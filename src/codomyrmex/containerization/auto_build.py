@@ -63,7 +63,6 @@ class DockerfileSpec:
 
     @property
     def stage_count(self) -> int:
-        """stage Count ."""
         return len(self.stages)
 
 
@@ -121,7 +120,6 @@ class AutoBuilder:
         py_version: str,
         entrypoint: str = "main.py",
     ) -> DockerfileSpec:
-        """build Spec ."""
         base = f"python:{py_version}-slim"
 
         builder = DockerStage(

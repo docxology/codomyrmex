@@ -6,12 +6,11 @@ exploring and interacting with the Codomyrmex ecosystem in engaging,
 accessible ways.
 """
 
-import logging
-
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 # Submodule exports - import first
 from . import commands, completions, rendering, shells
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 # Try optional submodules
 try:

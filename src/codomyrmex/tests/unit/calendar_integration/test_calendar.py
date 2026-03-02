@@ -7,7 +7,7 @@ Zero-mock policy: no MagicMock or monkeypatch.
 Live Google Calendar API tests are guarded by pytest.mark.skipif.
 """
 
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timedelta, timezone, UTC
 
 import pytest
 
@@ -30,8 +30,8 @@ class TestCalendarEvent:
     def _event(self, **kwargs) -> CalendarEvent:
         defaults = dict(
             summary="Test Event",
-            start_time=datetime(2026, 3, 1, 10, 0, tzinfo=timezone.utc),
-            end_time=datetime(2026, 3, 1, 11, 0, tzinfo=timezone.utc),
+            start_time=datetime(2026, 3, 1, 10, 0, tzinfo=UTC),
+            end_time=datetime(2026, 3, 1, 11, 0, tzinfo=UTC),
         )
         defaults.update(kwargs)
         return CalendarEvent(**defaults)
@@ -65,8 +65,8 @@ class TestCalendarEvent:
 
     def test_start_end_times_are_stored(self):
         """Test functionality: start end times are stored."""
-        start = datetime(2026, 3, 1, 9, 0, tzinfo=timezone.utc)
-        end = datetime(2026, 3, 1, 10, 30, tzinfo=timezone.utc)
+        start = datetime(2026, 3, 1, 9, 0, tzinfo=UTC)
+        end = datetime(2026, 3, 1, 10, 30, tzinfo=UTC)
         event = self._event(start_time=start, end_time=end)
         assert event.start_time == start
         assert event.end_time == end
@@ -92,8 +92,8 @@ class TestCalendarEvent:
         from pydantic import ValidationError
         with pytest.raises(ValidationError):
             CalendarEvent(
-                start_time=datetime(2026, 3, 1, 10, 0, tzinfo=timezone.utc),
-                end_time=datetime(2026, 3, 1, 11, 0, tzinfo=timezone.utc),
+                start_time=datetime(2026, 3, 1, 10, 0, tzinfo=UTC),
+                end_time=datetime(2026, 3, 1, 11, 0, tzinfo=UTC),
             )
 
     def test_start_time_is_required(self):
@@ -102,7 +102,7 @@ class TestCalendarEvent:
         with pytest.raises(ValidationError):
             CalendarEvent(
                 summary="Test",
-                end_time=datetime(2026, 3, 1, 11, 0, tzinfo=timezone.utc),
+                end_time=datetime(2026, 3, 1, 11, 0, tzinfo=UTC),
             )
 
     def test_end_time_is_required(self):
@@ -111,7 +111,7 @@ class TestCalendarEvent:
         with pytest.raises(ValidationError):
             CalendarEvent(
                 summary="Test",
-                start_time=datetime(2026, 3, 1, 10, 0, tzinfo=timezone.utc),
+                start_time=datetime(2026, 3, 1, 10, 0, tzinfo=UTC),
             )
 
 
@@ -178,7 +178,7 @@ class TestCalendarProviderAbstractInterface:
                 return None
 
         provider = MinimalProvider()
-        now = datetime.now(timezone.utc)
+        now = datetime.now(UTC)
         result = provider.list_events(now, now + timedelta(days=1))
         assert isinstance(result, list)
 

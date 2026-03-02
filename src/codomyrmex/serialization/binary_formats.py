@@ -1,14 +1,14 @@
 """Binary serialization formats implementation."""
 
 import io
-import logging
 from typing import Any
 
 import fastavro
 import msgpack
 import pandas as pd
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 class MsgpackSerializer:
     """Msgpack serialization."""

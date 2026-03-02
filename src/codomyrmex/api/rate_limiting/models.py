@@ -11,7 +11,6 @@ from datetime import datetime
 class RateLimitExceeded(Exception):
     """Raised when rate limit is exceeded."""
     def __init__(self, message: str, retry_after: float | None = None):
-        """Initialize this instance."""
         super().__init__(message)
         self.retry_after = retry_after
 

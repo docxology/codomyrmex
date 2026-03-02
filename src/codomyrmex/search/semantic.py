@@ -31,7 +31,6 @@ class HybridSearchIndex:
         vector_store=None,
         semantic_weight: float = 0.5,
     ):
-        """Initialize this instance."""
         self._keyword_index = InMemoryIndex()
         self._embedding_fn = embedding_fn
         self._vector_store = vector_store
@@ -121,7 +120,6 @@ class BM25Index:
         k1: float = 1.5,
         b: float = 0.75,
     ):
-        """Initialize this instance."""
         self.k1 = k1
         self.b = b
         self._documents: dict[str, Document] = {}
@@ -200,7 +198,6 @@ class AutoCompleteIndex:
     """Fast prefix-based autocomplete."""
 
     def __init__(self, max_suggestions: int = 10):
-        """Initialize this instance."""
         self._trie: dict[str, Any] = {}
         self._max_suggestions = max_suggestions
 

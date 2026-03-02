@@ -35,7 +35,6 @@ class NotificationRouter:
     """
 
     def __init__(self):
-        """Initialize this instance."""
         self._rules: list[tuple] = []  # (condition, channel)
         self._default: NotificationChannel = NotificationChannel.CONSOLE
 
@@ -94,7 +93,6 @@ class NotificationService:
     """
 
     def __init__(self, router: NotificationRouter | None = None):
-        """Initialize this instance."""
         self.router = router
         self._providers: dict[NotificationChannel, NotificationProvider] = {}
         self._templates: dict[str, NotificationTemplate] = {}

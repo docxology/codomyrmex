@@ -1,5 +1,4 @@
 import json
-import logging
 import statistics
 import threading
 import time
@@ -8,10 +7,11 @@ from collections.abc import Callable
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 """Advanced analytics and data streaming for physical management."""
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 
 class AnalyticsMetric(Enum):
@@ -434,7 +434,6 @@ class PredictiveAnalytics:
     """Simple predictive analytics using statistical methods."""
 
     def __init__(self, min_data_points: int = 10):
-        """Initialize this instance."""
 
         self.min_data_points = min_data_points
 

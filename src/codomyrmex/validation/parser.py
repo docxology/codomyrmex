@@ -1,12 +1,12 @@
 """Type-safe parser for validated data conversion."""
 
-import logging
 from typing import Any, TypeVar
 
 from pydantic import BaseModel
 from pydantic import ValidationError as PydanticValidationError
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 T = TypeVar("T", bound=BaseModel)
 

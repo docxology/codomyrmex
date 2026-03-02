@@ -22,7 +22,6 @@ class InMemoryIndex:
     """In-memory inverted index for document search."""
 
     def __init__(self):
-        """Initialize this instance."""
         self._index: dict[str, set[str]] = {}
         self._documents: dict[str, Document] = {}
 

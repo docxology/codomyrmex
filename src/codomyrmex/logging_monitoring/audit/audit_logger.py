@@ -43,7 +43,6 @@ class AuditRecord:
         }
 
     def to_json(self) -> str:
-        """to Json ."""
         return json.dumps(self.to_dict())
 
 
@@ -63,7 +62,6 @@ class AuditLogger:
     """
 
     def __init__(self, name: str = "codomyrmex.audit", max_records: int = 10000) -> None:
-        """Initialize this instance."""
         self.logger = logging.getLogger(name)
         self.logger.setLevel(logging.INFO)
         self._records: list[AuditRecord] = []
@@ -162,7 +160,6 @@ class AuditLogger:
 
     @property
     def record_count(self) -> int:
-        """record Count ."""
         return len(self._records)
 
     def export_jsonl(self) -> str:

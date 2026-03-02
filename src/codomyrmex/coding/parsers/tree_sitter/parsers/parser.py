@@ -1,14 +1,14 @@
 """Tree-sitter parser implementation."""
 
 import importlib
-import logging
 from typing import Any
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 # Import the external tree-sitter package explicitly to avoid shadowing
 # by the local codomyrmex.coding.parsers.tree_sitter package.
 _tree_sitter = importlib.import_module("tree_sitter")
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 class TreeSitterParser:
     """Wrapper for tree-sitter Parser."""

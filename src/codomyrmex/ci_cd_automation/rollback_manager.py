@@ -258,7 +258,7 @@ class RollbackManager:
                     execution.completed_steps += 1
                     logger.info(f"Completed rollback step: {step.name}")
 
-                except asyncio.TimeoutError:
+                except TimeoutError:
                     execution.failed_steps += 1
                     execution.errors.append(f"Step '{step.name}' timed out after {step.timeout}s")
                     logger.error(f"Rollback step '{step.name}' timed out")

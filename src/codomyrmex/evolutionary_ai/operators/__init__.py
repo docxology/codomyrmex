@@ -68,7 +68,6 @@ class MutationOperator(ABC, Generic[T]):
     """Abstract base class for mutation operators."""
 
     def __init__(self, mutation_rate: float = 0.1):
-        """Initialize this instance."""
         self.mutation_rate = mutation_rate
 
     @abstractmethod
@@ -114,7 +113,6 @@ class GaussianMutation(MutationOperator[list[float]]):
         sigma: float = 0.1,
         bounds: tuple[float, float] | None = None,
     ):
-        """Initialize this instance."""
         super().__init__(mutation_rate)
         self.sigma = sigma
         self.bounds = bounds
@@ -154,7 +152,6 @@ class CrossoverOperator(ABC, Generic[T]):
     """Abstract base class for crossover operators."""
 
     def __init__(self, crossover_rate: float = 0.8):
-        """Initialize this instance."""
         self.crossover_rate = crossover_rate
 
     @abstractmethod
@@ -227,7 +224,6 @@ class UniformCrossover(CrossoverOperator[list[T]]):
     """Uniform crossover with mixing ratio."""
 
     def __init__(self, crossover_rate: float = 0.8, mixing_ratio: float = 0.5):
-        """Initialize this instance."""
         super().__init__(crossover_rate)
         self.mixing_ratio = mixing_ratio
 
@@ -262,7 +258,6 @@ class BlendCrossover(CrossoverOperator[list[float]]):
     """BLX-alpha crossover for real-valued representations."""
 
     def __init__(self, crossover_rate: float = 0.8, alpha: float = 0.5):
-        """Initialize this instance."""
         super().__init__(crossover_rate)
         self.alpha = alpha
 
@@ -312,7 +307,6 @@ class TournamentSelection(SelectionOperator[T]):
     """Tournament selection."""
 
     def __init__(self, tournament_size: int = 3):
-        """Initialize this instance."""
         self.tournament_size = tournament_size
 
     def select(
@@ -375,7 +369,6 @@ class RankSelection(SelectionOperator[T]):
     """Rank-based selection."""
 
     def __init__(self, selection_pressure: float = 2.0):
-        """Initialize this instance."""
         self.selection_pressure = selection_pressure
 
     def select(
@@ -422,7 +415,6 @@ class ElitismSelection(SelectionOperator[T]):
     """Elitism selection - always keeps the best individuals."""
 
     def __init__(self, elite_count: int = 2, base_selector: SelectionOperator | None = None):
-        """Initialize this instance."""
         self.elite_count = elite_count
         self.base_selector = base_selector or TournamentSelection()
 

@@ -10,7 +10,7 @@ import sys
 from pathlib import Path
 
 try:
-    import codomyrmex
+    import codomyrmex  # noqa: F401
 except ImportError:
     project_root = Path(__file__).resolve().parent.parent.parent
     sys.path.insert(0, str(project_root / "src"))
@@ -57,7 +57,7 @@ def check_agent_health() -> dict:
     }
     
     try:
-        import codomyrmex
+        import codomyrmex  # noqa: F401
         health["codomyrmex_available"] = True
     except ImportError:
         pass

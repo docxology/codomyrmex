@@ -1,11 +1,11 @@
-import logging
 from dataclasses import dataclass, field
 from datetime import datetime
 from uuid import UUID, uuid4
 
 from .account import Account, AccountType
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 @dataclass(frozen=True)
 class Transaction:
@@ -25,7 +25,6 @@ class Ledger:
     """Double-entry bookkeeping engine."""
 
     def __init__(self):
-        """Initialize this instance."""
         self._accounts: dict[str, Account] = {}
         self._transactions: list[Transaction] = []
 

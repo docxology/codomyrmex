@@ -37,7 +37,6 @@ class KnowledgeRouter:
         pool: SharedMemoryPool | None = None,
         recency_weight: float = 0.2,
     ) -> None:
-        """Initialize this instance."""
         self._pool = pool or SharedMemoryPool()
         self._experts: dict[str, ExpertiseProfile] = {}
         self._recency_weight = recency_weight

@@ -41,7 +41,6 @@ class DeadLetter:
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> DeadLetter:
-        """from Dict ."""
         return cls(**data)
 
 
@@ -53,7 +52,6 @@ class DeadLetterQueue:
     """
 
     def __init__(self, store_path: Path) -> None:
-        """Initialize this instance."""
         self._path = store_path
         self._path.parent.mkdir(parents=True, exist_ok=True)
 

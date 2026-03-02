@@ -161,7 +161,6 @@ class CompatibilityMatrix:
     """
 
     def __init__(self) -> None:
-        """Initialize this instance."""
         self._compat: dict[str, list[tuple[APIVersion, APIVersion]]] = {}
 
     def add_compatible(self, tool: str, from_ver: str, to_ver: str) -> None:

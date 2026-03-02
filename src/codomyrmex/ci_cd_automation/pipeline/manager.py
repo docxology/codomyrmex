@@ -8,7 +8,7 @@ import os
 import subprocess
 import time
 from concurrent.futures import ThreadPoolExecutor
-from datetime import datetime, timezone
+from datetime import datetime, timezone, UTC
 from typing import Any
 
 import yaml
@@ -145,7 +145,7 @@ class PipelineManager:
 
         # Reset pipeline state
         pipeline.status = PipelineStatus.RUNNING
-        pipeline.started_at = datetime.now(timezone.utc)
+        pipeline.started_at = datetime.now(UTC)
 
         logger.info(f"Starting pipeline execution: {pipeline_name}")
 
@@ -154,7 +154,7 @@ class PipelineManager:
             await self._execute_pipeline_stages(pipeline)
 
             # Calculate final status
-            pipeline.finished_at = datetime.now(timezone.utc)
+            pipeline.finished_at = datetime.now(UTC)
             if pipeline.started_at:
                 pipeline.duration = (
                     pipeline.finished_at - pipeline.started_at
@@ -171,7 +171,7 @@ class PipelineManager:
 
         except Exception as e:
             pipeline.status = PipelineStatus.FAILURE
-            pipeline.finished_at = datetime.now(timezone.utc)
+            pipeline.finished_at = datetime.now(UTC)
             if pipeline.started_at:
                 pipeline.duration = (
                     pipeline.finished_at - pipeline.started_at
@@ -201,7 +201,6 @@ class PipelineManager:
                 # If loop is running, we need to handle differently
 
                 def run_async():
-                    """run Async ."""
 
                     new_loop = asyncio.new_event_loop()
                     asyncio.set_event_loop(new_loop)
@@ -244,7 +243,7 @@ class PipelineManager:
     async def _execute_stage(self, stage: PipelineStage, global_vars: dict[str, str]):
         """Execute a pipeline stage."""
         stage.status = StageStatus.RUNNING
-        stage.start_time = datetime.now(timezone.utc)
+        stage.start_time = datetime.now(UTC)
 
         logger.info(f"Executing stage: {stage.name}")
 
@@ -270,7 +269,7 @@ class PipelineManager:
             stage.status = StageStatus.FAILURE
             logger.error(f"Stage {stage.name} failed: {e}")
 
-        stage.end_time = datetime.now(timezone.utc)
+        stage.end_time = datetime.now(UTC)
 
     async def _execute_jobs_parallel(
         self, jobs: list[PipelineJob], env_vars: dict[str, str]
@@ -286,7 +285,7 @@ class PipelineManager:
     async def _execute_job(self, job: PipelineJob, env_vars: dict[str, str]):
         """Execute a single job."""
         job.status = JobStatus.RUNNING
-        job.start_time = datetime.now(timezone.utc)
+        job.start_time = datetime.now(UTC)
 
         logger.info(f"Executing job: {job.name}")
 
@@ -323,7 +322,7 @@ class PipelineManager:
             if not job.allow_failure:
                 raise
 
-        job.end_time = datetime.now(timezone.utc)
+        job.end_time = datetime.now(UTC)
 
     async def _run_command_async(
         self, command: str, timeout: int, env_vars: dict[str, str]
@@ -331,7 +330,6 @@ class PipelineManager:
         """Run a command asynchronously."""
 
         def run_cmd():
-            """run Cmd ."""
             try:
                 env = os.environ.copy()
                 env.update(env_vars)
@@ -848,7 +846,6 @@ class PipelineManager:
         rec_stack = set()
 
         def has_cycle(node: str) -> bool:
-            """has Cycle ."""
 
             visited.add(node)
             rec_stack.add(node)

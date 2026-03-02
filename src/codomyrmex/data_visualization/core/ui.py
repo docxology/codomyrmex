@@ -38,7 +38,6 @@ class Table:
     """Table component for data display."""
 
     def __init__(self, headers: list[str] | None = None, rows: list[list] | None = None, **kwargs):
-        """Initialize this instance."""
         self.headers = headers or []
         self.rows = rows or []
 
@@ -60,14 +59,12 @@ class Dashboard:
     """Dashboard container."""
 
     def __init__(self, title: str = "Dashboard", theme: Theme | None = None):
-        """Initialize this instance."""
         self.title = title
         self.theme = theme or DEFAULT_THEME
         self.grid = Grid()
         self.sections: list[Any] = self.grid.sections
 
     def add_section(self, title: str, content: Any = None, **kwargs: Any) -> None:
-        """add Section ."""
         self.grid.add_section(title, content, **kwargs)
 
     def render(self, output_path: str | None = None) -> str:

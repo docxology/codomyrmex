@@ -72,7 +72,6 @@ class AnalysisReport:
 
     @property
     def count_by_severity(self) -> dict[str, int]:
-        """count By Severity ."""
         counts: dict[str, int] = {}
         for p in self.patterns:
             key = p.severity.value
@@ -81,7 +80,6 @@ class AnalysisReport:
 
     @property
     def has_errors(self) -> bool:
-        """has Errors ."""
         return any(p.severity == Severity.ERROR for p in self.patterns)
 
     def to_dict(self) -> dict[str, Any]:
@@ -114,7 +112,6 @@ class AntiPatternDetector:
         max_complexity: int = 10,
         max_nesting: int = 4,
     ) -> None:
-        """Initialize this instance."""
         self._max_function_lines = max_function_lines
         self._max_params = max_params
         self._max_complexity = max_complexity

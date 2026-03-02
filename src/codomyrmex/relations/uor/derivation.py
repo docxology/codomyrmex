@@ -13,7 +13,7 @@ from __future__ import annotations
 import hashlib
 import json
 from dataclasses import dataclass, field
-from datetime import datetime, timezone
+from datetime import datetime, timezone, UTC
 from typing import Any
 
 
@@ -38,12 +38,11 @@ class DerivationRecord:
     inputs: dict[str, Any] = field(default_factory=dict)
     result_hash: str = ""
     timestamp: str = field(
-        default_factory=lambda: datetime.now(timezone.utc).isoformat()
+        default_factory=lambda: datetime.now(UTC).isoformat()
     )
     id: str = field(default="")
 
     def __post_init__(self) -> None:
-        """post Init ."""
         if not self.id:
             object.__setattr__(
                 self, "id", self._compute_derivation_id(
@@ -80,7 +79,6 @@ class DerivationTracker:
     """
 
     def __init__(self) -> None:
-        """Initialize this instance."""
         self._records: list[DerivationRecord] = []
 
     def record(

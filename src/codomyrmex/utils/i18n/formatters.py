@@ -21,7 +21,6 @@ class PluralRules:
 
     @classmethod
     def get_rule(cls, locale: Locale) -> Callable[[int], str]:
-        """get Rule ."""
         return cls.RULES.get(locale.language, cls.RULES["en"])
 
     @classmethod

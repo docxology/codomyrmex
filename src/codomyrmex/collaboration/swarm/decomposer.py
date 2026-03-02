@@ -36,7 +36,6 @@ class SubTask:
     priority: int = 5
 
     def __post_init__(self) -> None:
-        """post Init ."""
         if not self.task_id:
             self.task_id = str(uuid.uuid4())[:8]
 

@@ -6,13 +6,13 @@ Generate and manage SBOMs for supply chain security.
 
 import hashlib
 import json
-import logging
 from dataclasses import dataclass, field
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 from datetime import datetime
 from enum import Enum
 from typing import Any
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 
 class SBOMFormat(Enum):
@@ -81,7 +81,6 @@ class SBOM:
         }
 
     def to_json(self, indent: int = 2) -> str:
-        """to Json ."""
         return json.dumps(self.to_dict(), indent=indent)
 
     def save(self, path: str) -> None:
@@ -94,7 +93,6 @@ class SBOMGenerator:
     """Generate SBOMs from various sources."""
 
     def __init__(self):
-        """Initialize this instance."""
         self._components: list[Component] = []
 
     def from_requirements(self, requirements_path: str) -> list[Component]:
@@ -209,7 +207,6 @@ class VulnerabilityScanner:
     """Scan components for known vulnerabilities."""
 
     def __init__(self):
-        """Initialize this instance."""
         self._known_vulns: dict[str, list[str]] = {}
 
     def add_vulnerability_db(self, vulns: dict[str, list[str]]) -> None:

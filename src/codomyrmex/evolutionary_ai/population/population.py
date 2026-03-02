@@ -7,7 +7,6 @@ configurable selection/crossover/mutation strategies.
 
 from __future__ import annotations
 
-import logging
 from collections.abc import Callable
 from dataclasses import dataclass
 from typing import Any
@@ -20,7 +19,7 @@ from ..operators.operators import (
     tournament_selection,
 )
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 
 @dataclass

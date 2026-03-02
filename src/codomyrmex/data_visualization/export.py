@@ -6,13 +6,13 @@ to multiple output formats with configuration options.
 
 from __future__ import annotations
 
-import logging
 from dataclasses import dataclass
 from enum import Enum
 from pathlib import Path
 from typing import Any
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 
 class ExportFormat(Enum):
@@ -40,7 +40,6 @@ class ChartExporter:
     """Export matplotlib figures and charts to multiple formats."""
 
     def __init__(self, output_dir: Path | None = None) -> None:
-        """Initialize this instance."""
         self._output_dir = output_dir or Path(".")
 
     def export(self, fig: Any, filename: str,

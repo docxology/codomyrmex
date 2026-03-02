@@ -64,7 +64,6 @@ class FixedWindowLimiter(RateLimiter):
     """Fixed window rate limiter."""
 
     def __init__(self, limit: int, window_seconds: int):
-        """Initialize this instance."""
         self.limit = limit
         self.window_seconds = window_seconds
         self._counts: dict[str, tuple[int, datetime]] = {}
@@ -142,7 +141,6 @@ class SlidingWindowLimiter(RateLimiter):
     """Sliding window rate limiter."""
 
     def __init__(self, limit: int, window_seconds: int):
-        """Initialize this instance."""
         self.limit = limit
         self.window_seconds = window_seconds
         self._requests: dict[str, deque] = {}
@@ -214,7 +212,6 @@ class TokenBucketLimiter(RateLimiter):
         refill_interval: float = 1.0,
         initial_tokens: int | None = None,
     ):
-        """Initialize this instance."""
         self.capacity = capacity
         self.refill_rate = refill_rate
         self.refill_interval = refill_interval
@@ -332,7 +329,6 @@ class RateLimiterMiddleware:
     """
 
     def __init__(self, limiter: RateLimiter):
-        """Initialize this instance."""
         self.limiter = limiter
 
     def check(self, key: str, cost: int = 1) -> RateLimitResult:

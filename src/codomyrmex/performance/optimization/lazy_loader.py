@@ -126,7 +126,6 @@ def lazy_function(
 
     @wraps(lambda: None)  # Wraps sentinel — actual function resolved at call time
     def lazy_wrapper(*args, **kwargs):
-        """lazy Wrapper ."""
 
 
         func = getattr(loader, function_name)

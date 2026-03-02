@@ -31,7 +31,6 @@ class BehaviorAnalyzer:
     """Analyzes user behavior for security purposes."""
 
     def __init__(self):
-        """Initialize this instance."""
 
         self.behavior_history: dict[str, list[dict]] = {}
         logger.info("BehaviorAnalyzer initialized")

@@ -1,16 +1,15 @@
 """Dataset management utilities."""
 
 import json
-import logging
 from typing import Any
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 class Dataset:
     """Represents a collection of training/eval data."""
 
     def __init__(self, data: list[dict[str, Any]]):
-        """Initialize this instance."""
         self.data = data
 
     @classmethod

@@ -83,7 +83,6 @@ class Alert:
     fired_at: float = 0.0
 
     def __post_init__(self) -> None:
-        """post Init ."""
         if not self.fired_at:
             self.fired_at = time.time()
 
@@ -112,17 +111,14 @@ class AlertEngine:
     """
 
     def __init__(self) -> None:
-        """Initialize this instance."""
         self._rules: list[AlertRule] = []
         self._handlers: list[AlertHandler] = []
         self._alert_history: list[Alert] = []
 
     def add_rule(self, rule: AlertRule) -> None:
-        """add Rule ."""
         self._rules.append(rule)
 
     def on_alert(self, handler: AlertHandler) -> None:
-        """on Alert ."""
         self._handlers.append(handler)
 
     def evaluate(self, metrics: dict[str, float]) -> list[Alert]:
@@ -160,7 +156,6 @@ class AlertEngine:
 
     @property
     def rule_count(self) -> int:
-        """rule Count ."""
         return len(self._rules)
 
     @property

@@ -64,7 +64,6 @@ class WorkflowJournal:
     """
 
     def __init__(self, memory: MemoryStore | None = None) -> None:
-        """Initialize this instance."""
         self._entries: list[JournalEntry] = []
         self._memory = memory
 

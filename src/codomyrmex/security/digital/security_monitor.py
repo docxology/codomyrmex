@@ -10,7 +10,7 @@ import threading
 import time
 from collections.abc import Callable
 from dataclasses import dataclass, field
-from datetime import datetime, timezone
+from datetime import datetime, timezone, UTC
 from enum import Enum
 from typing import Any
 
@@ -256,7 +256,7 @@ class SecurityMonitor:
                     event = SecurityEvent(
                         event_id=self._generate_event_id(),
                         event_type=event_type,
-                        timestamp=datetime.now(timezone.utc),
+                        timestamp=datetime.now(UTC),
                         raw_log=line,
                         details={"source": source, "pattern": pattern},
                     )
@@ -294,7 +294,7 @@ class SecurityMonitor:
 
             # Simplified trigger (always triggers if type matches for now)
             self._trigger_alert(rule, event)
-            rule.last_triggered = datetime.now(timezone.utc)
+            rule.last_triggered = datetime.now(UTC)
 
     def _trigger_alert(self, rule: AlertRule, event: SecurityEvent):
         """Trigger an alert for a security event."""

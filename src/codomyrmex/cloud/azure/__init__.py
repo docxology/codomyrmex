@@ -1,19 +1,18 @@
 """Azure integration submodule."""
 
-import logging
 import os
 from typing import Optional
 
 from azure.identity import DefaultAzureCredential
 from azure.storage.blob import BlobServiceClient
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 class AzureBlobClient:
     """Wrapper for Azure Blob Storage operations."""
 
     def __init__(self, account_url: str | None = None):
-        """Initialize this instance."""
         if not account_url:
             account_url = os.environ.get("AZURE_STORAGE_ACCOUNT_URL")
 

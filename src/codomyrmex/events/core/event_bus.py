@@ -229,7 +229,6 @@ class EventBus:
             self.events_failed += 1
 
     def _run_async_handler(self, handler, event):
-        """run Async Handler ."""
         loop = asyncio.new_event_loop()
         asyncio.set_event_loop(loop)
         try:
@@ -253,7 +252,6 @@ class EventBus:
             }
 
     def reset_stats(self) -> None:
-        """reset Stats ."""
         self.events_published = self.events_processed = self.events_failed = 0
 
     def shutdown(self) -> None:
@@ -265,23 +263,19 @@ class EventBus:
 _event_bus = None
 
 def get_event_bus() -> EventBus:
-    """get Event Bus ."""
     global _event_bus
     if _event_bus is None:
         _event_bus = EventBus()
     return _event_bus
 
 def publish_event(event: Event) -> None:
-    """publish Event ."""
     get_event_bus().publish(event)
 
 async def publish_event_async(event: Event) -> None:
     await get_event_bus().publish_async(event)
 
 def subscribe_to_events(event_types: list[Any], handler: Callable, subscriber_id: str | None = None, **kwargs) -> str:
-    """subscribe To Events ."""
     return get_event_bus().subscribe(event_types, handler, subscriber_id, **kwargs)
 
 def unsubscribe_from_events(subscriber_id: str) -> bool:
-    """unsubscribe From Events ."""
     return get_event_bus().unsubscribe(subscriber_id)

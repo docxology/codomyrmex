@@ -4,10 +4,10 @@ Handles OAuth2 device flow and local server flow to acquire and cache tokens.
 Requires `google-auth-oauthlib`, `google-auth-httplib2`, and `google-api-python-client`.
 """
 
-import logging
 import os
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 try:
     from google.auth.transport.requests import Request

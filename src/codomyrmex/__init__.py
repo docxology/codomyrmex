@@ -7,13 +7,13 @@ testing, documentation generation, and workflow automation.
 
 __version__ = "1.0.3.dev0"
 
-import logging
 import os
 import pkgutil
 from pathlib import Path
 from typing import List
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 
 def get_version() -> str:

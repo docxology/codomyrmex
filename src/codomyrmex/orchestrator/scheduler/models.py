@@ -41,7 +41,6 @@ class Job:
     error: str | None = None
 
     def __post_init__(self):
-        """post Init ."""
         if self.next_run is None:
             self.next_run = self.trigger.get_next_run()
 

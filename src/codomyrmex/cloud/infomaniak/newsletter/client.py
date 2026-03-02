@@ -9,14 +9,14 @@ Environment Variables:
     INFOMANIAK_NEWSLETTER_ID: Newsletter product ID
 """
 
-import logging
 import os
 from typing import Any
 
 from ..base import InfomaniakRESTBase
 from ..exceptions import classify_http_error
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 BASE_URL = "https://api.infomaniak.com"
 
@@ -31,7 +31,6 @@ class InfomaniakNewsletterClient(InfomaniakRESTBase):
     _service_name: str = "newsletter"
 
     def __init__(self, token: str, newsletter_id: str, base_url: str = BASE_URL):
-        """Initialize this instance."""
         super().__init__(token=token, base_url=base_url)
         self._newsletter_id = newsletter_id
 

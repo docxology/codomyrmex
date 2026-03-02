@@ -10,7 +10,7 @@ from pathlib import Path
 
 # Ensure codomyrmex is in path
 try:
-    import codomyrmex
+    import codomyrmex  # noqa: F401
 except ImportError:
     project_root = Path(__file__).resolve().parent.parent.parent.parent
     sys.path.insert(0, str(project_root / "src"))
@@ -23,7 +23,7 @@ def main():
 
     # Import validation
     try:
-        import codomyrmex.logging_monitoring
+        import codomyrmex.logging_monitoring  # noqa: F401
         print_info("Successfully imported codomyrmex.logging_monitoring")
     except ImportError as e:
         print_info(f"Warning: Could not import codomyrmex.logging_monitoring: {e}")

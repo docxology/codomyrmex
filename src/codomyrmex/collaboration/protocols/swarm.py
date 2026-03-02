@@ -1,19 +1,16 @@
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 """Swarm coordination implementation."""
 
-import logging
-
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 class AgentProxy:
     """Mock-friendly proxy for a Codomyrmex agent."""
 
     def __init__(self, name: str, role: str):
-        """Initialize this instance."""
         self.name = name
         self.role = role
 
     def send_task(self, task: str) -> str:
-        """send Task ."""
         logger.info(f"Agent {self.name} received task: {task}")
         return f"Result from {self.name}"
 
@@ -21,11 +18,9 @@ class SwarmManager:
     """Orchestrates multiple agents working together."""
 
     def __init__(self):
-        """Initialize this instance."""
         self.agents: list[AgentProxy] = []
 
     def add_agent(self, agent: AgentProxy):
-        """add Agent ."""
         self.agents.append(agent)
         logger.info(f"Agent {agent.name} ({agent.role}) joined the swarm")
 

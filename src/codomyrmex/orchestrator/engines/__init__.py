@@ -55,7 +55,6 @@ class TaskResult:
 
     @property
     def duration_ms(self) -> float:
-        """duration Ms ."""
         if self.start_time and self.end_time:
             return (self.end_time - self.start_time).total_seconds() * 1000
         return 0.0
@@ -142,13 +141,11 @@ class WorkflowResult:
 
     @property
     def duration_ms(self) -> float:
-        """duration Ms ."""
         if self.start_time and self.end_time:
             return (self.end_time - self.start_time).total_seconds() * 1000
         return 0.0
 
     def get_task_result(self, task_id: str) -> TaskResult | None:
-        """get Task Result ."""
         return self.task_results.get(task_id)
 
 
@@ -178,7 +175,6 @@ class SequentialEngine(ExecutionEngine):
     """Executes tasks sequentially in dependency order."""
 
     def __init__(self, max_retries: int = 3):
-        """Initialize this instance."""
         self.max_retries = max_retries
 
     def execute(
@@ -236,7 +232,6 @@ class SequentialEngine(ExecutionEngine):
         context: dict[str, Any],
         previous_results: dict[str, TaskResult],
     ) -> TaskResult:
-        """execute Task ."""
         # Check condition
         if task.condition and not task.condition(context):
             return TaskResult(
@@ -303,7 +298,6 @@ class ParallelEngine(ExecutionEngine):
         max_workers: int = 4,
         max_retries: int = 3,
     ):
-        """Initialize this instance."""
         self.max_workers = max_workers
         self.max_retries = max_retries
 
@@ -389,7 +383,6 @@ class ParallelEngine(ExecutionEngine):
         context: dict[str, Any],
         previous_results: dict[str, TaskResult],
     ) -> TaskResult:
-        """execute Task ."""
         if task.condition and not task.condition(context):
             return TaskResult(task_id=task.id, state=TaskState.SKIPPED)
 

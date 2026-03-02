@@ -63,7 +63,6 @@ class WebsiteServer(
     _dispatch_thread = None
 
     def __init__(self, *args, **kwargs):
-        """Initialize this instance."""
         super().__init__(*args, **kwargs)
 
     def _cors_origin(self) -> str:

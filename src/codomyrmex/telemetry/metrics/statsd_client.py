@@ -1,11 +1,11 @@
 """StatsD metrics client."""
 
-import logging
 import os
 
 import statsd
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 class StatsDClient:
     """Wrapper for statsd client to send metrics to a StatsD collector."""

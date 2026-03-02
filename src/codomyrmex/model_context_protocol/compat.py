@@ -49,13 +49,11 @@ class CompatShimGenerator:
     """
 
     def __init__(self) -> None:
-        """Initialize this instance."""
         self._mappings: dict[str, ShimMapping] = {}
         self._shims: dict[str, Callable] = {}
 
     @property
     def mapping_count(self) -> int:
-        """mapping Count ."""
         return len(self._mappings)
 
     def add_mapping(self, mapping: ShimMapping) -> None:

@@ -58,7 +58,6 @@ class MCPClient:
     """
 
     def __init__(self, config: MCPClientConfig | None = None) -> None:
-        """Initialize this instance."""
         self.config = config or MCPClientConfig()
         self._request_id = 0
         self._initialized = False
@@ -110,7 +109,6 @@ class MCPClient:
     # ------------------------------------------------------------------
 
     def _next_id(self) -> int:
-        """next Id ."""
         self._request_id += 1
         return self._request_id
 
@@ -145,7 +143,7 @@ class MCPClient:
                         f"RPC error on {method}: {response['error'].get('message', response['error'])}"
                     )
                 return response.get("result", {})
-            except (asyncio.TimeoutError, OSError, ConnectionError) as exc:
+            except (TimeoutError, OSError, ConnectionError) as exc:
                 last_exc = exc
                 if attempt < self.config.max_retries:
                     delay = self.config.retry_delay * (2 ** (attempt - 1))
@@ -333,7 +331,6 @@ class _StdioTransport(_Transport):
     """Stdio transport — launches a subprocess and speaks JSON-RPC over stdin/stdout."""
 
     def __init__(self, process: asyncio.subprocess.Process) -> None:
-        """Initialize this instance."""
         self._process = process
 
     async def send(self, message: dict[str, Any], *, timeout: float = 30.0) -> dict[str, Any]:
@@ -364,7 +361,6 @@ class _HTTPTransport(_Transport):
     """
 
     def __init__(self, base_url: str, *, pool_size: int = 10) -> None:
-        """Initialize this instance."""
         self._base_url = base_url.rstrip("/")
         self._pool_size = pool_size
         self._session: Any = None
@@ -422,7 +418,6 @@ class _StdioContextManager:
     """Async context manager for stdio connections."""
 
     def __init__(self, command: list[str], config: MCPClientConfig | None) -> None:
-        """Initialize this instance."""
         self._command = command
         self._config = config
         self._client: MCPClient | None = None
@@ -449,7 +444,6 @@ class _HTTPContextManager:
     """Async context manager for HTTP connections."""
 
     def __init__(self, base_url: str, config: MCPClientConfig | None) -> None:
-        """Initialize this instance."""
         self._base_url = base_url
         self._config = config
         self._client: MCPClient | None = None

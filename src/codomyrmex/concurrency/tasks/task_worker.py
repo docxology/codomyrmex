@@ -56,7 +56,6 @@ class TaskWorker:
         handler: Callable[[Task], Any] | None = None,
         timeout_ms: float = 30000.0,
     ) -> None:
-        """Initialize this instance."""
         self._worker_id = worker_id or f"worker-{uuid.uuid4().hex[:8]}"
         self._handler = handler or self._default_handler
         self._timeout_ms = timeout_ms
@@ -66,22 +65,18 @@ class TaskWorker:
 
     @property
     def worker_id(self) -> str:
-        """worker Id ."""
         return self._worker_id
 
     @property
     def is_running(self) -> bool:
-        """is Running ."""
         return self._running
 
     @property
     def tasks_processed(self) -> int:
-        """tasks Processed ."""
         return self._tasks_processed
 
     @property
     def tasks_failed(self) -> int:
-        """tasks Failed ."""
         return self._tasks_failed
 
     @property

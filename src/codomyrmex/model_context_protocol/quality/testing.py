@@ -56,7 +56,6 @@ class TestSuite:
 
     @property
     def success_rate(self) -> float:
-        """success Rate ."""
         return self.passed / self.total if self.total > 0 else 0.0
 
     def summary(self) -> str:
@@ -312,7 +311,6 @@ class IntegrationTester:
     """
 
     def __init__(self):
-        """Initialize this instance."""
         self.scenarios: list[dict[str, Any]] = []
 
     def add_scenario(
@@ -412,12 +410,10 @@ class TestMCPClient:
     """
 
     def __init__(self, server):
-        """Initialize this instance."""
         self.server = server
         self._request_id = 0
 
     def _next_id(self) -> int:
-        """next Id ."""
         self._request_id += 1
         return self._request_id
 

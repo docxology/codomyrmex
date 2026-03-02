@@ -10,7 +10,7 @@ import threading
 import uuid
 from collections.abc import Callable
 from dataclasses import dataclass, field
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from enum import Enum
 from typing import Any
 
@@ -34,15 +34,13 @@ except ImportError:
     def monitor_performance(*args, **kwargs):
         """Decorator for performance monitoring (fallback)."""
         def decorator(func):
-            """decorator ."""
-
             return func
 
         return decorator
 
 
 try:
-    from codomyrmex.model_context_protocol import MCPErrorDetail, MCPToolResult
+    import codomyrmex.model_context_protocol  # noqa: F401
 
     MCP_AVAILABLE = True
 except ImportError:
@@ -94,7 +92,7 @@ class OrchestrationSession:
     metadata: dict[str, Any] = field(default_factory=dict)
 
     # Execution tracking
-    created_at: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
+    created_at: datetime = field(default_factory=lambda: datetime.now(UTC))
     started_at: datetime | None = None
     updated_at: datetime | None = None
     completed_at: datetime | None = None
@@ -250,7 +248,7 @@ class OrchestrationEngine:
             if session_id in self.active_sessions:
                 context = self.active_sessions[session_id]
                 context.status = SessionStatus.COMPLETED
-                context.completed_at = datetime.now(timezone.utc)
+                context.completed_at = datetime.now(UTC)
 
                 # Cleanup session resources
                 self.resource_manager.deallocate_resources(session_id)
@@ -274,7 +272,7 @@ class OrchestrationEngine:
         if not context:
             return {"success": False, "error": f"Session {session_id} not found"}
 
-        context.started_at = datetime.now(timezone.utc)
+        context.started_at = datetime.now(UTC)
         context.status = SessionStatus.ACTIVE
 
         try:
@@ -343,7 +341,7 @@ class OrchestrationEngine:
 
             # Update context
             context.status = SessionStatus.COMPLETED if result["success"] else SessionStatus.FAILED
-            context.completed_at = datetime.now(timezone.utc)
+            context.completed_at = datetime.now(UTC)
 
             # Emit events
             event_data = {
@@ -360,7 +358,7 @@ class OrchestrationEngine:
 
         except Exception as e:
             context.status = SessionStatus.FAILED
-            context.completed_at = datetime.now(timezone.utc)
+            context.completed_at = datetime.now(UTC)
             logger.error(f"Workflow execution failed: {e}")
 
             return {"success": False, "error": str(e)}
@@ -437,7 +435,7 @@ class OrchestrationEngine:
             # Update project metrics
             if result["success"]:
                 metrics = {
-                    "last_workflow_execution": datetime.now(timezone.utc).isoformat(),
+                    "last_workflow_execution": datetime.now(UTC).isoformat(),
                     "workflow_executions": 1,
                 }
                 self.project_manager.update_project_metrics(project_name, metrics)
@@ -505,7 +503,7 @@ class OrchestrationEngine:
     def get_system_status(self) -> dict[str, Any]:
         """Get comprehensive system status."""
         status = {
-            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "timestamp": datetime.now(UTC).isoformat(),
             "orchestration_engine": {
                 "active_sessions": len(self.active_sessions),
                 "event_handlers": {
@@ -566,7 +564,7 @@ class OrchestrationEngine:
         """Perform comprehensive health check."""
         health = {
             "overall_status": "healthy",
-            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "timestamp": datetime.now(UTC).isoformat(),
             "components": {},
             "issues": [],
         }
@@ -621,7 +619,7 @@ class OrchestrationEngine:
     def get_metrics(self) -> dict[str, Any]:
         """Get comprehensive metrics."""
         metrics = {
-            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "timestamp": datetime.now(UTC).isoformat(),
             "sessions": {"total": len(self.active_sessions), "by_status": {}},
             "workflows": {},
             "tasks": {},

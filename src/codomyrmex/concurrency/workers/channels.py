@@ -25,7 +25,6 @@ class Channel(Generic[T]):
     """
 
     def __init__(self, capacity: int = 0) -> None:
-        """Initialize this instance."""
         self._capacity = max(0, capacity)
         self._queue: asyncio.Queue[T] = asyncio.Queue(maxsize=max(1, self._capacity))
         self._closed = False
@@ -58,7 +57,7 @@ class Channel(Generic[T]):
         while True:
             try:
                 yield await self.receive(timeout=0.1)
-            except (asyncio.TimeoutError, ChannelClosed):
+            except (TimeoutError, ChannelClosed):
                 if self._closed and self._queue.empty():
                     break
 
@@ -78,4 +77,4 @@ async def select(*channels: Channel, timeout: float | None = None) -> tuple[int,
     for i, task in enumerate(tasks):
         if task in done:
             return i, task.result()
-    raise asyncio.TimeoutError("No channel ready within timeout")
+    raise TimeoutError("No channel ready within timeout")

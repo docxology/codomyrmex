@@ -13,12 +13,13 @@ from __future__ import annotations
 
 import asyncio
 import logging
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 import time
 from collections.abc import Awaitable, Callable
 from dataclasses import dataclass
 from typing import Any, TypeVar
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 T = TypeVar("T")
 R = TypeVar("R")
@@ -54,7 +55,6 @@ class AsyncWorkerPool:
     """
 
     def __init__(self, max_workers: int = 4, *, name: str = "pool"):
-        """Initialize this instance."""
         self._max_workers = max_workers
         self._name = name
         self._semaphore = asyncio.Semaphore(max_workers)

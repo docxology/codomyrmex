@@ -5,7 +5,6 @@ Provides algorithms for selecting a coordinator or leader
 among a group of agents.
 """
 
-import logging
 import random
 from abc import ABC, abstractmethod
 from collections.abc import Callable
@@ -16,8 +15,9 @@ from typing import Any
 
 from ..agents.base import CollaborativeAgent
 from ..protocols import AgentState
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 
 class ElectionState(Enum):
@@ -58,7 +58,6 @@ class LeaderElection(ABC):
     """
 
     def __init__(self):
-        """Initialize this instance."""
         self._state = ElectionState.IDLE
         self._current_leader: str | None = None
         self._participants: set[str] = set()
@@ -71,7 +70,6 @@ class LeaderElection(ABC):
 
     @property
     def current_leader(self) -> str | None:
-        """current Leader ."""
         return self._current_leader
 
     def get_history(self) -> list[ElectionResult]:
@@ -113,7 +111,6 @@ class BullyElection(LeaderElection):
         priority_fn: Callable[[CollaborativeAgent], float] | None = None,
         timeout: float = 5.0,
     ):
-        """Initialize this instance."""
         super().__init__()
         self._priority_fn = priority_fn or self._default_priority
         self._timeout = timeout
@@ -195,7 +192,6 @@ class RingElection(LeaderElection):
         self,
         priority_fn: Callable[[CollaborativeAgent], float] | None = None,
     ):
-        """Initialize this instance."""
         super().__init__()
         self._priority_fn = priority_fn or (lambda a: hash(a.agent_id))
 
@@ -323,7 +319,6 @@ class RotatingLeadership:
     """
 
     def __init__(self, agents: list[CollaborativeAgent] | None = None):
-        """Initialize this instance."""
         self._agents: list[CollaborativeAgent] = agents or []
         self._current_index = 0
         self._term_count = 0

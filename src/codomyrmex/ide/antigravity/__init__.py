@@ -11,11 +11,10 @@ Example:
     >>> capabilities = client.get_capabilities()
 """
 import json
-import logging
 import os
 import shutil
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 import subprocess
 import time
 from collections.abc import Callable
@@ -23,6 +22,7 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List, Optional
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 try:
     from codomyrmex.ide import (

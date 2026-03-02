@@ -4,17 +4,16 @@ import base64
 import hashlib
 import hmac
 import json
-import logging
 import time
 from typing import Any
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 class TokenValidator:
     """Validates tokens and their signatures."""
 
     def __init__(self, secret: str):
-        """Initialize this instance."""
         self.secret = secret.encode()
 
     def _generate_signature(self, payload_dict: dict[str, Any]) -> str:

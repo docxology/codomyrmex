@@ -22,7 +22,6 @@ class SocialEngineeringDetector:
     """Detects social engineering attempts."""
 
     def __init__(self):
-        """Initialize this instance."""
         self.patterns = {
             "urgency": r"(immediately|urgent|right now|asap|act fast|time is running out|expires today|last chance|limited time)",
             "authority": r"(CEO|director|manager|executive|IT department|admin|supervisor|board|compliance officer)",

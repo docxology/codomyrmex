@@ -20,7 +20,6 @@ class SkillTestResult:
     """Result of a single skill test case."""
 
     def __init__(self, name: str, passed: bool, expected: Any = None, actual: Any = None, error: str | None = None):
-        """Initialize this instance."""
         self.name = name
         self.passed = passed
         self.expected = expected

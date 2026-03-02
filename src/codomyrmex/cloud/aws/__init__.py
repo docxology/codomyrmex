@@ -1,18 +1,17 @@
 """AWS integration submodule."""
 
-import logging
 from typing import Any, Dict, Optional
 
 import boto3
 from botocore.exceptions import ClientError
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 class S3Client:
     """Wrapper for AWS S3 operations."""
 
     def __init__(self, region_name: str | None = None):
-        """Initialize this instance."""
         self.client = boto3.client('s3', region_name=region_name)
 
     def upload_file(self, file_path: str, bucket: str, object_name: str | None = None) -> bool:

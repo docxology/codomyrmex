@@ -6,12 +6,12 @@ provides rollback capabilities.
 
 from __future__ import annotations
 
-import logging
 from typing import Any
 
 from ..strategies.strategies import DeploymentState, DeploymentStrategy
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 
 class DeploymentManager:
@@ -30,7 +30,6 @@ class DeploymentManager:
     """
 
     def __init__(self) -> None:
-        """Initialize this instance."""
         self._history: list[DeploymentState] = []
         self._active: dict[str, DeploymentState] = {}
 

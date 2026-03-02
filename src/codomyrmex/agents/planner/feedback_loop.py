@@ -96,7 +96,6 @@ class FeedbackLoop:
         memory_store: MemoryStore | None = None,
         task_executor_factory: Callable[[PlanTask], Callable[..., Any]] | None = None,
     ) -> None:
-        """Initialize this instance."""
         self._config = config or FeedbackConfig()
         self._plan_engine = plan_engine or PlanEngine()
         self._memory = memory_store or MemoryStore()

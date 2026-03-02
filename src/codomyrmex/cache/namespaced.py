@@ -10,12 +10,10 @@ class NamespacedCache(Cache):
     """Wraps a cache with a namespace prefix."""
 
     def __init__(self, cache: Cache, namespace: str):
-        """Initialize this instance."""
         self.cache = cache
         self.namespace = namespace
 
     def _full_key(self, key: str) -> str:
-        """full Key ."""
         return f"{self.namespace}:{key}"
 
     def get(self, key: str) -> Any | None:
@@ -45,5 +43,4 @@ class NamespacedCache(Cache):
 
 
     def delete_pattern(self, pattern: str) -> int:
-        """delete Pattern ."""
         return self.cache.delete_pattern(f"{self.namespace}:{pattern}")

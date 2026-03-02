@@ -69,7 +69,6 @@ class AgentSupervisor:
         max_restarts: int = 3,
         restart_window: float = 60.0,
     ) -> None:
-        """Initialize this instance."""
         self._strategy = strategy
         self._max_restarts = max_restarts
         self._restart_window = restart_window
@@ -83,7 +82,6 @@ class AgentSupervisor:
 
     @property
     def agent_count(self) -> int:
-        """agent Count ."""
         return len(self._registered)
 
     def register(self, agent_id: str) -> None:

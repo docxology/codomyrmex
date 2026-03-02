@@ -32,7 +32,6 @@ class DashboardManager:
     """
 
     def __init__(self, collector: MetricCollector | None = None):
-        """Initialize this instance."""
         self.collector = collector or MetricCollector()
         self._dashboards: dict[str, Dashboard] = {}
         self._lock = threading.Lock()

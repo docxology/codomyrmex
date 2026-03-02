@@ -7,13 +7,13 @@ for evaluating LLM outputs against reference values.
 
 from __future__ import annotations
 
-import logging
 import re
 from abc import ABC, abstractmethod
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 from dataclasses import dataclass
 from typing import Any
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 try:
     from codomyrmex.validation.schemas import Result, ResultStatus
@@ -74,7 +74,6 @@ class ExactMatchScorer(Scorer):
         case_sensitive: bool = True,
         strip_whitespace: bool = True,
     ) -> None:
-        """Initialize this instance."""
         self._case_sensitive = case_sensitive
         self._strip_whitespace = strip_whitespace
 
@@ -108,7 +107,6 @@ class ContainsScorer(Scorer):
     """
 
     def __init__(self, case_sensitive: bool = False) -> None:
-        """Initialize this instance."""
         self._case_sensitive = case_sensitive
 
     @property
@@ -144,7 +142,6 @@ class LengthScorer(Scorer):
     """
 
     def __init__(self, min_length: int = 1, max_length: int = 500) -> None:
-        """Initialize this instance."""
         if min_length < 0:
             raise ValueError("min_length must be non-negative")
         if max_length < min_length:
@@ -191,7 +188,6 @@ class RegexScorer(Scorer):
     """
 
     def __init__(self, flags: int = 0, full_match: bool = False) -> None:
-        """Initialize this instance."""
         self._flags = flags
         self._full_match = full_match
 
@@ -232,7 +228,6 @@ class CompositeScorer(Scorer):
     """
 
     def __init__(self, scorers: list[WeightedScorer] | None = None) -> None:
-        """Initialize this instance."""
         self._scorers: list[WeightedScorer] = list(scorers) if scorers else []
 
     @property

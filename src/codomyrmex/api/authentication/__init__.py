@@ -81,7 +81,6 @@ class APIKeyAuthenticator(Authenticator):
         header_name: str = "X-API-Key",
         query_param: str | None = None,
     ):
-        """Initialize this instance."""
         self.header_name = header_name
         self.query_param = query_param
         self._keys: dict[str, dict[str, Any]] = {}
@@ -158,7 +157,6 @@ class BearerTokenAuthenticator(Authenticator):
     auth_type = AuthType.BEARER_TOKEN
 
     def __init__(self, validator: Callable[[str], dict | None] | None = None):
-        """Initialize this instance."""
         self._tokens: dict[str, dict[str, Any]] = {}
         self._validator = validator
 
@@ -232,7 +230,6 @@ class BasicAuthenticator(Authenticator):
     auth_type = AuthType.BASIC_AUTH
 
     def __init__(self):
-        """Initialize this instance."""
         self._users: dict[str, dict[str, Any]] = {}
 
     def register_user(
@@ -302,7 +299,6 @@ class HMACAuthenticator(Authenticator):
         timestamp_header: str = "X-Timestamp",
         max_age_seconds: int = 300,
     ):
-        """Initialize this instance."""
         self.signature_header = signature_header
         self.timestamp_header = timestamp_header
         self.max_age_seconds = max_age_seconds

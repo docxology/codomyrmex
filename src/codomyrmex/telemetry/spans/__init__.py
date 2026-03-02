@@ -89,7 +89,6 @@ class Span:
         context: SpanContext | None = None,
         kind: str = "internal",
     ):
-        """Initialize this instance."""
         self.name = name
         self.context = context or SpanContext.new_root()
         self.kind = kind  # internal, server, client, producer, consumer
@@ -212,7 +211,6 @@ class Tracer:
         name: str,
         on_span_end: Callable[[Span], None] | None = None,
     ):
-        """Initialize this instance."""
         self.name = name
         self.on_span_end = on_span_end
 
@@ -287,7 +285,6 @@ class SpanProcessor:
     """Processes completed spans."""
 
     def __init__(self):
-        """Initialize this instance."""
         self._spans: list[Span] = []
         self._lock = threading.Lock()
 
@@ -321,7 +318,6 @@ class BatchSpanProcessor(SpanProcessor):
         max_batch_size: int = 100,
         flush_interval: float = 5.0,
     ):
-        """Initialize this instance."""
         super().__init__()
         self.exporter = exporter
         self.max_batch_size = max_batch_size

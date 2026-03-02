@@ -70,7 +70,6 @@ class SwarmMessage:
     timestamp: float = 0.0
 
     def __post_init__(self) -> None:
-        """post Init ."""
         if not self.message_id:
             self.message_id = str(uuid.uuid4())[:8]
         if not self.timestamp:
@@ -153,7 +152,6 @@ class TaskAssignment:
     result: dict[str, Any] = field(default_factory=dict)
 
     def __post_init__(self) -> None:
-        """post Init ."""
         if not self.task_id:
             self.task_id = str(uuid.uuid4())[:8]
 

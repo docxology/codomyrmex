@@ -13,7 +13,7 @@ import socket
 import subprocess
 import tempfile
 from dataclasses import dataclass, field
-from datetime import datetime, timezone
+from datetime import datetime, timezone, UTC
 from enum import Enum
 from typing import Any
 
@@ -105,9 +105,8 @@ class Deployment:
     metrics: dict[str, Any] = field(default_factory=dict)
 
     def __post_init__(self):
-        """post Init ."""
         if self.created_at is None:
-            self.created_at = datetime.now(timezone.utc)
+            self.created_at = datetime.now(UTC)
 
     def to_dict(self) -> dict[str, Any]:
         """Convert deployment to dictionary format."""
@@ -268,7 +267,7 @@ class DeploymentOrchestrator:
 
         # Reset deployment state
         deployment.status = DeploymentStatus.RUNNING
-        deployment.started_at = datetime.now(timezone.utc)
+        deployment.started_at = datetime.now(UTC)
         deployment.logs = []
 
         logger.info(f"Starting deployment: {deployment_name}")
@@ -316,7 +315,7 @@ class DeploymentOrchestrator:
                 deployment.status = DeploymentStatus.FAILURE
 
         # Update timing
-        deployment.finished_at = datetime.now(timezone.utc)
+        deployment.finished_at = datetime.now(UTC)
         if deployment.started_at:
             deployment.duration = (
                 deployment.finished_at - deployment.started_at

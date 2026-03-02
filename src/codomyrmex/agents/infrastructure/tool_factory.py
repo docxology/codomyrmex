@@ -4,12 +4,12 @@ Auto-generates Tool objects from Infomaniak client methods via introspection.
 """
 
 import inspect
-import logging
 from collections.abc import Callable
 from dataclasses import dataclass, field
 from typing import Any
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 
 @dataclass

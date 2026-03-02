@@ -4,7 +4,7 @@ Zero-mock policy: all tests use real objects only.
 """
 
 import uuid
-from datetime import datetime, timezone
+from datetime import datetime, timezone, UTC
 
 import pytest
 
@@ -115,7 +115,7 @@ class TestOrchestrationSession:
 
     def test_custom_construction(self):
         sid = str(uuid.uuid4())
-        now = datetime.now(timezone.utc)
+        now = datetime.now(UTC)
         session = OrchestrationSession(
             session_id=sid,
             name="my-session",
@@ -194,7 +194,7 @@ class TestOrchestrationSession:
         assert d["created_at"] is not None  # always set
 
     def test_to_dict_with_timestamps(self):
-        now = datetime.now(timezone.utc)
+        now = datetime.now(UTC)
         session = OrchestrationSession(
             started_at=now, completed_at=now, updated_at=now
         )

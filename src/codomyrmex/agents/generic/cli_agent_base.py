@@ -1,4 +1,3 @@
-import logging
 import os
 import subprocess
 import time
@@ -6,10 +5,11 @@ from collections.abc import Iterator
 from pathlib import Path
 from typing import Any
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 from codomyrmex.agents.core import AgentRequest, AgentResponse, BaseAgent
 from codomyrmex.agents.core.exceptions import AgentError, AgentTimeoutError
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 
 def retry_on_failure(max_retries: int = 3, backoff_factor: float = 1.0):

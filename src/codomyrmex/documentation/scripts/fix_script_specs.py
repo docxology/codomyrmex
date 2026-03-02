@@ -48,7 +48,6 @@ This module contains the **automation scripts** and **CLI entry points** for the
 """
 
 def fix_script_specs(root_dir):
-    """fix Script Specs ."""
     root = Path(root_dir)
     count = 0
 

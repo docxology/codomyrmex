@@ -1,17 +1,16 @@
 """Managed semaphores for resource throttling."""
 
 import asyncio
-import logging
 import threading
 from abc import ABC, abstractmethod
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 class BaseSemaphore(ABC):
     """Abstract base class for all semaphore implementations."""
 
     def __init__(self, value: int = 1):
-        """Initialize this instance."""
         self.initial_value = value
 
     @abstractmethod
@@ -28,7 +27,6 @@ class LocalSemaphore(BaseSemaphore):
     """Local thread-safe semaphore wrapper."""
 
     def __init__(self, value: int = 1):
-        """Initialize this instance."""
         super().__init__(value)
         self._semaphore = threading.Semaphore(value)
 
@@ -44,7 +42,6 @@ class AsyncLocalSemaphore(BaseSemaphore):
     """Asyncio-compatible local semaphore."""
 
     def __init__(self, value: int = 1):
-        """Initialize this instance."""
         super().__init__(value)
         self._semaphore = asyncio.Semaphore(value)
         self._sync_lock = threading.Lock()
@@ -96,7 +93,7 @@ class AsyncLocalSemaphore(BaseSemaphore):
                         timeout=timeout
                     )
                     return True
-                except asyncio.TimeoutError as e:
+                except TimeoutError as e:
                     logger.warning("Semaphore acquisition timed out after %.1fs: %s", timeout, e)
                     return False
 

@@ -10,11 +10,11 @@ Provides:
 
 from __future__ import annotations
 
-import logging
 import time
 from dataclasses import dataclass, field
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 
 @dataclass
@@ -52,7 +52,6 @@ class PermissionRegistry:
     """
 
     def __init__(self) -> None:
-        """Initialize this instance."""
         self._roles: dict[str, set[str]] = {}
         self._role_hierarchy: dict[str, set[str]] = {}
         self._user_roles: dict[str, set[str]] = {}
@@ -181,15 +180,12 @@ class PermissionRegistry:
 
     @property
     def audit_log(self) -> list[PermissionCheck]:
-        """audit Log ."""
         return list(self._audit_log)
 
     @property
     def role_count(self) -> int:
-        """role Count ."""
         return len(self._roles)
 
     @property
     def user_count(self) -> int:
-        """user Count ."""
         return len(self._user_roles)

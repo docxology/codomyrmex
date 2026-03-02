@@ -10,7 +10,6 @@ class QueryBuilder:
     """Builder for constructing search queries."""
 
     def __init__(self):
-        """Initialize this instance."""
         self.terms: list[str] = []
         self.filters: dict = {}
         self.sort_by: str | None = None

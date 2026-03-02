@@ -8,7 +8,7 @@ of workflows that coordinate multiple Codomyrmex modules.
 import json
 import uuid
 from dataclasses import dataclass, field
-from datetime import datetime, timezone
+from datetime import datetime, timezone, UTC
 from enum import Enum
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
@@ -51,7 +51,7 @@ class WorkflowExecution:
     """Track execution of a workflow."""
     workflow_name: str
     execution_id: str
-    start_time: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
+    start_time: datetime = field(default_factory=lambda: datetime.now(UTC))
     status: WorkflowStatus = WorkflowStatus.PENDING
     step_results: dict[str, Any] = field(default_factory=dict)
     end_time: datetime | None = None
@@ -165,7 +165,7 @@ class WorkflowManager:
         except Exception as e:
             execution.status = WorkflowStatus.FAILED
             execution.error = str(e)
-            execution.end_time = datetime.now(timezone.utc)
+            execution.end_time = datetime.now(UTC)
             logger.error(f"Workflow execution failed: {e}")
             return execution
 

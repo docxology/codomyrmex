@@ -120,7 +120,6 @@ class GenerationContext:
 
     @property
     def num_sources(self) -> int:
-        """num Sources ."""
         return len(self.retrieved)
 
 
@@ -146,7 +145,6 @@ class RecursiveTextSplitter(TextSplitter):
         chunk_overlap: int = 200,
         separators: list[str] | None = None,
     ):
-        """Initialize this instance."""
         self.chunk_size = chunk_size
         self.chunk_overlap = chunk_overlap
         self.separators = separators or ["\n\n", "\n", ". ", " ", ""]
@@ -228,7 +226,6 @@ class SentenceSplitter(TextSplitter):
         sentences_per_chunk: int = 5,
         overlap_sentences: int = 1,
     ):
-        """Initialize this instance."""
         self.sentences_per_chunk = sentences_per_chunk
         self.overlap_sentences = overlap_sentences
 
@@ -291,7 +288,6 @@ class InMemoryVectorStore(VectorStore):
     """Simple in-memory vector store."""
 
     def __init__(self):
-        """Initialize this instance."""
         self._chunks: list[Chunk] = []
 
     def add(self, chunks: list[Chunk]) -> None:
@@ -345,7 +341,6 @@ class ContextFormatter:
         max_context_length: int = 4000,
         include_metadata: bool = False,
     ):
-        """Initialize this instance."""
         self.template = template
         self.max_context_length = max_context_length
         self.include_metadata = include_metadata
@@ -405,7 +400,6 @@ class RAGPipeline:
         text_splitter: TextSplitter | None = None,
         context_formatter: ContextFormatter | None = None,
     ):
-        """Initialize this instance."""
         self.embedding_fn = embedding_fn
         self.vector_store = vector_store or InMemoryVectorStore()
         self.text_splitter = text_splitter or RecursiveTextSplitter()

@@ -11,14 +11,14 @@ transport layer while keeping the same API surface.
 
 from __future__ import annotations
 
-import logging
 import time
 from collections import deque
 from collections.abc import Callable
 from dataclasses import dataclass, field
 from typing import Any
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 
 @dataclass
@@ -70,7 +70,6 @@ class ROS2Bridge:
         node_name: str,
         history_depth: int = 100,
     ) -> None:
-        """Initialize this instance."""
         self.node_name = node_name
         self._subscribers: dict[str, list[Callable[[Message], Any]]] = {}
         self._history: dict[str, deque[Message]] = {}

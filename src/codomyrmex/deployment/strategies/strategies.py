@@ -9,13 +9,13 @@ Provides pluggable deployment strategies:
 
 from __future__ import annotations
 
-import logging
 import time
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from typing import Any
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 
 @dataclass
@@ -33,7 +33,6 @@ class DeploymentState:
 
     @property
     def duration_seconds(self) -> float:
-        """duration Seconds ."""
         end = self.completed_at or time.time()
         return end - self.started_at
 
@@ -77,7 +76,6 @@ class RollingStrategy(DeploymentStrategy):
         batch_count: int = 4,
         pause_seconds: float = 0.0,
     ) -> None:
-        """Initialize this instance."""
         self.batch_size = batch_size
         self.batch_count = batch_count
         self.pause_seconds = pause_seconds
@@ -124,7 +122,6 @@ class CanaryStrategy(DeploymentStrategy):
         step: int = 20,
         max_steps: int = 5,
     ) -> None:
-        """Initialize this instance."""
         self.initial_percentage = initial_percentage
         self.step = step
         self.max_steps = max_steps
@@ -199,7 +196,6 @@ class FeatureFlagStrategy(DeploymentStrategy):
     """
 
     def __init__(self, flag_name: str = "", initial_rollout: float = 0.0) -> None:
-        """Initialize this instance."""
         self.flag_name = flag_name
         self.initial_rollout = initial_rollout
 

@@ -9,13 +9,13 @@ from __future__ import annotations
 
 import ast
 import hashlib
-import logging
 import re
 from collections import Counter
 from dataclasses import dataclass
 from pathlib import Path
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 
 @dataclass
@@ -50,7 +50,6 @@ class CodeSimilarity:
     _WHITESPACE_RE = re.compile(r"\s+")
 
     def __init__(self) -> None:
-        """Initialize this instance."""
         self._cache = {}  # Initialize similarity cache
 
     def compute_similarity(self, code_a: str, code_b: str) -> float:

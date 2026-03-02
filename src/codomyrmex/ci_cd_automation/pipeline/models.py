@@ -1,7 +1,7 @@
 """Pipeline data models — enums and dataclasses for pipeline orchestration."""
 
 from dataclasses import dataclass, field
-from datetime import datetime, timezone
+from datetime import datetime, timezone, UTC
 from enum import Enum
 from typing import Any
 
@@ -122,9 +122,8 @@ class Pipeline:
     duration: float = 0.0
 
     def __post_init__(self):
-        """post Init ."""
         if self.created_at is None:
-            self.created_at = datetime.now(timezone.utc)
+            self.created_at = datetime.now(UTC)
 
     def to_dict(self) -> dict[str, Any]:
         """Convert pipeline to dictionary format."""

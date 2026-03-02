@@ -4,12 +4,12 @@ Model Storage Backends
 Storage backends for model artifacts.
 """
 
-import logging
 import threading
 from abc import ABC, abstractmethod
 from pathlib import Path
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 
 class ModelStore(ABC):
@@ -35,7 +35,6 @@ class FileModelStore(ModelStore):
     """File-based model storage."""
 
     def __init__(self, base_path: str = "./models"):
-        """Initialize this instance."""
         self.base_path = Path(base_path)
         self.base_path.mkdir(parents=True, exist_ok=True)
 
@@ -68,7 +67,6 @@ class InMemoryModelStore(ModelStore):
     """In-memory model storage for testing."""
 
     def __init__(self):
-        """Initialize this instance."""
         self._artifacts: dict[str, bytes] = {}
         self._lock = threading.Lock()
 

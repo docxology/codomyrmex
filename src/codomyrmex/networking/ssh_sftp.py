@@ -1,16 +1,14 @@
 """SSH and SFTP client implementation."""
 
-import logging
-
 import paramiko
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 class SSHClient:
     """Wrapper for SSH operations using Paramiko."""
 
     def __init__(self, hostname: str, username: str, password: str | None = None, key_filename: str | None = None, port: int = 22):
-        """Initialize this instance."""
         self.hostname = hostname
         self.username = username
         self.password = password

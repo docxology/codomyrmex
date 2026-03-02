@@ -7,11 +7,11 @@ detector that scans Python source code for their presence using AST analysis.
 from __future__ import annotations
 
 import ast
-import logging
 from dataclasses import dataclass
 from typing import Any
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 
 @dataclass
@@ -90,7 +90,6 @@ PATTERNS: dict[str, dict[str, Any]] = {
 
 
 def _to_definition(name: str, info: dict) -> PatternDefinition:
-    """to Definition ."""
     return PatternDefinition(
         name=name,
         description=info.get("description", ""),
@@ -174,7 +173,6 @@ class PatternDetector:
 
     @staticmethod
     def _collect_class_info(tree: ast.Module) -> list[dict]:
-        """collect Class Info ."""
         classes = []
         for node in ast.walk(tree):
             if isinstance(node, ast.ClassDef):
@@ -205,7 +203,6 @@ class PatternDetector:
 
     @staticmethod
     def _collect_func_info(tree: ast.Module) -> list[dict]:
-        """collect Func Info ."""
         funcs = []
         for node in ast.walk(tree):
             if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
@@ -221,7 +218,6 @@ class PatternDetector:
     # ------------------------------------------------------------------
 
     def _detect_singleton(self, classes: list[dict]) -> list[dict]:
-        """detect Singleton ."""
         if "singleton" not in self._definitions:
             return []
         results = []
@@ -236,7 +232,6 @@ class PatternDetector:
         return results
 
     def _detect_factory(self, funcs: list[dict]) -> list[dict]:
-        """detect Factory ."""
         if "factory" not in self._definitions:
             return []
         results = []
@@ -253,7 +248,6 @@ class PatternDetector:
         return results
 
     def _detect_observer(self, classes: list[dict]) -> list[dict]:
-        """detect Observer ."""
         if "observer" not in self._definitions:
             return []
         results = []
@@ -277,7 +271,6 @@ class PatternDetector:
         return results
 
     def _detect_strategy(self, classes: list[dict]) -> list[dict]:
-        """detect Strategy ."""
         if "strategy" not in self._definitions:
             return []
         results = []
@@ -296,7 +289,6 @@ class PatternDetector:
         return results
 
     def _detect_template_method(self, classes: list[dict]) -> list[dict]:
-        """detect Template Method ."""
         if "template_method" not in self._definitions:
             return []
         # This is a heuristic: classes with methods that are prefixed with _

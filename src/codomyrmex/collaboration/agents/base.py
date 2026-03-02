@@ -5,7 +5,6 @@ Provides abstract and concrete base implementations for collaborative agents.
 """
 
 import asyncio
-import logging
 import uuid
 from abc import ABC, abstractmethod
 from collections.abc import Callable
@@ -15,8 +14,9 @@ from typing import Any
 from ..exceptions import AgentBusyError
 from ..models import AgentStatus, Task, TaskResult
 from ..protocols import AgentCapability, AgentMessage, AgentState, MessageType
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 
 class AbstractAgent(ABC):
@@ -81,7 +81,6 @@ class CollaborativeAgent(AbstractAgent):
         name: str = "Agent",
         capabilities: list[AgentCapability] | None = None,
     ):
-        """Initialize this instance."""
         self._agent_id = agent_id or str(uuid.uuid4())
         self._name = name
         self._capabilities = capabilities or []
@@ -96,7 +95,6 @@ class CollaborativeAgent(AbstractAgent):
 
     @property
     def agent_id(self) -> str:
-        """agent Id ."""
         return self._agent_id
 
     @property
@@ -167,7 +165,7 @@ class CollaborativeAgent(AbstractAgent):
                     await handler(message)
                 else:
                     logger.warning(f"No handler for message type: {message.message_type}")
-            except asyncio.TimeoutError:
+            except TimeoutError:
                 continue
             except Exception as e:
                 logger.error(f"Error processing message: {e}")

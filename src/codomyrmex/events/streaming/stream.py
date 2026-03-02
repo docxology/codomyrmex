@@ -5,14 +5,14 @@ In-memory and SSE stream backends.
 """
 
 import asyncio
-import logging
 import threading
 from abc import ABC, abstractmethod
 from collections.abc import AsyncIterator, Callable
 
 from .models import Event, EventType, Subscription
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 
 class Stream(ABC):
@@ -43,7 +43,6 @@ class InMemoryStream(Stream):
     """In-memory stream implementation."""
 
     def __init__(self):
-        """Initialize this instance."""
         self._subscriptions: dict[str, Subscription] = {}
         self._event_buffer: list[Event] = []
         self._buffer_size = 1000
@@ -92,7 +91,6 @@ class SSEStream(Stream):
     """Server-Sent Events stream implementation."""
 
     def __init__(self, buffer_size: int = 100):
-        """Initialize this instance."""
         self._subscriptions: dict[str, Subscription] = {}
         self._event_queues: dict[str, asyncio.Queue] = {}
         self._buffer_size = buffer_size
@@ -138,7 +136,7 @@ class SSEStream(Stream):
             try:
                 event = await asyncio.wait_for(queue.get(), timeout=30.0)
                 yield event
-            except asyncio.TimeoutError:
+            except TimeoutError:
                 yield Event(type=EventType.HEARTBEAT)
 
     async def sse_generator(self, subscription_id: str) -> AsyncIterator[str]:
@@ -151,7 +149,6 @@ class TopicStream:
     """Stream with topic-based routing."""
 
     def __init__(self):
-        """Initialize this instance."""
         self._topics: dict[str, InMemoryStream] = {}
         self._default = InMemoryStream()
 

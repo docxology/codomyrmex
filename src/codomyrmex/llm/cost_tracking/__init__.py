@@ -102,7 +102,6 @@ class UsageSummary:
 
     @property
     def total_tokens(self) -> int:
-        """total Tokens ."""
         return self.total_input_tokens + self.total_output_tokens
 
 
@@ -420,7 +419,6 @@ class BudgetGuard:
         monthly_limit: float | None = None,
         total_limit: float | None = None,
     ):
-        """Initialize this instance."""
         self.daily_limit = daily_limit
         self.monthly_limit = monthly_limit
         self.total_limit = total_limit
@@ -429,11 +427,9 @@ class BudgetGuard:
         self._total_spend = 0.0
 
     def _today_key(self) -> str:
-        """today Key ."""
         return datetime.now().strftime("%Y-%m-%d")
 
     def _month_key(self) -> str:
-        """month Key ."""
         return datetime.now().strftime("%Y-%m")
 
     def record_spend(self, amount: float) -> None:

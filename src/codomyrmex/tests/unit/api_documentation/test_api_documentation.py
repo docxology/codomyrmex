@@ -7,7 +7,7 @@ generation, OpenAPI specification, and schema management.
 
 import json
 import os
-from datetime import datetime, timezone
+from datetime import datetime, timezone, UTC
 
 import pytest
 
@@ -133,7 +133,7 @@ class TestAPIDocumentation:
             description="Test description",
             base_url="https://api.example.com",
             endpoints=[],
-            generated_at=datetime.now(timezone.utc)
+            generated_at=datetime.now(UTC)
         )
 
         doc_dict = documentation.to_dict()

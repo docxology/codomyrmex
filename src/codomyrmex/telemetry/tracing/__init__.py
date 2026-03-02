@@ -111,17 +111,14 @@ class Span:
 
     @property
     def trace_id(self) -> str:
-        """trace Id ."""
         return self.context.trace_id
 
     @property
     def span_id(self) -> str:
-        """span Id ."""
         return self.context.span_id
 
     @property
     def parent_span_id(self) -> str | None:
-        """parent Span Id ."""
         return self.context.parent_span_id
 
     @property
@@ -133,7 +130,6 @@ class Span:
 
     @property
     def is_finished(self) -> bool:
-        """is Finished ."""
         return self.end_time is not None
 
     def set_attribute(self, key: str, value: Any) -> "Span":
@@ -226,7 +222,6 @@ class ConsoleExporter(SpanExporter):
     """Export spans to console."""
 
     def __init__(self, pretty: bool = True):
-        """Initialize this instance."""
         self.pretty = pretty
 
     def export(self, spans: list[Span]) -> None:
@@ -247,7 +242,6 @@ class InMemoryExporter(SpanExporter):
     """Store spans in memory (useful for testing)."""
 
     def __init__(self, max_spans: int = 1000):
-        """Initialize this instance."""
         self.max_spans = max_spans
         self.spans: list[Span] = []
         self._lock = threading.Lock()
@@ -310,7 +304,6 @@ class Tracer:
         service_name: str = "default",
         exporter: SpanExporter | None = None,
     ):
-        """Initialize this instance."""
         self.service_name = service_name
         self.exporter = exporter or ConsoleExporter()
         self._pending_spans: list[Span] = []

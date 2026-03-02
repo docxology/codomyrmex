@@ -13,7 +13,6 @@ class CrumbCleaner:
     """Sanitizes data by removing tracking crumbs and metadata."""
 
     def __init__(self):
-        """Initialize this instance."""
         self._blacklist: set[str] = {
             "timestamp", "created_at", "updated_at",
             "ip_address", "device_id", "geo_lat", "geo_lon",

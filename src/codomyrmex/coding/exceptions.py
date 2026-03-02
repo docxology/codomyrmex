@@ -28,7 +28,6 @@ class ExecutionTimeoutError(CodeExecutionError):
         process_id: int | None = None,
         **kwargs
     ):
-        """Initialize this instance."""
         super().__init__(message, **kwargs)
         if timeout_seconds is not None:
             self.context["timeout_seconds"] = timeout_seconds
@@ -46,7 +45,6 @@ class MemoryLimitError(CodeExecutionError):
         used_bytes: int | None = None,
         **kwargs
     ):
-        """Initialize this instance."""
         super().__init__(message, **kwargs)
         if limit_bytes is not None:
             self.context["limit_bytes"] = limit_bytes
@@ -64,7 +62,6 @@ class SandboxSecurityError(SandboxError):
         attempted_action: str | None = None,
         **kwargs
     ):
-        """Initialize this instance."""
         super().__init__(message, **kwargs)
         if violation_type:
             self.context["violation_type"] = violation_type
@@ -81,7 +78,6 @@ class SandboxResourceError(SandboxError):
         resource_type: str | None = None,
         **kwargs
     ):
-        """Initialize this instance."""
         super().__init__(message, **kwargs)
         if resource_type:
             self.context["resource_type"] = resource_type
@@ -97,7 +93,6 @@ class DebuggerError(CodomyrmexError):
         target_process: int | None = None,
         **kwargs
     ):
-        """Initialize this instance."""
         super().__init__(message, **kwargs)
         if debugger:
             self.context["debugger"] = debugger
@@ -115,7 +110,6 @@ class BreakpointError(DebuggerError):
         line: int | None = None,
         **kwargs
     ):
-        """Initialize this instance."""
         super().__init__(message, **kwargs)
         if file_path:
             self.context["file_path"] = file_path
@@ -143,7 +137,6 @@ class MonitoringError(CodomyrmexError):
         source: str | None = None,
         **kwargs
     ):
-        """Initialize this instance."""
         super().__init__(message, **kwargs)
         if metric:
             self.context["metric"] = metric
@@ -171,7 +164,6 @@ class RuntimeError(CodeExecutionError):
         traceback: str | None = None,
         **kwargs
     ):
-        """Initialize this instance."""
         super().__init__(message, **kwargs)
         if error_type:
             self.context["error_type"] = error_type

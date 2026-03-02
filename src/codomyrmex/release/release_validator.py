@@ -61,17 +61,14 @@ class ReleaseCertification:
 
     @property
     def total_checks(self) -> int:
-        """total Checks ."""
         return len(self.checks)
 
     @property
     def passed_checks(self) -> int:
-        """passed Checks ."""
         return sum(1 for c in self.checks if c.status == CertificationStatus.PASS)
 
     @property
     def pass_rate(self) -> float:
-        """pass Rate ."""
         return self.passed_checks / self.total_checks if self.checks else 0.0
 
 
@@ -88,13 +85,11 @@ class ReleaseValidator:
     """
 
     def __init__(self, version: str = "1.0.0") -> None:
-        """Initialize this instance."""
         self._version = version
         self._checks: list[CertificationCheck] = []
 
     @property
     def check_count(self) -> int:
-        """check Count ."""
         return len(self._checks)
 
     def check_tests(self, failures: int, total: int, max_skips: int = 50) -> CertificationCheck:

@@ -105,7 +105,6 @@ class InMemoryAuditStore(AuditStore):
     """In-memory audit storage."""
 
     def __init__(self, max_events: int = 10000):
-        """Initialize this instance."""
         self.max_events = max_events
         self._events: list[AuditEvent] = []
         self._lock = threading.Lock()
@@ -152,7 +151,6 @@ class FileAuditStore(AuditStore):
     """File-based audit storage."""
 
     def __init__(self, log_path: str):
-        """Initialize this instance."""
         self.log_path = Path(log_path)
         self._lock = threading.Lock()
 
@@ -226,7 +224,6 @@ class AuditLogger:
     """
 
     def __init__(self, store: AuditStore | None = None):
-        """Initialize this instance."""
         self.store = store or InMemoryAuditStore()
         self._counter = 0
         self._lock = threading.Lock()

@@ -44,7 +44,6 @@ class ModuleConnector:
     """
 
     def __init__(self) -> None:
-        """Initialize this instance."""
         self._bindings: dict[str, ServiceBinding] = {}
 
     def register(
@@ -83,16 +82,13 @@ class ModuleConnector:
         return name in self._bindings
 
     def services_by_tag(self, tag: str) -> list[str]:
-        """services By Tag ."""
         return [b.name for b in self._bindings.values() if tag in b.tags]
 
     @property
     def service_count(self) -> int:
-        """service Count ."""
         return len(self._bindings)
 
     def service_names(self) -> list[str]:
-        """service Names ."""
         return list(self._bindings.keys())
 
 

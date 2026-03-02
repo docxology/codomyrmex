@@ -33,7 +33,6 @@ class SimulatedAgent(AgentInterface):
     """A simulated agent with configurable delay and failure rate."""
 
     def __init__(self, name: str, delay: float = 0.5, failure_rate: float = 0.0):
-        """Initialize this instance."""
         super().__init__()
         self.name = name
         self.delay = delay
@@ -71,7 +70,6 @@ class SimulatedAgent(AgentInterface):
         return None  # Demo agent — no setup needed
 
     def test_connection(self) -> bool:
-        """test Connection ."""
         return True
 
     def get_capabilities(self):
@@ -79,7 +77,6 @@ class SimulatedAgent(AgentInterface):
         return self.capabilities
 
     def supports_capability(self, capability):
-        """supports Capability ."""
         return capability in self.capabilities
 
 

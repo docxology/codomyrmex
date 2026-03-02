@@ -7,10 +7,10 @@ such as design patterns, anti-patterns, and user-defined templates.
 from __future__ import annotations
 
 import ast
-import logging
 from dataclasses import dataclass
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 
 @dataclass
@@ -58,7 +58,6 @@ class ASTMatcher:
     )
 
     def __init__(self) -> None:
-        """Initialize this instance."""
         pass
 
     def parse_code(self, source: str, language: str = "python") -> dict:
@@ -197,7 +196,6 @@ class ASTMatcher:
 
     @staticmethod
     def _find_singleton(tree: ast.Module) -> list[ASTMatchResult]:
-        """find Singleton ."""
         results = []
         for node in ast.walk(tree):
             if isinstance(node, ast.ClassDef):
@@ -229,7 +227,6 @@ class ASTMatcher:
 
     @staticmethod
     def _find_factory(tree: ast.Module) -> list[ASTMatchResult]:
-        """find Factory ."""
         results = []
         for node in ast.walk(tree):
             if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
@@ -248,7 +245,6 @@ class ASTMatcher:
 
     @staticmethod
     def _find_decorated(tree: ast.Module) -> list[ASTMatchResult]:
-        """find Decorated ."""
         results = []
         for node in ast.walk(tree):
             if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)):
@@ -274,7 +270,6 @@ class ASTMatcher:
 
     @staticmethod
     def _find_context_manager(tree: ast.Module) -> list[ASTMatchResult]:
-        """find Context Manager ."""
         results = []
         for node in ast.walk(tree):
             if isinstance(node, ast.ClassDef):
@@ -300,7 +295,6 @@ class ASTMatcher:
 
     @staticmethod
     def _check_bare_except(tree: ast.Module) -> list[ASTMatchResult]:
-        """check Bare Except ."""
         results = []
         for node in ast.walk(tree):
             if isinstance(node, ast.ExceptHandler) and node.type is None:
@@ -315,7 +309,6 @@ class ASTMatcher:
 
     @staticmethod
     def _check_mutable_default_arg(tree: ast.Module) -> list[ASTMatchResult]:
-        """check Mutable Default Arg ."""
         results = []
         mutable_types = (ast.List, ast.Dict, ast.Set)
         for node in ast.walk(tree):
@@ -335,7 +328,6 @@ class ASTMatcher:
 
     @staticmethod
     def _check_star_import(tree: ast.Module) -> list[ASTMatchResult]:
-        """check Star Import ."""
         results = []
         for node in ast.walk(tree):
             if isinstance(node, ast.ImportFrom):
@@ -356,7 +348,6 @@ class ASTMatcher:
         tree: ast.Module,
         max_depth: int = 2,
     ) -> list[ASTMatchResult]:
-        """check Nested Function Depth ."""
         results: list[ASTMatchResult] = []
 
         def _walk(node: ast.AST, depth: int) -> None:

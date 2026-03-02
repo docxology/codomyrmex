@@ -1,21 +1,19 @@
 """Prometheus metrics exporter."""
 
-import logging
-
 from prometheus_client import (
     Counter,
     Gauge,
     Histogram,
     start_http_server,
 )
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 class PrometheusExporter:
     """Wrapper for prometheus_client to expose metrics via HTTP."""
 
     def __init__(self, port: int = 8000, addr: str = "0.0.0.0"):
-        """Initialize this instance."""
         self.port = port
         self.addr = addr
         self._server_started = False

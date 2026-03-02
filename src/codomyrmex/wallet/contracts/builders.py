@@ -56,7 +56,6 @@ class TransactionBuilder:
     """
 
     def __init__(self, from_address: Address) -> None:
-        """Initialize this instance."""
         self.from_address = from_address
         self._to: Address | None = None
         self._value: int = 0
@@ -83,12 +82,10 @@ class TransactionBuilder:
         return self
 
     def gas_limit(self, limit: int) -> TransactionBuilder:
-        """gas Limit ."""
         self._gas_limit = limit
         return self
 
     def gas_price(self, price: int) -> TransactionBuilder:
-        """gas Price ."""
         self._gas_price = price
         return self
 
@@ -98,7 +95,6 @@ class TransactionBuilder:
         return self
 
     def chain_id(self, cid: int) -> TransactionBuilder:
-        """chain Id ."""
         self._chain_id = cid
         return self
 

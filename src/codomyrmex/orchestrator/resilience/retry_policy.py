@@ -7,15 +7,15 @@ with exponential backoff, circuit breaker integration, and dead letter routing.
 from __future__ import annotations
 
 import asyncio
-import logging
 import random
 import time
 from collections.abc import Callable
 from dataclasses import dataclass
 from enum import Enum
 from typing import Any, TypeVar
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 T = TypeVar("T")
 
 
@@ -73,7 +73,6 @@ class PipelineRetryExecutor:
     """Execute pipeline steps with configurable retry policies."""
 
     def __init__(self, default_policy: RetryPolicy | None = None) -> None:
-        """Initialize this instance."""
         self._default_policy = default_policy or RetryPolicy()
         self._step_policies: dict[str, RetryPolicy] = {}
 
@@ -247,7 +246,6 @@ def with_retry(
 
             @functools.wraps(func)
             def sync_wrapper(*args: Any, **kwargs: Any) -> Any:
-                """sync Wrapper ."""
                 last_exc: Exception | None = None
                 for attempt in range(1, policy.max_attempts + 1):
                     try:

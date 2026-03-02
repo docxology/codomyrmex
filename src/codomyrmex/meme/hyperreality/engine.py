@@ -16,7 +16,6 @@ class HyperrealityEngine:
     """Engine for managing hyperreal states and reality tunnels."""
 
     def __init__(self) -> None:
-        """Initialize this instance."""
         self.tunnels: dict[str, RealityTunnel] = {}
 
     def create_tunnel(self, name: str, filters: list[str]) -> RealityTunnel:

@@ -108,7 +108,6 @@ def cli_commands():
             print(f"Error: {result['error']}")
 
     def _list_tools():
-        """list Tools ."""
         tools_list = get_available_tools()
         print("Available analysis tools:")
         for tool in tools_list:

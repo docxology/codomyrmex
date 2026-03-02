@@ -1,6 +1,6 @@
 # PAI-Codomyrmex Workflows
 
-**Version**: v1.0.3-dev | **Last Updated**: February 2026
+**Version**: v1.0.3 | **Last Updated**: March 2026
 
 ## Overview
 
@@ -24,6 +24,7 @@ Codomyrmex provides two primary workflows for PAI integration, plus an Algorithm
 **Backing function**: `verify_capabilities()` in `trust_gateway.py`
 
 **Returns:**
+
 ```python
 {
     "status": "verified",
@@ -43,6 +44,7 @@ Codomyrmex provides two primary workflows for PAI integration, plus an Algorithm
 ```
 
 **When to use:**
+
 - First interaction with a new Codomyrmex installation
 - After updating Codomyrmex modules
 - To check system health before executing tools
@@ -63,6 +65,7 @@ Codomyrmex provides two primary workflows for PAI integration, plus an Algorithm
 **Backing function**: `trust_all()` in `trust_gateway.py`
 
 **Returns:**
+
 ```python
 {
     "promoted": ["codomyrmex.write_file", "codomyrmex.run_command", ...],
@@ -72,17 +75,23 @@ Codomyrmex provides two primary workflows for PAI integration, plus an Algorithm
 ```
 
 **Security implications:**
+
 - Enables `write_file` (file system writes)
 - Enables `run_command` (shell execution)
 - Enables `run_tests` (test execution with potential side effects)
 - Enables `call_module_function` (arbitrary module function calls)
 
 **When to use:**
+
 - After `/codomyrmexVerify` has audited capabilities
 - When you need the full power of Codomyrmex tools
 - Trust persists across sessions via the ledger file
 
 ## Algorithm Phase → Codomyrmex Module Mapping
+
+The PAI Dispatch tab provides direct action buttons (Summarize, Scope & Plan, Review, Enact Next Step) that trigger Algorithm phases for each mission:
+
+![PAI Dispatch — Mission action center with per-mission Summarize, Scope & Plan, Review, and Enact Next Step buttons](screenshots/pai_dispatch.png)
 
 Each phase of PAI's 7-phase Algorithm maps to specific Codomyrmex tools:
 
@@ -96,9 +105,22 @@ Each phase of PAI's 7-phase Algorithm maps to specific Codomyrmex tools:
 | **VERIFY** | `git_status`, `git_diff`, `checksum_file` | Verify changes are correct |
 | **LEARN** | `pai_awareness`, `pai_status` | Capture learning, check system state |
 
+### Mission Tracking
+
+The Board tab provides a Kanban view of mission status, reflecting Algorithm phase progress:
+
+![PAI Board — Kanban board with ACTIVE, PLANNING, IN PROGRESS, BLOCKED, and PAUSED columns tracking mission lifecycle](screenshots/pai_board.png)
+
+### Calendar Scheduling
+
+The Calendar tab integrates with Google Calendar for scheduling Algorithm execution windows and deadlines:
+
+![PAI Calendar — Google Calendar integration with month view, event creation, navigation, and DAF attendee invite](screenshots/pai_calendar.png)
+
 ### Bidirectional Data Flow
 
 **PAI → Codomyrmex** (during Algorithm execution):
+
 ```
 OBSERVE: PAI calls list_modules to understand project
 THINK:   PAI calls analyze_python to study code structure
@@ -110,6 +132,7 @@ LEARN:   PAI calls pai_awareness to capture state
 ```
 
 **Codomyrmex → PAI** (via PAIBridge):
+
 ```
 bridge.is_installed()         → Is PAI available?
 bridge.get_algorithm_version() → What Algorithm version?

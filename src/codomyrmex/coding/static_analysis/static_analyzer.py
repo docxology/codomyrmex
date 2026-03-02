@@ -40,7 +40,6 @@ except ImportError:
     PERFORMANCE_MONITORING_AVAILABLE = False
 
     def monitor_performance(*args, **kwargs):
-        """monitor Performance ."""
         def decorator(func):
             """decorator ."""
             return func
@@ -50,7 +49,6 @@ except ImportError:
     class performance_context:
         """Functional component: performance_context."""
         def __init__(self, *args, **kwargs):
-            """Initialize this instance."""
             return None  # Intentional no-op
 
         def __enter__(self):

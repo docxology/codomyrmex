@@ -33,7 +33,6 @@ class AggregateResult:
 
     @property
     def success_rate(self) -> float:
-        """success Rate ."""
         return self.successful / self.total_tasks if self.total_tasks > 0 else 0.0
 
 
@@ -49,7 +48,6 @@ class ResultAggregator:
     """
 
     def __init__(self) -> None:
-        """Initialize this instance."""
         self._results: list[TaskResult] = []
 
     @property

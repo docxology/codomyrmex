@@ -13,7 +13,6 @@ Advantages:
 """
 
 import asyncio
-import logging
 import tempfile
 import time
 from pathlib import Path
@@ -32,8 +31,9 @@ from ..models import (
     VoiceInfo,
 )
 from .base import TTSProvider
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 # Check if pyttsx3 is available
 try:

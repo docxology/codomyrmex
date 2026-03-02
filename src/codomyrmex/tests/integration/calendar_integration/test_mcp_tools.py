@@ -1,5 +1,5 @@
 import os
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timedelta, timezone, UTC
 
 import pytest
 
@@ -45,7 +45,7 @@ def test_calendar_mcp_flow():
     assert "events" in res
 
     # 2. Create
-    now = datetime.now(timezone.utc)
+    now = datetime.now(UTC)
     res_create = calendar_create_event(
         summary="Test MCP Agent Event",
         start_time=now.isoformat(),
@@ -85,7 +85,7 @@ def test_calendar_mcp_flow():
 )
 def test_calendar_attendee_injection():
     """Verify that _DEFAULT_ATTENDEE is always injected as an attendee."""
-    now = datetime.now(timezone.utc)
+    now = datetime.now(UTC)
     res_create = calendar_create_event(
         summary="PAI Attendee Injection Test",
         start_time=now.isoformat(),
@@ -118,7 +118,7 @@ def test_calendar_error_handling_missing_token():
     assert res_list["status"] == "error", "Expected error status for missing token"
     assert res_list.get("error"), "Expected non-empty error message"
 
-    now = datetime.now(timezone.utc)
+    now = datetime.now(UTC)
     res_create = calendar_create_event(
         summary="Should not be created",
         start_time=now.isoformat(),

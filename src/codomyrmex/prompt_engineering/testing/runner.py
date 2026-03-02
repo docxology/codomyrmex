@@ -40,7 +40,6 @@ class PromptTestSuite:
     """
 
     def __init__(self, suite_id: str, description: str = ""):
-        """Initialize this instance."""
         self.suite_id = suite_id
         self.description = description
         self.test_cases: list[PromptTestCase] = []
@@ -89,7 +88,6 @@ class PromptTester:
     """
 
     def __init__(self, pass_threshold: float = 0.5):
-        """Initialize this instance."""
         self.pass_threshold = pass_threshold
         self._evaluators: dict[EvaluationType, Evaluator] = {
             EvaluationType.EXACT_MATCH: ExactMatchEvaluator(),
@@ -184,7 +182,6 @@ class ABTest:
     """
 
     def __init__(self, test_id: str):
-        """Initialize this instance."""
         self.test_id = test_id
         self.variants: dict[str, str] = {}
         self.results: dict[str, TestSuiteResult] = {}

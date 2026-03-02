@@ -35,9 +35,7 @@ Environment Variables:
     INFOMANIAK_S3_SECRET_KEY: S3 secret key for object storage
 """
 
-import logging
-
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 # Exception hierarchy
 # Core authentication

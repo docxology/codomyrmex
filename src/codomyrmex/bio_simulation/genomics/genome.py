@@ -29,7 +29,6 @@ class Genome:
     length: int = field(init=False)
 
     def __post_init__(self) -> None:
-        """post Init ."""
         self.length = len(self.genes)
 
     @classmethod

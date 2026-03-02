@@ -46,7 +46,6 @@ class CheckResult:
         message: str = "",
         details: dict[str, Any] | None = None,
     ):
-        """Initialize this instance."""
         self.name = name
         self.status = status
         self.message = message

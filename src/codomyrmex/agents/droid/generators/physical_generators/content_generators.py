@@ -108,7 +108,6 @@ class ObjectRegistry:
     """Registry for managing physical objects."""
 
     def __init__(self):
-        """Initialize this instance."""
         self.objects: Dict[str, PhysicalObject] = {}
         self._location_index: Dict[Tuple[int, int, int], Set[str]] = {}  # Grid-based index
 
@@ -212,13 +211,11 @@ class PhysicalObjectManager:
     """Main manager for physical object operations."""
 
     def __init__(self):
-        """Initialize this instance."""
         self.registry = ObjectRegistry()
         self._active_simulations = set()
 
     def create_object(self, object_id: str, name: str, object_type: ObjectType,
                      x: float, y: float, z: float, **properties) -> PhysicalObject:
-        """create Object ."""
                          pass
         """Create a new physical object."""
         obj = PhysicalObject(
@@ -362,7 +359,6 @@ class PhysicsSimulator:
     """Physics simulation engine."""
 
     def __init__(self):
-        """Initialize this instance."""
         self.gravity = Vector3D(0, -9.81, 0)
         self.force_fields: List[ForceField] = []
         self.constraints: List[Constraint] = []
@@ -378,7 +374,6 @@ class PhysicsSimulator:
 
     def register_object(self, object_id: str, mass: float, position: Vector3D,
                        velocity: Vector3D = None) -> None:
-        """register Object ."""
                            pass
         """Register an object for physics simulation."""
         if velocity is None:
@@ -551,7 +546,6 @@ class SensorManager:
     """Manages sensor data collection and device integration."""
 
     def __init__(self):
-        """Initialize this instance."""
         self.devices: Dict[str, DeviceInterface] = {}
         self.readings: List[SensorReading] = []
         self._callbacks: Dict[str, List[Callable]] = {}
@@ -593,7 +587,6 @@ class SensorManager:
     def get_readings_by_type(self, sensor_type: SensorType,
                            start_time: Optional[float] = None,
                            end_time: Optional[float] = None) -> List[SensorReading]:
-        """get Readings By Type ."""
                                pass
         """Get readings for a sensor type within time range."""
         filtered_readings = []

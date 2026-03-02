@@ -318,7 +318,6 @@ class HealthChecker:
             # Test performance profiling
             @profile_function
             def test_func():
-                """test Func ."""
                 return sum(range(100))
 
             test_func()

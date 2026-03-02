@@ -44,7 +44,6 @@ class SiteGenerator:
     """
 
     def __init__(self, title: str = "Codomyrmex Documentation") -> None:
-        """Initialize this instance."""
         self._title = title
         self._extractor = APIDocExtractor()
         self._index = SearchIndex()
@@ -53,17 +52,14 @@ class SiteGenerator:
 
     @property
     def module_count(self) -> int:
-        """module Count ."""
         return len(self._modules)
 
     @property
     def page_count(self) -> int:
-        """page Count ."""
         return len(self._pages)
 
     @property
     def search_index(self) -> SearchIndex:
-        """search Index ."""
         return self._index
 
     def add_module_source(self, source: str, module_name: str) -> ModuleDoc:

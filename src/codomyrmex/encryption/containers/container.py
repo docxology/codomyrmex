@@ -10,7 +10,6 @@ class SecureDataContainer:
     """A container for storing and retrieving encrypted data objects."""
 
     def __init__(self, key: bytes):
-        """Initialize this instance."""
         self.encryptor = AESGCMEncryptor(key)
 
     def pack(self, data: Any, metadata: dict[str, Any] | None = None) -> bytes:

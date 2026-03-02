@@ -79,18 +79,15 @@ class WorkflowResult:
     total_duration_ms: float = 0.0
 
     def __post_init__(self) -> None:
-        """post Init ."""
         if not self.workflow_id:
             self.workflow_id = f"wf-{uuid.uuid4().hex[:8]}"
 
     @property
     def completed_count(self) -> int:
-        """completed Count ."""
         return sum(1 for s in self.steps if s.status == StepStatus.COMPLETED)
 
     @property
     def failed_count(self) -> int:
-        """failed Count ."""
         return sum(1 for s in self.steps if s.status == StepStatus.FAILED)
 
     def to_dict(self) -> dict[str, Any]:
@@ -116,11 +113,9 @@ class WorkflowRunner:
     """
 
     def __init__(self) -> None:
-        """Initialize this instance."""
         self._steps: dict[str, WorkflowStep] = {}
 
     def add_step(self, step: WorkflowStep) -> None:
-        """add Step ."""
         self._steps[step.name] = step
 
     def run(self, context: dict[str, Any] | None = None) -> WorkflowResult:
@@ -203,11 +198,9 @@ class WorkflowRunner:
 
     @property
     def step_count(self) -> int:
-        """step Count ."""
         return len(self._steps)
 
     def step_names(self) -> list[str]:
-        """step Names ."""
         return list(self._steps.keys())
 
 

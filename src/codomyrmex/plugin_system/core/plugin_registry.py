@@ -77,7 +77,6 @@ class PluginInfo:
 class Hook:
     """Represents a plugin hook."""
     def __init__(self, name: str, description: str = ""):
-        """Initialize this instance."""
         self.name = name
         self.description = description
         self.handlers: list[Callable] = []

@@ -5,7 +5,6 @@ Provides utilities for building, managing, and running Docker containers.
 """
 
 import json
-import logging
 import os
 import subprocess
 import tempfile
@@ -13,8 +12,9 @@ from collections.abc import Iterator
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Dict, List, Optional
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 
 @dataclass
@@ -93,7 +93,6 @@ class ImageInfo:
 
     @property
     def full_name(self) -> str:
-        """full Name ."""
         return f"{self.repository}:{self.tag}"
 
 
@@ -109,7 +108,6 @@ class ContainerInfo:
 
     @property
     def is_running(self) -> bool:
-        """is Running ."""
         return "Up" in self.status
 
 
@@ -117,7 +115,6 @@ class DockerClient:
     """Client for interacting with Docker."""
 
     def __init__(self, docker_path: str = "docker"):
-        """Initialize this instance."""
         self.docker_path = docker_path
         self._verify_docker()
 
@@ -375,7 +372,6 @@ class DockerComposeClient:
     """Client for Docker Compose operations."""
 
     def __init__(self, compose_file: str = "docker-compose.yml"):
-        """Initialize this instance."""
         self.compose_file = compose_file
 
     def _run_compose(

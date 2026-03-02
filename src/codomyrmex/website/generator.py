@@ -21,7 +21,6 @@ class WebsiteGenerator:
     """
 
     def __init__(self, output_dir: str, root_dir: str | None = None):
-        """Initialize this instance."""
 
 
         self.output_dir = Path(output_dir)

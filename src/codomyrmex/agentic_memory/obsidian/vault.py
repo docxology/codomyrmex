@@ -8,16 +8,16 @@ via :func:`parser.parse_note`, and caches the results.  Excludes
 from __future__ import annotations
 
 import json
-import logging
 from pathlib import Path
 from typing import Any
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 from codomyrmex.agentic_memory.obsidian.models import Note, VaultMetadata
 from codomyrmex.agentic_memory.obsidian.parser import (
     parse_note,
 )
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 
 class ObsidianVault:

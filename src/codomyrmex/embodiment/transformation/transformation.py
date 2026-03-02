@@ -59,7 +59,6 @@ class Vec3:
         )
 
     def to_tuple(self) -> tuple[float, float, float]:
-        """to Tuple ."""
         return (self.x, self.y, self.z)
 
     def to_dict(self) -> dict[str, float]:

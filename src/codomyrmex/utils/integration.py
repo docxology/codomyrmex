@@ -273,7 +273,6 @@ class HealthChecker:
     """Aggregate health checks for modules."""
 
     def __init__(self):
-        """Initialize this instance."""
         self._checks: dict[str, Callable[[], HealthStatus]] = {}
 
     def register(self, name: str, check_fn: Callable[[], HealthStatus]) -> None:

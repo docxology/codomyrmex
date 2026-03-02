@@ -13,7 +13,7 @@ Based on https://github.com/agenticnotetaking/arscontexta
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from datetime import datetime, timezone
+from datetime import datetime, timezone, UTC
 from enum import Enum
 from pathlib import Path
 from typing import Any
@@ -139,7 +139,7 @@ class DimensionSignal:
     value: str
     confidence: float = 0.5
     source: str = ""
-    timestamp: str = field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
+    timestamp: str = field(default_factory=lambda: datetime.now(UTC).isoformat())
 
     def to_dict(self) -> dict[str, Any]:
         """Return a dictionary representation of this object."""
@@ -211,14 +211,12 @@ class KernelConfig:
     primitives: list[KernelPrimitive] = field(default_factory=list)
 
     def get_by_name(self, name: str) -> KernelPrimitive | None:
-        """get By Name ."""
         for p in self.primitives:
             if p.name == name:
                 return p
         return None
 
     def get_by_layer(self, layer: KernelLayer) -> list[KernelPrimitive]:
-        """get By Layer ."""
         return [p for p in self.primitives if p.layer == layer]
 
     def validate_dependencies(self) -> list[str]:
@@ -243,7 +241,7 @@ class VaultConfig:
     )
     derivation_signals: list[DimensionSignal] = field(default_factory=list)
     prerequisites: list[str] = field(default_factory=list)
-    created_at: str = field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
+    created_at: str = field(default_factory=lambda: datetime.now(UTC).isoformat())
 
     def to_dict(self) -> dict[str, Any]:
         """Return a dictionary representation of this object."""

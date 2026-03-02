@@ -9,13 +9,13 @@ simple JSON-file-based persistence).
 from __future__ import annotations
 
 import json
-import logging
 import os
 import threading
 from abc import ABC, abstractmethod
 from typing import Any
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 
 class FlagStore(ABC):
@@ -74,7 +74,6 @@ class InMemoryFlagStore(FlagStore):
     """
 
     def __init__(self) -> None:
-        """Initialize this instance."""
         self._data: dict[str, Any] = {}
         self._lock = threading.Lock()
 
@@ -97,7 +96,6 @@ class InMemoryFlagStore(FlagStore):
             return False
 
     def list_all(self) -> dict[str, Any]:
-        """list All ."""
         with self._lock:
             return dict(self._data)
 
@@ -124,7 +122,6 @@ class FileFlagStore(FlagStore):
     """
 
     def __init__(self, path: str) -> None:
-        """Initialize this instance."""
         self._path = path
         self._lock = threading.Lock()
         if not os.path.exists(self._path):
@@ -155,7 +152,6 @@ class FileFlagStore(FlagStore):
             return False
 
     def list_all(self) -> dict[str, Any]:
-        """list All ."""
         return self._read()
 
     # --- internal helpers ---

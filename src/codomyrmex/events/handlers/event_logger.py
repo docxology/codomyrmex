@@ -25,7 +25,6 @@ from ..core.event_schema import Event, EventType
 class EventLogEntry:
     """Functional component: EventLogEntry."""
     def __init__(self, event: Event, handler_count: int = 0, processing_time: float | None = None):
-        """Initialize this instance."""
         self.event = event
         self.timestamp = datetime.now()
         self.handler_count = handler_count
@@ -52,7 +51,6 @@ class EventLogEntry:
 class EventLogger:
     """Functional component: EventLogger."""
     def __init__(self, max_entries: int = 10000, event_bus: EventBus | None = None):
-        """Initialize this instance."""
         self.max_entries = max_entries
         self.event_bus = event_bus or get_event_bus()
         self.entries: deque[EventLogEntry] = deque(maxlen=max_entries)
@@ -63,7 +61,6 @@ class EventLogger:
         self.event_bus.subscribe(["*"], self.log_event)
 
     def log_event(self, event: Event, handler_count: int = 0, processing_time: float | None = 0.0) -> None:
-        """log Event ."""
         with self.lock:
             entry = EventLogEntry(event, handler_count, processing_time)
             self.entries.append(entry)
@@ -74,7 +71,6 @@ class EventLogger:
             self.processing_times[etype].append(processing_time or 0.0)
 
     def get_event_statistics(self) -> dict[str, Any]:
-        """get Event Statistics ."""
         with self.lock:
             return {
                 "total_events": sum(self.event_counts.values()),
@@ -83,7 +79,6 @@ class EventLogger:
             }
 
     def get_events(self, event_type: str | None = None, start_time=None, end_time=None) -> list[EventLogEntry]:
-        """get Events ."""
         with self.lock:
             res = list(self.entries)
             if event_type:
@@ -93,21 +88,17 @@ class EventLogger:
             return res
 
     def get_events_by_type(self, event_type: EventType | str) -> list[EventLogEntry]:
-        """get Events By Type ."""
         t = event_type.value if hasattr(event_type, 'value') else str(event_type)
         return self.get_events(event_type=t)
 
     def get_error_events(self) -> list[EventLogEntry]:
-        """get Error Events ."""
         with self.lock:
             return [e for e in self.entries if "error" in (e.event.event_type.value if hasattr(e.event.event_type, 'value') else str(e.event.event_type)).lower()]
 
     def get_events_in_time_range(self, start, end) -> list[EventLogEntry]:
-        """get Events In Time Range ."""
         return self.get_events(start_time=start, end_time=end)
 
     def get_recent_events(self, limit: int = 50) -> list[EventLogEntry]:
-        """get Recent Events ."""
         with self.lock: return list(self.entries)[-limit:]
 
     def clear(self) -> None:
@@ -120,7 +111,6 @@ class EventLogger:
 
 
     def get_performance_report(self) -> dict[str, Any]:
-        """get Performance Report ."""
         with self.lock:
             total_time = sum(sum(t) for t in self.processing_times.values())
             total_count = sum(len(t) for t in self.processing_times.values())
@@ -132,7 +122,6 @@ class EventLogger:
             return report
 
     def export_logs(self, path: str, format: str = 'json') -> None:
-        """export Logs ."""
         with self.lock:
             data = [e.to_dict() for e in self.entries]
             if format == 'json':
@@ -143,7 +132,6 @@ class EventLogger:
 
 _logger = None
 def get_event_logger():
-    """get Event Logger ."""
     global _logger
     if _logger is None: _logger = EventLogger()
     return _logger

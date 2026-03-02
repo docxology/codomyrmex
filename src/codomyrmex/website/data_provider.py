@@ -34,7 +34,6 @@ class DataProvider(HealthProviderMixin, PAIProviderMixin):
     _PAI_ROOT: Path = Path.home() / ".claude"
 
     def __init__(self, root_dir: Path):
-        """Initialize this instance."""
         self.root_dir = root_dir
         self._start_time = time.time()
 

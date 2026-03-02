@@ -22,7 +22,7 @@ try:
     from . import context
 except ImportError as e:
     import logging as _logging
-    _logging.getLogger(__name__).debug("Optional telemetry.context not available: %s", e)
+    _get_logger(__name__).debug("Optional telemetry.context not available: %s", e)
     pass
 
 # Try to import from existing modules, but don't fail if they don't exist
@@ -89,6 +89,7 @@ def cli_commands():
 
 
 from . import dashboard
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 __all__ = [
     "dashboard",

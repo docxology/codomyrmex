@@ -77,11 +77,9 @@ class RepoIndex:
 
     @property
     def symbol_count(self) -> int:
-        """symbol Count ."""
         return len(self.symbols)
 
     def symbols_in_file(self, file_path: str) -> list[Symbol]:
-        """symbols In File ."""
         return [s for s in self.symbols if s.file == file_path]
 
     def functions(self) -> list[Symbol]:

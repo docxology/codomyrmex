@@ -24,7 +24,6 @@ class MetricCollector:
     """
 
     def __init__(self, retention_minutes: int = 60):
-        """Initialize this instance."""
         self.retention_minutes = retention_minutes
         self._metrics: dict[str, list[MetricValue]] = {}
         self._lock = threading.Lock()

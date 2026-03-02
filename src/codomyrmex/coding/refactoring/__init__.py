@@ -129,7 +129,6 @@ class RenameRefactoring(Refactoring):
         new_name: str,
         scope: str = "file",  # file, module, project
     ):
-        """Initialize this instance."""
         self.file_path = file_path
         self.old_name = old_name
         self.new_name = new_name
@@ -236,7 +235,6 @@ class ExtractFunctionRefactoring(Refactoring):
         function_name: str,
         parameters: list[str] | None = None,
     ):
-        """Initialize this instance."""
         self.file_path = file_path
         self.start_line = start_line
         self.end_line = end_line
@@ -361,7 +359,6 @@ class InlineRefactoring(Refactoring):
         file_path: str,
         symbol_name: str,
     ):
-        """Initialize this instance."""
         self.file_path = file_path
         self.symbol_name = symbol_name
 

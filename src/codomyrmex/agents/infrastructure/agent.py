@@ -4,7 +4,6 @@ Follows the GitAgent pattern — BaseAgent subclass with JSON command dispatch.
 """
 
 import json
-import logging
 from collections.abc import Iterator
 from typing import Any
 
@@ -16,8 +15,9 @@ from codomyrmex.agents.core.base import (
 )
 
 from .tool_factory import CloudToolFactory, Tool
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 # Lazy import for security pipeline
 try:
@@ -41,7 +41,6 @@ class InfrastructureAgent(BaseAgent):
         security_pipeline: Any = None,
         config: dict[str, Any] | None = None,
     ):
-        """Initialize this instance."""
         capabilities = [AgentCapabilities.CLOUD_INFRASTRUCTURE]
         if clients and any(
             name in clients for name in ("s3", "object_storage")

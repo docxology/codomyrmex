@@ -29,7 +29,6 @@ class CodomyrmexError(Exception):
         error_code: str | None = None,
         **kwargs: Any,
     ):
-        """Initialize this instance."""
 
         super().__init__(message)
         self.message = message

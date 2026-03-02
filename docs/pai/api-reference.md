@@ -1,6 +1,6 @@
 # PAI-Codomyrmex Python API Reference
 
-**Version**: v1.0.3-dev | **Last Updated**: February 2026
+**Version**: v1.0.3 | **Last Updated**: March 2026
 
 ## Module: `codomyrmex.agents.pai`
 
@@ -9,6 +9,10 @@ All public API is importable from the top-level package:
 ```python
 from codomyrmex.agents.pai import PAIBridge, TrustLevel, call_tool, verify_capabilities
 ```
+
+The PAI Dashboard (port 8889) uses this API to render the Analytics tab with live mission, project, and task data:
+
+![PAI Analytics — Live dashboard showing 7 missions, 19 projects, 831 tasks with status badges and completion bars](screenshots/pai_analytics.png)
 
 ## PAIBridge Class
 
@@ -123,6 +127,10 @@ TrustLevel.TRUSTED    # "trusted"
 | `get_trust_report` | `() -> dict[str, Any]` | Current trust state |
 | `is_trusted` | `(tool_name: str) -> bool` | Check trust status |
 | `reset_trust` | `() -> None` | Reset all to UNTRUSTED |
+
+The `pai_status` and `pai_awareness` data is visualized in the PAI Dashboard's multiple views including the Integration tab:
+
+![PAI Integration — GitHub repos, sync controls, diff preview, cleanup tools, and JSON/CSV data export for project data](screenshots/pai_integration.png)
 
 ## Dataclasses
 

@@ -35,7 +35,6 @@ class Address:
 
     @property
     def is_valid(self) -> bool:
-        """is Valid ."""
         if self.network in [Network.ETHEREUM, Network.POLYGON, Network.ARBITRUM, Network.OPTIMISM, Network.BASE]:
             return len(self.value) == 42 and self.value.startswith("0x")
         return len(self.value) > 0

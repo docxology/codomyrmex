@@ -70,7 +70,6 @@ class SensorManager:
     """Manages sensor data collection and device integration."""
 
     def __init__(self):
-        """Initialize this instance."""
         self.devices: Dict[str, DeviceInterface] = {}
         self.readings: List[SensorReading] = []
         self._callbacks: Dict[str, List[Callable]] = {}
@@ -112,7 +111,6 @@ class SensorManager:
     def get_readings_by_type(self, sensor_type: SensorType,
                            start_time: Optional[float] = None,
                            end_time: Optional[float] = None) -> List[SensorReading]:
-        """get Readings By Type ."""
                                pass
         """Get readings for a sensor type within time range."""
         filtered_readings = []

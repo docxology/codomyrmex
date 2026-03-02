@@ -27,7 +27,6 @@ class CodaAPIError(Exception):
         status_code: int | None = None,
         response_body: dict[str, Any] | None = None,
     ):
-        """Initialize this instance."""
         super().__init__(message)
         self.message = message
         self.status_code = status_code
@@ -49,7 +48,6 @@ class CodaAuthenticationError(CodaAPIError):
         message: str = "The API token is invalid or missing",
         response_body: dict[str, Any] | None = None,
     ):
-        """Initialize this instance."""
         super().__init__(message, status_code=401, response_body=response_body)
 
 
@@ -69,7 +67,6 @@ class CodaForbiddenError(CodaAPIError):
         message: str = "The API token does not grant access to this resource",
         response_body: dict[str, Any] | None = None,
     ):
-        """Initialize this instance."""
         super().__init__(message, status_code=403, response_body=response_body)
 
 
@@ -89,7 +86,6 @@ class CodaNotFoundError(CodaAPIError):
         message: str = "The resource could not be located with the current API token",
         response_body: dict[str, Any] | None = None,
     ):
-        """Initialize this instance."""
         super().__init__(message, status_code=404, response_body=response_body)
 
 
@@ -107,7 +103,6 @@ class CodaGoneError(CodaAPIError):
         message: str = "The resource has been deleted",
         response_body: dict[str, Any] | None = None,
     ):
-        """Initialize this instance."""
         super().__init__(message, status_code=410, response_body=response_body)
 
 
@@ -130,7 +125,6 @@ class CodaRateLimitError(CodaAPIError):
         message: str = "The client has sent too many requests",
         response_body: dict[str, Any] | None = None,
     ):
-        """Initialize this instance."""
         super().__init__(message, status_code=429, response_body=response_body)
 
 
@@ -150,7 +144,6 @@ class CodaValidationError(CodaAPIError):
         message: str = "The request parameters did not conform to expectations",
         response_body: dict[str, Any] | None = None,
     ):
-        """Initialize this instance."""
         super().__init__(message, status_code=400, response_body=response_body)
 
 
@@ -169,7 +162,6 @@ class CodaUnprocessableError(CodaAPIError):
         message: str = "Unable to process the request",
         response_body: dict[str, Any] | None = None,
     ):
-        """Initialize this instance."""
         super().__init__(message, status_code=422, response_body=response_body)
 
 

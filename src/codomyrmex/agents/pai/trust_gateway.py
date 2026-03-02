@@ -28,7 +28,7 @@ import logging
 import threading
 import time
 from collections.abc import Callable
-from datetime import datetime, timezone
+from datetime import datetime, timezone, UTC
 from pathlib import Path
 from typing import Any, TypedDict
 
@@ -111,7 +111,7 @@ def _log_audit_entry(
         args_hash = "unhashable"
 
     entry: AuditEntry = {
-        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "timestamp": datetime.now(UTC).isoformat(),
         "tool_name": tool_name,
         "args_hash": args_hash,
         "result_status": status,
@@ -242,7 +242,7 @@ def _trigger_trust_change(old_level: TrustLevel, new_level: TrustLevel) -> None:
             data={
                 "old_level": old_level.name,
                 "new_level": new_level.name,
-                "timestamp": datetime.now(timezone.utc).isoformat(),
+                "timestamp": datetime.now(UTC).isoformat(),
             },
         )
         publish_event(event)
@@ -290,12 +290,10 @@ class _LazyToolSets:
 
     @staticmethod
     def safe_tools() -> frozenset[str]:
-        """safe Tools ."""
         return _get_safe_tools()
 
     @staticmethod
     def destructive_tools_set() -> frozenset[str]:
-        """destructive Tools Set ."""
         return _get_destructive_tools()
 
 
@@ -316,7 +314,6 @@ class TrustRegistry:
     """
 
     def __init__(self) -> None:
-        """Initialize this instance."""
         self._ledger_path = Path.home() / ".codomyrmex" / "trust_ledger.json"
 
         # Initialize default state with ALL known tools (static + dynamic)
@@ -545,7 +542,7 @@ def verify_capabilities() -> dict[str, Any]:
             for m in discovery_metrics.failed_modules
         ]
         discovery_cache_age = (
-            (datetime.now(timezone.utc) - discovery_metrics.last_scan_time).total_seconds()
+            (datetime.now(UTC) - discovery_metrics.last_scan_time).total_seconds()
             if discovery_metrics.last_scan_time else -1.0
         )
         discovery_last_duration = discovery_metrics.scan_duration_ms

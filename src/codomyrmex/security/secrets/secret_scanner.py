@@ -77,7 +77,6 @@ class SecretScanner:
     """
 
     def __init__(self, min_entropy: float = 3.0) -> None:
-        """Initialize this instance."""
         self._min_entropy = min_entropy
         self._patterns = [
             {**p, "compiled": re.compile(p["pattern"], re.IGNORECASE)}

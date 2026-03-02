@@ -55,7 +55,6 @@ class PerimeterManager:
     """Manages physical perimeter security."""
 
     def __init__(self):
-        """Initialize this instance."""
 
         self.access_points: dict[str, AccessPoint] = {}
         logger.info("PerimeterManager initialized")

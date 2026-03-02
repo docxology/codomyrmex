@@ -33,7 +33,6 @@ class ReverseAuction:
     """Manages anonymous reverse auctions."""
 
     def __init__(self):
-        """Initialize this instance."""
         self._auctions: dict[str, AuctionRequest] = {}
 
     def create_request(self, persona_id: str, description: str, max_price: float) -> str:

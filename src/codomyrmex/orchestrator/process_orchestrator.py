@@ -85,7 +85,6 @@ class ProcessOrchestrator:
         supervisor: AgentSupervisor | None = None,
         heartbeat: HeartbeatMonitor | None = None,
     ) -> None:
-        """Initialize this instance."""
         self._supervisor = supervisor or AgentSupervisor()
         self._heartbeat = heartbeat or HeartbeatMonitor()
         self._agents: dict[str, AgentProcess] = {}
@@ -93,7 +92,6 @@ class ProcessOrchestrator:
 
     @property
     def agent_count(self) -> int:
-        """agent Count ."""
         return len(self._agents)
 
     def spawn(

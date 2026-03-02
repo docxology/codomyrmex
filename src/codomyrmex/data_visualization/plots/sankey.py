@@ -18,5 +18,4 @@ class SankeyDiagram(BasePlot):
         return f'<div class="mermaid">{definition}</div>'
 
     def _render_figure(self, fig, ax):
-        """render Figure ."""
         ax.text(0.5, 0.5, "Sankey diagram", ha="center", va="center")

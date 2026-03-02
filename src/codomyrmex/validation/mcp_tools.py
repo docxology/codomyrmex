@@ -13,7 +13,6 @@ try:
     from codomyrmex.model_context_protocol.decorators import mcp_tool
 except ImportError:
     def mcp_tool(**kwargs: Any):  # type: ignore[misc]
-        """mcp Tool ."""
         def decorator(func: Any) -> Any:
             func._mcp_tool_meta = kwargs
             return func

@@ -7,11 +7,10 @@ Provides deployment strategies, managers, and utilities:
 - GitOps synchronization
 """
 
-import logging
 import os
 from typing import Any, Dict, List, Optional
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 # Shared schemas for cross-module interop
 try:
@@ -39,6 +38,7 @@ RollingStrategy = RollingDeployment
 
 # Submodule exports
 from . import health_checks, rollback, strategies
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 # Try optional submodules
 try:
@@ -105,7 +105,6 @@ class DeploymentManager:
 
         # Mock deploy function
         def deploy_fn(target: DeploymentTarget, ver: str) -> bool:
-            """deploy Fn ."""
             target.version = ver
             return True
 

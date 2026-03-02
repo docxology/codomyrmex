@@ -123,7 +123,6 @@ class AsyncParallelRunner:
         fail_fast: bool = False,
         on_task_complete: OnTaskComplete | None = None,
     ) -> None:
-        """Initialize this instance."""
         self._max_concurrency = max_concurrency
         self._fail_fast = fail_fast
         self._on_task_complete = on_task_complete
@@ -205,7 +204,7 @@ class AsyncParallelRunner:
                         self._guarded_run(name, coro, args, result),
                         name=name,
                     )
-        except* Exception:  # type: ignore[misc]  # 3.11+ syntax, runtime is 3.11+
+        except* Exception:  # 3.11+ ExceptionGroup syntax
             # TaskGroup raises ExceptionGroup on any unhandled failures.
             # _guarded_run already catches per-task errors, so this only
             # fires if _guarded_run itself has a bug — unlikely but safe.

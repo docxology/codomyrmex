@@ -62,7 +62,6 @@ class CircuitOpenError(Exception):
     """Raised when the circuit is open and calls are being rejected."""
 
     def __init__(self, name: str, remaining: float) -> None:
-        """Initialize this instance."""
         self.name = name
         self.remaining = remaining
         super().__init__(
@@ -87,7 +86,6 @@ class CircuitBreaker:
         name: str = "default",
         config: CircuitBreakerConfig | None = None,
     ) -> None:
-        """Initialize this instance."""
         self.name = name
         self.config = config or CircuitBreakerConfig()
         self._state = CircuitState.CLOSED
@@ -113,7 +111,6 @@ class CircuitBreaker:
 
     @property
     def failure_count(self) -> int:
-        """failure Count ."""
         return self._failure_count
 
     @property

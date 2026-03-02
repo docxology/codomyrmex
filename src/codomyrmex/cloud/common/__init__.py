@@ -76,7 +76,6 @@ class CloudClient(ABC):
     provider: CloudProvider
 
     def __init__(self, credentials: CloudCredentials):
-        """Initialize this instance."""
         self.credentials = credentials
         self.region = credentials.region
 
@@ -228,7 +227,6 @@ class CloudConfig:
     """Configuration for cloud operations."""
 
     def __init__(self):
-        """Initialize this instance."""
         self._providers: dict[CloudProvider, CloudCredentials] = {}
 
     def add_provider(self, credentials: CloudCredentials) -> None:

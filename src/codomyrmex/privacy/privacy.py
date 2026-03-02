@@ -217,7 +217,6 @@ class Privacy:
     """
 
     def __init__(self, config: dict[str, Any] | None = None) -> None:
-        """Initialize this instance."""
         self.config = config or {}
         self._rules: dict[str, PrivacyRule] = {}
         logger.info("Privacy engine initialized")

@@ -11,7 +11,7 @@ Zero-mock policy: all tests use real objects and tmp_path for filesystem.
 
 import json
 import os
-from datetime import datetime, timezone
+from datetime import datetime, timezone, UTC
 
 import pytest
 import yaml
@@ -193,14 +193,14 @@ class TestDeploymentDataclass:
 
     def test_post_init_sets_created_at(self):
         env = _make_env()
-        before = datetime.now(timezone.utc)
+        before = datetime.now(UTC)
         dep = Deployment(name="a", version="1", environment=env, artifacts=[])
-        after = datetime.now(timezone.utc)
+        after = datetime.now(UTC)
         assert before <= dep.created_at <= after
 
     def test_explicit_created_at_preserved(self):
         env = _make_env()
-        ts = datetime(2025, 1, 1, tzinfo=timezone.utc)
+        ts = datetime(2025, 1, 1, tzinfo=UTC)
         dep = Deployment(name="a", version="1", environment=env, artifacts=[], created_at=ts)
         assert dep.created_at == ts
 
@@ -230,7 +230,7 @@ class TestDeploymentDataclass:
 
     def test_to_dict_timestamps_iso(self):
         env = _make_env()
-        ts = datetime(2025, 6, 15, 12, 0, 0, tzinfo=timezone.utc)
+        ts = datetime(2025, 6, 15, 12, 0, 0, tzinfo=UTC)
         dep = Deployment(
             name="a", version="1", environment=env, artifacts=[],
             created_at=ts, started_at=ts,
@@ -464,7 +464,7 @@ class TestDeployLifecycle:
     def test_deploy_sets_started_at(self, tmp_path):
         orch = _orchestrator_with_env(tmp_path)
         orch.create_deployment("app", "1.0", "staging", [])
-        before = datetime.now(timezone.utc)
+        before = datetime.now(UTC)
         result = orch.deploy("app")
         assert result.started_at is not None
         assert result.started_at >= before

@@ -28,7 +28,6 @@ class ValidationSummary:
     """
 
     def __init__(self, issues: list[ValidationIssue] | None = None) -> None:
-        """Initialize this instance."""
         self.issues: list[ValidationIssue] = issues or []
 
     def add_issue(self, issue: ValidationIssue) -> None:
@@ -51,17 +50,14 @@ class ValidationSummary:
 
     @property
     def error_count(self) -> int:
-        """error Count ."""
         return sum(1 for i in self.issues if i.severity == "error")
 
     @property
     def warning_count(self) -> int:
-        """warning Count ."""
         return sum(1 for i in self.issues if i.severity == "warning")
 
     @property
     def info_count(self) -> int:
-        """info Count ."""
         return sum(1 for i in self.issues if i.severity == "info")
 
     def by_severity(self) -> dict[str, list[ValidationIssue]]:

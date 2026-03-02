@@ -137,7 +137,6 @@ class DecompositionStrategy(ReasoningStrategy):
         max_depth: int = 3,
         min_component_size: int = 1,
     ):
-        """Initialize this instance."""
         self.max_depth = max_depth
         self.min_component_size = min_component_size
 
@@ -274,7 +273,6 @@ class FirstPrinciplesReasoner:
     """Main reasoning engine using first principles."""
 
     def __init__(self):
-        """Initialize this instance."""
         self.strategies: dict[str, ReasoningStrategy] = {
             "decomposition": DecompositionStrategy(),
             "assumption_analysis": AssumptionAnalysisStrategy(),

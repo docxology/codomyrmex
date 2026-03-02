@@ -6,7 +6,6 @@ Task scheduler with support for various trigger types.
 
 import concurrent.futures
 import heapq
-import logging
 import threading
 import time
 from collections.abc import Callable
@@ -15,8 +14,9 @@ from typing import Any
 
 from .models import Job, JobStatus
 from .triggers import CronTrigger, IntervalTrigger, OnceTrigger, Trigger
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 
 class Scheduler:
@@ -45,7 +45,6 @@ class Scheduler:
     """
 
     def __init__(self, max_workers: int = 4):
-        """Initialize this instance."""
         self._jobs: dict[str, Job] = {}
         self._job_queue: list[Job] = []
         self._lock = threading.Lock()

@@ -42,7 +42,6 @@ class JSONFormatter(logging.Formatter):
         include_fields: list[str] | None = None,
         exclude_fields: list[str] | None = None,
     ) -> None:
-        """Initialize this instance."""
         super().__init__(datefmt=datefmt)
         self._include = set(include_fields) if include_fields else None
         self._exclude = set(exclude_fields) if exclude_fields else set()
@@ -85,7 +84,6 @@ class PrettyJSONFormatter(JSONFormatter):
     """
 
     def __init__(self, indent: int = 2, **kwargs: Any) -> None:
-        """Initialize this instance."""
         super().__init__(**kwargs)
         self._indent = indent
 
@@ -115,7 +113,6 @@ class RedactedJSONFormatter(JSONFormatter):
         replacement: str = "[REDACTED]",
         **kwargs: Any,
     ) -> None:
-        """Initialize this instance."""
         super().__init__(**kwargs)
         self._replacement = replacement
         if patterns:

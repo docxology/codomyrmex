@@ -242,7 +242,6 @@ class PAIProviderMixin:
             return re.sub(r"[^a-zA-Z0-9_]", "_", text)
 
         def _escape_label(text: str) -> str:
-            """escape Label ."""
             return text.replace('"', "'").replace("<", "").replace(">", "")
 
         lines = ["graph TD"]

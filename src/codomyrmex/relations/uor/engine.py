@@ -64,7 +64,6 @@ class PrismEngine:
     BYTE_CYCLE = 256
 
     def __init__(self, quantum: int = 0) -> None:
-        """Initialize this instance."""
         if quantum < 0:
             raise ValueError("Quantum must be non-negative")
         self.quantum = quantum

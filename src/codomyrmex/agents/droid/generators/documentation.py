@@ -371,7 +371,6 @@ class DocumentationQualityAnalyzer:
     """Analyzes documentation quality metrics."""
 
     def __init__(self):
-        """Initialize this instance."""
         self.quality_metrics = {
             "completeness": 0,
             "consistency": 0,
@@ -606,7 +605,6 @@ class DocumentationConsistencyChecker:
     """Checks documentation consistency across files."""
 
     def __init__(self):
-        """Initialize this instance."""
         self.naming_conventions = {
             "files": ["README.md", "CHANGELOG.md", "CONTRIBUTING.md"],
             "headers": ["# ", "## ", "### "],

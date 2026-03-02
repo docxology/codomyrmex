@@ -9,7 +9,7 @@ from __future__ import annotations
 
 import difflib
 from dataclasses import dataclass, field
-from datetime import datetime, timezone
+from datetime import datetime, timezone, UTC
 from typing import Any
 
 try:
@@ -32,7 +32,7 @@ class PromptVersion:
 
     version: str
     template: PromptTemplate
-    created_at: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
+    created_at: datetime = field(default_factory=lambda: datetime.now(UTC))
     changelog: str = ""
     author: str = ""
     metadata: dict[str, Any] = field(default_factory=dict)
@@ -110,7 +110,6 @@ class VersionManager:
     """
 
     def __init__(self) -> None:
-        """Initialize this instance."""
         self._versions: dict[str, list[PromptVersion]] = {}
 
     def create_version(

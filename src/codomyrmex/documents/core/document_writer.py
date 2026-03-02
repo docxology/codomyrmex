@@ -17,7 +17,6 @@ class DocumentWriter:
     """Unified document writer supporting multiple formats."""
 
     def __init__(self):
-        """Initialize this instance."""
 
         self.config = get_config()
 

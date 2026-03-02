@@ -1,14 +1,12 @@
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 """Accessibility utility functions."""
 
-import logging
-
-_logger = logging.getLogger(__name__)
+_logger = get_logger(__name__)
 
 
 def calculate_contrast_ratio(fg: str, bg: str) -> float:
     """Calculate WCAG contrast ratio between two colors."""
     def hex_to_luminance(hex_color: str) -> float:
-        """hex To Luminance ."""
         hex_color = hex_color.lstrip('#')
         r, g, b = [int(hex_color[i:i+2], 16) / 255 for i in (0, 2, 4)]
 

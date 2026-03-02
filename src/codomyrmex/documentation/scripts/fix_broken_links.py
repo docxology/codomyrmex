@@ -27,7 +27,6 @@ def fix_links_in_file(file_path: Path, repo_root: Path) -> list[str]:
         link_pattern = r'\[([^\]]+)\]\(([^)]+)\)'
 
         def replace_link(match):
-            """replace Link ."""
             link_text = match.group(1)
             link_url = match.group(2)
 

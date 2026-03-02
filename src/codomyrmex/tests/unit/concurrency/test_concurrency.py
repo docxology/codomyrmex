@@ -175,7 +175,7 @@ class TestAsyncSemaphore:
         try:
             await asyncio.wait_for(sem.acquire_async(), timeout=0.1)
             acquired = True
-        except asyncio.TimeoutError:
+        except TimeoutError:
             pass
 
         assert acquired is False

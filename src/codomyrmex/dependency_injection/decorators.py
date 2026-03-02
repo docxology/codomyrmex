@@ -50,7 +50,6 @@ class InjectableMetadata:
         auto_register: bool = True,
         tags: tuple | None = None,
     ) -> None:
-        """Initialize this instance."""
         self.scope = scope
         self.auto_register = auto_register
         self.tags = tags or ()
@@ -81,7 +80,6 @@ class InjectMetadata:
         params: dict[str, Any] | None = None,
         resolve_all: bool = True,
     ) -> None:
-        """Initialize this instance."""
         self.params = params or {}
         self.resolve_all = resolve_all
 

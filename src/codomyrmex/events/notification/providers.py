@@ -65,7 +65,6 @@ class FileProvider(NotificationProvider):
     """Write notifications to a file."""
 
     def __init__(self, file_path: str = "notifications.log"):
-        """Initialize this instance."""
         self.file_path = file_path
 
     @property
@@ -99,7 +98,6 @@ class WebhookProvider(NotificationProvider):
     """Send notifications via webhook."""
 
     def __init__(self, url: str, headers: dict[str, str] | None = None):
-        """Initialize this instance."""
         self.url = url
         self.headers = headers or {}
         self._sent: list[Notification] = []  # Store for testing

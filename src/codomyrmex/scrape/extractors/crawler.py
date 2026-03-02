@@ -119,7 +119,6 @@ class Crawler:
     """
 
     def __init__(self, config: CrawlConfig | None = None) -> None:
-        """Initialize this instance."""
         self._config = config or CrawlConfig()
         self._frontier: deque[tuple[str, int]] = deque()
         self._visited: set[str] = set()

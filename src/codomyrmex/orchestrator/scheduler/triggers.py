@@ -38,14 +38,12 @@ class OnceTrigger(Trigger):
     run_at: datetime
 
     def get_next_run(self, from_time: datetime | None = None) -> datetime | None:
-        """get Next Run ."""
         from_time = from_time or datetime.now()
         if self.run_at > from_time:
             return self.run_at
         return None
 
     def get_type(self) -> TriggerType:
-        """get Type ."""
         return TriggerType.ONCE
 
 
@@ -61,7 +59,6 @@ class IntervalTrigger(Trigger):
 
     @property
     def interval_seconds(self) -> int:
-        """interval Seconds ."""
         return (
             self.seconds +
             self.minutes * 60 +
@@ -70,7 +67,6 @@ class IntervalTrigger(Trigger):
         )
 
     def get_next_run(self, from_time: datetime | None = None) -> datetime | None:
-        """get Next Run ."""
         from_time = from_time or datetime.now()
         start = self.start_time or datetime.now()
 
@@ -87,7 +83,6 @@ class IntervalTrigger(Trigger):
         return next_run
 
     def get_type(self) -> TriggerType:
-        """get Type ."""
         return TriggerType.INTERVAL
 
 
@@ -147,7 +142,6 @@ class CronTrigger(Trigger):
         return None
 
     def get_type(self) -> TriggerType:
-        """get Type ."""
         return TriggerType.CRON
 
     @classmethod

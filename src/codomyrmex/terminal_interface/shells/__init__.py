@@ -89,7 +89,6 @@ class Shell:
     """A shell for executing commands."""
 
     def __init__(self, config: ShellConfig | None = None):
-        """Initialize this instance."""
         self.config = config or ShellConfig.detect()
         self._process: subprocess.Popen | None = None
         self._history: list[CommandResult] = []
@@ -188,7 +187,6 @@ class InteractiveShell:
     """An interactive shell session."""
 
     def __init__(self, config: ShellConfig | None = None):
-        """Initialize this instance."""
         self.config = config or ShellConfig.detect()
         self._process: subprocess.Popen | None = None
         self._output_queue: queue.Queue = queue.Queue()
@@ -263,7 +261,6 @@ class CommandBuilder:
     """Builder for constructing shell commands."""
 
     def __init__(self, base_command: str = ""):
-        """Initialize this instance."""
         self._parts: list[str] = []
         if base_command:
             self._parts.append(base_command)

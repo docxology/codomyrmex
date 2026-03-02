@@ -37,7 +37,6 @@ class MigrationRunner:
     """
 
     def __init__(self):
-        """Initialize this instance."""
         self._completed: list[str] = []
         self._lock = threading.Lock()
 
@@ -105,7 +104,6 @@ class DataMigrator:
     """
 
     def __init__(self):
-        """Initialize this instance."""
         self._transformers: list[DataTransformer] = []
 
     def add_transformer(self, transformer: DataTransformer) -> "DataMigrator":

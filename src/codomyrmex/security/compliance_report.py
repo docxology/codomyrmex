@@ -59,12 +59,10 @@ class ComplianceReport:
 
     @property
     def total_checks(self) -> int:
-        """total Checks ."""
         return len(self.checks)
 
     @property
     def pass_rate(self) -> float:
-        """pass Rate ."""
         if not self.checks:
             return 0.0
         passed = sum(1 for c in self.checks if c.status == ComplianceStatus.PASS)
@@ -136,7 +134,6 @@ class ComplianceGenerator:
     ]
 
     def __init__(self) -> None:
-        """Initialize this instance."""
         self._checks: list[ComplianceCheck] = []
 
     def add_owasp_checks(self, default_status: ComplianceStatus = ComplianceStatus.PASS) -> None:

@@ -8,14 +8,14 @@ from __future__ import annotations
 
 import hmac
 import json
-import logging
 import time
 from dataclasses import dataclass, field
 from enum import Enum
 from pathlib import Path
 from typing import Any
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 
 class SignatureAlgorithm(Enum):
@@ -51,12 +51,10 @@ class Signer:
 
     def __init__(self, secret_key: str | bytes,
                  algorithm: SignatureAlgorithm = SignatureAlgorithm.HMAC_SHA256) -> None:
-        """Initialize this instance."""
         self._key = secret_key.encode() if isinstance(secret_key, str) else secret_key
         self._algorithm = algorithm
 
     def _get_hash_func(self) -> str:
-        """get Hash Func ."""
         if self._algorithm == SignatureAlgorithm.HMAC_SHA512:
             return "sha512"
         return "sha256"

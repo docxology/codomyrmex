@@ -36,7 +36,6 @@ class Grid:
     sections: list[Section] = field(default_factory=list)
 
     def add_section(self, title: str, content: Any = None, **kwargs: Any) -> None:
-        """add Section ."""
         description = kwargs.get("description", "")
         full_width = kwargs.get("full_width", False)
         width = "100%" if full_width else f"{100/self.columns}%" # Simplistic width

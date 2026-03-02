@@ -112,7 +112,6 @@ class BaseAgent(ABC):
         name: str = "Agent",
         capabilities: list[AgentCapability] | None = None,
     ):
-        """Initialize this instance."""
         self.agent_id = agent_id or str(uuid.uuid4())
         self.name = name
         self.capabilities = capabilities or []
@@ -160,7 +159,6 @@ class AgentCoordinator:
     """Coordinates communication and task distribution between agents."""
 
     def __init__(self):
-        """Initialize this instance."""
         self.agents: dict[str, BaseAgent] = {}
         self.message_log: list[AgentMessage] = []
         self.protocols: dict[str, AgentProtocol] = {}
@@ -216,11 +214,9 @@ class RoundRobinProtocol(AgentProtocol):
     """Distributes tasks to agents in round-robin fashion."""
 
     def __init__(self):
-        """Initialize this instance."""
         self._current_index = 0
 
     def select_agents(self, task: Any, available_agents: list[BaseAgent]) -> list[BaseAgent]:
-        """select Agents ."""
         if not available_agents:
             return []
 
@@ -245,7 +241,6 @@ class BroadcastProtocol(AgentProtocol):
     """Broadcasts task to all agents and collects results."""
 
     def select_agents(self, task: Any, available_agents: list[BaseAgent]) -> list[BaseAgent]:
-        """select Agents ."""
         return available_agents
 
     async def execute(self, task: Any, agents: list[BaseAgent]) -> list[Any]:
@@ -266,11 +261,9 @@ class CapabilityRoutingProtocol(AgentProtocol):
     """Routes tasks to agents based on required capabilities."""
 
     def __init__(self, required_capability: str):
-        """Initialize this instance."""
         self.required_capability = required_capability
 
     def select_agents(self, task: Any, available_agents: list[BaseAgent]) -> list[BaseAgent]:
-        """select Agents ."""
         return [a for a in available_agents if a.has_capability(self.required_capability)]
 
     async def execute(self, task: Any, agents: list[BaseAgent]) -> Any:
@@ -291,11 +284,9 @@ class ConsensusProtocol(AgentProtocol):
     """Requires consensus among agents for task completion."""
 
     def __init__(self, quorum: float = 0.5):
-        """Initialize this instance."""
         self.quorum = quorum  # Percentage of agents that must agree
 
     def select_agents(self, task: Any, available_agents: list[BaseAgent]) -> list[BaseAgent]:
-        """select Agents ."""
         return available_agents
 
     async def execute(self, task: Any, agents: list[BaseAgent]) -> Any:

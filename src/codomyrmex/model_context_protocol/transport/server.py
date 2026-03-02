@@ -62,7 +62,6 @@ class MCPServer:
         config: MCPServerConfig | None = None,
         call_tool_fn: Callable[..., Any] | None = None,
     ):
-        """Initialize this instance."""
         self.config = config or MCPServerConfig()
         self._tool_registry: MCPToolRegistry = MCPToolRegistry()
         self._resources: dict[str, dict[str, Any]] = {}
@@ -202,7 +201,6 @@ class MCPServer:
         p = Path(path)
 
         def read_file():
-            """read File ."""
             return p.read_text()
 
         mime_types = {
@@ -399,7 +397,7 @@ class MCPServer:
                 )
             else:
                 result = self._tool_registry.execute(tool_call)
-        except asyncio.TimeoutError:
+        except TimeoutError:
             return MCPToolError(
                 code=MCPErrorCode.TIMEOUT,
                 message=f"Tool {tool_name!r} timed out after {tool_timeout}s",

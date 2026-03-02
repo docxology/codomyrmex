@@ -31,7 +31,6 @@ class AgentDeserializer:
     """
 
     def __init__(self) -> None:
-        """Initialize this instance."""
         self._serializer = AgentSerializer()
 
     def deserialize(self, data: bytes) -> AgentSnapshot:

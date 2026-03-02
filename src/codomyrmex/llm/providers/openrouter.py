@@ -51,7 +51,6 @@ class OpenRouterProvider(LLMProvider):
     ]
 
     def __init__(self, config: ProviderConfig):
-        """Initialize this instance."""
         super().__init__(config)
         # Set OpenRouter base URL if not specified
         if not self.config.base_url:
@@ -120,7 +119,6 @@ class OpenRouterProvider(LLMProvider):
         max_tokens: int | None = None,
         **kwargs
     ) -> Iterator[str]:
-        """complete Stream ."""
         if not self._client:
             raise RuntimeError("OpenRouter client not initialized.")
 
@@ -184,7 +182,6 @@ class OpenRouterProvider(LLMProvider):
         return self.FREE_MODELS
 
     def _default_model(self) -> str:
-        """default Model ."""
         return "openrouter/free"
 
 

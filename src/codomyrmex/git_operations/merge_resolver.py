@@ -6,14 +6,14 @@ using AST-aware and heuristic-based strategies.
 
 from __future__ import annotations
 
-import logging
 import re
 import subprocess
 from dataclasses import dataclass, field
 from enum import Enum
 from pathlib import Path
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 
 class ResolutionStrategy(Enum):
@@ -62,7 +62,6 @@ class MergeResolver:
     CONFLICT_END = re.compile(r"^>>>>>>>\s*(.*)")
 
     def __init__(self, repo_path: Path) -> None:
-        """Initialize this instance."""
         self._repo = repo_path
 
     def detect_conflicts(self) -> MergeConflictReport:

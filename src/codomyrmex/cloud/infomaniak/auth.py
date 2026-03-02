@@ -10,14 +10,14 @@ Endpoints:
     - S3 Object Storage (alt): https://s3.pub2.infomaniak.cloud/
 """
 
-import logging
 import os
 from dataclasses import dataclass, field
 from typing import Any
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 from .exceptions import InfomaniakAuthError
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 # Default Infomaniak endpoints
 DEFAULT_AUTH_URL = "https://api.pub1.infomaniak.cloud/identity/v3/"

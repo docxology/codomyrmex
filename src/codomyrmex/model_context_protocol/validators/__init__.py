@@ -33,7 +33,6 @@ class SchemaValidator:
     """
 
     def __init__(self, schema: dict[str, Any]):
-        """Initialize this instance."""
         self.schema = schema
 
     def validate(self, data: Any) -> ValidationResult:

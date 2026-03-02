@@ -18,7 +18,6 @@ class Locale:
 
     @classmethod
     def from_string(cls, code: str) -> "Locale":
-        """from String ."""
         parts = code.replace("-", "_").split("_")
         language = parts[0].lower()
         region = parts[1].upper() if len(parts) > 1 else ""

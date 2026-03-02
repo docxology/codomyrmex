@@ -36,7 +36,6 @@ except ImportError:
     class performance_context:
         """Functional component: performance_context."""
         def __init__(self, *args, **kwargs):
-            """Initialize this instance."""
             return None  # Intentional no-op
         def __enter__(self):
             """enter ."""

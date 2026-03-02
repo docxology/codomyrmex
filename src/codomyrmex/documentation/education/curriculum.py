@@ -5,13 +5,13 @@ for building structured learning paths.
 """
 
 import json
-import logging
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any
 from uuid import UUID, uuid4
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 
 class Difficulty(Enum):
@@ -76,7 +76,6 @@ class Curriculum:
     """
 
     def __init__(self, name: str, level: str | Difficulty = Difficulty.BEGINNER):
-        """Initialize this instance."""
         self.name = name
         if isinstance(level, Difficulty):
             self.level = level.value

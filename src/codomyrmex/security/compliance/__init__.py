@@ -148,7 +148,6 @@ class PolicyChecker(ControlChecker):
         fail_message: str = "Control failed",
         remediation: str = "",
     ):
-        """Initialize this instance."""
         self._control_id = control_id
         self._check_fn = check_fn
         self._pass_message = pass_message
@@ -157,7 +156,6 @@ class PolicyChecker(ControlChecker):
 
     @property
     def control_id(self) -> str:
-        """control Id ."""
         return self._control_id
 
     def check(self, context: dict[str, Any]) -> ControlResult:
@@ -204,7 +202,6 @@ class ComplianceChecker:
     """
 
     def __init__(self, framework: ComplianceFramework):
-        """Initialize this instance."""
         self.framework = framework
         self._controls: dict[str, Control] = {}
         self._checkers: dict[str, ControlChecker] = {}

@@ -16,7 +16,7 @@ from pathlib import Path
 
 # Ensure codomyrmex is in path
 try:
-    import codomyrmex
+    import codomyrmex  # noqa: F401
 except ImportError:
     # Add src to sys.path if running from source without install
     project_root = Path(__file__).resolve().parent.parent

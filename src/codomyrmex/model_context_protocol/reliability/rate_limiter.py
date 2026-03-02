@@ -54,7 +54,6 @@ class _TokenBucket:
     __slots__ = ("rate", "burst", "_tokens", "_last_refill")
 
     def __init__(self, rate: float, burst: int) -> None:
-        """Initialize this instance."""
         self.rate = rate
         self.burst = burst
         self._tokens = float(burst)
@@ -101,7 +100,6 @@ class RateLimiter:
     """
 
     def __init__(self, config: RateLimiterConfig | None = None) -> None:
-        """Initialize this instance."""
         self.config = config or RateLimiterConfig()
         self._global = _TokenBucket(self.config.rate, self.config.burst)
         self._per_tool: dict[str, _TokenBucket] = {}

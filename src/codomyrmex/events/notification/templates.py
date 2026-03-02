@@ -38,7 +38,6 @@ class NotificationTemplate:
         default_channel: NotificationChannel = NotificationChannel.CONSOLE,
         default_priority: NotificationPriority = NotificationPriority.MEDIUM,
     ):
-        """Initialize this instance."""
         self.name = name
         self.subject_template = subject_template
         self.body_template = body_template

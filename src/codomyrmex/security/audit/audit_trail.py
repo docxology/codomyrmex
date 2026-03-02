@@ -40,7 +40,6 @@ class AuditEntry:
     entry_hash: str = ""
 
     def __post_init__(self) -> None:
-        """post Init ."""
         if not self.timestamp:
             self.timestamp = time.time()
 
@@ -77,7 +76,6 @@ class AuditTrail:
     """
 
     def __init__(self, signing_key: bytes = b"codomyrmex-audit") -> None:
-        """Initialize this instance."""
         self._key = signing_key
         self._entries: list[AuditEntry] = []
 
@@ -123,15 +121,12 @@ class AuditTrail:
         return list(self._entries)
 
     def entries_by_actor(self, actor: str) -> list[AuditEntry]:
-        """entries By Actor ."""
         return [e for e in self._entries if e.actor == actor]
 
     def to_jsonl(self) -> str:
-        """to Jsonl ."""
         return "\n".join(json.dumps(e.to_dict()) for e in self._entries)
 
     def _compute_hash(self, entry: AuditEntry) -> str:
-        """compute Hash ."""
         return hmac.new(self._key, entry.payload().encode(), hashlib.sha256).hexdigest()[:16]
 
 

@@ -30,7 +30,6 @@ class Theme:
     """Visualization theme manager."""
 
     def __init__(self, name: str = "default"):
-        """Initialize this instance."""
         self.name = name
         self.colors = ThemeColors()
         self.font = ThemeFont()

@@ -37,7 +37,6 @@ class Sign:
     id: str = field(default="")
 
     def __post_init__(self) -> None:
-        """post Init ."""
         if not self.id:
             h = hashlib.sha256(f"{self.signifier}:{self.signified}".encode())
             self.id = h.hexdigest()[:16]

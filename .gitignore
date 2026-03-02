@@ -243,3 +243,7 @@ coverage.txt
 .benchmarks/
 fix_*.py
 /.claude
+.desloppify/state-python.json
+.desloppify/review_packet_blind.json
+.desloppify/state-python.json
+.desloppify/review_packet_blind.json

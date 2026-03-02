@@ -16,7 +16,6 @@ class LLMProvider(ABC):
     provider_type: ProviderType
 
     def __init__(self, config: ProviderConfig):
-        """Initialize this instance."""
         self.config = config
         self._client = None
 

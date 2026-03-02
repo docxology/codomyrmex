@@ -65,7 +65,6 @@ class PopulationManager(Generic[T]):
         mutation: MutationOperator[T],
         elitism_count: int = 1,
     ) -> None:
-        """Initialize this instance."""
         self._selection = selection
         self._crossover = crossover
         self._mutation = mutation

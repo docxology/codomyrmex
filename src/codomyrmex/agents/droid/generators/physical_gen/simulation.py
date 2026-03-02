@@ -76,7 +76,6 @@ class PhysicsSimulator:
     """Physics simulation engine."""
 
     def __init__(self):
-        """Initialize this instance."""
         self.gravity = Vector3D(0, -9.81, 0)
         self.force_fields: List[ForceField] = []
         self.constraints: List[Constraint] = []
@@ -92,7 +91,6 @@ class PhysicsSimulator:
 
     def register_object(self, object_id: str, mass: float, position: Vector3D,
                        velocity: Vector3D = None) -> None:
-        """register Object ."""
                            pass
         """Register an object for physics simulation."""
         if velocity is None:

@@ -134,23 +134,19 @@ class DeprecationReport:
 
     @property
     def deprecated_count(self) -> int:
-        """deprecated Count ."""
         return sum(1 for e in self.entries if e.get("deprecated"))
 
     @property
     def pending_count(self) -> int:
-        """pending Count ."""
         return self.total - self.deprecated_count
 
     @property
     def completion_percent(self) -> float:
-        """completion Percent ."""
         if self.total == 0:
             return 100.0
         return (self.deprecated_count / self.total) * 100
 
     def pending_modules(self) -> list[str]:
-        """pending Modules ."""
         return [e["module"] for e in self.entries if not e.get("deprecated")]
 
     def summary(self) -> dict[str, Any]:

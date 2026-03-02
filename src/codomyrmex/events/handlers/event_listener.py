@@ -74,7 +74,6 @@ class EventListener:
             handler_name = f"{self.listener_id}_once_{len(self.handlers)}"
 
         def one_time_wrapper(event: Event):
-            """one Time Wrapper ."""
             try:
                 handler(event)
             finally:
@@ -93,13 +92,11 @@ class EventListener:
         return False
 
     def listen_to_analysis_events(self, handler: Callable[[Event], Any]) -> list[str]:
-        """listen To Analysis Events ."""
         event_types = [EventType.ANALYSIS_START, EventType.ANALYSIS_PROGRESS,
                        EventType.ANALYSIS_COMPLETE, EventType.ANALYSIS_ERROR]
         return [self.on(et, handler) for et in event_types]
 
     def listen_to_build_events(self, handler: Callable[[Event], Any]) -> list[str]:
-        """listen To Build Events ."""
         event_types = [EventType.BUILD_START, EventType.BUILD_PROGRESS,
                        EventType.BUILD_COMPLETE, EventType.BUILD_ERROR]
         return [self.on(et, handler) for et in event_types]
@@ -108,7 +105,6 @@ class EventListener:
 def event_handler(event_types: EventType | list[EventType],
                  filter_func: Callable[[Event], bool] | None = None,
                  priority: int = 0):
-    """event Handler ."""
     def decorator(func):
         """decorator ."""
         func._event_types = event_types if isinstance(event_types, list) else [event_types]
@@ -122,7 +118,6 @@ def event_handler(event_types: EventType | list[EventType],
 class AutoEventListener(EventListener):
     """Functional component: AutoEventListener."""
     def register_handlers(self, obj: Any) -> None:
-        """register Handlers ."""
         for attr_name in dir(obj):
             attr = getattr(obj, attr_name)
             if (callable(attr) and getattr(attr, '_is_event_handler', False)):
@@ -135,7 +130,6 @@ class AutoEventListener(EventListener):
 
 def create_listener(listener_id: str) -> EventListener: return EventListener(listener_id)
 def create_auto_listener(listener_id: str, obj: Any) -> AutoEventListener:
-    """create Listener ."""
     listener = AutoEventListener(listener_id)
     listener.register_handlers(obj)
     return listener

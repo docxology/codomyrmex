@@ -18,17 +18,14 @@ class SkillLibrary:
     """Repository of agent skills."""
 
     def __init__(self):
-        """Initialize this instance."""
         self._skills: dict[str, Skill] = {}
 
     def add_skill(self, skill: Skill) -> None:
-        """add Skill ."""
         if skill.name in self._skills:
             raise ValueError(f"Skill '{skill.name}' already exists.")
         self._skills[skill.name] = skill
 
     def get_skill(self, name: str) -> Skill | None:
-        """get Skill ."""
         return self._skills.get(name)
 
     def search(self, tag: str) -> list[Skill]:

@@ -237,7 +237,6 @@ class PAIBridge:
     """
 
     def __init__(self, config: PAIConfig | None = None) -> None:
-        """Initialize this instance."""
         self.config = config or PAIConfig()
 
     # ==================================================================

@@ -114,7 +114,6 @@ class BoxPlot:
         figure_size: tuple = None,
         theme=None,
     ):
-        """Initialize this instance."""
         self.data = data or []
         self.labels = labels
         self.title = title

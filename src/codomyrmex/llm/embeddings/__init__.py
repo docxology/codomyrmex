@@ -137,13 +137,11 @@ class TestEmbeddingProvider(EmbeddingProvider):
     """
 
     def __init__(self, dimensions: int = 384):
-        """Initialize this instance."""
         self.dimensions = dimensions
         self._model = "mock-embedding"
 
     @property
     def model_name(self) -> str:
-        """model Name ."""
         return self._model
 
     def _text_to_vector(self, text: str) -> list[float]:
@@ -193,7 +191,6 @@ class EmbeddingCache:
     """
 
     def __init__(self, max_size: int = 10000):
-        """Initialize this instance."""
         self.max_size = max_size
         self._cache: dict[str, Embedding] = {}
         self._access_order: list[str] = []
@@ -301,7 +298,6 @@ class EmbeddingIndex:
         self,
         similarity_fn: Callable[[list[float], list[float]], float] = cosine_similarity,
     ):
-        """Initialize this instance."""
         self.similarity_fn = similarity_fn
         self._embeddings: list[Embedding] = []
         self._lock = threading.Lock()
@@ -393,7 +389,6 @@ class EmbeddingService:
         cache: EmbeddingCache | None = None,
         batch_size: int = 100,
     ):
-        """Initialize this instance."""
         self.provider = provider
         self.cache = cache or EmbeddingCache()
         self.batch_size = batch_size

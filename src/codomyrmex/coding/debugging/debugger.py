@@ -17,14 +17,14 @@ Example:
 
 from __future__ import annotations
 
-import logging
 from typing import Any
 
 from codomyrmex.coding.debugging.error_analyzer import ErrorAnalyzer
 from codomyrmex.coding.debugging.patch_generator import PatchGenerator
 from codomyrmex.coding.debugging.verify_fix import FixVerifier
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 
 class Debugger:

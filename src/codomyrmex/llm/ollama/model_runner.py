@@ -552,7 +552,7 @@ class ModelRunner:
                             error_message=error_msg
                         )
 
-        except asyncio.TimeoutError:
+        except TimeoutError:
             execution_time = time.time() - start_time
             return ModelExecutionResult(
                 model_name=model_name,
@@ -710,7 +710,7 @@ class ModelRunner:
                             error_message=error_msg
                         )
 
-        except asyncio.TimeoutError:
+        except TimeoutError:
             execution_time = time.time() - start_time
             return ModelExecutionResult(
                 model_name=model_name,
@@ -832,7 +832,7 @@ class ModelRunner:
                             except json.JSONDecodeError:
                                 continue
 
-        except asyncio.TimeoutError:
+        except TimeoutError:
             self.logger.error("[ASYNC] Streaming generation timed out")
             yield StreamingChunk(content="", done=True, token_count=0)
         except aiohttp.ClientError as e:

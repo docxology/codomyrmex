@@ -80,7 +80,6 @@ class PromptTemplate:
         name: str | None = None,
         description: str = "",
     ):
-        """Initialize this instance."""
         self.template = template
         self.name = name or f"template_{id(self)}"
         self.description = description
@@ -164,7 +163,6 @@ class PromptBuilder:
     """
 
     def __init__(self):
-        """Initialize this instance."""
         self._messages: list[Message] = []
 
     def system(self, content: str, **metadata) -> "PromptBuilder":
@@ -243,7 +241,6 @@ class PromptRegistry:
     """
 
     def __init__(self):
-        """Initialize this instance."""
         self._templates: dict[str, dict[str, PromptVersion]] = {}
         self._active_versions: dict[str, str] = {}
 

@@ -14,13 +14,13 @@ radius) rather than git commit history — complementing GitHistoryAnalyzer.
 from __future__ import annotations
 
 import json
-import logging
 import shutil
 import subprocess
 from pathlib import Path
 from typing import Any
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 
 class GitNexusNotAvailableError(RuntimeError):
@@ -35,7 +35,6 @@ class GitNexusBridge:
     """
 
     def __init__(self, repo_path: str, vendor_dir: str | None = None) -> None:
-        """Initialize this instance."""
         self.repo_path = str(Path(repo_path).resolve())
         self._vendor_dir = vendor_dir or str(
             Path(__file__).parent.parent / "vendor" / "gitnexus"

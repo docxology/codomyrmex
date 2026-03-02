@@ -87,7 +87,6 @@ class StreamBuffer:
 
     def __init__(self, max_size: int = 1000,
                  flush_callback: Any = None) -> None:
-        """Initialize this instance."""
         self._max_size = max_size
         self._buffer: list[Any] = []
         self._flush_callback = flush_callback
@@ -115,5 +114,4 @@ class StreamBuffer:
 
     @property
     def total_flushed(self) -> int:
-        """total Flushed ."""
         return self._total_flushed

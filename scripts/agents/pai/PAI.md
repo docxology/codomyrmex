@@ -19,7 +19,7 @@ Example scripts demonstrating the full PAI agent integration API surface. These 
 
 ```python
 try:
-    import codomyrmex
+    import codomyrmex  # noqa: F401
 except ImportError:
     project_root = Path(__file__).resolve().parent.parent.parent.parent
     sys.path.insert(0, str(project_root / "src"))

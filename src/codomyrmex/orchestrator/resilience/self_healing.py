@@ -57,7 +57,6 @@ class Diagnosis:
     diagnosed_at: float = 0.0
 
     def __post_init__(self) -> None:
-        """post Init ."""
         if not self.diagnosed_at:
             self.diagnosed_at = time.time()
 

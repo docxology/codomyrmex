@@ -6,7 +6,6 @@ with capability-based routing and configurable execution handlers.
 """
 
 import asyncio
-import logging
 from collections.abc import Callable
 from typing import Any
 
@@ -14,8 +13,9 @@ from ..exceptions import CapabilityMismatchError
 from ..models import Task, TaskResult
 from ..protocols import AgentCapability
 from .base import CollaborativeAgent
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 
 class WorkerAgent(CollaborativeAgent):
@@ -37,7 +37,6 @@ class WorkerAgent(CollaborativeAgent):
         capabilities: list[AgentCapability] | None = None,
         max_concurrent_tasks: int = 1,
     ):
-        """Initialize this instance."""
         super().__init__(agent_id, name, capabilities)
         self._task_handlers: dict[str, Callable[[Task], Any]] = {}
         self._max_concurrent_tasks = max_concurrent_tasks
@@ -162,7 +161,6 @@ class SpecializedWorker(WorkerAgent):
         name: str | None = None,
         description: str = "",
     ):
-        """Initialize this instance."""
         name = name or f"{capability_name.title()}Worker"
         super().__init__(agent_id, name)
         self.register_handler(capability_name, handler, description)

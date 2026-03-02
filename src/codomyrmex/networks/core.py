@@ -83,7 +83,6 @@ class Network:
             self._adj[nid] = [e for e in self._adj[nid] if e.target != node_id and e.source != node_id]
 
     def has_node(self, node_id: str) -> bool:
-        """has Node ."""
         return node_id in self.nodes
 
     # ── Edge operations ─────────────────────────────────────────────
@@ -233,12 +232,10 @@ class Network:
 
     @property
     def node_count(self) -> int:
-        """node Count ."""
         return len(self.nodes)
 
     @property
     def edge_count(self) -> int:
-        """edge Count ."""
         return len(self.edges)
 
     @property

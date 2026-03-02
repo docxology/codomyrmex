@@ -4,7 +4,6 @@ Distributed Rate Limiting
 Rate limiting with Redis backend for distributed systems.
 """
 
-import logging
 import os
 import threading
 import time
@@ -14,8 +13,9 @@ from typing import Any
 from codomyrmex.config_management.defaults import DEFAULT_REDIS_URL
 
 from . import RateLimiter, RateLimitExceeded, RateLimitResult
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 
 @dataclass
@@ -24,7 +24,6 @@ class DistributedRateLimiterConfig:
     redis_url: str = ""
 
     def __post_init__(self):
-        """post Init ."""
         if not self.redis_url:
             self.redis_url = os.getenv("REDIS_URL", DEFAULT_REDIS_URL)
     key_prefix: str = "ratelimit:"
@@ -44,7 +43,6 @@ class RedisRateLimiter(RateLimiter):
         redis_client: Any | None = None,
         key_prefix: str = "ratelimit:",
     ):
-        """Initialize this instance."""
         self.limit = limit
         self.window_seconds = window_seconds
         self.key_prefix = key_prefix
@@ -150,7 +148,6 @@ class LeakyBucketLimiter(RateLimiter):
         capacity: int,
         leak_rate: float,  # Requests per second
     ):
-        """Initialize this instance."""
         self.capacity = capacity
         self.leak_rate = leak_rate
         self._buckets: dict[str, tuple] = {}  # key -> (level, last_update)
@@ -225,7 +222,6 @@ class AdaptiveRateLimiter(RateLimiter):
         load_threshold: float = 0.8,
         min_limit_ratio: float = 0.2,
     ):
-        """Initialize this instance."""
         self.base_limit = base_limit
         self.window_seconds = window_seconds
         self.load_threshold = load_threshold

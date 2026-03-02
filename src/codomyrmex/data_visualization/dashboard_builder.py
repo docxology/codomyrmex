@@ -93,7 +93,6 @@ class DashboardBuilder:
     """
 
     def __init__(self, title: str = "Dashboard", uid: str = "") -> None:
-        """Initialize this instance."""
         self._title = title
         self._uid = uid
         self._panels: list[Panel] = []
@@ -103,7 +102,6 @@ class DashboardBuilder:
 
     @property
     def panel_count(self) -> int:
-        """panel Count ."""
         return len(self._panels)
 
     def add_panel(self, panel: Panel) -> DashboardBuilder:

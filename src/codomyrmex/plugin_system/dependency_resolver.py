@@ -74,7 +74,6 @@ class DependencyResolver:
     """
 
     def __init__(self) -> None:
-        """Initialize this instance."""
         self._nodes: dict[str, DependencyNode] = {}
 
     def add(self, node: DependencyNode) -> None:

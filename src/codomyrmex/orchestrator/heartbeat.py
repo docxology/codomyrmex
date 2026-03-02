@@ -49,7 +49,6 @@ class HeartbeatMonitor:
     """
 
     def __init__(self, timeout_seconds: float = 10.0, suspect_threshold: int = 2) -> None:
-        """Initialize this instance."""
         self._timeout = timeout_seconds
         self._suspect_threshold = suspect_threshold
         self._agents: dict[str, list[HeartbeatRecord]] = {}
@@ -58,7 +57,6 @@ class HeartbeatMonitor:
 
     @property
     def agent_count(self) -> int:
-        """agent Count ."""
         return len(self._agents)
 
     def register(self, agent_id: str) -> None:

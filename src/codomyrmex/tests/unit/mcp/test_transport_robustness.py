@@ -88,7 +88,7 @@ class _TimeoutTransport(_Transport):
     """Transport that always times out."""
 
     async def send(self, message: dict, *, timeout: float = 30.0) -> dict:
-        raise asyncio.TimeoutError("connection timed out")
+        raise TimeoutError("connection timed out")
 
     async def send_notification(self, message: dict) -> None:
         pass

@@ -6,7 +6,7 @@ Provides SSL/TLS certificate validation, monitoring, and security assessment.
 import socket
 import ssl
 from dataclasses import dataclass
-from datetime import datetime, timezone
+from datetime import datetime, timezone, UTC
 from typing import Any
 
 import OpenSSL
@@ -69,8 +69,8 @@ class CertificateValidator:
             if not_after_bytes:
                 not_after_str = not_after_bytes.decode('utf-8')
                 # OpenSSL format: YYYYMMDDhhmmssZ
-                expires_at = datetime.strptime(not_after_str, '%Y%m%d%H%M%SZ').replace(tzinfo=timezone.utc)
-                now = datetime.now(timezone.utc)
+                expires_at = datetime.strptime(not_after_str, '%Y%m%d%H%M%SZ').replace(tzinfo=UTC)
+                now = datetime.now(UTC)
                 days_left = (expires_at - now).days
                 is_expired = days_left < 0
             else:

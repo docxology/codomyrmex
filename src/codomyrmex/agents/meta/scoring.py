@@ -61,7 +61,6 @@ class OutcomeScorer:
         self,
         weights: dict[str, float] | None = None,
     ) -> None:
-        """Initialize this instance."""
         self._weights = weights or {
             "correctness": 0.4,
             "efficiency": 0.2,

@@ -35,7 +35,6 @@ class EdgeCache:
     """
 
     def __init__(self, max_size: int = 1000, default_ttl: float = 300.0):
-        """Initialize this instance."""
         self._store: dict[str, CacheEntry] = {}
         self._max_size = max_size
         self._default_ttl = default_ttl

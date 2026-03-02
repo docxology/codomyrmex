@@ -28,7 +28,6 @@ class EventPublishError(EventError):
         channel: str | None = None,
         **kwargs: Any
     ):
-        """Initialize this instance."""
         super().__init__(message, **kwargs)
         if event_type:
             self.context["event_type"] = event_type
@@ -56,7 +55,6 @@ class EventSubscriptionError(EventError):
         reason: str | None = None,
         **kwargs: Any
     ):
-        """Initialize this instance."""
         super().__init__(message, **kwargs)
         if event_type:
             self.context["event_type"] = event_type
@@ -86,7 +84,6 @@ class EventHandlerError(EventError):
         original_error: str | None = None,
         **kwargs: Any
     ):
-        """Initialize this instance."""
         super().__init__(message, **kwargs)
         if handler_name:
             self.context["handler_name"] = handler_name
@@ -116,7 +113,6 @@ class EventTimeoutError(EventError):
         processing_stage: str | None = None,
         **kwargs: Any
     ):
-        """Initialize this instance."""
         super().__init__(message, **kwargs)
         if event_id:
             self.context["event_id"] = event_id
@@ -144,7 +140,6 @@ class EventValidationError(EventError):
         schema: str | None = None,
         **kwargs: Any
     ):
-        """Initialize this instance."""
         super().__init__(message, **kwargs)
         if event_type:
             self.context["event_type"] = event_type
@@ -172,7 +167,6 @@ class EventQueueError(EventError):
         max_size: int | None = None,
         **kwargs: Any
     ):
-        """Initialize this instance."""
         super().__init__(message, **kwargs)
         if queue_name:
             self.context["queue_name"] = queue_name
@@ -200,7 +194,6 @@ class EventDeliveryError(EventError):
         retry_count: int | None = None,
         **kwargs: Any
     ):
-        """Initialize this instance."""
         super().__init__(message, **kwargs)
         if event_id:
             self.context["event_id"] = event_id

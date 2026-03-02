@@ -28,7 +28,6 @@ class BM25Index:
     """Simple BM25 keyword index for hybrid search."""
 
     def __init__(self, k1: float = 1.5, b: float = 0.75) -> None:
-        """Initialize this instance."""
         self._k1 = k1
         self._b = b
         self._docs: dict[str, list[str]] = {}
@@ -85,7 +84,6 @@ class HybridSearchEngine:
 
     def __init__(self, keyword_weight: float = 0.4,
                  semantic_weight: float = 0.6) -> None:
-        """Initialize this instance."""
         self._kw_weight = keyword_weight
         self._sem_weight = semantic_weight
         self._bm25 = BM25Index()

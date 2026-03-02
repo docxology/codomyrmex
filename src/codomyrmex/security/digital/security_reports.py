@@ -6,7 +6,7 @@ Provides comprehensive security reporting and assessment generation capabilities
 import json
 import os
 from dataclasses import dataclass, field
-from datetime import datetime, timezone
+from datetime import datetime, timezone, UTC
 from typing import Any
 
 try:
@@ -220,7 +220,7 @@ class SecurityReportGenerator:
         monitoring_data: dict[str, Any],
     ) -> SecurityReport:
         """Generate comprehensive security report."""
-        report_id = f"security_report_{datetime.now(timezone.utc).strftime('%Y%m%d_%H%M%S')}"
+        report_id = f"security_report_{datetime.now(UTC).strftime('%Y%m%d_%H%M%S')}"
 
         vulnerability_analysis = self._analyze_vulnerabilities(vulnerability_data)
         compliance_analysis = self._analyze_compliance(compliance_data)
@@ -238,7 +238,7 @@ class SecurityReportGenerator:
         return SecurityReport(
             report_id=report_id,
             title="Comprehensive Security Assessment Report",
-            generated_at=datetime.now(timezone.utc),
+            generated_at=datetime.now(UTC),
             target_system=vulnerability_data.get("target", "Unknown System"),
             executive_summary=executive_summary,
             risk_assessment=overall_risk,

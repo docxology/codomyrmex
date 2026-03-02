@@ -5,7 +5,6 @@ Provides implementations for OTLP and other telemetry protocols.
 """
 
 import json
-import logging
 import os
 import threading
 import time
@@ -15,9 +14,10 @@ from datetime import datetime
 from queue import Queue
 from typing import Any, Dict, List, Optional
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 from codomyrmex.config_management.defaults import DEFAULT_OTEL_ENDPOINT
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 
 @dataclass
@@ -76,7 +76,6 @@ class ConsoleExporter(SpanExporter):
     """Exports spans to the console for debugging."""
 
     def __init__(self, pretty: bool = True):
-        """Initialize this instance."""
         self.pretty = pretty
 
     def export(self, spans: list[SpanData]) -> bool:
@@ -98,7 +97,6 @@ class FileExporter(SpanExporter):
     """Exports spans to a JSON file."""
 
     def __init__(self, filepath: str):
-        """Initialize this instance."""
         self.filepath = filepath
         self._lock = threading.Lock()
 
@@ -129,7 +127,6 @@ class OTLPExporter(SpanExporter):
         timeout: float = 10.0,
         compression: str = "none",  # none, gzip
     ):
-        """Initialize this instance."""
         self.endpoint = endpoint.rstrip('/')
         self.headers = headers or {}
         self.timeout = timeout
@@ -257,7 +254,6 @@ class BatchExporter(SpanExporter):
         max_queue_size: int = 2048,
         scheduled_delay_ms: int = 5000,
     ):
-        """Initialize this instance."""
         self.exporter = exporter
         self.max_batch_size = max_batch_size
         self.max_queue_size = max_queue_size
@@ -323,7 +319,6 @@ class MultiExporter(SpanExporter):
     """Exports to multiple backends simultaneously."""
 
     def __init__(self, exporters: list[SpanExporter]):
-        """Initialize this instance."""
         self.exporters = exporters
 
     def export(self, spans: list[SpanData]) -> bool:

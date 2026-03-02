@@ -44,7 +44,6 @@ class AccessControlSystem:
     """Manages physical access control."""
 
     def __init__(self):
-        """Initialize this instance."""
 
         self.permissions: dict[str, list[AccessPermission]] = {}
         self.audit_trail: list[dict] = []

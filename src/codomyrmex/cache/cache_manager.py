@@ -35,7 +35,6 @@ class CacheManager:
     SUPPORTED_BACKENDS = ("in_memory", "file_based", "redis")
 
     def __init__(self, default_backend: str = "in_memory", default_ttl: float = 0) -> None:
-        """Initialize this instance."""
         self._caches: dict[str, Cache] = {}
         self._backends: dict[str, str] = {}  # cache_key -> backend name
         self._default_backend = default_backend
@@ -114,12 +113,10 @@ class CacheManager:
 
     @property
     def cache_count(self) -> int:
-        """cache Count ."""
         return len(self._caches)
 
     @property
     def default_backend(self) -> str:
-        """default Backend ."""
         return self._default_backend
 
     def summary(self) -> dict[str, Any]:

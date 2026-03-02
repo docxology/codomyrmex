@@ -74,7 +74,6 @@ class RollbackManager:
     """
 
     def __init__(self) -> None:
-        """Initialize this instance."""
         self._snapshots: list[DeploymentSnapshot] = []
         self._current_version: str | None = None
 

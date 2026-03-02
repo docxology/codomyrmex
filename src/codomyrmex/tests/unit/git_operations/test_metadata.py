@@ -13,7 +13,7 @@ Zero-mock policy: uses real RepositoryMetadataManager backed by tmp_path JSON.
 """
 
 import json
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timedelta, timezone, UTC
 from pathlib import Path
 from types import SimpleNamespace
 
@@ -90,7 +90,7 @@ def _make_repo_metadata(
         tags=tags or [],
         priority=0,
         category="general",
-        created_date=datetime.now(timezone.utc).isoformat(),
+        created_date=datetime.now(UTC).isoformat(),
     )
 
 
@@ -361,7 +361,7 @@ class TestCmdReport:
 
     def test_report_detailed_shows_outdated(self, tmp_path, capsys):
         """Detailed report shows repos needing attention when outdated."""
-        old_date = (datetime.now(timezone.utc) - timedelta(days=60)).isoformat()
+        old_date = (datetime.now(UTC) - timedelta(days=60)).isoformat()
         repo = _make_repo_metadata("a/old", last_sync_date=old_date)
         manager = _make_manager(tmp_path, {"a/old": repo})
         args = _args(detailed=True)

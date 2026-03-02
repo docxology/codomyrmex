@@ -32,7 +32,6 @@ class GraphRAGPipeline:
         graph: KnowledgeGraph,
         embedding_fn: Callable[[list[str]], list[list[float]]] | None = None,
     ):
-        """Initialize this instance."""
         self.graph = graph
         self.embedding_fn = embedding_fn
 

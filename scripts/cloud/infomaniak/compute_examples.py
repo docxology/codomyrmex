@@ -22,7 +22,7 @@ from pathlib import Path
 
 # Add project src to path if needed
 try:
-    import codomyrmex
+    import codomyrmex  # noqa: F401
 except ImportError:
     project_root = Path(__file__).resolve().parent.parent.parent.parent
     sys.path.insert(0, str(project_root / "src"))

@@ -61,17 +61,14 @@ class MigrationPlan:
 
     @property
     def step_count(self) -> int:
-        """step Count ."""
         return len(self.steps)
 
     @property
     def breaking_count(self) -> int:
-        """breaking Count ."""
         return sum(1 for s in self.steps if s.breaking)
 
     @property
     def is_safe(self) -> bool:
-        """is Safe ."""
         return self.breaking_count == 0
 
 
@@ -86,13 +83,11 @@ class MigrationEngine:
     """
 
     def __init__(self) -> None:
-        """Initialize this instance."""
         self._steps: list[MigrationStep] = []
         self._plans: dict[str, MigrationPlan] = {}
 
     @property
     def total_steps(self) -> int:
-        """total Steps ."""
         return len(self._steps)
 
     def add_rename(

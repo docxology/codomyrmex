@@ -4,13 +4,13 @@ Alert Manager
 Alert rule management and notification for observability.
 """
 
-import logging
 import threading
 from collections.abc import Callable
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 from .models import Alert, AlertSeverity
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 
 class AlertManager:
@@ -32,7 +32,6 @@ class AlertManager:
     """
 
     def __init__(self):
-        """Initialize this instance."""
         self._alerts: dict[str, Alert] = {}
         self._rules: dict[str, dict[str, any]] = {}
         self._counter = 0

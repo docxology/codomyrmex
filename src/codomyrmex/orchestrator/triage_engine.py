@@ -150,7 +150,6 @@ class TriageEngine:
         min_active_loc: int = 2000,
         archive_threshold: int = 100,
     ) -> None:
-        """Initialize this instance."""
         self._min_active_loc = min_active_loc
         self._archive_threshold = archive_threshold
 

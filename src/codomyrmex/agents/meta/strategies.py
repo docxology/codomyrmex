@@ -61,7 +61,6 @@ class StrategyLibrary:
     """
 
     def __init__(self) -> None:
-        """Initialize this instance."""
         self._strategies: dict[str, Strategy] = {}
 
     def add(self, strategy: Strategy) -> None:

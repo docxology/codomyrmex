@@ -5,15 +5,15 @@ Provides different template rendering engines.
 """
 
 import html
-import logging
 import re
 from abc import ABC, abstractmethod
 from collections.abc import Callable
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Dict, List, Optional
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 
 @dataclass
@@ -69,7 +69,6 @@ class SimpleTemplateEngine(TemplateEngine):
         delimiters: tuple = ("{{", "}}"),
         escape_html: bool = False,
     ):
-        """Initialize this instance."""
         self.left_delim = delimiters[0]
         self.right_delim = delimiters[1]
         self.escape_html = escape_html
@@ -114,7 +113,6 @@ class SimpleTemplateEngine(TemplateEngine):
         return self._pattern.sub(replace, template)
 
     def render_file(self, path: str, context: dict[str, Any]) -> str:
-        """render File ."""
         with open(path) as f:
             template = f.read()
         return self.render(template, context)
@@ -128,7 +126,6 @@ class Jinja2LikeEngine(TemplateEngine):
         filters: dict[str, Callable] | None = None,
         autoescape: bool = True,
     ):
-        """Initialize this instance."""
         self.filters = filters or {}
         self.autoescape = autoescape
 
@@ -358,7 +355,6 @@ class Jinja2LikeEngine(TemplateEngine):
         return bool(value)
 
     def render_file(self, path: str, context: dict[str, Any]) -> str:
-        """render File ."""
         with open(path) as f:
             template = f.read()
         return self.render(template, context)
@@ -368,7 +364,6 @@ class MustacheEngine(TemplateEngine):
     """Mustache-style logic-less templates."""
 
     def __init__(self):
-        """Initialize this instance."""
         self._var_pattern = re.compile(r'\{\{([#^/]?)(.+?)\}\}')
 
     def render(self, template: str, context: dict[str, Any]) -> str:
@@ -376,7 +371,6 @@ class MustacheEngine(TemplateEngine):
         return self._render_internal(template, context)
 
     def _render_internal(self, template: str, context: dict[str, Any]) -> str:
-        """render Internal ."""
         # Process sections
         template = self._process_sections(template, context)
 
@@ -476,7 +470,6 @@ class MustacheEngine(TemplateEngine):
         return value
 
     def render_file(self, path: str, context: dict[str, Any]) -> str:
-        """render File ."""
         with open(path) as f:
             template = f.read()
         return self.render(template, context)

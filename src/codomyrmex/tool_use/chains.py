@@ -126,7 +126,6 @@ class ToolChain:
     """
 
     def __init__(self, registry: ToolRegistry) -> None:
-        """Initialize this instance."""
         self._registry = registry
         self._steps: list[ChainStep] = []
 

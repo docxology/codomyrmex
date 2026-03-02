@@ -8,7 +8,7 @@ Provides:
 
 from __future__ import annotations
 
-from datetime import datetime, timezone
+from datetime import datetime, timezone, UTC
 from enum import Enum, auto
 from typing import Any
 from uuid import uuid4
@@ -32,13 +32,12 @@ class Account:
     """
 
     def __init__(self, name: str, account_type: AccountType, code: str = "") -> None:
-        """Initialize this instance."""
         self.id: str = str(uuid4())
         self.name = name
         self.account_type = account_type
         self.code = code
         self.balance: float = 0.0
-        self.created_at: str = datetime.now(timezone.utc).isoformat()
+        self.created_at: str = datetime.now(UTC).isoformat()
         self._frozen: bool = False
 
     @property
@@ -104,7 +103,6 @@ class AccountChart:
     """
 
     def __init__(self) -> None:
-        """Initialize this instance."""
         self._accounts: dict[str, Account] = {}
 
     def create(self, name: str, account_type: AccountType, code: str = "") -> Account:
@@ -118,33 +116,27 @@ class AccountChart:
         return self._accounts.get(account_id)
 
     def find_by_name(self, name: str) -> Account | None:
-        """find By Name ."""
         for acct in self._accounts.values():
             if acct.name == name:
                 return acct
         return None
 
     def find_by_code(self, code: str) -> Account | None:
-        """find By Code ."""
         for acct in self._accounts.values():
             if acct.code == code:
                 return acct
         return None
 
     def by_type(self, account_type: AccountType) -> list[Account]:
-        """by Type ."""
         return [a for a in self._accounts.values() if a.account_type == account_type]
 
     def total_assets(self) -> float:
-        """total Assets ."""
         return sum(a.balance for a in self.by_type(AccountType.ASSET))
 
     def total_liabilities(self) -> float:
-        """total Liabilities ."""
         return sum(a.balance for a in self.by_type(AccountType.LIABILITY))
 
     def total_equity(self) -> float:
-        """total Equity ."""
         return sum(a.balance for a in self.by_type(AccountType.EQUITY))
 
     def net_income(self) -> float:
@@ -155,11 +147,9 @@ class AccountChart:
 
     @property
     def account_count(self) -> int:
-        """account Count ."""
         return len(self._accounts)
 
     def all_accounts(self) -> list[Account]:
-        """all Accounts ."""
         return list(self._accounts.values())
 
     def summary(self) -> dict[str, Any]:

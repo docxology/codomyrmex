@@ -1,6 +1,6 @@
 """Unit tests for the Configuration data model -- get/set, dot notation, validation."""
 
-from datetime import datetime, timezone
+from datetime import datetime, timezone, UTC
 
 import pytest
 
@@ -139,7 +139,7 @@ class TestConfigurationAdditionalEdgeCases:
         assert config.loaded_at is not None
         assert isinstance(config.loaded_at, datetime)
         # Should be very recent (within last 10 seconds)
-        delta = datetime.now(timezone.utc) - config.loaded_at
+        delta = datetime.now(UTC) - config.loaded_at
         assert delta.total_seconds() < 10
 
     def test_to_dict_loaded_at_is_iso_string(self):

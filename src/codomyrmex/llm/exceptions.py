@@ -23,7 +23,6 @@ class LLMConnectionError(LLMError):
         endpoint: str | None = None,
         **kwargs
     ):
-        """Initialize this instance."""
         super().__init__(message, **kwargs)
         if provider:
             self.context["provider"] = provider
@@ -40,7 +39,6 @@ class LLMAuthenticationError(LLMError):
         provider: str | None = None,
         **kwargs
     ):
-        """Initialize this instance."""
         super().__init__(message, **kwargs)
         if provider:
             self.context["provider"] = provider
@@ -57,7 +55,6 @@ class LLMRateLimitError(LLMError):
         limit_type: str | None = None,
         **kwargs
     ):
-        """Initialize this instance."""
         super().__init__(message, **kwargs)
         if provider:
             self.context["provider"] = provider
@@ -77,7 +74,6 @@ class LLMTimeoutError(LLMError):
         provider: str | None = None,
         **kwargs
     ):
-        """Initialize this instance."""
         super().__init__(message, **kwargs)
         if timeout_seconds is not None:
             self.context["timeout_seconds"] = timeout_seconds
@@ -101,7 +97,6 @@ class PromptTooLongError(PromptError):
         model: str | None = None,
         **kwargs
     ):
-        """Initialize this instance."""
         super().__init__(message, **kwargs)
         if token_count is not None:
             self.context["token_count"] = token_count
@@ -120,7 +115,6 @@ class PromptValidationError(PromptError):
         validation_errors: list[str] | None = None,
         **kwargs
     ):
-        """Initialize this instance."""
         super().__init__(message, **kwargs)
         if validation_errors:
             self.context["validation_errors"] = validation_errors
@@ -141,7 +135,6 @@ class ResponseParsingError(ResponseError):
         raw_response: str | None = None,
         **kwargs
     ):
-        """Initialize this instance."""
         super().__init__(message, **kwargs)
         if expected_format:
             self.context["expected_format"] = expected_format
@@ -165,7 +158,6 @@ class ContentFilterError(LLMError):
         category: str | None = None,
         **kwargs
     ):
-        """Initialize this instance."""
         super().__init__(message, **kwargs)
         if filter_type:
             self.context["filter_type"] = filter_type
@@ -184,7 +176,6 @@ class ModelNotFoundError(LLMError):
         available_models: list[str] | None = None,
         **kwargs
     ):
-        """Initialize this instance."""
         super().__init__(message, **kwargs)
         if model:
             self.context["model"] = model
@@ -204,7 +195,6 @@ class TokenLimitError(LLMError):
         available_tokens: int | None = None,
         **kwargs
     ):
-        """Initialize this instance."""
         super().__init__(message, **kwargs)
         if requested_tokens is not None:
             self.context["requested_tokens"] = requested_tokens
@@ -221,7 +211,6 @@ class StreamingError(LLMError):
         chunks_received: int | None = None,
         **kwargs
     ):
-        """Initialize this instance."""
         super().__init__(message, **kwargs)
         if chunks_received is not None:
             self.context["chunks_received"] = chunks_received
@@ -238,7 +227,6 @@ class ContextWindowError(LLMError):
         model: str | None = None,
         **kwargs
     ):
-        """Initialize this instance."""
         super().__init__(message, **kwargs)
         if context_length is not None:
             self.context["context_length"] = context_length

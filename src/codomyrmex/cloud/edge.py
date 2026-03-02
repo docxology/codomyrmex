@@ -91,7 +91,6 @@ class CloudflareWorkersClient(EdgeClient):
     """Cloudflare Workers client (in-memory implementation)."""
 
     def __init__(self, account_id: str, api_token: str):
-        """Initialize this instance."""
         self.account_id = account_id
         self.api_token = api_token
         self._deployments: dict[str, EdgeDeployment] = {}
@@ -117,7 +116,6 @@ class CloudflareWorkersClient(EdgeClient):
         return deployment
 
     def list_deployments(self) -> list[EdgeDeployment]:
-        """list Deployments ."""
         return list(self._deployments.values())
 
     def delete(self, deployment_id: str) -> bool:
@@ -128,7 +126,6 @@ class CloudflareWorkersClient(EdgeClient):
         return False
 
     def get_logs(self, deployment_id: str, limit: int = 100) -> list[dict[str, Any]]:
-        """get Logs ."""
         return []
 
 
@@ -136,7 +133,6 @@ class FastlyComputeClient(EdgeClient):
     """Fastly Compute@Edge client (in-memory implementation)."""
 
     def __init__(self, api_key: str, service_id: str = ""):
-        """Initialize this instance."""
         self.api_key = api_key
         self.service_id = service_id
         self._deployments: dict[str, EdgeDeployment] = {}
@@ -162,7 +158,6 @@ class FastlyComputeClient(EdgeClient):
         return deployment
 
     def list_deployments(self) -> list[EdgeDeployment]:
-        """list Deployments ."""
         return list(self._deployments.values())
 
     def delete(self, deployment_id: str) -> bool:
@@ -173,7 +168,6 @@ class FastlyComputeClient(EdgeClient):
         return False
 
     def get_logs(self, deployment_id: str, limit: int = 100) -> list[dict[str, Any]]:
-        """get Logs ."""
         return []
 
 
@@ -181,7 +175,6 @@ class EdgeManager:
     """Manage edge deployments across providers."""
 
     def __init__(self):
-        """Initialize this instance."""
         self._clients: dict[EdgeProvider, EdgeClient] = {}
 
     def register_client(self, client: EdgeClient) -> None:

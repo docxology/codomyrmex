@@ -432,7 +432,6 @@ class ClaudeCodeEndpoint:
 
     @property
     def is_running(self) -> bool:
-        """is Running ."""
         return self._running
 
     # ── Callbacks ─────────────────────────────────────────────────

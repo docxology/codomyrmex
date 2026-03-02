@@ -124,7 +124,6 @@ class MaintenanceScheduler:
     """
 
     def __init__(self) -> None:
-        """Initialize this instance."""
         self._tasks: dict[str, MaintenanceTask] = {}
         self._history: list[TaskResult] = []
 

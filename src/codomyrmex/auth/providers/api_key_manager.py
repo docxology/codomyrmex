@@ -35,14 +35,12 @@ class APIKey:
 
     @property
     def is_expired(self) -> bool:
-        """is Expired ."""
         if self.expires_at is None:
             return False
         return time.time() > self.expires_at
 
     @property
     def is_valid(self) -> bool:
-        """is Valid ."""
         return not self.revoked and not self.is_expired
 
 
@@ -58,7 +56,6 @@ class APIKeyManager:
     """
 
     def __init__(self, prefix: str = "codomyrmex") -> None:
-        """Initialize this instance."""
         self._prefix = prefix
         self._keys: dict[str, APIKey] = {}
 
@@ -98,7 +95,6 @@ class APIKeyManager:
         return key_str
 
     def generate_api_key(self, user_id: str, permissions: list[str] | None = None) -> str:
-        """generate Api Key ."""
         return self.generate(user_id, permissions=permissions)
 
     def validate(self, key_str: str) -> APIKey | None:
@@ -116,7 +112,6 @@ class APIKeyManager:
         return api_key
 
     def validate_api_key(self, api_key: str) -> dict | None:
-        """validate Api Key ."""
         info = self.validate(api_key)
         if info is None:
             return None
@@ -132,7 +127,6 @@ class APIKeyManager:
         return True
 
     def revoke_api_key(self, api_key: str) -> bool:
-        """revoke Api Key ."""
         return self.revoke(api_key)
 
     def rotate(self, old_key_str: str, ttl_seconds: float | None = None) -> str | None:
@@ -176,10 +170,8 @@ class APIKeyManager:
 
     @property
     def active_count(self) -> int:
-        """active Count ."""
         return sum(1 for k in self._keys.values() if k.is_valid)
 
     @property
     def total_count(self) -> int:
-        """total Count ."""
         return len(self._keys)

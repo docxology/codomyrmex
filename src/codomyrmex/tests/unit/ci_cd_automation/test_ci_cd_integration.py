@@ -2,7 +2,7 @@
 
 import asyncio
 import os
-from datetime import datetime, timezone
+from datetime import datetime, timezone, UTC
 
 import pytest
 import yaml
@@ -546,7 +546,7 @@ class TestIntegration:
             description="Test description",
             stages=[],
             status=PipelineStatus.RUNNING,
-            started_at=datetime.now(timezone.utc)
+            started_at=datetime.now(UTC)
         )
 
         pipeline_dict = pipeline.to_dict()
@@ -571,8 +571,8 @@ class TestIntegration:
             environment=environment,
             artifacts=[],
             status=DeploymentStatus.SUCCESS,
-            started_at=datetime.now(timezone.utc),
-            finished_at=datetime.now(timezone.utc)
+            started_at=datetime.now(UTC),
+            finished_at=datetime.now(UTC)
         )
 
         deployment_dict = deployment.to_dict()

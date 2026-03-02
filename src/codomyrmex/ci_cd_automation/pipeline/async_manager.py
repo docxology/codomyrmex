@@ -5,7 +5,7 @@ import json
 import os
 import time
 from dataclasses import dataclass, field
-from datetime import datetime, timezone
+from datetime import datetime, timezone, UTC
 from typing import Any
 
 import aiohttp
@@ -26,7 +26,7 @@ class AsyncPipelineResult:
     message: str
     data: dict[str, Any] | None = None
     error: str | None = None
-    timestamp: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
+    timestamp: datetime = field(default_factory=lambda: datetime.now(UTC))
 
     def to_dict(self) -> dict[str, Any]:
         """Convert result to dictionary format."""
@@ -161,7 +161,7 @@ class AsyncPipelineManager:
                             error=error_msg,
                         )
 
-        except asyncio.TimeoutError:
+        except TimeoutError:
             error_msg = "Pipeline trigger request timed out"
             logger.error(f"[ASYNC] {error_msg}")
             return AsyncPipelineResult(
@@ -287,7 +287,7 @@ class AsyncPipelineManager:
                             error=error_msg,
                         )
 
-        except asyncio.TimeoutError:
+        except TimeoutError:
             error_msg = "Pipeline status request timed out"
             logger.error(f"[ASYNC] {error_msg}")
             return AsyncPipelineResult(
@@ -436,7 +436,7 @@ class AsyncPipelineManager:
                             error=error_msg,
                         )
 
-        except asyncio.TimeoutError:
+        except TimeoutError:
             error_msg = "Pipeline cancel request timed out"
             logger.error(f"[ASYNC] {error_msg}")
             return AsyncPipelineResult(
@@ -542,7 +542,7 @@ class AsyncPipelineManager:
                             error=error_msg,
                         )
 
-        except asyncio.TimeoutError:
+        except TimeoutError:
             error_msg = "Workflow runs request timed out"
             logger.error(f"[ASYNC] {error_msg}")
             return AsyncPipelineResult(

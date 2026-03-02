@@ -6,7 +6,7 @@ audit trail and configurable rotation policies.
 
 from collections.abc import Callable
 from dataclasses import dataclass
-from datetime import datetime, timezone
+from datetime import datetime, timezone, UTC
 
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
@@ -73,7 +73,7 @@ class KeyRotation:
             wallet_id: The wallet address/ID.
         """
         self._signature_counts[user_id] = 0
-        self._creation_times[user_id] = datetime.now(timezone.utc)
+        self._creation_times[user_id] = datetime.now(UTC)
         if user_id not in self._history:
             self._history[user_id] = []
         logger.info(f"Registered wallet {wallet_id} for rotation tracking")
@@ -102,7 +102,7 @@ class KeyRotation:
 
         created = self._creation_times.get(user_id)
         if created:
-            age = (datetime.now(timezone.utc) - created).days
+            age = (datetime.now(UTC) - created).days
             if age >= self.policy.max_age_days:
                 logger.info(f"User {user_id}: rotation needed (age={age} days)")
                 return True
@@ -131,7 +131,7 @@ class KeyRotation:
             user_id=user_id,
             old_wallet_id=old_wallet_id,
             new_wallet_id=new_wallet_id,
-            timestamp=datetime.now(timezone.utc).isoformat(),
+            timestamp=datetime.now(UTC).isoformat(),
             reason=reason,
         )
 
@@ -141,7 +141,7 @@ class KeyRotation:
 
         # Reset counters
         self._signature_counts[user_id] = 0
-        self._creation_times[user_id] = datetime.now(timezone.utc)
+        self._creation_times[user_id] = datetime.now(UTC)
 
         # Run post-rotate hooks
         for hook in self._post_rotate_hooks:

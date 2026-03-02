@@ -47,7 +47,6 @@ class FaultInjector:
     """Inject faults into system components."""
 
     def __init__(self):
-        """Initialize this instance."""
         self._active_faults: dict[str, FaultConfig] = {}
         self._lock = threading.Lock()
 
@@ -128,7 +127,6 @@ class ChaosExperiment:
         action: Callable[[], None],
         rollback: Callable[[], None] | None = None,
     ):
-        """Initialize this instance."""
         self.name = name
         self.hypothesis = hypothesis
         self.action = action
@@ -196,7 +194,6 @@ class ChaosMonkey:
     """Automated chaos testing."""
 
     def __init__(self, injector: FaultInjector | None = None):
-        """Initialize this instance."""
         self.injector = injector or FaultInjector()
         self._experiments: list[ChaosExperiment] = []
         self._results: list[ExperimentResult] = []

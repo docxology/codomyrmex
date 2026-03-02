@@ -82,11 +82,9 @@ class DashboardExporter:
     """
 
     def __init__(self, title: str = "Codomyrmex Agent Dashboard") -> None:
-        """Initialize this instance."""
         self._dashboard = Dashboard(title=title)
 
     def add_panel(self, panel: Panel) -> None:
-        """add Panel ."""
         self._dashboard.panels.append(panel)
 
     def export(self) -> dict[str, Any]:
@@ -95,7 +93,6 @@ class DashboardExporter:
 
     @property
     def panel_count(self) -> int:
-        """panel Count ."""
         return len(self._dashboard.panels)
 
     @classmethod

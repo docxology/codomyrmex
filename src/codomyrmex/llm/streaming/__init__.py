@@ -87,7 +87,6 @@ class StreamBuffer:
     """
 
     def __init__(self, max_size: int = 100000):
-        """Initialize this instance."""
         self.max_size = max_size
         self._chunks: list[str] = []
         self._total_length = 0
@@ -145,7 +144,6 @@ class ContentFilterProcessor(StreamProcessor):
     """Filters content based on patterns."""
 
     def __init__(self, block_patterns: list[str] | None = None):
-        """Initialize this instance."""
         self.block_patterns = block_patterns or []
 
     def process(self, event: StreamEvent) -> StreamEvent | None:
@@ -175,7 +173,6 @@ class JSONStreamParser:
     """
 
     def __init__(self):
-        """Initialize this instance."""
         self._buffer = ""
         self._objects: list[Any] = []
         self._depth = 0
@@ -252,7 +249,6 @@ class StreamHandler:
     """
 
     def __init__(self):
-        """Initialize this instance."""
         self._processors: list[StreamProcessor] = []
         self._callbacks: dict[StreamEventType, list[Callable]] = {}
         self._buffer = StreamBuffer()

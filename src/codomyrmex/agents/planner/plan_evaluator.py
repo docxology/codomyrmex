@@ -57,7 +57,6 @@ class PlanEvaluator:
     """
 
     def __init__(self, config: FeedbackConfig | None = None) -> None:
-        """Initialize this instance."""
         self._config = config or FeedbackConfig()
 
     @property

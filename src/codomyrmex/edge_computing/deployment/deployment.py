@@ -50,7 +50,6 @@ class DeploymentManager:
     """Manage function deployments across an edge cluster."""
 
     def __init__(self, cluster: EdgeCluster):
-        """Initialize this instance."""
         self._cluster = cluster
         self._deployments: list[DeploymentPlan] = []
 
@@ -100,7 +99,6 @@ class DeploymentManager:
         return count
 
     def list_deployments(self) -> list[DeploymentPlan]:
-        """list Deployments ."""
         return list(self._deployments)
 
     # --- Strategy implementations ---

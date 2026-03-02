@@ -5,13 +5,13 @@ Async-first streaming implementations.
 """
 
 import asyncio
-import logging
 from collections.abc import AsyncIterator, Callable
 from typing import Any
 
 from . import Event, EventType
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 
 class AsyncStream:
@@ -22,7 +22,6 @@ class AsyncStream:
         buffer_size: int = 1000,
         enable_backpressure: bool = True,
     ):
-        """Initialize this instance."""
         self._buffer: asyncio.Queue = asyncio.Queue(maxsize=buffer_size if enable_backpressure else 0)
         self._subscribers: dict[str, asyncio.Queue] = {}
         self._running = False
@@ -50,7 +49,7 @@ class AsyncStream:
             try:
                 event = await asyncio.wait_for(self._buffer.get(), timeout=1.0)
                 await self._broadcast(event)
-            except asyncio.TimeoutError:
+            except TimeoutError:
                 continue
             except asyncio.CancelledError:
                 break
@@ -70,7 +69,7 @@ class AsyncStream:
         try:
             await asyncio.wait_for(self._buffer.put(event), timeout=5.0)
             return True
-        except asyncio.TimeoutError as e:
+        except TimeoutError as e:
             logger.warning("Event publish timed out after 5s: %s", e)
             return False
 
@@ -98,7 +97,7 @@ class AsyncStream:
             try:
                 event = await asyncio.wait_for(queue.get(), timeout=30.0)
                 yield event
-            except asyncio.TimeoutError:
+            except TimeoutError:
                 # Heartbeat
                 yield Event(type=EventType.HEARTBEAT)
 
@@ -107,7 +106,6 @@ class WebSocketStream:
     """WebSocket-compatible stream."""
 
     def __init__(self):
-        """Initialize this instance."""
         self._connections: dict[str, Any] = {}
         self._base_stream = AsyncStream()
 
@@ -153,7 +151,6 @@ class BatchingStream:
         batch_size: int = 100,
         flush_interval: float = 1.0,
     ):
-        """Initialize this instance."""
         self._batch: list[Event] = []
         self._batch_size = batch_size
         self._flush_interval = flush_interval

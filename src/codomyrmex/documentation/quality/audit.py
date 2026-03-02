@@ -3,12 +3,12 @@ Audit documentation completeness for codomyrmex modules.
 """
 
 import ast
-import logging
 import os
 import sys
 from pathlib import Path
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 REQUIRED_DOCS = ["README.md", "AGENTS.md", "SPEC.md", "PAI.md"]
 PLACEHOLDER_TEXTS = ["Placeholder", "TODO: Add documentation", "# New Module"]
@@ -18,7 +18,6 @@ class ModuleAudit:
     """Audits a single module for documentation completeness."""
 
     def __init__(self, path: Path, src_root: Path):
-        """Initialize this instance."""
         self.path = path
         self.name = path.name
         self.relative_path = path.relative_to(src_root)

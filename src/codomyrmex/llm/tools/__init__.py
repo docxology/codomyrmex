@@ -133,7 +133,6 @@ class ToolRegistry:
     """Registry for managing available tools."""
 
     def __init__(self):
-        """Initialize this instance."""
         self.tools: dict[str, Tool] = {}
         self.categories: dict[str, list[str]] = {}
 

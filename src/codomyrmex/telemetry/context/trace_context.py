@@ -1,6 +1,5 @@
 """Core logic for span management and context propagation."""
 
-import logging
 from functools import wraps
 from typing import Any
 
@@ -8,8 +7,9 @@ from opentelemetry import trace
 from opentelemetry.sdk.resources import Resource
 from opentelemetry.sdk.trace import TracerProvider
 from opentelemetry.trace import Span, Status, StatusCode
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 class TraceContext:
     """Manager for the global or local trace state."""

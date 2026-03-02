@@ -38,7 +38,6 @@ class HealingEvent:
     metadata: dict[str, Any] = field(default_factory=dict)
 
     def __post_init__(self) -> None:
-        """post Init ."""
         if not self.event_id:
             self.event_id = f"heal-{int(time.time() * 1000) % 100000}"
         if not self.timestamp:
@@ -57,7 +56,6 @@ class HealingEvent:
         }
 
     def to_jsonl(self) -> str:
-        """to Jsonl ."""
         return json.dumps(self.to_dict())
 
 
@@ -79,7 +77,6 @@ class HealingLog:
     """
 
     def __init__(self) -> None:
-        """Initialize this instance."""
         self._events: list[HealingEvent] = []
 
     def record(self, event: HealingEvent) -> None:

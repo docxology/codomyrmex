@@ -1,6 +1,5 @@
 """Hardware and environment profilers."""
 
-import logging
 import multiprocessing
 import os
 import platform
@@ -8,8 +7,9 @@ import sys
 from typing import Any
 
 import psutil
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 class HardwareProfiler:
     """Detects and profiles system hardware capabilities."""

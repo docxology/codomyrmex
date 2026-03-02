@@ -58,7 +58,6 @@ class StageResult:
 
     @property
     def is_success(self) -> bool:
-        """is Success ."""
         return self.status == StageStatus.SUCCESS
 
 
@@ -80,12 +79,10 @@ class PipelineResult:
 
     @property
     def successful_stages(self) -> int:
-        """successful Stages ."""
         return sum(1 for s in self.stages if s.is_success)
 
     @property
     def failed_stages(self) -> int:
-        """failed Stages ."""
         return sum(1 for s in self.stages if s.status == StageStatus.FAILED)
 
 
@@ -100,7 +97,6 @@ class Stage(ABC):
         retry_count: int = 0,
         timeout_s: float | None = None,
     ):
-        """Initialize this instance."""
         self.stage_id = stage_id
         self.name = name or stage_id
         self.depends_on = depends_on or []
@@ -130,7 +126,6 @@ class FunctionStage(Stage):
         func: Callable[[dict[str, Any]], Any],
         **kwargs,
     ):
-        """Initialize this instance."""
         super().__init__(stage_id, **kwargs)
         self._func = func
 
@@ -149,7 +144,6 @@ class ConditionalStage(Stage):
         stage: Stage,
         **kwargs,
     ):
-        """Initialize this instance."""
         super().__init__(stage_id, **kwargs)
         self.condition = condition
         self.stage = stage
@@ -171,7 +165,6 @@ class ParallelStage(Stage):
         max_workers: int = 4,
         **kwargs,
     ):
-        """Initialize this instance."""
         super().__init__(stage_id, **kwargs)
         self.stages = stages
         self.max_workers = max_workers
@@ -219,7 +212,6 @@ class Pipeline:
         name: str | None = None,
         fail_fast: bool = True,
     ):
-        """Initialize this instance."""
         self.pipeline_id = pipeline_id or str(uuid.uuid4())[:8]
         self.name = name or self.pipeline_id
         self.fail_fast = fail_fast
@@ -370,7 +362,6 @@ class PipelineBuilder:
     """
 
     def __init__(self, name: str):
-        """Initialize this instance."""
         self._pipeline = Pipeline(name=name)
 
     def stage(

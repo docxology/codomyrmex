@@ -53,7 +53,6 @@ The codebase utilizes modern Python features (version 3.10+) to provide a clean,
 """
 
 def boost_file(path: Path):
-    """boost File ."""
     try:
         content = path.read_text(encoding="utf-8", errors="ignore")
         original_content = content

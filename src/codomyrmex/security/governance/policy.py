@@ -4,12 +4,12 @@ Provides PolicyRule, PolicyEngine, and PolicyError for defining
 and enforcing governance policies with composable rules.
 """
 
-import logging
 from collections.abc import Callable
 from typing import Any
 from uuid import uuid4
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 
 class PolicyError(Exception):
@@ -34,7 +34,6 @@ class PolicyRule:
         action: str,
         priority: int = 0,
     ) -> None:
-        """Initialize this instance."""
         self.name = name
         self.condition = condition
         self.action = action
@@ -68,7 +67,6 @@ class PolicyEngine:
     """
 
     def __init__(self) -> None:
-        """Initialize this instance."""
         self._policies: dict[str, dict[str, Any]] = {}
 
     def create_policy(self, name: str, description: str = "") -> dict[str, Any]:

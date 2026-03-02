@@ -21,7 +21,6 @@ class AgentsFileFixer:
     """Fix AGENTS.md files throughout the repository."""
 
     def __init__(self, repo_root: Path):
-        """Initialize this instance."""
         self.repo_root = repo_root
         self.fixed_count = 0
         self.error_count = 0

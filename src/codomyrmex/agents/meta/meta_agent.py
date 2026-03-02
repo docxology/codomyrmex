@@ -58,7 +58,6 @@ class MetaAgent:
         scorer: OutcomeScorer | None = None,
         ab_engine: ABTestEngine | None = None,
     ) -> None:
-        """Initialize this instance."""
         self.library = library or StrategyLibrary()
         self._scorer = scorer or OutcomeScorer()
         self._ab_engine = ab_engine or ABTestEngine()

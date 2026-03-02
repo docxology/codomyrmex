@@ -27,7 +27,6 @@ class FixtureManager:
     """Manage test fixtures."""
 
     def __init__(self):
-        """Initialize this instance."""
         self._fixtures: dict[str, Fixture] = {}
         self._active: dict[str, Any] = {}
 

@@ -8,7 +8,7 @@ Zero-mock policy: no MagicMock or monkeypatch.
 Live Gmail / AgentMail API tests are guarded by pytest.mark.skipif.
 """
 
-from datetime import datetime, timezone
+from datetime import datetime, timezone, UTC
 
 import pytest
 
@@ -56,7 +56,7 @@ class TestEmailMessage:
         defaults = dict(
             subject="Test Subject",
             sender=EmailAddress(email="sender@example.com"),
-            date=datetime(2026, 3, 1, 10, 0, tzinfo=timezone.utc),
+            date=datetime(2026, 3, 1, 10, 0, tzinfo=UTC),
         )
         defaults.update(kwargs)
         return EmailMessage(**defaults)
@@ -99,7 +99,7 @@ class TestEmailMessage:
 
     def test_date_is_stored(self):
         """Test functionality: date is stored correctly."""
-        dt = datetime(2026, 3, 1, 9, 0, tzinfo=timezone.utc)
+        dt = datetime(2026, 3, 1, 9, 0, tzinfo=UTC)
         msg = self._msg(date=dt)
         assert msg.date == dt
 
@@ -109,7 +109,7 @@ class TestEmailMessage:
         with pytest.raises(ValidationError):
             EmailMessage(
                 sender=EmailAddress(email="a@b.com"),
-                date=datetime.now(timezone.utc),
+                date=datetime.now(UTC),
             )
 
     def test_sender_is_required(self):
@@ -118,7 +118,7 @@ class TestEmailMessage:
         with pytest.raises(ValidationError):
             EmailMessage(
                 subject="Test",
-                date=datetime.now(timezone.utc),
+                date=datetime.now(UTC),
             )
 
     def test_date_is_required(self):
@@ -211,7 +211,7 @@ class TestEmailProviderAbstractInterface:
                 return EmailMessage(
                     subject=draft.subject,
                     sender=EmailAddress(email="me@example.com"),
-                    date=datetime.now(timezone.utc),
+                    date=datetime.now(UTC),
                 )
 
             def create_draft(self, draft):
@@ -237,7 +237,7 @@ class TestEmailProviderAbstractInterface:
             def send_message(self, draft):
                 return EmailMessage(
                     subject="x", sender=EmailAddress(email="a@b.com"),
-                    date=datetime.now(timezone.utc))
+                    date=datetime.now(UTC))
             def create_draft(self, draft):
                 return "id"
             def delete_message(self, message_id):

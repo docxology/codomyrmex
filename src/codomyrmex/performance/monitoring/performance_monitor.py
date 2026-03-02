@@ -48,7 +48,6 @@ class SystemMetrics:
 class SystemMonitor:
     """Functional component: SystemMonitor."""
     def __init__(self, interval: float = 1.0):
-        """Initialize this instance."""
         self.interval = interval
         self._process = psutil.Process() if HAS_PSUTIL else None
         self._monitoring = False
@@ -77,7 +76,6 @@ class SystemMonitor:
             self._monitor_thread.join(timeout=2.0)
 
     def get_current_metrics(self) -> SystemMetrics:
-        """get Current Metrics ."""
         if not HAS_PSUTIL:
             return SystemMetrics(0,0,0,0,0,0,0,0)
 

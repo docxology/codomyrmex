@@ -11,13 +11,13 @@ Example:
 """
 
 import json
-import logging
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 from codomyrmex.ide import CommandExecutionError, ConnectionError, IDEClient, IDEError
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 
 class CursorClient(IDEClient):

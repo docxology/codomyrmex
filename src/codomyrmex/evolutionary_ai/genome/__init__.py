@@ -55,7 +55,6 @@ class BinaryGenome(Genome):
         return BinaryGenome(bits=list(self.bits))
 
     def to_list(self) -> list[int]:
-        """to List ."""
         return list(self.bits)
 
     def __len__(self) -> int:
@@ -112,7 +111,6 @@ class RealValuedGenome(Genome):
         )
 
     def to_list(self) -> list[float]:
-        """to List ."""
         return list(self.values)
 
     def __len__(self) -> int:
@@ -170,7 +168,6 @@ class PermutationGenome(Genome):
         return PermutationGenome(elements=copy.deepcopy(self.elements))
 
     def to_list(self) -> list[Any]:
-        """to List ."""
         return list(self.elements)
 
     def __len__(self) -> int:

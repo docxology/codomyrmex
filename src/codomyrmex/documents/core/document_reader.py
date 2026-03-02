@@ -19,7 +19,6 @@ class DocumentReader:
     """Unified document reader supporting multiple formats."""
 
     def __init__(self):
-        """Initialize this instance."""
 
         self.config = get_config()
 

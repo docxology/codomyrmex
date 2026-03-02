@@ -59,7 +59,7 @@ class TestSelfSignedCert:
     def test_validity_period(self, rsa_keypair: KeyPair) -> None:
         """Test functionality: validity period."""
         cert = generate_self_signed_cert("validity.test", rsa_keypair, days=30)
-        now = datetime.datetime.now(datetime.timezone.utc)
+        now = datetime.datetime.now(datetime.UTC)
         assert cert.not_valid_before_utc <= now
         delta = cert.not_valid_after_utc - cert.not_valid_before_utc
         assert 29 <= delta.days <= 31
@@ -161,7 +161,7 @@ class TestCertificateChainValidation:
 
         # Generate leaf signed by CA
         leaf_kp = generate_rsa_keypair(2048)
-        now = datetime.datetime.now(datetime.timezone.utc)
+        now = datetime.datetime.now(datetime.UTC)
         leaf_cert = (
             x509.CertificateBuilder()
             .subject_name(x509.Name([x509.NameAttribute(x509.oid.NameOID.COMMON_NAME, "leaf.test")]))

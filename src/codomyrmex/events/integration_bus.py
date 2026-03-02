@@ -35,7 +35,6 @@ class IntegrationEvent:
     event_id: str = ""
 
     def __post_init__(self) -> None:
-        """post Init ."""
         if not self.timestamp:
             self.timestamp = time.time()
         if not self.event_id:
@@ -53,7 +52,6 @@ class IntegrationBus:
     """
 
     def __init__(self) -> None:
-        """Initialize this instance."""
         self._handlers: dict[str, list[Callable[[IntegrationEvent], None]]] = defaultdict(list)
         self._history: list[IntegrationEvent] = []
 
@@ -84,20 +82,16 @@ class IntegrationBus:
 
     @property
     def topic_count(self) -> int:
-        """topic Count ."""
         return len(self._handlers)
 
     @property
     def history_size(self) -> int:
-        """history Size ."""
         return len(self._history)
 
     def history_by_topic(self, topic: str) -> list[IntegrationEvent]:
-        """history By Topic ."""
         return [e for e in self._history if e.topic == topic]
 
     def clear_history(self) -> None:
-        """clear History ."""
         self._history.clear()
 
 

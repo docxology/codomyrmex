@@ -4,12 +4,12 @@ Theme definitions for data visualization.
 Provides predefined color schemes and styling configurations.
 """
 
-import logging
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import Dict, List, Optional
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 
 class ThemeName(Enum):

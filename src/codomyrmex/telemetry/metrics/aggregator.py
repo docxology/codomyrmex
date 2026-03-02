@@ -9,13 +9,13 @@ Provides:
 
 from __future__ import annotations
 
-import logging
 import time
 from collections import defaultdict
 from dataclasses import dataclass, field
 from typing import Any
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 
 @dataclass
@@ -28,7 +28,6 @@ class HistogramBucket:
     total_sum: float = 0.0
 
     def __post_init__(self) -> None:
-        """post Init ."""
         if not self.counts:
             self.counts = [0] * (len(self.boundaries) + 1)  # +1 for overflow
 
@@ -73,7 +72,6 @@ class MetricAggregator:
     """
 
     def __init__(self) -> None:
-        """Initialize this instance."""
         self._counters: dict[str, float] = {}
         self._gauges: dict[str, float] = {}
         self._histograms: dict[str, HistogramBucket] = {}
@@ -100,15 +98,12 @@ class MetricAggregator:
         self._histograms[name].observe(value)
 
     def get_counter(self, name: str) -> float:
-        """get Counter ."""
         return self._counters.get(name, 0.0)
 
     def get_gauge(self, name: str) -> float:
-        """get Gauge ."""
         return self._gauges.get(name, 0.0)
 
     def get_histogram(self, name: str) -> HistogramBucket | None:
-        """get Histogram ."""
         return self._histograms.get(name)
 
     def counter_rate(self, name: str) -> float:

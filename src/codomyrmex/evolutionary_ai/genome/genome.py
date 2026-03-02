@@ -40,7 +40,6 @@ class Genome:
         fitness: float | None = None,
         metadata: dict[str, Any] | None = None,
     ) -> None:
-        """Initialize this instance."""
         self.genes = genes
         self.fitness = fitness
         self.metadata: dict[str, Any] = metadata or {}

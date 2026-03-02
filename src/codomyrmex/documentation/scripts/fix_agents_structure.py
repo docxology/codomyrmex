@@ -20,7 +20,6 @@ If sections are missing, it adds them with intelligent default content.
 logger = get_logger(__name__)
 
 def get_default_contracts():
-    """get Default Contracts ."""
     return """
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.
@@ -51,7 +50,6 @@ def get_active_components(dir_path):
     return "\n## Active Components\n" + "\n".join(sorted(components)) + "\n"
 
 def fix_agents_file(file_path):
-    """fix Agents File ."""
     try:
         content = file_path.read_text(encoding='utf-8')
         modified = False

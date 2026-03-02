@@ -6,7 +6,6 @@ Connection pooling, health checks, and connection management.
 
 __version__ = "0.1.0"
 
-import logging
 import queue
 import threading
 import time
@@ -17,8 +16,9 @@ from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
 from typing import Any, Dict, Generic, List, Optional, TypeVar
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 T = TypeVar('T')
 
@@ -66,7 +66,6 @@ class Connection(ABC, Generic[T]):
     """Base class for database connections."""
 
     def __init__(self):
-        """Initialize this instance."""
         self.created_at: datetime = datetime.now()
         self.last_used_at: datetime = datetime.now()
         self.state: ConnectionState = ConnectionState.IDLE
@@ -117,7 +116,6 @@ class InMemoryConnection(Connection[dict]):
     """In-memory connection for lightweight or test usage."""
 
     def __init__(self, connection_id: int = 0):
-        """Initialize this instance."""
         super().__init__()
         self.connection_id = connection_id
         self._closed = False
@@ -153,7 +151,6 @@ class InMemoryConnectionFactory(ConnectionFactory[dict]):
     """Factory for in-memory connections."""
 
     def __init__(self):
-        """Initialize this instance."""
         self._counter = 0
         self._lock = threading.Lock()
 
@@ -189,7 +186,6 @@ class ConnectionPool(Generic[T]):
         factory: ConnectionFactory[T],
         config: PoolConfig | None = None,
     ):
-        """Initialize this instance."""
         self.factory = factory
         self.config = config or PoolConfig()
         self._pool: queue.Queue = queue.Queue()
@@ -392,7 +388,6 @@ class HealthChecker:
         check_interval: float = 60.0,
         health_query: str = "SELECT 1",
     ):
-        """Initialize this instance."""
         self.pool = pool
         self.check_interval = check_interval
         self.health_query = health_query
@@ -421,7 +416,6 @@ class HealthChecker:
         self._running = True
 
         def check_loop():
-            """check Loop ."""
             while self._running:
                 self.check_health()
                 time.sleep(self.check_interval)

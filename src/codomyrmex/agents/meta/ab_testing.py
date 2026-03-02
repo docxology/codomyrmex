@@ -37,7 +37,6 @@ class ABTestResult:
 
     @property
     def total_trials(self) -> int:
-        """total Trials ."""
         return self.wins_a + self.wins_b + self.ties
 
     def to_dict(self) -> dict[str, Any]:

@@ -20,12 +20,12 @@ Usage:
 from __future__ import annotations
 
 import enum
-import logging
 import threading
 import uuid
 from typing import TYPE_CHECKING, Any, TypeVar
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 if TYPE_CHECKING:
     from .container import Container
@@ -90,7 +90,6 @@ class ScopeContext:
     """
 
     def __init__(self, container: Container) -> None:
-        """Initialize this instance."""
         self._container = container
         self._instances: dict[type[Any], Any] = {}
         self._lock = threading.Lock()

@@ -52,7 +52,6 @@ class Range:
 
     @property
     def line_count(self) -> int:
-        """line Count ."""
         return self.end.line - self.start.line + 1
 
     def contains(self, pos: Position) -> bool:
@@ -289,15 +288,12 @@ class PythonParser(Parser):
         return end_line
 
     def get_functions(self, root: ASTNode) -> list[ASTNode]:
-        """get Functions ."""
         return root.find_children("function_definition")
 
     def get_classes(self, root: ASTNode) -> list[ASTNode]:
-        """get Classes ."""
         return root.find_children("class_definition")
 
     def get_imports(self, root: ASTNode) -> list[ASTNode]:
-        """get Imports ."""
         imports = root.find_children("import_statement")
         imports.extend(root.find_children("import_from_statement"))
         return imports
@@ -330,7 +326,6 @@ class JavaScriptParser(Parser):
         return root
 
     def _parse_functions(self, source: str, lines: list[str]) -> list[ASTNode]:
-        """parse Functions ."""
         functions = []
 
         # function name() {}
@@ -362,7 +357,6 @@ class JavaScriptParser(Parser):
         return functions
 
     def _parse_classes(self, source: str, lines: list[str]) -> list[ASTNode]:
-        """parse Classes ."""
         classes = []
         pattern = re.compile(r'class\s+(\w+)(?:\s+extends\s+(\w+))?\s*\{')
 
@@ -387,7 +381,6 @@ class JavaScriptParser(Parser):
         return classes
 
     def _parse_imports(self, source: str, lines: list[str]) -> list[ASTNode]:
-        """parse Imports ."""
         imports = []
         pattern = re.compile(r'import\s+(?:\{([^}]+)\}|(\w+))?\s*(?:,\s*(?:\{([^}]+)\}|(\w+)))?\s*from\s+[\'"]([^\'"]+)[\'"]')
 
@@ -409,15 +402,12 @@ class JavaScriptParser(Parser):
         return imports
 
     def get_functions(self, root: ASTNode) -> list[ASTNode]:
-        """get Functions ."""
         return root.find_children("function_declaration")
 
     def get_classes(self, root: ASTNode) -> list[ASTNode]:
-        """get Classes ."""
         return root.find_children("class_declaration")
 
     def get_imports(self, root: ASTNode) -> list[ASTNode]:
-        """get Imports ."""
         return root.find_children("import_declaration")
 
 

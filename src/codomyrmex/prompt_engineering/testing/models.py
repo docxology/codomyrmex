@@ -165,7 +165,6 @@ class TestSuiteResult:
 
     @property
     def median_latency_ms(self) -> float:
-        """median Latency Ms ."""
         if not self.results:
             return 0.0
         return statistics.median(r.latency_ms for r in self.results)

@@ -37,7 +37,6 @@ class AgentPool:
     """
 
     def __init__(self) -> None:
-        """Initialize this instance."""
         self._agents: dict[str, SwarmAgent] = {}
         self._round_robin_index: int = 0
 
@@ -60,7 +59,6 @@ class AgentPool:
 
     @property
     def available_agents(self) -> list[SwarmAgent]:
-        """available Agents ."""
         return [a for a in self._agents.values() if a.available]
 
     def get(self, agent_id: str) -> SwarmAgent | None:

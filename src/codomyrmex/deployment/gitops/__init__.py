@@ -8,14 +8,14 @@ desired state and the actual deployed state, and can reconcile differences.
 from __future__ import annotations
 
 import hashlib
-import logging
 import subprocess
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 from typing import Any
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 
 class SyncState(Enum):
@@ -75,7 +75,6 @@ class GitOpsSynchronizer:
         repo_path: str,
         target_branch: str = "main",
     ) -> None:
-        """Initialize this instance."""
         self._repo_path = repo_path
         self._target_branch = target_branch
         self._actual_revision: str | None = None
@@ -179,7 +178,6 @@ class GitOpsSynchronizer:
             return None
 
     def _build_status(self, desired: str | None) -> SyncStatus:
-        """build Status ."""
         return SyncStatus(
             state=self._state,
             desired_revision=desired,

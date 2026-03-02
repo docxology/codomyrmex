@@ -51,14 +51,12 @@ class CacheStats:
 
     @property
     def miss_rate(self) -> float:
-        """miss Rate ."""
         if self.total_requests == 0:
             return 0.0
         return self.misses / self.total_requests
 
     @property
     def usage_percent(self) -> float:
-        """usage Percent ."""
         if self.max_size == 0:
             return 0.0
         return (self.size / self.max_size) * 100
@@ -87,15 +85,12 @@ class CacheStats:
         self._timestamps.append((time.time(), False))
 
     def record_write(self) -> None:
-        """record Write ."""
         self.writes += 1
 
     def record_eviction(self) -> None:
-        """record Eviction ."""
         self.evictions += 1
 
     def record_delete(self) -> None:
-        """record Delete ."""
         self.deletes += 1
 
     # ── Time-windowed ───────────────────────────────────────────────

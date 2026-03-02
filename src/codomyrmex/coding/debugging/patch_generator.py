@@ -14,14 +14,14 @@ Example:
 
 from __future__ import annotations
 
-import logging
 from dataclasses import dataclass
 from typing import Any
 
 from codomyrmex.agents.llm_client import AgentRequest
 from codomyrmex.coding.debugging.error_analyzer import ErrorDiagnosis
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 
 @dataclass

@@ -56,12 +56,10 @@ class AggregatedHealth:
 
     @property
     def healthy_count(self) -> int:
-        """healthy Count ."""
         return sum(1 for c in self.checks if c.status == HealthStatus.HEALTHY)
 
     @property
     def unhealthy_count(self) -> int:
-        """unhealthy Count ."""
         return sum(1 for c in self.checks if c.status == HealthStatus.UNHEALTHY)
 
     def to_dict(self) -> dict[str, Any]:
@@ -85,7 +83,6 @@ class HealthCheck(ABC):
         timeout: float = 5.0,
         critical: bool = True,
     ):
-        """Initialize this instance."""
         self.name = name
         self.timeout = timeout
         self.critical = critical
@@ -115,7 +112,6 @@ class HTTPHealthCheck(HealthCheck):
         timeout: float = 5.0,
         critical: bool = True,
     ):
-        """Initialize this instance."""
         super().__init__(name, timeout, critical)
         self.url = url
         self.method = method
@@ -185,7 +181,6 @@ class TCPHealthCheck(HealthCheck):
         timeout: float = 5.0,
         critical: bool = True,
     ):
-        """Initialize this instance."""
         super().__init__(name, timeout, critical)
         self.host = host
         self.port = port
@@ -241,7 +236,6 @@ class CommandHealthCheck(HealthCheck):
         timeout: float = 10.0,
         critical: bool = True,
     ):
-        """Initialize this instance."""
         super().__init__(name, timeout, critical)
         self.command = command
         self.expected_exit_code = expected_exit_code
@@ -316,7 +310,6 @@ class MemoryHealthCheck(HealthCheck):
         timeout: float = 5.0,
         critical: bool = True,
     ):
-        """Initialize this instance."""
         super().__init__(name, timeout, critical)
         self.warning_threshold = warning_threshold
         self.critical_threshold = critical_threshold
@@ -388,7 +381,6 @@ class DiskHealthCheck(HealthCheck):
         timeout: float = 5.0,
         critical: bool = True,
     ):
-        """Initialize this instance."""
         super().__init__(name, timeout, critical)
         self.path = path
         self.warning_threshold = warning_threshold
@@ -448,7 +440,6 @@ class HealthChecker:
     """Manages multiple health checks."""
 
     def __init__(self):
-        """Initialize this instance."""
         self.checks: list[HealthCheck] = []
 
     def add_check(self, check: HealthCheck) -> 'HealthChecker':

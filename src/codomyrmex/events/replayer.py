@@ -47,7 +47,6 @@ class EventReplayer:
     """
 
     def __init__(self, store: EventStore) -> None:
-        """Initialize this instance."""
         self._store = store
 
     def replay(

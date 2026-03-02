@@ -87,7 +87,6 @@ class APIContract:
 
     @property
     def endpoint_count(self) -> int:
-        """endpoint Count ."""
         return len(self.endpoints)
 
     def add_endpoint(self, endpoint: APIEndpoint) -> None:
@@ -147,7 +146,6 @@ class ContractValidator:
     """
 
     def __init__(self, baseline: APIContract) -> None:
-        """Initialize this instance."""
         self._baseline = baseline
 
     def validate(self, current: APIContract) -> list[BreakingChange]:

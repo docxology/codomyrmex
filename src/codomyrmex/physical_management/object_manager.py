@@ -5,7 +5,6 @@ physical entities in the system.
 """
 
 import json
-import logging
 import math
 import threading
 import time
@@ -15,8 +14,9 @@ from dataclasses import dataclass, field
 from enum import Enum
 from pathlib import Path
 from typing import Any
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 
 class ObjectType(Enum):
@@ -728,7 +728,6 @@ class PhysicalObjectManager:
     """Main manager for physical object operations."""
 
     def __init__(self):
-        """Initialize this instance."""
 
         self.registry = ObjectRegistry()
         self._active_simulations = set()

@@ -1,17 +1,16 @@
 """GCP integration submodule."""
 
-import logging
 from typing import Optional
 
 from google.cloud import storage
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 class GCSClient:
     """Wrapper for Google Cloud Storage operations."""
 
     def __init__(self, project: str | None = None):
-        """Initialize this instance."""
         self.client = storage.Client(project=project)
 
     def upload_blob(self, bucket_name: str, source_file_name: str, destination_blob_name: str) -> bool:

@@ -58,7 +58,6 @@ class Cli:
     """Codomyrmex CLI"""
 
     def __init__(self, verbose=False, performance=False):
-        """Initialize this instance."""
         if verbose:
             logger.setLevel(10)  # DEBUG level
             logger.debug("Verbose mode enabled")

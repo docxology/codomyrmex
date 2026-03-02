@@ -42,7 +42,6 @@ class EvictionPolicy(ABC, Generic[K, V]):
     """Abstract base class for eviction policies."""
 
     def __init__(self, max_size: int):
-        """Initialize this instance."""
         self.max_size = max_size
         self._lock = threading.RLock()
 
@@ -80,7 +79,6 @@ class LRUPolicy(EvictionPolicy[K, V]):
     """Least Recently Used eviction policy."""
 
     def __init__(self, max_size: int):
-        """Initialize this instance."""
         super().__init__(max_size)
         self._cache: OrderedDict[K, CacheEntry[V]] = OrderedDict()
 
@@ -134,7 +132,6 @@ class LFUPolicy(EvictionPolicy[K, V]):
     """Least Frequently Used eviction policy."""
 
     def __init__(self, max_size: int):
-        """Initialize this instance."""
         super().__init__(max_size)
         self._cache: dict[K, CacheEntry[V]] = {}
         self._freq_map: dict[int, OrderedDict[K, None]] = {}
@@ -230,7 +227,6 @@ class TTLPolicy(EvictionPolicy[K, V]):
     """TTL-based eviction policy with lazy expiration."""
 
     def __init__(self, max_size: int, default_ttl: timedelta = timedelta(hours=1)):
-        """Initialize this instance."""
         super().__init__(max_size)
         self._cache: dict[K, CacheEntry[V]] = {}
         self._default_ttl = default_ttl
@@ -303,7 +299,6 @@ class FIFOPolicy(EvictionPolicy[K, V]):
     """First In First Out eviction policy."""
 
     def __init__(self, max_size: int):
-        """Initialize this instance."""
         super().__init__(max_size)
         self._cache: OrderedDict[K, CacheEntry[V]] = OrderedDict()
 

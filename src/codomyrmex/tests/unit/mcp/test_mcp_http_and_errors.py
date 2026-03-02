@@ -203,7 +203,7 @@ class _TimeoutTransport:
 
     async def send(self, message, *, timeout=30.0):
         self.last_timeout = timeout
-        raise asyncio.TimeoutError(f"Simulated timeout after {timeout}s")
+        raise TimeoutError(f"Simulated timeout after {timeout}s")
 
     async def send_notification(self, message):
         pass  # notifications don't timeout

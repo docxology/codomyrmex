@@ -41,7 +41,6 @@ class MetricComparison:
     passed: bool = True
 
     def __post_init__(self) -> None:
-        """post Init ."""
         if self.baseline_value > 0:
             deviation = abs(self.canary_value - self.baseline_value) / self.baseline_value
             self.passed = deviation <= self.threshold
@@ -103,7 +102,6 @@ class CanaryAnalyzer:
         rollback_threshold: float = 0.5,
         metric_tolerance: float = 0.1,
     ) -> None:
-        """Initialize this instance."""
         self._promote_threshold = promote_threshold
         self._rollback_threshold = rollback_threshold
         self._metric_tolerance = metric_tolerance

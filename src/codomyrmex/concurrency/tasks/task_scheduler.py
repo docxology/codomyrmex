@@ -48,7 +48,6 @@ class TaskScheduler:
     """
 
     def __init__(self, strategy: SchedulingStrategy = SchedulingStrategy.ROUND_ROBIN) -> None:
-        """Initialize this instance."""
         self._strategy = strategy
         self._workers: dict[str, WorkerInfo] = {}
         self._round_robin_index = 0
@@ -56,7 +55,6 @@ class TaskScheduler:
 
     @property
     def worker_count(self) -> int:
-        """worker Count ."""
         return len(self._workers)
 
     @property
@@ -162,7 +160,6 @@ class TaskScheduler:
         return eligible
 
     def _round_robin(self, workers: list[WorkerInfo]) -> str:
-        """round Robin ."""
         idx = self._round_robin_index % len(workers)
         self._round_robin_index += 1
         selected = workers[idx]
@@ -170,7 +167,6 @@ class TaskScheduler:
         return selected.worker_id
 
     def _least_loaded(self, workers: list[WorkerInfo]) -> str:
-        """least Loaded ."""
         selected = min(workers, key=lambda w: w.current_load)
         selected.current_load += 1
         return selected.worker_id

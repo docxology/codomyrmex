@@ -64,12 +64,10 @@ class PermissionModel:
     """
 
     def __init__(self) -> None:
-        """Initialize this instance."""
         self._grants: dict[str, list[Grant]] = {}
 
     @property
     def principal_count(self) -> int:
-        """principal Count ."""
         return len(self._grants)
 
     def grant(

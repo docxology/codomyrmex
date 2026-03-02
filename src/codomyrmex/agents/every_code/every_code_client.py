@@ -1,10 +1,9 @@
-import logging
 import subprocess
 from collections.abc import Iterator
 from pathlib import Path
 from typing import Any
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 from codomyrmex.agents.core import (
     AgentCapabilities,
@@ -17,6 +16,7 @@ from codomyrmex.agents.core.exceptions import (
     EveryCodeError,
 )
 from codomyrmex.agents.generic import CLIAgentBase
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 
 class EveryCodeClient(CLIAgentBase):

@@ -5,13 +5,12 @@ File-backed vector storage for persistence across restarts.
 """
 
 import json
-import logging
 import threading
 from collections.abc import Callable
 from pathlib import Path
 from typing import Any
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 from . import (
     DistanceMetric,
@@ -19,6 +18,7 @@ from . import (
     VectorEntry,
     VectorStore,
 )
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 
 class PersistentVectorStore(VectorStore):
@@ -31,7 +31,6 @@ class PersistentVectorStore(VectorStore):
         auto_save: bool = True,
         save_interval: int = 100,  # Save every N operations
     ):
-        """Initialize this instance."""
         self._path = Path(path)
         self._auto_save = auto_save
         self._save_interval = save_interval
@@ -183,7 +182,6 @@ class CachedVectorStore(VectorStore):
         backend: VectorStore,
         cache_size: int = 1000,
     ):
-        """Initialize this instance."""
         self._backend = backend
         self._cache_size = cache_size
         self._cache: dict[str, VectorEntry] = {}

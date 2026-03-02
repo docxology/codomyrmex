@@ -25,7 +25,6 @@ class ParserError(StaticAnalysisError):
         column: int | None = None,
         **kwargs
     ):
-        """Initialize this instance."""
         super().__init__(message, **kwargs)
         if file_path:
             self.context["file_path"] = file_path
@@ -45,7 +44,6 @@ class LintError(StaticAnalysisError):
         rule: str | None = None,
         **kwargs
     ):
-        """Initialize this instance."""
         super().__init__(message, **kwargs)
         if linter:
             self.context["linter"] = linter
@@ -63,7 +61,6 @@ class TypeCheckError(StaticAnalysisError):
         actual_type: str | None = None,
         **kwargs
     ):
-        """Initialize this instance."""
         super().__init__(message, **kwargs)
         if expected_type:
             self.context["expected_type"] = expected_type
@@ -82,7 +79,6 @@ class ComplexityError(StaticAnalysisError):
         threshold: float | None = None,
         **kwargs
     ):
-        """Initialize this instance."""
         super().__init__(message, **kwargs)
         if metric:
             self.context["metric"] = metric
@@ -102,7 +98,6 @@ class DependencyAnalysisError(StaticAnalysisError):
         version: str | None = None,
         **kwargs
     ):
-        """Initialize this instance."""
         super().__init__(message, **kwargs)
         if dependency:
             self.context["dependency"] = dependency
@@ -121,7 +116,6 @@ class SecurityVulnerabilityError(StaticAnalysisError):
         cwe_id: str | None = None,
         **kwargs
     ):
-        """Initialize this instance."""
         super().__init__(message, **kwargs)
         if vulnerability_type:
             self.context["vulnerability_type"] = vulnerability_type

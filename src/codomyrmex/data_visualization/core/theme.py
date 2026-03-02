@@ -18,7 +18,6 @@ class Theme:
     custom: dict[str, Any] = field(default_factory=dict)
 
     def __init__(self, name: str = "default", **kwargs: Any) -> None:
-        """Initialize this instance."""
         self.name = name
         self.primary_color = kwargs.get("primary", kwargs.get("primary_color", "#2c3e50"))
         # Map 'accent' to secondary if provided
@@ -56,7 +55,6 @@ class Theme:
         return "\n".join(css_lines)
 
     def to_css_vars(self) -> dict[str, str]:
-        """to Css Vars ."""
         return {
             "--primary": self.primary_color,
             "--secondary": self.secondary_color,

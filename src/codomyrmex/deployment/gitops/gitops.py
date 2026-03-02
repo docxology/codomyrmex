@@ -1,16 +1,15 @@
 """GitOps synchronization utilities."""
 
-import logging
 import os
 import subprocess
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 class GitOpsSynchronizer:
     """Synchronizes target state from a Git repository."""
 
     def __init__(self, repo_url: str, local_path: str):
-        """Initialize this instance."""
         self.repo_url = repo_url
         self.local_path = local_path
 

@@ -12,7 +12,7 @@ catch blocks without any stubs.
 
 import json
 import os
-from datetime import datetime, timezone
+from datetime import datetime, timezone, UTC
 
 import pytest
 
@@ -102,7 +102,7 @@ class TestAsyncPipelineResult:
 
     def test_creation_with_all_fields(self):
         """Result created with every field stores them correctly."""
-        ts = datetime(2026, 2, 26, 12, 0, 0, tzinfo=timezone.utc)
+        ts = datetime(2026, 2, 26, 12, 0, 0, tzinfo=UTC)
         result = AsyncPipelineResult(
             pipeline_id="pipe-2",
             status=PipelineStatus.SUCCESS,

@@ -1,18 +1,17 @@
 """Hot-reloading configuration watcher."""
 
-import logging
 import os
 import threading
 import time
 from collections.abc import Callable
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 class ConfigWatcher:
     """Watches a configuration file for changes and triggers a callback."""
 
     def __init__(self, file_path: str, callback: Callable[[], None], interval: int = 5):
-        """Initialize this instance."""
         self.file_path = file_path
         self.callback = callback
         self.interval = interval

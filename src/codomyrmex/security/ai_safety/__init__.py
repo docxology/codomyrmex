@@ -30,7 +30,6 @@ class AISafetyMonitor:
     """
 
     def __init__(self):
-        """Initialize this instance."""
         self._defense = ActiveDefense() if ACTIVE_DEFENSE_AVAILABLE else None
         self._rabbithole = RabbitHole() if RABBITHOLE_AVAILABLE else None
         self._incidents: list[dict] = []

@@ -47,7 +47,6 @@ class AgentHealth:
 
     @property
     def failure_rate(self) -> float:
-        """failure Rate ."""
         total = self.total_successes + self.total_failures
         return self.total_failures / total if total > 0 else 0.0
 
@@ -87,7 +86,6 @@ class CircuitBreaker:
         failure_threshold: int = 3,
         cooldown_seconds: float = 30.0,
     ) -> None:
-        """Initialize this instance."""
         self._threshold = failure_threshold
         self._cooldown = cooldown_seconds
         self._agents: dict[str, AgentHealth] = {}

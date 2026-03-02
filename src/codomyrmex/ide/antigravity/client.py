@@ -1,11 +1,10 @@
-import logging
 import shutil
 import subprocess
 from datetime import datetime
 from pathlib import Path
 from typing import Any
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 from .models import (
     Artifact,
@@ -16,6 +15,7 @@ from .models import (
     IDECommandResult,
     IDEStatus,
 )
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 
 class AntigravityClient(IDEClient):

@@ -3,7 +3,7 @@ import json
 import os
 import sys
 from dataclasses import dataclass, field
-from datetime import datetime, timezone
+from datetime import datetime, timezone, UTC
 from typing import Any
 
 import yaml
@@ -72,9 +72,8 @@ class APIDocumentation:
     license_info: dict[str, str] = field(default_factory=dict)
 
     def __post_init__(self):
-        """post Init ."""
         if self.generated_at is None:
-            self.generated_at = datetime.now(timezone.utc)
+            self.generated_at = datetime.now(UTC)
 
     def to_dict(self) -> dict[str, Any]:
         """Convert documentation to dictionary format."""

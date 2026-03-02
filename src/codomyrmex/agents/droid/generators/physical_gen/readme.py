@@ -105,7 +105,6 @@ sensor_manager.add_reading(reading)
 
 # Subscribe to temperature readings
 def temperature_callback(reading):
-    """temperature Callback ."""
     print(f"Temperature: {reading.value} {reading.unit}")
 
 sensor_manager.subscribe_to_sensor(SensorType.TEMPERATURE, temperature_callback)

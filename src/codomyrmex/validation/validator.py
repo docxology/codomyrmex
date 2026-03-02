@@ -32,7 +32,6 @@ class ValidationError(CodomyrmexError):
     """
 
     def __init__(self, message: str, field: str | None = None, code: str | None = None, path: list[str] | None = None):
-        """Initialize this instance."""
 
         super().__init__(message)
         self.field = field

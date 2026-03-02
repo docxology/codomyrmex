@@ -62,17 +62,14 @@ class DriftSnapshot:
 
     @property
     def shifted_count(self) -> int:
-        """shifted Count ."""
         return sum(1 for e in self.events if e.category == "shifted")
 
     @property
     def new_count(self) -> int:
-        """new Count ."""
         return sum(1 for e in self.events if e.category == "new")
 
     @property
     def lost_count(self) -> int:
-        """lost Count ."""
         return sum(1 for e in self.events if e.category == "lost")
 
     def to_dict(self) -> dict[str, Any]:

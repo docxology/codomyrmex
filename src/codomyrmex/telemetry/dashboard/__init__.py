@@ -132,7 +132,6 @@ class Dashboard:
         description: str = "",
         tags: list[str] | None = None,
     ) -> None:
-        """Initialize this instance."""
         self.id = id
         self.name = name
         self.description = description
@@ -172,7 +171,6 @@ class MetricCollector:
     """Collects and stores metric values."""
 
     def __init__(self, retention_minutes: int = 1440) -> None:
-        """Initialize this instance."""
         self.retention_minutes = retention_minutes
         self._metrics: dict[str, list[MetricValue]] = {}
 
@@ -234,7 +232,6 @@ class AlertManager:
     """Manages alert rules and active alerts."""
 
     def __init__(self) -> None:
-        """Initialize this instance."""
         self._rules: dict[str, dict[str, Any]] = {}
         self._active_alerts: dict[str, Alert] = {}
         self._history: list[Alert] = []
@@ -307,7 +304,6 @@ class DashboardManager:
     """Manages dashboard CRUD and data retrieval."""
 
     def __init__(self, collector: MetricCollector | None = None) -> None:
-        """Initialize this instance."""
         self.collector = collector or MetricCollector()
         self._dashboards: dict[str, Dashboard] = {}
 

@@ -44,7 +44,6 @@ class TestSuite:
 
     @property
     def test_count(self) -> int:
-        """test Count ."""
         return len(self.tests)
 
     def render(self) -> str:
@@ -98,7 +97,6 @@ class TestGenerator:
         return suite
 
     def _generate_function_test(self, node: ast.FunctionDef) -> GeneratedTest:
-        """generate Function Test ."""
         args = [a.arg for a in node.args.args if a.arg != "self"]
         name = f"test_{node.name}"
 
@@ -110,7 +108,6 @@ class TestGenerator:
         return GeneratedTest(name=name, body=body, target=node.name)
 
     def _generate_class_tests(self, node: ast.ClassDef) -> list[GeneratedTest]:
-        """generate Class Tests ."""
         tests = []
         class_name = node.name
 

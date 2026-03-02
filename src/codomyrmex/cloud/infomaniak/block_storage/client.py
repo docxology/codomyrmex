@@ -4,12 +4,12 @@ Infomaniak Block Storage Client (Cinder).
 Provides volume and backup operations via the OpenStack Cinder API.
 """
 
-import logging
 from typing import Any
 
 from ..base import InfomaniakOpenStackBase
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 
 class InfomaniakVolumeClient(InfomaniakOpenStackBase):

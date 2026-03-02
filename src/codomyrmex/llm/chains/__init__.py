@@ -71,7 +71,6 @@ class Chain(ABC):
     chain_type: ChainType
 
     def __init__(self, name: str = "chain"):
-        """Initialize this instance."""
         self.name = name
         self.steps: list[ChainStep] = []
 
@@ -92,7 +91,6 @@ class SimpleChain(Chain):
     chain_type = ChainType.SIMPLE
 
     def __init__(self, prompt_template: str, name: str = "simple_chain"):
-        """Initialize this instance."""
         super().__init__(name)
         self.prompt_template = prompt_template
 
@@ -158,7 +156,6 @@ class ChainOfThought(SequentialChain):
     """A chain that implements chain-of-thought reasoning."""
 
     def __init__(self, name: str = "cot_chain"):
-        """Initialize this instance."""
         super().__init__(name)
 
         # Add reasoning step
@@ -201,7 +198,6 @@ class ReActChain(Chain):
         max_iterations: int = 5,
         name: str = "react_chain"
     ):
-        """Initialize this instance."""
         super().__init__(name)
         self.tools = tools
         self.max_iterations = max_iterations

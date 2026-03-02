@@ -10,7 +10,6 @@ class AccessibilityReporter:
     """Format accessibility reports for output."""
 
     def __init__(self, report: AccessibilityReport):
-        """Initialize this instance."""
         self.report = report
 
     def to_summary(self) -> str:

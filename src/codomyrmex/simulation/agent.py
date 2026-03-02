@@ -30,7 +30,6 @@ class Agent(abc.ABC):
     """Abstract base class for all simulation agents."""
 
     def __init__(self, agent_id: str, name: str = "") -> None:
-        """Initialize this instance."""
         self.id = agent_id
         self.name = name or agent_id
         self.step_count: int = 0
@@ -89,7 +88,6 @@ class RandomAgent(Agent):
         action_types: list[str] | None = None,
         name: str = "",
     ) -> None:
-        """Initialize this instance."""
         super().__init__(agent_id, name)
         self.action_types = action_types or ["move", "wait", "observe"]
 
@@ -112,7 +110,6 @@ class RuleBasedAgent(Agent):
     """
 
     def __init__(self, agent_id: str, name: str = "") -> None:
-        """Initialize this instance."""
         super().__init__(agent_id, name)
         self._rules: list[tuple[Any, str]] = []
 
@@ -166,7 +163,6 @@ class QLearningAgent(Agent):
         epsilon_min: float = 0.01,
         name: str = "",
     ) -> None:
-        """Initialize this instance."""
         super().__init__(agent_id, name)
         self.action_types = action_types
         self.alpha = alpha

@@ -6,7 +6,7 @@ Backups contain metadata and encrypted key material - never plaintext keys.
 
 import hashlib
 import json
-from datetime import datetime, timezone
+from datetime import datetime, timezone, UTC
 from pathlib import Path
 from typing import Any
 
@@ -66,7 +66,7 @@ class BackupManager:
         if not key:
             raise WalletNotFoundError(f"No key found for user {user_id}")
 
-        timestamp = datetime.now(timezone.utc).isoformat()
+        timestamp = datetime.now(UTC).isoformat()
         backup_id = hashlib.sha256(
             f"{user_id}:{wallet_id}:{timestamp}".encode()
         ).hexdigest()[:16]

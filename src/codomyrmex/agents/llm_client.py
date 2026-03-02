@@ -5,7 +5,6 @@ autonomous agents, CLI tools, and skills.
 """
 
 import json
-import logging
 import os
 import time
 import urllib.error
@@ -14,8 +13,9 @@ from dataclasses import dataclass
 from typing import Any
 
 from codomyrmex.config_management.defaults import DEFAULT_OLLAMA_URL
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 @dataclass
 class AgentRequest:
@@ -33,7 +33,6 @@ class OllamaClient:
     for use in ClaudeCodeEndpoint, using real LLM inference.
     """
     def __init__(self, model: str = "llama3", base_url: str = DEFAULT_OLLAMA_URL):
-        """Initialize this instance."""
         if not any(base_url.startswith(prefix) for prefix in _OLLAMA_ALLOWED_PREFIXES):
             raise ValueError(
                 f"base_url must be a localhost address to prevent SSRF: {base_url!r}"
@@ -43,7 +42,6 @@ class OllamaClient:
         self.session_manager = None # dummy for interface compatibility
 
     def create_session(self, session_id: str) -> None:
-        """create Session ."""
         raise NotImplementedError("LLM session management not implemented")
 
     def execute_with_session(self, request: AgentRequest, session: Any = None, session_id: Any = None) -> Any:

@@ -579,7 +579,7 @@ async def run_command_async(
                 timeout=timeout,
             )
             timed_out = False
-        except asyncio.TimeoutError:
+        except TimeoutError:
             process.kill()
             await process.wait()
             stdout_bytes, stderr_bytes = b"", b""

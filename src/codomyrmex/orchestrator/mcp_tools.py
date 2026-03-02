@@ -1,10 +1,9 @@
 """MCP tools for the orchestrator module."""
 
-import logging
-
 from codomyrmex.model_context_protocol.decorators import mcp_tool
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 
 @mcp_tool(category="orchestrator")

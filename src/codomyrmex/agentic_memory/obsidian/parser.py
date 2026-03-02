@@ -6,12 +6,11 @@ All extraction is regex/YAML-based with no external Obsidian dependencies.
 
 from __future__ import annotations
 
-import logging
 import re
 from pathlib import Path
 from typing import Any
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 try:
     import yaml
@@ -28,6 +27,7 @@ from codomyrmex.agentic_memory.obsidian.models import (
     Tag,
     Wikilink,
 )
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 # ── regex patterns ───────────────────────────────────────────────────
 

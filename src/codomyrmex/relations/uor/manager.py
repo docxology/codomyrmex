@@ -24,7 +24,6 @@ class EntityManager:
     """
 
     def __init__(self, quantum: int = 0) -> None:
-        """Initialize this instance."""
         self._entities: dict[str, UOREntity] = {}
         self._engine = PrismEngine(quantum=quantum)
 

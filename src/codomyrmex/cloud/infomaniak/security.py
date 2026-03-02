@@ -4,12 +4,12 @@ Composable pre/post security checks that integrate with cognitive security
 modules (defense, identity, privacy) when available.
 """
 
-import logging
 from dataclasses import dataclass, field
 from enum import Enum, auto
 from typing import Any
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 # Lazy imports — all cross-module dependencies are optional
 try:
@@ -106,7 +106,6 @@ class CloudSecurityPipeline:
         identity_manager: Any | None = None,
         crumb_cleaner: Any | None = None,
     ):
-        """Initialize this instance."""
         self._defense = active_defense
         if self._defense is None and ActiveDefense is not None:
             self._defense = ActiveDefense()

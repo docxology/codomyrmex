@@ -71,7 +71,6 @@ class SISModel:
     def __init__(
         self, population_size: int = 1000, beta: float = 0.3, gamma: float = 0.1
     ) -> None:
-        """Initialize this instance."""
         self.N = population_size
         self.beta = beta
         self.gamma = gamma
@@ -120,7 +119,6 @@ class SEIRModel(SIRModel):
         sigma: float = 0.1,  # Incubation rate (1/incubation_period)
         gamma: float = 0.1,
     ) -> None:
-        """Initialize this instance."""
         super().__init__(population_size, beta, gamma)
         self.sigma = sigma
 

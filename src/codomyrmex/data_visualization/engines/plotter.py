@@ -51,7 +51,6 @@ except ImportError:
     class performance_context:
         """Performance Context (fallback)."""
         def __init__(self, *args, **kwargs):
-            """Initialize this instance."""
             return None  # Intentional no-op
         def __enter__(self):
             """enter ."""
@@ -65,7 +64,6 @@ class Plotter:
     """Simple wrapper around chart functions providing a unified plotting interface."""
 
     def __init__(self, figure_size: tuple = DEFAULT_FIGURE_SIZE):
-        """Initialize this instance."""
         self.figure_size = figure_size
 
     def bar_chart(self, categories, values, **kwargs):

@@ -52,13 +52,11 @@ class SearchIndex:
     """
 
     def __init__(self) -> None:
-        """Initialize this instance."""
         self._docs: dict[str, IndexEntry] = {}
         self._inverted: dict[str, set[str]] = defaultdict(set)
 
     @property
     def doc_count(self) -> int:
-        """doc Count ."""
         return len(self._docs)
 
     def add(

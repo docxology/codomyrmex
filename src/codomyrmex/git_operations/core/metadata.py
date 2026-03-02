@@ -1,7 +1,7 @@
 import json
 import os
 from dataclasses import asdict, dataclass, field
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timedelta, timezone, UTC
 from enum import Enum
 from pathlib import Path
 from typing import Any
@@ -137,7 +137,7 @@ class RepositoryMetadata:
     updated_date: str | None = None
     metadata_version: str = "1.0"
     last_metadata_update: str = field(
-        default_factory=lambda: datetime.now(timezone.utc).isoformat()
+        default_factory=lambda: datetime.now(UTC).isoformat()
     )
 
     # Custom Fields
@@ -258,7 +258,7 @@ class RepositoryMetadataManager:
 
     def update_repository_metadata(self, metadata: RepositoryMetadata) -> None:
         """Update metadata for a repository."""
-        metadata.last_metadata_update = datetime.now(timezone.utc).isoformat()
+        metadata.last_metadata_update = datetime.now(UTC).isoformat()
         self.metadata[metadata.full_name] = metadata
 
     def fetch_github_metadata(self, owner: str, repo: str) -> dict[str, Any] | None:
@@ -373,13 +373,13 @@ class RepositoryMetadataManager:
                 clone_url=url,
                 description=description,
                 local_path=local_path,
-                created_date=datetime.now(timezone.utc).isoformat(),
+                created_date=datetime.now(UTC).isoformat(),
             )
         else:
             # Update basic info
             metadata.description = description or metadata.description
             metadata.local_path = local_path or metadata.local_path
-            metadata.updated_date = datetime.now(timezone.utc).isoformat()
+            metadata.updated_date = datetime.now(UTC).isoformat()
 
         # Fetch GitHub metadata
         github_data = self.fetch_github_metadata(owner, name)
@@ -475,7 +475,7 @@ class RepositoryMetadataManager:
 
     def get_outdated_repositories(self, days: int = 30) -> list[RepositoryMetadata]:
         """Get repositories that haven't been synced in specified days."""
-        cutoff_date = datetime.now(timezone.utc) - timedelta(days=days)
+        cutoff_date = datetime.now(UTC) - timedelta(days=days)
         outdated = []
 
         for metadata in self.metadata.values():
@@ -525,7 +525,7 @@ class RepositoryMetadataManager:
             "total_stars": total_stars,
             "total_forks": total_forks,
             "outdated_repositories": len(self.get_outdated_repositories()),
-            "last_update": datetime.now(timezone.utc).isoformat(),
+            "last_update": datetime.now(UTC).isoformat(),
         }
 
 

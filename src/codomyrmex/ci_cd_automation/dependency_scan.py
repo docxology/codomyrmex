@@ -65,17 +65,14 @@ class ScanReport:
 
     @property
     def has_critical(self) -> bool:
-        """has Critical ."""
         return any(v.severity == "critical" for v in self.vulnerabilities)
 
     @property
     def is_clean(self) -> bool:
-        """is Clean ."""
         return len(self.vulnerabilities) == 0
 
     @property
     def count_by_severity(self) -> dict[str, int]:
-        """count By Severity ."""
         counts: dict[str, int] = {}
         for v in self.vulnerabilities:
             counts[v.severity] = counts.get(v.severity, 0) + 1

@@ -6,12 +6,12 @@ and function/file-level metrics.
 """
 
 import ast
-import logging
 import re
 from dataclasses import dataclass, field
 from enum import Enum
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 
 class ComplexityLevel(Enum):
@@ -71,12 +71,10 @@ class FileMetrics:
 
     @property
     def function_count(self) -> int:
-        """function Count ."""
         return len(self.functions)
 
     @property
     def average_complexity(self) -> float:
-        """average Complexity ."""
         if not self.functions:
             return 0.0
         return sum(f.cyclomatic_complexity for f in self.functions) / len(self.functions)

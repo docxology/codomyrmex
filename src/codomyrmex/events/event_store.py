@@ -46,7 +46,6 @@ class EventStore:
     """
 
     def __init__(self) -> None:
-        """Initialize this instance."""
         self._events: list[StreamEvent] = []
         self._next_sequence = 1
         self._topic_index: dict[str, list[int]] = defaultdict(list)

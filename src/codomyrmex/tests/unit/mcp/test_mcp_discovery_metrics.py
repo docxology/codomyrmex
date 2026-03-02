@@ -14,6 +14,7 @@ from codomyrmex.model_context_protocol.discovery import (
     DiscoveryMetrics,
     MCPDiscovery,
 )
+from datetime import UTC
 
 # ── DiscoveryMetrics dataclass ────────────────────────────────────────
 
@@ -34,7 +35,7 @@ class TestDiscoveryMetricsDataclass:
         """Test functionality: custom values."""
         from datetime import datetime, timezone
 
-        now = datetime.now(timezone.utc)
+        now = datetime.now(UTC)
         m = DiscoveryMetrics(
             total_tools=42,
             scan_duration_ms=123.4,
@@ -102,7 +103,7 @@ class TestMetricsSerialisation:
             failed_modules=["bad_mod"],
             modules_scanned=3,
             cache_hits=1,
-            last_scan_time=datetime.now(timezone.utc),
+            last_scan_time=datetime.now(UTC),
         )
         payload = {
             "total_tools": m.total_tools,

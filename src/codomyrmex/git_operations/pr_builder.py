@@ -52,7 +52,6 @@ class PRSpec:
 
     @property
     def file_count(self) -> int:
-        """file Count ."""
         return len(self.changes)
 
     def to_dict(self) -> dict[str, Any]:
@@ -119,7 +118,6 @@ class PRBuilder:
 
     @staticmethod
     def _auto_title(changes: list[FileChange]) -> str:
-        """auto Title ."""
         if not changes:
             return "Empty changeset"
         actions = set(c.action for c in changes)
@@ -129,7 +127,6 @@ class PRBuilder:
 
     @staticmethod
     def _branch_name(title: str) -> str:
-        """branch Name ."""
         slug = title.lower().replace(" ", "-")[:40]
         slug = "".join(c for c in slug if c.isalnum() or c == "-")
         return f"auto/{slug}"

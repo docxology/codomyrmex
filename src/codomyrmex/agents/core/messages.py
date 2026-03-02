@@ -10,7 +10,7 @@ from __future__ import annotations
 
 import uuid
 from dataclasses import dataclass, field
-from datetime import datetime, timezone
+from datetime import datetime, timezone, UTC
 from enum import Enum
 from typing import Any
 
@@ -70,7 +70,7 @@ class AgentMessage:
     tool_calls: list[ToolCall] = field(default_factory=list)
     tool_results: list[ToolResult] = field(default_factory=list)
     metadata: dict[str, Any] = field(default_factory=dict)
-    timestamp: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
+    timestamp: datetime = field(default_factory=lambda: datetime.now(UTC))
     message_id: str = field(default_factory=lambda: uuid.uuid4().hex)
 
     # ------------------------------------------------------------------
@@ -116,7 +116,7 @@ class AgentMessage:
             tool_calls=tool_calls,
             tool_results=tool_results,
             metadata=data.get("metadata", {}),
-            timestamp=datetime.fromisoformat(data["timestamp"]) if "timestamp" in data else datetime.now(timezone.utc),
+            timestamp=datetime.fromisoformat(data["timestamp"]) if "timestamp" in data else datetime.now(UTC),
             message_id=data.get("message_id", uuid.uuid4().hex),
         )
 

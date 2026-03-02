@@ -83,7 +83,7 @@ class TestAsyncSemaphoreBasicOperations:
         try:
             await asyncio.wait_for(sem.acquire_async(), timeout=0.1)
             acquired = True
-        except asyncio.TimeoutError:
+        except TimeoutError:
             pass
 
         assert acquired is False
@@ -105,7 +105,7 @@ class TestAsyncSemaphoreBlocking:
         try:
             await asyncio.wait_for(sem.acquire_async(), timeout=0.2)
             pytest.fail("Should have timed out")
-        except asyncio.TimeoutError:
+        except TimeoutError:
             elapsed = time.time() - start_time
             assert elapsed >= 0.15  # Should have blocked for at least timeout duration
 
@@ -245,7 +245,7 @@ class TestAsyncSemaphoreTimeout:
         try:
             await asyncio.wait_for(sem.acquire_async(), timeout=1.0)
             acquired = True
-        except asyncio.TimeoutError:
+        except TimeoutError:
             acquired = False
 
         assert acquired is True
@@ -262,7 +262,7 @@ class TestAsyncSemaphoreTimeout:
         try:
             await asyncio.wait_for(sem.acquire_async(), timeout=0.1)
             acquired = True
-        except asyncio.TimeoutError:
+        except TimeoutError:
             acquired = False
 
         assert acquired is False
@@ -280,7 +280,7 @@ class TestAsyncSemaphoreTimeout:
                 await asyncio.wait_for(sem.acquire_async(), timeout=0.05)
                 results.append("acquired")
                 sem.release()
-            except asyncio.TimeoutError:
+            except TimeoutError:
                 results.append("timeout")
 
         async def patient_waiter():
@@ -743,7 +743,7 @@ class TestAsyncDeadlockPrevention:
                         success_count += 1
                         lock_b.release()
                         return
-                    except asyncio.TimeoutError:
+                    except TimeoutError:
                         retry_count += 1
                         await asyncio.sleep(0.01)  # Back off
                 finally:

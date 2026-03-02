@@ -36,7 +36,6 @@ _DIM = "\033[2m"
 
 
 def _status_color(status: str) -> str:
-    """status Color ."""
     return {
         "operative": _GREEN,
         "key_missing": _YELLOW,
@@ -60,7 +59,6 @@ def _badge(status: str) -> str:
 # ── Display helpers ───────────────────────────────────────────────────────
 
 def print_banner():
-    """print Banner ."""
     print(f"""
 {_BOLD}{_CYAN}╔══════════════════════════════════════════════════════════════╗
 ║              Codomyrmex Agent Setup Wizard                   ║

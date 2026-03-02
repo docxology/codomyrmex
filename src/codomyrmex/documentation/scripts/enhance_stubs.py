@@ -75,7 +75,6 @@ See the root `CONTRIBUTING.md` for more details.
 """
 
 def enhance_stubs(root_dir):
-    """enhance Stubs ."""
     root = Path(root_dir)
     count = 0
 

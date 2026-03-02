@@ -48,7 +48,6 @@ class Metric(ABC):
     """Base class for metrics."""
 
     def __init__(self, name: str, description: str = "", labels: list[str] | None = None):
-        """Initialize this instance."""
         self.name = name
         self.description = description
         self.allowed_labels = labels or []
@@ -70,7 +69,6 @@ class Counter(Metric):
     """Counter metric (only increases)."""
 
     def __init__(self, name: str, description: str = "", labels: dict[str, str] | list[str] | None = None, value: float = 0.0):
-        """Initialize this instance."""
         allowed = labels
         if isinstance(labels, dict):
             allowed = list(labels.keys())
@@ -84,7 +82,6 @@ class Counter(Metric):
 
     @property
     def metric_type(self) -> MetricType:
-        """metric Type ."""
         return MetricType.COUNTER
 
     def _key(self, labels: dict[str, str] | None) -> str:
@@ -117,7 +114,6 @@ class Gauge(Metric):
     """Gauge metric (can go up and down)."""
 
     def __init__(self, name: str, description: str = "", labels: dict[str, str] | list[str] | None = None, value: float = 0.0):
-        """Initialize this instance."""
         allowed = labels
         if isinstance(labels, dict):
             allowed = list(labels.keys())
@@ -131,7 +127,6 @@ class Gauge(Metric):
 
     @property
     def metric_type(self) -> MetricType:
-        """metric Type ."""
         return MetricType.GAUGE
 
     def _key(self, labels: dict[str, str] | None) -> str:
@@ -182,7 +177,6 @@ class Histogram(Metric):
         labels: dict[str, str] | list[str] | None = None,
         buckets: list[float] | None = None,
     ):
-        """Initialize this instance."""
         allowed = labels
         if isinstance(labels, dict):
             allowed = list(labels.keys())
@@ -194,7 +188,6 @@ class Histogram(Metric):
 
     @property
     def metric_type(self) -> MetricType:
-        """metric Type ."""
         return MetricType.HISTOGRAM
 
     def observe(self, value: float) -> None:
@@ -237,7 +230,6 @@ class Summary(Metric):
         labels: dict[str, str] | list[str] | None = None,
         quantiles: list[float] | None = None,
     ):
-        """Initialize this instance."""
         allowed = labels
         if isinstance(labels, dict):
             allowed = list(labels.keys())
@@ -250,7 +242,6 @@ class Summary(Metric):
 
     @property
     def metric_type(self) -> MetricType:
-        """metric Type ."""
         return MetricType.SUMMARY
 
     def observe(self, value: float) -> None:
@@ -290,7 +281,6 @@ class Timer:
     """Context manager for timing operations."""
 
     def __init__(self, histogram: Histogram):
-        """Initialize this instance."""
         self.histogram = histogram
         self._start: float = 0
 
@@ -326,7 +316,6 @@ class MetricsRegistry:
     """
 
     def __init__(self):
-        """Initialize this instance."""
         self._metrics: dict[str, Metric] = {}
         self._lock = threading.Lock()
 
@@ -407,7 +396,6 @@ class MetricsError(CodomyrmexError):
 class Metrics(MetricsRegistry):
     """Alias for MetricsRegistry for compatibility."""
     def __init__(self, backend="in_memory"):
-        """Initialize this instance."""
         super().__init__()
         self.backend = backend
         self._counters: dict[str, Counter] = {}

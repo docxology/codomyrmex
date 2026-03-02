@@ -3,12 +3,12 @@ Static analysis for imports and dependency graph.
 """
 
 import ast
-import logging
 import os
 from pathlib import Path
 from typing import Any
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 # Layer sets aligned with src/codomyrmex/SPEC.md architecture
 # exceptions and validation are cross-cutting foundation concerns used by all layers

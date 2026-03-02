@@ -3,12 +3,12 @@ PAI documentation generation and updates.
 """
 
 import ast
-import logging
 import re
 from pathlib import Path
 from typing import Any
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 MAX_STUB_LINES = 55
 

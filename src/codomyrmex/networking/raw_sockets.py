@@ -1,16 +1,15 @@
 """TCP and UDP socket implementation."""
 
-import logging
 import socket
 from typing import Any
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 class TCPClient:
     """Simple TCP client."""
 
     def __init__(self, host: str, port: int):
-        """Initialize this instance."""
         self.host = host
         self.port = port
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -43,7 +42,6 @@ class TCPServer:
     """Simple TCP server."""
 
     def __init__(self, host: str, port: int):
-        """Initialize this instance."""
         self.host = host
         self.port = port
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -68,7 +66,6 @@ class UDPClient:
     """Simple UDP client."""
 
     def __init__(self, host: str, port: int):
-        """Initialize this instance."""
         self.host = host
         self.port = port
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)

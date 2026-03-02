@@ -83,7 +83,6 @@ class PackageBuilder:
     """
 
     def __init__(self, metadata: PackageMetadata | None = None) -> None:
-        """Initialize this instance."""
         self._metadata = metadata or PackageMetadata()
 
     @property

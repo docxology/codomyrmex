@@ -53,12 +53,10 @@ class PlanTask:
 
     @property
     def is_leaf(self) -> bool:
-        """is Leaf ."""
         return len(self.subtasks) == 0
 
     @property
     def subtask_count(self) -> int:
-        """subtask Count ."""
         return len(self.subtasks) + sum(s.subtask_count for s in self.subtasks)
 
     def to_dict(self) -> dict[str, Any]:
@@ -86,18 +84,15 @@ class Plan:
     created_at: float = 0.0
 
     def __post_init__(self) -> None:
-        """post Init ."""
         if not self.created_at:
             self.created_at = time.time()
 
     @property
     def total_tasks(self) -> int:
-        """total Tasks ."""
         return sum(1 + t.subtask_count for t in self.tasks)
 
     @property
     def completion_rate(self) -> float:
-        """completion Rate ."""
         all_tasks = self._flatten()
         if not all_tasks:
             return 0.0

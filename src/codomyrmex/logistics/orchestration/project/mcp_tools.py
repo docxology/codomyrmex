@@ -5,7 +5,7 @@ This module provides MCP tools that allow AI models to interact with the
 orchestration system, enabling AI-driven project management and task execution.
 """
 
-from datetime import datetime, timezone
+from datetime import datetime, timezone, UTC
 from typing import Any
 
 # Import Codomyrmex modules
@@ -27,7 +27,6 @@ except ImportError:
     logger.error("CRITICAL: MCP core modules are not installed. Cannot instantiate MCP tools. Zero mock policy enforces crashing instead of mocking.")
 
     def __raise_mcp_error(*args, **kwargs):
-        """raise Mcp Error ."""
         raise RuntimeError("MCP tools cannot be utilized without the codomyrmex.model_context_protocol package installed.")
 
     MCPToolResult = __raise_mcp_error
@@ -324,7 +323,7 @@ class OrchestrationMCPTools:
             metadata={
                 "workflow_name": workflow_name,
                 "session_id": session_id,
-                "timestamp": datetime.now(timezone.utc).isoformat(),
+                "timestamp": datetime.now(UTC).isoformat(),
             },
         )
 
@@ -356,7 +355,7 @@ class OrchestrationMCPTools:
                 "steps_count": len(steps),
                 "description": description,
             },
-            metadata={"timestamp": datetime.now(timezone.utc).isoformat()},
+            metadata={"timestamp": datetime.now(UTC).isoformat()},
         )
 
     def _list_workflows_tool(self, arguments: dict[str, Any]) -> MCPToolResult:
@@ -366,7 +365,7 @@ class OrchestrationMCPTools:
         return MCPToolResult(
             success=True,
             data={"workflows": workflows, "count": len(workflows)},
-            metadata={"timestamp": datetime.now(timezone.utc).isoformat()},
+            metadata={"timestamp": datetime.now(UTC).isoformat()},
         )
 
     def _create_project_tool(self, arguments: dict[str, Any]) -> MCPToolResult:
@@ -390,7 +389,7 @@ class OrchestrationMCPTools:
                     "template_used": template,
                     "workflows": project.workflows,
                 },
-                metadata={"timestamp": datetime.now(timezone.utc).isoformat()},
+                metadata={"timestamp": datetime.now(UTC).isoformat()},
             )
         except Exception as e:
             return MCPToolResult(
@@ -420,7 +419,7 @@ class OrchestrationMCPTools:
         return MCPToolResult(
             success=True,
             data={"projects": project_details, "count": len(project_details)},
-            metadata={"timestamp": datetime.now(timezone.utc).isoformat()},
+            metadata={"timestamp": datetime.now(UTC).isoformat()},
         )
 
     def _execute_task_tool(self, arguments: dict[str, Any]) -> MCPToolResult:
@@ -458,7 +457,7 @@ class OrchestrationMCPTools:
                 "task_name": name,
                 "module": module,
                 "action": action,
-                "timestamp": datetime.now(timezone.utc).isoformat(),
+                "timestamp": datetime.now(UTC).isoformat(),
             },
         )
 
@@ -469,7 +468,7 @@ class OrchestrationMCPTools:
         return MCPToolResult(
             success=True,
             data=status,
-            metadata={"timestamp": datetime.now(timezone.utc).isoformat()},
+            metadata={"timestamp": datetime.now(UTC).isoformat()},
         )
 
     def _get_health_status_tool(self, arguments: dict[str, Any]) -> MCPToolResult:
@@ -479,7 +478,7 @@ class OrchestrationMCPTools:
         return MCPToolResult(
             success=True,
             data=health,
-            metadata={"timestamp": datetime.now(timezone.utc).isoformat()},
+            metadata={"timestamp": datetime.now(UTC).isoformat()},
         )
 
     def _allocate_resources_tool(self, arguments: dict[str, Any]) -> MCPToolResult:
@@ -496,7 +495,7 @@ class OrchestrationMCPTools:
                 "user_id": user_id,
                 "requirements": requirements,
             },
-            metadata={"timestamp": datetime.now(timezone.utc).isoformat()},
+            metadata={"timestamp": datetime.now(UTC).isoformat()},
         )
 
     def _create_complex_workflow_tool(self, arguments: dict[str, Any]) -> MCPToolResult:
@@ -509,7 +508,7 @@ class OrchestrationMCPTools:
         return MCPToolResult(
             success=result.get("success", False),
             data={"workflow_name": name, "execution_result": result},
-            metadata={"timestamp": datetime.now(timezone.utc).isoformat()},
+            metadata={"timestamp": datetime.now(UTC).isoformat()},
         )
 
 

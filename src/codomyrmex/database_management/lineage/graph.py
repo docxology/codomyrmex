@@ -23,7 +23,6 @@ class LineageGraph:
     """
 
     def __init__(self):
-        """Initialize this instance."""
         self._nodes: dict[str, LineageNode] = {}
         self._edges: list[LineageEdge] = []
         self._lock = threading.Lock()

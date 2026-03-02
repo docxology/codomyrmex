@@ -101,7 +101,6 @@ class TestSuiteResult:
 
     @property
     def success_rate(self) -> float:
-        """success Rate ."""
         return self.passed / self.total if self.total > 0 else 0.0
 
 
@@ -133,7 +132,6 @@ class ImprovementReport:
 
     @property
     def change_count(self) -> int:
-        """change Count ."""
         return len(self.changes)
 
     @property

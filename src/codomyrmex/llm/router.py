@@ -53,19 +53,16 @@ class ModelStats:
 
     @property
     def avg_latency_ms(self) -> float:
-        """avg Latency Ms ."""
         total = self.success_count + self.failure_count
         return self.total_latency_ms / total if total > 0 else 0.0
 
     @property
     def success_rate(self) -> float:
-        """success Rate ."""
         total = self.success_count + self.failure_count
         return self.success_count / total if total > 0 else 1.0
 
     @property
     def total_cost(self) -> float:
-        """total Cost ."""
         # Simplified cost calculation
         return 0.0
 
@@ -93,7 +90,6 @@ class ModelRouter:
         fallback_enabled: bool = True,
         max_retries: int = 3,
     ):
-        """Initialize this instance."""
         self.strategy = strategy
         self.fallback_enabled = fallback_enabled
         self.max_retries = max_retries
@@ -162,7 +158,6 @@ class ModelRouter:
         elif strategy == RoutingStrategy.CAPABILITY_MATCH:
             if required_capabilities:
                 def capability_score(m):
-                    """capability Score ."""
                     return len(set(required_capabilities) & set(m.capabilities))
                 return max(candidates, key=capability_score)
             return candidates[0]
@@ -250,7 +245,6 @@ class FallbackChain:
     """Chain of models with automatic fallback."""
 
     def __init__(self, models: list[str]):
-        """Initialize this instance."""
         self.models = models
         self._router: ModelRouter | None = None
 
@@ -279,7 +273,6 @@ class CostTracker:
     """Track LLM API costs."""
 
     def __init__(self):
-        """Initialize this instance."""
         self._usage: dict[str, dict[str, float]] = {}
 
     def record(

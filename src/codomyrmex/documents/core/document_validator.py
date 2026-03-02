@@ -13,7 +13,6 @@ class ValidationResult:
     """Result of document validation."""
 
     def __init__(self, is_valid: bool, errors: list[str] = None, warnings: list[str] = None):
-        """Initialize this instance."""
 
         self.is_valid = is_valid
         self.errors = errors or []

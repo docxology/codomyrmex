@@ -10,14 +10,14 @@ Provides:
 from __future__ import annotations
 
 import functools
-import logging
 import time
 from collections import defaultdict
 from collections.abc import Callable
 from dataclasses import dataclass, field
 from typing import Any
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 
 @dataclass
@@ -44,17 +44,14 @@ class ProfileStats:
 
     @property
     def avg_seconds(self) -> float:
-        """avg Seconds ."""
         return self.total_seconds / max(self.call_count, 1)
 
     @property
     def avg_ms(self) -> float:
-        """avg Ms ."""
         return self.avg_seconds * 1000
 
     @property
     def max_ms(self) -> float:
-        """max Ms ."""
         return self.max_seconds * 1000
 
 
@@ -77,7 +74,6 @@ class AsyncProfiler:
     """
 
     def __init__(self, slow_threshold: float = 1.0) -> None:
-        """Initialize this instance."""
         self.slow_threshold = slow_threshold
         self._entries: dict[str, list[ProfileEntry]] = defaultdict(list)
         self._slow_calls: list[ProfileEntry] = []
@@ -168,17 +164,14 @@ class AsyncProfiler:
 
     @property
     def slow_calls(self) -> list[ProfileEntry]:
-        """slow Calls ."""
         return list(self._slow_calls)
 
     @property
     def total_calls(self) -> int:
-        """total Calls ."""
         return sum(len(entries) for entries in self._entries.values())
 
     @property
     def profiled_functions(self) -> list[str]:
-        """profiled Functions ."""
         return sorted(self._entries.keys())
 
     def clear(self) -> None:

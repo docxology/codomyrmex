@@ -73,7 +73,6 @@ class PrecisionMetric(Metric):
     """Precision for a specific positive class."""
 
     def __init__(self, positive_class: Any = 1):
-        """Initialize this instance."""
         self.positive_class = positive_class
 
     @property
@@ -94,7 +93,6 @@ class RecallMetric(Metric):
     """Recall for a specific positive class."""
 
     def __init__(self, positive_class: Any = 1):
-        """Initialize this instance."""
         self.positive_class = positive_class
 
     @property
@@ -115,7 +113,6 @@ class F1Metric(Metric):
     """F1 score for a specific positive class."""
 
     def __init__(self, positive_class: Any = 1):
-        """Initialize this instance."""
         self.positive_class = positive_class
 
     @property
@@ -224,7 +221,6 @@ class ConfusionMatrix:
     """Confusion matrix for classification tasks."""
 
     def __init__(self, y_true: list, y_pred: list):
-        """Initialize this instance."""
         self.y_true = y_true
         self.y_pred = y_pred
         self.classes = sorted(set(y_true) | set(y_pred))
@@ -239,7 +235,6 @@ class ConfusionMatrix:
         return matrix
 
     def get_cell(self, true_label: Any, pred_label: Any) -> int:
-        """get Cell ."""
         return self._matrix.get((true_label, pred_label), 0)
 
     def to_dict(self) -> dict[str, Any]:
@@ -265,12 +260,10 @@ class ModelEvaluator:
     """High-level evaluator that selects appropriate metrics by task type."""
 
     def __init__(self, task_type: TaskType):
-        """Initialize this instance."""
         self.task_type = task_type
         self.metrics: list[Metric] = self._default_metrics()
 
     def _default_metrics(self) -> list[Metric]:
-        """default Metrics ."""
         if self.task_type in (TaskType.BINARY_CLASSIFICATION, TaskType.MULTICLASS_CLASSIFICATION):
             return [AccuracyMetric(), PrecisionMetric(), RecallMetric(), F1Metric()]
         elif self.task_type == TaskType.REGRESSION:
@@ -278,7 +271,6 @@ class ModelEvaluator:
         return []
 
     def add_metric(self, metric: Metric) -> None:
-        """add Metric ."""
         self.metrics.append(metric)
 
     def evaluate(self, y_true: list, y_pred: list) -> EvaluationResult:

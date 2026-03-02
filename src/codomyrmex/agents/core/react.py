@@ -38,7 +38,6 @@ class ReActAgent(BaseAgent):
         config: dict[str, Any] | None = None,
         max_steps: int = 10,
     ):
-        """Initialize this instance."""
         capabilities = [
             AgentCapabilities.MULTI_TURN,
             AgentCapabilities.CODE_EXECUTION,

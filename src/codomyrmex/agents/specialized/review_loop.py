@@ -76,7 +76,6 @@ class ReviewLoop:
         max_iterations: int = 5,
         approval_threshold: float = 0.7,
     ) -> None:
-        """Initialize this instance."""
         self._max_iterations = max_iterations
         self._approval_threshold = approval_threshold
         self._generator = CodeGenerator()

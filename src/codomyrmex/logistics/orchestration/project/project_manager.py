@@ -6,7 +6,7 @@ templates, scaffolding, and coordination of complex multi-module workflows.
 
 import shutil
 from dataclasses import dataclass, field
-from datetime import datetime, timezone
+from datetime import datetime, timezone, UTC
 from enum import Enum
 from pathlib import Path
 from typing import Any
@@ -60,8 +60,8 @@ class Project:
     description: str = ""
     status: ProjectStatus = ProjectStatus.PLANNING
     config: dict[str, Any] = field(default_factory=dict)
-    created_at: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
-    updated_at: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
+    created_at: datetime = field(default_factory=lambda: datetime.now(UTC))
+    updated_at: datetime = field(default_factory=lambda: datetime.now(UTC))
     owner: str | None = None
     version: str = "0.1.0"
 
@@ -149,7 +149,7 @@ class ProjectManager:
         project = self.get_project(name)
         if project:
             project.status = status
-            project.updated_at = datetime.now(timezone.utc)
+            project.updated_at = datetime.now(UTC)
             logger.info(f"Updated status for project {name}: {status.value}")
             return True
         return False

@@ -35,13 +35,11 @@ class MemoryEntry:
     access_count: int = 0
 
     def __post_init__(self) -> None:
-        """post Init ."""
         if not self.created_at:
             self.created_at = time.time()
 
     @property
     def is_expired(self) -> bool:
-        """is Expired ."""
         if self.expires_at == 0:
             return False
         return time.time() > self.expires_at
@@ -58,7 +56,6 @@ class MemoryStore:
     """
 
     def __init__(self) -> None:
-        """Initialize this instance."""
         self._entries: dict[str, MemoryEntry] = {}
 
     def put(self, key: str, value: Any, ttl: float = 0, tags: list[str] | None = None) -> None:
@@ -90,7 +87,6 @@ class MemoryStore:
         return entry is not None
 
     def search_by_tag(self, tag: str) -> list[MemoryEntry]:
-        """search By Tag ."""
         self._clean_expired()
         return [e for e in self._entries.values() if tag in e.tags]
 
@@ -106,7 +102,6 @@ class MemoryStore:
         return list(self._entries.keys())
 
     def _clean_expired(self) -> None:
-        """clean Expired ."""
         expired = [k for k, v in self._entries.items() if v.is_expired]
         for k in expired:
             del self._entries[k]

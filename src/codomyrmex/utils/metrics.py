@@ -160,7 +160,6 @@ class ModuleHealth:
     """Track health of modules."""
 
     def __init__(self):
-        """Initialize this instance."""
         self._health: dict[str, bool] = {}
         self._last_check: dict[str, datetime] = {}
         self._check_fns: dict[str, Callable[[], bool]] = {}

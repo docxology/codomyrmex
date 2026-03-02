@@ -6,7 +6,7 @@ functions in ``codomyrmex.agents.pai.trust_gateway``.
 
 import json
 import tempfile
-from datetime import datetime, timezone
+from datetime import datetime, timezone, UTC
 from pathlib import Path
 
 import pytest
@@ -129,7 +129,7 @@ class TestClearAuditLog:
         """clear_audit_log(before) only removes older entries."""
         clear_audit_log()  # start fresh
         _log_audit_entry("old.entry", {}, "success", "TRUSTED", 1.0)
-        cutoff = datetime.now(timezone.utc)
+        cutoff = datetime.now(UTC)
         _log_audit_entry("new.entry", {}, "success", "TRUSTED", 1.0)
         removed = clear_audit_log(before=cutoff)
         assert removed >= 1

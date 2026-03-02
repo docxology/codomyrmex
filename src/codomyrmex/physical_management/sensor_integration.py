@@ -5,15 +5,15 @@ data collection, and calibration.
 """
 
 import json
-import logging
 import math
 import time
 from collections.abc import Callable
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 
 class SensorType(Enum):

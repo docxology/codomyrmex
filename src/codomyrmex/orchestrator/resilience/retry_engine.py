@@ -68,7 +68,6 @@ class RetryEngine:
         max_delay: float = 1.0,
         backoff_factor: float = 2.0,
     ) -> None:
-        """Initialize this instance."""
         self._max_retries = max_retries
         self._base_delay = base_delay
         self._max_delay = max_delay

@@ -16,7 +16,6 @@ logger = get_logger(__name__)
 _PROJECT_ROOT = Path(__file__).resolve().parents[5]
 
 def _get_package_version() -> str:
-    """get Package Version ."""
     try:
         from importlib.metadata import version
         return version("codomyrmex")

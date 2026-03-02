@@ -57,7 +57,6 @@ class HTTPWebhookTransport(WebhookTransport):
             [str, str, dict[str, str], float], tuple[int, str]
         ],
     ) -> None:
-        """Initialize this instance."""
         self._handler = handler
 
     def send(

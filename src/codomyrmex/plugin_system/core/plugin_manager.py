@@ -194,7 +194,6 @@ class PluginManager:
 
 
 def get_plugin_manager() -> PluginManager:
-    """get Plugin Manager ."""
     if not hasattr(get_plugin_manager, '_manager'):
         get_plugin_manager._manager = PluginManager()
     return get_plugin_manager._manager

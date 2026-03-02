@@ -43,7 +43,6 @@ class MemoryMessage:
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> 'MemoryMessage':
-        """from Dict ."""
         return cls(
             role=data["role"],
             content=data["content"],
@@ -58,12 +57,10 @@ class Memory(ABC):
     memory_type: MemoryType
 
     def __init__(self, session_id: str | None = None):
-        """Initialize this instance."""
         self.session_id = session_id or self._generate_session_id()
         self.messages: list[MemoryMessage] = []
 
     def _generate_session_id(self) -> str:
-        """generate Session Id ."""
         return hashlib.sha256(str(datetime.now().timestamp()).encode()).hexdigest()[:16]
 
     @abstractmethod
@@ -103,7 +100,6 @@ class Memory(ABC):
 
     @property
     def message_count(self) -> int:
-        """message Count ."""
         return len(self.messages)
 
 
@@ -113,12 +109,10 @@ class BufferMemory(Memory):
     memory_type = MemoryType.BUFFER
 
     def __init__(self, session_id: str | None = None, max_messages: int | None = None):
-        """Initialize this instance."""
         super().__init__(session_id)
         self.max_messages = max_messages
 
     def add_message(self, role: str, content: str, **metadata) -> None:
-        """add Message ."""
         message = MemoryMessage(role=role, content=content, metadata=metadata)
         self.messages.append(message)
 
@@ -130,7 +124,6 @@ class BufferMemory(Memory):
             self.messages = system_msgs + other_msgs[-keep_count:]
 
     def get_messages(self) -> list[dict[str, str]]:
-        """get Messages ."""
         return [{"role": m.role, "content": m.content} for m in self.messages]
 
     def clear(self) -> None:
@@ -144,13 +137,11 @@ class WindowMemory(Memory):
     memory_type = MemoryType.WINDOW
 
     def __init__(self, session_id: str | None = None, window_size: int = 10):
-        """Initialize this instance."""
         super().__init__(session_id)
         self.window_size = window_size
         self.system_messages: list[MemoryMessage] = []
 
     def add_message(self, role: str, content: str, **metadata) -> None:
-        """add Message ."""
         message = MemoryMessage(role=role, content=content, metadata=metadata)
 
         if role == "system":
@@ -161,7 +152,6 @@ class WindowMemory(Memory):
                 self.messages = self.messages[-self.window_size:]
 
     def get_messages(self) -> list[dict[str, str]]:
-        """get Messages ."""
         all_messages = self.system_messages + self.messages
         return [{"role": m.role, "content": m.content} for m in all_messages]
 
@@ -182,7 +172,6 @@ class SummaryMemory(Memory):
         summarizer: Callable | None = None,
         summary_threshold: int = 10
     ):
-        """Initialize this instance."""
         super().__init__(session_id)
         self.summarizer = summarizer
         self.summary_threshold = summary_threshold
@@ -190,7 +179,6 @@ class SummaryMemory(Memory):
         self.recent_messages: list[MemoryMessage] = []
 
     def add_message(self, role: str, content: str, **metadata) -> None:
-        """add Message ."""
         message = MemoryMessage(role=role, content=content, metadata=metadata)
         self.messages.append(message)
         self.recent_messages.append(message)
@@ -199,7 +187,6 @@ class SummaryMemory(Memory):
             self._update_summary()
 
     def _update_summary(self) -> None:
-        """update Summary ."""
         if not self.summarizer or not self.recent_messages:
             return
 
@@ -221,7 +208,6 @@ Updated Summary:"""
         self.recent_messages = []
 
     def get_messages(self) -> list[dict[str, str]]:
-        """get Messages ."""
         messages = []
 
         if self.summary:
@@ -252,13 +238,11 @@ class EntityMemory(Memory):
         session_id: str | None = None,
         max_entities: int = 50
     ):
-        """Initialize this instance."""
         super().__init__(session_id)
         self.entities: dict[str, dict[str, Any]] = {}
         self.max_entities = max_entities
 
     def add_message(self, role: str, content: str, **metadata) -> None:
-        """add Message ."""
         message = MemoryMessage(role=role, content=content, metadata=metadata)
         self.messages.append(message)
 
@@ -268,7 +252,6 @@ class EntityMemory(Memory):
                 self._update_entity(entity_name, entity_info)
 
     def _update_entity(self, name: str, info: dict[str, Any]) -> None:
-        """update Entity ."""
         if name in self.entities:
             self.entities[name].update(info)
             self.entities[name]["mentions"] = self.entities[name].get("mentions", 0) + 1
@@ -282,11 +265,9 @@ class EntityMemory(Memory):
             self.entities[name] = {**info, "mentions": 1}
 
     def get_entity(self, name: str) -> dict[str, Any] | None:
-        """get Entity ."""
         return self.entities.get(name)
 
     def get_messages(self) -> list[dict[str, str]]:
-        """get Messages ."""
         messages = []
 
         if self.entities:

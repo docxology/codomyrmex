@@ -116,7 +116,6 @@ class StructuredFormatter:
     """
 
     def __init__(self, config: FormatterConfig | None = None) -> None:
-        """Initialize this instance."""
         self._config = config or FormatterConfig()
         self._line_count = 0
 
@@ -209,7 +208,7 @@ class StructuredFormatter:
         """Format a unix timestamp as ISO 8601 UTC."""
         import datetime
 
-        dt = datetime.datetime.fromtimestamp(ts, tz=datetime.timezone.utc)
+        dt = datetime.datetime.fromtimestamp(ts, tz=datetime.UTC)
         return dt.isoformat()
 
     def reset_count(self) -> None:

@@ -5,15 +5,15 @@ Provides different strategies for evaluating feature flags.
 """
 
 import hashlib
-import logging
 import random
 from abc import ABC, abstractmethod
 from collections.abc import Callable
 from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Any, Dict, List, Optional
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 
 @dataclass
@@ -68,7 +68,6 @@ class BooleanStrategy(EvaluationStrategy):
     """Simple on/off boolean strategy."""
 
     def __init__(self, enabled: bool = False):
-        """Initialize this instance."""
         self.enabled = enabled
 
     def evaluate(self, context: EvaluationContext) -> EvaluationResult:
@@ -84,7 +83,6 @@ class BooleanStrategy(EvaluationStrategy):
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> 'BooleanStrategy':
-        """from Dict ."""
         return cls(enabled=data.get("enabled", False))
 
 
@@ -92,7 +90,6 @@ class PercentageStrategy(EvaluationStrategy):
     """Percentage-based rollout strategy."""
 
     def __init__(self, percentage: float = 0.0, sticky: bool = True):
-        """Initialize this instance."""
         self.percentage = max(0.0, min(100.0, percentage))
         self.sticky = sticky
 
@@ -122,7 +119,6 @@ class PercentageStrategy(EvaluationStrategy):
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> 'PercentageStrategy':
-        """from Dict ."""
         return cls(
             percentage=data.get("percentage", 0.0),
             sticky=data.get("sticky", True)
@@ -138,7 +134,6 @@ class UserListStrategy(EvaluationStrategy):
         blocked_users: list[str] | None = None,
         default: bool = False
     ):
-        """Initialize this instance."""
         self.allowed_users = set(allowed_users or [])
         self.blocked_users = set(blocked_users or [])
         self.default = default
@@ -191,7 +186,6 @@ class UserListStrategy(EvaluationStrategy):
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> 'UserListStrategy':
-        """from Dict ."""
         return cls(
             allowed_users=data.get("allowed_users"),
             blocked_users=data.get("blocked_users"),
@@ -209,7 +203,6 @@ class AttributeStrategy(EvaluationStrategy):
         value: Any,
         enabled_value: bool = True
     ):
-        """Initialize this instance."""
         self.attribute = attribute
         self.operator = operator
         self.value = value
@@ -274,7 +267,6 @@ class AttributeStrategy(EvaluationStrategy):
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> 'AttributeStrategy':
-        """from Dict ."""
         return cls(
             attribute=data["attribute"],
             operator=data["operator"],
@@ -287,7 +279,6 @@ class EnvironmentStrategy(EvaluationStrategy):
     """Strategy based on environment."""
 
     def __init__(self, enabled_environments: list[str] | None = None):
-        """Initialize this instance."""
         self.enabled_environments = set(enabled_environments or ["development"])
 
     def evaluate(self, context: EvaluationContext) -> EvaluationResult:
@@ -308,7 +299,6 @@ class EnvironmentStrategy(EvaluationStrategy):
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> 'EnvironmentStrategy':
-        """from Dict ."""
         return cls(enabled_environments=data.get("enabled_environments"))
 
 
@@ -320,7 +310,6 @@ class CompositeStrategy(EvaluationStrategy):
         strategies: list[EvaluationStrategy],
         operator: str = "and"  # "and" or "or"
     ):
-        """Initialize this instance."""
         self.strategies = strategies
         self.operator = operator
 
@@ -354,7 +343,6 @@ class CompositeStrategy(EvaluationStrategy):
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> 'CompositeStrategy':
-        """from Dict ."""
         strategies = [create_strategy(s) for s in data.get("strategies", [])]
         return cls(strategies=strategies, operator=data.get("operator", "and"))
 

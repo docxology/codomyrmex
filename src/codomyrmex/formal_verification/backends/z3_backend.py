@@ -38,16 +38,13 @@ class Z3Backend(SolverBackend):
     """
 
     def __init__(self) -> None:
-        """Initialize this instance."""
         _require_z3()
         self._items: list[str] = []
 
     def clear_model(self) -> None:
-        """clear Model ."""
         self._items.clear()
 
     def add_item(self, item: str, index: int | None = None) -> int:
-        """add Item ."""
         if index is None:
             self._items.append(item)
             return len(self._items) - 1
@@ -55,7 +52,6 @@ class Z3Backend(SolverBackend):
         return index
 
     def delete_item(self, index: int) -> str:
-        """delete Item ."""
         if not self._items:
             raise ModelBuildError(f"Cannot delete index {index}: model is empty")
         if not 0 <= index < len(self._items):
@@ -63,7 +59,6 @@ class Z3Backend(SolverBackend):
         return self._items.pop(index)
 
     def replace_item(self, index: int, new_item: str) -> str:
-        """replace Item ."""
         if not self._items:
             raise ModelBuildError(f"Cannot replace index {index}: model is empty")
         if not 0 <= index < len(self._items):
@@ -73,11 +68,9 @@ class Z3Backend(SolverBackend):
         return old
 
     def get_model(self) -> list[tuple[int, str]]:
-        """get Model ."""
         return list(enumerate(self._items))
 
     def solve_model(self, timeout_ms: int = 30000) -> SolverResult:
-        """solve Model ."""
         _require_z3()
 
         # Build a namespace with z3 imports for executing model items
@@ -148,5 +141,4 @@ class Z3Backend(SolverBackend):
             )
 
     def backend_name(self) -> str:
-        """backend Name ."""
         return "Z3 SMT Solver"

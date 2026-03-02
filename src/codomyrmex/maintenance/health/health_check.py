@@ -102,7 +102,6 @@ class HealthChecker:
     """
 
     def __init__(self) -> None:
-        """Initialize this instance."""
         self._checks: dict[str, HealthCheck] = {}
         self._last_results: dict[str, HealthCheckResult] = {}
 

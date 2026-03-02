@@ -1,16 +1,14 @@
 """Fine-tuning orchestration."""
 
-import logging
-
 from .datasets import Dataset
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 class FineTuningJob:
     """Represents a fine-tuning job on a remote provider."""
 
     def __init__(self, base_model: str, dataset: Dataset, provider: str = "openai"):
-        """Initialize this instance."""
         self.base_model = base_model
         self.dataset = dataset
         self.provider = provider

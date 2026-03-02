@@ -23,7 +23,6 @@ class WebhookDispatcher:
         registry: WebhookRegistry,
         transport: WebhookTransport,
     ) -> None:
-        """Initialize this instance."""
         self._registry = registry
         self._transport = transport
 

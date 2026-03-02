@@ -75,7 +75,6 @@ class ThinkingAgent(AgentInterface):
         thinking_config: ThinkingAgentConfig | None = None,
         knowledge_retriever: Any | None = None,
     ) -> None:
-        """Initialize this instance."""
         super().__init__(config)
         self._thinking_config = thinking_config or ThinkingAgentConfig()
         self._cot = ChainOfThought(depth=self._thinking_config.depth)

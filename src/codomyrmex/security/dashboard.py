@@ -51,7 +51,6 @@ class SecurityDashboard:
         compliance: ComplianceReport | None = None,
         secrets: list[SecretFinding] | None = None,
     ) -> None:
-        """Initialize this instance."""
         self._permissions = permissions or PermissionModel()
         self._compliance = compliance or ComplianceReport()
         self._secrets = secrets or []

@@ -65,18 +65,15 @@ class HealthReport:
     timestamp: float = 0.0
 
     def __post_init__(self) -> None:
-        """post Init ."""
         if not self.timestamp:
             self.timestamp = time.time()
 
     @property
     def is_healthy(self) -> bool:
-        """is Healthy ."""
         return self.status == HealthStatus.HEALTHY
 
     @property
     def component_count(self) -> int:
-        """component Count ."""
         return len(self.components)
 
     def to_dict(self) -> dict[str, Any]:
@@ -101,7 +98,6 @@ class HealthChecker:
     """
 
     def __init__(self) -> None:
-        """Initialize this instance."""
         self._checks: dict[str, Any] = {}
         self._start_time = time.time()
 

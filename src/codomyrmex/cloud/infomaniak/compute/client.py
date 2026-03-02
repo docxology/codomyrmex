@@ -5,13 +5,13 @@ Provides instance, image, keypair, and availability zone operations
 via the OpenStack Nova API.
 """
 
-import logging
 from typing import Any
 
 from ...common import ComputeClient
 from ..base import InfomaniakOpenStackBase
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 
 class InfomaniakComputeClient(InfomaniakOpenStackBase, ComputeClient):

@@ -10,14 +10,14 @@ Provides:
 
 from __future__ import annotations
 
-import logging
 import statistics
 import time
 from collections.abc import Callable
 from dataclasses import dataclass, field
 from typing import Any
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 try:
     import psutil
@@ -36,22 +36,18 @@ class BenchmarkResult:
 
     @property
     def average_time(self) -> float:
-        """average Time ."""
         return sum(self.times) / max(len(self.times), 1)
 
     @property
     def min_time(self) -> float:
-        """min Time ."""
         return min(self.times) if self.times else 0.0
 
     @property
     def max_time(self) -> float:
-        """max Time ."""
         return max(self.times) if self.times else 0.0
 
     @property
     def total_time(self) -> float:
-        """total Time ."""
         return sum(self.times)
 
     @property
@@ -201,7 +197,6 @@ class BenchmarkSuite:
     """
 
     def __init__(self) -> None:
-        """Initialize this instance."""
         self._benchmarks: dict[str, Callable[[], Any]] = {}
         self._results: dict[str, dict[str, Any]] = {}
 
@@ -231,7 +226,6 @@ class BenchmarkSuite:
 
     @property
     def benchmark_count(self) -> int:
-        """benchmark Count ."""
         return len(self._benchmarks)
 
 

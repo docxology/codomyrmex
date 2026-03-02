@@ -10,12 +10,10 @@ class AnthropicProvider(LLMProvider):
     provider_type = ProviderType.ANTHROPIC
 
     def __init__(self, config: ProviderConfig):
-        """Initialize this instance."""
         super().__init__(config)
         self._init_client()
 
     def _init_client(self):
-        """init Client ."""
         try:
             from anthropic import Anthropic
             self._client = Anthropic(api_key=self.config.api_key)
@@ -73,7 +71,6 @@ class AnthropicProvider(LLMProvider):
         max_tokens: int | None = None,
         **kwargs
     ) -> Iterator[str]:
-        """complete Stream ."""
         if not self._client:
             raise RuntimeError("Anthropic client not initialized.")
 
@@ -140,7 +137,6 @@ class AnthropicProvider(LLMProvider):
             raise RuntimeError("Anthropic async client not available.") from e
 
     def list_models(self) -> list[str]:
-        """list Models ."""
         return [
             "claude-3-5-sonnet-20241022",
             "claude-3-5-haiku-20241022",
@@ -150,7 +146,6 @@ class AnthropicProvider(LLMProvider):
         ]
 
     def _default_model(self) -> str:
-        """default Model ."""
         return "claude-3-5-sonnet-20241022"
 
 

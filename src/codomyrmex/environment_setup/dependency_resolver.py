@@ -7,13 +7,13 @@ using constraint solving and compatibility analysis.
 from __future__ import annotations
 
 import json
-import logging
 import subprocess
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 
 @dataclass
@@ -43,7 +43,6 @@ class DependencyResolver:
     """
 
     def __init__(self, python_path: str = "python") -> None:
-        """Initialize this instance."""
         self._python = python_path
 
     def check_conflicts(self) -> list[Conflict]:

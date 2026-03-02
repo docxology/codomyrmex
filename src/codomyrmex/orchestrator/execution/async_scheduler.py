@@ -8,15 +8,15 @@ lifecycle event integration.
 from __future__ import annotations
 
 import asyncio
-import logging
 import uuid
 from collections.abc import Callable, Coroutine
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 from typing import Any
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 
 # ---------------------------------------------------------------------------
@@ -142,7 +142,6 @@ class AsyncScheduler:
         max_concurrency: int = 4,
         event_bus: Any = None,
     ) -> None:
-        """Initialize this instance."""
         self._jobs: dict[str, AsyncJob] = {}
         self._max_concurrency = max_concurrency
         self._event_bus = event_bus

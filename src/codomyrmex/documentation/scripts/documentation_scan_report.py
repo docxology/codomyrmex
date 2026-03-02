@@ -23,7 +23,6 @@ class DocumentationScanner:
     """Comprehensive documentation scanner and analyzer."""
 
     def __init__(self, repo_root: Path):
-        """Initialize this instance."""
         self.repo_root = repo_root.resolve()
         self.results = {
             'phase1': {

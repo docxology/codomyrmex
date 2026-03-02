@@ -167,7 +167,6 @@ class KernelPrimitiveRegistry:
     """Registry holding the 15 default kernel primitives."""
 
     def __init__(self) -> None:
-        """Initialize this instance."""
         self._primitives: dict[str, KernelPrimitive] = {}
         for p in _build_default_primitives():
             self._primitives[p.name] = p
@@ -177,11 +176,9 @@ class KernelPrimitiveRegistry:
         return self._primitives.get(name)
 
     def list_all(self) -> list[KernelPrimitive]:
-        """list All ."""
         return list(self._primitives.values())
 
     def list_by_layer(self, layer: KernelLayer) -> list[KernelPrimitive]:
-        """list By Layer ."""
         return [p for p in self._primitives.values() if p.layer == layer]
 
     def validate_primitive(self, name: str, vault_path: Path) -> bool:
@@ -198,7 +195,6 @@ class KernelPrimitiveRegistry:
         return prim.enabled
 
     def to_kernel_config(self) -> KernelConfig:
-        """to Kernel Config ."""
         return KernelConfig(primitives=list(self._primitives.values()))
 
 
@@ -206,7 +202,6 @@ class ProcessingPipeline:
     """Implements the 6R Processing Pipeline with pluggable stage handlers."""
 
     def __init__(self) -> None:
-        """Initialize this instance."""
         self._handlers: dict[PipelineStage, list[Callable[[str, dict], str]]] = {
             stage: [] for stage in PipelineStage
         }
@@ -262,7 +257,6 @@ class ProcessingPipeline:
             )
 
     def get_results(self) -> list[StageResult]:
-        """get Results ."""
         return list(self._results)
 
 
@@ -270,11 +264,9 @@ class DerivationEngine:
     """Maps user text to 8 configuration dimensions with confidence scoring."""
 
     def __init__(self) -> None:
-        """Initialize this instance."""
         self._signals: list[DimensionSignal] = []
 
     def ingest_signal(self, signal: DimensionSignal) -> None:
-        """ingest Signal ."""
         self._signals.append(signal)
 
     def ingest_from_text(self, text: str, source: str = "user") -> list[DimensionSignal]:

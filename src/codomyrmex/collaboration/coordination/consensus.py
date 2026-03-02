@@ -6,7 +6,6 @@ collaborative decision making.
 """
 
 import asyncio
-import logging
 import uuid
 from collections.abc import Callable
 from dataclasses import dataclass, field
@@ -15,8 +14,9 @@ from enum import Enum
 from typing import Any
 
 from ..agents.base import CollaborativeAgent
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 
 class VoteType(Enum):
@@ -119,7 +119,6 @@ class VotingMechanism:
         quorum: float = 0.5,
         threshold: float = 0.5,
     ):
-        """Initialize this instance."""
         if not 0 <= quorum <= 1:
             raise ValueError("Quorum must be between 0 and 1")
         if not 0 <= threshold <= 1:
@@ -255,7 +254,6 @@ class ConsensusBuilder:
     """
 
     def __init__(self, convergence_threshold: float = 0.8):
-        """Initialize this instance."""
         self._convergence_threshold = convergence_threshold
         self._proposals: dict[str, dict[str, Any]] = {}  # key -> agent_id -> value
         self._consensus_values: dict[str, Any] = {}

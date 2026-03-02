@@ -159,7 +159,6 @@ class APIDocExtractor:
 
     @staticmethod
     def _name_str(node: ast.expr) -> str:
-        """name Str ."""
         if isinstance(node, ast.Name):
             return node.id
         if isinstance(node, ast.Attribute):

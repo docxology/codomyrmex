@@ -1,7 +1,7 @@
 """Unit tests for pipeline enhancement features and configuration parsing."""
 
 import json
-from datetime import datetime, timezone
+from datetime import datetime, timezone, UTC
 
 import pytest
 
@@ -275,12 +275,12 @@ class TestJobStepExecutionTracking:
         assert job.status == JobStatus.PENDING
 
         job.status = JobStatus.RUNNING
-        job.start_time = datetime.now(timezone.utc)
+        job.start_time = datetime.now(UTC)
         assert job.status == JobStatus.RUNNING
         assert job.start_time is not None
 
         job.status = JobStatus.SUCCESS
-        job.end_time = datetime.now(timezone.utc)
+        job.end_time = datetime.now(UTC)
         assert job.status == JobStatus.SUCCESS
         assert job.end_time is not None
 

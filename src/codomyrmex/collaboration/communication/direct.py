@@ -5,7 +5,6 @@ Provides request-response patterns and direct agent-to-agent messaging.
 """
 
 import asyncio
-import logging
 import uuid
 from collections.abc import Awaitable, Callable
 from dataclasses import dataclass, field
@@ -14,8 +13,9 @@ from typing import Any
 
 from ..exceptions import MessageDeliveryError
 from ..protocols import AgentMessage, MessageType
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 
 @dataclass
@@ -48,7 +48,6 @@ class DirectMessenger:
     """
 
     def __init__(self, default_timeout: float = 30.0):
-        """Initialize this instance."""
         self._handlers: dict[str, Callable[[AgentMessage], Awaitable[Any]]] = {}
         self._pending_requests: dict[str, PendingRequest] = {}
         self._default_timeout = default_timeout
@@ -201,7 +200,7 @@ class DirectMessenger:
             # Otherwise wait for explicit response
             return await asyncio.wait_for(future, timeout)
 
-        except asyncio.TimeoutError:
+        except TimeoutError:
             raise
         except Exception as e:
             raise MessageDeliveryError(
@@ -278,7 +277,7 @@ class DirectMessenger:
         for rid in expired:
             req = self._pending_requests.pop(rid)
             if not req.future.done():
-                req.future.set_exception(asyncio.TimeoutError("Request expired"))
+                req.future.set_exception(TimeoutError("Request expired"))
 
         return len(expired)
 
@@ -291,7 +290,6 @@ class ConversationTracker:
     """
 
     def __init__(self):
-        """Initialize this instance."""
         self._conversations: dict[str, list[AgentMessage]] = {}
         self._agent_conversations: dict[str, set[str]] = {}
 

@@ -6,7 +6,6 @@ establishing communication pathways between agents.
 """
 
 import asyncio
-import logging
 import uuid
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
@@ -16,8 +15,9 @@ from typing import Any
 
 from ..exceptions import ChannelError
 from ..protocols import AgentMessage
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 
 class ChannelState(Enum):
@@ -59,7 +59,6 @@ class Channel(ABC):
     """
 
     def __init__(self, channel_id: str | None = None, name: str = "Channel"):
-        """Initialize this instance."""
         self._channel_id = channel_id or str(uuid.uuid4())
         self._name = name
         self._state = ChannelState.OPEN
@@ -68,7 +67,6 @@ class Channel(ABC):
 
     @property
     def channel_id(self) -> str:
-        """channel Id ."""
         return self._channel_id
 
     @property
@@ -124,7 +122,6 @@ class MessageQueue:
     """
 
     def __init__(self, max_size: int = 0, message_ttl: float = 0):
-        """Initialize this instance."""
         self._queue: asyncio.Queue = asyncio.Queue(maxsize=max_size) if max_size > 0 else asyncio.Queue()
         self._max_size = max_size
         self._message_ttl = message_ttl
@@ -162,7 +159,7 @@ class MessageQueue:
             else:
                 await self._queue.put(message)
             self._message_count += 1
-        except asyncio.TimeoutError:
+        except TimeoutError:
             raise ChannelError(
                 "message_queue",
                 f"Queue is full, timeout after {timeout}s"
@@ -203,7 +200,7 @@ class MessageQueue:
                     return await self.get(timeout)
 
             return message
-        except asyncio.TimeoutError:
+        except TimeoutError:
             raise ChannelError(
                 "message_queue",
                 f"No message available, timeout after {timeout}s"
@@ -243,7 +240,6 @@ class QueueChannel(Channel):
         max_size: int = 1000,
         message_ttl: float = 0,
     ):
-        """Initialize this instance."""
         super().__init__(channel_id, name)
         self._queue = MessageQueue(max_size, message_ttl)
 
@@ -264,7 +260,6 @@ class QueueChannel(Channel):
         return await self._queue.get(timeout)
 
     def get_info(self) -> ChannelInfo:
-        """get Info ."""
         return ChannelInfo(
             channel_id=self._channel_id,
             name=self._name,
@@ -284,7 +279,6 @@ class ChannelManager:
     """
 
     def __init__(self):
-        """Initialize this instance."""
         self._channels: dict[str, Channel] = {}
 
     def create_channel(

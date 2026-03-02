@@ -10,7 +10,7 @@ import json
 import re
 import uuid
 from dataclasses import dataclass, field
-from datetime import datetime, timezone
+from datetime import datetime, timezone, UTC
 from pathlib import Path
 from typing import Any
 
@@ -38,7 +38,6 @@ class SBOMComponent:
     scope: str = "required"
 
     def __post_init__(self) -> None:
-        """post Init ."""
         if not self.purl and self.name:
             version_part = f"@{self.version}" if self.version else ""
             self.purl = f"pkg:pypi/{self.name.lower()}{version_part}"
@@ -71,15 +70,13 @@ class SBOMDocument:
     timestamp: str = ""
 
     def __post_init__(self) -> None:
-        """post Init ."""
         if not self.serial_number:
             self.serial_number = f"urn:uuid:{uuid.uuid4()}"
         if not self.timestamp:
-            self.timestamp = datetime.now(timezone.utc).isoformat()
+            self.timestamp = datetime.now(UTC).isoformat()
 
     @property
     def component_count(self) -> int:
-        """component Count ."""
         return len(self.components)
 
     def to_cyclonedx(self) -> dict[str, Any]:

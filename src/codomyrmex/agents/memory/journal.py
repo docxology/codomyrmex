@@ -33,7 +33,6 @@ class JournalEntry:
     timestamp: float = 0.0
 
     def __post_init__(self) -> None:
-        """post Init ."""
         if not self.timestamp:
             self.timestamp = time.time()
 
@@ -59,7 +58,6 @@ class LearningJournal:
     """
 
     def __init__(self) -> None:
-        """Initialize this instance."""
         self._entries: list[JournalEntry] = []
 
     def record(
@@ -84,11 +82,9 @@ class LearningJournal:
         return len(self._entries)
 
     def by_topic(self, topic: str) -> list[JournalEntry]:
-        """by Topic ."""
         return [e for e in self._entries if e.topic == topic]
 
     def by_tag(self, tag: str) -> list[JournalEntry]:
-        """by Tag ."""
         return [e for e in self._entries if tag in e.tags]
 
     def detect_patterns(self) -> dict[str, Any]:
@@ -110,7 +106,6 @@ class LearningJournal:
         return self._entries[-n:]
 
     def high_confidence(self, threshold: float = 0.8) -> list[JournalEntry]:
-        """high Confidence ."""
         return [e for e in self._entries if e.confidence >= threshold]
 
 

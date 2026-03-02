@@ -45,7 +45,6 @@ class EventFilter:
     """Filter contract events with a fluent API."""
 
     def __init__(self) -> None:
-        """Initialize this instance."""
         self._event_name: str | None = None
         self._from_block: int = 0
         self._to_block: int | None = None
@@ -58,12 +57,10 @@ class EventFilter:
         return self
 
     def from_block(self, block: int) -> EventFilter:
-        """from Block ."""
         self._from_block = block
         return self
 
     def to_block(self, block: int) -> EventFilter:
-        """to Block ."""
         self._to_block = block
         return self
 
@@ -97,7 +94,6 @@ class EventLog:
     """Collect, query, and aggregate contract events."""
 
     def __init__(self) -> None:
-        """Initialize this instance."""
         self._events: list[ContractEvent] = []
 
     def add(self, event: ContractEvent) -> None:
@@ -105,7 +101,6 @@ class EventLog:
         self._events.append(event)
 
     def add_many(self, events: list[ContractEvent]) -> None:
-        """add Many ."""
         self._events.extend(events)
 
     def query(self, filter: EventFilter | None = None) -> list[ContractEvent]:

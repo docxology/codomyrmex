@@ -52,7 +52,6 @@ class EncryptedEntry:
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> EncryptedEntry:
-        """from Dict ."""
         return cls(**data)
 
 

@@ -62,7 +62,6 @@ class ClassifiedError:
     confidence: float = 1.0
 
     def __post_init__(self) -> None:
-        """post Init ."""
         if not self.suggested_strategies:
             self.suggested_strategies = list(RECOVERY_MAP.get(self.category, []))
 

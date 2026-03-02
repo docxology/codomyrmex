@@ -7,7 +7,6 @@ for SQLite, PostgreSQL, and generic SQL databases.
 from __future__ import annotations
 
 import json
-import logging
 import shutil
 import subprocess
 import time
@@ -15,8 +14,9 @@ from dataclasses import dataclass, field
 from enum import Enum
 from pathlib import Path
 from typing import Any
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 
 class BackupFormat(Enum):
@@ -61,20 +61,17 @@ class DatabaseBackup:
     """
 
     def __init__(self, backup_dir: Path) -> None:
-        """Initialize this instance."""
         self._backup_dir = backup_dir
         self._backup_dir.mkdir(parents=True, exist_ok=True)
         self._manifest_path = self._backup_dir / "manifest.json"
         self._manifest: list[dict[str, Any]] = self._load_manifest()
 
     def _load_manifest(self) -> list[dict[str, Any]]:
-        """load Manifest ."""
         if self._manifest_path.exists():
             return json.loads(self._manifest_path.read_text())
         return []
 
     def _save_manifest(self) -> None:
-        """save Manifest ."""
         self._manifest_path.write_text(json.dumps(self._manifest, indent=2))
 
     def backup_sqlite(self, db_path: Path, backup_name: str | None = None) -> BackupMetadata:
@@ -154,11 +151,9 @@ class DatabaseBackup:
         return True
 
     def list_backups(self) -> list[dict[str, Any]]:
-        """list Backups ."""
         return list(self._manifest)
 
     def _find_backup(self, backup_id: str) -> dict[str, Any] | None:
-        """find Backup ."""
         for entry in self._manifest:
             if entry["backup_id"] == backup_id:
                 return entry

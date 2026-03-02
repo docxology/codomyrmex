@@ -51,7 +51,6 @@ class DistillationPipeline:
         self,
         config: DistillationConfig | None = None,
     ) -> None:
-        """Initialize this instance."""
         self._config = config or DistillationConfig()
         self._seen_prompts: set[str] = set()
 

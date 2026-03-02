@@ -28,7 +28,7 @@ import os
 import time
 import uuid
 from dataclasses import asdict, dataclass, field
-from datetime import datetime, timezone
+from datetime import datetime, timezone, UTC
 from pathlib import Path
 from typing import Any
 
@@ -74,7 +74,7 @@ class RelayMessage:
         cursor: Line number in the JSONL file (set on read).
     """
     id: str = field(default_factory=lambda: str(uuid.uuid4()))
-    timestamp: str = field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
+    timestamp: str = field(default_factory=lambda: datetime.now(UTC).isoformat())
     sender: str = ""
     msg_type: str = MSG_CHAT
     content: str = ""
@@ -111,17 +111,14 @@ class RelayMessage:
 
     @property
     def is_chat(self) -> bool:
-        """is Chat ."""
         return self.msg_type == MSG_CHAT
 
     @property
     def is_tool_request(self) -> bool:
-        """is Tool Request ."""
         return self.msg_type == MSG_TOOL_REQUEST
 
     @property
     def is_tool_result(self) -> bool:
-        """is Tool Result ."""
         return self.msg_type == MSG_TOOL_RESULT
 
 

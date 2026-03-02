@@ -69,7 +69,6 @@ class RelayEndpoint:
         model: str | None = None,
         scheduler_config: Any | None = None,
     ) -> None:
-        """Initialize this instance."""
         self.relay = AgentRelay(channel_id)
         self.identity = identity
         self.poll_interval = poll_interval

@@ -47,7 +47,6 @@ class ModelRegistry:
     """
 
     def __init__(self, store: ModelStore | None = None):
-        """Initialize this instance."""
         self.store = store or InMemoryModelStore()
         self._models: dict[str, RegisteredModel] = {}
         self._lock = threading.Lock()

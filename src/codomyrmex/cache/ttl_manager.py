@@ -1,17 +1,16 @@
 """TTL manager for periodic cache cleanup."""
 
-import logging
 import threading
 import time
 from typing import Any
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 class TTLManager:
     """Periodically cleans up expired keys from a cache."""
 
     def __init__(self, cleanup_interval: int = 60):
-        """Initialize this instance."""
         self.cleanup_interval = cleanup_interval
         self._cache_registry: set[Any] = set()
         self._stop_event = threading.Event()

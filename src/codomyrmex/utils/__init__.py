@@ -16,7 +16,6 @@ Submodules:
 import functools
 import hashlib
 import json
-import logging
 import os
 import time
 from collections.abc import Callable
@@ -24,7 +23,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any, Optional, TypeVar, Union
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 # Import subprocess utilities
 from .process.subprocess import (
@@ -306,6 +305,7 @@ from .process.script_base import (
     ScriptResult,
     run_script,
 )
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 __all__ = [
     "i18n",

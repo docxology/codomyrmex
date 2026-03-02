@@ -91,7 +91,6 @@ class RollingDeployment(DeploymentStrategy):
         delay_seconds: float = 5.0,
         health_check: Callable[[DeploymentTarget], bool] | None = None,
     ):
-        """Initialize this instance."""
         self.batch_size = batch_size
         self.delay_seconds = delay_seconds
         self.health_check = health_check
@@ -169,7 +168,6 @@ class BlueGreenDeployment(DeploymentStrategy):
         switch_fn: Callable[[str], bool] | None = None,
         health_check: Callable[[DeploymentTarget], bool] | None = None,
     ):
-        """Initialize this instance."""
         self.switch_fn = switch_fn
         self.health_check = health_check
 
@@ -261,7 +259,6 @@ class CanaryDeployment(DeploymentStrategy):
         health_check: Callable[[DeploymentTarget], bool] | None = None,
         success_threshold: float = 0.95,
     ):
-        """Initialize this instance."""
         self.stages = stages or [10, 25, 50, 100]
         self.stage_duration = stage_duration_seconds
         self.health_check = health_check

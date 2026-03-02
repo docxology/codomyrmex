@@ -19,7 +19,6 @@ class DocumentsConfig:
         cache_directory: Path | None = None,
         strict_validation: bool = False,
     ):
-        """Initialize this instance."""
         self.default_encoding = default_encoding
         self.max_file_size = max_file_size
         self.enable_caching = enable_caching

@@ -51,7 +51,6 @@ class Edge:
     id: str = field(default="")
 
     def __post_init__(self):
-        """post Init ."""
         if not self.id:
             # Deterministic ID for undirected edge check
             s, t = sorted([self.source, self.target])
@@ -71,11 +70,9 @@ class Graph:
     topology: NetworkTopology = NetworkTopology.RANDOM
 
     def add_node(self, node: Node):
-        """add Node ."""
         self.nodes[node.id] = node
 
     def add_edge(self, edge: Edge):
-        """add Edge ."""
         self.edges.append(edge)
         if edge.source in self.nodes:
             self.nodes[edge.source].connections.add(edge.target)

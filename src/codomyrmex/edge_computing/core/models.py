@@ -15,7 +15,7 @@ import hashlib
 import json
 from collections.abc import Callable
 from dataclasses import dataclass, field
-from datetime import datetime, timezone
+from datetime import datetime, timezone, UTC
 from enum import Enum
 from typing import Any
 
@@ -40,14 +40,12 @@ class ResourceUsage:
 
     @property
     def memory_percent(self) -> float:
-        """memory Percent ."""
         if self.memory_max_mb <= 0:
             return 0.0
         return (self.memory_mb / self.memory_max_mb) * 100
 
     @property
     def is_overloaded(self) -> bool:
-        """is Overloaded ."""
         return self.cpu_percent > 90 or self.memory_percent > 90
 
 
@@ -60,27 +58,24 @@ class EdgeNode:
     status: EdgeNodeStatus = EdgeNodeStatus.ONLINE
     capabilities: list[str] = field(default_factory=list)
     metadata: dict[str, Any] = field(default_factory=dict)
-    last_heartbeat: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
+    last_heartbeat: datetime = field(default_factory=lambda: datetime.now(UTC))
     resources: ResourceUsage = field(default_factory=ResourceUsage)
     max_functions: int = 10
 
     def heartbeat(self) -> None:
         """Update the last heartbeat timestamp."""
-        self.last_heartbeat = datetime.now(timezone.utc)
+        self.last_heartbeat = datetime.now(UTC)
 
     @property
     def seconds_since_heartbeat(self) -> float:
-        """seconds Since Heartbeat ."""
-        delta = datetime.now(timezone.utc) - self.last_heartbeat
+        delta = datetime.now(UTC) - self.last_heartbeat
         return delta.total_seconds()
 
     @property
     def is_healthy(self) -> bool:
-        """is Healthy ."""
         return self.status == EdgeNodeStatus.ONLINE and self.seconds_since_heartbeat < 60
 
     def has_capability(self, capability: str) -> bool:
-        """has Capability ."""
         return capability in self.capabilities
 
     def to_dict(self) -> dict[str, Any]:
@@ -117,12 +112,11 @@ class EdgeDeployment:
     """Assignment of a function to a node."""
     function_id: str
     node_id: str
-    deployed_at: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
+    deployed_at: datetime = field(default_factory=lambda: datetime.now(UTC))
     active: bool = True
     invocations: int = 0
 
     def record_invocation(self) -> None:
-        """record Invocation ."""
         self.invocations += 1
 
 
@@ -132,11 +126,10 @@ class SyncState:
     version: int
     data: dict[str, Any]
     checksum: str
-    updated_at: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
+    updated_at: datetime = field(default_factory=lambda: datetime.now(UTC))
 
     @classmethod
     def from_data(cls, data: dict[str, Any], version: int) -> SyncState:
-        """from Data ."""
         checksum = hashlib.md5(json.dumps(data, sort_keys=True).encode()).hexdigest()
         return cls(version=version, data=data, checksum=checksum)
 

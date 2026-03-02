@@ -141,7 +141,6 @@ class ExactMatchScorer(Scorer):
     """Score based on exact match."""
 
     def __init__(self, case_sensitive: bool = False):
-        """Initialize this instance."""
         self.case_sensitive = case_sensitive
 
     def score(self, output: str, expected: str | None = None) -> float:
@@ -158,7 +157,6 @@ class ContainsScorer(Scorer):
     """Score based on whether output contains expected text."""
 
     def __init__(self, case_sensitive: bool = False):
-        """Initialize this instance."""
         self.case_sensitive = case_sensitive
 
     def score(self, output: str, expected: str | None = None) -> float:
@@ -175,7 +173,6 @@ class LengthScorer(Scorer):
     """Score based on output length relative to target."""
 
     def __init__(self, target_length: int, tolerance: float = 0.3):
-        """Initialize this instance."""
         self.target_length = target_length
         self.tolerance = tolerance
 
@@ -238,7 +235,6 @@ class AgentBenchmark(Generic[T]):
         scorer: Scorer | None = None,
         include_cost: bool = True,
     ):
-        """Initialize this instance."""
         self.test_cases: list[TestCase] = []
         self.scorer = scorer or ContainsScorer()
         self.include_cost = include_cost

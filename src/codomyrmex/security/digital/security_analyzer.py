@@ -146,7 +146,6 @@ class ASTSecurityAnalyzer(ast.NodeVisitor):
     """AST visitor for security analysis."""
 
     def __init__(self, filepath: str):
-        """Initialize this instance."""
         self.filepath = filepath
         self.findings: list[SecurityFinding] = []
 

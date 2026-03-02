@@ -89,7 +89,6 @@ class WasmtimeClient(WASMRuntimeClient):
     """Wasmtime runtime client (mock implementation for structure)."""
 
     def __init__(self):
-        """Initialize this instance."""
         self._instances: dict[str, WASMInstance] = {}
         self._counter = 0
         self._lock = threading.Lock()
@@ -152,7 +151,6 @@ class WASMOrchestrator:
     """Orchestrate WASM containers."""
 
     def __init__(self):
-        """Initialize this instance."""
         self._runtimes: dict[WASMRuntime, WASMRuntimeClient] = {}
         self._modules: dict[str, WASMModule] = {}
 
@@ -202,7 +200,6 @@ class WASMComponentModel:
     """Support for WASM Component Model (interface types)."""
 
     def __init__(self):
-        """Initialize this instance."""
         self._interfaces: dict[str, dict[str, Any]] = {}
 
     def define_interface(

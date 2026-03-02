@@ -16,7 +16,6 @@ Example:
     >>> # Subclass IDEClient for specific IDE implementations
 """
 
-import logging
 import time
 from abc import ABC, abstractmethod
 from collections.abc import Callable
@@ -213,7 +212,7 @@ class IDEClient(ABC):
         try:
             line_count = len(file_path.read_text().splitlines())
         except Exception as e:
-            logging.getLogger(__name__).warning("Could not read line count for %s: %s", path, e)
+            get_logger(__name__).warning("Could not read line count for %s: %s", path, e)
             line_count = None
 
         return FileInfo(
@@ -236,7 +235,7 @@ class IDEClient(ABC):
                 try:
                     handler(data)
                 except Exception as e:
-                    logging.getLogger(__name__).warning("Event handler failed for %r: %s", event, e)
+                    get_logger(__name__).warning("Event handler failed for %r: %s", event, e)
 
     def clear_command_history(self) -> None:
         """Clear the command execution history."""
@@ -268,6 +267,7 @@ from codomyrmex.exceptions import (
 
 # Import submodule clients
 from codomyrmex.ide.cursor import CursorClient
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 
 def cli_commands():

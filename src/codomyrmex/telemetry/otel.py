@@ -42,7 +42,6 @@ class Span:
     status: str = "ok"
 
     def __post_init__(self) -> None:
-        """post Init ."""
         if not self.trace_id:
             self.trace_id = uuid.uuid4().hex[:16]
         if not self.span_id:
@@ -52,7 +51,6 @@ class Span:
 
     @property
     def duration_ms(self) -> float:
-        """duration Ms ."""
         if self.end_time:
             return (self.end_time - self.start_time) * 1000
         return 0.0
@@ -88,7 +86,6 @@ class Tracer:
     """
 
     def __init__(self) -> None:
-        """Initialize this instance."""
         self._spans: list[Span] = []
         self._active_trace: str = ""
 
@@ -98,7 +95,6 @@ class Tracer:
         parent: Span | None = None,
         attributes: dict[str, Any] | None = None,
     ) -> Span:
-        """start Span ."""
         trace_id = parent.trace_id if parent else (self._active_trace or uuid.uuid4().hex[:16])
         span = Span(
             name=name,
@@ -116,7 +112,6 @@ class Tracer:
 
     @property
     def span_count(self) -> int:
-        """span Count ."""
         return len(self._spans)
 
     def clear(self) -> None:
@@ -137,7 +132,6 @@ class MetricCounter:
     """
 
     def __init__(self) -> None:
-        """Initialize this instance."""
         self._counters: dict[str, float] = defaultdict(float)
         self._gauges: dict[str, float] = {}
 
@@ -150,11 +144,9 @@ class MetricCounter:
         self._gauges[name] = value
 
     def get_counter(self, name: str) -> float:
-        """get Counter ."""
         return self._counters.get(name, 0.0)
 
     def get_gauge(self, name: str) -> float | None:
-        """get Gauge ."""
         return self._gauges.get(name)
 
     def export(self) -> dict[str, Any]:

@@ -31,7 +31,6 @@ class ExactMatchEvaluator(Evaluator):
     """Evaluator for exact matches."""
 
     def __init__(self, case_sensitive: bool = False) -> None:
-        """Initialize this instance."""
         self.case_sensitive = case_sensitive
 
     def evaluate(self, test_case: PromptTestCase, actual_output: str) -> float:
@@ -48,7 +47,6 @@ class ContainsEvaluator(Evaluator):
     """Evaluator for substring containment with scoring."""
 
     def __init__(self, case_sensitive: bool = False) -> None:
-        """Initialize this instance."""
         self.case_sensitive = case_sensitive
 
     def evaluate(self, test_case: PromptTestCase, actual_output: str) -> float:
@@ -73,7 +71,6 @@ class SimilarityEvaluator(Evaluator):
     """Evaluate output similarity using word-level Jaccard index."""
 
     def __init__(self, case_sensitive: bool = False) -> None:
-        """Initialize this instance."""
         self.case_sensitive = case_sensitive
 
     def evaluate(self, test_case: PromptTestCase, actual_output: str) -> float:
@@ -98,7 +95,6 @@ class LengthEvaluator(Evaluator):
     """Evaluate whether output length falls within expected bounds."""
 
     def __init__(self, min_length: int = 0, max_length: int = 10000) -> None:
-        """Initialize this instance."""
         self.min_length = min_length
         self.max_length = max_length
 
@@ -117,12 +113,10 @@ class RegexEvaluator(Evaluator):
     """Evaluate output against one or more regex patterns."""
 
     def __init__(self, patterns: list[str] | None = None, all_must_match: bool = True) -> None:
-        """Initialize this instance."""
         self._patterns = [re.compile(p) for p in (patterns or [])]
         self.all_must_match = all_must_match
 
     def add_pattern(self, pattern: str) -> None:
-        """add Pattern ."""
         self._patterns.append(re.compile(pattern))
 
     def evaluate(self, test_case: PromptTestCase, actual_output: str) -> float:
@@ -147,7 +141,6 @@ class CompositeEvaluator(Evaluator):
     """
 
     def __init__(self) -> None:
-        """Initialize this instance."""
         self._evaluators: list[tuple[Evaluator, float]] = []
 
     def add(self, evaluator: Evaluator, weight: float = 1.0) -> None:
@@ -172,7 +165,6 @@ class CustomEvaluator(Evaluator):
     """Evaluator using a user-provided function."""
 
     def __init__(self, eval_fn: Callable[[PromptTestCase, str], float]) -> None:
-        """Initialize this instance."""
         self.eval_fn = eval_fn
 
     def evaluate(self, test_case: PromptTestCase, actual_output: str) -> float:

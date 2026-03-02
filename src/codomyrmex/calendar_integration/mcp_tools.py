@@ -5,25 +5,24 @@ as MCP tools, enabling agents to schedule, read, and manage events.
 """
 
 import json
-import logging
 import os
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timedelta, timezone, UTC
 from pathlib import Path
 from typing import Any
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 try:
     from codomyrmex.model_context_protocol.decorators import mcp_tool
 except ImportError:
     def mcp_tool(**kwargs: Any):  # type: ignore
-        """mcp Tool ."""
         def decorator(func: Any) -> Any:
             func._mcp_tool_meta = kwargs
             return func
         return decorator
 
 from codomyrmex.calendar_integration.generics import CalendarEvent
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 # Default attendee injected into every create/update call.
 # Override via CODOMYRMEX_CALENDAR_ATTENDEE env var.
@@ -111,7 +110,7 @@ def calendar_list_events(days_ahead: int = 7) -> dict[str, Any]:
     """
     try:
         provider = _get_provider()
-        now = datetime.now(timezone.utc)
+        now = datetime.now(UTC)
         future = now + timedelta(days=days_ahead)
 
         events = provider.list_events(time_min=now, time_max=future)

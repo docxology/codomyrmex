@@ -8,13 +8,13 @@ from the recorded data.
 
 from __future__ import annotations
 
-import logging
 import uuid
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 
 class AccountType(Enum):
@@ -104,7 +104,6 @@ class Ledger:
     """
 
     def __init__(self, name: str = "General Ledger") -> None:
-        """Initialize this instance."""
         self.name = name
         self.accounts: dict[str, Account] = {}
         self.transactions: list[Transaction] = []

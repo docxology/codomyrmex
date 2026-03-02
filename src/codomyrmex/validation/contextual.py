@@ -50,7 +50,6 @@ class ContextualValidator:
     """
 
     def __init__(self) -> None:
-        """Initialize this instance."""
         self._rules: list[ValidationRule] = []
         self._rule_names: list[str] = []
 
@@ -94,7 +93,6 @@ class ContextualValidator:
 
     @property
     def rule_count(self) -> int:
-        """rule Count ."""
         return len(self._rules)
 
     # ── Built-in Rule Factories ─────────────────────────────────────

@@ -4,13 +4,13 @@ Infomaniak Metering Client.
 Provides usage and billing data retrieval.
 """
 
-import logging
-from datetime import datetime, timezone
+from datetime import datetime, timezone, UTC
 from typing import Any
 
 from ..base import InfomaniakOpenStackBase
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 
 class InfomaniakMeteringClient(InfomaniakOpenStackBase):
@@ -134,7 +134,7 @@ class InfomaniakMeteringClient(InfomaniakOpenStackBase):
             "storage": self.get_storage_usage(),
             "network": self.get_network_usage(),
             "object_storage": self.get_object_storage_usage(),
-            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "timestamp": datetime.now(UTC).isoformat(),
         }
 
     # =========================================================================

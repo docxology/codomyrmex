@@ -22,7 +22,6 @@ class GitOperationError(CodomyrmexError):
         repository_path: str | Path | None = None,
         **kwargs: Any,
     ) -> None:
-        """Initialize this instance."""
         super().__init__(message, **kwargs)
         if git_command:
             self.context["git_command"] = git_command

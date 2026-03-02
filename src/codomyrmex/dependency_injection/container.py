@@ -87,7 +87,6 @@ class Container:
     """
 
     def __init__(self) -> None:
-        """Initialize this instance."""
         self._registry: dict[type[Any], ServiceDescriptor] = {}
         self._lock = threading.RLock()
         self._scope_stack: list[ScopeContext] = []

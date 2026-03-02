@@ -41,7 +41,6 @@ class APISurface:
     """
 
     def __init__(self, contract: APIContract) -> None:
-        """Initialize this instance."""
         self._contract = contract
 
     def analyze(self) -> APISurfaceReport:

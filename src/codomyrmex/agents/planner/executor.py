@@ -54,7 +54,6 @@ class PlanExecutor:
     """
 
     def __init__(self, max_retries: int = 1) -> None:
-        """Initialize this instance."""
         self._max_retries = max_retries
 
     def execute(

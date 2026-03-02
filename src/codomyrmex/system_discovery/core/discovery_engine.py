@@ -149,7 +149,6 @@ class SystemDiscovery:
             inventory = self.scan_system()
 
             def default_serializer(obj):
-                """default Serializer ."""
                 if isinstance(obj, (Path, set)):
                     return str(list(obj) if isinstance(obj, set) else obj)
                 return str(obj)

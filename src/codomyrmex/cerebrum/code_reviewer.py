@@ -72,17 +72,14 @@ class CodeReviewReport:
 
     @property
     def error_count(self) -> int:
-        """error Count ."""
         return sum(1 for f in self.findings if f.severity == "error")
 
     @property
     def warning_count(self) -> int:
-        """warning Count ."""
         return sum(1 for f in self.findings if f.severity == "warning")
 
     @property
     def is_clean(self) -> bool:
-        """is Clean ."""
         return len(self.findings) == 0
 
     def to_dict(self) -> dict[str, Any]:
@@ -117,7 +114,6 @@ class CodeReviewer:
         drift_tracker: ConceptDriftTracker | None = None,
         prompt_selector: AgentPromptSelector | None = None,
     ) -> None:
-        """Initialize this instance."""
         self._detector = detector or AntiPatternDetector()
         self._drift_tracker = drift_tracker or ConceptDriftTracker()
         self._prompt_selector = prompt_selector or AgentPromptSelector()

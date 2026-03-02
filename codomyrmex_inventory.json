@@ -4,7 +4,7 @@
     "version": "0.1.0",
     "root_path": "/Users/mini/Documents/GitHub/codomyrmex",
     "python_version": "3.13.11 (main, Dec  5 2025, 21:16:49) [Clang 21.1.4 ]",
-    "timestamp": "2026-03-01T15:35:03.822425"
+    "timestamp": "2026-03-01T18:00:08.636429"
   },
   "modules": {
     "tool_use": {
@@ -150,7 +150,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 13:57:35"
+      "last_modified": "2026-03-01 17:40:03"
     },
     "ide": {
       "name": "ide",
@@ -275,7 +275,7 @@
           "signature": "class IDEClient",
           "docstring": "Abstract base class for IDE integrations.\n\nAll IDE-specific clients should inherit from this class and implement\nthe required abstract methods to ensure a consistent API across integrations.",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/ide/__init__.py",
-          "line_number": 96,
+          "line_number": 0,
           "is_public": true,
           "dependencies": []
         },
@@ -448,7 +448,7 @@
           "name": "field",
           "module_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/ide",
           "type": "function",
-          "signature": "(*, default=<dataclasses._MISSING_TYPE object at 0x104b72120>, default_factory=<dataclasses._MISSING_TYPE object at 0x104b72120>, init=True, repr=True, hash=None, compare=True, metadata=None, kw_only=<dataclasses._MISSING_TYPE object at 0x104b72120>)",
+          "signature": "(*, default=<dataclasses._MISSING_TYPE object at 0x1051ea120>, default_factory=<dataclasses._MISSING_TYPE object at 0x1051ea120>, init=True, repr=True, hash=None, compare=True, metadata=None, kw_only=<dataclasses._MISSING_TYPE object at 0x1051ea120>)",
           "docstring": "Return an object to identify dataclass fields.\n\ndefault is the default value of the field.  default_factory is a\n0-argument function called to initialize a field's value.  If init\nis true, the field will be a parameter to the class's __init__()\nfunction.  If repr is true, the field will be included in the\nobject's repr().  If hash is true, the field will be included in the\nobject's hash().  If compare is true, the field will be used in\ncomparison functions.  metadata, if specified, must be a map",
           "file_path": "/Users/mini/.local/share/uv/python/cpython-3.13.11-macos-aarch64-none/lib/python3.13/dataclasses.py",
           "line_number": 383,
@@ -493,7 +493,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 14:54:53"
+      "last_modified": "2026-03-01 17:46:42"
     },
     "encryption": {
       "name": "encryption",
@@ -803,7 +803,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 13:57:34"
+      "last_modified": "2026-03-01 17:44:20"
     },
     "feature_flags": {
       "name": "feature_flags",
@@ -959,7 +959,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 13:57:34"
+      "last_modified": "2026-03-01 17:44:20"
     },
     "collaboration": {
       "name": "collaboration",
@@ -1456,7 +1456,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 14:54:53"
+      "last_modified": "2026-03-01 17:44:20"
     },
     "crypto": {
       "name": "crypto",
@@ -1722,7 +1722,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-02-28 17:36:23"
+      "last_modified": "2026-03-01 17:39:06"
     },
     "agentic_memory": {
       "name": "agentic_memory",
@@ -1933,7 +1933,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 13:57:33"
+      "last_modified": "2026-03-01 17:46:42"
     },
     "documentation": {
       "name": "documentation",
@@ -2111,7 +2111,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 13:57:34"
+      "last_modified": "2026-03-01 17:44:20"
     },
     "video": {
       "name": "video",
@@ -2542,7 +2542,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 13:57:35"
+      "last_modified": "2026-03-01 17:44:23"
     },
     "llm": {
       "name": "llm",
@@ -2709,7 +2709,7 @@
           "module_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/llm",
           "type": "function",
           "signature": "(question: str, model: str = 'openrouter/free') -> str",
-          "docstring": "Ask a question to an LLM provider (default: OpenRouter Free Tier).\n\nArgs:\n    question: The prompt/question to ask\n    model: Model to use (default: openrouter/free)\n    \nReturns:\n    The text response from the LLM.",
+          "docstring": "Ask a question to an LLM provider (default: OpenRouter Free Tier).\n\nArgs:\n    question: The prompt/question to ask\n    model: Model to use (default: openrouter/free)\n\nReturns:\n    The text response from the LLM.",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/model_context_protocol/decorators.py",
           "line_number": 139,
           "is_public": true,
@@ -3039,7 +3039,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 14:54:53"
+      "last_modified": "2026-03-01 17:44:21"
     },
     "terminal_interface": {
       "name": "terminal_interface",
@@ -3195,7 +3195,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 13:57:34"
+      "last_modified": "2026-03-01 17:44:21"
     },
     "formal_verification": {
       "name": "formal_verification",
@@ -3406,7 +3406,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 13:57:34"
+      "last_modified": "2026-03-01 17:44:20"
     },
     "meme": {
       "name": "meme",
@@ -4123,7 +4123,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 13:57:34"
+      "last_modified": "2026-03-01 17:40:01"
     },
     "privacy": {
       "name": "privacy",
@@ -4224,7 +4224,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 13:57:34"
+      "last_modified": "2026-03-01 17:40:01"
     },
     "cache": {
       "name": "cache",
@@ -4589,7 +4589,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 13:57:34"
+      "last_modified": "2026-03-01 17:44:20"
     },
     "identity": {
       "name": "identity",
@@ -4723,7 +4723,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 13:57:34"
+      "last_modified": "2026-03-01 17:40:01"
     },
     "relations": {
       "name": "relations",
@@ -4956,7 +4956,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 13:57:34"
+      "last_modified": "2026-03-01 17:40:01"
     },
     "bio_simulation": {
       "name": "bio_simulation",
@@ -5068,7 +5068,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 13:57:34"
+      "last_modified": "2026-03-01 17:40:00"
     },
     "security": {
       "name": "security",
@@ -6181,7 +6181,7 @@
           "module_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/security",
           "type": "function",
           "signature": "(path: str = '.') -> dict[str, typing.Any]",
-          "docstring": "Run a full security scan on the project (vulnerabilities + secrets).\n\nArgs:\n    path: Root path to scan (default: current directory)\n    \nReturns:\n    Structured security report.",
+          "docstring": "Run a full security scan on the project (vulnerabilities + secrets).\n\nArgs:\n    path: Root path to scan (default: current directory)\n\nReturns:\n    Structured security report.",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/model_context_protocol/decorators.py",
           "line_number": 276,
           "is_public": true,
@@ -6225,7 +6225,7 @@
           "module_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/security",
           "type": "function",
           "signature": "(path: str) -> dict[str, typing.Any]",
-          "docstring": "Audit code quality and security for a specific file or directory.\n\nArgs:\n    path: Path to file or directory\n    \nReturns:\n    Audit results.",
+          "docstring": "Audit code quality and security for a specific file or directory.\n\nArgs:\n    path: Path to file or directory\n\nReturns:\n    Audit results.",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/model_context_protocol/decorators.py",
           "line_number": 315,
           "is_public": true,
@@ -6269,7 +6269,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 14:22:33"
+      "last_modified": "2026-03-01 17:44:21"
     },
     "auth": {
       "name": "auth",
@@ -6502,7 +6502,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 13:57:34"
+      "last_modified": "2026-03-01 17:44:19"
     },
     "docs_gen": {
       "name": "docs_gen",
@@ -6647,7 +6647,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 13:57:34"
+      "last_modified": "2026-03-01 17:40:01"
     },
     "static_analysis": {
       "name": "static_analysis",
@@ -6737,7 +6737,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-02-28 17:50:02"
+      "last_modified": "2026-03-01 17:44:21"
     },
     "networking": {
       "name": "networking",
@@ -6895,7 +6895,7 @@
           "signature": "class SSHError",
           "docstring": "Raised when SSH operations fail.\n\nAttributes:\n    message: Error description.\n    host: SSH server host.\n    port: SSH server port.\n    username: Username used for authentication.",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/networking/exceptions.py",
-          "line_number": 240,
+          "line_number": 0,
           "is_public": true,
           "dependencies": []
         },
@@ -7058,7 +7058,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 14:54:53"
+      "last_modified": "2026-03-01 17:44:21"
     },
     "serialization": {
       "name": "serialization",
@@ -7095,7 +7095,7 @@
           "signature": "class BinaryFormatError",
           "docstring": "Raised when binary format operations fail.\n\nAttributes:\n    message: Error description.\n    format: Binary format (MessagePack, Protobuf, Avro, etc.).\n    operation: The operation that failed (pack, unpack, etc.).",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/serialization/exceptions.py",
-          "line_number": 196,
+          "line_number": 0,
           "is_public": true,
           "dependencies": []
         },
@@ -7368,7 +7368,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 13:57:34"
+      "last_modified": "2026-03-01 17:44:21"
     },
     "model_ops": {
       "name": "model_ops",
@@ -7986,7 +7986,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 13:57:34"
+      "last_modified": "2026-03-01 17:44:21"
     },
     "website": {
       "name": "website",
@@ -8109,7 +8109,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 14:54:53"
+      "last_modified": "2026-03-01 17:44:23"
     },
     "tests": {
       "name": "tests",
@@ -8155,7 +8155,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 15:14:53"
+      "last_modified": "2026-03-01 17:39:06"
     },
     "git_analysis": {
       "name": "git_analysis",
@@ -8245,7 +8245,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 13:57:34"
+      "last_modified": "2026-03-01 17:44:20"
     },
     "containerization": {
       "name": "containerization",
@@ -8676,7 +8676,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 14:54:53"
+      "last_modified": "2026-03-01 17:44:20"
     },
     "environment_setup": {
       "name": "environment_setup",
@@ -8799,7 +8799,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 13:57:34"
+      "last_modified": "2026-03-01 17:44:20"
     },
     "simulation": {
       "name": "simulation",
@@ -8856,7 +8856,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 13:57:34"
+      "last_modified": "2026-03-01 17:40:01"
     },
     "plugin_system": {
       "name": "plugin_system",
@@ -9133,7 +9133,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 13:57:34"
+      "last_modified": "2026-03-01 17:44:21"
     },
     "agents": {
       "name": "agents",
@@ -9313,7 +9313,7 @@
           "signature": "class AgenticSeekClient",
           "docstring": "Client for the agenticSeek autonomous agent framework.\n\nagenticSeek is a fully-local alternative to Manus AI that\nautonomously browses the web, writes and executes code, and\nplans complex multi-step tasks\u2014all running on local hardware.\n\nThis client integrates as a ``CLIAgentBase`` and provides:\n\n* CLI invocation via ``uv run cli.py``\n* Docker-based invocation via ``docker compose``\n* ``config.ini`` reading and writing\n* Environment health checks (Docker, Ollama, SearxNG)\n* Heuristic agent routin",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/agents/agentic_seek/agentic_seek_client.py",
-          "line_number": 40,
+          "line_number": 42,
           "is_public": true,
           "dependencies": []
         },
@@ -10202,7 +10202,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 14:54:53"
+      "last_modified": "2026-03-01 17:48:40"
     },
     "utils": {
       "name": "utils",
@@ -10731,7 +10731,7 @@
           "name": "registry",
           "module_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/utils",
           "type": "other",
-          "signature": "<codomyrmex.utils.integration.ModuleRegistry object at 0x10b859550>",
+          "signature": "<codomyrmex.utils.integration.ModuleRegistry object at 0x10b529550>",
           "docstring": "No docstring",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/utils",
           "line_number": 0,
@@ -10919,7 +10919,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 13:57:35"
+      "last_modified": "2026-03-01 17:46:42"
     },
     "release": {
       "name": "release",
@@ -11097,7 +11097,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 13:57:34"
+      "last_modified": "2026-03-01 17:40:01"
     },
     "scrape": {
       "name": "scrape",
@@ -11407,7 +11407,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 13:57:34"
+      "last_modified": "2026-03-01 17:40:01"
     },
     "graph_rag": {
       "name": "graph_rag",
@@ -11574,7 +11574,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 13:57:34"
+      "last_modified": "2026-03-01 17:40:01"
     },
     "templating": {
       "name": "templating",
@@ -11774,7 +11774,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 13:57:34"
+      "last_modified": "2026-03-01 17:44:21"
     },
     "cli": {
       "name": "cli",
@@ -12282,7 +12282,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 14:04:44"
+      "last_modified": "2026-03-01 17:40:00"
     },
     "module_template": {
       "name": "module_template",
@@ -12306,7 +12306,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-02-24 09:17:53"
+      "last_modified": "2026-03-01 17:39:06"
     },
     "exceptions": {
       "name": "exceptions",
@@ -13298,7 +13298,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 13:57:34"
+      "last_modified": "2026-03-01 17:40:01"
     },
     "data_visualization": {
       "name": "data_visualization",
@@ -13850,7 +13850,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 13:57:34"
+      "last_modified": "2026-03-01 17:44:20"
     },
     "vector_store": {
       "name": "vector_store",
@@ -14017,7 +14017,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 13:57:35"
+      "last_modified": "2026-03-01 17:46:42"
     },
     "search": {
       "name": "search",
@@ -14228,7 +14228,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 13:57:34"
+      "last_modified": "2026-03-01 17:40:01"
     },
     "testing": {
       "name": "testing",
@@ -14538,7 +14538,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 13:57:34"
+      "last_modified": "2026-03-01 17:40:02"
     },
     "concurrency": {
       "name": "concurrency",
@@ -14771,7 +14771,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 13:57:34"
+      "last_modified": "2026-03-01 17:44:20"
     },
     "networks": {
       "name": "networks",
@@ -14839,7 +14839,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 13:57:34"
+      "last_modified": "2026-03-01 17:40:01"
     },
     "audio": {
       "name": "audio",
@@ -15204,7 +15204,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 13:57:34"
+      "last_modified": "2026-03-01 17:44:19"
     },
     "edge_computing": {
       "name": "edge_computing",
@@ -15296,7 +15296,7 @@
           "signature": "class EdgeExecutionError",
           "docstring": "Error during edge function execution.",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/edge_computing/core/models.py",
-          "line_number": 149,
+          "line_number": 0,
           "is_public": true,
           "dependencies": []
         },
@@ -15525,7 +15525,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 14:54:53"
+      "last_modified": "2026-03-01 17:44:20"
     },
     "logging_monitoring": {
       "name": "logging_monitoring",
@@ -15736,7 +15736,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 13:57:34"
+      "last_modified": "2026-03-01 17:40:01"
     },
     "config_management": {
       "name": "config_management",
@@ -16046,7 +16046,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 13:57:34"
+      "last_modified": "2026-03-01 17:44:20"
     },
     "prompt_engineering": {
       "name": "prompt_engineering",
@@ -16054,6 +16054,17 @@
       "description": "**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026",
       "version": "0.1.0",
       "capabilities": [
+        {
+          "name": "Any",
+          "module_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/prompt_engineering",
+          "type": "class",
+          "signature": "class Any",
+          "docstring": "Special type indicating an unconstrained type.\n\n- Any is compatible with every type.\n- Any assumed to have all methods.\n- All values assumed to be instances of Any.\n\nNote that all the above statements are true from the point of view of\nstatic type checkers. At runtime, Any should not be used with instance\nchecks.",
+          "file_path": "/Users/mini/.local/share/uv/python/cpython-3.13.11-macos-aarch64-none/lib/python3.13/typing.py",
+          "line_number": 598,
+          "is_public": true,
+          "dependencies": []
+        },
         {
           "name": "CodomyrmexError",
           "module_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/prompt_engineering",
@@ -16127,7 +16138,7 @@
           "signature": "class PromptEngineeringError",
           "docstring": "Raised when prompt engineering operations fail.",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/prompt_engineering/__init__.py",
-          "line_number": 62,
+          "line_number": 64,
           "is_public": true,
           "dependencies": []
         },
@@ -16237,7 +16248,7 @@
           "signature": "() -> 'dict'",
           "docstring": "Return CLI command definitions for the prompt_engineering module.\n\nFollows the codomyrmex cli_commands() discovery convention so that\nthe CLI core can auto-register these commands.",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/prompt_engineering/__init__.py",
-          "line_number": 103,
+          "line_number": 105,
           "is_public": true,
           "dependencies": []
         },
@@ -16281,7 +16292,7 @@
           "signature": "() -> 'list[str]'",
           "docstring": "List available optimization strategies.\n\nReturns:\n    Sorted list of strategy value strings.",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/prompt_engineering/__init__.py",
-          "line_number": 77,
+          "line_number": 79,
           "is_public": true,
           "dependencies": []
         },
@@ -16292,7 +16303,7 @@
           "signature": "() -> 'list[str]'",
           "docstring": "List all templates in the default registry.\n\nReturns:\n    Sorted list of template names.",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/prompt_engineering/__init__.py",
-          "line_number": 67,
+          "line_number": 69,
           "is_public": true,
           "dependencies": []
         },
@@ -16314,7 +16325,7 @@
           "signature": "(prompt: 'str', response: 'str') -> 'dict'",
           "docstring": "Run a quick evaluation of a prompt-response pair using default criteria.\n\nArgs:\n    prompt: The prompt string.\n    response: The model response string.\n\nReturns:\n    Dictionary with per-criterion scores and weighted total.",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/prompt_engineering/__init__.py",
-          "line_number": 87,
+          "line_number": 89,
           "is_public": true,
           "dependencies": []
         },
@@ -16400,7 +16411,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 13:57:34"
+      "last_modified": "2026-03-01 17:40:01"
     },
     "deployment": {
       "name": "deployment",
@@ -16732,7 +16743,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 14:54:53"
+      "last_modified": "2026-03-01 17:44:20"
     },
     "tree_sitter": {
       "name": "tree_sitter",
@@ -16811,7 +16822,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 13:57:35"
+      "last_modified": "2026-03-01 17:44:23"
     },
     "examples": {
       "name": "examples",
@@ -16823,7 +16834,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 13:57:34"
+      "last_modified": "2026-03-01 17:40:01"
     },
     "cloud": {
       "name": "cloud",
@@ -17540,7 +17551,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 13:57:34"
+      "last_modified": "2026-03-01 17:49:13"
     },
     "compression": {
       "name": "compression",
@@ -17795,7 +17806,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 13:57:34"
+      "last_modified": "2026-03-01 17:44:20"
     },
     "wallet": {
       "name": "wallet",
@@ -18050,7 +18061,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 13:57:35"
+      "last_modified": "2026-03-01 17:40:03"
     },
     "api": {
       "name": "api",
@@ -19460,7 +19471,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 13:57:34"
+      "last_modified": "2026-03-01 17:44:19"
     },
     "physical_management": {
       "name": "physical_management",
@@ -19847,7 +19858,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 13:57:34"
+      "last_modified": "2026-03-01 17:44:21"
     },
     "ci_cd_automation": {
       "name": "ci_cd_automation",
@@ -20256,7 +20267,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 14:54:53"
+      "last_modified": "2026-03-01 17:44:20"
     },
     "finance": {
       "name": "finance",
@@ -20445,7 +20456,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 13:57:34"
+      "last_modified": "2026-03-01 17:44:20"
     },
     "coding": {
       "name": "coding",
@@ -21151,7 +21162,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 14:54:53"
+      "last_modified": "2026-03-01 17:44:20"
     },
     "maintenance": {
       "name": "maintenance",
@@ -21210,7 +21221,7 @@
           "signature": "() -> dict[str, typing.Any]",
           "docstring": "Analyze code quality metrics.",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/maintenance/analyze_project.py",
-          "line_number": 102,
+          "line_number": 101,
           "is_public": true,
           "dependencies": []
         },
@@ -21232,7 +21243,7 @@
           "signature": "() -> dict[str, typing.Any]",
           "docstring": "Analyze project dependencies.",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/maintenance/analyze_project.py",
-          "line_number": 71,
+          "line_number": 70,
           "is_public": true,
           "dependencies": []
         },
@@ -21243,7 +21254,7 @@
           "signature": "()",
           "docstring": "Main function to run the analysis.",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/maintenance/analyze_project.py",
-          "line_number": 196,
+          "line_number": 195,
           "is_public": true,
           "dependencies": []
         },
@@ -21254,7 +21265,7 @@
           "signature": "() -> dict[str, typing.Any]",
           "docstring": "Analyze the overall project structure.",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/maintenance/analyze_project.py",
-          "line_number": 27,
+          "line_number": 26,
           "is_public": true,
           "dependencies": []
         },
@@ -21331,7 +21342,7 @@
           "signature": "(structure: dict, deps: dict, quality: dict) -> str",
           "docstring": "Generate an analysis report.",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/maintenance/analyze_project.py",
-          "line_number": 142,
+          "line_number": 141,
           "is_public": true,
           "dependencies": []
         },
@@ -21373,7 +21384,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 13:57:34"
+      "last_modified": "2026-03-01 17:40:01"
     },
     "market": {
       "name": "market",
@@ -21496,7 +21507,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 13:57:34"
+      "last_modified": "2026-03-01 17:40:01"
     },
     "system_discovery": {
       "name": "system_discovery",
@@ -21555,7 +21566,7 @@
           "signature": "class SystemDiscovery",
           "docstring": "Comprehensive system discovery and orchestration for Codomyrmex.\n\nThis class provides the main interface for discovering all modules,\ntheir capabilities, system status, and interactive exploration.\n\nUses DependencyAnalyzer for module metadata extraction and\nSystemHealthChecker for health/status/git operations.",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/system_discovery/core/discovery_engine.py",
-          "line_number": 63,
+          "line_number": 66,
           "is_public": true,
           "dependencies": []
         },
@@ -21630,7 +21641,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 13:57:34"
+      "last_modified": "2026-03-01 17:44:21"
     },
     "database_management": {
       "name": "database_management",
@@ -21962,7 +21973,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 14:54:53"
+      "last_modified": "2026-03-01 17:44:20"
     },
     "skills": {
       "name": "skills",
@@ -22316,7 +22327,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 14:54:53"
+      "last_modified": "2026-03-01 17:44:21"
     },
     "dark": {
       "name": "dark",
@@ -22384,7 +22395,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-02-16 14:22:25"
+      "last_modified": "2026-03-01 17:39:06"
     },
     "embodiment": {
       "name": "embodiment",
@@ -22474,7 +22485,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 13:57:34"
+      "last_modified": "2026-03-01 17:44:20"
     },
     "defense": {
       "name": "defense",
@@ -22542,7 +22553,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 13:57:34"
+      "last_modified": "2026-03-01 17:40:01"
     },
     "model_context_protocol": {
       "name": "model_context_protocol",
@@ -22997,7 +23008,7 @@
           "signature": "() -> None",
           "docstring": "Synchronous entry point.",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/model_context_protocol/transport/main.py",
-          "line_number": 107,
+          "line_number": 106,
           "is_public": true,
           "dependencies": []
         },
@@ -23063,7 +23074,7 @@
           "signature": "() -> None",
           "docstring": "Run the MCP server.",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/model_context_protocol/transport/main.py",
-          "line_number": 52,
+          "line_number": 51,
           "is_public": true,
           "dependencies": []
         },
@@ -23149,7 +23160,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 13:57:34"
+      "last_modified": "2026-03-01 17:44:21"
     },
     "telemetry": {
       "name": "telemetry",
@@ -23437,7 +23448,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 13:57:34"
+      "last_modified": "2026-03-01 17:46:42"
     },
     "documents": {
       "name": "documents",
@@ -24242,7 +24253,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 13:57:34"
+      "last_modified": "2026-03-01 17:40:01"
     },
     "calendar_integration": {
       "name": "calendar_integration",
@@ -24345,7 +24356,7 @@
           "signature": "class GoogleCalendar",
           "docstring": "Google Calendar provider implementation.",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/calendar_integration/gcal/provider.py",
-          "line_number": 29,
+          "line_number": 36,
           "is_public": true,
           "dependencies": []
         },
@@ -24420,7 +24431,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 13:57:34"
+      "last_modified": "2026-03-01 17:44:20"
     },
     "dependency_injection": {
       "name": "dependency_injection",
@@ -24556,7 +24567,7 @@
           "signature": "(fn: 'Callable[..., Any]') -> 'Callable[..., Any]'",
           "docstring": "Decorator that marks a constructor (or any method) for auto-injection.\n\nWhen placed on ``__init__``, the container will inspect the method's\ntype hints and automatically resolve parameters from registered services.\n\nThe decorator stores an InjectMetadata instance under ``__inject__``\non the function. It also resolves type hints eagerly where possible\nand stores them under ``__inject_params__``.\n\nArgs:\n    fn: The function (typically __init__) to mark for injection.\n\nReturns:\n    The original fun",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/dependency_injection/decorators.py",
-          "line_number": 137,
+          "line_number": 0,
           "is_public": true,
           "dependencies": []
         },
@@ -24598,7 +24609,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 13:57:34"
+      "last_modified": "2026-03-01 17:44:20"
     },
     "spatial": {
       "name": "spatial",
@@ -24710,7 +24721,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 13:57:34"
+      "last_modified": "2026-03-01 17:40:02"
     },
     "events": {
       "name": "events",
@@ -24956,7 +24967,7 @@
           "signature": "()",
           "docstring": "get Event Logger .",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/events/handlers/event_logger.py",
-          "line_number": 145,
+          "line_number": 0,
           "is_public": true,
           "dependencies": []
         },
@@ -24967,7 +24978,7 @@
           "signature": "()",
           "docstring": "No docstring",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/events/handlers/event_logger.py",
-          "line_number": 151,
+          "line_number": 0,
           "is_public": true,
           "dependencies": []
         },
@@ -25088,7 +25099,7 @@
           "signature": "(subscriber_id: str) -> bool",
           "docstring": "unsubscribe From Events .",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/events/core/event_bus.py",
-          "line_number": 285,
+          "line_number": 0,
           "is_public": true,
           "dependencies": []
         }
@@ -25097,7 +25108,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 13:57:34"
+      "last_modified": "2026-03-01 17:44:20"
     },
     "performance": {
       "name": "performance",
@@ -25374,7 +25385,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 14:54:53"
+      "last_modified": "2026-03-01 17:44:21"
     },
     "evolutionary_ai": {
       "name": "evolutionary_ai",
@@ -25849,7 +25860,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 13:57:34"
+      "last_modified": "2026-03-01 17:49:57"
     },
     "logistics": {
       "name": "logistics",
@@ -26040,7 +26051,7 @@
           "signature": "class WorkflowManager",
           "docstring": "Manages workflow definitions and execution.",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/logistics/orchestration/project/workflow_manager.py",
-          "line_number": 65,
+          "line_number": 68,
           "is_public": true,
           "dependencies": []
         },
@@ -26137,7 +26148,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 13:57:34"
+      "last_modified": "2026-03-01 17:43:58"
     },
     "email": {
       "name": "email",
@@ -26273,7 +26284,7 @@
           "signature": "class GmailProvider",
           "docstring": "Google Mail provider implementation.",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/email/gmail/provider.py",
-          "line_number": 35,
+          "line_number": 42,
           "is_public": true,
           "dependencies": []
         },
@@ -26370,7 +26381,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 13:57:34"
+      "last_modified": "2026-03-01 17:40:01"
     },
     "cerebrum": {
       "name": "cerebrum",
@@ -26561,7 +26572,7 @@
           "signature": "class FPFCombinatoricsAnalyzer",
           "docstring": "Analyzes all combinatorics of FPF patterns using CEREBRUM.",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/cerebrum/fpf/combinatorics.py",
-          "line_number": 46,
+          "line_number": 47,
           "is_public": true,
           "dependencies": []
         },
@@ -26999,7 +27010,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 13:57:34"
+      "last_modified": "2026-03-01 17:40:00"
     },
     "orchestrator": {
       "name": "orchestrator",
@@ -27936,7 +27947,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 14:54:53"
+      "last_modified": "2026-03-01 17:44:21"
     },
     "validation": {
       "name": "validation",
@@ -28114,7 +28125,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 13:57:35"
+      "last_modified": "2026-03-01 17:44:23"
     },
     "quantum": {
       "name": "quantum",
@@ -28325,7 +28336,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 13:57:34"
+      "last_modified": "2026-03-01 17:40:01"
     },
     "fpf": {
       "name": "fpf",
@@ -28472,7 +28483,7 @@
           "signature": "class FPFVisualizer",
           "docstring": "Visualizer for FPF specifications.",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/fpf/visualization/visualizer.py",
-          "line_number": 15,
+          "line_number": 16,
           "is_public": true,
           "dependencies": []
         },
@@ -28734,7 +28745,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 13:57:34"
+      "last_modified": "2026-03-01 17:40:01"
     },
     "git_operations": {
       "name": "git_operations",
@@ -28903,7 +28914,7 @@
           "signature": "(repository_path: str, output_path: str = None, title: str = None, max_depth: int = 3) -> dict[str, typing.Any]",
           "docstring": "Analyze and visualize repository structure.\n\nArgs:\n    repository_path: Path to the Git repository\n    output_path: Path to save the Mermaid diagram\n    title: Title for the diagram\n    max_depth: Maximum directory depth to analyze\n\nReturns:\n    Dictionary with analysis results and diagram",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/git_operations/api/visualization.py",
-          "line_number": 354,
+          "line_number": 351,
           "is_public": true,
           "dependencies": []
         },
@@ -29035,7 +29046,7 @@
           "signature": "(repository_path: str, output_dir: str = './git_analysis', report_name: str = None, include_png: bool = True, include_mermaid: bool = True) -> dict[str, typing.Any]",
           "docstring": "Create a comprehensive Git analysis report with visualizations.\n\nArgs:\n    repository_path: Path to the Git repository\n    output_dir: Directory to save the report files\n    report_name: Base name for report files (defaults to repo name)\n    include_png: Whether to generate PNG visualizations\n    include_mermaid: Whether to generate Mermaid diagrams\n\nReturns:\n    Dictionary with report status and file paths",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/git_operations/api/visualization.py",
-          "line_number": 44,
+          "line_number": 41,
           "is_public": true,
           "dependencies": []
         },
@@ -29046,7 +29057,7 @@
           "signature": "(workflow_type: str = 'feature_branch', output_path: str = './git_workflow.mmd', title: str = 'Git Workflow') -> dict[str, typing.Any]",
           "docstring": "Create a Git workflow diagram.\n\nArgs:\n    workflow_type: Type of workflow (\"feature_branch\", \"gitflow\", \"github_flow\")\n    output_path: Path to save the Mermaid diagram\n    title: Title for the diagram\n\nReturns:\n    Dictionary with diagram creation status and content",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/git_operations/api/visualization.py",
-          "line_number": 248,
+          "line_number": 245,
           "is_public": true,
           "dependencies": []
         },
@@ -29222,7 +29233,7 @@
           "signature": "(repository_path: str) -> dict[str, typing.Any]",
           "docstring": "Get comprehensive repository metadata for visualization.\n\nArgs:\n    repository_path: Path to the Git repository\n\nReturns:\n    Dictionary with repository metadata",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/git_operations/api/visualization.py",
-          "line_number": 410,
+          "line_number": 407,
           "is_public": true,
           "dependencies": []
         },
@@ -29453,7 +29464,7 @@
           "signature": "(repository_path: str, output_path: str = None, days_back: int = 30, title: str = None) -> dict[str, typing.Any]",
           "docstring": "Create a commit activity visualization.\n\nArgs:\n    repository_path: Path to the Git repository\n    output_path: Path to save the PNG visualization\n    days_back: Number of days back to analyze\n    title: Title for the visualization\n\nReturns:\n    Dictionary with visualization status and details",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/git_operations/api/visualization.py",
-          "line_number": 191,
+          "line_number": 188,
           "is_public": true,
           "dependencies": []
         },
@@ -29464,7 +29475,7 @@
           "signature": "(repository_path: str, output_path: str = None, format_type: str = 'png', title: str = None, max_commits: int = 20) -> dict[str, typing.Any]",
           "docstring": "Create a Git branch visualization.\n\nArgs:\n    repository_path: Path to the Git repository\n    output_path: Path to save the visualization\n    format_type: Output format (\"png\" or \"mermaid\")\n    title: Title for the visualization\n    max_commits: Maximum number of commits to include\n\nReturns:\n    Dictionary with visualization status and details",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/git_operations/api/visualization.py",
-          "line_number": 116,
+          "line_number": 113,
           "is_public": true,
           "dependencies": []
         }
@@ -29473,7 +29484,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 15:07:20"
+      "last_modified": "2026-03-01 17:44:21"
     }
   },
   "system_status": {

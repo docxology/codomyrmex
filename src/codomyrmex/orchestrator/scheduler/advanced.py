@@ -5,7 +5,6 @@ Persistent scheduling and job dependencies.
 """
 
 import json
-import logging
 from collections.abc import Callable
 from dataclasses import dataclass, field
 from datetime import datetime
@@ -14,8 +13,9 @@ from pathlib import Path
 from typing import Any
 
 from . import JobStatus, Scheduler
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 
 class DependencyStatus(Enum):
@@ -39,7 +39,6 @@ class DependencyScheduler(Scheduler):
     """Scheduler with job dependency support."""
 
     def __init__(self, max_workers: int = 4):
-        """Initialize this instance."""
         super().__init__(max_workers)
         self._dependencies: dict[str, JobDependency] = {}
         self._completed_jobs: set[str] = set()
@@ -103,7 +102,6 @@ class PersistentScheduler(Scheduler):
         state_path: str | None = None,
         auto_save: bool = True,
     ):
-        """Initialize this instance."""
         super().__init__(max_workers)
         self._state_path = Path(state_path) if state_path else None
         self._auto_save = auto_save
@@ -193,7 +191,6 @@ class JobPipeline:
     """Define and run job pipelines."""
 
     def __init__(self, scheduler: Scheduler):
-        """Initialize this instance."""
         self._scheduler = scheduler
         self._stages: list[list[Callable]] = []
         self._current_stage = 0

@@ -11,7 +11,7 @@ from __future__ import annotations
 import json
 import uuid
 from dataclasses import asdict, dataclass, field
-from datetime import datetime, timezone
+from datetime import datetime, timezone, UTC
 from enum import Enum
 from typing import Any
 
@@ -52,7 +52,7 @@ class ReasoningStep:
     evidence: list[str] = field(default_factory=list)
     step_type: str = "reasoning"
     timestamp: str = field(
-        default_factory=lambda: datetime.now(timezone.utc).isoformat()
+        default_factory=lambda: datetime.now(UTC).isoformat()
     )
     step_id: str = field(default_factory=lambda: uuid.uuid4().hex[:12])
 
@@ -72,7 +72,7 @@ class ReasoningStep:
             confidence=data.get("confidence", 0.5),
             evidence=data.get("evidence", []),
             step_type=data.get("step_type", "reasoning"),
-            timestamp=data.get("timestamp", datetime.now(timezone.utc).isoformat()),
+            timestamp=data.get("timestamp", datetime.now(UTC).isoformat()),
             step_id=data.get("step_id", uuid.uuid4().hex[:12]),
         )
 
@@ -140,7 +140,7 @@ class ReasoningTrace:
     depth: ThinkingDepth = ThinkingDepth.NORMAL
     trace_id: str = field(default_factory=lambda: uuid.uuid4().hex)
     created_at: str = field(
-        default_factory=lambda: datetime.now(timezone.utc).isoformat()
+        default_factory=lambda: datetime.now(UTC).isoformat()
     )
 
     # ── Computed properties ───────────────────────────────────────
@@ -212,7 +212,7 @@ class ReasoningTrace:
             prompt=data.get("prompt", ""),
             depth=ThinkingDepth(data.get("depth", "normal")),
             trace_id=data.get("trace_id", uuid.uuid4().hex),
-            created_at=data.get("created_at", datetime.now(timezone.utc).isoformat()),
+            created_at=data.get("created_at", datetime.now(UTC).isoformat()),
         )
 
     def to_json(self, indent: int = 2) -> str:

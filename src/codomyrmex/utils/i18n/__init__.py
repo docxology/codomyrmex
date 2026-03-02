@@ -23,7 +23,6 @@ _default_translator: Translator | None = None
 
 
 def init(default_locale: str = "en") -> Translator:
-    """Initialize this instance."""
     global _default_translator
     _default_translator = Translator(Locale.from_string(default_locale))
     return _default_translator

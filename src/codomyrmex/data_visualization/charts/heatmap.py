@@ -125,7 +125,6 @@ class Heatmap:
         figure_size: tuple = None,
         theme=None,
     ):
-        """Initialize this instance."""
         self.data = data or []
         self.x_labels = x_labels
         self.y_labels = y_labels

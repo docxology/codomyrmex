@@ -43,7 +43,6 @@ class ValidationManager:
     """
 
     def __init__(self) -> None:
-        """Initialize this instance."""
         self._validators: dict[str, Callable] = {}
         self._default_validator = Validator()
         self._profiles: dict[str, list[tuple[str, Callable]]] = {}
@@ -152,7 +151,6 @@ class ValidationManager:
 
     @property
     def run_count(self) -> int:
-        """run Count ."""
         return len(self._history)
 
     @property

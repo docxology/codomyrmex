@@ -42,7 +42,6 @@ class ConstraintSolver:
 
     @staticmethod
     def _create_backend(name: str) -> SolverBackend:
-        """create Backend ."""
         if name == "z3":
             try:
                 from .backends.z3_backend import Z3Backend
@@ -55,7 +54,6 @@ class ConstraintSolver:
 
     @property
     def backend_name(self) -> str:
-        """backend Name ."""
         return self._backend.backend_name()
 
     # --- mcp-solver 6-tool interface ---

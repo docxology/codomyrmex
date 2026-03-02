@@ -26,7 +26,6 @@ class SimpleVersion:
     """Simple semantic version implementation."""
 
     def __init__(self, version_str: str):
-        """Initialize this instance."""
         parts = version_str.split('.')
         if len(parts) != 3:
             raise ValueError(f"Invalid semantic version: {version_str}")

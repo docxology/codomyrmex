@@ -70,7 +70,6 @@ class MCPBridge:
         server_info: MCPServerInfo | None = None,
         client_info: MCPClientInfo | None = None,
     ):
-        """Initialize this instance."""
         self.server_info = server_info or MCPServerInfo(name="codomyrmex-mcp")
         self.client_info = client_info or MCPClientInfo(name="codomyrmex-client")
 

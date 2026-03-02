@@ -35,7 +35,6 @@ class StoredEvent:
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> StoredEvent:
-        """from Dict ."""
         return cls(**data)
 
 
@@ -47,13 +46,11 @@ class EventStore:
     """
 
     def __init__(self, store_path: Path) -> None:
-        """Initialize this instance."""
         self._path = store_path
         self._path.parent.mkdir(parents=True, exist_ok=True)
         self._sequence = self._load_last_sequence()
 
     def _load_last_sequence(self) -> int:
-        """load Last Sequence ."""
         if not self._path.exists():
             return 0
         last_seq = 0
@@ -130,5 +127,4 @@ class EventStore:
 
     @property
     def event_count(self) -> int:
-        """event Count ."""
         return self._sequence

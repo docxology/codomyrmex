@@ -84,7 +84,6 @@ class ToolRegistry:
     """
 
     def __init__(self) -> None:
-        """Initialize this instance."""
         self._tools: dict[str, ToolEntry] = {}
 
     # ------------------------------------------------------------------

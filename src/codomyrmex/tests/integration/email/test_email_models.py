@@ -1,7 +1,7 @@
 """Tests for the email module."""
 
 import os
-from datetime import datetime, timezone
+from datetime import datetime, timezone, UTC
 
 import pytest
 
@@ -23,7 +23,7 @@ pytestmark = pytest.mark.skipif(
 
 def test_email_models():
     """Test that the generic Email models instantiate correctly."""
-    now = datetime.now(timezone.utc)
+    now = datetime.now(UTC)
 
     sender = EmailAddress(name="Alice", email="alice@example.com")
     recipient = EmailAddress(name="Bob", email="bob@example.com")

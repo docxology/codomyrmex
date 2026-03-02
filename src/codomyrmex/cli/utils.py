@@ -5,7 +5,6 @@ try:
     from codomyrmex.logging_monitoring.core.logger_config import get_logger
 except ImportError:
     def get_logger(name: str) -> logging.Logger:
-        """get Logger ."""
         return logging.getLogger(name)
 
 try:
@@ -37,22 +36,18 @@ def get_formatter() -> Any | None:
     return None
 
 def print_success(msg: str):
-    """print Success ."""
     formatter = get_formatter()
     print(formatter.success(msg) if formatter else f"✅ {msg}")
 
 def print_error(msg: str):
-    """print Error ."""
     formatter = get_formatter()
     print(formatter.error(msg) if formatter else f"❌ {msg}")
 
 def print_warning(msg: str):
-    """print Warning ."""
     formatter = get_formatter()
     print(formatter.warning(msg) if formatter else f"⚠️  {msg}")
 
 def print_header(msg: str, char: str = "=", length: int = 60):
-    """print Header ."""
     formatter = get_formatter()
     if formatter:
         print(formatter.header(msg, char, length))

@@ -83,7 +83,6 @@ class Icon:
 
     @classmethod
     def from_dict(cls, data: dict[str, Any] | None) -> Optional["Icon"]:
-        """from Dict ."""
 
         if not data:
             return None
@@ -104,7 +103,6 @@ class Image:
 
     @classmethod
     def from_dict(cls, data: dict[str, Any] | None) -> Optional["Image"]:
-        """from Dict ."""
 
         if not data:
             return None
@@ -127,7 +125,6 @@ class WorkspaceReference:
 
     @classmethod
     def from_dict(cls, data: dict[str, Any] | None) -> Optional["WorkspaceReference"]:
-        """from Dict ."""
 
         if not data:
             return None
@@ -150,7 +147,6 @@ class FolderReference:
 
     @classmethod
     def from_dict(cls, data: dict[str, Any] | None) -> Optional["FolderReference"]:
-        """from Dict ."""
 
         if not data:
             return None
@@ -172,7 +168,6 @@ class DocSize:
 
     @classmethod
     def from_dict(cls, data: dict[str, Any] | None) -> Optional["DocSize"]:
-        """from Dict ."""
 
         if not data:
             return None
@@ -195,7 +190,6 @@ class PageReference:
 
     @classmethod
     def from_dict(cls, data: dict[str, Any] | None) -> Optional["PageReference"]:
-        """from Dict ."""
 
         if not data:
             return None
@@ -220,7 +214,6 @@ class TableReference:
 
     @classmethod
     def from_dict(cls, data: dict[str, Any] | None) -> Optional["TableReference"]:
-        """from Dict ."""
 
         if not data:
             return None
@@ -243,7 +236,6 @@ class ColumnReference:
 
     @classmethod
     def from_dict(cls, data: dict[str, Any] | None) -> Optional["ColumnReference"]:
-        """from Dict ."""
 
         if not data:
             return None
@@ -281,7 +273,6 @@ class Doc:
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> "Doc":
-        """from Dict ."""
 
         return cls(
             id=data.get("id", ""),
@@ -314,7 +305,6 @@ class DocList:
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> "DocList":
-        """from Dict ."""
 
         return cls(
             items=[Doc.from_dict(item) for item in data.get("items", [])],
@@ -332,7 +322,6 @@ class PersonValue:
 
     @classmethod
     def from_dict(cls, data: dict[str, Any] | None) -> Optional["PersonValue"]:
-        """from Dict ."""
 
         if not data:
             return None
@@ -366,7 +355,6 @@ class Page:
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> "Page":
-        """from Dict ."""
 
         children_data = data.get("children", [])
         children = [PageReference.from_dict(c) for c in children_data if c]
@@ -406,7 +394,6 @@ class PageList:
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> "PageList":
-        """from Dict ."""
 
         return cls(
             items=[Page.from_dict(item) for item in data.get("items", [])],
@@ -425,7 +412,6 @@ class PageContentItem:
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> "PageContentItem":
-        """from Dict ."""
 
         return cls(
             id=data.get("id", ""),
@@ -442,7 +428,6 @@ class Sort:
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> "Sort":
-        """from Dict ."""
 
         return cls(
             column=ColumnReference.from_dict(data.get("column")) or ColumnReference(id=""),
@@ -471,7 +456,6 @@ class Table:
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> "Table":
-        """from Dict ."""
 
         sorts_data = data.get("sorts", [])
         sorts = [Sort.from_dict(s) for s in sorts_data] if sorts_data else None
@@ -505,7 +489,6 @@ class TableList:
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> "TableList":
-        """from Dict ."""
 
         return cls(
             items=[Table.from_dict(item) for item in data.get("items", [])],
@@ -531,7 +514,6 @@ class Column:
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> "Column":
-        """from Dict ."""
 
         return cls(
             id=data.get("id", ""),
@@ -557,7 +539,6 @@ class ColumnList:
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> "ColumnList":
-        """from Dict ."""
 
         return cls(
             items=[Column.from_dict(item) for item in data.get("items", [])],
@@ -583,7 +564,6 @@ class Row:
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> "Row":
-        """from Dict ."""
 
         return cls(
             id=data.get("id", ""),
@@ -610,7 +590,6 @@ class RowList:
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> "RowList":
-        """from Dict ."""
 
         return cls(
             items=[Row.from_dict(item) for item in data.get("items", [])],
@@ -657,7 +636,6 @@ class Formula:
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> "Formula":
-        """from Dict ."""
         return cls(
             id=data.get("id", ""),
             type=data.get("type", "formula"),
@@ -678,7 +656,6 @@ class FormulaList:
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> "FormulaList":
-        """from Dict ."""
 
         return cls(
             items=[Formula.from_dict(item) for item in data.get("items", [])],
@@ -701,7 +678,6 @@ class Control:
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> "Control":
-        """from Dict ."""
 
         return cls(
             id=data.get("id", ""),
@@ -724,7 +700,6 @@ class ControlList:
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> "ControlList":
-        """from Dict ."""
 
         return cls(
             items=[Control.from_dict(item) for item in data.get("items", [])],
@@ -746,7 +721,6 @@ class Principal:
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> "Principal":
-        """from Dict ."""
 
         return cls(
             type=data.get("type", ""),
@@ -771,7 +745,6 @@ class Permission:
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> "Permission":
-        """from Dict ."""
 
         return cls(
             id=data.get("id", ""),
@@ -790,7 +763,6 @@ class PermissionList:
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> "PermissionList":
-        """from Dict ."""
 
         return cls(
             items=[Permission.from_dict(item) for item in data.get("items", [])],
@@ -810,7 +782,6 @@ class SharingMetadata:
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> "SharingMetadata":
-        """from Dict ."""
 
         return cls(
             can_share=data.get("canShare", False),
@@ -829,7 +800,6 @@ class ACLSettings:
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> "ACLSettings":
-        """from Dict ."""
 
         return cls(
             allow_editors_to_change_permissions=data.get("allowEditorsToChangePermissions", False),
@@ -856,7 +826,6 @@ class User:
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> "User":
-        """from Dict ."""
 
         return cls(
             name=data.get("name", ""),
@@ -882,7 +851,6 @@ class MutationStatus:
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> "MutationStatus":
-        """from Dict ."""
 
         return cls(
             completed=data.get("completed", False),
@@ -898,7 +866,6 @@ class InsertRowsResult:
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> "InsertRowsResult":
-        """from Dict ."""
         return cls(
             request_id=data.get("requestId", ""),
             added_row_ids=data.get("addedRowIds"),

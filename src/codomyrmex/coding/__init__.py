@@ -98,7 +98,6 @@ from .sandbox import (
 def cli_commands():
     """Return CLI commands for the coding module."""
     def _list_languages():
-        """list Languages ."""
         print("Supported languages:")
         for lang in sorted(SUPPORTED_LANGUAGES):
             print(f"  {lang}")

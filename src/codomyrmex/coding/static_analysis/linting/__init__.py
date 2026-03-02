@@ -40,27 +40,22 @@ class LintResult:
 
     @property
     def error_count(self) -> int:
-        """error Count ."""
         return sum(1 for i in self.issues if i.severity == LintSeverity.ERROR)
 
     @property
     def warning_count(self) -> int:
-        """warning Count ."""
         return sum(1 for i in self.issues if i.severity == LintSeverity.WARNING)
 
     @property
     def info_count(self) -> int:
-        """info Count ."""
         return sum(1 for i in self.issues if i.severity == LintSeverity.INFO)
 
     @property
     def has_errors(self) -> bool:
-        """has Errors ."""
         return self.error_count > 0
 
     @property
     def total_issues(self) -> int:
-        """total Issues ."""
         return len(self.issues)
 
 
@@ -85,7 +80,6 @@ class LineLengthRule(LintRule):
     """Check for lines exceeding maximum length."""
 
     def __init__(self, max_length: int = 88):
-        """Initialize this instance."""
         self.max_length = max_length
 
     def check(self, code: str, file_path: str = "") -> list[LintIssue]:
@@ -188,7 +182,6 @@ class Linter:
     """
 
     def __init__(self):
-        """Initialize this instance."""
         self.rules: list[LintRule] = [
             TrailingWhitespaceRule(),
             TodoCommentRule(),

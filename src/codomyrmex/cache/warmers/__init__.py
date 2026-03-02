@@ -7,7 +7,6 @@ Cache pre-population and warming strategies.
 __version__ = "0.1.0"
 
 import concurrent.futures
-import logging
 import threading
 import time
 from abc import ABC, abstractmethod
@@ -16,8 +15,9 @@ from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
 from typing import Any, Dict, Generic, List, Optional, Set, TypeVar
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 T = TypeVar('T')
 K = TypeVar('K')
@@ -75,11 +75,9 @@ class StaticKeyProvider(KeyProvider[K]):
     """Provide a static list of keys."""
 
     def __init__(self, keys: list[K]):
-        """Initialize this instance."""
         self._keys = keys
 
     def get_keys(self) -> list[K]:
-        """get Keys ."""
         return self._keys.copy()
 
 
@@ -87,11 +85,9 @@ class CallableKeyProvider(KeyProvider[K]):
     """Provide keys from a callable."""
 
     def __init__(self, func: Callable[[], list[K]]):
-        """Initialize this instance."""
         self._func = func
 
     def get_keys(self) -> list[K]:
-        """get Keys ."""
         return self._func()
 
 
@@ -108,7 +104,6 @@ class CallableValueLoader(ValueLoader[K, V]):
     """Load values using a callable."""
 
     def __init__(self, func: Callable[[K], V]):
-        """Initialize this instance."""
         self._func = func
 
     def load(self, key: K) -> V:
@@ -125,7 +120,6 @@ class BatchValueLoader(ValueLoader[K, V]):
     """
 
     def __init__(self, batch_func: Callable[[list[K]], dict[K, V]]):
-        """Initialize this instance."""
         self._batch_func = batch_func
         self._cache: dict[K, V] = {}
 
@@ -174,7 +168,6 @@ class CacheWarmer(Generic[K, V]):
         value_loader: ValueLoader[K, V],
         config: WarmingConfig | None = None,
     ):
-        """Initialize this instance."""
         self.cache = cache
         self.key_provider = key_provider
         self.value_loader = value_loader
@@ -259,7 +252,6 @@ class CacheWarmer(Generic[K, V]):
         stats = WarmingStats()
 
         def load_key(key: K) -> tuple:
-            """load Key ."""
             for attempt in range(self.config.max_retries + 1):
                 try:
                     value = self.value_loader.load(key)
@@ -322,7 +314,6 @@ class CacheWarmer(Generic[K, V]):
         self._stop_scheduler.clear()
 
         def scheduler_loop():
-            """scheduler Loop ."""
             while not self._stop_scheduler.wait(self.config.refresh_interval_s):
                 self.warm()
 
@@ -353,7 +344,6 @@ class AccessTracker(Generic[K]):
     """
 
     def __init__(self, max_keys: int = 10000):
-        """Initialize this instance."""
         self.max_keys = max_keys
         self._access_counts: dict[K, int] = {}
         self._last_access: dict[K, float] = {}
@@ -435,13 +425,11 @@ class AdaptiveKeyProvider(KeyProvider[K]):
         threshold: int = 5,
         limit: int = 1000,
     ):
-        """Initialize this instance."""
         self.tracker = tracker
         self.threshold = threshold
         self.limit = limit
 
     def get_keys(self) -> list[K]:
-        """get Keys ."""
         return self.tracker.get_hot_keys(
             threshold=self.threshold,
             limit=self.limit,

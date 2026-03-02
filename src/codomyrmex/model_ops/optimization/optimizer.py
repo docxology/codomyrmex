@@ -38,7 +38,6 @@ class InferenceOptimizer:
         model_fn: Callable[[list[Any]], list[Any]],
         config: OptimizationConfig | None = None,
     ):
-        """Initialize this instance."""
         self.model_fn = model_fn
         self.config = config or OptimizationConfig()
 

@@ -9,14 +9,14 @@ Provides:
 
 from __future__ import annotations
 
-import logging
 import time
 from dataclasses import dataclass
 from typing import Any
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 from .models import EdgeExecutionError, EdgeFunction, EdgeNode
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 
 @dataclass
@@ -47,7 +47,6 @@ class EdgeRuntime:
     """
 
     def __init__(self, node: EdgeNode) -> None:
-        """Initialize this instance."""
         self.node = node
         self._functions: dict[str, EdgeFunction] = {}
         self._metrics: list[InvocationMetrics] = []
@@ -136,26 +135,21 @@ class EdgeRuntime:
         return True
 
     def list_functions(self) -> list[EdgeFunction]:
-        """list Functions ."""
         return list(self._functions.values())
 
     def is_warm(self, function_id: str) -> bool:
-        """is Warm ."""
         return function_id in self._warm_functions
 
     @property
     def function_count(self) -> int:
-        """function Count ."""
         return len(self._functions)
 
     @property
     def total_invocations(self) -> int:
-        """total Invocations ."""
         return sum(self._call_counts.values())
 
     @property
     def cold_start_count(self) -> int:
-        """cold Start Count ."""
         return sum(1 for m in self._metrics if m.cold_start)
 
     def get_function_stats(self, function_id: str) -> dict[str, Any]:

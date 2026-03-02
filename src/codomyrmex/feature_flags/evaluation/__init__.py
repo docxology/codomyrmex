@@ -8,13 +8,13 @@ rules and percentage-based rollout evaluation.
 from __future__ import annotations
 
 import hashlib
-import logging
 from dataclasses import dataclass, field
 from typing import Any
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 from ..strategies import EvaluationContext, EvaluationResult, EvaluationStrategy
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 
 @dataclass

@@ -6,13 +6,13 @@ detection, and output sanitization for LLM responses.
 
 from __future__ import annotations
 
-import logging
 import re
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 
 class SafetyCategory(Enum):
@@ -44,7 +44,6 @@ class SafetyReport:
 
     @property
     def critical_violations(self) -> list[SafetyViolation]:
-        """critical Violations ."""
         return [v for v in self.violations if v.severity == "critical"]
 
 
@@ -71,7 +70,6 @@ class SafetyFilter:
     ]
 
     def __init__(self, auto_sanitize: bool = True) -> None:
-        """Initialize this instance."""
         self._auto_sanitize = auto_sanitize
         self._custom_filters: list[Any] = []
 

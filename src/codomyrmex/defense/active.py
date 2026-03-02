@@ -17,7 +17,6 @@ class ActiveDefense:
     """Active defense system against cognitive exploits."""
 
     def __init__(self):
-        """Initialize this instance."""
         self._exploit_patterns = [
             "ignore previous instructions",
             "system override",

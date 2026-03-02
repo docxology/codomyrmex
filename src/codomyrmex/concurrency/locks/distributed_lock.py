@@ -1,18 +1,17 @@
 """Abstract base class and local implementation of distributed locks."""
 
 import fcntl
-import logging
 import os
 import time
 from abc import ABC, abstractmethod
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 class BaseLock(ABC):
     """Abstract base class for all lock implementations."""
 
     def __init__(self, name: str):
-        """Initialize this instance."""
         self.name = name
         self.is_held = False
 
@@ -48,7 +47,6 @@ class LocalLock(BaseLock):
     """File-based lock for local multi-process synchronization."""
 
     def __init__(self, name: str, lock_dir: str = "/tmp/codomyrmex/locks"):
-        """Initialize this instance."""
         super().__init__(name)
         self.lock_path = os.path.join(lock_dir, f"{name}.lock")
         os.makedirs(lock_dir, exist_ok=True)

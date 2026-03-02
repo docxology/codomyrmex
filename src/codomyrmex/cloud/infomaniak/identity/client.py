@@ -5,12 +5,12 @@ Provides authentication, application credentials, and user management
 via the OpenStack Keystone API.
 """
 
-import logging
 from typing import Any
 
 from ..base import InfomaniakOpenStackBase
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 
 class InfomaniakIdentityClient(InfomaniakOpenStackBase):

@@ -8,13 +8,11 @@ class ConfusionMatrix(BasePlot):
     """Confusion matrix visualization."""
 
     def __init__(self, title="", matrix=None, labels=None, **kwargs):
-        """Initialize this instance."""
         super().__init__(title=title, **kwargs)
         self.matrix = matrix or [[0]]
         self.labels = labels or []
 
     def _render_figure(self, fig, ax):
-        """render Figure ."""
         arr = np.array(self.matrix)
         ax.imshow(arr, cmap="Blues", aspect="equal")
         n = len(self.labels)

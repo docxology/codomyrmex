@@ -47,7 +47,6 @@ class BenchmarkSuite:
 
     def add_task(self, name: str, func: Callable, expected: Any = None,
                  timeout: float = 60.0) -> None:
-        """add Task ."""
         self.tasks.append(BenchmarkTask(name=name, func=func,
                                          expected=expected, timeout=timeout))
 
@@ -69,7 +68,6 @@ class AgentBenchmarker:
     """
 
     def __init__(self, output_dir: Path | None = None) -> None:
-        """Initialize this instance."""
         self._output_dir = output_dir
         self._results: list[BenchmarkResult] = []
 

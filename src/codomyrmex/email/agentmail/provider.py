@@ -40,6 +40,7 @@ from .models import (
     _sdk_message_to_email_message,
     _sdk_pod_to_model,
 )
+from datetime import UTC
 
 
 def _raise_for_api_error(exc: Exception, context: str) -> NoReturn:
@@ -83,7 +84,6 @@ class AgentMailProvider(
         api_key: str | None = None,
         default_inbox_id: str | None = None,
     ) -> None:
-        """Initialize this instance."""
         if not AGENTMAIL_AVAILABLE:
             raise ImportError(
                 "AgentMail dependencies are not installed. "
@@ -231,7 +231,7 @@ class AgentMailProvider(
                 bcc=[EmailAddress(email=addr) for addr in draft.bcc],
                 body_text=draft.body_text,
                 body_html=draft.body_html,
-                date=datetime.now(timezone.utc),
+                date=datetime.now(UTC),
             )
         except ApiError as exc:
             _raise_for_api_error(exc, "send_message")

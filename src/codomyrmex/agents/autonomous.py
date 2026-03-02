@@ -4,12 +4,12 @@ Provides a long-lived, autonomous agent class that can execute in a loop,
 respond to messages on a relay channel, and maintain a persona.
 """
 
-import logging
 import time
 
 from codomyrmex.agents.llm_client import AgentRequest, get_llm_client
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 
 def _make_endpoint(
@@ -69,7 +69,6 @@ class AutonomousAgent:
         model: str | None = None,
         scheduler_config: object | None = None,
     ):
-        """Initialize this instance."""
         self.identity = identity
         self.persona = persona
         self.channel = channel

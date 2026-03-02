@@ -40,7 +40,6 @@ class MemoryConsolidator:
     """
 
     def __init__(self, config: ConsolidationConfig | None = None) -> None:
-        """Initialize this instance."""
         self.config = config or ConsolidationConfig()
         self._seen: set[str] = set()
 

@@ -61,7 +61,6 @@ class WCAGRule:
         message: str,
         suggestion: str = "",
     ):
-        """Initialize this instance."""
         self.code = code
         self.criterion = criterion
         self.level = level

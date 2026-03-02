@@ -95,7 +95,6 @@ class MessageScheduler:
         *,
         identity: str = "scheduler",
     ) -> None:
-        """Initialize this instance."""
         self._relay = relay
         self._config = config or SchedulerConfig()
         self._identity = identity

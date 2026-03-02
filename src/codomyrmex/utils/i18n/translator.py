@@ -12,7 +12,6 @@ class MessageBundle:
     """A collection of translated messages."""
 
     def __init__(self, locale: Locale):
-        """Initialize this instance."""
         self.locale = locale
         self._messages: dict[str, str] = {}
 
@@ -38,14 +37,12 @@ class MessageBundle:
 
     @classmethod
     def from_dict(cls, locale: Locale, data: dict[str, str]) -> "MessageBundle":
-        """from Dict ."""
         bundle = cls(locale)
         bundle._messages = data
         return bundle
 
     @classmethod
     def from_json_file(cls, locale: Locale, path: str) -> "MessageBundle":
-        """from Json File ."""
         with open(path, encoding='utf-8') as f:
             data = json.load(f)
         return cls.from_dict(locale, data)
@@ -55,22 +52,18 @@ class Translator:
     """Multi-locale translator."""
 
     def __init__(self, default_locale: Locale | None = None):
-        """Initialize this instance."""
         self.default_locale = default_locale or Locale("en")
         self._bundles: dict[str, MessageBundle] = {}
         self._current_locale = self.default_locale
         self._interpolation_pattern = re.compile(r'\{(\w+)\}')
 
     def add_bundle(self, bundle: MessageBundle) -> None:
-        """add Bundle ."""
         self._bundles[bundle.locale.code] = bundle
 
     def set_locale(self, locale: Locale) -> None:
-        """set Locale ."""
         self._current_locale = locale
 
     def get_locale(self) -> Locale:
-        """get Locale ."""
         return self._current_locale
 
     def t(

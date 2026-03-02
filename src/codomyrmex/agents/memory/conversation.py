@@ -28,13 +28,11 @@ class Turn:
     metadata: dict[str, Any] = field(default_factory=dict)
 
     def __post_init__(self) -> None:
-        """post Init ."""
         if not self.timestamp:
             self.timestamp = time.time()
 
     @property
     def word_count(self) -> int:
-        """word Count ."""
         return len(self.content.split())
 
 
@@ -50,7 +48,6 @@ class ConversationHistory:
     """
 
     def __init__(self, max_turns: int = 1000) -> None:
-        """Initialize this instance."""
         self._turns: list[Turn] = []
         self._max_turns = max_turns
 
@@ -64,7 +61,6 @@ class ConversationHistory:
 
     @property
     def turn_count(self) -> int:
-        """turn Count ."""
         return len(self._turns)
 
     def last(self, n: int = 1) -> list[Turn]:
@@ -72,7 +68,6 @@ class ConversationHistory:
         return self._turns[-n:]
 
     def by_role(self, role: str) -> list[Turn]:
-        """by Role ."""
         return [t for t in self._turns if t.role == role]
 
     def summary(self) -> dict[str, Any]:

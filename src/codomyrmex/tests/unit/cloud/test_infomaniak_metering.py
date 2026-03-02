@@ -14,7 +14,7 @@ Tests cover:
 Total: ~19 tests in a single TestInfomaniakMetering class.
 """
 
-from datetime import datetime, timezone
+from datetime import datetime, timezone, UTC
 
 from _stubs import Stub
 
@@ -122,8 +122,8 @@ class TestInfomaniakMetering:
         """get_compute_usage passes start/end as ISO strings in the result."""
         mock_openstack_connection.compute.servers.return_value = []
 
-        start = datetime(2025, 1, 1, tzinfo=timezone.utc)
-        end = datetime(2025, 1, 31, 23, 59, 59, tzinfo=timezone.utc)
+        start = datetime(2025, 1, 1, tzinfo=UTC)
+        end = datetime(2025, 1, 31, 23, 59, 59, tzinfo=UTC)
 
         client = InfomaniakMeteringClient(mock_openstack_connection)
         usage = client.get_compute_usage(start=start, end=end)

@@ -6,7 +6,7 @@ Provides self-custody wallet management securely extending key management.
 import hashlib
 import hmac
 import uuid
-from datetime import datetime, timezone
+from datetime import datetime, timezone, UTC
 from pathlib import Path
 
 from codomyrmex.encryption.keys.key_manager import KeyManager
@@ -62,7 +62,7 @@ class WalletManager:
         key_id = f"wallet_{user_id}_private"
         if self.key_manager.store_key(key_id, secret_key):
             self._wallets[user_id] = wallet_id
-            self._created_at[user_id] = datetime.now(timezone.utc).isoformat()
+            self._created_at[user_id] = datetime.now(UTC).isoformat()
             logger.info(f"Created wallet {wallet_id} for user {user_id}")
             return wallet_id
         else:
@@ -158,7 +158,7 @@ class WalletManager:
         if self.key_manager.store_key(key_id, new_secret_key):
             old_id = self._wallets[user_id]
             self._wallets[user_id] = new_wallet_id
-            self._created_at[user_id] = datetime.now(timezone.utc).isoformat()
+            self._created_at[user_id] = datetime.now(UTC).isoformat()
             logger.info(
                 f"Rotated keys for user {user_id}: {old_id} -> {new_wallet_id} ({reason})"
             )
@@ -191,7 +191,7 @@ class WalletManager:
             "wallet_id": self._wallets[user_id],
             "key_hash": hashlib.sha256(key).hexdigest() if key else None,
             "created_at": self._created_at.get(user_id),
-            "backup_ts": datetime.now(timezone.utc).isoformat(),
+            "backup_ts": datetime.now(UTC).isoformat(),
         }
 
     def delete_wallet(self, user_id: str) -> bool:

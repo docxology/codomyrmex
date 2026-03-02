@@ -9,14 +9,14 @@ arbitrary collections, producing standardized page metadata and HTTP headers.
 __version__ = "0.1.0"
 
 import base64
-import logging
 import math
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any, Dict, List, Optional
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 # ---------------------------------------------------------------------------
 # Enums
@@ -390,7 +390,6 @@ class KeysetPaginator(Paginator):
     """
 
     def __init__(self, sort_field: str = "id"):
-        """Initialize this instance."""
         self._sort_field = sort_field
 
     def _get_field_value(self, item: Any, field_name: str) -> Any:

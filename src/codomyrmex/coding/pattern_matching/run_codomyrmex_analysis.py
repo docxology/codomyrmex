@@ -104,7 +104,6 @@ def get_embedding_function() -> Any:
     EMBEDDING_DIM = 128
 
     def _hash_embed(text: str) -> list[float]:
-        """hash Embed ."""
         # Generate a deterministic embedding by hashing overlapping shingles
         digest = hashlib.sha512(text.encode("utf-8")).digest()
         # Extend to fill EMBEDDING_DIM floats

@@ -1,14 +1,14 @@
 """Distributed lock backed by Redis."""
 
-import logging
 import time
 import uuid
 
 import redis
 
 from .distributed_lock import BaseLock
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 class RedisLock(BaseLock):
     """Distributed lock using Redis SETNX and TTL."""

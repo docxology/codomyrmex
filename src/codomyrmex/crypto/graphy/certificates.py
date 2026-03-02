@@ -69,7 +69,7 @@ def generate_self_signed_cert(
             x509.NameAttribute(NameOID.COMMON_NAME, common_name),
         ])
 
-        now = datetime.datetime.now(datetime.timezone.utc)
+        now = datetime.datetime.now(datetime.UTC)
         signing_params = _get_signing_params(private_key)
 
         cert = (
@@ -165,7 +165,7 @@ def validate_certificate_chain(cert_chain: list) -> ValidationResult:
     if not cert_chain:
         return ValidationResult(valid=False, errors=["Empty certificate chain"], chain_length=0)
 
-    now = datetime.datetime.now(datetime.timezone.utc)
+    now = datetime.datetime.now(datetime.UTC)
 
     try:
         for i, cert in enumerate(cert_chain):

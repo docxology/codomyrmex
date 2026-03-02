@@ -1,7 +1,7 @@
 import os
 import sys
 from dataclasses import dataclass, field
-from datetime import datetime, timezone
+from datetime import datetime, timezone, UTC
 from typing import Any
 
 import docker
@@ -136,7 +136,7 @@ class DockerManager:
                 "image_id": image.id,
                 "image_tags": image.tags,
                 "build_logs": logs,
-                "build_time": datetime.now(timezone.utc).isoformat(),
+                "build_time": datetime.now(UTC).isoformat(),
             }
 
             # Push if requested
@@ -186,7 +186,7 @@ class DockerManager:
                 "success": True,
                 "image": image_name,
                 "push_logs": logs,
-                "push_time": datetime.now(timezone.utc).isoformat(),
+                "push_time": datetime.now(UTC).isoformat(),
             }
 
         except Exception as e:
@@ -251,7 +251,7 @@ class DockerManager:
                 "container_id": container.id,
                 "container_name": container.name,
                 "status": container.status,
-                "start_time": datetime.now(timezone.utc).isoformat(),
+                "start_time": datetime.now(UTC).isoformat(),
             }
 
         except Exception as e:
@@ -315,7 +315,7 @@ class DockerManager:
             return {
                 "success": True,
                 "container_id": container_id,
-                "stop_time": datetime.now(timezone.utc).isoformat(),
+                "stop_time": datetime.now(UTC).isoformat(),
             }
 
         except Exception as e:
@@ -345,7 +345,7 @@ class DockerManager:
             return {
                 "success": True,
                 "container_id": container_id,
-                "removal_time": datetime.now(timezone.utc).isoformat(),
+                "removal_time": datetime.now(UTC).isoformat(),
             }
 
         except Exception as e:
@@ -404,7 +404,7 @@ class DockerManager:
                 "cpu_usage": stats.get("cpu_stats", {}).get("cpu_usage", {}),
                 "memory_usage": stats.get("memory_stats", {}),
                 "network_stats": stats.get("networks", {}),
-                "timestamp": datetime.now(timezone.utc).isoformat(),
+                "timestamp": datetime.now(UTC).isoformat(),
             }
 
         except Exception as e:
@@ -433,7 +433,7 @@ class DockerManager:
                 "network_id": network.id,
                 "network_name": name,
                 "driver": driver,
-                "creation_time": datetime.now(timezone.utc).isoformat(),
+                "creation_time": datetime.now(UTC).isoformat(),
             }
 
         except Exception as e:
@@ -486,7 +486,7 @@ class DockerManager:
             return {
                 "success": True,
                 "image": image_name,
-                "removal_time": datetime.now(timezone.utc).isoformat(),
+                "removal_time": datetime.now(UTC).isoformat(),
             }
 
         except Exception as e:

@@ -50,7 +50,6 @@ class MessageHeader:
     destination: str = ""
 
     def __post_init__(self) -> None:
-        """post Init ."""
         if not self.message_id:
             self.message_id = f"msg-{uuid.uuid4().hex[:12]}"
         if not self.timestamp:

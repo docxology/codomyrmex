@@ -6,12 +6,10 @@ class WordCloud(BasePlot):
     """Word cloud visualization."""
 
     def __init__(self, title="", words=None, **kwargs):
-        """Initialize this instance."""
         super().__init__(title=title, **kwargs)
         self.words = words or []
 
     def _render_figure(self, fig, ax):
-        """render Figure ."""
         if not self.words:
             return
         # Simple scatter representation of words

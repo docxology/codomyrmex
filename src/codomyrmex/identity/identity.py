@@ -33,12 +33,10 @@ class AuthToken:
 
     @property
     def is_expired(self) -> bool:
-        """is Expired ."""
         return time.time() > self.expires_at
 
     @property
     def remaining_seconds(self) -> float:
-        """remaining Seconds ."""
         return max(0.0, self.expires_at - time.time())
 
 
@@ -65,7 +63,6 @@ class PasswordProvider(AuthProvider):
     """Password-based authentication using salted SHA-256 hashing."""
 
     def __init__(self) -> None:
-        """Initialize this instance."""
         self._users: dict[str, tuple[str, str]] = {}  # user_id -> (salt, hash)
 
     def register(self, user_id: str, password: str) -> None:
@@ -89,7 +86,6 @@ class TokenProvider(AuthProvider):
     """API-key / bearer token authentication."""
 
     def __init__(self) -> None:
-        """Initialize this instance."""
         self._valid_tokens: set[str] = set()
 
     def create_token(self) -> str:
@@ -134,7 +130,6 @@ class Identity:
         config: dict[str, Any] | None = None,
         session_ttl: float = 3600.0,
     ) -> None:
-        """Initialize this instance."""
         self.config = config or {}
         self.session_ttl = session_ttl
         self._providers: dict[str, AuthProvider] = {}
@@ -238,12 +233,10 @@ class Identity:
 
     @property
     def audit_log(self) -> list[AuthEvent]:
-        """audit Log ."""
         return list(self._events)
 
     @property
     def active_session_count(self) -> int:
-        """active Session Count ."""
         return sum(1 for s in self._sessions.values() if not s.is_expired)
 
 

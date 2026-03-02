@@ -262,7 +262,6 @@ class Workflow:
         path = set()
 
         def check_cycle(task_name):
-            """check Cycle ."""
             visited.add(task_name)
             path.add(task_name)
 
@@ -533,8 +532,8 @@ class Workflow:
                     )
                 else:
                     return await loop.run_in_executor(None, func)
-        except asyncio.TimeoutError:
-            raise asyncio.TimeoutError(f"Task '{task.name}' timed out after {task.timeout}s") from None
+        except TimeoutError:
+            raise TimeoutError(f"Task '{task.name}' timed out after {task.timeout}s") from None
 
     def get_task_result(self, task_name: str) -> TaskResult | None:
         """Get result of a specific task."""

@@ -111,7 +111,6 @@ except ImportError:
 def cli_commands():
     """Return CLI commands for the git_operations module."""
     def _show_status():
-        """show Status ."""
         import os
         try:
             status = get_status(os.getcwd())
@@ -125,7 +124,6 @@ def cli_commands():
             print(f"Error getting git status: {e}")
 
     def _show_info():
-        """show Info ."""
         import os
         cwd = os.getcwd()
         try:

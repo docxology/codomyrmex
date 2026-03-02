@@ -1,7 +1,7 @@
 """Tests for the calendar module."""
 
 import os
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timedelta, timezone, UTC
 
 import pytest
 
@@ -21,7 +21,7 @@ pytestmark = pytest.mark.skipif(
 
 def test_calendar_event_model():
     """Test that the generic CalendarEvent model instantiates correctly."""
-    now = datetime.now(timezone.utc)
+    now = datetime.now(UTC)
     event = CalendarEvent(
         summary="Test Meeting",
         description="A test description",
@@ -71,7 +71,7 @@ def test_google_calendar_live_integration():
     provider = GoogleCalendar(credentials=creds)
 
     # 1. List events (make sure it doesn't crash)
-    now = datetime.now(timezone.utc)
+    now = datetime.now(UTC)
     events = provider.list_events(now, now + timedelta(days=7))
     assert isinstance(events, list)
 

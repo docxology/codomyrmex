@@ -56,7 +56,6 @@ class OllamaConfig:
     enable_benchmarks: bool = True  # Enable benchmarking features
 
     def __post_init__(self):
-        """post Init ."""
 
         if self.preferred_models is None:
             self.preferred_models = ["llama3.1:latest", "codellama:latest", "gemma2:2b"]

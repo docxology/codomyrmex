@@ -10,17 +10,17 @@ from __future__ import annotations
 import importlib
 import importlib.util
 import inspect
-import logging
 import pkgutil
 import time
 from collections.abc import Callable
 from dataclasses import dataclass, field
-from datetime import datetime, timezone
+from datetime import datetime, timezone, UTC
 from pathlib import Path
 from types import ModuleType
 from typing import Any
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 
 # =====================================================================
@@ -122,7 +122,6 @@ class MCPDiscovery:
     """
 
     def __init__(self) -> None:
-        """Initialize this instance."""
         self._registry: dict[str, DiscoveredTool] = {}
         self._failed_modules: list[FailedModule] = []
         self._metrics = DiscoveryMetrics()
@@ -248,7 +247,6 @@ class MCPDiscovery:
         tools = []
 
         def _add_if_tool(name: str, obj: Any) -> None:
-            """add If Tool ."""
             if hasattr(obj, "_mcp_tool_meta"):
                 meta = obj._mcp_tool_meta
 
@@ -296,7 +294,7 @@ class MCPDiscovery:
         self._metrics.total_tools = len(self._registry)
         self._metrics.scan_duration_ms = report.scan_duration_ms
         self._metrics.modules_scanned = report.modules_scanned
-        self._metrics.last_scan_time = datetime.now(timezone.utc)
+        self._metrics.last_scan_time = datetime.now(UTC)
         self._metrics.failed_modules = [m.module for m in self._failed_modules]
 
     # ── Registry accessors ───────────────────────────────────────
@@ -306,7 +304,6 @@ class MCPDiscovery:
         self._registry[tool.name] = tool
 
     def get_tool(self, name: str) -> DiscoveredTool | None:
-        """get Tool ."""
         return self._registry.get(name)
 
     def list_tools(self, tag: str | None = None) -> list[DiscoveredTool]:
@@ -317,7 +314,6 @@ class MCPDiscovery:
 
     @property
     def tool_count(self) -> int:
-        """tool Count ."""
         return len(self._registry)
 
     def record_cache_hit(self) -> None:

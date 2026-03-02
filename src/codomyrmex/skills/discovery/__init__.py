@@ -7,15 +7,15 @@ Provides mechanisms for discovering and registering agent skills.
 import hashlib
 import inspect
 import json
-import logging
 from abc import ABC, abstractmethod
 from collections.abc import Callable
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 from typing import Any
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 
 class SkillCategory(Enum):
@@ -143,7 +143,6 @@ class FunctionSkill(Skill):
         func: Callable,
         metadata: SkillMetadata | None = None,
     ):
-        """Initialize this instance."""
         self.func = func
 
         if metadata:
@@ -210,7 +209,6 @@ class SkillRegistry:
     """Registry for managing skills."""
 
     def __init__(self):
-        """Initialize this instance."""
         self._skills: dict[str, Skill] = {}
         self._by_category: dict[SkillCategory, list[str]] = {}
         self._by_tag: dict[str, list[str]] = {}
@@ -345,7 +343,6 @@ class SkillDiscoverer:
     """Discovers skills from modules and packages."""
 
     def __init__(self, registry: SkillRegistry):
-        """Initialize this instance."""
         self.registry = registry
 
     def discover_from_module(self, module) -> list[Skill]:

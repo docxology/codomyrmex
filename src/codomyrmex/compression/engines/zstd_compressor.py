@@ -1,8 +1,7 @@
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 """High-performance Zstd compressor."""
 
-import logging
-
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 try:
     import zstandard as zstd
@@ -14,7 +13,6 @@ class ZstdCompressor:
     """Compressor using the Zstandard algorithm."""
 
     def __init__(self, level: int = 3):
-        """Initialize this instance."""
         if not ZSTD_AVAILABLE:
             raise ImportError("zstandard package not available. Install with: pip install zstandard")
         self.level = level

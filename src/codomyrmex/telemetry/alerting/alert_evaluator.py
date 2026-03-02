@@ -99,7 +99,6 @@ class AlertEvaluator:
     }
 
     def __init__(self, metrics: MetricAggregator) -> None:
-        """Initialize this instance."""
         self._metrics = metrics
         self._rules: dict[str, AlertRule] = {}
         self._alerts: list[Alert] = []
@@ -107,12 +106,10 @@ class AlertEvaluator:
 
     @property
     def rule_count(self) -> int:
-        """rule Count ."""
         return len(self._rules)
 
     @property
     def active_alerts(self) -> list[Alert]:
-        """active Alerts ."""
         return list(self._active.values())
 
     def add_rule(self, rule: AlertRule) -> None:

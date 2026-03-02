@@ -10,7 +10,6 @@ Reference: https://github.com/Fosowl/agenticSeek
 from __future__ import annotations
 
 import configparser
-import logging
 import os
 import shutil
 import subprocess
@@ -19,7 +18,7 @@ from collections.abc import Iterator
 from pathlib import Path
 from typing import Any
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 from codomyrmex.agents.agentic_seek.agent_router import AgenticSeekRouter
 from codomyrmex.agents.agentic_seek.agent_types import (
@@ -37,6 +36,7 @@ from codomyrmex.config_management.defaults import (
     DEFAULT_API_BASE_URL,
     DEFAULT_OLLAMA_URL,
 )
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 
 class AgenticSeekClient(CLIAgentBase):

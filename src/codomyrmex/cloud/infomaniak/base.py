@@ -10,12 +10,12 @@ Three base classes cover all auth mechanisms:
 - InfomaniakRESTBase: REST API with OAuth2 Bearer token
 """
 
-import logging
 from typing import Any
 
 import requests
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 
 class InfomaniakOpenStackBase:

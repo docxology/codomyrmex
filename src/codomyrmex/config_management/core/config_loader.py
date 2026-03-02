@@ -7,7 +7,7 @@ Provides comprehensive configuration loading, validation, and management.
 import json
 import os
 from dataclasses import dataclass, field
-from datetime import datetime, timezone
+from datetime import datetime, timezone, UTC
 from typing import Any
 
 import jsonschema
@@ -64,7 +64,6 @@ except ImportError:
             pass
 
         def create_error_context(**kwargs):
-            """create Error Context ."""
             return dict(kwargs)
     pass
 
@@ -123,10 +122,9 @@ class Configuration:
     metadata: dict[str, Any] = field(default_factory=dict)
 
     def __post_init__(self):
-        """post Init ."""
 
         if not hasattr(self, 'loaded_at') or self.loaded_at is None:
-            self.loaded_at = datetime.now(timezone.utc)
+            self.loaded_at = datetime.now(UTC)
 
     def validate(self) -> list[str]:
         """Validate configuration against schema."""
@@ -721,7 +719,7 @@ class ConfigurationManager:
         config = self.configurations[name]
         version = config.data.get("version", "unknown")
 
-        backup_name = f"{name}_backup_{version}_{int(datetime.now(timezone.utc).timestamp())}"
+        backup_name = f"{name}_backup_{version}_{int(datetime.now(UTC).timestamp())}"
 
         try:
             # Create backup configuration

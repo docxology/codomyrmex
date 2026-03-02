@@ -7,7 +7,6 @@ and load balancing across agents.
 
 import asyncio
 import heapq
-import logging
 from collections.abc import Callable
 from dataclasses import dataclass, field
 from enum import Enum
@@ -18,8 +17,9 @@ from ..exceptions import (
 )
 from ..models import Task, TaskResult, TaskStatus
 from ..protocols import AgentState
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 
 class SchedulingStrategy(Enum):
@@ -46,7 +46,6 @@ class TaskQueue:
     """
 
     def __init__(self):
-        """Initialize this instance."""
         self._heap: list[PriorityTask] = []
         self._tasks: dict[str, Task] = {}
         self._counter = 0
@@ -105,7 +104,6 @@ class DependencyGraph:
     """
 
     def __init__(self):
-        """Initialize this instance."""
         self._dependencies: dict[str, set[str]] = {}  # task_id -> set of dependency task_ids
         self._dependents: dict[str, set[str]] = {}    # task_id -> set of tasks depending on it
 
@@ -194,7 +192,6 @@ class TaskManager:
         strategy: SchedulingStrategy = SchedulingStrategy.PRIORITY,
         max_concurrent: int = 1,
     ):
-        """Initialize this instance."""
         self._strategy = strategy
         self._max_concurrent = max_concurrent
         self._queue = TaskQueue()

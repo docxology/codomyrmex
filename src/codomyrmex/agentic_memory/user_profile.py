@@ -48,11 +48,9 @@ class UserProfile:
     # ── helpers ──────────────────────────────────────────────────
 
     def set_preference(self, key: str, value: Any) -> None:
-        """set Preference ."""
         self.preferences[key] = value
 
     def get_preference(self, key: str, default: Any = None) -> Any:
-        """get Preference ."""
         return self.preferences.get(key, default)
 
     def to_context_string(self) -> str:

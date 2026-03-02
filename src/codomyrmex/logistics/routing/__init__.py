@@ -179,7 +179,6 @@ class TwoOptRouting(RoutingAlgorithm):
     """2-opt improvement algorithm."""
 
     def __init__(self, max_iterations: int = 1000):
-        """Initialize this instance."""
         self.max_iterations = max_iterations
 
     def _calculate_route_distance(
@@ -256,7 +255,6 @@ class DijkstraRouting:
     """Dijkstra's shortest path algorithm for graph-based routing."""
 
     def __init__(self):
-        """Initialize this instance."""
         self.graph: dict[str, dict[str, float]] = {}
 
     def add_edge(
@@ -332,7 +330,6 @@ class AStarRouting:
     """A* pathfinding algorithm."""
 
     def __init__(self):
-        """Initialize this instance."""
         self.graph: dict[str, dict[str, float]] = {}
         self.positions: dict[str, tuple[float, float]] = {}
 

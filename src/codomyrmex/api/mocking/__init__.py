@@ -252,7 +252,6 @@ class MockAPIServer:
     """
 
     def __init__(self) -> None:
-        """Initialize this instance."""
         self._routes: dict[str, MockRoute] = {}
         self._route_order: list[str] = []
         self._request_log: list[RequestLog] = []

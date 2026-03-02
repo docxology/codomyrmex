@@ -65,7 +65,6 @@ class ScalarFitness(FitnessFunction):
         fn: Any,  # Callable[[Any], float]
         maximize: bool = True,
     ) -> None:
-        """Initialize this instance."""
         self._fn = fn
         self._maximize = maximize
 
@@ -95,7 +94,6 @@ class MultiObjectiveFitness(FitnessFunction):
         objectives: list[Any],  # list[Callable[[Any], float]]
         maximize: list[bool] | None = None,
     ) -> None:
-        """Initialize this instance."""
         self._objectives = objectives
         self._maximize = maximize or [True] * len(objectives)
         if len(self._maximize) != len(self._objectives):
@@ -156,7 +154,6 @@ class ConstrainedFitness(FitnessFunction):
         constraints: list[Any],  # list[Callable[[Any], float]]
         penalty_weight: float = 1000.0,
     ) -> None:
-        """Initialize this instance."""
         self._base = base
         self._constraints = constraints
         self._penalty_weight = penalty_weight

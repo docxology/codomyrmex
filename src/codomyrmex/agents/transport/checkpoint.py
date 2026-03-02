@@ -34,7 +34,6 @@ class StateDelta:
 
     @property
     def has_changes(self) -> bool:
-        """has Changes ."""
         return (
             self.config_changed
             or self.traces_added > 0
@@ -61,7 +60,6 @@ class Checkpoint:
     created_at: float = field(default_factory=time.time)
 
     def __post_init__(self) -> None:
-        """post Init ."""
         if not self.checkpoint_id:
             self.checkpoint_id = (
                 f"ckpt-{self.snapshot.agent_id}-{int(self.created_at)}"

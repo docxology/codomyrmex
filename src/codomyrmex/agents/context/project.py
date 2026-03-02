@@ -33,7 +33,6 @@ class FileInfo:
     module: str = ""
 
     def __post_init__(self) -> None:
-        """post Init ."""
         if not self.extension and "." in self.path:
             self.extension = self.path.rsplit(".", 1)[-1]
 
@@ -65,16 +64,13 @@ class ProjectContext:
 
     @property
     def file_count(self) -> int:
-        """file Count ."""
         return len(self.files)
 
     @property
     def module_count(self) -> int:
-        """module Count ."""
         return len(self.modules)
 
     def files_by_extension(self, ext: str) -> list[FileInfo]:
-        """files By Extension ."""
         return [f for f in self.files if f.extension == ext]
 
     def to_dict(self) -> dict[str, Any]:
@@ -103,7 +99,6 @@ class ProjectScanner:
         extensions: set[str] | None = None,
         exclude_dirs: set[str] | None = None,
     ) -> None:
-        """Initialize this instance."""
         self._extensions = extensions or {"py", "md", "toml", "yaml", "yml"}
         self._exclude_dirs = exclude_dirs or {
             "__pycache__", ".git", ".venv", "node_modules", ".eggs", "*.egg-info",

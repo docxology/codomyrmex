@@ -27,7 +27,6 @@ class HealthMonitor:
     """Monitor health of edge nodes in a cluster."""
 
     def __init__(self, heartbeat_timeout_seconds: float = 60.0):
-        """Initialize this instance."""
         self._timeout = timedelta(seconds=heartbeat_timeout_seconds)
         self._checks: dict[str, list[HealthCheck]] = {}
         self._max_history = 100

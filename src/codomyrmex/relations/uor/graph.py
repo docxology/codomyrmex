@@ -25,7 +25,6 @@ class UORGraph:
     """
 
     def __init__(self, quantum: int = 0) -> None:
-        """Initialize this instance."""
         self._manager = EntityManager(quantum=quantum)
         self._relationships: dict[str, UORRelationship] = {}
 

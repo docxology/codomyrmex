@@ -60,13 +60,11 @@ class MemoryProfiler:
     """
 
     def __init__(self, leak_threshold: int = 1000) -> None:
-        """Initialize this instance."""
         self._snapshots: dict[str, MemorySnapshot] = {}
         self._leak_threshold = leak_threshold
 
     @property
     def snapshot_count(self) -> int:
-        """snapshot Count ."""
         return len(self._snapshots)
 
     def snapshot(self, label: str) -> MemorySnapshot:
@@ -147,7 +145,6 @@ class MemoryProfiler:
         )
 
     def get_snapshot(self, label: str) -> MemorySnapshot | None:
-        """get Snapshot ."""
         return self._snapshots.get(label)
 
 

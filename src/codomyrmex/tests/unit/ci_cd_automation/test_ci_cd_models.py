@@ -1,6 +1,6 @@
 """Unit tests for CI/CD pipeline data model classes: PipelineJob, PipelineStage, and Pipeline."""
 
-from datetime import datetime, timezone
+from datetime import datetime, timezone, UTC
 
 from codomyrmex.ci_cd_automation.pipeline import (
     AsyncPipelineResult,
@@ -49,7 +49,7 @@ class TestPipelineJob:
             name="test_job",
             commands=["echo test"],
             status=JobStatus.RUNNING,
-            start_time=datetime.now(timezone.utc)
+            start_time=datetime.now(UTC)
         )
 
         job_dict = job.to_dict()
@@ -84,7 +84,7 @@ class TestPipelineStage:
         stage = PipelineStage(
             name="test_stage",
             status=StageStatus.RUNNING,
-            start_time=datetime.now(timezone.utc)
+            start_time=datetime.now(UTC)
         )
 
         stage_dict = stage.to_dict()
@@ -127,7 +127,7 @@ class TestPipeline:
             name="test_pipeline",
             stages=[],
             status=PipelineStatus.RUNNING,
-            started_at=datetime.now(timezone.utc)
+            started_at=datetime.now(UTC)
         )
 
         pipeline_dict = pipeline.to_dict()

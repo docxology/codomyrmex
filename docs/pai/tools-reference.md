@@ -1,10 +1,11 @@
 # PAI-Codomyrmex Tools Reference
 
-**Version**: v1.0.3-dev | **Last Updated**: February 2026
+**Version**: v1.0.3 | **Last Updated**: March 2026
 
 ## Overview
 
 Codomyrmex exposes tools to PAI via two mechanisms:
+
 1. **Static tools** (20): Defined in `mcp_bridge.py`, always available
 2. **Dynamic tools** (variable): Auto-discovered from module public functions at runtime
 
@@ -21,15 +22,18 @@ The PAI Skill (`SKILL.md`) curates a subset for MCP consumption.
 | `codomyrmex.list_directory` | Safe | List directory contents with filtering |
 
 #### `codomyrmex.read_file`
+
 - **Parameters**: `path` (required), `encoding` (default: "utf-8"), `max_size` (default: 1000000)
 - **Returns**: File contents with metadata
 
 #### `codomyrmex.write_file`
+
 - **Parameters**: `path` (required), `content` (required), `create_dirs` (default: true)
 - **Returns**: Write confirmation
 - **Trust**: Requires TRUSTED level
 
 #### `codomyrmex.list_directory`
+
 - **Parameters**: `path` (default: "."), `pattern` (default: "*"), `recursive` (default: false), `max_items` (default: 200)
 - **Returns**: Directory listing
 
@@ -41,14 +45,20 @@ The PAI Skill (`SKILL.md`) curates a subset for MCP consumption.
 | `codomyrmex.search_codebase` | Safe | Search for patterns (regex supported) |
 
 #### `codomyrmex.analyze_python`
+
 - **Parameters**: `path` (required)
 - **Returns**: Structure analysis (classes, functions, imports, metrics)
 
 #### `codomyrmex.search_codebase`
+
 - **Parameters**: `pattern` (required), `path` (default: "."), `file_types` (array), `case_sensitive` (default: false), `max_results` (default: 100)
 - **Returns**: Matching files and lines
 
 ### Git Operations
+
+The PAI Dashboard provides a visual interface for git repository management, wrapping these MCP tools with Push/Pull/Sync controls per-project:
+
+![PAI Git — Repository sync manager showing 18 linked repos with per-project Push, Pull, Sync, and Unlink controls](screenshots/pai_git.png)
 
 | Tool | Trust | Description |
 |------|-------|-------------|
@@ -56,10 +66,12 @@ The PAI Skill (`SKILL.md`) curates a subset for MCP consumption.
 | `codomyrmex.git_diff` | Safe | Get git diff for changes |
 
 #### `codomyrmex.git_status`
+
 - **Parameters**: `path` (default: ".")
 - **Returns**: Repository status (branch, staged, modified, untracked)
 
 #### `codomyrmex.git_diff`
+
 - **Parameters**: `path` (default: "."), `staged` (default: false)
 - **Returns**: Diff output
 
@@ -70,6 +82,7 @@ The PAI Skill (`SKILL.md`) curates a subset for MCP consumption.
 | `codomyrmex.run_command` | **Destructive** | Execute shell commands safely |
 
 #### `codomyrmex.run_command`
+
 - **Parameters**: `command` (required), `cwd` (default: "."), `timeout` (default: 30)
 - **Returns**: stdout, stderr, return code
 - **Trust**: Requires TRUSTED level
@@ -82,10 +95,12 @@ The PAI Skill (`SKILL.md`) curates a subset for MCP consumption.
 | `codomyrmex.checksum_file` | Safe | Calculate file checksum (md5, sha1, sha256) |
 
 #### `codomyrmex.json_query`
+
 - **Parameters**: `path` (required), `query` (optional dot-notation path)
 - **Returns**: JSON data or queried subset
 
 #### `codomyrmex.checksum_file`
+
 - **Parameters**: `path` (required), `algorithm` (default: "sha256")
 - **Returns**: Hex digest string
 
@@ -97,10 +112,12 @@ The PAI Skill (`SKILL.md`) curates a subset for MCP consumption.
 | `codomyrmex.module_info` | Safe | Get module docstring, exports, path |
 
 #### `codomyrmex.list_modules`
+
 - **Parameters**: none
 - **Returns**: `{modules: [...], count: N}`
 
 #### `codomyrmex.module_info`
+
 - **Parameters**: `module_name` (required)
 - **Returns**: `{module, docstring, exports, export_count, path}`
 
@@ -112,10 +129,12 @@ The PAI Skill (`SKILL.md`) curates a subset for MCP consumption.
 | `codomyrmex.pai_awareness` | Safe | Get full PAI awareness data |
 
 #### `codomyrmex.pai_status`
+
 - **Parameters**: none
 - **Returns**: Installation status with component counts (skills, tools, hooks, agents, memory)
 
 #### `codomyrmex.pai_awareness`
+
 - **Parameters**: none
 - **Returns**: Missions, projects, tasks, TELOS, memory data
 
@@ -126,6 +145,7 @@ The PAI Skill (`SKILL.md`) curates a subset for MCP consumption.
 | `codomyrmex.run_tests` | **Destructive** | Run pytest for a module or project |
 
 #### `codomyrmex.run_tests`
+
 - **Parameters**: `module` (optional), `verbose` (default: false)
 - **Returns**: `{returncode, passed, stdout, stderr}`
 - **Trust**: Requires TRUSTED level (test execution may have side effects)
@@ -141,16 +161,19 @@ These tools provide generic access to **any** Codomyrmex module's public API:
 | `codomyrmex.get_module_readme` | Safe | Read module README/SPEC docs |
 
 #### `codomyrmex.list_module_functions`
+
 - **Parameters**: `module` (required, e.g. "encryption", "cache")
 - **Returns**: `{module, functions: [{name, signature, docstring}], classes: [{name, docstring, public_methods}], total_callables}`
 
 #### `codomyrmex.call_module_function`
+
 - **Parameters**: `function` (required, e.g. "encryption.encrypt"), `kwargs` (optional dict)
 - **Returns**: `{result: ...}` or `{error: ...}`
 - **Trust**: Requires TRUSTED level (arbitrary code execution)
 - **Safety**: Private functions (underscore-prefixed) are blocked
 
 #### `codomyrmex.get_module_readme`
+
 - **Parameters**: `module` (required)
 - **Returns**: `{module, path, content}` (truncated at 5000 chars)
 
@@ -166,12 +189,17 @@ Targeted scan modules include: `data_visualization`, `llm`, `agentic_memory`, `s
 ### Trust Classification for Dynamic Tools
 
 Dynamic tools are classified using pattern matching on function names:
+
 - Names containing `write`, `delete`, `execute`, `run`, `create`, `modify`, etc. → **Destructive**
 - All others → **Safe**
 
 See `_DESTRUCTIVE_PATTERNS` in `trust_gateway.py` for the full list.
 
 ### Email / AgentMail + Gmail (12 tools)
+
+The Email tab in the PAI Dashboard provides a browser-accessible interface for all email MCP tools:
+
+![PAI Email — AgentMail and Gmail dual-provider with inbox view, compose form, and AI-assisted drafting](screenshots/pai_email.png)
 
 **Module**: `codomyrmex.email.mcp_tools`
 **Auth**: AgentMail tools require `AGENTMAIL_API_KEY`. Gmail tools require `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, and `GOOGLE_REFRESH_TOKEN`.
@@ -193,6 +221,7 @@ See `_DESTRUCTIVE_PATTERNS` in `trust_gateway.py` for the full list.
 | `gmail_create_draft` | **Destructive** | Create a Gmail draft without sending |
 
 **Notes:**
+
 - AgentMail tools require `agentmail>=0.2.17` (`uv sync --extra email`)
 - Gmail tools require Google OAuth2 credentials in environment variables
 - Inbox defaults to `AGENTMAIL_DEFAULT_INBOX` env var when `inbox_id` is omitted

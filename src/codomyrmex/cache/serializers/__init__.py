@@ -6,14 +6,14 @@ Provides serializers for cache values.
 
 import base64
 import json
-import logging
 import pickle
 import zlib
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from typing import Any, Dict, Optional
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 
 class CacheSerializer(ABC):
@@ -34,7 +34,6 @@ class JSONSerializer(CacheSerializer):
     """JSON serializer for cache values."""
 
     def __init__(self, indent: int | None = None):
-        """Initialize this instance."""
         self.indent = indent
 
     def serialize(self, value: Any) -> bytes:
@@ -56,7 +55,6 @@ class PickleSerializer(CacheSerializer):
     """
 
     def __init__(self, protocol: int = pickle.HIGHEST_PROTOCOL):
-        """Initialize this instance."""
         self.protocol = protocol
 
     def serialize(self, value: Any) -> bytes:
@@ -76,7 +74,6 @@ class CompressedSerializer(CacheSerializer):
         base_serializer: CacheSerializer,
         compression_level: int = 6,
     ):
-        """Initialize this instance."""
         self.base = base_serializer
         self.level = compression_level
 
@@ -95,7 +92,6 @@ class Base64Serializer(CacheSerializer):
     """Wrapper that adds base64 encoding."""
 
     def __init__(self, base_serializer: CacheSerializer):
-        """Initialize this instance."""
         self.base = base_serializer
 
     def serialize(self, value: Any) -> bytes:
@@ -113,7 +109,6 @@ class StringSerializer(CacheSerializer):
     """Simple string serializer."""
 
     def __init__(self, encoding: str = 'utf-8'):
-        """Initialize this instance."""
         self.encoding = encoding
 
     def serialize(self, value: Any) -> bytes:
@@ -129,7 +124,6 @@ class TypedSerializer(CacheSerializer):
     """Serializer that preserves type information."""
 
     def __init__(self, base_serializer: CacheSerializer | None = None):
-        """Initialize this instance."""
         self.base = base_serializer or JSONSerializer()
 
     def serialize(self, value: Any) -> bytes:
@@ -162,7 +156,6 @@ class TypedSerializer(CacheSerializer):
         return value
 
     def _is_json_serializable(self, value: Any) -> bool:
-        """is Json Serializable ."""
         try:
             json.dumps(value)
             return True

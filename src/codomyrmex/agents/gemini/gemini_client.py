@@ -22,7 +22,6 @@ class GeminiClient(BaseAgent):
     """Client for interacting with Gemini API via google-genai SDK."""
 
     def __init__(self, config: dict[str, Any] | None = None):
-        """Initialize this instance."""
         super().__init__(
             name="gemini",
             capabilities=[
@@ -55,7 +54,6 @@ class GeminiClient(BaseAgent):
         self.default_model = self.get_config_value("gemini_model", default="gemini-2.0-flash", config=config)
 
     def _execute_impl(self, request: AgentRequest) -> AgentResponse:
-        """execute Impl ."""
         if not self.client:
             raise GeminiError("Gemini Client not initialized")
 
@@ -106,7 +104,6 @@ class GeminiClient(BaseAgent):
             raise GeminiError(f"Gemini API execution failed: {e}") from e
 
     def _stream_impl(self, request: AgentRequest) -> Iterator[str]:
-        """stream Impl ."""
         if not self.client:
              raise GeminiError("Gemini Client not initialized")
 
@@ -138,7 +135,6 @@ class GeminiClient(BaseAgent):
         enable_automatic_function_calling: bool = False,
         model: str | None = None,
     ) -> Any:
-        """start Chat ."""
         if not self.client:
             raise GeminiError("Gemini Client not initialized")
 
@@ -151,7 +147,6 @@ class GeminiClient(BaseAgent):
         )
 
     def _build_contents(self, prompt: str, context: dict[str, Any]) -> list[Any]:
-        """build Contents ."""
         if "contents" in context:
             return context["contents"]
 
@@ -166,7 +161,6 @@ class GeminiClient(BaseAgent):
         return [parts]
 
     def _build_response_from_api_result(self, response: Any, request: AgentRequest) -> AgentResponse:
-        """build Response From Api Result ."""
         if not response.candidates:
              return AgentResponse(content="", error="No candidates returned", metadata={"raw": str(response)})
 
@@ -195,7 +189,6 @@ class GeminiClient(BaseAgent):
         )
 
     def list_models(self) -> list[dict[str, Any]]:
-        """list Models ."""
         if not self.client:
             raise GeminiError("Gemini Client not initialized")
         try:
@@ -205,7 +198,6 @@ class GeminiClient(BaseAgent):
             raise GeminiError(f"Failed to list models: {e}") from e
 
     def get_model(self, model_name: str) -> dict[str, Any]:
-        """get Model ."""
         if not self.client:
             raise GeminiError("Gemini Client not initialized")
         try:
@@ -215,7 +207,6 @@ class GeminiClient(BaseAgent):
             raise GeminiError(f"Failed to get model {model_name}: {e}") from e
 
     def count_tokens(self, content: str | list[Any], model: str | None = None) -> int:
-        """count Tokens ."""
         if not self.client:
             raise GeminiError("Gemini Client not initialized")
         try:
@@ -226,7 +217,6 @@ class GeminiClient(BaseAgent):
             raise GeminiError(f"Failed to count tokens: {e}") from e
 
     def embed_content(self, content: str | list[str], model: str = "text-embedding-004") -> list[list[float]]:
-        """embed Content ."""
         if not self.client:
             raise GeminiError("Gemini Client not initialized")
         try:
@@ -241,7 +231,6 @@ class GeminiClient(BaseAgent):
             raise GeminiError(f"Failed to embed content: {e}") from e
 
     def generate_images(self, prompt: str, model: str = "imagen-latest") -> list[dict[str, Any]]:
-        """generate Images ."""
         if not self.client:
             raise GeminiError("Gemini Client not initialized")
         try:
@@ -252,7 +241,6 @@ class GeminiClient(BaseAgent):
             raise GeminiError(f"Failed to generate images: {e}") from e
 
     def upscale_image(self, image: Any, model: str = "imagen-latest") -> list[dict[str, Any]]:
-        """upscale Image ."""
         if not self.client:
             raise GeminiError("Gemini Client not initialized")
         try:
@@ -263,7 +251,6 @@ class GeminiClient(BaseAgent):
             raise GeminiError(f"Failed to upscale image: {e}") from e
 
     def edit_image(self, prompt: str, image: Any, model: str = "imagen-latest") -> list[dict[str, Any]]:
-        """edit Image ."""
         if not self.client:
             raise GeminiError("Gemini Client not initialized")
         try:
@@ -274,7 +261,6 @@ class GeminiClient(BaseAgent):
             raise GeminiError(f"Failed to edit image: {e}") from e
 
     def generate_videos(self, prompt: str, model: str = "veo-latest") -> list[dict[str, Any]]:
-        """generate Videos ."""
         if not self.client:
             raise GeminiError("Gemini Client not initialized")
         try:
@@ -285,7 +271,6 @@ class GeminiClient(BaseAgent):
             raise GeminiError(f"Failed to generate videos: {e}") from e
 
     def upload_file(self, file_path: str, mime_type: str | None = None) -> dict[str, Any]:
-        """upload File ."""
         if not self.client:
             raise GeminiError("Gemini Client not initialized")
         try:
@@ -300,7 +285,6 @@ class GeminiClient(BaseAgent):
             raise GeminiError(f"Failed to upload file: {e}") from e
 
     def list_files(self) -> list[dict[str, Any]]:
-        """list Files ."""
         if not self.client:
             raise GeminiError("Gemini Client not initialized")
         try:
@@ -310,7 +294,6 @@ class GeminiClient(BaseAgent):
             raise GeminiError(f"Failed to list files: {e}") from e
 
     def get_file(self, file_name: str) -> dict[str, Any]:
-        """get File ."""
         if not self.client:
             raise GeminiError("Gemini Client not initialized")
         try:
@@ -320,7 +303,6 @@ class GeminiClient(BaseAgent):
             raise GeminiError(f"Failed to get file {file_name}: {e}") from e
 
     def delete_file(self, file_name: str) -> bool:
-        """delete File ."""
         if not self.client:
             raise GeminiError("Gemini Client not initialized")
         try:
@@ -331,7 +313,6 @@ class GeminiClient(BaseAgent):
             raise GeminiError(f"Failed to delete file {file_name}: {e}") from e
 
     def create_cached_content(self, model: str, contents: Any, ttl: str | None = None, display_name: str | None = None) -> dict[str, Any]:
-        """create Cached Content ."""
         if not self.client:
             raise GeminiError("Gemini Client not initialized")
         try:
@@ -342,7 +323,6 @@ class GeminiClient(BaseAgent):
             raise GeminiError(f"Failed to create cached content: {e}") from e
 
     def list_cached_contents(self) -> list[dict[str, Any]]:
-        """list Cached Contents ."""
         if not self.client:
             raise GeminiError("Gemini Client not initialized")
         try:
@@ -352,7 +332,6 @@ class GeminiClient(BaseAgent):
             raise GeminiError(f"Failed to list cached contents: {e}") from e
 
     def get_cached_content(self, name: str) -> dict[str, Any]:
-        """get Cached Content ."""
         if not self.client:
             raise GeminiError("Gemini Client not initialized")
         try:
@@ -362,7 +341,6 @@ class GeminiClient(BaseAgent):
             raise GeminiError(f"Failed to get cached content {name}: {e}") from e
 
     def delete_cached_content(self, name: str) -> bool:
-        """delete Cached Content ."""
         if not self.client:
             raise GeminiError("Gemini Client not initialized")
         try:
@@ -373,7 +351,6 @@ class GeminiClient(BaseAgent):
             raise GeminiError(f"Failed to delete cached content {name}: {e}") from e
 
     def update_cached_content(self, name: str, ttl: str | None = None) -> dict[str, Any]:
-        """update Cached Content ."""
         if not self.client:
             raise GeminiError("Gemini Client not initialized")
         try:
@@ -383,7 +360,6 @@ class GeminiClient(BaseAgent):
             raise GeminiError(f"Failed to update cached content {name}: {e}") from e
 
     def create_tuned_model(self, source_model: str, training_data: Any, display_name: str | None = None, epochs: int | None = None) -> dict[str, Any]:
-        """create Tuned Model ."""
         if not self.client:
             raise GeminiError("Gemini Client not initialized")
         try:
@@ -394,7 +370,6 @@ class GeminiClient(BaseAgent):
             raise GeminiError(f"Failed to create tuned model: {e}") from e
 
     def list_tuned_models(self) -> list[dict[str, Any]]:
-        """list Tuned Models ."""
         if not self.client:
             raise GeminiError("Gemini Client not initialized")
         try:
@@ -404,7 +379,6 @@ class GeminiClient(BaseAgent):
             raise GeminiError(f"Failed to list tuned models: {e}") from e
 
     def get_tuned_model(self, name: str) -> dict[str, Any]:
-        """get Tuned Model ."""
         if not self.client:
             raise GeminiError("Gemini Client not initialized")
         try:
@@ -414,7 +388,6 @@ class GeminiClient(BaseAgent):
             raise GeminiError(f"Failed to get tuned model {name}: {e}") from e
 
     def delete_tuned_model(self, name: str) -> bool:
-        """delete Tuned Model ."""
         if not self.client:
             raise GeminiError("Gemini Client not initialized")
         try:
@@ -424,7 +397,6 @@ class GeminiClient(BaseAgent):
             logger.error(f"Failed to delete tuned model {name}: {e}")
             raise GeminiError(f"Failed to delete tuned model {name}: {e}") from e
     def create_batch(self, requests: list[Any], model: str | None = None) -> dict[str, Any]:
-        """create Batch ."""
         if not self.client:
             raise GeminiError("Gemini Client not initialized")
         try:
@@ -434,7 +406,6 @@ class GeminiClient(BaseAgent):
             raise GeminiError(f"Failed to create batch: {e}") from e
 
     def get_batch(self, name: str) -> dict[str, Any]:
-        """get Batch ."""
         if not self.client:
             raise GeminiError("Gemini Client not initialized")
         try:
@@ -444,7 +415,6 @@ class GeminiClient(BaseAgent):
             raise GeminiError(f"Failed to get batch {name}: {e}") from e
 
     def list_batches(self) -> list[dict[str, Any]]:
-        """list Batches ."""
         if not self.client:
             raise GeminiError("Gemini Client not initialized")
         try:
@@ -454,7 +424,6 @@ class GeminiClient(BaseAgent):
             raise GeminiError(f"Failed to list batches: {e}") from e
 
     def delete_batch(self, name: str) -> bool:
-        """delete Batch ."""
         if not self.client:
             raise GeminiError("Gemini Client not initialized")
         try:

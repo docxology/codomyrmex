@@ -25,7 +25,6 @@ class CircuitBreaker:
     """Circuit breaker pattern implementation."""
 
     def __init__(self, name: str, config: CircuitBreakerConfig | None = None):
-        """Initialize this instance."""
         self.name = name
         self.config = config or CircuitBreakerConfig()
         self.state = CircuitState.CLOSED
@@ -96,7 +95,6 @@ class LoadBalancer:
     """Load balancer for service instances."""
 
     def __init__(self, strategy: LoadBalancerStrategy = LoadBalancerStrategy.ROUND_ROBIN):
-        """Initialize this instance."""
         self.strategy = strategy
         self._instances: dict[str, ServiceInstance] = {}
         self._round_robin_index = 0
@@ -155,7 +153,6 @@ class RetryPolicy:
         exponential_base: float = 2.0,
         jitter: bool = True,
     ):
-        """Initialize this instance."""
         self.max_retries = max_retries
         self.initial_delay = initial_delay
         self.max_delay = max_delay
@@ -193,7 +190,6 @@ class ServiceProxy:
         circuit_breaker: CircuitBreaker | None = None,
         retry_policy: RetryPolicy | None = None,
     ):
-        """Initialize this instance."""
         self.service_name = service_name
         self.load_balancer = load_balancer or LoadBalancer()
         self.circuit_breaker = circuit_breaker or CircuitBreaker(service_name)

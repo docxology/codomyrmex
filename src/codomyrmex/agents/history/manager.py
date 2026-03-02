@@ -31,7 +31,6 @@ class ConversationManager:
         store: InMemoryHistoryStore | None = None,
         max_messages_per_conversation: int = 100,
     ):
-        """Initialize this instance."""
         self.store = store or InMemoryHistoryStore()
         self.max_messages = max_messages_per_conversation
         self._active_conversation: Conversation | None = None

@@ -23,7 +23,7 @@ import logging
 import threading
 import time
 from dataclasses import dataclass
-from datetime import datetime, timezone
+from datetime import datetime, timezone, UTC
 from typing import Any
 
 try:
@@ -265,7 +265,7 @@ class AntigravityDispatcher:
             if success:
                 with self._lock:
                     self._forwarded_count += 1
-                    self._last_forwarded_at = datetime.now(timezone.utc).isoformat()
+                    self._last_forwarded_at = datetime.now(UTC).isoformat()
                 logger.info(
                     "Forwarded message %s from %s to Antigravity",
                     msg.id,

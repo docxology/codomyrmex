@@ -40,7 +40,6 @@ class BenchmarkCase:
     tags: list[str] = field(default_factory=list)
 
     def __post_init__(self) -> None:
-        """post Init ."""
         if not self.id:
             self.id = str(uuid.uuid4())[:8]
 
@@ -185,7 +184,6 @@ class BenchmarkSuite:
         name: str = "default",
         scorer: Scorer | None = None,
     ) -> None:
-        """Initialize this instance."""
         self._name = name
         self._scorer = scorer or ExactMatchScorer(case_sensitive=False)
         self._cases: list[BenchmarkCase] = []

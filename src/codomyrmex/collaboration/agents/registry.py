@@ -6,7 +6,6 @@ and health monitoring functionality.
 """
 
 import asyncio
-import logging
 import threading
 from collections.abc import Callable
 from datetime import datetime, timedelta
@@ -16,8 +15,9 @@ from ..exceptions import AgentNotFoundError
 from ..models import AgentStatus, SwarmStatus
 from ..protocols import AgentState
 from .base import CollaborativeAgent
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 
 class AgentRegistry:
@@ -50,7 +50,6 @@ class AgentRegistry:
         health_check_interval: float = 30.0,
         heartbeat_timeout: float = 60.0,
     ):
-        """Initialize this instance."""
         if self._initialized:
             return
 

@@ -74,5 +74,4 @@ class NotificationResult:
 
     @property
     def is_success(self) -> bool:
-        """is Success ."""
         return self.status in [NotificationStatus.SENT, NotificationStatus.DELIVERED]

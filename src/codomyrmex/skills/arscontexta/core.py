@@ -78,7 +78,6 @@ class KernelPrimitiveRegistry:
     """Registry holding the 15 default kernel primitives."""
 
     def __init__(self) -> None:
-        """Initialize this instance."""
         self._primitives: dict[str, KernelPrimitive] = {}
         for p in _build_default_primitives():
             self._primitives[p.name] = p
@@ -88,11 +87,9 @@ class KernelPrimitiveRegistry:
         return self._primitives.get(name)
 
     def list_all(self) -> list[KernelPrimitive]:
-        """list All ."""
         return list(self._primitives.values())
 
     def list_by_layer(self, layer: KernelLayer) -> list[KernelPrimitive]:
-        """list By Layer ."""
         return [p for p in self._primitives.values() if p.layer == layer]
 
     def validate_primitive(self, name: str, vault_path: Path) -> bool:
@@ -109,7 +106,6 @@ class KernelPrimitiveRegistry:
         return prim.enabled
 
     def to_kernel_config(self) -> KernelConfig:
-        """to Kernel Config ."""
         return KernelConfig(primitives=list(self._primitives.values()))
 
 
@@ -122,7 +118,6 @@ class ProcessingPipeline:
     """Implements the 6R Processing Pipeline with pluggable stage handlers."""
 
     def __init__(self) -> None:
-        """Initialize this instance."""
         self._handlers: dict[PipelineStage, list[Callable[[str, dict], str]]] = {
             stage: [] for stage in PipelineStage
         }
@@ -178,7 +173,6 @@ class ProcessingPipeline:
             )
 
     def get_results(self) -> list[StageResult]:
-        """get Results ."""
         return list(self._results)
 
 
@@ -247,11 +241,9 @@ class DerivationEngine:
     """Maps user text to 8 configuration dimensions with confidence scoring."""
 
     def __init__(self) -> None:
-        """Initialize this instance."""
         self._signals: list[DimensionSignal] = []
 
     def ingest_signal(self, signal: DimensionSignal) -> None:
-        """ingest Signal ."""
         self._signals.append(signal)
 
     def ingest_from_text(self, text: str, source: str = "user") -> list[DimensionSignal]:
@@ -302,18 +294,15 @@ class MethodologyGraph:
     """Adjacency-list graph of research claims grounding Ars Contexta decisions."""
 
     def __init__(self) -> None:
-        """Initialize this instance."""
         self._claims: dict[str, ResearchClaim] = {}
         self._edges: dict[str, list[str]] = {}  # claim_id -> [related_ids]
 
     def add_claim(self, claim: ResearchClaim) -> None:
-        """add Claim ."""
         self._claims[claim.claim_id] = claim
         if claim.claim_id not in self._edges:
             self._edges[claim.claim_id] = []
 
     def add_edge(self, from_id: str, to_id: str) -> None:
-        """add Edge ."""
         if from_id not in self._edges:
             self._edges[from_id] = []
         if to_id not in self._edges[from_id]:
@@ -325,26 +314,21 @@ class MethodologyGraph:
             self._edges[to_id].append(from_id)
 
     def get_claim(self, claim_id: str) -> ResearchClaim | None:
-        """get Claim ."""
         return self._claims.get(claim_id)
 
     def get_related(self, claim_id: str) -> list[ResearchClaim]:
-        """get Related ."""
         related_ids = self._edges.get(claim_id, [])
         return [self._claims[rid] for rid in related_ids if rid in self._claims]
 
     def get_by_primitive(self, primitive_name: str) -> list[ResearchClaim]:
-        """get By Primitive ."""
         return [
             c for c in self._claims.values() if primitive_name in c.connected_primitives
         ]
 
     def get_by_domain(self, domain: str) -> list[ResearchClaim]:
-        """get By Domain ."""
         return [c for c in self._claims.values() if c.domain == domain]
 
     def list_all(self) -> list[ResearchClaim]:
-        """list All ."""
         return list(self._claims.values())
 
     def count(self) -> int:
@@ -352,7 +336,6 @@ class MethodologyGraph:
         return len(self._claims)
 
     def get_statistics(self) -> dict[str, Any]:
-        """get Statistics ."""
         domains: dict[str, int] = {}
         for c in self._claims.values():
             domains[c.domain] = domains.get(c.domain, 0) + 1
@@ -427,7 +410,6 @@ class ArsContextaManager:
     """Main entry point composing all Ars Contexta services."""
 
     def __init__(self) -> None:
-        """Initialize this instance."""
         self.registry = KernelPrimitiveRegistry()
         self.pipeline = ProcessingPipeline()
         self.derivation = DerivationEngine()
@@ -488,11 +470,9 @@ class ArsContextaManager:
         return [p.to_dict() for p in prims]
 
     def get_methodology_stats(self) -> dict[str, Any]:
-        """get Methodology Stats ."""
         return self.methodology.get_statistics()
 
     def get_config(self) -> VaultConfig | None:
-        """get Config ."""
         return self._config
 
 

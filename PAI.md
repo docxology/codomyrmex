@@ -83,6 +83,7 @@ UNTRUSTED ──/codomyrmexVerify──> VERIFIED ──/codomyrmexTrust──> 
 analyze, search, git status/diff, and discovery tools.
 
 **Destructive tools (4)**: Require explicit `/codomyrmexTrust`:
+
 - `codomyrmex.write_file` — filesystem writes
 - `codomyrmex.run_command` — shell execution
 - `codomyrmex.run_tests` — test execution
@@ -228,8 +229,45 @@ Every codomyrmex module has a `PAI.md` file describing its AI capabilities. Thes
 - [Detailed PAI Reference](docs/pai/) — Architecture, tools, API, workflows
 - [Connecting Tutorial](docs/getting-started/tutorials/connecting-pai.md) — Step-by-step setup
 
+## PAI Dashboard Interface
+
+The PAI Dashboard (`~/.claude/skills/PAI/Tools/PMServer.ts`, port 8889) provides a browser-based project management and communication interface. It is a Codomyrmex-integrated fork of [danielmiessler/Personal_AI_Infrastructure](https://github.com/danielmiessler/Personal_AI_Infrastructure), extended with email, calendar, git sync, and network visualization capabilities.
+
+### Analytics — Mission & Project Overview
+
+![PAI Analytics Dashboard](docs/pai/screenshots/pai_analytics.png)
+
+### Board — Kanban Mission Tracker
+
+![PAI Kanban Board](docs/pai/screenshots/pai_board.png)
+
+### Calendar — Google Calendar Integration
+
+![PAI Calendar](docs/pai/screenshots/pai_calendar.png)
+
+### Email — AgentMail & Gmail Dual-Provider
+
+![PAI Email](docs/pai/screenshots/pai_email.png)
+
+### Network — Force-Directed Project Graph
+
+![PAI Network Visualization](docs/pai/screenshots/pai_network.png)
+
+### Git — Repository Sync Manager
+
+![PAI Git Management](docs/pai/screenshots/pai_git.png)
+
+### Dispatch — Mission Action Center
+
+![PAI Dispatch](docs/pai/screenshots/pai_dispatch.png)
+
+### Integration — GitHub & Data Export
+
+![PAI Integration Tools](docs/pai/screenshots/pai_integration.png)
+
 ## Version History
 
+- **v0.5.0** (March 2026) — Dashboard interface screenshots (8 tabs), quadruple review, fork attribution
 - **v0.4.0** (February 2026) — Bidirectional link completion, docs/pai/ reference, version sync
 - **v0.2.0** (February 2026) — Full rewrite: actual PAI system bridge documentation
 - **v0.1.0** (February 2026) — Initial generic PAI concept documentation

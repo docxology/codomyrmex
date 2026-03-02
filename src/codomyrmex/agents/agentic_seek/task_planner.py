@@ -10,17 +10,17 @@ Reference: https://github.com/Fosowl/agenticSeek/blob/main/sources/agents/planne
 from __future__ import annotations
 
 import json
-import logging
 import re
 from collections import deque
 from typing import Any
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 from codomyrmex.agents.agentic_seek.agent_types import (
     AgenticSeekAgentType,
     AgenticSeekTaskStep,
 )
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 # ---------------------------------------------------------------------------
 # Task-name extraction (mirrors PlannerAgent.get_task_names)

@@ -4,10 +4,9 @@ This module provides the VideoAnalyzer class for extracting information
 and metadata from video files.
 """
 
-import logging
 from pathlib import Path
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 from codomyrmex.video.exceptions import (
     UnsupportedFormatError,
@@ -15,6 +14,7 @@ from codomyrmex.video.exceptions import (
     VideoReadError,
 )
 from codomyrmex.video.models import VideoComparison, VideoInfo
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 # Check for OpenCV availability
 try:

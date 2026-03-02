@@ -10,13 +10,13 @@ S3 Endpoints:
     - https://s3.pub2.infomaniak.cloud/
 """
 
-import logging
 from typing import Any
 
 from ...common import StorageClient
 from ..base import InfomaniakOpenStackBase, InfomaniakS3Base
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 
 class InfomaniakObjectStorageClient(InfomaniakOpenStackBase):

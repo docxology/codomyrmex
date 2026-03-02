@@ -49,7 +49,6 @@ class AssetInventory:
     """Manages physical asset inventory."""
 
     def __init__(self):
-        """Initialize this instance."""
 
         self.assets: dict[str, PhysicalAsset] = {}
         logger.info("AssetInventory initialized")

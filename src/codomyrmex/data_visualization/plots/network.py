@@ -8,13 +8,11 @@ class NetworkGraph(BasePlot):
     """Network graph visualization."""
 
     def __init__(self, title="", nodes=None, edges=None, **kwargs):
-        """Initialize this instance."""
         super().__init__(title=title, **kwargs)
         self.nodes = nodes or []
         self.edges = edges or []
 
     def _render_figure(self, fig, ax):
-        """render Figure ."""
         n = len(self.nodes)
         if n == 0:
             return

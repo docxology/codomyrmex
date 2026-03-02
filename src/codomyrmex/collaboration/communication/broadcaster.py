@@ -5,7 +5,6 @@ Provides topic-based pub/sub patterns for agent swarms.
 """
 
 import asyncio
-import logging
 import uuid
 from collections.abc import Callable
 from dataclasses import dataclass, field
@@ -14,8 +13,9 @@ from typing import Any
 
 from ..exceptions import ChannelError
 from ..protocols import AgentMessage, MessageType
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 
 @dataclass
@@ -59,7 +59,6 @@ class Broadcaster:
     """
 
     def __init__(self, retention_count: int = 100):
-        """Initialize this instance."""
         self._topics: dict[str, set[str]] = {}  # topic -> subscription_ids
         self._subscriptions: dict[str, Subscription] = {}  # subscription_id -> Subscription
         self._topic_created_at: dict[str, datetime] = {}

@@ -119,7 +119,6 @@ class AreaChart:
         figure_size: tuple = None,
         theme=None,
     ):
-        """Initialize this instance."""
         self.x_data = x_data or []
         self.y_data = y_data or []
         self.title = title

@@ -4,15 +4,15 @@ Migration Models
 Data classes, enums, and transformers for data migration.
 """
 
-import logging
 from abc import ABC, abstractmethod
 from collections.abc import Callable
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 from typing import Any
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 
 class MigrationStatus(Enum):
@@ -129,7 +129,6 @@ class FieldRenameTransformer(DataTransformer):
     """Renames fields in dictionaries."""
 
     def __init__(self, mapping: dict[str, str]):
-        """Initialize this instance."""
         self.mapping = mapping
 
     def transform(self, data: dict[str, Any]) -> dict[str, Any]:
@@ -145,7 +144,6 @@ class FieldTypeTransformer(DataTransformer):
     """Converts field types."""
 
     def __init__(self, conversions: dict[str, type]):
-        """Initialize this instance."""
         self.conversions = conversions
 
     def transform(self, data: dict[str, Any]) -> dict[str, Any]:
@@ -165,7 +163,6 @@ class CompositeTransformer(DataTransformer):
     """Combines multiple transformers."""
 
     def __init__(self, transformers: list[DataTransformer]):
-        """Initialize this instance."""
         self.transformers = transformers
 
     def transform(self, data: Any) -> Any:

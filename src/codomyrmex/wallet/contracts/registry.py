@@ -50,7 +50,6 @@ class ContractRegistry:
     """
 
     def __init__(self) -> None:
-        """Initialize this instance."""
         self._contracts: dict[str, ContractVersion] = {}
         self._history: dict[str, list[ContractVersion]] = {}
 

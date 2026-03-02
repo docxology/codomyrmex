@@ -15,7 +15,7 @@ from pathlib import Path
 
 # Ensure codomyrmex is importable
 try:
-    import codomyrmex
+    import codomyrmex  # noqa: F401
 except ImportError:
     sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "src"))
 

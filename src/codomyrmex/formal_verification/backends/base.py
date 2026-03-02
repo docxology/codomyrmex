@@ -34,12 +34,10 @@ class SolverResult:
 
     @property
     def is_sat(self) -> bool:
-        """is Sat ."""
         return self.status == SolverStatus.SAT
 
     @property
     def is_unsat(self) -> bool:
-        """is Unsat ."""
         return self.status == SolverStatus.UNSAT
 
 

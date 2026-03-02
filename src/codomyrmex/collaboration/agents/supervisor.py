@@ -6,7 +6,6 @@ for complex multi-step workflows.
 """
 
 import asyncio
-import logging
 from collections.abc import Callable
 from typing import Any
 
@@ -19,8 +18,9 @@ from ..models import Task, TaskResult
 from ..protocols import AgentCapability, AgentState
 from .base import CollaborativeAgent
 from .worker import WorkerAgent
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 
 class SupervisorAgent(CollaborativeAgent):
@@ -43,7 +43,6 @@ class SupervisorAgent(CollaborativeAgent):
         delegation_strategy: str = "capability",
         max_retries: int = 3,
     ):
-        """Initialize this instance."""
         super().__init__(
             agent_id,
             name,

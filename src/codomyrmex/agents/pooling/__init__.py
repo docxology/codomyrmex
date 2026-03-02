@@ -118,7 +118,6 @@ class CircuitBreaker:
         failure_threshold: int = 5,
         reset_timeout_s: float = 30.0,
     ):
-        """Initialize this instance."""
         self.failure_threshold = failure_threshold
         self.reset_timeout_s = reset_timeout_s
         self._failures = 0
@@ -188,7 +187,6 @@ class AgentPool(Generic[T]):
         strategy: LoadBalanceStrategy = LoadBalanceStrategy.ROUND_ROBIN,
         config: PoolConfig | None = None,
     ):
-        """Initialize this instance."""
         self.strategy = strategy
         self.config = config or PoolConfig()
         self._agents: dict[str, PooledAgent[T]] = {}
@@ -417,7 +415,6 @@ class FallbackChain(Generic[T]):
     """
 
     def __init__(self):
-        """Initialize this instance."""
         self._agents: list[tuple[str, T]] = []
 
     def add(self, name: str, agent: T) -> "FallbackChain[T]":

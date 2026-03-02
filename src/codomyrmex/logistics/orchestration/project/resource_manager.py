@@ -7,7 +7,7 @@ for tasks and workflows across the Codomyrmex ecosystem.
 import threading
 import uuid
 from dataclasses import asdict, dataclass, field
-from datetime import datetime, timezone
+from datetime import datetime, timezone, UTC
 from enum import Enum
 from typing import Any
 
@@ -71,7 +71,7 @@ class ResourceAllocation:
     resource_id: str
     requester_id: str
     amount: float
-    timestamp: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
+    timestamp: datetime = field(default_factory=lambda: datetime.now(UTC))
     expires_at: datetime | None = None
     metadata: dict[str, Any] = field(default_factory=dict)
 
@@ -85,7 +85,7 @@ class ResourceUsage:
     available_amount: float
     allocation_count: int
     utilization_percentage: float
-    timestamp: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
+    timestamp: datetime = field(default_factory=lambda: datetime.now(UTC))
 
 
 @dataclass
@@ -105,7 +105,6 @@ class Resource:
     allocations: dict[str, ResourceAllocation] = field(default_factory=dict)
 
     def __post_init__(self):
-        """post Init ."""
         if not self.id:
             self.id = str(uuid.uuid4())
 
@@ -316,7 +315,7 @@ class ResourceManager:
 
     def cleanup_expired_allocations(self) -> int:
         """Release all expired allocations."""
-        now = datetime.now(timezone.utc)
+        now = datetime.now(UTC)
         cleaned_count = 0
 
         with self._lock:

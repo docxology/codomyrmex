@@ -10,7 +10,7 @@ import uuid
 from collections import deque
 from concurrent.futures import Future, ThreadPoolExecutor
 from dataclasses import dataclass, field
-from datetime import datetime, timezone
+from datetime import datetime, timezone, UTC
 from enum import Enum
 from typing import Any
 
@@ -82,7 +82,7 @@ class Task:
     status: TaskStatus = TaskStatus.PENDING
     result: TaskResult | None = None
     error: str | None = None
-    created_at: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
+    created_at: datetime = field(default_factory=lambda: datetime.now(UTC))
     started_at: datetime | None = None
     completed_at: datetime | None = None
     allocations: list[ResourceAllocation] = field(default_factory=list)
@@ -229,7 +229,7 @@ class TaskOrchestrator:
         # In a real implementation, we would check self.resource_manager.allocate(...)
 
         task.status = TaskStatus.RUNNING
-        task.started_at = datetime.now(timezone.utc)
+        task.started_at = datetime.now(UTC)
 
         future = self.executor.submit(self._execute_task_logic, task)
         self.running_tasks[task_id] = future
@@ -261,7 +261,7 @@ class TaskOrchestrator:
             if not task:
                 return
 
-            task.completed_at = datetime.now(timezone.utc)
+            task.completed_at = datetime.now(UTC)
             self.running_tasks.pop(task_id, None)
 
             try:
@@ -311,7 +311,7 @@ class TaskOrchestrator:
                 return False
 
             task.status = TaskStatus.CANCELLED
-            task.completed_at = datetime.now(timezone.utc)
+            task.completed_at = datetime.now(UTC)
 
             # Note: We can't easily kill running threads in ThreadPoolExecutor
             # but we can mark it as cancelled so we don't return its result or trigger dependents

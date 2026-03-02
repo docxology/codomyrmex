@@ -31,13 +31,12 @@ Usage — file-injected TO-DO development loop::
 from __future__ import annotations
 
 import json
-import logging
 import os
 import time
 import uuid
 from collections.abc import Callable
 from dataclasses import asdict, dataclass, field
-from datetime import datetime, timezone
+from datetime import datetime, timezone, UTC
 from pathlib import Path
 from typing import Any
 
@@ -46,8 +45,9 @@ from codomyrmex.ide.antigravity.agent_relay import AgentRelay
 from codomyrmex.logging_monitoring.core.correlation import (
     with_correlation,
 )
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 
 # ── Data Structures ──────────────────────────────────────────────────
@@ -76,7 +76,6 @@ class AgentSpec:
     model: str = ""
 
     def __post_init__(self) -> None:
-        """post Init ."""
         if not self.model:
             if self.provider == "ollama":
                 self.model = os.environ.get("OLLAMA_MODEL", "llama3.2:1b")
@@ -96,7 +95,6 @@ class FileContext:
     max_lines: int = 200
 
     def __post_init__(self) -> None:
-        """post Init ."""
         self.path = Path(self.path)
         if not self.content and self.path.is_file():
             raw = self.path.read_text(errors="replace")
@@ -114,7 +112,6 @@ class FileContext:
 
     @property
     def token_estimate(self) -> int:
-        """token Estimate ."""
         return len(self.content.split())
 
 
@@ -223,11 +220,9 @@ def _create_llm_client(spec: AgentSpec) -> Any:
                     class AntigravityCodeImplementerWrapper:
                         """Functional component: AntigravityCodeImplementerWrapper."""
                         def __init__(self, base_client):
-                            """Initialize this instance."""
                             self.client = base_client
 
                         def execute_with_session(self, request, session=None, session_id=None):
-                            """execute With Session ."""
                             if hasattr(self.client, 'execute_with_tools'):
                                 logger.info(f"[{spec.identity}] Executing with full Antigravity tool loop...")
                                 return self.client.execute_with_tools(request, auto_execute=True, max_tool_rounds=15)
@@ -283,7 +278,6 @@ class ConversationOrchestrator:
         todo_path: str | Path | None = None,
         max_retries: int = 2,
     ) -> None:
-        """Initialize this instance."""
         self.channel_id = channel or f"conv-{uuid.uuid4().hex[:8]}"
         self.seed_prompt = seed_prompt
         self.max_retries = max_retries
@@ -344,7 +338,7 @@ class ConversationOrchestrator:
         # Conversation state.
         self.log = ConversationLog(
             channel_id=self.channel_id,
-            started_at=datetime.now(timezone.utc).isoformat(),
+            started_at=datetime.now(UTC).isoformat(),
             agents=[a.identity for a in self.agents],
         )
 
@@ -416,7 +410,7 @@ class ConversationOrchestrator:
 
         self.log.total_rounds = round_num - 1 if rounds > 0 else round_num
         self.log.status = "completed"
-        self.log.ended_at = datetime.now(timezone.utc).isoformat()
+        self.log.ended_at = datetime.now(UTC).isoformat()
         self._running = False
 
         logger.info(
@@ -618,7 +612,7 @@ class ConversationOrchestrator:
             provider=spec.provider,
             model=spec.model,
             content=content,
-            timestamp=datetime.now(timezone.utc).isoformat(),
+            timestamp=datetime.now(UTC).isoformat(),
             elapsed_seconds=round(elapsed, 3),
             token_estimate=len(content.split()),
         )

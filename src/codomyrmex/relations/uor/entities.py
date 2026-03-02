@@ -14,7 +14,7 @@ from __future__ import annotations
 import hashlib
 import json
 from dataclasses import dataclass, field
-from datetime import datetime, timezone
+from datetime import datetime, timezone, UTC
 from typing import Any
 from uuid import uuid4
 
@@ -55,7 +55,7 @@ class UOREntity:
     content_hash: str = ""
     triadic_coordinates: TriadicCoordinate | None = None
     created_at: str = field(
-        default_factory=lambda: datetime.now(timezone.utc).isoformat()
+        default_factory=lambda: datetime.now(UTC).isoformat()
     )
 
     def __post_init__(self) -> None:
@@ -170,7 +170,7 @@ class UORRelationship:
     weight: float = 1.0
     bidirectional: bool = False
     created_at: str = field(
-        default_factory=lambda: datetime.now(timezone.utc).isoformat()
+        default_factory=lambda: datetime.now(UTC).isoformat()
     )
 
     def __post_init__(self) -> None:

@@ -45,23 +45,12 @@ Usage:
     processed = list(run_todos(controller, manager, 3))
 """
 
-# Handle both module and direct execution imports
-try:
-    # When run as module
-    from .controller import (
-        DroidController,
-        create_default_controller,
-        load_config_from_file,
-    )
-    from .todo import TodoItem, TodoManager
-except ImportError:
-    # When run directly as script
-    from controller import (
-        DroidController,
-        create_default_controller,
-        load_config_from_file,
-    )
-    from todo import TodoItem, TodoManager
+from codomyrmex.agents.droid.controller import (
+    DroidController,
+    create_default_controller,
+    load_config_from_file,
+)
+from codomyrmex.agents.droid.todo import TodoItem, TodoManager
 
 # Enhanced prompt with Codomyrmex-specific context and rules
 CODOMYRMEX_ENHANCED_PROMPT = (
@@ -466,12 +455,8 @@ Examples:
 
     # Set the working directory to the droid folder for relative paths
     import os
-    import sys
 
     droid_dir = os.path.dirname(os.path.abspath(__file__))
-    project_root = os.path.dirname(
-        os.path.dirname(os.path.dirname(os.path.dirname(droid_dir)))
-    )
     os.chdir(droid_dir)
 
     print("🤖 Codomyrmex Droid TODO Processor")

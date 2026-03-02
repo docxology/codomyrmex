@@ -52,7 +52,6 @@ class ConsistentHash:
     """
 
     def __init__(self, nodes: list[str] | None = None, replicas: int = 100) -> None:
-        """Initialize this instance."""
         self._replicas = replicas
         self._ring: list[int] = []
         self._node_map: dict[int, str] = {}
