@@ -36,12 +36,11 @@ def handle_quick_run(
     Returns:
         True if successful
     """
-    from codomyrmex.orchestrator.parallel_runner import ParallelRunner
-
     from codomyrmex.orchestrator import (
         discover_scripts,
         run_script,
     )
+    from codomyrmex.orchestrator.execution.parallel_runner import ParallelRunner
 
     args = args or []
     target_path = Path(target)
@@ -209,9 +208,8 @@ def handle_quick_batch(
     Returns:
         True if all succeeded
     """
-    from codomyrmex.orchestrator.parallel_runner import ParallelRunner
-
     from codomyrmex.orchestrator import discover_scripts
+    from codomyrmex.orchestrator.execution.parallel_runner import ParallelRunner
 
     # Collect all scripts
     all_scripts = []

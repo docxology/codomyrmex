@@ -1,14 +1,39 @@
+"""Shared test infrastructure for agent unit tests.
+
+This module provides module-level constants and helper functions used by
+agent test files to gate tests on external tool/SDK availability.
+
+**Design rationale — why module-level constants, not pytest fixtures:**
+
+The constants defined here (GEMINI_AVAILABLE, JULES_AVAILABLE, etc.) are
+intentionally evaluated at *module import time* (i.e., during pytest
+collection), not at test invocation time.  This is required because they
+are consumed by ``@pytest.mark.skipif(not CONSTANT, ...)`` decorators,
+which are processed when Python parses the test module, before any test
+function is called or any pytest fixture is instantiated.
+
+Converting these constants to pytest fixtures would break the skip
+mechanism: fixtures are injected at test-call time and cannot be referenced
+in decorator arguments that must evaluate to a literal bool at definition
+time.
+
+**Usage pattern in test files:**
+
+    from codomyrmex.tests.unit.agents.helpers import GEMINI_AVAILABLE
+
+    class TestGeminiIntegration:
+        @pytest.mark.skipif(not GEMINI_AVAILABLE, reason="gemini CLI or SDK not installed")
+        def test_something(self):
+            ...
+
+**Adding new tools:**  Add a new ``TOOL_AVAILABLE`` constant below following
+the existing ``check_tool_available("tool-name")`` pattern.  Do NOT import
+this file from production code — it is test infrastructure only.
+"""
+
 import os
 import subprocess
 
-"""Helper functions for agent tests.
-
-
-
-Tests use real implementations only. When CLI tools are not available,
-tests are skipped rather than using mocks. All data processing and
-conversion logic is tested with real data structures.
-"""
 
 def check_tool_available(command: str, help_flag: str = "--help") -> bool:
     """
