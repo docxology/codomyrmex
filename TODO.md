@@ -13,7 +13,7 @@ This is the authoritative project backlog. Updated after each wave/sprint. Sprin
 - [x] Create top-level `TODO.md` *(Wave 2 — done)*
 - [x] Fix Gemini workflows — created `.gemini/` directory with 5 prompt files *(Wave 2 — done)*
 - [x] **`model_context_protocol/transport/server.py`** — 0% → 60%+ test coverage, new `test_server_coverage.py` *(Sprint 14)*
-- [ ] **Ratchet coverage gate** from `fail_under=68` → 70% (server.py at 60%, need more coverage)
+- [ ] **Ratchet coverage gate** from `fail_under=68` → 70% (Sprint 15: +21 health_handler tests; need full-suite verification ≥70% before bumping gate)
 - [ ] **Resolve ~35 circular import pairs** (Sprint 4 target, still open)
 
 ---
@@ -61,8 +61,8 @@ Modules with no MCP exposure — invisible to the PAI bridge:
 
 ### Type Checking
 
-- [ ] Add `py.typed` markers across all modules with type hints (PEP 561)
-- [ ] Check and complete: `cerebrum/`, `events/`, `search/`, `config_management/`, etc.
+- [x] Add `py.typed` markers across all modules with type hints (PEP 561) — **88/88 modules complete** (Sprint 15)
+- [ ] Check and complete type hint coverage: `cerebrum/`, `events/`, `search/`, `config_management/`, etc.
 
 ### Ruff Violations — Sprint 15 COMPLETE ✅ *(March 2026)*
 
@@ -174,13 +174,16 @@ Modules with no MCP exposure — invisible to the PAI bridge:
 - [x] Added `## PAI Integration` table to root README.md (7-phase Algorithm table)
 - [x] Updated root README.md test badge to 16,190, coverage gate reference to 68%
 
-### Sprint 15 (March 2026) — Ruff Cleanup & Bug Fixes
+### Sprint 15 (March 2026) — Ruff Cleanup, Bug Fixes & Coverage
 - [x] **TID252 eliminated**: 241 relative parent imports converted to absolute across 107 source files
 - [x] **E402 eliminated**: 160 "imports not at top" fixed across 120+ files (logger placement, cli_commands, docstring order)
 - [x] Ruff total: 607 → 43 violations (93% reduction; only F405 structural star imports remain)
 - [x] Fixed circular import in `ide/__init__.py` — CursorClient deferred with `# noqa: E402`
 - [x] Fixed seaborn `xticklabels=None` TypeError (→ `"auto"`) in `advanced_plotter.py`
 - [x] Fixed `test_task_master.py` ANTHROPIC_API_KEY collection-time skip → execution-time `autouse` fixture
+- [x] Fixed `orchestrator/execution/runner.py` `queue.empty()` race condition → `queue.get(timeout=5)` (fixes flaky multiprocessing tests)
+- [x] Added 21 new health_handler tests (`test_health_handler.py`): coverage 62% → 94%
+- [x] Added missing `py.typed` markers for `docs_gen`, `git_analysis`, `release` (now 88/88 modules have py.typed)
 
 ### Sprint 14 (March 2026) — Rules Submodule
 - [x] Moved `cursorrules/` → `src/codomyrmex/agentic_memory/rules/` via `git mv`
