@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import json
 
+
 def test_import_mcp_tools() -> None:
     """All MCP tools are importable without errors."""
     from codomyrmex.cli.mcp_tools import (
@@ -80,6 +81,7 @@ def test_cli_run_command_invalid_args_json() -> None:
     assert result.get("status") == "error"
     # Should be JSON decode error caught in some way or another
     # Wait, the try/except catches Exception and returns it
+
 
 def test_cli_run_command_args_not_dict() -> None:
     """cli_run_command returns error if args JSON is not a dictionary."""
