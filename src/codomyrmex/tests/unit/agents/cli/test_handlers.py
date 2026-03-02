@@ -337,6 +337,7 @@ class TestOpenCodeHandlers:
         result = handle_opencode_execute(args)
         assert isinstance(result, bool)
 
+    @pytest.mark.timeout(10)
     def test_opencode_stream_runs(self, capsys):
         args = _make_args(prompt="test")
         result = handle_opencode_stream(args)

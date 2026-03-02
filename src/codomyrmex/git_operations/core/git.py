@@ -65,6 +65,7 @@ __all__ = [
     "switch_branch",
     "delete_branch",
     "get_current_branch",
+    "list_branches",
     "commit_changes",
     "amend_commit",
     "revert_commit",
