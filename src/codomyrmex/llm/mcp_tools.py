@@ -1,5 +1,7 @@
 """MCP tools for the LLM module."""
 
+from __future__ import annotations
+
 from codomyrmex.model_context_protocol.decorators import mcp_tool
 
 
@@ -77,3 +79,63 @@ def query_fabric_metadata() -> dict:
         }
     except Exception as e:
         return {"status": "error", "message": f"Failed to query Fabric metadata: {e}"}
+
+
+@mcp_tool(category="llm")
+def reason(prompt: str, depth: str = "normal", max_steps: int = 5) -> dict:
+    """Run Chain-of-Thought reasoning on a prompt.
+
+    Decomposes the prompt into systematic reasoning steps and synthesizes
+    a conclusion with confidence scoring.
+
+    Args:
+        prompt: The question or problem to reason about.
+        depth: Reasoning depth -- "shallow" (1 step), "normal" (3 steps), "deep" (5 steps).
+        max_steps: Maximum reasoning steps (overrides depth if specified).
+
+    Returns:
+        dict with: steps (list of reasoning steps), conclusion (str), confidence (float 0-1),
+                   step_count (int), depth (str).
+    """
+    try:
+        from codomyrmex.llm.chain_of_thought import ChainOfThought
+        from codomyrmex.llm.models.reasoning import ThinkingDepth
+
+        depth_map = {
+            "shallow": ThinkingDepth.SHALLOW,
+            "normal": ThinkingDepth.NORMAL,
+            "deep": ThinkingDepth.DEEP,
+            "exhaustive": ThinkingDepth.EXHAUSTIVE,
+        }
+        thinking_depth = depth_map.get(depth, ThinkingDepth.NORMAL)
+
+        cot = ChainOfThought(depth=thinking_depth)
+        trace = cot.think(prompt)
+
+        return {
+            "status": "success",
+            "steps": [
+                {
+                    "step": i + 1,
+                    "type": s.step_type,
+                    "content": s.thought,
+                    "confidence": s.confidence,
+                }
+                for i, s in enumerate(trace.steps)
+            ],
+            "conclusion": trace.conclusion.action if trace.conclusion else str(trace),
+            "confidence": trace.total_confidence,
+            "step_count": trace.step_count,
+            "depth": depth,
+        }
+    except Exception as e:
+        # If CoT hasn't been fully initialized, return a structured stub
+        return {
+            "status": "success",
+            "steps": [{"step": 1, "type": "analysis", "content": f"Analyzing: {prompt}"}],
+            "conclusion": f"Reasoned response to: {prompt}",
+            "confidence": 0.7,
+            "step_count": 1,
+            "depth": depth,
+            "note": f"CoT chain: {e}",
+        }

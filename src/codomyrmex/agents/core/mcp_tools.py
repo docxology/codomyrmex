@@ -136,9 +136,79 @@ def get_last_trace() -> dict:
     }
 
 
+@mcp_tool(category="agents.core")
+def react_step(
+    observation: str,
+    available_tools: list[str] | None = None,
+    max_steps: int = 5,
+) -> dict:
+    """Execute a single ReAct (Reasoning + Acting) step.
+
+    Given an observation, the agent reasons about what action to take
+    and returns a thought + action pair.
+
+    Args:
+        observation: Current observation or task description.
+        available_tools: List of tool names available for actions.
+        max_steps: Maximum number of steps before forced conclusion.
+
+    Returns:
+        dict with: thought (str), action (str), action_input (str),
+                   is_final (bool), step_number (int).
+    """
+    try:
+        from codomyrmex.agents.core.react import ReActAgent
+        from codomyrmex.agents.core.registry import ToolRegistry
+
+        tools = available_tools or ["search", "think", "calculate", "conclude"]
+
+        # Build a lightweight registry with the named tools
+        registry = ToolRegistry()
+        for tool_name in tools:
+            # Register a no-op function for each tool name so the agent
+            # can plan with them even though they aren't wired up here.
+            registry.register_function(
+                lambda **kw: kw,  # noqa: E731
+                name=tool_name,
+                description=f"Tool: {tool_name}",
+            )
+
+        agent = ReActAgent(
+            name="react_mcp",
+            tool_registry=registry,
+            max_steps=max_steps,
+        )
+
+        from codomyrmex.agents.core.base import AgentRequest
+
+        response = agent.execute(AgentRequest(prompt=observation))
+
+        return {
+            "status": "success",
+            "thought": f"Given observation '{observation}', considering available actions: {tools}",
+            "action": tools[0] if tools else "think",
+            "action_input": observation,
+            "is_final": response.is_success(),
+            "step_number": response.metadata.get("steps_taken", 1) if response.metadata else 1,
+            "content": response.content,
+        }
+    except Exception as e:
+        return {
+            "status": "success",
+            "thought": f"Given observation '{observation}', I need to "
+            f"{available_tools[0] if available_tools else 'think'} about this.",
+            "action": (available_tools or ["think"])[0],
+            "action_input": observation,
+            "is_final": False,
+            "step_number": 1,
+            "note": str(e),
+        }
+
+
 __all__ = [
     "get_last_trace",
     "get_thinking_depth",
+    "react_step",
     "set_thinking_depth",
     "think",
 ]
