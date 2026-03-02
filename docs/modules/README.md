@@ -221,3 +221,63 @@ Each module directory contains:
 - **Root**: [Project Root](../../README.md)
 - **Agent Coordination**: [AGENTS.md](AGENTS.md)
 - **Functional Specification**: [SPEC.md](SPEC.md)
+
+## AI/ML Research Modules
+
+Specialized AI/ML research and production modules added in Sprints 13--17.
+
+### Neural Architecture
+| Module | Description |
+|--------|-------------|
+| [neural/](neural/) | Core neural network primitives and forward pass |
+| [autograd/](autograd/) | Automatic differentiation engine |
+| [ssm/](ssm/) | State Space Models (Mamba architecture) |
+
+### Training Methods
+| Module | Description |
+|--------|-------------|
+| [lora/](lora/) | Low-Rank Adaptation fine-tuning |
+| [peft/](peft/) | Parameter-Efficient Fine-Tuning framework |
+| [dpo/](dpo/) | Direct Preference Optimization |
+| [rlhf/](rlhf/) | Reinforcement Learning from Human Feedback |
+| [distillation/](distillation/) | Knowledge distillation pipelines |
+| [distributed_training/](distributed_training/) | Multi-GPU/multi-node training coordination |
+
+### Optimization & Kernels
+| Module | Description |
+|--------|-------------|
+| [quantization/](quantization/) | Model weight quantization (INT8/INT4) |
+| [nas/](nas/) | Neural Architecture Search |
+| [matmul_kernel/](matmul_kernel/) | Custom matrix multiplication kernels |
+| [softmax_opt/](softmax_opt/) | Optimized softmax implementations |
+| [logit_processor/](logit_processor/) | Token logit processing and sampling |
+
+### Data & Evaluation
+| Module | Description |
+|--------|-------------|
+| [data_curation/](data_curation/) | Dataset curation and quality pipelines |
+| [synthetic_data/](synthetic_data/) | Synthetic training data generation |
+| [eval_harness/](eval_harness/) | Model evaluation harness and benchmarks |
+| [text_to_sql/](text_to_sql/) | Natural language to SQL translation |
+| [data_lineage/](data_lineage/) | Data provenance and lineage tracking |
+| [feature_store/](feature_store/) | ML feature storage and retrieval |
+
+### Application AI
+| Module | Description |
+|--------|-------------|
+| [ai_gateway/](ai_gateway/) | Unified AI provider gateway |
+| [model_merger/](model_merger/) | Model merging and ensemble strategies |
+| [interpretability/](interpretability/) | Model interpretability and explanation |
+| [semantic_router/](semantic_router/) | Semantic request routing and dispatch |
+| [slm/](slm/) | Small Language Model utilities |
+
+### Multimodal & Infrastructure
+| Module | Description |
+|--------|-------------|
+| [multimodal/](multimodal/) | Multi-modal input/output processing |
+| [image/](image/) | Image processing and vision utilities |
+| [tokenizer/](tokenizer/) | Tokenizer utilities and BPE |
+| [operating_system/](operating_system/) | OS abstraction and system calls |
+| [file_system/](file_system/) | File system operations and monitoring |
+| [container_optimization/](container_optimization/) | Container performance optimization |
+| [cost_management/](cost_management/) | Cloud cost monitoring and optimization |

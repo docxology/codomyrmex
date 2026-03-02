@@ -1,6 +1,6 @@
 # Development Documentation
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.6 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
@@ -18,6 +18,7 @@ Guides for setting up and working in the Codomyrmex development environment. Cov
 | [AGENTS.md](AGENTS.md) | Agent coordination for development docs |
 | [SPEC.md](SPEC.md) | Development documentation specification |
 | [PAI.md](PAI.md) | Personal AI development considerations |
+| [**multi-agent-git.md**](multi-agent-git.md) | Parallel agent git lock coordination protocol |
 
 ## Key Topics
 
@@ -32,7 +33,7 @@ Guides for setting up and working in the Codomyrmex development environment. Cov
 
 - Unit testing with pytest
 - Integration testing patterns
-- Test coverage requirements (>80%)
+- Test coverage requirements (≥70%)
 - Test fixtures and data generators
 
 ### Documentation Standards
@@ -45,7 +46,7 @@ Guides for setting up and working in the Codomyrmex development environment. Cov
 
 ```bash
 # Clone and setup
-git clone https://github.com/docxology/codomyrmex.git
+git clone https://github.com/danielmiessler/codomyrmex.git
 cd codomyrmex
 uv sync
 

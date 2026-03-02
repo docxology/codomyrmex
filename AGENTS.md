@@ -1,12 +1,12 @@
 # Codomyrmex Agents — Repository Root
 
-**Version**: v1.0.3 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.0.6 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
 
 This is the root coordination document for all AI agents operating within the Codomyrmex repository. It defines the top-level structure, surfaces, and operating contracts that govern agent interactions across the entire project.
 
-Codomyrmex is a modular coding workspace enabling AI development workflows with 88 specialized modules. This document serves as the central navigation hub for agents working with any part of the system.
+Codomyrmex is a modular coding workspace enabling AI development workflows with 122 specialized modules. This document serves as the central navigation hub for agents working with any part of the system.
 
 ## Repository Structure
 
@@ -21,7 +21,6 @@ The repository is organized into distinct surfaces, each with specific responsib
 | **docs/** | Project documentation (about Codomyrmex) | [docs/README.md](docs/README.md) |
 | **src/codomyrmex/tests/** | Test suites (unit and integration) | [src/codomyrmex/tests/README.md](src/codomyrmex/tests/README.md) |
 | **config/** | Configuration templates and examples | [config/README.md](config/README.md) |
-| **cursorrules/** | Coding standards and automation rules | [cursorrules/README.md](cursorrules/README.md) |
 | **projects/** | Project workspace and templates | [projects/README.md](projects/README.md) |
 | **src/codomyrmex/examples/** | Executable examples and demos | [src/codomyrmex/examples/README.md](src/codomyrmex/examples/README.md) |
 
@@ -37,10 +36,6 @@ The repository is organized into distinct surfaces, each with specific responsib
 - `uv.lock` - Python dependency lock file
 - `start_here.sh` - Interactive entry point for exploration
 - `package.json` - Node.js package configuration
-- `cursorrules/general.cursorrules` - General coding standards (in `cursorrules/` directory)
-- `resources.json` - Resource configuration
-- `test.db` - Generated test database (artifact, not source)
-- `workflow.db` - Generated workflow database (artifact, not source)
 
 ## Operating Contracts
 
@@ -52,7 +47,7 @@ All agents operating within this repository must:
 
 2. **Maintain Documentation Alignment**: Code, documentation, and workflows must remain synchronized. When updating code, update corresponding documentation.
 
-3. **Follow Cursorrules**: Adhere to coding standards defined in `cursorrules/general.cursorrules` and module-specific rules.
+3. **Follow Coding Standards**: Adhere to coding standards defined in project documentation and `.editorconfig`.
 
 4. **Use Structured Logging**: All operations must use the centralized logging system (`src/codomyrmex/logging_monitoring/`).
 
@@ -203,7 +198,7 @@ Located in `src/codomyrmex/`, these modules provide the primary capabilities:
 - `plugin_system/` - Plugin architecture and management
   - Key Classes: `PluginManager`, `PluginLoader`, `PluginRegistry`
   - Key Functions: `load_plugin(path: str) -> Plugin`, `register_plugin(plugin: Plugin) -> None`
-- `tools/` - Utility tools and helpers
+- `tool_use/` - Tool invocation and management
   - Key Classes: `ToolRegistry`, `ToolExecutor`
   - Key Functions: `register_tool(name: str, tool: callable) -> None`, `execute_tool(name: str, args: dict) -> Any`
 - `utils/` - General utilities
@@ -330,7 +325,7 @@ See [docs/modules/overview.md](docs/modules/overview.md) for module documentatio
 
 ### For Agents
 
-- **Coding Standards**: [cursorrules/general.cursorrules](cursorrules/general.cursorrules)
+- **Coding Standards**: [.editorconfig](.editorconfig)
 - **Module System**: [docs/modules/overview.md](docs/modules/overview.md)
 - **Module Relationships**: [docs/modules/relationships.md](docs/modules/relationships.md)
 - **API Reference**: [docs/reference/api.md](docs/reference/api.md)
@@ -358,7 +353,6 @@ See [docs/modules/overview.md](docs/modules/overview.md) for module documentatio
 | **docs/** | [docs/AGENTS.md](docs/AGENTS.md) | Documentation coordination |
 | **scripts/** | [scripts/AGENTS.md](scripts/AGENTS.md) | Automation scripts coordination |
 | **config/** | [config/AGENTS.md](config/AGENTS.md) | Configuration coordination |
-| **cursorrules/** | [cursorrules/AGENTS.md](cursorrules/AGENTS.md) | Coding standards coordination |
 | **projects/** | [projects/AGENTS.md](projects/AGENTS.md) | Project workspace coordination |
 
 ### Key Module AGENTS.md Files
@@ -389,13 +383,10 @@ See [docs/modules/overview.md](docs/modules/overview.md) for module documentatio
 - `projects/` – Project workspace and templates
 - `pyproject.toml` – Python package configuration
 - `pytest.ini` – Test configuration
-- `resources.json` – Resource configuration
 - `scripts/` – Maintenance and automation utilities
 - `src/` – Core source modules implementing functionality
 - `start_here.sh` – Interactive entry point for exploration
-- `test.db` – Test database file
 - `src/codomyrmex/tests/` – Test suites (unit and integration)
-- `workflow.db` – Workflow database file
 - `output/` – Generated reports and documentation artifacts
 
 ## Navigation Links
@@ -406,7 +397,6 @@ See [docs/modules/overview.md](docs/modules/overview.md) for module documentatio
 - **Scripts**: [scripts/README.md](scripts/README.md) - Scripts directory
 - **Testing**: [src/codomyrmex/tests/README.md](src/codomyrmex/tests/README.md) - Testing suite
 - **Configuration**: [config/README.md](config/README.md) - Configuration templates
-- **Cursor Rules**: [cursorrules/README.md](cursorrules/README.md) - Coding standards
 - **Projects**: [projects/README.md](projects/README.md) - Projects workspace
 - **Examples**: [src/codomyrmex/examples/README.md](src/codomyrmex/examples/README.md) - Executable examples and demos
 
@@ -442,6 +432,8 @@ Before completing significant changes:
 
 ## Version History
 
+- **v1.0.6** (March 2026) - Sprint 17 MCP expansion: 74 auto-discovered modules, ~367 tools; module count updated to 122; version synchronized across all docs
+- **v1.0.5** (March 2026) - Sprint 16 MCP coverage, ruff violations zeroed, circular imports resolved
 - **v1.0.3** (March 2026) - Documentation audit: experimental/stub labels added to non-MCP-exposed and stub-only modules; accuracy review across phantom module references
 - **v0.1.7** (February 2026) - Module count corrected to 86, version synchronized, missing modules added to discovery
 - **v0.1.6** (February 2026) - Agent & memory foundations, event orchestration
@@ -449,9 +441,7 @@ Before completing significant changes:
 
 ## Related Documentation
 
-- **[Module Overview](docs/modules/overview.md)** - Module system documentation
 - **[Architecture](docs/project/architecture.md)** - System architecture and design principles
-- **[Cursorrules](cursorrules/README.md)** - Detailed coding standards and automation rules
 - **[Contributing](docs/project/contributing.md)** - Contributing guidelines and workflow
 
 <!-- gitnexus:start -->

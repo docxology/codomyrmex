@@ -1,6 +1,6 @@
 # Tutorials
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.6 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
@@ -10,8 +10,14 @@ Step-by-step tutorials for learning Codomyrmex. From creating your first module 
 
 | Tutorial | Description | Time |
 |----------|-------------|------|
-| [**Creating a Module**](creating-a-module.md) | Build your own Codomyrmex module from scratch | 45 min |
-| [**Connecting PAI to Codomyrmex**](connecting-pai.md) | Connect the PAI system to codomyrmex via MCP | 30 min |
+| [**Creating a Module** (overview)](creating-a-module.md) | End-to-end guide: scaffold, implement, test, document | 2 hr |
+| [**Part 1: Scaffold**](creating-a-module-01-scaffold.md) | Module directory structure and boilerplate setup | 30 min |
+| [**Part 2: Implement**](creating-a-module-02-implement.md) | Core logic, public API, and MCP tool registration | 45 min |
+| [**Part 3: Test**](creating-a-module-03-test.md) | Zero-Mock test patterns, pytest markers, coverage | 45 min |
+| [**Part 4: Document**](creating-a-module-04-document.md) | RASP docs (README, AGENTS, SPEC, PAI) | 30 min |
+| [**Connecting PAI**](connecting-pai.md) | MCP bridge setup and Algorithm phase mapping | 30 min |
+
+> **Note:** Parts 1-4 are a sequential multi-part series building one module end-to-end. Start with Part 1 or use the overview for the full combined guide.
 
 ## Learning Path
 

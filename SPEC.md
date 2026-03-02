@@ -1,6 +1,6 @@
 # Codomyrmex Functional Specification
 
-**Version**: v1.0.3 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.6 | **Status**: Active | **Last Updated**: March 2026
 
 ## System Concept
 
@@ -32,7 +32,7 @@ It functions as a cohesive "colony" of specialized modules where each component 
 
 ### Internal Coherence
 
-- Consistent directory structure and naming conventions across all 88 modules.
+- Consistent directory structure and naming conventions across all 122 modules.
 - Unified documentation patterns: every module carries the same set of specification files.
 - Shared configuration idioms via standardized `Config` objects and `pyproject.toml` extras.
 
@@ -188,7 +188,7 @@ Tracked items by sprint target. Resolved items are kept for historical reference
 | EventBus trust events wrong signature | **Resolved v1.0.2** | — | `EventType.TRUST_LEVEL_CHANGED` added; `publish_event` call fixed in `trust_gateway.py` |
 | PAI.md thin files (5 modules at <52 lines) | **Resolved v1.0.2** | — | All 5 expanded to ≥100 lines with MCP tool docs and phase mapping |
 | Tool versioning: no deprecation scheme | **Resolved v1.0.2** | — | `version` + `deprecated_in` params added to `@mcp_tool` decorator |
-| Stale module/tool counts in docs | **Resolved v1.0.3** | — | Updated: 88 modules, 171 tools (167 safe + 4 destructive), 3 resources |
+| Stale module/tool counts in docs | **Resolved v1.0.6** | — | Updated: 122 modules, ~367 tools across 74 auto-discovered modules |
 | 6 optional modules fail import | Expected | — | Cloud (AWS/Azure/GCP), performance.monitoring, lazy_loader, security cert validator — require optional SDKs |
 | Shutdown logging on closed streams | **Resolved v1.0.3** | — | `OrchestrationEngine.__del__` and `shutdown()` guarded against `ValueError` on closed file handles |
 | Session status enum misuse | **Resolved v1.0.3** | — | `close_session()` now uses `SessionStatus.COMPLETED` instead of raw `"closed"` string |

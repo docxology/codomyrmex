@@ -1,6 +1,6 @@
 <p align="center">
-  <img src="https://img.shields.io/badge/Codomyrmex-v1.0.5-blue?style=for-the-badge" alt="Version">
-  <img src="https://img.shields.io/badge/Modules-95-green?style=for-the-badge" alt="Modules">
+  <img src="https://img.shields.io/badge/Codomyrmex-v1.0.6-blue?style=for-the-badge" alt="Version">
+  <img src="https://img.shields.io/badge/Modules-122-green?style=for-the-badge" alt="Modules">
   <img src="https://img.shields.io/badge/Python_Files-1800+-orange?style=for-the-badge" alt="Python Files">
   <img src="https://img.shields.io/badge/Tests-800+-purple?style=for-the-badge" alt="Tests">
   <img src="https://img.shields.io/badge/Zero--Mock-100%25-brightgreen?style=for-the-badge" alt="Zero Mock">
@@ -11,7 +11,7 @@
 
 > **A comprehensive, modular, agentic Python ecosystem for autonomous software engineering, personal AI infrastructure, and multi-agent orchestration.**
 
-Codomyrmex is a production-grade library of 95+ deeply integrated modules spanning AI agents, cloud infrastructure, security, finance, multimedia, and more — all built on a strict **Zero-Mock** testing policy ensuring every method is real, tested, documented, and functional.
+Codomyrmex is a production-grade library of 122 deeply integrated modules spanning AI agents, cloud infrastructure, security, finance, multimedia, and more — all built on a strict **Zero-Mock** testing policy ensuring every method is real, tested, documented, and functional.
 
 ---
 
@@ -34,7 +34,7 @@ Codomyrmex is a production-grade library of 95+ deeply integrated modules spanni
 | [**docs/getting-started/**](docs/getting-started/) | 18 | Quick start, installation, setup, tutorials |
 | [**docs/development/**](docs/development/) | 9 | Dev environment, testing strategy, contribution guides |
 | [**docs/reference/**](docs/reference/) | 15 | API reference, CLI reference, troubleshooting |
-| [**docs/modules/**](docs/modules/) | 740 | Per-module documentation for all 95 modules |
+| [**docs/modules/**](docs/modules/) | 740 | Per-module documentation for all 122 modules |
 | [**docs/agents/**](docs/agents/) | 9 | Agent rules, coordination, autonomous operation |
 | [**docs/integration/**](docs/integration/) | 11 | External service integration (Google, GitHub, etc.) |
 | [**docs/deployment/**](docs/deployment/) | 5 | Production deployment guides and checklists |
@@ -157,7 +157,6 @@ graph TB
 | [`prompt_engineering`](src/codomyrmex/prompt_engineering/) | 10 | 7 | [📖](docs/modules/prompt_engineering/) | [⚙️](config/prompt_engineering/config.yaml) | [📜](scripts/prompt_engineering/) | Template management, prompt optimization, few-shot patterns |
 | [`skills`](src/codomyrmex/skills/) | 22 | 11 | [📖](docs/modules/skills/) | [⚙️](config/skills/config.yaml) | [📜](scripts/skills/) | Extensible skill registry and execution engine |
 
-
 ### 🤖 AI & Machine Learning Modules
 
 | Module | Py | Tests | Docs | Config | Scripts | Description |
@@ -170,7 +169,6 @@ graph TB
 | [`simulation`](src/codomyrmex/simulation/) | 3 | 3 | [📖](docs/modules/simulation/) | [⚙️](config/simulation/config.yaml) | [📜](scripts/simulation/) | General-purpose simulation framework |
 | [`quantum`](src/codomyrmex/quantum/) | 6 | 1 | [📖](docs/modules/quantum/) | [⚙️](config/quantum/config.yaml) | [📜](scripts/quantum/) | Quantum computing abstractions and circuit simulation |
 | [`fpf`](src/codomyrmex/fpf/) | 26 | 11 | [📖](docs/modules/fpf/) | [⚙️](config/fpf/config.yaml) | [📜](scripts/fpf/) | Free-energy Principle Framework (Active Inference) |
-
 
 ### ☁️ Infrastructure & DevOps Modules
 
@@ -186,7 +184,6 @@ graph TB
 | [`networks`](src/codomyrmex/networks/) | 3 | 3 | [📖](docs/modules/networks/) | [⚙️](config/networks/config.yaml) | [📜](scripts/networks/) | Network topology and graph analysis |
 | [`cost_management`](src/codomyrmex/cost_management/) | 4 | 2 | [📖](docs/modules/cost_management/) | [⚙️](config/cost_management/config.yaml) | [📜](scripts/cost_management/) | Cloud cost tracking, budget alerts, optimization |
 
-
 ### 💾 Data & Storage Modules
 
 | Module | Py | Tests | Docs | Config | Scripts | Description |
@@ -199,7 +196,6 @@ graph TB
 | [`feature_store`](src/codomyrmex/feature_store/) | 5 | 2 | [📖](docs/modules/feature_store/) | [⚙️](config/feature_store/config.yaml) | [📜](scripts/feature_store/) | ML feature registry, versioning, and serving |
 | [`agentic_memory`](src/codomyrmex/agentic_memory/) | 35 | 30 | [📖](docs/modules/agentic_memory/) | [⚙️](config/agentic_memory/config.yaml) | [📜](scripts/agentic_memory/) | Long-term agent memory, retrieval, and knowledge graphs |
 | [`model_ops`](src/codomyrmex/model_ops/) | 22 | 10 | [📖](docs/modules/model_ops/) | [⚙️](config/model_ops/config.yaml) | [📜](scripts/model_ops/) | ML model lifecycle, registry, versioning |
-
 
 ### 🔒 Security & Identity Modules
 
@@ -214,7 +210,6 @@ graph TB
 | [`identity`](src/codomyrmex/identity/) | 5 | 4 | [📖](docs/modules/identity/) | [⚙️](config/identity/config.yaml) | [📜](scripts/identity/) | Digital identity, persona management, biocognitive auth |
 | [`wallet`](src/codomyrmex/wallet/) | 16 | 3 | [📖](docs/modules/wallet/) | [⚙️](config/wallet/config.yaml) | [📜](scripts/wallet/) | Cryptocurrency wallet, key storage, transaction signing |
 
-
 ### 🎨 Multimedia & Visualization Modules
 
 | Module | Py | Tests | Docs | Config | Scripts | Description |
@@ -225,7 +220,6 @@ graph TB
 | [`data_visualization`](src/codomyrmex/data_visualization/) | 68 | 20 | [📖](docs/modules/data_visualization/) | [⚙️](config/data_visualization/config.yaml) | [📜](scripts/data_visualization/) | Matplotlib, Plotly, chart generation, dashboards |
 | [`meme`](src/codomyrmex/meme/) | 57 | 6 | [📖](docs/modules/meme/) | [⚙️](config/meme/config.yaml) | [📜](scripts/meme/) | Meme generation, template engine, social media formatting |
 | [`spatial`](src/codomyrmex/spatial/) | 12 | 3 | [📖](docs/modules/spatial/) | [⚙️](config/spatial/config.yaml) | [📜](scripts/spatial/) | Geospatial data, coordinate systems, mapping |
-
 
 ### 🏠 Personal AI (PAI) Modules
 
@@ -239,7 +233,6 @@ graph TB
 | [`logistics`](src/codomyrmex/logistics/) | 27 | 9 | [📖](docs/modules/logistics/) | [⚙️](config/logistics/config.yaml) | [📜](scripts/logistics/) | Task routing, supply chain, resource allocation |
 | [`relations`](src/codomyrmex/relations/) | 15 | 4 | [📖](docs/modules/relations/) | [⚙️](config/relations/config.yaml) | [📜](scripts/relations/) | Contact management, relationship mapping, CRM |
 | [`physical_management`](src/codomyrmex/physical_management/) | 8 | 4 | [📖](docs/modules/physical_management/) | [⚙️](config/physical_management/config.yaml) | [📜](scripts/physical_management/) | IoT device tracking, physical asset management |
-
 
 ### 🛠️ Developer Tooling Modules
 
@@ -255,7 +248,6 @@ graph TB
 | [`scrape`](src/codomyrmex/scrape/) | 12 | 9 | [📖](docs/modules/scrape/) | [⚙️](config/scrape/config.yaml) | [📜](scripts/scrape/) | Web scraping, HTML parsing, sitemap crawling |
 | [`search`](src/codomyrmex/search/) | 6 | 3 | [📖](docs/modules/search/) | [⚙️](config/search/config.yaml) | [📜](scripts/search/) | Full-text search, fuzzy matching, regex search |
 
-
 ### ⚙️ Configuration & Operations Modules
 
 | Module | Py | Tests | Docs | Config | Scripts | Description |
@@ -269,7 +261,6 @@ graph TB
 | [`performance`](src/codomyrmex/performance/) | 19 | 4 | [📖](docs/modules/performance/) | [⚙️](config/performance/config.yaml) | [📜](scripts/performance/) | Benchmarking, profiling, performance visualization |
 | [`maintenance`](src/codomyrmex/maintenance/) | 12 | 3 | [📖](docs/modules/maintenance/) | [⚙️](config/maintenance/config.yaml) | [📜](scripts/maintenance/) | Health checks, cleanup, system diagnostics |
 | [`release`](src/codomyrmex/release/) | 4 | 2 | [📖](docs/modules/release/) | [⚙️](config/release/config.yaml) | [📜](scripts/release/) | Release management, changelog generation, versioning |
-
 
 ### 🧩 Framework & Utility Modules
 
@@ -297,7 +288,6 @@ graph TB
 | [`demos`](src/codomyrmex/demos/) | 2 | 1 | [📖](docs/modules/demos/) | [⚙️](config/demos/config.yaml) | [📜](scripts/demos/) | Demo registry and showcase runner |
 | [`formal_verification`](src/codomyrmex/formal_verification/) | 8 | 2 | [📖](docs/modules/formal_verification/) | [⚙️](config/formal_verification/config.yaml) | [📜](scripts/formal_verification/) | Z3 backend, SMT solver, invariant checking |
 | [`system_discovery`](src/codomyrmex/system_discovery/) | 14 | 4 | [📖](docs/modules/system_discovery/) | [⚙️](config/system_discovery/config.yaml) | [📜](scripts/system_discovery/) | System introspection, capability detection |
-
 
 ---
 
@@ -380,7 +370,7 @@ sequenceDiagram
     User->>CLI: codomyrmex run --task "analyze codebase"
     CLI->>Orchestrator: Create workflow
     Orchestrator->>MCP: Register available tools
-    MCP->>Tools: Discover 169 safe tools
+    MCP->>Tools: Discover ~367 tools (74 auto-discovered modules)
     Orchestrator->>Agents: Dispatch agent
     Agents->>LLM: Generate completion (Gemini 2.5 Pro)
     LLM-->>Agents: Response + tool calls
@@ -400,7 +390,7 @@ sequenceDiagram
 ```
 codomyrmex/
 ├── .github/                  # GitHub workflows, templates, README
-├── config/                   # 95 module-specific config.yaml files
+├── config/                   # 122 module-specific config.yaml files
 ├── docs/                     # 900+ documentation files
 │   ├── ARCHITECTURE.md       # System architecture
 │   ├── AGENTS.md             # Agent coordination
@@ -415,7 +405,7 @@ codomyrmex/
 │   ├── agents/               # Jules batch dispatch, harvester
 │   ├── maintenance/          # Config generation, health checks
 │   └── ... (90+ module scripts)
-├── src/codomyrmex/           # Main source (95 modules)
+├── src/codomyrmex/           # Main source (122 modules)
 │   ├── agents/               # 168 files
 │   ├── llm/                  # 41 files
 │   ├── security/             # 47 files
@@ -430,7 +420,7 @@ codomyrmex/
 
 | Metric | Value |
 |:---|:---:|
-| **Total Modules** | 95 |
+| **Total Modules** | 122 |
 | **Total Python Files** | 1,800+ |
 | **Total Test Files** | 800+ |
 | **Documentation Files** | 900+ |
@@ -473,7 +463,7 @@ graph TD
         Harvester["mega_swarm_harvester.py"]
     end
 
-    subgraph Targets["Target Modules - 95"]
+    subgraph Targets["Target Modules - 122"]
         M1["agentic_memory"]
         M2["agents"]
         Mdots["..."]
@@ -527,7 +517,7 @@ uv run python -m pytest src/codomyrmex/tests/unit/llm/ -v
 
 ## 🗺️ Configuration Architecture
 
-> See [config/](config/) for all 95 module configurations.
+> See [config/](config/) for all 122 module configurations.
 
 ```mermaid
 graph TB
@@ -535,7 +525,7 @@ graph TB
         C1["agents/config.yaml"]
         C2["llm/config.yaml"]
         C3["security/config.yaml"]
-        Cdots["... 95 total"]
+        Cdots["... 122 total"]
     end
 
     subgraph Scripts["scripts/"]
@@ -549,7 +539,7 @@ graph TB
         Src1["agents/"]
         Src2["llm/"]
         Src3["security/"]
-        SrcDots["... 95 modules"]
+        SrcDots["... 122 modules"]
     end
 
     C1 -.->|"YAML load"| S1
@@ -642,5 +632,5 @@ MIT License — see [LICENSE](LICENSE) for details.
 
 <p align="center">
   <b>Built with 🐜 Codomyrmex — The Autonomous Software Colony</b><br>
-  <sub>95 modules · 1,800+ Python files · 800+ tests · 900+ docs · Zero-Mock · Production-Grade</sub>
+  <sub>122 modules · 1,800+ Python files · 800+ tests · 900+ docs · Zero-Mock · Production-Grade</sub>
 </p>

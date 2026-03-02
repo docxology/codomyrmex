@@ -2,7 +2,7 @@
 
 **Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026 | **Upstream**: [danielmiessler/Personal_AI_Infrastructure](https://github.com/danielmiessler/Personal_AI_Infrastructure)
 
-> **PAI** (Personal AI Infrastructure) is a TypeScript/Bun system that runs [The Algorithm](https://github.com/danielmiessler/Personal_AI_Infrastructure) on every Claude Code prompt. **Codomyrmex** is the 88-module Python toolbox it consumes via MCP. This folder documents the bridge between them.
+> **PAI** (Personal AI Infrastructure) is a TypeScript/Bun system that runs [The Algorithm](https://github.com/danielmiessler/Personal_AI_Infrastructure) on every Claude Code prompt. **Codomyrmex** is the 122-module Python toolbox it consumes via MCP. This folder documents the bridge between them.
 
 ## 🎬 Interface Tour
 
@@ -18,7 +18,7 @@ graph TB
         direction TB
         ALGO["Algorithm v3.5.0<br/>7 Phases"]
         SKILLS["77+ Skills"]
-        HOOKS["22 Hooks"]
+        HOOKS["50 Hooks"]
         TOOLS_TS["60 TypeScript Tools"]
         AGENTS_PAI["13+ Named Agents"]
         MEMORY["Memory Stores<br/>WORK · STATE · LEARNING"]
@@ -32,14 +32,14 @@ graph TB
 
     subgraph CDM["🐜 Codomyrmex (this repo)"]
         direction TB
-        MODULES["88 Python Modules"]
-        STATIC["22 Static Tools"]
-        DYNAMIC["~151 Dynamic Tools"]
+        MODULES["122 Python Modules"]
+        STATIC["20 Static Tools"]
+        DYNAMIC["~347 Dynamic Tools"]
         RESOURCES["2 Resources"]
         PROMPTS["10 Prompts"]
     end
 
-    subgraph DASH["📊 Dashboard (PMServer.ts:8889)"]
+    subgraph DASH["📊 Dashboard (PMServer.ts:8888)"]
         direction TB
         TABS["14 Interface Tabs"]
         REST["REST API Endpoints"]
@@ -135,7 +135,7 @@ stateDiagram-v2
 
 ## 📊 Dashboard Tabs
 
-The PAI Dashboard serves 14 interface tabs at `http://localhost:8889/`. It is a Codomyrmex-integrated fork of [danielmiessler/Personal\_AI\_Infrastructure](https://github.com/danielmiessler/Personal_AI_Infrastructure), extended with email, calendar, git sync, and network visualization.
+The PAI Dashboard serves 14 interface tabs at `http://localhost:8888/`. It is a Codomyrmex-integrated fork of [danielmiessler/Personal\_AI\_Infrastructure](https://github.com/danielmiessler/Personal_AI_Infrastructure), extended with email, calendar, git sync, and network visualization.
 
 ### Analytics — Mission & Project Overview
 
@@ -259,7 +259,7 @@ graph LR
         GC["Google Calendar<br/>5 MCP tools"]
     end
 
-    subgraph Dashboard["PAI Dashboard :8889"]
+    subgraph Dashboard["PAI Dashboard :8888"]
         EMAIL_TAB["Email Tab"]
         CAL_TAB["Calendar Tab"]
     end
@@ -357,7 +357,7 @@ sequenceDiagram
     CC-->>U: Response
 
     Note over DB: Dashboard runs independently
-    U->>DB: Browse :8889
+    U->>DB: Browse :8888
     DB->>DB: Load DataModels
     DB-->>U: 14-tab interface
 ```
@@ -376,8 +376,8 @@ uv run python scripts/model_context_protocol/run_mcp_server.py --transport stdio
 
 # 3. Start Dashboard (for browser interface)
 set -a && source .env && set +a
-uv run python scripts/pai/dashboard.py --reload
-# → http://localhost:8889/
+uv run python scripts/pai/dashboard.py
+# → http://localhost:8787/ (Codomyrmex Admin) + http://localhost:8888/ (PAI PM)
 
 # 4. In Claude Code: /codomyrmexVerify then /codomyrmexTrust
 ```

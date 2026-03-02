@@ -1,11 +1,11 @@
 # Codomyrmex
 
-**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.0.6 | **Status**: Active | **Last Updated**: March 2026
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python](https://img.shields.io/badge/python-≥3.10-blue.svg)](https://www.python.org/downloads/)
-[![Version](https://img.shields.io/badge/version-1.0.5-blue.svg)](https://github.com/docxology/codomyrmex)
-[![Tests](https://img.shields.io/badge/tests-16,190%20passing-brightgreen.svg)](https://github.com/docxology/codomyrmex)
-[![Coverage](https://img.shields.io/badge/coverage-~68%25-blue.svg)](https://github.com/docxology/codomyrmex)
+[![Version](https://img.shields.io/badge/version-1.0.6-blue.svg)](https://github.com/docxology/codomyrmex)
+[![Tests](https://img.shields.io/badge/tests-21,035%20collected-brightgreen.svg)](https://github.com/docxology/codomyrmex)
+[![Coverage](https://img.shields.io/badge/coverage-~32%25-blue.svg)](https://github.com/docxology/codomyrmex)
 
 > **A modular, extensible coding workspace designed for AI development workflows**
 
@@ -13,12 +13,12 @@ Codomyrmex integrates tools for building, documenting, analyzing, executing, and
 
 ## What is Codomyrmex?
 
-Codomyrmex is a **modular development platform** that brings together 88 specialized modules for code analysis, AI-assisted development, build automation, documentation, and more. Each module is self-contained, tested, and can be used independently or composed together for complex workflows.
+Codomyrmex is a **modular development platform** that brings together 122 specialized modules for code analysis, AI-assisted development, build automation, documentation, and more. Each module is self-contained, tested, and can be used independently or composed together for complex workflows.
 
 ### Key Features
 
 - **AI-Powered Development** - Built-in support for Large Language Models via Model Context Protocol (MCP)
-- **Modular Architecture** - 88 independent, composable modules with clear interfaces
+- **Modular Architecture** - 122 independent, composable modules with clear interfaces
 - **Code Analysis** - Static analysis, pattern matching, security scanning, and quality metrics
 - **Build & Deploy** - Multi-language builds, CI/CD automation, container management
 - **Visualization** - Data visualization, 3D/4D spatial modeling, and interactive plots
@@ -30,7 +30,7 @@ Codomyrmex is a **modular development platform** that brings together 88 special
 
 - **Modularity First**: Self-contained modules with clear boundaries - use what you need, when you need it
 - **AI Integration**: Seamless integration with LLMs through standardized Model Context Protocol
-- **Tested**: Over ten thousand unit, integration, and workflow tests exercise core functionality across modules
+- **Tested**: Over twenty-one thousand unit, integration, and workflow tests exercise core functionality across modules
 - **Well-Documented**: RASP documentation (README, AGENTS, SPEC, PAI) and API references for modules and tools
 - **Robust Interfaces**: Stable public APIs with structured error handling and telemetry
 
@@ -167,7 +167,7 @@ Codomyrmex is the **toolbox** for [PAI v4.0.1](https://github.com/danielmiessler
 | VERIFY | `static_analysis`, `security`, `validation` |
 | LEARN | `agentic_memory`, `logging_monitoring` |
 
-**MCP Bridge**: 171 tools (167 safe + 4 destructive) across 33 auto-discovered modules — see [`PAI.md`](PAI.md)
+**MCP Bridge**: ~367 tools across 74 auto-discovered modules — see [`PAI.md`](PAI.md)
 **Trust Model**: UNTRUSTED → VERIFIED (`/codomyrmexVerify`) → TRUSTED (`/codomyrmexTrust`)
 **Deep Dive**: [`PAI.md`](PAI.md) · [`docs/pai/README.md`](docs/pai/README.md) · [`docs/pai/architecture.md`](docs/pai/architecture.md)
 
@@ -205,12 +205,12 @@ See **[Creating a Module Tutorial](docs/getting-started/tutorials/creating-a-mod
 
 ## Key Metrics
 
-- **Lines of Code**: ~100K+ across 88 modules
-- **Test Coverage**: ~68% (16,190 tests passing, gate: 68%)
-- **Module Count**: 88 modules (88 load successfully; 6 additional require optional SDKs)
+- **Lines of Code**: ~100K+ across 122 modules
+- **Test Coverage**: ~32% (21,035 tests collected)
+- **Module Count**: 122 modules across 4 architectural layers
 - **Language Support**: Python, JavaScript, Go, Rust, Java
 - **AI Integration**: 5+ LLM providers supported
-- **Documentation**: 200+ pages across all modules
+- **Documentation**: 900+ pages across all modules
 
 ## Contributing
 

@@ -1,6 +1,6 @@
 # Skills Documentation — README
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.6 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 

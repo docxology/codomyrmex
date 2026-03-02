@@ -32,7 +32,7 @@ PAI (Personal AI Infrastructure) is the orchestrator that runs The Algorithm on 
 │                                      │
 │  ┌───────────┐  ┌────────────────┐   │
 │  │ PAIBridge  │  │ MCP Bridge     │   │
-│  │ Discovery  │  │ 22 static +    │   │
+│  │ Discovery  │  │ 20 static +    │   │
 │  │ Validation │  │ auto-discovered│   │
 │  └───────────┘  └───────┬────────┘   │
 │                         │            │
@@ -42,7 +42,7 @@ PAI (Personal AI Infrastructure) is the orchestrator that runs The Algorithm on 
 │  └─────────────────────────────────┘  │
 │                                      │
 │  ┌─────────────────────────────────┐  │
-│  │ 88 Codomyrmex Modules           │  │
+│  │ 122 Codomyrmex Modules          │  │
 │  │ (coding, llm, security, ...)    │  │
 │  └─────────────────────────────────┘  │
 └──────────────────────────────────────┘
@@ -72,7 +72,7 @@ The discovery and validation layer. Reads PAI's filesystem to enumerate all subs
 
 Exposes all Codomyrmex capabilities as MCP tools for PAI consumption.
 
-**Static Tools (22):**
+**Static Tools (20):**
 
 - 17 core tools: file ops, code analysis, git, shell, data, discovery, PAI, testing
 - 3 universal proxy tools: `list_module_functions`, `call_module_function`, `get_module_readme`

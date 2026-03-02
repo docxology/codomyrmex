@@ -1,6 +1,6 @@
 # Reference Documentation
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.6 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
@@ -19,6 +19,7 @@ Technical reference documentation for Codomyrmex. Includes comprehensive API doc
 | [**migration-guide.md**](migration-guide.md) | Version migration guide |
 | [**changelog.md**](changelog.md) | Version changelog |
 | [**orchestrator.md**](orchestrator.md) | Orchestrator reference |
+| [**glossary.md**](glossary.md) | Platform terminology: Algorithm, RASP, MCP, ISC, Trust Gateway, Zero-Mock |
 
 ## Quick Reference
 
@@ -48,6 +49,8 @@ codomyrmex status     # Current status
 | `run_pyrefly_analysis()` | static_analysis | Code analysis |
 
 ### Secure Cognitive APIs
+
+> **Note:** These modules exist in `src/codomyrmex/` but their specific class interface names have not been independently verified against source. Confirm class names from each module's source README before use in production code.
 
 | Function | Module | Description |
 |----------|--------|-------------|

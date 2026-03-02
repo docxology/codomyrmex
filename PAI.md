@@ -1,6 +1,6 @@
 # Codomyrmex &harr; PAI System Bridge
 
-**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.0.6 | **Status**: Active | **Last Updated**: March 2026
 
 ## What Is PAI?
 
@@ -19,11 +19,11 @@ PAI operates inside Claude Code sessions. It runs the Algorithm on every prompt,
 
 ## How Codomyrmex Serves PAI
 
-Codomyrmex is an **88-module Python development platform**. PAI agents consume codomyrmex capabilities via the Model Context Protocol (MCP). The relationship is:
+Codomyrmex is a **122-module Python development platform**. PAI agents consume codomyrmex capabilities via the Model Context Protocol (MCP). The relationship is:
 
 ```
 PAI (TypeScript/Bun, ~/.claude/)  ──MCP──>  Codomyrmex (Python, this repo)
-     Algorithm + Skills + Hooks              88 modules of dev-platform tools
+     Algorithm + Skills + Hooks              122 modules of dev-platform tools
 ```
 
 PAI is the **orchestrator**. Codomyrmex is the **toolbox**.
@@ -49,7 +49,7 @@ graph LR
         CodeAnalysis["Code Analysis"]
         Shell["Shell Execution"]
         Memory["Memory/Knowledge"]
-        Modules["88 Module Tools"]
+        Modules["122 Module Tools"]
     end
 
     Algo --> Agents
@@ -62,9 +62,9 @@ graph LR
 ```
 
 **Server**: `scripts/model_context_protocol/run_mcp_server.py`
-**Transports**: stdio (Claude Desktop/Code) and HTTP with Web UI (port 8080)
-**Tools**: 22 static tools (17 core + 3 universal proxy + 2 maintenance) + ~146 auto-discovered module tools from 33 modules via `pkgutil` scan. Total: **~173 tools** (169 safe + 4 destructive). The Codomyrmex PAI Skill (`~/.claude/skills/Codomyrmex/SKILL.md`) surfaces ~173 tools for MCP exposure.
-**Web UI**: `http://localhost:8080/` — interactive tool tester, server info, resources, prompts
+**Transports**: stdio (Claude Desktop/Code) and Codomyrmex Admin Dashboard (port 8787)
+**Tools**: 20 static tools (17 core + 3 universal proxy) + ~235 auto-discovered module tools from 74 modules via `pkgutil` scan. Total: **~255 tools** (251 safe + 4 destructive). The Codomyrmex PAI Skill (`~/.claude/skills/Codomyrmex/SKILL.md`) surfaces ~255 tools for MCP exposure.
+**Web UI**: `http://localhost:8787/` (Codomyrmex Admin Dashboard) · `http://localhost:8888/` (PAI Project Manager)
 **Config**: Register in `claude_desktop_config.json` (see [Connecting PAI tutorial](docs/getting-started/tutorials/connecting-pai.md))
 **Full docs**: [src/codomyrmex/model_context_protocol/PAI.md](src/codomyrmex/model_context_protocol/PAI.md)
 
@@ -123,7 +123,7 @@ Each phase of the PAI Algorithm maps to specific codomyrmex modules:
 └── claude_desktop_config.json      # MCP server registrations
 
 codomyrmex/                         # SHARED (this repo, committed)
-├── src/codomyrmex/                 # 88 Python modules
+├── src/codomyrmex/                 # 122 Python modules
 ├── scripts/model_context_protocol/ # MCP server runner
 ├── PAI.md                          # THIS FILE (bridge doc)
 └── docs/                           # Documentation
@@ -231,7 +231,7 @@ Every codomyrmex module has a `PAI.md` file describing its AI capabilities. Thes
 
 ## PAI Dashboard Interface
 
-The PAI Dashboard (`~/.claude/PAI/Tools/PMServer.ts`, port 8889) provides a browser-based project management and communication interface. It is a Codomyrmex-integrated fork of [danielmiessler/Personal_AI_Infrastructure](https://github.com/danielmiessler/Personal_AI_Infrastructure), extended with email, calendar, git sync, and network visualization capabilities.
+The PAI Dashboard (`~/.claude/PAI/Tools/PMServer.ts`, port 8888) provides a browser-based project management and communication interface. It is a Codomyrmex-integrated fork of [danielmiessler/Personal_AI_Infrastructure](https://github.com/danielmiessler/Personal_AI_Infrastructure), extended with email, calendar, git sync, and network visualization capabilities.
 
 ### Analytics — Mission & Project Overview
 
