@@ -32,7 +32,7 @@ class InMemoryQueue:
         """Remove and return the next job from the queue."""
         # Check scheduled jobs
         now = datetime.now()
-        ready_jobs = [j for dt, j in self._scheduled if dt <= now]
+        ready_jobs = [(dt, j) for dt, j in self._scheduled if dt <= now]
         for dt, job in ready_jobs:
             self._scheduled.remove((dt, job))
             heapq.heappush(self._queue, (-job.priority, time.time(), job))
