@@ -19,18 +19,14 @@ Example:
 import logging
 import time
 from abc import ABC, abstractmethod
-
-# Shared schemas for cross-module interop
-try:
-    from codomyrmex.validation.schemas import Result, ResultStatus
-except ImportError:
-    Result = None
-    ResultStatus = None
 from collections.abc import Callable
 from dataclasses import dataclass, field
 from enum import Enum
 from pathlib import Path
 from typing import Any, Dict, List, Optional
+
+# Shared schemas for cross-module interop
+from codomyrmex.validation.schemas import Result, ResultStatus
 
 
 class IDEStatus(Enum):
