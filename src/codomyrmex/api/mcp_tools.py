@@ -9,7 +9,7 @@ from __future__ import annotations
 from typing import Any
 
 try:
-    from codomyrmex.model_context_protocol.decorators import mcp_tool
+    from codomyrmex.model_context_protocol.tool_decorator import mcp_tool
 except ImportError:
 
     def mcp_tool(**kwargs: Any):  # type: ignore[misc]
@@ -20,7 +20,56 @@ except ImportError:
         return decorator
 
 
-@mcp_tool(category="api")
+@mcp_tool(
+    category="api",
+    description="Check the API server status, aggregating health across components.",
+)
+def api_health_check() -> dict[str, Any]:
+    """Check the health and availability of the API module.
+
+    Verifies that core API submodules can be imported and aggregates
+    their health via HealthChecker.
+
+    Returns:
+        Dictionary with overall health status and component details.
+    """
+    from codomyrmex.api.health import HealthChecker, ComponentHealth
+
+    checker = HealthChecker()
+
+    def check_submodules() -> ComponentHealth:
+        submodules = [
+            "documentation",
+            "standardization",
+            "authentication",
+            "rate_limiting",
+            "circuit_breaker",
+            "webhooks",
+            "mocking",
+            "pagination",
+        ]
+        results = {}
+        all_ok = True
+        for name in submodules:
+            try:
+                __import__(f"codomyrmex.api.{name}")
+                results[name] = "ok"
+            except Exception as exc:
+                results[name] = f"error: {exc}"
+                all_ok = False
+        if not all_ok:
+            raise Exception(f"Failed to load submodules: {results}")
+        return ComponentHealth(name="api_submodules", message="All submodules loaded")
+
+    checker.register("submodules", check_submodules)
+    report = checker.check()
+    return report.to_dict()
+
+
+@mcp_tool(
+    category="api",
+    description="List registered API endpoints discovered from source code.",
+)
 def api_list_endpoints(
     source_path: str = ".",
 ) -> dict[str, Any]:
@@ -50,7 +99,10 @@ def api_list_endpoints(
         return {"status": "error", "message": str(exc)}
 
 
-@mcp_tool(category="api")
+@mcp_tool(
+    category="api",
+    description="Retrieve the OpenAPI specification generated from source code.",
+)
 def api_get_spec(
     title: str = "Codomyrmex API",
     version: str = "1.0.0",
@@ -89,43 +141,3 @@ def api_get_spec(
         return {"status": "error", "message": f"not yet implemented: {exc}"}
     except Exception as exc:
         return {"status": "error", "message": str(exc)}
-
-
-@mcp_tool(category="api")
-def api_health_check() -> dict[str, Any]:
-    """Check the health and availability of the API module.
-
-    Verifies that core API submodules (documentation, standardization,
-    authentication, rate_limiting, circuit_breaker, webhooks, mocking,
-    pagination) can be imported successfully.
-
-    Returns:
-        Dictionary with health status per submodule.
-    """
-    submodules = [
-        "documentation",
-        "standardization",
-        "authentication",
-        "rate_limiting",
-        "circuit_breaker",
-        "webhooks",
-        "mocking",
-        "pagination",
-    ]
-    results: dict[str, str] = {}
-    all_ok = True
-
-    for name in submodules:
-        try:
-            __import__(f"codomyrmex.api.{name}")
-            results[name] = "ok"
-        except Exception as exc:
-            results[name] = f"error: {exc}"
-            all_ok = False
-
-    return {
-        "status": "success" if all_ok else "degraded",
-        "submodules": results,
-        "healthy_count": sum(1 for v in results.values() if v == "ok"),
-        "total_count": len(submodules),
-    }
