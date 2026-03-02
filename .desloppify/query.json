@@ -1,23 +1,916 @@
 {
-  "command": "status",
-  "overall_score": 66.2,
-  "objective_score": 79.2,
-  "strict_score": 66.2,
-  "verified_strict_score": 79.1,
+  "command": "scan",
+  "overall_score": 63.1,
+  "objective_score": 78.9,
+  "strict_score": 63.1,
+  "verified_strict_score": 78.9,
+  "prev_overall_score": null,
+  "prev_objective_score": null,
+  "prev_strict_score": null,
+  "prev_verified_strict_score": null,
+  "profile": "full",
+  "noise_budget": 10,
+  "noise_global_budget": 0,
+  "hidden_by_detector": {
+    "test_coverage": 17661,
+    "subjective_review": 14842,
+    "structural": 6550,
+    "dupes": 6309,
+    "dict_keys": 3247,
+    "smells": 2269,
+    "facade": 1993,
+    "security": 1220,
+    "responsibility_cohesion": 771,
+    "global_mutable_config": 344,
+    "coupling": 299,
+    "private_imports": 142,
+    "flat_dirs": 101,
+    "unused": 101,
+    "props": 67,
+    "review": 10,
+    "cycles": 3
+  },
+  "hidden_total": 55929,
+  "diff": {
+    "new": 145,
+    "auto_resolved": 2426,
+    "reopened": 2750,
+    "total_current": 56165,
+    "suspect_detectors": [
+      "review"
+    ],
+    "chronic_reopeners": [
+      {
+        "id": "test_coverage::src/codomyrmex/model_context_protocol/transport/server.py::untested_module",
+        "detector": "test_coverage",
+        "file": "src/codomyrmex/model_context_protocol/transport/server.py",
+        "tier": 3,
+        "confidence": "high",
+        "summary": "Untested module (654 LOC, 3 importers)",
+        "detail": {
+          "kind": "untested_module",
+          "loc": 654,
+          "importer_count": 3,
+          "loc_weight": 25.573423705088842
+        },
+        "status": "open",
+        "note": "Reopened (\u00d72) \u2014 reappeared in scan (was auto_resolved)",
+        "first_seen": "2026-03-01T00:01:19+00:00",
+        "last_seen": "2026-03-02T02:59:38+00:00",
+        "resolved_at": null,
+        "reopen_count": 2,
+        "lang": "python",
+        "zone": "production",
+        "suppressed": false,
+        "suppressed_at": null,
+        "suppression_pattern": null
+      },
+      {
+        "id": "test_coverage::src/codomyrmex/ide/antigravity/agent_bridge.py::untested_module",
+        "detector": "test_coverage",
+        "file": "src/codomyrmex/ide/antigravity/agent_bridge.py",
+        "tier": 3,
+        "confidence": "high",
+        "summary": "Untested module (324 LOC, 0 importers)",
+        "detail": {
+          "kind": "untested_module",
+          "loc": 324,
+          "importer_count": 0,
+          "loc_weight": 18.0
+        },
+        "status": "open",
+        "note": "Reopened (\u00d72) \u2014 reappeared in scan (was auto_resolved)",
+        "first_seen": "2026-03-01T00:01:19+00:00",
+        "last_seen": "2026-03-02T02:59:38+00:00",
+        "resolved_at": null,
+        "reopen_count": 2,
+        "lang": "python",
+        "zone": "production",
+        "suppressed": false,
+        "suppressed_at": null,
+        "suppression_pattern": null
+      },
+      {
+        "id": "test_coverage::src/codomyrmex/git_operations/cli/metadata.py::untested_critical",
+        "detector": "test_coverage",
+        "file": "src/codomyrmex/git_operations/cli/metadata.py",
+        "tier": 2,
+        "confidence": "high",
+        "summary": "Untested critical module (436 LOC, 0 importers) \u2014 high blast radius",
+        "detail": {
+          "kind": "untested_critical",
+          "loc": 436,
+          "importer_count": 0,
+          "loc_weight": 20.8806130178211,
+          "complexity_score": 43
+        },
+        "status": "open",
+        "note": "Reopened (\u00d72) \u2014 reappeared in scan (was auto_resolved)",
+        "first_seen": "2026-03-01T00:01:19+00:00",
+        "last_seen": "2026-03-02T02:59:38+00:00",
+        "resolved_at": null,
+        "reopen_count": 2,
+        "lang": "python",
+        "zone": "production",
+        "suppressed": false,
+        "suppressed_at": null,
+        "suppression_pattern": null
+      },
+      {
+        "id": "test_coverage::src/codomyrmex/model_context_protocol/transport/web_ui.py::untested_module",
+        "detector": "test_coverage",
+        "file": "src/codomyrmex/model_context_protocol/transport/web_ui.py",
+        "tier": 3,
+        "confidence": "high",
+        "summary": "Untested module (524 LOC, 2 importers)",
+        "detail": {
+          "kind": "untested_module",
+          "loc": 524,
+          "importer_count": 2,
+          "loc_weight": 22.891046284519195
+        },
+        "status": "open",
+        "note": "Reopened (\u00d72) \u2014 reappeared in scan (was auto_resolved)",
+        "first_seen": "2026-03-01T00:01:19+00:00",
+        "last_seen": "2026-03-02T02:59:38+00:00",
+        "resolved_at": null,
+        "reopen_count": 2,
+        "lang": "python",
+        "zone": "production",
+        "suppressed": false,
+        "suppressed_at": null,
+        "suppression_pattern": null
+      },
+      {
+        "id": "test_coverage::src/codomyrmex/meme/narrative/models.py::untested_module",
+        "detector": "test_coverage",
+        "file": "src/codomyrmex/meme/narrative/models.py",
+        "tier": 3,
+        "confidence": "high",
+        "summary": "Untested module (81 LOC, 0 importers)",
+        "detail": {
+          "kind": "untested_module",
+          "loc": 81,
+          "importer_count": 0,
+          "loc_weight": 9.0
+        },
+        "status": "open",
+        "note": "Reopened (\u00d72) \u2014 reappeared in scan (was auto_resolved)",
+        "first_seen": "2026-03-01T00:01:19+00:00",
+        "last_seen": "2026-03-02T02:59:38+00:00",
+        "resolved_at": null,
+        "reopen_count": 2,
+        "lang": "python",
+        "zone": "production",
+        "suppressed": false,
+        "suppressed_at": null,
+        "suppression_pattern": null
+      },
+      {
+        "id": "test_coverage::src/codomyrmex/skills/mcp_tools.py::untested_module",
+        "detector": "test_coverage",
+        "file": "src/codomyrmex/skills/mcp_tools.py",
+        "tier": 3,
+        "confidence": "high",
+        "summary": "Untested module (178 LOC, 1 importers)",
+        "detail": {
+          "kind": "untested_module",
+          "loc": 178,
+          "importer_count": 1,
+          "loc_weight": 13.341664064126334
+        },
+        "status": "open",
+        "note": "Reopened (\u00d72) \u2014 reappeared in scan (was auto_resolved)",
+        "first_seen": "2026-03-01T00:01:19+00:00",
+        "last_seen": "2026-03-02T02:59:38+00:00",
+        "resolved_at": null,
+        "reopen_count": 2,
+        "lang": "python",
+        "zone": "production",
+        "suppressed": false,
+        "suppressed_at": null,
+        "suppression_pattern": null
+      },
+      {
+        "id": "test_coverage::src/codomyrmex/plugin_system/dependency_resolver.py::untested_module",
+        "detector": "test_coverage",
+        "file": "src/codomyrmex/plugin_system/dependency_resolver.py",
+        "tier": 3,
+        "confidence": "high",
+        "summary": "Untested module (211 LOC, 0 importers)",
+        "detail": {
+          "kind": "untested_module",
+          "loc": 211,
+          "importer_count": 0,
+          "loc_weight": 14.52583904633395
+        },
+        "status": "open",
+        "note": "Reopened (\u00d72) \u2014 reappeared in scan (was auto_resolved)",
+        "first_seen": "2026-03-01T00:01:19+00:00",
+        "last_seen": "2026-03-02T02:59:38+00:00",
+        "resolved_at": null,
+        "reopen_count": 2,
+        "lang": "python",
+        "zone": "production",
+        "suppressed": false,
+        "suppressed_at": null,
+        "suppression_pattern": null
+      },
+      {
+        "id": "test_coverage::src/codomyrmex/performance/monitoring/performance_monitor.py::untested_module",
+        "detector": "test_coverage",
+        "file": "src/codomyrmex/performance/monitoring/performance_monitor.py",
+        "tier": 3,
+        "confidence": "high",
+        "summary": "Untested module (437 LOC, 2 importers)",
+        "detail": {
+          "kind": "untested_module",
+          "loc": 437,
+          "importer_count": 2,
+          "loc_weight": 20.904544960366874
+        },
+        "status": "open",
+        "note": "Reopened (\u00d72) \u2014 reappeared in scan (was auto_resolved)",
+        "first_seen": "2026-03-01T00:01:19+00:00",
+        "last_seen": "2026-03-02T02:59:38+00:00",
+        "resolved_at": null,
+        "reopen_count": 2,
+        "lang": "python",
+        "zone": "production",
+        "suppressed": false,
+        "suppressed_at": null,
+        "suppression_pattern": null
+      },
+      {
+        "id": "test_coverage::src/codomyrmex/model_context_protocol/schemas/mcp_schemas.py::untested_module",
+        "detector": "test_coverage",
+        "file": "src/codomyrmex/model_context_protocol/schemas/mcp_schemas.py",
+        "tier": 3,
+        "confidence": "high",
+        "summary": "Untested module (300 LOC, 2 importers)",
+        "detail": {
+          "kind": "untested_module",
+          "loc": 300,
+          "importer_count": 2,
+          "loc_weight": 17.320508075688775
+        },
+        "status": "open",
+        "note": "Reopened (\u00d72) \u2014 reappeared in scan (was auto_resolved)",
+        "first_seen": "2026-03-01T00:01:19+00:00",
+        "last_seen": "2026-03-02T02:59:38+00:00",
+        "resolved_at": null,
+        "reopen_count": 2,
+        "lang": "python",
+        "zone": "production",
+        "suppressed": false,
+        "suppressed_at": null,
+        "suppression_pattern": null
+      },
+      {
+        "id": "test_coverage::src/codomyrmex/model_context_protocol/transport/main.py::untested_module",
+        "detector": "test_coverage",
+        "file": "src/codomyrmex/model_context_protocol/transport/main.py",
+        "tier": 3,
+        "confidence": "high",
+        "summary": "Untested module (111 LOC, 2 importers)",
+        "detail": {
+          "kind": "untested_module",
+          "loc": 111,
+          "importer_count": 2,
+          "loc_weight": 10.535653752852738
+        },
+        "status": "open",
+        "note": "Reopened (\u00d72) \u2014 reappeared in scan (was auto_resolved)",
+        "first_seen": "2026-03-01T00:01:19+00:00",
+        "last_seen": "2026-03-02T02:59:38+00:00",
+        "resolved_at": null,
+        "reopen_count": 2,
+        "lang": "python",
+        "zone": "production",
+        "suppressed": false,
+        "suppressed_at": null,
+        "suppression_pattern": null
+      },
+      {
+        "id": "test_coverage::src/codomyrmex/concurrency/workers/rate_limiter.py::untested_module",
+        "detector": "test_coverage",
+        "file": "src/codomyrmex/concurrency/workers/rate_limiter.py",
+        "tier": 3,
+        "confidence": "high",
+        "summary": "Untested module (77 LOC, 1 importers)",
+        "detail": {
+          "kind": "untested_module",
+          "loc": 77,
+          "importer_count": 1,
+          "loc_weight": 8.774964387392123
+        },
+        "status": "open",
+        "note": "Reopened (\u00d72) \u2014 reappeared in scan (was auto_resolved)",
+        "first_seen": "2026-03-01T00:01:19+00:00",
+        "last_seen": "2026-03-02T02:59:38+00:00",
+        "resolved_at": null,
+        "reopen_count": 2,
+        "lang": "python",
+        "zone": "production",
+        "suppressed": false,
+        "suppressed_at": null,
+        "suppression_pattern": null
+      },
+      {
+        "id": "test_coverage::src/codomyrmex/data_visualization/plots/network.py::untested_module",
+        "detector": "test_coverage",
+        "file": "src/codomyrmex/data_visualization/plots/network.py",
+        "tier": 3,
+        "confidence": "high",
+        "summary": "Untested module (32 LOC, 1 importers)",
+        "detail": {
+          "kind": "untested_module",
+          "loc": 32,
+          "importer_count": 1,
+          "loc_weight": 5.656854249492381
+        },
+        "status": "open",
+        "note": "Reopened (\u00d72) \u2014 reappeared in scan (was auto_resolved)",
+        "first_seen": "2026-03-01T00:01:19+00:00",
+        "last_seen": "2026-03-02T02:59:38+00:00",
+        "resolved_at": null,
+        "reopen_count": 2,
+        "lang": "python",
+        "zone": "production",
+        "suppressed": false,
+        "suppressed_at": null,
+        "suppression_pattern": null
+      },
+      {
+        "id": "test_coverage::src/codomyrmex/edge_computing/scheduling/scheduler.py::untested_module",
+        "detector": "test_coverage",
+        "file": "src/codomyrmex/edge_computing/scheduling/scheduler.py",
+        "tier": 3,
+        "confidence": "high",
+        "summary": "Untested module (137 LOC, 1 importers)",
+        "detail": {
+          "kind": "untested_module",
+          "loc": 137,
+          "importer_count": 1,
+          "loc_weight": 11.704699910719626
+        },
+        "status": "open",
+        "note": "Reopened (\u00d72) \u2014 reappeared in scan (was auto_resolved)",
+        "first_seen": "2026-03-01T00:01:19+00:00",
+        "last_seen": "2026-03-02T02:59:38+00:00",
+        "resolved_at": null,
+        "reopen_count": 2,
+        "lang": "python",
+        "zone": "production",
+        "suppressed": false,
+        "suppressed_at": null,
+        "suppression_pattern": null
+      },
+      {
+        "id": "test_coverage::src/codomyrmex/api/rate_limiting/strategies.py::untested_module",
+        "detector": "test_coverage",
+        "file": "src/codomyrmex/api/rate_limiting/strategies.py",
+        "tier": 3,
+        "confidence": "high",
+        "summary": "Untested module (69 LOC, 1 importers)",
+        "detail": {
+          "kind": "untested_module",
+          "loc": 69,
+          "importer_count": 1,
+          "loc_weight": 8.306623862918075
+        },
+        "status": "open",
+        "note": "Reopened (\u00d72) \u2014 reappeared in scan (was auto_resolved)",
+        "first_seen": "2026-03-01T00:01:19+00:00",
+        "last_seen": "2026-03-02T02:59:38+00:00",
+        "resolved_at": null,
+        "reopen_count": 2,
+        "lang": "python",
+        "zone": "production",
+        "suppressed": false,
+        "suppressed_at": null,
+        "suppression_pattern": null
+      },
+      {
+        "id": "test_coverage::src/codomyrmex/events/notification/templates.py::untested_module",
+        "detector": "test_coverage",
+        "file": "src/codomyrmex/events/notification/templates.py",
+        "tier": 3,
+        "confidence": "high",
+        "summary": "Untested module (90 LOC, 2 importers)",
+        "detail": {
+          "kind": "untested_module",
+          "loc": 90,
+          "importer_count": 2,
+          "loc_weight": 9.486832980505138
+        },
+        "status": "open",
+        "note": "Reopened (\u00d72) \u2014 reappeared in scan (was auto_resolved)",
+        "first_seen": "2026-03-01T00:01:19+00:00",
+        "last_seen": "2026-03-02T02:59:38+00:00",
+        "resolved_at": null,
+        "reopen_count": 2,
+        "lang": "python",
+        "zone": "production",
+        "suppressed": false,
+        "suppressed_at": null,
+        "suppression_pattern": null
+      },
+      {
+        "id": "test_coverage::src/codomyrmex/agentic_memory/obsidian/graph.py::untested_module",
+        "detector": "test_coverage",
+        "file": "src/codomyrmex/agentic_memory/obsidian/graph.py",
+        "tier": 3,
+        "confidence": "high",
+        "summary": "Untested module (244 LOC, 0 importers)",
+        "detail": {
+          "kind": "untested_module",
+          "loc": 244,
+          "importer_count": 0,
+          "loc_weight": 15.620499351813308
+        },
+        "status": "open",
+        "note": "Reopened (\u00d72) \u2014 reappeared in scan (was auto_resolved)",
+        "first_seen": "2026-03-01T00:01:19+00:00",
+        "last_seen": "2026-03-02T02:59:38+00:00",
+        "resolved_at": null,
+        "reopen_count": 2,
+        "lang": "python",
+        "zone": "production",
+        "suppressed": false,
+        "suppressed_at": null,
+        "suppression_pattern": null
+      },
+      {
+        "id": "test_coverage::src/codomyrmex/api/rate_limiting/models.py::untested_module",
+        "detector": "test_coverage",
+        "file": "src/codomyrmex/api/rate_limiting/models.py",
+        "tier": 3,
+        "confidence": "high",
+        "summary": "Untested module (42 LOC, 3 importers)",
+        "detail": {
+          "kind": "untested_module",
+          "loc": 42,
+          "importer_count": 3,
+          "loc_weight": 6.48074069840786
+        },
+        "status": "open",
+        "note": "Reopened (\u00d72) \u2014 reappeared in scan (was auto_resolved)",
+        "first_seen": "2026-03-01T00:01:19+00:00",
+        "last_seen": "2026-03-02T02:59:38+00:00",
+        "resolved_at": null,
+        "reopen_count": 2,
+        "lang": "python",
+        "zone": "production",
+        "suppressed": false,
+        "suppressed_at": null,
+        "suppression_pattern": null
+      },
+      {
+        "id": "test_coverage::src/codomyrmex/model_context_protocol/errors.py::untested_module",
+        "detector": "test_coverage",
+        "file": "src/codomyrmex/model_context_protocol/errors.py",
+        "tier": 3,
+        "confidence": "high",
+        "summary": "Untested module (205 LOC, 3 importers)",
+        "detail": {
+          "kind": "untested_module",
+          "loc": 205,
+          "importer_count": 3,
+          "loc_weight": 14.317821063276353
+        },
+        "status": "open",
+        "note": "Reopened (\u00d72) \u2014 reappeared in scan (was auto_resolved)",
+        "first_seen": "2026-03-01T00:01:19+00:00",
+        "last_seen": "2026-03-02T02:59:38+00:00",
+        "resolved_at": null,
+        "reopen_count": 2,
+        "lang": "python",
+        "zone": "production",
+        "suppressed": false,
+        "suppressed_at": null,
+        "suppression_pattern": null
+      },
+      {
+        "id": "test_coverage::src/codomyrmex/cerebrum/visualization/core.py::untested_module",
+        "detector": "test_coverage",
+        "file": "src/codomyrmex/cerebrum/visualization/core.py",
+        "tier": 3,
+        "confidence": "high",
+        "summary": "Untested module (550 LOC, 1 importers)",
+        "detail": {
+          "kind": "untested_module",
+          "loc": 550,
+          "importer_count": 1,
+          "loc_weight": 23.45207879911715
+        },
+        "status": "open",
+        "note": "Reopened (\u00d72) \u2014 reappeared in scan (was auto_resolved)",
+        "first_seen": "2026-03-01T00:01:19+00:00",
+        "last_seen": "2026-03-02T02:59:38+00:00",
+        "resolved_at": null,
+        "reopen_count": 2,
+        "lang": "python",
+        "zone": "production",
+        "suppressed": false,
+        "suppressed_at": null,
+        "suppression_pattern": null
+      },
+      {
+        "id": "test_coverage::src/codomyrmex/git_operations/core/commands/sync.py::untested_module",
+        "detector": "test_coverage",
+        "file": "src/codomyrmex/git_operations/core/commands/sync.py",
+        "tier": 3,
+        "confidence": "high",
+        "summary": "Untested module (124 LOC, 1 importers)",
+        "detail": {
+          "kind": "untested_module",
+          "loc": 124,
+          "importer_count": 1,
+          "loc_weight": 11.135528725660043
+        },
+        "status": "open",
+        "note": "Reopened (\u00d72) \u2014 reappeared in scan (was auto_resolved)",
+        "first_seen": "2026-03-01T00:01:19+00:00",
+        "last_seen": "2026-03-02T02:59:38+00:00",
+        "resolved_at": null,
+        "reopen_count": 2,
+        "lang": "python",
+        "zone": "script",
+        "suppressed": false,
+        "suppressed_at": null,
+        "suppression_pattern": null
+      },
+      {
+        "id": "test_coverage::src/codomyrmex/website/generator.py::untested_module",
+        "detector": "test_coverage",
+        "file": "src/codomyrmex/website/generator.py",
+        "tier": 3,
+        "confidence": "high",
+        "summary": "Untested module (97 LOC, 1 importers)",
+        "detail": {
+          "kind": "untested_module",
+          "loc": 97,
+          "importer_count": 1,
+          "loc_weight": 9.848857801796104
+        },
+        "status": "open",
+        "note": "Reopened (\u00d72) \u2014 reappeared in scan (was auto_resolved)",
+        "first_seen": "2026-03-01T00:01:19+00:00",
+        "last_seen": "2026-03-02T02:59:38+00:00",
+        "resolved_at": null,
+        "reopen_count": 2,
+        "lang": "python",
+        "zone": "production",
+        "suppressed": false,
+        "suppressed_at": null,
+        "suppression_pattern": null
+      },
+      {
+        "id": "test_coverage::src/codomyrmex/website/accessibility/utils.py::untested_module",
+        "detector": "test_coverage",
+        "file": "src/codomyrmex/website/accessibility/utils.py",
+        "tier": 3,
+        "confidence": "high",
+        "summary": "Untested module (43 LOC, 1 importers)",
+        "detail": {
+          "kind": "untested_module",
+          "loc": 43,
+          "importer_count": 1,
+          "loc_weight": 6.557438524302
+        },
+        "status": "open",
+        "note": "Reopened (\u00d72) \u2014 reappeared in scan (was auto_resolved)",
+        "first_seen": "2026-03-01T00:01:19+00:00",
+        "last_seen": "2026-03-02T02:59:38+00:00",
+        "resolved_at": null,
+        "reopen_count": 2,
+        "lang": "python",
+        "zone": "production",
+        "suppressed": false,
+        "suppressed_at": null,
+        "suppression_pattern": null
+      },
+      {
+        "id": "test_coverage::src/codomyrmex/tool_use/validation.py::untested_module",
+        "detector": "test_coverage",
+        "file": "src/codomyrmex/tool_use/validation.py",
+        "tier": 3,
+        "confidence": "high",
+        "summary": "Untested module (206 LOC, 3 importers)",
+        "detail": {
+          "kind": "untested_module",
+          "loc": 206,
+          "importer_count": 3,
+          "loc_weight": 14.352700094407323
+        },
+        "status": "open",
+        "note": "Reopened (\u00d72) \u2014 reappeared in scan (was auto_resolved)",
+        "first_seen": "2026-03-01T00:01:19+00:00",
+        "last_seen": "2026-03-02T02:59:38+00:00",
+        "resolved_at": null,
+        "reopen_count": 2,
+        "lang": "python",
+        "zone": "production",
+        "suppressed": false,
+        "suppressed_at": null,
+        "suppression_pattern": null
+      },
+      {
+        "id": "test_coverage::src/codomyrmex/events/notification/models.py::untested_module",
+        "detector": "test_coverage",
+        "file": "src/codomyrmex/events/notification/models.py",
+        "tier": 3,
+        "confidence": "high",
+        "summary": "Untested module (77 LOC, 4 importers)",
+        "detail": {
+          "kind": "untested_module",
+          "loc": 77,
+          "importer_count": 4,
+          "loc_weight": 8.774964387392123
+        },
+        "status": "open",
+        "note": "Reopened (\u00d72) \u2014 reappeared in scan (was auto_resolved)",
+        "first_seen": "2026-03-01T00:01:19+00:00",
+        "last_seen": "2026-03-02T02:59:38+00:00",
+        "resolved_at": null,
+        "reopen_count": 2,
+        "lang": "python",
+        "zone": "production",
+        "suppressed": false,
+        "suppressed_at": null,
+        "suppression_pattern": null
+      },
+      {
+        "id": "test_coverage::src/codomyrmex/agents/context/indexer.py::untested_module",
+        "detector": "test_coverage",
+        "file": "src/codomyrmex/agents/context/indexer.py",
+        "tier": 3,
+        "confidence": "high",
+        "summary": "Untested module (211 LOC, 0 importers)",
+        "detail": {
+          "kind": "untested_module",
+          "loc": 211,
+          "importer_count": 0,
+          "loc_weight": 14.52583904633395
+        },
+        "status": "open",
+        "note": "Reopened (\u00d72) \u2014 reappeared in scan (was auto_resolved)",
+        "first_seen": "2026-03-01T00:01:19+00:00",
+        "last_seen": "2026-03-02T02:59:38+00:00",
+        "resolved_at": null,
+        "reopen_count": 2,
+        "lang": "python",
+        "zone": "production",
+        "suppressed": false,
+        "suppressed_at": null,
+        "suppression_pattern": null
+      },
+      {
+        "id": "test_coverage::src/codomyrmex/api/rate_limiting/limiters.py::untested_module",
+        "detector": "test_coverage",
+        "file": "src/codomyrmex/api/rate_limiting/limiters.py",
+        "tier": 3,
+        "confidence": "high",
+        "summary": "Untested module (382 LOC, 2 importers)",
+        "detail": {
+          "kind": "untested_module",
+          "loc": 382,
+          "importer_count": 2,
+          "loc_weight": 19.544820285692065
+        },
+        "status": "open",
+        "note": "Reopened (\u00d72) \u2014 reappeared in scan (was auto_resolved)",
+        "first_seen": "2026-03-01T00:01:19+00:00",
+        "last_seen": "2026-03-02T02:59:38+00:00",
+        "resolved_at": null,
+        "reopen_count": 2,
+        "lang": "python",
+        "zone": "production",
+        "suppressed": false,
+        "suppressed_at": null,
+        "suppression_pattern": null
+      },
+      {
+        "id": "test_coverage::src/codomyrmex/utils/metrics.py::untested_module",
+        "detector": "test_coverage",
+        "file": "src/codomyrmex/utils/metrics.py",
+        "tier": 3,
+        "confidence": "high",
+        "summary": "Untested module (226 LOC, 0 importers)",
+        "detail": {
+          "kind": "untested_module",
+          "loc": 226,
+          "importer_count": 0,
+          "loc_weight": 15.033296378372908
+        },
+        "status": "open",
+        "note": "Reopened (\u00d72) \u2014 reappeared in scan (was auto_resolved)",
+        "first_seen": "2026-03-01T00:01:19+00:00",
+        "last_seen": "2026-03-02T02:59:38+00:00",
+        "resolved_at": null,
+        "reopen_count": 2,
+        "lang": "python",
+        "zone": "production",
+        "suppressed": false,
+        "suppressed_at": null,
+        "suppression_pattern": null
+      },
+      {
+        "id": "test_coverage::src/codomyrmex/quantum/simulator.py::untested_module",
+        "detector": "test_coverage",
+        "file": "src/codomyrmex/quantum/simulator.py",
+        "tier": 3,
+        "confidence": "high",
+        "summary": "Untested module (121 LOC, 1 importers)",
+        "detail": {
+          "kind": "untested_module",
+          "loc": 121,
+          "importer_count": 1,
+          "loc_weight": 11.0
+        },
+        "status": "open",
+        "note": "Reopened (\u00d72) \u2014 reappeared in scan (was auto_resolved)",
+        "first_seen": "2026-03-01T00:01:19+00:00",
+        "last_seen": "2026-03-02T02:59:38+00:00",
+        "resolved_at": null,
+        "reopen_count": 2,
+        "lang": "python",
+        "zone": "production",
+        "suppressed": false,
+        "suppressed_at": null,
+        "suppression_pattern": null
+      },
+      {
+        "id": "test_coverage::src/codomyrmex/agentic_memory/obsidian/parser.py::untested_module",
+        "detector": "test_coverage",
+        "file": "src/codomyrmex/agentic_memory/obsidian/parser.py",
+        "tier": 3,
+        "confidence": "high",
+        "summary": "Untested module (269 LOC, 0 importers)",
+        "detail": {
+          "kind": "untested_module",
+          "loc": 269,
+          "importer_count": 0,
+          "loc_weight": 16.401219466856727
+        },
+        "status": "open",
+        "note": "Reopened (\u00d72) \u2014 reappeared in scan (was auto_resolved)",
+        "first_seen": "2026-03-01T00:01:19+00:00",
+        "last_seen": "2026-03-02T02:59:38+00:00",
+        "resolved_at": null,
+        "reopen_count": 2,
+        "lang": "python",
+        "zone": "production",
+        "suppressed": false,
+        "suppressed_at": null,
+        "suppression_pattern": null
+      },
+      {
+        "id": "test_coverage::src/codomyrmex/agents/benchmarks.py::untested_module",
+        "detector": "test_coverage",
+        "file": "src/codomyrmex/agents/benchmarks.py",
+        "tier": 3,
+        "confidence": "high",
+        "summary": "Untested module (137 LOC, 0 importers)",
+        "detail": {
+          "kind": "untested_module",
+          "loc": 137,
+          "importer_count": 0,
+          "loc_weight": 11.704699910719626
+        },
+        "status": "open",
+        "note": "Reopened (\u00d72) \u2014 reappeared in scan (was auto_resolved)",
+        "first_seen": "2026-03-01T00:01:19+00:00",
+        "last_seen": "2026-03-02T02:59:38+00:00",
+        "resolved_at": null,
+        "reopen_count": 2,
+        "lang": "python",
+        "zone": "production",
+        "suppressed": false,
+        "suppressed_at": null,
+        "suppression_pattern": null
+      },
+      {
+        "id": "test_coverage::src/codomyrmex/crypto/currency/wallet.py::untested_module",
+        "detector": "test_coverage",
+        "file": "src/codomyrmex/crypto/currency/wallet.py",
+        "tier": 3,
+        "confidence": "high",
+        "summary": "Untested module (345 LOC, 0 importers)",
+        "detail": {
+          "kind": "untested_module",
+          "loc": 345,
+          "importer_count": 0,
+          "loc_weight": 18.57417562100671
+        },
+        "status": "open",
+        "note": "Reopened (\u00d72) \u2014 reappeared in scan (was auto_resolved)",
+        "first_seen": "2026-03-01T00:01:19+00:00",
+        "last_seen": "2026-03-02T02:59:38+00:00",
+        "resolved_at": null,
+        "reopen_count": 2,
+        "lang": "python",
+        "zone": "production",
+        "suppressed": false,
+        "suppressed_at": null,
+        "suppression_pattern": null
+      },
+      {
+        "id": "test_coverage::src/codomyrmex/git_operations/core/commands/branching.py::untested_module",
+        "detector": "test_coverage",
+        "file": "src/codomyrmex/git_operations/core/commands/branching.py",
+        "tier": 3,
+        "confidence": "high",
+        "summary": "Untested module (115 LOC, 3 importers)",
+        "detail": {
+          "kind": "untested_module",
+          "loc": 115,
+          "importer_count": 3,
+          "loc_weight": 10.723805294763608
+        },
+        "status": "open",
+        "note": "Reopened (\u00d72) \u2014 reappeared in scan (was auto_resolved)",
+        "first_seen": "2026-03-01T00:01:19+00:00",
+        "last_seen": "2026-03-02T02:59:38+00:00",
+        "resolved_at": null,
+        "reopen_count": 2,
+        "lang": "python",
+        "zone": "script",
+        "suppressed": false,
+        "suppressed_at": null,
+        "suppression_pattern": null
+      }
+    ],
+    "skipped_other_lang": 0,
+    "skipped_out_of_scope": 0,
+    "ignored": 0,
+    "ignore_patterns": 0,
+    "raw_findings": 56793,
+    "suppressed_pct": 0.0
+  },
+  "stats": {
+    "total": 78348,
+    "open": 56109,
+    "fixed": 1,
+    "auto_resolved": 22162,
+    "wontfix": 2,
+    "false_positive": 74,
+    "by_tier": {
+      "1": {
+        "open": 107,
+        "fixed": 0,
+        "auto_resolved": 8823,
+        "wontfix": 2,
+        "false_positive": 12
+      },
+      "2": {
+        "open": 11899,
+        "fixed": 0,
+        "auto_resolved": 3539,
+        "wontfix": 0,
+        "false_positive": 62
+      },
+      "3": {
+        "open": 28911,
+        "fixed": 1,
+        "auto_resolved": 9759,
+        "wontfix": 0,
+        "false_positive": 0
+      },
+      "4": {
+        "open": 15192,
+        "fixed": 0,
+        "auto_resolved": 41,
+        "wontfix": 0,
+        "false_positive": 0
+      }
+    }
+  },
+  "open_scope": {
+    "in_scope": 56109,
+    "out_of_scope": 0,
+    "global": 56109
+  },
+  "warnings": [
+    "2750 findings reopened \u2014 was a previous fix reverted? Check: git log --oneline -5",
+    "\u27f3 32 chronic reopeners (reopened 2+ times). These keep bouncing \u2014 fix properly or wontfix. Run: `desloppify show --chronic` to see them.",
+    "Coverage reduced (security): bandit timed out \u2014 Python-specific security checks were skipped this scan. Repercussion: Python-specific security checks were skipped; this can miss shell injection, unsafe deserialization, and risky SQL/subprocess patterns. Fix: Rerun scan or run `bandit -r -f json --quiet <path>` manually."
+  ],
   "dimension_scores": {
     "File health": {
       "score": 88.7,
       "strict_score": 88.7,
       "verified_strict_score": 88.7,
       "checks": 22222,
-      "issues": 3827,
+      "issues": 3826,
       "tier": 3,
       "detectors": {
         "structural": {
           "potential": 22222,
-          "pass_rate": 0.8867383673836728,
-          "issues": 3827,
-          "weighted_failures": 2516.900000000024
+          "pass_rate": 0.8867698676986758,
+          "issues": 3826,
+          "weighted_failures": 2516.2000000000244
         }
       },
       "strict": 88.7
@@ -87,28 +980,45 @@
       },
       "strict": 97.2
     },
+    "Duplication": {
+      "score": 94.4,
+      "strict_score": 94.4,
+      "verified_strict_score": 94.4,
+      "checks": 112545,
+      "issues": 6319,
+      "tier": 3,
+      "detectors": {
+        "dupes": {
+          "potential": 112545,
+          "pass_rate": 0.9438660091518948,
+          "issues": 6319,
+          "weighted_failures": 6317.6
+        }
+      },
+      "strict": 94.4
+    },
     "Test health": {
-      "score": 7.3,
-      "strict_score": 7.3,
-      "verified_strict_score": 7.3,
-      "checks": 247566,
-      "issues": 17671,
+      "score": 5.6,
+      "strict_score": 5.6,
+      "verified_strict_score": 5.6,
+      "checks": 247529,
+      "issues": 32523,
       "tier": 4,
       "detectors": {
         "test_coverage": {
-          "potential": 232713,
-          "pass_rate": 0.013952987174767315,
+          "potential": 232678,
+          "pass_rate": 0.014383562608302343,
           "issues": 17671,
-          "weighted_failures": 229465.95849559837
+          "weighted_failures": 229331.26141942543
         },
         "subjective_review": {
-          "potential": 14853,
-          "pass_rate": 1.0,
-          "issues": 0,
-          "weighted_failures": 0.0
+          "potential": 14851,
+          "pass_rate": 0.6999797993401119,
+          "issues": 14852,
+          "weighted_failures": 4455.599999999999
         }
       },
-      "strict": 7.3
+      "strict": 5.6
     },
     "Security": {
       "score": 98.7,
@@ -147,116 +1057,72 @@
       ]
     },
     "Error consistency": {
-      "score": 47.0,
-      "strict_score": 47.0,
-      "verified_strict_score": 47.0,
+      "score": 45.0,
+      "strict_score": 45.0,
+      "verified_strict_score": 45.0,
       "checks": 10,
       "issues": 2,
       "tier": 4,
       "detectors": {
         "subjective_assessment": {
           "potential": 10,
-          "pass_rate": 0.47,
+          "pass_rate": 0.45,
           "issues": 2,
-          "weighted_failures": 5.3,
-          "assessment_score": 47.0,
+          "weighted_failures": 5.5,
+          "assessment_score": 45.0,
           "placeholder": false,
           "dimension_key": "error_consistency",
           "configured_weight": 3.0,
           "components": []
         }
       },
-      "strict": 47.0
+      "strict": 45.0
     },
     "Abstraction fit": {
-      "score": 62.0,
-      "strict_score": 62.0,
-      "verified_strict_score": 62.0,
+      "score": 52.0,
+      "strict_score": 52.0,
+      "verified_strict_score": 52.0,
       "checks": 10,
       "issues": 1,
       "tier": 4,
       "detectors": {
         "subjective_assessment": {
           "potential": 10,
-          "pass_rate": 0.62,
+          "pass_rate": 0.52,
           "issues": 1,
-          "weighted_failures": 3.8,
-          "assessment_score": 62.0,
+          "weighted_failures": 4.8,
+          "assessment_score": 52.0,
           "placeholder": false,
           "dimension_key": "abstraction_fitness",
           "configured_weight": 8.0,
           "components": []
         }
       },
-      "strict": 62.0
+      "strict": 52.0
     },
     "AI generated debt": {
-      "score": 34.0,
-      "strict_score": 34.0,
-      "verified_strict_score": 34.0,
+      "score": 38.0,
+      "strict_score": 38.0,
+      "verified_strict_score": 38.0,
       "checks": 10,
-      "issues": 1,
+      "issues": 2,
       "tier": 4,
       "detectors": {
         "subjective_assessment": {
           "potential": 10,
-          "pass_rate": 0.34,
-          "issues": 1,
-          "weighted_failures": 6.6,
-          "assessment_score": 34.0,
+          "pass_rate": 0.38,
+          "issues": 2,
+          "weighted_failures": 6.2,
+          "assessment_score": 38.0,
           "placeholder": false,
           "dimension_key": "ai_generated_debt",
           "configured_weight": 1.0,
           "components": []
         }
       },
-      "strict": 34.0
+      "strict": 38.0
     },
     "High elegance": {
-      "score": 61.0,
-      "strict_score": 61.0,
-      "verified_strict_score": 61.0,
-      "checks": 10,
-      "issues": 1,
-      "tier": 4,
-      "detectors": {
-        "subjective_assessment": {
-          "potential": 10,
-          "pass_rate": 0.61,
-          "issues": 1,
-          "weighted_failures": 3.9,
-          "assessment_score": 61.0,
-          "placeholder": false,
-          "dimension_key": "high_level_elegance",
-          "configured_weight": 22.0,
-          "components": []
-        }
-      },
-      "strict": 61.0
-    },
-    "Mid elegance": {
-      "score": 57.0,
-      "strict_score": 57.0,
-      "verified_strict_score": 57.0,
-      "checks": 10,
-      "issues": 1,
-      "tier": 4,
-      "detectors": {
-        "subjective_assessment": {
-          "potential": 10,
-          "pass_rate": 0.57,
-          "issues": 1,
-          "weighted_failures": 4.3,
-          "assessment_score": 57.0,
-          "placeholder": false,
-          "dimension_key": "mid_level_elegance",
-          "configured_weight": 22.0,
-          "components": []
-        }
-      },
-      "strict": 57.0
-    },
-    "Low elegance": {
       "score": 55.0,
       "strict_score": 55.0,
       "verified_strict_score": 55.0,
@@ -271,36 +1137,36 @@
           "weighted_failures": 4.5,
           "assessment_score": 55.0,
           "placeholder": false,
-          "dimension_key": "low_level_elegance",
-          "configured_weight": 12.0,
+          "dimension_key": "high_level_elegance",
+          "configured_weight": 22.0,
           "components": []
         }
       },
       "strict": 55.0
     },
-    "Cross-module arch": {
-      "score": 58.0,
-      "strict_score": 58.0,
-      "verified_strict_score": 58.0,
+    "Mid elegance": {
+      "score": 50.0,
+      "strict_score": 50.0,
+      "verified_strict_score": 50.0,
       "checks": 10,
-      "issues": 0,
+      "issues": 1,
       "tier": 4,
       "detectors": {
         "subjective_assessment": {
           "potential": 10,
-          "pass_rate": 0.58,
-          "issues": 0,
-          "weighted_failures": 4.2,
-          "assessment_score": 58.0,
+          "pass_rate": 0.5,
+          "issues": 1,
+          "weighted_failures": 5.0,
+          "assessment_score": 50.0,
           "placeholder": false,
-          "dimension_key": "cross_module_architecture",
-          "configured_weight": 1.0,
+          "dimension_key": "mid_level_elegance",
+          "configured_weight": 22.0,
           "components": []
         }
       },
-      "strict": 58.0
+      "strict": 50.0
     },
-    "Convention drift": {
+    "Low elegance": {
       "score": 54.0,
       "strict_score": 54.0,
       "verified_strict_score": 54.0,
@@ -315,56 +1181,100 @@
           "weighted_failures": 4.6,
           "assessment_score": 54.0,
           "placeholder": false,
-          "dimension_key": "convention_outlier",
-          "configured_weight": 1.0,
+          "dimension_key": "low_level_elegance",
+          "configured_weight": 12.0,
           "components": []
         }
       },
       "strict": 54.0
     },
-    "Dep health": {
-      "score": 55.0,
-      "strict_score": 55.0,
-      "verified_strict_score": 55.0,
+    "Cross-module arch": {
+      "score": 48.0,
+      "strict_score": 48.0,
+      "verified_strict_score": 48.0,
+      "checks": 10,
+      "issues": 3,
+      "tier": 4,
+      "detectors": {
+        "subjective_assessment": {
+          "potential": 10,
+          "pass_rate": 0.48,
+          "issues": 3,
+          "weighted_failures": 5.2,
+          "assessment_score": 48.0,
+          "placeholder": false,
+          "dimension_key": "cross_module_architecture",
+          "configured_weight": 1.0,
+          "components": []
+        }
+      },
+      "strict": 48.0
+    },
+    "Convention drift": {
+      "score": 62.0,
+      "strict_score": 62.0,
+      "verified_strict_score": 62.0,
       "checks": 10,
       "issues": 1,
       "tier": 4,
       "detectors": {
         "subjective_assessment": {
           "potential": 10,
-          "pass_rate": 0.55,
+          "pass_rate": 0.62,
           "issues": 1,
-          "weighted_failures": 4.5,
-          "assessment_score": 55.0,
+          "weighted_failures": 3.8,
+          "assessment_score": 62.0,
+          "placeholder": false,
+          "dimension_key": "convention_outlier",
+          "configured_weight": 1.0,
+          "components": []
+        }
+      },
+      "strict": 62.0
+    },
+    "Dep health": {
+      "score": 44.0,
+      "strict_score": 44.0,
+      "verified_strict_score": 44.0,
+      "checks": 10,
+      "issues": 2,
+      "tier": 4,
+      "detectors": {
+        "subjective_assessment": {
+          "potential": 10,
+          "pass_rate": 0.44,
+          "issues": 2,
+          "weighted_failures": 5.6,
+          "assessment_score": 44.0,
           "placeholder": false,
           "dimension_key": "dependency_health",
           "configured_weight": 1.0,
           "components": []
         }
       },
-      "strict": 55.0
+      "strict": 44.0
     },
     "Test strategy": {
-      "score": 59.0,
-      "strict_score": 59.0,
-      "verified_strict_score": 59.0,
+      "score": 58.0,
+      "strict_score": 58.0,
+      "verified_strict_score": 58.0,
       "checks": 10,
-      "issues": 1,
+      "issues": 2,
       "tier": 4,
       "detectors": {
         "subjective_assessment": {
           "potential": 10,
-          "pass_rate": 0.59,
-          "issues": 1,
-          "weighted_failures": 4.1,
-          "assessment_score": 59.0,
+          "pass_rate": 0.58,
+          "issues": 2,
+          "weighted_failures": 4.2,
+          "assessment_score": 58.0,
           "placeholder": false,
           "dimension_key": "test_strategy",
           "configured_weight": 1.0,
           "components": []
         }
       },
-      "strict": 59.0
+      "strict": 58.0
     },
     "Structure nav": {
       "score": 60.0,
@@ -389,481 +1299,34 @@
       "strict": 60.0
     },
     "Design coherence": {
-      "score": 55.0,
-      "strict_score": 55.0,
-      "verified_strict_score": 55.0,
+      "score": 52.0,
+      "strict_score": 52.0,
+      "verified_strict_score": 52.0,
       "checks": 10,
-      "issues": 1,
+      "issues": 2,
       "tier": 4,
       "detectors": {
         "subjective_assessment": {
           "potential": 10,
-          "pass_rate": 0.55,
-          "issues": 1,
-          "weighted_failures": 4.5,
-          "assessment_score": 55.0,
+          "pass_rate": 0.52,
+          "issues": 2,
+          "weighted_failures": 4.8,
+          "assessment_score": 52.0,
           "placeholder": false,
           "dimension_key": "design_coherence",
           "configured_weight": 10.0,
           "components": []
         }
       },
-      "strict": 55.0
-    },
-    "Duplication": {
-      "score": 94.4,
-      "strict_score": 94.4,
-      "verified_strict_score": 94.4,
-      "checks": 112546,
-      "issues": 6315,
-      "tier": 3,
-      "detectors": {
-        "dupes": {
-          "potential": 112546,
-          "pass_rate": 0.943902048939989,
-          "issues": 6315,
-          "weighted_failures": 6313.6
-        }
-      },
-      "strict": 94.4,
-      "carried_forward": true
+      "strict": 52.0
     }
-  },
-  "scorecard_dimensions": [
-    {
-      "name": "File health",
-      "score": 88.7,
-      "strict": 88.7,
-      "checks": 22222,
-      "issues": 3827,
-      "tier": 3,
-      "subjective": false
-    },
-    {
-      "name": "AI generated debt",
-      "score": 34.0,
-      "strict": 34.0,
-      "checks": 10,
-      "issues": 1,
-      "tier": 4,
-      "subjective": true,
-      "placeholder": false,
-      "cli_keys": [
-        "ai_generated_debt"
-      ]
-    },
-    {
-      "name": "Abstraction fit",
-      "score": 62.0,
-      "strict": 62.0,
-      "checks": 10,
-      "issues": 1,
-      "tier": 4,
-      "subjective": true,
-      "placeholder": false,
-      "cli_keys": [
-        "abstraction_fitness"
-      ]
-    },
-    {
-      "name": "Code quality",
-      "score": 97.2,
-      "strict": 97.2,
-      "checks": 165741,
-      "issues": 8055,
-      "tier": 3,
-      "subjective": false
-    },
-    {
-      "name": "Convention drift",
-      "score": 54.0,
-      "strict": 54.0,
-      "checks": 10,
-      "issues": 2,
-      "tier": 4,
-      "subjective": true,
-      "placeholder": false,
-      "cli_keys": [
-        "convention_outlier"
-      ]
-    },
-    {
-      "name": "Cross-module arch",
-      "score": 58.0,
-      "strict": 58.0,
-      "checks": 10,
-      "issues": 0,
-      "tier": 4,
-      "subjective": true,
-      "placeholder": false,
-      "cli_keys": [
-        "cross_module_architecture"
-      ]
-    },
-    {
-      "name": "Dep health",
-      "score": 55.0,
-      "strict": 55.0,
-      "checks": 10,
-      "issues": 1,
-      "tier": 4,
-      "subjective": true,
-      "placeholder": false,
-      "cli_keys": [
-        "dependency_health"
-      ]
-    },
-    {
-      "name": "Design coherence",
-      "score": 55.0,
-      "strict": 55.0,
-      "checks": 10,
-      "issues": 1,
-      "tier": 4,
-      "subjective": true,
-      "placeholder": false,
-      "cli_keys": [
-        "design_coherence"
-      ]
-    },
-    {
-      "name": "Duplication",
-      "score": 94.4,
-      "strict": 94.4,
-      "checks": 112546,
-      "issues": 6315,
-      "tier": 3,
-      "subjective": false
-    },
-    {
-      "name": "Elegance",
-      "score": 57.7,
-      "strict": 57.7,
-      "checks": 30,
-      "issues": 3,
-      "tier": 4,
-      "subjective": true,
-      "placeholder": false,
-      "cli_keys": [
-        "high_level_elegance",
-        "mid_level_elegance",
-        "low_level_elegance"
-      ]
-    },
-    {
-      "name": "Error consistency",
-      "score": 47.0,
-      "strict": 47.0,
-      "checks": 10,
-      "issues": 2,
-      "tier": 4,
-      "subjective": true,
-      "placeholder": false,
-      "cli_keys": [
-        "error_consistency"
-      ]
-    },
-    {
-      "name": "Security",
-      "score": 98.7,
-      "strict": 98.7,
-      "checks": 44599,
-      "issues": 1243,
-      "tier": 4,
-      "subjective": false
-    },
-    {
-      "name": "Structure nav",
-      "score": 60.0,
-      "strict": 60.0,
-      "checks": 10,
-      "issues": 1,
-      "tier": 4,
-      "subjective": true,
-      "placeholder": false,
-      "cli_keys": [
-        "package_organization"
-      ]
-    },
-    {
-      "name": "Test health",
-      "score": 7.3,
-      "strict": 7.3,
-      "checks": 247566,
-      "issues": 17671,
-      "tier": 4,
-      "subjective": false
-    },
-    {
-      "name": "Test strategy",
-      "score": 59.0,
-      "strict": 59.0,
-      "checks": 10,
-      "issues": 1,
-      "tier": 4,
-      "subjective": true,
-      "placeholder": false,
-      "cli_keys": [
-        "test_strategy"
-      ]
-    }
-  ],
-  "subjective_measures": [
-    {
-      "name": "AI generated debt",
-      "score": 34.0,
-      "strict": 34.0,
-      "checks": 10,
-      "issues": 1,
-      "tier": 4,
-      "subjective": true,
-      "placeholder": false,
-      "cli_keys": [
-        "ai_generated_debt"
-      ]
-    },
-    {
-      "name": "Abstraction fit",
-      "score": 62.0,
-      "strict": 62.0,
-      "checks": 10,
-      "issues": 1,
-      "tier": 4,
-      "subjective": true,
-      "placeholder": false,
-      "cli_keys": [
-        "abstraction_fitness"
-      ]
-    },
-    {
-      "name": "Convention drift",
-      "score": 54.0,
-      "strict": 54.0,
-      "checks": 10,
-      "issues": 2,
-      "tier": 4,
-      "subjective": true,
-      "placeholder": false,
-      "cli_keys": [
-        "convention_outlier"
-      ]
-    },
-    {
-      "name": "Cross-module arch",
-      "score": 58.0,
-      "strict": 58.0,
-      "checks": 10,
-      "issues": 0,
-      "tier": 4,
-      "subjective": true,
-      "placeholder": false,
-      "cli_keys": [
-        "cross_module_architecture"
-      ]
-    },
-    {
-      "name": "Dep health",
-      "score": 55.0,
-      "strict": 55.0,
-      "checks": 10,
-      "issues": 1,
-      "tier": 4,
-      "subjective": true,
-      "placeholder": false,
-      "cli_keys": [
-        "dependency_health"
-      ]
-    },
-    {
-      "name": "Design coherence",
-      "score": 55.0,
-      "strict": 55.0,
-      "checks": 10,
-      "issues": 1,
-      "tier": 4,
-      "subjective": true,
-      "placeholder": false,
-      "cli_keys": [
-        "design_coherence"
-      ]
-    },
-    {
-      "name": "Elegance",
-      "score": 57.7,
-      "strict": 57.7,
-      "checks": 30,
-      "issues": 3,
-      "tier": 4,
-      "subjective": true,
-      "placeholder": false,
-      "cli_keys": [
-        "high_level_elegance",
-        "mid_level_elegance",
-        "low_level_elegance"
-      ]
-    },
-    {
-      "name": "Error consistency",
-      "score": 47.0,
-      "strict": 47.0,
-      "checks": 10,
-      "issues": 2,
-      "tier": 4,
-      "subjective": true,
-      "placeholder": false,
-      "cli_keys": [
-        "error_consistency"
-      ]
-    },
-    {
-      "name": "Structure nav",
-      "score": 60.0,
-      "strict": 60.0,
-      "checks": 10,
-      "issues": 1,
-      "tier": 4,
-      "subjective": true,
-      "placeholder": false,
-      "cli_keys": [
-        "package_organization"
-      ]
-    },
-    {
-      "name": "Test strategy",
-      "score": 59.0,
-      "strict": 59.0,
-      "checks": 10,
-      "issues": 1,
-      "tier": 4,
-      "subjective": true,
-      "placeholder": false,
-      "cli_keys": [
-        "test_strategy"
-      ]
-    }
-  ],
-  "stats": {
-    "total": 77159,
-    "open": 41247,
-    "fixed": 1,
-    "auto_resolved": 35835,
-    "wontfix": 2,
-    "false_positive": 74,
-    "by_tier": {
-      "1": {
-        "open": 107,
-        "fixed": 0,
-        "auto_resolved": 8823,
-        "wontfix": 2,
-        "false_positive": 12
-      },
-      "2": {
-        "open": 11898,
-        "fixed": 0,
-        "auto_resolved": 3450,
-        "wontfix": 0,
-        "false_positive": 62
-      },
-      "3": {
-        "open": 28902,
-        "fixed": 1,
-        "auto_resolved": 8707,
-        "wontfix": 0,
-        "false_positive": 0
-      },
-      "4": {
-        "open": 340,
-        "fixed": 0,
-        "auto_resolved": 14855,
-        "wontfix": 0,
-        "false_positive": 0
-      }
-    }
-  },
-  "scan_count": 6,
-  "last_scan": "2026-03-02T02:04:00+00:00",
-  "by_tier": {
-    "1": {
-      "open": 107,
-      "fixed": 0,
-      "auto_resolved": 8823,
-      "wontfix": 2,
-      "false_positive": 12
-    },
-    "2": {
-      "open": 11898,
-      "fixed": 0,
-      "auto_resolved": 3450,
-      "wontfix": 0,
-      "false_positive": 62
-    },
-    "3": {
-      "open": 28902,
-      "fixed": 1,
-      "auto_resolved": 8707,
-      "wontfix": 0,
-      "false_positive": 0
-    },
-    "4": {
-      "open": 340,
-      "fixed": 0,
-      "auto_resolved": 14855,
-      "wontfix": 0,
-      "false_positive": 0
-    }
-  },
-  "ignores": [],
-  "suppression": {
-    "last_ignored": 0,
-    "last_raw_findings": 35623,
-    "last_suppressed_pct": 0.0,
-    "last_ignore_patterns": 0,
-    "recent_scans": 5,
-    "recent_ignored": 0,
-    "recent_raw_findings": 175964,
-    "recent_suppressed_pct": 0.0
-  },
-  "potentials": {
-    "python": {
-      "unused": 22222,
-      "structural": 22222,
-      "flat_dirs": 9645,
-      "props": 77,
-      "responsibility_cohesion": 0,
-      "single_use": 0,
-      "cycles": 22377,
-      "orphaned": 22377,
-      "facade": 22377,
-      "coupling": 0,
-      "uncalled_functions": 0,
-      "test_coverage": 232713,
-      "smells": 22222,
-      "global_mutable_config": 22222,
-      "security": 22222,
-      "private_imports": 22377,
-      "dict_keys": 22222,
-      "subjective_review": 14853,
-      "stale_wontfix": 2
-    }
-  },
-  "codebase_metrics": {
-    "python": {
-      "total_files": 30172,
-      "total_loc": 5908448,
-      "total_directories": 9645
-    }
-  },
-  "open_scope": {
-    "in_scope": 41247,
-    "out_of_scope": 0,
-    "global": 41247
   },
   "score_breakdown": {
-    "overall_score": 66.2,
+    "overall_score": 63.1,
     "mechanical_fraction": 0.4,
     "subjective_fraction": 0.6,
-    "mechanical_avg": 79.16666666666667,
-    "subjective_avg": 57.50574712643678,
+    "mechanical_avg": 78.88333333333334,
+    "subjective_avg": 52.632183908045974,
     "entries": [
       {
         "name": "File health",
@@ -892,17 +1355,30 @@
         "overall_drag": 0.18666666666666648
       },
       {
-        "name": "Test health",
+        "name": "Duplication",
         "pool": "mechanical",
-        "score": 7.3,
-        "checks": 247566.0,
+        "score": 94.4,
+        "checks": 112545.0,
         "sample_factor": 1.0,
         "configured_weight": 1.0,
         "effective_weight": 1.0,
         "pool_share": 0.16666666666666666,
         "overall_per_point": 0.06666666666666667,
-        "overall_contribution": 0.48666666666666664,
-        "overall_drag": 6.18
+        "overall_contribution": 6.293333333333334,
+        "overall_drag": 0.37333333333333296
+      },
+      {
+        "name": "Test health",
+        "pool": "mechanical",
+        "score": 5.6,
+        "checks": 247529.0,
+        "sample_factor": 1.0,
+        "configured_weight": 1.0,
+        "effective_weight": 1.0,
+        "pool_share": 0.16666666666666666,
+        "overall_per_point": 0.06666666666666667,
+        "overall_contribution": 0.3733333333333333,
+        "overall_drag": 6.293333333333334
       },
       {
         "name": "Security",
@@ -918,98 +1394,124 @@
         "overall_drag": 0.08666666666666648
       },
       {
-        "name": "Duplication",
-        "pool": "mechanical",
-        "score": 94.4,
-        "checks": 112546.0,
-        "sample_factor": 1.0,
-        "configured_weight": 1.0,
-        "effective_weight": 1.0,
-        "pool_share": 0.16666666666666666,
-        "overall_per_point": 0.06666666666666667,
-        "overall_contribution": 6.293333333333334,
-        "overall_drag": 0.37333333333333296
-      },
-      {
         "name": "Error consistency",
         "pool": "subjective",
-        "score": 47.0,
+        "score": 45.0,
         "checks": 0.0,
         "sample_factor": 1.0,
         "configured_weight": 3.0,
         "effective_weight": 3.0,
         "pool_share": 0.034482758620689655,
         "overall_per_point": 0.020689655172413793,
-        "overall_contribution": 0.9724137931034482,
-        "overall_drag": 1.096551724137931
+        "overall_contribution": 0.9310344827586207,
+        "overall_drag": 1.1379310344827587
       },
       {
         "name": "Abstraction fit",
         "pool": "subjective",
-        "score": 62.0,
+        "score": 52.0,
         "checks": 0.0,
         "sample_factor": 1.0,
         "configured_weight": 8.0,
         "effective_weight": 8.0,
         "pool_share": 0.09195402298850575,
         "overall_per_point": 0.05517241379310345,
-        "overall_contribution": 3.4206896551724135,
-        "overall_drag": 2.096551724137931
+        "overall_contribution": 2.8689655172413793,
+        "overall_drag": 2.6482758620689655
       },
       {
         "name": "AI generated debt",
         "pool": "subjective",
-        "score": 34.0,
+        "score": 38.0,
         "checks": 0.0,
         "sample_factor": 1.0,
         "configured_weight": 1.0,
         "effective_weight": 1.0,
         "pool_share": 0.011494252873563218,
         "overall_per_point": 0.006896551724137931,
-        "overall_contribution": 0.23448275862068965,
-        "overall_drag": 0.45517241379310347
+        "overall_contribution": 0.26206896551724135,
+        "overall_drag": 0.4275862068965517
       },
       {
         "name": "High elegance",
         "pool": "subjective",
-        "score": 61.0,
+        "score": 55.0,
         "checks": 0.0,
         "sample_factor": 1.0,
         "configured_weight": 22.0,
         "effective_weight": 22.0,
         "pool_share": 0.25287356321839083,
         "overall_per_point": 0.15172413793103448,
-        "overall_contribution": 9.255172413793103,
-        "overall_drag": 5.917241379310345
+        "overall_contribution": 8.344827586206897,
+        "overall_drag": 6.827586206896552
       },
       {
         "name": "Mid elegance",
         "pool": "subjective",
-        "score": 57.0,
+        "score": 50.0,
         "checks": 0.0,
         "sample_factor": 1.0,
         "configured_weight": 22.0,
         "effective_weight": 22.0,
         "pool_share": 0.25287356321839083,
         "overall_per_point": 0.15172413793103448,
-        "overall_contribution": 8.648275862068965,
-        "overall_drag": 6.524137931034483
+        "overall_contribution": 7.586206896551724,
+        "overall_drag": 7.586206896551724
       },
       {
         "name": "Low elegance",
         "pool": "subjective",
-        "score": 55.0,
+        "score": 54.0,
         "checks": 0.0,
         "sample_factor": 1.0,
         "configured_weight": 12.0,
         "effective_weight": 12.0,
         "pool_share": 0.13793103448275862,
         "overall_per_point": 0.08275862068965517,
-        "overall_contribution": 4.551724137931035,
-        "overall_drag": 3.7241379310344827
+        "overall_contribution": 4.468965517241379,
+        "overall_drag": 3.806896551724138
       },
       {
         "name": "Cross-module arch",
+        "pool": "subjective",
+        "score": 48.0,
+        "checks": 0.0,
+        "sample_factor": 1.0,
+        "configured_weight": 1.0,
+        "effective_weight": 1.0,
+        "pool_share": 0.011494252873563218,
+        "overall_per_point": 0.006896551724137931,
+        "overall_contribution": 0.3310344827586207,
+        "overall_drag": 0.3586206896551724
+      },
+      {
+        "name": "Convention drift",
+        "pool": "subjective",
+        "score": 62.0,
+        "checks": 0.0,
+        "sample_factor": 1.0,
+        "configured_weight": 1.0,
+        "effective_weight": 1.0,
+        "pool_share": 0.011494252873563218,
+        "overall_per_point": 0.006896551724137931,
+        "overall_contribution": 0.4275862068965517,
+        "overall_drag": 0.26206896551724135
+      },
+      {
+        "name": "Dep health",
+        "pool": "subjective",
+        "score": 44.0,
+        "checks": 0.0,
+        "sample_factor": 1.0,
+        "configured_weight": 1.0,
+        "effective_weight": 1.0,
+        "pool_share": 0.011494252873563218,
+        "overall_per_point": 0.006896551724137931,
+        "overall_contribution": 0.30344827586206896,
+        "overall_drag": 0.38620689655172413
+      },
+      {
+        "name": "Test strategy",
         "pool": "subjective",
         "score": 58.0,
         "checks": 0.0,
@@ -1020,45 +1522,6 @@
         "overall_per_point": 0.006896551724137931,
         "overall_contribution": 0.4,
         "overall_drag": 0.2896551724137931
-      },
-      {
-        "name": "Convention drift",
-        "pool": "subjective",
-        "score": 54.0,
-        "checks": 0.0,
-        "sample_factor": 1.0,
-        "configured_weight": 1.0,
-        "effective_weight": 1.0,
-        "pool_share": 0.011494252873563218,
-        "overall_per_point": 0.006896551724137931,
-        "overall_contribution": 0.37241379310344824,
-        "overall_drag": 0.3172413793103448
-      },
-      {
-        "name": "Dep health",
-        "pool": "subjective",
-        "score": 55.0,
-        "checks": 0.0,
-        "sample_factor": 1.0,
-        "configured_weight": 1.0,
-        "effective_weight": 1.0,
-        "pool_share": 0.011494252873563218,
-        "overall_per_point": 0.006896551724137931,
-        "overall_contribution": 0.3793103448275862,
-        "overall_drag": 0.3103448275862069
-      },
-      {
-        "name": "Test strategy",
-        "pool": "subjective",
-        "score": 59.0,
-        "checks": 0.0,
-        "sample_factor": 1.0,
-        "configured_weight": 1.0,
-        "effective_weight": 1.0,
-        "pool_share": 0.011494252873563218,
-        "overall_per_point": 0.006896551724137931,
-        "overall_contribution": 0.4068965517241379,
-        "overall_drag": 0.2827586206896552
       },
       {
         "name": "Structure nav",
@@ -1076,41 +1539,117 @@
       {
         "name": "Design coherence",
         "pool": "subjective",
-        "score": 55.0,
+        "score": 52.0,
         "checks": 0.0,
         "sample_factor": 1.0,
         "configured_weight": 10.0,
         "effective_weight": 10.0,
         "pool_share": 0.11494252873563218,
         "overall_per_point": 0.06896551724137931,
-        "overall_contribution": 3.793103448275862,
-        "overall_drag": 3.103448275862069
+        "overall_contribution": 3.586206896551724,
+        "overall_drag": 3.310344827586207
       }
     ]
   },
-  "next_command": "desloppify issues",
+  "subjective_integrity": {
+    "status": "pass",
+    "target_score": 95.0,
+    "matched_count": 0,
+    "matched_dimensions": [],
+    "reset_dimensions": []
+  },
+  "score_confidence": {
+    "status": "reduced",
+    "confidence": 0.75,
+    "detectors": [
+      {
+        "detector": "security",
+        "status": "reduced",
+        "confidence": 0.75,
+        "summary": "bandit timed out \u2014 Python-specific security checks were skipped this scan.",
+        "impact": "Python-specific security checks were skipped; this can miss shell injection, unsafe deserialization, and risky SQL/subprocess patterns.",
+        "remediation": "Rerun scan or run `bandit -r -f json --quiet <path>` manually.",
+        "tool": "bandit",
+        "reason": "timeout"
+      }
+    ],
+    "dimensions": [
+      "Security"
+    ]
+  },
+  "potentials": {
+    "python": {
+      "unused": 22222,
+      "structural": 22222,
+      "flat_dirs": 9645,
+      "props": 77,
+      "responsibility_cohesion": 0,
+      "single_use": 0,
+      "cycles": 22377,
+      "orphaned": 22377,
+      "facade": 22377,
+      "coupling": 0,
+      "uncalled_functions": 0,
+      "test_coverage": 232678,
+      "smells": 22222,
+      "global_mutable_config": 22222,
+      "security": 22222,
+      "private_imports": 22377,
+      "dict_keys": 22222,
+      "subjective_review": 14851,
+      "dupes": 112545,
+      "stale_wontfix": 2
+    }
+  },
+  "scan_coverage": {
+    "python": {
+      "status": "reduced",
+      "confidence": 0.75,
+      "detectors": {
+        "security": {
+          "detector": "security",
+          "status": "reduced",
+          "confidence": 0.75,
+          "summary": "bandit timed out \u2014 Python-specific security checks were skipped this scan.",
+          "impact": "Python-specific security checks were skipped; this can miss shell injection, unsafe deserialization, and risky SQL/subprocess patterns.",
+          "remediation": "Rerun scan or run `bandit -r -f json --quiet <path>` manually.",
+          "tool": "bandit",
+          "reason": "timeout"
+        }
+      },
+      "warnings": [],
+      "updated_at": "2026-03-02T02:59:38+00:00"
+    }
+  },
+  "zone_distribution": {
+    "production": 17106,
+    "test": 7830,
+    "script": 5116,
+    "config": 110,
+    "vendor": 10
+  },
   "narrative": {
-    "phase": "middle_grind",
-    "headline": "\u26a0 1230 security findings \u2014 review before other cleanup. 41247 findings open. Test health (7.3%) needs attention \u2014 run `desloppify next` to start. (13 review findings \u2014 run `desloppify issues`)",
+    "phase": "regression",
+    "headline": "\u26a0 1230 security findings \u2014 review before other cleanup. Score shifted 3.9 pts \u2014 this is normal after structural changes. Rescan after your next fix to see the real trend. (20 review findings \u2014 run `desloppify issues`)",
     "dimensions": {
       "lowest_dimensions": [
         {
           "name": "Test health",
-          "strict": 7.3,
-          "issues": 17671,
+          "strict": 5.6,
+          "issues": 32523,
           "impact": 0.0
         },
         {
           "name": "AI generated debt",
-          "strict": 34.0,
-          "issues": 1,
+          "strict": 38.0,
+          "issues": 2,
           "impact": 0.0,
           "subjective": true,
           "impact_description": "re-review to improve"
         },
         {
-          "name": "Error consistency",
-          "strict": 47.0,
+          "name": "Dep health",
+          "strict": 44.0,
           "issues": 2,
           "impact": 0.0,
           "subjective": true,
@@ -1120,13 +1659,8 @@
       "biggest_gap_dimensions": [],
       "stagnant_dimensions": [
         {
-          "name": "File health",
-          "strict": 88.7,
-          "stuck_scans": 5
-        },
-        {
-          "name": "Security",
-          "strict": 98.7,
+          "name": "Structure nav",
+          "strict": 60.0,
           "stuck_scans": 5
         }
       ]
@@ -1135,13 +1669,13 @@
       {
         "type": "issue_queue",
         "detector": "review",
-        "count": 13,
-        "description": "13 review findings need investigation \u2014 run `desloppify issues` to see the work queue",
+        "count": 20,
+        "description": "20 review findings need investigation \u2014 run `desloppify issues` to see the work queue",
         "command": "desloppify issues",
         "impact": 0.0,
         "dimension": "Unknown",
         "priority": 1,
-        "lane": "refactor_0"
+        "lane": "refactor"
       },
       {
         "type": "reorganize",
@@ -1196,18 +1730,18 @@
         "impact": 0.0,
         "dimension": "Unknown",
         "priority": 6,
-        "lane": "refactor_1"
+        "lane": "refactor"
       },
       {
         "type": "refactor",
         "detector": "structural",
-        "count": 6561,
-        "description": "6561 structural findings \u2014 decompose large files \u2014 extract logic into focused modules",
+        "count": 6560,
+        "description": "6560 structural findings \u2014 decompose large files \u2014 extract logic into focused modules",
         "command": "desloppify show structural --status open",
         "impact": 0.0,
         "dimension": "File health",
         "priority": 7,
-        "lane": "refactor_1"
+        "lane": "refactor"
       },
       {
         "type": "refactor",
@@ -1218,18 +1752,18 @@
         "impact": 0.0,
         "dimension": "Code quality",
         "priority": 8,
-        "lane": "refactor_1"
+        "lane": "refactor"
       },
       {
         "type": "refactor",
         "detector": "dupes",
-        "count": 6315,
-        "description": "6315 dupes findings \u2014 extract shared utility or consolidate duplicates",
+        "count": 6319,
+        "description": "6319 dupes findings \u2014 extract shared utility or consolidate duplicates",
         "command": "desloppify show dupes --status open",
         "impact": 0.0,
         "dimension": "Duplication",
         "priority": 9,
-        "lane": "refactor_1"
+        "lane": "refactor"
       },
       {
         "type": "refactor",
@@ -1240,7 +1774,7 @@
         "impact": 0.0,
         "dimension": "Code quality",
         "priority": 10,
-        "lane": "refactor_1"
+        "lane": "refactor"
       },
       {
         "type": "refactor",
@@ -1262,7 +1796,7 @@
         "impact": 0.0,
         "dimension": "Code quality",
         "priority": 12,
-        "lane": "refactor_1"
+        "lane": "refactor"
       },
       {
         "type": "manual_fix",
@@ -1273,7 +1807,7 @@
         "impact": 0.0,
         "dimension": "Code quality",
         "priority": 13,
-        "lane": "refactor_1"
+        "lane": "refactor"
       },
       {
         "type": "manual_fix",
@@ -1284,7 +1818,7 @@
         "impact": 0.0,
         "dimension": "Code quality",
         "priority": 14,
-        "lane": "refactor_1"
+        "lane": "refactor"
       },
       {
         "type": "manual_fix",
@@ -1295,7 +1829,7 @@
         "impact": 0.0,
         "dimension": "Code quality",
         "priority": 15,
-        "lane": "refactor_1"
+        "lane": "refactor"
       },
       {
         "type": "manual_fix",
@@ -1306,7 +1840,7 @@
         "impact": 0.0,
         "dimension": "Code quality",
         "priority": 16,
-        "lane": "refactor_1"
+        "lane": "refactor"
       },
       {
         "type": "manual_fix",
@@ -1317,13 +1851,24 @@
         "impact": 0.0,
         "dimension": "Security",
         "priority": 17,
-        "lane": "refactor_1"
+        "lane": "refactor"
+      },
+      {
+        "type": "manual_fix",
+        "detector": "subjective_review",
+        "count": 14852,
+        "description": "14852 files need design review \u2014 run design review with dimension templates",
+        "command": "desloppify fix review",
+        "impact": 0.0,
+        "dimension": "Test health",
+        "priority": 18,
+        "lane": "refactor"
       }
     ],
     "strategy": {
       "fixer_leverage": {
         "auto_fixable_count": 0,
-        "total_count": 41273,
+        "total_count": 56149,
         "coverage": 0.0,
         "impact_ratio": 0.0,
         "recommendation": "none"
@@ -1341,17 +1886,9 @@
           "automation": "manual",
           "run_first": false
         },
-        "refactor_0": {
+        "refactor": {
           "actions": [
-            1
-          ],
-          "file_count": 1,
-          "total_impact": 0.0,
-          "automation": "manual",
-          "run_first": false
-        },
-        "refactor_1": {
-          "actions": [
+            1,
             6,
             7,
             8,
@@ -1362,9 +1899,10 @@
             14,
             15,
             16,
-            17
+            17,
+            18
           ],
-          "file_count": 9496,
+          "file_count": 19209,
           "total_impact": 0.0,
           "automation": "manual",
           "run_first": false
@@ -1380,7 +1918,7 @@
         }
       },
       "can_parallelize": true,
-      "hint": "4 independent workstreams, safe to parallelize. Rescan after each phase to verify. Review: 13 finding(s) \u2014 `desloppify issues`."
+      "hint": "3 independent workstreams, safe to parallelize. Rescan after each phase to verify. Review: 20 finding(s) \u2014 `desloppify issues`."
     },
     "tools": {
       "fixers": [],
@@ -1411,9 +1949,9 @@
     "milestone": null,
     "primary_action": {
       "command": "desloppify issues",
-      "description": "13 review findings need investigation \u2014 run `desloppify issues` to see the work queue"
+      "description": "20 review findings need investigation \u2014 run `desloppify issues` to see the work queue"
     },
-    "why_now": "4 independent workstreams, safe to parallelize. Rescan after each phase to verify. Review: 13 finding(s) \u2014 `desloppify issues`.",
+    "why_now": "3 independent workstreams, safe to parallelize. Rescan after each phase to verify. Review: 20 finding(s) \u2014 `desloppify issues`.",
     "verification_step": {
       "command": "desloppify scan",
       "reason": "revalidate after changes"
@@ -1427,26 +1965,34 @@
     ],
     "strict_target": {
       "target": 95.0,
-      "current": 66.2,
-      "gap": 28.8,
+      "current": 63.1,
+      "gap": 31.9,
       "state": "below",
       "warning": null
     },
     "reminders": [
       {
         "type": "review_findings_pending",
-        "message": "13 review finding(s) need investigation. Run `desloppify issues` to see the work queue.",
+        "message": "20 review finding(s) need investigation. Run `desloppify issues` to see the work queue.",
         "command": "desloppify issues",
         "priority": 1,
         "severity": "high"
+      },
+      {
+        "type": "report_scores",
+        "message": "ALWAYS share ALL scores with the user: overall, objective, and strict, plus every dimension score (lenient + strict), including subjective dimensions. The goal is to maximize strict scores.",
+        "command": null,
+        "no_decay": true,
+        "priority": 3,
+        "severity": "low"
       }
     ],
     "reminder_history": {
       "zone_classification": 3,
-      "report_scores": 5,
+      "report_scores": 7,
       "feedback_nudge": 3,
       "stagnant_nudge": 14,
-      "review_findings_pending": 2
+      "review_findings_pending": 3
     }
   },
   "config": {

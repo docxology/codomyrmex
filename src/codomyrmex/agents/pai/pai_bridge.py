@@ -5,7 +5,7 @@ Comprehensive bridge between Codomyrmex and the
 (PAI) by Daniel Miessler.
 
 **Upstream**: https://github.com/danielmiessler/Personal_AI_Infrastructure
-**Local install**: ``~/.claude/skills/PAI/``
+**Local install**: ``~/.claude/PAI/`` (v4+) or ``~/.claude/skills/PAI/`` (v3 legacy)
 
 This module discovers the PAI installation and exposes programmatic access to
 every PAI subsystem:
@@ -50,12 +50,16 @@ class PAIConfig:
     """Configuration and path layout for the PAI system.
 
     Attributes:
-        pai_root: Root directory of the PAI skill (default ``~/.claude/skills/PAI``).
+        pai_root: Root directory of the PAI system (default ``~/.claude/PAI`` for v4+, ``~/.claude/skills/PAI`` for v3 legacy).
         claude_root: Root of the Claude configuration directory (default ``~/.claude``).
     """
 
     pai_root: Path = field(
-        default_factory=lambda: Path.home() / ".claude" / "skills" / "PAI"
+        default_factory=lambda: (
+            Path.home() / ".claude" / "PAI"
+            if (Path.home() / ".claude" / "PAI" / "SKILL.md").is_file()
+            else Path.home() / ".claude" / "skills" / "PAI"
+        )
     )
     claude_root: Path = field(default_factory=lambda: Path.home() / ".claude")
 
@@ -233,7 +237,8 @@ class PAIBridge:
 
     See Also:
         - Upstream: https://github.com/danielmiessler/Personal_AI_Infrastructure
-        - Local install path: ``~/.claude/skills/PAI/``
+        - Local install path (v4+): ``~/.claude/PAI/``
+        - Local install path (v3 legacy): ``~/.claude/skills/PAI/``
     """
 
     def __init__(self, config: PAIConfig | None = None) -> None:

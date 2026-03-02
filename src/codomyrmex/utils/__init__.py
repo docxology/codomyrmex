@@ -23,7 +23,9 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any, Optional, TypeVar, Union
 
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 logger = get_logger(__name__)
+
 
 # Import subprocess utilities
 from .process.subprocess import (
@@ -305,8 +307,6 @@ from .process.script_base import (
     ScriptResult,
     run_script,
 )
-from codomyrmex.logging_monitoring.core.logger_config import get_logger
-
 __all__ = [
     "i18n",
     # Core utilities

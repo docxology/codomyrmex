@@ -1,21 +1,70 @@
+"""Tests for the GeneralSystemReport class in data_visualization.reports."""
+
 from pathlib import Path
+
+import pytest
 
 from codomyrmex.data_visualization.reports.general import GeneralSystemReport
 
 
-def test_general_report_generation(tmp_path):
-    """Test functionality: general report generation."""
-    report = GeneralSystemReport()
-    out_file = tmp_path / "system_report.html"
+@pytest.mark.unit
+class TestGeneralSystemReport:
+    """Tests for GeneralSystemReport generation and serialization."""
 
-    # Generate and save
-    saved_path = report.save(str(out_file))
+    def test_generation_creates_file(self, tmp_path):
+        """save() creates an HTML file at the given path."""
+        report = GeneralSystemReport()
+        out_file = tmp_path / "system_report.html"
+        saved_path = report.save(str(out_file))
+        assert Path(saved_path).exists()
 
-    assert Path(saved_path).exists()
-    content = Path(saved_path).read_text()
+    def test_output_contains_required_sections(self, tmp_path):
+        """Generated HTML includes all expected section headings."""
+        report = GeneralSystemReport()
+        out_file = tmp_path / "report.html"
+        saved_path = report.save(str(out_file))
+        content = Path(saved_path).read_text()
+        assert "Finance: Key Metrics" in content
+        assert "Bio-Sim: Population" in content
+        assert "Relations: Social Graph" in content
+        assert "Education: Learning Path" in content
 
-    # Check for presence of sections
-    assert "Finance: Key Metrics" in content
-    assert "Bio-Sim: Population" in content
-    assert "Relations: Social Graph" in content
-    assert "Education: Learning Path" in content
+    def test_save_auto_generates(self, tmp_path):
+        """save() calls generate() implicitly when not yet generated."""
+        report = GeneralSystemReport()
+        out_file = tmp_path / "auto.html"
+        # Do NOT call report.generate() — save should do it automatically
+        saved_path = report.save(str(out_file))
+        assert Path(saved_path).exists()
+        assert len(Path(saved_path).read_text()) > 0
+
+    def test_generate_idempotent(self, tmp_path):
+        """Calling generate() twice produces consistent output."""
+        report = GeneralSystemReport()
+        report.generate()
+        out1 = tmp_path / "r1.html"
+        report.save(str(out1))
+        content1 = out1.read_text()
+
+        report2 = GeneralSystemReport()
+        report2.generate()
+        report2.generate()  # second call
+        out2 = tmp_path / "r2.html"
+        report2.save(str(out2))
+        content2 = out2.read_text()
+
+        assert content1 == content2
+
+    def test_save_returns_string_path(self, tmp_path):
+        """save() returns a str, not a Path object."""
+        report = GeneralSystemReport()
+        result = report.save(str(tmp_path / "out.html"))
+        assert isinstance(result, str)
+
+    def test_title_in_output(self, tmp_path):
+        """Generated HTML contains the report title."""
+        report = GeneralSystemReport()
+        out_file = tmp_path / "titled.html"
+        report.save(str(out_file))
+        content = out_file.read_text()
+        assert "Codomyrmex Executive Dashboard" in content

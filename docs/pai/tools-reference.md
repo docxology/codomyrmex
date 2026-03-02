@@ -179,7 +179,7 @@ These tools provide generic access to **any** Codomyrmex module's public API:
 
 ## Dynamic Tool Discovery
 
-Beyond the 20 static tools, the MCP bridge auto-discovers additional tools at runtime:
+Beyond the 22 static tools, the MCP bridge auto-discovers additional tools at runtime:
 
 1. **Decorated tools**: Functions with `@mcp_tool` decorator in targeted modules
 2. **Public functions**: All public functions from every Codomyrmex module
@@ -231,7 +231,7 @@ The Email tab in the PAI Dashboard provides a browser-accessible interface for a
 
 | Category | Count | Trust |
 |----------|-------|-------|
-| Static safe | 16 | Auto-VERIFIED |
+| Static safe | 18 | Auto-VERIFIED |
 | Static destructive | 4 | Requires TRUSTED |
 | Dynamic safe | ~146 | Pattern-classified, auto-VERIFIED |
 | Dynamic destructive | ~4 (pattern-matched) | Requires TRUSTED |

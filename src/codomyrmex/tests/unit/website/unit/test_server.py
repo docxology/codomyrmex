@@ -8,6 +8,7 @@ Ollama-dependent tests use real Ollama calls and skip when unavailable.
 import http.client
 import importlib.util
 import json
+import os
 import socketserver
 import threading
 from pathlib import Path
@@ -20,15 +21,17 @@ import requests as _requests_lib
 from codomyrmex.website.data_provider import DataProvider
 from codomyrmex.website.server import WebsiteServer
 
+_OLLAMA_BASE_URL: str = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
+
 
 def _ollama_available() -> tuple[bool, str | None]:
     """Return (True, model_name) if Ollama server is reachable and has a model."""
     try:
-        resp = _requests_lib.get("http://localhost:11434/api/version", timeout=2)
+        resp = _requests_lib.get(f"{_OLLAMA_BASE_URL}/api/version", timeout=2)
         if resp.status_code != 200:
             return False, None
         # Find an available model
-        tags_resp = _requests_lib.get("http://localhost:11434/api/tags", timeout=2)
+        tags_resp = _requests_lib.get(f"{_OLLAMA_BASE_URL}/api/tags", timeout=2)
         if tags_resp.status_code == 200:
             models = tags_resp.json().get("models", [])
             if models:

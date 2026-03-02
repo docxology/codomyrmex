@@ -8,11 +8,11 @@ import hashlib
 import json
 from dataclasses import dataclass, field
 
-logger = get_logger(__name__)
 from datetime import datetime
 from enum import Enum
 from typing import Any
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
+logger = get_logger(__name__)
 
 
 class SBOMFormat(Enum):

@@ -5,7 +5,6 @@ This module provides template engine support (Jinja2, Mako) for code generation,
 documentation templates, and dynamic content.
 """
 
-logger = get_logger(__name__)
 
 # Shared schemas for cross-module interop
 try:
@@ -17,6 +16,7 @@ except ImportError:
 # Submodule exports - import first to make available
 from . import context, engines, filters
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
+logger = get_logger(__name__)
 
 # Try to import optional submodules
 try:

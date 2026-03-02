@@ -8,6 +8,7 @@ is offline or no models are available.
 """
 
 import json
+import os
 import threading
 import time
 import urllib.error
@@ -15,12 +16,14 @@ import urllib.request
 
 import pytest
 
+_OLLAMA_BASE_URL: str = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
+
 # ── Skip entire module if Ollama is unreachable ─────────────────────
 
 def _ollama_available() -> bool:
     """Check if Ollama is running and has at least one model."""
     try:
-        with urllib.request.urlopen("http://localhost:11434/api/tags", timeout=3) as resp:
+        with urllib.request.urlopen(f"{_OLLAMA_BASE_URL}/api/tags", timeout=3) as resp:
             data = json.loads(resp.read().decode("utf-8"))
             return len(data.get("models", [])) > 0
     except Exception:
@@ -30,7 +33,7 @@ def _ollama_available() -> bool:
 def _get_smallest_model() -> str:
     """Get the smallest available Ollama model for fast testing."""
     try:
-        with urllib.request.urlopen("http://localhost:11434/api/tags", timeout=3) as resp:
+        with urllib.request.urlopen(f"{_OLLAMA_BASE_URL}/api/tags", timeout=3) as resp:
             data = json.loads(resp.read().decode("utf-8"))
             models = data.get("models", [])
             if not models:

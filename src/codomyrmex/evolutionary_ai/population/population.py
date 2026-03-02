@@ -18,6 +18,7 @@ from ..operators.operators import (
     mutate,
     tournament_selection,
 )
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 logger = get_logger(__name__)
 

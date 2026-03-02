@@ -14,10 +14,10 @@ from datetime import datetime
 from queue import Queue
 from typing import Any, Dict, List, Optional
 
-logger = get_logger(__name__)
 
 from codomyrmex.config_management.defaults import DEFAULT_OTEL_ENDPOINT
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
+logger = get_logger(__name__)
 
 
 @dataclass

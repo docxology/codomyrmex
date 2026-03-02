@@ -11,13 +11,13 @@ import json
 from pathlib import Path
 from typing import Any
 
-logger = get_logger(__name__)
 
 from codomyrmex.agentic_memory.obsidian.models import Note, VaultMetadata
 from codomyrmex.agentic_memory.obsidian.parser import (
     parse_note,
 )
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
+logger = get_logger(__name__)
 
 
 class ObsidianVault:

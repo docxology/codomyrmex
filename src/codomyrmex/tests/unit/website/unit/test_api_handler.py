@@ -15,7 +15,6 @@ import pytest
 
 from codomyrmex.website.handlers.api_handler import APIHandler
 
-
 # ── Helpers ──────────────────────────────────────────────────────────────
 
 
@@ -249,7 +248,6 @@ class TestHandleTestsRun:
         h = FakeAPIHandler(content_length=len(body), body=body)
         # handle_tests_run imports WebsiteServer — mock the class-level state
         # by patching just what's needed
-        from codomyrmex.website.handlers import api_handler as ah_module
 
         # Temporarily give APIHandler the class attributes WebsiteServer would have
         import threading

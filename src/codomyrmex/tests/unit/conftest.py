@@ -4,9 +4,32 @@ Provides common fixtures used across per-module unit test directories.
 Module-specific fixtures should live in their own conftest.py files.
 """
 
+import os
 from pathlib import Path
 
 import pytest
+
+# ═══════════════════════════════════════════════════════════════
+# Service URL constants — override via env vars in CI/CD
+# ═══════════════════════════════════════════════════════════════
+
+#: Default Ollama server URL; override with OLLAMA_BASE_URL env var.
+OLLAMA_BASE_URL: str = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
+
+#: Default local container registry; override with CONTAINER_REGISTRY_URL env var.
+CONTAINER_REGISTRY_URL: str = os.getenv("CONTAINER_REGISTRY_URL", "localhost:5000")
+
+
+@pytest.fixture
+def ollama_base_url() -> str:
+    """Ollama server base URL, configurable via OLLAMA_BASE_URL env var."""
+    return OLLAMA_BASE_URL
+
+
+@pytest.fixture
+def container_registry_url() -> str:
+    """Local container registry URL, configurable via CONTAINER_REGISTRY_URL env var."""
+    return CONTAINER_REGISTRY_URL
 
 # ═══════════════════════════════════════════════════════════════
 # Project paths

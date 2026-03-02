@@ -101,11 +101,11 @@ graph TB
 
 ## PAI Algorithm Phase Mapping
 
-When used with the [PAI system](../../PAI.md) (`~/.claude/skills/PAI/`), these modules map to specific Algorithm phases:
+When used with the [PAI system](../../PAI.md) (`~/.claude/PAI/`), these modules map to specific Algorithm phases:
 
 ```mermaid
 graph TB
-    subgraph Algorithm ["PAI Algorithm v1.5.0"]
+    subgraph Algorithm ["PAI Algorithm v3.5.0"]
         OBSERVE["1. OBSERVE"]
         THINK["2. THINK"]
         PLAN["3. PLAN"]

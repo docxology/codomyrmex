@@ -4,16 +4,16 @@
 
 ## What Is PAI?
 
-PAI (Personal AI Infrastructure) is the system at `~/.claude/skills/PAI/`. It is **not** a concept — it is running software:
+PAI (Personal AI Infrastructure) is the system at `~/.claude/PAI/`. It is **not** a concept — it is running software:
 
 | Component | Count | Location |
 |-----------|-------|----------|
-| Algorithm | v1.5.0 | `~/.claude/skills/PAI/SKILL.md` (CORE) |
-| Skills | 76 | `~/.claude/skills/` |
-| Hooks | 20 | `~/.claude/hooks/` |
-| Tools | 60 | `~/.claude/skills/PAI/Tools/` |
-| Agents | 13 + subagent types | `~/.claude/skills/PAI/PAIAGENTSYSTEM.md` |
-| Memory | WORK / STATE / LEARNING | `~/.claude/skills/PAI/MEMORY/` |
+| Algorithm | v3.5.0 | `~/.claude/PAI/SKILL.md` (CORE) |
+| Skills | 77+ | `~/.claude/skills/` |
+| Hooks | 22 | `~/.claude/hooks/` |
+| Tools | 60+ | `~/.claude/PAI/Tools/` |
+| Agents | 13 + subagent types | `~/.claude/PAI/PAIAGENTSYSTEM.md` |
+| Memory | WORK / STATE / LEARNING | `~/.claude/MEMORY/` |
 
 PAI operates inside Claude Code sessions. It runs the Algorithm on every prompt, creates ISC (Ideal State Criteria), selects capabilities, executes work, and verifies results.
 
@@ -35,8 +35,8 @@ The MCP server is the operational bridge between PAI and codomyrmex:
 ```mermaid
 graph LR
     subgraph PAI ["PAI System (~/.claude/)"]
-        Algo["Algorithm v1.5.0"]
-        Skills["76 Skills"]
+        Algo["Algorithm v3.5.0"]
+        Skills["77+ Skills"]
         Agents["Named Agents"]
     end
 
@@ -112,14 +112,14 @@ Each phase of the PAI Algorithm maps to specific codomyrmex modules:
 
 ```
 ~/.claude/                          # PRIVATE (per-user, never committed)
-├── skills/PAI/                     # Algorithm, skills, tools, hooks
-│   ├── SKILL.md                    # CORE (the Algorithm)
-│   ├── Skills/                     # 76 skills
-│   ├── Tools/                      # 60 tools
-│   ├── USER/                       # Personal data
-│   └── MEMORY/                     # WORK, STATE, LEARNING
-├── hooks/                          # 20 hooks
-├── settings.json                   # Identity, preferences
+├── PAI/                            # Algorithm, tools, system docs (v4+)
+│   ├── SKILL.md                    # CORE (the Algorithm v3.5.0)
+│   ├── Tools/                      # TypeScript CLI tools
+│   └── (PAIAGENTSYSTEM.md, etc.)   # PAI system docs
+├── skills/                         # 77+ skill packs (PAI, Codomyrmex, etc.)
+├── hooks/                          # 22 hooks
+├── MEMORY/                         # WORK, STATE, LEARNING
+├── settings.json                   # Identity, preferences (pai.version=4.0.1)
 └── claude_desktop_config.json      # MCP server registrations
 
 codomyrmex/                         # SHARED (this repo, committed)
@@ -133,7 +133,7 @@ codomyrmex/                         # SHARED (this repo, committed)
 
 ## Configuration
 
-### PAI Settings (`~/.claude/skills/PAI/settings.json`)
+### PAI Settings (`~/.claude/settings.json`)
 
 ```json
 {
@@ -205,7 +205,7 @@ Every codomyrmex module has a `PAI.md` file describing its AI capabilities. Thes
 
 ## Getting Started
 
-1. **Have PAI installed**: Check `~/.claude/skills/PAI/SKILL.md` exists
+1. **Have PAI installed**: Check `~/.claude/PAI/SKILL.md` exists
 2. **Clone codomyrmex**: `git clone` this repo, run `uv sync`
 3. **Connect via MCP**: Follow [Connecting PAI to Codomyrmex](docs/getting-started/tutorials/connecting-pai.md)
 4. **Verify**: Start a Claude Code session, invoke the Algorithm, confirm codomyrmex tools are available
@@ -231,7 +231,7 @@ Every codomyrmex module has a `PAI.md` file describing its AI capabilities. Thes
 
 ## PAI Dashboard Interface
 
-The PAI Dashboard (`~/.claude/skills/PAI/Tools/PMServer.ts`, port 8889) provides a browser-based project management and communication interface. It is a Codomyrmex-integrated fork of [danielmiessler/Personal_AI_Infrastructure](https://github.com/danielmiessler/Personal_AI_Infrastructure), extended with email, calendar, git sync, and network visualization capabilities.
+The PAI Dashboard (`~/.claude/PAI/Tools/PMServer.ts`, port 8889) provides a browser-based project management and communication interface. It is a Codomyrmex-integrated fork of [danielmiessler/Personal_AI_Infrastructure](https://github.com/danielmiessler/Personal_AI_Infrastructure), extended with email, calendar, git sync, and network visualization capabilities.
 
 ### Analytics — Mission & Project Overview
 

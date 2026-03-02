@@ -178,9 +178,11 @@ if __name__ == "__main__":
 
     (project_dir / "tests" / "__init__.py").write_text("")
     (project_dir / "tests" / "test_main.py").write_text("""
+import pytest
+
+
 def test_main():
-    # Test would go here
-    assert True
+    pytest.skip("placeholder — add real tests here")
 """)
 
     (project_dir / "README.md").write_text("# Test Project\n\nA test project for Codomyrmex testing.")

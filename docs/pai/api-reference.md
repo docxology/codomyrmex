@@ -203,8 +203,8 @@ Filesystem path layout for the PAI installation.
 | `RESPONSE_DEPTH_LEVELS` | `list[dict[str, str]]` | 3 levels | FULL, ITERATION, MINIMAL |
 | `PAI_PRINCIPLES` | `list[dict[str, str]]` | 16 principles | Core PAI principles |
 | `PAI_UPSTREAM_URL` | `str` | GitHub URL | Upstream repository |
-| `TOOL_COUNT` | `int` | 20 | Static tool count |
-| `RESOURCE_COUNT` | `int` | 3 | Resource count |
+| `TOOL_COUNT` | `int` | 22 | Static tool count |
+| `RESOURCE_COUNT` | `int` | 2 | Resource count |
 | `PROMPT_COUNT` | `int` | 10 | Prompt count |
 | `DESTRUCTIVE_TOOLS` | `frozenset[str]` | 4 tools | Tools requiring TRUSTED |
 

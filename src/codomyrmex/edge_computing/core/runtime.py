@@ -13,10 +13,10 @@ import time
 from dataclasses import dataclass
 from typing import Any
 
-logger = get_logger(__name__)
 
 from .models import EdgeExecutionError, EdgeFunction, EdgeNode
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
+logger = get_logger(__name__)
 
 
 @dataclass

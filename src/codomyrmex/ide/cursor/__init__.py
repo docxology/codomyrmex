@@ -14,10 +14,10 @@ import json
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
-logger = get_logger(__name__)
 
 from codomyrmex.ide import CommandExecutionError, ConnectionError, IDEClient, IDEError
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
+logger = get_logger(__name__)
 
 
 class CursorClient(IDEClient):

@@ -12,7 +12,7 @@ Documentation module for the PAI-Codomyrmex integration. Provides architecture r
 |------|-------------|------------|
 | `README.md` | Index page with full screenshot gallery | All 8 tabs |
 | `architecture.md` | MCP bridge architecture and trust model | Analytics, Network, Integration |
-| `tools-reference.md` | Complete tool inventory (20 static + dynamic) | Git, Email |
+| `tools-reference.md` | Complete tool inventory (22 static + dynamic) | Git, Email |
 | `api-reference.md` | Python API reference (PAIBridge, TrustRegistry) | Analytics |
 | `workflows.md` | Workflow documentation and Algorithm mapping | Dispatch, Board, Calendar |
 | `screenshots/` | PAI Dashboard interface screenshots (8 tabs) | — |

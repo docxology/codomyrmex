@@ -14,13 +14,13 @@ import re
 from collections import deque
 from typing import Any
 
-logger = get_logger(__name__)
 
 from codomyrmex.agents.agentic_seek.agent_types import (
     AgenticSeekAgentType,
     AgenticSeekTaskStep,
 )
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
+logger = get_logger(__name__)
 
 # ---------------------------------------------------------------------------
 # Task-name extraction (mirrors PlannerAgent.get_task_names)

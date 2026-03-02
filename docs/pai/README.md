@@ -16,9 +16,9 @@
 graph TB
     subgraph PAI["🧠 PAI System (~/.claude/)"]
         direction TB
-        ALGO["Algorithm v1.5.0<br/>7 Phases"]
-        SKILLS["76 Skills"]
-        HOOKS["20 Hooks"]
+        ALGO["Algorithm v3.5.0<br/>7 Phases"]
+        SKILLS["77+ Skills"]
+        HOOKS["22 Hooks"]
         TOOLS_TS["60 TypeScript Tools"]
         AGENTS_PAI["13+ Named Agents"]
         MEMORY["Memory Stores<br/>WORK · STATE · LEARNING"]
@@ -33,9 +33,9 @@ graph TB
     subgraph CDM["🐜 Codomyrmex (this repo)"]
         direction TB
         MODULES["88 Python Modules"]
-        STATIC["20 Static Tools"]
+        STATIC["22 Static Tools"]
         DYNAMIC["~151 Dynamic Tools"]
-        RESOURCES["3 Resources"]
+        RESOURCES["2 Resources"]
         PROMPTS["10 Prompts"]
     end
 
@@ -227,7 +227,7 @@ erDiagram
 ## MCP Tool Categories
 
 ```mermaid
-pie title Tool Distribution (~171 Total)
+pie title Tool Distribution (~173 Total)
     "File Operations" : 3
     "Code Analysis" : 2
     "Git Operations" : 2
@@ -237,6 +237,7 @@ pie title Tool Distribution (~171 Total)
     "PAI" : 2
     "Testing" : 1
     "Module Proxy" : 3
+    "Workflows & Cache" : 2
     "Email (AgentMail)" : 8
     "Email (Gmail)" : 4
     "Calendar" : 5
@@ -316,10 +317,10 @@ graph TD
 
 | Document | Lines | Scope |
 |----------|------:|-------|
-| [architecture.md](architecture.md) | 175 | MCP bridge, trust model, data flow, network visualization |
-| [tools-reference.md](tools-reference.md) | 227 | 20 static + dynamic tools, email/calendar tool tables |
+| [architecture.md](architecture.md) | 182 | MCP bridge, trust model, data flow, network visualization |
+| [tools-reference.md](tools-reference.md) | 248 | 22 static + dynamic tools, email/calendar tool tables |
 | [api-reference.md](api-reference.md) | 217 | PAIBridge (24 methods), TrustRegistry, dataclasses |
-| [workflows.md](workflows.md) | 163 | `/codomyrmexVerify`, `/codomyrmexTrust`, Algorithm phase mapping |
+| [workflows.md](workflows.md) | 172 | `/codomyrmexVerify`, `/codomyrmexTrust`, Algorithm phase mapping |
 | [screenshots/](screenshots/) | — | 8 PNG screenshots + 1 WebP tour recording |
 
 ### RASP Documentation

@@ -24,11 +24,13 @@ from pathlib import Path
 import pytest
 import requests as _requests_lib
 
+_OLLAMA_BASE_URL: str = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
+
 
 def _ollama_available() -> bool:
     """Return True if Ollama server is reachable."""
     try:
-        resp = _requests_lib.get("http://localhost:11434/api/version", timeout=2)
+        resp = _requests_lib.get(f"{_OLLAMA_BASE_URL}/api/version", timeout=2)
         return resp.status_code == 200
     except Exception:
         return False

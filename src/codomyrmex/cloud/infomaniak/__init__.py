@@ -35,6 +35,7 @@ Environment Variables:
     INFOMANIAK_S3_SECRET_KEY: S3 secret key for object storage
 """
 
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 logger = get_logger(__name__)
 
 # Exception hierarchy

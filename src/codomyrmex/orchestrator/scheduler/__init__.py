@@ -6,7 +6,6 @@ Task scheduling and job queuing with support for cron and interval triggers.
 
 __version__ = "0.1.0"
 
-logger = get_logger(__name__)
 
 # Shared schemas for cross-module interop
 try:
@@ -19,6 +18,7 @@ from .models import Job, JobStatus
 from .scheduler import Scheduler, at, cron, every
 from .triggers import CronTrigger, IntervalTrigger, OnceTrigger, Trigger, TriggerType
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
+logger = get_logger(__name__)
 
 # Advanced scheduler extensions
 try:

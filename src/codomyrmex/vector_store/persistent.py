@@ -10,7 +10,6 @@ from collections.abc import Callable
 from pathlib import Path
 from typing import Any
 
-logger = get_logger(__name__)
 
 from . import (
     DistanceMetric,
@@ -19,6 +18,7 @@ from . import (
     VectorStore,
 )
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
+logger = get_logger(__name__)
 
 
 class PersistentVectorStore(VectorStore):

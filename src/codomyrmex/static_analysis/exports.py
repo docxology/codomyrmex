@@ -10,10 +10,10 @@ Provides:
 from __future__ import annotations
 
 import ast
-logger = get_logger(__name__)
 from pathlib import Path
 from typing import Any
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
+logger = get_logger(__name__)
 
 SKIP_DIRS = {"__pycache__", "py.typed", ".git", "node_modules", "htmlcov"}
 

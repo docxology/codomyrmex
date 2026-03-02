@@ -11,11 +11,11 @@ PAI (Personal AI Infrastructure) is the orchestrator that runs The Algorithm on 
 ```
 ┌──────────────────────────────────────┐
 │  PAI (TypeScript/Bun)                │
-│  ~/.claude/skills/PAI/               │
+│  ~/.claude/PAI/                      │
 │                                      │
 │  ┌──────────┐  ┌──────────────────┐  │
 │  │ Algorithm │  │ Skills/Hooks/    │  │
-│  │ v1.5.0   │  │ Agents/Memory    │  │
+│  │ v3.5.0   │  │ Agents/Memory    │  │
 │  └────┬─────┘  └────────┬─────────┘  │
 │       │                 │            │
 │       └────────┬────────┘            │
@@ -32,7 +32,7 @@ PAI (Personal AI Infrastructure) is the orchestrator that runs The Algorithm on 
 │                                      │
 │  ┌───────────┐  ┌────────────────┐   │
 │  │ PAIBridge  │  │ MCP Bridge     │   │
-│  │ Discovery  │  │ 20 static +    │   │
+│  │ Discovery  │  │ 22 static +    │   │
 │  │ Validation │  │ auto-discovered│   │
 │  └───────────┘  └───────┬────────┘   │
 │                         │            │
@@ -72,10 +72,11 @@ The discovery and validation layer. Reads PAI's filesystem to enumerate all subs
 
 Exposes all Codomyrmex capabilities as MCP tools for PAI consumption.
 
-**Static Tools (20):**
+**Static Tools (22):**
 
 - 17 core tools: file ops, code analysis, git, shell, data, discovery, PAI, testing
 - 3 universal proxy tools: `list_module_functions`, `call_module_function`, `get_module_readme`
+- 2 maintenance tools: `list_workflows`, `invalidate_cache`
 
 **Dynamic Discovery:**
 The bridge auto-discovers additional tools from Codomyrmex modules:
@@ -83,7 +84,7 @@ The bridge auto-discovers additional tools from Codomyrmex modules:
 1. **Phase 1**: Scans for `@mcp_tool` decorated functions in targeted modules
 2. **Phase 2**: Auto-discovers all public functions from every module via `discover_all_public_tools()`
 
-**Resources (3):** `codomyrmex://modules` (inventory), `codomyrmex://status` (health), `codomyrmex://discovery/metrics` (scan stats)
+**Resources (2):** `codomyrmex://modules` (inventory), `codomyrmex://status` (health)
 
 **Prompts (10):**
 
@@ -102,7 +103,7 @@ UNTRUSTED ──/codomyrmexVerify──→ VERIFIED ──/codomyrmexTrust──
    └────────────────────────────────┴──────────────────────────────┘
 ```
 
-**Safe tools (16 static):** Auto-promoted to VERIFIED by `/codomyrmexVerify`
+**Safe tools (18 static):** Auto-promoted to VERIFIED by `/codomyrmexVerify`
 
 - `read_file`, `list_directory`, `analyze_python`, `search_codebase`, `git_status`, `git_diff`, `json_query`, `checksum_file`, `list_modules`, `module_info`, `pai_status`, `pai_awareness`, `list_module_functions`, `get_module_readme`, `list_workflows`, `invalidate_cache`
 
@@ -146,15 +147,15 @@ PAI Agent (TypeScript)
 ```
 PAIBridge
   │
-  ├─ ~/.claude/skills/PAI/SKILL.md     → Algorithm version
-  ├─ ~/.claude/skills/*/               → Skill enumeration
-  ├─ ~/.claude/skills/PAI/Tools/*.ts   → Tool listing
-  ├─ ~/.claude/hooks/                  → Hook discovery
-  ├─ ~/.claude/agents/*.md             → Agent personalities
-  ├─ ~/.claude/MEMORY/                 → Memory stores
-  ├─ ~/.claude/skills/PAI/PAISECURITYSYSTEM/ → Security config
-  ├─ ~/.claude/USER/                   → TELOS files
-  └─ ~/.claude/settings.json           → Settings & env vars
+  ├─ ~/.claude/PAI/SKILL.md           → Algorithm version (v4+)
+  ├─ ~/.claude/skills/PAI/SKILL.md    → Algorithm version (v3 legacy fallback)
+  ├─ ~/.claude/skills/*/              → Skill enumeration (77+ skills)
+  ├─ ~/.claude/PAI/Tools/*.ts         → Tool listing
+  ├─ ~/.claude/hooks/                 → Hook discovery (22 hooks)
+  ├─ ~/.claude/agents/*.md            → Agent personalities
+  ├─ ~/.claude/MEMORY/                → Memory stores
+  ├─ ~/.claude/USER/                  → TELOS files
+  └─ ~/.claude/settings.json          → Settings & env vars (pai.version=4.0.1)
 ```
 
 ## Cross-Language Communication

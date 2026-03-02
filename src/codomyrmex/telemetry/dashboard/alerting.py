@@ -7,10 +7,10 @@ Alert rule management and notification for observability.
 import threading
 from collections.abc import Callable
 
-logger = get_logger(__name__)
 
 from .models import Alert, AlertSeverity
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
+logger = get_logger(__name__)
 
 
 class AlertManager:

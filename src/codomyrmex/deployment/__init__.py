@@ -10,7 +10,6 @@ Provides deployment strategies, managers, and utilities:
 import os
 from typing import Any, Dict, List, Optional
 
-logger = get_logger(__name__)
 
 # Shared schemas for cross-module interop
 try:
@@ -39,6 +38,7 @@ RollingStrategy = RollingDeployment
 # Submodule exports
 from . import health_checks, rollback, strategies
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
+logger = get_logger(__name__)
 
 # Try optional submodules
 try:

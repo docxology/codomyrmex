@@ -1,10 +1,10 @@
 """Feature Flags module for Codomyrmex."""
 
-logger = get_logger(__name__)
 
 # Submodule exports - import first
 from . import evaluation, rollout, storage, strategies
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
+logger = get_logger(__name__)
 
 # Try optional submodules
 try:

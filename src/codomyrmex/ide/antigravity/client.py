@@ -4,7 +4,6 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any
 
-logger = get_logger(__name__)
 
 from .models import (
     Artifact,
@@ -16,6 +15,7 @@ from .models import (
     IDEStatus,
 )
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
+logger = get_logger(__name__)
 
 
 class AntigravityClient(IDEClient):

@@ -18,7 +18,6 @@ from collections.abc import Iterator
 from pathlib import Path
 from typing import Any
 
-logger = get_logger(__name__)
 
 from codomyrmex.agents.agentic_seek.agent_router import AgenticSeekRouter
 from codomyrmex.agents.agentic_seek.agent_types import (
@@ -37,6 +36,7 @@ from codomyrmex.config_management.defaults import (
     DEFAULT_OLLAMA_URL,
 )
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
+logger = get_logger(__name__)
 
 
 class AgenticSeekClient(CLIAgentBase):

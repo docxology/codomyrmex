@@ -14,7 +14,6 @@ import json
 import os
 import shutil
 
-logger = get_logger(__name__)
 import subprocess
 import time
 from collections.abc import Callable
@@ -23,6 +22,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
+logger = get_logger(__name__)
 
 try:
     from codomyrmex.ide import (
