@@ -93,7 +93,7 @@ def audio_list_voices(provider: str = "pyttsx3") -> dict:
 
 
 @mcp_tool(category="audio")
-def audio_list_formats() -> Dict[str, List[str]]:
+def audio_list_formats() -> Dict[str, Any]:
     """List supported audio formats for processing.
 
     Returns:
