@@ -59,7 +59,7 @@ class ConsistentHash:
             self.add_node(node)
 
     def _hash(self, key: str) -> int:
-        """hash ."""
+        """Return the hash value."""
         return int(hashlib.md5(key.encode()).hexdigest(), 16)
 
     def add_node(self, node: str) -> None:
@@ -89,7 +89,7 @@ class ConsistentHash:
 
     @property
     def nodes(self) -> set[str]:
-        """nodes ."""
+        """Nodes."""
         return set(self._node_map.values())
 
 

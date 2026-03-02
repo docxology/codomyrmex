@@ -15,7 +15,7 @@ class GeneratorStrategy(ABC):
 
     @abstractmethod
     def generate(self) -> Any:
-        """generate ."""
+        """Generate."""
         pass
 
 
@@ -27,7 +27,7 @@ class IntGenerator(GeneratorStrategy):
         self.max_val = max_val
 
     def generate(self) -> int:
-        """generate ."""
+        """Generate."""
         return random.randint(self.min_val, self.max_val)
 
 
@@ -39,7 +39,7 @@ class FloatGenerator(GeneratorStrategy):
         self.max_val = max_val
 
     def generate(self) -> float:
-        """generate ."""
+        """Generate."""
         return random.uniform(self.min_val, self.max_val)
 
 
@@ -57,7 +57,7 @@ class StringGenerator(GeneratorStrategy):
         self.charset = charset
 
     def generate(self) -> str:
-        """generate ."""
+        """Generate."""
         length = random.randint(self.min_length, self.max_length)
         return ''.join(random.choice(self.charset) for _ in range(length))
 
@@ -76,7 +76,7 @@ class ListGenerator(GeneratorStrategy):
         self.max_length = max_length
 
     def generate(self) -> list[Any]:
-        """generate ."""
+        """Generate."""
         length = random.randint(self.min_length, self.max_length)
         return [self.element_generator.generate() for _ in range(length)]
 
@@ -97,7 +97,7 @@ class DictGenerator(GeneratorStrategy):
         self.max_size = max_size
 
     def generate(self) -> dict[Any, Any]:
-        """generate ."""
+        """Generate."""
         size = random.randint(self.min_size, self.max_size)
         return {
             self.key_generator.generate(): self.value_generator.generate()
@@ -112,5 +112,5 @@ class OneOfGenerator(GeneratorStrategy):
         self.values = values
 
     def generate(self) -> Any:
-        """generate ."""
+        """Generate."""
         return random.choice(self.values)

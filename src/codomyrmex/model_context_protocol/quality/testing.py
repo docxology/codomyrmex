@@ -41,17 +41,17 @@ class TestSuite:
 
     @property
     def passed(self) -> int:
-        """passed ."""
+        """Passed."""
         return sum(1 for r in self.results if r.passed)
 
     @property
     def failed(self) -> int:
-        """failed ."""
+        """Failed."""
         return sum(1 for r in self.results if not r.passed)
 
     @property
     def total(self) -> int:
-        """total ."""
+        """Total."""
         return len(self.results)
 
     @property
@@ -59,7 +59,7 @@ class TestSuite:
         return self.passed / self.total if self.total > 0 else 0.0
 
     def summary(self) -> str:
-        """summary ."""
+        """Summary."""
         return f"{self.name}: {self.passed}/{self.total} passed ({self.success_rate:.1%})"
 
 

@@ -146,7 +146,7 @@ class Dataset:
         return cls(data=data)
 
     def __len__(self) -> int:
-        """len ."""
+        """Return the number of items."""
         return len(self.data)
 
 class DatasetSanitizer:

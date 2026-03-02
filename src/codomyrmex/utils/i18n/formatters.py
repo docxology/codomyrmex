@@ -25,7 +25,7 @@ class PluralRules:
 
     @classmethod
     def pluralize(cls, locale: Locale, count: int, forms: dict[str, str]) -> str:
-        """pluralize ."""
+        """Pluralize."""
         rule = cls.get_rule(locale)
         category = rule(count)
         return forms.get(category, forms.get("other", ""))

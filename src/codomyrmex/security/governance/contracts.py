@@ -232,7 +232,7 @@ class Contract:
         }
 
     def __repr__(self) -> str:
-        """repr ."""
+        """Return string representation."""
         return (
             f"Contract(title='{self.title}', status='{self.status.value}', "
             f"parties={self.parties})"

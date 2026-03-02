@@ -147,7 +147,7 @@ class BayesianNetwork:
         order = []
 
         def visit(node: str):
-            """visit ."""
+            """Visit."""
 
 
             if node in visited:

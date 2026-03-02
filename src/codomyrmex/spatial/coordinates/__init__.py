@@ -26,19 +26,19 @@ class Point3D:
     z: float = 0.0
 
     def __add__(self, other: 'Point3D') -> 'Point3D':
-        """add ."""
+        """Return sum with other."""
         return Point3D(self.x + other.x, self.y + other.y, self.z + other.z)
 
     def __sub__(self, other: 'Point3D') -> 'Point3D':
-        """sub ."""
+        """Return difference from other."""
         return Point3D(self.x - other.x, self.y - other.y, self.z - other.z)
 
     def __mul__(self, scalar: float) -> 'Point3D':
-        """mul ."""
+        """Return product with other."""
         return Point3D(self.x * scalar, self.y * scalar, self.z * scalar)
 
     def __truediv__(self, scalar: float) -> 'Point3D':
-        """truediv ."""
+        """Return true division result."""
         return Point3D(self.x / scalar, self.y / scalar, self.z / scalar)
 
     def magnitude(self) -> float:

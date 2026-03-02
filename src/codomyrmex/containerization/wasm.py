@@ -61,7 +61,7 @@ class WASMRuntimeClient(ABC):
     @property
     @abstractmethod
     def runtime(self) -> WASMRuntime:
-        """runtime ."""
+        """Runtime."""
         pass
 
     @abstractmethod
@@ -95,7 +95,7 @@ class WasmtimeClient(WASMRuntimeClient):
 
     @property
     def runtime(self) -> WASMRuntime:
-        """runtime ."""
+        """Runtime."""
         return WASMRuntime.WASMTIME
 
     def load_module(self, module: WASMModule) -> WASMInstance:

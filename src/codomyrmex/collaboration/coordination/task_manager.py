@@ -88,11 +88,11 @@ class TaskQueue:
         return self._tasks.get(task_id)
 
     def __len__(self) -> int:
-        """len ."""
+        """Return the number of items."""
         return len(self._tasks)
 
     def __bool__(self) -> bool:
-        """bool ."""
+        """Return True if this instance is truthy."""
         return bool(self._tasks)
 
 
@@ -154,7 +154,7 @@ class DependencyGraph:
         rec_stack = set()
 
         def dfs(task_id: str) -> bool:
-            """dfs ."""
+            """Dfs."""
             visited.add(task_id)
             rec_stack.add(task_id)
 

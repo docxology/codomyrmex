@@ -67,17 +67,17 @@ class TransactionBuilder:
         self._memo: str = ""
 
     def to(self, address: Address) -> TransactionBuilder:
-        """to ."""
+        """To."""
         self._to = address
         return self
 
     def value(self, amount: int) -> TransactionBuilder:
-        """value ."""
+        """Value."""
         self._value = amount
         return self
 
     def data(self, data: str) -> TransactionBuilder:
-        """data ."""
+        """Data."""
         self._data = data
         return self
 
@@ -90,7 +90,7 @@ class TransactionBuilder:
         return self
 
     def nonce(self, nonce: int) -> TransactionBuilder:
-        """nonce ."""
+        """Nonce."""
         self._nonce = nonce
         return self
 
@@ -99,7 +99,7 @@ class TransactionBuilder:
         return self
 
     def memo(self, memo: str) -> TransactionBuilder:
-        """memo ."""
+        """Memo."""
         self._memo = memo
         return self
 

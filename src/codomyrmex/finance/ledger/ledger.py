@@ -51,7 +51,7 @@ class Account:
     created_at: datetime = field(default_factory=datetime.now)
 
     def __repr__(self) -> str:
-        """repr ."""
+        """Return string representation."""
         return (
             f"Account(id={self.id!r}, name={self.name!r}, "
             f"type={self.account_type.value}, balance={self.balance:.2f})"
@@ -334,7 +334,7 @@ class Ledger:
         }
 
     def __repr__(self) -> str:
-        """repr ."""
+        """Return string representation."""
         return (
             f"Ledger(name={self.name!r}, accounts={len(self.accounts)}, "
             f"transactions={len(self.transactions)})"

@@ -44,7 +44,7 @@ class Result:
 
     @property
     def ok(self) -> bool:
-        """ok ."""
+        """Ok."""
         return self.status == ResultStatus.SUCCESS
 
     def to_dict(self) -> dict[str, Any]:

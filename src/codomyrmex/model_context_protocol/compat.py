@@ -85,7 +85,7 @@ class CompatShimGenerator:
 
         @functools.wraps(target_fn)
         def shim(*args, **kwargs):
-            """shim ."""
+            """Shim."""
             # Rename parameters
             translated_kwargs = {}
             for k, v in kwargs.items():

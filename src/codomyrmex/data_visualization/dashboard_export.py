@@ -88,7 +88,7 @@ class DashboardExporter:
         self._dashboard.panels.append(panel)
 
     def export(self) -> dict[str, Any]:
-        """export ."""
+        """Export."""
         return self._dashboard.to_dict()
 
     @property

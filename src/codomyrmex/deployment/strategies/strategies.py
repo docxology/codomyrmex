@@ -38,13 +38,13 @@ class DeploymentState:
         return end - self.started_at
 
     def complete(self) -> None:
-        """complete ."""
+        """Complete."""
         self.status = "completed"
         self.completed_at = time.time()
         self.traffic_percentage = 100.0
 
     def fail(self, reason: str = "") -> None:
-        """fail ."""
+        """Fail."""
         self.status = "failed"
         self.completed_at = time.time()
         self.metadata["failure_reason"] = reason
@@ -100,7 +100,7 @@ class RollingStrategy(DeploymentStrategy):
         return state
 
     def rollback(self, state: DeploymentState) -> DeploymentState:
-        """rollback ."""
+        """Rollback."""
         state.status = "rolled_back"
         state.traffic_percentage = 0.0
         state.completed_at = time.time()
@@ -147,7 +147,7 @@ class CanaryStrategy(DeploymentStrategy):
         return state
 
     def rollback(self, state: DeploymentState) -> DeploymentState:
-        """rollback ."""
+        """Rollback."""
         state.status = "rolled_back"
         state.traffic_percentage = 0.0
         state.completed_at = time.time()
@@ -179,7 +179,7 @@ class BlueGreenStrategy(DeploymentStrategy):
         return state
 
     def rollback(self, state: DeploymentState) -> DeploymentState:
-        """rollback ."""
+        """Rollback."""
         state.status = "rolled_back"
         state.metadata["active_slot"] = "blue"
         state.traffic_percentage = 100.0  # back on blue
@@ -213,7 +213,7 @@ class FeatureFlagStrategy(DeploymentStrategy):
         return state
 
     def rollback(self, state: DeploymentState) -> DeploymentState:
-        """rollback ."""
+        """Rollback."""
         state.traffic_percentage = 0.0
         state.status = "rolled_back"
         state.completed_at = time.time()

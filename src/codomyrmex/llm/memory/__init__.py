@@ -124,7 +124,7 @@ class BufferMemory(Memory):
         return [{"role": m.role, "content": m.content} for m in self.messages]
 
     def clear(self) -> None:
-        """clear ."""
+        """Clear."""
         self.messages = []
 
 class WindowMemory(Memory):
@@ -152,7 +152,7 @@ class WindowMemory(Memory):
         return [{"role": m.role, "content": m.content} for m in all_messages]
 
     def clear(self) -> None:
-        """clear ."""
+        """Clear."""
         self.messages = []
         self.system_messages = []
 
@@ -217,7 +217,7 @@ Updated Summary:"""
         return messages
 
     def clear(self) -> None:
-        """clear ."""
+        """Clear."""
         self.messages = []
         self.recent_messages = []
         self.summary = ""
@@ -277,7 +277,7 @@ class EntityMemory(Memory):
         return messages
 
     def clear(self) -> None:
-        """clear ."""
+        """Clear."""
         self.messages = []
         self.entities = {}
 

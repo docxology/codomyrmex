@@ -446,16 +446,16 @@ class Container:
     # ──────────────────────────────────────────────
 
     def __contains__(self, interface: type[Any]) -> bool:
-        """contains ."""
+        """Return True if item is contained."""
         return self.has(interface)
 
     def __len__(self) -> int:
-        """len ."""
+        """Return the number of items."""
         with self._lock:
             return len(self._registry)
 
     def __repr__(self) -> str:
-        """repr ."""
+        """Return string representation."""
         with self._lock:
             count = len(self._registry)
         return f"Container(registrations={count})"

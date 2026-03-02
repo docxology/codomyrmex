@@ -54,7 +54,7 @@ class PolicyRule:
             return False
 
     def __repr__(self) -> str:
-        """repr ."""
+        """Return string representation."""
         return f"PolicyRule(name='{self.name}', priority={self.priority})"
 
 

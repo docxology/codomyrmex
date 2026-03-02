@@ -84,7 +84,7 @@ class OpenRouterProvider(LLMProvider):
         max_tokens: int | None = None,
         **kwargs
     ) -> CompletionResponse:
-        """complete ."""
+        """Complete."""
         if not self._client:
             raise RuntimeError("OpenRouter client not initialized. Install openai package.")
 

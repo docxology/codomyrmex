@@ -68,7 +68,7 @@ class LearningJournal:
         confidence: float = 1.0,
         tags: list[str] | None = None,
     ) -> JournalEntry:
-        """record ."""
+        """Record."""
         entry = JournalEntry(
             topic=topic, insight=insight, source=source,
             confidence=confidence, tags=tags or [],
@@ -78,7 +78,7 @@ class LearningJournal:
 
     @property
     def size(self) -> int:
-        """size ."""
+        """Size."""
         return len(self._entries)
 
     def by_topic(self, topic: str) -> list[JournalEntry]:
@@ -102,7 +102,7 @@ class LearningJournal:
         }
 
     def recent(self, n: int = 10) -> list[JournalEntry]:
-        """recent ."""
+        """Recent."""
         return self._entries[-n:]
 
     def high_confidence(self, threshold: float = 0.8) -> list[JournalEntry]:

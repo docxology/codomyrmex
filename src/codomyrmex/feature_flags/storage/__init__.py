@@ -101,12 +101,12 @@ class InMemoryFlagStore(FlagStore):
             return dict(self._data)
 
     def __len__(self) -> int:
-        """len ."""
+        """Return the number of items."""
         with self._lock:
             return len(self._data)
 
     def __repr__(self) -> str:
-        """repr ."""
+        """Return string representation."""
         return f"InMemoryFlagStore(keys={list(self._data.keys())})"
 
 
@@ -177,7 +177,7 @@ class FileFlagStore(FlagStore):
         os.replace(tmp_path, self._path)
 
     def __repr__(self) -> str:
-        """repr ."""
+        """Return string representation."""
         return f"FileFlagStore(path={self._path!r})"
 
 

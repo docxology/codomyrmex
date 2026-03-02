@@ -557,7 +557,7 @@ def assess_site():
 
 
 def main():
-    """main ."""
+    """Main."""
 
     parser = argparse.ArgumentParser(
         description=(

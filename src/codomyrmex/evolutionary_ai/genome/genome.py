@@ -126,19 +126,19 @@ class Genome:
     # ── Dunder methods ──────────────────────────────────────────────
 
     def __len__(self) -> int:
-        """len ."""
+        """Return the number of items."""
         return len(self.genes)
 
     def __getitem__(self, index: int) -> float:
-        """getitem ."""
+        """Return item at the given key."""
         return self.genes[index]
 
     def __eq__(self, other: object) -> bool:
-        """eq ."""
+        """Return True if equal to other."""
         if not isinstance(other, Genome):
             return NotImplemented
         return self.genes == other.genes
 
     def __repr__(self) -> str:
-        """repr ."""
+        """Return string representation."""
         return f"Genome(fitness={self.fitness}, length={len(self)})"

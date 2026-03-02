@@ -44,7 +44,7 @@ class HistogramBucket:
 
     @property
     def mean(self) -> float:
-        """mean ."""
+        """Mean."""
         return self.total_sum / max(self.total_count, 1)
 
     def to_dict(self) -> dict[str, Any]:
@@ -148,7 +148,7 @@ class MetricAggregator:
         return sorted(names)
 
     def summary(self) -> dict[str, Any]:
-        """summary ."""
+        """Summary."""
         return {
             "counters": len(self._counters),
             "gauges": len(self._gauges),

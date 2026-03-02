@@ -69,7 +69,7 @@ class ScalarFitness(FitnessFunction):
         self._maximize = maximize
 
     def evaluate(self, genome: Any) -> FitnessResult:
-        """evaluate ."""
+        """Evaluate."""
         raw = float(self._fn(genome))
         value = raw if self._maximize else -raw
         return FitnessResult(
@@ -100,7 +100,7 @@ class MultiObjectiveFitness(FitnessFunction):
             raise ValueError("maximize length must match number of objectives")
 
     def evaluate(self, genome: Any) -> FitnessResult:
-        """evaluate ."""
+        """Evaluate."""
         values: list[float] = []
         for fn, is_max in zip(self._objectives, self._maximize, strict=False):
             raw = float(fn(genome))
@@ -159,7 +159,7 @@ class ConstrainedFitness(FitnessFunction):
         self._penalty_weight = penalty_weight
 
     def evaluate(self, genome: Any) -> FitnessResult:
-        """evaluate ."""
+        """Evaluate."""
         base_result = self._base.evaluate(genome)
         base_value = (
             base_result.value

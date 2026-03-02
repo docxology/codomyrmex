@@ -52,7 +52,7 @@ class ResultAggregator:
 
     @property
     def count(self) -> int:
-        """count ."""
+        """Count."""
         return len(self._results)
 
     def add(self, result: TaskResult) -> None:

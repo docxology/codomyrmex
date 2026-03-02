@@ -86,7 +86,7 @@ def fix_agents_file(file_path):
     return False
 
 def main():
-    """main ."""
+    """Main."""
     root = Path(__file__).parent.parent.parent
     print(f"Scanning {root} for AGENTS.md files...")
 

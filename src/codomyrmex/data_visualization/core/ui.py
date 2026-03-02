@@ -17,7 +17,7 @@ class Card:
     css_class: str = "card"
 
     def render(self) -> str:
-        """render ."""
+        """Render."""
         parts = [f"<h3>{self.title}</h3>"]
         if self.value is not None:
              parts.append(f"<div class='value'>{self.value}</div>")
@@ -30,7 +30,7 @@ class Card:
         return f"<div class='{self.css_class}'>{inner}</div>"
 
     def __str__(self) -> str:
-        """str ."""
+        """Return human-readable string."""
         return self.render()
 
 
@@ -42,7 +42,7 @@ class Table:
         self.rows = rows or []
 
     def render(self) -> str:
-        """render ."""
+        """Render."""
         header = "".join(f"<th>{h}</th>" for h in self.headers)
         body = "".join(
             "<tr>" + "".join(f"<td>{c}</td>" for c in row) + "</tr>"
@@ -51,7 +51,7 @@ class Table:
         return f"<table><thead><tr>{header}</tr></thead><tbody>{body}</tbody></table>"
 
     def __str__(self) -> str:
-        """str ."""
+        """Return human-readable string."""
         return self.render()
 
 
@@ -85,9 +85,9 @@ class Dashboard:
         return html
 
     def __str__(self) -> str:
-        """str ."""
+        """Return human-readable string."""
         return self.render()
 
     def __repr__(self) -> str:
-        """repr ."""
+        """Return string representation."""
         return f"Dashboard(title={self.title!r}, sections={len(self.sections)})"

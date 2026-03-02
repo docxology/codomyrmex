@@ -21,7 +21,7 @@ except ImportError:
     def monitor_performance(*args, **kwargs):
         """Decorator for performance monitoring (fallback)."""
         def decorator(func):
-            """decorator ."""
+            """Decorator."""
             return func
         return decorator
 

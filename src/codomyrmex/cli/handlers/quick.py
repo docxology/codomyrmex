@@ -47,7 +47,7 @@ def handle_quick_run(
 
     # Progress callback for verbose mode
     def progress(name: str, status: str, details: dict[str, Any]):
-        """progress ."""
+        """Progress."""
         if verbose:
             print(f"  [{status.upper()}] {name}", end="")
             if "execution_time" in details:
@@ -230,7 +230,7 @@ def handle_quick_batch(
     print(f"Running {len(all_scripts)} scripts with {workers} workers")
 
     def progress(name: str, status: str, details: dict[str, Any]):
-        """progress ."""
+        """Progress."""
         if verbose:
             print(f"  [{status}] {name}")
 

@@ -62,7 +62,7 @@ class LineageGraph:
         result = []
 
         def dfs(current_id: str, depth: int):
-            """dfs ."""
+            """Dfs."""
             if depth > max_depth or current_id in visited:
                 return
             visited.add(current_id)
@@ -82,7 +82,7 @@ class LineageGraph:
         result = []
 
         def dfs(current_id: str, depth: int):
-            """dfs ."""
+            """Dfs."""
             if depth > max_depth or current_id in visited:
                 return
             visited.add(current_id)
@@ -101,7 +101,7 @@ class LineageGraph:
         visited: set[str] = set()
 
         def dfs(current: str, path: list[str]) -> list[str] | None:
-            """dfs ."""
+            """Dfs."""
             if current == target_id:
                 return path + [current]
             if current in visited:

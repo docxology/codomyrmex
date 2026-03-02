@@ -60,7 +60,7 @@ class _TokenBucket:
         self._last_refill = time.monotonic()
 
     def _refill(self) -> None:
-        """refill ."""
+        """Refill."""
         now = time.monotonic()
         elapsed = now - self._last_refill
         self._tokens = min(self.burst, self._tokens + elapsed * self.rate)
@@ -76,13 +76,13 @@ class _TokenBucket:
 
     @property
     def tokens(self) -> float:
-        """tokens ."""
+        """Tokens."""
         self._refill()
         return self._tokens
 
     @property
     def metrics(self) -> dict[str, Any]:
-        """metrics ."""
+        """Metrics."""
         return {
             "tokens": round(self.tokens, 2),
             "rate": self.rate,

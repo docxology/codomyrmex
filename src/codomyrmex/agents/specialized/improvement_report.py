@@ -136,7 +136,7 @@ class ImprovementReport:
 
     @property
     def approved(self) -> bool:
-        """approved ."""
+        """Approved."""
         return self.review_verdict == ReviewVerdict.APPROVE
 
     def to_markdown(self) -> str:

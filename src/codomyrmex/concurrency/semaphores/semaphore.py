@@ -32,11 +32,11 @@ class LocalSemaphore(BaseSemaphore):
         self._semaphore = threading.Semaphore(value)
 
     def acquire(self, timeout: float = 10.0) -> bool:
-        """acquire ."""
+        """Acquire."""
         return self._semaphore.acquire(timeout=timeout)
 
     def release(self) -> None:
-        """release ."""
+        """Release."""
         self._semaphore.release()
 
 class AsyncLocalSemaphore(BaseSemaphore):
@@ -52,7 +52,7 @@ class AsyncLocalSemaphore(BaseSemaphore):
         await self._semaphore.acquire()
 
     def release(self) -> None:
-        """release ."""
+        """Release."""
         self._semaphore.release()
         # Also update sync count if it was acquired synchronously
         with self._sync_lock:

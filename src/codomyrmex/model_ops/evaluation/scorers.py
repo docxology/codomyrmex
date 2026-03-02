@@ -80,11 +80,11 @@ class ExactMatchScorer(Scorer):
 
     @property
     def name(self) -> str:
-        """name ."""
+        """Name."""
         return "exact_match"
 
     def score(self, output: str, reference: str) -> float:
-        """score ."""
+        """Score."""
         a = output
         b = reference
 
@@ -112,11 +112,11 @@ class ContainsScorer(Scorer):
 
     @property
     def name(self) -> str:
-        """name ."""
+        """Name."""
         return "contains"
 
     def score(self, output: str, reference: str) -> float:
-        """score ."""
+        """Score."""
         a = output
         b = reference
 
@@ -153,11 +153,11 @@ class LengthScorer(Scorer):
 
     @property
     def name(self) -> str:
-        """name ."""
+        """Name."""
         return "length"
 
     def score(self, output: str, reference: str = "") -> float:
-        """score ."""
+        """Score."""
         length = len(output)
 
         if self._min_length <= length <= self._max_length:
@@ -194,11 +194,11 @@ class RegexScorer(Scorer):
 
     @property
     def name(self) -> str:
-        """name ."""
+        """Name."""
         return "regex"
 
     def score(self, output: str, reference: str) -> float:
-        """score ."""
+        """Score."""
         try:
             pattern = re.compile(reference, self._flags)
         except re.error as e:
@@ -233,7 +233,7 @@ class CompositeScorer(Scorer):
 
     @property
     def name(self) -> str:
-        """name ."""
+        """Name."""
         return "composite"
 
     def add_scorer(self, scorer: Scorer, weight: float = 1.0) -> CompositeScorer:
@@ -255,7 +255,7 @@ class CompositeScorer(Scorer):
         return self
 
     def score(self, output: str, reference: str) -> float:
-        """score ."""
+        """Score."""
         if not self._scorers:
             return 0.0
 

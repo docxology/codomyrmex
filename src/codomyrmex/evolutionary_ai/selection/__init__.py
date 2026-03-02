@@ -64,7 +64,7 @@ class TournamentSelection(SelectionOperator[T]):
         population: list[Individual[T]],
         count: int,
     ) -> list[Individual[T]]:
-        """select ."""
+        """Select."""
         selected: list[Individual[T]] = []
         for _ in range(count):
             contestants = random.sample(
@@ -98,7 +98,7 @@ class RouletteWheelSelection(SelectionOperator[T]):
         population: list[Individual[T]],
         count: int,
     ) -> list[Individual[T]]:
-        """select ."""
+        """Select."""
         fitnesses = [ind.fitness if ind.fitness is not None else 0.0 for ind in population]
         min_f = min(fitnesses)
         shift = abs(min_f) + 1.0 if min_f <= 0 else 0.0
@@ -157,7 +157,7 @@ class RankSelection(SelectionOperator[T]):
         population: list[Individual[T]],
         count: int,
     ) -> list[Individual[T]]:
-        """select ."""
+        """Select."""
         sorted_pop = sorted(
             population,
             key=lambda ind: ind.fitness if ind.fitness is not None else float("-inf"),

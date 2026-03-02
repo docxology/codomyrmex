@@ -76,7 +76,7 @@ class SISModel:
         self.gamma = gamma
 
     def simulate(self, steps: int = 100, initial_infected: int = 1) -> PropagationTrace:
-        """simulate ."""
+        """Simulate."""
         S = self.N - initial_infected
         infected = initial_infected
         # SIS has no "Recovered" bucket in the same sense, but we track
@@ -123,7 +123,7 @@ class SEIRModel(SIRModel):
         self.sigma = sigma
 
     def simulate(self, steps: int = 100, initial_infected: int = 1) -> PropagationTrace:
-        """simulate ."""
+        """Simulate."""
         S = self.N - initial_infected
         E = 0
         infected = initial_infected

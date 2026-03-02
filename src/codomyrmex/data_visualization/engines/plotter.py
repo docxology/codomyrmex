@@ -44,7 +44,7 @@ except ImportError:
     def monitor_performance(*args, **kwargs):
         """Decorator for performance monitoring (fallback)."""
         def decorator(func):
-            """decorator ."""
+            """Decorator."""
             return func
         return decorator
 
@@ -53,10 +53,10 @@ except ImportError:
         def __init__(self, *args, **kwargs):
             return None  # Intentional no-op
         def __enter__(self):
-            """enter ."""
+            """Enter the context manager."""
             return self
         def __exit__(self, *args):
-            """exit ."""
+            """Exit the context manager and clean up."""
             return None  # Intentional no-op
 
 

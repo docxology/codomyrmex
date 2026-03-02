@@ -352,7 +352,7 @@ class ASTMatcher:
         results: list[ASTMatchResult] = []
 
         def _walk(node: ast.AST, depth: int) -> None:
-            """walk ."""
+            """Walk."""
             if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
                 if depth > max_depth:
                     results.append(ASTMatchResult(

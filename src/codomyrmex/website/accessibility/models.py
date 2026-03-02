@@ -42,7 +42,7 @@ class AccessibilityReport:
 
     @property
     def score(self) -> float:
-        """score ."""
+        """Score."""
         total = self.passed + self.errors
         if total == 0:
             return 100.0

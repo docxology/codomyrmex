@@ -44,7 +44,7 @@ class FixtureInstance:
     created_at: datetime = field(default_factory=datetime.now)
 
     def __repr__(self) -> str:
-        """repr ."""
+        """Return string representation."""
         return f"Fixture({self.name})"
 
 class FixtureManager:
@@ -165,15 +165,15 @@ class DataFixture:
         self._data = data
 
     def __getitem__(self, index: int) -> dict[str, Any]:
-        """getitem ."""
+        """Return item at the given key."""
         return self._data[index]
 
     def __len__(self) -> int:
-        """len ."""
+        """Return the number of items."""
         return len(self._data)
 
     def __iter__(self):
-        """iter ."""
+        """Return an iterator over items."""
         return iter(self._data)
 
     def filter(self, **kwargs) -> list[dict[str, Any]]:

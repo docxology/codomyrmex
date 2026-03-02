@@ -96,7 +96,7 @@ class LRUPolicy(EvictionPolicy[K, V]):
             return entry.value
 
     def put(self, key: K, value: V, ttl: timedelta | None = None) -> None:
-        """put ."""
+        """Put."""
         with self._lock:
             if key in self._cache:
                 self._cache.move_to_end(key)
@@ -108,7 +108,7 @@ class LRUPolicy(EvictionPolicy[K, V]):
                 self._cache[key] = CacheEntry(value=value, ttl=ttl)
 
     def remove(self, key: K) -> V | None:
-        """remove ."""
+        """Remove."""
         with self._lock:
             if key in self._cache:
                 entry = self._cache.pop(key)
@@ -116,12 +116,12 @@ class LRUPolicy(EvictionPolicy[K, V]):
             return None
 
     def clear(self) -> None:
-        """clear ."""
+        """Clear."""
         with self._lock:
             self._cache.clear()
 
     def size(self) -> int:
-        """size ."""
+        """Size."""
         return len(self._cache)
 
 class LFUPolicy(EvictionPolicy[K, V]):
@@ -168,7 +168,7 @@ class LFUPolicy(EvictionPolicy[K, V]):
             return entry.value
 
     def put(self, key: K, value: V, ttl: timedelta | None = None) -> None:
-        """put ."""
+        """Put."""
         with self._lock:
             if self.max_size <= 0:
                 return
@@ -192,7 +192,7 @@ class LFUPolicy(EvictionPolicy[K, V]):
                 self._freq_map[1][key] = None
 
     def remove(self, key: K) -> V | None:
-        """remove ."""
+        """Remove."""
         with self._lock:
             if key not in self._cache:
                 return None
@@ -208,14 +208,14 @@ class LFUPolicy(EvictionPolicy[K, V]):
             return entry.value
 
     def clear(self) -> None:
-        """clear ."""
+        """Clear."""
         with self._lock:
             self._cache.clear()
             self._freq_map.clear()
             self._min_freq = 0
 
     def size(self) -> int:
-        """size ."""
+        """Size."""
         return len(self._cache)
 
 class TTLPolicy(EvictionPolicy[K, V]):
@@ -252,7 +252,7 @@ class TTLPolicy(EvictionPolicy[K, V]):
             return entry.value
 
     def put(self, key: K, value: V, ttl: timedelta | None = None) -> None:
-        """put ."""
+        """Put."""
         with self._lock:
             self._cleanup_expired()
 
@@ -271,7 +271,7 @@ class TTLPolicy(EvictionPolicy[K, V]):
             heapq.heappush(self._expiry_heap, (expiry_time, key))
 
     def remove(self, key: K) -> V | None:
-        """remove ."""
+        """Remove."""
         with self._lock:
             if key in self._cache:
                 entry = self._cache.pop(key)
@@ -279,13 +279,13 @@ class TTLPolicy(EvictionPolicy[K, V]):
             return None
 
     def clear(self) -> None:
-        """clear ."""
+        """Clear."""
         with self._lock:
             self._cache.clear()
             self._expiry_heap.clear()
 
     def size(self) -> int:
-        """size ."""
+        """Size."""
         self._cleanup_expired()
         return len(self._cache)
 
@@ -311,7 +311,7 @@ class FIFOPolicy(EvictionPolicy[K, V]):
             return entry.value
 
     def put(self, key: K, value: V, ttl: timedelta | None = None) -> None:
-        """put ."""
+        """Put."""
         with self._lock:
             if key in self._cache:
                 self._cache[key] = CacheEntry(value=value, ttl=ttl)
@@ -321,7 +321,7 @@ class FIFOPolicy(EvictionPolicy[K, V]):
                 self._cache[key] = CacheEntry(value=value, ttl=ttl)
 
     def remove(self, key: K) -> V | None:
-        """remove ."""
+        """Remove."""
         with self._lock:
             if key in self._cache:
                 entry = self._cache.pop(key)
@@ -329,12 +329,12 @@ class FIFOPolicy(EvictionPolicy[K, V]):
             return None
 
     def clear(self) -> None:
-        """clear ."""
+        """Clear."""
         with self._lock:
             self._cache.clear()
 
     def size(self) -> int:
-        """size ."""
+        """Size."""
         return len(self._cache)
 
 def create_policy(policy_name: str, max_size: int, **kwargs) -> EvictionPolicy:

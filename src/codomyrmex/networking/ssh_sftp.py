@@ -45,10 +45,10 @@ class SSHClient:
         logger.info(f"Closed connection to {self.hostname}")
 
     def __enter__(self):
-        """enter ."""
+        """Enter the context manager."""
         self.connect()
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        """exit ."""
+        """Exit the context manager and clean up."""
         self.close()

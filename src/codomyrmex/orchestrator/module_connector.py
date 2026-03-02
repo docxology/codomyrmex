@@ -59,7 +59,7 @@ class ModuleConnector:
         )
 
     def resolve(self, name: str) -> Any:
-        """resolve ."""
+        """Resolve."""
         binding = self._bindings.get(name)
         if binding is None:
             raise KeyError(f"No service registered: {name}")
@@ -78,7 +78,7 @@ class ModuleConnector:
         return instance
 
     def has(self, name: str) -> bool:
-        """has ."""
+        """Has."""
         return name in self._bindings
 
     def services_by_tag(self, tag: str) -> list[str]:

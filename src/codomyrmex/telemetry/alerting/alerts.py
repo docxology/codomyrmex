@@ -51,7 +51,7 @@ class AlertRule:
     message_template: str = "{metric} is {value} (threshold: {threshold})"
 
     def evaluate(self, value: float) -> bool:
-        """evaluate ."""
+        """Evaluate."""
         ops = {
             "gt": value > self.threshold,
             "lt": value < self.threshold,
@@ -160,7 +160,7 @@ class AlertEngine:
 
     @property
     def history(self) -> list[Alert]:
-        """history ."""
+        """History."""
         return list(self._alert_history)
 
 

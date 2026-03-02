@@ -103,7 +103,7 @@ class CorrelationFilter(logging.Filter):
     """
 
     def filter(self, record: logging.LogRecord) -> bool:
-        """filter ."""
+        """Filter."""
         record.correlation_id = get_correlation_id()  # noqa: E501
         return True
 

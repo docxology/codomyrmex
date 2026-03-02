@@ -154,7 +154,7 @@ class PatternRule(SecurityRule):
 
     @property
     def id(self) -> str:
-        """id ."""
+        """Id."""
         return self._id
 
     @property

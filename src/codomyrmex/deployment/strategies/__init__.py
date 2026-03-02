@@ -97,7 +97,7 @@ class RollingDeployment(DeploymentStrategy):
         version: str,
         deploy_fn: Callable[[DeploymentTarget, str], bool],
     ) -> DeploymentResult:
-        """deploy ."""
+        """Deploy."""
         start_time = time.time()
         updated = 0
         failed = 0
@@ -152,7 +152,7 @@ class RollingDeployment(DeploymentStrategy):
         previous_version: str,
         deploy_fn: Callable[[DeploymentTarget, str], bool],
     ) -> DeploymentResult:
-        """rollback ."""
+        """Rollback."""
         return self.deploy(targets, previous_version, deploy_fn)
 
 class BlueGreenDeployment(DeploymentStrategy):
@@ -172,7 +172,7 @@ class BlueGreenDeployment(DeploymentStrategy):
         version: str,
         deploy_fn: Callable[[DeploymentTarget, str], bool],
     ) -> DeploymentResult:
-        """deploy ."""
+        """Deploy."""
         start_time = time.time()
 
         # Deploy to all targets (green environment)
@@ -231,7 +231,7 @@ class BlueGreenDeployment(DeploymentStrategy):
         previous_version: str,
         deploy_fn: Callable[[DeploymentTarget, str], bool],
     ) -> DeploymentResult:
-        """rollback ."""
+        """Rollback."""
         # Just switch traffic back to blue
         if self.switch_fn:
             self.switch_fn(previous_version)
@@ -264,7 +264,7 @@ class CanaryDeployment(DeploymentStrategy):
         version: str,
         deploy_fn: Callable[[DeploymentTarget, str], bool],
     ) -> DeploymentResult:
-        """deploy ."""
+        """Deploy."""
         start_time = time.time()
         total = len(targets)
         updated = 0
@@ -336,7 +336,7 @@ class CanaryDeployment(DeploymentStrategy):
         previous_version: str,
         deploy_fn: Callable[[DeploymentTarget, str], bool],
     ) -> DeploymentResult:
-        """rollback ."""
+        """Rollback."""
         # Rolling rollback to canary targets
         rolling = RollingDeployment(batch_size=5)
         return rolling.deploy(targets, previous_version, deploy_fn)

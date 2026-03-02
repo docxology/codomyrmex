@@ -100,7 +100,7 @@ class Plan:
         return done / len(all_tasks)
 
     def _flatten(self) -> list[PlanTask]:
-        """flatten ."""
+        """Flatten."""
         result: list[PlanTask] = []
         stack = list(self.tasks)
         while stack:

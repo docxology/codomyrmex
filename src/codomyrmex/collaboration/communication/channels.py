@@ -71,12 +71,12 @@ class Channel(ABC):
 
     @property
     def name(self) -> str:
-        """name ."""
+        """Name."""
         return self._name
 
     @property
     def state(self) -> ChannelState:
-        """state ."""
+        """State."""
         return self._state
 
     @abstractmethod

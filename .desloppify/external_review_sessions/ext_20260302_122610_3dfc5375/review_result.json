@@ -1,0 +1,233 @@
+{
+  "session": {
+    "id": "ext_20260302_122610_3dfc5375",
+    "token": "4acb52f724b320151baa2d3db764806a"
+  },
+  "assessments": {
+    "cross_module_architecture": 58,
+    "convention_outlier": 52,
+    "error_consistency": 45,
+    "abstraction_fitness": 55,
+    "dependency_health": 62,
+    "test_strategy": 64,
+    "ai_generated_debt": 28,
+    "package_organization": 60,
+    "high_level_elegance": 56,
+    "mid_level_elegance": 50,
+    "low_level_elegance": 48,
+    "design_coherence": 42
+  },
+  "findings": [
+    {
+      "dimension": "ai_generated_debt",
+      "identifier": "reviewer_aid_01",
+      "summary": "Hundreds of `__init__` methods have generic content-free single-word-plus-period docstrings such as `\"\"\"decorator .\"\"\"` and `\"\"\"wrapper .\"\"\"` scattered across 22+ files, indicating mass AI-generated stubs.",
+      "related_files": [
+        "src/codomyrmex/model_context_protocol/decorators.py",
+        "src/codomyrmex/utils/retry.py",
+        "src/codomyrmex/utils/integration.py",
+        "src/codomyrmex/telemetry/spans/__init__.py",
+        "src/codomyrmex/orchestrator/thin.py",
+        "src/codomyrmex/git_operations/core/git.py",
+        "src/codomyrmex/testing/chaos/__init__.py"
+      ],
+      "evidence": "Grep for `\"\"\"[A-Za-z]+ .\"\"\"` found 614 occurrences across 233 files. Confirmed examples: `decorators.py` line 46 `\"\"\"decorator .\"\"\"`, line 75 `\"\"\"wrapper .\"\"\"`. These are clearly AI-generated placeholder docstrings — a single lowercased word followed by a period and nothing else.",
+      "suggestion": "Replace every `\"\"\"word .\"\"\"` docstring with a substantive one-sentence description. Run a script similar to the repo's `fix_docstrings_v2.py` to locate them, then write meaningful text for each. Do NOT use regex with DOTALL to replace them in bulk — replace per-function with real content.",
+      "confidence": "high"
+    },
+    {
+      "dimension": "ai_generated_debt",
+      "identifier": "reviewer_aid_02",
+      "summary": "Production source files contain literal mock/stub data with comments explicitly naming them as mocks, directly violating the zero-mock policy.",
+      "related_files": [
+        "src/codomyrmex/model_ops/fine_tuning/fine_tuning.py",
+        "src/codomyrmex/deployment/__init__.py",
+        "src/codomyrmex/containerization/wasm.py",
+        "src/codomyrmex/security/digital/compliance_checker.py"
+      ],
+      "evidence": "`fine_tuning.py:42` sets `self.job_id = \"ft-mock-12345\"` with comment `# In a real implementation, this would call provider SDKs`. `deployment/__init__.py:105` has `# Mock deploy function` with a trivially-returning lambda. `compliance_checker.py:78` has `# Mock compliance check logic`. These are not tests — they are production code paths.",
+      "suggestion": "Replace mock-returning production methods with `raise NotImplementedError(\"Fine-tuning via <provider> not yet implemented\")` per the project's zero-mock policy. Remove inline mock comments and mock data literals from all non-test files.",
+      "confidence": "high"
+    },
+    {
+      "dimension": "error_consistency",
+      "identifier": "reviewer_ec_01",
+      "summary": "MCP tool layer wraps exceptions into error dicts while the underlying core functions return `bool` on failure, creating three incompatible error surfaces for the same operations.",
+      "related_files": [
+        "src/codomyrmex/git_operations/mcp_tools.py",
+        "src/codomyrmex/git_operations/core/commands/branching.py"
+      ],
+      "evidence": "`branching.py:create_branch` returns `False` on error (swallows CalledProcessError). `mcp_tools.py:git_is_repo` wraps exceptions into `{\"status\": \"error\", \"error\": str(exc)}`. `git_repo_status` does the same. Callers get a bool from core, a dict from MCP — no shared error type. The `mcp_tools.py` layer catches `Exception` broadly, hiding the specific exception type from the caller.",
+      "suggestion": "Define a shared `GitOperationError` exception class in `git_operations.exceptions`. Core functions should raise it instead of returning `False`. MCP tools catch `GitOperationError` specifically and serialize it. This gives callers a consistent, typed error surface at every level.",
+      "confidence": "high"
+    },
+    {
+      "dimension": "error_consistency",
+      "identifier": "reviewer_ec_02",
+      "summary": "Broad `except Exception` in core functions swallows CalledProcessError detail and returns `None` or `False`, making root cause diagnosis impossible from return value alone.",
+      "related_files": [
+        "src/codomyrmex/git_operations/core/commands/branching.py"
+      ],
+      "evidence": "`get_current_branch` lines 110-113: `except Exception as e: logger.error(...); return None`. `create_branch` lines 35-37: same pattern. `subprocess.CalledProcessError` carries stdout/stderr, but by catching generic `Exception` the function discards the structured error and logs it only — no re-raise, no structured return.",
+      "suggestion": "Catch only `subprocess.CalledProcessError` for subprocess failures and let unexpected exceptions propagate. Include `e.stderr` in log messages using structured fields rather than f-strings.",
+      "confidence": "high"
+    },
+    {
+      "dimension": "convention_outlier",
+      "identifier": "reviewer_co_01",
+      "summary": "103 Python files use `logging.getLogger(__name__)` directly instead of the project-standard `get_logger(__name__)` from `logging_monitoring`.",
+      "related_files": [
+        "src/codomyrmex/telemetry/__init__.py",
+        "src/codomyrmex/logging_monitoring/core/logger_config.py",
+        "src/codomyrmex/plugin_system/core/plugin_manager.py",
+        "src/codomyrmex/events/core/event_bus.py",
+        "src/codomyrmex/ide/antigravity/agent_bridge.py"
+      ],
+      "evidence": "Grep for `logging.getLogger` in .py files returned 103 files with matches. The canonical pattern documented in `logging_monitoring/__init__.py` and used in most modules is `from codomyrmex.logging_monitoring import get_logger; logger = get_logger(__name__)`. The `telemetry/__init__.py:27` falls back to `import logging as _logging; _logging.getLogger(__name__)` — bypassing correlation ID injection and structured formatting.",
+      "suggestion": "Replace all `logging.getLogger(__name__)` occurrences with `from codomyrmex.logging_monitoring import get_logger; logger = get_logger(__name__)`. Run `ruff` with a custom rule or a one-shot sed across the codebase after confirming no circular imports block this.",
+      "confidence": "high"
+    },
+    {
+      "dimension": "cross_module_architecture",
+      "identifier": "reviewer_cma_01",
+      "summary": "`git_operations/core/commands/` files directly import `@mcp_tool` from `model_context_protocol`, making a Core-layer module depend on a Foundation-layer module's decorator rather than the designated MCP facade.",
+      "related_files": [
+        "src/codomyrmex/git_operations/core/commands/branching.py",
+        "src/codomyrmex/git_operations/core/commands/history.py",
+        "src/codomyrmex/git_operations/core/commands/merge.py",
+        "src/codomyrmex/git_operations/core/commands/status.py",
+        "src/codomyrmex/git_operations/core/commands/commit.py"
+      ],
+      "evidence": "Confirmed: `branching.py:5` has `from codomyrmex.model_context_protocol.decorators import mcp_tool`. Same pattern in 9 of the 10 `git_operations/core/commands/*.py` files. The `mcp_tools.py` facade exists precisely to decouple core commands from MCP concerns — but core commands bypass it by importing the decorator directly.",
+      "suggestion": "Remove `@mcp_tool` decorators from `core/commands/*.py` files. Keep business logic pure. Register the same functions in `mcp_tools.py` by wrapping or re-exporting them. The `mcp_tools.py` fallback decorator pattern already handles missing MCP gracefully.",
+      "confidence": "high"
+    },
+    {
+      "dimension": "low_level_elegance",
+      "identifier": "reviewer_lle_01",
+      "summary": "`subprocess.run` calls in the IDE client lack a `timeout` argument, allowing them to block the process indefinitely.",
+      "related_files": [
+        "src/codomyrmex/ide/antigravity/client.py"
+      ],
+      "evidence": "`client.py:636` calls `subprocess.run([\"osascript\", \"-e\", apple_script], check=True, capture_output=True)` — no `timeout`. `client.py:702` calls `subprocess.run(cmd, check=True, capture_output=True)` — no `timeout`. If the `osascript` or `antigravity` CLI hangs, the calling process blocks forever with no recovery path.",
+      "suggestion": "Add `timeout=10` (or a configurable value via `os.getenv(\"ANTIGRAVITY_CMD_TIMEOUT\", \"10\")`) to both `subprocess.run` calls. Catch `subprocess.TimeoutExpired` explicitly and return an `IDECommandResult(success=False, error=\"Command timed out\")` rather than letting it propagate.",
+      "confidence": "high"
+    },
+    {
+      "dimension": "low_level_elegance",
+      "identifier": "reviewer_lle_02",
+      "summary": "The performance no-op fallback block is duplicated inside `git_operations/core/git.py` even though the import from `codomyrmex.performance` on line 8 already succeeds unconditionally.",
+      "related_files": [
+        "src/codomyrmex/git_operations/core/git.py"
+      ],
+      "evidence": "`git.py` lines 8-9 unconditionally import `monitor_performance, performance_context` from `codomyrmex.performance`. Lines 53-84 then have a dead `try/except ImportError` block that redefines those same names as no-ops. The `try` block body is empty (only `except` branch has code), meaning the `except` is unreachable — dead code that creates confusion.",
+      "suggestion": "Remove lines 53-84 entirely. If the import on line 8 can fail, wrap only that import in `try/except ImportError` and define the no-ops there. Do not maintain two competing import paths for the same symbol.",
+      "confidence": "high"
+    },
+    {
+      "dimension": "design_coherence",
+      "identifier": "reviewer_dc_01",
+      "summary": "Core git functions return `bool` (False) on error, MCP tools return `dict` with `{\"status\": \"error\"}`, and some functions return `None` on error — three incompatible failure return conventions within the same module.",
+      "related_files": [
+        "src/codomyrmex/git_operations/core/commands/branching.py",
+        "src/codomyrmex/git_operations/mcp_tools.py"
+      ],
+      "evidence": "`create_branch` returns `False` on CalledProcessError. `get_current_branch` returns `None` on error. `git_is_repo` (mcp_tools) returns `{\"status\": \"error\", \"error\": str(exc)}`. `git_check_availability` returns `{\"status\": \"ok\", \"git_available\": available}` — always a dict with no error path. No consistent signal for failure.",
+      "suggestion": "Decide on one error convention per layer: core functions raise typed exceptions; MCP tools catch and return structured error dicts. Eliminate the `bool` and `None` returns-on-error from core functions.",
+      "confidence": "high"
+    },
+    {
+      "dimension": "design_coherence",
+      "identifier": "reviewer_dc_02",
+      "summary": "The `agents/__init__.py` silently sets imported names to `None` on `ImportError` for 20+ agent types, making type-unsafe references appear valid at import time.",
+      "related_files": [
+        "src/codomyrmex/agents/__init__.py"
+      ],
+      "evidence": "Lines 34-205 of `agents/__init__.py` consist of 20 consecutive `try/except ImportError: SomeClass = None` blocks. All of these `None` values are exported in `__all__`. Code calling `ClaudeClient(...)` after an import failure gets `TypeError: 'NoneType' object is not callable` instead of a meaningful `ImportError` with which package to install.",
+      "suggestion": "Replace silent `None` assignments with a factory that raises `ImportError` with a helpful message naming the missing extras (e.g., `raise ImportError(\"ClaudeClient requires: pip install codomyrmex[claude]\")`). This preserves lazy-load intent while giving callers actionable errors.",
+      "confidence": "medium"
+    },
+    {
+      "dimension": "abstraction_fitness",
+      "identifier": "reviewer_af_01",
+      "summary": "`AntigravityClient.execute_command` contains a comment stating it 'simulates command execution' and returns a hardcoded success dict — the method is a stub presented as a real implementation.",
+      "related_files": [
+        "src/codomyrmex/ide/antigravity/client.py"
+      ],
+      "evidence": "`client.py:179-186`: `# Return simulated success response` followed by `return {\"status\": \"success\", \"command\": command, ...}`. The method signature and docstring make no mention of it being simulated. `get_open_files` at line 235 returns `[]` unconditionally. `open_file` at line 227 only checks `Path(path).exists()` — it does not open the file in any IDE.",
+      "suggestion": "Methods that cannot be implemented without a real Antigravity API should raise `NotImplementedError('Antigravity API not available; connect a real session')` instead of silently returning success-shaped stubs.",
+      "confidence": "high"
+    },
+    {
+      "dimension": "abstraction_fitness",
+      "identifier": "reviewer_af_02",
+      "summary": "`FineTuningJob.run()` and `refresh_status()` are stub implementations that set mock state instead of raising `NotImplementedError`, violating the zero-stub policy for production code.",
+      "related_files": [
+        "src/codomyrmex/model_ops/fine_tuning/fine_tuning.py"
+      ],
+      "evidence": "`fine_tuning.py:38-50`: `run()` sets `self.job_id = \"ft-mock-12345\"` with comment `# In a real implementation, this would call provider SDKs`. `refresh_status()` sets `self.status = \"completed\"` with comment `# Mock status update`. These methods appear functional but produce fabricated results.",
+      "suggestion": "Replace both methods with `raise NotImplementedError(\"FineTuningJob.run requires a provider SDK; install codomyrmex[model_ops]\")`. Remove the mock data.",
+      "confidence": "high"
+    },
+    {
+      "dimension": "dependency_health",
+      "identifier": "reviewer_dh_01",
+      "summary": "The `telemetry/__init__.py` falls back to the stdlib `logging` module when `logging_monitoring` is unavailable, but `logging_monitoring` is a foundation-layer module that should never be absent in any valid installation.",
+      "related_files": [
+        "src/codomyrmex/telemetry/__init__.py"
+      ],
+      "evidence": "`telemetry/__init__.py:26-28`: `import logging as _logging; _logging.getLogger(__name__).debug(\"Optional telemetry.context not available: %s\", e)`. This fallback is for `telemetry.context`, not `logging_monitoring`, but it uses stdlib directly. More importantly, it leaves a `pass` after the log statement (line 28), meaning the `ImportError` is silently swallowed if a second error occurs.",
+      "suggestion": "Remove the `pass` statement and either re-raise non-optional import errors or document with an explicit `# telemetry.context is optional — not required for core logging` comment. Standardize on `get_logger` throughout.",
+      "confidence": "medium"
+    },
+    {
+      "dimension": "test_strategy",
+      "identifier": "reviewer_ts_01",
+      "summary": "The `AntigravityClient` test suite validates only construction and filesystem artifact operations, but leaves `execute_command`, `send_chat_gui`, and `send_chat_message` (the subprocess-calling paths) untested.",
+      "related_files": [
+        "src/codomyrmex/tests/unit/ide/test_antigravity_client.py",
+        "src/codomyrmex/ide/antigravity/client.py"
+      ],
+      "evidence": "Test file reads show classes `TestClientConstruction`, helpers for `_connected_client`, artifact tests — but no test class or function references `send_chat_gui`, `send_chat_message`, or `execute_command`. These are the only methods that call `subprocess.run` and are the highest-risk paths.",
+      "suggestion": "Add test classes `TestSendChatGui` and `TestSendChatMessage` that verify: (1) when `shutil.which` finds no CLI binary, the fallback path is taken; (2) `CalledProcessError` returns `IDECommandResult(success=False)`; (3) timeout behavior. Use real filesystem state to simulate connected/disconnected states per the zero-mock policy.",
+      "confidence": "high"
+    },
+    {
+      "dimension": "package_organization",
+      "identifier": "reviewer_po_01",
+      "summary": "`git_operations/core/repository_metadata.json` is a runtime data artifact committed to source control, polluting the package with mutable state.",
+      "related_files": [
+        "src/codomyrmex/git_operations/core/repository_metadata.json"
+      ],
+      "evidence": "The file appears in `git status` as modified (`M src/codomyrmex/git_operations/core/repository_metadata.json`). This is a JSON file within a Python package directory that tracks mutable runtime state (repository metadata). Committing it means the package directory's content changes at runtime.",
+      "suggestion": "Move `repository_metadata.json` to a user-local path such as `~/.codomyrmex/git_operations/repository_metadata.json` or a configurable `XDG_DATA_HOME` location. Add `git_operations/core/repository_metadata.json` to `.gitignore`.",
+      "confidence": "high"
+    },
+    {
+      "dimension": "mid_level_elegance",
+      "identifier": "reviewer_mle_01",
+      "summary": "The `agentic_memory/rules/mcp_tools.py` instantiates a new `RuleEngine()` on every call to each of the 8 tool functions, re-parsing all 75 `.cursorrules` files on each invocation.",
+      "related_files": [
+        "src/codomyrmex/agentic_memory/rules/mcp_tools.py"
+      ],
+      "evidence": "Each of the 8 `@mcp_tool` functions in `mcp_tools.py` calls `from .engine import RuleEngine; RuleEngine().list_module_names()` (or similar). `RuleEngine.__init__` creates a `RuleRegistry(rules_root)` which reads 75 files from disk. With no caching or module-level singleton, every MCP invocation re-reads all rules files.",
+      "suggestion": "Create a module-level `_engine: RuleEngine | None = None` singleton with a getter `_get_engine() -> RuleEngine`. Each tool function calls `_get_engine()` instead of constructing a new instance. This reduces file I/O from O(N*calls) to O(N) for the process lifetime.",
+      "confidence": "high"
+    },
+    {
+      "dimension": "high_level_elegance",
+      "identifier": "reviewer_hle_01",
+      "summary": "The codebase contains modules for domains (quantum, bio_simulation, meme, wallet, embodiment, evolutionary_ai, dark/pdf) that are unrelated to a development platform and appear to be leftover scaffolding or scope expansion without real implementation.",
+      "related_files": [
+        "src/codomyrmex/quantum/simulator.py",
+        "src/codomyrmex/bio_simulation/",
+        "src/codomyrmex/meme/",
+        "src/codomyrmex/wallet/",
+        "src/codomyrmex/embodiment/"
+      ],
+      "evidence": "`quantum/simulator.py` uses `def __init__` with `Initialize` docstring pattern suggesting scaffolding. `meme/cultural_dynamics/engine.py:22` has `# Mock spectral analysis`. `bio_simulation`, `evolutionary_ai` contain stub patterns. These modules are not referenced in the layer hierarchy described in CLAUDE.md and lack real implementations, diluting the platform's coherent purpose.",
+      "suggestion": "Audit each peripheral module for whether it has real, tested implementation. Modules with only stubs and no tests should be either (a) moved to a `contrib/` or `experimental/` namespace and excluded from the main package, or (b) removed until real implementations exist. Keep the core 88 modules focused on developer tooling.",
+      "confidence": "medium"
+    }
+  ]
+}

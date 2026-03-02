@@ -35,7 +35,7 @@ class Location:
     end_column: int | None = None
 
     def __str__(self) -> str:
-        """str ."""
+        """Return human-readable string."""
         return f"{self.file_path}:{self.line}:{self.column}"
 
 @dataclass
@@ -149,7 +149,7 @@ class RenameRefactoring(Refactoring):
         return occurrences
 
     def analyze(self) -> list[str]:
-        """analyze ."""
+        """Analyze."""
         warnings = []
 
         if not self._is_valid_identifier(self.new_name):
@@ -202,7 +202,7 @@ class RenameRefactoring(Refactoring):
             )
 
     def preview(self) -> str:
-        """preview ."""
+        """Preview."""
         result = self.execute()
         lines = [f"Rename: {self.old_name} -> {self.new_name}"]
         lines.append(f"File: {self.file_path}")
@@ -256,7 +256,7 @@ class ExtractFunctionRefactoring(Refactoring):
         return list(external), list(defined)
 
     def analyze(self) -> list[str]:
-        """analyze ."""
+        """Analyze."""
         warnings = []
 
         if not self.function_name.isidentifier():
@@ -336,7 +336,7 @@ class ExtractFunctionRefactoring(Refactoring):
             )
 
     def preview(self) -> str:
-        """preview ."""
+        """Preview."""
         self.execute()
         return f"Extract Function: {self.function_name}\n" + \
                f"Lines: {self.start_line}-{self.end_line}\n" + \
@@ -356,7 +356,7 @@ class InlineRefactoring(Refactoring):
         self.symbol_name = symbol_name
 
     def analyze(self) -> list[str]:
-        """analyze ."""
+        """Analyze."""
         warnings = []
 
         with open(self.file_path) as f:
@@ -430,7 +430,7 @@ class InlineRefactoring(Refactoring):
             )
 
     def preview(self) -> str:
-        """preview ."""
+        """Preview."""
         result = self.execute()
         return f"Inline: {self.symbol_name}\n" + \
                f"Changes: {len(result.changes)}\n" + \

@@ -12,7 +12,7 @@ class ChatBubble(BaseComponent):
     timestamp: str = ""
 
     def render(self) -> str:
-        """render ."""
+        """Render."""
         align = "right" if self.role == "user" else "left"
         label = self.role.capitalize()
         return (
@@ -24,5 +24,5 @@ class ChatBubble(BaseComponent):
         )
 
     def __str__(self) -> str:
-        """str ."""
+        """Return human-readable string."""
         return self.render()

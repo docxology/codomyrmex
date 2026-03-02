@@ -65,7 +65,7 @@ class LeaderElection(ABC):
 
     @property
     def state(self) -> ElectionState:
-        """state ."""
+        """State."""
         return self._state
 
     @property

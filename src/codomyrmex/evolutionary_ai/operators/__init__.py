@@ -74,7 +74,7 @@ class BitFlipMutation(MutationOperator[list[int]]):
     """Bit flip mutation for binary representations."""
 
     def mutate(self, individual: Individual[list[int]]) -> Individual[list[int]]:
-        """mutate ."""
+        """Mutate."""
         genes = list(individual.genes)
 
         for i in range(len(genes)):
@@ -87,7 +87,7 @@ class SwapMutation(MutationOperator[list[T]]):
     """Swap mutation for permutation representations."""
 
     def mutate(self, individual: Individual[list[T]]) -> Individual[list[T]]:
-        """mutate ."""
+        """Mutate."""
         genes = list(individual.genes)
 
         if random.random() < self.mutation_rate and len(genes) >= 2:
@@ -110,7 +110,7 @@ class GaussianMutation(MutationOperator[list[float]]):
         self.bounds = bounds
 
     def mutate(self, individual: Individual[list[float]]) -> Individual[list[float]]:
-        """mutate ."""
+        """Mutate."""
         genes = list(individual.genes)
 
         for i in range(len(genes)):
@@ -126,7 +126,7 @@ class ScrambleMutation(MutationOperator[list[T]]):
     """Scramble mutation - scrambles a random subset of genes."""
 
     def mutate(self, individual: Individual[list[T]]) -> Individual[list[T]]:
-        """mutate ."""
+        """Mutate."""
         genes = list(individual.genes)
 
         if random.random() < self.mutation_rate and len(genes) >= 2:
@@ -161,7 +161,7 @@ class SinglePointCrossover(CrossoverOperator[list[T]]):
         parent1: Individual[list[T]],
         parent2: Individual[list[T]],
     ) -> tuple[Individual[list[T]], Individual[list[T]]]:
-        """crossover ."""
+        """Crossover."""
         if random.random() > self.crossover_rate:
             return parent1, parent2
 
@@ -184,7 +184,7 @@ class TwoPointCrossover(CrossoverOperator[list[T]]):
         parent1: Individual[list[T]],
         parent2: Individual[list[T]],
     ) -> tuple[Individual[list[T]], Individual[list[T]]]:
-        """crossover ."""
+        """Crossover."""
         if random.random() > self.crossover_rate:
             return parent1, parent2
 
@@ -219,7 +219,7 @@ class UniformCrossover(CrossoverOperator[list[T]]):
         parent1: Individual[list[T]],
         parent2: Individual[list[T]],
     ) -> tuple[Individual[list[T]], Individual[list[T]]]:
-        """crossover ."""
+        """Crossover."""
         if random.random() > self.crossover_rate:
             return parent1, parent2
 
@@ -252,7 +252,7 @@ class BlendCrossover(CrossoverOperator[list[float]]):
         parent1: Individual[list[float]],
         parent2: Individual[list[float]],
     ) -> tuple[Individual[list[float]], Individual[list[float]]]:
-        """crossover ."""
+        """Crossover."""
         if random.random() > self.crossover_rate:
             return parent1, parent2
 
@@ -298,7 +298,7 @@ class TournamentSelection(SelectionOperator[T]):
         population: list[Individual[T]],
         num_selected: int,
     ) -> list[Individual[T]]:
-        """select ."""
+        """Select."""
         selected = []
 
         for _ in range(num_selected):
@@ -320,7 +320,7 @@ class RouletteSelection(SelectionOperator[T]):
         population: list[Individual[T]],
         num_selected: int,
     ) -> list[Individual[T]]:
-        """select ."""
+        """Select."""
         # Handle negative fitness by shifting
         min_fitness = min(ind.fitness or 0 for ind in population)
         shift = abs(min_fitness) + 1 if min_fitness < 0 else 0
@@ -358,7 +358,7 @@ class RankSelection(SelectionOperator[T]):
         population: list[Individual[T]],
         num_selected: int,
     ) -> list[Individual[T]]:
-        """select ."""
+        """Select."""
         # Sort by fitness
         sorted_pop = sorted(population, key=lambda ind: ind.fitness or float('-inf'))
         n = len(sorted_pop)
@@ -404,7 +404,7 @@ class ElitismSelection(SelectionOperator[T]):
         population: list[Individual[T]],
         num_selected: int,
     ) -> list[Individual[T]]:
-        """select ."""
+        """Select."""
         sorted_pop = sorted(population, key=lambda ind: ind.fitness or float('-inf'), reverse=True)
 
         elite = sorted_pop[:min(self.elite_count, num_selected)]

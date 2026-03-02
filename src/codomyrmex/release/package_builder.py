@@ -87,7 +87,7 @@ class PackageBuilder:
 
     @property
     def metadata(self) -> PackageMetadata:
-        """metadata ."""
+        """Metadata."""
         return self._metadata
 
     def validate_metadata(self) -> list[str]:

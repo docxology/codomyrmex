@@ -171,11 +171,11 @@ class EntityManager:
         return list(self._entities.values())
 
     def __len__(self) -> int:
-        """len ."""
+        """Return the number of items."""
         return len(self._entities)
 
     def __repr__(self) -> str:
-        """repr ."""
+        """Return string representation."""
         return f"EntityManager(entities={len(self)}, quantum={self._engine.quantum})"
 
     def _compute_coordinates(self, entity: UOREntity) -> TriadicCoordinate:

@@ -425,7 +425,7 @@ def step(
         Decorator function
     """
     def decorator(func):
-        """decorator ."""
+        """Decorator."""
         func._step_name = name
         func._step_timeout = timeout
         func._step_retry = retry
@@ -514,7 +514,7 @@ def timeout(seconds: float) -> Callable:
         Decorator function
     """
     def decorator(action):
-        """decorator ."""
+        """Decorator."""
         async def wrapper(*args, **kwargs):
             if asyncio.iscoroutinefunction(action):
                 return await asyncio.wait_for(

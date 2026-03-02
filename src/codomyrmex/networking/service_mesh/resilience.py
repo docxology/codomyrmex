@@ -202,7 +202,7 @@ class ServiceProxy:
             raise NoHealthyInstanceError(f"No healthy instances for {self.service_name}")
 
         def wrapped():
-            """wrapped ."""
+            """Wrapped."""
             return self.circuit_breaker.execute(func, instance, *args, **kwargs)
 
         return self.retry_policy.execute(wrapped)
@@ -213,9 +213,9 @@ def with_circuit_breaker(name: str, config: CircuitBreakerConfig | None = None) 
     cb = CircuitBreaker(name, config)
 
     def decorator(func: Callable) -> Callable:
-        """decorator ."""
+        """Decorator."""
         def wrapper(*args, **kwargs):
-            """wrapper ."""
+            """Wrapper."""
             return cb.execute(func, *args, **kwargs)
         return wrapper
 
@@ -227,9 +227,9 @@ def with_retry(max_retries: int = 3, **kwargs) -> Callable:
     policy = RetryPolicy(max_retries=max_retries, **kwargs)
 
     def decorator(func: Callable) -> Callable:
-        """decorator ."""
+        """Decorator."""
         def wrapper(*args, **kwargs):
-            """wrapper ."""
+            """Wrapper."""
             return policy.execute(func, *args, **kwargs)
         return wrapper
 

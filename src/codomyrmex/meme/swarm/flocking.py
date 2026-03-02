@@ -44,7 +44,7 @@ def update_flock(agents: list[SwarmAgent], params: FlockingParams) -> None:
 
         # Normalize and weigh
         def steer(vec, target):
-            """steer ."""
+            """Steer."""
             # Helper to implement "steer towards" logic not fully expanded
             # for brevity in this snippet, using raw forces directly:
             return vec

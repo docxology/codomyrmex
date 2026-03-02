@@ -56,7 +56,7 @@ class Span:
         return 0.0
 
     def finish(self, status: str = "ok") -> None:
-        """finish ."""
+        """Finish."""
         self.end_time = time.time()
         self.status = status
 
@@ -107,7 +107,7 @@ class Tracer:
         return span
 
     def export(self) -> list[dict[str, Any]]:
-        """export ."""
+        """Export."""
         return [s.to_dict() for s in self._spans]
 
     @property
@@ -115,7 +115,7 @@ class Tracer:
         return len(self._spans)
 
     def clear(self) -> None:
-        """clear ."""
+        """Clear."""
         self._spans.clear()
 
 
@@ -136,11 +136,11 @@ class MetricCounter:
         self._gauges: dict[str, float] = {}
 
     def increment(self, name: str, value: float = 1.0) -> None:
-        """increment ."""
+        """Increment."""
         self._counters[name] += value
 
     def gauge(self, name: str, value: float) -> None:
-        """gauge ."""
+        """Gauge."""
         self._gauges[name] = value
 
     def get_counter(self, name: str) -> float:
@@ -150,7 +150,7 @@ class MetricCounter:
         return self._gauges.get(name)
 
     def export(self) -> dict[str, Any]:
-        """export ."""
+        """Export."""
         return {
             "counters": dict(self._counters),
             "gauges": dict(self._gauges),

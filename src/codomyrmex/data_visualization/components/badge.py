@@ -19,7 +19,7 @@ class Badge(BaseComponent):
     }
 
     def render(self) -> str:
-        """render ."""
+        """Render."""
         bg = self._COLOR_MAP.get(self.color, self.color)
         return (
             f'<span class="badge" style="background-color: {bg}; '
@@ -28,5 +28,5 @@ class Badge(BaseComponent):
         )
 
     def __str__(self) -> str:
-        """str ."""
+        """Return human-readable string."""
         return self.render()

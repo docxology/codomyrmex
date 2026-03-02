@@ -92,7 +92,7 @@ class RandomAgent(Agent):
         self.action_types = action_types or ["move", "wait", "observe"]
 
     def act(self, observation: dict[str, Any]) -> Action:
-        """act ."""
+        """Act."""
         return Action(type=random.choice(self.action_types))
 
 
@@ -126,7 +126,7 @@ class RuleBasedAgent(Agent):
         self._rules.append((condition, action_type, params or {}))  # type: ignore[arg-type]
 
     def act(self, observation: dict[str, Any]) -> Action:
-        """act ."""
+        """Act."""
         for condition, action_type, params in self._rules:  # type: ignore[misc]
             try:
                 if condition(observation):
@@ -184,7 +184,7 @@ class QLearningAgent(Agent):
         return str(items)
 
     def act(self, observation: dict[str, Any]) -> Action:
-        """act ."""
+        """Act."""
         state = self._state_key(observation)
         self._last_state = state
 

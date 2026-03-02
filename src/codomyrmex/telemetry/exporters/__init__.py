@@ -76,7 +76,7 @@ class ConsoleExporter(SpanExporter):
         self.pretty = pretty
 
     def export(self, spans: list[SpanData]) -> bool:
-        """export ."""
+        """Export."""
         for span in spans:
             data = span.to_dict()
             if self.pretty:
@@ -86,7 +86,7 @@ class ConsoleExporter(SpanExporter):
         return True
 
     def shutdown(self) -> None:
-        """shutdown ."""
+        """Shutdown."""
         pass
 
 class FileExporter(SpanExporter):
@@ -97,7 +97,7 @@ class FileExporter(SpanExporter):
         self._lock = threading.Lock()
 
     def export(self, spans: list[SpanData]) -> bool:
-        """export ."""
+        """Export."""
         try:
             with self._lock:
                 with open(self.filepath, 'a') as f:
@@ -109,7 +109,7 @@ class FileExporter(SpanExporter):
             return False
 
     def shutdown(self) -> None:
-        """shutdown ."""
+        """Shutdown."""
         pass
 
 class OTLPExporter(SpanExporter):
@@ -203,7 +203,7 @@ class OTLPExporter(SpanExporter):
         return result
 
     def export(self, spans: list[SpanData]) -> bool:
-        """export ."""
+        """Export."""
         try:
             import urllib.request
 
@@ -235,7 +235,7 @@ class OTLPExporter(SpanExporter):
             return False
 
     def shutdown(self) -> None:
-        """shutdown ."""
+        """Shutdown."""
         pass
 
 class BatchExporter(SpanExporter):
@@ -280,7 +280,7 @@ class BatchExporter(SpanExporter):
                 self.exporter.export(batch)
 
     def export(self, spans: list[SpanData]) -> bool:
-        """export ."""
+        """Export."""
         for span in spans:
             try:
                 self._queue.put_nowait(span)
@@ -290,7 +290,7 @@ class BatchExporter(SpanExporter):
         return True
 
     def shutdown(self) -> None:
-        """shutdown ."""
+        """Shutdown."""
         self._shutdown.set()
         self._worker_thread.join(timeout=5.0)
 
@@ -315,7 +315,7 @@ class MultiExporter(SpanExporter):
         self.exporters = exporters
 
     def export(self, spans: list[SpanData]) -> bool:
-        """export ."""
+        """Export."""
         results = []
         for exporter in self.exporters:
             try:
@@ -326,7 +326,7 @@ class MultiExporter(SpanExporter):
         return any(results)
 
     def shutdown(self) -> None:
-        """shutdown ."""
+        """Shutdown."""
         for exporter in self.exporters:
             try:
                 exporter.shutdown()

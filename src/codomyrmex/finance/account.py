@@ -72,7 +72,7 @@ class Account:
         self._frozen = True
 
     def unfreeze(self) -> None:
-        """unfreeze ."""
+        """Unfreeze."""
         self._frozen = False
 
     def to_dict(self) -> dict[str, Any]:
@@ -87,7 +87,7 @@ class Account:
         }
 
     def __repr__(self) -> str:
-        """repr ."""
+        """Return string representation."""
         return f"Account(name='{self.name}', type={self.account_type.name}, balance={self.balance:.2f})"
 
 
@@ -153,7 +153,7 @@ class AccountChart:
         return list(self._accounts.values())
 
     def summary(self) -> dict[str, Any]:
-        """summary ."""
+        """Summary."""
         return {
             "total_accounts": self.account_count,
             "assets": self.total_assets(),

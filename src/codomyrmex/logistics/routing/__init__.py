@@ -136,7 +136,7 @@ class NearestNeighborRouting(RoutingAlgorithm):
         end: Location | None = None,
         constraints: RoutingConstraints | None = None,
     ) -> Route:
-        """optimize ."""
+        """Optimize."""
         route = Route(id="nn_route", stops=[])
         current = start
         remaining = {loc.id for loc in locations if loc.id != start.id}
@@ -202,7 +202,7 @@ class TwoOptRouting(RoutingAlgorithm):
         end: Location | None = None,
         constraints: RoutingConstraints | None = None,
     ) -> Route:
-        """optimize ."""
+        """Optimize."""
         # Initial route using nearest neighbor
         nn = NearestNeighborRouting()
         initial = nn.optimize(locations, start, end, constraints)

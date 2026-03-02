@@ -80,11 +80,11 @@ class BasePlot:
         return output_path
 
     def __str__(self) -> str:
-        """str ."""
+        """Return human-readable string."""
         return self.to_html()
 
     def __repr__(self) -> str:
-        """repr ."""
+        """Return string representation."""
         return f"{self.__class__.__name__}(title={self.title!r}, data_count={len(self.data)})"
 
     # ──────────────────────────────────────────────

@@ -217,7 +217,7 @@ class ConsoleExporter(SpanExporter):
         self.pretty = pretty
 
     def export(self, spans: list[Span]) -> None:
-        """export ."""
+        """Export."""
         for span in spans:
             data = span.to_dict()
             if self.pretty:
@@ -238,7 +238,7 @@ class InMemoryExporter(SpanExporter):
         self._lock = threading.Lock()
 
     def export(self, spans: list[Span]) -> None:
-        """export ."""
+        """Export."""
         with self._lock:
             self.spans.extend(spans)
             # Trim if over limit
@@ -432,12 +432,12 @@ def trace(
             ...
     """
     def decorator(func: Callable[..., T]) -> Callable[..., T]:
-        """decorator ."""
+        """Decorator."""
         span_name = name or func.__name__
 
         @functools.wraps(func)
         def wrapper(*args, **kwargs) -> T:
-            """wrapper ."""
+            """Wrapper."""
             tracer = get_tracer(tracer_name)
             with tracer.span(span_name, kind=kind) as span:
                 span.set_attribute("function.name", func.__name__)

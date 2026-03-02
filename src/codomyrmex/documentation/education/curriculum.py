@@ -250,11 +250,11 @@ class Curriculum:
     # ------------------------------------------------------------------
 
     def __len__(self) -> int:
-        """len ."""
+        """Return the number of items."""
         return len(self._modules)
 
     def __repr__(self) -> str:
-        """repr ."""
+        """Return string representation."""
         return (
             f"Curriculum(name='{self.name}', "
             f"level='{self.level}', "

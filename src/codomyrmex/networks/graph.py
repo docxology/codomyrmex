@@ -19,11 +19,11 @@ class Node(Generic[T]):
     data: T | None = None
 
     def __hash__(self):
-        """hash ."""
+        """Return the hash value."""
         return hash(self.id)
 
     def __eq__(self, other):
-        """eq ."""
+        """Return True if equal to other."""
         if not isinstance(other, Node):
             return False
         return self.id == other.id

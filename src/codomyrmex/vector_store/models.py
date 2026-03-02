@@ -26,11 +26,11 @@ class SearchResult:
     metadata: dict[str, Any] = field(default_factory=dict)
 
     def __lt__(self, other: SearchResult) -> bool:
-        """lt ."""
+        """Return True if less than other."""
         return self.score < other.score
 
     def __repr__(self) -> str:
-        """repr ."""
+        """Return string representation."""
         return f"SearchResult(id={self.id!r}, score={self.score:.4f}, dim={len(self.embedding)})"
 
 
@@ -46,12 +46,12 @@ class VectorEntry:
 
     @property
     def dimension(self) -> int:
-        """dimension ."""
+        """Dimension."""
         return len(self.embedding)
 
     @property
     def magnitude(self) -> float:
-        """magnitude ."""
+        """Magnitude."""
         return math.sqrt(sum(x * x for x in self.embedding))
 
     def update_embedding(self, new_embedding: list[float]) -> None:

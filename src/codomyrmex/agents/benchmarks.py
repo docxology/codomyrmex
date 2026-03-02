@@ -133,5 +133,5 @@ class AgentBenchmarker:
 
     @property
     def results(self) -> list[BenchmarkResult]:
-        """results ."""
+        """Results."""
         return list(self._results)

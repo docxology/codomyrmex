@@ -45,7 +45,7 @@ def _status_color(status: str) -> str:
 
 
 def _badge(status: str) -> str:
-    """badge ."""
+    """Badge."""
     color = _status_color(status)
     symbols = {
         "operative": "✓",

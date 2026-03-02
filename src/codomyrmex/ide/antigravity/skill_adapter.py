@@ -177,7 +177,7 @@ class AntigravityToolSkill:
                 break
 
     def __repr__(self) -> str:
-        """repr ."""
+        """Return string representation."""
         return f"AntigravityToolSkill({self.tool_name!r})"
 
 

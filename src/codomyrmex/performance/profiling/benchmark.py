@@ -53,12 +53,12 @@ class BenchmarkResult:
 
     @property
     def stdev(self) -> float:
-        """stdev ."""
+        """Stdev."""
         return statistics.stdev(self.times) if len(self.times) > 1 else 0.0
 
     @property
     def median(self) -> float:
-        """median ."""
+        """Median."""
         return statistics.median(self.times) if self.times else 0.0
 
     def percentile(self, p: float) -> float:
@@ -202,7 +202,7 @@ class BenchmarkSuite:
         self._results: dict[str, dict[str, Any]] = {}
 
     def add(self, name: str, func: Callable[[], Any]) -> None:
-        """add ."""
+        """Return sum with other."""
         self._benchmarks[name] = func
 
     def run_all(self, iterations: int = 5, warmup: int = 1) -> dict[str, dict[str, Any]]:

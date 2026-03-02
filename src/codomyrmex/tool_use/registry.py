@@ -251,15 +251,15 @@ class ToolRegistry:
     # ------------------------------------------------------------------
 
     def __len__(self) -> int:
-        """len ."""
+        """Return the number of items."""
         return len(self._tools)
 
     def __contains__(self, name: str) -> bool:
-        """contains ."""
+        """Return True if item is contained."""
         return name in self._tools
 
     def __repr__(self) -> str:
-        """repr ."""
+        """Return string representation."""
         return f"ToolRegistry(tools={self.list_names()})"
 
 
@@ -303,7 +303,7 @@ def tool(
     """
 
     def decorator(fn: Callable) -> Callable:
-        """decorator ."""
+        """Decorator."""
         entry = ToolEntry(
             name=name,
             description=description or fn.__doc__ or "",
@@ -315,7 +315,7 @@ def tool(
 
         @functools.wraps(fn)
         def wrapper(*args: Any, **kwargs: Any) -> Any:
-            """wrapper ."""
+            """Wrapper."""
             return fn(*args, **kwargs)
 
         wrapper.tool_entry = entry  # type: ignore[attr-defined]

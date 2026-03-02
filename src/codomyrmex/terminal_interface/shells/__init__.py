@@ -68,7 +68,7 @@ class CommandResult:
 
     @property
     def success(self) -> bool:
-        """success ."""
+        """Success."""
         return self.exit_code == 0
 
     def to_dict(self) -> dict[str, Any]:

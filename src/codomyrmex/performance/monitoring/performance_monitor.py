@@ -276,10 +276,10 @@ def monitor_performance(
     """
 
     def decorator(func: Callable) -> Callable:
-        """decorator ."""
+        """Decorator."""
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
-            """wrapper ."""
+            """Wrapper."""
             current_monitor = monitor or _performance_monitor
             start_time = time.time()
             try:
@@ -309,7 +309,7 @@ def profile_memory_usage(func: Callable) -> Callable:
     """
     @functools.wraps(func)
     def wrapper(*args, **kwargs):
-        """wrapper ."""
+        """Wrapper."""
 
         if not HAS_PSUTIL:
             logger.warning("psutil not available, memory profiling disabled")

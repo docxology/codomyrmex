@@ -24,7 +24,7 @@ class CacheEntry:
 
     @property
     def expired(self) -> bool:
-        """expired ."""
+        """Expired."""
         return (time.time() - self.created_at) > self.ttl_seconds
 
 
@@ -93,7 +93,7 @@ class EdgeCache:
 
     @property
     def size(self) -> int:
-        """size ."""
+        """Size."""
         return len(self._store)
 
     @property

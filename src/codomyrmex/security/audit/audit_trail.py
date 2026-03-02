@@ -55,7 +55,7 @@ class AuditEntry:
         }
 
     def payload(self) -> str:
-        """payload ."""
+        """Payload."""
         return json.dumps({
             "action": self.action,
             "actor": self.actor,
@@ -113,11 +113,11 @@ class AuditTrail:
 
     @property
     def size(self) -> int:
-        """size ."""
+        """Size."""
         return len(self._entries)
 
     def entries(self) -> list[AuditEntry]:
-        """entries ."""
+        """Entries."""
         return list(self._entries)
 
     def entries_by_actor(self, actor: str) -> list[AuditEntry]:

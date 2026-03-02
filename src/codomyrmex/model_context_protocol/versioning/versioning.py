@@ -27,7 +27,7 @@ class APIVersion:
     patch: int = 0
 
     def __str__(self) -> str:
-        """str ."""
+        """Return human-readable string."""
         return f"v{self.major}.{self.minor}.{self.patch}"
 
     @classmethod
@@ -90,14 +90,14 @@ def versioned(version: str = "1.0.0", introduced: str = "1.0.0"):
         introduced: Version when the function was introduced.
     """
     def decorator(func: Callable) -> Callable:
-        """decorator ."""
+        """Decorator."""
         func._api_version = APIVersion.parse(version)
         func._api_introduced = APIVersion.parse(introduced)
         func._api_deprecated = False
 
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
-            """wrapper ."""
+            """Wrapper."""
             return func(*args, **kwargs)
 
         wrapper._api_version = func._api_version
@@ -120,7 +120,7 @@ def deprecated(since: str = "", removal: str = "", replacement: str = "", messag
         message: Custom deprecation message.
     """
     def decorator(func: Callable) -> Callable:
-        """decorator ."""
+        """Decorator."""
         info = DeprecationInfo(
             since=since,
             removal=removal,
@@ -132,7 +132,7 @@ def deprecated(since: str = "", removal: str = "", replacement: str = "", messag
 
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
-            """wrapper ."""
+            """Wrapper."""
             msg = info.message
             if info.replacement:
                 msg += f". Use {info.replacement} instead"

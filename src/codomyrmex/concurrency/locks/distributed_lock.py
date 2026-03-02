@@ -35,13 +35,13 @@ class BaseLock(ABC):
         pass
 
     def __enter__(self):
-        """enter ."""
+        """Enter the context manager."""
         if not self.acquire():
             raise TimeoutError(f"Could not acquire lock: {self.name}")
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        """exit ."""
+        """Exit the context manager and clean up."""
         self.release()
 
 class LocalLock(BaseLock):
@@ -54,7 +54,7 @@ class LocalLock(BaseLock):
         self._lock_file = None
 
     def acquire(self, timeout: float = 10.0, retry_interval: float = 0.1) -> bool:
-        """acquire ."""
+        """Acquire."""
         start_time = time.time()
         while time.time() - start_time < timeout:
             try:
@@ -70,7 +70,7 @@ class LocalLock(BaseLock):
         return False
 
     def release(self) -> None:
-        """release ."""
+        """Release."""
         if self.is_held and self._lock_file:
             fcntl.flock(self._lock_file, fcntl.LOCK_UN)
             self._lock_file.close()

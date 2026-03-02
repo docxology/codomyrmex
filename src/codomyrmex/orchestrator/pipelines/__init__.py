@@ -226,7 +226,7 @@ class Pipeline:
         order = []
 
         def visit(stage_id: str):
-            """visit ."""
+            """Visit."""
             if stage_id in visited:
                 return
             visited.add(stage_id)

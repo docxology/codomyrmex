@@ -31,7 +31,7 @@ class Theme:
 
     @property
     def primary(self) -> str:
-        """primary ."""
+        """Primary."""
         return self.primary_color
 
     @property
@@ -41,12 +41,12 @@ class Theme:
 
     @property
     def background(self) -> str:
-        """background ."""
+        """Background."""
         return self.background_color
 
     @property
     def css(self) -> str:
-        """css ."""
+        """Css."""
         vars_dict = self.to_css_vars()
         css_lines = ["body {"]
         for k, v in vars_dict.items():

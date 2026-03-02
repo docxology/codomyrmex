@@ -106,7 +106,7 @@ class Genome:
         return sum(self.genes) / self.length
 
     def __repr__(self) -> str:
-        """repr ."""
+        """Return string representation."""
         preview = self.genes[:5]
         suffix = ", ..." if self.length > 5 else ""
         gene_str = ", ".join(f"{g:.3f}" for g in preview)

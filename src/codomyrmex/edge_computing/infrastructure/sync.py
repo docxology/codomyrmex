@@ -145,7 +145,7 @@ class EdgeSynchronizer:
         return self._history[-limit:]
 
     def summary(self) -> dict[str, Any]:
-        """summary ."""
+        """Summary."""
         return {
             "local_version": self.local_version,
             "remote_version": self._remote_version,

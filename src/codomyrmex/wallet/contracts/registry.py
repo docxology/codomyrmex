@@ -136,7 +136,7 @@ class ContractRegistry:
 
     @property
     def count(self) -> int:
-        """count ."""
+        """Count."""
         return len(self._contracts)
 
     def summary(self) -> dict[str, Any]:

@@ -45,12 +45,12 @@ class Metric(ABC):
     @property
     @abstractmethod
     def name(self) -> str:
-        """name ."""
+        """Name."""
         ...
 
     @abstractmethod
     def compute(self, y_true: list, y_pred: list) -> float:
-        """compute ."""
+        """Compute."""
         ...
 
 
@@ -59,11 +59,11 @@ class AccuracyMetric(Metric):
 
     @property
     def name(self) -> str:
-        """name ."""
+        """Name."""
         return "accuracy"
 
     def compute(self, y_true: list, y_pred: list) -> float:
-        """compute ."""
+        """Compute."""
         if not y_true:
             return 0.0
         return sum(1 for t, p in zip(y_true, y_pred, strict=False) if t == p) / len(y_true)
@@ -77,11 +77,11 @@ class PrecisionMetric(Metric):
 
     @property
     def name(self) -> str:
-        """name ."""
+        """Name."""
         return "precision"
 
     def compute(self, y_true: list, y_pred: list) -> float:
-        """compute ."""
+        """Compute."""
         tp = sum(1 for t, p in zip(y_true, y_pred, strict=False) if p == self.positive_class and t == self.positive_class)
         fp = sum(1 for t, p in zip(y_true, y_pred, strict=False) if p == self.positive_class and t != self.positive_class)
         if tp + fp == 0:
@@ -97,11 +97,11 @@ class RecallMetric(Metric):
 
     @property
     def name(self) -> str:
-        """name ."""
+        """Name."""
         return "recall"
 
     def compute(self, y_true: list, y_pred: list) -> float:
-        """compute ."""
+        """Compute."""
         tp = sum(1 for t, p in zip(y_true, y_pred, strict=False) if p == self.positive_class and t == self.positive_class)
         fn = sum(1 for t, p in zip(y_true, y_pred, strict=False) if p != self.positive_class and t == self.positive_class)
         if tp + fn == 0:
@@ -117,11 +117,11 @@ class F1Metric(Metric):
 
     @property
     def name(self) -> str:
-        """name ."""
+        """Name."""
         return "f1"
 
     def compute(self, y_true: list, y_pred: list) -> float:
-        """compute ."""
+        """Compute."""
         p = PrecisionMetric(self.positive_class).compute(y_true, y_pred)
         r = RecallMetric(self.positive_class).compute(y_true, y_pred)
         if p + r == 0:
@@ -134,11 +134,11 @@ class MSEMetric(Metric):
 
     @property
     def name(self) -> str:
-        """name ."""
+        """Name."""
         return "mse"
 
     def compute(self, y_true: list, y_pred: list) -> float:
-        """compute ."""
+        """Compute."""
         if not y_true:
             return 0.0
         return sum((t - p) ** 2 for t, p in zip(y_true, y_pred, strict=False)) / len(y_true)
@@ -149,11 +149,11 @@ class MAEMetric(Metric):
 
     @property
     def name(self) -> str:
-        """name ."""
+        """Name."""
         return "mae"
 
     def compute(self, y_true: list, y_pred: list) -> float:
-        """compute ."""
+        """Compute."""
         if not y_true:
             return 0.0
         return sum(abs(t - p) for t, p in zip(y_true, y_pred, strict=False)) / len(y_true)
@@ -164,11 +164,11 @@ class RMSEMetric(Metric):
 
     @property
     def name(self) -> str:
-        """name ."""
+        """Name."""
         return "rmse"
 
     def compute(self, y_true: list, y_pred: list) -> float:
-        """compute ."""
+        """Compute."""
         return math.sqrt(MSEMetric().compute(y_true, y_pred))
 
 
@@ -177,11 +177,11 @@ class R2Metric(Metric):
 
     @property
     def name(self) -> str:
-        """name ."""
+        """Name."""
         return "r2"
 
     def compute(self, y_true: list, y_pred: list) -> float:
-        """compute ."""
+        """Compute."""
         if not y_true:
             return 0.0
         mean_true = sum(y_true) / len(y_true)
@@ -197,11 +197,11 @@ class AUCROCMetric(Metric):
 
     @property
     def name(self) -> str:
-        """name ."""
+        """Name."""
         return "auc_roc"
 
     def compute(self, y_true: list, y_scores: list) -> float:
-        """compute ."""
+        """Compute."""
         positives = [(s, t) for s, t in zip(y_scores, y_true, strict=False) if t == 1]
         negatives = [(s, t) for s, t in zip(y_scores, y_true, strict=False) if t == 0]
         if not positives or not negatives:
@@ -246,7 +246,7 @@ class ConfusionMatrix:
         return {"classes": self.classes, "matrix": matrix_rows}
 
     def __str__(self) -> str:
-        """str ."""
+        """Return human-readable string."""
         lines = ["Confusion Matrix:"]
         header = "     " + " ".join(f"{c:>5}" for c in self.classes)
         lines.append(header)
@@ -274,7 +274,7 @@ class ModelEvaluator:
         self.metrics.append(metric)
 
     def evaluate(self, y_true: list, y_pred: list) -> EvaluationResult:
-        """evaluate ."""
+        """Evaluate."""
         results = {}
         for metric in self.metrics:
             results[metric.name] = metric.compute(y_true, y_pred)

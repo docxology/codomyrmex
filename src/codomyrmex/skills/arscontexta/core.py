@@ -332,7 +332,7 @@ class MethodologyGraph:
         return list(self._claims.values())
 
     def count(self) -> int:
-        """count ."""
+        """Count."""
         return len(self._claims)
 
     def get_statistics(self) -> dict[str, Any]:

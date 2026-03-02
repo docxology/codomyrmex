@@ -55,7 +55,7 @@ class TCPServer:
         logger.info(f"TCP server listening on {self.host}:{self.port}")
 
     def accept(self):
-        """accept ."""
+        """Accept."""
         conn, addr = self.sock.accept()
         return conn, addr
 

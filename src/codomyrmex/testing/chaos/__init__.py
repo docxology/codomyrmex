@@ -213,7 +213,7 @@ class ChaosMonkey:
 
     @property
     def results(self) -> list[ExperimentResult]:
-        """results ."""
+        """Results."""
         return self._results
 
 # Decorators
@@ -223,9 +223,9 @@ def with_chaos(
 ) -> Callable:
     """Decorator to inject chaos into a function."""
     def decorator(func: Callable) -> Callable:
-        """decorator ."""
+        """Decorator."""
         def wrapper(*args, **kwargs):
-            """wrapper ."""
+            """Wrapper."""
             injector.maybe_inject(fault_name)
             return func(*args, **kwargs)
         return wrapper

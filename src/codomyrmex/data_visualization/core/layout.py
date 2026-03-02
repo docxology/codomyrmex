@@ -14,11 +14,11 @@ class Section:
     width: str = "100%"
 
     def add(self, child: Any) -> None:
-        """add ."""
+        """Return sum with other."""
         self.children.append(child)
 
     def render(self) -> str:
-        """render ."""
+        """Render."""
         inner = "\n".join(
             getattr(c, "render", lambda c=c: str(c))() for c in self.children
         )
@@ -46,7 +46,7 @@ class Grid:
         self.sections.append(section)
 
     def render(self) -> str:
-        """render ."""
+        """Render."""
         inner = "\n".join(s.render() for s in self.sections)
         return (
             f'<div style="display:grid;grid-template-columns:'

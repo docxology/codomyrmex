@@ -68,7 +68,7 @@ class BooleanStrategy(EvaluationStrategy):
         self.enabled = enabled
 
     def evaluate(self, context: EvaluationContext) -> EvaluationResult:
-        """evaluate ."""
+        """Evaluate."""
         return EvaluationResult(
             enabled=self.enabled,
             reason="boolean" if self.enabled else "disabled"
@@ -90,7 +90,7 @@ class PercentageStrategy(EvaluationStrategy):
         self.sticky = sticky
 
     def evaluate(self, context: EvaluationContext) -> EvaluationResult:
-        """evaluate ."""
+        """Evaluate."""
         if self.sticky and (context.user_id or context.session_id):
             # Use consistent hashing for sticky sessions
             hash_key = context.get_hash_key()
@@ -134,7 +134,7 @@ class UserListStrategy(EvaluationStrategy):
         self.default = default
 
     def evaluate(self, context: EvaluationContext) -> EvaluationResult:
-        """evaluate ."""
+        """Evaluate."""
         if not context.user_id:
             return EvaluationResult(
                 enabled=self.default,
@@ -203,7 +203,7 @@ class AttributeStrategy(EvaluationStrategy):
         self.enabled_value = enabled_value
 
     def evaluate(self, context: EvaluationContext) -> EvaluationResult:
-        """evaluate ."""
+        """Evaluate."""
         attr_value = context.get_attribute(self.attribute)
 
         if attr_value is None:
@@ -275,7 +275,7 @@ class EnvironmentStrategy(EvaluationStrategy):
         self.enabled_environments = set(enabled_environments or ["development"])
 
     def evaluate(self, context: EvaluationContext) -> EvaluationResult:
-        """evaluate ."""
+        """Evaluate."""
         enabled = context.environment in self.enabled_environments
         return EvaluationResult(
             enabled=enabled,
@@ -369,7 +369,7 @@ class CompositeStrategy(EvaluationStrategy):
         self.operator = operator
 
     def evaluate(self, context: EvaluationContext) -> EvaluationResult:
-        """evaluate ."""
+        """Evaluate."""
         if not self.strategies:
             return EvaluationResult(enabled=False, reason="no_strategies")
 

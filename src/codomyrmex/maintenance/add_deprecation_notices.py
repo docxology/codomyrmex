@@ -129,7 +129,7 @@ class DeprecationReport:
 
     @property
     def total(self) -> int:
-        """total ."""
+        """Total."""
         return len(self.entries)
 
     @property
@@ -150,7 +150,7 @@ class DeprecationReport:
         return [e["module"] for e in self.entries if not e.get("deprecated")]
 
     def summary(self) -> dict[str, Any]:
-        """summary ."""
+        """Summary."""
         return {
             "total_files": self.total,
             "deprecated": self.deprecated_count,
@@ -160,7 +160,7 @@ class DeprecationReport:
         }
 
     def text(self) -> str:
-        """text ."""
+        """Text."""
         lines = [
             f"Deprecation Report: {self.deprecated_count}/{self.total} deprecation notices applied "
             f"({self.completion_percent:.0f}%)",

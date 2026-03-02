@@ -61,7 +61,7 @@ class SimulatedAgent(AgentInterface):
         )
 
     def stream(self, request: AgentRequest) -> Iterator[str]:
-        """stream ."""
+        """Stream."""
         yield f"[{self.name}] Stream chunk 1"
         yield f"[{self.name}] Stream chunk 2"
 
@@ -81,7 +81,7 @@ class SimulatedAgent(AgentInterface):
 
 
 def main():
-    """main ."""
+    """Main."""
     setup_logging()
 
     logger.info("Initializing agents...")

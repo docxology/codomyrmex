@@ -87,15 +87,15 @@ class Genome:
         return cls(length=length)
 
     def __len__(self) -> int:
-        """len ."""
+        """Return the number of items."""
         return len(self.genes)
 
     def __getitem__(self, key):
-        """getitem ."""
+        """Return item at the given key."""
         return self.genes[key]
 
     def __iter__(self):
-        """iter ."""
+        """Return an iterator over items."""
         return iter(self.genes)
 
     def copy(self) -> 'Genome':

@@ -65,7 +65,7 @@ class MetaAgent:
 
     @property
     def history(self) -> list[EvolutionRecord]:
-        """history ."""
+        """History."""
         return list(self._history)
 
     @property

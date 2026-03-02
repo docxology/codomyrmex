@@ -37,17 +37,17 @@ class SimpleVersion:
             raise ValueError(f"Invalid semantic version components: {version_str}") from None
 
     def __str__(self):
-        """str ."""
+        """Return human-readable string."""
         return f"{self.major}.{self.minor}.{self.patch}"
 
     def __lt__(self, other):
-        """lt ."""
+        """Return True if less than other."""
         if not isinstance(other, SimpleVersion):
             return NotImplemented
         return (self.major, self.minor, self.patch) < (other.major, other.minor, other.patch)
 
     def __eq__(self, other):
-        """eq ."""
+        """Return True if equal to other."""
         if not isinstance(other, SimpleVersion):
             return NotImplemented
         return (self.major, self.minor, self.patch) == (other.major, other.minor, other.patch)
@@ -444,7 +444,7 @@ def version(version_str: str):
         Decorated function
     """
     def decorator(func: Callable) -> Callable:
-        """decorator ."""
+        """Decorator."""
         func._api_version = version_str
         return func
     return decorator
@@ -461,7 +461,7 @@ def deprecated_version(version_str: str):
         Decorated function
     """
     def decorator(func: Callable) -> Callable:
-        """decorator ."""
+        """Decorator."""
         func._deprecated_version = version_str
         return func
     return decorator

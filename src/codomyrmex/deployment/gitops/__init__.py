@@ -188,7 +188,7 @@ class GitOpsSynchronizer:
         )
 
     def __repr__(self) -> str:
-        """repr ."""
+        """Return string representation."""
         return (
             f"GitOpsSynchronizer(repo={self._repo_path!r}, "
             f"branch={self._target_branch!r}, state={self._state.value})"

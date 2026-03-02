@@ -25,7 +25,7 @@ class CodeBlock:
     end_line: int = 0
 
     def __str__(self) -> str:
-        """str ."""
+        """Return human-readable string."""
         return self.code
 
 
@@ -39,7 +39,7 @@ class ParseResult:
     raw_text: str = ""
 
     def __bool__(self) -> bool:
-        """bool ."""
+        """Return True if this instance is truthy."""
         return self.success
 
 

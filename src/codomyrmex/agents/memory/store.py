@@ -79,7 +79,7 @@ class MemoryStore:
         return self._entries.pop(key, None) is not None
 
     def has(self, key: str) -> bool:
-        """has ."""
+        """Has."""
         entry = self._entries.get(key)
         if entry and entry.is_expired:
             del self._entries[key]
@@ -92,12 +92,12 @@ class MemoryStore:
 
     @property
     def size(self) -> int:
-        """size ."""
+        """Size."""
         self._clean_expired()
         return len(self._entries)
 
     def keys(self) -> list[str]:
-        """keys ."""
+        """Keys."""
         self._clean_expired()
         return list(self._entries.keys())
 

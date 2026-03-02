@@ -143,7 +143,7 @@ class ImprovementPipeline:
 
     @property
     def config(self) -> ImprovementConfig:
-        """config ."""
+        """Config."""
         return self._config
 
     def analyze(self, source: str, file_path: str = "") -> list[AntiPattern]:

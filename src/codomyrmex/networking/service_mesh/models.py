@@ -56,5 +56,5 @@ class ServiceInstance:
 
     @property
     def address(self) -> str:
-        """address ."""
+        """Address."""
         return f"{self.host}:{self.port}"

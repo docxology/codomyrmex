@@ -33,7 +33,7 @@ class CodaAPIError(Exception):
         self.response_body = response_body
 
     def __str__(self) -> str:
-        """str ."""
+        """Return human-readable string."""
         return f"{self.message} (Status: {self.status_code})"
 
 

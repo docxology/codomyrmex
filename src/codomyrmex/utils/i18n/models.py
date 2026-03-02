@@ -11,7 +11,7 @@ class Locale:
 
     @property
     def code(self) -> str:
-        """code ."""
+        """Code."""
         if self.region:
             return f"{self.language}_{self.region}"
         return self.language
@@ -24,5 +24,5 @@ class Locale:
         return cls(language=language, region=region)
 
     def __str__(self) -> str:
-        """str ."""
+        """Return human-readable string."""
         return self.code

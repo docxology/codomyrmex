@@ -34,7 +34,7 @@ class ExactMatchEvaluator(Evaluator):
         self.case_sensitive = case_sensitive
 
     def evaluate(self, test_case: PromptTestCase, actual_output: str) -> float:
-        """evaluate ."""
+        """Evaluate."""
         expected = test_case.expected_output
         actual = actual_output
         if not self.case_sensitive:
@@ -50,7 +50,7 @@ class ContainsEvaluator(Evaluator):
         self.case_sensitive = case_sensitive
 
     def evaluate(self, test_case: PromptTestCase, actual_output: str) -> float:
-        """evaluate ."""
+        """Evaluate."""
         actual = actual_output if self.case_sensitive else actual_output.lower()
         total_checks = len(test_case.expected_contains) + len(test_case.expected_not_contains)
         if total_checks == 0:
@@ -74,7 +74,7 @@ class SimilarityEvaluator(Evaluator):
         self.case_sensitive = case_sensitive
 
     def evaluate(self, test_case: PromptTestCase, actual_output: str) -> float:
-        """evaluate ."""
+        """Evaluate."""
         expected = test_case.expected_output
         actual = actual_output
         if not self.case_sensitive:
@@ -99,7 +99,7 @@ class LengthEvaluator(Evaluator):
         self.max_length = max_length
 
     def evaluate(self, test_case: PromptTestCase, actual_output: str) -> float:
-        """evaluate ."""
+        """Evaluate."""
         length = len(actual_output)
         if self.min_length <= length <= self.max_length:
             return 1.0
@@ -120,7 +120,7 @@ class RegexEvaluator(Evaluator):
         self._patterns.append(re.compile(pattern))
 
     def evaluate(self, test_case: PromptTestCase, actual_output: str) -> float:
-        """evaluate ."""
+        """Evaluate."""
         if not self._patterns:
             return 1.0
         matches = sum(1 for p in self._patterns if p.search(actual_output))
@@ -148,7 +148,7 @@ class CompositeEvaluator(Evaluator):
         self._evaluators.append((evaluator, weight))
 
     def evaluate(self, test_case: PromptTestCase, actual_output: str) -> float:
-        """evaluate ."""
+        """Evaluate."""
         if not self._evaluators:
             return 0.0
         total_weight = sum(w for _, w in self._evaluators)
@@ -168,5 +168,5 @@ class CustomEvaluator(Evaluator):
         self.eval_fn = eval_fn
 
     def evaluate(self, test_case: PromptTestCase, actual_output: str) -> float:
-        """evaluate ."""
+        """Evaluate."""
         return self.eval_fn(test_case, actual_output)

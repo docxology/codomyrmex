@@ -193,7 +193,7 @@ class DeploymentOrchestrator:
         return True
 
     def __repr__(self) -> str:
-        """repr ."""
+        """Return string representation."""
         return (
             f"DeploymentOrchestrator("
             f"completed={self._status.deployments_completed}, "

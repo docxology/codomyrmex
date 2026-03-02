@@ -82,31 +82,31 @@ class TriageReport:
 
     @property
     def promote(self) -> list[ModuleProfile]:
-        """promote ."""
+        """Promote."""
         return [m for m in self.modules if m.decision == TriageDecision.PROMOTE]
 
     @property
     def archive(self) -> list[ModuleProfile]:
-        """archive ."""
+        """Archive."""
         return [m for m in self.modules if m.decision == TriageDecision.ARCHIVE]
 
     @property
     def merge(self) -> list[ModuleProfile]:
-        """merge ."""
+        """Merge."""
         return [m for m in self.modules if m.decision == TriageDecision.MERGE]
 
     @property
     def stub(self) -> list[ModuleProfile]:
-        """stub ."""
+        """Stub."""
         return [m for m in self.modules if m.decision == TriageDecision.STUB]
 
     @property
     def active(self) -> list[ModuleProfile]:
-        """active ."""
+        """Active."""
         return [m for m in self.modules if m.decision == TriageDecision.ACTIVE]
 
     def summary(self) -> dict[str, Any]:
-        """summary ."""
+        """Summary."""
         return {
             "total": len(self.modules),
             "promote": len(self.promote),

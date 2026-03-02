@@ -18,7 +18,7 @@ class ValidationResult:
         self.warnings = warnings or []
 
     def __bool__(self) -> bool:
-        """bool ."""
+        """Return True if this instance is truthy."""
 
         return self.is_valid
 

@@ -77,7 +77,7 @@ class AgentSupervisor:
 
     @property
     def strategy(self) -> RestartStrategy:
-        """strategy ."""
+        """Strategy."""
         return self._strategy
 
     @property

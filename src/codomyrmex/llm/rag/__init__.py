@@ -90,7 +90,7 @@ class Chunk:
 
     @property
     def length(self) -> int:
-        """length ."""
+        """Length."""
         return len(self.content)
 
 @dataclass
@@ -102,7 +102,7 @@ class RetrievalResult:
 
     @property
     def content(self) -> str:
-        """content ."""
+        """Content."""
         return self.chunk.content
 
 @dataclass
@@ -318,7 +318,7 @@ class InMemoryVectorStore(VectorStore):
 
     @property
     def count(self) -> int:
-        """count ."""
+        """Count."""
         return len(self._chunks)
 
 class ContextFormatter:

@@ -46,7 +46,7 @@ class AsyncTokenBucket:
             await asyncio.sleep(min(wait_time, 0.1))
 
     def _refill(self) -> None:
-        """refill ."""
+        """Refill."""
         now = time.monotonic()
         elapsed = now - self._last_refill
         self._tokens = min(self._capacity, self._tokens + elapsed * self._rate)

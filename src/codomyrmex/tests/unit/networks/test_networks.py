@@ -317,7 +317,7 @@ class TestNetworkComponents:
 # ---------------------------------------------------------------------------
 
 class TestNetworkCentrality:
-    """degree_centrality."""
+    """Degree centrality."""
 
     @pytest.mark.unit
     def test_degree_centrality_single_node(self) -> None:

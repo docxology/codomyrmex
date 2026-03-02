@@ -39,11 +39,11 @@ class TemplateContext:
         return TemplateContext(data=kwargs, parent=self)
 
     def __getitem__(self, key: str) -> Any:
-        """getitem ."""
+        """Return item at the given key."""
         return self.get(key)
 
     def __setitem__(self, key: str, value: Any) -> None:
-        """setitem ."""
+        """Set item at the given key."""
         self.set(key, value)
 
 class TemplateEngine(ABC):
@@ -93,9 +93,9 @@ class SimpleTemplateEngine(TemplateEngine):
         return value
 
     def render(self, template: str, context: dict[str, Any]) -> str:
-        """render ."""
+        """Render."""
         def replace(match):
-            """replace ."""
+            """Replace."""
             path = match.group(1).strip()
             value = self._resolve_path(path, context)
 
@@ -218,7 +218,7 @@ class Jinja2LikeEngine(TemplateEngine):
         return value
 
     def render(self, template: str, context: dict[str, Any]) -> str:
-        """render ."""
+        """Render."""
         # Process control structures
         template = self._process_for_loops(template, context)
         template = self._process_if_blocks(template, context)
@@ -233,7 +233,7 @@ class Jinja2LikeEngine(TemplateEngine):
         pattern = re.compile(r'\{\{\s*(.+?)\s*\}\}')
 
         def replace(match):
-            """replace ."""
+            """Replace."""
             expr = match.group(1)
             value = self._parse_expression(expr, context)
 
@@ -256,7 +256,7 @@ class Jinja2LikeEngine(TemplateEngine):
         )
 
         def replace(match):
-            """replace ."""
+            """Replace."""
             var_name = match.group(1)
             iterable_expr = match.group(2)
             body = match.group(3)
@@ -297,7 +297,7 @@ class Jinja2LikeEngine(TemplateEngine):
         )
 
         def replace(match):
-            """replace ."""
+            """Replace."""
             condition = match.group(1)
             true_block = match.group(2)
             false_block = match.group(3) or ''
@@ -363,7 +363,7 @@ class MustacheEngine(TemplateEngine):
         self._var_pattern = re.compile(r'\{\{([#^/]?)(.+?)\}\}')
 
     def render(self, template: str, context: dict[str, Any]) -> str:
-        """render ."""
+        """Render."""
         return self._render_internal(template, context)
 
     def _render_internal(self, template: str, context: dict[str, Any]) -> str:
@@ -383,7 +383,7 @@ class MustacheEngine(TemplateEngine):
         )
 
         def replace(match):
-            """replace ."""
+            """Replace."""
             section_type = match.group(1)
             name = match.group(2).strip()
             content = match.group(3)
@@ -425,7 +425,7 @@ class MustacheEngine(TemplateEngine):
         pattern = re.compile(r'\{\{([^#^/].+?)\}\}')
 
         def replace(match):
-            """replace ."""
+            """Replace."""
             name = match.group(1).strip()
 
             # Triple mustache for unescaped

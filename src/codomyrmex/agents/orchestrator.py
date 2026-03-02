@@ -107,7 +107,7 @@ class FileContext:
 
     @property
     def name(self) -> str:
-        """name ."""
+        """Name."""
         return self.path.name
 
     @property

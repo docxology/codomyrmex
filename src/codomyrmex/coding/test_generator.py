@@ -47,7 +47,7 @@ class TestSuite:
         return len(self.tests)
 
     def render(self) -> str:
-        """render ."""
+        """Render."""
         lines = ['"""Auto-generated tests."""', "", "import pytest", ""]
         lines.extend(self.imports)
         lines.append("")

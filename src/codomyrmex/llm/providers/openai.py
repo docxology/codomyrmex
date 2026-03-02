@@ -35,7 +35,7 @@ class OpenAIProvider(LLMProvider):
         max_tokens: int | None = None,
         **kwargs
     ) -> CompletionResponse:
-        """complete ."""
+        """Complete."""
         if not self._client:
             raise RuntimeError("OpenAI client not initialized. Install openai package.")
 

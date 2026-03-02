@@ -28,7 +28,7 @@ class SearchResult:
     highlights: list[str] = field(default_factory=list)
 
     def __lt__(self, other: "SearchResult") -> bool:
-        """lt ."""
+        """Return True if less than other."""
         return self.score < other.score
 
 
@@ -37,7 +37,7 @@ class Tokenizer(ABC):
 
     @abstractmethod
     def tokenize(self, text: str) -> list[str]:
-        """tokenize ."""
+        """Tokenize."""
         pass
 
 
@@ -49,7 +49,7 @@ class SimpleTokenizer(Tokenizer):
         self.min_length = min_length
 
     def tokenize(self, text: str) -> list[str]:
-        """tokenize ."""
+        """Tokenize."""
         if self.lowercase:
             text = text.lower()
         tokens = re.findall(r'\b\w+\b', text)

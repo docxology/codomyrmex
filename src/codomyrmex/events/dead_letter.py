@@ -111,5 +111,5 @@ class DeadLetterQueue:
 
     @property
     def count(self) -> int:
-        """count ."""
+        """Count."""
         return len(self.list_all())

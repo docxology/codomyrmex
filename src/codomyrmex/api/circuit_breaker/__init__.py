@@ -400,10 +400,10 @@ def circuit_breaker(
     breaker = CircuitBreaker(name=name, config=config)
 
     def decorator(func: Callable[..., T]) -> Callable[..., T]:
-        """decorator ."""
+        """Decorator."""
         @functools.wraps(func)
         def wrapper(*args, **kwargs) -> T:
-            """wrapper ."""
+            """Wrapper."""
             with breaker:
                 return func(*args, **kwargs)
 
@@ -427,10 +427,10 @@ def retry(
             ...
     """
     def decorator(func: Callable[..., T]) -> Callable[..., T]:
-        """decorator ."""
+        """Decorator."""
         @functools.wraps(func)
         def wrapper(*args, **kwargs) -> T:
-            """wrapper ."""
+            """Wrapper."""
             policy = RetryPolicy(
                 max_retries=max_retries,
                 backoff_base=backoff_base,

@@ -109,7 +109,7 @@ class StreamBuffer:
 
     @property
     def pending(self) -> int:
-        """pending ."""
+        """Pending."""
         return len(self._buffer)
 
     @property

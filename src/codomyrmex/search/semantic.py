@@ -108,7 +108,7 @@ class HybridSearchIndex:
         return self._documents.pop(doc_id, None) is not None
 
     def count(self) -> int:
-        """count ."""
+        """Count."""
         return len(self._documents)
 
 

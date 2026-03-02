@@ -29,7 +29,7 @@ class RedisLock(BaseLock):
         self.key = f"codomyrmex:lock:{name}"
 
     def acquire(self, timeout: float = 10.0, retry_interval: float = 0.1) -> bool:
-        """acquire ."""
+        """Acquire."""
         start_time = time.time()
         while time.time() - start_time < timeout:
             # Atomic set if not exists with PX (milliseconds TTL)
@@ -40,7 +40,7 @@ class RedisLock(BaseLock):
         return False
 
     def release(self) -> None:
-        """release ."""
+        """Release."""
         if not self.is_held:
             return
 

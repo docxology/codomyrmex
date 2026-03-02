@@ -22,7 +22,7 @@ class ValidationResult:
     warnings: list[str] = field(default_factory=list)
 
     def __bool__(self) -> bool:
-        """bool ."""
+        """Return True if this instance is truthy."""
         return self.valid
 
 class SchemaValidator:

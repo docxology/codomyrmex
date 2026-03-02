@@ -132,7 +132,7 @@ class ObservabilityPipeline:
         duration_ms: float = 0.0, source: str = "",
         data: dict[str, Any] | None = None,
     ) -> ObservabilityEvent:
-        """record ."""
+        """Record."""
         event = ObservabilityEvent(
             kind=kind, name=name, correlation_id=correlation_id,
             duration_ms=duration_ms, source=source, data=data or {},

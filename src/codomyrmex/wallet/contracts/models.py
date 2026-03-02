@@ -30,7 +30,7 @@ class Address:
     network: Network = Network.ETHEREUM
 
     def __str__(self) -> str:
-        """str ."""
+        """Return human-readable string."""
         return self.value
 
     @property

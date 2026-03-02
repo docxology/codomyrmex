@@ -99,7 +99,7 @@ class Counter(Metric):
         return MetricType.COUNTER
 
     def _key(self, labels: dict[str, str] | None) -> str:
-        """key ."""
+        """Key."""
         if not labels:
             return ""
         return "|".join(f"{k}={v}" for k, v in sorted(labels.items()))
@@ -121,7 +121,7 @@ class Counter(Metric):
 
     @property
     def value(self) -> float:
-        """value ."""
+        """Value."""
         return self.get_value()
 
 class Gauge(Metric):
@@ -144,7 +144,7 @@ class Gauge(Metric):
         return MetricType.GAUGE
 
     def _key(self, labels: dict[str, str] | None) -> str:
-        """key ."""
+        """Key."""
         if not labels:
             return ""
         return "|".join(f"{k}={v}" for k, v in sorted(labels.items()))
@@ -176,7 +176,7 @@ class Gauge(Metric):
 
     @property
     def value(self) -> float:
-        """value ."""
+        """Value."""
         return self.get_value()
 
 class Histogram(Metric):
@@ -298,12 +298,12 @@ class Timer:
         self._start: float = 0
 
     def __enter__(self):
-        """enter ."""
+        """Enter the context manager."""
         self._start = time.time()
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        """exit ."""
+        """Exit the context manager and clean up."""
         duration = time.time() - self._start
         self.histogram.observe(duration)
 
@@ -407,28 +407,28 @@ class Metrics(MetricsRegistry):
         return name
 
     def counter(self, name: str, labels: dict | None = None, description: str = "") -> Counter:
-        """counter ."""
+        """Counter."""
         key = self._make_key(name, labels)
         if key not in self._counters:
             self._counters[key] = Counter(name=name, labels=labels, description=description)
         return self._counters[key]
 
     def gauge(self, name: str, labels: dict | None = None, description: str = "") -> Gauge:
-        """gauge ."""
+        """Gauge."""
         key = self._make_key(name, labels)
         if key not in self._gauges:
             self._gauges[key] = Gauge(name=name, labels=labels, description=description)
         return self._gauges[key]
 
     def histogram(self, name: str, labels: dict | None = None, description: str = "") -> Histogram:
-        """histogram ."""
+        """Histogram."""
         key = self._make_key(name, labels)
         if key not in self._histograms:
             self._histograms[key] = Histogram(name=name, labels=labels, description=description)
         return self._histograms[key]
 
     def summary(self, name: str, labels: dict | None = None, description: str = "") -> Summary:
-        """summary ."""
+        """Summary."""
         key = self._make_key(name, labels)
         if key not in self._summaries:
             self._summaries[key] = Summary(name=name, labels=labels, description=description)

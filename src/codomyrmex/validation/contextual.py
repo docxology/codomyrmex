@@ -26,7 +26,7 @@ class ValidationIssue:
     context: dict[str, Any] = field(default_factory=dict)
 
     def __str__(self) -> str:
-        """str ."""
+        """Return human-readable string."""
         return f"[{self.severity.upper()}] {self.field}: {self.message}"
 
 

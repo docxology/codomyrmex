@@ -271,11 +271,11 @@ class ToolChain:
     # ------------------------------------------------------------------
 
     def __len__(self) -> int:
-        """len ."""
+        """Return the number of items."""
         return len(self._steps)
 
     def __repr__(self) -> str:
-        """repr ."""
+        """Return string representation."""
         names = [s.tool_name for s in self._steps]
         return f"ToolChain(steps={names})"
 

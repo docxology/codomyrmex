@@ -63,7 +63,7 @@ class EdgeClient(ABC):
     @property
     @abstractmethod
     def provider(self) -> EdgeProvider:
-        """provider ."""
+        """Provider."""
         pass
 
     @abstractmethod
@@ -98,7 +98,7 @@ class CloudflareWorkersClient(EdgeClient):
 
     @property
     def provider(self) -> EdgeProvider:
-        """provider ."""
+        """Provider."""
         return EdgeProvider.CLOUDFLARE_WORKERS
 
     def deploy(self, config: EdgeFunctionConfig, code: str) -> EdgeDeployment:
@@ -140,7 +140,7 @@ class FastlyComputeClient(EdgeClient):
 
     @property
     def provider(self) -> EdgeProvider:
-        """provider ."""
+        """Provider."""
         return EdgeProvider.FASTLY_COMPUTE
 
     def deploy(self, config: EdgeFunctionConfig, code: str) -> EdgeDeployment:

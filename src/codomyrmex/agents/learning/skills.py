@@ -29,5 +29,5 @@ class SkillLibrary:
         return self._skills.get(name)
 
     def search(self, tag: str) -> list[Skill]:
-        """search ."""
+        """Search."""
         return [s for s in self._skills.values() if tag in s.tags]

@@ -65,7 +65,7 @@ def _default_task_executor(task: PlanTask) -> Callable[..., Any]:
     a dict with the task name and state.
     """
     def executor(ctx: dict[str, Any]) -> dict[str, Any]:
-        """executor ."""
+        """Executor."""
         task.state = TaskState.COMPLETED
         return {"task": task.name, "state": task.state.value}
     return executor

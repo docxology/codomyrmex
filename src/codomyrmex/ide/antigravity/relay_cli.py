@@ -46,7 +46,7 @@ def cmd_start(args: argparse.Namespace) -> None:
 
     # Graceful shutdown
     def _shutdown(sig: int, frame: Any) -> None:
-        """shutdown ."""
+        """Shutdown."""
         print("\nShutting down...")
         endpoint.stop()
         sys.exit(0)

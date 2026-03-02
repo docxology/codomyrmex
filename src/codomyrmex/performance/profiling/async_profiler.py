@@ -112,7 +112,7 @@ class AsyncProfiler:
         """Decorator to profile a synchronous function."""
         @functools.wraps(func)
         def wrapper(*args: Any, **kwargs: Any) -> Any:
-            """wrapper ."""
+            """Wrapper."""
             start = time.perf_counter()
             error_msg = ""
             try:

@@ -20,19 +20,19 @@ class Vec3:
     z: float = 0.0
 
     def __add__(self, other: Vec3) -> Vec3:
-        """add ."""
+        """Return sum with other."""
         return Vec3(self.x + other.x, self.y + other.y, self.z + other.z)
 
     def __sub__(self, other: Vec3) -> Vec3:
-        """sub ."""
+        """Return difference from other."""
         return Vec3(self.x - other.x, self.y - other.y, self.z - other.z)
 
     def __mul__(self, scalar: float) -> Vec3:
-        """mul ."""
+        """Return product with other."""
         return Vec3(self.x * scalar, self.y * scalar, self.z * scalar)
 
     def __rmul__(self, scalar: float) -> Vec3:
-        """rmul ."""
+        """Rmul."""
         return self.__mul__(scalar)
 
     def length(self) -> float:
@@ -234,7 +234,7 @@ class Transform3D:
         }
 
     def __repr__(self) -> str:
-        """repr ."""
+        """Return string representation."""
         t = self.translation
         r = self.rotation
         return (

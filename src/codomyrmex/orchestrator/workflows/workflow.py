@@ -94,7 +94,7 @@ class Task:
     execution_time: float = 0.0
 
     def __hash__(self):
-        """hash ."""
+        """Return the hash value."""
         return hash(self.name)
 
     def should_run(self, results: dict[str, TaskResult]) -> bool:

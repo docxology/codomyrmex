@@ -138,7 +138,7 @@ class ExactMatchScorer(Scorer):
         self.case_sensitive = case_sensitive
 
     def score(self, output: str, expected: str | None = None) -> float:
-        """score ."""
+        """Score."""
         if expected is None:
             return 1.0
 
@@ -153,7 +153,7 @@ class ContainsScorer(Scorer):
         self.case_sensitive = case_sensitive
 
     def score(self, output: str, expected: str | None = None) -> float:
-        """score ."""
+        """Score."""
         if expected is None:
             return 1.0
 
@@ -169,7 +169,7 @@ class LengthScorer(Scorer):
         self.tolerance = tolerance
 
     def score(self, output: str, expected: str | None = None) -> float:
-        """score ."""
+        """Score."""
         length = len(output)
         diff = abs(length - self.target_length) / self.target_length
 
@@ -190,7 +190,7 @@ class CompositeScorer(Scorer):
         self.normalized_scorers = [(s, w / total_weight) for s, w in scorers]
 
     def score(self, output: str, expected: str | None = None) -> float:
-        """score ."""
+        """Score."""
         total = 0.0
         for scorer, weight in self.normalized_scorers:
             total += scorer.score(output, expected) * weight

@@ -39,12 +39,12 @@ class Qubit:
 
     @classmethod
     def zero(cls) -> "Qubit":
-        """zero ."""
+        """Zero."""
         return cls(1.0 + 0j, 0.0 + 0j)
 
     @classmethod
     def one(cls) -> "Qubit":
-        """one ."""
+        """One."""
         return cls(0.0 + 0j, 1.0 + 0j)
 
     @classmethod

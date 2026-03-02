@@ -194,6 +194,6 @@ class DerivationTracker:
         }
 
     def __len__(self) -> int:
-        """len ."""
+        """Return the number of items."""
         return len(self._records)
 

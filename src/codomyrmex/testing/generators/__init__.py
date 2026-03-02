@@ -69,7 +69,7 @@ class StringGenerator(Generator):
         self.charset = charset
 
     def generate(self) -> str:
-        """generate ."""
+        """Generate."""
         length = random.randint(self.min_length, self.max_length)
         return ''.join(random.choices(self.charset, k=length))
 
@@ -81,7 +81,7 @@ class IntegerGenerator(Generator):
         self.max_value = max_value
 
     def generate(self) -> int:
-        """generate ."""
+        """Generate."""
         return random.randint(self.min_value, self.max_value)
 
 class FloatGenerator(Generator):
@@ -98,7 +98,7 @@ class FloatGenerator(Generator):
         self.precision = precision
 
     def generate(self) -> float:
-        """generate ."""
+        """Generate."""
         value = random.uniform(self.min_value, self.max_value)
         return round(value, self.precision)
 
@@ -109,7 +109,7 @@ class BooleanGenerator(Generator):
         self.true_probability = true_probability
 
     def generate(self) -> bool:
-        """generate ."""
+        """Generate."""
         return random.random() < self.true_probability
 
 class DateGenerator(Generator):
@@ -124,7 +124,7 @@ class DateGenerator(Generator):
         self.end_date = end_date or datetime.now()
 
     def generate(self) -> datetime:
-        """generate ."""
+        """Generate."""
         delta = self.end_date - self.start_date
         random_days = random.randint(0, delta.days)
         return self.start_date + timedelta(days=random_days)
@@ -138,7 +138,7 @@ class EmailGenerator(Generator):
         self._string_gen = StringGenerator(min_length=5, max_length=10, charset=string.ascii_lowercase)
 
     def generate(self) -> str:
-        """generate ."""
+        """Generate."""
         username = self._string_gen.generate()
         domain = random.choice(self.DOMAINS)
         return f"{username}@{domain}"
@@ -147,7 +147,7 @@ class UUIDGenerator(Generator):
     """Generates UUIDs."""
 
     def generate(self) -> str:
-        """generate ."""
+        """Generate."""
         # Simple UUID-like string
         parts = [
             ''.join(random.choices('0123456789abcdef', k=8)),
@@ -165,7 +165,7 @@ class NameGenerator(Generator):
     LAST_NAMES = ["Smith", "Johnson", "Williams", "Brown", "Jones", "Garcia", "Miller", "Davis"]
 
     def generate(self) -> str:
-        """generate ."""
+        """Generate."""
         first = random.choice(self.FIRST_NAMES)
         last = random.choice(self.LAST_NAMES)
         return f"{first} {last}"
@@ -177,7 +177,7 @@ class ChoiceGenerator(Generator):
         self.choices = choices
 
     def generate(self) -> Any:
-        """generate ."""
+        """Generate."""
         return random.choice(self.choices)
 
 class RecordGenerator:

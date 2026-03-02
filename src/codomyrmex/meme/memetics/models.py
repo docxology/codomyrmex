@@ -101,7 +101,7 @@ class MemeticCode:
 
     @property
     def length(self) -> int:
-        """length ."""
+        """Length."""
         return len(self.sequence)
 
     @property
@@ -216,7 +216,7 @@ class FitnessMap:
     timestamp: float = field(default_factory=time.time)
 
     def add(self, entity_id: str, fitness: float) -> None:
-        """add ."""
+        """Return sum with other."""
         self.entries[entity_id] = fitness
 
     @property

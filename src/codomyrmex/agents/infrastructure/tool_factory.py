@@ -161,7 +161,7 @@ class CloudToolFactory:
         """Wrap a client method with pre/post security checks."""
 
         def secured(*args: Any, **kwargs: Any) -> Any:
-            """secured ."""
+            """Secured."""
             check = pipeline.pre_check(method_name, kwargs)
             if not check.allowed:
                 raise PermissionError(

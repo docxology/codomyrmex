@@ -29,10 +29,10 @@ def property_test(
 ):
     """Decorator for property-based tests."""
     def decorator(func: Callable) -> Callable:
-        """decorator ."""
+        """Decorator."""
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
-            """wrapper ."""
+            """Wrapper."""
             failures = []
             start = datetime.now()
 

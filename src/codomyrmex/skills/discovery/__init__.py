@@ -318,7 +318,7 @@ def skill(
 ):
     """Decorator to create a skill from a function."""
     def decorator(func: Callable) -> FunctionSkill:
-        """decorator ."""
+        """Decorator."""
         # Create skill
         skill_obj = FunctionSkill(func)
 

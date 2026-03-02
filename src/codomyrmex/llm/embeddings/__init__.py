@@ -103,7 +103,7 @@ class SimilarityResult:
 
     @property
     def text(self) -> str:
-        """text ."""
+        """Text."""
         return self.embedding.text
 
 class EmbeddingProvider(ABC):

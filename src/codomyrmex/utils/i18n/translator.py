@@ -16,7 +16,7 @@ class MessageBundle:
         self._messages: dict[str, str] = {}
 
     def add(self, key: str, message: str) -> None:
-        """add ."""
+        """Return sum with other."""
         self._messages[key] = message
 
     def get(self, key: str, default: str | None = None) -> str | None:
@@ -24,11 +24,11 @@ class MessageBundle:
         return self._messages.get(key, default)
 
     def has(self, key: str) -> bool:
-        """has ."""
+        """Has."""
         return key in self._messages
 
     def keys(self) -> list[str]:
-        """keys ."""
+        """Keys."""
         return list(self._messages.keys())
 
     def to_dict(self) -> dict[str, str]:
@@ -104,9 +104,9 @@ class Translator:
         return key
 
     def _interpolate(self, message: str, values: dict[str, Any]) -> str:
-        """interpolate ."""
+        """Interpolate."""
         def replacer(match):
-            """replacer ."""
+            """Replacer."""
             key = match.group(1)
             return str(values.get(key, match.group(0)))
         return self._interpolation_pattern.sub(replacer, message)

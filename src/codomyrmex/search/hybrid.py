@@ -75,7 +75,7 @@ class BM25Index:
 
     @staticmethod
     def _tokenize(text: str) -> list[str]:
-        """tokenize ."""
+        """Tokenize."""
         return re.findall(r'\w+', text.lower())
 
 

@@ -25,9 +25,9 @@ class BaseComponent:
         return {"type": self.__class__.__name__}
 
     def __str__(self) -> str:
-        """str ."""
+        """Return human-readable string."""
         return self.render()
 
     def __repr__(self) -> str:
-        """repr ."""
+        """Return string representation."""
         return f"{self.__class__.__name__}(css_class={self.css_class!r})"

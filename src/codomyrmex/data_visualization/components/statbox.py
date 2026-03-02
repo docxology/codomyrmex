@@ -13,7 +13,7 @@ class StatBox(BaseComponent):
     direction: str = ""  # "up" or "down"
 
     def render(self) -> str:
-        """render ."""
+        """Render."""
         color = "green" if self.direction == "up" else ("red" if self.direction == "down" else "gray")
         return (
             f'<div class="statbox">'
@@ -24,5 +24,5 @@ class StatBox(BaseComponent):
         )
 
     def __str__(self) -> str:
-        """str ."""
+        """Return human-readable string."""
         return self.render()

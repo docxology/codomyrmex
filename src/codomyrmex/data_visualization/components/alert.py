@@ -18,7 +18,7 @@ class Alert(BaseComponent):
     }
 
     def render(self) -> str:
-        """render ."""
+        """Render."""
         bg = self._BG_MAP.get(self.level, "#d9edf7")
         return (
             f'<div class="alert alert-{self.level}" '
@@ -27,5 +27,5 @@ class Alert(BaseComponent):
         )
 
     def __str__(self) -> str:
-        """str ."""
+        """Return human-readable string."""
         return self.render()

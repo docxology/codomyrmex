@@ -105,7 +105,7 @@ class EventLogger:
             return list(self.entries)[-limit:]
 
     def clear(self) -> None:
-        """clear ."""
+        """Clear."""
         with self.lock:
             self.entries.clear()
             self.event_counts.clear()

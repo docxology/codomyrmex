@@ -37,7 +37,7 @@ class Position:
     column: int
 
     def __lt__(self, other: 'Position') -> bool:
-        """lt ."""
+        """Return True if less than other."""
         if self.line != other.line:
             return self.line < other.line
         return self.column < other.column
@@ -53,7 +53,7 @@ class Range:
         return self.end.line - self.start.line + 1
 
     def contains(self, pos: Position) -> bool:
-        """contains ."""
+        """Return True if item is contained."""
         return self.start <= pos <= self.end
 
 @dataclass
@@ -75,7 +75,7 @@ class ASTNode:
         result = []
 
         def search(node: ASTNode):
-            """search ."""
+            """Search."""
             if node.type == node_type:
                 result.append(node)
             for child in node.children:
@@ -138,7 +138,7 @@ class PythonParser(Parser):
 
     @property
     def language(self) -> str:
-        """language ."""
+        """Language."""
         return "python"
 
     def parse(self, source: str) -> ASTNode:
@@ -298,7 +298,7 @@ class JavaScriptParser(Parser):
 
     @property
     def language(self) -> str:
-        """language ."""
+        """Language."""
         return "javascript"
 
     def parse(self, source: str) -> ASTNode:

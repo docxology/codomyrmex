@@ -137,7 +137,7 @@ class AgentMemory:
     # -- forget -------------------------------------------------------
 
     def forget(self, memory_id: str) -> bool:
-        """forget ."""
+        """Forget."""
         return self.store.delete(memory_id)
 
     # -- context ------------------------------------------------------
@@ -165,11 +165,11 @@ class VectorStoreMemory:
         content: str,
         importance: MemoryImportance = MemoryImportance.MEDIUM,
     ) -> Memory:
-        """add ."""
+        """Return sum with other."""
         return self._agent.add(content, importance=importance)
 
     def search(self, query: str, k: int = 10) -> list[RetrievalResult]:
-        """search ."""
+        """Search."""
         return self._agent.search(query, k=k)
 
 

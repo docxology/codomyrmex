@@ -95,7 +95,7 @@ def boost_file(path: Path):
         return False
 
 def main():
-    """main ."""
+    """Main."""
     repo_root = Path.cwd()
     md_files = []
     for pattern in ['**/*.md', '**/*.MD']:

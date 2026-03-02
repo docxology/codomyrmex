@@ -59,7 +59,7 @@ class TaskScheduler:
 
     @property
     def strategy(self) -> SchedulingStrategy:
-        """strategy ."""
+        """Strategy."""
         return self._strategy
 
     def register_worker(
@@ -172,7 +172,7 @@ class TaskScheduler:
         return selected.worker_id
 
     def _affinity(self, task: Task, workers: list[WorkerInfo]) -> str:
-        """affinity ."""
+        """Affinity."""
         preferred = self._affinity_map.get(task.task_type)
         if preferred:
             for w in workers:

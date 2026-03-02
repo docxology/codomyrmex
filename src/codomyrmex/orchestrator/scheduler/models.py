@@ -45,7 +45,7 @@ class Job:
             self.next_run = self.trigger.get_next_run()
 
     def __lt__(self, other: "Job") -> bool:
-        """lt ."""
+        """Return True if less than other."""
         if self.next_run is None:
             return False
         if other.next_run is None:

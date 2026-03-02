@@ -29,16 +29,16 @@ class NamespacedCache(Cache):
         return self.cache.delete(self._full_key(key))
 
     def clear(self) -> bool:
-        """clear ."""
+        """Clear."""
         return self.cache.delete_pattern(f"{self.namespace}:*") > 0
 
     def exists(self, key: str) -> bool:
-        """exists ."""
+        """Exists."""
         return self.cache.exists(self._full_key(key))
 
     @property
     def stats(self) -> CacheStats:
-        """stats ."""
+        """Stats."""
         return self.cache.stats
 
 

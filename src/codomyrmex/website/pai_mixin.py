@@ -238,7 +238,7 @@ class PAIProviderMixin:
         """Generate a Mermaid graph TD string from mission→project hierarchy."""
 
         def _sanitize(text: str) -> str:
-            """sanitize ."""
+            """Sanitize."""
             return re.sub(r"[^a-zA-Z0-9_]", "_", text)
 
         def _escape_label(text: str) -> str:

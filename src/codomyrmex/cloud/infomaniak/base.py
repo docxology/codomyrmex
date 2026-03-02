@@ -77,11 +77,11 @@ class InfomaniakOpenStackBase:
         return cls(conn)
 
     def __enter__(self):
-        """enter ."""
+        """Enter the context manager."""
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        """exit ."""
+        """Exit the context manager and clean up."""
         self.close()
         return False
 
@@ -160,11 +160,11 @@ class InfomaniakS3Base:
         return cls(client)
 
     def __enter__(self):
-        """enter ."""
+        """Enter the context manager."""
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        """exit ."""
+        """Exit the context manager and clean up."""
         self.close()
         return False
 
@@ -228,11 +228,11 @@ class InfomaniakRESTBase:
         )
 
     def __enter__(self):
-        """enter ."""
+        """Enter the context manager."""
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        """exit ."""
+        """Exit the context manager and clean up."""
         self.close()
         return False
 

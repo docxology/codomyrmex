@@ -261,11 +261,11 @@ class Tracer:
     ):
         """Decorator to wrap a function with span creation."""
         def decorator(func: Callable) -> Callable:
-            """decorator ."""
+            """Decorator."""
             span_name = name or func.__name__
 
             def wrapper(*args, **kwargs):
-                """wrapper ."""
+                """Wrapper."""
                 with self.span(span_name, kind):
                     return func(*args, **kwargs)
 

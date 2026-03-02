@@ -106,7 +106,7 @@ def event_handler(event_types: EventType | list[EventType],
                  filter_func: Callable[[Event], bool] | None = None,
                  priority: int = 0):
     def decorator(func):
-        """decorator ."""
+        """Decorator."""
         func._event_types = event_types if isinstance(event_types, list) else [event_types]
         func._event_filter = filter_func
         func._event_priority = priority

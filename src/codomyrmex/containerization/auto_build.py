@@ -29,7 +29,7 @@ class DockerStage:
     commands: list[str] = field(default_factory=list)
 
     def render(self) -> str:
-        """render ."""
+        """Render."""
         lines = [f"FROM {self.base_image} AS {self.name}"]
         lines.extend(self.commands)
         return "\n".join(lines)
@@ -165,7 +165,7 @@ class AutoBuilder:
 
     @staticmethod
     def _extract(content: str, field_name: str) -> str:
-        """extract ."""
+        """Extract."""
         pattern = re.compile(rf'^{field_name}\s*=\s*"([^"]*)"', re.MULTILINE)
         match = pattern.search(content)
         return match.group(1) if match else ""

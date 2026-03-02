@@ -351,7 +351,7 @@ def mcp_tool(
                   If any are missing, the tool will be registered as unavailable.
     """
     def decorator(func: Callable[..., Any]) -> Callable[..., Any]:
-        """decorator ."""
+        """Decorator."""
         # Extract parameters using pydantic or typed-dict generation logic if needed
         # For now, we rely on the bridge to inspect signatures at runtime
         # but here we just mark it.

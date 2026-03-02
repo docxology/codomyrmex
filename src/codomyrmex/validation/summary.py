@@ -45,7 +45,7 @@ class ValidationSummary:
 
     @property
     def total(self) -> int:
-        """total ."""
+        """Total."""
         return len(self.issues)
 
     @property

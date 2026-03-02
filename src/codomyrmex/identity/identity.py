@@ -72,7 +72,7 @@ class PasswordProvider(AuthProvider):
         self._users[user_id] = (salt, pw_hash)
 
     def authenticate(self, credentials: dict[str, Any]) -> bool:
-        """authenticate ."""
+        """Authenticate."""
         user_id = credentials.get("user_id", "")
         password = credentials.get("password", "")
         if user_id not in self._users:
@@ -102,7 +102,7 @@ class TokenProvider(AuthProvider):
         return False
 
     def authenticate(self, credentials: dict[str, Any]) -> bool:
-        """authenticate ."""
+        """Authenticate."""
         return credentials.get("token", "") in self._valid_tokens
 
 
@@ -226,7 +226,7 @@ class Identity:
     # ── Audit ───────────────────────────────────────────────────────
 
     def _audit(self, user_id: str, event_type: str, metadata: dict[str, Any] | None = None) -> None:
-        """audit ."""
+        """Audit."""
         event = AuthEvent(user_id=user_id, event_type=event_type, metadata=metadata or {})
         self._events.append(event)
         logger.info("Auth event: %s for %s", event_type, user_id)

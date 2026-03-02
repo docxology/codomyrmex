@@ -279,5 +279,5 @@ class Network:
         return net
 
     def __repr__(self) -> str:
-        """repr ."""
+        """Return string representation."""
         return f"Network(name='{self.name}', nodes={self.node_count}, edges={self.edge_count})"

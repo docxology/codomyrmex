@@ -37,7 +37,7 @@ class ConsoleProvider(NotificationProvider):
 
     @property
     def channel(self) -> NotificationChannel:
-        """channel ."""
+        """Channel."""
         return NotificationChannel.CONSOLE
 
     def send(self, notification: Notification) -> NotificationResult:
@@ -69,7 +69,7 @@ class FileProvider(NotificationProvider):
 
     @property
     def channel(self) -> NotificationChannel:
-        """channel ."""
+        """Channel."""
         return NotificationChannel.FILE
 
     def send(self, notification: Notification) -> NotificationResult:
@@ -104,7 +104,7 @@ class WebhookProvider(NotificationProvider):
 
     @property
     def channel(self) -> NotificationChannel:
-        """channel ."""
+        """Channel."""
         return NotificationChannel.WEBHOOK
 
     def send(self, notification: Notification) -> NotificationResult:

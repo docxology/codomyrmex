@@ -54,7 +54,7 @@ class AgentPool:
 
     @property
     def size(self) -> int:
-        """size ."""
+        """Size."""
         return len(self._agents)
 
     @property

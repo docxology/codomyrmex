@@ -12,7 +12,7 @@ class TimelineEvent(BaseComponent):
     description: str = ""
 
     def render(self) -> str:
-        """render ."""
+        """Render."""
         return (
             f'<div class="timeline-event">'
             f'<time>{self.timestamp}</time>'
@@ -22,7 +22,7 @@ class TimelineEvent(BaseComponent):
         )
 
     def __str__(self) -> str:
-        """str ."""
+        """Return human-readable string."""
         return self.render()
 
 @dataclass
@@ -31,12 +31,12 @@ class Timeline(BaseComponent):
     events: list = field(default_factory=list)
 
     def render(self) -> str:
-        """render ."""
+        """Render."""
         inner = "\n".join(
             e.render() if hasattr(e, "render") else str(e) for e in self.events
         )
         return f'<div class="timeline">{inner}</div>'
 
     def __str__(self) -> str:
-        """str ."""
+        """Return human-readable string."""
         return self.render()

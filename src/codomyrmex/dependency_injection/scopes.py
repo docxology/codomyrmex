@@ -108,13 +108,13 @@ class ScopeContext:
         return self._active
 
     def __enter__(self) -> ScopeContext:
-        """enter ."""
+        """Enter the context manager."""
         self._active = True
         self._container._push_scope(self)
         return self
 
     def __exit__(self, exc_type: Any, exc_val: Any, exc_tb: Any) -> None:
-        """exit ."""
+        """Exit the context manager and clean up."""
         self._active = False
         self._container._pop_scope(self)
         self._dispose()
@@ -173,7 +173,7 @@ class ScopeContext:
             self._instances.clear()
 
     def __repr__(self) -> str:
-        """repr ."""
+        """Return string representation."""
         cached = len(self._instances)
         return (
             f"ScopeContext(id={self._scope_id[:8]}..., "

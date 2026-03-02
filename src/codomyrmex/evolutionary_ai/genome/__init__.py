@@ -51,14 +51,14 @@ class BinaryGenome(Genome):
         return cls(bits=[random.randint(0, 1) for _ in range(length)])
 
     def copy(self) -> BinaryGenome:
-        """copy ."""
+        """Return a shallow copy."""
         return BinaryGenome(bits=list(self.bits))
 
     def to_list(self) -> list[int]:
         return list(self.bits)
 
     def __len__(self) -> int:
-        """len ."""
+        """Return the number of items."""
         return len(self.bits)
 
     def flip(self, index: int) -> None:
@@ -103,7 +103,7 @@ class RealValuedGenome(Genome):
         )
 
     def copy(self) -> RealValuedGenome:
-        """copy ."""
+        """Return a shallow copy."""
         return RealValuedGenome(
             values=list(self.values),
             lower_bounds=list(self.lower_bounds) if self.lower_bounds else None,
@@ -114,7 +114,7 @@ class RealValuedGenome(Genome):
         return list(self.values)
 
     def __len__(self) -> int:
-        """len ."""
+        """Return the number of items."""
         return len(self.values)
 
     def clip(self) -> None:
@@ -164,14 +164,14 @@ class PermutationGenome(Genome):
         return cls(elements=list(elements))
 
     def copy(self) -> PermutationGenome:
-        """copy ."""
+        """Return a shallow copy."""
         return PermutationGenome(elements=copy.deepcopy(self.elements))
 
     def to_list(self) -> list[Any]:
         return list(self.elements)
 
     def __len__(self) -> int:
-        """len ."""
+        """Return the number of items."""
         return len(self.elements)
 
     def swap(self, i: int, j: int) -> None:

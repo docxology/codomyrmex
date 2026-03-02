@@ -179,7 +179,7 @@ class RollbackManager:
         return self._current_version
 
     def __repr__(self) -> str:
-        """repr ."""
+        """Return string representation."""
         return (
             f"RollbackManager(snapshots={len(self._snapshots)}, "
             f"current_version={self._current_version!r})"

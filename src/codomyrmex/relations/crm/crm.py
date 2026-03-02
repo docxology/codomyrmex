@@ -205,5 +205,5 @@ class ContactManager:
         return list(self._contacts.values())
 
     def __len__(self) -> int:
-        """len ."""
+        """Return the number of items."""
         return len(self._contacts)

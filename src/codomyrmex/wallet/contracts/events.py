@@ -52,7 +52,7 @@ class EventFilter:
         self._arg_filters: dict[str, Any] = {}
 
     def event(self, name: str) -> EventFilter:
-        """event ."""
+        """Event."""
         self._event_name = name
         return self
 
@@ -65,7 +65,7 @@ class EventFilter:
         return self
 
     def address(self, addr: Address) -> EventFilter:
-        """address ."""
+        """Address."""
         self._contract_address = addr
         return self
 
@@ -97,26 +97,26 @@ class EventLog:
         self._events: list[ContractEvent] = []
 
     def add(self, event: ContractEvent) -> None:
-        """add ."""
+        """Return sum with other."""
         self._events.append(event)
 
     def add_many(self, events: list[ContractEvent]) -> None:
         self._events.extend(events)
 
     def query(self, filter: EventFilter | None = None) -> list[ContractEvent]:
-        """query ."""
+        """Query."""
         if filter is None:
             return list(self._events)
         return [e for e in self._events if filter.matches(e)]
 
     def count(self, event_name: str | None = None) -> int:
-        """count ."""
+        """Count."""
         if event_name is None:
             return len(self._events)
         return sum(1 for e in self._events if e.name == event_name)
 
     def latest(self, n: int = 1) -> list[ContractEvent]:
-        """latest ."""
+        """Latest."""
         sorted_events = sorted(self._events, key=lambda e: e.block_number, reverse=True)
         return sorted_events[:n]
 
@@ -150,12 +150,12 @@ class EventLog:
         return [e.to_dict() for e in self._events]
 
     def clear(self) -> None:
-        """clear ."""
+        """Clear."""
         self._events.clear()
 
     @property
     def total(self) -> int:
-        """total ."""
+        """Total."""
         return len(self._events)
 
     def summary(self) -> dict[str, Any]:

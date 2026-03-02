@@ -177,7 +177,7 @@ class AgentSession:
         return len(self.messages)
 
     def __repr__(self) -> str:
-        """repr ."""
+        """Return string representation."""
         return f"AgentSession(id={self.session_id[:8]}..., messages={len(self.messages)})"
 
 

@@ -150,7 +150,7 @@ class ModelRouter:
 
         elif strategy == RoutingStrategy.LATENCY_OPTIMIZED:
             def latency(m):
-                """latency ."""
+                """Latency."""
                 stats = self._stats.get(m.name)
                 return stats.avg_latency_ms if stats else float('inf')
             return min(candidates, key=latency)

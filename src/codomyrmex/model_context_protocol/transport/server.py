@@ -104,7 +104,7 @@ class MCPServer:
             output_schema: JSON Schema for structured output (MCP 2025-06-18).
         """
         def decorator(func: Callable[..., Any]) -> Callable[..., Any]:
-            """decorator ."""
+            """Decorator."""
             tool_name = name or func.__name__
             tool_desc = description or func.__doc__ or ""
 

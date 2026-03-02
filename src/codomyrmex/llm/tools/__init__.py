@@ -187,7 +187,7 @@ def tool(
 ):
     """Decorator to create a tool from a function."""
     def decorator(func: Callable) -> Callable:
-        """decorator ."""
+        """Decorator."""
         tool_name = name or func.__name__
         tool_description = description or func.__doc__ or f"Tool: {tool_name}"
 
@@ -233,7 +233,7 @@ def tool(
 
         @wraps(func)
         def wrapper(*args, **kwargs):
-            """wrapper ."""
+            """Wrapper."""
             return func(*args, **kwargs)
 
         wrapper._tool = tool_obj

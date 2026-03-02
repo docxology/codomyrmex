@@ -12,7 +12,7 @@ def calculate_contrast_ratio(fg: str, bg: str) -> float:
         r, g, b = [int(hex_color[i:i+2], 16) / 255 for i in (0, 2, 4)]
 
         def adjust(c):
-            """adjust ."""
+            """Adjust."""
             return c / 12.92 if c <= 0.03928 else ((c + 0.055) / 1.055) ** 2.4
 
         return 0.2126 * adjust(r) + 0.7152 * adjust(g) + 0.0722 * adjust(b)

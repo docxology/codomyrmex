@@ -89,7 +89,7 @@ class HealingLog:
 
     @property
     def size(self) -> int:
-        """size ."""
+        """Size."""
         return len(self._events)
 
     @property

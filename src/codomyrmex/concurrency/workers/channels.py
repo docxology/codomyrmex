@@ -32,7 +32,7 @@ class Channel(Generic[T]):
 
     @property
     def closed(self) -> bool:
-        """closed ."""
+        """Closed."""
         return self._closed
 
     async def send(self, item: T, timeout: float | None = None) -> None:

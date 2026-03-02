@@ -104,17 +104,17 @@ class CollaborativeAgent(AbstractAgent):
 
     @property
     def name(self) -> str:
-        """name ."""
+        """Name."""
         return self._name
 
     @property
     def state(self) -> AgentState:
-        """state ."""
+        """State."""
         return self._state
 
     @state.setter
     def state(self, value: AgentState):
-        """state ."""
+        """State."""
         self._state = value
 
     def get_capabilities(self) -> list[str]:

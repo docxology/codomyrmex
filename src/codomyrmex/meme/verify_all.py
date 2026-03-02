@@ -6,15 +6,15 @@ import sys
 sys.path.insert(0, "/Users/mini/Documents/GitHub/codomyrmex/src")
 
 def info(msg):
-    """info ."""
+    """Info."""
     print(f"\033[94m[INFO]\033[0m {msg}")
 
 def success(msg):
-    """success ."""
+    """Success."""
     print(f"\033[92m[PASS]\033[0m {msg}")
 
 def fail(msg):
-    """fail ."""
+    """Fail."""
     print(f"\033[91m[FAIL]\033[0m {msg}")
 
 try:

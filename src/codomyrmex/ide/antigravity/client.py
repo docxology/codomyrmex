@@ -633,7 +633,7 @@ class AntigravityClient(IDEClient):
         '''
 
         try:
-            subprocess.run(["osascript", "-e", apple_script], check=True, capture_output=True)
+            subprocess.run(["osascript", "-e", apple_script], check=True, capture_output=True, timeout=10)
             return IDECommandResult(
                 success=True,
                 command="osascript",
@@ -699,7 +699,7 @@ class AntigravityClient(IDEClient):
                 cmd.append(message)
 
                 # Run the CLI command
-                subprocess.run(cmd, check=True, capture_output=True)
+                subprocess.run(cmd, check=True, capture_output=True, timeout=30)
 
                 return IDECommandResult(
                     success=True,

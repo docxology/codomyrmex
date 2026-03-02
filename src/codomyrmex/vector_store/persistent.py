@@ -244,11 +244,11 @@ class CachedVectorStore(VectorStore):
         return self._backend.search(query, k, filter_fn)
 
     def count(self) -> int:
-        """count ."""
+        """Count."""
         return self._backend.count()
 
     def clear(self) -> None:
-        """clear ."""
+        """Clear."""
         with self._lock:
             self._cache.clear()
             self._access_order.clear()

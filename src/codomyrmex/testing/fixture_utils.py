@@ -67,7 +67,7 @@ class FixtureManager:
 def fixture(name: str, scope: str = "function"):
     """Decorator to create fixtures."""
     def decorator(func: Callable) -> Callable:
-        """decorator ."""
+        """Decorator."""
         func._fixture_name = name
         func._fixture_scope = scope
         return func
@@ -79,19 +79,19 @@ class TestDataFactory:
 
     @staticmethod
     def email(domain: str = "test.com") -> str:
-        """email ."""
+        """Email."""
         username = ''.join(random.choices(string.ascii_lowercase, k=8))
         return f"{username}@{domain}"
 
     @staticmethod
     def phone(country_code: str = "+1") -> str:
-        """phone ."""
+        """Phone."""
         number = ''.join(random.choices(string.digits, k=10))
         return f"{country_code}{number}"
 
     @staticmethod
     def uuid() -> str:
-        """uuid ."""
+        """Uuid."""
         import uuid
         return str(uuid.uuid4())
 
@@ -100,7 +100,7 @@ class TestDataFactory:
         start: datetime = None,
         end: datetime = None,
     ) -> datetime:
-        """date ."""
+        """Date."""
         start = start or datetime(2000, 1, 1)
         end = end or datetime.now()
         delta = (end - start).total_seconds()

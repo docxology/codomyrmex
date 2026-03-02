@@ -83,11 +83,11 @@ class RepoIndex:
         return [s for s in self.symbols if s.file == file_path]
 
     def functions(self) -> list[Symbol]:
-        """functions ."""
+        """Functions."""
         return [s for s in self.symbols if s.kind == "function"]
 
     def classes(self) -> list[Symbol]:
-        """classes ."""
+        """Classes."""
         return [s for s in self.symbols if s.kind == "class"]
 
     def to_dict(self) -> dict[str, Any]:

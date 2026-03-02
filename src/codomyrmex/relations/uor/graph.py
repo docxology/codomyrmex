@@ -252,7 +252,7 @@ class UORGraph:
         }
 
     def __repr__(self) -> str:
-        """repr ."""
+        """Return string representation."""
         return (
             f"UORGraph(entities={self.entity_count}, "
             f"relationships={self.relationship_count})"

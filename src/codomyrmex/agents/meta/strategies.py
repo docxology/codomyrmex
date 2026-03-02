@@ -72,7 +72,7 @@ class StrategyLibrary:
         return self._strategies.get(name)
 
     def remove(self, name: str) -> bool:
-        """remove ."""
+        """Remove."""
         if name in self._strategies:
             del self._strategies[name]
             return True
@@ -93,7 +93,7 @@ class StrategyLibrary:
 
     @property
     def size(self) -> int:
-        """size ."""
+        """Size."""
         return len(self._strategies)
 
     def to_dict(self) -> dict[str, Any]:

@@ -66,7 +66,7 @@ class JSONFileStore:
     # ── internal ─────────────────────────────────────────────────
 
     def _flush(self) -> None:
-        """flush ."""
+        """Flush."""
         self._path.parent.mkdir(parents=True, exist_ok=True)
         with open(self._path, "w") as fh:
             json.dump(list(self._data.values()), fh, indent=2)

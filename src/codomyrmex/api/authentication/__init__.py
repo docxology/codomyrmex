@@ -102,7 +102,7 @@ class APIKeyAuthenticator(Authenticator):
             del self._keys[key]
 
     def authenticate(self, request: dict[str, Any]) -> AuthResult:
-        """authenticate ."""
+        """Authenticate."""
         # Extract API key
         headers = request.get("headers", {})
         query = request.get("query", {})
@@ -174,7 +174,7 @@ class BearerTokenAuthenticator(Authenticator):
         return token
 
     def authenticate(self, request: dict[str, Any]) -> AuthResult:
-        """authenticate ."""
+        """Authenticate."""
         headers = request.get("headers", {})
         auth_header = headers.get("Authorization", "")
 
@@ -241,7 +241,7 @@ class BasicAuthenticator(Authenticator):
         }
 
     def authenticate(self, request: dict[str, Any]) -> AuthResult:
-        """authenticate ."""
+        """Authenticate."""
         headers = request.get("headers", {})
         auth_header = headers.get("Authorization", "")
 
@@ -332,7 +332,7 @@ class HMACAuthenticator(Authenticator):
         return signature
 
     def authenticate(self, request: dict[str, Any]) -> AuthResult:
-        """authenticate ."""
+        """Authenticate."""
         headers = request.get("headers", {})
         signature = headers.get(self.signature_header)
         timestamp_str = headers.get(self.timestamp_header)

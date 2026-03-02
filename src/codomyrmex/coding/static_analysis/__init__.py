@@ -97,7 +97,7 @@ def analyze_code_quality(path: str = None, **kwargs) -> dict:
 def cli_commands():
     """Return CLI commands for the static_analysis module."""
     def _analyze(path=None):
-        """analyze ."""
+        """Analyze."""
         import os
         target = path or os.getcwd()
         result = analyze_code_quality(target)

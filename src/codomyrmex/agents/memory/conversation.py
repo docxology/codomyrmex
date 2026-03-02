@@ -52,7 +52,7 @@ class ConversationHistory:
         self._max_turns = max_turns
 
     def add(self, role: str, content: str, metadata: dict[str, Any] | None = None) -> Turn:
-        """add ."""
+        """Return sum with other."""
         turn = Turn(role=role, content=content, metadata=metadata or {})
         self._turns.append(turn)
         if len(self._turns) > self._max_turns:
@@ -64,14 +64,14 @@ class ConversationHistory:
         return len(self._turns)
 
     def last(self, n: int = 1) -> list[Turn]:
-        """last ."""
+        """Last."""
         return self._turns[-n:]
 
     def by_role(self, role: str) -> list[Turn]:
         return [t for t in self._turns if t.role == role]
 
     def summary(self) -> dict[str, Any]:
-        """summary ."""
+        """Summary."""
         total_words = sum(t.word_count for t in self._turns)
         role_counts = {}
         for t in self._turns:
@@ -83,7 +83,7 @@ class ConversationHistory:
         }
 
     def clear(self) -> None:
-        """clear ."""
+        """Clear."""
         self._turns.clear()
 
     def to_messages(self) -> list[dict[str, str]]:

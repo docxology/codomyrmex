@@ -230,11 +230,11 @@ class PopulationManager(Generic[T]):
         return self._generation
 
     def __len__(self) -> int:
-        """len ."""
+        """Return the number of items."""
         return len(self._population)
 
     def __repr__(self) -> str:
-        """repr ."""
+        """Return string representation."""
         best = self.get_best()
         best_fit = best.fitness if best else None
         return (

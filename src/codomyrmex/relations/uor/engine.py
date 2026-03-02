@@ -404,16 +404,16 @@ class PrismEngine:
         return self._coherent
 
     def __repr__(self) -> str:
-        """repr ."""
+        """Return string representation."""
         status = "verified" if self._coherent else "unverified"
         return f"PrismEngine(quantum={self.quantum}, bits={self.bits}, {status})"
 
     def __eq__(self, other: object) -> bool:
-        """eq ."""
+        """Return True if equal to other."""
         if not isinstance(other, PrismEngine):
             return NotImplemented
         return self.quantum == other.quantum
 
     def __hash__(self) -> int:
-        """hash ."""
+        """Return the hash value."""
         return hash(self.quantum)

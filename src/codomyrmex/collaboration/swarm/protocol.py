@@ -107,7 +107,7 @@ class SwarmAgent:
 
     @property
     def available(self) -> bool:
-        """available ."""
+        """Available."""
         return self.active_tasks < self.max_concurrent
 
     @property

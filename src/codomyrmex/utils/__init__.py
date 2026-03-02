@@ -137,7 +137,7 @@ def timing_decorator(func: Callable[..., T]) -> Callable[..., T]:
     """
     @functools.wraps(func)
     def wrapper(*args, **kwargs):
-        """wrapper ."""
+        """Wrapper."""
         start = time.perf_counter()
         result = func(*args, **kwargs)
         elapsed = (time.perf_counter() - start) * 1000
@@ -167,10 +167,10 @@ def retry(
         Decorator function
     """
     def decorator(func: Callable[..., T]) -> Callable[..., T]:
-        """decorator ."""
+        """Decorator."""
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
-            """wrapper ."""
+            """Wrapper."""
             current_delay = delay
             last_exception = None
 
