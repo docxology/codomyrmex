@@ -1,6 +1,6 @@
 # Agent Guidelines - Model Context Protocol
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Module Overview
 
@@ -74,6 +74,27 @@ All tools are auto-discovered via `@mcp_tool` decorators and exposed through the
 | `inspect_server` | Inspect the running MCP server's configuration and state | Safe |
 | `list_registered_tools` | List all tools registered across the MCP ecosystem | Safe |
 | `get_tool_schema` | Get the JSON schema for a specific registered MCP tool | Safe |
+
+## PAI Agent Role Access Matrix
+
+| PAI Agent | Access Level | MCP Tools | Trust Level |
+|-----------|-------------|-----------|-------------|
+| **Engineer** | Full introspection | `inspect_server`, `list_registered_tools`, `get_tool_schema` | TRUSTED |
+| **Architect** | Tool inventory | `list_registered_tools`, `get_tool_schema` | OBSERVED |
+| **QATester** | Health + discovery | `inspect_server`, `list_registered_tools` | OBSERVED |
+| **Researcher** | Schema inspection | `list_registered_tools`, `get_tool_schema` | OBSERVED |
+
+### Engineer Agent
+**Access**: Full MCP introspection — server state, tool registry, and schema details.
+**Use Cases**: Debugging MCP bridge configuration, verifying that auto-discovered tools are registered correctly after module additions, checking tool schema validity during development.
+
+### Architect Agent
+**Access**: Tool inventory — list and inspect tools without server state access.
+**Use Cases**: Auditing the full tool surface (171 tools), designing tool groupings, verifying that new `@mcp_tool` decorators produce correct schemas, planning trust-level assignments.
+
+### QATester Agent
+**Access**: Health and discovery — server health and tool registration verification.
+**Use Cases**: Confirming MCP bridge starts and serves tools correctly, verifying that the expected number of tools (171 total) are registered after deployment, regression testing auto-discovery.
 
 ## Navigation
 

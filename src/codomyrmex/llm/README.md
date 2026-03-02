@@ -1,10 +1,20 @@
 # LLM Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
 LLM module providing language model integration, prompt management, and output handling for the Codomyrmex platform. Supports multi-provider backends with unified API.
+
+## PAI Integration
+
+The llm module powers PAI's local-first inference strategy. `generate_text` is used by `Engineer` agents during BUILD for code generation and documentation synthesis. `list_local_models` is called during OBSERVE for capability discovery — the Algorithm uses this to know which local models are available before capability selection. Local Ollama models run via `OLLAMA_BASE_URL` (default: `http://localhost:11434`). See [AGENTS.md](AGENTS.md) for the full agent role access matrix.
+
+| Algorithm Phase | LLM Role |
+|----------------|----------|
+| OBSERVE | `Researcher` → `list_local_models` for capability inventory |
+| BUILD | `Engineer` → `generate_text` for code and doc generation |
+| VERIFY | `QATester` → `generate_text` for prompt regression testing |
 
 ## Supported Providers
 

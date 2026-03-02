@@ -1,6 +1,6 @@
 # Codomyrmex Agents — src/codomyrmex/orchestrator
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
 
@@ -70,6 +70,27 @@ All tools are auto-discovered via `@mcp_tool` decorators and exposed through the
 |------|-------------|-------------|
 | `get_scheduler_metrics` | Retrieve the current metrics of the Orchestrator AsyncScheduler | Safe |
 | `analyze_workflow_dependencies` | Analyze a proposed workflow DAG for cyclic dependencies | Safe |
+
+## PAI Agent Role Access Matrix
+
+| PAI Agent | Access Level | MCP Tools | Trust Level |
+|-----------|-------------|-----------|-------------|
+| **Engineer** | Full orchestration | `get_scheduler_metrics`, `analyze_workflow_dependencies` | TRUSTED |
+| **Architect** | DAG design | `analyze_workflow_dependencies` | OBSERVED |
+| **QATester** | Performance verification | `get_scheduler_metrics` | OBSERVED |
+| **Researcher** | Read-only | `get_scheduler_metrics` | OBSERVED |
+
+### Engineer Agent
+**Access**: Full — workflow definition, DAG validation, and scheduler metrics.
+**Use Cases**: Building multi-step workflows in the PLAN phase, validating DAG structure before BUILD begins, debugging scheduler performance during complex parallel execution.
+
+### Architect Agent
+**Access**: DAG analysis only — validate dependency graphs without execution.
+**Use Cases**: Designing workflow DAGs, detecting cyclic dependencies before committing workflow definitions, evaluating fan-out/fan-in strategies.
+
+### QATester Agent
+**Access**: Metrics verification — read scheduler state to validate workflow health.
+**Use Cases**: Confirming EXECUTE-phase workflows completed without deadlocks, verifying scheduler metrics after workflow runs, regression testing scheduler behavior.
 
 ## Navigation Links
 

@@ -1,10 +1,19 @@
 # Documentation Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
 Documentation management and website generation module for the Codomyrmex project. Provides tools for checking documentation environments, building and serving static documentation sites (Docusaurus-based), aggregating docs from across modules, validating version consistency, and assessing documentation quality. Integrates with `logging_monitoring` for structured logging and `environment_setup` for dependency verification.
+
+## PAI Integration
+
+The documentation module's `audit_rasp_compliance` MCP tool is invoked by PAI `QATester` agents during the **VERIFY phase** to confirm that new modules follow the RASP documentation pattern (README + AGENTS + SPEC + PAI). `generate_module_docs` is called by `Engineer` agents during BUILD when creating new modules. See [AGENTS.md](AGENTS.md) for the full agent role access matrix.
+
+| Algorithm Phase | Documentation Role |
+|----------------|-------------------|
+| BUILD | `Engineer` → `generate_module_docs` when scaffolding new modules |
+| VERIFY | `QATester` → `audit_rasp_compliance` to gate RASP doc completeness |
 
 ## Key Exports
 

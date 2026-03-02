@@ -1,6 +1,6 @@
 # Codomyrmex Agents — src/codomyrmex/agents
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
 
@@ -74,6 +74,33 @@ uv run python src/codomyrmex/examples/agent_orchestration_demo.py
 - Configuration through `AgentConfig` dataclass with environment variable fallbacks
 - API keys masked in `to_dict()` output
 - Zero-mock testing policy — all tests use real objects and functional verification
+
+## PAI Agent Role Access Matrix
+
+This section defines which PAI v4.0.1 agent types can access which agents submodules and at what trust level.
+
+| PAI Agent | Access Level | Primary Capabilities | Trust Level |
+|-----------|-------------|---------------------|-------------|
+| **Engineer** | Full | `execute_agent`, `list_agents`, `get_agent_memory`; `CodeEditor`, `AgentOrchestrator`, all 12 provider clients | TRUSTED |
+| **Architect** | Read + Design | `list_agents`, `get_agent_memory`; architecture analysis, provider selection, pool strategy design | OBSERVED |
+| **QATester** | Validation | `list_agents`, `execute_agent` (test runs only); `AgentBenchmark`, all scorers (`ExactMatch`, `Contains`, `Composite`) | OBSERVED |
+| **Researcher** | Read-only | `list_agents`, `get_agent_memory`; session history retrieval, conversation context inspection | OBSERVED |
+
+### Engineer Agent
+**Access**: Full — all provider clients, orchestration, code editing, session management
+**Use Cases**: Implementing new provider integrations, building multi-agent workflows, AI-assisted code editing automation, parallel agent pool configuration.
+
+### Architect Agent
+**Access**: Read + Design — provider inventory, capability analysis, pool/circuit-breaker design
+**Use Cases**: Agent architecture design, provider comparison and selection, pool sizing strategy, evaluation framework design, theoretical architecture review (reactive/deliberative/hybrid).
+
+### QATester Agent
+**Access**: Validation — benchmark runs, response validation, session persistence tests
+**Use Cases**: Agent benchmark execution, provider integration verification, response format validation, conversation history round-trip tests.
+
+### Researcher Agent
+**Access**: Read-only — session history, agent capability discovery
+**Use Cases**: Querying agent memory for prior work context, listing available providers for capability awareness, inspecting conversation history for research continuity.
 
 ## Navigation Links
 

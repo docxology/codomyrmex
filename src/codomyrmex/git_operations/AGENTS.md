@@ -1,6 +1,6 @@
 # Agent Guidelines - Git Operations
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Module Overview
 
@@ -132,6 +132,27 @@ assert len(commits) <= 5
 branches = repo.branches()
 assert "main" in branches or "master" in branches
 ```
+
+## PAI Agent Role Access Matrix
+
+| PAI Agent | Access Level | MCP Tools | Trust Level |
+|-----------|-------------|-----------|-------------|
+| **Engineer** | Full git lifecycle | All 34 `git_*` tools including all Destructive operations | TRUSTED |
+| **Architect** | History analysis | `git_log`, `git_repo_status`, `git_diff`, `git_commit_details`, `git_blame`, `git_list_remotes`, `git_list_tags` (Safe only) | OBSERVED |
+| **QATester** | State verification | `git_repo_status`, `git_diff`, `git_current_branch`, `git_log` | OBSERVED |
+| **Researcher** | Read-only history | `git_log`, `git_commit_details`, `git_blame` | OBSERVED |
+
+### Engineer Agent
+**Access**: Full — all 34 tools including all Destructive operations (commit, push, branch, merge, rebase, reset).
+**Use Cases**: Committing BUILD-phase artifacts, creating feature branches, pushing to remotes in EXECUTE phase, managing tags on release, cherry-picking hotfixes.
+
+### Architect Agent
+**Access**: Read-only — all Safe tools for history and diff analysis.
+**Use Cases**: Analyzing commit history patterns, reviewing diffs for architectural decisions, understanding blame attribution, assessing branch topology.
+
+### QATester Agent
+**Access**: State verification — Safe read tools to confirm expected repository state after EXECUTE.
+**Use Cases**: Verifying commits were created correctly, checking that the right files were staged, confirming branch state matches expected post-execution state.
 
 ## Navigation
 

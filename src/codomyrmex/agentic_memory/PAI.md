@@ -124,6 +124,9 @@ profile = UserProfile()
 | `memory_put` | Store a new memory entry with content, optional type (episodic/semantic/procedural), and importance level | Safe |
 | `memory_get` | Retrieve a specific memory by its unique ID | Safe |
 | `memory_search` | Search memories by text query; returns top-k results ranked by combined relevance/recency/importance score | Safe |
+| `rules_list_modules` | List all Codomyrmex module names that have a defined coding rule | Safe |
+| `rules_get_module_rule` | Get the full coding rule (sections, raw content) for a specific module | Safe |
+| `rules_get_applicable` | Get all applicable coding rules for a file path and/or module, ordered FILE_SPECIFIC → GENERAL | Safe |
 
 ## Agent Capabilities
 

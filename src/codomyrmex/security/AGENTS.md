@@ -1,6 +1,6 @@
 # Agent Guidelines - Security
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Module Overview
 
@@ -78,6 +78,27 @@ All tools are auto-discovered via `@mcp_tool` decorators and exposed through the
 | `scan_vulnerabilities` | Scan a project directory for known security vulnerabilities | `path` (default ".") | Safe |
 | `scan_secrets` | Scan a specific file for leaked secrets, API keys, or credentials | `file_path` | Safe |
 | `audit_code_security` | Audit code quality and security for a specific file or directory | `path` | Safe |
+
+## PAI Agent Role Access Matrix
+
+| PAI Agent | Access Level | MCP Tools | Trust Level |
+|-----------|-------------|-----------|-------------|
+| **Engineer** | Full scan suite | `scan_vulnerabilities`, `scan_secrets`, `audit_code_security` | TRUSTED |
+| **Architect** | Architectural review | `audit_code_security` | OBSERVED |
+| **QATester** | Validation scans | `scan_vulnerabilities`, `scan_secrets` | OBSERVED |
+| **Researcher** | Read analysis only | `audit_code_security` (read-only mode) | OBSERVED |
+
+### Engineer Agent
+**Access**: Full — all three scan tools, full project scope.
+**Use Cases**: Running full security audits during BUILD phase, scanning newly written code for vulnerabilities before commit, ensuring secrets are not accidentally committed.
+
+### Architect Agent
+**Access**: Code audit — architectural security review without file-level scanning.
+**Use Cases**: Reviewing architectural security patterns, identifying design-level vulnerabilities (e.g., missing authentication boundaries), threat modeling support.
+
+### QATester Agent
+**Access**: Scan validation — vulnerability and secrets scans as VERIFY-phase gates.
+**Use Cases**: Confirming zero new CVEs in BUILD output, verifying no secrets leaked into test fixtures, running security regression checks before LEARN phase completes.
 
 ## Navigation
 

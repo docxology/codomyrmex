@@ -1,6 +1,6 @@
 # Agent Guidelines - LLM
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Module Overview
 
@@ -75,6 +75,27 @@ template = PromptTemplate("Hello {name}")
 prompt = template.format(name="World")
 assert prompt == "Hello World"
 ```
+
+## PAI Agent Role Access Matrix
+
+| PAI Agent | Access Level | MCP Tools | Trust Level |
+|-----------|-------------|-----------|-------------|
+| **Engineer** | Full LLM access | `generate_text`, `list_local_models`, `query_fabric_metadata` | TRUSTED |
+| **Architect** | Model inventory | `list_local_models`, `query_fabric_metadata` | OBSERVED |
+| **QATester** | Inference testing | `generate_text`, `list_local_models` | OBSERVED |
+| **Researcher** | Read-only | `list_local_models`, `query_fabric_metadata` | OBSERVED |
+
+### Engineer Agent
+**Access**: Full — text generation, model listing, and Fabric metadata queries.
+**Use Cases**: Invoking LLM inference during BUILD phase, generating code/docs with local Ollama models, selecting the right model tier for cost-performance tradeoffs.
+
+### Architect Agent
+**Access**: Model inventory — list available models and Fabric integration specs without running inference.
+**Use Cases**: Evaluating which local models are available before Algorithm capability selection, reviewing Fabric metadata for integration architecture, capacity planning.
+
+### QATester Agent
+**Access**: Inference testing — run `generate_text` with controlled inputs to verify LLM behavior.
+**Use Cases**: Confirming local model availability and responsiveness, regression testing prompt templates, verifying response format consistency.
 
 ## Navigation
 

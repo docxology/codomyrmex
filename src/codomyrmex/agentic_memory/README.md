@@ -67,12 +67,22 @@ persistent = JSONFileStore(path="~/.codomyrmex/memory/")
 
 ```
 agentic_memory/
-├── __init__.py          # Public API (AgentMemory, Memory, stores, enums)
+├── __init__.py          # Public API (AgentMemory, Memory, stores, enums, RuleEngine)
 ├── memory.py            # Core memory classes (AgentMemory, ConversationMemory, etc.)
 ├── models.py            # Memory, MemoryType, MemoryImportance, RetrievalResult
 ├── stores.py            # InMemoryStore, JSONFileStore backends
 ├── user_profile.py      # UserProfile tracking
 ├── mcp_tools.py         # MCP tool definitions (memory_put, memory_get, memory_search)
+├── rules/               # Coding governance rules submodule (see rules/README.md)
+│   ├── engine.py        # RuleEngine — hierarchy-aware rule resolution
+│   ├── loader.py        # RuleLoader — parses .cursorrules files
+│   ├── registry.py      # RuleRegistry — indexed access by module/extension
+│   ├── models.py        # Rule, RuleSet, RulePriority, RuleSection
+│   ├── mcp_tools.py     # rules_list_modules, rules_get_module_rule, rules_get_applicable
+│   ├── general.cursorrules
+│   ├── modules/         # 60 module-specific rules
+│   ├── cross-module/    # 8 cross-cutting rules
+│   └── file-specific/   # 6 file-type rules
 └── tests/               # Unit tests (Zero-Mock policy)
 ```
 

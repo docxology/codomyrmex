@@ -1,6 +1,6 @@
 # Agent Guidelines - Coding
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Module Overview
 
@@ -72,6 +72,27 @@ matcher = PatternMatcher()
 matches = matcher.find_in_string("x = 10", "Assignment")
 assert len(matches) == 1
 ```
+
+## PAI Agent Role Access Matrix
+
+| PAI Agent | Access Level | MCP Tools | Trust Level |
+|-----------|-------------|-----------|-------------|
+| **Engineer** | Full sandbox | `code_execute` (Destructive), `code_review_file`, `code_review_project`, `code_debug` | TRUSTED |
+| **Architect** | Project review | `code_review_project` | OBSERVED |
+| **QATester** | Execution + Debug | `code_execute`, `code_debug` | OBSERVED |
+| **Researcher** | Review-only | `code_review_file`, `code_list_languages` | OBSERVED |
+
+### Engineer Agent
+**Access**: Full — sandbox execution and all review/debug tools.
+**Use Cases**: Executing generated code in the BUILD phase, debugging failing implementations, reviewing code quality after refactoring, running language-specific tests.
+
+### Architect Agent
+**Access**: Project-level review — architecture and quality analysis without execution.
+**Use Cases**: Evaluating project-level code quality metrics, identifying architectural violations, assessing complexity distribution across modules.
+
+### QATester Agent
+**Access**: Execution and debugging — running tests and diagnosing failures.
+**Use Cases**: Executing test suites against BUILD output, diagnosing test failures with `code_debug`, verifying exit codes and stdout match expected VERIFY criteria.
 
 ## Navigation
 

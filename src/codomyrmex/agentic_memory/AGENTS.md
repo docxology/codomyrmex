@@ -1,6 +1,6 @@
 # Agent Instructions for `codomyrmex.agentic_memory`
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Context
 
@@ -49,6 +49,27 @@ All tools are auto-discovered via `@mcp_tool` decorators and exposed through the
 - **DO**: Use `memory_search` before starting work to check for relevant past experience
 - **DO NOT**: Store sensitive credentials in memory (use `wallet/` or `auth/` instead)
 - **DO NOT**: Assume memory persistence — always handle `KeyError` from `memory_get`
+
+## PAI Agent Role Access Matrix
+
+| PAI Agent | Access Level | MCP Tools | Trust Level |
+|-----------|-------------|-----------|-------------|
+| **Engineer** | Full CRUD | `memory_put`, `memory_get`, `memory_search` | TRUSTED |
+| **Architect** | Query-only | `memory_search` | OBSERVED |
+| **QATester** | Retrieval + Verification | `memory_search`, `memory_get` | OBSERVED |
+| **Researcher** | Read-only | `memory_get`, `memory_search` | OBSERVED |
+
+### Engineer Agent
+**Access**: Full — write, read, and search operations on the memory store.
+**Use Cases**: Capturing work outcomes in the LEARN phase, storing session state, persisting ISC results and decisions across Algorithm runs.
+
+### Architect Agent
+**Access**: Query-only — semantic search for prior architecture decisions.
+**Use Cases**: Retrieving precedents for design decisions, querying past problem patterns, informing ISC criteria with prior experience.
+
+### QATester Agent
+**Access**: Retrieval + verification — confirm memory round-trips correctly.
+**Use Cases**: Verifying that LEARN-phase writes were stored correctly, checking that memory searches return relevant results, testing persistence across sessions.
 
 ## Navigation
 

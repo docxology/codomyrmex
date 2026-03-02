@@ -1,10 +1,10 @@
 # Codomyrmex
 
-**Version**: v1.0.3 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python](https://img.shields.io/badge/python-≥3.10-blue.svg)](https://www.python.org/downloads/)
-[![Version](https://img.shields.io/badge/version-1.0.3-blue.svg)](https://github.com/docxology/codomyrmex)
-[![Tests](https://img.shields.io/badge/tests-15,179%20passing-brightgreen.svg)](https://github.com/docxology/codomyrmex)
+[![Version](https://img.shields.io/badge/version-1.0.5-blue.svg)](https://github.com/docxology/codomyrmex)
+[![Tests](https://img.shields.io/badge/tests-16,190%20passing-brightgreen.svg)](https://github.com/docxology/codomyrmex)
 [![Coverage](https://img.shields.io/badge/coverage-~68%25-blue.svg)](https://github.com/docxology/codomyrmex)
 
 > **A modular, extensible coding workspace designed for AI development workflows**
@@ -153,6 +153,24 @@ uv run scripts/documentation/examples/advanced_workflow.py
 
 See the **[Full Setup Guide](docs/getting-started/full-setup.md)** for complete module tables, architecture diagrams, and the module quick reference.
 
+## PAI Integration
+
+Codomyrmex is the **toolbox** for [PAI v4.0.1](https://github.com/danielmiessler/Personal_AI_Infrastructure) (Personal AI Infrastructure). PAI agents invoke codomyrmex capabilities via the Model Context Protocol (MCP) during every phase of The Algorithm:
+
+| Algorithm Phase | Primary Codomyrmex Modules |
+|----------------|---------------------------|
+| OBSERVE | `system_discovery`, `git_operations`, `search` |
+| THINK | `cerebrum`, `agents/core` (ThinkingAgent) |
+| PLAN | `orchestrator`, `formal_verification` |
+| BUILD | `agents`, `coding`, `git_operations` |
+| EXECUTE | `agents` (all 12 providers), `containerization` |
+| VERIFY | `static_analysis`, `security`, `validation` |
+| LEARN | `agentic_memory`, `logging_monitoring` |
+
+**MCP Bridge**: 171 tools (167 safe + 4 destructive) across 33 auto-discovered modules — see [`PAI.md`](PAI.md)
+**Trust Model**: UNTRUSTED → VERIFIED (`/codomyrmexVerify`) → TRUSTED (`/codomyrmexTrust`)
+**Deep Dive**: [`PAI.md`](PAI.md) · [`docs/pai/README.md`](docs/pai/README.md) · [`docs/pai/architecture.md`](docs/pai/architecture.md)
+
 ## Development
 
 ### Running Tests
@@ -188,7 +206,7 @@ See **[Creating a Module Tutorial](docs/getting-started/tutorials/creating-a-mod
 ## Key Metrics
 
 - **Lines of Code**: ~100K+ across 88 modules
-- **Test Coverage**: ~68% (15,179 tests passing, gate: 67%)
+- **Test Coverage**: ~68% (16,190 tests passing, gate: 68%)
 - **Module Count**: 88 modules (88 load successfully; 6 additional require optional SDKs)
 - **Language Support**: Python, JavaScript, Go, Rust, Java
 - **AI Integration**: 5+ LLM providers supported

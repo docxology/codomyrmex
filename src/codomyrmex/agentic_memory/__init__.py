@@ -1,7 +1,9 @@
 """Agentic Memory — persistent, searchable agent memory with typed retrieval.
 
 Provides Memory models, in-memory and file-backed stores, agent-level
-search/recall, and Obsidian vault integration.
+search/recall, Obsidian vault integration, and a rules submodule exposing
+the hierarchical .cursorrules coding governance system via Python API and
+MCP tools.
 """
 
 from codomyrmex.agentic_memory.memory import (
@@ -16,6 +18,12 @@ from codomyrmex.agentic_memory.models import (
     MemoryType,
     RetrievalResult,
 )
+from codomyrmex.agentic_memory.rules import (
+    Rule,
+    RuleEngine,
+    RulePriority,
+    RuleSet,
+)
 from codomyrmex.agentic_memory.stores import InMemoryStore, JSONFileStore
 from codomyrmex.agentic_memory.user_profile import UserProfile
 
@@ -29,6 +37,10 @@ __all__ = [
     "MemoryImportance",
     "MemoryType",
     "RetrievalResult",
+    "Rule",
+    "RuleEngine",
+    "RulePriority",
+    "RuleSet",
     "UserProfile",
     "VectorStoreMemory",
 ]

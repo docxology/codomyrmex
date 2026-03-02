@@ -1,6 +1,6 @@
 # Agent Guidelines - Cerebrum
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Module Overview
 
@@ -72,6 +72,27 @@ All tools are auto-discovered via `@mcp_tool` decorators and exposed through the
 |------|-------------|-------------|
 | `query_knowledge_base` | Perform semantic retrieval from the CaseBase | Safe |
 | `add_case_reference` | Store intelligence context directly into the CaseBase | Safe |
+
+## PAI Agent Role Access Matrix
+
+| PAI Agent | Access Level | MCP Tools | Trust Level |
+|-----------|-------------|-----------|-------------|
+| **Engineer** | Full knowledge CRUD | `query_knowledge_base`, `add_case_reference` | TRUSTED |
+| **Architect** | Query-only | `query_knowledge_base` | OBSERVED |
+| **QATester** | Retrieval verification | `query_knowledge_base` | OBSERVED |
+| **Researcher** | Read-only | `query_knowledge_base` | OBSERVED |
+
+### Engineer Agent
+**Access**: Full — both read and write operations on the knowledge base (CaseBase).
+**Use Cases**: Adding case references during LEARN phase, storing problem-solution pairs for future retrieval, building up domain knowledge from successful Algorithm runs.
+
+### Architect Agent
+**Access**: Query-only — semantic retrieval for design decisions.
+**Use Cases**: Querying past architectural decisions, retrieving analogous problems for pattern matching, informing ISC criteria with case-based precedents from the THINK phase.
+
+### QATester Agent
+**Access**: Retrieval verification — confirming knowledge retrieval accuracy.
+**Use Cases**: Verifying that `add_case_reference` writes are retrievable via `query_knowledge_base`, testing relevance ranking of search results, confirming CaseBase consistency.
 
 ## Navigation
 

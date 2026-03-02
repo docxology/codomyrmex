@@ -1,10 +1,46 @@
-# cursorrules
+# Agentic Memory — Rules Submodule
 
-**Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.3.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
 Hierarchical coding standards and automation rules for AI-assisted development across the Codomyrmex platform. Rules are organized by specificity level and applied in order of precedence.
+
+This submodule exposes the 75 `.cursorrules` files via a Python API and three MCP tools, enabling AI agents to programmatically query which coding standards apply to any given file or module.
+
+## Python API
+
+```python
+from codomyrmex.agentic_memory.rules import RuleEngine, RulePriority
+
+engine = RuleEngine()
+
+# Which rules apply when editing src/codomyrmex/agents/memory.py?
+rule_set = engine.get_applicable_rules(
+    file_path="memory.py",
+    module_name="agentic_memory",
+)
+for rule in rule_set.resolved():  # FILE_SPECIFIC first, GENERAL last
+    print(f"[{rule.priority.name}] {rule.name}")
+
+# Get a specific module's rule
+rule = engine.get_module_rule("agents")
+section = rule.get_section(3)  # "Coding Standards & Practices for agents"
+print(section.content)
+
+# List all modules with rules
+print(engine.list_module_names())  # ['agents', 'agentic_memory', 'cloud', ...]
+```
+
+## MCP Tools
+
+Three tools are auto-discovered by the PAI MCP bridge:
+
+| Tool | Description |
+|------|-------------|
+| `rules_list_modules` | List all module names with defined rules |
+| `rules_get_module_rule` | Get the full rule for a specific module |
+| `rules_get_applicable` | Get all applicable rules for a file/module context |
 
 ## Rule Hierarchy
 
@@ -32,7 +68,13 @@ These policies are defined in `general.cursorrules §2` and enforced at all leve
 ## Directory Structure
 
 ```
-cursorrules/
+src/codomyrmex/agentic_memory/rules/
+├── __init__.py               # Public API (RuleEngine, RuleLoader, Rule, RuleSet, RulePriority)
+├── engine.py                 # RuleEngine — hierarchy-aware resolution
+├── loader.py                 # RuleLoader — parses .cursorrules files
+├── registry.py               # RuleRegistry — indexed access by module/extension/cross-module
+├── models.py                 # Rule, RuleSet, RulePriority, RuleSection dataclasses
+├── mcp_tools.py              # MCP tools (rules_list_modules, rules_get_module_rule, rules_get_applicable)
 ├── general.cursorrules       # Universal coding standards + mandatory policies
 ├── cross-module/             # Rules for cross-cutting concerns (8 rules)
 │   ├── logging_monitoring.cursorrules
@@ -82,6 +124,6 @@ All `.cursorrules` files follow this structure:
 
 ## Navigation
 
-- **Project Root**: [../README.md](../README.md)
-- **Source Code**: [../src/codomyrmex/](../src/codomyrmex/)
-- **Documentation**: [../docs/](../docs/)
+- **Parent Module**: [../README.md](../README.md) — Agentic Memory module
+- **Source Code**: [../](../) — agentic_memory/ package root
+- **Documentation**: [../../../../../docs/](../../../../../docs/)
