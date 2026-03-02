@@ -1,38 +1,14 @@
 # Dark Module
 
-**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-Dark mode utilities for different domains: PDF, network, hardware, and software.
-
-## PAI Integration
-
-| Algorithm Phase | Role | Tools Used |
-|----------------|------|-----------|
-| **EXECUTE** | Apply dark mode transformations and TOR access operations | Direct Python import |
-| **OBSERVE** | Gather dark web intelligence and monitor channels | Direct Python import |
-| **VERIFY** | Validate anonymity and dark mode filter output | Direct Python import |
-
-PAI agents access this module via direct Python import through the MCP bridge. The Engineer agent uses `DarkPDF` during EXECUTE to apply dark mode filters to PDF artifacts for accessibility and low-light readability.
+Dark mode utilities for PDF processing, providing high-quality visual transformations.
 
 ## Submodules
 
 | Submodule | Status | Description |
 |-----------|--------|-------------|
 | `pdf` | Implemented | PDF dark mode filters (inversion, brightness, contrast, sepia) |
-| `network` | Planned | Network dark mode utilities — Planned for future implementation |
-| `hardware` | Planned | Hardware dark mode utilities — Planned for future implementation |
-| `software` | Planned | Software dark mode utilities — Planned for future implementation |
-
-## Key Exports
-
-### Submodules
-- **`pdf`** — PDF dark mode filters (inversion, brightness, contrast, sepia); `None` if dependencies missing
-- **`network`** — Network dark mode utilities — Planned for future implementation
-- **`hardware`** — Hardware dark mode utilities — Planned for future implementation
-- **`software`** — Software dark mode utilities — Planned for future implementation
-
-### Availability Flags
-- **`PDF_AVAILABLE`** — Boolean flag indicating whether PDF processing dependencies (PyMuPDF, Pillow) are available
 
 ## Installation
 
@@ -44,23 +20,35 @@ This installs PyMuPDF and Pillow, required for the PDF submodule.
 
 ## Quick Start
 
+### Simple One-Call API
 ```python
-from codomyrmex.dark.pdf import DarkPDF, DarkPDFFilter, apply_dark_mode
+from codomyrmex.dark.pdf import apply_dark_mode
 
-# Simple one-call API
-DarkPDF("input.pdf").save("output.pdf")
+# Apply standard dark mode and save
+apply_dark_mode("input.pdf", "output.pdf")
+```
 
-# With a preset
-DarkPDF("input.pdf", preset="sepia").save("output.pdf")
+### Fluent API (Fluent & Chainable)
+```python
+from codomyrmex.dark.pdf import DarkPDF
 
-# Custom filter parameters
-apply_dark_mode("input.pdf", "output.pdf", inversion=0.85, contrast=1.2)
+(
+    DarkPDF("input.pdf")
+    .set_filter("sepia")
+    .set_brightness(0.8)
+    .set_contrast(1.2)
+    .save("output_custom.pdf")
+)
+```
 
-# Batch processing
+### Batch Processing
+```python
+from codomyrmex.dark.pdf import DarkPDF
+
 DarkPDF.batch(
     ["doc1.pdf", "doc2.pdf", "doc3.pdf"],
     output_dir="dark_pdfs/",
-    preset="dark",
+    preset="high_contrast",
 )
 ```
 
@@ -73,16 +61,20 @@ DarkPDF.batch(
 | `high_contrast` | 1.00 | 1.00 | 1.30 | 0.00 |
 | `low_light` | 0.80 | 0.70 | 0.85 | 0.05 |
 
-## Credits
-
-The PDF filter logic is inspired by [dark-pdf](https://github.com/benjifriedman/dark-pdf), a Next.js application for applying dark mode to PDFs. The original JavaScript filter pipeline has been reimplemented natively in Python using PyMuPDF and Pillow.
-
-The dark-pdf source is included as a git submodule at `pdf/vendor/dark-pdf/` for reference.
-
 ## Testing
+
+The module follows a **Strict Zero-Mock Policy**. All tests use real PDF artifacts.
 
 ```bash
 uv run python -m pytest src/codomyrmex/tests/ -k dark -v
+```
+
+## Orchestrator Example
+
+A working example script is available at `scripts/dark/dark_orchestrator.py`.
+
+```bash
+uv run scripts/dark/dark_orchestrator.py
 ```
 
 ## Navigation

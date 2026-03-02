@@ -94,6 +94,15 @@ The module exposes 6 MCP tools matching the mcp-solver specification:
 - `replace_item` — Replace a constraint at index
 - `get_model` — View the current model
 - `solve_model` — Execute the solver
+- `push` — Start a new solver scope
+- `pop` — Revert to a previous solver scope
+
+## New Features (v1.1.0)
+
+- **Incremental Solving**: Use `push()` and `pop()` for better performance when exploring many similar constraint sets.
+- **Improved ISC Extraction**: Smarter variable name extraction from criteria descriptions (e.g., "Response time under 200ms" correctly maps to `response_time`).
+- **Conflict Detection**: Automatic identification of conflicting criteria via Z3 unsat cores.
+- **Optimization Support**: Use `optimizer.add`, `optimizer.maximize`, and `optimizer.minimize` to solve optimization problems.
 
 ## Architecture
 

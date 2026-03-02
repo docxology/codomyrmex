@@ -44,14 +44,23 @@ The exceptions are organized into logical modules:
 ## Usage
 
 ```python
-from codomyrmex.exceptions import FileOperationError, create_error_context
+from codomyrmex.exceptions import FileOperationError, AIProviderError
 
+# Raising with domain-specific context
 try:
-    process_file("data.txt")
-except FileOperationError as e:
-    # Access structured context
-    filepath = e.context.get("file_path")
-    logger.error(f"Failed to process {filepath}: {e}")
+    raise AIProviderError("Connection failed", provider_name="Anthropic")
+except AIProviderError as e:
+    print(f"Provider: {e.context.get('provider_name')}")
+
+# Chaining exceptions
+try:
+    try:
+        raise FileOperationError("Missing file", file_path="config.json")
+    except FileOperationError as cause:
+        raise ConfigurationError("Load failed") from cause
+except CodomyrmexError as e:
+    from codomyrmex.exceptions import format_exception_chain
+    print(format_exception_chain(e))
 ```
 
 ## Directory Structure
@@ -73,9 +82,15 @@ exceptions/
 └── specialized.py   # Misc domain errors
 ```
 
+## Testing
+
+```bash
+uv run pytest src/codomyrmex/tests/unit/exceptions/ -v
+```
+
 ## Navigation
 
+- [SPEC](SPEC.md) | [AGENTS](AGENTS.md) | [PAI](PAI.md)
 - **Extended Docs**: [docs/modules/exceptions/](../../../docs/modules/exceptions/)
 - **Parent Directory**: [codomyrmex](../README.md)
-- **Project Root**: ../../../README.md
 - **Related**: [Validation](../validation/README.md)

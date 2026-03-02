@@ -1,99 +1,94 @@
 # Feature Flags Module
 
-**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-Feature flag management with evaluation strategies and gradual rollout.
+Advanced feature flag management with evaluation strategies, gradual rollout, and persistent storage.
+
+## Design Principles
+
+- **Resilience**: Defaults to safe 'closed' states if evaluation fails.
+- **Performance**: High-speed deterministic evaluation using hashing.
+- **Flexibility**: Multiple storage backends and rich targeting rules.
 
 ## PAI Integration
 
 | Algorithm Phase | Role | Tools Used |
 |----------------|------|-----------|
-| **OBSERVE** | Check flag states and current rollout percentages | Direct Python import |
-| **PLAN** | Configure rollout strategies and experiment parameters | Direct Python import |
-| **EXECUTE** | Toggle features during deployments and A/B test execution | Direct Python import |
+| **PLAN** | Query current flag states before making decisions | `flag_list`, `flag_is_enabled` |
+| **EXECUTE** | Create or update flags during feature deployment | `flag_create`, `flag_is_enabled` |
+| **VERIFY** | Confirm expected flags are active after deployment | `flag_list`, `flag_is_enabled` |
 
-PAI agents access this module via direct Python import through the MCP bridge. The Architect agent configures rollout strategies during PLAN, while the Engineer agent toggles flags during EXECUTE for gradual feature releases.
+PAI's Engineer agent uses `flag_create` during BUILD to gate new features. `flag_is_enabled` drives conditional logic in EXECUTE — agents check flag state before taking deployment actions. `flag_list` provides OBSERVE-phase visibility into active feature configuration. **Note**: MCP-session flags are process-local and not persisted between sessions unless `storage.FileStorage` is configured.
 
-## Installation
+## Architecture
 
-```bash
-uv add codomyrmex
-```
+The module is composed of several specialized submodules:
 
-Or for development:
-
-```bash
-uv sync
-```
-
-## Key Exports
-
-### Classes
-- **`VariantType`** — Experiment variant types.
-- **`Variant`** — An experiment variant.
-- **`Experiment`** — An A/B test experiment.
-- **`Assignment`** — User's experiment assignment.
-- **`ExperimentEvent`** — An experiment analytics event.
-- **`ExperimentManager`** — Manage A/B test experiments.
-
-### Submodules
-- **`core/`** — Core flag management submodule.
-- **`evaluation/`** — Flag evaluation submodule.
-- **`rollout/`** — Gradual rollout submodule.
-- **`storage/`** — Flag storage submodule.
-- **`strategies/`** — Feature flag evaluation strategies.
+- **`core`**: The central `FeatureManager` that orchestrates evaluation, storage, and rollouts.
+- **`evaluation`**: Core logic for evaluating flags against contexts.
+- **`strategies`**: Implementation of various evaluation strategies (Boolean, Percentage, UserList, etc.).
+- **`rollout`**: Management of multi-stage gradual rollouts.
+- **`storage`**: Backends for flag persistence (In-memory, File).
 
 ## Quick Start
 
 ```python
-from codomyrmex.feature_flags import strategies, storage, evaluation, rollout
-
-# Using FeatureManager (if available)
 from codomyrmex.feature_flags import FeatureManager
 
+# Initialize manager
 manager = FeatureManager()
 
-# Define flags
-manager.define("dark_mode", default=False)
-manager.define("new_checkout", default=False, rollout_percent=25)
+# Create a flag with a 25% rollout
+manager.create_flag("new_ui", percentage=25.0, description="New user interface")
 
-# Check flags
-if manager.is_enabled("dark_mode", user_id="user-123"):
-    show_dark_mode()
-
-# Gradual rollout
-if manager.is_enabled("new_checkout", user_id="user-123"):
-    render_new_checkout()
+# Check if enabled for a user
+if manager.is_enabled("new_ui", user_id="user_123"):
+    show_new_ui()
 else:
-    render_old_checkout()
+    show_old_ui()
 
-# Override for testing
-with manager.override("experimental_feature", True):
-    run_experiment()
+# Multivariate flags
+manager.create_flag("max_results", enabled=True, metadata={"value": 50})
+limit = manager.get_value("max_results", default=10)
 ```
 
-## Submodules
+## Advanced Targeting
 
-| Module | Description |
-|--------|-------------|
-| `strategies` | Evaluation strategies (percentage, user segment, etc.) |
-| `storage` | Flag storage backends (memory, file, redis) |
-| `evaluation` | Flag evaluation logic |
-| `rollout` | Gradual rollout management |
-| `core` | Core flag manager |
+Targeting rules allow granular control based on user attributes:
 
-## Exports
+```python
+from codomyrmex.feature_flags.evaluation import TargetingRule
 
-| Class | Description |
-|-------|-------------|
-| `FeatureManager` | Main flag manager |
+rule = TargetingRule(attribute="plan", operator="eq", value="premium")
+manager.create_flag("beta_feature", targeting_rules=[rule])
+
+# Enabled only for premium users
+is_enabled = manager.is_enabled("beta_feature", plan="premium")
+```
+
+## Directory Structure
+
+```
+feature_flags/
+├── __init__.py          # Module exports (FeatureManager, cli_commands)
+├── mcp_tools.py         # MCP: flag_create, flag_is_enabled, flag_list
+├── experiments.py       # A/B experiment tracking
+├── core/                # FeatureManager — central orchestration
+│   └── manager.py       # Flag lifecycle management
+├── evaluation/          # Flag evaluation logic and targeting rules
+├── strategies/          # BooleanStrategy, PercentageStrategy, UserListStrategy, TimeWindowStrategy
+├── storage/             # InMemoryStorage, FileStorage backends
+└── rollout/             # Multi-stage gradual rollout management
+```
+
+## Testing
+
+```bash
+uv run pytest src/codomyrmex/tests/unit/feature_flags/
+```
 
 ## Documentation
 
-- [Module Documentation](../../../docs/modules/feature_flags/README.md)
-- [Agent Guide](../../../docs/modules/feature_flags/AGENTS.md)
-- [Specification](../../../docs/modules/feature_flags/SPEC.md)
-
-## Navigation
-
-- [SPEC](SPEC.md) | [AGENTS](AGENTS.md) | [PAI](PAI.md)
+- [SPEC](SPEC.md) - Functional Specification
+- [AGENTS](AGENTS.md) - Guidelines for AI Agents
+- [SECURITY](SECURITY.md) - Security and Privacy considerations

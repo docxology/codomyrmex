@@ -12,9 +12,6 @@ from pathlib import Path
 
 from codomyrmex.logging_monitoring import get_logger
 
-
-
-
 logger = get_logger(__name__)
 
 def find_markdown_files(docs_dir: Path) -> list[Path]:

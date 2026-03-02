@@ -77,6 +77,12 @@ maintenance/
 └── tests/                           # Zero-Mock tests
 ```
 
+## Testing
+
+```bash
+uv run pytest src/codomyrmex/tests/unit/maintenance/
+```
+
 ## Navigation
 
 - **Extended Docs**: [docs/modules/maintenance/](../../../docs/modules/maintenance/)
