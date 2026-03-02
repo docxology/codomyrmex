@@ -53,11 +53,17 @@ class SwarmManager(NewSwarmManager):
 
     def consensus_vote(self, proposal: str) -> bool:
         """Simple majority vote among agents (Legacy Compatibility)."""
+        import asyncio
         from codomyrmex.collaboration.swarm import Decision, Vote
         votes = [Vote(aid, True) for aid in self.pool._agents]
         if not votes:
             return False
-        result = self.request_consensus(proposal, votes)
+        try:
+            result = asyncio.run(self.request_consensus(proposal, votes))
+        except RuntimeError:
+            loop = asyncio.new_event_loop()
+            result = loop.run_until_complete(self.request_consensus(proposal, votes))
+            loop.close()
         return result.decision == Decision.APPROVED
 
 class TaskDecomposer(NewTaskDecomposer):

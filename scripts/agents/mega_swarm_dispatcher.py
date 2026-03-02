@@ -9,7 +9,6 @@ comprehensive zero-mock tests, and documentation (AGENTS.md, README.md, SPEC.md)
 It executes agents in parallel batches to respect rate limits.
 """
 
-import os
 import subprocess
 import time
 from pathlib import Path

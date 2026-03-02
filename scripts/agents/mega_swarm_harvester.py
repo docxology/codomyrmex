@@ -7,8 +7,6 @@ and automatically applies their changes to the local repository.
 """
 
 import subprocess
-import sys
-import time
 
 def get_completed_sessions() -> list[str]:
     """Parse 'jules remote list --session' to find Completed session IDs."""

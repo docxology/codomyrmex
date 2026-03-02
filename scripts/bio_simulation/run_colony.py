@@ -7,7 +7,7 @@ Demonstrates the capabilities of the improved bio_simulation module:
 - Population genomics and trait distributions.
 """
 
-from codomyrmex.bio_simulation import Colony, Genome, Population
+from codomyrmex.bio_simulation import Colony, Population
 
 
 def main():

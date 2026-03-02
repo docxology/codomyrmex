@@ -134,92 +134,146 @@ class Cli:
             resume=resume,
         )
 
-    def workflow(self, action, name=None, template=None, params=None):
-        """Workflow management (list, run, create)"""
-        if action == "list":
+    class workflow:
+        """Workflow management subcommands"""
+
+        def list(self):
+            """List all available workflows"""
             return list_workflows()
-        elif action == "run":
-            if not name:
-                print("❌ Must specify a workflow name to run")
-                return False
-            run_params = {}
+
+        def run(self, name: str, params: str = ""):
+            """Run a named workflow (params as JSON string)"""
+            run_params: dict = {}
             if params:
                 try:
                     run_params = json.loads(params)
                 except json.JSONDecodeError:
-                    print("❌ Invalid JSON in --params")
+                    print("❌ Invalid JSON in params")
                     return False
             return run_workflow(name, **run_params)
-        elif action == "create":
-            if not name:
-                print("❌ Must specify a name for the new workflow")
-                return False
-            return handle_workflow_create(name, template)
-        else:
-            print(f"❌ Unknown workflow action: {action}")
-            return False
 
-    def project(self, action, name=None, template=None, description=None, path=None):
-        """Project management (list, create)"""
-        if action == "list":
+        def create(self, name: str, template: str = ""):
+            """Create a new workflow from an optional template"""
+            return handle_workflow_create(name, template or None)
+
+    class project:
+        """Project management subcommands"""
+
+        def list(self):
+            """List all projects"""
             return handle_project_list()
-        elif action == "create":
-            if not name:
-                print("❌ Must specify a project name")
-                return False
+
+        def create(self, name: str, template: str = "ai_analysis", description: str = "", path: str = ""):
+            """Create a new project"""
             kwargs = {}
             if description:
                 kwargs["description"] = description
             if path:
                 kwargs["path"] = path
-            return handle_project_create(name, template or "ai_analysis", **kwargs)
-        else:
-            print(f"❌ Unknown project action: {action}")
-            return False
+            return handle_project_create(name, template, **kwargs)
 
-    def orchestration(self, action):
-        """Orchestration system management (status, health)"""
-        if action == "status":
+    class orchestration:
+        """Orchestration system management"""
+
+        def status(self):
+            """Show orchestration system status"""
             return handle_orchestration_status()
-        elif action == "health":
+
+        def health(self):
+            """Check orchestration system health"""
             return handle_orchestration_health()
-        else:
-            print(f"❌ Unknown orchestration action: {action}")
-            return False
 
-    def ai(self, action, prompt=None, language="python", provider="openai", file=None, instruction=None):
-        """AI-powered operations (generate, refactor)"""
-        if action == "generate":
-            if not prompt:
-                print("❌ Must specify a prompt for generation")
-                return False
+    class ai:
+        """AI-powered operations"""
+
+        def generate(self, prompt: str, language: str = "python", provider: str = "openai"):
+            """Generate code from a prompt"""
             return handle_ai_generate(prompt, language, provider)
-        elif action == "refactor":
-            if not file or not instruction:
-                print("❌ Must specify both --file and --instruction for refactoring")
-                return False
+
+        def refactor(self, file: str, instruction: str):
+            """Refactor a file given an instruction"""
             return handle_ai_refactor(file, instruction)
-        else:
-            print(f"❌ Unknown ai action: {action}")
-            return False
 
-    def analyze(self, action, path=".", output=None, repo="."):
-        """Code and git analysis operations (code, git)"""
-        if action == "code":
-            return handle_code_analysis(path, output)
-        elif action == "git":
+    class analyze:
+        """Code and git analysis operations"""
+
+        def code(self, path: str = ".", output: str = ""):
+            """Analyze code quality at path"""
+            return handle_code_analysis(path, output or None)
+
+        def git(self, repo: str = "."):
+            """Analyze git history for a repository"""
             return handle_git_analysis(repo)
-        else:
-            print(f"❌ Unknown analyze action: {action}")
-            return False
 
-    def build(self, action="project", config=None):
+    class build:
         """Build and synthesis operations"""
-        if action == "project":
-            return handle_project_build(config)
-        else:
-            print(f"❌ Unknown build action: {action}")
-            return False
+
+        def project(self, config: str = ""):
+            """Build the project using an optional config file"""
+            return handle_project_build(config or None)
+
+    class fpf:
+        """First Principles Framework operations"""
+
+        def fetch(self, repo: str = "ailev/FPF", branch: str = "main", output: str = ""):
+            """Fetch the FPF repository"""
+            return handle_fpf_fetch(repo, branch, output or None)
+
+        def parse(self, file: str, output: str = ""):
+            """Parse an FPF file"""
+            return handle_fpf_parse(file, output or None)
+
+        def export(self, file: str, output: str, format: str = "json"):
+            """Export an FPF file to a given format"""
+            return handle_fpf_export(file, output, format)
+
+        def search(self, query: str, file: str = "", status: str = "", part: str = ""):
+            """Search within an FPF file"""
+            filters: dict = {}
+            if status:
+                filters["status"] = status
+            if part:
+                filters["part"] = part
+            return handle_fpf_search(query, file or None, filters)
+
+        def visualize(self, file: str, output: str, type: str = "hierarchy", format: str = "json", layout: str = "hierarchical", chart_type: str = "bar"):
+            """Visualize an FPF file"""
+            return handle_fpf_visualize(file, type, output, format, layout, chart_type)
+
+        def context(self, file: str, output: str = "", pattern: str = "", depth: int = 1):
+            """Show context for an FPF file"""
+            return handle_fpf_context(file, pattern or None, output or None, depth)
+
+        def export_section(self, file: str, output: str, part: str = "", pattern: str = "", include_dependencies: bool = False):
+            """Export a section of an FPF file"""
+            return handle_fpf_export_section(file, part or None, pattern or None, output, include_dependencies)
+
+        def analyze(self, file: str, output: str = ""):
+            """Analyze an FPF file"""
+            return handle_fpf_analyze(file, output or None)
+
+        def report(self, file: str, output: str, include_analysis: bool = True):
+            """Generate a report from an FPF file"""
+            return handle_fpf_report(file, output, include_analysis)
+
+    class skills:
+        """Skills management operations"""
+
+        def sync(self, force: bool = False):
+            """Sync available skills"""
+            return handle_skills_sync(force)
+
+        def list(self, category: str = ""):
+            """List available skills, optionally filtered by category"""
+            return handle_skills_list(category or None)
+
+        def get(self, category: str, name: str, output: str = ""):
+            """Get a specific skill by category and name"""
+            return handle_skills_get(category, name, output or None)
+
+        def search(self, query: str):
+            """Search skills by query"""
+            return handle_skills_search(query)
 
     def test(self, module_name):
         """Run tests for a specific module"""
@@ -228,79 +282,6 @@ class Cli:
     def demo(self, module_name):
         """Run demonstration for a specific module"""
         return handle_module_demo(module_name)
-
-    def fpf(self, action, file=None, repo="ailev/FPF", branch="main", output=None, format="json", query=None, status=None, part=None, type="hierarchy", layout="hierarchical", chart_type="bar", pattern=None, depth=1, include_dependencies=False, include_analysis=True):
-        """First Principles Framework operations (fetch, parse, export, search, etc.)"""
-        if action == "fetch":
-            return handle_fpf_fetch(repo, branch, output)
-        elif action == "parse":
-            if not file:
-                print("❌ Must specify --file to parse")
-                return False
-            return handle_fpf_parse(file, output)
-        elif action == "export":
-            if not file or not output:
-                print("❌ Must specify --file and --output for export")
-                return False
-            return handle_fpf_export(file, output, format)
-        elif action == "search":
-            if not query:
-                print("❌ Must specify --query to search")
-                return False
-            filters = {}
-            if status:
-                filters["status"] = status
-            if part:
-                filters["part"] = part
-            return handle_fpf_search(query, file, filters)
-        elif action == "visualize":
-            if not file or not output:
-                print("❌ Must specify --file and --output for visualization")
-                return False
-            return handle_fpf_visualize(file, type, output, format, layout, chart_type)
-        elif action == "context":
-            if not file:
-                print("❌ Must specify --file for context")
-                return False
-            return handle_fpf_context(file, pattern, output, depth)
-        elif action == "export-section":
-            if not file or not output:
-                print("❌ Must specify --file and --output for export-section")
-                return False
-            return handle_fpf_export_section(file, part, pattern, output, include_dependencies)
-        elif action == "analyze":
-            if not file:
-                print("❌ Must specify --file for analysis")
-                return False
-            return handle_fpf_analyze(file, output)
-        elif action == "report":
-            if not file or not output:
-                print("❌ Must specify --file and --output for report")
-                return False
-            return handle_fpf_report(file, output, include_analysis)
-        else:
-            print(f"❌ Unknown fpf action: {action}")
-            return False
-
-    def skills(self, action, force=False, category=None, name=None, output=None, query=None):
-        """Skills management operations (sync, list, get, search)"""
-        if action == "sync":
-            return handle_skills_sync(force)
-        elif action == "list":
-            return handle_skills_list(category)
-        elif action == "get":
-            if not category or not name:
-                print("❌ Must specify both --category and --name to get a skill")
-                return False
-            return handle_skills_get(category, name, output)
-        elif action == "search":
-            if not query:
-                print("❌ Must specify --query to search skills")
-                return False
-            return handle_skills_search(query)
-        else:
-            print(f"❌ Unknown skills action: {action}")
-            return False
 
     def run(self, target, args=None, timeout=60, parallel=False, verbose=False):
         """Quick run script, module, or directory"""
