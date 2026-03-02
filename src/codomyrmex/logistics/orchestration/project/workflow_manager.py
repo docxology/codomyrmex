@@ -11,7 +11,10 @@ from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from enum import Enum
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
+
+if TYPE_CHECKING:
+    from .workflow_dag import WorkflowDAG
 
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
 

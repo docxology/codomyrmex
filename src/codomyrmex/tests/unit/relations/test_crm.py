@@ -4,7 +4,7 @@ from codomyrmex.relations.crm.crm import Contact, ContactManager, Interaction
 def test_contact_management():
     """Test functionality: contact management."""
     cm = ContactManager()
-    c1 = cm.add_contact("Alice", email="alice@example.com")
+    cm.add_contact("Alice", email="alice@example.com")
 
     assert len(cm.search_contacts("Alice")) == 1
     assert len(cm.search_contacts("alice@example.com")) == 1

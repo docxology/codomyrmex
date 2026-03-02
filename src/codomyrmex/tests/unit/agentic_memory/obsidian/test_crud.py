@@ -34,13 +34,13 @@ class TestCreateNote:
     def test_create_in_subfolder(self, tmp_vault):
         """Test functionality: create in subfolder."""
         vault = ObsidianVault(tmp_vault)
-        note = create_note(vault, "deep/folder/Note.md", content="Deep")
+        create_note(vault, "deep/folder/Note.md", content="Deep")
         assert (tmp_vault / "deep" / "folder" / "Note.md").exists()
 
     def test_create_adds_md_extension(self, tmp_vault):
         """Test functionality: create adds md extension."""
         vault = ObsidianVault(tmp_vault)
-        note = create_note(vault, "NoExt", content="Test")
+        create_note(vault, "NoExt", content="Test")
         assert (tmp_vault / "NoExt.md").exists()
 
     def test_create_duplicate_raises(self, tmp_vault):
@@ -83,7 +83,7 @@ class TestUpdateNote:
     def test_update_content(self, tmp_vault):
         """Test functionality: update content."""
         vault = ObsidianVault(tmp_vault)
-        note = update_note(vault, "Simple Note.md", content="Updated content")
+        update_note(vault, "Simple Note.md", content="Updated content")
         # Re-read to verify
         note2 = read_note(vault, "Simple Note.md")
         assert "Updated content" in note2.content
@@ -91,7 +91,7 @@ class TestUpdateNote:
     def test_update_frontmatter(self, tmp_vault):
         """Test functionality: update frontmatter."""
         vault = ObsidianVault(tmp_vault)
-        note = update_note(
+        update_note(
             vault, "My Test Note.md", frontmatter={"new_key": "new_value"}
         )
         note2 = read_note(vault, "My Test Note.md")
@@ -138,7 +138,7 @@ class TestFrontmatter:
     def test_set_frontmatter_merge(self, tmp_vault):
         """Test functionality: set frontmatter merge."""
         vault = ObsidianVault(tmp_vault)
-        note = set_frontmatter(vault, "My Test Note.md", {"priority": "high"})
+        set_frontmatter(vault, "My Test Note.md", {"priority": "high"})
         fm = get_frontmatter(vault, "My Test Note.md")
         assert fm["priority"] == "high"
         assert fm["title"] == "My Test Note"  # Original preserved

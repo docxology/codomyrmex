@@ -459,6 +459,7 @@ class TestGmailProviderFromEnv:
     def test_from_env_raises_without_credentials(self):
         """from_env() raises an auth exception when no credentials are available."""
         import os
+
         from codomyrmex.email.gmail.provider import GMAIL_AVAILABLE, GmailProvider
 
         if not GMAIL_AVAILABLE:
@@ -525,6 +526,7 @@ class TestAgentMailProviderGuards:
     def test_init_raises_auth_error_when_no_key(self):
         """AgentMailProvider raises EmailAuthError when no API key is provided."""
         import os
+
         from codomyrmex.email.agentmail.provider import AGENTMAIL_AVAILABLE
         if not AGENTMAIL_AVAILABLE:
             pytest.skip("AgentMail SDK not installed")

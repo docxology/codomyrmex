@@ -12,8 +12,6 @@ test_orchestration_session.py.
 Zero-mock policy: all tests use real objects only.
 """
 
-import uuid
-from datetime import datetime, timezone
 
 import pytest
 
@@ -21,11 +19,9 @@ from codomyrmex.logistics.orchestration.project.orchestration_engine import (
     MCP_AVAILABLE,
     OrchestrationEngine,
     OrchestrationMode,
-    OrchestrationSession,
     SessionStatus,
     get_orchestration_engine,
 )
-
 
 # ---------------------------------------------------------------------------
 # OrchestrationEngine constructor

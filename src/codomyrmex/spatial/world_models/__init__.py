@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+
 """
 World modeling module for Codomyrmex.
 Provides support for building and managing world models for agents.

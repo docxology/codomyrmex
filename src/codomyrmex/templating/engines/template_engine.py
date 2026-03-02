@@ -141,7 +141,7 @@ class TemplateEngine:
             template_obj = Jinja2Template(template, environment=env)
             return template_obj.render(**context)
         except ImportError:
-            raise TemplatingError("jinja2 package not available. Install with: pip install jinja2")
+            raise TemplatingError("jinja2 package not available. Install with: pip install jinja2") from None
 
     def _load_jinja2(self, path: str) -> Any:
         """Load template using Jinja2."""
@@ -155,7 +155,7 @@ class TemplateEngine:
 
             return env.get_template(path_obj.name)
         except ImportError:
-            raise TemplatingError("jinja2 package not available. Install with: pip install jinja2")
+            raise TemplatingError("jinja2 package not available. Install with: pip install jinja2") from None
 
     def _render_mako(self, template: str, context: dict) -> str:
         """Render using Mako."""
@@ -164,7 +164,7 @@ class TemplateEngine:
             template_obj = MakoTemplate(template)
             return template_obj.render(**context)
         except ImportError:
-            raise TemplatingError("mako package not available. Install with: pip install mako")
+            raise TemplatingError("mako package not available. Install with: pip install mako") from None
 
     def _load_mako(self, path: str) -> Any:
         """Load template using Mako."""
@@ -172,5 +172,5 @@ class TemplateEngine:
 
             return MakoTemplate(filename=path)
         except ImportError:
-            raise TemplatingError("mako package not available. Install with: pip install mako")
+            raise TemplatingError("mako package not available. Install with: pip install mako") from None
 

@@ -7,30 +7,29 @@ with transformers (rename, type-convert, composite).
 Split from test_database_core.py to reduce file size.
 """
 
-import json
 
 import pytest
 
-from codomyrmex.database_management.schema_generator import (
-    Column,
-    Index,
-    SchemaGenerator,
-    SchemaTable,
+from codomyrmex.database_management.migration.executor import (
+    DataMigrator,
+    MigrationRunner,
 )
 from codomyrmex.database_management.migration.models import (
     CompositeTransformer,
     FieldRenameTransformer,
     FieldTypeTransformer,
-    Migration as MigrationModel,
-    MigrationResult as MigrationModelResult,
     MigrationStatus,
     MigrationStep,
 )
-from codomyrmex.database_management.migration.executor import (
-    DataMigrator,
-    MigrationRunner,
+from codomyrmex.database_management.migration.models import (
+    Migration as MigrationModel,
 )
-
+from codomyrmex.database_management.migration.models import (
+    MigrationResult as MigrationModelResult,
+)
+from codomyrmex.database_management.schema_generator import (
+    SchemaGenerator,
+)
 
 # =============================================================================
 # Migration Generation (SchemaGenerator.generate_migration) Tests

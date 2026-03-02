@@ -13,9 +13,7 @@ from codomyrmex.plugin_system.core.plugin_registry import (
 from codomyrmex.plugin_system.validation.enforcer import InterfaceEnforcer
 from codomyrmex.plugin_system.validation.plugin_validator import (
     PluginValidator,
-    validate_plugin,
 )
-
 
 # ============================================================================
 # Test Plugin Validator

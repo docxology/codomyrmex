@@ -215,7 +215,7 @@ class MCPClient:
         """
         t0 = time.monotonic()
         try:
-            result = await self._send("ping", timeout=5.0)
+            await self._send("ping", timeout=5.0)
             latency = (time.monotonic() - t0) * 1000
             return {"ok": True, "latency_ms": round(latency, 2), "server": self._server_info}
         except MCPClientError:
@@ -382,7 +382,7 @@ class _HTTPTransport(_Transport):
             except ImportError:
                 raise MCPClientError(
                     "aiohttp is required for HTTP transport — pip install aiohttp"
-                )
+                ) from None
         return self._session
 
     async def send(self, message: dict[str, Any], *, timeout: float = 30.0) -> dict[str, Any]:

@@ -534,7 +534,7 @@ class Workflow:
                 else:
                     return await loop.run_in_executor(None, func)
         except asyncio.TimeoutError:
-            raise asyncio.TimeoutError(f"Task '{task.name}' timed out after {task.timeout}s")
+            raise asyncio.TimeoutError(f"Task '{task.name}' timed out after {task.timeout}s") from None
 
     def get_task_result(self, task_name: str) -> TaskResult | None:
         """Get result of a specific task."""

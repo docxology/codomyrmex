@@ -77,7 +77,7 @@ def test_node_cmd_caches_after_resolve() -> None:
 @pytest.mark.unit
 def test_list_repos_handles_dict_response() -> None:
     """list_repos extracts 'repos' key from dict-shaped JSON response."""
-    bridge = GitNexusBridge(PROJECT_ROOT)
+    GitNexusBridge(PROJECT_ROOT)
     # Directly test the normalization logic in list_repos
     # by checking the method accepts both shapes — no mocking needed,
     # we verify the logic is correct by examining the source behaviour

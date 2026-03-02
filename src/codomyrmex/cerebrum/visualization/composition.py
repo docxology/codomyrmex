@@ -237,7 +237,7 @@ class CompositionVisualizer:
             sizes = [200] * len(pattern_ids)
 
         # Scatter plot
-        scatter = ax.scatter(
+        ax.scatter(
             x_coords,
             y_coords,
             c=colors,
@@ -310,7 +310,7 @@ class CompositionVisualizer:
         if n_analyses == 1:
             axes = [axes]
 
-        analysis_names = list(analysis_results.keys())
+        list(analysis_results.keys())
         colors = self.theme.get_color_sequence(n_analyses, "primary")
 
         for idx, (analysis_name, results) in enumerate(analysis_results.items()):

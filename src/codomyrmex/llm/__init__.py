@@ -140,11 +140,11 @@ from codomyrmex.model_context_protocol.decorators import mcp_tool
 def ask(question: str, model: str = "openrouter/free") -> str:
     """
     Ask a question to an LLM provider (default: OpenRouter Free Tier).
-    
+
     Args:
         question: The prompt/question to ask
         model: Model to use (default: openrouter/free)
-        
+
     Returns:
         The text response from the LLM.
     """

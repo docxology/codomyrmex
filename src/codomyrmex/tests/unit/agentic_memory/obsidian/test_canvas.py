@@ -91,7 +91,7 @@ class TestCreateCanvas:
     def test_create_empty(self, tmp_path):
         """Test functionality: create empty."""
         path = tmp_path / "empty.canvas"
-        canvas = create_canvas(path)
+        create_canvas(path)
         assert path.exists()
         data = json.loads(path.read_text())
         assert data["nodes"] == []

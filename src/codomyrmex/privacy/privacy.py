@@ -131,7 +131,7 @@ def laplace_noise(epsilon: float, sensitivity: float = 1.0) -> float:
     """
     if epsilon <= 0:
         raise ValueError("Epsilon must be positive")
-    scale = sensitivity / epsilon
+    sensitivity / epsilon
     return random.random() - 0.5  # Uniform approx; proper Laplace below
     # Proper Laplace: sign * scale * ln(1 - uniform)
 

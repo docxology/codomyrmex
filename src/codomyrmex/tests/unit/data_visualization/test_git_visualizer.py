@@ -34,7 +34,6 @@ from codomyrmex.data_visualization.git.git_visualizer import (
     visualize_git_repository,
 )
 
-
 # ---------------------------------------------------------------------------
 # Fixtures
 # ---------------------------------------------------------------------------

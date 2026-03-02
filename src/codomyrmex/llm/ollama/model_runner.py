@@ -800,7 +800,7 @@ class ModelRunner:
                     json=payload
                 ) as response:
                     if response.status != 200:
-                        error_text = await response.text()
+                        await response.text()
                         yield StreamingChunk(
                             content="",
                             done=True,

@@ -136,7 +136,7 @@ class TestEveryCodeClient:
 
     def test_every_code_client_file_operations_structure(self):
         """Test file operations structure (without executing)."""
-        client = EveryCodeClient()
+        EveryCodeClient()
         request = AgentRequest(
             prompt="Analyze this code",
             context={"files": ["src/main.py"]}
@@ -171,7 +171,7 @@ class TestEveryCodeClient:
 
     def test_every_code_client_special_commands(self):
         """Test special command handling."""
-        client = EveryCodeClient()
+        EveryCodeClient()
 
         # Test /plan command
         request = AgentRequest(prompt="/plan Create a new feature")

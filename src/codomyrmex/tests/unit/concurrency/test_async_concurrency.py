@@ -428,7 +428,7 @@ class TestAsyncSemaphoreResourcePool:
 
         # First 5 should start immediately, next 5 should be delayed
         first_batch = request_times[:5]
-        second_batch = request_times[5:]
+        request_times[5:]
 
         # All first batch should be close to 0
         assert all(t < 0.05 for t in first_batch)

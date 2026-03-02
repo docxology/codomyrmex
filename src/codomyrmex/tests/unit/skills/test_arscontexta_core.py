@@ -25,7 +25,6 @@ from codomyrmex.skills.arscontexta.models import (
     VaultConfig,
 )
 
-
 # ============================================================================
 # MethodologyGraph extended tests
 # ============================================================================

@@ -89,7 +89,7 @@ class OpenAPISpecification:
             import yaml
             return yaml.dump(self.spec, default_flow_style=False)
         except ImportError:
-            raise ImportError("PyYAML is required for YAML output")
+            raise ImportError("PyYAML is required for YAML output") from None
 
     def save_to_file(self, filepath: str, format: str = "json") -> None:
         """
@@ -185,7 +185,7 @@ def create_openapi_from_rest_api(api: RESTAPI) -> OpenAPISpecification:
             from codomyrmex.api.standardization.rest_api import RESTAPI as _RESTAPI
             RESTAPI = _RESTAPI
         except ImportError:
-            raise ImportError("RESTAPI class not available. Ensure standardization module is properly imported.")
+            raise ImportError("RESTAPI class not available. Ensure standardization module is properly imported.") from None
 
     generator = StandardizationOpenAPIGenerator(
         title=api.title,

@@ -13,13 +13,13 @@ def generate_chart(
     output_path: str | None = None
 ) -> dict:
     """Generate a visualization chart and optionally save it.
-    
+
     Args:
         chart_type: Type of chart ('bar', 'pie', 'line', 'scatter', 'area', 'histogram')
         data: Dictionary containing chart data (structure depends on type)
         title: Title of the chart
         output_path: Optional path to save the rendered output
-        
+
     Returns:
         A dictionary containing the chart schema or generation status.
     """
@@ -69,11 +69,11 @@ def generate_chart(
 @mcp_tool(category="data_visualization")
 def export_dashboard(report_type: str = "general", output_dir: str = ".") -> dict:
     """Generate and export a comprehensive HTML dashboard report.
-    
+
     Args:
         report_type: Type of report ('general', 'finance', 'marketing', 'logistics')
         output_dir: Directory where the HTML report will be saved
-        
+
     Returns:
         A dictionary containing the export status and file path.
     """

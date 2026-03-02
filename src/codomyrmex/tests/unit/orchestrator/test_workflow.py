@@ -118,7 +118,7 @@ async def test_task_failure_handling():
     wf.add_task("Fail", failing_task)
     wf.add_task("Downstream", downstream_task, dependencies=["Fail"])
 
-    results = await wf.run()
+    await wf.run()
 
     # Downstream should not have run or should be skipped/failed in a specific way.
     # Implementation treats raising Exception as FAILED status.

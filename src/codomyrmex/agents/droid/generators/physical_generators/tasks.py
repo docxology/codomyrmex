@@ -4,9 +4,24 @@ from __future__ import annotations
 
 import os
 import sys
+import time
 from pathlib import Path
 
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
+from codomyrmex.agents.droid.generators.physical_generators.content_generators import (
+    generate_physical_init_content,
+    generate_physical_manager_content,
+    generate_physical_simulation_content,
+    generate_sensor_integration_content,
+)
+from codomyrmex.agents.droid.generators.physical_generators.doc_generators import (
+    generate_physical_api_spec,
+    generate_physical_docs_content,
+    generate_physical_examples,
+    generate_physical_readme_content,
+    generate_physical_requirements,
+    generate_physical_tests,
+)
 
 logger = get_logger(__name__)
 

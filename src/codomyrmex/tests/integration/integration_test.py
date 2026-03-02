@@ -419,8 +419,8 @@ class TestOrchestrationEdgeCases:
         )
 
         # Add tasks to orchestrator
-        task1_id = self.task_orchestrator.add_task(task1)
-        task2_id = self.task_orchestrator.add_task(task2)
+        self.task_orchestrator.add_task(task1)
+        self.task_orchestrator.add_task(task2)
 
         # Start execution
         self.task_orchestrator.start_execution()

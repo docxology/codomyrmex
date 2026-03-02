@@ -1,8 +1,5 @@
 """Unit tests for API routing and REST API handler."""
 
-import json
-import os
-import tempfile
 from datetime import datetime
 
 import pytest

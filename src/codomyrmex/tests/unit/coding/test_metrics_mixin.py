@@ -6,16 +6,15 @@ required dependencies (pyscn_analyzer, project_root, sibling-mixin methods)
 via simple real implementations.
 """
 
-import os
-import pytest
 from typing import Any
+
+import pytest
 
 from codomyrmex.coding.review.mixins.metrics import MetricsMixin
 from codomyrmex.coding.review.models import (
     ArchitectureViolation,
     QualityDashboard,
 )
-
 
 # ---------------------------------------------------------------------------
 # Real helper: a minimal pyscn analyzer that returns configurable data
@@ -667,7 +666,6 @@ class TestCalculateSecurityScore:
         # Make project_root a non-existent deeply nested path that will fail os.walk
         subject.project_root = str(tmp_path / "nonexistent" / "path")
         # os.walk won't raise, it just yields nothing; force an outer exception
-        original_walk = os.walk
 
         class BrokenSelf:
             """Trigger outer exception via property."""

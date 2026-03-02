@@ -44,7 +44,7 @@ def handle_chat_session(
             if stream:
                 print(f"\n🤖 [{turn.speaker}] ({turn.elapsed_seconds}s):\n{turn.content}\n" + "-"*40)
 
-        transcript = orch.run(rounds=rounds, on_turn=on_turn_callback)
+        orch.run(rounds=rounds, on_turn=on_turn_callback)
 
         # Export state
         log = orch.get_log()

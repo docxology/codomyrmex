@@ -11,7 +11,6 @@ from codomyrmex.api.openapi_generator import (
     OpenAPISpecification,
 )
 
-
 # ---------------------------------------------------------------------------
 # APISchema dataclass
 # ---------------------------------------------------------------------------

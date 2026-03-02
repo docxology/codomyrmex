@@ -70,11 +70,9 @@ except ImportError:
     write_csv = None
 
 from codomyrmex.documents.exceptions import (
-    DocumentConversionError,
     DocumentReadError,
     DocumentValidationError,
     DocumentWriteError,
-    UnsupportedFormatError,
 )
 from codomyrmex.documents.utils.encoding_detector import detect_encoding
 from codomyrmex.documents.utils.file_validator import (
@@ -85,7 +83,6 @@ from codomyrmex.documents.utils.mime_type_detector import (
     detect_format_from_path,
     detect_mime_type,
 )
-
 
 # --- Document Reader --------------------------------------------------------
 

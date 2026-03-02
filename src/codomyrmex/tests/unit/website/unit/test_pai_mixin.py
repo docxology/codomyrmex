@@ -8,8 +8,10 @@ get_pai_memory_overview, _build_pai_mermaid_graph, and get_pai_awareness_data.
 Note: _PAI_ROOT is overridden as an instance attribute on each DataProvider
 so tests are fully isolated from the real ~/.claude directory.
 """
-import pytest
 from pathlib import Path
+
+import pytest
+
 from codomyrmex.website.data_provider import DataProvider
 
 

@@ -118,7 +118,7 @@ class TestScaffoldNewModule:
     def test_accepts_simple_valid_names(self, tmp_path: Path) -> None:
         """Various valid snake_case names should work."""
         for name in ["a", "abc", "my_module", "mod123", "a1b2c3"]:
-            sub = tmp_path / name
+            tmp_path / name
             sub_parent = tmp_path / f"parent_{name}"
             sub_parent.mkdir()
             result = scaffold_new_module(name, target_path=sub_parent)

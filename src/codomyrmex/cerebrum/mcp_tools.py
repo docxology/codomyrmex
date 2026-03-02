@@ -6,11 +6,11 @@ from codomyrmex.model_context_protocol.decorators import mcp_tool
 @mcp_tool(category="cerebrum")
 def query_knowledge_base(query: str, limit: int = 5) -> dict:
     """Perform semantic retrieval from the CaseBase.
-    
+
     Args:
         query: The semantic concept or question to search for
         limit: Maximum number of cases to return
-        
+
     Returns:
         Structured retrieval results containing matching cases.
     """
@@ -41,11 +41,11 @@ def query_knowledge_base(query: str, limit: int = 5) -> dict:
 @mcp_tool(category="cerebrum")
 def add_case_reference(concept: str, solution: str) -> dict:
     """Store intelligence context directly into the CaseBase.
-    
+
     Args:
         concept: The problem or concept feature string
         solution: The paired resolution or insight
-        
+
     Returns:
         Confirmation of case storage.
     """

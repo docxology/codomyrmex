@@ -104,7 +104,7 @@ class PyscnAnalyzer:
         except (subprocess.CalledProcessError, FileNotFoundError, subprocess.TimeoutExpired):
             raise ToolNotFoundError(
                 "pyscn not found. Install with: pipx install pyscn"
-            )
+            ) from None
 
     @monitor_performance("pyscn_analyze_complexity")
     def analyze_complexity(self, file_path: str) -> list[dict[str, Any]]:

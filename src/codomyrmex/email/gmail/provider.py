@@ -1,8 +1,15 @@
 """Gmail implementation of the EmailProvider interface."""
 
 import base64
+import logging
 import os
 from datetime import datetime
+
+try:
+    from codomyrmex.logging_monitoring.core.logger_config import get_logger
+    logger = get_logger(__name__)
+except Exception:
+    logger = logging.getLogger(__name__)
 from email.message import EmailMessage as PyEmailMessage
 
 from ..exceptions import (
@@ -55,7 +62,7 @@ class GmailProvider(EmailProvider):
         try:
             self.service = service or build('gmail', 'v1', credentials=credentials)
         except Exception as e:
-            raise EmailAuthError(f"Failed to initialize Gmail API service: {e}")
+            raise EmailAuthError(f"Failed to initialize Gmail API service: {e}") from e
 
     @classmethod
     def from_env(cls) -> "GmailProvider":
@@ -198,7 +205,7 @@ class GmailProvider(EmailProvider):
                 labels=payload.get('labelIds', [])
             )
         except Exception as e:
-            raise InvalidMessageError(f"Failed to parse Gmail message data: {e}")
+            raise InvalidMessageError(f"Failed to parse Gmail message data: {e}") from e
 
     def _create_raw_message(self, draft: EmailDraft) -> dict:
         """Create a raw base64 string dictionary for Gmail insertion."""
@@ -236,7 +243,7 @@ class GmailProvider(EmailProvider):
                  full_messages.append(self.get_message(msg_meta['id'], user_id))
             return full_messages
         except HttpError as e:
-            raise EmailAPIError(f"Failed to list messages: {e}")
+            raise EmailAPIError(f"Failed to list messages: {e}") from e
 
     def get_message(self, message_id: str, user_id: str = 'me') -> EmailMessage:
         """Fetch a specific message by its ID."""
@@ -249,8 +256,8 @@ class GmailProvider(EmailProvider):
             return self._gmail_dict_to_message(message)
         except HttpError as e:
             if e.resp.status == 404:
-                raise MessageNotFoundError(f"Message with ID {message_id} not found.")
-            raise EmailAPIError(f"Failed to fetch message: {e}")
+                raise MessageNotFoundError(f"Message with ID {message_id} not found.") from e
+            raise EmailAPIError(f"Failed to fetch message: {e}") from e
 
     def send_message(self, draft: EmailDraft, user_id: str = 'me') -> EmailMessage:
         """Send a new email immediately."""
@@ -262,7 +269,7 @@ class GmailProvider(EmailProvider):
             ).execute()
             return self.get_message(sent_message['id'], user_id)
         except HttpError as e:
-            raise EmailAPIError(f"Failed to send email: {e}")
+            raise EmailAPIError(f"Failed to send email: {e}") from e
 
     def create_draft(self, draft: EmailDraft, user_id: str = 'me') -> str:
         """Create a new draft and return its ID."""
@@ -274,7 +281,7 @@ class GmailProvider(EmailProvider):
             ).execute()
             return created_draft['id']
         except HttpError as e:
-            raise EmailAPIError(f"Failed to create draft: {e}")
+            raise EmailAPIError(f"Failed to create draft: {e}") from e
 
     def delete_message(self, message_id: str, user_id: str = 'me') -> None:
         """Delete an email message (moves it to trash)."""
@@ -285,8 +292,8 @@ class GmailProvider(EmailProvider):
             ).execute()
         except HttpError as e:
             if e.resp.status == 404:
-                raise MessageNotFoundError(f"Message with ID {message_id} not found for deletion.")
-            raise EmailAPIError(f"Failed to delete message: {e}")
+                raise MessageNotFoundError(f"Message with ID {message_id} not found for deletion.") from e
+            raise EmailAPIError(f"Failed to delete message: {e}") from e
 
     def modify_labels(self, message_id: str, add_labels: list[str], remove_labels: list[str], user_id: str = 'me') -> None:
         """Add or remove labels from a message."""
@@ -302,5 +309,5 @@ class GmailProvider(EmailProvider):
             ).execute()
         except HttpError as e:
             if e.resp.status == 404:
-                raise MessageNotFoundError(f"Message with ID {message_id} not found for label modification.")
-            raise EmailAPIError(f"Failed to modify message labels: {e}")
+                raise MessageNotFoundError(f"Message with ID {message_id} not found for label modification.") from e
+            raise EmailAPIError(f"Failed to modify message labels: {e}") from e

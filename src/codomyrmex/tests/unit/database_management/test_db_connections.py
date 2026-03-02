@@ -18,7 +18,6 @@ from codomyrmex.database_management.migration.migration_manager import (
 )
 from codomyrmex.exceptions import CodomyrmexError
 
-
 # ==============================================================================
 # Connection Management Tests
 # ==============================================================================
@@ -362,7 +361,6 @@ class TestDatabaseManager:
         assert DatabaseType.SQLITE.value == "sqlite" or hasattr(DatabaseType, "SQLITE")
 
     def test_query_result(self):
-        from codomyrmex.database_management.db_manager import QueryResult
         r = QueryResult(success=True, rows=[], columns=[], row_count=0, execution_time=0.01)
         assert r.success
 

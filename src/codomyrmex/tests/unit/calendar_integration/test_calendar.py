@@ -295,8 +295,12 @@ class TestGoogleCalendarFromEnv:
     def test_from_env_raises_auth_error_without_credentials(self):
         """from_env() raises CalendarAuthError (or ImportError) when no credentials available."""
         import os
+
         from codomyrmex.calendar_integration.exceptions import CalendarAuthError
-        from codomyrmex.calendar_integration.gcal.provider import GCAL_AVAILABLE, GoogleCalendar
+        from codomyrmex.calendar_integration.gcal.provider import (
+            GCAL_AVAILABLE,
+            GoogleCalendar,
+        )
 
         if not GCAL_AVAILABLE:
             pytest.skip("Google Calendar SDK not installed")

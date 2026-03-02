@@ -194,7 +194,7 @@ class ModelVisualizer(BaseNetworkVisualizer):
         if n_results == 1:
             axes = [axes]
 
-        colors = self.theme.get_color_sequence(len(results), "accent")
+        self.theme.get_color_sequence(len(results), "accent")
 
         for idx, (var, dist) in enumerate(results.items()):
             ax = axes[idx]

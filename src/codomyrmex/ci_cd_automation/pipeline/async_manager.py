@@ -277,7 +277,7 @@ class AsyncPipelineManager:
                             },
                         )
                     else:
-                        error_text = await response.text()
+                        await response.text()
                         error_msg = f"Failed to get pipeline status: HTTP {response.status}"
                         logger.error(f"[ASYNC] {error_msg}")
                         return AsyncPipelineResult(
@@ -426,7 +426,7 @@ class AsyncPipelineManager:
                             data={"run_id": run_id},
                         )
                     else:
-                        error_text = await response.text()
+                        await response.text()
                         error_msg = f"Failed to cancel pipeline: HTTP {response.status}"
                         logger.error(f"[ASYNC] {error_msg}")
                         return AsyncPipelineResult(
@@ -532,7 +532,7 @@ class AsyncPipelineManager:
                             },
                         )
                     else:
-                        error_text = await response.text()
+                        await response.text()
                         error_msg = f"Failed to get workflow runs: HTTP {response.status}"
                         logger.error(f"[ASYNC] {error_msg}")
                         return AsyncPipelineResult(

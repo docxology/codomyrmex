@@ -27,7 +27,6 @@ from codomyrmex.logistics.orchestration.project.parallel_executor import (
     validate_workflow_dependencies,
 )
 
-
 # ---------------------------------------------------------------------------
 # ExecutionStatus enum
 # ---------------------------------------------------------------------------

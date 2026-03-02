@@ -84,7 +84,7 @@ def read_pdf(file_path: str | Path) -> PDFDocument:
                 raise DocumentReadError(
                     "PDF libraries not available. Install with: uv pip install pypdf or uv pip install PyPDF2",
                     file_path=str(file_path)
-                )
+                ) from None
 
     except Exception as e:
         logger.error(f"Error reading PDF file {file_path}: {e}")
@@ -172,7 +172,7 @@ def write_pdf(
                 raise DocumentWriteError(
                     "PDF generation libraries not available. Install with: uv pip install reportlab or uv pip install fpdf",
                     file_path=str(file_path)
-                )
+                ) from None
 
     except Exception as e:
         logger.error(f"Error writing PDF file {file_path}: {e}")

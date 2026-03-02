@@ -136,7 +136,7 @@ class ImageOptimizer:
             return analysis
 
         except docker.errors.ImageNotFound:
-            raise ValueError(f"Image '{image_name}' not found")
+            raise ValueError(f"Image '{image_name}' not found") from None
         except Exception as e:
             logger.error(f"Error analyzing image {image_name}: {e}")
             raise

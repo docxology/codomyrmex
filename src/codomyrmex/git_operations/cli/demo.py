@@ -7,6 +7,7 @@ from codomyrmex.git_operations import (
 from codomyrmex.git_operations.api.visualization import (
     analyze_repository_structure,
     create_git_analysis_report,
+    create_git_workflow_diagram,
     visualize_commit_activity,
     visualize_git_branches,
 )

@@ -17,7 +17,6 @@ from typing import Any
 
 from codomyrmex.config_management.defaults import DEFAULT_OLLAMA_URL
 
-
 # ---------------------------------------------------------------------------
 # Agent type taxonomy
 # ---------------------------------------------------------------------------

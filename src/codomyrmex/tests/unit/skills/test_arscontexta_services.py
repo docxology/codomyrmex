@@ -21,7 +21,6 @@ from codomyrmex.skills.arscontexta.models import (
     PipelineStage,
 )
 
-
 # ============================================================================
 # KernelPrimitiveRegistry tests (from services.py)
 # ============================================================================

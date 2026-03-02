@@ -15,14 +15,13 @@ from typing import Any
 
 import pytest
 
-from codomyrmex.coding.review.reviewer_impl.dashboard import DashboardMixin
 from codomyrmex.coding.review.models import (
     ArchitectureViolation,
     ComplexityReductionSuggestion,
     DeadCodeFinding,
     QualityDashboard,
 )
-
+from codomyrmex.coding.review.reviewer_impl.dashboard import DashboardMixin
 
 # ---------------------------------------------------------------------------
 # Helper: lightweight concrete class that provides DashboardMixin's required

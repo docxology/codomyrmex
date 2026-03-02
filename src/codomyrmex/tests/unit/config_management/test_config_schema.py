@@ -6,7 +6,6 @@ from codomyrmex.config_management.core.config_loader import (
     ConfigSchema,
 )
 
-
 # ---------------------------------------------------------------------------
 # ConfigSchema tests
 # ---------------------------------------------------------------------------

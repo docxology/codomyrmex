@@ -68,7 +68,7 @@ class TestFPFOrchestratorInit:
 
     def test_init_creates_output_dir(self, tmp_path):
         out = tmp_path / "orch_output"
-        o = FPFOrchestrator(output_dir=str(out))
+        FPFOrchestrator(output_dir=str(out))
         assert out.exists()
 
     def test_init_loads_spec(self, orchestrator):
@@ -602,7 +602,7 @@ class TestFPFOrchestratorInitFromFile:
         from codomyrmex.fpf import FPFExporter
 
         spec_file = tmp_path / "FPF-Spec.md"
-        exporter = FPFExporter()
+        FPFExporter()
         # Re-fetch to markdown -- use the raw content from the fetcher
         content = orchestrator.fpf_client.fetcher.fetch_latest()
         spec_file.write_text(content, encoding="utf-8")

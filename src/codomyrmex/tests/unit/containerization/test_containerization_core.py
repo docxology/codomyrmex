@@ -23,19 +23,19 @@ from datetime import datetime
 import pytest
 
 # ---------------------------------------------------------------------------
+# Imports from containerization __init__.py
+# ---------------------------------------------------------------------------
+import codomyrmex.containerization as containerization_pkg
+
+# ---------------------------------------------------------------------------
 # Imports from docker/__init__.py (CLI-based ContainerConfig)
 # ---------------------------------------------------------------------------
 from codomyrmex.containerization.docker import (
     ContainerConfig as DockerCliContainerConfig,
+)
+from codomyrmex.containerization.docker import (
     ContainerInfo,
     ImageInfo,
-)
-
-# ---------------------------------------------------------------------------
-# Imports from docker/docker_manager.py (SDK-based ContainerConfig)
-# ---------------------------------------------------------------------------
-from codomyrmex.containerization.docker.docker_manager import (
-    ContainerConfig as DockerSdkContainerConfig,
 )
 
 # ---------------------------------------------------------------------------
@@ -49,11 +49,10 @@ from codomyrmex.containerization.docker.build_generator import (
 )
 
 # ---------------------------------------------------------------------------
-# Imports from kubernetes/kubernetes_orchestrator.py
+# Imports from docker/docker_manager.py (SDK-based ContainerConfig)
 # ---------------------------------------------------------------------------
-from codomyrmex.containerization.kubernetes.kubernetes_orchestrator import (
-    KubernetesDeployment,
-    KubernetesService,
+from codomyrmex.containerization.docker.docker_manager import (
+    ContainerConfig as DockerSdkContainerConfig,
 )
 
 # ---------------------------------------------------------------------------
@@ -69,10 +68,12 @@ from codomyrmex.containerization.exceptions import (
 )
 
 # ---------------------------------------------------------------------------
-# Imports from containerization __init__.py
+# Imports from kubernetes/kubernetes_orchestrator.py
 # ---------------------------------------------------------------------------
-import codomyrmex.containerization as containerization_pkg
-
+from codomyrmex.containerization.kubernetes.kubernetes_orchestrator import (
+    KubernetesDeployment,
+    KubernetesService,
+)
 
 # ===========================================================================
 # Docker CLI ContainerConfig (docker/__init__.py)

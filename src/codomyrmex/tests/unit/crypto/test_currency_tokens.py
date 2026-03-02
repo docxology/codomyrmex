@@ -141,7 +141,7 @@ class TestDecodeTransferEvent:
         """Encode a transfer, build matching log data, and decode."""
         to_hex = "de" * 20
         amount = 42000
-        encoded = encode_transfer("0x" + to_hex, amount)
+        encode_transfer("0x" + to_hex, amount)
 
         # Build log data: from is zeros, to and amount from encoding
         from_hex = "00" * 20

@@ -7,6 +7,24 @@ Implements the Three-Space Architecture, 15 Kernel Primitives,
 
 from __future__ import annotations
 
+# Core services (all live in core.py)
+from .core import (
+    ArsContextaManager,
+    DerivationEngine,
+    KernelPrimitiveRegistry,
+    MethodologyGraph,
+    ProcessingPipeline,
+    VaultHealthChecker,
+)
+
+# Exceptions
+from .exceptions import (
+    ArsContextaError,
+    PipelineError,
+    PrimitiveValidationError,
+    VaultNotFoundError,
+)
+
 # Types and data models (enums + dataclasses)
 from .types import (
     ConfigDimension,
@@ -22,24 +40,6 @@ from .types import (
     VaultConfig,
     VaultHealthReport,
     VaultSpace,
-)
-
-# Exceptions
-from .exceptions import (
-    ArsContextaError,
-    PipelineError,
-    PrimitiveValidationError,
-    VaultNotFoundError,
-)
-
-# Core services (all live in core.py)
-from .core import (
-    ArsContextaManager,
-    DerivationEngine,
-    KernelPrimitiveRegistry,
-    MethodologyGraph,
-    ProcessingPipeline,
-    VaultHealthChecker,
 )
 
 __all__ = [

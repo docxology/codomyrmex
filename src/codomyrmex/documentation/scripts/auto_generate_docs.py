@@ -1,8 +1,15 @@
 import argparse
+import logging
 import sys
 from pathlib import Path
 
 from codomyrmex.documentation.scripts.smart_template_engine import SmartTemplateEngine
+
+try:
+    from codomyrmex.logging_monitoring.core.logger_config import get_logger
+    logger = get_logger(__name__)
+except Exception:
+    logger = logging.getLogger(__name__)
 
 # Import smart template engine
 # sys.path.insert(0, str(Path(__file__).parent)) # Removed sys.path hack
@@ -208,7 +215,7 @@ For complete documentation, see:
 @mcp_tool()
 def generate_documentation(repo_root: str = None, module_name: str = None) -> int:
     """Generate documentation for modules.
-    
+
     Args:
         repo_root: Root directory of the repository (optional).
         module_name: Specific module to document (optional).

@@ -62,7 +62,7 @@ class TestFPFCombinatoricsAnalyzerInit:
 
     def test_init_creates_output_dir(self, tmp_path):
         out = tmp_path / "new_output"
-        a = FPFCombinatoricsAnalyzer(output_dir=str(out))
+        FPFCombinatoricsAnalyzer(output_dir=str(out))
         assert out.exists()
         assert out.is_dir()
 

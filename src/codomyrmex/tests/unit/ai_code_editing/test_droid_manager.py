@@ -24,7 +24,6 @@ from codomyrmex.agents.droid.controller import (
 )
 from codomyrmex.agents.droid.todo import TodoManager
 
-
 # ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------
@@ -80,7 +79,7 @@ class TestDroidSystemManagerInit:
         """When droid_dir is None the manager falls back to a sibling 'droid' directory."""
         mgr = DroidSystemManager(droid_dir=None)
         # Should be <module_dir>/droid
-        expected_parent = Path(__file__).parent  # test dir
+        Path(__file__).parent  # test dir
         # The default is relative to droid_manager.py, not us
         assert mgr.droid_dir.name == "droid"
 

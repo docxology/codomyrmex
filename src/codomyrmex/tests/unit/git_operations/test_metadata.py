@@ -19,6 +19,8 @@ from types import SimpleNamespace
 
 import pytest
 
+# The module under test
+import codomyrmex.git_operations.cli.metadata as metadata_cli
 from codomyrmex.git_operations.core.metadata import (
     AccessLevel,
     CloneStatus,
@@ -28,10 +30,6 @@ from codomyrmex.git_operations.core.metadata import (
     RepositoryStats,
     SyncStatus,
 )
-
-# The module under test
-import codomyrmex.git_operations.cli.metadata as metadata_cli
-
 
 # ---------------------------------------------------------------------------
 # Helpers

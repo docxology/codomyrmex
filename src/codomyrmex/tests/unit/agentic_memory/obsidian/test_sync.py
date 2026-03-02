@@ -4,11 +4,22 @@ import pytest
 
 from codomyrmex.agentic_memory.obsidian.cli import ObsidianCLI, ObsidianCLINotAvailable
 from codomyrmex.agentic_memory.obsidian.sync import (
-    PublishStatus, SyncHistoryEntry, SyncStatus,
-    publish_add, publish_list, publish_open, publish_remove,
-    publish_site, publish_status,
-    sync_deleted, sync_history, sync_open, sync_read,
-    sync_restore, sync_status, sync_toggle,
+    PublishStatus,
+    SyncHistoryEntry,
+    SyncStatus,
+    publish_add,
+    publish_list,
+    publish_open,
+    publish_remove,
+    publish_site,
+    publish_status,
+    sync_deleted,
+    sync_history,
+    sync_open,
+    sync_read,
+    sync_restore,
+    sync_status,
+    sync_toggle,
 )
 
 

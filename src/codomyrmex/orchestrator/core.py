@@ -389,7 +389,7 @@ def main(argv=None):
         return early_exit
 
     # Execute scripts with LogContext for correlation ID
-    with LogContext(correlation_id=run_id) as ctx:
+    with LogContext(correlation_id=run_id):
         logger.info("Orchestrator run started", extra={
             "event": "RUN_STARTED",
             "run_id": run_id,
@@ -409,7 +409,7 @@ def main(argv=None):
         summary, exit_code = _report_results(results, args, run_id)
 
         # Log RUN_COMPLETED event
-        run_duration = perf_logger.end_timer("full_run")
+        perf_logger.end_timer("full_run")
         logger.info("Orchestrator run completed", extra={
             "event": "RUN_COMPLETED",
             "run_id": run_id,

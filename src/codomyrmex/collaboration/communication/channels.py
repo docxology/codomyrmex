@@ -166,7 +166,7 @@ class MessageQueue:
             raise ChannelError(
                 "message_queue",
                 f"Queue is full, timeout after {timeout}s"
-            )
+            ) from None
 
     def put_nowait(self, message: AgentMessage) -> None:
         """Put a message without waiting."""
@@ -174,7 +174,7 @@ class MessageQueue:
             self._queue.put_nowait(message)
             self._message_count += 1
         except asyncio.QueueFull:
-            raise ChannelError("message_queue", "Queue is full")
+            raise ChannelError("message_queue", "Queue is full") from None
 
     async def get(self, timeout: float | None = None) -> AgentMessage:
         """
@@ -207,7 +207,7 @@ class MessageQueue:
             raise ChannelError(
                 "message_queue",
                 f"No message available, timeout after {timeout}s"
-            )
+            ) from None
 
     def get_nowait(self) -> AgentMessage | None:
         """Get a message without waiting, returns None if empty."""

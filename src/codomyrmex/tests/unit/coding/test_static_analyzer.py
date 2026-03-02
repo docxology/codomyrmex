@@ -20,11 +20,14 @@ from codomyrmex.coding.static_analysis.static_analyzer import (
     Language,
     SeverityLevel,
     StaticAnalyzer,
-    analyze_file as module_analyze_file,
-    analyze_project as module_analyze_project,
     get_available_tools,
 )
-
+from codomyrmex.coding.static_analysis.static_analyzer import (
+    analyze_file as module_analyze_file,
+)
+from codomyrmex.coding.static_analysis.static_analyzer import (
+    analyze_project as module_analyze_project,
+)
 
 # ---------------------------------------------------------------------------
 # Fixtures
@@ -744,7 +747,7 @@ class TestAnalyzeProject:
 
     def test_excludes_pycache(self, project_with_files):
         analyzer = StaticAnalyzer(project_root=str(project_with_files))
-        summary = analyzer.analyze_project()
+        analyzer.analyze_project()
         # __pycache__/junk.py should be excluded
         analyzed_paths = [r.file_path for r in analyzer.results]
         for p in analyzed_paths:

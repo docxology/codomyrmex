@@ -43,7 +43,7 @@ class LazyLoader:
             try:
                 self._module = importlib.import_module(self.module_name, self.package)
             except ImportError as e:
-                raise ImportError(f"Could not import {self.module_name}: {e}")
+                raise ImportError(f"Could not import {self.module_name}: {e}") from e
             finally:
                 self._loading = False
 

@@ -48,7 +48,6 @@ def stream_csv_write(path: Path, items: Iterator[dict[str, Any]],
                      fieldnames: list[str] | None = None) -> int:
     """Stream-write dicts as CSV rows."""
     count = 0
-    first_item: dict[str, Any] | None = None
 
     with open(path, "w", newline="") as f:
         writer: csv.DictWriter | None = None

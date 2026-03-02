@@ -1,6 +1,5 @@
 """Unit tests for database result set iteration and batch operations."""
 
-import sqlite3
 import time
 
 import pytest
@@ -11,7 +10,6 @@ from codomyrmex.database_management.db_manager import (
 from codomyrmex.database_management.migration.migration_manager import (
     DatabaseConnector,
 )
-
 
 # ==============================================================================
 # Result Set Iteration Tests

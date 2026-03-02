@@ -207,7 +207,7 @@ def validate_environment_completeness(repo_root: str | None = None) -> bool:
     deps = ensure_dependencies_installed()
     env_vars = check_and_setup_env_vars(repo_root)
     py_ver = validate_python_version()
-    uv_env = is_uv_environment()
+    is_uv_environment()
 
     return deps and env_vars and py_ver
 

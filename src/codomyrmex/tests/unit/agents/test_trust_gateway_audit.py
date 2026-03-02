@@ -12,12 +12,12 @@ from pathlib import Path
 import pytest
 
 from codomyrmex.agents.pai.trust_gateway import (
-    _log_audit_entry,
-    get_audit_log,
-    export_audit_log,
-    clear_audit_log,
-    _is_destructive,
     DESTRUCTIVE_TOOLS,
+    _is_destructive,
+    _log_audit_entry,
+    clear_audit_log,
+    export_audit_log,
+    get_audit_log,
 )
 
 

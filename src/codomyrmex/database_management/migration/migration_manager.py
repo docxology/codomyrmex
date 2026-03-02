@@ -188,7 +188,7 @@ class DatabaseConnector:
             rows_affected = cursor.rowcount if cursor.rowcount >= 0 else 0
             return rows_affected, cursor
         except Exception as e:
-            raise CodomyrmexError(f"SQL execution failed: {e}")
+            raise CodomyrmexError(f"SQL execution failed: {e}") from e
 
     def execute_script(self, sql_script: str) -> tuple[int, int]:
         """Execute multiple SQL statements.

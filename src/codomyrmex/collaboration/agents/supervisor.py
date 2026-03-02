@@ -141,7 +141,7 @@ class SupervisorAgent(CollaborativeAgent):
                 if attempt < self._max_retries - 1:
                     logger.warning(f"Task {task.id} error: {e}, retrying...")
                 else:
-                    raise TaskExecutionError(task.id, str(e), worker.agent_id)
+                    raise TaskExecutionError(task.id, str(e), worker.agent_id) from e
 
         return TaskResult(
             task_id=task.id,

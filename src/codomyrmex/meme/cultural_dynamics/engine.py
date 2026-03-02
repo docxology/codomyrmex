@@ -62,7 +62,7 @@ class CulturalDynamicsEngine:
         self, state: CulturalState, perturbation: Meme
     ) -> float:
         """Calculate probability of cultural mutation given current state.
-        
+
         High 'energy' (tension) increases mutation probability.
         """
         # Meme compatibility check placeholder

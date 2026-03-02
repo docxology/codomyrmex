@@ -297,7 +297,7 @@ class ParallelExecutor:
             # Extract task parameters
             module = task.get("module", "")
             action = task.get("action", "")
-            parameters = task.get("parameters", {})
+            task.get("parameters", {})
 
             # Here we would normally call the actual module function
             # For now, we'll simulate execution
@@ -345,8 +345,8 @@ class ParallelExecutor:
         """
         # Simulate different execution times and results based on task type
         task_name = task["name"]
-        module = task.get("module", "")
-        action = task.get("action", "")
+        task.get("module", "")
+        task.get("action", "")
 
         # Simulate varying execution times
         if "analysis" in task_name.lower():

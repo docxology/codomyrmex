@@ -7,7 +7,7 @@ from codomyrmex.meme.swarm.models import SwarmAgent
 
 def reach_consensus(agents: list[SwarmAgent], proposal: str, threshold: float = 0.6) -> bool:
     """Simple majority/threshold consensus check.
-    
+
     Agents vote based on internal state — 'positive' state counts as yes.
     """
     # Agents in 'positive' state vote yes
@@ -18,7 +18,7 @@ def reach_consensus(agents: list[SwarmAgent], proposal: str, threshold: float = 
 
 def quorum_sensing(agents: list[SwarmAgent], radius: float) -> float:
     """Calculate local density as a signal for quorum sensing.
-    
+
     Returns average local density (neighbors per unit area/vol).
     """
     total_neighbors = 0

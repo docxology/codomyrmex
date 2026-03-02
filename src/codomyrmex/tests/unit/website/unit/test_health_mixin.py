@@ -6,8 +6,8 @@ which have zero direct coverage. Pipeline, git_info, and architecture_layers
 are already tested in test_data_provider.py.
 """
 import pytest
-from codomyrmex.website.data_provider import DataProvider
 
+from codomyrmex.website.data_provider import DataProvider
 
 # ── get_llm_config ────────────────────────────────────────────────────
 

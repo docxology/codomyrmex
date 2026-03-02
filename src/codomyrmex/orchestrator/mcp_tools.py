@@ -10,7 +10,7 @@ logger = logging.getLogger(__name__)
 @mcp_tool(category="orchestrator")
 def get_scheduler_metrics() -> dict:
     """Retrieve the current metrics of the Orchestrator AsyncScheduler.
-    
+
     Returns:
         A dictionary containing scheduler metrics like active jobs and completion rates.
     """
@@ -39,10 +39,10 @@ def get_scheduler_metrics() -> dict:
 @mcp_tool(category="orchestrator")
 def analyze_workflow_dependencies(tasks: list[dict]) -> dict:
     """Analyze a proposed workflow DAG for cyclic dependencies.
-    
+
     Args:
         tasks: A list of dictionaries, each containing 'id' and 'dependencies' (list of ids)
-        
+
     Returns:
         Validation result indicating if the workflow is a valid DAG.
     """

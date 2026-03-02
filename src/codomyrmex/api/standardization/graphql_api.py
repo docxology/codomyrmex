@@ -412,7 +412,7 @@ class GraphQLAPI:
         errors = []
 
         try:
-            parsed = self._parse_query(query)
+            self._parse_query(query)
             # Add validation logic here
         except Exception as e:
             errors.append(str(e))

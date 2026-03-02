@@ -5,8 +5,10 @@ import json
 import pytest
 
 from codomyrmex.config_management.core.config_loader import (
-    Configuration,
     ConfigSchema as CoreConfigSchema,
+)
+from codomyrmex.config_management.core.config_loader import (
+    Configuration,
     ConfigurationManager,
 )
 from codomyrmex.config_management.migration.config_migrator import (

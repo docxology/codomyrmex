@@ -7,7 +7,6 @@ import tempfile
 import pytest
 
 from codomyrmex.api.openapi_generator import (
-    APISchema,
     DocumentationOpenAPIGenerator,
     OpenAPISpecification,
     StandardizationOpenAPIGenerator,
@@ -15,7 +14,6 @@ from codomyrmex.api.openapi_generator import (
     generate_openapi_spec,
     validate_openapi_spec,
 )
-
 
 # ---------------------------------------------------------------------------
 # StandardizationOpenAPIGenerator

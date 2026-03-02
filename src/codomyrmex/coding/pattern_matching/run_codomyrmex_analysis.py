@@ -92,9 +92,6 @@ def run_codomyrmex_analysis(directory: str, patterns: dict[str, str] | None = No
     analyzer = PatternAnalyzer(patterns or {})
     return analyzer.analyze_directory(directory)
 
-    analyzer = PatternAnalyzer(patterns)
-    return analyzer.analyze_file(file_path)
-
 def get_embedding_function() -> Any:
     """Get a deterministic hash-based embedding function.
 

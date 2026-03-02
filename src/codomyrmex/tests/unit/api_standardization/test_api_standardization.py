@@ -343,7 +343,7 @@ class TestOpenAPIGenerator:
     def test_spec_validation(self):
         """Test OpenAPI specification validation."""
         # Valid spec should have no errors
-        errors = self.generator.validate_spec()
+        self.generator.validate_spec()
         # May have some validation errors for minimal spec, but should not crash
 
     def test_spec_generation(self):
@@ -385,7 +385,7 @@ class TestIntegration:
         version_manager = APIVersionManager("1.0.0")
 
         # Create REST API
-        api = RESTAPI("Test API", "1.0.0")
+        RESTAPI("Test API", "1.0.0")
 
         # Add versioned endpoint
         def handler_v1(request):

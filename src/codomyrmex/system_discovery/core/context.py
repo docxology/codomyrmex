@@ -28,8 +28,8 @@ def get_system_context(root_dir: str = ".") -> dict[str, Any]:
         Dictionary containing system context (structure, health, etc.)
     """
     try:
-        engine = SystemDiscovery(Path(root_dir))
-        health = HealthChecker()
+        SystemDiscovery(Path(root_dir))
+        HealthChecker()
 
         # Determine basic structure
         # This is a lightweight context, not a full index

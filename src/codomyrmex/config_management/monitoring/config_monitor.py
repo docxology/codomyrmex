@@ -162,7 +162,7 @@ class ConfigurationMonitor:
         if not hash_store_path.exists():
             return None
         try:
-            with open(hash_store_path, "r") as f:
+            with open(hash_store_path) as f:
                 stored_hashes = json.load(f)
             return stored_hashes.get(file_path)
         except (json.JSONDecodeError, OSError):
@@ -175,7 +175,7 @@ class ConfigurationMonitor:
         existing: dict[str, str] = {}
         if hash_store_path.exists():
             try:
-                with open(hash_store_path, "r") as f:
+                with open(hash_store_path) as f:
                     existing = json.load(f)
             except (json.JSONDecodeError, OSError) as e:
                 logger.debug("Hash store unreadable, starting fresh: %s", e)

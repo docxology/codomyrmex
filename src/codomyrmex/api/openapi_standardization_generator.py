@@ -118,7 +118,7 @@ class StandardizationOpenAPIGenerator:
                 from codomyrmex.api.standardization.rest_api import RESTAPI as _RESTAPI
                 _restapi_class = _RESTAPI
             except ImportError:
-                raise ImportError("RESTAPI class not available. Ensure standardization module is properly imported.")
+                raise ImportError("RESTAPI class not available. Ensure standardization module is properly imported.") from None
 
         # Verify the api object has required methods (don't check isinstance to avoid import issues)
         if not hasattr(api, 'get_endpoints'):
@@ -151,7 +151,7 @@ class StandardizationOpenAPIGenerator:
                 )
                 _GraphQLAPI = _GQL
             except ImportError:
-                raise ImportError("GraphQLAPI class not available. Ensure standardization module is properly imported.")
+                raise ImportError("GraphQLAPI class not available. Ensure standardization module is properly imported.") from None
 
         # Add GraphQL endpoint
         graphql_path = "/graphql"
@@ -227,7 +227,7 @@ class StandardizationOpenAPIGenerator:
                 )
                 _AVM = _AVM2
             except ImportError:
-                raise ImportError("APIVersionManager class not available. Ensure standardization module is properly imported.")
+                raise ImportError("APIVersionManager class not available. Ensure standardization module is properly imported.") from None
 
         # Add version parameter
         self.spec.spec["components"]["parameters"]["ApiVersion"] = {

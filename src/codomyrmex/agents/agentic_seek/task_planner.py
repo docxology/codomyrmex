@@ -22,7 +22,6 @@ from codomyrmex.agents.agentic_seek.agent_types import (
     AgenticSeekTaskStep,
 )
 
-
 # ---------------------------------------------------------------------------
 # Task-name extraction (mirrors PlannerAgent.get_task_names)
 # ---------------------------------------------------------------------------
@@ -138,7 +137,7 @@ def parse_plan_json(text: str) -> list[AgenticSeekTaskStep]:
                 raise ValueError(
                     f"Unknown agent type {item['agent']!r} in plan step "
                     f"{item['id']}."
-                )
+                ) from None
 
             deps = item.get("need", [])
             if isinstance(deps, int):

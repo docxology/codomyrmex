@@ -35,7 +35,7 @@ class SimpleVersion:
             self.minor = int(parts[1])
             self.patch = int(parts[2])
         except ValueError:
-            raise ValueError(f"Invalid semantic version components: {version_str}")
+            raise ValueError(f"Invalid semantic version components: {version_str}") from None
 
     def __str__(self):
         """str ."""
@@ -83,7 +83,7 @@ class APIVersion:
             try:
                 SimpleVersion(self.version)
             except ValueError:
-                raise ValueError(f"Invalid semantic version: {self.version}")
+                raise ValueError(f"Invalid semantic version: {self.version}") from None
         elif self.format == VersionFormat.DATE:
             if not re.match(r'^\d{4}-\d{2}-\d{2}$', self.version):
                 raise ValueError(f"Invalid date format (expected YYYY-MM-DD): {self.version}")

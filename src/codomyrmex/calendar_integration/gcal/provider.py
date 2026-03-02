@@ -1,7 +1,14 @@
 """Google Calendar implementation of the CalendarProvider interface."""
 
+import logging
 import os
 from datetime import datetime
+
+try:
+    from codomyrmex.logging_monitoring.core.logger_config import get_logger
+    logger = get_logger(__name__)
+except Exception:
+    logger = logging.getLogger(__name__)
 
 from ..exceptions import (
     CalendarAPIError,
@@ -49,7 +56,7 @@ class GoogleCalendar(CalendarProvider):
         try:
             self.service = service or build('calendar', 'v3', credentials=credentials)
         except Exception as e:
-            raise CalendarAuthError(f"Failed to initialize Google Calendar API service: {e}")
+            raise CalendarAuthError(f"Failed to initialize Google Calendar API service: {e}") from e
 
     @classmethod
     def from_env(cls) -> "GoogleCalendar":
@@ -216,7 +223,7 @@ class GoogleCalendar(CalendarProvider):
                 html_link=item.get('htmlLink')
             )
         except (KeyError, ValueError) as e:
-            raise InvalidEventError(f"Failed to parse Google Calendar event data: {e}")
+            raise InvalidEventError(f"Failed to parse Google Calendar event data: {e}") from e
 
     def list_events(self, time_min: datetime, time_max: datetime, calendar_id: str = 'primary') -> list[CalendarEvent]:
         """List events between the given start and end times."""
@@ -232,7 +239,7 @@ class GoogleCalendar(CalendarProvider):
             items = events_result.get('items', [])
             return [self._gcal_dict_to_event(item) for item in items]
         except HttpError as e:
-            raise CalendarAPIError(f"Failed to list events: {e}")
+            raise CalendarAPIError(f"Failed to list events: {e}") from e
 
     def create_event(self, event: CalendarEvent, calendar_id: str = 'primary') -> CalendarEvent:
         """Create a new event in the calendar."""
@@ -244,7 +251,7 @@ class GoogleCalendar(CalendarProvider):
             ).execute()
             return self._gcal_dict_to_event(created_event)
         except HttpError as e:
-            raise CalendarAPIError(f"Failed to create event: {e}")
+            raise CalendarAPIError(f"Failed to create event: {e}") from e
 
     def get_event(self, event_id: str, calendar_id: str = 'primary') -> CalendarEvent:
         """Fetch a specific event by its ID."""
@@ -256,8 +263,8 @@ class GoogleCalendar(CalendarProvider):
             return self._gcal_dict_to_event(event)
         except HttpError as e:
             if e.resp.status == 404:
-                raise EventNotFoundError(f"Event with ID {event_id} not found.")
-            raise CalendarAPIError(f"Failed to fetch event: {e}")
+                raise EventNotFoundError(f"Event with ID {event_id} not found.") from e
+            raise CalendarAPIError(f"Failed to fetch event: {e}") from e
 
     def update_event(self, event_id: str, event: CalendarEvent, calendar_id: str = 'primary') -> CalendarEvent:
         """Update an existing event."""
@@ -271,8 +278,8 @@ class GoogleCalendar(CalendarProvider):
             return self._gcal_dict_to_event(updated_event)
         except HttpError as e:
             if e.resp.status == 404:
-                raise EventNotFoundError(f"Event with ID {event_id} not found for update.")
-            raise CalendarAPIError(f"Failed to update event: {e}")
+                raise EventNotFoundError(f"Event with ID {event_id} not found for update.") from e
+            raise CalendarAPIError(f"Failed to update event: {e}") from e
 
     def delete_event(self, event_id: str, calendar_id: str = 'primary') -> None:
         """Delete an event from the calendar."""
@@ -283,5 +290,5 @@ class GoogleCalendar(CalendarProvider):
             ).execute()
         except HttpError as e:
             if e.resp.status == 404:
-                raise EventNotFoundError(f"Event with ID {event_id} not found for deletion.")
-            raise CalendarAPIError(f"Failed to delete event: {e}")
+                raise EventNotFoundError(f"Event with ID {event_id} not found for deletion.") from e
+            raise CalendarAPIError(f"Failed to delete event: {e}") from e

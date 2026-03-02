@@ -49,7 +49,6 @@ from codomyrmex.plugin_system.discovery import (
     PluginState as DiscoveryPluginState,
 )
 
-
 # ---------------------------------------------------------------------------
 # Helpers -- real Plugin subclasses (not mocks)
 # ---------------------------------------------------------------------------
@@ -445,7 +444,7 @@ class TestPluginLoaderCore:
     def test_init_creates_directories(self):
         with tempfile.TemporaryDirectory() as tmpdir:
             plugin_dir = os.path.join(tmpdir, "plugins_new")
-            loader = PluginLoader(plugin_directories=[plugin_dir])
+            PluginLoader(plugin_directories=[plugin_dir])
             assert os.path.isdir(plugin_dir)
 
     def test_discover_empty_directory(self):

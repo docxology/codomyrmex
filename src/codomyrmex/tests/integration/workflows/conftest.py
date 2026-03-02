@@ -13,7 +13,6 @@ def reset_trust_state():
     from codomyrmex.agents.pai import trust_gateway
 
     # Store original state
-    original_level = trust_gateway._trust_level
 
     yield
 

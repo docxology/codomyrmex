@@ -25,7 +25,6 @@ from codomyrmex.ci_cd_automation.deployment_orchestrator import (
     manage_deployments,
 )
 
-
 # ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------
@@ -464,7 +463,7 @@ class TestDeployLifecycle:
 
     def test_deploy_sets_started_at(self, tmp_path):
         orch = _orchestrator_with_env(tmp_path)
-        dep = orch.create_deployment("app", "1.0", "staging", [])
+        orch.create_deployment("app", "1.0", "staging", [])
         before = datetime.now(timezone.utc)
         result = orch.deploy("app")
         assert result.started_at is not None

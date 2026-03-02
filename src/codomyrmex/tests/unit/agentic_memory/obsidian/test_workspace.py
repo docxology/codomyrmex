@@ -4,9 +4,14 @@ import pytest
 
 from codomyrmex.agentic_memory.obsidian.cli import ObsidianCLI, ObsidianCLINotAvailable
 from codomyrmex.agentic_memory.obsidian.workspace import (
-    delete_workspace, get_active_workspace, list_recents,
-    list_tabs, list_workspaces, load_workspace,
-    open_tab, save_workspace,
+    delete_workspace,
+    get_active_workspace,
+    list_recents,
+    list_tabs,
+    list_workspaces,
+    load_workspace,
+    open_tab,
+    save_workspace,
 )
 
 

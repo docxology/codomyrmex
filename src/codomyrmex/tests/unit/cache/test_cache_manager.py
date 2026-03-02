@@ -131,24 +131,24 @@ class TestCacheManagerBackendSelection:
     """Backend creation and fallback logic."""
 
     def test_in_memory_backend(self):
-        from codomyrmex.cache.cache_manager import CacheManager
         from codomyrmex.cache.backends.in_memory import InMemoryCache
+        from codomyrmex.cache.cache_manager import CacheManager
 
         mgr = CacheManager()
         cache = mgr.get_cache("mem", backend="in_memory")
         assert isinstance(cache, InMemoryCache)
 
     def test_file_based_backend(self):
-        from codomyrmex.cache.cache_manager import CacheManager
         from codomyrmex.cache.backends.file_based import FileBasedCache
+        from codomyrmex.cache.cache_manager import CacheManager
 
         mgr = CacheManager()
         cache = mgr.get_cache("fb", backend="file_based")
         assert isinstance(cache, FileBasedCache)
 
     def test_unknown_backend_falls_back(self):
-        from codomyrmex.cache.cache_manager import CacheManager
         from codomyrmex.cache.backends.in_memory import InMemoryCache
+        from codomyrmex.cache.cache_manager import CacheManager
 
         mgr = CacheManager()
         cache = mgr.get_cache("unk", backend="memcached_nonexistent")
@@ -156,8 +156,8 @@ class TestCacheManagerBackendSelection:
 
     def test_redis_backend_returns_valid_cache(self):
         """Redis backend returns a valid Cache instance (RedisCache or fallback)."""
-        from codomyrmex.cache.cache_manager import CacheManager
         from codomyrmex.cache.cache import Cache
+        from codomyrmex.cache.cache_manager import CacheManager
 
         mgr = CacheManager()
         cache = mgr.get_cache("red", backend="redis")
@@ -175,8 +175,8 @@ class TestCacheManagerBackendSelection:
         assert mgr.cache_count == 2
 
     def test_default_backend_used_when_none(self):
-        from codomyrmex.cache.cache_manager import CacheManager
         from codomyrmex.cache.backends.file_based import FileBasedCache
+        from codomyrmex.cache.cache_manager import CacheManager
 
         mgr = CacheManager(default_backend="file_based")
         cache = mgr.get_cache("auto")

@@ -4,14 +4,15 @@ Sprint 2 coverage: targets SequentialEngine and ParallelEngine
 from ``orchestrator.engines``.
 """
 
-import pytest
 import time
 
+import pytest
+
 from codomyrmex.orchestrator.engines import (
-    SequentialEngine,
     ParallelEngine,
-    WorkflowDefinition,
+    SequentialEngine,
     TaskState,
+    WorkflowDefinition,
     create_engine,
 )
 

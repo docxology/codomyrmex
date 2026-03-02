@@ -199,7 +199,6 @@ class TestAsyncEventSubscription:
         # First event should be received
         bus.publish(Event(event_type=EventType.SYSTEM_STARTUP, source="test"))
         await asyncio.sleep(0.2)
-        first_count = call_count
 
         # Unsubscribe
         bus.unsubscribe(sub_id)

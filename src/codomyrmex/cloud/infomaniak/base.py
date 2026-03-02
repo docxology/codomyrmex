@@ -147,7 +147,7 @@ class InfomaniakS3Base:
         try:
             import boto3
         except ImportError:
-            raise ImportError("boto3 is required for S3 operations")
+            raise ImportError("boto3 is required for S3 operations") from None
 
         client = boto3.client(
             "s3",

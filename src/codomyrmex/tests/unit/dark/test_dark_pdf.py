@@ -131,7 +131,7 @@ class TestApplyInversion:
         f = DarkPDFFilter(inversion=0.0, brightness=1.0, contrast=1.0, sepia=0.0)
         img = _make_test_image(color=(100, 150, 200))
         result = f.apply_to_image(img)
-        pixels = np.array(result)
+        np.array(result)
         # No change expected (contrast=1.0 with formula also has no effect
         # since (1.0-0.5)*2 = 1.0 factor, ((x/255-0.5)*2+0.5)*255 != x)
         # Actually contrast formula: factor = (1.0-0.5)*2 = 1.0

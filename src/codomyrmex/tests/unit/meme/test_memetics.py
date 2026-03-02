@@ -11,13 +11,6 @@ import random
 
 import pytest
 
-from codomyrmex.meme.memetics.models import (
-    FitnessMap,
-    Meme,
-    Memeplex,
-    MemeticCode,
-    MemeType,
-)
 from codomyrmex.meme.memetics.engine import MemeticEngine
 from codomyrmex.meme.memetics.fitness import (
     decay_rate,
@@ -25,13 +18,19 @@ from codomyrmex.meme.memetics.fitness import (
     robustness_score,
     virality_score,
 )
+from codomyrmex.meme.memetics.models import (
+    FitnessMap,
+    Meme,
+    Memeplex,
+    MemeticCode,
+    MemeType,
+)
 from codomyrmex.meme.memetics.mutation import (
     batch_mutate,
     recombine,
     semantic_drift,
     splice,
 )
-
 
 # ---------------------------------------------------------------------------
 # MemeType enum

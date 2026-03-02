@@ -46,7 +46,6 @@ from codomyrmex.containerization.registry.container_registry import (
 )
 from codomyrmex.exceptions import CodomyrmexError
 
-
 # ---------------------------------------------------------------------------
 # ContainerImage dataclass
 # ---------------------------------------------------------------------------

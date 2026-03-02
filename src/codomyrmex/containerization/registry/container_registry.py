@@ -152,7 +152,7 @@ class ContainerRegistry:
             try:
                 image = self._docker_client.images.get(local_name)
             except ImageNotFound:
-                raise CodomyrmexError(f"Local image not found: {local_name}")
+                raise CodomyrmexError(f"Local image not found: {local_name}") from None
 
             # Tag image for the registry
             image.tag(self.registry_url + "/" + image_name if self.registry_url else image_name, image_tag)
@@ -197,7 +197,7 @@ class ContainerRegistry:
             }
 
         except DockerException as e:
-            raise CodomyrmexError(f"Failed to push image: {e}")
+            raise CodomyrmexError(f"Failed to push image: {e}") from e
 
     def pull_image(
         self,
@@ -260,9 +260,9 @@ class ContainerRegistry:
             }
 
         except ImageNotFound:
-            raise CodomyrmexError(f"Image not found in registry: {full_name}")
+            raise CodomyrmexError(f"Image not found in registry: {full_name}") from None
         except DockerException as e:
-            raise CodomyrmexError(f"Failed to pull image: {e}")
+            raise CodomyrmexError(f"Failed to pull image: {e}") from e
 
     def build_and_push(
         self,
@@ -333,7 +333,7 @@ class ContainerRegistry:
             }
 
         except DockerException as e:
-            raise CodomyrmexError(f"Failed to build and push image: {e}")
+            raise CodomyrmexError(f"Failed to build and push image: {e}") from e
 
     def list_images(
         self,

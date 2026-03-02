@@ -127,7 +127,7 @@ class RequestBatcher(Generic[T]):
         if not batch or not self.processor:
             return
 
-        request_ids = [item[0] for item in batch]
+        [item[0] for item in batch]
         inputs = [item[1] for item in batch]
         futures = [item[2] for item in batch]
 

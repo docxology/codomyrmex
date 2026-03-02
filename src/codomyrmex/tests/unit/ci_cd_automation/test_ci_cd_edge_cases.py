@@ -1,12 +1,10 @@
 """Error handling, edge cases, and boundary condition tests for the ci_cd_automation module."""
 
 import asyncio
-import json
 import os
-from datetime import datetime, timezone
+from datetime import datetime
 
 import pytest
-import yaml
 
 try:
     import docker
@@ -21,40 +19,25 @@ except ImportError:
     AIOHTTP_AVAILABLE = False
 
 from codomyrmex.ci_cd_automation.deployment_orchestrator import (
-    Deployment,
     DeploymentOrchestrator,
-    DeploymentStatus,
-    Environment,
-    EnvironmentType,
-    manage_deployments,
 )
 from codomyrmex.ci_cd_automation.performance_optimizer import (
     PipelineOptimizer,
 )
 from codomyrmex.ci_cd_automation.pipeline import (
     AsyncPipelineManager,
-    AsyncPipelineResult,
     JobStatus,
     Pipeline,
     PipelineJob,
     PipelineManager,
     PipelineStage,
     PipelineStatus,
-    StageStatus,
-    create_pipeline,
-    run_pipeline,
-)
-from codomyrmex.ci_cd_automation.pipeline.pipeline_monitor import (
-    PipelineMonitor,
-    PipelineReport,
-    ReportType,
 )
 from codomyrmex.ci_cd_automation.rollback_manager import (
     RollbackExecution,
     RollbackManager,
     RollbackStrategy,
 )
-
 
 _HAS_GITHUB_TOKEN = bool(os.environ.get("GITHUB_TOKEN"))
 _GITHUB_OWNER = os.environ.get("GITHUB_REPO_OWNER", "")

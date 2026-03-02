@@ -1,9 +1,6 @@
 from pathlib import Path
 
-"""
-STANDARD_CONTENT =
-"""
-"""
+STANDARD_CONTENT = """
 
 
 Enhance Stub READMEs.

@@ -20,7 +20,6 @@ from codomyrmex.utils.process.script_base import (
     run_script,
 )
 
-
 # ---------------------------------------------------------------------------
 # Concrete subclasses for testing the abstract ScriptBase
 # ---------------------------------------------------------------------------

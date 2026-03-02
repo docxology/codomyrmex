@@ -318,7 +318,7 @@ class TestIdentitySession:
         assert self.ident.active_session_count == 1
 
         self.prov.register("u2", "p2")
-        t2 = self.ident.login("u2", {"user_id": "u2", "password": "p2"})
+        self.ident.login("u2", {"user_id": "u2", "password": "p2"})
         assert self.ident.active_session_count == 2
 
         self.ident.logout(t1.token)

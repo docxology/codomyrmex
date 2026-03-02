@@ -2,7 +2,6 @@
 
 from pathlib import Path
 
-
 from codomyrmex.agentic_memory.obsidian.models import (
     Callout,
     Canvas,

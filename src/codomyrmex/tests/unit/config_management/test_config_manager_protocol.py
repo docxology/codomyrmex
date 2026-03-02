@@ -7,13 +7,9 @@ import pytest
 import yaml
 
 from codomyrmex.config_management.core.config_loader import (
-    ConfigSchema,
     Configuration,
     ConfigurationManager,
-    load_configuration,
-    validate_configuration,
 )
-
 
 # ---------------------------------------------------------------------------
 # ConfigurationManager -- file:// protocol tests

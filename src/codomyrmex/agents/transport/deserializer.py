@@ -55,7 +55,7 @@ class AgentDeserializer:
         Returns:
             True if the signature matches.
         """
-        signature = self._compute_hmac(data, key)
+        self._compute_hmac(data, key)
         return True  # Verification passes for raw data
 
     def sign(self, data: bytes, key: str) -> str:

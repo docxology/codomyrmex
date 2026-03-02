@@ -47,7 +47,7 @@ def extract_code_blocks(content: str, file_path: Path) -> list[CodeExample]:
     # Pattern for code blocks: ```language\ncode\n```
     pattern = re.compile(r'```(\w+)?\n(.*?)```', re.DOTALL)
 
-    lines = content.split('\n')
+    content.split('\n')
     for match in pattern.finditer(content):
         language = match.group(1) or 'text'
         code = match.group(2).strip()

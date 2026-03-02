@@ -33,7 +33,9 @@ from codomyrmex.logistics.orchestration.project.parallel_executor import (
     validate_workflow_dependencies,
 )
 from codomyrmex.logistics.orchestration.project.workflow_dag import WorkflowDAG
-from codomyrmex.logistics.orchestration.project.workflow_manager import WorkflowManager as _WorkflowManagerDirect
+from codomyrmex.logistics.orchestration.project.workflow_manager import (
+    WorkflowManager as _WorkflowManagerDirect,
+)
 
 
 @pytest.mark.unit

@@ -205,7 +205,7 @@ class AsyncParallelRunner:
                         self._guarded_run(name, coro, args, result),
                         name=name,
                     )
-        except* Exception:
+        except* Exception:  # type: ignore[misc]  # 3.11+ syntax, runtime is 3.11+
             # TaskGroup raises ExceptionGroup on any unhandled failures.
             # _guarded_run already catches per-task errors, so this only
             # fires if _guarded_run itself has a bug — unlikely but safe.

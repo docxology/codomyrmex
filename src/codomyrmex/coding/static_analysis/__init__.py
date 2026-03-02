@@ -33,13 +33,6 @@ except ImportError:
     Result = None
     ResultStatus = None
 
-from .pyrefly_runner import (
-    PyreflyIssue,
-    PyreflyResult,
-    PyreflyRunner,
-    check_pyrefly_available,
-    run_pyrefly,
-)
 from .models import (
     AnalysisResult,
     AnalysisSummary,
@@ -47,6 +40,13 @@ from .models import (
     CodeMetrics,
     Language,
     SeverityLevel,
+)
+from .pyrefly_runner import (
+    PyreflyIssue,
+    PyreflyResult,
+    PyreflyRunner,
+    check_pyrefly_available,
+    run_pyrefly,
 )
 from .static_analyzer import (
     StaticAnalyzer,

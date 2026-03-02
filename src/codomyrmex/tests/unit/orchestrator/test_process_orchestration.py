@@ -105,7 +105,7 @@ class TestProcessOrchestrator:
     def test_spawn_and_health(self):
         """Test functionality: spawn and health."""
         orch = ProcessOrchestrator()
-        agent_id = orch.spawn("ThinkingAgent", {"depth": 3})
+        orch.spawn("ThinkingAgent", {"depth": 3})
         health = orch.health()
         assert health.total_agents == 1
         assert health.running == 1

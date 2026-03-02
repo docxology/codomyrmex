@@ -543,7 +543,7 @@ class TestInputOutputMappingBetweenSteps:
         wf.add_task("first", first_task)
         wf.add_task("second", second_task, dependencies=["first"])
 
-        results = await wf.run()
+        await wf.run()
 
         assert "first" in received_results
         assert received_results["first"].value == {"key": "value_from_first"}
@@ -1031,7 +1031,7 @@ class TestStepsBuilder:
         steps.add("task2", task2, depends_on=["task1"])
 
         # Use async run instead of run_sync to avoid nested event loop issues
-        output = await steps.run()
+        await steps.run()
 
         assert "t1" in results
         assert "t2" in results

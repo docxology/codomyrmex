@@ -19,7 +19,6 @@ Uses real Ollama/Fabric when available, with skip markers otherwise.
 import json
 import os
 import shutil
-import tempfile
 from pathlib import Path
 
 import pytest
@@ -624,7 +623,7 @@ class TestConfigManager:
         config_file = Path(self.temp_dir) / "config.json"
         manager = ConfigManager(str(config_file))
 
-        success = manager.update_config(
+        manager.update_config(
             default_model="new-model",
             auto_start_server=False
         )

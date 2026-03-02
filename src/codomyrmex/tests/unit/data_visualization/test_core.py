@@ -25,7 +25,7 @@ def test_grid_layout():
 def test_export_html(tmp_path):
     """Test functionality: export html."""
     out_file = tmp_path / "test_report.html"
-    html = render_html("<h1>Hello</h1>", title="Test Report", output_path=out_file)
+    render_html("<h1>Hello</h1>", title="Test Report", output_path=out_file)
 
     assert Path(out_file).exists()
     content = Path(out_file).read_text()

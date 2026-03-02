@@ -271,7 +271,7 @@ def parse_cron(expression: str) -> dict[str, Any]:
 
 def describe_cron(expression: str) -> str:
     """Get human-readable description of cron expression."""
-    parsed = parse_cron(expression)
+    parse_cron(expression)
 
     if expression == "* * * * *":
         return "Every minute"

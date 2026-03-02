@@ -40,7 +40,6 @@ class FPFParser:
 
         # Extract version info if available
         version = None
-        last_updated = None
         for line in lines[:100]:  # Check first 100 lines
             if "Version" in line or "version" in line:
                 version_match = re.search(r"v?(\d+\.\d+\.\d+)", line)
@@ -50,7 +49,7 @@ class FPFParser:
                 # Try to extract date
                 date_match = re.search(r"(\d{4})", line)
                 if date_match:
-                    last_updated = date_match.group(1)
+                    date_match.group(1)
 
         return FPFSpec(
             version=version,
@@ -121,7 +120,6 @@ class FPFParser:
         current_pattern = None
         current_section = None
         current_content_lines = []
-        pattern_start_line = 0
 
         i = 0
         while i < len(lines):
@@ -158,7 +156,6 @@ class FPFParser:
                     dependencies={},
                 )
                 current_content_lines = [line]
-                pattern_start_line = i
                 current_section = "header"
                 i += 1
                 continue

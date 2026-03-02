@@ -17,7 +17,10 @@ from typing import Any
 from codomyrmex.logging_monitoring import get_logger
 
 try:
-    from codomyrmex.logging_monitoring.core.logger_config import get_logger, setup_logging
+    from codomyrmex.logging_monitoring.core.logger_config import (
+        get_logger,
+        setup_logging,
+    )
 
     setup_logging()
     logger = get_logger(__name__)

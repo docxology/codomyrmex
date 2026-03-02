@@ -1,9 +1,10 @@
 import csv
 import json
+import logging
 from collections import defaultdict
 from pathlib import Path
 from typing import Any
-import logging
+
 logger = logging.getLogger(__name__)
 
 import matplotlib.pyplot as plt

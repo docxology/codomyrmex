@@ -7,7 +7,7 @@ from codomyrmex.meme.cultural_dynamics.models import PowerMap
 
 def map_power_dynamics(entities: list[str], flows: list[tuple[str, str, float]]) -> PowerMap:
     """Map power based on capital flows.
-    
+
     Args:
         entities: List of entity IDs.
         flows: List of (source, target, amount) tuples.

@@ -13,7 +13,6 @@ from codomyrmex.logistics.orchestration.project.documentation_generator import (
     DocumentationGenerator,
 )
 
-
 # ---------------------------------------------------------------------------
 # Fixtures
 # ---------------------------------------------------------------------------

@@ -15,7 +15,6 @@ from pathlib import Path
 
 import pytest
 
-
 # ---------------------------------------------------------------------------
 # VideoConfig
 # ---------------------------------------------------------------------------
@@ -224,7 +223,12 @@ class TestGlobalConfigManagement:
 
     @pytest.mark.unit
     def test_get_set_reset_cycle(self) -> None:
-        from codomyrmex.video.config import VideoConfig, get_config, reset_config, set_config
+        from codomyrmex.video.config import (
+            VideoConfig,
+            get_config,
+            reset_config,
+            set_config,
+        )
 
         original_fps = get_config().default_fps
         set_config(VideoConfig(default_fps=120))

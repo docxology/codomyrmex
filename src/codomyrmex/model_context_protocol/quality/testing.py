@@ -84,11 +84,11 @@ class ToolTester:
     ) -> TestSuite:
         """
         Run test cases against a tool.
-        
+
         Args:
             tool_name: Name of tool to test
             test_cases: List of dicts with 'arguments' and optional 'expected'
-        
+
         Returns:
             TestSuite with results
         """

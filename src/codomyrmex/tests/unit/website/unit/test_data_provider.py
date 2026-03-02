@@ -12,7 +12,6 @@ Tests cover:
 - PAI Awareness data methods
 """
 
-import json
 import sys
 from pathlib import Path
 

@@ -332,7 +332,7 @@ class TestInfrastructureAgentToolRegistry:
 
         tool_name = "infomaniak_compute_list_instances"
         if tool_name in registry:
-            result = registry[tool_name].handler()
+            registry[tool_name].handler()
             assert len(compute._calls.get("list_instances", [])) > 0
 
     def test_stream_yields_execute_result(self):

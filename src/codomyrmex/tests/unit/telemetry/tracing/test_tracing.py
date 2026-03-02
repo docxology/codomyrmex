@@ -175,8 +175,8 @@ class TestTracer:
         exporter = InMemoryExporter()
         tracer = Tracer("test-service", exporter=exporter)
 
-        with tracer.span("outer") as outer:
-            with tracer.span("inner") as inner:
+        with tracer.span("outer"):
+            with tracer.span("inner"):
                 pass
 
         tracer.flush()
@@ -191,7 +191,7 @@ class TestTracer:
         tracer = Tracer("test-service", exporter=exporter)
 
         try:
-            with tracer.span("operation") as span:
+            with tracer.span("operation"):
                 raise ValueError("test error")
         except ValueError:
             pass

@@ -223,7 +223,7 @@ class TestFileHistoryStore:
     def test_creates_directory_if_missing(self, tmp_path):
         """FileHistoryStore creates the directory on init."""
         new_dir = tmp_path / "subdir" / "history"
-        store = FileHistoryStore(str(new_dir))
+        FileHistoryStore(str(new_dir))
         assert new_dir.exists()
 
 

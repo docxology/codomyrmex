@@ -10,6 +10,8 @@ from __future__ import annotations
 
 import pytest
 
+from codomyrmex.meme.contagion.cascade import CascadeDetector, detect_cascades
+from codomyrmex.meme.contagion.epidemic import SEIRModel, SIRModel, SISModel
 from codomyrmex.meme.contagion.models import (
     Cascade,
     CascadeType,
@@ -17,10 +19,7 @@ from codomyrmex.meme.contagion.models import (
     PropagationTrace,
     ResonanceMap,
 )
-from codomyrmex.meme.contagion.cascade import CascadeDetector, detect_cascades
-from codomyrmex.meme.contagion.epidemic import SEIRModel, SIRModel, SISModel
 from codomyrmex.meme.contagion.simulation import run_simulation
-
 
 # ---------------------------------------------------------------------------
 # CascadeType enum

@@ -383,7 +383,7 @@ class TestVisualizationPerformanceWorkflow:
         if DATA_VISUALIZATION_AVAILABLE:
             from codomyrmex.data_visualization import create_bar_chart
             data = {"categories": ["X", "Y", "Z"], "values": [10, 20, 30]}
-            chart = create_bar_chart(data, "Integration Test")
+            create_bar_chart(data, "Integration Test")
             workflow_steps += 1
 
         # Step 2: Profile a function

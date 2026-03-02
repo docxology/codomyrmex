@@ -6,12 +6,12 @@ from codomyrmex.model_context_protocol.decorators import mcp_tool
 @mcp_tool(category="llm")
 def generate_text(prompt: str, provider: str = "openrouter", model: str = "openrouter/free") -> dict:
     """Generate text using a specified LLM provider and model.
-    
+
     Args:
         prompt: The input prompt for the LLM
         provider: The provider to use (e.g., 'openrouter', 'ollama')
         model: The specific model ID to use
-        
+
     Returns:
         Structured response with the generated text.
     """
@@ -40,7 +40,7 @@ def generate_text(prompt: str, provider: str = "openrouter", model: str = "openr
 @mcp_tool(category="llm")
 def list_local_models() -> dict:
     """List available local models managed by Ollama.
-    
+
     Returns:
         List of local LLM models installed.
     """
@@ -57,7 +57,7 @@ def list_local_models() -> dict:
 @mcp_tool(category="llm")
 def query_fabric_metadata() -> dict:
     """Query configuration metadata for Microsoft Fabric integration.
-    
+
     Returns:
         Fabric connection configuration metadata.
     """

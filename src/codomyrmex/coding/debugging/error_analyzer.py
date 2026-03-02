@@ -116,7 +116,6 @@ class ErrorAnalyzer:
             return None
 
         # Combine output for analysis, prioritizing stderr which usually has the traceback
-        full_output = f"{stdout}\n{stderr}"
 
         # Check for timeout (this usually comes from the runner but we might see SIGTERM/124)
         if exit_code == 124: # Standard timeout exit code on linux

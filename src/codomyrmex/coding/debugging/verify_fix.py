@@ -96,7 +96,7 @@ class FixVerifier:
         # For this prototype, we'll assume the patch might contain the full replaced content
         # or we would need a proper `patch` utility.
         # Apply patch to source using string-based replacement.
-        patched_source = self._apply_patch(original_source, patch)
+        self._apply_patch(original_source, patch)
 
         # 2. Execute patched code
         # result = execute_code("python", patched_source, stdin=test_input)

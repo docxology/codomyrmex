@@ -2,12 +2,16 @@
 
 import pytest
 
-from codomyrmex.agentic_memory.obsidian.cli import ObsidianCLI, ObsidianCLINotAvailable
 from codomyrmex.agentic_memory.obsidian.bookmarks import (
-    BookmarkItem, _parse_bookmarks,
-    bookmark_file, bookmark_folder, bookmark_search, bookmark_url,
+    BookmarkItem,
+    _parse_bookmarks,
+    bookmark_file,
+    bookmark_folder,
+    bookmark_search,
+    bookmark_url,
     list_bookmarks,
 )
+from codomyrmex.agentic_memory.obsidian.cli import ObsidianCLI, ObsidianCLINotAvailable
 
 
 class TestBookmarkItem:

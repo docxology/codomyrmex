@@ -1,9 +1,7 @@
 """Unit tests for document processing -- parsing, validation, transformation, search, and chunking."""
 
-import json
 
 import pytest
-import yaml
 
 from codomyrmex.documents import (
     parse_document,
@@ -84,7 +82,6 @@ from codomyrmex.documents.exceptions import (
     DocumentConversionError,
     UnsupportedFormatError,
 )
-
 
 # --- Document Parser --------------------------------------------------------
 

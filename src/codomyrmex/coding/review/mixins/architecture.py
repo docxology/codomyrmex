@@ -126,6 +126,6 @@ class ArchitectureMixin:
                     return True
 
         except Exception as e:
-            logger.debug("Error checking layer violation for %s: %s", business_file, e)
+            logger.debug("Error checking layer violation for %s: %s", file_path, e)
 
         return False

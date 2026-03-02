@@ -36,7 +36,7 @@ def cli_commands():
         print("Running Bell State simulation...")
         circuit = bell_state()
         sim = QuantumSimulator()
-        result = sim.run(circuit)
+        sim.run(circuit)
         print(f"  Circuit:\n{circuit_to_ascii(circuit)}")
         stats = circuit_stats(circuit)
         for key, val in stats.items():

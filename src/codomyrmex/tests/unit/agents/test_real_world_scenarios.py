@@ -291,7 +291,7 @@ class TestComplexScenarios:
             prompt="Add implementation details",
             context=context
         )
-        response2 = agent.execute(request2)
+        agent.execute(request2)
 
         # Verify context was maintained
         assert len(agent.execution_history) == 2

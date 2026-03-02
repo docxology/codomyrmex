@@ -20,7 +20,6 @@ from codomyrmex.system_discovery.core.capability_scanner import (
     ModuleCapability,
 )
 
-
 # ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------

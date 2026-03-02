@@ -2,8 +2,6 @@
 
 import os
 
-import pytest
-
 from codomyrmex.documents.config import (
     DocumentsConfig,
     get_config,
@@ -21,7 +19,6 @@ from codomyrmex.documents.models.metadata import (
     DocumentMetadata,
     MetadataField,
 )
-
 
 # --- Document Model --------------------------------------------------------
 

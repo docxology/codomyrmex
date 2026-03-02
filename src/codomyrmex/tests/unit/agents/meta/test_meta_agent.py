@@ -139,7 +139,6 @@ class TestMetaAgent:
         meta.library.add(Strategy("careful", "go careful"))
 
         def task_fn(strategy_name: str) -> dict:
-            score = 0.9 if strategy_name == "fast" else 0.7
             return {"tests_passed": 9, "tests_total": 10, "tokens_used": 100}
 
         records = meta.run(task_fn, iterations=3)

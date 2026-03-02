@@ -137,7 +137,7 @@ class TestMistralVibeClient:
 
     def test_mistral_vibe_client_file_operations_structure(self):
         """Test file operations structure (without executing)."""
-        client = MistralVibeClient()
+        MistralVibeClient()
         request = AgentRequest(
             prompt="Analyze this code",
             context={"files": ["src/main.py"]}

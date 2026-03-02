@@ -56,7 +56,7 @@ def _get_provider() -> Any:
 
         from codomyrmex.calendar_integration.gcal.provider import GoogleCalendar
     except ImportError:
-        raise RuntimeError("Google Calendar dependencies not installed. Run `uv sync --extra calendar`")
+        raise RuntimeError("Google Calendar dependencies not installed. Run `uv sync --extra calendar`") from None
 
     token_path = Path.home() / ".codomyrmex" / "gcal_token.json"
     if not token_path.exists():
@@ -66,7 +66,7 @@ def _get_provider() -> Any:
         with open(token_path) as f:
             token_data = json.load(f)
     except Exception as e:
-        raise RuntimeError(f"Failed to read calendar token: {e}")
+        raise RuntimeError(f"Failed to read calendar token: {e}") from e
 
     try:
         from dotenv import load_dotenv

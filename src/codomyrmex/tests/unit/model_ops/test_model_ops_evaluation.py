@@ -49,7 +49,6 @@ from codomyrmex.model_ops.evaluation import (
     create_evaluator,
 )
 
-
 # ---------------------------------------------------------------------------
 # QualityAnalyzer -- coherence, relevance, completeness, conciseness, accuracy
 # ---------------------------------------------------------------------------
@@ -616,7 +615,7 @@ class TestBenchmarkSuite:
     def test_suite_remove_case(self):
         """remove_case removes by ID and returns True."""
         suite = BenchmarkSuite()
-        case = suite.add_case("x", "y", case_id="rm-1")
+        suite.add_case("x", "y", case_id="rm-1")
         assert suite.remove_case("rm-1") is True
         assert suite.case_count == 0
 

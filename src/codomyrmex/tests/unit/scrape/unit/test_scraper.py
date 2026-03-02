@@ -85,7 +85,7 @@ class TestScraper:
         config = ScrapeConfig(api_key=None)
 
         try:
-            scraper = Scraper(config=config)
+            Scraper(config=config)
             # If firecrawl-py is available, it will try to initialize
             # This will fail at validation
             pytest.skip("firecrawl-py may be available, cannot test error case")

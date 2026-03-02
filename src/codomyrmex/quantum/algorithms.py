@@ -134,7 +134,7 @@ def grover_search(n: int, target: int, iterations: int | None = None) -> Quantum
         # Oracle: flip phase of target state
         _apply_oracle(circuit, n, target)
         # Diffusion
-        diffusion = grover_diffusion(n)
+        grover_diffusion(n)
         # Inline diffusion gates (simplified — merge circuits)
         for i in range(n):
             circuit.h(i)

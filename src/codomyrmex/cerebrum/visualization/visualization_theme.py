@@ -41,9 +41,9 @@ class Theme:
         import numpy as np
 
         if base_color == "primary":
-            base = self.colors.primary
+            pass
         else:
-            base = base_color
+            pass
 
         # Generate varied colors
         cmap = plt.get_cmap("viridis")

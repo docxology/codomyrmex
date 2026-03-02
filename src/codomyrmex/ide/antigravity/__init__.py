@@ -491,7 +491,7 @@ class AntigravityClient(IDEClient):
                 "created": True,
             }
         except Exception as e:
-            raise ArtifactError(f"Failed to create artifact: {e}")
+            raise ArtifactError(f"Failed to create artifact: {e}") from e
 
     def update_artifact(self, name: str, content: str) -> dict[str, Any]:
         """Update an existing artifact.
@@ -530,7 +530,7 @@ class AntigravityClient(IDEClient):
                 "updated": True,
             }
         except Exception as e:
-            raise ArtifactError(f"Failed to update artifact: {e}")
+            raise ArtifactError(f"Failed to update artifact: {e}") from e
 
     def delete_artifact(self, name: str) -> bool:
         """Delete an artifact.
@@ -563,7 +563,7 @@ class AntigravityClient(IDEClient):
 
             return True
         except Exception as e:
-            raise ArtifactError(f"Failed to delete artifact: {e}")
+            raise ArtifactError(f"Failed to delete artifact: {e}") from e
 
     def list_conversations(self, limit: int = 10) -> list[dict[str, Any]]:
         """List recent conversations.
@@ -800,9 +800,9 @@ class AntigravityClient(IDEClient):
                 )
             except subprocess.CalledProcessError as e:
                 # If CLI fails, we continue to fallback but log error
-                cli_error = e.stderr.decode() if e.stderr else str(e)
+                e.stderr.decode() if e.stderr else str(e)
             except Exception as e:
-                cli_error = str(e)
+                str(e)
 
         # Fallback implementation
         if not self._connected:

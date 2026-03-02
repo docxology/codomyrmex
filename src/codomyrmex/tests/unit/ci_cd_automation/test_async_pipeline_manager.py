@@ -28,7 +28,6 @@ from codomyrmex.ci_cd_automation.pipeline.models import (
     PipelineStatus,
 )
 
-
 # ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------
@@ -300,7 +299,7 @@ class TestCreatePipeline:
         mgr = _make_manager(tmp_path)
         config_path = _write_json_config(tmp_path, _minimal_config())
 
-        pipeline = mgr.create_pipeline(config_path)
+        mgr.create_pipeline(config_path)
 
         assert "test_pipeline" in mgr._sync_manager.pipelines
 

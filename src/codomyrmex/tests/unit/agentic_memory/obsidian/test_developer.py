@@ -5,9 +5,16 @@ import pytest
 from codomyrmex.agentic_memory.obsidian.cli import ObsidianCLI, ObsidianCLINotAvailable
 from codomyrmex.agentic_memory.obsidian.developer import (
     ConsoleEntry,
-    cdp_command, debug_toggle, eval_js,
-    get_console_log, get_css, get_dom, get_errors,
-    mobile_toggle, screenshot, toggle_devtools,
+    cdp_command,
+    debug_toggle,
+    eval_js,
+    get_console_log,
+    get_css,
+    get_dom,
+    get_errors,
+    mobile_toggle,
+    screenshot,
+    toggle_devtools,
 )
 
 

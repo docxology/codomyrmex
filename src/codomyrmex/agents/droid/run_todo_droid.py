@@ -19,7 +19,6 @@ This module provides run_todo_droid functionality including:
 Usage:
     from codomyrmex.agents.droid.run_todo_droid import run_todos
 """
-logger = get_logger(__name__)
 
 """
 🤖 Codomyrmex Droid TODO Processor
@@ -474,11 +473,6 @@ Examples:
         os.path.dirname(os.path.dirname(os.path.dirname(droid_dir)))
     )
     os.chdir(droid_dir)
-
-    # Add project root to Python path for module imports
-    if project_root not in sys.path:
-        pass
-#         sys.path.insert(0, project_root)  # Removed sys.path manipulation
 
     print("🤖 Codomyrmex Droid TODO Processor")
     print("=====================================")

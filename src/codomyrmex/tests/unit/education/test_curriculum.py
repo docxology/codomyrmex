@@ -14,7 +14,7 @@ def test_curriculum_basics():
 
 def test_lesson_prerequisites():
     """Test functionality: lesson prerequisites."""
-    l1 = Lesson(
+    Lesson(
         title="A",
         objectives=["Learn A"],
         content="...",

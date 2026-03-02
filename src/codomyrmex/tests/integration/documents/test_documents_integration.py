@@ -110,7 +110,7 @@ class TestCrossFormatOperations:
 
         # Write as YAML (if conversion available)
         try:
-            yaml_file = tmp_path / "data.yaml"
+            tmp_path / "data.yaml"
             # For now, just test that we can read JSON
             assert json_doc.content == data
         except Exception:

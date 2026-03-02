@@ -217,7 +217,7 @@ class TestAssetsCopying:
     def test_assets_copied_correctly(self, tmp_path):
         """Test that all assets are copied to output directory."""
         # Get the real module directory to use actual templates
-        module_dir = Path(__file__).resolve().parent.parent.parent
+        Path(__file__).resolve().parent.parent.parent
 
         output_dir = tmp_path / "website_output"
 

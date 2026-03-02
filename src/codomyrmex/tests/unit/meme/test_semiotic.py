@@ -9,16 +9,15 @@ from __future__ import annotations
 
 import pytest
 
+from codomyrmex.meme.semiotic.analyzer import SemioticAnalyzer
+from codomyrmex.meme.semiotic.encoding import SemioticEncoder
+from codomyrmex.meme.semiotic.mnemonics import MnemonicDevice, build_memory_palace
 from codomyrmex.meme.semiotic.models import (
     DriftReport,
     SemanticTerritory,
     Sign,
     SignType,
 )
-from codomyrmex.meme.semiotic.analyzer import SemioticAnalyzer
-from codomyrmex.meme.semiotic.encoding import SemioticEncoder
-from codomyrmex.meme.semiotic.mnemonics import MnemonicDevice, build_memory_palace
-
 
 # ---------------------------------------------------------------------------
 # SignType enum

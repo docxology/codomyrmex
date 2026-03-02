@@ -132,7 +132,7 @@ class TestFeedbackLoop:
             config=FeedbackConfig(quality_floor=0.5),
             memory_store=memory,
         )
-        result = loop.run("Analyze data")
+        loop.run("Analyze data")
 
         assert memory.size >= 1
         # Check that feedback tag is searchable

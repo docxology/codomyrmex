@@ -22,6 +22,10 @@ from datetime import datetime
 
 import pytest
 
+from codomyrmex.ci_cd_automation.dependency_scan import (
+    ScanReport,
+    Vulnerability,
+)
 from codomyrmex.ci_cd_automation.deployment_orchestrator import (
     Deployment,
     DeploymentStatus,
@@ -36,6 +40,10 @@ from codomyrmex.ci_cd_automation.exceptions import (
     RollbackError,
     StageError,
 )
+from codomyrmex.ci_cd_automation.pipeline.async_manager import (
+    AsyncPipelineResult,
+)
+from codomyrmex.ci_cd_automation.pipeline.manager import PipelineManager
 from codomyrmex.ci_cd_automation.pipeline.models import (
     JobStatus,
     Pipeline,
@@ -44,10 +52,6 @@ from codomyrmex.ci_cd_automation.pipeline.models import (
     PipelineStatus,
     StageStatus,
 )
-from codomyrmex.ci_cd_automation.pipeline.async_manager import (
-    AsyncPipelineResult,
-)
-from codomyrmex.ci_cd_automation.pipeline.manager import PipelineManager
 from codomyrmex.ci_cd_automation.pipeline.pipeline_monitor import (
     PipelineMonitor,
     PipelineReport,
@@ -62,11 +66,6 @@ from codomyrmex.ci_cd_automation.rollback_manager import (
     RollbackStep,
     RollbackStrategy,
 )
-from codomyrmex.ci_cd_automation.dependency_scan import (
-    ScanReport,
-    Vulnerability,
-)
-
 
 # ---------------------------------------------------------------------------
 # Helpers

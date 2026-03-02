@@ -20,12 +20,10 @@ import shutil
 
 import pytest
 
-from codomyrmex.coding.static_analysis.pyrefly_runner import (
-    PyreflyIssue,
-    PyreflyResult,
-    PyreflyRunner,
-    check_pyrefly_available,
-    run_pyrefly,
+from codomyrmex.coding.static_analysis import (
+    analyze_code_quality,
+    cli_commands,
+    get_available_tools,
 )
 from codomyrmex.coding.static_analysis.exceptions import (
     ASTError,
@@ -37,10 +35,12 @@ from codomyrmex.coding.static_analysis.exceptions import (
     SecurityVulnerabilityError,
     TypeCheckError,
 )
-from codomyrmex.coding.static_analysis import (
-    analyze_code_quality,
-    cli_commands,
-    get_available_tools,
+from codomyrmex.coding.static_analysis.pyrefly_runner import (
+    PyreflyIssue,
+    PyreflyResult,
+    PyreflyRunner,
+    check_pyrefly_available,
+    run_pyrefly,
 )
 
 pytestmark = pytest.mark.unit

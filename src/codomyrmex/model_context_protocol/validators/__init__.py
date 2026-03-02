@@ -124,8 +124,6 @@ class ToolCallValidator:
         arguments: dict[str, Any],
     ) -> ValidationResult:
         """Validate a tool call."""
-        errors: list[str] = []
-        warnings: list[str] = []
 
         # Check tool exists
         if tool_name not in self.tool_schemas:

@@ -13,7 +13,7 @@ def generate_terrain(
     bounds: tuple[float, float, float, float] = (-100.0, 100.0, -100.0, 100.0)
 ) -> TerrainMap:
     """Generate a height map from feature points using Gaussian kernels.
-    
+
     Simulates 'peaks' of high activity/virality mapped to 2D space.
     """
     x_min, x_max, y_min, y_max = bounds

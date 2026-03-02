@@ -41,7 +41,7 @@ def _ensure_yaml():
         raise ImportError(
             "PyYAML is required for config file support. "
             "Install with: uv pip install pyyaml"
-        )
+        ) from None
 
 
 def load_config(path: Path | str | None = None) -> dict[str, Any]:

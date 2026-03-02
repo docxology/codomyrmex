@@ -13,23 +13,24 @@ and in-memory strings. No mocks, stubs, or fakes.
 import pytest
 
 from codomyrmex.maintenance.deps.dependency_analyzer import DependencyAnalyzer
+from codomyrmex.maintenance.deps.dependency_checker import (
+    check_python_version,
+)
+from codomyrmex.maintenance.deps.dependency_checker import (
+    generate_report as checker_generate_report,
+)
 from codomyrmex.maintenance.deps.dependency_consolidator import (
     find_all_requirements_files,
     generate_deprecation_notice,
     generate_pyproject_additions,
     parse_requirements_file,
 )
-from codomyrmex.maintenance.deps.dependency_checker import (
-    check_python_version,
-    generate_report as checker_generate_report,
-)
 from codomyrmex.maintenance.deps.validate_dependencies import (
     check_duplicates,
-    check_version_constraints,
     check_requirements_txt_deprecated,
+    check_version_constraints,
     parse_pyproject_dependencies,
 )
-
 
 # ---------------------------------------------------------------------------
 # 1. Requirement string parsing (dependency_consolidator.parse_requirements_file)

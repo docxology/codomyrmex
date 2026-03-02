@@ -146,7 +146,7 @@ class TestGitAgentExecution:
         # We execute and just verify it dispatched correctly through the stub
         # The actual clean_repository call may fail without a real git repo,
         # but the agent catches exceptions and returns an error response
-        response = agent.execute(request)
+        agent.execute(request)
         # get_repository should have been called
         assert len(stub._calls.get("get_repository", [])) == 1
 
@@ -159,7 +159,7 @@ class TestGitAgentExecution:
         request = AgentRequest(
             prompt="add_remote: repository=owner/repo, name=upstream, url=git@github.com:owner/repo.git"
         )
-        response = agent.execute(request)
+        agent.execute(request)
         assert len(stub._calls.get("get_repository", [])) == 1
 
     def test_create_issue_json(self):

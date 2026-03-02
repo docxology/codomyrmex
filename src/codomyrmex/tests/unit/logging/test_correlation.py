@@ -71,9 +71,9 @@ class TestWithCorrelation:
 
     def test_nested_contexts(self):
         """Test functionality: nested contexts."""
-        with with_correlation("outer") as outer:
+        with with_correlation("outer"):
             assert get_correlation_id() == "outer"
-            with with_correlation("inner") as inner:
+            with with_correlation("inner"):
                 assert get_correlation_id() == "inner"
             assert get_correlation_id() == "outer"
         assert get_correlation_id() == ""

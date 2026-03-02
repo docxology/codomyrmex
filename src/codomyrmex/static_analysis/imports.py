@@ -3,10 +3,10 @@ Static analysis for imports and dependency graph.
 """
 
 import ast
+import logging
 import os
 from pathlib import Path
 from typing import Any
-import logging
 
 logger = logging.getLogger(__name__)
 

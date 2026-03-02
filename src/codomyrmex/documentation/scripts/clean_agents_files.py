@@ -47,7 +47,7 @@ class AgentsCleaner:
     def clean_agents_file(self, agents_file: Path, dry_run: bool = True) -> bool:
         """Clean a single AGENTS.md file."""
         directory = agents_file.parent
-        actual_items = self.get_actual_files(directory)
+        self.get_actual_files(directory)
 
         content = agents_file.read_text(encoding='utf-8')
         lines = content.split('\n')

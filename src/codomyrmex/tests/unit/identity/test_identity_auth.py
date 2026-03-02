@@ -443,7 +443,7 @@ class TestIdentityMultipleProviders:
         pw.register("alice", "pw")
         ident.register_provider("password", pw)
         t1 = ident.login("alice", {"user_id": "alice", "password": "pw"})
-        t2 = ident.login("alice", {"user_id": "alice", "password": "pw"})
+        ident.login("alice", {"user_id": "alice", "password": "pw"})
         assert ident.active_session_count == 2
         ident.logout(t1.token)
         assert ident.active_session_count == 1

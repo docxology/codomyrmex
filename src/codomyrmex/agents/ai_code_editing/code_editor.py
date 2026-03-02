@@ -72,7 +72,9 @@ class CodeEditor(BaseAgent):
         """Test if underlying helpers are working by calling a real helper function."""
         try:
             # CodeLanguage is a lightweight enum import — verifies the module loads correctly
-            from codomyrmex.agents.ai_code_editing.ai_code_helpers.models import CodeLanguage
+            from codomyrmex.agents.ai_code_editing.ai_code_helpers.models import (
+                CodeLanguage,
+            )
             _ = list(CodeLanguage)
             return True
         except Exception as e:

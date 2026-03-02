@@ -276,7 +276,6 @@ class TestGeneratorErrorHandling:
         broken.write_text("{{ undefined_var.method() }}")
 
         # Monkey-patch the pages list to include the broken template
-        original_generate = gen.generate
 
         def patched_generate():
             """Generate with an extra broken page in the list."""

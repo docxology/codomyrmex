@@ -5,10 +5,8 @@ Tests the repository library management functionality including
 loading, searching, and Git operations integration.
 """
 import os
-import shutil
 import subprocess
 import sys
-import tempfile
 from pathlib import Path
 
 import pytest

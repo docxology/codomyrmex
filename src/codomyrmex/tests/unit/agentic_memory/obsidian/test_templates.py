@@ -4,8 +4,11 @@ import pytest
 
 from codomyrmex.agentic_memory.obsidian.cli import ObsidianCLI, ObsidianCLINotAvailable
 from codomyrmex.agentic_memory.obsidian.templates import (
-    TemplateInfo, _parse_templates,
-    insert_template, list_templates, read_template,
+    TemplateInfo,
+    _parse_templates,
+    insert_template,
+    list_templates,
+    read_template,
 )
 
 

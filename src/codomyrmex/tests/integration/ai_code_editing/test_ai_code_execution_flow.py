@@ -47,7 +47,6 @@ class TestAICodeExecutionWorkflow:
     def test_simple_function_generation_and_execution(self):
         """Test generating a simple function and executing it successfully."""
         # Step 1: Generate code using AI
-        prompt = "Write a Python function that calculates the factorial of a number using recursion"
         language = "python"
 
         # Note: This would typically call an AI service, but we'll mock/test the integration

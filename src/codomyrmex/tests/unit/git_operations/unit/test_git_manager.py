@@ -181,7 +181,7 @@ class TestCommitChanges:
 
     def test_commit_changes_no_staged(self, temp_git_repo):
         """Test committing with no staged changes."""
-        result = commit_changes("Test commit", temp_git_repo)
+        commit_changes("Test commit", temp_git_repo)
         # Should return None or empty string if nothing to commit
         # (depends on implementation - may return False or None)
 

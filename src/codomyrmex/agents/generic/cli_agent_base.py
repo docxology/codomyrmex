@@ -302,7 +302,7 @@ class CLIAgentBase(BaseAgent):
                 f"Command timed out after {timeout}s",
                 timeout=timeout,
                 command=" ".join(cmd),
-            )
+            ) from None
         except FileNotFoundError:
             self.logger.error(
                 f"Command not found: {self.command}",
@@ -311,7 +311,7 @@ class CLIAgentBase(BaseAgent):
             raise AgentError(
                 f"Command not found: {self.command}",
                 command=self.command,
-            )
+            ) from None
         except Exception as e:
             execution_time = time.time() - start_time
             self.logger.error(

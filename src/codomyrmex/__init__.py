@@ -131,7 +131,7 @@ def __getattr__(name):
             globals()[name] = module
             return module
         except ImportError as e:
-            raise ImportError(f"Failed to import {name}: {e}. You may need to install optional dependencies.")
+            raise ImportError(f"Failed to import {name}: {e}. You may need to install optional dependencies.") from e
     raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
 
 # Eager imports for convenience.

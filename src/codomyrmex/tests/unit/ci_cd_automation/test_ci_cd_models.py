@@ -2,8 +2,6 @@
 
 from datetime import datetime, timezone
 
-import pytest
-
 from codomyrmex.ci_cd_automation.pipeline import (
     AsyncPipelineResult,
     JobStatus,

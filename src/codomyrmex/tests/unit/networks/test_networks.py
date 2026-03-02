@@ -19,10 +19,11 @@ Tests cover:
 import pytest
 
 from codomyrmex.networks.core import Edge as CoreEdge
-from codomyrmex.networks.core import Network, Node as CoreNode
+from codomyrmex.networks.core import Network
+from codomyrmex.networks.core import Node as CoreNode
 from codomyrmex.networks.graph import Edge as GraphEdge
-from codomyrmex.networks.graph import NetworkGraph, Node as GraphNode
-
+from codomyrmex.networks.graph import NetworkGraph
+from codomyrmex.networks.graph import Node as GraphNode
 
 # ---------------------------------------------------------------------------
 # core.py -- Node and Edge dataclasses

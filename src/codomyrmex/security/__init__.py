@@ -277,10 +277,10 @@ from codomyrmex.model_context_protocol.decorators import mcp_tool
 def scan_project_security(path: str = ".") -> dict[str, Any]:
     """
     Run a full security scan on the project (vulnerabilities + secrets).
-    
+
     Args:
         path: Root path to scan (default: current directory)
-        
+
     Returns:
         Structured security report.
     """
@@ -316,10 +316,10 @@ def scan_project_security(path: str = ".") -> dict[str, Any]:
 def security_audit_code(path: str) -> dict[str, Any]:
     """
     Audit code quality and security for a specific file or directory.
-    
+
     Args:
         path: Path to file or directory
-        
+
     Returns:
         Audit results.
     """

@@ -242,7 +242,6 @@ class BuildGenerator:
 
         has_from = False
         has_user = False
-        has_workdir = False
 
         for line_num, line in enumerate(lines, 1):
             line = line.strip()
@@ -266,7 +265,7 @@ class BuildGenerator:
 
             # Check for WORKDIR
             if line.upper().startswith('WORKDIR '):
-                has_workdir = True
+                pass
 
             # Check for security issues
             if 'chmod 777' in line or 'chmod +x' in line:

@@ -6,8 +6,8 @@ Sprint 2 coverage: targets ``EventEmitter`` from
 
 import pytest
 
-from codomyrmex.events.emitters.event_emitter import EventEmitter
 from codomyrmex.events.core.event_schema import EventType
+from codomyrmex.events.emitters.event_emitter import EventEmitter
 
 
 class _FakeEventBus:

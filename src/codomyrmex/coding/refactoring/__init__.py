@@ -311,7 +311,7 @@ class ExtractFunctionRefactoring(Refactoring):
             if returns:
                 func_lines.append(f"    return {', '.join(returns)}\n")
 
-            new_function = ''.join(func_lines)
+            ''.join(func_lines)
 
             # Build function call
             if returns:
@@ -345,7 +345,7 @@ class ExtractFunctionRefactoring(Refactoring):
 
     def preview(self) -> str:
         """preview ."""
-        result = self.execute()
+        self.execute()
         return f"Extract Function: {self.function_name}\n" + \
                f"Lines: {self.start_line}-{self.end_line}\n" + \
                f"Parameters: {', '.join(self.parameters)}"

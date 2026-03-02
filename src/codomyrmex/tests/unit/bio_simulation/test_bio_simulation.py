@@ -73,7 +73,7 @@ def test_ant_step_depletes_energy():
 @pytest.mark.unit
 def test_ant_foraging_movement():
     """Foraging ant changes position on step."""
-    ant = Ant(id=2, state=AntState.FORAGING)
+    Ant(id=2, state=AntState.FORAGING)
     positions = set()
     # Run enough steps to observe movement (random, so collect multiple)
     for _ in range(50):

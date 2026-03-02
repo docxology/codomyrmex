@@ -42,7 +42,7 @@ class TestTaskQueue:
         """Test functionality: ack completes task."""
         queue = TaskQueue()
         queue.enqueue(Task(task_id="t1"))
-        task = queue.dequeue()
+        queue.dequeue()
         assert queue.in_flight_count == 1
         queue.ack("t1")
         assert queue.in_flight_count == 0
@@ -51,7 +51,7 @@ class TestTaskQueue:
         """Test functionality: nack requeues."""
         queue = TaskQueue()
         queue.enqueue(Task(task_id="t1", max_retries=3))
-        task = queue.dequeue()
+        queue.dequeue()
         result = queue.nack("t1")
         assert result is True
         assert queue.pending_count == 1

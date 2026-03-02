@@ -78,7 +78,7 @@ class OpenAICodex:
             except ImportError:
                 raise ImportError(
                     "OpenAI package not installed. Install with: pip install openai"
-                )
+                ) from None
         return self._client
 
     def generate_code(
@@ -157,10 +157,10 @@ class OpenAICodex:
             raise
         except ValueError as e:
             logger.error(f"Configuration error: {e}")
-            raise RuntimeError(f"Code generation failed: {e}")
+            raise RuntimeError(f"Code generation failed: {e}") from e
         except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
             logger.error(f"Error generating code: {e}", exc_info=True)
-            raise RuntimeError(f"Code generation failed: {e}")
+            raise RuntimeError(f"Code generation failed: {e}") from e
 
     def complete_code(
         self,
@@ -262,7 +262,7 @@ class OpenAICodex:
 
         except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
             logger.error(f"Error editing code: {e}", exc_info=True)
-            raise RuntimeError(f"Code editing failed: {e}")
+            raise RuntimeError(f"Code editing failed: {e}") from e
 
     def explain_code(
         self,
@@ -331,7 +331,7 @@ class OpenAICodex:
 
         except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
             logger.error(f"Error explaining code: {e}", exc_info=True)
-            raise RuntimeError(f"Code explanation failed: {e}")
+            raise RuntimeError(f"Code explanation failed: {e}") from e
 
     def _build_system_prompt(self, language: str) -> str:
         """Build system prompt for code generation."""

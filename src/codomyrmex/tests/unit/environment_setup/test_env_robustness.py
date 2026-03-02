@@ -53,7 +53,7 @@ class TestEnvironmentRobustness:
         os.chdir(tmp_path)
         try:
             from codomyrmex.environment_setup.env_checker import load_env_file
-            result = load_env_file(str(tmp_path / ".env"))
+            load_env_file(str(tmp_path / ".env"))
             # Either None or raises -- both acceptable
         except (FileNotFoundError, OSError, AttributeError, ImportError):
             pass

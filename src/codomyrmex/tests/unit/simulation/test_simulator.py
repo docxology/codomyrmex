@@ -20,7 +20,11 @@ from codomyrmex.simulation.agent import (
     RandomAgent,
     RuleBasedAgent,
 )
-from codomyrmex.simulation.simulator import SimulationConfig, SimulationResult, Simulator
+from codomyrmex.simulation.simulator import (
+    SimulationConfig,
+    SimulationResult,
+    Simulator,
+)
 
 
 class ConcreteAgent(Agent):

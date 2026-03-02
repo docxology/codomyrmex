@@ -12,7 +12,6 @@ import pytest
 from codomyrmex.agents.agentic_seek.agent_types import AgenticSeekConfig
 from codomyrmex.agents.agentic_seek.agentic_seek_client import AgenticSeekClient
 
-
 # ===================================================================
 # Class structure
 # ===================================================================

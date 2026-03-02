@@ -199,7 +199,7 @@ class TestJulesCommands:
         """Test jules execute request structure."""
         from codomyrmex.agents.jules import JulesClient
 
-        client = JulesClient()
+        JulesClient()
         request = AgentRequest(prompt="test prompt")
 
         # Should be able to create request
@@ -226,7 +226,7 @@ class TestClaudeCommands:
 
         # May fail if anthropic not installed, but structure should work
         try:
-            client = ClaudeClient()
+            ClaudeClient()
             request = AgentRequest(prompt="test prompt")
             assert request.prompt == "test prompt"
         except Exception:
@@ -253,7 +253,7 @@ class TestCodexCommands:
 
         # May fail if openai not installed, but structure should work
         try:
-            client = CodexClient()
+            CodexClient()
             request = AgentRequest(prompt="test prompt")
             assert request.prompt == "test prompt"
         except Exception:
@@ -501,7 +501,7 @@ class TestConfigCommands:
         from codomyrmex.agents.core.config import AgentConfig, reset_config, set_config
 
         reset_config()
-        original_config = get_config()
+        get_config()
 
         # Test that we can create a new config with overrides
         new_config = AgentConfig(default_timeout=99, log_level="DEBUG")
@@ -651,7 +651,7 @@ class TestTaskPlannerCommands:
             planner = TaskPlanner()
 
             task1 = planner.create_task("Task 1")
-            task2 = planner.create_task("Task 2", dependencies=[task1.id])
+            planner.create_task("Task 2", dependencies=[task1.id])
 
             ready_tasks = planner.get_ready_tasks()
             assert len(ready_tasks) >= 1  # task1 should be ready

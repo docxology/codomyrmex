@@ -23,8 +23,6 @@ from codomyrmex.database_management.schema_generator import (
     Index,
     SchemaTable,
 )
-from codomyrmex.exceptions import CodomyrmexError
-
 
 # ==============================================================================
 # Migration Support Tests

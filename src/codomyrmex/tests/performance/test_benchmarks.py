@@ -35,13 +35,13 @@ def test_ast_parsing_speed(benchmark):
     class Example:
         def __init__(self):
             self.value = 0
-            
+
         def compute(self, x):
             if x > 0:
                 return x * x
             else:
                 return 0
-                
+
         def loop(self):
             for i in range(100):
                 self.compute(i)

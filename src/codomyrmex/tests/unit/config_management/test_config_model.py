@@ -9,7 +9,6 @@ from codomyrmex.config_management.core.config_loader import (
     Configuration,
 )
 
-
 # ---------------------------------------------------------------------------
 # Configuration dataclass tests
 # ---------------------------------------------------------------------------

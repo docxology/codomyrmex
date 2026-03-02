@@ -8,7 +8,7 @@ from typing import Optional
 
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
-from .job import JobStatus
+from .job import Job, JobStatus
 from .queue import Queue
 
 logger = get_logger(__name__)

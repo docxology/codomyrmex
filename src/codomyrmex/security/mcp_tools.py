@@ -6,10 +6,10 @@ from codomyrmex.model_context_protocol.decorators import mcp_tool
 @mcp_tool(category="security")
 def scan_vulnerabilities(path: str = ".") -> dict:
     """Scan a project directory for known security vulnerabilities.
-    
+
     Args:
         path: Root path to scan (default: current directory)
-        
+
     Returns:
         Structured security report of identified vulnerabilities.
     """
@@ -28,10 +28,10 @@ def scan_vulnerabilities(path: str = ".") -> dict:
 @mcp_tool(category="security")
 def scan_secrets(file_path: str) -> dict:
     """Scan a specific file for leaked secrets, API keys, or credentials.
-    
+
     Args:
         file_path: Path to the file to scan
-        
+
     Returns:
         A dictionary containing identified secrets or confirmation of validation.
     """
@@ -49,10 +49,10 @@ def scan_secrets(file_path: str) -> dict:
 @mcp_tool(category="security")
 def audit_code_security(path: str) -> dict:
     """Audit code quality and security for a specific file or directory.
-    
+
     Args:
         path: Path to file or directory
-        
+
     Returns:
         Audit results and security grade.
     """

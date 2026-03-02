@@ -49,7 +49,7 @@ def read_yaml(
         raise DocumentReadError(
             "PyYAML library not available",
             file_path=str(file_path)
-        )
+        ) from None
     except yaml.YAMLError as e:
         logger.error(f"Invalid YAML in file {file_path}: {e}")
         raise DocumentReadError(
@@ -98,7 +98,7 @@ def write_yaml(
         raise DocumentWriteError(
             "PyYAML library not available",
             file_path=str(file_path)
-        )
+        ) from None
     except Exception as e:
         logger.error(f"Error writing YAML file {file_path}: {e}")
         raise DocumentWriteError(

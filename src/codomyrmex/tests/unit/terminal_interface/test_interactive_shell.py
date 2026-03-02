@@ -93,7 +93,9 @@ class TestInteractiveShellInit:
         assert len(shell.foraging_messages) > 0
 
     def test_intro_class_attribute(self):
-        from codomyrmex.terminal_interface.shells.interactive_shell import InteractiveShell
+        from codomyrmex.terminal_interface.shells.interactive_shell import (
+            InteractiveShell,
+        )
         assert "Welcome" in InteractiveShell.intro
         assert "forager" in InteractiveShell.intro.lower() or "forag" in InteractiveShell.intro.lower()
 
@@ -509,7 +511,6 @@ class TestRunMethod:
         shell, _ = _make_shell()
 
         # Override cmdloop to raise KeyboardInterrupt
-        original_cmdloop = shell.cmdloop
 
         def raising_cmdloop(*args, **kwargs):
             raise KeyboardInterrupt()

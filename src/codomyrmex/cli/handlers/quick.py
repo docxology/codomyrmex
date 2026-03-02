@@ -174,7 +174,7 @@ def handle_quick_pipe(commands: list[str], stop_on_error: bool = True) -> bool:
 
     # Run workflow
     try:
-        results = asyncio.run(workflow.run())
+        asyncio.run(workflow.run())
         summary = workflow.get_summary()
 
         print(f"\nPipeline {'succeeded' if summary['success'] else 'failed'}")
@@ -330,10 +330,9 @@ def handle_quick_workflow(
         return False
 
     # Parse parameters
-    workflow_params = {}
     if params:
         try:
-            workflow_params = json.loads(params)
+            json.loads(params)
         except json.JSONDecodeError:
             print(f"Invalid JSON parameters: {params}")
             return False

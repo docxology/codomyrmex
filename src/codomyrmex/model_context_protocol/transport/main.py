@@ -12,7 +12,6 @@ NOT at module import time.
 import asyncio
 import importlib
 import logging
-from typing import List
 
 from codomyrmex.logging_monitoring import get_logger
 
@@ -23,7 +22,7 @@ from .server import MCPServer, MCPServerConfig
 # These are NOT imported at module level -- doing so would violate
 # the Foundation -> Core layer boundary.
 # ---------------------------------------------------------------------------
-_OPTIONAL_CORE_MCP_MODULES: List[str] = [
+_OPTIONAL_CORE_MCP_MODULES: list[str] = [
     "codomyrmex.coding.mcp_tools",
     "codomyrmex.containerization.mcp_tools",
     "codomyrmex.git_operations.mcp_tools",

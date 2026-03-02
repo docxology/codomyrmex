@@ -198,7 +198,7 @@ class KubernetesOrchestrator:
             if e.status == 409:
                 logger.warning(f"Deployment already exists: {deployment.name}")
                 return deployment.name
-            raise CodomyrmexError(f"Failed to create deployment: {e}")
+            raise CodomyrmexError(f"Failed to create deployment: {e}") from e
 
     def create_service(self, service: KubernetesService) -> str:
         """Create a Kubernetes service.
@@ -258,7 +258,7 @@ class KubernetesOrchestrator:
             if e.status == 409:
                 logger.warning(f"Service already exists: {service.name}")
                 return service.name
-            raise CodomyrmexError(f"Failed to create service: {e}")
+            raise CodomyrmexError(f"Failed to create service: {e}") from e
 
     def scale_deployment(
         self,
@@ -573,7 +573,7 @@ class KubernetesOrchestrator:
         except ApiException as e:
             if e.status == 409:
                 return {"status": "exists", "kind": kind, "name": name, "namespace": ns}
-            raise CodomyrmexError(f"Failed to apply manifest: {e}")
+            raise CodomyrmexError(f"Failed to apply manifest: {e}") from e
 
     def apply_yaml_file(self, yaml_path: str, namespace: str = "default") -> list[dict[str, Any]]:
         """Apply manifests from a YAML file.

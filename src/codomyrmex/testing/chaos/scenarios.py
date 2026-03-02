@@ -81,7 +81,7 @@ class ChaosScenarioRunner:
         observations.append(f"Starting network partition for {config.duration_seconds}s")
 
         # Inject latency and failures
-        start = time.time()
+        time.time()
         partition_active = True
 
         async def partition_behavior():

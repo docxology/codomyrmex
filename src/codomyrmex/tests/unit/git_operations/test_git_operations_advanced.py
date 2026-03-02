@@ -18,10 +18,8 @@ Test Coverage:
 """
 
 import os
-import shutil
 import subprocess
 import sys
-import tempfile
 
 # Removed mock imports to follow TDD principle: no mock methods, always do real data analysis
 

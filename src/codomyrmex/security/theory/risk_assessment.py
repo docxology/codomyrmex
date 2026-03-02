@@ -135,8 +135,8 @@ class RiskAssessor:
         # Extract context information
         threats = context.get("threats", [])
         assets = context.get("assets", [])
-        vulnerabilities = context.get("vulnerabilities", [])
-        system_type = context.get("system_type", "general")
+        context.get("vulnerabilities", [])
+        context.get("system_type", "general")
 
         # Identify risks based on common threat patterns
         if "data_breach" in str(threats).lower() or "data" in str(assets).lower():

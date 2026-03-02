@@ -1,5 +1,6 @@
 """3D Rendering Pipeline."""
 
+from typing import Any
 
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
 

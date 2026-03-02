@@ -12,10 +12,8 @@ from codomyrmex.plugin_system.core.plugin_registry import (
     PluginRegistry,
     PluginState,
     PluginType,
-    create_plugin_info,
     get_registry,
 )
-
 
 # ============================================================================
 # Test Plugin Helper Classes
@@ -405,7 +403,7 @@ class TestPluginRegistry:
         hook.register(good_handler2)
 
         # Should not raise, even with bad handler
-        results = registry.emit_global_hook("error_hook", "test")
+        registry.emit_global_hook("error_hook", "test")
 
         # All handlers should have been called
         assert "good1" in call_order
@@ -510,7 +508,7 @@ class TestPluginBaseClass:
         plugin.register_hook("test_hook", test_handler)
 
         assert "test_hook" in plugin.hooks
-        hook = plugin.hooks["test_hook"]
+        plugin.hooks["test_hook"]
 
         # Emit hook
         results = plugin.emit_hook("test_hook")

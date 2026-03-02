@@ -52,7 +52,7 @@ class TestGetActiveFileBasic:
     def test_callable_attribute(self):
         """get_active_file is a callable method on CursorClient."""
         client = CursorClient()
-        assert callable(getattr(client, "get_active_file"))
+        assert callable(client.get_active_file)
 
 
 @pytest.mark.unit

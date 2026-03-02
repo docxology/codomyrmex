@@ -289,7 +289,7 @@ class OpenAIProvider(LLMProvider):
                 raw_response=response,
             )
         except ImportError:
-            raise RuntimeError("OpenAI async client not available.")
+            raise RuntimeError("OpenAI async client not available.") from None
 
     def list_models(self) -> list[str]:
         """list Models ."""
@@ -437,7 +437,7 @@ class AnthropicProvider(LLMProvider):
                 raw_response=response,
             )
         except ImportError:
-            raise RuntimeError("Anthropic async client not available.")
+            raise RuntimeError("Anthropic async client not available.") from None
 
     def list_models(self) -> list[str]:
         """list Models ."""
@@ -624,7 +624,7 @@ class OpenRouterProvider(LLMProvider):
                 raw_response=response,
             )
         except ImportError:
-            raise RuntimeError("OpenRouter async client not available. Install openai package.")
+            raise RuntimeError("OpenRouter async client not available. Install openai package.") from None
 
     def list_models(self) -> list[str]:
         """List free models available on OpenRouter.

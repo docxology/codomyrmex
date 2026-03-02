@@ -65,7 +65,7 @@ class IdeoscapeLayer:
 @dataclass
 class TerrainMap:
     """The generated terrain of the ideoscape.
-    
+
     Attributes:
         height_map: 2D array representing 'elevation' (e.g. attention/virality).
         resolution: Grid resolution.

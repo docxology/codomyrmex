@@ -10,7 +10,6 @@ Tests all aspects of the Ollama integration including:
 - Real execution tests (no mocks)
 """
 import json
-import shutil
 import time
 from pathlib import Path
 
@@ -641,7 +640,6 @@ def run_ollama_integration_tests():
     print("=" * 60)
 
     # Use pytest programmatic runner
-    import sys
     return pytest.main([__file__, '-v']) == 0
 
 

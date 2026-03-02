@@ -56,7 +56,9 @@ Type 'explore' to begin your foraging adventure!
         # to respect the Foundation -> Core layer boundary.
         self.discovery = None
         try:
-            from codomyrmex.system_discovery.core.discovery_engine import SystemDiscovery
+            from codomyrmex.system_discovery.core.discovery_engine import (
+                SystemDiscovery,
+            )
             self.discovery = SystemDiscovery()
         except ImportError:
             logger.warning("system_discovery module not available -- running in limited mode")
@@ -356,6 +358,7 @@ Type 'explore' to begin your foraging adventure!
         try:
             # Lazy-load Core-layer dependencies inside the method
             import numpy as np
+
             from codomyrmex.data_visualization import create_bar_chart, create_line_plot
 
             print("   📊 Creating sample line plot...")

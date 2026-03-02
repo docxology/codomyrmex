@@ -209,7 +209,10 @@ class TestExecutionMixin:
 
     def test_calculate_cost_known_model(self):
         """Test cost calculation for a known model in CLAUDE_PRICING."""
-        from codomyrmex.agents.claude.mixins.execution import ExecutionMixin, CLAUDE_PRICING
+        from codomyrmex.agents.claude.mixins.execution import (
+            CLAUDE_PRICING,
+            ExecutionMixin,
+        )
         mixin = ExecutionMixin()
         # Pick a model from the pricing dict
         model_name = next(iter(CLAUDE_PRICING))

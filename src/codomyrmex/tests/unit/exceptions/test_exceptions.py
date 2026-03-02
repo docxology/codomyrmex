@@ -415,7 +415,7 @@ class TestSpecializedExceptions:
 
     def test_case_not_found_error_chain(self):
         """CaseNotFoundError inherits CaseError -> CerebrumError -> CodomyrmexError."""
-        from codomyrmex.exceptions import CaseNotFoundError, CaseError, CerebrumError
+        from codomyrmex.exceptions import CaseError, CaseNotFoundError, CerebrumError
         error = CaseNotFoundError("Case 42 missing")
         assert isinstance(error, CaseError)
         assert isinstance(error, CerebrumError)
@@ -423,7 +423,7 @@ class TestSpecializedExceptions:
 
     def test_invalid_case_error_chain(self):
         """InvalidCaseError inherits CaseError."""
-        from codomyrmex.exceptions import InvalidCaseError, CaseError
+        from codomyrmex.exceptions import CaseError, InvalidCaseError
         error = InvalidCaseError("Invalid case data")
         assert isinstance(error, CaseError)
 
@@ -478,7 +478,9 @@ class TestSpecializedExceptions:
     def test_inference_error_deep_chain(self):
         """InferenceError -> BayesianInferenceError -> CerebrumError -> CodomyrmexError."""
         from codomyrmex.exceptions import (
-            InferenceError, BayesianInferenceError, CerebrumError,
+            BayesianInferenceError,
+            CerebrumError,
+            InferenceError,
         )
         error = InferenceError("Inference failed")
         assert isinstance(error, BayesianInferenceError)
@@ -486,6 +488,6 @@ class TestSpecializedExceptions:
 
     def test_network_structure_error_chain(self):
         """NetworkStructureError -> BayesianInferenceError."""
-        from codomyrmex.exceptions import NetworkStructureError, BayesianInferenceError
+        from codomyrmex.exceptions import BayesianInferenceError, NetworkStructureError
         error = NetworkStructureError("Bad graph")
         assert isinstance(error, BayesianInferenceError)

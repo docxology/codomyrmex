@@ -16,20 +16,17 @@ import textwrap
 
 import pytest
 
-from codomyrmex.agents.editing_loop import EditTask, EditingConfig
-
 # EditingOrchestrator constructor requires OllamaClient + AgentRelay which
 # do succeed at import time but reach out to Ollama at execution.  We import
 # the class unconditionally (it's pure Python) but guard tests that call the
 # constructor behind an Ollama reachability check.
-
-from codomyrmex.agents.editing_loop import EditingOrchestrator
+from codomyrmex.agents.editing_loop import EditingConfig, EditingOrchestrator, EditTask
 
 
 def _ollama_is_reachable() -> bool:
     """Return True if a local Ollama instance responds to /api/tags."""
-    import urllib.request
     import urllib.error
+    import urllib.request
 
     base = os.environ.get("OLLAMA_BASE_URL", "http://localhost:11434")
     try:
@@ -43,8 +40,8 @@ def _ollama_is_reachable() -> bool:
 def _ollama_has_model() -> bool:
     """Return True if a local Ollama instance has the configured model for chat."""
     import json
-    import urllib.request
     import urllib.error
+    import urllib.request
 
     base = os.environ.get("OLLAMA_BASE_URL", "http://localhost:11434")
     model = os.environ.get("OLLAMA_MODEL", "codellama:latest")

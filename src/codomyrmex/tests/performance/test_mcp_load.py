@@ -96,7 +96,7 @@ class TestMCPLoadConcurrent:
             latencies.append(elapsed_ms)
             assert tool is not None
 
-        p50 = _percentile(latencies, 50)
+        _percentile(latencies, 50)
         p95 = _percentile(latencies, 95)
         p99 = _percentile(latencies, 99)
 
@@ -141,9 +141,9 @@ class TestMCPLoadConcurrent:
         assert len(errors) == 0, f"Errors during load test: {errors[:5]}"
         assert len(latencies) == 100
 
-        p50 = _percentile(latencies, 50)
+        _percentile(latencies, 50)
         p95 = _percentile(latencies, 95)
-        p99 = _percentile(latencies, 99)
+        _percentile(latencies, 99)
 
         # P95 must be under 500ms
         assert p95 < 500.0, f"P95 latency {p95:.1f}ms exceeds 500ms limit"

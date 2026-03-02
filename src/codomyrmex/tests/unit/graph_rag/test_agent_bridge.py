@@ -93,7 +93,7 @@ class TestGraphRetriever:
         r = GraphRetriever(g)
         ctx = r.retrieve("Python", entity_type=EntityType.PERSON)
         # Should not match "Python" (CONCEPT) but might not match anything
-        names = [e.name for e in ctx.entities]
+        [e.name for e in ctx.entities]
         # Guido has "Python" substring? No. So empty.
         assert all(e.entity_type == EntityType.PERSON for e in ctx.entities)
 

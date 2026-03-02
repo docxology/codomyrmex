@@ -15,7 +15,6 @@ import json
 import os
 import shutil
 import sys
-import tempfile
 from datetime import datetime
 from pathlib import Path
 
@@ -44,7 +43,6 @@ from codomyrmex.git_operations.core.git import (
     get_status,
     push_changes,
 )
-
 
 # Module-level skip: all tests require a GitHub token
 _GITHUB_TOKEN = None
@@ -685,7 +683,7 @@ All test resources are automatically cleaned up after test completion.
 
         print(f"   Generated comprehensive report: {report_file}")
         print(f"   Generated summary: {summary_md}")
-        print(f"\nTest Session Summary:")
+        print("\nTest Session Summary:")
         print(f"   Passed: {report['summary']['passed']}")
         print(f"   Failed: {report['summary']['failed']}")
         print(f"   Repositories: {report['repositories_created']}")

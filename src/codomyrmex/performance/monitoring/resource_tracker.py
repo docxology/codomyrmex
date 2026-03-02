@@ -393,10 +393,9 @@ def benchmark_resource_usage(func: Callable, iterations: int = 10, *args, **kwar
         tracker.start_tracking(f"{func.__name__}_iteration_{i+1}")
 
         try:
-            result = func(*args, **kwargs)
+            func(*args, **kwargs)
         except Exception as e:
             logger.error(f"Benchmark iteration {i+1} failed: {e}")
-            result = None
 
         tracking_result = tracker.stop_tracking(f"{func.__name__}_iteration_{i+1}")
         results.append(tracking_result)

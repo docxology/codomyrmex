@@ -6,7 +6,7 @@ from codomyrmex.model_context_protocol.decorators import mcp_tool
 @mcp_tool(category="cloud")
 def list_cloud_instances() -> dict:
     """List virtual machine instances currently running in the Infomaniak OpenStack cloud.
-    
+
     Returns:
         A list of active instances or an error if authentication fails.
     """
@@ -34,7 +34,7 @@ def list_cloud_instances() -> dict:
 @mcp_tool(category="cloud")
 def list_s3_buckets() -> dict:
     """List S3 buckets available in the Infomaniak storage.
-    
+
     Returns:
         A list of available S3 buckets.
     """
@@ -53,12 +53,12 @@ def list_s3_buckets() -> dict:
 @mcp_tool(category="cloud")
 def upload_file_to_s3(file_path: str, bucket: str, object_name: str | None = None) -> dict:
     """Upload a local file to Infomaniak S3 storage.
-    
+
     Args:
         file_path: The local path to the file to upload
         bucket: The destination S3 bucket name
         object_name: The target S3 object key (defaults to the file name)
-        
+
     Returns:
         Status of the upload operation.
     """

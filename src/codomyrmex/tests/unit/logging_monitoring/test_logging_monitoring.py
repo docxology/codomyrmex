@@ -54,7 +54,7 @@ class TestLoggingMonitoring:
         """Test setup_logging with real file output configuration."""
         from codomyrmex.logging_monitoring import get_logger
 
-        log_file = tmp_path / "test_setup.log"
+        tmp_path / "test_setup.log"
 
         # Note: Logging is already configured by conftest.py, so we test the existing logger
         logger = get_logger('test_setup')

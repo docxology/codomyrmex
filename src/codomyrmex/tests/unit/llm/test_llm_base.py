@@ -899,7 +899,7 @@ class TestOutputManagerPureLogic:
     def test_output_dirs_created_on_init(self):
         from codomyrmex.llm.ollama.output_manager import OutputManager
 
-        om = OutputManager(self.temp_dir)
+        OutputManager(self.temp_dir)
         assert (Path(self.temp_dir) / "outputs").is_dir()
         assert (Path(self.temp_dir) / "configs").is_dir()
         assert (Path(self.temp_dir) / "logs").is_dir()

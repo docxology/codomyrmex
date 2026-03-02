@@ -10,7 +10,7 @@ def render_curriculum_path(curriculum: Curriculum) -> MermaidDiagram:
     diagram = "graph LR\n"
 
     for lesson in curriculum.lessons:
-        safe_title = lesson.title.replace(" ", "_")
+        lesson.title.replace(" ", "_")
         diagram += f"    {lesson.id}[{lesson.title}]\n"
 
         for prereq_id in lesson.prerequisites:

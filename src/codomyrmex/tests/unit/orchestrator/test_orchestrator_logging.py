@@ -28,7 +28,7 @@ class TestOrchestratorLogging:
 
         # Capture logs
         with caplog.at_level(logging.INFO, logger="codomyrmex.orchestrator.execution.runner"):
-            result = run_script(test_script, timeout=10)
+            run_script(test_script, timeout=10)
 
         # Verify SCRIPT_START event by checking log messages
         start_logs = [r for r in caplog.records if "Script execution started" in r.message]
@@ -54,7 +54,7 @@ class TestOrchestratorLogging:
         test_script.write_text("import sys; sys.exit(1)")
 
         with caplog.at_level(logging.INFO, logger="codomyrmex.orchestrator.execution.runner"):
-            result = run_script(test_script, timeout=10)
+            run_script(test_script, timeout=10)
 
         # Verify SCRIPT_END event shows failure
         end_logs = [r for r in caplog.records if "Script execution completed" in r.message]
@@ -89,7 +89,7 @@ class TestOrchestratorLogging:
         ]
 
         with caplog.at_level(logging.INFO, logger="codomyrmex.orchestrator.observability.reporting"):
-            summary = generate_report(results, tmp_path, "test_run_123")
+            generate_report(results, tmp_path, "test_run_123")
 
         # Verify RUN_SUMMARY event
         summary_logs = [r for r in caplog.records if "Run summary generated" in r.message]

@@ -2,11 +2,39 @@
 
 from __future__ import annotations
 
+import hashlib
+import json
+import logging
 import time
 from collections.abc import Callable
 from pathlib import Path
 from typing import Any
 
+try:
+    from codomyrmex.logging_monitoring.core.logger_config import get_logger
+    logger = get_logger(__name__)
+except Exception:
+    logger = logging.getLogger(__name__)
+
+try:
+    from codomyrmex.skills.discovery import (
+        DEFAULT_REGISTRY,
+        FunctionSkill,
+        ParameterSchema,
+        SkillCategory,
+        SkillMetadata,
+    )
+    _HAS_DISCOVERY = True
+except ImportError:
+    _HAS_DISCOVERY = False
+    DEFAULT_REGISTRY = None  # type: ignore[assignment]
+    FunctionSkill = None  # type: ignore[assignment,misc]
+    ParameterSchema = None  # type: ignore[assignment,misc]
+    SkillCategory = None  # type: ignore[assignment,misc]
+    SkillMetadata = None  # type: ignore[assignment,misc]
+
+from .core import ArsContextaManager, _DEFAULT_PRIMITIVES, _DIMENSION_KEYWORDS
+from .models import VaultSpace
 from .types import (
     ConfigDimension,
     DimensionSignal,

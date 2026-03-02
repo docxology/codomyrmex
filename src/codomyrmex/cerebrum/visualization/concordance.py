@@ -151,7 +151,7 @@ class ConcordanceVisualizer:
         # Add correlation values as text
         for i in range(n_methods):
             for j in range(n_methods):
-                text = ax.text(
+                ax.text(
                     j,
                     i,
                     f"{correlation_matrix[i, j]:.2f}",

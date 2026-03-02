@@ -8,7 +8,7 @@ from fastapi import FastAPI
 class TestServerManager:
     """
     Zero-Mock Integration Testing Server Manager.
-    
+
     Spins up a real FastAPI server on a background thread on localhost to handle
     HTTP requests during test execution. This allows testing network clients
     without relying on external physical infrastructure or using 'unittest.mock'.

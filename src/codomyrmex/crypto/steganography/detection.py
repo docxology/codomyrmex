@@ -79,7 +79,7 @@ def detect_lsb_steganography(image_path: str) -> DetectionResult:
     # Test 1: LSB distribution uniformity
     # Natural images have biased LSBs; embedded data makes them ~50/50
     ones_count = sum(lsb_values)
-    zeros_count = total_lsbs - ones_count
+    total_lsbs - ones_count
     lsb_ratio = ones_count / total_lsbs if total_lsbs > 0 else 0.5
     lsb_bias = abs(lsb_ratio - 0.5)
 
@@ -106,9 +106,9 @@ def detect_lsb_steganography(image_path: str) -> DetectionResult:
     # Test 3: Compare LSB entropy to bit-1 entropy
     # In natural images, LSBs correlate with higher bits
     # After embedding, LSBs become more random / independent
-    lsb_ones_ratio = ones_count / total_lsbs if total_lsbs > 0 else 0.5
+    ones_count / total_lsbs if total_lsbs > 0 else 0.5
     bit1_ones = sum(bit1_values)
-    bit1_ratio = bit1_ones / len(bit1_values) if bit1_values else 0.5
+    bit1_ones / len(bit1_values) if bit1_values else 0.5
 
     # Measure how "random" the LSBs are (closer to 0.5 = more suspicious)
     lsb_randomness = 1.0 - 2.0 * abs(lsb_ratio - 0.5)
@@ -215,7 +215,7 @@ def analyze_statistical_anomalies(data: bytes) -> DetectionResult:
     bit_ratios = [count / total_bytes for count in bit_counts]
     # Check if LSBs are unusually uniform compared to higher bits
     lsb_ratio = bit_ratios[0]
-    msb_ratio = bit_ratios[7]
+    bit_ratios[7]
     lsb_uniformity = 1.0 - 2.0 * abs(lsb_ratio - 0.5)
 
     # Test 3: Check for embedded length headers

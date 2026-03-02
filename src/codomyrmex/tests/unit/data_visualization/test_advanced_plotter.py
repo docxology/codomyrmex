@@ -29,6 +29,10 @@ if _has_matplotlib:
     matplotlib.use("Agg")
 
 
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+
 from codomyrmex.data_visualization.engines.advanced_plotter import (
     AdvancedPlotter,
     ChartStyle,
@@ -47,11 +51,6 @@ from codomyrmex.data_visualization.engines.advanced_plotter import (
     get_available_plot_types,
     get_available_styles,
 )
-
-import matplotlib.pyplot as plt
-import numpy as np
-import pandas as pd
-
 
 # ---------------------------------------------------------------------------
 # Fixtures
@@ -297,7 +296,7 @@ class TestPlotScatter:
         """Cover line 320: auto-create figure."""
         cfg = PlotConfig(show_plot=False)
         p = AdvancedPlotter(cfg)
-        sc = p.plot_scatter(sample_x, sample_y)
+        p.plot_scatter(sample_x, sample_y)
         assert p.current_figure is not None
 
     def test_scatter_with_variable_sizes(self, plotter, sample_x, sample_y):
@@ -328,7 +327,7 @@ class TestPlotBar:
         """Cover implicit auto-create."""
         cfg = PlotConfig(show_plot=False)
         p = AdvancedPlotter(cfg)
-        bars = p.plot_bar(["X"], [5])
+        p.plot_bar(["X"], [5])
         assert p.current_figure is not None
 
 
@@ -390,7 +389,7 @@ class TestPlotHeatmap:
         """Cover line 480."""
         cfg = PlotConfig(show_plot=False)
         p = AdvancedPlotter(cfg)
-        hm = p.plot_heatmap([[1, 2], [3, 4]], x_labels=["a", "b"], y_labels=["c", "d"])
+        p.plot_heatmap([[1, 2], [3, 4]], x_labels=["a", "b"], y_labels=["c", "d"])
         assert p.current_figure is not None
 
 
@@ -435,7 +434,7 @@ class TestPlotBox:
         """Cover line 530."""
         cfg = PlotConfig(show_plot=False)
         p = AdvancedPlotter(cfg)
-        bp = p.plot_box([1, 2, 3])
+        p.plot_box([1, 2, 3])
         assert p.current_figure is not None
 
 
@@ -474,7 +473,7 @@ class TestPlotViolin:
         """Cover line 579-580."""
         cfg = PlotConfig(show_plot=False)
         p = AdvancedPlotter(cfg)
-        vp = p.plot_violin([1, 2, 3, 4])
+        p.plot_violin([1, 2, 3, 4])
         assert p.current_figure is not None
 
 
@@ -509,7 +508,7 @@ class TestPlotCorrelation:
         cfg = PlotConfig(show_plot=False)
         p = AdvancedPlotter(cfg)
         df = pd.DataFrame({"x": [1, 2], "y": [3, 4]})
-        hm = p.plot_correlation(df)
+        p.plot_correlation(df)
         assert p.current_figure is not None
 
 

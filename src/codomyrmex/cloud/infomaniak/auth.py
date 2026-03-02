@@ -170,7 +170,7 @@ def create_openstack_connection(
         raise ImportError(
             "openstacksdk is required for Infomaniak integration. "
             "Install with: pip install openstacksdk"
-        )
+        ) from None
 
     if credentials is None:
         credentials = InfomaniakCredentials.from_env()
@@ -215,7 +215,7 @@ def create_s3_client(
         raise ImportError(
             "boto3 is required for Infomaniak S3 integration. "
             "Install with: pip install boto3"
-        )
+        ) from None
 
     if credentials is None:
         credentials = InfomaniakS3Credentials.from_env()

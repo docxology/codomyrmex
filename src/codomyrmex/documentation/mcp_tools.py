@@ -6,10 +6,10 @@ from codomyrmex.model_context_protocol.decorators import mcp_tool
 @mcp_tool(category="documentation")
 def generate_module_docs(module_name: str) -> dict:
     """Generate or update the RASP documentation suite for a specific module.
-    
+
     Args:
         module_name: Name of the module to generate documentation for (e.g. 'core')
-        
+
     Returns:
         Status and paths of generated documentation.
     """
@@ -37,10 +37,10 @@ def generate_module_docs(module_name: str) -> dict:
 @mcp_tool(category="documentation")
 def audit_rasp_compliance(module_name: str | None = None) -> dict:
     """Audit the repository for RASP (README, AGENTS, SPEC, PAI) compliance.
-    
+
     Args:
         module_name: Optional module name to audit specifically. If not provided, audits the whole repo.
-        
+
     Returns:
         Audit report detailing missing files.
     """

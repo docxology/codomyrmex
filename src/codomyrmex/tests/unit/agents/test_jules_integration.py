@@ -319,7 +319,7 @@ class TestJulesOrchestration:
         )
 
         orchestrator = AgentOrchestrator([jules_client, test_agent])
-        request = AgentRequest(prompt="test")
+        AgentRequest(prompt="test")
 
         # Test structure without requiring execution
         assert len(orchestrator.agents) == 2

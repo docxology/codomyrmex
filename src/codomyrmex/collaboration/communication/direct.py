@@ -127,7 +127,7 @@ class DirectMessenger:
                 sender_id,
                 receiver_id,
                 str(e)
-            )
+            ) from e
 
     async def request(
         self,
@@ -209,7 +209,7 @@ class DirectMessenger:
                 sender_id,
                 receiver_id,
                 str(e)
-            )
+            ) from e
         finally:
             # Cleanup pending request
             self._pending_requests.pop(message.id, None)
@@ -293,7 +293,7 @@ class ConversationTracker:
     def __init__(self):
         """Initialize this instance."""
         self._conversations: dict[str, list[AgentMessage]] = {}
-        self._agent_conversations: dict[str, Set[str]] = {}
+        self._agent_conversations: dict[str, set[str]] = {}
 
     def start_conversation(
         self,

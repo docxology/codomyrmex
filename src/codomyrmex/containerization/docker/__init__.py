@@ -133,7 +133,7 @@ class DockerClient:
             if result.returncode != 0:
                 raise RuntimeError("Docker not available")
         except FileNotFoundError:
-            raise RuntimeError(f"Docker not found at: {self.docker_path}")
+            raise RuntimeError(f"Docker not found at: {self.docker_path}") from None
 
     def _run_command(
         self,

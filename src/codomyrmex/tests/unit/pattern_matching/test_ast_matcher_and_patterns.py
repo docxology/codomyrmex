@@ -21,8 +21,10 @@ from codomyrmex.coding.pattern_matching.code_patterns import (
     PatternDetector,
     _to_definition,
 )
-from codomyrmex.coding.pattern_matching.similarity import CodeSimilarity, DuplicateResult
-
+from codomyrmex.coding.pattern_matching.similarity import (
+    CodeSimilarity,
+    DuplicateResult,
+)
 
 # =====================================================================
 # ASTMatcher tests

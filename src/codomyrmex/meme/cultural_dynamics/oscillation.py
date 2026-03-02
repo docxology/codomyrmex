@@ -20,7 +20,7 @@ def detect_oscillation(states: list[CulturalState], dimension: str) -> bool:
 
 def backlash_model(current_value: float, velocity: float) -> float:
     """Model cultural backlash (rubber-band effect).
-    
+
     Returns the restoring force.
     """
     k = 0.5  # Spring constant

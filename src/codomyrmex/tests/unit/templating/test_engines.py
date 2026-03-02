@@ -13,14 +13,13 @@ Tests cover:
 import pytest
 
 from codomyrmex.templating.engines import (
-    TemplateContext,
-    TemplateEngine,
-    SimpleTemplateEngine,
     Jinja2LikeEngine,
     MustacheEngine,
+    SimpleTemplateEngine,
+    TemplateContext,
+    TemplateEngine,
     create_engine,
 )
-
 
 # ---------------------------------------------------------------------------
 # TemplateContext

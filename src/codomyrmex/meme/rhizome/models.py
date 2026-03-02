@@ -19,7 +19,7 @@ class NetworkTopology(str, Enum):
 @dataclass
 class Node:
     """A node in the rhizome network (can be an agent, meme, or concept).
-    
+
     Attributes:
         id: Unique identifier.
         content: Payload (e.g. meme content).
@@ -37,7 +37,7 @@ class Node:
 @dataclass
 class Edge:
     """A connection between two nodes.
-    
+
     Attributes:
         source: Source Node ID.
         target: Target Node ID.
@@ -61,7 +61,7 @@ class Edge:
 @dataclass
 class Graph:
     """A graph structure representing the network.
-    
+
     Attributes:
         nodes: Map of ID to Node.
         edges: List of Edges.

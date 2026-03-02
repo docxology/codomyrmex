@@ -5,7 +5,6 @@ Tests ConversationManager: creation, save/load, search, active conversation, tru
 
 from __future__ import annotations
 
-
 import pytest
 
 from codomyrmex.agents.history.manager import ConversationManager

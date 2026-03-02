@@ -202,7 +202,6 @@ flask==2.2.0
 
         with perf_logger.time_operation("development_workflow") if perf_logger else None:
             # Step 1: Generate code using AI
-            prompt = "Write a Python function that validates email addresses using regex"
             generated_code = r'''
 import re
 
@@ -360,8 +359,8 @@ for email in emails:
             profile_a = profile_function(algorithm_a, 10000)
             profile_b = profile_function(algorithm_b, 10000)
 
-            benchmark_a = run_benchmark(lambda: algorithm_a(10000), iterations=5)
-            benchmark_b = run_benchmark(lambda: algorithm_b(10000), iterations=5)
+            run_benchmark(lambda: algorithm_a(10000), iterations=5)
+            run_benchmark(lambda: algorithm_b(10000), iterations=5)
 
             # Step 3: Execute algorithms with resource monitoring
             from codomyrmex.coding import ExecutionLimits, execute_with_limits

@@ -14,17 +14,19 @@ Covers:
 """
 from __future__ import annotations
 
-import argparse
 import json
-import os
 import sys
-import tempfile
 import textwrap
-import time
 from pathlib import Path
 from types import SimpleNamespace
 
 import pytest
+
+from codomyrmex.agents.droid.controller import (
+    DroidController,
+    DroidStatus,
+    create_default_controller,
+)
 
 # ---------------------------------------------------------------------------
 # Imports under test
@@ -38,14 +40,7 @@ from codomyrmex.agents.droid.run_todo_droid import (
     resolve_handler,
     run_todos,
 )
-from codomyrmex.agents.droid.controller import (
-    DroidConfig,
-    DroidController,
-    DroidStatus,
-    create_default_controller,
-)
 from codomyrmex.agents.droid.todo import TodoItem, TodoManager
-
 
 # ---------------------------------------------------------------------------
 # Helpers (real objects, no mocks)

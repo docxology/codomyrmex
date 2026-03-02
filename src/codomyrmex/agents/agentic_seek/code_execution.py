@@ -18,7 +18,6 @@ from codomyrmex.agents.agentic_seek.agent_types import (
     resolve_language,
 )
 
-
 # ---------------------------------------------------------------------------
 # Code-block extraction
 # ---------------------------------------------------------------------------

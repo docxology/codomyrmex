@@ -11,7 +11,6 @@ import os
 import subprocess
 import sys
 import threading
-from typing import Any
 from urllib.parse import urlparse
 
 from codomyrmex.logging_monitoring import get_logger

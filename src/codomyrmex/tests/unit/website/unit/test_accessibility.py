@@ -19,7 +19,6 @@ sys.path.insert(0, str(SRC_DIR))
 
 from codomyrmex.website.accessibility import models, utils
 
-
 # ── AccessibilityReport Model Tests ───────────────────────────────────
 
 

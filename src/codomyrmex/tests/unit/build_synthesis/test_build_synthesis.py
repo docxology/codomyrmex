@@ -8,7 +8,6 @@ Unit tests for the Build Synthesis module.
 import json
 import os
 import sys
-import tempfile
 import time
 
 # Add src to path for imports

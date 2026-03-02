@@ -4,7 +4,9 @@ import pytest
 
 from codomyrmex.agentic_memory.obsidian.cli import ObsidianCLI, ObsidianCLINotAvailable
 from codomyrmex.agentic_memory.obsidian.cli_search import (
-    cli_search, cli_search_context, cli_search_open,
+    cli_search,
+    cli_search_context,
+    cli_search_open,
 )
 
 

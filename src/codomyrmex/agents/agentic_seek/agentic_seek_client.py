@@ -21,6 +21,11 @@ from typing import Any
 
 logger = logging.getLogger(__name__)
 
+from codomyrmex.agents.agentic_seek.agent_router import AgenticSeekRouter
+from codomyrmex.agents.agentic_seek.agent_types import (
+    AgenticSeekAgentType,
+    AgenticSeekConfig,
+)
 from codomyrmex.agents.core import (
     AgentCapabilities,
     AgentRequest,
@@ -28,13 +33,10 @@ from codomyrmex.agents.core import (
 )
 from codomyrmex.agents.core.exceptions import AgentError
 from codomyrmex.agents.generic.cli_agent_base import CLIAgentBase
-from codomyrmex.config_management.defaults import DEFAULT_API_BASE_URL, DEFAULT_OLLAMA_URL
-
-from codomyrmex.agents.agentic_seek.agent_types import (
-    AgenticSeekAgentType,
-    AgenticSeekConfig,
+from codomyrmex.config_management.defaults import (
+    DEFAULT_API_BASE_URL,
+    DEFAULT_OLLAMA_URL,
 )
-from codomyrmex.agents.agentic_seek.agent_router import AgenticSeekRouter
 
 
 class AgenticSeekClient(CLIAgentBase):
@@ -132,12 +134,12 @@ class AgenticSeekClient(CLIAgentBase):
             execution_time = time.time() - start_time
             raise AgentError(
                 f"agenticSeek timed out after {execution_time:.1f}s"
-            )
+            ) from None
         except FileNotFoundError as exc:
             execution_time = time.time() - start_time
             raise AgentError(
                 f"agenticSeek CLI not found: {exc}"
-            )
+            ) from exc
 
     def _stream_impl(self, request: AgentRequest) -> Iterator[str]:
         """Stream agenticSeek output line by line.

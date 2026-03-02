@@ -18,11 +18,7 @@ from codomyrmex.database_management.db_manager import (
 from codomyrmex.database_management.migration.migration_manager import (
     DatabaseConnector,
 )
-from codomyrmex.database_management.performance_monitor import (
-    DatabasePerformanceMonitor,
-)
 from codomyrmex.exceptions import CodomyrmexError
-
 
 # ==============================================================================
 # Query Execution Tests

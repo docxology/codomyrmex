@@ -6,11 +6,11 @@ from codomyrmex.model_context_protocol.decorators import mcp_tool
 @mcp_tool(category="agents")
 def execute_agent(agent_name: str, prompt: str) -> dict:
     """Execute an agent conversation with the given prompt.
-    
+
     Args:
         agent_name: The name of the agent to execute (e.g. 'claude', 'gemini')
         prompt: The user input or instruction for the agent
-        
+
     Returns:
         A dictionary containing the agent's response and execution metrics.
     """
@@ -36,7 +36,7 @@ def execute_agent(agent_name: str, prompt: str) -> dict:
 @mcp_tool(category="agents")
 def list_agents() -> dict:
     """Return a list of all available AI agents.
-    
+
     Returns:
         A dictionary mapping agent IDs to their descriptions and capabilities.
     """
@@ -50,10 +50,10 @@ def list_agents() -> dict:
 @mcp_tool(category="agents")
 def get_agent_memory(session_id: str) -> dict:
     """Retrieve the interaction logs and memory for a specific agent session.
-    
+
     Args:
         session_id: The ID of the session
-        
+
     Returns:
         A dictionary containing the agent's memory traces.
     """

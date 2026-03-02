@@ -16,7 +16,6 @@ import pytest
 
 from codomyrmex.auth.providers.api_key_manager import APIKey, APIKeyManager
 
-
 # ==============================================================================
 # APIKey Dataclass Tests
 # ==============================================================================

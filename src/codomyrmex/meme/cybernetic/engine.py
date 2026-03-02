@@ -25,7 +25,7 @@ class CyberneticEngine:
 
     def update(self, system: ControlSystem, current_state: SystemState) -> dict[str, float]:
         """Update control outputs based on current state and setpoints.
-        
+
         Returns:
             Dict of control signals (adjustments) for each variable.
         """

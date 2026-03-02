@@ -94,7 +94,6 @@ class TestErrorIsolatedScanning:
         """Inject a broken module into sys.modules and verify scan survives."""
         # Create a fake package with a broken sub-module
         fake_pkg_name = "_test_fake_pkg_stream3"
-        fake_mod_name = f"{fake_pkg_name}._broken"
 
         # Create the fake package
         fake_pkg = types.ModuleType(fake_pkg_name)
@@ -133,9 +132,8 @@ class TestIncrementalScanning:
         self, engine: MCPDiscovery
     ) -> None:
         """Scanning two different modules should accumulate tools."""
-        r1 = engine.scan_module("codomyrmex.model_context_protocol.discovery")
-        count_after_first = engine.tool_count
-        r2 = engine.scan_module("codomyrmex.model_context_protocol.discovery")
+        engine.scan_module("codomyrmex.model_context_protocol.discovery")
+        engine.scan_module("codomyrmex.model_context_protocol.discovery")
         # Same module → same tools, count shouldn't decrease
         assert engine.tool_count >= 0
 

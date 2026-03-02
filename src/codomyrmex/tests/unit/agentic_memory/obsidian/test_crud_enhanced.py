@@ -25,7 +25,7 @@ class TestAppendNote:
 
     def test_append_newline(self, tmp_vault):
         vault = ObsidianVault(tmp_vault)
-        raw = (tmp_vault / "Simple Note.md").read_text()
+        (tmp_vault / "Simple Note.md").read_text()
         append_note(vault, "Simple Note", "New line", newline=True)
         updated = (tmp_vault / "Simple Note.md").read_text()
         assert "New line" in updated
@@ -39,7 +39,7 @@ class TestAppendNote:
 class TestPrependNote:
     def test_prepend_after_frontmatter(self, tmp_vault):
         vault = ObsidianVault(tmp_vault)
-        note = prepend_note(vault, "My Test Note", "PREPENDED TEXT", after_frontmatter=True)
+        prepend_note(vault, "My Test Note", "PREPENDED TEXT", after_frontmatter=True)
         raw = (tmp_vault / "My Test Note.md").read_text()
         # PREPENDED TEXT should appear after --- but before original content
         fm_end = raw.find("---\n", 4) + 4
@@ -77,7 +77,7 @@ class TestCreateNoteEnhanced:
     def test_create_with_overwrite(self, tmp_vault):
         vault = ObsidianVault(tmp_vault)
         # First create should work
-        note = create_note(vault, "Overwrite Test", content="Original")
+        create_note(vault, "Overwrite Test", content="Original")
         # Overwrite should succeed
         note2 = create_note(vault, "Overwrite Test", content="Replaced", overwrite=True)
         assert "Replaced" in note2.content

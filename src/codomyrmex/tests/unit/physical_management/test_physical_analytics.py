@@ -22,7 +22,6 @@ from codomyrmex.physical_management.analytics import (
     StreamingMode,
 )
 
-
 # ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------
@@ -460,7 +459,7 @@ class TestStreamingAnalyticsManager:
     def test_export_with_completed_windows(self):
         """Exporting a stream whose windows have completed should produce valid JSON."""
         sa = StreamingAnalytics()
-        stream = sa.create_stream("cw", buffer_size=100, window_duration=0.01)
+        sa.create_stream("cw", buffer_size=100, window_duration=0.01)
         for i in range(5):
             sa.add_data("cw", float(i), "s")
         time.sleep(0.05)

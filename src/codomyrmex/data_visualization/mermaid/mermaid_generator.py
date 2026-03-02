@@ -11,6 +11,7 @@ particularly focused on Git operations and workflow visualization.
 import os
 from pathlib import Path
 from typing import Any
+import logging
 
 try:
     from codomyrmex.logging_monitoring import get_logger

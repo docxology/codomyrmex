@@ -66,10 +66,10 @@ except ImportError:
 
 
 from .reviewer_impl import (
-    LintToolsMixin,
     AnalysisPatternsMixin,
-    PerformanceOptMixin,
     DashboardMixin,
+    LintToolsMixin,
+    PerformanceOptMixin,
     ReportingMixin,
 )
 

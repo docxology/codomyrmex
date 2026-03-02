@@ -26,7 +26,6 @@ from codomyrmex.plugin_system.validation.plugin_validator import (
     validate_plugin,
 )
 
-
 # ============================================================================
 # Test Plugin Manager
 # ============================================================================
@@ -393,7 +392,7 @@ class TestErrorHandling:
         hook.register(bad_handler)
         hook.register(handler2)
 
-        results = hook.emit()
+        hook.emit()
 
         # All handlers should have been attempted
         assert 1 in executed

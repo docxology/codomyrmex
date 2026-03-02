@@ -25,7 +25,6 @@ from codomyrmex.agents.orchestrator import (
     extract_todo_items,
 )
 
-
 # ── Helpers ──────────────────────────────────────────────────────────
 
 def _ollama_reachable() -> bool:

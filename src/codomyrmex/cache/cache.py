@@ -94,7 +94,6 @@ class Cache(ABC):
             Number of keys deleted
         """
         # Default implementation - override in subclasses for better performance
-        keys_to_delete = []
         # This is a basic implementation - subclasses should override
         return 0
 

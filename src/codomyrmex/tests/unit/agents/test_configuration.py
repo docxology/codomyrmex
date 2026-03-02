@@ -407,7 +407,7 @@ class TestGlobalConfigManagement:
         """Test that config changes don't leak between tests."""
         # This test verifies that reset_config works properly
         reset_config()
-        original_config = get_config()
+        get_config()
 
         # Modify config
         custom_config = AgentConfig(default_timeout=777)

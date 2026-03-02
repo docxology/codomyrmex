@@ -301,7 +301,7 @@ class MCPBridge:
 
     async def _handle_initialize(self, params: dict[str, Any]) -> dict[str, Any]:
         """Handle initialize request."""
-        client_info = params.get("clientInfo", {})
+        params.get("clientInfo", {})
 
         # Build capabilities based on what's registered
         capabilities = {}
@@ -393,7 +393,7 @@ class MCPBridge:
     async def _handle_prompt_get(self, params: dict[str, Any]) -> dict[str, Any]:
         """Handle prompt get."""
         name = params.get("name")
-        arguments = params.get("arguments", {})
+        params.get("arguments", {})
 
         if name not in self._prompts:
             raise ValueError(f"Prompt not found: {name}")

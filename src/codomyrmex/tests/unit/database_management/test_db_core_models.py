@@ -13,17 +13,16 @@ from pathlib import Path
 import pytest
 
 from codomyrmex.database_management.schema_generator import (
+    TYPE_MAPPINGS,
     Column,
     Index,
     SchemaDefinition,
     SchemaGenerator,
-    SchemaTable,
     SchemaMigration,
-    TYPE_MAPPINGS,
+    SchemaTable,
     generate_schema_from_models,
 )
 from codomyrmex.exceptions import CodomyrmexError
-
 
 # =============================================================================
 # Column SQL Generation Tests

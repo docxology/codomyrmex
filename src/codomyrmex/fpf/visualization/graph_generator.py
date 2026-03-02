@@ -108,7 +108,7 @@ class GraphGenerator:
             )
 
         # Add edges based on shared patterns
-        concept_patterns: dict[str, Set[str]] = {}
+        concept_patterns: dict[str, set[str]] = {}
         for concept in spec.concepts:
             concept_patterns[concept.name] = {concept.pattern_id}
             concept_patterns[concept.name].update(concept.references)

@@ -59,7 +59,6 @@ class JulesClient(CLIAgentBase):
         jules_args = self._build_jules_args(prompt, context)
 
         retries = 3
-        last_error = None
 
         for attempt in range(retries):
             try:
@@ -82,7 +81,6 @@ class JulesClient(CLIAgentBase):
                 )
             except AgentTimeoutError as e:
                 # Timeouts might be transient
-                last_error = e
                 if attempt < retries - 1:
                     continue
                 raise JulesError(f"Jules command timed out after {retries} attempts: {str(e)}", command=self.command) from e

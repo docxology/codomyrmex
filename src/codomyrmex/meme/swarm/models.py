@@ -59,7 +59,7 @@ class SwarmState:
 @dataclass
 class EmergentPattern:
     """A detected pattern emerging from collective behavior.
-    
+
     Attributes:
         pattern_type: Type of pattern (e.g. 'vortex', 'line', 'cluster').
         strength: Confidence/Strength of pattern (0-1).
@@ -74,7 +74,7 @@ class EmergentPattern:
 @dataclass
 class ConsensusState:
     """State of a consensus process.
-    
+
     Attributes:
         proposal_id: ID of the proposal.
         round: Current voting round.

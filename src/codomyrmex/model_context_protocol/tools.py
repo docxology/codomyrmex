@@ -27,12 +27,12 @@ logger = get_logger(__name__)
 def read_file(path: str, encoding: str = "utf-8", max_size: int = 1_000_000) -> dict[str, Any]:
     """
     Read file contents with metadata.
-    
+
     Args:
         path: File path to read
         encoding: File encoding
         max_size: Maximum file size in bytes
-    
+
     Returns:
         Dict with content, size, encoding, and metadata
     """
@@ -67,12 +67,12 @@ def read_file(path: str, encoding: str = "utf-8", max_size: int = 1_000_000) -> 
 def write_file(path: str, content: str, create_dirs: bool = True) -> dict[str, Any]:
     """
     Write content to a file.
-    
+
     Args:
         path: File path to write
         content: Content to write
         create_dirs: Create parent directories if needed
-    
+
     Returns:
         Dict with success status and metadata
     """
@@ -102,13 +102,13 @@ def list_directory(
 ) -> dict[str, Any]:
     """
     List directory contents with filtering.
-    
+
     Args:
         path: Directory path
         pattern: Glob pattern for filtering
         recursive: Search recursively
         max_items: Maximum items to return
-    
+
     Returns:
         Dict with items list and metadata
     """
@@ -158,10 +158,10 @@ def list_directory(
 def analyze_python_file(path: str) -> dict[str, Any]:
     """
     Analyze a Python file for structure and metrics.
-    
+
     Args:
         path: Python file path
-    
+
     Returns:
         Dict with classes, functions, imports, and metrics
     """
@@ -235,14 +235,14 @@ def search_codebase(
 ) -> dict[str, Any]:
     """
     Search for patterns in code files.
-    
+
     Args:
         pattern: Search pattern (regex supported)
         path: Directory to search
         file_types: File extensions to include (e.g., [".py", ".js"])
         case_sensitive: Case sensitive search
         max_results: Maximum results to return
-    
+
     Returns:
         Dict with matches and statistics
     """
@@ -306,10 +306,10 @@ def search_codebase(
 def git_status(path: str = ".") -> dict[str, Any]:
     """
     Get git repository status.
-    
+
     Args:
         path: Repository path
-    
+
     Returns:
         Dict with branch, changes, and status
     """
@@ -367,11 +367,11 @@ def git_status(path: str = ".") -> dict[str, Any]:
 def git_diff(path: str = ".", staged: bool = False) -> dict[str, Any]:
     """
     Get git diff for changes.
-    
+
     Args:
         path: Repository path
         staged: Show staged changes only
-    
+
     Returns:
         Dict with diff content
     """
@@ -407,13 +407,13 @@ def run_shell_command(
 ) -> dict[str, Any]:
     """
     Execute a shell command safely.
-    
+
     Args:
         command: Command to execute
         cwd: Working directory
         timeout: Timeout in seconds
         env: Additional environment variables
-    
+
     Returns:
         Dict with stdout, stderr, and exit code
     """
@@ -452,11 +452,11 @@ def run_shell_command(
 def json_query(path: str, query: str | None = None) -> dict[str, Any]:
     """
     Read and optionally query a JSON file.
-    
+
     Args:
         path: JSON file path
         query: Optional dot-notation path (e.g., "data.items[0].name")
-    
+
     Returns:
         Dict with data or queried value
     """
@@ -483,11 +483,11 @@ def json_query(path: str, query: str | None = None) -> dict[str, Any]:
 def checksum_file(path: str, algorithm: str = "sha256") -> dict[str, Any]:
     """
     Calculate file checksum.
-    
+
     Args:
         path: File path
         algorithm: Hash algorithm (md5, sha1, sha256)
-    
+
     Returns:
         Dict with checksum and metadata
     """
