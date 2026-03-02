@@ -12,8 +12,8 @@ This is the authoritative project backlog. Updated after each wave/sprint. Sprin
 - [x] Create `.github/CONTRIBUTING.md` *(Wave 2 — done)*
 - [x] Create top-level `TODO.md` *(Wave 2 — done)*
 - [x] Fix Gemini workflows — created `.gemini/` directory with 5 prompt files *(Wave 2 — done)*
-- [ ] **`model_context_protocol/transport/server.py`** — 654 LOC, 0% test coverage (chronic desloppify reopener — highest single-file gap)
-- [ ] **Ratchet coverage gate** from `fail_under=68` → 70% (once transport/server.py tests added)
+- [x] **`model_context_protocol/transport/server.py`** — 0% → 60%+ test coverage, new `test_server_coverage.py` *(Sprint 14)*
+- [ ] **Ratchet coverage gate** from `fail_under=68` → 70% (server.py at 60%, need more coverage)
 - [ ] **Resolve ~35 circular import pairs** (Sprint 4 target, still open)
 
 ---
@@ -64,12 +64,12 @@ Modules with no MCP exposure — invisible to the PAI bridge:
 - [ ] Add `py.typed` markers across all modules with type hints (PEP 561)
 - [ ] Check and complete: `cerebrum/`, `events/`, `search/`, `config_management/`, etc.
 
-### Ruff Violations (1,531 remaining)
+### Ruff Violations — Sprint 14 COMPLETE ✅ *(March 2026)*
 
-- [ ] Target: ≤1,000 violations in Sprint 15 (-35% from current)
-- [ ] Fix remaining B904 exception chaining not yet addressed
-- [ ] Address top TID violations (tidy-imports)
-- [ ] Replace remaining star imports in non-`__init__.py` files
+- [x] Reduced 1,531 → 607 violations (-60.4%, Sprint 14)
+- [x] Fixed all F821 source bugs, UP042 StrEnum, E721, B004, B005, B025, B006, B017, B023, B028, F811, F601, F402, B018, B027, UP022, UP036
+- [ ] Remaining 607: TID252 (404 relative imports), E402 (160 conditional imports), F405 (43 star-import usage) — architectural, deferred
+- [ ] Target: reduce TID252/E402 in Sprint 15 by migrating key modules to absolute imports
 
 ---
 
