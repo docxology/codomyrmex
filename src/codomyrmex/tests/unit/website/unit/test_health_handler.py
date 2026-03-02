@@ -20,7 +20,6 @@ sys.path.insert(0, str(SRC_DIR))
 
 from codomyrmex.website.handlers.health_handler import HealthHandler  # noqa: E402
 
-
 # ── Fake infrastructure ──────────────────────────────────────────────────
 
 
