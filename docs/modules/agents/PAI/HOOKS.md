@@ -166,7 +166,7 @@ security = bridge.get_security_config()
 print(security)
 # {
 #   "exists": True,
-#   "path": "/Users/mini/.claude/skills/PAI/PAISECURITYSYSTEM",
+#   "path": "/Users/mini/.claude/PAI/PAISECURITYSYSTEM",
 #   "files": ["patterns.yaml", "policies.md"],
 #   "patterns": { ... }  # Parsed YAML content
 # }

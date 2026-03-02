@@ -116,7 +116,7 @@ dp.run_tests()                # execute pytest, parse JUnit XML results
 |-----------|------|---------------|
 | Codomyrmex (this) | **8787** | `python scripts/website/launch_dashboard.py --open` |
 | PAI Observability | **5172** (UI) + **4000** (API) | `~/.claude/Observability/scripts/start-agent-observability-dashboard.sh` |
-| PAI Project Manager | **8888** | `bun ~/.claude/skills/PAI/Tools/PMServer.ts` (or via `dashboard.py`) |
+| PAI Project Manager | **8888** | `bun ~/.claude/PAI/Tools/PMServer.ts` (or via `dashboard.py`) |
 | MCP HTTP Server | **8080** | `python scripts/model_context_protocol/run_mcp_server.py --transport http` |
 
 > **Combined launch**: `uv run python scripts/pai/dashboard.py` starts both the PMServer (:8888) and Codomyrmex (:8787) simultaneously.

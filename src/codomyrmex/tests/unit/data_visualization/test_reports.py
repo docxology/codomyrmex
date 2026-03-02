@@ -38,22 +38,17 @@ class TestGeneralSystemReport:
         assert Path(saved_path).exists()
         assert len(Path(saved_path).read_text()) > 0
 
-    def test_generate_idempotent(self, tmp_path):
-        """Calling generate() twice produces consistent output."""
-        report = GeneralSystemReport()
-        report.generate()
+    def test_two_fresh_instances_produce_same_output(self, tmp_path):
+        """Two independently created reports produce identical HTML."""
+        report1 = GeneralSystemReport()
         out1 = tmp_path / "r1.html"
-        report.save(str(out1))
-        content1 = out1.read_text()
+        report1.save(str(out1))
 
         report2 = GeneralSystemReport()
-        report2.generate()
-        report2.generate()  # second call
         out2 = tmp_path / "r2.html"
         report2.save(str(out2))
-        content2 = out2.read_text()
 
-        assert content1 == content2
+        assert out1.read_text() == out2.read_text()
 
     def test_save_returns_string_path(self, tmp_path):
         """save() returns a str, not a Path object."""

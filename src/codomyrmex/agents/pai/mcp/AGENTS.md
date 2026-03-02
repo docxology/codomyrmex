@@ -10,7 +10,7 @@ MCP bridge subpackage that implements the full Codomyrmex-to-PAI tool surface: s
 
 | File | Class / Function | Role |
 |------|-----------------|------|
-| `definitions.py` | `_TOOL_DEFINITIONS` | 20 static tool tuples: (name, description, handler, input_schema) covering file ops, code analysis, git, shell, discovery, PAI, testing, and universal proxy |
+| `definitions.py` | `_TOOL_DEFINITIONS` | 22 static tool tuples: (name, description, handler, input_schema) covering file ops, code analysis, git, shell, discovery, PAI, testing, universal proxy, and maintenance |
 | `definitions.py` | `_RESOURCE_DEFINITIONS` | 2 MCP resources: `codomyrmex://modules` and `codomyrmex://status` |
 | `definitions.py` | `_PROMPT_DEFINITIONS` | 10 MCP prompts: analyze_module, debug_issue, create_test, codomyrmexAnalyze/Memory/Search/Docs/Status/Verify/Trust |
 | `discovery.py` | `_discover_dynamic_tools` | TTL-cached scan of all `mcp_tools.py` submodules via `pkgutil.walk_packages`, delegating to `MCPDiscovery` engine |

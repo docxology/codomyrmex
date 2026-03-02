@@ -63,7 +63,7 @@ graph LR
 
 **Server**: `scripts/model_context_protocol/run_mcp_server.py`
 **Transports**: stdio (Claude Desktop/Code) and HTTP with Web UI (port 8080)
-**Tools**: 20 static tools (17 core + 3 universal proxy) + ~146 auto-discovered module tools from 33 modules via `pkgutil` scan. Total: **~171 tools** (167 safe + 4 destructive). The Codomyrmex PAI Skill (`~/.claude/skills/Codomyrmex/SKILL.md`) surfaces ~171 tools for MCP exposure.
+**Tools**: 22 static tools (17 core + 3 universal proxy + 2 maintenance) + ~146 auto-discovered module tools from 33 modules via `pkgutil` scan. Total: **~173 tools** (169 safe + 4 destructive). The Codomyrmex PAI Skill (`~/.claude/skills/Codomyrmex/SKILL.md`) surfaces ~173 tools for MCP exposure.
 **Web UI**: `http://localhost:8080/` — interactive tool tester, server info, resources, prompts
 **Config**: Register in `claude_desktop_config.json` (see [Connecting PAI tutorial](docs/getting-started/tutorials/connecting-pai.md))
 **Full docs**: [src/codomyrmex/model_context_protocol/PAI.md](src/codomyrmex/model_context_protocol/PAI.md)
@@ -79,7 +79,7 @@ UNTRUSTED ──/codomyrmexVerify──> VERIFIED ──/codomyrmexTrust──> 
    └── All tools start here         └── 167 safe tools promoted    └── 4 destructive tools enabled
 ```
 
-**Safe tools (167)**: Auto-promoted to VERIFIED by `/codomyrmexVerify`. All read, list,
+**Safe tools (169)**: Auto-promoted to VERIFIED by `/codomyrmexVerify`. All read, list,
 analyze, search, git status/diff, and discovery tools.
 
 **Destructive tools (4)**: Require explicit `/codomyrmexTrust`:

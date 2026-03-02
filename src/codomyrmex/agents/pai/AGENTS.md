@@ -1,12 +1,12 @@
 # Codomyrmex Agents — src/codomyrmex/agents/pai
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 **Upstream**: [danielmiessler/Personal_AI_Infrastructure](https://github.com/danielmiessler/Personal_AI_Infrastructure)
 
 ## Purpose
 
-Full-featured PAI bridge module. Discovers, validates, and provides programmatic access to all PAI subsystems at `~/.claude/skills/PAI/`.
+Full-featured PAI bridge module. Discovers, validates, and provides programmatic access to all PAI subsystems at `~/.claude/PAI/` (v4+; v3 legacy: `~/.claude/skills/PAI/`).
 
 ## Active Components
 
@@ -14,7 +14,7 @@ Full-featured PAI bridge module. Discovers, validates, and provides programmatic
 |------|-------|-------------|
 | `__init__.py` | ~110 | Public API exports (31 symbols) |
 | `pai_bridge.py` | ~680 | Bridge client with all subsystem operations |
-| `mcp_bridge.py` | ~1,266 | MCP bridge — 20 static tools (17 core + 3 universal proxy) + auto-discovered module tools, 2 resources, 10 prompts |
+| `mcp_bridge.py` | ~1,266 | MCP bridge — 22 static tools (17 core + 3 universal proxy + 2 maintenance) + auto-discovered module tools, 2 resources, 10 prompts |
 | `trust_gateway.py` | ~405 | Trust gateway — UNTRUSTED/VERIFIED/TRUSTED tiers |
 
 ## Method Inventory
@@ -50,18 +50,18 @@ Full-featured PAI bridge module. Discovers, validates, and provides programmatic
 
 ### PAIConfig (pai_bridge.py)
 
-| Property | Path |
-|----------|------|
-| `pai_root` | `~/.claude/skills/PAI` |
-| `skill_md` | Algorithm SKILL.md |
-| `skills_dir` | `~/.claude/skills/` |
-| `tools_dir` | `~/.claude/skills/PAI/Tools/` |
-| `agents_dir` | `~/.claude/agents/` |
-| `memory_dir` | `~/.claude/MEMORY/` |
-| `hooks_dir` | `~/.claude/hooks/` |
-| `security_dir` | `~/.claude/skills/PAI/PAISECURITYSYSTEM/` |
-| `telos_dir` | `~/.claude/USER/` |
-| `components_dir` | `~/.claude/skills/PAI/Components/` |
+| Property | Path (v4+) | v3 Legacy |
+|----------|-----------|-----------|
+| `pai_root` | `~/.claude/PAI` | `~/.claude/skills/PAI` |
+| `skill_md` | `~/.claude/PAI/SKILL.md` | Algorithm SKILL.md |
+| `skills_dir` | `~/.claude/skills/` | `~/.claude/skills/` |
+| `tools_dir` | `~/.claude/PAI/Tools/` | `~/.claude/skills/PAI/Tools/` |
+| `agents_dir` | `~/.claude/agents/` | `~/.claude/agents/` |
+| `memory_dir` | `~/.claude/MEMORY/` | `~/.claude/MEMORY/` |
+| `hooks_dir` | `~/.claude/hooks/` | `~/.claude/hooks/` |
+| `security_dir` | `~/.claude/PAI/PAISECURITYSYSTEM/` | `~/.claude/skills/PAI/PAISECURITYSYSTEM/` |
+| `telos_dir` | `~/.claude/USER/` | `~/.claude/USER/` |
+| `components_dir` | `~/.claude/PAI/Components/` | `~/.claude/skills/PAI/Components/` |
 
 ### MCP Bridge (mcp_bridge.py)
 

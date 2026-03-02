@@ -1,0 +1,166 @@
+name: Code Health Dashboard
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    # Weekly on Sundays at 8 AM UTC
+    - cron: '0 8 * * 0'
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions: {}
+
+env:
+  PYTHON_VERSION: "3.11"
+  UV_VERSION: "0.5.7"
+
+jobs:
+  health-report:
+    name: Code Health Report
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install UV
+        uses: astral-sh/setup-uv@v5
+        with:
+          version: ${{ env.UV_VERSION }}
+
+      - name: Set up Python
+        run: uv python install ${{ env.PYTHON_VERSION }}
+
+      - name: Install dependencies
+        run: uv sync --all-extras --dev
+
+      - name: Create output directories
+        run: mkdir -p src/codomyrmex/output health-results
+
+      - name: Collect test count
+        id: test-count
+        run: |
+          count=$(uv run pytest src/codomyrmex/tests/unit/ --collect-only -q 2>/dev/null | grep "selected" | grep -oE "[0-9]+ selected" | head -1 | grep -oE "[0-9]+" || echo "N/A")
+          echo "count=${count}" >> $GITHUB_OUTPUT
+          echo "Test count: ${count}"
+
+      - name: Run coverage report
+        id: coverage
+        run: |
+          uv run pytest src/codomyrmex/tests/unit/ \
+            --cov=src/codomyrmex \
+            --cov-report=json:health-results/coverage.json \
+            -q --tb=no 2>/dev/null || true
+
+          if [ -f "health-results/coverage.json" ]; then
+            pct=$(python3 -c "import json; d=json.load(open('health-results/coverage.json')); print(f\"{d['totals']['percent_covered']:.1f}\")" 2>/dev/null || echo "N/A")
+            covered=$(python3 -c "import json; d=json.load(open('health-results/coverage.json')); print(d['totals']['covered_lines'])" 2>/dev/null || echo "N/A")
+            missing=$(python3 -c "import json; d=json.load(open('health-results/coverage.json')); print(d['totals']['missing_lines'])" 2>/dev/null || echo "N/A")
+          else
+            pct="N/A"
+            covered="N/A"
+            missing="N/A"
+          fi
+          echo "pct=${pct}" >> $GITHUB_OUTPUT
+          echo "covered=${covered}" >> $GITHUB_OUTPUT
+          echo "missing=${missing}" >> $GITHUB_OUTPUT
+
+      - name: Count ruff violations
+        id: ruff
+        run: |
+          total=$(uv run ruff check src/ --statistics 2>/dev/null | grep -v "^$" | awk '{sum += $1} END {print sum}' || echo "N/A")
+          rules=$(uv run ruff check src/ --statistics 2>/dev/null | grep -v "^$" | wc -l | tr -d ' ' || echo "N/A")
+          echo "total=${total}" >> $GITHUB_OUTPUT
+          echo "rules=${rules}" >> $GITHUB_OUTPUT
+
+      - name: Find top uncovered modules
+        run: |
+          if [ -f "health-results/coverage.json" ]; then
+            { echo "| Module | Coverage | Statements | Missing |"; echo "|--------|----------|-----------|---------|"; python3 -c "import json; data=json.load(open('health-results/coverage.json')); rows=sorted((i['summary']['percent_covered'],k,i['summary']['num_statements'],i['summary']['missing_lines']) for k,i in data.get('files',{}).items() if '/tests/' not in k and k.endswith('__init__.py') is False and i['summary']['num_statements']>20 and i['summary']['percent_covered']<50)[:15]; [print(f'| \`{k.replace(\"src/codomyrmex/\",\"\")}\` | {p:.0f}% | {s} | {m} |') for p,k,s,m in rows]" 2>/dev/null; } > health-results/uncovered.md || true
+          fi
+
+      - name: Download previous health snapshot
+        uses: actions/download-artifact@v4
+        continue-on-error: true
+        with:
+          name: health-snapshot
+          path: health-results/previous/
+
+      - name: Compute trends
+        id: trends
+        run: |
+          prev_cov="N/A"
+          prev_tests="N/A"
+          prev_ruff="N/A"
+          if [ -f "health-results/previous/health-snapshot.json" ]; then
+            prev_cov=$(python3 -c "import json; d=json.load(open('health-results/previous/health-snapshot.json')); print(d.get('coverage_pct','N/A'))" 2>/dev/null || echo "N/A")
+            prev_tests=$(python3 -c "import json; d=json.load(open('health-results/previous/health-snapshot.json')); print(d.get('test_count','N/A'))" 2>/dev/null || echo "N/A")
+            prev_ruff=$(python3 -c "import json; d=json.load(open('health-results/previous/health-snapshot.json')); print(d.get('ruff_violations','N/A'))" 2>/dev/null || echo "N/A")
+          fi
+          cov_arrow="➡️"
+          if [ "$prev_cov" != "N/A" ] && [ "${{ steps.coverage.outputs.pct }}" != "N/A" ]; then
+            if python3 -c "exit(0 if float('${{ steps.coverage.outputs.pct }}') > float('${prev_cov}') else 1)" 2>/dev/null; then
+              cov_arrow="📈"
+            elif python3 -c "exit(0 if float('${{ steps.coverage.outputs.pct }}') < float('${prev_cov}') else 1)" 2>/dev/null; then
+              cov_arrow="📉"
+            fi
+          fi
+          echo "prev_cov=${prev_cov}" >> $GITHUB_OUTPUT
+          echo "cov_arrow=${cov_arrow}" >> $GITHUB_OUTPUT
+          echo "prev_tests=${prev_tests}" >> $GITHUB_OUTPUT
+          echo "prev_ruff=${prev_ruff}" >> $GITHUB_OUTPUT
+
+      - name: Save health snapshot
+        run: |
+          python3 -c "import json, os; snapshot = {'coverage_pct': os.environ.get('COV_PCT','N/A'), 'test_count': os.environ.get('TEST_COUNT','N/A'), 'ruff_violations': os.environ.get('RUFF_TOTAL','N/A'), 'run_number': os.environ.get('GITHUB_RUN_NUMBER','N/A'), 'sha': os.environ.get('GITHUB_SHA','N/A')[:8]}; open('health-results/health-snapshot.json','w').write(json.dumps(snapshot, indent=2)); print('Saved:', snapshot)"
+        env:
+          COV_PCT: ${{ steps.coverage.outputs.pct }}
+          TEST_COUNT: ${{ steps.test-count.outputs.count }}
+          RUFF_TOTAL: ${{ steps.ruff.outputs.total }}
+
+      - name: Generate GitHub Step Summary
+        run: |
+          echo "# 🏥 Code Health Dashboard" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "> Generated: $(date -u '+%Y-%m-%d %H:%M UTC') | Commit: \`${GITHUB_SHA::8}\`" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## 📊 Key Metrics" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Metric | Value | Previous | Trend |" >> $GITHUB_STEP_SUMMARY
+          echo "|--------|-------|----------|-------|" >> $GITHUB_STEP_SUMMARY
+          echo "| 🧪 Test Count | **${{ steps.test-count.outputs.count }}** | ${{ steps.trends.outputs.prev_tests }} | ➡️ |" >> $GITHUB_STEP_SUMMARY
+          echo "| 📏 Coverage | **${{ steps.coverage.outputs.pct }}%** (gate: 68%) | ${{ steps.trends.outputs.prev_cov }}% | ${{ steps.trends.outputs.cov_arrow }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| 🔍 Ruff Violations | **${{ steps.ruff.outputs.total }}** (${{ steps.ruff.outputs.rules }} rules) | ${{ steps.trends.outputs.prev_ruff }} | ➡️ |" >> $GITHUB_STEP_SUMMARY
+          echo "| 📝 Covered Lines | ${{ steps.coverage.outputs.covered }} | — | — |" >> $GITHUB_STEP_SUMMARY
+          echo "| ❌ Missing Lines | ${{ steps.coverage.outputs.missing }} | — | — |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## 🔴 Top Uncovered Modules (< 50% coverage, > 20 statements)" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          if [ -f "health-results/uncovered.md" ]; then
+            cat health-results/uncovered.md >> $GITHUB_STEP_SUMMARY
+          else
+            echo "_Coverage data not available_" >> $GITHUB_STEP_SUMMARY
+          fi
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## 🔧 Ruff Violations by Rule (top 10)" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          uv run ruff check src/ --statistics 2>/dev/null | head -10 >> $GITHUB_STEP_SUMMARY || echo "Could not retrieve ruff statistics" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "---" >> $GITHUB_STEP_SUMMARY
+          echo "_This dashboard runs weekly (Sundays) and on every push to main._" >> $GITHUB_STEP_SUMMARY
+
+      - name: Upload health results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: health-snapshot
+          path: health-results/
+          retention-days: 90
+          overwrite: true

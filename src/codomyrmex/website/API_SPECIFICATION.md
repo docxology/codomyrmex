@@ -529,7 +529,7 @@ class DataProvider:
 | `get_pai_missions()` | `list[dict[str, Any]]` | PAI missions from `~/.claude/MEMORY/STATE/missions/` |
 | `get_pai_projects()` | `list[dict[str, Any]]` | PAI projects from `~/.claude/MEMORY/STATE/projects/` |
 | `get_pai_tasks(project_id: str)` | `dict[str, Any]` | Parse TASKS.md for a specific project (path-traversal protected) |
-| `get_pai_telos()` | `list[dict[str, Any]]` | TELOS life profile files from `~/.claude/skills/PAI/USER/TELOS/` |
+| `get_pai_telos()` | `list[dict[str, Any]]` | TELOS life profile files from `~/.claude/USER/TELOS/` |
 | `get_pai_memory_overview()` | `dict[str, Any]` | Memory directory stats (file counts, subdirectory counts) |
 | `get_pai_awareness_data()` | `dict[str, Any]` | Aggregated PAI ecosystem data with metrics and Mermaid graph |
 

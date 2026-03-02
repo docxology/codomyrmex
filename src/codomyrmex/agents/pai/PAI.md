@@ -1,6 +1,6 @@
 # Personal AI Infrastructure — PAI Bridge Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 **Module**: pai
 **Status**: Active
@@ -41,11 +41,11 @@ This module maps to The Algorithm phases:
 
 The `mcp_bridge.py` module exposes all Codomyrmex capabilities as MCP tools:
 
-- **20 Static MCP Tools** (17 core + 3 universal proxy) + auto-discovered module tools
+- **22 Static MCP Tools** (17 core + 3 universal proxy + 2 maintenance) + auto-discovered module tools
 - **2 Resources**: module inventory, system status
 - **10 Prompts** (3 dotted + 7 camelCase workflows)
 - **Algorithm Mapping**: Each tool maps to an Algorithm phase (OBSERVE → LEARN)
-- **Knowledge Scope**: 7 domains covering all 82 modules
+- **Knowledge Scope**: 7 domains covering all 88 modules
 
 ```python
 from codomyrmex.agents.pai import call_tool

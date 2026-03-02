@@ -1,12 +1,12 @@
 # Agents Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
 Agentic framework integrations providing AI code editing, task management, and multi-provider support. Core layer for intelligent automation workflows with 12 provider integrations, session management, response parsing, and theoretical architecture foundations.
 
-When used with [PAI](../../../PAI.md) (`~/.claude/skills/PAI/`), this module maps to PAI's three-tier agent system: Task Subagents (Engineer, Architect, QATester) dispatch through `AgentOrchestrator`, Named Agents consume tools via MCP, and Custom Agents extend `BaseAgent`. See [PAI.md](PAI.md) for full integration details.
+When used with [PAI](../../../PAI.md) (`~/.claude/PAI/`), this module maps to PAI's three-tier agent system: Task Subagents (Engineer, Architect, QATester) dispatch through `AgentOrchestrator`, Named Agents consume tools via MCP, and Custom Agents extend `BaseAgent`. See [PAI.md](PAI.md) for full integration details.
 
 ## Installation
 

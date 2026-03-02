@@ -6,7 +6,7 @@
 
 ## Purpose
 
-Comprehensive bridge to the PAI (Personal AI Infrastructure) system. Provides programmatic access to all PAI subsystems at `~/.claude/skills/PAI/`.
+Comprehensive bridge to the PAI (Personal AI Infrastructure) system. Provides programmatic access to all PAI subsystems at `~/.claude/PAI/` (v4+; v3 legacy: `~/.claude/skills/PAI/`).
 
 ## Core Capabilities
 

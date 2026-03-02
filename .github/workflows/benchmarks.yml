@@ -45,17 +45,14 @@ jobs:
       - name: Check if benchmarks exist
         id: check-benchmarks
         run: |
-          if [ -d "benchmarks" ] || find . -name "*benchmark*.py" -o -name "*perf*.py" | head -1 | grep -q .; then
+          # Look for real benchmark tests (not auto-generated ones)
+          if find . -path "*/tests/*" -name "*benchmark*.py" -not -path "*/.git/*" | head -1 | grep -q . || \
+             find . -name "*benchmark*.py" -not -path "*/.git/*" -not -path "*/node_modules/*" | head -1 | grep -q .; then
             echo "enabled=true" >> $GITHUB_OUTPUT
             echo "✅ Benchmark files found"
           else
             echo "enabled=false" >> $GITHUB_OUTPUT
-            echo "⚠️  No benchmark files found, creating basic structure..."
-            
-            # Create basic benchmark structure
-            mkdir -p benchmarks
-            echo "enabled=true" >> $GITHUB_OUTPUT
-            echo "✅ Basic benchmark structure created"
+            echo "ℹ️  No benchmark files found — skipping benchmark jobs (add @pytest.mark.benchmark tests to enable)"
           fi
 
   unit-benchmarks:
@@ -88,39 +85,7 @@ jobs:
       - name: Run unit benchmarks
         run: |
           echo "🏃‍♂️ Running unit performance benchmarks..."
-          
-          # Run pytest with benchmark markers if they exist
-          if find . -name "*test*.py" -exec grep -l "@pytest.mark.benchmark" {} \; | head -1 | grep -q .; then
-            uv run pytest -m benchmark --benchmark-json=benchmarks/results/unit-benchmarks.json -v || true
-          else
-            echo "No pytest benchmarks found, creating basic performance test"
-            mkdir -p src/codomyrmex/tests/benchmarks
-            cat > src/codomyrmex/tests/benchmarks/test_basic_benchmarks.py << 'EOF'
-import pytest
-import time
-
-@pytest.mark.benchmark
-def test_basic_performance(benchmark):
-    def basic_operation():
-        # Basic CPU operation
-        total = sum(i ** 2 for i in range(1000))
-        return total
-    
-    result = benchmark(basic_operation)
-    assert result > 0
-
-@pytest.mark.benchmark  
-def test_memory_allocation(benchmark):
-    def memory_operation():
-        # Basic memory allocation
-        data = [f"item_{i}" for i in range(1000)]
-        return len(data)
-    
-    result = benchmark(memory_operation)
-    assert result == 1000
-EOF
-            uv run pytest src/codomyrmex/tests/benchmarks/ -m benchmark --benchmark-json=benchmarks/results/unit-benchmarks.json -v || true
-          fi
+          uv run pytest -m benchmark --benchmark-json=benchmarks/results/unit-benchmarks.json -v || true
 
       - name: Generate benchmark report
         run: |
@@ -179,46 +144,7 @@ EOF
       - name: Run integration benchmarks
         run: |
           echo "🔗 Running integration performance benchmarks..."
-          
-          # Create basic integration benchmark
-          mkdir -p src/codomyrmex/tests/benchmarks
-          cat > src/codomyrmex/tests/benchmarks/test_integration_benchmarks.py << 'EOF'
-import pytest
-import time
-import sys
-import os
-
-@pytest.mark.benchmark
-def test_module_import_performance(benchmark):
-    def import_modules():
-        # Test import performance
-        try:
-            sys.path.insert(0, 'src')
-            import codomyrmex
-            return True
-        except ImportError:
-            return False
-    
-    result = benchmark(import_modules)
-    # Should complete successfully regardless of import success
-
-@pytest.mark.benchmark
-def test_workflow_simulation(benchmark):
-    def simulate_workflow():
-        # Simulate a typical workflow
-        data = {}
-        for i in range(100):
-            data[f"key_{i}"] = [j for j in range(10)]
-        
-        # Process data
-        processed = {k: sum(v) for k, v in data.items()}
-        return len(processed)
-    
-    result = benchmark(simulate_workflow)
-    assert result == 100
-EOF
-          
-          uv run pytest src/codomyrmex/tests/benchmarks/test_integration_benchmarks.py -m benchmark --benchmark-json=benchmarks/results/integration-benchmarks.json -v || true
+          uv run pytest -m "benchmark and integration" --benchmark-json=benchmarks/results/integration-benchmarks.json -v || true
 
       - name: Generate integration report
         run: |

@@ -1,6 +1,6 @@
 # Personal AI Infrastructure Context: docs/modules/
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
 
@@ -47,7 +47,7 @@ This file describes the AI context for the `docs/modules/` directory. It is dist
 
 | Document | Purpose |
 |----------|---------|
-| [`/PAI.md`](../../PAI.md) | **Authoritative bridge** — maps the actual PAI system (`~/.claude/skills/PAI/`) to codomyrmex modules |
+| [`/PAI.md`](../../PAI.md) | **Authoritative bridge** — maps the actual PAI system (`~/.claude/PAI/`) to codomyrmex modules |
 | [`docs/pai/`](../pai/) | Detailed PAI-Codomyrmex reference — architecture, tools, API, workflows |
 | `src/codomyrmex/<module>/PAI.md` | Per-module AI capabilities (RASP pattern) |
 | This file (`docs/modules/PAI.md`) | AI agent context for the documentation directory |

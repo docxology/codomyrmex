@@ -1,6 +1,6 @@
 # Personal AI Infrastructure — Agents Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
@@ -96,7 +96,7 @@ manager.create("documentation_session")
 
 ## PAI Agent System Integration
 
-When codomyrmex is used with the [PAI system](../../../PAI.md) (`~/.claude/skills/PAI/`), the agents module maps directly to PAI's three-tier agent architecture.
+When codomyrmex is used with the [PAI system](../../../PAI.md) (`~/.claude/PAI/`), the agents module maps directly to PAI's three-tier agent architecture.
 
 ### Three-Tier Agent Mapping
 
@@ -185,7 +185,7 @@ PAI composes capabilities using named patterns. These map to codomyrmex orchestr
 ```mermaid
 graph TB
     subgraph paiSystem ["PAI System (~/.claude/)"]
-        Algorithm["Algorithm v1.5.0"]
+        Algorithm["Algorithm v3.5.0"]
         Subagents["Task Subagents"]
         Named["Named Agents"]
     end

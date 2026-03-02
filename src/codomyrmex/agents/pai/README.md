@@ -1,12 +1,12 @@
 # pai
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 **Upstream**: [danielmiessler/Personal_AI_Infrastructure](https://github.com/danielmiessler/Personal_AI_Infrastructure)
 
 ## Overview
 
-The `pai` module bridges Codomyrmex with the PAI (Personal AI Infrastructure) system at `~/.claude/skills/PAI/`. It provides programmatic access to **all PAI subsystems** — Algorithm, Skills, Tools, Hooks, Agents, Memory, Security, TELOS, and Settings.
+The `pai` module bridges Codomyrmex with the PAI (Personal AI Infrastructure) system at `~/.claude/PAI/` (v4+; v3 legacy: `~/.claude/skills/PAI/`). It provides programmatic access to **all PAI subsystems** — Algorithm, Skills, Tools, Hooks, Agents, Memory, Security, TELOS, and Settings.
 
 PAI is the **orchestrator** that runs The Algorithm on every Claude Code prompt. Codomyrmex is the **toolbox** that PAI agents consume via MCP.
 

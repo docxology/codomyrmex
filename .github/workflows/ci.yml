@@ -66,14 +66,6 @@ jobs:
         run: |
           uv run mypy src/
 
-      - name: Run additional linters
-        run: |
-          # Pylint for comprehensive linting
-          uv run pylint src/codomyrmex/ || true
-          
-          # Flake8 for style guide enforcement
-          uv run flake8 src/codomyrmex/ || true
-
       - name: Validate dependencies
         run: |
           echo "🔍 Validating dependency management..."
@@ -355,8 +347,8 @@ jobs:
       - name: Check dependency consistency
         run: |
           uv sync --all-extras --dev
-          # Check for dependency conflicts
-          uv pip check || true
+          # Check for dependency conflicts — fail CI on conflicts
+          uv pip check
 
       - name: Generate dependency tree
         run: |
@@ -388,27 +380,31 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "## Matrix Test Results" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          
-          # Process test results
-          total_tests=0
-          failed_tests=0
-          
-          for dir in test-results/*/; do
-            if [ -d "$dir" ]; then
-              echo "📊 Processing: $(basename "$dir")" >> $GITHUB_STEP_SUMMARY
-              
-              # Count XML files for test metrics
-              xml_files=$(find "$dir" -name "*.xml" | wc -l)
-              if [ $xml_files -gt 0 ]; then
-                echo "  - Test files: $xml_files" >> $GITHUB_STEP_SUMMARY
-              fi
-            fi
-          done
-          
+
+          # Sum JUnit XML attributes using grep + awk (avoids multi-line Python in YAML)
+          total_tests=$(grep -rh 'tests="' test-results/ 2>/dev/null | grep -oP 'tests="\K[0-9]+' | awk '{s+=$1} END {print s+0}')
+          failed_tests=$(grep -rh 'failures="' test-results/ 2>/dev/null | grep -oP 'failures="\K[0-9]+' | awk '{s+=$1} END {print s+0}')
+          error_tests=$(grep -rh 'errors="' test-results/ 2>/dev/null | grep -oP 'errors="\K[0-9]+' | awk '{s+=$1} END {print s+0}')
+          passed=$((total_tests - failed_tests - error_tests))
+
+          echo "| Metric | Count |" >> $GITHUB_STEP_SUMMARY
+          echo "|--------|-------|" >> $GITHUB_STEP_SUMMARY
+          echo "| ✅ Passed | ${passed} |" >> $GITHUB_STEP_SUMMARY
+          echo "| ❌ Failed | ${failed_tests} |" >> $GITHUB_STEP_SUMMARY
+          echo "| 💥 Errors | ${error_tests} |" >> $GITHUB_STEP_SUMMARY
+          echo "| 📋 Total  | ${total_tests} |" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "## Coverage Information" >> $GITHUB_STEP_SUMMARY
-          echo "- Coverage reports available in artifacts" >> $GITHUB_STEP_SUMMARY
-          echo "- HTML coverage reports generated for detailed analysis" >> $GITHUB_STEP_SUMMARY
+
+          # Extract coverage % from coverage.json artifact (single-line python3)
+          COV_JSON="test-results/test-results-ubuntu-latest-3.11/coverage.json"
+          if [ -f "$COV_JSON" ]; then
+            pct=$(python3 -c "import json; d=json.load(open('$COV_JSON')); print(f\"{d['totals']['percent_covered']:.1f}\")" 2>/dev/null || echo "N/A")
+            echo "## Coverage" >> $GITHUB_STEP_SUMMARY
+            echo "- **Coverage**: ${pct}% (gate: 68%)" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "## Coverage" >> $GITHUB_STEP_SUMMARY
+            echo "- Coverage report not available (see artifacts)" >> $GITHUB_STEP_SUMMARY
+          fi
 
   final-status:
     name: CI Status

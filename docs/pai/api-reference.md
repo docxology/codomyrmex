@@ -1,6 +1,6 @@
 # PAI-Codomyrmex Python API Reference
 
-**Version**: v1.0.3 | **Last Updated**: March 2026
+**Version**: v1.0.5 | **Last Updated**: March 2026
 
 ## Module: `codomyrmex.agents.pai`
 
@@ -140,16 +140,16 @@ Filesystem path layout for the PAI installation.
 
 | Property | Type | Path |
 |----------|------|------|
-| `pai_root` | `Path` | `~/.claude/skills/PAI` |
+| `pai_root` | `Path` | `~/.claude/PAI` (v4+; v3 legacy: `~/.claude/skills/PAI`) |
 | `skill_md` | `Path` | Algorithm SKILL.md |
 | `skills_dir` | `Path` | `~/.claude/skills/` |
-| `tools_dir` | `Path` | `~/.claude/skills/PAI/Tools/` |
+| `tools_dir` | `Path` | `~/.claude/PAI/Tools/` (v4+; v3 legacy: `~/.claude/skills/PAI/Tools/`) |
 | `agents_dir` | `Path` | `~/.claude/agents/` |
 | `memory_dir` | `Path` | `~/.claude/MEMORY/` |
 | `hooks_dir` | `Path` | `~/.claude/hooks/` |
-| `security_dir` | `Path` | `~/.claude/skills/PAI/PAISECURITYSYSTEM/` |
+| `security_dir` | `Path` | `~/.claude/PAI/PAISECURITYSYSTEM/` (v4+; v3 legacy: `~/.claude/skills/PAI/PAISECURITYSYSTEM/`) |
 | `telos_dir` | `Path` | `~/.claude/USER/` |
-| `components_dir` | `Path` | `~/.claude/skills/PAI/Components/` |
+| `components_dir` | `Path` | `~/.claude/PAI/Components/` (v4+; v3 legacy: `~/.claude/skills/PAI/Components/`) |
 
 ### PAISkillInfo
 

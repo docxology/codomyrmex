@@ -1,10 +1,10 @@
 # Codomyrmex Agents — src
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.3 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
 
-Core source code directory containing all Codomyrmex modules. This is the primary implementation surface with 93 specialized modules organized by architectural layer.
+Core source code directory containing all Codomyrmex modules. This is the primary implementation surface with 88 specialized modules organized by architectural layer.
 
 ## Directory Structure
 

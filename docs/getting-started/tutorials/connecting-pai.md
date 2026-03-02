@@ -4,14 +4,14 @@
 
 ## Overview
 
-This tutorial walks you through connecting the [PAI system](../../../PAI.md) (`~/.claude/skills/PAI/`) to codomyrmex via the Model Context Protocol (MCP). Once connected, PAI agents can use codomyrmex's 88 modules as tools during Algorithm execution.
+This tutorial walks you through connecting the [PAI system](../../../PAI.md) (`~/.claude/PAI/`) to codomyrmex via the Model Context Protocol (MCP). Once connected, PAI agents can use codomyrmex's 88 modules as tools during Algorithm execution.
 
 ## Prerequisites
 
 Before starting:
 
-- **PAI installed**: `~/.claude/skills/PAI/SKILL.md` exists
-- **PAI configured**: `~/.claude/skills/PAI/settings.json` has your identity
+- **PAI installed**: `~/.claude/PAI/SKILL.md` exists
+- **PAI configured**: `~/.claude/PAI/settings.json` has your identity
 - **Codomyrmex cloned**: This repository is on your machine
 - **Python environment**: `uv sync` has been run in the codomyrmex directory
 - **Claude Code**: Installed and working ([claude.ai/code](https://claude.ai/code))
@@ -19,7 +19,7 @@ Before starting:
 Verify PAI is installed:
 
 ```bash
-ls ~/.claude/skills/PAI/SKILL.md
+ls ~/.claude/PAI/SKILL.md
 # Should show the file
 ```
 
@@ -129,7 +129,7 @@ Expected flow:
 
 ### Your USER/ Directory
 
-PAI stores personal configuration in `~/.claude/skills/PAI/USER/`. This is never committed to any repository. You can customize:
+PAI stores personal configuration in `~/.claude/USER/`. This is never committed to any repository. You can customize:
 
 - `USER/AISTEERINGRULES.md` — Personal behavioral rules
 - `USER/PROJECTS/PROJECTS.md` — Your project registry
@@ -137,11 +137,11 @@ PAI stores personal configuration in `~/.claude/skills/PAI/USER/`. This is never
 
 ### Skill Overrides
 
-PAI skills in `~/.claude/skills/PAI/Skills/` can be customized. Each skill has its own `SKILL.md` defining triggers, workflows, and agents.
+PAI skills in `~/.claude/skills/` can be customized. Each skill pack has its own `SKILL.md` defining triggers, workflows, and agents.
 
 ### Settings
 
-Edit `~/.claude/skills/PAI/settings.json` to change:
+Edit `~/.claude/PAI/settings.json` to change:
 
 ```json
 {
@@ -164,7 +164,7 @@ Edit `~/.claude/skills/PAI/settings.json` to change:
 | MCP server won't start | Run `uv sync` in codomyrmex directory, check Python version (3.10+) |
 | Tools not appearing in Claude Code | Verify `claude_desktop_config.json` paths are absolute |
 | "Module not found" errors | Ensure codomyrmex is installed: `uv sync --all-extras` |
-| PAI Algorithm doesn't run | Check `~/.claude/skills/PAI/SKILL.md` exists and is loaded |
+| PAI Algorithm doesn't run | Check `~/.claude/PAI/SKILL.md` exists and is loaded |
 | Slow tool responses | Use stdio transport (not HTTP) for local sessions |
 
 ## What's Next

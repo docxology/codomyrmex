@@ -107,7 +107,7 @@ repos:
 
       - id: check-placeholders
         name: Check for Placeholder Content
-        entry: python3 -c "import sys, re; content = open(sys.argv[1]).read(); patterns = ['TODO', 'FIXME', 'placeholder', 'TBD']; found = [p for p in patterns if p in content]; sys.exit(1 if found else 0)"
+        entry: python3 -c "import sys; content = open(sys.argv[1]).read(); patterns = ['TODO', 'FIXME', 'placeholder', 'TBD', 'HACK', 'STUB']; found = [p for p in patterns if p in content]; sys.exit(1 if found else 0)"
         language: system
         files: \.md$
 

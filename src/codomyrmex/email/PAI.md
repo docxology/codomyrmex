@@ -107,4 +107,4 @@ Gmail OAuth is managed via dashboard routes not exposed as MCP tools:
 - `GET /api/gmail/status` — check connection status
 - `POST /api/gmail/disconnect` — revoke token
 
-Setup guide: `~/.claude/skills/PAI/SYSTEM/EMAIL-SETUP.md`
+Setup guide: `~/.claude/PAI/SYSTEM/EMAIL-SETUP.md`
