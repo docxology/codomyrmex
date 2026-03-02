@@ -77,10 +77,8 @@ class AutonomousAgent:
         self.running = False
         self._scheduler_config = scheduler_config
 
-        # Initialize Client
         self.client = get_llm_client(identity)
 
-        # Initialize Endpoint (provider-agnostic relay wrapper)
         self.endpoint = _make_endpoint(
             channel, identity, poll_interval, self.client, scheduler_config,
         )

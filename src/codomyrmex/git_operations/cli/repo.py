@@ -419,7 +419,6 @@ Examples:
         parser.print_help()
         return
 
-    # Initialize repository manager
     try:
         manager = RepositoryManager(library_file=args.library, base_path=args.base_path)
     except Exception as e:

@@ -131,19 +131,15 @@ class PyscnAnalyzer:
             ...         print(f"Complex function: {func['name']}")
         """
         try:
-            # Pyscn writes JSON to a file, we need to read it from there
-            # Get the most recent .pyscn/reports file
             reports_dir = ".pyscn/reports"
             if os.path.exists(reports_dir):
                 json_files = glob.glob(os.path.join(reports_dir, "*.json"))
                 if json_files:
-                    # Get the most recent file
                     latest_file = max(json_files, key=os.path.getmtime)
 
                     with open(latest_file) as f:
                         data = json.load(f)
 
-                    # Pyscn returns data under "complexity" key in the main object
                     complexity_data = data.get("complexity", {})
                     if "Functions" in complexity_data:
                         # Extract functions from the Functions array
@@ -185,19 +181,16 @@ class PyscnAnalyzer:
             ...     print(f"Dead code at line {finding.get('location', {}).get('start_line')}")
         """
         try:
-            # Pyscn writes JSON to a file, we need to read it from there
-            # Get the most recent .pyscn/reports file
             reports_dir = ".pyscn/reports"
             if os.path.exists(reports_dir):
                 json_files = glob.glob(os.path.join(reports_dir, "*.json"))
                 if json_files:
-                    # Get the most recent file
                     latest_file = max(json_files, key=os.path.getmtime)
 
                     with open(latest_file) as f:
                         data = json.load(f)
 
-                    # Pyscn returns data under "dead_code" key
+                    dead_code_data = data.get("dead_code", {})
                     dead_code_data = data.get("dead_code", {})
                     if "files" in dead_code_data:
                         # Extract findings from all files
@@ -266,13 +259,10 @@ class PyscnAnalyzer:
             if os.path.exists(reports_dir):
                 json_files = glob.glob(os.path.join(reports_dir, "*.json"))
                 if json_files:
-                    # Get the most recent file
                     latest_file = max(json_files, key=os.path.getmtime)
 
                     with open(latest_file) as f:
                         data = json.load(f)
-
-                    # Pyscn returns clone data under "clones" key
                     clones_data = data.get("clones", {})
                     if "groups" in clones_data:
                         return clones_data["groups"]

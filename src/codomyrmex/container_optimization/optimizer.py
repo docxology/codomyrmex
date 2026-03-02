@@ -110,8 +110,8 @@ class ContainerOptimizer:
             analysis.optimization_score = self._calculate_score(analysis)
             
             return analysis
-        except docker.errors.ImageNotFound:
-            raise ValueError(f"Image '{image_name}' not found")
+        except docker.errors.ImageNotFound as exc:
+            raise ValueError(f"Image '{image_name}' not found") from exc
         except Exception as e:
             logger.error(f"Failed to analyze image {image_name}: {e}")
             raise

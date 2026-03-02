@@ -100,7 +100,7 @@ class FileBasedCache(Cache):
             return True
         except Exception as e:
             logger.error(f"Error writing cache: {e}")
-            return False
+            raise
 
     def delete(self, key: str) -> bool:
         """Delete a key from the cache."""
@@ -131,7 +131,7 @@ class FileBasedCache(Cache):
             return True
         except Exception as e:
             logger.error(f"Error clearing cache: {e}")
-            return False
+            raise
 
     def exists(self, key: str) -> bool:
         """Check if a key exists in the cache."""

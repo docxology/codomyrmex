@@ -89,7 +89,6 @@ class ConfigManager:
         # Current configuration
         self.config: OllamaConfig | None = None
 
-        # Initialize with defaults first, then try to load
         self.config = OllamaConfig()
 
         # Load configuration if file exists
@@ -152,7 +151,7 @@ class ConfigManager:
 
         except Exception as e:
             self.logger.error(f"Error saving configuration: {e}")
-            return False
+            raise
 
     def create_default_config(self) -> OllamaConfig:
         """Create a default configuration."""
@@ -179,7 +178,7 @@ class ConfigManager:
 
         except Exception as e:
             self.logger.error(f"Error updating configuration: {e}")
-            return False
+            raise
 
     def get_model_config(self, model_name: str) -> dict[str, Any] | None:
         """
@@ -241,7 +240,7 @@ class ConfigManager:
 
         except Exception as e:
             self.logger.error(f"Error saving model config for {model_name}: {e}")
-            return False
+            raise
 
     def get_execution_presets(self) -> dict[str, ExecutionOptions]:
         """
@@ -326,7 +325,7 @@ class ConfigManager:
 
         except Exception as e:
             self.logger.error(f"Error exporting configuration: {e}")
-            return False
+            raise
 
     def import_config(self, import_path: str) -> bool:
         """
@@ -365,7 +364,7 @@ class ConfigManager:
 
         except Exception as e:
             self.logger.error(f"Error importing configuration: {e}")
-            return False
+            raise
 
     def reset_to_defaults(self) -> bool:
         """
@@ -380,7 +379,7 @@ class ConfigManager:
 
         except Exception as e:
             self.logger.error(f"Error resetting configuration: {e}")
-            return False
+            raise
 
     def validate_config(self) -> dict[str, Any]:
         """

@@ -200,10 +200,6 @@ def call_tool(name: str, **kwargs: Any) -> dict[str, Any]:
         execution_error,
     )
 
-    # Check if tool is known first to match original behavior's KeyError
-    # (trusted_call_tool will also check, but let's be explicit about "registration" vs "trust")
-    # Actually trusted_call_tool handles this via get_tool_registry() lookup.
-
     with with_correlation():
         try:
             return trusted_call_tool(name, **kwargs)

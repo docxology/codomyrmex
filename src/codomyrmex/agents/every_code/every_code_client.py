@@ -219,7 +219,6 @@ class EveryCodeClient(CLIAgentBase):
         # Handle special commands (e.g., /plan, /solve, /code, /auto)
         input_parts = []
 
-        # Check if prompt starts with a command
         if prompt.strip().startswith("/"):
             # Pass through commands like /plan, /solve, /code, /auto
             input_parts.append(prompt)

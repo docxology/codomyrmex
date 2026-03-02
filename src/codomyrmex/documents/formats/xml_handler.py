@@ -74,7 +74,7 @@ def write_xml(content: str, file_path: str | Path, encoding: str | None = None) 
         logger.debug(f"Wrote XML to {file_path}")
     except ET.ParseError as e:
         logger.error(f"Attempted to write invalid XML to {file_path}: {e}")
-        raise DocumentWriteError(f"Invalid XML content: {str(e)}", file_path=str(file_path))
+        raise DocumentWriteError(f"Invalid XML content: {str(e)}", file_path=str(file_path)) from e
     except Exception as e:
         logger.error(f"Error writing XML file {file_path}: {e}")
         raise DocumentWriteError(

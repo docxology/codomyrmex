@@ -413,7 +413,6 @@ Examples:
         parser.print_help()
         return
 
-    # Initialize metadata manager
     try:
         manager = RepositoryMetadataManager(
             metadata_file=args.metadata_file, github_token=args.token

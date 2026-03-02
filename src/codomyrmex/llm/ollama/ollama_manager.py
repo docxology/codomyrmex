@@ -77,7 +77,6 @@ class OllamaManager:
         self.server_process = None
         self._ensure_server_running()
 
-        # Initialize sub-managers
         self.output_manager = None  # Will be set after import
         self.config_manager = None  # Will be set after import
 

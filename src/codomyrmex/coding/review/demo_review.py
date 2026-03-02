@@ -27,7 +27,6 @@ def main():
     print("Enhanced Code Review Module Demonstration")
     print("=" * 60)
 
-    # Initialize the code reviewer
     reviewer = CodeReviewer()
     reviewer.config['pyscn']['enabled'] = True
 

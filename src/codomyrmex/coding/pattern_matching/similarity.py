@@ -51,7 +51,7 @@ class CodeSimilarity:
     _WHITESPACE_RE = re.compile(r"\s+")
 
     def __init__(self) -> None:
-        self._cache = {}  # Initialize similarity cache
+        self._cache = {}
 
     def compute_similarity(self, code_a: str, code_b: str) -> float:
         """Compute a similarity score between two code fragments.

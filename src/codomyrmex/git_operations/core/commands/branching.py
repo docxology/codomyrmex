@@ -14,7 +14,6 @@ def create_branch(branch_name: str, repository_path: str = None) -> bool:
     try:
         logger.info(f"Creating new branch '{branch_name}' in {repository_path}")
 
-        # Create and switch to new branch
         subprocess.run(
             ["git", "checkout", "-b", branch_name],
             cwd=repository_path,

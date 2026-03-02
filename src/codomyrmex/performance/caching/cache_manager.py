@@ -58,14 +58,11 @@ class CacheManager:
 
     def _generate_key(self, func_name: str, args: tuple, kwargs: dict) -> str:
         """Generate a cache key from function name and arguments."""
-        # Create a deterministic string representation of the arguments
         key_data = {
             "func_name": func_name,
             "args": args,
             "kwargs": sorted(kwargs.items()) if kwargs else {},
         }
-
-        # Create a hash of the key data
         key_str = json.dumps(key_data, sort_keys=True, default=str)
         return hashlib.md5(key_str.encode()).hexdigest()
 

@@ -171,7 +171,6 @@ class DeploymentOrchestrator:
         # Load configuration
         self._load_config()
 
-        # Initialize clients
         self._initialize_clients()
 
     def _load_config(self):

@@ -25,13 +25,10 @@ def prepare_code_file(code: str, language: str) -> tuple[str, str]:
     Returns:
         Tuple of (temp directory path, code file path relative to temp directory)
     """
-    # Create a temporary directory for this execution
     temp_dir = tempfile.mkdtemp(prefix="codomyrmex_sandbox_")
 
-    # Get file extension for the language
     extension = SUPPORTED_LANGUAGES[language]["extension"]
 
-    # Create a file for the code
     rel_file_path = f"code.{extension}"
     abs_file_path = os.path.join(temp_dir, rel_file_path)
 

@@ -208,10 +208,8 @@ def sandbox_process_isolation(
         except Exception as e:
             queue.put(("error", str(e)))
 
-    # Create a queue for communication
     queue = multiprocessing.Queue()
 
-    # Create and start the subprocess
     process = multiprocessing.Process(target=execute_in_subprocess, args=(queue,))
     process.start()
 
@@ -248,7 +246,6 @@ def sandbox_process_isolation(
             }
         }
 
-    # Get the result from the subprocess
     if not queue.empty():
         status, data = queue.get()
         if status == "success":

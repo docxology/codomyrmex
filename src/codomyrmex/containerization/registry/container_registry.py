@@ -88,7 +88,6 @@ class ContainerRegistry:
 
     def _initialize_clients(self):
         """Initialize Docker client and HTTP session."""
-        # Initialize Docker client
         if DOCKER_AVAILABLE:
             try:
                 self._docker_client = docker.from_env()
@@ -99,7 +98,6 @@ class ContainerRegistry:
         else:
             logger.warning("Docker SDK not available")
 
-        # Initialize HTTP session for registry API
         if REQUESTS_AVAILABLE:
             self._session = requests.Session()
             if self.credentials:

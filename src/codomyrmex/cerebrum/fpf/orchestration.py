@@ -56,14 +56,12 @@ class FPFOrchestrator:
         setup_logging()
         self.logger = get_logger(__name__)
 
-        # Initialize FPF client
         self.fpf_client = FPFClient()
         if fpf_spec_path:
             self.spec = self.fpf_client.load_from_file(fpf_spec_path)
         else:
             self.spec = self.fpf_client.fetch_and_load()
 
-        # Initialize CEREBRUM engine
         config = CerebrumConfig(
             case_similarity_threshold=0.6,
             max_retrieved_cases=20,
@@ -72,7 +70,6 @@ class FPFOrchestrator:
         )
         self.cerebrum = CerebrumEngine(config)
 
-        # Initialize analyzers
         self.fpf_analyzer = FPFAnalyzer(self.spec)
         self.term_analyzer = TermAnalyzer()
 

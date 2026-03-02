@@ -53,7 +53,7 @@ class KeyManager:
             return True
         except Exception as e:
             logger.error("Error storing key '%s': %s", key_id, e)
-            return False
+            raise
 
     def get_key(self, key_id: str) -> bytes | None:
         """Retrieve a stored encryption key.
@@ -73,7 +73,7 @@ class KeyManager:
                 return f.read()
         except Exception as e:
             logger.error("Error retrieving key '%s': %s", key_id, e)
-            return None
+            raise
 
     def delete_key(self, key_id: str) -> bool:
         """Delete a stored encryption key.
@@ -93,7 +93,7 @@ class KeyManager:
             return False
         except Exception as e:
             logger.error("Error deleting key '%s': %s", key_id, e)
-            return False
+            raise
 
     def list_keys(self) -> Sequence[str]:
         """List all stored key identifiers.

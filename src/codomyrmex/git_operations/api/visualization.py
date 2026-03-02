@@ -79,7 +79,6 @@ def create_git_analysis_report(
     # Create output directory
     os.makedirs(output_dir, exist_ok=True)
 
-    # Initialize visualizer
     visualizer = GitVisualizer()
 
     # Create comprehensive report

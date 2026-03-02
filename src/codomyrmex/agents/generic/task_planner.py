@@ -149,7 +149,6 @@ class TaskPlanner:
             if task.status != TaskStatus.PENDING:
                 continue
 
-            # Check if all dependencies are completed
             all_deps_completed = True
             for dep_id in task.dependencies:
                 dep_task = self.tasks.get(dep_id)
@@ -180,7 +179,6 @@ class TaskPlanner:
                 if task.id in executed:
                     continue
 
-                # Check if all dependencies are executed
                 all_deps_executed = all(
                     dep_id in executed for dep_id in task.dependencies
                 )

@@ -222,7 +222,6 @@ class FeedbackLoop:
                     converged=True,
                 )
 
-            # Check if improvement is too small (convergence)
             if self._evaluator.is_converging(scores):
                 logger.info("Convergence detected (improvement below threshold)")
                 return FeedbackResult(

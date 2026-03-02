@@ -149,7 +149,7 @@ class FabricOrchestrator:
 
         except Exception as e:
             self.logger.error(f"Failed to create visualization: {e}")
-            return False
+            raise
 
         return False
 

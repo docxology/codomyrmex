@@ -335,7 +335,6 @@ Examples:
 
     args = parser.parse_args()
 
-    # Initialize generator
     generator = GitHubLibraryGenerator(args.username, args.token)
 
     if args.update:

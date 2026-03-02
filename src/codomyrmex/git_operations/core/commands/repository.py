@@ -58,7 +58,6 @@ def initialize_git_repository(repository_path: str, initial_commit: bool = True)
         # Ensure directory exists
         os.makedirs(repository_path, exist_ok=True)
 
-        # Initialize repository
         subprocess.run(
             ["git", "init"], cwd=repository_path, capture_output=True, text=True, check=True
         )
@@ -66,7 +65,6 @@ def initialize_git_repository(repository_path: str, initial_commit: bool = True)
         if initial_commit:
             # Create initial commit only if there are no commits yet
             try:
-                # Check if there are any commits
                 result = subprocess.run(
                     ["git", "rev-list", "--count", "HEAD"],
                     cwd=repository_path,

@@ -72,7 +72,7 @@ class RedisCache(Cache):
             return True
         except Exception as e:
             logger.error(f"Error writing to Redis: {e}")
-            return False
+            raise
 
     def delete(self, key: str) -> bool:
         """Delete a key from the cache."""
@@ -83,7 +83,7 @@ class RedisCache(Cache):
             return bool(result)
         except Exception as e:
             logger.error(f"Error deleting from Redis: {e}")
-            return False
+            raise
 
     def clear(self) -> bool:
         """Clear all entries from the cache."""
@@ -93,7 +93,7 @@ class RedisCache(Cache):
             return True
         except Exception as e:
             logger.error(f"Error clearing Redis: {e}")
-            return False
+            raise
 
     def exists(self, key: str) -> bool:
         """Check if a key exists in the cache."""
@@ -101,7 +101,7 @@ class RedisCache(Cache):
             return bool(self.client.exists(key))
         except Exception as e:
             logger.error(f"Error checking Redis: {e}")
-            return False
+            raise
 
     def get_stats(self) -> CacheStats:
         """Get cache statistics."""

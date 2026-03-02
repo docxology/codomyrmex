@@ -124,7 +124,6 @@ class CircuitBreaker:
         """Check if circuit is open (blocking requests)."""
         with self._lock:
             if self._state == "open":
-                # Check if we should transition to half-open
                 if self._last_failure_time:
                     if time.time() - self._last_failure_time > self.reset_timeout_s:
                         self._state = "half_open"

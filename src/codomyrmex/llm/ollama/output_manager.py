@@ -238,7 +238,7 @@ class OutputManager:
 
         except Exception as e:
             self.logger.error(f"Error loading config {config_file}: {e}")
-            return None
+            raise
 
     def save_batch_results(
         self,

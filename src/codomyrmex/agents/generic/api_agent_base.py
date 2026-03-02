@@ -60,7 +60,6 @@ class APIAgentBase(BaseAgent):
         if agent_config is None:
             agent_config = get_config()
 
-        # Check if client library is available
         if client_class is None:
             raise error_class(
                 f"{name} client library not installed. "
@@ -90,7 +89,6 @@ class APIAgentBase(BaseAgent):
             temperature_config_key, config=config, agent_config=agent_config
         )
 
-        # Initialize API client
         try:
             self.client = client_init_func(api_key)
         except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
@@ -203,7 +201,6 @@ class APIAgentBase(BaseAgent):
             },
         )
 
-        # Check if it's an API error class
         if api_error_class and isinstance(error, api_error_class):
             if isinstance(error, BaseException):
                 raise self._error_class(

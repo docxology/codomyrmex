@@ -124,7 +124,6 @@ class ToolsMixin:
 
             response = self.client.messages.create(**api_kwargs)
 
-            # Check if we need to execute tools
             if response.stop_reason != "tool_use":
                 # Final response
                 content, _ = self._extract_response_content(response)

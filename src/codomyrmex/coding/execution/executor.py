@@ -136,7 +136,6 @@ def execute_code(
     timeout = validate_timeout(timeout)
     session_id = validate_session_id(session_id)
 
-    # Check if Docker is available
     if not check_docker_available():
         return {
             "stdout": "",

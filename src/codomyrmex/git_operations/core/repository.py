@@ -96,7 +96,6 @@ class RepositoryManager:
         self.base_path = Path(base_path)
         self.repositories: dict[str, Repository] = {}
 
-        # Initialize metadata manager
         self.metadata_manager = RepositoryMetadataManager(
             metadata_file=metadata_file, github_token=github_token
         )

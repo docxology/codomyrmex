@@ -176,7 +176,6 @@ def run_todos(
     )
     print("=" * 70)
 
-    # Initialize timing and statistics
     start_time = time.time()
     task_times: list[float] = []
     task_status: list[str] = []
@@ -452,7 +451,6 @@ Examples:
 
     args = parser.parse_args()
 
-    # Set the working directory to the droid folder for relative paths
     import os
 
     droid_dir = os.path.dirname(os.path.abspath(__file__))

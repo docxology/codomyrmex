@@ -250,7 +250,7 @@ class RepositoryMetadataManager:
 
         except Exception as e:
             logger.error(f"Error saving metadata: {e}")
-            return False
+            raise
 
     def get_repository_metadata(self, full_name: str) -> RepositoryMetadata | None:
         """Get metadata for a specific repository."""

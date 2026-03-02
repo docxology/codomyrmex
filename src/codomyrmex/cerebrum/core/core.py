@@ -269,7 +269,6 @@ class CerebrumEngine:
         Returns:
             Reasoning result
         """
-        # Initialize reasoning engine if needed
         if self.reasoning_engine is None:
             self.reasoning_engine = ReasoningEngine(
                 self.case_base, self.bayesian_network, self.config

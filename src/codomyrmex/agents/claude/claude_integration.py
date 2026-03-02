@@ -220,7 +220,6 @@ class ClaudeIntegrationAdapter(AgentIntegrationAdapter):
         if len(conversation_messages) > 1:
             context["messages"] = conversation_messages[:-1]
 
-        # Get the last user message as the prompt
         last_message = conversation_messages[-1] if conversation_messages else {"content": ""}
         prompt = last_message.get("content", "")
 

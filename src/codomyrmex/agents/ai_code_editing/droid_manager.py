@@ -51,7 +51,6 @@ class DroidSystemManager:
         self.todo_file = droid_dir / "todo_list.txt"
         self.config_file = droid_dir / "droid_config.json"
 
-        # Initialize components
         self.controller: DroidController | None = None
         self.todo_manager = TodoManager(self.todo_file)
 

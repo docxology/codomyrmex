@@ -70,8 +70,8 @@ class ResourceTuner:
                 memory_limit_bytes=mem_limit,
                 memory_percent=mem_percent
             )
-        except docker.errors.NotFound:
-            raise ValueError(f"Container '{container_id}' not found")
+        except docker.errors.NotFound as exc:
+            raise ValueError(f"Container '{container_id}' not found") from exc
         except Exception as e:
             logger.error(f"Failed to analyze container {container_id}: {e}")
             raise
