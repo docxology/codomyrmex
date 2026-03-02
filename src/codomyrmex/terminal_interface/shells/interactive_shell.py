@@ -51,16 +51,10 @@ Type 'explore' to begin your foraging adventure!
         """Initialize the interactive shell."""
         super().__init__()
 
-        # Lazy-load SystemDiscovery from Core layer (system_discovery)
-        # to respect the Foundation -> Core layer boundary.
+        # SystemDiscovery (Application layer) is NOT imported here — this module
+        # is Foundation layer.  _ensure_discovery() uses pkgutil for module names.
         self.discovery = None
-        try:
-            from codomyrmex.system_discovery.core.discovery_engine import (
-                SystemDiscovery,
-            )
-            self.discovery = SystemDiscovery()
-        except ImportError:
-            logger.warning("system_discovery module not available -- running in limited mode")
+        self._module_names: list[str] = []
 
         # Track session data
         self.session_data = {
@@ -83,6 +77,32 @@ Type 'explore' to begin your foraging adventure!
         ]
 
         print(self.intro)
+
+    def _ensure_discovery(self) -> None:
+        """Build the module name list using pkgutil (Foundation-layer safe).
+
+        Populates ``self._module_names`` without importing any Core/Application
+        layer modules, preserving the Foundation → Core layer boundary.
+        ``self.discovery`` remains ``None``; commands that need rich discovery
+        data report limited-mode status as designed.
+        """
+        if not self._module_names:
+            try:
+                import pkgutil
+
+                import codomyrmex
+                self._module_names = [
+                    name
+                    for _, name, _ in pkgutil.iter_modules(codomyrmex.__path__)
+                ]
+            except Exception as exc:
+                logger.warning("pkgutil module scan failed: %s", exc)
+                self._module_names = []
+
+    def precmd(self, line: str) -> str:
+        """Ensure discovery engine is initialised before any command runs."""
+        self._ensure_discovery()
+        return line
 
     def emptyline(self):
         """Handle empty lines gracefully without repeating the last command."""

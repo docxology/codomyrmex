@@ -84,7 +84,7 @@ _CONFIRMATION_TTL = 60.0  # seconds
 
 
 class AuditEntry(TypedDict):
-    """Functional component: AuditEntry."""
+    """Immutable record of a single tool call stored in the trust gateway audit log."""
     timestamp: str
     tool_name: str
     args_hash: str
@@ -522,36 +522,25 @@ def verify_capabilities() -> dict[str, Any]:
 
     # ── Module Stats ──────────────────────────────────────────────
     # We check discovery metrics for failed modules
-    # We need to access the singleton-ish discovery metrics from mcp_bridge's discovery engine
-    # but mcp_bridge hides the engine instance.
-    # Actually create_codomyrmex_mcp_server._discovery_metrics_provider() gives us metrics.
-    # Or better, we expose a getter in mcp_bridge.
-    # For now, we reuse the pattern from mcp_bridge or just re-read the attribute if we can.
-    # Actually, mcp_bridge._DISCOVERY_ENGINE is private but we can access it for now or rely on
-    # invalidate_tool_cache().
-
-    # Let's use the provider if available or a direct access pattern
     failed_modules = []
     discovery_cache_age = -1.0
     discovery_last_duration = 0.0
     try:
-        from codomyrmex.agents.pai.mcp_bridge import _DISCOVERY_ENGINE
-        discovery_metrics = _DISCOVERY_ENGINE.get_metrics()
-        failed_modules = [
-            {"name": m, "error": "Import failed"} # Metric only stores name
-            for m in discovery_metrics.failed_modules
-        ]
-        discovery_cache_age = (
-            (datetime.now(UTC) - discovery_metrics.last_scan_time).total_seconds()
-            if discovery_metrics.last_scan_time else -1.0
-        )
-        discovery_last_duration = discovery_metrics.scan_duration_ms
+        from codomyrmex.agents.pai.mcp_bridge import get_discovery_metrics
+        discovery_metrics = get_discovery_metrics()
+        if discovery_metrics is not None:
+            failed_modules = [
+                {"name": m, "error": "Import failed"}
+                for m in discovery_metrics["failed_modules"]
+            ]
+            last_scan = discovery_metrics["last_scan_time"]
+            discovery_cache_age = (
+                (datetime.now(UTC) - last_scan).total_seconds()
+                if last_scan else -1.0
+            )
+            discovery_last_duration = discovery_metrics["scan_duration_ms"]
     except ImportError as e:
-        logger.warning("Discovery engine import failed during health check: %s", e)
-        pass # _DISCOVERY_ENGINE might not be directly importable or available in all setups
-    except AttributeError as e:
-        logger.warning("Discovery engine missing expected attributes: %s", e)
-        pass # _DISCOVERY_ENGINE might not have get_metrics() or related attributes
+        logger.warning("Discovery metrics import failed during health check: %s", e)
 
     # ── MCP server health ─────────────────────────────────────────
     try:
@@ -559,10 +548,11 @@ def verify_capabilities() -> dict[str, Any]:
         # but it's the robust check.
         server = create_codomyrmex_mcp_server()
         mcp_transport = "stdio/http" # Configurable, but default
-        mcp_resources = len(server._resources)
-        mcp_prompts = len(server._prompts)
-        mcp_server_name = server.config.name
-    except (ImportError, AttributeError, TypeError):
+        mcp_resources = len(getattr(server, "_resources", {}))
+        mcp_prompts = len(getattr(server, "_prompts", {}))
+        server_config = getattr(server, "config", None)
+        mcp_server_name = getattr(server_config, "name", "unknown") if server_config else "unknown"
+    except (ImportError, TypeError):
         mcp_server_name = "unknown"
         mcp_transport = "unknown"
         mcp_resources = 0
@@ -819,7 +809,6 @@ __all__ = [
     "trust_all",
     "get_trust_report",
     "is_trusted",
-    "trusted_call_tool",
     "trusted_call_tool",
     "get_audit_log",
     "export_audit_log",

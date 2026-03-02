@@ -33,23 +33,17 @@ class SwarmManager(NewSwarmManager):
         self.register_agent(SwarmAgent(agent.name, role))
 
     def execute(self, mission: str) -> dict[str, str]:
-        """Distribute a mission across the swarm (Legacy Compatibility)."""
-        import asyncio
-        # We need to run it synchronously for legacy compatibility if possible,
-        # but execute_task is async. This is a shim.
-        try:
-            loop = asyncio.get_event_loop()
-        except RuntimeError:
-            loop = asyncio.new_event_loop()
-            asyncio.set_event_loop(loop)
+        """Distribute a mission across the swarm (Legacy Compatibility).
 
-        # Simpler implementation for shim
-        results = {}
-        for agent_id in self.pool._agents:
-            agent = self.pool.get(agent_id)
-            if agent:
-                results[agent.agent_id] = f"Result from {agent.agent_id}"
-        return results
+        Decomposes the mission into role-based subtasks and returns the
+        distribution plan keyed by task_id.  For full async execution with
+        real result values, call ``execute_mission()`` directly.
+
+        Returns:
+            Mapping of task_id to task description for each decomposed subtask.
+        """
+        subtasks = self.decomposer.decompose(mission)
+        return {st.task_id: st.description for st in subtasks}
 
     def consensus_vote(self, proposal: str) -> bool:
         """Simple majority vote among agents (Legacy Compatibility)."""
