@@ -420,7 +420,7 @@ def main():
     try:
         # Test each repository
         for repo in test_repos:
-            success = test_repository(repo, base_dir)
+            success = _run_repo_test(repo, base_dir)
             results.append({'repo': repo['name'], 'success': success})
 
             if success:

@@ -763,7 +763,7 @@ class TestGetArchitectureLayers:
         result = provider._get_architecture_layers()
         # With no modules, Extended is omitted (no unclassified modules)
         assert len(result) >= 4
-        names = [l["name"] for l in result]
+        names = [item["name"] for item in result]
         assert "Foundation" in names
         assert "Core" in names
         assert "Service" in names

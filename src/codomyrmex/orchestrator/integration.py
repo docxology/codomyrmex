@@ -334,7 +334,7 @@ class AgentOrchestrator:
                 result = await agent.execute(task, **kwargs)
             elif hasattr(agent, "run"):
                 result = await agent.run(task, **kwargs)
-            elif hasattr(agent, "__call__"):
+            elif callable(agent):
                 result = await agent(task, **kwargs)
             else:
                 return {

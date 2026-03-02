@@ -24,7 +24,7 @@ class BaseReport:
     def render(self) -> str:
         """Render the report as an HTML string."""
         inner = "\n".join(
-            getattr(s, "render", lambda: str(s))() for s in self.sections
+            getattr(s, "render", lambda s=s: str(s))() for s in self.sections
         )
         return f"<article><h1>{self.title}</h1>{inner}</article>"
 

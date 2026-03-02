@@ -3,10 +3,10 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from enum import Enum
+from enum import StrEnum
 
 
-class CascadeType(str, Enum):
+class CascadeType(StrEnum):
     """Classification of information cascades."""
 
     VIRAL = "viral"  # Explosive growth

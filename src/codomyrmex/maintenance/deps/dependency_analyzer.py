@@ -79,7 +79,6 @@ class DependencyAnalyzer:
             "documentation": set(),  # Can import from all
             "api": {"logging_monitoring", "static_analysis"},
             "llm": {"logging_monitoring", "model_context_protocol"},
-            "llm": {"logging_monitoring", "model_context_protocol"},
             "performance": {"logging_monitoring"},
             "spatial.three_d": {"logging_monitoring"},
             "physical_management": {"logging_monitoring"},

@@ -66,6 +66,7 @@ from codomyrmex.ci_cd_automation.rollback_manager import (
     RollbackStep,
     RollbackStrategy,
 )
+from codomyrmex.exceptions import CodomyrmexError
 
 # ---------------------------------------------------------------------------
 # Helpers
@@ -656,7 +657,7 @@ class TestPipelineMonitorMetricsFlow:
     @pytest.mark.unit
     def test_finish_nonexistent_execution_raises(self, tmp_path):
         monitor = PipelineMonitor(workspace_dir=str(tmp_path))
-        with pytest.raises(Exception):
+        with pytest.raises(CodomyrmexError):
             monitor.finish_monitoring("nonexistent-id")
 
     @pytest.mark.unit

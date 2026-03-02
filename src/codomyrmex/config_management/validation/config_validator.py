@@ -165,9 +165,9 @@ class ConfigValidator:
             List of missing field names
         """
         missing = []
-        for field in required:
-            if field not in config or config[field] is None:
-                missing.append(field)
+        for field_name in required:
+            if field_name not in config or config[field_name] is None:
+                missing.append(field_name)
         return missing
 
     def validate_types(self, config: dict[str, Any], schema: dict[str, Any]) -> list[ValidationIssue]:
@@ -183,13 +183,13 @@ class ConfigValidator:
         """
         issues = []
 
-        for field, expected_type in schema.items():
-            if field in config:
-                actual_value = config[field]
+        for field_name, expected_type in schema.items():
+            if field_name in config:
+                actual_value = config[field_name]
                 if not self._check_type(actual_value, expected_type):
                     issues.append(ValidationIssue(
-                        field_path=field,
-                        message=f"Type mismatch for '{field}': expected {expected_type}, got {type(actual_value).__name__}",
+                        field_path=field_name,
+                        message=f"Type mismatch for '{field_name}': expected {expected_type}, got {type(actual_value).__name__}",
                         severity=ValidationSeverity.ERROR,
                         actual_value=type(actual_value).__name__,
                         expected_value=expected_type,
@@ -211,10 +211,10 @@ class ConfigValidator:
         """
         issues = []
 
-        for field, field_constraints in constraints.items():
-            if field in config:
-                value = config[field]
-                field_issues = self._validate_field_constraints(field, value, field_constraints)
+        for field_name, field_constraints in constraints.items():
+            if field_name in config:
+                value = config[field_name]
+                field_issues = self._validate_field_constraints(field_name, value, field_constraints)
                 issues.extend(field_issues)
 
         return issues

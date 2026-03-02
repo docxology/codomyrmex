@@ -263,7 +263,7 @@ class HealthProviderMixin:
                 ["git", "status", "--porcelain"],
                 capture_output=True, text=True, cwd=self.root_dir, timeout=5
             )
-            dirty_count = len([l for l in status_result.stdout.strip().split("\n") if l.strip()])
+            dirty_count = len([line for line in status_result.stdout.strip().split("\n") if line.strip()])
 
             return {
                 "branch": branch,

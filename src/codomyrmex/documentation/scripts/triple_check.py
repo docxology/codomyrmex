@@ -78,7 +78,9 @@ def verify_relative_path(link_url: str, from_file: Path, base_path: Path) -> tup
             if base_dir == base_dir.parent:  # Reached root
                 return (False, "Too many ../ levels", None)
             base_dir = base_dir.parent
-        resolved = base_dir / clean_url.lstrip('../')
+        while clean_url.startswith('../'):
+            clean_url = clean_url.removeprefix('../')
+        resolved = base_dir / clean_url
     elif clean_url.startswith('/'):
         resolved = base_path / clean_url.lstrip('/')
     else:
@@ -129,7 +131,7 @@ def check_file_completeness(content: str, file_path: Path) -> list[str]:
             issues.append("Missing reference to AGENTS.md")
 
     # Check for empty or minimal content
-    non_empty_lines = [l.strip() for l in content.split('\n') if l.strip() and not l.strip().startswith('#')]
+    non_empty_lines = [line.strip() for line in content.split('\n') if line.strip() and not line.strip().startswith('#')]
     if len(non_empty_lines) < 10:
         issues.append("File appears to have minimal content")
 

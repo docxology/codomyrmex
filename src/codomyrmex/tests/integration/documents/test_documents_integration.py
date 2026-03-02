@@ -15,6 +15,7 @@ from codomyrmex.documents import (
     read_document,
     write_document,
 )
+from codomyrmex.documents.exceptions import DocumentReadError
 
 try:
     from codomyrmex.documents.transformation import convert_document, merge_documents
@@ -126,7 +127,7 @@ class TestErrorPropagation:
         # Try to read non-existent file
         nonexistent = tmp_path / "nonexistent.txt"
 
-        with pytest.raises(Exception):  # Should raise DocumentReadError
+        with pytest.raises(DocumentReadError):
             read_document(nonexistent)
 
     def test_invalid_format_handling(self, tmp_path):

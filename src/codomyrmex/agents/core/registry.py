@@ -63,16 +63,16 @@ class ToolRegistry:
 
         for param_name, param in sig.parameters.items():
             param_type = "string" # Default
-            if param.annotation != inspect.Parameter.empty:
-                if param.annotation == int:
+            if param.annotation is not inspect.Parameter.empty:
+                if param.annotation is int:
                     param_type = "integer"
-                elif param.annotation == float:
+                elif param.annotation is float:
                     param_type = "number"
-                elif param.annotation == bool:
+                elif param.annotation is bool:
                     param_type = "boolean"
-                elif param.annotation == dict:
+                elif param.annotation is dict:
                     param_type = "object"
-                elif param.annotation == list:
+                elif param.annotation is list:
                     param_type = "array"
 
             parameters["properties"][param_name] = {

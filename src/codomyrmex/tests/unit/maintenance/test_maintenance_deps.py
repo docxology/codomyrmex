@@ -741,10 +741,6 @@ class TestCheckPythonVersion:
 
     def test_meets_requirement_for_current_python(self):
         """Current Python (3.10+) should meet the requirement."""
-        import sys
-        if sys.version_info < (3, 10):
-            pytest.skip("Test requires Python 3.10+")
-
         result = check_python_version()
 
         assert result["meets_requirement"] is True

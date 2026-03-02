@@ -11,7 +11,6 @@ executes correctly and safely.
 import pytest
 
 try:
-    from codomyrmex.agents.ai_code_editing import generate_code_snippet
     from codomyrmex.coding import ExecutionLimits, execute_code, execute_with_limits
     from codomyrmex.logging_monitoring.core.logger_config import (
         get_logger,
@@ -30,7 +29,7 @@ except ImportError:
     CODE_EXECUTION_AVAILABLE = False
 
 # Set up logging for tests
-if setup_logging and hasattr(setup_logging, '__call__'):
+if setup_logging and callable(setup_logging):
     try:
         setup_logging()
     except Exception:

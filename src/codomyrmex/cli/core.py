@@ -122,8 +122,10 @@ class Cli:
             output_json=output_json,
         )
 
-    def chat(self, todo="TO-DO.md", rounds=0, context=[], stream=False, resume=None):
+    def chat(self, todo="TO-DO.md", rounds=0, context=None, stream=False, resume=None):
         """Launch infinite conversation and dev_loop"""
+        if context is None:
+            context = []
         return handle_chat_session(
             todo_path=todo,
             rounds=rounds,
@@ -230,8 +232,10 @@ class Cli:
         elif action == "search":
             return handle_skills_search(query)
 
-    def run(self, target, args=[], timeout=60, parallel=False, verbose=False):
+    def run(self, target, args=None, timeout=60, parallel=False, verbose=False):
         """Quick run script, module, or directory"""
+        if args is None:
+            args = []
         return handle_quick_run(target, args=args, timeout=timeout, parallel=parallel, verbose=verbose)
 
     def pipe(self, commands, continue_on_error=False):

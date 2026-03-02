@@ -9,9 +9,7 @@ try:
         DistanceMetric,
         InMemoryVectorStore,
         NamespacedVectorStore,
-        SearchResult,
         VectorEntry,
-        VectorStore,
         create_vector_store,
         normalize_embedding,
     )

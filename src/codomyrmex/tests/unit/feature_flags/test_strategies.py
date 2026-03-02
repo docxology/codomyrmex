@@ -6,7 +6,6 @@ with real inputs -- no mocks, no stubs, no fakes.
 
 from __future__ import annotations
 
-import hashlib
 from datetime import datetime, timedelta
 
 import pytest

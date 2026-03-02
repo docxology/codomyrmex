@@ -5,15 +5,16 @@ import os
 from datetime import datetime
 
 import pytest
+import yaml
 
 try:
-    import docker
+    import docker  # noqa: F401
     DOCKER_AVAILABLE = True
 except ImportError:
     DOCKER_AVAILABLE = False
 
 try:
-    import aiohttp
+    import aiohttp  # noqa: F401
     AIOHTTP_AVAILABLE = True
 except ImportError:
     AIOHTTP_AVAILABLE = False
@@ -59,7 +60,7 @@ class TestErrorHandling:
         config_path = tmp_path / "invalid.yaml"
         config_path.write_text("invalid: yaml: content: [unbalanced brackets")
 
-        with pytest.raises(Exception):  # Could be YAML or parsing error
+        with pytest.raises((yaml.YAMLError, ValueError)):
             manager.create_pipeline(str(config_path))
 
     def test_command_execution_failure(self):

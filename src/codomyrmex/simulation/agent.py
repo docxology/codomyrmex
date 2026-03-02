@@ -39,7 +39,7 @@ class Agent(abc.ABC):
     def act(self, observation: dict[str, Any]) -> Action:
         """Decide on an action given the current observation."""
 
-    def learn(self, reward: float) -> None:
+    def learn(self, reward: float) -> None:  # noqa: B027
         """Update internal state based on reward. Override in learning agents."""
 
     def reset(self) -> None:

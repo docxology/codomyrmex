@@ -46,7 +46,7 @@ else:
 logger = get_logger(__name__)
 
 
-class BaseVisualizer(ABC):
+class BaseVisualizer(ABC):  # noqa: B024
     """Base class for all visualizers."""
 
     def __init__(

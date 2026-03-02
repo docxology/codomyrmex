@@ -4,10 +4,10 @@ from __future__ import annotations
 
 import time
 from dataclasses import dataclass, field
-from enum import Enum
+from enum import StrEnum
 
 
-class PatternType(str, Enum):
+class PatternType(StrEnum):
     """Classification of linguistic patterns."""
 
     HYPNOTIC = "hypnotic"  # Milton Model

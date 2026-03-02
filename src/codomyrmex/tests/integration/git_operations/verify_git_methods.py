@@ -9,9 +9,11 @@ from pathlib import Path
 
 from codomyrmex.git_operations import (
     GitHubAPIError,
+    add_files,
     apply_stash,
     check_git_availability,
     clone_repository,
+    commit_changes,
     create_branch,
     create_github_repository,
     create_pull_request,
@@ -23,6 +25,7 @@ from codomyrmex.git_operations import (
     get_pull_request,
     get_pull_requests,
     get_repository_info,
+    get_status,
     initialize_git_repository,
     is_git_repository,
     list_stashes,

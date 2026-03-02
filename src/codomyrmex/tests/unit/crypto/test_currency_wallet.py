@@ -164,7 +164,9 @@ class TestAddressGeneration:
 
     def test_unsupported_network_raises(self, wallet):
         """Test functionality: unsupported network raises."""
-        with pytest.raises(Exception):
+        from codomyrmex.crypto.exceptions import WalletError
+
+        with pytest.raises(WalletError):
             wallet.get_address("litecoin")
 
 

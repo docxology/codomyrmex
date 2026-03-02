@@ -471,7 +471,7 @@ class TestGmailProviderFromEnv:
             "GOOGLE_APPLICATION_CREDENTIALS",
         )}
         try:
-            with pytest.raises(Exception):
+            with pytest.raises((EmailAuthError, ImportError)):
                 GmailProvider.from_env()
         finally:
             for k, v in saved.items():

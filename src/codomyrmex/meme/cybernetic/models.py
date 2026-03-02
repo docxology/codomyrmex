@@ -4,10 +4,10 @@ from __future__ import annotations
 
 import time
 from dataclasses import dataclass, field
-from enum import Enum
+from enum import StrEnum
 
 
-class FeedbackType(str, Enum):
+class FeedbackType(StrEnum):
     """Types of feedback loops."""
 
     POSITIVE = "positive"  # Reinforcing, destabilizing

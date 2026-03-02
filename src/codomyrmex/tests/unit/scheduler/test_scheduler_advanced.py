@@ -8,8 +8,7 @@ import pytest
 
 try:
     from codomyrmex.orchestrator.scheduler import (
-        Job,
-        JobStatus,
+        Job,  # noqa: F401
         Scheduler,
     )
     from codomyrmex.orchestrator.scheduler.advanced import (

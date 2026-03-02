@@ -3,7 +3,7 @@
 import pytest
 
 try:
-    from codomyrmex.search import Document, InMemoryIndex, SearchResult
+    from codomyrmex.search import Document, SearchResult
     from codomyrmex.search.semantic import (
         AutoCompleteIndex,
         BM25Index,

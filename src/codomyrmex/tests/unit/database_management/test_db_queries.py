@@ -86,7 +86,7 @@ class TestQueryExecution:
 
     def test_query_with_invalid_table(self, db_connection):
         """Test query with non-existent table raises error."""
-        with pytest.raises(Exception):
+        with pytest.raises(sqlite3.OperationalError):
             db_connection.execute_query("SELECT * FROM invalid_table")
 
 

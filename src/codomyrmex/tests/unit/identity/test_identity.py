@@ -6,7 +6,7 @@ from codomyrmex.identity.manager import IdentityManager
 from codomyrmex.identity.persona import Persona, VerificationLevel
 
 try:
-    import numpy as np
+    import numpy as np  # noqa: F401
     HAS_NUMPY = True
 except ImportError:
     HAS_NUMPY = False

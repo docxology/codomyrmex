@@ -57,9 +57,9 @@ def mcp_server():
 # ======================================================================
 
 try:
-    import aiohttp
+    import aiohttp  # noqa: F401
     from aiohttp import web
-    from aiohttp.test_utils import AioHTTPTestCase, TestServer
+    from aiohttp.test_utils import TestServer
 
     HAS_AIOHTTP = True
 except ImportError:

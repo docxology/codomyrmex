@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
-from enum import Enum
+from enum import StrEnum
 from typing import Any
 
 """Core scraping abstractions and data structures.
@@ -11,7 +11,7 @@ This module defines the core abstractions for the scrape module,
 including result types, configuration options, and abstract base classes.
 """
 
-class ScrapeFormat(str, Enum):
+class ScrapeFormat(StrEnum):
     """Supported output formats for scraping operations."""
 
     MARKDOWN = "markdown"

@@ -206,7 +206,7 @@ def analyze_python_file(path: str) -> dict[str, Any]:
                     imports.append(f"{module}.{alias.name}")
 
         lines = content.split("\n")
-        code_lines = sum(1 for l in lines if l.strip() and not l.strip().startswith("#"))
+        code_lines = sum(1 for line in lines if line.strip() and not line.strip().startswith("#"))
 
         return {
             "success": True,

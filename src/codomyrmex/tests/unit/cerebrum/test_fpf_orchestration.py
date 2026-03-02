@@ -20,16 +20,11 @@ _SKIP_REASON = "Requires network access and cerebrum/fpf dependencies"
 
 try:
     from codomyrmex.cerebrum import (
-        ActiveInferenceAgent,
         BayesianNetwork,
         Case,
-        CerebrumConfig,
         CerebrumEngine,
-        InferenceEngine,
     )
     from codomyrmex.cerebrum.fpf.orchestration import FPFOrchestrator, main
-    from codomyrmex.cerebrum.inference.bayesian import Distribution
-    from codomyrmex.fpf import FPFClient
 
     _HAS_DEPS = True
 except ImportError:

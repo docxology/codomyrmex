@@ -59,7 +59,10 @@ class TestPhysicalManagement:
             sys.path.insert(0, str(code_dir))
 
         try:
-            from codomyrmex.physical_management import PhysicalObjectManager, Vector3D
+            from codomyrmex.physical_management import (  # noqa: F401
+                PhysicalObjectManager,
+                Vector3D,
+            )
             assert PhysicalObjectManager is not None
         except ImportError as e:
             pytest.fail(f"Failed to import PhysicalObjectManager: {e}")

@@ -9,8 +9,6 @@ try:
     from codomyrmex.vector_store import (
         InMemoryVectorStore,
         SearchResult,
-        VectorEntry,
-        VectorStore,
     )
     from codomyrmex.vector_store.persistent import (
         CachedVectorStore,

@@ -10,7 +10,9 @@ import pytest
 try:
     from codomyrmex.agents.core.base import AgentCapabilities, AgentRequest
     from codomyrmex.agents.git_agent import GitAgent
-    from codomyrmex.git_operations.core.repository import RepositoryManager
+    from codomyrmex.git_operations.core.repository import (
+        RepositoryManager,  # noqa: F401
+    )
     _HAS_AGENTS = True
 except ImportError:
     _HAS_AGENTS = False

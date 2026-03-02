@@ -5,7 +5,6 @@ import pytest
 try:
     from codomyrmex.cloud.edge import (
         CloudflareWorkersClient,
-        EdgeClient,
         EdgeDeployment,
         EdgeFunctionConfig,
         EdgeManager,

@@ -55,7 +55,7 @@ def test_cache_spec(tmp_path):
 def test_fetch_latest_error_handling(tmp_path):
     """Test error handling when fetching from a non-existent repo."""
     fetcher = FPFFetcher(cache_dir=tmp_path / "fpf_cache")
-    with pytest.raises(Exception):
+    with pytest.raises(requests.RequestException):
         fetcher.fetch_latest("nonexistent-user-xyz/nonexistent-repo-xyz", "main")
 
 

@@ -17,9 +17,8 @@ import pytest
 # Import modules for integration testing
 try:
     from codomyrmex.data_visualization import (
-        create_bar_chart,
-        create_line_plot,
-        create_plot,
+        create_bar_chart,  # noqa: F401
+        create_line_plot,  # noqa: F401
     )
     DATA_VISUALIZATION_AVAILABLE = True
 except ImportError:
@@ -27,9 +26,9 @@ except ImportError:
 
 try:
     from codomyrmex.performance import (
-        PerformanceProfiler,
-        profile_function,
-        run_benchmark,
+        PerformanceProfiler,  # noqa: F401
+        profile_function,  # noqa: F401
+        run_benchmark,  # noqa: F401
     )
     PERFORMANCE_AVAILABLE = True
 except ImportError:
@@ -51,7 +50,7 @@ except ImportError:
     LOGGING_AVAILABLE = False
 
 # Set up logging for tests
-if LOGGING_AVAILABLE and hasattr(setup_logging, '__call__'):
+if LOGGING_AVAILABLE and callable(setup_logging):
     try:
         setup_logging()
     except Exception:

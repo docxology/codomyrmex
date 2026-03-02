@@ -139,8 +139,8 @@ class TestEnvironmentSetupComprehensive:
 
         # Test with real imports - check if dependencies are actually available
         try:
-            import dotenv
-            import kit
+            import dotenv  # noqa: F401
+            import kit  # noqa: F401
             # Both are available - test should pass
             result = ensure_dependencies_installed()
 

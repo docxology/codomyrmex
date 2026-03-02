@@ -10,10 +10,8 @@ try:
         FuzzyMatcher,
         InMemoryIndex,
         QueryParser,
-        SearchIndex,
         SearchResult,
         SimpleTokenizer,
-        Tokenizer,
         create_index,
         quick_search,
     )

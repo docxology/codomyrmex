@@ -10,7 +10,7 @@ import pytest
 # Check if z3-solver is available
 z3_available = True
 try:
-    import z3
+    import z3  # noqa: F401
 except ImportError:
     z3_available = False
 

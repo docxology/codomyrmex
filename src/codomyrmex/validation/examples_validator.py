@@ -6,7 +6,7 @@ import subprocess
 import sys
 import time
 from dataclasses import dataclass, field
-from enum import Enum
+from enum import StrEnum
 from pathlib import Path
 from typing import Any
 
@@ -24,7 +24,7 @@ from codomyrmex.utils.cli_helpers import (
 logger = get_logger(__name__) if get_logger else None
 
 
-class ValidationSeverity(str, Enum):
+class ValidationSeverity(StrEnum):
     """Severity levels for validation issues."""
     CRITICAL = "critical"
     ERROR = "error"
@@ -32,7 +32,7 @@ class ValidationSeverity(str, Enum):
     INFO = "info"
 
 
-class ValidationType(str, Enum):
+class ValidationType(StrEnum):
     """Types of validation checks."""
     EXECUTION = "execution"
     CONFIGURATION = "configuration"

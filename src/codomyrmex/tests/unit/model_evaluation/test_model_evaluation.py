@@ -16,7 +16,6 @@ try:
         QualityDimension,
         QualityReport,
         RegexScorer,
-        Scorer,
         SuiteResult,
         WeightedScorer,
         analyze_quality,

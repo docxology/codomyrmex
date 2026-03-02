@@ -79,8 +79,7 @@ class TestDroidSystemManagerInit:
         """When droid_dir is None the manager falls back to a sibling 'droid' directory."""
         mgr = DroidSystemManager(droid_dir=None)
         # Should be <module_dir>/droid
-        Path(__file__).parent  # test dir
-        # The default is relative to droid_manager.py, not us
+        # Path(__file__).parent is the test dir; default is relative to droid_manager.py
         assert mgr.droid_dir.name == "droid"
 
     def test_session_stats_initial_values(self, tmp_path: Path) -> None:

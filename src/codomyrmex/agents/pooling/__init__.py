@@ -445,7 +445,6 @@ class FallbackChain(Generic[T]):
 
 # Type alias for common use
 
-tuple  # Prevent unused import warning
 
 __all__ = [
     # Enums

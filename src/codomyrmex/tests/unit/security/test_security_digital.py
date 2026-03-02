@@ -24,14 +24,9 @@ pytestmark = pytest.mark.skipif(
 
 try:
     from codomyrmex.security.digital.vulnerability_scanner import (
-        ComplianceCheck,
-        ComplianceStandard,
-        SecurityScanResult,
-        SeverityLevel,
         VulnerabilityReport,
         VulnerabilityScanner,
         audit_code_security,
-        check_compliance,
         scan_vulnerabilities,
     )
     VULNERABILITY_AVAILABLE = True
@@ -40,12 +35,7 @@ except ImportError:
 
 try:
     from codomyrmex.security.digital.security_monitor import (
-        AlertLevel,
-        AlertRule,
-        SecurityEvent,
-        SecurityEventType,
         SecurityMonitor,
-        audit_access_logs,
         monitor_security_events,
     )
     MONITORING_AVAILABLE = True
@@ -65,7 +55,6 @@ except ImportError:
 try:
     from codomyrmex.security.digital.certificate_validator import (
         CertificateValidator,
-        SSLValidationResult,
         validate_ssl_certificates,
     )
     CERTIFICATE_AVAILABLE = True

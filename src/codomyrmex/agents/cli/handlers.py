@@ -133,7 +133,7 @@ def _handle_agent_execute(client_class, client_name: str, args: Any) -> bool:
         logger.error(f"{client_name} error: {str(e)}")
         print_error(f"{client_name} error", context=str(e), exception=e)
         return False
-    except (AgentError, ClaudeError, CodexError, GeminiError, JulesError, OpenCodeError, ValueError, RuntimeError, AttributeError, OSError) as e:
+    except (ValueError, RuntimeError, AttributeError, OSError) as e:
         logger.exception(f"Unexpected error during {client_name} execution")
         print_error(f"Unexpected error during {client_name} execution", exception=e)
         return False
@@ -174,7 +174,7 @@ def _handle_agent_stream(client_class, client_name: str, args: Any) -> bool:
         logger.error(f"{client_name} streaming error: {str(e)}")
         print_error(f"{client_name} streaming error", context=str(e), exception=e)
         return False
-    except (AgentError, ClaudeError, CodexError, GeminiError, JulesError, OpenCodeError, ValueError, RuntimeError, AttributeError, OSError) as e:
+    except (ValueError, RuntimeError, AttributeError, OSError) as e:
         logger.exception(f"Unexpected error during {client_name} streaming")
         print_error(f"Unexpected error during {client_name} streaming", exception=e)
         return False

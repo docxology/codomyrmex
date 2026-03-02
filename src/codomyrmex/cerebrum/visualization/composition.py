@@ -97,7 +97,7 @@ class CompositionVisualizer:
             importance_data = analysis_summary["importance_distribution"]
             levels = list(importance_data.keys())
             counts = list(importance_data.values())
-            colors = [self.theme.get_importance_color(l) for l in levels]
+            colors = [self.theme.get_importance_color(level) for level in levels]
             ax2.bar(levels, counts, color=colors, alpha=0.8, edgecolor="black", linewidth=1.0)
             ax2.set_xlabel("Importance", fontsize=self.theme.font.label_size)
             ax2.set_ylabel("Count", fontsize=self.theme.font.label_size)

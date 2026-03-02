@@ -6,11 +6,11 @@ import hashlib
 import time
 import uuid
 from dataclasses import dataclass, field
-from enum import Enum
+from enum import StrEnum
 from typing import Any
 
 
-class MemeType(str, Enum):
+class MemeType(StrEnum):
     """Classification of meme types by cognitive function."""
 
     BELIEF = "belief"

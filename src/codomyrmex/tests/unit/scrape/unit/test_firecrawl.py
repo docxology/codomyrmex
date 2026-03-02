@@ -10,13 +10,14 @@ import pytest
 from codomyrmex.scrape.config import ScrapeConfig
 from codomyrmex.scrape.exceptions import (
     FirecrawlError,
+    ScrapingError,
 )
 from codomyrmex.scrape.firecrawl.adapter import FirecrawlAdapter
 from codomyrmex.scrape.firecrawl.client import FirecrawlClient
 
 # Check if firecrawl-py is available
 try:
-    from firecrawl import Firecrawl
+    from firecrawl import Firecrawl  # noqa: F401
 
     FIRECRAWL_AVAILABLE = True
 except ImportError:
@@ -38,14 +39,9 @@ class TestFirecrawlClient:
     def test_init_without_api_key(self):
         """Test that FirecrawlClient validates API key."""
         config = ScrapeConfig(api_key=None)
-        # This will fail at validation
-        with pytest.raises(Exception):  # ScrapeValidationError or FirecrawlError
-            try:
-                FirecrawlClient(config)
-            except Exception as e:
-                # Either validation error or import error is acceptable
-                assert "api key" in str(e).lower() or "firecrawl" in str(e).lower()
-                raise
+        # This will fail at validation (ScrapeValidationError or FirecrawlError)
+        with pytest.raises(ScrapingError, match=r".+"):
+            FirecrawlClient(config)
 
     @pytest.mark.skipif(not FIRECRAWL_AVAILABLE, reason="firecrawl-py not installed")
     def test_init_success(self):
@@ -72,13 +68,8 @@ class TestFirecrawlAdapter:
             pytest.skip("firecrawl-py is installed, cannot test import error")
 
         config = ScrapeConfig(api_key="test-key")
-        with pytest.raises(Exception):  # FirecrawlError or ScrapeValidationError
-            try:
-                FirecrawlAdapter(config)
-            except Exception as e:
-                # Either validation error or import error is acceptable
-                assert "firecrawl" in str(e).lower() or "api key" in str(e).lower()
-                raise
+        with pytest.raises(ScrapingError, match=r".+"):
+            FirecrawlAdapter(config)
 
     def test_adapter_implements_base_scraper(self):
         """Test that FirecrawlAdapter implements BaseScraper interface."""

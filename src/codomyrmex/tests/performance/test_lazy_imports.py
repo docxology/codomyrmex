@@ -59,7 +59,7 @@ class TestLazyDependencies:
         """chromadb should not be imported by the vector store module."""
         # Verify that chromadb is imported conditionally
         try:
-            from codomyrmex.search import vector_store
+            from codomyrmex.search import vector_store  # noqa: F401
             # If we get here without chromadb, the import is lazy
         except ImportError:
             pass  # Module might not exist, that's fine
@@ -72,14 +72,14 @@ class TestLazyDependencies:
         # Simply verify the module is not in sys.modules from basic imports
         # This is a conservative check
         try:
-            from codomyrmex import search
+            from codomyrmex import search  # noqa: F401
         except ImportError:
             pass  # OK if search module doesn't exist
 
     def test_pyarrow_not_eagerly_loaded(self) -> None:
         """pyarrow should not be imported eagerly."""
         try:
-            from codomyrmex import data_visualization
+            from codomyrmex import data_visualization  # noqa: F401
         except ImportError:
             pass  # OK if module doesn't exist
 

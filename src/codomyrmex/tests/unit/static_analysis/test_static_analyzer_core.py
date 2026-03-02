@@ -12,7 +12,6 @@ try:
         AnalysisSummary,
         AnalysisType,
         CodeMetrics,
-        Language,
         SeverityLevel,
         StaticAnalyzer,
     )

@@ -5,10 +5,10 @@ from __future__ import annotations
 import hashlib
 import time
 from dataclasses import dataclass, field
-from enum import Enum
+from enum import StrEnum
 
 
-class SignType(str, Enum):
+class SignType(StrEnum):
     """Peircean sign trichotomy classification."""
 
     ICON = "icon"

@@ -464,7 +464,7 @@ class TestExceptionHierarchy:
         [PipelineError, BuildError, DeploymentError, ArtifactError, StageError, RollbackError],
     )
     def test_catch_as_base_exception(self, exc_cls):
-        with pytest.raises(Exception):
+        with pytest.raises(CodomyrmexError):
             raise exc_cls("test")
 
     @pytest.mark.parametrize(

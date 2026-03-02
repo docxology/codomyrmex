@@ -8,7 +8,6 @@ try:
         EventType,
         InMemoryStream,
         SSEStream,
-        Stream,
         StreamProcessor,
         Subscription,
         TopicStream,

@@ -354,7 +354,7 @@ class TestAuthFunctions:
 # =========================================================================
 
 try:
-    import openstack
+    import openstack  # noqa: F401
     HAS_OPENSTACK = True
 except ImportError:
     HAS_OPENSTACK = False

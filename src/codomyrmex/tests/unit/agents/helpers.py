@@ -45,7 +45,7 @@ def check_tool_available(command: str, help_flag: str = "--help") -> bool:
 
 # Check availability of CLI tools and SDKs at module level
 try:
-    import google.genai as genai
+    import google.genai as genai  # noqa: F401
     SDK_AVAILABLE = True
 except ImportError:
     SDK_AVAILABLE = False

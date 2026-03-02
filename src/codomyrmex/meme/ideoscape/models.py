@@ -4,12 +4,12 @@ from __future__ import annotations
 
 import time
 from dataclasses import dataclass, field
-from enum import Enum
+from enum import StrEnum
 
 import numpy as np
 
 
-class ProjectionType(str, Enum):
+class ProjectionType(StrEnum):
     """Map projection types for abstract spaces."""
 
     MERCATOR = "mercator"  # Preserves angles

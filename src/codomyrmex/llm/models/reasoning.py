@@ -12,11 +12,11 @@ import json
 import uuid
 from dataclasses import asdict, dataclass, field
 from datetime import UTC, datetime
-from enum import Enum
+from enum import StrEnum
 from typing import Any
 
 
-class ThinkingDepth(str, Enum):
+class ThinkingDepth(StrEnum):
     """Controls how many reasoning steps the CoT pipeline produces."""
 
     SHALLOW = "shallow"     # 1 step — quick pattern match

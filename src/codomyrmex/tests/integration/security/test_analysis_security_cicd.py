@@ -14,23 +14,29 @@ import pytest
 
 # Import modules for integration testing
 try:
-    from codomyrmex.coding.static_analysis import analyze_file, analyze_project
+    from codomyrmex.coding.static_analysis import (  # noqa: F401
+        analyze_file,
+        analyze_project,
+    )
     STATIC_ANALYSIS_AVAILABLE = True
 except ImportError:
     STATIC_ANALYSIS_AVAILABLE = False
 
 try:
     from codomyrmex.security.digital import (
-        analyze_file_security,
-        check_compliance,
-        scan_vulnerabilities,
+        analyze_file_security,  # noqa: F401
+        check_compliance,  # noqa: F401
+        scan_vulnerabilities,  # noqa: F401
     )
     SECURITY_AVAILABLE = True
 except ImportError:
     SECURITY_AVAILABLE = False
 
 try:
-    from codomyrmex.ci_cd_automation import create_pipeline, validate_pipeline_config
+    from codomyrmex.ci_cd_automation import (  # noqa: F401
+        create_pipeline,
+        validate_pipeline_config,
+    )
     CI_CD_AVAILABLE = True
 except ImportError:
     CI_CD_AVAILABLE = False
@@ -45,7 +51,7 @@ except ImportError:
     LOGGING_AVAILABLE = False
 
 # Set up logging for tests
-if LOGGING_AVAILABLE and hasattr(setup_logging, '__call__'):
+if LOGGING_AVAILABLE and callable(setup_logging):
     try:
         setup_logging()
     except Exception:

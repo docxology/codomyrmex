@@ -1,5 +1,5 @@
 from datetime import datetime
-from enum import Enum
+from enum import StrEnum
 from typing import Any
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator
@@ -16,7 +16,7 @@ and the overall specification.
 
 logger = get_logger(__name__)
 
-class PatternStatus(str, Enum):
+class PatternStatus(StrEnum):
     """Status values for FPF patterns."""
 
     STABLE = "Stable"
@@ -25,7 +25,7 @@ class PatternStatus(str, Enum):
     NEW = "New"
 
 
-class RelationshipType(str, Enum):
+class RelationshipType(StrEnum):
     """Types of relationships between patterns."""
 
     BUILDS_ON = "builds_on"
@@ -39,7 +39,7 @@ class RelationshipType(str, Enum):
     INSTANCES = "instances"
 
 
-class ConceptType(str, Enum):
+class ConceptType(StrEnum):
     """Types of concepts in FPF."""
 
     U_TYPE = "U.Type"

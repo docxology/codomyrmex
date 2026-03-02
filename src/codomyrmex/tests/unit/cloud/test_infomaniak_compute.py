@@ -22,7 +22,7 @@ from codomyrmex.cloud.infomaniak.base import InfomaniakOpenStackBase
 from codomyrmex.cloud.infomaniak.compute import InfomaniakComputeClient
 
 try:
-    import openstack
+    import openstack  # noqa: F401
     HAS_OPENSTACK = True
 except ImportError:
     HAS_OPENSTACK = False

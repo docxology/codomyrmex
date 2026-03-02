@@ -26,56 +26,56 @@ except ImportError:
 MODULE_AVAILABILITY = {}
 
 try:
-    from codomyrmex.coding import ExecutionLimits, execute_code, execute_with_limits
+    from codomyrmex.coding import execute_code
     MODULE_AVAILABILITY["code_execution"] = True
 except ImportError:
     MODULE_AVAILABILITY["code_execution"] = False
 
 try:
-    from codomyrmex.coding.static_analysis import analyze_file
+    from codomyrmex.coding.static_analysis import analyze_file  # noqa: F401
     MODULE_AVAILABILITY["static_analysis"] = True
 except ImportError:
     MODULE_AVAILABILITY["static_analysis"] = False
 
 try:
-    from codomyrmex.security.digital import analyze_file_security, check_compliance
+    from codomyrmex.security.digital import analyze_file_security  # noqa: F401
     MODULE_AVAILABILITY["security"] = True
 except ImportError:
     MODULE_AVAILABILITY["security"] = False
 
 try:
-    from codomyrmex.agents.ai_code_editing import generate_code_snippet
     MODULE_AVAILABILITY["ai_code_editing"] = True
 except ImportError:
     MODULE_AVAILABILITY["ai_code_editing"] = False
 
 try:
-    from codomyrmex.data_visualization import create_bar_chart
+    from codomyrmex.data_visualization import create_bar_chart  # noqa: F401
     MODULE_AVAILABILITY["data_visualization"] = True
 except ImportError:
     MODULE_AVAILABILITY["data_visualization"] = False
 
 try:
     from codomyrmex.performance import (
-        PerformanceProfiler,
-        profile_function,
-        run_benchmark,
+        profile_function,  # noqa: F401
+        run_benchmark,  # noqa: F401
     )
     MODULE_AVAILABILITY["performance"] = True
 except ImportError:
     MODULE_AVAILABILITY["performance"] = False
 
 try:
-    from codomyrmex.logging_monitoring.core.logger_config import PerformanceLogger
+    from codomyrmex.logging_monitoring.core.logger_config import (
+        PerformanceLogger,  # noqa: F401
+    )
     MODULE_AVAILABILITY["performance_logging"] = True
 except ImportError:
     MODULE_AVAILABILITY["performance_logging"] = False
 
 try:
     from codomyrmex.logging_monitoring.core.logger_config import (
-        get_logger,
-        setup_logging,
+        get_logger,  # noqa: F401
     )
+
     LOGGING_AVAILABLE = True
 except ImportError:
     LOGGING_AVAILABLE = False
@@ -323,7 +323,7 @@ class TestModulePerformanceBaselines:
         # Memory usage can fluctuate based on environment; warning instead of failing.
         if result.regression_detected:
             import warnings
-            warnings.warn(f"Performance regression detected in code_execution: {result.baseline_comparison}")
+            warnings.warn(f"Performance regression detected in code_execution: {result.baseline_comparison}", stacklevel=2)
 
     @pytest.mark.performance
     @pytest.mark.skipif(not MODULE_AVAILABILITY.get("static_analysis", False),

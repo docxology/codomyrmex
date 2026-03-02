@@ -80,7 +80,8 @@ class GraphQLSchema:
         # Add types
         for type_name, type_def in self.types.items():
             lines.append(f"type {type_name} {{")
-            for field_name, field in type_def.fields.items():
+            for field_name, field_def in type_def.fields.items():
+                field = field_def
                 args_str = ""
                 if field.args:
                     args_list = []
@@ -353,7 +354,8 @@ class GraphQLAPI:
         """
         result = {}
 
-        for field_name, field in object_type.fields.items():
+        for field_name, field_def in object_type.fields.items():
+            field = field_def
             if field.resolver:
                 # Use custom resolver
                 try:

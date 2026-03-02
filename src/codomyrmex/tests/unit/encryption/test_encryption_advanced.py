@@ -6,9 +6,9 @@ import warnings
 from pathlib import Path
 
 import pytest
+from cryptography.exceptions import InvalidTag
 
 from codomyrmex.encryption import (
-    AESGCMEncryptor,
     EncryptionError,
     SecureDataContainer,
     compute_hmac,
@@ -67,7 +67,7 @@ class TestAESGCM:
         aad = b"associated data"
         ciphertext = encryptor.encrypt(data, aad)
 
-        with pytest.raises(Exception):  # cryptography raises InvalidTag
+        with pytest.raises(InvalidTag):
             encryptor.decrypt(ciphertext, b"wrong aad")
 
     def test_aes_gcm_tampered_ciphertext_fails(self):
@@ -82,7 +82,7 @@ class TestAESGCM:
         tampered[-1] ^= 0xFF
         tampered = bytes(tampered)
 
-        with pytest.raises(Exception):  # cryptography raises InvalidTag
+        with pytest.raises(InvalidTag):
             encryptor.decrypt(tampered)
 
     def test_aes_gcm_auto_key_generation(self):
@@ -169,7 +169,7 @@ class TestSecureDataContainer:
         data = {"secret": "value"}
         packed = container1.pack(data)
 
-        with pytest.raises(Exception):
+        with pytest.raises(InvalidTag):
             container2.unpack(packed)
 
 

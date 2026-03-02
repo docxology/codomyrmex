@@ -7,7 +7,6 @@ try:
     from codomyrmex.api.rate_limiting import (
         FixedWindowLimiter,
         QuotaManager,
-        RateLimiter,
         RateLimitExceeded,
         RateLimitResult,
         SlidingWindowLimiter,

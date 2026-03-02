@@ -4,10 +4,10 @@ from __future__ import annotations
 
 import uuid
 from dataclasses import dataclass, field
-from enum import Enum
+from enum import StrEnum
 
 
-class NetworkTopology(str, Enum):
+class NetworkTopology(StrEnum):
     """Network structure types."""
     RANDOM = "random"
     SCALE_FREE = "scale_free"

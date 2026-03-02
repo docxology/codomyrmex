@@ -108,7 +108,8 @@ def resolve_path(base_path: Path, relative_path: str, repo_root: Path) -> tuple[
                 if current_dir == repo_root or current_dir == current_dir.parent:
                     break
                 current_dir = current_dir.parent
-            relative_path = relative_path.lstrip('../')
+            while relative_path.startswith('../'):
+                relative_path = relative_path.removeprefix('../')
             target = current_dir / relative_path
         elif relative_path.startswith('./'):
             target = base_path.parent / relative_path[2:]

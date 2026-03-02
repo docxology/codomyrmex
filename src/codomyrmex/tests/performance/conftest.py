@@ -22,7 +22,7 @@ except ImportError:
 @pytest.fixture(scope="session", autouse=True)
 def setup_performance_logging():
     """Set up logging for performance tests."""
-    if LOGGING_AVAILABLE and hasattr(setup_logging, '__call__'):
+    if LOGGING_AVAILABLE and callable(setup_logging):
         try:
             setup_logging()
         except Exception:

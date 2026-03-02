@@ -186,7 +186,7 @@ class ASTMatcher:
             return False
 
         for c_node, t_node in zip(code_nodes, tmpl_nodes, strict=False):
-            if type(c_node) != type(t_node):
+            if type(c_node) is not type(t_node):
                 return False
 
         return True

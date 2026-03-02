@@ -17,13 +17,16 @@ import pytest
 MODULE_AVAILABILITY = {}
 
 try:
-    from codomyrmex.agents.ai_code_editing import generate_code_snippet
     MODULE_AVAILABILITY["ai_code_editing"] = True
 except ImportError:
     MODULE_AVAILABILITY["ai_code_editing"] = False
 
 try:
-    from codomyrmex.coding import ExecutionLimits, execute_code, execute_with_limits
+    from codomyrmex.coding import (  # noqa: F401
+        ExecutionLimits,
+        execute_code,
+        execute_with_limits,
+    )
     from codomyrmex.coding.sandbox.container import check_docker_available
     if check_docker_available():
         MODULE_AVAILABILITY["code_execution"] = True
@@ -33,31 +36,34 @@ except ImportError:
     MODULE_AVAILABILITY["code_execution"] = False
 
 try:
-    from codomyrmex.coding.static_analysis import analyze_file
+    from codomyrmex.coding.static_analysis import analyze_file  # noqa: F401
     MODULE_AVAILABILITY["static_analysis"] = True
 except ImportError:
     MODULE_AVAILABILITY["static_analysis"] = False
 
 try:
-    from codomyrmex.security.digital import analyze_file_security, check_compliance
+    from codomyrmex.security.digital import (  # noqa: F401
+        analyze_file_security,
+        check_compliance,
+    )
     MODULE_AVAILABILITY["security"] = True
 except ImportError:
     MODULE_AVAILABILITY["security"] = False
 
 try:
-    from codomyrmex.data_visualization import create_bar_chart
+    from codomyrmex.data_visualization import create_bar_chart  # noqa: F401
     MODULE_AVAILABILITY["data_visualization"] = True
 except ImportError:
     MODULE_AVAILABILITY["data_visualization"] = False
 
 try:
-    from codomyrmex.performance import profile_function, run_benchmark
+    from codomyrmex.performance import profile_function, run_benchmark  # noqa: F401
     MODULE_AVAILABILITY["performance"] = True
 except ImportError:
     MODULE_AVAILABILITY["performance"] = False
 
 try:
-    from codomyrmex.ci_cd_automation import create_pipeline
+    from codomyrmex.ci_cd_automation import create_pipeline  # noqa: F401
     MODULE_AVAILABILITY["ci_cd"] = True
 except ImportError:
     MODULE_AVAILABILITY["ci_cd"] = False
@@ -78,7 +84,7 @@ except ImportError:
     LOGGING_AVAILABLE = False
 
 # Set up logging for tests
-if LOGGING_AVAILABLE and hasattr(setup_logging, '__call__'):
+if LOGGING_AVAILABLE and callable(setup_logging):
     try:
         setup_logging()
     except Exception:

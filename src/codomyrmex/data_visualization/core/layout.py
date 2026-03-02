@@ -20,7 +20,7 @@ class Section:
     def render(self) -> str:
         """render ."""
         inner = "\n".join(
-            getattr(c, "render", lambda: str(c))() for c in self.children
+            getattr(c, "render", lambda c=c: str(c))() for c in self.children
         )
         cls = f' class="{self.css_class}"' if self.css_class else ""
         title_html = f"<h2>{self.title}</h2>" if self.title else ""

@@ -27,8 +27,10 @@ class TestServerManager:
         def health_check():
             return {"status": "ok"}
 
-    def add_route(self, path: str, endpoint: Callable, methods: list[str] = ["GET"]):
+    def add_route(self, path: str, endpoint: Callable, methods: list[str] | None = None):
         """Add a route to the FastAPI application."""
+        if methods is None:
+            methods = ["GET"]
         self.app.add_api_route(path, endpoint, methods=methods)
 
     def _run_server(self):

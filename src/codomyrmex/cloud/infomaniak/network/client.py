@@ -476,13 +476,13 @@ class InfomaniakNetworkClient(InfomaniakOpenStackBase):
             listeners = list(self._conn.load_balancer.listeners(**kwargs))
             return [
                 {
-                    "id": l.id,
-                    "name": l.name,
-                    "protocol": l.protocol,
-                    "protocol_port": l.protocol_port,
-                    "loadbalancer_id": getattr(l, "loadbalancer_id", None),
+                    "id": listener.id,
+                    "name": listener.name,
+                    "protocol": listener.protocol,
+                    "protocol_port": listener.protocol_port,
+                    "loadbalancer_id": getattr(listener, "loadbalancer_id", None),
                 }
-                for l in listeners
+                for listener in listeners
             ]
         except Exception as e:
             logger.error(f"Failed to list listeners: {e}")

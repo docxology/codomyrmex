@@ -14,7 +14,7 @@ except ImportError:
     DOCKER_AVAILABLE = False
 
 try:
-    import aiohttp
+    import aiohttp  # noqa: F401
     AIOHTTP_AVAILABLE = True
 except ImportError:
     AIOHTTP_AVAILABLE = False
@@ -330,7 +330,7 @@ class TestDeploymentOrchestrator:
     def test_deploy_to_production_kubernetes(self):
         """Test deployment to production with Kubernetes."""
         try:
-            import kubernetes
+            import kubernetes  # noqa: F401
             KUBERNETES_AVAILABLE = True
         except ImportError:
             KUBERNETES_AVAILABLE = False
@@ -382,7 +382,7 @@ class TestDeploymentOrchestrator:
     def test_perform_health_checks_http(self):
         """Test HTTP health check with real requests."""
         try:
-            import requests
+            import requests  # noqa: F401
         except ImportError:
             pytest.skip("requests not available")
 
@@ -415,7 +415,7 @@ class TestDeploymentOrchestrator:
     def test_perform_health_checks_http_failure(self):
         """Test HTTP health check failure with real requests."""
         try:
-            import requests
+            import requests  # noqa: F401
         except ImportError:
             pytest.skip("requests not available")
 

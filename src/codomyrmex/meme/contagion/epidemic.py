@@ -31,7 +31,7 @@ class SIRModel:
         Uses standard compartmental logic (S, I, R counts only, mean-field approximation).
         """
         S = self.N - initial_infected
-        I = initial_infected
+        infected = initial_infected
         R = 0
 
         trace = PropagationTrace(seed_meme_id="simulated_meme")
@@ -39,23 +39,23 @@ class SIRModel:
         for t in range(steps):
             trace.time_steps.append(t)
             trace.susceptible_counts.append(S)
-            trace.infected_counts.append(I)
+            trace.infected_counts.append(infected)
             trace.recovered_counts.append(R)
 
-            # New infections: beta * I * (S/N)
-            new_infections = int(self.beta * I * (S / self.N))
-            # Recoveries: gamma * I
-            new_recoveries = int(self.gamma * I)
+            # New infections: beta * infected * (S/N)
+            new_infections = int(self.beta * infected * (S / self.N))
+            # Recoveries: gamma * infected
+            new_recoveries = int(self.gamma * infected)
 
             # Apply
             new_infections = min(new_infections, S)
-            new_recoveries = min(new_recoveries, I)
+            new_recoveries = min(new_recoveries, infected)
 
             S -= new_infections
-            I += new_infections - new_recoveries
+            infected += new_infections - new_recoveries
             R += new_recoveries
 
-            if I <= 0:
+            if infected <= 0:
                 break  # Extinct
 
         return trace
@@ -78,7 +78,7 @@ class SISModel:
     def simulate(self, steps: int = 100, initial_infected: int = 1) -> PropagationTrace:
         """simulate ."""
         S = self.N - initial_infected
-        I = initial_infected
+        infected = initial_infected
         # SIS has no "Recovered" bucket in the same sense, but we track
         # logic similarly.
 
@@ -87,19 +87,19 @@ class SISModel:
         for t in range(steps):
             trace.time_steps.append(t)
             trace.susceptible_counts.append(S)
-            trace.infected_counts.append(I)
+            trace.infected_counts.append(infected)
             trace.recovered_counts.append(0)  # Always 0 for SIS trace compatibility
 
-            new_infections = int(self.beta * I * (S / self.N))
-            new_recoveries = int(self.gamma * I)
+            new_infections = int(self.beta * infected * (S / self.N))
+            new_recoveries = int(self.gamma * infected)
 
             new_infections = min(new_infections, S)
-            new_recoveries = min(new_recoveries, I)
+            new_recoveries = min(new_recoveries, infected)
 
             S = S - new_infections + new_recoveries
-            I = I + new_infections - new_recoveries
+            infected = infected + new_infections - new_recoveries
 
-            if I <= 0:
+            if infected <= 0:
                 break
 
         return trace
@@ -126,7 +126,7 @@ class SEIRModel(SIRModel):
         """simulate ."""
         S = self.N - initial_infected
         E = 0
-        I = initial_infected
+        infected = initial_infected
         R = 0
 
         trace = PropagationTrace(seed_meme_id="seir_simulated_meme")
@@ -134,26 +134,26 @@ class SEIRModel(SIRModel):
         for t in range(steps):
             trace.time_steps.append(t)
             trace.susceptible_counts.append(S)
-            trace.infected_counts.append(I)
+            trace.infected_counts.append(infected)
             trace.recovered_counts.append(R)
 
             # New exposed
-            new_exposed = int(self.beta * I * (S / self.N))
+            new_exposed = int(self.beta * infected * (S / self.N))
             # New infected (from exposed)
             new_infected = int(self.sigma * E)
             # New recovered
-            new_recovered = int(self.gamma * I)
+            new_recovered = int(self.gamma * infected)
 
             new_exposed = min(new_exposed, S)
             new_infected = min(new_infected, E)
-            new_recovered = min(new_recovered, I)
+            new_recovered = min(new_recovered, infected)
 
             S -= new_exposed
             E += new_exposed - new_infected
-            I += new_infected - new_recovered
+            infected += new_infected - new_recovered
             R += new_recovered
 
-            if E <= 0 and I <= 0:
+            if E <= 0 and infected <= 0:
                 break
 
         return trace

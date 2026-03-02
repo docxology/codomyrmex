@@ -528,7 +528,7 @@ class TestPrintAssessmentChecklist:
         out = capsys.readouterr().out
 
         # Each item should be prefixed with "- [ ] "
-        lines = [l for l in out.strip().split("\n") if l.startswith("- [ ] ")]
+        lines = [line for line in out.strip().split("\n") if line.startswith("- [ ] ")]
         assert len(lines) == 8
 
 

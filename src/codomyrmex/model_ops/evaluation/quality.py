@@ -271,7 +271,7 @@ class QualityAnalyzer:
         # Sentence length variance
         lengths = [len(_tokenize(s)) for s in sentences]
         mean_len = sum(lengths) / len(lengths)
-        variance = sum((l - mean_len) ** 2 for l in lengths) / len(lengths)
+        variance = sum((length - mean_len) ** 2 for length in lengths) / len(lengths)
         std_dev = math.sqrt(variance)
         # Normalize: low std_dev relative to mean is good
         cv = std_dev / mean_len if mean_len > 0 else 0

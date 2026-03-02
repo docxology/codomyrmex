@@ -94,7 +94,8 @@ def resolve_link(link_url: str, from_file: Path, docs_root: Path) -> tuple[bool,
             else:
                 # Would go beyond project root, stop here
                 break
-        link_url = link_url.lstrip('../')
+        while link_url.startswith('../'):
+            link_url = link_url.removeprefix('../')
         resolved = current_dir / link_url
     elif link_url.startswith('/'):
         # Absolute from docs root

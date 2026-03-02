@@ -1,4 +1,6 @@
-from typing import TYPE_CHECKING, Any, Optional
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
     from codomyrmex.cerebrum.inference.active_inference import ActiveInferenceAgent
@@ -87,7 +89,7 @@ class ReasoningEngine:
     def __init__(
         self,
         case_base: CaseBase,
-        bayesian_network: Optional["BayesianNetwork"] = None,
+        bayesian_network: BayesianNetwork | None = None,
         config: CerebrumConfig | None = None,
     ):
         """Initialize reasoning engine.
@@ -294,7 +296,7 @@ class CerebrumEngine:
         """
         return self.transformation_manager.transform(model, transformation, **kwargs)
 
-    def set_bayesian_network(self, network: "BayesianNetwork") -> None:
+    def set_bayesian_network(self, network: BayesianNetwork) -> None:
         """Set Bayesian network for probabilistic inference.
 
         Args:
@@ -307,7 +309,7 @@ class CerebrumEngine:
         )
         self.logger.info(f"Set Bayesian network: {network.name}")
 
-    def set_active_inference_agent(self, agent: "ActiveInferenceAgent") -> None:
+    def set_active_inference_agent(self, agent: ActiveInferenceAgent) -> None:
         """Set active inference agent.
 
         Args:

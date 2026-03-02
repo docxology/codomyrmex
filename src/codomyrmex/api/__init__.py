@@ -75,10 +75,6 @@ from .documentation import (
     APIEndpoint as DocumentationAPIEndpoint,
 )
 from .documentation import (
-    # OpenAPI/Swagger
-    OpenAPIGenerator as DocumentationOpenAPIGenerator,
-)
-from .documentation import (
     generate_openapi_spec as generate_openapi_spec_from_docs,
 )
 
@@ -103,8 +99,6 @@ from .openapi_generator import (
 # Import shared OpenAPI components
 from .openapi_generator import (
     DocumentationOpenAPIGenerator,
-    OpenAPISpecification,
-    StandardizationOpenAPIGenerator,
 )
 
 # Import from pagination submodule

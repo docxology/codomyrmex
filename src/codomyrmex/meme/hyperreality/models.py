@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import uuid
 from dataclasses import dataclass, field
-from enum import Enum
+from enum import Enum, StrEnum
 
 
 class SimulationLevel(int, Enum):
@@ -16,7 +16,7 @@ class SimulationLevel(int, Enum):
     PURE = 4        # No relation to any reality: pure simulacrum
 
 
-class OntologicalStatus(str, Enum):
+class OntologicalStatus(StrEnum):
     """The status of an object's existence."""
     REAL = "real"
     VIRTUAL = "virtual"

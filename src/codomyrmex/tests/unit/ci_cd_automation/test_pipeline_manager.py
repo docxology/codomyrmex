@@ -203,14 +203,14 @@ class TestCreatePipeline:
 
     def test_create_pipeline_bad_path_raises(self, tmp_path):
         mgr = PipelineManager(workspace_dir=str(tmp_path / "ws"))
-        with pytest.raises(Exception):
+        with pytest.raises((FileNotFoundError, OSError)):
             mgr.create_pipeline("/nonexistent/path.json")
 
     def test_create_pipeline_invalid_json_raises(self, tmp_path):
         bad_file = tmp_path / "bad.json"
         bad_file.write_text("{invalid json!!!")
         mgr = PipelineManager(workspace_dir=str(tmp_path / "ws"))
-        with pytest.raises(Exception):
+        with pytest.raises((json.JSONDecodeError, ValueError)):
             mgr.create_pipeline(str(bad_file))
 
     def test_create_pipeline_defaults(self, tmp_path):

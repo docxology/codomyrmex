@@ -170,7 +170,7 @@ class DeadLetterQueue:
                 return 0
             lines = self._path.read_text(encoding="utf-8").splitlines()
             if before is None:
-                count = len([l for l in lines if l.strip()])
+                count = len([line for line in lines if line.strip()])
                 self._path.write_text("", encoding="utf-8")
                 return count
 

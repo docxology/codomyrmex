@@ -166,13 +166,12 @@ def generate_environment_report() -> str:
 
     deps_ok = True
     try:
-        import cased
-    except ImportError:
-        deps_ok = False
-
-    try:
-        import dotenv
-    except ImportError:
+        import importlib.util
+        deps_ok = (
+            importlib.util.find_spec("cased") is not None
+            and importlib.util.find_spec("dotenv") is not None
+        )
+    except Exception:
         deps_ok = False
 
     report.append(f"Dependencies OK: {'Yes' if deps_ok else 'No'}")

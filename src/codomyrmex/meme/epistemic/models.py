@@ -3,10 +3,10 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from enum import Enum
+from enum import StrEnum
 
 
-class EvidenceType(str, Enum):
+class EvidenceType(StrEnum):
     """Classification of evidence strength."""
 
     EMPIRICAL = "empirical"  # Direct observation/data

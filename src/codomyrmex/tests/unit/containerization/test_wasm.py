@@ -10,7 +10,6 @@ try:
         WASMModule,
         WASMOrchestrator,
         WASMRuntime,
-        WASMRuntimeClient,
         WasmtimeClient,
     )
     HAS_MODULE = True

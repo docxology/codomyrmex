@@ -18,7 +18,6 @@ try:
     from codomyrmex.agents.core import (
         AgentCapabilities,
         AgentRequest,
-        AgentResponse,
         SessionManager,
     )
 

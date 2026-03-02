@@ -63,10 +63,10 @@ class PluginValidator:
         """Validate plugin metadata dictionary."""
         result = ValidationResult()
         required_fields = ['name', 'version']
-        for field in required_fields:
-            if field not in metadata:
+        for field_name in required_fields:
+            if field_name not in metadata:
                 result.valid = False
-                result.issues.append({'type': 'metadata', 'message': f"Missing field: {field}", 'severity': 'error'})
+                result.issues.append({'type': 'metadata', 'message': f"Missing field: {field_name}", 'severity': 'error'})
         return result
 
     def check_plugin_dependencies(self, dependencies_or_info: PluginInfo | list[str],

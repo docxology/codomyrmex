@@ -298,7 +298,7 @@ class ClaudeTaskMaster:
         except ValueError as e:
             logger.error(f"Configuration error: {e}")
             raise RuntimeError(f"Task execution failed: {e}") from None
-        except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
+        except (RuntimeError, AttributeError, OSError, TypeError) as e:
             execution_time = time.time() - start_time
             logger.error(f"Error executing task: {e}", exc_info=True)
             return {

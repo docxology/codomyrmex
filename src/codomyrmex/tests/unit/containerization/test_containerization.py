@@ -52,7 +52,6 @@ class TestImageOptimizer:
         try:
             from codomyrmex.containerization.docker.image_optimizer import (
                 ImageOptimizer,
-                OptimizationSuggestion,
             )
         except ImportError:
             pytest.skip("ImageOptimizer not available")

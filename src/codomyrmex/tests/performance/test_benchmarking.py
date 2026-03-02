@@ -12,16 +12,18 @@ import pytest
 
 try:
     from codomyrmex.performance import (
-        PerformanceProfiler,
-        profile_function,
-        run_benchmark,
+        PerformanceProfiler,  # noqa: F401
+        profile_function,  # noqa: F401
+        run_benchmark,  # noqa: F401
     )
     PERFORMANCE_AVAILABLE = True
 except ImportError:
     PERFORMANCE_AVAILABLE = False
 
 try:
-    from codomyrmex.logging_monitoring.core.logger_config import PerformanceLogger
+    from codomyrmex.logging_monitoring.core.logger_config import (
+        PerformanceLogger,  # noqa: F401
+    )
     PERFORMANCE_LOGGING_AVAILABLE = True
 except ImportError:
     PERFORMANCE_LOGGING_AVAILABLE = False

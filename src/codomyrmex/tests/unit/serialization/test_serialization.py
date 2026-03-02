@@ -22,19 +22,19 @@ import pytest
 
 # Check optional dependencies
 try:
-    import yaml
+    import yaml  # noqa: F401
     YAML_AVAILABLE = True
 except ImportError:
     YAML_AVAILABLE = False
 
 try:
-    import msgpack
+    import msgpack  # noqa: F401
     MSGPACK_AVAILABLE = True
 except ImportError:
     MSGPACK_AVAILABLE = False
 
 try:
-    import fastavro
+    import fastavro  # noqa: F401
     AVRO_AVAILABLE = True
 except ImportError:
     AVRO_AVAILABLE = False
