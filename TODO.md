@@ -10,8 +10,9 @@ This is the authoritative project backlog. Updated after each wave/sprint. Sprin
 
 - [x] Fix `__init__.py` version: `1.0.3.dev0` → `1.0.5` *(Wave 2 — done)*
 - [x] Create `.github/CONTRIBUTING.md` *(Wave 2 — done)*
+- [x] Create top-level `TODO.md` *(Wave 2 — done)*
+- [x] Fix Gemini workflows — created `.gemini/` directory with 5 prompt files *(Wave 2 — done)*
 - [ ] **`model_context_protocol/transport/server.py`** — 654 LOC, 0% test coverage (chronic desloppify reopener — highest single-file gap)
-- [ ] **Verify Gemini workflows** — 5 GitHub Actions workflows may have broken API keys: `gemini-review.yml`, `gemini-triage.yml`, `gemini-scheduled-triage.yml`, `gemini-dispatch.yml`, `gemini-invoke.yml`
 - [ ] **Ratchet coverage gate** from `fail_under=68` → 70% (once transport/server.py tests added)
 - [ ] **Resolve ~35 circular import pairs** (Sprint 4 target, still open)
 
@@ -19,99 +20,22 @@ This is the authoritative project backlog. Updated after each wave/sprint. Sprin
 
 ## 🟠 HIGH (next sprint targets)
 
-### Documentation — PAI.md Version Headers (75/88 modules outdated)
+### Documentation — Wave 2 COMPLETE ✅ *(March 2026)*
 
-All need: `v1.0.0 | February 2026` → `v1.0.5 | March 2026`
+All RASP documentation enrichment complete across all 88 modules:
 
-**Group A (a-c):** `agentic_memory`, `api`, `audio`, `auth`, `bio_simulation`, `cache`, `calendar_integration`, `cerebrum`, `ci_cd_automation`
-**Group B (cl-d):** `cloud`, `coding`, `compression`, `concurrency`, `config_management`, `containerization`, `crypto`, `dark`, `database_management`
-**Group C (de-ev):** `defense`, `dependency_injection`, `deployment`, `documentation`, `documents`, `edge_computing`, `email`, `embodiment`, `encryption`, `environment_setup`
-**Group D (ev-i):** `events`, `evolutionary_ai`, `examples`, `exceptions`, `feature_flags`, `finance`, `formal_verification`, `fpf`, `git_operations`
-**Group E (gr-lo):** `graph_rag`, `ide`, `identity`, `llm`, `logging_monitoring`, `logistics`
-**Group F (ma-ph):** `market`, `meme`, `model_ops`, `module_template`, `networking`, `networks`, `orchestrator`, `performance`, `physical_management`
-**Group G (pl-sk):** `plugin_system`, `privacy`, `prompt_engineering`, `quantum`, `relations`, `scrape`, `security`, `simulation`, `skills`, `spatial`
-**Group H (st-z):** `static_analysis`, `system_discovery`, `telemetry`, `templating`, `terminal_interface`, `testing`, `tests`, `tool_use`, `tree_sitter`, `utils`, `vector_store`, `video`, `wallet`
+- [x] **PAI.md version headers** — all 88 bumped to `v1.0.5 | March 2026`
+- [x] **AGENTS.md Agent Role Access Matrix** — added to all 88 modules (was 9/88)
+- [x] **README.md PAI Integration section** — added to all 88 modules (was 6/88)
+- [x] **PAI.md MCP Tools table** — added to all 88 modules (was 30/88)
+- [x] **SPEC.md expansion** — 4 of 8 stub files expanded (agentic_memory, bio_simulation, ci_cd_automation, config_management); 4 pending (finance, model_context_protocol, physical_management, system_discovery)
 
-### Documentation — AGENTS.md Agent Role Access Matrix (79/88 missing)
+### Documentation — Remaining SPEC.md Stubs (4/8 done)
 
-Template: `src/codomyrmex/agentic_memory/AGENTS.md` (verified canonical). Already done: agents, agentic_memory, cerebrum, coding, git_operations, llm, model_context_protocol, orchestrator, security.
-
-**Core Layer:**
-- [ ] `static_analysis/AGENTS.md`
-- [ ] `logging_monitoring/AGENTS.md`
-- [ ] `environment_setup/AGENTS.md`
-- [ ] `terminal_interface/AGENTS.md`
-
-**Service Layer:**
-- [ ] `ci_cd_automation/AGENTS.md`
-- [ ] `formal_verification/AGENTS.md`
-- [ ] `validation/AGENTS.md`
-- [ ] `events/AGENTS.md`
-- [ ] `config_management/AGENTS.md`
-- [ ] `data_visualization/AGENTS.md`
-- [ ] `maintenance/AGENTS.md`
-- [ ] `plugin_system/AGENTS.md`
-- [ ] `relations/AGENTS.md`
-- [ ] `calendar_integration/AGENTS.md`
-- [ ] `collaboration/AGENTS.md`
-- [ ] `skills/AGENTS.md`
-- [ ] `system_discovery/AGENTS.md`
-- [ ] `performance/AGENTS.md`
-- [ ] `scrape/AGENTS.md`
-- [ ] `search/AGENTS.md`
-- [ ] `cloud/AGENTS.md`
-- [ ] `git_analysis/AGENTS.md`
-- [ ] `containerization/AGENTS.md`
-
-**Domain Modules:**
-- [ ] `api/AGENTS.md`, `audio/AGENTS.md`, `auth/AGENTS.md`, `bio_simulation/AGENTS.md`
-- [ ] `cache/AGENTS.md`, `compression/AGENTS.md`, `concurrency/AGENTS.md`, `dark/AGENTS.md`
-- [ ] `database_management/AGENTS.md`, `defense/AGENTS.md`, `dependency_injection/AGENTS.md`
-- [ ] `deployment/AGENTS.md`, `documents/AGENTS.md`, `edge_computing/AGENTS.md`
-- [ ] `email/AGENTS.md`, `embodiment/AGENTS.md`, `encryption/AGENTS.md`
-- [ ] `evolutionary_ai/AGENTS.md`, `examples/AGENTS.md`, `exceptions/AGENTS.md`
-- [ ] `feature_flags/AGENTS.md`, `finance/AGENTS.md`, `fpf/AGENTS.md`
-- [ ] `graph_rag/AGENTS.md`, `ide/AGENTS.md`, `identity/AGENTS.md`, `logistics/AGENTS.md`
-- [ ] `market/AGENTS.md`, `meme/AGENTS.md`, `model_ops/AGENTS.md`, `module_template/AGENTS.md`
-- [ ] `networking/AGENTS.md`, `networks/AGENTS.md`, `physical_management/AGENTS.md`
-- [ ] `privacy/AGENTS.md`, `prompt_engineering/AGENTS.md`, `quantum/AGENTS.md`
-- [ ] `simulation/AGENTS.md`, `spatial/AGENTS.md`, `telemetry/AGENTS.md`
-- [ ] `templating/AGENTS.md`, `testing/AGENTS.md`, `tests/AGENTS.md`, `tool_use/AGENTS.md`
-- [ ] `tree_sitter/AGENTS.md`, `utils/AGENTS.md`, `vector_store/AGENTS.md`
-- [ ] `video/AGENTS.md`, `wallet/AGENTS.md`
-
-### Documentation — README.md PAI Integration (82/88 missing)
-
-Template: `src/codomyrmex/orchestrator/README.md` or `src/codomyrmex/security/README.md`. Already done: security, llm, orchestrator, git_operations, documentation, formal_verification.
-
-**Priority 1 (largest modules by Python file count):**
-- [ ] `agents/README.md` (168 Python files — top priority)
-- [ ] `coding/README.md` (71 files)
-- [ ] `data_visualization/README.md` (68 files)
-- [ ] `cloud/README.md` (56 files)
-- [ ] `meme/README.md` (57 files)
-- [ ] `agentic_memory/README.md` (has matrix but missing PAI section)
-- [ ] `cerebrum/README.md`
-- [ ] `model_context_protocol/README.md`
-
-**Priority 2 (service/foundation modules):**
-- [ ] `api`, `auth`, `cache`, `cli`, `collaboration`, `config_management`
-- [ ] `containerization`, `events`, `feature_flags`, `ide`, `logistics`
-- [ ] `model_ops`, `plugin_system`, `prompt_engineering`, `relations`
-- [ ] `scrape`, `search`, `skills`, `static_analysis`, `system_discovery`
-- [ ] `telemetry`, `terminal_interface`, `utils`, `validation`
-
-**Priority 3 (domain modules):**
-- [ ] `audio`, `bio_simulation`, `compression`, `concurrency`, `crypto`
-- [ ] `dark`, `database_management`, `defense`, `dependency_injection`
-- [ ] `deployment`, `documents`, `edge_computing`, `embodiment`
-- [ ] `encryption`, `environment_setup`, `examples`, `evolutionary_ai`
-- [ ] `exceptions`, `finance`, `fpf`, `git_analysis`, `graph_rag`
-- [ ] `identity`, `logging_monitoring`, `maintenance`, `market`
-- [ ] `module_template`, `networking`, `networks`, `performance`
-- [ ] `physical_management`, `privacy`, `quantum`, `simulation`
-- [ ] `spatial`, `templating`, `testing`, `tests`, `tool_use`
-- [ ] `tree_sitter`, `vector_store`, `video`, `wallet`
+- [ ] `finance/SPEC.md` — still 43 lines, needs expansion
+- [ ] `model_context_protocol/SPEC.md` — still 49 lines, needs expansion
+- [ ] `physical_management/SPEC.md` — still 49 lines, needs expansion
+- [ ] `system_discovery/SPEC.md` — still 49 lines, needs expansion
 
 ### MCP Coverage (48+ modules missing `mcp_tools.py`)
 
@@ -145,24 +69,11 @@ Modules with no MCP exposure — invisible to the PAI bridge:
 
 ## 🟡 MEDIUM (notable enhancement, 2-4 sprint horizon)
 
-### Documentation — PAI.md MCP Tools Tables (58/88 missing)
+### Documentation — PAI.md MCP Tools Tables
 
-Add `## MCP Tools` section to 58 module PAI.md files:
-
-**Has verified tools (add full table):** `events`, `config_management`, `cloud`, `cerebrum`, `performance`, `scrape`, `maintenance`, `plugin_system`, `relations`, `calendar_integration`, `data_visualization`, `collaboration`, `skills`, `git_analysis` and others (see MEMORY.md verified tool names)
-
-**No MCP tools (add "not exposed" note):** All remaining modules without `@mcp_tool` decorators
-
-### Documentation — SPEC.md Expansion (8 stub files < 50 lines)
-
-- [ ] `agentic_memory/SPEC.md`
-- [ ] `bio_simulation/SPEC.md`
-- [ ] `ci_cd_automation/SPEC.md`
-- [ ] `config_management/SPEC.md`
-- [ ] `finance/SPEC.md`
-- [ ] `model_context_protocol/SPEC.md`
-- [ ] `physical_management/SPEC.md`
-- [ ] `system_discovery/SPEC.md`
+- [x] All 88 modules have `## MCP Tools` section *(Wave 2 — done)*
+- Modules with MCP tools have full tool tables (git_analysis 16 tools, email 12 tools, etc.)
+- Modules without MCP tools have "not exposed" placeholder with import/CLI guidance
 
 ### Rules Submodule Enhancements (agentic_memory/rules/)
 
