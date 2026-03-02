@@ -1,4 +1,3 @@
-import argparse
 import io
 import json
 import os
@@ -68,7 +67,7 @@ def test_resolve_handler_fallback(tmp_path):
 
 def test_get_todo_count_interactive(monkeypatch, tmp_path):
     # Setup a temporary todo_list.txt in the expected location
-    droid_dir = Path(__file__).parent.parent.parent.parent.parent / "agents" / "droid"
+    Path(__file__).parent.parent.parent.parent.parent / "agents" / "droid"
     # To test get_todo_count_interactive without modifying source dir, we patch os.path.dirname
     monkeypatch.setattr(os.path, "dirname", lambda p: str(tmp_path))
 
@@ -110,13 +109,18 @@ def test_run_todos_empty(tmp_path):
     todo_file = tmp_path / "todo_list.txt"
     todo_file.write_text("[TODO]\n[COMPLETED]\n", encoding="utf-8")
     manager = TodoManager(str(todo_file))
-    controller = DroidController(config=build_controller(None).config.with_overrides(allowed_operations=["TestTask"]))
+    controller = DroidController(
+        config=build_controller(None).config.with_overrides(
+            allowed_operations=["TestTask"]
+        )
+    )
     processed = list(run_todos(controller, manager, 1))
     assert processed == []
 
 
 def dummy_handler_with_kwargs(*args, **kwargs):
     return "success"
+
 
 def test_run_todos_success(tmp_path):
     todo_file = tmp_path / "todo_list.txt"
@@ -127,7 +131,11 @@ def test_run_todos_success(tmp_path):
     )
     manager = TodoManager(str(todo_file))
 
-    controller = DroidController(config=build_controller(None).config.with_overrides(allowed_operations=["TestTask"]))
+    controller = DroidController(
+        config=build_controller(None).config.with_overrides(
+            allowed_operations=["TestTask"]
+        )
+    )
     controller.start()
     processed = list(run_todos(controller, manager, 1))
     assert len(processed) == 1
@@ -149,7 +157,11 @@ def test_run_todos_failure(tmp_path):
     )
     manager = TodoManager(str(todo_file))
 
-    controller = DroidController(config=build_controller(None).config.with_overrides(allowed_operations=["TestTask"]))
+    controller = DroidController(
+        config=build_controller(None).config.with_overrides(
+            allowed_operations=["TestTask"]
+        )
+    )
     controller.start()
     processed = list(run_todos(controller, manager, 1))
 
@@ -169,7 +181,11 @@ def test_run_todos_no_handler(tmp_path):
     )
     manager = TodoManager(str(todo_file))
 
-    controller = DroidController(config=build_controller(None).config.with_overrides(allowed_operations=["implement_nothing"]))
+    controller = DroidController(
+        config=build_controller(None).config.with_overrides(
+            allowed_operations=["implement_nothing"]
+        )
+    )
     controller.start()
 
     # run_todos catches the error inside, and just continues but logs it as failed
@@ -187,13 +203,16 @@ def test_build_controller(tmp_path, monkeypatch):
 
     # Without config and create_default_controller missing (fallback to DroidController())
     import codomyrmex.agents.droid.run_todo_droid as module_to_patch
+
     monkeypatch.delattr(module_to_patch, "create_default_controller")
     controller_fallback = module_to_patch.build_controller(None)
     assert isinstance(controller_fallback, DroidController)
 
     # With config
     config_file = tmp_path / "config.json"
-    config_file.write_text(json.dumps({"identifier": "test_droid", "mode": "test"}), encoding="utf-8")
+    config_file.write_text(
+        json.dumps({"identifier": "test_droid", "mode": "test"}), encoding="utf-8"
+    )
     controller2 = build_controller(str(config_file))
     assert isinstance(controller2, DroidController)
     assert controller2.config.identifier == "test_droid"
@@ -230,7 +249,9 @@ def test_determine_count():
     assert _determine_count(Args(2, False, False), todos) == 2
 
     # capturing stdout for the invalid print
-    import io, sys
+    import io
+    import sys
+
     stdout = io.StringIO()
     sys.stdout = stdout
     assert _determine_count(Args(-2, False, False), todos) is None
@@ -257,7 +278,11 @@ def test_process_todos(capsys, tmp_path):
         encoding="utf-8",
     )
     manager = TodoManager(str(todo_file))
-    controller = DroidController(config=build_controller(None).config.with_overrides(allowed_operations=["TestTask"]))
+    controller = DroidController(
+        config=build_controller(None).config.with_overrides(
+            allowed_operations=["TestTask"]
+        )
+    )
     controller.start()
 
     _process_todos(controller, manager, 1)
@@ -283,29 +308,45 @@ def test_main(monkeypatch, tmp_path, capsys):
         encoding="utf-8",
     )
 
-    monkeypatch.setattr(sys, "argv", ["run_todo_droid.py", "--todo-file", str(todo_file), "--list"])
+    monkeypatch.setattr(
+        sys, "argv", ["run_todo_droid.py", "--todo-file", str(todo_file), "--list"]
+    )
     main()
     captured = capsys.readouterr()
     assert "TODO List:" in captured.out
 
-    monkeypatch.setattr(sys, "argv", ["run_todo_droid.py", "--todo-file", str(todo_file), "--dry-run"])
+    monkeypatch.setattr(
+        sys, "argv", ["run_todo_droid.py", "--todo-file", str(todo_file), "--dry-run"]
+    )
     main()
     captured = capsys.readouterr()
     assert "Dry run" in captured.out
 
-    monkeypatch.setattr(sys, "argv", ["run_todo_droid.py", "--todo-file", str(todo_file), "--count", "1"])
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        ["run_todo_droid.py", "--todo-file", str(todo_file), "--count", "1"],
+    )
     main()
     captured = capsys.readouterr()
     assert "Execution Summary" in captured.out
 
     # Test invalid count
-    monkeypatch.setattr(sys, "argv", ["run_todo_droid.py", "--todo-file", str(todo_file), "--count", "-2"])
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        ["run_todo_droid.py", "--todo-file", str(todo_file), "--count", "-2"],
+    )
     main()
 
     # Test no todos
     empty_todo = tmp_path / "empty.txt"
     empty_todo.write_text("[TODO]\n[COMPLETED]\n", encoding="utf-8")
-    monkeypatch.setattr(sys, "argv", ["run_todo_droid.py", "--todo-file", str(empty_todo), "--count", "1"])
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        ["run_todo_droid.py", "--todo-file", str(empty_todo), "--count", "1"],
+    )
     main()
     captured = capsys.readouterr()
     assert "No TODOs to process. Exiting." in captured.out
@@ -318,11 +359,14 @@ def test_process_todos_controller_metrics_fallback(capsys, tmp_path, monkeypatch
         encoding="utf-8",
     )
     manager = TodoManager(str(todo_file))
-    controller = DroidController(config=build_controller(None).config.with_overrides(allowed_operations=["TestTask"]))
+    controller = DroidController(
+        config=build_controller(None).config.with_overrides(
+            allowed_operations=["TestTask"]
+        )
+    )
     controller.start()
 
     # We need to simulate controller metrics raising AttributeError
-    original_metrics = DroidController.metrics
     def mock_metrics(self):
         raise AttributeError("mocked error")
 
@@ -344,7 +388,11 @@ def test_main_invalid_count_type(monkeypatch, tmp_path, capsys):
     # We already test _determine_count. Let's cover the `if count is None:` path in main.
     # To hit this, count is None if _determine_count returns None.
     # _determine_count returns None if args.count < -1. We test that.
-    monkeypatch.setattr(sys, "argv", ["run_todo_droid.py", "--todo-file", str(todo_file), "--count", "-2"])
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        ["run_todo_droid.py", "--todo-file", str(todo_file), "--count", "-2"],
+    )
     main()
     captured = capsys.readouterr()
     assert "Invalid count: -2" in captured.out
@@ -357,13 +405,19 @@ def test_main_keyboard_interrupt(monkeypatch, tmp_path, capsys):
         encoding="utf-8",
     )
 
-    manager = TodoManager(str(todo_file))
+    TodoManager(str(todo_file))
 
     def mock_run_todos(*args, **kwargs):
         raise KeyboardInterrupt()
 
-    monkeypatch.setattr("codomyrmex.agents.droid.run_todo_droid.run_todos", mock_run_todos)
-    monkeypatch.setattr(sys, "argv", ["run_todo_droid.py", "--todo-file", str(todo_file), "--count", "1"])
+    monkeypatch.setattr(
+        "codomyrmex.agents.droid.run_todo_droid.run_todos", mock_run_todos
+    )
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        ["run_todo_droid.py", "--todo-file", str(todo_file), "--count", "1"],
+    )
     main()
     captured = capsys.readouterr()
     assert "Operation interrupted by user" in captured.out
@@ -382,7 +436,11 @@ def test_main_metrics_exception(monkeypatch, tmp_path, capsys):
         raise TypeError("forced exception for coverage")
 
     monkeypatch.setattr(DroidController, "metrics", property(mock_metrics))
-    monkeypatch.setattr(sys, "argv", ["run_todo_droid.py", "--todo-file", str(todo_file), "--count", "1"])
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        ["run_todo_droid.py", "--todo-file", str(todo_file), "--count", "1"],
+    )
     main()
     captured = capsys.readouterr()
     assert "Droid session completed." in captured.out
@@ -397,7 +455,11 @@ def test_run_todos_multiple_tasks_with_metrics(tmp_path, capsys):
     )
     manager = TodoManager(str(todo_file))
 
-    controller = DroidController(config=build_controller(None).config.with_overrides(allowed_operations=["TestTask1", "TestTask2"]))
+    controller = DroidController(
+        config=build_controller(None).config.with_overrides(
+            allowed_operations=["TestTask1", "TestTask2"]
+        )
+    )
     controller.start()
 
     processed = list(run_todos(controller, manager, 2))
@@ -419,6 +481,7 @@ def test_run_todos_no_items(tmp_path):
     processed = list(run_todos(controller, manager, 1))
 
     assert len(processed) == 0
+
 
 def test_process_todos_controller_none(capsys, tmp_path):
     todo_file = tmp_path / "todo_list.txt"
