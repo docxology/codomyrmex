@@ -4,7 +4,7 @@
     "version": "0.1.0",
     "root_path": "/Users/mini/Documents/GitHub/codomyrmex",
     "python_version": "3.13.11 (main, Dec  5 2025, 21:16:49) [Clang 21.1.4 ]",
-    "timestamp": "2026-03-01T23:51:26.916753"
+    "timestamp": "2026-03-02T00:22:19.468863"
   },
   "modules": {
     "tool_use": {
@@ -426,7 +426,7 @@
           "name": "field",
           "module_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/ide",
           "type": "function",
-          "signature": "(*, default=<dataclasses._MISSING_TYPE object at 0x10153e120>, default_factory=<dataclasses._MISSING_TYPE object at 0x10153e120>, init=True, repr=True, hash=None, compare=True, metadata=None, kw_only=<dataclasses._MISSING_TYPE object at 0x10153e120>)",
+          "signature": "(*, default=<dataclasses._MISSING_TYPE object at 0x104e1e120>, default_factory=<dataclasses._MISSING_TYPE object at 0x104e1e120>, init=True, repr=True, hash=None, compare=True, metadata=None, kw_only=<dataclasses._MISSING_TYPE object at 0x104e1e120>)",
           "docstring": "Return an object to identify dataclass fields.\n\ndefault is the default value of the field.  default_factory is a\n0-argument function called to initialize a field's value.  If init\nis true, the field will be a parameter to the class's __init__()\nfunction.  If repr is true, the field will be included in the\nobject's repr().  If hash is true, the field will be included in the\nobject's hash().  If compare is true, the field will be used in\ncomparison functions.  metadata, if specified, must be a map",
           "file_path": "/Users/mini/.local/share/uv/python/cpython-3.13.11-macos-aarch64-none/lib/python3.13/dataclasses.py",
           "line_number": 383,
@@ -8166,7 +8166,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 23:50:59"
+      "last_modified": "2026-03-02 00:07:14"
     },
     "git_analysis": {
       "name": "git_analysis",
@@ -10742,7 +10742,7 @@
           "name": "registry",
           "module_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/utils",
           "type": "other",
-          "signature": "<codomyrmex.utils.integration.ModuleRegistry object at 0x107c5c830>",
+          "signature": "<codomyrmex.utils.integration.ModuleRegistry object at 0x10be1cad0>",
           "docstring": "No docstring",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/utils",
           "line_number": 0,
@@ -11801,6 +11801,17 @@
           "docstring": "Check if the environment is properly set up.",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/cli/handlers/system.py",
           "line_number": 12,
+          "is_public": true,
+          "dependencies": []
+        },
+        {
+          "name": "completion",
+          "module_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/cli",
+          "type": "other",
+          "signature": "<module 'codomyrmex.cli.completion' from '/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/cli/completion.py'>",
+          "docstring": "No docstring",
+          "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/cli",
+          "line_number": 0,
           "is_public": true,
           "dependencies": []
         },
@@ -29467,7 +29478,7 @@
     },
     "dependencies": {
       "python-dotenv": true,
-      "cased-kit": true,
+      "cased-kit": false,
       "openai": true,
       "anthropic": true,
       "matplotlib": true,
