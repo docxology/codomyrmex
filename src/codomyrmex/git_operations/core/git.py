@@ -2,17 +2,18 @@
 Core module for executing Git operations.
 """
 
-import time
 import os
 
 from codomyrmex.logging_monitoring.core.logger_config import get_logger, setup_logging
-from codomyrmex.performance import monitor_performance, performance_context
+from codomyrmex.performance import PERFORMANCE_MONITOR_AVAILABLE
+
+if PERFORMANCE_MONITOR_AVAILABLE:
+    from codomyrmex.performance import monitor_performance, performance_context  # noqa: F401
 
 from .commands.branching import (
     create_branch,
     delete_branch,
     get_current_branch,
-    list_branches,
     switch_branch,
 )
 from .commands.commit import amend_commit, cherry_pick, commit_changes, revert_commit
@@ -51,9 +52,9 @@ from .commands.sync import fetch_changes, pull_changes, push_changes
 from .commands.tags import create_tag, list_tags
 
 logger = get_logger(__name__)
-# monitor_performance and performance_context are imported unconditionally above;
-# PERFORMANCE_MONITORING_AVAILABLE reflects availability at import time.
-PERFORMANCE_MONITORING_AVAILABLE = True
+# PERFORMANCE_MONITORING_AVAILABLE reflects actual psutil availability at import time.
+# monitor_performance and performance_context are only defined when this is True.
+PERFORMANCE_MONITORING_AVAILABLE = PERFORMANCE_MONITOR_AVAILABLE
 
 __all__ = [
     "create_branch",

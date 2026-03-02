@@ -1,7 +1,6 @@
 """Zero-mock tests for new document formats (HTML, XML, CSV)."""
 
 import pytest
-from pathlib import Path
 from codomyrmex.documents.formats.html_handler import read_html, write_html, strip_html_tags
 from codomyrmex.documents.formats.xml_handler import read_xml, write_xml
 from codomyrmex.documents.formats.csv_handler import read_csv, write_csv

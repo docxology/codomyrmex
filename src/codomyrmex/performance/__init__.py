@@ -30,7 +30,8 @@ from .profiling.benchmark import (
     run_benchmark,
 )
 
-# Import PerformanceMonitor with fallback if psutil is not available
+# Import PerformanceMonitor — requires psutil. If unavailable, callers must guard
+# with `if PERFORMANCE_MONITOR_AVAILABLE:` before using monitor_performance.
 try:
     from .monitoring.performance_monitor import (
         PerformanceMonitor,
@@ -41,32 +42,16 @@ try:
 
     PERFORMANCE_MONITOR_AVAILABLE = True
 except ImportError:
+    import logging as _logging
+    _logging.getLogger("codomyrmex.performance").warning(
+        "psutil is not installed; performance monitoring is disabled. "
+        "Enable it with: uv sync --extra performance"
+    )
     PerformanceMonitor = None
     PERFORMANCE_MONITOR_AVAILABLE = False
 
-    def monitor_performance(*args, **kwargs):
-        """No-op decorator returned when psutil is not installed."""
 
-        def decorator(func):
-            return func
-
-        return decorator
-
-    class performance_context:
-        """No-op context manager returned when psutil is not installed."""
-
-        def __init__(self, *args, **kwargs):
-            pass
-
-        def __enter__(self):
-            return self
-
-        def __exit__(self, *args):
-            return None
-
-    def get_system_metrics(*args, **kwargs):
-        """No-op metrics stub returned when psutil is not installed."""
-        return {}
+__version__ = "0.1.0"
 
 
 def cli_commands():
@@ -115,10 +100,6 @@ if PERFORMANCE_MONITOR_AVAILABLE:
     __all__.append("PerformanceMonitor")
     __all__.append("monitor_performance")
     __all__.append("performance_context")
-    __all__.append("get_system_metrics")
-else:
-    __all__.append("monitor_performance")  # Export the no-op version
-    __all__.append("performance_context")  # Export the no-op version
     __all__.append("get_system_metrics")
 
 __version__ = "0.1.0"

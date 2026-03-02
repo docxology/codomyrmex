@@ -17,7 +17,7 @@ def lora_apply(weight_shape: list, rank: int = 4, alpha: float = 8.0) -> dict:
     Returns:
         dict with: weight_shape, rank, scaling, delta_rank, parameter_reduction_pct
     """
-    from .lora import LoRAConfig, apply_lora
+    from .lora import apply_lora
 
     d, k = weight_shape
     W = np.random.randn(d, k) * 0.01

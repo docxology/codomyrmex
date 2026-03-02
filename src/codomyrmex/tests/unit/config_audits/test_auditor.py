@@ -1,11 +1,8 @@
-import json
 import os
-from pathlib import Path
 
 import pytest
 
 from codomyrmex.config_audits.auditor import ConfigAuditor
-from codomyrmex.config_audits.models import Severity
 
 
 @pytest.fixture

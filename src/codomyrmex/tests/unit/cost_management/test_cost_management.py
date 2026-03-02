@@ -1,6 +1,5 @@
 """Unit tests for cost_management module."""
 
-import json
 from datetime import datetime, timedelta
 
 import pytest
@@ -12,7 +11,6 @@ from codomyrmex.cost_management import (
     BudgetPeriod,
     CostCategory,
     CostEntry,
-    CostSummary,
     CostTracker,
     InMemoryCostStore,
     JSONCostStore,

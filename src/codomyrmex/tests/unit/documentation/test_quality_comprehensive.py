@@ -4,7 +4,6 @@ Strict zero-mock policy. All tests use real filesystem.
 """
 
 import pytest
-from pathlib import Path
 from codomyrmex.documentation.quality.consistency_checker import DocumentationConsistencyChecker
 from codomyrmex.documentation.quality.quality_assessment import DocumentationQualityAnalyzer
 

@@ -10,7 +10,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 from codomyrmex.feature_flags.evaluation import FlagDefinition, FlagEvaluator, TargetingRule
-from codomyrmex.feature_flags.rollout import RolloutManager, RolloutConfig
+from codomyrmex.feature_flags.rollout import RolloutManager
 from codomyrmex.feature_flags.storage import FlagStore, InMemoryFlagStore
 from codomyrmex.feature_flags.strategies import EvaluationContext
 from codomyrmex.logging_monitoring.core.logger_config import get_logger

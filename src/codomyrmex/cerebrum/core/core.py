@@ -11,7 +11,7 @@ if TYPE_CHECKING:
         InferenceEngine,
     )
 from codomyrmex.cerebrum.core.cases import Case, CaseBase, CaseRetriever
-from codomyrmex.cerebrum.core.chain import ChainExecutionResult, ReasoningChain
+from codomyrmex.cerebrum.core.chain import ReasoningChain
 from codomyrmex.cerebrum.core.config import CerebrumConfig
 from codomyrmex.cerebrum.core.decision import Decision, DecisionModule
 from codomyrmex.cerebrum.core.exceptions import ModelError

@@ -1,6 +1,5 @@
 """Comprehensive zero-mock tests for the defense module."""
 
-import asyncio
 import pytest
 from codomyrmex.defense import (
     Defense,
@@ -9,7 +8,6 @@ from codomyrmex.defense import (
     DetectionRule,
     Severity,
     ResponseAction,
-    ThreatEvent,
     create_defense,
 )
 from codomyrmex.defense.active import ThreatLevel

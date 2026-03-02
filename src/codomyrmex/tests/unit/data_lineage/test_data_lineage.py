@@ -8,8 +8,7 @@ from codomyrmex.data_lineage import (
     LineageNode,
     LineageEdge,
     NodeType,
-    EdgeType,
-    DataAsset
+    EdgeType
 )
 
 

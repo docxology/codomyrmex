@@ -5,7 +5,6 @@ This module provides the main FileSystemManager class for managing
 files and directories, as well as several utility functions.
 """
 
-import os
 import shutil
 import hashlib
 from datetime import datetime

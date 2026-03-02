@@ -6,7 +6,6 @@ import warnings
 from pathlib import Path
 
 import pytest
-from cryptography.exceptions import InvalidTag
 
 from codomyrmex.encryption import (
     EncryptionError,

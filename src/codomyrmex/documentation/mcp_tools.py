@@ -15,7 +15,6 @@ def generate_module_docs(module_name: str) -> dict:
     """
     from pathlib import Path
 
-    from codomyrmex.documentation import generate_pai_md
 
     module_path = Path(f"src/codomyrmex/{module_name}")
     if not module_path.exists():

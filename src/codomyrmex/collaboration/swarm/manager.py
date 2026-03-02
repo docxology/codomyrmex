@@ -10,7 +10,7 @@ import asyncio
 from typing import Any
 
 from codomyrmex.collaboration.swarm.consensus import ConsensusEngine, ConsensusResult, Vote
-from codomyrmex.collaboration.swarm.decomposer import SubTask, TaskDecomposer
+from codomyrmex.collaboration.swarm.decomposer import TaskDecomposer
 from codomyrmex.collaboration.swarm.message_bus import MessageBus
 from codomyrmex.collaboration.swarm.pool import AgentPool
 from codomyrmex.collaboration.swarm.protocol import (

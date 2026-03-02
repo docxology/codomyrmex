@@ -7,7 +7,6 @@ through the Model Context Protocol.
 
 from __future__ import annotations
 
-import numpy as np
 
 from codomyrmex.model_context_protocol.decorators import mcp_tool
 

@@ -4,7 +4,6 @@ Unit tests for unified cloud storage clients.
 Uses strictly zero-mock tests with the Stub class.
 """
 
-import os
 import pytest
 from _stubs import Stub
 from codomyrmex.cloud.aws import S3Client

@@ -8,7 +8,6 @@ import math
 from codomyrmex.evolutionary_ai.genome.genome import (
     Individual,
     Genome,
-    GenomeStats,
 )
 
 @pytest.mark.unit

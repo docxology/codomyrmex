@@ -8,7 +8,6 @@ document similarity.
 
 from __future__ import annotations
 
-from typing import Any
 
 from codomyrmex.model_context_protocol.decorators import mcp_tool
 

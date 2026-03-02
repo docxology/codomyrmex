@@ -375,6 +375,33 @@ class TestDestructiveConfirmation:
         assert len(pending) >= 1
         assert pending[-1]["tool_name"] == destructive
 
+    def test_valid_token_allows_execution(self, confirmation_enabled):
+        """A valid confirm_token allows the tool to reach its handler.
+
+        Verifies the full confirmation round-trip:
+          1st call → confirmation_required=True + confirm_token
+          2nd call with token → gateway passes through (no SecurityError,
+          no second confirmation dict)
+        """
+        destructive = _pick_destructive_tool()
+        kwargs = _kwargs_for(destructive)
+
+        # Step 1: request confirmation
+        first = trusted_call_tool(destructive, **kwargs)
+        assert first.get("confirmation_required") is True
+        token = first["confirm_token"]
+
+        # Step 2: submit valid token — gateway must pass through to handler
+        kwargs_confirmed = dict(kwargs)
+        kwargs_confirmed["confirmation_token"] = token
+
+        # Must NOT raise SecurityError and must NOT return another confirmation dict
+        second = trusted_call_tool(destructive, **kwargs_confirmed)
+        assert isinstance(second, dict)
+        assert second.get("confirmation_required") is not True, (
+            "Token was not consumed; still in confirmation loop"
+        )
+
     def test_invalid_token_fails(self, confirmation_enabled):
         """An invalid confirmation token must raise SecurityError."""
         destructive = _pick_destructive_tool()

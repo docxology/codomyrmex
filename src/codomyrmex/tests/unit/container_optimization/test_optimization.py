@@ -1,6 +1,5 @@
 import pytest
 import docker
-import os
 import time
 from codomyrmex.container_optimization.optimizer import ContainerOptimizer
 from codomyrmex.container_optimization.resource_tuner import ResourceTuner, ResourceUsage

@@ -2,12 +2,11 @@
 
 import pytest
 import time
-from datetime import datetime, timezone
 
 from codomyrmex.identity.manager import IdentityManager
 from codomyrmex.identity.persona import Persona, VerificationLevel
 from codomyrmex.identity.biocognitive import BioCognitiveVerifier
-from codomyrmex.identity.identity import Identity, PasswordProvider, TokenProvider, AuthToken
+from codomyrmex.identity.identity import Identity, PasswordProvider
 
 try:
     import numpy as np  # noqa: F401

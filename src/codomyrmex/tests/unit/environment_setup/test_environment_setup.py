@@ -5,7 +5,6 @@ Strictly zero-mock tests, uses real objects and tmp_path for filesystem.
 
 import os
 import sys
-from pathlib import Path
 
 import pytest
 

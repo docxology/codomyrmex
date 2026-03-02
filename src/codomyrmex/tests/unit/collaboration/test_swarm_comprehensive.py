@@ -12,7 +12,6 @@ from codomyrmex.collaboration.swarm import (
     AgentPool,
     MessageBus,
     TaskAssignment,
-    TaskStatus,
     SwarmMessage,
     SwarmMessageType
 )

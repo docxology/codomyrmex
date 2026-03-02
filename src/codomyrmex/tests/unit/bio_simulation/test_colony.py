@@ -1,4 +1,4 @@
-from codomyrmex.bio_simulation import AntState, Colony
+from codomyrmex.bio_simulation import Colony
 
 
 def test_colony_simulation():

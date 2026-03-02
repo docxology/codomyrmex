@@ -19,7 +19,7 @@ from typing import Any
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 from .manager import IdentityManager
-from .persona import Persona, VerificationLevel
+from .persona import VerificationLevel
 
 logger = get_logger(__name__)
 

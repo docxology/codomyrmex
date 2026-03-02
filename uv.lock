@@ -772,7 +772,7 @@ wheels = [
 
 [[package]]
 name = "chromadb"
-version = "1.5.1"
+version = "1.5.2"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "bcrypt" },
@@ -803,13 +803,13 @@ dependencies = [
     { name = "typing-extensions" },
     { name = "uvicorn", extra = ["standard"] },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/c3/b6/b7bd96a44a94698d10bb61a7714439108f06900f6c89e005e66b5f64ccb9/chromadb-1.5.1.tar.gz", hash = "sha256:1ebf53664f6d2064c07681741016c80f5f47e7d61d1eba0d654d01823842a516", size = 2379368, upload-time = "2026-02-19T19:59:32.738Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/9e/48/aa5906f9f817b73c9e87e085d3a64705d91b7bb4f76f4649b9379baea980/chromadb-1.5.2.tar.gz", hash = "sha256:4fc3535a0fcd45343f93d298591882f68e659f24ed319aef14094b168105f956", size = 2386235, upload-time = "2026-02-27T19:49:34.167Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/31/c3/598e28a67db38ffc377f30c49f37cad865be2fe261d719fa84641b07ff72/chromadb-1.5.1-cp39-abi3-macosx_10_12_x86_64.whl", hash = "sha256:0ca6e9f8110e848eeb2807994184b50380b35a59bce09d7acff850ec35c735f9", size = 20732567, upload-time = "2026-02-19T19:59:30.269Z" },
-    { url = "https://files.pythonhosted.org/packages/5a/96/e219be6a44ffc6d7f8012cc6987e1618561a20a8673341f696f9feb93890/chromadb-1.5.1-cp39-abi3-macosx_11_0_arm64.whl", hash = "sha256:8f4c06709e5bd8f6af1a2196db8500dc728697aef4a8cb4f8f37b47338582032", size = 19993506, upload-time = "2026-02-19T19:59:26.734Z" },
-    { url = "https://files.pythonhosted.org/packages/21/25/b4dbc81e174bb6e661c5aa48d03598f0d5c0e8267461b608e861dcb841d4/chromadb-1.5.1-cp39-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:aa1a63c757c2a9a61820aab81d6ad4921e7394daf4f0cf04c8690d30274530f2", size = 20643281, upload-time = "2026-02-19T19:59:18.496Z" },
-    { url = "https://files.pythonhosted.org/packages/24/6b/051e4684966599991d9fc6fe10cf2fd8d84e08bfe8752485c74111167543/chromadb-1.5.1-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:89ff9f7185238b352c498181b3cfa9e28f7f3336c2b8d7ab8cdfe4f3d76e5e96", size = 21516981, upload-time = "2026-02-19T19:59:22.439Z" },
-    { url = "https://files.pythonhosted.org/packages/84/a2/023696860162c59ed7d5d2a589d701bf5c54233d82a0f808c69956204c10/chromadb-1.5.1-cp39-abi3-win_amd64.whl", hash = "sha256:7ec9dc47841cf3fecc475ca07a0aacfc9a347b3460881051636755618d6250c6", size = 21856118, upload-time = "2026-02-19T19:59:34.676Z" },
+    { url = "https://files.pythonhosted.org/packages/6b/3b/36989e7ebfa2ee10a85deacd423989b07f9e3bd176846863ace1305e9460/chromadb-1.5.2-cp39-abi3-macosx_10_12_x86_64.whl", hash = "sha256:a898ab200f9a22a16751eed5444dac330f1f82184264e16d5420e41e0afe63e4", size = 20733964, upload-time = "2026-02-27T19:49:31.683Z" },
+    { url = "https://files.pythonhosted.org/packages/85/b3/db3e5a8a47106d339c3e109e73859647969a81e9c54ca15bc6dde6685c1e/chromadb-1.5.2-cp39-abi3-macosx_11_0_arm64.whl", hash = "sha256:8e6a12adb34bf441f8cc368b6460fbc9e14bee5cf926f34e752da759d68dec56", size = 19993688, upload-time = "2026-02-27T19:49:28.5Z" },
+    { url = "https://files.pythonhosted.org/packages/c2/88/0a9b6dddac3097f321ec8b057d09a61b4edb2b42b891fce7c2bfd01cd4c3/chromadb-1.5.2-cp39-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:b533db30303ce5a82856ded8897c3cafd3160e1f2dccf5473d0bfdee49a159b3", size = 20642212, upload-time = "2026-02-27T19:49:22.467Z" },
+    { url = "https://files.pythonhosted.org/packages/ae/74/b8cd9d9bc72c545a579fd1f7bb44558a801ed5f5bab164a25eea16d51ad9/chromadb-1.5.2-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:e48e5b0f300d6f709446a5d9299614e3b6bca997772d810e1298b76b0c4e7dbb", size = 21529269, upload-time = "2026-02-27T19:49:25.699Z" },
+    { url = "https://files.pythonhosted.org/packages/e8/96/fa83f81f8b618ffca7527915f99cf054c6f8bd272bf3cf5c0616757083ba/chromadb-1.5.2-cp39-abi3-win_amd64.whl", hash = "sha256:042e746ee0c9db34eef2723c4dca30197ded3bf9d27846d996fd51715ec7b0e3", size = 21863829, upload-time = "2026-02-27T19:49:36.422Z" },
 ]
 
 [[package]]
@@ -826,36 +826,27 @@ wheels = [
 
 [[package]]
 name = "codomyrmex"
-version = "1.0.6"
+version = "1.0.7"
 source = { editable = "." }
 dependencies = [
-    { name = "absl-py" },
     { name = "aiohttp" },
-    { name = "anthropic" },
     { name = "bandit" },
     { name = "beautifulsoup4" },
     { name = "cased-kit" },
-    { name = "chromadb" },
     { name = "cryptography" },
     { name = "diff-match-patch" },
-    { name = "docker" },
     { name = "fastapi" },
     { name = "fastavro" },
-    { name = "fire" },
     { name = "gitpython" },
-    { name = "google-genai" },
-    { name = "google-generativeai" },
     { name = "jsonschema" },
     { name = "lizard" },
     { name = "loguru" },
     { name = "mako" },
     { name = "markdownify" },
-    { name = "matplotlib" },
     { name = "mnemonic" },
     { name = "msgpack" },
     { name = "networkx" },
     { name = "numpy" },
-    { name = "openai" },
     { name = "paramiko" },
     { name = "pydantic" },
     { name = "pygments" },
@@ -864,12 +855,8 @@ dependencies = [
     { name = "pytz" },
     { name = "pyyaml" },
     { name = "radon" },
-    { name = "redis" },
     { name = "requests" },
     { name = "scipy" },
-    { name = "seaborn" },
-    { name = "sentence-transformers" },
-    { name = "tiktoken" },
     { name = "tomli" },
     { name = "tqdm" },
     { name = "unidiff" },
@@ -884,6 +871,9 @@ audio = [
     { name = "pydub" },
     { name = "pyttsx3" },
     { name = "soundfile" },
+]
+cache = [
+    { name = "redis" },
 ]
 calendar = [
     { name = "google-api-python-client" },
@@ -903,6 +893,9 @@ code-review = [
     { name = "typing-extensions" },
     { name = "vulture" },
 ]
+containerization = [
+    { name = "docker" },
+]
 crypto = [
     { name = "cryptography" },
     { name = "mnemonic" },
@@ -911,6 +904,10 @@ crypto = [
 dark = [
     { name = "pillow" },
     { name = "pymupdf" },
+]
+data-visualization = [
+    { name = "matplotlib" },
+    { name = "seaborn" },
 ]
 documents = [
     { name = "chardet" },
@@ -921,6 +918,10 @@ email = [
     { name = "google-api-python-client" },
     { name = "google-auth-httplib2" },
     { name = "google-auth-oauthlib" },
+]
+embedding = [
+    { name = "chromadb" },
+    { name = "sentence-transformers" },
 ]
 formal-verification = [
     { name = "z3-solver" },
@@ -933,6 +934,14 @@ language-models = [
     { name = "pytest-asyncio" },
     { name = "typing-extensions" },
     { name = "urllib3" },
+]
+llm-providers = [
+    { name = "absl-py" },
+    { name = "anthropic" },
+    { name = "google-genai" },
+    { name = "google-generativeai" },
+    { name = "openai" },
+    { name = "tiktoken" },
 ]
 modeling-3d = [
     { name = "moderngl" },
@@ -1014,11 +1023,11 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "absl-py", specifier = ">=1.4.0" },
+    { name = "absl-py", marker = "extra == 'llm-providers'", specifier = ">=1.4.0" },
     { name = "agentmail", marker = "extra == 'email'", specifier = ">=0.2.17" },
     { name = "aiohttp", specifier = ">=3.13.3" },
     { name = "alembic", marker = "extra == 'physical-management'", specifier = ">=1.7.0" },
-    { name = "anthropic", specifier = ">=0.64.0" },
+    { name = "anthropic", marker = "extra == 'llm-providers'", specifier = ">=0.64.0" },
     { name = "azure-identity", marker = "extra == 'cloud'", specifier = ">=1.13.0" },
     { name = "azure-storage-blob", marker = "extra == 'cloud'", specifier = ">=12.17.0" },
     { name = "bandit", specifier = ">=1.8.0" },
@@ -1027,18 +1036,17 @@ requires-dist = [
     { name = "cased-kit", specifier = ">=1.9.0" },
     { name = "certifi", marker = "extra == 'language-models'", specifier = ">=2022.0.0" },
     { name = "chardet", marker = "extra == 'documents'", specifier = ">=5.0.0" },
-    { name = "chromadb", specifier = ">=0.4.0" },
+    { name = "chromadb", marker = "extra == 'embedding'", specifier = ">=0.4.0" },
     { name = "cryptography", specifier = ">=41.0.0" },
     { name = "cryptography", marker = "extra == 'crypto'", specifier = ">=42.0.0" },
     { name = "cryptography", marker = "extra == 'security-audit'", specifier = ">=41.0.0" },
     { name = "diff-match-patch", specifier = ">=20230430.0" },
-    { name = "docker", specifier = ">=6.0.0" },
+    { name = "docker", marker = "extra == 'containerization'", specifier = ">=6.0.0" },
     { name = "dynaconf", marker = "extra == 'physical-management'", specifier = ">=3.1.0" },
     { name = "edge-tts", marker = "extra == 'audio'", specifier = ">=6.1.0" },
     { name = "fastapi", specifier = ">=0.100.0" },
     { name = "fastavro", specifier = ">=1.12.1" },
     { name = "faster-whisper", marker = "extra == 'audio'", specifier = ">=1.0.0" },
-    { name = "fire", specifier = ">=0.7.0" },
     { name = "firecrawl-py", marker = "extra == 'scrape'", specifier = ">=1.0.0" },
     { name = "gitpython", specifier = ">=3.1.0" },
     { name = "google-api-python-client", marker = "extra == 'calendar'", specifier = ">=2.0.0" },
@@ -1048,8 +1056,8 @@ requires-dist = [
     { name = "google-auth-oauthlib", marker = "extra == 'calendar'", specifier = ">=1.0.0" },
     { name = "google-auth-oauthlib", marker = "extra == 'email'", specifier = ">=1.0.0" },
     { name = "google-cloud-storage", marker = "extra == 'cloud'", specifier = ">=2.10.0" },
-    { name = "google-genai", specifier = ">=0.1.0" },
-    { name = "google-generativeai", specifier = ">=0.3.0" },
+    { name = "google-genai", marker = "extra == 'llm-providers'", specifier = ">=0.1.0" },
+    { name = "google-generativeai", marker = "extra == 'llm-providers'", specifier = ">=0.3.0" },
     { name = "jinja2", marker = "extra == 'security-audit'", specifier = ">=3.1.0" },
     { name = "jsonschema", specifier = ">=4.23.0" },
     { name = "lizard", specifier = ">=1.17.0" },
@@ -1057,7 +1065,7 @@ requires-dist = [
     { name = "mako", specifier = ">=1.2.0" },
     { name = "markdownify", specifier = ">=1.2.2" },
     { name = "marshmallow", marker = "extra == 'physical-management'", specifier = ">=3.0.0" },
-    { name = "matplotlib", specifier = ">=3.10.0" },
+    { name = "matplotlib", marker = "extra == 'data-visualization'", specifier = ">=3.10.0" },
     { name = "mkdocs", marker = "extra == 'physical-management'", specifier = ">=1.2.0" },
     { name = "mkdocs-material", marker = "extra == 'physical-management'", specifier = ">=7.3.0" },
     { name = "mnemonic", specifier = ">=0.21" },
@@ -1068,7 +1076,7 @@ requires-dist = [
     { name = "msgpack", marker = "extra == 'serialization'", specifier = ">=1.0.0" },
     { name = "networkx", specifier = ">=3.0.0" },
     { name = "numpy", specifier = ">=2.2.0" },
-    { name = "openai", specifier = ">=1.0.0" },
+    { name = "openai", marker = "extra == 'llm-providers'", specifier = ">=1.0.0" },
     { name = "opencv-python", marker = "extra == 'video'", specifier = ">=4.8.0" },
     { name = "openstacksdk", marker = "extra == 'cloud'", specifier = ">=1.0.0" },
     { name = "opentelemetry-api", marker = "extra == 'observability'", specifier = ">=1.20.0" },
@@ -1107,18 +1115,18 @@ requires-dist = [
     { name = "pyyaml", specifier = ">=6.0.2" },
     { name = "pyyaml", marker = "extra == 'obsidian'", specifier = ">=6.0.2" },
     { name = "radon", specifier = ">=6.0.0" },
-    { name = "redis", specifier = ">=5.0.0" },
+    { name = "redis", marker = "extra == 'cache'", specifier = ">=5.0.0" },
     { name = "requests", specifier = ">=2.31.0" },
     { name = "safety", marker = "extra == 'code-review'", specifier = ">=2.3.0" },
     { name = "safety", marker = "extra == 'security-audit'", specifier = ">=2.3.0" },
     { name = "scipy", specifier = ">=1.7.0" },
-    { name = "seaborn", specifier = ">=0.13.0" },
-    { name = "sentence-transformers", specifier = ">=2.0.0" },
+    { name = "seaborn", marker = "extra == 'data-visualization'", specifier = ">=0.13.0" },
+    { name = "sentence-transformers", marker = "extra == 'embedding'", specifier = ">=2.0.0" },
     { name = "smbus2", marker = "extra == 'physical-management'", specifier = ">=0.4.0" },
     { name = "soundfile", marker = "extra == 'audio'", specifier = ">=0.12.0" },
     { name = "sqlalchemy", marker = "extra == 'physical-management'", specifier = ">=1.4.0" },
     { name = "statsd", marker = "extra == 'observability'", specifier = ">=4.0.0" },
-    { name = "tiktoken", specifier = ">=0.5.0" },
+    { name = "tiktoken", marker = "extra == 'llm-providers'", specifier = ">=0.5.0" },
     { name = "tomli", specifier = ">=2.0.0" },
     { name = "tqdm", specifier = ">=4.65.0" },
     { name = "tree-sitter", marker = "extra == 'parsing'", specifier = ">=0.20.0" },
@@ -1133,7 +1141,7 @@ requires-dist = [
     { name = "websockets", marker = "extra == 'physical-management'", specifier = ">=10.0" },
     { name = "z3-solver", marker = "extra == 'formal-verification'", specifier = ">=4.8.0" },
 ]
-provides-extras = ["code-review", "language-models", "cloud", "serialization", "parsing", "modeling-3d", "performance", "observability", "physical-management", "security-audit", "static-analysis", "scrape", "fpf", "crypto", "documents", "audio", "video", "dark", "formal-verification", "obsidian", "calendar", "email"]
+provides-extras = ["code-review", "language-models", "cloud", "serialization", "parsing", "modeling-3d", "performance", "observability", "physical-management", "security-audit", "static-analysis", "scrape", "fpf", "crypto", "documents", "audio", "video", "dark", "formal-verification", "obsidian", "calendar", "email", "llm-providers", "embedding", "containerization", "data-visualization", "cache"]
 
 [package.metadata.requires-dev]
 dev = [

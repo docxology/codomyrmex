@@ -3,7 +3,7 @@
 import threading
 import time
 from dataclasses import dataclass, field
-from typing import Dict, List, Optional, Set
+from typing import Dict, List, Optional
 
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
 

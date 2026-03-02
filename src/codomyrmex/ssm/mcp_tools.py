@@ -51,7 +51,7 @@ def flash_attention_forward(
     Returns:
         dict with: output_shape, max_error_vs_standard (should be < 1e-5), passed
     """
-    from codomyrmex.neural.flash_attention import flash_attention, verify_flash_vs_standard
+    from codomyrmex.neural.flash_attention import verify_flash_vs_standard
 
     Q = np.random.randn(1, seq_len, d_model).astype(np.float32)
     K = np.random.randn(1, seq_len, d_model).astype(np.float32)

@@ -7,11 +7,9 @@ Protocol so that AI agents can evaluate expressions and verify gradients.
 
 from __future__ import annotations
 
-import math
 import operator
 from typing import Any
 
-import numpy as np
 
 from codomyrmex.model_context_protocol.decorators import mcp_tool
 

@@ -2,22 +2,16 @@
 Comprehensive zero-mock tests for the Codomyrmex Event System.
 """
 
-import time
 import pytest
-import asyncio
 from codomyrmex.events import (
     EventBus, 
     Event, 
-    EventType, 
-    EventPriority,
-    EventSchema,
-    get_event_bus
+    EventType
 )
 from codomyrmex.events.emitters.event_emitter import EventEmitter
-from codomyrmex.events.handlers.event_listener import EventListener, AutoEventListener, event_handler
+from codomyrmex.events.handlers.event_listener import AutoEventListener, event_handler
 from codomyrmex.events.handlers.event_logger import EventLogger
 from codomyrmex.events.event_store import EventStore, StreamEvent
-from codomyrmex.events.core.exceptions import EventPublishError, EventSubscriptionError
 
 @pytest.fixture
 def clean_bus():

@@ -5,7 +5,6 @@ rollout management, targeting rules, and the experiment system.
 """
 
 import pytest
-from pathlib import Path
 
 from codomyrmex.feature_flags import FeatureManager
 from codomyrmex.feature_flags.evaluation import (

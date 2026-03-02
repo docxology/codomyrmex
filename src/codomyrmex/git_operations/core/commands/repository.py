@@ -3,7 +3,10 @@ import subprocess
 
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
 from codomyrmex.model_context_protocol.decorators import mcp_tool
-from codomyrmex.performance import monitor_performance
+from codomyrmex.performance import PERFORMANCE_MONITOR_AVAILABLE
+
+if PERFORMANCE_MONITOR_AVAILABLE:
+    from codomyrmex.performance import monitor_performance
 
 logger = get_logger(__name__)
 
@@ -44,7 +47,6 @@ def is_git_repository(repository_path: str = None) -> bool:
         return False
 
 @mcp_tool(name="git_init")
-@monitor_performance("git_initialize_repository")
 def initialize_git_repository(repository_path: str, initial_commit: bool = True) -> bool:
     """Initialize a new Git repository at the specified path.
 
@@ -112,7 +114,6 @@ def initialize_git_repository(repository_path: str, initial_commit: bool = True)
         return False
 
 @mcp_tool(name="git_clone")
-@monitor_performance("git_clone_repository")
 def clone_repository(url: str, destination: str, branch: str = None) -> bool:
     """Clone a Git repository to the specified destination."""
     try:
@@ -137,3 +138,8 @@ def clone_repository(url: str, destination: str, branch: str = None) -> bool:
         logger.error(f"Unexpected error cloning repository: {e}")
         return False
 
+
+# Apply performance monitoring wrappers explicitly when psutil is available.
+if PERFORMANCE_MONITOR_AVAILABLE:
+    initialize_git_repository = monitor_performance("git_initialize_repository")(initialize_git_repository)
+    clone_repository = monitor_performance("git_clone_repository")(clone_repository)

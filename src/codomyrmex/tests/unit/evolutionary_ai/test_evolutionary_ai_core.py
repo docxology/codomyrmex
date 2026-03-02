@@ -3,7 +3,6 @@ Unit tests for evolutionary_ai.operators — Zero-Mock compliant.
 """
 
 import pytest
-import random
 
 from codomyrmex.evolutionary_ai.genome.genome import Individual
 from codomyrmex.evolutionary_ai.operators.operators import (

@@ -1,6 +1,5 @@
-import typing
 from dataclasses import dataclass, field
-from typing import Any, List, Dict, Optional
+from typing import Any, Dict, Optional
 import time
 
 import docker

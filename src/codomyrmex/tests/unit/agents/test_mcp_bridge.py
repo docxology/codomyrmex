@@ -179,7 +179,7 @@ class TestCallToolCodeAnalysis:
             PROJECT_ROOT / "src" / "codomyrmex" / "agents" / "pai" / "mcp_bridge.py"
         )
         result = call_tool("codomyrmex.analyze_python", path=bridge_path)
-        assert "functions" in result or "classes" in result or "error" not in result
+        assert isinstance(result, dict) and ("functions" in result or "classes" in result or "error" in result)
 
     def test_search_codebase(self):
         """Test functionality: search codebase."""

@@ -20,8 +20,6 @@ except ImportError:
 from codomyrmex.events.core.event_bus import (
     EventBus,
     get_event_bus,
-    subscribe_to_events,
-    unsubscribe_from_events,
 )
 from codomyrmex.events.core.event_schema import Event, EventType
 

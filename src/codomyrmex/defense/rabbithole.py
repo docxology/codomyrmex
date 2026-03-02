@@ -6,7 +6,6 @@ Provides distraction and containment environments for attackers.
 import asyncio
 import random
 import time
-from typing import Any
 
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
 

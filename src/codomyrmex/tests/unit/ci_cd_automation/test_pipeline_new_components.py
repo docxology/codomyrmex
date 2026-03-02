@@ -1,15 +1,11 @@
 """Tests for new pipeline components: Builder, Generator, and ArtifactManager."""
 
-import os
-from pathlib import Path
 import pytest
 import yaml
 from codomyrmex.ci_cd_automation.pipeline import (
     PipelineBuilder,
     WorkflowGenerator,
-    ArtifactManager,
-    PipelineStatus,
-    JobStatus
+    ArtifactManager
 )
 
 @pytest.mark.unit

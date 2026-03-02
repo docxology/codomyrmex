@@ -5,7 +5,6 @@ These tests use real implementations to verify CLI behavior.
 
 import io
 import sys
-from pathlib import Path
 
 import pytest
 

@@ -10,7 +10,7 @@ from __future__ import annotations
 import random
 import statistics
 from collections.abc import Callable
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from typing import Any, TypeVar
 
 from codomyrmex.evolutionary_ai.genome.genome import Genome, Individual

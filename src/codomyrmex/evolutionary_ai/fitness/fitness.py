@@ -7,7 +7,6 @@ for scalar, multi-objective (Pareto), and constrained fitness evaluation.
 
 from __future__ import annotations
 
-import math
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from typing import Any, TypeVar

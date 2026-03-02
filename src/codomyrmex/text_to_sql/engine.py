@@ -7,7 +7,7 @@ from a provided schema. Pure Python, no LLM dependency.
 """
 
 import re
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from typing import Optional
 
 

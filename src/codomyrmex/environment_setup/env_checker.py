@@ -10,7 +10,7 @@ import os
 import shutil
 import sys
 from dataclasses import dataclass, field
-from typing import List, Optional, Union
+from typing import List, Optional
 
 import dotenv
 

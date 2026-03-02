@@ -178,7 +178,7 @@ class TestFlashAttention:
     @pytest.mark.unit
     def test_flash_block_size_one(self):
         """Edge case: block_size=1 processes one element at a time."""
-        from codomyrmex.neural.flash_attention import flash_attention, verify_flash_vs_standard
+        from codomyrmex.neural.flash_attention import flash_attention
 
         Q = np.random.randn(1, 4, 8).astype(np.float32)
         K = np.random.randn(1, 4, 8).astype(np.float32)

@@ -7,7 +7,6 @@ Strictly zero-mock tests, uses real objects and tmp_path for filesystem.
 from __future__ import annotations
 
 import sys
-from pathlib import Path
 
 import pytest
 

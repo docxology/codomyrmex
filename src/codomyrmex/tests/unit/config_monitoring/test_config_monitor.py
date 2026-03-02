@@ -1,11 +1,9 @@
 """Zero-mock tests for Configuration Monitoring module."""
 
 import time
-from pathlib import Path
 import pytest
 from codomyrmex.config_monitoring.config_monitor import ConfigurationMonitor
 from codomyrmex.config_monitoring.watcher import ConfigWatcher
-from codomyrmex.exceptions import CodomyrmexError
 
 @pytest.fixture
 def workspace(tmp_path):

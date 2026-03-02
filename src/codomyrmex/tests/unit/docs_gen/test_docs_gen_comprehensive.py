@@ -13,13 +13,7 @@ import pytest
 
 from codomyrmex.docs_gen import (
     APIDocExtractor,
-    ClassDoc,
-    FunctionDoc,
-    IndexEntry,
-    ModuleDoc,
     SearchIndex,
-    SearchResult,
-    SiteConfig,
     SiteGenerator,
 )
 

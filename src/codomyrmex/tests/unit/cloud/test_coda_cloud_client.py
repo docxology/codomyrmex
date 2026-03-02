@@ -5,7 +5,6 @@ Uses strictly zero-mock tests with the Stub class.
 """
 
 import pytest
-from datetime import datetime
 from _stubs import Stub
 from codomyrmex.cloud.coda_io import CodaClient
 from codomyrmex.cloud.common import ResourceType, CloudProvider

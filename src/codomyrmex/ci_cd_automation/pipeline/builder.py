@@ -1,6 +1,5 @@
 """Pipeline builder for programmatic pipeline construction."""
 
-from typing import Any
 from .models import Pipeline, PipelineStage, PipelineJob
 
 class PipelineBuilder:

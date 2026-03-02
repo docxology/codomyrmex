@@ -7,7 +7,7 @@ decorators (@injectable, @inject), exceptions, and introspection functions.
 
 import threading
 import sys
-from typing import List, Optional, Iterable
+from typing import List, Optional
 
 import pytest
 

@@ -5,7 +5,7 @@ import json
 import pytest
 
 from codomyrmex.documents.core.document_writer import DocumentWriter, write_document
-from codomyrmex.documents.exceptions import DocumentWriteError, UnsupportedFormatError
+from codomyrmex.documents.exceptions import UnsupportedFormatError
 from codomyrmex.documents.models.document import Document, DocumentFormat
 
 

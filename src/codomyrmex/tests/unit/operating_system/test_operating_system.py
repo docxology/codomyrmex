@@ -15,7 +15,6 @@ Covers:
 - MCP tools import
 """
 
-import os
 
 import pytest
 

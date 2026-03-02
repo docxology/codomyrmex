@@ -9,7 +9,6 @@ Pure Python + NumPy. No PyTorch dependency.
 """
 
 import numpy as np
-from typing import Optional
 
 
 def compute_log_probs(

@@ -6,8 +6,7 @@ is embedded and compared to all route examples via cosine similarity.
 The route with highest similarity (above threshold) is selected.
 """
 import numpy as np
-from dataclasses import dataclass, field
-from typing import Optional
+from dataclasses import dataclass
 
 
 @dataclass

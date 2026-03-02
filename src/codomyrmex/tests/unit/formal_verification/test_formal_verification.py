@@ -177,7 +177,7 @@ class TestConstraintSolver:
     @skip_no_z3
     def test_push_pop(self):
         """Push and pop affect solver scopes."""
-        from codomyrmex.formal_verification import ConstraintSolver, SolverStatus
+        from codomyrmex.formal_verification import ConstraintSolver
         solver = ConstraintSolver()
         solver.add_item("x = Int('x')")
         solver.add_item("solver.add(x > 0)")

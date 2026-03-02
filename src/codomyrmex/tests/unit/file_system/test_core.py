@@ -5,7 +5,6 @@ Strictly zero-mock, using a real temporary filesystem for all tests.
 """
 
 import pytest
-from pathlib import Path
 from codomyrmex.file_system.core import FileSystemManager, create_file_system_manager
 
 

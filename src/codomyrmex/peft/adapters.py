@@ -8,8 +8,7 @@ the math behind PEFT methods without requiring PyTorch.
 
 import numpy as np
 from abc import ABC, abstractmethod
-from dataclasses import dataclass, field
-from typing import Optional
+from dataclasses import dataclass
 
 
 @dataclass

@@ -1,6 +1,5 @@
 """Artifact manager for CI/CD pipelines."""
 
-import os
 import shutil
 from pathlib import Path
 

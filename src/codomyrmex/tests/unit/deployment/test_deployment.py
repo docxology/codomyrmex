@@ -5,7 +5,6 @@ GitOpsSynchronizer, and edge cases such as failed deployments and invalid config
 """
 
 import os
-import shutil
 import subprocess
 
 import pytest

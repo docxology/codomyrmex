@@ -7,7 +7,6 @@ from codomyrmex.feature_store import (
     FeatureValue,
     FeatureVector,
     FeatureGroup,
-    FeatureStore,
     InMemoryFeatureStore,
     FeatureTransform,
     FeatureService,

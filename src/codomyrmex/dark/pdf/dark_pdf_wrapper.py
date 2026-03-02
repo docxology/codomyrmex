@@ -12,7 +12,7 @@ from typing import TYPE_CHECKING
 from .filters import DarkPDFFilter
 
 if TYPE_CHECKING:
-    import fitz
+    pass
 
 # Preset configurations matching common use cases
 _PRESETS: dict[str, dict[str, float]] = {

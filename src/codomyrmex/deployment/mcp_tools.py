@@ -4,6 +4,8 @@ from __future__ import annotations
 
 from typing import Any
 
+from codomyrmex.model_context_protocol.decorators import mcp_tool
+
 from .manager.manager import DeploymentManager
 from .strategies.implementations import create_strategy
 from .strategies.types import DeploymentTarget
@@ -12,6 +14,7 @@ from .strategies.types import DeploymentTarget
 _manager = DeploymentManager()
 
 
+@mcp_tool(category="deployment")
 def deployment_execute(
     service_name: str,
     version: str,
@@ -53,6 +56,7 @@ def deployment_execute(
     return output
 
 
+@mcp_tool(category="deployment")
 def deployment_list_strategies() -> list[str]:
     """List available deployment strategy names.
 
@@ -62,6 +66,7 @@ def deployment_list_strategies() -> list[str]:
     return ["rolling", "blue_green", "canary"]
 
 
+@mcp_tool(category="deployment")
 def deployment_get_history() -> list[dict[str, Any]]:
     """Get the history of all deployment operations.
 
@@ -70,20 +75,6 @@ def deployment_get_history() -> list[dict[str, Any]]:
     """
     return [r.to_dict() for r in _manager.history]
 
-
-# Attach MCP metadata for bridge discovery
-deployment_execute._mcp_tool_meta = {
-    "name": "deployment_execute",
-    "description": "Execute a deployment for a service.",
-}
-deployment_list_strategies._mcp_tool_meta = {
-    "name": "deployment_list_strategies",
-    "description": "List available deployment strategy names.",
-}
-deployment_get_history._mcp_tool_meta = {
-    "name": "deployment_get_history",
-    "description": "Get the history of all deployment operations.",
-}
 
 __all__ = [
     "deployment_execute",

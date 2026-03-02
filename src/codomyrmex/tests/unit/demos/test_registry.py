@@ -1,9 +1,8 @@
 """Unit tests for the DemoRegistry."""
 
-import os
 import tempfile
 from pathlib import Path
-from codomyrmex.demos.registry import DemoRegistry, DemoResult
+from codomyrmex.demos.registry import DemoRegistry
 
 
 def test_registry_register_and_list():

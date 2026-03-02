@@ -13,7 +13,6 @@ from pathlib import Path
 
 import pytest
 
-import codomyrmex.agents.pai.trust_gateway as _gw
 from codomyrmex.agents.pai.trust_gateway import (
     DESTRUCTIVE_TOOLS,
     TrustLevel,
@@ -80,6 +79,20 @@ class TestAuditLog:
         _log_audit_entry("test.filter", {}, "blocked", "UNTRUSTED", 0.0)
         blocked = get_audit_log(status="blocked")
         assert all(e["result_status"] == "blocked" for e in blocked)
+
+    def test_filter_by_since(self):
+        """get_audit_log(since=) excludes entries before the cutoff."""
+        clear_audit_log()
+        _log_audit_entry("since.old", {}, "success", "TRUSTED", 1.0)
+        cutoff = datetime.now(UTC)
+        _log_audit_entry("since.new", {}, "success", "TRUSTED", 1.0)
+        recent = get_audit_log(since=cutoff)
+        tool_names = [e["tool_name"] for e in recent]
+        assert "since.new" in tool_names
+        assert "since.old" not in tool_names
+        assert all(
+            datetime.fromisoformat(e["timestamp"]) >= cutoff for e in recent
+        )
 
     def test_unhashable_args(self):
         """Non-serializable args get 'unhashable' hash."""

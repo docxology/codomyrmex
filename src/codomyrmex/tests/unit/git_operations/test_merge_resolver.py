@@ -3,12 +3,10 @@
 Uses real git repositories with actual merge conflicts. No mocks.
 """
 
-import os
 import shutil
 import subprocess
 
 import pytest
-from pathlib import Path
 
 _GIT_AVAILABLE = shutil.which("git") is not None
 
