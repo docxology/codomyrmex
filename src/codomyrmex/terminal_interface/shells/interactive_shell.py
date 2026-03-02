@@ -96,7 +96,7 @@ Type 'explore' to begin your foraging adventure!
                     name
                     for _, name, _ in pkgutil.iter_modules(codomyrmex.__path__)
                 ]
-            except Exception as exc:
+            except (ImportError, AttributeError, OSError) as exc:
                 logger.warning("pkgutil module scan failed: %s", exc)
                 self._module_names = []
 

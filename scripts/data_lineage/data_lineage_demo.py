@@ -7,7 +7,6 @@ impact analysis using the improved codomyrmex.data_lineage module.
 """
 
 import sys
-import json
 from pathlib import Path
 
 # Add project root to path

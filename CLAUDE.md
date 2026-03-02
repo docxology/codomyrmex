@@ -312,12 +312,12 @@ Last: [first session]
 
 ## Last Session Bridge
 [Emergency bridge — running bridge was not updated]
-Files: src/codomyrmex/validation/schemas.py (edit), src/codomyrmex/agents/pai/trust_gateway.py (edit), /Users/mini/.claude/projects/-Users-mini-Documents-GitHub-codomyrmex/memory/MEMORY.md (edit), src/codomyrmex/collaboration/protocols/swarm.py (edit), src/codomyrmex/tests/unit/collaboration/test_collaboration.py (edit), src/codomyrmex/terminal_interface/shells/interactive_shell.py (edit)
+No changes or facts in this session.
 
 ## Crash Recovery
-Last session (2026-03-02T14:16:04.070370) was not properly closed (crash/kill).
-Recorded 7 file changes before crash.
-Last changed files: src/codomyrmex/terminal_interface/shells/interactive_shell.py, src/codomyrmex/tests/unit/collaboration/test_collaboration.py, src/codomyrmex/collaboration/protocols/swarm.py, /Users/mini/.claude/projects/-Users-mini-Documents-GitHub-codomyrmex/memory/MEMORY.md, src/codomyrmex/agents/pai/trust_gateway.py
+Last session (2026-03-02T14:47:21.188194) was not properly closed (crash/kill).
+Recorded 0 file changes before crash.
+Last changed files: none
 Bridge from previous session is valid (above).
 For details use: memory_search("changes last session")
 

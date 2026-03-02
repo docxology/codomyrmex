@@ -12,12 +12,11 @@ This script demonstrates:
 """
 
 import sys
-import time
 from pathlib import Path
 
 # Add src to path if needed
 try:
-    import codomyrmex
+    import codomyrmex  # noqa: F401
 except ImportError:
     project_root = Path(__file__).resolve().parent.parent.parent
     sys.path.insert(0, str(project_root / "src"))
@@ -30,7 +29,6 @@ from codomyrmex.deployment import (
     DeploymentTarget,
     RollingStrategy,
 )
-from codomyrmex.deployment.health_checks import HealthChecker, TCPHealthCheck
 
 
 def run_orchestration():

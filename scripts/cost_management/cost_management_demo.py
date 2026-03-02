@@ -6,9 +6,7 @@ Demonstrates functionality of the cost_management module.
 """
 
 import sys
-import time
 from pathlib import Path
-from datetime import datetime
 
 # Add project root to path
 PROJECT_ROOT = Path(__file__).parent.parent.parent

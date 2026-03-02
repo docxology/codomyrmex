@@ -4,7 +4,6 @@ Orchestrator for database_management.
 Demonstrates the improved database management module with a working example.
 """
 
-import os
 import sys
 import tempfile
 from pathlib import Path
@@ -14,9 +13,7 @@ project_root = Path(__file__).resolve().parent.parent.parent
 sys.path.insert(0, str(project_root / "src"))
 
 from codomyrmex.database_management import (
-    manage_databases, 
-    DatabaseType, 
-    DatabaseConnection,
+    manage_databases,
     MigrationManager,
     DatabasePerformanceMonitor,
     BackupManager

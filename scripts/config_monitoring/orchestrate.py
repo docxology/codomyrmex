@@ -4,9 +4,7 @@ Orchestrator script for Configuration Monitoring.
 Demonstrates change detection, snapshots, drift analysis, auditing, and watching.
 """
 
-import os
 import time
-from pathlib import Path
 from codomyrmex.config_monitoring import ConfigurationMonitor, ConfigWatcher
 
 def main():

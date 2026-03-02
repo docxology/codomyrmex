@@ -26,8 +26,8 @@ def _tool_invalidate_cache(module: str | None = None) -> dict[str, Any]:
         report = _DISCOVERY_ENGINE.scan_module(module)
 
         # Force a cache refresh next time get_tool_registry is called
-        global _CACHE_TIMESTAMP
-        _CACHE_TIMESTAMP = 0.0
+        global _CACHE_EXPIRY
+        _CACHE_EXPIRY = 0.0  # expired in the past → triggers refresh on next access
 
         return {
              "cleared": False, # We didn't clear everything
@@ -99,10 +99,8 @@ def _find_mcp_modules() -> list[str]:
         logger.info("Auto-discovered %d modules with mcp_tools", len(parents))
         return sorted(parents)
 
-    except Exception as exc:
-        import traceback
-        traceback.print_exc()
-        logger.warning("_find_mcp_modules failed (%s); using fallback targets", exc)
+    except (ImportError, AttributeError, OSError, RuntimeError) as exc:
+        logger.exception("_find_mcp_modules failed (%s); using fallback targets", exc)
         return list(_FALLBACK_SCAN_TARGETS)
 
 def _discover_dynamic_tools() -> list[tuple[str, str, Any, dict[str, Any]]]:
@@ -131,8 +129,8 @@ def _discover_dynamic_tools() -> list[tuple[str, str, Any, dict[str, Any]]]:
     for target in scan_targets:
         try:
              _DISCOVERY_ENGINE.scan_package(target)
-        except Exception as e:
-             logger.warning(f"Failed to scan package {target}: {e}")
+        except (ImportError, AttributeError, SyntaxError, TypeError) as e:
+             logger.warning("Failed to scan package %s: %s", target, e)
 
     tools: list[tuple[str, str, Any, dict[str, Any]]] = []
 

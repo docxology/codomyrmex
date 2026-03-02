@@ -6,13 +6,11 @@ LocalSemaphore, and AsyncWorkerPool.
 """
 
 import sys
-import os
 import time
 import random
 import threading
 import asyncio
 from pathlib import Path
-from typing import List, Dict, Any
 
 try:
     import codomyrmex  # noqa: F401

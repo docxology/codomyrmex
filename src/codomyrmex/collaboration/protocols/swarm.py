@@ -17,7 +17,16 @@ class AgentProxy:
         self.role = role
 
     def send_task(self, task: str) -> str:
-        return f"Result from {self.name}"
+        """Send a task to this agent.
+
+        Raises:
+            NotImplementedError: Legacy AgentProxy does not implement task execution.
+                Use codomyrmex.collaboration.swarm.SwarmManager for real delegation.
+        """
+        raise NotImplementedError(
+            "AgentProxy.send_task is not implemented. "
+            "Use codomyrmex.collaboration.swarm.SwarmManager for real agent delegation."
+        )
 
 class SwarmManager(NewSwarmManager):
     """Orchestrates multiple agents working together (Legacy Compatibility)."""
