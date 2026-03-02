@@ -14,10 +14,11 @@ import shlex
 import subprocess
 from pathlib import Path
 
-# NOTE: Core-layer imports (coding, data_visualization, system_discovery)
-# are loaded lazily inside the methods that need them to respect the
-# Foundation -> Core layer boundary.  Only Foundation-layer imports appear
-# at the top level.
+# NOTE: Core-layer imports (coding, data_visualization) are loaded lazily
+# inside the methods that need them to respect the Foundation → Core layer
+# boundary.  Only Foundation-layer imports appear at the top level.
+# system_discovery (Application layer) is NOT imported — _ensure_discovery()
+# uses pkgutil instead.
 from codomyrmex.logging_monitoring import get_logger
 
 try:

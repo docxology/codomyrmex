@@ -69,7 +69,7 @@ class TestAPIDocExtractor:
         ext = APIDocExtractor()
         doc = ext.extract_from_source(SAMPLE_SOURCE, "sample")
         md = ext.to_markdown(doc)
-        assert "# `sample`" in md
+        assert "# Module `sample`" in md
         assert "Greeter" in md
 
 

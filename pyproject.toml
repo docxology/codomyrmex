@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "codomyrmex"
-version = "1.0.7"
+version = "1.0.8"
 description = "A Modular, Extensible Coding Workspace"
 readme = "README.md"
 requires-python = ">=3.11"
@@ -120,8 +120,6 @@ cloud = [
 
 serialization = [
     "protobuf>=4.0.0",
-    "msgpack>=1.0.0",
-
     "pandas>=2.0.0",
     "pyarrow>=12.0.0",
 ]
@@ -190,9 +188,7 @@ fpf = [
 ]
 
 crypto = [
-    "cryptography>=42.0.0",
     "pillow>=10.0.0",
-    "mnemonic>=0.20",
 ]
 
 documents = [
