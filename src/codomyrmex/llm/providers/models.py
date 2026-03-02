@@ -16,9 +16,9 @@ class ProviderType(Enum):
         OPENAI - OpenAI API (GPT models)
         ANTHROPIC - Anthropic API (Claude models)
         OPENROUTER - OpenRouter API (multi-model access, includes free models)
+        GOOGLE - Google AI (Gemini models, Ultra subscription tier)
 
     Planned:
-        GOOGLE - Google AI (Gemini models)
         OLLAMA - Local Ollama server
         AZURE_OPENAI - Azure OpenAI Service
         COHERE - Cohere API

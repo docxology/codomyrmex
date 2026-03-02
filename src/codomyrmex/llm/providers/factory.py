@@ -1,5 +1,6 @@
 from .anthropic import AnthropicProvider
 from .base import LLMProvider
+from .gemini import GeminiProvider
 from .models import ProviderConfig, ProviderType
 from .openai import OpenAIProvider
 from .openrouter import OpenRouterProvider
@@ -18,6 +19,7 @@ def get_provider(
         ProviderType.OPENAI: OpenAIProvider,
         ProviderType.ANTHROPIC: AnthropicProvider,
         ProviderType.OPENROUTER: OpenRouterProvider,
+        ProviderType.GOOGLE: GeminiProvider,
     }
 
     provider_class = providers.get(provider_type)

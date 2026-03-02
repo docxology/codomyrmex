@@ -218,10 +218,10 @@ class TestTools:
 
     def test_get_tool_info(self, bridge: PAIBridge) -> None:
         """Test functionality: get tool info."""
-        # AddTask is a known tool from upstream
-        tool = bridge.get_tool_info("AddTask")
+        # ActivityParser is a known tool from upstream (v4+)
+        tool = bridge.get_tool_info("ActivityParser")
         assert tool is not None
-        assert tool.name == "AddTask"
+        assert tool.name == "ActivityParser"
 
     def test_get_tool_info_missing(self, bridge: PAIBridge) -> None:
         """Test functionality: get tool info missing."""

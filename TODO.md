@@ -1,6 +1,6 @@
 # Codomyrmex — TODO
 
-**Version**: v1.0.6 | **Date**: 2026-03-02 | **Modules**: 88 | **Active Sprint**: 17+
+**Version**: v1.0.6 | **Date**: 2026-03-02 | **Modules**: 88 | **Active Sprint**: 18+
 
 This is the authoritative project backlog. Updated after each sprint.
 
@@ -14,15 +14,15 @@ This is the authoritative project backlog. Updated after each sprint.
 | Source files (non-test) | 1,623 | `find -name "*.py" -not -path "*/tests/*"` |
 | Source LOC (non-test) | 290,319 | `wc -l` across source files |
 | Total LOC (incl. tests) | 490,240 | `wc -l` across all `.py` |
-| Test files | 694 | Sprint 14: +5 new test files |
-| Test suite | ~16,190+ tests collected | `uv run pytest --collect-only` |
+| Test files | 700 | Sprint 18: +6 new test files |
+| Test suite | ~20,530+ tests collected | `uv run pytest --collect-only` |
 | Ruff violations | **0** | Sprint 16: F405 star-imports eliminated; 2 ImportError bugs fixed |
 | `NotImplementedError` sites | 13 ABC-annotated (`# ABC: intentional`) + ~10 implementation gaps | Architectural patterns verified |
 | Pass-only function stubs | **227** across 38 modules | AST analysis (down from 255) |
 | Missing `@abstractmethod` markers | **0** (was 26, all resolved v1.0.4) | AST analysis ✅ |
 | Coverage gate | 68% (Sprint 16 target: 70%) | +102 new tests: `ide/antigravity/client.py` (65), `git_operations/cli/repo.py` (37) |
-| MCP Tools | **~198** (+17 Sprint 17: serialization/cache/deployment/model_ops/testing/templating) | Auto-discovery + manual |
-| Auto-discovered MCP modules | 39 (+6 Sprint 17) | MCP bridge |
+| MCP Tools | **~214** (+16 Sprint 18: prompt_engineering/database_management/auth/environment_setup/utils/tool_use) | Auto-discovery + manual |
+| Auto-discovered MCP modules | 45 (+6 Sprint 18) | MCP bridge |
 | RASP documentation compliance | 100% (88/88) | Automated audit |
 | `py.typed` markers | 88/88 | PEP 561 ✅ |
 | Zero-Mock policy | Enforced via `ruff.lint.flake8-tidy-imports.banned-api` | `pyproject.toml` |
@@ -88,14 +88,14 @@ Prioritized by module criticality and user-facing impact. Excludes ~120 intentio
 Modules with no MCP exposure — invisible to the PAI bridge.
 Sprint 16 completed: `static_analysis` ✅, `vector_store` ✅, `feature_flags` ✅
 Sprint 17 completed: `serialization` ✅, `cache` ✅, `deployment` ✅, `model_ops` ✅, `testing` ✅, `templating` ✅
+Sprint 18 completed: `prompt_engineering` ✅, `database_management` ✅, `auth` ✅, `environment_setup` ✅, `utils` ✅, `tool_use` ✅
 
 | Module Group | Modules |
 |---|---|
-| Infrastructure | `api`, `auth`, `ci_cd_automation`, `environment_setup` |
-| Data / Storage | `database_management` |
-| AI / ML | `prompt_engineering`, `tool_use`, `evolutionary_ai` |
+| Infrastructure | `api`, `ci_cd_automation` |
+| AI / ML | `evolutionary_ai` |
 | Code Quality | `tree_sitter`, `pattern_matching` |
-| Developer Tools | `cli`, `ide`, `terminal_interface`, `utils` |
+| Developer Tools | `cli`, `ide`, `terminal_interface` |
 | Comms / Media | `audio`, `video`, `dark`, `documents`, `fpf` |
 | Security | `encryption`, `defense`, `privacy` |
 | Platform | `edge_computing`, `networking`, `physical_management`, `quantum` |
@@ -179,7 +179,7 @@ First feature release targeting external consumption.
 
 ### Documentation
 
-- [ ] Create `docs/ARCHITECTURE.md` — visual Mermaid layer diagram
+- [x] Create `docs/ARCHITECTURE.md` — visual Mermaid layer diagram *(exists: 448-line dependency graph)*
 - [ ] Expand `docs/getting-started/` with more tutorials (currently only `connecting-pai.md`)
 - [ ] Auto-generate rule index table in `rules/README.md` from live filesystem scan
 - [ ] Cross-reference rules to corresponding `AGENTS.md` files
@@ -256,6 +256,18 @@ Architectural extensions and research directions. Aspirational and may require s
 ---
 
 ## ✅ COMPLETED — Sprint History
+
+### Sprint 18 (March 2026) — MCP Coverage Expansion (6 Modules)
+
+- [x] Created `mcp_tools.py` for `prompt_engineering` — 3 tools: `prompt_list_templates`, `prompt_list_strategies`, `prompt_evaluate`
+- [x] Created `mcp_tools.py` for `database_management` — 3 tools: `db_list_adapters`, `db_monitor`, `db_generate_schema`
+- [x] Created `mcp_tools.py` for `auth` — 3 tools: `auth_authenticate`, `auth_validate_token`, `auth_list_providers`
+- [x] Created `mcp_tools.py` for `environment_setup` — 2 tools: `env_check`, `env_list_deps`
+- [x] Created `mcp_tools.py` for `utils` — 3 tools: `utils_hash_content`, `utils_json_loads`, `utils_flatten_dict`
+- [x] Created `mcp_tools.py` for `tool_use` — 2 tools: `tool_use_list_tools`, `tool_use_validate_input`
+- [x] Created 37 new tests across 6 test files — all 37 pass
+- [x] MCP tool count: ~198 → ~214 (+16)
+- [x] Auto-discovered MCP modules: 39 → 45 (+6)
 
 ### Sprint 17 (March 2026) — MCP Coverage Expansion (6 Modules) + Templating Bug Fix
 

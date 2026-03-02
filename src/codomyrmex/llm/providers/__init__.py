@@ -616,6 +616,11 @@ class OpenRouterProvider(LLMProvider):
     def _default_model(self) -> str:
         return "openrouter/free"
 
+# Lazy import to avoid circular dependency
+def _get_gemini_provider():
+    from .gemini import GeminiProvider as _GP
+    return _GP
+
 def get_provider(
     provider_type: ProviderType,
     config: ProviderConfig | None = None,
@@ -629,6 +634,7 @@ def get_provider(
         ProviderType.OPENAI: OpenAIProvider,
         ProviderType.ANTHROPIC: AnthropicProvider,
         ProviderType.OPENROUTER: OpenRouterProvider,
+        ProviderType.GOOGLE: _get_gemini_provider(),
     }
 
     provider_class = providers.get(provider_type)

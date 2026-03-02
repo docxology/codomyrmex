@@ -1,17 +1,17 @@
 # PAI-Codomyrmex Tools Reference
 
-**Version**: v1.0.3 | **Last Updated**: March 2026
+**Version**: v1.0.5 | **Last Updated**: March 2026
 
 ## Overview
 
 Codomyrmex exposes tools to PAI via two mechanisms:
 
-1. **Static tools** (20): Defined in `mcp_bridge.py`, always available
+1. **Static tools** (22): Defined in `mcp_bridge.py`, always available (17 core + 3 universal proxy + 2 maintenance)
 2. **Dynamic tools** (variable): Auto-discovered from module public functions at runtime
 
 The PAI Skill (`SKILL.md`) curates a subset for MCP consumption.
 
-## Static Tools (20)
+## Static Tools (22)
 
 ### File Operations
 
@@ -177,6 +177,23 @@ These tools provide generic access to **any** Codomyrmex module's public API:
 - **Parameters**: `module` (required)
 - **Returns**: `{module, path, content}` (truncated at 5000 chars)
 
+### Maintenance (2 tools)
+
+| Tool | Trust | Description |
+|------|-------|-------------|
+| `codomyrmex.list_workflows` | Safe | List all registered workflow prompts |
+| `codomyrmex.invalidate_cache` | Safe | Clear cached module/tool discovery data |
+
+#### `codomyrmex.list_workflows`
+
+- **Parameters**: none
+- **Returns**: `{workflows: [{name, description}], count: N}`
+
+#### `codomyrmex.invalidate_cache`
+
+- **Parameters**: none
+- **Returns**: `{status: "cleared", caches: [...]}`
+
 ## Dynamic Tool Discovery
 
 Beyond the 22 static tools, the MCP bridge auto-discovers additional tools at runtime:
@@ -227,17 +244,37 @@ The Email tab in the PAI Dashboard provides a browser-accessible interface for a
 - Inbox defaults to `AGENTMAIL_DEFAULT_INBOX` env var when `inbox_id` is omitted
 - Full provider API: `src/codomyrmex/email/agentmail/API_SPECIFICATION.md`
 
+### Calendar / Google Calendar (5 tools)
+
+**Module**: `codomyrmex.calendar_integration.mcp_tools`
+**Auth**: Requires `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, and `GOOGLE_REFRESH_TOKEN`.
+**Category**: `calendar`
+
+| Tool | Trust | Description |
+|------|-------|-------------|
+| `gcal_list_calendars` | Safe | List all accessible Google Calendars |
+| `gcal_list_events` | Safe | List events from a calendar with date range filters |
+| `gcal_create_event` | **Destructive** | Create a new calendar event with attendees |
+| `gcal_update_event` | **Destructive** | Update an existing calendar event |
+| `gcal_delete_event` | **Destructive** | Delete a calendar event by ID |
+
+**Notes:**
+
+- Calendar tools require Google OAuth2 credentials in environment variables
+- Default calendar is `primary` when `calendar_id` is omitted
+- Full provider API: `src/codomyrmex/calendar_integration/gcal/`
+
 ## Tool Count Summary
 
 | Category | Count | Trust |
 |----------|-------|-------|
 | Static safe | 18 | Auto-VERIFIED |
 | Static destructive | 4 | Requires TRUSTED |
-| Dynamic safe | ~146 | Pattern-classified, auto-VERIFIED |
-| Dynamic destructive | ~4 (pattern-matched) | Requires TRUSTED |
-| **Total** | **~171** | — |
+| Dynamic safe | ~169 | Pattern-classified, auto-VERIFIED |
+| Dynamic destructive | ~7 (pattern-matched) | Requires TRUSTED |
+| **Total** | **~198** | — |
 
-> Run `/codomyrmexVerify` to get the current exact count. Total reflects 88-module codebase with 33 auto-discovered modules.
+> Run `/codomyrmexVerify` to get the current exact count. Total reflects 88-module codebase with 45 auto-discovered modules (Sprint 18).
 
 ## Navigation
 

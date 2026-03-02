@@ -4,7 +4,7 @@
     "version": "0.1.0",
     "root_path": "/Users/mini/Documents/GitHub/codomyrmex",
     "python_version": "3.13.11 (main, Dec  5 2025, 21:16:49) [Clang 21.1.4 ]",
-    "timestamp": "2026-03-02T04:06:46.844809"
+    "timestamp": "2026-03-02T04:48:23.971876"
   },
   "modules": {
     "tool_use": {
@@ -91,6 +91,17 @@
           "dependencies": []
         },
         {
+          "name": "mcp_tools",
+          "module_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/tool_use",
+          "type": "other",
+          "signature": "<module 'codomyrmex.tool_use.mcp_tools' from '/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/tool_use/mcp_tools.py'>",
+          "docstring": "No docstring",
+          "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/tool_use",
+          "line_number": 0,
+          "is_public": true,
+          "dependencies": []
+        },
+        {
           "name": "registry",
           "module_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/tool_use",
           "type": "other",
@@ -150,7 +161,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 17:40:03"
+      "last_modified": "2026-03-02 04:47:20"
     },
     "ide": {
       "name": "ide",
@@ -426,7 +437,7 @@
           "name": "field",
           "module_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/ide",
           "type": "function",
-          "signature": "(*, default=<dataclasses._MISSING_TYPE object at 0x10595e120>, default_factory=<dataclasses._MISSING_TYPE object at 0x10595e120>, init=True, repr=True, hash=None, compare=True, metadata=None, kw_only=<dataclasses._MISSING_TYPE object at 0x10595e120>)",
+          "signature": "(*, default=<dataclasses._MISSING_TYPE object at 0x10170e120>, default_factory=<dataclasses._MISSING_TYPE object at 0x10170e120>, init=True, repr=True, hash=None, compare=True, metadata=None, kw_only=<dataclasses._MISSING_TYPE object at 0x10170e120>)",
           "docstring": "Return an object to identify dataclass fields.\n\ndefault is the default value of the field.  default_factory is a\n0-argument function called to initialize a field's value.  If init\nis true, the field will be a parameter to the class's __init__()\nfunction.  If repr is true, the field will be included in the\nobject's repr().  If hash is true, the field will be included in the\nobject's hash().  If compare is true, the field will be used in\ncomparison functions.  metadata, if specified, must be a map",
           "file_path": "/Users/mini/.local/share/uv/python/cpython-3.13.11-macos-aarch64-none/lib/python3.13/dataclasses.py",
           "line_number": 383,
@@ -471,7 +482,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-02 04:02:42"
+      "last_modified": "2026-03-02 04:30:16"
     },
     "encryption": {
       "name": "encryption",
@@ -948,7 +959,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-02 03:30:22"
+      "last_modified": "2026-03-02 04:30:16"
     },
     "collaboration": {
       "name": "collaboration",
@@ -1445,7 +1456,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 22:40:45"
+      "last_modified": "2026-03-02 04:30:16"
     },
     "crypto": {
       "name": "crypto",
@@ -2010,7 +2021,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-02 03:34:36"
+      "last_modified": "2026-03-02 04:30:16"
     },
     "documentation": {
       "name": "documentation",
@@ -2188,7 +2199,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 21:28:05"
+      "last_modified": "2026-03-02 04:30:16"
     },
     "video": {
       "name": "video",
@@ -3116,7 +3127,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 22:46:57"
+      "last_modified": "2026-03-02 04:30:17"
     },
     "terminal_interface": {
       "name": "terminal_interface",
@@ -3272,7 +3283,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 21:03:23"
+      "last_modified": "2026-03-02 04:30:17"
     },
     "formal_verification": {
       "name": "formal_verification",
@@ -4200,7 +4211,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 21:28:44"
+      "last_modified": "2026-03-02 04:30:17"
     },
     "privacy": {
       "name": "privacy",
@@ -4677,7 +4688,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-02 03:55:31"
+      "last_modified": "2026-03-02 04:30:17"
     },
     "identity": {
       "name": "identity",
@@ -4811,7 +4822,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 20:49:36"
+      "last_modified": "2026-03-02 04:30:17"
     },
     "relations": {
       "name": "relations",
@@ -5044,7 +5055,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 21:02:06"
+      "last_modified": "2026-03-02 04:30:17"
     },
     "bio_simulation": {
       "name": "bio_simulation",
@@ -5156,7 +5167,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 17:40:00"
+      "last_modified": "2026-03-02 04:30:17"
     },
     "security": {
       "name": "security",
@@ -6335,7 +6346,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 21:03:23"
+      "last_modified": "2026-03-02 04:30:17"
     },
     "auth": {
       "name": "auth",
@@ -6531,6 +6542,17 @@
           "dependencies": []
         },
         {
+          "name": "mcp_tools",
+          "module_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/auth",
+          "type": "other",
+          "signature": "<module 'codomyrmex.auth.mcp_tools' from '/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/auth/mcp_tools.py'>",
+          "docstring": "No docstring",
+          "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/auth",
+          "line_number": 0,
+          "is_public": true,
+          "dependencies": []
+        },
+        {
           "name": "providers",
           "module_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/auth",
           "type": "other",
@@ -6568,7 +6590,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 22:16:20"
+      "last_modified": "2026-03-02 04:47:51"
     },
     "docs_gen": {
       "name": "docs_gen",
@@ -7135,7 +7157,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 22:45:46"
+      "last_modified": "2026-03-02 04:30:17"
     },
     "serialization": {
       "name": "serialization",
@@ -7456,7 +7478,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-02 03:52:05"
+      "last_modified": "2026-03-02 04:30:17"
     },
     "model_ops": {
       "name": "model_ops",
@@ -8063,7 +8085,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-02 04:05:26"
+      "last_modified": "2026-03-02 04:30:17"
     },
     "website": {
       "name": "website",
@@ -8186,7 +8208,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 22:47:46"
+      "last_modified": "2026-03-02 04:30:17"
     },
     "tests": {
       "name": "tests",
@@ -8221,7 +8243,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-02 04:06:15"
+      "last_modified": "2026-03-02 04:47:33"
     },
     "git_analysis": {
       "name": "git_analysis",
@@ -8311,7 +8333,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-02 03:42:10"
+      "last_modified": "2026-03-02 04:32:42"
     },
     "containerization": {
       "name": "containerization",
@@ -8742,7 +8764,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 21:00:58"
+      "last_modified": "2026-03-02 04:30:18"
     },
     "environment_setup": {
       "name": "environment_setup",
@@ -8850,6 +8872,17 @@
           "dependencies": []
         },
         {
+          "name": "mcp_tools",
+          "module_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/environment_setup",
+          "type": "other",
+          "signature": "<module 'codomyrmex.environment_setup.mcp_tools' from '/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/environment_setup/mcp_tools.py'>",
+          "docstring": "No docstring",
+          "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/environment_setup",
+          "line_number": 0,
+          "is_public": true,
+          "dependencies": []
+        },
+        {
           "name": "validate_python_version",
           "module_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/environment_setup",
           "type": "function",
@@ -8865,7 +8898,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 21:25:52"
+      "last_modified": "2026-03-02 04:42:22"
     },
     "simulation": {
       "name": "simulation",
@@ -8922,7 +8955,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 21:30:31"
+      "last_modified": "2026-03-02 04:30:18"
     },
     "plugin_system": {
       "name": "plugin_system",
@@ -10268,7 +10301,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-02 03:49:48"
+      "last_modified": "2026-03-02 04:30:19"
     },
     "utils": {
       "name": "utils",
@@ -10662,6 +10695,17 @@
           "dependencies": []
         },
         {
+          "name": "hashing",
+          "module_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/utils",
+          "type": "other",
+          "signature": "<module 'codomyrmex.utils.hashing' from '/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/utils/hashing.py'>",
+          "docstring": "No docstring",
+          "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/utils",
+          "line_number": 0,
+          "is_public": true,
+          "dependencies": []
+        },
+        {
           "name": "hashlib",
           "module_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/utils",
           "type": "other",
@@ -10739,6 +10783,17 @@
           "dependencies": []
         },
         {
+          "name": "mcp_tools",
+          "module_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/utils",
+          "type": "other",
+          "signature": "<module 'codomyrmex.utils.mcp_tools' from '/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/utils/mcp_tools.py'>",
+          "docstring": "No docstring",
+          "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/utils",
+          "line_number": 0,
+          "is_public": true,
+          "dependencies": []
+        },
+        {
           "name": "metrics",
           "module_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/utils",
           "type": "other",
@@ -10797,7 +10852,7 @@
           "name": "registry",
           "module_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/utils",
           "type": "other",
-          "signature": "<codomyrmex.utils.integration.ModuleRegistry object at 0x10c050830>",
+          "signature": "<codomyrmex.utils.integration.ModuleRegistry object at 0x107dcc830>",
           "docstring": "No docstring",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/utils",
           "line_number": 0,
@@ -10985,7 +11040,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 22:41:03"
+      "last_modified": "2026-03-02 04:42:31"
     },
     "release": {
       "name": "release",
@@ -11163,7 +11218,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 17:40:01"
+      "last_modified": "2026-03-02 04:30:19"
     },
     "scrape": {
       "name": "scrape",
@@ -11688,7 +11743,7 @@
           "signature": "class Template",
           "docstring": "Template object.",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/templating/engines/template_engine.py",
-          "line_number": 22,
+          "line_number": 21,
           "is_public": true,
           "dependencies": []
         },
@@ -11699,7 +11754,7 @@
           "signature": "class TemplateEngine",
           "docstring": "Template engine interface.",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/templating/engines/template_engine.py",
-          "line_number": 44,
+          "line_number": 43,
           "is_public": true,
           "dependencies": []
         },
@@ -11851,7 +11906,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-02 04:02:42"
+      "last_modified": "2026-03-02 04:30:19"
     },
     "cli": {
       "name": "cli",
@@ -12370,7 +12425,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-02 03:49:45"
+      "last_modified": "2026-03-02 04:30:19"
     },
     "module_template": {
       "name": "module_template",
@@ -13938,7 +13993,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 22:57:47"
+      "last_modified": "2026-03-02 04:30:19"
     },
     "vector_store": {
       "name": "vector_store",
@@ -14116,7 +14171,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-02 03:30:08"
+      "last_modified": "2026-03-02 04:30:19"
     },
     "search": {
       "name": "search",
@@ -14327,7 +14382,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 17:40:01"
+      "last_modified": "2026-03-02 04:30:19"
     },
     "testing": {
       "name": "testing",
@@ -14648,7 +14703,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-02 03:52:56"
+      "last_modified": "2026-03-02 04:30:19"
     },
     "concurrency": {
       "name": "concurrency",
@@ -14881,7 +14936,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 21:28:04"
+      "last_modified": "2026-03-02 04:30:19"
     },
     "networks": {
       "name": "networks",
@@ -14949,7 +15004,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 17:40:01"
+      "last_modified": "2026-03-02 04:30:19"
     },
     "audio": {
       "name": "audio",
@@ -15635,7 +15690,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 22:40:35"
+      "last_modified": "2026-03-02 04:30:19"
     },
     "logging_monitoring": {
       "name": "logging_monitoring",
@@ -15846,7 +15901,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 22:45:18"
+      "last_modified": "2026-03-02 04:30:19"
     },
     "config_management": {
       "name": "config_management",
@@ -16418,6 +16473,17 @@
           "dependencies": []
         },
         {
+          "name": "mcp_tools",
+          "module_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/prompt_engineering",
+          "type": "other",
+          "signature": "<module 'codomyrmex.prompt_engineering.mcp_tools' from '/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/prompt_engineering/mcp_tools.py'>",
+          "docstring": "No docstring",
+          "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/prompt_engineering",
+          "line_number": 0,
+          "is_public": true,
+          "dependencies": []
+        },
+        {
           "name": "optimization",
           "module_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/prompt_engineering",
           "type": "other",
@@ -16521,7 +16587,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 22:46:00"
+      "last_modified": "2026-03-02 04:41:54"
     },
     "deployment": {
       "name": "deployment",
@@ -16842,7 +16908,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-02 03:52:29"
+      "last_modified": "2026-03-02 04:30:19"
     },
     "tree_sitter": {
       "name": "tree_sitter",
@@ -16921,7 +16987,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 21:03:23"
+      "last_modified": "2026-03-02 04:30:19"
     },
     "examples": {
       "name": "examples",
@@ -16933,7 +16999,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 17:40:01"
+      "last_modified": "2026-03-02 04:30:19"
     },
     "cloud": {
       "name": "cloud",
@@ -17650,7 +17716,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 22:40:45"
+      "last_modified": "2026-03-02 04:30:19"
     },
     "compression": {
       "name": "compression",
@@ -18160,7 +18226,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 22:47:18"
+      "last_modified": "2026-03-02 04:30:19"
     },
     "api": {
       "name": "api",
@@ -19570,7 +19636,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 22:40:45"
+      "last_modified": "2026-03-02 04:30:19"
     },
     "physical_management": {
       "name": "physical_management",
@@ -19957,7 +20023,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-02 03:27:45"
+      "last_modified": "2026-03-02 04:30:19"
     },
     "ci_cd_automation": {
       "name": "ci_cd_automation",
@@ -20555,7 +20621,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 22:40:35"
+      "last_modified": "2026-03-02 04:30:19"
     },
     "coding": {
       "name": "coding",
@@ -21261,7 +21327,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 22:40:45"
+      "last_modified": "2026-03-02 04:30:19"
     },
     "maintenance": {
       "name": "maintenance",
@@ -21483,7 +21549,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 21:25:51"
+      "last_modified": "2026-03-02 04:30:19"
     },
     "market": {
       "name": "market",
@@ -21980,6 +22046,17 @@
           "dependencies": []
         },
         {
+          "name": "mcp_tools",
+          "module_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/database_management",
+          "type": "other",
+          "signature": "<module 'codomyrmex.database_management.mcp_tools' from '/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/database_management/mcp_tools.py'>",
+          "docstring": "No docstring",
+          "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/database_management",
+          "line_number": 0,
+          "is_public": true,
+          "dependencies": []
+        },
+        {
           "name": "migration",
           "module_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/database_management",
           "type": "other",
@@ -22072,7 +22149,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 22:45:03"
+      "last_modified": "2026-03-02 04:47:17"
     },
     "skills": {
       "name": "skills",
@@ -22426,7 +22503,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 20:57:18"
+      "last_modified": "2026-03-02 04:30:19"
     },
     "dark": {
       "name": "dark",
@@ -22584,7 +22661,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 20:57:18"
+      "last_modified": "2026-03-02 04:30:19"
     },
     "defense": {
       "name": "defense",
@@ -23259,7 +23336,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 22:40:45"
+      "last_modified": "2026-03-02 04:30:19"
     },
     "telemetry": {
       "name": "telemetry",
@@ -23558,7 +23635,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 22:46:36"
+      "last_modified": "2026-03-02 04:30:19"
     },
     "documents": {
       "name": "documents",
@@ -24363,7 +24440,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 22:40:45"
+      "last_modified": "2026-03-02 04:30:20"
     },
     "calendar_integration": {
       "name": "calendar_integration",
@@ -24719,7 +24796,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 21:01:41"
+      "last_modified": "2026-03-02 04:30:20"
     },
     "spatial": {
       "name": "spatial",
@@ -24831,7 +24908,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-02 03:30:00"
+      "last_modified": "2026-03-02 04:30:20"
     },
     "events": {
       "name": "events",
@@ -25218,7 +25295,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 22:40:35"
+      "last_modified": "2026-03-02 04:30:20"
     },
     "performance": {
       "name": "performance",
@@ -25495,7 +25572,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 20:57:18"
+      "last_modified": "2026-03-02 04:30:20"
     },
     "evolutionary_ai": {
       "name": "evolutionary_ai",
@@ -25937,7 +26014,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 22:40:35"
+      "last_modified": "2026-03-02 04:30:20"
     },
     "logistics": {
       "name": "logistics",
@@ -26225,7 +26302,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 22:40:45"
+      "last_modified": "2026-03-02 04:30:20"
     },
     "email": {
       "name": "email",
@@ -27087,7 +27164,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 22:20:32"
+      "last_modified": "2026-03-02 04:30:20"
     },
     "orchestrator": {
       "name": "orchestrator",
@@ -28024,7 +28101,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 23:21:39"
+      "last_modified": "2026-03-02 04:30:20"
     },
     "validation": {
       "name": "validation",
@@ -28202,7 +28279,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 21:19:43"
+      "last_modified": "2026-03-02 04:30:20"
     },
     "quantum": {
       "name": "quantum",
@@ -28413,7 +28490,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 21:01:41"
+      "last_modified": "2026-03-02 04:30:20"
     },
     "fpf": {
       "name": "fpf",
@@ -29561,7 +29638,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-03-01 21:25:58"
+      "last_modified": "2026-03-02 04:30:20"
     }
   },
   "system_status": {

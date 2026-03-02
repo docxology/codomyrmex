@@ -51,7 +51,7 @@ class GeminiClient(BaseAgent):
                 logger.error(f"Failed to initialize Gemini Client: {e}")
                 raise GeminiError(f"Failed to initialize Gemini Client: {e}") from e
 
-        self.default_model = self.get_config_value("gemini_model", default="gemini-2.0-flash", config=config)
+        self.default_model = self.get_config_value("gemini_model", default="gemini-2.5-pro", config=config)
 
     def _execute_impl(self, request: AgentRequest) -> AgentResponse:
         if not self.client:

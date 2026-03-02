@@ -1,6 +1,6 @@
 # Personal AI Infrastructure — Documentation
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
@@ -22,7 +22,7 @@ This document provides a guide to Personal AI Infrastructure (PAI) documentation
 | :--- | :--- | :--- |
 | Integration Index | [pai/README.md](pai/README.md) | Detailed PAI-Codomyrmex reference |
 | Architecture | [pai/architecture.md](pai/architecture.md) | MCP bridge, trust model, data flow |
-| Tools Reference | [pai/tools-reference.md](pai/tools-reference.md) | All 18 static tools + dynamic discovery |
+| Tools Reference | [pai/tools-reference.md](pai/tools-reference.md) | All 22 static tools + dynamic discovery |
 | API Reference | [pai/api-reference.md](pai/api-reference.md) | PAIBridge, TrustRegistry, dataclasses |
 | Workflows | [pai/workflows.md](pai/workflows.md) | /codomyrmexVerify, /codomyrmexTrust, Algorithm mapping |
 

@@ -228,7 +228,7 @@ See [`/codomyrmexWorktree`](.agent/workflows/codomyrmexWorktree.md) for detailed
 <!-- gitnexus:start -->
 # GitNexus MCP
 
-This project is indexed by GitNexus as **codomyrmex** (58072 symbols, 136958 relationships, 300 execution flows).
+This project is indexed by GitNexus as **codomyrmex** (58140 symbols, 137331 relationships, 300 execution flows).
 
 ## Always Start Here
 
