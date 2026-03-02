@@ -62,6 +62,16 @@ DEV_TOOLS = {
 
 
 def main():
+    # Auto-injected: Load configuration
+    import yaml
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "tools" / "config.yaml"
+    config_data = {}
+    if config_path.exists():
+        with open(config_path, "r") as f:
+            config_data = yaml.safe_load(f) or {}
+            print(f"Loaded config from config/tools/config.yaml")
+
     parser = argparse.ArgumentParser(description="Development tools utilities")
     parser.add_argument("--check", "-c", action="store_true", help="Check all tools")
     parser.add_argument("--tool", "-t", help="Check specific tool")

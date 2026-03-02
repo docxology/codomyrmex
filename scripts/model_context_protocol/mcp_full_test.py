@@ -526,6 +526,16 @@ def run_integration_tests(runner: TestRunner):
 # ============================================================================
 
 def main():
+    # Auto-injected: Load configuration
+    import yaml
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "model_context_protocol" / "config.yaml"
+    config_data = {}
+    if config_path.exists():
+        with open(config_path, "r") as f:
+            config_data = yaml.safe_load(f) or {}
+            print(f"Loaded config from config/model_context_protocol/config.yaml")
+
     parser = argparse.ArgumentParser(description="MCP Comprehensive Test Suite")
     parser.add_argument("--category", "-c", help="Run specific category")
     parser.add_argument("--verbose", "-v", action="store_true", help="Verbose output")

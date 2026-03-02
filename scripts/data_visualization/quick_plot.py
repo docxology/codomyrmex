@@ -126,6 +126,16 @@ def create_text_plot(data: list, x_col: str, y_col: str, plot_type: str, width: 
 
 
 def main():
+    # Auto-injected: Load configuration
+    import yaml
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "data_visualization" / "config.yaml"
+    config_data = {}
+    if config_path.exists():
+        with open(config_path, "r") as f:
+            config_data = yaml.safe_load(f) or {}
+            print(f"Loaded config from config/data_visualization/config.yaml")
+
     parser = argparse.ArgumentParser(description="Create quick plots from data files")
     parser.add_argument("data_file", help="CSV or JSON data file")
     parser.add_argument("--type", "-t", choices=["line", "bar", "scatter"], default="bar",

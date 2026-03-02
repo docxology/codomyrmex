@@ -66,6 +66,16 @@ def analyze_logs(lines: list) -> dict:
 
 
 def main():
+    # Auto-injected: Load configuration
+    import yaml
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "logging_monitoring" / "config.yaml"
+    config_data = {}
+    if config_path.exists():
+        with open(config_path, "r") as f:
+            config_data = yaml.safe_load(f) or {}
+            print(f"Loaded config from config/logging_monitoring/config.yaml")
+
     parser = argparse.ArgumentParser(description="Log viewer and analysis")
     parser.add_argument("path", nargs="?", default=".", help="Log file or directory")
     parser.add_argument("--level", "-l", choices=LOG_LEVELS, default=None, help="Filter by level")

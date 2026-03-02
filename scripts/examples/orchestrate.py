@@ -12,6 +12,16 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "src"))
 from codomyrmex.examples import *
 
 def main():
+    # Auto-injected: Load configuration
+    import yaml
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "examples" / "config.yaml"
+    config_data = {}
+    if config_path.exists():
+        with open(config_path, "r") as f:
+            config_data = yaml.safe_load(f) or {}
+            print(f"Loaded config from {config_path.name}")
+
     print("=== Examples Module Orchestrator ===")
     print("This orchestrator demonstrates the examples module capabilities.")
     print("Available exports:", dir())

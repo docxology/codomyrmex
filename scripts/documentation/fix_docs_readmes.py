@@ -125,6 +125,16 @@ def fix_spec(mod_name):
 
 
 def main():
+    # Auto-injected: Load configuration
+    import yaml
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "documentation" / "config.yaml"
+    config_data = {}
+    if config_path.exists():
+        with open(config_path, "r") as f:
+            config_data = yaml.safe_load(f) or {}
+            print(f"Loaded config from config/documentation/config.yaml")
+
     modules = sorted(d for d in os.listdir(DOCS) if os.path.isdir(os.path.join(DOCS, d)))
     readme_fixed = spec_fixed = 0
     for mod in modules:

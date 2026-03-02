@@ -47,6 +47,16 @@ def process_data(data: list[int], *, factor: int = 1, verbose: bool = False) -> 
 '''
 
 def main():
+    # Auto-injected: Load configuration
+    import yaml
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "docs_gen" / "config.yaml"
+    config_data = {}
+    if config_path.exists():
+        with open(config_path, "r") as f:
+            config_data = yaml.safe_load(f) or {}
+            print(f"Loaded config from {config_path.name}")
+
     print("--- Starting Docs Generation Orchestrator ---")
     
     # 1. Initialize SiteGenerator

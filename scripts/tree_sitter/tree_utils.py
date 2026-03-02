@@ -78,6 +78,16 @@ def search_pattern(path: Path, pattern: str) -> list:
 
 
 def main():
+    # Auto-injected: Load configuration
+    import yaml
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "tree_sitter" / "config.yaml"
+    config_data = {}
+    if config_path.exists():
+        with open(config_path, "r") as f:
+            config_data = yaml.safe_load(f) or {}
+            print(f"Loaded config from config/tree_sitter/config.yaml")
+
     parser = argparse.ArgumentParser(description="Tree-sitter parsing utilities")
     parser.add_argument("file", nargs="?", help="File to parse")
     parser.add_argument("--query", "-q", help="Search pattern")

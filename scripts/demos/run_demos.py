@@ -23,6 +23,16 @@ from codomyrmex.utils.cli_helpers import (
 )
 
 def main():
+    # Auto-injected: Load configuration
+    import yaml
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "demos" / "config.yaml"
+    config_data = {}
+    if config_path.exists():
+        with open(config_path, "r") as f:
+            config_data = yaml.safe_load(f) or {}
+            print(f"Loaded config from {config_path.name}")
+
     parser = argparse.ArgumentParser(description="Codomyrmex Demo Orchestrator")
     parser.add_argument("--list", action="store_true", help="List available demos")
     parser.add_argument("--module", help="Filter demos by module")

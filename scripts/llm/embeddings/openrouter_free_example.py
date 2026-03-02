@@ -73,6 +73,16 @@ Similarity score (0-100):"""),
 
 
 def main():
+    # Auto-injected: Load configuration
+    import yaml
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "llm" / "config.yaml"
+    config_data = {}
+    if config_path.exists():
+        with open(config_path, "r") as f:
+            config_data = yaml.safe_load(f) or {}
+            print(f"Loaded config from config/llm/config.yaml")
+
     """Demonstrate semantic similarity with OpenRouter free models."""
     print("=" * 60)
     print("  OpenRouter Free Example - Semantic Similarity")

@@ -122,6 +122,16 @@ def create_html_chart(data: list, x_col: str, y_col: str, chart_type: str = "bar
 
 
 def main():
+    # Auto-injected: Load configuration
+    import yaml
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "data_visualization" / "config.yaml"
+    config_data = {}
+    if config_path.exists():
+        with open(config_path, "r") as f:
+            config_data = yaml.safe_load(f) or {}
+            print(f"Loaded config from config/data_visualization/config.yaml")
+
     parser = argparse.ArgumentParser(description="Export data visualizations")
     parser.add_argument("data_file", help="CSV or JSON data file")
     parser.add_argument("--output", "-o", required=True, help="Output file path")

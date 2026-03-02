@@ -92,6 +92,16 @@ def get_images() -> list:
 
 
 def main():
+    # Auto-injected: Load configuration
+    import yaml
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "containerization" / "config.yaml"
+    config_data = {}
+    if config_path.exists():
+        with open(config_path, "r") as f:
+            config_data = yaml.safe_load(f) or {}
+            print(f"Loaded config from config/containerization/config.yaml")
+
     parser = argparse.ArgumentParser(description="Check container status")
     parser.add_argument("--all", "-a", action="store_true", help="Show all containers")
     parser.add_argument("--images", "-i", action="store_true", help="Show images")

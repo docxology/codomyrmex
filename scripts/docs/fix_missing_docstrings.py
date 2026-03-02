@@ -67,6 +67,16 @@ def fix_docstring(rel_path: str, src_dir: Path):
         print(f"Error fixing {rel_path}: {e}", file=sys.stderr)
 
 def main():
+    # Auto-injected: Load configuration
+    import yaml
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "docs" / "config.yaml"
+    config_data = {}
+    if config_path.exists():
+        with open(config_path, "r") as f:
+            config_data = yaml.safe_load(f) or {}
+            print(f"Loaded config from config/docs/config.yaml")
+
     parser = argparse.ArgumentParser(description="Fix missing docstrings in __init__.py files.")
     parser.add_argument("--root", type=Path, default=Path(__file__).parent.parent, help="Project root directory")
     parser.add_argument("--target", action="append", help="Specific target module (relative to src/codomyrmex). Can be used multiple times.")

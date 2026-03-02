@@ -98,6 +98,17 @@ def run_swarm(max_agents: int = None) -> None:
     print("Use 'jules remote list --session' to monitor your agents.")
     print("Use 'jules remote pull --session <ID> --apply' to merge completed work.")
 
+
+    # Auto-injected: Load configuration
+    import yaml
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "agents" / "config.yaml"
+    config_data = {}
+    if config_path.exists():
+        with open(config_path, "r") as f:
+            config_data = yaml.safe_load(f) or {}
+            print(f"Loaded config from config/agents/config.yaml")
+
 if __name__ == "__main__":
     import sys
     # Optional arg to limit agents (e.g. ./mega_swarm_dispatcher.py 5)

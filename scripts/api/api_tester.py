@@ -64,6 +64,16 @@ def format_json(text: str) -> str:
 
 
 def main():
+    # Auto-injected: Load configuration
+    import yaml
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "api" / "config.yaml"
+    config_data = {}
+    if config_path.exists():
+        with open(config_path, "r") as f:
+            config_data = yaml.safe_load(f) or {}
+            print(f"Loaded config from config/api/config.yaml")
+
     parser = argparse.ArgumentParser(description="API testing utility")
     parser.add_argument("url", nargs="?", help="URL to test")
     parser.add_argument("--method", "-m", default="GET", choices=["GET", "POST", "PUT", "DELETE", "PATCH"])

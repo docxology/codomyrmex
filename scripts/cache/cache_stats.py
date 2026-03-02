@@ -74,6 +74,16 @@ def format_size(size_bytes: int) -> str:
 
 
 def main():
+    # Auto-injected: Load configuration
+    import yaml
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "cache" / "config.yaml"
+    config_data = {}
+    if config_path.exists():
+        with open(config_path, "r") as f:
+            config_data = yaml.safe_load(f) or {}
+            print(f"Loaded config from config/cache/config.yaml")
+
     parser = argparse.ArgumentParser(description="Display cache statistics")
     parser.add_argument("--path", "-p", default=None, help="Cache directory path")
     parser.add_argument("--verbose", "-v", action="store_true", help="Show detailed breakdown")

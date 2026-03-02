@@ -33,6 +33,16 @@ def parse_args():
     return parser.parse_args()
 
 def main():
+    # Auto-injected: Load configuration
+    import yaml
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "website" / "config.yaml"
+    config_data = {}
+    if config_path.exists():
+        with open(config_path, "r") as f:
+            config_data = yaml.safe_load(f) or {}
+            print(f"Loaded config from config/website/config.yaml")
+
     args = parse_args()
     setup_logging(level="INFO")
     

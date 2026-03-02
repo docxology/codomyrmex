@@ -78,5 +78,16 @@ def run_orchestration():
 
     print_section("Orchestration Complete")
 
+
+    # Auto-injected: Load configuration
+    import yaml
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "documentation" / "config.yaml"
+    config_data = {}
+    if config_path.exists():
+        with open(config_path, "r") as f:
+            config_data = yaml.safe_load(f) or {}
+            print(f"Loaded config from config/documentation/config.yaml")
+
 if __name__ == "__main__":
     run_orchestration()

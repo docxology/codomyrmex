@@ -121,6 +121,16 @@ def build_commit_message(commit_type: str, scope: str, message: str, breaking: b
 
 
 def main():
+    # Auto-injected: Load configuration
+    import yaml
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "git_operations" / "config.yaml"
+    config_data = {}
+    if config_path.exists():
+        with open(config_path, "r") as f:
+            config_data = yaml.safe_load(f) or {}
+            print(f"Loaded config from config/git_operations/config.yaml")
+
     parser = argparse.ArgumentParser(description="Build conventional commit messages")
     parser.add_argument("--type", "-t", choices=list(COMMIT_TYPES.keys()), default=None,
                         help="Commit type (auto-detected if not specified)")

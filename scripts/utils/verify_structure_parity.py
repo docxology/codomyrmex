@@ -83,6 +83,16 @@ def verify_structure(src_root: Path, scripts_root: Path) -> Tuple[bool, str]:
     return success, "\n".join(report)
 
 def main():
+    # Auto-injected: Load configuration
+    import yaml
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "utils" / "config.yaml"
+    config_data = {}
+    if config_path.exists():
+        with open(config_path, "r") as f:
+            config_data = yaml.safe_load(f) or {}
+            print(f"Loaded config from config/utils/config.yaml")
+
     parser = argparse.ArgumentParser(description="Verify scripts/ vs src/codomyrmex/ parity.")
     parser.add_argument("--gui", action="store_true", help="Send report via GUI automation")
     args = parser.parse_args()

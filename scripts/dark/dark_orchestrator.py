@@ -99,5 +99,16 @@ def main() -> None:
         print(f"View results in: {output_dir.absolute()}")
 
 
+
+    # Auto-injected: Load configuration
+    import yaml
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "dark" / "config.yaml"
+    config_data = {}
+    if config_path.exists():
+        with open(config_path, "r") as f:
+            config_data = yaml.safe_load(f) or {}
+            print(f"Loaded config from config/dark/config.yaml")
+
 if __name__ == "__main__":
     main()

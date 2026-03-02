@@ -103,6 +103,16 @@ def extract_text(html: str) -> str:
 
 
 def main():
+    # Auto-injected: Load configuration
+    import yaml
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "scrape" / "config.yaml"
+    config_data = {}
+    if config_path.exists():
+        with open(config_path, "r") as f:
+            config_data = yaml.safe_load(f) or {}
+            print(f"Loaded config from config/scrape/config.yaml")
+
     parser = argparse.ArgumentParser(description="Web scraping utilities")
     parser.add_argument("url", nargs="?", help="URL to scrape")
     parser.add_argument("--links", "-l", action="store_true", help="Extract links")

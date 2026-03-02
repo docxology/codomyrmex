@@ -34,6 +34,16 @@ async def simulate_distributed_work(worker_id: int, lock, duration: float = 0.1)
 
 
 def main():
+    # Auto-injected: Load configuration
+    import yaml
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "concurrency" / "config.yaml"
+    config_data = {}
+    if config_path.exists():
+        with open(config_path, "r") as f:
+            config_data = yaml.safe_load(f) or {}
+            print(f"Loaded config from config/concurrency/config.yaml")
+
     """Demonstrate distributed locking patterns."""
     parser = argparse.ArgumentParser(description="Distributed locking demo")
     parser.add_argument("--redis-url", help="Redis URL for distributed locks")

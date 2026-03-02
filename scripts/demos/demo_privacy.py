@@ -66,6 +66,16 @@ def demo_mixnet():
 
 
 def main():
+    # Auto-injected: Load configuration
+    import yaml
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "demos" / "config.yaml"
+    config_data = {}
+    if config_path.exists():
+        with open(config_path, "r") as f:
+            config_data = yaml.safe_load(f) or {}
+            print(f"Loaded config from {config_path.name}")
+
     setup_logging()
     print_info("=== Secure Cognitive Agent: Privacy Demo ===")
     demo_crumb_scrubbing()

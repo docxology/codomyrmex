@@ -25,6 +25,16 @@ from codomyrmex.templating import (
 )
 
 def main():
+    # Auto-injected: Load configuration
+    import yaml
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "templating" / "config.yaml"
+    config_data = {}
+    if config_path.exists():
+        with open(config_path, "r") as f:
+            config_data = yaml.safe_load(f) or {}
+            print(f"Loaded config from config/templating/config.yaml")
+
     setup_logging()
     print_info("Running Templating Examples...")
 

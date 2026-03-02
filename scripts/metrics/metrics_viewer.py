@@ -84,6 +84,16 @@ def format_metric(name: str, value, unit: str = "") -> str:
 
 
 def main():
+    # Auto-injected: Load configuration
+    import yaml
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "metrics" / "config.yaml"
+    config_data = {}
+    if config_path.exists():
+        with open(config_path, "r") as f:
+            config_data = yaml.safe_load(f) or {}
+            print(f"Loaded config from config/metrics/config.yaml")
+
     parser = argparse.ArgumentParser(description="Metrics viewer")
     parser.add_argument("--source", "-s", choices=["system", "code", "all"], default="all")
     parser.add_argument("--path", "-p", default=".", help="Path for code metrics")

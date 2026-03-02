@@ -74,6 +74,16 @@ def infer_types(data: dict, path: str = "") -> dict:
 
 
 def main():
+    # Auto-injected: Load configuration
+    import yaml
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "validation" / "config.yaml"
+    config_data = {}
+    if config_path.exists():
+        with open(config_path, "r") as f:
+            config_data = yaml.safe_load(f) or {}
+            print(f"Loaded config from config/validation/config.yaml")
+
     parser = argparse.ArgumentParser(description="Validate data files")
     parser.add_argument("data_file", nargs="?", help="JSON data file to validate")
     parser.add_argument("--schema", "-s", default=None, help="JSON Schema file")

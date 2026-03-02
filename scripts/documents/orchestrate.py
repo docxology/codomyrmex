@@ -23,6 +23,16 @@ from codomyrmex.documents import (
 from codomyrmex.utils.cli_helpers import setup_logging, print_success, print_info, print_error
 
 def main():
+    # Auto-injected: Load configuration
+    import yaml
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "documents" / "config.yaml"
+    config_data = {}
+    if config_path.exists():
+        with open(config_path, "r") as f:
+            config_data = yaml.safe_load(f) or {}
+            print(f"Loaded config from {config_path.name}")
+
     parser = argparse.ArgumentParser(description="Documents Orchestrator")
     parser.add_argument("action", choices=["convert", "info", "test"], help="Action to perform")
     parser.add_argument("--input", "-i", help="Input file path")

@@ -1,13 +1,18 @@
 #!/usr/bin/env python3
 """
-Concurrency utilities for parallel task management.
-
-Usage:
-    python concurrency_demo.py [--workers N] [--demo TYPE]
+Comprehensive demo of the Codomyrmex Concurrency Module.
+Demonstrates LocalLock, RedisLock (via fakeredis), ReadWriteLock, 
+LocalSemaphore, and AsyncWorkerPool.
 """
 
 import sys
+import os
+import time
+import random
+import threading
+import asyncio
 from pathlib import Path
+from typing import List, Dict, Any
 
 try:
     import codomyrmex  # noqa: F401
@@ -15,93 +20,157 @@ except ImportError:
     project_root = Path(__file__).resolve().parent.parent.parent
     sys.path.insert(0, str(project_root / "src"))
 
-import argparse
-import concurrent.futures
-import threading
-import time
-import random
+from codomyrmex.concurrency import (
+    LocalLock, 
+    LockManager, 
+    ReadWriteLock, 
+    LocalSemaphore, 
+    AsyncWorkerPool,
+    RedisLock
+)
 
+# Use fakeredis for zero-mock demonstration
+try:
+    import fakeredis
+except ImportError:
+    fakeredis = None
 
-def worker_task(task_id: int, duration: float) -> dict:
-    """Simulate a worker task."""
-    start = time.time()
-    time.sleep(duration)
-    return {
-        "task_id": task_id,
-        "thread": threading.current_thread().name,
-        "duration": round(time.time() - start, 3),
-    }
+def section(name: str):
+    print(f"\n--- {name} ---")
 
+def demo_local_lock():
+    section("LocalLock (Process & Thread Safe)")
+    lock = LocalLock("demo_resource")
+    
+    # Re-entry demonstration
+    print("Attempting re-entry...")
+    with lock:
+        print("  Locked once")
+        with lock:
+            print("    Locked twice (re-entry)")
+    print("  Released all")
 
-def demo_thread_pool(num_tasks: int = 10, workers: int = 4) -> list:
-    """Demonstrate thread pool execution."""
+def demo_read_write_lock():
+    section("ReadWriteLock (Multiple Readers, Exclusive Writer)")
+    rw_lock = ReadWriteLock()
     results = []
     
-    with concurrent.futures.ThreadPoolExecutor(max_workers=workers) as executor:
-        futures = []
-        for i in range(num_tasks):
-            duration = random.uniform(0.1, 0.5)
-            futures.append(executor.submit(worker_task, i, duration))
+    def reader(id: int):
+        with rw_lock.read_lock():
+            print(f"  Reader {id} entered")
+            time.sleep(0.1)
+            results.append(f"R{id}")
+            print(f"  Reader {id} exited")
+
+    def writer(id: int):
+        with rw_lock.write_lock():
+            print(f"  Writer {id} entered")
+            time.sleep(0.2)
+            results.append(f"W{id}")
+            print(f"  Writer {id} exited")
+
+    threads = [
+        threading.Thread(target=reader, args=(1,)),
+        threading.Thread(target=reader, args=(2,)),
+        threading.Thread(target=writer, args=(1,)),
+        threading.Thread(target=reader, args=(3,)),
+    ]
+    
+    for t in threads: t.start()
+    for t in threads: t.join()
+    print(f"Sequence: {results}")
+
+def demo_lock_manager():
+    section("LockManager (Multi-resource Acquisition)")
+    manager = LockManager()
+    manager.register_lock("resource_A", LocalLock("A"))
+    manager.register_lock("resource_B", LocalLock("B"))
+    
+    print("Acquiring multiple resources safely...")
+    if manager.acquire_all(["resource_A", "resource_B"], timeout=5.0):
+        try:
+            print("  Acquired resource_A and resource_B")
+        finally:
+            manager.release_all(["resource_A", "resource_B"])
+            print("  Released all resources")
+    
+    stats = manager.stats
+    print(f"Manager Stats: Total acquisitions={stats.total_acquisitions}")
+
+def demo_redis_lock():
+    section("RedisLock (Distributed Coordination)")
+    if not fakeredis:
+        print("  Skipping: fakeredis not installed")
+        return
         
-        for future in concurrent.futures.as_completed(futures):
-            results.append(future.result())
+    client = fakeredis.FakeRedis()
+    lock = RedisLock("global_task", client, ttl=10)
     
-    return results
+    print("Acquiring distributed lock...")
+    with lock:
+        print("  Acquired distributed lock")
+        print(f"  Is locked externally? {lock.is_locked_externally()}")
+        print("  Extending lock TTL...")
+        if lock.extend(20):
+            print("  Lock extended")
+    print("  Released distributed lock")
 
-
-def demo_process_pool(num_tasks: int = 5, workers: int = 2) -> list:
-    """Demonstrate process pool execution."""
-    results = []
+def demo_semaphore():
+    section("LocalSemaphore (Resource Throttling)")
+    sem = LocalSemaphore(value=2)
     
-    with concurrent.futures.ProcessPoolExecutor(max_workers=workers) as executor:
-        futures = {executor.submit(worker_task, i, 0.2): i for i in range(num_tasks)}
+    def throttled_worker(id: int):
+        with sem:
+            print(f"  Worker {id} processing...")
+            time.sleep(0.2)
+            print(f"  Worker {id} done")
+
+    threads = [threading.Thread(target=throttled_worker, args=(i,)) for i in range(5)]
+    for t in threads: t.start()
+    for t in threads: t.join()
+
+async def demo_async_worker_pool():
+    section("AsyncWorkerPool (Bounded Async Execution)")
+    
+    async def task(item: str, delay: float):
+        await asyncio.sleep(delay)
+        return f"Processed {item}"
+
+    print("Running 10 tasks with max_workers=3...")
+    async with AsyncWorkerPool(max_workers=3, name="demo_pool") as pool:
+        items = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"]
+        # Mix of delays
+        results = await pool.map(lambda x: task(x, random.uniform(0.1, 0.3)), items)
         
-        for future in concurrent.futures.as_completed(futures):
-            try:
-                results.append(future.result())
-            except Exception as e:
-                results.append({"error": str(e)})
-    
-    return results
-
+        success_count = sum(1 for r in results if r.success)
+        print(f"  Completed {success_count}/{len(items)} tasks")
+        
+        stats = pool.stats
+        print(f"  Pool Stats: Completed={stats.completed}, Failed={stats.failed}")
 
 def main():
-    parser = argparse.ArgumentParser(description="Concurrency utilities demo")
-    parser.add_argument("--workers", "-w", type=int, default=4, help="Number of workers")
-    parser.add_argument("--tasks", "-t", type=int, default=10, help="Number of tasks")
-    parser.add_argument("--demo", "-d", choices=["thread", "process", "all"], default="thread")
-    args = parser.parse_args()
-    
-    print("⚡ Concurrency Demo\n")
-    
-    if args.demo in ["thread", "all"]:
-        print(f"🔄 Thread Pool ({args.workers} workers, {args.tasks} tasks):")
-        start = time.time()
-        results = demo_thread_pool(args.tasks, args.workers)
-        elapsed = time.time() - start
-        
-        print(f"   Completed: {len(results)} tasks in {elapsed:.2f}s")
-        print(f"   Threads used: {len(set(r['thread'] for r in results))}")
-        total_work = sum(r['duration'] for r in results)
-        print(f"   Speedup: {total_work / elapsed:.1f}x")
-        print()
-    
-    if args.demo in ["process", "all"]:
-        print(f"🔄 Process Pool ({args.workers} workers, {min(args.tasks, 5)} tasks):")
-        start = time.time()
-        results = demo_process_pool(min(args.tasks, 5), args.workers)
-        elapsed = time.time() - start
-        
-        successful = [r for r in results if "error" not in r]
-        print(f"   Completed: {len(successful)}/{len(results)} tasks in {elapsed:.2f}s")
-    
-    print("\n💡 Tips:")
-    print("   - Use ThreadPoolExecutor for I/O-bound tasks")
-    print("   - Use ProcessPoolExecutor for CPU-bound tasks")
-    print("   - Consider asyncio for many concurrent I/O operations")
-    
-    return 0
+    # Auto-injected: Load configuration
+    import yaml
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "concurrency" / "config.yaml"
+    config_data = {}
+    if config_path.exists():
+        with open(config_path, "r") as f:
+            config_data = yaml.safe_load(f) or {}
+            print(f"Loaded config from {config_path.name}")
 
+    print("🚀 Codomyrmex Concurrency Module Demo")
+    
+    demo_local_lock()
+    demo_read_write_lock()
+    demo_lock_manager()
+    demo_redis_lock()
+    demo_semaphore()
+    
+    asyncio.run(demo_async_worker_pool())
+    
+    print("\n✅ Concurrency Demo Completed")
+    return 0
 
 if __name__ == "__main__":
     sys.exit(main())

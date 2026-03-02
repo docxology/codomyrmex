@@ -24,6 +24,16 @@ from codomyrmex.logging_monitoring.core.logger_config import get_logger
 logger = get_logger(__name__)
 
 def main():
+    # Auto-injected: Load configuration
+    import yaml
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "edge_computing" / "config.yaml"
+    config_data = {}
+    if config_path.exists():
+        with open(config_path, "r") as f:
+            config_data = yaml.safe_load(f) or {}
+            print(f"Loaded config from config/edge_computing/config.yaml")
+
     print("--- Edge Computing Orchestrator Starting ---")
     
     # 1. Initialize Cluster and Infrastructure

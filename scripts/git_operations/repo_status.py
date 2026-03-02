@@ -113,6 +113,16 @@ def get_stash_info(path: str) -> list:
 
 
 def main():
+    # Auto-injected: Load configuration
+    import yaml
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "git_operations" / "config.yaml"
+    config_data = {}
+    if config_path.exists():
+        with open(config_path, "r") as f:
+            config_data = yaml.safe_load(f) or {}
+            print(f"Loaded config from config/git_operations/config.yaml")
+
     parser = argparse.ArgumentParser(description="Display Git repository status")
     parser.add_argument("--path", "-p", default=".", help="Repository path (default: current directory)")
     parser.add_argument("--verbose", "-v", action="store_true", help="Show detailed information")

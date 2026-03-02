@@ -51,6 +51,16 @@ def validate_template(template: str, variables: dict) -> list:
 
 
 def main():
+    # Auto-injected: Load configuration
+    import yaml
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "templating" / "config.yaml"
+    config_data = {}
+    if config_path.exists():
+        with open(config_path, "r") as f:
+            config_data = yaml.safe_load(f) or {}
+            print(f"Loaded config from config/templating/config.yaml")
+
     parser = argparse.ArgumentParser(description="Template utilities")
     parser.add_argument("template", nargs="?", help="Template file or string")
     parser.add_argument("--vars", "-v", help="Variables as JSON")

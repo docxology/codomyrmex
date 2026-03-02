@@ -70,6 +70,16 @@ def test_inference(host: str, port: int, model: str, prompt: str = "Hello, how a
 
 
 def main():
+    # Auto-injected: Load configuration
+    import yaml
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "llm" / "config.yaml"
+    config_data = {}
+    if config_path.exists():
+        with open(config_path, "r") as f:
+            config_data = yaml.safe_load(f) or {}
+            print(f"Loaded config from config/llm/config.yaml")
+
     parser = argparse.ArgumentParser(description="Test Ollama LLM connectivity")
     parser.add_argument("--host", default="localhost", help="Ollama host (default: localhost)")
     parser.add_argument("--port", type=int, default=11434, help="Ollama port (default: 11434)")

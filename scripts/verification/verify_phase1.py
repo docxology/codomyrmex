@@ -81,6 +81,16 @@ def verify_wallet():
     print("✓ Natural Ritual Recovery (Failure Case)")
 
 def main():
+    # Auto-injected: Load configuration
+    import yaml
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "verification" / "config.yaml"
+    config_data = {}
+    if config_path.exists():
+        with open(config_path, "r") as f:
+            config_data = yaml.safe_load(f) or {}
+            print(f"Loaded config from config/verification/config.yaml")
+
     verify_identity()
     verify_wallet()
     print("\n[SUCCESS] Phase 1 Verification Complete")

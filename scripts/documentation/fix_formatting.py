@@ -144,6 +144,16 @@ def add_installation(mod_name):
 
 
 def main():
+    # Auto-injected: Load configuration
+    import yaml
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "documentation" / "config.yaml"
+    config_data = {}
+    if config_path.exists():
+        with open(config_path, "r") as f:
+            config_data = yaml.safe_load(f) or {}
+            print(f"Loaded config from config/documentation/config.yaml")
+
     fixes = {"unclosed": 0, "duplicate": 0, "empty": 0, "install": 0}
 
     # Fix unclosed code blocks

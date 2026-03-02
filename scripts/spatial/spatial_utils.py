@@ -48,6 +48,16 @@ def point_in_bbox(lat: float, lon: float, bbox: tuple) -> bool:
 
 
 def main():
+    # Auto-injected: Load configuration
+    import yaml
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "spatial" / "config.yaml"
+    config_data = {}
+    if config_path.exists():
+        with open(config_path, "r") as f:
+            config_data = yaml.safe_load(f) or {}
+            print(f"Loaded config from config/spatial/config.yaml")
+
     parser = argparse.ArgumentParser(description="Spatial utilities")
     subparsers = parser.add_subparsers(dest="command")
     

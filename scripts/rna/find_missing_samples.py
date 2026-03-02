@@ -4,6 +4,16 @@ import argparse
 import csv
 
 def main():
+    # Auto-injected: Load configuration
+    import yaml
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "rna" / "config.yaml"
+    config_data = {}
+    if config_path.exists():
+        with open(config_path, "r") as f:
+            config_data = yaml.safe_load(f) or {}
+            print(f"Loaded config from config/rna/config.yaml")
+
     parser = argparse.ArgumentParser(description="Find missing Amalgkit samples")
     parser.add_argument("--metadata", required=True, help="Path to metadata.tsv")
     parser.add_argument("--work-dir", required=True, help="Amalgkit work directory")

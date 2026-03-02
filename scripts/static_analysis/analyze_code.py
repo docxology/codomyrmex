@@ -83,6 +83,16 @@ def run_external_linter(path: str, linter: str) -> list:
 
 
 def main():
+    # Auto-injected: Load configuration
+    import yaml
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "static_analysis" / "config.yaml"
+    config_data = {}
+    if config_path.exists():
+        with open(config_path, "r") as f:
+            config_data = yaml.safe_load(f) or {}
+            print(f"Loaded config from config/static_analysis/config.yaml")
+
     parser = argparse.ArgumentParser(description="Static code analysis")
     parser.add_argument("path", nargs="?", help="File or directory to analyze")
     parser.add_argument("--type", "-t", choices=["basic", "ruff", "flake8", "pylint", "mypy"], default="basic")

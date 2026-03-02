@@ -23,6 +23,16 @@ except ImportError as e:
 
 
 def main():
+    # Auto-injected: Load configuration
+    import yaml
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "docs" / "config.yaml"
+    config_data = {}
+    if config_path.exists():
+        with open(config_path, "r") as f:
+            config_data = yaml.safe_load(f) or {}
+            print(f"Loaded config from config/docs/config.yaml")
+
     parser = argparse.ArgumentParser(description="Update SPEC.md with missing modules.")
     parser.add_argument("--root", type=Path, default=PROJ_ROOT, help="Project root directory")
     args = parser.parse_args()

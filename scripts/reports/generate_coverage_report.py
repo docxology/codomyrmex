@@ -107,6 +107,16 @@ def generate_report(repo_root: Path, output_dir: Path = None) -> int:
 
 
 def main():
+    # Auto-injected: Load configuration
+    import yaml
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "reports" / "config.yaml"
+    config_data = {}
+    if config_path.exists():
+        with open(config_path, "r") as f:
+            config_data = yaml.safe_load(f) or {}
+            print(f"Loaded config from config/reports/config.yaml")
+
     parser = argparse.ArgumentParser(description="Generate coverage reports")
     parser.add_argument(
         "--repo-root",

@@ -12,6 +12,17 @@ except ImportError:
 
 from codomyrmex.orchestrator.core import main
 
+
+    # Auto-injected: Load configuration
+    import yaml
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "tree_sitter" / "config.yaml"
+    config_data = {}
+    if config_path.exists():
+        with open(config_path, "r") as f:
+            config_data = yaml.safe_load(f) or {}
+            print(f"Loaded config from config/tree_sitter/config.yaml")
+
 if __name__ == "__main__":
     current_dir = Path(__file__).resolve().parent
     if not any(arg.startswith("--scripts-dir") for arg in sys.argv):

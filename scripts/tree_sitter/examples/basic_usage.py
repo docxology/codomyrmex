@@ -299,6 +299,17 @@ class Calculator:
         self.value += x
         return self.value
 
+
+    # Auto-injected: Load configuration
+    import yaml
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "tree_sitter" / "config.yaml"
+    config_data = {}
+    if config_path.exists():
+        with open(config_path, "r") as f:
+            config_data = yaml.safe_load(f) or {}
+            print(f"Loaded config from config/tree_sitter/config.yaml")
+
 if __name__ == "__main__":
     print(fibonacci(10))
 ''',
@@ -541,6 +552,17 @@ int main() {
         if len(node.children) > 5:
             self.log_info(f"{prefix}  ... ({len(node.children) - 5} more children)")
 
+
+
+    # Auto-injected: Load configuration
+    import yaml
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "tree_sitter" / "config.yaml"
+    config_data = {}
+    if config_path.exists():
+        with open(config_path, "r") as f:
+            config_data = yaml.safe_load(f) or {}
+            print(f"Loaded config from config/tree_sitter/config.yaml")
 
 if __name__ == "__main__":
     script = TreeSitterScript()

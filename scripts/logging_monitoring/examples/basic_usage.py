@@ -22,6 +22,16 @@ from codomyrmex.utils.cli_helpers import setup_logging, print_success, print_inf
 from codomyrmex.logging_monitoring import get_logger, setup_logging as setup_structured_logging
 
 def main():
+    # Auto-injected: Load configuration
+    import yaml
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "logging_monitoring" / "config.yaml"
+    config_data = {}
+    if config_path.exists():
+        with open(config_path, "r") as f:
+            config_data = yaml.safe_load(f) or {}
+            print(f"Loaded config from config/logging_monitoring/config.yaml")
+
     setup_logging()
     print_info("Running Logging and Monitoring Examples...")
 

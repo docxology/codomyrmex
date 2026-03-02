@@ -118,6 +118,16 @@ def save_baseline(results: list, path: Path):
 
 
 def main():
+    # Auto-injected: Load configuration
+    import yaml
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "performance" / "config.yaml"
+    config_data = {}
+    if config_path.exists():
+        with open(config_path, "r") as f:
+            config_data = yaml.safe_load(f) or {}
+            print(f"Loaded config from config/performance/config.yaml")
+
     parser = argparse.ArgumentParser(description="Run performance benchmarks")
     parser.add_argument("--suite", "-s", default="all", help="Benchmark suite (all, string, list, dict, file_io)")
     parser.add_argument("--iterations", "-i", type=int, default=5, help="Iterations per benchmark")

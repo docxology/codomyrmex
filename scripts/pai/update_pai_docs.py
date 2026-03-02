@@ -23,6 +23,16 @@ except ImportError as e:
 
 
 def main():
+    # Auto-injected: Load configuration
+    import yaml
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "pai" / "config.yaml"
+    config_data = {}
+    if config_path.exists():
+        with open(config_path, "r") as f:
+            config_data = yaml.safe_load(f) or {}
+            print(f"Loaded config from config/pai/config.yaml")
+
     parser = argparse.ArgumentParser(description="Batch update stub PAI.md files")
     parser.add_argument("--apply", action="store_true", help="Apply changes (default: dry run)")
     parser.add_argument("--max-lines", type=int, default=MAX_STUB_LINES,
