@@ -123,6 +123,12 @@ pages = gen.generate_pages()         # dict[str, str] of path -> markdown conten
 - [PAI.md](PAI.md) -- PAI integration details
 - [Root PAI bridge](../../../PAI.md) -- Authoritative PAI system bridge document
 
+## Testing
+
+```bash
+uv run pytest src/codomyrmex/tests/unit/docs_gen/
+```
+
 ## Navigation
 
 - **Extended Docs**: [docs/modules/docs_gen/](../../../docs/modules/docs_gen/)

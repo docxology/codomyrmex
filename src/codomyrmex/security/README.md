@@ -158,10 +158,23 @@ uv sync
 ## Quick Start
 
 ```python
-from codomyrmex.security.sbom import SBOMFormat, LicenseType, Component
+from codomyrmex.security.mcp_tools import (
+    scan_vulnerabilities,
+    scan_secrets,
+    audit_code_security,
+)
 
-# Initialize SBOMFormat
-instance = SBOMFormat()
+# Scan project dependencies for CVE vulnerabilities
+vuln_report = scan_vulnerabilities(path=".")
+print(vuln_report)
+
+# Detect hardcoded secrets in a source file
+secrets_report = scan_secrets(file_path="src/config.py")
+print(secrets_report)
+
+# OWASP static analysis on codebase
+audit_result = audit_code_security(path="src/")
+print(audit_result)
 ```
 
 ## Testing

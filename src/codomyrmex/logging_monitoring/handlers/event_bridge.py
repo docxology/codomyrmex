@@ -8,10 +8,17 @@ from __future__ import annotations
 
 import json
 import logging
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
-from codomyrmex.events.core.event_bus import EventBus
-from codomyrmex.events.core.event_schema import Event, EventType
+# TYPE_CHECKING guard breaks the runtime circular import:
+#   logging_monitoring.handlers.event_bridge → events.core.event_bus
+#   events.core.event_bus → logging_monitoring.core.logger_config
+# Annotations are lazy strings (from __future__ import annotations), so no
+# runtime import is needed for type hints.  EventType is imported lazily
+# inside __init__ when actually required.
+if TYPE_CHECKING:
+    from codomyrmex.events.core.event_bus import EventBus
+    from codomyrmex.events.core.event_schema import Event, EventType
 
 logger = logging.getLogger("codomyrmex.observability.event_bridge")
 
@@ -48,7 +55,10 @@ class EventLoggingBridge:
         log_level: int = logging.INFO,
     ) -> None:
         self._event_bus = event_bus
-        self._event_types = event_types or list(EventType)
+        if event_types is None:
+            from codomyrmex.events.core.event_schema import EventType  # lazy import at use-site
+            event_types = list(EventType)
+        self._event_types = event_types
         self._logger = logging.getLogger(logger_name)
         self._log_level = log_level
         self._subscriber_ids: list[str] = []

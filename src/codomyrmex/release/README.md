@@ -140,6 +140,12 @@ certification checks during real CI pipeline runs.
 - [static_analysis](../coding/static_analysis/) -- linting and type-check results
 - [documentation](../documentation/) -- doc completeness for `check_documentation`
 
+## Testing
+
+```bash
+uv run pytest src/codomyrmex/tests/unit/release/
+```
+
 ## Navigation
 
 - **Extended Docs**: [docs/modules/release/](../../../docs/modules/release/)

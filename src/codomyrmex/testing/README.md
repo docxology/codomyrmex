@@ -87,6 +87,12 @@ The following modules have been consolidated into this module as sub-packages:
 
 Original standalone modules remain as backward-compatible re-export wrappers.
 
+## Testing
+
+```bash
+uv run pytest src/codomyrmex/tests/unit/testing/
+```
+
 ## Navigation
 
 - **Full Documentation**: [docs/modules/testing/](../../../docs/modules/testing/)

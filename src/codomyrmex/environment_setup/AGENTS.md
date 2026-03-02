@@ -4,33 +4,54 @@
 
 ## Module Overview
 
-Environment validation, dependency checking, and setup automation. This module is the baseline for all other module execution environments.
+Environment validation, dependency checking, and setup automation. This module is the baseline for all other module execution environments. It validates Python version requirements, detects and integrates with the `uv` package manager, loads `.env` files for credential management, checks API key availability, and resolves dependency conflicts using pip introspection. The `DependencyResolver` provides full audit capabilities including conflict detection, pyproject.toml validation, outdated package discovery, and virtual environment detection.
 
-## Key Functions
+## Key Files
 
-### Core Validation
-- **`validate_environment(min_python)`** — Aggregated status check of system requirements. Returns `ValidationReport`.
-- **`check_dependencies(list)`** — Detailed check for specific installed packages. Returns `List[DependencyStatus]`.
-- **`ensure_dependencies_installed(list)`** — Logs status of dependencies, returns True if all exist.
-- **`install_dependencies(source)`** — Automates dependency installation via `uv` (preferred) or `pip`.
+| File | Purpose |
+|------|---------|
+| `__init__.py` | Exports `validate_environment`, `check_dependencies`, `install_dependencies`, `DependencyResolver`, `ValidationReport`, `DependencyStatus`, `APIKeyReport`, `DependencyInfo`, `Conflict`, and all utility functions |
+| `env_checker.py` | `ValidationReport`, `DependencyStatus`, `APIKeyReport` dataclasses; `validate_environment()`, `check_dependencies()`, `check_and_setup_env_vars()`, `check_api_keys()`, `is_uv_available()`, `generate_environment_report()` |
+| `dependency_resolver.py` | `DependencyResolver` class: conflict detection via `pip check`, `list_installed()`, `suggest_resolution()`, `validate_pyproject()`, `detect_virtualenv()`, `find_outdated()`, `full_audit()`, `generate_report()` |
+| `mcp_tools.py` | MCP tools: `env_check`, `env_list_deps` |
 
-### Environment Management
-- **`check_and_setup_env_vars(repo_root, required, optional)`** — Load `.env` and verify key presence.
-- **`check_api_keys(keys)`** — Focused check for credential availability. Returns `APIKeyReport`.
+## Key Classes
 
-### System Info
-- **`is_uv_available()`** — Boolean for `uv` existence.
-- **`get_uv_path()`** — String path to `uv` executable.
-- **`is_uv_environment()`** — Boolean for current execution context being uv-based.
-- **`generate_environment_report()`** — String summary of system state.
+- **ValidationReport** -- Dataclass with `valid: bool` and `missing_items: List[str]`. Returned by `validate_environment()`.
+- **DependencyStatus** -- Dataclass with `name: str` and `installed: bool`. Returned by `check_dependencies()`.
+- **APIKeyReport** -- Dataclass with `all_present: bool` and `missing: List[str]`. Returned by `check_api_keys()`.
+- **DependencyInfo** -- Dataclass with `name`, `version`, `required_by`, `requires`. Returned by `DependencyResolver.list_installed()`.
+- **Conflict** -- Dataclass with `package`, `installed_version`, `required_version`, `required_by`, `severity`. Returned by `DependencyResolver.check_conflicts()`.
+- **DependencyResolver** -- Full dependency analysis: `check_conflicts()`, `list_installed()`, `suggest_resolution()`, `validate_pyproject()`, `detect_virtualenv()`, `find_outdated()`, `full_audit()`, `generate_report()`.
+
+## MCP Tools Available
+
+| Tool | Description | Trust Level |
+|------|-------------|-------------|
+| `env_check` | Check Python version validity, uv availability, and uv-managed environment status. Returns dict of boolean checks. | SAFE |
+| `env_list_deps` | Verify all required Python dependencies are installed. Returns True if all satisfied, or a detail dict. | SAFE |
 
 ## Agent Instructions
 
-1. **Verify first** — Run `validate_environment()` before performing task operations.
-2. **Setup Credentials** — Use `check_and_setup_env_vars()` at start to ensure API keys are loaded from `.env`.
-3. **Handle Missing** — If `ValidationReport.valid` is False, use `install_dependencies()` to resolve package gaps.
-4. **Leverage uv** — Always prefer `uv` tools via `get_uv_path()` for any environment mutations.
-5. **Detailed Reporting** — Use `generate_environment_report()` for logging or debugging session startup.
+1. **Verify first** -- Run `validate_environment()` before performing task operations.
+2. **Setup Credentials** -- Use `check_and_setup_env_vars()` at start to ensure API keys are loaded from `.env`.
+3. **Handle Missing** -- If `ValidationReport.valid` is False, use `install_dependencies()` to resolve package gaps.
+4. **Leverage uv** -- Always prefer `uv` tools via `get_uv_path()` for any environment mutations.
+5. **Detailed Reporting** -- Use `generate_environment_report()` for logging or debugging session startup.
+6. **Audit before releases** -- Use `DependencyResolver.full_audit()` to detect conflicts and unpinned dependencies before deployment.
+7. **Detect virtualenv** -- Call `DependencyResolver.detect_virtualenv()` to confirm isolated execution context before installing packages.
+
+## Operating Contracts
+
+- `validate_environment()` must be called before any module initialization in production workflows; it is the gate for all downstream operations.
+- `check_and_setup_env_vars()` loads `.env` via `python-dotenv` and returns a list of missing required variables; an empty list means all present.
+- `install_dependencies()` prefers `uv pip install` when `uv` is available; falls back to `pip install` otherwise.
+- `DependencyResolver.check_conflicts()` shells out to `pip check` with a 30-second timeout; returns an empty list on timeout or missing pip.
+- `DependencyResolver.validate_pyproject()` flags unpinned dependencies (missing `>=`, `==`, or `~=` version specifiers).
+- **DO NOT** mutate the system PATH or system Python environment in production -- use uv virtual environments only.
+- **DO NOT** install dependencies without first checking if they already exist via `check_dependencies()` or `ensure_dependencies_installed()`.
+- **DO NOT** hard-code Python version requirements; use `validate_environment(min_python=...)` parameter.
+- `DependencyResolver` requires internet access for `find_outdated()` and `list_installed()` operations; use `@pytest.mark.network` for tests that call these.
 
 ## Common Patterns
 
@@ -50,6 +71,20 @@ if not report.valid or missing_vars:
         install_dependencies("pyproject.toml")
 ```
 
+### Dependency Audit
+
+```python
+from codomyrmex.environment_setup import DependencyResolver
+from pathlib import Path
+
+resolver = DependencyResolver()
+audit = resolver.full_audit(pyproject_path=Path("pyproject.toml"))
+
+if audit["conflict_count"] > 0:
+    for suggestion in audit["suggestions"]:
+        print(f"Fix: {suggestion}")
+```
+
 ## Testing Patterns
 
 ```python
@@ -59,34 +94,14 @@ from codomyrmex.environment_setup import is_uv_available
 assert isinstance(is_uv_available(), bool)
 ```
 
-## MCP Tools Available
-
-| Tool | Description | Trust Level |
-|------|-------------|-------------|
-| `env_check` | Check Python version validity, uv availability, and uv-managed environment status. Returns dict of boolean checks. | SAFE |
-| `env_list_deps` | Verify all required Python dependencies are installed. Returns True if all satisfied, or a detail dict. | SAFE |
-
-## Operating Contracts
-
-**DO:**
-- Call `validate_environment()` at session start before any heavy operations
-- Use `check_and_setup_env_vars(required=[...])` to load `.env` and verify API keys
-- Prefer `uv` via `get_uv_path()` for any package installation operations
-- Check `is_uv_environment()` before assuming fast package operations
-
-**DO NOT:**
-- Install dependencies without first checking if they already exist
-- Mutate the system Python environment — use uv virtual environments only
-- Hard-code Python version requirements; use `validate_environment(min_python=...)` parameter
-
 ## PAI Agent Role Access Matrix
 
-| PAI Agent | Access Level | Primary Capabilities | Trust Level |
-|-----------|-------------|---------------------|-------------|
-| **Engineer** | Full | Environment validation, dependency checking, setup automation; `env_check`, `env_list_deps` | TRUSTED |
-| **Architect** | Read + Design | Dependency inventory, environment specification review | OBSERVED |
-| **QATester** | Validation | Environment health verification, dependency availability testing | OBSERVED |
-| **Researcher** | Read-only | Check environment state via `env_check` before research operations | SAFE |
+| PAI Agent | Access Level | MCP Tools | Trust Level |
+|-----------|-------------|-----------|-------------|
+| **Engineer** | Full | `env_check`, `env_list_deps` | TRUSTED |
+| **Architect** | Read + Design | `env_check`, `env_list_deps` -- dependency inventory, environment specification review | OBSERVED |
+| **QATester** | Validation | `env_check`, `env_list_deps` -- environment health verification, dependency availability testing | OBSERVED |
+| **Researcher** | Read-only | `env_check` -- check environment state before research operations | SAFE |
 
 ### Engineer Agent
 **Use Cases**: Setting up execution environments during BUILD, validating dependencies before EXECUTE, automating environment configuration.

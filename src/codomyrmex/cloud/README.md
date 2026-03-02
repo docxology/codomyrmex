@@ -133,6 +133,14 @@ if config.has_provider(CloudProvider.CODA):
 | [PAI.md](PAI.md) | Personal AI infrastructure context |
 | [API_SPECIFICATION.md](API_SPECIFICATION.md) | Complete API reference |
 
+## Testing
+
+```bash
+# Requires optional cloud SDK dependencies
+uv sync --extra cloud
+uv run pytest src/codomyrmex/tests/unit/cloud/ -m "not network"
+```
+
 ## Navigation
 
 - **Full Documentation**: [docs/modules/cloud/](../../../docs/modules/cloud/)

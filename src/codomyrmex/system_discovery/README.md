@@ -82,6 +82,14 @@ print(f"Health: {report.health_score}%")
 | `StatusReporter` | Generate system health reports |
 | `get_system_context()` | Get context string for LLM |
 
+## Directory Structure
+
+```
+system_discovery/
+├── __init__.py          # Module exports (SystemDiscovery, CapabilityScanner, StatusReporter)
+└── mcp_tools.py         # MCP: health_check, list_modules, dependency_tree
+```
+
 ## Use Cases
 
 - **Module introspection** — Discover available functionality

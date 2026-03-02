@@ -6,6 +6,16 @@
 
 The collaboration module provides multi-agent collaboration capabilities including agent management, communication channels, task coordination, and message-passing protocols. It features a robust **Swarm** system for orchestrating complex workflows across multiple specialized agents.
 
+## PAI Integration
+
+| Algorithm Phase | Role | Tools Used |
+|----------------|------|-----------|
+| **EXECUTE** | Orchestrate parallel workloads across a swarm of agents | `swarm_submit_task`, `pool_status` |
+| **OBSERVE** | Inspect active agents and current swarm topology | `list_agents`, `pool_status` |
+| **VERIFY** | Confirm all swarm tasks completed successfully | `pool_status`, `list_agents` |
+
+PAI's Engineer agent uses `swarm_submit_task` to decompose complex missions into parallel sub-tasks during EXECUTE. `pool_status` provides real-time visibility into swarm progress. `list_agents` supports OBSERVE-phase enumeration of active agent capabilities before delegating work.
+
 ## Key Components
 
 ### Swarm Management (`collaboration.swarm`)
@@ -52,6 +62,21 @@ async def main():
 
 if __name__ == "__main__":
     asyncio.run(main())
+```
+
+## Directory Structure
+
+```
+collaboration/
+├── __init__.py          # Module exports (SwarmManager, AgentPool, MessageBus, protocols)
+├── mcp_tools.py         # MCP: swarm_submit_task, pool_status, list_agents
+├── models.py            # Task, TaskResult, AgentStatus, SwarmStatus data models
+├── exceptions.py        # CollaborationError hierarchy
+├── swarm/               # SwarmManager, AgentPool, MessageBus, TaskDecomposer, ConsensusEngine
+├── agents/              # WorkerAgent, SupervisorAgent, AgentRegistry
+├── communication/       # Channel-based inter-agent messaging
+├── coordination/        # Task scheduling and consensus algorithms
+└── protocols/           # BaseAgent, AgentProtocol, RoundRobin, Broadcast, CapabilityRouting
 ```
 
 ## Testing

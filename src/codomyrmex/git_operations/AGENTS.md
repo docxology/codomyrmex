@@ -1,17 +1,46 @@
 # Agent Guidelines - Git Operations
 
-**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Module Overview
 
-Git repository operations: commits, branches, merges, and history.
+Git repository operations: commits, branches, merges, history, remotes, tags, stash, diffs, and GitHub API integration. Exposes a comprehensive function-based API (not class-based) organized into command modules covering branching, commit, config, history, merge, remote, repository lifecycle, stash, status, submodules, sync, and tags. The module also provides `Repository` and `RepositoryManager` for higher-level repository management, `RepositoryMetadataManager` for clone/metadata tracking, and GitHub API operations for pull requests and repository management. All 34 MCP tools are auto-discovered via `@mcp_tool` decorators.
+
+## Key Files
+
+| File | Purpose |
+|------|---------|
+| `__init__.py` | Exports all public functions and classes; optional visualization integration |
+| `core/git.py` | Re-exports all command functions from the `commands/` subpackage |
+| `core/commands/branching.py` | `create_branch()`, `delete_branch()`, `switch_branch()`, `get_current_branch()`, `list_branches()` |
+| `core/commands/commit.py` | `commit_changes()`, `amend_commit()`, `cherry_pick()`, `revert_commit()` |
+| `core/commands/config.py` | `get_config()`, `set_config()` |
+| `core/commands/history.py` | `get_commit_history()`, `get_commit_history_filtered()`, `get_commit_details()`, `get_blame()` |
+| `core/commands/merge.py` | `merge_branch()`, `rebase_branch()` |
+| `core/commands/remote.py` | `add_remote()`, `remove_remote()`, `list_remotes()`, `fetch_remote()`, `prune_remote()` |
+| `core/commands/repository.py` | `check_git_availability()`, `is_git_repository()`, `initialize_git_repository()`, `clone_repository()` |
+| `core/commands/stash.py` | `stash_changes()`, `apply_stash()`, `list_stashes()` |
+| `core/commands/status.py` | `get_status()`, `get_diff()`, `get_diff_files()`, `add_files()`, `reset_changes()`, `clean_repository()` |
+| `core/commands/submodules.py` | `init_submodules()`, `update_submodules()` |
+| `core/commands/sync.py` | `push_changes()`, `pull_changes()`, `fetch_changes()` |
+| `core/commands/tags.py` | `create_tag()`, `list_tags()` |
+| `core/repository.py` | `Repository` dataclass, `RepositoryManager`, `RepositoryType` enum |
+| `core/metadata.py` | `RepositoryMetadata`, `RepositoryMetadataManager`, `CloneStatus` |
+| `api/github.py` | `create_github_repository()`, `delete_github_repository()`, `create_pull_request()`, `get_pull_requests()`, `get_pull_request()`, `get_repository_info()`, `GitHubAPIError` |
+| `api/visualization.py` | Optional: `visualize_git_branches()`, `visualize_commit_activity()`, `create_git_analysis_report()` |
+| `mcp_tools.py` | 34 MCP tools auto-discovered via `@mcp_tool` decorators |
 
 ## Key Classes
 
-- **GitRepo** — Repository operations
-- **Commit** — Commit representation
-- **Branch** — Branch management
-- **DiffManager** — View diffs
+- **Repository** -- Dataclass representing a git repository with path, name, and type.
+- **RepositoryManager** -- High-level repository lifecycle management (create, list, remove).
+- **RepositoryType** -- Enum for repository types.
+- **RepositoryMetadata** -- Metadata about a cloned/managed repository.
+- **RepositoryMetadataManager** -- Tracks clone status and metadata for managed repositories.
+- **CloneStatus** -- Enum for clone states.
+- **GitHubAPIError** -- Exception for GitHub API failures.
+
+**Note:** The git_operations module uses a **function-based API** (e.g., `commit_changes()`, `create_branch()`, `push_changes()`), not a class-based one. All functions accept a `repository_path` argument to specify the target repo.
 
 ## MCP Tools Available
 
@@ -84,54 +113,91 @@ All tools are auto-discovered via `@mcp_tool` decorators and exposed through the
 
 ## Agent Instructions
 
-1. **Check status first** — Verify clean state
-2. **Branch often** — Feature branches for work
-3. **Small commits** — Atomic, focused commits
-4. **Meaningful messages** — Descriptive commit messages
-5. **Pull before push** — Avoid merge conflicts
+1. **Check status first** -- Verify clean state before operations.
+2. **Branch often** -- Feature branches for work.
+3. **Small commits** -- Atomic, focused commits.
+4. **Meaningful messages** -- Descriptive commit messages.
+5. **Pull before push** -- Avoid merge conflicts.
+6. **Lock awareness** -- Check for `.git/index.lock` before write operations in multi-agent environments.
+
+## Operating Contracts
+
+- All functions accept a `repository_path` argument (string path). They do not maintain global state.
+- `check_git_availability()` must return True before any other operations are called.
+- `is_git_repository()` must return True for the target path before calling commit/branch/merge operations.
+- `push_changes()` with `force=True` requires explicit trust escalation -- never force-push to `main`/`master` without authorization.
+- `reset_changes()` with `mode="hard"` is destructive and irreversible -- it discards uncommitted work.
+- `clean_repository()` permanently deletes untracked files -- there is no undo.
+- `amend_commit()` rewrites history -- never use on commits that have been pushed to a shared remote.
+- In multi-agent environments, always check for `.git/index.lock` before write operations: `ls .git/index.lock 2>/dev/null`.
+- Clear stale locks only when no git process is running: check `ps aux | grep git` first, then `rm -f .git/index.lock` if stale > 60s.
+- **DO NOT** use `--no-verify` on commits unless explicitly authorized by the user.
+- **DO NOT** call `delete_branch()` with `force=True` on branches that have unmerged work without user confirmation.
+- **DO NOT** call `rebase_branch()` on branches that have been pushed to shared remotes -- this rewrites history.
+- GitHub API functions (`create_pull_request()`, etc.) require a valid `GITHUB_TOKEN` environment variable.
 
 ## Common Patterns
 
+### Basic Workflow
+
 ```python
-from codomyrmex.git_operations import GitRepo, Branch
+from codomyrmex.git_operations import (
+    check_git_availability, is_git_repository, get_status,
+    add_files, commit_changes, create_branch, get_current_branch,
+    get_commit_history
+)
 
-# Open repository
-repo = GitRepo(".")
+repo = "/path/to/repo"
 
-# Check status
-status = repo.status()
-if status.is_dirty:
-    print(f"Modified: {status.modified_files}")
+if check_git_availability() and is_git_repository(repo):
+    status = get_status(repo)
+    print(f"Branch: {get_current_branch(repo)}")
 
-# Commit changes
-repo.add(["src/main.py"])
-repo.commit("feat: add new feature")
+    # Stage and commit
+    add_files(repo, ["src/main.py"])
+    commit_changes(repo, "feat: add new feature")
 
-# Branch operations
-branch = Branch(repo)
-branch.create("feature/new-thing")
-branch.checkout("feature/new-thing")
+    # View history
+    for entry in get_commit_history(limit=5, repository_path=repo):
+        print(f"{entry['hash'][:7]} - {entry['message']}")
+```
 
-# View history
-for commit in repo.log(limit=10):
-    print(f"{commit.hash[:7]} - {commit.message}")
+### Branch and Merge
+
+```python
+from codomyrmex.git_operations import (
+    create_branch, switch_branch, merge_branch, delete_branch
+)
+
+create_branch(repo, "feature/new-thing")
+switch_branch(repo, "feature/new-thing")
+# ... do work, commit ...
+switch_branch(repo, "main")
+merge_branch(repo, "feature/new-thing")
+delete_branch(repo, "feature/new-thing")
 ```
 
 ## Testing Patterns
 
 ```python
-# Verify status
-repo = GitRepo(".")
-status = repo.status()
-assert hasattr(status, "is_dirty")
+from codomyrmex.git_operations import (
+    check_git_availability, is_git_repository, get_status,
+    get_commit_history, get_current_branch
+)
+
+# Verify availability
+assert check_git_availability()
+
+# Verify repo detection
+assert is_git_repository(".")
+
+# Verify status fields
+status = get_status(".")
+assert isinstance(status, dict)
 
 # Verify log
-commits = repo.log(limit=5)
+commits = get_commit_history(limit=5, repository_path=".")
 assert len(commits) <= 5
-
-# Verify branch listing
-branches = repo.branches()
-assert "main" in branches or "master" in branches
 ```
 
 ## PAI Agent Role Access Matrix
@@ -144,16 +210,20 @@ assert "main" in branches or "master" in branches
 | **Researcher** | Read-only history | `git_log`, `git_commit_details`, `git_blame` | OBSERVED |
 
 ### Engineer Agent
-**Access**: Full — all 34 tools including all Destructive operations (commit, push, branch, merge, rebase, reset).
+**Access**: Full -- all 34 tools including all Destructive operations (commit, push, branch, merge, rebase, reset).
 **Use Cases**: Committing BUILD-phase artifacts, creating feature branches, pushing to remotes in EXECUTE phase, managing tags on release, cherry-picking hotfixes.
 
 ### Architect Agent
-**Access**: Read-only — all Safe tools for history and diff analysis.
+**Access**: Read-only -- all Safe tools for history and diff analysis.
 **Use Cases**: Analyzing commit history patterns, reviewing diffs for architectural decisions, understanding blame attribution, assessing branch topology.
 
 ### QATester Agent
-**Access**: State verification — Safe read tools to confirm expected repository state after EXECUTE.
+**Access**: State verification -- Safe read tools to confirm expected repository state after EXECUTE.
 **Use Cases**: Verifying commits were created correctly, checking that the right files were staged, confirming branch state matches expected post-execution state.
+
+### Researcher Agent
+**Access**: Read-only history tools for analysis.
+**Use Cases**: Mining commit history for patterns, analyzing contributor activity, studying code evolution.
 
 ## Navigation
 

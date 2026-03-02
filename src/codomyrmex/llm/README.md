@@ -51,7 +51,8 @@ The llm module powers PAI's local-first inference strategy. `generate_text` is u
 - **`create_mcp_bridge_from_registry`** — Create an MCPBridge instance from the tool registry
 
 ### MCP Tools
-- **`ask`** — Ask a question to an LLM provider (default: OpenRouter free tier)
+
+The three registered `@mcp_tool` functions are: `generate_text`, `list_local_models`, `query_fabric_metadata` — see `mcp_tools.py`.
 
 ### Consolidated Submodules
 - **`safety`** — Content safety filtering and PII detection

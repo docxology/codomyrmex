@@ -10,6 +10,16 @@ Advanced feature flag management with evaluation strategies, gradual rollout, an
 - **Performance**: High-speed deterministic evaluation using hashing.
 - **Flexibility**: Multiple storage backends and rich targeting rules.
 
+## PAI Integration
+
+| Algorithm Phase | Role | Tools Used |
+|----------------|------|-----------|
+| **PLAN** | Query current flag states before making decisions | `flag_list`, `flag_is_enabled` |
+| **EXECUTE** | Create or update flags during feature deployment | `flag_create`, `flag_is_enabled` |
+| **VERIFY** | Confirm expected flags are active after deployment | `flag_list`, `flag_is_enabled` |
+
+PAI's Engineer agent uses `flag_create` during BUILD to gate new features. `flag_is_enabled` drives conditional logic in EXECUTE — agents check flag state before taking deployment actions. `flag_list` provides OBSERVE-phase visibility into active feature configuration. **Note**: MCP-session flags are process-local and not persisted between sessions unless `storage.FileStorage` is configured.
+
 ## Architecture
 
 The module is composed of several specialized submodules:
@@ -54,6 +64,27 @@ manager.create_flag("beta_feature", targeting_rules=[rule])
 
 # Enabled only for premium users
 is_enabled = manager.is_enabled("beta_feature", plan="premium")
+```
+
+## Directory Structure
+
+```
+feature_flags/
+├── __init__.py          # Module exports (FeatureManager, cli_commands)
+├── mcp_tools.py         # MCP: flag_create, flag_is_enabled, flag_list
+├── experiments.py       # A/B experiment tracking
+├── core/                # FeatureManager — central orchestration
+│   └── manager.py       # Flag lifecycle management
+├── evaluation/          # Flag evaluation logic and targeting rules
+├── strategies/          # BooleanStrategy, PercentageStrategy, UserListStrategy, TimeWindowStrategy
+├── storage/             # InMemoryStorage, FileStorage backends
+└── rollout/             # Multi-stage gradual rollout management
+```
+
+## Testing
+
+```bash
+uv run pytest src/codomyrmex/tests/unit/feature_flags/
 ```
 
 ## Documentation

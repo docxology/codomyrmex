@@ -14,6 +14,32 @@ The `cli` module provides the primary command-line interface for the Codomyrmex 
 - **Rich Feedback**: Uses `TerminalFormatter` for colored, structured output.
 - **Extensibility**: Command handlers are modularized in `src/codomyrmex/cli/handlers/`.
 
+## PAI Integration
+
+| Algorithm Phase | Role | Tools Used |
+|----------------|------|-----------|
+| **OBSERVE** | List available modules and current system status | `codomyrmex modules`, `codomyrmex status` |
+| **EXECUTE** | Trigger code generation, workflows, and build operations | `codomyrmex ai`, `codomyrmex workflow run`, `codomyrmex build` |
+| **VERIFY** | Confirm environment health and run module tests | `codomyrmex check`, `codomyrmex doctor`, `codomyrmex test <module>` |
+
+PAI agents invoke the CLI as a subprocess to trigger codomyrmex operations. `codomyrmex check` gates Algorithm cycles by verifying environment health. `codomyrmex test <module>` drives VERIFY-phase validation. `codomyrmex ai generate` and `codomyrmex workflow run` are primary EXECUTE-phase entry points.
+
+## Key Python Exports
+
+| Symbol | Description |
+|--------|-------------|
+| `main` | CLI entry point — the `codomyrmex` command |
+| `check_environment` | Verify dependencies and module health |
+| `show_modules` | List all available Codomyrmex modules |
+| `show_system_status` | Full system status dashboard |
+| `run_interactive_shell` | Launch interactive REPL |
+| `handle_ai_generate` | AI code generation handler |
+| `handle_ai_refactor` | AI code refactoring handler |
+| `handle_code_analysis` | Static analysis and linting handler |
+| `run_workflow` | Execute a named workflow |
+| `handle_module_test` | Run tests for a specific module |
+| `handle_skills_sync` | Sync skill definitions from upstream |
+
 ## Command Structure
 
 The CLI is organized into several command groups:
