@@ -252,21 +252,23 @@ def run_function(
         result["status"] = "timeout"
         result["error"] = f"Function timed out after {timeout}s"
     else:
-        if not queue.empty():
-            status, val = queue.get()
+        try:
+            # Use get(timeout) instead of queue.empty() — empty() is unreliable
+            # under heavy multiprocessing load (race condition in flush timing)
+            status, val = queue.get(timeout=5)
             if status == "success":
                 result["status"] = "passed"
                 result["result"] = val
             else:
                 result["status"] = "error"
                 result["error"] = val
-        else:
+        except Exception:
             # Succeeded but no return? or crashed silently?
             if p.exitcode != 0:
-                 result["status"] = "failed"
-                 result["error"] = f"Process exited with code {p.exitcode}"
+                result["status"] = "failed"
+                result["error"] = f"Process exited with code {p.exitcode}"
             else:
-                 result["status"] = "passed"
+                result["status"] = "passed"
 
     result["execution_time"] = time.time() - start_time
     result["end_time"] = datetime.now().isoformat()
