@@ -92,21 +92,21 @@ class TestVisualizationPerformanceWorkflow:
                        reason="Data visualization module not available")
     def test_basic_visualization_creation(self):
         """Test that basic visualizations can be created."""
+        import matplotlib
         from codomyrmex.data_visualization import create_bar_chart, create_line_plot
 
         # Test bar chart creation
         bar_data = {"categories": ["A", "B", "C"], "values": [10, 20, 15]}
         bar_result = create_bar_chart(bar_data, "Test Bar Chart")
 
-        assert isinstance(bar_result, str)
-        assert len(bar_result) > 0
+        assert bar_result is not None
+        assert isinstance(bar_result, matplotlib.figure.Figure)
 
-        # Test line plot creation
-        line_data = {"x": [1, 2, 3, 4], "y": [10, 15, 12, 18]}
-        line_result = create_line_plot(line_data, "Test Line Plot")
+        # Test line plot creation (x_data, y_data are positional lists)
+        line_result = create_line_plot([1, 2, 3, 4], [10, 15, 12, 18], "Test Line Plot")
 
-        assert isinstance(line_result, str)
-        assert len(line_result) > 0
+        assert line_result is not None
+        assert isinstance(line_result, matplotlib.figure.Figure)
 
     @pytest.mark.skipif(not PERFORMANCE_AVAILABLE,
                        reason="Performance module not available")
