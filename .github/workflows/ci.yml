@@ -205,7 +205,7 @@ jobs:
             --cov-report=xml \
             --cov-report=html \
             --cov-report=term-missing \
-            --cov-fail-under=68 \
+            --cov-fail-under=70 \
             --junit-xml=junit-unit-${{ matrix.os }}-${{ matrix.python-version }}.xml \
             --cov-report=json
 
@@ -400,7 +400,7 @@ jobs:
           if [ -f "$COV_JSON" ]; then
             pct=$(python3 -c "import json; d=json.load(open('$COV_JSON')); print(f\"{d['totals']['percent_covered']:.1f}\")" 2>/dev/null || echo "N/A")
             echo "## Coverage" >> $GITHUB_STEP_SUMMARY
-            echo "- **Coverage**: ${pct}% (gate: 68%)" >> $GITHUB_STEP_SUMMARY
+            echo "- **Coverage**: ${pct}% (gate: 70%)" >> $GITHUB_STEP_SUMMARY
           else
             echo "## Coverage" >> $GITHUB_STEP_SUMMARY
             echo "- Coverage report not available (see artifacts)" >> $GITHUB_STEP_SUMMARY
