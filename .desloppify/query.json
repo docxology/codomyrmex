@@ -1,11 +1,11 @@
 {
   "command": "resolve",
   "patterns": [
-    "review::.::holistic::dependency_health::dep_002::538b05af"
+    "review::.::holistic::error_consistency::err_002::e0593db7"
   ],
   "status": "false_positive",
   "resolved": [
-    "review::.::holistic::dependency_health::dep_002::538b05af"
+    "review::.::holistic::error_consistency::err_002::e0593db7"
   ],
   "count": 1,
   "next_command": "desloppify issues",
@@ -17,10 +17,10 @@
   "prev_objective_score": 78.1,
   "prev_strict_score": 62.8,
   "prev_verified_strict_score": 78.1,
-  "attestation": "I have actually read branching.py and run grep to confirm 0 mcp_tool references. I am not gaming the score by resolving without investigation.",
+  "attestation": "I have actually run grep on all three files and confirmed 0 bare pass statements exist. I am not gaming the score by resolving without investigation.",
   "narrative": {
     "phase": "stagnation",
-    "headline": "\u26a0 780 security findings \u2014 review before other cleanup. Score plateaued at 62.8 for 5 scans. Test health (6.7%) is where the breakthrough is. (8 review findings \u2014 run `desloppify issues`)",
+    "headline": "\u26a0 780 security findings \u2014 review before other cleanup. Score plateaued at 62.8 for 5 scans. Test health (6.7%) is where the breakthrough is. (7 review findings \u2014 run `desloppify issues`)",
     "dimensions": {
       "lowest_dimensions": [
         {
@@ -124,8 +124,8 @@
       {
         "type": "issue_queue",
         "detector": "review",
-        "count": 8,
-        "description": "8 review findings need investigation \u2014 run `desloppify issues` to see the work queue",
+        "count": 7,
+        "description": "7 review findings need investigation \u2014 run `desloppify issues` to see the work queue",
         "command": "desloppify issues",
         "impact": 0.0,
         "dimension": "Unknown",
@@ -323,7 +323,7 @@
     "strategy": {
       "fixer_leverage": {
         "auto_fixable_count": 0,
-        "total_count": 37269,
+        "total_count": 37266,
         "coverage": 0.0,
         "impact_ratio": 0.0,
         "recommendation": "none"
@@ -373,7 +373,7 @@
         }
       },
       "can_parallelize": true,
-      "hint": "3 independent workstreams, safe to parallelize. Rescan after each phase to verify. Review: 8 finding(s) \u2014 `desloppify issues`."
+      "hint": "3 independent workstreams, safe to parallelize. Rescan after each phase to verify. Review: 7 finding(s) \u2014 `desloppify issues`."
     },
     "tools": {
       "fixers": [],
@@ -404,9 +404,9 @@
     "milestone": null,
     "primary_action": {
       "command": "desloppify issues",
-      "description": "8 review findings need investigation \u2014 run `desloppify issues` to see the work queue"
+      "description": "7 review findings need investigation \u2014 run `desloppify issues` to see the work queue"
     },
-    "why_now": "3 independent workstreams, safe to parallelize. Rescan after each phase to verify. Review: 8 finding(s) \u2014 `desloppify issues`.",
+    "why_now": "3 independent workstreams, safe to parallelize. Rescan after each phase to verify. Review: 7 finding(s) \u2014 `desloppify issues`.",
     "verification_step": {
       "command": "desloppify scan",
       "reason": "revalidate after changes"
