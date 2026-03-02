@@ -27,7 +27,12 @@ def test_ide_get_status_valid_integration():
     assert "connection_status" in result
     # We expect connecting or error if no real IDE is found,
     # but the tool logic itself shouldn't raise unhandled exceptions
-    assert result["connection_status"] in ("connecting", "connected", "error", "disconnected")
+    assert result["connection_status"] in (
+        "connecting",
+        "connected",
+        "error",
+        "disconnected",
+    )
 
 
 @pytest.mark.unit

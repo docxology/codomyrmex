@@ -83,7 +83,9 @@ def ide_get_status(integration: str) -> dict:
 
 
 @mcp_tool(category="ide")
-def ide_execute_command(integration: str, command: str, args: dict | None = None) -> dict:
+def ide_execute_command(
+    integration: str, command: str, args: dict | None = None
+) -> dict:
     """Execute an IDE command on a specified integration.
 
     Args:
