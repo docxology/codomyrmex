@@ -11,7 +11,6 @@ Usage:
 """
 
 import sys
-import time
 import math
 import asyncio
 from pathlib import Path

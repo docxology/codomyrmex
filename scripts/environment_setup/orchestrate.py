@@ -6,7 +6,6 @@ Demonstrates the use of the environment_setup module for validating
 the runtime environment, checking dependencies, and loading configuration.
 """
 
-import os
 import sys
 from pathlib import Path
 

@@ -2,255 +2,255 @@
   "command": "next",
   "items": [
     {
-      "id": "unused::scripts/concurrency/concurrency_demo.py::os",
+      "id": "unused::scripts/embodiment/examples/basic_usage.py::time",
       "kind": "finding",
       "tier": 1,
       "effective_tier": 1,
       "confidence": "high",
       "detector": "unused",
-      "file": "scripts/concurrency/concurrency_demo.py",
+      "file": "scripts/embodiment/examples/basic_usage.py",
+      "summary": "Unused imports: time",
+      "detail": {
+        "line": 14,
+        "category": "imports"
+      },
+      "status": "open",
+      "primary_command": "desloppify resolve fixed \"unused::scripts/embodiment/examples/basic_usage.py::time\" --note \"<what you did>\" --attest \"I have actually [DESCRIBE THE CONCRETE CHANGE YOU MADE] and I am not gaming the score by resolving without fixing.\""
+    },
+    {
+      "id": "unused::scripts/environment_setup/orchestrate.py::os",
+      "kind": "finding",
+      "tier": 1,
+      "effective_tier": 1,
+      "confidence": "high",
+      "detector": "unused",
+      "file": "scripts/environment_setup/orchestrate.py",
       "summary": "Unused imports: os",
       "detail": {
         "line": 9,
         "category": "imports"
       },
       "status": "open",
-      "primary_command": "desloppify resolve fixed \"unused::scripts/concurrency/concurrency_demo.py::os\" --note \"<what you did>\" --attest \"I have actually [DESCRIBE THE CONCRETE CHANGE YOU MADE] and I am not gaming the score by resolving without fixing.\""
+      "primary_command": "desloppify resolve fixed \"unused::scripts/environment_setup/orchestrate.py::os\" --note \"<what you did>\" --attest \"I have actually [DESCRIBE THE CONCRETE CHANGE YOU MADE] and I am not gaming the score by resolving without fixing.\""
     },
     {
-      "id": "unused::scripts/concurrency/concurrency_demo.py::typing.Any",
+      "id": "unused::scripts/events/event_demo.py::asyncio",
       "kind": "finding",
       "tier": 1,
       "effective_tier": 1,
       "confidence": "high",
       "detector": "unused",
-      "file": "scripts/concurrency/concurrency_demo.py",
-      "summary": "Unused imports: typing.Any",
+      "file": "scripts/events/event_demo.py",
+      "summary": "Unused imports: asyncio",
       "detail": {
-        "line": 15,
+        "line": 13,
         "category": "imports"
       },
       "status": "open",
-      "primary_command": "desloppify resolve fixed \"unused::scripts/concurrency/concurrency_demo.py::typing.Any\" --note \"<what you did>\" --attest \"I have actually [DESCRIBE THE CONCRETE CHANGE YOU MADE] and I am not gaming the score by resolving without fixing.\""
+      "primary_command": "desloppify resolve fixed \"unused::scripts/events/event_demo.py::asyncio\" --note \"<what you did>\" --attest \"I have actually [DESCRIBE THE CONCRETE CHANGE YOU MADE] and I am not gaming the score by resolving without fixing.\""
     },
     {
-      "id": "unused::scripts/concurrency/concurrency_demo.py::typing.Dict",
+      "id": "unused::scripts/events/event_demo.py::codomyrmex.events.EventBus",
       "kind": "finding",
       "tier": 1,
       "effective_tier": 1,
       "confidence": "high",
       "detector": "unused",
-      "file": "scripts/concurrency/concurrency_demo.py",
-      "summary": "Unused imports: typing.Dict",
+      "file": "scripts/events/event_demo.py",
+      "summary": "Unused imports: codomyrmex.events.EventBus",
       "detail": {
-        "line": 15,
+        "line": 24,
         "category": "imports"
       },
       "status": "open",
-      "primary_command": "desloppify resolve fixed \"unused::scripts/concurrency/concurrency_demo.py::typing.Dict\" --note \"<what you did>\" --attest \"I have actually [DESCRIBE THE CONCRETE CHANGE YOU MADE] and I am not gaming the score by resolving without fixing.\""
+      "primary_command": "desloppify resolve fixed \"unused::scripts/events/event_demo.py::codomyrmex.events.EventBus\" --note \"<what you did>\" --attest \"I have actually [DESCRIBE THE CONCRETE CHANGE YOU MADE] and I am not gaming the score by resolving without fixing.\""
     },
     {
-      "id": "unused::scripts/concurrency/concurrency_demo.py::typing.List",
+      "id": "unused::scripts/events/event_demo.py::codomyrmex.events.get_event_logger",
       "kind": "finding",
       "tier": 1,
       "effective_tier": 1,
       "confidence": "high",
       "detector": "unused",
-      "file": "scripts/concurrency/concurrency_demo.py",
-      "summary": "Unused imports: typing.List",
+      "file": "scripts/events/event_demo.py",
+      "summary": "Unused imports: codomyrmex.events.get_event_logger",
       "detail": {
-        "line": 15,
+        "line": 31,
         "category": "imports"
       },
       "status": "open",
-      "primary_command": "desloppify resolve fixed \"unused::scripts/concurrency/concurrency_demo.py::typing.List\" --note \"<what you did>\" --attest \"I have actually [DESCRIBE THE CONCRETE CHANGE YOU MADE] and I am not gaming the score by resolving without fixing.\""
+      "primary_command": "desloppify resolve fixed \"unused::scripts/events/event_demo.py::codomyrmex.events.get_event_logger\" --note \"<what you did>\" --attest \"I have actually [DESCRIBE THE CONCRETE CHANGE YOU MADE] and I am not gaming the score by resolving without fixing.\""
     },
     {
-      "id": "unused::scripts/concurrency/orchestrate.py::os",
+      "id": "unused::scripts/events/event_demo.py::codomyrmex.events.subscribe_to_events",
       "kind": "finding",
       "tier": 1,
       "effective_tier": 1,
       "confidence": "high",
       "detector": "unused",
-      "file": "scripts/concurrency/orchestrate.py",
+      "file": "scripts/events/event_demo.py",
+      "summary": "Unused imports: codomyrmex.events.subscribe_to_events",
+      "detail": {
+        "line": 30,
+        "category": "imports"
+      },
+      "status": "open",
+      "primary_command": "desloppify resolve fixed \"unused::scripts/events/event_demo.py::codomyrmex.events.subscribe_to_events\" --note \"<what you did>\" --attest \"I have actually [DESCRIBE THE CONCRETE CHANGE YOU MADE] and I am not gaming the score by resolving without fixing.\""
+    },
+    {
+      "id": "unused::scripts/events/event_demo.py::os",
+      "kind": "finding",
+      "tier": 1,
+      "effective_tier": 1,
+      "confidence": "high",
+      "detector": "unused",
+      "file": "scripts/events/event_demo.py",
       "summary": "Unused imports: os",
       "detail": {
-        "line": 5,
+        "line": 10,
         "category": "imports"
       },
       "status": "open",
-      "primary_command": "desloppify resolve fixed \"unused::scripts/concurrency/orchestrate.py::os\" --note \"<what you did>\" --attest \"I have actually [DESCRIBE THE CONCRETE CHANGE YOU MADE] and I am not gaming the score by resolving without fixing.\""
+      "primary_command": "desloppify resolve fixed \"unused::scripts/events/event_demo.py::os\" --note \"<what you did>\" --attest \"I have actually [DESCRIBE THE CONCRETE CHANGE YOU MADE] and I am not gaming the score by resolving without fixing.\""
     },
     {
-      "id": "unused::scripts/config_monitoring/orchestrate.py::os",
+      "id": "unused::scripts/exceptions/orchestrate.py::codomyrmex.exceptions.CerebrumError",
       "kind": "finding",
       "tier": 1,
       "effective_tier": 1,
       "confidence": "high",
       "detector": "unused",
-      "file": "scripts/config_monitoring/orchestrate.py",
-      "summary": "Unused imports: os",
+      "file": "scripts/exceptions/orchestrate.py",
+      "summary": "Unused imports: codomyrmex.exceptions.CerebrumError",
       "detail": {
-        "line": 7,
+        "line": 22,
         "category": "imports"
       },
       "status": "open",
-      "primary_command": "desloppify resolve fixed \"unused::scripts/config_monitoring/orchestrate.py::os\" --note \"<what you did>\" --attest \"I have actually [DESCRIBE THE CONCRETE CHANGE YOU MADE] and I am not gaming the score by resolving without fixing.\""
+      "primary_command": "desloppify resolve fixed \"unused::scripts/exceptions/orchestrate.py::codomyrmex.exceptions.CerebrumError\" --note \"<what you did>\" --attest \"I have actually [DESCRIBE THE CONCRETE CHANGE YOU MADE] and I am not gaming the score by resolving without fixing.\""
     },
     {
-      "id": "unused::scripts/config_monitoring/orchestrate.py::pathlib.Path",
+      "id": "unused::scripts/feature_flags/examples/basic_usage.py::json",
       "kind": "finding",
       "tier": 1,
       "effective_tier": 1,
       "confidence": "high",
       "detector": "unused",
-      "file": "scripts/config_monitoring/orchestrate.py",
-      "summary": "Unused imports: pathlib.Path",
+      "file": "scripts/feature_flags/examples/basic_usage.py",
+      "summary": "Unused imports: json",
       "detail": {
-        "line": 9,
+        "line": 14,
         "category": "imports"
       },
       "status": "open",
-      "primary_command": "desloppify resolve fixed \"unused::scripts/config_monitoring/orchestrate.py::pathlib.Path\" --note \"<what you did>\" --attest \"I have actually [DESCRIBE THE CONCRETE CHANGE YOU MADE] and I am not gaming the score by resolving without fixing.\""
+      "primary_command": "desloppify resolve fixed \"unused::scripts/feature_flags/examples/basic_usage.py::json\" --note \"<what you did>\" --attest \"I have actually [DESCRIBE THE CONCRETE CHANGE YOU MADE] and I am not gaming the score by resolving without fixing.\""
     },
     {
-      "id": "unused::scripts/cost_management/cost_management_demo.py::datetime.datetime",
+      "id": "unused::scripts/feature_store/feature_store_demo.py::datetime.datetime",
       "kind": "finding",
       "tier": 1,
       "effective_tier": 1,
       "confidence": "high",
       "detector": "unused",
-      "file": "scripts/cost_management/cost_management_demo.py",
+      "file": "scripts/feature_store/feature_store_demo.py",
       "summary": "Unused imports: datetime.datetime",
       "detail": {
         "line": 11,
         "category": "imports"
       },
       "status": "open",
-      "primary_command": "desloppify resolve fixed \"unused::scripts/cost_management/cost_management_demo.py::datetime.datetime\" --note \"<what you did>\" --attest \"I have actually [DESCRIBE THE CONCRETE CHANGE YOU MADE] and I am not gaming the score by resolving without fixing.\""
+      "primary_command": "desloppify resolve fixed \"unused::scripts/feature_store/feature_store_demo.py::datetime.datetime\" --note \"<what you did>\" --attest \"I have actually [DESCRIBE THE CONCRETE CHANGE YOU MADE] and I am not gaming the score by resolving without fixing.\""
     },
     {
-      "id": "unused::scripts/cost_management/cost_management_demo.py::time",
+      "id": "unused::scripts/finance/orchestrator.py::datetime.datetime",
       "kind": "finding",
       "tier": 1,
       "effective_tier": 1,
       "confidence": "high",
       "detector": "unused",
-      "file": "scripts/cost_management/cost_management_demo.py",
-      "summary": "Unused imports: time",
+      "file": "scripts/finance/orchestrator.py",
+      "summary": "Unused imports: datetime.datetime",
       "detail": {
         "line": 9,
         "category": "imports"
       },
       "status": "open",
-      "primary_command": "desloppify resolve fixed \"unused::scripts/cost_management/cost_management_demo.py::time\" --note \"<what you did>\" --attest \"I have actually [DESCRIBE THE CONCRETE CHANGE YOU MADE] and I am not gaming the score by resolving without fixing.\""
+      "primary_command": "desloppify resolve fixed \"unused::scripts/finance/orchestrator.py::datetime.datetime\" --note \"<what you did>\" --attest \"I have actually [DESCRIBE THE CONCRETE CHANGE YOU MADE] and I am not gaming the score by resolving without fixing.\""
     },
     {
-      "id": "unused::scripts/data_lineage/data_lineage_demo.py::json",
+      "id": "unused::scripts/finance/orchestrator.py::decimal.Decimal",
       "kind": "finding",
       "tier": 1,
       "effective_tier": 1,
       "confidence": "high",
       "detector": "unused",
-      "file": "scripts/data_lineage/data_lineage_demo.py",
-      "summary": "Unused imports: json",
+      "file": "scripts/finance/orchestrator.py",
+      "summary": "Unused imports: decimal.Decimal",
       "detail": {
-        "line": 10,
+        "line": 8,
         "category": "imports"
       },
       "status": "open",
-      "primary_command": "desloppify resolve fixed \"unused::scripts/data_lineage/data_lineage_demo.py::json\" --note \"<what you did>\" --attest \"I have actually [DESCRIBE THE CONCRETE CHANGE YOU MADE] and I am not gaming the score by resolving without fixing.\""
+      "primary_command": "desloppify resolve fixed \"unused::scripts/finance/orchestrator.py::decimal.Decimal\" --note \"<what you did>\" --attest \"I have actually [DESCRIBE THE CONCRETE CHANGE YOU MADE] and I am not gaming the score by resolving without fixing.\""
     },
     {
-      "id": "unused::scripts/database_management/orchestrate.py::codomyrmex.database_management.DatabaseConnection",
+      "id": "unused::scripts/finance/orchestrator.py::sys",
       "kind": "finding",
       "tier": 1,
       "effective_tier": 1,
       "confidence": "high",
       "detector": "unused",
-      "file": "scripts/database_management/orchestrate.py",
-      "summary": "Unused imports: codomyrmex.database_management.DatabaseConnection",
-      "detail": {
-        "line": 19,
-        "category": "imports"
-      },
-      "status": "open",
-      "primary_command": "desloppify resolve fixed \"unused::scripts/database_management/orchestrate.py::codomyrmex.database_management.DatabaseConnection\" --note \"<what you did>\" --attest \"I have actually [DESCRIBE THE CONCRETE CHANGE YOU MADE] and I am not gaming the score by resolving without fixing.\""
-    },
-    {
-      "id": "unused::scripts/database_management/orchestrate.py::codomyrmex.database_management.DatabaseType",
-      "kind": "finding",
-      "tier": 1,
-      "effective_tier": 1,
-      "confidence": "high",
-      "detector": "unused",
-      "file": "scripts/database_management/orchestrate.py",
-      "summary": "Unused imports: codomyrmex.database_management.DatabaseType",
-      "detail": {
-        "line": 18,
-        "category": "imports"
-      },
-      "status": "open",
-      "primary_command": "desloppify resolve fixed \"unused::scripts/database_management/orchestrate.py::codomyrmex.database_management.DatabaseType\" --note \"<what you did>\" --attest \"I have actually [DESCRIBE THE CONCRETE CHANGE YOU MADE] and I am not gaming the score by resolving without fixing.\""
-    },
-    {
-      "id": "unused::scripts/database_management/orchestrate.py::os",
-      "kind": "finding",
-      "tier": 1,
-      "effective_tier": 1,
-      "confidence": "high",
-      "detector": "unused",
-      "file": "scripts/database_management/orchestrate.py",
-      "summary": "Unused imports: os",
+      "file": "scripts/finance/orchestrator.py",
+      "summary": "Unused imports: sys",
       "detail": {
         "line": 7,
         "category": "imports"
       },
       "status": "open",
-      "primary_command": "desloppify resolve fixed \"unused::scripts/database_management/orchestrate.py::os\" --note \"<what you did>\" --attest \"I have actually [DESCRIBE THE CONCRETE CHANGE YOU MADE] and I am not gaming the score by resolving without fixing.\""
+      "primary_command": "desloppify resolve fixed \"unused::scripts/finance/orchestrator.py::sys\" --note \"<what you did>\" --attest \"I have actually [DESCRIBE THE CONCRETE CHANGE YOU MADE] and I am not gaming the score by resolving without fixing.\""
     },
     {
-      "id": "unused::scripts/deployment/orchestrate.py::codomyrmex",
+      "id": "unused::scripts/git_operations/orchestrate.py::codomyrmex",
       "kind": "finding",
       "tier": 1,
       "effective_tier": 1,
       "confidence": "high",
       "detector": "unused",
-      "file": "scripts/deployment/orchestrate.py",
+      "file": "scripts/git_operations/orchestrate.py",
       "summary": "Unused imports: codomyrmex",
       "detail": {
-        "line": 20,
+        "line": 27,
         "category": "imports"
       },
       "status": "open",
-      "primary_command": "desloppify resolve fixed \"unused::scripts/deployment/orchestrate.py::codomyrmex\" --note \"<what you did>\" --attest \"I have actually [DESCRIBE THE CONCRETE CHANGE YOU MADE] and I am not gaming the score by resolving without fixing.\""
+      "primary_command": "desloppify resolve fixed \"unused::scripts/git_operations/orchestrate.py::codomyrmex\" --note \"<what you did>\" --attest \"I have actually [DESCRIBE THE CONCRETE CHANGE YOU MADE] and I am not gaming the score by resolving without fixing.\""
     },
     {
-      "id": "unused::scripts/deployment/orchestrate.py::codomyrmex.deployment.health_checks.HealthChecker",
+      "id": "unused::scripts/git_operations/orchestrate.py::codomyrmex.git_operations.get_diff",
       "kind": "finding",
       "tier": 1,
       "effective_tier": 1,
       "confidence": "high",
       "detector": "unused",
-      "file": "scripts/deployment/orchestrate.py",
-      "summary": "Unused imports: codomyrmex.deployment.health_checks.HealthChecker",
+      "file": "scripts/git_operations/orchestrate.py",
+      "summary": "Unused imports: codomyrmex.git_operations.get_diff",
       "detail": {
-        "line": 33,
+        "line": 43,
         "category": "imports"
       },
       "status": "open",
-      "primary_command": "desloppify resolve fixed \"unused::scripts/deployment/orchestrate.py::codomyrmex.deployment.health_checks.HealthChecker\" --note \"<what you did>\" --attest \"I have actually [DESCRIBE THE CONCRETE CHANGE YOU MADE] and I am not gaming the score by resolving without fixing.\""
+      "primary_command": "desloppify resolve fixed \"unused::scripts/git_operations/orchestrate.py::codomyrmex.git_operations.get_diff\" --note \"<what you did>\" --attest \"I have actually [DESCRIBE THE CONCRETE CHANGE YOU MADE] and I am not gaming the score by resolving without fixing.\""
     }
   ],
   "queue": {
     "tier_counts": {
-      "1": 41,
-      "2": 10639,
-      "3": 17748,
-      "4": 8818
+      "1": 20,
+      "2": 10634,
+      "3": 17749,
+      "4": 190
     },
-    "requested_tier": 1,
-    "selected_tier": 1,
+    "requested_tier": null,
+    "selected_tier": null,
     "fallback_reason": null,
     "available_tiers": [
       1,
@@ -258,17 +258,17 @@
       3,
       4
     ],
-    "total": 41
+    "total": 28593
   },
   "narrative": {
     "phase": "middle_grind",
-    "headline": "\u26a0 780 security findings \u2014 review before other cleanup. 37236 findings open. Test health (6.7%) needs attention \u2014 run `desloppify next` to start.",
+    "headline": "\u26a0 780 security findings \u2014 review before other cleanup. 28583 findings open. Test health (8.5%) needs attention \u2014 run `desloppify next` to start.",
     "dimensions": {
       "lowest_dimensions": [
         {
           "name": "Test health",
-          "strict": 6.7,
-          "issues": 18821,
+          "strict": 8.5,
+          "issues": 10192,
           "impact": 0.0
         },
         {
@@ -361,7 +361,7 @@
         "impact": 0.0,
         "dimension": "Unknown",
         "priority": 5,
-        "lane": "refactor"
+        "lane": "refactor_0"
       },
       {
         "type": "refactor",
@@ -372,7 +372,7 @@
         "impact": 0.0,
         "dimension": "File health",
         "priority": 6,
-        "lane": "refactor"
+        "lane": "refactor_0"
       },
       {
         "type": "refactor",
@@ -383,7 +383,7 @@
         "impact": 0.0,
         "dimension": "Code quality",
         "priority": 7,
-        "lane": "refactor"
+        "lane": "refactor_0"
       },
       {
         "type": "refactor",
@@ -394,7 +394,7 @@
         "impact": 0.0,
         "dimension": "Duplication",
         "priority": 8,
-        "lane": "refactor"
+        "lane": "refactor_0"
       },
       {
         "type": "refactor",
@@ -405,13 +405,13 @@
         "impact": 0.0,
         "dimension": "Code quality",
         "priority": 9,
-        "lane": "refactor"
+        "lane": "refactor_0"
       },
       {
         "type": "refactor",
         "detector": "test_coverage",
-        "count": 10193,
-        "description": "10193 test_coverage findings \u2014 add tests for untested production modules \u2014 prioritize by import count",
+        "count": 10192,
+        "description": "10192 test_coverage findings \u2014 add tests for untested production modules \u2014 prioritize by import count",
         "command": "desloppify show test_coverage --status open",
         "impact": 0.0,
         "dimension": "Test health",
@@ -427,18 +427,18 @@
         "impact": 0.0,
         "dimension": "Code quality",
         "priority": 11,
-        "lane": "refactor"
+        "lane": "refactor_0"
       },
       {
         "type": "manual_fix",
         "detector": "unused",
-        "count": 499,
-        "description": "499 unused findings \u2014 inspect with `desloppify next` and fix manually",
+        "count": 475,
+        "description": "475 unused findings \u2014 inspect with `desloppify next` and fix manually",
         "command": "desloppify show unused --status open",
         "impact": 0.0,
         "dimension": "Code quality",
         "priority": 12,
-        "lane": "refactor"
+        "lane": "refactor_0"
       },
       {
         "type": "manual_fix",
@@ -449,7 +449,7 @@
         "impact": 0.0,
         "dimension": "Code quality",
         "priority": 13,
-        "lane": "refactor"
+        "lane": "refactor_0"
       },
       {
         "type": "manual_fix",
@@ -460,7 +460,7 @@
         "impact": 0.0,
         "dimension": "Code quality",
         "priority": 14,
-        "lane": "refactor"
+        "lane": "refactor_0"
       },
       {
         "type": "manual_fix",
@@ -471,7 +471,7 @@
         "impact": 0.0,
         "dimension": "Code quality",
         "priority": 15,
-        "lane": "refactor"
+        "lane": "refactor_1"
       },
       {
         "type": "manual_fix",
@@ -482,24 +482,13 @@
         "impact": 0.0,
         "dimension": "Security",
         "priority": 16,
-        "lane": "refactor"
-      },
-      {
-        "type": "manual_fix",
-        "detector": "subjective_review",
-        "count": 8628,
-        "description": "8628 files need design review \u2014 run design review with dimension templates",
-        "command": "desloppify fix review",
-        "impact": 0.0,
-        "dimension": "Test health",
-        "priority": 17,
-        "lane": "refactor"
+        "lane": "refactor_0"
       }
     ],
     "strategy": {
       "fixer_leverage": {
         "auto_fixable_count": 0,
-        "total_count": 37236,
+        "total_count": 28583,
         "coverage": 0.0,
         "impact_ratio": 0.0,
         "recommendation": "none"
@@ -517,7 +506,7 @@
           "automation": "manual",
           "run_first": false
         },
-        "refactor": {
+        "refactor_0": {
           "actions": [
             5,
             6,
@@ -528,11 +517,18 @@
             12,
             13,
             14,
-            15,
-            16,
-            17
+            16
           ],
-          "file_count": 12013,
+          "file_count": 6792,
+          "total_impact": 0.0,
+          "automation": "manual",
+          "run_first": false
+        },
+        "refactor_1": {
+          "actions": [
+            15
+          ],
+          "file_count": 6,
           "total_impact": 0.0,
           "automation": "manual",
           "run_first": false
@@ -541,14 +537,14 @@
           "actions": [
             10
           ],
-          "file_count": 10193,
+          "file_count": 10192,
           "total_impact": 0.0,
           "automation": "manual",
           "run_first": false
         }
       },
       "can_parallelize": true,
-      "hint": "3 independent workstreams, safe to parallelize. Rescan after each phase to verify."
+      "hint": "4 independent workstreams, safe to parallelize. Rescan after each phase to verify."
     },
     "tools": {
       "fixers": [],
@@ -571,7 +567,7 @@
     },
     "debt": {
       "overall_gap": 0.0,
-      "wontfix_count": 8,
+      "wontfix_count": 0,
       "worst_dimension": null,
       "worst_gap": 0.0,
       "trend": "stable"
@@ -581,43 +577,37 @@
       "command": "desloppify show flat_dirs --status open",
       "description": "66 flat_dirs findings \u2014 create subdirectories and use `desloppify move`"
     },
-    "why_now": "3 independent workstreams, safe to parallelize. Rescan after each phase to verify.",
+    "why_now": "4 independent workstreams, safe to parallelize. Rescan after each phase to verify.",
     "verification_step": {
       "command": "desloppify scan",
       "reason": "revalidate after changes"
     },
-    "risk_flags": [
-      {
-        "type": "wontfix_gap",
-        "severity": "medium",
-        "message": "Strict/lenient gap is 0.0 pts with 8 wontfix findings"
-      }
-    ],
+    "risk_flags": [],
     "strict_target": {
       "target": 95.0,
-      "current": 64.3,
-      "gap": 30.7,
+      "current": 64.5,
+      "gap": 30.5,
       "state": "below",
       "warning": null
     },
     "reminders": [],
     "reminder_history": {
       "zone_classification": 3,
-      "report_scores": 11,
+      "report_scores": 12,
       "feedback_nudge": 3,
       "stagnant_nudge": 14,
       "review_findings_pending": 3
     }
   },
-  "overall_score": 64.3,
-  "objective_score": 78.1,
-  "strict_score": 64.3,
+  "overall_score": 64.5,
+  "objective_score": 78.4,
+  "strict_score": 64.5,
   "scorecard_dimensions": [
     {
       "name": "File health",
       "score": 88.9,
       "strict": 88.9,
-      "checks": 12898,
+      "checks": 12899,
       "issues": 2201,
       "tier": 3,
       "subjective": false
@@ -650,10 +640,10 @@
     },
     {
       "name": "Code quality",
-      "score": 96.0,
-      "strict": 96.0,
-      "checks": 95166,
-      "issues": 6053,
+      "score": 96.1,
+      "strict": 96.1,
+      "checks": 95173,
+      "issues": 6029,
       "tier": 3,
       "subjective": false
     },
@@ -713,7 +703,7 @@
       "name": "Duplication",
       "score": 89.7,
       "strict": 89.7,
-      "checks": 64235,
+      "checks": 64233,
       "issues": 6651,
       "tier": 3,
       "subjective": false
@@ -750,7 +740,7 @@
       "name": "Security",
       "score": 98.5,
       "strict": 98.5,
-      "checks": 25539,
+      "checks": 25541,
       "issues": 798,
       "tier": 4,
       "subjective": false
@@ -770,10 +760,10 @@
     },
     {
       "name": "Test health",
-      "score": 6.7,
-      "strict": 6.7,
-      "checks": 144656,
-      "issues": 18821,
+      "score": 8.5,
+      "strict": 8.5,
+      "checks": 144660,
+      "issues": 10192,
       "tier": 4,
       "subjective": false
     },

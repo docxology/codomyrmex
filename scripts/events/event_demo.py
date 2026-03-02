@@ -7,10 +7,8 @@ Usage:
 """
 
 import sys
-import os
 import time
 import argparse
-import asyncio
 from pathlib import Path
 
 # Ensure codomyrmex is in path
@@ -21,14 +19,11 @@ except ImportError:
     sys.path.insert(0, str(project_root / "src"))
 
 from codomyrmex.events import (
-    EventBus, 
-    Event, 
-    EventType, 
-    EventPriority, 
-    get_event_bus, 
+    Event,
+    EventType,
+    EventPriority,
+    get_event_bus,
     publish_event,
-    subscribe_to_events,
-    get_event_logger,
     get_event_stats
 )
 from codomyrmex.events.emitters.event_emitter import EventEmitter

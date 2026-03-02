@@ -10,7 +10,6 @@ from codomyrmex.edge_computing import (
     EdgeCluster,
     EdgeNode,
     EdgeFunction,
-    EdgeNodeStatus,
     EdgeSynchronizer,
     SyncState,
     EdgeMetrics,
@@ -18,7 +17,7 @@ from codomyrmex.edge_computing import (
     DeploymentManager,
     DeploymentStrategy,
 )
-from codomyrmex.edge_computing.scheduling import EdgeScheduler, ScheduleType
+from codomyrmex.edge_computing.scheduling import EdgeScheduler
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 logger = get_logger(__name__)

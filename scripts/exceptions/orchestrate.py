@@ -19,7 +19,6 @@ from codomyrmex.exceptions import (
     AIProviderError,
     FileOperationError,
     ConfigurationError,
-    CerebrumError,
     InferenceError,
     format_exception_chain,
 )

@@ -1,0 +1,318 @@
+{
+  "session": {
+    "id": "ext_20260302_223535_ee11ff64",
+    "token": "0d6f9d160e3b4d10dd3250e0f85e46b0"
+  },
+  "assessments": {
+    "cross_module_architecture": 68,
+    "convention_outlier": 62,
+    "error_consistency": 57,
+    "abstraction_fitness": 65,
+    "dependency_health": 60,
+    "test_strategy": 72,
+    "ai_generated_debt": 48,
+    "package_organization": 70,
+    "high_level_elegance": 63,
+    "mid_level_elegance": 64,
+    "low_level_elegance": 58,
+    "design_coherence": 61
+  },
+  "findings": [
+    {
+      "dimension": "cross_module_architecture",
+      "identifier": "CMA-01",
+      "summary": "Layer boundary partially enforced but InteractiveShell leaks Application-layer dependency patterns into a Foundation-layer module",
+      "related_files": [
+        "src/codomyrmex/terminal_interface/shells/interactive_shell.py",
+        "src/codomyrmex/terminal_interface/shells/__init__.py"
+      ],
+      "evidence": [
+        "interactive_shell.py line 82-101: _ensure_discovery() is designed to avoid importing system_discovery (Application layer), but the do_explore, do_capabilities, do_forage methods all check 'if not self.discovery' and silently return or print limited-mode messages, meaning the module is architecturally unusable as a Foundation module \u2014 its primary commands require self.discovery which can only be set by injecting an Application-layer object.",
+        "interactive_shell.py line 254-256: do_capabilities calls self.discovery._discover_modules() directly, bypassing any abstraction layer and coupling to private implementation details of the discovery object.",
+        "git_operations/core/git.py line 8-14: imports PERFORMANCE_MONITOR_AVAILABLE from performance module, and conditionally imports monitor_performance at module level \u2014 this creates a hard conditional import that silently drops monitoring; the module-level if-guard means the import succeeds without error but the symbols are never in scope when psutil is absent, leading to NameError if misused.",
+        "agents/pai/trust_gateway.py line 36-42: imports from mcp_bridge and mcp.discovery at module top level, creating a tight coupling between trust_gateway and the bridge implementation; changes to the bridge directly affect the trust surface."
+      ],
+      "suggestion": "Separate the Foundation-layer shell infrastructure (Shell, InteractiveShell from shells/__init__.py) from the user-facing interactive exploration shell which genuinely depends on Application-layer discovery. The exploration shell belongs at the Application layer alongside system_discovery. This would also remove the silent no-op path in do_explore.",
+      "confidence": "high"
+    },
+    {
+      "dimension": "convention_outlier",
+      "identifier": "CO-01",
+      "summary": "Inconsistent logging style: f-strings used in logger calls throughout git_operations and coding modules despite Python logging best practices discouraging eager interpolation",
+      "related_files": [
+        "src/codomyrmex/git_operations/core/commands/branching.py",
+        "src/codomyrmex/git_operations/core/commands/merge.py",
+        "src/codomyrmex/coding/review/reviewer.py",
+        "src/codomyrmex/coding/static_analysis/static_analyzer.py"
+      ],
+      "evidence": [
+        "branching.py lines 18, 26, 38, 46, 71, 89, 93, 96: all logger calls use f-strings (e.g. logger.info(f\"Creating new branch '{branch_name}' in {repository_path}\")) instead of %-style lazy formatting.",
+        "merge.py lines 29-31, 46: logger.info(f\"Merging branch '{source_branch}' into '{target_branch}'\") \u2014 same f-string pattern.",
+        "reviewer.py line 147: logger.warning(f\"Error loading config from {self.config_path}: {e}\") uses f-string.",
+        "static_analyzer.py lines 155, 303: logger.warning and logger.error calls use f-strings.",
+        "By contrast, agents/pai/trust_gateway.py and collaboration/swarm/manager.py use the %-style format consistently (e.g. logger.info('Tool %s promoted to TRUSTED', tool_name)), creating a split convention across the codebase."
+      ],
+      "suggestion": "Standardize on %-style lazy formatting for all logger calls (logger.info('Creating branch %r in %s', branch_name, repository_path)). This avoids string construction overhead at log levels that are filtered out and is the recommended Python convention.",
+      "confidence": "high"
+    },
+    {
+      "dimension": "convention_outlier",
+      "identifier": "CO-02",
+      "summary": "AgentProxy.send_task returns a hardcoded stub string in production code, violating the project's zero-mock policy",
+      "related_files": [
+        "src/codomyrmex/collaboration/protocols/swarm.py"
+      ],
+      "evidence": [
+        "collaboration/protocols/swarm.py line 19-20: def send_task(self, task: str) -> str: return f'Result from {self.name}' \u2014 this is a hardcoded fake return value in production code.",
+        "The class docstring on line 12-13 says 'Mock-friendly proxy for a Codomyrmex agent (Legacy)' \u2014 describing it as mock-friendly explicitly contradicts the project's stated zero-mock/zero-stub policy.",
+        "The test in test_collaboration.py line 15-23 constructs SwarmManager with AgentProxy objects and asserts execute() returns a dict \u2014 this test exercises the stub path and passes because the legacy adapter never calls send_task at all, masking the dead stub."
+      ],
+      "suggestion": "Either raise NotImplementedError in send_task to comply with zero-mock policy, or remove AgentProxy entirely if the legacy compatibility layer is truly only used for test setup. Document the deprecation timeline per the project's stated policy.",
+      "confidence": "high"
+    },
+    {
+      "dimension": "error_consistency",
+      "identifier": "EC-01",
+      "summary": "Mixed error-handling contracts: some functions return False/None on failure while others raise; no consistent policy within git_operations",
+      "related_files": [
+        "src/codomyrmex/git_operations/core/commands/branching.py",
+        "src/codomyrmex/git_operations/core/commands/merge.py"
+      ],
+      "evidence": [
+        "branching.py lines 9-27: create_branch raises subprocess.CalledProcessError on failure (docstring says Raises:), returning True only on success.",
+        "branching.py lines 74-97: get_current_branch catches CalledProcessError and returns None on failure \u2014 completely different contract from create_branch which raises.",
+        "branching.py lines 100-127: list_branches catches CalledProcessError and returns [] on failure \u2014 silent-return convention.",
+        "merge.py lines 49-56: merge_branch catches CalledProcessError and returns False \u2014 yet another convention within the same module group.",
+        "Callers cannot write uniform error-handling code because each function in the same module family uses a different failure signalling mechanism (raise, return None, return False, return [])."
+      ],
+      "suggestion": "Pick one convention for git_operations/core/commands: either all functions raise on failure, or all return a Result-like object. The existing code in trust_gateway.py and collaboration/swarm/pool.py uses exceptions consistently (AssignmentError, SecurityError) and is a better model to follow.",
+      "confidence": "high"
+    },
+    {
+      "dimension": "error_consistency",
+      "identifier": "EC-02",
+      "summary": "Bare except-Exception in discovery.py and interactive_shell.py swallows all errors including KeyboardInterrupt subclasses and SystemExit",
+      "related_files": [
+        "src/codomyrmex/agents/pai/mcp/discovery.py",
+        "src/codomyrmex/terminal_interface/shells/interactive_shell.py"
+      ],
+      "evidence": [
+        "discovery.py lines 102-106: except Exception as exc followed by traceback.print_exc() and logger.warning \u2014 this is a legitimate broad catch but prints directly to stderr via traceback.print_exc(), mixing output channels.",
+        "discovery.py lines 134-135: for target in scan_targets: try: ... except Exception as e: logger.warning(f'Failed to scan package {target}: {e}') \u2014 swallows all errors silently, including potential programming errors (AttributeError, TypeError) that should propagate.",
+        "interactive_shell.py lines 366-367, 416-417, 433-434, 465-466: multiple _demo_*() methods each have bare except Exception: print(f'... demo failed: {e}') \u2014 these catch and print but do not log, inconsistent with the rest of the module which uses logger.",
+        "interactive_shell.py lines 826-830: run() method catches both KeyboardInterrupt and bare Exception but formats them as print() not logger calls."
+      ],
+      "suggestion": "Narrow except clauses to specific expected exception types. Use logger.exception() instead of traceback.print_exc() + logger.warning() to produce structured stack traces. Never use bare except in discovery scan loops without at minimum re-raising non-fatal-but-unexpected types.",
+      "confidence": "high"
+    },
+    {
+      "dimension": "abstraction_fitness",
+      "identifier": "AF-01",
+      "summary": "TrustRegistry._load() is called redundantly before almost every mutating operation, creating implicit read-your-own-writes semantics that are unclear and potentially expensive",
+      "related_files": [
+        "src/codomyrmex/agents/pai/trust_gateway.py"
+      ],
+      "evidence": [
+        "trust_gateway.py lines 366-368: verify_all_safe calls self._load() with comment 'Refresh first'.",
+        "trust_gateway.py lines 381-382: trust_tool calls self._load() with comment 'Refresh first'.",
+        "trust_gateway.py lines 395-397: trust_all calls self._load() with comment 'Refresh first'.",
+        "trust_gateway.py lines 418-421: get_report calls self._load() with comment 'Reload before reporting'.",
+        "trust_gateway.py lines 437-438: get_aggregate_level calls self._load().",
+        "trust_gateway.py line 361: even level() calls self._load() on every invocation \u2014 this means a call to trusted_call_tool (which calls level() and is_trusted()) triggers at minimum two disk reads per tool call.",
+        "There is no caching, TTL, or dirty-flag mechanism on the in-memory state, so disk I/O occurs on every read in a hot path."
+      ],
+      "suggestion": "Introduce a dirty-flag or file-modification-time check before unconditionally calling _load(). For in-process single-agent use, the ledger should only be re-read if the file's mtime has changed. Alternatively, document the multi-process assumption explicitly and accept the cost as intentional.",
+      "confidence": "medium"
+    },
+    {
+      "dimension": "abstraction_fitness",
+      "identifier": "AF-02",
+      "summary": "StaticAnalyzer and CodeReviewer duplicate identical _detect_language, _should_analyze_file, _generate_summary, and _check_tools_availability logic with no shared base",
+      "related_files": [
+        "src/codomyrmex/coding/static_analysis/static_analyzer.py",
+        "src/codomyrmex/coding/review/reviewer.py"
+      ],
+      "evidence": [
+        "static_analyzer.py lines 160-181: _detect_language contains an identical language_map dict to reviewer.py lines 188-208.",
+        "static_analyzer.py lines 311-328: _should_analyze_file with identical supported_extensions set to reviewer.py lines 211-216.",
+        "reviewer.py lines 300-317 and static_analyzer.py lines 330-348: _generate_summary are structurally identical loops populating by_severity, by_category, by_rule from self.results.",
+        "reviewer.py lines 151-185 and static_analyzer.py lines 78-116: _check_tools_availability contain nearly identical subprocess.run(['tool', '--version']) probe loops with the same exception handling."
+      ],
+      "suggestion": "Extract a shared AnalysisBase class or module-level helper functions (detect_language, should_analyze_file, probe_tools, generate_summary) in a common.py within the coding package. Both StaticAnalyzer and CodeReviewer should inherit or call these shared helpers.",
+      "confidence": "high"
+    },
+    {
+      "dimension": "dependency_health",
+      "identifier": "DH-01",
+      "summary": "discovery.py references undefined module-level variable _CACHE_TIMESTAMP, which will raise NameError at runtime when _tool_invalidate_cache is called with a specific module argument",
+      "related_files": [
+        "src/codomyrmex/agents/pai/mcp/discovery.py"
+      ],
+      "evidence": [
+        "discovery.py line 29-30: global _CACHE_TIMESTAMP; _CACHE_TIMESTAMP = 0.0 \u2014 this references a global name _CACHE_TIMESTAMP that is never declared at module scope.",
+        "The module declares _CACHE_EXPIRY at line 46 and _DYNAMIC_TOOLS_CACHE at line 42, but _CACHE_TIMESTAMP does not appear in any module-level assignment.",
+        "Calling _tool_invalidate_cache(module='some_module') will raise NameError: name '_CACHE_TIMESTAMP' is not defined at the global _CACHE_TIMESTAMP = 0.0 line.",
+        "The invalidate_tool_cache() path (called when module=None) works correctly because it uses _CACHE_EXPIRY instead, so this bug is only triggered on the module-specific invalidation branch."
+      ],
+      "suggestion": "Add _CACHE_TIMESTAMP: float = 0.0 at module level adjacent to the other cache state variables (lines 42-48), or replace the reference to _CACHE_TIMESTAMP with _CACHE_EXPIRY = 0.0 if the intent is to force a cache refresh by making the expiry in the past.",
+      "confidence": "high"
+    },
+    {
+      "dimension": "dependency_health",
+      "identifier": "DH-02",
+      "summary": "performance/__init__.py silently sets PerformanceMonitor=None when psutil is absent, but reviewer.py and static_analyzer.py then define their own duplicate no-op fallback classes rather than using the module flag",
+      "related_files": [
+        "src/codomyrmex/performance/__init__.py",
+        "src/codomyrmex/coding/review/reviewer.py",
+        "src/codomyrmex/coding/static_analysis/static_analyzer.py"
+      ],
+      "evidence": [
+        "performance/__init__.py lines 36-52: defines PERFORMANCE_MONITOR_AVAILABLE and sets PerformanceMonitor=None when psutil is absent.",
+        "reviewer.py lines 39-72: defines its own local monitor_performance no-op decorator and performance_context no-op context manager when the import fails \u2014 duplicating the responsibility that belongs to performance/__init__.py.",
+        "static_analyzer.py lines 37-59: defines another copy of the same no-op monitor_performance and performance_context fallbacks.",
+        "The no-op performance_context in static_analyzer.py returns None from __init__ (line 51) which is harmless but semantically wrong \u2014 __init__ should return None always but the explicit 'return None' is misleading.",
+        "These three parallel fallback implementations will diverge over time since they are maintained independently."
+      ],
+      "suggestion": "Move the no-op fallback implementations into performance/__init__.py alongside PERFORMANCE_MONITOR_AVAILABLE, so all callers simply do 'from codomyrmex.performance import monitor_performance, performance_context' without any fallback logic in consumer modules.",
+      "confidence": "high"
+    },
+    {
+      "dimension": "test_strategy",
+      "identifier": "TS-01",
+      "summary": "Test quality is strong in swarm/test_swarm.py (class-based, behavioral, edge cases) but weak in test_collaboration.py (top-level functions, trivial assertions, stub proxy exercises no real behavior)",
+      "related_files": [
+        "src/codomyrmex/tests/unit/collaboration/swarm/test_swarm.py",
+        "src/codomyrmex/tests/unit/collaboration/test_collaboration.py"
+      ],
+      "evidence": [
+        "test_swarm.py: 8 test classes, 28+ test functions covering AgentPool role filtering, capability matching, load balancing, release, AssignmentError on no-available-agent, consensus weighted/veto/majority/deadlock, cyclic dependency detection, MessageBus wildcard routing, handler error isolation, and history \u2014 all behavioral.",
+        "test_collaboration.py lines 12-45: three top-level test functions (test_swarm_execution, test_task_decomposition, test_consensus) that exercise the legacy protocols/swarm.py shim, which itself delegates to the real swarm \u2014 these tests assert isinstance(results, dict) and len(tasks)==2 without checking actual behavior.",
+        "test_collaboration.py line 84-87: test_has_cycle_detects_cycle directly injects into private attributes (g._dependencies, g._dependents) to manufacture a cycle, bypassing the public API \u2014 this is a test isolation workaround that couples tests to private implementation.",
+        "test_trust_gateway_audit.py: well-structured class-based tests with concurrent-write safety test, TTL cleanup test, and proper use of tempfile for export \u2014 this is the strongest test file in the sample."
+      ],
+      "suggestion": "Promote the top-level functions in test_collaboration.py to class-based tests like the swarm tests. Remove direct _private attribute manipulation; instead add a public method or constructor parameter to DependencyGraph that allows injecting a pre-built graph for testing purposes.",
+      "confidence": "high"
+    },
+    {
+      "dimension": "ai_generated_debt",
+      "identifier": "AGD-01",
+      "summary": "Multiple files show structural patterns consistent with AI generation: over-commented obvious code, emoji-heavy UI strings embedded in business logic, generic docstrings, and duplicate fallback boilerplate across unrelated modules",
+      "related_files": [
+        "src/codomyrmex/terminal_interface/shells/interactive_shell.py",
+        "src/codomyrmex/coding/review/reviewer.py",
+        "src/codomyrmex/coding/static_analysis/static_analyzer.py"
+      ],
+      "evidence": [
+        "interactive_shell.py lines 38-47: intro string embeds 10+ emojis (\ud83d\udc1c, \ud83d\udd0d, etc.) and 'epistemic forager' metaphor inconsistently applied throughout; the foraging_messages list (lines 68-78) contains 8 thematically redundant strings that serve no functional distinction.",
+        "interactive_shell.py lines 305-326: do_demo method has a nested list of 4 random theatrical messages ('Ladies and gentlemen, the show is about to begin!') that add no value and would not be written by a developer aware of user experience.",
+        "reviewer.py and static_analyzer.py: both contain identical fallback boilerplate (monitor_performance no-op decorator, performance_context no-op context manager) suggesting copy-paste generation rather than shared infrastructure design.",
+        "reviewer.py lines 111-149: _load_config returns a hardcoded config dict with specific numeric defaults (max_complexity: 15, min_clone_similarity: 0.8, lsh_threshold: 500) that appear plausible but are undocumented as to their origin or tuning rationale.",
+        "collaboration/protocols/swarm.py: the AgentProxy.send_task stub, combined with the SwarmManager.add_agent shim translating legacy roles, has the characteristic shape of AI-generated compatibility scaffolding rather than intentional design.",
+        "generic one-liner docstrings appear in multiple places: reviewer.py lines 48-49 'def decorator(func): \"\"\"Decorator.\"\"\"', static_analyzer.py lines 41-42 same pattern \u2014 these docstrings convey no information."
+      ],
+      "suggestion": "Audit the interactive shell for value-neutral UI strings and remove or simplify them. Extract the shared fallback boilerplate into the performance module. Review all single-word docstrings ('Decorator.', 'Wrapper.') and replace with meaningful descriptions or remove them. The 'Legacy Compatibility' shim in protocols/swarm.py should have a documented deprecation date.",
+      "confidence": "high"
+    },
+    {
+      "dimension": "package_organization",
+      "identifier": "PO-01",
+      "summary": "InteractiveShell class name collision: two unrelated classes named InteractiveShell exist in different modules with different interfaces",
+      "related_files": [
+        "src/codomyrmex/terminal_interface/shells/__init__.py",
+        "src/codomyrmex/terminal_interface/shells/interactive_shell.py"
+      ],
+      "evidence": [
+        "terminal_interface/shells/__init__.py lines 182-279: defines InteractiveShell as a subprocess-based session wrapper with start/send/read_output/execute/stop interface.",
+        "terminal_interface/shells/interactive_shell.py lines 29-836: defines InteractiveShell as a cmd.Cmd subclass providing a command loop for humans to explore the ecosystem.",
+        "These two classes have completely different constructors, interfaces, and purposes. Both are importable as 'from codomyrmex.terminal_interface.shells import InteractiveShell' (from __init__.py) or 'from codomyrmex.terminal_interface.shells.interactive_shell import InteractiveShell' \u2014 but a user importing from the package gets the subprocess session wrapper, not the exploration shell.",
+        "The exploration-shell class overrides do_clear (line 761-782) and resets session_data but introduces a type regression: 'discoveries_made' changes from list to set and 'demos_run' changes from int to set \u2014 breaking the type contract established in __init__."
+      ],
+      "suggestion": "Rename the cmd.Cmd-based exploration shell to ExplorationShell or EcosystemShell and document the distinction clearly. Fix the do_clear type regression where discoveries_made and demos_run types are changed from what __init__ established.",
+      "confidence": "high"
+    },
+    {
+      "dimension": "high_level_elegance",
+      "identifier": "HLE-01",
+      "summary": "The three-tier trust model (UNTRUSTED->VERIFIED->TRUSTED) is well-conceived and consistently implemented, but the dual-tracking of trust level via both _trust_level global and TrustRegistry creates redundant state that can desynchronize",
+      "related_files": [
+        "src/codomyrmex/agents/pai/trust_gateway.py"
+      ],
+      "evidence": [
+        "trust_gateway.py lines 64: _trust_level: TrustLevel = TrustLevel.UNTRUSTED \u2014 module-level global tracking global trust state.",
+        "trust_gateway.py lines 310-483: TrustRegistry._levels tracks per-tool trust levels, and get_aggregate_level() derives the global level from them.",
+        "trust_gateway.py lines 604-629: trust_tool() updates _registry per-tool AND then derives aggregate and updates _trust_level \u2014 two sources of truth that must be kept synchronized.",
+        "trust_gateway.py line 787-794: get_current_trust_level() ignores _trust_level entirely and derives from _registry.get_aggregate_level() \u2014 meaning the module-level _trust_level global is only authoritative for reset_trust().",
+        "The mismatch is acknowledged in comments (line 618-621) but the dual state is never fully resolved: _trust_level exists but is not the canonical source."
+      ],
+      "suggestion": "Remove the module-level _trust_level global and derive trust level solely from the registry's get_aggregate_level(). The only state that needs to be maintained is the per-tool registry. This eliminates the synchronization burden and makes the code easier to reason about.",
+      "confidence": "medium"
+    },
+    {
+      "dimension": "mid_level_elegance",
+      "identifier": "MLE-01",
+      "summary": "get_tool_registry() rebuilds a full registry on every call with no caching, causing O(n) dynamic tool discovery scans on each invocation",
+      "related_files": [
+        "src/codomyrmex/agents/pai/mcp/server.py",
+        "src/codomyrmex/agents/pai/trust_gateway.py"
+      ],
+      "evidence": [
+        "server.py lines 35-68: get_tool_registry() creates a new _ToolRegistry(), registers all static tools, then calls _discover_dynamic_tools() which itself has a TTL cache \u2014 but each call to get_tool_registry() still iterates over all _TOOL_DEFINITIONS and all dynamic tools to populate a fresh registry object.",
+        "trust_gateway.py lines 269-280: _get_destructive_tools() calls get_tool_registry() which rebuilds the registry. _get_safe_tools() also calls get_tool_registry().",
+        "trust_gateway.py lines 304-306: module-level SAFE_TOOLS, SAFE_TOOL_COUNT, DESTRUCTIVE_TOOL_COUNT are eagerly computed at import time by calling _get_safe_tools() and _get_destructive_tools(), each rebuilding the registry \u2014 three separate registry builds at import.",
+        "trusted_call_tool() calls get_tool_registry() on line 683 (known_tools), then _registry.level() which calls _registry.level which calls nothing but does call self._load() \u2014 so a single tool call triggers at minimum one full registry rebuild."
+      ],
+      "suggestion": "Cache the output of get_tool_registry() with the same TTL as _DYNAMIC_TOOLS_CACHE, invalidating when invalidate_tool_cache() is called. The _ToolRegistry object can be a module-level singleton refreshed on cache invalidation.",
+      "confidence": "high"
+    },
+    {
+      "dimension": "low_level_elegance",
+      "identifier": "LLE-01",
+      "summary": "Inconsistent None-handling for optional repository_path parameter across git_operations functions \u2014 some use 'if x is None: x = os.getcwd()' while others use 'cwd = x or \".\"'",
+      "related_files": [
+        "src/codomyrmex/git_operations/core/commands/branching.py"
+      ],
+      "evidence": [
+        "branching.py lines 9-16: create_branch uses 'if repository_path is None: repository_path = os.getcwd()' pattern.",
+        "branching.py lines 29-36: switch_branch uses same pattern.",
+        "branching.py lines 100-111: list_branches uses 'cwd = repository_path or \".\"' \u2014 this differs from the previous pattern in two ways: it uses a dot string as fallback instead of os.getcwd(), and it uses truthiness test (or) rather than None identity (is None), meaning an empty-string repository_path would fall through to '.' rather than raising.",
+        "The 'or \".\"' pattern is subtly different from os.getcwd(): a '.' relative path is interpreted relative to the process CWD, which is the same in practice but different in semantics and different from what the docstring implies ('Defaults to current directory')."
+      ],
+      "suggestion": "Standardize on a single pattern for all git command functions. Prefer 'if repository_path is None: repository_path = os.getcwd()' since it is explicit about None-checking, returns an absolute path, and matches the pattern used in the rest of the module.",
+      "confidence": "high"
+    },
+    {
+      "dimension": "low_level_elegance",
+      "identifier": "LLE-02",
+      "summary": "do_clear() in interactive_shell.py resets session_data with mismatched types relative to __init__, silently introducing a bug where subsequent session stats will fail or produce wrong output",
+      "related_files": [
+        "src/codomyrmex/terminal_interface/shells/interactive_shell.py"
+      ],
+      "evidence": [
+        "interactive_shell.py lines 61-66: __init__ sets session_data with 'commands_run': 0 (int), 'modules_explored': set() (set), 'discoveries_made': [] (list), 'demos_run': 0 (int).",
+        "interactive_shell.py lines 776-782: do_clear resets session_data with 'commands_run': 0 (correct), 'modules_explored': set() (correct), 'discoveries_made': set() (WRONG \u2014 was list), 'demos_run': set() (WRONG \u2014 was int).",
+        "After do_clear, do_session at line 669 iterates over session_data['discoveries_made'] \u2014 this works whether it is list or set, but line 662 prints len(discoveries_made) which also works \u2014 the bug surfaces only if code appends to discoveries_made after clear (append works on list, not set).",
+        "interactive_shell.py line 783: self.command_history = [] sets an attribute that was never initialized in __init__, creating an inconsistent object state."
+      ],
+      "suggestion": "Extract a _reset_session_data() private method called from both __init__ and do_clear to guarantee type consistency. Decide whether discoveries_made is a list or set and use that type exclusively.",
+      "confidence": "high"
+    },
+    {
+      "dimension": "design_coherence",
+      "identifier": "DC-01",
+      "summary": "Legacy compatibility shim in collaboration/protocols/swarm.py inherits from the new SwarmManager while overriding methods with incompatible return types, creating a Liskov Substitution Principle violation",
+      "related_files": [
+        "src/codomyrmex/collaboration/protocols/swarm.py",
+        "src/codomyrmex/collaboration/swarm/manager.py"
+      ],
+      "evidence": [
+        "protocols/swarm.py line 22: class SwarmManager(NewSwarmManager) \u2014 inherits from the real SwarmManager.",
+        "protocols/swarm.py lines 35-46: execute() method returns dict[str, str] (task_id to description), whereas the parent's execute_mission() is async and returns list[dict[str, Any]] \u2014 completely incompatible return types.",
+        "protocols/swarm.py lines 48-62: consensus_vote() calls asyncio.run() inside the method, meaning calling it from an already-running event loop (common in async contexts) will raise RuntimeError: This event loop is already running. The try/except RuntimeError creates a new loop \u2014 this pattern is fragile and can leak resources.",
+        "protocols/swarm.py line 64-72: TaskDecomposer(NewTaskDecomposer) overrides decompose() to return list[str] while the parent returns list[SubTask] \u2014 different return types on the same method name.",
+        "The legacy shim is imported and used in tests (test_collaboration.py line 4-8) and tests pass \u2014 meaning the type divergences are never caught by existing tests."
+      ],
+      "suggestion": "Do not use inheritance for legacy compatibility when return types are incompatible. Use composition or a standalone adapter class that wraps but does not extend the new SwarmManager. Alternatively, mark the entire protocols/swarm.py module with a clear deprecation date and prevent new code from importing it.",
+      "confidence": "high"
+    }
+  ]
+}

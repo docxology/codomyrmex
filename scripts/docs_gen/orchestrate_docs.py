@@ -7,8 +7,7 @@ Demonstrates the improved capabilities of the docs_gen module:
 - Static site configuration generation
 """
 
-import os
-from codomyrmex.docs_gen import SiteGenerator, SearchIndex
+from codomyrmex.docs_gen import SiteGenerator
 
 # Example source code with various features
 SAMPLE_SOURCE = '''
