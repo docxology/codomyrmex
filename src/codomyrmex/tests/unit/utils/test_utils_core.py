@@ -731,5 +731,69 @@ class TestPrintFunctions:
         assert "=" in captured.out
 
 
+
+@pytest.mark.unit
+class TestHashFile:
+    """Tests for hash_file function."""
+
+    def test_hash_existing_file(self, tmp_path):
+        """Test hashing an existing file."""
+        from codomyrmex.utils import hash_file
+
+        test_file = tmp_path / "test.txt"
+        test_file.write_text("file content")
+
+        result = hash_file(test_file)
+
+        assert result is not None
+        assert len(result) == 64
+
+    def test_hash_nonexistent_file(self):
+        """Test hashing non-existent file returns None."""
+        from codomyrmex.utils import hash_file
+
+        result = hash_file("/nonexistent/file.txt")
+
+        assert result is None
+
+    def test_hash_file_string_path(self, tmp_path):
+        """Test hashing with string path."""
+        from codomyrmex.utils import hash_file
+
+        test_file = tmp_path / "test.txt"
+        test_file.write_text("content")
+
+        result = hash_file(str(test_file))
+
+        assert result is not None
+
+    def test_hash_file_different_algorithms(self, tmp_path):
+        """Test hashing file with different algorithms."""
+        from codomyrmex.utils import hash_file
+
+        test_file = tmp_path / "test.txt"
+        test_file.write_text("content")
+
+        sha256 = hash_file(test_file, algorithm="sha256")
+        md5 = hash_file(test_file, algorithm="md5")
+
+        assert len(sha256) == 64
+        assert len(md5) == 32
+
+    def test_hash_file_same_content_same_hash(self, tmp_path):
+        """Test same file content produces same hash."""
+        from codomyrmex.utils import hash_file
+
+        file1 = tmp_path / "file1.txt"
+        file2 = tmp_path / "file2.txt"
+        file1.write_text("identical content")
+        file2.write_text("identical content")
+
+        hash1 = hash_file(file1)
+        hash2 = hash_file(file2)
+
+        assert hash1 == hash2
+
+
 if __name__ == "__main__":
     unittest.main()
