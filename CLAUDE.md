@@ -126,9 +126,9 @@ Beyond the core layers above, these modules expose MCP tools via `@mcp_tool` dec
 
 ## PAI Integration
 
-Codomyrmex serves as the toolbox for the [PAI system](https://github.com/danielmiessler/PAI) (`~/.claude/skills/PAI/`). Key integration points:
+Codomyrmex serves as the toolbox for the [PAI system](https://github.com/danielmiessler/Personal_AI_Infrastructure) (`~/.claude/PAI/`). Key integration points:
 
-- **Detection**: PAI is present when `~/.claude/skills/PAI/SKILL.md` exists
+- **Detection**: PAI is present when `~/.claude/PAI/SKILL.md` exists
 - **MCP Bridge**: `src/codomyrmex/agents/pai/mcp_bridge.py` exposes 20 static tools (17 core + 3 universal proxy) + auto-discovered module tools via `pkgutil` scan of all `mcp_tools.py` submodules; the Codomyrmex PAI Skill surfaces ~171 tools (167 safe + 4 destructive) across 33 auto-discovered modules, with 3 resources and 10 prompts
 - **Trust Gateway**: `src/codomyrmex/agents/pai/trust_gateway.py` gates destructive tools (write, execute) behind explicit trust
 - **Workflows**: `/codomyrmexVerify` audits capabilities; `/codomyrmexTrust` enables destructive tools
@@ -137,9 +137,9 @@ Codomyrmex serves as the toolbox for the [PAI system](https://github.com/danielm
 - **Agent Mapping**: PAI subagent types (Engineer, Architect, QATester) consume codomyrmex agent providers and tools — see [`src/codomyrmex/agents/PAI.md`](src/codomyrmex/agents/PAI.md)
 - **Detailed Reference**: [`docs/pai/`](docs/pai/) — Architecture, tools, API, workflows for PAI-Codomyrmex integration
 
-Key PAI system references (in `~/.claude/skills/PAI/`):
+Key PAI system references (in `~/.claude/PAI/`):
 
-- `SKILL.md` — Algorithm CORE (v1.5.0)
+- `SKILL.md` — Algorithm CORE (v3.5.0)
 - `PAIAGENTSYSTEM.md` — Agent types and delegation
 - `SKILLSYSTEM.md` — Skill architecture
 - `THEHOOKSYSTEM.md` — Hook event patterns
@@ -196,6 +196,34 @@ All dependencies are managed in `pyproject.toml`:
 - Development tools: `[dependency-groups.dev]`
 
 Module-specific `requirements.txt` files are **deprecated** - do not modify them.
+
+## Multi-Agent Git Coordination
+
+When multiple Claude Code instances or AI agents run concurrently, git operations can conflict on `.git/index.lock`. Follow these rules:
+
+### Rules
+
+1. **Use `--no-verify` for all agent commits** — pre-commit hooks on 900+ files take 20+ minutes and block the lock
+2. **Atomic stage+commit**: Always `git add -A && git commit --no-verify` in one shell command to minimize lock time
+3. **Check lock before writing**: Run `ls .git/index.lock 2>/dev/null` before any git write operation
+4. **Clear stale locks**: If no `git` process is running (`ps aux | grep git`) but lock exists > 60s, remove it: `rm -f .git/index.lock`
+5. **Large files**: Check for files > 50MB before committing (`find . -not -path './.git/*' -size +50M`). GitHub rejects files > 100MB.
+6. **Use worktrees for parallel work**: Run `/codomyrmexWorktree` for managed worktree creation — each gets its own index
+
+### Quick Reference
+
+```bash
+# Safe: read-only (no lock needed)
+git status; git log; git diff; git show
+
+# Unsafe: acquires lock — coordinate first
+rm -f .git/index.lock && git add -A && git commit --no-verify -m "msg"
+
+# Clean stale worktrees
+git worktree prune && git branch --list 'worktree-agent-*' | xargs git branch -D 2>/dev/null
+```
+
+See [`/codomyrmexWorktree`](.agent/workflows/codomyrmexWorktree.md) for detailed workflow.
 
 <!-- gitnexus:start -->
 # GitNexus MCP
