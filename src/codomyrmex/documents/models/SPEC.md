@@ -1,55 +1,72 @@
-# models Functional Specification
+# documents/models — Technical Specification
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+## Overview
 
-## Core Concept
+Defines the canonical data models for the document management subsystem. Two main dataclasses (`Document` and `DocumentMetadata`) plus two enums (`DocumentType` and `DocumentFormat`) form the schema that all document operations share.
 
-Detailed technical specification and implementation guide.
+## Architecture
 
-## Functional Requirements
+Pure data layer with no I/O or external dependencies beyond the standard library. All classes are dataclasses for immutability-friendly usage and built-in equality.
 
-- System compliance and architectural integrity verification.
-- System compliance and architectural integrity verification.
+## Enums
 
-## Modularity & Interfaces
+### DocumentType
 
-- Inputs: Detailed technical specification and implementation guide.
-- Outputs: Detailed technical specification and implementation guide.
-- Dependencies: Core Codomyrmex utility libraries.
+| Value | Meaning |
+|-------|---------|
+| `TEXT` | Plain text documents |
+| `MARKUP` | Markdown, HTML, RST |
+| `STRUCTURED` | JSON, YAML, XML, CSV, TOML, INI |
+| `BINARY` | PDF and other binary formats |
+| `CODE` | Python, JavaScript source files |
 
-## Coherence
+### DocumentFormat (13 formats)
 
-Detailed technical specification and implementation guide.
+`MARKDOWN`, `HTML`, `JSON`, `YAML`, `XML`, `CSV`, `PDF`, `TEXT`, `RST`, `TOML`, `INI`, `PYTHON`, `JS`
 
-## Navigation Links
+Each format maps to a `DocumentType` via the module-level `_FORMAT_TYPE_MAP` dict.
 
-- **Parent**: [Project Overview](../README.md)
-- **Module Index**: [All Agents](../../AGENTS.md)
-- **Documentation**: [Reference Guides](../../../../docs/README.md)
-- **Home**: [Root README](../../../README.md)
+## Dataclasses
 
-## Detailed Architecture and Implementation
+### Document
 
-### Design Principles
+| Field | Type | Default |
+|-------|------|---------|
+| `content` | `str \| bytes` | required |
+| `format` | `DocumentFormat` | required |
+| `file_path` | `str \| None` | `None` |
+| `encoding` | `str` | `"utf-8"` |
+| `metadata` | `dict[str, Any]` | `{}` |
+| `id` | `str` | `uuid4().hex` |
+| `document_type` | `DocumentType \| None` | derived from format |
+| `created_at` | `datetime` | `datetime.now()` |
+| `modified_at` | `datetime` | `datetime.now()` |
 
-1. **Strict Modularity**: Each component is isolated and communicates via well-defined APIs.
-2. **Performance Optimization**: Implementation leverages lazy loading and intelligent caching to minimize resource overhead.
-3. **Error Resilience**: Robust exception handling ensures system stability even under unexpected conditions.
-4. **Extensibility**: The architecture is designed to accommodate future enhancements without breaking existing contracts.
+Methods: `get_content_as_string() -> str`, `to_dict() -> dict[str, Any]`.
 
-### Technical Implementation
+### MetadataField
 
-The codebase utilizes modern Python features (version 3.10+) to provide a clean, type-safe API. Interaction patterns are documented in the corresponding `AGENTS.md` and `SPEC.md` files, ensuring that both human developers and automated agents can effectively utilize these capabilities.
+| Field | Type | Default |
+|-------|------|---------|
+| `name` | `str` | required |
+| `value` | `Any` | required |
+| `data_type` | `str` | `"string"` |
+| `source` | `str` | `""` |
 
-## Detailed Architecture and Implementation
+### DocumentMetadata
 
-### Design Principles
+| Field | Type | Default |
+|-------|------|---------|
+| `title` | `str` | `""` |
+| `author` | `str` | `""` |
+| `created_at` | `datetime \| None` | `None` |
+| `modified_at` | `datetime \| None` | `None` |
+| `version` | `str` | `""` |
+| `tags` | `list[str]` | `[]` |
+| `custom_fields` | `dict[str, MetadataField]` | `{}` |
 
-1. **Strict Modularity**: Each component is isolated and communicates via well-defined APIs.
-2. **Performance Optimization**: Implementation leverages lazy loading and intelligent caching to minimize resource overhead.
-3. **Error Resilience**: Robust exception handling ensures system stability even under unexpected conditions.
-4. **Extensibility**: The architecture is designed to accommodate future enhancements without breaking existing contracts.
+Methods: `to_dict() -> dict`, `from_dict(data) -> DocumentMetadata` (classmethod), `copy() -> DocumentMetadata`.
 
-### Technical Implementation
+## Dependencies
 
-The codebase utilizes modern Python features (version 3.10+) to provide a clean, type-safe API. Interaction patterns are documented in the corresponding `AGENTS.md` and `SPEC.md` files, ensuring that both human developers and automated agents can effectively utilize these capabilities.
+Standard library only: `dataclasses`, `datetime`, `uuid`, `typing`.

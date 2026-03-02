@@ -687,10 +687,8 @@ class AntigravityClient(IDEClient):
                 )
             except subprocess.CalledProcessError as e:
                 logger.warning("Antigravity CLI notification failed: %s", str(e))
-                pass
             except Exception as e:
                 logger.warning("Antigravity notify_user unexpected error: %s", str(e))
-                pass
 
         # Fallback implementation
         if not self._connected:

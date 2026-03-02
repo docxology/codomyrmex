@@ -19,7 +19,7 @@ class RadarChart(BasePlot):
     """
 
     def __init__(self, title="", categories=None, values=None, **kwargs):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         super().__init__(title=title, **kwargs)
         self.categories = categories or []
         self.values = values or []

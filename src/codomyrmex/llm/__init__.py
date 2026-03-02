@@ -63,14 +63,14 @@ from .ollama import ConfigManager, ModelRunner, OllamaManager, OutputManager
 def cli_commands():
     """Return CLI commands for the llm module."""
     def _show_config():
-        """Execute  Show Config operations natively."""
+        """show Config ."""
         config = get_config()
         print("LLM configuration:")
         for key, value in vars(config).items():
             print(f"  {key}: {value}")
 
     def _list_providers():
-        """Execute  List Providers operations natively."""
+        """list Providers ."""
         submodules = [
             "providers", "chains", "memory", "tools",
             "guardrails", "streaming", "embeddings",

@@ -15,7 +15,7 @@ class CyberneticEngine:
     """Engine for managing cybernetic systems and feedback loops."""
 
     def __init__(self):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._controllers: dict[str, PIDController] = {}
         self._last_tick = time.time()
 

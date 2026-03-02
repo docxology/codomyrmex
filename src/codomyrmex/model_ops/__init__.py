@@ -148,7 +148,7 @@ class Dataset:
         return cls(data=data)
 
     def __len__(self) -> int:
-        """Execute   Len   operations natively."""
+        """len ."""
         return len(self.data)
 
 

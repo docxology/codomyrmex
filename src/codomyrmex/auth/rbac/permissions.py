@@ -52,7 +52,7 @@ class PermissionRegistry:
     """
 
     def __init__(self) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._roles: dict[str, set[str]] = {}
         self._role_hierarchy: dict[str, set[str]] = {}
         self._user_roles: dict[str, set[str]] = {}
@@ -181,15 +181,15 @@ class PermissionRegistry:
 
     @property
     def audit_log(self) -> list[PermissionCheck]:
-        """Execute Audit Log operations natively."""
+        """audit Log ."""
         return list(self._audit_log)
 
     @property
     def role_count(self) -> int:
-        """Execute Role Count operations natively."""
+        """role Count ."""
         return len(self._roles)
 
     @property
     def user_count(self) -> int:
-        """Execute User Count operations natively."""
+        """user Count ."""
         return len(self._user_roles)

@@ -47,7 +47,7 @@ class DeploymentResult:
     metadata: dict[str, Any] = field(default_factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        """Execute To Dict operations natively."""
+        """Return a dictionary representation of this object."""
         return {
             "success": self.success,
             "targets_updated": self.targets_updated,
@@ -91,7 +91,7 @@ class RollingDeployment(DeploymentStrategy):
         delay_seconds: float = 5.0,
         health_check: Callable[[DeploymentTarget], bool] | None = None,
     ):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.batch_size = batch_size
         self.delay_seconds = delay_seconds
         self.health_check = health_check
@@ -102,7 +102,7 @@ class RollingDeployment(DeploymentStrategy):
         version: str,
         deploy_fn: Callable[[DeploymentTarget, str], bool],
     ) -> DeploymentResult:
-        """Execute Deploy operations natively."""
+        """deploy ."""
         start_time = time.time()
         updated = 0
         failed = 0
@@ -157,7 +157,7 @@ class RollingDeployment(DeploymentStrategy):
         previous_version: str,
         deploy_fn: Callable[[DeploymentTarget, str], bool],
     ) -> DeploymentResult:
-        """Execute Rollback operations natively."""
+        """rollback ."""
         return self.deploy(targets, previous_version, deploy_fn)
 
 
@@ -169,7 +169,7 @@ class BlueGreenDeployment(DeploymentStrategy):
         switch_fn: Callable[[str], bool] | None = None,
         health_check: Callable[[DeploymentTarget], bool] | None = None,
     ):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.switch_fn = switch_fn
         self.health_check = health_check
 
@@ -179,7 +179,7 @@ class BlueGreenDeployment(DeploymentStrategy):
         version: str,
         deploy_fn: Callable[[DeploymentTarget, str], bool],
     ) -> DeploymentResult:
-        """Execute Deploy operations natively."""
+        """deploy ."""
         start_time = time.time()
 
         # Deploy to all targets (green environment)
@@ -238,7 +238,7 @@ class BlueGreenDeployment(DeploymentStrategy):
         previous_version: str,
         deploy_fn: Callable[[DeploymentTarget, str], bool],
     ) -> DeploymentResult:
-        """Execute Rollback operations natively."""
+        """rollback ."""
         # Just switch traffic back to blue
         if self.switch_fn:
             self.switch_fn(previous_version)
@@ -261,7 +261,7 @@ class CanaryDeployment(DeploymentStrategy):
         health_check: Callable[[DeploymentTarget], bool] | None = None,
         success_threshold: float = 0.95,
     ):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.stages = stages or [10, 25, 50, 100]
         self.stage_duration = stage_duration_seconds
         self.health_check = health_check
@@ -273,7 +273,7 @@ class CanaryDeployment(DeploymentStrategy):
         version: str,
         deploy_fn: Callable[[DeploymentTarget, str], bool],
     ) -> DeploymentResult:
-        """Execute Deploy operations natively."""
+        """deploy ."""
         start_time = time.time()
         total = len(targets)
         updated = 0
@@ -345,7 +345,7 @@ class CanaryDeployment(DeploymentStrategy):
         previous_version: str,
         deploy_fn: Callable[[DeploymentTarget, str], bool],
     ) -> DeploymentResult:
-        """Execute Rollback operations natively."""
+        """rollback ."""
         # Rolling rollback to canary targets
         rolling = RollingDeployment(batch_size=5)
         return rolling.deploy(targets, previous_version, deploy_fn)

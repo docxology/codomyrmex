@@ -97,7 +97,7 @@ class PromptInjectionDetector:
     ]
 
     def __init__(self, config: GuardrailConfig | None = None):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.config = config or GuardrailConfig()
         self._compiled_patterns = [
             re.compile(p, re.IGNORECASE) for p in self.INJECTION_PATTERNS
@@ -257,7 +257,7 @@ class ContentFilter:
     ]
 
     def __init__(self, custom_patterns: list[str] | None = None):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.patterns = self.TOXIC_PATTERNS.copy()
         if custom_patterns:
             self.patterns.extend(custom_patterns)
@@ -300,7 +300,7 @@ class OutputValidator:
     """Validates LLM output for safety and format compliance."""
 
     def __init__(self, config: GuardrailConfig | None = None):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.config = config or GuardrailConfig()
         self.pii_detector = PIIDetector()
         self.content_filter = ContentFilter()
@@ -381,7 +381,7 @@ class Guardrail:
     """
 
     def __init__(self, config: GuardrailConfig | None = None):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.config = config or GuardrailConfig()
         self.injection_detector = PromptInjectionDetector(self.config)
         self.pii_detector = PIIDetector()

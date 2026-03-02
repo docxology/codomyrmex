@@ -22,7 +22,7 @@ class ConfigurationError(CodomyrmexError):
         config_file: str | Path | None = None,
         **kwargs: Any,
     ) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         super().__init__(message, **kwargs)
         if config_key:
             self.context["config_key"] = config_key

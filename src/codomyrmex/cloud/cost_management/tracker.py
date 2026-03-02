@@ -40,7 +40,7 @@ class CostTracker:
     """
 
     def __init__(self, store: CostStore | None = None):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.store = store or InMemoryCostStore()
         self._counter = 0
         self._lock = threading.Lock()
@@ -181,7 +181,7 @@ class BudgetManager:
     """
 
     def __init__(self, tracker: CostTracker):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.tracker = tracker
         self._budgets: dict[str, Budget] = {}
         self._triggered_alerts: set[str] = set()  # Track which thresholds were triggered

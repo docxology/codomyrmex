@@ -29,7 +29,7 @@ class InfomaniakCloudError(Exception):
         operation: str = "",
         resource_id: str = "",
     ):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.service = service
         self.operation = operation
         self.resource_id = resource_id

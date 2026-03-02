@@ -42,7 +42,7 @@ class EvictionPolicy(ABC, Generic[K, V]):
     """Abstract base class for eviction policies."""
 
     def __init__(self, max_size: int):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.max_size = max_size
         self._lock = threading.RLock()
 
@@ -80,12 +80,12 @@ class LRUPolicy(EvictionPolicy[K, V]):
     """Least Recently Used eviction policy."""
 
     def __init__(self, max_size: int):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         super().__init__(max_size)
         self._cache: OrderedDict[K, CacheEntry[V]] = OrderedDict()
 
     def get(self, key: K) -> V | None:
-        """Execute Get operations natively."""
+        """Return the requested value."""
         with self._lock:
             if key not in self._cache:
                 return None
@@ -101,7 +101,7 @@ class LRUPolicy(EvictionPolicy[K, V]):
             return entry.value
 
     def put(self, key: K, value: V, ttl: timedelta | None = None) -> None:
-        """Execute Put operations natively."""
+        """put ."""
         with self._lock:
             if key in self._cache:
                 self._cache.move_to_end(key)
@@ -113,7 +113,7 @@ class LRUPolicy(EvictionPolicy[K, V]):
                 self._cache[key] = CacheEntry(value=value, ttl=ttl)
 
     def remove(self, key: K) -> V | None:
-        """Execute Remove operations natively."""
+        """remove ."""
         with self._lock:
             if key in self._cache:
                 entry = self._cache.pop(key)
@@ -121,12 +121,12 @@ class LRUPolicy(EvictionPolicy[K, V]):
             return None
 
     def clear(self) -> None:
-        """Execute Clear operations natively."""
+        """clear ."""
         with self._lock:
             self._cache.clear()
 
     def size(self) -> int:
-        """Execute Size operations natively."""
+        """size ."""
         return len(self._cache)
 
 
@@ -134,7 +134,7 @@ class LFUPolicy(EvictionPolicy[K, V]):
     """Least Frequently Used eviction policy."""
 
     def __init__(self, max_size: int):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         super().__init__(max_size)
         self._cache: dict[K, CacheEntry[V]] = {}
         self._freq_map: dict[int, OrderedDict[K, None]] = {}
@@ -161,7 +161,7 @@ class LFUPolicy(EvictionPolicy[K, V]):
         self._freq_map[new_freq][key] = None
 
     def get(self, key: K) -> V | None:
-        """Execute Get operations natively."""
+        """Return the requested value."""
         with self._lock:
             if key not in self._cache:
                 return None
@@ -175,7 +175,7 @@ class LFUPolicy(EvictionPolicy[K, V]):
             return entry.value
 
     def put(self, key: K, value: V, ttl: timedelta | None = None) -> None:
-        """Execute Put operations natively."""
+        """put ."""
         with self._lock:
             if self.max_size <= 0:
                 return
@@ -199,7 +199,7 @@ class LFUPolicy(EvictionPolicy[K, V]):
                 self._freq_map[1][key] = None
 
     def remove(self, key: K) -> V | None:
-        """Execute Remove operations natively."""
+        """remove ."""
         with self._lock:
             if key not in self._cache:
                 return None
@@ -215,14 +215,14 @@ class LFUPolicy(EvictionPolicy[K, V]):
             return entry.value
 
     def clear(self) -> None:
-        """Execute Clear operations natively."""
+        """clear ."""
         with self._lock:
             self._cache.clear()
             self._freq_map.clear()
             self._min_freq = 0
 
     def size(self) -> int:
-        """Execute Size operations natively."""
+        """size ."""
         return len(self._cache)
 
 
@@ -230,7 +230,7 @@ class TTLPolicy(EvictionPolicy[K, V]):
     """TTL-based eviction policy with lazy expiration."""
 
     def __init__(self, max_size: int, default_ttl: timedelta = timedelta(hours=1)):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         super().__init__(max_size)
         self._cache: dict[K, CacheEntry[V]] = {}
         self._default_ttl = default_ttl
@@ -245,7 +245,7 @@ class TTLPolicy(EvictionPolicy[K, V]):
                 del self._cache[key]
 
     def get(self, key: K) -> V | None:
-        """Execute Get operations natively."""
+        """Return the requested value."""
         with self._lock:
             self._cleanup_expired()
 
@@ -261,7 +261,7 @@ class TTLPolicy(EvictionPolicy[K, V]):
             return entry.value
 
     def put(self, key: K, value: V, ttl: timedelta | None = None) -> None:
-        """Execute Put operations natively."""
+        """put ."""
         with self._lock:
             self._cleanup_expired()
 
@@ -280,7 +280,7 @@ class TTLPolicy(EvictionPolicy[K, V]):
             heapq.heappush(self._expiry_heap, (expiry_time, key))
 
     def remove(self, key: K) -> V | None:
-        """Execute Remove operations natively."""
+        """remove ."""
         with self._lock:
             if key in self._cache:
                 entry = self._cache.pop(key)
@@ -288,13 +288,13 @@ class TTLPolicy(EvictionPolicy[K, V]):
             return None
 
     def clear(self) -> None:
-        """Execute Clear operations natively."""
+        """clear ."""
         with self._lock:
             self._cache.clear()
             self._expiry_heap.clear()
 
     def size(self) -> int:
-        """Execute Size operations natively."""
+        """size ."""
         self._cleanup_expired()
         return len(self._cache)
 
@@ -303,12 +303,12 @@ class FIFOPolicy(EvictionPolicy[K, V]):
     """First In First Out eviction policy."""
 
     def __init__(self, max_size: int):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         super().__init__(max_size)
         self._cache: OrderedDict[K, CacheEntry[V]] = OrderedDict()
 
     def get(self, key: K) -> V | None:
-        """Execute Get operations natively."""
+        """Return the requested value."""
         with self._lock:
             if key not in self._cache:
                 return None
@@ -322,7 +322,7 @@ class FIFOPolicy(EvictionPolicy[K, V]):
             return entry.value
 
     def put(self, key: K, value: V, ttl: timedelta | None = None) -> None:
-        """Execute Put operations natively."""
+        """put ."""
         with self._lock:
             if key in self._cache:
                 self._cache[key] = CacheEntry(value=value, ttl=ttl)
@@ -332,7 +332,7 @@ class FIFOPolicy(EvictionPolicy[K, V]):
                 self._cache[key] = CacheEntry(value=value, ttl=ttl)
 
     def remove(self, key: K) -> V | None:
-        """Execute Remove operations natively."""
+        """remove ."""
         with self._lock:
             if key in self._cache:
                 entry = self._cache.pop(key)
@@ -340,12 +340,12 @@ class FIFOPolicy(EvictionPolicy[K, V]):
             return None
 
     def clear(self) -> None:
-        """Execute Clear operations natively."""
+        """clear ."""
         with self._lock:
             self._cache.clear()
 
     def size(self) -> int:
-        """Execute Size operations natively."""
+        """size ."""
         return len(self._cache)
 
 

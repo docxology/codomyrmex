@@ -278,12 +278,11 @@ class TestDoForage:
 
     def test_forage_increments_commands_run_when_no_caps(self):
         shell, _ = _make_shell()
-        # With empty modules, it should still print but may return early
+        initial_commands_run = shell.session_data["commands_run"]
+        # With empty modules, forage still runs through the command dispatch path
         _run_cmd(shell, "do_forage", "")
-        # commands_run only incremented at end of method, which may not be reached
-        # if all_caps is empty -- check the method flow: it returns early
-        # so commands_run won't be incremented
-        # This is an observation, not a bug necessarily
+        # commands_run is incremented by the dispatch mechanism for each command invocation
+        assert shell.session_data["commands_run"] == initial_commands_run + 1
 
     def test_forage_no_discovery(self):
         shell, _ = _make_shell()

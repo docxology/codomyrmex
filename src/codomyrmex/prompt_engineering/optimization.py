@@ -79,7 +79,7 @@ class PromptOptimizer:
     """
 
     def __init__(self) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._strategy_handlers = {
             OptimizationStrategy.CONCISE: self._optimize_concise,
             OptimizationStrategy.DETAILED: self._optimize_detailed,

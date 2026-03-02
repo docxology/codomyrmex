@@ -57,7 +57,7 @@ class MetricValue:
     timestamp: datetime = field(default_factory=datetime.now)
 
     def to_dict(self) -> dict[str, Any]:
-        """Execute To Dict operations natively."""
+        """Return a dictionary representation of this object."""
         return {
             "name": self.name,
             "value": self.value,
@@ -90,7 +90,7 @@ class Alert:
         return end - self.created_at
 
     def to_dict(self) -> dict[str, Any]:
-        """Execute To Dict operations natively."""
+        """Return a dictionary representation of this object."""
         return {
             "id": self.id,
             "name": self.name,
@@ -112,7 +112,7 @@ class Panel:
     config: dict[str, Any] = field(default_factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        """Execute To Dict operations natively."""
+        """Return a dictionary representation of this object."""
         return {
             "id": self.id,
             "title": self.title,
@@ -132,7 +132,7 @@ class Dashboard:
         description: str = "",
         tags: list[str] | None = None,
     ) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.id = id
         self.name = name
         self.description = description
@@ -153,7 +153,7 @@ class Dashboard:
         return None
 
     def to_dict(self) -> dict[str, Any]:
-        """Execute To Dict operations natively."""
+        """Return a dictionary representation of this object."""
         return {
             "id": self.id,
             "name": self.name,
@@ -172,7 +172,7 @@ class MetricCollector:
     """Collects and stores metric values."""
 
     def __init__(self, retention_minutes: int = 1440) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.retention_minutes = retention_minutes
         self._metrics: dict[str, list[MetricValue]] = {}
 
@@ -234,7 +234,7 @@ class AlertManager:
     """Manages alert rules and active alerts."""
 
     def __init__(self) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._rules: dict[str, dict[str, Any]] = {}
         self._active_alerts: dict[str, Alert] = {}
         self._history: list[Alert] = []
@@ -307,7 +307,7 @@ class DashboardManager:
     """Manages dashboard CRUD and data retrieval."""
 
     def __init__(self, collector: MetricCollector | None = None) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.collector = collector or MetricCollector()
         self._dashboards: dict[str, Dashboard] = {}
 

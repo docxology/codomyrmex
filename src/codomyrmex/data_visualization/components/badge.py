@@ -19,7 +19,7 @@ class Badge(BaseComponent):
     }
 
     def render(self) -> str:
-        """Execute Render operations natively."""
+        """render ."""
         bg = self._COLOR_MAP.get(self.color, self.color)
         return (
             f'<span class="badge" style="background-color: {bg}; '
@@ -28,5 +28,5 @@ class Badge(BaseComponent):
         )
 
     def __str__(self) -> str:
-        """Execute   Str   operations natively."""
+        """str ."""
         return self.render()

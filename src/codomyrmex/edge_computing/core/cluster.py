@@ -32,7 +32,7 @@ class EdgeCluster:
     """
 
     def __init__(self) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._nodes: dict[str, EdgeNode] = {}
         self._runtimes: dict[str, EdgeRuntime] = {}
         self._draining: set[str] = set()
@@ -54,11 +54,11 @@ class EdgeCluster:
         return False
 
     def get_node(self, node_id: str) -> EdgeNode | None:
-        """Execute Get Node operations natively."""
+        """get Node ."""
         return self._nodes.get(node_id)
 
     def get_runtime(self, node_id: str) -> EdgeRuntime | None:
-        """Execute Get Runtime operations natively."""
+        """get Runtime ."""
         return self._runtimes.get(node_id)
 
     def list_nodes(self, status: EdgeNodeStatus | None = None) -> list[EdgeNode]:
@@ -155,11 +155,11 @@ class EdgeCluster:
         return False
 
     def is_draining(self, node_id: str) -> bool:
-        """Execute Is Draining operations natively."""
+        """is Draining ."""
         return node_id in self._draining
 
     def undrain_node(self, node_id: str) -> bool:
-        """Execute Undrain Node operations natively."""
+        """undrain Node ."""
         if node_id in self._draining:
             self._draining.discard(node_id)
             return True
@@ -169,12 +169,12 @@ class EdgeCluster:
 
     @property
     def node_count(self) -> int:
-        """Execute Node Count operations natively."""
+        """node Count ."""
         return len(self._nodes)
 
     @property
     def online_count(self) -> int:
-        """Execute Online Count operations natively."""
+        """online Count ."""
         return sum(1 for n in self._nodes.values() if n.status == EdgeNodeStatus.ONLINE)
 
     def health(self) -> dict[str, Any]:

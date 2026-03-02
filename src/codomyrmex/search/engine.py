@@ -40,7 +40,7 @@ class InMemoryIndex(SearchIndex):
     """In-memory inverted index with TF-IDF scoring."""
 
     def __init__(self, tokenizer: Tokenizer | None = None):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.tokenizer = tokenizer or SimpleTokenizer()
         self._documents: dict[str, Document] = {}
         self._inverted_index: dict[str, set[str]] = defaultdict(set)

@@ -1,31 +1,38 @@
-# Agents Guide: Rhizome
+# Codomyrmex Agents -- src/codomyrmex/meme/rhizome
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.0 | **Status**: Experimental | **Last Updated**: March 2026
 
-**Operational Directives**
+## Purpose
 
-Use the `rhizome` submodule to analyze and exploit network structures. Treat connections as the primary reality.
+Models distributed, non-hierarchical network structures inspired by Deleuze and Guattari's rhizome concept. Provides graph construction with configurable topologies (random Erdos-Renyi, scale-free Barabasi-Albert), degree centrality analysis, resilience estimation, and influencer identification.
 
-## Capabilities
+## Key Components
 
-1. **Targeting**:
-    * Use `find_influencers` to identify hubs. In a scale-free network, disabling a few hubs can collapse the system.
-    * Conversely, protect your own hubs.
+| File | Class / Function | Role |
+|------|-----------------|------|
+| `engine.py` | `RhizomeEngine` | Orchestrator: initialize network, analyze resilience, find influencers |
+| `network.py` | `build_graph` | Construct graph with Erdos-Renyi (p=0.1) or Barabasi-Albert (m=2) model |
+| `network.py` | `calculate_centrality` | Compute degree centrality for all nodes |
+| `models.py` | `Node` | A node with ID, content, type, capacity, and connections |
+| `models.py` | `Edge` | A weighted connection between two nodes |
+| `models.py` | `Graph` | Graph structure with `add_node` and `add_edge` methods |
+| `models.py` | `NetworkTopology` | RANDOM, SCALE_FREE, SMALL_WORLD, LATTICE, FULLY_CONNECTED |
 
-2. **Traversal**:
-    * Find the shortest path between two concepts or agents.
-    * Use "lines of flight" to escape captured territory and establish new connections elsewhere.
+## Operating Contracts
 
-3. **Resilience**:
-    * Design networks that are `rhizomatic`—decentralized and redundant. If one node is cut, others should route around it.
-    * Run `analyze_resilience` regularly to stress-test your network.
+- Only RANDOM and SCALE_FREE topologies are implemented; others default to RANDOM.
+- Graph algorithms can be O(N^2); exercise caution with networks exceeding ~10k nodes.
+- Resilience is a heuristic (average degree / 10.0); no actual node removal simulation.
+- Edge IDs are deterministic for undirected edges (sorted source/target joined by dash).
+- `find_influencers` ranks by degree centrality (connections / (N-1)).
+- Errors must be logged via `logging_monitoring` before re-raising.
 
-## Constraints
+## Integration Points
 
-* **Scale**: Graph algorithms can be `O(N^2)` or worse. Be careful with massive networks (>10k nodes).
-* **Dynamic Topology**: The network is always changing. Static analysis may be obsolete by the time it completes.
+- **Depends on**: None (standard library only: `uuid`, `random`, `dataclasses`)
+- **Used by**: `meme.swarm` (swarm agents traverse rhizome edges), `meme.ideoscape` (rhizome defines paths, ideoscape defines terrain), `meme.contagion` (network-based simulation expansion)
 
-## Integration
+## Navigation
 
-* **With Swarm**: Swarm agents traverse the Rhizome.
-* **With Ideoscape**: The Rhizome defines the paths; Ideoscape defines the terrain.
+- **Parent**: [meme](../README.md)
+- **Root**: [Root](../../../../README.md)

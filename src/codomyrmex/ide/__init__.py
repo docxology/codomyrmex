@@ -49,7 +49,7 @@ class IDECommand:
     timeout: float = 30.0
 
     def to_dict(self) -> dict[str, Any]:
-        """Execute To Dict operations natively."""
+        """Return a dictionary representation of this command."""
         return {"name": self.name, "args": self.args, "timeout": self.timeout}
 
 
@@ -63,7 +63,7 @@ class IDECommandResult:
     execution_time: float = 0.0
 
     def to_dict(self) -> dict[str, Any]:
-        """Execute To Dict operations natively."""
+        """Return a dictionary representation of this command result."""
         return {
             "success": self.success,
             "command": self.command,
@@ -83,7 +83,7 @@ class FileInfo:
     line_count: int | None = None
 
     def to_dict(self) -> dict[str, Any]:
-        """Execute To Dict operations natively."""
+        """Return a dictionary representation of this file info."""
         return {
             "path": self.path,
             "name": self.name,
@@ -216,7 +216,8 @@ class IDEClient(ABC):
 
         try:
             line_count = len(file_path.read_text().splitlines())
-        except Exception:
+        except Exception as e:
+            logging.getLogger(__name__).warning("Could not read line count for %s: %s", path, e)
             line_count = None
 
         return FileInfo(

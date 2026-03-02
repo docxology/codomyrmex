@@ -70,12 +70,12 @@ class FileMetrics:
 
     @property
     def function_count(self) -> int:
-        """Execute Function Count operations natively."""
+        """function Count ."""
         return len(self.functions)
 
     @property
     def average_complexity(self) -> float:
-        """Execute Average Complexity operations natively."""
+        """average Complexity ."""
         if not self.functions:
             return 0.0
         return sum(f.cyclomatic_complexity for f in self.functions) / len(self.functions)

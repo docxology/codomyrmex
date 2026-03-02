@@ -10,7 +10,7 @@ class TCPClient:
     """Simple TCP client."""
 
     def __init__(self, host: str, port: int):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.host = host
         self.port = port
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -24,65 +24,65 @@ class TCPClient:
         self.close()
 
     def connect(self) -> None:
-        """Execute Connect operations natively."""
+        """Establish a connection to the target service."""
         self.sock.connect((self.host, self.port))
 
     def send(self, data: bytes) -> None:
-        """Execute Send operations natively."""
+        """Send the message or request."""
         self.sock.sendall(data)
 
     def receive(self, buffer_size: int = 1024) -> bytes:
-        """Execute Receive operations natively."""
+        """Receive and return the response."""
         return self.sock.recv(buffer_size)
 
     def close(self) -> None:
-        """Execute Close operations natively."""
+        """Close the resource and release associated handles."""
         self.sock.close()
 
 class TCPServer:
     """Simple TCP server."""
 
     def __init__(self, host: str, port: int):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.host = host
         self.port = port
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 
     def start(self) -> None:
-        """Execute Start operations natively."""
+        """Start the operation or service."""
         self.sock.bind((self.host, self.port))
         self.sock.listen(1)
         logger.info(f"TCP server listening on {self.host}:{self.port}")
 
     def accept(self):
-        """Execute Accept operations natively."""
+        """accept ."""
         conn, addr = self.sock.accept()
         return conn, addr
 
     def close(self) -> None:
-        """Execute Close operations natively."""
+        """Close the resource and release associated handles."""
         self.sock.close()
 
 class UDPClient:
     """Simple UDP client."""
 
     def __init__(self, host: str, port: int):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.host = host
         self.port = port
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
     def send(self, data: bytes) -> None:
-        """Execute Send operations natively."""
+        """Send the message or request."""
         self.sock.sendto(data, (self.host, self.port))
 
     def receive(self, buffer_size: int = 1024) -> tuple[bytes, Any]:
-        """Execute Receive operations natively."""
+        """Receive and return the response."""
         return self.sock.recvfrom(buffer_size)
 
     def close(self) -> None:
-        """Execute Close operations natively."""
+        """Close the resource and release associated handles."""
         self.sock.close()
 
 class PortScanner:

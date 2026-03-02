@@ -33,7 +33,7 @@ class SignatureResult:
     key_id: str = ""
 
     def to_dict(self) -> dict[str, Any]:
-        """Execute To Dict operations natively."""
+        """Return a dictionary representation of this object."""
         return {
             "signature": self.signature,
             "algorithm": self.algorithm.value,
@@ -51,12 +51,12 @@ class Signer:
 
     def __init__(self, secret_key: str | bytes,
                  algorithm: SignatureAlgorithm = SignatureAlgorithm.HMAC_SHA256) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._key = secret_key.encode() if isinstance(secret_key, str) else secret_key
         self._algorithm = algorithm
 
     def _get_hash_func(self) -> str:
-        """Execute  Get Hash Func operations natively."""
+        """get Hash Func ."""
         if self._algorithm == SignatureAlgorithm.HMAC_SHA512:
             return "sha512"
         return "sha256"

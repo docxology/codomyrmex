@@ -1,31 +1,44 @@
-# Agents Guide: Memetics
+# Codomyrmex Agents -- src/codomyrmex/meme/memetics
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.0 | **Status**: Experimental | **Last Updated**: March 2026
 
-**Operational Directives**
+## Purpose
 
-Use the `memetics` submodule to analyze, manipulate, and generate raw informational material. This is your toolkit for "genetic engineering" of ideas.
+Core memetic engine providing data structures and algorithms for modeling memes as discrete replicable information units. Implements text dissection into atomic meme units, evolutionary selection (tournament/truncation), mutation operators (semantic drift, recombination, splicing), fitness evaluation, and population-level analysis.
 
-## Capabilities
+## Key Components
 
-1. **Dissection**:
-    * Use `MemeticEngine.dissect()` to break down user input or corpus text into atomic units.
-    * Classify these units by `MemeType` (Belief, Strategy, Norm, etc.) to understand the composition of the input.
+| File | Class / Function | Role |
+|------|-----------------|------|
+| `engine.py` | `MemeticEngine` | High-level orchestrator: dissect, synthesize, evolve, select |
+| `models.py` | `Meme` | Discrete information unit with fidelity, fecundity, longevity |
+| `models.py` | `Memeplex` | Co-adapted meme complex with synergy bonus and mutation/recombination |
+| `models.py` | `MemeticCode` | Ordered meme sequence with splice, excise, and fitness operations |
+| `models.py` | `MemeType` | BELIEF, NORM, STRATEGY, AESTHETIC, NARRATIVE, SYMBOL, RITUAL, SLOGAN |
+| `models.py` | `FitnessMap` | Population fitness snapshot with summary statistics |
+| `fitness.py` | `virality_score` | Estimate virality from fecundity, brevity, and network scaling |
+| `fitness.py` | `robustness_score` | Coefficient-of-variation based robustness metric for memeplexes |
+| `fitness.py` | `decay_rate` | Exponential decay constant adjusted by longevity |
+| `mutation.py` | `semantic_drift` | Token-level perturbation with fidelity degradation |
+| `mutation.py` | `recombine` | Content crossover with averaged properties |
+| `mutation.py` | `splice` | Horizontal gene transfer: inject foreign content |
+| `mutation.py` | `batch_mutate` | Apply mutations to population at configurable rate |
 
-2. **Fitness Assessment**:
-    * Calculate `virality_score` before deploying any output intended for persuasion.
-    * Aim for high `fidelity` (accuracy of transmission) and `fecundity` (spread potential).
+## Operating Contracts
 
-3. **Evolutionary Generation**:
-    * When generating creative content, create a population of variants.
-    * Use `MemeticEngine.evolve()` to refine these variants against a fitness function (e.g., specific keywords, sentiment constraint).
+- Fitness dimensions (fidelity, fecundity, longevity) are clamped to [0, 1] on construction.
+- Type classification uses keyword matching; defaults to BELIEF when no keywords match.
+- High mutation rates (>0.3) risk semantic drift where original meaning is lost.
+- `evolve` currently uses cloning instead of crossover recombination for offspring.
+- Meme IDs are SHA-256 truncated to 16 chars; not collision-free at scale.
+- Errors must be logged via `logging_monitoring` before re-raising.
 
-## Constraints
+## Integration Points
 
-* **Mutation Risk**: High mutation rates can lead to `semantic_drift` where the original meaning is lost. Keep mutation rates low (0.1 - 0.3) for stability.
-* **Resource Intensity**: Evolutionary algorithms can be computationally expensive. Use small population sizes (10-50) for real-time applications.
+- **Depends on**: None (standard library only: `hashlib`, `time`, `uuid`, `math`, `random`, `re`)
+- **Used by**: `meme.semiotic` (validate mutated memes retain intended signifier), `meme.contagion` (evolved memes feed contagion simulation), `meme.narrative` (narrative meme type classification)
 
-## Integration
+## Navigation
 
-* **With Semiotics**: Use `semiotic.SemioticAnalyzer` to verify that mutated memes still carry the intended signifier.
-* **With Contagion**: Pass evolved memes to `contagion.simulation` to predict their spread.
+- **Parent**: [meme](../README.md)
+- **Root**: [Root](../../../../README.md)

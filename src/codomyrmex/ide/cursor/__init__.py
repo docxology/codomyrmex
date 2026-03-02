@@ -86,8 +86,43 @@ class CursorClient(IDEClient):
         return {"status": "success", "command": command, "args": args or {}}
 
     def get_active_file(self) -> str | None:
-        """Get the currently active file."""
-        raise NotImplementedError("Cursor IDE integration: get_active_file not yet implemented")
+        """Get the currently active file in Cursor IDE.
+
+        When connected, scans the workspace for the most recently modified
+        source file and returns its absolute path. Returns None if not
+        connected or if no files are found.
+
+        Returns:
+            Absolute path to the most recently modified file, or None.
+        """
+        if not self._connected:
+            return None
+
+        # Scan workspace for source files, return the most recently modified
+        source_extensions = {
+            ".py", ".js", ".ts", ".jsx", ".tsx", ".java", ".go", ".rs",
+            ".c", ".cpp", ".h", ".hpp", ".md", ".json", ".yaml", ".yml",
+            ".toml", ".cfg", ".ini", ".sh", ".bash", ".zsh", ".rb",
+            ".swift", ".kt", ".scala", ".html", ".css", ".scss", ".vue",
+            ".svelte", ".sql", ".graphql", ".proto", ".tf", ".dockerfile",
+        }
+
+        best_file: Path | None = None
+        best_mtime: float = -1.0
+
+        try:
+            for entry in self.workspace_path.iterdir():
+                if entry.is_file() and entry.suffix.lower() in source_extensions:
+                    mtime = entry.stat().st_mtime
+                    if mtime > best_mtime:
+                        best_mtime = mtime
+                        best_file = entry
+        except OSError:
+            return None
+
+        if best_file is not None:
+            return str(best_file.resolve())
+        return None
 
     def open_file(self, path: str) -> bool:
         """Open a file in Cursor."""

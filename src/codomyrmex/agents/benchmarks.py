@@ -27,7 +27,7 @@ class BenchmarkResult:
     timestamp: float = field(default_factory=time.time)
 
     def to_dict(self) -> dict[str, Any]:
-        """Execute To Dict operations natively."""
+        """Return a dictionary representation of this object."""
         return {
             "task_name": self.task_name,
             "agent_name": self.agent_name,
@@ -47,7 +47,7 @@ class BenchmarkSuite:
 
     def add_task(self, name: str, func: Callable, expected: Any = None,
                  timeout: float = 60.0) -> None:
-        """Execute Add Task operations natively."""
+        """add Task ."""
         self.tasks.append(BenchmarkTask(name=name, func=func,
                                          expected=expected, timeout=timeout))
 
@@ -69,7 +69,7 @@ class AgentBenchmarker:
     """
 
     def __init__(self, output_dir: Path | None = None) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._output_dir = output_dir
         self._results: list[BenchmarkResult] = []
 
@@ -135,5 +135,5 @@ class AgentBenchmarker:
 
     @property
     def results(self) -> list[BenchmarkResult]:
-        """Execute Results operations natively."""
+        """results ."""
         return list(self._results)

@@ -62,10 +62,9 @@ class TestPortIsLive:
     def test_active_port_is_live(self) -> None:
         """Port with active server returns True."""
         # Port 8888 should be live (PAI PM is running in background)
-        if _port_is_live(8888, timeout=1.0):
-            assert True
-        else:
+        if not _port_is_live(8888, timeout=1.0):
             pytest.skip("PAI PM not running on :8888")
+        assert _port_is_live(8888, timeout=1.0) is True
 
     def test_timeout_works(self) -> None:
         """Short timeout doesn't hang."""

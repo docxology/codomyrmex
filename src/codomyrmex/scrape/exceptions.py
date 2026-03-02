@@ -27,7 +27,7 @@ class ScrapingError(Exception):
         *,
         context: dict[str, Any] | None = None,
     ) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.url = url
         self.context = context or {}
         self.details = details or {}
@@ -37,7 +37,7 @@ class ScrapingError(Exception):
 
     @property
     def error_dict(self) -> dict[str, Any]:
-        """Execute Error Dict operations natively."""
+        """error Dict ."""
         return {
             "error_type": self.__class__.__name__,
             "message": str(self),
@@ -56,7 +56,7 @@ class RequestError(ScrapingError):
         status_code: int | None = None,
         response_body: str = "",
     ) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.status_code = status_code
         self.response_body = response_body[:500] if response_body else ""
         super().__init__(message, url=url, details={
@@ -66,12 +66,12 @@ class RequestError(ScrapingError):
 
     @property
     def is_server_error(self) -> bool:
-        """Execute Is Server Error operations natively."""
+        """is Server Error ."""
         return self.status_code is not None and 500 <= self.status_code < 600
 
     @property
     def is_client_error(self) -> bool:
-        """Execute Is Client Error operations natively."""
+        """is Client Error ."""
         return self.status_code is not None and 400 <= self.status_code < 500
 
 
@@ -85,7 +85,7 @@ class ParseError(ScrapingError):
         selector: str = "",
         content_preview: str = "",
     ) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.selector = selector
         self.content_preview = content_preview[:200] if content_preview else ""
         super().__init__(message, url=url, details={
@@ -103,7 +103,7 @@ class RateLimitError(ScrapingError):
         url: str = "",
         retry_after: float | None = None,
     ) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.retry_after = retry_after
         super().__init__(message, url=url, details={"retry_after": retry_after})
 
@@ -112,7 +112,7 @@ class CaptchaError(ScrapingError):
     """CAPTCHA challenge detected."""
 
     def __init__(self, message: str = "CAPTCHA detected", url: str = "", captcha_type: str = "unknown") -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.captcha_type = captcha_type
         super().__init__(message, url=url, details={"captcha_type": captcha_type})
 
@@ -121,7 +121,7 @@ class AuthenticationError(ScrapingError):
     """Authentication or session failure."""
 
     def __init__(self, message: str = "Authentication failed", url: str = "") -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         super().__init__(message, url=url)
 
 
@@ -129,7 +129,7 @@ class ContentNotFoundError(ScrapingError):
     """Expected content was not found on the page."""
 
     def __init__(self, message: str = "Content not found", url: str = "", selector: str = "") -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.selector = selector
         super().__init__(message, url=url, details={"selector": selector})
 
@@ -138,7 +138,7 @@ class BlockedError(ScrapingError):
     """IP or user-agent has been blocked by the target."""
 
     def __init__(self, message: str = "Blocked", url: str = "", reason: str = "") -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.reason = reason
         super().__init__(message, url=url, details={"reason": reason})
 
@@ -188,7 +188,7 @@ class FirecrawlError(ScrapingError):
         *,
         firecrawl_error: Exception | None = None,
     ) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.firecrawl_error = firecrawl_error
         details: dict[str, Any] = {}
         if firecrawl_error:
@@ -204,7 +204,7 @@ class ScrapeTimeoutError(RequestError):
     """Timeout during a scrape operation."""
 
     def __init__(self, message: str = "Scrape timed out", url: str = "", timeout: float = 0) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.timeout = timeout
         super().__init__(message, url=url)
 
@@ -220,7 +220,7 @@ class ScrapeValidationError(ScrapingError):
         field: str = "",
         value: str = "",
     ) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.field = field
         self.value = value
         details: dict[str, Any] = {}

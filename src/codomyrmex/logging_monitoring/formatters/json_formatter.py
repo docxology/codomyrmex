@@ -42,7 +42,7 @@ class JSONFormatter(logging.Formatter):
         include_fields: list[str] | None = None,
         exclude_fields: list[str] | None = None,
     ) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         super().__init__(datefmt=datefmt)
         self._include = set(include_fields) if include_fields else None
         self._exclude = set(exclude_fields) if exclude_fields else set()
@@ -85,12 +85,12 @@ class PrettyJSONFormatter(JSONFormatter):
     """
 
     def __init__(self, indent: int = 2, **kwargs: Any) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         super().__init__(**kwargs)
         self._indent = indent
 
     def format(self, record: logging.LogRecord) -> str:
-        """Execute Format operations natively."""
+        """Format the value for output."""
         return json.dumps(
             self._build_entry(record),
             indent=self._indent,
@@ -115,7 +115,7 @@ class RedactedJSONFormatter(JSONFormatter):
         replacement: str = "[REDACTED]",
         **kwargs: Any,
     ) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         super().__init__(**kwargs)
         self._replacement = replacement
         if patterns:
@@ -140,6 +140,6 @@ class RedactedJSONFormatter(JSONFormatter):
         return result
 
     def format(self, record: logging.LogRecord) -> str:
-        """Execute Format operations natively."""
+        """Format the value for output."""
         entry = self._build_entry(record)
         return json.dumps(self._redact(entry), default=str)

@@ -37,7 +37,7 @@ class FieldError:
     value: Any = None
 
     def to_dict(self) -> dict[str, Any]:
-        """Execute To Dict operations natively."""
+        """Return a dictionary representation of this object."""
         d: dict[str, Any] = {"field": self.field, "constraint": self.constraint}
         if self.value is not None:
             d["value"] = self.value

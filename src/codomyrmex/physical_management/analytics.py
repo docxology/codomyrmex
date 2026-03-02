@@ -434,7 +434,7 @@ class PredictiveAnalytics:
     """Simple predictive analytics using statistical methods."""
 
     def __init__(self, min_data_points: int = 10):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
 
         self.min_data_points = min_data_points
 

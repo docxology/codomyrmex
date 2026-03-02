@@ -8,6 +8,6 @@ from codomyrmex.logging_monitoring import get_logger
 logger = get_logger(__name__)
 
 def compose_prompt(system: str | None, task: str | None, context: str | None) -> str:
-    """Execute Compose Prompt operations natively."""
+    """compose Prompt ."""
     parts = [p.strip() for p in ((system or ""), (task or ""), (context or "")) if p and p.strip()]
     return "\n\n".join(parts)

@@ -11,7 +11,7 @@ class InMemoryHistoryStore:
     """In-memory conversation storage."""
 
     def __init__(self):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._conversations: dict[str, Conversation] = {}
 
     def save(self, conversation: Conversation) -> None:
@@ -65,7 +65,7 @@ class FileHistoryStore:
     """File-based conversation storage (JSON)."""
 
     def __init__(self, directory: str):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.directory = Path(directory)
         self.directory.mkdir(parents=True, exist_ok=True)
 
@@ -130,7 +130,7 @@ class SQLiteHistoryStore:
     """SQLite-based conversation storage."""
 
     def __init__(self, db_path: str):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.db_path = db_path
         self._init_db()
 

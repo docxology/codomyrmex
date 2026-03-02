@@ -1,31 +1,40 @@
-# Agents Guide: Narrative
+# Codomyrmex Agents -- src/codomyrmex/meme/narrative
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.0 | **Status**: Experimental | **Last Updated**: March 2026
 
-**Operational Directives**
+## Purpose
 
-Use the `narrative` submodule to structure information in compelling, story-driven formats. Humans process information primarily through narrative; use this to your advantage.
+Implements computational narratology with Jungian/Campbellian archetypal character mapping, structural arc definitions (Hero's Journey, Freytag's Pyramid, Fichtean Curve), text-based narrative analysis, template-driven generation, counter-narrative construction, and synthetic myth assembly.
 
-## Capabilities
+## Key Components
 
-1. **Archetypal Mapping**:
-    * Identify the roles played by key actors in a discourse. Who is the `HERO`? Who is the `SHADOW`?
-    * Use `Archetype` to ensure your own communications align with a resonant role (e.g., `MENTOR` or `HERALD`).
+| File | Class / Function | Role |
+|------|-----------------|------|
+| `engine.py` | `NarrativeEngine` | Orchestrator: analyze text, generate from templates, produce counter-narratives |
+| `models.py` | `Narrative` | Full computational representation of a story |
+| `models.py` | `NarrativeArc` | Tension curve and emotional valence over time |
+| `models.py` | `NarrativeTemplate` | Reusable template with stages and required archetypal roles |
+| `models.py` | `Archetype` | HERO, SHADOW, MENTOR, TRICKSTER, HERALD, THRESHOLD_GUARDIAN, SHAPESHIFTER, ALLY |
+| `structure.py` | `heros_journey_arc` | 12-stage Monomyth tension and emotion curve |
+| `structure.py` | `freytag_pyramid_arc` | Classic 5-act dramatic structure |
+| `structure.py` | `fichtean_curve_arc` | Series of crises leading to climax (8 stages) |
+| `myth.py` | `synthesize_myth` | Assemble a Hero's Journey myth for a given domain |
 
-2. **Arc Construction**:
-    * Structure long-form outputs using `NarrativeArc`. Ensure there is a clear "Inciting Incident," "Climax," and "Resolution."
-    * Use `heros_journey_arc` for transformational stories; use `freytag_pyramid_arc` for tragic or dramatic reports.
+## Operating Contracts
 
-3. **Counter-Narrative**:
-    * Identify hostile narratives. Analyze their structure.
-    * deploy counter-narratives that re-cast the roles (e.g., turning a `HERO` into a `FALSE PROPHET`).
+- `analyze` uses punctuation density for tension (no NLP dependency); exclamation and question marks drive scores.
+- Character detection is keyword-based ("hero", "villain", "mentor"); case-insensitive.
+- Theme detection uses word frequency after stopword removal; defaults to "unidentified".
+- `insurgent_counter` deep-copies the narrative and inverts title/theme with hardcoded counter-segments.
+- Narratives must be internally consistent; do not mix arc structures arbitrarily.
+- Errors must be logged via `logging_monitoring` before re-raising.
 
-## Constraints
+## Integration Points
 
-* **Coherence**: Narratives must be internally consistent. Do not mix metaphors or arc structures randomly.
-* **Relevance**: Ensure the chosen archetype resonates with the target audience's culture.
+- **Depends on**: None (standard library only: `re`, `copy`, `time`, `uuid`, `collections`)
+- **Used by**: `meme.neurolinguistic` (framing reinforces narrative), `meme.hyperreality` (narratives build reality tunnels)
 
-## Integration
+## Navigation
 
-* **With Neurolinguistic**: Use narrative structures to frame arguments (`neurolinguistic.framing`).
-* **With Hyperreality**: Use narratives to build `RealityTunnels` that filter perception.
+- **Parent**: [meme](../README.md)
+- **Root**: [Root](../../../../README.md)

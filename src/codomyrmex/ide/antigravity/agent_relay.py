@@ -111,17 +111,17 @@ class RelayMessage:
 
     @property
     def is_chat(self) -> bool:
-        """Execute Is Chat operations natively."""
+        """is Chat ."""
         return self.msg_type == MSG_CHAT
 
     @property
     def is_tool_request(self) -> bool:
-        """Execute Is Tool Request operations natively."""
+        """is Tool Request ."""
         return self.msg_type == MSG_TOOL_REQUEST
 
     @property
     def is_tool_result(self) -> bool:
-        """Execute Is Tool Result operations natively."""
+        """is Tool Result ."""
         return self.msg_type == MSG_TOOL_RESULT
 
 

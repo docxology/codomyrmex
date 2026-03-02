@@ -74,7 +74,7 @@ class Task:
     created_at: float = field(default_factory=time.time)
 
     def __post_init__(self) -> None:
-        """Execute   Post Init   operations natively."""
+        """post Init ."""
         if not self.task_id:
             self.task_id = f"task-{uuid.uuid4().hex[:10]}"
 
@@ -91,7 +91,7 @@ class TaskQueue:
     """
 
     def __init__(self, max_retries: int = 3) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._heap: list[QueueEntry] = []
         self._sequence = 0
         self._in_flight: dict[str, Task] = {}

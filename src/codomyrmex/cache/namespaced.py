@@ -10,40 +10,40 @@ class NamespacedCache(Cache):
     """Wraps a cache with a namespace prefix."""
 
     def __init__(self, cache: Cache, namespace: str):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.cache = cache
         self.namespace = namespace
 
     def _full_key(self, key: str) -> str:
-        """Execute  Full Key operations natively."""
+        """full Key ."""
         return f"{self.namespace}:{key}"
 
     def get(self, key: str) -> Any | None:
-        """Execute Get operations natively."""
+        """Return the requested value."""
         return self.cache.get(self._full_key(key))
 
     def set(self, key: str, value: Any, ttl: int | None = None) -> bool:
-        """Execute Set operations natively."""
+        """Set the value."""
         return self.cache.set(self._full_key(key), value, ttl)
 
     def delete(self, key: str) -> bool:
-        """Execute Delete operations natively."""
+        """Delete the specified resource."""
         return self.cache.delete(self._full_key(key))
 
     def clear(self) -> bool:
-        """Execute Clear operations natively."""
+        """clear ."""
         return self.cache.delete_pattern(f"{self.namespace}:*") > 0
 
     def exists(self, key: str) -> bool:
-        """Execute Exists operations natively."""
+        """exists ."""
         return self.cache.exists(self._full_key(key))
 
     @property
     def stats(self) -> CacheStats:
-        """Execute Stats operations natively."""
+        """stats ."""
         return self.cache.stats
 
 
     def delete_pattern(self, pattern: str) -> int:
-        """Execute Delete Pattern operations natively."""
+        """delete Pattern ."""
         return self.cache.delete_pattern(f"{self.namespace}:{pattern}")

@@ -15,7 +15,7 @@ class JsonView(BaseComponent):
     label: str = ""
 
     def render(self) -> str:
-        """Execute Render operations natively."""
+        """render ."""
         formatted = json.dumps(self.data, indent=2, default=str)
         open_attr = "" if self.collapsed else " open"
         title = self.label or "JSON"
@@ -27,5 +27,5 @@ class JsonView(BaseComponent):
         )
 
     def __str__(self) -> str:
-        """Execute   Str   operations natively."""
+        """str ."""
         return self.render()

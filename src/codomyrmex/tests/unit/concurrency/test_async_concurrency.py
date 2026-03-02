@@ -104,7 +104,7 @@ class TestAsyncSemaphoreBlocking:
         start_time = time.time()
         try:
             await asyncio.wait_for(sem.acquire_async(), timeout=0.2)
-            assert False, "Should have timed out"
+            pytest.fail("Should have timed out")
         except asyncio.TimeoutError:
             elapsed = time.time() - start_time
             assert elapsed >= 0.15  # Should have blocked for at least timeout duration

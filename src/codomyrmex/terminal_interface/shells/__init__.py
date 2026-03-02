@@ -70,11 +70,11 @@ class CommandResult:
 
     @property
     def success(self) -> bool:
-        """Execute Success operations natively."""
+        """success ."""
         return self.exit_code == 0
 
     def to_dict(self) -> dict[str, Any]:
-        """Execute To Dict operations natively."""
+        """Return a dictionary representation of this object."""
         return {
             "command": self.command,
             "exit_code": self.exit_code,
@@ -89,7 +89,7 @@ class Shell:
     """A shell for executing commands."""
 
     def __init__(self, config: ShellConfig | None = None):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.config = config or ShellConfig.detect()
         self._process: subprocess.Popen | None = None
         self._history: list[CommandResult] = []
@@ -188,7 +188,7 @@ class InteractiveShell:
     """An interactive shell session."""
 
     def __init__(self, config: ShellConfig | None = None):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.config = config or ShellConfig.detect()
         self._process: subprocess.Popen | None = None
         self._output_queue: queue.Queue = queue.Queue()
@@ -255,36 +255,7 @@ class InteractiveShell:
         return "".join(output_lines)
 
     def execute(self, command: str, timeout: float = 5.0) -> str:
-        """Execute a command and return output."""
-        # Clear any pending output
-        while not self._output_queue.empty():
-            try:
-                self._output_queue.get_nowait()
-            except queue.Empty:
-                break
-
-        self.send(command)
-        return self.read_output(timeout)
-
-    def stop(self) -> None:
-        """Stop the shell."""
-        self._running = False
-
-        if self._process:
-            try:
-                self._process.terminate()
-                self._process.wait(timeout=2)
-            except subprocess.TimeoutExpired:
-                self._process.kill()
-            self._process = None
-
-        if self._reader_thread:
-            self._reader_thread.join(timeout=1)
-            self._reader_thread = None
-
-    @property
-    def is_running(self) -> bool:
-        """Execute Is Running operations natively."""
+        """a command and return output.""" # Clear any pending output while not self._output_queue.empty(): try: self._output_queue.get_nowait() except queue.Empty: break self.send(command) return self.read_output(timeout) def stop(self) -> None: """Stop the shell.""" self._running = False if self._process: try: self._process.terminate() self._process.wait(timeout=2) except subprocess.TimeoutExpired: self._process.kill() self._process = None if self._reader_thread: self._reader_thread.join(timeout=1) self._reader_thread = None @property def is_running(self) -> bool: """Execute Is Running ."""
         return self._running and self._process is not None
 
 
@@ -292,7 +263,7 @@ class CommandBuilder:
     """Builder for constructing shell commands."""
 
     def __init__(self, base_command: str = ""):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._parts: list[str] = []
         if base_command:
             self._parts.append(base_command)

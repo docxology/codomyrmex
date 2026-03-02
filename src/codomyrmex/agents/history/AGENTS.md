@@ -1,49 +1,37 @@
-# AI Agent Guidelines - History
+# Codomyrmex Agents -- src/codomyrmex/agents/history
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
-
-**Module**: `codomyrmex.agents.history`  
-**Status**: Active
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
 
-Conversation and context persistence for stateful interactions
+Provides conversation and context persistence for agent sessions. The module defines message and conversation data models, three interchangeable storage backends (in-memory, JSON file, SQLite), and a high-level `ConversationManager` that tracks an active conversation, enforces message limits, and delegates persistence to a pluggable store.
 
-## Agent Instructions
+## Key Components
 
-When working with this submodule:
+| File | Class / Function | Role |
+|------|-----------------|------|
+| `models.py` | `MessageRole` | Enum defining conversation roles: SYSTEM, USER, ASSISTANT, TOOL, FUNCTION |
+| `models.py` | `HistoryMessage` | Dataclass for a single message with SHA-256-based auto-ID, token count, and metadata |
+| `models.py` | `Conversation` | Ordered message collection with `add_message`, `truncate`, `get_messages_for_api`, and dict serialization |
+| `stores.py` | `InMemoryHistoryStore` | Dict-backed ephemeral store with save/load/delete/list/search |
+| `stores.py` | `FileHistoryStore` | One-JSON-file-per-conversation persistence under a configurable directory |
+| `stores.py` | `SQLiteHistoryStore` | SQLite-backed store with indexed message table and LIKE-based search |
+| `manager.py` | `ConversationManager` | High-level facade: creates conversations, auto-truncates on save, manages active conversation state |
 
-### Key Patterns
+## Operating Contracts
 
-1. **Import Convention**:
-   ```python
-   from codomyrmex.agents.history import <specific_import>
-   ```
+- All three store backends share the same interface: `save`, `load`, `delete`, `list_conversations`, `search`.
+- `Conversation.truncate()` always preserves SYSTEM-role messages while trimming oldest non-system messages.
+- `ConversationManager.save()` enforces `max_messages_per_conversation` by calling `truncate` before delegating to the store.
+- Message IDs are deterministic SHA-256 hashes of role + content + timestamp; collisions are possible but unlikely at the 16-hex-char prefix length.
+- Errors must be logged via `logging_monitoring` before re-raising.
 
-2. **Error Handling**: Always handle exceptions gracefully
-3. **Configuration**: Check for required environment variables
+## Integration Points
 
-### Common Operations
+- **Depends on**: Standard library only (`hashlib`, `json`, `sqlite3`, `dataclasses`, `datetime`, `pathlib`)
+- **Used by**: `codomyrmex.agents.core` session management, any agent requiring multi-turn conversation state
 
-- Operation 1: Description
-- Operation 2: Description
+## Navigation
 
-### Integration Points
-
-- Integrates with: `agents` (parent module)
-- Dependencies: Listed in `__init__.py`
-
-## File Reference
-
-| File | Purpose |
-|------|---------|
-| `__init__.py` | Module exports and initialization |
-| `README.md` | User documentation |
-| `SPEC.md` | Technical specification |
-
-## Troubleshooting
-
-Common issues and solutions:
-
-1. **Issue**: Description
-   **Solution**: Resolution steps
+- **Parent**: [agents](../README.md)
+- **Root**: [codomyrmex](../../../../README.md)

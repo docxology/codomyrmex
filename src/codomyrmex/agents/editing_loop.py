@@ -96,7 +96,7 @@ class EditingConfig:
     channel: str = ""
 
     def __post_init__(self) -> None:
-        """Execute   Post Init   operations natively."""
+        """post Init ."""
         import os
         if not self.ollama_model:
             self.ollama_model = os.environ.get("OLLAMA_MODEL", "codellama:latest")
@@ -125,7 +125,7 @@ class EditingOrchestrator:
     """
 
     def __init__(self, config: EditingConfig | None = None) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.config = config or EditingConfig()
 
         # Planner: always Ollama (fast, local).

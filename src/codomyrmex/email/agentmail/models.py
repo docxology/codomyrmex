@@ -217,7 +217,7 @@ def _sdk_draft_to_model(draft: Any, inbox_id: str = "") -> AgentMailDraft:
     labels_raw = getattr(draft, "labels", None)
 
     def _addr_list_to_strings(raw: Any) -> list[str]:
-        """Execute  Addr List To Strings operations natively."""
+        """addr List To Strings ."""
         if raw is None:
             return []
         if isinstance(raw, str):

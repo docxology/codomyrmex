@@ -50,7 +50,7 @@ def validate_api_keys() -> dict[str, bool]:
     return validation_results
 
 def setup_environment() -> bool:
-    """Execute Setup Environment operations natively."""
+    """setup Environment ."""
     # Setup environment variables and check dependencies.
     try:
         # Check and setup environment variables if available

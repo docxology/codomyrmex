@@ -63,11 +63,11 @@ class Vector3D:
     z: float = 0.0
 
     def __add__(self, other: "Vector3D") -> "Vector3D":
-        """Execute   Add   operations natively."""
+        """add ."""
         return Vector3D(self.x + other.x, self.y + other.y, self.z + other.z)
 
     def __mul__(self, scalar: float) -> "Vector3D":
-        """Execute   Mul   operations natively."""
+        """mul ."""
         return Vector3D(self.x * scalar, self.y * scalar, self.z * scalar)
 
 
@@ -84,7 +84,7 @@ class Scene3D:
     """Main 3D scene container."""
 
     def __init__(self):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.objects: List["Object3D"] = []
         self.cameras: List["Camera3D"] = []
         self.lights: List["Light3D"] = []
@@ -106,7 +106,7 @@ class Object3D:
     """3D object with transform and geometry."""
 
     def __init__(self, name: str = "Object"):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.name = name
         self.position = Vector3D()
         self.rotation = Quaternion()
@@ -128,7 +128,7 @@ class Camera3D:
     """3D camera for viewing the scene."""
 
     def __init__(self, name: str = "Camera"):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.name = name
         self.position = Vector3D(0.0, 0.0, 10.0)
         self.target = Vector3D(0.0, 0.0, 0.0)
@@ -142,7 +142,7 @@ class Light3D:
     """3D light source."""
 
     def __init__(self, name: str = "Light"):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.name = name
         self.position = Vector3D(0.0, 0.0, 0.0)
         self.color = Vector3D(1.0, 1.0, 1.0)
@@ -154,7 +154,7 @@ class Material3D:
     """Material properties for 3D objects."""
 
     def __init__(self, name: str = "Material"):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.name = name
         self.diffuse_color = Vector3D(0.8, 0.8, 0.8)
         self.specular_color = Vector3D(1.0, 1.0, 1.0)
@@ -177,7 +177,7 @@ class AnimationController:
     """Controller for 3D animations."""
 
     def __init__(self):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.animations: Dict[str, Any] = {}
 
     def play_animation(self, name: str) -> None:
@@ -189,7 +189,7 @@ class PhysicsEngine:
     """Basic physics simulation for 3D objects."""
 
     def __init__(self):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.gravity = Vector3D(0.0, -9.81, 0.0)
 
     def update_physics(self, objects: List[Object3D], delta_time: float) -> None:
@@ -212,7 +212,7 @@ class ARSession:
     """Augmented Reality session manager."""
 
     def __init__(self):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.is_active = False
         self.tracking_quality = "unknown"
 
@@ -234,7 +234,7 @@ class VRRenderer:
     """Virtual Reality renderer."""
 
     def __init__(self):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.left_eye_texture = None
         self.right_eye_texture = None
         self.head_pose = (Vector3D(), Quaternion())
@@ -248,7 +248,7 @@ class XRInterface:
     """Extended Reality interface combining AR and VR."""
 
     def __init__(self):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.ar_session = ARSession()
         self.vr_renderer = VRRenderer()
 
@@ -278,7 +278,7 @@ class ShaderManager:
     """Manages 3D shaders."""
 
     def __init__(self):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.shaders: dict[str, str] = {}
 
     def load_shader(self, name: str, vertex_code: str, fragment_code: str) -> None:
@@ -290,7 +290,7 @@ class TextureManager:
     """Manages 3D textures."""
 
     def __init__(self):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.textures: dict[str, Any] = {}
 
     def load_texture(self, name: str, file_path: str) -> bool:
@@ -303,7 +303,7 @@ class RenderPipeline:
     """Main rendering pipeline."""
 
     def __init__(self):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.shader_manager = ShaderManager()
         self.texture_manager = TextureManager()
 

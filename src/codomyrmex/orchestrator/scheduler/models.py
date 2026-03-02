@@ -41,12 +41,12 @@ class Job:
     error: str | None = None
 
     def __post_init__(self):
-        """Execute   Post Init   operations natively."""
+        """post Init ."""
         if self.next_run is None:
             self.next_run = self.trigger.get_next_run()
 
     def __lt__(self, other: "Job") -> bool:
-        """Execute   Lt   operations natively."""
+        """lt ."""
         if self.next_run is None:
             return False
         if other.next_run is None:

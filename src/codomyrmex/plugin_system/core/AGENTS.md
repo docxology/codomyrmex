@@ -1,11 +1,41 @@
-# Core Agentic Context
+# Core - Agent Coordination
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+## Purpose
 
-## Agent Overview
-This file provides context for autonomous agents operating within the `Core` module.
+Plugin lifecycle management system providing registration, loading, dependency resolution, and hook-based extension for the Codomyrmex platform.
 
-## Operational Directives
-1. **Context Awareness**: Agents modifying or analyzing this directory must understand its role within the broader Codomyrmex system.
-2. **Functional Enforcement**: Agents must ensure any generated code remains fully functional and real.
-3. **Documentation Sync**: Agents must keep this `AGENTS.md`, `README.md`, and `SPEC.md` synchronized with actual code capabilities.
+## Key Components
+
+| Component | Role |
+|-----------|------|
+| `PluginRegistry` | Central registry for plugin instances with category tracking and global hooks |
+| `PluginManager` | High-level manager coordinating registry, validator, and loader |
+| `PluginLoader` | Discovery and loading from `plugins/` and `~/.codomyrmex/plugins/` directories |
+| `Plugin` | Base class for all plugins with lifecycle methods and hook support |
+| `PluginInfo` | Dataclass: name, version, description, author, plugin_type, entry_point, dependencies |
+| `PluginType` | Enum: ANALYZER, FORMATTER, EXPORTER, IMPORTER, PROCESSOR, HOOK, UTILITY, ADAPTER, AGENT |
+| `PluginState` | Enum: 10 lifecycle states from UNKNOWN to UNLOADED |
+| `Hook` | Named hook with handler list and `emit()` method |
+| `LoadResult` | Dataclass: plugin_name, success, plugin_instance, error_message, warnings |
+
+## Operating Contracts
+
+- `PluginRegistry.register()` rejects duplicate plugin names (logs warning, returns False).
+- `Plugin.initialize(config)` transitions state to ACTIVE; `shutdown()` transitions to SHUTTING_DOWN.
+- `PluginLoader` searches both local `plugins/` and user-global `~/.codomyrmex/plugins/` directories.
+- Plugin metadata may come from `plugin.json`, `plugin.yaml`, or `pyproject.toml`.
+- `PluginManager` is a singleton via `get_plugin_manager()`.
+- `PluginRegistry` is a singleton via `get_registry()`.
+- `check_dependencies(name)` returns list of missing dependency names.
+- Hook `emit()` catches and logs exceptions from individual handlers without propagating.
+
+## Integration Points
+
+- **Parent module**: `plugin_system/` exposes `plugin_scan_entry_points` and `plugin_resolve_dependencies` MCP tools.
+- **Global hooks**: `register_global_hook()` and `emit_global_hook()` for cross-plugin events.
+
+## Navigation
+
+- **Parent**: [plugin_system/](../README.md)
+- **Sibling**: [SPEC.md](SPEC.md)
+- **Root**: [/README.md](../../../../README.md)

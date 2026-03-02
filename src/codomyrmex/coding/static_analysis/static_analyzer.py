@@ -5,15 +5,9 @@ import csv
 import json
 import math
 import os
-import re
-import subprocess
-import sys
 import time
-from dataclasses import dataclass, field
-from enum import Enum
 from pathlib import Path
 
-from codomyrmex.coding.static_analysis.pyrefly_runner import run_pyrefly
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
 from codomyrmex.model_context_protocol.decorators import mcp_tool
 
@@ -24,15 +18,15 @@ This module provides advanced static analysis capabilities including code qualit
 security analysis, performance analysis, and maintainability assessment.
 """
 
-
-# Add project root to Python path
-SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-PROJECT_ROOT = os.path.abspath(os.path.join(SCRIPT_DIR, "..", ".."))
-if PROJECT_ROOT not in sys.path:
-    pass
-#     sys.path.insert(0, PROJECT_ROOT)  # Removed sys.path manipulation
-
-# Import logger setup
+from .models import (
+    AnalysisResult,
+    AnalysisSummary,
+    AnalysisType,
+    CodeMetrics,
+    Language,
+    SeverityLevel,
+)
+from .tool_runners import ToolRunner
 
 # Get module logger
 logger = get_logger(__name__)
@@ -46,9 +40,9 @@ except ImportError:
     PERFORMANCE_MONITORING_AVAILABLE = False
 
     def monitor_performance(*args, **kwargs):
-        """Execute Monitor Performance operations natively."""
+        """monitor Performance ."""
         def decorator(func):
-            """Execute Decorator operations natively."""
+            """decorator ."""
             return func
 
         return decorator
@@ -56,97 +50,16 @@ except ImportError:
     class performance_context:
         """Functional component: performance_context."""
         def __init__(self, *args, **kwargs):
-            """Execute   Init   operations natively."""
+            """Initialize this instance."""
             return None  # Intentional no-op
 
         def __enter__(self):
-            """Execute   Enter   operations natively."""
+            """enter ."""
             return self
 
         def __exit__(self, *args):
-            """Execute   Exit   operations natively."""
+            """exit ."""
             return None  # Intentional no-op
-
-
-# Enums for analysis types and severity levels
-class AnalysisType(Enum):
-    """Types of static analysis."""
-
-    QUALITY = "quality"
-    SECURITY = "security"
-    PERFORMANCE = "performance"
-    MAINTAINABILITY = "maintainability"
-    COMPLEXITY = "complexity"
-    STYLE = "style"
-    DOCUMENTATION = "documentation"
-    TESTING = "testing"
-
-
-class SeverityLevel(Enum):
-    """Severity levels for analysis results."""
-
-    INFO = "info"
-    WARNING = "warning"
-    ERROR = "error"
-    CRITICAL = "critical"
-
-
-class Language(Enum):
-    """Supported programming languages."""
-
-    PYTHON = "python"
-    JAVASCRIPT = "javascript"
-    TYPESCRIPT = "typescript"
-    JAVA = "java"
-    CPP = "cpp"
-    CSHARP = "csharp"
-    GO = "go"
-    RUST = "rust"
-    PHP = "php"
-    RUBY = "ruby"
-
-
-@dataclass
-class AnalysisResult:
-    """Result of a static analysis operation."""
-
-    file_path: str
-    line_number: int
-    column_number: int
-    severity: SeverityLevel
-    message: str
-    rule_id: str
-    category: str
-    suggestion: str | None = None
-    context: str | None = None
-    fix_available: bool = False
-    confidence: float = 1.0
-
-
-@dataclass
-class AnalysisSummary:
-    """Summary of analysis results for a file or project."""
-
-    total_issues: int
-    by_severity: dict[SeverityLevel, int] = field(default_factory=dict)
-    by_category: dict[str, int] = field(default_factory=dict)
-    by_rule: dict[str, int] = field(default_factory=dict)
-    files_analyzed: int = 0
-    analysis_time: float = 0.0
-    language: Language | None = None
-
-
-@dataclass
-class CodeMetrics:
-    """Code quality metrics."""
-
-    lines_of_code: int
-    cyclomatic_complexity: int
-    maintainability_index: float
-    technical_debt: float
-    code_duplication: float
-    test_coverage: float | None = None
-    documentation_coverage: float | None = None
 
 
 class StaticAnalyzer:
@@ -163,9 +76,12 @@ class StaticAnalyzer:
         self.results: list[AnalysisResult] = []
         self.metrics: dict[str, CodeMetrics] = {}
         self.tools_available = self._check_tools_availability()
+        self.tool_runner = ToolRunner(self.tools_available, self.project_root)
 
     def _check_tools_availability(self) -> dict[str, bool]:
         """Check which analysis tools are available."""
+        import subprocess
+
         tools = {
             "pylint": False,
             "flake8": False,
@@ -185,7 +101,6 @@ class StaticAnalyzer:
         for tool in tools:
             try:
                 if tool == "pyrefly":
-                    # Pyrefly uses 'pyrefly check --version' or just 'pyrefly --version'
                     subprocess.run(
                         ["pyrefly", "--version"], capture_output=True, check=True, timeout=5
                     )
@@ -274,362 +189,31 @@ class StaticAnalyzer:
         """Analyze a Python file."""
         results = []
 
-        # Pylint analysis
         if AnalysisType.QUALITY in analysis_types and self.tools_available["pylint"]:
-            results.extend(self._run_pylint(file_path))
+            results.extend(self.tool_runner.run_pylint(file_path))
 
-        # Flake8 analysis
         if AnalysisType.STYLE in analysis_types and self.tools_available["flake8"]:
-            results.extend(self._run_flake8(file_path))
+            results.extend(self.tool_runner.run_flake8(file_path))
 
-        # MyPy type checking
         if AnalysisType.QUALITY in analysis_types and self.tools_available["mypy"]:
-            results.extend(self._run_mypy(file_path))
+            results.extend(self.tool_runner.run_mypy(file_path))
 
-        # Bandit security analysis
         if AnalysisType.SECURITY in analysis_types and self.tools_available["bandit"]:
-            results.extend(self._run_bandit(file_path))
+            results.extend(self.tool_runner.run_bandit(file_path))
 
-        # Radon complexity analysis
         if AnalysisType.COMPLEXITY in analysis_types and self.tools_available["radon"]:
-            results.extend(self._run_radon(file_path))
+            results.extend(self.tool_runner.run_radon(file_path))
 
-        # Vulture dead code analysis
         if AnalysisType.QUALITY in analysis_types and self.tools_available["vulture"]:
-            results.extend(self._run_vulture(file_path))
+            results.extend(self.tool_runner.run_vulture(file_path))
 
-        # Safety dependency analysis
         if AnalysisType.SECURITY in analysis_types and self.tools_available["safety"]:
-            results.extend(self._run_safety(file_path))
+            results.extend(self.tool_runner.run_safety(file_path))
 
-        # Pyrefly type checking
         if AnalysisType.QUALITY in analysis_types and self.tools_available["pyrefly"]:
-            results.extend(self._run_pyrefly(file_path))
+            results.extend(self.tool_runner.run_pyrefly(file_path))
 
         return results
-
-    def _run_pylint(self, file_path: str) -> list[AnalysisResult]:
-        """Run pylint analysis on a file."""
-        results = []
-
-        try:
-            cmd = ["pylint", "--output-format=json", file_path]
-            result = subprocess.run(cmd, capture_output=True, text=True, timeout=30)
-
-            if result.returncode != 0 and result.stdout:
-                pylint_results = json.loads(result.stdout)
-
-                for issue in pylint_results:
-                    severity_map = {
-                        "convention": SeverityLevel.INFO,
-                        "refactor": SeverityLevel.WARNING,
-                        "warning": SeverityLevel.WARNING,
-                        "error": SeverityLevel.ERROR,
-                        "fatal": SeverityLevel.CRITICAL,
-                    }
-
-                    results.append(
-                        AnalysisResult(
-                            file_path=issue["path"],
-                            line_number=issue["line"],
-                            column_number=issue["column"],
-                            severity=severity_map.get(
-                                issue["type"], SeverityLevel.WARNING
-                            ),
-                            message=issue["message"],
-                            rule_id=issue["message-id"],
-                            category="pylint",
-                            suggestion=issue.get("suggestion"),
-                            context=issue.get("context"),
-                        )
-                    )
-
-        except (subprocess.TimeoutExpired, json.JSONDecodeError, Exception) as e:
-            logger.error(f"Error running pylint on {file_path}: {e}")
-
-        return results
-
-    def _run_flake8(self, file_path: str) -> list[AnalysisResult]:
-        """Run flake8 analysis on a file."""
-        results = []
-
-        try:
-            cmd = [
-                "flake8",
-                "--format=%(path)s:%(row)d:%(col)d: %(code)s %(text)s",
-                file_path,
-            ]
-            result = subprocess.run(cmd, capture_output=True, text=True, timeout=30)
-
-            if result.stdout:
-                for line in result.stdout.strip().split("\n"):
-                    if ":" in line:
-                        parts = line.split(":", 3)
-                        if len(parts) >= 4:
-                            file_path, line_num, col_num, message = parts
-
-                            # Parse flake8 error codes
-                            code_match = re.match(r"^([A-Z]\d{3})", message.strip())
-                            rule_id = code_match.group(1) if code_match else "E999"
-
-                            # Determine severity based on error code
-                            severity = SeverityLevel.WARNING
-                            if rule_id.startswith("E"):
-                                severity = SeverityLevel.ERROR
-                            elif rule_id.startswith("W"):
-                                severity = SeverityLevel.WARNING
-                            elif rule_id.startswith("F"):
-                                severity = SeverityLevel.ERROR
-
-                            results.append(
-                                AnalysisResult(
-                                    file_path=file_path,
-                                    line_number=int(line_num),
-                                    column_number=int(col_num),
-                                    severity=severity,
-                                    message=message.strip(),
-                                    rule_id=rule_id,
-                                    category="flake8",
-                                )
-                            )
-
-        except (subprocess.TimeoutExpired, Exception) as e:
-            logger.error(f"Error running flake8 on {file_path}: {e}")
-
-        return results
-
-    def _run_mypy(self, file_path: str) -> list[AnalysisResult]:
-        """Run mypy type checking on a file."""
-        results = []
-
-        try:
-            cmd = ["mypy", "--show-error-codes", "--no-error-summary", file_path]
-            result = subprocess.run(cmd, capture_output=True, text=True, timeout=30)
-
-            if result.stdout:
-                for line in result.stdout.strip().split("\n"):
-                    if ":" in line and "error:" in line:
-                        # Parse mypy output format
-                        match = re.match(
-                            r"([^:]+):(\d+):(\d+): error: (.+) \[([^\]]+)\]", line
-                        )
-                        if match:
-                            file_path, line_num, col_num, message, error_code = (
-                                match.groups()
-                            )
-
-                            results.append(
-                                AnalysisResult(
-                                    file_path=file_path,
-                                    line_number=int(line_num),
-                                    column_number=int(col_num),
-                                    severity=SeverityLevel.ERROR,
-                                    message=message,
-                                    rule_id=error_code,
-                                    category="mypy",
-                                )
-                            )
-
-        except (subprocess.TimeoutExpired, Exception) as e:
-            logger.error(f"Error running mypy on {file_path}: {e}")
-
-        return results
-
-    def _run_bandit(self, file_path: str) -> list[AnalysisResult]:
-        """Run bandit security analysis on a file."""
-        results = []
-
-        try:
-            cmd = ["bandit", "-f", "json", file_path]
-            result = subprocess.run(cmd, capture_output=True, text=True, timeout=30)
-
-            if result.stdout:
-                bandit_results = json.loads(result.stdout)
-
-                for issue in bandit_results.get("results", []):
-                    severity_map = {
-                        "LOW": SeverityLevel.INFO,
-                        "MEDIUM": SeverityLevel.WARNING,
-                        "HIGH": SeverityLevel.ERROR,
-                        "CRITICAL": SeverityLevel.CRITICAL,
-                    }
-
-                    results.append(
-                        AnalysisResult(
-                            file_path=issue["filename"],
-                            line_number=issue["line_number"],
-                            column_number=0,
-                            severity=severity_map.get(
-                                issue["issue_severity"], SeverityLevel.WARNING
-                            ),
-                            message=issue["issue_text"],
-                            rule_id=issue["test_id"],
-                            category="security",
-                            suggestion=issue.get("more_info"),
-                        )
-                    )
-
-        except (subprocess.TimeoutExpired, json.JSONDecodeError, Exception) as e:
-            logger.error(f"Error running bandit on {file_path}: {e}")
-
-        return results
-
-    def _run_radon(self, file_path: str) -> list[AnalysisResult]:
-        """Run radon complexity analysis on a file."""
-        results = []
-
-        try:
-            cmd = ["radon", "cc", "-j", file_path]
-            result = subprocess.run(cmd, capture_output=True, text=True, timeout=30)
-
-            if result.stdout:
-                radon_results = json.loads(result.stdout)
-
-                for file_data in radon_results.values():
-                    for function_data in file_data:
-                        complexity = function_data.get("complexity", 0)
-                        if complexity > 10:  # High complexity threshold
-                            results.append(
-                                AnalysisResult(
-                                    file_path=file_path,
-                                    line_number=function_data.get("lineno", 0),
-                                    column_number=0,
-                                    severity=(
-                                        SeverityLevel.WARNING
-                                        if complexity <= 20
-                                        else SeverityLevel.ERROR
-                                    ),
-                                    message=f"High cyclomatic complexity: {complexity}",
-                                    rule_id="RADON_CC",
-                                    category="complexity",
-                                    suggestion=f"Consider refactoring to reduce complexity (current: {complexity})",
-                                )
-                            )
-
-        except (subprocess.TimeoutExpired, json.JSONDecodeError, Exception) as e:
-            logger.error(f"Error running radon on {file_path}: {e}")
-
-        return results
-
-    def _run_vulture(self, file_path: str) -> list[AnalysisResult]:
-        """Run vulture dead code analysis on a file."""
-        results = []
-
-        try:
-            cmd = ["vulture", "--min-confidence", "60", file_path]
-            result = subprocess.run(cmd, capture_output=True, text=True, timeout=30)
-
-            if result.stdout:
-                for line in result.stdout.strip().split("\n"):
-                    if ":" in line:
-                        parts = line.split(":", 2)
-                        if len(parts) >= 3:
-                            file_path, line_num, message = parts
-
-                            results.append(
-                                AnalysisResult(
-                                    file_path=file_path,
-                                    line_number=int(line_num),
-                                    column_number=0,
-                                    severity=SeverityLevel.WARNING,
-                                    message=message.strip(),
-                                    rule_id="VULTURE",
-                                    category="quality",
-                                    suggestion="Consider removing unused code or adding tests",
-                                )
-                            )
-
-        except (subprocess.TimeoutExpired, Exception) as e:
-            logger.error(f"Error running vulture on {file_path}: {e}")
-
-        return results
-
-    def _run_safety(self, file_path: str) -> list[AnalysisResult]:
-        """Run safety dependency analysis."""
-        results = []
-
-        try:
-            # Safety analyzes requirements files, not individual Python files
-            req_files = self._find_requirements_files()
-
-            for req_file in req_files:
-                cmd = ["safety", "check", "--json", "--file", req_file]
-                result = subprocess.run(cmd, capture_output=True, text=True, timeout=30)
-
-                if result.stdout:
-                    safety_results = json.loads(result.stdout)
-
-                    for vuln in safety_results:
-                        results.append(
-                            AnalysisResult(
-                                file_path=req_file,
-                                line_number=0,
-                                column_number=0,
-                                severity=SeverityLevel.ERROR,
-                                message=f"Vulnerable dependency: {vuln.get('package', 'unknown')}",
-                                rule_id="SAFETY",
-                                category="security",
-                                suggestion=f"Update to version {vuln.get('safe_version', 'latest')}",
-                            )
-                        )
-
-        except (subprocess.TimeoutExpired, json.JSONDecodeError, Exception) as e:
-            logger.error(f"Error running safety: {e}")
-
-        return results
-
-    def _run_pyrefly(self, file_path: str) -> list[AnalysisResult]:
-        """Run Pyrefly type checking on a file."""
-        results = []
-
-        try:
-            # Run Pyrefly analysis on the file
-            pyrefly_result = run_pyrefly(file_path)
-
-            # Convert Pyrefly results to AnalysisResult format
-            if pyrefly_result.success and pyrefly_result.issues:
-                severity_map = {
-                    "error": SeverityLevel.ERROR,
-                    "warning": SeverityLevel.WARNING,
-                    "info": SeverityLevel.INFO,
-                }
-
-                for issue in pyrefly_result.issues:
-                    results.append(
-                        AnalysisResult(
-                            file_path=issue.file_path or file_path,
-                            line_number=issue.line,
-                            column_number=issue.column,
-                            severity=severity_map.get(
-                                issue.severity, SeverityLevel.ERROR
-                            ),
-                            message=issue.message,
-                            rule_id=issue.rule_id or "PYREFLY_ERROR",
-                            category="type_checking",
-                        )
-                    )
-
-            # Log any errors from Pyrefly execution
-            if pyrefly_result.error_message:
-                logger.warning(f"Pyrefly reported error for {file_path}: {pyrefly_result.error_message}")
-
-        except (ImportError, subprocess.SubprocessError, FileNotFoundError, Exception) as e:
-            logger.error(f"Error running Pyrefly on {file_path}: {e}")
-
-        return results
-
-    def _find_requirements_files(self) -> list[str]:
-        """Find requirements files in the project."""
-        req_files = []
-        req_patterns = ["requirements*.txt", "Pipfile", "pyproject.toml", "setup.py"]
-
-        for pattern in req_patterns:
-            for root, _dirs, files in os.walk(self.project_root):
-                for file in files:
-                    if file == pattern or file.startswith("requirements"):
-                        req_files.append(os.path.join(root, file))
-
-        return req_files
 
     def _analyze_javascript_file(
         self, file_path: str, analysis_types: list[AnalysisType]
@@ -637,92 +221,15 @@ class StaticAnalyzer:
         """Analyze a JavaScript/TypeScript file."""
         results = []
 
-        # ESLint analysis
         if AnalysisType.QUALITY in analysis_types and self.tools_available.get(
             "eslint", False
         ):
-            results.extend(self._run_eslint(file_path))
+            results.extend(self.tool_runner.run_eslint(file_path))
 
-        # TypeScript compiler
         if AnalysisType.QUALITY in analysis_types and file_path.endswith(
             (".ts", ".tsx")
         ):
-            results.extend(self._run_typescript_compiler(file_path))
-
-        return results
-
-    def _run_eslint(self, file_path: str) -> list[AnalysisResult]:
-        """Run ESLint analysis on a JavaScript/TypeScript file."""
-        results = []
-
-        try:
-            cmd = ["eslint", "--format=json", file_path]
-            result = subprocess.run(cmd, capture_output=True, text=True, timeout=30)
-
-            if result.stdout:
-                eslint_results = json.loads(result.stdout)
-
-                for file_data in eslint_results:
-                    for message in file_data.get("messages", []):
-                        severity_map = {
-                            1: SeverityLevel.WARNING,
-                            2: SeverityLevel.ERROR,
-                        }
-
-                        results.append(
-                            AnalysisResult(
-                                file_path=file_data["filePath"],
-                                line_number=message["line"],
-                                column_number=message["column"],
-                                severity=severity_map.get(
-                                    message["severity"], SeverityLevel.WARNING
-                                ),
-                                message=message["message"],
-                                rule_id=message["ruleId"],
-                                category="eslint",
-                                suggestion=message.get("fix"),
-                            )
-                        )
-
-        except (subprocess.TimeoutExpired, json.JSONDecodeError, Exception) as e:
-            logger.error(f"Error running eslint on {file_path}: {e}")
-
-        return results
-
-    def _run_typescript_compiler(self, file_path: str) -> list[AnalysisResult]:
-        """Run TypeScript compiler analysis."""
-        results = []
-
-        try:
-            cmd = ["tsc", "--noEmit", "--pretty", "false", file_path]
-            result = subprocess.run(cmd, capture_output=True, text=True, timeout=30)
-
-            if result.stderr:
-                for line in result.stderr.strip().split("\n"):
-                    if ":" in line and "error" in line:
-                        # Parse TypeScript error format
-                        match = re.match(
-                            r"([^:]+):(\d+):(\d+) - error TS(\d+): (.+)", line
-                        )
-                        if match:
-                            file_path, line_num, col_num, error_code, message = (
-                                match.groups()
-                            )
-
-                            results.append(
-                                AnalysisResult(
-                                    file_path=file_path,
-                                    line_number=int(line_num),
-                                    column_number=int(col_num),
-                                    severity=SeverityLevel.ERROR,
-                                    message=message,
-                                    rule_id=f"TS{error_code}",
-                                    category="typescript",
-                                )
-                            )
-
-        except (subprocess.TimeoutExpired, Exception) as e:
-            logger.error(f"Error running TypeScript compiler on {file_path}: {e}")
+            results.extend(self.tool_runner.run_typescript_compiler(file_path))
 
         return results
 
@@ -732,49 +239,10 @@ class StaticAnalyzer:
         """Analyze a Java file."""
         results = []
 
-        # SpotBugs analysis
         if AnalysisType.QUALITY in analysis_types and self.tools_available.get(
             "spotbugs", False
         ):
-            results.extend(self._run_spotbugs(file_path))
-
-        return results
-
-    def _run_spotbugs(self, file_path: str) -> list[AnalysisResult]:
-        """Run SpotBugs analysis on a Java file."""
-        results = []
-
-        try:
-            cmd = ["spotbugs", "-textui", "-output", "json", file_path]
-            result = subprocess.run(cmd, capture_output=True, text=True, timeout=30)
-
-            if result.stdout:
-                spotbugs_results = json.loads(result.stdout)
-
-                for bug in spotbugs_results.get("bugs", []):
-                    severity_map = {
-                        "LOW": SeverityLevel.INFO,
-                        "MEDIUM": SeverityLevel.WARNING,
-                        "HIGH": SeverityLevel.ERROR,
-                    }
-
-                    results.append(
-                        AnalysisResult(
-                            file_path=bug["file"],
-                            line_number=bug["line"],
-                            column_number=0,
-                            severity=severity_map.get(
-                                bug["priority"], SeverityLevel.WARNING
-                            ),
-                            message=bug["message"],
-                            rule_id=bug["type"],
-                            category="spotbugs",
-                            suggestion=bug.get("suggestion"),
-                        )
-                    )
-
-        except (subprocess.TimeoutExpired, json.JSONDecodeError, Exception) as e:
-            logger.error(f"Error running spotbugs on {file_path}: {e}")
+            results.extend(self.tool_runner.run_spotbugs(file_path))
 
         return results
 
@@ -813,14 +281,12 @@ class StaticAnalyzer:
         start_time = time.time()
         files_analyzed = 0
 
-        # Find all files to analyze
         files_to_analyze = []
         for target_path in target_paths:
             if os.path.isfile(target_path):
                 files_to_analyze.append(target_path)
             else:
                 for root, dirs, files in os.walk(target_path):
-                    # Filter out excluded directories
                     dirs[:] = [
                         d
                         for d in dirs
@@ -832,7 +298,6 @@ class StaticAnalyzer:
                         if self._should_analyze_file(file_path):
                             files_to_analyze.append(file_path)
 
-        # Analyze each file
         for file_path in files_to_analyze:
             try:
                 self.analyze_file(file_path, analysis_types)
@@ -842,7 +307,6 @@ class StaticAnalyzer:
 
         analysis_time = time.time() - start_time
 
-        # Generate summary
         summary = self._generate_summary(files_analyzed, analysis_time)
 
         return summary
@@ -876,7 +340,6 @@ class StaticAnalyzer:
             analysis_time=analysis_time,
         )
 
-        # Count by severity
         for result in self.results:
             summary.by_severity[result.severity] = (
                 summary.by_severity.get(result.severity, 0) + 1
@@ -895,7 +358,6 @@ class StaticAnalyzer:
             with open(file_path, encoding="utf-8") as f:
                 content = f.read()
 
-            # Basic metrics
             lines_of_code = len(
                 [
                     line
@@ -904,18 +366,14 @@ class StaticAnalyzer:
                 ]
             )
 
-            # Cyclomatic complexity (simplified)
             cyclomatic_complexity = self._calculate_cyclomatic_complexity(content)
 
-            # Maintainability index (simplified)
             maintainability_index = max(
                 0, 171 - 5.2 * math.log(cyclomatic_complexity) - 0.23 * lines_of_code
             )
 
-            # Technical debt (simplified)
             technical_debt = len(self.results) * 0.1  # 0.1 hours per issue
 
-            # Code duplication (simplified)
             code_duplication = self._calculate_code_duplication(content)
 
             metrics = CodeMetrics(
@@ -972,7 +430,6 @@ class StaticAnalyzer:
         if not lines:
             return 0.0
 
-        # Simple duplication detection
         line_counts = {}
         for line in lines:
             line_counts[line] = line_counts.get(line, 0) + 1
@@ -1019,7 +476,6 @@ class StaticAnalyzer:
                     )
 
             elif format.lower() == "csv":
-
                 with open(output_path, "w", newline="") as f:
                     writer = csv.writer(f)
                     writer.writerow(

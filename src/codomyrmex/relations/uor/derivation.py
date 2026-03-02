@@ -43,7 +43,7 @@ class DerivationRecord:
     id: str = field(default="")
 
     def __post_init__(self) -> None:
-        """Execute   Post Init   operations natively."""
+        """post Init ."""
         if not self.id:
             object.__setattr__(
                 self, "id", self._compute_derivation_id(
@@ -80,7 +80,7 @@ class DerivationTracker:
     """
 
     def __init__(self) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._records: list[DerivationRecord] = []
 
     def record(
@@ -196,6 +196,6 @@ class DerivationTracker:
         }
 
     def __len__(self) -> int:
-        """Execute   Len   operations natively."""
+        """len ."""
         return len(self._records)
 

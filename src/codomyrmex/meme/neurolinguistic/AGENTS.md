@@ -1,31 +1,42 @@
-# Agents Guide: Neurolinguistic
+# Codomyrmex Agents -- src/codomyrmex/meme/neurolinguistic
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.0 | **Status**: Experimental | **Last Updated**: March 2026
 
-**Operational Directives**
+## Purpose
 
-Use the `neurolinguistic` submodule to optimize your communication for maximum impact. Words are weapons; choose them carefully.
+Models neurolinguistic programming concepts including cognitive framing (Lakoff), linguistic pattern libraries (Milton Model hypnotic patterns, Meta Model clarifying patterns), pattern detection in text, frame analysis via keyword matching, and content reframing between cognitive frames.
 
-## Capabilities
+## Key Components
 
-1. **Framing**:
-    * Control the debate by setting the `CognitiveFrame`. Never accept an opponent's frame; always pivot to your own.
-    * Use `reframe` to translate hostile arguments into supportive ones.
+| File | Class / Function | Role |
+|------|-----------------|------|
+| `engine.py` | `NeurolinguisticEngine` | Orchestrator: register frames, audit text, spin content toward target frame |
+| `framing.py` | `analyze_frames` | Identify active cognitive frames via keyword matching |
+| `framing.py` | `reframe` | Translate content between frames via primary keyword substitution |
+| `patterns.py` | `milton_model_patterns` | Library of 3 hypnotic patterns (Mind Read, Lost Performative, Cause-Effect) |
+| `patterns.py` | `meta_model_patterns` | Library of 2 clarifying patterns (Universal Quantifier Challenge, Specify Verb) |
+| `patterns.py` | `detect_patterns` | Detect linguistic patterns via keyword heuristic |
+| `models.py` | `CognitiveFrame` | A Lakoff-style cognitive frame with keywords and semantic roles |
+| `models.py` | `LinguisticPattern` | A detected or generated linguistic pattern with type and template |
+| `models.py` | `PatternType` | HYPNOTIC, CLARIFYING, PERSUASIVE, DECEPTIVE |
+| `models.py` | `PersuasionAttempt` | Record of a persuasive communication attempt |
+| `models.py` | `BiasInstance` | A detected instance of cognitive bias |
 
-2. **Pattern Usage**:
-    * Use `milton_model_patterns` (hypnotic language) to bypass critical faculties and implant suggestions.
-    * Use `meta_model_patterns` to dismantle vague or manipulative language from others.
+## Operating Contracts
 
-3. **Bias Exploitation**:
-    * Identify cognitive biases (e.g., Confirmation Bias, Anchoring) in your target.
-    * Craft messages that trigger these biases to increase acceptance (`BiasInstance`).
+- Frame analysis uses keyword-hit-count matching; no semantic similarity or embeddings.
+- `reframe` substitutes only the first keyword from each frame; naive string replacement.
+- `detect_patterns` currently detects only "always"/"never" (Universal Quantifier) usage.
+- `spin` appends a keyword phrase rather than restructuring content.
+- `spin` returns original text unchanged if target frame is not registered.
+- Errors must be logged via `logging_monitoring` before re-raising.
 
-## Constraints
+## Integration Points
 
-* **Subtlety**: Overt manipulation triggers resistance (Reactance Theory). Keep patterns subtle.
-* **Ethics**: While powerful, these tools can be deceptive. Ensure alignment with core directives before deploying high-impact persuasion.
+- **Depends on**: None (self-contained within `meme` package)
+- **Used by**: `meme.memetics` (NLP patterns increase meme virality), `meme.narrative` (framing reinforces narrative moral)
 
-## Integration
+## Navigation
 
-* **With Memetics**: Use NLP patterns to increase the `virality_score` of a meme.
-* **With Narrative**: Use framing to reinforce the moral of a story.
+- **Parent**: [meme](../README.md)
+- **Root**: [Root](../../../../README.md)

@@ -13,7 +13,7 @@ class AzureBlobClient:
     """Wrapper for Azure Blob Storage operations."""
 
     def __init__(self, account_url: str | None = None):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         if not account_url:
             account_url = os.environ.get("AZURE_STORAGE_ACCOUNT_URL")
 

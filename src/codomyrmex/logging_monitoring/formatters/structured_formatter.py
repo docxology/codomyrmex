@@ -116,7 +116,7 @@ class StructuredFormatter:
     """
 
     def __init__(self, config: FormatterConfig | None = None) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._config = config or FormatterConfig()
         self._line_count = 0
 

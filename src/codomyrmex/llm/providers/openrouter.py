@@ -51,7 +51,7 @@ class OpenRouterProvider(LLMProvider):
     ]
 
     def __init__(self, config: ProviderConfig):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         super().__init__(config)
         # Set OpenRouter base URL if not specified
         if not self.config.base_url:
@@ -85,7 +85,7 @@ class OpenRouterProvider(LLMProvider):
         max_tokens: int | None = None,
         **kwargs
     ) -> CompletionResponse:
-        """Execute Complete operations natively."""
+        """complete ."""
         if not self._client:
             raise RuntimeError("OpenRouter client not initialized. Install openai package.")
 
@@ -120,7 +120,7 @@ class OpenRouterProvider(LLMProvider):
         max_tokens: int | None = None,
         **kwargs
     ) -> Iterator[str]:
-        """Execute Complete Stream operations natively."""
+        """complete Stream ."""
         if not self._client:
             raise RuntimeError("OpenRouter client not initialized.")
 
@@ -184,7 +184,7 @@ class OpenRouterProvider(LLMProvider):
         return self.FREE_MODELS
 
     def _default_model(self) -> str:
-        """Execute  Default Model operations natively."""
+        """default Model ."""
         return "openrouter/free"
 
 

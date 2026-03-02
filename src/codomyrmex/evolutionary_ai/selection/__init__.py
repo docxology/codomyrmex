@@ -55,7 +55,7 @@ class TournamentSelection(SelectionOperator[T]):
     """
 
     def __init__(self, tournament_size: int = 3) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         if tournament_size < 1:
             raise ValueError("tournament_size must be >= 1")
         self.tournament_size = tournament_size
@@ -65,7 +65,7 @@ class TournamentSelection(SelectionOperator[T]):
         population: list[Individual[T]],
         count: int,
     ) -> list[Individual[T]]:
-        """Execute Select operations natively."""
+        """select ."""
         selected: list[Individual[T]] = []
         for _ in range(count):
             contestants = random.sample(
@@ -99,7 +99,7 @@ class RouletteWheelSelection(SelectionOperator[T]):
         population: list[Individual[T]],
         count: int,
     ) -> list[Individual[T]]:
-        """Execute Select operations natively."""
+        """select ."""
         fitnesses = [ind.fitness if ind.fitness is not None else 0.0 for ind in population]
         min_f = min(fitnesses)
         shift = abs(min_f) + 1.0 if min_f <= 0 else 0.0
@@ -128,7 +128,7 @@ class RouletteWheelSelection(SelectionOperator[T]):
 
     @staticmethod
     def _copy_individual(ind: Individual[T]) -> Individual[T]:
-        """Execute  Copy Individual operations natively."""
+        """copy Individual ."""
         return Individual(
             genes=list(ind.genes) if isinstance(ind.genes, list) else ind.genes,
             fitness=ind.fitness,
@@ -150,7 +150,7 @@ class RankSelection(SelectionOperator[T]):
     """
 
     def __init__(self, selection_pressure: float = 1.5) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         if not (1.0 <= selection_pressure <= 2.0):
             raise ValueError("selection_pressure must be in [1.0, 2.0]")
         self.selection_pressure = selection_pressure
@@ -160,7 +160,7 @@ class RankSelection(SelectionOperator[T]):
         population: list[Individual[T]],
         count: int,
     ) -> list[Individual[T]]:
-        """Execute Select operations natively."""
+        """select ."""
         sorted_pop = sorted(
             population,
             key=lambda ind: ind.fitness if ind.fitness is not None else float("-inf"),

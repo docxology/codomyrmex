@@ -42,7 +42,7 @@ class SerializationManager:
     """
 
     def __init__(self) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._serializers: dict[str, Serializer] = {}
         self._stats: list[SerializationResult] = []
 
@@ -151,12 +151,12 @@ class SerializationManager:
 
     @property
     def operation_count(self) -> int:
-        """Execute Operation Count operations natively."""
+        """operation Count ."""
         return len(self._stats)
 
     @property
     def error_count(self) -> int:
-        """Execute Error Count operations natively."""
+        """error Count ."""
         return sum(1 for s in self._stats if not s.success)
 
     def summary(self) -> dict[str, Any]:

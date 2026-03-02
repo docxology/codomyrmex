@@ -35,7 +35,7 @@ class Vote:
     reason: str | None = None
 
     def to_dict(self) -> dict[str, Any]:
-        """Execute To Dict operations natively."""
+        """Return a dictionary representation of this object."""
         return {
             "voter_id": self.voter_id,
             "vote": self.vote.value,
@@ -56,7 +56,7 @@ class Proposal:
     metadata: dict[str, Any] = field(default_factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        """Execute To Dict operations natively."""
+        """Return a dictionary representation of this object."""
         return {
             "proposal_id": self.proposal_id,
             "title": self.title,
@@ -88,7 +88,7 @@ class VotingResult:
         return (self.votes_for + self.votes_against + self.abstentions) / self.total_voters
 
     def to_dict(self) -> dict[str, Any]:
-        """Execute To Dict operations natively."""
+        """Return a dictionary representation of this object."""
         return {
             "proposal_id": self.proposal_id,
             "passed": self.passed,
@@ -119,7 +119,7 @@ class VotingMechanism:
         quorum: float = 0.5,
         threshold: float = 0.5,
     ):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         if not 0 <= quorum <= 1:
             raise ValueError("Quorum must be between 0 and 1")
         if not 0 <= threshold <= 1:
@@ -255,7 +255,7 @@ class ConsensusBuilder:
     """
 
     def __init__(self, convergence_threshold: float = 0.8):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._convergence_threshold = convergence_threshold
         self._proposals: dict[str, dict[str, Any]] = {}  # key -> agent_id -> value
         self._consensus_values: dict[str, Any] = {}

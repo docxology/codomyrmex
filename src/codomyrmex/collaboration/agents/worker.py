@@ -37,7 +37,7 @@ class WorkerAgent(CollaborativeAgent):
         capabilities: list[AgentCapability] | None = None,
         max_concurrent_tasks: int = 1,
     ):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         super().__init__(agent_id, name, capabilities)
         self._task_handlers: dict[str, Callable[[Task], Any]] = {}
         self._max_concurrent_tasks = max_concurrent_tasks
@@ -162,7 +162,7 @@ class SpecializedWorker(WorkerAgent):
         name: str | None = None,
         description: str = "",
     ):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         name = name or f"{capability_name.title()}Worker"
         super().__init__(agent_id, name)
         self.register_handler(capability_name, handler, description)

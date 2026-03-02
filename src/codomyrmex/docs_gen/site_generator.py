@@ -44,7 +44,7 @@ class SiteGenerator:
     """
 
     def __init__(self, title: str = "Codomyrmex Documentation") -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._title = title
         self._extractor = APIDocExtractor()
         self._index = SearchIndex()
@@ -53,17 +53,17 @@ class SiteGenerator:
 
     @property
     def module_count(self) -> int:
-        """Execute Module Count operations natively."""
+        """module Count ."""
         return len(self._modules)
 
     @property
     def page_count(self) -> int:
-        """Execute Page Count operations natively."""
+        """page Count ."""
         return len(self._pages)
 
     @property
     def search_index(self) -> SearchIndex:
-        """Execute Search Index operations natively."""
+        """search Index ."""
         return self._index
 
     def add_module_source(self, source: str, module_name: str) -> ModuleDoc:

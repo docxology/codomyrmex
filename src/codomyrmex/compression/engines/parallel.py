@@ -67,7 +67,7 @@ class ParallelCompressor:
         max_workers: int = 4,
         chunk_size: int = 1024 * 1024,  # 1MB default chunks
     ) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.format = format
         self.max_workers = max_workers
         self.chunk_size = chunk_size

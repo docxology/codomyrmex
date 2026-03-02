@@ -46,7 +46,7 @@ class WorkflowAnalytics:
     """
 
     def __init__(self, journal: WorkflowJournal) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._journal = journal
 
     def failure_hotspots(self, n: int = 5) -> list[tuple[str, int]]:

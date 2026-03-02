@@ -1,26 +1,36 @@
-# Codomyrmex Agents — src/codomyrmex/git_operations/data
+# Codomyrmex Agents -- src/codomyrmex/git_operations/data
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
 
-Git data models and structures for representing commits, branches, and repository state.
+Data subdirectory containing static data files used by the git_operations
+module. This is NOT a Python module -- it contains no `.py` implementation
+files. It holds repository metadata, library catalogs, and auto-generated
+reference data.
 
-## Active Components
+## Contents
 
-- `README.md` – Project file
-- `auto_generated_library.txt` – Project file
-- `docxology_repository_library.txt` – Project file
-- `repository_library.txt` – Project file
-- `repository_metadata.json` – Project file
+| File | Role |
+|------|------|
+| `repository_metadata.json` | Structured metadata about the repository (version, module inventory, etc.) |
+| `repository_library.txt` | Curated library of repository references |
+| `auto_generated_library.txt` | Auto-generated library catalog |
+| `docxology_repository_library.txt` | Documentation-oriented repository library |
 
 ## Operating Contracts
 
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
+- Files in this directory are data artifacts, not executable code.
+- `repository_metadata.json` is consumed by `git_operations.core.git` and related tooling.
+- Data files should be kept in sync with the actual repository structure.
+- No Python imports originate from this directory.
 
-## Navigation Links
+## Integration Points
 
-- **📁 Parent Directory**: [git_operations](../README.md) - Parent directory documentation
-- **🏠 Project Root**: ../../../../README.md - Main project documentation
+- **Depends on**: Nothing (static data)
+- **Used by**: `git_operations` module for metadata lookups
+
+## Navigation
+
+- **Parent**: [git_operations](../AGENTS.md)
+- **Root**: [../../../../README.md](../../../../README.md)

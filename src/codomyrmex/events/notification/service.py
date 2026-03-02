@@ -35,7 +35,7 @@ class NotificationRouter:
     """
 
     def __init__(self):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._rules: list[tuple] = []  # (condition, channel)
         self._default: NotificationChannel = NotificationChannel.CONSOLE
 
@@ -94,7 +94,7 @@ class NotificationService:
     """
 
     def __init__(self, router: NotificationRouter | None = None):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.router = router
         self._providers: dict[NotificationChannel, NotificationProvider] = {}
         self._templates: dict[str, NotificationTemplate] = {}

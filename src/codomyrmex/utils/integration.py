@@ -49,10 +49,10 @@ def log_performance(
 ):
     """Decorator to log function performance."""
     def decorator(func: Callable) -> Callable:
-        """Execute Decorator operations natively."""
+        """decorator ."""
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
-            """Execute Wrapper operations natively."""
+            """wrapper ."""
             log = logger or logging.getLogger("codomyrmex")
             start = time.time()
             try:
@@ -130,10 +130,10 @@ def with_retry(config: RetryConfig | None = None):
     cfg = config or RetryConfig()
 
     def decorator(func: Callable) -> Callable:
-        """Execute Decorator operations natively."""
+        """decorator ."""
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
-            """Execute Wrapper operations natively."""
+            """wrapper ."""
             import random
             last_exception = None
             delay = cfg.initial_delay
@@ -218,7 +218,7 @@ class ModuleRegistry:
     _instance = None
 
     def __new__(cls):
-        """Execute   New   operations natively."""
+        """new ."""
         if cls._instance is None:
             cls._instance = super().__new__(cls)
             cls._instance._modules = {}
@@ -273,7 +273,7 @@ class HealthChecker:
     """Aggregate health checks for modules."""
 
     def __init__(self):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._checks: dict[str, Callable[[], HealthStatus]] = {}
 
     def register(self, name: str, check_fn: Callable[[], HealthStatus]) -> None:

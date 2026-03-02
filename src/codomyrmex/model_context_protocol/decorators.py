@@ -43,7 +43,7 @@ def mcp_tool(
             return a + b
     """
     def decorator(func: Callable[..., Any]) -> Callable[..., Any]:
-        """Execute Decorator operations natively."""
+        """decorator ."""
         # Get metadata
         base_name = name or func.__name__
         if not base_name.startswith("codomyrmex."):
@@ -72,7 +72,7 @@ def mcp_tool(
 
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
-            """Execute Wrapper operations natively."""
+            """wrapper ."""
             if deprecated_in:
                 import warnings
                 warnings.warn(

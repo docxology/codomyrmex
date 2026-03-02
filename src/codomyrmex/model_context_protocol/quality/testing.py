@@ -24,7 +24,7 @@ class TestResult:
     output: Any | None = None
 
     def to_dict(self) -> dict[str, Any]:
-        """Execute To Dict operations natively."""
+        """Return a dictionary representation of this object."""
         return {
             "name": self.name,
             "passed": self.passed,
@@ -41,26 +41,26 @@ class TestSuite:
 
     @property
     def passed(self) -> int:
-        """Execute Passed operations natively."""
+        """passed ."""
         return sum(1 for r in self.results if r.passed)
 
     @property
     def failed(self) -> int:
-        """Execute Failed operations natively."""
+        """failed ."""
         return sum(1 for r in self.results if not r.passed)
 
     @property
     def total(self) -> int:
-        """Execute Total operations natively."""
+        """total ."""
         return len(self.results)
 
     @property
     def success_rate(self) -> float:
-        """Execute Success Rate operations natively."""
+        """success Rate ."""
         return self.passed / self.total if self.total > 0 else 0.0
 
     def summary(self) -> str:
-        """Execute Summary operations natively."""
+        """summary ."""
         return f"{self.name}: {self.passed}/{self.total} passed ({self.success_rate:.1%})"
 
 
@@ -312,7 +312,7 @@ class IntegrationTester:
     """
 
     def __init__(self):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.scenarios: list[dict[str, Any]] = []
 
     def add_scenario(
@@ -412,12 +412,12 @@ class TestMCPClient:
     """
 
     def __init__(self, server):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.server = server
         self._request_id = 0
 
     def _next_id(self) -> int:
-        """Execute  Next Id operations natively."""
+        """next Id ."""
         self._request_id += 1
         return self._request_id
 

@@ -39,7 +39,7 @@ class DependencyScheduler(Scheduler):
     """Scheduler with job dependency support."""
 
     def __init__(self, max_workers: int = 4):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         super().__init__(max_workers)
         self._dependencies: dict[str, JobDependency] = {}
         self._completed_jobs: set[str] = set()
@@ -103,7 +103,7 @@ class PersistentScheduler(Scheduler):
         state_path: str | None = None,
         auto_save: bool = True,
     ):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         super().__init__(max_workers)
         self._state_path = Path(state_path) if state_path else None
         self._auto_save = auto_save
@@ -193,7 +193,7 @@ class JobPipeline:
     """Define and run job pipelines."""
 
     def __init__(self, scheduler: Scheduler):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._scheduler = scheduler
         self._stages: list[list[Callable]] = []
         self._current_stage = 0

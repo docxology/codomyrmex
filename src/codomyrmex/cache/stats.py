@@ -51,14 +51,14 @@ class CacheStats:
 
     @property
     def miss_rate(self) -> float:
-        """Execute Miss Rate operations natively."""
+        """miss Rate ."""
         if self.total_requests == 0:
             return 0.0
         return self.misses / self.total_requests
 
     @property
     def usage_percent(self) -> float:
-        """Execute Usage Percent operations natively."""
+        """usage Percent ."""
         if self.max_size == 0:
             return 0.0
         return (self.size / self.max_size) * 100
@@ -87,15 +87,15 @@ class CacheStats:
         self._timestamps.append((time.time(), False))
 
     def record_write(self) -> None:
-        """Execute Record Write operations natively."""
+        """record Write ."""
         self.writes += 1
 
     def record_eviction(self) -> None:
-        """Execute Record Eviction operations natively."""
+        """record Eviction ."""
         self.evictions += 1
 
     def record_delete(self) -> None:
-        """Execute Record Delete operations natively."""
+        """record Delete ."""
         self.deletes += 1
 
     # ── Time-windowed ───────────────────────────────────────────────
@@ -133,7 +133,7 @@ class CacheStats:
         )
 
     def to_dict(self) -> dict[str, Any]:
-        """Execute To Dict operations natively."""
+        """Return a dictionary representation of this object."""
         return {
             "hits": self.hits,
             "misses": self.misses,

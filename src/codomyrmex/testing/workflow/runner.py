@@ -43,7 +43,7 @@ class WorkflowRunner:
     """
 
     def __init__(self):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._executors: dict[WorkflowStepType, StepExecutor] = {
             WorkflowStepType.ASSERTION: AssertionExecutor(),
             WorkflowStepType.WAIT: WaitExecutor(),

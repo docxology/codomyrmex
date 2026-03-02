@@ -42,7 +42,7 @@ class ValidationResult:
         )
 
     def to_dict(self) -> dict[str, Any]:
-        """Execute To Dict operations natively."""
+        """Return a dictionary representation of this object."""
         return {
             "valid": self.valid,
             "errors": self.errors,

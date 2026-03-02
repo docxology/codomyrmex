@@ -125,7 +125,7 @@ class Heatmap:
         figure_size: tuple = None,
         theme=None,
     ):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.data = data or []
         self.x_labels = x_labels
         self.y_labels = y_labels

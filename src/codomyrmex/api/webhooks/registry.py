@@ -9,7 +9,7 @@ class WebhookRegistry:
     """
 
     def __init__(self) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._webhooks: dict[str, WebhookConfig] = {}
 
     def register(self, webhook_id: str, config: WebhookConfig) -> None:

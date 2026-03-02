@@ -6,11 +6,11 @@ class TreeMap(BasePlot):
     """Treemap visualization."""
 
     def __init__(self, title="", data=None, **kwargs):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         super().__init__(title=title, data=data or [], **kwargs)
 
     def _render_figure(self, fig, ax):
-        """Execute  Render Figure operations natively."""
+        """render Figure ."""
         if not self.data:
             return
         labels = [d.get("label", "") for d in self.data]

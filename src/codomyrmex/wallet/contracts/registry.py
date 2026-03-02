@@ -50,7 +50,7 @@ class ContractRegistry:
     """
 
     def __init__(self) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._contracts: dict[str, ContractVersion] = {}
         self._history: dict[str, list[ContractVersion]] = {}
 
@@ -137,7 +137,7 @@ class ContractRegistry:
 
     @property
     def count(self) -> int:
-        """Execute Count operations natively."""
+        """count ."""
         return len(self._contracts)
 
     def summary(self) -> dict[str, Any]:

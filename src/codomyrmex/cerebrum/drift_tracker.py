@@ -34,7 +34,7 @@ class DriftEvent:
     category: str = "shifted"
 
     def to_dict(self) -> dict[str, Any]:
-        """Execute To Dict operations natively."""
+        """Return a dictionary representation of this object."""
         return {
             "term": self.term,
             "old_context": self.old_context,
@@ -62,21 +62,21 @@ class DriftSnapshot:
 
     @property
     def shifted_count(self) -> int:
-        """Execute Shifted Count operations natively."""
+        """shifted Count ."""
         return sum(1 for e in self.events if e.category == "shifted")
 
     @property
     def new_count(self) -> int:
-        """Execute New Count operations natively."""
+        """new Count ."""
         return sum(1 for e in self.events if e.category == "new")
 
     @property
     def lost_count(self) -> int:
-        """Execute Lost Count operations natively."""
+        """lost Count ."""
         return sum(1 for e in self.events if e.category == "lost")
 
     def to_dict(self) -> dict[str, Any]:
-        """Execute To Dict operations natively."""
+        """Return a dictionary representation of this object."""
         return {
             "events": [e.to_dict() for e in self.events],
             "magnitude": self.magnitude,

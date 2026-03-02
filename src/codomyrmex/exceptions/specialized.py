@@ -125,7 +125,7 @@ class PluginError(CodomyrmexError):
         plugin_version: str | None = None,
         **kwargs: Any,
     ) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         super().__init__(message, **kwargs)
         if plugin_name:
             self.context["plugin_name"] = plugin_name
@@ -199,7 +199,7 @@ class CacheError(CodomyrmexError):
         backend: str | None = None,
         **kwargs: Any,
     ) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         super().__init__(message, **kwargs)
         if cache_key:
             self.context["cache_key"] = cache_key
@@ -218,7 +218,7 @@ class SerializationError(CodomyrmexError):
         data_type: str | None = None,
         **kwargs: Any,
     ) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         super().__init__(message, **kwargs)
         if format_type:
             self.context["format_type"] = format_type

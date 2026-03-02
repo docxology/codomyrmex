@@ -32,7 +32,7 @@ class TemplateManager:
     """
 
     def __init__(self, engine: str = "jinja2") -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.engine = TemplateEngine(engine=engine)
         self._templates: dict[str, str] = {}  # name -> template source string
         self._parents: dict[str, str] = {}  # child_name -> parent_name
@@ -199,7 +199,7 @@ class TemplateManager:
 
     @property
     def template_count(self) -> int:
-        """Execute Template Count operations natively."""
+        """template Count ."""
         return len(self._templates)
 
     def summary(self) -> dict[str, Any]:

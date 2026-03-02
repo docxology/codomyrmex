@@ -33,7 +33,7 @@ class OllamaClient:
     for use in ClaudeCodeEndpoint, using real LLM inference.
     """
     def __init__(self, model: str = "llama3", base_url: str = DEFAULT_OLLAMA_URL):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         if not any(base_url.startswith(prefix) for prefix in _OLLAMA_ALLOWED_PREFIXES):
             raise ValueError(
                 f"base_url must be a localhost address to prevent SSRF: {base_url!r}"
@@ -43,7 +43,7 @@ class OllamaClient:
         self.session_manager = None # dummy for interface compatibility
 
     def create_session(self, session_id: str) -> None:
-        """Execute Create Session operations natively."""
+        """create Session ."""
         raise NotImplementedError("LLM session management not implemented")
 
     def execute_with_session(self, request: AgentRequest, session: Any = None, session_id: Any = None) -> Any:

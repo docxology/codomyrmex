@@ -24,7 +24,7 @@ class DistributedRateLimiterConfig:
     redis_url: str = ""
 
     def __post_init__(self):
-        """Execute   Post Init   operations natively."""
+        """post Init ."""
         if not self.redis_url:
             self.redis_url = os.getenv("REDIS_URL", DEFAULT_REDIS_URL)
     key_prefix: str = "ratelimit:"
@@ -44,7 +44,7 @@ class RedisRateLimiter(RateLimiter):
         redis_client: Any | None = None,
         key_prefix: str = "ratelimit:",
     ):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.limit = limit
         self.window_seconds = window_seconds
         self.key_prefix = key_prefix
@@ -150,7 +150,7 @@ class LeakyBucketLimiter(RateLimiter):
         capacity: int,
         leak_rate: float,  # Requests per second
     ):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.capacity = capacity
         self.leak_rate = leak_rate
         self._buckets: dict[str, tuple] = {}  # key -> (level, last_update)
@@ -225,7 +225,7 @@ class AdaptiveRateLimiter(RateLimiter):
         load_threshold: float = 0.8,
         min_limit_ratio: float = 0.2,
     ):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.base_limit = base_limit
         self.window_seconds = window_seconds
         self.load_threshold = load_threshold

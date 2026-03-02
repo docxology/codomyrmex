@@ -62,7 +62,7 @@ class MergeResolver:
     CONFLICT_END = re.compile(r"^>>>>>>>\s*(.*)")
 
     def __init__(self, repo_path: Path) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._repo = repo_path
 
     def detect_conflicts(self) -> MergeConflictReport:

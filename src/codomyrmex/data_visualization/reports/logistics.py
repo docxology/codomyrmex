@@ -10,7 +10,7 @@ class LogisticsReport(BaseReport):
     """Logistics report with shipment tracking and goods-flow Sankey diagram."""
 
     def __init__(self):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         super().__init__(title="Logistics & Operations")
         self.dashboard = Dashboard(title="Logistics & Operations")
         self._generated = False

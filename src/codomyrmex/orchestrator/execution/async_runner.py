@@ -123,7 +123,7 @@ class AsyncParallelRunner:
         fail_fast: bool = False,
         on_task_complete: OnTaskComplete | None = None,
     ) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._max_concurrency = max_concurrency
         self._fail_fast = fail_fast
         self._on_task_complete = on_task_complete

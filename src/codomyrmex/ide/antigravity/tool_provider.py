@@ -326,7 +326,7 @@ class AntigravityToolProvider:
             A callable that invokes the tool.
         """
         def _invoke(**kwargs: Any) -> Any:
-            """Execute  Invoke operations natively."""
+            """Invoke the specified callable."""
             return self.client.invoke_tool(tool_name, kwargs)
         _invoke.__name__ = tool_name
         _invoke.__doc__ = _TOOL_SCHEMAS.get(tool_name, {}).get(

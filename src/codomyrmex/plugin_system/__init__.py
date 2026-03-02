@@ -36,7 +36,7 @@ except ImportError:
 def cli_commands():
     """Return CLI commands for the plugin_system module."""
     def _list_plugins():
-        """Execute  List Plugins operations natively."""
+        """list Plugins ."""
         registry = PluginRegistry()
         plugins = registry.list_plugins()
         if not plugins:
@@ -47,7 +47,7 @@ def cli_commands():
             print(f"  - {p.name} (v{p.version}) [{p.state.value}]")
 
     def _plugin_info():
-        """Execute  Plugin Info operations natively."""
+        """plugin Info ."""
         print(
             "Plugin System Info\n"
             "  Plugin types: " + ", ".join(pt.value for pt in PluginType) + "\n"

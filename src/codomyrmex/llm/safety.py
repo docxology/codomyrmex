@@ -44,7 +44,7 @@ class SafetyReport:
 
     @property
     def critical_violations(self) -> list[SafetyViolation]:
-        """Execute Critical Violations operations natively."""
+        """critical Violations ."""
         return [v for v in self.violations if v.severity == "critical"]
 
 
@@ -71,7 +71,7 @@ class SafetyFilter:
     ]
 
     def __init__(self, auto_sanitize: bool = True) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._auto_sanitize = auto_sanitize
         self._custom_filters: list[Any] = []
 

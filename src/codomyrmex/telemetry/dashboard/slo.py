@@ -94,7 +94,7 @@ class SLOTracker:
     """Track SLOs and error budgets."""
 
     def __init__(self):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._slos: dict[str, SLO] = {}
         self._violations: list[SLOViolation] = []
         self._lock = threading.Lock()
@@ -203,7 +203,7 @@ class ErrorBudgetPolicy:
     """Policies based on error budget consumption."""
 
     def __init__(self, tracker: SLOTracker):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.tracker = tracker
         self._policies: dict[str, Callable[[float], None]] = {}
 

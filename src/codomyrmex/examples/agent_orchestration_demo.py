@@ -33,7 +33,7 @@ class SimulatedAgent(AgentInterface):
     """A simulated agent with configurable delay and failure rate."""
 
     def __init__(self, name: str, delay: float = 0.5, failure_rate: float = 0.0):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         super().__init__()
         self.name = name
         self.delay = delay
@@ -41,7 +41,7 @@ class SimulatedAgent(AgentInterface):
         self.capabilities = [AgentCapabilities.TEXT_COMPLETION]
 
     def execute(self, request: AgentRequest) -> AgentResponse:
-        """Execute Execute operations natively."""
+        """Execute the operation."""
         logger.info(f"[{self.name}] Received request: {request.prompt[:20]}...")
 
         # Simulate work
@@ -62,29 +62,29 @@ class SimulatedAgent(AgentInterface):
         )
 
     def stream(self, request: AgentRequest) -> Iterator[str]:
-        """Execute Stream operations natively."""
+        """stream ."""
         yield f"[{self.name}] Stream chunk 1"
         yield f"[{self.name}] Stream chunk 2"
 
     def setup(self) -> None:
-        """Execute Setup operations natively."""
+        """Configure and prepare this instance for use."""
         return None  # Demo agent — no setup needed
 
     def test_connection(self) -> bool:
-        """Execute Test Connection operations natively."""
+        """test Connection ."""
         return True
 
     def get_capabilities(self):
-        """Execute Get Capabilities operations natively."""
+        """Return a dictionary of supported capabilities."""
         return self.capabilities
 
     def supports_capability(self, capability):
-        """Execute Supports Capability operations natively."""
+        """supports Capability ."""
         return capability in self.capabilities
 
 
 def main():
-    """Execute Main operations natively."""
+    """main ."""
     setup_logging()
 
     logger.info("Initializing agents...")

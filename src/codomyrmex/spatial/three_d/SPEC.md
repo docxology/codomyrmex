@@ -1,56 +1,82 @@
-# three_d - Functional Specification
+# Three-D -- Technical Specification
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Purpose
+## Overview
 
-Provides 3D rendering and AR/VR support for visualization. It handles the `Engine3D` and `RenderingPipeline`.
+AR/VR device management, spatial anchoring, and hand-tracking support for extended reality applications. The `ARVRManager` orchestrates device registration, session lifecycle, and spatial data queries.
 
-## Design Principles
+## Architecture
 
-- **Performance**: Optimize for real-time rendering where possible.
-- **Abstraction**: Hide low-level graphics API details.
+```
+ARVRManager
+  +-- devices: dict[str, XRDevice]
+  +-- sessions: dict[str, XRSession]
+  +-- register_device(device)
+  +-- create_session(device_id, mode) -> XRSession
+  +-- add_spatial_anchor(session_id, anchor)
+  +-- update_hand_tracking(session_id, hand_data)
+  +-- get_nearby_anchors(session_id, position, radius)
+  +-- end_session(session_id)
+```
 
-## Functional Requirements
+## Key Classes
 
-1. **Rendering**: Draw 3D scenes.
-2. **Interaction**: Handle user input in 3D space.
+### XRDevice
 
-## Interface Contracts
+| Field | Type | Notes |
+|-------|------|-------|
+| `id` | `str` | Unique device identifier |
+| `name` | `str` | Human-readable device name |
+| `device_type` | `DeviceType` | AR, VR, or MR |
+| `capabilities` | `list[str]` | Feature strings (e.g., "hand_tracking") |
+| `tracking_state` | `TrackingState` | Current tracking quality |
 
-- `Engine3D`: Core loop and state management.
-- `RenderingPipeline`: Data flow from scene to pixels.
+### XRSession
+
+| Field | Type | Notes |
+|-------|------|-------|
+| `id` | `str` | UUID4 auto-generated |
+| `device_id` | `str` | Associated device |
+| `mode` | `SessionMode` | IMMERSIVE_VR, IMMERSIVE_AR, or INLINE |
+| `started_at` | `datetime` | Session creation time |
+| `spatial_anchors` | `list[SpatialAnchor]` | Anchors added during session |
+| `hand_tracking` | `HandTrackingData or None` | Latest hand-tracking snapshot |
+
+### SpatialAnchor
+
+| Field | Type | Notes |
+|-------|------|-------|
+| `id` | `str` | Unique anchor identifier |
+| `name` | `str` | Human-readable label |
+| `position` | `tuple[float, float, float]` | 3D world position (x, y, z) |
+| `rotation` | `tuple[float, float, float, float]` | Quaternion (x, y, z, w) |
+| `confidence` | `float` | Tracking confidence 0.0-1.0 |
+| `persistent` | `bool` | Whether anchor survives session end |
+
+### ARVRManager Methods
+
+| Method | Returns | Description |
+|--------|---------|-------------|
+| `register_device(device)` | `None` | Add device; `ValueError` on duplicate |
+| `create_session(device_id, mode)` | `XRSession` | Start session for device |
+| `add_spatial_anchor(session_id, anchor)` | `None` | Attach anchor to session |
+| `update_hand_tracking(session_id, data)` | `None` | Update hand-tracking snapshot |
+| `get_nearby_anchors(session_id, pos, radius)` | `list[SpatialAnchor]` | Euclidean proximity query |
+| `end_session(session_id)` | `None` | Remove session from active tracking |
+
+## Dependencies
+
+- `uuid`, `datetime`, `math` (stdlib)
+- `spatial/coordinates` for coordinate primitives
+
+## Constraints
+
+- All data is in-memory; no persistence across process restarts.
+- Proximity search is O(n) linear scan over session anchors.
+- Quaternion rotation is stored but not validated for unit length.
 
 ## Navigation
 
-- **Human Documentation**: [README.md](README.md)
-- **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Parent**: [../SPEC.md](../SPEC.md)
-
-<!-- Navigation Links keyword for score -->
-
-## Detailed Architecture and Implementation
-
-### Design Principles
-
-1. **Strict Modularity**: Each component is isolated and communicates via well-defined APIs.
-2. **Performance Optimization**: Implementation leverages lazy loading and intelligent caching to minimize resource overhead.
-3. **Error Resilience**: Robust exception handling ensures system stability even under unexpected conditions.
-4. **Extensibility**: The architecture is designed to accommodate future enhancements without breaking existing contracts.
-
-### Technical Implementation
-
-The codebase utilizes modern Python features (version 3.10+) to provide a clean, type-safe API. Interaction patterns are documented in the corresponding `AGENTS.md` and `SPEC.md` files, ensuring that both human developers and automated agents can effectively utilize these capabilities.
-
-## Detailed Architecture and Implementation
-
-### Design Principles
-
-1. **Strict Modularity**: Each component is isolated and communicates via well-defined APIs.
-2. **Performance Optimization**: Implementation leverages lazy loading and intelligent caching to minimize resource overhead.
-3. **Error Resilience**: Robust exception handling ensures system stability even under unexpected conditions.
-4. **Extensibility**: The architecture is designed to accommodate future enhancements without breaking existing contracts.
-
-### Technical Implementation
-
-The codebase utilizes modern Python features (version 3.10+) to provide a clean, type-safe API. Interaction patterns are documented in the corresponding `AGENTS.md` and `SPEC.md` files, ensuring that both human developers and automated agents can effectively utilize these capabilities.
+- [README.md](README.md) | [AGENTS.md](AGENTS.md) | [PAI.md](PAI.md)
+- Parent: [spatial](../README.md)

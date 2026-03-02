@@ -44,7 +44,7 @@ class ModuleConnector:
     """
 
     def __init__(self) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._bindings: dict[str, ServiceBinding] = {}
 
     def register(
@@ -54,13 +54,13 @@ class ModuleConnector:
         singleton: bool = True,
         tags: list[str] | None = None,
     ) -> None:
-        """Execute Register operations natively."""
+        """Register the item in the registry."""
         self._bindings[name] = ServiceBinding(
             name=name, factory=factory, singleton=singleton, tags=tags or [],
         )
 
     def resolve(self, name: str) -> Any:
-        """Execute Resolve operations natively."""
+        """resolve ."""
         binding = self._bindings.get(name)
         if binding is None:
             raise KeyError(f"No service registered: {name}")
@@ -79,20 +79,20 @@ class ModuleConnector:
         return instance
 
     def has(self, name: str) -> bool:
-        """Execute Has operations natively."""
+        """has ."""
         return name in self._bindings
 
     def services_by_tag(self, tag: str) -> list[str]:
-        """Execute Services By Tag operations natively."""
+        """services By Tag ."""
         return [b.name for b in self._bindings.values() if tag in b.tags]
 
     @property
     def service_count(self) -> int:
-        """Execute Service Count operations natively."""
+        """service Count ."""
         return len(self._bindings)
 
     def service_names(self) -> list[str]:
-        """Execute Service Names operations natively."""
+        """service Names ."""
         return list(self._bindings.keys())
 
 

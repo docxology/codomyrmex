@@ -12,12 +12,12 @@ class Image(BaseComponent):
     caption: str = ""
 
     def render(self) -> str:
-        """Execute Render operations natively."""
+        """render ."""
         cap = f"<figcaption>{self.caption}</figcaption>" if self.caption else ""
         return f'<figure><img src="{self.src}" alt="{self.alt}" />{cap}</figure>'
 
     def __str__(self) -> str:
-        """Execute   Str   operations natively."""
+        """str ."""
         return self.render()
 
 @dataclass
@@ -28,7 +28,7 @@ class Video(BaseComponent):
     controls: bool = True
 
     def render(self) -> str:
-        """Execute Render operations natively."""
+        """render ."""
         attrs = [f'src="{self.src}"']
         if self.controls:
             attrs.append("controls")
@@ -37,5 +37,5 @@ class Video(BaseComponent):
         return f'<video {" ".join(attrs)}></video>'
 
     def __str__(self) -> str:
-        """Execute   Str   operations natively."""
+        """str ."""
         return self.render()

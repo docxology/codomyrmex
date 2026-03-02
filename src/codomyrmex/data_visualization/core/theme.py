@@ -18,7 +18,7 @@ class Theme:
     custom: dict[str, Any] = field(default_factory=dict)
 
     def __init__(self, name: str = "default", **kwargs: Any) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.name = name
         self.primary_color = kwargs.get("primary", kwargs.get("primary_color", "#2c3e50"))
         # Map 'accent' to secondary if provided
@@ -32,7 +32,7 @@ class Theme:
 
     @property
     def primary(self) -> str:
-        """Execute Primary operations natively."""
+        """primary ."""
         return self.primary_color
 
     @property
@@ -42,12 +42,12 @@ class Theme:
 
     @property
     def background(self) -> str:
-        """Execute Background operations natively."""
+        """background ."""
         return self.background_color
 
     @property
     def css(self) -> str:
-        """Execute Css operations natively."""
+        """css ."""
         vars_dict = self.to_css_vars()
         css_lines = ["body {"]
         for k, v in vars_dict.items():
@@ -56,7 +56,7 @@ class Theme:
         return "\n".join(css_lines)
 
     def to_css_vars(self) -> dict[str, str]:
-        """Execute To Css Vars operations natively."""
+        """to Css Vars ."""
         return {
             "--primary": self.primary_color,
             "--secondary": self.secondary_color,
@@ -68,7 +68,7 @@ class Theme:
         }
 
     def to_dict(self) -> dict[str, Any]:
-        """Execute To Dict operations natively."""
+        """Return a dictionary representation of this object."""
         return {
             "name": self.name,
             "primary": self.primary_color,

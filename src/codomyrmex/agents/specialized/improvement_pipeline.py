@@ -73,7 +73,7 @@ class AntiPatternDetector:
     """
 
     def __init__(self, severity_threshold: float = 0.0) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._threshold = severity_threshold
 
     def analyze(self, source: str, file_path: str = "") -> list[AntiPattern]:
@@ -135,7 +135,7 @@ class ImprovementPipeline:
         fix_generator: Callable[[AntiPattern, str], ProposedChange | None] | None = None,
         test_generator: Callable[[ProposedChange], str] | None = None,
     ) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._config = config or ImprovementConfig()
         self._detector = detector or AntiPatternDetector(
             severity_threshold=self._config.severity_threshold,
@@ -145,7 +145,7 @@ class ImprovementPipeline:
 
     @property
     def config(self) -> ImprovementConfig:
-        """Execute Config operations natively."""
+        """config ."""
         return self._config
 
     def analyze(self, source: str, file_path: str = "") -> list[AntiPattern]:

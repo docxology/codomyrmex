@@ -728,7 +728,7 @@ class PhysicalObjectManager:
     """Main manager for physical object operations."""
 
     def __init__(self):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
 
         self.registry = ObjectRegistry()
         self._active_simulations = set()

@@ -48,11 +48,11 @@ class UserProfile:
     # ── helpers ──────────────────────────────────────────────────
 
     def set_preference(self, key: str, value: Any) -> None:
-        """Execute Set Preference operations natively."""
+        """set Preference ."""
         self.preferences[key] = value
 
     def get_preference(self, key: str, default: Any = None) -> Any:
-        """Execute Get Preference operations natively."""
+        """get Preference ."""
         return self.preferences.get(key, default)
 
     def to_context_string(self) -> str:

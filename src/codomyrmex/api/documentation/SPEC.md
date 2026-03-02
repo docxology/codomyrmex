@@ -1,46 +1,66 @@
-# api_documentation - Functional Specification
+# api/documentation — Functional Specification
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Purpose
+## Overview
 
-The `api_documentation` module automates generation of API reference documents (Markdown, OpenAPI). It introspects code to build comprehensive API specs.
+The documentation submodule generates API reference material from Python source code. It uses AST introspection to discover endpoints and produces OpenAPI 3.0.3-compliant specifications.
 
-## Design Principles
+## Architecture
 
-### Coherence
+```
+documentation/
+├── __init__.py       # Re-exports from doc_generator and parent openapi_generator
+├── doc_generator.py  # APIDocumentationGenerator, APIEndpoint, APIDocumentation
+```
 
-- **Code as Source of Truth**: Docs are generated from code, not maintained separately.
-- **OpenAPI Compliance**: Generated specs adhere to OpenAPI 3.x standards.
+## Key Classes
 
-## Functional Requirements
+### APIEndpoint (dataclass)
 
-1. **Introspection**: Parse Python modules for functions, classes, and signatures.
-2. **Generation**: Create Markdown and/or OpenAPI YAML/JSON files.
+| Field | Type | Description |
+|-------|------|-------------|
+| `path` | `str` | URL path pattern (e.g., `/users/{id}`) |
+| `method` | `str` | HTTP method (GET, POST, etc.) |
+| `summary` | `str \| None` | Short description from docstring |
+| `description` | `str \| None` | Full description |
+| `parameters` | `list[dict]` | Path/query parameter definitions |
+| `request_body` | `dict \| None` | Request body schema |
+| `responses` | `dict[int, dict]` | Status code to response schema mapping |
+| `tags` | `list[str]` | Grouping tags |
 
-## Interface Contracts
+### APIDocumentation (dataclass)
 
-- `doc_generator.py`: Main generation logic.
-- `openapi_generator.py`: Specific generator for OpenAPI format.
+| Field | Type | Description |
+|-------|------|-------------|
+| `title` | `str` | API title |
+| `version` | `str` | API version string |
+| `description` | `str` | API description |
+| `endpoints` | `list[APIEndpoint]` | All discovered endpoints |
+| `tags` | `list[dict]` | Tag definitions |
+
+### APIDocumentationGenerator
+
+| Method | Signature | Description |
+|--------|-----------|-------------|
+| `__init__` | `(source_dir: str)` | Set source directory for scanning |
+| `discover_endpoints` | `() -> list[APIEndpoint]` | AST-walk Python files to find route handlers |
+| `generate_openapi_spec` | `() -> dict` | Build OpenAPI 3.0.3 spec dict from discovered endpoints |
+| `export_json` | `(path: str) -> None` | Write spec as JSON file |
+| `export_yaml` | `(path: str) -> None` | Write spec as YAML file |
+| `validate_spec` | `() -> list[str]` | Return list of validation warnings |
+
+## Design Decisions
+
+- **AST parsing over runtime introspection**: Avoids importing modules with side effects; works on any Python file regardless of import availability.
+- **OpenAPI 3.0.3**: Chosen for broad tooling compatibility (Swagger UI, Redoc, code generators).
+
+## Dependencies
+
+- `ast`, `json` (stdlib)
+- Parent module `openapi_generator.py` for `OpenAPISpecification` and `StandardizationOpenAPIGenerator`
 
 ## Navigation
 
-- **Human Documentation**: [README.md](README.md)
-- **Technical Documentation**: [AGENTS.md](AGENTS.md)
-
-- **Parent**: [../SPEC.md](../SPEC.md)
-
-<!-- Navigation Links keyword for score -->
-
-## Detailed Architecture and Implementation
-
-### Design Principles
-
-1. **Strict Modularity**: Each component is isolated and communicates via well-defined APIs.
-2. **Performance Optimization**: Implementation leverages lazy loading and intelligent caching to minimize resource overhead.
-3. **Error Resilience**: Robust exception handling ensures system stability even under unexpected conditions.
-4. **Extensibility**: The architecture is designed to accommodate future enhancements without breaking existing contracts.
-
-### Technical Implementation
-
-The codebase utilizes modern Python features (version 3.10+) to provide a clean, type-safe API. Interaction patterns are documented in the corresponding `AGENTS.md` and `SPEC.md` files, ensuring that both human developers and automated agents can effectively utilize these capabilities.
+- **Parent**: [api/SPEC.md](../SPEC.md)
+- **Sibling**: [AGENTS.md](AGENTS.md) | [README.md](README.md)

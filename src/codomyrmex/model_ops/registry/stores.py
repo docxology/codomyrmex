@@ -35,7 +35,7 @@ class FileModelStore(ModelStore):
     """File-based model storage."""
 
     def __init__(self, base_path: str = "./models"):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.base_path = Path(base_path)
         self.base_path.mkdir(parents=True, exist_ok=True)
 
@@ -68,7 +68,7 @@ class InMemoryModelStore(ModelStore):
     """In-memory model storage for testing."""
 
     def __init__(self):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._artifacts: dict[str, bytes] = {}
         self._lock = threading.Lock()
 

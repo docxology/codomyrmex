@@ -40,7 +40,7 @@ class EncryptedEntry:
     rotated_at: float = 0.0
 
     def to_dict(self) -> dict[str, Any]:
-        """Execute To Dict operations natively."""
+        """Return a dictionary representation of this object."""
         return {
             "key": self.key,
             "ciphertext": self.ciphertext,
@@ -52,7 +52,7 @@ class EncryptedEntry:
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> EncryptedEntry:
-        """Execute From Dict operations natively."""
+        """from Dict ."""
         return cls(**data)
 
 

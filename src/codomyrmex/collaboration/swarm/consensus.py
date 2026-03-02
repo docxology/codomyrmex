@@ -56,7 +56,7 @@ class ConsensusResult:
     strategy: str = ""
 
     def to_dict(self) -> dict[str, Any]:
-        """Execute To Dict operations natively."""
+        """Return a dictionary representation of this object."""
         return {
             "decision": self.decision.value,
             "approval_score": round(self.approval_score, 3),

@@ -51,7 +51,7 @@ class AlertRule:
     message_template: str = "{metric} is {value} (threshold: {threshold})"
 
     def evaluate(self, value: float) -> bool:
-        """Execute Evaluate operations natively."""
+        """evaluate ."""
         ops = {
             "gt": value > self.threshold,
             "lt": value < self.threshold,
@@ -83,12 +83,12 @@ class Alert:
     fired_at: float = 0.0
 
     def __post_init__(self) -> None:
-        """Execute   Post Init   operations natively."""
+        """post Init ."""
         if not self.fired_at:
             self.fired_at = time.time()
 
     def to_dict(self) -> dict[str, Any]:
-        """Execute To Dict operations natively."""
+        """Return a dictionary representation of this object."""
         return {
             "rule": self.rule_name,
             "severity": self.severity.value,
@@ -112,17 +112,17 @@ class AlertEngine:
     """
 
     def __init__(self) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._rules: list[AlertRule] = []
         self._handlers: list[AlertHandler] = []
         self._alert_history: list[Alert] = []
 
     def add_rule(self, rule: AlertRule) -> None:
-        """Execute Add Rule operations natively."""
+        """add Rule ."""
         self._rules.append(rule)
 
     def on_alert(self, handler: AlertHandler) -> None:
-        """Execute On Alert operations natively."""
+        """on Alert ."""
         self._handlers.append(handler)
 
     def evaluate(self, metrics: dict[str, float]) -> list[Alert]:
@@ -160,12 +160,12 @@ class AlertEngine:
 
     @property
     def rule_count(self) -> int:
-        """Execute Rule Count operations natively."""
+        """rule Count ."""
         return len(self._rules)
 
     @property
     def history(self) -> list[Alert]:
-        """Execute History operations natively."""
+        """history ."""
         return list(self._alert_history)
 
 

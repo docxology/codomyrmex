@@ -1,30 +1,38 @@
-# Agents Guide: Hyperreality
+# Codomyrmex Agents -- src/codomyrmex/meme/hyperreality
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.0 | **Status**: Experimental | **Last Updated**: March 2026
 
-**Operational Directives**
+## Purpose
 
-Use the `hyperreality` submodule to distinguish the Real from the Simulacrum.
+Models Baudrillardian simulation theory with four levels of simulacra and Robert Anton Wilson's reality tunnels. Provides engines for creating named reality tunnels, injecting simulacra at varying simulation levels, and assessing the simulation level of objects via metadata heuristics.
 
-## Capabilities
+## Key Components
 
-1. **Authenticity Check**:
-    * Use `assess_authenticity` on critical inputs. In an age of Deepfakes and AI generation, assume nothing is Base Reality until verified.
-    * Detect 4th-order simulacra (pure simulation) and flag them.
+| File | Class / Function | Role |
+|------|-----------------|------|
+| `engine.py` | `HyperrealityEngine` | Orchestrator managing reality tunnels and simulacrum injection |
+| `simulation.py` | `assess_reality_level` | Heuristic classification of objects into Baudrillard's four phases |
+| `simulation.py` | `generate_simulacrum` | Create a simulacrum with level-appropriate fidelity and autonomy |
+| `models.py` | `Simulacrum` | A copy without an original, with fidelity and autonomy scores |
+| `models.py` | `SimulationLevel` | REFLECTION (1), MASK (2), ABSENCE (3), PURE (4) |
+| `models.py` | `RealityTunnel` | Subjective perception filter with distortion score and active simulacra |
+| `models.py` | `OntologicalStatus` | REAL, VIRTUAL, HYPERREAL, FICTIONAL |
 
-2. **Reality Engineering**:
-    * Construct `RealityTunnel`s to guide user perception. By filtering what data a user sees, you shape their reality.
-    * Use `superimpose` to add augmented layers of meaning to raw data.
+## Operating Contracts
 
-3. **Consensus Breaking**:
-    * Identify where the `consensus_reality` diverges from empirical fact. This gap is an opportunity for arbitrage or disruption.
+- `inject_simulacrum` auto-creates tunnels if the named tunnel does not exist.
+- Distortion increases by `0.1 * level` per injection, capped at 1.0.
+- `assess_reality_level` returns PURE (worst-case) when no provenance metadata is provided.
+- Fidelity and autonomy values are preset per simulation level and not configurable.
+- `get_tunnel` returns `None` for unknown names; does not raise exceptions.
+- Errors must be logged via `logging_monitoring` before re-raising.
 
-## Constraints
+## Integration Points
 
-* **Ontological Risk**: Prolonged exposure to high-order simulacra can degrade an agent's ability to recognize Base Reality. Regular `epistemic` ground-truthing is required.
-* **Ethics**: Manipulating Reality Tunnels is a high-impact intervention. Ensure compliance with core safety guidelines.
+- **Depends on**: None (self-contained within `meme` package)
+- **Used by**: `meme.narrative` (narratives are building blocks of reality tunnels), `meme.semiotic` (signs in hyperreality may lack referents), `meme.epistemic` (ground-truthing against hyperreal distortion)
 
-## Integration
+## Navigation
 
-* **With Narrative**: Narratives are the primary building blocks of a Reality Tunnel.
-* **With Semiotics**: Signs in hyperreality often have no referent (`signified` is null).
+- **Parent**: [meme](../README.md)
+- **Root**: [Root](../../../../README.md)

@@ -53,16 +53,16 @@ class PlanTask:
 
     @property
     def is_leaf(self) -> bool:
-        """Execute Is Leaf operations natively."""
+        """is Leaf ."""
         return len(self.subtasks) == 0
 
     @property
     def subtask_count(self) -> int:
-        """Execute Subtask Count operations natively."""
+        """subtask Count ."""
         return len(self.subtasks) + sum(s.subtask_count for s in self.subtasks)
 
     def to_dict(self) -> dict[str, Any]:
-        """Execute To Dict operations natively."""
+        """Return a dictionary representation of this object."""
         return {
             "name": self.name,
             "state": self.state.value,
@@ -86,18 +86,18 @@ class Plan:
     created_at: float = 0.0
 
     def __post_init__(self) -> None:
-        """Execute   Post Init   operations natively."""
+        """post Init ."""
         if not self.created_at:
             self.created_at = time.time()
 
     @property
     def total_tasks(self) -> int:
-        """Execute Total Tasks operations natively."""
+        """total Tasks ."""
         return sum(1 + t.subtask_count for t in self.tasks)
 
     @property
     def completion_rate(self) -> float:
-        """Execute Completion Rate operations natively."""
+        """completion Rate ."""
         all_tasks = self._flatten()
         if not all_tasks:
             return 0.0
@@ -105,7 +105,7 @@ class Plan:
         return done / len(all_tasks)
 
     def _flatten(self) -> list[PlanTask]:
-        """Execute  Flatten operations natively."""
+        """flatten ."""
         result: list[PlanTask] = []
         stack = list(self.tasks)
         while stack:

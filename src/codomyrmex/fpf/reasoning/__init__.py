@@ -33,7 +33,7 @@ class Premise:
     depends_on: list[str] = field(default_factory=list)
 
     def to_dict(self) -> dict[str, Any]:
-        """Execute To Dict operations natively."""
+        """Return a dictionary representation of this object."""
         return {
             "id": self.id,
             "content": self.content,
@@ -109,7 +109,7 @@ class ReasoningChain:
         return confidence
 
     def to_dict(self) -> dict[str, Any]:
-        """Execute To Dict operations natively."""
+        """Return a dictionary representation of this object."""
         return {
             "id": self.id,
             "goal": self.goal,
@@ -137,12 +137,12 @@ class DecompositionStrategy(ReasoningStrategy):
         max_depth: int = 3,
         min_component_size: int = 1,
     ):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.max_depth = max_depth
         self.min_component_size = min_component_size
 
     def apply(self, problem: str) -> ReasoningChain:
-        """Execute Apply operations natively."""
+        """Apply the transformation or operation."""
         chain = ReasoningChain(
             id="decomposition",
             goal=f"Decompose: {problem}",
@@ -168,7 +168,7 @@ class AssumptionAnalysisStrategy(ReasoningStrategy):
     """Identify and challenge assumptions."""
 
     def apply(self, problem: str) -> ReasoningChain:
-        """Execute Apply operations natively."""
+        """Apply the transformation or operation."""
         chain = ReasoningChain(
             id="assumption_analysis",
             goal=f"Analyze assumptions in: {problem}",
@@ -197,7 +197,7 @@ class AnalogicalReasoningStrategy(ReasoningStrategy):
     """Reason by analogy to similar problems."""
 
     def apply(self, problem: str) -> ReasoningChain:
-        """Execute Apply operations natively."""
+        """Apply the transformation or operation."""
         chain = ReasoningChain(
             id="analogical",
             goal=f"Find analogies for: {problem}",
@@ -225,7 +225,7 @@ class ContradictionStrategy(ReasoningStrategy):
     """Find contradictions to prove or disprove hypotheses."""
 
     def apply(self, problem: str) -> ReasoningChain:
-        """Execute Apply operations natively."""
+        """Apply the transformation or operation."""
         chain = ReasoningChain(
             id="contradiction",
             goal=f"Find contradictions in: {problem}",
@@ -260,7 +260,7 @@ class ProblemSpace:
     assumptions: list[str] = field(default_factory=list)
 
     def to_dict(self) -> dict[str, Any]:
-        """Execute To Dict operations natively."""
+        """Return a dictionary representation of this object."""
         return {
             "problem": self.problem,
             "constraints": self.constraints,
@@ -274,7 +274,7 @@ class FirstPrinciplesReasoner:
     """Main reasoning engine using first principles."""
 
     def __init__(self):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.strategies: dict[str, ReasoningStrategy] = {
             "decomposition": DecompositionStrategy(),
             "assumption_analysis": AssumptionAnalysisStrategy(),

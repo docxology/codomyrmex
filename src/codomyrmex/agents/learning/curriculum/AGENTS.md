@@ -1,11 +1,38 @@
-# Curriculum Agentic Context
+# Codomyrmex Agents -- src/codomyrmex/agents/learning/curriculum
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.0 | **Status**: Planned | **Last Updated**: March 2026
 
-## Agent Overview
-This file provides context for autonomous agents operating within the `Curriculum` module.
+## Purpose
 
-## Operational Directives
-1. **Context Awareness**: Agents modifying or analyzing this directory must understand its role within the broader Codomyrmex system.
-2. **Functional Enforcement**: Agents must ensure any generated code remains fully functional and real.
-3. **Documentation Sync**: Agents must keep this `AGENTS.md`, `README.md`, and `SPEC.md` synchronized with actual code capabilities.
+Placeholder subpackage for a curriculum-based learning system for agents. This directory is reserved for future implementation of structured learning sequences that guide agents through progressively complex tasks.
+
+No Python implementation exists in this directory yet. The parent module `agents/learning/` contains the implemented `skills.py` module with `Skill` and `SkillLibrary` classes.
+
+## Key Components
+
+| File | Class / Function | Role |
+|------|-----------------|------|
+| *(none yet)* | -- | No implementation files present |
+
+## Planned Capabilities
+
+- Structured learning sequences for agent training
+- Progressive difficulty scaling
+- Curriculum-based knowledge acquisition
+
+## Operating Contracts
+
+- When implemented, must integrate with `agents.learning.skills.SkillLibrary` for skill tracking.
+- Must follow the zero-mock policy: no stub data or placeholder implementations in production code.
+- Errors must be logged via `logging_monitoring` before re-raising.
+- Unimplemented paths must raise `NotImplementedError`.
+
+## Integration Points
+
+- **Depends on**: `agents.learning.skills` (sibling module, provides `Skill`, `SkillLibrary`)
+- **Used by**: Agent training pipelines (planned)
+
+## Navigation
+
+- **Parent**: [../AGENTS.md](../AGENTS.md)
+- **Root**: [../../../../README.md](../../../../README.md)

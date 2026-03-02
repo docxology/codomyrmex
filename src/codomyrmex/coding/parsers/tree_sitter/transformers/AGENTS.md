@@ -1,25 +1,29 @@
-# Codomyrmex Agents — src/codomyrmex/coding/parsers/tree_sitter/transformers
+# Codomyrmex Agents -- src/codomyrmex/coding/parsers/tree_sitter/transformers
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
 
-AST transformation utilities for code manipulation, refactoring, and syntax-aware modifications.
+Placeholder sub-module for AST transformation and code rewriting utilities. Currently exports nothing; intended for visitor-pattern based AST transformers that apply structural modifications to parsed syntax trees.
 
-## Active Components
+## Key Components
 
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SPEC.md` – Project file
-- `__init__.py` – Project file
+| File | Class / Function | Role |
+|------|-----------------|------|
+| `__init__.py` | _(empty exports)_ | Namespace package marker |
 
 ## Operating Contracts
 
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
+- Future transformer classes must implement a visitor interface that operates on `tree_sitter.Node` objects.
+- Transformations must be non-destructive (produce new source rather than mutating in place).
+- Errors must be logged via `logging_monitoring` before re-raising.
 
-## Navigation Links
+## Integration Points
 
-- **📁 Parent Directory**: [tree_sitter](../README.md) - Parent directory documentation
-- **🏠 Project Root**: ../../../../README.md - Main project documentation
+- **Depends on**: `tree_sitter` (external)
+- **Used by**: _(future code refactoring and rewriting tools)_
+
+## Navigation
+
+- **Parent**: [tree_sitter](../README.md)
+- **Root**: [Root](../../../../../../README.md)

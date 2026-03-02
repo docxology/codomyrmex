@@ -29,7 +29,7 @@ class DockerStage:
     commands: list[str] = field(default_factory=list)
 
     def render(self) -> str:
-        """Execute Render operations natively."""
+        """render ."""
         lines = [f"FROM {self.base_image} AS {self.name}"]
         lines.extend(self.commands)
         return "\n".join(lines)
@@ -63,7 +63,7 @@ class DockerfileSpec:
 
     @property
     def stage_count(self) -> int:
-        """Execute Stage Count operations natively."""
+        """stage Count ."""
         return len(self.stages)
 
 
@@ -121,7 +121,7 @@ class AutoBuilder:
         py_version: str,
         entrypoint: str = "main.py",
     ) -> DockerfileSpec:
-        """Execute  Build Spec operations natively."""
+        """build Spec ."""
         base = f"python:{py_version}-slim"
 
         builder = DockerStage(
@@ -167,7 +167,7 @@ class AutoBuilder:
 
     @staticmethod
     def _extract(content: str, field_name: str) -> str:
-        """Execute  Extract operations natively."""
+        """extract ."""
         pattern = re.compile(rf'^{field_name}\s*=\s*"([^"]*)"', re.MULTILINE)
         match = pattern.search(content)
         return match.group(1) if match else ""

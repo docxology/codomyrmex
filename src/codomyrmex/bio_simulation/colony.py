@@ -55,7 +55,7 @@ class Ant:
             pass  # hold position
 
     def _move_random(self) -> None:
-        """Execute  Move Random operations natively."""
+        """move Random ."""
         self.x += random.choice([-self.speed, 0, self.speed])
         self.y += random.choice([-self.speed, 0, self.speed])
 
@@ -88,16 +88,16 @@ class Ant:
 
     @property
     def is_alive(self) -> bool:
-        """Execute Is Alive operations natively."""
+        """is Alive ."""
         return self.energy > 0
 
     @property
     def distance_from_nest(self) -> float:
-        """Execute Distance From Nest operations natively."""
+        """distance From Nest ."""
         return math.sqrt(self.x ** 2 + self.y ** 2)
 
     def to_dict(self) -> dict[str, Any]:
-        """Execute To Dict operations natively."""
+        """Return a dictionary representation of this object."""
         return {
             "id": self.id, "state": self.state.name, "energy": self.energy,
             "x": self.x, "y": self.y, "carrying": self.carrying, "age": self.age,
@@ -127,7 +127,7 @@ class Colony:
     """
 
     def __init__(self, population_size: int, grid_size: int = 100) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.ants = [Ant(id=i) for i in range(population_size)]
         self.tick = 0
         self.grid_size = grid_size
@@ -212,10 +212,10 @@ class Colony:
 
     @property
     def food_collected(self) -> float:
-        """Execute Food Collected operations natively."""
+        """food Collected ."""
         return self._food_collected
 
     @property
     def population_alive(self) -> int:
-        """Execute Population Alive operations natively."""
+        """population Alive ."""
         return sum(1 for a in self.ants if a.is_alive)

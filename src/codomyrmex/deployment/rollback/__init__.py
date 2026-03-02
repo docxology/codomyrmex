@@ -74,7 +74,7 @@ class RollbackManager:
     """
 
     def __init__(self) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._snapshots: list[DeploymentSnapshot] = []
         self._current_version: str | None = None
 
@@ -180,7 +180,7 @@ class RollbackManager:
         return self._current_version
 
     def __repr__(self) -> str:
-        """Execute   Repr   operations natively."""
+        """repr ."""
         return (
             f"RollbackManager(snapshots={len(self._snapshots)}, "
             f"current_version={self._current_version!r})"

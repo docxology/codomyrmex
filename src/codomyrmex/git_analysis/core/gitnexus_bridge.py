@@ -35,7 +35,7 @@ class GitNexusBridge:
     """
 
     def __init__(self, repo_path: str, vendor_dir: str | None = None) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.repo_path = str(Path(repo_path).resolve())
         self._vendor_dir = vendor_dir or str(
             Path(__file__).parent.parent / "vendor" / "gitnexus"

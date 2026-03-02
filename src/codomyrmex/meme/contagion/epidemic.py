@@ -71,13 +71,13 @@ class SISModel:
     def __init__(
         self, population_size: int = 1000, beta: float = 0.3, gamma: float = 0.1
     ) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.N = population_size
         self.beta = beta
         self.gamma = gamma
 
     def simulate(self, steps: int = 100, initial_infected: int = 1) -> PropagationTrace:
-        """Execute Simulate operations natively."""
+        """simulate ."""
         S = self.N - initial_infected
         I = initial_infected
         # SIS has no "Recovered" bucket in the same sense, but we track
@@ -120,12 +120,12 @@ class SEIRModel(SIRModel):
         sigma: float = 0.1,  # Incubation rate (1/incubation_period)
         gamma: float = 0.1,
     ) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         super().__init__(population_size, beta, gamma)
         self.sigma = sigma
 
     def simulate(self, steps: int = 100, initial_infected: int = 1) -> PropagationTrace:
-        """Execute Simulate operations natively."""
+        """simulate ."""
         S = self.N - initial_infected
         E = 0
         I = initial_infected

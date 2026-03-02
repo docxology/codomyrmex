@@ -34,7 +34,7 @@ except ImportError:
 def cli_commands():
     """Return CLI commands for the feature_store module."""
     def _list_features():
-        """Execute  List Features operations natively."""
+        """list Features ."""
         print(
             "Feature Store\n"
             "  Feature types: " + ", ".join(ft.value for ft in FeatureType) + "\n"
@@ -44,7 +44,7 @@ def cli_commands():
         )
 
     def _feature_stats():
-        """Execute  Feature Stats operations natively."""
+        """feature Stats ."""
         print(
             "Feature Store Stats\n"
             "  Use FeatureService to serve features with transforms.\n"

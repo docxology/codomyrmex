@@ -56,5 +56,5 @@ class ServiceInstance:
 
     @property
     def address(self) -> str:
-        """Execute Address operations natively."""
+        """address ."""
         return f"{self.host}:{self.port}"

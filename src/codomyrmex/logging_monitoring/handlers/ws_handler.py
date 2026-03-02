@@ -37,7 +37,7 @@ class WebSocketLogHandler(logging.Handler):
         max_queue_size: int = 1000,
         level: int = logging.DEBUG,
     ) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         super().__init__(level=level)
         self._max_queue_size = max_queue_size
         self._queue: asyncio.Queue[dict[str, Any]] = asyncio.Queue(

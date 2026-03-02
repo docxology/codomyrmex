@@ -47,7 +47,7 @@ class MCPObservabilityHooks:
     """
 
     def __init__(self) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._lock = threading.Lock()
         self._tool_metrics: dict[str, ToolMetrics] = {}
         self._global_calls: int = 0

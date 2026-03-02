@@ -28,7 +28,7 @@ class ConnectionError(NetworkError):
         protocol: str | None = None,
         **kwargs: Any
     ):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         super().__init__(message, **kwargs)
         if host:
             self.context["host"] = host
@@ -56,7 +56,7 @@ class NetworkTimeoutError(NetworkError):
         url: str | None = None,
         **kwargs: Any
     ):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         super().__init__(message, **kwargs)
         if timeout_seconds is not None:
             self.context["timeout_seconds"] = timeout_seconds
@@ -84,7 +84,7 @@ class SSLError(NetworkError):
         ssl_version: str | None = None,
         **kwargs: Any
     ):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         super().__init__(message, **kwargs)
         if host:
             self.context["host"] = host
@@ -114,7 +114,7 @@ class HTTPError(NetworkError):
         response_body: str | None = None,
         **kwargs: Any
     ):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         super().__init__(message, **kwargs)
         if status_code is not None:
             self.context["status_code"] = status_code
@@ -145,7 +145,7 @@ class DNSResolutionError(NetworkError):
         dns_server: str | None = None,
         **kwargs: Any
     ):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         super().__init__(message, **kwargs)
         if hostname:
             self.context["hostname"] = hostname
@@ -171,7 +171,7 @@ class WebSocketError(NetworkError):
         close_reason: str | None = None,
         **kwargs: Any
     ):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         super().__init__(message, **kwargs)
         if url:
             self.context["url"] = url
@@ -199,7 +199,7 @@ class ProxyError(NetworkError):
         target_url: str | None = None,
         **kwargs: Any
     ):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         super().__init__(message, **kwargs)
         if proxy_url:
             self.context["proxy_url"] = proxy_url
@@ -227,7 +227,7 @@ class RateLimitError(NetworkError):
         limit_type: str | None = None,
         **kwargs: Any
     ):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         super().__init__(message, **kwargs)
         if url:
             self.context["url"] = url
@@ -255,7 +255,7 @@ class SSHError(NetworkError):
         username: str | None = None,
         **kwargs: Any
     ):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         super().__init__(message, **kwargs)
         if host:
             self.context["host"] = host

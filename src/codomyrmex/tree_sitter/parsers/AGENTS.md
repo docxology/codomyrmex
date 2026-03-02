@@ -1,26 +1,36 @@
-# Codomyrmex Agents — src/codomyrmex/coding/parsers/tree_sitter/parsers
+# Codomyrmex Agents -- src/codomyrmex/coding/parsers/tree_sitter/parsers
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
 
-Tree-sitter parser configurations and wrappers for multi-language syntax parsing.
+Contains the core tree-sitter parser wrapper and a regex-based fallback AST layer. Provides data types for AST nodes, source positions, and abstract `Parser` base class with concrete `PythonParser` and `JavaScriptParser` implementations.
 
-## Active Components
+## Key Components
 
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SPEC.md` – Project file
-- `__init__.py` – Project file
-- `parser.py` – Project file
+| File | Class / Function | Role |
+|------|-----------------|------|
+| `parser.py` | `TreeSitterParser` | Wraps `tree_sitter.Parser`; `parse()` and `query()` |
+| `__init__.py` | `NodeType`, `Position`, `Range`, `ASTNode` | Core AST data types |
+| `__init__.py` | `Parser` (ABC) | Abstract base class for language parsers |
+| `__init__.py` | `PythonParser` | Regex-based Python parser (functions, classes, imports) |
+| `__init__.py` | `JavaScriptParser` | Regex-based JavaScript parser (functions, classes, imports) |
+| `__init__.py` | `get_parser(language)` | Factory function returning the correct `Parser` |
+| `__init__.py` | `parse_file(filepath)` | Convenience: detect language and parse a file |
 
 ## Operating Contracts
 
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
+- `TreeSitterParser` requires a pre-loaded `tree_sitter.Language` instance; call `LanguageManager.load_language()` first.
+- Regex-based parsers (`PythonParser`, `JavaScriptParser`) are best-effort heuristic parsers -- they do not produce a full AST.
+- `get_parser()` raises `ValueError` for unsupported languages.
+- Errors must be logged via `logging_monitoring` before re-raising.
 
-## Navigation Links
+## Integration Points
 
-- **📁 Parent Directory**: [tree_sitter](../README.md) - Parent directory documentation
-- **🏠 Project Root**: ../../../../README.md - Main project documentation
+- **Depends on**: `tree_sitter` (external), `re`, `ast` (stdlib)
+- **Used by**: `coding.pattern_matching`, `coding.review`, `coding.static_analysis`
+
+## Navigation
+
+- **Parent**: [tree_sitter](../README.md)
+- **Root**: [Root](../../../../../../README.md)

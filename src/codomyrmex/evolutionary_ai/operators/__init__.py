@@ -68,7 +68,7 @@ class MutationOperator(ABC, Generic[T]):
     """Abstract base class for mutation operators."""
 
     def __init__(self, mutation_rate: float = 0.1):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.mutation_rate = mutation_rate
 
     @abstractmethod
@@ -81,7 +81,7 @@ class BitFlipMutation(MutationOperator[list[int]]):
     """Bit flip mutation for binary representations."""
 
     def mutate(self, individual: Individual[list[int]]) -> Individual[list[int]]:
-        """Execute Mutate operations natively."""
+        """mutate ."""
         genes = list(individual.genes)
 
         for i in range(len(genes)):
@@ -95,7 +95,7 @@ class SwapMutation(MutationOperator[list[T]]):
     """Swap mutation for permutation representations."""
 
     def mutate(self, individual: Individual[list[T]]) -> Individual[list[T]]:
-        """Execute Mutate operations natively."""
+        """mutate ."""
         genes = list(individual.genes)
 
         if random.random() < self.mutation_rate and len(genes) >= 2:
@@ -114,13 +114,13 @@ class GaussianMutation(MutationOperator[list[float]]):
         sigma: float = 0.1,
         bounds: tuple[float, float] | None = None,
     ):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         super().__init__(mutation_rate)
         self.sigma = sigma
         self.bounds = bounds
 
     def mutate(self, individual: Individual[list[float]]) -> Individual[list[float]]:
-        """Execute Mutate operations natively."""
+        """mutate ."""
         genes = list(individual.genes)
 
         for i in range(len(genes)):
@@ -137,7 +137,7 @@ class ScrambleMutation(MutationOperator[list[T]]):
     """Scramble mutation - scrambles a random subset of genes."""
 
     def mutate(self, individual: Individual[list[T]]) -> Individual[list[T]]:
-        """Execute Mutate operations natively."""
+        """mutate ."""
         genes = list(individual.genes)
 
         if random.random() < self.mutation_rate and len(genes) >= 2:
@@ -154,7 +154,7 @@ class CrossoverOperator(ABC, Generic[T]):
     """Abstract base class for crossover operators."""
 
     def __init__(self, crossover_rate: float = 0.8):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.crossover_rate = crossover_rate
 
     @abstractmethod
@@ -175,7 +175,7 @@ class SinglePointCrossover(CrossoverOperator[list[T]]):
         parent1: Individual[list[T]],
         parent2: Individual[list[T]],
     ) -> tuple[Individual[list[T]], Individual[list[T]]]:
-        """Execute Crossover operations natively."""
+        """crossover ."""
         if random.random() > self.crossover_rate:
             return parent1, parent2
 
@@ -199,7 +199,7 @@ class TwoPointCrossover(CrossoverOperator[list[T]]):
         parent1: Individual[list[T]],
         parent2: Individual[list[T]],
     ) -> tuple[Individual[list[T]], Individual[list[T]]]:
-        """Execute Crossover operations natively."""
+        """crossover ."""
         if random.random() > self.crossover_rate:
             return parent1, parent2
 
@@ -227,7 +227,7 @@ class UniformCrossover(CrossoverOperator[list[T]]):
     """Uniform crossover with mixing ratio."""
 
     def __init__(self, crossover_rate: float = 0.8, mixing_ratio: float = 0.5):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         super().__init__(crossover_rate)
         self.mixing_ratio = mixing_ratio
 
@@ -236,7 +236,7 @@ class UniformCrossover(CrossoverOperator[list[T]]):
         parent1: Individual[list[T]],
         parent2: Individual[list[T]],
     ) -> tuple[Individual[list[T]], Individual[list[T]]]:
-        """Execute Crossover operations natively."""
+        """crossover ."""
         if random.random() > self.crossover_rate:
             return parent1, parent2
 
@@ -262,7 +262,7 @@ class BlendCrossover(CrossoverOperator[list[float]]):
     """BLX-alpha crossover for real-valued representations."""
 
     def __init__(self, crossover_rate: float = 0.8, alpha: float = 0.5):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         super().__init__(crossover_rate)
         self.alpha = alpha
 
@@ -271,7 +271,7 @@ class BlendCrossover(CrossoverOperator[list[float]]):
         parent1: Individual[list[float]],
         parent2: Individual[list[float]],
     ) -> tuple[Individual[list[float]], Individual[list[float]]]:
-        """Execute Crossover operations natively."""
+        """crossover ."""
         if random.random() > self.crossover_rate:
             return parent1, parent2
 
@@ -312,7 +312,7 @@ class TournamentSelection(SelectionOperator[T]):
     """Tournament selection."""
 
     def __init__(self, tournament_size: int = 3):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.tournament_size = tournament_size
 
     def select(
@@ -320,7 +320,7 @@ class TournamentSelection(SelectionOperator[T]):
         population: list[Individual[T]],
         num_selected: int,
     ) -> list[Individual[T]]:
-        """Execute Select operations natively."""
+        """select ."""
         selected = []
 
         for _ in range(num_selected):
@@ -343,7 +343,7 @@ class RouletteSelection(SelectionOperator[T]):
         population: list[Individual[T]],
         num_selected: int,
     ) -> list[Individual[T]]:
-        """Execute Select operations natively."""
+        """select ."""
         # Handle negative fitness by shifting
         min_fitness = min(ind.fitness or 0 for ind in population)
         shift = abs(min_fitness) + 1 if min_fitness < 0 else 0
@@ -375,7 +375,7 @@ class RankSelection(SelectionOperator[T]):
     """Rank-based selection."""
 
     def __init__(self, selection_pressure: float = 2.0):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.selection_pressure = selection_pressure
 
     def select(
@@ -383,7 +383,7 @@ class RankSelection(SelectionOperator[T]):
         population: list[Individual[T]],
         num_selected: int,
     ) -> list[Individual[T]]:
-        """Execute Select operations natively."""
+        """select ."""
         # Sort by fitness
         sorted_pop = sorted(population, key=lambda ind: ind.fitness or float('-inf'))
         n = len(sorted_pop)
@@ -422,7 +422,7 @@ class ElitismSelection(SelectionOperator[T]):
     """Elitism selection - always keeps the best individuals."""
 
     def __init__(self, elite_count: int = 2, base_selector: SelectionOperator | None = None):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.elite_count = elite_count
         self.base_selector = base_selector or TournamentSelection()
 
@@ -431,7 +431,7 @@ class ElitismSelection(SelectionOperator[T]):
         population: list[Individual[T]],
         num_selected: int,
     ) -> list[Individual[T]]:
-        """Execute Select operations natively."""
+        """select ."""
         sorted_pop = sorted(population, key=lambda ind: ind.fitness or float('-inf'), reverse=True)
 
         elite = sorted_pop[:min(self.elite_count, num_selected)]

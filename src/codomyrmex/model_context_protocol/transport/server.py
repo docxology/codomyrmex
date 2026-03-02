@@ -62,7 +62,7 @@ class MCPServer:
         config: MCPServerConfig | None = None,
         call_tool_fn: Callable[..., Any] | None = None,
     ):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.config = config or MCPServerConfig()
         self._tool_registry: MCPToolRegistry = MCPToolRegistry()
         self._resources: dict[str, dict[str, Any]] = {}
@@ -103,7 +103,7 @@ class MCPServer:
             output_schema: JSON Schema for structured output (MCP 2025-06-18).
         """
         def decorator(func: Callable[..., Any]) -> Callable[..., Any]:
-            """Execute Decorator operations natively."""
+            """decorator ."""
             tool_name = name or func.__name__
             tool_desc = description or func.__doc__ or ""
 
@@ -202,7 +202,7 @@ class MCPServer:
         p = Path(path)
 
         def read_file():
-            """Execute Read File operations natively."""
+            """read File ."""
             return p.read_text()
 
         mime_types = {

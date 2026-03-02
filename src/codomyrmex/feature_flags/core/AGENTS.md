@@ -1,26 +1,36 @@
 # Codomyrmex Agents — src/codomyrmex/feature_flags/core
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
 
-Core feature flag infrastructure including flag definitions, configuration models, and base evaluation logic.
+Central feature flag evaluation engine. Provides `FeatureManager`, the primary entry point for creating, evaluating, persisting, and overriding feature flags. Supports boolean on/off flags, percentage-based rollouts with deterministic user hashing, allowlist/denylist targeting, time-window activation, and multivariate values via metadata.
 
-## Active Components
+## Key Components
 
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SPEC.md` – Project file
-- `__init__.py` – Project file
-- `manager.py` – Project file
+| File | Class / Function | Role |
+|------|-----------------|------|
+| `manager.py` | `FlagDefinition` | Dataclass defining a flag: key, enabled state, percentage, allow/deny lists, time window, description, metadata |
+| `manager.py` | `FeatureManager` | Evaluation engine with prioritized resolution: override > denylist > allowlist > time window > percentage > boolean |
+| `manager.py` | `FeatureManager.is_enabled` | Evaluates a flag for a given context (user_id, group, etc.) following the six-step priority chain |
+| `manager.py` | `FeatureManager.get_value` | Retrieves multivariate flag values from `metadata["value"]` |
+| `manager.py` | `FeatureManager.load_from_file` / `save_to_file` | JSON file persistence for flag definitions |
+| `manager.py` | `FeatureManager.set_override` / `clear_override` | In-memory test override stack (highest evaluation priority) |
 
 ## Operating Contracts
 
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
+- Flag evaluation follows a strict six-step priority: test overrides, denylist, allowlist, time window, percentage rollout, boolean default.
+- Percentage rollout uses `hash(f"{key}:{user_id}") % 100` for deterministic, sticky assignment without external state.
+- If a flag key does not exist, `is_enabled` returns the caller-supplied `default` (defaults to `False`).
+- `load_from_file` accepts both `bool` values and `dict` definitions in the JSON payload.
+- Errors must be logged via `logging_monitoring` before re-raising.
 
-## Navigation Links
+## Integration Points
 
-- **📁 Parent Directory**: [feature_flags](../README.md) - Parent directory documentation
-- **🏠 Project Root**: ../../../../README.md - Main project documentation
+- **Depends on**: `json`, `pathlib.Path`, `time` (standard library only)
+- **Used by**: `feature_flags.strategies`, `feature_flags.rollout`, any module needing runtime flag checks
+
+## Navigation
+
+- **Parent**: [feature_flags](../README.md)
+- **Root**: [Root](../../../../README.md)

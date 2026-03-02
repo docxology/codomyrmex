@@ -64,17 +64,17 @@ class SystemOpsMixin:
         exclude = (exclude_patterns or []) + default_exclude
 
         def should_exclude(name: str) -> bool:
-            """Execute Should Exclude operations natively."""
+            """should Exclude ."""
             return any(fnmatch.fnmatch(name, pat) for pat in exclude)
 
         def should_include(name: str) -> bool:
-            """Execute Should Include operations natively."""
+            """should Include ."""
             if not include_patterns:
                 return True
             return any(fnmatch.fnmatch(name, pat) for pat in include_patterns)
 
         def scan_dir(dir_path: str, depth: int) -> dict:
-            """Execute Scan Dir operations natively."""
+            """scan Dir ."""
             if depth > max_depth:
                 return {"type": "directory", "truncated": True}
 
@@ -103,7 +103,7 @@ class SystemOpsMixin:
         files: list[str] = []
 
         def collect_files(node: dict, current_path: str) -> None:
-            """Execute Collect Files operations natively."""
+            """collect Files ."""
             for name, child in node.get("children", {}).items():
                 child_path = os.path.join(current_path, name)
                 if child.get("type") == "file":

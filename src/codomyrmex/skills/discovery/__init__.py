@@ -41,7 +41,7 @@ class ParameterSchema:
     enum_values: list[Any] | None = None
 
     def to_dict(self) -> dict[str, Any]:
-        """Execute To Dict operations natively."""
+        """Return a dictionary representation of this object."""
         result = {
             "name": self.name,
             "type": self.param_type,
@@ -72,7 +72,7 @@ class SkillMetadata:
     enabled: bool = True
 
     def to_dict(self) -> dict[str, Any]:
-        """Execute To Dict operations natively."""
+        """Return a dictionary representation of this object."""
         return {
             "id": self.id,
             "name": self.name,
@@ -143,7 +143,7 @@ class FunctionSkill(Skill):
         func: Callable,
         metadata: SkillMetadata | None = None,
     ):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.func = func
 
         if metadata:
@@ -202,7 +202,7 @@ class FunctionSkill(Skill):
         )
 
     def execute(self, **kwargs) -> Any:
-        """Execute Execute operations natively."""
+        """Execute the operation."""
         return self.func(**kwargs)
 
 
@@ -210,7 +210,7 @@ class SkillRegistry:
     """Registry for managing skills."""
 
     def __init__(self):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._skills: dict[str, Skill] = {}
         self._by_category: dict[SkillCategory, list[str]] = {}
         self._by_tag: dict[str, list[str]] = {}
@@ -319,7 +319,7 @@ def skill(
 ):
     """Decorator to create a skill from a function."""
     def decorator(func: Callable) -> FunctionSkill:
-        """Execute Decorator operations natively."""
+        """decorator ."""
         # Create skill
         skill_obj = FunctionSkill(func)
 
@@ -345,7 +345,7 @@ class SkillDiscoverer:
     """Discovers skills from modules and packages."""
 
     def __init__(self, registry: SkillRegistry):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.registry = registry
 
     def discover_from_module(self, module) -> list[Skill]:

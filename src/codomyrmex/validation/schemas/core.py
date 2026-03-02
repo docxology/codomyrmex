@@ -44,11 +44,11 @@ class Result:
 
     @property
     def ok(self) -> bool:
-        """Execute Ok operations natively."""
+        """ok ."""
         return self.status == ResultStatus.SUCCESS
 
     def to_dict(self) -> dict[str, Any]:
-        """Execute To Dict operations natively."""
+        """Return a dictionary representation of this object."""
         return {
             "status": self.status.value,
             "data": self.data,
@@ -78,7 +78,7 @@ class Task:
     metadata: dict[str, Any] = field(default_factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        """Execute To Dict operations natively."""
+        """Return a dictionary representation of this object."""
         return {
             "id": self.id,
             "name": self.name,
@@ -101,11 +101,11 @@ class Config:
     module: str = ""
 
     def get(self, key: str, default: Any = None) -> Any:
-        """Execute Get operations natively."""
+        """Return the requested value."""
         return self.values.get(key, default)
 
     def set(self, key: str, value: Any) -> None:
-        """Execute Set operations natively."""
+        """Set the value."""
         self.values[key] = value
 
 

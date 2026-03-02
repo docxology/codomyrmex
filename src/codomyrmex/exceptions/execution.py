@@ -22,7 +22,7 @@ class CodeExecutionError(CodomyrmexError):
         stderr: str | None = None,
         **kwargs: Any,
     ) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         super().__init__(message, **kwargs)
         if exit_code is not None:
             self.context["exit_code"] = exit_code

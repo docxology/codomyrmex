@@ -74,22 +74,22 @@ class InMemoryFlagStore(FlagStore):
     """
 
     def __init__(self) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._data: dict[str, Any] = {}
         self._lock = threading.Lock()
 
     def get(self, key: str) -> Any | None:
-        """Execute Get operations natively."""
+        """Return the requested value."""
         with self._lock:
             return self._data.get(key)
 
     def set(self, key: str, value: Any) -> None:
-        """Execute Set operations natively."""
+        """Set the value."""
         with self._lock:
             self._data[key] = value
 
     def delete(self, key: str) -> bool:
-        """Execute Delete operations natively."""
+        """Delete the specified resource."""
         with self._lock:
             if key in self._data:
                 del self._data[key]
@@ -97,17 +97,17 @@ class InMemoryFlagStore(FlagStore):
             return False
 
     def list_all(self) -> dict[str, Any]:
-        """Execute List All operations natively."""
+        """list All ."""
         with self._lock:
             return dict(self._data)
 
     def __len__(self) -> int:
-        """Execute   Len   operations natively."""
+        """len ."""
         with self._lock:
             return len(self._data)
 
     def __repr__(self) -> str:
-        """Execute   Repr   operations natively."""
+        """repr ."""
         return f"InMemoryFlagStore(keys={list(self._data.keys())})"
 
 
@@ -124,7 +124,7 @@ class FileFlagStore(FlagStore):
     """
 
     def __init__(self, path: str) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._path = path
         self._lock = threading.Lock()
         if not os.path.exists(self._path):
@@ -133,19 +133,19 @@ class FileFlagStore(FlagStore):
     # --- public interface ---
 
     def get(self, key: str) -> Any | None:
-        """Execute Get operations natively."""
+        """Return the requested value."""
         data = self._read()
         return data.get(key)
 
     def set(self, key: str, value: Any) -> None:
-        """Execute Set operations natively."""
+        """Set the value."""
         with self._lock:
             data = self._read()
             data[key] = value
             self._write(data)
 
     def delete(self, key: str) -> bool:
-        """Execute Delete operations natively."""
+        """Delete the specified resource."""
         with self._lock:
             data = self._read()
             if key in data:
@@ -155,7 +155,7 @@ class FileFlagStore(FlagStore):
             return False
 
     def list_all(self) -> dict[str, Any]:
-        """Execute List All operations natively."""
+        """list All ."""
         return self._read()
 
     # --- internal helpers ---
@@ -180,7 +180,7 @@ class FileFlagStore(FlagStore):
         os.replace(tmp_path, self._path)
 
     def __repr__(self) -> str:
-        """Execute   Repr   operations natively."""
+        """repr ."""
         return f"FileFlagStore(path={self._path!r})"
 
 

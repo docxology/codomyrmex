@@ -40,7 +40,7 @@ class MemoryConsolidator:
     """
 
     def __init__(self, config: ConsolidationConfig | None = None) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.config = config or ConsolidationConfig()
         self._seen: set[str] = set()
 

@@ -15,7 +15,7 @@ class PrometheusExporter:
     """Wrapper for prometheus_client to expose metrics via HTTP."""
 
     def __init__(self, port: int = 8000, addr: str = "0.0.0.0"):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.port = port
         self.addr = addr
         self._server_started = False

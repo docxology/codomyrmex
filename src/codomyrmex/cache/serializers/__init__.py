@@ -34,15 +34,15 @@ class JSONSerializer(CacheSerializer):
     """JSON serializer for cache values."""
 
     def __init__(self, indent: int | None = None):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.indent = indent
 
     def serialize(self, value: Any) -> bytes:
-        """Execute Serialize operations natively."""
+        """Serialize this object to a portable format."""
         return json.dumps(value, indent=self.indent, default=str).encode('utf-8')
 
     def deserialize(self, data: bytes) -> Any:
-        """Execute Deserialize operations natively."""
+        """Deserialize from a portable format and return an instance."""
         return json.loads(data.decode('utf-8'))
 
 
@@ -56,15 +56,15 @@ class PickleSerializer(CacheSerializer):
     """
 
     def __init__(self, protocol: int = pickle.HIGHEST_PROTOCOL):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.protocol = protocol
 
     def serialize(self, value: Any) -> bytes:
-        """Execute Serialize operations natively."""
+        """Serialize this object to a portable format."""
         return pickle.dumps(value, protocol=self.protocol)
 
     def deserialize(self, data: bytes) -> Any:
-        """Execute Deserialize operations natively."""
+        """Deserialize from a portable format and return an instance."""
         return pickle.loads(data)
 
 
@@ -76,17 +76,17 @@ class CompressedSerializer(CacheSerializer):
         base_serializer: CacheSerializer,
         compression_level: int = 6,
     ):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.base = base_serializer
         self.level = compression_level
 
     def serialize(self, value: Any) -> bytes:
-        """Execute Serialize operations natively."""
+        """Serialize this object to a portable format."""
         data = self.base.serialize(value)
         return zlib.compress(data, level=self.level)
 
     def deserialize(self, data: bytes) -> Any:
-        """Execute Deserialize operations natively."""
+        """Deserialize from a portable format and return an instance."""
         decompressed = zlib.decompress(data)
         return self.base.deserialize(decompressed)
 
@@ -95,16 +95,16 @@ class Base64Serializer(CacheSerializer):
     """Wrapper that adds base64 encoding."""
 
     def __init__(self, base_serializer: CacheSerializer):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.base = base_serializer
 
     def serialize(self, value: Any) -> bytes:
-        """Execute Serialize operations natively."""
+        """Serialize this object to a portable format."""
         data = self.base.serialize(value)
         return base64.b64encode(data)
 
     def deserialize(self, data: bytes) -> Any:
-        """Execute Deserialize operations natively."""
+        """Deserialize from a portable format and return an instance."""
         decoded = base64.b64decode(data)
         return self.base.deserialize(decoded)
 
@@ -113,15 +113,15 @@ class StringSerializer(CacheSerializer):
     """Simple string serializer."""
 
     def __init__(self, encoding: str = 'utf-8'):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.encoding = encoding
 
     def serialize(self, value: Any) -> bytes:
-        """Execute Serialize operations natively."""
+        """Serialize this object to a portable format."""
         return str(value).encode(self.encoding)
 
     def deserialize(self, data: bytes) -> Any:
-        """Execute Deserialize operations natively."""
+        """Deserialize from a portable format and return an instance."""
         return data.decode(self.encoding)
 
 
@@ -129,11 +129,11 @@ class TypedSerializer(CacheSerializer):
     """Serializer that preserves type information."""
 
     def __init__(self, base_serializer: CacheSerializer | None = None):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.base = base_serializer or JSONSerializer()
 
     def serialize(self, value: Any) -> bytes:
-        """Execute Serialize operations natively."""
+        """Serialize this object to a portable format."""
         type_name = type(value).__name__
         wrapped = {
             "_type": type_name,
@@ -142,7 +142,7 @@ class TypedSerializer(CacheSerializer):
         return self.base.serialize(wrapped)
 
     def deserialize(self, data: bytes) -> Any:
-        """Execute Deserialize operations natively."""
+        """Deserialize from a portable format and return an instance."""
         wrapped = self.base.deserialize(data)
         type_name = wrapped.get("_type")
         value = wrapped.get("_value")
@@ -162,7 +162,7 @@ class TypedSerializer(CacheSerializer):
         return value
 
     def _is_json_serializable(self, value: Any) -> bool:
-        """Execute  Is Json Serializable operations natively."""
+        """is Json Serializable ."""
         try:
             json.dumps(value)
             return True

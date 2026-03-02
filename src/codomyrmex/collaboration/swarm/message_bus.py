@@ -48,7 +48,7 @@ class MessageBus:
     """
 
     def __init__(self) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._subscriptions: list[Subscription] = []
         self._history: list[SwarmMessage] = []
         self._history_limit: int = 1000
@@ -139,12 +139,12 @@ class MessageBus:
 
     @property
     def subscription_count(self) -> int:
-        """Execute Subscription Count operations natively."""
+        """subscription Count ."""
         return len(self._subscriptions)
 
     @property
     def history_size(self) -> int:
-        """Execute History Size operations natively."""
+        """history Size ."""
         return len(self._history)
 
     def recent_messages(self, limit: int = 10) -> list[SwarmMessage]:

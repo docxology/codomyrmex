@@ -1,29 +1,42 @@
 # Codomyrmex Agents — src/codomyrmex/security/governance
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
 
-Governance components for policy enforcement, contract lifecycle management, compliance checking, and dispute resolution. Provides structured workflows for agent agreements, rule-based policy evaluation, and formal mediation processes.
+Inter-agent governance providing contract lifecycle management with multi-party signing, rule-based policy enforcement with priority-ordered evaluation, and formal dispute resolution workflows.
 
-## Active Components
+## Key Components
 
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SPEC.md` – Project file
-- `__init__.py` – Project file
-- `contracts.py` – Project file
-- `dispute_resolution.py` – Project file
-- `policy.py` – Project file
-- `visualization.py` – Project file
+| File | Class / Function | Role |
+|------|-----------------|------|
+| `contracts.py` | `ContractStatus` | Enum: `DRAFT`, `ACTIVE`, `EXPIRED`, `TERMINATED`, `DISPUTED` |
+| `contracts.py` | `ContractTerm` | Dataclass with `type` validation (obligation/prohibition/permission), `fulfill()`, `is_overdue()` |
+| `contracts.py` | `Contract` | Multi-party contract: `add_term()`, `sign()` (auto-activates when all sign), `expire()`, `terminate()`, `dispute()`, `check_compliance()` |
+| `contracts.py` | `ContractError` | Exception for invalid operations (e.g., signing non-DRAFT, duplicate parties) |
+| `policy.py` | `PolicyRule` | Callable-based rule with `name`, `condition`, `action`, `priority`; `evaluate()` catches exceptions and returns `False` |
+| `policy.py` | `PolicyEngine` | Named policy containers: `create_policy()`, `add_rule()`, `evaluate()` (priority-descending), `get_violations()`, `enforce()` |
+| `policy.py` | `PolicyError` | Exception for duplicate policies or missing policy names |
+| `dispute_resolution.py` | `DisputeStatus` | Enum: `OPEN`, `UNDER_REVIEW`, `RESOLVED`, `CLOSED` |
+| `dispute_resolution.py` | `Dispute` | Dataclass with `contract_id`, `filer_id`, `description`, `resolution` |
+| `dispute_resolution.py` | `DisputeResolver` | Dispute lifecycle: `file_dispute()`, `resolve_dispute()`, `get_dispute()` |
 
 ## Operating Contracts
 
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
+- `Contract` requires at least 2 unique parties; `ContractError` raised on duplicates or fewer than 2.
+- Terms can only be added to `DRAFT` contracts; term `party` must be in the contract's party list.
+- `Contract.sign()` auto-transitions to `ACTIVE` when all parties have signed.
+- `PolicyEngine.evaluate()` sorts rules by descending `priority` before evaluation.
+- `PolicyRule.evaluate()` catches exceptions and returns `False` (logged as warning).
+- `DisputeResolver` rejects duplicate dispute IDs via `DisputeError`.
+- Errors must be logged via `logging_monitoring` before re-raising.
 
-## Navigation Links
+## Integration Points
 
-- **Parent Directory**: [security](../README.md)
-- **Project Root**: ../../../../README.md
+- **Depends on**: Standard library (`uuid`, `logging`, `datetime`)
+- **Used by**: Agent collaboration protocols, multi-agent agreements, security policy enforcement
+
+## Navigation
+
+- **Parent**: [security](../README.md)
+- **Root**: [Root](../../../../README.md)

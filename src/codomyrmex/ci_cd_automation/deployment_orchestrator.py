@@ -105,7 +105,7 @@ class Deployment:
     metrics: dict[str, Any] = field(default_factory=dict)
 
     def __post_init__(self):
-        """Execute   Post Init   operations natively."""
+        """post Init ."""
         if self.created_at is None:
             self.created_at = datetime.now(timezone.utc)
 

@@ -26,7 +26,7 @@ class SimpleVersion:
     """Simple semantic version implementation."""
 
     def __init__(self, version_str: str):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         parts = version_str.split('.')
         if len(parts) != 3:
             raise ValueError(f"Invalid semantic version: {version_str}")
@@ -38,17 +38,17 @@ class SimpleVersion:
             raise ValueError(f"Invalid semantic version components: {version_str}")
 
     def __str__(self):
-        """Execute   Str   operations natively."""
+        """str ."""
         return f"{self.major}.{self.minor}.{self.patch}"
 
     def __lt__(self, other):
-        """Execute   Lt   operations natively."""
+        """lt ."""
         if not isinstance(other, SimpleVersion):
             return NotImplemented
         return (self.major, self.minor, self.patch) < (other.major, other.minor, other.patch)
 
     def __eq__(self, other):
-        """Execute   Eq   operations natively."""
+        """eq ."""
         if not isinstance(other, SimpleVersion):
             return NotImplemented
         return (self.major, self.minor, self.patch) == (other.major, other.minor, other.patch)
@@ -445,7 +445,7 @@ def version(version_str: str):
         Decorated function
     """
     def decorator(func: Callable) -> Callable:
-        """Execute Decorator operations natively."""
+        """decorator ."""
         func._api_version = version_str
         return func
     return decorator
@@ -462,7 +462,7 @@ def deprecated_version(version_str: str):
         Decorated function
     """
     def decorator(func: Callable) -> Callable:
-        """Execute Decorator operations natively."""
+        """decorator ."""
         func._deprecated_version = version_str
         return func
     return decorator

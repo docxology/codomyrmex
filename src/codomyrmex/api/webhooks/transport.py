@@ -57,7 +57,7 @@ class HTTPWebhookTransport(WebhookTransport):
             [str, str, dict[str, str], float], tuple[int, str]
         ],
     ) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._handler = handler
 
     def send(

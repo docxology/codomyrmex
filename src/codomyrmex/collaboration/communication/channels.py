@@ -39,7 +39,7 @@ class ChannelInfo:
     created_at: datetime
 
     def to_dict(self) -> dict[str, Any]:
-        """Execute To Dict operations natively."""
+        """Return a dictionary representation of this object."""
         return {
             "channel_id": self.channel_id,
             "name": self.name,
@@ -59,7 +59,7 @@ class Channel(ABC):
     """
 
     def __init__(self, channel_id: str | None = None, name: str = "Channel"):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._channel_id = channel_id or str(uuid.uuid4())
         self._name = name
         self._state = ChannelState.OPEN
@@ -68,17 +68,17 @@ class Channel(ABC):
 
     @property
     def channel_id(self) -> str:
-        """Execute Channel Id operations natively."""
+        """channel Id ."""
         return self._channel_id
 
     @property
     def name(self) -> str:
-        """Execute Name operations natively."""
+        """name ."""
         return self._name
 
     @property
     def state(self) -> ChannelState:
-        """Execute State operations natively."""
+        """state ."""
         return self._state
 
     @abstractmethod
@@ -124,7 +124,7 @@ class MessageQueue:
     """
 
     def __init__(self, max_size: int = 0, message_ttl: float = 0):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._queue: asyncio.Queue = asyncio.Queue(maxsize=max_size) if max_size > 0 else asyncio.Queue()
         self._max_size = max_size
         self._message_ttl = message_ttl
@@ -243,7 +243,7 @@ class QueueChannel(Channel):
         max_size: int = 1000,
         message_ttl: float = 0,
     ):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         super().__init__(channel_id, name)
         self._queue = MessageQueue(max_size, message_ttl)
 
@@ -264,7 +264,7 @@ class QueueChannel(Channel):
         return await self._queue.get(timeout)
 
     def get_info(self) -> ChannelInfo:
-        """Execute Get Info operations natively."""
+        """get Info ."""
         return ChannelInfo(
             channel_id=self._channel_id,
             name=self._name,
@@ -284,7 +284,7 @@ class ChannelManager:
     """
 
     def __init__(self):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._channels: dict[str, Channel] = {}
 
     def create_channel(

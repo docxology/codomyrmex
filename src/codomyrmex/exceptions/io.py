@@ -18,7 +18,7 @@ class FileOperationError(CodomyrmexError):
     def __init__(
         self, message: str, file_path: str | Path | None = None, **kwargs: Any
     ) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         super().__init__(message, **kwargs)
         if file_path:
             self.context["file_path"] = str(file_path)

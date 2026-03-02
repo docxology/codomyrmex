@@ -201,7 +201,7 @@ class PipelineManager:
                 # If loop is running, we need to handle differently
 
                 def run_async():
-                    """Execute Run Async operations natively."""
+                    """run Async ."""
 
                     new_loop = asyncio.new_event_loop()
                     asyncio.set_event_loop(new_loop)
@@ -331,7 +331,7 @@ class PipelineManager:
         """Run a command asynchronously."""
 
         def run_cmd():
-            """Execute Run Cmd operations natively."""
+            """run Cmd ."""
             try:
                 env = os.environ.copy()
                 env.update(env_vars)
@@ -848,7 +848,7 @@ class PipelineManager:
         rec_stack = set()
 
         def has_cycle(node: str) -> bool:
-            """Execute Has Cycle operations natively."""
+            """has Cycle ."""
 
             visited.add(node)
             rec_stack.add(node)

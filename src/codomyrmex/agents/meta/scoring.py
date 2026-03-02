@@ -32,7 +32,7 @@ class OutcomeScore:
     composite: float = 0.0
 
     def to_dict(self) -> dict[str, Any]:
-        """Execute To Dict operations natively."""
+        """Return a dictionary representation of this object."""
         return {
             "correctness": round(self.correctness, 3),
             "efficiency": round(self.efficiency, 3),
@@ -61,7 +61,7 @@ class OutcomeScorer:
         self,
         weights: dict[str, float] | None = None,
     ) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._weights = weights or {
             "correctness": 0.4,
             "efficiency": 0.2,

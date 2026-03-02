@@ -40,18 +40,21 @@ from .pyrefly_runner import (
     check_pyrefly_available,
     run_pyrefly,
 )
-from .static_analyzer import (
+from .models import (
     AnalysisResult,
     AnalysisSummary,
     AnalysisType,
     CodeMetrics,
     Language,
     SeverityLevel,
+)
+from .static_analyzer import (
     StaticAnalyzer,
     analyze_file,
     analyze_project,
     get_available_tools,
 )
+from .tool_runners import ToolRunner
 
 
 def analyze_code_quality(path: str = None, **kwargs) -> dict:
@@ -70,7 +73,7 @@ def analyze_code_quality(path: str = None, **kwargs) -> dict:
 
     try:
         analyzer = StaticAnalyzer()
-        result = analyzer.analyze(target_path)
+        result = analyzer.analyze_project([target_path])
 
         return {
             "success": True,
@@ -94,7 +97,7 @@ def analyze_code_quality(path: str = None, **kwargs) -> dict:
 def cli_commands():
     """Return CLI commands for the static_analysis module."""
     def _analyze(path=None):
-        """Execute  Analyze operations natively."""
+        """analyze ."""
         import os
         target = path or os.getcwd()
         result = analyze_code_quality(target)
@@ -105,7 +108,7 @@ def cli_commands():
             print(f"Error: {result['error']}")
 
     def _list_tools():
-        """Execute  List Tools operations natively."""
+        """list Tools ."""
         tools_list = get_available_tools()
         print("Available analysis tools:")
         for tool in tools_list:
@@ -125,6 +128,7 @@ __all__ = [
     "run_pyrefly",
     "check_pyrefly_available",
     "StaticAnalyzer",
+    "ToolRunner",
     "analyze_file",
     "analyze_project",
     "analyze_code_quality",  # For workflow integration

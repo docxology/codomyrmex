@@ -54,14 +54,14 @@ class _TokenBucket:
     __slots__ = ("rate", "burst", "_tokens", "_last_refill")
 
     def __init__(self, rate: float, burst: int) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.rate = rate
         self.burst = burst
         self._tokens = float(burst)
         self._last_refill = time.monotonic()
 
     def _refill(self) -> None:
-        """Execute  Refill operations natively."""
+        """refill ."""
         now = time.monotonic()
         elapsed = now - self._last_refill
         self._tokens = min(self.burst, self._tokens + elapsed * self.rate)
@@ -77,13 +77,13 @@ class _TokenBucket:
 
     @property
     def tokens(self) -> float:
-        """Execute Tokens operations natively."""
+        """tokens ."""
         self._refill()
         return self._tokens
 
     @property
     def metrics(self) -> dict[str, Any]:
-        """Execute Metrics operations natively."""
+        """metrics ."""
         return {
             "tokens": round(self.tokens, 2),
             "rate": self.rate,
@@ -101,7 +101,7 @@ class RateLimiter:
     """
 
     def __init__(self, config: RateLimiterConfig | None = None) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.config = config or RateLimiterConfig()
         self._global = _TokenBucket(self.config.rate, self.config.burst)
         self._per_tool: dict[str, _TokenBucket] = {}

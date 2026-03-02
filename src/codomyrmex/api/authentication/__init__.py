@@ -49,7 +49,7 @@ class AuthResult:
     metadata: dict[str, Any] = field(default_factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        """Execute To Dict operations natively."""
+        """Return a dictionary representation of this object."""
         return {
             "authenticated": self.authenticated,
             "identity": self.identity,
@@ -81,7 +81,7 @@ class APIKeyAuthenticator(Authenticator):
         header_name: str = "X-API-Key",
         query_param: str | None = None,
     ):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.header_name = header_name
         self.query_param = query_param
         self._keys: dict[str, dict[str, Any]] = {}
@@ -107,7 +107,7 @@ class APIKeyAuthenticator(Authenticator):
             del self._keys[key]
 
     def authenticate(self, request: dict[str, Any]) -> AuthResult:
-        """Execute Authenticate operations natively."""
+        """authenticate ."""
         # Extract API key
         headers = request.get("headers", {})
         query = request.get("query", {})
@@ -158,7 +158,7 @@ class BearerTokenAuthenticator(Authenticator):
     auth_type = AuthType.BEARER_TOKEN
 
     def __init__(self, validator: Callable[[str], dict | None] | None = None):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._tokens: dict[str, dict[str, Any]] = {}
         self._validator = validator
 
@@ -181,7 +181,7 @@ class BearerTokenAuthenticator(Authenticator):
         return token
 
     def authenticate(self, request: dict[str, Any]) -> AuthResult:
-        """Execute Authenticate operations natively."""
+        """authenticate ."""
         headers = request.get("headers", {})
         auth_header = headers.get("Authorization", "")
 
@@ -232,7 +232,7 @@ class BasicAuthenticator(Authenticator):
     auth_type = AuthType.BASIC_AUTH
 
     def __init__(self):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._users: dict[str, dict[str, Any]] = {}
 
     def register_user(
@@ -250,7 +250,7 @@ class BasicAuthenticator(Authenticator):
         }
 
     def authenticate(self, request: dict[str, Any]) -> AuthResult:
-        """Execute Authenticate operations natively."""
+        """authenticate ."""
         headers = request.get("headers", {})
         auth_header = headers.get("Authorization", "")
 
@@ -302,7 +302,7 @@ class HMACAuthenticator(Authenticator):
         timestamp_header: str = "X-Timestamp",
         max_age_seconds: int = 300,
     ):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.signature_header = signature_header
         self.timestamp_header = timestamp_header
         self.max_age_seconds = max_age_seconds
@@ -343,7 +343,7 @@ class HMACAuthenticator(Authenticator):
         return signature
 
     def authenticate(self, request: dict[str, Any]) -> AuthResult:
-        """Execute Authenticate operations natively."""
+        """authenticate ."""
         headers = request.get("headers", {})
         signature = headers.get(self.signature_header)
         timestamp_str = headers.get(self.timestamp_header)

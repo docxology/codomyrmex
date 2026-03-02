@@ -54,7 +54,7 @@ class ModuleProfile:
     merge_target: str = ""
 
     def to_dict(self) -> dict[str, Any]:
-        """Execute To Dict operations natively."""
+        """Return a dictionary representation of this object."""
         return {
             "name": self.name,
             "loc": self.loc,
@@ -82,31 +82,31 @@ class TriageReport:
 
     @property
     def promote(self) -> list[ModuleProfile]:
-        """Execute Promote operations natively."""
+        """promote ."""
         return [m for m in self.modules if m.decision == TriageDecision.PROMOTE]
 
     @property
     def archive(self) -> list[ModuleProfile]:
-        """Execute Archive operations natively."""
+        """archive ."""
         return [m for m in self.modules if m.decision == TriageDecision.ARCHIVE]
 
     @property
     def merge(self) -> list[ModuleProfile]:
-        """Execute Merge operations natively."""
+        """merge ."""
         return [m for m in self.modules if m.decision == TriageDecision.MERGE]
 
     @property
     def stub(self) -> list[ModuleProfile]:
-        """Execute Stub operations natively."""
+        """stub ."""
         return [m for m in self.modules if m.decision == TriageDecision.STUB]
 
     @property
     def active(self) -> list[ModuleProfile]:
-        """Execute Active operations natively."""
+        """active ."""
         return [m for m in self.modules if m.decision == TriageDecision.ACTIVE]
 
     def summary(self) -> dict[str, Any]:
-        """Execute Summary operations natively."""
+        """summary ."""
         return {
             "total": len(self.modules),
             "promote": len(self.promote),
@@ -150,7 +150,7 @@ class TriageEngine:
         min_active_loc: int = 2000,
         archive_threshold: int = 100,
     ) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._min_active_loc = min_active_loc
         self._archive_threshold = archive_threshold
 

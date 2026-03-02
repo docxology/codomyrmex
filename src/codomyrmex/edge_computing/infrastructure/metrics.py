@@ -21,7 +21,7 @@ class EdgeMetrics:
     """Track metrics for edge function invocations."""
 
     def __init__(self):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._records: list[InvocationRecord] = []
 
     def record(self, record: InvocationRecord) -> None:

@@ -408,7 +408,7 @@ class EventOperationContext:
         self.start_time: float | None = None
 
     def __enter__(self):
-        """Execute   Enter   operations natively."""
+        """enter ."""
 
         import time
         self.start_time = time.time()
@@ -416,7 +416,7 @@ class EventOperationContext:
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        """Execute   Exit   operations natively."""
+        """exit ."""
 
         import time
         end_time = time.time()

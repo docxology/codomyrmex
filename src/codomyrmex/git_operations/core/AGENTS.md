@@ -1,55 +1,39 @@
-# Codomyrmex Agents — src/codomyrmex/git_operations/core
-
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+# Core - Agent Coordination
 
 ## Purpose
 
-Core Git integration infrastructure for repository access and version control.
+Hub module re-exporting 37 git operation functions from the `commands/` subpackage, covering branching, commits, remotes, stash, sync, tags, submodules, config, and status.
 
-## Active Components
+## Key Components
 
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SPEC.md` – Project file
-- `git.py` – Project file
-- `metadata.py` – Project file
-- `repository.py` – Project file
-- `repository_metadata.json` – Project file
-- `repository_metadata.json.backup.20260126_085342` – Project file
-- `repository_metadata.json.backup.20260126_085518` – Project file
-- `repository_metadata.json.backup.20260126_090734` – Project file
-- `repository_metadata.json.backup.20260126_090740` – Project file
-- `repository_metadata.json.backup.20260126_090741` – Project file
-- `repository_metadata.json.backup.20260126_090742` – Project file
-- `repository_metadata.json.backup.20260126_090845` – Project file
-- `repository_metadata.json.backup.20260126_100201` – Project file
-- `repository_metadata.json.backup.20260126_100342` – Project file
-- `repository_metadata.json.backup.20260126_100938` – Project file
-- `repository_metadata.json.backup.20260126_101027` – Project file
-- `repository_metadata.json.backup.20260126_103618` – Project file
-- `repository_metadata.json.backup.20260126_103759` – Project file
-- `repository_metadata.json.backup.20260126_104644` – Project file
-- `repository_metadata.json.backup.20260126_104824` – Project file
-- `repository_metadata.json.backup.20260126_110046` – Project file
-- `repository_metadata.json.backup.20260126_110227` – Project file
-- `repository_metadata.json.backup.20260126_111957` – Project file
-- `repository_metadata.json.backup.20260126_112137` – Project file
-- `repository_metadata.json.backup.20260126_114120` – Project file
-- `repository_metadata.json.backup.20260126_114259` – Project file
-- `repository_metadata.json.backup.20260126_153140` – Project file
-- `repository_metadata.json.backup.20260126_153319` – Project file
-- `repository_metadata.json.backup.20260127_065955` – Project file
-- `repository_metadata.json.backup.20260127_070145` – Project file
-- `repository_metadata.json.backup.20260127_070645` – Project file
-- `repository_metadata.json.backup.20260127_070934` – Project file
+| Component | Category | Functions |
+|-----------|----------|-----------|
+| `commands/branching` | Branch management | `create_branch`, `delete_branch`, `get_current_branch`, `switch_branch` |
+| `commands/commit` | Commit operations | `commit_changes`, `amend_commit`, `revert_commit`, `cherry_pick` |
+| `commands/config` | Git config | `get_config`, `set_config` |
+| `commands/history` | History queries | `get_commit_history`, `get_commit_history_filtered`, `get_commit_details`, `get_blame` |
+| `commands/merge` | Merge/rebase | `merge_branch`, `rebase_branch` |
+| `commands/remote` | Remote management | `add_remote`, `remove_remote`, `list_remotes`, `fetch_remote`, `prune_remote` |
+| `commands/repository` | Repo operations | `check_git_availability`, `clone_repository`, `initialize_git_repository`, `is_git_repository` |
+| `commands/stash` | Stash operations | `stash_changes`, `apply_stash`, `list_stashes` |
+| `commands/status` | Working tree | `get_status`, `get_diff`, `get_diff_files`, `add_files`, `reset_changes`, `clean_repository` |
+| `commands/submodules` | Submodule ops | `init_submodules`, `update_submodules` |
+| `commands/sync` | Push/pull/fetch | `push_changes`, `pull_changes`, `fetch_changes` |
+| `commands/tags` | Tag management | `create_tag`, `list_tags` |
 
 ## Operating Contracts
 
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
+- All 37 functions are re-exported via `__all__` for direct import from `git_operations.core`.
+- Performance monitoring is optional -- falls back to no-op decorators if unavailable.
+- Destructive operations (push, clean, reset, delete_branch) require appropriate trust level when invoked via MCP.
 
-## Navigation Links
+## Integration Points
 
-- **📁 Parent Directory**: [git_operations](../README.md) - Parent directory documentation
-- **🏠 Project Root**: ../../../../README.md - Main project documentation
+- **Parent module**: `git_operations/` exposes 34 `@mcp_tool`-decorated tools via `mcp_tools.py`.
+- **Dependencies**: `codomyrmex.logging_monitoring`, `codomyrmex.performance`.
+
+## Navigation
+
+- **Parent**: [git_operations/](../README.md)
+- **Sibling**: [SPEC.md](SPEC.md)
+- **Root**: [/README.md](../../../../README.md)

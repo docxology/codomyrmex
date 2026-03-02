@@ -1,25 +1,39 @@
-# Codomyrmex Agents — src/codomyrmex/logistics/resources
+# Codomyrmex Agents -- src/codomyrmex/logistics/resources
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
 
-Resource management for tracking availability, allocation, and capacity planning.
+Placeholder submodule for resource allocation and management within the
+logistics system. Currently defines the module namespace only (`__init__.py`
+with empty `__all__`). Intended to house resource tracking, availability
+monitoring, and capacity planning once implemented.
 
-## Active Components
+## Key Components
 
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SPEC.md` – Project file
-- `__init__.py` – Project file
+| File | Class / Function | Role |
+|------|-----------------|------|
+| `__init__.py` | (empty `__all__`) | Module namespace placeholder |
+
+## Current State
+
+This submodule is a namespace stub. No resource management implementations
+are present yet. The `__init__.py` exports an empty `__all__` list.
+Resource management for the logistics system is planned for future
+development.
 
 ## Operating Contracts
 
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
+- Future implementations must follow the zero-mock policy: real resource tracking only.
+- Unimplemented features must raise `NotImplementedError`.
+- Errors must be logged via `logging_monitoring` before re-raising.
 
-## Navigation Links
+## Integration Points
 
-- **📁 Parent Directory**: [logistics](../README.md) - Parent directory documentation
-- **🏠 Project Root**: ../../../../README.md - Main project documentation
+- **Depends on**: Nothing currently
+- **Used by**: Nothing currently (namespace reserved for future use)
+
+## Navigation
+
+- **Parent**: [logistics](../AGENTS.md)
+- **Root**: [../../../../README.md](../../../../README.md)

@@ -41,7 +41,7 @@ class APISurface:
     """
 
     def __init__(self, contract: APIContract) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._contract = contract
 
     def analyze(self) -> APISurfaceReport:

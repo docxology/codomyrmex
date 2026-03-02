@@ -207,7 +207,7 @@ except ImportError:
 def cli_commands():
     """Return CLI commands for the agents module."""
     def _list_agents():
-        """Execute  List Agents operations natively."""
+        """list Agents ."""
         providers = []
         provider_map = {
             "claude": ClaudeClient,
@@ -230,7 +230,7 @@ def cli_commands():
         print("\n".join(providers))
 
     def _show_config():
-        """Execute  Show Config operations natively."""
+        """show Config ."""
         config = get_config()
         print("Agent configuration:")
         for key, value in vars(config).items():

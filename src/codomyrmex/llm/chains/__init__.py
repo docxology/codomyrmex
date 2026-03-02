@@ -71,7 +71,7 @@ class Chain(ABC):
     chain_type: ChainType
 
     def __init__(self, name: str = "chain"):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.name = name
         self.steps: list[ChainStep] = []
 
@@ -92,12 +92,12 @@ class SimpleChain(Chain):
     chain_type = ChainType.SIMPLE
 
     def __init__(self, prompt_template: str, name: str = "simple_chain"):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         super().__init__(name)
         self.prompt_template = prompt_template
 
     def run(self, input_data: dict[str, Any], llm_func: Callable[[str], str]) -> ChainResult:
-        """Execute Run operations natively."""
+        """Run the operation."""
         try:
             prompt = self.prompt_template
             for key, value in input_data.items():
@@ -121,7 +121,7 @@ class SequentialChain(Chain):
     chain_type = ChainType.SEQUENTIAL
 
     def run(self, input_data: dict[str, Any], llm_func: Callable[[str], str]) -> ChainResult:
-        """Execute Run operations natively."""
+        """Run the operation."""
         context = dict(input_data)
         step_results = []
 
@@ -158,7 +158,7 @@ class ChainOfThought(SequentialChain):
     """A chain that implements chain-of-thought reasoning."""
 
     def __init__(self, name: str = "cot_chain"):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         super().__init__(name)
 
         # Add reasoning step
@@ -201,13 +201,13 @@ class ReActChain(Chain):
         max_iterations: int = 5,
         name: str = "react_chain"
     ):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         super().__init__(name)
         self.tools = tools
         self.max_iterations = max_iterations
 
     def run(self, input_data: dict[str, Any], llm_func: Callable[[str], str]) -> ChainResult:
-        """Execute Run operations natively."""
+        """Run the operation."""
         context = dict(input_data)
         step_results = []
         scratchpad = ""

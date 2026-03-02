@@ -43,7 +43,7 @@ class ChainStep:
     output_key: str = ""
 
     def to_dict(self) -> dict[str, Any]:
-        """Execute To Dict operations natively."""
+        """Return a dictionary representation of this object."""
         return {
             "tool_name": self.tool_name,
             "input_mapping": self.input_mapping,
@@ -71,7 +71,7 @@ class ChainResult:
     duration_ms: float = 0.0
 
     def to_dict(self) -> dict[str, Any]:
-        """Execute To Dict operations natively."""
+        """Return a dictionary representation of this object."""
         return {
             "success": self.success,
             "context": self.context,
@@ -126,7 +126,7 @@ class ToolChain:
     """
 
     def __init__(self, registry: ToolRegistry) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._registry = registry
         self._steps: list[ChainStep] = []
 
@@ -272,11 +272,11 @@ class ToolChain:
     # ------------------------------------------------------------------
 
     def __len__(self) -> int:
-        """Execute   Len   operations natively."""
+        """len ."""
         return len(self._steps)
 
     def __repr__(self) -> str:
-        """Execute   Repr   operations natively."""
+        """repr ."""
         names = [s.tool_name for s in self._steps]
         return f"ToolChain(steps={names})"
 

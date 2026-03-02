@@ -30,7 +30,7 @@ class LogRotationManager:
     """
 
     def __init__(self, log_dir: str = "logs") -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.log_dir = log_dir
         self._handlers: dict[str, RotatingFileHandler] = {}
         if not os.path.exists(log_dir):
@@ -140,5 +140,5 @@ class LogRotationManager:
 
     @property
     def handler_count(self) -> int:
-        """Execute Handler Count operations natively."""
+        """handler Count ."""
         return len(self._handlers)

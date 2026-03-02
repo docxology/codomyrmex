@@ -10,7 +10,7 @@ class SwarmEngine:
     """Engine for simulating and controlling agent swarms."""
 
     def __init__(self, num_agents: int = 50):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.agents = [SwarmAgent() for _ in range(num_agents)]
         self.params = FlockingParams()
 

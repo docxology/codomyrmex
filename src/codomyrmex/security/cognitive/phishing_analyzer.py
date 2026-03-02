@@ -23,7 +23,7 @@ class PhishingAnalyzer:
     """Analyzes emails and communications for phishing attempts."""
 
     def __init__(self):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
 
         logger.info("PhishingAnalyzer initialized")
 

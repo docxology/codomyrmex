@@ -51,7 +51,7 @@ class DistillationPipeline:
         self,
         config: DistillationConfig | None = None,
     ) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._config = config or DistillationConfig()
         self._seen_prompts: set[str] = set()
 

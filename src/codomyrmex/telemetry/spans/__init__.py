@@ -23,7 +23,7 @@ class SpanContext:
     sampled: bool = True
 
     def to_dict(self) -> dict[str, Any]:
-        """Execute To Dict operations natively."""
+        """Return a dictionary representation of this object."""
         return {
             "trace_id": self.trace_id,
             "span_id": self.span_id,
@@ -57,7 +57,7 @@ class SpanEvent:
     attributes: dict[str, Any] = field(default_factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        """Execute To Dict operations natively."""
+        """Return a dictionary representation of this object."""
         return {
             "name": self.name,
             "timestamp": self.timestamp.isoformat(),
@@ -89,7 +89,7 @@ class Span:
         context: SpanContext | None = None,
         kind: str = "internal",
     ):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.name = name
         self.context = context or SpanContext.new_root()
         self.kind = kind  # internal, server, client, producer, consumer
@@ -173,7 +173,7 @@ class Span:
         return 0.0
 
     def to_dict(self) -> dict[str, Any]:
-        """Execute To Dict operations natively."""
+        """Return a dictionary representation of this object."""
         return {
             "name": self.name,
             "trace_id": self.context.trace_id,
@@ -212,7 +212,7 @@ class Tracer:
         name: str,
         on_span_end: Callable[[Span], None] | None = None,
     ):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.name = name
         self.on_span_end = on_span_end
 
@@ -271,11 +271,11 @@ class Tracer:
     ):
         """Decorator to wrap a function with span creation."""
         def decorator(func: Callable) -> Callable:
-            """Execute Decorator operations natively."""
+            """decorator ."""
             span_name = name or func.__name__
 
             def wrapper(*args, **kwargs):
-                """Execute Wrapper operations natively."""
+                """wrapper ."""
                 with self.span(span_name, kind):
                     return func(*args, **kwargs)
 
@@ -287,7 +287,7 @@ class SpanProcessor:
     """Processes completed spans."""
 
     def __init__(self):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._spans: list[Span] = []
         self._lock = threading.Lock()
 
@@ -321,7 +321,7 @@ class BatchSpanProcessor(SpanProcessor):
         max_batch_size: int = 100,
         flush_interval: float = 5.0,
     ):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         super().__init__()
         self.exporter = exporter
         self.max_batch_size = max_batch_size

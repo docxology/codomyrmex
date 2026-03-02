@@ -36,7 +36,7 @@ _DIM = "\033[2m"
 
 
 def _status_color(status: str) -> str:
-    """Execute  Status Color operations natively."""
+    """status Color ."""
     return {
         "operative": _GREEN,
         "key_missing": _YELLOW,
@@ -46,7 +46,7 @@ def _status_color(status: str) -> str:
 
 
 def _badge(status: str) -> str:
-    """Execute  Badge operations natively."""
+    """badge ."""
     color = _status_color(status)
     symbols = {
         "operative": "✓",
@@ -60,7 +60,7 @@ def _badge(status: str) -> str:
 # ── Display helpers ───────────────────────────────────────────────────────
 
 def print_banner():
-    """Execute Print Banner operations natively."""
+    """print Banner ."""
     print(f"""
 {_BOLD}{_CYAN}╔══════════════════════════════════════════════════════════════╗
 ║              Codomyrmex Agent Setup Wizard                   ║

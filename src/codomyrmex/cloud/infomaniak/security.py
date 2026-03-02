@@ -106,7 +106,7 @@ class CloudSecurityPipeline:
         identity_manager: Any | None = None,
         crumb_cleaner: Any | None = None,
     ):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._defense = active_defense
         if self._defense is None and ActiveDefense is not None:
             self._defense = ActiveDefense()

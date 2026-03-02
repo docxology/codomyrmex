@@ -318,7 +318,7 @@ class HealthChecker:
             # Test performance profiling
             @profile_function
             def test_func():
-                """Execute Test Func operations natively."""
+                """test Func ."""
                 return sum(range(100))
 
             test_func()

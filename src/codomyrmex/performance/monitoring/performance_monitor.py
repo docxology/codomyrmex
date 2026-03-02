@@ -48,7 +48,7 @@ class SystemMetrics:
 class SystemMonitor:
     """Functional component: SystemMonitor."""
     def __init__(self, interval: float = 1.0):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.interval = interval
         self._process = psutil.Process() if HAS_PSUTIL else None
         self._monitoring = False
@@ -77,7 +77,7 @@ class SystemMonitor:
             self._monitor_thread.join(timeout=2.0)
 
     def get_current_metrics(self) -> SystemMetrics:
-        """Execute Get Current Metrics operations natively."""
+        """get Current Metrics ."""
         if not HAS_PSUTIL:
             return SystemMetrics(0,0,0,0,0,0,0,0)
 
@@ -278,10 +278,10 @@ def monitor_performance(
     """
 
     def decorator(func: Callable) -> Callable:
-        """Execute Decorator operations natively."""
+        """decorator ."""
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
-            """Execute Wrapper operations natively."""
+            """wrapper ."""
             current_monitor = monitor or _performance_monitor
             start_time = time.time()
             try:
@@ -311,7 +311,7 @@ def profile_memory_usage(func: Callable) -> Callable:
     """
     @functools.wraps(func)
     def wrapper(*args, **kwargs):
-        """Execute Wrapper operations natively."""
+        """wrapper ."""
 
         if not HAS_PSUTIL:
             logger.warning("psutil not available, memory profiling disabled")

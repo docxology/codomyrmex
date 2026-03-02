@@ -45,7 +45,7 @@ class AntiPattern:
     suggestion: str = ""
 
     def to_dict(self) -> dict[str, Any]:
-        """Execute To Dict operations natively."""
+        """Return a dictionary representation of this object."""
         return {
             "name": self.name,
             "message": self.message,
@@ -72,7 +72,7 @@ class AnalysisReport:
 
     @property
     def count_by_severity(self) -> dict[str, int]:
-        """Execute Count By Severity operations natively."""
+        """count By Severity ."""
         counts: dict[str, int] = {}
         for p in self.patterns:
             key = p.severity.value
@@ -81,11 +81,11 @@ class AnalysisReport:
 
     @property
     def has_errors(self) -> bool:
-        """Execute Has Errors operations natively."""
+        """has Errors ."""
         return any(p.severity == Severity.ERROR for p in self.patterns)
 
     def to_dict(self) -> dict[str, Any]:
-        """Execute To Dict operations natively."""
+        """Return a dictionary representation of this object."""
         return {
             "patterns": [p.to_dict() for p in self.patterns],
             "files_scanned": self.files_scanned,
@@ -114,7 +114,7 @@ class AntiPatternDetector:
         max_complexity: int = 10,
         max_nesting: int = 4,
     ) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._max_function_lines = max_function_lines
         self._max_params = max_params
         self._max_complexity = max_complexity

@@ -23,14 +23,14 @@ _default_translator: Translator | None = None
 
 
 def init(default_locale: str = "en") -> Translator:
-    """Execute Init operations natively."""
+    """Initialize this instance."""
     global _default_translator
     _default_translator = Translator(Locale.from_string(default_locale))
     return _default_translator
 
 
 def t(key: str, **kwargs) -> str:
-    """Execute T operations natively."""
+    """t ."""
     global _default_translator
     if _default_translator is None:
         init()

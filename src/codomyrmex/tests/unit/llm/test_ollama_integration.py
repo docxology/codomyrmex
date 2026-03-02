@@ -79,9 +79,7 @@ class TestOllamaIntegration:
     def test_ollama_server_connectivity(self):
         """Test that Ollama server is running and accessible."""
         if not self.ollama_available:
-            # Test passes when Ollama is not available - this is expected in CI
-            assert True
-            return
+            pytest.skip("Ollama server not available")
 
         # This is a basic connectivity test
         models = self.ollama_manager.list_models()
@@ -92,9 +90,7 @@ class TestOllamaIntegration:
     def test_model_listing(self):
         """Test model listing functionality."""
         if not self.ollama_available:
-            # Test passes when Ollama is not available
-            assert True
-            return
+            pytest.skip("Ollama server not available")
 
         models = self.ollama_manager.list_models()
 
@@ -112,9 +108,7 @@ class TestOllamaIntegration:
     def test_model_availability_checking(self):
         """Test model availability checking."""
         if not self.ollama_available:
-            # Test passes when Ollama is not available
-            assert True
-            return
+            pytest.skip("Ollama server not available")
 
         # Test with known available model
         if self.test_model:
@@ -142,9 +136,7 @@ class TestOllamaIntegration:
     def test_model_execution_basic(self):
         """Test basic model execution."""
         if not self.ollama_available or not self.ollama_manager.is_model_available(self.test_model):
-            # Test passes when Ollama or model is not available
-            assert True
-            return
+            pytest.skip("Ollama server or test model not available")
 
         result = self.ollama_manager.run_model(
             self.test_model,
@@ -174,9 +166,7 @@ class TestOllamaIntegration:
     def test_model_execution_with_options(self):
         """Test model execution with execution options."""
         if not self.ollama_available or not self.ollama_manager.is_model_available(self.test_model):
-            # Test passes when Ollama or model is not available
-            assert True
-            return
+            pytest.skip("Ollama server or test model not available")
 
         options = ExecutionOptions(
             temperature=0.7,
@@ -198,9 +188,7 @@ class TestOllamaIntegration:
     def test_batch_execution(self):
         """Test batch execution of multiple prompts."""
         if not self.ollama_available or not self.ollama_manager.is_model_available(self.test_model):
-            # Test passes when Ollama or model is not available
-            assert True
-            return
+            pytest.skip("Ollama server or test model not available")
 
         results = self.model_runner.run_batch(
             self.test_model,
@@ -371,9 +359,7 @@ class TestOllamaIntegration:
     def test_conversation_execution(self):
         """Test conversational model execution."""
         if not self.ollama_available or not self.ollama_manager.is_model_available(self.test_model):
-            # Test passes when Ollama or model is not available
-            assert True
-            return
+            pytest.skip("Ollama server or test model not available")
 
         # Test conversation format
         messages = [
@@ -396,9 +382,7 @@ class TestOllamaIntegration:
     def test_context_execution(self):
         """Test execution with additional context."""
         if not self.ollama_available or not self.ollama_manager.is_model_available(self.test_model):
-            # Test passes when Ollama or model is not available
-            assert True
-            return
+            pytest.skip("Ollama server or test model not available")
 
         context_docs = [
             "Context 1: Machine learning is a subset of AI.",
@@ -419,9 +403,7 @@ class TestOllamaIntegration:
     def test_benchmarking(self):
         """Test model benchmarking functionality."""
         if not self.ollama_available or not self.ollama_manager.is_model_available(self.test_model):
-            # Test passes when Ollama or model is not available
-            assert True
-            return
+            pytest.skip("Ollama server or test model not available")
 
         # Test with small prompts for quick benchmarking
         test_prompts = [
@@ -534,9 +516,7 @@ class TestOllamaIntegrationRealExecution:
     def test_real_model_execution(self):
         """Test real model execution with actual responses."""
         if not self.ollama_available or not self.test_model:
-            # Test passes when Ollama or model is not available
-            assert True
-            return
+            pytest.skip("Ollama server or test model not available")
 
         print(f"Testing real execution with model: {self.test_model}")
 
@@ -583,16 +563,12 @@ class TestOllamaIntegrationRealExecution:
     def test_real_model_comparison(self):
         """Test real model comparison."""
         if not self.ollama_available:
-            # Test passes when Ollama is not available
-            assert True
-            return
+            pytest.skip("Ollama server not available")
 
         models = self.ollama_manager.list_models()
 
         if len(models) < 2:
-            # Test passes when not enough models are available
-            assert True
-            return
+            pytest.skip("Not enough models available for comparison")
 
         print(f"Testing real model comparison with: {[m.name for m in models[:2]]}")
 

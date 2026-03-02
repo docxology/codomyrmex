@@ -98,13 +98,13 @@ from .sandbox import (
 def cli_commands():
     """Return CLI commands for the coding module."""
     def _list_languages():
-        """Execute  List Languages operations natively."""
+        """list Languages ."""
         print("Supported languages:")
         for lang in sorted(SUPPORTED_LANGUAGES):
             print(f"  {lang}")
 
     def _execute(lang="python", code="print('hello')"):
-        """Execute  Execute operations natively."""
+        """Execute the operation."""
         result = execute_code(lang, code)
         print(f"Language: {lang}")
         print(f"Exit code: {result.get('exit_code', 'N/A')}")

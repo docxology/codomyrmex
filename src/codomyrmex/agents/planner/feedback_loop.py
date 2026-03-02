@@ -65,7 +65,7 @@ def _default_task_executor(task: PlanTask) -> Callable[..., Any]:
     a dict with the task name and state.
     """
     def executor(ctx: dict[str, Any]) -> dict[str, Any]:
-        """Execute Executor operations natively."""
+        """executor ."""
         task.state = TaskState.COMPLETED
         return {"task": task.name, "state": task.state.value}
     return executor
@@ -96,7 +96,7 @@ class FeedbackLoop:
         memory_store: MemoryStore | None = None,
         task_executor_factory: Callable[[PlanTask], Callable[..., Any]] | None = None,
     ) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._config = config or FeedbackConfig()
         self._plan_engine = plan_engine or PlanEngine()
         self._memory = memory_store or MemoryStore()

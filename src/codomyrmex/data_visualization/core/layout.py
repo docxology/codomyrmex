@@ -14,11 +14,11 @@ class Section:
     width: str = "100%"
 
     def add(self, child: Any) -> None:
-        """Execute Add operations natively."""
+        """add ."""
         self.children.append(child)
 
     def render(self) -> str:
-        """Execute Render operations natively."""
+        """render ."""
         inner = "\n".join(
             getattr(c, "render", lambda: str(c))() for c in self.children
         )
@@ -36,7 +36,7 @@ class Grid:
     sections: list[Section] = field(default_factory=list)
 
     def add_section(self, title: str, content: Any = None, **kwargs: Any) -> None:
-        """Execute Add Section operations natively."""
+        """add Section ."""
         description = kwargs.get("description", "")
         full_width = kwargs.get("full_width", False)
         width = "100%" if full_width else f"{100/self.columns}%" # Simplistic width
@@ -47,7 +47,7 @@ class Grid:
         self.sections.append(section)
 
     def render(self) -> str:
-        """Execute Render operations natively."""
+        """render ."""
         inner = "\n".join(s.render() for s in self.sections)
         return (
             f'<div style="display:grid;grid-template-columns:'

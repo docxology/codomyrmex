@@ -65,7 +65,7 @@ class PopulationManager(Generic[T]):
         mutation: MutationOperator[T],
         elitism_count: int = 1,
     ) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._selection = selection
         self._crossover = crossover
         self._mutation = mutation
@@ -231,11 +231,11 @@ class PopulationManager(Generic[T]):
         return self._generation
 
     def __len__(self) -> int:
-        """Execute   Len   operations natively."""
+        """len ."""
         return len(self._population)
 
     def __repr__(self) -> str:
-        """Execute   Repr   operations natively."""
+        """repr ."""
         best = self.get_best()
         best_fit = best.fitness if best else None
         return (

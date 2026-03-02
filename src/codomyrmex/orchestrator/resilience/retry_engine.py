@@ -39,7 +39,7 @@ class RetryResult:
     adjustments: list[str] = field(default_factory=list)
 
     def to_dict(self) -> dict[str, Any]:
-        """Execute To Dict operations natively."""
+        """Return a dictionary representation of this object."""
         return {
             "success": self.success,
             "attempts": self.attempts,
@@ -68,7 +68,7 @@ class RetryEngine:
         max_delay: float = 1.0,
         backoff_factor: float = 2.0,
     ) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._max_retries = max_retries
         self._base_delay = base_delay
         self._max_delay = max_delay

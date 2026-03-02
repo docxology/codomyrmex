@@ -57,12 +57,12 @@ class Diagnosis:
     diagnosed_at: float = 0.0
 
     def __post_init__(self) -> None:
-        """Execute   Post Init   operations natively."""
+        """post Init ."""
         if not self.diagnosed_at:
             self.diagnosed_at = time.time()
 
     def to_dict(self) -> dict[str, Any]:
-        """Execute To Dict operations natively."""
+        """Return a dictionary representation of this object."""
         return {
             "error": self.error.to_dict(),
             "root_cause": self.root_cause,

@@ -37,7 +37,7 @@ class SurveillanceMonitor:
     """Monitors physical security events."""
 
     def __init__(self):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
 
         self.events: list[PhysicalEvent] = []
         logger.info("SurveillanceMonitor initialized")

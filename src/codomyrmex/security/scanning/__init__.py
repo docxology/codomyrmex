@@ -148,7 +148,7 @@ class PatternRule(SecurityRule):
         description: str,
         remediation: str = "",
     ):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._id = rule_id
         self._finding_type = finding_type
         self._pattern = re.compile(pattern, re.IGNORECASE | re.MULTILINE)
@@ -160,16 +160,16 @@ class PatternRule(SecurityRule):
 
     @property
     def id(self) -> str:
-        """Execute Id operations natively."""
+        """id ."""
         return self._id
 
     @property
     def finding_type(self) -> FindingType:
-        """Execute Finding Type operations natively."""
+        """finding Type ."""
         return self._finding_type
 
     def check(self, content: str, file_path: str) -> list[SecurityFinding]:
-        """Execute Check operations natively."""
+        """Check the condition and return the result."""
         findings = []
         lines = content.split('\n')
 
@@ -195,7 +195,7 @@ class SQLInjectionRule(PatternRule):
     """Detects potential SQL injection vulnerabilities."""
 
     def __init__(self):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         super().__init__(
             rule_id="SQL001",
             finding_type=FindingType.SQL_INJECTION,
@@ -211,7 +211,7 @@ class HardcodedSecretRule(PatternRule):
     """Detects hardcoded secrets."""
 
     def __init__(self):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         super().__init__(
             rule_id="SEC001",
             finding_type=FindingType.HARDCODED_SECRET,
@@ -227,7 +227,7 @@ class CommandInjectionRule(PatternRule):
     """Detects potential command injection."""
 
     def __init__(self):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         super().__init__(
             rule_id="CMD001",
             finding_type=FindingType.COMMAND_INJECTION,
@@ -243,7 +243,7 @@ class InsecureRandomRule(PatternRule):
     """Detects use of insecure random."""
 
     def __init__(self):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         super().__init__(
             rule_id="RND001",
             finding_type=FindingType.INSECURE_RANDOM,
@@ -273,7 +273,7 @@ class SecurityScanner:
     """
 
     def __init__(self):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._rules: list[SecurityRule] = []
         self._counter = 0
         self._lock = threading.Lock()

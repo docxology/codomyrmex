@@ -23,7 +23,7 @@ class ValidationResult:
     warnings: list[str] = field(default_factory=list)
 
     def __bool__(self) -> bool:
-        """Execute   Bool   operations natively."""
+        """bool ."""
         return self.valid
 
 
@@ -33,7 +33,7 @@ class SchemaValidator:
     """
 
     def __init__(self, schema: dict[str, Any]):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.schema = schema
 
     def validate(self, data: Any) -> ValidationResult:

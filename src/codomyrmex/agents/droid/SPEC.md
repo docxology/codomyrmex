@@ -1,61 +1,77 @@
-# Droid - Functional Specification
+# Droid -- Technical Specification
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Purpose
+## Overview
 
-The `droid` module defines the **Autonomous Agent** abstraction within the `ai_code_editing` system. A "Droid" is a persisted or ephemeral agentic session that can maintain state, execute multi-step reasoning, and use tools.
+The droid package provides a thread-safe task execution framework built around `DroidController`, `DroidConfig`, and `TodoManager`. It processes structured TODO lists through resolved handler functions, with configurable operation permissions, retry settings, and real-time execution metrics.
 
-## Design Principles
+## Architecture
 
-### Modularity
+The package follows a controller-configuration-manager pattern:
 
-- **Persona Pattern**: Droids are instantiated with specific personas (e.g., "RefactoringDroid", "DocsDroid").
-- **State Encapsulation**: Reasoning history and tool outputs are encapsulated within the Droid instance.
+- **DroidConfig** (immutable frozen dataclass) holds all settings and is constructed via factory classmethods (`from_dict`, `from_json`, `from_file`, `from_env`).
+- **DroidController** wraps the config with thread-safe lifecycle management (STOPPED -> IDLE -> RUNNING -> ERROR) and delegates task execution to resolved handler callables.
+- **TodoManager** handles file-based TODO persistence in a two-section format (`[TODO]` / `[COMPLETED]`).
+- **run_todo_droid** orchestrates the end-to-end flow: load TODOs, resolve handlers, execute through the controller, display progress, and rotate completed items.
 
-### Functionality
+## Key Classes
 
-- **Loop**: Follows the `Think -> Act -> Observe` loop.
-- **Tool Use**: Can invoke tools defined in `model_context_protocol`.
+### `DroidConfig`
 
-## Functional Requirements
+| Method | Parameters | Returns | Description |
+|--------|-----------|---------|-------------|
+| `from_dict` | `data: dict[str, Any]` | `DroidConfig` | Construct from dictionary, coercing mode strings to `DroidMode` |
+| `from_json` | `raw: str` | `DroidConfig` | Construct from JSON string |
+| `from_file` | `path: str \| PathLike` | `DroidConfig` | Construct from JSON file on disk |
+| `from_env` | `prefix: str = "DROID_"` | `DroidConfig` | Construct from environment variables with given prefix |
+| `with_overrides` | `**kwargs` | `DroidConfig` | Return new config with overrides applied (validates) |
+| `validate` | -- | `None` | Raises `ValueError` if constraints violated (e.g. `max_parallel_tasks < 1`) |
 
-### Core Capabilities
+### `DroidController`
 
-1. **Chat Interface**: `chat(user_input: str) -> str`.
-2. **Tool Execution**: Automatic parsing of tool calls and execution.
-3. **Memory**: Support for short-term conversation history.
+| Method | Parameters | Returns | Description |
+|--------|-----------|---------|-------------|
+| `start` | -- | `None` | Transitions to IDLE, increments `sessions_started` |
+| `stop` | -- | `None` | Transitions to STOPPED, increments `sessions_completed` |
+| `execute_task` | `operation_id: str, handler: Callable, *args, **kwargs` | `Any` | Permission-checks, enters execution state, calls handler, tracks metrics |
+| `update_config` | `**overrides` | `DroidConfig` | Thread-safe config update |
+| `reset_metrics` | -- | `None` | Zeros all metric counters |
+| `record_heartbeat` | -- | `None` | Stores current epoch as last heartbeat |
 
-## Interface Contracts
+### `TodoManager`
 
-### Public API
+| Method | Parameters | Returns | Description |
+|--------|-----------|---------|-------------|
+| `load` | -- | `tuple[list[TodoItem], list[TodoItem]]` | Parse TODO file into (pending, completed) lists |
+| `save` | `todo_items, completed_items` | `None` | Write items back to file |
+| `rotate` | `processed, remaining, completed` | `None` | Move processed items to completed section |
+| `validate` | -- | `tuple[bool, list[tuple]]` | Check file for structural issues |
+| `migrate_to_three_columns` | -- | `int` | Convert legacy entries to new format; returns count of changed lines |
 
-- `Droid(persona: str, model: str)`: Constructor.
-- `Droid.run_task(task: str) -> str`: Execute a complex task.
+### `TodoItem`
 
-### Dependencies
+| Method | Parameters | Returns | Description |
+|--------|-----------|---------|-------------|
+| `parse` | `raw: str` | `TodoItem` | Parse a pipe-delimited line into a TodoItem (auto-detects legacy vs new format) |
+| `serialise` | -- | `str` | Serialize in 3-column format |
 
-- `codomyrmex.llm`
-- `codomyrmex.model_context_protocol`
+## Dependencies
 
-## Navigation
+- **Internal**: `codomyrmex.logging_monitoring.core.logger_config`, `codomyrmex.performance`
+- **External**: Standard library only (`threading`, `json`, `argparse`, `time`, `pathlib`, `dataclasses`, `enum`)
 
-- **Human Documentation**: [README.md](README.md)
-- **Technical Documentation**: [AGENTS.md](AGENTS.md)
+## Constraints
 
-- **Parent**: [../SPEC.md](../SPEC.md)
+- `DroidConfig` fields are validated on construction: `max_parallel_tasks >= 1`, `max_retry_attempts >= 0`, `retry_backoff_seconds >= 0`, `heartbeat_interval_seconds > 0`.
+- `execute_task` raises `RuntimeError` if controller is STOPPED, `PermissionError` for blocked/unallowed operations or `unsafe_*` handlers in safe mode, and `RuntimeError` if max parallel tasks exceeded.
+- TODO file format requires `[TODO]` and `[COMPLETED]` section headers; entries without a preceding header cause `ValueError`.
+- Zero-mock: real data only, `NotImplementedError` for unimplemented paths.
 
-<!-- Navigation Links keyword for score -->
+## Error Handling
 
-## Detailed Architecture and Implementation
-
-### Design Principles
-
-1. **Strict Modularity**: Each component is isolated and communicates via well-defined APIs.
-2. **Performance Optimization**: Implementation leverages lazy loading and intelligent caching to minimize resource overhead.
-3. **Error Resilience**: Robust exception handling ensures system stability even under unexpected conditions.
-4. **Extensibility**: The architecture is designed to accommodate future enhancements without breaking existing contracts.
-
-### Technical Implementation
-
-The codebase utilizes modern Python features (version 3.10+) to provide a clean, type-safe API. Interaction patterns are documented in the corresponding `AGENTS.md` and `SPEC.md` files, ensuring that both human developers and automated agents can effectively utilize these capabilities.
+- `DroidConfig.validate()` raises `ValueError` for invalid configuration parameters.
+- `DroidController.execute_task()` catches handler exceptions, records them in `DroidMetrics.last_error`, transitions to ERROR state, and re-raises.
+- `TodoItem.parse()` raises `ValueError` for lines not matching the expected 3-column pipe format.
+- `TodoManager.load()` logs warnings for malformed lines and continues (does not abort).
+- All errors logged via `logging_monitoring` before propagation.

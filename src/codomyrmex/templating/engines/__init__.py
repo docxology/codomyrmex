@@ -39,11 +39,11 @@ class TemplateContext:
         return TemplateContext(data=kwargs, parent=self)
 
     def __getitem__(self, key: str) -> Any:
-        """Execute   Getitem   operations natively."""
+        """getitem ."""
         return self.get(key)
 
     def __setitem__(self, key: str, value: Any) -> None:
-        """Execute   Setitem   operations natively."""
+        """setitem ."""
         self.set(key, value)
 
 
@@ -69,7 +69,7 @@ class SimpleTemplateEngine(TemplateEngine):
         delimiters: tuple = ("{{", "}}"),
         escape_html: bool = False,
     ):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.left_delim = delimiters[0]
         self.right_delim = delimiters[1]
         self.escape_html = escape_html
@@ -96,9 +96,9 @@ class SimpleTemplateEngine(TemplateEngine):
         return value
 
     def render(self, template: str, context: dict[str, Any]) -> str:
-        """Execute Render operations natively."""
+        """render ."""
         def replace(match):
-            """Execute Replace operations natively."""
+            """replace ."""
             path = match.group(1).strip()
             value = self._resolve_path(path, context)
 
@@ -114,7 +114,7 @@ class SimpleTemplateEngine(TemplateEngine):
         return self._pattern.sub(replace, template)
 
     def render_file(self, path: str, context: dict[str, Any]) -> str:
-        """Execute Render File operations natively."""
+        """render File ."""
         with open(path) as f:
             template = f.read()
         return self.render(template, context)
@@ -128,7 +128,7 @@ class Jinja2LikeEngine(TemplateEngine):
         filters: dict[str, Callable] | None = None,
         autoescape: bool = True,
     ):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.filters = filters or {}
         self.autoescape = autoescape
 
@@ -224,7 +224,7 @@ class Jinja2LikeEngine(TemplateEngine):
         return value
 
     def render(self, template: str, context: dict[str, Any]) -> str:
-        """Execute Render operations natively."""
+        """render ."""
         # Process control structures
         template = self._process_for_loops(template, context)
         template = self._process_if_blocks(template, context)
@@ -239,7 +239,7 @@ class Jinja2LikeEngine(TemplateEngine):
         pattern = re.compile(r'\{\{\s*(.+?)\s*\}\}')
 
         def replace(match):
-            """Execute Replace operations natively."""
+            """replace ."""
             expr = match.group(1)
             value = self._parse_expression(expr, context)
 
@@ -262,7 +262,7 @@ class Jinja2LikeEngine(TemplateEngine):
         )
 
         def replace(match):
-            """Execute Replace operations natively."""
+            """replace ."""
             var_name = match.group(1)
             iterable_expr = match.group(2)
             body = match.group(3)
@@ -303,7 +303,7 @@ class Jinja2LikeEngine(TemplateEngine):
         )
 
         def replace(match):
-            """Execute Replace operations natively."""
+            """replace ."""
             condition = match.group(1)
             true_block = match.group(2)
             false_block = match.group(3) or ''
@@ -358,7 +358,7 @@ class Jinja2LikeEngine(TemplateEngine):
         return bool(value)
 
     def render_file(self, path: str, context: dict[str, Any]) -> str:
-        """Execute Render File operations natively."""
+        """render File ."""
         with open(path) as f:
             template = f.read()
         return self.render(template, context)
@@ -368,15 +368,15 @@ class MustacheEngine(TemplateEngine):
     """Mustache-style logic-less templates."""
 
     def __init__(self):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._var_pattern = re.compile(r'\{\{([#^/]?)(.+?)\}\}')
 
     def render(self, template: str, context: dict[str, Any]) -> str:
-        """Execute Render operations natively."""
+        """render ."""
         return self._render_internal(template, context)
 
     def _render_internal(self, template: str, context: dict[str, Any]) -> str:
-        """Execute  Render Internal operations natively."""
+        """render Internal ."""
         # Process sections
         template = self._process_sections(template, context)
 
@@ -393,7 +393,7 @@ class MustacheEngine(TemplateEngine):
         )
 
         def replace(match):
-            """Execute Replace operations natively."""
+            """replace ."""
             section_type = match.group(1)
             name = match.group(2).strip()
             content = match.group(3)
@@ -435,7 +435,7 @@ class MustacheEngine(TemplateEngine):
         pattern = re.compile(r'\{\{([^#^/].+?)\}\}')
 
         def replace(match):
-            """Execute Replace operations natively."""
+            """replace ."""
             name = match.group(1).strip()
 
             # Triple mustache for unescaped
@@ -476,7 +476,7 @@ class MustacheEngine(TemplateEngine):
         return value
 
     def render_file(self, path: str, context: dict[str, Any]) -> str:
-        """Execute Render File operations natively."""
+        """render File ."""
         with open(path) as f:
             template = f.read()
         return self.render(template, context)

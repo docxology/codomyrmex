@@ -45,7 +45,7 @@ class SyncStatus:
     drift_details: list[str] = field(default_factory=list)
 
     def to_dict(self) -> dict[str, Any]:
-        """Execute To Dict operations natively."""
+        """Return a dictionary representation of this object."""
         return {
             "state": self.state.value,
             "desired_revision": self.desired_revision,
@@ -75,7 +75,7 @@ class GitOpsSynchronizer:
         repo_path: str,
         target_branch: str = "main",
     ) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._repo_path = repo_path
         self._target_branch = target_branch
         self._actual_revision: str | None = None
@@ -179,7 +179,7 @@ class GitOpsSynchronizer:
             return None
 
     def _build_status(self, desired: str | None) -> SyncStatus:
-        """Execute  Build Status operations natively."""
+        """build Status ."""
         return SyncStatus(
             state=self._state,
             desired_revision=desired,
@@ -189,7 +189,7 @@ class GitOpsSynchronizer:
         )
 
     def __repr__(self) -> str:
-        """Execute   Repr   operations natively."""
+        """repr ."""
         return (
             f"GitOpsSynchronizer(repo={self._repo_path!r}, "
             f"branch={self._target_branch!r}, state={self._state.value})"

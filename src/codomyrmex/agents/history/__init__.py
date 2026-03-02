@@ -39,7 +39,7 @@ class HistoryMessage:
     tokens: int = 0
 
     def __post_init__(self):
-        """Execute   Post Init   operations natively."""
+        """post Init ."""
         if self.message_id is None:
             self.message_id = self._generate_id()
 
@@ -168,7 +168,7 @@ class InMemoryHistoryStore:
     """In-memory conversation storage."""
 
     def __init__(self):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._conversations: dict[str, Conversation] = {}
 
     def save(self, conversation: Conversation) -> None:
@@ -222,7 +222,7 @@ class FileHistoryStore:
     """File-based conversation storage (JSON)."""
 
     def __init__(self, directory: str):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.directory = Path(directory)
         self.directory.mkdir(parents=True, exist_ok=True)
 
@@ -287,7 +287,7 @@ class SQLiteHistoryStore:
     """SQLite-based conversation storage."""
 
     def __init__(self, db_path: str):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.db_path = db_path
         self._init_db()
 
@@ -483,7 +483,7 @@ class ConversationManager:
         store: InMemoryHistoryStore | None = None,
         max_messages_per_conversation: int = 100,
     ):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.store = store or InMemoryHistoryStore()
         self.max_messages = max_messages_per_conversation
         self._active_conversation: Conversation | None = None

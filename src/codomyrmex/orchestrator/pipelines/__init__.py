@@ -58,7 +58,7 @@ class StageResult:
 
     @property
     def is_success(self) -> bool:
-        """Execute Is Success operations natively."""
+        """is Success ."""
         return self.status == StageStatus.SUCCESS
 
 
@@ -80,12 +80,12 @@ class PipelineResult:
 
     @property
     def successful_stages(self) -> int:
-        """Execute Successful Stages operations natively."""
+        """successful Stages ."""
         return sum(1 for s in self.stages if s.is_success)
 
     @property
     def failed_stages(self) -> int:
-        """Execute Failed Stages operations natively."""
+        """failed Stages ."""
         return sum(1 for s in self.stages if s.status == StageStatus.FAILED)
 
 
@@ -100,7 +100,7 @@ class Stage(ABC):
         retry_count: int = 0,
         timeout_s: float | None = None,
     ):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.stage_id = stage_id
         self.name = name or stage_id
         self.depends_on = depends_on or []
@@ -130,12 +130,12 @@ class FunctionStage(Stage):
         func: Callable[[dict[str, Any]], Any],
         **kwargs,
     ):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         super().__init__(stage_id, **kwargs)
         self._func = func
 
     def execute(self, context: dict[str, Any]) -> Any:
-        """Execute Execute operations natively."""
+        """Execute the operation."""
         return self._func(context)
 
 
@@ -149,13 +149,13 @@ class ConditionalStage(Stage):
         stage: Stage,
         **kwargs,
     ):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         super().__init__(stage_id, **kwargs)
         self.condition = condition
         self.stage = stage
 
     def execute(self, context: dict[str, Any]) -> Any:
-        """Execute Execute operations natively."""
+        """Execute the operation."""
         if self.condition(context):
             return self.stage.execute(context)
         return None
@@ -171,13 +171,13 @@ class ParallelStage(Stage):
         max_workers: int = 4,
         **kwargs,
     ):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         super().__init__(stage_id, **kwargs)
         self.stages = stages
         self.max_workers = max_workers
 
     def execute(self, context: dict[str, Any]) -> dict[str, Any]:
-        """Execute Execute operations natively."""
+        """Execute the operation."""
         results = {}
 
         with concurrent.futures.ThreadPoolExecutor(max_workers=self.max_workers) as executor:
@@ -219,7 +219,7 @@ class Pipeline:
         name: str | None = None,
         fail_fast: bool = True,
     ):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.pipeline_id = pipeline_id or str(uuid.uuid4())[:8]
         self.name = name or self.pipeline_id
         self.fail_fast = fail_fast
@@ -243,7 +243,7 @@ class Pipeline:
         order = []
 
         def visit(stage_id: str):
-            """Execute Visit operations natively."""
+            """visit ."""
             if stage_id in visited:
                 return
             visited.add(stage_id)
@@ -370,7 +370,7 @@ class PipelineBuilder:
     """
 
     def __init__(self, name: str):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._pipeline = Pipeline(name=name)
 
     def stage(

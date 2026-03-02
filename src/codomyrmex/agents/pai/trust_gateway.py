@@ -290,12 +290,12 @@ class _LazyToolSets:
 
     @staticmethod
     def safe_tools() -> frozenset[str]:
-        """Execute Safe Tools operations natively."""
+        """safe Tools ."""
         return _get_safe_tools()
 
     @staticmethod
     def destructive_tools_set() -> frozenset[str]:
-        """Execute Destructive Tools Set operations natively."""
+        """destructive Tools Set ."""
         return _get_destructive_tools()
 
 
@@ -316,7 +316,7 @@ class TrustRegistry:
     """
 
     def __init__(self) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._ledger_path = Path.home() / ".codomyrmex" / "trust_ledger.json"
 
         # Initialize default state with ALL known tools (static + dynamic)

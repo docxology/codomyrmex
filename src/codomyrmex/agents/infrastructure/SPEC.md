@@ -1,42 +1,60 @@
-# Infrastructure — Functional Specification
+# Infrastructure -- Technical Specification
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
 
-**Module**: `codomyrmex.agents.infrastructure`
-**Status**: Active
+## Overview
 
-## 1. Overview
+Cloud infrastructure agent module that bridges the `BaseAgent` interface with Infomaniak cloud service clients. Provides JSON command dispatch, automatic tool registry generation via method introspection, and optional security pipeline integration for pre/post execution checks.
 
-Infrastructure agent for cloud operations.
+## Architecture
 
-## 2. Architecture
+Follows the GitAgent pattern: a `BaseAgent` subclass receives structured JSON prompts, resolves a service client and action method, executes with extracted parameters, and returns a JSON `AgentResponse`. `CloudToolFactory` uses `inspect.signature` to auto-generate tool descriptors from client public methods.
 
-### Components
+## Key Classes
 
-| Component | Type | Description |
-|-----------|------|-------------|
-| `InfrastructureAgent` | Class | Agent specialized for cloud infrastructure operations. |
-| `Tool` | Class | Lightweight tool descriptor for agent registries. |
-| `CloudToolFactory` | Class | Generates Tool objects from cloud client methods. |
+### `InfrastructureAgent`
 
-## 3. API Usage
+| Method | Parameters | Returns | Description |
+|--------|-----------|---------|-------------|
+| `__init__` | `clients: dict[str, Any]`, `security_pipeline: Any`, `config: dict` | `None` | Registers clients and optional security pipeline; sets `AgentCapabilities` |
+| `from_env` | (classmethod) | `InfrastructureAgent` | Creates agent from env vars, attempting each Infomaniak client |
+| `_execute_impl` | `request: AgentRequest` | `AgentResponse` | Parses JSON prompt, dispatches to client method, applies security checks |
+| `stream` | `request: AgentRequest` | `Iterator[str]` | Yields single execute result (streaming not natively supported) |
+| `populate_tool_registry` | `registry: dict[str, Tool] \| None` | `dict[str, Tool]` | Auto-generates Tool objects from all configured client methods |
+| `available_services` | -- | `list[str]` | Returns names of configured service clients |
+| `test_connection` | -- | `bool` | Validates connectivity to all configured clients |
 
-```python
-from codomyrmex.agents.infrastructure import InfrastructureAgent
-```
+### `Tool`
 
-## 4. Dependencies
+| Field | Type | Description |
+|-------|------|-------------|
+| `name` | `str` | Unique tool identifier, format: `infomaniak_{service}_{method}` |
+| `description` | `str` | `{service}.{method}` label |
+| `parameters` | `dict[str, Any]` | JSON-schema-like parameter definition |
+| `handler` | `Callable \| None` | Bound method or security-wrapped callable |
 
-See `src/codomyrmex/agents/infrastructure/__init__.py` for import dependencies.
+### `CloudToolFactory`
 
-## 5. Testing
+| Method | Parameters | Returns | Description |
+|--------|-----------|---------|-------------|
+| `register_client` | `client`, `service_name: str`, `registry: dict`, `security_pipeline` | `list[str]` | Registers all public methods of one client as `Tool` objects |
+| `register_all_clients` | `registry: dict`, `clients: dict`, `security_pipeline` | `dict[str, list[str]]` | Batch registers tools from multiple service clients |
 
-```bash
-uv run python -m pytest src/codomyrmex/tests/ -k infrastructure -v
-```
+## Dependencies
 
-## References
+- **Internal**: `codomyrmex.agents.core.base`, `codomyrmex.cloud.infomaniak` (6 client types), `codomyrmex.cloud.infomaniak.security`
+- **External**: Standard library only (`inspect`, `json`, `logging`)
 
-- [README.md](README.md)
-- [AGENTS.md](AGENTS.md)
-- [Parent: Agents](../SPEC.md)
+## Constraints
+
+- JSON prompt must contain both `service` and `action` keys or the request is rejected.
+- Only public, non-underscore-prefixed callable methods are registered as tools.
+- Parameter type annotations default to `"string"` when absent or unrecognized.
+- Zero-mock: real cloud clients required, `NotImplementedError` for unimplemented paths.
+
+## Error Handling
+
+- `json.JSONDecodeError` raised when prompt is not valid JSON.
+- `PermissionError` raised by security wrapper when `pre_check` denies the action.
+- `TypeError` raised when extracted params do not match client method signature.
+- All errors logged via `logger.exception` before returning as `AgentResponse.error`.

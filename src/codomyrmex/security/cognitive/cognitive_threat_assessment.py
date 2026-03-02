@@ -23,7 +23,7 @@ class CognitiveThreatAssessor:
     """Assesses cognitive security threats."""
 
     def __init__(self):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
 
         logger.info("CognitiveThreatAssessor initialized")
 

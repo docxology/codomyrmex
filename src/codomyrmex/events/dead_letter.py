@@ -27,7 +27,7 @@ class DeadLetter:
     metadata: dict[str, Any] = field(default_factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        """Execute To Dict operations natively."""
+        """Return a dictionary representation of this object."""
         return {
             "event_type": self.event_type,
             "payload": self.payload,
@@ -41,7 +41,7 @@ class DeadLetter:
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> DeadLetter:
-        """Execute From Dict operations natively."""
+        """from Dict ."""
         return cls(**data)
 
 
@@ -53,7 +53,7 @@ class DeadLetterQueue:
     """
 
     def __init__(self, store_path: Path) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._path = store_path
         self._path.parent.mkdir(parents=True, exist_ok=True)
 
@@ -113,5 +113,5 @@ class DeadLetterQueue:
 
     @property
     def count(self) -> int:
-        """Execute Count operations natively."""
+        """count ."""
         return len(self.list_all())

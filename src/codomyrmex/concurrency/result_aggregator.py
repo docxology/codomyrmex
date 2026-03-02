@@ -33,7 +33,7 @@ class AggregateResult:
 
     @property
     def success_rate(self) -> float:
-        """Execute Success Rate operations natively."""
+        """success Rate ."""
         return self.successful / self.total_tasks if self.total_tasks > 0 else 0.0
 
 
@@ -49,12 +49,12 @@ class ResultAggregator:
     """
 
     def __init__(self) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._results: list[TaskResult] = []
 
     @property
     def count(self) -> int:
-        """Execute Count operations natively."""
+        """count ."""
         return len(self._results)
 
     def add(self, result: TaskResult) -> None:

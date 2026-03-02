@@ -105,7 +105,7 @@ class DeploymentManager:
 
         # Mock deploy function
         def deploy_fn(target: DeploymentTarget, ver: str) -> bool:
-            """Execute Deploy Fn operations natively."""
+            """deploy Fn ."""
             target.version = ver
             return True
 

@@ -31,11 +31,11 @@ class ExactMatchEvaluator(Evaluator):
     """Evaluator for exact matches."""
 
     def __init__(self, case_sensitive: bool = False) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.case_sensitive = case_sensitive
 
     def evaluate(self, test_case: PromptTestCase, actual_output: str) -> float:
-        """Execute Evaluate operations natively."""
+        """evaluate ."""
         expected = test_case.expected_output
         actual = actual_output
         if not self.case_sensitive:
@@ -48,11 +48,11 @@ class ContainsEvaluator(Evaluator):
     """Evaluator for substring containment with scoring."""
 
     def __init__(self, case_sensitive: bool = False) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.case_sensitive = case_sensitive
 
     def evaluate(self, test_case: PromptTestCase, actual_output: str) -> float:
-        """Execute Evaluate operations natively."""
+        """evaluate ."""
         actual = actual_output if self.case_sensitive else actual_output.lower()
         total_checks = len(test_case.expected_contains) + len(test_case.expected_not_contains)
         if total_checks == 0:
@@ -73,11 +73,11 @@ class SimilarityEvaluator(Evaluator):
     """Evaluate output similarity using word-level Jaccard index."""
 
     def __init__(self, case_sensitive: bool = False) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.case_sensitive = case_sensitive
 
     def evaluate(self, test_case: PromptTestCase, actual_output: str) -> float:
-        """Execute Evaluate operations natively."""
+        """evaluate ."""
         expected = test_case.expected_output
         actual = actual_output
         if not self.case_sensitive:
@@ -98,12 +98,12 @@ class LengthEvaluator(Evaluator):
     """Evaluate whether output length falls within expected bounds."""
 
     def __init__(self, min_length: int = 0, max_length: int = 10000) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.min_length = min_length
         self.max_length = max_length
 
     def evaluate(self, test_case: PromptTestCase, actual_output: str) -> float:
-        """Execute Evaluate operations natively."""
+        """evaluate ."""
         length = len(actual_output)
         if self.min_length <= length <= self.max_length:
             return 1.0
@@ -117,16 +117,16 @@ class RegexEvaluator(Evaluator):
     """Evaluate output against one or more regex patterns."""
 
     def __init__(self, patterns: list[str] | None = None, all_must_match: bool = True) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._patterns = [re.compile(p) for p in (patterns or [])]
         self.all_must_match = all_must_match
 
     def add_pattern(self, pattern: str) -> None:
-        """Execute Add Pattern operations natively."""
+        """add Pattern ."""
         self._patterns.append(re.compile(pattern))
 
     def evaluate(self, test_case: PromptTestCase, actual_output: str) -> float:
-        """Execute Evaluate operations natively."""
+        """evaluate ."""
         if not self._patterns:
             return 1.0
         matches = sum(1 for p in self._patterns if p.search(actual_output))
@@ -147,7 +147,7 @@ class CompositeEvaluator(Evaluator):
     """
 
     def __init__(self) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._evaluators: list[tuple[Evaluator, float]] = []
 
     def add(self, evaluator: Evaluator, weight: float = 1.0) -> None:
@@ -155,7 +155,7 @@ class CompositeEvaluator(Evaluator):
         self._evaluators.append((evaluator, weight))
 
     def evaluate(self, test_case: PromptTestCase, actual_output: str) -> float:
-        """Execute Evaluate operations natively."""
+        """evaluate ."""
         if not self._evaluators:
             return 0.0
         total_weight = sum(w for _, w in self._evaluators)
@@ -172,9 +172,9 @@ class CustomEvaluator(Evaluator):
     """Evaluator using a user-provided function."""
 
     def __init__(self, eval_fn: Callable[[PromptTestCase, str], float]) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.eval_fn = eval_fn
 
     def evaluate(self, test_case: PromptTestCase, actual_output: str) -> float:
-        """Execute Evaluate operations natively."""
+        """evaluate ."""
         return self.eval_fn(test_case, actual_output)

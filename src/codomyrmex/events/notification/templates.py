@@ -38,7 +38,7 @@ class NotificationTemplate:
         default_channel: NotificationChannel = NotificationChannel.CONSOLE,
         default_priority: NotificationPriority = NotificationPriority.MEDIUM,
     ):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.name = name
         self.subject_template = subject_template
         self.body_template = body_template

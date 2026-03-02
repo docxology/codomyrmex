@@ -61,17 +61,17 @@ class MigrationPlan:
 
     @property
     def step_count(self) -> int:
-        """Execute Step Count operations natively."""
+        """step Count ."""
         return len(self.steps)
 
     @property
     def breaking_count(self) -> int:
-        """Execute Breaking Count operations natively."""
+        """breaking Count ."""
         return sum(1 for s in self.steps if s.breaking)
 
     @property
     def is_safe(self) -> bool:
-        """Execute Is Safe operations natively."""
+        """is Safe ."""
         return self.breaking_count == 0
 
 
@@ -86,13 +86,13 @@ class MigrationEngine:
     """
 
     def __init__(self) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._steps: list[MigrationStep] = []
         self._plans: dict[str, MigrationPlan] = {}
 
     @property
     def total_steps(self) -> int:
-        """Execute Total Steps operations natively."""
+        """total Steps ."""
         return len(self._steps)
 
     def add_rename(

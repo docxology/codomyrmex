@@ -51,7 +51,7 @@ class ChaosScenarioRunner:
     """Run pre-built chaos scenarios."""
 
     def __init__(self):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._injector = FaultInjector()
         self._scenarios: dict[ScenarioType, Callable] = {
             ScenarioType.NETWORK_PARTITION: self._run_network_partition,
@@ -189,7 +189,7 @@ class GameDay:
     """Run a coordinated chaos game day."""
 
     def __init__(self):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._runner = ChaosScenarioRunner()
         self._scenarios: list[ScenarioConfig] = []
         self._results: list[ScenarioResult] = []

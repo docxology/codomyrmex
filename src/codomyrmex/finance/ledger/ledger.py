@@ -50,7 +50,7 @@ class Account:
     created_at: datetime = field(default_factory=datetime.now)
 
     def __repr__(self) -> str:
-        """Execute   Repr   operations natively."""
+        """repr ."""
         return (
             f"Account(id={self.id!r}, name={self.name!r}, "
             f"type={self.account_type.value}, balance={self.balance:.2f})"
@@ -104,7 +104,7 @@ class Ledger:
     """
 
     def __init__(self, name: str = "General Ledger") -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.name = name
         self.accounts: dict[str, Account] = {}
         self.transactions: list[Transaction] = []
@@ -334,7 +334,7 @@ class Ledger:
         }
 
     def __repr__(self) -> str:
-        """Execute   Repr   operations natively."""
+        """repr ."""
         return (
             f"Ledger(name={self.name!r}, accounts={len(self.accounts)}, "
             f"transactions={len(self.transactions)})"

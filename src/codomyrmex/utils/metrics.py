@@ -38,7 +38,7 @@ class MetricsCollector:
     _instance = None
 
     def __new__(cls):
-        """Execute   New   operations natively."""
+        """new ."""
         if cls._instance is None:
             cls._instance = super().__new__(cls)
             cls._instance._metrics: dict[str, list[MetricValue]] = {}
@@ -137,12 +137,12 @@ def timed_metric(name: str, labels: dict[str, str] | None = None):
 def count_calls(name: str, labels: dict[str, str] | None = None):
     """Decorator to count function calls."""
     def decorator(func: Callable) -> Callable:
-        """Execute Decorator operations natively."""
+        """decorator ."""
         import functools
 
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
-            """Execute Wrapper operations natively."""
+            """wrapper ."""
             metrics.increment(f"{name}_calls_total", labels=labels)
             try:
                 result = func(*args, **kwargs)
@@ -160,7 +160,7 @@ class ModuleHealth:
     """Track health of modules."""
 
     def __init__(self):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._health: dict[str, bool] = {}
         self._last_check: dict[str, datetime] = {}
         self._check_fns: dict[str, Callable[[], bool]] = {}

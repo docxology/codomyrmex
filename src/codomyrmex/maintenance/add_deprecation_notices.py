@@ -129,32 +129,32 @@ class DeprecationReport:
 
     @property
     def total(self) -> int:
-        """Execute Total operations natively."""
+        """total ."""
         return len(self.entries)
 
     @property
     def deprecated_count(self) -> int:
-        """Execute Deprecated Count operations natively."""
+        """deprecated Count ."""
         return sum(1 for e in self.entries if e.get("deprecated"))
 
     @property
     def pending_count(self) -> int:
-        """Execute Pending Count operations natively."""
+        """pending Count ."""
         return self.total - self.deprecated_count
 
     @property
     def completion_percent(self) -> float:
-        """Execute Completion Percent operations natively."""
+        """completion Percent ."""
         if self.total == 0:
             return 100.0
         return (self.deprecated_count / self.total) * 100
 
     def pending_modules(self) -> list[str]:
-        """Execute Pending Modules operations natively."""
+        """pending Modules ."""
         return [e["module"] for e in self.entries if not e.get("deprecated")]
 
     def summary(self) -> dict[str, Any]:
-        """Execute Summary operations natively."""
+        """summary ."""
         return {
             "total_files": self.total,
             "deprecated": self.deprecated_count,
@@ -164,7 +164,7 @@ class DeprecationReport:
         }
 
     def text(self) -> str:
-        """Execute Text operations natively."""
+        """text ."""
         lines = [
             f"Deprecation Report: {self.deprecated_count}/{self.total} deprecation notices applied "
             f"({self.completion_percent:.0f}%)",

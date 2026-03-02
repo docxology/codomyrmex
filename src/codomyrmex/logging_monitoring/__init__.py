@@ -56,7 +56,7 @@ from .core.logger_config import get_logger, setup_logging
 def cli_commands() -> dict[str, object]:
     """Return CLI commands for the logging_monitoring module."""
     def _show_config() -> None:
-        """Execute  Show Config operations natively."""
+        """show Config ."""
         import os
         print("Logging configuration:")
         print(f"  CODOMYRMEX_LOG_LEVEL: {os.environ.get('CODOMYRMEX_LOG_LEVEL', 'INFO (default)')}")
@@ -64,7 +64,7 @@ def cli_commands() -> dict[str, object]:
         print(f"  CODOMYRMEX_LOG_FORMAT: {os.environ.get('CODOMYRMEX_LOG_FORMAT', 'default')}")
 
     def _list_levels() -> None:
-        """Execute  List Levels operations natively."""
+        """list Levels ."""
         import logging
         levels = ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
         print("Available log levels:")

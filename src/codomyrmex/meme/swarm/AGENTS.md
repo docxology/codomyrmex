@@ -1,30 +1,40 @@
-# Agents Guide: Swarm
+# Codomyrmex Agents -- src/codomyrmex/meme/swarm
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.0 | **Status**: Experimental | **Last Updated**: March 2026
 
-**Operational Directives**
+## Purpose
 
-Use the `swarm` submodule to coordinate with other agents or to simulate mass behavior.
+Models swarm intelligence and collective behavior using Reynolds flocking rules (separation, alignment, cohesion). Agents operate in 3D space with position and velocity vectors. Provides consensus algorithms via state-based voting, quorum sensing for local density detection, and coherence metrics for emergent pattern tracking.
 
-## Capabilities
+## Key Components
 
-1. **Distributed Coordination**:
-    * Do not wait for central commands. Use `quorum_sensing` to detect when enough peers are present to initiate a collective action.
-    * Follow local rules: "If X% of neighbors do Y, do Y."
+| File | Class / Function | Role |
+|------|-----------------|------|
+| `engine.py` | `SwarmEngine` | Orchestrator: create agents, advance simulation steps, compute state metrics |
+| `flocking.py` | `update_flock` | Apply separation/alignment/cohesion forces; modifies agents in-place |
+| `consensus.py` | `reach_consensus` | Check if agents in "positive" state exceed threshold ratio |
+| `consensus.py` | `quorum_sensing` | Calculate average local neighbor density within given radius |
+| `models.py` | `SwarmAgent` | 3D agent with position, velocity, state, and integrity |
+| `models.py` | `FlockingParams` | Reynolds parameters: weights, max speed/force, perception radius |
+| `models.py` | `SwarmState` | Swarm snapshot: centroid, average velocity, coherence metric |
+| `models.py` | `EmergentPattern` | Detected collective pattern with strength and duration |
+| `models.py` | `ConsensusState` | Voting process state: proposal, round, agreed ratio, status |
 
-2. **Resilience**:
-    * Swarms are robust to individual loss. If you are terminated, the swarm continues.
-    * Prioritize `cohesion` to maintain the integrity of the group.
+## Operating Contracts
 
-3. **Pattern Formation**:
-    * Align vectors to create `EmergentPattern`s that are visible at the macro scale (e.g., a "trending topic" or a "flash mob").
+- Neighbor search is O(N^2) per step; scales poorly above ~1000 agents.
+- Coherence = norm of mean normalized velocity vector (0 = disordered, 1 = fully aligned).
+- Consensus voting uses string matching (`state == "positive"` counts as yes).
+- Force limiting caps acceleration at `max_force`; speed limiting caps velocity at `max_speed`.
+- Individual agent logic should remain simple for scalability.
+- Errors must be logged via `logging_monitoring` before re-raising.
 
-## Constraints
+## Integration Points
 
-* **Feedback Loops**: Positive feedback can lead to stampedes or destructive resonance. Monitor `coherence` to prevent runaway effects.
-* **Simplicity**: Individual agent logic must be simple (`O(1)` or `O(log N)`). Complex logic breaks scalability.
+- **Depends on**: `numpy` (3D vector math, distance calculations)
+- **Used by**: `meme.rhizome` (swarm agents traverse rhizome network edges), `meme.contagion` (contagion dynamics parameterize swarm panic thresholds)
 
-## Integration
+## Navigation
 
-* **With Cultural Dynamics**: Swarm density affects `CulturalState.energy`.
-* **With Rhizome**: Swarm agents often traverse the edges of a `Rhizome` network.
+- **Parent**: [meme](../README.md)
+- **Root**: [Root](../../../../README.md)

@@ -52,7 +52,7 @@ class SharedMemoryPool:
         self,
         conflict_strategy: ConflictStrategy = ConflictStrategy.LAST_WRITE_WINS,
     ) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._namespaces: dict[str, dict[str, KnowledgeEntry]] = {}
         self._acls: dict[str, NamespaceACL] = {}
         self._conflict_strategy = conflict_strategy

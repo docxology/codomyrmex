@@ -18,7 +18,7 @@ class ModuleAudit:
     """Audits a single module for documentation completeness."""
 
     def __init__(self, path: Path, src_root: Path):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.path = path
         self.name = path.name
         self.relative_path = path.relative_to(src_root)

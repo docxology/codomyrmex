@@ -52,11 +52,11 @@ class PRSpec:
 
     @property
     def file_count(self) -> int:
-        """Execute File Count operations natively."""
+        """file Count ."""
         return len(self.changes)
 
     def to_dict(self) -> dict[str, Any]:
-        """Execute To Dict operations natively."""
+        """Return a dictionary representation of this object."""
         return {
             "title": self.title,
             "branch": self.branch,
@@ -119,7 +119,7 @@ class PRBuilder:
 
     @staticmethod
     def _auto_title(changes: list[FileChange]) -> str:
-        """Execute  Auto Title operations natively."""
+        """auto Title ."""
         if not changes:
             return "Empty changeset"
         actions = set(c.action for c in changes)
@@ -129,7 +129,7 @@ class PRBuilder:
 
     @staticmethod
     def _branch_name(title: str) -> str:
-        """Execute  Branch Name operations natively."""
+        """branch Name ."""
         slug = title.lower().replace(" ", "-")[:40]
         slug = "".join(c for c in slug if c.isalnum() or c == "-")
         return f"auto/{slug}"

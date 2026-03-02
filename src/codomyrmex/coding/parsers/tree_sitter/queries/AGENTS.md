@@ -1,25 +1,29 @@
-# Codomyrmex Agents — src/codomyrmex/coding/parsers/tree_sitter/queries
+# Codomyrmex Agents -- src/codomyrmex/coding/parsers/tree_sitter/queries
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
 
-Tree-sitter query files for pattern matching and code structure extraction.
+Placeholder sub-module for tree-sitter S-expression query patterns and a future query builder API. Currently exports nothing; query execution is handled inline by `TreeSitterParser.query()`.
 
-## Active Components
+## Key Components
 
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SPEC.md` – Project file
-- `__init__.py` – Project file
+| File | Class / Function | Role |
+|------|-----------------|------|
+| `__init__.py` | _(empty exports)_ | Namespace package marker |
 
 ## Operating Contracts
 
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
+- When query utilities are added, they must accept and return standard tree-sitter node types.
+- Future query patterns should be stored as `.scm` files or Python constants in this package.
+- Errors must be logged via `logging_monitoring` before re-raising.
 
-## Navigation Links
+## Integration Points
 
-- **📁 Parent Directory**: [tree_sitter](../README.md) - Parent directory documentation
-- **🏠 Project Root**: ../../../../README.md - Main project documentation
+- **Depends on**: `tree_sitter` (external)
+- **Used by**: _(future consumers of pre-built query patterns)_
+
+## Navigation
+
+- **Parent**: [tree_sitter](../README.md)
+- **Root**: [Root](../../../../../../README.md)

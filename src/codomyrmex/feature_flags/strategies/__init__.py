@@ -68,23 +68,23 @@ class BooleanStrategy(EvaluationStrategy):
     """Simple on/off boolean strategy."""
 
     def __init__(self, enabled: bool = False):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.enabled = enabled
 
     def evaluate(self, context: EvaluationContext) -> EvaluationResult:
-        """Execute Evaluate operations natively."""
+        """evaluate ."""
         return EvaluationResult(
             enabled=self.enabled,
             reason="boolean" if self.enabled else "disabled"
         )
 
     def to_dict(self) -> dict[str, Any]:
-        """Execute To Dict operations natively."""
+        """Return a dictionary representation of this object."""
         return {"type": "boolean", "enabled": self.enabled}
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> 'BooleanStrategy':
-        """Execute From Dict operations natively."""
+        """from Dict ."""
         return cls(enabled=data.get("enabled", False))
 
 
@@ -92,12 +92,12 @@ class PercentageStrategy(EvaluationStrategy):
     """Percentage-based rollout strategy."""
 
     def __init__(self, percentage: float = 0.0, sticky: bool = True):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.percentage = max(0.0, min(100.0, percentage))
         self.sticky = sticky
 
     def evaluate(self, context: EvaluationContext) -> EvaluationResult:
-        """Execute Evaluate operations natively."""
+        """evaluate ."""
         if self.sticky and (context.user_id or context.session_id):
             # Use consistent hashing for sticky sessions
             hash_key = context.get_hash_key()
@@ -113,7 +113,7 @@ class PercentageStrategy(EvaluationStrategy):
         )
 
     def to_dict(self) -> dict[str, Any]:
-        """Execute To Dict operations natively."""
+        """Return a dictionary representation of this object."""
         return {
             "type": "percentage",
             "percentage": self.percentage,
@@ -122,7 +122,7 @@ class PercentageStrategy(EvaluationStrategy):
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> 'PercentageStrategy':
-        """Execute From Dict operations natively."""
+        """from Dict ."""
         return cls(
             percentage=data.get("percentage", 0.0),
             sticky=data.get("sticky", True)
@@ -138,13 +138,13 @@ class UserListStrategy(EvaluationStrategy):
         blocked_users: list[str] | None = None,
         default: bool = False
     ):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.allowed_users = set(allowed_users or [])
         self.blocked_users = set(blocked_users or [])
         self.default = default
 
     def evaluate(self, context: EvaluationContext) -> EvaluationResult:
-        """Execute Evaluate operations natively."""
+        """evaluate ."""
         if not context.user_id:
             return EvaluationResult(
                 enabled=self.default,
@@ -181,7 +181,7 @@ class UserListStrategy(EvaluationStrategy):
         self.blocked_users.add(user_id)
 
     def to_dict(self) -> dict[str, Any]:
-        """Execute To Dict operations natively."""
+        """Return a dictionary representation of this object."""
         return {
             "type": "user_list",
             "allowed_users": list(self.allowed_users),
@@ -191,7 +191,7 @@ class UserListStrategy(EvaluationStrategy):
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> 'UserListStrategy':
-        """Execute From Dict operations natively."""
+        """from Dict ."""
         return cls(
             allowed_users=data.get("allowed_users"),
             blocked_users=data.get("blocked_users"),
@@ -209,14 +209,14 @@ class AttributeStrategy(EvaluationStrategy):
         value: Any,
         enabled_value: bool = True
     ):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.attribute = attribute
         self.operator = operator
         self.value = value
         self.enabled_value = enabled_value
 
     def evaluate(self, context: EvaluationContext) -> EvaluationResult:
-        """Execute Evaluate operations natively."""
+        """evaluate ."""
         attr_value = context.get_attribute(self.attribute)
 
         if attr_value is None:
@@ -263,7 +263,7 @@ class AttributeStrategy(EvaluationStrategy):
             return False
 
     def to_dict(self) -> dict[str, Any]:
-        """Execute To Dict operations natively."""
+        """Return a dictionary representation of this object."""
         return {
             "type": "attribute",
             "attribute": self.attribute,
@@ -274,7 +274,7 @@ class AttributeStrategy(EvaluationStrategy):
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> 'AttributeStrategy':
-        """Execute From Dict operations natively."""
+        """from Dict ."""
         return cls(
             attribute=data["attribute"],
             operator=data["operator"],
@@ -287,11 +287,11 @@ class EnvironmentStrategy(EvaluationStrategy):
     """Strategy based on environment."""
 
     def __init__(self, enabled_environments: list[str] | None = None):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.enabled_environments = set(enabled_environments or ["development"])
 
     def evaluate(self, context: EvaluationContext) -> EvaluationResult:
-        """Execute Evaluate operations natively."""
+        """evaluate ."""
         enabled = context.environment in self.enabled_environments
         return EvaluationResult(
             enabled=enabled,
@@ -300,7 +300,7 @@ class EnvironmentStrategy(EvaluationStrategy):
         )
 
     def to_dict(self) -> dict[str, Any]:
-        """Execute To Dict operations natively."""
+        """Return a dictionary representation of this object."""
         return {
             "type": "environment",
             "enabled_environments": list(self.enabled_environments)
@@ -308,7 +308,7 @@ class EnvironmentStrategy(EvaluationStrategy):
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> 'EnvironmentStrategy':
-        """Execute From Dict operations natively."""
+        """from Dict ."""
         return cls(enabled_environments=data.get("enabled_environments"))
 
 
@@ -320,12 +320,12 @@ class CompositeStrategy(EvaluationStrategy):
         strategies: list[EvaluationStrategy],
         operator: str = "and"  # "and" or "or"
     ):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.strategies = strategies
         self.operator = operator
 
     def evaluate(self, context: EvaluationContext) -> EvaluationResult:
-        """Execute Evaluate operations natively."""
+        """evaluate ."""
         if not self.strategies:
             return EvaluationResult(enabled=False, reason="no_strategies")
 
@@ -345,7 +345,7 @@ class CompositeStrategy(EvaluationStrategy):
         )
 
     def to_dict(self) -> dict[str, Any]:
-        """Execute To Dict operations natively."""
+        """Return a dictionary representation of this object."""
         return {
             "type": "composite",
             "operator": self.operator,
@@ -354,7 +354,7 @@ class CompositeStrategy(EvaluationStrategy):
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> 'CompositeStrategy':
-        """Execute From Dict operations natively."""
+        """from Dict ."""
         strategies = [create_strategy(s) for s in data.get("strategies", [])]
         return cls(strategies=strategies, operator=data.get("operator", "and"))
 

@@ -33,12 +33,12 @@ class JournalEntry:
     timestamp: float = 0.0
 
     def __post_init__(self) -> None:
-        """Execute   Post Init   operations natively."""
+        """post Init ."""
         if not self.timestamp:
             self.timestamp = time.time()
 
     def to_dict(self) -> dict[str, Any]:
-        """Execute To Dict operations natively."""
+        """Return a dictionary representation of this object."""
         return {
             "topic": self.topic,
             "insight": self.insight,
@@ -59,7 +59,7 @@ class LearningJournal:
     """
 
     def __init__(self) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._entries: list[JournalEntry] = []
 
     def record(
@@ -70,7 +70,7 @@ class LearningJournal:
         confidence: float = 1.0,
         tags: list[str] | None = None,
     ) -> JournalEntry:
-        """Execute Record operations natively."""
+        """record ."""
         entry = JournalEntry(
             topic=topic, insight=insight, source=source,
             confidence=confidence, tags=tags or [],
@@ -80,15 +80,15 @@ class LearningJournal:
 
     @property
     def size(self) -> int:
-        """Execute Size operations natively."""
+        """size ."""
         return len(self._entries)
 
     def by_topic(self, topic: str) -> list[JournalEntry]:
-        """Execute By Topic operations natively."""
+        """by Topic ."""
         return [e for e in self._entries if e.topic == topic]
 
     def by_tag(self, tag: str) -> list[JournalEntry]:
-        """Execute By Tag operations natively."""
+        """by Tag ."""
         return [e for e in self._entries if tag in e.tags]
 
     def detect_patterns(self) -> dict[str, Any]:
@@ -106,11 +106,11 @@ class LearningJournal:
         }
 
     def recent(self, n: int = 10) -> list[JournalEntry]:
-        """Execute Recent operations natively."""
+        """recent ."""
         return self._entries[-n:]
 
     def high_confidence(self, threshold: float = 0.8) -> list[JournalEntry]:
-        """Execute High Confidence operations natively."""
+        """high Confidence ."""
         return [e for e in self._entries if e.confidence >= threshold]
 
 

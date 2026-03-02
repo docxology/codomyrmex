@@ -177,7 +177,7 @@ class AntigravityToolSkill:
                 break
 
     def __repr__(self) -> str:
-        """Execute   Repr   operations natively."""
+        """repr ."""
         return f"AntigravityToolSkill({self.tool_name!r})"
 
 

@@ -71,7 +71,7 @@ class ObjectRegistry:
     """Registry for managing physical objects."""
 
     def __init__(self):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.objects: Dict[str, PhysicalObject] = {}
         self._location_index: Dict[Tuple[int, int, int], Set[str]] = {}  # Grid-based index
 
@@ -175,13 +175,13 @@ class PhysicalObjectManager:
     """Main manager for physical object operations."""
 
     def __init__(self):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.registry = ObjectRegistry()
         self._active_simulations = set()
 
     def create_object(self, object_id: str, name: str, object_type: ObjectType,
                      x: float, y: float, z: float, **properties) -> PhysicalObject:
-        """Execute Create Object operations natively."""
+        """create Object ."""
                          pass
         """Create a new physical object."""
         obj = PhysicalObject(

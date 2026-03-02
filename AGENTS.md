@@ -1,6 +1,6 @@
 # Codomyrmex Agents — Repository Root
 
-**Version**: v1.0.3 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.3 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
 
@@ -250,13 +250,13 @@ Located in `src/codomyrmex/`, these modules provide the primary capabilities:
   - Key Classes: `TelemetryClient`, `TraceManager`
 - `website/` - Website generation and management
   - Key Classes: `WebsiteBuilder`, `PageGenerator`
-- `meme/` - Memetics & Information Dynamics
+- `meme/` - Memetics & Information Dynamics *(Experimental — not yet MCP-exposed)*
   - Key Classes: `MemeSpecific`, `NarrativeEngine`
 - `agentic_memory/` - Long-term agent memory, recall, and Obsidian vault integration
   - Key Classes: `AgentMemory`, `VectorStoreMemory`
   - Key Submodule: `obsidian/` — 19-module dual-mode Obsidian integration (filesystem + CLI)
   - Key Functions: `ObsidianVault(path)`, `search_vault()`, `create_note()`, `build_link_graph()`, `parse_canvas()`
-- `audio/` - Audio processing and transcription
+- `audio/` - Audio processing and transcription *(Stub — exceptions only, not yet implemented)*
   - Key Classes: `AudioProcessor`, `Transcriber`
 - `bio_simulation/` - Biological simulation
   - Key Classes: `BioSimulator`
@@ -295,10 +295,10 @@ Located in `src/codomyrmex/`, these modules provide the primary capabilities:
   - Key Classes: `ToolRegistry`, `ToolExecutor`
 - `vector_store/` - Vector storage and similarity search
   - Key Classes: `InMemoryVectorStore`, `VectorIndex`
-- `video/` - Video processing and analysis
+- `video/` - Video processing and analysis *(Stub — exceptions only, not yet implemented)*
   - Key Classes: `VideoProcessor`, `FrameExtractor`
 
-**Secure Cognitive Layer**:
+**Secure Cognitive Layer** *(Experimental — modules exist but are not yet MCP-exposed via the PAI bridge)*:
 
 - `identity/` - Multi-persona and bio-verification
   - Key Classes: `IdentityManager`, `BioCognitiveVerifier`, `Persona`
@@ -442,6 +442,7 @@ Before completing significant changes:
 
 ## Version History
 
+- **v1.0.3** (March 2026) - Documentation audit: experimental/stub labels added to non-MCP-exposed and stub-only modules; accuracy review across phantom module references
 - **v0.1.7** (February 2026) - Module count corrected to 86, version synchronized, missing modules added to discovery
 - **v0.1.6** (February 2026) - Agent & memory foundations, event orchestration
 - **v0.1.0** (February 2026) - Initial repository structure and agent coordination framework
@@ -456,7 +457,7 @@ Before completing significant changes:
 <!-- gitnexus:start -->
 # GitNexus MCP
 
-This project is indexed by GitNexus as **codomyrmex** (49441 symbols, 116480 relationships, 300 execution flows).
+This project is indexed by GitNexus as **codomyrmex** (49675 symbols, 116932 relationships, 300 execution flows).
 
 ## Always Start Here
 

@@ -102,7 +102,7 @@ class UsageSummary:
 
     @property
     def total_tokens(self) -> int:
-        """Execute Total Tokens operations natively."""
+        """total Tokens ."""
         return self.total_input_tokens + self.total_output_tokens
 
 
@@ -420,7 +420,7 @@ class BudgetGuard:
         monthly_limit: float | None = None,
         total_limit: float | None = None,
     ):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.daily_limit = daily_limit
         self.monthly_limit = monthly_limit
         self.total_limit = total_limit
@@ -429,11 +429,11 @@ class BudgetGuard:
         self._total_spend = 0.0
 
     def _today_key(self) -> str:
-        """Execute  Today Key operations natively."""
+        """today Key ."""
         return datetime.now().strftime("%Y-%m-%d")
 
     def _month_key(self) -> str:
-        """Execute  Month Key operations natively."""
+        """month Key ."""
         return datetime.now().strftime("%Y-%m")
 
     def record_spend(self, amount: float) -> None:

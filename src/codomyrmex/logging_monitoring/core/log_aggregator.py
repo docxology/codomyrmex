@@ -95,7 +95,7 @@ class LogAggregator:
     """
 
     def __init__(self, max_records: int = 100_000) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._records: list[LogRecord] = []
         self._max_records = max_records
 

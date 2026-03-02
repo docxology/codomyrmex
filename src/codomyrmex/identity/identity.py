@@ -33,12 +33,12 @@ class AuthToken:
 
     @property
     def is_expired(self) -> bool:
-        """Execute Is Expired operations natively."""
+        """is Expired ."""
         return time.time() > self.expires_at
 
     @property
     def remaining_seconds(self) -> float:
-        """Execute Remaining Seconds operations natively."""
+        """remaining Seconds ."""
         return max(0.0, self.expires_at - time.time())
 
 
@@ -65,7 +65,7 @@ class PasswordProvider(AuthProvider):
     """Password-based authentication using salted SHA-256 hashing."""
 
     def __init__(self) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._users: dict[str, tuple[str, str]] = {}  # user_id -> (salt, hash)
 
     def register(self, user_id: str, password: str) -> None:
@@ -75,7 +75,7 @@ class PasswordProvider(AuthProvider):
         self._users[user_id] = (salt, pw_hash)
 
     def authenticate(self, credentials: dict[str, Any]) -> bool:
-        """Execute Authenticate operations natively."""
+        """authenticate ."""
         user_id = credentials.get("user_id", "")
         password = credentials.get("password", "")
         if user_id not in self._users:
@@ -89,7 +89,7 @@ class TokenProvider(AuthProvider):
     """API-key / bearer token authentication."""
 
     def __init__(self) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._valid_tokens: set[str] = set()
 
     def create_token(self) -> str:
@@ -106,7 +106,7 @@ class TokenProvider(AuthProvider):
         return False
 
     def authenticate(self, credentials: dict[str, Any]) -> bool:
-        """Execute Authenticate operations natively."""
+        """authenticate ."""
         return credentials.get("token", "") in self._valid_tokens
 
 
@@ -134,7 +134,7 @@ class Identity:
         config: dict[str, Any] | None = None,
         session_ttl: float = 3600.0,
     ) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.config = config or {}
         self.session_ttl = session_ttl
         self._providers: dict[str, AuthProvider] = {}
@@ -231,19 +231,19 @@ class Identity:
     # ── Audit ───────────────────────────────────────────────────────
 
     def _audit(self, user_id: str, event_type: str, metadata: dict[str, Any] | None = None) -> None:
-        """Execute  Audit operations natively."""
+        """audit ."""
         event = AuthEvent(user_id=user_id, event_type=event_type, metadata=metadata or {})
         self._events.append(event)
         logger.info("Auth event: %s for %s", event_type, user_id)
 
     @property
     def audit_log(self) -> list[AuthEvent]:
-        """Execute Audit Log operations natively."""
+        """audit Log ."""
         return list(self._events)
 
     @property
     def active_session_count(self) -> int:
-        """Execute Active Session Count operations natively."""
+        """active Session Count ."""
         return sum(1 for s in self._sessions.values() if not s.is_expired)
 
 

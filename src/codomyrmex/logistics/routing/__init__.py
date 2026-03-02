@@ -99,7 +99,7 @@ class Route:
         self.total_load += load
 
     def to_dict(self) -> dict[str, Any]:
-        """Execute To Dict operations natively."""
+        """Return a dictionary representation of this object."""
         return {
             "id": self.id,
             "stops": [
@@ -141,7 +141,7 @@ class NearestNeighborRouting(RoutingAlgorithm):
         end: Location | None = None,
         constraints: RoutingConstraints | None = None,
     ) -> Route:
-        """Execute Optimize operations natively."""
+        """optimize ."""
         route = Route(id="nn_route", stops=[])
         current = start
         remaining = set(loc.id for loc in locations if loc.id != start.id)
@@ -179,7 +179,7 @@ class TwoOptRouting(RoutingAlgorithm):
     """2-opt improvement algorithm."""
 
     def __init__(self, max_iterations: int = 1000):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.max_iterations = max_iterations
 
     def _calculate_route_distance(
@@ -209,7 +209,7 @@ class TwoOptRouting(RoutingAlgorithm):
         end: Location | None = None,
         constraints: RoutingConstraints | None = None,
     ) -> Route:
-        """Execute Optimize operations natively."""
+        """optimize ."""
         # Initial route using nearest neighbor
         nn = NearestNeighborRouting()
         initial = nn.optimize(locations, start, end, constraints)
@@ -256,7 +256,7 @@ class DijkstraRouting:
     """Dijkstra's shortest path algorithm for graph-based routing."""
 
     def __init__(self):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.graph: dict[str, dict[str, float]] = {}
 
     def add_edge(
@@ -332,7 +332,7 @@ class AStarRouting:
     """A* pathfinding algorithm."""
 
     def __init__(self):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.graph: dict[str, dict[str, float]] = {}
         self.positions: dict[str, tuple[float, float]] = {}
 

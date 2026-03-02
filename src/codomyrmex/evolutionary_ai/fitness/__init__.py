@@ -65,12 +65,12 @@ class ScalarFitness(FitnessFunction):
         fn: Any,  # Callable[[Any], float]
         maximize: bool = True,
     ) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._fn = fn
         self._maximize = maximize
 
     def evaluate(self, genome: Any) -> FitnessResult:
-        """Execute Evaluate operations natively."""
+        """evaluate ."""
         raw = float(self._fn(genome))
         value = raw if self._maximize else -raw
         return FitnessResult(
@@ -95,14 +95,14 @@ class MultiObjectiveFitness(FitnessFunction):
         objectives: list[Any],  # list[Callable[[Any], float]]
         maximize: list[bool] | None = None,
     ) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._objectives = objectives
         self._maximize = maximize or [True] * len(objectives)
         if len(self._maximize) != len(self._objectives):
             raise ValueError("maximize length must match number of objectives")
 
     def evaluate(self, genome: Any) -> FitnessResult:
-        """Execute Evaluate operations natively."""
+        """evaluate ."""
         values: list[float] = []
         for fn, is_max in zip(self._objectives, self._maximize):
             raw = float(fn(genome))
@@ -156,13 +156,13 @@ class ConstrainedFitness(FitnessFunction):
         constraints: list[Any],  # list[Callable[[Any], float]]
         penalty_weight: float = 1000.0,
     ) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._base = base
         self._constraints = constraints
         self._penalty_weight = penalty_weight
 
     def evaluate(self, genome: Any) -> FitnessResult:
-        """Execute Evaluate operations natively."""
+        """evaluate ."""
         base_result = self._base.evaluate(genome)
         base_value = (
             base_result.value

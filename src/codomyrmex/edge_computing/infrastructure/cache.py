@@ -24,7 +24,7 @@ class CacheEntry:
 
     @property
     def expired(self) -> bool:
-        """Execute Expired operations natively."""
+        """expired ."""
         return (time.time() - self.created_at) > self.ttl_seconds
 
 
@@ -35,7 +35,7 @@ class EdgeCache:
     """
 
     def __init__(self, max_size: int = 1000, default_ttl: float = 300.0):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._store: dict[str, CacheEntry] = {}
         self._max_size = max_size
         self._default_ttl = default_ttl
@@ -94,7 +94,7 @@ class EdgeCache:
 
     @property
     def size(self) -> int:
-        """Execute Size operations natively."""
+        """size ."""
         return len(self._store)
 
     @property

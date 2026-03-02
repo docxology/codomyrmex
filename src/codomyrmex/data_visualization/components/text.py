@@ -11,14 +11,14 @@ class TextBlock(BaseComponent):
     is_markdown: bool = False
 
     def render(self) -> str:
-        """Execute Render operations natively."""
+        """render ."""
         text = self.content.replace("\n", "<br>")
         md_class = " markdown" if self.is_markdown else ""
         cls = f"component-text{md_class}"
         return f"<div class='{cls}'>{text}</div>"
 
     def __str__(self) -> str:
-        """Execute   Str   operations natively."""
+        """str ."""
         return self.render()
 
 @dataclass
@@ -28,9 +28,9 @@ class CodeBlock(BaseComponent):
     language: str = "python"
 
     def render(self) -> str:
-        """Execute Render operations natively."""
+        """render ."""
         return f'<pre><code class="language-{self.language}">{self.code}</code></pre>'
 
     def __str__(self) -> str:
-        """Execute   Str   operations natively."""
+        """str ."""
         return self.render()

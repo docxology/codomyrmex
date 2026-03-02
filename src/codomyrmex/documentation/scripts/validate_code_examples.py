@@ -33,7 +33,7 @@ class CodeExample:
     api_mismatches: list[str] = None
 
     def __post_init__(self):
-        """Execute   Post Init   operations natively."""
+        """post Init ."""
         if self.import_errors is None:
             self.import_errors = []
         if self.api_mismatches is None:

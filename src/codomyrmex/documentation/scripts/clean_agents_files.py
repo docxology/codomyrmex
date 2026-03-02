@@ -20,7 +20,7 @@ class AgentsCleaner:
     """Clean AGENTS.md files by removing conceptual items."""
 
     def __init__(self, repo_root: Path):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.repo_root = repo_root
         self.fixed_count = 0
 

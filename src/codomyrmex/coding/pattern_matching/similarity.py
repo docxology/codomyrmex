@@ -50,7 +50,7 @@ class CodeSimilarity:
     _WHITESPACE_RE = re.compile(r"\s+")
 
     def __init__(self) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._cache = {}  # Initialize similarity cache
 
     def compute_similarity(self, code_a: str, code_b: str) -> float:

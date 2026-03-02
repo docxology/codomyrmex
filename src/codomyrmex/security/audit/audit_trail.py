@@ -40,12 +40,12 @@ class AuditEntry:
     entry_hash: str = ""
 
     def __post_init__(self) -> None:
-        """Execute   Post Init   operations natively."""
+        """post Init ."""
         if not self.timestamp:
             self.timestamp = time.time()
 
     def to_dict(self) -> dict[str, Any]:
-        """Execute To Dict operations natively."""
+        """Return a dictionary representation of this object."""
         return {
             "action": self.action,
             "actor": self.actor,
@@ -56,7 +56,7 @@ class AuditEntry:
         }
 
     def payload(self) -> str:
-        """Execute Payload operations natively."""
+        """payload ."""
         return json.dumps({
             "action": self.action,
             "actor": self.actor,
@@ -77,7 +77,7 @@ class AuditTrail:
     """
 
     def __init__(self, signing_key: bytes = b"codomyrmex-audit") -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._key = signing_key
         self._entries: list[AuditEntry] = []
 
@@ -115,23 +115,23 @@ class AuditTrail:
 
     @property
     def size(self) -> int:
-        """Execute Size operations natively."""
+        """size ."""
         return len(self._entries)
 
     def entries(self) -> list[AuditEntry]:
-        """Execute Entries operations natively."""
+        """entries ."""
         return list(self._entries)
 
     def entries_by_actor(self, actor: str) -> list[AuditEntry]:
-        """Execute Entries By Actor operations natively."""
+        """entries By Actor ."""
         return [e for e in self._entries if e.actor == actor]
 
     def to_jsonl(self) -> str:
-        """Execute To Jsonl operations natively."""
+        """to Jsonl ."""
         return "\n".join(json.dumps(e.to_dict()) for e in self._entries)
 
     def _compute_hash(self, entry: AuditEntry) -> str:
-        """Execute  Compute Hash operations natively."""
+        """compute Hash ."""
         return hmac.new(self._key, entry.payload().encode(), hashlib.sha256).hexdigest()[:16]
 
 

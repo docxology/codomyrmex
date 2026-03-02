@@ -136,7 +136,7 @@ def timing_decorator(func: Callable[..., T]) -> Callable[..., T]:
     """
     @functools.wraps(func)
     def wrapper(*args, **kwargs):
-        """Execute Wrapper operations natively."""
+        """wrapper ."""
         start = time.perf_counter()
         result = func(*args, **kwargs)
         elapsed = (time.perf_counter() - start) * 1000
@@ -166,10 +166,10 @@ def retry(
         Decorator function
     """
     def decorator(func: Callable[..., T]) -> Callable[..., T]:
-        """Execute Decorator operations natively."""
+        """decorator ."""
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
-            """Execute Wrapper operations natively."""
+            """wrapper ."""
             current_delay = delay
             last_exception = None
 

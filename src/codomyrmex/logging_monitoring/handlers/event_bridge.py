@@ -47,7 +47,7 @@ class EventLoggingBridge:
         logger_name: str = "codomyrmex.observability.event_bridge",
         log_level: int = logging.INFO,
     ) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._event_bus = event_bus
         self._event_types = event_types or list(EventType)
         self._logger = logging.getLogger(logger_name)

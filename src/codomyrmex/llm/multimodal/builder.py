@@ -27,7 +27,7 @@ class MultimodalMessageBuilder:
     """
 
     def __init__(self, message_id: str, role: str = "user"):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._message = MultimodalMessage(id=message_id, role=role)
 
     def text(self, content: str) -> "MultimodalMessageBuilder":

@@ -21,7 +21,7 @@ except ImportError:
     def monitor_performance(*args, **kwargs):
         """Decorator for performance monitoring (fallback)."""
         def decorator(func):
-            """Execute Decorator operations natively."""
+            """decorator ."""
             return func
         return decorator
 
@@ -105,7 +105,7 @@ class Resource:
     allocations: dict[str, ResourceAllocation] = field(default_factory=dict)
 
     def __post_init__(self):
-        """Execute   Post Init   operations natively."""
+        """post Init ."""
         if not self.id:
             self.id = str(uuid.uuid4())
 

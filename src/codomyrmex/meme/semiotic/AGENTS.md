@@ -1,30 +1,39 @@
-# Agents Guide: Semiotics
+# Codomyrmex Agents -- src/codomyrmex/meme/semiotic
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.0 | **Status**: Experimental | **Last Updated**: March 2026
 
-**Operational Directives**
+## Purpose
 
-Use the `semiotic` submodule to ensure semantic integrity and to decode hidden layers of meaning in inputs.
+Implements computational semiotics based on Peircean sign theory. Provides sign extraction from text (icon/index/symbol classification), semiotic drift measurement between corpora, semantic territory mapping, synonym-based linguistic steganography for embedding hidden payloads, and mnemonic device construction using the Method of Loci.
 
-## Capabilities
+## Key Components
 
-1. **Drift Detection**:
-    * Monitor key terms for "semantic drift." If a word's usage shifts (e.g., "woke" shifting from "aware" to "pejorative"), update your internal definitions.
-    * Use `measure_drift` to alert users to changing language landscapes.
+| File | Class / Function | Role |
+|------|-----------------|------|
+| `analyzer.py` | `SemioticAnalyzer` | Decode text into signs, measure drift, map semantic territories |
+| `encoding.py` | `SemioticEncoder` | Meaning-level steganography via synonym substitution |
+| `mnemonics.py` | `MnemonicDevice` | Memory palace structure with anchors and associations |
+| `mnemonics.py` | `build_memory_palace` | Construct Method of Loci device linking items to locations |
+| `models.py` | `Sign` | Fundamental semiotic unit: signifier, signified, Peircean type |
+| `models.py` | `SignType` | ICON, INDEX, SYMBOL (Peircean trichotomy) |
+| `models.py` | `SemanticTerritory` | Mapped region of semantic space with density metric |
+| `models.py` | `DriftReport` | Semiotic drift analysis with stability_ratio property |
 
-2. **Steganography**:
-    * Use `SemioticEncoder` to pass hidden metadata in generated text if required for watermarking or coordination.
-    * Scan incoming high-priority messages for encoded payloads.
+## Operating Contracts
 
-3. **Memory Palaces**:
-    * Use `mnemonics` to structure complex outputs for better user retention. Present lists as spatial arrangements.
+- Sign type inference uses heuristics: emoji unicode ranges for ICON, deictic words for INDEX, default SYMBOL.
+- Drift threshold is fixed at Jaccard < 0.3 for meaning shift; not configurable.
+- Steganography uses a fixed 8-word synonym map; proof-of-concept only.
+- Words shorter than 2 characters are excluded from sign extraction.
+- Meaning is context-dependent; a Sign valid in one SemanticTerritory may be invalid in another.
+- Errors must be logged via `logging_monitoring` before re-raising.
 
-## Constraints
+## Integration Points
 
-* **Context Dependency**: Meaning is highly context-dependent. A `Sign` valid in one `SemanticTerritory` may be invalid in another. Always check the context.
-* **Ambiguity**: Signs are inherently polysemous. Design agents to handle ambiguity gracefully, providing multiple interpretations if confidence is low.
+- **Depends on**: None (standard library only: `hashlib`, `time`, `re`, `collections`)
+- **Used by**: `meme.memetics` (validate mutated memes retain intended signifier), `meme.neurolinguistic` (semiotic analysis identifies framing mechanisms)
 
-## Integration
+## Navigation
 
-* **With Memetics**: Validate that a `Meme`'s content accurately reflects its intended `Sign`.
-* **With Neurolinguistic**: Use semiotic analysis to identify the framing mechanisms (metaphors, metonyms) used in persuasion.
+- **Parent**: [meme](../README.md)
+- **Root**: [Root](../../../../README.md)

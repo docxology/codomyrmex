@@ -26,7 +26,7 @@ class SerializationError(CodomyrmexError):
         data_type: str | None = None,
         **kwargs: Any
     ):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         super().__init__(message, **kwargs)
         if format:
             self.context["format"] = format
@@ -52,7 +52,7 @@ class DeserializationError(SerializationError):
         expected_type: str | None = None,
         **kwargs: Any
     ):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         super().__init__(message, format=format, **kwargs)
         # Truncate raw data preview to avoid huge context
         if raw_data_preview:
@@ -81,7 +81,7 @@ class SchemaValidationError(SerializationError):
         path: str | None = None,
         **kwargs: Any
     ):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         super().__init__(message, **kwargs)
         if schema_name:
             self.context["schema_name"] = schema_name
@@ -107,7 +107,7 @@ class EncodingError(SerializationError):
         position: int | None = None,
         **kwargs: Any
     ):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         super().__init__(message, **kwargs)
         if encoding:
             self.context["encoding"] = encoding
@@ -131,7 +131,7 @@ class FormatNotSupportedError(SerializationError):
         supported_formats: list[str] | None = None,
         **kwargs: Any
     ):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         super().__init__(message, **kwargs)
         if requested_format:
             self.context["requested_format"] = requested_format
@@ -155,7 +155,7 @@ class CircularReferenceError(SerializationError):
         reference_path: str | None = None,
         **kwargs: Any
     ):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         super().__init__(message, **kwargs)
         if object_type:
             self.context["object_type"] = object_type
@@ -181,7 +181,7 @@ class TypeConversionError(SerializationError):
         value_preview: str | None = None,
         **kwargs: Any
     ):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         super().__init__(message, **kwargs)
         if source_type:
             self.context["source_type"] = source_type
@@ -209,7 +209,7 @@ class BinaryFormatError(SerializationError):
         operation: str | None = None,
         **kwargs: Any
     ):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         super().__init__(message, format=format, **kwargs)
         if operation:
             self.context["operation"] = operation

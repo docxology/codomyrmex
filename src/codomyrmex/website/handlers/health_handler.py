@@ -7,7 +7,6 @@ and /api/awareness endpoints.
 from __future__ import annotations
 
 import sys
-from typing import Any
 
 from codomyrmex.logging_monitoring import get_logger
 
@@ -175,7 +174,6 @@ class HealthHandler:
                     pass
 
                 # Additional useful metrics
-                import platform
                 collector.record("python_version_minor",
                                 float(sys.version_info.minor),
                                 metric_type=MetricType.GAUGE)

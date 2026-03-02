@@ -101,7 +101,7 @@ class ScatterPlot:
 
     @property
     def data(self) -> dict[str, list]:
-        """Execute Data operations natively."""
+        """data ."""
         return {"x": self.x_data, "y": self.y_data}
 
     def render(self, output_path: str = None, show_plot: bool = False):

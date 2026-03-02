@@ -20,7 +20,7 @@ class GeminiCLIWrapper(BaseAgent):
     """Client for interacting with the gemini CLI package (gemini-cli)."""
 
     def __init__(self, config: dict[str, Any] | None = None):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         super().__init__(
             name="gemini_cli",
             capabilities=[
@@ -36,7 +36,7 @@ class GeminiCLIWrapper(BaseAgent):
         self.default_model = self.get_config_value("gemini_model", default=None, config=config)
 
     def _execute_impl(self, request: AgentRequest) -> AgentResponse:
-        """Execute  Execute Impl operations natively."""
+        """execute Impl ."""
         if not self.cli_path:
             raise GeminiError("gemini CLI executable not found")
 
@@ -103,7 +103,7 @@ class GeminiCLIWrapper(BaseAgent):
             raise GeminiError(f"Failed to execute gemini CLI: {e}") from e
 
     def _stream_impl(self, request: AgentRequest) -> Iterator[str]:
-        """Execute  Stream Impl operations natively."""
+        """stream Impl ."""
         # CLI streaming is complex. We will implement simple blocking execution for now
         # and yield it as a single chunk.
         logger.warning("Streaming is not fully supported via CLI subprocess. Falling back to block execute.")

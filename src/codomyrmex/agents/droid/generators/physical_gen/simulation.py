@@ -18,15 +18,15 @@ class Vector3D:
     z: float = 0.0
 
     def __add__(self, other: "Vector3D") -> "Vector3D":
-        """Execute   Add   operations natively."""
+        """add ."""
         return Vector3D(self.x + other.x, self.y + other.y, self.z + other.z)
 
     def __sub__(self, other: "Vector3D") -> "Vector3D":
-        """Execute   Sub   operations natively."""
+        """sub ."""
         return Vector3D(self.x - other.x, self.y - other.y, self.z - other.z)
 
     def __mul__(self, scalar: float) -> "Vector3D":
-        """Execute   Mul   operations natively."""
+        """mul ."""
         return Vector3D(self.x * scalar, self.y * scalar, self.z * scalar)
 
     def magnitude(self) -> float:
@@ -76,7 +76,7 @@ class PhysicsSimulator:
     """Physics simulation engine."""
 
     def __init__(self):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.gravity = Vector3D(0, -9.81, 0)
         self.force_fields: List[ForceField] = []
         self.constraints: List[Constraint] = []
@@ -92,7 +92,7 @@ class PhysicsSimulator:
 
     def register_object(self, object_id: str, mass: float, position: Vector3D,
                        velocity: Vector3D = None) -> None:
-        """Execute Register Object operations natively."""
+        """register Object ."""
                            pass
         """Register an object for physics simulation."""
         if velocity is None:

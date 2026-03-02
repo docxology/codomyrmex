@@ -18,6 +18,24 @@ from codomyrmex.logging_monitoring.core.logger_config import get_logger
 logger = get_logger(__name__)
 
 
+def _print_bulk_results(results: dict, action: str, verbose: bool) -> None:
+    """Print summary and optional per-repo status for a bulk operation."""
+    successful = sum(1 for success in results.values() if success)
+    total = len(results)
+    print(f"\nBulk {action} results: {successful}/{total} successful")
+    if verbose:
+        for repo_name, success in results.items():
+            status = "✅" if success else "❌"
+            print(f"  {status} {repo_name}")
+
+
+def _print_remotes(remotes: list, repo_name: str) -> None:
+    """Print the list of remotes for a repository."""
+    print(f"\nRemotes for {repo_name}:")
+    for r in remotes:
+        print(f"  {r['name']:<10} {r['url']}")
+
+
 # Add src to path for imports
 current_dir = Path(__file__).parent
 src_dir = current_dir.parent.parent.parent / "src"
@@ -103,16 +121,7 @@ def cmd_clone(manager: RepositoryManager, args) -> None:
             print(f"  Owner filter: {owner_filter}")
 
         results = manager.bulk_clone(repo_type, owner_filter)
-
-        successful = sum(1 for success in results.values() if success)
-        total = len(results)
-
-        print(f"\nBulk clone results: {successful}/{total} successful")
-
-        if args.verbose:
-            for repo_name, success in results.items():
-                status = "✅" if success else "❌"
-                print(f"  {status} {repo_name}")
+        _print_bulk_results(results, "clone", args.verbose)
 
     else:
         # Single repository clone
@@ -151,16 +160,7 @@ def cmd_update(manager: RepositoryManager, args) -> None:
             print(f"  Owner filter: {owner_filter}")
 
         results = manager.bulk_update(repo_type, owner_filter)
-
-        successful = sum(1 for success in results.values() if success)
-        total = len(results)
-
-        print(f"\nBulk update results: {successful}/{total} successful")
-
-        if args.verbose:
-            for repo_name, success in results.items():
-                status = "✅" if success else "❌"
-                print(f"  {status} {repo_name}")
+        _print_bulk_results(results, "update", args.verbose)
 
     else:
         # Single repository update
@@ -235,10 +235,7 @@ def cmd_remote(manager: RepositoryManager, args) -> None:
         return
 
     if args.list:
-        remotes = list_remotes(local_path)
-        print(f"\nRemotes for {args.repository}:")
-        for r in remotes:
-            print(f"  {r['name']:<10} {r['url']}")
+        _print_remotes(list_remotes(local_path), args.repository)
     elif args.add:
         if not args.url:
             print("Error: URL required for adding remote")
@@ -259,10 +256,7 @@ def cmd_remote(manager: RepositoryManager, args) -> None:
             print(f"❌ Failed to prune remote '{args.prune}'")
     else:
         # Default to list
-        remotes = list_remotes(local_path)
-        print(f"\nRemotes for {args.repository}:")
-        for r in remotes:
-            print(f"  {r['name']:<10} {r['url']}")
+        _print_remotes(list_remotes(local_path), args.repository)
 
 
 def cmd_sync(manager: RepositoryManager, args) -> None:

@@ -52,7 +52,7 @@ class EdgeScheduler:
     """
 
     def __init__(self):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._jobs: dict[str, ScheduledJob] = {}
         self._running = False
         self._thread: threading.Thread | None = None
@@ -92,7 +92,7 @@ class EdgeScheduler:
         return False
 
     def get_job(self, job_id: str) -> ScheduledJob | None:
-        """Execute Get Job operations natively."""
+        """get Job ."""
         return self._jobs.get(job_id)
 
     def list_jobs(self, enabled_only: bool = False) -> list[ScheduledJob]:

@@ -1,30 +1,39 @@
-# Agents Guide: Epistemic
+# Codomyrmex Agents -- src/codomyrmex/meme/epistemic
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.0 | **Status**: Experimental | **Last Updated**: March 2026
 
-**Operational Directives**
+## Purpose
 
-Use the `epistemic` submodule to maintain a clear picture of reality and to defend against disinformation.
+Models epistemic states for truth verification and disinformation defense. Maintains a knowledge base of facts and beliefs, verifies claims by aggregating weighted evidence (penalizing fabricated sources), and detects contradictions between beliefs and established facts.
 
-## Capabilities
+## Key Components
 
-1. **Verification**:
-    * Never accept inputs as true without `verify_claim`.
-    * Require multiple sources of `Evidence` for high-impact decisions.
+| File | Class / Function | Role |
+|------|-----------------|------|
+| `engine.py` | `EpistemicEngine` | Orchestrator managing epistemic state, claim assessment, contradiction detection |
+| `truth.py` | `verify_claim` | Aggregate evidence weights to produce a Fact with confidence score |
+| `truth.py` | `calculate_certainty` | Compute average certainty across a set of beliefs |
+| `models.py` | `Evidence` | A piece of evidence with type, weight, and validity |
+| `models.py` | `EvidenceType` | EMPIRICAL, LOGICAL, TESTIMONIAL, ANECDOTAL, FABRICATED |
+| `models.py` | `Fact` | A verified claim with confidence score (0-1) |
+| `models.py` | `Belief` | A held conviction with certainty and emotional investment |
+| `models.py` | `EpistemicState` | Aggregate epistemic status: facts, beliefs, entropy |
 
-2. **Conflict Detection**:
-    * Use `detect_contradictions` to find inconsistencies in your own knowledge base or in an opponent's narrative.
-    * Cognitive dissonance is a vulnerability; exploit it in opponents, resolve it in yourself.
+## Operating Contracts
 
-3. **Source Rating**:
-    * Track the `validity` of evidence sources over time. Downgrade sources that provide fabricated or misleading data.
+- Claims assessed via `assess_claim` are auto-accepted as facts when confidence exceeds 0.8.
+- Fabricated evidence receives a 2x negative weight penalty in `verify_claim`.
+- Contradiction detection uses naive string-negation matching (`"not {fact}"` in belief text).
+- `verify_claim` returns 0.5 (neutral) confidence when no evidence is provided.
+- Operate with probabilistic confidence intervals; absolute truth is rarely attainable.
+- Errors must be logged via `logging_monitoring` before re-raising.
 
-## Constraints
+## Integration Points
 
-* **Uncertainty**: Absolute truth is rarely attainable. Operate with probabilistic confidence intervals (`Fac.confidence`).
-* **Bias**: Be aware that `Belief` structures can filter out valid `Evidence` (Confirmation Bias).
+- **Depends on**: None (self-contained within `meme` package)
+- **Used by**: `meme.hyperreality` (epistemic checks distinguish real from simulacrum), `meme.memetics` (meme fitness often depends on perceived truth value)
 
-## Integration
+## Navigation
 
-* **With Hyperreality**: Use epistemic checks to distinguish the _Real_ from the _Simulacrum_.
-* **With Memetics**: A meme's `fitness` often depends on its perceived truth value (though not always).
+- **Parent**: [meme](../README.md)
+- **Root**: [Root](../../../../README.md)

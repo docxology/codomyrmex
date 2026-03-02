@@ -18,7 +18,7 @@ class DocumentReadError(DocumentsError):
     """Raised when document reading fails."""
 
     def __init__(self, message: str, file_path: str = None, **kwargs):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         super().__init__(message, **kwargs)
         if file_path:
             self.context["file_path"] = file_path
@@ -28,7 +28,7 @@ class DocumentWriteError(DocumentsError):
     """Raised when document writing fails."""
 
     def __init__(self, message: str, file_path: str = None, **kwargs):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         super().__init__(message, **kwargs)
         if file_path:
             self.context["file_path"] = file_path
@@ -43,7 +43,7 @@ class DocumentValidationError(DocumentsError):
     """Raised when document validation fails."""
 
     def __init__(self, message: str, validation_errors: list = None, **kwargs):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         super().__init__(message, **kwargs)
         if validation_errors:
             self.context["validation_errors"] = validation_errors
@@ -58,7 +58,7 @@ class UnsupportedFormatError(DocumentsError):
     """Raised when an unsupported document format is requested."""
 
     def __init__(self, message: str, format: str = None, **kwargs):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         super().__init__(message, **kwargs)
         if format:
             self.context["format"] = format

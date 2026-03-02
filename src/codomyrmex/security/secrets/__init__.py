@@ -53,7 +53,7 @@ class DetectedSecret:
 
     @property
     def is_high_severity(self) -> bool:
-        """Execute Is High Severity operations natively."""
+        """is High Severity ."""
         return self.severity in [SecretSeverity.HIGH, SecretSeverity.CRITICAL]
 
 
@@ -66,12 +66,12 @@ class ScanResult:
 
     @property
     def has_secrets(self) -> bool:
-        """Execute Has Secrets operations natively."""
+        """has Secrets ."""
         return len(self.secrets_found) > 0
 
     @property
     def high_severity_count(self) -> int:
-        """Execute High Severity Count operations natively."""
+        """high Severity Count ."""
         return sum(1 for s in self.secrets_found if s.is_high_severity)
 
 
@@ -122,7 +122,7 @@ class SecretPatterns:
     ]
 
     def __init__(self, custom_patterns: list[tuple] | None = None):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.patterns = self.PATTERNS.copy()
         if custom_patterns:
             self.patterns.extend(custom_patterns)
@@ -167,7 +167,7 @@ class SecretScanner:
         patterns: SecretPatterns | None = None,
         min_confidence: float = 0.5,
     ):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.patterns = patterns or SecretPatterns()
         self.min_confidence = min_confidence
         self._ignore_compiled = [re.compile(p) for p in self.IGNORE_PATTERNS]
@@ -330,7 +330,7 @@ class SecretVault:
         path: str | None = None,
         master_password: str | None = None,
     ):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.path = Path(path) if path else None
         self._secrets: dict[str, str] = {}
         self._key = self._derive_key(master_password) if master_password else None

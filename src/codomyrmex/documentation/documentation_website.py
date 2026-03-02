@@ -557,7 +557,7 @@ def assess_site():
 
 
 def main():
-    """Execute Main operations natively."""
+    """main ."""
 
     parser = argparse.ArgumentParser(
         description=(

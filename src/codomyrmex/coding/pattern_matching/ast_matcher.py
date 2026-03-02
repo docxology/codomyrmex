@@ -58,7 +58,7 @@ class ASTMatcher:
     )
 
     def __init__(self) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         pass
 
     def parse_code(self, source: str, language: str = "python") -> dict:
@@ -197,7 +197,7 @@ class ASTMatcher:
 
     @staticmethod
     def _find_singleton(tree: ast.Module) -> list[ASTMatchResult]:
-        """Execute  Find Singleton operations natively."""
+        """find Singleton ."""
         results = []
         for node in ast.walk(tree):
             if isinstance(node, ast.ClassDef):
@@ -229,7 +229,7 @@ class ASTMatcher:
 
     @staticmethod
     def _find_factory(tree: ast.Module) -> list[ASTMatchResult]:
-        """Execute  Find Factory operations natively."""
+        """find Factory ."""
         results = []
         for node in ast.walk(tree):
             if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
@@ -248,7 +248,7 @@ class ASTMatcher:
 
     @staticmethod
     def _find_decorated(tree: ast.Module) -> list[ASTMatchResult]:
-        """Execute  Find Decorated operations natively."""
+        """find Decorated ."""
         results = []
         for node in ast.walk(tree):
             if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)):
@@ -274,7 +274,7 @@ class ASTMatcher:
 
     @staticmethod
     def _find_context_manager(tree: ast.Module) -> list[ASTMatchResult]:
-        """Execute  Find Context Manager operations natively."""
+        """find Context Manager ."""
         results = []
         for node in ast.walk(tree):
             if isinstance(node, ast.ClassDef):
@@ -300,7 +300,7 @@ class ASTMatcher:
 
     @staticmethod
     def _check_bare_except(tree: ast.Module) -> list[ASTMatchResult]:
-        """Execute  Check Bare Except operations natively."""
+        """check Bare Except ."""
         results = []
         for node in ast.walk(tree):
             if isinstance(node, ast.ExceptHandler) and node.type is None:
@@ -315,7 +315,7 @@ class ASTMatcher:
 
     @staticmethod
     def _check_mutable_default_arg(tree: ast.Module) -> list[ASTMatchResult]:
-        """Execute  Check Mutable Default Arg operations natively."""
+        """check Mutable Default Arg ."""
         results = []
         mutable_types = (ast.List, ast.Dict, ast.Set)
         for node in ast.walk(tree):
@@ -335,7 +335,7 @@ class ASTMatcher:
 
     @staticmethod
     def _check_star_import(tree: ast.Module) -> list[ASTMatchResult]:
-        """Execute  Check Star Import operations natively."""
+        """check Star Import ."""
         results = []
         for node in ast.walk(tree):
             if isinstance(node, ast.ImportFrom):
@@ -356,11 +356,11 @@ class ASTMatcher:
         tree: ast.Module,
         max_depth: int = 2,
     ) -> list[ASTMatchResult]:
-        """Execute  Check Nested Function Depth operations natively."""
+        """check Nested Function Depth ."""
         results: list[ASTMatchResult] = []
 
         def _walk(node: ast.AST, depth: int) -> None:
-            """Execute  Walk operations natively."""
+            """walk ."""
             if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
                 if depth > max_depth:
                     results.append(ASTMatchResult(

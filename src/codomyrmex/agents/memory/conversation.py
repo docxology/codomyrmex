@@ -28,13 +28,13 @@ class Turn:
     metadata: dict[str, Any] = field(default_factory=dict)
 
     def __post_init__(self) -> None:
-        """Execute   Post Init   operations natively."""
+        """post Init ."""
         if not self.timestamp:
             self.timestamp = time.time()
 
     @property
     def word_count(self) -> int:
-        """Execute Word Count operations natively."""
+        """word Count ."""
         return len(self.content.split())
 
 
@@ -50,12 +50,12 @@ class ConversationHistory:
     """
 
     def __init__(self, max_turns: int = 1000) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._turns: list[Turn] = []
         self._max_turns = max_turns
 
     def add(self, role: str, content: str, metadata: dict[str, Any] | None = None) -> Turn:
-        """Execute Add operations natively."""
+        """add ."""
         turn = Turn(role=role, content=content, metadata=metadata or {})
         self._turns.append(turn)
         if len(self._turns) > self._max_turns:
@@ -64,19 +64,19 @@ class ConversationHistory:
 
     @property
     def turn_count(self) -> int:
-        """Execute Turn Count operations natively."""
+        """turn Count ."""
         return len(self._turns)
 
     def last(self, n: int = 1) -> list[Turn]:
-        """Execute Last operations natively."""
+        """last ."""
         return self._turns[-n:]
 
     def by_role(self, role: str) -> list[Turn]:
-        """Execute By Role operations natively."""
+        """by Role ."""
         return [t for t in self._turns if t.role == role]
 
     def summary(self) -> dict[str, Any]:
-        """Execute Summary operations natively."""
+        """summary ."""
         total_words = sum(t.word_count for t in self._turns)
         role_counts = {}
         for t in self._turns:
@@ -88,7 +88,7 @@ class ConversationHistory:
         }
 
     def clear(self) -> None:
-        """Execute Clear operations natively."""
+        """clear ."""
         self._turns.clear()
 
     def to_messages(self) -> list[dict[str, str]]:

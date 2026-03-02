@@ -6,7 +6,7 @@ class CandlestickChart(BasePlot):
     """Candlestick / OHLC chart visualization."""
 
     def __init__(self, title="", dates=None, opens=None, highs=None, lows=None, closes=None, **kwargs):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         super().__init__(title=title, **kwargs)
         self.dates = dates or []
         self.opens = opens or []
@@ -15,7 +15,7 @@ class CandlestickChart(BasePlot):
         self.closes = closes or []
 
     def _render_figure(self, fig, ax):
-        """Execute  Render Figure operations natively."""
+        """render Figure ."""
         n = len(self.dates)
         for i in range(n):
             colour = "green" if self.closes[i] >= self.opens[i] else "red"

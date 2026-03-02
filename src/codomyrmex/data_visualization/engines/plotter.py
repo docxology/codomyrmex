@@ -44,20 +44,20 @@ except ImportError:
     def monitor_performance(*args, **kwargs):
         """Decorator for performance monitoring (fallback)."""
         def decorator(func):
-            """Execute Decorator operations natively."""
+            """decorator ."""
             return func
         return decorator
 
     class performance_context:
         """Performance Context (fallback)."""
         def __init__(self, *args, **kwargs):
-            """Execute   Init   operations natively."""
+            """Initialize this instance."""
             return None  # Intentional no-op
         def __enter__(self):
-            """Execute   Enter   operations natively."""
+            """enter ."""
             return self
         def __exit__(self, *args):
-            """Execute   Exit   operations natively."""
+            """exit ."""
             return None  # Intentional no-op
 
 
@@ -65,7 +65,7 @@ class Plotter:
     """Simple wrapper around chart functions providing a unified plotting interface."""
 
     def __init__(self, figure_size: tuple = DEFAULT_FIGURE_SIZE):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.figure_size = figure_size
 
     def bar_chart(self, categories, values, **kwargs):

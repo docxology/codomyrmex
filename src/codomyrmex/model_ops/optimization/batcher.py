@@ -39,7 +39,7 @@ class RequestBatcher(Generic[T]):
         timeout_ms: float = 100.0,
         processor: Callable[[list[T]], list[Any]] | None = None,
     ):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.max_batch_size = max_batch_size
         self.timeout_ms = timeout_ms
         self.processor = processor

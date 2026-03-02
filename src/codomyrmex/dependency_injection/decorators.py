@@ -50,13 +50,13 @@ class InjectableMetadata:
         auto_register: bool = True,
         tags: tuple | None = None,
     ) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.scope = scope
         self.auto_register = auto_register
         self.tags = tags or ()
 
     def __repr__(self) -> str:
-        """Execute   Repr   operations natively."""
+        """repr ."""
         return (
             f"InjectableMetadata(scope={self.scope!r}, "
             f"auto_register={self.auto_register}, tags={self.tags})"
@@ -81,12 +81,12 @@ class InjectMetadata:
         params: dict[str, Any] | None = None,
         resolve_all: bool = True,
     ) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.params = params or {}
         self.resolve_all = resolve_all
 
     def __repr__(self) -> str:
-        """Execute   Repr   operations natively."""
+        """repr ."""
         return (
             f"InjectMetadata(params={self.params}, "
             f"resolve_all={self.resolve_all})"
@@ -122,7 +122,7 @@ def injectable(
     """
 
     def decorator(cls: type[T]) -> type[T]:
-        """Execute Decorator operations natively."""
+        """decorator ."""
         metadata = InjectableMetadata(
             scope=scope,
             auto_register=auto_register,
@@ -184,7 +184,7 @@ def inject(fn: Callable[..., Any]) -> Callable[..., Any]:
 
     @functools.wraps(fn)
     def wrapper(*args: Any, **kwargs: Any) -> Any:
-        """Execute Wrapper operations natively."""
+        """wrapper ."""
         return fn(*args, **kwargs)
 
     # Transfer metadata to wrapper

@@ -37,7 +37,7 @@ class ConsoleProvider(NotificationProvider):
 
     @property
     def channel(self) -> NotificationChannel:
-        """Execute Channel operations natively."""
+        """channel ."""
         return NotificationChannel.CONSOLE
 
     def send(self, notification: Notification) -> NotificationResult:
@@ -65,12 +65,12 @@ class FileProvider(NotificationProvider):
     """Write notifications to a file."""
 
     def __init__(self, file_path: str = "notifications.log"):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.file_path = file_path
 
     @property
     def channel(self) -> NotificationChannel:
-        """Execute Channel operations natively."""
+        """channel ."""
         return NotificationChannel.FILE
 
     def send(self, notification: Notification) -> NotificationResult:
@@ -99,14 +99,14 @@ class WebhookProvider(NotificationProvider):
     """Send notifications via webhook."""
 
     def __init__(self, url: str, headers: dict[str, str] | None = None):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.url = url
         self.headers = headers or {}
         self._sent: list[Notification] = []  # Store for testing
 
     @property
     def channel(self) -> NotificationChannel:
-        """Execute Channel operations natively."""
+        """channel ."""
         return NotificationChannel.WEBHOOK
 
     def send(self, notification: Notification) -> NotificationResult:

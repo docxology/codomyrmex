@@ -257,14 +257,14 @@ if BaseAgent is not None:
             class AdapterResponse:
                 """Functional component: AdapterResponse."""
                 def __init__(self, resp):
-                    """Execute   Init   operations natively."""
+                    """Initialize this instance."""
                     self.content = resp.content
                     self.tokens_used = 0
                     self.execution_time = resp.execution_time
                     self.error = getattr(resp, "error", None)
 
                 def is_success(self):
-                    """Execute Is Success operations natively."""
+                    """is Success ."""
                     return not bool(self.error)
 
             return AdapterResponse(response)
@@ -317,7 +317,7 @@ else:
         """Stub for when agents.core is not installed."""
 
         def __init__(self, *args: Any, **kwargs: Any) -> None:
-            """Execute   Init   operations natively."""
+            """Initialize this instance."""
             raise ImportError(
                 "codomyrmex.agents.core is required for AntigravityAgent. "
                 "Install with: pip install codomyrmex[agents]"

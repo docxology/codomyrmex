@@ -34,7 +34,7 @@ class LoadResult:
     warnings: list[str] = None
 
     def __post_init__(self):
-        """Execute   Post Init   operations natively."""
+        """post Init ."""
 
         if self.warnings is None:
             self.warnings = []

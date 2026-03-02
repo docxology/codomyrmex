@@ -47,7 +47,7 @@ class ObservabilityEvent:
     duration_ms: float = 0.0
 
     def __post_init__(self) -> None:
-        """Execute   Post Init   operations natively."""
+        """post Init ."""
         if not self.event_id:
             self.event_id = f"evt-{uuid.uuid4().hex[:10]}"
 
@@ -66,13 +66,13 @@ class ObservabilityPipeline:
     """
 
     def __init__(self) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._events: list[ObservabilityEvent] = []
         self._by_correlation: dict[str, list[ObservabilityEvent]] = {}
 
     @property
     def event_count(self) -> int:
-        """Execute Event Count operations natively."""
+        """event Count ."""
         return len(self._events)
 
     def start_correlation(self) -> str:
@@ -135,7 +135,7 @@ class ObservabilityPipeline:
         duration_ms: float = 0.0, source: str = "",
         data: dict[str, Any] | None = None,
     ) -> ObservabilityEvent:
-        """Execute  Record operations natively."""
+        """record ."""
         event = ObservabilityEvent(
             kind=kind, name=name, correlation_id=correlation_id,
             duration_ms=duration_ms, source=source, data=data or {},

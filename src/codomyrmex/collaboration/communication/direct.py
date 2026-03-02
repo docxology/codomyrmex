@@ -48,7 +48,7 @@ class DirectMessenger:
     """
 
     def __init__(self, default_timeout: float = 30.0):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._handlers: dict[str, Callable[[AgentMessage], Awaitable[Any]]] = {}
         self._pending_requests: dict[str, PendingRequest] = {}
         self._default_timeout = default_timeout
@@ -291,7 +291,7 @@ class ConversationTracker:
     """
 
     def __init__(self):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._conversations: dict[str, list[AgentMessage]] = {}
         self._agent_conversations: dict[str, Set[str]] = {}
 

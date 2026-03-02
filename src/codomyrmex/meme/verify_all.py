@@ -6,15 +6,15 @@ import sys
 sys.path.insert(0, "/Users/mini/Documents/GitHub/codomyrmex/src")
 
 def info(msg):
-    """Execute Info operations natively."""
+    """info ."""
     print(f"\033[94m[INFO]\033[0m {msg}")
 
 def success(msg):
-    """Execute Success operations natively."""
+    """success ."""
     print(f"\033[92m[PASS]\033[0m {msg}")
 
 def fail(msg):
-    """Execute Fail operations natively."""
+    """fail ."""
     print(f"\033[91m[FAIL]\033[0m {msg}")
 
 try:

@@ -29,7 +29,7 @@ class Genome:
     length: int = field(init=False)
 
     def __post_init__(self) -> None:
-        """Execute   Post Init   operations natively."""
+        """post Init ."""
         self.length = len(self.genes)
 
     @classmethod
@@ -107,7 +107,7 @@ class Genome:
         return sum(self.genes) / self.length
 
     def __repr__(self) -> str:
-        """Execute   Repr   operations natively."""
+        """repr ."""
         preview = self.genes[:5]
         suffix = ", ..." if self.length > 5 else ""
         gene_str = ", ".join(f"{g:.3f}" for g in preview)

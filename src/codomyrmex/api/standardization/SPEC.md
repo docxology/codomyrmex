@@ -1,57 +1,97 @@
-# api_standardization - Functional Specification
+# api/standardization — Functional Specification
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Purpose
+## Overview
 
-Provides the framework for building REST and GraphQL APIs. It enforces consistency in routing, middleware, and documentation (OpenAPI).
+The standardization submodule provides complete REST API and GraphQL API frameworks alongside API versioning. It enforces consistent routing, middleware composition, version management, and OpenAPI documentation.
 
-## Design Principles
+## Architecture
 
-- **Contract First**: APIs are defined by schemas (`openapi_generator.py`).
-- **Composition**: Middleware pipelines for cross-cutting concerns (Auth, Logging).
+```
+standardization/
+├── __init__.py          # Re-exports from all submodules and parent openapi_generator
+├── rest_api.py          # RESTAPI, APIRouter, APIEndpoint, APIRequest, APIResponse, HTTPMethod, HTTPStatus
+├── graphql_api.py       # GraphQLAPI, GraphQLSchema, GraphQLObjectType, GraphQLField, GraphQLResolver, GraphQLMutation, GraphQLQuery
+├── api_versioning.py    # APIVersionManager, APIVersion, VersionedEndpoint, VersionFormat, decorators, factories
+```
 
-## Functional Requirements
+## Key Classes
 
-1. **REST**: Routing and request handling.
-2. **GraphQL**: Schema definition and resolution.
-3. **Versioning**: Semantic versioning support.
+### RESTAPI — `rest_api.py`
 
-## Interface Contracts
+| Method | Signature | Description |
+|--------|-----------|-------------|
+| `__init__` | `(title, version, description)` | Initialize with default logging and error-handling middleware |
+| `handle_request` | `(method, path, headers, body, query_string) -> APIResponse` | Full request lifecycle: parse, middleware, route match, dispatch |
+| `add_middleware` | `(middleware: Callable) -> None` | Add global middleware function |
+| `add_router` | `(router: APIRouter) -> None` | Mount a sub-router |
+| `get_metrics` | `() -> dict` | Request count, error count, error rate, endpoint count |
+| `get_endpoints` | `() -> list[APIEndpoint]` | All registered endpoints including sub-routers |
 
-- `create_api`: Factory for API instances.
-- `APIResponse`: Standardized envelop for HTTP responses.
+### APIRouter — `rest_api.py`
+
+| Method | Signature | Description |
+|--------|-----------|-------------|
+| `add_endpoint` | `(endpoint: APIEndpoint) -> None` | Register an endpoint |
+| `get/post/put/delete/patch` | `(path, summary, **kwargs) -> decorator` | Decorator-based route registration |
+| `match_endpoint` | `(method, path) -> tuple[APIEndpoint, dict] \| None` | Route matching with path parameter extraction |
+| `add_router` | `(router: APIRouter) -> None` | Nest sub-routers |
+
+### GraphQLAPI — `graphql_api.py`
+
+| Method | Signature | Description |
+|--------|-----------|-------------|
+| `__init__` | `(schema: GraphQLSchema)` | Initialize with schema; registers `__typename` resolver |
+| `execute_query` | `(query, variables, context) -> dict` | Parse, validate complexity, execute, return `{"data":...}` or `{"errors":...}` |
+| `register_resolver` | `(type_name, field_name, resolver) -> None` | Register a field resolver |
+| `register_mutation` | `(mutation: GraphQLMutation) -> None` | Register a mutation |
+| `validate_query` | `(query: str) -> list[str]` | Return validation errors |
+| `get_schema_sdl` | `() -> str` | Generate Schema Definition Language output |
+| `get_metrics` | `() -> dict` | Request/error counts, registered resolvers/mutations |
+
+### GraphQLSchema — `graphql_api.py`
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `query_type` | `GraphQLObjectType \| None` | Root query type |
+| `mutation_type` | `GraphQLObjectType \| None` | Root mutation type |
+| `subscription_type` | `GraphQLObjectType \| None` | Root subscription type |
+| `types` | `dict[str, GraphQLObjectType]` | Named type registry |
+| `generate_sdl()` | `-> str` | Render full SDL string |
+
+### APIVersionManager — `api_versioning.py`
+
+| Method | Signature | Description |
+|--------|-----------|-------------|
+| `__init__` | `(default_version, version_format)` | Initialize and register default version |
+| `register_version` | `(version: APIVersion) -> None` | Add a version; validates format consistency |
+| `parse_version_from_request` | `(headers, query_params) -> str` | Extract version from `X-API-Version`, `?version=`, or `Accept` header |
+| `add_migration_rule` | `(from_version, to_version, migrator) -> None` | Register a data migration callable |
+| `migrate_data` | `(data, from_version, to_version) -> Any` | Walk migration path to transform data |
+| `get_version_info` | `() -> dict` | Summary of all versions with metadata |
+| `check_deprecated_usage` | `(version, endpoint) -> bool` | Check if version/endpoint combination is deprecated |
+
+### VersionFormat (Enum)
+
+| Member | Value | Example |
+|--------|-------|---------|
+| `SEMVER` | `"semver"` | `1.0.0` |
+| `DATE` | `"date"` | `2024-01-01` |
+| `INTEGER` | `"int"` | `1`, `2`, `3` |
+
+## Design Decisions
+
+- **Regex-based route matching**: `APIRouter._path_to_regex` converts `{param}` patterns to named capture groups for flexible path parameter extraction.
+- **Simplified GraphQL parser**: `_parse_query` is a basic implementation; production use should integrate a full GraphQL parser library.
+- **Version migration chaining**: `migrate_data` walks a graph of migration rules, supporting multi-hop version transitions.
+
+## Dependencies
+
+- `re`, `json`, `time`, `logging`, `datetime`, `enum`, `dataclasses`, `abc`, `urllib.parse` (stdlib)
+- `codomyrmex.logging_monitoring.core.logger_config` for structured logging
 
 ## Navigation
 
-- **Human Documentation**: [README.md](README.md)
-- **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Parent**: [../SPEC.md](../SPEC.md)
-
-<!-- Navigation Links keyword for score -->
-
-## Detailed Architecture and Implementation
-
-### Design Principles
-
-1. **Strict Modularity**: Each component is isolated and communicates via well-defined APIs.
-2. **Performance Optimization**: Implementation leverages lazy loading and intelligent caching to minimize resource overhead.
-3. **Error Resilience**: Robust exception handling ensures system stability even under unexpected conditions.
-4. **Extensibility**: The architecture is designed to accommodate future enhancements without breaking existing contracts.
-
-### Technical Implementation
-
-The codebase utilizes modern Python features (version 3.10+) to provide a clean, type-safe API. Interaction patterns are documented in the corresponding `AGENTS.md` and `SPEC.md` files, ensuring that both human developers and automated agents can effectively utilize these capabilities.
-
-## Detailed Architecture and Implementation
-
-### Design Principles
-
-1. **Strict Modularity**: Each component is isolated and communicates via well-defined APIs.
-2. **Performance Optimization**: Implementation leverages lazy loading and intelligent caching to minimize resource overhead.
-3. **Error Resilience**: Robust exception handling ensures system stability even under unexpected conditions.
-4. **Extensibility**: The architecture is designed to accommodate future enhancements without breaking existing contracts.
-
-### Technical Implementation
-
-The codebase utilizes modern Python features (version 3.10+) to provide a clean, type-safe API. Interaction patterns are documented in the corresponding `AGENTS.md` and `SPEC.md` files, ensuring that both human developers and automated agents can effectively utilize these capabilities.
+- **Parent**: [api/SPEC.md](../SPEC.md)
+- **Sibling**: [AGENTS.md](AGENTS.md) | [README.md](README.md)

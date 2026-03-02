@@ -31,7 +31,7 @@ class PersistentVectorStore(VectorStore):
         auto_save: bool = True,
         save_interval: int = 100,  # Save every N operations
     ):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._path = Path(path)
         self._auto_save = auto_save
         self._save_interval = save_interval
@@ -183,7 +183,7 @@ class CachedVectorStore(VectorStore):
         backend: VectorStore,
         cache_size: int = 1000,
     ):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._backend = backend
         self._cache_size = cache_size
         self._cache: dict[str, VectorEntry] = {}
@@ -245,11 +245,11 @@ class CachedVectorStore(VectorStore):
         return self._backend.search(query, k, filter_fn)
 
     def count(self) -> int:
-        """Execute Count operations natively."""
+        """count ."""
         return self._backend.count()
 
     def clear(self) -> None:
-        """Execute Clear operations natively."""
+        """clear ."""
         with self._lock:
             self._cache.clear()
             self._access_order.clear()

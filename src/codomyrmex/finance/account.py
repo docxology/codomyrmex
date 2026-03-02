@@ -32,7 +32,7 @@ class Account:
     """
 
     def __init__(self, name: str, account_type: AccountType, code: str = "") -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.id: str = str(uuid4())
         self.name = name
         self.account_type = account_type
@@ -73,11 +73,11 @@ class Account:
         self._frozen = True
 
     def unfreeze(self) -> None:
-        """Execute Unfreeze operations natively."""
+        """unfreeze ."""
         self._frozen = False
 
     def to_dict(self) -> dict[str, Any]:
-        """Execute To Dict operations natively."""
+        """Return a dictionary representation of this object."""
         return {
             "id": self.id,
             "name": self.name,
@@ -88,7 +88,7 @@ class Account:
         }
 
     def __repr__(self) -> str:
-        """Execute   Repr   operations natively."""
+        """repr ."""
         return f"Account(name='{self.name}', type={self.account_type.name}, balance={self.balance:.2f})"
 
 
@@ -104,7 +104,7 @@ class AccountChart:
     """
 
     def __init__(self) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._accounts: dict[str, Account] = {}
 
     def create(self, name: str, account_type: AccountType, code: str = "") -> Account:
@@ -114,37 +114,37 @@ class AccountChart:
         return acct
 
     def get(self, account_id: str) -> Account | None:
-        """Execute Get operations natively."""
+        """Return the requested value."""
         return self._accounts.get(account_id)
 
     def find_by_name(self, name: str) -> Account | None:
-        """Execute Find By Name operations natively."""
+        """find By Name ."""
         for acct in self._accounts.values():
             if acct.name == name:
                 return acct
         return None
 
     def find_by_code(self, code: str) -> Account | None:
-        """Execute Find By Code operations natively."""
+        """find By Code ."""
         for acct in self._accounts.values():
             if acct.code == code:
                 return acct
         return None
 
     def by_type(self, account_type: AccountType) -> list[Account]:
-        """Execute By Type operations natively."""
+        """by Type ."""
         return [a for a in self._accounts.values() if a.account_type == account_type]
 
     def total_assets(self) -> float:
-        """Execute Total Assets operations natively."""
+        """total Assets ."""
         return sum(a.balance for a in self.by_type(AccountType.ASSET))
 
     def total_liabilities(self) -> float:
-        """Execute Total Liabilities operations natively."""
+        """total Liabilities ."""
         return sum(a.balance for a in self.by_type(AccountType.LIABILITY))
 
     def total_equity(self) -> float:
-        """Execute Total Equity operations natively."""
+        """total Equity ."""
         return sum(a.balance for a in self.by_type(AccountType.EQUITY))
 
     def net_income(self) -> float:
@@ -155,15 +155,15 @@ class AccountChart:
 
     @property
     def account_count(self) -> int:
-        """Execute Account Count operations natively."""
+        """account Count ."""
         return len(self._accounts)
 
     def all_accounts(self) -> list[Account]:
-        """Execute All Accounts operations natively."""
+        """all Accounts ."""
         return list(self._accounts.values())
 
     def summary(self) -> dict[str, Any]:
-        """Execute Summary operations natively."""
+        """summary ."""
         return {
             "total_accounts": self.account_count,
             "assets": self.total_assets(),

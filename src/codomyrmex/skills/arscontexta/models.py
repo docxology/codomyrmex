@@ -97,7 +97,7 @@ class KernelPrimitive:
     enabled: bool = True
 
     def to_dict(self) -> dict[str, Any]:
-        """Execute To Dict operations natively."""
+        """Return a dictionary representation of this object."""
         return {
             "name": self.name,
             "layer": self.layer.value,
@@ -120,7 +120,7 @@ class ResearchClaim:
     confidence: float = 0.8
 
     def to_dict(self) -> dict[str, Any]:
-        """Execute To Dict operations natively."""
+        """Return a dictionary representation of this object."""
         return {
             "claim_id": self.claim_id,
             "statement": self.statement,
@@ -142,7 +142,7 @@ class DimensionSignal:
     timestamp: str = field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
 
     def to_dict(self) -> dict[str, Any]:
-        """Execute To Dict operations natively."""
+        """Return a dictionary representation of this object."""
         return {
             "dimension": self.dimension.value,
             "value": self.value,
@@ -165,7 +165,7 @@ class StageResult:
     error: str | None = None
 
     def to_dict(self) -> dict[str, Any]:
-        """Execute To Dict operations natively."""
+        """Return a dictionary representation of this object."""
         return {
             "stage": self.stage.value,
             "input_content": self.input_content,
@@ -191,7 +191,7 @@ class VaultHealthReport:
     errors: list[str] = field(default_factory=list)
 
     def to_dict(self) -> dict[str, Any]:
-        """Execute To Dict operations natively."""
+        """Return a dictionary representation of this object."""
         return {
             "status": self.status.value,
             "spaces_present": self.spaces_present,
@@ -211,14 +211,14 @@ class KernelConfig:
     primitives: list[KernelPrimitive] = field(default_factory=list)
 
     def get_by_name(self, name: str) -> KernelPrimitive | None:
-        """Execute Get By Name operations natively."""
+        """get By Name ."""
         for p in self.primitives:
             if p.name == name:
                 return p
         return None
 
     def get_by_layer(self, layer: KernelLayer) -> list[KernelPrimitive]:
-        """Execute Get By Layer operations natively."""
+        """get By Layer ."""
         return [p for p in self.primitives if p.layer == layer]
 
     def validate_dependencies(self) -> list[str]:
@@ -246,7 +246,7 @@ class VaultConfig:
     created_at: str = field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
 
     def to_dict(self) -> dict[str, Any]:
-        """Execute To Dict operations natively."""
+        """Return a dictionary representation of this object."""
         return {
             "vault_path": str(self.vault_path),
             "kernel": {

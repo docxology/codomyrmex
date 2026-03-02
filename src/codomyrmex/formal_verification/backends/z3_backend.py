@@ -22,7 +22,7 @@ from .base import SolverBackend, SolverResult, SolverStatus
 
 
 def _require_z3() -> None:
-    """Execute  Require Z3 operations natively."""
+    """require Z3 ."""
     if z3 is None:
         raise BackendNotAvailableError(
             "z3-solver is not installed. Install with: pip install z3-solver"
@@ -38,16 +38,16 @@ class Z3Backend(SolverBackend):
     """
 
     def __init__(self) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         _require_z3()
         self._items: list[str] = []
 
     def clear_model(self) -> None:
-        """Execute Clear Model operations natively."""
+        """clear Model ."""
         self._items.clear()
 
     def add_item(self, item: str, index: int | None = None) -> int:
-        """Execute Add Item operations natively."""
+        """add Item ."""
         if index is None:
             self._items.append(item)
             return len(self._items) - 1
@@ -55,7 +55,7 @@ class Z3Backend(SolverBackend):
         return index
 
     def delete_item(self, index: int) -> str:
-        """Execute Delete Item operations natively."""
+        """delete Item ."""
         if not self._items:
             raise ModelBuildError(f"Cannot delete index {index}: model is empty")
         if not 0 <= index < len(self._items):
@@ -63,7 +63,7 @@ class Z3Backend(SolverBackend):
         return self._items.pop(index)
 
     def replace_item(self, index: int, new_item: str) -> str:
-        """Execute Replace Item operations natively."""
+        """replace Item ."""
         if not self._items:
             raise ModelBuildError(f"Cannot replace index {index}: model is empty")
         if not 0 <= index < len(self._items):
@@ -73,11 +73,11 @@ class Z3Backend(SolverBackend):
         return old
 
     def get_model(self) -> list[tuple[int, str]]:
-        """Execute Get Model operations natively."""
+        """get Model ."""
         return list(enumerate(self._items))
 
     def solve_model(self, timeout_ms: int = 30000) -> SolverResult:
-        """Execute Solve Model operations natively."""
+        """solve Model ."""
         _require_z3()
 
         # Build a namespace with z3 imports for executing model items
@@ -148,5 +148,5 @@ class Z3Backend(SolverBackend):
             )
 
     def backend_name(self) -> str:
-        """Execute Backend Name operations natively."""
+        """backend Name ."""
         return "Z3 SMT Solver"

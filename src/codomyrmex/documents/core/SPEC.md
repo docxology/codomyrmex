@@ -1,43 +1,59 @@
-# core Functional Specification
+# documents/core — Technical Specification
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+## Overview
 
-## Core Concept
+The core subpackage provides four complementary classes for document lifecycle operations: reading from disk, writing to disk, parsing in-memory content, and validating document correctness.
 
-Core I/O and processing abstractions for document handling, providing a unified interface for reading, writing, parsing, and validating diverse file formats.
+## Architecture
 
-## Functional Requirements
+All classes are stateless and instantiated without arguments. Each exposes a single primary method plus a module-level convenience function that wraps it.
 
-- [REQUIREMENT 1]: Implement robust auto-detection of file formats (MIME types) and character encodings.
-- [REQUIREMENT 2]: Provide a unified `Document` object model for consistent in-memory representation.
-- [REQUIREMENT 3]: standardized validation framework to ensure documents meet strict schema or content requirements.
+## Key Classes
 
-## Modularity & Interfaces
+### DocumentReader
 
-- Inputs: Raw file paths, binary streams, text content.
-- Outputs: Normalized `Document` objects, validated output files.
-- Dependencies: `python-magic` (format detection), `chardet` (encoding), `pydantic` (validation models).
+| Method | Signature | Returns |
+|--------|-----------|---------|
+| `read` | `(file_path: str, format: DocumentFormat \| None = None) -> Document` | Loaded document |
+| `_detect_format` | `(file_path: str) -> DocumentFormat` | Auto-detected format via MIME type |
 
-## Coherence
+Supports formats: `MARKDOWN`, `JSON`, `YAML`, `PDF`, `TEXT`. Uses `mimetypes.guess_type()` for detection. Falls back to `TEXT` for unknown types.
 
-Acts as the central "printing press and library" for the system, abstracting away low-level I/O details so agents can focus on semantic content.
+### DocumentWriter
 
-## Navigation Links
+| Method | Signature | Returns |
+|--------|-----------|---------|
+| `write` | `(document: Document, output_path: str) -> None` | None |
 
-- **Parent**: [Project Overview](../README.md)
-- **Module Index**: [All Agents](../../AGENTS.md)
-- **Documentation**: [Reference Guides](../../../../docs/README.md)
-- **Home**: [Root README](../../../README.md)
+Creates parent directories via `os.makedirs(exist_ok=True)`. Encodes content using document's `encoding` attribute (default UTF-8).
 
-## Detailed Architecture and Implementation
+### DocumentValidator
 
-### Design Principles
+| Method | Signature | Returns |
+|--------|-----------|---------|
+| `validate` | `(document: Document) -> ValidationResult` | Validation result |
+| `_validate_json` | `(content: str) -> ValidationResult` | JSON parse check |
+| `_validate_yaml` | `(content: str) -> ValidationResult` | YAML parse check |
+| `_validate_against_schema` | `(data: dict, schema: dict) -> ValidationResult` | jsonschema check |
 
-1. **Strict Modularity**: Each component is isolated and communicates via well-defined APIs.
-2. **Performance Optimization**: Implementation leverages lazy loading and intelligent caching to minimize resource overhead.
-3. **Error Resilience**: Robust exception handling ensures system stability even under unexpected conditions.
-4. **Extensibility**: The architecture is designed to accommodate future enhancements without breaking existing contracts.
+`ValidationResult` is a dataclass with fields: `is_valid: bool`, `errors: list[str]`, `warnings: list[str]`.
 
-### Technical Implementation
+### DocumentParser
 
-The codebase utilizes modern Python features (version 3.10+) to provide a clean, type-safe API. Interaction patterns are documented in the corresponding `AGENTS.md` and `SPEC.md` files, ensuring that both human developers and automated agents can effectively utilize these capabilities.
+| Method | Signature | Returns |
+|--------|-----------|---------|
+| `parse` | `(content: str, format: DocumentFormat \| None = None) -> Document` | Parsed document |
+| `_parse_content` | `(content: str, format: DocumentFormat) -> Any` | Format-specific parsed data |
+
+## Dependencies
+
+- `mimetypes` (stdlib) for format detection
+- `json`, `yaml` (PyYAML) for structured format parsing
+- `jsonschema` (optional) for schema validation
+- `documents.models.Document`, `DocumentFormat`
+
+## Error Handling
+
+- `FileNotFoundError` raised by `DocumentReader.read()` for missing files.
+- `ValidationResult.errors` collects parse errors without raising exceptions.
+- `json.JSONDecodeError` and `yaml.YAMLError` caught and returned as validation errors.

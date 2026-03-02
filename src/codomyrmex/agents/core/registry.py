@@ -36,7 +36,7 @@ class ToolRegistry:
     """Registry for managing available tools."""
 
     def __init__(self):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._tools: dict[str, Tool] = {}
         self._lock = threading.Lock()
         self.logger = get_logger(self.__class__.__name__)

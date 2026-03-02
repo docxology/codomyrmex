@@ -7,7 +7,7 @@ from codomyrmex.logging_monitoring import get_logger
 logger = get_logger(__name__)
 
 def fix_newlines(directory):
-    """Execute Fix Newlines operations natively."""
+    """fix Newlines ."""
 
     for root, dirs, files in os.walk(directory):
         if any(exclude in root for exclude in ['.git', 'venv', 'node_modules', '__pycache__']):

@@ -432,7 +432,7 @@ class ClaudeCodeEndpoint:
 
     @property
     def is_running(self) -> bool:
-        """Execute Is Running operations natively."""
+        """is Running ."""
         return self._running
 
     # ── Callbacks ─────────────────────────────────────────────────

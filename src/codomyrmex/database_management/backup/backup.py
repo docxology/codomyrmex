@@ -40,7 +40,7 @@ class BackupMetadata:
     error: str | None = None
 
     def to_dict(self) -> dict[str, Any]:
-        """Execute To Dict operations natively."""
+        """Return a dictionary representation of this object."""
         return {
             "backup_id": self.backup_id,
             "source": self.source,
@@ -61,20 +61,20 @@ class DatabaseBackup:
     """
 
     def __init__(self, backup_dir: Path) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._backup_dir = backup_dir
         self._backup_dir.mkdir(parents=True, exist_ok=True)
         self._manifest_path = self._backup_dir / "manifest.json"
         self._manifest: list[dict[str, Any]] = self._load_manifest()
 
     def _load_manifest(self) -> list[dict[str, Any]]:
-        """Execute  Load Manifest operations natively."""
+        """load Manifest ."""
         if self._manifest_path.exists():
             return json.loads(self._manifest_path.read_text())
         return []
 
     def _save_manifest(self) -> None:
-        """Execute  Save Manifest operations natively."""
+        """save Manifest ."""
         self._manifest_path.write_text(json.dumps(self._manifest, indent=2))
 
     def backup_sqlite(self, db_path: Path, backup_name: str | None = None) -> BackupMetadata:
@@ -154,11 +154,11 @@ class DatabaseBackup:
         return True
 
     def list_backups(self) -> list[dict[str, Any]]:
-        """Execute List Backups operations natively."""
+        """list Backups ."""
         return list(self._manifest)
 
     def _find_backup(self, backup_id: str) -> dict[str, Any] | None:
-        """Execute  Find Backup operations natively."""
+        """find Backup ."""
         for entry in self._manifest:
             if entry["backup_id"] == backup_id:
                 return entry

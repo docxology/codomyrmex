@@ -49,13 +49,13 @@ class CompatShimGenerator:
     """
 
     def __init__(self) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._mappings: dict[str, ShimMapping] = {}
         self._shims: dict[str, Callable] = {}
 
     @property
     def mapping_count(self) -> int:
-        """Execute Mapping Count operations natively."""
+        """mapping Count ."""
         return len(self._mappings)
 
     def add_mapping(self, mapping: ShimMapping) -> None:
@@ -87,7 +87,7 @@ class CompatShimGenerator:
 
         @functools.wraps(target_fn)
         def shim(*args, **kwargs):
-            """Execute Shim operations natively."""
+            """shim ."""
             # Rename parameters
             translated_kwargs = {}
             for k, v in kwargs.items():

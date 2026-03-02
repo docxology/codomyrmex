@@ -1,25 +1,43 @@
-# Codomyrmex Agents — src/codomyrmex/llm/tools
+# Codomyrmex Agents -- src/codomyrmex/llm/tools
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
 
-LLM tool definitions and integrations enabling function calling, tool use, and structured outputs from language models.
+Provides a tool-calling framework for LLMs with structured tool definitions,
+a registry for managing available tools, automatic parameter extraction from
+function signatures, and serialization to both OpenAI and Anthropic tool
+formats. Includes a `@tool` decorator for declarative tool creation.
 
-## Active Components
+## Key Components
 
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SPEC.md` – Project file
-- `__init__.py` – Project file
+| File | Class / Function | Role |
+|------|-----------------|------|
+| `__init__.py` | `Tool` | Core tool dataclass with name, description, parameters, function, and category |
+| `__init__.py` | `ToolRegistry` | Registry for managing, listing, and executing tools by name or category |
+| `__init__.py` | `ToolParameter` | Parameter definition with JSON Schema type, description, required flag, and enum support |
+| `__init__.py` | `ToolResult` | Execution result with success flag, output, error, and metadata |
+| `__init__.py` | `ParameterType` | Enum mapping to JSON Schema types (STRING, INTEGER, NUMBER, BOOLEAN, ARRAY, OBJECT) |
+| `__init__.py` | `tool` | Decorator that creates a `Tool` from a function's signature and docstring |
+| `__init__.py` | `create_calculator_tool()` | Built-in safe calculator using AST-based evaluation (no `eval()`) |
+| `__init__.py` | `create_datetime_tool()` | Built-in datetime tool with configurable strftime format |
+| `__init__.py` | `DEFAULT_REGISTRY` | Global singleton tool registry |
 
 ## Operating Contracts
 
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
+- `Tool.execute()` catches all exceptions and returns `ToolResult(success=False, error=...)`.
+- The `@tool` decorator extracts parameters from function signatures and type hints automatically.
+- `Tool.to_openai_format()` and `Tool.to_anthropic_format()` produce provider-specific tool schemas.
+- The built-in calculator uses `ast.parse(mode="eval")` for safe expression evaluation -- never `eval()`.
+- `ToolRegistry.execute()` returns an error `ToolResult` for unknown tool names (no exception).
+- Errors must be logged via `logging_monitoring` before re-raising.
 
-## Navigation Links
+## Integration Points
 
-- **📁 Parent Directory**: [llm](../README.md) - Parent directory documentation
-- **🏠 Project Root**: ../../../../README.md - Main project documentation
+- **Depends on**: stdlib `inspect`, `json`, `ast`, `functools`, `dataclasses`, `enum`
+- **Used by**: `llm/providers/` (OpenAI, Anthropic), `agents/core`, MCP bridge tool dispatch
+
+## Navigation
+
+- **Parent**: [llm](../AGENTS.md)
+- **Root**: [../../../../README.md](../../../../README.md)

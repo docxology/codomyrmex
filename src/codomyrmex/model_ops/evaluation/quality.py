@@ -189,7 +189,7 @@ class QualityAnalyzer:
         self,
         dimension_weights: dict[QualityDimension, float] | None = None,
     ) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._weights = dimension_weights or {
             QualityDimension.COHERENCE: 1.0,
             QualityDimension.RELEVANCE: 1.0,

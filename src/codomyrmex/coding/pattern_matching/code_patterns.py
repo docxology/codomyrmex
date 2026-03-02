@@ -90,7 +90,7 @@ PATTERNS: dict[str, dict[str, Any]] = {
 
 
 def _to_definition(name: str, info: dict) -> PatternDefinition:
-    """Execute  To Definition operations natively."""
+    """to Definition ."""
     return PatternDefinition(
         name=name,
         description=info.get("description", ""),
@@ -174,7 +174,7 @@ class PatternDetector:
 
     @staticmethod
     def _collect_class_info(tree: ast.Module) -> list[dict]:
-        """Execute  Collect Class Info operations natively."""
+        """collect Class Info ."""
         classes = []
         for node in ast.walk(tree):
             if isinstance(node, ast.ClassDef):
@@ -205,7 +205,7 @@ class PatternDetector:
 
     @staticmethod
     def _collect_func_info(tree: ast.Module) -> list[dict]:
-        """Execute  Collect Func Info operations natively."""
+        """collect Func Info ."""
         funcs = []
         for node in ast.walk(tree):
             if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
@@ -221,7 +221,7 @@ class PatternDetector:
     # ------------------------------------------------------------------
 
     def _detect_singleton(self, classes: list[dict]) -> list[dict]:
-        """Execute  Detect Singleton operations natively."""
+        """detect Singleton ."""
         if "singleton" not in self._definitions:
             return []
         results = []
@@ -236,7 +236,7 @@ class PatternDetector:
         return results
 
     def _detect_factory(self, funcs: list[dict]) -> list[dict]:
-        """Execute  Detect Factory operations natively."""
+        """detect Factory ."""
         if "factory" not in self._definitions:
             return []
         results = []
@@ -253,7 +253,7 @@ class PatternDetector:
         return results
 
     def _detect_observer(self, classes: list[dict]) -> list[dict]:
-        """Execute  Detect Observer operations natively."""
+        """detect Observer ."""
         if "observer" not in self._definitions:
             return []
         results = []
@@ -277,7 +277,7 @@ class PatternDetector:
         return results
 
     def _detect_strategy(self, classes: list[dict]) -> list[dict]:
-        """Execute  Detect Strategy operations natively."""
+        """detect Strategy ."""
         if "strategy" not in self._definitions:
             return []
         results = []
@@ -296,7 +296,7 @@ class PatternDetector:
         return results
 
     def _detect_template_method(self, classes: list[dict]) -> list[dict]:
-        """Execute  Detect Template Method operations natively."""
+        """detect Template Method ."""
         if "template_method" not in self._definitions:
             return []
         # This is a heuristic: classes with methods that are prefixed with _

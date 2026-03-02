@@ -101,7 +101,7 @@ class TestSuiteResult:
 
     @property
     def success_rate(self) -> float:
-        """Execute Success Rate operations natively."""
+        """success Rate ."""
         return self.passed / self.total if self.total > 0 else 0.0
 
 
@@ -133,12 +133,12 @@ class ImprovementReport:
 
     @property
     def change_count(self) -> int:
-        """Execute Change Count operations natively."""
+        """change Count ."""
         return len(self.changes)
 
     @property
     def approved(self) -> bool:
-        """Execute Approved operations natively."""
+        """approved ."""
         return self.review_verdict == ReviewVerdict.APPROVE
 
     def to_markdown(self) -> str:

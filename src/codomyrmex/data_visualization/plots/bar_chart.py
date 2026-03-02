@@ -10,13 +10,13 @@ class BarChart(BasePlot):
     """
 
     def __init__(self, title="", data=None, categories=None, values=None, **kwargs):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         super().__init__(title=title, data=data or [], **kwargs)
         self.categories = categories or []
         self.values = values or []
 
     def _render_figure(self, fig, ax):
-        """Execute  Render Figure operations natively."""
+        """render Figure ."""
         if self.categories and self.values:
             ax.bar(self.categories, self.values)
         elif self.data:

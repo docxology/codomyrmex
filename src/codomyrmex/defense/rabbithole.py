@@ -16,7 +16,7 @@ class RabbitHole:
     """
 
     def __init__(self):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._active_sessions: dict[str, float] = {} # attacker_id -> start_time
 
     def engage(self, attacker_id: str) -> str:

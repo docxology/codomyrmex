@@ -24,7 +24,7 @@ class EntityManager:
     """
 
     def __init__(self, quantum: int = 0) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._entities: dict[str, UOREntity] = {}
         self._engine = PrismEngine(quantum=quantum)
 
@@ -172,11 +172,11 @@ class EntityManager:
         return list(self._entities.values())
 
     def __len__(self) -> int:
-        """Execute   Len   operations natively."""
+        """len ."""
         return len(self._entities)
 
     def __repr__(self) -> str:
-        """Execute   Repr   operations natively."""
+        """repr ."""
         return f"EntityManager(entities={len(self)}, quantum={self._engine.quantum})"
 
     def _compute_coordinates(self, entity: UOREntity) -> TriadicCoordinate:

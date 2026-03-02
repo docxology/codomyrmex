@@ -36,7 +36,7 @@ class Location:
     end_column: int | None = None
 
     def __str__(self) -> str:
-        """Execute   Str   operations natively."""
+        """str ."""
         return f"{self.file_path}:{self.line}:{self.column}"
 
 
@@ -49,7 +49,7 @@ class Change:
     description: str = ""
 
     def to_dict(self) -> dict[str, Any]:
-        """Execute To Dict operations natively."""
+        """Return a dictionary representation of this object."""
         return {
             "file": self.location.file_path,
             "line": self.location.line,
@@ -129,7 +129,7 @@ class RenameRefactoring(Refactoring):
         new_name: str,
         scope: str = "file",  # file, module, project
     ):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.file_path = file_path
         self.old_name = old_name
         self.new_name = new_name
@@ -155,7 +155,7 @@ class RenameRefactoring(Refactoring):
         return occurrences
 
     def analyze(self) -> list[str]:
-        """Execute Analyze operations natively."""
+        """analyze ."""
         warnings = []
 
         if not self._is_valid_identifier(self.new_name):
@@ -174,7 +174,7 @@ class RenameRefactoring(Refactoring):
         return warnings
 
     def execute(self) -> RefactoringResult:
-        """Execute Execute operations natively."""
+        """Execute the operation."""
         warnings = self.analyze()
 
         try:
@@ -208,7 +208,7 @@ class RenameRefactoring(Refactoring):
             )
 
     def preview(self) -> str:
-        """Execute Preview operations natively."""
+        """preview ."""
         result = self.execute()
         lines = [f"Rename: {self.old_name} -> {self.new_name}"]
         lines.append(f"File: {self.file_path}")
@@ -236,7 +236,7 @@ class ExtractFunctionRefactoring(Refactoring):
         function_name: str,
         parameters: list[str] | None = None,
     ):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.file_path = file_path
         self.start_line = start_line
         self.end_line = end_line
@@ -264,7 +264,7 @@ class ExtractFunctionRefactoring(Refactoring):
         return list(external), list(defined)
 
     def analyze(self) -> list[str]:
-        """Execute Analyze operations natively."""
+        """analyze ."""
         warnings = []
 
         if not self.function_name.isidentifier():
@@ -279,7 +279,7 @@ class ExtractFunctionRefactoring(Refactoring):
         return warnings
 
     def execute(self) -> RefactoringResult:
-        """Execute Execute operations natively."""
+        """Execute the operation."""
         warnings = self.analyze()
 
         try:
@@ -344,7 +344,7 @@ class ExtractFunctionRefactoring(Refactoring):
             )
 
     def preview(self) -> str:
-        """Execute Preview operations natively."""
+        """preview ."""
         result = self.execute()
         return f"Extract Function: {self.function_name}\n" + \
                f"Lines: {self.start_line}-{self.end_line}\n" + \
@@ -361,12 +361,12 @@ class InlineRefactoring(Refactoring):
         file_path: str,
         symbol_name: str,
     ):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.file_path = file_path
         self.symbol_name = symbol_name
 
     def analyze(self) -> list[str]:
-        """Execute Analyze operations natively."""
+        """analyze ."""
         warnings = []
 
         with open(self.file_path) as f:
@@ -382,7 +382,7 @@ class InlineRefactoring(Refactoring):
         return warnings
 
     def execute(self) -> RefactoringResult:
-        """Execute Execute operations natively."""
+        """Execute the operation."""
         warnings = self.analyze()
 
         try:
@@ -440,7 +440,7 @@ class InlineRefactoring(Refactoring):
             )
 
     def preview(self) -> str:
-        """Execute Preview operations natively."""
+        """preview ."""
         result = self.execute()
         return f"Inline: {self.symbol_name}\n" + \
                f"Changes: {len(result.changes)}\n" + \

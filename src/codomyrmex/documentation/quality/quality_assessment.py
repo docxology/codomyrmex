@@ -16,7 +16,7 @@ class DocumentationQualityAnalyzer:
     """Analyzes documentation quality metrics."""
 
     def __init__(self):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
 
         self.quality_metrics = {
             "completeness": 0,

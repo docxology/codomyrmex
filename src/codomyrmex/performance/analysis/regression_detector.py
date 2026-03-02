@@ -96,7 +96,7 @@ class RegressionDetector:
     """
 
     def __init__(self) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._baselines: dict[str, Baseline] = {}
 
     def set_baseline(self, baseline: Baseline) -> None:

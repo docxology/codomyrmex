@@ -85,7 +85,7 @@ class DeploymentOrchestrator:
         health_checker: HealthChecker | None = None,
         deploy_fn: Callable[[DeploymentTarget, str], bool] | None = None,
     ) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._health_checker = health_checker
         self._deploy_fn = deploy_fn or self._default_deploy
         self._status = DeploymentStatus()
@@ -194,7 +194,7 @@ class DeploymentOrchestrator:
         return True
 
     def __repr__(self) -> str:
-        """Execute   Repr   operations natively."""
+        """repr ."""
         return (
             f"DeploymentOrchestrator("
             f"completed={self._status.deployments_completed}, "

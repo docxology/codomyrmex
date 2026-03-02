@@ -586,19 +586,25 @@ class TestSetupLogging:
     """Tests for setup_logging."""
 
     def test_setup_logging_default(self):
-        # Should not raise
+        import logging
         setup_logging()
+        assert len(logging.getLogger().handlers) > 0
 
     def test_setup_logging_quiet(self):
-        # Should not raise
+        import logging
         setup_logging(quiet=True)
+        assert len(logging.getLogger().handlers) > 0
 
     def test_setup_logging_debug_level(self):
+        import logging
         setup_logging(level="DEBUG")
+        assert len(logging.getLogger().handlers) > 0
 
     def test_setup_logging_case_insensitive(self):
+        import logging
         # The code calls level.upper(), so lowercase should work
         setup_logging(level="warning")
+        assert len(logging.getLogger().handlers) > 0
 
 
 # ---------------------------------------------------------------------------

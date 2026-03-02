@@ -15,7 +15,7 @@ class StreamProcessor:
     """Process events from a stream with transformations."""
 
     def __init__(self, source: Stream):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.source = source
         self._transforms: list[Callable[[Event], Event | None]] = []
         self._sinks: list[Stream] = []
@@ -28,7 +28,7 @@ class StreamProcessor:
     def filter(self, fn: Callable[[Event], bool]) -> "StreamProcessor":
         """Add a filter transformation."""
         def filter_transform(event: Event) -> Event | None:
-            """Execute Filter Transform operations natively."""
+            """filter Transform ."""
             return event if fn(event) else None
         self._transforms.append(filter_transform)
         return self

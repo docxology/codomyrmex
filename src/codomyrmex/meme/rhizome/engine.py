@@ -10,7 +10,7 @@ class RhizomeEngine:
     """Engine for managing distributed graph networks."""
 
     def __init__(self) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.graph = Graph()
 
     def initialize_network(self, size: int = 100, topology: str = "scale_free") -> None:

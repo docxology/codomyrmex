@@ -17,7 +17,7 @@ try:
 except ImportError:
     # Fallback decorator if MCP module not available
     def mcp_tool(**kwargs: Any):  # type: ignore[misc]
-        """Execute Mcp Tool operations natively."""
+        """mcp Tool ."""
         def decorator(func: Any) -> Any:
             func._mcp_tool_meta = kwargs
             return func
@@ -31,7 +31,7 @@ _solver: ConstraintSolver | None = None
 
 
 def _get_solver() -> ConstraintSolver:
-    """Execute  Get Solver operations natively."""
+    """get Solver ."""
     global _solver
     if _solver is None:
         _solver = ConstraintSolver(backend="z3")

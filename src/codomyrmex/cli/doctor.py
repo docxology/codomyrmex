@@ -46,14 +46,14 @@ class CheckResult:
         message: str = "",
         details: dict[str, Any] | None = None,
     ):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.name = name
         self.status = status
         self.message = message
         self.details = details or {}
 
     def to_dict(self) -> dict[str, Any]:
-        """Execute To Dict operations natively."""
+        """Return a dictionary representation of this object."""
         d: dict[str, Any] = {"name": self.name, "status": self.status}
         if self.message:
             d["message"] = self.message

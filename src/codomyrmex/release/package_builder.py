@@ -83,12 +83,12 @@ class PackageBuilder:
     """
 
     def __init__(self, metadata: PackageMetadata | None = None) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._metadata = metadata or PackageMetadata()
 
     @property
     def metadata(self) -> PackageMetadata:
-        """Execute Metadata operations natively."""
+        """metadata ."""
         return self._metadata
 
     def validate_metadata(self) -> list[str]:

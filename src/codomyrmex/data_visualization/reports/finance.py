@@ -9,7 +9,7 @@ class FinanceReport(BaseReport):
     """Finance report with Net Profit and Stock metrics."""
 
     def __init__(self):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         super().__init__(title="Financial Overview")
         self.dashboard = Dashboard(title="Financial Overview")
         self._generated = False

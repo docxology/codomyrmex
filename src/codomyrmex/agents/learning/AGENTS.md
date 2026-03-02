@@ -1,39 +1,33 @@
-# Agent Learning Agents
+# Codomyrmex Agents -- src/codomyrmex/agents/learning
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Overview
+## Purpose
 
-Meta-agents responsible for training and improving the workforce agents.
+Provides mechanisms for agents to acquire, store, and query reusable skills. The module defines a `Skill` dataclass representing a learnable capability with associated code and tags, a `SkillLibrary` repository for adding, retrieving, and tag-searching skills, and a visualization helper that renders bar charts of skill distribution by tag.
 
-## Agents
+## Key Components
 
-### `CoachAgent` (Reflection)
+| File | Class / Function | Role |
+|------|-----------------|------|
+| `skills.py` | `Skill` | Dataclass: name, description, code_snippet, tags, usage_count, UUID id |
+| `skills.py` | `SkillLibrary` | In-memory skill repository with `add_skill`, `get_skill`, `search` by tag |
+| `visualization.py` | `plot_skill_distribution` | Renders a `BarChart` of skill counts grouped by tag using `data_visualization.charts` |
 
-- **Role**: Reviews performance and provides feedback.
-- **Capabilities**: `review_logs`, `suggest_improvement`.
+## Operating Contracts
 
-### `SkillMiner` (Skills)
+- `SkillLibrary.add_skill` raises `ValueError` if a skill with the same name already exists; names are unique keys.
+- `SkillLibrary.search` performs exact tag membership checks (tag must appear in `Skill.tags` list).
+- `plot_skill_distribution` accesses `library._skills` directly to aggregate tag counts via `collections.Counter`.
+- Each `Skill` receives a `uuid4` on creation; `created_at` defaults to `datetime.now()`.
+- Errors must be logged via `logging_monitoring` before re-raising.
 
-- **Role**: Extracts reusable code and logic from successful tasks.
-- **Capabilities**: `mine_skill`, `catalog_function`.
+## Integration Points
 
-### `TrainerAgent` (Curriculum)
-
-- **Role**: Generates practice scenarios.
-- **Capabilities**: `create_scenario`, `evaluate_performance`.
-
-## Tools
-
-| Tool | Agent | Description |
-| :--- | :--- | :--- |
-| `analyze_trace` | CoachAgent | Parse execution history |
-| `extract_function` | SkillMiner | Save code snippet as skill |
-
-## Integration
-
-These agents integrate with `codomyrmex.agents.core` and use the MCP protocol for tool access.
+- **Depends on**: `codomyrmex.data_visualization.charts.bar_chart` (`BarChart`)
+- **Used by**: Agent learning pipelines, skill cataloging workflows
 
 ## Navigation
 
-- [README](README.md) | [SPEC](SPEC.md)
+- **Parent**: [agents](../README.md)
+- **Root**: [codomyrmex](../../../../README.md)

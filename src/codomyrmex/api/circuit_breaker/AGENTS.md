@@ -1,49 +1,40 @@
-# AI Agent Guidelines - Circuit Breaker
+# AI Agent Guidelines — api/circuit_breaker
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
-
-**Module**: `codomyrmex.api.circuit_breaker`  
-**Status**: Active
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
 
-Resilience patterns including retry, circuit breaker, and bulkhead
+Implements the circuit breaker resilience pattern with retry policies and bulkhead concurrency limiting for protecting API calls against cascading failures.
 
-## Agent Instructions
+## Key Components
 
-When working with this submodule:
+| Component | Role |
+|-----------|------|
+| `CircuitState` | Enum: `CLOSED`, `OPEN`, `HALF_OPEN` |
+| `CircuitStats` | Dataclass tracking `total_requests`, `failures`, `successes`, `last_failure_time` |
+| `CircuitBreakerConfig` | Dataclass with `failure_threshold`, `recovery_timeout`, `half_open_max_calls` |
+| `CircuitBreaker` | Context-manager-based circuit breaker with state machine (closed/open/half-open transitions) |
+| `RetryPolicy` | Configurable retry with exponential backoff, jitter, and retryable exception filtering |
+| `Bulkhead` | Semaphore-based concurrency limiter with `max_concurrent` and `max_wait` settings |
+| `circuit_breaker` | Decorator wrapping a function with circuit breaker protection |
+| `retry` | Decorator wrapping a function with retry policy |
 
-### Key Patterns
+## Operating Contracts
 
-1. **Import Convention**:
-   ```python
-   from codomyrmex.api.circuit_breaker import <specific_import>
-   ```
+- `CircuitBreaker` is used as a context manager (`with cb:`) or via the `circuit_breaker` decorator.
+- State transitions: CLOSED (tracking failures) -> OPEN (rejecting calls) -> HALF_OPEN (probing) -> CLOSED.
+- `RetryPolicy.execute(func)` runs `func` with configurable retries and backoff.
+- `Bulkhead` limits concurrent access; raises `BulkheadFullError` when the semaphore is exhausted and `max_wait` expires.
+- All three patterns are independent and can be composed.
 
-2. **Error Handling**: Always handle exceptions gracefully
-3. **Configuration**: Check for required environment variables
+## Integration Points
 
-### Common Operations
+- **Parent**: `api` module composes these patterns around HTTP client calls.
+- **Consumers**: Any module making external or unreliable calls (cloud providers, LLM APIs, webhooks).
+- **Composition**: `circuit_breaker(retry(fn))` is a common stacking pattern.
 
-- Operation 1: Description
-- Operation 2: Description
+## Navigation
 
-### Integration Points
-
-- Integrates with: `api` (parent module)
-- Dependencies: Listed in `__init__.py`
-
-## File Reference
-
-| File | Purpose |
-|------|---------|
-| `__init__.py` | Module exports and initialization |
-| `README.md` | User documentation |
-| `SPEC.md` | Technical specification |
-
-## Troubleshooting
-
-Common issues and solutions:
-
-1. **Issue**: Description
-   **Solution**: Resolution steps
+- **Parent**: [api/README.md](../README.md)
+- **Sibling**: [SPEC.md](SPEC.md) | [README.md](README.md)
+- **Root**: [../../../../README.md](../../../../README.md)

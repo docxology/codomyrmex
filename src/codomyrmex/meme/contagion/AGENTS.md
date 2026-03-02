@@ -1,27 +1,41 @@
-# Agents Guide: Contagion
+# Codomyrmex Agents -- src/codomyrmex/meme/contagion
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.0 | **Status**: Experimental | **Last Updated**: March 2026
 
-**Operational Directives**
+## Purpose
 
-Use the `contagion` submodule to model the spread of information and detect viral events.
+Models the spread of information using compartmental epidemic models (SIR, SIS, SEIR) adapted for memetic propagation. Detects and classifies information cascades from event streams by velocity and size, and provides simulation runners for contagion scenarios.
 
-## Capabilities
+## Key Components
 
-1. **Simulation**:
-    * Use `SIRModel` to predict the trajectory of a new meme. Estimate when "herd immunity" (saturation) will be reached.
-    * Use `SEIRModel` for complex, high-effort memes that require "incubation" time before re-transmission.
+| File | Class / Function | Role |
+|------|-----------------|------|
+| `epidemic.py` | `SIRModel` | Susceptible-Infected-Recovered simulation for meme spread |
+| `epidemic.py` | `SISModel` | Susceptible-Infected-Susceptible loop for recurring trends |
+| `epidemic.py` | `SEIRModel` | Adds Exposed incubation stage for memes requiring priming |
+| `cascade.py` | `CascadeDetector` | Detects and classifies cascades from event dicts |
+| `cascade.py` | `detect_cascades` | Convenience wrapper for `CascadeDetector.detect` |
+| `models.py` | `PropagationTrace` | Simulation output with per-step S/I/R counts |
+| `models.py` | `Cascade` | Detected cascade event with velocity and type |
+| `models.py` | `CascadeType` | Classification: VIRAL, ORGANIC, MANUFACTURED, DAMPENED |
+| `models.py` | `ContagionModel` | Configuration dataclass (beta, gamma, network_size) |
+| `simulation.py` | `run_simulation` | High-level runner wrapping SIRModel with topology param |
 
-2. **Detection**:
-    * Monitor social feeds for rapid spikes in keyword usage.
-    * Use `CascadeDetector` to classify events. `CascadeType.MANUFACTURED` indicates bot activity or coordinated campaigns; `CascadeType.VIRAL` suggests organic spread.
+## Operating Contracts
 
-## Constraints
+- Simulations use mean-field approximation; no explicit network structure.
+- Small changes in `infection_rate` (beta) can drastically alter outcomes; run sensitivity analyses.
+- `run_simulation` accepts a `topology` parameter for future expansion but currently uses mean-field only.
+- Cascade classification uses fixed thresholds: velocity >10.0 = VIRAL, size <5 = DAMPENED.
+- Events passed to `CascadeDetector.detect` must include `meme_id`, `node_id`, and `timestamp` keys.
+- Errors must be logged via `logging_monitoring` before re-raising.
 
-* **Parameter Sensitivity**: Small changes in `infection_rate` (beta) can drastically alter outcomes. Always run sensitivity analyses.
-* **Network Topology**: Real social networks are not perfectly mixed (mean-field). Use `rhizome` for more accurate network-based simulations.
+## Integration Points
 
-## Integration
+- **Depends on**: None (self-contained within `meme` package)
+- **Used by**: `meme.swarm` (contagion dynamics parameterize swarm behavior), `meme.rhizome` (network-based simulation expansion)
 
-* **With Swarm**: Use `contagion` dynamics to set parameters for swarm behavior (e.g., panic thresholds).
-* **With Cultural Dynamics**: Use cascade data to feed `cultural_dynamics.Zeitgeist` tracking.
+## Navigation
+
+- **Parent**: [meme](../README.md)
+- **Root**: [Root](../../../../README.md)

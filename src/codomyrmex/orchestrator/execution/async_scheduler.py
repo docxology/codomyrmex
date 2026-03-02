@@ -67,7 +67,7 @@ class SchedulerMetrics:
     total_execution_time: float = 0.0
 
     def to_dict(self) -> dict[str, Any]:
-        """Execute To Dict operations natively."""
+        """Return a dictionary representation of this object."""
         return {
             "jobs_scheduled": self.jobs_scheduled,
             "jobs_completed": self.jobs_completed,
@@ -142,7 +142,7 @@ class AsyncScheduler:
         max_concurrency: int = 4,
         event_bus: Any = None,
     ) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._jobs: dict[str, AsyncJob] = {}
         self._max_concurrency = max_concurrency
         self._event_bus = event_bus

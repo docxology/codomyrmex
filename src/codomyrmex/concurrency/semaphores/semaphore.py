@@ -11,7 +11,7 @@ class BaseSemaphore(ABC):
     """Abstract base class for all semaphore implementations."""
 
     def __init__(self, value: int = 1):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.initial_value = value
 
     @abstractmethod
@@ -28,23 +28,23 @@ class LocalSemaphore(BaseSemaphore):
     """Local thread-safe semaphore wrapper."""
 
     def __init__(self, value: int = 1):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         super().__init__(value)
         self._semaphore = threading.Semaphore(value)
 
     def acquire(self, timeout: float = 10.0) -> bool:
-        """Execute Acquire operations natively."""
+        """acquire ."""
         return self._semaphore.acquire(timeout=timeout)
 
     def release(self) -> None:
-        """Execute Release operations natively."""
+        """release ."""
         self._semaphore.release()
 
 class AsyncLocalSemaphore(BaseSemaphore):
     """Asyncio-compatible local semaphore."""
 
     def __init__(self, value: int = 1):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         super().__init__(value)
         self._semaphore = asyncio.Semaphore(value)
         self._sync_lock = threading.Lock()
@@ -54,7 +54,7 @@ class AsyncLocalSemaphore(BaseSemaphore):
         await self._semaphore.acquire()
 
     def release(self) -> None:
-        """Execute Release operations natively."""
+        """release ."""
         self._semaphore.release()
         # Also update sync count if it was acquired synchronously
         with self._sync_lock:

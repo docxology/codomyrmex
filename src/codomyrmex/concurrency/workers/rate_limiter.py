@@ -25,7 +25,7 @@ class AsyncTokenBucket:
     """
 
     def __init__(self, rate: float, capacity: int | None = None) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._rate = rate
         self._capacity = capacity or int(rate)
         self._tokens = float(self._capacity)
@@ -47,7 +47,7 @@ class AsyncTokenBucket:
             await asyncio.sleep(min(wait_time, 0.1))
 
     def _refill(self) -> None:
-        """Execute  Refill operations natively."""
+        """refill ."""
         now = time.monotonic()
         elapsed = now - self._last_refill
         self._tokens = min(self._capacity, self._tokens + elapsed * self._rate)
@@ -58,7 +58,7 @@ class AsyncSlidingWindow:
     """Sliding window rate limiter for async contexts."""
 
     def __init__(self, max_requests: int, window_seconds: float) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._max_requests = max_requests
         self._window = window_seconds
         self._timestamps: list[float] = []

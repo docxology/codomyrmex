@@ -37,7 +37,7 @@ except ImportError:
     def monitor_performance(*args, **kwargs):
         """No-op decorator if dependencies missing."""
         def decorator(func):
-            """Execute Decorator operations natively."""
+            """decorator ."""
             return func
         return decorator
 

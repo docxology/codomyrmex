@@ -76,7 +76,7 @@ class AgentSpec:
     model: str = ""
 
     def __post_init__(self) -> None:
-        """Execute   Post Init   operations natively."""
+        """post Init ."""
         if not self.model:
             if self.provider == "ollama":
                 self.model = os.environ.get("OLLAMA_MODEL", "llama3.2:1b")
@@ -96,7 +96,7 @@ class FileContext:
     max_lines: int = 200
 
     def __post_init__(self) -> None:
-        """Execute   Post Init   operations natively."""
+        """post Init ."""
         self.path = Path(self.path)
         if not self.content and self.path.is_file():
             raw = self.path.read_text(errors="replace")
@@ -109,12 +109,12 @@ class FileContext:
 
     @property
     def name(self) -> str:
-        """Execute Name operations natively."""
+        """name ."""
         return self.path.name
 
     @property
     def token_estimate(self) -> int:
-        """Execute Token Estimate operations natively."""
+        """token Estimate ."""
         return len(self.content.split())
 
 
@@ -223,11 +223,11 @@ def _create_llm_client(spec: AgentSpec) -> Any:
                     class AntigravityCodeImplementerWrapper:
                         """Functional component: AntigravityCodeImplementerWrapper."""
                         def __init__(self, base_client):
-                            """Execute   Init   operations natively."""
+                            """Initialize this instance."""
                             self.client = base_client
 
                         def execute_with_session(self, request, session=None, session_id=None):
-                            """Execute Execute With Session operations natively."""
+                            """execute With Session ."""
                             if hasattr(self.client, 'execute_with_tools'):
                                 logger.info(f"[{spec.identity}] Executing with full Antigravity tool loop...")
                                 return self.client.execute_with_tools(request, auto_execute=True, max_tool_rounds=15)
@@ -283,7 +283,7 @@ class ConversationOrchestrator:
         todo_path: str | Path | None = None,
         max_retries: int = 2,
     ) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.channel_id = channel or f"conv-{uuid.uuid4().hex[:8]}"
         self.seed_prompt = seed_prompt
         self.max_retries = max_retries

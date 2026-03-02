@@ -1,49 +1,42 @@
-# AI Agent Guidelines - Pagination
+# AI Agent Guidelines — api/pagination
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
-
-**Module**: `codomyrmex.api.pagination`  
-**Status**: Active
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
 
-Cursor and offset pagination utilities for API responses
+Provides three pagination strategies (offset, cursor, keyset) through a common `Paginator` interface with factory-based instantiation for consistent API result set traversal.
 
-## Agent Instructions
+## Key Components
 
-When working with this submodule:
+| Component | Role |
+|-----------|------|
+| `PaginationStrategy` | Enum: `OFFSET`, `CURSOR`, `KEYSET` |
+| `SortDirection` | Enum: `ASC`, `DESC` |
+| `PageInfo` | Dataclass with `has_next`, `has_previous`, `total_count`, `start_cursor`, `end_cursor` |
+| `PaginatedResponse` | Dataclass wrapping `items`, `page_info`, `page_size`, `current_page` |
+| `PaginationRequest` | Dataclass with `page`, `page_size`, `cursor`, `sort_by`, `sort_direction`, `filters` |
+| `Paginator` | ABC defining `paginate(items, request) -> PaginatedResponse` |
+| `OffsetPaginator` | Classic offset/limit pagination |
+| `CursorPaginator` | Base64-encoded cursor pagination with opaque tokens |
+| `KeysetPaginator` | Seek-based pagination using sort key comparison |
+| `create_paginator` | Factory returning the correct `Paginator` for a given `PaginationStrategy` |
 
-### Key Patterns
+## Operating Contracts
 
-1. **Import Convention**:
-   ```python
-   from codomyrmex.api.pagination import <specific_import>
-   ```
+- All paginators implement `Paginator.paginate(items, request) -> PaginatedResponse`.
+- `CursorPaginator` encodes/decodes cursors as base64 strings; callers treat cursors as opaque.
+- `KeysetPaginator` requires items to be sorted by the keyset field for correct seek behaviour.
+- `PaginatedResponse.page_info` always contains navigation metadata.
+- `create_paginator(strategy, **kwargs)` selects the implementation by `PaginationStrategy` enum.
 
-2. **Error Handling**: Always handle exceptions gracefully
-3. **Configuration**: Check for required environment variables
+## Integration Points
 
-### Common Operations
+- **Parent**: `api` module uses paginators in REST endpoint handlers.
+- **Consumers**: Any list/collection endpoint returning paginated results.
+- **Pattern**: `paginator = create_paginator(strategy); response = paginator.paginate(items, request)`.
 
-- Operation 1: Description
-- Operation 2: Description
+## Navigation
 
-### Integration Points
-
-- Integrates with: `api` (parent module)
-- Dependencies: Listed in `__init__.py`
-
-## File Reference
-
-| File | Purpose |
-|------|---------|
-| `__init__.py` | Module exports and initialization |
-| `README.md` | User documentation |
-| `SPEC.md` | Technical specification |
-
-## Troubleshooting
-
-Common issues and solutions:
-
-1. **Issue**: Description
-   **Solution**: Resolution steps
+- **Parent**: [api/README.md](../README.md)
+- **Sibling**: [SPEC.md](SPEC.md) | [README.md](README.md)
+- **Root**: [../../../../README.md](../../../../README.md)

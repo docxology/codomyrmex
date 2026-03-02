@@ -68,13 +68,13 @@ class BenchmarkRunner:
     """
 
     def __init__(self, suite_name: str = "Performance Suite") -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._suite_name = suite_name
         self._benchmarks: list[dict[str, Any]] = []
 
     @property
     def benchmark_count(self) -> int:
-        """Execute Benchmark Count operations natively."""
+        """benchmark Count ."""
         return len(self._benchmarks)
 
     def add(
@@ -125,7 +125,7 @@ class BenchmarkRunner:
         )
 
     def _run_one(self, bench: dict[str, Any]) -> BenchmarkResult:
-        """Execute  Run One operations natively."""
+        """run One ."""
         fn = bench["fn"]
         iterations = bench["iterations"]
         threshold = bench["threshold_ms"]

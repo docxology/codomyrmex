@@ -38,7 +38,7 @@ class GitAgent(BaseAgent):
         config: dict[str, Any] | None = None,
         repository_manager: RepositoryManager | None = None,
     ):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         super().__init__(
             name="GitAgent",
             capabilities=[AgentCapabilities.CODE_EXECUTION], # Technically executing git commands

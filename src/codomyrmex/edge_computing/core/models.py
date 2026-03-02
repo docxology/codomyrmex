@@ -40,14 +40,14 @@ class ResourceUsage:
 
     @property
     def memory_percent(self) -> float:
-        """Execute Memory Percent operations natively."""
+        """memory Percent ."""
         if self.memory_max_mb <= 0:
             return 0.0
         return (self.memory_mb / self.memory_max_mb) * 100
 
     @property
     def is_overloaded(self) -> bool:
-        """Execute Is Overloaded operations natively."""
+        """is Overloaded ."""
         return self.cpu_percent > 90 or self.memory_percent > 90
 
 
@@ -70,21 +70,21 @@ class EdgeNode:
 
     @property
     def seconds_since_heartbeat(self) -> float:
-        """Execute Seconds Since Heartbeat operations natively."""
+        """seconds Since Heartbeat ."""
         delta = datetime.now(timezone.utc) - self.last_heartbeat
         return delta.total_seconds()
 
     @property
     def is_healthy(self) -> bool:
-        """Execute Is Healthy operations natively."""
+        """is Healthy ."""
         return self.status == EdgeNodeStatus.ONLINE and self.seconds_since_heartbeat < 60
 
     def has_capability(self, capability: str) -> bool:
-        """Execute Has Capability operations natively."""
+        """has Capability ."""
         return capability in self.capabilities
 
     def to_dict(self) -> dict[str, Any]:
-        """Execute To Dict operations natively."""
+        """Return a dictionary representation of this object."""
         return {
             "id": self.id,
             "name": self.name,
@@ -122,7 +122,7 @@ class EdgeDeployment:
     invocations: int = 0
 
     def record_invocation(self) -> None:
-        """Execute Record Invocation operations natively."""
+        """record Invocation ."""
         self.invocations += 1
 
 
@@ -136,7 +136,7 @@ class SyncState:
 
     @classmethod
     def from_data(cls, data: dict[str, Any], version: int) -> SyncState:
-        """Execute From Data operations natively."""
+        """from Data ."""
         checksum = hashlib.md5(json.dumps(data, sort_keys=True).encode()).hexdigest()
         return cls(version=version, data=data, checksum=checksum)
 

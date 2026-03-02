@@ -10,7 +10,7 @@ class BaseNetworkVisualizer:
     """Base class for network visualizations."""
 
     def __init__(self, figure_size: tuple[int, int] = (12, 8), dpi: int = 100):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.figure_size = figure_size
         self.dpi = dpi
 
@@ -59,7 +59,7 @@ class BaseChartVisualizer:
     """Base class for chart visualizations."""
 
     def __init__(self, figure_size: tuple[int, int] = (10, 6), dpi: int = 100):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.figure_size = figure_size
         self.dpi = dpi
 

@@ -1,55 +1,58 @@
-# search Functional Specification
+# documents/search — Technical Specification
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+## Overview
 
-## Core Concept
+Implements document search via an in-memory inverted index with term-frequency scoring, plus a fluent query builder for constructing structured queries.
 
-Detailed technical specification and implementation guide.
+## Architecture
 
-## Functional Requirements
+Three modules with distinct responsibilities: `indexer.py` (storage and retrieval), `query_builder.py` (query construction), `searcher.py` (scoring and ranking).
 
-- System compliance and architectural integrity verification.
-- System compliance and architectural integrity verification.
+## Key Classes and Functions
 
-## Modularity & Interfaces
+### InMemoryIndex (indexer.py)
 
-- Inputs: Detailed technical specification and implementation guide.
-- Outputs: Detailed technical specification and implementation guide.
-- Dependencies: Core Codomyrmex utility libraries.
+| Method | Signature | Returns |
+|--------|-----------|---------|
+| `add` | `(doc_id: str, content: str, document: Document \| None = None)` | None |
+| `remove` | `(doc_id: str)` | `bool` |
+| `search` | `(query: str)` | `list[str]` (doc IDs, AND semantics) |
+| `get_document` | `(doc_id: str)` | `Document \| None` |
+| `save` | `(path: str)` | None (JSON persistence) |
+| `load` | `(path: str)` | None (JSON restore) |
+| `document_count` | property | `int` |
 
-## Coherence
+Internal structure: `_index: dict[str, set[str]]` (term to doc_id sets), `_documents: dict[str, Document]`.
 
-Detailed technical specification and implementation guide.
+### QueryBuilder (query_builder.py)
 
-## Navigation Links
+| Method | Signature | Returns |
+|--------|-----------|---------|
+| `add_term` | `(term: str)` | `QueryBuilder` (fluent) |
+| `add_filter` | `(field: str, value: str)` | `QueryBuilder` (fluent) |
+| `set_sort` | `(field: str)` | `QueryBuilder` (fluent) |
+| `build` | `()` | `str` (space-joined terms) |
+| `to_dict` | `()` | `dict` (serialized state) |
 
-- **Parent**: [Project Overview](../README.md)
-- **Module Index**: [All Agents](../../AGENTS.md)
-- **Documentation**: [Reference Guides](../../../../docs/README.md)
-- **Home**: [Root README](../../../README.md)
+State: `terms: list[str]`, `filters: dict`, `sort_by: str | None`.
 
-## Detailed Architecture and Implementation
+### Searcher Functions (searcher.py)
 
-### Design Principles
+| Function | Signature | Returns |
+|----------|-----------|---------|
+| `search_documents` | `(documents: list[Document], query: str)` | `list[Document]` |
+| `search_index` | `(index: InMemoryIndex, query: str)` | `list[tuple[str, float]]` |
 
-1. **Strict Modularity**: Each component is isolated and communicates via well-defined APIs.
-2. **Performance Optimization**: Implementation leverages lazy loading and intelligent caching to minimize resource overhead.
-3. **Error Resilience**: Robust exception handling ensures system stability even under unexpected conditions.
-4. **Extensibility**: The architecture is designed to accommodate future enhancements without breaking existing contracts.
+`search_index` uses `collections.Counter` for term-frequency scoring. Results are sorted descending by score.
 
-### Technical Implementation
+## Dependencies
 
-The codebase utilizes modern Python features (version 3.10+) to provide a clean, type-safe API. Interaction patterns are documented in the corresponding `AGENTS.md` and `SPEC.md` files, ensuring that both human developers and automated agents can effectively utilize these capabilities.
+- `collections.Counter` for TF scoring
+- `json` for index persistence
+- `documents.models.Document` for document references
 
-## Detailed Architecture and Implementation
+## Constraints
 
-### Design Principles
-
-1. **Strict Modularity**: Each component is isolated and communicates via well-defined APIs.
-2. **Performance Optimization**: Implementation leverages lazy loading and intelligent caching to minimize resource overhead.
-3. **Error Resilience**: Robust exception handling ensures system stability even under unexpected conditions.
-4. **Extensibility**: The architecture is designed to accommodate future enhancements without breaking existing contracts.
-
-### Technical Implementation
-
-The codebase utilizes modern Python features (version 3.10+) to provide a clean, type-safe API. Interaction patterns are documented in the corresponding `AGENTS.md` and `SPEC.md` files, ensuring that both human developers and automated agents can effectively utilize these capabilities.
+- AND-only query semantics (all terms must match).
+- In-memory storage; index size bounded by available RAM.
+- No stemming or stop-word filtering; tokenization is lowercase whitespace split.

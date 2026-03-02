@@ -14,7 +14,7 @@ class TokenValidator:
     """Validates tokens and their signatures."""
 
     def __init__(self, secret: str):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.secret = secret.encode()
 
     def _generate_signature(self, payload_dict: dict[str, Any]) -> str:

@@ -1,25 +1,38 @@
 # Codomyrmex Agents — src/codomyrmex/cache/serializers
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
 
-Cache serialization layer for encoding/decoding cached objects using JSON, pickle, msgpack, and other formats.
+Pluggable cache serialization layer providing six serializer implementations and two composable wrappers. Supports JSON, pickle, string, and typed serialization with optional zlib compression and base64 encoding. A factory function creates serializers by name.
 
-## Active Components
+## Key Components
 
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SPEC.md` – Project file
-- `__init__.py` – Project file
+| File | Class / Function | Role |
+|------|-----------------|------|
+| `__init__.py` | `CacheSerializer` (ABC) | Abstract base with `serialize(value) -> bytes` and `deserialize(data) -> Any` |
+| `__init__.py` | `JSONSerializer` | JSON serialization with configurable indent |
+| `__init__.py` | `PickleSerializer` | Pickle serialization (trusted data only) with configurable protocol |
+| `__init__.py` | `StringSerializer` | Simple `str()` encoding with configurable character set |
+| `__init__.py` | `TypedSerializer` | Preserves Python type information (`_type`, `_value`) via JSON wrapper |
+| `__init__.py` | `CompressedSerializer` | Composable wrapper adding zlib compression (configurable level) |
+| `__init__.py` | `Base64Serializer` | Composable wrapper adding base64 encoding |
+| `__init__.py` | `create_serializer` | Factory: `create_serializer("json", compress=True)` |
 
 ## Operating Contracts
 
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
+- `PickleSerializer` warning: can execute arbitrary code on deserialization; use only with trusted data.
+- `CompressedSerializer` and `Base64Serializer` are wrappers that compose with any base serializer.
+- `TypedSerializer` preserves type for `int`, `float`, `bool`, `str`, `list`, `dict`; other types are `str()`-ified.
+- `create_serializer` accepts `"json"`, `"pickle"`, `"string"`, `"typed"` with optional `compress=True`.
+- Errors must be logged before re-raising.
 
-## Navigation Links
+## Integration Points
 
-- **📁 Parent Directory**: [cache](../README.md) - Parent directory documentation
-- **🏠 Project Root**: ../../../../README.md - Main project documentation
+- **Depends on**: Standard library only (`json`, `pickle`, `zlib`, `base64`, `logging`)
+- **Used by**: `cache` parent module, `cache.cache_manager`, external cache backends
+
+## Navigation
+
+- **Parent**: [cache](../README.md)
+- **Root**: [Root](../../../../README.md)

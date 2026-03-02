@@ -1,25 +1,35 @@
-# Codomyrmex Agents — src/codomyrmex/evolutionary_ai/fitness
+# Codomyrmex Agents -- evolutionary_ai/fitness
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
 
-Fitness evaluation functions and multi-objective optimization scoring.
+Fitness evaluation functions for evolutionary algorithms, supporting single-objective, multi-objective (Pareto), and constraint-based fitness scoring.
 
-## Active Components
+## Key Components
 
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SPEC.md` – Project file
-- `__init__.py` – Project file
+| Component | Role |
+|-----------|------|
+| `FitnessResult` | Dataclass: `score: float`, `components: dict[str, float]`, `feasible: bool`, `metadata: dict` |
+| `FitnessFunction` (ABC) | Abstract base with `evaluate(genome) -> FitnessResult` and `is_better(a, b) -> bool` |
+| `ScalarFitness` | Single-objective evaluator wrapping a `Callable[[list], float]`; supports `maximize` flag |
+| `MultiObjectiveFitness` | Multi-objective evaluator with `dominates(a, b)` Pareto comparison; aggregates via weighted sum |
+| `ConstrainedFitness` | Wraps another `FitnessFunction` and applies penalty for constraint violations; marks `feasible` flag |
 
 ## Operating Contracts
 
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
+- `ScalarFitness.evaluate()` calls the user-provided function with `genome.to_list()` and returns a `FitnessResult`.
+- `ScalarFitness.is_better()` compares scores respecting the `maximize` flag.
+- `MultiObjectiveFitness.__init__` takes a list of `(objective_fn, weight)` tuples; `evaluate()` returns weighted sum as the aggregate score with per-objective components.
+- `MultiObjectiveFitness.dominates(a, b)` returns True if `a` is better on all objectives and strictly better on at least one.
+- `ConstrainedFitness.__init__` takes a base `FitnessFunction` and a list of `(constraint_fn, penalty_weight)` tuples; violations subtract penalty from the base score.
 
-## Navigation Links
+## Integration Points
 
-- **📁 Parent Directory**: [evolutionary_ai](../README.md) - Parent directory documentation
-- **🏠 Project Root**: ../../../../README.md - Main project documentation
+- `FitnessFunction` implementations are consumed by `evolutionary_ai.population.PopulationManager.evolve_generation()`.
+- `FitnessResult.components` dict provides per-objective breakdown for analysis.
+
+## Navigation
+
+- [README](../README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)
+- Parent: [evolutionary_ai](../README.md)

@@ -1,49 +1,35 @@
-# AI Agent Guidelines - Scanning
+# Codomyrmex Agents — src/codomyrmex/security/scanning
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
-
-**Module**: `codomyrmex.security.scanning`  
-**Status**: Active
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
 
-SAST/DAST integration for automated security testing
+Automated CVE scanning against installed Python dependencies using pip-audit and safety as backends. Produces structured `ScanReport` objects with vulnerability details and generates fix commands.
 
-## Agent Instructions
+## Key Components
 
-When working with this submodule:
+| File | Class / Function | Role |
+|------|-----------------|------|
+| `vulnerability_scanner.py` | `Vulnerability` | Dataclass with `package`, `installed_version`, `vulnerability_id`, `description`, `fix_versions`, `severity`, `url`; has `.to_dict()` |
+| `vulnerability_scanner.py` | `ScanReport` | Dataclass with `vulnerabilities`, `packages_scanned`, `scan_tool`, `success`, `error`; computed `.critical_count`, `.high_count` |
+| `vulnerability_scanner.py` | `VulnerabilityScanner` | Main scanner: `scan_pip_audit()` (primary), `scan_safety()` (fallback), `scan()` (best available), `generate_fix_commands()` |
 
-### Key Patterns
+## Operating Contracts
 
-1. **Import Convention**:
-   ```python
-   from codomyrmex.security.scanning import <specific_import>
-   ```
+- `scan()` tries `scan_pip_audit()` first; falls back to `scan_safety()` only if pip-audit fails.
+- Both scan methods use `subprocess.run()` with a 120-second timeout.
+- `scan_pip_audit()` returns `ScanReport(success=False)` with error message when pip-audit is not installed (no exception raised to caller).
+- `generate_fix_commands()` produces deduplicated `pip install` commands targeting the latest fix version for each vulnerable package.
+- External tool output parsing failures (JSON decode, missing keys) are caught and return empty results.
+- Errors must be logged via `logging_monitoring` before re-raising.
 
-2. **Error Handling**: Always handle exceptions gracefully
-3. **Configuration**: Check for required environment variables
+## Integration Points
 
-### Common Operations
+- **Depends on**: Standard library (`subprocess`, `json`, `logging`)
+- **External tools**: `pip-audit` (primary), `safety` (fallback) -- both optional
+- **Used by**: CI/CD security gates, `security` parent module MCP tool `scan_vulnerabilities`
 
-- Operation 1: Description
-- Operation 2: Description
+## Navigation
 
-### Integration Points
-
-- Integrates with: `security` (parent module)
-- Dependencies: Listed in `__init__.py`
-
-## File Reference
-
-| File | Purpose |
-|------|---------|
-| `__init__.py` | Module exports and initialization |
-| `README.md` | User documentation |
-| `SPEC.md` | Technical specification |
-
-## Troubleshooting
-
-Common issues and solutions:
-
-1. **Issue**: Description
-   **Solution**: Resolution steps
+- **Parent**: [security](../README.md)
+- **Root**: [Root](../../../../README.md)

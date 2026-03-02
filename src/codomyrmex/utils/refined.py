@@ -27,9 +27,9 @@ class RefinedUtilities:
     def retry(retries: int = 3, backoff_factor: float = 2.0, jitter: bool = True):
         """Retry a function with exponential backoff and optional jitter."""
         def decorator(func: Callable):
-            """Execute Decorator operations natively."""
+            """decorator ."""
             def wrapper(*args, **kwargs):
-                """Execute Wrapper operations natively."""
+                """wrapper ."""
                 for i in range(retries):
                     try:
                         return func(*args, **kwargs)

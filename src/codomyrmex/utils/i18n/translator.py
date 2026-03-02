@@ -12,40 +12,40 @@ class MessageBundle:
     """A collection of translated messages."""
 
     def __init__(self, locale: Locale):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.locale = locale
         self._messages: dict[str, str] = {}
 
     def add(self, key: str, message: str) -> None:
-        """Execute Add operations natively."""
+        """add ."""
         self._messages[key] = message
 
     def get(self, key: str, default: str | None = None) -> str | None:
-        """Execute Get operations natively."""
+        """Return the requested value."""
         return self._messages.get(key, default)
 
     def has(self, key: str) -> bool:
-        """Execute Has operations natively."""
+        """has ."""
         return key in self._messages
 
     def keys(self) -> list[str]:
-        """Execute Keys operations natively."""
+        """keys ."""
         return list(self._messages.keys())
 
     def to_dict(self) -> dict[str, str]:
-        """Execute To Dict operations natively."""
+        """Return a dictionary representation of this object."""
         return self._messages.copy()
 
     @classmethod
     def from_dict(cls, locale: Locale, data: dict[str, str]) -> "MessageBundle":
-        """Execute From Dict operations natively."""
+        """from Dict ."""
         bundle = cls(locale)
         bundle._messages = data
         return bundle
 
     @classmethod
     def from_json_file(cls, locale: Locale, path: str) -> "MessageBundle":
-        """Execute From Json File operations natively."""
+        """from Json File ."""
         with open(path, encoding='utf-8') as f:
             data = json.load(f)
         return cls.from_dict(locale, data)
@@ -55,22 +55,22 @@ class Translator:
     """Multi-locale translator."""
 
     def __init__(self, default_locale: Locale | None = None):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.default_locale = default_locale or Locale("en")
         self._bundles: dict[str, MessageBundle] = {}
         self._current_locale = self.default_locale
         self._interpolation_pattern = re.compile(r'\{(\w+)\}')
 
     def add_bundle(self, bundle: MessageBundle) -> None:
-        """Execute Add Bundle operations natively."""
+        """add Bundle ."""
         self._bundles[bundle.locale.code] = bundle
 
     def set_locale(self, locale: Locale) -> None:
-        """Execute Set Locale operations natively."""
+        """set Locale ."""
         self._current_locale = locale
 
     def get_locale(self) -> Locale:
-        """Execute Get Locale operations natively."""
+        """get Locale ."""
         return self._current_locale
 
     def t(
@@ -111,9 +111,9 @@ class Translator:
         return key
 
     def _interpolate(self, message: str, values: dict[str, Any]) -> str:
-        """Execute  Interpolate operations natively."""
+        """interpolate ."""
         def replacer(match):
-            """Execute Replacer operations natively."""
+            """replacer ."""
             key = match.group(1)
             return str(values.get(key, match.group(0)))
         return self._interpolation_pattern.sub(replacer, message)

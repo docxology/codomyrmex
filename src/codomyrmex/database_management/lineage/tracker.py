@@ -24,7 +24,7 @@ class LineageTracker:
     """
 
     def __init__(self, graph: LineageGraph | None = None):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.graph = graph or LineageGraph()
         self._current_transform: str | None = None
 
@@ -99,7 +99,7 @@ class ImpactAnalyzer:
     """
 
     def __init__(self, graph: LineageGraph):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.graph = graph
 
     def analyze_change(self, node_id: str) -> dict[str, Any]:

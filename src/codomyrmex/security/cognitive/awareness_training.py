@@ -107,7 +107,7 @@ class AwarenessTrainer:
     }
 
     def __init__(self):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
 
         self.modules: dict[str, TrainingModule] = {}
         self.results: list[TrainingResult] = []

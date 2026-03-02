@@ -56,7 +56,7 @@ class TransactionBuilder:
     """
 
     def __init__(self, from_address: Address) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.from_address = from_address
         self._to: Address | None = None
         self._value: int = 0
@@ -68,42 +68,42 @@ class TransactionBuilder:
         self._memo: str = ""
 
     def to(self, address: Address) -> TransactionBuilder:
-        """Execute To operations natively."""
+        """to ."""
         self._to = address
         return self
 
     def value(self, amount: int) -> TransactionBuilder:
-        """Execute Value operations natively."""
+        """value ."""
         self._value = amount
         return self
 
     def data(self, data: str) -> TransactionBuilder:
-        """Execute Data operations natively."""
+        """data ."""
         self._data = data
         return self
 
     def gas_limit(self, limit: int) -> TransactionBuilder:
-        """Execute Gas Limit operations natively."""
+        """gas Limit ."""
         self._gas_limit = limit
         return self
 
     def gas_price(self, price: int) -> TransactionBuilder:
-        """Execute Gas Price operations natively."""
+        """gas Price ."""
         self._gas_price = price
         return self
 
     def nonce(self, nonce: int) -> TransactionBuilder:
-        """Execute Nonce operations natively."""
+        """nonce ."""
         self._nonce = nonce
         return self
 
     def chain_id(self, cid: int) -> TransactionBuilder:
-        """Execute Chain Id operations natively."""
+        """chain Id ."""
         self._chain_id = cid
         return self
 
     def memo(self, memo: str) -> TransactionBuilder:
-        """Execute Memo operations natively."""
+        """memo ."""
         self._memo = memo
         return self
 

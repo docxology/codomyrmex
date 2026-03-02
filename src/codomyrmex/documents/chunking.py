@@ -33,12 +33,12 @@ class Chunk:
 
     @property
     def char_count(self) -> int:
-        """Execute Char Count operations natively."""
+        """char Count ."""
         return len(self.text)
 
     @property
     def word_count(self) -> int:
-        """Execute Word Count operations natively."""
+        """word Count ."""
         return len(self.text.split())
 
 
@@ -60,7 +60,7 @@ class DocumentChunker:
     """
 
     def __init__(self, config: ChunkConfig | None = None) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._config = config or ChunkConfig()
 
     def chunk(self, text: str, metadata: dict[str, Any] | None = None) -> list[Chunk]:

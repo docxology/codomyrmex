@@ -56,7 +56,7 @@ class WorkflowExecution:
 
     @property
     def duration(self) -> float | None:
-        """Execute Duration operations natively."""
+        """duration ."""
         if self.end_time:
             return (self.end_time - self.start_time).total_seconds()
         return None

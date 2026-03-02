@@ -74,17 +74,17 @@ class ExactMatchScorer(Scorer):
         case_sensitive: bool = True,
         strip_whitespace: bool = True,
     ) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._case_sensitive = case_sensitive
         self._strip_whitespace = strip_whitespace
 
     @property
     def name(self) -> str:
-        """Execute Name operations natively."""
+        """name ."""
         return "exact_match"
 
     def score(self, output: str, reference: str) -> float:
-        """Execute Score operations natively."""
+        """score ."""
         a = output
         b = reference
 
@@ -108,16 +108,16 @@ class ContainsScorer(Scorer):
     """
 
     def __init__(self, case_sensitive: bool = False) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._case_sensitive = case_sensitive
 
     @property
     def name(self) -> str:
-        """Execute Name operations natively."""
+        """name ."""
         return "contains"
 
     def score(self, output: str, reference: str) -> float:
-        """Execute Score operations natively."""
+        """score ."""
         a = output
         b = reference
 
@@ -144,7 +144,7 @@ class LengthScorer(Scorer):
     """
 
     def __init__(self, min_length: int = 1, max_length: int = 500) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         if min_length < 0:
             raise ValueError("min_length must be non-negative")
         if max_length < min_length:
@@ -155,11 +155,11 @@ class LengthScorer(Scorer):
 
     @property
     def name(self) -> str:
-        """Execute Name operations natively."""
+        """name ."""
         return "length"
 
     def score(self, output: str, reference: str = "") -> float:
-        """Execute Score operations natively."""
+        """score ."""
         length = len(output)
 
         if self._min_length <= length <= self._max_length:
@@ -191,17 +191,17 @@ class RegexScorer(Scorer):
     """
 
     def __init__(self, flags: int = 0, full_match: bool = False) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._flags = flags
         self._full_match = full_match
 
     @property
     def name(self) -> str:
-        """Execute Name operations natively."""
+        """name ."""
         return "regex"
 
     def score(self, output: str, reference: str) -> float:
-        """Execute Score operations natively."""
+        """score ."""
         try:
             pattern = re.compile(reference, self._flags)
         except re.error as e:
@@ -232,12 +232,12 @@ class CompositeScorer(Scorer):
     """
 
     def __init__(self, scorers: list[WeightedScorer] | None = None) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._scorers: list[WeightedScorer] = list(scorers) if scorers else []
 
     @property
     def name(self) -> str:
-        """Execute Name operations natively."""
+        """name ."""
         return "composite"
 
     def add_scorer(self, scorer: Scorer, weight: float = 1.0) -> CompositeScorer:
@@ -259,7 +259,7 @@ class CompositeScorer(Scorer):
         return self
 
     def score(self, output: str, reference: str) -> float:
-        """Execute Score operations natively."""
+        """score ."""
         if not self._scorers:
             return 0.0
 

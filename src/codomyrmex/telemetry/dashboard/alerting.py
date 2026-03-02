@@ -32,7 +32,7 @@ class AlertManager:
     """
 
     def __init__(self):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._alerts: dict[str, Alert] = {}
         self._rules: dict[str, dict[str, any]] = {}
         self._counter = 0

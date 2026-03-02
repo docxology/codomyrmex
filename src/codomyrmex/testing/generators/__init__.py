@@ -68,13 +68,13 @@ class StringGenerator(Generator):
         max_length: int = 20,
         charset: str = string.ascii_letters + string.digits,
     ):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.min_length = min_length
         self.max_length = max_length
         self.charset = charset
 
     def generate(self) -> str:
-        """Execute Generate operations natively."""
+        """generate ."""
         length = random.randint(self.min_length, self.max_length)
         return ''.join(random.choices(self.charset, k=length))
 
@@ -83,12 +83,12 @@ class IntegerGenerator(Generator):
     """Generates random integers."""
 
     def __init__(self, min_value: int = 0, max_value: int = 1000):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.min_value = min_value
         self.max_value = max_value
 
     def generate(self) -> int:
-        """Execute Generate operations natively."""
+        """generate ."""
         return random.randint(self.min_value, self.max_value)
 
 
@@ -101,13 +101,13 @@ class FloatGenerator(Generator):
         max_value: float = 100.0,
         precision: int = 2,
     ):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.min_value = min_value
         self.max_value = max_value
         self.precision = precision
 
     def generate(self) -> float:
-        """Execute Generate operations natively."""
+        """generate ."""
         value = random.uniform(self.min_value, self.max_value)
         return round(value, self.precision)
 
@@ -116,11 +116,11 @@ class BooleanGenerator(Generator):
     """Generates random booleans."""
 
     def __init__(self, true_probability: float = 0.5):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.true_probability = true_probability
 
     def generate(self) -> bool:
-        """Execute Generate operations natively."""
+        """generate ."""
         return random.random() < self.true_probability
 
 
@@ -132,12 +132,12 @@ class DateGenerator(Generator):
         start_date: datetime | None = None,
         end_date: datetime | None = None,
     ):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.start_date = start_date or datetime(2020, 1, 1)
         self.end_date = end_date or datetime.now()
 
     def generate(self) -> datetime:
-        """Execute Generate operations natively."""
+        """generate ."""
         delta = self.end_date - self.start_date
         random_days = random.randint(0, delta.days)
         return self.start_date + timedelta(days=random_days)
@@ -149,11 +149,11 @@ class EmailGenerator(Generator):
     DOMAINS = ["example.com", "test.org", "mail.net", "demo.io"]
 
     def __init__(self):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._string_gen = StringGenerator(min_length=5, max_length=10, charset=string.ascii_lowercase)
 
     def generate(self) -> str:
-        """Execute Generate operations natively."""
+        """generate ."""
         username = self._string_gen.generate()
         domain = random.choice(self.DOMAINS)
         return f"{username}@{domain}"
@@ -163,7 +163,7 @@ class UUIDGenerator(Generator):
     """Generates UUIDs."""
 
     def generate(self) -> str:
-        """Execute Generate operations natively."""
+        """generate ."""
         # Simple UUID-like string
         parts = [
             ''.join(random.choices('0123456789abcdef', k=8)),
@@ -182,7 +182,7 @@ class NameGenerator(Generator):
     LAST_NAMES = ["Smith", "Johnson", "Williams", "Brown", "Jones", "Garcia", "Miller", "Davis"]
 
     def generate(self) -> str:
-        """Execute Generate operations natively."""
+        """generate ."""
         first = random.choice(self.FIRST_NAMES)
         last = random.choice(self.LAST_NAMES)
         return f"{first} {last}"
@@ -192,11 +192,11 @@ class ChoiceGenerator(Generator):
     """Generates random choice from list."""
 
     def __init__(self, choices: list[Any]):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.choices = choices
 
     def generate(self) -> Any:
-        """Execute Generate operations natively."""
+        """generate ."""
         return random.choice(self.choices)
 
 
@@ -215,7 +215,7 @@ class RecordGenerator:
     """
 
     def __init__(self):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._fields: dict[str, Generator] = {}
 
     def add_field(self, name: str, generator: Generator) -> "RecordGenerator":
@@ -246,7 +246,7 @@ class DatasetGenerator:
     """
 
     def __init__(self, name: str):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.name = name
         self._columns: dict[str, Generator] = {}
 

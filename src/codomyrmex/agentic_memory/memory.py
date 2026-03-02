@@ -47,12 +47,12 @@ class AgentMemory:
     """Agent-level memory with remember / recall / forget / search."""
 
     def __init__(self, store: InMemoryStore | None = None) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.store = store or InMemoryStore()
 
     @property
     def memory_count(self) -> int:
-        """Execute Memory Count operations natively."""
+        """memory Count ."""
         return len(self.store.list_all())
 
     # -- remember / add -----------------------------------------------
@@ -111,7 +111,7 @@ class AgentMemory:
         memory_type: MemoryType | None = None,
         min_importance: MemoryImportance | None = None,
     ) -> list[RetrievalResult]:
-        """Execute  Search Internal operations natively."""
+        """search Internal ."""
         candidates = self.store.list_all()
         if memory_type is not None:
             candidates = [m for m in candidates if m.memory_type == memory_type]
@@ -140,7 +140,7 @@ class AgentMemory:
     # -- forget -------------------------------------------------------
 
     def forget(self, memory_id: str) -> bool:
-        """Execute Forget operations natively."""
+        """forget ."""
         return self.store.delete(memory_id)
 
     # -- context ------------------------------------------------------
@@ -160,7 +160,7 @@ class VectorStoreMemory:
     """Memory with pluggable store backend and search."""
 
     def __init__(self, store: InMemoryStore | None = None) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.store = store or InMemoryStore()
         self._agent = AgentMemory(self.store)
 
@@ -169,11 +169,11 @@ class VectorStoreMemory:
         content: str,
         importance: MemoryImportance = MemoryImportance.MEDIUM,
     ) -> Memory:
-        """Execute Add operations natively."""
+        """add ."""
         return self._agent.add(content, importance=importance)
 
     def search(self, query: str, k: int = 10) -> list[RetrievalResult]:
-        """Execute Search operations natively."""
+        """search ."""
         return self._agent.search(query, k=k)
 
 
@@ -183,7 +183,7 @@ class ConversationMemory:
     """Specialised memory for conversation turns."""
 
     def __init__(self, store: InMemoryStore | None = None) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._agent = AgentMemory(store)
 
     def add_turn(
@@ -193,7 +193,7 @@ class ConversationMemory:
         *,
         turn_number: int = 0,
     ) -> Memory:
-        """Execute Add Turn operations natively."""
+        """add Turn ."""
         return self._agent.remember(
             content,
             memory_type=MemoryType.EPISODIC,
@@ -207,7 +207,7 @@ class KnowledgeMemory:
     """Specialised memory for factual knowledge."""
 
     def __init__(self, store: InMemoryStore | None = None) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._agent = AgentMemory(store)
 
     def add_fact(
@@ -215,7 +215,7 @@ class KnowledgeMemory:
         fact: str,
         source: str = "",
     ) -> Memory:
-        """Execute Add Fact operations natively."""
+        """add Fact ."""
         return self._agent.remember(
             fact,
             memory_type=MemoryType.SEMANTIC,

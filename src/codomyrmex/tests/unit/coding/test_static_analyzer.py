@@ -985,24 +985,24 @@ class TestFindRequirementsFiles:
     def test_finds_requirements_txt(self, tmp_path):
         (tmp_path / "requirements.txt").write_text("flask\n", encoding="utf-8")
         analyzer = StaticAnalyzer(project_root=str(tmp_path))
-        found = analyzer._find_requirements_files()
+        found = analyzer.tool_runner._find_requirements_files()
         assert any("requirements.txt" in f for f in found)
 
     def test_finds_requirements_dev(self, tmp_path):
         (tmp_path / "requirements-dev.txt").write_text("pytest\n", encoding="utf-8")
         analyzer = StaticAnalyzer(project_root=str(tmp_path))
-        found = analyzer._find_requirements_files()
+        found = analyzer.tool_runner._find_requirements_files()
         assert any("requirements-dev.txt" in f for f in found)
 
     def test_finds_pyproject_toml(self, tmp_path):
         (tmp_path / "pyproject.toml").write_text("[project]\n", encoding="utf-8")
         analyzer = StaticAnalyzer(project_root=str(tmp_path))
-        found = analyzer._find_requirements_files()
+        found = analyzer.tool_runner._find_requirements_files()
         assert any("pyproject.toml" in f for f in found)
 
     def test_empty_directory(self, tmp_path):
         analyzer = StaticAnalyzer(project_root=str(tmp_path))
-        found = analyzer._find_requirements_files()
+        found = analyzer.tool_runner._find_requirements_files()
         assert found == []
 
 

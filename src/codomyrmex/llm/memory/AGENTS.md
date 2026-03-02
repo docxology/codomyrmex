@@ -1,25 +1,39 @@
 # Codomyrmex Agents — src/codomyrmex/llm/memory
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
 
-LLM memory systems including conversation history, context management, and semantic memory for persistent knowledge.
+Conversation memory management for LLM interactions. Provides pluggable memory strategies (buffer, sliding window, summary, entity) that maintain context across turns and serialize messages into the format expected by LLM APIs.
 
-## Active Components
+## Key Components
 
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SPEC.md` – Project file
-- `__init__.py` – Project file
+| File | Class / Function | Role |
+|------|-----------------|------|
+| `__init__.py` | `MemoryType` | Enum: BUFFER, WINDOW, SUMMARY, VECTOR, ENTITY |
+| `__init__.py` | `MemoryMessage` | Dataclass for a stored message (role, content, timestamp, metadata, token_count) |
+| `__init__.py` | `Memory` | Abstract base class with `add_message`, `get_messages`, `clear`, JSON serialization |
+| `__init__.py` | `BufferMemory` | Stores all messages up to optional `max_messages` limit; preserves system messages on eviction |
+| `__init__.py` | `WindowMemory` | Sliding window keeping last N non-system messages; system messages stored separately |
+| `__init__.py` | `SummaryMemory` | Maintains a running summary via a `summarizer` callable; flushes after `summary_threshold` messages |
+| `__init__.py` | `EntityMemory` | Tracks named entities from message metadata; evicts least-mentioned when `max_entities` exceeded |
+| `__init__.py` | `create_memory` | Factory function mapping `MemoryType` to concrete memory class |
 
 ## Operating Contracts
 
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
+- `get_messages()` returns `list[dict[str, str]]` with `role` and `content` keys, compatible with OpenAI/Anthropic APIs.
+- `BufferMemory` preserves system messages when trimming to `max_messages`.
+- `SummaryMemory` requires an external `summarizer: Callable` -- it is not called if the summarizer is `None`.
+- `EntityMemory` expects entity data in `metadata["entities"]` dict when calling `add_message`.
+- Session IDs are auto-generated via SHA-256 hash of current timestamp if not provided.
+- Errors must be logged via `logging_monitoring` before re-raising.
 
-## Navigation Links
+## Integration Points
 
-- **📁 Parent Directory**: [llm](../README.md) - Parent directory documentation
-- **🏠 Project Root**: ../../../../README.md - Main project documentation
+- **Depends on**: Standard library only (`hashlib`, `json`, `abc`, `dataclasses`, `datetime`, `enum`)
+- **Used by**: `codomyrmex.llm` parent module, agent conversation loops, `codomyrmex.agents.memory`
+
+## Navigation
+
+- **Parent**: [llm](../README.md)
+- **Root**: [Root](../../../../README.md)

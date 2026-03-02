@@ -93,7 +93,7 @@ class ImageInfo:
 
     @property
     def full_name(self) -> str:
-        """Execute Full Name operations natively."""
+        """full Name ."""
         return f"{self.repository}:{self.tag}"
 
 
@@ -109,7 +109,7 @@ class ContainerInfo:
 
     @property
     def is_running(self) -> bool:
-        """Execute Is Running operations natively."""
+        """is Running ."""
         return "Up" in self.status
 
 
@@ -117,7 +117,7 @@ class DockerClient:
     """Client for interacting with Docker."""
 
     def __init__(self, docker_path: str = "docker"):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.docker_path = docker_path
         self._verify_docker()
 
@@ -375,7 +375,7 @@ class DockerComposeClient:
     """Client for Docker Compose operations."""
 
     def __init__(self, compose_file: str = "docker-compose.yml"):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.compose_file = compose_file
 
     def _run_compose(

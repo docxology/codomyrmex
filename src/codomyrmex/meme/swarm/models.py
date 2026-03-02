@@ -27,7 +27,7 @@ class SwarmAgent:
     integrity: float = 1.0
 
     def __post_init__(self):
-        """Execute   Post Init   operations natively."""
+        """post Init ."""
         # Ensure numpy arrays are correct shape/type if passed as lists (common in JSON)
         if isinstance(self.position, list):
             self.position = np.array(self.position, dtype=float)

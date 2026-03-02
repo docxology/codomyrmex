@@ -1,29 +1,39 @@
-# Agents Guide: Cybernetic
+# Codomyrmex Agents -- src/codomyrmex/meme/cybernetic
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.0 | **Status**: Experimental | **Last Updated**: March 2026
 
-**Operational Directives**
+## Purpose
 
-Use the `cybernetic` submodule to "steer the ship." Without control loops, systems drift into entropy.
+Implements second-order cybernetic control systems with PID controllers, feedback loops, and homeostatic regulation. Manages named control variables with setpoints and computes real-time control signals to drive system variables toward targets.
 
-## Capabilities
+## Key Components
 
-1. **Regulation (Negative Feedback)**:
-    * Use negative feedback to stabilize volatile systems (e.g., damping a `contagion` outbreak or calming a `cultural_dynamics` oscillation).
-    * Monitor the `error` (difference between `setpoint` and `current_state`).
+| File | Class / Function | Role |
+|------|-----------------|------|
+| `engine.py` | `CyberneticEngine` | Orchestrator managing named PID controllers, computing control signals |
+| `control.py` | `PIDController` | Proportional-Integral-Derivative controller with error tracking |
+| `control.py` | `apply_control` | Apply a single feedback loop transformation (positive or negative) |
+| `models.py` | `ControlSystem` | Named system with target setpoints |
+| `models.py` | `SystemState` | Current measured variable values with timestamp |
+| `models.py` | `FeedbackLoop` | Feedback mechanism between source and target variables |
+| `models.py` | `FeedbackType` | POSITIVE (reinforcing) or NEGATIVE (balancing) |
+| `models.py` | `Homeostat` | Ashby-style ultrastable system with variable bounds |
 
-2. **Amplification (Positive Feedback)**:
-    * Use positive feedback to accelerate growth (e.g., making a meme viral).
-    * **Warning**: Positive feedback leads to exponential growth and potential collapse. Always set a `limit`.
+## Operating Contracts
 
-3. **Autopoiesis**:
-    * Design systems that are self-creating and self-maintaining. A robust agent should be able to repair its own state (`Homeostat`).
+- `CyberneticEngine.update` only processes variables present in both `setpoints` and `current_state`.
+- PID integral accumulates without anti-windup; callers must manage saturation.
+- `dt` is clamped to minimum 0.001 to prevent division by zero in derivative.
+- `Homeostat` is defined as a data model; adaptation logic is not yet implemented.
+- Positive feedback leads to exponential growth; always pair with limits or negative feedback.
+- Errors must be logged via `logging_monitoring` before re-raising.
 
-## Constraints
+## Integration Points
 
-* **Delays**: Feedback delays can cause oscillation. Ensure sensors are fast.
-* **Loop Gain**: Too high gain = instability. Too low gain = sluggish response. Tune your PIDs.
+- **Depends on**: None (self-contained within `meme` package)
+- **Used by**: Any meme sub-module needing regulation (e.g., damping contagion outbreaks, stabilizing swarm behavior)
 
-## Integration
+## Navigation
 
-* **With All Modules**: Cybernetics is the "governor" layer that can sit on top of any other module to regulate it.
+- **Parent**: [meme](../README.md)
+- **Root**: [Root](../../../../README.md)

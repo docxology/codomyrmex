@@ -2,8 +2,6 @@
 
 This document provides usage examples for the tools and scripts within the `documentation` module, primarily focusing on the `documentation_website.py` helper script.
 
-<!-- TODO: Ensure all examples are tested and accurately reflect the script's capabilities and options as defined in `documentation_website.py --help` and the main README.md. -->
-
 ## Example 1: Starting the Docusaurus Development Server
 
 This example shows how to start the local Docusaurus development server, which provides live reloading as you make changes to documentation files.

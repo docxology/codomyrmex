@@ -37,7 +37,7 @@ class AgentPool:
     """
 
     def __init__(self) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._agents: dict[str, SwarmAgent] = {}
         self._round_robin_index: int = 0
 
@@ -55,16 +55,16 @@ class AgentPool:
 
     @property
     def size(self) -> int:
-        """Execute Size operations natively."""
+        """size ."""
         return len(self._agents)
 
     @property
     def available_agents(self) -> list[SwarmAgent]:
-        """Execute Available Agents operations natively."""
+        """available Agents ."""
         return [a for a in self._agents.values() if a.available]
 
     def get(self, agent_id: str) -> SwarmAgent | None:
-        """Execute Get operations natively."""
+        """Return the requested value."""
         return self._agents.get(agent_id)
 
     def assign(self, task: TaskAssignment) -> SwarmAgent:

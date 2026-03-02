@@ -72,7 +72,7 @@ class APIDocumentation:
     license_info: dict[str, str] = field(default_factory=dict)
 
     def __post_init__(self):
-        """Execute   Post Init   operations natively."""
+        """post Init ."""
         if self.generated_at is None:
             self.generated_at = datetime.now(timezone.utc)
 

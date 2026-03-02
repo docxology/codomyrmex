@@ -28,7 +28,7 @@ class HistogramBucket:
     total_sum: float = 0.0
 
     def __post_init__(self) -> None:
-        """Execute   Post Init   operations natively."""
+        """post Init ."""
         if not self.counts:
             self.counts = [0] * (len(self.boundaries) + 1)  # +1 for overflow
 
@@ -44,11 +44,11 @@ class HistogramBucket:
 
     @property
     def mean(self) -> float:
-        """Execute Mean operations natively."""
+        """mean ."""
         return self.total_sum / max(self.total_count, 1)
 
     def to_dict(self) -> dict[str, Any]:
-        """Execute To Dict operations natively."""
+        """Return a dictionary representation of this object."""
         buckets = {f"le_{b}": c for b, c in zip(self.boundaries, self.counts)}
         buckets["le_inf"] = self.counts[-1]
         return {
@@ -73,7 +73,7 @@ class MetricAggregator:
     """
 
     def __init__(self) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._counters: dict[str, float] = {}
         self._gauges: dict[str, float] = {}
         self._histograms: dict[str, HistogramBucket] = {}
@@ -100,15 +100,15 @@ class MetricAggregator:
         self._histograms[name].observe(value)
 
     def get_counter(self, name: str) -> float:
-        """Execute Get Counter operations natively."""
+        """get Counter ."""
         return self._counters.get(name, 0.0)
 
     def get_gauge(self, name: str) -> float:
-        """Execute Get Gauge operations natively."""
+        """get Gauge ."""
         return self._gauges.get(name, 0.0)
 
     def get_histogram(self, name: str) -> HistogramBucket | None:
-        """Execute Get Histogram operations natively."""
+        """get Histogram ."""
         return self._histograms.get(name)
 
     def counter_rate(self, name: str) -> float:
@@ -152,7 +152,7 @@ class MetricAggregator:
         return sorted(names)
 
     def summary(self) -> dict[str, Any]:
-        """Execute Summary operations natively."""
+        """summary ."""
         return {
             "counters": len(self._counters),
             "gauges": len(self._gauges),

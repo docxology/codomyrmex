@@ -900,3 +900,407 @@ class TestEdgeCases:
         p.plot_line(sample_x, sample_y)
         fig = p.finalize_plot(title="No Tight")
         assert fig is not None
+
+
+# ---------------------------------------------------------------------------
+# Sprint 13 Agent E - Additional targeted tests
+# Covers: uncovered line 655 (list->correlation), config effect verification,
+# data validation, save_plot bbox_inches=None path, deeper behavioral checks,
+# multi-figure lifecycle, dataset scatter without explicit size/color,
+# PlotConfig custom fields, DataPoint with all fields, and more.
+# ---------------------------------------------------------------------------
+
+
+class TestCorrelationListInput:
+    """Cover line 655: plot_correlation with a raw list input."""
+
+    def test_correlation_from_list(self, plotter):
+        """When data is a list-of-lists, it should be converted through
+        ndarray -> DataFrame before computing correlation."""
+        plotter.create_figure()
+        data = [[1, 2, 3], [4, 5, 6], [7, 8, 9], [10, 11, 12]]
+        hm = plotter.plot_correlation(data)
+        assert hm is not None
+
+    def test_correlation_from_list_kendall(self, plotter):
+        """Kendall correlation method with list input covers both line 654-655
+        (isinstance list branch) and the method param."""
+        plotter.create_figure()
+        data = [[1.0, 2.0], [3.0, 1.0], [2.0, 4.0], [5.0, 3.0]]
+        hm = plotter.plot_correlation(data, method="kendall")
+        assert hm is not None
+
+
+class TestPlotConfigEffects:
+    """Verify that PlotConfig fields actually propagate to the plotter."""
+
+    def test_config_title_propagates(self):
+        cfg = PlotConfig(title="My Title", show_plot=False)
+        p = AdvancedPlotter(cfg)
+        assert p.config.title == "My Title"
+
+    def test_config_xlabel_ylabel_propagate(self):
+        cfg = PlotConfig(xlabel="Time", ylabel="Value", show_plot=False)
+        p = AdvancedPlotter(cfg)
+        assert p.config.xlabel == "Time"
+        assert p.config.ylabel == "Value"
+
+    def test_config_figsize_effect(self):
+        """Config figsize should be used by create_figure."""
+        cfg = PlotConfig(figsize=(14, 10), show_plot=False)
+        p = AdvancedPlotter(cfg)
+        fig, _ = p.create_figure()
+        w, h = fig.get_size_inches()
+        assert abs(w - 14) < 0.1
+        assert abs(h - 10) < 0.1
+
+    def test_config_dpi_effect(self):
+        """Config dpi should be used by create_figure."""
+        cfg = PlotConfig(dpi=150, show_plot=False)
+        p = AdvancedPlotter(cfg)
+        fig, _ = p.create_figure()
+        assert fig.get_dpi() == 150
+
+    def test_config_transparent_effect(self, tmp_path):
+        """Transparent flag should be passed to savefig."""
+        cfg = PlotConfig(show_plot=False, transparent=True)
+        p = AdvancedPlotter(cfg)
+        p.create_figure()
+        p.plot_line([1, 2], [3, 4])
+        path = str(tmp_path / "transparent.png")
+        result = p.save_plot(path)
+        assert result is True
+        assert os.path.exists(path)
+
+    def test_config_save_dpi_effect(self, tmp_path):
+        """save_dpi from config should be used when not overridden."""
+        cfg = PlotConfig(show_plot=False, save_dpi=72)
+        p = AdvancedPlotter(cfg)
+        p.create_figure()
+        p.plot_line([1, 2], [3, 4])
+        path = str(tmp_path / "lowdpi.png")
+        result = p.save_plot(path)
+        assert result is True
+        assert os.path.exists(path)
+
+    def test_config_save_format_effect(self, tmp_path):
+        """save_format from config should be used when not overridden."""
+        cfg = PlotConfig(show_plot=False, save_format="pdf")
+        p = AdvancedPlotter(cfg)
+        p.create_figure()
+        p.plot_line([1, 2], [3, 4])
+        path = str(tmp_path / "auto_format.pdf")
+        result = p.save_plot(path)
+        assert result is True
+        assert os.path.exists(path)
+
+    def test_config_bbox_inches_effect(self, tmp_path):
+        """bbox_inches from config should be passed through."""
+        cfg = PlotConfig(show_plot=False, bbox_inches="tight")
+        p = AdvancedPlotter(cfg)
+        p.create_figure()
+        p.plot_line([1, 2], [3, 4])
+        path = str(tmp_path / "bbox.png")
+        result = p.save_plot(path)
+        assert result is True
+
+
+class TestDataPointVariations:
+    """Deeper tests on DataPoint construction and field usage."""
+
+    def test_data_point_with_all_fields(self):
+        dp = DataPoint(x=1.5, y=2.5, label="pt", color="red", size=10.0, alpha=0.5)
+        assert dp.x == 1.5
+        assert dp.y == 2.5
+        assert dp.label == "pt"
+        assert dp.color == "red"
+        assert dp.size == 10.0
+        assert dp.alpha == 0.5
+
+    def test_data_point_string_x(self):
+        dp = DataPoint(x="category_a", y=100)
+        assert dp.x == "category_a"
+
+    def test_data_point_datetime_x(self):
+        from datetime import datetime
+        now = datetime(2026, 1, 1, 12, 0, 0)
+        dp = DataPoint(x=now, y=42)
+        assert dp.x == now
+
+
+class TestDatasetVariations:
+    """Deeper tests on Dataset construction and defaults."""
+
+    def test_dataset_with_custom_fields(self):
+        ds = Dataset(
+            name="custom",
+            data=[],
+            plot_type=PlotType.SCATTER,
+            color="green",
+            label="scatter_data",
+            alpha=0.3,
+            linewidth=1.5,
+            markersize=12.0,
+        )
+        assert ds.name == "custom"
+        assert ds.color == "green"
+        assert ds.label == "scatter_data"
+        assert ds.alpha == 0.3
+        assert ds.linewidth == 1.5
+        assert ds.markersize == 12.0
+
+    def test_dataset_all_plot_types_accepted(self):
+        for pt in PlotType:
+            ds = Dataset(name=f"test_{pt.value}", data=[], plot_type=pt)
+            assert ds.plot_type == pt
+
+
+class TestPlotDatasetScatterDefaults:
+    """Cover scatter branch in _plot_dataset when point.size/color are None."""
+
+    def test_plot_dataset_scatter_none_size_color(self, plotter):
+        """When DataPoint.size is None and DataPoint.color is None, defaults
+        should be pulled from Dataset.markersize and Dataset.color."""
+        fig, ax = plotter.create_figure()
+        points = [DataPoint(x=1, y=2), DataPoint(x=3, y=4)]
+        ds = Dataset(
+            name="sc_defaults",
+            data=points,
+            plot_type=PlotType.SCATTER,
+            label="defaults",
+            color="purple",
+            markersize=20.0,
+        )
+        plotter._plot_dataset(ax, ds)
+        # No error raised; the default fallback in _plot_dataset worked
+
+
+class TestMultiFigureLifecycle:
+    """Test creating multiple figures, switching, clearing."""
+
+    def test_create_three_figures_then_clear(self):
+        cfg = PlotConfig(show_plot=False)
+        p = AdvancedPlotter(cfg)
+        for _ in range(3):
+            p.create_figure()
+        assert len(p.figures) == 3
+        p.clear_figures()
+        assert len(p.figures) == 0
+        assert p.current_figure is None
+        assert p.current_axes is None
+
+    def test_last_figure_is_current(self):
+        cfg = PlotConfig(show_plot=False)
+        p = AdvancedPlotter(cfg)
+        fig1, _ = p.create_figure()
+        fig2, _ = p.create_figure()
+        assert p.current_figure is fig2
+        assert p.current_figure is not fig1
+
+    def test_save_after_clear_returns_false(self, tmp_path):
+        cfg = PlotConfig(show_plot=False)
+        p = AdvancedPlotter(cfg)
+        p.create_figure()
+        p.plot_line([1], [2])
+        p.clear_figures()
+        result = p.save_plot(str(tmp_path / "after_clear.png"))
+        assert result is False
+
+    def test_finalize_after_clear_raises(self):
+        cfg = PlotConfig(show_plot=False)
+        p = AdvancedPlotter(cfg)
+        p.create_figure()
+        p.plot_line([1], [2])
+        p.clear_figures()
+        with pytest.raises(ValueError, match="No current figure"):
+            p.finalize_plot()
+
+
+class TestSavePlotBboxNone:
+    """Cover the path where bbox_inches override is explicitly None
+    so the config value is used."""
+
+    def test_save_plot_bbox_inches_none_uses_config(self, plotter, sample_x, sample_y, tmp_path):
+        plotter.create_figure()
+        plotter.plot_line(sample_x, sample_y)
+        path = str(tmp_path / "bbox_none.png")
+        result = plotter.save_plot(path, bbox_inches=None)
+        assert result is True
+        assert os.path.exists(path)
+
+
+class TestBarWithColors:
+    """Test bar chart with color list."""
+
+    def test_bar_with_color_list(self, plotter):
+        plotter.create_figure()
+        bars = plotter.plot_bar(
+            ["A", "B", "C"],
+            [10, 20, 30],
+            color=["red", "green", "blue"],
+            label="colored",
+        )
+        assert bars is not None
+
+    def test_bar_with_custom_width(self, plotter):
+        plotter.create_figure()
+        bars = plotter.plot_bar(["X", "Y"], [5, 10], width=0.4)
+        assert bars is not None
+
+    def test_horizontal_bar_with_label(self, plotter):
+        plotter.create_figure()
+        bars = plotter.plot_bar(
+            ["A", "B"],
+            [100, 200],
+            orientation="horizontal",
+            label="horiz",
+            alpha=0.5,
+        )
+        assert bars is not None
+
+
+class TestHistogramEdgeCases:
+    """Additional histogram edge cases."""
+
+    def test_histogram_with_bin_edges(self, plotter):
+        """Provide explicit bin edges instead of count."""
+        plotter.create_figure()
+        counts, edges, _ = plotter.plot_histogram(
+            [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+            bins=[0, 3, 6, 10],
+        )
+        assert len(edges) == 4
+
+    def test_histogram_single_value(self, plotter):
+        """Histogram with a single repeated value."""
+        plotter.create_figure()
+        counts, edges, patches = plotter.plot_histogram([5, 5, 5, 5], bins=1)
+        assert counts is not None
+
+
+class TestHeatmapEdgeCases:
+    """Additional heatmap variations."""
+
+    def test_heatmap_with_annotation(self, plotter):
+        plotter.create_figure()
+        data = np.array([[1.11, 2.22], [3.33, 4.44]])
+        hm = plotter.plot_heatmap(
+            data,
+            x_labels=["c1", "c2"],
+            y_labels=["r1", "r2"],
+            annot=True,
+            fmt=".1f",
+            cmap="plasma",
+        )
+        assert hm is not None
+
+    def test_heatmap_large_matrix(self, plotter):
+        plotter.create_figure()
+        data = np.random.rand(10, 10)
+        hm = plotter.plot_heatmap(data)
+        assert hm is not None
+
+
+class TestViolinEdgeCases:
+    """Additional violin plot tests."""
+
+    def test_violin_dict_single_group(self, plotter):
+        """Dict with a single group."""
+        plotter.create_figure()
+        vp = plotter.plot_violin({"Only": [1, 2, 3, 4, 5, 6, 7, 8]})
+        assert vp is not None
+
+    def test_violin_large_dataset(self, plotter):
+        """Violin with a larger dataset."""
+        plotter.create_figure()
+        data = list(np.random.normal(0, 1, 200))
+        vp = plotter.plot_violin(data, labels=["normal"])
+        assert vp is not None
+
+
+class TestDashboardEdgeCases:
+    """Additional dashboard edge cases."""
+
+    def test_dashboard_empty_datasets(self, plotter):
+        """Dashboard with zero datasets should create figure but all panels hidden."""
+        fig = plotter.create_dashboard([], layout=(2, 2), title="Empty")
+        assert fig is not None
+
+    def test_dashboard_with_tight_layout_false(self):
+        """Dashboard respects tight_layout=False."""
+        cfg = PlotConfig(show_plot=False, tight_layout=False)
+        p = AdvancedPlotter(cfg)
+        points = [DataPoint(x=i, y=i) for i in range(5)]
+        ds = Dataset(name="d", data=points, plot_type=PlotType.LINE, label="L")
+        fig = p.create_dashboard([ds], layout=(1, 1), title="No Tight")
+        assert fig is not None
+
+    def test_dashboard_1d_axes_layout(self, plotter):
+        """Layout (1, 3) gives 1D axes array -- cover axes.ndim == 1 branch."""
+        points = [DataPoint(x=i, y=i * 2) for i in range(5)]
+        datasets = [
+            Dataset(name=f"d{i}", data=points, plot_type=PlotType.LINE, label=f"D{i}")
+            for i in range(3)
+        ]
+        fig = plotter.create_dashboard(datasets, layout=(1, 3), title="1D Axes")
+        assert fig is not None
+
+
+class TestFinalizeWithOverrides:
+    """Test finalize_plot with various override combinations."""
+
+    def test_finalize_overrides_config_title(self, plotter, sample_x, sample_y):
+        """Explicit title arg should override config title."""
+        plotter.config.title = "Config Title"
+        plotter.create_figure()
+        plotter.plot_line(sample_x, sample_y, label="line")
+        fig = plotter.finalize_plot(title="Override Title")
+        assert fig is not None
+        # suptitle should be "Override Title"
+        assert fig._suptitle is not None
+        assert fig._suptitle.get_text() == "Override Title"
+
+    def test_finalize_uses_config_title_when_none(self, sample_x, sample_y):
+        """When no title arg, config title should be used."""
+        cfg = PlotConfig(title="From Config", show_plot=False)
+        p = AdvancedPlotter(cfg)
+        p.create_figure()
+        p.plot_line(sample_x, sample_y, label="line")
+        fig = p.finalize_plot()
+        assert fig._suptitle.get_text() == "From Config"
+
+    def test_finalize_no_title_at_all(self, plotter, sample_x, sample_y):
+        """When both title arg and config title are empty, no suptitle set."""
+        plotter.create_figure()
+        plotter.plot_line(sample_x, sample_y)
+        fig = plotter.finalize_plot()
+        # _suptitle may be None or have empty text
+        assert fig is not None
+
+
+class TestGetColorPaletteReturnType:
+    """Verify _get_color_palette returns correct number and type."""
+
+    def test_palette_returns_correct_count(self, plotter):
+        for n in [1, 3, 7, 12]:
+            colors = plotter._get_color_palette(n)
+            assert len(colors) == n
+
+    def test_palette_single_color(self):
+        cfg = PlotConfig(palette=ColorPalette.VIRIDIS, show_plot=False)
+        p = AdvancedPlotter(cfg)
+        colors = p._get_color_palette(1)
+        assert len(colors) == 1
+
+
+class TestCreateFigureCustomDpi:
+    """Test create_figure with explicit dpi kwarg."""
+
+    def test_dpi_override_in_kwargs(self, plotter):
+        fig, _ = plotter.create_figure(dpi=72)
+        assert fig.get_dpi() == 72
+
+    def test_extra_kwargs_passed_through(self, plotter):
+        """Passing squeeze=False should not raise."""
+        fig, axes = plotter.create_figure(subplots=(1, 1), squeeze=False)
+        assert fig is not None

@@ -20,19 +20,19 @@ class Vec3:
     z: float = 0.0
 
     def __add__(self, other: Vec3) -> Vec3:
-        """Execute   Add   operations natively."""
+        """add ."""
         return Vec3(self.x + other.x, self.y + other.y, self.z + other.z)
 
     def __sub__(self, other: Vec3) -> Vec3:
-        """Execute   Sub   operations natively."""
+        """sub ."""
         return Vec3(self.x - other.x, self.y - other.y, self.z - other.z)
 
     def __mul__(self, scalar: float) -> Vec3:
-        """Execute   Mul   operations natively."""
+        """mul ."""
         return Vec3(self.x * scalar, self.y * scalar, self.z * scalar)
 
     def __rmul__(self, scalar: float) -> Vec3:
-        """Execute   Rmul   operations natively."""
+        """rmul ."""
         return self.__mul__(scalar)
 
     def length(self) -> float:
@@ -59,11 +59,11 @@ class Vec3:
         )
 
     def to_tuple(self) -> tuple[float, float, float]:
-        """Execute To Tuple operations natively."""
+        """to Tuple ."""
         return (self.x, self.y, self.z)
 
     def to_dict(self) -> dict[str, float]:
-        """Execute To Dict operations natively."""
+        """Return a dictionary representation of this object."""
         return {"x": self.x, "y": self.y, "z": self.z}
 
 
@@ -235,7 +235,7 @@ class Transform3D:
         }
 
     def __repr__(self) -> str:
-        """Execute   Repr   operations natively."""
+        """repr ."""
         t = self.translation
         r = self.rotation
         return (

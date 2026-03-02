@@ -133,7 +133,7 @@ class ToolRegistry:
     """Registry for managing available tools."""
 
     def __init__(self):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.tools: dict[str, Tool] = {}
         self.categories: dict[str, list[str]] = {}
 
@@ -194,7 +194,7 @@ def tool(
 ):
     """Decorator to create a tool from a function."""
     def decorator(func: Callable) -> Callable:
-        """Execute Decorator operations natively."""
+        """decorator ."""
         tool_name = name or func.__name__
         tool_description = description or func.__doc__ or f"Tool: {tool_name}"
 
@@ -240,7 +240,7 @@ def tool(
 
         @wraps(func)
         def wrapper(*args, **kwargs):
-            """Execute Wrapper operations natively."""
+            """wrapper ."""
             return func(*args, **kwargs)
 
         wrapper._tool = tool_obj

@@ -43,7 +43,7 @@ class DependencyResolver:
     """
 
     def __init__(self, python_path: str = "python") -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._python = python_path
 
     def check_conflicts(self) -> list[Conflict]:

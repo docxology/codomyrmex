@@ -40,27 +40,27 @@ class LintResult:
 
     @property
     def error_count(self) -> int:
-        """Execute Error Count operations natively."""
+        """error Count ."""
         return sum(1 for i in self.issues if i.severity == LintSeverity.ERROR)
 
     @property
     def warning_count(self) -> int:
-        """Execute Warning Count operations natively."""
+        """warning Count ."""
         return sum(1 for i in self.issues if i.severity == LintSeverity.WARNING)
 
     @property
     def info_count(self) -> int:
-        """Execute Info Count operations natively."""
+        """info Count ."""
         return sum(1 for i in self.issues if i.severity == LintSeverity.INFO)
 
     @property
     def has_errors(self) -> bool:
-        """Execute Has Errors operations natively."""
+        """has Errors ."""
         return self.error_count > 0
 
     @property
     def total_issues(self) -> int:
-        """Execute Total Issues operations natively."""
+        """total Issues ."""
         return len(self.issues)
 
 
@@ -85,11 +85,11 @@ class LineLengthRule(LintRule):
     """Check for lines exceeding maximum length."""
 
     def __init__(self, max_length: int = 88):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.max_length = max_length
 
     def check(self, code: str, file_path: str = "") -> list[LintIssue]:
-        """Execute Check operations natively."""
+        """Check the condition and return the result."""
         issues = []
         for i, line in enumerate(code.split("\n"), 1):
             if len(line) > self.max_length:
@@ -107,7 +107,7 @@ class TrailingWhitespaceRule(LintRule):
     """Check for trailing whitespace."""
 
     def check(self, code: str, file_path: str = "") -> list[LintIssue]:
-        """Execute Check operations natively."""
+        """Check the condition and return the result."""
         issues = []
         for i, line in enumerate(code.split("\n"), 1):
             if line != line.rstrip():
@@ -125,7 +125,7 @@ class UnusedImportRule(LintRule):
     """Check for potentially unused imports (heuristic-based)."""
 
     def check(self, code: str, file_path: str = "") -> list[LintIssue]:
-        """Execute Check operations natively."""
+        """Check the condition and return the result."""
         issues = []
         lines = code.split("\n")
         import_names: list[tuple[str, int]] = []
@@ -167,7 +167,7 @@ class TodoCommentRule(LintRule):
     _PATTERN = re.compile(r"#\s*(TODO|FIXME|HACK|XXX)\b", re.IGNORECASE)
 
     def check(self, code: str, file_path: str = "") -> list[LintIssue]:
-        """Execute Check operations natively."""
+        """Check the condition and return the result."""
         issues = []
         for i, line in enumerate(code.split("\n"), 1):
             for match in self._PATTERN.finditer(line):
@@ -188,7 +188,7 @@ class Linter:
     """
 
     def __init__(self):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.rules: list[LintRule] = [
             TrailingWhitespaceRule(),
             TodoCommentRule(),

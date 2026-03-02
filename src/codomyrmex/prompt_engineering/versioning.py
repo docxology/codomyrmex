@@ -110,7 +110,7 @@ class VersionManager:
     """
 
     def __init__(self) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._versions: dict[str, list[PromptVersion]] = {}
 
     def create_version(

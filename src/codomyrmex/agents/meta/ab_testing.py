@@ -37,11 +37,11 @@ class ABTestResult:
 
     @property
     def total_trials(self) -> int:
-        """Execute Total Trials operations natively."""
+        """total Trials ."""
         return self.wins_a + self.wins_b + self.ties
 
     def to_dict(self) -> dict[str, Any]:
-        """Execute To Dict operations natively."""
+        """Return a dictionary representation of this object."""
         return {
             "strategy_a": self.strategy_a,
             "strategy_b": self.strategy_b,

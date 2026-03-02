@@ -101,7 +101,7 @@ class LLMProvider(ABC):
     provider_type: ProviderType
 
     def __init__(self, config: ProviderConfig):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.config = config
         self._client = None
 
@@ -175,7 +175,7 @@ class OpenAIProvider(LLMProvider):
     provider_type = ProviderType.OPENAI
 
     def __init__(self, config: ProviderConfig):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         super().__init__(config)
         self._init_client()
 
@@ -201,7 +201,7 @@ class OpenAIProvider(LLMProvider):
         max_tokens: int | None = None,
         **kwargs
     ) -> CompletionResponse:
-        """Execute Complete operations natively."""
+        """complete ."""
         if not self._client:
             raise RuntimeError("OpenAI client not initialized. Install openai package.")
 
@@ -236,7 +236,7 @@ class OpenAIProvider(LLMProvider):
         max_tokens: int | None = None,
         **kwargs
     ) -> Iterator[str]:
-        """Execute Complete Stream operations natively."""
+        """complete Stream ."""
         if not self._client:
             raise RuntimeError("OpenAI client not initialized.")
 
@@ -292,14 +292,14 @@ class OpenAIProvider(LLMProvider):
             raise RuntimeError("OpenAI async client not available.")
 
     def list_models(self) -> list[str]:
-        """Execute List Models operations natively."""
+        """list Models ."""
         if not self._client:
             return []
         models = self._client.models.list()
         return [m.id for m in models.data if "gpt" in m.id.lower()]
 
     def _default_model(self) -> str:
-        """Execute  Default Model operations natively."""
+        """default Model ."""
         return "gpt-4o"
 
 
@@ -309,12 +309,12 @@ class AnthropicProvider(LLMProvider):
     provider_type = ProviderType.ANTHROPIC
 
     def __init__(self, config: ProviderConfig):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         super().__init__(config)
         self._init_client()
 
     def _init_client(self):
-        """Execute  Init Client operations natively."""
+        """init Client ."""
         try:
             from anthropic import Anthropic
             self._client = Anthropic(api_key=self.config.api_key)
@@ -329,7 +329,7 @@ class AnthropicProvider(LLMProvider):
         max_tokens: int | None = None,
         **kwargs
     ) -> CompletionResponse:
-        """Execute Complete operations natively."""
+        """complete ."""
         if not self._client:
             raise RuntimeError("Anthropic client not initialized.")
 
@@ -372,7 +372,7 @@ class AnthropicProvider(LLMProvider):
         max_tokens: int | None = None,
         **kwargs
     ) -> Iterator[str]:
-        """Execute Complete Stream operations natively."""
+        """complete Stream ."""
         if not self._client:
             raise RuntimeError("Anthropic client not initialized.")
 
@@ -440,7 +440,7 @@ class AnthropicProvider(LLMProvider):
             raise RuntimeError("Anthropic async client not available.")
 
     def list_models(self) -> list[str]:
-        """Execute List Models operations natively."""
+        """list Models ."""
         return [
             "claude-3-5-sonnet-20241022",
             "claude-3-5-haiku-20241022",
@@ -450,7 +450,7 @@ class AnthropicProvider(LLMProvider):
         ]
 
     def _default_model(self) -> str:
-        """Execute  Default Model operations natively."""
+        """default Model ."""
         return "claude-3-5-sonnet-20241022"
 
 
@@ -501,7 +501,7 @@ class OpenRouterProvider(LLMProvider):
     ]
 
     def __init__(self, config: ProviderConfig):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         super().__init__(config)
         # Set OpenRouter base URL if not specified
         if not self.config.base_url:
@@ -535,7 +535,7 @@ class OpenRouterProvider(LLMProvider):
         max_tokens: int | None = None,
         **kwargs
     ) -> CompletionResponse:
-        """Execute Complete operations natively."""
+        """complete ."""
         if not self._client:
             raise RuntimeError("OpenRouter client not initialized. Install openai package.")
 
@@ -570,7 +570,7 @@ class OpenRouterProvider(LLMProvider):
         max_tokens: int | None = None,
         **kwargs
     ) -> Iterator[str]:
-        """Execute Complete Stream operations natively."""
+        """complete Stream ."""
         if not self._client:
             raise RuntimeError("OpenRouter client not initialized.")
 
@@ -634,7 +634,7 @@ class OpenRouterProvider(LLMProvider):
         return self.FREE_MODELS
 
     def _default_model(self) -> str:
-        """Execute  Default Model operations natively."""
+        """default Model ."""
         return "openrouter/free"
 
 

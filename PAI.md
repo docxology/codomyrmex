@@ -9,7 +9,7 @@ PAI (Personal AI Infrastructure) is the system at `~/.claude/skills/PAI/`. It is
 | Component | Count | Location |
 |-----------|-------|----------|
 | Algorithm | v1.5.0 | `~/.claude/skills/PAI/SKILL.md` (CORE) |
-| Skills | 55 | `~/.claude/skills/` |
+| Skills | 76 | `~/.claude/skills/` |
 | Hooks | 20 | `~/.claude/hooks/` |
 | Tools | 60 | `~/.claude/skills/PAI/Tools/` |
 | Agents | 13 + subagent types | `~/.claude/skills/PAI/PAIAGENTSYSTEM.md` |
@@ -36,7 +36,7 @@ The MCP server is the operational bridge between PAI and codomyrmex:
 graph LR
     subgraph PAI ["PAI System (~/.claude/)"]
         Algo["Algorithm v1.5.0"]
-        Skills["55 Skills"]
+        Skills["76 Skills"]
         Agents["Named Agents"]
     end
 
@@ -113,7 +113,7 @@ Each phase of the PAI Algorithm maps to specific codomyrmex modules:
 ~/.claude/                          # PRIVATE (per-user, never committed)
 ├── skills/PAI/                     # Algorithm, skills, tools, hooks
 │   ├── SKILL.md                    # CORE (the Algorithm)
-│   ├── Skills/                     # 55 skills
+│   ├── Skills/                     # 76 skills
 │   ├── Tools/                      # 60 tools
 │   ├── USER/                       # Personal data
 │   └── MEMORY/                     # WORK, STATE, LEARNING

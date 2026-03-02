@@ -1,49 +1,45 @@
-# AI Agent Guidelines - Webhooks
+# AI Agent Guidelines — api/webhooks
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
-
-**Module**: `codomyrmex.api.webhooks`  
-**Status**: Active
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
 
-Webhook dispatch and receipt management for event-driven APIs
+Provides webhook dispatch and receipt management for event-driven APIs, including endpoint registration, HMAC payload signing, event dispatching with retry logic, and pluggable transport layers.
 
-## Agent Instructions
+## Key Components
 
-When working with this submodule:
+| Component | File | Role |
+|-----------|------|------|
+| `WebhookEventType` | `models.py` | Enum: `CREATED`, `UPDATED`, `DELETED`, `CUSTOM` |
+| `WebhookStatus` | `models.py` | Enum: `PENDING`, `DELIVERED`, `FAILED`, `RETRYING` |
+| `SignatureAlgorithm` | `models.py` | Enum: `HMAC_SHA256`, `HMAC_SHA512` |
+| `WebhookEvent` | `models.py` | Dataclass with `event_type`, `payload`, auto-generated `event_id` (UUID4), `timestamp`, `source`; serializes via `to_dict()` / `to_json()` |
+| `WebhookConfig` | `models.py` | Dataclass with `url`, `secret`, `events`, `max_retries`, `retry_delay`, `timeout`, `signature_algorithm`, `active` |
+| `DeliveryResult` | `models.py` | Dataclass recording delivery outcome: `webhook_id`, `event_id`, `status`, `status_code`, `attempt`, `error` |
+| `WebhookTransport` | `transport.py` | ABC requiring `send(url, payload, headers, timeout) -> (status_code, body)` |
+| `HTTPWebhookTransport` | `transport.py` | Callback-based transport delegating to a user-supplied callable (for testing/in-process dispatch) |
+| `WebhookSignature` | `signature.py` | Static utility: `sign(payload, secret, algorithm)` and `verify(payload, secret, signature, algorithm)` using HMAC with constant-time comparison |
+| `WebhookRegistry` | `registry.py` | In-memory registry: `register`, `unregister`, `get`, `list_all`, `list_for_event` (filters by active + subscribed event type) |
+| `WebhookDispatcher` | `dispatcher.py` | Dispatches events to matching webhooks; `dispatch` (single attempt) and `dispatch_with_retry` (linear backoff) |
+| `create_webhook_registry` | `factory.py` | Factory returning empty `WebhookRegistry` |
+| `create_webhook_dispatcher` | `factory.py` | Factory returning `WebhookDispatcher` with optional defaults (no-op transport if none provided) |
 
-### Key Patterns
+## Operating Contracts
 
-1. **Import Convention**:
-   ```python
-   from codomyrmex.api.webhooks import <specific_import>
-   ```
+- Register webhooks via `registry.register(webhook_id, config)` before dispatching events.
+- `dispatcher.dispatch(event)` sends to all active webhooks subscribed to the event type.
+- `dispatcher.dispatch_with_retry(event)` retries failed deliveries up to `config.max_retries` with `config.retry_delay` linear backoff.
+- All payloads are HMAC-signed; `WebhookSignature.verify` uses `hmac.compare_digest` (constant-time) to prevent timing attacks.
+- `list_for_event` returns webhooks that are active AND either subscribe to the specific event type or have an empty events list (wildcard).
 
-2. **Error Handling**: Always handle exceptions gracefully
-3. **Configuration**: Check for required environment variables
+## Integration Points
 
-### Common Operations
+- **Parent**: `api` module re-exports webhook components via `api/webhooks/__init__.py`.
+- **Transport**: Implement `WebhookTransport` ABC for production HTTP delivery (e.g., `httpx`, `aiohttp`).
+- **Events module**: Can be paired with `codomyrmex.events` for internal event bus bridging.
 
-- Operation 1: Description
-- Operation 2: Description
+## Navigation
 
-### Integration Points
-
-- Integrates with: `api` (parent module)
-- Dependencies: Listed in `__init__.py`
-
-## File Reference
-
-| File | Purpose |
-|------|---------|
-| `__init__.py` | Module exports and initialization |
-| `README.md` | User documentation |
-| `SPEC.md` | Technical specification |
-
-## Troubleshooting
-
-Common issues and solutions:
-
-1. **Issue**: Description
-   **Solution**: Resolution steps
+- **Parent**: [api/README.md](../README.md)
+- **Sibling**: [SPEC.md](SPEC.md) | [README.md](README.md)
+- **Root**: [../../../../README.md](../../../../README.md)

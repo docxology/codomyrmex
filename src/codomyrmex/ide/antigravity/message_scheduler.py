@@ -95,7 +95,7 @@ class MessageScheduler:
         *,
         identity: str = "scheduler",
     ) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._relay = relay
         self._config = config or SchedulerConfig()
         self._identity = identity

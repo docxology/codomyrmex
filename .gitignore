@@ -242,3 +242,4 @@ test_fails.log
 coverage.txt
 .benchmarks/
 fix_*.py
+/.claude

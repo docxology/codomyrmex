@@ -69,11 +69,11 @@ def record_exception(span: Span, exception: Exception, escaped: bool = True) -> 
 def traced(name: str | None = None, attributes: dict[str, Any] | None = None):
     """Decorator to automatically wrap a function in a span."""
     def decorator(func):
-        """Execute Decorator operations natively."""
+        """decorator ."""
         span_name = name or func.__name__
         @wraps(func)
         def wrapper(*args, **kwargs):
-            """Execute Wrapper operations natively."""
+            """wrapper ."""
             tracer = TraceContext.get_tracer()
             with tracer.start_as_current_span(span_name, attributes=attributes) as span:
                 try:

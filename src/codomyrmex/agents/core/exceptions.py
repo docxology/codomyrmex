@@ -15,7 +15,7 @@ class AgentTimeoutError(AgentError):
     """Raised when an agent operation times out."""
 
     def __init__(self, message: str = "Agent operation timed out", timeout: float | None = None, **kwargs):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         super().__init__(message, **kwargs)
         if timeout is not None:
             self.context["timeout"] = timeout
@@ -25,7 +25,7 @@ class AgentConfigurationError(AgentError):
     """Raised when agent configuration is invalid or missing."""
 
     def __init__(self, message: str = "Agent configuration error", config_key: str | None = None, **kwargs):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         super().__init__(message, **kwargs)
         if config_key:
             self.context["config_key"] = config_key
@@ -35,7 +35,7 @@ class JulesError(AgentError):
     """Raised when Jules CLI operations fail."""
 
     def __init__(self, message: str = "Jules operation failed", command: str | None = None, exit_code: int | None = None, **kwargs):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         super().__init__(message, **kwargs)
         if command:
             self.context["command"] = command
@@ -97,7 +97,7 @@ class CodexError(AgentError):
     """Raised when OpenAI Codex API operations fail."""
 
     def __init__(self, message: str = "Codex operation failed", model: str | None = None, **kwargs):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         super().__init__(message, **kwargs)
         if model:
             self.context["model"] = model
@@ -107,7 +107,7 @@ class OpenCodeError(AgentError):
     """Raised when OpenCode CLI operations fail."""
 
     def __init__(self, message: str = "OpenCode operation failed", command: str | None = None, exit_code: int | None = None, **kwargs):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         super().__init__(message, **kwargs)
         if command:
             self.context["command"] = command
@@ -119,7 +119,7 @@ class GeminiError(AgentError):
     """Raised when Gemini CLI operations fail."""
 
     def __init__(self, message: str = "Gemini operation failed", command: str | None = None, exit_code: int | None = None, **kwargs):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         super().__init__(message, **kwargs)
         if command:
             self.context["command"] = command
@@ -131,7 +131,7 @@ class MistralVibeError(AgentError):
     """Raised when Mistral Vibe CLI operations fail."""
 
     def __init__(self, message: str = "Mistral Vibe operation failed", command: str | None = None, exit_code: int | None = None, **kwargs):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         super().__init__(message, **kwargs)
         if command:
             self.context["command"] = command
@@ -143,7 +143,7 @@ class EveryCodeError(AgentError):
     """Raised when Every Code CLI operations fail."""
 
     def __init__(self, message: str = "Every Code operation failed", command: str | None = None, exit_code: int | None = None, **kwargs):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         super().__init__(message, **kwargs)
         if command:
             self.context["command"] = command
@@ -155,7 +155,7 @@ class OpenClawError(AgentError):
     """Raised when OpenClaw CLI operations fail."""
 
     def __init__(self, message: str = "OpenClaw operation failed", command: str | None = None, exit_code: int | None = None, **kwargs):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         super().__init__(message, **kwargs)
         if command:
             self.context["command"] = command
@@ -169,7 +169,7 @@ class SessionError(AgentError):
     """Raised when agent session operations fail."""
 
     def __init__(self, message: str = "Session operation failed", session_id: str | None = None, **kwargs):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         super().__init__(message, **kwargs)
         if session_id:
             self.context["session_id"] = session_id

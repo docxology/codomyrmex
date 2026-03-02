@@ -1,27 +1,36 @@
-# Codomyrmex Agents — src/codomyrmex/documents/models
-
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+# documents/models — Agent Coordination
 
 ## Purpose
 
-Documentation files and guides.
+Defines the data models that represent documents and their metadata throughout the document processing pipeline. All document operations in `documents.core` and `documents.search` depend on these models.
 
-## Active Components
+## Key Components
 
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SPEC.md` – Project file
-- `__init__.py` – Project file
-- `document.py` – Project file
-- `metadata.py` – Project file
+| Component | Role |
+|-----------|------|
+| `DocumentType` | Enum classifying documents: `TEXT`, `MARKUP`, `STRUCTURED`, `BINARY`, `CODE` |
+| `DocumentFormat` | Enum of 13 supported formats: `MARKDOWN`, `HTML`, `JSON`, `YAML`, `XML`, `CSV`, `PDF`, `TEXT`, `RST`, `TOML`, `INI`, `PYTHON`, `JS` |
+| `_FORMAT_TYPE_MAP` | Dict mapping each `DocumentFormat` to its `DocumentType` category |
+| `Document` | Primary dataclass holding content, format, metadata, timestamps, and an auto-generated UUID |
+| `MetadataField` | Dataclass for a single metadata entry: `name`, `value`, `data_type`, `source` |
+| `DocumentMetadata` | Dataclass for structured metadata: title, author, version, tags, custom fields |
 
 ## Operating Contracts
 
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
+- `Document` fields: `content` (str or bytes), `format` (DocumentFormat), `file_path` (optional str), `encoding` (default `"utf-8"`), `metadata` (dict), `id` (auto UUID4), `document_type` (derived from format via `_FORMAT_TYPE_MAP`), `created_at`/`modified_at` (datetime).
+- `Document.get_content_as_string()` decodes bytes content using the document's encoding.
+- `Document.to_dict()` serializes all fields to a plain dict for JSON export.
+- `DocumentMetadata.to_dict()` and `from_dict()` support round-trip serialization.
+- `DocumentMetadata.copy()` returns a deep copy of the metadata instance.
 
-## Navigation Links
+## Integration Points
 
-- **📁 Parent Directory**: [documents](../README.md) - Parent directory documentation
-- **🏠 Project Root**: ../../../../README.md - Main project documentation
+- **Core**: `DocumentReader`, `DocumentWriter`, `DocumentParser`, `DocumentValidator` all accept/return `Document` instances.
+- **Search**: `InMemoryIndex` stores and retrieves `Document` objects by ID.
+- **Serialization**: `to_dict()` methods enable JSON persistence and MCP tool responses.
+
+## Navigation
+
+- **Parent**: [documents README](../README.md)
+- **Siblings**: [core](../core/AGENTS.md) | [search](../search/AGENTS.md)
+- **Spec**: [SPEC.md](SPEC.md)

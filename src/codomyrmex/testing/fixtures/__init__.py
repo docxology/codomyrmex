@@ -47,7 +47,7 @@ class FixtureInstance:
     created_at: datetime = field(default_factory=datetime.now)
 
     def __repr__(self) -> str:
-        """Execute   Repr   operations natively."""
+        """repr ."""
         return f"Fixture({self.name})"
 
 
@@ -69,7 +69,7 @@ class FixtureManager:
     """
 
     def __init__(self):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._definitions: dict[str, FixtureDefinition] = {}
         self._instances: dict[str, FixtureInstance] = {}
         self._lock = threading.Lock()
@@ -168,19 +168,19 @@ class DataFixture:
     """
 
     def __init__(self, data: list[dict[str, Any]]):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self._data = data
 
     def __getitem__(self, index: int) -> dict[str, Any]:
-        """Execute   Getitem   operations natively."""
+        """getitem ."""
         return self._data[index]
 
     def __len__(self) -> int:
-        """Execute   Len   operations natively."""
+        """len ."""
         return len(self._data)
 
     def __iter__(self):
-        """Execute   Iter   operations natively."""
+        """iter ."""
         return iter(self._data)
 
     def filter(self, **kwargs) -> list[dict[str, Any]]:
@@ -212,7 +212,7 @@ class JSONFixtureLoader:
     """
 
     def __init__(self, base_path: str):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.base_path = Path(base_path)
         self._cache: dict[str, DataFixture] = {}
 
@@ -251,7 +251,7 @@ class FixtureBuilder:
     """
 
     def __init__(self, name: str):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.name = name
         self._data: dict[str, Any] = {}
 

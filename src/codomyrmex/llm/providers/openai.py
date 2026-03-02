@@ -10,7 +10,7 @@ class OpenAIProvider(LLMProvider):
     provider_type = ProviderType.OPENAI
 
     def __init__(self, config: ProviderConfig):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         super().__init__(config)
         self._init_client()
 
@@ -36,7 +36,7 @@ class OpenAIProvider(LLMProvider):
         max_tokens: int | None = None,
         **kwargs
     ) -> CompletionResponse:
-        """Execute Complete operations natively."""
+        """complete ."""
         if not self._client:
             raise RuntimeError("OpenAI client not initialized. Install openai package.")
 
@@ -71,7 +71,7 @@ class OpenAIProvider(LLMProvider):
         max_tokens: int | None = None,
         **kwargs
     ) -> Iterator[str]:
-        """Execute Complete Stream operations natively."""
+        """complete Stream ."""
         if not self._client:
             raise RuntimeError("OpenAI client not initialized.")
 
@@ -127,14 +127,14 @@ class OpenAIProvider(LLMProvider):
             raise RuntimeError("OpenAI async client not available.") from e
 
     def list_models(self) -> list[str]:
-        """Execute List Models operations natively."""
+        """list Models ."""
         if not self._client:
             return []
         models = self._client.models.list()
         return [m.id for m in models.data if "gpt" in m.id.lower()]
 
     def _default_model(self) -> str:
-        """Execute  Default Model operations natively."""
+        """default Model ."""
         return "gpt-4o"
 
 

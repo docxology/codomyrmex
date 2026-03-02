@@ -69,7 +69,7 @@ class AutonomousAgent:
         model: str | None = None,
         scheduler_config: object | None = None,
     ):
-        """Execute   Init   operations natively."""
+        """Initialize this instance."""
         self.identity = identity
         self.persona = persona
         self.channel = channel
