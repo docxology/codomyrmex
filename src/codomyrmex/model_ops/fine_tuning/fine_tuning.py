@@ -1,8 +1,27 @@
 """Fine-tuning orchestration."""
 
+from dataclasses import dataclass, field
+from typing import Any
+
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
-from .datasets import Dataset
+
+@dataclass
+class Dataset:
+    """Represents a fine-tuning dataset."""
+    name: str
+    path: str
+    format: str = "jsonl"
+    metadata: dict[str, Any] = field(default_factory=dict)
+
+    def to_dict(self) -> dict[str, Any]:
+        """Return a dictionary representation of this dataset."""
+        return {
+            "name": self.name,
+            "path": self.path,
+            "format": self.format,
+            "metadata": self.metadata,
+        }
 
 logger = get_logger(__name__)
 

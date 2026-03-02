@@ -4,9 +4,17 @@ This module provides 3D modeling, rendering, and AR/VR/XR capabilities
 for the Codomyrmex platform, enabling spatial computing and visualization.
 """
 
-from .ar_vr_support import *
-from .engine_3d import *
-from .rendering_pipeline import *
+from .ar_vr_support import ARSession, VRRenderer, XRInterface
+from .engine_3d import (
+    Camera3D,
+    Light3D,
+    Object3D,
+    PhysicsEngine,
+    Quaternion,
+    Scene3D,
+    Vector3D,
+)
+from .rendering_pipeline import RenderPipeline, ShaderManager, TextureManager
 
 __version__ = "0.1.0"
 __all__ = [
@@ -15,7 +23,9 @@ __all__ = [
     "Object3D",
     "Camera3D",
     "Light3D",
-    "Material3D",
+    "PhysicsEngine",
+    "Vector3D",
+    "Quaternion",
     # AR/VR/XR Support
     "ARSession",
     "VRRenderer",
@@ -24,8 +34,4 @@ __all__ = [
     "RenderPipeline",
     "ShaderManager",
     "TextureManager",
-    # Utilities
-    "MeshLoader",
-    "AnimationController",
-    "PhysicsEngine",
 ]

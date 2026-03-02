@@ -186,12 +186,32 @@ class AntigravityClient(IDEClient):
         }
 
     def get_active_file(self) -> str | None:
-        """Get the currently active file in the IDE.
+        """Get the currently active file in Antigravity.
+
+        Uses artifact modification times and workspace heuristics.
 
         Returns:
             File path or None if no file is active.
         """
-        # In a real integration, this would query the IDE state
+        # Check conversation artifacts first
+        if self._context and self._context.artifacts:
+            most_recent = max(self._context.artifacts, key=lambda a: a.modified)
+            if most_recent.path and Path(most_recent.path).exists():
+                return most_recent.path
+
+        # Fallback: most recently modified source file in cwd
+        try:
+            cwd = Path.cwd()
+            candidates = [
+                f for f in cwd.rglob("*")
+                if f.is_file()
+                and not any(part.startswith(".") for part in f.parts)
+                and f.suffix in {".py", ".md", ".txt", ".yaml", ".yml", ".toml", ".json"}
+            ]
+            if candidates:
+                return str(max(candidates, key=lambda p: p.stat().st_mtime))
+        except OSError as e:
+            logger.debug("Failed to scan Antigravity workspace for files: %s", e)
         return None
 
     def open_file(self, path: str) -> bool:
