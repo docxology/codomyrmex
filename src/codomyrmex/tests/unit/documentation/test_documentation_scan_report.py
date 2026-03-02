@@ -577,7 +577,7 @@ class TestPhase6Verification:
         scanner = DocumentationScanner(tmp_path)
         results = scanner._run_automated_checks()
         # All tools should report 'Tool not found'
-        for tool_name, tool_result in results.items():
+        for _tool_name, tool_result in results.items():
             assert tool_result.get("error") == "Tool not found"
 
     def test_generate_manual_review_checklist(self, tmp_path: Path):

@@ -78,7 +78,7 @@ class FPFParser:
         in_toc = False
         current_part = None
 
-        for i, line in enumerate(lines):
+        for _i, line in enumerate(lines):
             # Detect start of TOC
             if "# Table of Content" in line or "Table of Content" in line:
                 in_toc = True

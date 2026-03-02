@@ -11,13 +11,12 @@ Example:
 """
 import json
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Optional
 
 from codomyrmex.ide import CommandExecutionError, ConnectionError, IDEClient, IDEError
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 logger = get_logger(__name__)
-
 
 class VSCodeClient(IDEClient):
     """Client for interacting with Visual Studio Code.
@@ -237,6 +236,5 @@ class VSCodeClient(IDEClient):
         if not self._connected:
             raise IDEError("Not connected to VS Code")
         return True
-
 
 __all__ = ["VSCodeClient"]

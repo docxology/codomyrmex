@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from datetime import datetime, UTC
+from datetime import UTC, datetime
 from typing import Any
 
 from pydantic import BaseModel
@@ -164,7 +164,6 @@ def _sdk_message_to_email_message(msg: Any, inbox_id: str | None = None) -> Emai
     elif isinstance(date_raw, (int, float)):
         date = datetime.fromtimestamp(date_raw)
     else:
-        from datetime import timezone as _tz
         date = datetime.now(UTC)
 
     return EmailMessage(

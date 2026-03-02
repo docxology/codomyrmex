@@ -500,7 +500,7 @@ def example_autonomous_vehicle_fleet():
     )
 
     # Connect waypoints to create navigation network
-    for i, waypoint in enumerate(waypoints):
+    for _i, waypoint in enumerate(waypoints):
         # Connect to nearby waypoints
         for other in waypoints:
             if waypoint.id != other.id and waypoint.distance_to(other) < 35:

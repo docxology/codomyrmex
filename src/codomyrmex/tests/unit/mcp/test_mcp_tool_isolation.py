@@ -145,7 +145,7 @@ class TestGlobalStateIsolation:
         reg = MCPToolRegistry()
         reg.register("mutator", schema={}, handler=_mutates_global)
 
-        for i in range(5):
+        for _i in range(5):
             r = reg.execute(MCPToolCall(tool_name="mutator", arguments={"key": "shared"}))
 
         assert r.data["result"]["count"] == 5

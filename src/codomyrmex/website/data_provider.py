@@ -413,7 +413,8 @@ class DataProvider(HealthProviderMixin, PAIProviderMixin):
 
         # Files first, then dirs
         for item in sorted(path.iterdir()):
-            if item.name.startswith("."): continue
+            if item.name.startswith("."):
+                continue
 
             if item.is_file() and item.suffix == ".md":
                 node["children"].append({

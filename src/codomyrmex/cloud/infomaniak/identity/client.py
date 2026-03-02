@@ -7,8 +7,9 @@ via the OpenStack Keystone API.
 
 from typing import Any
 
-from ..base import InfomaniakOpenStackBase
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
+
+from ..base import InfomaniakOpenStackBase
 
 logger = get_logger(__name__)
 

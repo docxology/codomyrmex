@@ -1,6 +1,6 @@
 # Personal AI Infrastructure — Tests Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
@@ -41,6 +41,12 @@ print(f"Coverage: {coverage.percent}%")
 | `TestRunner` | Execute tests |
 | `CoverageReporter` | Track coverage |
 | `TestGenerator` | AI-generated tests |
+
+## MCP Tools
+
+This module does not expose MCP tools directly. Access its capabilities via:
+- Direct Python import: `from codomyrmex.tests import ...`
+- CLI: `codomyrmex tests <command>`
 
 ## Navigation
 

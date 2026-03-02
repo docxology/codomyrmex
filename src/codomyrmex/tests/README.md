@@ -1,8 +1,18 @@
 # Tests
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 Comprehensive test suite for the Codomyrmex ecosystem.
+
+## PAI Integration
+
+| Algorithm Phase | Role | Tools Used |
+|----------------|------|-----------|
+| **VERIFY** | Execute full test suite and validate coverage gate | Direct Python import |
+| **OBSERVE** | Monitor test health and analyze results by marker | Direct Python import |
+| **BUILD** | Maintain test infrastructure and shared fixtures | Direct Python import |
+
+PAI agents access this module via direct Python import through the MCP bridge for test suite execution and coverage validation.
 
 ## Directory Structure
 

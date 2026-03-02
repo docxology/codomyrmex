@@ -1,6 +1,6 @@
 # email -- Agent Capabilities
 
-**Version**: v1.0.1 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
 
@@ -96,6 +96,23 @@ EmailError (base)
 | `logistics` | Consumes email module for notification dispatching |
 | `events` | Webhook registration enables event-driven email processing |
 | `model_context_protocol` | `@mcp_tool` decorators in `mcp_tools.py` enable auto-discovery |
+
+## PAI Agent Role Access Matrix
+
+| PAI Agent | Access Level | Primary Capabilities | Trust Level |
+|-----------|-------------|---------------------|-------------|
+| **Engineer** | Full | `agentmail_send_message`, `agentmail_list_messages`, `agentmail_create_inbox`, `gmail_send_message`, `gmail_list_messages`; full inbox management | TRUSTED |
+| **Architect** | Read + Design | `agentmail_list_inboxes`, `agentmail_list_messages`; inbox architecture review | OBSERVED |
+| **QATester** | Validation | `agentmail_list_messages`, `agentmail_get_message`; message delivery validation | OBSERVED |
+
+### Engineer Agent
+**Use Cases**: Agent-to-agent communication via AgentMail, automated email workflows, BUILD phase notifications, Gmail integration for user-facing emails
+
+### Architect Agent
+**Use Cases**: Inbox structure review, thread organization design, email routing architecture
+
+### QATester Agent
+**Use Cases**: Validate message delivery, verify inbox creation, test webhook registration
 
 ## Navigation
 

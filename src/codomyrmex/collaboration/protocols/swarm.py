@@ -1,4 +1,5 @@
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
+
 """Swarm coordination implementation."""
 
 logger = get_logger(__name__)

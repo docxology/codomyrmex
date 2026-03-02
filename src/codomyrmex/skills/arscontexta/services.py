@@ -33,7 +33,7 @@ except ImportError:
     SkillCategory = None  # type: ignore[assignment,misc]
     SkillMetadata = None  # type: ignore[assignment,misc]
 
-from .core import ArsContextaManager, _DEFAULT_PRIMITIVES, _DIMENSION_KEYWORDS
+from .core import _DEFAULT_PRIMITIVES, _DIMENSION_KEYWORDS, ArsContextaManager
 from .models import VaultSpace
 from .types import (
     ConfigDimension,

@@ -1,6 +1,6 @@
 # Compression Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 Data compression utilities with gzip, zlib, ZIP, and Zstandard support.
 
@@ -15,6 +15,16 @@ Or for development:
 ```bash
 uv sync
 ```
+
+## PAI Integration
+
+| Algorithm Phase | Role | Tools Used |
+|----------------|------|-----------|
+| **BUILD** | Compress build artifacts and archive outputs | Direct Python import |
+| **EXECUTE** | Compress and decompress data during pipeline runs | Direct Python import |
+| **VERIFY** | Validate compression ratios and archive integrity | Direct Python import |
+
+PAI agents access this module via direct Python import through the MCP bridge. The Engineer agent uses it during BUILD phase to compress artifacts, and during EXECUTE phase to handle data compression in processing pipelines.
 
 ## Key Exports
 

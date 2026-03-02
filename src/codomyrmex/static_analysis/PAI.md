@@ -1,6 +1,6 @@
 # Personal AI Infrastructure — Static Analysis Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
@@ -68,6 +68,12 @@ imports = extract_imports_ast("src/codomyrmex/agents/__init__.py")
 ## Architecture Role
 
 **Core Layer** — Foundational code intelligence consumed by `security/`, `maintenance/`, `coding/`, and the MCP `analyze_python_file` tool.
+
+## MCP Tools
+
+This module does not expose MCP tools directly. Access its capabilities via:
+- Direct Python import: `from codomyrmex.static_analysis import ...`
+- CLI: `codomyrmex static_analysis <command>`
 
 ## Navigation
 

@@ -14,7 +14,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional, Set
+from typing import Any, Optional
 
 
 class TaskState(Enum):
@@ -26,7 +26,6 @@ class TaskState(Enum):
     FAILED = "failed"
     CANCELLED = "cancelled"
     SKIPPED = "skipped"
-
 
 @dataclass
 class TaskDefinition:
@@ -40,7 +39,6 @@ class TaskDefinition:
     retry_delay: float = 1.0
     condition: Callable[[dict], bool] | None = None
     metadata: dict[str, Any] = field(default_factory=dict)
-
 
 @dataclass
 class TaskResult:
@@ -58,7 +56,6 @@ class TaskResult:
         if self.start_time and self.end_time:
             return (self.end_time - self.start_time).total_seconds() * 1000
         return 0.0
-
 
 @dataclass
 class WorkflowDefinition:
@@ -128,7 +125,6 @@ class WorkflowDefinition:
 
         return levels
 
-
 @dataclass
 class WorkflowResult:
     """Result of workflow execution."""
@@ -147,7 +143,6 @@ class WorkflowResult:
 
     def get_task_result(self, task_id: str) -> TaskResult | None:
         return self.task_results.get(task_id)
-
 
 class ExecutionEngine(ABC):
     """Abstract base class for workflow execution engines."""
@@ -169,7 +164,6 @@ class ExecutionEngine(ABC):
     ) -> WorkflowResult:
         """Execute a workflow asynchronously."""
         pass
-
 
 class SequentialEngine(ExecutionEngine):
     """Executes tasks sequentially in dependency order."""
@@ -288,7 +282,6 @@ class SequentialEngine(ExecutionEngine):
             workflow,
             initial_context,
         )
-
 
 class ParallelEngine(ExecutionEngine):
     """Executes independent tasks in parallel."""
@@ -426,7 +419,6 @@ class ParallelEngine(ExecutionEngine):
         loop = asyncio.get_event_loop()
         return await loop.run_in_executor(None, self.execute, workflow, initial_context)
 
-
 def create_engine(engine_type: str = "parallel", **kwargs) -> ExecutionEngine:
     """Factory function for execution engines."""
     engines = {
@@ -439,7 +431,6 @@ def create_engine(engine_type: str = "parallel", **kwargs) -> ExecutionEngine:
         raise ValueError(f"Unknown engine type: {engine_type}")
 
     return engine_class(**kwargs)
-
 
 __all__ = [
     "TaskState",

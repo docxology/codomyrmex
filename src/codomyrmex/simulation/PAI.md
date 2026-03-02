@@ -1,6 +1,6 @@
 # Personal AI Infrastructure -- Simulation Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
@@ -55,6 +55,12 @@ results = sim.get_results()
 ## Architecture Role
 
 **Core Layer** -- Part of the codomyrmex layered architecture. Depends on `logging_monitoring` (Foundation Layer) for structured logging.
+
+## MCP Tools
+
+This module does not expose MCP tools directly. Access its capabilities via:
+- Direct Python import: `from codomyrmex.simulation import ...`
+- CLI: `codomyrmex simulation <command>`
 
 ## Navigation
 

@@ -2,6 +2,16 @@
 
 Repository analysis module for Codomyrmex. Provides two complementary capabilities for understanding codebases:
 
+## PAI Integration
+
+| Algorithm Phase | Role | Tools Used |
+|----------------|------|-----------|
+| **OBSERVE** | Analyze git history to understand codebase evolution and contribution patterns | 16 `git_analysis_*` tools |
+| **THINK** | Identify code hotspots and contributor expertise for capability selection | `git_analysis_*` analysis tools |
+| **LEARN** | Archive commit patterns for future baseline comparisons | `git_analysis_*` pattern tools |
+
+PAI's OBSERVE phase uses git analysis to understand the codebase: commit timeline, contributor stats, and pattern detection inform THINK phase capability selection. 16 MCP tools cover commit analysis, author statistics, file evolution, and pattern detection.
+
 ## Capabilities
 
 ### 1. GitPython History Analysis (always available)

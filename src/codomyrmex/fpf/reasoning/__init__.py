@@ -9,7 +9,7 @@ from abc import ABC, abstractmethod
 from collections.abc import Callable
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any, Dict, List, Optional
+from typing import Any, Optional
 
 
 class ReasoningStep(Enum):
@@ -20,7 +20,6 @@ class ReasoningStep(Enum):
     INFERENCE = "inference"
     CONCLUSION = "conclusion"
     HYPOTHESIS = "hypothesis"
-
 
 @dataclass
 class Premise:
@@ -42,7 +41,6 @@ class Premise:
             "source": self.source,
             "depends_on": self.depends_on,
         }
-
 
 @dataclass
 class ReasoningChain:
@@ -119,7 +117,6 @@ class ReasoningChain:
             "metadata": self.metadata,
         }
 
-
 class ReasoningStrategy(ABC):
     """Abstract base class for reasoning strategies."""
 
@@ -127,7 +124,6 @@ class ReasoningStrategy(ABC):
     def apply(self, problem: str) -> ReasoningChain:
         """Apply the reasoning strategy to a problem."""
         pass
-
 
 class DecompositionStrategy(ReasoningStrategy):
     """Break down a problem into smaller components."""
@@ -162,7 +158,6 @@ class DecompositionStrategy(ReasoningStrategy):
 
         return chain
 
-
 class AssumptionAnalysisStrategy(ReasoningStrategy):
     """Identify and challenge assumptions."""
 
@@ -191,7 +186,6 @@ class AssumptionAnalysisStrategy(ReasoningStrategy):
 
         return chain
 
-
 class AnalogicalReasoningStrategy(ReasoningStrategy):
     """Reason by analogy to similar problems."""
 
@@ -218,7 +212,6 @@ class AnalogicalReasoningStrategy(ReasoningStrategy):
         )
 
         return chain
-
 
 class ContradictionStrategy(ReasoningStrategy):
     """Find contradictions to prove or disprove hypotheses."""
@@ -248,7 +241,6 @@ class ContradictionStrategy(ReasoningStrategy):
 
         return chain
 
-
 @dataclass
 class ProblemSpace:
     """A problem space for exploration."""
@@ -267,7 +259,6 @@ class ProblemSpace:
             "known_facts": self.known_facts,
             "assumptions": self.assumptions,
         }
-
 
 class FirstPrinciplesReasoner:
     """Main reasoning engine using first principles."""
@@ -351,11 +342,9 @@ class FirstPrinciplesReasoner:
         """Get reasoning history."""
         return [chain.to_dict() for chain in self.reasoning_history]
 
-
 def create_reasoner() -> FirstPrinciplesReasoner:
     """Create a first principles reasoner."""
     return FirstPrinciplesReasoner()
-
 
 __all__ = [
     "ReasoningStep",

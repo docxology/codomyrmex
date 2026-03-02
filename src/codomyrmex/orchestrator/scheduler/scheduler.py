@@ -12,9 +12,10 @@ from collections.abc import Callable
 from datetime import datetime, timedelta
 from typing import Any
 
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
+
 from .models import Job, JobStatus
 from .triggers import CronTrigger, IntervalTrigger, OnceTrigger, Trigger
-from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 logger = get_logger(__name__)
 

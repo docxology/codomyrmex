@@ -309,8 +309,8 @@ class TestVisualizationPerformanceWorkflow:
             def memory_intensive_function():
                 """Function that uses some memory."""
                 data = []
-                for i in range(1000):
-                    data.append([j for j in range(100)])
+                for _i in range(1000):
+                    data.append(list(range(100)))
                 return len(data)
 
             profile_result = profile_function(memory_intensive_function)

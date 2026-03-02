@@ -1,6 +1,6 @@
 # Personal AI Infrastructure — Concurrency Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
@@ -62,6 +62,12 @@ dlq = DeadLetterQueue()
 ## Architecture Role
 
 **Foundation Layer** — Cross-cutting concurrency primitives consumed by `orchestrator/`, `agents/` (AgentPool), and `ci_cd_automation/`.
+
+## MCP Tools
+
+This module does not expose MCP tools directly. Access its capabilities via:
+- Direct Python import: `from codomyrmex.concurrency import ...`
+- CLI: `codomyrmex concurrency <command>`
 
 ## Navigation
 

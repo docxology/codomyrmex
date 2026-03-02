@@ -1,22 +1,50 @@
-# Codomyrmex Agents — cursorrules
+# Agentic Memory — Rules Submodule
 
-**Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.3.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
 
-Coding standards and automation rules for consistent code quality across the repository. Defines style guidelines, naming conventions, mandatory policies, and automated checks for AI-assisted development.
+Coding standards and automation rules for consistent code quality across the repository, now exposed as a Python module and MCP tools. Defines style guidelines, naming conventions, mandatory policies, and automated checks for AI-assisted development. AI agents can query applicable rules programmatically via `RuleEngine` or the three MCP tools.
 
 ## Directory Structure
 
 ```
-cursorrules/                 # 75 rules total
-├── general.cursorrules      # Universal coding standards (1)
-├── cross-module/            # Cross-cutting concerns (8)
-├── file-specific/           # File type specific rules (6)
-└── modules/                 # Per-module standards (60)
+src/codomyrmex/agentic_memory/rules/   # 75 rules + Python API
+├── engine.py                           # RuleEngine — hierarchy-aware rule resolution
+├── loader.py                           # RuleLoader — parses .cursorrules files
+├── registry.py                         # RuleRegistry — indexed access by module/extension
+├── models.py                           # Rule, RuleSet, RulePriority, RuleSection
+├── mcp_tools.py                        # rules_list_modules, rules_get_module_rule, rules_get_applicable
+├── __init__.py                         # Public API
+├── general.cursorrules                 # Universal coding standards (1)
+├── cross-module/                       # Cross-cutting concerns (8)
+├── file-specific/                      # File type specific rules (6)
+└── modules/                            # Per-module standards (60)
 ```
 
 ## Active Components
+
+### Python API
+
+| Component | Type | Description |
+|-----------|------|-------------|
+| `RuleEngine` | Class | Hierarchy-aware rule resolution; primary entry point |
+| `RuleLoader` | Class | Parses `.cursorrules` files into `Rule` objects |
+| `RuleRegistry` | Class | Indexed access by module name, file extension, cross-module |
+| `Rule` | Dataclass | Parsed representation of one `.cursorrules` file |
+| `RuleSet` | Dataclass | Collection of applicable rules; sortable by priority |
+| `RulePriority` | Enum | `FILE_SPECIFIC=1 > MODULE=2 > CROSS_MODULE=3 > GENERAL=4` |
+| `RuleSection` | Dataclass | One numbered section (§0–§7) from a rule file |
+
+### MCP Tools (auto-discovered)
+
+| Tool | Description |
+|------|-------------|
+| `rules_list_modules` | List all 60 module names with defined rules |
+| `rules_get_module_rule` | Get full rule dict for a specific module |
+| `rules_get_applicable` | Get all applicable rules for a file path and/or module, ordered highest priority first |
+
+### Rule Files
 
 | Component | Type | Description |
 |-----------|------|-------------|
@@ -29,10 +57,10 @@ cursorrules/                 # 75 rules total
 
 Rules follow a specificity hierarchy (most specific wins):
 
-1. **File-specific** (`file-specific/`) - Rules for specific file patterns
-2. **Module-specific** (`modules/`) - Per-module overrides
-3. **Cross-module** (`cross-module/`) - Cross-cutting patterns
-4. **General** (`general.cursorrules`) - Universal defaults
+1. **File-specific** (`file-specific/`) — Rules for specific file patterns
+2. **Module-specific** (`modules/`) — Per-module overrides
+3. **Cross-module** (`cross-module/`) — Cross-cutting patterns
+4. **General** (`general.cursorrules`) — Universal defaults
 
 ## Mandatory Policies
 
@@ -46,9 +74,40 @@ These policies are enforced globally and **cannot be overridden** by any rule le
 | **Python ≥ 3.10** | All code must be compatible with Python 3.10+ |
 | **Type hints** | All functions must have type annotations |
 | **Docstrings** | All public APIs must have Google-style docstrings |
-| **Test coverage** | ≥80% coverage required |
 
 ## Agent Guidelines
+
+### Using the Python API
+
+```python
+from codomyrmex.agentic_memory.rules import RuleEngine
+
+engine = RuleEngine()
+
+# Get all applicable rules when editing a Python file in the agents module
+rule_set = engine.get_applicable_rules(
+    file_path="memory.py",
+    module_name="agentic_memory",
+)
+for rule in rule_set.resolved():  # FILE_SPECIFIC first, GENERAL last
+    print(f"[{rule.priority.name}] {rule.name}")
+    section = rule.get_section(3)  # "Coding Standards"
+    if section:
+        print(section.content[:200])
+```
+
+### Using MCP Tools
+
+```
+rules_get_applicable(file_path="memory.py", module_name="agentic_memory")
+→ Returns list of rule dicts, FILE_SPECIFIC first
+
+rules_get_module_rule(module_name="agents")
+→ Returns full rule dict with sections and raw_content
+
+rules_list_modules()
+→ Returns sorted list of 60 module names
+```
 
 ### Coding Standards
 
@@ -63,6 +122,7 @@ These policies are enforced globally and **cannot be overridden** by any rule le
 2. **Execution**: Run via `uv run pytest` — never raw `pytest`
 3. **External Services**: Gate behind `@pytest.mark.skipif(not os.getenv("API_KEY"))`
 4. **File Operations**: Use `tmp_path` fixture with real filesystem operations
+5. **Rules tests**: Use real `.cursorrules` files from the `rules/` directory — no mocking
 
 ### When Modifying Rules
 
@@ -82,7 +142,7 @@ These policies are enforced globally and **cannot be overridden** by any rule le
 
 ## Navigation Links
 
-- **📁 Parent**: [../README.md](../README.md) - Project root
-- **📖 Dev Docs**: [../docs/development/](../docs/development/) - Development guides
-- **🧪 Testing**: [../docs/development/testing-strategy.md](../docs/development/testing-strategy.md) - Test patterns
-- **📋 PAI Context**: [PAI.md](PAI.md) - AI infrastructure context
+- **Parent**: [../README.md](../README.md) - Agentic Memory module
+- **PAI Context**: [PAI.md](PAI.md) - AI infrastructure context
+- **Spec**: [SPEC.md](SPEC.md) - Functional specification
+- **Human Docs**: [README.md](README.md) - User documentation

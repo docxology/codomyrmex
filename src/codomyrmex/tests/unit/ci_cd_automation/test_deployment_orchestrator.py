@@ -11,7 +11,7 @@ Zero-mock policy: all tests use real objects and tmp_path for filesystem.
 
 import json
 import os
-from datetime import datetime, timezone, UTC
+from datetime import UTC, datetime
 
 import pytest
 import yaml

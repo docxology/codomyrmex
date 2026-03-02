@@ -1,8 +1,19 @@
 # Tool Use Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 Registry, composition, and validation infrastructure for tool-based workflows. Provides a central registry for managing tools, a chain abstraction for sequential tool pipelines, and JSON-schema-like input/output validation utilities.
+
+## PAI Integration
+
+| Algorithm Phase | Role | Tools Used |
+|----------------|------|-----------|
+| **ALL PHASES** | Invoke external tools and CLIs through the registry | Direct Python import |
+| **OBSERVE** | Inspect available tools and their schemas | Direct Python import |
+| **EXECUTE** | Run external tools via registry and chain pipelines | Direct Python import |
+| **VERIFY** | Validate tool inputs and outputs against schemas | Direct Python import |
+
+PAI agents access this module via direct Python import through the MCP bridge to register, compose, and validate tool-based workflows.
 
 ## Installation
 

@@ -1,6 +1,6 @@
 # Personal AI Infrastructure -- Exceptions Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
@@ -78,6 +78,12 @@ ctx = create_error_context(file_path="/tmp/data.json", line_number=42, column=No
 ## Architecture Role
 
 **Foundation Layer** -- This module is imported by every other Codomyrmex module. It has no upward dependencies and must remain stable. The only external import is `pathlib.Path` from the standard library.
+
+## MCP Tools
+
+This module does not expose MCP tools directly. Access its capabilities via:
+- Direct Python import: `from codomyrmex.exceptions import ...`
+- CLI: `codomyrmex exceptions <command>`
 
 ## Navigation
 

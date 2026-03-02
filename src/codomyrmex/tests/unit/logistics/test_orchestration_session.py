@@ -4,7 +4,7 @@ Zero-mock policy: all tests use real objects only.
 """
 
 import uuid
-from datetime import datetime, timezone, UTC
+from datetime import UTC, datetime
 
 import pytest
 

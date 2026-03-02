@@ -1,6 +1,6 @@
 # Agent Guidelines - FPF
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Module Overview
 
@@ -61,6 +61,23 @@ proxy = Proxy(firewall)
 safe = proxy.filter_input("<script>alert()</script>")
 assert "<script>" not in safe
 ```
+
+## PAI Agent Role Access Matrix
+
+| PAI Agent | Access Level | Primary Capabilities | Trust Level |
+|-----------|-------------|---------------------|-------------|
+| **Engineer** | Full | Direct Python import, class instantiation, full API access | TRUSTED |
+| **Architect** | Read + Design | API review, interface design, dependency analysis | OBSERVED |
+| **QATester** | Validation | Integration testing via pytest, output validation | OBSERVED |
+
+### Engineer Agent
+**Use Cases**: Uses FPF (Firewall-Proxy-Format) tools for secure communications, input/output filtering, policy enforcement, and document handling via Firewall, Proxy, Formatter, and PolicyEngine.
+
+### Architect Agent
+**Use Cases**: Reviews secure communication architecture, evaluates firewall rule design, and assesses policy engine integration patterns.
+
+### QATester Agent
+**Use Cases**: Validates security properties including PII filtering, injection blocking, policy enforcement correctness, and proxy interception behavior.
 
 ## Navigation
 

@@ -1,6 +1,6 @@
 # Agent Guidelines - Validation
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Module Overview
 
@@ -81,6 +81,23 @@ All tools are auto-discovered via `@mcp_tool` decorators and exposed through the
 | `validate_schema` | Validate data against a JSON Schema | Safe |
 | `validate_config` | Validate a configuration dictionary against common patterns | Safe |
 | `validation_summary` | Get a summary of validation operations performed in this session | Safe |
+
+## PAI Agent Role Access Matrix
+
+| PAI Agent | Access Level | Primary Capabilities | Trust Level |
+|-----------|-------------|---------------------|-------------|
+| **Engineer** | Full | `validate_schema`, `validate_config`, `validation_summary`; complete validation pipeline | TRUSTED |
+| **Architect** | Read + Design | `validate_schema`; schema design review, data contract validation | OBSERVED |
+| **QATester** | Validation | `validate_schema`, `validate_config`, `validation_summary`; full VERIFY-phase validation | OBSERVED |
+
+### Engineer Agent
+**Use Cases**: Schema validation at system boundaries during BUILD, config validation before EXECUTE, generating validation summaries.
+
+### Architect Agent
+**Use Cases**: Reviewing data schemas, validating API contracts, confirming data shapes match design.
+
+### QATester Agent
+**Use Cases**: Running full validation suite during VERIFY, generating compliance reports, confirming schema correctness.
 
 ## Navigation
 

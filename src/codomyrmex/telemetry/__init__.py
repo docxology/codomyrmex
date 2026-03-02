@@ -88,8 +88,9 @@ def cli_commands():
     }
 
 
-from . import dashboard
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
+
+from . import dashboard
 
 __all__ = [
     "dashboard",

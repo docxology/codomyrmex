@@ -1,6 +1,6 @@
 # Agent Guidelines - Spatial
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Module Overview
 
@@ -52,6 +52,23 @@ q = Quaternion.from_euler(0, 90, 0)
 rotated = q.rotate(Vec3(1, 0, 0))
 assert abs(rotated.z - 1.0) < 0.001  # Rotated 90° around Y
 ```
+
+## PAI Agent Role Access Matrix
+
+| PAI Agent | Access Level | Primary Capabilities | Trust Level |
+|-----------|-------------|---------------------|-------------|
+| **Engineer** | Full | Direct Python import, class instantiation, full API access | TRUSTED |
+| **Architect** | Read + Design | API review, interface design, dependency analysis | OBSERVED |
+| **QATester** | Validation | Integration testing via pytest, output validation | OBSERVED |
+
+### Engineer Agent
+**Use Cases**: Performs spatial analysis, GIS operations, and geospatial queries using `Vec3`, `Quaternion`, `Mesh`, `GeoCoordinate`, and physics simulation classes. Handles coordinate transformations and 3D/4D modeling.
+
+### Architect Agent
+**Use Cases**: Designs spatial data models, reviews coordinate system choices (mercator, orthographic, perspective), evaluates quaternion vs. Euler angle trade-offs, and plans physics timestep strategies.
+
+### QATester Agent
+**Use Cases**: Validates coordinate transformations and spatial queries, verifies vector operation correctness (dot products, cross products), confirms quaternion rotation accuracy, and tests geo-coordinate round-trip conversions.
 
 ## Navigation
 

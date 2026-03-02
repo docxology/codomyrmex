@@ -1,6 +1,6 @@
 # Agent Guidelines - Utils
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Module Overview
 
@@ -67,6 +67,23 @@ def flaky():
     return "ok"
 assert flaky() == "ok"
 ```
+
+## PAI Agent Role Access Matrix
+
+| PAI Agent | Access Level | Primary Capabilities | Trust Level |
+|-----------|-------------|---------------------|-------------|
+| **Engineer** | Full | Direct Python import, class instantiation, full API access | TRUSTED |
+| **Architect** | Read + Design | API review, interface design, dependency analysis | OBSERVED |
+| **QATester** | Validation | Integration testing via pytest, output validation | OBSERVED |
+
+### Engineer Agent
+**Use Cases**: Use utility functions (safe_json_loads, run_command, retry, hash_file) during all BUILD/EXECUTE phases
+
+### Architect Agent
+**Use Cases**: Review utility API design, evaluate deep_merge behavior, plan retry and error handling strategies
+
+### QATester Agent
+**Use Cases**: Validate utility function correctness, verify retry backoff behavior, test JSON parsing edge cases
 
 ## Navigation
 

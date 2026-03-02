@@ -88,7 +88,7 @@ class DistanceMetric:
         """Cosine similarity (0–1, higher = more similar)."""
         if len(vec1) != len(vec2):
             return 0.0
-        dot = sum(a * b for a, b in zip(vec1, vec2))
+        dot = sum(a * b for a, b in zip(vec1, vec2, strict=False))
         mag1 = math.sqrt(sum(x * x for x in vec1))
         mag2 = math.sqrt(sum(x * x for x in vec2))
         if mag1 == 0 or mag2 == 0:
@@ -100,28 +100,28 @@ class DistanceMetric:
         """Euclidean distance (0+, lower = more similar)."""
         if len(vec1) != len(vec2):
             return float("inf")
-        return math.sqrt(sum((a - b) ** 2 for a, b in zip(vec1, vec2)))
+        return math.sqrt(sum((a - b) ** 2 for a, b in zip(vec1, vec2, strict=False)))
 
     @staticmethod
     def dot_product(vec1: list[float], vec2: list[float]) -> float:
         """Dot product similarity."""
         if len(vec1) != len(vec2):
             return 0.0
-        return sum(a * b for a, b in zip(vec1, vec2))
+        return sum(a * b for a, b in zip(vec1, vec2, strict=False))
 
     @staticmethod
     def manhattan(vec1: list[float], vec2: list[float]) -> float:
         """Manhattan (L1) distance."""
         if len(vec1) != len(vec2):
             return float("inf")
-        return sum(abs(a - b) for a, b in zip(vec1, vec2))
+        return sum(abs(a - b) for a, b in zip(vec1, vec2, strict=False))
 
     @staticmethod
     def chebyshev(vec1: list[float], vec2: list[float]) -> float:
         """Chebyshev (L∞) distance — max absolute difference."""
         if len(vec1) != len(vec2):
             return float("inf")
-        return max(abs(a - b) for a, b in zip(vec1, vec2))
+        return max(abs(a - b) for a, b in zip(vec1, vec2, strict=False))
 
 
 # ─── Utility Functions ──────────────────────────────────────────────────

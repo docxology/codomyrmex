@@ -7,11 +7,12 @@ Generate and manage SBOMs for supply chain security.
 import hashlib
 import json
 from dataclasses import dataclass, field
-
 from datetime import datetime
 from enum import Enum
 from typing import Any
+
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
+
 logger = get_logger(__name__)
 
 

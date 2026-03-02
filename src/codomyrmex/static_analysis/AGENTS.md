@@ -51,6 +51,23 @@ Modules are classified into architectural layers for violation detection:
 - Uses only `ast`, `os`, `pathlib` from stdlib — no external dependencies
 - Layer taxonomy must stay aligned with [SPEC.md](../SPEC.md)
 
+## PAI Agent Role Access Matrix
+
+| PAI Agent | Access Level | Primary Capabilities | Trust Level |
+|-----------|-------------|---------------------|-------------|
+| **Engineer** | Full | Direct Python import; `StaticAnalyzer`, `LintRunner`, `SecurityScanner`; full scan suite | TRUSTED |
+| **Architect** | Read + Design | Code quality analysis, architectural review, dependency validation | OBSERVED |
+| **QATester** | Validation | Lint reports, security scan output validation, quality gate verification | OBSERVED |
+
+### Engineer Agent
+**Use Cases**: Running full static analysis pipelines, enforcing code quality standards during BUILD phase, integrating scan results into CI/CD.
+
+### Architect Agent
+**Use Cases**: Architectural code review, identifying dependency violations, reviewing scan configurations.
+
+### QATester Agent
+**Use Cases**: Validating lint/security scan results during VERIFY phase, confirming quality gate compliance.
+
 ## Signposting
 
 ### Document Hierarchy

@@ -14,7 +14,7 @@ from collections.abc import Callable
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
-from typing import Any, Dict, List, Optional
+from typing import Any, Optional
 
 # Shared schemas for cross-module interop
 try:
@@ -22,7 +22,6 @@ try:
 except ImportError:
     Result = None
     ResultStatus = None
-
 
 class FaultType(Enum):
     """Types of injectable faults."""
@@ -32,7 +31,6 @@ class FaultType(Enum):
     RESOURCE_EXHAUSTION = "resource_exhaustion"
     NETWORK_PARTITION = "network_partition"
 
-
 @dataclass
 class FaultConfig:
     """Configuration for a fault."""
@@ -41,7 +39,6 @@ class FaultConfig:
     duration_seconds: float = 0.0
     error_message: str = "Injected fault"
     metadata: dict[str, Any] = field(default_factory=dict)
-
 
 class FaultInjector:
     """Inject faults into system components."""
@@ -91,11 +88,9 @@ class FaultInjector:
         if self.should_inject(name):
             self.inject(name)
 
-
 class InjectedFaultError(Exception):
     """Raised when a fault is injected."""
     pass
-
 
 @dataclass
 class SteadyStateHypothesis:
@@ -103,7 +98,6 @@ class SteadyStateHypothesis:
     name: str
     check_fn: Callable[[], bool]
     description: str = ""
-
 
 @dataclass
 class ExperimentResult:
@@ -115,7 +109,6 @@ class ExperimentResult:
     duration_seconds: float
     error: str | None = None
     started_at: datetime = field(default_factory=datetime.now)
-
 
 class ChaosExperiment:
     """A chaos engineering experiment."""
@@ -189,7 +182,6 @@ class ChaosExperiment:
             error=error,
         )
 
-
 class ChaosMonkey:
     """Automated chaos testing."""
 
@@ -224,7 +216,6 @@ class ChaosMonkey:
         """results ."""
         return self._results
 
-
 # Decorators
 def with_chaos(
     injector: FaultInjector,
@@ -239,7 +230,6 @@ def with_chaos(
             return func(*args, **kwargs)
         return wrapper
     return decorator
-
 
 def cli_commands():
     """Return CLI commands for the chaos_engineering module."""
@@ -265,7 +255,6 @@ def cli_commands():
         "experiments": _experiments,
         "run": _run,
     }
-
 
 __all__ = [
     "FaultInjector",

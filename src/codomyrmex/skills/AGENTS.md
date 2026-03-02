@@ -1,6 +1,6 @@
 # Agent Guidelines - Skills
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Module Overview
 
@@ -77,6 +77,23 @@ executor = SkillExecutor(registry)
 result = executor.execute("code_review", code="print(1)")
 assert result is not None
 ```
+
+## PAI Agent Role Access Matrix
+
+| PAI Agent | Access Level | Primary Capabilities | Trust Level |
+|-----------|-------------|---------------------|-------------|
+| **Engineer** | Full | All 7 `skills_*` tools; skill discovery, invocation, and lifecycle management | TRUSTED |
+| **Architect** | Read + Design | `skills_list`, `skills_get`; skill inventory review, skill architecture design | OBSERVED |
+| **QATester** | Validation | `skills_list`, `skills_get`; skill availability verification, invocation testing | OBSERVED |
+
+### Engineer Agent
+**Use Cases**: Discovering and invoking skills during EXECUTE, managing skill lifecycle, building skill composition workflows.
+
+### Architect Agent
+**Use Cases**: Reviewing installed skill catalog, designing skill composition patterns, planning skill architecture.
+
+### QATester Agent
+**Use Cases**: Verifying skill discovery during VERIFY, confirming skill invocation correctness.
 
 ## Navigation
 

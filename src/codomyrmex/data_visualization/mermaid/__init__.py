@@ -7,7 +7,7 @@ Provides utilities for creating Mermaid diagrams programmatically.
 import json
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Optional, Union
 
 
 class DiagramType(Enum):
@@ -23,7 +23,6 @@ class DiagramType(Enum):
     TIMELINE = "timeline"
     JOURNEY = "journey"
 
-
 class FlowDirection(Enum):
     """Direction for flowcharts."""
     TOP_DOWN = "TD"
@@ -31,7 +30,6 @@ class FlowDirection(Enum):
     BOTTOM_TOP = "BT"
     LEFT_RIGHT = "LR"
     RIGHT_LEFT = "RL"
-
 
 class NodeShape(Enum):
     """Flowchart node shapes."""
@@ -46,7 +44,6 @@ class NodeShape(Enum):
     HEXAGON = "hexagon"
     PARALLELOGRAM = "parallelogram"
     TRAPEZOID = "trapezoid"
-
 
 @dataclass
 class Node:
@@ -76,14 +73,12 @@ class Node:
 
         return shape_formats.get(self.shape, f'{self.id}["{label}"]')
 
-
 class LinkStyle(Enum):
     """Styles for links between nodes."""
     SOLID = "-->"
     DOTTED = "-.->"
     THICK = "==>"
     INVISIBLE = "~~~"
-
 
 @dataclass
 class Link:
@@ -100,7 +95,6 @@ class Link:
             style_str = self.style.value.replace(">", f"|{label}|>")
             return f"{self.source} {style_str} {self.target}"
         return f"{self.source} {self.style.value} {self.target}"
-
 
 class MermaidDiagram:
     """Base class for Mermaid diagrams."""
@@ -135,7 +129,6 @@ class MermaidDiagram:
     def to_markdown(self) -> str:
         """Render as a Markdown code block."""
         return f"```mermaid\n{self.render()}\n```"
-
 
 class Flowchart(MermaidDiagram):
     """Flowchart diagram builder."""
@@ -209,7 +202,6 @@ class Flowchart(MermaidDiagram):
             lines.append(f"    {link.render()}")
 
         return "\n".join(lines)
-
 
 class SequenceDiagram(MermaidDiagram):
     """Sequence diagram builder."""
@@ -293,7 +285,6 @@ class SequenceDiagram(MermaidDiagram):
 
         return "\n".join(lines)
 
-
 class ClassDiagram(MermaidDiagram):
     """Class diagram builder."""
 
@@ -346,23 +337,19 @@ class ClassDiagram(MermaidDiagram):
 
         return "\n".join(lines)
 
-
 def create_flowchart(
     direction: FlowDirection = FlowDirection.TOP_DOWN
 ) -> Flowchart:
     """Create a new flowchart."""
     return Flowchart(direction)
 
-
 def create_sequence_diagram() -> SequenceDiagram:
     """Create a new sequence diagram."""
     return SequenceDiagram()
 
-
 def create_class_diagram() -> ClassDiagram:
     """Create a new class diagram."""
     return ClassDiagram()
-
 
 __all__ = [
     "DiagramType",

@@ -5,16 +5,15 @@ four-layer architecture for AI-assisted software development, code analysis,
 testing, documentation generation, and workflow automation.
 """
 
-__version__ = "1.0.3.dev0"
+__version__ = "1.0.5"
 
 import os
 import pkgutil
 from pathlib import Path
-from typing import List
+
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 logger = get_logger(__name__)
-
 
 def get_version() -> str:
     """Get the package version."""

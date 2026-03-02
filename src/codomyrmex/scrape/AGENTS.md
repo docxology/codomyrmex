@@ -1,6 +1,6 @@
 # Agent Guidelines - Scrape
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Module Overview
 
@@ -72,6 +72,23 @@ scraper.get("url1")
 scraper.get("url2")
 assert time.time() - start >= 1.0
 ```
+
+## PAI Agent Role Access Matrix
+
+| PAI Agent | Access Level | Primary Capabilities | Trust Level |
+|-----------|-------------|---------------------|-------------|
+| **Engineer** | Full | `scrape_extract_content`, `scrape_text_similarity`; full web content extraction | TRUSTED |
+| **Architect** | Read + Design | `scrape_text_similarity`; content similarity analysis, data extraction design | OBSERVED |
+| **QATester** | Validation | `scrape_extract_content`, `scrape_text_similarity`; extraction correctness verification | OBSERVED |
+
+### Engineer Agent
+**Use Cases**: Extracting web content during OBSERVE phase, computing text similarity for research, gathering external data.
+
+### Architect Agent
+**Use Cases**: Designing content extraction pipelines, reviewing similarity metrics, planning data aggregation.
+
+### QATester Agent
+**Use Cases**: Validating extraction quality during VERIFY, confirming URL validation works correctly.
 
 ## Navigation
 

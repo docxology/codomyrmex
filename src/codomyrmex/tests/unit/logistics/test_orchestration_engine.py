@@ -251,21 +251,26 @@ class TestOrchestrationEngineEvents:
         eng.task_orchestrator.stop_execution()
 
     def test_register_event_handler(self, engine):
-        handler = lambda event, data: None
+        def handler(event, data):
+            return None
         engine.register_event_handler("test_event", handler)
         assert "test_event" in engine.event_handlers
         assert handler in engine.event_handlers["test_event"]
 
     def test_register_multiple_handlers(self, engine):
-        h1 = lambda e, d: None
-        h2 = lambda e, d: None
+        def h1(e, d):
+            return None
+        def h2(e, d):
+            return None
         engine.register_event_handler("evt", h1)
         engine.register_event_handler("evt", h2)
         assert len(engine.event_handlers["evt"]) == 2
 
     def test_register_handlers_different_events(self, engine):
-        h1 = lambda e, d: None
-        h2 = lambda e, d: None
+        def h1(e, d):
+            return None
+        def h2(e, d):
+            return None
         engine.register_event_handler("evt_a", h1)
         engine.register_event_handler("evt_b", h2)
         assert "evt_a" in engine.event_handlers
@@ -394,7 +399,7 @@ class TestOrchestrationEngineStatus:
 
     def test_health_check_components_have_status(self, engine):
         result = engine.health_check()
-        for comp_name, comp_data in result["components"].items():
+        for _comp_name, comp_data in result["components"].items():
             assert "status" in comp_data
 
     def test_get_metrics_fails_on_missing_methods(self, engine):

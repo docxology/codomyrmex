@@ -20,7 +20,6 @@ from codomyrmex.website.accessibility.utils import (
     check_heading_hierarchy,
 )
 
-
 # ── calculate_contrast_ratio ────────────────────────────────────────────
 
 

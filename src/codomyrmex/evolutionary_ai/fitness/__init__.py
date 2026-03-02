@@ -102,7 +102,7 @@ class MultiObjectiveFitness(FitnessFunction):
     def evaluate(self, genome: Any) -> FitnessResult:
         """evaluate ."""
         values: list[float] = []
-        for fn, is_max in zip(self._objectives, self._maximize):
+        for fn, is_max in zip(self._objectives, self._maximize, strict=False):
             raw = float(fn(genome))
             values.append(raw if is_max else -raw)
         return FitnessResult(
@@ -125,7 +125,7 @@ class MultiObjectiveFitness(FitnessFunction):
             True if a dominates b.
         """
         dominated_in_at_least_one = False
-        for ai, bi in zip(a, b):
+        for ai, bi in zip(a, b, strict=False):
             if ai < bi:
                 return False
             if ai > bi:

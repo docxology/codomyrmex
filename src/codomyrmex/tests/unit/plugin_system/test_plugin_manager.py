@@ -149,8 +149,8 @@ class TestPlugin:
         status = manager.get_plugin_status("test_plugin")
 
         assert status["name"] == "test_plugin"
-        assert status["registered"] == True
-        assert status["loaded"] == False
+        assert status["registered"] is True
+        assert status["loaded"] is False
         assert not status["dependencies_satisfied"]
         assert "missing_dep" in status["missing_dependencies"]
 
@@ -161,8 +161,8 @@ class TestPlugin:
         status = manager.get_plugin_status("nonexistent")
 
         assert status["name"] == "nonexistent"
-        assert status["registered"] == False
-        assert status["loaded"] == False
+        assert status["registered"] is False
+        assert status["loaded"] is False
 
     def test_system_status(self):
         """Test getting system status."""

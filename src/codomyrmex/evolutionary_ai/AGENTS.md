@@ -1,6 +1,6 @@
 # Agent Guidelines - Evolutionary AI
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Module Overview
 
@@ -60,6 +60,23 @@ for _ in range(10):
     ga.evolve(lambda x: sum(x.genes))
 assert ga.get_best().fitness >= initial_fitness
 ```
+
+## PAI Agent Role Access Matrix
+
+| PAI Agent | Access Level | Primary Capabilities | Trust Level |
+|-----------|-------------|---------------------|-------------|
+| **Engineer** | Full | Direct Python import, class instantiation, full API access | TRUSTED |
+| **Architect** | Read + Design | API review, interface design, dependency analysis | OBSERVED |
+| **QATester** | Validation | Integration testing via pytest, output validation | OBSERVED |
+
+### Engineer Agent
+**Use Cases**: Run evolutionary algorithms, configure GeneticAlgorithm and NEATEvolver, manage populations during BUILD/EXECUTE phases
+
+### Architect Agent
+**Use Cases**: Design fitness functions, population strategies, selection/crossover/mutation operator architecture
+
+### QATester Agent
+**Use Cases**: Unit and integration test execution, fitness convergence validation, population diversity verification
 
 ## Navigation
 

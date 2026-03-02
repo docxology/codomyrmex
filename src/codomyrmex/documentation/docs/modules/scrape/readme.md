@@ -1,10 +1,19 @@
 # Scrape Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
 Web scraping module providing a unified interface for extracting content from websites. Supports multiple output formats (Markdown, HTML), site crawling, URL mapping, search, and structured data extraction. Abstracts provider-specific details (currently Firecrawl) behind a consistent API with configurable options and a robust exception hierarchy.
+
+## PAI Integration
+
+| Algorithm Phase | Role | Tools Used |
+|----------------|------|-----------|
+| **OBSERVE** | Extract web content for research and information gathering | `scrape_extract_content` |
+| **THINK** | Compute text similarity to find relevant analogous content | `scrape_text_similarity` |
+
+PAI's OBSERVE phase uses `scrape_extract_content` for external data gathering. `scrape_text_similarity` supports THINK phase by identifying content relevance. URL validation (http/https only) is enforced -- no local file scraping.
 
 ## Installation
 

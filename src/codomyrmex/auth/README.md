@@ -1,8 +1,18 @@
 # Auth Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 Authentication with API keys, tokens, OAuth, and access control.
+
+## PAI Integration
+
+| Algorithm Phase | Role | Tools Used |
+|----------------|------|-----------|
+| **OBSERVE** | Check authentication state and token validity | Direct Python import |
+| **EXECUTE** | Authenticate users and issue tokens | Direct Python import |
+| **VERIFY** | Validate tokens, sessions, and API key permissions | Direct Python import |
+
+PAI agents access this module via direct Python import through the MCP bridge. The Engineer agent uses it during EXECUTE phase to authenticate against external services, and the QATester validates token lifecycle during VERIFY phase.
 
 ## Installation
 

@@ -1,8 +1,18 @@
 # Identity Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 Persona management and bio-cognitive verification for agent identity.
+
+## PAI Integration
+
+| Algorithm Phase | Role | Tools Used |
+|----------------|------|-----------|
+| **OBSERVE** | Verify identity claims and inspect persona states | Direct Python import |
+| **EXECUTE** | Identity operations including registration and promotion | Direct Python import |
+| **VERIFY** | Validate identity assertions via bio-cognitive challenges | Direct Python import |
+
+PAI agents access this module via direct Python import through the MCP bridge. The QATester agent uses BioCognitiveVerifier during VERIFY to validate agent authenticity, while the Engineer agent manages persona lifecycle during EXECUTE.
 
 ## Installation
 

@@ -6,6 +6,7 @@ from typing import Any
 import fastavro
 import msgpack
 import pandas as pd
+
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 logger = get_logger(__name__)
@@ -38,7 +39,7 @@ class AvroSerializer:
         """Deserialize from a portable format and return an instance."""
         inp = io.BytesIO(data)
         reader = fastavro.reader(inp)
-        return [record for record in reader]
+        return list(reader)
 
 class ParquetSerializer:
     """Parquet serialization using pandas and pyarrow."""

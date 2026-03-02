@@ -10,10 +10,9 @@ from abc import ABC, abstractmethod
 from collections.abc import Callable
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any, Dict, Generic, List, Optional, Tuple, TypeVar
+from typing import Any, Generic, Optional, TypeVar
 
 T = TypeVar('T')
-
 
 class MutationType(Enum):
     """Types of mutation operators."""
@@ -25,7 +24,6 @@ class MutationType(Enum):
     UNIFORM = "uniform"
     BOUNDARY = "boundary"
 
-
 class CrossoverType(Enum):
     """Types of crossover operators."""
     SINGLE_POINT = "single_point"
@@ -35,7 +33,6 @@ class CrossoverType(Enum):
     ORDER = "order"
     CYCLE = "cycle"
 
-
 class SelectionType(Enum):
     """Types of selection operators."""
     TOURNAMENT = "tournament"
@@ -44,7 +41,6 @@ class SelectionType(Enum):
     STEADY_STATE = "steady_state"
     ELITISM = "elitism"
     TRUNCATION = "truncation"
-
 
 @dataclass
 class Individual(Generic[T]):
@@ -63,7 +59,6 @@ class Individual(Generic[T]):
             return False
         return self.fitness < other.fitness
 
-
 class MutationOperator(ABC, Generic[T]):
     """Abstract base class for mutation operators."""
 
@@ -74,7 +69,6 @@ class MutationOperator(ABC, Generic[T]):
     def mutate(self, individual: Individual[T]) -> Individual[T]:
         """Apply mutation to an individual."""
         pass
-
 
 class BitFlipMutation(MutationOperator[list[int]]):
     """Bit flip mutation for binary representations."""
@@ -89,7 +83,6 @@ class BitFlipMutation(MutationOperator[list[int]]):
 
         return Individual(genes=genes, metadata=individual.metadata.copy())
 
-
 class SwapMutation(MutationOperator[list[T]]):
     """Swap mutation for permutation representations."""
 
@@ -102,7 +95,6 @@ class SwapMutation(MutationOperator[list[T]]):
             genes[i], genes[j] = genes[j], genes[i]
 
         return Individual(genes=genes, metadata=individual.metadata.copy())
-
 
 class GaussianMutation(MutationOperator[list[float]]):
     """Gaussian mutation for real-valued representations."""
@@ -130,7 +122,6 @@ class GaussianMutation(MutationOperator[list[float]]):
 
         return Individual(genes=genes, metadata=individual.metadata.copy())
 
-
 class ScrambleMutation(MutationOperator[list[T]]):
     """Scramble mutation - scrambles a random subset of genes."""
 
@@ -147,7 +138,6 @@ class ScrambleMutation(MutationOperator[list[T]]):
 
         return Individual(genes=genes, metadata=individual.metadata.copy())
 
-
 class CrossoverOperator(ABC, Generic[T]):
     """Abstract base class for crossover operators."""
 
@@ -162,7 +152,6 @@ class CrossoverOperator(ABC, Generic[T]):
     ) -> tuple[Individual[T], Individual[T]]:
         """Create offspring from two parents."""
         pass
-
 
 class SinglePointCrossover(CrossoverOperator[list[T]]):
     """Single point crossover."""
@@ -186,7 +175,6 @@ class SinglePointCrossover(CrossoverOperator[list[T]]):
             Individual(genes=child1_genes),
             Individual(genes=child2_genes),
         )
-
 
 class TwoPointCrossover(CrossoverOperator[list[T]]):
     """Two point crossover."""
@@ -218,7 +206,6 @@ class TwoPointCrossover(CrossoverOperator[list[T]]):
             Individual(genes=child1_genes),
             Individual(genes=child2_genes),
         )
-
 
 class UniformCrossover(CrossoverOperator[list[T]]):
     """Uniform crossover with mixing ratio."""
@@ -253,7 +240,6 @@ class UniformCrossover(CrossoverOperator[list[T]]):
             Individual(genes=child2_genes),
         )
 
-
 class BlendCrossover(CrossoverOperator[list[float]]):
     """BLX-alpha crossover for real-valued representations."""
 
@@ -273,7 +259,7 @@ class BlendCrossover(CrossoverOperator[list[float]]):
         child1_genes = []
         child2_genes = []
 
-        for g1, g2 in zip(parent1.genes, parent2.genes):
+        for g1, g2 in zip(parent1.genes, parent2.genes, strict=False):
             min_val = min(g1, g2)
             max_val = max(g1, g2)
             diff = max_val - min_val
@@ -289,7 +275,6 @@ class BlendCrossover(CrossoverOperator[list[float]]):
             Individual(genes=child2_genes),
         )
 
-
 class SelectionOperator(ABC, Generic[T]):
     """Abstract base class for selection operators."""
 
@@ -301,7 +286,6 @@ class SelectionOperator(ABC, Generic[T]):
     ) -> list[Individual[T]]:
         """Select individuals from the population."""
         pass
-
 
 class TournamentSelection(SelectionOperator[T]):
     """Tournament selection."""
@@ -327,7 +311,6 @@ class TournamentSelection(SelectionOperator[T]):
             ))
 
         return selected
-
 
 class RouletteSelection(SelectionOperator[T]):
     """Roulette wheel (fitness proportionate) selection."""
@@ -363,7 +346,6 @@ class RouletteSelection(SelectionOperator[T]):
                     break
 
         return selected
-
 
 class RankSelection(SelectionOperator[T]):
     """Rank-based selection."""
@@ -410,7 +392,6 @@ class RankSelection(SelectionOperator[T]):
 
         return selected
 
-
 class ElitismSelection(SelectionOperator[T]):
     """Elitism selection - always keeps the best individuals."""
 
@@ -435,7 +416,6 @@ class ElitismSelection(SelectionOperator[T]):
 
         return elite
 
-
 def create_mutation(
     mutation_type: MutationType,
     **kwargs
@@ -453,7 +433,6 @@ def create_mutation(
         raise ValueError(f"Unknown mutation type: {mutation_type}")
 
     return op_class(**kwargs)
-
 
 def create_crossover(
     crossover_type: CrossoverType,
@@ -473,7 +452,6 @@ def create_crossover(
 
     return op_class(**kwargs)
 
-
 def create_selection(
     selection_type: SelectionType,
     **kwargs
@@ -491,7 +469,6 @@ def create_selection(
         raise ValueError(f"Unknown selection type: {selection_type}")
 
     return op_class(**kwargs)
-
 
 __all__ = [
     "MutationType",

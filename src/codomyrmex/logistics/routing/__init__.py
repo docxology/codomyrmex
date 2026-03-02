@@ -10,7 +10,7 @@ import random
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any, Dict, List, Optional, Set, Tuple
+from typing import Any, Optional
 
 
 @dataclass
@@ -37,7 +37,6 @@ class Location:
 
         return R * c
 
-
 @dataclass
 class RoutingConstraints:
     """Constraints for routing optimization."""
@@ -49,7 +48,6 @@ class RoutingConstraints:
     vehicle_capacity: float | None = None
     time_windows: dict[str, tuple[int, int]] = field(default_factory=dict)
 
-
 @dataclass
 class RouteStop:
     """A stop in a route."""
@@ -58,7 +56,6 @@ class RouteStop:
     departure_time: float | None = None
     service_time: float = 0.0
     load: float = 0.0
-
 
 @dataclass
 class Route:
@@ -115,7 +112,6 @@ class Route:
             "total_duration_min": round(self.total_duration, 2),
         }
 
-
 class RoutingAlgorithm(ABC):
     """Abstract base class for routing algorithms."""
 
@@ -130,7 +126,6 @@ class RoutingAlgorithm(ABC):
         """Optimize a route through the given locations."""
         pass
 
-
 class NearestNeighborRouting(RoutingAlgorithm):
     """Simple nearest neighbor heuristic."""
 
@@ -144,7 +139,7 @@ class NearestNeighborRouting(RoutingAlgorithm):
         """optimize ."""
         route = Route(id="nn_route", stops=[])
         current = start
-        remaining = set(loc.id for loc in locations if loc.id != start.id)
+        remaining = {loc.id for loc in locations if loc.id != start.id}
         location_map = {loc.id: loc for loc in locations}
 
         # Add start
@@ -173,7 +168,6 @@ class NearestNeighborRouting(RoutingAlgorithm):
             route.add_stop(end, dist)
 
         return route
-
 
 class TwoOptRouting(RoutingAlgorithm):
     """2-opt improvement algorithm."""
@@ -250,7 +244,6 @@ class TwoOptRouting(RoutingAlgorithm):
 
         return result
 
-
 class DijkstraRouting:
     """Dijkstra's shortest path algorithm for graph-based routing."""
 
@@ -324,7 +317,6 @@ class DijkstraRouting:
             return [], float('inf')
 
         return path, distances[end_id]
-
 
 class AStarRouting:
     """A* pathfinding algorithm."""
@@ -412,7 +404,6 @@ class AStarRouting:
 
         return [], float('inf')
 
-
 def create_routing_algorithm(
     algorithm_type: str,
     **kwargs
@@ -428,7 +419,6 @@ def create_routing_algorithm(
         raise ValueError(f"Unknown algorithm: {algorithm_type}")
 
     return algo_class(**kwargs)
-
 
 __all__ = [
     "Location",

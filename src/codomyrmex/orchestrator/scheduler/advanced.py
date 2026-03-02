@@ -12,8 +12,9 @@ from enum import Enum
 from pathlib import Path
 from typing import Any
 
-from . import JobStatus, Scheduler
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
+
+from . import JobStatus, Scheduler
 
 logger = get_logger(__name__)
 

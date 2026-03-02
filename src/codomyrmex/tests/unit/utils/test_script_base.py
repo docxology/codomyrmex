@@ -163,14 +163,14 @@ class TestScriptResult:
     """Tests for the ScriptResult dataclass."""
 
     def _make_result(self, **overrides) -> ScriptResult:
-        defaults = dict(
-            script_name="test_script",
-            status="success",
-            start_time="2026-01-01T00:00:00",
-            end_time="2026-01-01T00:00:05",
-            duration_seconds=5.0,
-            exit_code=0,
-        )
+        defaults = {
+            "script_name": "test_script",
+            "status": "success",
+            "start_time": "2026-01-01T00:00:00",
+            "end_time": "2026-01-01T00:00:05",
+            "duration_seconds": 5.0,
+            "exit_code": 0,
+        }
         defaults.update(overrides)
         return ScriptResult(**defaults)
 

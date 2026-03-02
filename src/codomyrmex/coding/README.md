@@ -1,10 +1,20 @@
 # Coding Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
 Unified module for code execution, sandboxing, review, monitoring, and debugging. Provides a comprehensive toolkit for running code in isolated environments with resource limits, performing static analysis and quality assessment, tracking execution metrics, and automatically analyzing errors to generate patches. Supports multiple programming languages and Docker-based container isolation.
+
+## PAI Integration
+
+| Algorithm Phase | Role | Tools Used |
+|----------------|------|-----------|
+| **BUILD** | Engineer agent executes code in sandbox, generates and reviews code | `code_execute`, `code_review_file` |
+| **EXECUTE** | Runs scripts and code artifacts produced in BUILD phase | `code_execute` |
+| **VERIFY** | QATester runs `code_debug` to diagnose failures; `code_review_project` for quality | `code_review_project`, `code_debug` |
+
+PAI's Engineer subagent uses `code_execute` for sandbox execution and `code_review_file`/`code_review_project` for quality assurance during BUILD. QATester uses `code_debug` during VERIFY to diagnose test failures.
 
 ## Key Exports
 

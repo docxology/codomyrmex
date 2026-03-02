@@ -1,10 +1,9 @@
 import argparse
 import json
 import os
+import tomllib
 from pathlib import Path
 from typing import Any
-
-import tomllib
 
 from codomyrmex.logging_monitoring import get_logger
 
@@ -120,7 +119,7 @@ def analyze_code_quality() -> dict[str, Any]:
             quality["test_files"] += 1
 
     # Count documentation files
-    for md_file in project_root.rglob("*.md"):
+    for _md_file in project_root.rglob("*.md"):
         quality["documentation_files"] += 1
 
     # Check for testing setup

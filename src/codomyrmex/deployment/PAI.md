@@ -1,6 +1,6 @@
 # Personal AI Infrastructure — Deployment Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
@@ -32,6 +32,12 @@ The Deployment module provides release management, rollback orchestration, and d
 ## Architecture Role
 
 **Service Layer** — Consumes `ci_cd_automation/` (builds), `containerization/` (container deploys), `cloud/` (infrastructure). Top of the deployment pipeline.
+
+## MCP Tools
+
+This module does not expose MCP tools directly. Access its capabilities via:
+- Direct Python import: `from codomyrmex.deployment import ...`
+- CLI: `codomyrmex deployment <command>`
 
 ## Navigation
 

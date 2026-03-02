@@ -1,9 +1,10 @@
 """AWS integration submodule."""
 
-from typing import Any, Dict, Optional
+from typing import Any, Optional
 
 import boto3
 from botocore.exceptions import ClientError
+
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 logger = get_logger(__name__)

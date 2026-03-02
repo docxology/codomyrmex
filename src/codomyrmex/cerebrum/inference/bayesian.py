@@ -38,7 +38,7 @@ class Distribution:
         """Compute expectation if values are numeric."""
         if not all(isinstance(v, (int, float)) for v in self.values):
             raise ValueError("Cannot compute expectation for non-numeric values")
-        return sum(v * p for v, p in zip(self.values, self.probabilities))
+        return sum(v * p for v, p in zip(self.values, self.probabilities, strict=False))
 
     def mode(self) -> Any:
         """Get the most probable value."""
@@ -167,8 +167,8 @@ class BayesianNetwork:
         return {
             "name": self.name,
             "nodes": self.nodes,
-            "edges": {k: v for k, v in self.edges.items()},
-            "parents": {k: v for k, v in self.parents.items()},
+            "edges": dict(self.edges.items()),
+            "parents": dict(self.parents.items()),
             # CPT serialization would need custom handling
         }
 

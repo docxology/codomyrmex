@@ -13,6 +13,7 @@ import time
 from collections import defaultdict
 from dataclasses import dataclass, field
 from typing import Any
+
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 logger = get_logger(__name__)
@@ -48,7 +49,7 @@ class HistogramBucket:
 
     def to_dict(self) -> dict[str, Any]:
         """Return a dictionary representation of this object."""
-        buckets = {f"le_{b}": c for b, c in zip(self.boundaries, self.counts)}
+        buckets = {f"le_{b}": c for b, c in zip(self.boundaries, self.counts, strict=False)}
         buckets["le_inf"] = self.counts[-1]
         return {
             "buckets": buckets,

@@ -1,8 +1,18 @@
 # Logging & Monitoring Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 Centralized logging with configurable levels, formats, and outputs.
+
+## PAI Integration
+
+| Algorithm Phase | Role | Tools Used |
+|----------------|------|-----------|
+| **ALL PHASES** | Structured logging of all Algorithm actions and tool invocations | `logging_format_structured` |
+| **LEARN** | Archive structured logs for retrospective analysis | `logging_format_structured` |
+| **VERIFY** | Validate log output format and completeness | `logging_format_structured` |
+
+Every PAI Algorithm phase emits structured logs via this module. `logging_format_structured` is called by Engineer agents throughout BUILD and EXECUTE; all phase transition logs are archived for LEARN phase retrospectives. The monitoring integration forwards alerts when anomalies are detected.
 
 ## Key Exports
 

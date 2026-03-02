@@ -15,7 +15,7 @@ from collections.abc import Callable
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any, Optional, Union
 
 
 class EmbeddingModel(Enum):
@@ -39,7 +39,6 @@ class EmbeddingModel(Enum):
             "all-MiniLM-L6-v2": 384,
         }
         return dims.get(self.value, 1536)
-
 
 @dataclass
 class Embedding:
@@ -95,7 +94,6 @@ class Embedding:
             metadata=data.get("metadata", {}),
         )
 
-
 @dataclass
 class SimilarityResult:
     """Result of a similarity search."""
@@ -107,7 +105,6 @@ class SimilarityResult:
     def text(self) -> str:
         """text ."""
         return self.embedding.text
-
 
 class EmbeddingProvider(ABC):
     """Base class for embedding providers."""
@@ -127,7 +124,6 @@ class EmbeddingProvider(ABC):
     def model_name(self) -> str:
         """Get model name."""
         pass
-
 
 class TestEmbeddingProvider(EmbeddingProvider):
     """
@@ -174,7 +170,6 @@ class TestEmbeddingProvider(EmbeddingProvider):
     def embed_batch(self, texts: list[str]) -> list[Embedding]:
         """Generate mock embeddings for batch."""
         return [self.embed(text) for text in texts]
-
 
 class EmbeddingCache:
     """
@@ -237,7 +232,6 @@ class EmbeddingCache:
         """Get number of cached embeddings."""
         return len(self._cache)
 
-
 def cosine_similarity(vec1: list[float], vec2: list[float]) -> float:
     """
     Compute cosine similarity between two vectors.
@@ -247,7 +241,7 @@ def cosine_similarity(vec1: list[float], vec2: list[float]) -> float:
     if len(vec1) != len(vec2):
         raise ValueError(f"Dimension mismatch: {len(vec1)} vs {len(vec2)}")
 
-    dot_product = sum(a * b for a, b in zip(vec1, vec2))
+    dot_product = sum(a * b for a, b in zip(vec1, vec2, strict=False))
     magnitude1 = math.sqrt(sum(x * x for x in vec1))
     magnitude2 = math.sqrt(sum(x * x for x in vec2))
 
@@ -255,7 +249,6 @@ def cosine_similarity(vec1: list[float], vec2: list[float]) -> float:
         return 0.0
 
     return dot_product / (magnitude1 * magnitude2)
-
 
 def euclidean_distance(vec1: list[float], vec2: list[float]) -> float:
     """
@@ -266,16 +259,14 @@ def euclidean_distance(vec1: list[float], vec2: list[float]) -> float:
     if len(vec1) != len(vec2):
         raise ValueError(f"Dimension mismatch: {len(vec1)} vs {len(vec2)}")
 
-    return math.sqrt(sum((a - b) ** 2 for a, b in zip(vec1, vec2)))
-
+    return math.sqrt(sum((a - b) ** 2 for a, b in zip(vec1, vec2, strict=False)))
 
 def dot_product(vec1: list[float], vec2: list[float]) -> float:
     """Compute dot product of two vectors."""
     if len(vec1) != len(vec2):
         raise ValueError(f"Dimension mismatch: {len(vec1)} vs {len(vec2)}")
 
-    return sum(a * b for a, b in zip(vec1, vec2))
-
+    return sum(a * b for a, b in zip(vec1, vec2, strict=False))
 
 class EmbeddingIndex:
     """
@@ -364,7 +355,6 @@ class EmbeddingIndex:
     def count(self) -> int:
         """Get number of indexed embeddings."""
         return len(self._embeddings)
-
 
 class EmbeddingService:
     """
@@ -471,7 +461,7 @@ class EmbeddingService:
             self._stats["api_calls"] += 1
             embeddings = self.provider.embed_batch(batch_texts)
 
-            for (idx, _), embedding in zip(batch, embeddings):
+            for (idx, _), embedding in zip(batch, embeddings, strict=False):
                 results[idx] = embedding
                 if use_cache:
                     self.cache.set(embedding)
@@ -490,7 +480,6 @@ class EmbeddingService:
         if self._stats["total_requests"] == 0:
             return 0.0
         return self._stats["cache_hits"] / self._stats["total_requests"]
-
 
 def chunk_text(
     text: str,
@@ -532,7 +521,6 @@ def chunk_text(
         start = end - overlap
 
     return chunks
-
 
 __all__ = [
     # Enums

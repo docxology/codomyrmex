@@ -1,6 +1,6 @@
 # Personal AI Infrastructure — Templating Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
@@ -64,6 +64,12 @@ from codomyrmex.templating import engines
 ## Architecture Role
 
 **Core Layer** — Consumed by `documentation/` (doc generation), `ci_cd_automation/` (pipeline configs), `coding/` (code scaffolding), and `agents/` (prompt construction).
+
+## MCP Tools
+
+This module does not expose MCP tools directly. Access its capabilities via:
+- Direct Python import: `from codomyrmex.templating import ...`
+- CLI: `codomyrmex templating <command>`
 
 ## Navigation
 

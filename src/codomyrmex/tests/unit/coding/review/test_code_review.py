@@ -158,7 +158,7 @@ class TestCodeReview:
             "generate_report",
         ]
 
-        for export in expected_exports:
+        for _export in expected_exports:
             # Note: imports usually at sub-module level, verifying basic availability
             pass
 

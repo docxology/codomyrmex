@@ -13,9 +13,10 @@ from datetime import datetime
 from enum import Enum
 from typing import Any
 
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
+
 from ..agents.base import CollaborativeAgent
 from ..protocols import AgentState
-from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 logger = get_logger(__name__)
 
@@ -83,7 +84,7 @@ class LeaderElection(ABC):
 
         This is the base implementation - subclasses should override.
         """
-        raise NotImplementedError("Subclasses must implement elect()")
+        raise NotImplementedError("Subclasses must implement elect()")  # ABC: intentional
 
     def _record_result(self, result: ElectionResult) -> None:
         """Record an election result."""

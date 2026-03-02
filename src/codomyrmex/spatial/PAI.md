@@ -1,6 +1,6 @@
 # Personal AI Infrastructure — Spatial Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
@@ -46,6 +46,12 @@ from codomyrmex.spatial import coordinates, three_d, physics, rendering, world_m
 ## Architecture Role
 
 **Specialized Layer** — Advanced domain-specific module for spatial computing. Consumed by `embodiment/`, `data_visualization/`, and `simulation/`.
+
+## MCP Tools
+
+This module does not expose MCP tools directly. Access its capabilities via:
+- Direct Python import: `from codomyrmex.spatial import ...`
+- CLI: `codomyrmex spatial <command>`
 
 ## Navigation
 

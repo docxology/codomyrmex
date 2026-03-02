@@ -78,7 +78,7 @@ class VariationalFreeEnergy:
             if prob > 0 and state in likelihood:
                 obs_probs = likelihood[state]
                 # Compute expected log likelihood
-                for obs_key, obs_value in observations.items():
+                for obs_key, _obs_value in observations.items():
                     if obs_key in obs_probs:
                         accuracy -= prob * math.log(obs_probs[obs_key] + 1e-10)
 
@@ -285,7 +285,7 @@ class ActiveInferenceAgent:
             if state in self.observation_model:
                 obs_probs = self.observation_model[state]
                 likelihood = 1.0
-                for obs_key, obs_value in observation.items():
+                for obs_key, _obs_value in observation.items():
                     if obs_key in obs_probs:
                         likelihood *= obs_probs[obs_key]
                 updated_beliefs[state] = prior_prob * likelihood

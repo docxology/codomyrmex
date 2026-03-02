@@ -1,7 +1,7 @@
 """Tests for the calendar module."""
 
 import os
-from datetime import datetime, timedelta, timezone, UTC
+from datetime import UTC, datetime, timedelta
 
 import pytest
 

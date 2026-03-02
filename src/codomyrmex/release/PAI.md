@@ -1,6 +1,6 @@
 # Personal AI Infrastructure — Release Module
 
-**Version**: v1.0.2 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
@@ -113,6 +113,12 @@ assert result.url, "Publish failed — no URL returned"
 `logging_monitoring`) and Core Layer (`static_analysis`, `git_operations`) for
 certification checks. Consumed by CI/CD automation in the `.github/workflows/` release
 pipeline.
+
+## MCP Tools
+
+This module does not expose MCP tools directly. Access its capabilities via:
+- Direct Python import: `from codomyrmex.release import ...`
+- CLI: `codomyrmex release <command>`
 
 ## Navigation
 

@@ -10,7 +10,6 @@ from pathlib import Path
 
 import pytest
 
-
 # ---------------------------------------------------------------------------
 # ConsistencyIssue / ConsistencyReport dataclasses
 # ---------------------------------------------------------------------------
@@ -21,7 +20,9 @@ class TestConsistencyDataclasses:
     """Test ConsistencyIssue and ConsistencyReport dataclass instantiation."""
 
     def test_consistency_issue_fields(self):
-        from codomyrmex.documentation.quality.consistency_checker import ConsistencyIssue
+        from codomyrmex.documentation.quality.consistency_checker import (
+            ConsistencyIssue,
+        )
 
         issue = ConsistencyIssue(
             file_path="/path/to/file.md",
@@ -35,7 +36,9 @@ class TestConsistencyDataclasses:
         assert issue.severity == "warning"  # default
 
     def test_consistency_issue_custom_severity(self):
-        from codomyrmex.documentation.quality.consistency_checker import ConsistencyIssue
+        from codomyrmex.documentation.quality.consistency_checker import (
+            ConsistencyIssue,
+        )
 
         issue = ConsistencyIssue(
             file_path="x.md",
@@ -47,7 +50,9 @@ class TestConsistencyDataclasses:
         assert issue.severity == "error"
 
     def test_consistency_issue_suggestion(self):
-        from codomyrmex.documentation.quality.consistency_checker import ConsistencyIssue
+        from codomyrmex.documentation.quality.consistency_checker import (
+            ConsistencyIssue,
+        )
 
         issue = ConsistencyIssue(
             file_path="x.md",
@@ -59,7 +64,9 @@ class TestConsistencyDataclasses:
         assert issue.suggestion == "Replace with 4 spaces"
 
     def test_consistency_report_defaults(self):
-        from codomyrmex.documentation.quality.consistency_checker import ConsistencyReport
+        from codomyrmex.documentation.quality.consistency_checker import (
+            ConsistencyReport,
+        )
 
         report = ConsistencyReport(total_files=5, files_checked=3)
         assert report.total_files == 5
@@ -370,7 +377,7 @@ class TestDocumentationQualityAnalyzer:
         )
 
         analyzer = DocumentationQualityAnalyzer()
-        for metric, value in analyzer.quality_metrics.items():
+        for _metric, value in analyzer.quality_metrics.items():
             assert value == 0
 
 

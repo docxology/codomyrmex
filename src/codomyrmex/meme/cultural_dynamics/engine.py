@@ -72,7 +72,7 @@ class CulturalDynamicsEngine:
         """Map power dynamics from interaction graph."""
         # Simple degree centrality placeholder
         scores = dict.fromkeys(nodes, 0.1)
-        for src, dst in interactions:
+        for src, _dst in interactions:
             scores[src] = scores.get(src, 0.1) + 0.05
 
         return PowerMap(nodes=nodes, centrality_scores=scores)

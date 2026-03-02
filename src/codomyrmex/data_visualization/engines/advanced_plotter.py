@@ -548,7 +548,7 @@ class AdvancedPlotter:
         if color and patch_artist:
             if isinstance(color, str):
                 color = [color] * len(data_list)
-            for patch, col in zip(box_plot["boxes"], color):
+            for patch, col in zip(box_plot["boxes"], color, strict=False):
                 patch.set_facecolor(col)
 
         return box_plot

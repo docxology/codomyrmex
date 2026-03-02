@@ -11,15 +11,14 @@ import json
 import threading
 import time
 import uuid
-from collections.abc import Callable
+from collections.abc import Callable, Generator
 from contextlib import contextmanager
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any, ContextManager, Dict, List, Optional, TypeVar
+from typing import Any, Optional, TypeVar
 
 T = TypeVar('T')
-
 
 class SpanKind(Enum):
     """Type of span."""
@@ -29,13 +28,11 @@ class SpanKind(Enum):
     PRODUCER = "producer"
     CONSUMER = "consumer"
 
-
 class SpanStatus(Enum):
     """Status of a span."""
     UNSET = "unset"
     OK = "ok"
     ERROR = "error"
-
 
 @dataclass
 class SpanContext:
@@ -94,7 +91,6 @@ class SpanContext:
             parent_span_id=parent if parent else None,
             sampled=sampled,
         )
-
 
 @dataclass
 class Span:
@@ -200,7 +196,6 @@ class Span:
             "events": self.events,
         }
 
-
 from abc import ABC, abstractmethod
 
 
@@ -216,7 +211,6 @@ class SpanExporter(ABC):
     def shutdown(self) -> None:
         """Shutdown exporter."""
         pass
-
 
 class ConsoleExporter(SpanExporter):
     """Export spans to console."""
@@ -236,7 +230,6 @@ class ConsoleExporter(SpanExporter):
     def shutdown(self) -> None:
         """No-op shutdown for console exporter."""
         return None  # Intentional no-op
-
 
 class InMemoryExporter(SpanExporter):
     """Store spans in memory (useful for testing)."""
@@ -270,15 +263,12 @@ class InMemoryExporter(SpanExporter):
         """Clear spans on shutdown."""
         self.clear()
 
-
 # Thread-local storage for context
 _context_local = threading.local()
-
 
 def _generate_id(length: int = 16) -> str:
     """Generate a random hex ID."""
     return uuid.uuid4().hex[:length]
-
 
 class Tracer:
     """
@@ -368,7 +358,7 @@ class Tracer:
         name: str,
         kind: SpanKind = SpanKind.INTERNAL,
         **attributes,
-    ) -> ContextManager[Span]:
+    ) -> Generator[Span, None, None]:
         """
         Context manager for spans.
 
@@ -412,11 +402,9 @@ class Tracer:
         self.flush()
         self.exporter.shutdown()
 
-
 # Global tracer registry
 _tracers: dict[str, Tracer] = {}
 _tracers_lock = threading.Lock()
-
 
 def get_tracer(
     name: str = "default",
@@ -427,7 +415,6 @@ def get_tracer(
         if name not in _tracers:
             _tracers[name] = Tracer(name, exporter)
         return _tracers[name]
-
 
 def trace(
     name: str | None = None,
@@ -462,12 +449,10 @@ def trace(
 
     return decorator
 
-
 def get_current_span() -> Span | None:
     """Get the current active span context."""
     context = getattr(_context_local, 'context', None)
     return context
-
 
 __all__ = [
     # Enums

@@ -1,10 +1,20 @@
 # CI/CD Automation Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
 CI/CD pipeline management module providing end-to-end continuous integration and deployment capabilities. The `PipelineManager` creates and executes multi-stage pipelines composed of `PipelineStage` and `PipelineJob` definitions. `DeploymentOrchestrator` handles deployment to target environments with promotion and rollback support. `PipelineMonitor` tracks pipeline health and generates analytics reports. `RollbackManager` implements configurable rollback strategies for failed deployments. `PipelineOptimizer` identifies and applies performance improvements to pipeline execution. Includes a full exception hierarchy for granular error handling across pipeline, build, deployment, artifact, stage, and rollback operations.
+
+## PAI Integration
+
+| Algorithm Phase | Role | Tools Used |
+|----------------|------|-----------|
+| **PLAN** | Review pipeline dependencies and workflow structure | Direct Python import |
+| **EXECUTE** | Trigger CI/CD pipelines for automated build and test | Direct Python import |
+| **VERIFY** | Confirm pipeline results meet quality gates | Direct Python import |
+
+PAI's EXECUTE phase triggers CI/CD workflows for automated validation. Engineer agents manage pipeline configuration during BUILD; QATester validates pipeline outputs during VERIFY. This module automates the feedback loop between PAI's Algorithm cycles and the CI system.
 
 ## Key Exports
 

@@ -141,7 +141,7 @@ class TestInteractiveShell:
         result = self.shell.do_quit("")
 
         # Should return True to exit
-        assert result == True
+        assert result is True
 
         # Capture output
         captured = capsys.readouterr()
@@ -152,7 +152,7 @@ class TestInteractiveShell:
         result = self.shell.do_EOF("")
 
         # Should return True to exit
-        assert result == True
+        assert result is True
 
         # Capture output
         captured = capsys.readouterr()
@@ -163,7 +163,7 @@ class TestInteractiveShell:
         result = self.shell.do_exit("")
 
         # Should return True to exit
-        assert result == True
+        assert result is True
 
         # Capture output
         captured = capsys.readouterr()
@@ -270,11 +270,11 @@ class TestInteractiveShell:
         """Test postcmd hook."""
         # Test with stop=False (continue)
         result = self.shell.postcmd(False, "explore")
-        assert result == False
+        assert result is False
 
         # Test with stop=True (exit)
         result = self.shell.postcmd(True, "quit")
-        assert result == True
+        assert result is True
 
     def test_session_data_tracking(self):
         """Test that session data is properly tracked."""

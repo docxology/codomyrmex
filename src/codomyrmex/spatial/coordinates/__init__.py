@@ -7,7 +7,7 @@ Provides coordinate system conversions and transformations.
 import math
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import List, Optional, Tuple, Union
+from typing import Optional, Union
 
 
 class CoordinateSystem(Enum):
@@ -17,7 +17,6 @@ class CoordinateSystem(Enum):
     CYLINDRICAL = "cylindrical"
     GEOGRAPHIC = "geographic"  # lat/lon
     UTM = "utm"
-
 
 @dataclass
 class Point3D:
@@ -78,7 +77,6 @@ class Point3D:
         """Create from tuple."""
         return cls(t[0], t[1], t[2])
 
-
 @dataclass
 class SphericalCoord:
     """Spherical coordinates (r, theta, phi)."""
@@ -104,7 +102,6 @@ class SphericalCoord:
         phi = math.acos(point.z / r)
         return cls(r, theta, phi)
 
-
 @dataclass
 class CylindricalCoord:
     """Cylindrical coordinates (r, theta, z)."""
@@ -124,7 +121,6 @@ class CylindricalCoord:
         r = math.sqrt(point.x**2 + point.y**2)
         theta = math.atan2(point.y, point.x)
         return cls(r, theta, point.z)
-
 
 @dataclass
 class GeographicCoord:
@@ -183,7 +179,6 @@ class GeographicCoord:
 
         bearing = math.degrees(math.atan2(x, y))
         return (bearing + 360) % 360
-
 
 @dataclass
 class Matrix4x4:
@@ -275,7 +270,6 @@ class Matrix4x4:
             return Point3D(x/w, y/w, z/w)
         return Point3D(x, y, z)
 
-
 class CoordinateTransformer:
     """Utility class for coordinate transformations."""
 
@@ -318,7 +312,6 @@ class CoordinateTransformer:
     def radians_to_degrees(radians: float) -> float:
         """Convert radians to degrees."""
         return math.degrees(radians)
-
 
 __all__ = [
     "CoordinateSystem",

@@ -1,6 +1,6 @@
 # Agent Guidelines - Examples
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Module Overview
 
@@ -61,6 +61,23 @@ for example in list_examples():
     code = get_example_code(example.name)
     ast.parse(code)  # Should not raise
 ```
+
+## PAI Agent Role Access Matrix
+
+| PAI Agent | Access Level | Primary Capabilities | Trust Level |
+|-----------|-------------|---------------------|-------------|
+| **Engineer** | Full | Direct Python import, class instantiation, full API access | TRUSTED |
+| **Architect** | Read + Design | API review, interface design, dependency analysis | OBSERVED |
+| **QATester** | Validation | Integration testing via pytest, output validation | OBSERVED |
+
+### Engineer Agent
+**Use Cases**: Consult examples for implementation patterns, use examples as templates during BUILD phases
+
+### Architect Agent
+**Use Cases**: Architecture review of example patterns, integration example design, usage pattern documentation
+
+### QATester Agent
+**Use Cases**: Validate example correctness, verify examples are runnable, ensure examples stay in sync with API
 
 ## Navigation
 

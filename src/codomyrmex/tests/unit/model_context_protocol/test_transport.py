@@ -24,7 +24,6 @@ from codomyrmex.model_context_protocol.errors import (
     validation_error,
 )
 from codomyrmex.model_context_protocol.transport.client import (
-    MCPClient,
     MCPClientConfig,
     MCPClientError,
 )

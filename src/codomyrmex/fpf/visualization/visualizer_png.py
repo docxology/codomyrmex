@@ -390,7 +390,7 @@ class FPFVisualizerPNG:
             from matplotlib.patches import Patch
             legend_elements = [
                 Patch(facecolor=color, edgecolor="black", label=status, alpha=0.8)
-                for status, color in zip(statuses, colors)
+                for status, color in zip(statuses, colors, strict=False)
             ]
             self.theme.create_legend(ax, legend_elements, statuses, loc="upper right")
 

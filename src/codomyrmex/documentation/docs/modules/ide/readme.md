@@ -1,8 +1,18 @@
 # IDE Integration Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 Programmatic integration with IDEs: Antigravity, Cursor, and VS Code.
+
+## PAI Integration
+
+| Algorithm Phase | Role | Tools Used |
+|----------------|------|-----------|
+| **BUILD** | Code editing operations via IDE command execution | Direct Python import |
+| **EXECUTE** | IDE integrations for automated formatting and saves | Direct Python import |
+| **OBSERVE** | IDE state inspection including open files and status | Direct Python import |
+
+PAI agents access this module via direct Python import through the MCP bridge. The Engineer agent drives IDE commands during BUILD for automated code editing, and inspects IDE state during OBSERVE to understand the current workspace context.
 
 ## Installation
 

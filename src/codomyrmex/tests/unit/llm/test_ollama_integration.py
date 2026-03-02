@@ -326,7 +326,7 @@ class TestOllamaIntegration:
         assert 'balanced' in presets
 
         # Validate preset structure
-        for preset_name, preset_options in presets.items():
+        for _preset_name, preset_options in presets.items():
             assert isinstance(preset_options, ExecutionOptions)
             assert isinstance(preset_options.temperature, float)
             assert isinstance(preset_options.max_tokens, int)

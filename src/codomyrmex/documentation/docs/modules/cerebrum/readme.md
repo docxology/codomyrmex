@@ -1,10 +1,20 @@
 # Cerebrum Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
 Case-Enabled Reasoning Engine with Bayesian Representations for Unified Modeling (CEREBRUM). Combines case-based reasoning with Bayesian probabilistic inference for cognitive modeling, code reasoning, and AI enhancement. Provides a full pipeline from case storage and retrieval through Bayesian network inference and active inference agents based on the free energy principle, with visualization tools for models, cases, and inference results.
+
+## PAI Integration
+
+| Algorithm Phase | Role | Tools Used |
+|----------------|------|-----------|
+| **THINK** | Case-based reasoning to select optimal capabilities and strategies | `query_knowledge_base` |
+| **OBSERVE** | Retrieve prior knowledge about similar problems | `query_knowledge_base` |
+| **LEARN** | Store new case references for future reasoning | `add_case_reference` |
+
+PAI's THINK phase uses `query_knowledge_base` to retrieve analogous cases from the knowledge base, informing capability selection. The Engineer subagent has full access; `add_case_reference` is called during LEARN to capture new problem-solution pairs.
 
 ## Key Exports
 

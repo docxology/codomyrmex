@@ -1,6 +1,6 @@
 # Agent Guidelines - Maintenance
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Module Overview
 
@@ -68,6 +68,23 @@ All tools are auto-discovered via `@mcp_tool` decorators and exposed through the
 |------|-------------|-------------|
 | `maintenance_health_check` | Run a simple health check and return its status | Safe |
 | `maintenance_list_tasks` | List all registered maintenance tasks and their status | Safe |
+
+## PAI Agent Role Access Matrix
+
+| PAI Agent | Access Level | Primary Capabilities | Trust Level |
+|-----------|-------------|---------------------|-------------|
+| **Engineer** | Full | `maintenance_health_check`, `maintenance_list_tasks`; full maintenance lifecycle | TRUSTED |
+| **Architect** | Read + Design | `maintenance_list_tasks`; task queue review, maintenance schedule design | OBSERVED |
+| **QATester** | Validation | `maintenance_health_check`; system health verification during VERIFY phase | OBSERVED |
+
+### Engineer Agent
+**Use Cases**: Running health checks during VERIFY, managing maintenance task queues, scheduling system upkeep.
+
+### Architect Agent
+**Use Cases**: Reviewing maintenance schedules, designing health check strategies, planning upkeep workflows.
+
+### QATester Agent
+**Use Cases**: Running health checks to confirm system operational status, validating maintenance completeness.
 
 ## Navigation
 

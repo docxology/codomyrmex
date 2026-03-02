@@ -233,7 +233,7 @@ def fix_dependencies(deps: dict[str, dict]) -> None:
     """Attempt to install missing dependencies."""
     missing_packages = []
 
-    for category, packages in deps.items():
+    for _category, packages in deps.items():
         for package, info in packages.items():
             if not info["installed"]:
                 missing_packages.append(package)

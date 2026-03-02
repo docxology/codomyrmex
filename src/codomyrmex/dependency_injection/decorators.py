@@ -169,7 +169,7 @@ def inject(fn: Callable[..., Any]) -> Callable[..., Any]:
     sig = inspect.signature(fn)
     injectable_params: dict[str, type] = {}
 
-    for name, param in sig.parameters.items():
+    for name, _param in sig.parameters.items():
         if name == "self":
             continue
         if name == "return":

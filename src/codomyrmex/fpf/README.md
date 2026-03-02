@@ -1,10 +1,20 @@
 # FPF (Functional Programming Framework) Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
 First Principles Framework (FPF) module for fetching, parsing, analyzing, and exporting the FPF specification for use in prompt and context engineering. Transforms the static FPF-Spec.md markdown document into a machine-readable, queryable data model with concepts, patterns, relationships, and a searchable index. Includes a high-level `FPFClient` for common workflows and visualization tools for rendering concept graphs.
+
+## PAI Integration
+
+| Algorithm Phase | Role | Tools Used |
+|----------------|------|-----------|
+| **EXECUTE** | Secure document submission and FPF spec export | Direct Python import |
+| **OBSERVE** | Monitor secure drops and query parsed specifications | Direct Python import |
+| **VERIFY** | Validate secure communications and spec consistency | Direct Python import |
+
+PAI agents access this module via direct Python import through the MCP bridge. The Engineer agent uses FPFClient during EXECUTE to fetch and export specifications, while QATester validates spec consistency during VERIFY.
 
 ## Installation
 

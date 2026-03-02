@@ -15,10 +15,9 @@ from collections.abc import Callable
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
-from typing import Any, Dict, Generic, List, Optional, TypeVar, Union
+from typing import Any, Generic, Optional, TypeVar, Union
 
 T = TypeVar('T')
-
 
 class StageStatus(Enum):
     """Status of a pipeline stage."""
@@ -29,7 +28,6 @@ class StageStatus(Enum):
     SKIPPED = "skipped"
     CANCELLED = "cancelled"
 
-
 class PipelineStatus(Enum):
     """Status of a pipeline."""
     CREATED = "created"
@@ -37,7 +35,6 @@ class PipelineStatus(Enum):
     SUCCESS = "success"
     FAILED = "failed"
     CANCELLED = "cancelled"
-
 
 @dataclass
 class StageResult:
@@ -59,7 +56,6 @@ class StageResult:
     @property
     def is_success(self) -> bool:
         return self.status == StageStatus.SUCCESS
-
 
 @dataclass
 class PipelineResult:
@@ -84,7 +80,6 @@ class PipelineResult:
     @property
     def failed_stages(self) -> int:
         return sum(1 for s in self.stages if s.status == StageStatus.FAILED)
-
 
 class Stage(ABC):
     """Base class for pipeline stages."""
@@ -116,7 +111,6 @@ class Stage(ABC):
         """Called on failed execution."""
         return None  # Optional hook — subclass may override
 
-
 class FunctionStage(Stage):
     """Stage that executes a function."""
 
@@ -132,7 +126,6 @@ class FunctionStage(Stage):
     def execute(self, context: dict[str, Any]) -> Any:
         """Execute the operation."""
         return self._func(context)
-
 
 class ConditionalStage(Stage):
     """Stage that executes conditionally."""
@@ -153,7 +146,6 @@ class ConditionalStage(Stage):
         if self.condition(context):
             return self.stage.execute(context)
         return None
-
 
 class ParallelStage(Stage):
     """Stage that executes multiple stages in parallel."""
@@ -187,7 +179,6 @@ class ParallelStage(Stage):
                     results[stage_id] = {"error": str(e)}
 
         return results
-
 
 class Pipeline:
     """
@@ -348,7 +339,6 @@ class Pipeline:
         result.end_time = datetime.now()
         return result
 
-
 class PipelineBuilder:
     """
     Fluent builder for pipelines.
@@ -402,7 +392,6 @@ class PipelineBuilder:
     def build(self) -> Pipeline:
         """Build the pipeline."""
         return self._pipeline
-
 
 __all__ = [
     # Enums

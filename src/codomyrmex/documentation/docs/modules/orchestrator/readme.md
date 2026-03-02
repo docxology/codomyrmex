@@ -1,10 +1,20 @@
 # Orchestrator Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
 Script orchestration engine for discovering, configuring, and running Python scripts within the Codomyrmex project. Provides workflow DAG execution with dependency resolution, parallel execution with resource management, retry logic with exponential backoff, conditional step execution, and CI/CD pipeline integration. Includes both a full-featured workflow system and a thin convenience API for common patterns.
+
+## PAI Integration
+
+The orchestrator module is central to PAI's **PLAN phase**. The `Architect` subagent uses `analyze_workflow_dependencies` to validate DAG structure and detect cycles before BUILD begins. The `QATester` subagent reads `get_scheduler_metrics` during VERIFY to confirm workflow execution completed without deadlocks or timeouts. See [AGENTS.md](AGENTS.md) for the full agent role access matrix.
+
+| Algorithm Phase | Orchestrator Role |
+|----------------|------------------|
+| PLAN | `Architect` → `analyze_workflow_dependencies` to validate DAG |
+| EXECUTE | `Engineer` → `Workflow` / `ParallelRunner` for parallel task execution |
+| VERIFY | `QATester` → `get_scheduler_metrics` to confirm execution health |
 
 ## Key Exports
 

@@ -1,8 +1,18 @@
 # Privacy Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 Data sanitization and anonymous routing for privacy protection.
+
+## PAI Integration
+
+| Algorithm Phase | Role | Tools Used |
+|----------------|------|-----------|
+| **VERIFY** | Validate PII handling and data sanitization | Direct Python import |
+| **BUILD** | Implement privacy controls and mixnet routing | Direct Python import |
+| **OBSERVE** | Audit data flows for sensitive information | Direct Python import |
+
+PAI agents access this module via direct Python import through the MCP bridge. The Engineer agent imports `CrumbCleaner` during BUILD to sanitize PII from outputs, and during VERIFY to validate that sensitive data is properly masked.
 
 ## Installation
 

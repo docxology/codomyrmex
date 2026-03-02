@@ -1,8 +1,18 @@
 # Concurrency Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 Distributed locks, semaphores, and synchronization primitives.
+
+## PAI Integration
+
+| Algorithm Phase | Role | Tools Used |
+|----------------|------|-----------|
+| **EXECUTE** | Run parallel agent tasks with distributed locking | Direct Python import |
+| **BUILD** | Parallelize build steps using semaphores and lock managers | Direct Python import |
+| **OBSERVE** | Monitor concurrent task status and lock contention | Direct Python import |
+
+PAI agents access this module via direct Python import through the MCP bridge. The Engineer agent uses `LockManager` and `LocalSemaphore` to coordinate parallel build and execution tasks safely across concurrent agent operations.
 
 ## Installation
 

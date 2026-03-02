@@ -851,7 +851,7 @@ class TestSavePipelineConfig:
         reloaded = mgr.create_pipeline(out_path)
         assert reloaded.name == pipeline.name
         assert len(reloaded.stages) == len(pipeline.stages)
-        for orig, loaded in zip(pipeline.stages, reloaded.stages):
+        for orig, loaded in zip(pipeline.stages, reloaded.stages, strict=False):
             assert orig.name == loaded.name
             assert len(orig.jobs) == len(loaded.jobs)
 

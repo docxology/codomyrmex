@@ -1,6 +1,6 @@
 # Audio Module - AI Agent Guidelines
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Module Purpose
 
@@ -225,3 +225,20 @@ from codomyrmex.audio import (
 if not STT_AVAILABLE:
     print("Install audio deps: uv sync --extra audio")
 ```
+
+## PAI Agent Role Access Matrix
+
+| PAI Agent | Access Level | Primary Capabilities | Trust Level |
+|-----------|-------------|---------------------|-------------|
+| **Engineer** | Full | Audio processing, synthesis, transcription, TTS/STT integration | TRUSTED |
+| **Architect** | Read + Design | Audio pipeline design, codec selection, processing architecture review | OBSERVED |
+| **QATester** | Validation | Audio output quality validation, transcription accuracy testing | OBSERVED |
+
+### Engineer Agent
+**Use Cases**: Audio generation and processing during BUILD/EXECUTE, TTS integration for voice interfaces.
+
+### Architect Agent
+**Use Cases**: Designing audio pipelines, selecting codecs, planning TTS/STT architectures.
+
+### QATester Agent
+**Use Cases**: Validating audio output quality during VERIFY, testing transcription accuracy.

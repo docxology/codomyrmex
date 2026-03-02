@@ -1,6 +1,6 @@
 # Agent Guidelines - CI/CD Automation
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Module Overview
 
@@ -58,6 +58,23 @@ generator = WorkflowGenerator("github")
 workflow = generator.from_pipeline(pipeline)
 assert "jobs" in workflow.to_dict()
 ```
+
+## PAI Agent Role Access Matrix
+
+| PAI Agent | Access Level | Primary Capabilities | Trust Level |
+|-----------|-------------|---------------------|-------------|
+| **Engineer** | Full | Pipeline management, workflow triggering, CI/CD configuration; full pipeline control | TRUSTED |
+| **Architect** | Read + Design | Pipeline design review, workflow dependency analysis, CI/CD architecture | OBSERVED |
+| **QATester** | Validation | Pipeline status validation, workflow output verification, CI health checks | OBSERVED |
+
+### Engineer Agent
+**Use Cases**: Triggering CI/CD pipelines during EXECUTE, configuring workflows, managing deployment pipelines.
+
+### Architect Agent
+**Use Cases**: Designing CI/CD workflows, reviewing pipeline dependencies, planning automation architecture.
+
+### QATester Agent
+**Use Cases**: Validating pipeline outputs during VERIFY, confirming CI gates pass, checking deployment readiness.
 
 ## Navigation
 

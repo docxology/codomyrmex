@@ -50,4 +50,4 @@ def locate_features(terrain: TerrainMap, threshold: float) -> list[tuple[int, in
     """Find grid coordinates of peaks above threshold."""
     peaks = np.where(terrain.height_map > threshold)
     # peaks is (array([row_indices]), array([col_indices]))
-    return list(zip(peaks[0], peaks[1]))
+    return list(zip(peaks[0], peaks[1], strict=False))

@@ -98,9 +98,9 @@ def score_relevance(prompt: str, response: str) -> float:
     Extracts significant words (4+ chars) from the prompt and checks
     how many appear in the response.
     """
-    prompt_words = set(
+    prompt_words = {
         w.lower() for w in re.findall(r"\b\w{4,}\b", prompt)
-    )
+    }
     if not prompt_words:
         return 1.0
 

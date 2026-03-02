@@ -14,7 +14,7 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Set, Tuple
+from typing import Any, Optional
 
 
 class Severity(Enum):
@@ -24,7 +24,6 @@ class Severity(Enum):
     MEDIUM = "medium"
     LOW = "low"
     INFO = "info"
-
 
 class FindingType(Enum):
     """Types of security findings."""
@@ -38,7 +37,6 @@ class FindingType(Enum):
     EXPOSED_DEBUG = "exposed_debug"
     INSECURE_DESERIALIZATION = "insecure_deserialization"
     OPEN_REDIRECT = "open_redirect"
-
 
 @dataclass
 class SecurityFinding:
@@ -67,7 +65,6 @@ class SecurityFinding:
             "line": self.line_number,
             "remediation": self.remediation,
         }
-
 
 @dataclass
 class ScanResult:
@@ -113,7 +110,6 @@ class ScanResult:
             "high": self.high_count,
         }
 
-
 class SecurityRule(ABC):
     """Base class for security rules."""
 
@@ -133,7 +129,6 @@ class SecurityRule(ABC):
     def check(self, content: str, file_path: str) -> list[SecurityFinding]:
         """Check content for vulnerabilities."""
         pass
-
 
 class PatternRule(SecurityRule):
     """Rule based on regex patterns."""
@@ -188,7 +183,6 @@ class PatternRule(SecurityRule):
 
         return findings
 
-
 class SQLInjectionRule(PatternRule):
     """Detects potential SQL injection vulnerabilities."""
 
@@ -202,7 +196,6 @@ class SQLInjectionRule(PatternRule):
             description="User input may be directly concatenated into SQL query",
             remediation="Use parameterized queries or prepared statements",
         )
-
 
 class HardcodedSecretRule(PatternRule):
     """Detects hardcoded secrets."""
@@ -218,7 +211,6 @@ class HardcodedSecretRule(PatternRule):
             remediation="Use environment variables or a secrets manager",
         )
 
-
 class CommandInjectionRule(PatternRule):
     """Detects potential command injection."""
 
@@ -233,7 +225,6 @@ class CommandInjectionRule(PatternRule):
             remediation="Use subprocess with shell=False and pass args as list",
         )
 
-
 class InsecureRandomRule(PatternRule):
     """Detects use of insecure random."""
 
@@ -247,7 +238,6 @@ class InsecureRandomRule(PatternRule):
             description="Using random module for security-sensitive operation",
             remediation="Use secrets module for cryptographic randomness",
         )
-
 
 class SecurityScanner:
     """
@@ -383,7 +373,6 @@ class SecurityScanner:
 
         result.completed_at = datetime.now()
         return result
-
 
 __all__ = [
     # Enums

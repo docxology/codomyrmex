@@ -364,7 +364,7 @@ def handle_quick_workflow(
         if result["success"]:
             print("Workflow completed successfully")
             if verbose and "results" in result:
-                for step, step_result in result["results"].items():
+                for step, _step_result in result["results"].items():
                     print(f"  ✓ {step}")
             return True
         else:

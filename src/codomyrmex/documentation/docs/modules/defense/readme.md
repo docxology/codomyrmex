@@ -1,8 +1,18 @@
 # Defense Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 Active countermeasures and threat containment for AI security.
+
+## PAI Integration
+
+| Algorithm Phase | Role | Tools Used |
+|----------------|------|-----------|
+| **VERIFY** | Run defensive scans against injection and exploit attempts | Direct Python import |
+| **OBSERVE** | Monitor threats and detect suspicious agent behavior | Direct Python import |
+| **BUILD** | Harden configurations and register threat handlers | Direct Python import |
+
+PAI agents access this module via direct Python import through the MCP bridge. The QATester agent uses `ActiveDefense` during VERIFY to scan for prompt injection, while `RabbitHole` isolates suspicious agents during threat containment.
 
 ## Installation
 

@@ -380,7 +380,7 @@ class Workflow:
 
             results = await asyncio.gather(*coroutines, return_exceptions=True)
 
-            for task, result in zip(runnable, results):
+            for task, result in zip(runnable, results, strict=False):
                 if isinstance(result, Exception):
                     task.status = TaskStatus.FAILED
                     task.error = result
@@ -524,7 +524,8 @@ class Workflow:
                 # Remove injected results for sync functions that might not expect them
                 if "_task_results" in kwargs and "_task_results" not in task.kwargs:
                     del kwargs["_task_results"]
-                func = lambda: task.action(*task.args, **kwargs)
+                def func():
+                    return task.action(*task.args, **kwargs)
                 if task.timeout:
                     return await asyncio.wait_for(
                         loop.run_in_executor(None, func),

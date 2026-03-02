@@ -87,7 +87,7 @@ class Genome:
                 f"{len(self.genes)} and {len(other.genes)}"
             )
         return math.sqrt(
-            sum((a - b) ** 2 for a, b in zip(self.genes, other.genes))
+            sum((a - b) ** 2 for a, b in zip(self.genes, other.genes, strict=False))
         )
 
     def clamp(self, low: float = 0.0, high: float = 1.0) -> Genome:

@@ -1,10 +1,20 @@
 # Encryption Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
 Encryption and cryptographic operations module for Codomyrmex. Provides symmetric and asymmetric encryption, authenticated encryption, key management, HMAC message authentication, key derivation functions, digital signatures, and secure hashing.
+
+## PAI Integration
+
+| Algorithm Phase | Role | Tools Used |
+|----------------|------|-----------|
+| **BUILD** | Encrypt sensitive artifacts and generate keys | Direct Python import |
+| **EXECUTE** | Encrypt and decrypt data during pipeline operations | Direct Python import |
+| **VERIFY** | Validate encryption correctness and HMAC integrity | Direct Python import |
+
+PAI agents access this module via direct Python import through the MCP bridge. The Engineer agent uses AESGCMEncryptor and KeyManager to protect sensitive data artifacts during BUILD and EXECUTE phases.
 
 ## Features
 

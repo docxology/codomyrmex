@@ -115,7 +115,7 @@ class RouletteWheelSelection(SelectionOperator[T]):
         for _ in range(count):
             pick = random.uniform(0, total)
             cumulative = 0.0
-            for ind, sf in zip(population, shifted):
+            for ind, sf in zip(population, shifted, strict=False):
                 cumulative += sf
                 if cumulative >= pick:
                     selected.append(self._copy_individual(ind))

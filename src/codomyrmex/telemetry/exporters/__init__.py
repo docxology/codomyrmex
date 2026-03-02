@@ -12,13 +12,12 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from datetime import datetime
 from queue import Queue
-from typing import Any, Dict, List, Optional
-
+from typing import Any, Optional
 
 from codomyrmex.config_management.defaults import DEFAULT_OTEL_ENDPOINT
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
-logger = get_logger(__name__)
 
+logger = get_logger(__name__)
 
 @dataclass
 class SpanData:
@@ -57,7 +56,6 @@ class SpanData:
             "events": self.events,
         }
 
-
 class SpanExporter(ABC):
     """Abstract base class for span exporters."""
 
@@ -70,7 +68,6 @@ class SpanExporter(ABC):
     def shutdown(self) -> None:
         """Shutdown the exporter."""
         pass
-
 
 class ConsoleExporter(SpanExporter):
     """Exports spans to the console for debugging."""
@@ -91,7 +88,6 @@ class ConsoleExporter(SpanExporter):
     def shutdown(self) -> None:
         """shutdown ."""
         pass
-
 
 class FileExporter(SpanExporter):
     """Exports spans to a JSON file."""
@@ -115,7 +111,6 @@ class FileExporter(SpanExporter):
     def shutdown(self) -> None:
         """shutdown ."""
         pass
-
 
 class OTLPExporter(SpanExporter):
     """Exports spans using the OTLP protocol."""
@@ -144,7 +139,7 @@ class OTLPExporter(SpanExporter):
                 trace_spans[span.trace_id] = []
             trace_spans[span.trace_id].append(span)
 
-        for trace_id, trace_span_list in trace_spans.items():
+        for _trace_id, trace_span_list in trace_spans.items():
             scope_spans = []
             for span in trace_span_list:
                 scope_spans.append({
@@ -243,7 +238,6 @@ class OTLPExporter(SpanExporter):
         """shutdown ."""
         pass
 
-
 class BatchExporter(SpanExporter):
     """Batches spans before exporting to reduce network calls."""
 
@@ -314,7 +308,6 @@ class BatchExporter(SpanExporter):
 
         self.exporter.shutdown()
 
-
 class MultiExporter(SpanExporter):
     """Exports to multiple backends simultaneously."""
 
@@ -341,7 +334,6 @@ class MultiExporter(SpanExporter):
                 logger.debug("Exporter shutdown error: %s", e)
                 pass
 
-
 def create_exporter(
     exporter_type: str,
     **kwargs
@@ -358,7 +350,6 @@ def create_exporter(
         raise ValueError(f"Unknown exporter type: {exporter_type}")
 
     return exporter_class(**kwargs)
-
 
 __all__ = [
     "SpanData",

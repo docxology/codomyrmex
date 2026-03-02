@@ -1,8 +1,18 @@
 # Market Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 Reverse auction and demand aggregation for AI service procurement.
+
+## PAI Integration
+
+| Algorithm Phase | Role | Tools Used |
+|----------------|------|-----------|
+| **OBSERVE** | Fetch market data and auction state | Direct Python import |
+| **THINK** | Analyze market signals and bid patterns | Direct Python import |
+| **PLAN** | Make market-driven procurement decisions | Direct Python import |
+
+PAI agents access this module via direct Python import through the MCP bridge. The Architect agent imports `ReverseAuction` and `DemandAggregator` to evaluate AI service procurement options during planning phases.
 
 ## Installation
 

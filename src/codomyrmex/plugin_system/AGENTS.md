@@ -1,6 +1,6 @@
 # Agent Guidelines - Plugin System
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Module Overview
 
@@ -71,6 +71,23 @@ assert plugin.state == PluginState.ACTIVE
 plugin.deactivate()
 assert plugin.state == PluginState.INACTIVE
 ```
+
+## PAI Agent Role Access Matrix
+
+| PAI Agent | Access Level | Primary Capabilities | Trust Level |
+|-----------|-------------|---------------------|-------------|
+| **Engineer** | Full | `plugin_scan_entry_points`, `plugin_resolve_dependencies`; full plugin lifecycle | TRUSTED |
+| **Architect** | Read + Design | `plugin_scan_entry_points`, `plugin_resolve_dependencies`; plugin architecture design | OBSERVED |
+| **QATester** | Validation | `plugin_scan_entry_points`; plugin discovery verification, dependency graph validation | OBSERVED |
+
+### Engineer Agent
+**Use Cases**: Scanning for available plugins during OBSERVE, resolving plugin dependencies before BUILD, managing plugin registry.
+
+### Architect Agent
+**Use Cases**: Designing plugin interfaces, reviewing dependency graphs, planning plugin extension points.
+
+### QATester Agent
+**Use Cases**: Verifying plugin discovery during VERIFY, confirming dependency resolution correctness.
 
 ## Navigation
 

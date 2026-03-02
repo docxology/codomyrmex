@@ -1,6 +1,6 @@
 # Personal AI Infrastructure — Logistics Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
@@ -37,6 +37,12 @@ Scheduler metrics exposed for PAI dashboard consumption.
 ## Architecture Role
 
 **Service Layer** — Consumed by `orchestrator/` (workflow scheduling), `agents/` (task distribution), and `calendar/` (deadline integration).
+
+## MCP Tools
+
+This module does not expose MCP tools directly. Access its capabilities via:
+- Direct Python import: `from codomyrmex.logistics import ...`
+- CLI: `codomyrmex logistics <command>`
 
 ## Navigation
 

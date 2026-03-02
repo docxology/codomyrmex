@@ -15,12 +15,11 @@ from collections.abc import Callable, Generator, Iterator
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional
+from typing import Any, Optional
 
 from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
-
 
 class StreamEventType(Enum):
     """Types of streaming events."""
@@ -30,7 +29,6 @@ class StreamEventType(Enum):
     END = "end"
     TOOL_CALL = "tool_call"
     METADATA = "metadata"
-
 
 @dataclass
 class StreamEvent:
@@ -55,7 +53,6 @@ class StreamEvent:
             "metadata": self.metadata,
         }
 
-
 @dataclass
 class StreamStats:
     """Statistics for a stream."""
@@ -70,7 +67,6 @@ class StreamStats:
         if self.total_duration_ms == 0:
             return 0.0
         return self.total_tokens / (self.total_duration_ms / 1000)
-
 
 class StreamBuffer:
     """
@@ -122,7 +118,6 @@ class StreamBuffer:
             self._chunks.clear()
             self._total_length = 0
 
-
 class StreamProcessor(ABC):
     """Base class for stream processors."""
 
@@ -131,14 +126,12 @@ class StreamProcessor(ABC):
         """Process a stream event. Return None to filter out."""
         pass
 
-
 class PassthroughProcessor(StreamProcessor):
     """Passes events through unchanged."""
 
     def process(self, event: StreamEvent) -> StreamEvent | None:
         """Process the input and return the result."""
         return event
-
 
 class ContentFilterProcessor(StreamProcessor):
     """Filters content based on patterns."""
@@ -156,7 +149,6 @@ class ContentFilterProcessor(StreamProcessor):
                         delta="[FILTERED]",
                     )
         return event
-
 
 class JSONStreamParser:
     """
@@ -229,7 +221,6 @@ class JSONStreamParser:
         self._objects = []
         self._depth = 0
         self._in_string = False
-
 
 class StreamHandler:
     """
@@ -373,19 +364,16 @@ class StreamHandler:
         """Get stream statistics."""
         return self._stats
 
-
 def stream_to_string(stream: Iterator[str]) -> str:
     """Convert a stream to a complete string."""
     handler = StreamHandler()
     return handler.process_stream(stream)
-
 
 def chunk_stream(text: str, chunk_size: int = 10) -> Generator[str, None, None]:
     """Generate chunks from text (for testing)."""
     for i in range(0, len(text), chunk_size):
         yield text[i:i + chunk_size]
         time.sleep(0.01)  # Simulate network delay
-
 
 __all__ = [
     # Enums

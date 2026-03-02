@@ -75,7 +75,7 @@ class TestMcpToolDecoratorMetadata:
 
     def test_each_tool_has_mcp_metadata(self):
         """Every tool should carry @mcp_tool decorator metadata."""
-        for fn, expected_name, expected_category in self._tools:
+        for fn, _expected_name, _expected_category in self._tools:
             # @mcp_tool wraps the function; the underlying callable must have a __name__
             # and the decorator should attach _mcp_tool_meta or similar
             assert fn is not None

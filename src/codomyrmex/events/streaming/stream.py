@@ -9,8 +9,9 @@ import threading
 from abc import ABC, abstractmethod
 from collections.abc import AsyncIterator, Callable
 
-from .models import Event, EventType, Subscription
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
+
+from .models import Event, EventType, Subscription
 
 logger = get_logger(__name__)
 

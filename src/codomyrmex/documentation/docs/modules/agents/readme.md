@@ -8,6 +8,19 @@ Agentic framework integrations providing AI code editing, task management, and m
 
 When used with [PAI](../../../PAI.md) (`~/.claude/PAI/`), this module maps to PAI's three-tier agent system: Task Subagents (Engineer, Architect, QATester) dispatch through `AgentOrchestrator`, Named Agents consume tools via MCP, and Custom Agents extend `BaseAgent`. See [PAI.md](PAI.md) for full integration details.
 
+## PAI Integration
+
+| Algorithm Phase | Role | Tools Used |
+|----------------|------|-----------|
+| **OBSERVE** | Explore agent reads codebase using `system_discovery`, patterns via `search` | `list_agents`, `get_agent_memory` |
+| **THINK** | Capability selection — which agent provider/model for the task | `list_agents` (inventory) |
+| **BUILD** | Engineer agent runs code editing, generation, refactoring via `CodeEditor` | `execute_agent` |
+| **EXECUTE** | All 12 provider clients dispatch tasks (Claude, Codex, Gemini, O1, etc.) | `execute_agent` |
+| **VERIFY** | QATester agent runs benchmarks, validates agent output quality | `execute_agent`, `list_agents` |
+| **LEARN** | Session history captured; agent memory stored via `agentic_memory` | `get_agent_memory` |
+
+PAI agents invoke this module via the MCP bridge (`execute_agent`, `list_agents`, `get_agent_memory`). The Engineer subagent drives `CodeEditor` and `AgentOrchestrator` during BUILD; QATester drives `AgentEvaluator` during VERIFY.
+
 ## Installation
 
 ```bash

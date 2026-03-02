@@ -1,6 +1,6 @@
 # Personal AI Infrastructure — Graph RAG Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
@@ -58,6 +58,12 @@ from codomyrmex.graph_rag.models import Entity, Relationship, GraphDocument
 ## Architecture Role
 
 **Core Layer** — Central knowledge infrastructure consumed by `cerebrum/` (reasoning), `agents/` (context retrieval), `search/` (augmented search), and `agentic_memory/` (structured memory).
+
+## MCP Tools
+
+This module does not expose MCP tools directly. Access its capabilities via:
+- Direct Python import: `from codomyrmex.graph_rag import ...`
+- CLI: `codomyrmex graph_rag <command>`
 
 ## Navigation
 

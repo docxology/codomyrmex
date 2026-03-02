@@ -22,7 +22,7 @@ from collections.abc import Callable
 from dataclasses import dataclass, field
 from enum import Enum
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Optional
 
 # Shared schemas for cross-module interop
 from codomyrmex.validation.schemas import Result, ResultStatus
@@ -35,7 +35,6 @@ class IDEStatus(Enum):
     CONNECTED = "connected"
     ERROR = "error"
 
-
 @dataclass
 class IDECommand:
     """Represents an IDE command to be executed."""
@@ -46,7 +45,6 @@ class IDECommand:
     def to_dict(self) -> dict[str, Any]:
         """Return a dictionary representation of this command."""
         return {"name": self.name, "args": self.args, "timeout": self.timeout}
-
 
 @dataclass
 class IDECommandResult:
@@ -67,7 +65,6 @@ class IDECommandResult:
             "execution_time": self.execution_time,
         }
 
-
 @dataclass
 class FileInfo:
     """Information about a file in the IDE."""
@@ -86,7 +83,6 @@ class FileInfo:
             "language": self.language,
             "line_count": self.line_count,
         }
-
 
 class IDEClient(ABC):
     """Abstract base class for IDE integrations.
@@ -254,7 +250,6 @@ class IDEClient(ABC):
         successes = sum(1 for cmd in self._command_history if cmd.success)
         return successes / len(self._command_history)
 
-
 from codomyrmex.exceptions import (
     ArtifactError,
     CommandExecutionError,
@@ -290,7 +285,6 @@ def cli_commands():
         "extensions": _list_extensions,
         "status": _ide_status,
     }
-
 
 __all__ = [
     "IDEClient",

@@ -1,6 +1,6 @@
 # Codomyrmex Agents — src/codomyrmex/cloud
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
 
@@ -144,6 +144,23 @@ This module exposes cloud operations for Model Context Protocol agents:
 - Storage CRUD operations across providers
 - Document management via Coda.io
 - Resource listing and metadata retrieval
+
+## PAI Agent Role Access Matrix
+
+| PAI Agent | Access Level | Primary Capabilities | Trust Level |
+|-----------|-------------|---------------------|-------------|
+| **Engineer** | Full | `list_cloud_instances`, `list_s3_buckets`, `upload_file_to_s3`; full cloud lifecycle | TRUSTED |
+| **Architect** | Read + Design | `list_cloud_instances`, `list_s3_buckets`; infrastructure inventory, cloud architecture review | OBSERVED |
+| **QATester** | Validation | `list_cloud_instances`, `list_s3_buckets`; resource availability verification | OBSERVED |
+
+### Engineer Agent
+**Use Cases**: Deploying artifacts to S3 during EXECUTE, listing cloud instances for infrastructure awareness, managing cloud resource lifecycle.
+
+### Architect Agent
+**Use Cases**: Cloud infrastructure inventory during OBSERVE, reviewing instance configurations, planning cloud architecture.
+
+### QATester Agent
+**Use Cases**: Verifying cloud resource availability during VERIFY, confirming S3 upload success.
 
 ## Navigation Links
 

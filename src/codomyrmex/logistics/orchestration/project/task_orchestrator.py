@@ -10,7 +10,7 @@ import uuid
 from collections import deque
 from concurrent.futures import Future, ThreadPoolExecutor
 from dataclasses import dataclass, field
-from datetime import datetime, timezone, UTC
+from datetime import UTC, datetime
 from enum import Enum
 from typing import Any
 

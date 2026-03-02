@@ -1,6 +1,6 @@
 # Agent Guidelines - Quantum
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Module Overview
 
@@ -67,6 +67,23 @@ assert set(counts.keys()) <= {"00", "11"}
 assert counts.get("00", 0) > 0
 assert counts.get("11", 0) > 0
 ```
+
+## PAI Agent Role Access Matrix
+
+| PAI Agent | Access Level | Primary Capabilities | Trust Level |
+|-----------|-------------|---------------------|-------------|
+| **Engineer** | Full | Direct Python import, class instantiation, full API access | TRUSTED |
+| **Architect** | Read + Design | API review, interface design, dependency analysis | OBSERVED |
+| **QATester** | Validation | Integration testing via pytest, output validation | OBSERVED |
+
+### Engineer Agent
+**Use Cases**: Implements quantum algorithms and circuit simulations using `QuantumCircuit`, `QuantumSimulator`, and gate operations. Builds circuits with the fluent API, runs statevector simulations, and creates entangled states (Bell, GHZ).
+
+### Architect Agent
+**Use Cases**: Designs quantum-classical hybrid architectures, reviews circuit composition patterns, evaluates gate set completeness, and plans integration with classical optimization loops.
+
+### QATester Agent
+**Use Cases**: Validates quantum gate operations, verifies entanglement outcomes (Bell state produces only "00"/"11"), confirms circuit statistics accuracy, and tests simulator determinism with seeded runs.
 
 ## Navigation
 

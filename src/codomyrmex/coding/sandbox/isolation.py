@@ -21,7 +21,8 @@ except ImportError:
     class _DummyPSUtil:
         """Functional component: _DummyPSUtil."""
         def cpu_percent(self, interval=None): return 0.0
-        class NoSuchProcess(Exception): pass
+        class NoSuchProcess(Exception):
+            pass
     psutil = _DummyPSUtil()
 
 from codomyrmex.logging_monitoring.core.logger_config import get_logger

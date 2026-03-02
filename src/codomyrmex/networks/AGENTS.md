@@ -1,6 +1,6 @@
 # Agent Guidelines - Networks
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Module Overview
 
@@ -75,6 +75,23 @@ assert net.edges[0].weight == 0.5
 assert "n2" in net.get_neighbors("n1")
 assert "n1" in net.get_neighbors("n2")
 ```
+
+## PAI Agent Role Access Matrix
+
+| PAI Agent | Access Level | Primary Capabilities | Trust Level |
+|-----------|-------------|---------------------|-------------|
+| **Engineer** | Full | Direct Python import, class instantiation, full API access | TRUSTED |
+| **Architect** | Read + Design | API review, interface design, dependency analysis | OBSERVED |
+| **QATester** | Validation | Integration testing via pytest, output validation | OBSERVED |
+
+### Engineer Agent
+**Use Cases**: Configures and manages network topology and graph structures using Network, Node, and Edge classes for building, querying, and traversing typed node graphs.
+
+### Architect Agent
+**Use Cases**: Designs network architectures, evaluates graph data model scalability, and reviews node/edge typing and attribute patterns.
+
+### QATester Agent
+**Use Cases**: Validates network connectivity, neighbor lookup symmetry, edge weight correctness, and graph traversal behavior via pytest.
 
 ## Navigation
 

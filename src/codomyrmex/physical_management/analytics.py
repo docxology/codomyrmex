@@ -7,6 +7,7 @@ from collections.abc import Callable
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any
+
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 """Advanced analytics and data streaming for physical management."""
@@ -452,7 +453,7 @@ class PredictiveAnalytics:
             n = len(data_points)
             sum_x = sum(x_values)
             sum_y = sum(y_values)
-            sum_xy = sum(x * y for x, y in zip(x_values, y_values))
+            sum_xy = sum(x * y for x, y in zip(x_values, y_values, strict=False))
             sum_xx = sum(x * x for x in x_values)
 
             # Calculate slope and intercept
@@ -528,7 +529,7 @@ class PredictiveAnalytics:
             mean2 = statistics.mean(values2)
 
             numerator = sum(
-                (v1 - mean1) * (v2 - mean2) for v1, v2 in zip(values1, values2)
+                (v1 - mean1) * (v2 - mean2) for v1, v2 in zip(values1, values2, strict=False)
             )
             sum_sq1 = sum((v1 - mean1) ** 2 for v1 in values1)
             sum_sq2 = sum((v2 - mean2) ** 2 for v2 in values2)

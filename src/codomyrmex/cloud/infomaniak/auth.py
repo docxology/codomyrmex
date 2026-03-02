@@ -14,9 +14,10 @@ import os
 from dataclasses import dataclass, field
 from typing import Any
 
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 from .exceptions import InfomaniakAuthError
-from codomyrmex.logging_monitoring.core.logger_config import get_logger
+
 logger = get_logger(__name__)
 
 # Default Infomaniak endpoints

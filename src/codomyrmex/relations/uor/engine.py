@@ -123,19 +123,19 @@ class PrismEngine:
         """Bitwise XOR (per byte). Commutative, associative."""
         ba = self._normalize(a)
         bb = self._normalize(b)
-        return tuple(x ^ y for x, y in zip(ba, bb))
+        return tuple(x ^ y for x, y in zip(ba, bb, strict=False))
 
     def band(self, a: int | tuple[int, ...], b: int | tuple[int, ...]) -> tuple[int, ...]:
         """Bitwise AND (per byte). Commutative, associative."""
         ba = self._normalize(a)
         bb = self._normalize(b)
-        return tuple(x & y for x, y in zip(ba, bb))
+        return tuple(x & y for x, y in zip(ba, bb, strict=False))
 
     def bor(self, a: int | tuple[int, ...], b: int | tuple[int, ...]) -> tuple[int, ...]:
         """Bitwise OR (per byte). Commutative, associative."""
         ba = self._normalize(a)
         bb = self._normalize(b)
-        return tuple(x | y for x, y in zip(ba, bb))
+        return tuple(x | y for x, y in zip(ba, bb, strict=False))
 
     # ═══════════════════════════════════════════════════════════════════════
     # DERIVED OPERATIONS

@@ -1,6 +1,6 @@
 # release -- Release & Distribution Management
 
-**Version**: v1.0.2 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
@@ -18,6 +18,16 @@ checks and publishes artifacts to a chosen `DistributionTarget`.
 
 This module does **not** expose MCP tools. It is consumed as a Python library by
 CI/CD pipelines and EXECUTE-phase scripts.
+
+## PAI Integration
+
+| Algorithm Phase | Role | Tools Used |
+|----------------|------|-----------|
+| **BUILD** | Bump versions and generate changelog entries | Direct Python import |
+| **VERIFY** | Validate release artifacts and certification integrity | Direct Python import |
+| **EXECUTE** | Publish releases to distribution targets | Direct Python import |
+
+PAI agents access this module via direct Python import through the MCP bridge to orchestrate the full release lifecycle from certification to publishing.
 
 ## Key Capabilities
 

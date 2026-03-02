@@ -1,6 +1,6 @@
 # Agent Guidelines - Embodiment
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Module Overview
 
@@ -53,6 +53,23 @@ t.rotate_euler(0, 0, 90)
 point = t.apply([0, 1, 0])
 assert abs(point[0] - 0) < 0.01  # Rotated 90°
 ```
+
+## PAI Agent Role Access Matrix
+
+| PAI Agent | Access Level | Primary Capabilities | Trust Level |
+|-----------|-------------|---------------------|-------------|
+| **Engineer** | Full | Direct Python import, class instantiation, full API access | TRUSTED |
+| **Architect** | Read + Design | API review, interface design, dependency analysis | OBSERVED |
+| **QATester** | Validation | Integration testing via pytest, output validation | OBSERVED |
+
+### Engineer Agent
+**Use Cases**: Interface with robotic/physical systems via ROS2Bridge, configure sensors and actuators during BUILD/EXECUTE phases
+
+### Architect Agent
+**Use Cases**: Design embodiment abstractions, coordinate frame strategy, sensor-actuator topology review
+
+### QATester Agent
+**Use Cases**: Unit and integration test execution, transform accuracy validation, bridge connectivity verification
 
 ## Navigation
 

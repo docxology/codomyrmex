@@ -1,6 +1,6 @@
 # Cloud Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
@@ -15,6 +15,16 @@ The Cloud Services module provides unified, provider-agnostic interfaces for int
 | **Infomaniak** | `InfomaniakComputeClient`, `InfomaniakVolumeClient`, `InfomaniakNetworkClient`, `InfomaniakObjectStorageClient`, `InfomaniakS3Client`, `InfomaniakIdentityClient`, `InfomaniakDNSClient`, `InfomaniakHeatClient`, `InfomaniakMeteringClient`, `InfomaniakNewsletterClient` | Swiss-hosted OpenStack cloud (9 services) + Newsletter API |
 
 All storage clients share a consistent interface pattern with operations for upload, download, list, metadata retrieval, and bucket/container management. Infomaniak clients provide compute, storage, networking, DNS, orchestration, metering, and newsletter services via OpenStack and Infomaniak REST APIs.
+
+## PAI Integration
+
+| Algorithm Phase | Role | Tools Used |
+|----------------|------|-----------|
+| **OBSERVE** | List cloud instances and S3 buckets for infrastructure inventory | `list_cloud_instances`, `list_s3_buckets` |
+| **EXECUTE** | Upload artifacts, deploy to cloud instances | `upload_file_to_s3` |
+| **VERIFY** | Confirm cloud resource availability and artifact upload success | `list_s3_buckets`, `list_cloud_instances` |
+
+PAI's Engineer subagent uses cloud tools during EXECUTE for deployment and artifact storage. OBSERVE phase uses `list_cloud_instances` and `list_s3_buckets` for infrastructure discovery.
 
 ## Key Exports
 

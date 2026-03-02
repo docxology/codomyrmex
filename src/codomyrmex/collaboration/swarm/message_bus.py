@@ -166,7 +166,7 @@ class MessageBus:
         if len(pattern_parts) != len(topic_parts):
             return False
 
-        for p, t in zip(pattern_parts, topic_parts):
+        for p, t in zip(pattern_parts, topic_parts, strict=False):
             if p == "*":
                 continue
             if p != t:

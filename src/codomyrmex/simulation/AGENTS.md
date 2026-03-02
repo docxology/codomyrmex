@@ -1,6 +1,6 @@
 # Agent Guidelines - Simulation
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Module Overview
 
@@ -72,6 +72,23 @@ assert "steps_completed" in results
 assert "config" in results
 assert "status" in results
 ```
+
+## PAI Agent Role Access Matrix
+
+| PAI Agent | Access Level | Primary Capabilities | Trust Level |
+|-----------|-------------|---------------------|-------------|
+| **Engineer** | Full | Direct Python import, class instantiation, full API access | TRUSTED |
+| **Architect** | Read + Design | API review, interface design, dependency analysis | OBSERVED |
+| **QATester** | Validation | Integration testing via pytest, output validation | OBSERVED |
+
+### Engineer Agent
+**Use Cases**: Runs system and environment simulations via `Simulator` and `SimulationConfig`. Configures step-based runs, sets seeds for reproducibility, and retrieves structured results from simulation outcomes.
+
+### Architect Agent
+**Use Cases**: Designs simulation models and scenarios, reviews step-based engine architecture, evaluates configuration parameter schemas, and plans integration with agent-based modeling workflows.
+
+### QATester Agent
+**Use Cases**: Validates simulation output accuracy, verifies deterministic results with seeded runs, confirms step count tracking, and tests early termination and error handling paths.
 
 ## Navigation
 

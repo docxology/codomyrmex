@@ -14,7 +14,7 @@ Tests cover:
 Total: ~19 tests in a single TestInfomaniakMetering class.
 """
 
-from datetime import datetime, timezone, UTC
+from datetime import UTC, datetime
 
 from _stubs import Stub
 

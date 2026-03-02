@@ -10,6 +10,7 @@ from collections.abc import Callable
 from pathlib import Path
 from typing import Any
 
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 from . import (
     DistanceMetric,
@@ -17,7 +18,7 @@ from . import (
     VectorEntry,
     VectorStore,
 )
-from codomyrmex.logging_monitoring.core.logger_config import get_logger
+
 logger = get_logger(__name__)
 
 

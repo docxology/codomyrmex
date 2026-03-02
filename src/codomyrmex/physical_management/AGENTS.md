@@ -1,6 +1,6 @@
 # Agent Guidelines - Physical Management
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Module Overview
 
@@ -59,6 +59,23 @@ sensors = SensorHub(simulation=True)
 value = sensors.read("simulated_sensor")
 assert value is not None
 ```
+
+## PAI Agent Role Access Matrix
+
+| PAI Agent | Access Level | Primary Capabilities | Trust Level |
+|-----------|-------------|---------------------|-------------|
+| **Engineer** | Full | Direct Python import, class instantiation, full API access | TRUSTED |
+| **Architect** | Read + Design | API review, interface design, dependency analysis | OBSERVED |
+| **QATester** | Validation | Integration testing via pytest, output validation | OBSERVED |
+
+### Engineer Agent
+**Use Cases**: Manages physical resources, hardware inventory, and device tracking via `DeviceManager`, `SensorHub`, and `ActuatorController`. Handles device discovery, sensor reads, and actuator commands.
+
+### Architect Agent
+**Use Cases**: Designs resource allocation models, reviews hardware abstraction layers, evaluates IoT protocol choices, and analyzes dependency flow between physical management and upstream modules.
+
+### QATester Agent
+**Use Cases**: Validates hardware state tracking in simulation mode, verifies sensor read accuracy, confirms actuator position commands, and tests device discovery edge cases.
 
 ## Navigation
 

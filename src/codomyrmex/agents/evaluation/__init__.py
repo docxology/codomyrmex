@@ -14,10 +14,9 @@ from collections.abc import Callable
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, Generic, List, Optional, Tuple, TypeVar
+from typing import Any, Generic, Optional, TypeVar
 
 T = TypeVar('T')
-
 
 class MetricType(Enum):
     """Types of evaluation metrics."""
@@ -29,7 +28,6 @@ class MetricType(Enum):
     COST = "cost"
     TOKEN_EFFICIENCY = "token_efficiency"
     CUSTOM = "custom"
-
 
 @dataclass
 class EvalResult:
@@ -47,7 +45,6 @@ class EvalResult:
     metrics: dict[str, float] = field(default_factory=dict)
     errors: list[str] = field(default_factory=list)
     timestamp: datetime = field(default_factory=datetime.now)
-
 
 @dataclass
 class TestCase:
@@ -81,7 +78,6 @@ class TestCase:
                 failures.append(f"Contains forbidden: '{forbidden}'")
 
         return len(failures) == 0, failures
-
 
 @dataclass
 class BenchmarkResult:
@@ -118,7 +114,6 @@ class BenchmarkResult:
             return total_tokens / total_time_s
         return 0.0
 
-
 class Scorer(ABC):
     """Base class for scoring outputs."""
 
@@ -136,7 +131,6 @@ class Scorer(ABC):
         """
         pass
 
-
 class ExactMatchScorer(Scorer):
     """Score based on exact match."""
 
@@ -151,7 +145,6 @@ class ExactMatchScorer(Scorer):
         if self.case_sensitive:
             return 1.0 if output.strip() == expected.strip() else 0.0
         return 1.0 if output.strip().lower() == expected.strip().lower() else 0.0
-
 
 class ContainsScorer(Scorer):
     """Score based on whether output contains expected text."""
@@ -168,7 +161,6 @@ class ContainsScorer(Scorer):
             return 1.0 if expected in output else 0.0
         return 1.0 if expected.lower() in output.lower() else 0.0
 
-
 class LengthScorer(Scorer):
     """Score based on output length relative to target."""
 
@@ -184,7 +176,6 @@ class LengthScorer(Scorer):
         if diff <= self.tolerance:
             return 1.0 - (diff / self.tolerance) * 0.5
         return max(0.0, 0.5 - (diff - self.tolerance))
-
 
 class CompositeScorer(Scorer):
     """Combine multiple scorers with weights."""
@@ -204,7 +195,6 @@ class CompositeScorer(Scorer):
         for scorer, weight in self.normalized_scorers:
             total += scorer.score(output, expected) * weight
         return total
-
 
 class AgentBenchmark(Generic[T]):
     """
@@ -475,7 +465,6 @@ class AgentBenchmark(Generic[T]):
             }
         return json.dumps(export, indent=2)
 
-
 # Pre-built test suites
 def create_basic_test_suite() -> list[TestCase]:
     """Create a basic test suite for LLM agents."""
@@ -512,7 +501,6 @@ def create_basic_test_suite() -> list[TestCase]:
             tags=["coding", "python"],
         ),
     ]
-
 
 __all__ = [
     # Enums

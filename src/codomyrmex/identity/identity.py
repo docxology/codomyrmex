@@ -56,7 +56,7 @@ class AuthProvider(ABC):
     @abstractmethod
     def authenticate(self, credentials: dict[str, Any]) -> bool:
         """Return True if credentials are valid."""
-        raise NotImplementedError
+        raise NotImplementedError  # ABC: intentional
 
 
 class PasswordProvider(AuthProvider):

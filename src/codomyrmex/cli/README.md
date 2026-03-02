@@ -1,10 +1,20 @@
 # CLI Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
 Command-line interface module serving as the primary entry point for user interaction with the Codomyrmex platform. Built on argparse, it provides commands for environment checking, module listing, system status, interactive shell mode, workflow management, project operations, AI-assisted code generation and refactoring, code and git analysis, build operations, FPF (Fetch/Parse/Format) data pipelines, and skills management. Each command group is implemented as a handler function dispatched from the central argument parser.
+
+## PAI Integration
+
+| Algorithm Phase | Role | Tools Used |
+|----------------|------|-----------|
+| **EXECUTE** | Invoke CLI commands for builds, tests, and workflows | Direct Python import |
+| **OBSERVE** | Parse CLI output to assess system and module state | Direct Python import |
+| **BUILD** | Generate CLI tools and scaffold command handlers | Direct Python import |
+
+PAI agents access this module via direct Python import through the MCP bridge. The Engineer agent uses it during EXECUTE phase to run platform commands, and during OBSERVE phase to inspect module status and system health via CLI output.
 
 ## Key Exports
 

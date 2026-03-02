@@ -1,6 +1,6 @@
 # Meme Module — Agent Coordination
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
 
@@ -108,3 +108,20 @@ uv run python -m pytest src/codomyrmex/tests/ -k meme -v
 
 - Always use real, functional tests — no mocks (Zero-Mock policy)
 - Verify all changes pass existing tests before submitting
+
+## PAI Agent Role Access Matrix
+
+| PAI Agent | Access Level | Primary Capabilities | Trust Level |
+|-----------|-------------|---------------------|-------------|
+| **Engineer** | Full | Direct Python import, class instantiation, full API access | TRUSTED |
+| **Architect** | Read + Design | API review, interface design, dependency analysis | OBSERVED |
+| **QATester** | Validation | Integration testing via pytest, output validation | OBSERVED |
+
+### Engineer Agent
+**Use Cases**: Creates and manages meme content generation using MemeticEngine, Meme, Memeplex, and related classes across 12 submodules including contagion, narrative, and swarm intelligence.
+
+### Architect Agent
+**Use Cases**: Designs content generation pipelines, reviews memetic engine architecture, and evaluates submodule interaction patterns across semiotic, cultural dynamics, and cybernetic subsystems.
+
+### QATester Agent
+**Use Cases**: Validates generated content quality, meme fitness scoring accuracy, contagion model behavior, and cross-submodule integration correctness.

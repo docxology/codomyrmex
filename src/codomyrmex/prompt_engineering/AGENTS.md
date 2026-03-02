@@ -1,6 +1,6 @@
 # Prompt Engineering Module — Agent Coordination
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
 
@@ -89,3 +89,20 @@ uv run python -m pytest src/codomyrmex/tests/ -k prompt_engineering -v
 
 - Always use real, functional tests — no mocks (Zero-Mock policy)
 - Verify all changes pass existing tests before submitting
+
+## PAI Agent Role Access Matrix
+
+| PAI Agent | Access Level | Primary Capabilities | Trust Level |
+|-----------|-------------|---------------------|-------------|
+| **Engineer** | Full | Direct Python import, class instantiation, full API access | TRUSTED |
+| **Architect** | Read + Design | API review, interface design, dependency analysis | OBSERVED |
+| **QATester** | Validation | Integration testing via pytest, output validation | OBSERVED |
+
+### Engineer Agent
+**Use Cases**: Designs and optimizes prompts for LLM tasks using `PromptTemplate`, `PromptOptimizer`, and `VersionManager`. Creates templates, applies optimization strategies (CONCISE, CHAIN_OF_THOUGHT, FEW_SHOT), and tracks prompt versions.
+
+### Architect Agent
+**Use Cases**: Designs prompt template systems, reviews `TemplateRegistry` organization, evaluates optimization strategy selection, and plans prompt versioning workflows across modules.
+
+### QATester Agent
+**Use Cases**: Validates prompt effectiveness and output quality via `PromptEvaluator` and `EvaluationCriteria`. Tests template rendering, round-trip version tracking, and optimization token reduction accuracy.

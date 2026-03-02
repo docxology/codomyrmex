@@ -1,6 +1,6 @@
 # Agent Guidelines - Templating
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Module Overview
 
@@ -57,6 +57,23 @@ assert output == "3"
 output = render_file("templates/test.j2", {"name": "test"})
 assert "test" in output
 ```
+
+## PAI Agent Role Access Matrix
+
+| PAI Agent | Access Level | Primary Capabilities | Trust Level |
+|-----------|-------------|---------------------|-------------|
+| **Engineer** | Full | Direct Python import, class instantiation, full API access | TRUSTED |
+| **Architect** | Read + Design | API review, interface design, dependency analysis | OBSERVED |
+| **QATester** | Validation | Integration testing via pytest, output validation | OBSERVED |
+
+### Engineer Agent
+**Use Cases**: Render Jinja2/Mako templates for code generation and documentation output during BUILD phases
+
+### Architect Agent
+**Use Cases**: Design template schemas, define variable contracts, plan template inheritance hierarchies
+
+### QATester Agent
+**Use Cases**: Validate template rendering fidelity, verify variable substitution correctness, test error handling for malformed templates
 
 ## Navigation
 

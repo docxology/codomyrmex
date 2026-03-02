@@ -1,6 +1,6 @@
 # Personal AI Infrastructure — Tree Sitter Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
@@ -32,6 +32,12 @@ from codomyrmex.coding.parsers.tree_sitter import TreeSitterParser, LanguageMana
 ## Architecture Role
 
 **Extended Layer** — Part of the codomyrmex layered architecture.
+
+## MCP Tools
+
+This module does not expose MCP tools directly. Access its capabilities via:
+- Direct Python import: `from codomyrmex.tree_sitter import ...`
+- CLI: `codomyrmex tree_sitter <command>`
 
 ## Navigation
 

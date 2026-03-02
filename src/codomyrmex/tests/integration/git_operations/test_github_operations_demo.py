@@ -439,7 +439,7 @@ and GitHub API functionality for a seamless development workflow.'''
         print("="*80)
 
         print("\n✅ Successfully demonstrated GitHub Operations:")
-        print(f"   🏗️ Repository Creation: {len([r for r in self.created_repos])}")
+        print(f"   🏗️ Repository Creation: {len(list(self.created_repos))}")
         print("   🔄 Pull Request Workflow: Complete")
         print("   🧹 Resource Cleanup: Automated")
 

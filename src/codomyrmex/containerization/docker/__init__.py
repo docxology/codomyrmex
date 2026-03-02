@@ -11,11 +11,11 @@ import tempfile
 from collections.abc import Iterator
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Optional
+
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 logger = get_logger(__name__)
-
 
 @dataclass
 class ContainerConfig:
@@ -81,7 +81,6 @@ class ContainerConfig:
 
         return args
 
-
 @dataclass
 class ImageInfo:
     """Information about a Docker image."""
@@ -94,7 +93,6 @@ class ImageInfo:
     @property
     def full_name(self) -> str:
         return f"{self.repository}:{self.tag}"
-
 
 @dataclass
 class ContainerInfo:
@@ -109,7 +107,6 @@ class ContainerInfo:
     @property
     def is_running(self) -> bool:
         return "Up" in self.status
-
 
 class DockerClient:
     """Client for interacting with Docker."""
@@ -367,7 +364,6 @@ class DockerClient:
         if result.returncode != 0:
             raise RuntimeError(f"Tag failed: {result.stderr}")
 
-
 class DockerComposeClient:
     """Client for Docker Compose operations."""
 
@@ -439,7 +435,6 @@ class DockerComposeClient:
         except json.JSONDecodeError as e:
             logger.warning("Failed to parse docker-compose ps output: %s", e)
             return []
-
 
 __all__ = [
     "ContainerConfig",

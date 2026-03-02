@@ -1,6 +1,6 @@
 # Personal AI Infrastructure — API Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
@@ -32,6 +32,12 @@ The API module provides REST API framework, endpoint routing, request/response h
 ## Architecture Role
 
 **Service Layer** — Consumes `auth/` (authentication), `serialization/` (request/response), `validation/` (input validation). Exposed by `model_context_protocol/` HTTP transport.
+
+## MCP Tools
+
+This module does not expose MCP tools directly. Access its capabilities via:
+- Direct Python import: `from codomyrmex.api import ...`
+- CLI: `codomyrmex api <command>`
 
 ## Navigation
 

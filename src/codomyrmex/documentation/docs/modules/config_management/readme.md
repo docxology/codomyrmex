@@ -1,10 +1,20 @@
 # Config Management Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
 Configuration management module providing loading, validation, deployment, monitoring, and secret management for the Codomyrmex platform. Supports merging configuration from multiple sources (files, environment variables, defaults), JSON Schema-based validation, deployment tracking to target environments, real-time file watching for configuration changes, and optional encrypted secret management via the `cryptography` library. Integrates with `logging_monitoring`, `security`, and `environment_setup` modules.
+
+## PAI Integration
+
+| Algorithm Phase | Role | Tools Used |
+|----------------|------|-----------|
+| **OBSERVE** | Read active configuration to understand current system settings | `get_config` |
+| **BUILD** | Apply configuration changes for new builds and deployments | `set_config` |
+| **VERIFY** | Validate configuration correctness before and after changes | `validate_config` |
+
+PAI's Engineer subagent reads and writes config via `get_config`/`set_config` during OBSERVE and BUILD. QATester uses `validate_config` during VERIFY to confirm configuration meets schema requirements. All agents read config during OBSERVE for system state awareness.
 
 ## Key Exports
 

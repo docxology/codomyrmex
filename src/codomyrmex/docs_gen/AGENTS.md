@@ -1,6 +1,6 @@
 # docs_gen -- Agents
 
-**Version**: v1.0.2 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
 
@@ -96,6 +96,23 @@ Python source (str) --> APIDocExtractor.extract_from_source()
 SearchIndex.add(doc_id, title, content, path, tags)
     --> SearchIndex.search(query, limit) --> list[SearchResult]
 ```
+
+## PAI Agent Role Access Matrix
+
+| PAI Agent | Access Level | Primary Capabilities | Trust Level |
+|-----------|-------------|---------------------|-------------|
+| **Engineer** | Full | Direct Python import, class instantiation, full API access | TRUSTED |
+| **Architect** | Read + Design | API review, doc template design, dependency analysis | OBSERVED |
+| **QATester** | Validation | Integration testing via pytest, documentation quality validation | OBSERVED |
+
+### Engineer Agent
+**Use Cases**: Generate documentation via APIDocExtractor, build search indices, configure site generation during BUILD/EXECUTE phases
+
+### Architect Agent
+**Use Cases**: Design documentation templates, validate extraction pipeline architecture, review search index strategy
+
+### QATester Agent
+**Use Cases**: Validate doc extraction accuracy, verify search index round-trip correctness, test site generation completeness
 
 ## Navigation
 

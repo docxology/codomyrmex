@@ -1,6 +1,6 @@
 # Personal AI Infrastructure — Telemetry Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
@@ -90,6 +90,12 @@ latency.observe(0.15)
 
 - **Upstream Dependencies**: `logging_monitoring`
 - **Downstream Consumers**: `agents`, `networking`, `database_management`
+
+## MCP Tools
+
+This module does not expose MCP tools directly. Access its capabilities via:
+- Direct Python import: `from codomyrmex.telemetry import ...`
+- CLI: `codomyrmex telemetry <command>`
 
 ## Navigation
 

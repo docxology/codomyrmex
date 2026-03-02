@@ -6,7 +6,7 @@ Backups contain metadata and encrypted key material - never plaintext keys.
 
 import hashlib
 import json
-from datetime import datetime, timezone, UTC
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 

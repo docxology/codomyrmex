@@ -4,6 +4,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any
 
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 from .models import (
     Artifact,
@@ -14,7 +15,7 @@ from .models import (
     IDECommandResult,
     IDEStatus,
 )
-from codomyrmex.logging_monitoring.core.logger_config import get_logger
+
 logger = get_logger(__name__)
 
 

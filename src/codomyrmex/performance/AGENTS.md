@@ -1,6 +1,6 @@
 # Agent Guidelines - Performance
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Module Overview
 
@@ -69,6 +69,23 @@ All tools are auto-discovered via `@mcp_tool` decorators and exposed through the
 |------|-------------|-------------|
 | `performance_check_regression` | Check a benchmark result against a stored baseline for regressions | Safe |
 | `performance_compare_benchmarks` | Compute the delta between two benchmark values | Safe |
+
+## PAI Agent Role Access Matrix
+
+| PAI Agent | Access Level | Primary Capabilities | Trust Level |
+|-----------|-------------|---------------------|-------------|
+| **Engineer** | Full | `performance_check_regression`, `performance_compare_benchmarks`; full benchmarking suite | TRUSTED |
+| **Architect** | Read + Design | `performance_compare_benchmarks`; performance baseline design, SLO specification | OBSERVED |
+| **QATester** | Validation | `performance_check_regression`, `performance_compare_benchmarks`; regression detection, SLO verification | OBSERVED |
+
+### Engineer Agent
+**Use Cases**: Running benchmarks during VERIFY, detecting performance regressions after BUILD, comparing baseline vs. current performance.
+
+### Architect Agent
+**Use Cases**: Setting performance baselines, defining SLOs, reviewing benchmark configurations.
+
+### QATester Agent
+**Use Cases**: Detecting performance regressions during VERIFY, confirming benchmarks meet SLO targets.
 
 ## Navigation
 

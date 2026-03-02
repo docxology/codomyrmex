@@ -1,6 +1,6 @@
 """Tests for Sprint 16: Self-Healing Orchestration.
 
-Tests for failure_taxonomy, self_healing, retry_engine, 
+Tests for failure_taxonomy, self_healing, retry_engine,
 agent_circuit_breaker, healing_log.
 """
 

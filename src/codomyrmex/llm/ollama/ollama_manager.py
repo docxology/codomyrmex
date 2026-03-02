@@ -401,7 +401,7 @@ class OllamaManager:
 
                     # Check if model is now available (with retry for cache refresh)
                     self._models_cache = None  # Clear cache
-                    for attempt in range(5):  # More retries
+                    for _attempt in range(5):  # More retries
                         if self.is_model_available(model_name):
                             self.logger.info(f"Model {model_name} verified as available via HTTP API")
                             return True

@@ -1,6 +1,6 @@
 # Agent Guidelines - Networking
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Module Overview
 
@@ -62,6 +62,23 @@ resolver = DNSResolver()
 ips = resolver.resolve("localhost")
 assert "127.0.0.1" in ips
 ```
+
+## PAI Agent Role Access Matrix
+
+| PAI Agent | Access Level | Primary Capabilities | Trust Level |
+|-----------|-------------|---------------------|-------------|
+| **Engineer** | Full | Network operations, HTTP/TCP clients, connection management, protocol handling | TRUSTED |
+| **Architect** | Read + Design | Network architecture review, protocol selection, connectivity design | OBSERVED |
+| **QATester** | Validation | Connectivity testing, protocol conformance verification, latency measurement | OBSERVED |
+
+### Engineer Agent
+**Use Cases**: Network operations during EXECUTE, managing connections, protocol-level communication.
+
+### Architect Agent
+**Use Cases**: Designing network topologies, reviewing protocol choices, planning connectivity.
+
+### QATester Agent
+**Use Cases**: Testing network connectivity during VERIFY, confirming protocol conformance.
 
 ## Navigation
 

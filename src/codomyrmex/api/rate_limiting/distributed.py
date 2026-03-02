@@ -11,9 +11,9 @@ from dataclasses import dataclass
 from typing import Any
 
 from codomyrmex.config_management.defaults import DEFAULT_REDIS_URL
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 from . import RateLimiter, RateLimitExceeded, RateLimitResult
-from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 logger = get_logger(__name__)
 

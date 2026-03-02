@@ -232,10 +232,10 @@ class TestWebhookRegistry:
     """WebhookRegistry should support register, unregister, get, and listing."""
 
     def _make_config(self, **overrides):
-        defaults = dict(
-            url="https://example.com/hook",
-            secret="secret",
-        )
+        defaults = {
+            "url": "https://example.com/hook",
+            "secret": "secret",
+        }
         defaults.update(overrides)
         return WebhookConfig(**defaults)
 

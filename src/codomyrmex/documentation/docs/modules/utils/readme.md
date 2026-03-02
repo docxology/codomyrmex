@@ -1,10 +1,18 @@
 # Utilities Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
 Common utility functions and helpers used across the entire Codomyrmex codebase. Provides subprocess execution with error handling and retry, safe JSON serialization/deserialization, file hashing, directory management, retry decorators with exponential backoff, timing measurement, environment variable access, dictionary operations (flatten, deep merge), string truncation, and script execution base classes.
+
+## PAI Integration
+
+| Algorithm Phase | Role | Tools Used |
+|----------------|------|-----------|
+| **ALL PHASES** | Shared utilities consumed by all agents across every Algorithm phase | Direct Python import |
+
+This module provides foundational utilities (string manipulation, datetime handling, file I/O helpers, type coercion) used by every PAI agent. No direct MCP exposure — access via `from codomyrmex.utils import ...`. All 88 modules depend on utils for common operations.
 
 ## Key Exports
 

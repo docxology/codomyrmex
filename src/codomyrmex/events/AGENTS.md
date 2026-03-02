@@ -1,6 +1,6 @@
 # Agent Guidelines - Events
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Module Overview
 
@@ -73,6 +73,23 @@ All tools are auto-discovered via `@mcp_tool` decorators and exposed through the
 | `emit_event` | Emit an event to the event bus | Safe |
 | `list_event_types` | List all registered event types in the event bus | Safe |
 | `get_event_history` | Retrieve recent event history from the event bus | Safe |
+
+## PAI Agent Role Access Matrix
+
+| PAI Agent | Access Level | Primary Capabilities | Trust Level |
+|-----------|-------------|---------------------|-------------|
+| **Engineer** | Full | `emit_event`, `list_event_types`, `get_event_history`; full event bus control | TRUSTED |
+| **Architect** | Read + Design | `list_event_types`, `get_event_history`; event schema review, pub/sub design | OBSERVED |
+| **QATester** | Validation | `get_event_history`, `list_event_types`; event delivery verification | OBSERVED |
+
+### Engineer Agent
+**Use Cases**: Emitting workflow events during EXECUTE, configuring event subscriptions, auditing event history.
+
+### Architect Agent
+**Use Cases**: Designing event-driven workflows, reviewing event type taxonomy, pub/sub architecture analysis.
+
+### QATester Agent
+**Use Cases**: Verifying event delivery and ordering during VERIFY, confirming event history completeness.
 
 ## Navigation
 

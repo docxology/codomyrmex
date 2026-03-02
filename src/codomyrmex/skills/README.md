@@ -1,10 +1,20 @@
 # Skills Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
 Integration with the [vibeship-spawner-skills](https://github.com/vibeforge1111/vibeship-spawner-skills) repository, providing access to 462+ specialized skills organized across 35 categories. Enables skill management, syncing with upstream, custom skill overrides, and a programmatic discovery framework for building and registering new skills.
+
+## PAI Integration
+
+| Algorithm Phase | Role | Tools Used |
+|----------------|------|-----------|
+| **OBSERVE** | Discover available PAI skills and their capabilities | `skills_list`, `skills_get` |
+| **THINK** | Select appropriate skills for the current task context | `skills_list` |
+| **EXECUTE** | Invoke selected skills as part of the Algorithm workflow | `skills_invoke` |
+
+PAI's Algorithm uses skill discovery during OBSERVE to understand what specialized workflows are available. `skills_list` enumerates all 76 installed skill packs; `skills_invoke` triggers selected skills during EXECUTE. This module is the bridge between PAI's skill system and codomyrmex.
 
 ## Features
 

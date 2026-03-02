@@ -137,7 +137,7 @@ class ExamplesValidator:
                 for module in self.modules
             }
 
-            for i, future in enumerate(concurrent.futures.as_completed(future_to_module)):
+            for _i, future in enumerate(concurrent.futures.as_completed(future_to_module)):
                 module = future_to_module[future]
                 try:
                     result = future.result()
@@ -426,7 +426,7 @@ def main():
     parser.add_argument(
         "--types", "-t",
         type=lambda x: [ValidationType(t.strip()) for t in x.split(',')],
-        default=[vt for vt in ValidationType],
+        default=list(ValidationType),
         help="Comma-separated validation types"
     )
 

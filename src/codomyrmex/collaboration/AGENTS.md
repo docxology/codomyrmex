@@ -1,6 +1,6 @@
 # Agent Guidelines - Collaboration
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Module Overview
 
@@ -67,6 +67,23 @@ state = SharedState()
 state.set("key", "value")
 assert state.get("key") == "value"
 ```
+
+## PAI Agent Role Access Matrix
+
+| PAI Agent | Access Level | Primary Capabilities | Trust Level |
+|-----------|-------------|---------------------|-------------|
+| **Engineer** | Full | `swarm_submit_task`, `pool_status`, `list_agents`; full multi-agent coordination | TRUSTED |
+| **Architect** | Read + Design | `pool_status`, `list_agents`; agent pool design, swarm architecture review | OBSERVED |
+| **QATester** | Validation | `pool_status`, `list_agents`; agent availability verification, swarm health checks | OBSERVED |
+
+### Engineer Agent
+**Use Cases**: Submitting tasks to agent swarm during EXECUTE, monitoring pool status, coordinating multi-agent workflows.
+
+### Architect Agent
+**Use Cases**: Designing agent pool configurations, reviewing swarm task distribution, planning collaborative workflows.
+
+### QATester Agent
+**Use Cases**: Verifying agent pool health during VERIFY, confirming task submission and completion.
 
 ## Navigation
 

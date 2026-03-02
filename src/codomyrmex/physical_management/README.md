@@ -1,10 +1,20 @@
 # Physical Management Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
 Physical object management, simulation, and sensor integration module for the Codomyrmex platform. Enables physical computing and IoT device management through an object registry with spatial indexing, a physics simulator with force fields and constraints, a sensor manager supporting multiple device types, and a streaming analytics engine with predictive capabilities.
+
+## PAI Integration
+
+| Algorithm Phase | Role | Tools Used |
+|----------------|------|-----------|
+| **OBSERVE** | Inventory physical resources and sensor readings | Direct Python import |
+| **EXECUTE** | Manage physical devices and run simulations | Direct Python import |
+| **VERIFY** | Validate hardware state and sensor calibration | Direct Python import |
+
+PAI agents access this module via direct Python import through the MCP bridge. The Engineer agent imports `PhysicalObjectManager` and `SensorManager` during EXECUTE to interact with IoT devices and physical computing resources.
 
 ## Key Exports
 

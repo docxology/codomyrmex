@@ -1,8 +1,18 @@
 # Search Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 Full-text search with TF-IDF, fuzzy matching, and query parsing.
+
+## PAI Integration
+
+| Algorithm Phase | Role | Tools Used |
+|----------------|------|-----------|
+| **OBSERVE** | Document discovery, full-text search across codebases and knowledge bases | `search_documents`, `search_index_query` |
+| **THINK** | Fuzzy search for relevant context and prior decisions | `search_fuzzy` |
+| **LEARN** | Index new documents for future retrieval | `search_index_query` |
+
+PAI's OBSERVE phase relies heavily on search for codebase and documentation discovery. `search_documents` provides full-text search; `search_fuzzy` enables approximate matching for context retrieval during THINK. Engineer agents use all three tools.
 
 ## Installation
 

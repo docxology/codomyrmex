@@ -337,7 +337,7 @@ class TestSummary:
     def test_summary_accumulates_correctly(self):
         """Test summary accumulates values correctly over time."""
         summary = Summary(name="test_summary")
-        for i in range(100):
+        for _i in range(100):
             summary.observe(1.0)
 
         stats = summary.get()

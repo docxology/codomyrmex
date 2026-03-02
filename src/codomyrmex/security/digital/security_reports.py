@@ -6,7 +6,7 @@ Provides comprehensive security reporting and assessment generation capabilities
 import json
 import os
 from dataclasses import dataclass, field
-from datetime import datetime, timezone, UTC
+from datetime import UTC, datetime
 from typing import Any
 
 try:
@@ -290,13 +290,18 @@ class SecurityReportGenerator:
         """Calculate overall risk."""
         # Heuristic risk scoring based on vulnerability counts
         score = 0
-        if vuln.get("critical_count", 0) > 0: score += 50
-        if vuln.get("high_count", 0) > 0: score += 30
+        if vuln.get("critical_count", 0) > 0:
+            score += 50
+        if vuln.get("high_count", 0) > 0:
+            score += 30
 
         level = "LOW"
-        if score > 80: level = "CRITICAL"
-        elif score > 50: level = "HIGH"
-        elif score > 20: level = "MEDIUM"
+        if score > 80:
+            level = "CRITICAL"
+        elif score > 50:
+            level = "HIGH"
+        elif score > 20:
+            level = "MEDIUM"
 
         return {
             "score": score,

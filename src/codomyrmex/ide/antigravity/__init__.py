@@ -13,15 +13,16 @@ Example:
 import json
 import os
 import shutil
-
 import subprocess
 import time
 from collections.abc import Callable
 from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Optional
+
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
+
 logger = get_logger(__name__)
 
 try:
@@ -49,8 +50,6 @@ except ImportError:
     CommandExecutionError = Exception
     SessionError = Exception
     ArtifactError = Exception
-
-
 
 @dataclass
 class Artifact:
@@ -690,7 +689,6 @@ class AntigravityClient(IDEClient):
 
         return tool_info.get(tool_name)
 
-
     def send_chat_gui(self, message: str, app_name: str = "Antigravity") -> IDECommandResult:
         """Send a message using GUI automation (AppleScript).
 
@@ -912,7 +910,6 @@ try:
 except ImportError:
     AntigravityDispatcher = None
     DispatcherConfig = None
-
 
 __all__ = [
     # Core

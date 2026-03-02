@@ -1,8 +1,17 @@
 # Terminal Interface Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 Interactive terminal shells, command runners, and rich rendering.
+
+## PAI Integration
+
+| Algorithm Phase | Role | Tools Used |
+|----------------|------|-----------|
+| **ALL PHASES** | Rich terminal output for all Algorithm phase headers and progress | Direct Python import |
+| **EXECUTE** | Progress bars and live output during long-running operations | Direct Python import |
+
+All PAI Algorithm output is rendered through the terminal interface. Every phase header, tool call result, and summary uses this module's rich formatting. Engineer agents use it for progress display during EXECUTE; all agents use it for structured output.
 
 ## Installation
 

@@ -1,6 +1,6 @@
 # Personal AI Infrastructure — Evolutionary Ai Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
@@ -42,6 +42,12 @@ from codomyrmex.evolutionary_ai import Genome, Population, Individual, operators
 ## Architecture Role
 
 **Extended Layer** — Part of the codomyrmex layered architecture.
+
+## MCP Tools
+
+This module does not expose MCP tools directly. Access its capabilities via:
+- Direct Python import: `from codomyrmex.evolutionary_ai import ...`
+- CLI: `codomyrmex evolutionary_ai <command>`
 
 ## Navigation
 

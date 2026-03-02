@@ -5,7 +5,7 @@ import json
 import os
 import time
 from dataclasses import dataclass, field
-from datetime import datetime, timezone, UTC
+from datetime import UTC, datetime
 from typing import Any
 
 import aiohttp

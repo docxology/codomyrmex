@@ -8,8 +8,10 @@ accessible ways.
 
 
 # Submodule exports - import first
-from . import commands, completions, rendering, shells
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
+
+from . import commands, completions, rendering, shells
+
 logger = get_logger(__name__)
 
 # Try optional submodules

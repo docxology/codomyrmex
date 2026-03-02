@@ -1,6 +1,6 @@
 # Agent Guidelines - System Discovery
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Module Overview
 
@@ -74,6 +74,23 @@ All tools are auto-discovered via `@mcp_tool` decorators and exposed through the
 | `health_check` | Run a health check on the system or a specific module | Safe |
 | `list_modules` | List all registered modules and their availability | Safe |
 | `dependency_tree` | Show the dependency tree for a specific module | Safe |
+
+## PAI Agent Role Access Matrix
+
+| PAI Agent | Access Level | Primary Capabilities | Trust Level |
+|-----------|-------------|---------------------|-------------|
+| **Engineer** | Full | `health_check`, `list_modules`, `dependency_tree`; full system discovery | TRUSTED |
+| **Architect** | Read + Design | `list_modules`, `dependency_tree`; module inventory, dependency architecture analysis | OBSERVED |
+| **QATester** | Validation | `health_check`, `list_modules`; system health verification, module availability | OBSERVED |
+
+### Engineer Agent
+**Use Cases**: System health checks during OBSERVE, module enumeration, dependency tree analysis before BUILD.
+
+### Architect Agent
+**Use Cases**: Module inventory for architectural decisions, dependency tree review, planning module relationships.
+
+### QATester Agent
+**Use Cases**: System health verification during VERIFY, confirming all 88 modules are discoverable.
 
 ## Navigation
 

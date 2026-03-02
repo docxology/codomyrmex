@@ -6,14 +6,14 @@ and metadata from video files.
 
 from pathlib import Path
 
-
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 from codomyrmex.video.exceptions import (
     UnsupportedFormatError,
     VideoAnalysisError,
     VideoReadError,
 )
 from codomyrmex.video.models import VideoComparison, VideoInfo
-from codomyrmex.logging_monitoring.core.logger_config import get_logger
+
 logger = get_logger(__name__)
 
 # Check for OpenCV availability

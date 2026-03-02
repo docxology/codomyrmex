@@ -1,6 +1,6 @@
 # Personal AI Infrastructure — CLI Module
 
-**Version**: v1.0.2 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
@@ -159,6 +159,12 @@ codomyrmex test events       # After changing events module
 4. **Subprocess invocation from PAI agents**: PAI agents should invoke `codomyrmex`
    subcommands via the Bash tool rather than direct Python import — this ensures
    proper environment isolation and captures rich terminal output for VERIFY evidence.
+
+## MCP Tools
+
+This module does not expose MCP tools directly. Access its capabilities via:
+- Direct Python import: `from codomyrmex.cli import ...`
+- CLI: `codomyrmex <command>`
 
 ## Navigation
 

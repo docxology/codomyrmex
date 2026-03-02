@@ -12,7 +12,7 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional, Set
+from typing import Any, Optional
 
 
 class ComplianceFramework(Enum):
@@ -24,7 +24,6 @@ class ComplianceFramework(Enum):
     ISO27001 = "iso27001"
     CUSTOM = "custom"
 
-
 class ControlStatus(Enum):
     """Status of a control check."""
     PASSED = "passed"
@@ -32,7 +31,6 @@ class ControlStatus(Enum):
     PARTIAL = "partial"
     NOT_APPLICABLE = "not_applicable"
     UNKNOWN = "unknown"
-
 
 @dataclass
 class Control:
@@ -53,7 +51,6 @@ class Control:
             "framework": self.framework.value,
             "category": self.category,
         }
-
 
 @dataclass
 class ControlResult:
@@ -77,7 +74,6 @@ class ControlResult:
             "status": self.status.value,
             "message": self.message,
         }
-
 
 @dataclass
 class ComplianceReport:
@@ -121,7 +117,6 @@ class ComplianceReport:
             "score": self.compliance_score,
         }
 
-
 class ControlChecker(ABC):
     """Base class for control checkers."""
 
@@ -135,7 +130,6 @@ class ControlChecker(ABC):
     def check(self, context: dict[str, Any]) -> ControlResult:
         """Check the control."""
         pass
-
 
 class PolicyChecker(ControlChecker):
     """Checker based on policy rules."""
@@ -174,7 +168,6 @@ class PolicyChecker(ControlChecker):
                 status=ControlStatus.UNKNOWN,
                 message=f"Check error: {e}",
             )
-
 
 class ComplianceChecker:
     """
@@ -247,7 +240,7 @@ class ComplianceChecker:
             framework=self.framework,
         )
 
-        for control_id, checker in self._checkers.items():
+        for _control_id, checker in self._checkers.items():
             result = checker.check(context)
             report.results.append(result)
 
@@ -259,7 +252,6 @@ class ComplianceChecker:
         if not checker:
             return None
         return checker.check(context)
-
 
 # Pre-built SOC2 controls
 SOC2_CONTROLS = [
@@ -285,7 +277,6 @@ SOC2_CONTROLS = [
         category="Common Criteria",
     ),
 ]
-
 
 __all__ = [
     # Enums

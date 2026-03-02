@@ -1,6 +1,6 @@
 # Personal AI Infrastructure — Defense Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
@@ -51,6 +51,12 @@ containment = RabbitHole()
 ## Architecture Role
 
 **Specialized Layer** — Part of the Secure Cognitive Agent suite (`identity`, `wallet`, `defense`, `market`, `privacy`). Being migrated to `security.ai_safety`.
+
+## MCP Tools
+
+This module does not expose MCP tools directly. Access its capabilities via:
+- Direct Python import: `from codomyrmex.defense import ...`
+- CLI: `codomyrmex defense <command>`
 
 ## Navigation
 

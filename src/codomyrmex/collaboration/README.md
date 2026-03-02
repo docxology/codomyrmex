@@ -1,10 +1,20 @@
 # Collaboration Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
 The collaboration module provides multi-agent collaboration capabilities including agent management, communication channels, task coordination, and message-passing protocols. It supports round-robin, broadcast, capability-routing, and consensus protocols, along with swarm-based task decomposition and parallel execution for orchestrating complex multi-agent workflows.
+
+## PAI Integration
+
+| Algorithm Phase | Role | Tools Used |
+|----------------|------|-----------|
+| **EXECUTE** | Coordinate multi-agent task execution via swarm submission | `swarm_submit_task` |
+| **OBSERVE** | Monitor agent pool availability and capacity | `pool_status`, `list_agents` |
+| **VERIFY** | Confirm task completion and agent pool health | `pool_status` |
+
+PAI uses the collaboration module to orchestrate multi-agent workflows. Engineer agents use `swarm_submit_task` during EXECUTE for parallelized work; `pool_status` monitors agent availability during OBSERVE. This module enables PAI's Fan-out composition pattern across multiple specialized agents.
 
 ## Installation
 

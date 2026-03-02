@@ -347,8 +347,7 @@ class ClaudeTaskMaster:
                 messages=[{"role": "user", "content": user_message}],
                 **kwargs
             ) as stream:
-                for text in stream.text_stream:
-                    yield text
+                yield from stream.text_stream
 
         except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
             logger.error(f"Streaming error: {e}", exc_info=True)

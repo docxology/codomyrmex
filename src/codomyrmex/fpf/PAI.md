@@ -1,6 +1,6 @@
 # Personal AI Infrastructure — FPF Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
@@ -34,6 +34,12 @@ The FPF (Functional Programming Framework) module provides functional programmin
 ## Architecture Role
 
 **Specialized Layer** — Functional programming toolkit used by modules needing composable data transformations.
+
+## MCP Tools
+
+This module does not expose MCP tools directly. Access its capabilities via:
+- Direct Python import: `from codomyrmex.fpf import ...`
+- CLI: `codomyrmex fpf <command>`
 
 ## Navigation
 

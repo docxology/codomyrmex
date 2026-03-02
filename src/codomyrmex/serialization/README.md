@@ -1,10 +1,20 @@
 # Serialization Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
 Unified data serialization and deserialization module supporting multiple formats including JSON, YAML, TOML, MessagePack, Avro, and Parquet. Provides both a low-level `Serializer` class with format-specific encoding and a higher-level `SerializationManager` for managing serialization workflows. Includes comprehensive error handling with typed exceptions for schema validation, encoding, circular references, and format compatibility issues.
+
+## PAI Integration
+
+| Algorithm Phase | Role | Tools Used |
+|----------------|------|-----------|
+| **BUILD** | Serialize and deserialize data structures across formats | Direct Python import |
+| **EXECUTE** | Data marshaling in agent pipelines and workflows | Direct Python import |
+| **VERIFY** | Validate round-trip serialization fidelity | Direct Python import |
+
+PAI agents access this module via direct Python import through the MCP bridge for multi-format data encoding and decoding in agent pipelines.
 
 ## Installation
 

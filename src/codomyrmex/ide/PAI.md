@@ -1,6 +1,6 @@
 # Personal AI Infrastructure — IDE Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
@@ -62,6 +62,12 @@ from codomyrmex.ide import IDEStatus, IDECommand, IDECommandResult, FileInfo
 ## Architecture Role
 
 **Interface Layer** — Top-level user interaction module. Consumes `coding/` (code operations) and `git_operations/` (VCS integration). No MCP tools — operates through direct IDE protocol.
+
+## MCP Tools
+
+This module does not expose MCP tools directly. Access its capabilities via:
+- Direct Python import: `from codomyrmex.ide import ...`
+- CLI: `codomyrmex ide <command>`
 
 ## Navigation
 

@@ -155,7 +155,7 @@ class FPFCombinatoricsAnalyzer:
 
             # Get dependencies
             dependencies = []
-            for dep_type, deps in pattern.dependencies.items():
+            for _dep_type, deps in pattern.dependencies.items():
                 dependencies.extend(deps)
 
             if dependencies:
@@ -184,7 +184,7 @@ class FPFCombinatoricsAnalyzer:
                     "chain": chain,
                     "length": len(chain),
                     "avg_importance": chain_importance,
-                    "parts": list(set(p.part for p in chain_patterns if p.part)),
+                    "parts": list({p.part for p in chain_patterns if p.part}),
                 })
 
         chain_analysis.sort(key=lambda x: x["avg_importance"], reverse=True)
@@ -328,7 +328,7 @@ class FPFCombinatoricsAnalyzer:
                 return
 
             # Create similarity matrix
-            pattern_ids = sorted(list(set(p["pattern1"] for p in pairs) | set(p["pattern2"] for p in pairs)))
+            pattern_ids = sorted({p["pattern1"] for p in pairs} | {p["pattern2"] for p in pairs})
             similarity_matrix = np.zeros((len(pattern_ids), len(pattern_ids)))
 
             for pair in pairs:
@@ -742,7 +742,7 @@ class FPFCombinatoricsAnalyzer:
             # Find connected components (clusters)
             clusters = list(nx.connected_components(G))
 
-            return [sorted(list(cluster)) for cluster in clusters if len(cluster) > 2]
+            return [sorted(cluster) for cluster in clusters if len(cluster) > 2]
         except ImportError as e:
             logger.debug("Optional networkx graph clustering unavailable: %s", e)
             return []

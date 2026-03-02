@@ -1,6 +1,6 @@
 # Agent Guidelines - Vector Store
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Module Overview
 
@@ -61,6 +61,23 @@ ns_store.add("a", [1, 0, 0], namespace="n1")
 ns_store.add("a", [0, 1, 0], namespace="n2")
 assert ns_store.count("n1") == 1
 ```
+
+## PAI Agent Role Access Matrix
+
+| PAI Agent | Access Level | Primary Capabilities | Trust Level |
+|-----------|-------------|---------------------|-------------|
+| **Engineer** | Full | Direct Python import, class instantiation, full API access | TRUSTED |
+| **Architect** | Read + Design | API review, interface design, dependency analysis | OBSERVED |
+| **QATester** | Validation | Integration testing via pytest, output validation | OBSERVED |
+
+### Engineer Agent
+**Use Cases**: Store and retrieve vector embeddings, configure namespaced stores for RAG pipelines during BUILD phases
+
+### Architect Agent
+**Use Cases**: Design embedding schemas, evaluate similarity strategies (cosine vs euclidean), plan namespace isolation
+
+### QATester Agent
+**Use Cases**: Validate search accuracy and recall, verify namespace isolation, test batch insert performance
 
 ## Navigation
 

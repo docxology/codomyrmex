@@ -20,7 +20,7 @@ def update_flock(agents: list[SwarmAgent], params: FlockingParams) -> None:
     if n == 0:
         return
 
-    for i, agent in enumerate(agents):
+    for _i, agent in enumerate(agents):
         # Find neighbors within radius
         # (Naive O(N^2) for now - optimize with spatial tree later)
         distances = np.linalg.norm(positions - agent.position, axis=1)

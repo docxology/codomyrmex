@@ -6,6 +6,7 @@ import ast
 import os
 import sys
 from pathlib import Path
+
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 logger = get_logger(__name__)
@@ -140,7 +141,7 @@ def audit_documentation(src_dir: Path, report_file: Path) -> None:
 
     audits = []
 
-    for root, dirs, files in os.walk(src_dir):
+    for root, _dirs, _files in os.walk(src_dir):
         root_path = Path(root)
         if is_package(root_path):
             # Skip hidden directories and __pycache__
@@ -171,7 +172,7 @@ def audit_rasp(base_dir: Path) -> int:
 
     # Walk to find packages
     packages = []
-    for root, dirs, files in os.walk(base_dir):
+    for root, _dirs, files in os.walk(base_dir):
         if "__init__.py" in files:
             path = Path(root)
             # Skip hidden/cache

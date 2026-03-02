@@ -8,8 +8,9 @@ import asyncio
 from collections.abc import AsyncIterator, Callable
 from typing import Any
 
-from . import Event, EventType
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
+
+from . import Event, EventType
 
 logger = get_logger(__name__)
 

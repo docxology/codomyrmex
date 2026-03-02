@@ -1,8 +1,18 @@
 # Dark Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 Dark mode utilities for different domains: PDF, network, hardware, and software.
+
+## PAI Integration
+
+| Algorithm Phase | Role | Tools Used |
+|----------------|------|-----------|
+| **EXECUTE** | Apply dark mode transformations and TOR access operations | Direct Python import |
+| **OBSERVE** | Gather dark web intelligence and monitor channels | Direct Python import |
+| **VERIFY** | Validate anonymity and dark mode filter output | Direct Python import |
+
+PAI agents access this module via direct Python import through the MCP bridge. The Engineer agent uses `DarkPDF` during EXECUTE to apply dark mode filters to PDF artifacts for accessibility and low-light readability.
 
 ## Submodules
 

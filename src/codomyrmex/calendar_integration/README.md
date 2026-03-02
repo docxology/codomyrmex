@@ -1,6 +1,6 @@
 # Codomyrmex Calendar Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 The `calendar_integration` module provides a unified, generic interface for integrating with various calendar providers, with an initial focus on Google Calendar (`gcal`). It adheres strictly to the Codomyrmex Zero-Mock policy, ensuring reliable and verifiable interactions with real calendar APIs.
 
@@ -9,6 +9,16 @@ The `calendar_integration` module provides a unified, generic interface for inte
 - **Generic Interface:** Define calendar events and operations using standard Pydantic models and Abstract Base Classes.
 - **Google Calendar Integration:** Out-of-the-box support for the Google Calendar API (`v3`).
 - **Zero-Mock Testing Compatibility:** Designed to be tested against real APIs using authenticated service accounts or OAuth tokens.
+
+## PAI Integration
+
+| Algorithm Phase | Role | Tools Used |
+|----------------|------|-----------|
+| **OBSERVE** | Query scheduled events and deadlines | `calendar_list_events`, `calendar_get_event` |
+| **PLAN** | Schedule upcoming tasks and milestones | `calendar_create_event`, `calendar_update_event` |
+| **EXECUTE** | Create and manage calendar entries | `calendar_create_event`, `calendar_delete_event` |
+
+PAI agents use the calendar module to track task schedules and deadlines. The Engineer agent creates events during PLAN phase; the QATester validates calendar entries are correctly stored and retrievable.
 
 ## Installation
 

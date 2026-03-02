@@ -12,7 +12,7 @@ import re
 from collections.abc import Callable
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Optional
 
 
 class ThreatLevel(Enum):
@@ -23,14 +23,12 @@ class ThreatLevel(Enum):
     HIGH = "high"
     CRITICAL = "critical"
 
-
 class GuardrailAction(Enum):
     """Actions to take when a guardrail is triggered."""
     ALLOW = "allow"
     WARN = "warn"
     BLOCK = "block"
     SANITIZE = "sanitize"
-
 
 @dataclass
 class GuardrailResult:
@@ -48,7 +46,6 @@ class GuardrailResult:
         """Check if content is safe to proceed."""
         return self.passed and self.action in [GuardrailAction.ALLOW, GuardrailAction.WARN]
 
-
 @dataclass
 class GuardrailConfig:
     """Configuration for guardrail behavior."""
@@ -59,7 +56,6 @@ class GuardrailConfig:
     max_output_length: int = 500000
     custom_blocked_patterns: list[str] = field(default_factory=list)
     custom_allowed_patterns: list[str] = field(default_factory=list)
-
 
 class PromptInjectionDetector:
     """Detects prompt injection attempts in user input."""
@@ -150,7 +146,6 @@ class PromptInjectionDetector:
             message=f"Detected {threat_count} potential prompt injection pattern(s)",
             threats_detected=threats_detected,
         )
-
 
 class PIIDetector:
     """Detects and optionally sanitizes Personally Identifiable Information."""
@@ -244,7 +239,6 @@ class PIIDetector:
 
         return sanitized, redacted_types
 
-
 class ContentFilter:
     """Filters content for safety and appropriateness."""
 
@@ -292,7 +286,6 @@ class ContentFilter:
             message="Content failed safety check",
             threats_detected=threats_detected,
         )
-
 
 class OutputValidator:
     """Validates LLM output for safety and format compliance."""
@@ -354,7 +347,6 @@ class OutputValidator:
             message=f"Output validation found {len(threats_detected)} issue(s)",
             threats_detected=threats_detected,
         )
-
 
 class Guardrail:
     """
@@ -465,13 +457,11 @@ class Guardrail:
 
         return result
 
-
 # Convenience functions
 def check_prompt_injection(text: str) -> bool:
     """Quick check for prompt injection. Returns True if safe."""
     detector = PromptInjectionDetector()
     return detector.detect(text).passed
-
 
 def sanitize_pii(text: str) -> str:
     """Sanitize PII from text and return cleaned version."""
@@ -479,12 +469,10 @@ def sanitize_pii(text: str) -> str:
     sanitized, _ = detector.sanitize(text)
     return sanitized
 
-
 def validate_llm_output(output: str, expected_format: str | None = None) -> bool:
     """Quick validation of LLM output. Returns True if valid."""
     validator = OutputValidator()
     return validator.validate(output, expected_format).passed
-
 
 __all__ = [
     # Enums

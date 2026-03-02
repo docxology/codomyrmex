@@ -1,6 +1,6 @@
 # Tool Use Module — Agent Coordination
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
 
@@ -79,3 +79,20 @@ uv run python -m pytest src/codomyrmex/tests/ -k tool_use -v
 
 - Always use real, functional tests — no mocks (Zero-Mock policy)
 - Verify all changes pass existing tests before submitting
+
+## PAI Agent Role Access Matrix
+
+| PAI Agent | Access Level | Primary Capabilities | Trust Level |
+|-----------|-------------|---------------------|-------------|
+| **Engineer** | Full | Direct Python import, class instantiation, full API access | TRUSTED |
+| **Architect** | Read + Design | API review, interface design, dependency analysis | OBSERVED |
+| **QATester** | Validation | Integration testing via pytest, output validation | OBSERVED |
+
+### Engineer Agent
+**Use Cases**: Invoke external tools and CLIs via ToolRegistry, compose ToolChain pipelines, validate input/output schemas during BUILD/EXECUTE phases
+
+### Architect Agent
+**Use Cases**: Design tool integration patterns, define ToolEntry schemas, plan chain composition strategies
+
+### QATester Agent
+**Use Cases**: Validate tool invocation correctness, verify result parsing accuracy, test chain execution and error propagation

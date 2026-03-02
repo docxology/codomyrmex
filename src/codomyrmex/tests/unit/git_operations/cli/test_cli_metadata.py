@@ -7,7 +7,6 @@ Zero-Mock: no mocks, no stubs.
 
 import argparse
 import json
-import tempfile
 from pathlib import Path
 
 import pytest
@@ -20,7 +19,6 @@ from codomyrmex.git_operations.cli.metadata import (
     main,
 )
 from codomyrmex.git_operations.core.metadata import RepositoryMetadataManager
-
 
 # ---------------------------------------------------------------------------
 # Fixtures

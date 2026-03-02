@@ -1,10 +1,20 @@
 # Wallet Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
 The `wallet` module provides secure self-custody key management and "Natural Ritual" recovery mechanisms for cognitive agents. It extends standard key management with behavioral and knowledge-based recovery flows, eliminating reliance on centralized custodians.
+
+## PAI Integration
+
+| Algorithm Phase | Role | Tools Used |
+|----------------|------|-----------|
+| **EXECUTE** | Manage cryptocurrency wallet operations (create, sign, rotate) | Direct Python import |
+| **OBSERVE** | Check balances, list wallets, and inspect transactions | Direct Python import |
+| **VERIFY** | Validate transaction signatures and backup integrity | Direct Python import |
+
+PAI agents access this module via direct Python import through the MCP bridge to manage self-custody keys, sign messages, and perform recovery operations.
 
 ## Key Capabilities
 

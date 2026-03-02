@@ -1,10 +1,20 @@
 # Testing Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
 Test fixtures, generators, and utilities for the Codomyrmex test suite. Provides a structured framework for creating reusable test data, managing fixture lifecycles with scoping and dependency resolution, and generating random typed data for property-based and integration testing.
+
+## PAI Integration
+
+| Algorithm Phase | Role | Tools Used |
+|----------------|------|-----------|
+| **VERIFY** | Define and run test strategies with fixture management | Direct Python import |
+| **BUILD** | Write test cases using generators and fixture builders | Direct Python import |
+| **OBSERVE** | Analyze test coverage and fixture dependency graphs | Direct Python import |
+
+PAI agents access this module via direct Python import through the MCP bridge for test data generation and fixture lifecycle management.
 
 ## Installation
 

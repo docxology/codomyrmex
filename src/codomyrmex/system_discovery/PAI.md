@@ -1,6 +1,6 @@
 # Personal AI Infrastructure — System Discovery Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
@@ -66,15 +66,13 @@ report = reporter.generate()
 | **PLAN** | Module discovery data helps plan which tools to use in workflows |
 | **VERIFY** | Status reports verify system health after changes |
 
-## MCP Integration
+## MCP Tools
 
-Three MCP tools are powered by this module:
-
-| Tool | MCP Name | Description | Trust Level |
-|------|----------|-------------|-------------|
-| Health check | `health_check` | Run health check on all codomyrmex modules | Safe |
-| Module listing | `list_modules` | List all codomyrmex modules with status | Safe |
-| Dependency tree | `dependency_tree` | Get module dependency tree and layer violations | Safe |
+| Tool | Description | Key Parameters | PAI Phase |
+|------|-------------|----------------|-----------|
+| `health_check` | Run health checks across all codomyrmex modules | `module: str \| None` | OBSERVE |
+| `list_modules` | List all available codomyrmex modules with metadata | -- | OBSERVE |
+| `dependency_tree` | Generate module dependency tree | `module: str \| None` | OBSERVE |
 
 ## Architecture Role
 

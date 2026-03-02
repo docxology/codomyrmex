@@ -1,6 +1,6 @@
 # Personal AI Infrastructure — Environment Setup Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
@@ -73,6 +73,12 @@ if not check_and_setup_env_vars("/path/to/repo_root"):
 1. **CLI Entry Points** (fail fast if env is bad)
 2. **Agent Initialization** (ensure config is loaded)
 3. **Build Tools** (leverage `uv` if present)
+
+## MCP Tools
+
+This module does not expose MCP tools directly. Access its capabilities via:
+- Direct Python import: `from codomyrmex.environment_setup import ...`
+- CLI: `codomyrmex environment_setup <command>`
 
 ## Navigation
 

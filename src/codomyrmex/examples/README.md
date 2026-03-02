@@ -1,12 +1,21 @@
 # Examples Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 Reference implementations, sample outputs, and learning resources.
 
 ## Overview
 
 Example files demonstrating Codomyrmex capabilities. No programmatic exports — access content directly as reference files.
+
+## PAI Integration
+
+| Algorithm Phase | Role | Tools Used |
+|----------------|------|-----------|
+| **OBSERVE** | Reference examples for report formats and patterns | Direct Python import |
+| **THINK** | Use examples as context for architectural decisions | Direct Python import |
+
+PAI agents access this module via direct Python import through the MCP bridge. Agents load example JSON reports during OBSERVE phase to understand expected output formats before generating their own.
 
 ## Quick Reference
 

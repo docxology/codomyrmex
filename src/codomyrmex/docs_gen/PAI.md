@@ -1,6 +1,6 @@
 # Personal AI Infrastructure — Docs Gen Module
 
-**Version**: v1.0.2 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
@@ -108,6 +108,12 @@ assert results, "New module not discoverable in documentation index"
 **Service Layer** — Documentation pipeline. Depends on Foundation Layer
 (`logging_monitoring`). Consumed by the documentation site build process in CI/CD.
 No runtime dependency from other codomyrmex modules — purely a tooling consumer.
+
+## MCP Tools
+
+This module does not expose MCP tools directly. Access its capabilities via:
+- Direct Python import: `from codomyrmex.docs_gen import ...`
+- CLI: `codomyrmex docs_gen <command>`
 
 ## Navigation
 

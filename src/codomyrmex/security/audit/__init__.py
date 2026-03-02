@@ -14,7 +14,7 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Optional
 
 
 class AuditEventType(Enum):
@@ -31,7 +31,6 @@ class AuditEventType(Enum):
     SYSTEM_ERROR = "system.error"
     ADMIN_ACTION = "admin.action"
 
-
 class AuditSeverity(Enum):
     """Severity of audit events."""
     DEBUG = "debug"
@@ -39,7 +38,6 @@ class AuditSeverity(Enum):
     WARNING = "warning"
     ERROR = "error"
     CRITICAL = "critical"
-
 
 @dataclass
 class AuditEvent:
@@ -80,7 +78,6 @@ class AuditEvent:
         """Convert to JSON string."""
         return json.dumps(self.to_dict())
 
-
 class AuditStore(ABC):
     """Base class for audit storage."""
 
@@ -99,7 +96,6 @@ class AuditStore(ABC):
     ) -> list[AuditEvent]:
         """Query audit events."""
         pass
-
 
 class InMemoryAuditStore(AuditStore):
     """In-memory audit storage."""
@@ -145,7 +141,6 @@ class InMemoryAuditStore(AuditStore):
         """Clear all events."""
         with self._lock:
             self._events.clear()
-
 
 class FileAuditStore(AuditStore):
     """File-based audit storage."""
@@ -202,7 +197,6 @@ class FileAuditStore(AuditStore):
                     continue
 
         return results
-
 
 class AuditLogger:
     """
@@ -330,7 +324,6 @@ class AuditLogger:
     ) -> list[AuditEvent]:
         """Query audit events."""
         return self.store.query(start=start, end=end, event_type=event_type, actor=actor)
-
 
 __all__ = [
     # Enums

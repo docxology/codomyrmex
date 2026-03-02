@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import ast
 from dataclasses import dataclass
+
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 logger = get_logger(__name__)
@@ -184,7 +185,7 @@ class ASTMatcher:
         if len(code_nodes) != len(tmpl_nodes):
             return False
 
-        for c_node, t_node in zip(code_nodes, tmpl_nodes):
+        for c_node, t_node in zip(code_nodes, tmpl_nodes, strict=False):
             if type(c_node) != type(t_node):
                 return False
 

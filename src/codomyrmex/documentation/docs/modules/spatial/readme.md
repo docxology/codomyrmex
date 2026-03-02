@@ -1,8 +1,18 @@
 # Spatial Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 3D/4D spatial modeling, coordinates, physics, and rendering.
+
+## PAI Integration
+
+| Algorithm Phase | Role | Tools Used |
+|----------------|------|-----------|
+| **OBSERVE** | Geospatial queries and map analysis | Direct Python import |
+| **BUILD** | Construct spatial models and coordinate systems | Direct Python import |
+| **EXECUTE** | Geographic operations and physics simulation | Direct Python import |
+
+PAI agents access this module via direct Python import through the MCP bridge for 3D/4D spatial modeling and geospatial operations.
 
 ## Installation
 

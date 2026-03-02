@@ -73,13 +73,13 @@ from codomyrmex.ci_cd_automation.rollback_manager import (
 
 def _make_environment(**overrides) -> Environment:
     """Build an Environment with sensible defaults, overridden by kwargs."""
-    defaults = dict(
-        name="staging",
-        type=EnvironmentType.STAGING,
-        host="staging.example.com",
-        port=22,
-        user="deploy",
-    )
+    defaults = {
+        "name": "staging",
+        "type": EnvironmentType.STAGING,
+        "host": "staging.example.com",
+        "port": 22,
+        "user": "deploy",
+    }
     defaults.update(overrides)
     return Environment(**defaults)
 
@@ -88,13 +88,13 @@ def _make_deployment(env: Environment | None = None, **overrides) -> Deployment:
     """Build a Deployment with sensible defaults."""
     if env is None:
         env = _make_environment()
-    defaults = dict(
-        name="app-v2",
-        version="2.0.0",
-        environment=env,
-        artifacts=["build/app.tar.gz"],
-        strategy="rolling",
-    )
+    defaults = {
+        "name": "app-v2",
+        "version": "2.0.0",
+        "environment": env,
+        "artifacts": ["build/app.tar.gz"],
+        "strategy": "rolling",
+    }
     defaults.update(overrides)
     return Deployment(**defaults)
 

@@ -1,8 +1,18 @@
 # Edge Computing Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 Edge deployment, IoT gateways, and latency-sensitive function execution.
+
+## PAI Integration
+
+| Algorithm Phase | Role | Tools Used |
+|----------------|------|-----------|
+| **EXECUTE** | Deploy and invoke functions on edge nodes | Direct Python import |
+| **OBSERVE** | Monitor edge node status and cluster health | Direct Python import |
+| **BUILD** | Configure edge runtimes and register nodes | Direct Python import |
+
+PAI agents access this module via direct Python import through the MCP bridge. The Engineer agent uses EdgeCluster and EdgeRuntime to deploy latency-sensitive functions to edge nodes during BUILD and EXECUTE phases.
 
 ## Installation
 

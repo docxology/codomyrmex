@@ -1,6 +1,6 @@
 # Identity Module - Agent Guide
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
 
@@ -60,6 +60,23 @@ is_valid = verifier.verify(user_id="u1", metric="keystroke", current_value=0.15)
 - Maintain alignment between code, documentation, and configured workflows
 - Ensure Model Context Protocol interfaces remain available for sibling agents
 - Record outcomes in shared telemetry and update TODO queues when necessary
+
+## PAI Agent Role Access Matrix
+
+| PAI Agent | Access Level | Primary Capabilities | Trust Level |
+|-----------|-------------|---------------------|-------------|
+| **Engineer** | Full | Identity management, user/service identity lifecycle, credential provisioning | TRUSTED |
+| **Architect** | Read + Design | Identity architecture review, IAM design, federation strategy | OBSERVED |
+| **QATester** | Validation | Identity verification testing, credential validation, access control verification | OBSERVED |
+
+### Engineer Agent
+**Use Cases**: Managing identities during BUILD/EXECUTE, provisioning service credentials.
+
+### Architect Agent
+**Use Cases**: Designing IAM strategies, reviewing identity federation, planning access control.
+
+### QATester Agent
+**Use Cases**: Verifying identity management correctness during VERIFY, testing access control boundaries.
 
 ## Navigation Links
 

@@ -1,6 +1,6 @@
 # Personal AI Infrastructure — Networking Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
@@ -108,6 +108,12 @@ response = client.receive()
 
 - **Upstream Dependencies**: `exceptions`, `logging_monitoring`
 - **Downstream Consumers**: `agents`, `cloud`, `scrape`, `api`
+
+## MCP Tools
+
+This module does not expose MCP tools directly. Access its capabilities via:
+- Direct Python import: `from codomyrmex.networking import ...`
+- CLI: `codomyrmex networking <command>`
 
 ## Navigation
 

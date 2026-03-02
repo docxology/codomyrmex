@@ -1,6 +1,6 @@
 # Agent Guidelines - Logistics
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Module Overview
 
@@ -62,6 +62,23 @@ optimizer = RouteOptimizer()
 route = optimizer.optimize([loc1, loc2, loc3])
 assert len(route.stops) == 3
 ```
+
+## PAI Agent Role Access Matrix
+
+| PAI Agent | Access Level | Primary Capabilities | Trust Level |
+|-----------|-------------|---------------------|-------------|
+| **Engineer** | Full | Task logistics, workflow coordination, notification dispatching, scheduling | TRUSTED |
+| **Architect** | Read + Design | Logistics pipeline design, workflow dependency review, scheduling architecture | OBSERVED |
+| **QATester** | Validation | Workflow completion verification, notification delivery testing, scheduling correctness | OBSERVED |
+
+### Engineer Agent
+**Use Cases**: Coordinating workflow logistics during EXECUTE, dispatching notifications, scheduling tasks.
+
+### Architect Agent
+**Use Cases**: Designing logistics pipelines, reviewing workflow dependencies, planning notification strategies.
+
+### QATester Agent
+**Use Cases**: Verifying workflow completion during VERIFY, confirming notification delivery.
 
 ## Navigation
 

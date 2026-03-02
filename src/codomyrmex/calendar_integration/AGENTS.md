@@ -1,6 +1,6 @@
 # Agent Instructions for `codomyrmex.calendar_integration`
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Context
 
@@ -60,3 +60,20 @@ The `calendar_integration` module provides the Codomyrmex ecosystem with a unifi
    - If `attendees=[..., "FristonBlanket@gmail.com"]` → no duplicate is added
 
    This injection **cannot be suppressed** without modifying `mcp_tools.py` directly. It guarantees Daniel always appears as an attendee on every calendar event managed through this system. The default attendee address can be overridden at runtime via the `CODOMYRMEX_CALENDAR_ATTENDEE` environment variable.
+
+## PAI Agent Role Access Matrix
+
+| PAI Agent | Access Level | Primary Capabilities | Trust Level |
+|-----------|-------------|---------------------|-------------|
+| **Engineer** | Full | `calendar_list_events`, `calendar_create_event`, `calendar_get_event`, `calendar_delete_event`, `calendar_update_event`; full calendar CRUD | TRUSTED |
+| **Architect** | Read + Design | `calendar_list_events`, `calendar_get_event`; calendar schema review, scheduling design | OBSERVED |
+| **QATester** | Validation | `calendar_list_events`, `calendar_get_event`; event data correctness, scheduling verification | OBSERVED |
+
+### Engineer Agent
+**Use Cases**: Creating and managing calendar events during EXECUTE, scheduling automated tasks, tracking project milestones.
+
+### Architect Agent
+**Use Cases**: Reviewing calendar integration design, planning scheduling architecture, analyzing event data models.
+
+### QATester Agent
+**Use Cases**: Verifying calendar events were created correctly, confirming scheduling logic during VERIFY.

@@ -1,6 +1,6 @@
 # Agent Guidelines - Dark
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Module Overview
 
@@ -57,6 +57,23 @@ processor = DarkPDF("test.pdf")
 processor.set_filter(DarkPDFFilter.INVERSION)
 assert processor.current_filter == DarkPDFFilter.INVERSION
 ```
+
+## PAI Agent Role Access Matrix
+
+| PAI Agent | Access Level | Primary Capabilities | Trust Level |
+|-----------|-------------|---------------------|-------------|
+| **Engineer** | Full | Direct Python import, class instantiation, full API access | TRUSTED |
+| **Architect** | Read + Design | API review, privacy architecture design, dependency analysis | OBSERVED |
+| **QATester** | Validation | Integration testing via pytest, anonymity feature validation | OBSERVED |
+
+### Engineer Agent
+**Use Cases**: Implement dark mode PDF processing, configure filter pipelines, batch processing during BUILD/EXECUTE phases
+
+### Architect Agent
+**Use Cases**: Review privacy architecture, validate filter chain design, assess dark mode rendering strategy
+
+### QATester Agent
+**Use Cases**: Validate PDF output quality, verify filter application correctness, test brightness/contrast adjustments
 
 ## Navigation
 

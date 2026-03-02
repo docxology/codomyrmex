@@ -1,7 +1,7 @@
 """Tests for the email module."""
 
 import os
-from datetime import datetime, timezone, UTC
+from datetime import UTC, datetime
 
 import pytest
 

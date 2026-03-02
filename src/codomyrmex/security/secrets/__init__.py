@@ -16,7 +16,7 @@ from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Set, Tuple
+from typing import Any, Optional
 
 
 class SecretType(Enum):
@@ -30,14 +30,12 @@ class SecretType(Enum):
     DATABASE_URL = "database_url"
     GENERIC = "generic"
 
-
 class SecretSeverity(Enum):
     """Severity levels for detected secrets."""
     LOW = "low"
     MEDIUM = "medium"
     HIGH = "high"
     CRITICAL = "critical"
-
 
 @dataclass
 class DetectedSecret:
@@ -55,7 +53,6 @@ class DetectedSecret:
     def is_high_severity(self) -> bool:
         return self.severity in [SecretSeverity.HIGH, SecretSeverity.CRITICAL]
 
-
 @dataclass
 class ScanResult:
     """Result of a secret scan."""
@@ -70,7 +67,6 @@ class ScanResult:
     @property
     def high_severity_count(self) -> int:
         return sum(1 for s in self.secrets_found if s.is_high_severity)
-
 
 class SecretPatterns:
     """Collection of patterns for detecting secrets."""
@@ -126,7 +122,6 @@ class SecretPatterns:
             (re.compile(p[0], re.IGNORECASE), p[1], p[2], p[3])
             for p in self.patterns
         ]
-
 
 class SecretScanner:
     """
@@ -301,7 +296,6 @@ class SecretScanner:
             scan_time_ms=(time.time() - start_time) * 1000,
         )
 
-
 class SecretVault:
     """
     Simple encrypted secret storage.
@@ -396,18 +390,15 @@ class SecretVault:
             with open(self.path) as f:
                 self._secrets = json.load(f)
 
-
 def get_secret_from_env(name: str, default: str | None = None) -> str | None:
     """Get a secret from environment variables."""
     return os.environ.get(name, default)
-
 
 def mask_secret(value: str, show_chars: int = 4) -> str:
     """Mask a secret for display."""
     if len(value) <= show_chars * 2:
         return "*" * len(value)
     return value[:show_chars] + "*" * (len(value) - show_chars * 2) + value[-show_chars:]
-
 
 def generate_secret(length: int = 32, include_special: bool = True) -> str:
     """Generate a random secret."""
@@ -431,7 +422,6 @@ def generate_secret(length: int = 32, include_special: bool = True) -> str:
 
     return ''.join(_stdlib_secrets.choice(chars) for _ in range(length))
 
-
 __all__ = [
     # Enums
     "SecretType",
@@ -448,7 +438,6 @@ __all__ = [
     "mask_secret",
     "generate_secret",
 ]
-
 
 # Note: secret_scanner.py contains a minimal SecretScanner variant.
 # Do NOT wildcard-import it here — it would overwrite the full-featured

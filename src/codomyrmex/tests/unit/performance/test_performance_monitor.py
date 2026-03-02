@@ -388,7 +388,7 @@ class TestProfileMemoryUsage:
     def test_returns_function_result(self):
         @profile_memory_usage
         def compute():
-            return [i for i in range(100)]
+            return list(range(100))
 
         result = compute()
         assert len(result) == 100

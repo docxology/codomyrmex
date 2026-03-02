@@ -263,7 +263,7 @@ class CompositionVisualizer:
                     textcoords="offset points",
                     fontsize=self.theme.font.annotation_size,
                     fontweight="bold",
-                    bbox=dict(boxstyle="round,pad=0.3", facecolor="white", alpha=0.8),
+                    bbox={"boxstyle": "round,pad=0.3", "facecolor": "white", "alpha": 0.8},
                 )
 
         chart_viz.format_axes_labels(ax, xlabel="Dimension 1", ylabel="Dimension 2")

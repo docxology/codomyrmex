@@ -55,7 +55,7 @@ class TestConfigValidator:
         )
 
         assert schema.type == "str"
-        assert schema.required == True
+        assert schema.required is True
         assert schema.default == "default_value"
         assert schema.description == "Test field"
         assert schema.constraints["min_length"] == 3

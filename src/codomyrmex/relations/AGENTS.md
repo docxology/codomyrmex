@@ -87,6 +87,23 @@ uv run pytest src/codomyrmex/tests/unit/relations/ -v
 - **cerebrum module**: Case-based reasoning can use `SocialGraph` centrality and community data as features.
 - **networks module**: The general `networks` module provides lower-level graph primitives; `relations` builds domain-specific CRM and UOR semantics on top.
 
+## PAI Agent Role Access Matrix
+
+| PAI Agent | Access Level | Primary Capabilities | Trust Level |
+|-----------|-------------|---------------------|-------------|
+| **Engineer** | Full | `relations_score_strength`; relationship scoring, entity link management | TRUSTED |
+| **Architect** | Read + Design | `relations_score_strength`; relationship design, entity graph architecture | OBSERVED |
+| **QATester** | Validation | `relations_score_strength`; relationship strength verification | OBSERVED |
+
+### Engineer Agent
+**Use Cases**: Scoring entity relationships during OBSERVE/THINK, building relationship graphs, computing link strength metrics.
+
+### Architect Agent
+**Use Cases**: Designing entity relationship models, reviewing relationship schema, graph architecture analysis.
+
+### QATester Agent
+**Use Cases**: Validating relationship scores during VERIFY, confirming entity linkage correctness.
+
 ## Navigation
 
 - Module: `src/codomyrmex/relations/`

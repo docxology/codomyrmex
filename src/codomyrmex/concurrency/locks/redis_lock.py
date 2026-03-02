@@ -5,8 +5,9 @@ import uuid
 
 import redis
 
-from .distributed_lock import BaseLock
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
+
+from .distributed_lock import BaseLock
 
 logger = get_logger(__name__)
 

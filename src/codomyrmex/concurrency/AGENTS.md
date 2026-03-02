@@ -1,6 +1,6 @@
 # Agent Guidelines - Concurrency
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Module Overview
 
@@ -63,6 +63,23 @@ assert sem.acquire()
 assert sem.acquire()
 assert not sem.acquire(timeout=0.1)  # At limit
 ```
+
+## PAI Agent Role Access Matrix
+
+| PAI Agent | Access Level | Primary Capabilities | Trust Level |
+|-----------|-------------|---------------------|-------------|
+| **Engineer** | Full | Direct Python import, class instantiation, full API access | TRUSTED |
+| **Architect** | Read + Design | API review, concurrency pattern design, dependency analysis | OBSERVED |
+| **QATester** | Validation | Integration testing via pytest, thread safety validation | OBSERVED |
+
+### Engineer Agent
+**Use Cases**: Implement async/parallel tasks, configure distributed locks, manage thread pools during BUILD/EXECUTE phases
+
+### Architect Agent
+**Use Cases**: Review concurrency patterns, validate deadlock prevention strategies, design lock hierarchies
+
+### QATester Agent
+**Use Cases**: Validate thread safety under contention, verify lock exclusion semantics, test semaphore counting behavior
 
 ## Navigation
 

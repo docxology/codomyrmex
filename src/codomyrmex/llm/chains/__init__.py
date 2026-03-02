@@ -10,10 +10,9 @@ from abc import ABC, abstractmethod
 from collections.abc import Callable
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any, Dict, Generic, List, Optional, TypeVar
+from typing import Any, Generic, Optional, TypeVar
 
 T = TypeVar('T')
-
 
 class ChainType(Enum):
     """Types of chains."""
@@ -23,7 +22,6 @@ class ChainType(Enum):
     CONDITIONAL = "conditional"
     MAP_REDUCE = "map_reduce"
     ROUTER = "router"
-
 
 @dataclass
 class ChainStep:
@@ -47,7 +45,6 @@ class ChainStep:
             return self.parser(output)
         return output
 
-
 @dataclass
 class ChainResult:
     """Result of running a chain."""
@@ -63,7 +60,6 @@ class ChainResult:
             if step.get("name") == step_name:
                 return step.get("output")
         return None
-
 
 class Chain(ABC):
     """Abstract base class for chains."""
@@ -83,7 +79,6 @@ class Chain(ABC):
         """Add a step to the chain."""
         self.steps.append(step)
         return self
-
 
 class SimpleChain(Chain):
     """A simple single-step chain."""
@@ -111,7 +106,6 @@ class SimpleChain(Chain):
             )
         except Exception as e:
             return ChainResult(success=False, output=None, error=str(e))
-
 
 class SequentialChain(Chain):
     """A chain that runs steps sequentially, passing context between them."""
@@ -151,7 +145,6 @@ class SequentialChain(Chain):
                 error=str(e),
             )
 
-
 class ChainOfThought(SequentialChain):
     """A chain that implements chain-of-thought reasoning."""
 
@@ -185,7 +178,6 @@ Now provide a clear, concise answer to: {question}
 Answer:""",
             output_key="answer",
         ))
-
 
 class ReActChain(Chain):
     """A chain implementing the ReAct (Reason + Act) pattern."""
@@ -282,7 +274,6 @@ Thought:"""
                 error=str(e),
             )
 
-
 def create_chain(chain_type: ChainType, **kwargs) -> Chain:
     """Factory function to create chains."""
     chains = {
@@ -296,7 +287,6 @@ def create_chain(chain_type: ChainType, **kwargs) -> Chain:
 
     return chain_class(**kwargs)
 
-
 # Output parsers
 def json_parser(output: str) -> dict:
     """Parse JSON from output."""
@@ -305,7 +295,6 @@ def json_parser(output: str) -> dict:
     if json_match:
         return json.loads(json_match.group(1))
     return json.loads(output)
-
 
 def list_parser(output: str) -> list[str]:
     """Parse a numbered or bulleted list."""
@@ -317,7 +306,6 @@ def list_parser(output: str) -> list[str]:
         if cleaned:
             items.append(cleaned)
     return items
-
 
 __all__ = [
     "ChainType",

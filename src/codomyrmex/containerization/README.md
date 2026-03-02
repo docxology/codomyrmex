@@ -1,10 +1,20 @@
 # Containerization Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
 Container management, orchestration, and deployment module organized into four submodules: Docker lifecycle management, Kubernetes orchestration, container registry operations, and container security/performance optimization. Provides classes for building and managing Docker containers, deploying to Kubernetes clusters, interacting with container registries, and scanning containers for security vulnerabilities. All submodule imports are optional and gracefully degrade if dependencies are unavailable.
+
+## PAI Integration
+
+| Algorithm Phase | Role | Tools Used |
+|----------------|------|-----------|
+| **BUILD** | Engineer agent builds container images for artifact packaging | `container_build` |
+| **EXECUTE** | Manage running containers for deployment and testing | `container_list`, `container_runtime_status` |
+| **VERIFY** | QATester scans container images for security vulnerabilities | `container_security_scan` |
+
+PAI's BUILD phase uses `container_build` to package artifacts; EXECUTE uses `container_list` and `container_runtime_status` to manage deployments. QATester calls `container_security_scan` during VERIFY to confirm image security before deployment.
 
 ## Installation
 

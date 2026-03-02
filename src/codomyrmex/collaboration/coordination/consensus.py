@@ -13,8 +13,9 @@ from datetime import datetime
 from enum import Enum
 from typing import Any
 
-from ..agents.base import CollaborativeAgent
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
+
+from ..agents.base import CollaborativeAgent
 
 logger = get_logger(__name__)
 

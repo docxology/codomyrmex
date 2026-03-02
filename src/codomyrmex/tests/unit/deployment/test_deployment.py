@@ -111,7 +111,8 @@ def test_rolling_deployment_all_succeed():
         DeploymentTarget(id=f"t-{i}", name=f"n-{i}", address=f"localhost:{8000 + i}")
         for i in range(4)
     ]
-    deploy_fn = lambda t, v: True
+    def deploy_fn(t, v):
+        return True
     result = strategy.deploy(targets, "v2", deploy_fn)
 
     assert result.success is True

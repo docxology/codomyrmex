@@ -1,10 +1,20 @@
 # Telemetry Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
 The telemetry module provides an OpenTelemetry-compatible observability framework for distributed tracing, metrics collection, span processing, and alerting. It supports trace context propagation, multiple span processors (simple and batch), OTLP export, sampling strategies, and configurable alerting -- enabling end-to-end visibility across distributed workflows.
+
+## PAI Integration
+
+| Algorithm Phase | Role | Tools Used |
+|----------------|------|-----------|
+| **OBSERVE** | Collect live metrics on system state, performance, and health | Direct Python import |
+| **VERIFY** | Confirm metrics are within expected ranges post-BUILD | Direct Python import |
+| **LEARN** | Archive metric time-series for trend analysis and future OBSERVE cycles | Direct Python import |
+
+PAI uses telemetry to monitor the system during all Algorithm phases. Engineer agents configure metric collection; QATester validates metric correctness during VERIFY. The website dashboard (`/api/telemetry`) surfaces these metrics for real-time visibility.
 
 ## Installation
 

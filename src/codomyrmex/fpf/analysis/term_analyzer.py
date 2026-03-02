@@ -109,7 +109,7 @@ class TermAnalyzer:
                 term_patterns[term].add(pattern.id)
 
         shared = [
-            (term, len(patterns), sorted(list(patterns)))
+            (term, len(patterns), sorted(patterns))
             for term, patterns in term_patterns.items()
             if len(patterns) >= min_occurrences
         ]
@@ -191,7 +191,7 @@ class TermAnalyzer:
             terms = self.extract_terms_from_pattern(pattern)
             section_terms[section].update(terms)
 
-        return {section: sorted(list(terms)) for section, terms in section_terms.items()}
+        return {section: sorted(terms) for section, terms in section_terms.items()}
 
     def find_cross_section_terms(
         self, spec: FPFSpec, min_sections: int = 2
@@ -214,7 +214,7 @@ class TermAnalyzer:
                 term_sections[term].add(section)
 
         cross_section = [
-            (term, len(sections), sorted(list(sections)))
+            (term, len(sections), sorted(sections))
             for term, sections in term_sections.items()
             if len(sections) >= min_sections
         ]

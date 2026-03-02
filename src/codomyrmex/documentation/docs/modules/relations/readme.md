@@ -1,10 +1,19 @@
 # Relations Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
 The Relations module provides CRM (Contact Relationship Management), social network analysis, and Universal Object Reference (UOR) capabilities. It enables agents to track contacts, analyze social graphs, and maintain bidirectional entity relationships.
+
+## PAI Integration
+
+| Algorithm Phase | Role | Tools Used |
+|----------------|------|-----------|
+| **OBSERVE** | Score relationship strength between entities in the knowledge graph | `relations_score_strength` |
+| **THINK** | Use relationship strengths to weight context retrieval | `relations_score_strength` |
+
+PAI uses `relations_score_strength` to compute relevance between entities (modules, agents, tasks) during OBSERVE and THINK. This informs capability selection by weighting related prior decisions more heavily.
 
 ## Installation
 

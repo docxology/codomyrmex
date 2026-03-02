@@ -254,7 +254,7 @@ class PhysicsSimulator:
             total_pe += self.calculate_potential_energy(obj_id)
 
         # Force field potential energy
-        for obj_id, obj_data in self.objects.items():
+        for _obj_id, obj_data in self.objects.items():
             for force_field in self.force_fields:
                 distance = (obj_data["position"] - force_field.position).magnitude()
                 if distance > 0:

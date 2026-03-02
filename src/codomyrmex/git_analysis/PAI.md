@@ -79,6 +79,27 @@ Contributor patterns inform agent delegation:
 | **QATester** | `git_analysis_code_churn` to prioritize high-risk test coverage |
 | **Algorithm** | `git_analysis_contributor_stats` + `git_analysis_commit_frequency` for ISC |
 
+## MCP Tools
+
+| Tool | Description | Key Parameters | PAI Phase |
+|------|-------------|----------------|-----------|
+| `git_analysis__analyze_repo` | Full repository analysis | `repo_path: str` | OBSERVE |
+| `git_analysis__get_commit_history` | Retrieve commit log with filters | `repo_path, limit, author` | OBSERVE |
+| `git_analysis__get_contributor_stats` | Contributor activity and commit stats | `repo_path: str` | OBSERVE |
+| `git_analysis__get_file_history` | History of changes to a specific file | `repo_path, file_path` | OBSERVE |
+| `git_analysis__detect_patterns` | Detect commit patterns and trends | `repo_path: str` | OBSERVE |
+| `git_analysis__get_branch_info` | Branch metadata and divergence info | `repo_path: str` | OBSERVE |
+| `git_analysis__get_blame` | Line-by-line blame attribution | `repo_path, file_path` | OBSERVE |
+| `git_analysis__get_tags` | Repository tags and versions | `repo_path: str` | OBSERVE |
+| `git_analysis__get_diff` | Diff between commits or branches | `repo_path, from_ref, to_ref` | OBSERVE |
+| `git_analysis__get_hotspots` | Files with most churn/changes | `repo_path: str` | OBSERVE |
+| `git_analysis__get_code_age` | Age of code by file/function | `repo_path: str` | OBSERVE |
+| `git_analysis__get_first_commit` | First commit metadata | `repo_path: str` | OBSERVE |
+| `git_analysis__get_commit_frequency` | Commit frequency over time | `repo_path, interval` | OBSERVE |
+| `git_analysis__get_coauthors` | Co-author collaboration patterns | `repo_path: str` | OBSERVE |
+| `git_analysis__get_merge_patterns` | Merge strategy and frequency | `repo_path: str` | OBSERVE |
+| `git_analysis__summarize_repo` | High-level repository summary | `repo_path: str` | OBSERVE |
+
 ## MCP Bridge Discovery
 
 This module is auto-discovered by the PAI MCP bridge via the `@mcp_tool` decorator

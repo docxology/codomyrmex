@@ -1,6 +1,6 @@
 # Market Module - Agent Guide
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
 
@@ -54,6 +54,23 @@ aggregator.join_demand(item="storage_1TB", persona_id="anon_1")
 - Maintain alignment between code, documentation, and configured workflows
 - Ensure Model Context Protocol interfaces remain available for sibling agents
 - Record outcomes in shared telemetry and update TODO queues when necessary
+
+## PAI Agent Role Access Matrix
+
+| PAI Agent | Access Level | Primary Capabilities | Trust Level |
+|-----------|-------------|---------------------|-------------|
+| **Engineer** | Full | Direct Python import, class instantiation, full API access | TRUSTED |
+| **Architect** | Read + Design | API review, interface design, dependency analysis | OBSERVED |
+| **QATester** | Validation | Integration testing via pytest, output validation | OBSERVED |
+
+### Engineer Agent
+**Use Cases**: Implements market data analysis, reverse auction lifecycle, demand aggregation, and bid management via ReverseAuction, DemandAggregator, and BidManager.
+
+### Architect Agent
+**Use Cases**: Designs market data pipelines, evaluates auction system scalability, and reviews provider registry integration patterns.
+
+### QATester Agent
+**Use Cases**: Validates market data processing accuracy, auction lifecycle correctness, bid ranking logic, and demand aggregation consistency.
 
 ## Navigation Links
 

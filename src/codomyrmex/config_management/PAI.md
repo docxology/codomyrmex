@@ -1,6 +1,6 @@
 # Personal AI Infrastructure — Config Management Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
@@ -35,15 +35,13 @@ from codomyrmex.config_management import core, deployment, monitoring
 | **EXECUTE** | Apply configuration changes during deployment |
 | **VERIFY** | Validate configuration against schema constraints |
 
-## MCP Integration
+## MCP Tools
 
-Three MCP tools available:
-
-| Tool | Description | Trust Level |
-|------|-------------|-------------|
-| `get_config` | Read a configuration value by key | Safe |
-| `set_config` | Write a configuration value by key | Safe |
-| `validate_config` | Validate configuration against schema | Safe |
+| Tool | Description | Key Parameters | PAI Phase |
+|------|-------------|----------------|-----------|
+| `get_config` | Retrieve a configuration value by key | `key: str, default: Any` | OBSERVE |
+| `set_config` | Set a configuration value | `key: str, value: Any` | BUILD |
+| `validate_config` | Validate configuration against schema | `config: dict, schema: dict` | VERIFY |
 
 ## Architecture Role
 

@@ -1,8 +1,18 @@
 # Graph RAG Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 Knowledge graph-enhanced RAG with entity relationships.
+
+## PAI Integration
+
+| Algorithm Phase | Role | Tools Used |
+|----------------|------|-----------|
+| **THINK** | Knowledge graph reasoning over entity relationships | Direct Python import |
+| **OBSERVE** | Query graph knowledge base for contextual retrieval | Direct Python import |
+| **LEARN** | Update knowledge graph with new entities and relationships | Direct Python import |
+
+PAI agents access this module via direct Python import through the MCP bridge. The Architect agent queries the KnowledgeGraph during THINK for relationship-aware reasoning, and agents update the graph during LEARN to capture new domain knowledge.
 
 ## Key Exports
 

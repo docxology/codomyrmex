@@ -122,3 +122,20 @@ Expected: 63 tests pass (Node.js integration test may be skipped if unavailable)
 | `model_context_protocol` | Used for `@mcp_tool` decorator registration |
 | `logging_monitoring` | Used for structured logging (Foundation Layer) |
 | `formal_verification` | Parallel pattern — both have `vendor/` git submodules |
+
+## PAI Agent Role Access Matrix
+
+| PAI Agent | Access Level | Primary Capabilities | Trust Level |
+|-----------|-------------|---------------------|-------------|
+| **Engineer** | Full | All 16 `git_analysis_*` tools; commit analysis, contributor stats, pattern detection | TRUSTED |
+| **Architect** | Read + Design | `git_analysis_*` read tools; codebase evolution analysis, contributor pattern review | OBSERVED |
+| **QATester** | Validation | `git_analysis_*` analysis tools; commit pattern validation, history integrity checks | OBSERVED |
+
+### Engineer Agent
+**Use Cases**: Analyzing git history during OBSERVE, generating contributor statistics, detecting commit patterns for LEARN phase.
+
+### Architect Agent
+**Use Cases**: Understanding codebase evolution, reviewing development patterns, analyzing team contribution distribution.
+
+### QATester Agent
+**Use Cases**: Validating git history integrity, confirming expected commit patterns during VERIFY.

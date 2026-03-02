@@ -1,6 +1,6 @@
 # Personal AI Infrastructure — Physical Management Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
@@ -33,6 +33,12 @@ The Physical Management module provides physical infrastructure management capab
 ## Architecture Role
 
 **Specialized Layer** — Infrastructure management consumed by `cloud/` (hybrid deployments) and `deployment/` (on-premise releases).
+
+## MCP Tools
+
+This module does not expose MCP tools directly. Access its capabilities via:
+- Direct Python import: `from codomyrmex.physical_management import ...`
+- CLI: `codomyrmex physical_management <command>`
 
 ## Navigation
 

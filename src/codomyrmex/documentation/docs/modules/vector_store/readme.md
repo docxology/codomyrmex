@@ -1,8 +1,18 @@
 # Vector Store Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 Embeddings storage with similarity search using cosine, euclidean, or dot product metrics.
+
+## PAI Integration
+
+| Algorithm Phase | Role | Tools Used |
+|----------------|------|-----------|
+| **OBSERVE** | Semantic search over stored embeddings for context retrieval | Direct Python import |
+| **THINK** | Vector similarity to find related prior decisions and patterns | Direct Python import |
+| **LEARN** | Store new embeddings for future retrieval | Direct Python import |
+
+PAI uses vector storage for semantic memory. During OBSERVE/THINK, vector similarity search retrieves relevant prior context. LEARN phase stores new embeddings. Works alongside `agentic_memory` for hybrid structured + semantic retrieval.
 
 ## Installation
 

@@ -1,10 +1,20 @@
 # Model Context Protocol Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
 Foundation-layer module defining the Model Context Protocol (MCP), the standardized communication specification between AI agents and platform tools within Codomyrmex. Provides JSON-RPC message handling, Pydantic-validated schemas for tool calls, and a full MCP server implementation with stdio transport.
+
+## PAI Integration
+
+| Algorithm Phase | Role | Tools Used |
+|----------------|------|-----------|
+| **ALL PHASES** | MCP is the transport layer -- all PAI-codomyrmex communication flows through it | `inspect_server`, `list_registered_tools` |
+| **OBSERVE** | Discover available tools and their schemas | `list_registered_tools`, `get_tool_schema` |
+| **VERIFY** | Confirm MCP server health and tool availability | `inspect_server` |
+
+This module **is** the integration layer. PAI agents communicate with codomyrmex exclusively via MCP (JSON-RPC over stdio or HTTP). `inspect_server` provides health checks; `list_registered_tools` enumerates the 171 available tools; `get_tool_schema` validates tool interfaces. The trust gateway (`trust_gateway.py`) gates destructive tool access.
 
 ## Quick Start
 

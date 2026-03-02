@@ -542,7 +542,7 @@ class TestFileOpsMixin:
             ".java": "java", ".go": "go", ".rs": "rust", ".rb": "ruby",
         }
         # This is hardcoded in the method; we're verifying our understanding
-        for ext, expected_lang in ext_map.items():
+        for _ext, expected_lang in ext_map.items():
             assert expected_lang is not None  # sanity
 
 

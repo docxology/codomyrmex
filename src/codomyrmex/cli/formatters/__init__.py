@@ -10,7 +10,7 @@ from abc import ABC, abstractmethod
 from collections.abc import Callable
 from dataclasses import dataclass, field
 from io import StringIO
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Optional, Union
 
 
 @dataclass
@@ -37,7 +37,6 @@ class Column:
                 return text.ljust(self.width)
         return text
 
-
 class OutputFormatter(ABC):
     """Abstract base class for output formatters."""
 
@@ -60,7 +59,6 @@ class OutputFormatter(ABC):
     def format_key_value(self, data: dict[str, Any]) -> str:
         """Format key-value pairs."""
         pass
-
 
 class PlainFormatter(OutputFormatter):
     """Plain text formatter."""
@@ -116,7 +114,6 @@ class PlainFormatter(OutputFormatter):
             lines.append(f"{key.ljust(max_key_len)}: {value}")
         return "\n".join(lines)
 
-
 class JSONFormatter(OutputFormatter):
     """JSON formatter for machine-readable output."""
 
@@ -134,7 +131,6 @@ class JSONFormatter(OutputFormatter):
 
     def format_key_value(self, data: dict[str, Any]) -> str:
         return self.format_data(data)
-
 
 class TableFormatter(OutputFormatter):
     """Rich table formatter with borders."""
@@ -249,7 +245,6 @@ class TableFormatter(OutputFormatter):
             [Column(name="Key", key="key"), Column(name="Value", key="value")]
         )
 
-
 class YAMLFormatter(OutputFormatter):
     """YAML-like formatter for readable output."""
 
@@ -307,7 +302,6 @@ class YAMLFormatter(OutputFormatter):
     def format_key_value(self, data: dict[str, Any]) -> str:
         return self.format_data(data)
 
-
 def create_formatter(format_type: str, **kwargs) -> OutputFormatter:
     """Factory function to create formatters."""
     formatters = {
@@ -322,7 +316,6 @@ def create_formatter(format_type: str, **kwargs) -> OutputFormatter:
         raise ValueError(f"Unknown format type: {format_type}")
 
     return formatter_class(**kwargs)
-
 
 __all__ = [
     "Column",

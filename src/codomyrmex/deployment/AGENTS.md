@@ -1,6 +1,6 @@
 # Agent Guidelines - Deployment
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Module Overview
 
@@ -60,6 +60,23 @@ deployer = DeploymentManager(dry_run=True)
 result = deployer.deploy(image="test", environment="test")
 assert result.dry_run
 ```
+
+## PAI Agent Role Access Matrix
+
+| PAI Agent | Access Level | Primary Capabilities | Trust Level |
+|-----------|-------------|---------------------|-------------|
+| **Engineer** | Full | Deployment automation, release management, environment provisioning | TRUSTED |
+| **Architect** | Read + Design | Deployment strategy review, environment architecture, release pipeline design | OBSERVED |
+| **QATester** | Validation | Deployment health checks, rollback verification, environment correctness | OBSERVED |
+
+### Engineer Agent
+**Use Cases**: Executing deployments during EXECUTE phase, managing release automation, provisioning environments.
+
+### Architect Agent
+**Use Cases**: Designing deployment strategies (blue/green, canary), reviewing release pipelines.
+
+### QATester Agent
+**Use Cases**: Verifying deployment success during VERIFY, confirming environment health, testing rollback procedures.
 
 ## Navigation
 

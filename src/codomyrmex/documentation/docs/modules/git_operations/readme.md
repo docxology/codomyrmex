@@ -1,10 +1,20 @@
 # Git Operations Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
 Comprehensive programmatic Python interface for Git version control operations. Wraps Git subprocess calls into typed, error-handling functions covering repository lifecycle, branching, merging, stashing, tagging, remote management, and GitHub API integration. Includes optional visualization support for generating branch diagrams and commit activity charts.
+
+## PAI Integration
+
+Git operations are central to PAI's **EXECUTE phase**. `Engineer` agents invoke `commit_changes()`, `push_changes()`, and `create_branch()` during feature delivery. `QATester` agents use `get_status()` and `get_diff()` in VERIFY to confirm that exactly the expected files changed. The `Architect` subagent uses `get_commit_history()` and `get_diff()` in OBSERVE for codebase analysis. See [AGENTS.md](AGENTS.md) for the full agent role access matrix and tool trust levels.
+
+| Algorithm Phase | Git Operations Role |
+|----------------|-------------------|
+| OBSERVE | `Architect` → `get_commit_history()`, `get_diff()` for codebase analysis |
+| EXECUTE | `Engineer` → `commit_changes()`, `push_changes()`, `create_branch()` |
+| VERIFY | `QATester` → `get_status()`, `get_diff()` to confirm expected repo state |
 
 ## Key Exports
 

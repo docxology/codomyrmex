@@ -22,6 +22,7 @@ from codomyrmex.audio.exceptions import (
     SynthesisError,
     VoiceNotFoundError,
 )
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 from ..models import (
     AudioFormat,
@@ -31,7 +32,6 @@ from ..models import (
     VoiceInfo,
 )
 from .base import TTSProvider
-from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 logger = get_logger(__name__)
 

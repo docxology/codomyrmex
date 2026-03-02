@@ -10,7 +10,6 @@ import re
 from pathlib import Path
 from typing import Any
 
-
 try:
     import yaml
 except ImportError:  # pragma: no cover – yaml is an optional dep
@@ -27,6 +26,7 @@ from codomyrmex.agentic_memory.obsidian.models import (
     Wikilink,
 )
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
+
 logger = get_logger(__name__)
 
 # ── regex patterns ───────────────────────────────────────────────────

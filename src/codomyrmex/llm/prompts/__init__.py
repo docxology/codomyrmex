@@ -13,7 +13,7 @@ from collections.abc import Callable
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Optional, Union
 
 
 class PromptRole(Enum):
@@ -23,7 +23,6 @@ class PromptRole(Enum):
     ASSISTANT = "assistant"
     FUNCTION = "function"
     TOOL = "tool"
-
 
 @dataclass
 class Message:
@@ -40,7 +39,6 @@ class Message:
             result["name"] = self.name
         return result
 
-
 @dataclass
 class PromptVersion:
     """A version of a prompt template."""
@@ -55,7 +53,6 @@ class PromptVersion:
     def content_hash(self) -> str:
         """Get hash of template content."""
         return hashlib.sha256(self.template.encode()).hexdigest()[:12]
-
 
 class PromptTemplate:
     """
@@ -147,7 +144,6 @@ class PromptTemplate:
 
         return [v for v in required if v not in kwargs]
 
-
 class PromptBuilder:
     """
     Fluent builder for constructing multi-message prompts.
@@ -219,7 +215,6 @@ class PromptBuilder:
     def messages(self) -> list[Message]:
         """Get raw message objects."""
         return self._messages.copy()
-
 
 class PromptRegistry:
     """
@@ -374,7 +369,6 @@ class PromptRegistry:
 
         return count
 
-
 # Common prompt templates
 COMMON_TEMPLATES = {
     "code_review": PromptTemplate(
@@ -399,11 +393,9 @@ COMMON_TEMPLATES = {
     ),
 }
 
-
 def get_common_template(name: str) -> PromptTemplate | None:
     """Get a common built-in template."""
     return COMMON_TEMPLATES.get(name)
-
 
 __all__ = [
     # Enums

@@ -12,7 +12,7 @@ from collections import defaultdict
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Optional
 
 
 class ModelProvider(Enum):
@@ -24,7 +24,6 @@ class ModelProvider(Enum):
     COHERE = "cohere"
     LOCAL = "local"
     CUSTOM = "custom"
-
 
 @dataclass
 class ModelPricing:
@@ -41,7 +40,6 @@ class ModelPricing:
         input_cost = (input_tokens / 1000) * self.input_cost_per_1k
         output_cost = (output_tokens / 1000) * self.output_cost_per_1k
         return input_cost + output_cost
-
 
 # Pricing data (as of late 2025 / early 2026 - prices change!)
 MODEL_PRICING: dict[str, ModelPricing] = {
@@ -70,7 +68,6 @@ MODEL_PRICING: dict[str, ModelPricing] = {
     "codestral": ModelPricing("codestral", ModelProvider.MISTRAL, 0.0002, 0.0006, 32000),
 }
 
-
 @dataclass
 class UsageRecord:
     """Record of a single LLM usage event."""
@@ -87,7 +84,6 @@ class UsageRecord:
         """Total tokens used."""
         return self.input_tokens + self.output_tokens
 
-
 @dataclass
 class UsageSummary:
     """Aggregated usage summary."""
@@ -103,7 +99,6 @@ class UsageSummary:
     @property
     def total_tokens(self) -> int:
         return self.total_input_tokens + self.total_output_tokens
-
 
 class TokenCounter:
     """
@@ -189,7 +184,6 @@ class TokenCounter:
         total += 2  # End of messages token
 
         return total
-
 
 class CostTracker:
     """
@@ -398,7 +392,6 @@ class CostTracker:
         """Clear all records."""
         self._records = []
 
-
 class BudgetGuard:
     """
     Guard against exceeding budget limits.
@@ -471,7 +464,6 @@ class BudgetGuard:
             ),
         }
 
-
 # Convenience functions
 def estimate_cost(
     model_id: str,
@@ -486,17 +478,14 @@ def estimate_cost(
     input_tokens = TokenCounter.estimate_tokens(input_text, provider)
     return MODEL_PRICING[model_id].calculate_cost(input_tokens, output_tokens)
 
-
 def count_tokens(text: str, provider: str = "openai") -> int:
     """Quick token count."""
     provider_enum = ModelProvider[provider.upper()]
     return TokenCounter.estimate_tokens(text, provider_enum)
 
-
 def get_model_pricing(model_id: str) -> ModelPricing | None:
     """Get pricing for a model."""
     return MODEL_PRICING.get(model_id)
-
 
 __all__ = [
     # Enums

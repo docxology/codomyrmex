@@ -2,8 +2,10 @@
 
 
 # Submodule exports - import first
-from . import evaluation, rollout, storage, strategies
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
+
+from . import evaluation, rollout, storage, strategies
+
 logger = get_logger(__name__)
 
 # Try optional submodules

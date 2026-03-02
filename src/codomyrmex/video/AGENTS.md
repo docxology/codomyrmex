@@ -1,6 +1,6 @@
 # Video Module - AI Agent Guidelines
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Module Purpose
 
@@ -251,3 +251,20 @@ from codomyrmex.video import (
 if not PROCESSING_AVAILABLE:
     print("Install: uv sync --extra video")
 ```
+
+## PAI Agent Role Access Matrix
+
+| PAI Agent | Access Level | Primary Capabilities | Trust Level |
+|-----------|-------------|---------------------|-------------|
+| **Engineer** | Full | Video analysis, frame extraction, content classification, metadata extraction | TRUSTED |
+| **Architect** | Read + Design | Video pipeline design, processing strategy, codec and format selection | OBSERVED |
+| **QATester** | Validation | Video analysis output validation, frame accuracy verification | OBSERVED |
+
+### Engineer Agent
+**Use Cases**: Video analysis during OBSERVE/BUILD, extracting metadata for content processing.
+
+### Architect Agent
+**Use Cases**: Designing video processing pipelines, selecting formats and codecs.
+
+### QATester Agent
+**Use Cases**: Validating video analysis output during VERIFY, confirming frame extraction accuracy.

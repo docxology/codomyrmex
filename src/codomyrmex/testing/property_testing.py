@@ -36,7 +36,7 @@ def property_test(
             failures = []
             start = datetime.now()
 
-            for i in range(iterations):
+            for _i in range(iterations):
                 test_kwargs = {
                     name: gen.generate()
                     for name, gen in generators.items()

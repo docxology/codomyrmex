@@ -1,6 +1,6 @@
 # Agent Guidelines - Tree-sitter
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Module Overview
 
@@ -53,6 +53,23 @@ assert not tree.root_node.has_error
 results = parser.query("(function_definition) @fn")
 assert len(results) == 1
 ```
+
+## PAI Agent Role Access Matrix
+
+| PAI Agent | Access Level | Primary Capabilities | Trust Level |
+|-----------|-------------|---------------------|-------------|
+| **Engineer** | Full | Direct Python import, class instantiation, full API access | TRUSTED |
+| **Architect** | Read + Design | API review, interface design, dependency analysis | OBSERVED |
+| **QATester** | Validation | Integration testing via pytest, output validation | OBSERVED |
+
+### Engineer Agent
+**Use Cases**: Parse code ASTs for analysis, execute tree-sitter queries for function/class extraction during BUILD/VERIFY phases
+
+### Architect Agent
+**Use Cases**: Design code analysis pipelines, plan query patterns for cross-language parsing, evaluate grammar coverage
+
+### QATester Agent
+**Use Cases**: Validate parser accuracy across languages, verify query result correctness, test error node detection
 
 ## Navigation
 

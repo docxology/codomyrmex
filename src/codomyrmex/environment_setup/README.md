@@ -1,8 +1,18 @@
 # Environment Setup Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 Development environment validation, dependency management, and uv integration.
+
+## PAI Integration
+
+| Algorithm Phase | Role | Tools Used |
+|----------------|------|-----------|
+| **OBSERVE** | Validate environment dependencies at session start | Direct Python import |
+| **VERIFY** | Run environment health checks after configuration changes | Direct Python import |
+| **PLAN** | Check capability prerequisites before task execution | Direct Python import |
+
+PAI agents access this module via direct Python import through the MCP bridge. The Architect agent calls `validate_environment_completeness()` during OBSERVE phase to confirm all dependencies are present before delegating work.
 
 ## Key Exports
 

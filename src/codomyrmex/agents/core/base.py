@@ -314,7 +314,7 @@ class BaseAgent(AgentInterface):
         Raises:
             NotImplementedError: If not implemented
         """
-        raise NotImplementedError
+        raise NotImplementedError  # ABC: intentional
 
     def _stream_impl(self, request: AgentRequest) -> Iterator[str]:
         """
@@ -329,7 +329,7 @@ class BaseAgent(AgentInterface):
         Raises:
             NotImplementedError: If not implemented
         """
-        raise NotImplementedError
+        raise NotImplementedError  # ABC: intentional
 
     def get_capabilities(self) -> list[AgentCapabilities]:
         """

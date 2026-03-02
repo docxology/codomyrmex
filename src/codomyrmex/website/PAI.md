@@ -165,6 +165,12 @@ The dashboard probes the MCP server at `localhost:8080` and displays:
 - Connection status indicators with semantic classes
 - Responsive design (mobile breakpoints at 900px and 600px)
 
+## MCP Tools
+
+This module does not expose MCP tools directly. Access its capabilities via:
+- Direct Python import: `from codomyrmex.website import ...`
+- CLI: `codomyrmex website <command>`
+
 ## Navigation
 
 - **Self**: [PAI.md](PAI.md)

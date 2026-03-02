@@ -1,6 +1,6 @@
 # Agent Guidelines - Graph RAG
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Module Overview
 
@@ -58,6 +58,23 @@ graph.add_relationship(Relationship("a", "b", RelationType.RELATED_TO))
 assert len(graph.get_neighbors("a")) == 1
 assert graph.get_entity("a").name == "A"
 ```
+
+## PAI Agent Role Access Matrix
+
+| PAI Agent | Access Level | Primary Capabilities | Trust Level |
+|-----------|-------------|---------------------|-------------|
+| **Engineer** | Full | Direct Python import, class instantiation, full API access | TRUSTED |
+| **Architect** | Read + Design | API review, interface design, dependency analysis | OBSERVED |
+| **QATester** | Validation | Integration testing via pytest, output validation | OBSERVED |
+
+### Engineer Agent
+**Use Cases**: Builds knowledge graphs and RAG pipelines using KnowledgeGraph, Entity, and Relationship classes for entity extraction, graph traversal, and multi-hop context retrieval.
+
+### Architect Agent
+**Use Cases**: Designs graph schemas, evaluates retrieval strategies, and reviews entity/relationship type hierarchies for scalable knowledge representation.
+
+### QATester Agent
+**Use Cases**: Validates graph query accuracy, retrieval quality, path-finding correctness, and entity resolution consistency via pytest.
 
 ## Navigation
 

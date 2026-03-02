@@ -3,6 +3,7 @@
 import os
 
 import statsd
+
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 logger = get_logger(__name__)

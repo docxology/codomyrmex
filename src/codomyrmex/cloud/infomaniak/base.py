@@ -13,6 +13,7 @@ Three base classes cover all auth mechanisms:
 from typing import Any
 
 import requests
+
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 logger = get_logger(__name__)
@@ -222,7 +223,7 @@ class InfomaniakRESTBase:
 
         Subclasses should override to define service-specific env var names.
         """
-        raise NotImplementedError(
+        raise NotImplementedError(  # ABC: intentional
             f"{cls.__name__} must override from_env() with service-specific env vars"
         )
 

@@ -1,6 +1,6 @@
 # Agent Guidelines - Tests
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Module Overview
 
@@ -61,6 +61,23 @@ pytest tests/unit/test_auth.py
 # With coverage
 pytest --cov=codomyrmex
 ```
+
+## PAI Agent Role Access Matrix
+
+| PAI Agent | Access Level | Primary Capabilities | Trust Level |
+|-----------|-------------|---------------------|-------------|
+| **Engineer** | Full | Direct Python import, class instantiation, full API access | TRUSTED |
+| **Architect** | Read + Design | API review, interface design, dependency analysis | OBSERVED |
+| **QATester** | Validation | Integration testing via pytest, output validation | OBSERVED |
+
+### Engineer Agent
+**Use Cases**: Maintain test infrastructure, create shared fixtures, manage conftest.py and RealDataFactory during BUILD phases
+
+### Architect Agent
+**Use Cases**: Review test architecture, design fixture sharing strategy, evaluate test directory organization
+
+### QATester Agent
+**Use Cases**: Run full test suite with coverage, validate coverage gate compliance, verify parametrized test completeness
 
 ## Navigation
 

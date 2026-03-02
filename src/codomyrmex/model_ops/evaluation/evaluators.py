@@ -1,6 +1,7 @@
 """Model evaluation benchmarks and scoring logic."""
 
 from collections.abc import Callable
+
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 logger = get_logger(__name__)
@@ -18,7 +19,7 @@ class Evaluator:
 
         results = {}
         for name, metric_fn in self.metrics.items():
-            scores = [metric_fn(p, r) for p, r in zip(predictions, references)]
+            scores = [metric_fn(p, r) for p, r in zip(predictions, references, strict=False)]
             results[name] = sum(scores) / len(scores) if scores else 0.0
 
         return results
@@ -27,5 +28,6 @@ def exact_match_metric(pred: str, ref: str) -> float:
     return 1.0 if pred.strip() == ref.strip() else 0.0
 
 def length_ratio_metric(pred: str, ref: str) -> float:
-    if not ref: return 1.0
+    if not ref:
+        return 1.0
     return len(pred) / len(ref)

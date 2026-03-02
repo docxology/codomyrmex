@@ -64,6 +64,23 @@ import json
 assert json.loads(output)  # Valid JSON
 ```
 
+## PAI Agent Role Access Matrix
+
+| PAI Agent | Access Level | Primary Capabilities | Trust Level |
+|-----------|-------------|---------------------|-------------|
+| **Engineer** | Full | `logging_format_structured`; structured log emission, monitoring integration, alert configuration | TRUSTED |
+| **Architect** | Read + Design | Log format review, observability architecture design | OBSERVED |
+| **QATester** | Validation | Log output validation, structured log correctness, monitoring pipeline health checks | OBSERVED |
+
+### Engineer Agent
+**Use Cases**: Emitting structured logs during EXECUTE phase, configuring monitoring integrations, alerting setup.
+
+### Architect Agent
+**Use Cases**: Designing observability strategy, reviewing log schema, setting alert thresholds.
+
+### QATester Agent
+**Use Cases**: Validating log format compliance, verifying monitoring pipeline during VERIFY phase.
+
 ## Navigation
 
 - [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)

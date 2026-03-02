@@ -106,7 +106,7 @@ class SectionExporter:
                 None,
             )
             if pattern:
-                for dep_type, deps in pattern.dependencies.items():
+                for _dep_type, deps in pattern.dependencies.items():
                     pattern_ids.extend(deps)
 
         self.export_pattern_group(

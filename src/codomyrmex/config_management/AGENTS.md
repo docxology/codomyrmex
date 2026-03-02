@@ -1,6 +1,6 @@
 # Agent Guidelines - Config Management
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Module Overview
 
@@ -64,6 +64,23 @@ assert env.name in ["development", "production", "test"]
 errors = ConfigValidator.validate(config, schema)
 assert len(errors) == 0
 ```
+
+## PAI Agent Role Access Matrix
+
+| PAI Agent | Access Level | Primary Capabilities | Trust Level |
+|-----------|-------------|---------------------|-------------|
+| **Engineer** | Full | `get_config`, `set_config`, `validate_config`; full config CRUD | TRUSTED |
+| **Architect** | Read + Design | `get_config`, `validate_config`; config schema review, settings architecture | OBSERVED |
+| **QATester** | Validation | `validate_config`, `get_config`; config correctness and schema compliance | OBSERVED |
+
+### Engineer Agent
+**Use Cases**: Reading/writing config during BUILD and EXECUTE, validating configuration files, applying environment-specific overrides.
+
+### Architect Agent
+**Use Cases**: Config schema design, reviewing configuration hierarchies, validating settings architecture.
+
+### QATester Agent
+**Use Cases**: Validating config files during VERIFY, checking schema compliance, confirming config values match expectations.
 
 ## Navigation
 

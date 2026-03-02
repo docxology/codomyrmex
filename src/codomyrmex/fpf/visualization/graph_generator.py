@@ -217,7 +217,7 @@ class GraphGenerator:
             elif attribute == "part":
                 # Use colormap for parts
                 parts = {G.nodes[node].get(attribute, "Other") for node in G.nodes()}
-                part_list = sorted(list(parts))
+                part_list = sorted(parts)
                 colors_list = plt.cm.Set3(np.linspace(0, 1, len(part_list)))
                 color_map = {part: colors_list[i] for i, part in enumerate(part_list)}
             else:

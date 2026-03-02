@@ -120,7 +120,7 @@ class PRBuilder:
     def _auto_title(changes: list[FileChange]) -> str:
         if not changes:
             return "Empty changeset"
-        actions = set(c.action for c in changes)
+        actions = {c.action for c in changes}
         paths = [c.path.split("/")[-1] for c in changes[:3]]
         verb = "Add" if "add" in actions else "Update"
         return f"{verb} {', '.join(paths)}"

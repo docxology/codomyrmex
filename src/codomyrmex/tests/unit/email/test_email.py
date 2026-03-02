@@ -8,7 +8,7 @@ Zero-mock policy: no MagicMock or monkeypatch.
 Live Gmail / AgentMail API tests are guarded by pytest.mark.skipif.
 """
 
-from datetime import datetime, timezone, UTC
+from datetime import UTC, datetime
 
 import pytest
 
@@ -53,11 +53,11 @@ class TestEmailMessage:
     """Tests for the EmailMessage data model."""
 
     def _msg(self, **kwargs) -> EmailMessage:
-        defaults = dict(
-            subject="Test Subject",
-            sender=EmailAddress(email="sender@example.com"),
-            date=datetime(2026, 3, 1, 10, 0, tzinfo=UTC),
-        )
+        defaults = {
+            "subject": "Test Subject",
+            "sender": EmailAddress(email="sender@example.com"),
+            "date": datetime(2026, 3, 1, 10, 0, tzinfo=UTC),
+        }
         defaults.update(kwargs)
         return EmailMessage(**defaults)
 

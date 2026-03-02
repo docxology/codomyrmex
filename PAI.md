@@ -76,7 +76,7 @@ that gates destructive operations behind explicit approval:
 ```
 UNTRUSTED ──/codomyrmexVerify──> VERIFIED ──/codomyrmexTrust──> TRUSTED
    │                                │                              │
-   └── All tools start here         └── 167 safe tools promoted    └── 4 destructive tools enabled
+   └── All tools start here         └── 169 safe tools promoted    └── 4 destructive tools enabled
 ```
 
 **Safe tools (169)**: Auto-promoted to VERIFIED by `/codomyrmexVerify`. All read, list,

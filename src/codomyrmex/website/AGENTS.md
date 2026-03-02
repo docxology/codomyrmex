@@ -1,6 +1,6 @@
 # Agent Guidelines - Website
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 **Type**: Application Module
 **Status**: Active
@@ -74,3 +74,20 @@ WebsiteServer.data_provider = DataProvider(Path("."))
 with socketserver.TCPServer(("", 8787), WebsiteServer) as httpd:
     httpd.serve_forever()
 ```
+
+## PAI Agent Role Access Matrix
+
+| PAI Agent | Access Level | Primary Capabilities | Trust Level |
+|-----------|-------------|---------------------|-------------|
+| **Engineer** | Full | Direct Python import, class instantiation, full API access | TRUSTED |
+| **Architect** | Read + Design | API review, interface design, dependency analysis | OBSERVED |
+| **QATester** | Validation | Integration testing via pytest, output validation | OBSERVED |
+
+### Engineer Agent
+**Use Cases**: Deploy and manage the dashboard web application, configure WebsiteServer endpoints, integrate DataProvider during BUILD phases
+
+### Architect Agent
+**Use Cases**: Review API endpoint design, plan REST route structure, evaluate template and asset organization
+
+### QATester Agent
+**Use Cases**: Validate endpoint responses and status codes, verify UI behavior via browser automation, test chat proxy and script execution

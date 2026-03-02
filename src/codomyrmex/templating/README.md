@@ -1,8 +1,18 @@
 # Templating Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 Template engine support (Jinja2, Mako) for code generation and dynamic content.
+
+## PAI Integration
+
+| Algorithm Phase | Role | Tools Used |
+|----------------|------|-----------|
+| **BUILD** | Render code and documentation templates | Direct Python import |
+| **EXECUTE** | Apply templates during code generation workflows | Direct Python import |
+| **OBSERVE** | Inspect template variables and engine configuration | Direct Python import |
+
+PAI agents access this module via direct Python import through the MCP bridge for Jinja2/Mako template rendering in generation pipelines.
 
 ## Installation
 

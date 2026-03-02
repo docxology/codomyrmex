@@ -1,6 +1,6 @@
 # Audio Module - Programmable AI Interface (PAI)
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Module Identity
 
@@ -193,6 +193,12 @@ TTSConfig:
 ### Thread Safety
 - Create separate instances per thread
 - Use async methods for concurrent processing
+
+## MCP Tools
+
+This module does not expose MCP tools directly. Access its capabilities via:
+- Direct Python import: `from codomyrmex.audio import ...`
+- CLI: `codomyrmex audio <command>`
 
 ## Versioning
 

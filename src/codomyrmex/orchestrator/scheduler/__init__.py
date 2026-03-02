@@ -14,10 +14,12 @@ except ImportError:
     Result = None
     ResultStatus = None
 
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
+
 from .models import Job, JobStatus
 from .scheduler import Scheduler, at, cron, every
 from .triggers import CronTrigger, IntervalTrigger, OnceTrigger, Trigger, TriggerType
-from codomyrmex.logging_monitoring.core.logger_config import get_logger
+
 logger = get_logger(__name__)
 
 # Advanced scheduler extensions

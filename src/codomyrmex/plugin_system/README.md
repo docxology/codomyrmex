@@ -1,8 +1,18 @@
 # Plugin System Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 Extensible plugin architecture for third-party modules.
+
+## PAI Integration
+
+| Algorithm Phase | Role | Tools Used |
+|----------------|------|-----------|
+| **OBSERVE** | Discover available plugins and extensions | `plugin_scan_entry_points` |
+| **PLAN** | Resolve plugin dependencies for task execution | `plugin_resolve_dependencies` |
+| **EXECUTE** | Load and invoke discovered plugins | `plugin_scan_entry_points`, `plugin_resolve_dependencies` |
+
+PAI agents use plugin_system to discover and load available capabilities at runtime. The Architect agent calls `plugin_scan_entry_points` during OBSERVE to map available tools; the Engineer resolves dependencies before EXECUTE.
 
 ## Installation
 

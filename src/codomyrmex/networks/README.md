@@ -1,6 +1,6 @@
 # Networks Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
@@ -17,6 +17,16 @@ complementary graph implementations:
 
 Both implementations use generic-typed nodes (`Node[T]`) so callers can attach
 arbitrary domain data to vertices without subclassing.
+
+## PAI Integration
+
+| Algorithm Phase | Role | Tools Used |
+|----------------|------|-----------|
+| **THINK** | Analyze graph structure and compute centrality | Direct Python import |
+| **OBSERVE** | Query network topology and shortest paths | Direct Python import |
+| **BUILD** | Construct graph models for dependency analysis | Direct Python import |
+
+PAI agents access this module via direct Python import through the MCP bridge. The Architect agent imports `Network` and `NetworkGraph` during THINK to analyze module dependency graphs and identify critical paths.
 
 ## Installation
 

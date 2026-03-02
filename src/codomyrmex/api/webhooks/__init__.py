@@ -18,12 +18,11 @@ from collections.abc import Callable
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Optional
 
 # ---------------------------------------------------------------------------
 # Enums
 # ---------------------------------------------------------------------------
-
 
 class WebhookEventType(Enum):
     """Types of webhook events that can be emitted."""
@@ -33,7 +32,6 @@ class WebhookEventType(Enum):
     DELETED = "deleted"
     CUSTOM = "custom"
 
-
 class WebhookStatus(Enum):
     """Delivery status of a webhook invocation."""
 
@@ -42,18 +40,15 @@ class WebhookStatus(Enum):
     FAILED = "failed"
     RETRYING = "retrying"
 
-
 class SignatureAlgorithm(Enum):
     """Supported HMAC signature algorithms for webhook payloads."""
 
     HMAC_SHA256 = "hmac_sha256"
     HMAC_SHA512 = "hmac_sha512"
 
-
 # ---------------------------------------------------------------------------
 # Dataclasses
 # ---------------------------------------------------------------------------
-
 
 @dataclass
 class WebhookEvent:
@@ -87,7 +82,6 @@ class WebhookEvent:
         """Serialize the event to a JSON string."""
         return json.dumps(self.to_dict(), sort_keys=True)
 
-
 @dataclass
 class WebhookConfig:
     """Configuration for a registered webhook endpoint.
@@ -111,7 +105,6 @@ class WebhookConfig:
     timeout: float = 30.0
     signature_algorithm: SignatureAlgorithm = SignatureAlgorithm.HMAC_SHA256
     active: bool = True
-
 
 @dataclass
 class DeliveryResult:
@@ -147,11 +140,9 @@ class DeliveryResult:
             "timestamp": self.timestamp.isoformat(),
         }
 
-
 # ---------------------------------------------------------------------------
 # Abstract base class
 # ---------------------------------------------------------------------------
-
 
 class WebhookTransport(ABC):
     """Abstract transport layer for sending webhook payloads.
@@ -181,11 +172,9 @@ class WebhookTransport(ABC):
         """
         pass
 
-
 # ---------------------------------------------------------------------------
 # Concrete classes
 # ---------------------------------------------------------------------------
-
 
 class HTTPWebhookTransport(WebhookTransport):
     """Callback-based webhook transport for testing and in-process dispatch.
@@ -226,7 +215,6 @@ class HTTPWebhookTransport(WebhookTransport):
             A tuple of (status_code, response_body) as returned by the handler.
         """
         return self._handler(url, payload, headers, timeout)
-
 
 class WebhookSignature:
     """Utility for signing and verifying webhook payloads using HMAC.
@@ -285,7 +273,6 @@ class WebhookSignature:
         """
         expected = WebhookSignature.sign(payload, secret, algorithm)
         return hmac.compare_digest(expected, signature)
-
 
 class WebhookRegistry:
     """In-memory registry for webhook configurations.
@@ -359,7 +346,6 @@ class WebhookRegistry:
             if config.active
             and (event_type in config.events or len(config.events) == 0)
         }
-
 
 class WebhookDispatcher:
     """Dispatches webhook events to registered endpoints via a transport.
@@ -545,11 +531,9 @@ class WebhookDispatcher:
 
         return results
 
-
 # ---------------------------------------------------------------------------
 # Factory functions
 # ---------------------------------------------------------------------------
-
 
 def create_webhook_registry() -> WebhookRegistry:
     """Create a new, empty webhook registry.
@@ -558,7 +542,6 @@ def create_webhook_registry() -> WebhookRegistry:
         A fresh ``WebhookRegistry`` instance.
     """
     return WebhookRegistry()
-
 
 def create_webhook_dispatcher(
     registry: WebhookRegistry | None = None,
@@ -584,7 +567,6 @@ def create_webhook_dispatcher(
             handler=lambda url, payload, headers, timeout: (200, "OK")
         )
     return WebhookDispatcher(registry=registry, transport=transport)
-
 
 # ---------------------------------------------------------------------------
 # Public API

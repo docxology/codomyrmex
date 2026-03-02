@@ -1,10 +1,20 @@
 # Video Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
 The video module provides comprehensive video processing capabilities including manipulation, frame extraction, and analysis. It uses moviepy and OpenCV backends for robust video operations.
+
+## PAI Integration
+
+| Algorithm Phase | Role | Tools Used |
+|----------------|------|-----------|
+| **BUILD** | Generate and process video content (resize, crop, merge, filter) | Direct Python import |
+| **EXECUTE** | Run video analysis and transformation pipelines | Direct Python import |
+| **OBSERVE** | Inspect video metadata, duration, codecs, and frame content | Direct Python import |
+
+PAI agents access this module via direct Python import through the MCP bridge to process, analyze, and extract frames from video files.
 
 ## Features
 

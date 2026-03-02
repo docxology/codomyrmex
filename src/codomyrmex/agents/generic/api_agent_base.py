@@ -307,7 +307,7 @@ class APIAgentBase(BaseAgent):
         Raises:
             NotImplementedError: If not overridden by subclass
         """
-        raise NotImplementedError(
+        raise NotImplementedError(  # ABC: intentional
             f"{self.__class__.__name__} must implement _execute_impl"
         )
 
@@ -326,7 +326,7 @@ class APIAgentBase(BaseAgent):
         Raises:
             NotImplementedError: If not overridden by subclass
         """
-        raise NotImplementedError(
+        raise NotImplementedError(  # ABC: intentional
             f"{self.__class__.__name__} must implement _stream_impl for streaming support"
         )
 

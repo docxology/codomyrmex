@@ -1,6 +1,6 @@
 # Personal AI Infrastructure -- Module Template
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
@@ -154,6 +154,12 @@ module_template/
 | `logging_monitoring` | Scaffold uses `get_logger` for structured logging during creation |
 | `documentation` | Generated RASP docs follow the documentation module's standards |
 | All modules | Every module in the monorepo was (or could be) created from this template |
+
+## MCP Tools
+
+This module does not expose MCP tools directly. Access its capabilities via:
+- Direct Python import: `from codomyrmex.module_template import ...`
+- CLI: `codomyrmex module_template <command>`
 
 ## Navigation
 

@@ -1,6 +1,6 @@
 # Agent Guidelines - Search
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Module Overview
 
@@ -73,6 +73,23 @@ matcher = FuzzyMatcher()
 matches = matcher.match("helo", ["hello", "goodbye"])
 assert matches[0][0] == "hello"
 ```
+
+## PAI Agent Role Access Matrix
+
+| PAI Agent | Access Level | Primary Capabilities | Trust Level |
+|-----------|-------------|---------------------|-------------|
+| **Engineer** | Full | `search_documents`, `search_index_query`, `search_fuzzy`; full search suite | TRUSTED |
+| **Architect** | Read + Design | `search_documents`, `search_index_query`; index design, search strategy review | OBSERVED |
+| **QATester** | Validation | `search_documents`, `search_fuzzy`; search result quality verification | OBSERVED |
+
+### Engineer Agent
+**Use Cases**: Document discovery during OBSERVE, full-text and fuzzy search across codebases, indexed queries during research.
+
+### Architect Agent
+**Use Cases**: Index schema design, search relevance tuning, reviewing search pipeline architecture.
+
+### QATester Agent
+**Use Cases**: Validating search result quality during VERIFY, confirming fuzzy match thresholds, testing index completeness.
 
 ## Navigation
 

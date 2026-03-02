@@ -12,7 +12,7 @@ def detect_oscillation(states: list[CulturalState], dimension: str) -> bool:
         return False
 
     # Check for sign changes in derivative
-    diffs = [y - x for x, y in zip(values[:-1], values[1:])]
+    diffs = [y - x for x, y in zip(values[:-1], values[1:], strict=False)]
     sign_changes = sum(1 for i in range(len(diffs)-1) if diffs[i] * diffs[i+1] < 0)
 
     return sign_changes > 0

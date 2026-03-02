@@ -1,8 +1,18 @@
 # Embodiment Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 Robotics integration with ROS2, sensors, actuators, and 3D transforms.
+
+## PAI Integration
+
+| Algorithm Phase | Role | Tools Used |
+|----------------|------|-----------|
+| **EXECUTE** | Control robotic and physical systems via ROS2 bridge | Direct Python import |
+| **OBSERVE** | Collect sensor data from cameras, lidar, and actuators | Direct Python import |
+| **BUILD** | Configure embodiment parameters and 3D transforms | Direct Python import |
+
+PAI agents access this module via direct Python import through the MCP bridge. The Engineer agent uses ROS2Bridge and Transform3D to interface with physical systems during EXECUTE phase.
 
 ## Installation
 

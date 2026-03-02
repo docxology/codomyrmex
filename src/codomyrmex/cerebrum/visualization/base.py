@@ -195,7 +195,7 @@ class BaseNetworkVisualizer(BaseVisualizer):
                 }
             else:
                 # Use primary palette
-                unique_vals = sorted(set(G.nodes[node].get(attribute, "default") for node in G.nodes()))
+                unique_vals = sorted({G.nodes[node].get(attribute, "default") for node in G.nodes()})
                 colors = self.theme.get_color_sequence(len(unique_vals), "primary")
                 color_map = {val: colors[i] for i, val in enumerate(unique_vals)}
 

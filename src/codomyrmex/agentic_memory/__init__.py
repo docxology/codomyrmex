@@ -21,7 +21,10 @@ from codomyrmex.agentic_memory.models import (
 from codomyrmex.agentic_memory.rules import (
     Rule,
     RuleEngine,
+    RuleLoader,
     RulePriority,
+    RuleRegistry,
+    RuleSection,
     RuleSet,
 )
 from codomyrmex.agentic_memory.stores import InMemoryStore, JSONFileStore
@@ -39,7 +42,10 @@ __all__ = [
     "RetrievalResult",
     "Rule",
     "RuleEngine",
+    "RuleLoader",
     "RulePriority",
+    "RuleRegistry",
+    "RuleSection",
     "RuleSet",
     "UserProfile",
     "VectorStoreMemory",

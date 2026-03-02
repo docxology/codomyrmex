@@ -1,6 +1,6 @@
 # Personal AI Infrastructure -- Meme Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
@@ -112,6 +112,12 @@ codomyrmex.meme
 ## Architecture Role
 
 **Application Layer** -- Advanced domain-specific module for information dynamics and memetic analysis. Self-contained with no upward dependencies. Each submodule is independently usable while the top-level `__init__.py` re-exports 50+ classes for unified access.
+
+## MCP Tools
+
+This module does not expose MCP tools directly. Access its capabilities via:
+- Direct Python import: `from codomyrmex.meme import ...`
+- CLI: `codomyrmex meme <command>`
 
 ## Navigation
 

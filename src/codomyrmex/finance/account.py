@@ -8,7 +8,7 @@ Provides:
 
 from __future__ import annotations
 
-from datetime import datetime, timezone, UTC
+from datetime import UTC, datetime
 from enum import Enum, auto
 from typing import Any
 from uuid import uuid4

@@ -6,7 +6,7 @@ functions in ``codomyrmex.agents.pai.trust_gateway``.
 
 import json
 import tempfile
-from datetime import datetime, timezone, UTC
+from datetime import UTC, datetime
 from pathlib import Path
 
 import pytest

@@ -1,10 +1,20 @@
 # Agentic Memory Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
 The Agentic Memory module provides persistent, structured memory for AI agents — enabling learning across sessions, context continuity, and experience-based decision making. It supports in-memory and file-backed storage backends, key-value memory operations, search, and user profile tracking.
+
+## PAI Integration
+
+| Algorithm Phase | Role | Tools Used |
+|----------------|------|-----------|
+| **OBSERVE** | Retrieve past context, prior decisions, and learned patterns | `memory_search`, `memory_get` |
+| **THINK** | Load architecture context and prior reasoning traces | `memory_search` |
+| **LEARN** | Store new patterns, outcomes, and knowledge for future sessions | `memory_put` |
+
+PAI's LEARN phase is primarily implemented via this module. `memory_put` stores insights after each Algorithm cycle; `memory_search` retrieves relevant prior context during OBSERVE/THINK. The Engineer subagent has full CRUD access; all agents use `memory_search` for context retrieval.
 
 ## Installation
 

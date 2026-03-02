@@ -1,6 +1,6 @@
 # Personal AI Infrastructure — Serialization Module
 
-**Version**: v1.0.2 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
@@ -113,6 +113,12 @@ assert recovered["iteration"] == 42
 **Foundation Layer** — Cross-cutting data encoding utility. No upstream codomyrmex
 dependencies (except optional `validation.schemas` for `Result`/`ResultStatus` types).
 Consumed by `agentic_memory/`, `cache/`, `config_management/`, and `events/`.
+
+## MCP Tools
+
+This module does not expose MCP tools directly. Access its capabilities via:
+- Direct Python import: `from codomyrmex.serialization import ...`
+- CLI: `codomyrmex serialization <command>`
 
 ## Navigation
 

@@ -1,6 +1,6 @@
 # Audio Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
@@ -22,6 +22,16 @@ The audio module provides comprehensive audio processing capabilities including 
 - Multiple output formats (WAV, MP3)
 - Voice listing and selection
 - Rate, pitch, and volume control
+
+## PAI Integration
+
+| Algorithm Phase | Role | Tools Used |
+|----------------|------|-----------|
+| **BUILD** | Generate audio output via TTS synthesis | Direct Python import |
+| **EXECUTE** | Play and process audio files, run TTS/STT pipelines | Direct Python import |
+| **OBSERVE** | Analyze audio content via speech-to-text transcription | Direct Python import |
+
+PAI agents access this module via direct Python import through the MCP bridge. The Engineer agent uses it during BUILD phase to generate speech audio, and during OBSERVE phase to transcribe audio input for analysis.
 
 ## Installation
 

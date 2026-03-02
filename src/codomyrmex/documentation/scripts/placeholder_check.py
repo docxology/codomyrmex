@@ -84,7 +84,7 @@ def main():
     base_path = Path("/Users/mini/Documents/GitHub/codomyrmex")
 
     doc_files = []
-    for root, dirs, files in os.walk(base_path):
+    for root, dirs, _files in os.walk(base_path):
         dirs[:] = [d for d in dirs if not d.startswith('.') and
                    d not in ['__pycache__', 'node_modules', 'venv', '.venv', '.git', '@output']]
 

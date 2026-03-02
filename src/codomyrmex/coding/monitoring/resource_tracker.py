@@ -16,8 +16,10 @@ except ImportError:
     class _DummyPSUtil:
         """Functional component: _DummyPSUtil."""
         Process = None
-        cpu_percent = lambda *args, **kwargs: 0.0
-        virtual_memory = lambda: type('obj', (object,), {'used': 0, 'total': 0})()
+        def cpu_percent(*args, **kwargs):
+            return 0.0
+        def virtual_memory():
+            return type('obj', (object,), {'used': 0, 'total': 0})()
     psutil = _DummyPSUtil()
 
 from codomyrmex.logging_monitoring.core.logger_config import get_logger

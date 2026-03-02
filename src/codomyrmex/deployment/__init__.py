@@ -8,8 +8,7 @@ Provides deployment strategies, managers, and utilities:
 """
 
 import os
-from typing import Any, Dict, List, Optional
-
+from typing import Any, Optional
 
 # Shared schemas for cross-module interop
 try:
@@ -36,8 +35,10 @@ BlueGreenStrategy = BlueGreenDeployment
 RollingStrategy = RollingDeployment
 
 # Submodule exports
-from . import health_checks, rollback, strategies
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
+
+from . import health_checks, rollback, strategies
+
 logger = get_logger(__name__)
 
 # Try optional submodules
@@ -50,7 +51,6 @@ try:
     from . import gitops
 except ImportError:
     gitops = None
-
 
 class DeploymentManager:
     """
@@ -154,7 +154,6 @@ class DeploymentManager:
         """
         return self.deploy(service_name, previous_version, strategy)
 
-
 class GitOpsSynchronizer:
     """
     GitOps synchronization manager.
@@ -219,7 +218,6 @@ class GitOpsSynchronizer:
         """Check if currently synced."""
         return self._synced
 
-
 def cli_commands():
     """Return CLI commands for the deployment module."""
     return {
@@ -242,7 +240,6 @@ def cli_commands():
             ),
         },
     }
-
 
 __all__ = [
     # CLI integration

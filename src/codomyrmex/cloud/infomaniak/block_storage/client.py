@@ -6,8 +6,9 @@ Provides volume and backup operations via the OpenStack Cinder API.
 
 from typing import Any
 
-from ..base import InfomaniakOpenStackBase
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
+
+from ..base import InfomaniakOpenStackBase
 
 logger = get_logger(__name__)
 

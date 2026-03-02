@@ -76,8 +76,7 @@ class ConcreteAgent(BaseAgent):
     def _stream_impl(self, request: AgentRequest) -> Iterator[str]:
         """Implementation of stream."""
         self._stream_called = True
-        for word in self._mock_response.split():
-            yield word
+        yield from self._mock_response.split()
 
 
 class FailingAgent(BaseAgent):

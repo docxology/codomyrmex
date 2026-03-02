@@ -1,6 +1,6 @@
 # Agent Guidelines - Serialization
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Module Overview
 
@@ -56,6 +56,23 @@ assert decoded == data
 assert detect_format(b'{"a":1}') == "json"
 assert detect_format(b'a: 1') == "yaml"
 ```
+
+## PAI Agent Role Access Matrix
+
+| PAI Agent | Access Level | Primary Capabilities | Trust Level |
+|-----------|-------------|---------------------|-------------|
+| **Engineer** | Full | Direct Python import, class instantiation, full API access | TRUSTED |
+| **Architect** | Read + Design | API review, interface design, dependency analysis | OBSERVED |
+| **QATester** | Validation | Integration testing via pytest, output validation | OBSERVED |
+
+### Engineer Agent
+**Use Cases**: Implements data serialization (JSON, YAML, msgpack, protobuf) via `Serializer`, `JSONSerializer`, and format-specific classes. Registers custom encoders, handles schema-validated deserialization, and manages format detection.
+
+### Architect Agent
+**Use Cases**: Designs serialization schemas, reviews format selection trade-offs (JSON for APIs, msgpack for speed), evaluates versioned schema migration strategies, and plans cross-module serialization consistency.
+
+### QATester Agent
+**Use Cases**: Validates round-trip serialization fidelity across all formats, verifies format auto-detection, confirms custom encoder registration, and tests schema-validated deserialization edge cases.
 
 ## Navigation
 

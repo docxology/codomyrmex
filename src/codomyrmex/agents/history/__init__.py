@@ -16,7 +16,7 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Optional
 
 
 class MessageRole(Enum):
@@ -26,7 +26,6 @@ class MessageRole(Enum):
     ASSISTANT = "assistant"
     TOOL = "tool"
     FUNCTION = "function"
-
 
 @dataclass
 class HistoryMessage:
@@ -69,7 +68,6 @@ class HistoryMessage:
             metadata=data.get("metadata", {}),
             tokens=data.get("tokens", 0),
         )
-
 
 @dataclass
 class Conversation:
@@ -162,7 +160,6 @@ class Conversation:
             metadata=data.get("metadata", {}),
         )
 
-
 class InMemoryHistoryStore:
     """In-memory conversation storage."""
 
@@ -214,7 +211,6 @@ class InMemoryHistoryStore:
     def clear(self) -> None:
         """Clear all conversations."""
         self._conversations.clear()
-
 
 class FileHistoryStore:
     """File-based conversation storage (JSON)."""
@@ -278,7 +274,6 @@ class FileHistoryStore:
                     results.append(conv)
                     break
         return results
-
 
 class SQLiteHistoryStore:
     """SQLite-based conversation storage."""
@@ -452,7 +447,6 @@ class SQLiteHistoryStore:
 
             return [self.load(cid) for cid in conv_ids if cid]
 
-
 class ConversationManager:
     """
     High-level manager for conversation history.
@@ -542,7 +536,6 @@ class ConversationManager:
         if conv:
             self._active_conversation = conv
         return conv
-
 
 __all__ = [
     # Enums

@@ -15,13 +15,13 @@ from contextlib import contextmanager
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
-from typing import Any, Dict, Generic, List, Optional, TypeVar
+from typing import Any, Generic, Optional, TypeVar
+
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 logger = get_logger(__name__)
 
 T = TypeVar('T')
-
 
 class ConnectionState(Enum):
     """State of a database connection."""
@@ -29,7 +29,6 @@ class ConnectionState(Enum):
     IN_USE = "in_use"
     CLOSED = "closed"
     ERROR = "error"
-
 
 @dataclass
 class ConnectionStats:
@@ -49,7 +48,6 @@ class ConnectionStats:
             return 0.0
         return self.active_connections / self.total_connections
 
-
 @dataclass
 class PoolConfig:
     """Configuration for connection pool."""
@@ -60,7 +58,6 @@ class PoolConfig:
     max_lifetime_s: float = 3600.0  # 1 hour
     validation_interval_s: float = 60.0
     health_check_query: str = "SELECT 1"
-
 
 class Connection(ABC, Generic[T]):
     """Base class for database connections."""
@@ -111,7 +108,6 @@ class Connection(ABC, Generic[T]):
         """Close the connection."""
         pass
 
-
 class InMemoryConnection(Connection[dict]):
     """In-memory connection for lightweight or test usage."""
 
@@ -137,7 +133,6 @@ class InMemoryConnection(Connection[dict]):
         self._closed = True
         self.state = ConnectionState.CLOSED
 
-
 class ConnectionFactory(ABC, Generic[T]):
     """Factory for creating database connections."""
 
@@ -145,7 +140,6 @@ class ConnectionFactory(ABC, Generic[T]):
     def create(self) -> Connection[T]:
         """Create a new connection."""
         pass
-
 
 class InMemoryConnectionFactory(ConnectionFactory[dict]):
     """Factory for in-memory connections."""
@@ -159,7 +153,6 @@ class InMemoryConnectionFactory(ConnectionFactory[dict]):
         with self._lock:
             self._counter += 1
             return InMemoryConnection(self._counter)
-
 
 class ConnectionPool(Generic[T]):
     """
@@ -369,7 +362,6 @@ class ConnectionPool(Generic[T]):
             logger.debug("Connection pool queue drained: %s", e)
             pass
 
-
 class HealthChecker:
     """
     Health checker for database connections.
@@ -433,7 +425,6 @@ class HealthChecker:
     def is_healthy(self) -> bool:
         """Get last health check result."""
         return self._last_result
-
 
 __all__ = [
     # Enums

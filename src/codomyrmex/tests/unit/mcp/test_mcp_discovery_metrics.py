@@ -9,12 +9,12 @@ Verifies:
 from __future__ import annotations
 
 import json
+from datetime import UTC
 
 from codomyrmex.model_context_protocol.discovery import (
     DiscoveryMetrics,
     MCPDiscovery,
 )
-from datetime import UTC
 
 # ── DiscoveryMetrics dataclass ────────────────────────────────────────
 
@@ -33,7 +33,7 @@ class TestDiscoveryMetricsDataclass:
 
     def test_custom_values(self) -> None:
         """Test functionality: custom values."""
-        from datetime import datetime, timezone
+        from datetime import datetime
 
         now = datetime.now(UTC)
         m = DiscoveryMetrics(
@@ -95,7 +95,7 @@ class TestMetricsSerialisation:
     """Test suite for MetricsSerialisation."""
     def test_metrics_are_json_serialisable(self) -> None:
         """Test functionality: metrics are json serialisable."""
-        from datetime import datetime, timezone
+        from datetime import datetime
 
         m = DiscoveryMetrics(
             total_tools=5,

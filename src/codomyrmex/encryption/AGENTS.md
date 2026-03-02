@@ -1,6 +1,6 @@
 # Agent Guidelines - Encryption
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Module Overview
 
@@ -68,6 +68,23 @@ assert encryptor.decrypt(ciphertext, key) == plaintext
 key2 = encryptor.generate_key()
 assert encryptor.encrypt(plaintext, key2) != ciphertext
 ```
+
+## PAI Agent Role Access Matrix
+
+| PAI Agent | Access Level | Primary Capabilities | Trust Level |
+|-----------|-------------|---------------------|-------------|
+| **Engineer** | Full | Symmetric/asymmetric encryption, key management, data-at-rest/in-transit protection | TRUSTED |
+| **Architect** | Read + Design | Encryption strategy review, key lifecycle design, security architecture | OBSERVED |
+| **QATester** | Validation | Encryption correctness, key rotation testing, data protection verification | OBSERVED |
+
+### Engineer Agent
+**Use Cases**: Encrypting sensitive data during BUILD/EXECUTE, managing encryption keys.
+
+### Architect Agent
+**Use Cases**: Reviewing encryption strategies, designing key management, planning security architecture.
+
+### QATester Agent
+**Use Cases**: Verifying encryption correctness during VERIFY, testing key rotation.
 
 ## Navigation
 

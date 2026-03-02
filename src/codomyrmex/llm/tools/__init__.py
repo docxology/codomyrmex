@@ -11,7 +11,7 @@ from collections.abc import Callable
 from dataclasses import dataclass, field
 from enum import Enum
 from functools import wraps
-from typing import Any, Dict, List, Optional, Type, get_type_hints
+from typing import Any, Optional, get_type_hints
 
 
 class ParameterType(Enum):
@@ -22,7 +22,6 @@ class ParameterType(Enum):
     BOOLEAN = "boolean"
     ARRAY = "array"
     OBJECT = "object"
-
 
 @dataclass
 class ToolParameter:
@@ -50,7 +49,6 @@ class ToolParameter:
 
         return schema
 
-
 @dataclass
 class ToolResult:
     """Result of tool execution."""
@@ -66,7 +64,6 @@ class ToolResult:
                 return json.dumps(self.output, indent=2)
             return str(self.output)
         return f"Error: {self.error}"
-
 
 @dataclass
 class Tool:
@@ -128,7 +125,6 @@ class Tool:
         except Exception as e:
             return ToolResult(success=False, output=None, error=str(e))
 
-
 class ToolRegistry:
     """Registry for managing available tools."""
 
@@ -171,7 +167,6 @@ class ToolRegistry:
             return ToolResult(success=False, output=None, error=f"Tool '{tool_name}' not found")
         return tool.execute(**kwargs)
 
-
 def _python_type_to_param_type(python_type: type) -> ParameterType:
     """Convert Python type to JSON Schema parameter type."""
     type_mapping = {
@@ -183,7 +178,6 @@ def _python_type_to_param_type(python_type: type) -> ParameterType:
         dict: ParameterType.OBJECT,
     }
     return type_mapping.get(python_type, ParameterType.STRING)
-
 
 def tool(
     name: str | None = None,
@@ -247,7 +241,6 @@ def tool(
 
     return decorator
 
-
 # Built-in tools
 def create_calculator_tool() -> Tool:
     """Create a calculator tool."""
@@ -295,7 +288,6 @@ def create_calculator_tool() -> Tool:
         category="utilities",
     )
 
-
 def create_datetime_tool() -> Tool:
     """Create a datetime tool."""
     from datetime import datetime
@@ -320,20 +312,16 @@ def create_datetime_tool() -> Tool:
         category="utilities",
     )
 
-
 # Global registry
 DEFAULT_REGISTRY = ToolRegistry()
-
 
 def register_tool(tool: Tool) -> None:
     """Register a tool in the default registry."""
     DEFAULT_REGISTRY.register(tool)
 
-
 def get_tool(name: str) -> Tool | None:
     """Get a tool from the default registry."""
     return DEFAULT_REGISTRY.get(name)
-
 
 __all__ = [
     "ParameterType",

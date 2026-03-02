@@ -97,7 +97,7 @@ class SectionManager:
         ]
 
         return {
-            "pattern_ids": sorted(list(pattern_id_set)),
+            "pattern_ids": sorted(pattern_id_set),
             "patterns": group_patterns,
             "concepts": group_concepts,
             "relationships": group_relationships,
@@ -145,7 +145,7 @@ class SectionManager:
         ]
 
         return {
-            "concept_names": sorted(list(concept_name_set)),
+            "concept_names": sorted(concept_name_set),
             "concepts": cluster_concepts,
             "patterns": cluster_patterns,
             "relationships": cluster_relationships,
@@ -176,7 +176,7 @@ class SectionManager:
         ]
 
         result = {
-            "relationship_types": sorted(list(relationship_type_set)),
+            "relationship_types": sorted(relationship_type_set),
             "relationships": subset_relationships,
         }
 
@@ -208,7 +208,7 @@ class SectionManager:
             List of part identifiers
         """
         parts = {p.part for p in self.spec.patterns if p.part}
-        return sorted(list(parts))
+        return sorted(parts)
 
     def list_pattern_groups(self, by_part: bool = False) -> dict[str, list[str]]:
         """List pattern groups.

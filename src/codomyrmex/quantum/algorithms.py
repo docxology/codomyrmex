@@ -193,7 +193,7 @@ def vqe_ansatz(n: int, depth: int = 1, params: list[float] | None = None) -> Qua
 
     circuit = QuantumCircuit(n)
     idx = 0
-    for layer in range(depth):
+    for _layer in range(depth):
         # Rotation layer
         for q in range(n):
             angle = params[idx % len(params)]

@@ -1,6 +1,6 @@
 # Simulation Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
@@ -9,6 +9,16 @@ It supports configurable simulation parameters, a step-based execution loop,
 multiple agent types (random, rule-based, and Q-learning), and result collection
 for modeling complex systems. The `Simulator.run` method is exposed as an MCP
 tool for PAI integration.
+
+## PAI Integration
+
+| Algorithm Phase | Role | Tools Used |
+|----------------|------|-----------|
+| **THINK** | Run system scenarios and explore parameter spaces | Direct Python import |
+| **BUILD** | Configure simulation parameters and agent types | Direct Python import |
+| **VERIFY** | Validate simulation outputs against expectations | Direct Python import |
+
+PAI agents access this module via direct Python import through the MCP bridge for agent-based simulation and scenario modeling.
 
 ## Installation
 

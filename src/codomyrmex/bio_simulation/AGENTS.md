@@ -1,6 +1,6 @@
 # Agent Instructions for `codomyrmex.bio_simulation`
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Context
 
@@ -31,6 +31,23 @@ The Bio-Simulation module provides high-fidelity ant colony simulation with indi
 | `ant_colony/environment.py` | Spatial environment and resource management |
 | `genomics/genome.py` | Genome representation and expression |
 | `genomics/population.py` | Population genetics simulation |
+
+## PAI Agent Role Access Matrix
+
+| PAI Agent | Access Level | Primary Capabilities | Trust Level |
+|-----------|-------------|---------------------|-------------|
+| **Engineer** | Full | Direct Python import, class instantiation, full API access | TRUSTED |
+| **Architect** | Read + Design | API review, biological model design, dependency analysis | OBSERVED |
+| **QATester** | Validation | Integration testing via pytest, simulation output validation | OBSERVED |
+
+### Engineer Agent
+**Use Cases**: Build colony simulations, configure genomics pipelines, full implementation access during BUILD/EXECUTE phases
+
+### Architect Agent
+**Use Cases**: Review biological model architecture, validate simulation fidelity patterns, inspect population dynamics design
+
+### QATester Agent
+**Use Cases**: Validate simulation outputs against expected distributions, verify colony lifecycle correctness, population genetics accuracy testing
 
 ## Navigation
 

@@ -1,6 +1,6 @@
 """Unit tests for CI/CD pipeline data model classes: PipelineJob, PipelineStage, and Pipeline."""
 
-from datetime import datetime, timezone, UTC
+from datetime import UTC, datetime
 
 from codomyrmex.ci_cd_automation.pipeline import (
     AsyncPipelineResult,

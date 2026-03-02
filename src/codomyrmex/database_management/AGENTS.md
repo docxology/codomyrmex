@@ -1,6 +1,6 @@
 # Agent Guidelines - Database Management
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Module Overview
 
@@ -66,6 +66,23 @@ sql, params = query.build()
 assert "SELECT" in sql
 assert 1 in params
 ```
+
+## PAI Agent Role Access Matrix
+
+| PAI Agent | Access Level | Primary Capabilities | Trust Level |
+|-----------|-------------|---------------------|-------------|
+| **Engineer** | Full | Database operations, schema management, query execution, connection pooling | TRUSTED |
+| **Architect** | Read + Design | Schema design review, query optimization analysis, database architecture | OBSERVED |
+| **QATester** | Validation | Query correctness, schema validation, data integrity verification | OBSERVED |
+
+### Engineer Agent
+**Use Cases**: Database operations during BUILD/EXECUTE, schema migrations, connection management.
+
+### Architect Agent
+**Use Cases**: Reviewing database schemas, analyzing query plans, designing data architecture.
+
+### QATester Agent
+**Use Cases**: Validating query correctness during VERIFY, testing schema migrations, data integrity checks.
 
 ## Navigation
 

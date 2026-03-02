@@ -8,7 +8,6 @@ Tests cover:
 - Codec routing via provider get_provider factories
 """
 
-from pathlib import Path
 
 import pytest
 

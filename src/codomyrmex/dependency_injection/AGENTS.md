@@ -1,6 +1,6 @@
 # Dependency Injection Module — Agent Coordination
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
 
@@ -140,3 +140,20 @@ uv run python -m pytest src/codomyrmex/tests/ -k dependency_injection -v
 
 - Always use real, functional tests — no mocks (Zero-Mock policy)
 - Verify all changes pass existing tests before submitting
+
+## PAI Agent Role Access Matrix
+
+| PAI Agent | Access Level | Primary Capabilities | Trust Level |
+|-----------|-------------|---------------------|-------------|
+| **Engineer** | Full | Direct Python import, class instantiation, full API access | TRUSTED |
+| **Architect** | Read + Design | API review, service graph design, dependency analysis | OBSERVED |
+| **QATester** | Validation | Integration testing via pytest, injection validation | OBSERVED |
+
+### Engineer Agent
+**Use Cases**: Configure DI containers, register service bindings, manage scoped lifetimes during BUILD/EXECUTE phases
+
+### Architect Agent
+**Use Cases**: Design service dependency graphs, validate scope strategies, review circular dependency prevention
+
+### QATester Agent
+**Use Cases**: Validate injection correctness, verify scope isolation semantics, test resolution error handling

@@ -1,8 +1,18 @@
 # Feature Flags Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 Feature flag management with evaluation strategies and gradual rollout.
+
+## PAI Integration
+
+| Algorithm Phase | Role | Tools Used |
+|----------------|------|-----------|
+| **OBSERVE** | Check flag states and current rollout percentages | Direct Python import |
+| **PLAN** | Configure rollout strategies and experiment parameters | Direct Python import |
+| **EXECUTE** | Toggle features during deployments and A/B test execution | Direct Python import |
+
+PAI agents access this module via direct Python import through the MCP bridge. The Architect agent configures rollout strategies during PLAN, while the Engineer agent toggles flags during EXECUTE for gradual feature releases.
 
 ## Installation
 

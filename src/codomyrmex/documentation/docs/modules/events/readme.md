@@ -1,10 +1,20 @@
 # Events Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
 Event-driven architecture module enabling decoupled, asynchronous communication between Codomyrmex components. Provides an `EventBus` for publish/subscribe messaging, an `AsyncEventEmitter` for async event dispatch, typed event schemas with priority levels, and an `EventLogger` for auditing event flow. Supports event filtering by type and priority, handler timeout management, and structured event statistics.
+
+## PAI Integration
+
+| Algorithm Phase | Role | Tools Used |
+|----------------|------|-----------|
+| **EXECUTE** | Emit events to signal phase transitions and workflow state changes | `emit_event` |
+| **OBSERVE** | Query event history to understand system state | `get_event_history` |
+| **LEARN** | Archive workflow events for pattern analysis | `get_event_history` |
+
+PAI uses the event bus to signal Algorithm phase transitions (e.g., BUILD_COMPLETE, VERIFY_STARTED). Engineer agents call `emit_event` to publish workflow state; `get_event_history` retrieves past events for OBSERVE/LEARN context.
 
 ## Installation
 

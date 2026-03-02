@@ -14,10 +14,9 @@ from collections import defaultdict
 from collections.abc import Callable
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any, Dict, Generic, List, Optional, TypeVar
+from typing import Any, Generic, Optional, TypeVar
 
 T = TypeVar('T')
-
 
 class LoadBalanceStrategy(Enum):
     """Load balancing strategies."""
@@ -28,14 +27,12 @@ class LoadBalanceStrategy(Enum):
     WEIGHTED = "weighted"
     PRIORITY = "priority"
 
-
 class AgentStatus(Enum):
     """Status of an agent in the pool."""
     HEALTHY = "healthy"
     DEGRADED = "degraded"
     UNHEALTHY = "unhealthy"
     CIRCUIT_OPEN = "circuit_open"
-
 
 @dataclass
 class AgentHealth:
@@ -70,7 +67,6 @@ class AgentHealth:
         """Check if agent is available for requests."""
         return self.status in [AgentStatus.HEALTHY, AgentStatus.DEGRADED]
 
-
 @dataclass
 class PooledAgent(Generic[T]):
     """An agent in the pool."""
@@ -80,7 +76,6 @@ class PooledAgent(Generic[T]):
     priority: int = 0  # Lower is higher priority
     health: AgentHealth = field(default_factory=AgentHealth)
     metadata: dict[str, Any] = field(default_factory=dict)
-
 
 @dataclass
 class PoolConfig:
@@ -101,7 +96,6 @@ class PoolConfig:
 
     # Timeout
     request_timeout_s: float = 30.0
-
 
 class CircuitBreaker:
     """
@@ -159,7 +153,6 @@ class CircuitBreaker:
             self._failures = 0
             self._state = "closed"
             self._last_failure_time = None
-
 
 class AgentPool(Generic[T]):
     """
@@ -398,7 +391,6 @@ class AgentPool(Generic[T]):
         for agent_id in self._agents:
             self.reset_agent(agent_id)
 
-
 class FallbackChain(Generic[T]):
     """
     Chain of agents with fallback behavior.
@@ -451,12 +443,9 @@ class FallbackChain(Generic[T]):
             raise last_error
         raise RuntimeError("No agents in fallback chain")
 
-
 # Type alias for common use
-from typing import Tuple
 
 tuple  # Prevent unused import warning
-
 
 __all__ = [
     # Enums

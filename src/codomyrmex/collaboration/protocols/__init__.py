@@ -12,7 +12,7 @@ from collections.abc import Callable
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional, Set
+from typing import Any, Optional
 
 
 class AgentState(Enum):
@@ -23,7 +23,6 @@ class AgentState(Enum):
     ERROR = "error"
     TERMINATED = "terminated"
 
-
 class MessageType(Enum):
     """Types of messages between agents."""
     REQUEST = "request"
@@ -32,7 +31,6 @@ class MessageType(Enum):
     HANDOFF = "handoff"
     STATUS = "status"
     ERROR = "error"
-
 
 @dataclass
 class AgentMessage:
@@ -70,7 +68,6 @@ class AgentMessage:
             reply_to=self.id,
         )
 
-
 @dataclass
 class AgentCapability:
     """A capability that an agent possesses."""
@@ -88,7 +85,6 @@ class AgentCapability:
             "output_schema": self.output_schema,
         }
 
-
 class AgentProtocol(ABC):
     """Abstract base class for agent coordination protocols."""
 
@@ -101,7 +97,6 @@ class AgentProtocol(ABC):
     def select_agents(self, task: Any, available_agents: list['BaseAgent']) -> list['BaseAgent']:
         """Select agents for a task."""
         pass
-
 
 class BaseAgent(ABC):
     """Base class for collaborative agents."""
@@ -153,7 +148,6 @@ class BaseAgent(ABC):
             "state": self.state.value,
             "capabilities": [c.to_dict() for c in self.capabilities],
         }
-
 
 class AgentCoordinator:
     """Coordinates communication and task distribution between agents."""
@@ -209,7 +203,6 @@ class AgentCoordinator:
         """Get all idle agents."""
         return [a for a in self.agents.values() if a.state == AgentState.IDLE]
 
-
 class RoundRobinProtocol(AgentProtocol):
     """Distributes tasks to agents in round-robin fashion."""
 
@@ -236,7 +229,6 @@ class RoundRobinProtocol(AgentProtocol):
         finally:
             agent.state = AgentState.IDLE
 
-
 class BroadcastProtocol(AgentProtocol):
     """Broadcasts task to all agents and collects results."""
 
@@ -255,7 +247,6 @@ class BroadcastProtocol(AgentProtocol):
         finally:
             for agent in agents:
                 agent.state = AgentState.IDLE
-
 
 class CapabilityRoutingProtocol(AgentProtocol):
     """Routes tasks to agents based on required capabilities."""
@@ -278,7 +269,6 @@ class CapabilityRoutingProtocol(AgentProtocol):
             return await agent.process_task(task)
         finally:
             agent.state = AgentState.IDLE
-
 
 class ConsensusProtocol(AgentProtocol):
     """Requires consensus among agents for task completion."""
@@ -316,7 +306,6 @@ class ConsensusProtocol(AgentProtocol):
             return json.loads(max_key)
 
         raise ValueError("Consensus not reached")
-
 
 __all__ = [
     "AgentState",

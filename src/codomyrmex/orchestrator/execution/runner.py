@@ -144,7 +144,8 @@ def run_script(
         # Prepare preexec_fn for memory limit
         preexec = None
         if memory_limit_mb and RESOURCE_LIMIT_AVAILABLE:
-            preexec = lambda: _set_memory_limit(memory_limit_mb)
+            def preexec():
+                return _set_memory_limit(memory_limit_mb)
 
         process = subprocess.run(
             cmd,

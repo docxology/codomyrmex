@@ -169,7 +169,7 @@ class TerminalFormatter:
 
         # Header
         header_row = "│ "
-        for i, (header, width) in enumerate(zip(headers, col_widths)):
+        for i, (header, width) in enumerate(zip(headers, col_widths, strict=False)):
             header_row += self.color(header[:width].ljust(width), "WHITE", "BOLD")
             if i < len(headers) - 1:
                 header_row += " │ "

@@ -1,6 +1,6 @@
 # Agent Guidelines - Model Ops
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Module Overview
 
@@ -65,6 +65,23 @@ with ExperimentTracker.start("test") as exp:
     exp.log_metrics({"acc": 0.9})
     assert exp.get_metrics()["acc"] == 0.9
 ```
+
+## PAI Agent Role Access Matrix
+
+| PAI Agent | Access Level | Primary Capabilities | Trust Level |
+|-----------|-------------|---------------------|-------------|
+| **Engineer** | Full | Model deployment, evaluation, monitoring, A/B testing, model registry management | TRUSTED |
+| **Architect** | Read + Design | Model lifecycle design, evaluation framework review, MLOps architecture | OBSERVED |
+| **QATester** | Validation | Model evaluation metric verification, inference correctness, deployment health | OBSERVED |
+
+### Engineer Agent
+**Use Cases**: Deploying models during EXECUTE, running evaluations, managing model registry.
+
+### Architect Agent
+**Use Cases**: Designing MLOps pipelines, reviewing evaluation frameworks, planning model versioning.
+
+### QATester Agent
+**Use Cases**: Validating model evaluation results during VERIFY, confirming deployment health.
 
 ## Navigation
 

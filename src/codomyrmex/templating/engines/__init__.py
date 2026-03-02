@@ -10,11 +10,11 @@ from abc import ABC, abstractmethod
 from collections.abc import Callable
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Optional
+
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 logger = get_logger(__name__)
-
 
 @dataclass
 class TemplateContext:
@@ -46,7 +46,6 @@ class TemplateContext:
         """setitem ."""
         self.set(key, value)
 
-
 class TemplateEngine(ABC):
     """Abstract base class for template engines."""
 
@@ -59,7 +58,6 @@ class TemplateEngine(ABC):
     def render_file(self, path: str, context: dict[str, Any]) -> str:
         """Render a template file."""
         pass
-
 
 class SimpleTemplateEngine(TemplateEngine):
     """Simple string interpolation template engine."""
@@ -116,7 +114,6 @@ class SimpleTemplateEngine(TemplateEngine):
         with open(path) as f:
             template = f.read()
         return self.render(template, context)
-
 
 class Jinja2LikeEngine(TemplateEngine):
     """Enhanced template engine with control structures."""
@@ -359,7 +356,6 @@ class Jinja2LikeEngine(TemplateEngine):
             template = f.read()
         return self.render(template, context)
 
-
 class MustacheEngine(TemplateEngine):
     """Mustache-style logic-less templates."""
 
@@ -474,7 +470,6 @@ class MustacheEngine(TemplateEngine):
             template = f.read()
         return self.render(template, context)
 
-
 def create_engine(
     engine_type: str = "simple",
     **kwargs
@@ -491,7 +486,6 @@ def create_engine(
         raise ValueError(f"Unknown engine type: {engine_type}")
 
     return engine_class(**kwargs)
-
 
 __all__ = [
     "TemplateContext",

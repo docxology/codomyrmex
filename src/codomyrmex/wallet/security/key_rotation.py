@@ -6,7 +6,7 @@ audit trail and configurable rotation policies.
 
 from collections.abc import Callable
 from dataclasses import dataclass
-from datetime import datetime, timezone, UTC
+from datetime import UTC, datetime
 
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
 

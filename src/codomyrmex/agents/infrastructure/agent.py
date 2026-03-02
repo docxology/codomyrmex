@@ -13,9 +13,9 @@ from codomyrmex.agents.core.base import (
     AgentResponse,
     BaseAgent,
 )
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 from .tool_factory import CloudToolFactory, Tool
-from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 logger = get_logger(__name__)
 

@@ -9,7 +9,7 @@ from abc import ABC, abstractmethod
 from collections.abc import Iterator
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Optional
 
 
 class NodeType(Enum):
@@ -30,7 +30,6 @@ class NodeType(Enum):
     WHILE = "while"
     TRY = "try"
 
-
 @dataclass
 class Position:
     """Source code position."""
@@ -42,7 +41,6 @@ class Position:
         if self.line != other.line:
             return self.line < other.line
         return self.column < other.column
-
 
 @dataclass
 class Range:
@@ -57,7 +55,6 @@ class Range:
     def contains(self, pos: Position) -> bool:
         """contains ."""
         return self.start <= pos <= self.end
-
 
 @dataclass
 class ASTNode:
@@ -107,7 +104,6 @@ class ASTNode:
             "children": [c.to_dict() for c in self.children],
         }
 
-
 class Parser(ABC):
     """Abstract base class for source code parsers."""
 
@@ -136,7 +132,6 @@ class Parser(ABC):
     def get_imports(self, root: ASTNode) -> list[ASTNode]:
         """Extract imports."""
         pass
-
 
 class PythonParser(Parser):
     """Parser for Python source code."""
@@ -298,7 +293,6 @@ class PythonParser(Parser):
         imports.extend(root.find_children("import_from_statement"))
         return imports
 
-
 class JavaScriptParser(Parser):
     """Parser for JavaScript source code."""
 
@@ -410,7 +404,6 @@ class JavaScriptParser(Parser):
     def get_imports(self, root: ASTNode) -> list[ASTNode]:
         return root.find_children("import_declaration")
 
-
 def get_parser(language: str) -> Parser:
     """Get a parser for the specified language."""
     parsers = {
@@ -426,7 +419,6 @@ def get_parser(language: str) -> Parser:
 
     return parser_class()
 
-
 def parse_file(filepath: str) -> ASTNode:
     """Parse a file and return its AST."""
     with open(filepath) as f:
@@ -441,7 +433,6 @@ def parse_file(filepath: str) -> ASTNode:
         raise ValueError(f"Unknown file type: {filepath}")
 
     return parser.parse(source)
-
 
 __all__ = [
     "NodeType",

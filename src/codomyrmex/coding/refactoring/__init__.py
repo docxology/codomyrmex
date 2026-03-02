@@ -10,7 +10,7 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from enum import Enum
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Optional
 
 
 class RefactoringType(Enum):
@@ -25,7 +25,6 @@ class RefactoringType(Enum):
     PUSH_DOWN = "push_down"
     REPLACE_CONDITIONAL = "replace_conditional"
 
-
 @dataclass
 class Location:
     """Source code location."""
@@ -38,7 +37,6 @@ class Location:
     def __str__(self) -> str:
         """str ."""
         return f"{self.file_path}:{self.line}:{self.column}"
-
 
 @dataclass
 class Change:
@@ -57,7 +55,6 @@ class Change:
             "new": self.new_text,
             "description": self.description,
         }
-
 
 @dataclass
 class RefactoringResult:
@@ -95,7 +92,6 @@ class RefactoringResult:
             with open(file_path, 'w') as f:
                 f.writelines(lines)
 
-
 class Refactoring(ABC):
     """Abstract base class for refactorings."""
 
@@ -115,7 +111,6 @@ class Refactoring(ABC):
     def preview(self) -> str:
         """Generate a preview of the changes."""
         pass
-
 
 class RenameRefactoring(Refactoring):
     """Rename a symbol (variable, function, class, etc.)."""
@@ -220,7 +215,6 @@ class RenameRefactoring(Refactoring):
             lines.append(f"  ... and {len(result.changes) - 10} more")
 
         return "\n".join(lines)
-
 
 class ExtractFunctionRefactoring(Refactoring):
     """Extract selected code into a new function."""
@@ -348,7 +342,6 @@ class ExtractFunctionRefactoring(Refactoring):
                f"Lines: {self.start_line}-{self.end_line}\n" + \
                f"Parameters: {', '.join(self.parameters)}"
 
-
 class InlineRefactoring(Refactoring):
     """Inline a function or variable."""
 
@@ -443,7 +436,6 @@ class InlineRefactoring(Refactoring):
                f"Changes: {len(result.changes)}\n" + \
                result.description
 
-
 def create_refactoring(
     refactoring_type: RefactoringType,
     **kwargs
@@ -460,7 +452,6 @@ def create_refactoring(
         raise ValueError(f"Unsupported refactoring type: {refactoring_type}")
 
     return refactoring_class(**kwargs)
-
 
 __all__ = [
     "RefactoringType",

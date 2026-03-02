@@ -1,8 +1,18 @@
 # Quantum Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 Quantum algorithm primitives, circuit simulation, and gate operations.
+
+## PAI Integration
+
+| Algorithm Phase | Role | Tools Used |
+|----------------|------|-----------|
+| **THINK** | Quantum algorithm design and gate selection | Direct Python import |
+| **BUILD** | Configure quantum circuits and parameters | Direct Python import |
+| **VERIFY** | Validate gate operations and measurement outputs | Direct Python import |
+
+PAI agents access this module via direct Python import through the MCP bridge for quantum circuit construction and simulation tasks.
 
 ## Installation
 

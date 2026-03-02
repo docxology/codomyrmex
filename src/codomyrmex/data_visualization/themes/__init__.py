@@ -6,11 +6,11 @@ Provides predefined color schemes and styling configurations.
 
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Dict, List, Optional
+from typing import Optional
+
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 logger = get_logger(__name__)
-
 
 class ThemeName(Enum):
     """Available theme names."""
@@ -20,7 +20,6 @@ class ThemeName(Enum):
     VIBRANT = "vibrant"
     MINIMAL = "minimal"
     SCIENTIFIC = "scientific"
-
 
 @dataclass
 class ColorPalette:
@@ -42,7 +41,6 @@ class ColorPalette:
             return self.primary
         return self.series[index % len(self.series)]
 
-
 @dataclass
 class FontConfig:
     """Font configuration for charts."""
@@ -53,7 +51,6 @@ class FontConfig:
     legend_size: int = 11
     weight: str = "normal"
 
-
 @dataclass
 class GridConfig:
     """Grid configuration for charts."""
@@ -62,7 +59,6 @@ class GridConfig:
     alpha: float = 0.5
     linestyle: str = "-"
     linewidth: float = 0.5
-
 
 @dataclass
 class Theme:
@@ -100,7 +96,6 @@ class Theme:
             'ytick.labelsize': self.fonts.tick_size,
             'legend.fontsize': self.fonts.legend_size,
         }
-
 
 # Predefined themes
 THEMES: dict[ThemeName, Theme] = {
@@ -186,11 +181,9 @@ THEMES: dict[ThemeName, Theme] = {
     ),
 }
 
-
 def get_theme(name: ThemeName = ThemeName.DEFAULT) -> Theme:
     """Get a theme by name."""
     return THEMES.get(name, THEMES[ThemeName.DEFAULT])
-
 
 def apply_theme(theme: Theme) -> None:
     """Apply a theme to matplotlib."""
@@ -201,11 +194,9 @@ def apply_theme(theme: Theme) -> None:
         logger.debug("matplotlib not available, cannot apply theme: %s", e)
         pass  # matplotlib not available
 
-
 def list_themes() -> list[str]:
     """List available theme names."""
     return [t.value for t in ThemeName]
-
 
 __all__ = [
     "ThemeName",

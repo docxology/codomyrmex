@@ -1,6 +1,6 @@
 # Personal AI Infrastructure -- Examples Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
@@ -109,6 +109,12 @@ examples/
 | `agents` | Examples consume `AgentInterface`, `AgentOrchestrator`, `AgentRequest`, `AgentResponse` |
 | `logging_monitoring` | Examples use `get_logger` and `setup_logging` for structured output |
 | `orchestrator` | The orchestration demo patterns mirror the workflow patterns available in the orchestrator module |
+
+## MCP Tools
+
+This module does not expose MCP tools directly. Access its capabilities via:
+- Direct Python import: `from codomyrmex.examples import ...`
+- CLI: `codomyrmex examples <command>`
 
 ## Navigation
 

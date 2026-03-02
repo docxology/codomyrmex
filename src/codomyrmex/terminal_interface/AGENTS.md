@@ -59,6 +59,23 @@ output = fmt.format_success("Test")
 assert "Test" in output
 ```
 
+## PAI Agent Role Access Matrix
+
+| PAI Agent | Access Level | Primary Capabilities | Trust Level |
+|-----------|-------------|---------------------|-------------|
+| **Engineer** | Full | Rich terminal output, formatting, progress bars, interactive prompts; full display control | TRUSTED |
+| **Architect** | Read + Design | Interface design review, output format specification | OBSERVED |
+| **QATester** | Validation | Terminal output correctness, formatting verification, accessibility compliance | OBSERVED |
+
+### Engineer Agent
+**Use Cases**: Rendering BUILD/EXECUTE progress output, displaying structured results, creating interactive CLI flows.
+
+### Architect Agent
+**Use Cases**: Designing terminal UX patterns, reviewing output format specifications.
+
+### QATester Agent
+**Use Cases**: Validating terminal output format, testing display correctness during VERIFY phase.
+
 ## Navigation
 
 - [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)

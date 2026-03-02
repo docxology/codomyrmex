@@ -1,10 +1,20 @@
 # Cache Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
 Unified caching module providing multiple backend strategies for code analysis results, LLM responses, build artifacts, and other frequently accessed data. Features an abstract `Cache` interface with in-memory, file-based, and Redis backends; a `CacheManager` for named cache instance lifecycle; namespace isolation; TTL management; eviction policies; invalidation strategies; serializers; distributed caching; cache warmers; replication; and async operations.
+
+## PAI Integration
+
+| Algorithm Phase | Role | Tools Used |
+|----------------|------|-----------|
+| **ALL PHASES** | Cache intermediate results across algorithm phases | Direct Python import |
+| **OBSERVE** | Check cached state to skip redundant data fetches | Direct Python import |
+| **LEARN** | Persist learned data and analysis results for reuse | Direct Python import |
+
+PAI agents access this module via direct Python import through the MCP bridge. The Engineer agent uses it across all phases to cache intermediate computation results, and during LEARN phase to persist insights for future algorithm runs.
 
 ## Installation
 

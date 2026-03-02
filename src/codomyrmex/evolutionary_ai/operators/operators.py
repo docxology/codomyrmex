@@ -53,7 +53,7 @@ def uniform_crossover(
         swap_prob: Probability of swapping each gene position.
     """
     c1, c2 = [], []
-    for g1, g2 in zip(parent1.genes, parent2.genes):
+    for g1, g2 in zip(parent1.genes, parent2.genes, strict=False):
         if random.random() < swap_prob:
             c1.append(g2)
             c2.append(g1)
@@ -146,7 +146,7 @@ def roulette_selection(population: list[Genome]) -> Genome:
         return random.choice(population)
     pick = random.uniform(0, total)
     current = 0.0
-    for genome, fit in zip(population, fitnesses):
+    for genome, fit in zip(population, fitnesses, strict=False):
         current += fit
         if current >= pick:
             return genome

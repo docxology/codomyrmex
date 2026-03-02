@@ -1,6 +1,6 @@
 # Personal AI Infrastructure — Edge Computing Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
@@ -67,6 +67,12 @@ sync.confirm_sync(up_to_version=3)
 | `EdgeRuntime` | Deploy and invoke functions |
 | `EdgeSynchronizer` | State consistency |
 | `EdgeMetrics` | Invocation tracking |
+
+## MCP Tools
+
+This module does not expose MCP tools directly. Access its capabilities via:
+- Direct Python import: `from codomyrmex.edge_computing import ...`
+- CLI: `codomyrmex edge_computing <command>`
 
 ## Navigation
 

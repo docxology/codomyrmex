@@ -1,6 +1,6 @@
 # Static Analysis Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
@@ -14,6 +14,15 @@ This module is distinct from `coding/static_analysis/`, which provides a broader
 `StaticAnalyzer` class with external tool integration (pylint, flake8, bandit, etc.).
 This root-level `static_analysis/` module focuses specifically on import graph
 analysis and architectural enforcement.
+
+## PAI Integration
+
+| Algorithm Phase | Role | Tools Used |
+|----------------|------|-----------|
+| **BUILD** | Engineer agent runs static analysis to validate code quality before EXECUTE | Direct Python import; `StaticAnalyzer`, `LintRunner` |
+| **VERIFY** | QATester runs full lint/security scan suite to confirm quality gates | Direct Python import; `SecurityScanner` |
+
+PAI's Engineer subagent invokes static analysis during BUILD to catch issues early. QATester runs security and lint scans during VERIFY to confirm code meets quality standards before LEARN phase.
 
 ## Installation
 

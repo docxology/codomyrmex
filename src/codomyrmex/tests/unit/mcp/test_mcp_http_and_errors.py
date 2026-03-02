@@ -426,7 +426,7 @@ class TestMCPClientConcurrency:
 
             # All 10 should return successfully
             assert len(results) == 10
-            for i, result in enumerate(results):
+            for _i, result in enumerate(results):
                 assert "content" in result
                 data = json.loads(result["content"][0]["text"])
                 # Each result should be a valid echo response

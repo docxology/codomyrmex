@@ -5,7 +5,6 @@ Provides ML model operations including:
 - Fine-tuning job management
 - Model evaluation and metrics
 
-
 Submodules:
     feature_store: Consolidated feature store capabilities.
     optimization: Consolidated optimization capabilities.
@@ -15,7 +14,7 @@ Submodules:
 import json
 import uuid
 from collections.abc import Callable
-from typing import Any, Dict, List, Optional
+from typing import Any, Optional
 
 # Shared schemas for cross-module interop
 try:
@@ -81,7 +80,6 @@ try:
     from . import fine_tuning
 except ImportError:
     fine_tuning = None
-
 
 class Dataset:
     """
@@ -151,7 +149,6 @@ class Dataset:
         """len ."""
         return len(self.data)
 
-
 class DatasetSanitizer:
     """
     Utilities for cleaning and filtering datasets.
@@ -199,7 +196,6 @@ class DatasetSanitizer:
             stripped.append(new_example)
         return Dataset(data=stripped)
 
-
 class FineTuningJob:
     """
     Fine-tuning job management.
@@ -246,7 +242,6 @@ class FineTuningJob:
             self.status = "completed"
         return self.status
 
-
 class Evaluator:
     """
     Model output evaluator with customizable metrics.
@@ -284,15 +279,13 @@ class Evaluator:
                 results[name] = 0.0
         return results
 
-
 # Convenience metric functions
 def exact_match_metric(predictions: list[str], references: list[str]) -> float:
     """Calculate exact match ratio (strips whitespace before comparison)."""
     if not predictions:
         return 0.0
-    matches = sum(1 for p, r in zip(predictions, references) if p.strip() == r.strip())
+    matches = sum(1 for p, r in zip(predictions, references, strict=False) if p.strip() == r.strip())
     return matches / len(predictions)
-
 
 def length_ratio_metric(predictions: list[str], references: list[str]) -> float:
     """Calculate average length ratio."""
@@ -300,14 +293,13 @@ def length_ratio_metric(predictions: list[str], references: list[str]) -> float:
         return 0.0
 
     ratios = []
-    for p, r in zip(predictions, references):
+    for p, r in zip(predictions, references, strict=False):
         if len(r) > 0:
             ratios.append(len(p) / len(r))
         else:
             ratios.append(1.0 if len(p) == 0 else 0.0)
 
     return sum(ratios) / len(ratios)
-
 
 def cli_commands():
     """Return CLI commands for the model_ops module."""
@@ -335,7 +327,6 @@ def cli_commands():
             ),
         },
     }
-
 
 from . import feature_store, optimization, registry
 

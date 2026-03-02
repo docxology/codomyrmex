@@ -1,6 +1,6 @@
 """Unit tests for the Configuration data model -- get/set, dot notation, validation."""
 
-from datetime import datetime, timezone, UTC
+from datetime import UTC, datetime
 
 import pytest
 

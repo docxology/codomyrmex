@@ -85,7 +85,7 @@ def classify_openstack_error(
         An appropriate InfomaniakCloudError subclass instance
     """
     error_str = str(error).lower()
-    kwargs = dict(service=service, operation=operation, resource_id=resource_id)
+    kwargs = {"service": service, "operation": operation, "resource_id": resource_id}
 
     # Check for HTTP status codes in the error message
     if "401" in error_str or "403" in error_str or "authentication" in error_str:
@@ -127,7 +127,7 @@ def classify_http_error(
     Returns:
         An appropriate InfomaniakCloudError subclass instance.
     """
-    kwargs = dict(service=service, operation=operation, resource_id=resource_id)
+    kwargs = {"service": service, "operation": operation, "resource_id": resource_id}
 
     # Connection errors (requires requests)
     if _requests is not None:

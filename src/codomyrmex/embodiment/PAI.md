@@ -1,6 +1,6 @@
 # Personal AI Infrastructure — Embodiment Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
@@ -35,6 +35,12 @@ The Embodiment module provides interfaces for physical and robotic system integr
 ## Architecture Role
 
 **Specialized Layer** — Advanced domain-specific module for physical/robotic integration. Minimal dependencies.
+
+## MCP Tools
+
+This module does not expose MCP tools directly. Access its capabilities via:
+- Direct Python import: `from codomyrmex.embodiment import ...`
+- CLI: `codomyrmex embodiment <command>`
 
 ## Navigation
 

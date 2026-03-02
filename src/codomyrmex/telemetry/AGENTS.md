@@ -1,6 +1,6 @@
 # Agent Guidelines - Telemetry
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Module Overview
 
@@ -55,6 +55,23 @@ def test_func():
     return 42
 assert test_func() == 42
 ```
+
+## PAI Agent Role Access Matrix
+
+| PAI Agent | Access Level | Primary Capabilities | Trust Level |
+|-----------|-------------|---------------------|-------------|
+| **Engineer** | Full | Direct Python import, class instantiation, full API access | TRUSTED |
+| **Architect** | Read + Design | API review, interface design, dependency analysis | OBSERVED |
+| **QATester** | Validation | Integration testing via pytest, output validation | OBSERVED |
+
+### Engineer Agent
+**Use Cases**: Instrument code with metrics and traces, configure OTLP exporters, register dashboard views during BUILD/VERIFY phases
+
+### Architect Agent
+**Use Cases**: Design observability strategy, define metric naming conventions, plan tracing topology across services
+
+### QATester Agent
+**Use Cases**: Validate metric collection accuracy, verify alert rule thresholds, test span propagation and dashboard rendering
 
 ## Navigation
 

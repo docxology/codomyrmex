@@ -1,6 +1,6 @@
 # Personal AI Infrastructure — Vector Store Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
@@ -52,6 +52,12 @@ from codomyrmex.vector_store.models import Embedding, VectorIndex, SimilarityMet
 ## Architecture Role
 
 **Core Layer** — Central embedding infrastructure. Consumed by `graph_rag/` (hybrid search), `agentic_memory/` (semantic memory), `search/` (augmented search), and `cerebrum/` (similarity-based reasoning).
+
+## MCP Tools
+
+This module does not expose MCP tools directly. Access its capabilities via:
+- Direct Python import: `from codomyrmex.vector_store import ...`
+- CLI: `codomyrmex vector_store <command>`
 
 ## Navigation
 

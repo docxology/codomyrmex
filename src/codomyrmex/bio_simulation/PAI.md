@@ -1,6 +1,6 @@
 # Personal AI Infrastructure -- Bio-Simulation Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
@@ -56,6 +56,12 @@ plot = render_colony_state(colony)
 ## Architecture Role
 
 **Application Layer** -- Domain-specific simulation module. Depends on the `visualization` module for rendering colony state. Has no upward dependencies from other modules.
+
+## MCP Tools
+
+This module does not expose MCP tools directly. Access its capabilities via:
+- Direct Python import: `from codomyrmex.bio_simulation import ...`
+- CLI: `codomyrmex bio_simulation <command>`
 
 ## Navigation
 

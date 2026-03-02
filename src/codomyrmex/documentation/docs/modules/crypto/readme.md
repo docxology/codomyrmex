@@ -1,12 +1,22 @@
 # Crypto Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
 The Crypto module provides comprehensive cryptographic operations for the Codomyrmex platform. It is organized into seven self-contained submodules covering the full spectrum of modern cryptography: primitives, cryptocurrency, cryptanalysis, steganography, encoding, randomness, and protocols.
 
 All implementations use established libraries (`cryptography`, `pycryptodome`, `hashlib`) rather than hand-rolled algorithms. Keys are always generated from CSPRNGs. No secrets are hardcoded.
+
+## PAI Integration
+
+| Algorithm Phase | Role | Tools Used |
+|----------------|------|-----------|
+| **BUILD** | Generate cryptographic keys for secure artifacts | `generate_key` |
+| **VERIFY** | Hash and verify data integrity of builds and artifacts | `hash_data`, `verify_hash` |
+| **EXECUTE** | Secure data hashing during agent operations | `hash_data` |
+
+PAI agents use crypto to ensure data integrity and secure key management. The Engineer agent calls `generate_key` during BUILD phase; the QATester uses `verify_hash` to validate artifact checksums during VERIFY.
 
 ## Submodules
 

@@ -207,7 +207,7 @@ class ParallelExecutor:
         # Wait for completion with timeout
         start_time = time.time()
         while futures and (time.time() - start_time) < timeout:
-            for task_name, (future, task) in list(futures.items()):
+            for task_name, (future, _task) in list(futures.items()):
                 if future.done():
                     try:
                         result = future.result(timeout=1.0)
@@ -228,7 +228,7 @@ class ParallelExecutor:
             time.sleep(0.05)
 
         # Handle remaining futures (timed out)
-        for task_name, (future, task) in futures.items():
+        for task_name, (future, _task) in futures.items():
             future.cancel()
             result = ExecutionResult(
                 task_name=task_name,

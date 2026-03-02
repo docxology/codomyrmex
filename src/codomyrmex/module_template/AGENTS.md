@@ -1,6 +1,6 @@
 # Agent Guidelines - Module Template
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Module Overview
 
@@ -70,6 +70,23 @@ import new_module
 assert hasattr(new_module, "__version__")
 assert hasattr(new_module, "__all__")
 ```
+
+## PAI Agent Role Access Matrix
+
+| PAI Agent | Access Level | Primary Capabilities | Trust Level |
+|-----------|-------------|---------------------|-------------|
+| **Engineer** | Full | Direct Python import, class instantiation, full API access | TRUSTED |
+| **Architect** | Read + Design | API review, interface design, dependency analysis | OBSERVED |
+| **QATester** | Validation | Integration testing via pytest, output validation | OBSERVED |
+
+### Engineer Agent
+**Use Cases**: Uses template to scaffold new modules following the RASP pattern, generating standard file structures with README, AGENTS, SPEC, PAI, and __init__.py.
+
+### Architect Agent
+**Use Cases**: Reviews module structure compliance against RASP conventions, validates export patterns, and ensures new modules conform to layer hierarchy.
+
+### QATester Agent
+**Use Cases**: Validates that generated modules meet standards including correct exports, version metadata, documentation completeness, and test scaffolding.
 
 ## Navigation
 

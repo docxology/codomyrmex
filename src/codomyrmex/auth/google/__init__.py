@@ -1,6 +1,6 @@
 """Google Auth submodule for Codomyrmex.
 
-Provides unified Google OAuth2 token acquisition and caching 
+Provides unified Google OAuth2 token acquisition and caching
 for downstream integrations like Calendar and Gmail.
 """
 

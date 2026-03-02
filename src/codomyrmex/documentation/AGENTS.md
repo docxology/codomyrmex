@@ -1,6 +1,6 @@
 # Codomyrmex Agents — src/codomyrmex/documentation
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
 
@@ -63,6 +63,23 @@ print(f"Overall: {scores['overall_score']:.1f}/100")
 # Generate project-wide quality report
 report = generate_quality_report(Path("."))
 ```
+
+## PAI Agent Role Access Matrix
+
+| PAI Agent | Access Level | Primary Capabilities | Trust Level |
+|-----------|-------------|---------------------|-------------|
+| **Engineer** | Full | `generate_module_docs`, `audit_rasp_compliance`; full Python API | TRUSTED |
+| **Architect** | Read + Design | API review, RASP compliance audit, documentation structure design | OBSERVED |
+| **QATester** | Validation | `audit_rasp_compliance`; RASP compliance validation across modules | OBSERVED |
+
+### Engineer Agent
+**Use Cases**: Generate module documentation, audit RASP compliance across all 88 modules, BUILD phase doc generation
+
+### Architect Agent
+**Use Cases**: Review documentation architecture, validate RASP pattern completeness, design doc structure
+
+### QATester Agent
+**Use Cases**: RASP compliance audit, verify all 4 doc files exist per module, documentation quality validation
 
 ## Navigation Links
 

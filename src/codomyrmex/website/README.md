@@ -1,8 +1,18 @@
 # Website Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 Dynamic web dashboard and control interface for Codomyrmex.
+
+## PAI Integration
+
+| Algorithm Phase | Role | Tools Used |
+|----------------|------|-----------|
+| **OBSERVE** | Probe dashboard status via `/health` and `/api/status` endpoints | Direct Python import |
+| **EXECUTE** | Serve PAI dashboard UI and run administrative actions | Direct Python import |
+| **VERIFY** | Validate API endpoint responses and UI behavior | Direct Python import |
+
+PAI agents access this module via direct Python import through the MCP bridge to serve, monitor, and control the Codomyrmex web dashboard.
 
 ## Quick Start
 

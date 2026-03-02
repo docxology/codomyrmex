@@ -1,6 +1,6 @@
 # Agent Guidelines - Data Visualization
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Module Overview
 
@@ -64,6 +64,23 @@ assert len(chart.series) == 1
 export_chart(chart, "/tmp/test.png")
 assert Path("/tmp/test.png").exists()
 ```
+
+## PAI Agent Role Access Matrix
+
+| PAI Agent | Access Level | Primary Capabilities | Trust Level |
+|-----------|-------------|---------------------|-------------|
+| **Engineer** | Full | `generate_chart`, `export_dashboard`; full visualization pipeline | TRUSTED |
+| **Architect** | Read + Design | `generate_chart`; chart type selection, dashboard layout design | OBSERVED |
+| **QATester** | Validation | `generate_chart`, `export_dashboard`; chart output validation, dashboard correctness | OBSERVED |
+
+### Engineer Agent
+**Use Cases**: Generating charts and dashboards during LEARN phase, visualizing metrics and test results, exporting dashboard HTML for reporting.
+
+### Architect Agent
+**Use Cases**: Designing visualization schemas, selecting appropriate chart types, planning dashboard layouts.
+
+### QATester Agent
+**Use Cases**: Validating chart output during VERIFY, confirming dashboard renders correctly, checking data accuracy.
 
 ## Navigation
 

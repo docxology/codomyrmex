@@ -24,7 +24,7 @@ def check_structure(root_path):
     errors = []
 
     # Walk valid python modules
-    for dirpath, dirnames, filenames in os.walk(root):
+    for dirpath, _dirnames, _filenames in os.walk(root):
         path = Path(dirpath)
 
         # Skip hidden, venv, tests, templates, and pycache
@@ -40,9 +40,12 @@ def check_structure(root_path):
 
             # 1. Check for Trinity Files
             missing = []
-            if not (path / "README.md").exists(): missing.append("README.md")
-            if not (path / "SPEC.md").exists(): missing.append("SPEC.md")
-            if not (path / "AGENTS.md").exists(): missing.append("AGENTS.md")
+            if not (path / "README.md").exists():
+                missing.append("README.md")
+            if not (path / "SPEC.md").exists():
+                missing.append("SPEC.md")
+            if not (path / "AGENTS.md").exists():
+                missing.append("AGENTS.md")
 
             if missing:
                 errors.append(f"MISSING FILES in {path.relative_to(root)}: {', '.join(missing)}")

@@ -257,7 +257,8 @@ class EventBus:
     def shutdown(self) -> None:
         """shutdown ."""
         self.executor.shutdown(wait=True)
-        with self._lock: self.subscriptions.clear()
+        with self._lock:
+            self.subscriptions.clear()
 
 
 _event_bus = None

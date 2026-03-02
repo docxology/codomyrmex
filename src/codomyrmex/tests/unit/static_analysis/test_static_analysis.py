@@ -86,10 +86,10 @@ class TestPyreflyIssue:
 
     def test_issue_equality(self):
         """Two PyreflyIssues with identical fields are equal (dataclass)."""
-        kwargs = dict(
-            file_path="x.py", line=10, column=5,
-            severity="info", message="msg", rule_id=None,
-        )
+        kwargs = {
+            "file_path": "x.py", "line": 10, "column": 5,
+            "severity": "info", "message": "msg", "rule_id": None,
+        }
         assert PyreflyIssue(**kwargs) == PyreflyIssue(**kwargs)
 
 

@@ -11,7 +11,7 @@ from collections.abc import Callable
 from contextlib import contextmanager
 from dataclasses import dataclass, field
 from datetime import datetime
-from typing import Any, Dict, List, Optional
+from typing import Any, Optional
 
 
 @dataclass
@@ -48,7 +48,6 @@ class SpanContext:
             sampled=self.sampled,
         )
 
-
 @dataclass
 class SpanEvent:
     """An event within a span."""
@@ -64,7 +63,6 @@ class SpanEvent:
             "attributes": self.attributes,
         }
 
-
 @dataclass
 class SpanLink:
     """A link to another span."""
@@ -72,13 +70,11 @@ class SpanLink:
     span_id: str
     attributes: dict[str, Any] = field(default_factory=dict)
 
-
 class SpanStatus:
     """Status of a span."""
     OK = "ok"
     ERROR = "error"
     UNSET = "unset"
-
 
 class Span:
     """A single span in a distributed trace."""
@@ -188,20 +184,16 @@ class Span:
             "status_message": self.status_message,
         }
 
-
 # Thread-local storage for current span
 _current_span = threading.local()
-
 
 def get_current_span() -> Span | None:
     """Get the current span from context."""
     return getattr(_current_span, 'span', None)
 
-
 def set_current_span(span: Span | None) -> None:
     """Set the current span in context."""
     _current_span.span = span
-
 
 class Tracer:
     """Creates and manages spans."""
@@ -280,7 +272,6 @@ class Tracer:
             return wrapper
         return decorator
 
-
 class SpanProcessor:
     """Processes completed spans."""
 
@@ -307,7 +298,6 @@ class SpanProcessor:
         """Get all spans for a trace."""
         with self._lock:
             return [s for s in self._spans if s.context.trace_id == trace_id]
-
 
 class BatchSpanProcessor(SpanProcessor):
     """Batch processes spans before export."""
@@ -348,7 +338,6 @@ class BatchSpanProcessor(SpanProcessor):
         with self._lock:
             self._flush()
 
-
 def create_tracer(
     name: str = "default",
     processor: SpanProcessor | None = None,
@@ -357,7 +346,6 @@ def create_tracer(
     if processor:
         return Tracer(name, on_span_end=processor.process)
     return Tracer(name)
-
 
 __all__ = [
     "SpanContext",

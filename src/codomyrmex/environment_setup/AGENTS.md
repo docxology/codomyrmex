@@ -61,6 +61,23 @@ assert len(deps) == 1
 assert deps[0].installed  # pip should exist
 ```
 
+## PAI Agent Role Access Matrix
+
+| PAI Agent | Access Level | Primary Capabilities | Trust Level |
+|-----------|-------------|---------------------|-------------|
+| **Engineer** | Full | Environment validation, dependency checking, setup automation; full configuration control | TRUSTED |
+| **Architect** | Read + Design | Dependency inventory, environment specification review | OBSERVED |
+| **QATester** | Validation | Environment health verification, dependency availability testing | OBSERVED |
+
+### Engineer Agent
+**Use Cases**: Setting up execution environments during BUILD, validating dependencies before EXECUTE, automating environment configuration.
+
+### Architect Agent
+**Use Cases**: Reviewing required dependencies, auditing environment specifications, planning dependency upgrades.
+
+### QATester Agent
+**Use Cases**: Verifying all required dependencies are available, testing environment isolation, confirming setup completeness during VERIFY.
+
 ## Navigation
 
 - [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)

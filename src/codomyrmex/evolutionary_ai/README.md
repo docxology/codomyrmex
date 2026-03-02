@@ -1,10 +1,20 @@
 # Evolutionary AI Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
 The evolutionary_ai module provides a complete genetic algorithm framework for evolutionary optimization. It includes genome representation with float-valued genes, population management with elitism-preserving evolution, and a rich library of pluggable operators for mutation (bit-flip, swap, Gaussian, scramble), crossover (single-point, two-point, uniform, blend), and selection (tournament, roulette, rank, elitism) -- all accessible via factory functions.
+
+## PAI Integration
+
+| Algorithm Phase | Role | Tools Used |
+|----------------|------|-----------|
+| **THINK** | Evolve candidate algorithms and solution strategies | Direct Python import |
+| **BUILD** | Configure population parameters and fitness functions | Direct Python import |
+| **LEARN** | Capture evolved solutions and optimal configurations | Direct Python import |
+
+PAI agents access this module via direct Python import through the MCP bridge. The Architect agent uses Population and Genome to evolve solution strategies during THINK phase, selecting optimal approaches through tournament selection.
 
 ## Installation
 

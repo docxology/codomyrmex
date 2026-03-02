@@ -1,6 +1,6 @@
 # Crypto Module — Agent Capabilities
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Agent Access Matrix
 
@@ -88,6 +88,23 @@ All tools are auto-discovered via `@mcp_tool` decorators and exposed through the
 | `crypto:status` | OBSERVED |
 | `crypto:algorithms` | OBSERVED |
 | `crypto:hash` | OBSERVED |
+
+## PAI Agent Role Access Matrix
+
+| PAI Agent | Access Level | Primary Capabilities | Trust Level |
+|-----------|-------------|---------------------|-------------|
+| **Engineer** | Full | `hash_data`, `verify_hash`, `generate_key`; full cryptographic operations | TRUSTED |
+| **Architect** | Read + Design | `hash_data`; cryptographic design review, key management strategy | OBSERVED |
+| **QATester** | Validation | `verify_hash`, `hash_data`; integrity verification, checksum validation | OBSERVED |
+
+### Engineer Agent
+**Use Cases**: Generate cryptographic keys, hash sensitive data, verify data integrity during BUILD/VERIFY phases
+
+### Architect Agent
+**Use Cases**: Review cryptographic architecture, design key rotation strategies, evaluate algorithm choices
+
+### QATester Agent
+**Use Cases**: Verify hash integrity of artifacts, validate checksum correctness, test key generation entropy
 
 ## Security Constraints
 

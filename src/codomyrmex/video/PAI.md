@@ -1,6 +1,6 @@
 # Video Module - Programmable AI Interface (PAI)
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Module Identity
 
@@ -234,6 +234,12 @@ VideoConfig:
 - Create separate instances per thread
 - VideoAnalyzer is thread-safe
 - VideoProcessor is NOT thread-safe
+
+## MCP Tools
+
+This module does not expose MCP tools directly. Access its capabilities via:
+- Direct Python import: `from codomyrmex.video import ...`
+- CLI: `codomyrmex video <command>`
 
 ## Versioning
 

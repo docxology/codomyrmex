@@ -1,8 +1,18 @@
 # Tree-Sitter Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 Code parsing with tree-sitter for syntax analysis and transformations.
+
+## PAI Integration
+
+| Algorithm Phase | Role | Tools Used |
+|----------------|------|-----------|
+| **OBSERVE** | Parse code into ASTs for deep structural analysis | Direct Python import |
+| **BUILD** | Extract code structure to inform code generation | Direct Python import |
+| **VERIFY** | Validate syntax correctness of generated or modified code | Direct Python import |
+
+PAI agents access this module via direct Python import through the MCP bridge to parse, query, and transform syntax trees across supported languages.
 
 ## Installation
 

@@ -66,7 +66,7 @@ class AccuracyMetric(Metric):
         """compute ."""
         if not y_true:
             return 0.0
-        return sum(1 for t, p in zip(y_true, y_pred) if t == p) / len(y_true)
+        return sum(1 for t, p in zip(y_true, y_pred, strict=False) if t == p) / len(y_true)
 
 
 class PrecisionMetric(Metric):
@@ -82,8 +82,8 @@ class PrecisionMetric(Metric):
 
     def compute(self, y_true: list, y_pred: list) -> float:
         """compute ."""
-        tp = sum(1 for t, p in zip(y_true, y_pred) if p == self.positive_class and t == self.positive_class)
-        fp = sum(1 for t, p in zip(y_true, y_pred) if p == self.positive_class and t != self.positive_class)
+        tp = sum(1 for t, p in zip(y_true, y_pred, strict=False) if p == self.positive_class and t == self.positive_class)
+        fp = sum(1 for t, p in zip(y_true, y_pred, strict=False) if p == self.positive_class and t != self.positive_class)
         if tp + fp == 0:
             return 0.0
         return tp / (tp + fp)
@@ -102,8 +102,8 @@ class RecallMetric(Metric):
 
     def compute(self, y_true: list, y_pred: list) -> float:
         """compute ."""
-        tp = sum(1 for t, p in zip(y_true, y_pred) if p == self.positive_class and t == self.positive_class)
-        fn = sum(1 for t, p in zip(y_true, y_pred) if p != self.positive_class and t == self.positive_class)
+        tp = sum(1 for t, p in zip(y_true, y_pred, strict=False) if p == self.positive_class and t == self.positive_class)
+        fn = sum(1 for t, p in zip(y_true, y_pred, strict=False) if p != self.positive_class and t == self.positive_class)
         if tp + fn == 0:
             return 0.0
         return tp / (tp + fn)
@@ -141,7 +141,7 @@ class MSEMetric(Metric):
         """compute ."""
         if not y_true:
             return 0.0
-        return sum((t - p) ** 2 for t, p in zip(y_true, y_pred)) / len(y_true)
+        return sum((t - p) ** 2 for t, p in zip(y_true, y_pred, strict=False)) / len(y_true)
 
 
 class MAEMetric(Metric):
@@ -156,7 +156,7 @@ class MAEMetric(Metric):
         """compute ."""
         if not y_true:
             return 0.0
-        return sum(abs(t - p) for t, p in zip(y_true, y_pred)) / len(y_true)
+        return sum(abs(t - p) for t, p in zip(y_true, y_pred, strict=False)) / len(y_true)
 
 
 class RMSEMetric(Metric):
@@ -186,7 +186,7 @@ class R2Metric(Metric):
             return 0.0
         mean_true = sum(y_true) / len(y_true)
         ss_tot = sum((t - mean_true) ** 2 for t in y_true)
-        ss_res = sum((t - p) ** 2 for t, p in zip(y_true, y_pred))
+        ss_res = sum((t - p) ** 2 for t, p in zip(y_true, y_pred, strict=False))
         if ss_tot == 0:
             return 1.0 if ss_res == 0 else 0.0
         return 1.0 - ss_res / ss_tot
@@ -202,8 +202,8 @@ class AUCROCMetric(Metric):
 
     def compute(self, y_true: list, y_scores: list) -> float:
         """compute ."""
-        positives = [(s, t) for s, t in zip(y_scores, y_true) if t == 1]
-        negatives = [(s, t) for s, t in zip(y_scores, y_true) if t == 0]
+        positives = [(s, t) for s, t in zip(y_scores, y_true, strict=False) if t == 1]
+        negatives = [(s, t) for s, t in zip(y_scores, y_true, strict=False) if t == 0]
         if not positives or not negatives:
             return 0.0
         count = 0
@@ -229,7 +229,7 @@ class ConfusionMatrix:
     def _build(self) -> dict[tuple, int]:
         """Build the target artifact."""
         matrix: dict[tuple, int] = {}
-        for t, p in zip(self.y_true, self.y_pred):
+        for t, p in zip(self.y_true, self.y_pred, strict=False):
             key = (t, p)
             matrix[key] = matrix.get(key, 0) + 1
         return matrix

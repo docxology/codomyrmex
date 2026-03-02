@@ -1,10 +1,21 @@
 # Email Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
 The Email module provides email composition, sending, and management through a provider-abstracted interface. Supports **Google Mail (Gmail)** (OAuth2) and **AgentMail** (API-key auth), with a pluggable provider architecture for additional backends.
+
+## PAI Integration
+
+| Algorithm Phase | Role | Tools Used |
+|----------------|------|-----------|
+| **EXECUTE** | Agent-to-agent messaging via AgentMail inboxes | `agentmail_send_message`, `agentmail_create_inbox` |
+| **OBSERVE** | Monitor agent communication threads and messages | `agentmail_list_messages`, `agentmail_list_threads` |
+| **BUILD** | Set up webhook integrations and notification pipelines | `agentmail_create_webhook`, `gmail_create_draft` |
+| **LEARN** | Archive agent communication history | `agentmail_list_inboxes`, `agentmail_get_message` |
+
+PAI agents use the email module for inter-agent communication and user notifications. The Engineer agent sets up AgentMail inboxes during BUILD phase; the QATester validates message delivery during VERIFY.
 
 ## Installation
 

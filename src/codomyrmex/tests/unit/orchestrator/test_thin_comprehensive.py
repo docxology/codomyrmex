@@ -631,7 +631,8 @@ class TestConditionEdgeCases:
 
     def test_condition_identity(self):
         """condition() returns the exact same predicate object."""
-        pred = lambda r: True
+        def pred(r):
+            return True
         assert condition(pred) is pred
 
     def test_condition_with_empty_results(self):

@@ -1,10 +1,20 @@
 # Documents Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
 Document handling module providing document parsing, generation, and manipulation capabilities. Supports multiple formats including Markdown, JSON, YAML, HTML, XML, CSV, PDF, and plain text.
+
+## PAI Integration
+
+| Algorithm Phase | Role | Tools Used |
+|----------------|------|-----------|
+| **OBSERVE** | Read and parse documents in multiple formats | Direct Python import |
+| **BUILD** | Generate documents and merge content from multiple sources | Direct Python import |
+| **EXECUTE** | Transform document formats and convert between types | Direct Python import |
+
+PAI agents access this module via direct Python import through the MCP bridge. The Engineer agent uses `read_document` and `convert_document` to parse inputs during OBSERVE and transform outputs during EXECUTE.
 
 ## Installation
 

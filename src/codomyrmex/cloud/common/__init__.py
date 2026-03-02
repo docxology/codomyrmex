@@ -8,7 +8,7 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional
+from typing import Any, Optional
 
 
 class CloudProvider(Enum):
@@ -18,7 +18,6 @@ class CloudProvider(Enum):
     AZURE = "azure"
     INFOMANIAK = "infomaniak"
     LOCAL = "local"
-
 
 class ResourceType(Enum):
     """Types of cloud resources."""
@@ -30,7 +29,6 @@ class ResourceType(Enum):
     CONTAINER = "container"
     QUEUE = "queue"
 
-
 @dataclass
 class CloudCredentials:
     """Credentials for cloud access."""
@@ -41,7 +39,6 @@ class CloudCredentials:
     project_id: str | None = None
     profile: str | None = None
     metadata: dict[str, str] = field(default_factory=dict)
-
 
 @dataclass
 class CloudResource:
@@ -68,7 +65,6 @@ class CloudResource:
             "created_at": self.created_at.isoformat() if self.created_at else None,
             "tags": self.tags,
         }
-
 
 class CloudClient(ABC):
     """Abstract base class for cloud clients."""
@@ -106,7 +102,6 @@ class CloudClient(ABC):
     def delete_resource(self, resource_id: str) -> bool:
         """Delete a resource."""
         pass
-
 
 class StorageClient(ABC):
     """Abstract storage client."""
@@ -152,7 +147,6 @@ class StorageClient(ABC):
         """Generate a presigned URL."""
         pass
 
-
 class ComputeClient(ABC):
     """Abstract compute client."""
 
@@ -187,7 +181,6 @@ class ComputeClient(ABC):
         """Create a new instance."""
         pass
 
-
 class ServerlessClient(ABC):
     """Abstract serverless client."""
 
@@ -221,7 +214,6 @@ class ServerlessClient(ABC):
     def delete_function(self, function_name: str) -> bool:
         """Delete a function."""
         pass
-
 
 class CloudConfig:
     """Configuration for cloud operations."""
@@ -276,7 +268,6 @@ class CloudConfig:
             ))
 
         return config
-
 
 __all__ = [
     "CloudProvider",

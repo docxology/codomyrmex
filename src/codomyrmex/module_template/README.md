@@ -1,10 +1,20 @@
 # Module Template Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
 Scaffolding module for creating new Codomyrmex modules from a standardized template. The `scaffold_new_module()` function generates a complete module directory with all required documentation files (README, AGENTS, SPEC, API_SPECIFICATION, CHANGELOG, MCP_TOOL_SPECIFICATION, SECURITY, USAGE_EXAMPLES), a customized `__init__.py`, and a core Python source file with a boilerplate class and factory function. Module names are validated to enforce snake_case naming conventions.
+
+## PAI Integration
+
+| Algorithm Phase | Role | Tools Used |
+|----------------|------|-----------|
+| **BUILD** | Scaffold new modules from standardized template | Direct Python import |
+| **PLAN** | Plan module structure and RASP documentation | Direct Python import |
+| **VERIFY** | Validate RASP compliance of generated modules | Direct Python import |
+
+PAI agents access this module via direct Python import through the MCP bridge. The Engineer agent calls `scaffold_new_module()` during BUILD to generate new modules with all required RASP documentation files.
 
 ## Installation
 

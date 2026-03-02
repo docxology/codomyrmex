@@ -106,7 +106,7 @@ class TestDiscovery:
         assert expected_keys.issubset(set(components.keys()))
 
         # Each component has exists/count/path
-        for key, info in components.items():
+        for _key, info in components.items():
             assert "exists" in info
             assert "count" in info
             assert "path" in info

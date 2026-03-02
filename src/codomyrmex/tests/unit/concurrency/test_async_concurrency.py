@@ -732,7 +732,7 @@ class TestAsyncDeadlockPrevention:
             nonlocal success_count, retry_count
             max_retries = 10
 
-            for attempt in range(max_retries):
+            for _attempt in range(max_retries):
                 await lock_a.acquire_async()
                 try:
                     # Try to acquire lock_b with timeout

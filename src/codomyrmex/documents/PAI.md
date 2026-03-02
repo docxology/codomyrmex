@@ -1,6 +1,6 @@
 # Personal AI Infrastructure — Documents Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
@@ -63,6 +63,12 @@ commands = cli_commands()
 ## Architecture Role
 
 **Core Layer** — Foundational document I/O used by `documentation`, `agentic_memory`, `search`, and agent modules. No upward dependencies.
+
+## MCP Tools
+
+This module does not expose MCP tools directly. Access its capabilities via:
+- Direct Python import: `from codomyrmex.documents import ...`
+- CLI: `codomyrmex documents <command>`
 
 ## Navigation
 

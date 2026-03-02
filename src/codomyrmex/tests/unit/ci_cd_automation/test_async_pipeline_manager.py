@@ -12,7 +12,7 @@ catch blocks without any stubs.
 
 import json
 import os
-from datetime import datetime, timezone, UTC
+from datetime import UTC, datetime
 
 import pytest
 

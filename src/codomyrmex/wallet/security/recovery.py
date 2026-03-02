@@ -171,7 +171,7 @@ class NaturalRitualRecovery:
 
         self._attempt_counts[user_id] = self._attempt_counts.get(user_id, 0) + 1
 
-        for i, (step, response) in enumerate(zip(steps, responses)):
+        for i, (step, response) in enumerate(zip(steps, responses, strict=False)):
             response_hash = hashlib.sha256(response.encode()).hexdigest()
             if response_hash != step.expected_response_hash:
                 logger.warning(f"Ritual failed at step {i + 1}: 'The memory was false'")

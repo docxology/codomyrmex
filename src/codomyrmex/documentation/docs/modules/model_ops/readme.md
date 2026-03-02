@@ -1,10 +1,20 @@
 # Model Ops Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
 ML model operations module providing dataset management, fine-tuning job orchestration, and model evaluation with pluggable metrics. The `Dataset` class manages training/evaluation data collections with JSONL I/O and validation for prompt/completion and messages formats. `DatasetSanitizer` filters and cleans datasets by length and key stripping. `FineTuningJob` simulates fine-tuning workflows with status tracking. The `evaluation` submodule provides a comprehensive metrics framework with accuracy, precision, recall, F1, confusion matrix, MSE, MAE, RMSE, R-squared, and AUC-ROC.
+
+## PAI Integration
+
+| Algorithm Phase | Role | Tools Used |
+|----------------|------|-----------|
+| **OBSERVE** | Monitor model metrics and training status | Direct Python import |
+| **VERIFY** | Evaluate model quality with pluggable scorers | Direct Python import |
+| **LEARN** | Capture model performance data for iteration | Direct Python import |
+
+PAI agents access this module via direct Python import through the MCP bridge. The Engineer agent imports `ModelEvaluator` and metric classes during VERIFY to score model outputs against ground truth.
 
 ## Key Exports
 

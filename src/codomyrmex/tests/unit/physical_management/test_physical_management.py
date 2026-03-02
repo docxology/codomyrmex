@@ -286,7 +286,8 @@ class TestDataStream:
         from codomyrmex.physical_management.analytics import DataStream
 
         received = []
-        cb = lambda dp: received.append(dp.value)
+        def cb(dp):
+            return received.append(dp.value)
         stream = DataStream("unsub-test")
         stream.subscribe(cb)
         stream.add_data_point(1.0, source_id="s")

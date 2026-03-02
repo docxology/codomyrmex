@@ -5,21 +5,17 @@ tool info, session stats, and connection lifecycle using real filesystem
 operations in tmp_path.
 """
 
-import tempfile
 from pathlib import Path
 
 import pytest
 
 from codomyrmex.ide import (
     ArtifactError,
-    CommandExecutionError,
     IDECommandResult,
     IDEStatus,
 )
 from codomyrmex.ide.antigravity import (
     AntigravityClient,
-    Artifact,
-    ConversationContext,
 )
 
 

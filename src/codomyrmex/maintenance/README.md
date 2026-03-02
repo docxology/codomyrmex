@@ -1,10 +1,19 @@
 # Maintenance Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
 The Maintenance module provides code health analysis, RASP documentation auditing, dependency management, and deprecation notice management for keeping the codomyrmex codebase healthy and well-documented.
+
+## PAI Integration
+
+| Algorithm Phase | Role | Tools Used |
+|----------------|------|-----------|
+| **OBSERVE** | System health checks at cycle start; task queue inspection | `maintenance_health_check`, `maintenance_list_tasks` |
+| **VERIFY** | Confirm system health post-execution before LEARN phase | `maintenance_health_check` |
+
+PAI's OBSERVE phase opens with `maintenance_health_check` to confirm system health before processing begins. `maintenance_list_tasks` provides a pending task queue for PLAN phase awareness. QATester uses `maintenance_health_check` during VERIFY to confirm operational status.
 
 ## Installation
 

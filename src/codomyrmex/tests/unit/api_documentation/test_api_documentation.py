@@ -7,7 +7,7 @@ generation, OpenAPI specification, and schema management.
 
 import json
 import os
-from datetime import datetime, timezone, UTC
+from datetime import UTC, datetime
 
 import pytest
 

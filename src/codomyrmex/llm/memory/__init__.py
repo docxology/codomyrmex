@@ -11,7 +11,7 @@ from collections.abc import Callable
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional
+from typing import Any, Optional
 
 
 class MemoryType(Enum):
@@ -21,7 +21,6 @@ class MemoryType(Enum):
     SUMMARY = "summary"
     VECTOR = "vector"
     ENTITY = "entity"
-
 
 @dataclass
 class MemoryMessage:
@@ -49,7 +48,6 @@ class MemoryMessage:
             timestamp=datetime.fromisoformat(data.get("timestamp", datetime.now().isoformat())),
             metadata=data.get("metadata", {}),
         )
-
 
 class Memory(ABC):
     """Abstract base class for conversation memory."""
@@ -102,7 +100,6 @@ class Memory(ABC):
     def message_count(self) -> int:
         return len(self.messages)
 
-
 class BufferMemory(Memory):
     """Simple buffer memory that stores all messages."""
 
@@ -129,7 +126,6 @@ class BufferMemory(Memory):
     def clear(self) -> None:
         """clear ."""
         self.messages = []
-
 
 class WindowMemory(Memory):
     """Sliding window memory that keeps the last N messages."""
@@ -159,7 +155,6 @@ class WindowMemory(Memory):
         """clear ."""
         self.messages = []
         self.system_messages = []
-
 
 class SummaryMemory(Memory):
     """Memory that maintains a running summary of the conversation."""
@@ -227,7 +222,6 @@ Updated Summary:"""
         self.recent_messages = []
         self.summary = ""
 
-
 class EntityMemory(Memory):
     """Memory that tracks entities mentioned in the conversation."""
 
@@ -287,7 +281,6 @@ class EntityMemory(Memory):
         self.messages = []
         self.entities = {}
 
-
 def create_memory(memory_type: MemoryType, **kwargs) -> Memory:
     """Factory function to create memory instances."""
     memories = {
@@ -302,7 +295,6 @@ def create_memory(memory_type: MemoryType, **kwargs) -> Memory:
         raise ValueError(f"Unsupported memory type: {memory_type}")
 
     return memory_class(**kwargs)
-
 
 __all__ = [
     "MemoryType",

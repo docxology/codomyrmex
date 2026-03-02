@@ -6,7 +6,7 @@ Provides SSL/TLS certificate validation, monitoring, and security assessment.
 import socket
 import ssl
 from dataclasses import dataclass
-from datetime import datetime, timezone, UTC
+from datetime import UTC, datetime
 from typing import Any
 
 import OpenSSL

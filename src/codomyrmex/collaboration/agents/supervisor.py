@@ -9,6 +9,8 @@ import asyncio
 from collections.abc import Callable
 from typing import Any
 
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
+
 from ..exceptions import (
     CapabilityMismatchError,
     TaskDependencyError,
@@ -18,7 +20,6 @@ from ..models import Task, TaskResult
 from ..protocols import AgentCapability, AgentState
 from .base import CollaborativeAgent
 from .worker import WorkerAgent
-from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 logger = get_logger(__name__)
 
@@ -221,7 +222,7 @@ class SupervisorAgent(CollaborativeAgent):
             # Execute ready tasks in parallel
             batch_results = await self.delegate_batch(ready)
 
-            for task, result in zip(ready, batch_results):
+            for task, result in zip(ready, batch_results, strict=False):
                 results[task.id] = result
                 completed_ids.append(task.id)
                 pending.remove(task)

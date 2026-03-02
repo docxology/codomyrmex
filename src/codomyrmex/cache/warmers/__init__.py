@@ -14,7 +14,8 @@ from collections.abc import Callable
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
-from typing import Any, Dict, Generic, List, Optional, Set, TypeVar
+from typing import Any, Generic, Optional, TypeVar
+
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 logger = get_logger(__name__)
@@ -23,14 +24,12 @@ T = TypeVar('T')
 K = TypeVar('K')
 V = TypeVar('V')
 
-
 class WarmingStrategy(Enum):
     """Cache warming strategies."""
     EAGER = "eager"           # Warm all keys at startup
     LAZY = "lazy"             # Warm on first access
     SCHEDULED = "scheduled"   # Warm on schedule
     ADAPTIVE = "adaptive"     # Warm based on access patterns
-
 
 @dataclass
 class WarmingConfig:
@@ -42,7 +41,6 @@ class WarmingConfig:
     warmup_timeout_s: float = 60.0
     retry_on_failure: bool = True
     max_retries: int = 3
-
 
 @dataclass
 class WarmingStats:
@@ -61,7 +59,6 @@ class WarmingStats:
             return self.keys_warmed / total
         return 1.0
 
-
 class KeyProvider(ABC, Generic[K]):
     """Base class for providing keys to warm."""
 
@@ -69,7 +66,6 @@ class KeyProvider(ABC, Generic[K]):
     def get_keys(self) -> list[K]:
         """Get list of keys to warm."""
         pass
-
 
 class StaticKeyProvider(KeyProvider[K]):
     """Provide a static list of keys."""
@@ -80,7 +76,6 @@ class StaticKeyProvider(KeyProvider[K]):
     def get_keys(self) -> list[K]:
         return self._keys.copy()
 
-
 class CallableKeyProvider(KeyProvider[K]):
     """Provide keys from a callable."""
 
@@ -90,7 +85,6 @@ class CallableKeyProvider(KeyProvider[K]):
     def get_keys(self) -> list[K]:
         return self._func()
 
-
 class ValueLoader(ABC, Generic[K, V]):
     """Base class for loading values for cache warming."""
 
@@ -98,7 +92,6 @@ class ValueLoader(ABC, Generic[K, V]):
     def load(self, key: K) -> V:
         """Load a value for a given key."""
         pass
-
 
 class CallableValueLoader(ValueLoader[K, V]):
     """Load values using a callable."""
@@ -109,7 +102,6 @@ class CallableValueLoader(ValueLoader[K, V]):
     def load(self, key: K) -> V:
         """Load data from the specified source."""
         return self._func(key)
-
 
 class BatchValueLoader(ValueLoader[K, V]):
     """
@@ -135,7 +127,6 @@ class BatchValueLoader(ValueLoader[K, V]):
             return self._cache[key]
         result = self._batch_func([key])
         return result.get(key)  # type: ignore
-
 
 class CacheWarmer(Generic[K, V]):
     """
@@ -326,7 +317,6 @@ class CacheWarmer(Generic[K, V]):
         if self._scheduler_thread:
             self._scheduler_thread.join(timeout=5.0)
 
-
 class AccessTracker(Generic[K]):
     """
     Track cache access patterns for adaptive warming.
@@ -411,7 +401,6 @@ class AccessTracker(Generic[K]):
             self._access_counts.clear()
             self._last_access.clear()
 
-
 class AdaptiveKeyProvider(KeyProvider[K]):
     """
     Key provider based on access patterns.
@@ -434,7 +423,6 @@ class AdaptiveKeyProvider(KeyProvider[K]):
             threshold=self.threshold,
             limit=self.limit,
         )
-
 
 __all__ = [
     # Enums

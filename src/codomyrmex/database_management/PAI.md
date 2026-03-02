@@ -1,6 +1,6 @@
 # Personal AI Infrastructure — Database Management Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
@@ -34,6 +34,12 @@ The Database Management module provides database lifecycle operations — schema
 ## Architecture Role
 
 **Service Layer** — Consumed by `agentic_memory/` (persistent storage), `serialization/` (object persistence), and `api/` (data backend).
+
+## MCP Tools
+
+This module does not expose MCP tools directly. Access its capabilities via:
+- Direct Python import: `from codomyrmex.database_management import ...`
+- CLI: `codomyrmex database_management <command>`
 
 ## Navigation
 

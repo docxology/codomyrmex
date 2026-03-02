@@ -14,7 +14,7 @@ from collections.abc import Callable
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
-from typing import Any, Dict, List, Optional
+from typing import Any, Optional
 
 
 class MetricType(Enum):
@@ -25,14 +25,12 @@ class MetricType(Enum):
     SUMMARY = "summary"
     TIMER = "timer"
 
-
 @dataclass
 class MetricSample:
     """A single metric sample."""
     value: float
     timestamp: datetime = field(default_factory=datetime.now)
     labels: dict[str, str] = field(default_factory=dict)
-
 
 @dataclass
 class MetricDescriptor:
@@ -42,7 +40,6 @@ class MetricDescriptor:
     description: str = ""
     labels: list[str] = field(default_factory=list)
     unit: str = ""
-
 
 class Metric(ABC):
     """Base class for metrics."""
@@ -63,7 +60,6 @@ class Metric(ABC):
     def get_value(self, labels: dict[str, str] | None = None) -> Any:
         """Get current value."""
         pass
-
 
 class Counter(Metric):
     """Counter metric (only increases)."""
@@ -276,7 +272,6 @@ class Summary(Metric):
                 "quantiles": quantile_values,
             }
 
-
 class Timer:
     """Context manager for timing operations."""
 
@@ -293,7 +288,6 @@ class Timer:
         """exit ."""
         duration = time.time() - self._start
         self.histogram.observe(duration)
-
 
 class MetricsRegistry:
     """
@@ -382,11 +376,11 @@ try:
 except ImportError:
     StatsDClient = None
 
-
 try:
     from codomyrmex.exceptions import CodomyrmexError
 except ImportError:
-    class CodomyrmexError(Exception): pass
+    class CodomyrmexError(Exception):
+        pass
 
 class MetricsError(CodomyrmexError):
     """Base class for metrics errors."""
@@ -487,7 +481,6 @@ class Metrics(MetricsRegistry):
 def get_metrics(backend="in_memory") -> Metrics:
     """Helper to get a metrics instance."""
     return Metrics(backend=backend)
-
 
 __all__ = [
     # Enums

@@ -7,6 +7,7 @@ import sys
 from typing import Any
 
 import psutil
+
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 logger = get_logger(__name__)

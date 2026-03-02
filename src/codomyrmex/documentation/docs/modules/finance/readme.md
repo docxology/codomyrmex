@@ -1,10 +1,20 @@
 # Finance Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
 Complete financial management system for autonomous agents and user businesses. Provides double-entry ledger, tax compliance, payroll processing, and financial forecasting.
+
+## PAI Integration
+
+| Algorithm Phase | Role | Tools Used |
+|----------------|------|-----------|
+| **OBSERVE** | Query financial data from ledger and accounts | Direct Python import |
+| **THINK** | Analyze financial metrics and identify trends | Direct Python import |
+| **PLAN** | Generate financial projections and forecasts | Direct Python import |
+
+PAI agents access this module via direct Python import through the MCP bridge. The Architect agent uses Forecaster during PLAN to generate projections, while agents query the Ledger during OBSERVE for real-time financial state.
 
 ## Installation
 

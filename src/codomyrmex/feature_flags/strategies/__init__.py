@@ -10,11 +10,11 @@ from abc import ABC, abstractmethod
 from collections.abc import Callable
 from dataclasses import dataclass, field
 from datetime import datetime
-from typing import Any, Dict, List, Optional
+from typing import Any, Optional
+
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 logger = get_logger(__name__)
-
 
 @dataclass
 class EvaluationContext:
@@ -34,7 +34,6 @@ class EvaluationContext:
         key = f"{self.user_id or ''}-{self.session_id or ''}"
         return hashlib.md5(key.encode()).hexdigest()
 
-
 @dataclass
 class EvaluationResult:
     """Result of a feature flag evaluation."""
@@ -42,7 +41,6 @@ class EvaluationResult:
     variant: str | None = None
     reason: str = ""
     metadata: dict[str, Any] = field(default_factory=dict)
-
 
 class EvaluationStrategy(ABC):
     """Abstract base class for evaluation strategies."""
@@ -62,7 +60,6 @@ class EvaluationStrategy(ABC):
     def from_dict(cls, data: dict[str, Any]) -> 'EvaluationStrategy':
         """Deserialize a strategy from a dictionary."""
         pass
-
 
 class BooleanStrategy(EvaluationStrategy):
     """Simple on/off boolean strategy."""
@@ -84,7 +81,6 @@ class BooleanStrategy(EvaluationStrategy):
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> 'BooleanStrategy':
         return cls(enabled=data.get("enabled", False))
-
 
 class PercentageStrategy(EvaluationStrategy):
     """Percentage-based rollout strategy."""
@@ -123,7 +119,6 @@ class PercentageStrategy(EvaluationStrategy):
             percentage=data.get("percentage", 0.0),
             sticky=data.get("sticky", True)
         )
-
 
 class UserListStrategy(EvaluationStrategy):
     """Strategy based on user allowlist/blocklist."""
@@ -191,7 +186,6 @@ class UserListStrategy(EvaluationStrategy):
             blocked_users=data.get("blocked_users"),
             default=data.get("default", False)
         )
-
 
 class AttributeStrategy(EvaluationStrategy):
     """Strategy based on context attributes."""
@@ -274,7 +268,6 @@ class AttributeStrategy(EvaluationStrategy):
             enabled_value=data.get("enabled_value", True)
         )
 
-
 class EnvironmentStrategy(EvaluationStrategy):
     """Strategy based on environment."""
 
@@ -300,6 +293,68 @@ class EnvironmentStrategy(EvaluationStrategy):
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> 'EnvironmentStrategy':
         return cls(enabled_environments=data.get("enabled_environments"))
+
+class TimeWindowStrategy(EvaluationStrategy):
+    """Strategy that enables a flag only within a time window.
+
+    Evaluates to True when the current time falls between
+    ``start_time`` and ``end_time`` (inclusive).  This allows
+    scheduling feature rollouts for a specific date/time range without
+    manual intervention.
+
+    Attributes:
+        start_time: The earliest datetime the flag should be enabled.
+        end_time: The latest datetime the flag should be enabled.
+    """
+
+    def __init__(
+        self,
+        start_time: datetime,
+        end_time: datetime,
+    ):
+        if end_time <= start_time:
+            raise ValueError(
+                f"end_time ({end_time.isoformat()}) must be after "
+                f"start_time ({start_time.isoformat()})"
+            )
+        self.start_time = start_time
+        self.end_time = end_time
+
+    def evaluate(self, context: EvaluationContext) -> EvaluationResult:
+        """Return enabled=True when now is within [start_time, end_time].
+
+        Uses ``context.timestamp`` when available so callers can override
+        the evaluation moment for testing or replay scenarios.  Falls back
+        to ``datetime.now()`` only when the context has no timestamp.
+        """
+        now = context.timestamp if context.timestamp else datetime.now()
+        enabled = self.start_time <= now <= self.end_time
+
+        reason = "time_window_active" if enabled else "time_window_inactive"
+        return EvaluationResult(
+            enabled=enabled,
+            reason=reason,
+            metadata={
+                "start_time": self.start_time.isoformat(),
+                "end_time": self.end_time.isoformat(),
+                "evaluated_at": now.isoformat(),
+            },
+        )
+
+    def to_dict(self) -> dict[str, Any]:
+        """Return a dictionary representation of this strategy."""
+        return {
+            "type": "time_window",
+            "start_time": self.start_time.isoformat(),
+            "end_time": self.end_time.isoformat(),
+        }
+
+    @classmethod
+    def from_dict(cls, data: dict[str, Any]) -> 'TimeWindowStrategy':
+        return cls(
+            start_time=datetime.fromisoformat(data["start_time"]),
+            end_time=datetime.fromisoformat(data["end_time"]),
+        )
 
 
 class CompositeStrategy(EvaluationStrategy):
@@ -346,7 +401,6 @@ class CompositeStrategy(EvaluationStrategy):
         strategies = [create_strategy(s) for s in data.get("strategies", [])]
         return cls(strategies=strategies, operator=data.get("operator", "and"))
 
-
 def create_strategy(data: dict[str, Any]) -> EvaluationStrategy:
     """Factory function to create strategies from config."""
     strategy_types = {
@@ -355,6 +409,7 @@ def create_strategy(data: dict[str, Any]) -> EvaluationStrategy:
         "user_list": UserListStrategy,
         "attribute": AttributeStrategy,
         "environment": EnvironmentStrategy,
+        "time_window": TimeWindowStrategy,
         "composite": CompositeStrategy,
     }
 
@@ -366,7 +421,6 @@ def create_strategy(data: dict[str, Any]) -> EvaluationStrategy:
 
     return strategy_class.from_dict(data)
 
-
 __all__ = [
     "EvaluationContext",
     "EvaluationResult",
@@ -376,6 +430,7 @@ __all__ = [
     "UserListStrategy",
     "AttributeStrategy",
     "EnvironmentStrategy",
+    "TimeWindowStrategy",
     "CompositeStrategy",
     "create_strategy",
 ]

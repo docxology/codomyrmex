@@ -3,7 +3,6 @@ from collections.abc import Iterator
 from pathlib import Path
 from typing import Any
 
-
 from codomyrmex.agents.core import (
     AgentCapabilities,
     AgentRequest,
@@ -16,6 +15,7 @@ from codomyrmex.agents.core.exceptions import (
 )
 from codomyrmex.agents.generic import CLIAgentBase
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
+
 logger = get_logger(__name__)
 
 

@@ -170,7 +170,7 @@ class {class_name}:
             Processed data
         """
         logger.debug(f"Processing data: {{type(data).__name__}}")
-        raise NotImplementedError("scaffold.process() requires implementation by consuming module")
+        raise NotImplementedError("scaffold.process() requires implementation by consuming module")  # ABC: intentional
 
 
 # Convenience function

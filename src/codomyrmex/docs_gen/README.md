@@ -1,6 +1,6 @@
 # docs_gen -- Documentation Generation
 
-**Version**: v1.0.2 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
@@ -9,6 +9,16 @@ The `docs_gen` module is the codomyrmex documentation pipeline. It extracts stru
 Three components work together: `APIDocExtractor` parses Python source into structured `ModuleDoc`, `ClassDoc`, and `FunctionDoc` dataclasses. `SearchIndex` builds a tokenized inverted index with relevance scoring over the extracted documentation. `SiteGenerator` orchestrates extraction and indexing, then outputs a `SiteConfig` containing navigation trees and page definitions ready for rendering.
 
 This module does not expose MCP tools. It is used as a Python library within build scripts, CI/CD pipelines, and other codomyrmex modules that need programmatic access to documentation extraction and indexing.
+
+## PAI Integration
+
+| Algorithm Phase | Role | Tools Used |
+|----------------|------|-----------|
+| **BUILD** | Auto-generate API docs from Python source via AST extraction | Direct Python import |
+| **VERIFY** | Lint generated documentation for completeness and accuracy | Direct Python import |
+| **LEARN** | Store generated docs in searchable indices for future retrieval | Direct Python import |
+
+PAI agents access this module via direct Python import through the MCP bridge. The Engineer agent uses `APIDocExtractor` and `SiteGenerator` during BUILD to produce module documentation, and `SearchIndex` during LEARN to make docs searchable.
 
 ## Key Capabilities
 

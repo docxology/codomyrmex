@@ -357,7 +357,7 @@ class CaseVisualizer(BaseChartVisualizer):
             )
 
         # Add value labels
-        for i, (bar, sim) in enumerate(zip(bars, similarities)):
+        for i, (_bar, sim) in enumerate(zip(bars, similarities, strict=False)):
             ax.text(
                 sim + 0.01,
                 i,
@@ -504,14 +504,14 @@ class InferenceVisualizer(BaseChartVisualizer):
         for beliefs in belief_history:
             all_states.update(beliefs.keys())
 
-        all_states = sorted(list(all_states))
+        all_states = sorted(all_states)
         time_steps = np.arange(len(belief_history))
 
         # Get colors for each state
         colors = self.theme.get_color_sequence(len(all_states), "primary")
 
         # Plot each state
-        for state, color in zip(all_states, colors):
+        for state, color in zip(all_states, colors, strict=False):
             values = [beliefs.get(state, 0.0) for beliefs in belief_history]
             ax.plot(
                 time_steps,

@@ -102,12 +102,12 @@ def analyze_dependencies(root: Path) -> dict[str, dict]:
         deps = parse_requirements_file(req_file)
         print(f"  {req_file.name}: {len(deps)} dependencies")
 
-        for package_name, version_spec, source_file in deps:
+        for package_name, version_spec, _source_file in deps:
             dependencies[package_name]["versions"].add(version_spec)
             dependencies[package_name]["sources"].append((str(req_file), version_spec))
 
     # Identify conflicts (multiple version specs for same package)
-    for package_name, info in dependencies.items():
+    for _package_name, info in dependencies.items():
         if len(info["versions"]) > 1:
             info["conflicts"] = list(info["versions"])
 

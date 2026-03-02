@@ -15,17 +15,15 @@ from collections.abc import Callable
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional, TypeVar
+from typing import Any, Optional, TypeVar
 
 T = TypeVar('T')
-
 
 class CircuitState(Enum):
     """States of a circuit breaker."""
     CLOSED = "closed"      # Normal operation
     OPEN = "open"          # Failing fast
     HALF_OPEN = "half_open"  # Testing recovery
-
 
 @dataclass
 class CircuitStats:
@@ -76,7 +74,6 @@ class CircuitStats:
         self.last_success_time = None
         self.total_latency_ms = 0.0
 
-
 @dataclass
 class CircuitBreakerConfig:
     """Configuration for circuit breaker."""
@@ -88,7 +85,6 @@ class CircuitBreakerConfig:
     # Optional error rate threshold (0.0 to 1.0)
     error_rate_threshold: float | None = None
     error_rate_window: int = 100  # Calls to consider for error rate
-
 
 class CircuitBreaker:
     """
@@ -250,7 +246,6 @@ class CircuitBreaker:
         else:
             self.record_failure()
 
-
 from codomyrmex.exceptions import BulkheadFullError, CircuitOpenError
 
 
@@ -308,7 +303,6 @@ class RetryPolicy:
                 delay = self.get_delay(attempt - 1)
                 time.sleep(delay)
             yield attempt
-
 
 class Bulkhead:
     """
@@ -386,7 +380,6 @@ class Bulkhead:
         """Context manager exit."""
         self.release()
 
-
 def circuit_breaker(
     name: str = "default",
     failure_threshold: int = 5,
@@ -418,7 +411,6 @@ def circuit_breaker(
         return wrapper
 
     return decorator
-
 
 def retry(
     max_retries: int = 3,
@@ -460,7 +452,6 @@ def retry(
         return wrapper
 
     return decorator
-
 
 __all__ = [
     # Enums

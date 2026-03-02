@@ -8,7 +8,7 @@ import os
 import subprocess
 import time
 from concurrent.futures import ThreadPoolExecutor
-from datetime import datetime, timezone, UTC
+from datetime import UTC, datetime
 from typing import Any
 
 import yaml

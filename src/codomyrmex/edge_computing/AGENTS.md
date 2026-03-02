@@ -1,6 +1,6 @@
 # Agent Guidelines - Edge Computing
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Module Overview
 
@@ -75,6 +75,23 @@ func = EdgeFunction(id="fn-1", name="echo", handler=lambda x: x)
 runtime.deploy(func)
 assert runtime.invoke("fn-1", 42) == 42
 ```
+
+## PAI Agent Role Access Matrix
+
+| PAI Agent | Access Level | Primary Capabilities | Trust Level |
+|-----------|-------------|---------------------|-------------|
+| **Engineer** | Full | Direct Python import, class instantiation, full API access | TRUSTED |
+| **Architect** | Read + Design | API review, interface design, dependency analysis | OBSERVED |
+| **QATester** | Validation | Integration testing via pytest, output validation | OBSERVED |
+
+### Engineer Agent
+**Use Cases**: Deploy edge workloads, configure EdgeRuntime and EdgeCluster, manage node registration during BUILD/EXECUTE phases
+
+### Architect Agent
+**Use Cases**: Edge topology design, synchronization strategy review, cluster architecture analysis
+
+### QATester Agent
+**Use Cases**: Unit and integration test execution, edge function invocation validation, sync state verification
 
 ## Navigation
 

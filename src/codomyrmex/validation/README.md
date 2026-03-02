@@ -1,10 +1,19 @@
 # Validation Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
 Validation utilities for system integrity and integration checks. The top-level package exports a PAI integration validator and shared result types used across 74+ codomyrmex modules. Additional validation capabilities (schema validation, config validation, validation summaries) are available via submodules and MCP tools.
+
+## PAI Integration
+
+| Algorithm Phase | Role | Tools Used |
+|----------------|------|-----------|
+| **BUILD** | Validate schemas and configs at system boundaries before use | `validate_schema`, `validate_config` |
+| **VERIFY** | Run full validation suite to confirm system correctness | `validate_schema`, `validate_config`, `validation_summary` |
+
+PAI's validation module is a cornerstone of the VERIFY phase. QATester agents call `validate_schema` and `validate_config` to confirm correctness; `validation_summary` aggregates results for reporting. Engineer agents use validation at BUILD-phase boundaries.
 
 ## Installation
 

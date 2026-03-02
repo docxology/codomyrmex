@@ -1,6 +1,6 @@
 # Agent Guidelines - Exceptions
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Module Overview
 
@@ -44,6 +44,23 @@ except CodomyrmexError as e:
 
 - **CEREBRUM**: Use `codomyrmex.exceptions.cerebrum` for all cognitive/inference errors.
 - **Circuit Breakers**: Use `CircuitOpenError` (inherits from `Exception`, not `CodomyrmexError`, as it's a control flow signal).
+
+## PAI Agent Role Access Matrix
+
+| PAI Agent | Access Level | Primary Capabilities | Trust Level |
+|-----------|-------------|---------------------|-------------|
+| **Engineer** | Full | Direct Python import, class instantiation, full API access | TRUSTED |
+| **Architect** | Read + Design | API review, interface design, dependency analysis | OBSERVED |
+| **QATester** | Validation | Integration testing via pytest, output validation | OBSERVED |
+
+### Engineer Agent
+**Use Cases**: Use typed exception classes for explicit error handling, raise CodomyrmexError subclasses during BUILD/EXECUTE phases
+
+### Architect Agent
+**Use Cases**: Design error hierarchy, review exception granularity, ensure context propagation patterns
+
+### QATester Agent
+**Use Cases**: Unit and integration test execution, exception context validation, error code coverage verification
 
 ## Navigation
 

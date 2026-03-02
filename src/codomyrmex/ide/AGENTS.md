@@ -1,6 +1,6 @@
 # Agent Guidelines - IDE
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Module Overview
 
@@ -56,6 +56,23 @@ assert client.status == IDEStatus.CONNECTED
 result = client.execute_command_safe("test.command")
 assert "success" in dir(result)
 ```
+
+## PAI Agent Role Access Matrix
+
+| PAI Agent | Access Level | Primary Capabilities | Trust Level |
+|-----------|-------------|---------------------|-------------|
+| **Engineer** | Full | Direct Python import, class instantiation, full API access | TRUSTED |
+| **Architect** | Read + Design | API review, interface design, dependency analysis | OBSERVED |
+| **QATester** | Validation | Integration testing via pytest, output validation | OBSERVED |
+
+### Engineer Agent
+**Use Cases**: Integrates IDE features including Cursor and Antigravity clients, executes editor commands, manages batch operations, and monitors connection reliability.
+
+### Architect Agent
+**Use Cases**: Reviews IDE plugin architecture, evaluates client abstraction layers, and assesses command execution patterns across editor integrations.
+
+### QATester Agent
+**Use Cases**: Validates IDE integration behavior including connection lifecycle, command execution success rates, batch operation ordering, and error recovery.
 
 ## Navigation
 

@@ -1,6 +1,6 @@
 # Agent Guidelines - Auth
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Module Overview
 
@@ -60,6 +60,23 @@ key = keys.generate()
 assert keys.validate(key)
 assert not keys.validate("invalid")
 ```
+
+## PAI Agent Role Access Matrix
+
+| PAI Agent | Access Level | Primary Capabilities | Trust Level |
+|-----------|-------------|---------------------|-------------|
+| **Engineer** | Full | Authentication providers, token management, credential handling | TRUSTED |
+| **Architect** | Read + Design | Auth strategy review, security model design, token lifecycle analysis | OBSERVED |
+| **QATester** | Validation | Auth flow validation, token expiry testing, credential security verification | OBSERVED |
+
+### Engineer Agent
+**Use Cases**: Configuring authentication during BUILD, managing credentials during EXECUTE.
+
+### Architect Agent
+**Use Cases**: Reviewing authentication strategies, designing security models, planning OAuth/JWT flows.
+
+### QATester Agent
+**Use Cases**: Validating authentication flows during VERIFY, testing token handling and expiry.
 
 ## Navigation
 

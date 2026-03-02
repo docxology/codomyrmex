@@ -83,8 +83,10 @@ class EventLogger:
             res = list(self.entries)
             if event_type:
                 res = [e for e in res if (e.event.event_type.value if hasattr(e.event.event_type, 'value') else str(e.event.event_type)) == event_type]
-            if start_time: res = [e for e in res if e.timestamp >= start_time]
-            if end_time: res = [e for e in res if e.timestamp <= end_time]
+            if start_time:
+                res = [e for e in res if e.timestamp >= start_time]
+            if end_time:
+                res = [e for e in res if e.timestamp <= end_time]
             return res
 
     def get_events_by_type(self, event_type: EventType | str) -> list[EventLogEntry]:
@@ -99,7 +101,8 @@ class EventLogger:
         return self.get_events(start_time=start, end_time=end)
 
     def get_recent_events(self, limit: int = 50) -> list[EventLogEntry]:
-        with self.lock: return list(self.entries)[-limit:]
+        with self.lock:
+            return list(self.entries)[-limit:]
 
     def clear(self) -> None:
         """clear ."""
@@ -125,15 +128,18 @@ class EventLogger:
         with self.lock:
             data = [e.to_dict() for e in self.entries]
             if format == 'json':
-                with open(path, 'w') as f: json.dump(data, f)
+                with open(path, 'w') as f:
+                    json.dump(data, f)
             else:
-                with open(path, 'w') as f: f.write("id,type\n" + "\n".join([f"{e['event_id']},{e['event_type']}" for e in data]))
+                with open(path, 'w') as f:
+                    f.write("id,type\n" + "\n".join([f"{e['event_id']},{e['event_type']}" for e in data]))
 
 
 _logger = None
 def get_event_logger():
     global _logger
-    if _logger is None: _logger = EventLogger()
+    if _logger is None:
+        _logger = EventLogger()
     return _logger
 
 def get_event_stats(): return get_event_logger().get_event_statistics()

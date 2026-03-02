@@ -517,7 +517,7 @@ class GitVisualizer:
 
         if commit_words:
             top_words = sorted(commit_words.items(), key=lambda x: x[1], reverse=True)[:10]
-            words, counts = zip(*top_words)
+            words, counts = zip(*top_words, strict=False)
             ax.barh(words, counts, color=self.colors["develop"])
             ax.set_title("Common Commit Words")
             ax.set_xlabel("Frequency")

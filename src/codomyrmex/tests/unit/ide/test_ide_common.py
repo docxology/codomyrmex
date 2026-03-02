@@ -6,7 +6,6 @@ event handler system, command history, and helper methods.
 """
 
 import abc
-from pathlib import Path
 
 import pytest
 

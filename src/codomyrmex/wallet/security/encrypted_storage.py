@@ -207,7 +207,7 @@ class EncryptedStore:
     def _xor_encrypt(data: bytes, key: bytes) -> bytes:
         """XOR-based encryption (symmetric — same for encrypt/decrypt)."""
         key_extended = key * (len(data) // len(key) + 1)
-        return bytes(a ^ b for a, b in zip(data, key_extended))
+        return bytes(a ^ b for a, b in zip(data, key_extended, strict=False))
 
 
 __all__ = [

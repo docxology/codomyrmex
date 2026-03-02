@@ -1,6 +1,6 @@
 # Personal AI Infrastructure -- Prompt Engineering Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
@@ -52,6 +52,12 @@ from codomyrmex.prompt_engineering import (
 ## Architecture Role
 
 **Service Layer** -- Prompt Engineering provides tools that PAI agents use to author, optimize, and evaluate prompts systematically. It integrates with the `model_evaluation` module for output scoring and the `llm` module for model interaction patterns.
+
+## MCP Tools
+
+This module does not expose MCP tools directly. Access its capabilities via:
+- Direct Python import: `from codomyrmex.prompt_engineering import ...`
+- CLI: `codomyrmex prompt_engineering <command>`
 
 ## Navigation
 

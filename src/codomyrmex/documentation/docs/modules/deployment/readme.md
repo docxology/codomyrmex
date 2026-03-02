@@ -1,10 +1,19 @@
 # Deployment Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
 The deployment module provides deployment strategy implementations and orchestration for service rollouts. It supports rolling, blue-green, and canary deployment patterns with configurable health checks, batch sizing, traffic switching, and staged percentage-based rollouts. Includes a high-level deployment manager for simplified orchestration and a GitOps synchronizer for Git-based configuration management.
+
+## PAI Integration
+
+| Algorithm Phase | Role | Tools Used |
+|----------------|------|-----------|
+| **EXECUTE** | Deploy built artifacts to target environments | Direct Python import |
+| **VERIFY** | Confirm deployment health and rollback availability | Direct Python import |
+
+PAI's EXECUTE phase uses this module to push deployments to target environments. Engineer agents configure deployment strategies; QATester validates deployment health during VERIFY. Rollback procedures are tested as part of the VERIFY phase checklist.
 
 ## Installation
 

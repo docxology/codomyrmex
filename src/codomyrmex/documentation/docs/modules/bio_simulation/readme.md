@@ -1,10 +1,20 @@
 # Bio-Simulation Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
 High-fidelity biological simulation engine. Provides digital twins of ant colonies for emergent behavior study, individual agent simulation, pheromone-based communication, and genomics pipeline integration.
+
+## PAI Integration
+
+| Algorithm Phase | Role | Tools Used |
+|----------------|------|-----------|
+| **THINK** | Run biological models to explore emergent behavior | Direct Python import |
+| **BUILD** | Configure colony simulations and genomics parameters | Direct Python import |
+| **VERIFY** | Validate simulation outputs against expected distributions | Direct Python import |
+
+PAI agents access this module via direct Python import through the MCP bridge. The Engineer agent uses it during BUILD phase to configure simulation parameters, and during THINK phase to run colony models and analyze emergent patterns.
 
 ## Installation
 

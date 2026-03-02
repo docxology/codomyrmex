@@ -1,6 +1,6 @@
 # Formal Verification Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
@@ -14,6 +14,17 @@ This module was inspired by [Spirotot's proposal in PAI Discussion #707](https:/
 - **Token efficiency**: Constraint solver identifies conflicts before wasting tokens on impossible criteria sets
 - **Speed**: Z3 solves most practical ISC constraint sets in milliseconds
 - **Flexibility preserved**: Solver is advisory — returns results but never blocks AI execution
+
+## PAI Integration
+
+| Algorithm Phase | Role | Tools Used |
+|----------------|------|-----------|
+| **THINK** | Model complex constraints and relationships | `clear_model`, `add_item`, `get_model` |
+| **PLAN** | Define and validate system invariants | `add_item`, `solve_model` |
+| **VERIFY** | Formally verify correctness of designs | `solve_model`, `get_model` |
+| **EXECUTE** | Constraint-driven task execution | `replace_item`, `delete_item` |
+
+PAI agents use formal_verification to define and verify system constraints using Z3. The Architect agent models system invariants during PLAN; the QATester calls `solve_model` to verify formal correctness during VERIFY.
 
 ## Installation
 

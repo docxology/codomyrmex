@@ -11,7 +11,7 @@ from collections.abc import Callable
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional
+from typing import Any, Optional
 
 
 class DeploymentState(Enum):
@@ -23,7 +23,6 @@ class DeploymentState(Enum):
     ROLLED_BACK = "rolled_back"
     PAUSED = "paused"
 
-
 @dataclass
 class DeploymentTarget:
     """A target for deployment (server, pod, etc.)."""
@@ -33,7 +32,6 @@ class DeploymentTarget:
     healthy: bool = True
     version: str | None = None
     metadata: dict[str, Any] = field(default_factory=dict)
-
 
 @dataclass
 class DeploymentResult:
@@ -57,7 +55,6 @@ class DeploymentResult:
             "errors": self.errors,
         }
 
-
 class DeploymentStrategy(ABC):
     """Abstract base class for deployment strategies."""
 
@@ -80,7 +77,6 @@ class DeploymentStrategy(ABC):
     ) -> DeploymentResult:
         """Rollback to a previous version."""
         pass
-
 
 class RollingDeployment(DeploymentStrategy):
     """Rolling deployment - update targets one at a time."""
@@ -158,7 +154,6 @@ class RollingDeployment(DeploymentStrategy):
     ) -> DeploymentResult:
         """rollback ."""
         return self.deploy(targets, previous_version, deploy_fn)
-
 
 class BlueGreenDeployment(DeploymentStrategy):
     """Blue-green deployment - switch all traffic at once."""
@@ -247,7 +242,6 @@ class BlueGreenDeployment(DeploymentStrategy):
             duration_ms=0,
             state=DeploymentState.ROLLED_BACK,
         )
-
 
 class CanaryDeployment(DeploymentStrategy):
     """Canary deployment - gradual rollout with traffic percentage."""
@@ -347,7 +341,6 @@ class CanaryDeployment(DeploymentStrategy):
         rolling = RollingDeployment(batch_size=5)
         return rolling.deploy(targets, previous_version, deploy_fn)
 
-
 def create_strategy(strategy_type: str, **kwargs) -> DeploymentStrategy:
     """Factory function for deployment strategies."""
     strategies = {
@@ -361,7 +354,6 @@ def create_strategy(strategy_type: str, **kwargs) -> DeploymentStrategy:
         raise ValueError(f"Unknown strategy: {strategy_type}")
 
     return strategy_class(**kwargs)
-
 
 __all__ = [
     "DeploymentState",

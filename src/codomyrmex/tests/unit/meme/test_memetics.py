@@ -488,7 +488,7 @@ class TestMutationOperators:
         """batch_mutate with rate 0 returns identical population."""
         pop = [Meme(content=f"m{i}") for i in range(5)]
         result = batch_mutate(pop, mutation_rate=0.0)
-        for orig, res in zip(pop, result):
+        for orig, res in zip(pop, result, strict=False):
             assert orig.id == res.id
 
     def test_batch_mutate_rate_one(self) -> None:

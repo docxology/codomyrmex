@@ -7,7 +7,6 @@ MCPClientConfig new fields.
 Zero-mock: real objects, real state.
 """
 
-import asyncio
 
 import pytest
 

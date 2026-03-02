@@ -1,10 +1,19 @@
 # Exceptions Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
 The `exceptions` package provides a comprehensive, hierarchical error handling system for the Codomyrmex ecosystem. It defines a base `CodomyrmexError` class and specialized exceptions for all major domains (AI, I/O, Git, Validation, CEREBRUM, etc.), ensuring consistent error reporting and handling across the codebase.
+
+## PAI Integration
+
+| Algorithm Phase | Role | Tools Used |
+|----------------|------|-----------|
+| **ALL PHASES** | Raise and catch structured errors throughout the pipeline | Direct Python import |
+| **VERIFY** | Validate error handling behavior and exception chains | Direct Python import |
+
+PAI agents access this module via direct Python import through the MCP bridge. All agents import CodomyrmexError subclasses for structured error handling; the QATester validates exception chains during VERIFY phase.
 
 ## Key Components
 

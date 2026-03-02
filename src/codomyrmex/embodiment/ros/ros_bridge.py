@@ -16,6 +16,7 @@ from collections import deque
 from collections.abc import Callable
 from dataclasses import dataclass, field
 from typing import Any
+
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 logger = get_logger(__name__)

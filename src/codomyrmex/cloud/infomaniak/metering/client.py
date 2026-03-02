@@ -4,11 +4,12 @@ Infomaniak Metering Client.
 Provides usage and billing data retrieval.
 """
 
-from datetime import datetime, timezone, UTC
+from datetime import UTC, datetime
 from typing import Any
 
-from ..base import InfomaniakOpenStackBase
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
+
+from ..base import InfomaniakOpenStackBase
 
 logger = get_logger(__name__)
 

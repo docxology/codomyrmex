@@ -6,10 +6,9 @@ as MCP tools, enabling agents to schedule, read, and manage events.
 
 import json
 import os
-from datetime import datetime, timedelta, timezone, UTC
+from datetime import UTC, datetime, timedelta
 from pathlib import Path
 from typing import Any
-
 
 try:
     from codomyrmex.model_context_protocol.decorators import mcp_tool
@@ -22,6 +21,7 @@ except ImportError:
 
 from codomyrmex.calendar_integration.generics import CalendarEvent
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
+
 logger = get_logger(__name__)
 
 # Default attendee injected into every create/update call.

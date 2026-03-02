@@ -466,7 +466,7 @@ class TestGetPipelineStatus:
 
         assert len(result) == yml_count, (
             f"Expected {yml_count} pipelines but got {len(result)}. "
-            f"Missing: {set(f.stem for f in workflows_dir.glob('*.yml')) - set(p['name'] for p in result)}"
+            f"Missing: { {f.stem for f in workflows_dir.glob('*.yml')} - {p['name'] for p in result} }"
         )
 
 

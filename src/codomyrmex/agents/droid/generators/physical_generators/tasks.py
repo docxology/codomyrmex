@@ -7,7 +7,6 @@ import sys
 import time
 from pathlib import Path
 
-from codomyrmex.logging_monitoring.core.logger_config import get_logger
 from codomyrmex.agents.droid.generators.physical_generators.content_generators import (
     generate_physical_init_content,
     generate_physical_manager_content,
@@ -22,6 +21,7 @@ from codomyrmex.agents.droid.generators.physical_generators.doc_generators impor
     generate_physical_requirements,
     generate_physical_tests,
 )
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 logger = get_logger(__name__)
 

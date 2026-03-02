@@ -1,10 +1,20 @@
 # Agentic Memory Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
 The Agentic Memory module provides persistent, structured memory for AI agents — enabling learning across sessions, context continuity, and experience-based decision making. It supports in-memory and file-backed storage backends, key-value memory operations, search, and user profile tracking.
+
+## PAI Integration
+
+| Algorithm Phase | Role | Tools Used |
+|----------------|------|-----------|
+| **OBSERVE** | Retrieve past context, prior decisions, and learned patterns | `memory_search`, `memory_get` |
+| **THINK** | Load architecture context and prior reasoning traces | `memory_search` |
+| **LEARN** | Store new patterns, outcomes, and knowledge for future sessions | `memory_put` |
+
+PAI's LEARN phase is primarily implemented via this module. `memory_put` stores insights after each Algorithm cycle; `memory_search` retrieves relevant prior context during OBSERVE/THINK. The Engineer subagent has full CRUD access; all agents use `memory_search` for context retrieval.
 
 ## Installation
 
@@ -67,12 +77,22 @@ persistent = JSONFileStore(path="~/.codomyrmex/memory/")
 
 ```
 agentic_memory/
-├── __init__.py          # Public API (AgentMemory, Memory, stores, enums)
+├── __init__.py          # Public API (AgentMemory, Memory, stores, enums, RuleEngine)
 ├── memory.py            # Core memory classes (AgentMemory, ConversationMemory, etc.)
 ├── models.py            # Memory, MemoryType, MemoryImportance, RetrievalResult
 ├── stores.py            # InMemoryStore, JSONFileStore backends
 ├── user_profile.py      # UserProfile tracking
 ├── mcp_tools.py         # MCP tool definitions (memory_put, memory_get, memory_search)
+├── rules/               # Coding governance rules submodule (see rules/README.md)
+│   ├── engine.py        # RuleEngine — hierarchy-aware rule resolution
+│   ├── loader.py        # RuleLoader — parses .cursorrules files
+│   ├── registry.py      # RuleRegistry — indexed access by module/extension
+│   ├── models.py        # Rule, RuleSet, RulePriority, RuleSection
+│   ├── mcp_tools.py     # rules_list_modules, rules_get_module_rule, rules_get_applicable
+│   ├── general.cursorrules
+│   ├── modules/         # 60 module-specific rules
+│   ├── cross-module/    # 8 cross-cutting rules
+│   └── file-specific/   # 6 file-type rules
 └── tests/               # Unit tests (Zero-Mock policy)
 ```
 

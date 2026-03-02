@@ -6,6 +6,7 @@ from prometheus_client import (
     Histogram,
     start_http_server,
 )
+
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 logger = get_logger(__name__)

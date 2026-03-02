@@ -10,11 +10,10 @@ from abc import ABC, abstractmethod
 from collections import OrderedDict
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
-from typing import Any, Dict, Generic, List, Optional, TypeVar
+from typing import Any, Generic, Optional, TypeVar
 
 K = TypeVar('K')
 V = TypeVar('V')
-
 
 @dataclass
 class CacheEntry(Generic[V]):
@@ -36,7 +35,6 @@ class CacheEntry(Generic[V]):
         """Update access metadata."""
         self.accessed_at = datetime.now()
         self.access_count += 1
-
 
 class EvictionPolicy(ABC, Generic[K, V]):
     """Abstract base class for eviction policies."""
@@ -73,7 +71,6 @@ class EvictionPolicy(ABC, Generic[K, V]):
     def contains(self, key: K) -> bool:
         """Check if key exists in cache."""
         return self.get(key) is not None
-
 
 class LRUPolicy(EvictionPolicy[K, V]):
     """Least Recently Used eviction policy."""
@@ -126,7 +123,6 @@ class LRUPolicy(EvictionPolicy[K, V]):
     def size(self) -> int:
         """size ."""
         return len(self._cache)
-
 
 class LFUPolicy(EvictionPolicy[K, V]):
     """Least Frequently Used eviction policy."""
@@ -222,7 +218,6 @@ class LFUPolicy(EvictionPolicy[K, V]):
         """size ."""
         return len(self._cache)
 
-
 class TTLPolicy(EvictionPolicy[K, V]):
     """TTL-based eviction policy with lazy expiration."""
 
@@ -294,7 +289,6 @@ class TTLPolicy(EvictionPolicy[K, V]):
         self._cleanup_expired()
         return len(self._cache)
 
-
 class FIFOPolicy(EvictionPolicy[K, V]):
     """First In First Out eviction policy."""
 
@@ -343,7 +337,6 @@ class FIFOPolicy(EvictionPolicy[K, V]):
         """size ."""
         return len(self._cache)
 
-
 def create_policy(policy_name: str, max_size: int, **kwargs) -> EvictionPolicy:
     """Factory function to create eviction policies."""
     policies = {
@@ -358,7 +351,6 @@ def create_policy(policy_name: str, max_size: int, **kwargs) -> EvictionPolicy:
         raise ValueError(f"Unknown policy: {policy_name}")
 
     return policy_class(max_size, **kwargs)
-
 
 __all__ = [
     "CacheEntry",

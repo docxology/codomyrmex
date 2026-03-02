@@ -1,10 +1,19 @@
 # Meme Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
 The Meme module is Codomyrmex's advanced memetic analysis engine, providing multi-layered capabilities for studying information propagation, narrative dynamics, and cultural evolution. It bridges semiotics, network theory, and computational linguistics.
+
+## PAI Integration
+
+| Algorithm Phase | Role | Tools Used |
+|----------------|------|-----------|
+| **BUILD** | Generate meme content and visual compositions | Direct Python import |
+| **EXECUTE** | Render and export meme artifacts | Direct Python import |
+
+PAI Engineer agents access this module directly via Python import during BUILD phase for content generation. No MCP tools are exposed; invoke via `from codomyrmex.meme import ...`.
 
 ## Installation
 

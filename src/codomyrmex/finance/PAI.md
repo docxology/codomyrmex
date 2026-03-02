@@ -1,6 +1,6 @@
 # Personal AI Infrastructure -- Finance Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
@@ -63,6 +63,12 @@ line_chart = plot_transaction_volume(ledger)
 ## Architecture Role
 
 **Application Layer** -- Domain-specific financial management module. Depends on the `visualization` module for chart rendering. Has no upward dependencies from other modules.
+
+## MCP Tools
+
+This module does not expose MCP tools directly. Access its capabilities via:
+- Direct Python import: `from codomyrmex.finance import ...`
+- CLI: `codomyrmex finance <command>`
 
 ## Navigation
 

@@ -15,7 +15,7 @@ from collections.abc import Callable
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
-from typing import Any, Dict, List, Optional
+from typing import Any, Optional
 
 
 class AuthType(Enum):
@@ -27,7 +27,6 @@ class AuthType(Enum):
     HMAC = "hmac"
     JWT = "jwt"
 
-
 @dataclass
 class AuthCredentials:
     """Authentication credentials."""
@@ -35,7 +34,6 @@ class AuthCredentials:
     identifier: str  # username, client_id, api_key_id
     secret: str      # password, client_secret, api_key
     metadata: dict[str, Any] = field(default_factory=dict)
-
 
 @dataclass
 class AuthResult:
@@ -59,7 +57,6 @@ class AuthResult:
             "error": self.error,
         }
 
-
 class Authenticator(ABC):
     """Abstract base class for authenticators."""
 
@@ -69,7 +66,6 @@ class Authenticator(ABC):
     def authenticate(self, request: dict[str, Any]) -> AuthResult:
         """Authenticate a request."""
         pass
-
 
 class APIKeyAuthenticator(Authenticator):
     """API key based authentication."""
@@ -150,7 +146,6 @@ class APIKeyAuthenticator(Authenticator):
         random_part = secrets.token_hex(24)
         return f"{prefix}_{random_part}"
 
-
 class BearerTokenAuthenticator(Authenticator):
     """Bearer token authentication."""
 
@@ -223,7 +218,6 @@ class BearerTokenAuthenticator(Authenticator):
             expires_at=token_data["expires_at"],
         )
 
-
 class BasicAuthenticator(Authenticator):
     """HTTP Basic authentication."""
 
@@ -286,7 +280,6 @@ class BasicAuthenticator(Authenticator):
             identity=username,
             roles=user.get("roles", []),
         )
-
 
 class HMACAuthenticator(Authenticator):
     """HMAC signature authentication."""
@@ -389,7 +382,6 @@ class HMACAuthenticator(Authenticator):
             scopes=client.get("scopes", []),
         )
 
-
 def create_authenticator(
     auth_type: AuthType,
     **kwargs
@@ -407,7 +399,6 @@ def create_authenticator(
         raise ValueError(f"Unsupported auth type: {auth_type}")
 
     return auth_class(**kwargs)
-
 
 __all__ = [
     "AuthType",

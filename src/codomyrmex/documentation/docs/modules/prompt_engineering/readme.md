@@ -1,8 +1,18 @@
 # Prompt Engineering Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 Comprehensive prompt template management, version tracking, optimization strategies, and evaluation scoring. Provides tools for the full prompt lifecycle from authoring through optimization and quality assessment.
+
+## PAI Integration
+
+| Algorithm Phase | Role | Tools Used |
+|----------------|------|-----------|
+| **THINK** | Construct optimized prompts for LLM capability selection | Direct Python import |
+| **BUILD** | Generate structured prompts for Engineer agent code generation tasks | Direct Python import |
+| **EXECUTE** | Dynamic prompt construction for agent-to-agent communication | Direct Python import |
+
+PAI agents use prompt engineering during THINK to craft high-quality LLM queries. The Fabric pattern system (240+ patterns) is accessible here; Engineer agents use prompt templates during BUILD for code generation. Prompt optimization improves ISC achievement across all Algorithm phases.
 
 ## Installation
 

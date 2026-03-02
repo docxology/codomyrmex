@@ -109,9 +109,9 @@ class TestDocumentationAccuracy:
         from codomyrmex.coding.execution.language_support import validate_language
 
         # Test language validation as documented
-        assert validate_language("python") == True
-        assert validate_language("javascript") == True
-        assert validate_language("nonexistent") == False
+        assert validate_language("python") is True
+        assert validate_language("javascript") is True
+        assert validate_language("nonexistent") is False
 
         # Test code execution as documented
         result = execute_code(

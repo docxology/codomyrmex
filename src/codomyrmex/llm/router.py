@@ -195,7 +195,7 @@ class ModelRouter:
         tried_models = set()
         last_error = None
 
-        for attempt in range(self.max_retries):
+        for _attempt in range(self.max_retries):
             if model.name in tried_models:
                 # Select different model for fallback
                 model = self.select_model(required_capabilities)

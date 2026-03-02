@@ -464,7 +464,7 @@ class FPFOrchestrator:
             # Get some example cases
             cases_with_similarity = []
             case_data_rows = []
-            for pattern_id, cbr_data in list(analysis_results["case_based_reasoning"]["similarity_analysis"].items())[:10]:
+            for pattern_id, _cbr_data in list(analysis_results["case_based_reasoning"]["similarity_analysis"].items())[:10]:
                 pattern = self.spec.get_pattern_by_id(pattern_id)
                 if pattern:
                     query_case = Case(

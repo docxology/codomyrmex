@@ -1,6 +1,6 @@
 # Personal AI Infrastructure — Feature Flags Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
@@ -57,6 +57,12 @@ from codomyrmex.feature_flags import rollout
 ## Architecture Role
 
 **Extended Layer** — Cross-cutting concern consumed by `agents/`, `orchestrator/`, and `ci_cd_automation/` for conditional capability gating.
+
+## MCP Tools
+
+This module does not expose MCP tools directly. Access its capabilities via:
+- Direct Python import: `from codomyrmex.feature_flags import ...`
+- CLI: `codomyrmex feature_flags <command>`
 
 ## Navigation
 

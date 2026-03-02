@@ -1,6 +1,6 @@
 # Agent Guidelines - CLI
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Module Overview
 
@@ -66,6 +66,23 @@ assert "Hello, World!" in result.output
 result = runner.invoke(cli, ["--help"])
 assert "Usage:" in result.output
 ```
+
+## PAI Agent Role Access Matrix
+
+| PAI Agent | Access Level | Primary Capabilities | Trust Level |
+|-----------|-------------|---------------------|-------------|
+| **Engineer** | Full | Direct Python import, class instantiation, full API access | TRUSTED |
+| **Architect** | Read + Design | API review, command structure design, dependency analysis | OBSERVED |
+| **QATester** | Validation | Integration testing via pytest, CLI behavior validation | OBSERVED |
+
+### Engineer Agent
+**Use Cases**: Build CLI commands and subcommands, implement argument parsing, full implementation access during BUILD/EXECUTE phases
+
+### Architect Agent
+**Use Cases**: Review command hierarchy structure, validate CLI UX patterns, design subcommand grouping
+
+### QATester Agent
+**Use Cases**: Validate CLI exit codes, verify help text output, test argument parsing edge cases via CliRunner
 
 ## Navigation
 

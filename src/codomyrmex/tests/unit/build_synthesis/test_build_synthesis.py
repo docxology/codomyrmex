@@ -527,7 +527,7 @@ if __name__ == "__main__":
             ("text_file", "readme.txt", "This is a readme file.", False),
         ]
 
-        for case_name, filename, content, should_be_valid in test_cases:
+        for _case_name, filename, content, should_be_valid in test_cases:
             filepath = os.path.join(test_dir, filename)
 
             if isinstance(content, str):

@@ -1,10 +1,20 @@
 # Logistics Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
 Comprehensive logistics module that consolidates orchestration, task management, and scheduling capabilities for the Codomyrmex platform. Provides workflow and project orchestration engines, job queue management, cron and recurring schedule support with timezone awareness, plus submodules for task routing algorithms, schedule optimization, resource allocation, and progress tracking.
+
+## PAI Integration
+
+| Algorithm Phase | Role | Tools Used |
+|----------------|------|-----------|
+| **PLAN** | Workflow scheduling and task sequencing via DAG construction | Direct Python import |
+| **EXECUTE** | Run logistics pipelines through OrchestrationEngine | Direct Python import |
+| **OBSERVE** | Monitor pipeline state and track workflow progress | Direct Python import |
+
+PAI agents access this module via direct Python import through the MCP bridge. The Architect agent builds workflow DAGs during PLAN using WorkflowManager, while the Engineer agent drives execution through OrchestrationEngine during EXECUTE.
 
 ## Installation
 

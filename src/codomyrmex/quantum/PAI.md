@@ -1,6 +1,6 @@
 # Personal AI Infrastructure — Quantum Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
@@ -59,6 +59,12 @@ print(circuit_to_ascii(bell_state()))
 | `Gate` / `GateType` | Gate representation |
 | `circuit_to_ascii` | Visualize circuits |
 | `circuit_stats` | Analyze circuit complexity |
+
+## MCP Tools
+
+This module does not expose MCP tools directly. Access its capabilities via:
+- Direct Python import: `from codomyrmex.quantum import ...`
+- CLI: `codomyrmex quantum <command>`
 
 ## Navigation
 

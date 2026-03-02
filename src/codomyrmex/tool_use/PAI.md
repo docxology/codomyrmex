@@ -1,6 +1,6 @@
 # Personal AI Infrastructure — Tool Use Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
@@ -75,6 +75,12 @@ result: ChainResult = chain.execute()
 ## Architecture Role
 
 **Core Layer** — Foundational tool infrastructure consumed by `model_context_protocol/` (MCP tool registration), `agents/` (tool dispatch), and `orchestrator/` (workflow step execution).
+
+## MCP Tools
+
+This module does not expose MCP tools directly. Access its capabilities via:
+- Direct Python import: `from codomyrmex.tool_use import ...`
+- CLI: `codomyrmex tool_use <command>`
 
 ## Navigation
 

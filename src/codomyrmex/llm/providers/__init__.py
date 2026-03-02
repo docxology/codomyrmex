@@ -9,7 +9,7 @@ from abc import ABC, abstractmethod
 from collections.abc import AsyncIterator, Iterator
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any, Dict, List, Optional
+from typing import Any, Optional
 
 
 class ProviderType(Enum):
@@ -36,7 +36,6 @@ class ProviderType(Enum):
     COHERE = "cohere"
     MISTRAL = "mistral"
 
-
 @dataclass
 class Message:
     """A chat message."""
@@ -57,7 +56,6 @@ class Message:
             result["tool_call_id"] = self.tool_call_id
         return result
 
-
 @dataclass
 class CompletionResponse:
     """Response from a completion request."""
@@ -76,7 +74,6 @@ class CompletionResponse:
             return self.usage.get("total_tokens", 0)
         return 0
 
-
 @dataclass
 class ProviderConfig:
     """Configuration for an LLM provider."""
@@ -87,7 +84,6 @@ class ProviderConfig:
     max_retries: int = 3
     default_model: str | None = None
     extra_headers: dict[str, str] = field(default_factory=dict)
-
 
 class LLMProvider(ABC):
     """Abstract base class for LLM providers.
@@ -166,7 +162,6 @@ class LLMProvider(ABC):
     def _default_model(self) -> str:
         """Get the default model for this provider."""
         pass
-
 
 class OpenAIProvider(LLMProvider):
     """OpenAI API provider."""
@@ -297,7 +292,6 @@ class OpenAIProvider(LLMProvider):
     def _default_model(self) -> str:
         return "gpt-4o"
 
-
 class AnthropicProvider(LLMProvider):
     """Anthropic Claude API provider."""
 
@@ -384,8 +378,7 @@ class AnthropicProvider(LLMProvider):
             max_tokens=max_tokens or 4096,
             **kwargs
         ) as stream:
-            for text in stream.text_stream:
-                yield text
+            yield from stream.text_stream
 
     async def complete_async(
         self,
@@ -442,7 +435,6 @@ class AnthropicProvider(LLMProvider):
 
     def _default_model(self) -> str:
         return "claude-3-5-sonnet-20241022"
-
 
 class OpenRouterProvider(LLMProvider):
     """OpenRouter API provider for multi-model access.
@@ -624,7 +616,6 @@ class OpenRouterProvider(LLMProvider):
     def _default_model(self) -> str:
         return "openrouter/free"
 
-
 def get_provider(
     provider_type: ProviderType,
     config: ProviderConfig | None = None,
@@ -645,7 +636,6 @@ def get_provider(
         raise ValueError(f"Unsupported provider: {provider_type}")
 
     return provider_class(config)
-
 
 __all__ = [
     "ProviderType",

@@ -1,6 +1,6 @@
 # Agent Guidelines - Containerization
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Module Overview
 
@@ -78,6 +78,23 @@ manager = ContainerManager()
 containers = manager.list()
 assert isinstance(containers, list)
 ```
+
+## PAI Agent Role Access Matrix
+
+| PAI Agent | Access Level | Primary Capabilities | Trust Level |
+|-----------|-------------|---------------------|-------------|
+| **Engineer** | Full | `container_runtime_status`, `container_build`, `container_list`, `container_security_scan`; full container lifecycle | TRUSTED |
+| **Architect** | Read + Design | `container_list`, `container_runtime_status`; container architecture review, image design | OBSERVED |
+| **QATester** | Validation | `container_security_scan`, `container_runtime_status`; security validation, runtime health | OBSERVED |
+
+### Engineer Agent
+**Use Cases**: Building container images during BUILD, listing running containers, scanning images for vulnerabilities during VERIFY.
+
+### Architect Agent
+**Use Cases**: Reviewing container configurations, designing Docker/K8s architecture, analyzing image layering.
+
+### QATester Agent
+**Use Cases**: Security scanning container images during VERIFY, confirming runtime health.
 
 ## Navigation
 

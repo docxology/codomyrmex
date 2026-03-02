@@ -1,10 +1,20 @@
 # Data Visualization Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
 Comprehensive data visualization module providing chart generation, plotting engines, Mermaid diagram generation, and Git repository visualization. Supports multiple chart types (line, bar, scatter, histogram, pie, heatmap, box plot, area chart), configurable styles and color palettes, and an advanced plotting engine with dashboard creation. Includes specialized visualizers for Git branch topology and commit timelines.
+
+## PAI Integration
+
+| Algorithm Phase | Role | Tools Used |
+|----------------|------|-----------|
+| **OBSERVE** | Dashboard generation from live system metrics | `generate_chart` |
+| **VERIFY** | Visualize test results and coverage metrics | `generate_chart`, `export_dashboard` |
+| **LEARN** | Export dashboards summarizing learned patterns and outcomes | `export_dashboard` |
+
+PAI agents use `generate_chart` to visualize metrics from any Algorithm phase and `export_dashboard` to produce HTML reports. Engineer agents drive chart generation; dashboards are the primary output of LEARN phase summaries.
 
 ## Installation
 

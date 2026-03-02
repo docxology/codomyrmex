@@ -1,8 +1,18 @@
 # System Discovery Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 Module scanning, capability discovery, and system status reporting.
+
+## PAI Integration
+
+| Algorithm Phase | Role | Tools Used |
+|----------------|------|-----------|
+| **OBSERVE** | System-wide module discovery at the start of every Algorithm cycle | `health_check`, `list_modules` |
+| **VERIFY** | Confirm all modules are healthy and discoverable after changes | `health_check` |
+| **PLAN** | Dependency tree informs which modules are needed for a given task | `dependency_tree` |
+
+Every PAI Algorithm cycle begins with `list_modules` and `health_check` during OBSERVE. `dependency_tree` supports PLAN by mapping module interdependencies. This module is the foundation of PAI's system awareness.
 
 ## Installation
 

@@ -10,7 +10,7 @@ Provides genetic algorithm components:
 
 import random
 from collections.abc import Callable
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Optional
 
 # Shared schemas for cross-module interop
 try:
@@ -59,7 +59,6 @@ try:
 except ImportError:
     population = None
 
-
 class Genome:
     """
     A genome representing an individual's genetic material.
@@ -104,7 +103,6 @@ class Genome:
         new = Genome(genes=self.genes.copy())
         new.fitness = self.fitness
         return new
-
 
 class Population:
     """
@@ -192,7 +190,6 @@ class Population:
         self.individuals = new_population[:len(self.individuals)]
         self.generation += 1
 
-
 def crossover(parent1: Genome, parent2: Genome) -> tuple[Genome, Genome]:
     """
     Perform single-point crossover between two genomes.
@@ -214,7 +211,6 @@ def crossover(parent1: Genome, parent2: Genome) -> tuple[Genome, Genome]:
     child2 = Genome(genes=list(parent2.genes[:point]) + list(parent1.genes[point:]))
 
     return child1, child2
-
 
 def mutate(genome: Genome, rate: float = 0.05) -> Genome:
     """
@@ -239,7 +235,6 @@ def mutate(genome: Genome, rate: float = 0.05) -> Genome:
 
     return Genome(genes=new_genes)
 
-
 def tournament_selection(
     population: list[Genome],
     tournament_size: int = 3,
@@ -257,7 +252,6 @@ def tournament_selection(
     tournament = random.sample(population, min(tournament_size, len(population)))
     winner = max(tournament, key=lambda g: g.fitness or float('-inf'))
     return winner.copy()
-
 
 def cli_commands():
     """Return CLI commands for the evolutionary_ai module."""
@@ -282,7 +276,6 @@ def cli_commands():
             ),
         },
     }
-
 
 __all__ = [
     # CLI integration

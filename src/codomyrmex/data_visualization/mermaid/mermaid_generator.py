@@ -8,10 +8,10 @@ particularly focused on Git operations and workflow visualization.
 - Recommend calling environment_setup.env_checker.ensure_dependencies_installed() at app startup.
 """
 
+import logging
 import os
 from pathlib import Path
 from typing import Any
-import logging
 
 try:
     from codomyrmex.logging_monitoring import get_logger

@@ -2,8 +2,9 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from uuid import UUID, uuid4
 
-from .account import Account, AccountType
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
+
+from .account import Account, AccountType
 
 logger = get_logger(__name__)
 

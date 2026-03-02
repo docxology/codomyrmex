@@ -16,12 +16,15 @@ def map_power_dynamics(entities: list[str], flows: list[tuple[str, str, float]])
 
     # Simple net flow calculation
     for src, dst, amount in flows:
-        if src in scores: scores[src] -= amount * 0.5  # Spending
-        if dst in scores: scores[dst] += amount      # Accumulating
+        if src in scores:
+            scores[src] -= amount * 0.5  # Spending
+        if dst in scores:
+            scores[dst] += amount      # Accumulating
 
     # Normalize
     max_score = max(scores.values()) if scores else 1.0
-    if max_score == 0: max_score = 1.0
+    if max_score == 0:
+        max_score = 1.0
 
     normalized = {k: v / max_score for k, v in scores.items()}
 

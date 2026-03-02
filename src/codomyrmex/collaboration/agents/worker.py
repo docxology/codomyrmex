@@ -9,11 +9,12 @@ import asyncio
 from collections.abc import Callable
 from typing import Any
 
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
+
 from ..exceptions import CapabilityMismatchError
 from ..models import Task, TaskResult
 from ..protocols import AgentCapability
 from .base import CollaborativeAgent
-from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 logger = get_logger(__name__)
 

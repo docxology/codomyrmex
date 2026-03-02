@@ -1,6 +1,6 @@
 # Agent Guidelines - Cache
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Module Overview
 
@@ -70,6 +70,23 @@ def add(a, b):
     return a + b
 assert add(1, 2) == 3
 ```
+
+## PAI Agent Role Access Matrix
+
+| PAI Agent | Access Level | Primary Capabilities | Trust Level |
+|-----------|-------------|---------------------|-------------|
+| **Engineer** | Full | Cache read/write, TTL configuration, cache invalidation, warm-up strategies | TRUSTED |
+| **Architect** | Read + Design | Caching strategy design, TTL policy review, cache topology planning | OBSERVED |
+| **QATester** | Validation | Cache hit/miss verification, TTL behavior testing, invalidation correctness | OBSERVED |
+
+### Engineer Agent
+**Use Cases**: Configuring caches during BUILD, implementing cache warm-up during EXECUTE.
+
+### Architect Agent
+**Use Cases**: Designing caching strategies, reviewing TTL policies, planning cache hierarchies.
+
+### QATester Agent
+**Use Cases**: Testing cache hit/miss behavior during VERIFY, confirming invalidation logic.
 
 ## Navigation
 

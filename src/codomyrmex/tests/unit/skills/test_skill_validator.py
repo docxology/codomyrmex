@@ -123,5 +123,5 @@ def test_validate_directory(validator, valid_skill_data):
 
         results = validator.validate_directory(Path(tmpdir))
         assert len(results) == 2
-        for path, (is_valid, errors) in results.items():
+        for _path, (is_valid, _errors) in results.items():
             assert is_valid is True

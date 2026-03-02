@@ -1,6 +1,6 @@
 # Personal AI Infrastructure — Terminal Interface Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
@@ -87,6 +87,12 @@ Note: `InteractiveShell`, `CommandRunner`, and `TerminalFormatter` are optional 
 ## Architecture Role
 
 **Foundation Layer** — One of the 4 foundation modules. Provides the terminal interaction layer that the CLI module and other user-facing components build upon.
+
+## MCP Tools
+
+This module does not expose MCP tools directly. Access its capabilities via:
+- Direct Python import: `from codomyrmex.terminal_interface import ...`
+- CLI: `codomyrmex terminal_interface <command>`
 
 ## Navigation
 

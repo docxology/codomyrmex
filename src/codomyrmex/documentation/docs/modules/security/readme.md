@@ -1,10 +1,19 @@
 # Security Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
 Comprehensive security module organized into nine specialized submodules: digital, physical, cognitive, theory, ai_safety, governance, scanning, secrets, audit, and compliance. The digital submodule handles vulnerability scanning, secrets detection, encryption, SSL certificate validation, compliance checking, and security monitoring. The physical submodule manages access control, asset inventory, surveillance, and perimeter security. The cognitive submodule detects social engineering, phishing, and anomalous user behavior. The theory submodule provides threat modeling, risk assessment, and security pattern frameworks. The ai_safety submodule provides jailbreak detection, prompt injection defense, and adversarial containment. The governance submodule provides contract management, policy enforcement, and dispute resolution. The scanning, secrets, audit, and compliance submodules provide core standalone capabilities.
+
+## PAI Integration
+
+The security module's MCP tools are invoked during the **VERIFY phase** of the PAI Algorithm. The `QATester` subagent runs `scan_vulnerabilities` and `scan_secrets` as gating checks before the LEARN phase completes. The `Engineer` subagent uses `audit_code_security` during BUILD to validate new code as it's written. See [AGENTS.md](AGENTS.md) for the full agent role access matrix.
+
+| Algorithm Phase | Security Role |
+|----------------|--------------|
+| BUILD | `Engineer` → `audit_code_security` on new code |
+| VERIFY | `QATester` → `scan_vulnerabilities` + `scan_secrets` as pass/fail gates |
 
 ## Installation
 

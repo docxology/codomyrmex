@@ -1,6 +1,6 @@
 # Personal AI Infrastructure — Privacy Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
@@ -59,6 +59,12 @@ commands = cli_commands()
 ## Architecture Role
 
 **Specialized Layer** — Part of the Secure Cognitive Agent suite (`identity`, `wallet`, `defense`, `market`, `privacy`). Consumed by `agents/`, `logging_monitoring/`, and `agentic_memory/`.
+
+## MCP Tools
+
+This module does not expose MCP tools directly. Access its capabilities via:
+- Direct Python import: `from codomyrmex.privacy import ...`
+- CLI: `codomyrmex privacy <command>`
 
 ## Navigation
 

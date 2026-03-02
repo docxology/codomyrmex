@@ -6,7 +6,7 @@ Provides self-custody wallet management securely extending key management.
 import hashlib
 import hmac
 import uuid
-from datetime import datetime, timezone, UTC
+from datetime import UTC, datetime
 from pathlib import Path
 
 from codomyrmex.encryption.keys.key_manager import KeyManager

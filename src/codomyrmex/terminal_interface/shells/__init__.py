@@ -15,7 +15,7 @@ from abc import ABC, abstractmethod
 from collections.abc import Callable, Iterator
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any, Dict, List, Optional
+from typing import Any, Optional
 
 
 class ShellType(Enum):
@@ -26,7 +26,6 @@ class ShellType(Enum):
     FISH = "fish"
     POWERSHELL = "powershell"
     CMD = "cmd"
-
 
 @dataclass
 class ShellConfig:
@@ -58,7 +57,6 @@ class ShellConfig:
             executable=shell_path,
         )
 
-
 @dataclass
 class CommandResult:
     """Result of a command execution."""
@@ -83,7 +81,6 @@ class CommandResult:
             "duration_ms": self.duration_ms,
             "success": self.success,
         }
-
 
 class Shell:
     """A shell for executing commands."""
@@ -182,7 +179,6 @@ class Shell:
         """Clear command history."""
         self._history.clear()
 
-
 class InteractiveShell:
     """An interactive shell session."""
 
@@ -256,7 +252,6 @@ class InteractiveShell:
         """a command and return output.""" # Clear any pending output while not self._output_queue.empty(): try: self._output_queue.get_nowait() except queue.Empty: break self.send(command) return self.read_output(timeout) def stop(self) -> None: """Stop the shell.""" self._running = False if self._process: try: self._process.terminate() self._process.wait(timeout=2) except subprocess.TimeoutExpired: self._process.kill() self._process = None if self._reader_thread: self._reader_thread.join(timeout=1) self._reader_thread = None @property def is_running(self) -> bool: """Execute Is Running ."""
         return self._running and self._process is not None
 
-
 class CommandBuilder:
     """Builder for constructing shell commands."""
 
@@ -322,7 +317,6 @@ class CommandBuilder:
 
         return " ".join(parts)
 
-
 def create_shell(shell_type: ShellType | None = None) -> Shell:
     """Create a shell instance."""
     if shell_type:
@@ -340,7 +334,6 @@ def create_shell(shell_type: ShellType | None = None) -> Shell:
         config = ShellConfig.detect()
 
     return Shell(config)
-
 
 __all__ = [
     "ShellType",

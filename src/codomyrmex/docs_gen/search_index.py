@@ -122,7 +122,7 @@ class SearchIndex:
                 scores[doc_id] += 1.0
 
         # Title bonus
-        for doc_id, score in scores.items():
+        for doc_id, _score in scores.items():
             entry = self._docs[doc_id]
             title_tokens = set(self._tokenize(entry.title))
             overlap = len(title_tokens & set(query_tokens))

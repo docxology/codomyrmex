@@ -1,6 +1,6 @@
 # Personal AI Infrastructure -- Dependency Injection Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
@@ -76,6 +76,12 @@ All container operations are protected by `threading.RLock`. Circular dependency
 ## Architecture Role
 
 **Foundation Layer** -- This module has no dependencies on other codomyrmex modules. It provides core IoC infrastructure that higher-layer modules can consume for decoupled service management.
+
+## MCP Tools
+
+This module does not expose MCP tools directly. Access its capabilities via:
+- Direct Python import: `from codomyrmex.dependency_injection import ...`
+- CLI: `codomyrmex dependency_injection <command>`
 
 ## Navigation
 

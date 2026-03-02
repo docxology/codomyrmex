@@ -1,6 +1,6 @@
 # Personal AI Infrastructure — Encryption Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
@@ -35,6 +35,12 @@ The Encryption module provides symmetric and asymmetric encryption, key generati
 ## Architecture Role
 
 **Core Layer** — Foundational cryptography consumed by `wallet/`, `auth/`, `security/`, and `privacy/` modules.
+
+## MCP Tools
+
+This module does not expose MCP tools directly. Access its capabilities via:
+- Direct Python import: `from codomyrmex.encryption import ...`
+- CLI: `codomyrmex encryption <command>`
 
 ## Navigation
 

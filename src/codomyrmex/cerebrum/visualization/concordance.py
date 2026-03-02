@@ -240,7 +240,7 @@ class ConcordanceVisualizer:
                         transform=ax.transAxes,
                         fontsize=self.theme.font.annotation_size,
                         fontweight="bold",
-                        bbox=dict(boxstyle="round", facecolor="white", alpha=0.8),
+                        bbox={"boxstyle": "round", "facecolor": "white", "alpha": 0.8},
                     )
 
                     chart_viz.format_axes_labels(ax, xlabel=metric1, ylabel=metric2)

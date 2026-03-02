@@ -166,9 +166,12 @@ def test_mutation_clamps_to_bounds():
 @pytest.mark.unit
 def test_tournament_selection_picks_fittest():
     """Test tournament selection returns the fittest when size equals population."""
-    g1 = Genome([1]); g1.fitness = 10
-    g2 = Genome([2]); g2.fitness = 20
-    g3 = Genome([3]); g3.fitness = 5
+    g1 = Genome([1])
+    g1.fitness = 10
+    g2 = Genome([2])
+    g2.fitness = 20
+    g3 = Genome([3])
+    g3.fitness = 5
     winner = tournament_selection([g1, g2, g3], tournament_size=3)
     assert winner.fitness == 20
 
@@ -176,7 +179,8 @@ def test_tournament_selection_picks_fittest():
 @pytest.mark.unit
 def test_tournament_selection_returns_copy():
     """Test tournament selection returns a copy, not a reference."""
-    g1 = Genome([1]); g1.fitness = 10
+    g1 = Genome([1])
+    g1.fitness = 10
     winner = tournament_selection([g1], tournament_size=1)
     winner.fitness = 999
     assert g1.fitness == 10

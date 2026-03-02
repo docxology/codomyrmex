@@ -14,10 +14,9 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 from pathlib import Path
-from typing import Any, Dict, List, Optional, TypeVar, Union
+from typing import Any, Optional, TypeVar, Union
 
 T = TypeVar('T')
-
 
 class DocumentType(Enum):
     """Supported document types."""
@@ -26,7 +25,6 @@ class DocumentType(Enum):
     HTML = "html"
     PDF = "pdf"
     CODE = "code"
-
 
 @dataclass
 class Document:
@@ -78,7 +76,6 @@ class Document:
             metadata={"filename": file_path.name},
         )
 
-
 @dataclass
 class Chunk:
     """A chunk of a document."""
@@ -96,7 +93,6 @@ class Chunk:
         """length ."""
         return len(self.content)
 
-
 @dataclass
 class RetrievalResult:
     """Result of a retrieval query."""
@@ -108,7 +104,6 @@ class RetrievalResult:
     def content(self) -> str:
         """content ."""
         return self.chunk.content
-
 
 @dataclass
 class GenerationContext:
@@ -122,7 +117,6 @@ class GenerationContext:
     def num_sources(self) -> int:
         return len(self.retrieved)
 
-
 class TextSplitter(ABC):
     """Base class for text splitting strategies."""
 
@@ -130,7 +124,6 @@ class TextSplitter(ABC):
     def split(self, document: Document) -> list[Chunk]:
         """Split document into chunks."""
         pass
-
 
 class RecursiveTextSplitter(TextSplitter):
     """
@@ -215,7 +208,6 @@ class RecursiveTextSplitter(TextSplitter):
 
         return chunks
 
-
 class SentenceSplitter(TextSplitter):
     """Split text by sentences."""
 
@@ -260,7 +252,6 @@ class SentenceSplitter(TextSplitter):
 
         return chunks
 
-
 class VectorStore(ABC):
     """Base class for vector storage."""
 
@@ -282,7 +273,6 @@ class VectorStore(ABC):
     def delete(self, document_id: str) -> int:
         """Delete chunks by document ID."""
         pass
-
 
 class InMemoryVectorStore(VectorStore):
     """Simple in-memory vector store."""
@@ -309,7 +299,7 @@ class InMemoryVectorStore(VectorStore):
                 continue
 
             # Cosine similarity
-            dot = sum(a * b for a, b in zip(query_embedding, chunk.embedding))
+            dot = sum(a * b for a, b in zip(query_embedding, chunk.embedding, strict=False))
             mag1 = sum(x * x for x in query_embedding) ** 0.5
             mag2 = sum(x * x for x in chunk.embedding) ** 0.5
 
@@ -330,7 +320,6 @@ class InMemoryVectorStore(VectorStore):
     def count(self) -> int:
         """count ."""
         return len(self._chunks)
-
 
 class ContextFormatter:
     """Format retrieved results into context for LLM."""
@@ -368,7 +357,6 @@ class ContextFormatter:
             total_length += len(part)
 
         return "\n".join(parts)
-
 
 class RAGPipeline:
     """
@@ -422,7 +410,7 @@ class RAGPipeline:
         texts = [c.content for c in chunks]
         embeddings = self.embedding_fn(texts)
 
-        for chunk, embedding in zip(chunks, embeddings):
+        for chunk, embedding in zip(chunks, embeddings, strict=False):
             chunk.embedding = embedding
 
         # Add to store
@@ -507,7 +495,6 @@ class RAGPipeline:
         """Get number of indexed documents."""
         return len(self._documents)
 
-
 # Prompt templates for RAG
 RAG_PROMPT_TEMPLATE = """Use the following context to answer the question. If the answer is not in the context, say "I don't have enough information to answer that."
 
@@ -518,14 +505,12 @@ Question: {query}
 
 Answer:"""
 
-
 def create_rag_prompt(context: GenerationContext) -> str:
     """Create a RAG prompt from generation context."""
     return RAG_PROMPT_TEMPLATE.format(
         context=context.formatted_context,
         query=context.query,
     )
-
 
 __all__ = [
     # Enums

@@ -265,7 +265,7 @@ class TestVoiceInfoSerialization:
 
     def test_voice_info_to_dict_has_all_fields(self) -> None:
         """Test VoiceInfo to_dict includes all expected fields."""
-        from codomyrmex.audio.text_to_speech.models import VoiceGender, VoiceInfo
+        from codomyrmex.audio.text_to_speech.models import VoiceInfo
 
         voice = VoiceInfo(id="v1", name="Test Voice", language="en-US")
         data = voice.to_dict()

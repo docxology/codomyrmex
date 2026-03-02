@@ -7,6 +7,7 @@ modules (defense, identity, privacy) when available.
 from dataclasses import dataclass, field
 from enum import Enum, auto
 from typing import Any
+
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 logger = get_logger(__name__)

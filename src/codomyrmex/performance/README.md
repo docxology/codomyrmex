@@ -1,8 +1,17 @@
 # Performance Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 Lazy loading, caching, and performance monitoring utilities.
+
+## PAI Integration
+
+| Algorithm Phase | Role | Tools Used |
+|----------------|------|-----------|
+| **VERIFY** | Detect performance regressions after BUILD, confirm SLO compliance | `performance_check_regression`, `performance_compare_benchmarks` |
+| **LEARN** | Record benchmark baselines for future regression detection | `performance_compare_benchmarks` |
+
+PAI's QATester subagent runs `performance_check_regression` during VERIFY to confirm BUILD-phase changes don't degrade performance. `performance_compare_benchmarks` establishes baselines and tracks trends over Algorithm cycles.
 
 ## Installation
 

@@ -244,6 +244,14 @@ server.register_tool(
 
 Any codomyrmex module can expose tools through MCP by adding an `MCP_TOOL_SPECIFICATION.md` file. The discovery bridge in `run_mcp_server.py` auto-discovers and registers these at startup.
 
+## MCP Tools
+
+| Tool | Description | Key Parameters | PAI Phase |
+|------|-------------|----------------|-----------|
+| `inspect_server` | Get MCP server metadata, capability count, and protocol version | `server_url: str` | OBSERVE |
+| `list_registered_tools` | List all registered tools on the running MCP server | -- | OBSERVE |
+| `get_tool_schema` | Get input schema and description for a specific tool | `tool_name: str` | OBSERVE |
+
 ## Navigation
 
 - **Self**: [PAI.md](PAI.md)

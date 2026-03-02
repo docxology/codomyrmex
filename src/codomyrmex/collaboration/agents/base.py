@@ -11,10 +11,11 @@ from collections.abc import Callable
 from datetime import datetime
 from typing import Any
 
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
+
 from ..exceptions import AgentBusyError
 from ..models import AgentStatus, Task, TaskResult
 from ..protocols import AgentCapability, AgentMessage, AgentState, MessageType
-from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 logger = get_logger(__name__)
 
@@ -235,7 +236,7 @@ class CollaborativeAgent(AbstractAgent):
         Subclasses should override this method to implement
         task-specific logic.
         """
-        raise NotImplementedError("Subclasses must implement _execute_task")
+        raise NotImplementedError("Subclasses must implement _execute_task")  # ABC: intentional
 
     def to_dict(self) -> dict[str, Any]:
         """Serialize agent to dictionary."""

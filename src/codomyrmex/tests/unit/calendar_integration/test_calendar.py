@@ -7,7 +7,7 @@ Zero-mock policy: no MagicMock or monkeypatch.
 Live Google Calendar API tests are guarded by pytest.mark.skipif.
 """
 
-from datetime import datetime, timedelta, timezone, UTC
+from datetime import UTC, datetime, timedelta
 
 import pytest
 
@@ -28,11 +28,11 @@ class TestCalendarEvent:
     """Tests for the CalendarEvent data model."""
 
     def _event(self, **kwargs) -> CalendarEvent:
-        defaults = dict(
-            summary="Test Event",
-            start_time=datetime(2026, 3, 1, 10, 0, tzinfo=UTC),
-            end_time=datetime(2026, 3, 1, 11, 0, tzinfo=UTC),
-        )
+        defaults = {
+            "summary": "Test Event",
+            "start_time": datetime(2026, 3, 1, 10, 0, tzinfo=UTC),
+            "end_time": datetime(2026, 3, 1, 11, 0, tzinfo=UTC),
+        }
         defaults.update(kwargs)
         return CalendarEvent(**defaults)
 

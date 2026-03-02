@@ -87,7 +87,7 @@ class KnowledgeRouter:
 
         for agent_id, profile in self._experts.items():
             # Tag overlap
-            expert_tags = set(t.lower() for t in profile.tags)
+            expert_tags = {t.lower() for t in profile.tags}
             tag_overlap = len(query_terms & expert_tags)
 
             # Domain match
@@ -166,7 +166,7 @@ class KnowledgeRouter:
         scored: list[tuple[str, float]] = []
 
         for agent_id, profile in self._experts.items():
-            expert_tags = set(t.lower() for t in profile.tags)
+            expert_tags = {t.lower() for t in profile.tags}
             tag_overlap = len(query_terms & expert_tags)
             domain_score = sum(
                 conf for dom, conf in profile.domains.items()

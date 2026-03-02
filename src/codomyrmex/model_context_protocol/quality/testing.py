@@ -366,7 +366,7 @@ class IntegrationTester:
 
                 # Check assertions
                 if "assertions" in step:
-                    for assertion in step["assertions"]:
+                    for _assertion in step["assertions"]:
                         # Simple assertion checking
                         pass
 

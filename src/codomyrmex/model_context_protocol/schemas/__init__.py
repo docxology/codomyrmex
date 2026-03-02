@@ -8,7 +8,7 @@ import json
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Optional, Union
 
 
 class MessageRole(Enum):
@@ -18,7 +18,6 @@ class MessageRole(Enum):
     SYSTEM = "system"
     TOOL = "tool"
 
-
 class ContentType(Enum):
     """Types of content in messages."""
     TEXT = "text"
@@ -26,7 +25,6 @@ class ContentType(Enum):
     FILE = "file"
     TOOL_CALL = "tool_call"
     TOOL_RESULT = "tool_result"
-
 
 @dataclass
 class TextContent:
@@ -37,7 +35,6 @@ class TextContent:
     def to_dict(self) -> dict[str, Any]:
         """Return a dictionary representation of this object."""
         return {"type": self.type, "text": self.text}
-
 
 @dataclass
 class ImageContent:
@@ -57,7 +54,6 @@ class ImageContent:
         if self.alt_text:
             result["alt_text"] = self.alt_text
         return result
-
 
 @dataclass
 class FileContent:
@@ -79,7 +75,6 @@ class FileContent:
         if self.size:
             result["size"] = self.size  # type: ignore[assignment]
         return result
-
 
 @dataclass
 class ToolParameter:
@@ -114,7 +109,6 @@ class ToolParameter:
         if self.enum:
             schema["enum"] = self.enum  # type: ignore[assignment]
         return schema
-
 
 @dataclass
 class Tool:
@@ -158,7 +152,6 @@ class Tool:
             },
         }
 
-
 @dataclass
 class ToolCall:
     """A call to a tool."""
@@ -175,7 +168,6 @@ class ToolCall:
             "arguments": self.arguments,
         }
 
-
 @dataclass
 class ToolResult:
     """Result of a tool call."""
@@ -191,7 +183,6 @@ class ToolResult:
             "content": self.content,
             "is_error": self.is_error,
         }
-
 
 @dataclass
 class Message:
@@ -229,7 +220,6 @@ class Message:
                 texts.append(c.text)
         return "\n".join(texts)
 
-
 @dataclass
 class Conversation:
     """A conversation context."""
@@ -263,7 +253,6 @@ class Conversation:
         """Serialize to JSON."""
         return json.dumps(self.to_dict(), indent=2)
 
-
 @dataclass
 class Request:
     """A request to the model."""
@@ -285,7 +274,6 @@ class Request:
             "stop_sequences": self.stop_sequences,
         }
 
-
 @dataclass
 class Response:
     """A response from the model."""
@@ -302,7 +290,6 @@ class Response:
             "usage": self.usage,
             "model": self.model,
         }
-
 
 def create_tool(
     name: str,
@@ -324,7 +311,6 @@ def create_tool(
             ))
 
     return Tool(name=name, description=description, parameters=params)
-
 
 __all__ = [
     "MessageRole",

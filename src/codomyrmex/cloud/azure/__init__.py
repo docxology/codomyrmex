@@ -5,6 +5,7 @@ from typing import Optional
 
 from azure.identity import DefaultAzureCredential
 from azure.storage.blob import BlobServiceClient
+
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 logger = get_logger(__name__)

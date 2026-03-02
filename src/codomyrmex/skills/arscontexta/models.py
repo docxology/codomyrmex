@@ -13,7 +13,7 @@ Based on https://github.com/agenticnotetaking/arscontexta
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from datetime import datetime, timezone, UTC
+from datetime import UTC, datetime
 from enum import Enum
 from pathlib import Path
 from typing import Any

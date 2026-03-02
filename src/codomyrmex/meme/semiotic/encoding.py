@@ -70,7 +70,7 @@ class SemioticEncoder:
 
         for word in words:
             clean = word.lower().strip(".,!?")
-            for base, synonyms in self._SYNONYM_MAP.items():
+            for _base, synonyms in self._SYNONYM_MAP.items():
                 if clean in synonyms:
                     bits.append(synonyms.index(clean))
                     break

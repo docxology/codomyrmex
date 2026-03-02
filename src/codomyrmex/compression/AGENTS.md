@@ -1,6 +1,6 @@
 # Agent Guidelines - Compression
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Module Overview
 
@@ -54,6 +54,23 @@ assert decompressed == data
 # Verify compression ratio
 assert len(compressed) < len(data)
 ```
+
+## PAI Agent Role Access Matrix
+
+| PAI Agent | Access Level | Primary Capabilities | Trust Level |
+|-----------|-------------|---------------------|-------------|
+| **Engineer** | Full | Data compression/decompression, format conversion, stream compression | TRUSTED |
+| **Architect** | Read + Design | Compression strategy selection, format architecture review | OBSERVED |
+| **QATester** | Validation | Compression ratio verification, decompression correctness, format compatibility | OBSERVED |
+
+### Engineer Agent
+**Use Cases**: Compressing artifacts for storage/transfer during EXECUTE, format conversion during BUILD.
+
+### Architect Agent
+**Use Cases**: Selecting compression algorithms, designing data format strategies.
+
+### QATester Agent
+**Use Cases**: Verifying compression ratios and decompression correctness during VERIFY.
 
 ## Navigation
 

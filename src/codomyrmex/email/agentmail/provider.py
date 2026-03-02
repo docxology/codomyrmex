@@ -31,6 +31,8 @@ except ImportError:
     ApiError = Exception  # type: ignore
     AGENTMAIL_AVAILABLE = False
 
+from datetime import UTC
+
 from .mixins import DraftMixin, InboxMixin, ThreadMixin, WebhookMixin
 from .models import (
     AgentMailAttachment,
@@ -40,7 +42,6 @@ from .models import (
     _sdk_message_to_email_message,
     _sdk_pod_to_model,
 )
-from datetime import UTC
 
 
 def _raise_for_api_error(exc: Exception, context: str) -> NoReturn:
@@ -221,7 +222,7 @@ class AgentMailProvider(
             if sent_id:
                 return self.get_message(sent_id, resolved_inbox)
             # If no ID returned, construct a minimal EmailMessage from draft
-            from datetime import datetime, timezone
+            from datetime import datetime
 
             return EmailMessage(
                 subject=draft.subject,

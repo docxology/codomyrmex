@@ -11,6 +11,8 @@ from collections.abc import Callable
 from dataclasses import dataclass
 from typing import Any
 
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
+
 from ..genome.genome import Genome
 from ..operators.operators import (
     _fitness_key,
@@ -18,7 +20,6 @@ from ..operators.operators import (
     mutate,
     tournament_selection,
 )
-from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 logger = get_logger(__name__)
 

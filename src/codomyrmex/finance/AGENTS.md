@@ -1,6 +1,6 @@
 # Agent Instructions for `codomyrmex.finance`
 
-**Version**: v1.0.2 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
 
@@ -91,6 +91,23 @@ uv run pytest src/codomyrmex/tests/unit/finance/ -v
 | `taxes/` | `TaxCalculator`, `TaxResult` | Progressive bracket-based tax calculation with deductions |
 | `payroll/` | `PayrollProcessor`, `PayStub` | Payroll computation with federal tax, SS, Medicare withholding |
 | `forecasting/` | `Forecaster` | Moving average, exponential smoothing, linear trend forecasting |
+
+## PAI Agent Role Access Matrix
+
+| PAI Agent | Access Level | Primary Capabilities | Trust Level |
+|-----------|-------------|---------------------|-------------|
+| **Engineer** | Full | Direct Python import, class instantiation, full API access | TRUSTED |
+| **Architect** | Read + Design | API review, interface design, dependency analysis | OBSERVED |
+| **QATester** | Validation | Integration testing via pytest, output validation | OBSERVED |
+
+### Engineer Agent
+**Use Cases**: Implements financial calculations, portfolio management, and risk analysis via Ledger, TaxCalculator, PayrollProcessor, and Forecaster classes.
+
+### Architect Agent
+**Use Cases**: Designs financial data models, reviews double-entry bookkeeping schema, and evaluates subsystem interfaces across ledger, tax, payroll, and forecasting.
+
+### QATester Agent
+**Use Cases**: Validates numerical accuracy of tax brackets, payroll withholdings, ledger balancing invariants, and forecast precision via pytest.
 
 ## Navigation
 

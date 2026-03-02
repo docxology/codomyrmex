@@ -1,10 +1,20 @@
 # API Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
 Comprehensive API infrastructure module providing everything needed to build, document, secure, and test APIs. Includes REST and GraphQL API frameworks, OpenAPI specification generation, multiple authentication mechanisms (API key, bearer token, basic, HMAC), rate limiting strategies (fixed window, sliding window, token bucket), resilience patterns (circuit breaker, retry, bulkhead), webhook dispatch, mock API servers for testing, and pagination implementations (offset, cursor, keyset).
+
+## PAI Integration
+
+| Algorithm Phase | Role | Tools Used |
+|----------------|------|-----------|
+| **OBSERVE** | Read API configurations and inspect endpoint definitions | Direct Python import |
+| **BUILD** | Register endpoints, generate OpenAPI specs, configure auth | Direct Python import |
+| **EXECUTE** | Make API calls, dispatch webhooks, handle requests | Direct Python import |
+
+PAI agents access this module via direct Python import through the MCP bridge. The Engineer agent uses it during BUILD phase to scaffold REST and GraphQL endpoints, and during EXECUTE phase to handle API requests and webhook dispatch.
 
 ## Key Exports
 

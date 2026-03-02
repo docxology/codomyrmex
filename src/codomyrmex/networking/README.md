@@ -1,10 +1,20 @@
 # Networking Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
 Networking module providing multi-protocol client implementations for HTTP, WebSocket, SSH/SFTP, and raw TCP/UDP socket communication. The `HTTPClient` handles standard HTTP request/response cycles with configurable timeouts and retry logic. `WebSocketClient` supports persistent bidirectional connections. `SSHClient` provides SSH command execution and SFTP file transfers. Raw socket classes (`TCPClient`, `TCPServer`, `UDPClient`) enable low-level network programming, and `PortScanner` discovers open ports on target hosts. Includes a comprehensive exception hierarchy for granular error handling.
+
+## PAI Integration
+
+| Algorithm Phase | Role | Tools Used |
+|----------------|------|-----------|
+| **OBSERVE** | Discover network topology and open ports | Direct Python import |
+| **EXECUTE** | Perform HTTP, WebSocket, SSH network operations | Direct Python import |
+| **VERIFY** | Validate connectivity and endpoint availability | Direct Python import |
+
+PAI agents access this module via direct Python import through the MCP bridge. The Engineer agent uses `HTTPClient` and `PortScanner` during EXECUTE and OBSERVE to interact with remote services and verify connectivity.
 
 ## Installation
 

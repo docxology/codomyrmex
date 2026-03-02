@@ -392,7 +392,7 @@ class TestConcurrentSubscribers:
         await asyncio.sleep(0.1)
 
         # All subscribers should have received the event
-        for sub_id, results in subscriber_results.items():
+        for _sub_id, results in subscriber_results.items():
             assert results == ["test_value"]
 
         bus.shutdown()
@@ -869,7 +869,7 @@ class TestAsyncEventBusStats:
         bus.subscribe([EventType.SYSTEM_STARTUP], handler, "stats_handler")
 
         # Publish events
-        for i in range(5):
+        for _i in range(5):
             await bus.publish_async(Event(event_type=EventType.SYSTEM_STARTUP, source="test"))
 
         await asyncio.sleep(0.1)
@@ -890,7 +890,7 @@ class TestAsyncEventBusStats:
         bus.subscribe([EventType.SYSTEM_STARTUP], handler, "reset_handler")
 
         # Publish some events
-        for i in range(3):
+        for _i in range(3):
             await bus.publish_async(Event(event_type=EventType.SYSTEM_STARTUP, source="test"))
 
         await asyncio.sleep(0.1)
@@ -1089,7 +1089,7 @@ class TestAsyncEventShutdown:
         bus.subscribe([EventType.SYSTEM_STARTUP], slow_handler, "slow")
 
         # Queue up events
-        for i in range(5):
+        for _i in range(5):
             await bus.publish_async(Event(event_type=EventType.SYSTEM_STARTUP, source="test"))
 
         # Immediate shutdown

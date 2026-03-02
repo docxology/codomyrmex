@@ -316,15 +316,15 @@ class _Transport(ABC):
 
     @abstractmethod
     async def send(self, message: dict[str, Any], *, timeout: float = 30.0) -> dict[str, Any]:
-        raise NotImplementedError
+        raise NotImplementedError  # ABC: intentional
 
     @abstractmethod
     async def send_notification(self, message: dict[str, Any]) -> None:
-        raise NotImplementedError
+        raise NotImplementedError  # ABC: intentional
 
     @abstractmethod
     async def close(self) -> None:
-        raise NotImplementedError
+        raise NotImplementedError  # ABC: intentional
 
 
 class _StdioTransport(_Transport):

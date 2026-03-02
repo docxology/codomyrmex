@@ -14,7 +14,7 @@ from collections.abc import Callable
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
-from typing import Any, Dict, List, Optional
+from typing import Any, Optional
 
 
 class HealthStatus(Enum):
@@ -23,7 +23,6 @@ class HealthStatus(Enum):
     UNHEALTHY = "unhealthy"
     DEGRADED = "degraded"
     UNKNOWN = "unknown"
-
 
 @dataclass
 class HealthCheckResult:
@@ -45,7 +44,6 @@ class HealthCheckResult:
             "timestamp": self.timestamp.isoformat(),
             "details": self.details,
         }
-
 
 @dataclass
 class AggregatedHealth:
@@ -73,7 +71,6 @@ class AggregatedHealth:
             "timestamp": self.timestamp.isoformat(),
         }
 
-
 class HealthCheck(ABC):
     """Abstract base class for health checks."""
 
@@ -96,7 +93,6 @@ class HealthCheck(ABC):
         """Perform the health check asynchronously."""
         loop = asyncio.get_event_loop()
         return await loop.run_in_executor(None, self.check)
-
 
 class HTTPHealthCheck(HealthCheck):
     """HTTP endpoint health check."""
@@ -169,7 +165,6 @@ class HTTPHealthCheck(HealthCheck):
                 latency_ms=latency_ms,
             )
 
-
 class TCPHealthCheck(HealthCheck):
     """TCP port connectivity health check."""
 
@@ -222,7 +217,6 @@ class TCPHealthCheck(HealthCheck):
                 message=str(e),
                 latency_ms=latency_ms,
             )
-
 
 class CommandHealthCheck(HealthCheck):
     """Command execution health check."""
@@ -298,7 +292,6 @@ class CommandHealthCheck(HealthCheck):
                 latency_ms=latency_ms,
             )
 
-
 class MemoryHealthCheck(HealthCheck):
     """Memory usage health check."""
 
@@ -368,7 +361,6 @@ class MemoryHealthCheck(HealthCheck):
                 message=str(e),
             )
 
-
 class DiskHealthCheck(HealthCheck):
     """Disk space health check."""
 
@@ -435,7 +427,6 @@ class DiskHealthCheck(HealthCheck):
                 message=str(e),
             )
 
-
 class HealthChecker:
     """Manages multiple health checks."""
 
@@ -475,7 +466,7 @@ class HealthChecker:
         """Determine overall status from results."""
         critical_unhealthy = any(
             r.status == HealthStatus.UNHEALTHY
-            for r, check in zip(results, self.checks)
+            for r, check in zip(results, self.checks, strict=False)
             if check.critical
         )
 
@@ -489,7 +480,6 @@ class HealthChecker:
             return HealthStatus.DEGRADED
 
         return HealthStatus.HEALTHY
-
 
 __all__ = [
     "HealthStatus",

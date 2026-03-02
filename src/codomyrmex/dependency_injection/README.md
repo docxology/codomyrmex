@@ -1,8 +1,18 @@
 # Dependency Injection Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 Lightweight, thread-safe Inversion of Control (IoC) container with decorator-based service registration, constructor injection, and lifecycle scoping.
+
+## PAI Integration
+
+| Algorithm Phase | Role | Tools Used |
+|----------------|------|-----------|
+| **BUILD** | Wire service containers and register agent dependencies | Direct Python import |
+| **EXECUTE** | Inject dependencies at runtime for agent service resolution | Direct Python import |
+| **VERIFY** | Validate DI configuration and detect circular dependencies | Direct Python import |
+
+PAI agents access this module via direct Python import through the MCP bridge. The Engineer agent uses `Container` to wire service graphs during BUILD, and agents resolve dependencies at runtime via `@inject` during EXECUTE.
 
 ## Key Exports
 

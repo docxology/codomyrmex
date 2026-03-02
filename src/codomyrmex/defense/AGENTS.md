@@ -1,6 +1,6 @@
 # Defense Module - Agent Guide
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
 
@@ -50,6 +50,23 @@ response = hole.engage("attacker_ip")
 - Maintain alignment between code, documentation, and configured workflows
 - Ensure Model Context Protocol interfaces remain available for sibling agents
 - Record outcomes in shared telemetry and update TODO queues when necessary
+
+## PAI Agent Role Access Matrix
+
+| PAI Agent | Access Level | Primary Capabilities | Trust Level |
+|-----------|-------------|---------------------|-------------|
+| **Engineer** | Full | Direct Python import, class instantiation, full API access | TRUSTED |
+| **Architect** | Read + Design | API review, threat model design, dependency analysis | OBSERVED |
+| **QATester** | Validation | Integration testing via pytest, defensive control validation | OBSERVED |
+
+### Engineer Agent
+**Use Cases**: Implement security defenses, configure exploit detection, deploy countermeasures during BUILD/EXECUTE phases
+
+### Architect Agent
+**Use Cases**: Review threat models, validate defense-in-depth architecture, design countermeasure escalation strategies
+
+### QATester Agent
+**Use Cases**: Validate defensive controls under simulated attacks, verify exploit detection accuracy, test proportional response logic
 
 ## Navigation Links
 

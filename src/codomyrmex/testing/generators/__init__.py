@@ -14,10 +14,9 @@ from collections.abc import Callable
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
-from typing import Any, Dict, List, Optional, TypeVar, Union
+from typing import Any, Optional, TypeVar, Union
 
 T = TypeVar('T')
-
 
 class DataType(Enum):
     """Types of generated data."""
@@ -32,7 +31,6 @@ class DataType(Enum):
     ADDRESS = "address"
     PHONE = "phone"
 
-
 @dataclass
 class FieldSpec:
     """Specification for a generated field."""
@@ -45,7 +43,6 @@ class FieldSpec:
     choices: list[Any] | None = None
     pattern: str | None = None
 
-
 class Generator(ABC):
     """Base class for data generators."""
 
@@ -57,7 +54,6 @@ class Generator(ABC):
     def generate_many(self, count: int) -> list[Any]:
         """Generate multiple values."""
         return [self.generate() for _ in range(count)]
-
 
 class StringGenerator(Generator):
     """Generates random strings."""
@@ -77,7 +73,6 @@ class StringGenerator(Generator):
         length = random.randint(self.min_length, self.max_length)
         return ''.join(random.choices(self.charset, k=length))
 
-
 class IntegerGenerator(Generator):
     """Generates random integers."""
 
@@ -88,7 +83,6 @@ class IntegerGenerator(Generator):
     def generate(self) -> int:
         """generate ."""
         return random.randint(self.min_value, self.max_value)
-
 
 class FloatGenerator(Generator):
     """Generates random floats."""
@@ -108,7 +102,6 @@ class FloatGenerator(Generator):
         value = random.uniform(self.min_value, self.max_value)
         return round(value, self.precision)
 
-
 class BooleanGenerator(Generator):
     """Generates random booleans."""
 
@@ -118,7 +111,6 @@ class BooleanGenerator(Generator):
     def generate(self) -> bool:
         """generate ."""
         return random.random() < self.true_probability
-
 
 class DateGenerator(Generator):
     """Generates random dates."""
@@ -137,7 +129,6 @@ class DateGenerator(Generator):
         random_days = random.randint(0, delta.days)
         return self.start_date + timedelta(days=random_days)
 
-
 class EmailGenerator(Generator):
     """Generates random email addresses."""
 
@@ -151,7 +142,6 @@ class EmailGenerator(Generator):
         username = self._string_gen.generate()
         domain = random.choice(self.DOMAINS)
         return f"{username}@{domain}"
-
 
 class UUIDGenerator(Generator):
     """Generates UUIDs."""
@@ -168,7 +158,6 @@ class UUIDGenerator(Generator):
         ]
         return '-'.join(parts)
 
-
 class NameGenerator(Generator):
     """Generates random names."""
 
@@ -181,7 +170,6 @@ class NameGenerator(Generator):
         last = random.choice(self.LAST_NAMES)
         return f"{first} {last}"
 
-
 class ChoiceGenerator(Generator):
     """Generates random choice from list."""
 
@@ -191,7 +179,6 @@ class ChoiceGenerator(Generator):
     def generate(self) -> Any:
         """generate ."""
         return random.choice(self.choices)
-
 
 class RecordGenerator:
     """
@@ -222,7 +209,6 @@ class RecordGenerator:
     def generate_many(self, count: int) -> list[dict[str, Any]]:
         """Generate multiple records."""
         return [self.generate() for _ in range(count)]
-
 
 class DatasetGenerator:
     """
@@ -270,7 +256,6 @@ class DatasetGenerator:
             lines.append(','.join(values))
 
         return '\n'.join(lines)
-
 
 __all__ = [
     # Enums
