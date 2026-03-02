@@ -357,7 +357,10 @@ class DatabaseManager:
         if not self._connection:
             raise CodomyrmexError("Not connected to database")
 
-        result = self.execute(f"PRAGMA table_info({table_name})")
+        # Sanitize table name by quoting it as an identifier
+        # and escaping double quotes.
+        safe_table_name = table_name.replace('"', '""')
+        result = self.execute(f'PRAGMA table_info("{safe_table_name}")')
         columns = []
         for row in result.rows:
             columns.append({
