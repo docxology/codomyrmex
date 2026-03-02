@@ -20,8 +20,17 @@ Also covers finance/account.py:
 
 import pytest
 
-# ── finance/ledger/ledger.py ───────────────────────────────────────────
+from codomyrmex.finance.account import (
+    Account as OOPAccount,
+)
+from codomyrmex.finance.account import (
+    AccountChart,
+)
+from codomyrmex.finance.account import (
+    AccountType as OOPAccountType,
+)
 
+# ── finance/ledger/ledger.py ───────────────────────────────────────────
 from codomyrmex.finance.ledger import (
     Account,
     AccountType,
@@ -271,12 +280,6 @@ class TestLedger:
 
 
 # ── finance/account.py ────────────────────────────────────────────────
-
-from codomyrmex.finance.account import (
-    Account as OOPAccount,
-    AccountChart,
-    AccountType as OOPAccountType,
-)
 
 
 @pytest.mark.unit
