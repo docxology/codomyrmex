@@ -18,9 +18,9 @@ from codomyrmex.exceptions.specialized import (
     ArtifactError,
     AuthenticationError,
     BulkheadFullError,
-    CICDError,
     CacheError,
     CapabilityScanError,
+    CICDError,
     CircuitOpenError,
     CommandExecutionError,
     CompressionError,
@@ -46,7 +46,6 @@ from codomyrmex.exceptions.specialized import (
     TemplateError,
     TerminalError,
 )
-
 
 # ── Simple CodomyrmexError subclasses ─────────────────────────────────
 
