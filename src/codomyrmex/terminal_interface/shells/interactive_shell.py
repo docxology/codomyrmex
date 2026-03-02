@@ -707,15 +707,17 @@ print("Sandbox execution complete! ✅")
             if any(op in arg for op in shell_operators):
                 # SECURITY: shell=True is intentional here — this is an
                 # interactive shell command entered by the local user.
-                result = subprocess.run(arg, shell=True, capture_output=True, text=True)
+                result = subprocess.run(arg, shell=True, capture_output=True, text=True, timeout=300)
             else:
-                result = subprocess.run(shlex.split(arg), capture_output=True, text=True)
+                result = subprocess.run(shlex.split(arg), capture_output=True, text=True, timeout=300)
             if result.stdout:
                 print(result.stdout)
             if result.stderr:
                 print(f"Error: {result.stderr}")
             if result.returncode != 0:
                 print(f"Command exited with code: {result.returncode}")
+        except subprocess.TimeoutExpired:
+            print("❌ Command timed out after 300 seconds.")
         except Exception as e:
             print(f"❌ Error executing command: {e}")
 
@@ -746,6 +748,7 @@ print("Sandbox execution complete! ✅")
             subprocess.run(
                 ["clear"] if os.name == "posix" else ["cmd", "/c", "cls"],
                 check=False,
+                timeout=5,
             )
         except Exception as e:
             print(f"❌ Could not clear screen: {e}")

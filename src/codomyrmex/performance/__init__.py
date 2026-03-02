@@ -44,18 +44,23 @@ except ImportError:
     PerformanceMonitor = None
     PERFORMANCE_MONITOR_AVAILABLE = False
 
-    def monitor_performance(name):
+    def monitor_performance(*args, **kwargs):
         """No-op decorator returned when psutil is not installed."""
+
         def decorator(func):
             return func
+
         return decorator
 
     class performance_context:
         """No-op context manager returned when psutil is not installed."""
+
         def __init__(self, *args, **kwargs):
             pass
+
         def __enter__(self):
             return self
+
         def __exit__(self, *args):
             return None
 
@@ -63,8 +68,10 @@ except ImportError:
         """No-op metrics stub returned when psutil is not installed."""
         return {}
 
+
 def cli_commands():
     """Return CLI commands for the performance module."""
+
     def _run_profiler():
         """Run the performance profiler."""
         print(f"Performance module v{__version__}")
@@ -83,7 +90,9 @@ def cli_commands():
         print("  LazyLoader: available")
         print("  CacheManager: available")
         print("  PerformanceProfiler: available")
-        print(f"  PerformanceMonitor: {'available' if PERFORMANCE_MONITOR_AVAILABLE else 'unavailable'}")
+        print(
+            f"  PerformanceMonitor: {'available' if PERFORMANCE_MONITOR_AVAILABLE else 'unavailable'}"
+        )
 
     return {
         "profile": _run_profiler,
@@ -108,8 +117,8 @@ if PERFORMANCE_MONITOR_AVAILABLE:
     __all__.append("performance_context")
     __all__.append("get_system_metrics")
 else:
-    __all__.append("monitor_performance") # Export the no-op version
-    __all__.append("performance_context") # Export the no-op version
+    __all__.append("monitor_performance")  # Export the no-op version
+    __all__.append("performance_context")  # Export the no-op version
     __all__.append("get_system_metrics")
 
 __version__ = "0.1.0"

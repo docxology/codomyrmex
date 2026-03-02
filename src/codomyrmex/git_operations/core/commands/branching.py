@@ -2,11 +2,10 @@ import os
 import subprocess
 
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
-from codomyrmex.model_context_protocol.decorators import mcp_tool
 
 logger = get_logger(__name__)
 
-@mcp_tool(name="git_create_branch")
+
 def create_branch(branch_name: str, repository_path: str = None) -> bool:
     """Create and switch to a new Git branch."""
     if repository_path is None:
@@ -36,7 +35,6 @@ def create_branch(branch_name: str, repository_path: str = None) -> bool:
         logger.error(f"Unexpected error creating branch: {e}")
         return False
 
-@mcp_tool(name="git_switch_branch")
 def switch_branch(branch_name: str, repository_path: str = None) -> bool:
     """Switch to an existing Git branch."""
     if repository_path is None:
@@ -65,7 +63,6 @@ def switch_branch(branch_name: str, repository_path: str = None) -> bool:
         logger.error(f"Unexpected error switching branch: {e}")
         return False
 
-@mcp_tool(name="git_delete_branch")
 def delete_branch(branch_name: str, repository_path: str = None, force: bool = False) -> bool:
     """Delete a local git branch.
 
@@ -97,7 +94,6 @@ def delete_branch(branch_name: str, repository_path: str = None, force: bool = F
         logger.error(f"Unexpected error deleting branch: {e}")
         return False
 
-@mcp_tool(name="git_current_branch")
 def get_current_branch(repository_path: str = None) -> str | None:
     """Get the name of the current Git branch."""
     if repository_path is None:

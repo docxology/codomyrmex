@@ -27,7 +27,7 @@ from codomyrmex.collaboration.swarm.pool import (
 )
 from codomyrmex.collaboration.swarm.protocol import (
     AgentRole,
-    MessageType,
+    SwarmMessageType,
     SwarmAgent,
     SwarmMessage,
     TaskAssignment,
@@ -39,15 +39,16 @@ from codomyrmex.collaboration.swarm.protocol import (
 
 class TestSwarmMessage:
     """Test suite for SwarmMessage."""
+
     def test_auto_id(self) -> None:
         """Test functionality: auto id."""
-        msg = SwarmMessage(MessageType.TASK_ASSIGNMENT, sender="alice")
+        msg = SwarmMessage(SwarmMessageType.TASK_ASSIGNMENT, sender="alice")
         assert msg.message_id
         assert msg.timestamp > 0
 
     def test_to_dict(self) -> None:
         """Test functionality: to dict."""
-        msg = SwarmMessage(MessageType.RESULT, sender="bob", recipient="alice")
+        msg = SwarmMessage(SwarmMessageType.RESULT, sender="bob", recipient="alice")
         d = msg.to_dict()
         assert d["message_type"] == "result"
         assert d["sender"] == "bob"
@@ -55,6 +56,7 @@ class TestSwarmMessage:
 
 class TestSwarmAgent:
     """Test suite for SwarmAgent."""
+
     def test_available(self) -> None:
         """Test functionality: available."""
         agent = SwarmAgent("a1", AgentRole.CODER, max_concurrent=2)
@@ -78,6 +80,7 @@ class TestSwarmAgent:
 
 class TestTaskAssignment:
     """Test suite for TaskAssignment."""
+
     def test_auto_id(self) -> None:
         """Test functionality: auto id."""
         task = TaskAssignment(description="test")
@@ -96,6 +99,7 @@ class TestTaskAssignment:
 
 class TestAgentPool:
     """Test suite for AgentPool."""
+
     def test_register_and_size(self) -> None:
         """Test functionality: register and size."""
         pool = AgentPool()
@@ -179,6 +183,7 @@ class TestAgentPool:
 
 class TestSubTask:
     """Test suite for SubTask."""
+
     def test_auto_id(self) -> None:
         """Test functionality: auto id."""
         st = SubTask(description="test")
@@ -194,6 +199,7 @@ class TestSubTask:
 
 class TestTaskDecomposer:
     """Test suite for TaskDecomposer."""
+
     def test_decompose_code_task(self) -> None:
         """Test functionality: decompose code task."""
         d = TaskDecomposer()
@@ -248,6 +254,7 @@ class TestTaskDecomposer:
 
 class TestConsensusEngine:
     """Test suite for ConsensusEngine."""
+
     def test_majority_approve(self) -> None:
         """Test functionality: majority approve."""
         engine = ConsensusEngine()
@@ -310,30 +317,37 @@ class TestConsensusEngine:
 
 class TestMessageBus:
     """Test suite for MessageBus."""
-    def test_subscribe_and_publish(self) -> None:
+
+    @pytest.mark.asyncio
+    async def test_subscribe_and_publish(self) -> None:
         """Test functionality: subscribe and publish."""
         bus = MessageBus()
         received: list[SwarmMessage] = []
         bus.subscribe("alice", "task.assigned", lambda m: received.append(m))
-        msg = SwarmMessage(MessageType.TASK_ASSIGNMENT, sender="system")
-        bus.publish("task.assigned", msg)
+        msg = SwarmMessage(SwarmMessageType.TASK_ASSIGNMENT, sender="system")
+        await bus.publish("task.assigned", msg)
         assert len(received) == 1
 
-    def test_wildcard_match(self) -> None:
+    @pytest.mark.asyncio
+    async def test_wildcard_match(self) -> None:
         """Test functionality: wildcard match."""
         bus = MessageBus()
         received: list[SwarmMessage] = []
         bus.subscribe("alice", "task.*", lambda m: received.append(m))
-        msg = SwarmMessage(MessageType.RESULT, sender="bob")
-        bus.publish("task.completed", msg)
+        msg = SwarmMessage(SwarmMessageType.RESULT, sender="bob")
+        await bus.publish("task.completed", msg)
         assert len(received) == 1
 
-    def test_no_match(self) -> None:
+    @pytest.mark.asyncio
+    async def test_no_match(self) -> None:
         """Test functionality: no match."""
         bus = MessageBus()
         received: list[SwarmMessage] = []
         bus.subscribe("alice", "task.assigned", lambda m: received.append(m))
-        bus.publish("review.requested", SwarmMessage(MessageType.REVIEW_REQUEST, "bob"))
+        await bus.publish(
+            "review.requested",
+            SwarmMessage(SwarmMessageType.REVIEW_REQUEST, "bob"),
+        )
         assert len(received) == 0
 
     def test_unsubscribe(self) -> None:
@@ -353,29 +367,34 @@ class TestMessageBus:
         removed = bus.unsubscribe("alice")
         assert removed == 2
 
-    def test_history(self) -> None:
+    @pytest.mark.asyncio
+    async def test_history(self) -> None:
         """Test functionality: history."""
         bus = MessageBus()
-        bus.publish("topic", SwarmMessage(MessageType.STATUS_UPDATE, "a"))
-        bus.publish("topic", SwarmMessage(MessageType.RESULT, "b"))
+        await bus.publish("topic", SwarmMessage(SwarmMessageType.STATUS_UPDATE, "a"))
+        await bus.publish("topic", SwarmMessage(SwarmMessageType.RESULT, "b"))
         assert bus.history_size == 2
         recent = bus.recent_messages(1)
         assert len(recent) == 1
 
-    def test_multi_segment_wildcard(self) -> None:
+    @pytest.mark.asyncio
+    async def test_multi_segment_wildcard(self) -> None:
         """Test functionality: multi segment wildcard."""
         bus = MessageBus()
         received: list[SwarmMessage] = []
         bus.subscribe("alice", "task.#", lambda m: received.append(m))
-        bus.publish("task.sub.deep", SwarmMessage(MessageType.RESULT, "x"))
+        await bus.publish("task.sub.deep", SwarmMessage(SwarmMessageType.RESULT, "x"))
         assert len(received) == 1
 
-    def test_handler_error_isolated(self) -> None:
+    @pytest.mark.asyncio
+    async def test_handler_error_isolated(self) -> None:
         """Test functionality: handler error isolated."""
         bus = MessageBus()
         good: list[SwarmMessage] = []
         bus.subscribe("bad", "topic", lambda m: 1 / 0)  # Will raise
         bus.subscribe("good", "topic", lambda m: good.append(m))
-        count = bus.publish("topic", SwarmMessage(MessageType.STATUS_UPDATE, "x"))
+        count = await bus.publish(
+            "topic", SwarmMessage(SwarmMessageType.STATUS_UPDATE, "x")
+        )
         assert count == 1  # Only good handler counted
         assert len(good) == 1

@@ -9,7 +9,8 @@
   "ignore": [],
   "ignore_metadata": {},
   "zone_overrides": {
-    ".claude/worktrees": "vendor"
+    ".claude/worktrees": "vendor",
+    ".claude": "vendor"
   },
   "review_dimensions": [],
   "large_files_threshold": 0,

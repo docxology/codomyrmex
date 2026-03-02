@@ -51,39 +51,9 @@ from .commands.sync import fetch_changes, pull_changes, push_changes
 from .commands.tags import create_tag, list_tags
 
 logger = get_logger(__name__)
-
-try:
-    PERFORMANCE_MONITORING_AVAILABLE = True
-except ImportError:
-    logger.warning("Performance monitoring not available - decorators will be no-op")
-    PERFORMANCE_MONITORING_AVAILABLE = False
-
-    # Create no-op decorators
-    def monitor_performance(*args, **kwargs):
-        """Decorator for performance monitoring (fallback)."""
-        def decorator(func):
-            """Decorator."""
-            return func
-        return decorator
-
-    class performance_context:
-        """
-        A class for handling performance_context operations.
-        """
-        def __init__(self, context_name: str = "unknown_context", *args, **kwargs):
-            """Initialize performance context (fallback)."""
-            self.context_name = context_name
-            self.start_time = 0
-
-        def __enter__(self):
-            """Enter context."""
-            self.start_time = time.time()
-            return self
-
-        def __exit__(self, exc_type, exc_val, exc_tb):
-            """Exit context."""
-            duration = time.time() - self.start_time
-            logger.debug(f"Exiting performance context: {self.context_name} (Duration: {duration:.4f}s)")
+# monitor_performance and performance_context are imported unconditionally above;
+# PERFORMANCE_MONITORING_AVAILABLE reflects availability at import time.
+PERFORMANCE_MONITORING_AVAILABLE = True
 
 __all__ = [
     "create_branch",

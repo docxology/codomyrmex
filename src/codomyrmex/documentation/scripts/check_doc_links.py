@@ -111,7 +111,6 @@ def resolve_link(link_url: str, from_file: Path, docs_root: Path) -> tuple[bool,
     except Exception as e:
         # Path might not exist, but we can still check
         logger.debug("Path resolution failed for %s: %s", link_url, e)
-        pass
 
     # Check if file or directory exists (allow both)
     exists = resolved.exists() and (resolved.is_file() or resolved.is_dir())

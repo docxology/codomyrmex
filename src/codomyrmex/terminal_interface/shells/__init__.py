@@ -249,7 +249,33 @@ class InteractiveShell:
         return "".join(output_lines)
 
     def execute(self, command: str, timeout: float = 5.0) -> str:
-        """a command and return output.""" # Clear any pending output while not self._output_queue.empty(): try: self._output_queue.get_nowait() except queue.Empty: break self.send(command) return self.read_output(timeout) def stop(self) -> None: """Stop the shell.""" self._running = False if self._process: try: self._process.terminate() self._process.wait(timeout=2) except subprocess.TimeoutExpired: self._process.kill() self._process = None if self._reader_thread: self._reader_thread.join(timeout=1) self._reader_thread = None @property def is_running(self) -> bool: """Execute Is Running ."""
+        """Execute a command and return output."""
+        # Clear any pending output
+        while not self._output_queue.empty():
+            try:
+                self._output_queue.get_nowait()
+            except queue.Empty:
+                break
+        self.send(command)
+        return self.read_output(timeout)
+
+    def stop(self) -> None:
+        """Stop the shell."""
+        self._running = False
+        if self._process:
+            try:
+                self._process.terminate()
+                self._process.wait(timeout=2)
+            except subprocess.TimeoutExpired:
+                self._process.kill()
+            self._process = None
+        if self._reader_thread:
+            self._reader_thread.join(timeout=1)
+            self._reader_thread = None
+
+    @property
+    def is_running(self) -> bool:
+        """Return True if the shell process is active."""
         return self._running and self._process is not None
 
 class CommandBuilder:

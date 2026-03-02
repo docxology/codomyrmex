@@ -310,7 +310,6 @@ class DocumentationScanner:
                             term_usage[term].append(str(md_file.relative_to(self.repo_root)))
             except Exception as e:
                 logger.warning("Failed to read markdown file %s: %s", md_file, e)
-                pass
 
         # Check for inconsistent usage
         for term_group_name, term_variants in key_terms.items():
@@ -462,7 +461,6 @@ class DocumentationScanner:
                         })
             except Exception as e:
                 logger.warning("Failed to read markdown file %s: %s", md_file, e)
-                pass
 
         return issues[:20]  # Limit results
 
@@ -483,7 +481,6 @@ class DocumentationScanner:
                     })
             except Exception as e:
                 logger.warning("Failed to read markdown file %s: %s", md_file, e)
-                pass
 
         return issues[:20]  # Limit results
 

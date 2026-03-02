@@ -42,7 +42,6 @@ def get_active_components(dir_path):
                  components.append(f"- `{item}` - Component file.")
     except Exception as e:
         logger.warning("Failed to list directory %s: %s", dir_path, e)
-        pass
 
     if not components:
         return "\n## Active Components\n- No specific components listed. See README.md for details.\n"

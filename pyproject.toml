@@ -282,6 +282,7 @@ dev = [
     "pyyaml>=6.0.2",
     "mutmut>=3.4.0",
     "fire>=0.5.0",
+    "fakeredis>=2.0.0",
 ]
 
 [project.scripts]

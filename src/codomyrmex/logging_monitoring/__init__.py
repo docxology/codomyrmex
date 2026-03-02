@@ -32,13 +32,6 @@ Subpackages:
 
 # This file makes the 'logging_monitoring' directory a Python package.
 
-# Shared schemas for cross-module interop
-try:
-    from codomyrmex.validation.schemas import Result, ResultStatus
-except ImportError:
-    Result = None  # type: ignore[assignment,misc]
-    ResultStatus = None  # type: ignore[assignment,misc]
-
 # Correlation ID propagation (v0.2.0 Stream 3)
 from .core.correlation import (
     CorrelationFilter,

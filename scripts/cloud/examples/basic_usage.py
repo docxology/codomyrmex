@@ -7,6 +7,7 @@ Demonstrates actual cloud capabilities:
 - Document and Page models usage
 """
 
+import os
 import sys
 from pathlib import Path
 
@@ -40,9 +41,9 @@ def main():
 
     # 1. CodaClient
     print_info("Testing CodaClient initialization...")
+    coda_token = os.getenv("CODA_API_TOKEN", "")
     try:
-        # We don't need a real token for instantiation check
-        client = CodaClient(api_token="test_token")
+        client = CodaClient(api_token=coda_token)
         print_success("  CodaClient initialized successfully (interface check).")
     except Exception as e:
         print_error(f"  CodaClient failed: {e}")

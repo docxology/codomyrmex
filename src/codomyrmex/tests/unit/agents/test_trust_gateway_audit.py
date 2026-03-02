@@ -6,15 +6,22 @@ functions in ``codomyrmex.agents.pai.trust_gateway``.
 
 import json
 import tempfile
+import threading
+import time
 from datetime import UTC, datetime
 from pathlib import Path
 
 import pytest
 
+import codomyrmex.agents.pai.trust_gateway as _gw
 from codomyrmex.agents.pai.trust_gateway import (
     DESTRUCTIVE_TOOLS,
+    TrustLevel,
+    TrustRegistry,
+    _cleanup_expired_confirmations,
     _is_destructive,
     _log_audit_entry,
+    _pending_confirmations,
     clear_audit_log,
     export_audit_log,
     get_audit_log,
@@ -159,3 +166,165 @@ class TestDestructiveDetection:
     def test_safe_auto_discovered(self):
         """Auto-discovered tools without destructive patterns are safe."""
         assert _is_destructive("codomyrmex.cache.get_stats") is False
+
+
+def _make_isolated_registry(levels: dict) -> "TrustRegistry":
+    """Create a TrustRegistry that is fully isolated from disk state.
+
+    Uses a non-existent ledger path so _load() is a no-op and overrides
+    _save() to prevent any filesystem writes during tests.
+    """
+    reg = TrustRegistry.__new__(TrustRegistry)
+    # Non-existent path means _load() returns immediately (no file found)
+    reg._ledger_path = Path("/nonexistent_test_trust_ledger_path.json")
+    reg._levels = dict(levels)
+    # Prevent writes to disk during tests
+    reg._save = lambda: None  # type: ignore[method-assign]
+    return reg
+
+
+@pytest.mark.unit
+class TestTrustStateMachine:
+    """Tests for the UNTRUSTED → VERIFIED → TRUSTED state machine."""
+
+    def test_trust_level_ordering(self):
+        """TrustLevel enum has the three expected values."""
+        assert TrustLevel.UNTRUSTED.value == "untrusted"
+        assert TrustLevel.VERIFIED.value == "verified"
+        assert TrustLevel.TRUSTED.value == "trusted"
+
+    def test_new_registry_reports_untrusted(self):
+        """A registry with UNTRUSTED levels reports them correctly."""
+        tool = "codomyrmex.list_modules"
+        reg = _make_isolated_registry({tool: TrustLevel.UNTRUSTED})
+        assert reg.level(tool) == TrustLevel.UNTRUSTED
+
+    def test_verify_all_safe_promotes_safe_tools(self):
+        """verify_all_safe() promotes eligible safe tools from UNTRUSTED to VERIFIED."""
+        from codomyrmex.agents.pai.trust_gateway import SAFE_TOOLS
+        if not SAFE_TOOLS:
+            pytest.skip("No safe tools registered in this environment")
+        safe_tool = next(iter(SAFE_TOOLS))
+        reg = _make_isolated_registry({safe_tool: TrustLevel.UNTRUSTED})
+        promoted = reg.verify_all_safe()
+        assert safe_tool in promoted
+        assert reg.level(safe_tool) == TrustLevel.VERIFIED
+
+    def test_verify_does_not_promote_already_trusted(self):
+        """verify_all_safe() leaves TRUSTED tools unchanged."""
+        from codomyrmex.agents.pai.trust_gateway import SAFE_TOOLS
+        if not SAFE_TOOLS:
+            pytest.skip("No safe tools registered in this environment")
+        tool = next(iter(SAFE_TOOLS))
+        reg = _make_isolated_registry({tool: TrustLevel.TRUSTED})
+        promoted = reg.verify_all_safe()
+        assert tool not in promoted
+        assert reg.level(tool) == TrustLevel.TRUSTED
+
+    def test_trust_tool_promotes_to_trusted(self):
+        """trust_tool() raises a tool from VERIFIED to TRUSTED."""
+        from codomyrmex.agents.pai.trust_gateway import SAFE_TOOLS
+        if not SAFE_TOOLS:
+            pytest.skip("No safe tools registered in this environment")
+        tool = next(iter(SAFE_TOOLS))
+        reg = _make_isolated_registry({tool: TrustLevel.VERIFIED})
+        result = reg.trust_tool(tool)
+        assert result == TrustLevel.TRUSTED
+        assert reg.level(tool) == TrustLevel.TRUSTED
+
+    def test_destructive_tool_not_promoted_by_verify(self):
+        """verify_all_safe() never promotes a destructive tool."""
+        for dtool in DESTRUCTIVE_TOOLS:
+            reg = _make_isolated_registry({dtool: TrustLevel.UNTRUSTED})
+            promoted = reg.verify_all_safe()
+            assert dtool not in promoted
+            assert reg.level(dtool) == TrustLevel.UNTRUSTED
+
+    def test_is_at_least_verified(self):
+        """is_at_least_verified returns True only for VERIFIED or TRUSTED."""
+        tool = "codomyrmex.list_modules"
+        reg = _make_isolated_registry({tool: TrustLevel.UNTRUSTED})
+        assert reg.is_at_least_verified(tool) is False
+        reg._levels[tool] = TrustLevel.VERIFIED
+        assert reg.is_at_least_verified(tool) is True
+        reg._levels[tool] = TrustLevel.TRUSTED
+        assert reg.is_at_least_verified(tool) is True
+
+    def test_reset_returns_all_to_untrusted(self):
+        """reset() sets every tool back to UNTRUSTED."""
+        reg = _make_isolated_registry({
+            "codomyrmex.list_modules": TrustLevel.TRUSTED,
+            "codomyrmex.write_file": TrustLevel.VERIFIED,
+        })
+        reg.reset()
+        for level in reg._levels.values():
+            assert level == TrustLevel.UNTRUSTED
+
+
+@pytest.mark.unit
+class TestConcurrentAuditLog:
+    """Verify audit log remains consistent under concurrent writes."""
+
+    def test_concurrent_writes_all_recorded(self):
+        """Multiple threads writing simultaneously produce no lost entries."""
+        clear_audit_log()
+        n_threads = 10
+        writes_per_thread = 5
+        errors = []
+
+        def write_entries(thread_id: int) -> None:
+            try:
+                for i in range(writes_per_thread):
+                    _log_audit_entry(
+                        tool_name=f"codomyrmex.concurrent_test_{thread_id}_{i}",
+                        args={},
+                        status="success",
+                        trust_level="UNTRUSTED",
+                        duration_ms=0.1,
+                    )
+            except Exception as exc:
+                errors.append(exc)
+
+        threads = [threading.Thread(target=write_entries, args=(t,)) for t in range(n_threads)]
+        for t in threads:
+            t.start()
+        for t in threads:
+            t.join()
+
+        assert not errors, f"Concurrent write errors: {errors}"
+        log = get_audit_log()
+        concurrent_entries = [e for e in log if "concurrent_test_" in e["tool_name"]]
+        assert len(concurrent_entries) == n_threads * writes_per_thread
+
+
+@pytest.mark.unit
+class TestConfirmationTTL:
+    """Verify expired pending confirmations are cleaned up."""
+
+    def test_expired_confirmations_are_removed(self):
+        """_cleanup_expired_confirmations() removes entries past TTL.
+
+        Uses time.monotonic() to match the implementation's clock source.
+        """
+        _pending_confirmations.clear()
+        expired_token = "test-expired-token"
+        # Insert a confirmation whose monotonic timestamp is far in the past
+        _pending_confirmations[expired_token] = {
+            "tool_name": "codomyrmex.test",
+            "timestamp": time.monotonic() - 9999,
+        }
+        assert expired_token in _pending_confirmations
+        _cleanup_expired_confirmations()
+        assert expired_token not in _pending_confirmations
+
+    def test_fresh_confirmations_are_kept(self):
+        """_cleanup_expired_confirmations() retains non-expired entries."""
+        _pending_confirmations.clear()
+        fresh_token = "test-fresh-token"
+        _pending_confirmations[fresh_token] = {
+            "tool_name": "codomyrmex.test",
+            "timestamp": time.monotonic(),
+        }
+        _cleanup_expired_confirmations()
+        assert fresh_token in _pending_confirmations
+        _pending_confirmations.clear()
