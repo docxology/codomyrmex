@@ -84,11 +84,12 @@ All tools are auto-discovered via `@mcp_tool` decorators and exposed through the
 
 ## PAI Agent Role Access Matrix
 
-| PAI Agent | Access Level | Primary Capabilities | Trust Level |
-|-----------|-------------|---------------------|-------------|
-| **Engineer** | Full | `validate_schema`, `validate_config`, `validation_summary`; complete validation pipeline | TRUSTED |
-| **Architect** | Read + Design | `validate_schema`; schema design review, data contract validation | OBSERVED |
-| **QATester** | Validation | `validate_schema`, `validate_config`, `validation_summary`; full VERIFY-phase validation | OBSERVED |
+| PAI Agent | Access Level | MCP Tools | Trust Level |
+|-----------|-------------|-----------|-------------|
+| **Engineer** | Full | `validate_schema`, `validate_config`, `validation_summary` | TRUSTED |
+| **Architect** | Read + Design | `validate_schema` — schema design review, data contract validation | OBSERVED |
+| **QATester** | Validation | `validate_schema`, `validate_config`, `validation_summary` — full VERIFY-phase validation | OBSERVED |
+| **Researcher** | Read-only | `validate_schema` — validate research data structures | SAFE |
 
 ### Engineer Agent
 **Use Cases**: Schema validation at system boundaries during BUILD, config validation before EXECUTE, generating validation summaries.
@@ -98,6 +99,9 @@ All tools are auto-discovered via `@mcp_tool` decorators and exposed through the
 
 ### QATester Agent
 **Use Cases**: Running full validation suite during VERIFY, generating compliance reports, confirming schema correctness.
+
+### Researcher Agent
+**Use Cases**: Validating research data structures against schemas before analysis.
 
 ## Navigation
 

@@ -59,13 +59,34 @@ from codomyrmex.environment_setup import is_uv_available
 assert isinstance(is_uv_available(), bool)
 ```
 
+## MCP Tools Available
+
+| Tool | Description | Trust Level |
+|------|-------------|-------------|
+| `env_check` | Check Python version validity, uv availability, and uv-managed environment status. Returns dict of boolean checks. | SAFE |
+| `env_list_deps` | Verify all required Python dependencies are installed. Returns True if all satisfied, or a detail dict. | SAFE |
+
+## Operating Contracts
+
+**DO:**
+- Call `validate_environment()` at session start before any heavy operations
+- Use `check_and_setup_env_vars(required=[...])` to load `.env` and verify API keys
+- Prefer `uv` via `get_uv_path()` for any package installation operations
+- Check `is_uv_environment()` before assuming fast package operations
+
+**DO NOT:**
+- Install dependencies without first checking if they already exist
+- Mutate the system Python environment — use uv virtual environments only
+- Hard-code Python version requirements; use `validate_environment(min_python=...)` parameter
+
 ## PAI Agent Role Access Matrix
 
 | PAI Agent | Access Level | Primary Capabilities | Trust Level |
 |-----------|-------------|---------------------|-------------|
-| **Engineer** | Full | Environment validation, dependency checking, setup automation; full configuration control | TRUSTED |
+| **Engineer** | Full | Environment validation, dependency checking, setup automation; `env_check`, `env_list_deps` | TRUSTED |
 | **Architect** | Read + Design | Dependency inventory, environment specification review | OBSERVED |
 | **QATester** | Validation | Environment health verification, dependency availability testing | OBSERVED |
+| **Researcher** | Read-only | Check environment state via `env_check` before research operations | SAFE |
 
 ### Engineer Agent
 **Use Cases**: Setting up execution environments during BUILD, validating dependencies before EXECUTE, automating environment configuration.
@@ -75,6 +96,9 @@ assert isinstance(is_uv_available(), bool)
 
 ### QATester Agent
 **Use Cases**: Verifying all required dependencies are available, testing environment isolation, confirming setup completeness during VERIFY.
+
+### Researcher Agent
+**Use Cases**: Confirm environment prerequisites before long research operations, check uv availability.
 
 ## Navigation
 

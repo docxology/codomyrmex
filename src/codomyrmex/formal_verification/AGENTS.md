@@ -128,11 +128,12 @@ SolverError (base)
 
 ## PAI Agent Role Access Matrix
 
-| PAI Agent | Access Level | Primary Capabilities | Trust Level |
-|-----------|-------------|---------------------|-------------|
-| **Engineer** | Full | `clear_model`, `add_item`, `delete_item`, `replace_item`, `get_model`, `solve_model`; full Z3 model lifecycle | TRUSTED |
-| **Architect** | Read + Design | `get_model`, `solve_model`; constraint model review, formal property specification | OBSERVED |
-| **QATester** | Validation | `solve_model`, `get_model`; constraint satisfaction verification, property proof checking | OBSERVED |
+| PAI Agent | Access Level | MCP Tools | Trust Level |
+|-----------|-------------|-----------|-------------|
+| **Engineer** | Full | `clear_model`, `add_item`, `delete_item`, `replace_item`, `get_model`, `solve_model`, `push`, `pop` | TRUSTED |
+| **Architect** | Read + Design | `get_model`, `solve_model` — constraint model review, formal property specification | OBSERVED |
+| **QATester** | Validation | `solve_model`, `get_model` — constraint satisfaction verification, property proof checking | OBSERVED |
+| **Researcher** | Read-only | `get_model`, `solve_model` — inspect models and run read-only verification | SAFE |
 
 ### Engineer Agent
 **Use Cases**: Building formal constraint models during BUILD, solving Z3 models to verify system properties, model checking workflows.
@@ -142,6 +143,9 @@ SolverError (base)
 
 ### QATester Agent
 **Use Cases**: Running constraint solvers during VERIFY, confirming formal properties hold, validating correctness proofs.
+
+### Researcher Agent
+**Use Cases**: Inspecting existing constraint models and running satisfiability checks for research and ISC analysis.
 
 ## Navigation
 

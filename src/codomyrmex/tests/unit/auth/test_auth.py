@@ -566,10 +566,12 @@ class TestAuthenticator:
         """Test role-based authorization."""
         # Register role with permissions
         authenticator.permissions.register_role("editor", ["read", "write"])
+        # Assign role to user
+        authenticator.permissions.assign_role("editor_user", "editor")
 
-        # Create token for user with role name as user_id
+        # Create token for user
         token = authenticator.token_manager.create_token(
-            user_id="editor",
+            user_id="editor_user",
             permissions=[]
         )
 
@@ -675,3 +677,57 @@ class TestAPIKeyManagerEdgeCases:
             assert manager.revoke_api_key(key)
         for key in keys:
             assert manager.validate_api_key(key) is None
+
+
+class TestAuthenticatorExtended:
+    """Extended tests for Authenticator new features."""
+
+    @pytest.fixture
+    def auth(self):
+        """Create a fresh Authenticator."""
+        # Authenticator is a singleton, so we might need to reset it if it was dirty
+        # but for unit tests we assume it's okay or we provide a way to reset it.
+        # Since I can't easily reset it without adding a reset method, 
+        # I'll just use it and be careful.
+        from codomyrmex.auth.core.authenticator import Authenticator
+        a = Authenticator()
+        a._users = {}
+        a.permissions = PermissionRegistry()
+        return a
+
+    def test_user_registration(self, auth):
+        """Test user registration and RBAC assignment."""
+        assert auth.register_user("bob", "password", roles=["editor"])
+        assert "bob" in auth._users
+        assert "editor" in auth.permissions.get_user_roles("bob")
+
+    def test_user_registration_duplicate(self, auth):
+        """Test registration fails for duplicate username."""
+        auth.register_user("alice", "pass1")
+        assert not auth.register_user("alice", "pass2")
+
+    def test_authenticate_registered_user(self, auth):
+        """Test authentication of a registered user."""
+        auth.permissions.register_role("admin", ["*"])
+        auth.register_user("charlie", "secret", roles=["admin"])
+        token = auth.authenticate({"username": "charlie", "password": "secret"})
+        assert token is not None
+        assert token.user_id == "charlie"
+        assert "*" in token.permissions
+
+    def test_authorize_with_signed_string(self, auth):
+        """Test authorization using a signed token string."""
+        auth.permissions.register_role("viewer", ["read"])
+        auth.register_user("dan", "pass", roles=["viewer"])
+        token = auth.authenticate({"username": "dan", "password": "pass"})
+        assert token.jwt is not None
+        
+        # Authorize using the signed string (JWT)
+        assert auth.authorize(token.jwt, "report", "read")
+
+    def test_wildcard_permission_in_token(self, auth):
+        """Test wildcard permissions in token."""
+        token = auth.token_manager.create_token("user1", permissions=["data.*"])
+        assert auth.authorize(token, "resource", "data.read")
+        assert auth.authorize(token, "resource", "data.write")
+        assert not auth.authorize(token, "resource", "other")

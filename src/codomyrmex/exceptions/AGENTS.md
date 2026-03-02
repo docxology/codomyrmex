@@ -53,23 +53,56 @@ except CodomyrmexError as e:
 - **CEREBRUM**: Use `codomyrmex.exceptions.cerebrum` for all cognitive/inference errors.
 - **Circuit Breakers**: Use `CircuitOpenError` (inherits from `Exception`, not `CodomyrmexError`, as it's a control flow signal).
 
+## Key Files
+
+| File | Purpose |
+|------|---------|
+| `__init__.py` | Re-exports all exception classes |
+| `base.py` | `CodomyrmexError` root class with `message`, `context`, `error_code`, `to_dict()` |
+| `ai.py` | `AIProviderError`, `CodeGenerationError`, `ModelContextError` |
+| `config.py` | `ConfigurationError`, `EnvironmentError`, `DependencyError` |
+| `execution.py` | `CodeExecutionError`, `SandboxError`, `BuildError` |
+| `git.py` | `GitOperationError`, `RepositoryError` |
+| `network.py` | `NetworkError`, `APIError`, `ValidationError` |
+| `orchestration.py` | `OrchestrationError`, `WorkflowError` |
+| `io.py` | `FileOperationError`, `DirectoryError` |
+| `cerebrum.py` | `CerebrumError`, `InferenceError` |
+| `specialized.py` | `DatabaseError`, `CacheError`, `PluginError` |
+
+## Operating Contracts
+
+**DO:**
+- Always inherit new exceptions from `CodomyrmexError` (or a domain subclass)
+- Provide domain-specific `context` dict with named kwargs: `raise AIProviderError("msg", provider_name="X")`
+- Use `from cause` when re-raising to preserve exception chains
+- Re-export new exception classes in `__init__.py`
+
+**DO NOT:**
+- Raise bare `RuntimeError`, `ValueError`, or `Exception` — always use typed codomyrmex exceptions
+- Suppress exceptions silently (`except: pass`) — log and re-raise or raise a specific error
+- Use `CircuitOpenError` for domain errors — it is a control-flow signal only
+
 ## PAI Agent Role Access Matrix
 
 | PAI Agent | Access Level | Primary Capabilities | Trust Level |
 |-----------|-------------|---------------------|-------------|
-| **Engineer** | Full | Direct Python import, class instantiation, full API access | TRUSTED |
-| **Architect** | Read + Design | API review, interface design, dependency analysis | OBSERVED |
-| **QATester** | Validation | Integration testing via pytest, output validation | OBSERVED |
+| **Engineer** | Full | Direct Python import, raise/catch any exception class | TRUSTED |
+| **Architect** | Read + Design | Exception hierarchy design, context propagation review | OBSERVED |
+| **QATester** | Validation | Exception context validation, error code coverage testing | OBSERVED |
+| **Researcher** | Read-only | Inspect exception types and structures for analysis | SAFE |
 
 ### Engineer Agent
-**Use Cases**: Use typed exception classes for explicit error handling, raise CodomyrmexError subclasses during BUILD/EXECUTE phases
+**Use Cases**: Use typed exception classes for explicit error handling, raise `CodomyrmexError` subclasses during BUILD/EXECUTE phases.
 
 ### Architect Agent
-**Use Cases**: Design error hierarchy, review exception granularity, ensure context propagation patterns
+**Use Cases**: Design error hierarchy, review exception granularity, ensure context propagation patterns are consistent.
 
 ### QATester Agent
-**Use Cases**: Unit and integration test execution, exception context validation, error code coverage verification
+**Use Cases**: Unit and integration test execution, exception context validation, error code coverage verification during VERIFY.
+
+### Researcher Agent
+**Use Cases**: Inspect exception structures to understand error patterns and domain boundaries.
 
 ## Navigation
 
-- [README](README.md) | [SPEC](SPEC.md)
+- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)

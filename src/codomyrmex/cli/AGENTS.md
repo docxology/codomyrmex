@@ -1,89 +1,106 @@
 # Agent Guidelines - CLI
 
-**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Module Overview
 
-Command-line interface framework with argument parsing and subcommands.
+The `cli` module is the primary user interface for the Codomyrmex platform. Uses `google-fire` to
+map a Python `Cli` class to command-line sub-commands. Handlers live in `handlers/` and are
+dispatched via the `Cli` class in `core.py`. No MCP tools — the CLI is consumed by human operators
+and shell scripts, not PAI agents via MCP.
+
+## Key Files
+
+| File | Purpose |
+|------|---------|
+| `__init__.py` | Module entry point |
+| `core.py` | `Cli` class — main `fire` entrypoint; all top-level commands |
+| `handlers/` | Handler functions by domain (`ai.py`, `workflow.py`, `project.py`, etc.) |
+| `handlers/__init__.py` | Exports all handler functions |
+| `utils.py` | `print_success()`, `print_error()`, `print_warning()` — consistent output helpers |
+| `formatters.py` | Output formatting helpers for tables and JSON |
+| `doctor.py` | `DoctorCheck` — environment health diagnostics |
 
 ## Key Classes
 
-- **CLI** — Main CLI application
-- **Command** — Command definition
-- **Option** — Command-line options
-- **Argument** — Positional arguments
+- **`Cli`** (`core.py`) — Root `fire` class; all `codomyrmex` sub-commands are methods
+- **`DoctorCheck`** (`doctor.py`) — Environment diagnostics and health reporting
+- **`print_success()`**, **`print_error()`**, **`print_warning()`** — Consistent output helpers
 
 ## Agent Instructions
 
-1. **Use subcommands** — Group related commands
-2. **Add help text** — Describe every option
-3. **Exit codes** — Return proper exit codes
-4. **Progress output** — Show progress for long ops
-5. **Configuration** — Support config files
+1. **Zero-Mock Policy** — When writing tests for the CLI, **do not use mocks**; exercise real handlers
+2. **Graceful Imports** — Use lazy imports or `try-except ImportError` in handlers; CLI must remain usable without optional modules
+3. **Consistent Formatting** — Use `print_success`, `print_error`, `print_warning` from `utils.py`
+4. **Method Documentation** — Every `Cli` method needs a docstring; `fire` uses them for help text
+5. **Subcommand Grouping** — Group related functionality into logical subcommands (`ai`, `workflow`, `fpf`)
+
+## Operating Contracts
+
+- All handler functions must return `True` on success, `False` on failure — never raise unhandled exceptions
+- `print_success()`, `print_error()`, and `print_warning()` are the only permitted output paths in handlers
+- The `Cli` class is the sole entrypoint — no direct calls to handler functions from outside `cli/`
+- New commands must use lazy imports: `from codomyrmex.my_module import X` inside the function body
+- **DO NOT** import heavy modules at module-level in `core.py` — this slows CLI startup
 
 ## Common Patterns
 
+### Adding a New Command Group
+
+1. Create a new handler file in `handlers/` (e.g., `my_feature.py`)
+2. Implement handler functions with proper error handling
+3. Export them in `handlers/__init__.py`
+4. Add a method to the `Cli` class in `core.py` that dispatches to these handlers
+
+### Robust Handler Implementation
+
 ```python
-from codomyrmex.cli import CLI, Command, Option, Argument
-
-cli = CLI(name="myapp", version="1.0.0")
-
-@cli.command()
-@Option("--verbose", "-v", is_flag=True)
-@Argument("name")
-def greet(name: str, verbose: bool):
-    \"\"\"Greet a user.\"\"\"
-    if verbose:
-        print(f"Verbose mode enabled")
-    print(f"Hello, {name}!")
-
-@cli.group()
-def users():
-    \"\"\"User management commands.\"\"\"
-    pass
-
-@users.command()
-def list():
-    \"\"\"List all users.\"\"\"
-    for user in get_users():
-        print(user.name)
-
-if __name__ == "__main__":
-    cli.run()
+def handle_my_command(param):
+    try:
+        from codomyrmex.my_module import real_logic
+        result = real_logic(param)
+        print_success("Operation completed")
+        return True
+    except ImportError:
+        print_error("My Module not available")
+        return False
+    except Exception as e:
+        print_error(f"Failed: {e}")
+        return False
 ```
 
 ## Testing Patterns
 
 ```python
-from codomyrmex.cli.testing import CliRunner
-
-runner = CliRunner()
-
-result = runner.invoke(cli, ["greet", "World"])
-assert result.exit_code == 0
-assert "Hello, World!" in result.output
-
-result = runner.invoke(cli, ["--help"])
-assert "Usage:" in result.output
+def test_my_command_integrated():
+    from codomyrmex.cli.core import Cli
+    cli = Cli()
+    # Exercise real command logic — no mocks
+    result = cli.my_command(param="value")
+    assert result is True
 ```
 
 ## PAI Agent Role Access Matrix
 
-| PAI Agent | Access Level | Primary Capabilities | Trust Level |
-|-----------|-------------|---------------------|-------------|
-| **Engineer** | Full | Direct Python import, class instantiation, full API access | TRUSTED |
-| **Architect** | Read + Design | API review, command structure design, dependency analysis | OBSERVED |
-| **QATester** | Validation | Integration testing via pytest, CLI behavior validation | OBSERVED |
+| PAI Agent | Access Level | MCP Tools | Trust Level |
+|-----------|-------------|-----------|-------------|
+| **Engineer** | Full | None — Python import / shell execution only | TRUSTED |
+| **Architect** | Read + Design | None — design command hierarchy and API specs | OBSERVED |
+| **QATester** | Validation | None — run integrated CLI tests and doctor checks | OBSERVED |
+| **Researcher** | Read-only | None — inspect CLI command structure | SAFE |
 
 ### Engineer Agent
-**Use Cases**: Build CLI commands and subcommands, implement argument parsing, full implementation access during BUILD/EXECUTE phases
+**Use Cases**: Building and maintaining CLI handlers during BUILD, adding new command groups.
 
 ### Architect Agent
-**Use Cases**: Review command hierarchy structure, validate CLI UX patterns, design subcommand grouping
+**Use Cases**: Defining command hierarchy, reviewing API specs, planning subcommand taxonomy.
 
 ### QATester Agent
-**Use Cases**: Validate CLI exit codes, verify help text output, test argument parsing edge cases via CliRunner
+**Use Cases**: Running integrated CLI tests during VERIFY, confirming doctor check results.
+
+### Researcher Agent
+**Use Cases**: Inspecting CLI command structure and handler implementations for analysis.
 
 ## Navigation
 
-- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)
+- [README](README.md) | [SPEC](SPEC.md)

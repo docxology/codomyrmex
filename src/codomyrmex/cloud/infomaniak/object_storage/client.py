@@ -235,10 +235,13 @@ class InfomaniakS3Client(InfomaniakS3Base, StorageClient):
             logger.error(f"Failed to list buckets: {e}")
             return []
 
-    def create_bucket(self, name: str) -> bool:
+    def create_bucket(self, name: str, region: str | None = None) -> bool:
         """Create a bucket."""
         try:
-            self._client.create_bucket(Bucket=name)
+            kwargs = {"Bucket": name}
+            if region:
+                kwargs["CreateBucketConfiguration"] = {"LocationConstraint": region}
+            self._client.create_bucket(**kwargs)
             logger.info(f"Created bucket: {name}")
             return True
         except Exception as e:
@@ -291,10 +294,13 @@ class InfomaniakS3Client(InfomaniakS3Base, StorageClient):
         bucket: str,
         key: str,
         file_path: str,
-        extra_args: dict[str, Any] | None = None
+        content_type: str | None = None
     ) -> bool:
         """Upload a local file to a bucket."""
         try:
+            extra_args = {}
+            if content_type:
+                extra_args["ContentType"] = content_type
             self._client.upload_file(file_path, bucket, key, ExtraArgs=extra_args)
             logger.info(f"Uploaded file: {bucket}/{key}")
             return True
@@ -355,28 +361,26 @@ class InfomaniakS3Client(InfomaniakS3Base, StorageClient):
         """Delete a file. ABC-compatible alias for delete_object."""
         return self.delete_object(bucket, key)
 
-    def get_metadata(self, bucket: str, key: str) -> dict[str, Any]:
+    def get_object_metadata(self, bucket: str, key: str) -> dict[str, Any]:
         """Get object metadata."""
         try:
             response = self._client.head_object(Bucket=bucket, Key=key)
-            return {
-                "content_length": response.get("ContentLength"),
-                "content_type": response.get("ContentType"),
-                "etag": response.get("ETag"),
-                "last_modified": str(response.get("LastModified")),
-                "metadata": response.get("Metadata", {}),
-            }
+            return response.get("Metadata", {})
         except Exception as e:
             logger.error(f"Failed to get metadata for {bucket}/{key}: {e}")
             return {}
+
+    def get_metadata(self, bucket: str, key: str) -> dict[str, Any]:
+        """Legacy alias for get_object_metadata."""
+        return self.get_object_metadata(bucket, key)
 
     def generate_presigned_url(
         self,
         bucket: str,
         key: str,
         expires_in: int = 3600,
-        http_method: str = "GET"
-    ) -> str | None:
+        operation: str = "get_object"
+    ) -> str:
         """
         Generate a presigned URL for temporary access.
 
@@ -384,19 +388,18 @@ class InfomaniakS3Client(InfomaniakS3Base, StorageClient):
             bucket: Bucket name
             key: Object key
             expires_in: URL expiration in seconds
-            http_method: HTTP method (GET or PUT)
+            operation: Operation type (e.g., "get_object", "put_object")
         """
         try:
-            client_method = "get_object" if http_method == "GET" else "put_object"
             url = self._client.generate_presigned_url(
-                ClientMethod=client_method,
+                ClientMethod=operation,
                 Params={"Bucket": bucket, "Key": key},
                 ExpiresIn=expires_in
             )
             return url
         except Exception as e:
             logger.error(f"Failed to generate presigned URL: {e}")
-            return None
+            return ""
 
     # =========================================================================
     # Advanced S3 Operations

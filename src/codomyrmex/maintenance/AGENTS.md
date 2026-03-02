@@ -4,7 +4,21 @@
 
 ## Module Overview
 
-Project maintenance utilities: dependency analysis, circular import detection, requirements consolidation, and deprecation management.
+Project maintenance utilities covering dependency analysis, circular import detection, requirements
+consolidation, and deprecation management. Provides `DependencyAnalyzer` for AST-based import
+scanning and layer violation detection, and two MCP tools (`maintenance_health_check`,
+`maintenance_list_tasks`) for system health monitoring.
+
+## Key Files
+
+| File | Purpose |
+|------|---------|
+| `__init__.py` | Exports `DependencyAnalyzer`, `analyze_project_structure`, `analyze_code_quality`, `check_dependencies` |
+| `dependency_analyzer.py` | `DependencyAnalyzer` — AST-based import scanner and circular dependency detector |
+| `analyze_project.py` | `analyze_project_structure()`, `analyze_code_quality()` |
+| `dependency_checker.py` | `check_dependencies()` — dependency validation |
+| `dependency_consolidator.py` | Requirements file consolidation utilities |
+| `mcp_tools.py` | MCP tools: `maintenance_health_check`, `maintenance_list_tasks` |
 
 ## Key Classes
 
@@ -62,20 +76,27 @@ assert "circular_dependencies" in result
 
 ## MCP Tools Available
 
-All tools are auto-discovered via `@mcp_tool` decorators and exposed through the MCP bridge.
-
 | Tool | Description | Trust Level |
 |------|-------------|-------------|
-| `maintenance_health_check` | Run a simple health check and return its status | Safe |
-| `maintenance_list_tasks` | List all registered maintenance tasks and their status | Safe |
+| `maintenance_health_check` | Run a simple health check and return its status | SAFE |
+| `maintenance_list_tasks` | List all registered maintenance tasks and their status | SAFE |
+
+## Operating Contracts
+
+- `DependencyAnalyzer` requires `scan_all_modules()` before calling `detect_circular_dependencies()` or `validate_dependency_hierarchy()`
+- `analyze_project_structure()` and `analyze_code_quality()` operate on the current working directory
+- `maintenance_health_check` is a point-in-time snapshot — run it, don't cache the result
+- `DependencyAnalyzer.generate_report()` returns a formatted string — log or print, don't parse it
+- **DO NOT** modify `requirements.txt` files; point deprecated ones to `pyproject.toml` instead
 
 ## PAI Agent Role Access Matrix
 
-| PAI Agent | Access Level | Primary Capabilities | Trust Level |
-|-----------|-------------|---------------------|-------------|
-| **Engineer** | Full | `maintenance_health_check`, `maintenance_list_tasks`; full maintenance lifecycle | TRUSTED |
-| **Architect** | Read + Design | `maintenance_list_tasks`; task queue review, maintenance schedule design | OBSERVED |
-| **QATester** | Validation | `maintenance_health_check`; system health verification during VERIFY phase | OBSERVED |
+| PAI Agent | Access Level | MCP Tools | Trust Level |
+|-----------|-------------|-----------|-------------|
+| **Engineer** | Full | `maintenance_health_check`, `maintenance_list_tasks` | TRUSTED |
+| **Architect** | Read + Design | `maintenance_list_tasks` — task queue review, maintenance schedule design | OBSERVED |
+| **QATester** | Validation | `maintenance_health_check` — system health verification during VERIFY phase | OBSERVED |
+| **Researcher** | Read-only | `maintenance_health_check`, `maintenance_list_tasks` — inspect system health and task state | SAFE |
 
 ### Engineer Agent
 **Use Cases**: Running health checks during VERIFY, managing maintenance task queues, scheduling system upkeep.
@@ -85,6 +106,9 @@ All tools are auto-discovered via `@mcp_tool` decorators and exposed through the
 
 ### QATester Agent
 **Use Cases**: Running health checks to confirm system operational status, validating maintenance completeness.
+
+### Researcher Agent
+**Use Cases**: Inspecting system health status and maintenance task catalog during research and analysis.
 
 ## Navigation
 

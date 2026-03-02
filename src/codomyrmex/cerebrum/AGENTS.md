@@ -4,14 +4,30 @@
 
 ## Module Overview
 
-Cognitive architecture for reasoning, planning, and decision-making.
+Cognitive architecture for case-based reasoning, planning, and decision-making. Provides
+`CerebrumEngine` for orchestrating multi-step reasoning, `WorkingMemory` for short-term context
+storage, and a `CaseBase` knowledge store for storing and retrieving prior problem-solution pairs.
+Two MCP tools (`query_knowledge_base`, `add_case_reference`) expose the knowledge lifecycle to
+PAI agents.
+
+## Key Files
+
+| File | Purpose |
+|------|---------|
+| `__init__.py` | Exports `CerebrumEngine`, `WorkingMemory`, `ReasoningChain`, `DecisionModule` |
+| `engine.py` | `CerebrumEngine` — core reasoning engine |
+| `memory.py` | `WorkingMemory` — short-term context storage |
+| `reasoning.py` | `ReasoningChain` — step-by-step chain-of-thought orchestration |
+| `decision.py` | `DecisionModule` — multi-criteria decision making |
+| `case_base.py` | `CaseBase` — knowledge store for prior problem-solution pairs |
+| `mcp_tools.py` | MCP tools: `query_knowledge_base`, `add_case_reference` |
 
 ## Key Classes
 
-- **CerebrumEngine** — Core reasoning engine
-- **WorkingMemory** — Short-term context
-- **ReasoningChain** — Chain-of-thought reasoning
-- **DecisionModule** — Decision making
+- **CerebrumEngine** — Core reasoning engine that orchestrates all cognitive components.
+- **WorkingMemory** — Short-term context storage for reasoning steps and decisions.
+- **ReasoningChain** — Orchestrates step-by-step chain-of-thought reasoning.
+- **DecisionModule** — Handles multi-criteria decision making based on weighted attributes.
 
 ## Agent Instructions
 
@@ -66,33 +82,39 @@ assert memory.retrieve("key") == "value"
 
 ## MCP Tools Available
 
-All tools are auto-discovered via `@mcp_tool` decorators and exposed through the MCP bridge.
-
 | Tool | Description | Trust Level |
 |------|-------------|-------------|
-| `query_knowledge_base` | Perform semantic retrieval from the CaseBase | Safe |
-| `add_case_reference` | Store intelligence context directly into the CaseBase | Safe |
+| `query_knowledge_base` | Perform semantic retrieval from the CaseBase | SAFE |
+| `add_case_reference` | Store intelligence context directly into the CaseBase | SAFE |
+
+## Operating Contracts
+
+- `WorkingMemory` is not thread-safe — create one instance per concurrent reasoning task
+- `ReasoningChain.execute()` requires all steps to be added before calling
+- `query_knowledge_base` is read-only — does not modify the CaseBase
+- `add_case_reference` writes persist within the session but may not be durable across restarts
+- **DO NOT** call `engine.decide()` without providing a non-empty `options` list
 
 ## PAI Agent Role Access Matrix
 
 | PAI Agent | Access Level | MCP Tools | Trust Level |
 |-----------|-------------|-----------|-------------|
 | **Engineer** | Full knowledge CRUD | `query_knowledge_base`, `add_case_reference` | TRUSTED |
-| **Architect** | Query-only | `query_knowledge_base` | OBSERVED |
-| **QATester** | Retrieval verification | `query_knowledge_base` | OBSERVED |
-| **Researcher** | Read-only | `query_knowledge_base` | OBSERVED |
+| **Architect** | Query-only | `query_knowledge_base` — architectural decision retrieval | OBSERVED |
+| **QATester** | Retrieval verification | `query_knowledge_base` — retrieval accuracy verification | OBSERVED |
+| **Researcher** | Read-only | `query_knowledge_base` — knowledge retrieval for research | SAFE |
 
 ### Engineer Agent
-**Access**: Full — both read and write operations on the knowledge base (CaseBase).
-**Use Cases**: Adding case references during LEARN phase, storing problem-solution pairs for future retrieval, building up domain knowledge from successful Algorithm runs.
+**Use Cases**: Adding case references during LEARN phase, storing problem-solution pairs, building domain knowledge from successful Algorithm runs.
 
 ### Architect Agent
-**Access**: Query-only — semantic retrieval for design decisions.
-**Use Cases**: Querying past architectural decisions, retrieving analogous problems for pattern matching, informing ISC criteria with case-based precedents from the THINK phase.
+**Use Cases**: Querying past architectural decisions, retrieving analogous problems for pattern matching, informing ISC criteria with case-based precedents during THINK phase.
 
 ### QATester Agent
-**Access**: Retrieval verification — confirming knowledge retrieval accuracy.
-**Use Cases**: Verifying that `add_case_reference` writes are retrievable via `query_knowledge_base`, testing relevance ranking of search results, confirming CaseBase consistency.
+**Use Cases**: Verifying that `add_case_reference` writes are retrievable, testing relevance ranking, confirming CaseBase consistency.
+
+### Researcher Agent
+**Use Cases**: Semantic knowledge retrieval for research analysis, querying prior case references.
 
 ## Navigation
 

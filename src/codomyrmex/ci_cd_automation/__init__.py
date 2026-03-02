@@ -6,7 +6,7 @@ capabilities, including pipeline management, automated testing, deployment orche
 and build automation for the Codomyrmex ecosystem.
 
 Submodules:
-    build: Consolidated build capabilities.
+    pipeline: Core pipeline management.
 
 Integration:
 - Uses `logging_monitoring` for all logging (ensure `setup_logging()` is called in your main app).
@@ -33,7 +33,7 @@ Data structures:
 - RollbackStrategy: Rollback configuration and execution
 """
 
-from . import build, pipeline
+from . import pipeline
 
 # Shared schemas for cross-module interop
 try:
@@ -45,7 +45,9 @@ except ImportError:
 from .deployment_orchestrator import (
     Deployment,
     DeploymentOrchestrator,
+    DeploymentStatus,
     Environment,
+    EnvironmentType,
     manage_deployments,
 )
 from .exceptions import (
@@ -65,6 +67,10 @@ from .pipeline import (
     PipelineJob,
     PipelineManager,
     PipelineStage,
+    PipelineBuilder,
+    WorkflowGenerator,
+    Workflow,
+    ArtifactManager,
     create_pipeline,
     run_pipeline,
 )
@@ -116,11 +122,17 @@ __all__ = [
     "Pipeline",
     "PipelineJob",
     "PipelineStage",
+    "PipelineBuilder",
+    "WorkflowGenerator",
+    "Workflow",
+    "ArtifactManager",
     # Deployment orchestration
     "DeploymentOrchestrator",
     "manage_deployments",
     "Deployment",
+    "DeploymentStatus",
     "Environment",
+    "EnvironmentType",
     # Pipeline monitoring
     "PipelineMonitor",
     "monitor_pipeline_health",

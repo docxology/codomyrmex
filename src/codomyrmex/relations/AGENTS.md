@@ -1,6 +1,6 @@
 # Agent Instructions for `codomyrmex.relations`
 
-**Version**: v1.0.2 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
 
@@ -89,11 +89,12 @@ uv run pytest src/codomyrmex/tests/unit/relations/ -v
 
 ## PAI Agent Role Access Matrix
 
-| PAI Agent | Access Level | Primary Capabilities | Trust Level |
-|-----------|-------------|---------------------|-------------|
-| **Engineer** | Full | `relations_score_strength`; relationship scoring, entity link management | TRUSTED |
-| **Architect** | Read + Design | `relations_score_strength`; relationship design, entity graph architecture | OBSERVED |
-| **QATester** | Validation | `relations_score_strength`; relationship strength verification | OBSERVED |
+| PAI Agent | Access Level | MCP Tools | Trust Level |
+|-----------|-------------|-----------|-------------|
+| **Engineer** | Full | `relations_score_strength` | TRUSTED |
+| **Architect** | Read + Design | `relations_score_strength` — relationship design, entity graph architecture | OBSERVED |
+| **QATester** | Validation | `relations_score_strength` — relationship strength verification | OBSERVED |
+| **Researcher** | Read-only | `relations_score_strength` — compute relationship scores for analysis | SAFE |
 
 ### Engineer Agent
 **Use Cases**: Scoring entity relationships during OBSERVE/THINK, building relationship graphs, computing link strength metrics.
@@ -103,6 +104,9 @@ uv run pytest src/codomyrmex/tests/unit/relations/ -v
 
 ### QATester Agent
 **Use Cases**: Validating relationship scores during VERIFY, confirming entity linkage correctness.
+
+### Researcher Agent
+**Use Cases**: Computing relationship strength scores between entities for research analysis and insight extraction.
 
 ## Navigation
 

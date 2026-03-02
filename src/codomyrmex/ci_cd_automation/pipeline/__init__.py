@@ -17,6 +17,9 @@ from .models import (
     PipelineStatus,
     StageStatus,
 )
+from .builder import PipelineBuilder
+from .generator import WorkflowGenerator, Workflow
+from .artifact_manager import ArtifactManager
 
 __all__ = [
     "JobStatus",
@@ -33,6 +36,10 @@ __all__ = [
     "async_wait_for_completion",
     "create_pipeline",
     "run_pipeline",
+    "PipelineBuilder",
+    "WorkflowGenerator",
+    "Workflow",
+    "ArtifactManager",
 ]
 
 from .pipeline_monitor import (  # noqa: E402, F401

@@ -144,17 +144,21 @@ class BayesianNetwork:
             List of node names in topological order
         """
         visited = set()
+        temp_visited = set()
         order = []
 
         def visit(node: str):
-            """Visit."""
-
-
+            if node in temp_visited:
+                raise NetworkStructureError(f"Cycle detected in Bayesian network involving node {node}")
             if node in visited:
                 return
-            visited.add(node)
+            
+            temp_visited.add(node)
             for parent in self.parents[node]:
                 visit(parent)
+            
+            temp_visited.remove(node)
+            visited.add(node)
             order.append(node)
 
         for node in self.nodes:
@@ -262,6 +266,8 @@ class InferenceEngine:
 
         for node in topo_order:
             if node not in assignment:
+                # If a node is missing from assignment, we can't compute a joint for it.
+                # However, for our purposes in VE or MCMC, we usually have full assignments for the current scope.
                 continue
 
             node_value = assignment[node]
@@ -271,10 +277,18 @@ class InferenceEngine:
                 # Root node - use prior
                 prior = self.network.nodes[node]["prior"]
                 values = self.network.nodes[node]["values"]
-                idx = values.index(node_value) if node_value in values else 0
-                prob *= prior[idx]
+                if node_value in values:
+                    idx = values.index(node_value)
+                    prob *= prior[idx]
+                else:
+                    prob *= 0.0
             else:
                 # Get parent configuration
+                # All parents must be in assignment for this to work
+                if any(p not in assignment for p in parents):
+                    # This shouldn't happen with topological order and full assignment
+                    continue
+
                 parent_config = tuple(assignment[p] for p in parents)
                 cpt = self.network.cpt.get(node, {})
                 dist = cpt.get(parent_config)

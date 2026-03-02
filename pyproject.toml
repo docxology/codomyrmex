@@ -105,7 +105,6 @@ dependencies = [
     "msgpack>=1.1.2",
     "fastavro>=1.12.1",
     "mnemonic>=0.21",
-
 ]
 
 [project.optional-dependencies]

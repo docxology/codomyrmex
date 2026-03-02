@@ -1,0 +1,32 @@
+module: multimodal
+enabled: true
+logging:
+  level: INFO
+  format: '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+  file: logs/multimodal.log
+performance:
+  max_workers: 4
+  timeout_seconds: 30.0
+  caching: true
+features:
+  experimental: false
+  strict_mode: true
+
+# Image generation via Google AI (Imagen 3)
+generation:
+  image:
+    # Google AI model — use "imagen-3.0-generate-002" for Imagen 3 (recommended)
+    # or "imagen-3.0-fast-generate-001" for faster, lower-cost generation
+    model: "imagen-3.0-generate-002"
+    # Default prompt used by orchestrate.py when no --prompt is given
+    default_prompt: "A photorealistic blue butterfly resting on a sunlit dandelion, macro photography, golden hour"
+    # Number of images to generate per request (1–4)
+    number_of_images: 1
+    # Aspect ratio: "1:1" | "16:9" | "9:16" | "4:3" | "3:4"
+    aspect_ratio: "1:1"
+    # Output directory (relative to repo root) for saving generated images
+    output_dir: "outputs/images"
+    # File format for saved images: "png" | "jpeg"
+    save_format: "png"
+    # Safety filter level: "block_low_and_above" | "block_medium_and_above" | "block_only_high"
+    safety_filter_level: "block_medium_and_above"

@@ -2,7 +2,9 @@
 
 import asyncio
 import threading
+import time
 from abc import ABC, abstractmethod
+from typing import Optional
 
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
@@ -12,6 +14,8 @@ class BaseSemaphore(ABC):
     """Abstract base class for all semaphore implementations."""
 
     def __init__(self, value: int = 1):
+        if value < 0:
+            raise ValueError("Semaphore value must be >= 0")
         self.initial_value = value
 
     @abstractmethod
@@ -24,6 +28,16 @@ class BaseSemaphore(ABC):
         """Release a semaphore unit."""
         pass
 
+    def __enter__(self):
+        """Enter the context manager."""
+        if not self.acquire():
+            raise TimeoutError("Could not acquire semaphore")
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        """Exit the context manager and clean up."""
+        self.release()
+
 class LocalSemaphore(BaseSemaphore):
     """Local thread-safe semaphore wrapper."""
 
@@ -32,11 +46,11 @@ class LocalSemaphore(BaseSemaphore):
         self._semaphore = threading.Semaphore(value)
 
     def acquire(self, timeout: float = 10.0) -> bool:
-        """Acquire."""
+        """Acquire a semaphore unit with timeout."""
         return self._semaphore.acquire(timeout=timeout)
 
     def release(self) -> None:
-        """Release."""
+        """Release a semaphore unit."""
         self._semaphore.release()
 
 class AsyncLocalSemaphore(BaseSemaphore):
@@ -48,13 +62,38 @@ class AsyncLocalSemaphore(BaseSemaphore):
         self._sync_lock = threading.Lock()
         self._sync_count = value
 
-    async def acquire_async(self) -> None:
-        await self._semaphore.acquire()
+    async def acquire_async(self, timeout: Optional[float] = None) -> bool:
+        """Acquire a semaphore unit asynchronously."""
+        try:
+            if timeout is not None:
+                await asyncio.wait_for(self._semaphore.acquire(), timeout=timeout)
+            else:
+                await self._semaphore.acquire()
+            
+            with self._sync_lock:
+                self._sync_count -= 1
+            return True
+        except (asyncio.TimeoutError, TimeoutError):
+            return False
+
+    async def __aenter__(self):
+        """Enter the async context manager."""
+        if not await self.acquire_async():
+            raise TimeoutError("Could not acquire semaphore")
+        return self
+
+    async def __aexit__(self, exc_type, exc_val, exc_tb):
+        """Exit the async context manager and clean up."""
+        self.release()
 
     def release(self) -> None:
-        """Release."""
-        self._semaphore.release()
-        # Also update sync count if it was acquired synchronously
+        """Release a unit back to the semaphore."""
+        try:
+            self._semaphore.release()
+        except ValueError:
+            # Too many releases for the internal semaphore
+            pass
+            
         with self._sync_lock:
             if self._sync_count < self.initial_value:
                 self._sync_count += 1
@@ -62,50 +101,39 @@ class AsyncLocalSemaphore(BaseSemaphore):
     def acquire(self, timeout: float = 10.0) -> bool:
         """Synchronous acquisition that bridges to async context safely.
 
-        This method attempts to acquire the semaphore synchronously by:
-        1. Checking if we're in an event loop - if so, use the sync fallback counter
-        2. If no loop is running, create one temporarily to run the acquire
-
-        Args:
-            timeout: Maximum time to wait for acquisition in seconds
-
-        Returns:
-            True if acquired, False if timeout occurred
+        If in an event loop, uses a fallback synchronous counter to avoid blocking.
+        If no loop is running, creates a temporary one to execute the acquisition.
         """
         try:
             # Check if there's a running event loop
             loop = asyncio.get_running_loop()
-            # We're inside an async context - use the sync counter fallback
+            # We're inside an async context - use the sync counter fallback to avoid blocking the loop
             logger.warning(
                 "Synchronous acquire() called from async context. "
                 "Using fallback sync counter - prefer acquire_async() instead."
             )
-            with self._sync_lock:
-                if self._sync_count > 0:
-                    self._sync_count -= 1
-                    return True
-                return False
+            start_time = time.time()
+            while time.time() - start_time < timeout:
+                with self._sync_lock:
+                    if self._sync_count > 0:
+                        self._sync_count -= 1
+                        # Note: This does NOT acquire the underlying asyncio.Semaphore
+                        # which is okay as long as this is only for sync-from-async bridging
+                        return True
+                time.sleep(0.01)
+            return False
+            
         except RuntimeError:
             # No running event loop - we can create one temporarily
             async def _acquire_with_timeout():
                 try:
-                    await asyncio.wait_for(
-                        self._semaphore.acquire(),
-                        timeout=timeout
-                    )
-                    return True
-                except TimeoutError as e:
-                    logger.warning("Semaphore acquisition timed out after %.1fs: %s", timeout, e)
+                    return await self.acquire_async(timeout=timeout)
+                except Exception as e:
+                    logger.warning("Semaphore acquisition failed: %s", e)
                     return False
 
             try:
-                loop = asyncio.new_event_loop()
-                asyncio.set_event_loop(loop)
-                try:
-                    return loop.run_until_complete(_acquire_with_timeout())
-                finally:
-                    loop.close()
-                    asyncio.set_event_loop(None)
+                return asyncio.run(_acquire_with_timeout())
             except Exception as e:
                 logger.error(f"Failed to acquire semaphore synchronously: {e}")
                 return False

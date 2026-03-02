@@ -1,17 +1,28 @@
 # Agent Guidelines - Terminal Interface
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Module Overview
 
-Interactive shell, command execution, and terminal rendering.
+Rich terminal output, interactive shell REPL, command execution, and tab completion for the Codomyrmex CLI. Powers all PAI Algorithm phase headers, progress bars, and structured result display. No MCP tools — access exclusively via direct Python import. Use `TerminalFormatter` for all agent-facing output formatting to maintain consistent visual style across the CLI.
+
+## Key Files
+
+| File | Purpose |
+|------|---------|
+| `__init__.py` | Package-level exports |
+| `shells/` | `InteractiveShell` REPL implementation |
+| `commands/` | Command registration and dispatch |
+| `rendering/` | Rich output formatting and styling |
+| `completions/` | Tab completion provider |
+| `utils/` | `CommandRunner`, `TerminalFormatter` helpers |
 
 ## Key Classes
 
-- **InteractiveShell** — Interactive command shell
-- **CommandRunner** — Execute commands
-- **TerminalFormatter** — Rich terminal output
-- **CompletionProvider** — Tab completion
+- **`InteractiveShell`** (in `shells/`) — REPL-style interactive shell with command registration
+- **`CommandRunner`** (in `utils/`) — Execute shell commands and capture stdout/stderr/exit_code
+- **`TerminalFormatter`** (in `utils/`) — Rich colored output: success(), error(), table(), progress
+- **`CompletionProvider`** (in `completions/`) — Tab completion for CLI commands
 
 ## Agent Instructions
 
@@ -59,6 +70,19 @@ output = fmt.format_success("Test")
 assert "Test" in output
 ```
 
+## Operating Contracts
+
+**DO:**
+- Import from subpackages: `from codomyrmex.terminal_interface.utils import TerminalFormatter`
+- Use `TerminalFormatter.success/error/table()` for all user-visible output
+- Handle `KeyboardInterrupt` (Ctrl+C) gracefully in `InteractiveShell` loops
+- Stream long command output rather than buffering to avoid memory issues
+
+**DO NOT:**
+- Use `print()` directly in agent code — use `TerminalFormatter` for consistent styling
+- Block the shell thread on long-running operations without progress feedback
+- Expose raw terminal escape codes — use the formatter's named methods only
+
 ## PAI Agent Role Access Matrix
 
 | PAI Agent | Access Level | Primary Capabilities | Trust Level |
@@ -66,6 +90,7 @@ assert "Test" in output
 | **Engineer** | Full | Rich terminal output, formatting, progress bars, interactive prompts; full display control | TRUSTED |
 | **Architect** | Read + Design | Interface design review, output format specification | OBSERVED |
 | **QATester** | Validation | Terminal output correctness, formatting verification, accessibility compliance | OBSERVED |
+| **Researcher** | Read-only | Display research results via `TerminalFormatter.table()` | SAFE |
 
 ### Engineer Agent
 **Use Cases**: Rendering BUILD/EXECUTE progress output, displaying structured results, creating interactive CLI flows.
@@ -75,6 +100,9 @@ assert "Test" in output
 
 ### QATester Agent
 **Use Cases**: Validating terminal output format, testing display correctness during VERIFY phase.
+
+### Researcher Agent
+**Use Cases**: Displaying research findings in formatted tables, showing progress during long research operations.
 
 ## Navigation
 

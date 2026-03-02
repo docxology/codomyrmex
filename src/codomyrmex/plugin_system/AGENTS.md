@@ -4,7 +4,22 @@
 
 ## Module Overview
 
-Extensible plugin architecture for third-party modules.
+Extensible plugin architecture for third-party module extensions. Provides `PluginManager` for
+loading, activating, and deactivating plugins, `PluginLoader` for path-based discovery, and
+`PluginRegistry` for cross-module plugin sharing. Two MCP tools (`plugin_scan_entry_points`,
+`plugin_resolve_dependencies`) expose discovery and dependency resolution.
+
+## Key Files
+
+| File | Purpose |
+|------|---------|
+| `__init__.py` | Exports `PluginManager`, `PluginLoader`, `PluginRegistry`, `PluginValidator`, `Plugin`, `PluginError` |
+| `plugin_manager.py` | `PluginManager` — load, activate, deactivate, get, list plugins |
+| `plugin_loader.py` | `PluginLoader` — load plugins from filesystem paths |
+| `plugin_registry.py` | `PluginRegistry` — register and discover plugins |
+| `plugin_validator.py` | `PluginValidator` — validate plugin structure before loading |
+| `base.py` | `Plugin` — base plugin class with lifecycle hooks |
+| `mcp_tools.py` | MCP tools: `plugin_scan_entry_points`, `plugin_resolve_dependencies` |
 
 ## Key Classes
 
@@ -49,12 +64,18 @@ if plugin:
 
 ## MCP Tools Available
 
-All tools are auto-discovered via `@mcp_tool` decorators and exposed through the MCP bridge.
+| Tool | Description | Trust Level |
+|------|-------------|-------------|
+| `plugin_scan_entry_points` | Scan for installed plugins via Python package entry points | SAFE |
+| `plugin_resolve_dependencies` | Resolve plugin dependencies and produce a topological load order | SAFE |
 
-| Tool | Description | Key Parameters | Trust Level |
-|------|-------------|----------------|-------------|
-| `plugin_scan_entry_points` | Scan for installed plugins via Python package entry points | `entry_point_group` (default "codomyrmex.plugins") | Safe |
-| `plugin_resolve_dependencies` | Resolve plugin dependencies and produce a topological load order | `plugins` (list of dicts with name and dependencies) | Safe |
+## Operating Contracts
+
+- Always validate with `PluginValidator` before `PluginManager.load_plugins_from()` in production
+- Lifecycle order is strictly: `load()` → `activate()` → use → `deactivate()` — skipping steps raises errors
+- `PluginManager.get_plugin(name)` returns `None` if not found — always check before calling `activate()`
+- `plugin_resolve_dependencies` returns a topologically sorted list — use this order for loading
+- **DO NOT** catch `PluginError` and silently continue — always log or re-raise
 
 ## Testing Patterns
 
@@ -74,11 +95,12 @@ assert plugin.state == PluginState.INACTIVE
 
 ## PAI Agent Role Access Matrix
 
-| PAI Agent | Access Level | Primary Capabilities | Trust Level |
-|-----------|-------------|---------------------|-------------|
-| **Engineer** | Full | `plugin_scan_entry_points`, `plugin_resolve_dependencies`; full plugin lifecycle | TRUSTED |
-| **Architect** | Read + Design | `plugin_scan_entry_points`, `plugin_resolve_dependencies`; plugin architecture design | OBSERVED |
-| **QATester** | Validation | `plugin_scan_entry_points`; plugin discovery verification, dependency graph validation | OBSERVED |
+| PAI Agent | Access Level | MCP Tools | Trust Level |
+|-----------|-------------|-----------|-------------|
+| **Engineer** | Full | `plugin_scan_entry_points`, `plugin_resolve_dependencies` | TRUSTED |
+| **Architect** | Read + Design | `plugin_scan_entry_points`, `plugin_resolve_dependencies` — plugin architecture design | OBSERVED |
+| **QATester** | Validation | `plugin_scan_entry_points` — plugin discovery verification, dependency graph validation | OBSERVED |
+| **Researcher** | Read-only | `plugin_scan_entry_points`, `plugin_resolve_dependencies` — inspect plugin catalog | SAFE |
 
 ### Engineer Agent
 **Use Cases**: Scanning for available plugins during OBSERVE, resolving plugin dependencies before BUILD, managing plugin registry.
@@ -88,6 +110,9 @@ assert plugin.state == PluginState.INACTIVE
 
 ### QATester Agent
 **Use Cases**: Verifying plugin discovery during VERIFY, confirming dependency resolution correctness.
+
+### Researcher Agent
+**Use Cases**: Inspecting available plugin catalog and dependency resolution for research analysis.
 
 ## Navigation
 

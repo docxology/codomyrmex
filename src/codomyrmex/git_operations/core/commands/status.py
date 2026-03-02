@@ -1,5 +1,6 @@
 import os
 import subprocess
+from typing import Any
 
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
 from codomyrmex.model_context_protocol.decorators import mcp_tool
@@ -37,7 +38,7 @@ def add_files(file_paths: list[str], repository_path: str = None) -> bool:
         return False
 
 @mcp_tool(name="git_repo_status")
-def get_status(repository_path: str = None) -> dict[str, any]:
+def get_status(repository_path: str = None) -> dict[str, Any]:
     """Get the current Git repository status."""
     if repository_path is None:
         repository_path = os.getcwd()

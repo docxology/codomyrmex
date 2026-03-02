@@ -1,6 +1,6 @@
 # Static Analysis — Agent Coordination
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
 
@@ -45,28 +45,41 @@ Modules are classified into architectural layers for violation detection:
 | Service | Service | `documentation`, `api`, `ci_cd_automation`, `containerization`, `database_management`, `logistics`, `orchestrator`, `auth`, `cloud`, `deployment` |
 | Specialized | Specialized | All remaining modules |
 
+## MCP Tools Available
+
+| Tool | Description | Trust Level |
+|------|-------------|-------------|
+| `static_analysis_audit_exports` | Audit all modules under a source directory for missing `__all__` definitions. | SAFE |
+| `static_analysis_find_dead_exports` | Find exports in `__all__` that are never imported anywhere in the codebase. | SAFE |
+| `static_analysis_full_audit` | Run the full audit suite (missing `__all__`, dead exports, unused functions) on a source directory. Returns unified report dict. | SAFE |
+
 ## Operating Contracts
 
-- Operates on the filesystem; does not import analyzed modules (safe for circular dependency detection)
-- Uses only `ast`, `os`, `pathlib` from stdlib — no external dependencies
-- Layer taxonomy must stay aligned with [SPEC.md](../SPEC.md)
+- **DO:** Call `scan_imports()` before `check_layer_violations()` — violations require the edge list from scan
+- **DO:** Pass absolute `Path` objects to all functions
+- **DO NOT:** Import analyzed modules during scanning — operates on AST/filesystem only
+- **DO NOT:** Modify layer taxonomy without updating `SPEC.md`
 
 ## PAI Agent Role Access Matrix
 
-| PAI Agent | Access Level | Primary Capabilities | Trust Level |
-|-----------|-------------|---------------------|-------------|
-| **Engineer** | Full | Direct Python import; `StaticAnalyzer`, `LintRunner`, `SecurityScanner`; full scan suite | TRUSTED |
-| **Architect** | Read + Design | Code quality analysis, architectural review, dependency validation | OBSERVED |
-| **QATester** | Validation | Lint reports, security scan output validation, quality gate verification | OBSERVED |
+| PAI Agent | Access Level | MCP Tools | Trust Level |
+|-----------|-------------|-----------|-------------|
+| **Engineer** | Full | `static_analysis_full_audit`, `static_analysis_audit_exports`, `static_analysis_find_dead_exports` | TRUSTED |
+| **Architect** | Analysis only | `static_analysis_full_audit`, `static_analysis_audit_exports` — review without modifying | OBSERVED |
+| **QATester** | Validation | `static_analysis_full_audit` — verify quality gates pass after BUILD | OBSERVED |
+| **Researcher** | Read-only | `static_analysis_audit_exports`, `static_analysis_find_dead_exports` — codebase surface inspection | SAFE |
 
 ### Engineer Agent
-**Use Cases**: Running full static analysis pipelines, enforcing code quality standards during BUILD phase, integrating scan results into CI/CD.
+**Use Cases**: Running full static analysis pipelines during BUILD phase, detecting missing `__all__` before releases, identifying dead exports as part of cleanup sprints.
 
 ### Architect Agent
-**Use Cases**: Architectural code review, identifying dependency violations, reviewing scan configurations.
+**Use Cases**: Architectural code review via layer violation scanning, auditing export completeness across modules, reviewing dependency graphs.
 
 ### QATester Agent
-**Use Cases**: Validating lint/security scan results during VERIFY phase, confirming quality gate compliance.
+**Use Cases**: Validating that full audit passes with zero critical findings during VERIFY phase, confirming quality gates after refactoring.
+
+### Researcher Agent
+**Use Cases**: Inspecting export surface and dead code patterns to understand codebase structure for research analysis.
 
 ## Signposting
 

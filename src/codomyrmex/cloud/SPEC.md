@@ -1,6 +1,6 @@
 # cloud - Functional Specification
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
 
@@ -8,32 +8,36 @@ Cloud services integration module providing standardized Python clients for inte
 
 ## Design Principles
 
-### 1. Modularity
+### 1. Unified Storage Interface
 
-- Each cloud service has its own submodule
-- Shared utilities extracted to `common/` components
-- Clear separation of concerns between services
-- Optional dependencies per provider
+The `StorageClient` ABC provides a consistent interface for all object storage providers (AWS S3, GCS, Azure Blob, Infomaniak S3):
 
-### 2. Consistency
+- `list_buckets()`
+- `create_bucket(name, region=None)`
+- `delete_bucket(name)`
+- `bucket_exists(name)`
+- `upload_file(bucket, key, file_path, content_type=None)`
+- `download_file(bucket, key, file_path)`
+- `list_objects(bucket, prefix=None)`
+- `delete_object(bucket, key)`
+- `get_object_metadata(bucket, key)`
+- `generate_presigned_url(bucket, key, expires_in=3600, operation="get_object")`
 
-- Uniform interface patterns across all cloud clients
-- Standardized error handling and exceptions
-- Common data model patterns using dataclasses
-- Abstract base classes in `common/` define contracts
+### 2. Standardized Resource Management
 
-### 3. Reliability
+The `CloudClient` ABC defines operations for general cloud resources (compute, databases, etc.):
 
-- Proper error handling with typed exceptions
-- Rate limit awareness and handling
-- Pagination support for list endpoints
-- Graceful degradation for optional dependencies
+- `list_resources(resource_type=None)`
+- `get_resource(resource_id)`
+- `create_resource(name, resource_type, config)`
+- `delete_resource(resource_id)`
 
-### 4. Provider Agnosticism
+### 3. Consistency and Robustness
 
-- Common abstractions enable provider-swapping
-- Consistent method signatures across providers
-- Unified credential management patterns
+- Unified error mapping via `CloudError`.
+- Type-safe models for credentials and resources.
+- Lazy-loaded dependencies for provider submodules.
+- Standardized logging and monitoring.
 
 ## Architecture
 
@@ -49,130 +53,65 @@ graph TD
             ServerlessClient[ServerlessClient ABC]
             Models[CloudCredentials, CloudResource]
             Enums[CloudProvider, ResourceType]
+            Errors[CloudError]
         end
         
-        subgraph "Provider Implementations"
+        subgraph "Storage Implementations"
             AWS[aws/S3Client]
             GCP[gcp/GCSClient]
             Azure[azure/AzureBlobClient]
-            Coda[coda_io/CodaClient]
+            IKS3[infomaniak/InfomaniakS3Client]
         end
 
-        subgraph "Infomaniak Provider"
-            IKCompute[InfomaniakComputeClient]
-            IKVolume[InfomaniakVolumeClient]
-            IKNetwork[InfomaniakNetworkClient]
-            IKObj[InfomaniakObjectStorageClient]
-            IKS3[InfomaniakS3Client]
-            IKIdentity[InfomaniakIdentityClient]
-            IKDNS[InfomaniakDNSClient]
-            IKHeat[InfomaniakHeatClient]
-            IKMeter[InfomaniakMeteringClient]
-            IKNewsletter[InfomaniakNewsletterClient]
+        subgraph "Compute Implementations"
+            IKComp[infomaniak/InfomaniakComputeClient]
+        end
+
+        subgraph "Resource Implementations"
+            Coda[coda_io/CodaClient]
         end
     end
 
-    Init --> AWS & GCP & Azure & Coda & IKCompute
-    StorageClient -.->|contract| AWS & GCP & Azure
-    AWS --> |boto3| S3[AWS S3 API]
-    GCP --> |google-cloud-storage| GCS[GCS API]
-    Azure --> |azure-storage-blob| Blob[Azure Blob API]
-    Coda --> |requests| CodaAPI[Coda.io API v1]
-    IKCompute & IKVolume & IKNetwork & IKObj & IKIdentity & IKDNS & IKHeat & IKMeter --> |openstacksdk| OpenStackAPI[Infomaniak OpenStack API]
-    IKS3 --> |boto3| IKS3API[Infomaniak S3 API]
-    IKNewsletter --> |requests| IKNewsAPI[Infomaniak Newsletter API]
+    Init --> AWS & GCP & Azure & Coda & IKComp
+    StorageClient -.->|contract| AWS & GCP & Azure & IKS3
+    CloudClient -.->|contract| Coda
+    ComputeClient -.->|contract| IKComp
 ```
 
 ## Functional Requirements
 
-### Interface Contracts
+### FR-1: Storage Abstraction
 
-#### Base Client (`cloud.common`)
+All implementations must provide the full set of `StorageClient` methods. Error mapping should translate provider-specific exceptions into a unified format where possible.
 
-```python
-class CloudClient(ABC):
-    def list_resources(resource_type: ResourceType = None) -> List[CloudResource]
-    def get_resource(resource_id: str) -> Optional[CloudResource]
-    def create_resource(name: str, resource_type: ResourceType, config: dict) -> CloudResource
-    def delete_resource(resource_id: str) -> bool
-```
+### FR-2: Resource Abstraction
 
-#### Object Storage (`cloud.common`)
+Providers with heterogeneous resources (like Coda.io) should implement `CloudClient` to provide a uniform view of their primary objects (e.g., documents).
 
-```python
-class StorageClient(ABC):
-    def list_buckets() -> List[str]
-    def create_bucket(name: str) -> bool
-    def upload_file(bucket: str, key: str, data: bytes, ...) -> str
-    def download_file(bucket: str, key: str) -> bytes
-    def delete_file(bucket: str, key: str) -> bool
-```
+### FR-3: Dependency Management
 
-#### Compute & Serverless (`cloud.common`)
-
-```python
-class ComputeClient(ABC):
-    def list_instances() -> List[dict]
-    def start_instance(instance_id: str) -> bool
-    def stop_instance(instance_id: str) -> bool
-    def create_instance(name: str, instance_type: str, image_id: str, ...) -> dict
-
-class ServerlessClient(ABC):
-    def list_functions() -> List[dict]
-    def invoke_function(function_name: str, payload: dict) -> dict
-    def create_function(name: str, runtime: str, handler: str, code_path: str, ...) -> dict
-```
+Clients should check for their specific requirements upon initialization or use, raising clear errors if mandatory libraries are missing.
 
 ### FR-4: Error Handling
 
-- Map HTTP status codes to typed exceptions
-- Preserve error messages from API responses
-- Support for rate limit detection (429)
-- Graceful handling of missing optional dependencies
+- Status codes from REST APIs should be mapped to `CloudError` or its subclasses.
+- Authentication errors should be consistently handled across providers.
+- Rate limiting should be managed with backoffs or clear exceptions.
 
 ## Technical Constraints
 
 ### Dependencies
 
-| Provider | Required Package | Optional |
-|----------|-----------------|----------|
-| Core | `requests` | No |
-| AWS | `boto3` | Yes |
-| GCP | `google-cloud-storage` | Yes |
-| Azure | `azure-storage-blob`, `azure-identity` | Yes |
-| Infomaniak | `openstacksdk` | Yes |
-| Infomaniak S3 | `boto3` | Yes |
+- AWS: `boto3`
+- GCP: `google-cloud-storage`
+- Azure: `azure-storage-blob`, `azure-identity`
+- Infomaniak: `openstacksdk`, `boto3`
+- Coda.io: `requests`
 
 ### Python Version
 
-- Python 3.10+ for modern type hints
+- Python 3.11+
 - Full typing with `py.typed` marker
-
-### Rate Limits (Coda.io)
-
-| Operation | Limit |
-|-----------|-------|
-| Reading | 100 requests / 6 seconds |
-| Writing | 10 requests / 6 seconds |
-| Listing docs | 4 requests / 6 seconds |
-
-## Non-Functional Requirements
-
-### NFR-1: Performance
-
-- Connection pooling via requests.Session
-- Lazy initialization of provider clients
-- Streaming for large file transfers
-
-### NFR-2: Observability
-
-- Structured logging via `codomyrmex.logging_monitoring`
-- Error classification and metrics
-
-### NFR-3: Testing
-
-- Unit tests with mocked provider APIs
-- Integration tests for local development
 
 ## Navigation Links
 

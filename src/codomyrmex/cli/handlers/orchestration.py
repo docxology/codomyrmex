@@ -5,6 +5,9 @@ from codomyrmex.cli.utils import (
     TERMINAL_INTERFACE_AVAILABLE,
     TerminalFormatter,
     get_logger,
+    print_error,
+    print_success,
+    print_header,
 )
 
 logger = get_logger(__name__)
@@ -19,22 +22,23 @@ def handle_project_build(config_file: str | None) -> bool:
             with open(config_file) as f:
                 build_config = json.load(f)
 
+        print("🚀 Starting project build pipeline...")
         result = orchestrate_build_pipeline(build_config)
 
         if result.get("success"):
-            print("✅ Build completed successfully")
+            print_success("Build completed successfully")
             return True
         else:
-            print(f"❌ Build failed: {result.get('error', 'Unknown error')}")
+            print_error(f"Build failed: {result.get('error', 'Unknown error')}")
             return False
 
     except ImportError:
         logger.warning("Build synthesis module not available")
-        print("❌ Build synthesis module not available")
+        print_error("Build synthesis module not available")
         return False
     except Exception as e:
         logger.error(f"Error building project: {e}", exc_info=True)
-        print(f"❌ Error building project: {str(e)}")
+        print_error(f"Error building project: {str(e)}")
         return False
 
 
@@ -104,19 +108,19 @@ def handle_workflow_create(name: str, template: str | None = None) -> bool:
         success = manager.create_workflow(name, steps)
 
         if success:
-            print(f"✅ Created workflow '{name}' with {len(steps)} steps")
+            print_success(f"Created workflow '{name}' with {len(steps)} steps")
             return True
         else:
-            print(f"❌ Failed to create workflow '{name}'")
+            print_error(f"Failed to create workflow '{name}'")
             return False
 
     except ImportError:
         logger.warning("Project orchestration module not available")
-        print("❌ Project orchestration module not available")
+        print_error("Project orchestration module not available")
         return False
     except Exception as e:
         logger.error(f"Error creating workflow: {e}", exc_info=True)
-        print(f"❌ Error creating workflow: {str(e)}")
+        print_error(f"Error creating workflow: {str(e)}")
         return False
 
 
@@ -128,7 +132,7 @@ def handle_project_create(name: str, template: str = "ai_analysis", **kwargs) ->
 
         project = manager.create_project(name=name, template_name=template, **kwargs)
 
-        print(f"✅ Created project '{name}' using template '{template}'")
+        print_success(f"Created project '{name}' using template '{template}'")
         print(f"   Path: {project.path}")
         print(f"   Type: {project.type.value}")
         print(f"   Workflows: {', '.join(project.workflows)}")
@@ -137,11 +141,11 @@ def handle_project_create(name: str, template: str = "ai_analysis", **kwargs) ->
 
     except ImportError:
         logger.warning("Project orchestration module not available")
-        print("❌ Project orchestration module not available")
+        print_error("Project orchestration module not available")
         return False
     except Exception as e:
         logger.error(f"Error creating project: {e}", exc_info=True)
-        print(f"❌ Error creating project: {str(e)}")
+        print_error(f"Error creating project: {str(e)}")
         return False
 
 
@@ -154,11 +158,7 @@ def handle_project_list() -> bool:
 
         formatter = TerminalFormatter() if TERMINAL_INTERFACE_AVAILABLE else None
 
-        if formatter:
-            print(formatter.header("📁 Available Projects", "=", 60))
-        else:
-            print("📁 Available Projects")
-            print("=" * 60)
+        print_header("📁 Available Projects")
 
         if not projects:
             print("No projects found. Create one with 'codomyrmex project create'")
@@ -188,11 +188,11 @@ def handle_project_list() -> bool:
 
     except ImportError:
         logger.warning("Project orchestration module not available")
-        print("❌ Project orchestration module not available")
+        print_error("Project orchestration module not available")
         return False
     except Exception as e:
         logger.error(f"Error listing projects: {e}", exc_info=True)
-        print(f"❌ Error listing projects: {str(e)}")
+        print_error(f"Error listing projects: {str(e)}")
         return False
 
 
@@ -203,13 +203,7 @@ def handle_orchestration_status() -> bool:
         engine = get_orchestration_engine()
         status = engine.get_system_status()
 
-        formatter = TerminalFormatter() if TERMINAL_INTERFACE_AVAILABLE else None
-
-        if formatter:
-            print(formatter.header("🎯 Orchestration System Status", "=", 60))
-        else:
-            print("🎯 Orchestration System Status")
-            print("=" * 60)
+        print_header("🎯 Orchestration System Status")
 
         # Active sessions
         sessions = status.get("orchestration_engine", {}).get("active_sessions", 0)
@@ -239,11 +233,11 @@ def handle_orchestration_status() -> bool:
 
     except ImportError:
         logger.warning("Project orchestration module not available")
-        print("❌ Project orchestration module not available")
+        print_error("Project orchestration module not available")
         return False
     except Exception as e:
         logger.error(f"Error getting orchestration status: {e}", exc_info=True)
-        print(f"❌ Error getting orchestration status: {str(e)}")
+        print_error(f"Error getting orchestration status: {str(e)}")
         return False
 
 
@@ -263,14 +257,12 @@ def handle_orchestration_health() -> bool:
             else "YELLOW" if overall_status == "degraded" else "RED"
         )
 
+        print_header("🏥 Orchestration Health Check")
         if formatter:
-            print(formatter.header("🏥 Orchestration Health Check", "=", 60))
             print(
                 f"Overall Status: {formatter.color(overall_status.upper(), status_color)}"
             )
         else:
-            print("🏥 Orchestration Health Check")
-            print("=" * 60)
             print(f"Overall Status: {overall_status.upper()}")
 
         # Component health
@@ -293,20 +285,18 @@ def handle_orchestration_health() -> bool:
         if issues:
             print(f"\nIssues Found ({len(issues)}):")
             for issue in issues:
-                if formatter:
-                    print(f"  {formatter.color('⚠️', 'YELLOW')} {issue}")
-                else:
-                    print(f"  ⚠️  {issue}")
+                from codomyrmex.cli.utils import print_warning
+                print_warning(issue)
 
         return overall_status in ["healthy", "degraded"]
 
     except ImportError:
         logger.warning("Project orchestration module not available")
-        print("❌ Project orchestration module not available")
+        print_error("Project orchestration module not available")
         return False
     except Exception as e:
         logger.error(f"Error checking orchestration health: {e}", exc_info=True)
-        print(f"❌ Error checking orchestration health: {str(e)}")
+        print_error(f"Error checking orchestration health: {str(e)}")
         return False
 
 
@@ -319,11 +309,7 @@ def list_workflows() -> bool:
 
         formatter = TerminalFormatter() if TERMINAL_INTERFACE_AVAILABLE else None
 
-        if formatter:
-            print(formatter.header("🎯 Available Workflows", "=", 60))
-        else:
-            print("🎯 Available Workflows")
-            print("=" * 60)
+        print_header("🎯 Available Workflows")
 
         if not workflows:
             print(
@@ -348,11 +334,11 @@ def list_workflows() -> bool:
 
     except ImportError:
         logger.warning("Project orchestration module not available")
-        print("❌ Project orchestration module not available")
+        print_error("Project orchestration module not available")
         return False
     except (AttributeError, KeyError, TypeError, ValueError) as e:
         logger.error(f"Error listing workflows: {e}", exc_info=True)
-        print(f"❌ Error listing workflows: {str(e)}")
+        print_error(f"Error listing workflows: {str(e)}")
         return False
 
 
@@ -362,24 +348,21 @@ def run_workflow(workflow_name: str, **kwargs) -> bool:
         from codomyrmex.logistics.orchestration.project import get_orchestration_engine
         engine = get_orchestration_engine()
 
+        print(f"🏃 Executing workflow: {workflow_name}...")
         result = engine.execute_workflow(workflow_name, **kwargs)
 
-        formatter = TerminalFormatter() if TERMINAL_INTERFACE_AVAILABLE else None
-
         if result["success"]:
-            msg = f"Workflow '{workflow_name}' completed successfully"
-            print(formatter.success(msg) if formatter else f"✅ {msg}")
+            print_success(f"Workflow '{workflow_name}' completed successfully")
         else:
-            msg = f"Workflow '{workflow_name}' failed: {result.get('error', 'Unknown error')}"
-            print(formatter.error(msg) if formatter else f"❌ {msg}")
+            print_error(f"Workflow '{workflow_name}' failed: {result.get('error', 'Unknown error')}")
 
         return result["success"]
 
     except ImportError:
         logger.warning("Project orchestration module not available")
-        print("❌ Project orchestration module not available")
+        print_error("Project orchestration module not available")
         return False
     except (AttributeError, KeyError, TypeError, ValueError, RuntimeError) as e:
         logger.error(f"Error running workflow: {e}", exc_info=True)
-        print(f"❌ Error running workflow: {str(e)}")
+        print_error(f"Error running workflow: {str(e)}")
         return False

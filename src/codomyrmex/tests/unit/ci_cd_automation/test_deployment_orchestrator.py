@@ -212,6 +212,7 @@ class TestDeploymentDataclass:
             "name", "version", "environment", "artifacts", "strategy",
             "timeout", "rollback_on_failure", "status", "created_at",
             "started_at", "finished_at", "duration", "logs", "metrics",
+            "previous_version",
         }
         assert set(d.keys()) == expected_keys
 

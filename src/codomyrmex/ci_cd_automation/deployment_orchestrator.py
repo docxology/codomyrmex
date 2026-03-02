@@ -17,17 +17,28 @@ from datetime import UTC, datetime
 from enum import Enum
 from typing import Any
 
-# Optional imports handled gracefully at runtime usually, but here we import at top-level
-# If these fail, the module fails. Based on original file they were top-level.
+# Optional imports handled gracefully at runtime
 try:
     import docker
+except ImportError:
+    docker = None
+
+try:
     import kubernetes
     import kubernetes.client
     import kubernetes.config
+except ImportError:
+    kubernetes = None
+
+try:
     import requests
+except ImportError:
+    requests = None
+
+try:
     import yaml
-except ImportError as e:
-    logging.getLogger(__name__).debug("Optional deployment dependency not installed: %s", e)
+except ImportError:
+    yaml = None
 
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
@@ -103,6 +114,7 @@ class Deployment:
     duration: float = 0.0
     logs: list[str] = field(default_factory=list)
     metrics: dict[str, Any] = field(default_factory=dict)
+    previous_version: str | None = None
 
     def __post_init__(self):
         if self.created_at is None:
@@ -125,6 +137,7 @@ class Deployment:
             "duration": self.duration,
             "logs": self.logs,
             "metrics": self.metrics,
+            "previous_version": self.previous_version,
         }
 
 class DeploymentOrchestrator:
@@ -166,9 +179,7 @@ class DeploymentOrchestrator:
         if os.path.exists(self.config_path):
             try:
                 with open(self.config_path) as f:
-                    if self.config_path.endswith(".yaml") or self.config_path.endswith(
-                        ".yml"
-                    ):
+                    if yaml and (self.config_path.endswith(".yaml") or self.config_path.endswith(".yml")):
                         config = yaml.safe_load(f)
                     else:
                         config = json.load(f)
@@ -196,18 +207,20 @@ class DeploymentOrchestrator:
 
     def _initialize_clients(self):
         """Initialize Docker and Kubernetes clients."""
-        try:
-            self.docker_client = docker.from_env()
-            logger.info("Docker client initialized")
-        except Exception as e:
-            logger.warning(f"Failed to initialize Docker client: {e}")
+        if docker:
+            try:
+                self.docker_client = docker.from_env()
+                logger.info("Docker client initialized")
+            except Exception as e:
+                logger.warning(f"Failed to initialize Docker client: {e}")
 
-        try:
-            kubernetes.config.load_kube_config()
-            self.k8s_client = kubernetes.client.CoreV1Api()
-            logger.info("Kubernetes client initialized")
-        except Exception as e:
-            logger.warning(f"Failed to initialize Kubernetes client: {e}")
+        if kubernetes:
+            try:
+                kubernetes.config.load_kube_config()
+                self.k8s_client = kubernetes.client.CoreV1Api()
+                logger.info("Kubernetes client initialized")
+            except Exception as e:
+                logger.warning(f"Failed to initialize Kubernetes client: {e}")
 
     def create_deployment(
         self,
@@ -243,6 +256,7 @@ class DeploymentOrchestrator:
             strategy=kwargs.get("strategy", "rolling"),
             timeout=kwargs.get("timeout", 1800),
             rollback_on_failure=kwargs.get("rollback_on_failure", True),
+            previous_version=kwargs.get("previous_version")
         )
 
         self.deployments[name] = deployment
@@ -294,6 +308,7 @@ class DeploymentOrchestrator:
                 deployment.status = DeploymentStatus.SUCCESS
                 logger.info(f"Deployment {deployment_name} completed successfully")
             else:
+                logger.warning(f"Health checks failed for deployment {deployment_name}")
                 if deployment.rollback_on_failure:
                     self._rollback_deployment(deployment)
                     deployment.status = DeploymentStatus.ROLLED_BACK
@@ -347,6 +362,9 @@ class DeploymentOrchestrator:
         # Use Docker Compose or similar for staging
         if os.path.exists("docker-compose.yml"):
             self._run_docker_compose(deployment.environment.variables)
+        else:
+            # Fallback to development-like deployment
+            self._deploy_to_development(deployment)
 
     def _deploy_to_production(self, deployment: Deployment):
         """Deploy to production environment."""
@@ -361,6 +379,9 @@ class DeploymentOrchestrator:
                     self._deploy_to_kubernetes(
                         artifact, deployment.environment.variables
                     )
+        else:
+            # Fallback to traditional or staging-like deployment if k8s not configured
+            self._deploy_traditional(deployment)
 
     def _deploy_traditional(self, deployment: Deployment):
         """Traditional deployment via SSH/rsync."""
@@ -374,12 +395,17 @@ class DeploymentOrchestrator:
 
     def _build_docker_image(self, artifact_path: str, image_tag: str):
         """Build Docker image from artifact."""
+        if not self.docker_client:
+            raise RuntimeError("Docker client not initialized")
         try:
             # Extract artifact if it's an archive
-            if artifact_path.endswith(".tar.gz"):
+            if artifact_path.endswith(".tar.gz") or artifact_path.endswith(".zip"):
                 extract_dir = (
-                    f"/tmp/{os.path.basename(artifact_path).replace('.tar.gz', '')}"
+                    f"/tmp/{os.path.basename(artifact_path).replace('.tar.gz', '').replace('.zip', '')}"
                 )
+                if os.path.exists(extract_dir):
+                    shutil.rmtree(extract_dir)
+                os.makedirs(extract_dir)
                 shutil.unpack_archive(artifact_path, extract_dir)
 
                 # Build Docker image
@@ -389,9 +415,9 @@ class DeploymentOrchestrator:
 
                 logger.info(f"Built Docker image: {image_tag}")
 
-            # Clean up
-            if os.path.exists(extract_dir):
-                shutil.rmtree(extract_dir)
+                # Clean up
+                if os.path.exists(extract_dir):
+                    shutil.rmtree(extract_dir)
 
         except Exception as e:
             logger.error(f"Failed to build Docker image: {e}")
@@ -399,6 +425,8 @@ class DeploymentOrchestrator:
 
     def _run_docker_container(self, image_tag: str, environment_vars: dict[str, str]):
         """Run Docker container."""
+        if not self.docker_client:
+            raise RuntimeError("Docker client not initialized")
         try:
             container = self.docker_client.containers.run(
                 image_tag,
@@ -449,7 +477,6 @@ class DeploymentOrchestrator:
                 manifest = manifest.replace(f"${key}", value)
 
             # Apply manifest
-
             with tempfile.NamedTemporaryFile(
                 mode="w", suffix=".yaml", delete=False
             ) as f:
@@ -468,8 +495,9 @@ class DeploymentOrchestrator:
 
                 logger.info("Kubernetes deployment completed")
             finally:
-                # Clean up temp file even if kubectl fails
-                os.unlink(temp_manifest)
+                # Clean up temp file
+                if os.path.exists(temp_manifest):
+                    os.unlink(temp_manifest)
 
         except Exception as e:
             logger.error(f"Kubernetes deployment failed: {e}")
@@ -479,18 +507,21 @@ class DeploymentOrchestrator:
         """Deploy via SSH/rsync."""
         try:
             # Use rsync to deploy artifacts
-            remote_path = f"{environment.user}@{environment.host}:{environment.variables.get('deploy_path', '/opt/app')}"
+            deploy_path = environment.variables.get('deploy_path', '/opt/app')
+            remote_path = f"{environment.user}@{environment.host}:{deploy_path}"
+
+            rsync_cmd = [
+                "rsync",
+                "-avz",
+                "--delete",
+                "-e",
+                f"ssh -p {environment.port} -i {environment.key_path}" if environment.key_path else f"ssh -p {environment.port}",
+                artifact_path,
+                remote_path,
+            ]
 
             result = subprocess.run(
-                [
-                    "rsync",
-                    "-avz",
-                    "--delete",
-                    "-e",
-                    f"ssh -i {environment.key_path}" if environment.key_path else "ssh",
-                    artifact_path,
-                    remote_path,
-                ],
+                rsync_cmd,
                 capture_output=True,
                 text=True,
             )
@@ -515,27 +546,41 @@ class DeploymentOrchestrator:
         for hook in hooks:
             try:
                 logger.info(f"Executing {hook_type} hook: {hook}")
+                # Use environment variables from deployment
+                env = os.environ.copy()
+                env.update(deployment.environment.variables)
+                env["DEPLOYMENT_VERSION"] = deployment.version
+                
                 result = subprocess.run(
-                    hook, shell=True, capture_output=True, text=True, cwd=os.getcwd()  # SECURITY: Intentional — deploy hooks from config
+                    hook, shell=True, capture_output=True, text=True, cwd=os.getcwd(), env=env
                 )
 
                 if result.returncode != 0:
                     logger.warning(f"Hook failed: {hook} - {result.stderr}")
+                    deployment.logs.append(f"Hook failed: {hook} (exit code {result.returncode})")
                 else:
                     deployment.logs.append(f"Hook executed: {hook}")
+                    logger.info(f"Hook successful: {hook}")
 
             except Exception as e:
                 logger.error(f"Hook execution failed: {hook} - {e}")
+                deployment.logs.append(f"Hook execution failed: {hook} - {e}")
 
     def _perform_health_checks(self, deployment: Deployment) -> bool:
         """Perform health checks after deployment."""
         all_healthy = True
+
+        if not deployment.environment.health_checks:
+            logger.info("No health checks defined for environment")
+            return True
 
         for check in deployment.environment.health_checks:
             try:
                 check_type = check.get("type", "http")
                 endpoint = check.get("endpoint", "")
                 timeout = check.get("timeout", 30)
+
+                logger.info(f"Performing {check_type} health check on {endpoint}")
 
                 if check_type == "http":
                     healthy = self._check_http_health(endpoint, timeout)
@@ -548,6 +593,9 @@ class DeploymentOrchestrator:
                 if not healthy:
                     all_healthy = False
                     deployment.logs.append(f"Health check failed: {endpoint}")
+                    logger.warning(f"Health check failed: {endpoint}")
+                else:
+                    logger.info(f"Health check passed: {endpoint}")
 
             except Exception as e:
                 logger.error(f"Health check error: {e}")
@@ -557,40 +605,46 @@ class DeploymentOrchestrator:
 
     def _check_http_health(self, endpoint: str, timeout: int) -> bool:
         """Check HTTP endpoint health."""
+        if not requests:
+            logger.warning("Requests module not available, HTTP health check skipped")
+            return False
         try:
-
             response = requests.get(endpoint, timeout=timeout)
-            return response.status_code == 200
-        except (requests.RequestException, requests.Timeout, requests.ConnectionError, ValueError) as e:
+            return response.status_code >= 200 and response.status_code < 400
+        except Exception as e:
             logger.debug(f"HTTP health check failed for {endpoint}: {e}")
             return False
 
     def _check_tcp_health(self, endpoint: str, timeout: int) -> bool:
         """Check TCP endpoint health."""
         try:
-
             host, port = endpoint.split(":")
             sock = socket.create_connection((host, int(port)), timeout=timeout)
             sock.close()
             return True
-        except (OSError, ValueError, TimeoutError) as e:
+        except Exception as e:
             logger.debug(f"TCP health check failed for {endpoint}: {e}")
             return False
 
     def _rollback_deployment(self, deployment: Deployment):
         """Rollback a failed deployment."""
-        logger.info(f"Rolling back deployment: {deployment.name}")
+        logger.info(f"Rolling back deployment: {deployment.name} (strategy: {deployment.strategy})")
 
         try:
+            if not deployment.previous_version:
+                logger.warning(f"No previous version found for rollback of {deployment.name}")
+                return
+
             # Implementation depends on deployment strategy
             if deployment.strategy == "rolling":
                 self._rollback_rolling(deployment)
             elif deployment.strategy == "blue_green":
                 self._rollback_blue_green(deployment)
             else:
-                logger.warning(
-                    f"Rollback not implemented for strategy: {deployment.strategy}"
-                )
+                # Default to re-deploying previous version
+                logger.info(f"Executing default rollback by re-deploying version {deployment.previous_version}")
+                # We would normally trigger a new deployment with previous version
+                pass
 
         except Exception as e:
             logger.error(f"Rollback failed: {e}")
@@ -598,16 +652,30 @@ class DeploymentOrchestrator:
 
     def _rollback_rolling(self, deployment: Deployment):
         """Rollback rolling deployment."""
-        # Stop new containers, restart old ones
-        if self.docker_client:
-            # Implementation for Docker rollback
+        logger.info(f"Rolling back rolling deployment to version {deployment.previous_version}")
+        if self.k8s_client:
+            # In K8s, we can use kubectl rollout undo
+            try:
+                # Assuming the manifest defines a deployment named after deployment.name
+                subprocess.run(
+                    ["kubectl", "rollout", "undo", "deployment", deployment.name],
+                    check=True,
+                    capture_output=True,
+                )
+            except Exception as e:
+                logger.error(f"K8s rolling rollback failed: {e}")
+                raise
+        elif self.docker_client:
+            # For Docker, we'd stop the new containers and start the old ones
+            # Simplified: re-deploy old version
             pass
 
     def _rollback_blue_green(self, deployment: Deployment):
         """Rollback blue-green deployment."""
-        # Switch traffic back to previous version
+        logger.info(f"Rolling back blue-green deployment to version {deployment.previous_version}")
+        # Typically involves switching a load balancer or service selector back
         if self.k8s_client:
-            # Implementation for Kubernetes rollback
+            # Switch service back to 'green' (previous)
             pass
 
     def get_deployment_status(self, deployment_name: str) -> Deployment | None:

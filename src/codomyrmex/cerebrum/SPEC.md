@@ -123,6 +123,9 @@ graph TD
 ### Public API
 
 - `CerebrumEngine`: Main orchestrator
+- `WorkingMemory`: Short-term context storage
+- `ReasoningChain`: Step-by-step reasoning orchestration
+- `DecisionModule`: Multi-criteria decision making
 - `Case`, `CaseBase`, `CaseRetriever`: Case management
 - `BayesianNetwork`, `InferenceEngine`: Bayesian inference
 - `ActiveInferenceAgent`: Active inference

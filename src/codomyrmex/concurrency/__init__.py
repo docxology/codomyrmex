@@ -29,6 +29,7 @@ from .dead_letter import DeadLetterQueue
 from .semaphores.semaphore import (
     BaseSemaphore,
     LocalSemaphore,
+    AsyncLocalSemaphore,
 )
 from .workers.pool import AsyncWorkerPool, PoolStats, TaskResult
 
@@ -41,7 +42,7 @@ def cli_commands():
         print("=== Concurrency Pools ===")
         print("  Lock types available: LocalLock, ReadWriteLock" +
               (", RedisLock" if RedisLock is not None else ""))
-        print("  Semaphore types: LocalSemaphore")
+        print("  Semaphore types: LocalSemaphore, AsyncLocalSemaphore")
         active = mgr.list_locks() if hasattr(mgr, "list_locks") else []
         print(f"  Active locks: {len(active)}")
 
@@ -49,10 +50,12 @@ def cli_commands():
         """Show concurrency statistics."""
         mgr = LockManager()
         print("=== Concurrency Stats ===")
-        stats = mgr.get_stats() if hasattr(mgr, "get_stats") else {}
-        if stats:
-            for key, value in stats.items():
-                print(f"  {key}: {value}")
+        stats = mgr.stats
+        if stats.total_locks > 0 or stats.total_acquisitions > 0:
+            print(f"  Total Locks: {stats.total_locks}")
+            print(f"  Total Acquisitions: {stats.total_acquisitions}")
+            print(f"  Total Releases: {stats.total_releases}")
+            print(f"  Active Locks: {stats.active_locks}")
         else:
             print("  No active concurrency operations")
 
@@ -67,6 +70,7 @@ __all__ = [
     "LocalLock",
     "BaseSemaphore",
     "LocalSemaphore",
+    "AsyncLocalSemaphore",
     "RedisLock",
     "LockManager",
     "ReadWriteLock",

@@ -25,6 +25,7 @@ Core infrastructure with zero internal dependencies. Used by all other layers.
 | Module | Description | Children |
 | :--- | :--- | ---: |
 | [config_management/](config_management/) | Configuration loading, validation, secrets | 79 |
+| [config_audits/](config_audits/) | Configuration security & compliance auditing | 0 |
 | [environment_setup/](environment_setup/) | Environment validation & dependency checking | 29 |
 | [logging_monitoring/](logging_monitoring/) | Centralized structured logging (JSON) | 65 |
 | [model_context_protocol/](model_context_protocol/) | MCP tool specs & protocol handling | 92 |
@@ -142,14 +143,14 @@ Advanced features with flexible dependencies.
 
 | Check | Status |
 | :--- | :--- |
-| Directions on disk | **88** |
-| Modules in `__init__.py._submodules` | **88** (excl. examples/tests) |
-| Modules in `__all__` | **91** (88 modules + 3 utility functions) |
-| Foundation Layer | **6** modules |
+| Directions on disk | **89** |
+| Modules in `__init__.py._submodules` | **89** (excl. examples/tests) |
+| Modules in `__all__` | **92** (89 modules + 3 utility functions) |
+| Foundation Layer | **7** modules |
 | Core Layer | **15** modules |
 | Service Layer | **10** modules |
 | Specialized Layer | **55** modules |
-| **Total** | **88** ✅ |
+| **Total** | **89** ✅ |
 
 ---
 

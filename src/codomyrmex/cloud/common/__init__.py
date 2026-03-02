@@ -17,6 +17,7 @@ class CloudProvider(Enum):
     GCP = "gcp"
     AZURE = "azure"
     INFOMANIAK = "infomaniak"
+    CODA = "coda"
     LOCAL = "local"
 
 class ResourceType(Enum):
@@ -28,6 +29,14 @@ class ResourceType(Enum):
     SERVERLESS = "serverless"
     CONTAINER = "container"
     QUEUE = "queue"
+    DOCUMENT = "document"
+
+class CloudError(Exception):
+    """Base class for cloud-related errors."""
+    def __init__(self, message: str, provider: CloudProvider | None = None, **kwargs):
+        super().__init__(message)
+        self.provider = provider
+        self.metadata = kwargs
 
 @dataclass
 class CloudCredentials:
@@ -64,6 +73,7 @@ class CloudResource:
             "status": self.status,
             "created_at": self.created_at.isoformat() if self.created_at else None,
             "tags": self.tags,
+            "metadata": self.metadata,
         }
 
 class CloudClient(ABC):
@@ -71,9 +81,9 @@ class CloudClient(ABC):
 
     provider: CloudProvider
 
-    def __init__(self, credentials: CloudCredentials):
+    def __init__(self, credentials: Optional[CloudCredentials] = None):
         self.credentials = credentials
-        self.region = credentials.region
+        self.region = credentials.region if credentials else None
 
     @abstractmethod
     def list_resources(
@@ -112,8 +122,18 @@ class StorageClient(ABC):
         pass
 
     @abstractmethod
-    def create_bucket(self, name: str) -> bool:
+    def create_bucket(self, name: str, region: str | None = None) -> bool:
         """Create a bucket."""
+        pass
+
+    @abstractmethod
+    def delete_bucket(self, name: str) -> bool:
+        """Delete a bucket."""
+        pass
+
+    @abstractmethod
+    def bucket_exists(self, name: str) -> bool:
+        """Check if a bucket exists."""
         pass
 
     @abstractmethod
@@ -121,20 +141,30 @@ class StorageClient(ABC):
         self,
         bucket: str,
         key: str,
-        data: bytes,
+        file_path: str,
         content_type: str | None = None,
-    ) -> str:
-        """Upload a file."""
+    ) -> bool:
+        """Upload a file from local disk."""
         pass
 
     @abstractmethod
-    def download_file(self, bucket: str, key: str) -> bytes:
-        """Download a file."""
+    def download_file(self, bucket: str, key: str, file_path: str) -> bool:
+        """Download a file to local disk."""
         pass
 
     @abstractmethod
-    def delete_file(self, bucket: str, key: str) -> bool:
-        """Delete a file."""
+    def list_objects(self, bucket: str, prefix: str | None = None) -> list[str]:
+        """List objects in a bucket."""
+        pass
+
+    @abstractmethod
+    def delete_object(self, bucket: str, key: str) -> bool:
+        """Delete an object."""
+        pass
+
+    @abstractmethod
+    def get_object_metadata(self, bucket: str, key: str) -> dict[str, Any]:
+        """Get object metadata."""
         pass
 
     @abstractmethod
@@ -143,6 +173,7 @@ class StorageClient(ABC):
         bucket: str,
         key: str,
         expires_in: int = 3600,
+        operation: str = "get_object",
     ) -> str:
         """Generate a presigned URL."""
         pass
@@ -250,7 +281,7 @@ class CloudConfig:
             ))
 
         # GCP
-        if os.environ.get('GOOGLE_APPLICATION_CREDENTIALS'):
+        if os.environ.get('GOOGLE_APPLICATION_CREDENTIALS') or os.environ.get('GCP_PROJECT_ID'):
             config.add_provider(CloudCredentials(
                 provider=CloudProvider.GCP,
                 project_id=os.environ.get('GCP_PROJECT_ID'),
@@ -267,6 +298,13 @@ class CloudConfig:
                 project_id=os.environ.get('INFOMANIAK_PROJECT_ID'),
             ))
 
+        # Coda
+        if os.environ.get('CODA_API_TOKEN'):
+            config.add_provider(CloudCredentials(
+                provider=CloudProvider.CODA,
+                access_key=os.environ.get('CODA_API_TOKEN'),
+            ))
+
         return config
 
 __all__ = [
@@ -279,4 +317,5 @@ __all__ = [
     "ComputeClient",
     "ServerlessClient",
     "CloudConfig",
+    "CloudError",
 ]

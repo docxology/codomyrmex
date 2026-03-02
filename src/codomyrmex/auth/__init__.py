@@ -2,17 +2,18 @@
 Authentication module for Codomyrmex.
 
 This module provides authentication and authorization with API key management,
-OAuth integration, and access control.
+OAuth integration, and Role-Based Access Control (RBAC).
 """
 
-from typing import Optional
+from typing import Optional, Dict, Any
 
 from codomyrmex.exceptions import AuthenticationError, CodomyrmexError
 
-from .core import Authenticator
-from .providers import APIKeyManager
-from .rbac import PermissionRegistry
-from .tokens import Token, TokenManager, TokenValidator
+from .core.authenticator import Authenticator
+from .providers.api_key_manager import APIKeyManager
+from .rbac.permissions import PermissionRegistry
+from .tokens.token import Token, TokenManager
+from .tokens.validator import TokenValidator
 
 # Shared schemas for cross-module interop
 try:
@@ -20,6 +21,27 @@ try:
 except ImportError:
     Result = None
     ResultStatus = None
+
+
+def authenticate(credentials: Dict[str, Any]) -> Optional[Token]:
+    """Authenticate with credentials.
+    
+    Convenience function that uses the Authenticator singleton.
+    """
+    return Authenticator().authenticate(credentials)
+
+
+def authorize(token: Token | str, resource: str, permission: str) -> bool:
+    """Check if token has permission.
+    
+    Convenience function that uses the Authenticator singleton.
+    """
+    return Authenticator().authorize(token, resource, permission)
+
+
+def get_authenticator() -> Authenticator:
+    """Get the Authenticator singleton instance."""
+    return Authenticator()
 
 
 def cli_commands():
@@ -62,23 +84,4 @@ __all__ = [
     "cli_commands",
 ]
 
-__version__ = "0.1.0"
-
-
-def authenticate(credentials: dict) -> Token | None:
-    """Authenticate with credentials."""
-    authenticator = Authenticator()
-    return authenticator.authenticate(credentials)
-
-
-def authorize(token: Token, resource: str, permission: str) -> bool:
-    """Check if token has permission."""
-    authenticator = Authenticator()
-    return authenticator.authorize(token, resource, permission)
-
-
-def get_authenticator() -> Authenticator:
-    """Get an authenticator instance."""
-    return Authenticator()
-
-
+__version__ = "1.1.0"

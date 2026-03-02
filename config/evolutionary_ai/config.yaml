@@ -1,0 +1,13 @@
+module: evolutionary_ai
+enabled: true
+logging:
+  level: INFO
+  format: '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+  file: logs/evolutionary_ai.log
+performance:
+  max_workers: 4
+  timeout_seconds: 30.0
+  caching: true
+features:
+  experimental: false
+  strict_mode: true

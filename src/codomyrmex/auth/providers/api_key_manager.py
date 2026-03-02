@@ -95,6 +95,7 @@ class APIKeyManager:
         return key_str
 
     def generate_api_key(self, user_id: str, permissions: list[str] | None = None) -> str:
+        """Legacy alias for generate()."""
         return self.generate(user_id, permissions=permissions)
 
     def validate(self, key_str: str) -> APIKey | None:
@@ -111,8 +112,9 @@ class APIKeyManager:
         api_key.request_count += 1
         return api_key
 
-    def validate_api_key(self, api_key: str) -> dict | None:
-        info = self.validate(api_key)
+    def validate_api_key(self, key_str: str) -> dict | None:
+        """Legacy alias for validate() returning a dict."""
+        info = self.validate(key_str)
         if info is None:
             return None
         return {"user_id": info.user_id, "permissions": info.permissions}
@@ -126,8 +128,9 @@ class APIKeyManager:
         logger.info("Revoked API key: %s...", key_str[:20])
         return True
 
-    def revoke_api_key(self, api_key: str) -> bool:
-        return self.revoke(api_key)
+    def revoke_api_key(self, key_str: str) -> bool:
+        """Legacy alias for revoke()."""
+        return self.revoke(key_str)
 
     def rotate(self, old_key_str: str, ttl_seconds: float | None = None) -> str | None:
         """Rotate an API key: revoke old, issue new with same permissions.

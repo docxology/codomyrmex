@@ -105,7 +105,7 @@ codomyrmex git_operations info    # Show repository info (branch, remotes, path)
 
 ## MCP Integration
 
-The MCP server exposes 31 git tools that delegate to this module's core functions. These are among the most-used tools during PAI OBSERVE, BUILD, and EXECUTE phases.
+The MCP server exposes 35 git tools that delegate to this module's core functions. These are among the most-used tools during PAI OBSERVE, BUILD, and EXECUTE phases.
 
 ## MCP Tools Available
 
@@ -117,34 +117,35 @@ The MCP server exposes 31 git tools that delegate to this module's core function
 | `git_current_branch` | Get the current branch name | Safe |
 | `git_diff` | Get diff of uncommitted changes (optionally staged only) | Safe |
 | `git_log` | Get recent commit history with configurable count | Safe |
-| `git_init` | Initialize a new git repository at a path | Safe |
-| `git_clone` | Clone a repository from URL to local path | Safe |
-| `git_commit` | Stage files and create a commit with a message | Safe |
-| `git_create_branch` | Create a new branch | Safe |
-| `git_switch_branch` | Switch to a different branch | Safe |
-| `git_delete_branch` | Delete a local branch (with optional force) | Safe |
-| `git_merge` | Merge a source branch into a target branch | Safe |
-| `git_rebase` | Rebase current branch onto a target branch | Safe |
-| `git_cherry_pick` | Cherry-pick a specific commit onto the current branch | Safe |
-| `git_revert` | Revert a commit by creating an inverse commit | Safe |
-| `git_reset` | Reset repository to a commit (soft, mixed, or hard mode) | Safe |
-| `git_amend` | Amend the most recent commit message or content | Safe |
-| `git_pull` | Pull latest changes from a remote repository | Safe |
-| `git_push` | Push local commits to a remote repository | Safe |
+| `git_init` | Initialize a new git repository at a path | Destructive |
+| `git_clone` | Clone a repository from URL to local path | Destructive |
+| `git_commit` | Stage files and create a commit with a message | Destructive |
+| `git_create_branch` | Create a new branch | Destructive |
+| `git_switch_branch` | Switch to a different branch | Destructive |
+| `git_delete_branch` | Delete a local branch (with optional force) | Destructive |
+| `git_merge` | Merge a source branch into a target branch | Destructive |
+| `git_rebase` | Rebase current branch onto a target branch | Destructive |
+| `git_cherry_pick` | Cherry-pick a specific commit onto the current branch | Destructive |
+| `git_revert` | Revert a commit by creating an inverse commit | Destructive |
+| `git_reset` | Reset repository to a commit (soft, mixed, or hard mode) | Destructive |
+| `git_amend` | Amend the most recent commit message or content | Destructive |
+| `git_pull` | Pull latest changes from a remote repository | Destructive |
+| `git_push` | Push local commits to a remote repository | Destructive |
 | `git_fetch` | Fetch changes from remote without merging | Safe |
-| `git_add_remote` | Add a named remote URL | Safe |
-| `git_remove_remote` | Remove a named remote | Safe |
+| `git_add_remote` | Add a named remote URL | Destructive |
+| `git_remove_remote` | Remove a named remote | Destructive |
 | `git_list_remotes` | List all configured remotes | Safe |
-| `git_stash` | Stash uncommitted changes with optional message | Safe |
-| `git_stash_apply` | Apply a stash entry to the working directory | Safe |
+| `git_stash` | Stash uncommitted changes with optional message | Destructive |
+| `git_stash_apply` | Apply a stash entry to the working directory | Destructive |
 | `git_stash_list` | List all stash entries | Safe |
-| `git_create_tag` | Create a lightweight or annotated tag | Safe |
+| `git_create_tag` | Create a lightweight or annotated tag | Destructive |
 | `git_list_tags` | List all tags in the repository | Safe |
+| `git_list_branches` | List all local branches in the repository | Safe |
 | `git_blame` | Show line-by-line commit attribution for a file | Safe |
 | `git_commit_details` | Get detailed metadata for a specific commit by SHA | Safe |
 | `git_get_config` | Read a git configuration value by key | Safe |
-| `git_set_config` | Set a git configuration value (local or global) | Safe |
-| `git_clean` | Delete untracked files from the working tree (irreversible) | Safe |
+| `git_set_config` | Set a git configuration value (local or global) | Destructive |
+| `git_clean` | Delete untracked files from the working tree (irreversible) | Destructive |
 
 ## PAI Algorithm Phase Mapping
 

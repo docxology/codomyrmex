@@ -6,13 +6,21 @@
 
 Unified toolkit for code execution, analysis, review, and transformation.
 
+## Key Files
+
+| File | Purpose |
+|------|---------|
+| `__init__.py` | Exports `analyze_file`, `analyze_project`, `Debugger`, `execute_code` |
+| `execution.py` | Sandboxed code execution, `SUPPORTED_LANGUAGES` constant |
+| `static_analysis/` | Import scanning, layer violation detection, export auditing |
+| `pattern_matching/` | AST-based `PatternMatcher` for structural code search |
+| `mcp_tools.py` | MCP tools: `code_execute`, `code_review_file`, `code_review_project`, `code_debug` |
+
 ## Key Classes
 
-- **CodeReviewer** — Orchestrate code quality reviews
-- **StaticAnalyzer** — Run deep linting and complexity analysis
-- **PatternMatcher** — Search for structural patterns (AST-based)
-- **CodeGenerator** — Generate code from functional specs
-- **Debugger** — Automated error diagnosis and patching
+- **`Debugger`** — Automated error diagnosis and patch suggestions (in `__init__.py`)
+- **`PatternMatcher`** — AST-based structural pattern search (in `pattern_matching/`)
+- **`execute_code(language, code, timeout)`** — Sandboxed execution function (in `execution.py`)
 
 ## Agent Instructions
 

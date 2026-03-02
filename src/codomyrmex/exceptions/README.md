@@ -82,9 +82,15 @@ exceptions/
 └── specialized.py   # Misc domain errors
 ```
 
+## Testing
+
+```bash
+uv run pytest src/codomyrmex/tests/unit/exceptions/ -v
+```
+
 ## Navigation
 
+- [SPEC](SPEC.md) | [AGENTS](AGENTS.md) | [PAI](PAI.md)
 - **Extended Docs**: [docs/modules/exceptions/](../../../docs/modules/exceptions/)
 - **Parent Directory**: [codomyrmex](../README.md)
-- **Project Root**: ../../../README.md
 - **Related**: [Validation](../validation/README.md)

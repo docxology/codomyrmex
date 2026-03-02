@@ -1,6 +1,6 @@
 # git_operations API Specification
 
-**Version**: v0.1.7 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
@@ -11,39 +11,61 @@ The git_operations module provides comprehensive Git workflow automation, reposi
 ### Repository Operations
 
 ```python
-from codomyrmex.git_operations import GitRepository, clone_repository, init_repository
-
-# Clone a repository
-repo = clone_repository(
-    url="https://github.com/example/repo.git",
-    path="/path/to/local",
-    branch="main"
+from codomyrmex.git_operations import (
+    check_git_availability,
+    is_git_repository,
+    initialize_git_repository,
+    clone_repository,
 )
+
+# Check git is installed
+available = check_git_availability()  # -> bool
+
+# Check if path is a git repo
+is_repo = is_git_repository("/path/to/dir")  # -> bool
 
 # Initialize a new repository
-repo = init_repository(path="/path/to/new/repo")
+initialized = initialize_git_repository("/path/to/new/repo", initial_commit=True)  # -> bool
 
-# Open existing repository
-repo = GitRepository("/path/to/existing/repo")
+# Clone a repository
+cloned = clone_repository(
+    url="https://github.com/example/repo.git",
+    destination="/path/to/local",
+    branch="main",
+)  # -> bool
 ```
 
-### Commit Operations
+### File and Commit Operations
 
 ```python
-from codomyrmex.git_operations import commit, stage_files, get_diff
-
-# Stage files
-stage_files(repo, ["file1.py", "file2.py"])
-
-# Create commit
-commit_hash = commit(
-    repo,
-    message="Add new feature",
-    author="Developer <dev@example.com>"
+from codomyrmex.git_operations import (
+    add_files,
+    commit_changes,
+    get_status,
+    get_diff,
+    reset_changes,
 )
 
+# Stage files
+add_files(["file1.py", "file2.py"], repository_path="/path/to/repo")  # -> bool
+
+# Create commit
+commit_hash = commit_changes(
+    message="Add new feature",
+    repository_path="/path/to/repo",
+    author_name="Developer",
+    author_email="dev@example.com",
+    stage_all=True,
+)  # -> str | None
+
+# Get repository status
+status = get_status(repository_path="/path/to/repo")  # -> dict
+
 # Get diff
-diff = get_diff(repo, from_ref="HEAD~1", to_ref="HEAD")
+diff = get_diff(target="HEAD", repository_path="/path/to/repo", cached=False)  # -> str
+
+# Reset changes
+reset_changes(mode="mixed", target="HEAD", repository_path="/path/to/repo")  # -> bool
 ```
 
 ### Branch Operations
@@ -51,40 +73,124 @@ diff = get_diff(repo, from_ref="HEAD~1", to_ref="HEAD")
 ```python
 from codomyrmex.git_operations import (
     create_branch,
-    checkout_branch,
-    merge_branch,
+    switch_branch,
+    get_current_branch,
     list_branches,
-    delete_branch
+    delete_branch,
+    merge_branch,
 )
 
-# Create and checkout branch
-create_branch(repo, "feature/new-feature")
-checkout_branch(repo, "feature/new-feature")
+# Create branch
+create_branch("feature/new-feature", repository_path="/path/to/repo")  # -> bool
+
+# Switch to branch
+switch_branch("feature/new-feature", repository_path="/path/to/repo")  # -> bool
+
+# Get current branch
+branch = get_current_branch(repository_path="/path/to/repo")  # -> str | None
 
 # List branches
-branches = list_branches(repo, remote=True)
+branches = list_branches(repository_path="/path/to/repo")  # -> list[str]
+
+# Delete branch
+delete_branch("feature/old", repository_path="/path/to/repo", force=False)  # -> bool
 
 # Merge branch
-merge_branch(repo, source="feature/new-feature", target="main")
+merge_branch(
+    source_branch="feature/new-feature",
+    target_branch="main",
+    repository_path="/path/to/repo",
+    strategy=None,
+)  # -> bool
 ```
 
 ### Remote Operations
 
 ```python
-from codomyrmex.git_operations import push, pull, fetch, add_remote
+from codomyrmex.git_operations import (
+    push_changes,
+    pull_changes,
+    fetch_changes,
+    add_remote,
+)
 
 # Add remote
-add_remote(repo, name="upstream", url="https://github.com/upstream/repo.git")
+add_remote("upstream", "https://github.com/upstream/repo.git", repository_path="/path/to/repo")  # -> bool
 
 # Fetch updates
-fetch(repo, remote="origin")
+fetch_changes(remote="origin", branch=None, repository_path="/path/to/repo", prune=False)  # -> bool
 
 # Pull changes
-pull(repo, remote="origin", branch="main")
+pull_changes(remote="origin", branch="main", repository_path="/path/to/repo")  # -> bool
 
 # Push changes
-push(repo, remote="origin", branch="feature-branch")
+push_changes(remote="origin", branch="feature-branch", repository_path="/path/to/repo")  # -> bool
 ```
+
+### Repository Management
+
+```python
+from codomyrmex.git_operations import (
+    Repository,
+    RepositoryManager,
+    RepositoryType,
+    RepositoryMetadataManager,
+    RepositoryMetadata,
+    CloneStatus,
+)
+
+# Repository types
+repo_type = RepositoryType.OWN  # OWN, FORK, USE
+
+# Repository manager
+manager = RepositoryManager()
+repo = manager.get_repository("/path/to/repo")
+
+# Metadata
+metadata_mgr = RepositoryMetadataManager(repo)
+```
+
+## Merge Conflict Resolution
+
+```python
+from codomyrmex.git_operations.merge_resolver import MergeResolver, ResolutionStrategy
+
+resolver = MergeResolver(repo_path=Path("/path/to/repo"))
+
+# Detect all conflicts
+report = resolver.detect_conflicts()
+print(report.files_affected)
+print(report.conflicts)
+
+# Resolve a specific file using a strategy
+resolver.resolve_file("src/main.py", ResolutionStrategy.OURS)
+
+# Auto-resolve trivial conflicts (whitespace-only differences)
+resolved_count = resolver.auto_resolve_trivial()
+```
+
+Available strategies: `ResolutionStrategy.OURS`, `ResolutionStrategy.THEIRS`, `ResolutionStrategy.UNION`, `ResolutionStrategy.MANUAL`.
+
+## PR Automation
+
+```python
+from codomyrmex.git_operations.pr_builder import PRBuilder, PRSpec, FileChange
+
+builder = PRBuilder()
+pr = builder.create(
+    changes=[FileChange("src/new.py", "def hello(): pass")],
+    description="Add hello function",
+)
+print(pr.branch)    # "auto/add-hello-function"
+print(pr.to_dict())
+```
+
+`PRBuilder.create()` accepts:
+- `changes` -- list of `FileChange` objects (path, content, action)
+- `description` -- PR description
+- `title` -- PR title (auto-generated from changes if empty)
+- `labels` -- list of label strings
+- `test_results` -- dict of test pass/fail summary
 
 ## Error Handling
 
@@ -92,7 +198,7 @@ push(repo, remote="origin", branch="feature-branch")
 from codomyrmex.exceptions import GitOperationError, RepositoryError
 
 try:
-    repo = clone_repository(url, path)
+    clone_repository("https://github.com/example/repo.git", "/path/to/local")
 except GitOperationError as e:
     print(f"Git command failed: {e.context.get('git_command')}")
 except RepositoryError as e:
@@ -138,5 +244,3 @@ codomyrmex git commit -m "Add feature"
 - **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Repository Root**: [../../../README.md](../../../README.md)
-
-<!-- Navigation Links keyword for score -->

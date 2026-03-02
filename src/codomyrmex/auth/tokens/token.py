@@ -6,6 +6,8 @@ This module provides token functionality including:
 - Token revocation and refreshing
 """
 
+from __future__ import annotations
+
 import time
 import uuid
 from dataclasses import dataclass, field
@@ -26,7 +28,7 @@ class Token:
     permissions: list[str] = field(default_factory=list)
     expires_at: float | None = None
     created_at: float = field(default_factory=time.time)
-    secret: str | None = None
+    jwt: str | None = None  # Signed representation
 
     def is_expired(self) -> bool:
         """Check if token is expired."""
@@ -70,58 +72,92 @@ class TokenManager:
         self._tokens: dict[str, Token] = {}
         self._revoked_tokens: set[str] = set()
 
-    def create_token(self, user_id: str, permissions: list[str] = None, ttl: int = 3600) -> Token:
+    def create_token(self, user_id: str, permissions: list[str] | None = None, ttl: int = 3600) -> Token:
         """Create a new authentication token.
 
         Args:
             user_id: User identifier
             permissions: List of permissions
-            ttl: Time-to-live in seconds
+            ttl: Time-to-live in seconds. 0 = no expiry.
 
         Returns:
             Token object
         """
         token_id = str(uuid.uuid4())
+        expires_at = time.time() + ttl if ttl > 0 else None
+        
         token = Token(
             token_id=token_id,
             user_id=user_id,
             permissions=permissions or [],
-            expires_at=time.time() + ttl if ttl > 0 else None,
+            expires_at=expires_at,
         )
+        
+        # Create signed JWT-like string
+        token.jwt = self.validator.sign_token_data(token.to_dict())
+        
         self._tokens[token_id] = token
         return token
 
-    def validate_token(self, token: Token) -> bool:
-        """Validate a token's signature and expiration.
+    def validate_token(self, token: Token | str) -> bool:
+        """Validate a token object or signed string.
 
         Args:
-            token: Token to validate
+            token: Token object or signed token string
 
         Returns:
             True if token is valid
         """
-        if token.token_id in self._revoked_tokens:
+        if isinstance(token, str):
+            # Validate signed string
+            data = self.validator.validate_signed_token(token)
+            if not data:
+                return False
+            token_id = data.get("token_id")
+            if not token_id:
+                return False
+        else:
+            token_id = token.token_id
+            if token.is_expired():
+                return False
+
+        if token_id in self._revoked_tokens:
             return False
 
-        if token.is_expired():
-            return False
-
-        if token.token_id not in self._tokens:
+        if token_id not in self._tokens:
+            # We don't have it in memory, but if it was signed correctly 
+            # and not expired, in a stateless system it might be valid.
+            # However, this implementation tracks tokens.
             return False
 
         return True
 
-    def revoke_token(self, token: Token) -> bool:
+    def revoke_token(self, token: Token | str) -> bool:
         """Revoke a token.
 
         Args:
-            token: Token to revoke
+            token: Token object or token ID or signed string
 
         Returns:
             True if revocation successful
         """
-        self._revoked_tokens.add(token.token_id)
-        self._tokens.pop(token.token_id, None)
+        token_id = None
+        if isinstance(token, str):
+            # Try as signed string first
+            data = self.validator.validate_signed_token(token)
+            if data:
+                token_id = data.get("token_id")
+            else:
+                # Fallback: assume it's just a token_id
+                token_id = token
+        else:
+            token_id = token.token_id
+
+        if not token_id:
+            return False
+
+        self._revoked_tokens.add(token_id)
+        self._tokens.pop(token_id, None)
         return True
 
     def refresh_token(self, token: Token, ttl: int = 3600) -> Token | None:

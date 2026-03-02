@@ -1,7 +1,9 @@
 """Unified lock management and advanced synchronization primitives."""
 
 import threading
-from dataclasses import dataclass
+import time
+from dataclasses import dataclass, field
+from typing import Dict, List, Optional, Set
 
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
@@ -13,88 +15,184 @@ logger = get_logger(__name__)
 @dataclass
 class LockStats:
     """Statistics for lock manager telemetry."""
-    total_locks: int
-    total_acquisitions: int
-    total_releases: int
-    active_locks: int
+    total_locks: int = 0
+    total_acquisitions: int = 0
+    total_releases: int = 0
+    active_locks: int = 0
+    lock_contention: Dict[str, int] = field(default_factory=dict)
 
 class LockManager:
     """Orchestrates multiple locks and provides multi-resource acquisition."""
 
     def __init__(self):
-        self._locks: dict[str, BaseLock] = {}
+        self._locks: Dict[str, BaseLock] = {}
         self._total_acquisitions = 0
         self._total_releases = 0
+        self._contention: Dict[str, int] = {}
+        self._manager_lock = threading.Lock()
 
     def register_lock(self, name: str, lock: BaseLock):
-        self._locks[name] = lock
+        """Register a lock with the manager."""
+        with self._manager_lock:
+            self._locks[name] = lock
+
+    def get_lock(self, name: str) -> Optional[BaseLock]:
+        """Retrieve a registered lock by name."""
+        with self._manager_lock:
+            return self._locks.get(name)
 
     @property
     def stats(self) -> LockStats:
         """Get lock manager statistics for telemetry."""
-        return LockStats(
-            total_locks=len(self._locks),
-            total_acquisitions=self._total_acquisitions,
-            total_releases=self._total_releases,
-            active_locks=sum(1 for lock in self._locks.values() if getattr(lock, '_acquired', False))
-        )
+        with self._manager_lock:
+            active = sum(1 for lock in self._locks.values() if getattr(lock, 'is_held', False))
+            return LockStats(
+                total_locks=len(self._locks),
+                total_acquisitions=self._total_acquisitions,
+                total_releases=self._total_releases,
+                active_locks=active,
+                lock_contention=self._contention.copy()
+            )
 
-    def acquire_all(self, names: list[str], timeout: float = 10.0) -> bool:
+    def list_locks(self) -> List[str]:
+        """List all registered lock names."""
+        with self._manager_lock:
+            return list(self._locks.keys())
+
+    def acquire_all(self, names: List[str], timeout: float = 10.0) -> bool:
         """Acquire multiple locks safely to avoid deadlocks (sorts by name)."""
         sorted_names = sorted(names)
-        acquired = []
+        acquired: List[BaseLock] = []
+        start_time = time.time()
+        
         try:
             for name in sorted_names:
-                lock = self._locks.get(name)
-                if not lock:
-                    raise ValueError(f"Lock '{name}' not registered")
-                if lock.acquire(timeout=timeout):
+                with self._manager_lock:
+                    lock = self._locks.get(name)
+                    if not lock:
+                        raise ValueError(f"Lock '{name}' not registered")
+                
+                remaining_timeout = max(0.1, timeout - (time.time() - start_time))
+                if lock.acquire(timeout=remaining_timeout):
                     acquired.append(lock)
-                    self._total_acquisitions += 1
+                    with self._manager_lock:
+                        self._total_acquisitions += 1
                 else:
+                    with self._manager_lock:
+                        self._contention[name] = self._contention.get(name, 0) + 1
+                    # Roll back on failure to acquire any lock in the set
+                    for l in reversed(acquired):
+                        l.release()
+                        with self._manager_lock:
+                            self._total_releases += 1
                     return False
             return True
         except Exception as e:
             logger.error(f"Failed to acquire multiple locks: {e}")
-            for lock in acquired:
-                lock.release()
-                self._total_releases += 1
+            for l in reversed(acquired):
+                l.release()
+                with self._manager_lock:
+                    self._total_releases += 1
             return False
 
-    def release_all(self, names: list[str]):
+    def release_all(self, names: List[str]):
         """Release multiple locks."""
         for name in names:
-            if name in self._locks:
-                self._locks[name].release()
-                self._total_releases += 1
+            with self._manager_lock:
+                lock = self._locks.get(name)
+            if lock:
+                lock.release()
+                with self._manager_lock:
+                    self._total_releases += 1
 
 class ReadWriteLock:
-    """In-process Read-Write lock (shared/exclusive)."""
+    """In-process Read-Write lock (shared/exclusive).
+    
+    This implementation prioritizes writers to avoid starvation.
+    """
 
     def __init__(self):
-        self._read_ready = threading.Condition(threading.Lock())
+        self._lock = threading.Lock()
+        self._read_ready = threading.Condition(self._lock)
         self._readers = 0
-        self._writers = 0
+        self._writers_waiting = 0
+        self._writer_active = False
 
-    def acquire_read(self):
-        with self._read_ready:
-            while self._writers > 0:
-                self._read_ready.wait()
+    def acquire_read(self, timeout: Optional[float] = None) -> bool:
+        """Acquire a read lock."""
+        start_time = time.time()
+        with self._lock:
+            while self._writer_active or self._writers_waiting > 0:
+                remaining = None
+                if timeout is not None:
+                    remaining = timeout - (time.time() - start_time)
+                    if remaining <= 0:
+                        return False
+                if not self._read_ready.wait(timeout=remaining):
+                    return False
             self._readers += 1
+            return True
 
     def release_read(self):
-        with self._read_ready:
+        """Release a read lock."""
+        with self._lock:
             self._readers -= 1
             if self._readers == 0:
                 self._read_ready.notify_all()
 
-    def acquire_write(self):
-        with self._read_ready:
-            while self._readers > 0 or self._writers > 0:
-                self._read_ready.wait()
-            self._writers += 1
+    def acquire_write(self, timeout: Optional[float] = None) -> bool:
+        """Acquire a write lock."""
+        start_time = time.time()
+        with self._lock:
+            self._writers_waiting += 1
+            try:
+                while self._readers > 0 or self._writer_active:
+                    remaining = None
+                    if timeout is not None:
+                        remaining = timeout - (time.time() - start_time)
+                        if remaining <= 0:
+                            return False
+                    if not self._read_ready.wait(timeout=remaining):
+                        return False
+                self._writer_active = True
+                return True
+            finally:
+                self._writers_waiting -= 1
 
     def release_write(self):
-        with self._read_ready:
-            self._writers -= 1
+        """Release a write lock."""
+        with self._lock:
+            self._writer_active = False
             self._read_ready.notify_all()
+
+    def read_lock(self):
+        """Return a context manager for the read lock."""
+        return _ReadLockContext(self)
+
+    def write_lock(self):
+        """Return a context manager for the write lock."""
+        return _WriteLockContext(self)
+
+class _ReadLockContext:
+    def __init__(self, rw_lock: ReadWriteLock):
+        self._rw_lock = rw_lock
+
+    def __enter__(self):
+        if not self._rw_lock.acquire_read():
+            raise TimeoutError("Failed to acquire read lock")
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self._rw_lock.release_read()
+
+class _WriteLockContext:
+    def __init__(self, rw_lock: ReadWriteLock):
+        self._rw_lock = rw_lock
+
+    def __enter__(self):
+        if not self._rw_lock.acquire_write():
+            raise TimeoutError("Failed to acquire write lock")
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self._rw_lock.release_write()

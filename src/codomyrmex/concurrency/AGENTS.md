@@ -1,86 +1,83 @@
-# Agent Guidelines - Concurrency
+# Concurrency Module - Agent Guidelines
 
-**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Module Overview
 
-Thread pools, locks, semaphores, and distributed locking.
+The `concurrency` module provides thread-safe and process-safe synchronization primitives for coordinating parallel tasks.
 
 ## Key Classes
 
-- **Lock** — Basic thread lock
-- **DistributedLock** — Cross-process locking
-- **RedisLock** — Redis-backed distributed lock
-- **Semaphore** — Counting semaphore
-- **LockManager** — Manage multiple locks
+- **`LocalLock`** — Thread-safe and process-safe file-based lock. Supports re-entry.
+- **`RedisLock`** — Redis-backed distributed lock for multi-node coordination.
+- **`LockManager`** — Orchestrates multiple named locks to prevent deadlocks.
+- **`ReadWriteLock`** — Efficient in-process lock (multiple readers, exclusive writer).
+- **`LocalSemaphore`** — Limit concurrent access to resources.
+- **`AsyncLocalSemaphore`** — Asyncio-compatible semaphore with sync bridge.
+- **`AsyncWorkerPool`** — Managed pool for bounded async task execution.
 
 ## Agent Instructions
 
-1. **Use context managers** — Always use `with lock:` pattern
-2. **Set timeouts** — Avoid deadlocks with lock timeouts
-3. **Prefer distributed** — Use `RedisLock` for multi-process
-4. **Limit concurrency** — Use `Semaphore` for resource limits
-5. **Name locks** — Use descriptive names for debugging
+1. **Always Use Context Managers** — Prefer the `with lock:` or `async with sem:` patterns for guaranteed cleanup.
+2. **Set Timeouts** — Never block indefinitely. Always provide a `timeout` argument to `acquire()` calls to prevent system-wide deadlocks.
+3. **Prefer the LockManager** — When acquiring multiple locks, use `LockManager.acquire_all()` which handles resource sorting to prevent circular wait deadlocks.
+4. **Choose the Right Primitive**:
+   - Use `LocalLock` for local process synchronization.
+   - Use `RedisLock` for distributed systems.
+   - Use `ReadWriteLock` for data structures that are frequently read but rarely updated.
+   - Use `AsyncWorkerPool` for limiting concurrency of async tasks (e.g., API calls).
 
 ## Common Patterns
 
+### Safe Multi-Resource Acquisition
 ```python
-from codomyrmex.concurrency import Lock, Semaphore, RedisLock, LockManager
+from codomyrmex.concurrency import LockManager, LocalLock
 
-# Basic locking
-lock = Lock("resource_lock")
-with lock:
-    modify_shared_resource()
-
-# Semaphore for limited concurrency
-sem = Semaphore("api_calls", limit=10)
-with sem:
-    call_rate_limited_api()
-
-# Distributed locking
-redis_lock = RedisLock("global_lock", redis_url="redis://localhost")
-with redis_lock.acquire(timeout=5.0):
-    perform_exclusive_operation()
-
-# Lock manager for multiple resources
 manager = LockManager()
-with manager.acquire_all(["lock_a", "lock_b"]):
-    modify_multiple_resources()
+manager.register_lock("db", LocalLock("database"))
+manager.register_lock("file", LocalLock("log_file"))
+
+# Safely acquire both in sorted order
+if manager.acquire_all(["file", "db"], timeout=5.0):
+    try:
+        # Critical section
+        pass
+    finally:
+        manager.release_all(["db", "file"])
 ```
 
-## Testing Patterns
-
+### Bounded Async Execution
 ```python
-# Verify lock exclusion
-lock = Lock("test")
-lock.acquire()
-assert not lock.acquire(timeout=0.1)  # Should fail
-lock.release()
+from codomyrmex.concurrency import AsyncWorkerPool
 
-# Verify semaphore counting
-sem = Semaphore("test", limit=2)
-assert sem.acquire()
-assert sem.acquire()
-assert not sem.acquire(timeout=0.1)  # At limit
+async def process_data(item):
+    # Process item
+    return item * 2
+
+async with AsyncWorkerPool(max_workers=5) as pool:
+    results = await pool.map(process_data, range(20))
+    # results is a list of TaskResult objects
 ```
 
-## PAI Agent Role Access Matrix
+### Redis Distributed Locking
+```python
+from redis import Redis
+from codomyrmex.concurrency import RedisLock
 
-| PAI Agent | Access Level | Primary Capabilities | Trust Level |
-|-----------|-------------|---------------------|-------------|
-| **Engineer** | Full | Direct Python import, class instantiation, full API access | TRUSTED |
-| **Architect** | Read + Design | API review, concurrency pattern design, dependency analysis | OBSERVED |
-| **QATester** | Validation | Integration testing via pytest, thread safety validation | OBSERVED |
+redis_client = Redis.from_url("redis://localhost:6379")
+lock = RedisLock("global_task", redis_client, ttl=60)
 
-### Engineer Agent
-**Use Cases**: Implement async/parallel tasks, configure distributed locks, manage thread pools during BUILD/EXECUTE phases
+with lock:
+    # Exclusive distributed operation
+    pass
+```
 
-### Architect Agent
-**Use Cases**: Review concurrency patterns, validate deadlock prevention strategies, design lock hierarchies
+## Testing Guidelines
 
-### QATester Agent
-**Use Cases**: Validate thread safety under contention, verify lock exclusion semantics, test semaphore counting behavior
+- **Zero-Mock Policy**: Use `fakeredis.FakeRedis()` for testing Redis-dependent code instead of mocking the Redis client.
+- **Race Conditions**: When testing concurrency, use multiple threads/processes and verify consistency of shared state.
+- **Timeouts**: Verify that `TimeoutError` is raised (or `False` is returned) when locks cannot be acquired.
 
 ## Navigation
 
-- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)
+- [README.md](README.md) | [SPEC.md](SPEC.md) | [PAI.md](PAI.md)

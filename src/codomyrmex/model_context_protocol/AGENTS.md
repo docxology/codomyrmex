@@ -4,22 +4,36 @@
 
 ## Module Overview
 
-MCP server/client implementation for AI agent tool access.
+Foundation-layer module implementing the Model Context Protocol (MCP) — the JSON-RPC communication standard between PAI agents and Codomyrmex tools. Provides Pydantic-validated schemas, `@mcp_tool` decorator for auto-discovery, full MCP server with stdio/HTTP transport, and three introspection tools for discovering and inspecting all registered tools at runtime. Every PAI-codomyrmex call flows through this module's transport layer.
+
+## Key Files
+
+| File | Purpose |
+|------|---------|
+| `__init__.py` | Exports `MCPServer`, `MCPToolRegistry`, `MCPMessage`, `MCPToolCall`, `MCPToolResult` |
+| `decorators.py` | `@mcp_tool` decorator — tag any function for auto-discovery |
+| `discovery/` | `pkgutil`-based discovery scanning all `mcp_tools.py` submodules |
+| `adapters/` | Protocol adapters for external systems |
+| `quality/` | Message validation utilities |
+| `reliability/` | Transport reliability helpers |
+| `mcp_tools.py` | Self-referential MCP introspection tools |
 
 ## Key Classes
 
-- **MCPServer** — MCP server implementation
-- **MCPClient** — Client to connect to servers
-- **Tool** — Tool definition
-- **Resource** — Resource definition
+- **`MCPServer`** — Full MCP server with tool, resource, and prompt registration; stdio/HTTP transport
+- **`MCPToolRegistry`** — Registry mapping tool names to callables and schemas
+- **`MCPMessage`** — JSON-RPC message representation
+- **`MCPToolCall`** — Tool invocation with `tool_name` and `arguments`
+- **`MCPToolResult`** — Execution result with status validation
+- **`MCPServerConfig`** — Server name, version, transport configuration
 
 ## Agent Instructions
 
-1. **Define tools clearly** — Schema and descriptions
-2. **Validate input** — Check tool parameters
-3. **Return structured** — Consistent response format
-4. **Handle errors** — Graceful error responses
-5. **Document capabilities** — List all available tools
+1. **Use `@mcp_tool` decorator** — Tag functions for auto-discovery; avoid manual registration
+2. **Validate input schemas** — Always use Pydantic-validated `MCPToolCall` for tool calls
+3. **Return structured dicts** — All tools must return `{"status": "ok"|"error", ...}`
+4. **Use `inspect_server` first** — Verify server health before long agent workflows
+5. **Use `list_registered_tools`** — To discover which tools are available in the current deployment
 
 ## Common Patterns
 

@@ -22,7 +22,7 @@ The Agentic Memory module provides persistent key-value memory for AI agents. It
 
 4. **Zero-Mock Policy**: Tests must use real `InMemoryStore` or `JSONFileStore` instances — no mocking of storage operations.
 
-5. **MCP Exposure**: Three MCP tools (`store_memory`, `recall_memory`, `list_memories`) are backed by this module. Changes to the API surface require updating `scripts/model_context_protocol/run_mcp_server.py`.
+5. **MCP Exposure**: Three MCP tools (`memory_put`, `memory_get`, `memory_search`) are backed by this module via `mcp_tools.py`. Changes to the API surface require updating `mcp_tools.py`.
 
 ## Key Files
 

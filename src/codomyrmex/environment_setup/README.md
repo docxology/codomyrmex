@@ -61,6 +61,23 @@ if is_uv_available():
 | **Configuration** | `check_and_setup_env_vars`, `check_api_keys`, `APIKeyReport` |
 | **System Info** | `is_uv_available`, `get_uv_path`, `is_uv_environment`, `generate_environment_report` |
 
+## Directory Contents
+
+```text
+environment_setup/
+├── __init__.py          # Exports all functions
+├── env_checker.py       # validate_environment, check_dependencies, generate_environment_report
+├── dependency_resolver.py  # DependencyResolver, install_dependencies
+├── mcp_tools.py         # MCP tools: env_check, env_list_deps
+└── scripts/             # Setup scripts
+```
+
+## Testing
+
+```bash
+uv run pytest src/codomyrmex/tests/unit/environment_setup/ -v
+```
+
 ## Documentation
 
 - [Functional Specification](SPEC.md)

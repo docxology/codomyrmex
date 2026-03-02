@@ -12,6 +12,7 @@ from .commands.branching import (
     create_branch,
     delete_branch,
     get_current_branch,
+    list_branches,
     switch_branch,
 )
 from .commands.commit import amend_commit, cherry_pick, commit_changes, revert_commit

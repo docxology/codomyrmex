@@ -12,6 +12,7 @@ from __future__ import annotations
 
 import time
 from dataclasses import dataclass, field
+from typing import Dict, List, Optional, Set
 
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
@@ -38,29 +39,17 @@ class PermissionRegistry:
     - Wildcard matching ("files.*" grants "files.read", "files.write")
     - Multi-role users
     - Audit trail of permission checks
-
-    Example::
-
-        reg = PermissionRegistry()
-        reg.register_role("viewer", ["files.read", "projects.list"])
-        reg.register_role("editor", ["files.write", "files.delete"])
-        reg.add_inheritance("editor", "viewer")
-        reg.assign_role("alice", "editor")
-
-        assert reg.check("alice", "files.read")   # inherited from viewer
-        assert reg.check("alice", "files.write")   # direct from editor
-        assert not reg.check("alice", "admin.nuke")
     """
 
     def __init__(self) -> None:
-        self._roles: dict[str, set[str]] = {}
-        self._role_hierarchy: dict[str, set[str]] = {}
-        self._user_roles: dict[str, set[str]] = {}
-        self._audit_log: list[PermissionCheck] = []
+        self._roles: Dict[str, Set[str]] = {}
+        self._role_hierarchy: Dict[str, Set[str]] = {}
+        self._user_roles: Dict[str, Set[str]] = {}
+        self._audit_log: List[PermissionCheck] = []
 
     # ── Role management ─────────────────────────────────────────────
 
-    def register_role(self, role: str, permissions: list[str] | None = None) -> None:
+    def register_role(self, role: str, permissions: List[str] | None = None) -> None:
         """Register a role with direct permissions."""
         if role not in self._roles:
             self._roles[role] = set()
@@ -70,7 +59,12 @@ class PermissionRegistry:
 
     def add_inheritance(self, child: str, parent: str) -> None:
         """Make child role inherit all permissions from parent role."""
+        if child not in self._roles:
+            self.register_role(child)
+        if parent not in self._roles:
+            self.register_role(parent)
         self._role_hierarchy.setdefault(child, set()).add(parent)
+        logger.debug("Role inheritance added: %s -> %s", child, parent)
 
     def remove_role(self, role: str) -> bool:
         """Remove a role and unassign from all users."""
@@ -78,11 +72,15 @@ class PermissionRegistry:
             return False
         del self._roles[role]
         self._role_hierarchy.pop(role, None)
+        # Remove from other roles' hierarchies
+        for parents in self._role_hierarchy.values():
+            parents.discard(role)
+        # Unassign from users
         for user_roles in self._user_roles.values():
             user_roles.discard(role)
         return True
 
-    def list_roles(self) -> list[str]:
+    def list_roles(self) -> List[str]:
         """List all registered role names."""
         return sorted(self._roles.keys())
 
@@ -90,22 +88,27 @@ class PermissionRegistry:
 
     def assign_role(self, user_id: str, role: str) -> None:
         """Assign a role to a user."""
+        if role not in self._roles:
+            self.register_role(role)
         self._user_roles.setdefault(user_id, set()).add(role)
+        logger.info("Assigned role '%s' to user '%s'", role, user_id)
 
     def revoke_role(self, user_id: str, role: str) -> bool:
         """Revoke a role from a user."""
         if user_id in self._user_roles:
-            self._user_roles[user_id].discard(role)
-            return True
+            if role in self._user_roles[user_id]:
+                self._user_roles[user_id].discard(role)
+                logger.info("Revoked role '%s' from user '%s'", role, user_id)
+                return True
         return False
 
-    def get_user_roles(self, user_id: str) -> set[str]:
+    def get_user_roles(self, user_id: str) -> Set[str]:
         """Get all roles assigned to a user."""
         return self._user_roles.get(user_id, set()).copy()
 
     # ── Permission resolution ───────────────────────────────────────
 
-    def get_permissions(self, role: str, _visited: set[str] | None = None) -> set[str]:
+    def get_permissions(self, role: str, _visited: Set[str] | None = None) -> Set[str]:
         """Get all permissions for a role, including inherited (cycle-safe)."""
         if _visited is None:
             _visited = set()
@@ -118,36 +121,34 @@ class PermissionRegistry:
             permissions.update(self.get_permissions(parent, _visited))
         return permissions
 
-    def get_user_permissions(self, user_id: str) -> set[str]:
+    def get_user_permissions(self, user_id: str) -> Set[str]:
         """Get all effective permissions for a user across all assigned roles."""
-        perms: set[str] = set()
+        perms: Set[str] = set()
         for role in self._user_roles.get(user_id, set()):
             perms.update(self.get_permissions(role))
         return perms
 
     @staticmethod
-    def _matches(permission: str, check: str) -> bool:
+    def _matches(permission: str, requested: str) -> bool:
         """Check if a registered permission matches a requested permission.
 
         Supports wildcards: "files.*" matches "files.read".
         """
-        if permission == check:
+        if permission == "*" or permission == requested:
             return True
         if permission.endswith(".*"):
             prefix = permission[:-1]  # "files."
-            if check.startswith(prefix):
+            if requested.startswith(prefix):
                 return True
-        if permission == "*":
-            return True
         return False
 
     def has_permission(self, role: str, permission: str) -> bool:
         """Check if a role has a specific permission (with wildcards)."""
         permissions = self.get_permissions(role)
-        if "admin" in permissions:
+        if "*" in permissions or "admin" in permissions:
             return True
-        for perm in permissions:
-            if self._matches(perm, permission):
+        for p in permissions:
+            if self._matches(p, permission):
                 return True
         return False
 
@@ -165,6 +166,8 @@ class PermissionRegistry:
             True if any of the user's roles grant the permission.
         """
         roles = self._user_roles.get(user_id, set())
+        
+        # Check all assigned roles
         for role in roles:
             if self.has_permission(role, permission):
                 self._audit_log.append(PermissionCheck(
@@ -173,6 +176,7 @@ class PermissionRegistry:
                 ))
                 return True
 
+        # Failed check
         self._audit_log.append(PermissionCheck(
             user_id=user_id, role=",".join(roles) if roles else "none",
             permission=permission, granted=False, resource=resource,
@@ -180,7 +184,7 @@ class PermissionRegistry:
         return False
 
     @property
-    def audit_log(self) -> list[PermissionCheck]:
+    def audit_log(self) -> List[PermissionCheck]:
         return list(self._audit_log)
 
     @property

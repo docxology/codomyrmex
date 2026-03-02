@@ -3,7 +3,9 @@
 import fcntl
 import os
 import time
+import threading
 from abc import ABC, abstractmethod
+from typing import Optional
 
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
@@ -45,39 +47,78 @@ class BaseLock(ABC):
         self.release()
 
 class LocalLock(BaseLock):
-    """File-based lock for local multi-process synchronization."""
+    """File-based lock for local multi-process synchronization.
+    
+    Now includes thread-safety via a re-entrant threading lock.
+    """
 
     def __init__(self, name: str, lock_dir: str = "/tmp/codomyrmex/locks"):
         super().__init__(name)
         self.lock_path = os.path.join(lock_dir, f"{name}.lock")
+        self._lock_dir = lock_dir
         os.makedirs(lock_dir, exist_ok=True)
-        self._lock_file = None
+        self._lock_file: Optional[int] = None
+        self._thread_lock = threading.RLock()
+        self._nesting_level = 0
 
     def acquire(self, timeout: float = 10.0, retry_interval: float = 0.1) -> bool:
-        """Acquire."""
+        """Acquire the lock with retry logic and thread safety."""
         start_time = time.time()
-        while time.time() - start_time < timeout:
+        
+        # First acquire the thread-level lock
+        if not self._thread_lock.acquire(timeout=timeout):
+            return False
+        
+        if self.is_held:
+            self._nesting_level += 1
+            return True
+
+        while True:
             try:
-                self._lock_file = open(self.lock_path, "w")
-                fcntl.flock(self._lock_file, fcntl.LOCK_EX | fcntl.LOCK_NB)
-                self.is_held = True
-                return True
-            except OSError:
-                if self._lock_file:
-                    self._lock_file.close()
-                    self._lock_file = None
-                time.sleep(retry_interval)
-        return False
+                # Open the file and try to get an exclusive lock
+                fd = os.open(self.lock_path, os.O_CREAT | os.O_WRONLY)
+                try:
+                    fcntl.flock(fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
+                    self._lock_file = fd
+                    self.is_held = True
+                    self._nesting_level = 1
+                    return True
+                except (OSError, IOError):
+                    os.close(fd)
+            except Exception as e:
+                logger.debug("Error opening lock file %s: %s", self.lock_path, e)
+
+            if time.time() - start_time >= timeout:
+                self._thread_lock.release()
+                return False
+                
+            time.sleep(retry_interval)
 
     def release(self) -> None:
-        """Release."""
-        if self.is_held and self._lock_file:
-            fcntl.flock(self._lock_file, fcntl.LOCK_UN)
-            self._lock_file.close()
-            self._lock_file = None
-            self.is_held = False
+        """Release the lock and clean up."""
+        with self._thread_lock:
+            if not self.is_held:
+                return
+
+            self._nesting_level -= 1
+            if self._nesting_level > 0:
+                return
+
+            if self._lock_file is not None:
+                try:
+                    fcntl.flock(self._lock_file, fcntl.LOCK_UN)
+                    os.close(self._lock_file)
+                except Exception as e:
+                    logger.debug("Error releasing lock file %s: %s", self.lock_path, e)
+                finally:
+                    self._lock_file = None
+                    self.is_held = False
+                    
             try:
-                os.remove(self.lock_path)
+                if os.path.exists(self.lock_path):
+                    os.remove(self.lock_path)
             except OSError as e:
                 logger.debug("Failed to remove lock file %s: %s", self.lock_path, e)
-                pass
+
+        # Release the thread lock after releasing the file lock
+        self._thread_lock.release()

@@ -4,7 +4,22 @@
 
 ## Module Overview
 
-Lazy loading, caching, profiling, and performance monitoring.
+Lazy loading, caching, profiling, and performance monitoring. Provides `LazyLoader` for deferred
+module imports, `CacheManager` for TTL-based in-memory caching, `AsyncProfiler` for async code
+profiling, and two MCP tools (`performance_check_regression`, `performance_compare_benchmarks`)
+for benchmark regression detection and comparison.
+
+## Key Files
+
+| File | Purpose |
+|------|---------|
+| `__init__.py` | Exports `LazyLoader`, `CacheManager`, `PerformanceMonitor`, `AsyncProfiler`, `ResourceTracker`, `lazy_import`, `cached_function`, `monitor_performance` |
+| `lazy_loader.py` | `LazyLoader`, `lazy_import()` — defer module loading until first use |
+| `cache_manager.py` | `CacheManager` — cache with TTL and multiple backends |
+| `performance_monitor.py` | `PerformanceMonitor` — system metrics (requires psutil) |
+| `async_profiler.py` | `AsyncProfiler` — profile async code execution |
+| `resource_tracker.py` | `ResourceTracker` — track memory and CPU usage |
+| `mcp_tools.py` | MCP tools: `performance_check_regression`, `performance_compare_benchmarks` |
 
 ## Key Classes
 
@@ -63,20 +78,27 @@ assert cache.get("key") == "value"
 
 ## MCP Tools Available
 
-All tools are auto-discovered via `@mcp_tool` decorators and exposed through the MCP bridge.
-
 | Tool | Description | Trust Level |
 |------|-------------|-------------|
-| `performance_check_regression` | Check a benchmark result against a stored baseline for regressions | Safe |
-| `performance_compare_benchmarks` | Compute the delta between two benchmark values | Safe |
+| `performance_check_regression` | Check a benchmark result against a stored baseline for regressions | SAFE |
+| `performance_compare_benchmarks` | Compute the delta between two benchmark values | SAFE |
+
+## Operating Contracts
+
+- `AsyncProfiler` must be instantiated (`profiler = AsyncProfiler()`) before using `@profiler.profile`; do NOT use `@AsyncProfiler.profile` (class-level) — this causes runtime errors
+- `CacheManager.set()` with `ttl=None` stores indefinitely — always set TTL in production
+- `PerformanceMonitor` requires `psutil` — will raise `ImportError` if not installed
+- `performance_check_regression` is read-only — does not modify baseline files
+- **DO NOT** call `@AsyncProfiler.profile` as a class decorator — always use an instance
 
 ## PAI Agent Role Access Matrix
 
-| PAI Agent | Access Level | Primary Capabilities | Trust Level |
-|-----------|-------------|---------------------|-------------|
-| **Engineer** | Full | `performance_check_regression`, `performance_compare_benchmarks`; full benchmarking suite | TRUSTED |
-| **Architect** | Read + Design | `performance_compare_benchmarks`; performance baseline design, SLO specification | OBSERVED |
-| **QATester** | Validation | `performance_check_regression`, `performance_compare_benchmarks`; regression detection, SLO verification | OBSERVED |
+| PAI Agent | Access Level | MCP Tools | Trust Level |
+|-----------|-------------|-----------|-------------|
+| **Engineer** | Full | `performance_check_regression`, `performance_compare_benchmarks` | TRUSTED |
+| **Architect** | Read + Design | `performance_compare_benchmarks` — baseline design, SLO specification | OBSERVED |
+| **QATester** | Validation | `performance_check_regression`, `performance_compare_benchmarks` — regression detection, SLO verification | OBSERVED |
+| **Researcher** | Read-only | `performance_compare_benchmarks`, `performance_check_regression` — benchmark analysis | SAFE |
 
 ### Engineer Agent
 **Use Cases**: Running benchmarks during VERIFY, detecting performance regressions after BUILD, comparing baseline vs. current performance.
@@ -86,6 +108,9 @@ All tools are auto-discovered via `@mcp_tool` decorators and exposed through the
 
 ### QATester Agent
 **Use Cases**: Detecting performance regressions during VERIFY, confirming benchmarks meet SLO targets.
+
+### Researcher Agent
+**Use Cases**: Analyzing benchmark deltas and regression signals during research and performance studies.
 
 ## Navigation
 

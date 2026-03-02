@@ -1,82 +1,59 @@
 # cli - Functional Specification
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
 
-Command-line interface providing unified access to all Codomyrmex modules and workflows through the `codomyrmex` command.
-
-## Design Principles
-
-### Modularity
-
-- Commands organized by domain (workflow, project, ai, analyze, build, fpf, skills)
-- Handler implementations in separate files for maintainability
-- Composable command structure with subparsers
-
-### Functionality
-
-- Supports both synchronous and asynchronous operations
-- Performance monitoring integration (--performance flag)
-- Verbose output mode (--verbose flag)
-
-### Documentation
-
-- Built-in help for all commands and subcommands
-- Usage examples in epilog
-- Clear error messages for invalid usage
+The `cli` module provides a unified, structured command-line interface for the Codomyrmex ecosystem. It enables both human users and AI agents to interact with the platform's diverse capabilities through a consistent API.
 
 ## Architecture
 
-```mermaid
-graph TD
-    CLI[codomyrmex CLI] --> Core[core.py - ArgumentParser]
-    Core --> Handlers[handlers/]
-    Handlers --> AI[ai.py]
-    Handlers --> Analysis[analysis.py]
-    Handlers --> Build[build.py]
-    Handlers --> Environment[environment.py]
-    Handlers --> FPF[fpf.py]
-    Handlers --> Skills[skills.py]
-    
-    AI --> agents[agents module]
-    Analysis --> static_analysis[static_analysis module]
-    Build --> deployment[deployment module]
-    FPF --> fpf_module[fpf module]
-    Skills --> skills_module[skills module]
-```
+The CLI uses a "Thin Dispatcher" pattern:
 
-## Command Groups
+1. **Entry Point (`core.py`)**: Defines the `Cli` class which maps methods to CLI commands using `google-fire`.
+2. **Handlers (`handlers/`)**: Logic for each command group is isolated in dedicated modules.
+3. **Utilities (`utils.py`)**: Common formatting, logging, and capability detection.
+4. **Doctor (`doctor.py`)**: Specialized diagnostic logic for system health.
 
-| Command | Subcommands | Purpose |
-|---------|------------|---------|
-| `check` | - | Validate environment setup |
-| `info` | - | Show project information |
-| `modules` | - | List available modules |
-| `status` | - | Show system status dashboard |
-| `shell` | - | Launch interactive shell |
-| `workflow` | list, create, run | Workflow management |
-| `project` | list, create | Project management |
-| `orchestration` | status, health | Orchestration system |
-| `ai` | generate, refactor | AI-powered operations |
-| `analyze` | code, git | Code analysis |
-| `build` | project | Build operations |
-| `fpf` | fetch, parse, export, search, visualize, context, analyze, report | FPF operations |
-| `skills` | sync, list, get, search | Skills management |
+## Core Components
 
-## Navigation
+### `Cli` Class
+The central hub for all commands. Methods are automatically exposed as subcommands.
+- Uses `fire.Fire(Cli)` for automatic CLI generation.
+- Handles global flags like `--verbose` and `--performance`.
 
-- **Human Documentation**: [README.md](README.md)
-- **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Parent Directory**: [codomyrmex](../README.md)
-- **Project Root**: [README](../../../README.md)
+### Command Handlers
+Located in `src/codomyrmex/cli/handlers/`:
+- `system.py`: Environment checks, info, and status.
+- `ai.py`: LLM-powered code editing.
+- `analysis.py`: Static analysis and module testing.
+- `orchestration.py`: Project and workflow management.
+- `fpf.py`: First Principles Framework operations.
+- `skills.py`: Skill registry management.
+- `quick.py`: Composable orchestration primitives (`run`, `pipe`, `batch`).
+
+## Behavioral Requirements
+
+- **Module Independence**: The CLI must start even if optional dependencies are missing.
+- **Clear Feedback**: Errors must be descriptive and actionable.
+- **Exit Codes**:
+  - `0`: Success.
+  - `1`: Functional error or invalid arguments.
+  - `2`: System-level failure.
+- **Interactivity**: Support for interactive shells and dashboards.
+
+## Testing Strategy
+
+- **Zero-Mock Policy**: All CLI tests must use real functional components. No mocking of internal logic or subprocesses (unless strictly necessary for environment isolation).
+- **Integrated Verification**: Tests in `test_cli_integrated.py` verify the end-to-end command flow.
 
 ## Dependencies
 
-See `src/codomyrmex/cli/__init__.py` for import dependencies.
+- **Core**: `fire`, `fire-python` (built-in)
+- **Optional**: `matplotlib`, `docker`, `jsonschema`, and various Codomyrmex internal modules.
 
-## Testing
+## Navigation
 
-```bash
-uv run python -m pytest src/codomyrmex/tests/ -k cli -v
-```
+- [README](README.md)
+- [Agent Guidelines](AGENTS.md)
+- [Project Root](../../../README.md)

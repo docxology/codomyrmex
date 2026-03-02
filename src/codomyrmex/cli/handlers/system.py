@@ -1,4 +1,6 @@
 import sys
+import platform
+import os
 
 from codomyrmex.cli.utils import (
     PERFORMANCE_MONITORING_AVAILABLE,
@@ -23,20 +25,22 @@ def check_environment() -> bool:
     # Check Python version
     python_version = sys.version_info
     if python_version.major < 3 or (
-        python_version.major == 3 and python_version.minor < 10
+        python_version.major == 3 and python_version.minor < 11
     ):
-        msg = f"Python {python_version.major}.{python_version.minor} detected. Need Python 3.10+"
+        msg = f"Python {python_version.major}.{python_version.minor} detected. Need Python 3.11+"
         print(formatter.error(msg) if formatter else f"❌ {msg}")
         success = False
     else:
-        msg = f"Python {python_version.major}.{python_version.minor}.{python_version.micro}"
+        msg = f"Python {python_version.major}.{python_version.minor}.{python_version.micro} ({platform.python_implementation()})"
         print(formatter.success(msg) if formatter else f"✅ {msg}")
 
     # Check if we're in a virtual environment
-    if hasattr(sys, "real_prefix") or (
+    is_venv = hasattr(sys, "real_prefix") or (
         hasattr(sys, "base_prefix") and sys.base_prefix != sys.prefix
-    ):
-        msg = "Running in virtual environment"
+    )
+    if is_venv:
+        venv_path = os.environ.get('VIRTUAL_ENV', 'unknown')
+        msg = f"Running in virtual environment: {venv_path}"
         print(formatter.success(msg) if formatter else f"✅ {msg}")
     else:
         msg = "Not running in virtual environment (consider using one)"
@@ -63,7 +67,8 @@ def check_environment() -> bool:
     ai_deps = [
         ("openai", "OpenAI integration"),
         ("anthropic", "Anthropic Claude integration"),
-        ("google.generativeai", "Google AI integration"),
+        ("google.generativeai", "Google AI integration (legacy)"),
+        ("google.genai", "Google GenAI integration"),
     ]
 
     for dep, desc in ai_deps:
@@ -82,6 +87,7 @@ def check_environment() -> bool:
         ("pandas", "Data analysis"),
         ("pytest", "Testing framework"),
         ("docker", "Code execution sandboxing"),
+        ("jsonschema", "JSON Schema validation"),
     ]
 
     for dep, desc in analysis_deps:
@@ -104,7 +110,7 @@ def show_info():
 🐜 Codomyrmex - A Modular, Extensible Coding Workspace
 
 Codomyrmex provides a comprehensive suite of tools for:
-    pass
+
 • AI-enhanced code editing and generation
 • Automated build and synthesis processes
 • Static analysis and code quality checking
@@ -116,12 +122,12 @@ Codomyrmex provides a comprehensive suite of tools for:
 • Project management and orchestration
 
 Available modules:
-    pass
+
 📝 ai_code_editing      - AI-powered code assistance
 🔨 build_synthesis      - Build automation and code generation
 📚 documentation        - Rich documentation with Docusaurus
 🔍 static_analysis      - Code quality and security analysis
-🏃 code - Code execution, sandboxing, review, and monitoring
+🏃 code                 - Code execution, sandboxing, review, and monitoring
 📊 data_visualization   - Charts and data plotting
 📦 git_operations       - Git workflow automation
 📋 logging_monitoring   - Structured logging
@@ -133,7 +139,7 @@ Available modules:
 💻 terminal_interface   - Interactive CLI and terminal utilities
 
 Get started:
-    pass
+
 1. Run 'codomyrmex check' to verify your setup
 2. Run 'codomyrmex shell' for interactive mode
 3. Run 'codomyrmex workflow list' to see available workflows
@@ -242,7 +248,7 @@ def show_system_status():
             if isinstance(status, dict) and "status" in status:
                 status_text = "✅" if status["status"] else "❌"
                 print(f"  {status_text} {category.replace('_', ' ').title()}")
-    except ImportError:
+    except (ImportError, AttributeError, Exception):
         print("\n🔍 System Discovery: Not available")
 
     # Performance monitoring
@@ -266,7 +272,12 @@ def run_interactive_shell() -> bool:
         print("Install missing dependencies or use individual commands")
         return False
 
-    from codomyrmex.terminal_interface.interactive_shell import InteractiveShell
-    shell = InteractiveShell()
-    shell.run()
-    return True
+    try:
+        from codomyrmex.terminal_interface.interactive_shell import InteractiveShell
+        shell = InteractiveShell()
+        shell.run()
+        return True
+    except (ImportError, Exception) as e:
+        logger.error(f"Failed to launch interactive shell: {e}")
+        print(f"❌ Failed to launch interactive shell: {e}")
+        return False

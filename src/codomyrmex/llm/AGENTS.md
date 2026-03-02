@@ -4,14 +4,28 @@
 
 ## Module Overview
 
-Large Language Model integration: providers, chains, and prompts.
+Multi-provider LLM integration layer supporting OpenRouter (cloud), Ollama (local), and Microsoft Fabric. Provides text generation via `ask()`, local model management via `OllamaManager`, Fabric integration via `FabricManager`, and a rich submodule ecosystem covering chains, embeddings, RAG, cost tracking, guardrails, streaming, and prompt versioning. Three MCP tools expose inference and model introspection to PAI agents.
 
-## Key Classes
+## Key Files
 
-- **LLMClient** — Multi-provider LLM client
-- **ChatSession** — Stateful conversations
-- **PromptTemplate** — Template-based prompts
-- **LLMChain** — Chained LLM operations
+| File | Purpose |
+|------|---------|
+| `__init__.py` | Exports `ask`, `OllamaManager`, `FabricManager`, `LLMConfig`, `get_config` |
+| `config.py` | `LLMConfig`, `LLMConfigPresets`, `get_config`, `set_config`, `reset_config` |
+| `ollama/` | `OllamaManager`, `ModelRunner`, `ConfigManager`, `OutputManager` |
+| `fabric/` | `FabricManager`, `FabricConfigManager`, `FabricOrchestrator` |
+| `providers/` | Multi-provider client interfaces |
+| `chains/` | Multi-step reasoning chain implementations |
+| `embeddings/` | Text embedding generation and caching |
+| `rag/` | Retrieval-Augmented Generation pipeline |
+| `mcp_tools.py` | MCP tools: `generate_text`, `list_local_models`, `query_fabric_metadata` |
+
+## Key Exports
+
+- **`ask(question, model)`** — Simple text generation via OpenRouter
+- **`OllamaManager`** — Local model management (list, generate, pull)
+- **`FabricManager`** — Microsoft Fabric integration
+- **`LLMConfig`** — Configuration dataclass with provider/model settings
 
 ## MCP Tools Available
 

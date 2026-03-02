@@ -73,38 +73,32 @@ This document defines which PAI agent types can access which crypto submodules a
 
 ## MCP Tools Available
 
-All tools are auto-discovered via `@mcp_tool` decorators and exposed through the MCP bridge.
-
-| Tool | Description | Key Parameters | Trust Level |
-|------|-------------|----------------|-------------|
-| `hash_data` | Compute a cryptographic hash of the input data | `data`, `algorithm` (sha256/sha384/sha512/sha3_256/blake2b) | Safe |
-| `verify_hash` | Verify that data matches an expected hash (constant-time comparison) | `data`, `expected_hash`, `algorithm` | Safe |
-| `generate_key` | Generate a cryptographic key | `algorithm` (aes128/aes256/hmac256), `encoding` (hex/base64) | Safe |
-
-## CLI Command Access
-
-| Command | Required Trust |
-|---|---|
-| `crypto:status` | OBSERVED |
-| `crypto:algorithms` | OBSERVED |
-| `crypto:hash` | OBSERVED |
+| Tool | Description | Trust Level |
+|------|-------------|-------------|
+| `hash_data` | Compute a cryptographic hash of the input data | SAFE |
+| `verify_hash` | Verify that data matches an expected hash (constant-time comparison) | SAFE |
+| `generate_key` | Generate a cryptographic key (aes128/aes256/hmac256) | SAFE |
 
 ## PAI Agent Role Access Matrix
 
-| PAI Agent | Access Level | Primary Capabilities | Trust Level |
-|-----------|-------------|---------------------|-------------|
-| **Engineer** | Full | `hash_data`, `verify_hash`, `generate_key`; full cryptographic operations | TRUSTED |
-| **Architect** | Read + Design | `hash_data`; cryptographic design review, key management strategy | OBSERVED |
-| **QATester** | Validation | `verify_hash`, `hash_data`; integrity verification, checksum validation | OBSERVED |
+| PAI Agent | Access Level | MCP Tools | Trust Level |
+|-----------|-------------|-----------|-------------|
+| **Engineer** | Full | `hash_data`, `verify_hash`, `generate_key` | TRUSTED |
+| **Architect** | Read + Design | `hash_data` — cryptographic design review, algorithm selection | OBSERVED |
+| **QATester** | Validation | `verify_hash`, `hash_data` — integrity verification, checksum validation | OBSERVED |
+| **Researcher** | Read-only | `hash_data`, `verify_hash` — hash computation and verification for analysis | SAFE |
 
 ### Engineer Agent
-**Use Cases**: Generate cryptographic keys, hash sensitive data, verify data integrity during BUILD/VERIFY phases
+**Use Cases**: Generate cryptographic keys, hash sensitive data, verify data integrity during BUILD/VERIFY phases.
 
 ### Architect Agent
-**Use Cases**: Review cryptographic architecture, design key rotation strategies, evaluate algorithm choices
+**Use Cases**: Review cryptographic architecture, design key rotation strategies, evaluate algorithm choices.
 
 ### QATester Agent
-**Use Cases**: Verify hash integrity of artifacts, validate checksum correctness, test key generation entropy
+**Use Cases**: Verify hash integrity of artifacts, validate checksum correctness, test key generation entropy.
+
+### Researcher Agent
+**Use Cases**: Computing data hashes and verifying integrity for research data pipelines.
 
 ## Security Constraints
 

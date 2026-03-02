@@ -9,6 +9,7 @@ API Documentation: https://coda.io/developers/apis/v1
 
 
 from codomyrmex.logging_monitoring import get_logger
+from codomyrmex.cloud.common import CloudClient, CloudProvider, CloudResource, ResourceType
 
 from .mixins.access import AccessMixin
 from .mixins.analytics import AnalyticsMixin
@@ -27,7 +28,7 @@ except ImportError:
 logger = get_logger(__name__)
 
 
-class CodaClient(BaseMixin, DocsMixin, PagesMixin, TablesMixin, ElementsMixin, AccessMixin, AnalyticsMixin, UtilsMixin):
+class CodaClient(BaseMixin, DocsMixin, PagesMixin, TablesMixin, ElementsMixin, AccessMixin, AnalyticsMixin, UtilsMixin, CloudClient):
     """
     Coda.io REST API v1 client.
 
@@ -57,6 +58,7 @@ class CodaClient(BaseMixin, DocsMixin, PagesMixin, TablesMixin, ElementsMixin, A
     """
 
     DEFAULT_BASE_URL = "https://coda.io/apis/v1"
+    provider = CloudProvider.CODA
 
     def __init__(
         self,
@@ -81,6 +83,7 @@ class CodaClient(BaseMixin, DocsMixin, PagesMixin, TablesMixin, ElementsMixin, A
                 "Install it with: pip install requests"
             )
 
+        super().__init__(credentials=None) # We'll just store api_token directly for now as per original design
         self.api_token = api_token
         self.base_url = base_url.rstrip("/")
         self.timeout = timeout
@@ -90,3 +93,65 @@ class CodaClient(BaseMixin, DocsMixin, PagesMixin, TablesMixin, ElementsMixin, A
             "Authorization": f"Bearer {api_token}",
             "Content-Type": "application/json",
         })
+
+    def list_resources(self, resource_type: ResourceType | None = None) -> list[CloudResource]:
+        """List Coda documents as cloud resources."""
+        if resource_type and resource_type != ResourceType.DOCUMENT:
+            return []
+        
+        docs = self.list_docs()
+        return [
+            CloudResource(
+                id=doc.id,
+                name=doc.name,
+                resource_type=ResourceType.DOCUMENT,
+                provider=self.provider,
+                region="global",
+                status="active",
+                created_at=doc.created_at,
+                metadata={"browser_link": doc.browser_link}
+            )
+            for doc in docs.items
+        ]
+
+    def get_resource(self, resource_id: str) -> CloudResource | None:
+        """Get a Coda document as a cloud resource."""
+        try:
+            doc = self.get_doc(resource_id)
+            return CloudResource(
+                id=doc.id,
+                name=doc.name,
+                resource_type=ResourceType.DOCUMENT,
+                provider=self.provider,
+                region="global",
+                status="active",
+                created_at=doc.created_at,
+                metadata={"browser_link": doc.browser_link}
+            )
+        except Exception:
+            return None
+
+    def create_resource(self, name: str, resource_type: ResourceType, config: dict) -> CloudResource:
+        """Create a new Coda document."""
+        if resource_type != ResourceType.DOCUMENT:
+            raise ValueError(f"Unsupported resource type for Coda: {resource_type}")
+        
+        doc = self.create_doc(title=name, **config)
+        return CloudResource(
+            id=doc.id,
+            name=doc.name,
+            resource_type=ResourceType.DOCUMENT,
+            provider=self.provider,
+            region="global",
+            status="active",
+            created_at=doc.created_at,
+            metadata={"browser_link": doc.browser_link}
+        )
+
+    def delete_resource(self, resource_id: str) -> bool:
+        """Delete a Coda document."""
+        try:
+            self.delete_doc(resource_id)
+            return True
+        except Exception:
+            return False

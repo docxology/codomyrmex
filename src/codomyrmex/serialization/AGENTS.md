@@ -4,22 +4,53 @@
 
 ## Module Overview
 
-Data serialization: JSON, YAML, msgpack, protobuf, and custom formats.
+Multi-format data serialization and deserialization supporting JSON, YAML, msgpack, protobuf, and
+custom formats. Provides `Serializer` for format-agnostic round-trips with custom encoder
+registration, `YAMLSerializer` with enforced safe loading, and `ProtobufSerializer` for typed binary
+encoding. Three MCP tools expose the full serialize/deserialize lifecycle to PAI agents without
+requiring Python imports.
+
+## Key Files
+
+| File | Purpose |
+|------|---------|
+| `__init__.py` | Exports `Serializer`, `JSONSerializer`, `YAMLSerializer`, `ProtobufSerializer`, `serialize`, `deserialize` |
+| `serializer.py` | Base `Serializer` with encoder registration and format dispatch |
+| `json_serializer.py` | JSON with custom encoder/decoder support |
+| `yaml_serializer.py` | YAML with safe_load enforcement |
+| `protobuf_serializer.py` | Protocol Buffers serialization |
+| `mcp_tools.py` | MCP tools: `serialize_data`, `deserialize_data`, `serialization_list_formats` |
 
 ## Key Classes
 
-- **Serializer** — Multi-format serialization
-- **JSONSerializer** — JSON with custom encoders
-- **YAMLSerializer** — YAML with safe loading
-- **ProtobufSerializer** — Protocol Buffers
+- **Serializer** — Multi-format serialization with custom encoder registration
+- **JSONSerializer** — JSON with custom encoders and decoders
+- **YAMLSerializer** — YAML with `safe_load` enforcement (no arbitrary Python objects)
+- **ProtobufSerializer** — Protocol Buffers serialization
+
+## MCP Tools Available
+
+| Tool | Description | Trust Level |
+|------|-------------|-------------|
+| `serialize_data` | Serialize a Python dict to a named format (json, yaml, msgpack) | SAFE |
+| `deserialize_data` | Deserialize bytes or a string back to a Python dict | SAFE |
+| `serialization_list_formats` | List all supported serialization format names | SAFE |
 
 ## Agent Instructions
 
-1. **Use appropriate format** — JSON for APIs, msgpack for speed
-2. **Handle dates** — Use ISO format for datetime
-3. **Safe loading** — Use safe_load for YAML
-4. **Version schemas** — Include version in format
-5. **Validate on deserialize** — Check structure after load
+1. **Use appropriate format** — JSON for APIs, msgpack for speed, YAML for config files
+2. **Handle dates** — Use ISO format for datetime serialization
+3. **Safe loading** — `YAMLSerializer` enforces `safe_load`; never bypass this
+4. **Version schemas** — Include a `version` field in serialized payloads
+5. **Validate on deserialize** — Check structure after loading untrusted data
+
+## Operating Contracts
+
+- `YAMLSerializer` always uses `safe_load` — arbitrary Python objects will not deserialize
+- `Serializer.register_encoder(type, fn)` is not thread-safe; register before concurrent use
+- `serialize_data` MCP tool accepts only JSON-serializable dicts as input
+- Round-trip fidelity: `deserialize(serialize(data, fmt), fmt) == data` for JSON and YAML
+- **DO NOT** pass raw file bytes to `deserialize` without specifying a format
 
 ## Common Patterns
 
@@ -28,51 +59,54 @@ from codomyrmex.serialization import (
     Serializer, JSONSerializer, serialize, deserialize
 )
 
-# Auto-detect format
+# Auto-detect format round-trip
 data = {"name": "test", "count": 42}
 json_bytes = serialize(data, format="json")
 back = deserialize(json_bytes, format="json")
+assert back == data
 
-# Custom serializer
+# Custom encoder for datetime
+from datetime import datetime
 serializer = Serializer()
 serializer.register_encoder(datetime, lambda d: d.isoformat())
 output = serializer.dumps({"created": datetime.now()})
-
-# With validation
-from codomyrmex.serialization import deserialize_validated
-data = deserialize_validated(raw, schema=MySchema)
 ```
 
 ## Testing Patterns
 
 ```python
-# Verify round-trip
+# Verify JSON round-trip
 data = {"key": "value", "num": 123}
 encoded = serialize(data, format="json")
 decoded = deserialize(encoded, format="json")
 assert decoded == data
 
-# Verify format detection
-assert detect_format(b'{"a":1}') == "json"
-assert detect_format(b'a: 1') == "yaml"
+# Verify YAML round-trip
+encoded = serialize(data, format="yaml")
+decoded = deserialize(encoded, format="yaml")
+assert decoded == data
 ```
 
 ## PAI Agent Role Access Matrix
 
-| PAI Agent | Access Level | Primary Capabilities | Trust Level |
-|-----------|-------------|---------------------|-------------|
-| **Engineer** | Full | Direct Python import, class instantiation, full API access | TRUSTED |
-| **Architect** | Read + Design | API review, interface design, dependency analysis | OBSERVED |
-| **QATester** | Validation | Integration testing via pytest, output validation | OBSERVED |
+| PAI Agent | Access Level | MCP Tools | Trust Level |
+|-----------|-------------|-----------|-------------|
+| **Engineer** | Full | `serialize_data`, `deserialize_data`, `serialization_list_formats` | TRUSTED |
+| **Architect** | Read + Design | `serialization_list_formats` — format selection and schema design review | OBSERVED |
+| **QATester** | Validation | `serialize_data`, `deserialize_data`, `serialization_list_formats` — round-trip fidelity verification | OBSERVED |
+| **Researcher** | Read-only | `serialization_list_formats`, `serialize_data` — format inspection for research analysis | SAFE |
 
 ### Engineer Agent
-**Use Cases**: Implements data serialization (JSON, YAML, msgpack, protobuf) via `Serializer`, `JSONSerializer`, and format-specific classes. Registers custom encoders, handles schema-validated deserialization, and manages format detection.
+**Use Cases**: Serializing inter-module data payloads during BUILD/EXECUTE, registering custom encoders, format conversion pipelines.
 
 ### Architect Agent
-**Use Cases**: Designs serialization schemas, reviews format selection trade-offs (JSON for APIs, msgpack for speed), evaluates versioned schema migration strategies, and plans cross-module serialization consistency.
+**Use Cases**: Designing serialization schemas, reviewing format selection trade-offs (JSON vs msgpack vs YAML), planning versioned schema migration strategies.
 
 ### QATester Agent
-**Use Cases**: Validates round-trip serialization fidelity across all formats, verifies format auto-detection, confirms custom encoder registration, and tests schema-validated deserialization edge cases.
+**Use Cases**: Validating round-trip serialization fidelity across all formats, verifying format auto-detection, testing edge cases.
+
+### Researcher Agent
+**Use Cases**: Inspecting supported format catalog and serializing research data structures during analysis.
 
 ## Navigation
 

@@ -1,0 +1,29 @@
+module: video
+enabled: true
+logging:
+  level: INFO
+  format: '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+  file: logs/video.log
+performance:
+  max_workers: 4
+  timeout_seconds: 30.0
+  caching: true
+features:
+  experimental: false
+  strict_mode: true
+
+# Video generation via Google AI (Veo 2.0)
+generation:
+  video:
+    # Google AI model — "veo-2.0-generate-001" is Veo 2.0 (recommended)
+    model: "veo-2.0-generate-001"
+    # Default prompt used by orchestrate.py when no --prompt is given
+    default_prompt: "A timelapse of a blooming rose in golden hour light, cinematic, 4K quality"
+    # Number of videos to generate per request (1–4)
+    number_of_videos: 1
+    # Aspect ratio: "16:9" (landscape) | "9:16" (portrait/vertical)
+    aspect_ratio: "16:9"
+    # Duration in seconds (typically 5 or 10)
+    duration_seconds: 5
+    # Output directory (relative to repo root) for saving generated videos
+    output_dir: "outputs/videos"

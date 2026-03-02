@@ -3,7 +3,7 @@ from pathlib import Path
 
 import yaml
 
-from codomyrmex.cli.utils import get_logger
+from codomyrmex.cli.utils import get_logger, print_error, print_success
 
 logger = get_logger(__name__)
 
@@ -12,16 +12,18 @@ def handle_skills_sync(force: bool) -> bool:
     try:
         from codomyrmex.skills import get_skills_manager
         manager = get_skills_manager()
+        
+        print("Syncing skills with upstream repository...")
         success = manager.sync_upstream(force=force)
 
         if success:
-            print("✅ Skills synced successfully")
+            print_success("Skills synced successfully")
         else:
-            print("❌ Failed to sync skills")
+            print_error("Failed to sync skills")
         return success
     except Exception as e:
         logger.error(f"Error syncing skills: {e}", exc_info=True)
-        print(f"❌ Error syncing skills: {str(e)}")
+        print_error(f"Error syncing skills: {str(e)}")
         return False
 
 
@@ -35,7 +37,7 @@ def handle_skills_list(category: str | None) -> bool:
         skills = manager.list_skills(category=category)
 
         if not skills:
-            print("No skills found" + (f" in category '{category}'" if category else ""))
+            print(f"No skills found" + (f" in category '{category}'" if category else ""))
             return True
 
         print(f"Found {len(skills)} skill(s):\n")
@@ -48,7 +50,7 @@ def handle_skills_list(category: str | None) -> bool:
         return True
     except Exception as e:
         logger.error(f"Error listing skills: {e}", exc_info=True)
-        print(f"❌ Error listing skills: {str(e)}")
+        print_error(f"Error listing skills: {str(e)}")
         return False
 
 
@@ -62,7 +64,7 @@ def handle_skills_get(category: str, name: str, output: str | None) -> bool:
         skill = manager.get_skill(category, name)
 
         if not skill:
-            print(f"❌ Skill not found: {category}/{name}")
+            print_error(f"Skill not found: {category}/{name}")
             return False
 
         if output:
@@ -73,14 +75,14 @@ def handle_skills_get(category: str, name: str, output: str | None) -> bool:
             else:
                 with open(output_path, "w", encoding="utf-8") as f:
                     json.dump(skill, f, indent=2, ensure_ascii=False)
-            print(f"✅ Skill saved to {output}")
+            print_success(f"Skill saved to {output}")
         else:
             print(json.dumps(skill, indent=2, default=str, ensure_ascii=False))
 
         return True
     except Exception as e:
         logger.error(f"Error getting skill: {e}", exc_info=True)
-        print(f"❌ Error getting skill: {str(e)}")
+        print_error(f"Error getting skill: {str(e)}")
         return False
 
 
@@ -107,5 +109,5 @@ def handle_skills_search(query: str) -> bool:
         return True
     except Exception as e:
         logger.error(f"Error searching skills: {e}", exc_info=True)
-        print(f"❌ Error searching skills: {str(e)}")
+        print_error(f"Error searching skills: {str(e)}")
         return False

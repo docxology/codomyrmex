@@ -1,26 +1,35 @@
 # Agent Guidelines - Logging Monitoring
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Module Overview
 
-Centralized logging with structured output, rotation, and audit trails.
+Centralized structured logging infrastructure for all Codomyrmex modules and PAI agents. Provides JSON-formatted log emission, correlation ID propagation, audit trails, log rotation, and monitoring integration. Every PAI Algorithm phase emits structured logs via `logging_format_structured`; the LEARN phase archives logs for retrospective analysis. Use this module to add observability to any component.
 
-## Key Classes
+## Key Files
 
-- **get_logger(name)** — Get configured logger
-- **configure_logging(config)** — Set logging configuration
-- **JSONFormatter** — Structured JSON log output
-- **LogRotator** — Log file rotation
-- **AuditLogger** — Security audit logging
+| File | Purpose |
+|------|---------|
+| `__init__.py` | Exports `setup_logging`, `get_logger` |
+| `core/` | `LogContext`, `log_with_context`, `create_correlation_id` |
+| `formatters/structured_formatter.py` | `StructuredFormatter`, `LogLevel`, `LogContext`, `StructuredLogEntry` |
+| `handlers/` | `LogRotationManager`, `PerformanceLogger` |
+| `audit/` | `AuditLogger` for immutable security/audit events |
+| `mcp_tools.py` | Exposes `logging_format_structured` as MCP tool |
+
+## MCP Tools Available
+
+| Tool | Description | Trust Level |
+|------|-------------|-------------|
+| `logging_format_structured` | Format a log entry as structured JSON for pipeline ingestion. Accepts level, message, module, correlation_id, fields. | SAFE |
 
 ## Agent Instructions
 
-1. **Use structured** — Prefer JSON for machine parsing
-2. **Add context** — Include request_id, user_id in logs
-3. **Set levels correctly** — DEBUG for dev, WARNING for prod
-4. **Rotate logs** — Use `LogRotator` for long-running
-5. **Audit sensitive** — Use `AuditLogger` for security events
+1. **Use structured** — Prefer JSON for machine parsing; pass `fields={"key": "val"}` for metadata
+2. **Add context** — Include `correlation_id` for request tracing across module boundaries
+3. **Set levels correctly** — DEBUG for dev, WARNING for prod; never log credentials or PII
+4. **Rotate logs** — Use `LogRotationManager` for long-running processes
+5. **Audit sensitive** — Use `AuditLogger` for security events; audit logs are immutable
 
 ## Common Patterns
 
@@ -64,6 +73,19 @@ import json
 assert json.loads(output)  # Valid JSON
 ```
 
+## Operating Contracts
+
+**DO:**
+- Call `setup_logging()` once at application start before any other logging
+- Include `correlation_id` in every log emitted within a request or workflow boundary
+- Use `AuditLogger` for all security-sensitive events (auth, data access, config changes)
+- Use `logging_format_structured` MCP tool to emit logs from agent workflows
+
+**DO NOT:**
+- Log secrets, API keys, passwords, or PII in any field
+- Create module-level loggers before `setup_logging()` is called
+- Use Python's built-in `print()` for any operational output — use `get_logger()` instead
+
 ## PAI Agent Role Access Matrix
 
 | PAI Agent | Access Level | Primary Capabilities | Trust Level |
@@ -71,6 +93,7 @@ assert json.loads(output)  # Valid JSON
 | **Engineer** | Full | `logging_format_structured`; structured log emission, monitoring integration, alert configuration | TRUSTED |
 | **Architect** | Read + Design | Log format review, observability architecture design | OBSERVED |
 | **QATester** | Validation | Log output validation, structured log correctness, monitoring pipeline health checks | OBSERVED |
+| **Researcher** | Read-only | Inspect log output during analysis; use `logging_format_structured` for research audit trail | SAFE |
 
 ### Engineer Agent
 **Use Cases**: Emitting structured logs during EXECUTE phase, configuring monitoring integrations, alerting setup.
@@ -80,6 +103,9 @@ assert json.loads(output)  # Valid JSON
 
 ### QATester Agent
 **Use Cases**: Validating log format compliance, verifying monitoring pipeline during VERIFY phase.
+
+### Researcher Agent
+**Use Cases**: Creating an audit trail of research operations, inspecting log output for debugging analysis.
 
 ## Navigation
 

@@ -50,6 +50,8 @@ from .core.git import (
     # Tag operations
     create_tag,
     delete_branch,
+    # Branch listing
+    list_branches,
     fetch_changes,
     # History & information
     get_blame,
@@ -157,6 +159,7 @@ __all__ = [
     "delete_branch",
     "switch_branch",
     "get_current_branch",
+    "list_branches",
     "merge_branch",
     "rebase_branch",
     # File operations

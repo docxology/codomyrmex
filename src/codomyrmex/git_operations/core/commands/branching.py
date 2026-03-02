@@ -123,3 +123,32 @@ def get_current_branch(repository_path: str = None) -> str | None:
         logger.error(f"Unexpected error getting current branch: {e}")
         return None
 
+
+def list_branches(repository_path: str = None) -> list[str]:
+    """List all local branches in the repository.
+
+    Args:
+        repository_path: Path to the git repository. Defaults to current directory.
+
+    Returns:
+        List of branch names (current branch has no special marker).
+        Returns empty list if not a git repository or on error.
+    """
+    cwd = repository_path or "."
+    try:
+        result = subprocess.run(
+            ["git", "branch", "--list"],
+            capture_output=True,
+            text=True,
+            cwd=cwd,
+            check=True,
+        )
+        branches = []
+        for line in result.stdout.splitlines():
+            name = line.lstrip("* ").strip()
+            if name:
+                branches.append(name)
+        return branches
+    except subprocess.CalledProcessError as e:
+        logger.error("Failed to list branches", extra={"error": str(e), "path": cwd})
+        return []

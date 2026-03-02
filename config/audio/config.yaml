@@ -1,0 +1,40 @@
+module: audio
+enabled: true
+logging:
+  level: INFO
+  format: '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+  file: logs/audio.log
+performance:
+  max_workers: 4
+  timeout_seconds: 30.0
+  caching: true
+features:
+  experimental: false
+  strict_mode: true
+
+# Audio generation via TTS providers
+generation:
+  tts:
+    # Primary provider: "edge-tts" (neural, high quality, requires internet)
+    # or "pyttsx3" (offline, uses system voices)
+    default_provider: "edge-tts"
+    # Microsoft Edge Neural TTS voice (used when provider is "edge-tts")
+    # Full list: https://aka.ms/speech/tts-languages
+    default_voice: "en-US-AriaNeural"
+    # Fallback provider when edge-tts is unavailable (no internet)
+    fallback_provider: "pyttsx3"
+    # Speaking rate multiplier (0.5 = half speed, 1.0 = normal, 2.0 = double)
+    rate: 1.0
+    # Pitch adjustment (1.0 = normal)
+    pitch: 1.0
+    # Volume level (0.0 = silent, 1.0 = full)
+    volume: 1.0
+    # Output directory (relative to repo root) for saving audio files
+    output_dir: "outputs/audio"
+    # Default synthesis text used by orchestrate.py when no --text is given
+    default_text: "Hello! This is a test of the Codomyrmex audio synthesis system using edge-tts neural voice."
+    # Batch synthesis examples for the orchestrator demo
+    batch_texts:
+      - "The quick brown fox jumps over the lazy dog."
+      - "Codomyrmex is a modular development platform for AI-assisted engineering."
+      - "Audio generation is now configurable via config/audio/config.yaml."

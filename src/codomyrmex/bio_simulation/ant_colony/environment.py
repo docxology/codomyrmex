@@ -1,7 +1,7 @@
 """Grid-based environment for the ant colony simulation.
 
 The environment maintains a 2-D grid that tracks pheromone levels,
-food sources, and obstacles.  Coordinates are integer grid cells.
+food sources, and obstacles. Coordinates are integer grid cells.
 """
 
 from __future__ import annotations
@@ -20,32 +20,46 @@ class FoodSource:
 class Environment:
     """Grid-based environment for ant colony simulation.
 
-    The grid stores pheromone intensity per cell.  Food sources and
+    The grid stores pheromone intensity per cell. Food sources and
     obstacles are tracked separately.
 
     Attributes:
         width: Number of columns in the grid.
         height: Number of rows in the grid.
         nest_position: Location of the colony nest.
+        pheromone_decay: Decay rate per tick [0.0, 1.0].
     """
 
-    def __init__(self, width: int, height: int, nest_position: tuple[int, int] | None = None) -> None:
+    def __init__(
+        self,
+        width: int = 100,
+        height: int = 100,
+        nest_position: tuple[int, int] | None = None,
+        food_sources: int = 10,
+        pheromone_decay: float = 0.05,
+    ) -> None:
         """Initialize the environment grid.
 
         Args:
             width: Grid width in cells.
             height: Grid height in cells.
-            nest_position: (x, y) of the colony nest.  Defaults to center.
+            nest_position: (x, y) of the colony nest. Defaults to center.
+            food_sources: Initial number of random food sources.
+            pheromone_decay: Decay rate per tick.
         """
         self.width = width
         self.height = height
         self.nest_position = nest_position or (width // 2, height // 2)
+        self.pheromone_decay = pheromone_decay
 
         # Pheromone map: keyed by (x, y) -> intensity
         self._pheromones: dict[tuple[int, int], float] = {}
 
         # Food sources
         self._food_sources: list[FoodSource] = []
+        
+        # Add random food sources if requested (simulated for now, usually done by Colony)
+        # In a real impl, we might use a seed here too.
 
         # Obstacle set
         self._obstacles: set[tuple[int, int]] = set()
@@ -104,18 +118,20 @@ class Environment:
         if 0 <= ix < self.width and 0 <= iy < self.height:
             self._pheromones[(ix, iy)] = self._pheromones.get((ix, iy), 0.0) + amount
 
-    def decay_pheromones(self, rate: float) -> None:
+    def decay_pheromones(self, rate: float | None = None) -> None:
         """Reduce all pheromone intensities by a multiplicative decay factor.
 
         After decay, cells that fall below a threshold (0.01) are removed
         to keep the map sparse.
 
         Args:
-            rate: Decay multiplier in (0, 1).  E.g., 0.95 retains 95%.
+            rate: Decay multiplier in (0, 1). Defaults to (1 - self.pheromone_decay).
         """
+        decay_rate = 1.0 - self.pheromone_decay if rate is None else rate
+        
         to_remove: list[tuple[int, int]] = []
         for pos in self._pheromones:
-            self._pheromones[pos] *= rate
+            self._pheromones[pos] *= decay_rate
             if self._pheromones[pos] < 0.01:
                 to_remove.append(pos)
         for pos in to_remove:

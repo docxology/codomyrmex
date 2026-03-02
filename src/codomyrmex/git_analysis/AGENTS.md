@@ -1,4 +1,6 @@
-# git_analysis — Agent Context
+# Agent Guidelines - Git Analysis
+
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Module Summary
 
@@ -125,11 +127,12 @@ Expected: 63 tests pass (Node.js integration test may be skipped if unavailable)
 
 ## PAI Agent Role Access Matrix
 
-| PAI Agent | Access Level | Primary Capabilities | Trust Level |
-|-----------|-------------|---------------------|-------------|
-| **Engineer** | Full | All 16 `git_analysis_*` tools; commit analysis, contributor stats, pattern detection | TRUSTED |
-| **Architect** | Read + Design | `git_analysis_*` read tools; codebase evolution analysis, contributor pattern review | OBSERVED |
-| **QATester** | Validation | `git_analysis_*` analysis tools; commit pattern validation, history integrity checks | OBSERVED |
+| PAI Agent | Access Level | MCP Tools | Trust Level |
+|-----------|-------------|-----------|-------------|
+| **Engineer** | Full | All 16 `git_analysis_*` tools | TRUSTED |
+| **Architect** | Read + Design | All 16 `git_analysis_*` tools — codebase evolution analysis, contributor pattern review | OBSERVED |
+| **QATester** | Validation | All 16 `git_analysis_*` tools — commit pattern validation, history integrity checks | OBSERVED |
+| **Researcher** | Read-only | All 16 `git_analysis_*` tools — full read access for research-phase analysis | SAFE |
 
 ### Engineer Agent
 **Use Cases**: Analyzing git history during OBSERVE, generating contributor statistics, detecting commit patterns for LEARN phase.
@@ -139,3 +142,6 @@ Expected: 63 tests pass (Node.js integration test may be skipped if unavailable)
 
 ### QATester Agent
 **Use Cases**: Validating git history integrity, confirming expected commit patterns during VERIFY.
+
+### Researcher Agent
+**Use Cases**: Full read-only access to all 16 git analysis tools for research, codebase understanding, and knowledge extraction.

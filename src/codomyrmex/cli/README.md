@@ -1,107 +1,69 @@
-# CLI Module
+# CLI Module - Codomyrmex
 
-**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Command-line interface module serving as the primary entry point for user interaction with the Codomyrmex platform. Built on argparse, it provides commands for environment checking, module listing, system status, interactive shell mode, workflow management, project operations, AI-assisted code generation and refactoring, code and git analysis, build operations, FPF (Fetch/Parse/Format) data pipelines, and skills management. Each command group is implemented as a handler function dispatched from the central argument parser.
+The `cli` module provides the primary command-line interface for the Codomyrmex platform. It is built using the `fire` library, allowing for a nested, intuitive command structure. The CLI serves as a unified entry point for all Codomyrmex capabilities, from environment diagnostics to AI-assisted coding and complex workflow orchestration.
 
-## PAI Integration
+## Design Principles
 
-| Algorithm Phase | Role | Tools Used |
-|----------------|------|-----------|
-| **EXECUTE** | Invoke CLI commands for builds, tests, and workflows | Direct Python import |
-| **OBSERVE** | Parse CLI output to assess system and module state | Direct Python import |
-| **BUILD** | Generate CLI tools and scaffold command handlers | Direct Python import |
+- **Unified Interface**: One command (`codomyrmex`) to rule them all.
+- **Zero-Mock Testing**: All CLI handlers and core components are verified with real functional tests.
+- **Robust Error Handling**: Graceful degradation when optional modules are missing.
+- **Rich Feedback**: Uses `TerminalFormatter` for colored, structured output.
+- **Extensibility**: Command handlers are modularized in `src/codomyrmex/cli/handlers/`.
 
-PAI agents access this module via direct Python import through the MCP bridge. The Engineer agent uses it during EXECUTE phase to run platform commands, and during OBSERVE phase to inspect module status and system health via CLI output.
+## Command Structure
 
-## Key Exports
+The CLI is organized into several command groups:
 
-### Entry Point
-- **`main()`** -- Primary CLI entry point that parses arguments and dispatches to the appropriate handler
+### System & Diagnostics
+- `codomyrmex info`: Show platform information.
+- `codomyrmex check`: Verify environment setup and dependencies.
+- `codomyrmex modules`: List all available modules.
+- `codomyrmex status`: Show comprehensive system status dashboard.
+- `codomyrmex doctor`: Run self-diagnostics on the ecosystem.
 
-### Environment and System
-- **`check_environment()`** -- Verifies environment setup, dependencies, and configuration
-- **`show_info()`** -- Displays platform version and configuration information
-- **`show_modules()`** -- Lists all available modules and their status
-- **`show_system_status()`** -- Shows system status dashboard with health indicators
+### Development Tools
+- `codomyrmex ai [generate|refactor]`: AI-powered code operations.
+- `codomyrmex analyze [code|git]`: Static code and git history analysis.
+- `codomyrmex build project`: Orchestrate build pipelines.
+- `codomyrmex test <module_name>`: Run unit tests for a specific module.
+- `codomyrmex demo <module_name>`: Run module demonstrations.
 
-### Interactive Shell
-- **`run_interactive_shell()`** -- Launches the interactive `codomyrmex>` REPL shell
+### Orchestration & Workflows
+- `codomyrmex workflow [list|run|create]`: Manage and execute workflows.
+- `codomyrmex project [list|create]`: Project-level management.
+- `codomyrmex orchestration [status|health]`: Monitor the orchestration engine.
 
-### Workflow Management
-- **`handle_workflow_create()`** -- Creates a new workflow definition
-- **`list_workflows()`** -- Lists all available workflow definitions
-- **`run_workflow()`** -- Executes a specified workflow
+### Advanced Features
+- `codomyrmex fpf [fetch|parse|search|visualize|...]`: First Principles Framework tools.
+- `codomyrmex skills [sync|list|get|search]`: Manage agentic skills.
+- `codomyrmex chat`: Launch AI-agent conversation loop.
+- `codomyrmex shell`: Interactive REPL shell.
 
-### Project Operations
-- **`handle_project_create()`** -- Initializes a new project with scaffolding
-- **`handle_project_list()`** -- Lists available projects
-- **`handle_orchestration_status()`** -- Shows orchestration pipeline status
-- **`handle_orchestration_health()`** -- Reports orchestration system health
+### Quick Orchestration
+- `codomyrmex run <target>`: Quick run a script or module.
+- `codomyrmex pipe <commands>`: Chain commands sequentially.
+- `codomyrmex batch <targets>`: Run multiple targets in parallel.
 
-### AI Code Operations
-- **`handle_ai_generate()`** -- Generates code using AI assistance
-- **`handle_ai_refactor()`** -- Refactors existing code with AI guidance
+## Directory Layout
 
-### Code Analysis
-- **`handle_code_analysis()`** -- Runs static analysis and linting on source code
-- **`handle_git_analysis()`** -- Analyzes git history, patterns, and commit statistics
+- `core.py`: Main CLI entry point and `Cli` class definition.
+- `doctor.py`: System diagnostic implementation.
+- `handlers/`: Domain-specific command implementations.
+- `utils.py`: Shared CLI utilities and formatting.
 
-### Build and Test
-- **`handle_project_build()`** -- Builds project artifacts
-- **`handle_module_test()`** -- Runs tests for a specific module
-- **`handle_module_demo()`** -- Runs demonstration scripts for a module
+## Testing
 
-### FPF (Fetch/Parse/Format)
-- **`handle_fpf_fetch()`** -- Fetches FPF data from a URL
-- **`handle_fpf_parse()`** -- Parses FPF documents into structured data
-- **`handle_fpf_export()`** -- Exports FPF data to various formats
-- **`handle_fpf_search()`** -- Searches FPF content
-- **`handle_fpf_visualize()`** -- Generates visualizations from FPF data
-- **`handle_fpf_context()`** -- Manages FPF context for operations
-- **`handle_fpf_export_section()`** -- Exports a specific section of FPF data
-- **`handle_fpf_analyze()`** -- Analyzes FPF data structures
-- **`handle_fpf_report()`** -- Generates FPF reports
-
-### Skills Management
-- **`handle_skills_sync()`** -- Synchronizes skill definitions
-- **`handle_skills_list()`** -- Lists available skills
-- **`handle_skills_get()`** -- Retrieves details for a specific skill
-- **`handle_skills_search()`** -- Searches skills by keyword or tag
-
-### Demos
-- **`demo_data_visualization()`** -- Demonstrates data visualization capabilities
-- **`demo_ai_code_editing()`** -- Demonstrates AI code editing features
-- **`demo_code_execution()`** -- Demonstrates sandboxed code execution
-- **`demo_git_operations()`** -- Demonstrates git operation automation
-
-## Directory Contents
-
-- `core.py` -- Main CLI entry point with argparse configuration and handler dispatch
-- `__main__.py` -- Allows `python -m codomyrmex.cli` execution
-- `handlers/` -- Command handler implementations organized by command group
-- `parsers/` -- Argument parser definitions and subcommand configuration
-- `formatters/` -- Output formatting utilities for CLI responses
-- `completions/` -- Shell completion scripts and providers
-- `themes/` -- Terminal color themes and styling configuration
-- `utils.py` -- Shared CLI utilities (logger setup, terminal formatting, feature detection)
-
-## Quick Start
-
-```python
-from codomyrmex.cli import main, get_formatter
-
-# Enhanced main CLI entry point with comprehensive functionality.
-result = main()
-
-# Get TerminalFormatter if available.
-output = get_formatter()
+Verified with integrated tests using the Zero-Mock policy:
+```bash
+uv run pytest src/codomyrmex/tests/unit/cli/test_cli_integrated.py
 ```
 
 ## Navigation
 
-- **Full Documentation**: [docs/modules/cli/](../../../docs/modules/cli/)
-- **Parent Directory**: [codomyrmex](../README.md)
-- **Project Root**: ../../../README.md
+- [Technical Specification](SPEC.md)
+- [Agent Guidelines](AGENTS.md)
+- [Parent Directory](../README.md)

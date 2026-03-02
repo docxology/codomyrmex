@@ -48,6 +48,14 @@ Multi-provider agent framework with 12 provider integrations (5 API, 6 CLI, 1 lo
 | CLI | `cli/` | CLI subcommands and handlers |
 | PAI Bridge | `pai/` | PAI system discovery and validation |
 
+## MCP Tools Available
+
+| Tool | Description | Trust Level |
+|------|-------------|-------------|
+| `execute_agent` | Execute an agent conversation with a given prompt. Uses `AgentRegistry` to look up and instantiate the agent. | TRUSTED |
+| `list_agents` | Return a list of all available AI agents from `AgentRegistry`. | SAFE |
+| `get_agent_memory` | Retrieve interaction logs and memory for a specific agent session by session ID. | SAFE |
+
 ## Quick Verification
 
 ```bash

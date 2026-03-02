@@ -6,66 +6,132 @@ import boto3
 from botocore.exceptions import ClientError
 
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
+from codomyrmex.cloud.common import StorageClient
 
 logger = get_logger(__name__)
 
-class S3Client:
+class S3Client(StorageClient):
     """Wrapper for AWS S3 operations."""
 
-    def __init__(self, region_name: str | None = None):
-        self.client = boto3.client('s3', region_name=region_name)
+    def __init__(self, region_name: str | None = None, session: Optional[boto3.Session] = None):
+        self.session = session or boto3.Session()
+        self.client = self.session.client('s3', region_name=region_name)
 
-    def upload_file(self, file_path: str, bucket: str, object_name: str | None = None) -> bool:
-        """Upload a file to an S3 bucket."""
-        if object_name is None:
-            object_name = file_path
-
+    def list_buckets(self) -> list[str]:
+        """List storage buckets."""
         try:
-            self.client.upload_file(file_path, bucket, object_name)
-            return True
+            response = self.client.list_buckets()
+            return [bucket['Name'] for bucket in response.get('Buckets', [])]
         except ClientError as e:
-            logger.error(f"S3 upload error: {e}")
-            return False
-
-    def list_objects(self, bucket: str) -> list[str]:
-        """List objects in an S3 bucket."""
-        try:
-            response = self.client.list_objects_v2(Bucket=bucket)
-            return [obj['Key'] for obj in response.get('Contents', [])]
-        except ClientError as e:
-            logger.error(f"S3 list error: {e}")
+            logger.error(f"S3 list_buckets error: {e}")
             return []
 
-    def download_file(self, bucket: str, object_name: str, file_path: str) -> bool:
-        """Download an object from an S3 bucket."""
+    def create_bucket(self, name: str, region: str | None = None) -> bool:
+        """Create a bucket."""
         try:
-            self.client.download_file(bucket, object_name, file_path)
+            if region:
+                self.client.create_bucket(
+                    Bucket=name,
+                    CreateBucketConfiguration={'LocationConstraint': region}
+                )
+            else:
+                self.client.create_bucket(Bucket=name)
             return True
         except ClientError as e:
-            logger.error(f"S3 download error: {e}")
+            logger.error(f"S3 create_bucket error: {e}")
             return False
 
-    def get_metadata(self, bucket: str, object_name: str) -> dict[str, Any]:
-        """Get object metadata."""
+    def delete_bucket(self, name: str) -> bool:
+        """Delete a bucket."""
         try:
-            response = self.client.head_object(Bucket=bucket, Key=object_name)
-            return response.get('Metadata', {})
+            self.client.delete_bucket(Bucket=name)
+            return True
         except ClientError as e:
-            logger.error(f"S3 metadata error: {e}")
-            return {}
+            logger.error(f"S3 delete_bucket error: {e}")
+            return False
 
-    def ensure_bucket(self, bucket: str, region: str | None = None) -> bool:
-        """Ensure an S3 bucket exists."""
+    def bucket_exists(self, name: str) -> bool:
+        """Check if a bucket exists."""
         try:
-            self.client.head_bucket(Bucket=bucket)
+            self.client.head_bucket(Bucket=name)
             return True
         except ClientError:
-            try:
-                if region:
-                    self.client.create_bucket(Bucket=bucket, CreateBucketConfiguration={'LocationConstraint': region})
-                else:
-                    self.client.create_bucket(Bucket=bucket)
-                return True
-            except ClientError as e:
-                logger.error(f"S3 bucket creation error: {e}")
-                return False
+            return False
+
+    def upload_file(self, bucket: str, key: str, file_path: str, content_type: str | None = None) -> bool:
+        """Upload a file from local disk."""
+        extra_args = {}
+        if content_type:
+            extra_args['ContentType'] = content_type
+
+        try:
+            self.client.upload_file(file_path, bucket, key, ExtraArgs=extra_args)
+            return True
+        except ClientError as e:
+            logger.error(f"S3 upload_file error: {e}")
+            return False
+
+    def download_file(self, bucket: str, key: str, file_path: str) -> bool:
+        """Download a file to local disk."""
+        try:
+            self.client.download_file(bucket, key, file_path)
+            return True
+        except ClientError as e:
+            logger.error(f"S3 download_file error: {e}")
+            return False
+
+    def list_objects(self, bucket: str, prefix: str | None = None) -> list[str]:
+        """List objects in a bucket."""
+        kwargs = {'Bucket': bucket}
+        if prefix:
+            kwargs['Prefix'] = prefix
+
+        try:
+            response = self.client.list_objects_v2(**kwargs)
+            return [obj['Key'] for obj in response.get('Contents', [])]
+        except ClientError as e:
+            logger.error(f"S3 list_objects error: {e}")
+            return []
+
+    def delete_object(self, bucket: str, key: str) -> bool:
+        """Delete an object."""
+        try:
+            self.client.delete_object(Bucket=bucket, Key=key)
+            return True
+        except ClientError as e:
+            logger.error(f"S3 delete_object error: {e}")
+            return False
+
+    def get_object_metadata(self, bucket: str, key: str) -> dict[str, Any]:
+        """Get object metadata."""
+        try:
+            response = self.client.head_object(Bucket=bucket, Key=key)
+            return response.get('Metadata', {})
+        except ClientError as e:
+            logger.error(f"S3 get_object_metadata error: {e}")
+            return {}
+
+    def generate_presigned_url(
+        self,
+        bucket: str,
+        key: str,
+        expires_in: int = 3600,
+        operation: str = "get_object",
+    ) -> str:
+        """Generate a presigned URL."""
+        try:
+            return self.client.generate_presigned_url(
+                ClientMethod=operation,
+                Params={'Bucket': bucket, 'Key': key},
+                ExpiresIn=expires_in
+            )
+        except ClientError as e:
+            logger.error(f"S3 generate_presigned_url error: {e}")
+            return ""
+
+    # Legacy method for backward compatibility
+    def ensure_bucket(self, bucket: str, region: str | None = None) -> bool:
+        """Ensure an S3 bucket exists (legacy)."""
+        if self.bucket_exists(bucket):
+            return True
+        return self.create_bucket(bucket, region)

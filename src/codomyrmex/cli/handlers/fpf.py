@@ -1,7 +1,7 @@
 import json
 from pathlib import Path
 
-from codomyrmex.cli.utils import get_logger
+from codomyrmex.cli.utils import get_logger, print_error, print_success
 
 logger = get_logger(__name__)
 
@@ -10,18 +10,20 @@ def handle_fpf_fetch(repo: str, branch: str, output: str | None) -> bool:
     try:
         from codomyrmex.fpf import FPFFetcher
         fetcher = FPFFetcher()
+        
+        print(f"Fetching FPF specification from {repo} ({branch})...")
         content = fetcher.fetch_latest(repo, branch)
 
         if output:
             Path(output).write_text(content, encoding="utf-8")
-            print(f"✅ FPF specification fetched and saved to {output}")
+            print_success(f"FPF specification fetched and saved to {output}")
         else:
             print(content)
 
         return True
     except Exception as e:
         logger.error(f"Error fetching FPF specification: {e}", exc_info=True)
-        print(f"❌ Error fetching FPF specification: {str(e)}")
+        print_error(f"Error fetching FPF specification: {str(e)}")
         return False
 
 
@@ -32,16 +34,16 @@ def handle_fpf_parse(file: str, output: str | None) -> bool:
         client = FPFClient()
         spec = client.load_from_file(file)
 
-        print(f"✅ Parsed FPF specification: {len(spec.patterns)} patterns, {len(spec.concepts)} concepts")
+        print_success(f"Parsed FPF specification: {len(spec.patterns)} patterns, {len(spec.concepts)} concepts")
 
         if output:
             client.export_json(output)
-            print(f"✅ Exported to {output}")
+            print_success(f"Exported to {output}")
 
         return True
     except Exception as e:
         logger.error(f"Error parsing FPF specification: {e}", exc_info=True)
-        print(f"❌ Error parsing FPF specification: {str(e)}")
+        print_error(f"Error parsing FPF specification: {str(e)}")
         return False
 
 
@@ -53,11 +55,11 @@ def handle_fpf_export(file: str, output: str, format: str) -> bool:
         client.load_from_file(file)
         client.export_json(output)
 
-        print(f"✅ Exported FPF specification to {output}")
+        print_success(f"Exported FPF specification to {output}")
         return True
     except Exception as e:
         logger.error(f"Error exporting FPF specification: {e}", exc_info=True)
-        print(f"❌ Error exporting FPF specification: {str(e)}")
+        print_error(f"Error exporting FPF specification: {str(e)}")
         return False
 
 
@@ -66,14 +68,11 @@ def handle_fpf_search(query: str, file: str | None, filters: dict) -> bool:
     try:
         if not file:
             # Try default location
-            # Note: adjusted relative path logic for CLI location
-            # src/codomyrmex/cli/handlers/fpf.py -> ../../../..
-            # But simpler to assume src logic is consistent
             default_path = Path(__file__).parent.parent.parent / "fpf" / "FPF-Spec.md"
             if default_path.exists():
                 file = str(default_path)
             else:
-                print("❌ No file specified and default not found")
+                print_error("No file specified and default not found")
                 return False
 
         from codomyrmex.fpf import FPFClient
@@ -88,7 +87,7 @@ def handle_fpf_search(query: str, file: str | None, filters: dict) -> bool:
         return True
     except Exception as e:
         logger.error(f"Error searching FPF: {e}", exc_info=True)
-        print(f"❌ Error searching FPF: {str(e)}")
+        print_error(f"Error searching FPF: {str(e)}")
         return False
 
 
@@ -96,12 +95,12 @@ def handle_fpf_visualize(file: str, viz_type: str, output: str, format: str, lay
     """Handle FPF visualize command."""
     try:
         from codomyrmex.fpf.visualizer_png import FPFVisualizerPNG
-
         from codomyrmex.fpf import FPFClient, FPFVisualizer
 
         client = FPFClient()
         client.load_from_file(file)
 
+        print(f"Generating {viz_type} visualization ({format})...")
         if format == "png":
             # Use PNG visualizer
             png_visualizer = FPFVisualizerPNG()
@@ -121,7 +120,7 @@ def handle_fpf_visualize(file: str, viz_type: str, output: str, format: str, lay
                 # Default to hierarchy
                 png_visualizer.visualize_pattern_dependencies(client.spec, output_path, layout="hierarchical")
 
-            print(f"✅ PNG visualization saved to {output}")
+            print_success(f"PNG visualization saved to {output}")
         else:
             # Use Mermaid visualizer
             visualizer = FPFVisualizer()
@@ -131,12 +130,12 @@ def handle_fpf_visualize(file: str, viz_type: str, output: str, format: str, lay
                 diagram = visualizer.visualize_dependencies(client.spec.patterns)
 
             Path(output).write_text(diagram, encoding="utf-8")
-            print(f"✅ Mermaid diagram saved to {output}")
+            print_success(f"Mermaid diagram saved to {output}")
 
         return True
     except Exception as e:
         logger.error(f"Error generating visualization: {e}", exc_info=True)
-        print(f"❌ Error generating visualization: {str(e)}")
+        print_error(f"Error generating visualization: {str(e)}")
         return False
 
 
@@ -147,6 +146,7 @@ def handle_fpf_context(file: str, pattern: str | None, output: str | None, depth
         client = FPFClient()
         client.load_from_file(file)
 
+        print(f"Building FPF context (pattern: {pattern or 'all'})...")
         if pattern:
             context = client.build_context(pattern_id=pattern)
         else:
@@ -154,14 +154,14 @@ def handle_fpf_context(file: str, pattern: str | None, output: str | None, depth
 
         if output:
             Path(output).write_text(context, encoding="utf-8")
-            print(f"✅ Context saved to {output}")
+            print_success(f"Context saved to {output}")
         else:
             print(context)
 
         return True
     except Exception as e:
         logger.error(f"Error building context: {e}", exc_info=True)
-        print(f"❌ Error building context: {str(e)}")
+        print_error(f"Error building context: {str(e)}")
         return False
 
 
@@ -170,7 +170,6 @@ def handle_fpf_export_section(file: str, part: str | None, pattern: str | None, 
     try:
         from codomyrmex.fpf.section_exporter import SectionExporter
         from codomyrmex.fpf.section_manager import SectionManager
-
         from codomyrmex.fpf import FPFClient
 
         client = FPFClient()
@@ -181,18 +180,18 @@ def handle_fpf_export_section(file: str, part: str | None, pattern: str | None, 
 
         if part:
             exporter.export_part(part, Path(output))
-            print(f"✅ Part {part} exported to {output}")
+            print_success(f"Part {part} exported to {output}")
         elif pattern:
             exporter.export_single_pattern(pattern, Path(output), include_related=include_dependencies)
-            print(f"✅ Pattern {pattern} exported to {output}")
+            print_success(f"Pattern {pattern} exported to {output}")
         else:
-            print("❌ Must specify either --part or --pattern")
+            print_error("Must specify either --part or --pattern")
             return False
 
         return True
     except Exception as e:
         logger.error(f"Error exporting section: {e}", exc_info=True)
-        print(f"❌ Error exporting section: {str(e)}")
+        print_error(f"Error exporting section: {str(e)}")
         return False
 
 
@@ -200,7 +199,6 @@ def handle_fpf_analyze(file: str, output: str | None) -> bool:
     """Handle FPF analyze command."""
     try:
         from codomyrmex.fpf.analyzer import FPFAnalyzer
-
         from codomyrmex.fpf import FPFClient
 
         client = FPFClient()
@@ -212,14 +210,14 @@ def handle_fpf_analyze(file: str, output: str | None) -> bool:
         if output:
             with open(output, "w", encoding="utf-8") as f:
                 json.dump(analysis, f, indent=2, ensure_ascii=False, default=str)
-            print(f"✅ Analysis saved to {output}")
+            print_success(f"Analysis saved to {output}")
         else:
             print(json.dumps(analysis, indent=2, default=str))
 
         return True
     except Exception as e:
         logger.error(f"Error analyzing FPF: {e}", exc_info=True)
-        print(f"❌ Error analyzing FPF: {str(e)}")
+        print_error(f"Error analyzing FPF: {str(e)}")
         return False
 
 
@@ -227,18 +225,18 @@ def handle_fpf_report(file: str, output: str, include_analysis: bool) -> bool:
     """Handle FPF report command."""
     try:
         from codomyrmex.fpf.report_generator import ReportGenerator
-
         from codomyrmex.fpf import FPFClient
 
         client = FPFClient()
         client.load_from_file(file)
 
         generator = ReportGenerator(client.spec)
+        print(f"Generating HTML report to {output}...")
         generator.generate_html_report(Path(output), include_analysis=include_analysis)
 
-        print(f"✅ Report generated at {output}")
+        print_success(f"Report generated at {output}")
         return True
     except Exception as e:
         logger.error(f"Error generating report: {e}", exc_info=True)
-        print(f"❌ Error generating report: {str(e)}")
+        print_error(f"Error generating report: {str(e)}")
         return False

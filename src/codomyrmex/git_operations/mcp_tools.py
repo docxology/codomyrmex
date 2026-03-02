@@ -171,6 +171,27 @@ def git_switch_branch(path: str, branch_name: str) -> dict[str, Any]:
 
 @mcp_tool(
     category="git_operations",
+    description="List all local branches in a git repository.",
+)
+def git_list_branches(path: str = ".") -> dict[str, Any]:
+    """List all local branches in a git repository.
+
+    Args:
+        path: Path to the git repository. Defaults to current directory.
+
+    Returns:
+        dict with keys: status (str), branches (list[str]), count (int)
+    """
+    branches = _git().list_branches(repository_path=path)
+    return {
+        "status": "success",
+        "branches": branches,
+        "count": len(branches),
+    }
+
+
+@mcp_tool(
+    category="git_operations",
     description="Pull latest changes from a remote git repository.",
 )
 def git_pull(path: str = ".", remote: str = "origin") -> dict[str, Any]:

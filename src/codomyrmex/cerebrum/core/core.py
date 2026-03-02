@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import json
+from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
@@ -9,8 +11,11 @@ if TYPE_CHECKING:
         InferenceEngine,
     )
 from codomyrmex.cerebrum.core.cases import Case, CaseBase, CaseRetriever
+from codomyrmex.cerebrum.core.chain import ChainExecutionResult, ReasoningChain
 from codomyrmex.cerebrum.core.config import CerebrumConfig
+from codomyrmex.cerebrum.core.decision import Decision, DecisionModule
 from codomyrmex.cerebrum.core.exceptions import ModelError
+from codomyrmex.cerebrum.core.memory import WorkingMemory
 from codomyrmex.cerebrum.core.models import Model, ReasoningResult
 from codomyrmex.cerebrum.core.transformations import (
     AdaptationTransformer,
@@ -214,6 +219,8 @@ class CerebrumEngine:
         self.case_base = CaseBase()
         self.model_manager = ModelManager()
         self.transformation_manager = TransformationManager()
+        self.working_memory = WorkingMemory()
+        self.decision_module = DecisionModule()
 
         # Register default transformers
         self.transformation_manager.register_transformer(
@@ -281,6 +288,30 @@ class CerebrumEngine:
         self.case_base.add_case(case)
         self.logger.debug(f"Learned from case: {case.case_id}")
 
+    def decide(
+        self, options: list[Any], criteria: dict[str, float], context: dict[str, Any] | None = None
+    ) -> Decision:
+        """Make a decision among options.
+
+        Args:
+            options: List of options
+            criteria: Dictionary of criteria weights
+            context: Additional context
+
+        Returns:
+            The selected decision
+        """
+        context = context or self.working_memory.to_dict()
+        return self.decision_module.decide(options, criteria, context)
+
+    def create_reasoning_chain(self) -> ReasoningChain:
+        """Create a new reasoning chain.
+
+        Returns:
+            Reasoning chain instance
+        """
+        return ReasoningChain()
+
     def transform_model(
         self, model: Model, transformation: str, **kwargs
     ) -> Model:
@@ -325,6 +356,34 @@ class CerebrumEngine:
     def get_model_manager(self) -> ModelManager:
         """Get the model manager."""
         return self.model_manager
+
+    def load_knowledge(self, path: str | Path) -> None:
+        """Load knowledge from a JSON file.
+
+        Args:
+            path: Path to the knowledge file
+        """
+        path = Path(path)
+        if not path.exists():
+            self.logger.error(f"Knowledge file not found: {path}")
+            return
+
+        with open(path, "r") as f:
+            data = json.load(f)
+            if "case_base" in data:
+                self.case_base = CaseBase.from_dict(data["case_base"])
+        self.logger.info(f"Loaded knowledge from {path}")
+
+    def save_knowledge(self, path: str | Path) -> None:
+        """Save knowledge to a JSON file.
+
+        Args:
+            path: Path to save the knowledge file
+        """
+        path = Path(path)
+        with open(path, "w") as f:
+            json.dump(self.to_dict(), f, indent=2)
+        self.logger.info(f"Saved knowledge to {path}")
 
     def to_dict(self) -> dict[str, Any]:
         """Convert engine state to dictionary."""

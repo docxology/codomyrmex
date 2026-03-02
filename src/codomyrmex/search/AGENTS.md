@@ -76,11 +76,12 @@ assert matches[0][0] == "hello"
 
 ## PAI Agent Role Access Matrix
 
-| PAI Agent | Access Level | Primary Capabilities | Trust Level |
-|-----------|-------------|---------------------|-------------|
-| **Engineer** | Full | `search_documents`, `search_index_query`, `search_fuzzy`; full search suite | TRUSTED |
-| **Architect** | Read + Design | `search_documents`, `search_index_query`; index design, search strategy review | OBSERVED |
-| **QATester** | Validation | `search_documents`, `search_fuzzy`; search result quality verification | OBSERVED |
+| PAI Agent | Access Level | MCP Tools | Trust Level |
+|-----------|-------------|-----------|-------------|
+| **Engineer** | Full | `search_documents`, `search_index_query`, `search_fuzzy` | TRUSTED |
+| **Architect** | Read + Design | `search_documents`, `search_index_query` — index design and strategy review | OBSERVED |
+| **QATester** | Validation | `search_documents`, `search_fuzzy` — search result quality verification | OBSERVED |
+| **Researcher** | Read-only | `search_documents`, `search_fuzzy`, `search_index_query` — full search access for research | SAFE |
 
 ### Engineer Agent
 **Use Cases**: Document discovery during OBSERVE, full-text and fuzzy search across codebases, indexed queries during research.
@@ -90,6 +91,9 @@ assert matches[0][0] == "hello"
 
 ### QATester Agent
 **Use Cases**: Validating search result quality during VERIFY, confirming fuzzy match thresholds, testing index completeness.
+
+### Researcher Agent
+**Use Cases**: Full read access for research-phase document discovery, codebase search, knowledge retrieval.
 
 ## Navigation
 
