@@ -5,6 +5,7 @@ This module provides components with the ability to listen to events from the ev
 with filtering, prioritization, and lifecycle management.
 """
 
+import inspect
 from collections.abc import Callable
 from typing import Any
 
@@ -39,7 +40,7 @@ class EventListener:
         self.enabled = True
 
 
-    def on(self, event_types: EventType | list[EventType],
+    def on(self, event_types: EventType | list[EventType] | str | list[str],
            handler: Callable[[Event], Any], handler_name: str | None = None,
            filter_func: Callable[[Event], bool] | None = None,
            priority: int = 0) -> str:
@@ -47,14 +48,14 @@ class EventListener:
         if not self.enabled:
             return ""
 
-        if isinstance(event_types, EventType):
+        if isinstance(event_types, (EventType, str)):
             event_types = [event_types]
 
         if handler_name is None:
             handler_name = f"{self.listener_id}_handler_{len(self.handlers)}"
 
-        subscriber_id = subscribe_to_events(
-            event_types=event_types,
+        subscriber_id = self.event_bus.subscribe(
+            event_patterns=event_types,
             handler=handler,
             subscriber_id=f"{self.listener_id}_{handler_name}",
             filter_func=filter_func,
@@ -65,7 +66,7 @@ class EventListener:
         self.handlers[handler_name] = handler
         return handler_name
 
-    def once(self, event_types: EventType | list[EventType],
+    def once(self, event_types: EventType | list[EventType] | str | list[str],
              handler: Callable[[Event], Any], handler_name: str | None = None,
              filter_func: Callable[[Event], bool] | None = None,
              priority: int = 0) -> str:
@@ -85,7 +86,7 @@ class EventListener:
         """Unsubscribe a handler."""
         if handler_name in self.subscriptions:
             subscriber_id = self.subscriptions.pop(handler_name)
-            unsubscribe_from_events(subscriber_id)
+            self.event_bus.unsubscribe(subscriber_id)
             if handler_name in self.handlers:
                 del self.handlers[handler_name]
             return True
@@ -102,7 +103,7 @@ class EventListener:
         return [self.on(et, handler) for et in event_types]
 
 
-def event_handler(event_types: EventType | list[EventType],
+def event_handler(event_types: EventType | list[EventType] | str | list[str],
                  filter_func: Callable[[Event], bool] | None = None,
                  priority: int = 0):
     def decorator(func):
@@ -124,7 +125,13 @@ class AutoEventListener(EventListener):
                 event_types = getattr(attr, '_event_types', [])
                 filter_func = getattr(attr, '_event_filter', None)
                 priority = getattr(attr, '_event_priority', 0)
-                bound_handler = attr.__get__(obj, obj.__class__)
+                
+                # Check if it's already bound or needs binding
+                if hasattr(attr, '__get__') and not inspect.ismethod(attr):
+                    bound_handler = attr.__get__(obj, obj.__class__)
+                else:
+                    bound_handler = attr
+                    
                 self.on(event_types, bound_handler, f"auto_{attr_name}", filter_func, priority)
 
 

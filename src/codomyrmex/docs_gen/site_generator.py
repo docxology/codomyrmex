@@ -23,6 +23,8 @@ class SiteConfig:
         nav: Navigation structure.
         plugins: Enabled plugins.
         base_url: Base URL.
+        extra_css: List of extra CSS files.
+        extra_javascript: List of extra JS files.
     """
 
     title: str = "Codomyrmex Documentation"
@@ -30,6 +32,8 @@ class SiteConfig:
     nav: list[dict[str, Any]] = field(default_factory=list)
     plugins: list[str] = field(default_factory=lambda: ["search", "mkdocstrings"])
     base_url: str = "/"
+    extra_css: list[str] = field(default_factory=list)
+    extra_javascript: list[str] = field(default_factory=list)
 
 
 class SiteGenerator:
@@ -49,6 +53,8 @@ class SiteGenerator:
         self._index = SearchIndex()
         self._modules: list[ModuleDoc] = []
         self._pages: dict[str, str] = {}
+        self._extra_css: list[str] = []
+        self._extra_js: list[str] = []
 
     @property
     def module_count(self) -> int:
@@ -106,20 +112,54 @@ class SiteGenerator:
             path=path,
         )
 
+    def add_extra_css(self, path: str) -> None:
+        """Add extra CSS file."""
+        self._extra_css.append(path)
+
+    def add_extra_javascript(self, path: str) -> None:
+        """Add extra JavaScript file."""
+        self._extra_js.append(path)
+
     def generate_config(self) -> SiteConfig:
         """Generate site configuration."""
         nav: list[dict[str, Any]] = [{"Home": "index.md"}]
 
         # API reference nav
         api_nav = []
-        for module in self._modules:
+        for module in sorted(self._modules, key=lambda x: x.name):
             api_nav.append({module.name: f"api/{module.name}.md"})
         if api_nav:
             nav.append({"API Reference": api_nav})
 
+        # Add other pages to nav if not already there
+        other_pages = []
+        nav_paths = set()
+
+        def collect_paths(item):
+            if isinstance(item, str):
+                nav_paths.add(item)
+            elif isinstance(item, dict):
+                for v in item.values():
+                    collect_paths(v)
+            elif isinstance(item, list):
+                for i in item:
+                    collect_paths(i)
+
+        collect_paths(nav)
+
+        for path in sorted(self._pages.keys()):
+            if path not in nav_paths and not path.startswith("api/"):
+                name = path.split("/")[-1].replace(".md", "").title()
+                other_pages.append({name: path})
+
+        if other_pages:
+            nav.append({"More": other_pages})
+
         return SiteConfig(
             title=self._title,
             nav=nav,
+            extra_css=list(self._extra_css),
+            extra_javascript=list(self._extra_js),
         )
 
     def generate_pages(self) -> dict[str, str]:
@@ -136,21 +176,46 @@ class SiteGenerator:
             "  palette:",
             "    scheme: slate",
             "    primary: indigo",
+            "    accent: indigo",
+            "  features:",
+            "    - navigation.tabs",
+            "    - navigation.sections",
+            "    - navigation.top",
+            "    - search.suggest",
+            "    - search.highlight",
+            "    - content.code.copy",
             "plugins:",
         ]
         for plugin in config.plugins:
             lines.append(f"  - {plugin}")
+
+        if config.extra_css:
+            lines.append("extra_css:")
+            for css in config.extra_css:
+                lines.append(f"  - {css}")
+
+        if config.extra_javascript:
+            lines.append("extra_javascript:")
+            for js in config.extra_javascript:
+                lines.append(f"  - {js}")
+
         lines.append("nav:")
         for item in config.nav:
+            self._render_nav_item(lines, item, indent=2)
+
+        return "\n".join(lines)
+
+    def _render_nav_item(self, lines: list[str], item: Any, indent: int) -> None:
+        if isinstance(item, dict):
             for key, val in item.items():
                 if isinstance(val, list):
-                    lines.append(f"  - {key}:")
+                    lines.append(f"{' ' * indent}- {key}:")
                     for sub in val:
-                        for sk, sv in sub.items():
-                            lines.append(f"    - {sk}: {sv}")
+                        self._render_nav_item(lines, sub, indent + 2)
                 else:
-                    lines.append(f"  - {key}: {val}")
-        return "\n".join(lines)
+                    lines.append(f"{' ' * indent}- {key}: {val}")
+        elif isinstance(item, str):
+            lines.append(f"{' ' * indent}- {item}")
 
 
 __all__ = ["SiteConfig", "SiteGenerator"]

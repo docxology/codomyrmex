@@ -125,11 +125,37 @@ class CursorClient(IDEClient):
 
     def open_file(self, path: str) -> bool:
         """Open a file in Cursor."""
+        # Simulated implementation
         return Path(path).exists()
+
+    def close_file(self, path: str) -> bool:
+        """Close a file in Cursor."""
+        # Simulated implementation
+        return True
 
     def get_open_files(self) -> list[str]:
         """Get list of open files."""
-        return []
+        # Simulated implementation based on common source files
+        if not self._connected:
+            return []
+        
+        files = []
+        for p in self.workspace_path.glob("**/*"):
+            if p.is_file() and p.suffix in {".py", ".ts", ".js", ".md"}:
+                files.append(str(p.absolute()))
+                if len(files) >= 5: # Limit for simulation
+                    break
+        return files
+
+    def save_file(self, path: str) -> bool:
+        """Save a file in Cursor."""
+        if not self._connected:
+            return False
+        return Path(path).exists()
+
+    def save_all(self) -> bool:
+        """Save all open files in Cursor."""
+        return self._connected
 
     def get_rules(self) -> dict[str, Any]:
         """Get current .cursorrules configuration."""

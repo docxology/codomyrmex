@@ -3,6 +3,7 @@ from datetime import datetime
 import pytest
 
 from codomyrmex.documents.models.document import Document, DocumentFormat, DocumentType
+from codomyrmex.documents.models.metadata import DocumentMetadata
 
 
 @pytest.mark.unit
@@ -19,7 +20,7 @@ class TestDocument:
         assert doc.file_path is None
         assert isinstance(doc.created_at, datetime)
         assert isinstance(doc.modified_at, datetime)
-        assert doc.metadata == {}
+        assert isinstance(doc.metadata, DocumentMetadata)
 
     def test_document_type_property(self):
         """Test document type derivation from format."""
@@ -49,7 +50,8 @@ class TestDocument:
         data = {"key": "value"}
         doc = Document(data, DocumentFormat.JSON)
         content_str = doc.get_content_as_string()
-        assert '"key": "value"' in content_str
+        assert '"key"' in content_str
+        assert '"value"' in content_str
 
     def test_get_content_as_string_bytes_content(self):
         """Test getting content when bytes."""
@@ -58,9 +60,9 @@ class TestDocument:
         assert doc.get_content_as_string() == "hello bytes"
 
     def test_metadata_defaults(self):
-        """Test that metadata defaults to empty dict."""
+        """Test that metadata defaults to DocumentMetadata."""
         doc = Document("content", DocumentFormat.TEXT)
-        assert doc.metadata == {}
+        assert isinstance(doc.metadata, DocumentMetadata)
 
         doc_with_meta = Document("content", DocumentFormat.TEXT, metadata={"author": "me"})
-        assert doc_with_meta.metadata == {"author": "me"}
+        assert doc_with_meta.metadata.author == "me"

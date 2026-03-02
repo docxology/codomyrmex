@@ -1,6 +1,6 @@
 # Agent Guidelines - Deployment
 
-**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.2.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Module Overview
 
@@ -8,57 +8,65 @@ Container deployment, infrastructure automation, and environment management.
 
 ## Key Classes
 
-- **DeploymentManager** — Orchestrate deployments
-- **ContainerBuilder** — Docker/OCI image building
-- **InfrastructureConfig** — Infrastructure as code
-- **EnvironmentManager** — Manage deployment environments
+- **DeploymentManager** — Orchestrate deployments using various strategies.
+- **GitOpsSynchronizer** — Sync infrastructure and code from Git.
+- **RollingDeployment** — Gradual update strategy.
+- **BlueGreenDeployment** — Atomic swap update strategy.
+- **CanaryDeployment** — Percentage-based update strategy.
+- **CanaryAnalyzer** — Metric-based canary decision maker.
+- **HealthChecker** — Multi-mode health verification.
+- **RollbackManager** — Snapshot and restoration manager.
 
 ## Agent Instructions
 
-1. **Validate configs** — Check before deploying
-2. **Use staging first** — Never deploy directly to prod
-3. **Rollback ready** — Always have rollback plan
-4. **Health checks** — Wait for health before marking success
-5. **Log everything** — Capture deployment logs
+1. **Validate targets** — Ensure deployment targets are reachable before beginning.
+2. **Use staging first** — Never deploy directly to production.
+3. **Rollback ready** — Always have a rollback plan and test it.
+4. **Health checks** — Always include health checks in strategy execution.
+5. **Log everything** — Use the centralized logging system to capture deployment outcomes.
+6. **Prefer GitOps** — Use `GitOpsSynchronizer` for managing infrastructure as code.
 
 ## Common Patterns
 
+### Performing a Rolling Deployment
+
 ```python
 from codomyrmex.deployment import (
-    DeploymentManager, ContainerBuilder, EnvironmentManager
+    DeploymentManager, RollingDeployment, DeploymentTarget
 )
 
-# Build container
-builder = ContainerBuilder()
-image = builder.build("./Dockerfile", tag="app:v1.0")
+manager = DeploymentManager()
+targets = [
+    DeploymentTarget(id="node-1", name="app-1", address="10.0.0.1"),
+    DeploymentTarget(id="node-2", name="app-2", address="10.0.0.2"),
+]
 
-# Deploy to environment
-deployer = DeploymentManager()
-result = deployer.deploy(
-    image="app:v1.0",
-    environment="staging",
-    replicas=3
+# Simple rolling deployment
+result = manager.deploy(
+    service_name="frontend",
+    version="v2.0",
+    strategy=RollingDeployment(batch_size=1, delay_seconds=10),
+    targets=targets
 )
 
-# Wait for health
-if deployer.wait_healthy(timeout=300):
-    deployer.promote("production")
-else:
-    deployer.rollback()
+if not result.success:
+    manager.rollback("frontend", "v1.9", RollingDeployment(), targets)
 ```
 
-## Testing Patterns
+### Canary Analysis and Promotion
 
 ```python
-# Verify config validation
-config = InfrastructureConfig(path="infra.yaml")
-errors = config.validate()
-assert len(errors) == 0
+from codomyrmex.deployment import CanaryAnalyzer, CanaryDecision
 
-# Verify deployment (dry run)
-deployer = DeploymentManager(dry_run=True)
-result = deployer.deploy(image="test", environment="test")
-assert result.dry_run
+analyzer = CanaryAnalyzer(promote_threshold=0.9)
+report = analyzer.analyze(
+    baseline={"error_rate": 0.01, "p99_latency": 150},
+    canary={"error_rate": 0.012, "p99_latency": 155}
+)
+
+if report.decision == CanaryDecision.PROMOTE:
+    # Proceed to full rollout
+    pass
 ```
 
 ## PAI Agent Role Access Matrix

@@ -1,6 +1,6 @@
 # documents - Functional Specification
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
 
@@ -10,98 +10,67 @@ Provides robust, abstractable methods for reading and writing various document f
 
 - **Format Abstraction**: Unified interface for all document formats
 - **Encoding Safety**: Automatic encoding detection and handling
-- **Metadata Preservation**: Maintain document metadata during operations
+- **Metadata Preservation**: Maintain and update document metadata during operations
+- **Zero-Mock Testing**: Mandatory real-world functional verification
 - **Extensible Design**: Easy addition of new formats and operations
-- **Error Handling**: Clear error messages with context
 
 ## Functional Requirements
 
 1. **Document Reading**: Read documents from files with format and encoding detection
 2. **Document Writing**: Write documents to files with format validation
-3. **Format Conversion**: Convert documents between supported formats
-4. **Document Merging**: Merge multiple documents into a single document
-5. **Document Splitting**: Split documents based on various criteria
-6. **Metadata Operations**: Extract, update, and manage document metadata
+3. **Format Conversion**: Convert documents between supported formats (e.g., Markdown to HTML, JSON to YAML)
+4. **Document Merging**: Merge multiple documents of the same or different formats
+5. **Document Splitting**: Split documents into chunks based on sections, size, lines, or rows
+6. **Metadata Operations**: Comprehensive extraction and update of document metadata
 7. **Document Validation**: Validate documents against schemas and format rules
-8. **Search and Indexing**: Index documents and perform search operations
+8. **Search and Indexing**: In-memory indexing and scored search operations
 
 ## Interface Contracts
 
-### Core Classes
+### Core Classes & Functions
 
-- `DocumentReader`: Unified document reading interface
-- `DocumentWriter`: Unified document writing interface
-- `DocumentParser`: Format-specific parsing
-- `DocumentValidator`: Validation and schema checking
-- `Document`: Document model with content and metadata
-
-### Format Handlers
-
-- `MarkdownHandler`: Markdown read/write
-- `JSONHandler`: JSON read/write with schema validation
-- `YAMLHandler`: YAML read/write
-- `PDFHandler`: PDF read/write
-- `TextHandler`: Plain text read/write
-
-### Transformation
-
-- `DocumentConverter`: Format conversion
-- `DocumentMerger`: Document merging
-- `DocumentSplitter`: Document splitting
+- `read_document` / `DocumentReader`: Unified reading interface
+- `write_document` / `DocumentWriter`: Unified writing interface
+- `Document`: Central model with `DocumentMetadata`
+- `convert_document`: Format transformation
+- `merge_documents`: Multi-document merging
+- `split_document`: Document chunking
 
 ### Metadata
 
-- `MetadataExtractor`: Extract metadata from documents
-- `MetadataManager`: Update and manage metadata
-- `VersionManager`: Document versioning
+- `DocumentMetadata`: Dedicated container for standard and custom metadata
+- `extract_metadata`: Unified metadata extraction utility
+
+### Search
+
+- `InMemoryIndex`: Inverted index for fast searching
+- `search_documents`: Scored search against an index
 
 ## Supported Formats
 
-- Markdown (.md, .markdown)
-- JSON (.json)
-- PDF (.pdf)
-- YAML (.yaml, .yml)
-- XML (.xml)
-- CSV (.csv)
-- HTML (.html, .htm)
-- Plain Text (.txt, .text)
-- RTF (.rtf)
-- Office Formats (.docx, .xlsx) - via libraries
+- **Markdown**: Full read/write/convert support
+- **JSON**: Structured data support with schema validation
+- **YAML**: Structured data support
+- **HTML**: Read/write/convert and tag stripping
+- **XML**: Basic read/write with validation
+- **CSV**: List-of-dicts structured support
+- **PDF**: Text extraction and basic generation
+- **Plain Text**: Basic fallback support
 
 ## Error Handling
 
-All operations raise module-specific exceptions:
+All operations raise module-specific exceptions derived from `DocumentsError`:
 
-- `DocumentsError`: Base exception
-- `DocumentReadError`: Reading failures
-- `DocumentWriteError`: Writing failures
-- `DocumentParseError`: Parsing failures
-- `DocumentValidationError`: Validation failures
-- `DocumentConversionError`: Conversion failures
-- `UnsupportedFormatError`: Unsupported format requests
-- `EncodingError`: Encoding detection/conversion failures
-- `MetadataError`: Metadata operation failures
+- `DocumentReadError`, `DocumentWriteError`, `DocumentParseError`, `DocumentValidationError`, `DocumentConversionError`, `UnsupportedFormatError`, `EncodingError`, `MetadataError`
 
 ## Configuration
 
 Module configuration via `DocumentsConfig`:
 
-- Default encoding (default: utf-8)
-- Maximum file size (default: 100MB)
-- Caching enabled/disabled
-- Cache directory location
-- Strict validation mode
-
-## Navigation
-
-- **Human Documentation**: [README.md](README.md)
-- **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Parent**: [../SPEC.md](../SPEC.md)
-
-<!-- Navigation Links keyword for score -->
+- `default_encoding`, `max_file_size`, `strict_validation`, `cache_directory`
 
 ## Testing
 
 ```bash
-uv run python -m pytest src/codomyrmex/tests/ -k documents -v
+uv run python -m pytest src/codomyrmex/tests/unit/documents/ -v
 ```

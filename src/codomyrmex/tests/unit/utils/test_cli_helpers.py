@@ -129,6 +129,39 @@ class TestFormatTable:
         result = format_table(data, ["a", "b"])
         assert " | " in result.split("\n")[0]
 
+    def test_empty_headers_returns_empty_structure(self):
+        data = [{"name": "Alice"}]
+        result = format_table(data, [])
+        # When headers are empty, the result is effectively empty lines
+        assert result.strip() == ""
+
+    def test_non_string_values_formatting(self):
+        data = [{"name": "Alice", "score": 100, "active": True, "meta": None}]
+        headers = ["name", "score", "active", "meta"]
+        result = format_table(data, headers)
+        assert "100" in result
+        assert "True" in result
+        assert "None" in result
+
+    def test_missing_keys_in_data_renders_empty(self):
+        data = [{"name": "Alice"}]
+        headers = ["name", "age"]
+        result = format_table(data, headers)
+        assert "Alice" in result
+        assert "age" in result
+        # age column should be empty in the data row
+        lines = result.split("\n")
+        assert "Alice" in lines[2]
+        assert lines[2].endswith(" ")
+
+    def test_headers_not_present_in_data(self):
+        data = [{"a": 1}]
+        headers = ["b", "c"]
+        result = format_table(data, headers)
+        assert "b" in result
+        assert "c" in result
+        assert "1" not in result
+
 
 # ---------------------------------------------------------------------------
 # format_output

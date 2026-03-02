@@ -2,9 +2,11 @@ import os
 import subprocess
 
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
+from codomyrmex.model_context_protocol.decorators import mcp_tool
 
 logger = get_logger(__name__)
 
+@mcp_tool(name="git_fetch")
 def fetch_remote(remote: str = "origin", repository_path: str = None) -> bool:
     """Fetch changes from a remote."""
     if repository_path is None:
@@ -22,8 +24,14 @@ def fetch_remote(remote: str = "origin", repository_path: str = None) -> bool:
         return True
     except subprocess.CalledProcessError as e:
         logger.error(f"Failed to fetch remote '{remote}': {e}")
+        if e.stderr:
+            logger.error(f"Git error: {e.stderr}")
+        return False
+    except Exception as e:
+        logger.error(f"Unexpected error fetching remote: {e}")
         return False
 
+@mcp_tool(name="git_prune_remote")
 def prune_remote(remote: str = "origin", repository_path: str = None) -> bool:
     """Prune remote tracking branches."""
     if repository_path is None:
@@ -41,8 +49,14 @@ def prune_remote(remote: str = "origin", repository_path: str = None) -> bool:
         return True
     except subprocess.CalledProcessError as e:
         logger.error(f"Failed to prune remote '{remote}': {e}")
+        if e.stderr:
+            logger.error(f"Git error: {e.stderr}")
+        return False
+    except Exception as e:
+        logger.error(f"Unexpected error pruning remote: {e}")
         return False
 
+@mcp_tool(name="git_add_remote")
 def add_remote(
     remote_name: str, url: str, repository_path: str = None
 ) -> bool:
@@ -73,6 +87,7 @@ def add_remote(
         logger.error(f"Unexpected error adding remote: {e}")
         return False
 
+@mcp_tool(name="git_remove_remote")
 def remove_remote(remote_name: str, repository_path: str = None) -> bool:
     """Remove a remote repository."""
     if repository_path is None:
@@ -101,6 +116,7 @@ def remove_remote(remote_name: str, repository_path: str = None) -> bool:
         logger.error(f"Unexpected error removing remote: {e}")
         return False
 
+@mcp_tool(name="git_list_remotes")
 def list_remotes(repository_path: str = None) -> list[dict[str, str]]:
     """List all remote repositories."""
     if repository_path is None:
@@ -150,4 +166,3 @@ def list_remotes(repository_path: str = None) -> list[dict[str, str]]:
     except Exception as e:
         logger.error(f"Unexpected error listing remotes: {e}")
         return []
-

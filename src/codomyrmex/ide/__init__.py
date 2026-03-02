@@ -154,8 +154,23 @@ class IDEClient(ABC):
         pass
 
     @abstractmethod
+    def close_file(self, path: str) -> bool:
+        """Close a file in the IDE."""
+        pass
+
+    @abstractmethod
     def get_open_files(self) -> list[str]:
         """Get list of currently open files."""
+        pass
+
+    @abstractmethod
+    def save_file(self, path: str) -> bool:
+        """Save a file in the IDE."""
+        pass
+
+    @abstractmethod
+    def save_all(self) -> bool:
+        """Save all open files in the IDE."""
         pass
 
     def execute_command_safe(
@@ -209,17 +224,21 @@ class IDEClient(ABC):
 
         ext_to_lang = {
             ".py": "python", ".js": "javascript", ".ts": "typescript",
+            ".jsx": "javascript", ".tsx": "typescript",
             ".java": "java", ".go": "go", ".rs": "rust",
-            ".c": "c", ".cpp": "cpp", ".md": "markdown",
-            ".json": "json", ".yaml": "yaml", ".yml": "yaml",
+            ".c": "c", ".cpp": "cpp", ".h": "c", ".hpp": "cpp",
+            ".md": "markdown", ".json": "json", ".yaml": "yaml",
+            ".yml": "yaml", ".toml": "toml", ".sh": "shell",
+            ".bash": "shell", ".zsh": "shell", ".sql": "sql",
         }
 
         language = ext_to_lang.get(file_path.suffix.lower())
 
         try:
-            line_count = len(file_path.read_text().splitlines())
+            content = file_path.read_text(errors="replace")
+            line_count = len(content.splitlines())
         except Exception as e:
-            get_logger(__name__).warning("Could not read line count for %s: %s", path, e)
+            get_logger(__name__).warning("Could not read file %s: %s", path, e)
             line_count = None
 
         return FileInfo(
@@ -266,6 +285,8 @@ class IDEClient(ABC):
 # CursorClient must be imported after IDEClient is defined to avoid circular import
 # (ide.cursor.__init__ imports IDEClient from ide)
 from codomyrmex.ide.cursor import CursorClient  # noqa: E402
+from codomyrmex.ide.vscode import VSCodeClient  # noqa: E402
+from codomyrmex.ide.antigravity import AntigravityClient  # noqa: E402
 
 
 def cli_commands():
@@ -302,5 +323,7 @@ __all__ = [
     "ArtifactError",
     # Submodule clients
     "CursorClient",
+    "VSCodeClient",
+    "AntigravityClient",
     "cli_commands",
 ]

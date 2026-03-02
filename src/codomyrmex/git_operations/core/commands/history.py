@@ -6,7 +6,7 @@ from codomyrmex.model_context_protocol.decorators import mcp_tool
 
 logger = get_logger(__name__)
 
-@mcp_tool()
+@mcp_tool(name="git_log")
 def get_commit_history(
     limit: int = 10, repository_path: str = None
 ) -> list[dict[str, str]]:
@@ -57,6 +57,7 @@ def get_commit_history(
         logger.error(f"Unexpected error getting commit history: {e}")
         return []
 
+@mcp_tool(name="git_blame")
 def get_blame(file_path: str, repository_path: str = None) -> str:
     """Get the blame for a file."""
     if repository_path is None:
@@ -73,8 +74,14 @@ def get_blame(file_path: str, repository_path: str = None) -> str:
         return result.stdout
     except subprocess.CalledProcessError as e:
         logger.error(f"Failed to get blame for {file_path}: {e}")
+        if e.stderr:
+            logger.error(f"Git error: {e.stderr}")
+        return ""
+    except Exception as e:
+        logger.error(f"Unexpected error getting blame for {file_path}: {e}")
         return ""
 
+@mcp_tool(name="git_commit_details")
 def get_commit_details(commit_sha: str, repository_path: str = None) -> dict:
     """Get detailed information about a specific commit."""
     if repository_path is None:
@@ -105,8 +112,14 @@ def get_commit_details(commit_sha: str, repository_path: str = None) -> dict:
         }
     except subprocess.CalledProcessError as e:
         logger.error(f"Failed to get commit details for {commit_sha}: {e}")
+        if e.stderr:
+            logger.error(f"Git error: {e.stderr}")
+        return {}
+    except Exception as e:
+        logger.error(f"Unexpected error getting commit details: {e}")
         return {}
 
+@mcp_tool(name="git_log_filtered")
 def get_commit_history_filtered(
     limit: int = 10,
     repository_path: str = None,

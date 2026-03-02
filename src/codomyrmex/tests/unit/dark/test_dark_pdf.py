@@ -126,21 +126,6 @@ class TestApplyInversion:
         assert np.allclose(pixels[:, :, 0], 55, atol=1)
 
     @pytest.mark.unit
-    def test_no_inversion(self) -> None:
-        """Test functionality: no inversion."""
-        f = DarkPDFFilter(inversion=0.0, brightness=1.0, contrast=1.0, sepia=0.0)
-        img = _make_test_image(color=(100, 150, 200))
-        result = f.apply_to_image(img)
-        np.array(result)
-        # No change expected (contrast=1.0 with formula also has no effect
-        # since (1.0-0.5)*2 = 1.0 factor, ((x/255-0.5)*2+0.5)*255 != x)
-        # Actually contrast formula: factor = (1.0-0.5)*2 = 1.0
-        # ((x/255 - 0.5) * (1+1.0) + 0.5)*255 = ((x/255-0.5)*2+0.5)*255
-        # For x=100: ((100/255-0.5)*2+0.5)*255 = ((-0.108)*2+0.5)*255 = 0.284*255 = 72.4
-        # So contrast=1.0 does change values. Use the identity contrast value.
-        pass
-
-    @pytest.mark.unit
     def test_half_inversion(self) -> None:
         """Test functionality: half inversion."""
         f = DarkPDFFilter(inversion=0.5, brightness=1.0, contrast=0.5, sepia=0.0)
@@ -255,7 +240,6 @@ class TestApplyToImage:
         assert result.mode == "RGB"
 
 
-@pytest.mark.skipif(not FITZ_AVAILABLE, reason="PyMuPDF not available")
 class TestApplyToPdf:
     """Test full PDF round-trip processing."""
 
@@ -291,9 +275,14 @@ class TestApplyToPdf:
             output_pdf = Path(tmpdir) / "output.pdf"
 
             _make_test_pdf(input_pdf)
+            # Use as a save function
             apply_dark_mode(input_pdf, output_pdf, dpi=72)
-
             assert output_pdf.exists()
+
+            # Use as a generator
+            processor = apply_dark_mode(input_pdf, dpi=72)
+            assert isinstance(processor, DarkPDF)
+            assert processor.page_count == 1
 
     @pytest.mark.unit
     def test_creates_output_directory(self) -> None:
@@ -439,3 +428,87 @@ class TestDarkPDFPresets:
         """Test functionality: file not found."""
         with pytest.raises(FileNotFoundError):
             DarkPDF("/nonexistent/path.pdf")
+
+
+class TestFluentAPI:
+    """Test the fluent API methods added to DarkPDF."""
+
+    @pytest.mark.unit
+    def test_fluent_setters(self) -> None:
+        """Test functionality: fluent setters."""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            input_pdf = Path(tmpdir) / "input.pdf"
+            _make_test_pdf(input_pdf)
+
+            dp = DarkPDF(input_pdf)
+            dp.set_inversion(0.5).set_brightness(1.5).set_contrast(2.0).set_sepia(0.3)
+
+            assert dp.filter.inversion == 0.5
+            assert dp.filter.brightness == 1.5
+            assert dp.filter.contrast == 2.0
+            assert dp.filter.sepia == 0.3
+
+    @pytest.mark.unit
+    def test_set_filter_preset(self) -> None:
+        """Test functionality: set_filter with preset name."""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            input_pdf = Path(tmpdir) / "input.pdf"
+            _make_test_pdf(input_pdf)
+
+            dp = DarkPDF(input_pdf)
+            dp.set_filter("sepia")
+            assert dp.filter.inversion == 0.85
+            assert dp.filter.sepia == 0.40
+
+    @pytest.mark.unit
+    def test_set_filter_instance(self) -> None:
+        """Test functionality: set_filter with DarkPDFFilter instance."""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            input_pdf = Path(tmpdir) / "input.pdf"
+            _make_test_pdf(input_pdf)
+
+            new_filter = DarkPDFFilter(inversion=0.1, brightness=0.2)
+            dp = DarkPDF(input_pdf)
+            dp.set_filter(new_filter)
+            assert dp.filter == new_filter
+
+    @pytest.mark.unit
+    def test_set_filter_invalid(self) -> None:
+        """Test functionality: set_filter with invalid preset."""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            input_pdf = Path(tmpdir) / "input.pdf"
+            _make_test_pdf(input_pdf)
+
+            dp = DarkPDF(input_pdf)
+            with pytest.raises(ValueError, match="Unknown preset"):
+                dp.set_filter("invalid_preset")
+
+    @pytest.mark.unit
+    def test_current_filter_property(self) -> None:
+        """Test functionality: current_filter property."""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            input_pdf = Path(tmpdir) / "input.pdf"
+            _make_test_pdf(input_pdf)
+
+            dp = DarkPDF(input_pdf)
+            assert dp.current_filter == dp.filter
+
+    @pytest.mark.unit
+    def test_page_count_property(self) -> None:
+        """Test functionality: page_count property."""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            input_pdf = Path(tmpdir) / "input.pdf"
+            _make_test_pdf(input_pdf)
+
+            dp = DarkPDF(input_pdf)
+            assert dp.page_count == 1
+
+    @pytest.mark.unit
+    def test_process_method(self) -> None:
+        """Test functionality: process method (placeholder)."""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            input_pdf = Path(tmpdir) / "input.pdf"
+            _make_test_pdf(input_pdf)
+
+            dp = DarkPDF(input_pdf)
+            assert dp.process() == dp

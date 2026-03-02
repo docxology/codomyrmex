@@ -1,9 +1,11 @@
 """Gmail implementation of the EmailProvider interface."""
 
+from __future__ import annotations
+
 import base64
 import logging
 import os
-from datetime import datetime
+from datetime import datetime, timezone
 
 try:
     from codomyrmex.logging_monitoring.core.logger_config import get_logger
@@ -67,6 +69,7 @@ class GmailProvider(EmailProvider):
         try:
             self.service = service or build('gmail', 'v1', credentials=credentials)
         except Exception as e:
+            logger.error(f"Failed to initialize Gmail API service: {e}")
             raise EmailAuthError(f"Failed to initialize Gmail API service: {e}") from e
 
     @classmethod
@@ -142,11 +145,13 @@ class GmailProvider(EmailProvider):
 
     def _parse_email_address(self, raw_header: str) -> list[EmailAddress]:
         """Parse a raw 'To' or 'From' header into a list of EmailAddress objects."""
-        # This is a very simplistic parser. In a real scenario, use `email.utils.getaddresses`.
-        addresses = []
+        if not raw_header:
+            return []
         import email.utils
+        addresses = []
         for name, addr in email.utils.getaddresses([raw_header]):
-            addresses.append(EmailAddress(name=name if name else None, email=addr))
+            if addr:
+                addresses.append(EmailAddress(name=name if name else None, email=addr))
         return addresses
 
     def _gmail_dict_to_message(self, payload: dict) -> EmailMessage:
@@ -164,7 +169,7 @@ class GmailProvider(EmailProvider):
 
             date_str = headers.get('date', '')
             import email.utils
-            parsed_date = email.utils.parsedate_to_datetime(date_str) if date_str else datetime.now(tz=datetime.now().astimezone().tzinfo)
+            parsed_date = email.utils.parsedate_to_datetime(date_str) if date_str else datetime.now(timezone.utc)
 
             body_text = ""
             body_html = ""
@@ -175,23 +180,27 @@ class GmailProvider(EmailProvider):
                     mime_type = part.get('mimeType')
                     body_data = part.get('body', {}).get('data', '')
                     if body_data:
-                        decoded_data = base64.urlsafe_b64decode(body_data).decode('utf-8')
-                        if mime_type == 'text/plain':
-                            body_text += decoded_data
-                        elif mime_type == 'text/html':
-                            body_html += decoded_data
+                        try:
+                            decoded_data = base64.urlsafe_b64decode(body_data).decode('utf-8', errors='replace')
+                            if mime_type == 'text/plain':
+                                body_text += decoded_data
+                            elif mime_type == 'text/html':
+                                body_html += decoded_data
+                        except Exception as e:
+                            logger.warning(f"Failed to decode part: {e}")
                     if 'parts' in part:
                         extract_parts(part['parts'])
 
             payload_part = payload.get('payload', {})
-            if payload_part.get('mimeType') == 'text/plain':
+            mime_type = payload_part.get('mimeType')
+            if mime_type == 'text/plain':
                  body_data = payload_part.get('body', {}).get('data', '')
                  if body_data:
-                     body_text = base64.urlsafe_b64decode(body_data).decode('utf-8')
-            elif payload_part.get('mimeType') == 'text/html':
+                     body_text = base64.urlsafe_b64decode(body_data).decode('utf-8', errors='replace')
+            elif mime_type == 'text/html':
                 body_data = payload_part.get('body', {}).get('data', '')
                 if body_data:
-                    body_html = base64.urlsafe_b64decode(body_data).decode('utf-8')
+                    body_html = base64.urlsafe_b64decode(body_data).decode('utf-8', errors='replace')
             else:
                  extract_parts(payload_part.get('parts', []))
 
@@ -209,6 +218,7 @@ class GmailProvider(EmailProvider):
                 labels=payload.get('labelIds', [])
             )
         except Exception as e:
+            logger.error(f"Failed to parse Gmail message data: {e}")
             raise InvalidMessageError(f"Failed to parse Gmail message data: {e}") from e
 
     def _create_raw_message(self, draft: EmailDraft) -> dict:
@@ -240,13 +250,13 @@ class GmailProvider(EmailProvider):
             ).execute()
             messages_meta = results.get('messages', [])
 
-            # Note: The list API only returns IDs. We have to batch get them or get them individually
-            # we do individually for simplicity here, but batching is better for prod
+            # We fetch messages individually.
             full_messages = []
             for msg_meta in messages_meta:
                  full_messages.append(self.get_message(msg_meta['id'], user_id))
             return full_messages
         except HttpError as e:
+            logger.error(f"Failed to list Gmail messages: {e}")
             raise EmailAPIError(f"Failed to list messages: {e}") from e
 
     def get_message(self, message_id: str, user_id: str = 'me') -> EmailMessage:
@@ -261,6 +271,7 @@ class GmailProvider(EmailProvider):
         except HttpError as e:
             if e.resp.status == 404:
                 raise MessageNotFoundError(f"Message with ID {message_id} not found.") from e
+            logger.error(f"Failed to fetch Gmail message {message_id}: {e}")
             raise EmailAPIError(f"Failed to fetch message: {e}") from e
 
     def send_message(self, draft: EmailDraft, user_id: str = 'me') -> EmailMessage:
@@ -273,6 +284,7 @@ class GmailProvider(EmailProvider):
             ).execute()
             return self.get_message(sent_message['id'], user_id)
         except HttpError as e:
+            logger.error(f"Failed to send Gmail message: {e}")
             raise EmailAPIError(f"Failed to send email: {e}") from e
 
     def create_draft(self, draft: EmailDraft, user_id: str = 'me') -> str:
@@ -285,6 +297,7 @@ class GmailProvider(EmailProvider):
             ).execute()
             return created_draft['id']
         except HttpError as e:
+            logger.error(f"Failed to create Gmail draft: {e}")
             raise EmailAPIError(f"Failed to create draft: {e}") from e
 
     def delete_message(self, message_id: str, user_id: str = 'me') -> None:
@@ -297,6 +310,7 @@ class GmailProvider(EmailProvider):
         except HttpError as e:
             if e.resp.status == 404:
                 raise MessageNotFoundError(f"Message with ID {message_id} not found for deletion.") from e
+            logger.error(f"Failed to delete Gmail message {message_id}: {e}")
             raise EmailAPIError(f"Failed to delete message: {e}") from e
 
     def modify_labels(self, message_id: str, add_labels: list[str], remove_labels: list[str], user_id: str = 'me') -> None:
@@ -314,4 +328,14 @@ class GmailProvider(EmailProvider):
         except HttpError as e:
             if e.resp.status == 404:
                 raise MessageNotFoundError(f"Message with ID {message_id} not found for label modification.") from e
+            logger.error(f"Failed to modify Gmail labels on {message_id}: {e}")
             raise EmailAPIError(f"Failed to modify message labels: {e}") from e
+
+    def list_labels(self, user_id: str = 'me') -> list[dict[str, str]]:
+        """List all available labels for the user."""
+        try:
+            results = self.service.users().labels().list(userId=user_id).execute()
+            return results.get('labels', [])
+        except HttpError as e:
+            logger.error(f"Failed to list Gmail labels: {e}")
+            raise EmailAPIError(f"Failed to list labels: {e}") from e

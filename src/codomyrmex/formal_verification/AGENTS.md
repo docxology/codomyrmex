@@ -33,8 +33,19 @@ All 6 tools follow the mcp-solver interaction pattern. They share a module-level
 | `replace_item` | Replace item at index with new content | Safe |
 | `get_model` | Retrieve current model as numbered item list | Safe |
 | `solve_model` | Execute Z3 solver with configurable timeout | Safe |
+| `push` | Push a new solver scope for incremental solving | Safe |
+| `pop` | Pop the last solver scope | Safe |
 
 ## Use Cases
+
+### Optimization
+Use the `optimizer` object to add constraints and define objectives. Example: `optimizer.add(x + y == 10)`, `optimizer.maximize(x)`. The solver will use the `Optimize` engine if any optimizer constraints are found.
+
+### Conflict Diagnosis
+If `verify_criteria_consistency()` returns `consistent=False`, check the `conflicts` list to identify which criteria IDs are involved in the inconsistency. This uses Z3's `unsat_core` feature.
+
+### Model Iteration
+Use `push()` and `pop()` to rapidly test different variations of a model without re-executing the entire script. This is highly efficient for large models.
 
 ### Constraint Solving
 Build and solve arbitrary Z3 constraint models. Agents add variable declarations and constraints as Python string expressions, then call `solve_model` to get SAT/UNSAT verdicts with satisfying assignments.

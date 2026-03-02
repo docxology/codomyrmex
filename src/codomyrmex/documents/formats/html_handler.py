@@ -79,7 +79,10 @@ def strip_html_tags(html_content: str) -> str:
     Returns:
         Plain text with HTML tags removed
     """
-    clean = re.sub(r'<[^>]+>', '', html_content)
+    # Remove script and style elements entirely
+    clean = re.sub(r'<(script|style)[^>]*>.*?</\1>', '', html_content, flags=re.DOTALL | re.IGNORECASE)
+    # Strip remaining tags
+    clean = re.sub(r'<[^>]+>', '', clean)
     # Collapse whitespace
     clean = re.sub(r'\s+', ' ', clean).strip()
     return clean

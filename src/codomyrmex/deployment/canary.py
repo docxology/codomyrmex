@@ -6,11 +6,12 @@ whether to promote or rollback.
 
 from __future__ import annotations
 
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any
 
-from codomyrmex.logging_monitoring import get_logger
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 logger = get_logger(__name__)
 
@@ -30,8 +31,9 @@ class MetricComparison:
         metric_name: Name of the metric.
         baseline_value: Baseline measurement.
         canary_value: Canary measurement.
-        threshold: Maximum acceptable deviation.
+        threshold: Maximum acceptable deviation (percentage as decimal).
         passed: Whether canary is within threshold.
+        message: Optional detail about the comparison.
     """
 
     metric_name: str
@@ -39,13 +41,23 @@ class MetricComparison:
     canary_value: float
     threshold: float = 0.1
     passed: bool = True
+    message: str = ""
 
     def __post_init__(self) -> None:
         if self.baseline_value > 0:
-            deviation = abs(self.canary_value - self.baseline_value) / self.baseline_value
-            self.passed = deviation <= self.threshold
+            deviation = (self.canary_value - self.baseline_value) / self.baseline_value
+            # For most metrics, lower is better (error rate, latency)
+            # If deviation is positive and exceeds threshold, it's a failure
+            if deviation > self.threshold:
+                self.passed = False
+                self.message = f"Exceeded threshold: +{deviation:.1%} (limit: {self.threshold:.1%})"
+            else:
+                self.passed = True
+                self.message = f"Within threshold: {deviation:+.1%}"
         else:
+            # Baseline is 0, so any value above threshold is a failure
             self.passed = self.canary_value <= self.threshold
+            self.message = f"Value {self.canary_value} vs threshold {self.threshold}"
 
     def to_dict(self) -> dict[str, Any]:
         """Return a dictionary representation of this object."""
@@ -55,6 +67,7 @@ class MetricComparison:
             "canary": round(self.canary_value, 4),
             "threshold": self.threshold,
             "passed": self.passed,
+            "message": self.message,
         }
 
 
@@ -137,9 +150,9 @@ class CanaryAnalyzer:
                 threshold=tol,
             ))
 
-        passed = sum(1 for c in comparisons if c.passed)
-        total = len(comparisons) or 1
-        pass_rate = passed / total
+        passed_count = sum(1 for c in comparisons if c.passed)
+        total_count = len(comparisons)
+        pass_rate = passed_count / total_count if total_count > 0 else 1.0
 
         if pass_rate >= self._promote_threshold:
             decision = CanaryDecision.PROMOTE
@@ -155,8 +168,8 @@ class CanaryAnalyzer:
         )
 
         logger.info(
-            "Canary analysis",
-            extra={"decision": decision.value, "pass_rate": round(pass_rate, 2)},
+            "Canary analysis completed: %s (Pass rate: %.1f%%)",
+            decision.value, pass_rate * 100
         )
 
         return report

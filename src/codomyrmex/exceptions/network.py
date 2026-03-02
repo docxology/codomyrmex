@@ -29,7 +29,19 @@ class NetworkError(CodomyrmexError):
 
 class APIError(CodomyrmexError):
     """Raised when API operations fail."""
-    pass
+
+    def __init__(
+        self,
+        message: str,
+        endpoint: str | None = None,
+        method: str | None = None,
+        **kwargs: Any,
+    ) -> None:
+        super().__init__(message, **kwargs)
+        if endpoint:
+            self.context["endpoint"] = endpoint
+        if method:
+            self.context["method"] = method
 
 
 class ValidationError(CodomyrmexError):
@@ -51,7 +63,19 @@ class ValidationError(CodomyrmexError):
 
 class SchemaError(CodomyrmexError):
     """Raised when schema validation fails."""
-    pass
+
+    def __init__(
+        self,
+        message: str,
+        schema_name: str | None = None,
+        data_preview: str | None = None,
+        **kwargs: Any,
+    ) -> None:
+        super().__init__(message, **kwargs)
+        if schema_name:
+            self.context["schema_name"] = schema_name
+        if data_preview:
+            self.context["data_preview"] = data_preview
 
 
 class TimeoutError(CodomyrmexError):

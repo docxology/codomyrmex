@@ -47,16 +47,21 @@ class DocumentationQualityAnalyzer:
 
         # Check for essential sections
         essential_sections = [
-            "overview", "installation", "usage", "api", "examples"
+            "overview", "installation", "usage", "api", "examples", "navigation", "purpose"
         ]
 
+        found_sections = 0
         for section in essential_sections:
-            if section.lower() in content.lower():
-                score += 20.0
+            if re.search(rf'^#+.*{section}', content, re.IGNORECASE | re.MULTILINE):
+                found_sections += 1
+        
+        score += (found_sections / len(essential_sections)) * 60.0
 
         # Check for code examples
-        if "```" in content or "example" in content.lower():
+        if "```" in content:
             score += 20.0
+        elif "example" in content.lower():
+            score += 10.0
 
         # Check for links and references
         if "http" in content or "[" in content:
@@ -95,23 +100,24 @@ class DocumentationQualityAnalyzer:
         # Check for technical terms
         technical_terms = [
             "api", "method", "function", "class", "module", "parameter",
-            "return", "exception", "error", "configuration"
+            "return", "exception", "error", "configuration", "interface",
+            "asynchronous", "decorator", "yield", "generator", "context manager"
         ]
 
         found_terms = sum(1 for term in technical_terms if term.lower() in content.lower())
-        score += min(found_terms * 5.0, 30.0)
+        score += min(found_terms * 4.0, 40.0)
 
         # Check for code references
-        if any(pattern in content for pattern in ["def ", "class ", "import "]):
+        if any(pattern in content for pattern in ["def ", "class ", "import ", "from "]):
             score += 30.0
 
         # Check for proper error handling documentation
-        if "error" in content.lower() or "exception" in content.lower():
-            score += 20.0
+        if "error" in content.lower() or "exception" in content.lower() or "raise" in content.lower():
+            score += 15.0
 
         # Check for version information
-        if any(keyword in content.lower() for keyword in ["version", "v1.", "v2."]):
-            score += 20.0
+        if re.search(r'v\d+\.\d+\.\d+', content) or "version" in content.lower():
+            score += 15.0
 
         return min(score, 100.0)
 

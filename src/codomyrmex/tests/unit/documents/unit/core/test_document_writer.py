@@ -5,7 +5,7 @@ import json
 import pytest
 
 from codomyrmex.documents.core.document_writer import DocumentWriter, write_document
-from codomyrmex.documents.exceptions import DocumentWriteError
+from codomyrmex.documents.exceptions import DocumentWriteError, UnsupportedFormatError
 from codomyrmex.documents.models.document import Document, DocumentFormat
 
 
@@ -48,9 +48,9 @@ class TestDocumentWriter:
 
     def test_write_unsupported_format(self, tmp_path):
         """Test error for unsupported format."""
-        f = tmp_path / "test.xml"
-        doc = Document("content", DocumentFormat.XML)
-        with pytest.raises(DocumentWriteError):
+        f = tmp_path / "test.rtf"
+        doc = Document("content", DocumentFormat.RTF)
+        with pytest.raises(UnsupportedFormatError):
             self.writer.write(doc, str(f))
 
 

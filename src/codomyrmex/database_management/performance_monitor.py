@@ -8,6 +8,7 @@ and performance analytics capabilities.
 import json
 import statistics
 import time
+from collections import defaultdict
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from pathlib import Path
@@ -150,10 +151,8 @@ class DatabasePerformanceMonitor:
             }
 
         # Group by query type
-        query_types = {}
+        query_types = defaultdict(list)
         for query in recent_queries:
-            if query.query_type not in query_types:
-                query_types[query.query_type] = []
             query_types[query.query_type].append(query.execution_time_ms)
 
         # Calculate statistics for each type

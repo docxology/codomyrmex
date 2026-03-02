@@ -5,26 +5,64 @@ Errors related to data visualization, plotting, and documentation.
 
 from __future__ import annotations
 
+from typing import Any
+
 from .base import CodomyrmexError
 
 
 # Visualization Errors
 class VisualizationError(CodomyrmexError):
     """Raised when data visualization operations fail."""
-    pass
+
+    def __init__(
+        self,
+        message: str,
+        tool_name: str | None = None,
+        **kwargs: Any,
+    ) -> None:
+        super().__init__(message, **kwargs)
+        if tool_name:
+            self.context["tool_name"] = tool_name
 
 
-class PlottingError(CodomyrmexError):
+class PlottingError(VisualizationError):
     """Raised when plotting operations fail."""
-    pass
+
+    def __init__(
+        self,
+        message: str,
+        plot_type: str | None = None,
+        **kwargs: Any,
+    ) -> None:
+        super().__init__(message, **kwargs)
+        if plot_type:
+            self.context["plot_type"] = plot_type
 
 
 # Documentation Errors
 class DocumentationError(CodomyrmexError):
     """Raised when documentation operations fail."""
-    pass
+
+    def __init__(
+        self,
+        message: str,
+        doc_type: str | None = None,
+        **kwargs: Any,
+    ) -> None:
+        super().__init__(message, **kwargs)
+        if doc_type:
+            self.context["doc_type"] = doc_type
 
 
-class APIDocumentationError(CodomyrmexError):
+class APIDocumentationError(DocumentationError):
     """Raised when API documentation generation fails."""
-    pass
+
+    def __init__(
+        self,
+        message: str,
+        target_path: str | None = None,
+        **kwargs: Any,
+    ) -> None:
+        super().__init__(message, **kwargs)
+        if target_path:
+            self.context["target_path"] = target_path

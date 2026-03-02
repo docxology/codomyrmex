@@ -88,5 +88,13 @@ class SolverBackend(ABC):
         """
 
     @abstractmethod
+    def push(self) -> None:
+        """Push a new solver scope."""
+
+    @abstractmethod
+    def pop(self, n: int = 1) -> None:
+        """Pop n solver scopes."""
+
+    @abstractmethod
     def backend_name(self) -> str:
         """Return the human-readable name of this backend."""

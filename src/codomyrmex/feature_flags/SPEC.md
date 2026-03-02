@@ -1,52 +1,43 @@
 # feature_flags - Functional Specification
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
 
-To provide a system for controlling functional and operational aspects of Codomyrmex at runtime, enabling gradual releases and rapid incident response.
-
-## Design Principles
-
-- **Resilience**: The system must fail 'closed' (to a safe default) if the flag provider is unreachable.
-- **Low Latency**: Flag evaluations must be extremely fast to avoid impacting application performance.
-- **Decoupling**: Business logic should not know how flag states are determined.
-- **Flexibility**: Support for varied backend providers (Config, Database, Redis, LaunchDarkly, etc.).
-
-## Architecture
-
-```mermaid
-graph TD
-    App[Application Code] --> FM[FeatureManager]
-    FM --> Cache[Local Cache]
-    FM --> Prov[Flag Provider]
-    FM --> Strat[Evaluation Strategies]
-```
-
-## Functional Requirements
-
-- Retrieve boolean flags based on a unique key.
-- support multi-variate flags (returning strings or numbers).
-- Target flags based on user attributes or environment variables.
-- Gradually rollout features to a percentage of users.
-- Remotely disable features in response to errors (Kill Switch).
+To provide a resilient, low-latency system for controlling functional and operational aspects of Codomyrmex at runtime.
 
 ## Interface Contracts
 
 ### `FeatureManager`
 
-- `is_enabled(flag_key: str, **context) -> bool`
-- `get_value(flag_key: str, **context) -> Any`
+- `create_flag(name, enabled=True, percentage=100.0, targeting_rules=None, metadata=None, description="")`
+- `is_enabled(name, default=False, **context_attrs) -> bool`
+- `get_value(name, default=None, **context_attrs) -> Any`
+- `delete_flag(name) -> bool`
+- `set_override(name, enabled: bool)`
 - `load_from_file(path: str)`
 - `save_to_file(path: str)`
 
-## Technical Constraints
+### `TargetingRule`
 
-- Must integration with the `cache` or `persistence` layer for performance.
-- Dependent on the `telemetry` module for tracking flag usage metrics.
+- `attribute: str`
+- `operator: str` (eq, neq, in, not_in, contains, gt, lt, gte, lte, regex)
+- `value: Any`
+
+## Evaluation Logic
+
+1. **Global Override**: If a runtime override exists, use it immediately.
+2. **Global Kill-switch**: If `flag.enabled` is `False`, return `False`.
+3. **Targeting Rules**: If rules exist, evaluate them with `OR` logic. If none match, return `False`.
+4. **Percentage Rollout**: Apply deterministic hashing (SHA-256) on `flag.name` and `user_id`. If user falls within `percentage`, return `True`.
+5. **Default**: If no rules or percentage are specified (and enabled is True), return `True`.
+
+## Persistence
+
+Supports JSON file storage by default. Custom backends can implement the `FlagStore` interface.
 
 ## Testing
 
 ```bash
-uv run python -m pytest src/codomyrmex/tests/ -k feature_flags -v
+uv run pytest src/codomyrmex/tests/unit/feature_flags/ -v
 ```

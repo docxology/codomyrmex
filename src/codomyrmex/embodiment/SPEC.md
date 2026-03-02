@@ -1,6 +1,6 @@
 # embodiment - Functional Specification
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
 
@@ -27,11 +27,12 @@ graph TD
 
 ## Functional Requirements
 
-- Connect to existing ROS2 networks.
-- Serialize/Deserialize common ROS2 message types (SensorMsgs, GeometryMsgs).
+- Connect to existing ROS2 networks (simulated).
+- Serialize/Deserialize common ROS2 message types.
 - Implement a 'Watchdog' for connection loss detection.
-- Scale sensor data (e.g., resizing high-res images before agent consumption).
+- Scale sensor data before agent consumption.
 - Enforce 'Soft Limits' on actuator velocity and acceleration.
+- Provide async interface for I/O operations.
 
 ## Interface Contracts
 
@@ -39,17 +40,34 @@ graph TD
 
 - `from_translation(x, y, z) -> Transform3D`
 - `from_rotation(roll, pitch, yaw) -> Transform3D`
+- `from_yaw(yaw_rad) -> Transform3D`
 - `apply(point: Tuple[float, float, float]) -> Tuple[float, float, float]`
+- `compose(other: Transform3D) -> Transform3D`
 - `inverse() -> Transform3D`
 
 ### `ROS2Bridge`
 
-- `publish(topic: str, message: dict)`
-- `subscribe(topic: str, callback: Callable)`
+- `connect(uri: str) -> bool` (async)
+- `disconnect() -> None`
+- `publish(topic: str, message: dict) -> Message` (async)
+- `subscribe(topic: str, callback: Callable) -> UnsubscribeHandle` (async)
+
+### `SensorInterface`
+
+- `connect() -> bool`
+- `disconnect() -> None`
+- `read() -> SensorData`
+
+### `ActuatorController`
+
+- `connect() -> bool`
+- `disconnect() -> None`
+- `execute(command: ActuatorCommand) -> bool`
+- `get_status() -> ActuatorStatus`
 
 ## Technical Constraints
 
-- Dependent on the presence of a ROS2 runtime (e.g., Humble, Iron).
+- Dependent on the presence of a ROS2 runtime for physical hardware (not for simulation).
 - High bandwidth requirement for vision-based embodiments.
 - Real-time performance may be limited by Python's GC and GIL.
 

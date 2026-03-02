@@ -7,6 +7,7 @@ access, and compaction of old events.
 from __future__ import annotations
 
 import time
+import threading
 from collections import defaultdict
 from dataclasses import dataclass, field
 from typing import Any
@@ -32,6 +33,16 @@ class StreamEvent:
     timestamp: float = field(default_factory=time.time)
     source: str = ""
 
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "sequence": self.sequence,
+            "topic": self.topic,
+            "event_type": self.event_type,
+            "data": self.data,
+            "timestamp": self.timestamp,
+            "source": self.source
+        }
+
 
 class EventStore:
     """Append-only event store with sequence numbers.
@@ -49,16 +60,19 @@ class EventStore:
         self._events: list[StreamEvent] = []
         self._next_sequence = 1
         self._topic_index: dict[str, list[int]] = defaultdict(list)
+        self._lock = threading.RLock()
 
     @property
     def count(self) -> int:
         """Total number of events in the store."""
-        return len(self._events)
+        with self._lock:
+            return len(self._events)
 
     @property
     def latest_sequence(self) -> int:
         """Latest sequence number."""
-        return self._next_sequence - 1
+        with self._lock:
+            return self._next_sequence - 1
 
     def append(self, event: StreamEvent) -> int:
         """Append an event and return its sequence number.
@@ -69,14 +83,15 @@ class EventStore:
         Returns:
             Assigned sequence number.
         """
-        event.sequence = self._next_sequence
-        self._next_sequence += 1
-        if not event.timestamp:
-            event.timestamp = time.time()
+        with self._lock:
+            event.sequence = self._next_sequence
+            self._next_sequence += 1
+            if not event.timestamp:
+                event.timestamp = time.time()
 
-        self._events.append(event)
-        self._topic_index[event.topic].append(len(self._events) - 1)
-        return event.sequence
+            self._events.append(event)
+            self._topic_index[event.topic].append(len(self._events) - 1)
+            return event.sequence
 
     def read(self, from_seq: int = 1, to_seq: int = 0) -> list[StreamEvent]:
         """Read events in a sequence range.
@@ -88,10 +103,11 @@ class EventStore:
         Returns:
             List of events in the range.
         """
-        if to_seq <= 0:
-            to_seq = self.latest_sequence
+        with self._lock:
+            if to_seq <= 0:
+                to_seq = self.latest_sequence
 
-        return [e for e in self._events if from_seq <= e.sequence <= to_seq]
+            return [e for e in self._events if from_seq <= e.sequence <= to_seq]
 
     def read_by_topic(self, topic: str, limit: int = 0) -> list[StreamEvent]:
         """Read events by topic.
@@ -103,11 +119,12 @@ class EventStore:
         Returns:
             Events matching the topic.
         """
-        indices = self._topic_index.get(topic, [])
-        events = [self._events[i] for i in indices]
-        if limit > 0:
-            events = events[-limit:]
-        return events
+        with self._lock:
+            indices = self._topic_index.get(topic, [])
+            events = [self._events[i] for i in indices]
+            if limit > 0:
+                events = events[-limit:]
+            return events
 
     def read_by_time(self, from_time: float, to_time: float) -> list[StreamEvent]:
         """Read events in a time range.
@@ -119,11 +136,13 @@ class EventStore:
         Returns:
             Events within the time range.
         """
-        return [e for e in self._events if from_time <= e.timestamp <= to_time]
+        with self._lock:
+            return [e for e in self._events if from_time <= e.timestamp <= to_time]
 
     def topics(self) -> list[str]:
         """List all known topics."""
-        return sorted(self._topic_index.keys())
+        with self._lock:
+            return sorted(self._topic_index.keys())
 
     def compact(self, before_seq: int) -> int:
         """Remove events before a sequence number.
@@ -134,16 +153,24 @@ class EventStore:
         Returns:
             Number of events removed.
         """
-        original = len(self._events)
-        self._events = [e for e in self._events if e.sequence >= before_seq]
-        removed = original - len(self._events)
+        with self._lock:
+            original = len(self._events)
+            self._events = [e for e in self._events if e.sequence >= before_seq]
+            removed = original - len(self._events)
 
-        # Rebuild topic index
-        self._topic_index.clear()
-        for i, e in enumerate(self._events):
-            self._topic_index[e.topic].append(i)
+            # Rebuild topic index
+            self._topic_index.clear()
+            for i, e in enumerate(self._events):
+                self._topic_index[e.topic].append(i)
 
-        return removed
+            return removed
+
+    def clear(self) -> None:
+        """Clear all events and reset sequence."""
+        with self._lock:
+            self._events.clear()
+            self._next_sequence = 1
+            self._topic_index.clear()
 
 
 __all__ = ["EventStore", "StreamEvent"]

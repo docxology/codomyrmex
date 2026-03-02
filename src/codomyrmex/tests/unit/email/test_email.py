@@ -8,7 +8,7 @@ Zero-mock policy: no MagicMock or monkeypatch.
 Live Gmail / AgentMail API tests are guarded by pytest.mark.skipif.
 """
 
-from datetime import UTC, datetime
+from datetime import UTC, datetime, timezone
 
 import pytest
 
@@ -44,6 +44,13 @@ class TestEmailAddress:
         addr = EmailAddress(email="bob@example.com", name="Bob Smith")
         assert addr.name == "Bob Smith"
         assert addr.email == "bob@example.com"
+
+    def test_address_str(self):
+        """Test functionality: address string representation."""
+        addr1 = EmailAddress(email="alice@example.com")
+        assert str(addr1) == "alice@example.com"
+        addr2 = EmailAddress(email="bob@example.com", name="Bob Smith")
+        assert str(addr2) == "Bob Smith <bob@example.com>"
 
 
 # ── EmailMessage ──────────────────────────────────────────────────────
@@ -129,6 +136,12 @@ class TestEmailMessage:
                 subject="Test",
                 sender=EmailAddress(email="a@b.com"),
             )
+
+    def test_message_summary(self):
+        """Test functionality: message summary property."""
+        msg = self._msg(subject="Summary Test")
+        # [2026-03-01T10:00:00+00:00] sender@example.com: Summary Test
+        assert "sender@example.com: Summary Test" in msg.summary
 
 
 # ── EmailDraft ────────────────────────────────────────────────────────
@@ -248,6 +261,34 @@ class TestEmailProviderAbstractInterface:
         provider = MinimalProvider()
         result = provider.list_messages()
         assert isinstance(result, list)
+
+    def test_batch_get_messages_default_impl(self):
+        """Test functionality: batch_get_messages default implementation."""
+
+        class MinimalProvider(EmailProvider):
+            def list_messages(self, query="", max_results=100):
+                return []
+            def get_message(self, message_id):
+                return EmailMessage(
+                    id=message_id,
+                    subject="Test",
+                    sender=EmailAddress(email="a@b.com"),
+                    date=datetime.now(timezone.utc)
+                )
+            def send_message(self, draft):
+                raise NotImplementedError()
+            def create_draft(self, draft):
+                return "id"
+            def delete_message(self, message_id):
+                return None
+            def modify_labels(self, message_id, add_labels, remove_labels):
+                return None
+
+        provider = MinimalProvider()
+        results = provider.batch_get_messages(["1", "2"])
+        assert len(results) == 2
+        assert results[0].id == "1"
+        assert results[1].id == "2"
 
 
 # ── EMAIL_AVAILABLE flag ──────────────────────────────────────────────

@@ -8,7 +8,7 @@ from .status import add_files
 
 logger = get_logger(__name__)
 
-@mcp_tool()
+@mcp_tool(name="git_commit")
 def commit_changes(
     message: str,
     repository_path: str = None,
@@ -120,8 +120,9 @@ def commit_changes(
         logger.error(f"Unexpected error committing changes: {e}")
         return None
 
+@mcp_tool(name="git_revert")
 def revert_commit(commit_sha: str, repository_path: str = None) -> bool:
-    """Revert a specific commit."""
+    """Revert a specific commit by creating a new inverse commit."""
     if repository_path is None:
         repository_path = os.getcwd()
 
@@ -135,11 +136,18 @@ def revert_commit(commit_sha: str, repository_path: str = None) -> bool:
             text=True,
             check=True,
         )
+        logger.info(f"Successfully reverted commit {commit_sha[:8]}")
         return True
     except subprocess.CalledProcessError as e:
         logger.error(f"Failed to revert commit '{commit_sha}': {e}")
+        if e.stderr:
+            logger.error(f"Git error: {e.stderr}")
+        return False
+    except Exception as e:
+        logger.error(f"Unexpected error reverting commit: {e}")
         return False
 
+@mcp_tool(name="git_cherry_pick")
 def cherry_pick(
     commit_sha: str, repository_path: str = None, no_commit: bool = False
 ) -> bool:
@@ -175,6 +183,7 @@ def cherry_pick(
         logger.error(f"Unexpected error cherry-picking commit: {e}")
         return False
 
+@mcp_tool(name="git_amend")
 def amend_commit(
     message: str = None,
     repository_path: str = None,

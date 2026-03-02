@@ -1,71 +1,59 @@
 # Agent Guidelines - Documents
 
-**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Module Overview
 
-Document processing: parsing, extraction, and transformation.
+Document processing: reading, writing, parsing, extraction, and transformation. Unified interface for multiple formats (MD, JSON, YAML, HTML, CSV, PDF, XML).
 
-## Key Classes
+## Key Classes & Functions
 
-- **DocumentParser** — Parse various formats
-- **TextExtractor** — Extract text content
-- **DocumentConverter** — Format conversion
-- **ChunkSplitter** — Split into chunks
+- **Document** — Core model holding content and `DocumentMetadata`.
+- **read_document / DocumentReader** — Unified reading with auto-detection.
+- **write_document / DocumentWriter** — Unified writing.
+- **convert_document** — Format conversion (e.g., Markdown to HTML).
+- **merge_documents / split_document** — Content manipulation.
+- **InMemoryIndex** — Basic search capabilities.
 
 ## Agent Instructions
 
-1. **Detect format** — Auto-detect document type
-2. **Extract metadata** — Title, author, date
-3. **Chunk for LLM** — Split large documents
-4. **Handle encoding** — UTF-8 by default
-5. **Preserve structure** — Maintain headings
+1. **Prefer read_document** — Let the module handle format and encoding detection.
+2. **Metadata first** — Use `doc.metadata.update()` to manage document properties.
+3. **Structured Content** — For CSV, JSON, and YAML, `doc.content` will be a native Python list or dict.
+4. **Transformations** — Use `convert_document` before merging if formats differ.
+5. **Zero-Mock Policy** — All tests must use real file I/O and functional implementations.
 
 ## Common Patterns
 
 ```python
 from codomyrmex.documents import (
-    DocumentParser, TextExtractor, ChunkSplitter
+    read_document, convert_document, split_document, DocumentFormat
 )
 
-# Parse document
-parser = DocumentParser()
-doc = parser.parse("report.pdf")
-print(f"Title: {doc.metadata.title}")
-print(f"Pages: {doc.page_count}")
+# Read and auto-detect
+doc = read_document("data.csv")
+print(f"Rows: {len(doc.content)}")
 
-# Extract text
-extractor = TextExtractor()
-text = extractor.extract("document.docx")
-text = extractor.extract_from_bytes(pdf_bytes, format="pdf")
+# Convert and Split
+md_doc = read_document("report.md")
+html_doc = convert_document(md_doc, DocumentFormat.HTML)
+sections = split_document(md_doc, {"method": "by_sections"})
 
-# Split into chunks for RAG
-splitter = ChunkSplitter(
-    chunk_size=1000,
-    overlap=100,
-    separator="paragraph"
-)
-chunks = splitter.split(text)
-for chunk in chunks:
-    embed_and_store(chunk)
-
-# Convert formats
-from codomyrmex.documents import DocumentConverter
-pdf = DocumentConverter.to_pdf("input.docx")
+# Search
+from codomyrmex.documents import create_index, index_document, search_documents
+index = create_index()
+index_document(md_doc, index)
+matches = search_documents("target keyword", index)
 ```
 
 ## Testing Patterns
 
 ```python
-# Verify parsing
-parser = DocumentParser()
-doc = parser.parse_string("# Heading\n\nText", format="markdown")
-assert doc.metadata is not None
-
-# Verify chunking
-splitter = ChunkSplitter(chunk_size=100)
-chunks = splitter.split("A" * 300)
-assert len(chunks) > 1
+# Use tmp_path fixture for zero-mock file tests
+def test_io(tmp_path):
+    f = tmp_path / "test.md"
+    write_document(Document("# Title", DocumentFormat.MARKDOWN), f)
+    assert read_document(f).metadata.title == "Title"
 ```
 
 ## PAI Agent Role Access Matrix
@@ -75,15 +63,6 @@ assert len(chunks) > 1
 | **Engineer** | Full | Direct Python import, class instantiation, full API access | TRUSTED |
 | **Architect** | Read + Design | API review, interface design, dependency analysis | OBSERVED |
 | **QATester** | Validation | Integration testing via pytest, output validation | OBSERVED |
-
-### Engineer Agent
-**Use Cases**: Process and convert documents (PDF, DOCX, Markdown) during BUILD/EXECUTE phases; chunk documents for RAG pipelines; direct module instantiation
-
-### Architect Agent
-**Use Cases**: Document pipeline design review, format support analysis, chunking strategy evaluation
-
-### QATester Agent
-**Use Cases**: Unit and integration test execution, document parsing validation, format conversion verification
 
 ## Navigation
 

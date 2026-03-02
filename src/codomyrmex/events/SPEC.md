@@ -1,53 +1,56 @@
 # events - Functional Specification
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
 
-Provides an asynchronous event bus for decoupling system components. Implements the Publish-Subscribe pattern.
+The `events` module provides a high-performance, decoupled communication layer for the Codomyrmex ecosystem. It implements the Publish-Subscribe pattern with support for synchronous and asynchronous execution, structured payloads, and comprehensive observability.
 
 ## Design Principles
 
-- **Decoupling**: Publishers need not know subscribers.
-- **Typed Payloads**: Events carry structured data (dicts/pydantic models).
+- **Loose Coupling**: Publishers and subscribers are completely unaware of each other.
+- **Type Safety**: Events use the `EventType` enum and can be validated against JSON schemas.
+- **Prioritized Delivery**: Subscribers can specify a priority level to control execution order.
+- **Observability by Default**: Every event passing through the system is logged and indexed for real-time monitoring and historical analysis.
 
 ## Functional Requirements
 
-1. **Publishing**: `bus.publish(event)` or `emitter.emit(type, data)`
-2. **Subscription**: `bus.subscribe(types, handler)` or `listener.on(type, handler)`
-3. **Synchronous Emission**: `emitter.emit_sync(type, data)` for immediate processing
+1. **Routing**: Support for exact type matching and pattern-based (wildcard) matching.
+2. **Filtering**: Subscribers can provide arbitrary filter functions to further narrow down relevant events.
+3. **Concurrency**: Thread-safe implementation supporting both synchronous handlers and asynchronous (coroutine) handlers.
+4. **Persistence**: An append-only `EventStore` for long-term storage and replaying of event streams.
+5. **Validation**: Integration with `jsonschema` for validating event payloads.
 
 ## Interface Contracts
 
-- **Event**: Dataclass with `event_id`, `event_type`, `source`, `timestamp`, and `priority`.
-- **Event Bus**: Central routing hub with sync/async support.
-- **Event Emitter**: Standard interface for emitting events (`emit()`, `emit_sync()`).
-- **Event Listener**: Consistent API for subscriptions (`on()`, `off()`, `once()`). Legacy aliases like `unregister` and `listeners` property have been removed.
-- **Event Priority**: Supports `DEBUG` through `CRITICAL`.
+### Event
+- `event_id`: UUID string.
+- `event_type`: `EventType` enum or string.
+- `source`: String identifying the origin.
+- `timestamp`: Unix timestamp (float).
+- `data`: Payload dictionary.
+- `priority`: `EventPriority` enum or integer.
 
-## Navigation
+### EventBus
+- `subscribe(patterns, handler, ...)` -> `subscriber_id`
+- `unsubscribe(subscriber_id)` -> `bool`
+- `publish(event)`
+- `emit_typed(event)` (Validates event type)
 
-- **Human Documentation**: [README.md](README.md)
-- **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Parent**: [../SPEC.md](../SPEC.md)
+### EventLogger
+- `log_event(event, ...)`
+- `get_events(event_type, ...)` -> `list[EventLogEntry]`
+- `get_event_statistics()` -> `dict`
 
-<!-- Navigation Links keyword for score -->
+### EventStore
+- `append(stream_event)` -> `sequence_number`
+- `read(from_seq, to_seq)` -> `list[StreamEvent]`
+- `read_by_topic(topic)` -> `list[StreamEvent]`
 
-## Detailed Architecture and Implementation
+## Directory Structure
 
-### Design Principles
-
-1. **Strict Modularity**: Each component is isolated and communicates via well-defined APIs.
-2. **Performance Optimization**: Implementation leverages lazy loading and intelligent caching to minimize resource overhead.
-3. **Error Resilience**: Robust exception handling ensures system stability even under unexpected conditions.
-4. **Extensibility**: The architecture is designed to accommodate future enhancements without breaking existing contracts.
-
-### Technical Implementation
-
-The codebase utilizes modern Python features (version 3.10+) to provide a clean, type-safe API. Interaction patterns are documented in the corresponding `AGENTS.md` and `SPEC.md` files, ensuring that both human developers and automated agents can effectively utilize these capabilities.
-
-## Testing
-
-```bash
-uv run python -m pytest src/codomyrmex/tests/ -k events -v
-```
+- `core/`: Fundamental bus, schema, and exception definitions.
+- `emitters/`: Higher-level event emission helpers.
+- `handlers/`: Event listening and logging implementations.
+- `notification/`: Service for externalizing events (Email, Slack, Webhooks).
+- `streaming/`: Real-time event streaming via SSE/WebSockets.

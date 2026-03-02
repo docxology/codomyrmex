@@ -1,21 +1,21 @@
 #!/usr/bin/env python3
 """
-File system utilities and operations.
+File system utilities and operations - Orchestrator script.
 
+This script demonstrates the use of the codomyrmex.file_system module.
 Usage:
     python fs_utils.py <command> [options]
 """
 
 import sys
+import argparse
 from pathlib import Path
 
-try:
-    import codomyrmex  # noqa: F401
-except ImportError:
-    project_root = Path(__file__).resolve().parent.parent.parent
-    sys.path.insert(0, str(project_root / "src"))
+# Add src to sys.path for local development
+project_root = Path(__file__).resolve().parent.parent.parent
+sys.path.insert(0, str(project_root / "src"))
 
-import argparse
+from codomyrmex.file_system import create_file_system_manager
 
 
 def format_size(bytes: int) -> str:
@@ -27,57 +27,16 @@ def format_size(bytes: int) -> str:
     return f"{bytes:.1f} TB"
 
 
-def analyze_directory(path: Path) -> dict:
-    """Analyze directory contents."""
-    stats = {
-        "files": 0, "dirs": 0, "total_size": 0,
-        "by_ext": {}, "largest": []
-    }
-    
-    for item in path.rglob("*"):
-        if item.is_file():
-            size = item.stat().st_size
-            stats["files"] += 1
-            stats["total_size"] += size
-            
-            ext = item.suffix.lower() or "no_ext"
-            if ext not in stats["by_ext"]:
-                stats["by_ext"][ext] = {"count": 0, "size": 0}
-            stats["by_ext"][ext]["count"] += 1
-            stats["by_ext"][ext]["size"] += size
-            
-            stats["largest"].append((size, str(item)))
-        elif item.is_dir():
-            stats["dirs"] += 1
-    
-    stats["largest"] = sorted(stats["largest"], reverse=True)[:10]
-    return stats
-
-
-def find_duplicates(path: Path) -> list:
-    """Find potential duplicate files by size."""
-    by_size = {}
-    
-    for f in path.rglob("*"):
-        if f.is_file():
-            size = f.stat().st_size
-            if size not in by_size:
-                by_size[size] = []
-            by_size[size].append(str(f))
-    
-    return [(size, files) for size, files in by_size.items() if len(files) > 1 and size > 1024]
-
-
 def main():
-    parser = argparse.ArgumentParser(description="File system utilities")
+    parser = argparse.ArgumentParser(description="Codomyrmex File System Utilities")
     subparsers = parser.add_subparsers(dest="command")
     
     # Analyze command
-    analyze = subparsers.add_parser("analyze", help="Analyze directory")
+    analyze = subparsers.add_parser("analyze", help="Analyze directory contents")
     analyze.add_argument("path", default=".", nargs="?")
     
     # Duplicates command
-    dups = subparsers.add_parser("duplicates", help="Find potential duplicates")
+    dups = subparsers.add_parser("duplicates", help="Find duplicate files")
     dups.add_argument("path", default=".", nargs="?")
     
     # Tree command
@@ -85,14 +44,21 @@ def main():
     tree.add_argument("path", default=".", nargs="?")
     tree.add_argument("--depth", "-d", type=int, default=3)
     
+    # Disk command
+    disk = subparsers.add_parser("disk", help="Show disk usage")
+    disk.add_argument("path", default=".", nargs="?")
+    
     args = parser.parse_args()
     
+    fs = create_file_system_manager()
+    
     if not args.command:
-        print("📁 File System Utilities\n")
+        print("📁 Codomyrmex File System Utilities\n")
         print("Commands:")
         print("  analyze    - Analyze directory contents")
-        print("  duplicates - Find potential duplicate files")
+        print("  duplicates - Find duplicate files")
         print("  tree       - Show directory tree")
+        print("  disk       - Show disk usage")
         print("\nExamples:")
         print("  python fs_utils.py analyze src/")
         print("  python fs_utils.py duplicates .")
@@ -106,33 +72,42 @@ def main():
             return 1
         
         print(f"📊 Analyzing: {path}\n")
-        stats = analyze_directory(path)
+        items = fs.list_dir(path, recursive=True)
         
-        print(f"   Files: {stats['files']}")
-        print(f"   Directories: {stats['dirs']}")
-        print(f"   Total size: {format_size(stats['total_size'])}")
+        files = [i for i in items if i.is_file()]
+        dirs = [i for i in items if i.is_dir()]
+        total_size = sum(f.stat().st_size for f in files)
         
+        print(f"   Files: {len(files)}")
+        print(f"   Directories: {len(dirs)}")
+        print(f"   Total size: {format_size(total_size)}")
+        
+        # Extension stats
+        ext_stats = {}
+        for f in files:
+            ext = f.suffix.lower() or "no_ext"
+            if ext not in ext_stats:
+                ext_stats[ext] = {"count": 0, "size": 0}
+            ext_stats[ext]["count"] += 1
+            ext_stats[ext]["size"] += f.stat().st_size
+            
         print("\n   By extension:")
-        sorted_ext = sorted(stats['by_ext'].items(), key=lambda x: -x[1]['size'])
+        sorted_ext = sorted(ext_stats.items(), key=lambda x: -x[1]['size'])
         for ext, data in sorted_ext[:10]:
             print(f"     {ext}: {data['count']} files, {format_size(data['size'])}")
-        
-        if stats['largest']:
-            print("\n   Largest files:")
-            for size, name in stats['largest'][:5]:
-                print(f"     {format_size(size)}: {Path(name).name}")
     
     elif args.command == "duplicates":
         path = Path(args.path)
         print(f"🔍 Finding duplicates in: {path}\n")
         
-        dups = find_duplicates(path)
-        if dups:
-            print(f"   Found {len(dups)} potential duplicate groups:\n")
-            for size, files in sorted(dups, reverse=True)[:10]:
-                print(f"   {format_size(size)}:")
-                for f in files[:3]:
-                    print(f"     - {Path(f).name}")
+        duplicates = fs.find_duplicates(path)
+        if duplicates:
+            print(f"   Found {len(duplicates)} duplicate groups:\n")
+            for h, paths in sorted(duplicates.items(), key=lambda x: -x[1][0].stat().st_size)[:10]:
+                size = paths[0].stat().st_size
+                print(f"   {format_size(size)} (Hash: {h[:12]}...):")
+                for p in paths[:3]:
+                    print(f"     - {p.relative_to(path)}")
         else:
             print("   No duplicates found")
     
@@ -143,7 +118,12 @@ def main():
         def print_tree(p, prefix="", depth=0, max_depth=3):
             if depth >= max_depth:
                 return
-            items = sorted(p.iterdir(), key=lambda x: (x.is_file(), x.name))
+            try:
+                items = sorted(fs.list_dir(p), key=lambda x: (x.is_file(), x.name))
+            except PermissionError:
+                print(f"{prefix}└── [Permission Denied]")
+                return
+                
             for i, item in enumerate(items[:20]):
                 is_last = i == len(items) - 1 or i == 19
                 connector = "└── " if is_last else "├── "
@@ -153,6 +133,14 @@ def main():
                     print_tree(item, prefix + ext, depth + 1, max_depth)
         
         print_tree(path, max_depth=args.depth)
+
+    elif args.command == "disk":
+        path = Path(args.path)
+        usage = fs.get_disk_usage(path)
+        print(f"💾 Disk Usage for: {path.resolve()}\n")
+        print(f"   Total: {format_size(usage['total'])}")
+        print(f"   Used:  {format_size(usage['used'])} ({usage['percent']:.1f}%)")
+        print(f"   Free:  {format_size(usage['free'])}")
     
     return 0
 

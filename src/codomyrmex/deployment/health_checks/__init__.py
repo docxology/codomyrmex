@@ -5,16 +5,18 @@ Provides health check utilities for deployment monitoring.
 """
 
 import asyncio
-import json
 import socket
 import time
 import urllib.request
 from abc import ABC, abstractmethod
-from collections.abc import Callable
 from dataclasses import dataclass, field
-from datetime import datetime, timedelta
+from datetime import datetime
 from enum import Enum
 from typing import Any, Optional
+
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
+
+logger = get_logger(__name__)
 
 
 class HealthStatus(Enum):
@@ -23,6 +25,7 @@ class HealthStatus(Enum):
     UNHEALTHY = "unhealthy"
     DEGRADED = "degraded"
     UNKNOWN = "unknown"
+
 
 @dataclass
 class HealthCheckResult:
@@ -44,6 +47,7 @@ class HealthCheckResult:
             "timestamp": self.timestamp.isoformat(),
             "details": self.details,
         }
+
 
 @dataclass
 class AggregatedHealth:
@@ -71,6 +75,7 @@ class AggregatedHealth:
             "timestamp": self.timestamp.isoformat(),
         }
 
+
 class HealthCheck(ABC):
     """Abstract base class for health checks."""
 
@@ -87,12 +92,12 @@ class HealthCheck(ABC):
     @abstractmethod
     def check(self) -> HealthCheckResult:
         """Perform the health check."""
-        pass
 
     async def check_async(self) -> HealthCheckResult:
         """Perform the health check asynchronously."""
         loop = asyncio.get_event_loop()
         return await loop.run_in_executor(None, self.check)
+
 
 class HTTPHealthCheck(HealthCheck):
     """HTTP endpoint health check."""
@@ -118,14 +123,12 @@ class HTTPHealthCheck(HealthCheck):
     def check(self) -> HealthCheckResult:
         """Check the condition and return the result."""
         start_time = time.time()
-
         try:
             request = urllib.request.Request(
                 self.url,
                 method=self.method,
                 headers=self.headers,
             )
-
             with urllib.request.urlopen(request, timeout=self.timeout) as response:
                 latency_ms = (time.time() - start_time) * 1000
                 body = response.read().decode('utf-8')
@@ -155,15 +158,16 @@ class HTTPHealthCheck(HealthCheck):
                     latency_ms=latency_ms,
                     details={"status_code": status_code},
                 )
-
         except Exception as e:
             latency_ms = (time.time() - start_time) * 1000
+            logger.debug("HTTP health check failed for %s: %s", self.url, e)
             return HealthCheckResult(
                 name=self.name,
                 status=HealthStatus.UNHEALTHY,
                 message=str(e),
                 latency_ms=latency_ms,
             )
+
 
 class TCPHealthCheck(HealthCheck):
     """TCP port connectivity health check."""
@@ -183,7 +187,6 @@ class TCPHealthCheck(HealthCheck):
     def check(self) -> HealthCheckResult:
         """Check the condition and return the result."""
         start_time = time.time()
-
         try:
             sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             sock.settimeout(self.timeout)
@@ -191,7 +194,6 @@ class TCPHealthCheck(HealthCheck):
             sock.close()
 
             latency_ms = (time.time() - start_time) * 1000
-
             if result == 0:
                 return HealthCheckResult(
                     name=self.name,
@@ -200,15 +202,13 @@ class TCPHealthCheck(HealthCheck):
                     latency_ms=latency_ms,
                     details={"host": self.host, "port": self.port},
                 )
-            else:
-                return HealthCheckResult(
-                    name=self.name,
-                    status=HealthStatus.UNHEALTHY,
-                    message=f"Port {self.port} is closed",
-                    latency_ms=latency_ms,
-                    details={"host": self.host, "port": self.port},
-                )
-
+            return HealthCheckResult(
+                name=self.name,
+                status=HealthStatus.UNHEALTHY,
+                message=f"Port {self.port} is closed",
+                latency_ms=latency_ms,
+                details={"host": self.host, "port": self.port},
+            )
         except Exception as e:
             latency_ms = (time.time() - start_time) * 1000
             return HealthCheckResult(
@@ -217,6 +217,7 @@ class TCPHealthCheck(HealthCheck):
                 message=str(e),
                 latency_ms=latency_ms,
             )
+
 
 class CommandHealthCheck(HealthCheck):
     """Command execution health check."""
@@ -238,9 +239,7 @@ class CommandHealthCheck(HealthCheck):
     def check(self) -> HealthCheckResult:
         """Check the condition and return the result."""
         import subprocess
-
         start_time = time.time()
-
         try:
             result = subprocess.run(
                 self.command,
@@ -248,7 +247,6 @@ class CommandHealthCheck(HealthCheck):
                 text=True,
                 timeout=self.timeout,
             )
-
             latency_ms = (time.time() - start_time) * 1000
 
             if result.returncode != self.expected_exit_code:
@@ -274,7 +272,6 @@ class CommandHealthCheck(HealthCheck):
                 message="OK",
                 latency_ms=latency_ms,
             )
-
         except subprocess.TimeoutExpired:
             latency_ms = (time.time() - start_time) * 1000
             return HealthCheckResult(
@@ -291,6 +288,7 @@ class CommandHealthCheck(HealthCheck):
                 message=str(e),
                 latency_ms=latency_ms,
             )
+
 
 class MemoryHealthCheck(HealthCheck):
     """Memory usage health check."""
@@ -310,7 +308,6 @@ class MemoryHealthCheck(HealthCheck):
     def check(self) -> HealthCheckResult:
         """Check the condition and return the result."""
         start_time = time.time()
-
         try:
             import psutil
             memory = psutil.virtual_memory()
@@ -339,15 +336,13 @@ class MemoryHealthCheck(HealthCheck):
                     latency_ms=latency_ms,
                     details=details,
                 )
-            else:
-                return HealthCheckResult(
-                    name=self.name,
-                    status=HealthStatus.HEALTHY,
-                    message=f"Memory usage: {percent}%",
-                    latency_ms=latency_ms,
-                    details=details,
-                )
-
+            return HealthCheckResult(
+                name=self.name,
+                status=HealthStatus.HEALTHY,
+                message=f"Memory usage: {percent}%",
+                latency_ms=latency_ms,
+                details=details,
+            )
         except ImportError:
             return HealthCheckResult(
                 name=self.name,
@@ -360,6 +355,7 @@ class MemoryHealthCheck(HealthCheck):
                 status=HealthStatus.UNHEALTHY,
                 message=str(e),
             )
+
 
 class DiskHealthCheck(HealthCheck):
     """Disk space health check."""
@@ -381,7 +377,6 @@ class DiskHealthCheck(HealthCheck):
     def check(self) -> HealthCheckResult:
         """Check the condition and return the result."""
         start_time = time.time()
-
         try:
             import shutil
             usage = shutil.disk_usage(self.path)
@@ -411,21 +406,20 @@ class DiskHealthCheck(HealthCheck):
                     latency_ms=latency_ms,
                     details=details,
                 )
-            else:
-                return HealthCheckResult(
-                    name=self.name,
-                    status=HealthStatus.HEALTHY,
-                    message=f"Disk usage: {percent:.1f}%",
-                    latency_ms=latency_ms,
-                    details=details,
-                )
-
+            return HealthCheckResult(
+                name=self.name,
+                status=HealthStatus.HEALTHY,
+                message=f"Disk usage: {percent:.1f}%",
+                latency_ms=latency_ms,
+                details=details,
+            )
         except Exception as e:
             return HealthCheckResult(
                 name=self.name,
                 status=HealthStatus.UNHEALTHY,
                 message=str(e),
             )
+
 
 class HealthChecker:
     """Manages multiple health checks."""
@@ -442,7 +436,6 @@ class HealthChecker:
         """Run all health checks."""
         results = [check.check() for check in self.checks]
         overall = self._determine_overall_status(results)
-
         return AggregatedHealth(
             overall_status=overall,
             checks=results,
@@ -453,7 +446,6 @@ class HealthChecker:
         tasks = [check.check_async() for check in self.checks]
         results = await asyncio.gather(*tasks)
         overall = self._determine_overall_status(results)
-
         return AggregatedHealth(
             overall_status=overall,
             checks=results,
@@ -480,6 +472,7 @@ class HealthChecker:
             return HealthStatus.DEGRADED
 
         return HealthStatus.HEALTHY
+
 
 __all__ = [
     "HealthStatus",

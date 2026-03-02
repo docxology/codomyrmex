@@ -15,102 +15,291 @@ from .base import CodomyrmexError
 # Performance and Monitoring
 class PerformanceError(CodomyrmexError):
     """Raised when performance monitoring operations fail."""
-    pass
+
+    def __init__(
+        self,
+        message: str,
+        metric_name: str | None = None,
+        threshold: float | None = None,
+        **kwargs: Any,
+    ) -> None:
+        super().__init__(message, **kwargs)
+        if metric_name:
+            self.context["metric_name"] = metric_name
+        if threshold is not None:
+            self.context["threshold"] = threshold
 
 
 class LoggingError(CodomyrmexError):
     """Raised when logging operations fail."""
-    pass
+
+    def __init__(
+        self,
+        message: str,
+        logger_name: str | None = None,
+        level: str | None = None,
+        **kwargs: Any,
+    ) -> None:
+        super().__init__(message, **kwargs)
+        if logger_name:
+            self.context["logger_name"] = logger_name
+        if level:
+            self.context["level"] = level
 
 
 # System Discovery
 class SystemDiscoveryError(CodomyrmexError):
     """Raised when system discovery operations fail."""
-    pass
+
+    def __init__(
+        self,
+        message: str,
+        discovery_scope: str | None = None,
+        **kwargs: Any,
+    ) -> None:
+        super().__init__(message, **kwargs)
+        if discovery_scope:
+            self.context["discovery_scope"] = discovery_scope
 
 
 class CapabilityScanError(CodomyrmexError):
     """Raised when capability scanning fails."""
-    pass
+
+    def __init__(
+        self,
+        message: str,
+        capability_name: str | None = None,
+        **kwargs: Any,
+    ) -> None:
+        super().__init__(message, **kwargs)
+        if capability_name:
+            self.context["capability_name"] = capability_name
 
 
 # 3D Modeling and Physical Management
 class Modeling3DError(CodomyrmexError):
     """Raised when 3D modeling operations fail."""
-    pass
+
+    def __init__(
+        self,
+        message: str,
+        model_format: str | None = None,
+        **kwargs: Any,
+    ) -> None:
+        super().__init__(message, **kwargs)
+        if model_format:
+            self.context["model_format"] = model_format
 
 
 class PhysicalManagementError(CodomyrmexError):
     """Raised when physical management operations fail."""
-    pass
+
+    def __init__(
+        self,
+        message: str,
+        device_id: str | None = None,
+        **kwargs: Any,
+    ) -> None:
+        super().__init__(message, **kwargs)
+        if device_id:
+            self.context["device_id"] = device_id
 
 
 class SimulationError(CodomyrmexError):
     """Raised when simulation operations fail."""
-    pass
+
+    def __init__(
+        self,
+        message: str,
+        simulation_id: str | None = None,
+        engine: str | None = None,
+        **kwargs: Any,
+    ) -> None:
+        super().__init__(message, **kwargs)
+        if simulation_id:
+            self.context["simulation_id"] = simulation_id
+        if engine:
+            self.context["engine"] = engine
 
 
 # Terminal and Interface
 class TerminalError(CodomyrmexError):
     """Raised when terminal interface operations fail."""
-    pass
+
+    def __init__(
+        self,
+        message: str,
+        terminal_type: str | None = None,
+        **kwargs: Any,
+    ) -> None:
+        super().__init__(message, **kwargs)
+        if terminal_type:
+            self.context["terminal_type"] = terminal_type
 
 
-class InteractiveShellError(CodomyrmexError):
+class InteractiveShellError(TerminalError):
     """Raised when interactive shell operations fail."""
-    pass
+
+    def __init__(
+        self,
+        message: str,
+        shell_name: str | None = None,
+        **kwargs: Any,
+    ) -> None:
+        super().__init__(message, **kwargs)
+        if shell_name:
+            self.context["shell_name"] = shell_name
 
 
 # Database
 class DatabaseError(CodomyrmexError):
     """Raised when database operations fail."""
-    pass
+
+    def __init__(
+        self,
+        message: str,
+        db_name: str | None = None,
+        query: str | None = None,
+        **kwargs: Any,
+    ) -> None:
+        super().__init__(message, **kwargs)
+        if db_name:
+            self.context["db_name"] = db_name
+        if query:
+            self.context["query"] = query
 
 
 # CI/CD
 class CICDError(CodomyrmexError):
     """Raised when CI/CD operations fail."""
-    pass
+
+    def __init__(
+        self,
+        message: str,
+        pipeline_id: str | None = None,
+        stage: str | None = None,
+        **kwargs: Any,
+    ) -> None:
+        super().__init__(message, **kwargs)
+        if pipeline_id:
+            self.context["pipeline_id"] = pipeline_id
+        if stage:
+            self.context["stage"] = stage
 
 
 class DeploymentError(CodomyrmexError):
     """Raised when deployment operations fail."""
-    pass
+
+    def __init__(
+        self,
+        message: str,
+        environment: str | None = None,
+        version: str | None = None,
+        **kwargs: Any,
+    ) -> None:
+        super().__init__(message, **kwargs)
+        if environment:
+            self.context["environment"] = environment
+        if version:
+            self.context["version"] = version
 
 
 # Resource
 class ResourceError(CodomyrmexError):
     """Raised when resource operations fail."""
-    pass
+
+    def __init__(
+        self,
+        message: str,
+        resource_id: str | None = None,
+        resource_type: str | None = None,
+        **kwargs: Any,
+    ) -> None:
+        super().__init__(message, **kwargs)
+        if resource_id:
+            self.context["resource_id"] = resource_id
+        if resource_type:
+            self.context["resource_type"] = resource_type
 
 
-class MemoryError(CodomyrmexError):
+class MemoryError(ResourceError):
     """Raised when memory-related errors occur."""
-    pass
+
+    def __init__(
+        self,
+        message: str,
+        memory_usage: int | None = None,
+        limit: int | None = None,
+        **kwargs: Any,
+    ) -> None:
+        super().__init__(message, **kwargs)
+        if memory_usage is not None:
+            self.context["memory_usage"] = memory_usage
+        if limit is not None:
+            self.context["limit"] = limit
 
 
 # Spatial
 class SpatialError(CodomyrmexError):
     """Raised when spatial operations fail."""
-    pass
+
+    def __init__(
+        self,
+        message: str,
+        coordinate_system: str | None = None,
+        **kwargs: Any,
+    ) -> None:
+        super().__init__(message, **kwargs)
+        if coordinate_system:
+            self.context["coordinate_system"] = coordinate_system
 
 
 # Events
 class EventError(CodomyrmexError):
     """Raised when event processing fails."""
-    pass
+
+    def __init__(
+        self,
+        message: str,
+        event_type: str | None = None,
+        event_id: str | None = None,
+        **kwargs: Any,
+    ) -> None:
+        super().__init__(message, **kwargs)
+        if event_type:
+            self.context["event_type"] = event_type
+        if event_id:
+            self.context["event_id"] = event_id
 
 
 # Skills
 class SkillError(CodomyrmexError):
     """Raised when skill execution fails."""
-    pass
+
+    def __init__(
+        self,
+        message: str,
+        skill_name: str | None = None,
+        **kwargs: Any,
+    ) -> None:
+        super().__init__(message, **kwargs)
+        if skill_name:
+            self.context["skill_name"] = skill_name
 
 
 # Templates
 class TemplateError(CodomyrmexError):
     """Raised when template operations fail."""
-    pass
+
+    def __init__(
+        self,
+        message: str,
+        template_name: str | None = None,
+        **kwargs: Any,
+    ) -> None:
+        super().__init__(message, **kwargs)
+        if template_name:
+            self.context["template_name"] = template_name
 
 
 # Plugins
@@ -134,7 +323,19 @@ class PluginError(CodomyrmexError):
 # Auth
 class AuthenticationError(CodomyrmexError):
     """Raised when authentication fails."""
-    pass
+
+    def __init__(
+        self,
+        message: str,
+        identity: str | None = None,
+        mechanism: str | None = None,
+        **kwargs: Any,
+    ) -> None:
+        super().__init__(message, **kwargs)
+        if identity:
+            self.context["identity"] = identity
+        if mechanism:
+            self.context["mechanism"] = mechanism
 
 
 # Circuit Breaker / Bulkhead (non-CodomyrmexError)
@@ -151,39 +352,108 @@ class BulkheadFullError(Exception):
 # Compression
 class CompressionError(CodomyrmexError):
     """Raised when compression operations fail."""
-    pass
+
+    def __init__(
+        self,
+        message: str,
+        algorithm: str | None = None,
+        **kwargs: Any,
+    ) -> None:
+        super().__init__(message, **kwargs)
+        if algorithm:
+            self.context["algorithm"] = algorithm
 
 
 # Encryption
 class EncryptionError(CodomyrmexError):
     """Raised when encryption operations fail."""
-    pass
+
+    def __init__(
+        self,
+        message: str,
+        algorithm: str | None = None,
+        key_id: str | None = None,
+        **kwargs: Any,
+    ) -> None:
+        super().__init__(message, **kwargs)
+        if algorithm:
+            self.context["algorithm"] = algorithm
+        if key_id:
+            self.context["key_id"] = key_id
 
 
 # IDE
 class IDEError(CodomyrmexError):
     """Base exception for IDE-related errors."""
-    pass
+
+    def __init__(
+        self,
+        message: str,
+        ide_name: str | None = None,
+        **kwargs: Any,
+    ) -> None:
+        super().__init__(message, **kwargs)
+        if ide_name:
+            self.context["ide_name"] = ide_name
 
 
 class IDEConnectionError(IDEError):
     """Raised when IDE connection fails."""
-    pass
+
+    def __init__(
+        self,
+        message: str,
+        host: str | None = None,
+        port: int | None = None,
+        **kwargs: Any,
+    ) -> None:
+        super().__init__(message, **kwargs)
+        if host:
+            self.context["host"] = host
+        if port is not None:
+            self.context["port"] = port
 
 
 class CommandExecutionError(IDEError):
     """Raised when an IDE command fails to execute."""
-    pass
+
+    def __init__(
+        self,
+        message: str,
+        command_name: str | None = None,
+        **kwargs: Any,
+    ) -> None:
+        super().__init__(message, **kwargs)
+        if command_name:
+            self.context["command_name"] = command_name
 
 
 class SessionError(IDEError):
     """Raised when there's a session-related error."""
-    pass
+
+    def __init__(
+        self,
+        message: str,
+        session_id: str | None = None,
+        **kwargs: Any,
+    ) -> None:
+        super().__init__(message, **kwargs)
+        if session_id:
+            self.context["session_id"] = session_id
 
 
 class ArtifactError(IDEError):
     """Raised when artifact operations fail."""
-    pass
+
+    def __init__(
+        self,
+        message: str,
+        artifact_id: str | None = None,
+        **kwargs: Any,
+    ) -> None:
+        super().__init__(message, **kwargs)
+        if artifact_id:
+            self.context["artifact_id"] = artifact_id
 
 
 # Cache

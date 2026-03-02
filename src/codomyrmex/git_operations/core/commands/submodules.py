@@ -2,9 +2,11 @@ import os
 import subprocess
 
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
+from codomyrmex.model_context_protocol.decorators import mcp_tool
 
 logger = get_logger(__name__)
 
+@mcp_tool()
 def init_submodules(repository_path: str = None) -> bool:
     """Initialize and update submodules."""
     if repository_path is None:
@@ -22,8 +24,14 @@ def init_submodules(repository_path: str = None) -> bool:
         return True
     except subprocess.CalledProcessError as e:
         logger.error(f"Failed to init submodules: {e}")
+        if e.stderr:
+            logger.error(f"Git error: {e.stderr}")
+        return False
+    except Exception as e:
+        logger.error(f"Unexpected error initializing submodules: {e}")
         return False
 
+@mcp_tool()
 def update_submodules(repository_path: str = None) -> bool:
     """Update submodules to latest commit."""
     if repository_path is None:
@@ -41,5 +49,9 @@ def update_submodules(repository_path: str = None) -> bool:
         return True
     except subprocess.CalledProcessError as e:
         logger.error(f"Failed to update submodules: {e}")
+        if e.stderr:
+            logger.error(f"Git error: {e.stderr}")
         return False
-
+    except Exception as e:
+        logger.error(f"Unexpected error updating submodules: {e}")
+        return False

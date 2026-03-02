@@ -1,7 +1,7 @@
-"""Tests for deployment strategies module.
+"""
+Unit tests for deployment.strategies — Zero-Mock compliant.
 
-Covers DeploymentState, RollingStrategy, CanaryStrategy,
-BlueGreenStrategy, and FeatureFlagStrategy.
+Covers RollingDeployment, CanaryDeployment, and BlueGreenDeployment.
 """
 
 from __future__ import annotations
@@ -10,276 +10,196 @@ import time
 
 import pytest
 
-from codomyrmex.deployment.strategies.strategies import (
-    BlueGreenStrategy,
-    CanaryStrategy,
+from codomyrmex.deployment.strategies import (
+    BlueGreenDeployment,
+    CanaryDeployment,
     DeploymentState,
-    DeploymentStrategy,
-    FeatureFlagStrategy,
-    RollingStrategy,
+    DeploymentTarget,
+    RollingDeployment,
 )
 
-# ---------------------------------------------------------------------------
-# DeploymentState dataclass
-# ---------------------------------------------------------------------------
+
+@pytest.mark.unit
+class TestRollingDeployment:
+    """Tests for RollingDeployment strategy."""
+
+    def test_deploy_all_success(self):
+        """Standard rolling deploy with all targets succeeding."""
+        strat = RollingDeployment(batch_size=1, delay_seconds=0)
+        targets = [
+            DeploymentTarget(id="t1", name="target1", address="1.1.1.1"),
+            DeploymentTarget(id="t2", name="target2", address="1.1.1.2"),
+        ]
+
+        def deploy_fn(target, version):
+            return True
+
+        result = strat.deploy(targets, "v2.0", deploy_fn)
+
+        assert result.success is True
+        assert result.targets_updated == 2
+        assert result.targets_failed == 0
+        assert result.state == DeploymentState.COMPLETED
+        assert targets[0].version == "v2.0"
+        assert targets[1].version == "v2.0"
+
+    def test_deploy_with_failure(self):
+        """Rolling deploy where one target fails."""
+        strat = RollingDeployment(batch_size=1, delay_seconds=0)
+        targets = [
+            DeploymentTarget(id="t1", name="target1", address="1.1.1.1"),
+            DeploymentTarget(id="t2", name="target2", address="1.1.1.2"),
+        ]
+
+        def deploy_fn(target, version):
+            return target.id == "t1"
+
+        result = strat.deploy(targets, "v2.0", deploy_fn)
+
+        assert result.success is False
+        assert result.targets_updated == 1
+        assert result.targets_failed == 1
+        assert result.state == DeploymentState.FAILED
+        assert targets[0].version == "v2.0"
+        assert targets[1].version is None
+
+    def test_deploy_with_health_check(self):
+        """Rolling deploy with an integrated health check."""
+        def health_check(target):
+            return target.id == "t1"
+
+        strat = RollingDeployment(batch_size=1, delay_seconds=0, health_check=health_check)
+        targets = [
+            DeploymentTarget(id="t1", name="target1", address="1.1.1.1"),
+            DeploymentTarget(id="t2", name="target2", address="1.1.1.2"),
+        ]
+
+        def deploy_fn(target, version):
+            return True
+
+        result = strat.deploy(targets, "v2.0", deploy_fn)
+
+        assert result.success is False
+        assert result.targets_updated == 1
+        assert result.targets_failed == 1
+        assert targets[0].healthy is True
+        assert targets[1].healthy is False
 
 
 @pytest.mark.unit
-class TestDeploymentState:
-    """Tests for the DeploymentState dataclass."""
+class TestBlueGreenDeployment:
+    """Tests for BlueGreenDeployment strategy."""
 
-    def test_default_construction(self) -> None:
-        """Minimal construction fills sensible defaults."""
-        state = DeploymentState(service="svc", version="1.0", strategy="rolling")
-        assert state.service == "svc"
-        assert state.version == "1.0"
-        assert state.strategy == "rolling"
-        assert state.status == "pending"
-        assert state.completed_at is None
-        assert state.traffic_percentage == 0.0
-        assert state.metadata == {}
+    def test_deploy_success_with_switch(self):
+        """Blue-green deploy with successful switch."""
+        switched_version = None
 
-    def test_started_at_is_set_automatically(self) -> None:
-        """started_at should be approximately now."""
-        before = time.time()
-        state = DeploymentState(service="s", version="v", strategy="x")
-        after = time.time()
-        assert before <= state.started_at <= after
+        def switch_fn(version):
+            nonlocal switched_version
+            switched_version = version
+            return True
 
-    def test_duration_seconds_while_running(self) -> None:
-        """Duration with no completed_at uses current time."""
-        state = DeploymentState(service="s", version="v", strategy="x")
-        state.started_at = time.time() - 5.0
-        dur = state.duration_seconds
-        assert dur >= 4.5  # generous lower bound
+        strat = BlueGreenDeployment(switch_fn=switch_fn)
+        targets = [
+            DeploymentTarget(id="t1", name="target1", address="1.1.1.1"),
+        ]
 
-    def test_duration_seconds_when_completed(self) -> None:
-        """Duration with completed_at uses that timestamp."""
-        state = DeploymentState(service="s", version="v", strategy="x")
-        state.started_at = 1000.0
-        state.completed_at = 1010.0
-        assert state.duration_seconds == pytest.approx(10.0)
+        result = strat.deploy(targets, "v2.0", lambda t, v: True)
 
-    def test_complete_method(self) -> None:
-        """complete() sets status, completed_at, and traffic to 100."""
-        state = DeploymentState(service="s", version="v", strategy="x")
-        state.complete()
-        assert state.status == "completed"
-        assert state.completed_at is not None
-        assert state.traffic_percentage == 100.0
+        assert result.success is True
+        assert result.state == DeploymentState.COMPLETED
+        assert switched_version == "v2.0"
+        assert result.metadata["active_slot"] == "green"
 
-    def test_fail_method_default_reason(self) -> None:
-        """fail() sets status and records empty reason by default."""
-        state = DeploymentState(service="s", version="v", strategy="x")
-        state.fail()
-        assert state.status == "failed"
-        assert state.completed_at is not None
-        assert state.metadata["failure_reason"] == ""
+    def test_deploy_failure_no_switch(self):
+        """Blue-green deploy that fails during target update, preventing switch."""
+        switched_version = None
 
-    def test_fail_method_with_reason(self) -> None:
-        """fail(reason) records the failure reason in metadata."""
-        state = DeploymentState(service="s", version="v", strategy="x")
-        state.fail("timeout")
-        assert state.metadata["failure_reason"] == "timeout"
+        def switch_fn(version):
+            nonlocal switched_version
+            switched_version = version
+            return True
 
-    def test_metadata_is_independent_between_instances(self) -> None:
-        """Each DeploymentState gets its own metadata dict."""
-        a = DeploymentState(service="a", version="1", strategy="x")
-        b = DeploymentState(service="b", version="2", strategy="y")
-        a.metadata["key"] = "val"
-        assert "key" not in b.metadata
+        strat = BlueGreenDeployment(switch_fn=switch_fn)
+        targets = [
+            DeploymentTarget(id="t1", name="target1", address="1.1.1.1"),
+        ]
 
+        result = strat.deploy(targets, "v2.0", lambda t, v: False)
 
-# ---------------------------------------------------------------------------
-# DeploymentStrategy ABC
-# ---------------------------------------------------------------------------
+        assert result.success is False
+        assert result.state == DeploymentState.FAILED
+        assert switched_version is None
+        assert result.metadata["active_slot"] == "blue"
+
+    def test_rollback(self):
+        """Blue-green rollback should trigger switch back."""
+        switched_version = None
+
+        def switch_fn(version):
+            nonlocal switched_version
+            switched_version = version
+            return True
+
+        strat = BlueGreenDeployment(switch_fn=switch_fn)
+        targets = [DeploymentTarget(id="t1", name="t1", address="")]
+
+        result = strat.rollback(targets, "v1.0", lambda t, v: True)
+
+        assert result.success is True
+        assert result.state == DeploymentState.ROLLED_BACK
+        assert switched_version == "v1.0"
+        assert result.metadata["active_slot"] == "blue"
 
 
 @pytest.mark.unit
-class TestDeploymentStrategyABC:
-    """Verify that DeploymentStrategy cannot be instantiated directly."""
+class TestCanaryDeployment:
+    """Tests for CanaryDeployment strategy."""
 
-    def test_cannot_instantiate_abstract(self) -> None:
-        with pytest.raises(TypeError):
-            DeploymentStrategy()  # type: ignore[abstract]
+    def test_deploy_full_success(self):
+        """Canary deploy through all stages successfully."""
+        strat = CanaryDeployment(stages=[50.0, 100.0], stage_duration_seconds=0)
+        targets = [
+            DeploymentTarget(id="t1", name="t1", address=""),
+            DeploymentTarget(id="t2", name="t2", address=""),
+            DeploymentTarget(id="t3", name="t3", address=""),
+            DeploymentTarget(id="t4", name="t4", address=""),
+        ]
 
+        result = strat.deploy(targets, "v2.0", lambda t, v: True)
 
-# ---------------------------------------------------------------------------
-# RollingStrategy
-# ---------------------------------------------------------------------------
+        assert result.success is True
+        assert result.targets_updated == 4
+        assert result.state == DeploymentState.COMPLETED
+        for t in targets:
+            assert t.version == "v2.0"
 
+    def test_deploy_aborted_by_threshold(self):
+        """Canary deploy aborted when success rate falls below threshold."""
+        strat = CanaryDeployment(stages=[50.0, 100.0], success_threshold=0.9)
+        targets = [
+            DeploymentTarget(id="t1", name="t1", address=""),
+            DeploymentTarget(id="t2", name="t2", address=""),
+        ]
 
-@pytest.mark.unit
-class TestRollingStrategy:
-    """Tests for the RollingStrategy concrete implementation."""
+        # Fail the first target in the first stage (50%)
+        def deploy_fn(target, version):
+            return target.id != "t1"
 
-    def test_default_params(self) -> None:
-        s = RollingStrategy()
-        assert s.batch_size == 1
-        assert s.batch_count == 4
-        assert s.pause_seconds == 0.0
+        result = strat.deploy(targets, "v2.0", deploy_fn)
 
-    def test_custom_params(self) -> None:
-        s = RollingStrategy(batch_size=3, batch_count=10, pause_seconds=0.5)
-        assert s.batch_size == 3
-        assert s.batch_count == 10
-        assert s.pause_seconds == 0.5
+        assert result.success is False
+        assert result.state == DeploymentState.FAILED
+        assert result.targets_updated == 0  # Stage 1: t1 fails, stage aborted
+        assert result.metadata["stopped_at_stage"] == 50.0
 
-    def test_execute_returns_completed_state(self) -> None:
-        s = RollingStrategy(batch_count=2, pause_seconds=0.0)
-        state = s.execute("api", "v2")
-        assert state.status == "completed"
-        assert state.traffic_percentage == 100.0
-        assert state.strategy == "rolling"
-        assert state.service == "api"
-        assert state.version == "v2"
-        assert state.completed_at is not None
+    def test_rollback(self):
+        """Canary rollback uses rolling deployment to restore version."""
+        strat = CanaryDeployment()
+        targets = [DeploymentTarget(id="t1", name="t1", address="")]
 
-    def test_execute_traffic_hits_100(self) -> None:
-        """Traffic should reach 100% even with many batches."""
-        s = RollingStrategy(batch_count=10)
-        state = s.execute("svc", "v1")
-        assert state.traffic_percentage == 100.0
+        result = strat.rollback(targets, "v1.0", lambda t, v: True)
 
-    def test_rollback_sets_state_correctly(self) -> None:
-        s = RollingStrategy()
-        state = s.execute("svc", "v1")
-        rolled_back = s.rollback(state)
-        assert rolled_back.status == "rolled_back"
-        assert rolled_back.traffic_percentage == 0.0
-        assert rolled_back.completed_at is not None
-
-    def test_is_instance_of_abc(self) -> None:
-        assert isinstance(RollingStrategy(), DeploymentStrategy)
-
-
-# ---------------------------------------------------------------------------
-# CanaryStrategy
-# ---------------------------------------------------------------------------
-
-
-@pytest.mark.unit
-class TestCanaryStrategy:
-    """Tests for the CanaryStrategy concrete implementation."""
-
-    def test_default_params(self) -> None:
-        s = CanaryStrategy()
-        assert s.initial_percentage == 10
-        assert s.step == 20
-        assert s.max_steps == 5
-
-    def test_execute_returns_completed(self) -> None:
-        s = CanaryStrategy(initial_percentage=10, step=30, max_steps=5)
-        state = s.execute("frontend", "3.0")
-        assert state.status == "completed"
-        assert state.traffic_percentage == 100.0
-        assert state.strategy == "canary"
-
-    def test_execute_caps_traffic_at_100(self) -> None:
-        """Even with large steps, traffic should never exceed 100."""
-        s = CanaryStrategy(initial_percentage=50, step=60, max_steps=10)
-        state = s.execute("svc", "v1")
-        assert state.traffic_percentage == 100.0
-
-    def test_execute_reaches_100_with_small_steps(self) -> None:
-        s = CanaryStrategy(initial_percentage=1, step=1, max_steps=200)
-        state = s.execute("svc", "v1")
-        assert state.status == "completed"
-
-    def test_rollback(self) -> None:
-        s = CanaryStrategy()
-        state = s.execute("svc", "v1")
-        rolled_back = s.rollback(state)
-        assert rolled_back.status == "rolled_back"
-        assert rolled_back.traffic_percentage == 0.0
-
-    def test_is_instance_of_abc(self) -> None:
-        assert isinstance(CanaryStrategy(), DeploymentStrategy)
-
-
-# ---------------------------------------------------------------------------
-# BlueGreenStrategy
-# ---------------------------------------------------------------------------
-
-
-@pytest.mark.unit
-class TestBlueGreenStrategy:
-    """Tests for the BlueGreenStrategy concrete implementation."""
-
-    def test_execute_returns_completed(self) -> None:
-        s = BlueGreenStrategy()
-        state = s.execute("backend", "v5")
-        assert state.status == "completed"
-        assert state.traffic_percentage == 100.0
-        assert state.strategy == "blue_green"
-
-    def test_execute_sets_active_slot_to_green(self) -> None:
-        s = BlueGreenStrategy()
-        state = s.execute("backend", "v5")
-        assert state.metadata["active_slot"] == "green"
-
-    def test_rollback_swaps_to_blue(self) -> None:
-        s = BlueGreenStrategy()
-        state = s.execute("backend", "v5")
-        rolled_back = s.rollback(state)
-        assert rolled_back.status == "rolled_back"
-        assert rolled_back.metadata["active_slot"] == "blue"
-        # Blue-green rollback keeps traffic at 100 on blue
-        assert rolled_back.traffic_percentage == 100.0
-
-    def test_is_instance_of_abc(self) -> None:
-        assert isinstance(BlueGreenStrategy(), DeploymentStrategy)
-
-
-# ---------------------------------------------------------------------------
-# FeatureFlagStrategy
-# ---------------------------------------------------------------------------
-
-
-@pytest.mark.unit
-class TestFeatureFlagStrategy:
-    """Tests for the FeatureFlagStrategy concrete implementation."""
-
-    def test_default_params(self) -> None:
-        s = FeatureFlagStrategy()
-        assert s.flag_name == ""
-        assert s.initial_rollout == 0.0
-
-    def test_custom_params(self) -> None:
-        s = FeatureFlagStrategy(flag_name="dark_mode", initial_rollout=25.0)
-        assert s.flag_name == "dark_mode"
-        assert s.initial_rollout == 25.0
-
-    def test_execute_generates_flag_name_when_empty(self) -> None:
-        """When no flag_name given, a default is generated from service+version."""
-        s = FeatureFlagStrategy()
-        state = s.execute("payments", "v3")
-        assert state.metadata["flag_name"] == "ff_payments_v3"
-
-    def test_execute_uses_provided_flag_name(self) -> None:
-        s = FeatureFlagStrategy(flag_name="my_flag")
-        state = s.execute("svc", "v1")
-        assert state.metadata["flag_name"] == "my_flag"
-
-    def test_execute_completed_status(self) -> None:
-        s = FeatureFlagStrategy(initial_rollout=50.0)
-        state = s.execute("svc", "v1")
-        assert state.status == "completed"
-        assert state.strategy == "feature_flag"
-
-    def test_execute_traffic_matches_initial_rollout(self) -> None:
-        """After complete(), traffic is 100, but the initial_rollout was recorded."""
-        s = FeatureFlagStrategy(initial_rollout=0.0)
-        state = s.execute("svc", "v1")
-        # complete() sets traffic to 100 — this is expected behaviour
-        assert state.traffic_percentage == 100.0
-
-    def test_rollback_disables_flag(self) -> None:
-        s = FeatureFlagStrategy(flag_name="test_flag")
-        state = s.execute("svc", "v1")
-        rolled_back = s.rollback(state)
-        assert rolled_back.status == "rolled_back"
-        assert rolled_back.traffic_percentage == 0.0
-
-    def test_is_instance_of_abc(self) -> None:
-        assert isinstance(FeatureFlagStrategy(), DeploymentStrategy)
+        assert result.success is True
+        assert result.state == DeploymentState.ROLLED_BACK
+        assert targets[0].version == "v1.0"

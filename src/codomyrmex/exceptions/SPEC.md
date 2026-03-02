@@ -1,6 +1,6 @@
 # Exceptions - Functional Specification
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
 
@@ -9,7 +9,7 @@ To provide a unified, hierarchical, and context-aware error handling system for 
 ## Functional Requirements
 
 1. **Unified Hierarchy**: All application errors descend from a single root (`CodomyrmexError`).
-2. **Context Propagation**: Errors must carry structured data (`context` dict) for debugging and logging.
+2. **Context Propagation**: Errors must carry structured data (`context` dict) via domain-specific constructor parameters for debugging, type safety, and logging.
 3. **Serialization**: Errors must be serializable to JSON (`to_dict()`) for API responses and logs.
 4. **Categorization**: Errors must be grouped by domain (IO, AI, Config, etc.) for clean organization.
 5. **Backward Compatibility**: The package must be a drop-in replacement for the old `exceptions.py`.
@@ -44,6 +44,16 @@ CodomyrmexError
 | `context` | `dict` | Key-value pairs of debugging info |
 | `error_code` | `str` | Unique code (default: ClassName) |
 | `to_dict()` | `dict` | Returns serialized error representation |
+
+### Specialized Constructors
+
+Specialized exception classes (e.g., `AIProviderError`, `FileOperationError`) provide explicit `__init__` methods with named parameters to ensure consistent context keys across the codebase.
+
+Example:
+```python
+raise AIProviderError("Limit reached", provider_name="OpenAI", model_name="gpt-4")
+# Results in e.context = {"provider_name": "OpenAI", "model_name": "gpt-4"}
+```
 
 ### Utilities
 

@@ -1,22 +1,10 @@
 """Document merging operations."""
 
-
 from codomyrmex.documents.exceptions import DocumentConversionError
 from codomyrmex.documents.models.document import Document, DocumentFormat
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 logger = get_logger(__name__)
-
-
-def _metadata_as_dict(metadata):
-    """Safely convert metadata to a dict for merging."""
-    if metadata is None:
-        return {}
-    if isinstance(metadata, dict):
-        return metadata
-    if hasattr(metadata, 'to_dict'):
-        return metadata.to_dict()
-    return {}
 
 
 def merge_documents(documents: list[Document], target_format: DocumentFormat = None) -> Document:
@@ -59,13 +47,15 @@ def merge_documents(documents: list[Document], target_format: DocumentFormat = N
             merged_content = _merge_yaml(converted_docs)
         elif target_format == DocumentFormat.TEXT:
             merged_content = _merge_text(converted_docs)
+        elif target_format == DocumentFormat.CSV:
+            merged_content = _merge_csv(converted_docs)
         else:
             merged_content = _merge_text(converted_docs)
 
         # Merge metadata
-        merged_metadata = {}
-        for doc in converted_docs:
-            merged_metadata.update(_metadata_as_dict(doc.metadata))
+        merged_metadata = documents[0].metadata.copy()
+        for doc in documents[1:]:
+            merged_metadata.update(doc.metadata)
 
         merged_doc = Document(
             content=merged_content,
@@ -77,6 +67,8 @@ def merge_documents(documents: list[Document], target_format: DocumentFormat = N
 
     except Exception as e:
         logger.error(f"Error merging documents: {e}")
+        if isinstance(e, DocumentConversionError):
+            raise
         raise DocumentConversionError(f"Failed to merge documents: {str(e)}") from e
 
 
@@ -91,30 +83,28 @@ def _merge_markdown(documents: list[Document]) -> str:
     return "".join(parts)
 
 
-def _merge_json(documents: list[Document]) -> dict:
+def _merge_json(documents: list[Document]) -> dict | list:
     """Merge JSON documents."""
-    merged = {}
+    if all(isinstance(doc.content, list) for doc in documents):
+        merged_list = []
+        for doc in documents:
+            merged_list.extend(doc.content)
+        return merged_list
+    
+    merged_dict = {}
     for doc in documents:
         if isinstance(doc.content, dict):
-            merged.update(doc.content)
+            merged_dict.update(doc.content)
         else:
-            if "documents" not in merged:
-                merged["documents"] = []
-            merged["documents"].append(doc.content)
-    return merged
+            if "documents" not in merged_dict:
+                merged_dict["documents"] = []
+            merged_dict["documents"].append(doc.content)
+    return merged_dict
 
 
-def _merge_yaml(documents: list[Document]) -> dict:
+def _merge_yaml(documents: list[Document]) -> dict | list:
     """Merge YAML documents."""
-    merged = {}
-    for doc in documents:
-        if isinstance(doc.content, dict):
-            merged.update(doc.content)
-        else:
-            if "documents" not in merged:
-                merged["documents"] = []
-            merged["documents"].append(doc.content)
-    return merged
+    return _merge_json(documents)
 
 
 def _merge_text(documents: list[Document]) -> str:
@@ -123,3 +113,11 @@ def _merge_text(documents: list[Document]) -> str:
     for doc in documents:
         parts.append(doc.get_content_as_string())
     return "\n\n".join(parts)
+
+def _merge_csv(documents: list[Document]) -> list[dict]:
+    """Merge CSV documents (list of dicts)."""
+    merged = []
+    for doc in documents:
+        if isinstance(doc.content, list):
+            merged.extend(doc.content)
+    return merged

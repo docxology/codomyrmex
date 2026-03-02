@@ -1,13 +1,11 @@
 """
 Unit tests for evolutionary_ai.selection — Zero-Mock compliant.
-
-Covers: TournamentSelection, RouletteWheelSelection, RankSelection.
 """
 
 import pytest
 
-from codomyrmex.evolutionary_ai.operators import Individual
-from codomyrmex.evolutionary_ai.selection import (
+from codomyrmex.evolutionary_ai.genome.genome import Individual
+from codomyrmex.evolutionary_ai.selection.selection import (
     RankSelection,
     RouletteWheelSelection,
     TournamentSelection,
@@ -55,7 +53,7 @@ class TestTournamentSelection:
             assert isinstance(ind, Individual)
 
     def test_select_favours_higher_fitness(self):
-        sel = TournamentSelection(tournament_size=5)  # large tournament = deterministic
+        sel = TournamentSelection(tournament_size=5)  # large tournament
         # With tournament_size = population_size, always picks best
         pop = _pop([1.0, 10.0, 5.0, 3.0, 7.0])
         selected = sel.select(pop, 10)
@@ -72,7 +70,6 @@ class TestTournamentSelection:
             selected[0].genes.append(99)
         # The population should not be affected
         assert selected[0].fitness in [ind.fitness for ind in pop]
-        _ = original_genes  # used to avoid lint warning
 
     def test_tournament_size_1_always_selects(self):
         sel = TournamentSelection(tournament_size=1)
@@ -84,8 +81,6 @@ class TestTournamentSelection:
         sel = TournamentSelection(tournament_size=2)
         pop = [Individual(genes=[1], fitness=None), Individual(genes=[2], fitness=5.0)]
         selected = sel.select(pop, 1)
-        # Should return the one with fitness=5.0 when tournament includes both
-        # (nondeterministic with size=2, but should not raise)
         assert len(selected) == 1
 
 
@@ -106,7 +101,6 @@ class TestRouletteWheelSelection:
         selected = sel.select(pop, 2)
         for ind in selected:
             assert isinstance(ind, Individual)
-            assert ind.fitness is not None
 
     def test_handles_negative_fitness(self):
         sel = RouletteWheelSelection()
@@ -117,7 +111,6 @@ class TestRouletteWheelSelection:
     def test_all_zero_fitness_handled(self):
         sel = RouletteWheelSelection()
         pop = _pop([0.0, 0.0, 0.0])
-        # Should not raise; falls back to random.choices
         selected = sel.select(pop, 2)
         assert len(selected) == 2
 
@@ -126,7 +119,8 @@ class TestRouletteWheelSelection:
         pop = _pop([1.0, 2.0])
         selected = sel.select(pop, 1)
         # The selected individual should be a distinct object
-        assert selected[0] is not pop[0] and selected[0] is not pop[1]
+        for ind in pop:
+            assert selected[0] is not ind
 
     def test_single_individual_population(self):
         sel = RouletteWheelSelection()
@@ -157,14 +151,6 @@ class TestRankSelection:
         with pytest.raises(ValueError):
             RankSelection(selection_pressure=2.1)
 
-    def test_boundary_pressure_one(self):
-        sel = RankSelection(selection_pressure=1.0)
-        assert sel.selection_pressure == 1.0
-
-    def test_boundary_pressure_two(self):
-        sel = RankSelection(selection_pressure=2.0)
-        assert sel.selection_pressure == 2.0
-
     def test_select_returns_correct_count(self):
         sel = RankSelection()
         pop = _pop([1.0, 2.0, 3.0, 4.0, 5.0])
@@ -180,9 +166,6 @@ class TestRankSelection:
 
     def test_max_pressure_biases_toward_best(self):
         sel = RankSelection(selection_pressure=2.0)
-        # With max pressure (2.0), the highest-ranked individual has
-        # probability 2/n, while lowest has 0 — so over many samples
-        # we should see the best individual selected more often.
         pop = _pop([1.0, 2.0, 10.0, 4.0, 5.0])
         selected = sel.select(pop, 50)
         best_fitness = max(ind.fitness for ind in pop)

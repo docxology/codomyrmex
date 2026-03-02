@@ -10,7 +10,7 @@ Submodules:
     payroll -- Payroll processing with tax withholding and pay-stub generation
 """
 
-from .forecasting import Forecaster
+from .forecasting import Forecaster, ForecastError
 from .ledger import (
     Account,
     AccountType,
@@ -19,8 +19,8 @@ from .ledger import (
     Transaction,
     TransactionEntry,
 )
-from .payroll import PayrollProcessor, PayStub
-from .taxes import TaxCalculator, TaxResult
+from .payroll import PayrollProcessor, PayStub, PayrollError
+from .taxes import TaxCalculator, TaxResult, TaxError
 
 __all__ = [
     # Ledger
@@ -32,10 +32,13 @@ __all__ = [
     "LedgerError",
     # Forecasting
     "Forecaster",
+    "ForecastError",
     # Taxes
     "TaxCalculator",
     "TaxResult",
+    "TaxError",
     # Payroll
     "PayrollProcessor",
     "PayStub",
+    "PayrollError",
 ]

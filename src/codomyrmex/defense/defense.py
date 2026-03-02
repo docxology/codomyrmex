@@ -4,7 +4,7 @@ Provides:
 - ThreatEvent: structured threat record with severity/category/source.
 - RateLimiter: sliding-window rate limiter per source IP/identifier.
 - ThreatDetector: rule-based anomaly detector with configurable thresholds.
-- DefenseEngine: orchestrator that combines detection + response actions.
+- Defense: orchestrator that combines detection + response actions.
 """
 
 from __future__ import annotations
@@ -13,9 +13,12 @@ import time
 from collections import defaultdict, deque
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any
+from typing import Any, Callable
 
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
+
+from .active import ActiveDefense, ThreatLevel
+from .rabbithole import RabbitHole
 
 logger = get_logger(__name__)
 
@@ -38,6 +41,8 @@ class ResponseAction(Enum):
     BLOCK = "block"
     ALERT = "alert"
     QUARANTINE = "quarantine"
+    RABBITHOLE = "rabbithole"
+    POISON = "poison"
 
 
 @dataclass
@@ -45,7 +50,7 @@ class ThreatEvent:
     """A detected threat occurrence."""
 
     source: str
-    category: str  # "brute_force", "injection", "rate_limit", "anomaly"
+    category: str  # "brute_force", "injection", "rate_limit", "anomaly", "cognitive_exploit"
     severity: Severity
     description: str
     timestamp: float = field(default_factory=time.time)
@@ -115,7 +120,7 @@ class DetectionRule:
     name: str
     category: str
     severity: Severity
-    check: Any  # Callable[[dict], bool]
+    check: Callable[[dict[str, Any]], bool]
     description: str = ""
     response: ResponseAction = ResponseAction.LOG
 
@@ -192,6 +197,8 @@ class Defense:
             window_seconds=self.config.get("window_seconds", 60.0),
         )
         self.detector = ThreatDetector()
+        self.active_defense = ActiveDefense()
+        self.rabbithole = RabbitHole()
         self._event_log: list[ThreatEvent] = []
         self._blocked_sources: set[str] = set()
         logger.info("Defense engine initialized")
@@ -217,6 +224,17 @@ class Defense:
         Returns:
             (allowed, threats): Whether the request is allowed and any detected threats.
         """
+        # 0. Check if already in Rabbit Hole
+        if self.rabbithole.is_engaged(source):
+            event = ThreatEvent(
+                source=source,
+                category="containment",
+                severity=Severity.HIGH,
+                description="Source is in the rabbit hole",
+                response=ResponseAction.RABBITHOLE,
+            )
+            return False, [event]
+
         # 1. Check blocklist
         if source in self._blocked_sources:
             event = ThreatEvent(
@@ -241,25 +259,56 @@ class Defense:
             self._event_log.append(event)
             return False, [event]
 
-        # 3. Threat detection
+        # 3. Rule-based threat detection
         threats = self.detector.evaluate(request, source=source)
+
+        # 4. Cognitive exploit detection (if input is present)
+        if "input" in request and isinstance(request["input"], str):
+            exploit_result = self.active_defense.detect_exploit(request["input"])
+            if exploit_result["detected"]:
+                severity_map = {
+                    ThreatLevel.NONE: Severity.INFO,
+                    ThreatLevel.LOW: Severity.LOW,
+                    ThreatLevel.MEDIUM: Severity.MEDIUM,
+                    ThreatLevel.HIGH: Severity.HIGH,
+                    ThreatLevel.CRITICAL: Severity.CRITICAL,
+                }
+                event = ThreatEvent(
+                    source=source,
+                    category="cognitive_exploit",
+                    severity=severity_map.get(exploit_result["threat_level"], Severity.MEDIUM),
+                    description=f"Cognitive exploit detected: {exploit_result['patterns']}",
+                    metadata=exploit_result,
+                    response=ResponseAction.RABBITHOLE
+                    if exploit_result["threat_level"].value >= ThreatLevel.HIGH.value
+                    else ResponseAction.POISON,
+                )
+                threats.append(event)
+
         self._event_log.extend(threats)
 
-        # Auto-block on CRITICAL threats
+        # Handle detected threats
         for t in threats:
             if t.severity == Severity.CRITICAL:
                 self.block_source(source)
+
             if t.response == ResponseAction.BLOCK:
+                return False, threats
+
+            if t.response == ResponseAction.RABBITHOLE:
+                self.rabbithole.engage(source)
                 return False, threats
 
         return True, threats
 
     @property
     def event_log(self) -> list[ThreatEvent]:
+        """Return a copy of the event log."""
         return list(self._event_log)
 
     @property
     def blocked_count(self) -> int:
+        """Return the number of blocked sources."""
         return len(self._blocked_sources)
 
 

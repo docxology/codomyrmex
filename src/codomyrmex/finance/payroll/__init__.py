@@ -1,5 +1,5 @@
 """Payroll processing submodule."""
 
-from .processor import PayrollProcessor, PayStub
+from .processor import PayrollProcessor, PayStub, PayrollError
 
-__all__ = ["PayrollProcessor", "PayStub"]
+__all__ = ["PayrollProcessor", "PayStub", "PayrollError"]

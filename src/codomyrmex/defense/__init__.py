@@ -1,22 +1,31 @@
-"""Defense Module.
+"""Defense Module — Threat Detection, Rate Limiting & Response Engine.
 
-Provides Active Countermeasures and Rabbit Hole containment.
-
-.. deprecated::
-    This module is being restructured into ``security.ai_safety``.
-    Import from ``codomyrmex.security.ai_safety`` instead.
-    This module remains functional for backward compatibility.
+Provides:
+- ActiveDefense: core exploit detection and response.
+- RabbitHole: attacker engagement/diversion system.
+- Defense: main orchestrator combining rate limiting, threat detection, and response.
 """
 
-import warnings as _warnings
-
 from .active import ActiveDefense
+from .defense import (
+    Defense,
+    DetectionRule,
+    ResponseAction,
+    Severity,
+    ThreatDetector,
+    ThreatEvent,
+    create_defense,
+)
 from .rabbithole import RabbitHole
 
-_warnings.warn(
-    "codomyrmex.defense is deprecated. Use codomyrmex.security.ai_safety instead.",
-    DeprecationWarning,
-    stacklevel=2,
-)
-
-__all__ = ["ActiveDefense", "RabbitHole"]
+__all__ = [
+    "ActiveDefense",
+    "RabbitHole",
+    "Defense",
+    "DetectionRule",
+    "ResponseAction",
+    "Severity",
+    "ThreatDetector",
+    "ThreatEvent",
+    "create_defense",
+]

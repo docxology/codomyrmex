@@ -55,9 +55,17 @@ class DocumentMetadata:
         modified_at = None
 
         if data.get("created_at"):
-            created_at = datetime.fromisoformat(data["created_at"])
+            try:
+                created_at = datetime.fromisoformat(data["created_at"])
+            except (ValueError, TypeError):
+                if isinstance(data["created_at"], (int, float)):
+                    created_at = datetime.fromtimestamp(data["created_at"])
         if data.get("modified_at"):
-            modified_at = datetime.fromisoformat(data["modified_at"])
+            try:
+                modified_at = datetime.fromisoformat(data["modified_at"])
+            except (ValueError, TypeError):
+                if isinstance(data["modified_at"], (int, float)):
+                    modified_at = datetime.fromtimestamp(data["modified_at"])
 
         return cls(
             title=data.get("title"),
@@ -68,3 +76,22 @@ class DocumentMetadata:
             tags=data.get("tags", []),
             custom_fields=data.get("custom_fields", {}),
         )
+
+    def update(self, other: Any) -> None:
+        """Update metadata from another metadata object or dictionary."""
+        if isinstance(other, DocumentMetadata):
+            other_dict = other.to_dict()
+        else:
+            other_dict = other
+
+        for key, value in other_dict.items():
+            if value is None:
+                continue
+            if key == "custom_fields":
+                self.custom_fields.update(value)
+            elif key == "tags":
+                self.tags = list(set(self.tags + value))
+            elif hasattr(self, key):
+                setattr(self, key, value)
+            else:
+                self.custom_fields[key] = value

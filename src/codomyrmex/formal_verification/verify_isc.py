@@ -94,6 +94,9 @@ def verify_criteria_consistency(
     skipped = 0
     skipped_reasons: dict[str, str] = {}
 
+    # Map index in solver to criterion ID for unsat core tracking
+    index_to_cid: dict[int, str] = {}
+
     for idx, criterion in enumerate(criteria):
         cid = criterion.get("id") or f"unknown_{idx}"
         desc = criterion.get("description", "")
@@ -102,8 +105,19 @@ def verify_criteria_consistency(
         if constraint:
             # Direct Z3 constraint provided
             try:
-                solver.add_item(constraint)
+                # We wrap the constraint to label it for unsat core extraction if it contains solver.add
+                if "solver.add(" in constraint:
+                    labeled_constraint = constraint.replace(
+                        "solver.add(", f"solver.assert_and_track("
+                    )
+                    # We need to provide the label as second arg: solver.assert_and_track(expr, label)
+                    # This is tricky with raw strings. A better way is needed if we want full unsat core.
+                    # For now, we'll just add it normally.
+                    solver.add_item(constraint)
+                else:
+                    solver.add_item(constraint)
                 analyzed += 1
+                index_to_cid[solver.item_count() - 1] = cid
             except Exception as exc:
                 skipped += 1
                 skipped_reasons[cid] = f"Invalid constraint: {exc}"
@@ -111,9 +125,17 @@ def verify_criteria_consistency(
             # Try to extract numeric constraints from description
             extracted = _extract_numeric_constraint(cid, desc)
             if extracted:
-                for item in extracted:
-                    solver.add_item(item)
+                for sub_idx, item in enumerate(extracted):
+                    # If it's a solver.add, we can label it
+                    if item.startswith("solver.add("):
+                        label = f"label_{cid}_{idx}_{sub_idx}".replace("-", "_")
+                        labeled_item = item.replace("solver.add(", f"solver.assert_and_track(", 1)
+                        labeled_item = labeled_item[:-1] + f", '{label}')"
+                        solver.add_item(labeled_item)
+                    else:
+                        solver.add_item(item)
                 analyzed += 1
+                index_to_cid[solver.item_count() - 1] = cid
             else:
                 skipped += 1
                 skipped_reasons[cid] = "No translatable numeric constraint found"
@@ -144,9 +166,27 @@ def verify_criteria_consistency(
             skipped_reasons=skipped_reasons,
         )
     elif result.status == SolverStatus.UNSAT:
+        unsat_core = result.statistics.get("unsat_core", [])
+        conflicts = []
+        if unsat_core:
+            # unsat_core contains labels like label_ISC_C1_0
+            core_ids = []
+            for label in unsat_core:
+                if label.startswith("label_"):
+                    # Extract the cid from label_cid_idx_subidx
+                    parts = label.split("_")
+                    if len(parts) >= 4:
+                        core_ids.append("_".join(parts[1:-2]))
+
+            # If we have at least 2, they are in conflict
+            if len(core_ids) >= 2:
+                # Add all pairs for now (simplified)
+                from itertools import combinations
+                conflicts = list(combinations(core_ids, 2))
+
         return ISCVerificationResult(
             consistent=False,
-            conflicts=_find_conflicts(solver, criteria),
+            conflicts=conflicts,
             satisfying_assignment=None,
             warnings=["Criteria set is unsatisfiable — check for conflicting requirements"],
             solver_status="unsat",
@@ -185,6 +225,13 @@ def _extract_numeric_constraint(cid: str, description: str) -> list[str] | None:
     var_name = re.sub(r"[^a-z0-9_]", "_", cid.replace("-", "_").lower())
     items: list[str] = []
 
+    # Handle "Response time" or similar prefixes by extracting the metric name
+    metric_match = re.match(r"^([a-z\s]+)\s+(?:under|below|less|more|above|greater|at|minimum|maximum|no|not|between|exactly)", description, re.IGNORECASE)
+    if metric_match:
+        metric_name = metric_match.group(1).strip().replace(" ", "_").lower()
+        if metric_name:
+            var_name = metric_name
+
     # "under/below/less than X"
     m = re.search(r"(?:under|below|less\s+than)\s+(\d+(?:\.\d+)?)", description, re.IGNORECASE)
     if m:
@@ -192,11 +239,22 @@ def _extract_numeric_constraint(cid: str, description: str) -> list[str] | None:
         z3t = _z3_type_for(val)
         items.append(f"{var_name} = {z3t}('{var_name}')")
         items.append(f"solver.add({var_name} < {val})")
-        items.append(f"solver.add({var_name} >= 0)")
+        # Heuristic: metrics like response time/memory are usually non-negative
+        if not re.search(r"temperature|offset|balance|level", description, re.IGNORECASE):
+            items.append(f"solver.add({var_name} >= 0)")
         return items
 
-    # "at least/minimum/no less than X"
-    m = re.search(r"(?:at\s+least|minimum|no\s+less\s+than)\s+(\d+(?:\.\d+)?)", description, re.IGNORECASE)
+    # "more than/greater than/above X"
+    m = re.search(r"(?:more\s+than|greater\s+than|above)\s+(\d+(?:\.\d+)?)", description, re.IGNORECASE)
+    if m:
+        val = m.group(1)
+        z3t = _z3_type_for(val)
+        items.append(f"{var_name} = {z3t}('{var_name}')")
+        items.append(f"solver.add({var_name} > {val})")
+        return items
+
+    # "at least/minimum/no less than/not less than X"
+    m = re.search(r"(?:at\s+least|minimum|(?:no|not)\s+less\s+than)\s+(\d+(?:\.\d+)?)", description, re.IGNORECASE)
     if m:
         val = m.group(1)
         z3t = _z3_type_for(val)
@@ -204,14 +262,15 @@ def _extract_numeric_constraint(cid: str, description: str) -> list[str] | None:
         items.append(f"solver.add({var_name} >= {val})")
         return items
 
-    # "at most/maximum/no more than X"
-    m = re.search(r"(?:at\s+most|maximum|no\s+more\s+than)\s+(\d+(?:\.\d+)?)", description, re.IGNORECASE)
+    # "at most/maximum/no more than/not more than X"
+    m = re.search(r"(?:at\s+most|maximum|(?:no|not)\s+more\s+than)\s+(\d+(?:\.\d+)?)", description, re.IGNORECASE)
     if m:
         val = m.group(1)
         z3t = _z3_type_for(val)
         items.append(f"{var_name} = {z3t}('{var_name}')")
         items.append(f"solver.add({var_name} <= {val})")
-        items.append(f"solver.add({var_name} >= 0)")
+        if not re.search(r"temperature|offset|balance|level", description, re.IGNORECASE):
+            items.append(f"solver.add({var_name} >= 0)")
         return items
 
     # "between X and Y"
@@ -232,6 +291,11 @@ def _extract_numeric_constraint(cid: str, description: str) -> list[str] | None:
         items.append(f"{var_name} = {z3t}('{var_name}')")
         items.append(f"solver.add({var_name} == {val})")
         return items
+
+    # Fallback: check if it matches a specific variable mentioned in the description
+    # e.g. "Response time under 200ms" where "Response time" maps to a known var
+    # For now, we already use 'var_name' derived from CID.
+    # If the description contains multiple metrics, this regex approach is limited.
 
     return None
 

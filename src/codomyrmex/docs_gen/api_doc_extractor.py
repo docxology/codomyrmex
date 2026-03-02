@@ -126,7 +126,7 @@ class APIDocExtractor:
             name=node.name,
             module=module,
             docstring=ast.get_docstring(node) or "",
-            bases=[self._name_str(b) for b in node.bases],
+            bases=[ast.unparse(b) for b in node.bases],
         )
 
         for item in node.body:
@@ -137,53 +137,106 @@ class APIDocExtractor:
 
     def _extract_function(self, node: ast.FunctionDef | ast.AsyncFunctionDef, module: str) -> FunctionDoc:
         """Extract function documentation."""
-        params = []
-        for arg in node.args.args:
-            params.append(arg.arg)
+        arg_strings = []
+
+        # Positional-only args
+        for i, arg in enumerate(node.args.posonlyargs):
+            s = arg.arg
+            if arg.annotation:
+                s += f": {ast.unparse(arg.annotation)}"
+            arg_strings.append(s)
+        if node.args.posonlyargs:
+            arg_strings.append("/")
+
+        # Standard args
+        for i, arg in enumerate(node.args.args):
+            s = arg.arg
+            if arg.annotation:
+                s += f": {ast.unparse(arg.annotation)}"
+
+            # Find default
+            default_idx = i - (len(node.args.args) - len(node.args.defaults))
+            if default_idx >= 0:
+                s += f" = {ast.unparse(node.args.defaults[default_idx])}"
+            arg_strings.append(s)
+
+        # *args
+        if node.args.vararg:
+            s = f"*{node.args.vararg.arg}"
+            if node.args.vararg.annotation:
+                s += f": {ast.unparse(node.args.vararg.annotation)}"
+            arg_strings.append(s)
+        elif node.args.kwonlyargs:
+            arg_strings.append("*")
+
+        # Kw-only args
+        for i, arg in enumerate(node.args.kwonlyargs):
+            s = arg.arg
+            if arg.annotation:
+                s += f": {ast.unparse(arg.annotation)}"
+
+            default = node.args.kw_defaults[i]
+            if default:
+                s += f" = {ast.unparse(default)}"
+            arg_strings.append(s)
+
+        # **kwargs
+        if node.args.kwarg:
+            s = f"**{node.args.kwarg.arg}"
+            if node.args.kwarg.annotation:
+                s += f": {ast.unparse(node.args.kwarg.annotation)}"
+            arg_strings.append(s)
+
+        signature = f"({', '.join(arg_strings)})"
+        if node.returns:
+            signature += f" -> {ast.unparse(node.returns)}"
 
         decorators = []
         for dec in node.decorator_list:
-            if isinstance(dec, ast.Name):
-                decorators.append(dec.id)
-            elif isinstance(dec, ast.Attribute):
-                decorators.append(dec.attr)
+            decorators.append(ast.unparse(dec))
 
         return FunctionDoc(
             name=node.name,
-            signature=f"({', '.join(params)})",
+            signature=signature,
             docstring=ast.get_docstring(node) or "",
             module=module,
             decorators=decorators,
             is_async=isinstance(node, ast.AsyncFunctionDef),
         )
 
-    @staticmethod
-    def _name_str(node: ast.expr) -> str:
-        if isinstance(node, ast.Name):
-            return node.id
-        if isinstance(node, ast.Attribute):
-            return node.attr
-        return ""
-
     def to_markdown(self, doc: ModuleDoc) -> str:
         """Render module documentation as markdown."""
-        lines = [f"# `{doc.name}`", ""]
+        lines = [f"# Module `{doc.name}`", ""]
         if doc.docstring:
             lines.extend([doc.docstring, ""])
 
+        if doc.exports:
+            lines.extend(["## Exports", "", ", ".join(f"`{e}`" for e in doc.exports), ""])
+
         for cls in doc.classes:
-            lines.extend([f"## `{cls.name}`", ""])
+            bases_str = f"({', '.join(cls.bases)})" if cls.bases else ""
+            lines.extend([f"## Class `{cls.name}{bases_str}`", ""])
             if cls.docstring:
                 lines.extend([cls.docstring, ""])
-            for method in cls.methods:
-                lines.append(f"### `{method.name}{method.signature}`")
-                if method.docstring:
-                    lines.extend(["", method.docstring, ""])
 
-        for func in doc.functions:
-            lines.extend([f"## `{func.name}{func.signature}`", ""])
-            if func.docstring:
-                lines.extend([func.docstring, ""])
+            if cls.methods:
+                lines.extend(["### Methods", ""])
+                for method in cls.methods:
+                    async_prefix = "async " if method.is_async else ""
+                    decorators = "".join(f"@{d}\n" for d in method.decorators)
+                    lines.append(f"#### `{async_prefix}{method.name}{method.signature}`")
+                    if decorators:
+                        lines.extend(["```python", decorators.strip(), "```", ""])
+                    if method.docstring:
+                        lines.extend(["", method.docstring, ""])
+
+        if doc.functions:
+            lines.extend(["## Functions", ""])
+            for func in doc.functions:
+                async_prefix = "async " if func.is_async else ""
+                lines.extend([f"### `{async_prefix}{func.name}{func.signature}`", ""])
+                if func.docstring:
+                    lines.extend([func.docstring, ""])
 
         return "\n".join(lines)
 

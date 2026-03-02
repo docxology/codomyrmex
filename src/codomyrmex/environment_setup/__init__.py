@@ -1,27 +1,30 @@
 """
 Environment Setup Module for Codomyrmex.
 
-For general project development environment setup instructions (covering
-prerequisites, cloning, virtual environments, Python dependencies, API keys,
-and other essential configurations).
-
-Integration:
-- Uses `logging_monitoring` for all logging (ensure `setup_logging()` is called in your main app).
-- Core module that other modules depend on for environment validation.
-
-Available functions:
-- is_uv_available
-- is_uv_environment
-- ensure_dependencies_installed
-- check_and_setup_env_vars
-- validate_python_version
+This module provides tools for validating the environment, checking dependencies,
+managing environment variables, and integrating with the uv package manager.
 """
 
+from .dependency_resolver import (
+    Conflict,
+    DependencyInfo,
+    DependencyResolver,
+    install_dependencies,
+)
 from .env_checker import (
+    APIKeyReport,
+    DependencyStatus,
+    ValidationReport,
+    check_api_keys,
     check_and_setup_env_vars,
+    check_dependencies,
     ensure_dependencies_installed,
+    generate_environment_report,
+    get_uv_path,
     is_uv_available,
     is_uv_environment,
+    validate_environment,
+    validate_environment_completeness,
     validate_python_version,
 )
 
@@ -41,23 +44,37 @@ def cli_commands():
             "handler": lambda **kwargs: print(
                 f"Python valid: {validate_python_version()}\n"
                 f"uv available: {is_uv_available()}\n"
-                f"uv environment: {is_uv_environment()}"
+                f"uv environment: {is_uv_environment()}\n"
+                f"Environment report:\n{generate_environment_report()}"
             ),
         },
         "deps": {
             "help": "List and verify installed dependencies",
             "handler": lambda **kwargs: print(
-                f"Dependencies installed: {ensure_dependencies_installed()}"
+                f"Dependencies status: {ensure_dependencies_installed()}"
             ),
         },
     }
 
 
 __all__ = [
+    "Conflict",
+    "DependencyInfo",
+    "DependencyResolver",
+    "install_dependencies",
+    "APIKeyReport",
+    "DependencyStatus",
+    "ValidationReport",
+    "check_api_keys",
+    "check_and_setup_env_vars",
+    "check_dependencies",
+    "ensure_dependencies_installed",
+    "generate_environment_report",
+    "get_uv_path",
     "is_uv_available",
     "is_uv_environment",
-    "ensure_dependencies_installed",
-    "check_and_setup_env_vars",
+    "validate_environment",
+    "validate_environment_completeness",
     "validate_python_version",
     "cli_commands",
 ]

@@ -1,6 +1,6 @@
 # evolutionary_ai - Functional Specification
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
 
@@ -29,23 +29,35 @@ graph TD
 
 - Define custom `Gene` types (binary, integer, float, or structured).
 - Support multiple selection strategies (Tournament, Rank, Stochastic).
-- Implement various crossover methods (Single-point, Two-point, Uniform).
-- Support adaptive mutation rates.
+- Implement various crossover methods (Single-point, Two-point, Uniform, Blend).
+- Support adaptive mutation rates and custom mutation operators.
 - Maintain a 'Hall of Fame' for the best-performing individuals.
 
 ## Interface Contracts
 
 ### `Population`
 
-- `evolve(fitness_scores: List[float])`
-- `get_best_genome() -> Genome`
-- `generations: int` (property)
+- `evolve(selection_op: SelectionOperator[T], crossover_op: CrossoverOperator[T], mutation_op: MutationOperator[T], elitism: int)`
+- `evaluate(fitness_fn: Callable[[Individual[T]], float])`
+- `get_best() -> Individual[T]`
+- `get_worst() -> Individual[T]`
+- `is_converged(threshold: float, window: int) -> bool`
+- `to_dict() -> dict[str, Any]`
 
-### `Genome`
+### `Individual` / `Genome`
 
-- `mutate(rate: float)`
-- `copy() -> Genome`
-- `random(length: int) -> Genome` (classmethod)
+- `Individual(genes: T, fitness: float | None = None, metadata: dict[str, Any] | None = None)`
+- `Genome.random(length: int, low: float, high: float) -> Genome` (classmethod)
+- `Genome.distance(other: Genome) -> float`
+- `Genome.stats() -> GenomeStats`
+- `Genome.clamp(low: float, high: float) -> Genome`
+- `Genome.clone() -> Genome`
+
+### `FitnessFunction`
+
+- `ScalarFitness(fn: Callable[[T], float], maximize: bool = True)`
+- `MultiObjectiveFitness(objectives: list[Callable[[T], float]], maximize: list[bool])`
+- `ConstrainedFitness(base: FitnessFunction, constraints: list[Callable[[T], float]], penalty_weight: float)`
 
 ## Technical Constraints
 
@@ -54,6 +66,8 @@ graph TD
 
 ## Testing
 
+The module is verified using strictly zero-mock tests to ensure actual evolutionary convergence and operator correctness.
+
 ```bash
-uv run python -m pytest src/codomyrmex/tests/ -k evolutionary_ai -v
+uv run pytest src/codomyrmex/tests/unit/evolutionary_ai/
 ```

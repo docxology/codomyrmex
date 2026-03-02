@@ -27,7 +27,7 @@ class AgentRole(Enum):
     DEVOPS = "devops"
 
 
-class MessageType(Enum):
+class SwarmMessageType(Enum):
     """Types of swarm messages."""
     TASK_ASSIGNMENT = "task_assignment"
     REVIEW_REQUEST = "review_request"
@@ -62,7 +62,7 @@ class SwarmMessage:
         timestamp: Creation timestamp.
     """
 
-    message_type: MessageType
+    message_type: SwarmMessageType
     sender: str
     recipient: str = ""
     payload: dict[str, Any] = field(default_factory=dict)
@@ -112,7 +112,7 @@ class SwarmAgent:
 
     @property
     def load(self) -> float:
-        """Load data from the specified source."""
+        """Load of the agent (0.0 to 1.0)."""
         return self.active_tasks / self.max_concurrent if self.max_concurrent > 0 else 1.0
 
     def to_dict(self) -> dict[str, Any]:
@@ -164,12 +164,13 @@ class TaskAssignment:
             "required_role": self.required_role.value if self.required_role else None,
             "status": self.status.value,
             "priority": self.priority,
+            "result": self.result,
         }
 
 
 __all__ = [
     "AgentRole",
-    "MessageType",
+    "SwarmMessageType",
     "SwarmAgent",
     "SwarmMessage",
     "TaskAssignment",

@@ -6,7 +6,7 @@ Tracks heartbeats, detects failures, and provides cluster health reports.
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from datetime import datetime, timedelta
+from datetime import UTC, datetime, timedelta
 from typing import Any
 
 from codomyrmex.edge_computing.core.models import EdgeNode, EdgeNodeStatus
@@ -19,7 +19,7 @@ class HealthCheck:
     node_id: str
     healthy: bool
     latency_ms: float = 0.0
-    checked_at: datetime = field(default_factory=datetime.now)
+    checked_at: datetime = field(default_factory=lambda: datetime.now(UTC))
     details: dict[str, Any] = field(default_factory=dict)
 
 
@@ -33,7 +33,7 @@ class HealthMonitor:
 
     def check_node(self, node: EdgeNode) -> HealthCheck:
         """Check the health of a single node based on heartbeat age."""
-        now = datetime.now()
+        now = datetime.now(UTC)
         age = now - node.last_heartbeat
         healthy = age < self._timeout and node.status != EdgeNodeStatus.OFFLINE
 
@@ -97,6 +97,23 @@ class HealthMonitor:
             if history[i].healthy != history[i - 1].healthy
         )
         return transitions >= 3
+
+    def get_recovery_recommendation(self, node_id: str) -> str:
+        """Suggest an action based on recent health history."""
+        history = self.get_history(node_id, limit=5)
+        if not history:
+            return "No data"
+        
+        if self.detect_flapping(node_id):
+            return "Reboot node (flapping detected)"
+        
+        if not history[-1].healthy:
+            age = history[-1].details.get("heartbeat_age_seconds", 0)
+            if age > 3600:
+                return "Decommission node (offline > 1h)"
+            return "Investigate connectivity (stale heartbeat)"
+            
+        return "Normal"
 
     def summary(self) -> dict[str, Any]:
         """Overall monitoring summary."""

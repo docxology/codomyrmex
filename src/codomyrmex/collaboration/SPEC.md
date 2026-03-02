@@ -1,6 +1,6 @@
 # collaboration - Functional Specification
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
 
@@ -8,67 +8,65 @@ To multiply the effectiveness of individual Codomyrmex agents by enabling them t
 
 ## Design Principles
 
-- **Decentralization**: Avoid single points of failure in agent coordination.
-- **Interoperability**: Agents should be able to collaborate regardless of their underlying model or architecture.
-- **Transparency**: Every step of the collaboration should be traceable.
-- **Feedback Loops**: Constant evaluation and adjustment based on agent feedback.
+- **Consolidation**: Unified swarm management through a robust `SwarmManager`.
+- **Asynchronous Orchestration**: Non-blocking task distribution and result aggregation using `asyncio`.
+- **Interoperability**: Modern and legacy interfaces supported for cross-module compatibility.
+- **Transparency**: Every step of the collaboration is traceable through the `MessageBus`.
 
 ## Architecture
 
 ```mermaid
 graph TD
     User([User]) --> SM[SwarmManager]
-    SM --> A1[Agent 1]
-    SM --> A2[Agent 2]
-    A1 <--> A2
-    A1 --> SMH[Shared Memory]
-    A2 --> SMH
+    SM --> Pool[AgentPool]
+    SM --> Bus[MessageBus]
+    SM --> Decomp[TaskDecomposer]
+    SM --> Cons[ConsensusEngine]
+    
+    Pool --> A1[Agent 1]
+    Pool --> A2[Agent 2]
+    
+    A1 <--> Bus
+    A2 <--> Bus
 ```
 
 ## Functional Requirements
 
-- Broadcast messages to an entire swarm or specific groups.
-- Elect a 'Leader' or 'Orchestrator' agent for a specific mission.
-- Implement 'Peer Review' patterns where one agent verifies another's output.
-- Provide a 'Wall' or 'Log' of the collaborative process.
+- **Task Decomposition**: Split high-level missions into role-based sub-tasks with dependency tracking.
+- **Role-based Routing**: Assign tasks based on ARCHITECT, CODER, TESTER, etc.
+- **Load Balancing**: Distribute work to least-busy agents in the pool.
+- **Pub/Sub Messaging**: Topic-routed in-process communication with wildcards (`*`, `#`).
+- **Multi-strategy Consensus**: Support majority, weighted, and veto voting.
+- **Async Result Waiting**: `SwarmManager` waits for task completion with configurable timeouts.
 
 ## Interface Contracts
 
-### Communication (`collaboration.communication`)
+### Swarm Management (`collaboration.swarm`)
 
 ```python
-class Broadcaster:
-    def subscribe(topic: str, subscriber_id: str, handler: Callable, ...) -> str
-    async def publish(topic: str, message: AgentMessage) -> int
-    def list_topics() -> List[TopicInfo]
-
-class DirectMessenger:
-    async def send_private(recipient_id: str, message: AgentMessage) -> bool
+class SwarmManager:
+    def register_agent(agent: SwarmAgent) -> None
+    async def execute_task(description: str, role: AgentRole, timeout: float) -> dict[str, Any]
+    async def execute_mission(mission: str) -> list[dict[str, Any]]
+    async def request_consensus(proposal: str, votes: list[Vote], strategy: str) -> ConsensusResult
 ```
 
-### Coordination (`collaboration.coordination`)
+### Communication (`collaboration.swarm.message_bus`)
 
 ```python
-class VotingMechanism:
-    def create_proposal(title: str, proposer_id: str, ...) -> Proposal
-    def cast_vote(proposal_id: str, voter_id: str, vote: VoteType, ...) -> Vote
-    def tally_votes(proposal_id: str, total_voters: int) -> VotingResult
-
-class ConsensusBuilder:
-    def propose_value(key: str, agent_id: str, value: Any) -> None
-    async def reach_consensus(key: str, agents: List[Agent], ...) -> Optional[Any]
-
-class TaskDecomposer:
-    def decompose(mission: str) -> List[Task]
+class MessageBus:
+    def subscribe(subscriber_id: str, topic: str, handler: MessageHandler) -> None
+    async def publish(topic: str, message: SwarmMessage) -> int
+    def unsubscribe(subscriber_id: str, topic: str | None) -> int
 ```
 
 ## Technical Constraints
 
-- Large swarms may face coordination overhead and messaging latency.
-- Requires robust serialization for transferring state between agents.
+- Swarm size limited by in-process messaging overhead and event loop capacity.
+- Results must be published back to `results.agent.{agent_id}` for the `SwarmManager` to aggregate them.
 
 ## Testing
 
 ```bash
-uv run python -m pytest src/codomyrmex/tests/ -k collaboration -v
+uv run pytest src/codomyrmex/tests/unit/collaboration/
 ```

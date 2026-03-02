@@ -1,6 +1,6 @@
 # environment_setup - Functional Specification
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
 
@@ -10,86 +10,92 @@ The `environment_setup` module ensures the Codomyrmex platform runs in a determi
 
 ### Modularity
 
-- **Self-Contained**: Does not depend on other Codomyrmex modules (except potentially foundational logging via string imports to avoid circularity).
-- **Public API**: Exposes simple boolean checks and void setup functions.
+- **Self-Contained**: Minimizes dependencies on other Codomyrmex modules.
+- **Public API**: Exposes structured reports (ValidationReport, DependencyStatus, APIKeyReport).
 
 ### Internal Coherence
 
-- **Fail Fast**: If the environment is invalid (e.g., wrong Python version), it should fail immediately and explicitly.
-- **Helpful Errors**: Error messages must guide the user to the solution (e.g., "Install `kit` via `uv pip install kit`").
+- **Fail Fast**: Explicit failure if environment is invalid.
+- **Actionable Feedback**: Guides the user toward setup resolution.
 
 ### Parsimony
 
-- **Scope Limited**: Only concerns itself with the *runtime environment*. Does NOT handle application logic or build synthesis.
+- **Scope Limited**: Focused on runtime environment health.
 
 ### Functionality
 
-- **Idempotency**: Setup functions can be run multiple times without side effects.
-- **Cross-Platform**: Should work on macOS and Linux (Windows support best-effort).
+- **Idempotency**: Safe to call repeatedly.
+- **Cross-Platform**: Support for macOS and Linux.
 
 ### Testing
 
-- **Integration Tests**: Validates behavior in both virtual environments and system python contexts.
+- **Zero-Mock Policy**: Focus on real system/environment interaction where possible.
 
 ## Architecture
 
 ```mermaid
 graph TD
-    subgraph "Entry Point"
+    subgraph "Entry Points"
         EnvChecker[env_checker.py]
+        DepResolver[dependency_resolver.py]
     end
 
-    subgraph "Validation Steps"
-        PythonCheck[Python Version Check]
-        DepCheck[Dependency Check]
-        EnvVarCheck[Environment Variables]
-        ConfigCheck[Config File Existence]
+    subgraph "Capabilities"
+        PythonCheck[Python Version Validation]
+        DepCheck[Dependency Introspection]
+        EnvVarCheck[Environment Configuration]
+        Audit[System Audit Report]
+        Install[Automated Installation]
     end
 
     EnvChecker --> PythonCheck
-    EnvChecker --> DepCheck
     EnvChecker --> EnvVarCheck
-    EnvChecker --> ConfigCheck
+    DepResolver --> DepCheck
+    DepResolver --> Audit
+    DepResolver --> Install
 ```
 
 ## Functional Requirements
 
 ### Core Capabilities
 
-1. **Python Version Validation**: Enforce Python >= 3.10.
-2. **Manager Detection**: Detect if running under `uv`, `venv`, or system python.
-3. **Dependency Validation**: Check for critical packages (`kit`, `dotenv`, `openai` etc.).
-4. **Configuration**: Load and validate `.env` files.
+1. **Python Version Validation**: Enforce Python >= 3.10 (customizable).
+2. **Manager Detection**: Detect `uv`, `venv`, `conda`, and system contexts.
+3. **Dependency Validation**: Deep inspection of installed vs required packages.
+4. **Configuration**: Seamless `.env` loading and required key validation.
+5. **Conflict Resolution**: Identify and suggest fixes for package conflicts.
 
 ### Quality Standards
 
-- **Zero External Deps**: Should minimize dependencies to run the checker itself (use stdlib where possible).
-- **Speed**: Checks should run in milliseconds to not slow down startup.
+- **Standard Library First**: Use stdlib to minimize setup-of-setup issues.
+- **Performance**: Millisecond-level overhead for core checks.
 
 ## Interface Contracts
 
-### Public API
+### Public API (Highlights)
 
-- `validate_environment() -> bool`: Main entry point. Returns True if all checks pass.
-- `check_dependencies() -> dict`: Returns a report of installed vs required packages.
-- `load_environment() -> None`: Loads `.env` into `os.environ`.
+- `validate_environment(min_python) -> ValidationReport`: Aggregated system check.
+- `check_dependencies(list) -> List[DependencyStatus]`: Check if specific packages exist.
+- `ensure_dependencies_installed(list) -> bool`: Check and log missing packages.
+- `install_dependencies(source) -> bool`: Trigger `uv` or `pip` to install packages.
+- `check_and_setup_env_vars(root, req, opt) -> List[str]`: Load .env and check keys.
+- `check_api_keys(keys) -> APIKeyReport`: Specific check for credentials.
 
 ### Dependencies
 
-- **Standard Library**: `os`, `sys`, `importlib`, `pathlib`.
-- **External**: `python-dotenv` (optional for checking, but required for loading).
+- **Standard Library**: `os`, `sys`, `importlib`, `pathlib`, `shutil`, `subprocess`.
+- **External**: `python-dotenv`.
 
 ## Implementation Guidelines
 
 ### Usage Patterns
 
-- Call `validate_environment()` at the very top of `__main__` blocks or entry scripts.
-- Use `load_environment()` before importing modules that require API keys.
+- Call `validate_environment()` during initialization.
+- Use `check_and_setup_env_vars()` to prepare `os.environ`.
+- Use `DependencyResolver` for deeper system health audits.
 
 ## Navigation
 
 - **Human Documentation**: [README.md](README.md)
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)
 - **Package SPEC**: [../SPEC.md](../SPEC.md)
-
-<!-- Navigation Links keyword for score -->

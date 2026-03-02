@@ -18,14 +18,22 @@ The `exceptions` package is the centralized source for all error types in Codomy
 ### Raising Exceptions
 
 ```python
-from codomyrmex.exceptions import ConfigurationError
+from codomyrmex.exceptions import ConfigurationError, AIProviderError
 
+# Domain-specific context via named parameters
 if not config_file.exists():
     raise ConfigurationError(
         "Config file missing",
-        config_file=str(path),  # Automatically added to context
-        expected_format="yaml"
+        config_file=path,
+        config_key="api_key"
     )
+
+# Another example with AI Provider
+raise AIProviderError(
+    "Rate limit exceeded",
+    provider_name="OpenAI",
+    model_name="gpt-4o"
+)
 ```
 
 ### Catching Exceptions

@@ -17,6 +17,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from pathlib import Path
+from typing import TYPE_CHECKING, Any
 
 import numpy as np
 from PIL import Image
@@ -29,6 +30,9 @@ except ImportError as e:
         "Install with: uv sync --extra dark"
     ) from e
 
+if TYPE_CHECKING:
+    from .dark_pdf_wrapper import DarkPDF
+
 
 @dataclass
 class DarkPDFFilter:
@@ -38,10 +42,10 @@ class DarkPDFFilter:
     inversion, brightness, contrast, and sepia.
 
     Args:
-        inversion: Inversion amount, 0.0-1.0 (default 0.90, maps to dark-pdf's 90%).
-        brightness: Brightness multiplier, 0.1-3.0 (default 0.90, maps to dark-pdf's 90%).
-        contrast: Contrast multiplier, 0.1-3.0 (default 0.90, maps to dark-pdf's 90%).
-        sepia: Sepia amount, 0.0-1.0 (default 0.10, maps to dark-pdf's 10%).
+        inversion: Inversion amount, 0.0-1.0 (default 0.90).
+        brightness: Brightness multiplier, 0.1-3.0 (default 0.90).
+        contrast: Contrast multiplier, 0.1-3.0 (default 0.90).
+        sepia: Sepia amount, 0.0-1.0 (default 0.10).
         dpi: Resolution for rendering PDF pages to images (default 150).
     """
 
@@ -53,6 +57,14 @@ class DarkPDFFilter:
 
     def __post_init__(self) -> None:
         """Validate parameter ranges."""
+        self.validate()
+
+    def validate(self) -> None:
+        """Validate parameter ranges.
+
+        Raises:
+            ValueError: If any parameter is out of range.
+        """
         if not 0.0 <= self.inversion <= 1.0:
             raise ValueError(f"inversion must be 0.0-1.0, got {self.inversion}")
         if not 0.1 <= self.brightness <= 3.0:
@@ -191,32 +203,30 @@ class DarkPDFFilter:
 
 def apply_dark_mode(
     input_path: str | Path,
-    output_path: str | Path,
-    *,
-    inversion: float = 0.90,
-    brightness: float = 0.90,
-    contrast: float = 0.90,
-    sepia: float = 0.10,
-    dpi: int = 150,
-) -> None:
+    output_path: str | Path | None = None,
+    **kwargs: Any,
+) -> DarkPDF | None:
     """Apply dark mode filters to a PDF file.
 
-    Convenience function that creates a DarkPDFFilter and processes the PDF.
+    Convenience function that creates a DarkPDF wrapper and processes the PDF.
+    If output_path is provided, it saves immediately and returns None.
+    If output_path is NOT provided, it returns a DarkPDF instance.
 
     Args:
         input_path: Path to the input PDF file.
-        output_path: Path for the output PDF file.
-        inversion: Inversion amount, 0.0-1.0 (default 0.90).
-        brightness: Brightness multiplier, 0.1-3.0 (default 0.90).
-        contrast: Contrast multiplier, 0.1-3.0 (default 0.90).
-        sepia: Sepia amount, 0.0-1.0 (default 0.10).
-        dpi: Resolution for rendering PDF pages (default 150).
+        output_path: Path for the output PDF file (optional).
+        **kwargs: Filter parameters passed to DarkPDF (inversion, brightness,
+            contrast, sepia, dpi, preset).
+
+    Returns:
+        DarkPDF instance if output_path is None, else None.
     """
-    pdf_filter = DarkPDFFilter(
-        inversion=inversion,
-        brightness=brightness,
-        contrast=contrast,
-        sepia=sepia,
-        dpi=dpi,
-    )
-    pdf_filter.apply_to_pdf(input_path, output_path)
+    from .dark_pdf_wrapper import DarkPDF
+
+    processor = DarkPDF(input_path, **kwargs)
+
+    if output_path:
+        processor.save(output_path)
+        return None
+
+    return processor

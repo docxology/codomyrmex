@@ -94,6 +94,8 @@ class Z3Backend(SolverBackend):
         # Execute all items to build the model
         solver = z3.Solver()
         solver.set("timeout", timeout_ms)
+        # Enable unsat core extraction by labeling assertions if needed
+        solver.set("unsat_core", True)
         namespace["solver"] = solver
 
         # Also provide an optimizer alias
@@ -110,24 +112,38 @@ class Z3Backend(SolverBackend):
                         f"Error executing item {idx}: {item!r}: {exc}"
                     ) from exc
 
-            # Check if user added constraints to solver
-            result = solver.check()
+            # If optimizer has assertions, use it; otherwise use solver
+            engine = optimizer if optimizer.assertions() else solver
+            result = engine.check()
 
             if result == z3.sat:
-                z3_model = solver.model()
+                z3_model = engine.model()
                 model_dict = {}
                 for decl in z3_model.decls():
                     val = z3_model[decl]
                     model_dict[str(decl)] = str(val)
+                
+                stats = {
+                    "num_constraints": len(engine.assertions()),
+                    "engine": "Optimize" if engine is optimizer else "Solver",
+                }
+                if engine is solver:
+                    stats["num_scopes"] = solver.num_scopes()
+                
                 return SolverResult(
                     status=SolverStatus.SAT,
                     model=model_dict,
-                    statistics={"num_constraints": len(solver.assertions())},
+                    statistics=stats,
                 )
             elif result == z3.unsat:
+                unsat_core = solver.unsat_core()
+                core_labels = [str(c) for c in unsat_core]
                 return SolverResult(
                     status=SolverStatus.UNSAT,
-                    statistics={"num_constraints": len(solver.assertions())},
+                    statistics={
+                        "num_constraints": len(solver.assertions()),
+                        "unsat_core": core_labels,
+                    },
                 )
             else:
                 return SolverResult(
@@ -144,6 +160,12 @@ class Z3Backend(SolverBackend):
                 status=SolverStatus.ERROR,
                 error_message=str(exc),
             )
+
+    def push(self) -> None:
+        self._items.append("solver.push()")
+
+    def pop(self, n: int = 1) -> None:
+        self._items.append(f"solver.pop({n})")
 
     def backend_name(self) -> str:
         return "Z3 SMT Solver"

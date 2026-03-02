@@ -9,7 +9,7 @@ Provides multi-agent collaboration capabilities including:
 
 # Core data models
 # Submodule exports
-from . import agents, communication, coordination, protocols
+from . import agents, communication, coordination, protocols, swarm
 
 # Exceptions
 from .exceptions import (
@@ -49,7 +49,25 @@ from .protocols import (
     MessageType,
     RoundRobinProtocol,
 )
-from .protocols.swarm import AgentProxy, SwarmManager, TaskDecomposer
+
+# Swarm components (modern interface)
+from .swarm import (
+    SwarmManager, 
+    AgentPool, 
+    MessageBus, 
+    TaskDecomposer, 
+    SwarmAgent, 
+    SwarmMessage,
+    TaskAssignment,
+    AgentRole,
+    SwarmMessageType,
+    Vote,
+    ConsensusResult,
+    Decision
+)
+
+# Legacy swarm components (for backward compatibility)
+from .protocols.swarm import AgentProxy
 
 # Shared schemas for cross-module interop
 try:
@@ -77,7 +95,8 @@ def cli_commands():
                 "  Agents:       module loaded\n"
                 "  Communication: module loaded\n"
                 "  Coordination:  module loaded\n"
-                "  Protocols:     module loaded"
+                "  Protocols:     module loaded\n"
+                "  Swarm:         module loaded"
             ),
         },
     }
@@ -116,17 +135,28 @@ __all__ = [
     "BroadcastProtocol",
     "CapabilityRoutingProtocol",
     "ConsensusProtocol",
-    # Swarm exports
+    # Swarm components
     "SwarmManager",
-    "AgentProxy",
+    "AgentPool",
+    "MessageBus",
     "TaskDecomposer",
+    "SwarmAgent",
+    "SwarmMessage",
+    "TaskAssignment",
+    "AgentRole",
+    "SwarmMessageType",
+    "Vote",
+    "ConsensusResult",
+    "Decision",
+    "AgentProxy", # Legacy
     # Submodules
     "agents",
     "communication",
     "coordination",
     "protocols",
+    "swarm",
     # CLI integration
     "cli_commands",
 ]
 
-__version__ = "0.2.0"
+__version__ = "0.2.1"

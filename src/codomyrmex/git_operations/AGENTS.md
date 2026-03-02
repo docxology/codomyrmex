@@ -36,6 +36,7 @@ All tools are auto-discovered via `@mcp_tool` decorators and exposed through the
 | `git_amend` | Amend the most recent commit message or content | Destructive |
 | `git_commit_details` | Get detailed metadata for a specific commit by SHA | Safe |
 | `git_log` | Get recent commit history | Safe |
+| `git_log_filtered` | Get commit history with filters (author, date, etc) | Safe |
 | `git_blame` | Show git blame output for a file (line-by-line attribution) | Safe |
 
 **Branches & Merging**

@@ -1,6 +1,6 @@
 # docs_gen -- Specification
 
-**Version**: v1.0.2 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
@@ -15,7 +15,7 @@ The module must parse Python source code using `ast.parse()` and extract:
 - Module-level docstrings (first `ast.Expr` containing a string constant).
 - Module-level `__all__` export lists (from `ast.Assign` targeting `__all__`).
 - Top-level class definitions including: name, docstring, base class names, and all method definitions.
-- Top-level function and async function definitions including: name, parameter signature, docstring, decorator names, and async status.
+- Top-level function and async function definitions including: name, parameter signature (with type hints, defaults, `*args`, `**kwargs`, and positional-only args), docstring, decorator names, and async status.
 - Class methods with the same attribute set as top-level functions.
 
 ### FR-2: Markdown Rendering
@@ -23,15 +23,19 @@ The module must parse Python source code using `ast.parse()` and extract:
 The module must render a `ModuleDoc` into Markdown format with:
 
 - H1 header for the module name.
-- H2 headers for each class and top-level function.
-- H3 headers for each class method with signature.
+- H2 headers for Exports, Classes, and Functions.
+- H3 headers for each class and top-level function.
+- H4 headers for each class method with full signature.
 - Docstrings rendered as body text below each header.
+- Decorators rendered in code blocks.
 
 ### FR-3: In-Memory Search Index
 
 The module must provide an inverted index that:
 
 - Tokenizes content into lowercase words of 2+ characters using `\w{2,}` regex.
+- Splits CamelCase and snake_case tokens into constituent words.
+- Filters out common English stopwords.
 - Maps tokens to document IDs for O(1) lookup per token.
 - Supports adding documents with `doc_id`, `title`, `content`, `path`, and optional `tags`.
 - Supports removing documents by `doc_id`, cleaning up all associated token mappings.
@@ -62,15 +66,17 @@ The module must generate `SiteConfig` objects containing:
 - Site title (configurable, default: `"Codomyrmex Documentation"`).
 - Theme name (`"material"`).
 - Plugin list (default: `["search", "mkdocstrings"]`).
-- Navigation tree with a `"Home"` entry and an `"API Reference"` section containing one entry per added module.
+- Navigation tree with a `"Home"` entry, a sorted `"API Reference"` section, and an optional `"More"` section for other pages.
 - Base URL (default: `"/"`).
+- Support for `extra_css` and `extra_javascript`.
 
 ### FR-7: MkDocs YAML Output
 
 `SiteGenerator.to_mkdocs_yaml()` must produce valid `mkdocs.yml` content including:
 
-- `site_name`, `theme` block (with `name`, `palette.scheme`, `palette.primary`), `plugins` list, and `nav` structure.
+- `site_name`, `theme` block (with `name`, `palette.scheme`, `palette.primary`, `features`), `plugins` list, `extra_css`, `extra_javascript`, and `nav` structure.
 - Theme palette uses `slate` scheme and `indigo` primary color.
+- Includes advanced features like navigation tabs, search suggestions, and code copy button.
 
 ## Interface Contract
 
@@ -112,6 +118,8 @@ class SiteGenerator:
     def __init__(self, title: str = "Codomyrmex Documentation") -> None: ...
     def add_module_source(self, source: str, module_name: str) -> ModuleDoc: ...
     def add_page(self, path: str, content: str, title: str = "") -> None: ...
+    def add_extra_css(self, path: str) -> None: ...
+    def add_extra_javascript(self, path: str) -> None: ...
     def generate_config(self) -> SiteConfig: ...
     def generate_pages(self) -> dict[str, str]: ...
     def to_mkdocs_yaml(self) -> str: ...
@@ -132,7 +140,7 @@ class SiteGenerator:
 - **`FunctionDoc`**: `name: str`, `signature: str`, `docstring: str`, `module: str`, `decorators: list[str]`, `is_async: bool`.
 - **`SearchResult`**: `doc_id: str`, `title: str`, `snippet: str`, `score: float`, `path: str`.
 - **`IndexEntry`**: `doc_id: str`, `title: str`, `content: str`, `path: str`, `tags: list[str]`.
-- **`SiteConfig`**: `title: str`, `theme: str`, `nav: list[dict[str, Any]]`, `plugins: list[str]`, `base_url: str`.
+- **`SiteConfig`**: `title: str`, `theme: str`, `nav: list[dict[str, Any]]`, `plugins: list[str]`, `base_url: str`, `extra_css: list[str]`, `extra_javascript: list[str]`.
 - **MkDocs YAML**: Plain text string suitable for writing to `mkdocs.yml`.
 
 ## Error Handling
@@ -150,7 +158,7 @@ No custom exception classes are defined. The module propagates standard Python e
 ## Performance Characteristics
 
 - **Extraction**: O(n) in source code AST node count. Single-pass traversal of the syntax tree.
-- **Indexing**: O(t) per document where t is the token count. Tokenization uses compiled regex.
+- **Indexing**: O(t) per document where t is the token count. Tokenization uses compiled regex and stopword set.
 - **Search**: O(q * d) where q is query token count and d is average documents per token. Practical performance is near-instant for indices under 10,000 documents.
 - **Memory**: All state is in-memory. No disk I/O, no database connections, no network calls.
 - **Snippet extraction**: O(t) per result where t is content length (single `str.find()` per query token).

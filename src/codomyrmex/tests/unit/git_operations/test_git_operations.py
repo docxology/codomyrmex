@@ -416,7 +416,8 @@ class TestGitOperationsComprehensive:
         # Test 2: Operations with empty/invalid parameters
         assert not create_branch("", self.repo_dir)
         assert not switch_branch("", self.repo_dir)
-        assert not add_files([], self.repo_dir)
+        # add_files returns True if no files specified (no-op)
+        assert add_files([], self.repo_dir)
         assert not commit_changes("", self.repo_dir)
 
         # Test 3: Operations requiring Git repository on non-repo

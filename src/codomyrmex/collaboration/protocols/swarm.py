@@ -1,53 +1,72 @@
-from codomyrmex.logging_monitoring.core.logger_config import get_logger
+"""Swarm coordination implementation (Legacy Compatibility).
 
-"""Swarm coordination implementation."""
+This module provides legacy access to swarm functionality. 
+New code should use codomyrmex.collaboration.swarm.
+"""
 
-logger = get_logger(__name__)
+from codomyrmex.collaboration.swarm import (
+    SwarmManager as NewSwarmManager,
+    TaskDecomposer as NewTaskDecomposer,
+    AgentRole
+)
 
 class AgentProxy:
-    """Mock-friendly proxy for a Codomyrmex agent."""
+    """Mock-friendly proxy for a Codomyrmex agent (Legacy)."""
 
     def __init__(self, name: str, role: str):
         self.name = name
         self.role = role
 
     def send_task(self, task: str) -> str:
-        logger.info(f"Agent {self.name} received task: {task}")
         return f"Result from {self.name}"
 
-class SwarmManager:
-    """Orchestrates multiple agents working together."""
-
-    def __init__(self):
-        self.agents: list[AgentProxy] = []
-
+class SwarmManager(NewSwarmManager):
+    """Orchestrates multiple agents working together (Legacy Compatibility)."""
+    
     def add_agent(self, agent: AgentProxy):
-        self.agents.append(agent)
-        logger.info(f"Agent {agent.name} ({agent.role}) joined the swarm")
+        from codomyrmex.collaboration.swarm import SwarmAgent
+        # Try to map legacy role to AgentRole enum
+        try:
+            role = AgentRole(agent.role.lower())
+        except ValueError:
+            role = AgentRole.CODER
+            
+        self.register_agent(SwarmAgent(agent.name, role))
 
     def execute(self, mission: str) -> dict[str, str]:
-        """Distribute a mission across the swarm."""
-        logger.info(f"Starting mission: {mission}")
+        """Distribute a mission across the swarm (Legacy Compatibility)."""
+        import asyncio
+        # We need to run it synchronously for legacy compatibility if possible, 
+        # but execute_task is async. This is a shim.
+        try:
+            loop = asyncio.get_event_loop()
+        except RuntimeError:
+            loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(loop)
+            
+        # Simpler implementation for shim
         results = {}
-        for agent in self.agents:
-            results[agent.name] = agent.send_task(mission)
+        for agent_id in self.pool._agents:
+            agent = self.pool.get(agent_id)
+            if agent:
+                results[agent.agent_id] = f"Result from {agent.agent_id}"
         return results
 
     def consensus_vote(self, proposal: str) -> bool:
-        """Simple majority vote among agents."""
-        if not self.agents:
+        """Simple majority vote among agents (Legacy Compatibility)."""
+        from codomyrmex.collaboration.swarm import Vote, Decision
+        votes = [Vote(aid, True) for aid in self.pool._agents]
+        if not votes:
             return False
-        # In a real swarm, each agent would return a bool
-        votes = [True for _ in self.agents] # Simplified
-        return sum(votes) > len(self.agents) / 2
+        result = self.request_consensus(proposal, votes)
+        return result.decision == Decision.APPROVED
 
-class TaskDecomposer:
-    """Utilities for breaking down complex missions."""
-
+class TaskDecomposer(NewTaskDecomposer):
+    """Utilities for breaking down complex missions (Legacy Compatibility)."""
+    
     @staticmethod
     def decompose(mission: str) -> list[str]:
-        """Break down a mission into primitive tasks."""
-        # Simple heuristic decomposition
+        """Break down a mission into primitive tasks (Legacy)."""
         if " and " in mission:
             return mission.split(" and ")
         return [mission]

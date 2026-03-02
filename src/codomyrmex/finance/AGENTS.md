@@ -1,6 +1,6 @@
 # Agent Instructions for `codomyrmex.finance`
 
-**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
 
@@ -52,10 +52,12 @@ The finance module does **not** expose any MCP tools. There is no `mcp_tools.py`
 
 5. **Payroll Processing**: `PayrollProcessor` supports five pay cadences: weekly, biweekly, semimonthly, monthly, annual. It annualizes gross pay for federal tax computation, then pro-rates back to the period. FICA rates are 2024-standard (SS 6.2%, Medicare 1.45%).
 
-6. **Forecasting**: `Forecaster` accepts a list of historical float values and supports three methods:
+6. **Forecasting**: `Forecaster` accepts a list of historical `Decimal` values and supports:
    - `moving_average(window)` -- simple moving average
    - `exponential_smoothing(alpha)` -- single exponential smoothing
-   - `linear_trend()` -- OLS linear regression with R-squared
+   - `linear_trend()` -- OLS linear regression with R-squared and std dev
+   - `project(periods)` -- Monte Carlo projection using linear trend and volatility
+   - `risk_metrics(portfolio)` -- VaR 95% and PnL analysis
    - `forecast(periods, method)` -- project future values using any of the above
 
 ## Quick Verification

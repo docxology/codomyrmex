@@ -4,8 +4,8 @@ Tests cover FeatureManager, evaluation strategies, storage backends,
 rollout management, targeting rules, and the experiment system.
 """
 
-
 import pytest
+from pathlib import Path
 
 from codomyrmex.feature_flags import FeatureManager
 from codomyrmex.feature_flags.evaluation import (
@@ -44,35 +44,35 @@ class TestFeatureManager:
 
     def test_static_flags_enabled(self):
         """Test simple boolean flag evaluation - enabled."""
-        manager = FeatureManager({"feature-a": True})
+        manager = FeatureManager(config={"feature-a": True})
         assert manager.is_enabled("feature-a") is True
 
     def test_static_flags_disabled(self):
         """Test simple boolean flag evaluation - disabled."""
-        manager = FeatureManager({"feature-b": False})
+        manager = FeatureManager(config={"feature-b": False})
         assert manager.is_enabled("feature-b") is False
 
     def test_static_flags_missing_default(self):
         """Test missing flag returns default."""
-        manager = FeatureManager({})
+        manager = FeatureManager()
         assert manager.is_enabled("missing") is False
         assert manager.is_enabled("missing", default=True) is True
 
     def test_percentage_rollout_deterministic(self):
         """Test percentage rollout gives deterministic results per user."""
-        manager = FeatureManager({"feat": {"percentage": 50}})
+        manager = FeatureManager(config={"feat": {"percentage": 50.0}})
         r1 = manager.is_enabled("feat", user_id="user_1")
         r2 = manager.is_enabled("feat", user_id="user_1")
         assert r1 == r2
 
     def test_percentage_rollout_no_user_id(self):
         """Test percentage rollout returns False without user_id."""
-        manager = FeatureManager({"feat": {"percentage": 50}})
+        manager = FeatureManager(config={"feat": {"percentage": 50.0}})
         assert manager.is_enabled("feat") is False
 
     def test_multivariate_flags(self):
         """Test non-boolean flag value retrieval."""
-        manager = FeatureManager({"theme": "dark", "max": 10})
+        manager = FeatureManager(config={"theme": "dark", "max": 10})
         assert manager.get_value("theme") == "dark"
         assert manager.get_value("max") == 10
         assert manager.get_value("missing", default="blue") == "blue"
@@ -80,7 +80,7 @@ class TestFeatureManager:
     def test_flag_persistence_save_load(self, tmp_path):
         """Test saving and loading flags from file."""
         file_path = str(tmp_path / "flags.json")
-        manager = FeatureManager({"feat-c": True, "feat-d": False})
+        manager = FeatureManager(config={"feat-c": True, "feat-d": False})
         manager.save_to_file(file_path)
 
         new_manager = FeatureManager()
@@ -343,8 +343,8 @@ class TestFlagStorage:
     def test_in_memory_store_basic(self):
         """Test InMemoryFlagStore basic operations."""
         store = InMemoryFlagStore()
-        store.set("flag-a", True)
-        assert store.get("flag-a") is True
+        store.set("flag-a", {"enabled": True})
+        assert store.get("flag-a")["enabled"] is True
         assert store.get("missing") is None
 
     def test_in_memory_store_delete(self):
@@ -375,8 +375,8 @@ class TestFlagStorage:
     def test_file_store_basic(self, tmp_path):
         """Test FileFlagStore basic set/get."""
         store = FileFlagStore(str(tmp_path / "flags.json"))
-        store.set("flag-x", True)
-        assert store.get("flag-x") is True
+        store.set("flag-x", {"enabled": True})
+        assert store.get("flag-x")["enabled"] is True
 
     def test_file_store_persistence(self, tmp_path):
         """Test FileFlagStore persists across instances."""

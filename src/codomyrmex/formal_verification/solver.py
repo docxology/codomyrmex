@@ -118,3 +118,11 @@ class ConstraintSolver:
         if result.status == SolverStatus.UNSAT:
             return False
         return None
+
+    def push(self) -> None:
+        """Push a new solver scope."""
+        self._backend.push()
+
+    def pop(self, n: int = 1) -> None:
+        """Pop n solver scopes."""
+        self._backend.pop(n)

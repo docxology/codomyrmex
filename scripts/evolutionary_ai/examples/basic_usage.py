@@ -21,7 +21,11 @@ sys.path.insert(0, str(project_root / "src"))
 
 # Direct import to avoid triggering full codomyrmex package init
 import importlib.util
-script_base_path = project_root / "src" / "codomyrmex" / "utils" / "script_base.py"
+script_base_path = project_root / "src" / "codomyrmex" / "utils" / "process" / "script_base.py"
+if not script_base_path.exists():
+    # Try alternate location if project structure differs
+    script_base_path = project_root / "src" / "codomyrmex" / "utils" / "script_base.py"
+
 spec = importlib.util.spec_from_file_location("script_base", script_base_path)
 script_base = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(script_base)
@@ -36,7 +40,7 @@ class EvolutionaryAIScript(ScriptBase):
         super().__init__(
             name="evolutionary_ai_usage",
             description="Demonstrate and test evolutionary algorithms",
-            version="1.0.0",
+            version="1.1.0",
         )
 
     def add_arguments(self, parser):
@@ -55,8 +59,8 @@ class EvolutionaryAIScript(ScriptBase):
             help="Length of each genome (default: 10)"
         )
         group.add_argument(
-            "--mutation-rate", type=float, default=0.05,
-            help="Mutation rate (default: 0.05)"
+            "--mutation-rate", type=float, default=0.1,
+            help="Mutation rate (default: 0.1)"
         )
         group.add_argument(
             "--elitism", type=int, default=2,
@@ -86,18 +90,23 @@ class EvolutionaryAIScript(ScriptBase):
             results["dry_run"] = True
             return results
 
-        # Import evolutionary_ai module (after dry_run check)
+        # Import improved evolutionary_ai module
         from codomyrmex.evolutionary_ai import (
-            Population
+            Population, TournamentSelection, GaussianMutation, SinglePointCrossover
         )
 
         # Select fitness function
         fitness_fn = self._get_fitness_function(args.fitness_function)
         self.log_info(f"Using fitness function: {args.fitness_function}")
 
+        # Set up operators
+        sel = TournamentSelection(tournament_size=3)
+        cross = SinglePointCrossover(crossover_rate=0.8)
+        mut = GaussianMutation(mutation_rate=args.mutation_rate, sigma=0.05)
+
         # Create population
         self.log_info(f"\n1. Creating population: {args.population_size} individuals, genome length {args.genome_length}")
-        population = Population(size=args.population_size, genome_length=args.genome_length)
+        population = Population.random_genome_population(size=args.population_size, genome_length=args.genome_length)
         self.log_success(f"Created population with {len(population.individuals)} individuals")
 
         # Evolution loop
@@ -108,21 +117,27 @@ class EvolutionaryAIScript(ScriptBase):
             # Evaluate
             population.evaluate(fitness_fn)
             best = population.get_best()
+            mean_fit = population.mean_fitness()
 
             # Record history
             gen_stats = {
                 "generation": gen + 1,
                 "best_fitness": best.fitness,
-                "avg_fitness": sum(g.fitness for g in population.individuals if g.fitness) / len(population.individuals),
+                "avg_fitness": mean_fit,
             }
             results["evolution_history"].append(gen_stats)
 
             if config.verbose:
-                self.log_debug(f"Gen {gen + 1}: best={best.fitness:.4f}, avg={gen_stats['avg_fitness']:.4f}")
+                self.log_debug(f"Gen {gen + 1}: best={best.fitness:.4f}, avg={mean_fit:.4f}")
 
             # Evolve (except last generation)
             if gen < args.generations - 1:
-                population.evolve(mutation_rate=args.mutation_rate, elitism=args.elitism)
+                population.evolve(
+                    selection_operator=sel,
+                    crossover_operator=cross,
+                    mutation_operator=mut,
+                    elitism=args.elitism
+                )
 
         evolution_time = time.perf_counter() - start_time
 
@@ -132,12 +147,6 @@ class EvolutionaryAIScript(ScriptBase):
 
         self.log_success(f"Evolution completed in {evolution_time:.2f}s")
         self.log_info(f"Best fitness: {final_best.fitness:.6f}")
-
-        # Test operators
-        self.log_info("\n3. Testing genetic operators")
-        operator_results = self._test_operators(args.genome_length, args.mutation_rate)
-        results["operator_tests"] = operator_results
-        self.log_success(f"Operators tested: crossover, mutation, selection")
 
         # Compile statistics
         results["statistics"] = {
@@ -163,19 +172,19 @@ class EvolutionaryAIScript(ScriptBase):
 
     def _get_fitness_function(self, name: str) -> Callable:
         """Get fitness function by name."""
-        def sum_fitness(genome):
-            return sum(genome.genes) / len(genome.genes)
+        def sum_fitness(genes):
+            return sum(genes) / len(genes)
 
-        def product_fitness(genome):
+        def product_fitness(genes):
             result = 1.0
-            for gene in genome.genes:
+            for gene in genes:
                 result *= (gene + 0.1)
             return result
 
-        def peaks_fitness(genome):
+        def peaks_fitness(genes):
             # Multi-modal fitness landscape
-            peak1 = sum((g - 0.3) ** 2 for g in genome.genes)
-            peak2 = sum((g - 0.7) ** 2 for g in genome.genes)
+            peak1 = sum((g - 0.3) ** 2 for g in genes)
+            peak2 = sum((g - 0.7) ** 2 for g in genes)
             return 1.0 / (1.0 + min(peak1, peak2))
 
         functions = {
@@ -183,50 +192,7 @@ class EvolutionaryAIScript(ScriptBase):
             "product": product_fitness,
             "peaks": peaks_fitness,
         }
-        return functions[name]
-
-    def _test_operators(self, genome_length: int, mutation_rate: float) -> Dict[str, Any]:
-        """Test genetic operators."""
-        from codomyrmex.evolutionary_ai import Genome, crossover, mutate, tournament_selection
-
-        results = {}
-
-        # Test crossover
-        parent1 = Genome.random(genome_length)
-        parent2 = Genome.random(genome_length)
-        child1, child2 = crossover(parent1, parent2)
-        results["crossover"] = {
-            "parent1_length": len(parent1),
-            "parent2_length": len(parent2),
-            "child1_length": len(child1),
-            "child2_length": len(child2),
-            "success": len(child1) == genome_length and len(child2) == genome_length,
-        }
-
-        # Test mutation
-        original = Genome.random(genome_length)
-        original_genes = original.genes.copy()
-        mutated = mutate(original, rate=mutation_rate)
-        changes = sum(1 for a, b in zip(original_genes, mutated.genes) if a != b)
-        results["mutation"] = {
-            "original_length": len(original_genes),
-            "mutated_length": len(mutated.genes),
-            "changes": changes,
-            "mutation_rate": mutation_rate,
-        }
-
-        # Test selection
-        test_population = [Genome.random(genome_length) for _ in range(10)]
-        for g in test_population:
-            g.fitness = sum(g.genes)
-        selected = tournament_selection(test_population, tournament_size=3)
-        results["selection"] = {
-            "population_size": len(test_population),
-            "selected_fitness": selected.fitness,
-            "selection_success": selected in test_population,
-        }
-
-        return results
+        return lambda ind: functions[name](ind.genes)
 
 
 if __name__ == "__main__":

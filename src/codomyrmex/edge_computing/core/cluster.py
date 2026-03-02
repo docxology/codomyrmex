@@ -67,11 +67,10 @@ class EdgeCluster:
 
     # ── Heartbeat / Health ──────────────────────────────────────────
 
-    def heartbeat(self, node_id: str) -> None:
-        """Update node heartbeat timestamp and mark online."""
+    def heartbeat(self, node_id: str, status: EdgeNodeStatus | None = None) -> None:
+        """Update node heartbeat timestamp and optionally status."""
         if node_id in self._nodes:
-            self._nodes[node_id].last_heartbeat = datetime.now(UTC)
-            self._nodes[node_id].status = EdgeNodeStatus.ONLINE
+            self._nodes[node_id].heartbeat(status)
 
     def mark_offline(self, node_id: str) -> None:
         """Mark a node as offline."""
@@ -170,6 +169,41 @@ class EdgeCluster:
     def online_count(self) -> int:
         return sum(1 for n in self._nodes.values() if n.status == EdgeNodeStatus.ONLINE)
 
+    def rebalance_cluster(self) -> int:
+        """Move functions from overloaded nodes to least-loaded ones.
+
+        Simplistic implementation: identify overloaded nodes, find their functions,
+        and try to redeploy them elsewhere.
+        """
+        moves = 0
+        overloaded = [nid for nid, node in self._nodes.items() if node.resources.is_overloaded]
+
+        for source_id in overloaded:
+            runtime = self._runtimes[source_id]
+            functions = runtime.list_functions()
+
+            for func in functions:
+                target_id = self.deploy_least_loaded(func)
+                if target_id and target_id != source_id:
+                    runtime.undeploy(func.id)
+                    moves += 1
+
+        return moves
+
+    def auto_heal(self) -> int:
+        """Mark stale nodes as OFFLINE and try to recover degraded nodes.
+
+        Returns:
+            Count of nodes whose status was changed.
+        """
+        stale_ids = self.detect_stale_nodes()
+        changes = 0
+        for nid in stale_ids:
+            if self._nodes[nid].status != EdgeNodeStatus.OFFLINE:
+                self.mark_offline(nid)
+                changes += 1
+        return changes
+
     def health(self) -> dict[str, Any]:
         """Return cluster health summary."""
         total_functions = sum(r.function_count for r in self._runtimes.values())
@@ -186,6 +220,7 @@ class EdgeCluster:
                     "status": node.status.value if hasattr(node.status, "value") else str(node.status),
                     "functions": self._runtimes[nid].function_count,
                     "draining": nid in self._draining,
+                    "overloaded": self._nodes[nid].resources.is_overloaded,
                 }
                 for nid, node in self._nodes.items()
             ],

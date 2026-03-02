@@ -1,22 +1,10 @@
 """Document splitting operations."""
 
-
 from codomyrmex.documents.exceptions import DocumentConversionError
 from codomyrmex.documents.models.document import Document
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 logger = get_logger(__name__)
-
-
-def _make_split_metadata(document_metadata, extra: dict):
-    """Create metadata for a split document chunk."""
-    if document_metadata is None:
-        return extra
-    if isinstance(document_metadata, dict):
-        return {**document_metadata, **extra}
-    if hasattr(document_metadata, 'to_dict'):
-        return {**document_metadata.to_dict(), **extra}
-    return extra
 
 
 def split_document(document: Document, criteria: dict) -> list[Document]:
@@ -42,12 +30,16 @@ def split_document(document: Document, criteria: dict) -> list[Document]:
             return _split_by_size(document, criteria)
         elif method == "by_pages" and document.format.value == "pdf":
             return _split_by_pages(document, criteria)
+        elif method == "by_rows" and document.format.value == "csv":
+            return _split_by_rows(document, criteria)
         else:
             # Default: split by lines
             return _split_by_lines(document, criteria)
 
     except Exception as e:
         logger.error(f"Error splitting document: {e}")
+        if isinstance(e, DocumentConversionError):
+            raise
         raise DocumentConversionError(f"Failed to split document: {str(e)}") from e
 
 
@@ -70,10 +62,13 @@ def _split_by_sections(document: Document, criteria: dict) -> list[Document]:
 
     split_docs = []
     for i, section_content in enumerate(sections):
+        new_metadata = document.metadata.copy()
+        new_metadata.custom_fields["section_index"] = i
+        
         split_doc = Document(
             content=section_content,
             format=document.format,
-            metadata=_make_split_metadata(document.metadata, {"section": i}),
+            metadata=new_metadata,
         )
         split_docs.append(split_doc)
 
@@ -88,10 +83,13 @@ def _split_by_size(document: Document, criteria: dict) -> list[Document]:
     split_docs = []
     for i in range(0, len(content), max_size):
         chunk = content[i:i + max_size]
+        new_metadata = document.metadata.copy()
+        new_metadata.custom_fields["chunk_index"] = i // max_size
+        
         split_doc = Document(
             content=chunk,
             format=document.format,
-            metadata=_make_split_metadata(document.metadata, {"chunk": i // max_size}),
+            metadata=new_metadata,
         )
         split_docs.append(split_doc)
 
@@ -100,7 +98,28 @@ def _split_by_size(document: Document, criteria: dict) -> list[Document]:
 
 def _split_by_pages(document: Document, criteria: dict) -> list[Document]:
     """Split PDF document by pages."""
+    # Placeholder for actual PDF splitting logic
     return [document]
+
+def _split_by_rows(document: Document, criteria: dict) -> list[Document]:
+    """Split CSV document (list of dicts) by rows."""
+    rows_per_chunk = criteria.get("rows_per_chunk", 100)
+    if not isinstance(document.content, list):
+        return [document]
+    
+    split_docs = []
+    for i in range(0, len(document.content), rows_per_chunk):
+        chunk = document.content[i:i + rows_per_chunk]
+        new_metadata = document.metadata.copy()
+        new_metadata.custom_fields["chunk_index"] = i // rows_per_chunk
+        
+        split_doc = Document(
+            content=chunk,
+            format=document.format,
+            metadata=new_metadata,
+        )
+        split_docs.append(split_doc)
+    return split_docs
 
 
 def _split_by_lines(document: Document, criteria: dict) -> list[Document]:
@@ -113,10 +132,13 @@ def _split_by_lines(document: Document, criteria: dict) -> list[Document]:
     for i in range(0, len(lines), lines_per_chunk):
         chunk_lines = lines[i:i + lines_per_chunk]
         chunk_content = '\n'.join(chunk_lines)
+        new_metadata = document.metadata.copy()
+        new_metadata.custom_fields["chunk_index"] = i // lines_per_chunk
+        
         split_doc = Document(
             content=chunk_content,
             format=document.format,
-            metadata=_make_split_metadata(document.metadata, {"chunk": i // lines_per_chunk}),
+            metadata=new_metadata,
         )
         split_docs.append(split_doc)
 

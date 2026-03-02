@@ -6,7 +6,7 @@ from codomyrmex.model_context_protocol.decorators import mcp_tool
 
 logger = get_logger(__name__)
 
-@mcp_tool()
+@mcp_tool(name="git_stash")
 def stash_changes(message: str = None, repository_path: str = None) -> bool:
     """Stash current changes."""
     if repository_path is None:
@@ -35,7 +35,7 @@ def stash_changes(message: str = None, repository_path: str = None) -> bool:
         logger.error(f"Unexpected error stashing changes: {e}")
         return False
 
-@mcp_tool()
+@mcp_tool(name="git_stash_apply")
 def apply_stash(stash_ref: str = None, repository_path: str = None) -> bool:
     """Apply stashed changes."""
     if repository_path is None:
@@ -64,7 +64,7 @@ def apply_stash(stash_ref: str = None, repository_path: str = None) -> bool:
         logger.error(f"Unexpected error applying stash: {e}")
         return False
 
-@mcp_tool()
+@mcp_tool(name="git_stash_list")
 def list_stashes(repository_path: str = None) -> list[dict[str, str]]:
     """List all stashes."""
     if repository_path is None:

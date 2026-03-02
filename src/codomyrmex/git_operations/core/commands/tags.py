@@ -6,7 +6,7 @@ from codomyrmex.model_context_protocol.decorators import mcp_tool
 
 logger = get_logger(__name__)
 
-@mcp_tool()
+@mcp_tool(name="git_create_tag")
 def create_tag(tag_name: str, message: str = None, repository_path: str = None) -> bool:
     """Create a Git tag."""
     if repository_path is None:
@@ -37,7 +37,7 @@ def create_tag(tag_name: str, message: str = None, repository_path: str = None) 
         logger.error(f"Unexpected error creating tag: {e}")
         return False
 
-@mcp_tool()
+@mcp_tool(name="git_list_tags")
 def list_tags(repository_path: str = None) -> list[str]:
     """List all Git tags."""
     if repository_path is None:

@@ -91,12 +91,18 @@ class EdgeRuntime:
         cold_start = function_id not in self._warm_functions
         start = time.time()
 
+        # Check resource constraints
+        if self.node.resources.is_overloaded:
+            logger.warning("Node %s is overloaded, invocation may be delayed", self.node.id)
+
         try:
             result = func.handler(*args, **kwargs)
             elapsed = time.time() - start
 
             if elapsed > func.timeout_seconds:
-                raise TimeoutError(f"Function exceeded timeout: {elapsed:.3f}s > {func.timeout_seconds}s")
+                raise TimeoutError(
+                    f"Function '{function_id}' exceeded timeout: {elapsed:.3f}s > {func.timeout_seconds}s"
+                )
 
             self._warm_functions.add(function_id)
             self._call_counts[function_id] = self._call_counts.get(function_id, 0) + 1

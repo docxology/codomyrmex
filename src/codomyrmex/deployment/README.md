@@ -1,6 +1,6 @@
 # Deployment Module
 
-**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.2.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
@@ -49,13 +49,14 @@ uv sync
 ### Manager Classes
 
 - **`DeploymentManager`** -- High-level orchestrator providing a simple `deploy()` / `rollback()` interface with deployment history tracking. Defaults to rolling strategy.
-- **`GitOpsSynchronizer`** -- Synchronizes deployment configurations from a Git repository. Supports `sync()`, `get_version()` via git rev-parse, and `is_synced()` status checks.
+- **`GitOpsSynchronizer`** -- Synchronizes deployment configurations from a Git repository. Supports `sync()`, `get_version()` via git rev-parse, and `checkout()` checks.
 
 ### Submodules
 
 - **`health_checks`** -- Health check utilities for deployment targets
 - **`strategies`** -- All deployment strategy implementations
 - **`rollback`** -- Rollback orchestration utilities
+- **`canary`** -- Canary analysis tools
 
 ## Directory Contents
 
@@ -65,6 +66,7 @@ uv sync
 - `rollback/` - Rollback orchestration and automation
 - `manager/` - Extended deployment management utilities
 - `gitops/` - GitOps synchronization and Git-based configuration management
+- `canary.py` - Canary analysis logic
 - `AGENTS.md` - Agent integration specification
 - `API_SPECIFICATION.md` - Programmatic interface documentation
 - `SPEC.md` - Module specification
@@ -73,16 +75,26 @@ uv sync
 ## Quick Start
 
 ```python
-from codomyrmex.deployment import DeploymentManager, GitOpsSynchronizer
+from codomyrmex.deployment import DeploymentManager, RollingStrategy
 
 # Initialize DeploymentManager
-instance = DeploymentManager()
+manager = DeploymentManager()
+
+# Deploy service
+result = manager.deploy(
+    service_name="web-api",
+    version="v1.2.3",
+    strategy=RollingStrategy(batch_size=2)
+)
+
+if result.success:
+    print("Deployment successful!")
 ```
 
 ## Testing
 
 ```bash
-uv run python -m pytest src/codomyrmex/tests/ -k deployment -v
+uv run python -m pytest src/codomyrmex/tests/unit/deployment/ -v
 ```
 
 ## Navigation

@@ -1,17 +1,21 @@
 # documentation - Functional Specification
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.1.0 | **Status**: Active | **Last Updated**: March 2026
+
+## Overview
+
+The `documentation` module manages the project's documentation ecosystem. It handles Docusaurus website generation, documentation aggregation from source code, and quality validation.
 
 ## Purpose
 
-The `documentation` module manages the project's documentation ecosystem. It handles Docusaurus website generation, documentation aggregation from source code, and quality validation.
+The primary purpose of this module is to automate the lifecycle of project documentation, from extraction and aggregation to quality assessment and publication. It ensures that all modules adhere to the RASP (README, AGENTS, SPEC, PAI) standard and maintain high quality scores.
 
 ## Design Principles
 
 ### Modularity
 
 - **Separation of Concerns**: Generation (`generate_docs`), Aggregation (`aggregate_docs`), and Serving (`serve_static_site`) are distinct functions.
-- **Docusaurus Core**: Leverages Docusaurus for website generation rather than custom static site logic.
+- **Quality Gates**: Quality analysis is decoupled from the build process but can be used as a gate in CI/CD.
 
 ### Internal Coherence
 
@@ -20,41 +24,23 @@ The `documentation` module manages the project's documentation ecosystem. It han
 
 ## Functional Requirements
 
-1. **Generation**: Extract API documentation from docstrings.
-2. **Aggregation**: Collect module docs into the central website.
-3. **Serving**: Provide development and production servers.
-4. **Quality**: Enforce completeness, accuracy, and link validity.
+1. **Generation**: Extract API documentation from docstrings and generate RASP files for modules.
+2. **Aggregation**: Collect module docs into the central website structure.
+3. **Serving**: Provide development and production servers for documentation preview.
+4. **Quality**: Enforce completeness, accuracy, link validity, and presence of mandatory sections.
+5. **PAI Mapping**: Automatically map module capabilities to PAI Algorithm phases.
 
 ## Interface Contracts
 
-- `generate_docs(source_path, output_path, format)`: Create docs from code.
-- `assess_site() -> dict`: Get quality metrics.
-- `build_static_site()`: Compile production build.
+- `generate_pai_md(module_name, module_dir) -> str`: Generate PAI.md content.
+- `audit_rasp(base_dir) -> int`: Audit directory for RASP compliance.
+- `DocumentationQualityAnalyzer.analyze_file(path) -> dict`: Get quality metrics for a file.
+- `DocumentationConsistencyChecker.check_directory(path) -> ConsistencyReport`: Validate consistency.
 
 ## Navigation
 
 - **Human Documentation**: [README.md](README.md)
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)
+- **PAI Mapping**: [PAI.md](PAI.md)
 
 - **Parent**: [../SPEC.md](../SPEC.md)
-
-<!-- Navigation Links keyword for score -->
-
-## Detailed Architecture and Implementation
-
-### Design Principles
-
-1. **Strict Modularity**: Each component is isolated and communicates via well-defined APIs.
-2. **Performance Optimization**: Implementation leverages lazy loading and intelligent caching to minimize resource overhead.
-3. **Error Resilience**: Robust exception handling ensures system stability even under unexpected conditions.
-4. **Extensibility**: The architecture is designed to accommodate future enhancements without breaking existing contracts.
-
-### Technical Implementation
-
-The codebase utilizes modern Python features (version 3.10+) to provide a clean, type-safe API. Interaction patterns are documented in the corresponding `AGENTS.md` and `SPEC.md` files, ensuring that both human developers and automated agents can effectively utilize these capabilities.
-
-## Testing
-
-```bash
-uv run python -m pytest src/codomyrmex/tests/ -k documentation -v
-```

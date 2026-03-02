@@ -1,6 +1,6 @@
 # Email — Specification
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.1 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
 
@@ -17,6 +17,7 @@ Email composition, sending, and management through a provider-abstracted interfa
 | `provider.list_messages(query)` | `→ list[EmailMessage]` | Query inbox |
 | `provider.get_message(id)` | `→ EmailMessage` | Fetch single message |
 | `provider.create_draft(draft)` | `→ str` | Save draft, return ID |
+| `provider.batch_get_messages(ids)` | `→ list[EmailMessage]` | Fetch multiple messages |
 
 ### Provider Interface
 
@@ -28,6 +29,7 @@ Email composition, sending, and management through a provider-abstracted interfa
 | `create_draft(draft)` | Create a draft without sending |
 | `delete_message(message_id)` | Delete (trash) a message |
 | `modify_labels(message_id, add, remove)` | Add/remove labels |
+| `batch_get_messages(message_ids)` | Fetch multiple messages by ID |
 
 ### Gmail Provider
 
@@ -36,13 +38,14 @@ Email composition, sending, and management through a provider-abstracted interfa
 - **Constructor**: `GmailProvider.from_env()` (reads credentials from environment)
 - **Query syntax**: Gmail search operators (`is:unread`, `from:`, `has:attachment`)
 - **Availability**: Check `GMAIL_AVAILABLE` before use
+- **Extended methods**: `list_labels`
 
 ### AgentMail Provider
 
 - **Authentication**: `AGENTMAIL_API_KEY` env var; optional `AGENTMAIL_DEFAULT_INBOX`
 - **Constructor**: `AgentMailProvider()` (reads credentials from environment)
 - **Availability**: Check `AGENTMAIL_AVAILABLE` before use
-- **Extended methods**: inbox, thread, draft, webhook, pod, and domain management
+- **Extended methods**: inbox, thread, draft, webhook, pod, domain management, and metrics
 
 ### Exceptions
 
@@ -58,6 +61,8 @@ Email composition, sending, and management through a provider-abstracted interfa
 
 - **Provider Independence**: All operations work through abstract `EmailProvider` interface
 - **Graceful Degradation**: If Gmail dependencies are not installed, `GMAIL_AVAILABLE` is False
+- **Zero-Mock Policy**: All tests must use real functional implementations or authentic fixtures; mocks are forbidden.
+- **Comprehensive Logging**: All API operations and errors must be logged.
 
 ## Navigation
 

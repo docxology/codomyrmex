@@ -7,7 +7,7 @@ from __future__ import annotations
 
 import threading
 from dataclasses import dataclass, field
-from datetime import datetime
+from datetime import UTC, datetime
 from enum import Enum
 from typing import Any
 
@@ -73,7 +73,7 @@ class EdgeScheduler:
             function_id=function_id,
             schedule_type=schedule_type,
             interval_seconds=interval_seconds,
-            next_run=datetime.now(),
+            next_run=datetime.now(UTC),
             max_runs=max_runs,
             args=args,
             kwargs=kwargs or {},
@@ -102,21 +102,48 @@ class EdgeScheduler:
 
     def get_due_jobs(self) -> list[ScheduledJob]:
         """Return jobs that are due to run now."""
-        now = datetime.now()
+        now = datetime.now(UTC)
         due = []
-        for job in self._jobs.values():
-            if not job.enabled or job.exhausted:
-                continue
-            if job.next_run and job.next_run <= now:
-                due.append(job)
+        with self._lock:
+            for job in self._jobs.values():
+                if not job.enabled or job.exhausted:
+                    continue
+                if job.next_run and job.next_run <= now:
+                    due.append(job)
         return due
+
+    def execute_tick(self, cluster: Any) -> int:
+        """Run one iteration of the scheduler, executing due jobs.
+
+        Args:
+            cluster: The EdgeCluster to run jobs on.
+
+        Returns:
+            Number of jobs executed.
+        """
+        due_jobs = self.get_due_jobs()
+        executed_count = 0
+
+        for job in due_jobs:
+            # Simplistic execution: run on any node that has the function
+            for node in cluster.list_nodes():
+                runtime = cluster.get_runtime(node.id)
+                if runtime and any(f.id == job.function_id for f in runtime.list_functions()):
+                    try:
+                        runtime.invoke(job.function_id, *job.args, **job.kwargs)
+                        self.mark_executed(job.id)
+                        executed_count += 1
+                        break
+                    except Exception:
+                        continue
+        return executed_count
 
     def mark_executed(self, job_id: str) -> None:
         """Mark a job as having just been executed."""
         job = self._jobs.get(job_id)
         if not job:
             return
-        job.last_run = datetime.now()
+        job.last_run = datetime.now(UTC)
         job.run_count += 1
 
         if job.schedule_type == ScheduleType.ONCE:
@@ -124,7 +151,7 @@ class EdgeScheduler:
         elif job.schedule_type == ScheduleType.INTERVAL:
             from datetime import timedelta
 
-            job.next_run = datetime.now() + timedelta(seconds=job.interval_seconds)
+            job.next_run = datetime.now(UTC) + timedelta(seconds=job.interval_seconds)
 
     def summary(self) -> dict[str, Any]:
         """Summary of scheduler state."""

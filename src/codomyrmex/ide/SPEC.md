@@ -135,6 +135,15 @@ class IDEClient(ABC):
     
     @abstractmethod
     def open_file(self, path: str) -> bool: ...
+    
+    @abstractmethod
+    def close_file(self, path: str) -> bool: ...
+    
+    @abstractmethod
+    def save_file(self, path: str) -> bool: ...
+    
+    @abstractmethod
+    def save_all(self) -> bool: ...
 ```
 
 ## Quality Standards

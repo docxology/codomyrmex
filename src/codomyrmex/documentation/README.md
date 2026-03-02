@@ -1,10 +1,14 @@
 # Documentation Module
 
-**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
 Documentation management and website generation module for the Codomyrmex project. Provides tools for checking documentation environments, building and serving static documentation sites (Docusaurus-based), aggregating docs from across modules, validating version consistency, and assessing documentation quality. Integrates with `logging_monitoring` for structured logging and `environment_setup` for dependency verification.
+
+## Purpose
+
+The documentation module exists to ensure high-quality, consistent, and automated documentation across the entire Codomyrmex ecosystem. It provides the infrastructure to generate a unified documentation website and the tools to audit and score documentation quality.
 
 ## PAI Integration
 
@@ -20,7 +24,6 @@ The documentation module's `audit_rasp_compliance` MCP tool is invoked by PAI `Q
 ### Website Generation
 
 - **`check_doc_environment()`** -- Verify that documentation tooling (Node.js, npm) is available and properly configured
-- **`run_command_stream_output()`** -- Execute a shell command with real-time streaming output for build processes
 - **`install_dependencies()`** -- Install documentation site dependencies (npm packages)
 - **`start_dev_server()`** -- Launch the Docusaurus development server with hot reload
 - **`build_static_site()`** -- Build the static documentation site for production deployment
@@ -35,59 +38,48 @@ The documentation module's `audit_rasp_compliance` MCP tool is invoked by PAI `Q
 
 ### Quality Analysis
 
-- **`DocumentationQualityAnalyzer`** -- Analyzes documentation quality across the project using configurable rules and metrics
+- **`DocumentationQualityAnalyzer`** -- Analyzes documentation quality across the project using configurable rules and metrics (completeness, consistency, technical accuracy, readability, structure)
 - **`generate_quality_report()`** -- Generate a comprehensive quality report for project documentation
-- **`DocumentationConsistencyChecker`** -- Checks cross-module documentation for consistency in naming, structure, and references
+- **`DocumentationConsistencyChecker`** -- Checks cross-module documentation for consistency in naming, structure, and references. Now includes mandatory section validation and internal link checking.
+- **`audit_rasp()`** -- Specifically audits for RASP compliance across modules.
 
 ## Directory Contents
 
-- `__init__.py` - Module exports from website, quality, and consistency subsystems
-- `documentation_website.py` - Core website generation functions (build, serve, aggregate, validate)
-- `consistency_checker.py` - Cross-module documentation consistency validation
-- `quality_assessment.py` - Documentation quality analysis and report generation
-- `docusaurus.config.js` - Docusaurus site configuration
-- `sidebars.js` - Documentation site sidebar structure
-- `package.json` - Node.js dependencies for the documentation site
-- `scripts/` - Build and validation scripts
-- `docs/` - Documentation source content
-- `src/` - Docusaurus React components and pages
-- `static/` - Static assets for the documentation site
-- `CHANGELOG.md` - Module change history
-- `SECURITY.md` - Security considerations for documentation generation
-- `USAGE_EXAMPLES.md` - Usage examples and patterns
-- `bug_taxonomy.md` - Documentation bug classification reference
-- `coverage_assessment.md` - Documentation coverage analysis
+- `PAI.md` – Personal AI Infrastructure documentation
+- `README.md` – This file
+- `SPEC.md` – Module specification
+- `__init__.py` – Package initialization
+- `documentation_website.py` - Core website generation functions
+- `maintenance.py` - Maintenance utilities for documentation synchronization
+- `pai.py` - PAI documentation generation and updates
+- `quality/` - Documentation quality and audit sub-package
 
 ## Quick Start
 
 ```python
-from codomyrmex.documentation import ConsistencyIssue, ConsistencyReport
+from pathlib import Path
+from codomyrmex.documentation import DocumentationQualityAnalyzer, DocumentationConsistencyChecker
 
-# Create a ConsistencyIssue instance
-consistencyissue = ConsistencyIssue()
+# Analyze quality of a file
+analyzer = DocumentationQualityAnalyzer()
+report = analyzer.analyze_file(Path("README.md"))
+print(f"Overall Score: {report['overall_score']}")
 
-# Use ConsistencyReport for additional functionality
-consistencyreport = ConsistencyReport()
+# Check consistency of a directory
+checker = DocumentationConsistencyChecker()
+consistency_report = checker.check_directory("src/codomyrmex/documentation")
+for issue in consistency_report.issues:
+    print(f"[{issue.severity}] {issue.file_path}:{issue.line_number} - {issue.description}")
 ```
 
 ## Testing
 
 ```bash
-uv run python -m pytest src/codomyrmex/tests/ -k documentation -v
+uv run python -m pytest src/codomyrmex/tests/unit/documentation/ -v
 ```
-
-## Consolidated Sub-modules
-
-The following modules have been consolidated into this module as sub-packages:
-
-| Sub-module | Description |
-|------------|-------------|
-| **`education/`** | Curriculum design, tutoring, and learning pathways |
-
-Original standalone modules remain as backward-compatible re-export wrappers.
 
 ## Navigation
 
 - **Full Documentation**: [docs/modules/documentation/](../../../docs/modules/documentation/)
 - **Parent Directory**: [codomyrmex](../README.md)
-- **Project Root**: ../../../README.md
+- **Project Root**: [README.md](../../../README.md)

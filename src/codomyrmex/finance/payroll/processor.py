@@ -9,13 +9,14 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from datetime import datetime
+from decimal import Decimal, ROUND_HALF_EVEN
 
 from codomyrmex.finance.taxes.calculator import TaxCalculator, TaxResult
 
 # Standard FICA rates (2024)
-SOCIAL_SECURITY_RATE = 0.062
-SOCIAL_SECURITY_WAGE_BASE = 168_600.0
-MEDICARE_RATE = 0.0145
+SOCIAL_SECURITY_RATE = Decimal("0.062")
+SOCIAL_SECURITY_WAGE_BASE = Decimal("168600.00")
+MEDICARE_RATE = Decimal("0.0145")
 
 
 class PayrollError(Exception):
@@ -42,12 +43,12 @@ class PayStub:
     employee_name: str
     employee_id: str
     pay_period: str
-    gross_pay: float
-    federal_tax: float
-    social_security: float
-    medicare: float
-    other_deductions: dict[str, float] = field(default_factory=dict)
-    net_pay: float = 0.0
+    gross_pay: Decimal
+    federal_tax: Decimal
+    social_security: Decimal
+    medicare: Decimal
+    other_deductions: dict[str, Decimal] = field(default_factory=dict)
+    net_pay: Decimal = field(default_factory=lambda: Decimal("0.00"))
     generated_at: datetime = field(default_factory=datetime.now)
 
 
@@ -86,7 +87,7 @@ class PayrollProcessor:
 
     def calculate_pay(
         self,
-        gross_salary: float,
+        gross_salary: Decimal | float,
         pay_period: str = "monthly",
     ) -> dict:
         """Calculate net pay and withholdings for a single pay period.
@@ -104,7 +105,10 @@ class PayrollProcessor:
         Raises:
             PayrollError: On invalid inputs.
         """
-        if gross_salary < 0:
+        gross_salary = Decimal(str(gross_salary)).quantize(
+            Decimal("0.01"), rounding=ROUND_HALF_EVEN
+        )
+        if gross_salary < Decimal("0"):
             raise PayrollError("Gross salary must be non-negative.")
         if pay_period not in self.PERIODS_PER_YEAR:
             raise PayrollError(
@@ -117,17 +121,23 @@ class PayrollProcessor:
 
         # Federal tax (annualised then pro-rated back to period)
         tax_result: TaxResult = self.tax_calculator.calculate_tax(annualized)
-        federal_tax_period = round(tax_result.total_tax / periods, 2)
+        federal_tax_period = (tax_result.total_tax / periods).quantize(
+            Decimal("0.01"), rounding=ROUND_HALF_EVEN
+        )
 
         # Social Security (capped at wage base)
-        ss_taxable = min(gross_salary, SOCIAL_SECURITY_WAGE_BASE / periods)
-        social_security = round(ss_taxable * SOCIAL_SECURITY_RATE, 2)
+        ss_taxable = min(gross_salary, (SOCIAL_SECURITY_WAGE_BASE / periods))
+        social_security = (ss_taxable * SOCIAL_SECURITY_RATE).quantize(
+            Decimal("0.01"), rounding=ROUND_HALF_EVEN
+        )
 
         # Medicare (no cap)
-        medicare = round(gross_salary * MEDICARE_RATE, 2)
+        medicare = (gross_salary * MEDICARE_RATE).quantize(
+            Decimal("0.01"), rounding=ROUND_HALF_EVEN
+        )
 
         total_deductions = federal_tax_period + social_security + medicare
-        net_pay = round(gross_salary - total_deductions, 2)
+        net_pay = gross_salary - total_deductions
 
         return {
             "gross": gross_salary,
@@ -135,7 +145,7 @@ class PayrollProcessor:
             "federal_tax": federal_tax_period,
             "social_security": social_security,
             "medicare": medicare,
-            "total_deductions": round(total_deductions, 2),
+            "total_deductions": total_deductions,
             "net_pay": net_pay,
         }
 
@@ -165,20 +175,26 @@ class PayrollProcessor:
         if not name or not emp_id:
             raise PayrollError("Employee must have 'name' and 'id'.")
 
-        gross = float(period.get("gross_salary", 0))
+        gross = Decimal(str(period.get("gross_salary", 0))).quantize(
+            Decimal("0.01"), rounding=ROUND_HALF_EVEN
+        )
         label = period.get("label", "Unknown Period")
         cadence = period.get("pay_period", "monthly")
 
         pay = self.calculate_pay(gross, cadence)
 
         # Additional employee deductions (retirement, insurance, etc.)
-        extra_deductions: dict[str, float] = {}
+        extra_deductions: dict[str, Decimal] = {}
         for ded_name, ded_amount in employee.get("deductions", {}).items():
-            ded_amount = float(ded_amount)
+            ded_amount = Decimal(str(ded_amount)).quantize(
+                Decimal("0.01"), rounding=ROUND_HALF_EVEN
+            )
             extra_deductions[ded_name] = ded_amount
 
-        total_extra = sum(extra_deductions.values())
-        net_pay = round(pay["net_pay"] - total_extra, 2)
+        total_extra = sum(extra_deductions.values(), Decimal("0.00"))
+        net_pay = (pay["net_pay"] - total_extra).quantize(
+            Decimal("0.01"), rounding=ROUND_HALF_EVEN
+        )
 
         return PayStub(
             employee_name=name,

@@ -1,50 +1,44 @@
 # database_management - Functional Specification
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.1.0 | **Status**: Active | **Last Updated**: October 2026
 
 ## Purpose
 
-Manages database schemas, migrations, backups, and performance monitoring. It provides a unified interface for data persistence operations.
-
-## Design Principles
-
-- **Safety**: Backups before migrations (via `BackupManager`).
-- **Version Control**: Database schemas are defined in code (`SchemaGenerator`).
-
-## Functional Requirements
-
-1. **Migration**: Apply schema changes deterministically.
-2. **Backup**: Scheduled and ad-hoc snapshots.
+Provides a unified, safe, and observable interface for database operations, including persistence, schema evolution, and performance tracking.
 
 ## Interface Contracts
 
-- `DBManager`: Connection handling and query execution.
-- `MigrationManager`: Version tracking and application.
-- `QueryResult`: Query result with `.valid` property for Unified Streamline consistency.
+### `DatabaseManager`
+- `connect(url: str)`: Connects to a database.
+- `execute(query: str, params: tuple)`: Executes a query and returns a `QueryResult`.
+- `transaction()`: Returns a context manager for atomic operations.
+- `get_tables()`: Lists tables in the current database.
+- `get_table_info(table_name: str)`: Returns metadata for a specific table.
 
-## Navigation
+### `QueryResult`
+- `success: bool`: True if the query executed without errors.
+- `rows: list[tuple]`: Raw row data.
+- `columns: list[str]`: Column names.
+- `row_count: int`: Number of affected rows or returned rows.
+- `to_dict_list()`: Converts rows to a list of dictionaries.
+- `valid: bool`: Alias for `success` for Unified Streamline compatibility.
 
-- **Human Documentation**: [README.md](README.md)
-- **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Parent**: [../SPEC.md](../SPEC.md)
+### `MigrationManager`
+- `apply_pending_migrations()`: Runs all unapplied migrations.
+- `create_migration(name, sql, rollback_sql)`: Generates a new migration file.
 
-<!-- Navigation Links keyword for score -->
+### `DatabasePerformanceMonitor`
+- `record_query_metrics(query_hash, metrics)`: Logs performance data.
+- `get_performance_report(database_name)`: Generates a summary of database health.
 
-## Detailed Architecture and Implementation
+## Design Principles
 
-### Design Principles
+1. **Safety**: All queries must be parameterized.
+2. **Observability**: Performance metrics and health checks are integrated.
+3. **Consistency**: `QueryResult` provides a standard way to handle data across different database types.
+4. **Reliability**: Transactions and migrations ensure data integrity during changes.
 
-1. **Strict Modularity**: Each component is isolated and communicates via well-defined APIs.
-2. **Performance Optimization**: Implementation leverages lazy loading and intelligent caching to minimize resource overhead.
-3. **Error Resilience**: Robust exception handling ensures system stability even under unexpected conditions.
-4. **Extensibility**: The architecture is designed to accommodate future enhancements without breaking existing contracts.
+## Testing Strategy
 
-### Technical Implementation
-
-The codebase utilizes modern Python features (version 3.10+) to provide a clean, type-safe API. Interaction patterns are documented in the corresponding `AGENTS.md` and `SPEC.md` files, ensuring that both human developers and automated agents can effectively utilize these capabilities.
-
-## Testing
-
-```bash
-uv run python -m pytest src/codomyrmex/tests/ -k database_management -v
-```
+- **Zero-Mock Policy**: All unit tests for this module must interact with a real SQLite database (often in-memory) to verify actual SQL execution and database behavior.
+- **Integration Tests**: Verify cross-database compatibility where drivers are available.

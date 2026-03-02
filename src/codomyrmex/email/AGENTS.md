@@ -1,6 +1,6 @@
 # email -- Agent Capabilities
 
-**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.0.6 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
 
@@ -51,8 +51,9 @@ The `EmailProvider` ABC defines the contract all providers must implement:
 | `create_draft(draft)` | Save a draft and return its ID |
 | `delete_message(message_id)` | Delete (trash) a message |
 | `modify_labels(message_id, add, remove)` | Add or remove labels |
+| `batch_get_messages(message_ids)` | Fetch multiple messages by ID |
 
-The `AgentMailProvider` extends this with inbox, thread, draft, webhook, pod, and domain management methods.
+The `AgentMailProvider` extends this with inbox, thread, draft, webhook, pod, domain management, and metrics methods.
 
 ## Quick Verification
 
@@ -63,9 +64,11 @@ uv run python -c "from codomyrmex.email import EMAIL_AVAILABLE, GMAIL_AVAILABLE,
 # Install email dependencies
 uv sync --extra email
 
+# Run email orchestrator demo
+uv run --extra email python scripts/email/orchestrator.py
+
 # Run email tests (requires credentials -- skips gracefully without them)
 uv run pytest src/codomyrmex/tests/unit/ -k email -v
-uv run pytest src/codomyrmex/tests/integration/email/ -v
 ```
 
 ## Operating Contracts

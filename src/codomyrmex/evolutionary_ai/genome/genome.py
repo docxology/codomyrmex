@@ -1,15 +1,51 @@
-"""Genome and Gene definitions for evolutionary algorithms.
+"""Genome and Individual definitions for evolutionary algorithms.
 
-Provides a float-vector genome with fitness tracking, distance metrics,
-serialization, and random initialization.
+Provides a generic Individual class and a float-vector Genome subclass
+with fitness tracking, distance metrics, serialization, and random initialization.
 """
 
 from __future__ import annotations
 
 import math
 import random
-from dataclasses import dataclass
-from typing import Any
+from dataclasses import dataclass, field
+from typing import Any, Generic, TypeVar
+
+T = TypeVar("T")
+
+
+@dataclass(slots=True)
+class Individual(Generic[T]):
+    """An individual in the population.
+
+    Attributes:
+        genes: The genetic material.
+        fitness: Fitness score assigned after evaluation (None if unevaluated).
+        metadata: Optional dict for storing additional information (e.g. lineage).
+    """
+
+    genes: T
+    fitness: float | None = None
+    metadata: dict[str, Any] = field(default_factory=dict)
+
+    def __lt__(self, other: Individual[T]) -> bool:
+        """Compare individuals by fitness for sorting.
+
+        Unevaluated individuals are considered "less fit" than evaluated ones.
+        """
+        if self.fitness is None and other.fitness is None:
+            return False
+        if self.fitness is None:
+            return True
+        if other.fitness is None:
+            return False
+        return self.fitness < other.fitness
+
+    def __eq__(self, other: object) -> bool:
+        """Check equality based on genes."""
+        if not isinstance(other, Individual):
+            return NotImplemented
+        return self.genes == other.genes
 
 
 @dataclass
@@ -23,38 +59,23 @@ class GenomeStats:
     length: int
 
 
-class Genome:
+class Genome(Individual[list[float]]):
     """Represents an individual's genetic information as a float vector.
 
-    Attributes:
-        genes: List of float values representing the genetic material.
-        fitness: Fitness score assigned after evaluation (None if unevaluated).
-        metadata: Optional dict for storing additional information (e.g. lineage).
+    Inherits from Individual[list[float]].
     """
-
-    __slots__ = ("genes", "fitness", "metadata")
-
-    def __init__(
-        self,
-        genes: list[float],
-        fitness: float | None = None,
-        metadata: dict[str, Any] | None = None,
-    ) -> None:
-        self.genes = genes
-        self.fitness = fitness
-        self.metadata: dict[str, Any] = metadata or {}
 
     # ── Factory methods ─────────────────────────────────────────────
 
     @classmethod
     def random(cls, length: int, low: float = 0.0, high: float = 1.0) -> Genome:
         """Create a random genome with genes uniformly distributed in [low, high]."""
-        return cls([random.uniform(low, high) for _ in range(length)])
+        return cls(genes=[random.uniform(low, high) for _ in range(length)])
 
     @classmethod
     def zeros(cls, length: int) -> Genome:
         """Create a genome of all zeros."""
-        return cls([0.0] * length)
+        return cls(genes=[0.0] * length)
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> Genome:
@@ -130,14 +151,8 @@ class Genome:
         return len(self.genes)
 
     def __getitem__(self, index: int) -> float:
-        """Return item at the given key."""
+        """Return item at the given index."""
         return self.genes[index]
-
-    def __eq__(self, other: object) -> bool:
-        """Return True if equal to other."""
-        if not isinstance(other, Genome):
-            return NotImplemented
-        return self.genes == other.genes
 
     def __repr__(self) -> str:
         """Return string representation."""

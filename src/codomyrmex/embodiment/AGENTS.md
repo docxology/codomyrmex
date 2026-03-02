@@ -1,6 +1,6 @@
 # Agent Guidelines - Embodiment
 
-**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Module Overview
 
@@ -8,49 +8,57 @@ Robotics integration with ROS2, sensors, actuators, and 3D coordinate transforms
 
 ## Key Classes
 
-- **ROS2Bridge** — WebSocket bridge to ROS2 nodes
+- **ROS2Bridge** — WebSocket/in-process bridge to ROS2 nodes
 - **Transform3D** — Position, rotation, and scale transforms
 - **SensorInterface** — Abstract sensor data handling
 - **ActuatorController** — Motor/actuator control
 
 ## Agent Instructions
 
-1. **Connect before use** — Call `bridge.connect()` before pub/sub operations
-2. **Handle disconnects** — Implement reconnection logic for ROS2 bridge
-3. **Transform frame** — Always specify coordinate frame for transforms
-4. **Rate limit commands** — Don't flood actuators with commands
-5. **Validate sensor data** — Check timestamps and validity flags
+1. **Connect before use** — Call `await bridge.connect()` before pub/sub operations.
+2. **Handle disconnects** — Implement reconnection logic for ROS2 bridge.
+3. **Transform frame** — Always specify coordinate frame for transforms.
+4. **Rate limit commands** — Don't flood actuators with commands.
+5. **Validate sensor data** — Check timestamps and validity flags.
+6. **Use mock classes** — For tests without physical hardware, use `MockSensor` and `MockActuator`.
 
-## ROS2 Patterns
+## ROS2 Patterns (Async)
 
 ```python
 from codomyrmex.embodiment import ROS2Bridge
+import asyncio
 
-bridge = ROS2Bridge(uri="ws://localhost:9090")
-await bridge.connect()
+async def run_robot():
+    bridge = ROS2Bridge(node_name="agent_node")
+    await bridge.connect(uri="ws://localhost:9090")
 
-# Subscribe to topics
-await bridge.subscribe("/camera/image", on_image_callback)
-await bridge.subscribe("/odom", on_odometry_callback)
+    async def on_image(msg):
+        # Process image
+        pass
 
-# Publish commands
-await bridge.publish("/cmd_vel", {
-    "linear": {"x": 0.5, "y": 0, "z": 0},
-    "angular": {"x": 0, "y": 0, "z": 0.1}
-})
+    # Subscribe to topics
+    await bridge.subscribe("/camera/image", on_image)
+    await bridge.subscribe("/odom", on_odometry_callback)
+
+    # Publish commands
+    await bridge.publish("/cmd_vel", {
+        "linear": {"x": 0.5, "y": 0, "z": 0},
+        "angular": {"x": 0, "y": 0, "z": 0.1}
+    })
+
+asyncio.run(run_robot())
 ```
 
-## Testing Patterns
+## Testing Patterns (Zero-Mock)
 
 ```python
 # Test transform operations
 from codomyrmex.embodiment import Transform3D
 
-t = Transform3D()
-t.translate(1, 0, 0)
-t.rotate_euler(0, 0, 90)
+t = Transform3D.from_translation(1, 0, 0)
+t = t.compose(Transform3D.from_rotation(0, 0, 1.5708)) # 90 deg
 
-point = t.apply([0, 1, 0])
+point = t.apply((0, 1, 0))
 assert abs(point[0] - 0) < 0.01  # Rotated 90°
 ```
 
@@ -73,4 +81,4 @@ assert abs(point[0] - 0) < 0.01  # Rotated 90°
 
 ## Navigation
 
-- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)
+- [README](README.md) | [SPEC](SPEC.md) | [PAI.md](PAI.md)

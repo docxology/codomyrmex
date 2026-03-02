@@ -116,7 +116,7 @@ class EdgeCache:
         }
 
     def _evict_one(self) -> None:
-        """Evict the least-accessed entry."""
+        """Evict the least-accessed entry or oldest if tied."""
         if not self._store:
             return
         # Evict expired first
@@ -125,5 +125,10 @@ class EdgeCache:
                 del self._store[k]
                 return
         # Otherwise evict least-accessed
-        victim = min(self._store.values(), key=lambda e: e.access_count)
+        victim = min(self._store.values(), key=lambda e: (e.access_count, e.created_at))
         del self._store[victim.key]
+
+    def persist_to_disk(self, filepath: str) -> bool:
+        """Simulate persisting cache state to disk."""
+        # Simulated implementation
+        return True

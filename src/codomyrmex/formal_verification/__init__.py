@@ -33,6 +33,7 @@ from .exceptions import (
     SolverTimeoutError,
     UnsatisfiableError,
 )
+from .mcp_tools import pop, push
 from .solver import ConstraintSolver
 from .verify_isc import ISCVerificationResult, verify_criteria_consistency
 
@@ -46,6 +47,8 @@ __all__ = [
     "SolverBackend",
     "SolverResult",
     "SolverStatus",
+    "push",
+    "pop",
     # Exceptions
     "SolverError",
     "SolverTimeoutError",

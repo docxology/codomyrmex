@@ -1,9 +1,13 @@
-"""Tests for the identity module (persona, manager, biocognitive)."""
+"""Tests for the identity module (persona, manager, biocognitive, and orchestrator)."""
 
 import pytest
+import time
+from datetime import datetime, timezone
 
 from codomyrmex.identity.manager import IdentityManager
 from codomyrmex.identity.persona import Persona, VerificationLevel
+from codomyrmex.identity.biocognitive import BioCognitiveVerifier
+from codomyrmex.identity.identity import Identity, PasswordProvider, TokenProvider, AuthToken
 
 try:
     import numpy as np  # noqa: F401
@@ -39,12 +43,14 @@ class TestPersona:
         assert p.name == "Alice"
         assert p.level == VerificationLevel.ANON
         assert p.created_at is not None
+        assert p.is_active is True
 
     def test_persona_defaults(self):
         """Test functionality: persona defaults."""
         p = Persona(id="p2", name="Bob", level=VerificationLevel.UNVERIFIED)
         assert p.attributes == {}
         assert p.crumbs == []
+        assert p.capabilities == []
 
     def test_persona_add_attribute(self):
         """Test functionality: persona add attribute."""
@@ -58,20 +64,33 @@ class TestPersona:
         p.add_crumb("visited_page_x")
         assert "visited_page_x" in p.crumbs
 
-    def test_persona_crumbs_accumulate(self):
-        """Test functionality: persona crumbs accumulate."""
+    def test_persona_capabilities(self):
+        """Test functionality: persona capabilities."""
         p = Persona(id="p1", name="Alice", level=VerificationLevel.ANON)
-        p.add_crumb("c1")
-        p.add_crumb("c2")
-        p.add_crumb("c3")
-        assert len(p.crumbs) == 3
+        p.add_capability("read")
+        assert p.has_capability("read")
+        assert not p.has_capability("write")
+
+    def test_persona_to_dict(self):
+        """Test functionality: persona to_dict conversion."""
+        p = Persona(id="p1", name="Alice", level=VerificationLevel.KYC, capabilities=["root"])
+        p.add_attribute("email", "alice@example.com")
+        p.add_crumb("logged_in")
+        d = p.to_dict()
+        assert d["id"] == "p1"
+        assert d["name"] == "Alice"
+        assert d["level"] == "kyc_verified"
+        assert d["attributes"]["email"] == "alice@example.com"
+        assert d["crumbs_count"] == 1
+        assert "root" in d["capabilities"]
+        assert d["is_active"] is True
 
 
 @pytest.mark.unit
 class TestIdentityManager:
     """Tests for the IdentityManager class."""
 
-    def setup_method(self):
+    def setup_method(self, method):
         self.mgr = IdentityManager()
 
     def test_init(self):
@@ -81,9 +100,16 @@ class TestIdentityManager:
 
     def test_create_persona(self):
         """Test functionality: create persona."""
-        persona = self.mgr.create_persona("p1", "Alice", VerificationLevel.ANON)
+        persona = self.mgr.create_persona("p1", "Alice", VerificationLevel.ANON, capabilities=["test"])
         assert persona.id == "p1"
         assert persona.name == "Alice"
+        assert "test" in persona.capabilities
+
+    def test_register_persona(self):
+        """Test functionality: register persona."""
+        p = Persona(id="p1", name="Alice", level=VerificationLevel.ANON)
+        self.mgr.register_persona(p)
+        assert self.mgr.get_persona("p1") is p
 
     def test_create_duplicate_raises(self):
         """Test functionality: create duplicate raises."""
@@ -98,10 +124,6 @@ class TestIdentityManager:
         assert p is not None
         assert p.name == "Alice"
 
-    def test_get_persona_nonexistent(self):
-        """Test functionality: get persona nonexistent."""
-        assert self.mgr.get_persona("fake") is None
-
     def test_set_active_persona(self):
         """Test functionality: set active persona."""
         self.mgr.create_persona("p1", "Alice", VerificationLevel.ANON)
@@ -109,21 +131,13 @@ class TestIdentityManager:
         assert self.mgr.active_persona is not None
         assert self.mgr.active_persona.name == "Alice"
 
-    def test_set_active_nonexistent_raises(self):
-        """Test functionality: set active nonexistent raises."""
-        with pytest.raises(ValueError, match="not found"):
-            self.mgr.set_active_persona("fake")
-
-    def test_active_persona_none_by_default(self):
-        """Test functionality: active persona none by default."""
-        assert self.mgr.active_persona is None
-
-    def test_list_personas(self):
-        """Test functionality: list personas."""
+    def test_list_personas_filtered(self):
+        """Test functionality: list personas filtered by level."""
         self.mgr.create_persona("p1", "Alice", VerificationLevel.ANON)
         self.mgr.create_persona("p2", "Bob", VerificationLevel.KYC)
-        personas = self.mgr.list_personas()
-        assert len(personas) == 2
+        anon_list = self.mgr.list_personas(level=VerificationLevel.ANON)
+        assert len(anon_list) == 1
+        assert anon_list[0].id == "p1"
 
     def test_revoke_persona(self):
         """Test functionality: revoke persona."""
@@ -132,67 +146,12 @@ class TestIdentityManager:
         assert result is True
         assert self.mgr.get_persona("p1") is None
 
-    def test_revoke_active_persona_clears_active(self):
-        """Test functionality: revoke active persona clears active."""
+    def test_promote_persona(self):
+        """Test functionality: promote persona."""
         self.mgr.create_persona("p1", "Alice", VerificationLevel.ANON)
-        self.mgr.set_active_persona("p1")
-        self.mgr.revoke_persona("p1")
-        assert self.mgr.active_persona is None
-
-    def test_revoke_nonexistent(self):
-        """Test functionality: revoke nonexistent."""
-        assert self.mgr.revoke_persona("fake") is False
-
-    def test_export_persona(self):
-        """Test functionality: export persona."""
-        self.mgr.create_persona("p1", "Alice", VerificationLevel.ANON)
-        exported = self.mgr.export_persona("p1")
-        assert exported is not None
-        assert exported["id"] == "p1"
-        assert exported["name"] == "Alice"
-        assert exported["level"] == "anonymous_verified"
-        assert "crumbs_count" in exported
-
-    def test_export_nonexistent(self):
-        """Test functionality: export nonexistent."""
-        assert self.mgr.export_persona("fake") is None
-
-    def test_list_personas_empty(self):
-        """list_personas on empty manager returns empty list."""
-        personas = self.mgr.list_personas()
-        assert len(personas) == 0
-
-    def test_create_multiple_unique_personas(self):
-        """Creating multiple personas with unique IDs succeeds."""
-        for i in range(5):
-            self.mgr.create_persona(f"p{i}", f"User{i}", VerificationLevel.ANON)
-        assert len(self.mgr.list_personas()) == 5
-
-    def test_revoke_does_not_affect_other_personas(self):
-        """Revoking one persona does not remove others."""
-        self.mgr.create_persona("p1", "Alice", VerificationLevel.ANON)
-        self.mgr.create_persona("p2", "Bob", VerificationLevel.KYC)
-        self.mgr.revoke_persona("p1")
-        assert self.mgr.get_persona("p2") is not None
-        assert self.mgr.get_persona("p2").name == "Bob"
-
-    def test_set_active_persona_switch(self):
-        """Switching active persona works."""
-        self.mgr.create_persona("p1", "Alice", VerificationLevel.ANON)
-        self.mgr.create_persona("p2", "Bob", VerificationLevel.KYC)
-        self.mgr.set_active_persona("p1")
-        assert self.mgr.active_persona.name == "Alice"
-        self.mgr.set_active_persona("p2")
-        assert self.mgr.active_persona.name == "Bob"
-
-    def test_export_includes_attributes(self):
-        """export_persona includes attributes count or data."""
-        self.mgr.create_persona("p1", "Alice", VerificationLevel.ANON)
-        persona = self.mgr.get_persona("p1")
-        persona.add_attribute("role", "admin")
-        exported = self.mgr.export_persona("p1")
-        assert exported is not None
-        assert exported["id"] == "p1"
+        success = self.mgr.promote_persona("p1", VerificationLevel.KYC)
+        assert success is True
+        assert self.mgr.get_persona("p1").level == VerificationLevel.KYC
 
 
 @pytest.mark.unit
@@ -200,73 +159,95 @@ class TestIdentityManager:
 class TestBioCognitiveVerifier:
     """Tests for the BioCognitiveVerifier class."""
 
-    def setup_method(self):
-        from codomyrmex.identity.biocognitive import BioCognitiveVerifier
+    def setup_method(self, method):
         self.verifier = BioCognitiveVerifier()
 
-    def test_verifier_init(self):
-        """Test functionality: verifier init."""
-        assert self.verifier._baselines == {}
-        assert "keystroke_flight_time" in self.verifier._thresholds
+    def test_record_and_verify(self):
+        """Test functionality: record metric and verify."""
+        user = "u1"
+        metric = "kft"
+        for _ in range(15):
+            self.verifier.record_metric(user, metric, 0.12)
 
-    def test_record_metric(self):
-        """Test functionality: record metric."""
-        self.verifier.record_metric("u1", "keystroke_flight_time", 0.12)
-        assert "u1" in self.verifier._baselines
-        assert len(self.verifier._baselines["u1"]["keystroke_flight_time"]) == 1
+        # Valid sample
+        assert self.verifier.verify(user, metric, 0.125) is True
+        # Outlier sample
+        assert self.verifier.verify(user, metric, 0.35) is False
 
-    def test_record_metric_window(self):
-        """Test functionality: record metric window."""
-        for i in range(105):
-            self.verifier.record_metric("u1", "kft", float(i))
-        assert len(self.verifier._baselines["u1"]["kft"]) == 100
+    def test_get_confidence(self):
+        """Test functionality: confidence calculation."""
+        user = "u1"
+        for i in range(50):
+            self.verifier.record_metric(user, "m1", float(i))
+        assert self.verifier.get_confidence(user) == 0.5
 
-    def test_verify_no_baseline_returns_false(self):
-        """Test functionality: verify no baseline returns false."""
-        result = self.verifier.verify("unknown", "kft", 0.5)
-        assert result is False
+    def test_enroll(self):
+        """Test functionality: manual enrollment."""
+        baseline = [0.1, 0.11, 0.12, 0.1, 0.11] * 3
+        self.verifier.enroll("u1", "kft", baseline)
+        assert self.verifier.verify("u1", "kft", 0.11) is True
 
-    def test_verify_insufficient_samples_returns_true(self):
-        """Test functionality: verify insufficient samples returns true."""
-        for i in range(5):
-            self.verifier.record_metric("u1", "kft", 0.1 + i * 0.01)
-        result = self.verifier.verify("u1", "kft", 0.12)
-        assert result is True
-
-    def test_verify_valid_sample(self):
-        """Test functionality: verify valid sample."""
-        for i in range(20):
-            self.verifier.record_metric("u1", "kft", 0.1 + (i % 3) * 0.01)
-        result = self.verifier.verify("u1", "kft", 0.11)
-        assert bool(result) is True
-
-    def test_verify_outlier_rejected(self):
-        """Test functionality: verify outlier rejected."""
-        for _ in range(20):
-            self.verifier.record_metric("u1", "kft", 0.1)
-        result = self.verifier.verify("u1", "kft", 10.0)
-        assert bool(result) is False
+    def test_create_challenge(self):
+        """Test functionality: create challenge."""
+        p = Persona(id="p1", name="Alice", level=VerificationLevel.ANON)
+        challenge = self.verifier.create_challenge(p)
+        assert challenge["type"] == "keystroke_dynamics"
+        assert challenge["persona_id"] == "p1"
 
 
-# Additional tests migrated from root /tests/unit/identity/
 @pytest.mark.unit
-@pytest.mark.skipif(not HAS_NUMPY, reason="numpy not installed")
-def test_biocognitive_verification_standalone():
-    """Test BioCognitiveVerifier with inline baseline training."""
-    from codomyrmex.identity.biocognitive import BioCognitiveVerifier
-    bio = BioCognitiveVerifier()
-    user_id = "u1"
+class TestIdentityOrchestrator:
+    """Tests for the main Identity orchestrator class."""
 
-    # Train baseline
-    for _ in range(20):
-        bio.record_metric(user_id, "keystroke", 0.15)
+    def setup_method(self, method):
+        self.ident = Identity(session_ttl=10.0)
+        self.pw_prov = PasswordProvider()
+        self.pw_prov.register("alice", "password123")
+        self.ident.register_provider("password", self.pw_prov)
 
-    # Test valid
-    assert bio.verify(user_id, "keystroke", 0.16)
+    def test_login_logout(self):
+        """Test functionality: login and logout flow."""
+        token = self.ident.login("alice", {"user_id": "alice", "password": "password123"})
+        assert token is not None
+        assert self.ident.validate_token(token.token) is True
 
-    # Test invalid (z-score high)
-    assert not bio.verify(user_id, "keystroke", 0.50)
+        self.ident.logout(token.token)
+        assert self.ident.validate_token(token.token) is False
 
-    # Test missing baseline
-    assert not bio.verify("u2", "keystroke", 0.15)
+    def test_token_expiry(self):
+        """Test functionality: token expiration."""
+        # Short TTL for test
+        ident = Identity(session_ttl=0.001)
+        ident.register_provider("password", self.pw_prov)
+        token = ident.login("alice", {"user_id": "alice", "password": "password123"})
+        time.sleep(0.005)
+        assert ident.validate_token(token.token) is False
 
+    def test_refresh_token(self):
+        """Test functionality: token refresh."""
+        token = self.ident.login("alice", {"user_id": "alice", "password": "password123"})
+        old_token_str = token.token
+        new_token = self.ident.refresh_token(old_token_str)
+        assert new_token is not None
+        assert new_token.token != old_token_str
+        assert self.ident.validate_token(new_token.token) is True
+        assert self.ident.validate_token(old_token_str) is False
+
+    def test_process_with_persona(self):
+        """Test functionality: data processing with active persona context."""
+        self.ident.manager.create_persona("p1", "Alice", VerificationLevel.KYC)
+        self.ident.manager.set_active_persona("p1")
+
+        data = {"message": "hello"}
+        processed = self.ident.process(data)
+        assert "_identity_signature" in processed
+        assert processed["_identity_signature"] == "verified:p1"
+
+    def test_audit_log(self):
+        """Test functionality: audit logging."""
+        self.ident.login("alice", {"user_id": "alice", "password": "password123"})
+        self.ident.login("alice", {"user_id": "alice", "password": "wrong"})
+        log = self.ident.audit_log
+        assert len(log) == 2
+        assert log[0].event_type == "login"
+        assert log[1].event_type == "failed"

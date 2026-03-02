@@ -30,4 +30,16 @@ class GitOperationError(CodomyrmexError):
 
 class RepositoryError(CodomyrmexError):
     """Raised when repository operations fail."""
-    pass
+
+    def __init__(
+        self,
+        message: str,
+        repository_path: str | Path | None = None,
+        remote_url: str | None = None,
+        **kwargs: Any,
+    ) -> None:
+        super().__init__(message, **kwargs)
+        if repository_path:
+            self.context["repository_path"] = str(repository_path)
+        if remote_url:
+            self.context["remote_url"] = remote_url

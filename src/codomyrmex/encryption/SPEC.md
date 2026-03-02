@@ -1,6 +1,6 @@
 # encryption - Functional Specification
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.1 | **Status**: Active | **Last Updated**: January 2025
 
 ## Purpose
 
@@ -10,9 +10,9 @@ Encryption module providing encryption/decryption utilities, key management, HMA
 
 ### Modularity
 
-- Algorithm-agnostic encryption interface
+- Algorithm-agnostic encryption interface (`Encryptor`)
 - Support for multiple encryption algorithms (AES-CBC, AES-GCM, RSA)
-- Pluggable encryption system with separate files per concern
+- Pluggable encryption system with separate directories per concern
 
 ### Internal Coherence
 
@@ -22,9 +22,9 @@ Encryption module providing encryption/decryption utilities, key management, HMA
 
 ### Parsimony
 
-- Essential encryption operations
+- Essential encryption operations only
 - Minimal dependencies (`cryptography` + stdlib)
-- Focus on commonly needed algorithms
+- Focus on commonly needed and industry-standard algorithms
 
 ### Functionality
 
@@ -32,13 +32,14 @@ Encryption module providing encryption/decryption utilities, key management, HMA
 - HMAC message authentication with timing-safe verification
 - HKDF and PBKDF2 key derivation
 - File-based key management with rotation support
-- SecureDataContainer for encrypted JSON storage
+- `SecureDataContainer` for encrypted JSON storage
+- `Signer` class for fast HMAC-based JSON/file signatures
 
 ### Testing
 
-- Unit tests for all algorithms and utilities
-- Integration tests for KeyManager + Encryptor workflows
-- Edge case coverage (empty data, binary data, key rotation)
+- Strictly zero-mock unit tests for all algorithms and utilities
+- Integration tests for `KeyManager` + `Encryptor` workflows
+- Edge case coverage (empty data, binary data, key rotation, tampered data)
 
 ### Documentation
 
@@ -51,13 +52,14 @@ Encryption module providing encryption/decryption utilities, key management, HMA
 ```mermaid
 graph TD
     Init["__init__.py<br/>(Public API)"]
-    Enc["encryptor.py<br/>(AES-CBC, RSA, Signing, Hashing)"]
-    GCM["aes_gcm.py<br/>(AES-GCM)"]
-    KM["key_manager.py<br/>(Key Storage & Rotation)"]
-    SDC["container.py<br/>(SecureDataContainer)"]
-    HMAC["hmac_utils.py<br/>(HMAC)"]
-    KDF["kdf.py<br/>(HKDF)"]
+    Enc["core/encryptor.py<br/>(AES-CBC, RSA, Signing, Hashing)"]
+    GCM["algorithms/aes_gcm.py<br/>(AES-GCM)"]
+    KM["keys/key_manager.py<br/>(Key Storage & Rotation)"]
+    SDC["containers/container.py<br/>(SecureDataContainer)"]
+    HMAC["keys/hmac_utils.py<br/>(HMAC)"]
+    KDF["keys/kdf.py<br/>(HKDF)"]
     Exc["codomyrmex.exceptions<br/>(EncryptionError)"]
+    Sign["signing.py<br/>(HMAC Signer)"]
 
     Init --> Enc
     Init --> GCM
@@ -65,8 +67,13 @@ graph TD
     Init --> SDC
     Init --> HMAC
     Init --> KDF
+    Init --> Sign
     SDC --> GCM
     Enc --> Exc
+    GCM --> Exc
+    KM --> Exc
+    SDC --> Exc
+    Sign --> Exc
 ```
 
 ## Functional Requirements
@@ -79,10 +86,11 @@ graph TD
 4. **Key Management**: Generate, store, retrieve, list, rotate, delete keys
 5. **Key Derivation**: PBKDF2 for passwords, HKDF for high-entropy material
 6. **HMAC**: Compute and verify message authentication codes
-7. **Signing**: RSA-PSS digital signatures
-8. **Hashing**: SHA-256, SHA-384, SHA-512, MD5 digests
-9. **File Encryption**: Encrypt/decrypt files to disk
-10. **Secure Container**: Encrypt arbitrary JSON-serializable data
+7. **Signing (Asymmetric)**: RSA-PSS digital signatures
+8. **Signing (Symmetric)**: HMAC-based JSON and file signing
+9. **Hashing**: SHA-256, SHA-384, SHA-512, MD5 digests
+10. **File Encryption**: Encrypt/decrypt files to disk
+11. **Secure Container**: Encrypt arbitrary JSON-serializable data
 
 ### Integration Points
 
@@ -94,15 +102,17 @@ graph TD
 
 ### Code Quality
 
-- Type hints for all functions
+- Mandatory type hints for all functions
 - PEP 8 compliance
-- Comprehensive error handling via EncryptionError
+- Comprehensive error handling via `EncryptionError`
+- Restrictive file permissions (0o600) for stored keys
 
 ### Testing Standards
 
+- Strictly zero-mock testing using real `cryptography`
 - >=80% coverage
 - Algorithm-specific tests
-- Security and edge case testing
+- Security and edge case testing (including tampered data detection)
 
 ### Documentation Standards
 
@@ -111,7 +121,7 @@ graph TD
 
 ## Interface Contracts
 
-### Encryption Interface
+### Encryption Interface (Encryptor)
 
 ```python
 class Encryptor:
@@ -128,7 +138,7 @@ class Encryptor:
     def verify(data: bytes, signature: bytes, public_key: bytes) -> bool
 ```
 
-### Digital Signatures (HMAC-based)
+### Digital Signatures (HMAC-based Signer)
 
 ```python
 class Signer:

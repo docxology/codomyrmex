@@ -1,9 +1,10 @@
 """MCP tools for the events module."""
 
 from typing import Any
-
 from codomyrmex.model_context_protocol.decorators import mcp_tool
-
+from codomyrmex.events.core.event_bus import get_event_bus
+from codomyrmex.events.core.event_schema import Event, EventType
+from codomyrmex.events.handlers.event_logger import get_event_logger
 
 @mcp_tool(category="events")
 def emit_event(
@@ -15,27 +16,47 @@ def emit_event(
     """Emit an event to the event bus.
 
     Args:
-        event_type: Type/topic of the event (e.g. 'tool.called', 'task.completed')
+        event_type: Type/topic of the event (e.g. 'system.startup', 'analysis.start')
         payload: Event data dictionary
         source: Source identifier for the event
-        priority: Event priority ('low', 'normal', 'high', 'critical')
+        priority: Event priority ('debug', 'info', 'normal', 'warning', 'error', 'critical')
 
     Returns:
-        Status dict with event_id and timestamp.
+        Status dict with result.
     """
-    from codomyrmex.events import Event, EventBus
-
     try:
-        bus = EventBus()
-        event = Event(event_type=event_type, data=payload, source=source)
-        bus.emit(event)
+        bus = get_event_bus()
+        
+        # Try to find the EventType enum member
+        try:
+            etype = EventType(event_type)
+        except ValueError:
+            # If not a standard EventType, use it as is if it's a string
+            # though Event expects EventType. We might want to support CUSTOM.
+            etype = EventType.CUSTOM
+            payload["original_type"] = event_type
+
+        from codomyrmex.events.core.event_schema import EventPriority
+        try:
+            epriority = EventPriority(priority.lower())
+        except ValueError:
+            epriority = EventPriority.NORMAL
+
+        event = Event(
+            event_type=etype, 
+            data=payload, 
+            source=source, 
+            priority=epriority
+        )
+        bus.publish(event)
         return {
             "status": "success",
+            "event_id": event.event_id,
             "event_type": event_type,
             "source": source,
             "priority": priority,
         }
-    except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
+    except Exception as e:
         return {"status": "error", "message": str(e)}
 
 
@@ -46,17 +67,15 @@ def list_event_types() -> dict:
     Returns:
         Dictionary with available event types and subscriber counts.
     """
-    from codomyrmex.events import EventBus
-
     try:
-        bus = EventBus()
-        types = bus.list_event_types() if hasattr(bus, "list_event_types") else []
+        bus = get_event_bus()
+        types = bus.list_event_types()
         return {
             "status": "success",
             "event_types": types,
             "count": len(types),
         }
-    except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
+    except Exception as e:
         return {"status": "error", "message": str(e)}
 
 
@@ -68,24 +87,26 @@ def get_event_history(
     """Retrieve recent event history from the event bus.
 
     Args:
-        event_type: Optional filter by event type
+        event_type: Optional filter by event type string
         limit: Maximum number of events to return
 
     Returns:
         Dictionary with list of recent events.
     """
-    from codomyrmex.events import EventBus
-
     try:
-        bus = EventBus()
-        if hasattr(bus, "get_history"):
-            history = bus.get_history(event_type=event_type, limit=limit)
-        else:
-            history = []
+        logger = get_event_logger()
+        entries = logger.get_events(event_type=event_type)
+        
+        # Sort by timestamp descending and apply limit
+        entries.sort(key=lambda x: x.timestamp, reverse=True)
+        entries = entries[:limit]
+        
+        history = [entry.to_dict() for entry in entries]
+        
         return {
             "status": "success",
             "events": history,
             "count": len(history),
         }
-    except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
+    except Exception as e:
         return {"status": "error", "message": str(e)}

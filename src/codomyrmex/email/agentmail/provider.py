@@ -15,8 +15,15 @@ Method groups are split into focused mixins:
 
 from __future__ import annotations
 
+import logging
 import os
 from typing import Any, NoReturn
+
+try:
+    from codomyrmex.logging_monitoring.core.logger_config import get_logger
+    logger = get_logger(__name__)
+except Exception:
+    logger = logging.getLogger(__name__)
 
 from codomyrmex.email.exceptions import (
     EmailAPIError,
@@ -60,6 +67,7 @@ def _raise_for_api_error(exc: Exception, context: str) -> NoReturn:
         raise EmailAuthError(f"AgentMail authentication failed during {context}: {exc}") from exc
     if status_code == 404:
         raise MessageNotFoundError(f"Resource not found during {context}: {exc}") from exc
+    logger.error(f"AgentMail API error during {context}: {exc}")
     raise EmailAPIError(f"AgentMail API error during {context}: {exc}") from exc
 
 
@@ -107,7 +115,12 @@ class AgentMailProvider(
                 "Set AGENTMAIL_API_KEY environment variable or pass api_key= argument."
             )
 
-        self._client: AgentMail = AgentMail(api_key=resolved_key)
+        try:
+            self._client: AgentMail = AgentMail(api_key=resolved_key)
+        except Exception as e:
+            logger.error(f"Failed to initialize AgentMail client: {e}")
+            raise EmailAuthError(f"Failed to initialize AgentMail client: {e}") from e
+
         self._default_inbox_id: str | None = (
             default_inbox_id or os.environ.get("AGENTMAIL_DEFAULT_INBOX")
         )
@@ -167,6 +180,7 @@ class AgentMailProvider(
         except ApiError as exc:
             _raise_for_api_error(exc, "list_messages")
         except Exception as exc:
+            logger.error(f"Unexpected error listing AgentMail messages: {exc}")
             raise EmailAPIError(f"Unexpected error listing messages: {exc}") from exc
 
     def get_message(
@@ -193,6 +207,7 @@ class AgentMailProvider(
         except ApiError as exc:
             _raise_for_api_error(exc, f"get_message({message_id})")
         except Exception as exc:
+            logger.error(f"Unexpected error fetching AgentMail message {message_id}: {exc}")
             raise EmailAPIError(f"Unexpected error fetching message {message_id}: {exc}") from exc
 
     def send_message(
@@ -246,6 +261,7 @@ class AgentMailProvider(
         except ApiError as exc:
             _raise_for_api_error(exc, "send_message")
         except Exception as exc:
+            logger.error(f"Unexpected error sending AgentMail message: {exc}")
             raise EmailAPIError(f"Unexpected error sending message: {exc}") from exc
 
     def delete_message(
@@ -280,6 +296,7 @@ class AgentMailProvider(
         except (EmailAPIError, MessageNotFoundError):
             raise
         except Exception as exc:
+            logger.error(f"Unexpected error deleting AgentMail message {message_id}: {exc}")
             raise EmailAPIError(f"Unexpected error deleting message {message_id}: {exc}") from exc
 
     def modify_labels(
@@ -311,6 +328,7 @@ class AgentMailProvider(
         except ApiError as exc:
             _raise_for_api_error(exc, f"modify_labels({message_id})")
         except Exception as exc:
+            logger.error(f"Unexpected error modifying AgentMail labels on {message_id}: {exc}")
             raise EmailAPIError(
                 f"Unexpected error modifying labels on {message_id}: {exc}"
             ) from exc
@@ -359,6 +377,7 @@ class AgentMailProvider(
         except ApiError as exc:
             _raise_for_api_error(exc, f"reply_to_message({message_id})")
         except Exception as exc:
+            logger.error(f"Unexpected error replying to AgentMail message {message_id}: {exc}")
             raise EmailAPIError(f"Unexpected error replying to {message_id}: {exc}") from exc
 
     def forward_message(
@@ -399,6 +418,7 @@ class AgentMailProvider(
         except ApiError as exc:
             _raise_for_api_error(exc, f"forward_message({message_id})")
         except Exception as exc:
+            logger.error(f"Unexpected error forwarding AgentMail message {message_id}: {exc}")
             raise EmailAPIError(f"Unexpected error forwarding {message_id}: {exc}") from exc
 
     def get_message_attachment(
@@ -437,6 +457,7 @@ class AgentMailProvider(
         except ApiError as exc:
             _raise_for_api_error(exc, f"get_message_attachment({message_id}, {attachment_id})")
         except Exception as exc:
+            logger.error(f"Unexpected error downloading AgentMail attachment {attachment_id}: {exc}")
             raise EmailAPIError(
                 f"Unexpected error downloading attachment {attachment_id}: {exc}"
             ) from exc
@@ -469,6 +490,7 @@ class AgentMailProvider(
         except (EmailAPIError, MessageNotFoundError):
             raise
         except Exception as exc:
+            logger.error(f"Unexpected error fetching raw AgentMail message {message_id}: {exc}")
             raise EmailAPIError(f"Unexpected error fetching raw message {message_id}: {exc}") from exc
 
     # -------------------------------------------------------------------------
@@ -491,6 +513,7 @@ class AgentMailProvider(
         except ApiError as exc:
             _raise_for_api_error(exc, "list_pods")
         except Exception as exc:
+            logger.error(f"Unexpected error listing AgentMail pods: {exc}")
             raise EmailAPIError(f"Unexpected error listing pods: {exc}") from exc
 
     def get_pod(self, pod_id: str) -> AgentMailPod:
@@ -511,6 +534,7 @@ class AgentMailProvider(
         except ApiError as exc:
             _raise_for_api_error(exc, f"get_pod({pod_id})")
         except Exception as exc:
+            logger.error(f"Unexpected error fetching AgentMail pod {pod_id}: {exc}")
             raise EmailAPIError(f"Unexpected error fetching pod {pod_id}: {exc}") from exc
 
     def create_pod(self, name: str | None = None) -> AgentMailPod:
@@ -531,6 +555,7 @@ class AgentMailProvider(
         except ApiError as exc:
             _raise_for_api_error(exc, "create_pod")
         except Exception as exc:
+            logger.error(f"Unexpected error creating AgentMail pod: {exc}")
             raise EmailAPIError(f"Unexpected error creating pod: {exc}") from exc
 
     def delete_pod(self, pod_id: str) -> None:
@@ -547,6 +572,7 @@ class AgentMailProvider(
         except ApiError as exc:
             _raise_for_api_error(exc, f"delete_pod({pod_id})")
         except Exception as exc:
+            logger.error(f"Unexpected error deleting AgentMail pod {pod_id}: {exc}")
             raise EmailAPIError(f"Unexpected error deleting pod {pod_id}: {exc}") from exc
 
     # -------------------------------------------------------------------------
@@ -569,6 +595,7 @@ class AgentMailProvider(
         except ApiError as exc:
             _raise_for_api_error(exc, "list_domains")
         except Exception as exc:
+            logger.error(f"Unexpected error listing AgentMail domains: {exc}")
             raise EmailAPIError(f"Unexpected error listing domains: {exc}") from exc
 
     def get_domain(self, domain_id: str) -> AgentMailDomain:
@@ -589,6 +616,7 @@ class AgentMailProvider(
         except ApiError as exc:
             _raise_for_api_error(exc, f"get_domain({domain_id})")
         except Exception as exc:
+            logger.error(f"Unexpected error fetching AgentMail domain {domain_id}: {exc}")
             raise EmailAPIError(f"Unexpected error fetching domain {domain_id}: {exc}") from exc
 
     # -------------------------------------------------------------------------
@@ -632,4 +660,5 @@ class AgentMailProvider(
         except ApiError as exc:
             _raise_for_api_error(exc, "get_inbox_metrics")
         except Exception as exc:
+            logger.error(f"Unexpected error fetching AgentMail metrics: {exc}")
             raise EmailAPIError(f"Unexpected error fetching metrics: {exc}") from exc

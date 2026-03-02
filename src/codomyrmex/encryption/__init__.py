@@ -1,19 +1,18 @@
-"""
-Encryption module for Codomyrmex.
+"""Encryption module for Codomyrmex.
 
-This module provides encryption/decryption utilities and key management:
-- AES-256 symmetric encryption (CBC mode, with deprecation warning)
-- AES-GCM authenticated encryption (recommended)
-- RSA asymmetric encryption
-- Key generation and derivation (PBKDF2, HKDF)
+Provides encryption, hashing, digital signatures, and key management:
+- AES-256 symmetric encryption (CBC and GCM)
+- RSA asymmetric encryption and digital signatures
+- Key generation and key derivation (PBKDF2, HKDF)
 - HMAC message authentication
-- Digital signatures
-- File encryption utilities
-- Secure hashing functions
-- Secure data container
+- Secure hashing (SHA-256, SHA-384, SHA-512, MD5)
+- Secure data containers for JSON objects
+- Key management for secure key storage
 """
 
-from typing import Optional
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, Any
 
 from codomyrmex.exceptions import EncryptionError
 
@@ -26,6 +25,10 @@ from .core import (
     generate_aes_key,
 )
 from .keys import KeyManager, compute_hmac, derive_key_hkdf, verify_hmac
+from .signing import Signer
+
+if TYPE_CHECKING:
+    from pathlib import Path
 
 # Shared schemas for cross-module interop
 try:
@@ -45,9 +48,9 @@ def cli_commands():
                 "  - AES-256-CBC: Symmetric (legacy, deprecated)\n"
                 "  - AES-256-GCM: Authenticated symmetric (recommended)\n"
                 "  - RSA: Asymmetric encryption\n"
-                "  - PBKDF2: Key derivation\n"
-                "  - HKDF: Key derivation\n"
-                "  - HMAC: Message authentication\n"
+                "  - PBKDF2: Key derivation from passwords\n"
+                "  - HKDF: Key derivation from high-entropy material\n"
+                "  - HMAC: Message authentication (SHA-256/384/512)\n"
                 "  - SHA-256/SHA-512: Secure hashing"
             ),
         },
@@ -59,6 +62,7 @@ def cli_commands():
                 f"  AES-GCM: {AESGCMEncryptor.__name__} (available)\n"
                 f"  Key Manager: {KeyManager.__name__} (available)\n"
                 f"  Secure Container: {SecureDataContainer.__name__} (available)\n"
+                f"  Signer: {Signer.__name__} (available)\n"
                 "  HMAC utils: available\n"
                 "  KDF utils: available"
             ),
@@ -73,6 +77,7 @@ __all__ = [
     "AESGCMEncryptor",
     "SecureDataContainer",
     "EncryptionError",
+    "Signer",
     # Convenience functions
     "encrypt",
     "decrypt",
@@ -94,42 +99,39 @@ __all__ = [
 ]
 
 
-__version__ = "0.1.0"
+__version__ = "0.2.0"
 
 
 def encrypt(data: bytes, key: bytes, algorithm: str = "AES") -> bytes:
-    """Encrypt data."""
-    encryptor = Encryptor(algorithm=algorithm)
-    return encryptor.encrypt(data, key)
+    """Encrypt bytes using specified algorithm."""
+    return Encryptor(algorithm=algorithm).encrypt(data, key)
 
 
 def decrypt(data: bytes, key: bytes, algorithm: str = "AES") -> bytes:
-    """Decrypt data."""
-    encryptor = Encryptor(algorithm=algorithm)
-    return encryptor.decrypt(data, key)
+    """Decrypt bytes using specified algorithm."""
+    return Encryptor(algorithm=algorithm).decrypt(data, key)
 
 
 def generate_key(algorithm: str = "AES") -> bytes:
-    """Generate an encryption key."""
-    encryptor = Encryptor(algorithm=algorithm)
-    return encryptor.generate_key()
+    """Generate an encryption key for specified algorithm."""
+    return Encryptor(algorithm=algorithm).generate_key()
 
 
 def get_encryptor(algorithm: str = "AES") -> Encryptor:
-    """Get an encryptor instance."""
+    """Get an Encryptor instance."""
     return Encryptor(algorithm=algorithm)
 
 
-def encrypt_file(input_path: str, output_path: str, key: bytes, algorithm: str = "AES") -> bool:
-    """Encrypt a file."""
+def encrypt_file(input_path: str | Path, output_path: str | Path, key: bytes, algorithm: str = "AES") -> bool:
+    """Encrypt a file from input to output."""
     return Encryptor(algorithm=algorithm).encrypt_file(input_path, output_path, key)
 
 
-def decrypt_file(input_path: str, output_path: str, key: bytes, algorithm: str = "AES") -> bool:
-    """Decrypt a file."""
+def decrypt_file(input_path: str | Path, output_path: str | Path, key: bytes, algorithm: str = "AES") -> bool:
+    """Decrypt a file from input to output."""
     return Encryptor(algorithm=algorithm).decrypt_file(input_path, output_path, key)
 
 
 def hash_data(data: bytes, algorithm: str = "sha256") -> str:
-    """Compute hash of data."""
+    """Compute hexadecimal hash of data."""
     return Encryptor.hash_data(data, algorithm)

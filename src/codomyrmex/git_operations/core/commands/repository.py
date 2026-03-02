@@ -7,6 +7,7 @@ from codomyrmex.performance import monitor_performance
 
 logger = get_logger(__name__)
 
+@mcp_tool(name="git_check_availability")
 def check_git_availability() -> bool:
     """Check if Git is available on the system."""
     try:
@@ -14,40 +15,52 @@ def check_git_availability() -> bool:
             ["git", "--version"], capture_output=True, text=True, check=True
         )
         version = result.stdout.strip()
-        logger.info(f"Git is available: {version}")
+        logger.debug(f"Git is available: {version}")
         return True
     except (subprocess.CalledProcessError, FileNotFoundError):
         logger.error("Git is not available on this system")
         return False
 
-def is_git_repository(path: str = None) -> bool:
+@mcp_tool(name="git_is_repo")
+def is_git_repository(repository_path: str = None) -> bool:
     """Check if the given path is a Git repository."""
-    if path is None:
-        path = os.getcwd()
+    if repository_path is None:
+        repository_path = os.getcwd()
+
+    if not os.path.isdir(repository_path):
+        return False
 
     try:
         result = subprocess.run(
             ["git", "rev-parse", "--git-dir"],
-            cwd=path,
+            cwd=repository_path,
             capture_output=True,
             text=True,
             check=False,
         )
         return result.returncode == 0
     except Exception as e:
-        logger.warning("Failed to check if %s is a git repository: %s", path, e)
+        logger.warning("Failed to check if %s is a git repository: %s", repository_path, e)
         return False
 
-@mcp_tool()
+@mcp_tool(name="git_init")
 @monitor_performance("git_initialize_repository")
-def initialize_git_repository(path: str, initial_commit: bool = True) -> bool:
-    """Initialize a new Git repository at the specified path."""
+def initialize_git_repository(repository_path: str, initial_commit: bool = True) -> bool:
+    """Initialize a new Git repository at the specified path.
+
+    Args:
+        repository_path: Path to initialize the repository in.
+        initial_commit: Whether to create an initial commit with a README.md.
+    """
     try:
-        logger.info(f"Initializing Git repository at: {path}")
+        logger.info(f"Initializing Git repository at: {repository_path}")
+
+        # Ensure directory exists
+        os.makedirs(repository_path, exist_ok=True)
 
         # Initialize repository
-        result = subprocess.run(
-            ["git", "init"], cwd=path, capture_output=True, text=True, check=True
+        subprocess.run(
+            ["git", "init"], cwd=repository_path, capture_output=True, text=True, check=True
         )
 
         if initial_commit:
@@ -56,7 +69,7 @@ def initialize_git_repository(path: str, initial_commit: bool = True) -> bool:
                 # Check if there are any commits
                 result = subprocess.run(
                     ["git", "rev-list", "--count", "HEAD"],
-                    cwd=path,
+                    cwd=repository_path,
                     capture_output=True,
                     text=True,
                     check=False,
@@ -67,12 +80,12 @@ def initialize_git_repository(path: str, initial_commit: bool = True) -> bool:
 
             if not has_commits:
                 # Create initial commit
-                readme_path = os.path.join(path, "README.md")
+                readme_path = os.path.join(repository_path, "README.md")
                 if not os.path.exists(readme_path):
                     with open(readme_path, "w") as f:
                         f.write("# Project\n\nInitial commit.\n")
 
-                subprocess.run(["git", "add", "README.md"], cwd=path, check=True)
+                subprocess.run(["git", "add", "README.md"], cwd=repository_path, check=True)
                 subprocess.run(
                     [
                         "git",
@@ -84,7 +97,7 @@ def initialize_git_repository(path: str, initial_commit: bool = True) -> bool:
                         "-m",
                         "Initial commit",
                     ],
-                    cwd=path,
+                    cwd=repository_path,
                     check=True,
                 )
 
@@ -93,12 +106,14 @@ def initialize_git_repository(path: str, initial_commit: bool = True) -> bool:
 
     except subprocess.CalledProcessError as e:
         logger.error(f"Failed to initialize Git repository: {e}")
+        if e.stderr:
+            logger.error(f"Git error: {e.stderr}")
         return False
     except Exception as e:
         logger.error(f"Unexpected error initializing repository: {e}")
         return False
 
-@mcp_tool()
+@mcp_tool(name="git_clone")
 @monitor_performance("git_clone_repository")
 def clone_repository(url: str, destination: str, branch: str = None) -> bool:
     """Clone a Git repository to the specified destination."""

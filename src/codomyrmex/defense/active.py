@@ -7,47 +7,97 @@ embedding generation (poisoning), exploit detection, and honeytoken traps.
 import random
 import threading
 import uuid
-from datetime import datetime
+from datetime import datetime, timezone
+from enum import Enum
+from typing import Any
 
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 logger = get_logger(__name__)
 
+
+class ThreatLevel(Enum):
+    """Threat levels for detected exploits."""
+
+    NONE = 0
+    LOW = 1
+    MEDIUM = 2
+    HIGH = 3
+    CRITICAL = 4
+
+
 class ActiveDefense:
     """Active defense system against cognitive exploits."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         self._exploit_patterns = [
             "ignore previous instructions",
             "system override",
             "you are now",
-            "mode: unlocked"
+            "mode: unlocked",
         ]
-        self._metrics: dict = {"exploits_detected": 0, "honeytokens_triggered": 0}
-        self._honeytokens: dict[str, dict] = {}
+        self._metrics: dict[str, int] = {"exploits_detected": 0, "honeytokens_triggered": 0}
+        self._honeytokens: dict[str, dict[str, Any]] = {}
         self._honeytoken_lock = threading.Lock()
 
-    def detect_exploit(self, input_text: str) -> bool:
-        """
-        Detect potential cognitive exploits in input.
+    def detect_exploit(self, input_text: str) -> dict[str, Any]:
+        """Detect potential cognitive exploits in input.
+
         Heuristic-based detection of common jailbreak patterns.
+
+        Args:
+            input_text: The input to scan.
+
+        Returns:
+            Dict containing detection results:
+            - detected: bool
+            - patterns: list of triggered patterns
+            - threat_level: ThreatLevel
         """
         input_lower = input_text.lower()
+        triggered_patterns = []
         for pattern in self._exploit_patterns:
             if pattern in input_lower:
-                logger.warning(f"Exploit attempt detected: '{pattern}'")
-                self._metrics["exploits_detected"] += 1
-                return True
-        return False
+                triggered_patterns.append(pattern)
+
+        if triggered_patterns:
+            logger.warning("Exploit attempt detected: %s", triggered_patterns)
+            self._metrics["exploits_detected"] += 1
+            threat_level = (
+                ThreatLevel.HIGH if len(triggered_patterns) > 1 else ThreatLevel.MEDIUM
+            )
+            return {
+                "detected": True,
+                "patterns": triggered_patterns,
+                "threat_level": threat_level,
+            }
+
+        return {
+            "detected": False,
+            "patterns": [],
+            "threat_level": ThreatLevel.NONE,
+        }
+
+    def classify_threat(self, input_text: str) -> ThreatLevel:
+        """Classify the threat level of an input.
+
+        Args:
+            input_text: The input to classify.
+
+        Returns:
+            ThreatLevel indicating the severity of the threat.
+        """
+        result = self.detect_exploit(input_text)
+        return result["threat_level"]
 
     def update_patterns(self, new_patterns: list[str]) -> None:
         """Add new exploit patterns dynamically."""
         for p in new_patterns:
             if p not in self._exploit_patterns:
                 self._exploit_patterns.append(p)
-                logger.info(f"Updated defense with pattern: '{p}'")
+                logger.info("Updated defense with pattern: '%s'", p)
 
-    def get_threat_report(self) -> dict:
+    def get_threat_report(self) -> dict[str, int]:
         """Return current threat metrics."""
         return {
             "active_patterns": len(self._exploit_patterns),
@@ -56,18 +106,17 @@ class ActiveDefense:
             "honeytokens_triggered": self._metrics.get("honeytokens_triggered", 0),
         }
 
-    def poison_context(self, attacker_id: str, intensity: float = 0.5) -> str:
-        """
-        Generate adversarial context to poison the attacker's model.
+    def poison_context(self, attacker_id: str, intensity: float = 0.5) -> dict[str, Any]:
+        """Generate adversarial context to poison the attacker's model.
 
         Args:
             attacker_id: ID of the detected attacker
             intensity: 0.0 to 1.0, how much noise to inject
 
         Returns:
-            Poisoned context string
+            Dict containing poisoned context and metadata.
         """
-        logger.info(f"Generating poison context for {attacker_id} (intensity={intensity})")
+        logger.info("Generating poison context for %s (intensity=%f)", attacker_id, intensity)
 
         # Simulated counter-embeddings/noise
         noise_phrases = [
@@ -75,12 +124,21 @@ class ActiveDefense:
             " {{context_reset}} ",
             " <<NULL_POINTER>> ",
             " ...recalibrating... ",
-            " (probability: 0.0)"
+            " (probability: 0.0)",
         ]
 
-        count = int(10 * intensity)
-        poison = "".join(random.choices(noise_phrases, k=count))
-        return poison
+        if intensity <= 0:
+            poison = ""
+        else:
+            count = int(10 * intensity)
+            poison = "".join(random.choices(noise_phrases, k=count))
+
+        return {
+            "attacker_id": attacker_id,
+            "poisoned_content": poison,
+            "intensity": intensity,
+            "timestamp": datetime.now(timezone.utc).isoformat(),
+        }
 
     # ── Honeytoken subsystem ─────────────────────────────────────────
 
@@ -102,11 +160,11 @@ class ActiveDefense:
             self._honeytokens[token] = {
                 "label": label or "unnamed",
                 "context": context,
-                "created_at": datetime.utcnow().isoformat() + "Z",
+                "created_at": datetime.now(timezone.utc).isoformat(),
                 "triggered": False,
                 "trigger_count": 0,
             }
-        logger.info(f"Honeytoken created: {token} ({label})")
+        logger.info("Honeytoken created: %s (%s)", token, label)
         return token
 
     def check_honeytoken(self, text: str) -> list[str]:
@@ -124,17 +182,18 @@ class ActiveDefense:
                 if token in text:
                     info["triggered"] = True
                     info["trigger_count"] += 1
-                    info["last_triggered_at"] = datetime.utcnow().isoformat() + "Z"
+                    info["last_triggered_at"] = datetime.now(timezone.utc).isoformat()
                     self._metrics["honeytokens_triggered"] += 1
                     triggered.append(token)
                     logger.warning(
-                        f"Honeytoken triggered: {token} ({info['label']}) — "
-                        f"trigger #{info['trigger_count']}"
+                        "Honeytoken triggered: %s (%s) — trigger #%d",
+                        token,
+                        info["label"],
+                        info["trigger_count"],
                     )
         return triggered
 
-    def list_honeytokens(self) -> dict[str, dict]:
+    def list_honeytokens(self) -> dict[str, dict[str, Any]]:
         """List all active honeytokens with their status."""
         with self._honeytoken_lock:
             return dict(self._honeytokens)
-

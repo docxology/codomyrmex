@@ -9,10 +9,11 @@ Edge computing module providing edge node management, function deployment, and s
 ## Functional Requirements
 
 - Edge node discovery and management
-- Function deployment to edge nodes
-- State synchronization (cloud ↔ edge)
+- Function deployment with multiple strategies (Rolling, Blue-Green, Canary)
+- State synchronization with delta support and conflict resolution
 - Offline operation support
-- Resource-aware scheduling
+- Resource-aware scheduling and cluster rebalancing
+- Advanced health monitoring with recovery recommendations
 
 ## Core Classes
 
@@ -25,14 +26,21 @@ Edge computing module providing edge node management, function deployment, and s
 | `EdgeSynchronizer` | State sync manager |
 | `EdgeMetrics` | Invocation metrics tracking |
 | `InvocationRecord` | Single invocation record |
+| `DeploymentManager` | Orchestrates multi-node function deployment |
+| `EdgeScheduler` | Periodic job execution |
+| `EdgeCache` | Local edge data caching |
+| `HealthMonitor` | Failure detection and recovery suggestion |
 
 ## Key Functions
 
 | Function | Description |
 |----------|-------------|
 | `EdgeRuntime.deploy(func)` | Deploy function to runtime |
-| `EdgeCluster.register_node(node)` | Register node in cluster |
-| `EdgeSynchronizer.update_local(data)` | Update local state |
+| `EdgeCluster.rebalance_cluster()` | Move functions to optimize resource use |
+| `EdgeCluster.auto_heal()` | Detect and mark stale nodes offline |
+| `EdgeSynchronizer.update_local(data, is_delta)` | Update local state (full or partial) |
+| `DeploymentManager.execute(plan)` | Execute a multi-node deployment |
+| `EdgeScheduler.execute_tick(cluster)` | Run due scheduled jobs |
 
 ## Design Principles
 

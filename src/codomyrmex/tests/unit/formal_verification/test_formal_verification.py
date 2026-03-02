@@ -174,6 +174,34 @@ class TestConstraintSolver:
         assert indices == [0, 1, 2]
         assert solver.item_count() == 3
 
+    @skip_no_z3
+    def test_push_pop(self):
+        """Push and pop affect solver scopes."""
+        from codomyrmex.formal_verification import ConstraintSolver, SolverStatus
+        solver = ConstraintSolver()
+        solver.add_item("x = Int('x')")
+        solver.add_item("solver.add(x > 0)")
+        assert solver.is_satisfiable()
+        
+        solver.push()
+        solver.add_item("solver.add(x < 0)")
+        assert not solver.is_satisfiable()
+        
+        solver.pop()
+        assert solver.is_satisfiable()
+
+    @skip_no_z3
+    def test_optimizer_support(self):
+        """Optimize engine is used when optimizer constraints are added."""
+        from codomyrmex.formal_verification import ConstraintSolver
+        solver = ConstraintSolver()
+        solver.add_item("x = Int('x')")
+        solver.add_item("optimizer.add(x == 10)")
+        result = solver.solve()
+        assert result.is_sat
+        assert result.statistics["engine"] == "Optimize"
+        assert result.model["x"] == "10"
+
 
 @pytest.mark.unit
 class TestISCVerification:
@@ -191,15 +219,28 @@ class TestISCVerification:
         assert result.criteria_analyzed == 2
 
     @skip_no_z3
+    def test_conflict_detection_unsat_core(self):
+        """Conflicting criteria are detected and reported via conflicts list."""
+        from codomyrmex.formal_verification import verify_criteria_consistency
+        result = verify_criteria_consistency([
+            {"id": "ISC-C1", "description": "Response time under 100ms"},
+            {"id": "ISC-C2", "description": "Response time at least 500ms"},
+        ])
+        assert result.consistent is False
+        # Conflicting pair should be (ISC_C1, ISC_C2) or similar
+        assert len(result.conflicts) > 0
+        assert ("ISC_C1", "ISC_C2") in result.conflicts or ("ISC_C2", "ISC_C1") in result.conflicts
+
+    @skip_no_z3
     def test_inconsistent_criteria(self):
-        """Independent variable criteria are satisfiable."""
+        """Same variable conflicting criteria are UNSAT."""
         from codomyrmex.formal_verification import verify_criteria_consistency
         result = verify_criteria_consistency([
             {"id": "ISC-C1", "description": "Value under 5"},
             {"id": "ISC-C2", "description": "Value at least 10"},
         ])
-        # Different variables (isc_c1 and isc_c2), so independent
-        assert result.consistent is True
+        # Same variable "value" is extracted for both because both descriptions start with "Value"
+        assert result.consistent is False
 
     @skip_no_z3
     def test_direct_constraint_override(self):

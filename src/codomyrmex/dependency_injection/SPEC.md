@@ -1,88 +1,46 @@
 # Dependency Injection — Functional Specification
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-**Module**: `codomyrmex.dependency_injection`  
-**Status**: Active
+**Module**: `codomyrmex.dependency_injection`
 
 ## 1. Overview
 
-Codomyrmex Dependency Injection Module.
-
 A lightweight, thread-safe Inversion of Control (IoC) container for managing
-service lifetimes and constructor-based dependency injection. This is a
-Foundation layer module with no dependencies on other codomyrmex modules.
+service lifetimes and constructor-based dependency injection.
 
-Core components:
-    - Container: The IoC container that manages registrations and resolution.
-    - ServiceDescriptor: Dataclass describing a service binding.
-    - Scope: Enum defining lifetime strategies (SINGLETON, TRANSIENT, SCOPED).
-    - ScopeContext: Context manager for scoped service lifetimes.
-    - @injectable: Decorator to mark a class as injectable with a given scope.
-    - @inject: Decorator to mark a constructor for automatic parameter injection.
+## 2. Core Features
 
-Quick start:
-    from codomyrmex.dependency_injection import Container, injectable, inject
+### 2.1 Resolution Strategies
+- **Type-based**: Resolve by interface type.
+- **Named**: Resolve by interface type and a unique name.
+- **Collections**: Resolve all registered implementations of a type via `List[T]` or `Iterable[T]`.
+- **Optional**: Gracefully handle missing dependencies via `Optional[T]`.
 
-    @injectable(scope="singleton")
-    class AppConfig:
-        def __init__(self):
-            self.debug = True
+### 2.2 Lifetimes
+- **SINGLETON**: One instance per container.
+- **TRANSIENT**: New instance per resolution.
+- **SCOPED**: One instance per `ScopeContext`.
 
-    @injectable(scope="transient")
-    class UserService:
-        @inject
-        def __init__(self, config: AppConfig):
-            self.config = config
+### 2.3 Registration
+- **Manual**: via `register()`, `register_instance()`, `register_factory()`.
+- **Automatic**: via `scan()` and `@injectable` decorator.
 
-    container = Container()
-    container.register(AppConfig, AppConfig, scope="singleton")
-    container.register(UserService, UserService, scope="transient")
-
-    service = container.resolve(UserService)
-    assert service.config.debug is True
-
-## 2. Architecture
-
-### Source Files
-
-| File | Purpose |
-|------|--------|
-| `container.py` | Inversion of Control (IoC) container for dependency injection. |
-| `decorators.py` | Injection decorators for marking classes and parameters. |
-| `scopes.py` | Lifecycle scope management for dependency injection. |
-
-## 3. Dependencies
-
-No internal Codomyrmex dependencies.
-
-## 4. Public API
-
-### Exports (`__all__`)
+## 3. API Surface
 
 - `Container`
-- `ServiceDescriptor`
-- `ResolutionError`
-- `CircularDependencyError`
-- `injectable`
-- `inject`
-- `is_injectable`
-- `get_injectable_metadata`
-- `get_inject_metadata`
-- `get_injectable_params`
-- `Scope`
 - `ScopeContext`
+- `Scope` (Enum)
+- `@injectable` (Decorator)
+- `@inject` (Decorator)
+- `ResolutionError`, `CircularDependencyError`
 
-## 5. Testing
+## 4. Implementation Details
 
-```bash
-uv run python -m pytest src/codomyrmex/tests/ -k dependency_injection -v
-```
+- **Thread-Safety**: Uses `threading.RLock` for registry access and `threading.Lock` for scope caches.
+- **Circular Dependency Detection**: Uses thread-local storage to track resolution stack and detect cycles.
+- **Injection**: Uses `typing.get_type_hints` and `inspect.signature` for constructor analysis.
 
-All tests follow the Zero-Mock policy.
+## 5. Testing Policy
 
-## 6. References
-
-- [README.md](README.md) — Human-readable documentation
-- [AGENTS.md](AGENTS.md) — Agent coordination guide
-- [Docs](../../../docs/modules/dependency_injection/)
+- **Zero-Mock**: All tests must use real classes and logic. No mocks allowed.

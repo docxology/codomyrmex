@@ -1,194 +1,112 @@
 """
 Unit tests for evolutionary_ai.genome — Zero-Mock compliant.
-
-Covers: BinaryGenome (random/copy/to_list/__len__/flip),
-RealValuedGenome (random/copy/to_list/__len__/clip),
-PermutationGenome (random/from_elements/copy/to_list/__len__/swap).
 """
 
 import pytest
+import math
 
-from codomyrmex.evolutionary_ai.genome import (
-    BinaryGenome,
-    PermutationGenome,
-    RealValuedGenome,
+from codomyrmex.evolutionary_ai.genome.genome import (
+    Individual,
+    Genome,
+    GenomeStats,
 )
 
-# ── BinaryGenome ──────────────────────────────────────────────────────
+@pytest.mark.unit
+class TestIndividual:
+    def test_individual_init(self):
+        ind = Individual(genes=[1, 2, 3], fitness=10.5, metadata={"id": "test"})
+        assert ind.genes == [1, 2, 3]
+        assert ind.fitness == 10.5
+        assert ind.metadata == {"id": "test"}
 
+    def test_individual_comparison(self):
+        ind1 = Individual(genes=[1], fitness=10.0)
+        ind2 = Individual(genes=[2], fitness=20.0)
+        ind3 = Individual(genes=[3], fitness=None)
+        
+        assert ind1 < ind2
+        assert not (ind2 < ind1)
+        assert ind3 < ind1
+        assert not (ind1 < ind3)
+        assert not (ind3 < ind3)
+
+    def test_individual_equality(self):
+        ind1 = Individual(genes=[1, 2, 3])
+        ind2 = Individual(genes=[1, 2, 3])
+        ind3 = Individual(genes=[1, 2, 4])
+        
+        assert ind1 == ind2
+        assert ind1 != ind3
+        assert ind1 != "not an individual"
 
 @pytest.mark.unit
-class TestBinaryGenome:
-    def test_random_correct_length(self):
-        g = BinaryGenome.random(10)
-        assert len(g.bits) == 10
+class TestGenome:
+    def test_genome_random(self):
+        g = Genome.random(length=10, low=0.0, high=1.0)
+        assert len(g) == 10
+        assert all(0.0 <= x <= 1.0 for x in g.genes)
 
-    def test_random_only_zero_or_one(self):
-        g = BinaryGenome.random(50)
-        assert all(b in (0, 1) for b in g.bits)
+    def test_genome_zeros(self):
+        g = Genome.zeros(length=5)
+        assert g.genes == [0.0] * 5
 
-    def test_len_reflects_bits(self):
-        g = BinaryGenome(bits=[1, 0, 1])
+    def test_genome_clone(self):
+        g1 = Genome(genes=[0.1, 0.2], fitness=0.5, metadata={"a": 1})
+        g2 = g1.clone()
+        
+        assert g1 == g2
+        assert g1.fitness == g2.fitness
+        assert g1.metadata == g2.metadata
+        
+        # Verify independence
+        g2.genes[0] = 0.9
+        g2.metadata["a"] = 2
+        assert g1.genes[0] == 0.1
+        assert g1.metadata["a"] == 1
+
+    def test_genome_distance(self):
+        g1 = Genome(genes=[0.0, 0.0])
+        g2 = Genome(genes=[3.0, 4.0])
+        assert g1.distance(g2) == pytest.approx(5.0)
+
+    def test_genome_distance_error(self):
+        g1 = Genome(genes=[0.0])
+        g2 = Genome(genes=[0.0, 0.0])
+        with pytest.raises(ValueError, match="Cannot compute distance"):
+            g1.distance(g2)
+
+    def test_genome_clamp(self):
+        g = Genome(genes=[-1.0, 0.5, 2.0])
+        clamped = g.clamp(low=0.0, high=1.0)
+        assert clamped.genes == [0.0, 0.5, 1.0]
+        assert clamped.fitness is None
+
+    def test_genome_stats(self):
+        g = Genome(genes=[1.0, 2.0, 3.0])
+        stats = g.stats()
+        assert stats.mean == 2.0
+        assert stats.min_val == 1.0
+        assert stats.max_val == 3.0
+        assert stats.length == 3
+        assert stats.std == pytest.approx(math.sqrt(2/3))
+
+    def test_genome_stats_empty(self):
+        g = Genome(genes=[])
+        stats = g.stats()
+        assert stats.length == 0
+        assert stats.mean == 0.0
+
+    def test_genome_serialization(self):
+        g1 = Genome(genes=[0.1, 0.2], fitness=0.8, metadata={"m": "data"})
+        data = g1.to_dict()
+        g2 = Genome.from_dict(data)
+        
+        assert g1 == g2
+        assert g1.fitness == g2.fitness
+        assert g1.metadata == g2.metadata
+
+    def test_genome_dunders(self):
+        g = Genome(genes=[1.0, 2.0, 3.0])
         assert len(g) == 3
-
-    def test_to_list_returns_copy(self):
-        g = BinaryGenome(bits=[1, 0, 1])
-        lst = g.to_list()
-        assert lst == [1, 0, 1]
-        lst.append(99)
-        # Mutating the list should not affect the genome
-        assert len(g.bits) == 3
-
-    def test_copy_returns_equal_genome(self):
-        g = BinaryGenome(bits=[1, 0, 0, 1])
-        g2 = g.copy()
-        assert g2.bits == g.bits
-
-    def test_copy_is_independent(self):
-        g = BinaryGenome(bits=[1, 0, 0, 1])
-        g2 = g.copy()
-        g2.bits[0] = 0
-        assert g.bits[0] == 1  # original unchanged
-
-    def test_flip_toggles_bit(self):
-        g = BinaryGenome(bits=[0, 1, 0])
-        g.flip(0)
-        assert g.bits[0] == 1
-
-    def test_flip_zero_to_one(self):
-        g = BinaryGenome(bits=[0, 0, 0])
-        g.flip(1)
-        assert g.bits[1] == 1
-
-    def test_flip_one_to_zero(self):
-        g = BinaryGenome(bits=[1, 1, 1])
-        g.flip(2)
-        assert g.bits[2] == 0
-
-
-# ── RealValuedGenome ──────────────────────────────────────────────────
-
-
-@pytest.mark.unit
-class TestRealValuedGenome:
-    def test_random_correct_length(self):
-        g = RealValuedGenome.random(5)
-        assert len(g.values) == 5
-
-    def test_random_values_within_bounds(self):
-        g = RealValuedGenome.random(20, lower=-1.0, upper=1.0)
-        assert all(-1.0 <= v <= 1.0 for v in g.values)
-
-    def test_random_default_bounds(self):
-        g = RealValuedGenome.random(10)
-        assert all(0.0 <= v <= 1.0 for v in g.values)
-
-    def test_random_sets_lower_bounds(self):
-        g = RealValuedGenome.random(3, lower=-5.0, upper=5.0)
-        assert g.lower_bounds == [-5.0, -5.0, -5.0]
-
-    def test_random_sets_upper_bounds(self):
-        g = RealValuedGenome.random(3, lower=-5.0, upper=5.0)
-        assert g.upper_bounds == [5.0, 5.0, 5.0]
-
-    def test_len_reflects_values(self):
-        g = RealValuedGenome(values=[1.0, 2.0, 3.0])
-        assert len(g) == 3
-
-    def test_to_list_returns_copy(self):
-        g = RealValuedGenome(values=[1.0, 2.0])
-        lst = g.to_list()
-        assert lst == [1.0, 2.0]
-        lst.append(99.0)
-        assert len(g.values) == 2
-
-    def test_copy_equals_original(self):
-        g = RealValuedGenome(values=[1.0, 2.0], lower_bounds=[0.0, 0.0])
-        g2 = g.copy()
-        assert g2.values == g.values
-
-    def test_copy_is_independent(self):
-        g = RealValuedGenome(values=[1.0, 2.0])
-        g2 = g.copy()
-        g2.values[0] = 99.0
-        assert g.values[0] == 1.0
-
-    def test_copy_with_none_bounds(self):
-        g = RealValuedGenome(values=[1.0])
-        g2 = g.copy()
-        assert g2.lower_bounds is None
-        assert g2.upper_bounds is None
-
-    def test_clip_clamps_values_within_bounds(self):
-        g = RealValuedGenome(
-            values=[5.0, -5.0, 0.5],
-            lower_bounds=[0.0, 0.0, 0.0],
-            upper_bounds=[1.0, 1.0, 1.0],
-        )
-        g.clip()
-        assert g.values[0] == pytest.approx(1.0)
-        assert g.values[1] == pytest.approx(0.0)
-        assert g.values[2] == pytest.approx(0.5)
-
-    def test_clip_no_bounds_unchanged(self):
-        g = RealValuedGenome(values=[1000.0, -1000.0])
-        g.clip()
-        assert g.values[0] == 1000.0
-        assert g.values[1] == -1000.0
-
-
-# ── PermutationGenome ─────────────────────────────────────────────────
-
-
-@pytest.mark.unit
-class TestPermutationGenome:
-    def test_random_correct_length(self):
-        g = PermutationGenome.random(5)
-        assert len(g.elements) == 5
-
-    def test_random_is_permutation(self):
-        g = PermutationGenome.random(6)
-        assert sorted(g.elements) == list(range(6))
-
-    def test_from_elements_stores_elements(self):
-        g = PermutationGenome.from_elements(["a", "b", "c"])
-        assert g.elements == ["a", "b", "c"]
-
-    def test_from_elements_is_copy(self):
-        source = [1, 2, 3]
-        g = PermutationGenome.from_elements(source)
-        source.append(4)
-        assert len(g.elements) == 3
-
-    def test_len_reflects_elements(self):
-        g = PermutationGenome(elements=[0, 1, 2, 3])
-        assert len(g) == 4
-
-    def test_to_list_returns_copy(self):
-        g = PermutationGenome(elements=[0, 1, 2])
-        lst = g.to_list()
-        assert lst == [0, 1, 2]
-        lst.append(99)
-        assert len(g.elements) == 3
-
-    def test_copy_equals_original(self):
-        g = PermutationGenome(elements=[2, 0, 1])
-        g2 = g.copy()
-        assert g2.elements == g.elements
-
-    def test_copy_is_independent(self):
-        g = PermutationGenome(elements=[0, 1, 2])
-        g2 = g.copy()
-        g2.elements[0] = 99
-        assert g.elements[0] == 0
-
-    def test_swap_exchanges_elements(self):
-        g = PermutationGenome(elements=[0, 1, 2, 3])
-        g.swap(0, 3)
-        assert g.elements[0] == 3
-        assert g.elements[3] == 0
-
-    def test_swap_maintains_all_elements(self):
-        g = PermutationGenome(elements=[0, 1, 2, 3])
-        g.swap(1, 2)
-        assert sorted(g.elements) == [0, 1, 2, 3]
+        assert g[1] == 2.0
+        assert "Genome" in repr(g)

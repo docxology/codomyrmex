@@ -226,13 +226,31 @@ class AntigravityClient(IDEClient):
         # In a real integration, this would invoke view_file tool
         return Path(path).exists()
 
+    def close_file(self, path: str) -> bool:
+        """Close a file in Antigravity."""
+        return True
+
     def get_open_files(self) -> list[str]:
         """Get list of open files.
 
         Returns:
             List of file paths.
         """
-        return []
+        # Simulated based on artifacts
+        if not self._connected:
+            return []
+        
+        return [a.path for a in self._context.artifacts if a.path]
+
+    def save_file(self, path: str) -> bool:
+        """Save a file in Antigravity."""
+        if not self._connected:
+            return False
+        return Path(path).exists()
+
+    def save_all(self) -> bool:
+        """Save all open files in Antigravity."""
+        return self._connected
 
     # Antigravity-specific methods
 

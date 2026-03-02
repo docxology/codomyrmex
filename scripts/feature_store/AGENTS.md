@@ -1,9 +1,9 @@
-# Codomyrmex Root Agentic Context
+# Feature Store Agentic Context
 
 ## Agent Overview
-This file provides context for autonomous agents operating within the `Codomyrmex Root` module.
+This directory contains the orchestrator/demonstration script for the `codomyrmex.feature_store` module.
 
 ## Operational Directives
-1. **Context Awareness**: Agents modifying or analyzing this directory must understand its role within the broader Codomyrmex system.
-2. **Functional Enforcement**: Agents must ensure any generated code remains fully functional and real.
-3. **Documentation Sync**: Agents must keep this `AGENTS.md`, `README.md`, and `SPEC.md` synchronized with actual code capabilities.
+1. **Real Module Use**: Always use the `codomyrmex.feature_store` module, never mock its components.
+2. **Clarity**: The orchestrator should be easy to read and serve as documentation by example.
+3. **Validation**: Ensure the orchestrator covers both successful paths and error cases.

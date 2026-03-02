@@ -136,6 +136,9 @@ def infer_pai_phase(module_name: str, functions: list[str], classes: list[str]) 
 
 def generate_pai_md(module_name: str, module_dir: Path) -> str:
     """Generate improved PAI.md content for a module."""
+    if not isinstance(module_dir, Path):
+        module_dir = Path(module_dir)
+        
     init_path = module_dir / "__init__.py"
     readme_path = module_dir / "README.md"
 
@@ -212,6 +215,17 @@ def generate_pai_md(module_name: str, module_dir: Path) -> str:
     sections.append("- **Siblings**: [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [API_SPECIFICATION.md](API_SPECIFICATION.md)")
 
     return "\n".join(sections) + "\n"
+
+
+def write_pai_md(module_name: str, module_dir: Path) -> Path:
+    """Generate and write PAI.md for a module."""
+    if not isinstance(module_dir, Path):
+        module_dir = Path(module_dir)
+        
+    content = generate_pai_md(module_name, module_dir)
+    pai_path = module_dir / "PAI.md"
+    pai_path.write_text(content, encoding="utf-8")
+    return pai_path
 
 
 def update_pai_docs(src_dir: Path, apply: bool = False, max_lines: int = MAX_STUB_LINES) -> None:

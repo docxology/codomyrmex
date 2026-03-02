@@ -101,6 +101,21 @@ class DeploymentManager:
     def list_deployments(self) -> list[DeploymentPlan]:
         return list(self._deployments)
 
+    def get_deployment_status(self, function_id: str) -> dict[str, Any]:
+        """Get the current deployment status of a function across the cluster."""
+        deployed_nodes = []
+        for node in self._cluster.list_nodes():
+            runtime = self._cluster.get_runtime(node.id)
+            if runtime and any(f.id == function_id for f in runtime.list_functions()):
+                deployed_nodes.append(node.id)
+
+        return {
+            "function_id": function_id,
+            "deployed_node_count": len(deployed_nodes),
+            "deployed_nodes": deployed_nodes,
+            "target_node_count": self._cluster.node_count,
+        }
+
     # --- Strategy implementations ---
 
     def _rolling_deploy(self, plan: DeploymentPlan) -> DeploymentPlan:

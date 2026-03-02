@@ -7,10 +7,12 @@ using constraint solving and compatibility analysis.
 from __future__ import annotations
 
 import json
+import os
+import shutil
 import subprocess
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any
+from typing import Any, List, Optional
 
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
@@ -123,18 +125,62 @@ class DependencyResolver:
                 issues.append("tomllib/tomli not available for pyproject parsing")
                 return issues
 
-        with open(pyproject_path, "rb") as f:
-            data = tomllib.load(f)
+        try:
+            with open(pyproject_path, "rb") as f:
+                data = tomllib.load(f)
 
-        deps = data.get("project", {}).get("dependencies", [])
-        if not deps:
-            issues.append("No dependencies declared in [project.dependencies]")
+            deps = data.get("project", {}).get("dependencies", [])
+            if not deps:
+                issues.append("No dependencies declared in [project.dependencies]")
 
-        for dep in deps:
-            if ">=" not in dep and "==" not in dep and "~=" not in dep:
-                if dep.strip() and not dep.startswith("#"):
-                    issues.append(f"Unpinned dependency: {dep}")
+            for dep in deps:
+                if ">=" not in dep and "==" not in dep and "~=" not in dep:
+                    if dep.strip() and not dep.startswith("#"):
+                        issues.append(f"Unpinned dependency: {dep}")
+        except Exception as e:
+            issues.append(f"Failed to parse pyproject.toml: {e}")
+            
         return issues
+
+    def install_dependencies(self, source: str = "pyproject.toml") -> bool:
+        """Install dependencies from a given source (pyproject.toml or requirements.txt).
+
+        Args:
+            source: Path to the dependency specification file.
+
+        Returns:
+            True if installation was successful, False otherwise.
+        """
+        uv_path = shutil.which("uv")
+        cmd = []
+
+        if uv_path:
+            cmd = [uv_path, "pip", "install"]
+        else:
+            cmd = [self._python, "-m", "pip", "install"]
+
+        if source.endswith(".toml"):
+            if uv_path:
+                # uv can install directly from pyproject.toml if in the same dir, 
+                # but let's be explicit and use -r if it was requirements, 
+                # for pyproject we might need a different approach or just use pip/uv on current dir
+                cmd = [uv_path, "pip", "install", "-e", "."] if source == "pyproject.toml" else [uv_path, "pip", "install", "-r", source]
+            else:
+                cmd = [self._python, "-m", "pip", "install", "."] if source == "pyproject.toml" else [self._python, "-m", "pip", "install", "-r", source]
+        else:
+            cmd.extend(["-r", source])
+
+        try:
+            logger.info("Installing dependencies from %s using %s", source, cmd[0])
+            result = subprocess.run(cmd, check=True, capture_output=True, text=True)
+            logger.info("Successfully installed dependencies.")
+            return True
+        except subprocess.CalledProcessError as e:
+            logger.error("Failed to install dependencies: %s", e.stderr)
+            return False
+        except Exception as e:
+            logger.error("An unexpected error occurred during installation: %s", e)
+            return False
 
     # ── Virtual environment detection ───────────────────────────────
 
@@ -144,7 +190,6 @@ class DependencyResolver:
         Returns:
             Dict with keys: active, path, type (venv, conda, uv, none).
         """
-        import os
         import sys
 
         venv_path = os.environ.get("VIRTUAL_ENV", "")
@@ -152,11 +197,11 @@ class DependencyResolver:
 
         if venv_path:
             # Detect if uv-managed
-            venv_type = "uv" if ".venv" in venv_path or "uv" in venv_path.lower() else "venv"
+            venv_type = "uv" if ".venv" in venv_path or "uv" in venv_path.lower() or os.environ.get("UV_ACTIVE") == "1" else "venv"
             return {"active": True, "path": venv_path, "type": venv_type}
         elif conda_env:
             return {"active": True, "path": conda_env, "type": "conda"}
-        elif hasattr(sys, "real_prefix"):
+        elif hasattr(sys, "real_prefix") or (hasattr(sys, "base_prefix") and sys.base_prefix != sys.prefix):
             return {"active": True, "path": sys.prefix, "type": "virtualenv"}
         return {"active": False, "path": "", "type": "none"}
 
@@ -268,3 +313,9 @@ class DependencyResolver:
             "conflict_count": len(conflicts),
             "issue_count": len(pyproject_issues),
         }
+
+
+def install_dependencies(source: str = "pyproject.toml") -> bool:
+    """Helper function to install dependencies."""
+    resolver = DependencyResolver()
+    return resolver.install_dependencies(source)

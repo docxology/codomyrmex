@@ -1,5 +1,7 @@
 """Generic representations and base classes for the email module."""
 
+from __future__ import annotations
+
 import abc
 from datetime import datetime
 
@@ -10,6 +12,11 @@ class EmailAddress(BaseModel):
     """Represents a single email address (e.g. 'John Doe <john@example.com>')."""
     email: str
     name: str | None = None
+
+    def __str__(self) -> str:
+        if self.name:
+            return f"{self.name} <{self.email}>"
+        return self.email
 
 
 class EmailMessage(BaseModel):
@@ -25,6 +32,11 @@ class EmailMessage(BaseModel):
     body_html: str | None = None
     date: datetime
     labels: list[str] = Field(default_factory=list)
+
+    @property
+    def summary(self) -> str:
+        """Return a short summary of the message."""
+        return f"[{self.date.isoformat()}] {self.sender.email}: {self.subject}"
 
 
 class EmailDraft(BaseModel):
@@ -69,3 +81,7 @@ class EmailProvider(abc.ABC):
     def modify_labels(self, message_id: str, add_labels: list[str], remove_labels: list[str]) -> None:
         """Add or remove labels from a message."""
         ...
+
+    def batch_get_messages(self, message_ids: list[str]) -> list[EmailMessage]:
+        """Fetch multiple messages by their IDs. Default implementation fetches one by one."""
+        return [self.get_message(mid) for mid in message_ids]

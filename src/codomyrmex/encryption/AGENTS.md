@@ -1,6 +1,6 @@
 # Agent Guidelines - Encryption
 
-**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.0.6 | **Status**: Active | **Last Updated**: January 2025
 
 ## Module Overview
 
@@ -10,27 +10,27 @@ Cryptographic operations: symmetric, asymmetric, hashing, and key management.
 
 | Component | Description |
 |-----------|-------------|
-| `Encryptor` | Core symmetric (AES) and asymmetric (RSA) encryption |
+| `AESGCMEncryptor` | Recommended symmetric (authenticated) encryption |
+| `Encryptor` | Symmetric (AES-CBC) and asymmetric (RSA) encryption |
 | `KeyManager` | Secure file-based key storage and rotation |
-| `SignatureAlgorithm` | Enumeration of supported HMAC algorithms |
 | `Signer` | Fast HMAC-based JSON and file signing |
 | `SecureDataContainer` | Encrypted storage for JSON-serializable data |
 
 ## Usage for Agents
 
-### Symmetric Encryption
+### Symmetric Authenticated Encryption (Recommended)
 
 ```python
-from codomyrmex.encryption import Encryptor
+from codomyrmex.encryption import AESGCMEncryptor, generate_key
 
-e = Encryptor(algorithm="AES")
-key = e.generate_key()
-# Encrypt strings directly
-ciphertext = e.encrypt_string("Secret data", key)
-plaintext = e.decrypt_string(ciphertext, key)
+key = generate_key("AES")  # 32 bytes
+gcm = AESGCMEncryptor(key)
+# Encrypt and decrypt with optional associated data
+ciphertext = gcm.encrypt(b"Secret data", associated_data=b"context-v1")
+plaintext = gcm.decrypt(ciphertext, associated_data=b"context-v1")
 ```
 
-### Digital Signatures
+### Digital Signatures (HMAC)
 
 ```python
 from codomyrmex.encryption import Signer
@@ -38,6 +38,8 @@ from codomyrmex.encryption import Signer
 signer = Signer(secret_key="my_secret")
 # Sign entire JSON objects
 signed_msg = signer.sign_json({"action": "deploy", "id": 789})
+if signer.verify_json(signed_msg):
+    print("Valid signature")
 ```
 
 ### Key Management
@@ -54,19 +56,23 @@ if km.key_exists("main_vault"):
     key_bytes = km.get_key("main_vault")
 ```
 
-## Testing Patterns
+## Testing Patterns (Zero-Mock Mandatory)
+
+Always use the actual `cryptography` library for testing; do **not** mock encryption or signing results.
 
 ```python
 # Verify encryption round-trip
-encryptor = SymmetricEncryptor()
-key = encryptor.generate_key()
+key = generate_key("AES")
+gcm = AESGCMEncryptor(key)
 plaintext = b"secret data"
-ciphertext = encryptor.encrypt(plaintext, key)
-assert encryptor.decrypt(ciphertext, key) == plaintext
+ciphertext = gcm.encrypt(plaintext)
+assert gcm.decrypt(ciphertext) == plaintext
 
-# Verify different keys produce different ciphertext
-key2 = encryptor.generate_key()
-assert encryptor.encrypt(plaintext, key2) != ciphertext
+# Verify tampering is detected
+tampered = bytearray(ciphertext)
+tampered[-1] ^= 0xFF
+with pytest.raises(EncryptionError):
+    gcm.decrypt(bytes(tampered))
 ```
 
 ## PAI Agent Role Access Matrix
@@ -78,7 +84,7 @@ assert encryptor.encrypt(plaintext, key2) != ciphertext
 | **QATester** | Validation | Encryption correctness, key rotation testing, data protection verification | OBSERVED |
 
 ### Engineer Agent
-**Use Cases**: Encrypting sensitive data during BUILD/EXECUTE, managing encryption keys.
+**Use Cases**: Encrypting sensitive data during BUILD/EXECUTE, managing encryption keys, signing artifacts.
 
 ### Architect Agent
 **Use Cases**: Reviewing encryption strategies, designing key management, planning security architecture.

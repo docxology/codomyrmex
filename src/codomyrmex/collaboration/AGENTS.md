@@ -1,17 +1,23 @@
 # Agent Guidelines - Collaboration
 
-**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Module Overview
 
 Multi-agent collaboration, shared state, and coordination patterns.
 
-## Key Classes
+## Swarm Management
 
-- **CollaborationSession** — Shared workspace for agents
-- **MessageBus** — Inter-agent messaging
-- **SharedState** — Synchronized state
-- **TaskPool** — Distributed task allocation
+The **`SwarmManager`** is the central orchestrator for agent collaboration. It manages the agent pool, coordinates messages, and handles task decomposition.
+
+### Key Classes
+
+- **`SwarmManager`** — Central orchestrator for the swarm.
+- **`SwarmAgent`** — An agent participating in the swarm.
+- **`AgentRole`** — Role of an agent (ARCHITECT, CODER, TESTER, etc.).
+- **`MessageBus`** — Inter-agent messaging system.
+- **`SwarmMessageType`** — Types of messages (TASK_ASSIGNMENT, RESULT, etc.).
+- **`ConsensusEngine`** — Voting and consensus builder.
 
 ## MCP Tools Available
 
@@ -25,65 +31,37 @@ All tools are auto-discovered via `@mcp_tool` decorators and exposed through the
 
 ## Agent Instructions
 
-1. **Use sessions** — Create sessions for related work
-2. **Message async** — Prefer async messaging
-3. **Lock shared state** — Use locks for concurrent access
-4. **Acknowledge tasks** — Confirm task completion
-5. **Handle failures** — Implement task retry logic
+1. **Register as a SwarmAgent** — Use the correct `AgentRole` to receive appropriate tasks.
+2. **Subscribe to Topics** — Listen on `tasks.role.{your_role}` for assignments.
+3. **Report Results** — Publish results back to `results.agent.{your_id}` so the `SwarmManager` can collect them.
+4. **Use Async Handlers** — Prefer `async` functions for message bus subscribers to avoid blocking.
+5. **Respect Load Balancing** — The `AgentPool` tracks your active tasks based on assignments and releases.
 
 ## Common Patterns
 
-```python
-from codomyrmex.collaboration import (
-    CollaborationSession, MessageBus, SharedState
-)
+### Mission Execution Flow
 
-# Create collaboration session
-session = CollaborationSession("project_analysis")
-session.add_agent("analyzer")
-session.add_agent("validator")
+1. `SwarmManager` decomposes mission into tasks.
+2. `SwarmManager` assigns task to an agent via `MessageBus`.
+3. Agent processes task and publishes `SwarmMessageType.RESULT` back to the bus.
+4. `SwarmManager` collects the result and proceeds to the next task.
 
-# Shared state
-state = SharedState()
-state.set("progress", 0.5)
-progress = state.get("progress")
-
-# Inter-agent messaging
-bus = MessageBus()
-bus.subscribe("results", handle_result)
-bus.publish("tasks", {"type": "analyze", "file": "main.py"})
-```
-
-## Testing Patterns
+### Example Agent Implementation
 
 ```python
-# Verify session
-session = CollaborationSession("test")
-session.add_agent("a1")
-assert "a1" in session.agents
-
-# Verify shared state
-state = SharedState()
-state.set("key", "value")
-assert state.get("key") == "value"
+async def on_task(message: SwarmMessage):
+    if message.message_type == SwarmMessageType.TASK_ASSIGNMENT:
+        # Process task...
+        # Publish result back
+        await manager.bus.publish(
+            f"results.agent.{agent_id}",
+            SwarmMessage(
+                message_type=SwarmMessageType.RESULT,
+                sender=agent_id,
+                payload={"task_id": task_id, "result": {"status": "success"}}
+            )
+        )
 ```
-
-## PAI Agent Role Access Matrix
-
-| PAI Agent | Access Level | Primary Capabilities | Trust Level |
-|-----------|-------------|---------------------|-------------|
-| **Engineer** | Full | `swarm_submit_task`, `pool_status`, `list_agents`; full multi-agent coordination | TRUSTED |
-| **Architect** | Read + Design | `pool_status`, `list_agents`; agent pool design, swarm architecture review | OBSERVED |
-| **QATester** | Validation | `pool_status`, `list_agents`; agent availability verification, swarm health checks | OBSERVED |
-
-### Engineer Agent
-**Use Cases**: Submitting tasks to agent swarm during EXECUTE, monitoring pool status, coordinating multi-agent workflows.
-
-### Architect Agent
-**Use Cases**: Designing agent pool configurations, reviewing swarm task distribution, planning collaborative workflows.
-
-### QATester Agent
-**Use Cases**: Verifying agent pool health during VERIFY, confirming task submission and completion.
 
 ## Navigation
 

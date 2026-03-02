@@ -13,8 +13,6 @@ from codomyrmex.system_discovery.health.health_checker import HealthChecker
 
 from .discovery_engine import SystemDiscovery
 
-# from .capability_scanner import CapabilityScanner # Optional, might be heavy
-
 logger = get_logger(__name__)
 
 def get_system_context(root_dir: str = ".") -> dict[str, Any]:

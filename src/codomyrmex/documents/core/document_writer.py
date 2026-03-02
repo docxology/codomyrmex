@@ -53,7 +53,7 @@ class DocumentWriter:
                 write_markdown(content, str(file_path), encoding=encoding)
             elif format == DocumentFormat.JSON:
                 from codomyrmex.documents.formats.json_handler import write_json
-                if isinstance(document.content, dict):
+                if isinstance(document.content, (dict, list)):
                     write_json(document.content, str(file_path), encoding=encoding)
                 else:
                     import json
@@ -61,7 +61,7 @@ class DocumentWriter:
                     write_json(data, str(file_path), encoding=encoding)
             elif format == DocumentFormat.YAML:
                 from codomyrmex.documents.formats.yaml_handler import write_yaml
-                if isinstance(document.content, dict):
+                if isinstance(document.content, (dict, list)):
                     write_yaml(document.content, str(file_path), encoding=encoding)
                 else:
                     import yaml
@@ -70,11 +70,25 @@ class DocumentWriter:
             elif format == DocumentFormat.PDF:
                 from codomyrmex.documents.formats.pdf_handler import write_pdf
                 content = document.get_content_as_string()
-                write_pdf(content, str(file_path), metadata=document.metadata)
+                write_pdf(content, str(file_path), metadata=document.metadata.to_dict())
             elif format == DocumentFormat.TEXT:
                 from codomyrmex.documents.formats.text_handler import write_text
                 content = document.get_content_as_string()
                 write_text(content, str(file_path), encoding=encoding)
+            elif format == DocumentFormat.HTML:
+                from codomyrmex.documents.formats.html_handler import write_html
+                content = document.get_content_as_string()
+                write_html(content, str(file_path), encoding=encoding)
+            elif format == DocumentFormat.XML:
+                from codomyrmex.documents.formats.xml_handler import write_xml
+                content = document.get_content_as_string()
+                write_xml(content, str(file_path), encoding=encoding)
+            elif format == DocumentFormat.CSV:
+                from codomyrmex.documents.formats.csv_handler import write_csv
+                if isinstance(document.content, list) and all(isinstance(x, dict) for x in document.content):
+                    write_csv(document.content, str(file_path), encoding=encoding)
+                else:
+                    raise DocumentWriteError("CSV content must be a list of dictionaries", file_path=str(file_path))
             else:
                 raise UnsupportedFormatError(
                     f"Format {format.value} not yet implemented",
@@ -85,6 +99,8 @@ class DocumentWriter:
 
         except Exception as e:
             logger.error(f"Error writing document to {file_path}: {e}")
+            if isinstance(e, (DocumentWriteError, UnsupportedFormatError)):
+                raise
             raise DocumentWriteError(
                 f"Failed to write document: {str(e)}",
                 file_path=str(file_path)
@@ -110,4 +126,3 @@ def write_document(
     """
     writer = DocumentWriter()
     writer.write(document, file_path, format=format, encoding=encoding)
-

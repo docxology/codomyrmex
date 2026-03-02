@@ -55,6 +55,7 @@ from .core.git import (
     get_blame,
     get_commit_details,
     get_commit_history,
+    get_commit_history_filtered,
     # Config operations
     get_config,
     get_current_branch,
@@ -174,6 +175,7 @@ __all__ = [
     "list_remotes",
     # History & information
     "get_commit_history",
+    "get_commit_history_filtered",
     # Config operations
     "get_config",
     "set_config",

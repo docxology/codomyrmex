@@ -3,12 +3,17 @@
 Defines core document types and formats.
 """
 
+from __future__ import annotations
+
 import json
 import uuid
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
+from pathlib import Path
 from typing import Any
+
+from codomyrmex.documents.models.metadata import DocumentMetadata
 
 
 class DocumentType(Enum):
@@ -60,9 +65,9 @@ class Document:
     """Represents a document."""
     content: Any
     format: DocumentFormat
-    file_path: Any | None = None
+    file_path: Path | str | None = None
     encoding: str | None = None
-    metadata: Any = field(default_factory=dict)
+    metadata: DocumentMetadata = field(default_factory=DocumentMetadata)
     id: str = field(default_factory=lambda: uuid.uuid4().hex)
     document_type: DocumentType | None = None
     created_at: datetime | None = field(default_factory=datetime.now)
@@ -71,6 +76,12 @@ class Document:
     def __post_init__(self):
         if self.document_type is None:
             self.document_type = _FORMAT_TYPE_MAP.get(self.format, DocumentType.TEXT)
+        
+        if not isinstance(self.metadata, DocumentMetadata):
+            if isinstance(self.metadata, dict):
+                self.metadata = DocumentMetadata.from_dict(self.metadata)
+            else:
+                self.metadata = DocumentMetadata()
 
     @property
     def type(self) -> DocumentType:
@@ -82,9 +93,9 @@ class Document:
         if isinstance(self.content, str):
             return self.content
         if isinstance(self.content, dict):
-            return json.dumps(self.content, ensure_ascii=False)
+            return json.dumps(self.content, ensure_ascii=False, indent=2)
         if isinstance(self.content, (list, tuple)):
-            return json.dumps(self.content, ensure_ascii=False)
+            return json.dumps(self.content, ensure_ascii=False, indent=2)
         if isinstance(self.content, bytes):
             return self.content.decode(self.encoding or "utf-8", errors="replace")
         return str(self.content)
@@ -101,6 +112,7 @@ class Document:
             "format": self.format.value,
             "file_path": str(self.file_path) if self.file_path else None,
             "encoding": self.encoding,
+            "metadata": self.metadata.to_dict() if self.metadata else {},
             "created_at": self.created_at.isoformat() if self.created_at else None,
             "modified_at": self.modified_at.isoformat() if self.modified_at else None,
         }

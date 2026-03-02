@@ -38,7 +38,6 @@ class AgentPool:
 
     def __init__(self) -> None:
         self._agents: dict[str, SwarmAgent] = {}
-        self._round_robin_index: int = 0
 
     def register(self, agent: SwarmAgent) -> None:
         """Register an agent in the pool."""
@@ -54,15 +53,16 @@ class AgentPool:
 
     @property
     def size(self) -> int:
-        """Size."""
+        """Number of agents in the pool."""
         return len(self._agents)
 
     @property
     def available_agents(self) -> list[SwarmAgent]:
+        """List of agents with available capacity."""
         return [a for a in self._agents.values() if a.available]
 
     def get(self, agent_id: str) -> SwarmAgent | None:
-        """Return the requested value."""
+        """Get an agent by ID."""
         return self._agents.get(agent_id)
 
     def assign(self, task: TaskAssignment) -> SwarmAgent:
@@ -134,6 +134,7 @@ class AgentPool:
                 for role in AgentRole
                 if self.agents_by_role(role)
             },
+            "agents": [a.to_dict() for a in self._agents.values()]
         }
 
 

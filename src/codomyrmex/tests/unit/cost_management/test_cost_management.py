@@ -1,7 +1,22 @@
 """Unit tests for cost_management module."""
+
+import json
 from datetime import datetime, timedelta
 
 import pytest
+
+from codomyrmex.cost_management import (
+    Budget,
+    BudgetAlert,
+    BudgetManager,
+    BudgetPeriod,
+    CostCategory,
+    CostEntry,
+    CostSummary,
+    CostTracker,
+    InMemoryCostStore,
+    JSONCostStore,
+)
 
 
 @pytest.mark.unit
@@ -10,12 +25,14 @@ class TestCostManagementImports:
 
     def test_module_imports(self):
         """Verify module can be imported without errors."""
-        from codomyrmex.cloud import cost_management
+        from codomyrmex import cost_management
+
         assert cost_management is not None
 
     def test_public_api_exists(self):
         """Verify expected public API is available."""
-        from codomyrmex.cloud.cost_management import __all__
+        from codomyrmex.cost_management import __all__
+
         expected_exports = [
             "CostCategory",
             "BudgetPeriod",
@@ -25,6 +42,7 @@ class TestCostManagementImports:
             "BudgetAlert",
             "CostStore",
             "InMemoryCostStore",
+            "JSONCostStore",
             "CostTracker",
             "BudgetManager",
         ]
@@ -38,14 +56,15 @@ class TestCostCategory:
 
     def test_cost_category_values(self):
         """Verify all cost categories are available."""
-        from codomyrmex.cloud.cost_management import CostCategory
-
         assert CostCategory.LLM_INFERENCE.value == "llm_inference"
         assert CostCategory.LLM_EMBEDDING.value == "llm_embedding"
+        assert CostCategory.LLM_FINE_TUNING.value == "llm_fine_tuning"
         assert CostCategory.COMPUTE.value == "compute"
         assert CostCategory.STORAGE.value == "storage"
         assert CostCategory.NETWORK.value == "network"
         assert CostCategory.API_CALLS.value == "api_calls"
+        assert CostCategory.DATABASE.value == "database"
+        assert CostCategory.LICENSE.value == "license"
         assert CostCategory.OTHER.value == "other"
 
 
@@ -55,12 +74,11 @@ class TestBudgetPeriod:
 
     def test_budget_period_values(self):
         """Verify all budget periods are available."""
-        from codomyrmex.cloud.cost_management import BudgetPeriod
-
         assert BudgetPeriod.HOURLY.value == "hourly"
         assert BudgetPeriod.DAILY.value == "daily"
         assert BudgetPeriod.WEEKLY.value == "weekly"
         assert BudgetPeriod.MONTHLY.value == "monthly"
+        assert BudgetPeriod.YEARLY.value == "yearly"
 
 
 @pytest.mark.unit
@@ -69,8 +87,6 @@ class TestCostEntry:
 
     def test_cost_entry_creation(self):
         """Verify CostEntry can be created with required fields."""
-        from codomyrmex.cloud.cost_management import CostCategory, CostEntry
-
         entry = CostEntry(
             id="cost_1",
             amount=0.05,
@@ -86,14 +102,13 @@ class TestCostEntry:
 
     def test_cost_entry_to_dict(self):
         """Verify CostEntry serialization to dict."""
-        from codomyrmex.cloud.cost_management import CostCategory, CostEntry
-
         entry = CostEntry(
             id="cost_2",
             amount=1.50,
             category=CostCategory.COMPUTE,
             description="Test compute cost",
             tags={"project": "alpha"},
+            metadata={"source": "test"},
         )
 
         result = entry.to_dict()
@@ -102,6 +117,25 @@ class TestCostEntry:
         assert result["category"] == "compute"
         assert result["description"] == "Test compute cost"
         assert result["tags"] == {"project": "alpha"}
+        assert result["metadata"] == {"source": "test"}
+
+    def test_cost_entry_from_dict(self):
+        """Verify CostEntry can be created from dict."""
+        data = {
+            "id": "cost_3",
+            "amount": 2.50,
+            "category": "storage",
+            "description": "Disk usage",
+            "resource_id": "vol-123",
+            "tags": {"env": "prod"},
+            "timestamp": "2024-01-01T12:00:00",
+            "metadata": {"info": "none"},
+        }
+        entry = CostEntry.from_dict(data)
+        assert entry.id == "cost_3"
+        assert entry.amount == 2.50
+        assert entry.category == CostCategory.STORAGE
+        assert entry.timestamp == datetime(2024, 1, 1, 12, 0, 0)
 
 
 @pytest.mark.unit
@@ -110,8 +144,6 @@ class TestBudget:
 
     def test_budget_creation(self):
         """Verify Budget can be created."""
-        from codomyrmex.cloud.cost_management import Budget, BudgetPeriod, CostCategory
-
         budget = Budget(
             id="daily_llm",
             name="Daily LLM Budget",
@@ -127,8 +159,6 @@ class TestBudget:
 
     def test_budget_get_period_start_daily(self):
         """Verify daily period start calculation."""
-        from codomyrmex.cloud.cost_management import Budget, BudgetPeriod
-
         budget = Budget(id="test", name="Test", amount=100.0, period=BudgetPeriod.DAILY)
         reference = datetime(2024, 1, 15, 14, 30, 45)
 
@@ -139,8 +169,6 @@ class TestBudget:
 
     def test_budget_get_period_start_hourly(self):
         """Verify hourly period start calculation."""
-        from codomyrmex.cloud.cost_management import Budget, BudgetPeriod
-
         budget = Budget(id="test", name="Test", amount=50.0, period=BudgetPeriod.HOURLY)
         reference = datetime(2024, 1, 15, 14, 30, 45)
 
@@ -149,6 +177,41 @@ class TestBudget:
         assert period_start.minute == 0
         assert period_start.second == 0
 
+    def test_budget_get_period_start_yearly(self):
+        """Verify yearly period start calculation."""
+        budget = Budget(id="test", name="Test", amount=5000.0, period=BudgetPeriod.YEARLY)
+        reference = datetime(2024, 6, 15, 14, 30, 45)
+
+        period_start = budget.get_period_start(reference)
+        assert period_start.year == 2024
+        assert period_start.month == 1
+        assert period_start.day == 1
+
+    def test_budget_is_match(self):
+        """Verify budget filter matching."""
+        budget = Budget(
+            id="test",
+            name="Test",
+            amount=100.0,
+            period=BudgetPeriod.DAILY,
+            category=CostCategory.COMPUTE,
+            tags_filter={"env": "prod"},
+        )
+
+        match_entry = CostEntry(
+            id="1", amount=1.0, category=CostCategory.COMPUTE, tags={"env": "prod"}
+        )
+        non_match_entry_cat = CostEntry(
+            id="2", amount=1.0, category=CostCategory.STORAGE, tags={"env": "prod"}
+        )
+        non_match_entry_tags = CostEntry(
+            id="3", amount=1.0, category=CostCategory.COMPUTE, tags={"env": "dev"}
+        )
+
+        assert budget.is_match(match_entry) is True
+        assert budget.is_match(non_match_entry_cat) is False
+        assert budget.is_match(non_match_entry_tags) is False
+
 
 @pytest.mark.unit
 class TestBudgetAlert:
@@ -156,8 +219,6 @@ class TestBudgetAlert:
 
     def test_budget_alert_utilization(self):
         """Verify utilization calculation."""
-        from codomyrmex.cloud.cost_management import BudgetAlert
-
         alert = BudgetAlert(
             budget_id="test_budget",
             threshold=0.8,
@@ -169,8 +230,6 @@ class TestBudgetAlert:
 
     def test_budget_alert_message(self):
         """Verify alert message generation."""
-        from codomyrmex.cloud.cost_management import BudgetAlert
-
         alert = BudgetAlert(
             budget_id="test_budget",
             threshold=0.9,
@@ -189,12 +248,6 @@ class TestInMemoryCostStore:
 
     def test_store_save_and_retrieve(self):
         """Verify entries can be saved and retrieved."""
-        from codomyrmex.cloud.cost_management import (
-            CostCategory,
-            CostEntry,
-            InMemoryCostStore,
-        )
-
         store = InMemoryCostStore()
         entry = CostEntry(
             id="test_1",
@@ -208,39 +261,61 @@ class TestInMemoryCostStore:
         assert len(all_entries) == 1
         assert all_entries[0].id == "test_1"
 
-    def test_store_get_entries_by_date_range(self):
-        """Verify filtering by date range."""
-        from codomyrmex.cloud.cost_management import (
-            CostCategory,
-            CostEntry,
-            InMemoryCostStore,
-        )
-
+    def test_store_get_entries_with_filters(self):
+        """Verify filtering by date range, category, and tags."""
         store = InMemoryCostStore()
 
         now = datetime.now()
-        entry = CostEntry(
-            id="test_1",
-            amount=10.0,
-            category=CostCategory.STORAGE,
-            timestamp=now,
+        yesterday = now - timedelta(days=1)
+
+        store.save_entry(
+            CostEntry(
+                id="e1",
+                amount=10.0,
+                category=CostCategory.COMPUTE,
+                timestamp=now,
+                tags={"env": "prod"},
+            )
         )
-        store.save_entry(entry)
+        store.save_entry(
+            CostEntry(
+                id="e2",
+                amount=5.0,
+                category=CostCategory.STORAGE,
+                timestamp=now,
+                tags={"env": "prod"},
+            )
+        )
+        store.save_entry(
+            CostEntry(
+                id="e3",
+                amount=3.0,
+                category=CostCategory.COMPUTE,
+                timestamp=yesterday,
+                tags={"env": "dev"},
+            )
+        )
 
-        start = now - timedelta(hours=1)
-        end = now + timedelta(hours=1)
-        entries = store.get_entries(start, end)
+        # Date range only
+        entries = store.get_entries(now - timedelta(hours=1), now + timedelta(hours=1))
+        assert len(entries) == 2
 
+        # Date range + category
+        entries = store.get_entries(
+            now - timedelta(hours=1), now + timedelta(hours=1), category=CostCategory.COMPUTE
+        )
         assert len(entries) == 1
+        assert entries[0].id == "e1"
+
+        # Date range + tags
+        entries = store.get_entries(
+            datetime.min, datetime.max, tags_filter={"env": "dev"}
+        )
+        assert len(entries) == 1
+        assert entries[0].id == "e3"
 
     def test_store_clear(self):
         """Verify store can be cleared."""
-        from codomyrmex.cloud.cost_management import (
-            CostCategory,
-            CostEntry,
-            InMemoryCostStore,
-        )
-
         store = InMemoryCostStore()
         store.save_entry(CostEntry(id="1", amount=5.0, category=CostCategory.OTHER))
         store.save_entry(CostEntry(id="2", amount=10.0, category=CostCategory.OTHER))
@@ -250,13 +325,39 @@ class TestInMemoryCostStore:
 
 
 @pytest.mark.unit
+class TestJSONCostStore:
+    """Test suite for JSONCostStore."""
+
+    def test_json_store_save_and_load(self, tmp_path):
+        """Verify JSON storage persistence."""
+        file_path = tmp_path / "costs.json"
+        store = JSONCostStore(file_path)
+
+        entry = CostEntry(
+            id="json_1",
+            amount=15.0,
+            category=CostCategory.NETWORK,
+            timestamp=datetime(2024, 1, 1, 12, 0, 0),
+        )
+
+        store.save_entry(entry)
+
+        # Create a new store instance pointing to same file
+        new_store = JSONCostStore(file_path)
+        entries = new_store.get_entries(datetime.min, datetime.max)
+
+        assert len(entries) == 1
+        assert entries[0].id == "json_1"
+        assert entries[0].amount == 15.0
+        assert entries[0].category == CostCategory.NETWORK
+
+
+@pytest.mark.unit
 class TestCostTracker:
     """Test suite for CostTracker."""
 
     def test_tracker_record_cost(self):
         """Verify costs can be recorded."""
-        from codomyrmex.cloud.cost_management import CostCategory, CostTracker
-
         tracker = CostTracker()
         entry = tracker.record(
             amount=0.05,
@@ -270,8 +371,6 @@ class TestCostTracker:
 
     def test_tracker_get_summary(self):
         """Verify cost summary generation."""
-        from codomyrmex.cloud.cost_management import CostCategory, CostTracker
-
         tracker = CostTracker()
         tracker.record(amount=10.0, category=CostCategory.COMPUTE)
         tracker.record(amount=5.0, category=CostCategory.COMPUTE)
@@ -286,8 +385,6 @@ class TestCostTracker:
 
     def test_tracker_get_total_by_category(self):
         """Verify total cost retrieval by category."""
-        from codomyrmex.cloud.cost_management import CostCategory, CostTracker
-
         tracker = CostTracker()
         tracker.record(amount=20.0, category=CostCategory.LLM_INFERENCE)
         tracker.record(amount=10.0, category=CostCategory.NETWORK)
@@ -302,13 +399,6 @@ class TestBudgetManager:
 
     def test_manager_create_budget(self):
         """Verify budget creation."""
-        from codomyrmex.cloud.cost_management import (
-            BudgetManager,
-            BudgetPeriod,
-            CostCategory,
-            CostTracker,
-        )
-
         tracker = CostTracker()
         manager = BudgetManager(tracker)
 
@@ -325,12 +415,6 @@ class TestBudgetManager:
 
     def test_manager_list_budgets(self):
         """Verify listing all budgets."""
-        from codomyrmex.cloud.cost_management import (
-            BudgetManager,
-            BudgetPeriod,
-            CostTracker,
-        )
-
         tracker = CostTracker()
         manager = BudgetManager(tracker)
 
@@ -342,29 +426,27 @@ class TestBudgetManager:
 
     def test_manager_can_spend(self):
         """Verify spend allowance check."""
-        from codomyrmex.cloud.cost_management import (
-            BudgetManager,
-            BudgetPeriod,
-            CostTracker,
-        )
-
         tracker = CostTracker()
         manager = BudgetManager(tracker)
 
-        manager.create(name="Test", amount=100.0, period=BudgetPeriod.DAILY)
+        manager.create(
+            name="Compute Budget",
+            amount=100.0,
+            period=BudgetPeriod.DAILY,
+            category=CostCategory.COMPUTE,
+        )
 
-        # Should allow reasonable spend
-        assert manager.can_spend(50.0) is True
+        # Should allow spend within budget
+        assert manager.can_spend(50.0, category=CostCategory.COMPUTE) is True
+
+        # Should block spend exceeding budget
+        assert manager.can_spend(150.0, category=CostCategory.COMPUTE) is False
+
+        # Should ignore spend for different categories
+        assert manager.can_spend(200.0, category=CostCategory.STORAGE) is True
 
     def test_manager_check_budgets_generates_alerts(self):
         """Verify budget check generates alerts when threshold exceeded."""
-        from codomyrmex.cloud.cost_management import (
-            BudgetManager,
-            BudgetPeriod,
-            CostCategory,
-            CostTracker,
-        )
-
         tracker = CostTracker()
         manager = BudgetManager(tracker)
 
@@ -380,3 +462,29 @@ class TestBudgetManager:
 
         alerts = manager.check_budgets()
         assert len(alerts) >= 1
+        assert alerts[0].threshold == 0.5
+
+        # Check again - alert should not be duplicated
+        new_alerts = manager.check_budgets()
+        assert len(new_alerts) == 0
+
+    def test_manager_reset_alerts(self):
+        """Verify alert reset."""
+        tracker = CostTracker()
+        manager = BudgetManager(tracker)
+
+        manager.create(
+            name="Small Budget",
+            amount=10.0,
+            period=BudgetPeriod.DAILY,
+            alert_thresholds=[0.5],
+        )
+
+        tracker.record(amount=6.0, category=CostCategory.OTHER)
+        manager.check_budgets()
+
+        manager.reset_period_alerts()
+
+        # Should fire alert again after reset
+        alerts = manager.check_budgets()
+        assert len(alerts) == 1

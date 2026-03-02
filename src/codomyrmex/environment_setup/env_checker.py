@@ -3,22 +3,14 @@
 This module provides functions for validating and configuring the development
 environment, including dependency checking, environment variable management,
 Python version validation, and uv package manager detection.
-
-Example:
-    >>> from codomyrmex.environment_setup import (
-    ...     validate_python_version,
-    ...     ensure_dependencies_installed,
-    ...     is_uv_available
-    ... )
-    >>> if validate_python_version():
-    ...     print("Python version OK")
-    >>> if is_uv_available():
-    ...     print("uv package manager found")
 """
 
+import importlib.util
 import os
 import shutil
 import sys
+from dataclasses import dataclass, field
+from typing import List, Optional, Union
 
 import dotenv
 
@@ -29,193 +21,215 @@ logger = get_logger(__name__)
 # Store the original script directory to correctly locate files relative to REPO_ROOT_PATH
 _script_dir = os.path.dirname(__file__)
 
-def ensure_dependencies_installed() -> bool:
-    """Check if primary dependencies are installed and accessible.
 
-    Verifies that required dependencies ('kit' and 'python-dotenv') are
-    installed and importable. Prints status messages for each dependency
-    and instructions if any are missing.
+@dataclass
+class ValidationReport:
+    """Report on environment validation status."""
+    valid: bool
+    missing_items: List[str] = field(default_factory=list)
 
-    Returns:
-        True if all required dependencies are installed, False otherwise.
 
-    Example:
-        >>> if ensure_dependencies_installed():
-        ...     print("All dependencies OK, proceeding with setup")
-        ... else:
-        ...     print("Please install missing dependencies first")
-    """
-    dependencies_ok = True
-    try:
-        print("[INFO] cased/kit library found.")
-    except ImportError:
-        print("[WARNING] cased/kit library NOT found.", file=sys.stderr)
-        dependencies_ok = False
+@dataclass
+class DependencyStatus:
+    """Status of a specific dependency."""
+    name: str
+    installed: bool
 
-    try:
-        print("[INFO] python-dotenv library found.")
-    except ImportError:
-        print("[WARNING] python-dotenv library NOT found.", file=sys.stderr)
-        dependencies_ok = False
 
-    if not dependencies_ok:
-        print("[INSTRUCTION] Please install missing dependencies.", file=sys.stderr)
-        return False
-    return True
+@dataclass
+class APIKeyReport:
+    """Report on API key presence."""
+    all_present: bool
+    missing: List[str] = field(default_factory=list)
 
-def check_and_setup_env_vars(repo_root: str) -> bool:
-    """Load environment variables from a .env file.
 
-    Attempts to load environment variables from a .env file in the specified
-    repository root directory. Uses python-dotenv to parse and set variables.
+def validate_python_version(min_version: str = "3.10") -> bool:
+    """Validate that the Python version meets minimum requirements.
 
     Args:
-        repo_root: The root directory of the repository containing the .env file.
+        min_version: Minimum required version string (e.g., "3.11").
 
     Returns:
-        True if the .env file was found and loaded successfully,
-        False if the file does not exist or loading failed.
-
-    Raises:
-        No exceptions are raised; errors are handled internally.
-
-    Example:
-        >>> if check_and_setup_env_vars("/path/to/project"):
-        ...     api_key = os.environ.get("API_KEY")
-        ... else:
-        ...     print("No .env file found, using defaults")
+        True if Python version meets or exceeds min_version, False otherwise.
     """
     try:
+        min_tuple = tuple(map(int, min_version.split(".")))
+        return sys.version_info >= min_tuple
+    except (ValueError, AttributeError):
+        logger.error("Invalid min_version format: %s", min_version)
+        return sys.version_info >= (3, 10)
+
+
+def is_uv_available() -> bool:
+    """Check if the 'uv' package manager is available in the system PATH."""
+    return shutil.which("uv") is not None
+
+
+def get_uv_path() -> Optional[str]:
+    """Get the path to the 'uv' executable if available."""
+    return shutil.which("uv")
+
+
+def is_uv_environment() -> bool:
+    """Check if the current Python interpreter is running within a uv-managed environment."""
+    return (
+        os.environ.get("UV_ACTIVE") == "1"
+        or os.environ.get("VIRTUAL_ENV") is not None
+        or is_uv_available()
+    )
+
+
+def check_dependencies(dependencies: List[str]) -> List[DependencyStatus]:
+    """Check if specified dependencies are installed.
+
+    Args:
+        dependencies: List of package names to check.
+
+    Returns:
+        List of DependencyStatus objects.
+    """
+    results = []
+    for dep in dependencies:
+        installed = importlib.util.find_spec(dep) is not None
+        results.append(DependencyStatus(name=dep, installed=installed))
+    return results
+
+
+def ensure_dependencies_installed(dependencies: Optional[List[str]] = None) -> bool:
+    """Check if required dependencies are installed and accessible.
+
+    Args:
+        dependencies: Optional list of package names to check.
+            If None, checks default ('kit', 'python-dotenv').
+
+    Returns:
+        True if all specified dependencies are installed, False otherwise.
+    """
+    if dependencies is None:
+        dependencies = ["kit", "dotenv"]
+
+    statuses = check_dependencies(dependencies)
+    all_installed = True
+
+    for status in statuses:
+        if status.installed:
+            logger.info("Dependency '%s' found.", status.name)
+        else:
+            logger.warning("Dependency '%s' NOT found.", status.name)
+            all_installed = False
+
+    if not all_installed:
+        logger.error("Missing dependencies. Please install them using 'uv pip install' or 'pip install'.")
+
+    return all_installed
+
+
+def check_and_setup_env_vars(
+    repo_root: Optional[str] = None,
+    required: Optional[List[str]] = None,
+    optional: Optional[List[str]] = None
+) -> List[str]:
+    """Load environment variables from a .env file and check for required keys.
+
+    Args:
+        repo_root: Directory to look for .env file.
+        required: List of environment variables that MUST be present.
+        optional: List of environment variables that are optional.
+
+    Returns:
+        List of missing required environment variable names.
+    """
+    if repo_root:
         dotenv_path = os.path.join(repo_root, ".env")
         if os.path.exists(dotenv_path):
             dotenv.load_dotenv(dotenv_path)
-            return True
+            logger.info("Loaded .env from %s", dotenv_path)
         else:
-            return False
-    except ImportError as e:
-        logger.warning("Failed to load .env from %s: %s", repo_root, e)
-        return False
+            logger.debug("No .env found at %s", dotenv_path)
+    else:
+        dotenv.load_dotenv()
 
-def validate_python_version() -> bool:
-    """Validate that the Python version meets minimum requirements.
+    missing = []
+    if required:
+        for var in required:
+            if var not in os.environ:
+                missing.append(var)
 
-    Checks that the current Python interpreter is version 3.10 or higher,
-    which is required for Codomyrmex functionality.
+    if missing:
+        logger.warning("Missing required environment variables: %s", missing)
 
-    Returns:
-        True if Python version is 3.10 or higher, False otherwise.
+    return missing
 
-    Example:
-        >>> if not validate_python_version():
-        ...     print(f"Python 3.10+ required, found {sys.version}")
-        ...     sys.exit(1)
-    """
-    return sys.version_info >= (3, 10)
 
-def is_uv_available() -> bool:
-    """Check if the 'uv' package manager is available in the system PATH.
+def check_api_keys(keys: List[str]) -> APIKeyReport:
+    """Check if required API keys are set in the environment.
 
-    The 'uv' tool is a fast Python package installer and resolver that can
-    be used as an alternative to pip.
+    Args:
+        keys: List of environment variable names to check.
 
     Returns:
-        True if 'uv' is found in the system PATH, False otherwise.
-
-    Example:
-        >>> if is_uv_available():
-        ...     subprocess.run(["uv", "pip", "install", "package"])
-        ... else:
-        ...     subprocess.run(["pip", "install", "package"])
+        APIKeyReport indicating status.
     """
-    return shutil.which("uv") is not None
+    missing = [k for k in keys if k not in os.environ]
+    return APIKeyReport(all_present=len(missing) == 0, missing=missing)
 
-def is_uv_environment() -> bool:
-    """Check if the current Python interpreter is running within a uv-managed environment.
 
-    Determines whether the current execution context is inside a virtual
-    environment (indicated by VIRTUAL_ENV environment variable) or if uv
-    is available in the system.
+def validate_environment(min_python: str = "3.10") -> ValidationReport:
+    """Comprehensive environment validation.
 
     Returns:
-        True if running in a virtual environment or uv is available,
-        False otherwise.
-
-    Example:
-        >>> if is_uv_environment():
-        ...     print("Running in uv-managed environment")
+        ValidationReport containing overall status and missing items.
     """
-    # Check for VIRTUAL_ENV environment variable which uv sets
-    # Or specifically check if the python executable path is inside .venv created by uv
-    return os.environ.get("VIRTUAL_ENV") is not None or is_uv_available()
+    missing_items = []
+
+    if not validate_python_version(min_python):
+        missing_items.append(f"Python >= {min_python}")
+
+    # Check for basic dependencies
+    if not importlib.util.find_spec("dotenv"):
+        missing_items.append("python-dotenv")
+
+    return ValidationReport(valid=len(missing_items) == 0, missing_items=missing_items)
+
 
 def generate_environment_report() -> str:
-    """Generate an environment status report.
-
-    Returns:
-        A detailed report of Python version, dependencies, environment
-        variables, and system configuration.
-    """
+    """Generate a detailed environment status report."""
     report = [
         "Codomyrmex Environment Report",
         "===========================",
         f"Python Version: {sys.version.split()[0]}",
         f"Python Executable: {sys.executable}",
         f"UV Available: {'Yes' if is_uv_available() else 'No'}",
+        f"UV Path: {get_uv_path() or 'N/A'}",
         f"UV Environment: {'Yes' if is_uv_environment() else 'No'}"
     ]
 
-    deps_ok = True
     try:
-        import importlib.util
-        deps_ok = (
-            importlib.util.find_spec("cased") is not None
-            and importlib.util.find_spec("dotenv") is not None
-        )
-    except Exception:
-        deps_ok = False
+        from codomyrmex.environment_setup.dependency_resolver import DependencyResolver
+        resolver = DependencyResolver()
+        venv = resolver.detect_virtualenv()
+        report.append(f"Virtualenv: {venv['type']} ({venv['path'] or 'None'})")
+    except ImportError:
+        report.append(f"Virtualenv: {'Yes' if os.environ.get('VIRTUAL_ENV') else 'No'}")
 
-    report.append(f"Dependencies OK: {'Yes' if deps_ok else 'No'}")
     return "\n".join(report)
 
-def validate_environment_completeness(repo_root: str | None = None) -> bool:
-    """Validate that the environment is fully configured for Codomyrmex.
 
-    Performs a comprehensive check of all environment requirements including
-    dependencies, environment variables, and Python version. This is the
-    primary validation function to call before running Codomyrmex operations.
-
-    Args:
-        repo_root: The root directory of the repository. If not provided,
-            defaults to the parent directory of the codomyrmex package.
-
-    Returns:
-        True if all environment checks pass (dependencies installed,
-        .env file loaded, Python version valid), False otherwise.
-
-    Example:
-        >>> if validate_environment_completeness("/path/to/project"):
-        ...     print("Environment ready")
-        ...     start_application()
-        ... else:
-        ...     print("Environment validation failed")
-        ...     sys.exit(1)
-    """
+def validate_environment_completeness(repo_root: Optional[str] = None) -> bool:
+    """Legacy wrapper for backward compatibility."""
     if repo_root is None:
+        # Default to repo root (3 levels up from this file)
         repo_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-    deps = ensure_dependencies_installed()
-    env_vars = check_and_setup_env_vars(repo_root)
-    py_ver = validate_python_version()
-    is_uv_environment()
+    report = validate_environment()
+    check_and_setup_env_vars(repo_root)
 
-    return deps and env_vars and py_ver
+    return report.valid
+
 
 if __name__ == "__main__":
-    print("Running env_checker.py standalone for basic checks...")
-    mock_repo_root = os.path.abspath(os.path.join(_script_dir, ".."))
-
-    ensure_dependencies_installed()
-    check_and_setup_env_vars(mock_repo_root)
-    print(f"UV Available: {is_uv_available()}")
-
-    print("env_checker.py standalone checks complete.")
+    print(generate_environment_report())
+    val_report = validate_environment()
+    print(f"Environment Valid: {val_report.valid}")
+    if not val_report.valid:
+        print(f"Missing: {val_report.missing_items}")

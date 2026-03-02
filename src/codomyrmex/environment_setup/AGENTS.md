@@ -1,64 +1,62 @@
 # Agent Guidelines - Environment Setup
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Module Overview
 
-Environment validation, dependency checking, and setup automation.
+Environment validation, dependency checking, and setup automation. This module is the baseline for all other module execution environments.
 
-## Key Classes
+## Key Functions
 
-- **validate_environment()** — Check system requirements
-- **check_dependencies()** — Verify installed packages
-- **install_dependencies(source)** — Install from requirements
-- **get_uv_path()** — Get uv package manager path
+### Core Validation
+- **`validate_environment(min_python)`** — Aggregated status check of system requirements. Returns `ValidationReport`.
+- **`check_dependencies(list)`** — Detailed check for specific installed packages. Returns `List[DependencyStatus]`.
+- **`ensure_dependencies_installed(list)`** — Logs status of dependencies, returns True if all exist.
+- **`install_dependencies(source)`** — Automates dependency installation via `uv` (preferred) or `pip`.
+
+### Environment Management
+- **`check_and_setup_env_vars(repo_root, required, optional)`** — Load `.env` and verify key presence.
+- **`check_api_keys(keys)`** — Focused check for credential availability. Returns `APIKeyReport`.
+
+### System Info
+- **`is_uv_available()`** — Boolean for `uv` existence.
+- **`get_uv_path()`** — String path to `uv` executable.
+- **`is_uv_environment()`** — Boolean for current execution context being uv-based.
+- **`generate_environment_report()`** — String summary of system state.
 
 ## Agent Instructions
 
-1. **Validate first** — Call `validate_environment()` before running
-2. **Check API keys** — Verify required keys are set
-3. **Use uv** — Prefer uv over pip for faster installs
-4. **Cache results** — Environment rarely changes
-5. **Report missing** — List all missing deps, not just first
+1. **Verify first** — Run `validate_environment()` before performing task operations.
+2. **Setup Credentials** — Use `check_and_setup_env_vars()` at start to ensure API keys are loaded from `.env`.
+3. **Handle Missing** — If `ValidationReport.valid` is False, use `install_dependencies()` to resolve package gaps.
+4. **Leverage uv** — Always prefer `uv` tools via `get_uv_path()` for any environment mutations.
+5. **Detailed Reporting** — Use `generate_environment_report()` for logging or debugging session startup.
 
 ## Common Patterns
 
 ```python
 from codomyrmex.environment_setup import (
-    validate_environment, check_dependencies, install_dependencies
+    validate_environment, check_and_setup_env_vars, install_dependencies
 )
 
-# Full environment validation
+# Load environment and validate
+missing_vars = check_and_setup_env_vars(required=["OPENAI_API_KEY"])
 report = validate_environment()
-if not report.valid:
-    print(f"Missing: {report.missing_items}")
-    install_dependencies("pyproject.toml")
 
-# Check specific dependencies
-deps = check_dependencies(["numpy", "pandas", "openai"])
-for dep in deps:
-    if not dep.installed:
-        print(f"Install {dep.name}: uv pip install {dep.name}")
-
-# Verify API keys
-from codomyrmex.environment_setup import check_api_keys
-keys = check_api_keys(["OPENAI_API_KEY", "ANTHROPIC_API_KEY"])
-if not keys.all_present:
-    print(f"Missing: {keys.missing}")
+if not report.valid or missing_vars:
+    print(f"Environment Gap: {report.missing_items}, Missing Vars: {missing_vars}")
+    # Fix if possible
+    if "python-dotenv" in report.missing_items:
+        install_dependencies("pyproject.toml")
 ```
 
 ## Testing Patterns
 
 ```python
-# Verify environment check
-report = validate_environment()
-assert hasattr(report, "valid")
-assert hasattr(report, "missing_items")
-
-# Verify dependency check
-deps = check_dependencies(["pip"])
-assert len(deps) == 1
-assert deps[0].installed  # pip should exist
+# Zero-mock system check
+from codomyrmex.environment_setup import is_uv_available
+# Always check real system state
+assert isinstance(is_uv_available(), bool)
 ```
 
 ## PAI Agent Role Access Matrix

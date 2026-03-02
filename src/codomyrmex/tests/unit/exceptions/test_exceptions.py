@@ -10,7 +10,17 @@ import pytest
 
 from codomyrmex.exceptions import (
     AIProviderError,
+    CodeEditingError,
+    CodeGenerationError,
+    ModelContextError,
+    CerebrumError,
+    CaseError,
+    InferenceError,
     CodeExecutionError,
+    SandboxError,
+    ContainerError,
+    BuildError,
+    SynthesisError,
     CodomyrmexError,
     ConfigurationError,
     DependencyError,
@@ -103,6 +113,63 @@ class TestSpecializedErrors:
         assert error.context["stderr"] == "Error message"
         assert "exit_code=1" in str(error)
 
+    def test_sandbox_error_context(self):
+        """Test SandboxError context."""
+        error = SandboxError("Sandbox failed", sandbox_id="sb-123", runtime="python")
+        assert error.context["sandbox_id"] == "sb-123"
+        assert error.context["runtime"] == "python"
+
+    def test_container_error_context(self):
+        """Test ContainerError context."""
+        error = ContainerError("Container failed", container_id="cont-1", image_name="ubuntu")
+        assert error.context["container_id"] == "cont-1"
+        assert error.context["image_name"] == "ubuntu"
+
+    def test_build_error_context(self):
+        """Test BuildError context."""
+        error = BuildError("Build failed", build_tool="make", target="all")
+        assert error.context["build_tool"] == "make"
+        assert error.context["target"] == "all"
+
+    def test_synthesis_error_context(self):
+        """Test SynthesisError context."""
+        error = SynthesisError("Synthesis failed", component="parser", synthesis_mode="fast")
+        assert error.context["component"] == "parser"
+        assert error.context["synthesis_mode"] == "fast"
+
+    def test_code_generation_error_context(self):
+        """Test CodeGenerationError context."""
+        error = CodeGenerationError("Gen failed", language="python", prompt_preview="hello")
+        assert error.context["language"] == "python"
+        assert error.context["prompt_preview"] == "hello"
+
+    def test_code_editing_error_context(self):
+        """Test CodeEditingError context."""
+        error = CodeEditingError("Edit failed", file_path="main.py", edit_type="insert")
+        assert error.context["file_path"] == "main.py"
+        assert error.context["edit_type"] == "insert"
+
+    def test_model_context_error_context(self):
+        """Test ModelContextError context."""
+        error = ModelContextError("MCP failed", protocol_version="1.0", operation="list_tools")
+        assert error.context["protocol_version"] == "1.0"
+        assert error.context["operation"] == "list_tools"
+
+    def test_cerebrum_error_context(self):
+        """Test CerebrumError context."""
+        error = CerebrumError("Cerebrum failed", system_component="core")
+        assert error.context["system_component"] == "core"
+
+    def test_case_error_context(self):
+        """Test CaseError context."""
+        error = CaseError("Case failed", case_id="c-1")
+        assert error.context["case_id"] == "c-1"
+
+    def test_inference_error_context(self):
+        """Test InferenceError context."""
+        error = InferenceError("Inference failed", inference_engine="engine-1")
+        assert error.context["inference_engine"] == "engine-1"
+
     def test_code_execution_error_minimal(self):
         """Test CodeExecutionError with minimal information."""
         error = CodeExecutionError("Command failed")
@@ -154,14 +221,18 @@ class TestErrorHierarchy:
         assert isinstance(error, CodomyrmexError)
 
     def test_ai_provider_error_hierarchy(self):
-        """Test AIProviderError inheritance."""
-        error = AIProviderError("AI error")
+        """Test AIProviderError inheritance and context."""
+        error = AIProviderError("AI error", provider_name="Anthropic", model_name="claude-3-5-sonnet")
         assert isinstance(error, CodomyrmexError)
+        assert error.context["provider_name"] == "Anthropic"
+        assert error.context["model_name"] == "claude-3-5-sonnet"
 
     def test_static_analysis_error_hierarchy(self):
-        """Test StaticAnalysisError inheritance."""
-        error = StaticAnalysisError("Analysis error")
+        """Test StaticAnalysisError inheritance and context."""
+        error = StaticAnalysisError("Analysis error", analyzer_name="pylint", file_path="src/main.py")
         assert isinstance(error, CodomyrmexError)
+        assert error.context["analyzer_name"] == "pylint"
+        assert error.context["file_path"] == "src/main.py"
 
     def test_visualization_error_hierarchy(self):
         """Test VisualizationError inheritance."""
@@ -169,9 +240,11 @@ class TestErrorHierarchy:
         assert isinstance(error, CodomyrmexError)
 
     def test_orchestration_error_hierarchy(self):
-        """Test OrchestrationError inheritance."""
-        error = OrchestrationError("Orchestration error")
+        """Test OrchestrationError inheritance and context."""
+        error = OrchestrationError("Orchestration error", orchestrator_id="orch_1", strategy="parallel")
         assert isinstance(error, CodomyrmexError)
+        assert error.context["orchestrator_id"] == "orch_1"
+        assert error.context["strategy"] == "parallel"
 
 
 class TestUtilityFunctions:

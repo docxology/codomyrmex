@@ -95,6 +95,7 @@ def main():
     demo_personas()
     demo_verification()
     print_success("Identity Demo Complete")
+    return True
 
 
 if __name__ == "__main__":

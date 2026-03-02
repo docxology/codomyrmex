@@ -6,6 +6,8 @@ decorators (@injectable, @inject), exceptions, and introspection functions.
 """
 
 import threading
+import sys
+from typing import List, Optional, Iterable
 
 import pytest
 
@@ -686,3 +688,92 @@ class TestAutoResolutionViaHints:
         container.register(Simple, Simple, scope="transient")
         instance = container.resolve(Simple)
         assert instance.ready is True
+
+
+# ---------------------------------------------------------------------------
+# Advanced resolution features tests
+# ---------------------------------------------------------------------------
+
+@injectable(scope="singleton")
+class GlobalAutoRegistered:
+    pass
+
+
+@pytest.mark.unit
+class TestContainerAdvancedFeatures:
+    """Tests for new advanced features: named, collection, and optional resolution."""
+
+    def test_named_registration(self, container: Container):
+        """Test functionality: named registration and resolution."""
+        container.register(IService, ConcreteService, name="primary")
+
+        class SecondaryService(IService):
+            pass
+
+        container.register(IService, SecondaryService, name="secondary")
+
+        primary = container.resolve(IService, name="primary")
+        secondary = container.resolve(IService, name="secondary")
+
+        assert isinstance(primary, ConcreteService)
+        assert isinstance(secondary, SecondaryService)
+
+    def test_resolve_list(self, container: Container):
+        """Test functionality: resolve all implementations via List[T]."""
+        container.register(IService, ConcreteService)
+
+        class AnotherImpl(IService):
+            pass
+
+        container.register(IService, AnotherImpl)
+
+        services = container.resolve(List[IService])
+        assert len(services) == 2
+        assert any(isinstance(s, ConcreteService) for s in services)
+        assert any(isinstance(s, AnotherImpl) for s in services)
+
+    def test_resolve_optional(self, container: Container):
+        """Test functionality: resolve optional dependency via Optional[T]."""
+        # Not registered
+        val = container.resolve(Optional[IService])
+        assert val is None
+
+        # Registered
+        container.register(IService, ConcreteService)
+        val = container.resolve(Optional[IService])
+        assert isinstance(val, ConcreteService)
+
+    def test_scan_auto_registration(self, container: Container):
+        """Test functionality: auto-scanning for @injectable classes."""
+        current_module = sys.modules[__name__]
+        container.scan(current_module)
+
+        assert container.has(GlobalAutoRegistered)
+        assert isinstance(container.resolve(GlobalAutoRegistered), GlobalAutoRegistered)
+
+    def test_circular_dependency_with_names(self, container: Container):
+        """Test functionality: circular dependency detection includes names in error."""
+        class A:
+            def __init__(self, b: "B"):
+                self.b = b
+
+        class B:
+            def __init__(self, a: A):
+                self.a = a
+
+        A.__init__.__annotations__['b'] = B
+        B.__init__.__annotations__['a'] = A
+
+        container.register(A, A, name="a_named")
+        container.register(B, B, name="b_named")
+
+        # Since auto-resolver doesn't know about names yet, we just trigger 
+        # a circular dependency by resolving one that depends on the other.
+        # Here we manually simulate the chain if needed, or just let auto-resolve 
+        # (which uses default None name) fail if they were registered without names.
+        
+        # To actually use the names in auto-resolve, we'd need @inject(b='b_named')
+        # For now, let's just verify circular detection works with the new key format.
+        
+        with pytest.raises(CircularDependencyError, match="a_named"):
+            container.resolve(A, name="a_named")

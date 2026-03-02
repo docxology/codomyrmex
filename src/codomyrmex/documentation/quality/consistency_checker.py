@@ -42,6 +42,7 @@ class DocumentationConsistencyChecker:
         """Initialize checker."""
         self.config = config or {}
         self.naming_patterns = self._load_naming_patterns()
+        self.mandatory_sections = self.config.get("mandatory_sections", ["Overview", "Purpose", "Navigation"])
 
     def _load_naming_patterns(self) -> dict[str, re.Pattern]:
         """Load naming convention patterns."""
@@ -55,9 +56,9 @@ class DocumentationConsistencyChecker:
         """Check a single file for consistency issues."""
         issues = []
         try:
-            with open(file_path, encoding='utf-8', errors='ignore') as f:
-                content = f.read()
-                lines = content.split('\n')
+            path = Path(file_path)
+            content = path.read_text(encoding='utf-8', errors='ignore')
+            lines = content.split('\n')
 
             # Check for common issues
             for i, line in enumerate(lines, 1):
@@ -80,6 +81,34 @@ class DocumentationConsistencyChecker:
                         description="Line contains tabs instead of spaces",
                         severity="warning"
                     ))
+
+                # Check for broken internal links (simple check)
+                internal_links = re.findall(r'\[([^\]]+)\]\(([^)]+)\)', line)
+                for text, link in internal_links:
+                    if link.startswith("./") or (not link.startswith("http") and not link.startswith("#")):
+                        link_path = path.parent / link.split("#")[0]
+                        if not link_path.exists():
+                            issues.append(ConsistencyIssue(
+                                file_path=file_path,
+                                line_number=i,
+                                issue_type="broken_link",
+                                description=f"Internal link '{link}' for '{text}' does not exist",
+                                severity="warning",
+                                suggestion=f"Check if {link} is spelled correctly and exists."
+                            ))
+
+            # Check for mandatory sections in RASP files
+            if path.name in ["README.md", "SPEC.md", "AGENTS.md", "PAI.md"]:
+                for section in self.mandatory_sections:
+                    if not re.search(rf'^#+.*{section}', content, re.IGNORECASE | re.MULTILINE):
+                        issues.append(ConsistencyIssue(
+                            file_path=file_path,
+                            line_number=1,
+                            issue_type="missing_section",
+                            description=f"Mandatory section '{section}' is missing",
+                            severity="warning",
+                            suggestion=f"Add a '## {section}' section to the file."
+                        ))
 
         except Exception as e:
             logger.error(f"Error checking file {file_path}: {e}")

@@ -24,9 +24,8 @@ Usage:
 
 
 Submodules:
-    cost_management: Consolidated cost management capabilities."""
+    common: Shared cloud utilities."""
 
-from . import cost_management
 
 # Shared schemas for cross-module interop
 try:
@@ -165,7 +164,6 @@ def cli_commands():
 
 
 __all__ = [
-    "cost_management",
     # Client
     "CodaClient",
     # Models

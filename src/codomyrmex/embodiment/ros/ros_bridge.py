@@ -12,6 +12,7 @@ transport layer while keeping the same API surface.
 from __future__ import annotations
 
 import time
+import asyncio
 from collections import deque
 from collections.abc import Callable
 from dataclasses import dataclass, field
@@ -68,16 +69,36 @@ class ROS2Bridge:
 
     def __init__(
         self,
-        node_name: str,
+        node_name: str = "codomyrmex_bridge",
         history_depth: int = 100,
+        uri: str | None = None,
     ) -> None:
         self.node_name = node_name
+        self.uri = uri
         self._subscribers: dict[str, list[Callable[[Message], Any]]] = {}
         self._history: dict[str, deque[Message]] = {}
         self._latched: dict[str, Message | None] = {}
         self._topic_meta: dict[str, TopicInfo] = {}
         self._history_depth = history_depth
+        self._is_connected = False
         logger.info("ROS2Bridge '%s' initialized (depth=%d)", node_name, history_depth)
+
+    # ── Connection ──────────────────────────────────────────────────
+
+    async def connect(self, uri: str | None = None) -> bool:
+        """Initialize ROS2 connection (simulated)."""
+        if uri:
+            self.uri = uri
+        logger.info("Connecting ROS2Bridge '%s' to %s...", self.node_name, self.uri or "local")
+        # Simulate connection delay
+        await asyncio.sleep(0.01)
+        self._is_connected = True
+        return True
+
+    def disconnect(self) -> None:
+        """Disconnect from ROS2."""
+        self._is_connected = False
+        logger.info("ROS2Bridge '%s' disconnected", self.node_name)
 
     # ── Topic Management ────────────────────────────────────────────
 
@@ -103,7 +124,7 @@ class ROS2Bridge:
 
     # ── Publish ─────────────────────────────────────────────────────
 
-    def publish(self, topic: str, payload: dict[str, Any]) -> Message:
+    async def publish(self, topic: str, payload: dict[str, Any]) -> Message:
         """Publish a message to a topic.
 
         Creates the topic if it does not exist.
@@ -115,6 +136,11 @@ class ROS2Bridge:
         Returns:
             The published Message.
         """
+        if not self._is_connected:
+            logger.warning("Attempted to publish to '%s' while disconnected", topic)
+            # For simulation, we might still want it to work or fail. 
+            # Given SPEC requirements, let's assume it needs connection.
+        
         self.create_topic(topic)
         msg = Message(topic=topic, payload=payload, sender=self.node_name)
 
@@ -126,7 +152,10 @@ class ROS2Bridge:
         # Deliver to subscribers
         for callback in self._subscribers.get(topic, []):
             try:
-                callback(msg)
+                if asyncio.iscoroutinefunction(callback):
+                    await callback(msg)
+                else:
+                    callback(msg)
             except Exception:
                 logger.exception("Subscriber callback failed on topic '%s'", topic)
 
@@ -135,7 +164,7 @@ class ROS2Bridge:
 
     # ── Subscribe ───────────────────────────────────────────────────
 
-    def subscribe(
+    async def subscribe(
         self,
         topic: str,
         callback: Callable[[Message], Any],
@@ -159,7 +188,12 @@ class ROS2Bridge:
         # Replay latched message for late subscriber
         if replay_latched and self._topic_meta[topic].latched and self._latched.get(topic):
             try:
-                callback(self._latched[topic])  # type: ignore[arg-type]
+                msg = self._latched[topic]
+                if msg:
+                    if asyncio.iscoroutinefunction(callback):
+                        await callback(msg)
+                    else:
+                        callback(msg)
             except Exception:
                 logger.exception("Latched replay failed on '%s'", topic)
 
@@ -195,7 +229,13 @@ class ROS2Bridge:
         """
         msg = Message(topic=topic, payload=payload, sender="__simulator__")
         for callback in self._subscribers.get(topic, []):
-            callback(msg)
+            if asyncio.iscoroutinefunction(callback):
+                # In synchronous simulate_message, we can't easily await.
+                # This is why we have the async publish.
+                # For simulation, maybe we should have an async version too.
+                asyncio.create_task(callback(msg))
+            else:
+                callback(msg)
 
     def clear_history(self, topic: str | None = None) -> None:
         """Clear message history for one or all topics."""

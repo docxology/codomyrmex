@@ -1,6 +1,6 @@
 # Finance — Specification
 
-**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
 
@@ -13,8 +13,8 @@ Complete financial management: double-entry bookkeeping, tax compliance, payroll
 | Interface | Signature | Description |
 |-----------|-----------|-------------|
 | `Ledger()` | Constructor | Create empty ledger |
-| `ledger.record(txn)` | `record(Transaction) → None` | Record a balanced transaction |
-| `ledger.trial_balance()` | `→ dict[str, Decimal]` | Compute trial balance |
+| `ledger.post_transaction(entries, desc)` | `post_transaction(list[dict], str) → Transaction` | Record a balanced transaction |
+| `ledger.trial_balance()` | `→ dict` | Compute trial balance |
 
 ### Transactions
 

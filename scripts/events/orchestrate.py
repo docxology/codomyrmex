@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 """
-Orchestrator for events
+Orchestrator for the events module.
+Discovers and runs all event-related scripts and examples.
 """
 
 import sys
+import os
 from pathlib import Path
 
 # Ensure codomyrmex is in path
@@ -16,11 +18,17 @@ except ImportError:
 from codomyrmex.orchestrator.core import main
 
 if __name__ == "__main__":
-    # Run the orchestrator for this specific module directory
-    # We must explicitly set the scripts directory to avoid recursive discovery of the parent 'scripts' folder
+    # Force the scripts directory to be this one
     current_dir = Path(__file__).resolve().parent
-    # Check if --scripts-dir is already passed
-    if not any(arg.startswith("--scripts-dir") for arg in sys.argv):
-        sys.argv.append(f"--scripts-dir={current_dir}")
-        
-    sys.exit(main())
+    
+    # We remove any existing --scripts-dir to ensure we use the current one
+    new_args = [arg for arg in sys.argv if not arg.startswith("--scripts-dir")]
+    new_args.append(f"--scripts-dir={current_dir}")
+    
+    # Set default output dir if not provided
+    if not any(arg.startswith("--output-dir") or arg == "-o" for arg in new_args):
+        output_dir = current_dir.parent.parent / "output" / "events_orchestration"
+        new_args.append(f"--output-dir={output_dir}")
+
+    print(f"🎬 Starting events orchestrator in: {current_dir}")
+    sys.exit(main(new_args[1:]))

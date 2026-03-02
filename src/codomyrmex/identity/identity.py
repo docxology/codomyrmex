@@ -18,6 +18,9 @@ from typing import Any
 
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
+from .manager import IdentityManager
+from .persona import Persona, VerificationLevel
+
 logger = get_logger(__name__)
 
 
@@ -33,10 +36,12 @@ class AuthToken:
 
     @property
     def is_expired(self) -> bool:
+        """Check if token is past its expiry time."""
         return time.time() > self.expires_at
 
     @property
     def remaining_seconds(self) -> float:
+        """Return remaining seconds until token expires."""
         return max(0.0, self.expires_at - time.time())
 
 
@@ -72,7 +77,7 @@ class PasswordProvider(AuthProvider):
         self._users[user_id] = (salt, pw_hash)
 
     def authenticate(self, credentials: dict[str, Any]) -> bool:
-        """Authenticate."""
+        """Authenticate based on user_id and password."""
         user_id = credentials.get("user_id", "")
         password = credentials.get("password", "")
         if user_id not in self._users:
@@ -102,7 +107,7 @@ class TokenProvider(AuthProvider):
         return False
 
     def authenticate(self, credentials: dict[str, Any]) -> bool:
-        """Authenticate."""
+        """Authenticate based on the provided token."""
         return credentials.get("token", "") in self._valid_tokens
 
 
@@ -135,7 +140,13 @@ class Identity:
         self._providers: dict[str, AuthProvider] = {}
         self._sessions: dict[str, AuthToken] = {}  # token_str -> AuthToken
         self._events: list[AuthEvent] = []
+        self._manager = IdentityManager()
         logger.info("Identity system initialized (ttl=%.0fs)", session_ttl)
+
+    @property
+    def manager(self) -> IdentityManager:
+        """Access the underlying Persona Identity Manager."""
+        return self._manager
 
     # ── Provider registration ───────────────────────────────────────
 
@@ -225,19 +236,40 @@ class Identity:
 
     # ── Audit ───────────────────────────────────────────────────────
 
-    def _audit(self, user_id: str, event_type: str, metadata: dict[str, Any] | None = None) -> None:
-        """Audit."""
-        event = AuthEvent(user_id=user_id, event_type=event_type, metadata=metadata or {})
+    def _audit(
+        self, user_id: str, event_type: str, metadata: dict[str, Any] | None = None
+    ) -> None:
+        """Record an authentication event in the audit log."""
+        event = AuthEvent(
+            user_id=user_id, event_type=event_type, metadata=metadata or {}
+        )
         self._events.append(event)
         logger.info("Auth event: %s for %s", event_type, user_id)
 
     @property
     def audit_log(self) -> list[AuthEvent]:
+        """Get the full audit log of authentication events."""
         return list(self._events)
 
     @property
     def active_session_count(self) -> int:
+        """Get the current count of non-expired sessions."""
         return sum(1 for s in self._sessions.values() if not s.is_expired)
+
+    def process(self, data: Any) -> Any:
+        """Identity processing of data to ensure compliance with active persona context.
+
+        Filters or prepares data for consumption based on the active persona.
+        """
+        active = self.manager.active_persona
+        if active:
+            logger.info("Processing data for persona: %s", active.id)
+            # Example logic: add identity stamp if KYC
+            if active.level == VerificationLevel.KYC:
+                if isinstance(data, dict):
+                    data["_identity_signature"] = f"verified:{active.id}"
+
+        return data
 
 
 def create_identity(config: dict[str, Any] | None = None) -> Identity:

@@ -238,8 +238,29 @@ class TestAntigravityClient:
     def test_open_file_checks_existence(self):
         """open_file should verify file exists."""
         client = AntigravityClient()
+        client._connected = True
         assert client.open_file("/nonexistent/path/file.txt") is False
         assert client.open_file(__file__) is True
+
+    def test_close_file_returns_true(self):
+        """close_file should return True (simulated)."""
+        client = AntigravityClient()
+        assert client.close_file("/some/file") is True
+
+    def test_save_file_requires_connection(self):
+        """save_file should require connection."""
+        client = AntigravityClient()
+        assert client.save_file(__file__) is False
+
+    def test_save_all_requires_connection(self):
+        """save_all should require connection."""
+        client = AntigravityClient()
+        assert client.save_all() is False
+
+    def test_get_open_files_disconnected(self):
+        """get_open_files should return empty when disconnected."""
+        client = AntigravityClient()
+        assert client.get_open_files() == []
 
     def test_list_artifacts_when_not_connected(self):
         """list_artifacts should return empty when not connected."""
@@ -519,6 +540,18 @@ class TestCursorClient:
             result = client.get_active_file()
             assert result is not None
             assert result.endswith("new.py")
+
+    def test_get_open_files_simulated(self):
+        """get_open_files should return some files from workspace."""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            (Path(tmpdir) / "a.py").write_text("a")
+            (Path(tmpdir) / "b.ts").write_text("b")
+            client = CursorClient(workspace_path=tmpdir)
+            client._connected = True
+            
+            open_files = client.get_open_files()
+            assert len(open_files) > 0
+            assert any(f.endswith("a.py") for f in open_files)
 
     def test_get_active_file_empty_workspace(self):
         """get_active_file should return None for empty workspace."""

@@ -92,7 +92,7 @@ class ScopeContext:
 
     def __init__(self, container: Container) -> None:
         self._container = container
-        self._instances: dict[type[Any], Any] = {}
+        self._instances: dict[Any, Any] = {}
         self._lock = threading.Lock()
         self._scope_id = str(uuid.uuid4())
         self._active = False
@@ -119,7 +119,7 @@ class ScopeContext:
         self._container._pop_scope(self)
         self._dispose()
 
-    def resolve(self, interface: type[T]) -> T:
+    def resolve(self, interface: type[T], name: str | None = None) -> T:
         """Resolve a service within this scope context.
 
         For SCOPED registrations, a single instance is created per
@@ -128,6 +128,7 @@ class ScopeContext:
 
         Args:
             interface: The type/interface to resolve.
+            name: Optional name for the registration.
 
         Returns:
             An instance of the requested type.
@@ -141,17 +142,20 @@ class ScopeContext:
                 "Cannot resolve from an inactive ScopeContext. "
                 "Use it as a context manager: with ScopeContext(container) as scope: ..."
             )
-        return self._container._resolve_with_scope(interface, self)
+        return self._container.resolve(interface, name=name)
 
-    def get_scoped_instance(self, interface: type[T]) -> T | None:
-        """Return the cached scoped instance for an interface, or None."""
+    def get_scoped_instance(self, key: Any) -> Any | None:
+        """Return the cached scoped instance for a key, or None.
+
+        Key is typically (interface, name).
+        """
         with self._lock:
-            return self._instances.get(interface)
+            return self._instances.get(key)
 
-    def cache_scoped_instance(self, interface: type[T], instance: T) -> None:
+    def cache_scoped_instance(self, key: Any, instance: Any) -> None:
         """Cache a scoped instance for the duration of this context."""
         with self._lock:
-            self._instances[interface] = instance
+            self._instances[key] = instance
 
     def _dispose(self) -> None:
         """Release all scoped instances.

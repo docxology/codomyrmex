@@ -8,19 +8,21 @@ Edge node management, function deployment, and synchronization.
 
 ## Key Classes
 
-- **EdgeNode** — Edge node representation
-- **EdgeFunction** — Deployable edge function
-- **EdgeRuntime** — Function execution runtime
-- **EdgeCluster** — Cluster management
-- **EdgeSynchronizer** — State synchronization
-- **EdgeMetrics** — Invocation metrics tracking
-- **InvocationRecord** — Single invocation record
+- **EdgeNode** — Node with `ResourceUsage` and health status
+- **EdgeFunction** — Function with capability constraints
+- **EdgeRuntime** — Latency-tracking execution runtime
+- **EdgeCluster** — Rebalancing and auto-healing orchestrator
+- **EdgeSynchronizer** — Bidirectional delta sync
+- **DeploymentManager** — Rolling/Canary/Blue-Green deployments
+- **EdgeScheduler** — Job lifecycle management
+- **HealthMonitor** — Failure detection with recovery logic
 
 ## Agent Instructions
 
-1. **Design for offline** — Handle disconnected states
-2. **Sync efficiently** — Delta sync, not full state
-3. **Resource aware** — Consider edge constraints
+1. **Design for offline** — Handle disconnected states gracefully
+2. **Sync efficiently** — Use `is_delta=True` for partial updates
+3. **Resource aware** — Check `is_overloaded` before large deployments
+4. **Auto-heal** — Periodically call `cluster.auto_heal()` to prune stale nodes
 4. **Local caching** — Cache at edge when possible
 5. **Graceful degradation** — Work with reduced capability
 

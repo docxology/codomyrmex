@@ -32,10 +32,6 @@ class DocumentationFixer(ScriptBase):
             "--target", type=Path, default=Path.cwd() / "src/codomyrmex",
             help="Target directory to fix"
         )
-        parser.add_argument(
-            "--dry-run-fix", action="store_true",
-            help="Don't write files, just log intention"
-        )
 
     def generate_pai(self, module_name: str) -> str:
         name_title = module_name.replace("_", " ").title()
@@ -183,20 +179,15 @@ class DocumentationFixer(ScriptBase):
                 action = "Upgraded Stub"
                 
             if should_write:
-                if self.config and self.config.dry_run: # fix: access via config
+                if self.config and self.config.dry_run:
                     self.log_info(f"[DRY RUN] Would write {file_path}")
-                elif not (self.config and hasattr(self.config, 'custom') and self.config.custom.get('dry_run_fix')):
-                     with open(file_path, "w") as f:
-                         f.write(content)
-                     self.log_success(f"{action} {file_path}")
+                else:
+                    with open(file_path, "w") as f:
+                        f.write(content)
+                    self.log_success(f"{action} {file_path}")
 
     def run(self, args, config):
         self.target_dir = args.target.resolve()
-        
-        # fix: handle arg passing logic vs config
-        is_dry = args.dry_run_fix
-        if is_dry:
-             self.log_info("Running in DRY RUN FIX mode")
 
         # Walk
         for root, dirs, files in os.walk(self.target_dir):

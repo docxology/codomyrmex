@@ -7,10 +7,11 @@ pause, advance, and status inspection capabilities.
 
 from __future__ import annotations
 
+import threading
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any
+from typing import Any, Dict, List, Optional
 
 
 class RolloutState(Enum):
@@ -30,7 +31,7 @@ class RolloutConfig:
         stages: List of rollout percentages (e.g. [5, 25, 50, 100]).
         stage_delay_seconds: Minimum seconds between automatic stage advances.
     """
-    stages: list[float] = field(default_factory=lambda: [5.0, 25.0, 50.0, 100.0])
+    stages: List[float] = field(default_factory=lambda: [5.0, 25.0, 50.0, 100.0])
     stage_delay_seconds: float = 3600.0
 
     def __post_init__(self) -> None:
@@ -60,7 +61,7 @@ class RolloutStatus:
     current_percentage: float
     started_at: datetime
     updated_at: datetime
-    metadata: dict[str, Any] = field(default_factory=dict)
+    metadata: Dict[str, Any] = field(default_factory=dict)
 
 
 class RolloutManager:
@@ -71,7 +72,8 @@ class RolloutManager:
     """
 
     def __init__(self) -> None:
-        self._rollouts: dict[str, _RolloutEntry] = {}
+        self._rollouts: Dict[str, _RolloutEntry] = {}
+        self._lock = threading.Lock()
 
     def create_rollout(self, flag_name: str, config: RolloutConfig) -> RolloutStatus:
         """Create a new rollout for a flag.
@@ -94,8 +96,9 @@ class RolloutManager:
             started_at=now,
             updated_at=now,
         )
-        self._rollouts[flag_name] = entry
-        return self._to_status(entry)
+        with self._lock:
+            self._rollouts[flag_name] = entry
+            return self._to_status_locked(entry)
 
     def advance_rollout(self, flag_name: str) -> RolloutStatus:
         """Advance the rollout to the next stage.
@@ -110,21 +113,22 @@ class RolloutManager:
             KeyError: If no rollout exists for the flag.
             RuntimeError: If the rollout is not in an advanceable state.
         """
-        entry = self._get_entry(flag_name)
-        if entry.state not in (RolloutState.ACTIVE, RolloutState.PAUSED):
-            raise RuntimeError(
-                f"Cannot advance rollout in state {entry.state.value}"
-            )
+        with self._lock:
+            entry = self._get_entry_locked(flag_name)
+            if entry.state not in (RolloutState.ACTIVE, RolloutState.PAUSED):
+                raise RuntimeError(
+                    f"Cannot advance rollout in state {entry.state.value}"
+                )
 
-        next_index = entry.current_stage_index + 1
-        if next_index >= len(entry.config.stages):
-            entry.state = RolloutState.COMPLETED
-        else:
-            entry.current_stage_index = next_index
-            entry.state = RolloutState.ACTIVE
+            next_index = entry.current_stage_index + 1
+            if next_index >= len(entry.config.stages):
+                entry.state = RolloutState.COMPLETED
+            else:
+                entry.current_stage_index = next_index
+                entry.state = RolloutState.ACTIVE
 
-        entry.updated_at = datetime.now()
-        return self._to_status(entry)
+            entry.updated_at = datetime.now()
+            return self._to_status_locked(entry)
 
     def get_rollout_status(self, flag_name: str) -> RolloutStatus:
         """Return the current status of a flag's rollout.
@@ -138,7 +142,8 @@ class RolloutManager:
         Raises:
             KeyError: If no rollout exists for the flag.
         """
-        return self._to_status(self._get_entry(flag_name))
+        with self._lock:
+            return self._to_status_locked(self._get_entry_locked(flag_name))
 
     def pause_rollout(self, flag_name: str) -> RolloutStatus:
         """Pause an active rollout.
@@ -153,28 +158,51 @@ class RolloutManager:
             KeyError: If no rollout exists for the flag.
             RuntimeError: If the rollout is not active.
         """
-        entry = self._get_entry(flag_name)
-        if entry.state != RolloutState.ACTIVE:
-            raise RuntimeError(
-                f"Can only pause an active rollout, current state: {entry.state.value}"
-            )
-        entry.state = RolloutState.PAUSED
-        entry.updated_at = datetime.now()
-        return self._to_status(entry)
+        with self._lock:
+            entry = self._get_entry_locked(flag_name)
+            if entry.state != RolloutState.ACTIVE:
+                raise RuntimeError(
+                    f"Can only pause an active rollout, current state: {entry.state.value}"
+                )
+            entry.state = RolloutState.PAUSED
+            entry.updated_at = datetime.now()
+            return self._to_status_locked(entry)
+
+    def resume_rollout(self, flag_name: str) -> RolloutStatus:
+        """Resume a paused rollout."""
+        with self._lock:
+            entry = self._get_entry_locked(flag_name)
+            if entry.state != RolloutState.PAUSED:
+                raise RuntimeError(
+                    f"Can only resume a paused rollout, current state: {entry.state.value}"
+                )
+            entry.state = RolloutState.ACTIVE
+            entry.updated_at = datetime.now()
+            return self._to_status_locked(entry)
+
+    def abort_rollout(self, flag_name: str) -> RolloutStatus:
+        """Abort a rollout, moving it to ABORTED state."""
+        with self._lock:
+            entry = self._get_entry_locked(flag_name)
+            entry.state = RolloutState.ABORTED
+            entry.updated_at = datetime.now()
+            return self._to_status_locked(entry)
 
     # ------------------------------------------------------------------
     # Internal helpers
     # ------------------------------------------------------------------
 
-    def _get_entry(self, flag_name: str) -> _RolloutEntry:
+    def _get_entry_locked(self, flag_name: str) -> _RolloutEntry:
         try:
             return self._rollouts[flag_name]
         except KeyError:
             raise KeyError(f"No rollout found for flag: {flag_name}") from None
 
     @staticmethod
-    def _to_status(entry: _RolloutEntry) -> RolloutStatus:
-        pct = entry.config.stages[entry.current_stage_index]
+    def _to_status_locked(entry: _RolloutEntry) -> RolloutStatus:
+        # Clamp stage index just in case
+        idx = min(entry.current_stage_index, len(entry.config.stages) - 1)
+        pct = entry.config.stages[idx]
         return RolloutStatus(
             flag_name=entry.flag_name,
             state=entry.state,

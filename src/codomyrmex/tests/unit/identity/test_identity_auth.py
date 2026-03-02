@@ -118,7 +118,7 @@ class TestAuthEvent:
 class TestPasswordProvider:
     """Tests for PasswordProvider registration and authentication."""
 
-    def setup_method(self):
+    def setup_method(self, method):
         self.pw = PasswordProvider()
 
     def test_register_and_authenticate(self):
@@ -164,7 +164,7 @@ class TestPasswordProvider:
 class TestTokenProvider:
     """Tests for TokenProvider creation, authentication, and revocation."""
 
-    def setup_method(self):
+    def setup_method(self, method):
         self.tp = TokenProvider()
 
     def test_create_and_authenticate(self):
@@ -208,7 +208,7 @@ class TestTokenProvider:
 class TestIdentity:
     """Tests for the Identity orchestrator: login, logout, sessions, audit."""
 
-    def setup_method(self):
+    def setup_method(self, method):
         self.ident = Identity(session_ttl=3600.0)
         self.pw = PasswordProvider()
         self.pw.register("alice", "s3cret")

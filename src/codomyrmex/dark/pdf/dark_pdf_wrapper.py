@@ -7,8 +7,12 @@ use cases, plus batch processing support.
 from __future__ import annotations
 
 from pathlib import Path
+from typing import TYPE_CHECKING
 
 from .filters import DarkPDFFilter
+
+if TYPE_CHECKING:
+    import fitz
 
 # Preset configurations matching common use cases
 _PRESETS: dict[str, dict[str, float]] = {
@@ -122,6 +126,109 @@ class DarkPDF:
             sepia=params["sepia"],
             dpi=dpi,
         )
+
+    @property
+    def current_filter(self) -> DarkPDFFilter:
+        """Return the current filter configuration."""
+        return self.filter
+
+    @property
+    def page_count(self) -> int:
+        """Return the number of pages in the input PDF."""
+        import fitz
+        doc = fitz.open(str(self.input_path))
+        count = len(doc)
+        doc.close()
+        return count
+
+    def set_filter(self, preset: str | DarkPDFFilter) -> DarkPDF:
+        """Set the filter to a preset or a custom DarkPDFFilter.
+
+        Args:
+            preset: Preset name or DarkPDFFilter instance.
+
+        Returns:
+            self for chaining.
+        """
+        if isinstance(preset, DarkPDFFilter):
+            self.filter = preset
+        elif preset in _PRESETS:
+            params = _PRESETS[preset]
+            self.filter = DarkPDFFilter(
+                inversion=params["inversion"],
+                brightness=params["brightness"],
+                contrast=params["contrast"],
+                sepia=params["sepia"],
+                dpi=self.filter.dpi,
+            )
+        else:
+            raise ValueError(
+                f"Unknown preset '{preset}'. Available: {list(_PRESETS.keys())}"
+            )
+        return self
+
+    def set_brightness(self, value: float) -> DarkPDF:
+        """Set brightness multiplier.
+
+        Args:
+            value: Brightness multiplier, 0.1-3.0.
+
+        Returns:
+            self for chaining.
+        """
+        self.filter.brightness = value
+        self.filter.validate()
+        return self
+
+    def set_contrast(self, value: float) -> DarkPDF:
+        """Set contrast multiplier.
+
+        Args:
+            value: Contrast multiplier, 0.1-3.0.
+
+        Returns:
+            self for chaining.
+        """
+        self.filter.contrast = value
+        self.filter.validate()
+        return self
+
+    def set_inversion(self, value: float) -> DarkPDF:
+        """Set inversion amount.
+
+        Args:
+            value: Inversion amount, 0.0-1.0.
+
+        Returns:
+            self for chaining.
+        """
+        self.filter.inversion = value
+        self.filter.validate()
+        return self
+
+    def set_sepia(self, value: float) -> DarkPDF:
+        """Set sepia amount.
+
+        Args:
+            value: Sepia amount, 0.0-1.0.
+
+        Returns:
+            self for chaining.
+        """
+        self.filter.sepia = value
+        self.filter.validate()
+        return self
+
+    def process(self) -> DarkPDF:
+        """Process the PDF. (Placeholder for internal consistency)
+
+        In this implementation, processing happens during save().
+        This method is provided for API compatibility with AGENTS.md patterns.
+
+        Returns:
+            self for chaining.
+        """
+        return self
 
     def save(self, output_path: str | Path) -> Path:
         """Apply dark mode and save the result.

@@ -1,146 +1,148 @@
 #!/usr/bin/env python3
 """
-Event system demonstration and utilities.
+Event system demonstration using the real Codomyrmex events module.
 
 Usage:
     python event_demo.py [--demo TYPE]
 """
 
 import sys
+import os
+import time
+import argparse
+import asyncio
 from pathlib import Path
 
+# Ensure codomyrmex is in path
 try:
     import codomyrmex  # noqa: F401
 except ImportError:
     project_root = Path(__file__).resolve().parent.parent.parent
     sys.path.insert(0, str(project_root / "src"))
 
-import argparse
-from collections import defaultdict
-from typing import Callable
-import time
-
-
-class EventEmitter:
-    """Simple event emitter implementation."""
-    
-    def __init__(self):
-        self._handlers: dict = defaultdict(list)
-        self._history: list = []
-    
-    def on(self, event: str, handler: Callable):
-        """Register an event handler."""
-        self._handlers[event].append(handler)
-    
-    def off(self, event: str, handler: Callable = None):
-        """Remove event handler(s)."""
-        if handler:
-            self._handlers[event].remove(handler)
-        else:
-            self._handlers[event] = []
-    
-    def emit(self, event: str, *args, **kwargs):
-        """Emit an event."""
-        self._history.append({"event": event, "time": time.time()})
-        for handler in self._handlers[event]:
-            try:
-                handler(*args, **kwargs)
-            except Exception as e:
-                print(f"   ⚠️ Handler error: {e}")
-    
-    def get_stats(self) -> dict:
-        """Get event statistics."""
-        stats = defaultdict(int)
-        for h in self._history:
-            stats[h["event"]] += 1
-        return dict(stats)
-
+from codomyrmex.events import (
+    EventBus, 
+    Event, 
+    EventType, 
+    EventPriority, 
+    get_event_bus, 
+    publish_event,
+    subscribe_to_events,
+    get_event_logger,
+    get_event_stats
+)
+from codomyrmex.events.emitters.event_emitter import EventEmitter
+from codomyrmex.events.handlers.event_listener import EventListener, event_handler, AutoEventListener
 
 def demo_basic():
-    """Basic event emitter demo."""
+    """Basic event publishing and subscription demo."""
     print("📡 Basic Event Demo:\n")
     
-    emitter = EventEmitter()
+    bus = get_event_bus()
+    received_events = []
     
-    # Register handlers
-    def on_start(msg):
-        print(f"   🟢 Started: {msg}")
+    def on_event(event: Event):
+        print(f"   🟢 Received: {event.event_type.value} from {event.source}")
+        received_events.append(event)
     
-    def on_complete(msg):
-        print(f"   ✅ Completed: {msg}")
+    # Subscribe to all system events
+    bus.subscribe(["system.*"], on_event)
     
-    def on_error(msg):
-        print(f"   ❌ Error: {msg}")
+    # Publish events
+    publish_event(Event(event_type=EventType.SYSTEM_STARTUP, source="demo_script", data={"version": "1.0"}))
+    publish_event(Event(event_type=EventType.SYSTEM_ERROR, source="demo_script", priority=EventPriority.ERROR, data={"msg": "test error"}))
     
-    emitter.on("start", on_start)
-    emitter.on("complete", on_complete)
-    emitter.on("error", on_error)
+    # Wait a bit for async-like behavior if any (though currently sync by default)
+    time.sleep(0.1)
     
-    # Emit events
-    emitter.emit("start", "Processing data...")
-    emitter.emit("complete", "Task finished")
-    emitter.emit("error", "Something went wrong")
-    
-    print(f"\n   Stats: {emitter.get_stats()}")
+    stats = get_event_stats()
+    print(f"\n   Stats: Total events={stats['total_events']}, Counts={stats['event_counts']}")
+    return len(received_events) == 2
 
 
-def demo_pipeline():
-    """Event-driven pipeline demo."""
-    print("🔄 Pipeline Demo:\n")
+def demo_emitter_listener():
+    """Demo using EventEmitter and EventListener."""
+    print("🔄 Emitter & Listener Demo:\n")
     
-    emitter = EventEmitter()
-    pipeline_data = {"stage": 0, "value": 0}
+    emitter = EventEmitter(source="workflow_engine")
+    listener = EventListener(listener_id="monitor_agent")
     
-    def stage1(data):
-        data["value"] += 10
-        data["stage"] = 1
-        print(f"   Stage 1: value = {data['value']}")
-        emitter.emit("stage2", data)
+    received = []
+    def monitor_handler(event: Event):
+        print(f"   👁️  Monitor saw: {event.event_type.value} - {event.data.get('status', 'no status')}")
+        received.append(event)
+        
+    listener.on(EventType.TASK_STARTED, monitor_handler)
+    listener.on(EventType.TASK_COMPLETED, monitor_handler)
     
-    def stage2(data):
-        data["value"] *= 2
-        data["stage"] = 2
-        print(f"   Stage 2: value = {data['value']}")
-        emitter.emit("stage3", data)
+    # Emit events via emitter
+    emitter.emit(EventType.TASK_STARTED, data={"task_id": "T1", "status": "running"})
+    emitter.emit(EventType.TASK_COMPLETED, data={"task_id": "T1", "status": "success"})
     
-    def stage3(data):
-        data["value"] += 5
-        data["stage"] = 3
-        print(f"   Stage 3: value = {data['value']}")
-        emitter.emit("complete", data)
+    # Clean up listener
+    listener.off("monitor_agent_handler_0")
+    listener.off("monitor_agent_handler_1")
     
-    def on_complete(data):
-        print(f"   ✅ Pipeline complete: {data}")
+    return len(received) == 2
+
+
+def demo_auto_listener():
+    """Demo using AutoEventListener with @event_handler decorator."""
+    print("🤖 Auto-Listener Demo:\n")
     
-    emitter.on("stage1", stage1)
-    emitter.on("stage2", stage2)
-    emitter.on("stage3", stage3)
-    emitter.on("complete", on_complete)
+    class MyComponent:
+        def __init__(self):
+            self.events_seen = 0
+            
+        @event_handler(EventType.ANALYSIS_START)
+        def handle_start(self, event: Event):
+            print(f"   🚀 Component starting analysis on {event.data.get('target')}")
+            self.events_seen += 1
+            
+        @event_handler(EventType.ANALYSIS_COMPLETE, priority=10)
+        def handle_complete(self, event: Event):
+            print(f"   🏁 Component finished analysis. Success: {event.data.get('success')}")
+            self.events_seen += 1
+
+    comp = MyComponent()
+    auto_listener = AutoEventListener(listener_id="auto_comp")
+    auto_listener.register_handlers(comp)
     
-    # Start pipeline
-    emitter.emit("stage1", pipeline_data)
+    publish_event(Event(event_type=EventType.ANALYSIS_START, source="demo", data={"target": "main.py"}))
+    publish_event(Event(event_type=EventType.ANALYSIS_COMPLETE, source="demo", data={"success": True}))
+    
+    time.sleep(0.1)
+    return comp.events_seen == 2
 
 
 def main():
     parser = argparse.ArgumentParser(description="Event system demo")
-    parser.add_argument("--demo", "-d", choices=["basic", "pipeline", "all"], default="all")
+    parser.add_argument("--demo", "-d", choices=["basic", "emitter", "auto", "all"], default="all")
     args = parser.parse_args()
     
-    print("📡 Event System Demo\n")
+    print("📡 Codomyrmex Event System Demo\n")
+    print(f"Project root: {Path(__file__).resolve().parent.parent.parent}\n")
+    
+    results = []
     
     if args.demo in ["basic", "all"]:
-        demo_basic()
+        results.append(demo_basic())
         print()
     
-    if args.demo in ["pipeline", "all"]:
-        demo_pipeline()
+    if args.demo in ["emitter", "all"]:
+        results.append(demo_emitter_listener())
+        print()
+        
+    if args.demo in ["auto", "all"]:
+        results.append(demo_auto_listener())
+        print()
     
-    print("\n💡 Tips:")
-    print("   - Use events for loose coupling between components")
-    print("   - Consider pub/sub patterns for distributed systems")
-    print("   - Add error handling and retry logic for production")
-    
-    return 0
+    if all(results):
+        print("✅ All demos completed successfully!")
+        return 0
+    else:
+        print("❌ Some demos failed.")
+        return 1
 
 
 if __name__ == "__main__":

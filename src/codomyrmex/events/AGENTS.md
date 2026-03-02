@@ -1,96 +1,66 @@
 # Agent Guidelines - Events
 
-**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Module Overview
 
-Event-driven architecture with pub/sub, event sourcing, and handlers.
+The `events` module provides a robust event-driven architecture for Codomyrmex. It supports synchronous and asynchronous event publishing, subscription-based routing with pattern matching, prioritized event handling, and comprehensive audit logging.
 
-## Key Classes
+## Core Directives
 
-- **EventBus** — Publish/subscribe hub
-- **Event** — Base event class
-- **EventHandler** — Event processing
-- **EventStore** — Event persistence
+1. **Use the Singleton Bus**: Always use `get_event_bus()` to obtain the central event bus instance unless a dedicated bus is required for isolation.
+2. **Typed Events**: Prefer `EventType` enum members for event types. If using custom strings, ensure they follow the `domain.action` pattern (e.g., `git.commit`).
+3. **Zero-Mock Testing**: When testing components that use events, do not mock the `EventBus`. Instead, use a real `EventBus` instance and verify side effects or use a dedicated `EventListener` to capture emitted events.
+4. **Idempotency**: Event handlers should be idempotent where possible, as the system may occasionally deliver the same event more than once in complex retry scenarios.
+5. **Thread Safety**: All core components (`EventBus`, `EventLogger`, `EventStore`) are thread-safe.
 
-## Agent Instructions
+## Key Classes and Usage
 
-1. **Name events** — Use past tense (UserCreated)
-2. **Include context** — Event ID, timestamp, actor
-3. **Idempotent handlers** — Handle duplicates
-4. **Order matters** — Preserve event order
-5. **Log all events** — Audit trail
+### EventBus
+The central hub for all events.
+- `subscribe(patterns, handler)`: Subscribe to event types (supports shell-style wildcards like `system.*`).
+- `publish(event)`: Dispatch an event to all matching subscribers.
 
-## Common Patterns
-
+### EventEmitter
+A helper for components to emit events with pre-configured source and metadata.
 ```python
-from codomyrmex.events import EventBus, Event, event_handler
-
-# Define events
-class UserCreated(Event):
-    user_id: str
-    email: str
-
-# Event handlers
-@event_handler(UserCreated)
-async def send_welcome_email(event: UserCreated):
-    await send_email(event.email, "Welcome!")
-
-# Publish events
-bus = EventBus()
-bus.register(send_welcome_email)
-
-event = UserCreated(user_id="u1", email="user@example.com")
-await bus.publish(event)
-
-# Event store
-store = EventStore()
-store.append("user-stream", event)
-events = store.load("user-stream")
+emitter = EventEmitter(source="my_module")
+emitter.emit(EventType.TASK_STARTED, data={"id": "123"})
 ```
 
-## Testing Patterns
+### EventListener
+A base class for components that need to manage multiple subscriptions.
+- `on(type, handler)`: Register a handler.
+- `once(type, handler)`: Register a handler that unsubscribes itself after one execution.
 
+### AutoEventListener & @event_handler
+The preferred way to define handlers within a class.
 ```python
-# Verify event handling
-handled = []
-@event_handler(UserCreated)
-def track(event):
-    handled.append(event)
+class MyAgent:
+    @event_handler(EventType.ANALYSIS_COMPLETE)
+    def on_complete(self, event):
+        print(f"Analysis {event.data['id']} finished")
 
-bus = EventBus()
-bus.register(track)
-await bus.publish(UserCreated(user_id="1", email="test@test.com"))
-assert len(handled) == 1
+agent = MyAgent()
+listener = AutoEventListener(listener_id="agent_listener")
+listener.register_handlers(agent)
 ```
+
+## Logging and Statistics
+Use `get_event_logger()` to access the global event history and performance metrics.
+- `get_event_stats()`: Get counts of events by type.
+- `get_recent_events(limit)`: Retrieve the last N events.
 
 ## MCP Tools Available
 
-All tools are auto-discovered via `@mcp_tool` decorators and exposed through the MCP bridge.
+- `emit_event`: Emit an event (Safe)
+- `list_event_types`: List active event types (Safe)
+- `get_event_history`: Retrieve recent history (Safe)
 
-| Tool | Description | Trust Level |
-|------|-------------|-------------|
-| `emit_event` | Emit an event to the event bus | Safe |
-| `list_event_types` | List all registered event types in the event bus | Safe |
-| `get_event_history` | Retrieve recent event history from the event bus | Safe |
+## PAI Integration
 
-## PAI Agent Role Access Matrix
-
-| PAI Agent | Access Level | Primary Capabilities | Trust Level |
-|-----------|-------------|---------------------|-------------|
-| **Engineer** | Full | `emit_event`, `list_event_types`, `get_event_history`; full event bus control | TRUSTED |
-| **Architect** | Read + Design | `list_event_types`, `get_event_history`; event schema review, pub/sub design | OBSERVED |
-| **QATester** | Validation | `get_event_history`, `list_event_types`; event delivery verification | OBSERVED |
-
-### Engineer Agent
-**Use Cases**: Emitting workflow events during EXECUTE, configuring event subscriptions, auditing event history.
-
-### Architect Agent
-**Use Cases**: Designing event-driven workflows, reviewing event type taxonomy, pub/sub architecture analysis.
-
-### QATester Agent
-**Use Cases**: Verifying event delivery and ordering during VERIFY, confirming event history completeness.
-
-## Navigation
-
-- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)
+| Phase | Usage |
+|-------|-------|
+| **EXECUTE** | Emit `TASK_STARTED`, `TASK_COMPLETED`, `TASK_FAILED` to track progress. |
+| **OBSERVE** | Subscribe to `SYSTEM_ERROR` or `METRIC_UPDATE` to monitor system health. |
+| **LEARN** | Analyze `EventLogger` history to optimize workflow patterns. |

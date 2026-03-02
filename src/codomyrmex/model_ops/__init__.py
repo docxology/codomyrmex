@@ -6,7 +6,6 @@ Provides ML model operations including:
 - Model evaluation and metrics
 
 Submodules:
-    feature_store: Consolidated feature store capabilities.
     optimization: Consolidated optimization capabilities.
     registry: Consolidated registry capabilities.
     evaluation: Consolidated evaluation capabilities."""
@@ -24,7 +23,7 @@ except ImportError:
     ResultStatus = None
 
 # Submodule exports
-from . import evaluation, feature_store, optimization, registry, training
+from . import evaluation, optimization, registry, training
 
 # Import evaluation components (scorer/benchmark/quality + metrics patterns)
 try:
@@ -329,7 +328,6 @@ def cli_commands():
     }
 
 __all__ = [
-    "feature_store",
     "optimization",
     "registry",
     # CLI integration

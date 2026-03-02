@@ -1,26 +1,34 @@
 """Population management and evolution cycle.
 
-Provides a ``Population`` class that manages a collection of genomes,
+Provides a ``Population`` class that manages a collection of individuals,
 tracks generational statistics, detects convergence, and supports
 configurable selection/crossover/mutation strategies.
 """
 
 from __future__ import annotations
 
+import random
+import statistics
 from collections.abc import Callable
-from dataclasses import dataclass
-from typing import Any
+from dataclasses import dataclass, field
+from typing import Any, TypeVar
 
-from codomyrmex.evolutionary_ai.genome.genome import Genome
+from codomyrmex.evolutionary_ai.genome.genome import Genome, Individual
 from codomyrmex.evolutionary_ai.operators.operators import (
-    _fitness_key,
-    crossover,
-    mutate,
-    tournament_selection,
+    CrossoverOperator,
+    GaussianMutation,
+    MutationOperator,
+    SinglePointCrossover,
+)
+from codomyrmex.evolutionary_ai.selection.selection import (
+    SelectionOperator,
+    TournamentSelection,
 )
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 logger = get_logger(__name__)
+
+T = TypeVar("T")
 
 
 @dataclass
@@ -30,28 +38,46 @@ class GenerationStats:
     generation: int
     best_fitness: float
     mean_fitness: float
+    median_fitness: float
     worst_fitness: float
+    std_fitness: float
     diversity: float  # mean pairwise distance (sampled)
     population_size: int
 
 
 class Population:
-    """Manages a collection of genomes and their evolution.
+    """Manages a collection of individuals and their evolution.
 
     Attributes:
-        individuals: Current list of genomes.
+        individuals: Current list of individuals.
         generation: Current generation number.
         history: List of per-generation statistics.
     """
 
     def __init__(
         self,
+        individuals: list[Individual[Any]],
+    ) -> None:
+        """Initialize a population with a given set of individuals.
+
+        Args:
+            individuals: List of individuals to manage.
+        """
+        if not individuals:
+            raise ValueError("Population must contain at least one individual.")
+        self.individuals = individuals
+        self.generation: int = 0
+        self.history: list[GenerationStats] = []
+
+    @classmethod
+    def random_genome_population(
+        cls,
         size: int,
         genome_length: int,
         gene_low: float = 0.0,
         gene_high: float = 1.0,
-    ) -> None:
-        """Initialize a random population.
+    ) -> Population:
+        """Create a population of random float-vector genomes.
 
         Args:
             size: Number of individuals.
@@ -59,20 +85,19 @@ class Population:
             gene_low: Lower bound for random gene initialization.
             gene_high: Upper bound for random gene initialization.
         """
-        self.individuals = [
+        individuals = [
             Genome.random(genome_length, low=gene_low, high=gene_high)
             for _ in range(size)
         ]
-        self.generation: int = 0
-        self.history: list[GenerationStats] = []
+        return cls(individuals)
 
     # ── Evaluation ──────────────────────────────────────────────────
 
-    def evaluate(self, fitness_fn: Callable[[Genome], float]) -> None:
+    def evaluate(self, fitness_fn: Callable[[Individual[Any]], float]) -> None:
         """Evaluate fitness for all individuals in the population.
 
         Args:
-            fitness_fn: Callable that takes a Genome and returns a float fitness.
+            fitness_fn: Callable that takes an Individual and returns a float fitness.
         """
         for ind in self.individuals:
             ind.fitness = fitness_fn(ind)
@@ -81,47 +106,65 @@ class Population:
 
     def evolve(
         self,
-        mutation_rate: float = 0.05,
+        selection_operator: SelectionOperator[Any] | None = None,
+        crossover_operator: CrossoverOperator[Any] | None = None,
+        mutation_operator: MutationOperator[Any] | None = None,
         elitism: int = 2,
-        selection_fn: Callable[[list[Genome]], Genome] | None = None,
-        crossover_fn: Callable[
-            [Genome, Genome], tuple[Genome, Genome]
-        ] | None = None,
-        mutation_fn: Callable[[Genome], Genome] | None = None,
     ) -> GenerationStats:
         """Perform one generation of evolution.
 
         Args:
-            mutation_rate: Per-gene probability of mutation (used by default mutator).
+            selection_operator: Custom selection operator (default: TournamentSelection).
+            crossover_operator: Custom crossover operator (default: SinglePointCrossover).
+            mutation_operator: Custom mutation operator (default: GaussianMutation).
             elitism: Number of top individuals carried over unchanged.
-            selection_fn: Custom selection operator (default: tournament_selection).
-            crossover_fn: Custom crossover operator (default: single-point crossover).
-            mutation_fn: Custom mutation operator (default: Gaussian mutate).
 
         Returns:
             GenerationStats for this generation.
         """
-        select = selection_fn or tournament_selection
-        cross = crossover_fn or crossover
-        mut = mutation_fn or (lambda g: mutate(g, rate=mutation_rate))
+        # Default operators
+        sel_op = selection_operator or TournamentSelection()
+        cross_op = crossover_operator or SinglePointCrossover()
+        mut_op = mutation_operator or GaussianMutation()
+
+        # Check if evaluated
+        if any(ind.fitness is None for ind in self.individuals):
+            logger.warning("Evolving population with unevaluated individuals.")
 
         # Sort by fitness (best first)
-        self.individuals.sort(key=_fitness_key, reverse=True)
+        self.individuals.sort(reverse=True)
 
         # Elitism — carry over top individuals
-        new_population = [ind.clone() for ind in self.individuals[:elitism]]
+        new_population: list[Individual[Any]] = []
+        elite_count = min(elitism, len(self.individuals))
+        for i in range(elite_count):
+            ind = self.individuals[i]
+            # Deepish copy of the individual, preserving class
+            new_genes = list(ind.genes) if isinstance(ind.genes, list) else ind.genes
+            new_population.append(
+                ind.__class__(
+                    genes=new_genes,
+                    fitness=ind.fitness,
+                    metadata=dict(ind.metadata),
+                )
+            )
 
         # Fill remaining slots
         target_size = len(self.individuals)
         while len(new_population) < target_size:
-            p1 = select(self.individuals)
-            p2 = select(self.individuals)
-            c1, c2 = cross(p1, p2)
-            new_population.append(mut(c1))
-            if len(new_population) < target_size:
-                new_population.append(mut(c2))
+            # Select parents
+            parents = sel_op.select(self.individuals, 2)
+            p1, p2 = parents[0], parents[1]
 
-        self.individuals = new_population
+            # Crossover
+            c1, c2 = cross_op.crossover(p1, p2)
+
+            # Mutate and add to new population
+            new_population.append(mut_op.mutate(c1))
+            if len(new_population) < target_size:
+                new_population.append(mut_op.mutate(c2))
+
+        self.individuals = new_population[:target_size]
         self.generation += 1
 
         stats = self._compute_stats()
@@ -137,18 +180,18 @@ class Population:
 
     # ── Queries ──────────────────────────────────────────────────────
 
-    def get_best(self) -> Genome:
+    def get_best(self) -> Individual[Any]:
         """Return the individual with the highest fitness."""
-        return max(self.individuals, key=_fitness_key)
+        return max(self.individuals)
 
-    def get_worst(self) -> Genome:
+    def get_worst(self) -> Individual[Any]:
         """Return the individual with the lowest fitness."""
-        return min(self.individuals, key=_fitness_key)
+        return min(self.individuals)
 
     def mean_fitness(self) -> float:
         """Return the mean fitness of the current population."""
-        fitnesses = [g.fitness for g in self.individuals if g.fitness is not None]
-        return sum(fitnesses) / len(fitnesses) if fitnesses else 0.0
+        fitnesses = [ind.fitness for ind in self.individuals if ind.fitness is not None]
+        return statistics.mean(fitnesses) if fitnesses else 0.0
 
     def is_converged(self, threshold: float = 1e-6, window: int = 5) -> bool:
         """Check if evolution has converged.
@@ -170,13 +213,22 @@ class Population:
         """Serialize the population state."""
         return {
             "generation": self.generation,
-            "individuals": [ind.to_dict() for ind in self.individuals],
+            "individuals": [
+                {
+                    "genes": ind.genes,
+                    "fitness": ind.fitness,
+                    "metadata": ind.metadata,
+                }
+                for ind in self.individuals
+            ],
             "history": [
                 {
                     "generation": s.generation,
                     "best_fitness": s.best_fitness,
                     "mean_fitness": s.mean_fitness,
+                    "median_fitness": s.median_fitness,
                     "worst_fitness": s.worst_fitness,
+                    "std_fitness": s.std_fitness,
                     "diversity": s.diversity,
                     "population_size": s.population_size,
                 }
@@ -189,14 +241,16 @@ class Population:
     def _compute_stats(self) -> GenerationStats:
         """Compute statistics for the current generation."""
         fitnesses = [
-            g.fitness for g in self.individuals if g.fitness is not None
+            ind.fitness for ind in self.individuals if ind.fitness is not None
         ]
         if not fitnesses:
             return GenerationStats(
                 generation=self.generation,
                 best_fitness=0.0,
                 mean_fitness=0.0,
+                median_fitness=0.0,
                 worst_fitness=0.0,
+                std_fitness=0.0,
                 diversity=0.0,
                 population_size=len(self.individuals),
             )
@@ -206,29 +260,44 @@ class Population:
         return GenerationStats(
             generation=self.generation,
             best_fitness=max(fitnesses),
-            mean_fitness=sum(fitnesses) / len(fitnesses),
+            mean_fitness=statistics.mean(fitnesses),
+            median_fitness=statistics.median(fitnesses),
             worst_fitness=min(fitnesses),
+            std_fitness=statistics.stdev(fitnesses) if len(fitnesses) > 1 else 0.0,
             diversity=diversity,
             population_size=len(self.individuals),
         )
 
     def _sample_diversity(self, max_pairs: int = 50) -> float:
-        """Estimate population diversity by sampling pairwise distances."""
-        import random as _rand
+        """Estimate population diversity by sampling pairwise distances.
 
+        Only works for Genome individuals (float vectors).
+        """
         n = len(self.individuals)
         if n < 2:
+            return 0.0
+
+        # Check if we can compute distance — check first few
+        can_dist = True
+        for i in range(min(n, 5)):
+            if not isinstance(self.individuals[i], Genome):
+                can_dist = False
+                break
+        
+        if not can_dist:
             return 0.0
 
         distances: list[float] = []
         pairs_to_check = min(max_pairs, n * (n - 1) // 2)
         attempts = 0
         while len(distances) < pairs_to_check and attempts < pairs_to_check * 3:
-            i, j = _rand.sample(range(n), 2)
+            i, j = random.sample(range(n), 2)
             try:
-                distances.append(self.individuals[i].distance(self.individuals[j]))
-            except ValueError as e:
-                logger.debug("Distance calculation failed for individuals %d and %d: %s", i, j, e)
+                ind1, ind2 = self.individuals[i], self.individuals[j]
+                if isinstance(ind1, Genome) and isinstance(ind2, Genome):
+                    distances.append(ind1.distance(ind2))
+            except (ValueError, AttributeError) as e:
+                logger.debug("Distance calculation failed: %s", e)
                 pass
             attempts += 1
 

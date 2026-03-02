@@ -10,8 +10,10 @@ from __future__ import annotations
 
 import uuid
 from dataclasses import dataclass, field
-from datetime import datetime
+from datetime import UTC, datetime
 from enum import Enum
+from decimal import Decimal, ROUND_HALF_EVEN
+from typing import Any
 
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
@@ -38,23 +40,51 @@ class Account:
 
     Attributes:
         id: Unique identifier for the account.
-        name: Human-readable account name.
+        name: Human-readable account name (format "Category:Subcategory").
         account_type: Classification that governs debit/credit behaviour.
-        balance: Current balance (positive value; interpretation depends on type).
+        balance: Current balance (interpretation depends on type).
+        code: Optional account code for reporting.
+        frozen: If True, no further transactions can be posted.
         created_at: Timestamp when the account was created.
     """
 
     id: str
     name: str
     account_type: AccountType
-    balance: float = 0.0
-    created_at: datetime = field(default_factory=datetime.now)
+    balance: Decimal = field(default_factory=lambda: Decimal("0.00"))
+    code: str = ""
+    frozen: bool = False
+    created_at: datetime = field(default_factory=lambda: datetime.now(UTC))
+
+    def __post_init__(self) -> None:
+        """Validate account name format."""
+        if ":" not in self.name:
+            raise LedgerError(
+                f"Account name '{self.name}' must follow 'Category:Subcategory' format."
+            )
+
+    @property
+    def is_debit_normal(self) -> bool:
+        """True if this account increases with debits."""
+        return self.account_type in (AccountType.ASSET, AccountType.EXPENSE)
+
+    def to_dict(self) -> dict[str, Any]:
+        """Return a dictionary representation."""
+        return {
+            "id": self.id,
+            "name": self.name,
+            "code": self.code,
+            "type": self.account_type.value,
+            "balance": float(self.balance),
+            "frozen": self.frozen,
+            "created_at": self.created_at.isoformat(),
+        }
 
     def __repr__(self) -> str:
         """Return string representation."""
         return (
             f"Account(id={self.id!r}, name={self.name!r}, "
-            f"type={self.account_type.value}, balance={self.balance:.2f})"
+            f"type={self.account_type.value}, balance={self.balance})"
         )
 
 
@@ -66,7 +96,7 @@ class TransactionEntry:
     """
 
     account_id: str
-    amount: float
+    amount: Decimal
     description: str = ""
 
 
@@ -85,7 +115,7 @@ class Transaction:
     @property
     def is_balanced(self) -> bool:
         """Return True when total debits equal total credits."""
-        return abs(sum(e.amount for e in self.entries)) < 1e-9
+        return sum(e.amount for e in self.entries) == Decimal("0.00")
 
 
 class Ledger:
@@ -113,18 +143,21 @@ class Ledger:
     # Account management
     # ------------------------------------------------------------------
 
-    def create_account(self, name: str, account_type: AccountType) -> Account:
+    def create_account(
+        self, name: str, account_type: AccountType, code: str = ""
+    ) -> Account:
         """Create and register a new account.
 
         Args:
-            name: Display name for the account.
+            name: Display name for the account (must be "Category:Subcategory").
             account_type: One of the five standard account types.
+            code: Optional account code.
 
         Returns:
             The newly created :class:`Account`.
 
         Raises:
-            LedgerError: If an account with the same name already exists.
+            LedgerError: If name format is invalid or account already exists.
         """
         for acct in self.accounts.values():
             if acct.name == name:
@@ -135,6 +168,7 @@ class Ledger:
             id=account_id,
             name=name,
             account_type=account_type,
+            code=code,
         )
         self.accounts[account_id] = account
         logger.info("Created account %s (%s)", name, account_type.value)
@@ -151,8 +185,8 @@ class Ledger:
     ) -> Transaction:
         """Post a balanced transaction to the ledger.
 
-        Each entry dict must contain ``account_id`` (str) and ``amount``
-        (float).  Positive amounts are debits, negative amounts are credits.
+        Each entry dict must contain ``account_id`` (str) and ``amount``.
+        Positive amounts are debits, negative amounts are credits.
         An optional ``description`` key is forwarded to the entry.
 
         Args:
@@ -178,19 +212,22 @@ class Ledger:
         # Build TransactionEntry objects
         tx_entries: list[TransactionEntry] = []
         for entry_dict in entries:
+            amount = Decimal(str(entry_dict["amount"])).quantize(
+                Decimal("0.01"), rounding=ROUND_HALF_EVEN
+            )
             tx_entries.append(
                 TransactionEntry(
                     account_id=entry_dict["account_id"],
-                    amount=float(entry_dict["amount"]),
+                    amount=amount,
                     description=entry_dict.get("description", ""),
                 )
             )
 
         # Balance check
         total = sum(e.amount for e in tx_entries)
-        if abs(total) > 1e-9:
+        if total != Decimal("0.00"):
             raise LedgerError(
-                f"Transaction does not balance: net amount is {total:.4f} "
+                f"Transaction does not balance: net amount is {total} "
                 "(must be 0)."
             )
 
@@ -200,13 +237,13 @@ class Ledger:
             description=description,
         )
 
-        # Apply to account balances using normal-balance rules:
-        #   Asset & Expense accounts: debit increases, credit decreases
-        #   Liability, Equity & Revenue: credit increases, debit decreases
+        # Apply to account balances using normal-balance rules
         for entry in tx_entries:
             acct = self.accounts[entry.account_id]
-            normal_debit = acct.account_type in (AccountType.ASSET, AccountType.EXPENSE)
-            if normal_debit:
+            if acct.frozen:
+                raise LedgerError(f"Account '{acct.name}' is frozen.")
+
+            if acct.is_debit_normal:
                 acct.balance += entry.amount
             else:
                 acct.balance -= entry.amount
@@ -219,7 +256,7 @@ class Ledger:
     # Queries
     # ------------------------------------------------------------------
 
-    def get_balance(self, account_id: str) -> float:
+    def get_balance(self, account_id: str) -> Decimal:
         """Return the current balance of the given account.
 
         Raises:
@@ -237,9 +274,9 @@ class Ledger:
         ``total_liabilities``, ``total_equity``, and a boolean
         ``balanced`` flag.
         """
-        assets: dict[str, float] = {}
-        liabilities: dict[str, float] = {}
-        equity: dict[str, float] = {}
+        assets: dict[str, Decimal] = {}
+        liabilities: dict[str, Decimal] = {}
+        equity: dict[str, Decimal] = {}
 
         for acct in self.accounts.values():
             if acct.account_type == AccountType.ASSET:
@@ -249,9 +286,9 @@ class Ledger:
             elif acct.account_type == AccountType.EQUITY:
                 equity[acct.name] = acct.balance
 
-        total_a = sum(assets.values())
-        total_l = sum(liabilities.values())
-        total_e = sum(equity.values())
+        total_a = sum(assets.values(), Decimal("0.00"))
+        total_l = sum(liabilities.values(), Decimal("0.00"))
+        total_e = sum(equity.values(), Decimal("0.00"))
 
         return {
             "assets": assets,
@@ -260,7 +297,7 @@ class Ledger:
             "total_assets": total_a,
             "total_liabilities": total_l,
             "total_equity": total_e,
-            "balanced": abs(total_a - (total_l + total_e)) < 1e-9,
+            "balanced": total_a == (total_l + total_e),
         }
 
     def get_income_statement(
@@ -276,8 +313,8 @@ class Ledger:
         Returns a dict with ``revenue``, ``expenses``, ``total_revenue``,
         ``total_expenses``, and ``net_income``.
         """
-        revenue: dict[str, float] = {}
-        expenses: dict[str, float] = {}
+        revenue: dict[str, Decimal] = {}
+        expenses: dict[str, Decimal] = {}
 
         # Filter transactions by date range
         filtered_txns = self.transactions
@@ -293,12 +330,16 @@ class Ledger:
                 if acct is None:
                     continue
                 if acct.account_type == AccountType.REVENUE:
-                    revenue[acct.name] = revenue.get(acct.name, 0.0) + abs(entry.amount)
+                    revenue[acct.name] = revenue.get(acct.name, Decimal("0.00")) + abs(
+                        entry.amount
+                    )
                 elif acct.account_type == AccountType.EXPENSE:
-                    expenses[acct.name] = expenses.get(acct.name, 0.0) + abs(entry.amount)
+                    expenses[acct.name] = expenses.get(acct.name, Decimal("0.00")) + abs(
+                        entry.amount
+                    )
 
-        total_rev = sum(revenue.values())
-        total_exp = sum(expenses.values())
+        total_rev = sum(revenue.values(), Decimal("0.00"))
+        total_exp = sum(expenses.values(), Decimal("0.00"))
 
         return {
             "revenue": revenue,
@@ -314,9 +355,9 @@ class Ledger:
         Returns a dict mapping account names to their balances and includes
         ``total_debits``, ``total_credits``, and a ``balanced`` flag.
         """
-        balances: dict[str, float] = {}
-        total_debits = 0.0
-        total_credits = 0.0
+        balances: dict[str, Decimal] = {}
+        total_debits = Decimal("0.00")
+        total_credits = Decimal("0.00")
 
         for acct in self.accounts.values():
             balances[acct.name] = acct.balance
@@ -330,7 +371,7 @@ class Ledger:
             "balances": balances,
             "total_debits": total_debits,
             "total_credits": total_credits,
-            "balanced": abs(total_debits - total_credits) < 1e-9,
+            "balanced": total_debits == total_credits,
         }
 
     def __repr__(self) -> str:

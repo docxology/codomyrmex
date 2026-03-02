@@ -4,6 +4,8 @@ Provides HMAC computation and constant-time verification using the
 standard library ``hmac`` module.
 """
 
+from __future__ import annotations
+
 import hashlib
 import hmac as _hmac
 
@@ -22,17 +24,18 @@ def compute_hmac(
     """Compute an HMAC digest.
 
     Args:
-        data: Message data (str will be UTF-8 encoded)
-        key: Secret key (str will be UTF-8 encoded)
-        algorithm: Hash algorithm name (sha256, sha384, sha512)
+        data: Message data (str will be UTF-8 encoded).
+        key: Secret key (str will be UTF-8 encoded).
+        algorithm: Hash algorithm name ("sha256", "sha384", "sha512").
 
     Returns:
-        Raw HMAC digest bytes
+        Raw HMAC digest bytes.
 
     Raises:
-        ValueError: If algorithm is not supported
+        ValueError: If algorithm is not supported.
     """
-    if algorithm not in _ALGORITHMS:
+    alg = algorithm.lower()
+    if alg not in _ALGORITHMS:
         raise ValueError(
             f"Unsupported algorithm: {algorithm}. "
             f"Choose from: {', '.join(sorted(_ALGORITHMS))}"
@@ -42,7 +45,7 @@ def compute_hmac(
     if isinstance(key, str):
         key = key.encode("utf-8")
 
-    return _hmac.new(key, data, _ALGORITHMS[algorithm]).digest()
+    return _hmac.new(key, data, _ALGORITHMS[alg]).digest()
 
 
 def verify_hmac(
@@ -54,13 +57,13 @@ def verify_hmac(
     """Verify an HMAC using constant-time comparison.
 
     Args:
-        data: Original message data
-        key: Secret key
-        expected_mac: The HMAC to verify against
-        algorithm: Hash algorithm name
+        data: Original message data.
+        key: Secret key.
+        expected_mac: The HMAC to verify against.
+        algorithm: Hash algorithm name.
 
     Returns:
-        True if the HMAC matches
+        True if the HMAC matches, False otherwise.
     """
     actual_mac = compute_hmac(data, key, algorithm)
     return _hmac.compare_digest(actual_mac, expected_mac)

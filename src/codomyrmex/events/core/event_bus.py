@@ -25,6 +25,7 @@ except ImportError:
 from codomyrmex.logging_monitoring.core.correlation import get_correlation_id
 
 from .event_schema import Event, EventSchema, EventType
+from .exceptions import EventPublishError, EventSubscriptionError
 
 
 @dataclass
@@ -54,8 +55,13 @@ class Subscription:
             return False
 
         # Check filter function
-        if self.filter_func and not self.filter_func(event):
-            return False
+        if self.filter_func:
+            try:
+                if not self.filter_func(event):
+                    return False
+            except Exception as e:
+                logger.error(f"Error in subscription filter function: {e}")
+                return False
 
         return True
 
@@ -95,6 +101,9 @@ class EventBus:
                  subscriber_id: str | None = None, filter_func: Callable[[Event], bool] | None = None,
                  priority: int = 0) -> str:
         """Subscribe to events."""
+        if not event_patterns:
+            raise EventSubscriptionError("Event patterns cannot be empty")
+
         if subscriber_id is None:
             with self._lock:
                 self._subscriber_counter += 1
@@ -173,8 +182,9 @@ class EventBus:
     def publish(self, event: Event) -> None:
         """Publish an event."""
         # Basic validation
-        if not hasattr(event, 'event_type'):
-            return
+        if not hasattr(event, 'event_type') or event.event_type is None:
+            logger.error("Attempted to publish event without event_type")
+            raise EventPublishError("Event must have an event_type")
 
         # Auto-inject correlation ID if not present
         if event.correlation_id is None:
@@ -198,6 +208,10 @@ class EventBus:
             self.publish(event)
             return
 
+        # Basic validation
+        if not hasattr(event, 'event_type') or event.event_type is None:
+            raise EventPublishError("Event must have an event_type")
+
         self.events_published += 1
         await self.event_queue.put(event)
 
@@ -218,23 +232,27 @@ class EventBus:
                         self.executor.submit(self._run_async_handler, subscription.handler, event)
                     else:
                         subscription.handler(event)
-                except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
+                except Exception as e:
                     logger.error(f"Error in event handler {subscription.subscriber_id}: {e}")
                     self.events_failed += 1
 
             self.events_processed += 1
-        except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
+        except Exception as e:
             logger.error(f"Error processing event: {e}")
             self.dead_letter_queue.append(event)
             self.events_failed += 1
 
     def _run_async_handler(self, handler, event):
-        loop = asyncio.new_event_loop()
-        asyncio.set_event_loop(loop)
         try:
-            loop.run_until_complete(handler(event))
-        finally:
-            loop.close()
+            loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(loop)
+            try:
+                loop.run_until_complete(handler(event))
+            finally:
+                loop.close()
+        except Exception as e:
+            logger.error(f"Error in async event handler: {e}")
+            self.events_failed += 1
 
     def get_stats(self) -> dict[str, Any]:
         """Get stats."""
@@ -248,6 +266,7 @@ class EventBus:
                 "events_failed": self.events_failed,
                 "dead_letter_count": len(self.dead_letter_queue),
                 "async_enabled": self.enable_async,
+                "subscribers_count": len(self.subscriptions),
                 "subscribers": subs
             }
 
@@ -260,13 +279,24 @@ class EventBus:
         with self._lock:
             self.subscriptions.clear()
 
+    def list_event_types(self) -> list[str]:
+        """List all event types that have active subscriptions."""
+        all_patterns = set()
+        with self._lock:
+            for sub in self.subscriptions.values():
+                all_patterns.update(sub.event_patterns)
+        return sorted(list(all_patterns), key=str)
+
 
 _event_bus = None
+_bus_lock = threading.Lock()
 
 def get_event_bus() -> EventBus:
     global _event_bus
     if _event_bus is None:
-        _event_bus = EventBus()
+        with _bus_lock:
+            if _event_bus is None:
+                _event_bus = EventBus()
     return _event_bus
 
 def publish_event(event: Event) -> None:

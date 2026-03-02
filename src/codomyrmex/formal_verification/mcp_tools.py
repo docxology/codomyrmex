@@ -155,3 +155,29 @@ def solve_model(timeout_ms: int = 30000) -> dict[str, Any]:
         "statistics": result.statistics,
         "error": result.error_message,
     }
+
+
+@mcp_tool(
+    category="formal_verification",
+    description="Push a new solver scope for incremental solving.",
+)
+def push() -> dict[str, str]:
+    """Start a new solver scope."""
+    solver, err = _get_solver_safe()
+    if err:
+        return err
+    solver.push()
+    return {"status": "ok", "message": "Solver scope pushed"}
+
+
+@mcp_tool(
+    category="formal_verification",
+    description="Pop the last solver scope.",
+)
+def pop(n: int = 1) -> dict[str, str]:
+    """Pop the last solver scope(s)."""
+    solver, err = _get_solver_safe()
+    if err:
+        return err
+    solver.pop(n)
+    return {"status": "ok", "message": f"Popped {n} scope(s)"}

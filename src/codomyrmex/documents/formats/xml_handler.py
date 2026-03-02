@@ -65,10 +65,16 @@ def write_xml(content: str, file_path: str | Path, encoding: str | None = None) 
     encoding = encoding or get_config().default_encoding
 
     try:
+        # Validate content is well-formed XML
+        ET.fromstring(content)
+        
         file_path.parent.mkdir(parents=True, exist_ok=True)
         with open(file_path, 'w', encoding=encoding) as f:
             f.write(content)
         logger.debug(f"Wrote XML to {file_path}")
+    except ET.ParseError as e:
+        logger.error(f"Attempted to write invalid XML to {file_path}: {e}")
+        raise DocumentWriteError(f"Invalid XML content: {str(e)}", file_path=str(file_path))
     except Exception as e:
         logger.error(f"Error writing XML file {file_path}: {e}")
         raise DocumentWriteError(

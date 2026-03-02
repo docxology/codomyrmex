@@ -1,61 +1,59 @@
 # Agent Guidelines - Dark
 
-**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Module Overview
 
-Dark mode utilities for PDFs, network, hardware, and software.
+Dark mode utilities for PDFs. The module provides high-level and low-level APIs for transforming documents for better readability in low-light environments.
 
 ## Key Classes
 
-- **DarkPDF** — PDF dark mode processing
-- **DarkPDFFilter** — Filter types: inversion, brightness, contrast, sepia
-- **apply_dark_mode(path)** — Apply dark mode to PDF
+- **DarkPDF** — Fluent API for PDF dark mode processing.
+- **DarkPDFFilter** — Core filter logic: inversion, brightness, contrast, sepia.
+- **apply_dark_mode(path, [output])** — Convenience function for conversion.
 
 ## Agent Instructions
 
-1. **Use apply_dark_mode** — Convenience function for simple conversions
-2. **Choose filter type** — Inversion for basic, sepia for readability
-3. **Adjust brightness** — Reduce for eye comfort
-4. **Preserve images** — Use smart inversion to skip images
-5. **Check output quality** — Verify text remains readable
+1. **Use Fluent API** — Prefer `DarkPDF(path).set_brightness(0.8).save(out)` for clear, readable code.
+2. **Choose Presets** — Use `preset="sepia"` or `preset="high_contrast"` for common needs.
+3. **Adjust Parameters** — Fine-tune `inversion`, `brightness`, `contrast`, and `sepia` for specific document types.
+4. **Zero-Mock Testing** — Always test with real PDF artifacts, never mock PyMuPDF or Pillow.
+5. **Check Output Quality** — Ensure text remains legible after transformation.
 
 ## Common Patterns
 
 ```python
-from codomyrmex.dark import apply_dark_mode, DarkPDF, DarkPDFFilter
+from codomyrmex.dark.pdf import apply_dark_mode, DarkPDF, DarkPDFFilter
 
-# Simple dark mode conversion
-dark_pdf = apply_dark_mode("document.pdf")
-dark_pdf.save("document_dark.pdf")
+# Simple dark mode conversion (one-call)
+apply_dark_mode("document.pdf", "document_dark.pdf")
 
-# Advanced customization
-processor = DarkPDF("document.pdf")
-processor.set_filter(DarkPDFFilter.SEPIA)
-processor.set_brightness(0.8)
-processor.set_contrast(1.1)
-processor.process()
-processor.save("output.pdf")
+# Fluent API with customization
+(
+    DarkPDF("document.pdf")
+    .set_filter("sepia")
+    .set_brightness(0.8)
+    .set_contrast(1.1)
+    .save("output.pdf")
+)
 
 # Batch processing
-for pdf in pdf_files:
-    apply_dark_mode(pdf).save(pdf.replace(".pdf", "_dark.pdf"))
+DarkPDF.batch(
+    ["doc1.pdf", "doc2.pdf"],
+    output_dir="dark_pdfs/",
+    preset="dark"
+)
 ```
 
 ## Testing Patterns
 
 ```python
-# Verify dark mode processing
-from codomyrmex.dark import apply_dark_mode
+# Verify dark mode processing with zero mocks
+from codomyrmex.dark.pdf import apply_dark_mode, DarkPDF
 
-result = apply_dark_mode("test.pdf")
-assert result is not None
-assert result.page_count > 0
-
-# Verify filter application
-processor = DarkPDF("test.pdf")
-processor.set_filter(DarkPDFFilter.INVERSION)
-assert processor.current_filter == DarkPDFFilter.INVERSION
+processor = apply_dark_mode("test.pdf")
+assert processor.page_count > 0
+assert processor.current_filter.inversion == 0.90
 ```
 
 ## PAI Agent Role Access Matrix
@@ -64,16 +62,7 @@ assert processor.current_filter == DarkPDFFilter.INVERSION
 |-----------|-------------|---------------------|-------------|
 | **Engineer** | Full | Direct Python import, class instantiation, full API access | TRUSTED |
 | **Architect** | Read + Design | API review, privacy architecture design, dependency analysis | OBSERVED |
-| **QATester** | Validation | Integration testing via pytest, anonymity feature validation | OBSERVED |
-
-### Engineer Agent
-**Use Cases**: Implement dark mode PDF processing, configure filter pipelines, batch processing during BUILD/EXECUTE phases
-
-### Architect Agent
-**Use Cases**: Review privacy architecture, validate filter chain design, assess dark mode rendering strategy
-
-### QATester Agent
-**Use Cases**: Validate PDF output quality, verify filter application correctness, test brightness/contrast adjustments
+| **QATester** | Validation | Integration testing via pytest, output quality validation | OBSERVED |
 
 ## Navigation
 

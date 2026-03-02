@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import csv
+import io
 from pathlib import Path
 
 from codomyrmex.documents.config import get_config
@@ -64,10 +65,15 @@ def write_csv(
     encoding = encoding or get_config().default_encoding
 
     if not data:
-        # Write empty file
+        # Write empty file with header if fieldnames provided, else just empty
         try:
             file_path.parent.mkdir(parents=True, exist_ok=True)
-            file_path.write_text("", encoding=encoding)
+            if fieldnames:
+                with open(file_path, 'w', encoding=encoding, newline='') as f:
+                    writer = csv.DictWriter(f, fieldnames=fieldnames)
+                    writer.writeheader()
+            else:
+                file_path.write_text("", encoding=encoding)
             return
         except Exception as e:
             raise DocumentWriteError(

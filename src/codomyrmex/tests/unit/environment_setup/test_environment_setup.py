@@ -1,7 +1,11 @@
-"""Comprehensive unit tests for environment_setup module."""
+"""Comprehensive unit tests for environment_setup module.
+
+Strictly zero-mock tests, uses real objects and tmp_path for filesystem.
+"""
 
 import os
 import sys
+from pathlib import Path
 
 import pytest
 
@@ -21,6 +25,23 @@ class TestEnvironmentSetupComprehensive:
         except ImportError as e:
             pytest.fail(f"Failed to import env_checker: {e}")
 
+    def test_validate_python_version_real(self, code_dir):
+        """Test validate_python_version with real sys.version."""
+        if str(code_dir) not in sys.path:
+            sys.path.insert(0, str(code_dir))
+
+        from codomyrmex.environment_setup.env_checker import validate_python_version
+
+        # Test with current version (should be True)
+        current_v = f"{sys.version_info.major}.{sys.version_info.minor}"
+        assert validate_python_version(current_v) is True
+
+        # Test with an old version (should be True)
+        assert validate_python_version("3.0") is True
+
+        # Test with an impossibly high version (should be False)
+        assert validate_python_version("10.0") is False
+
     def test_is_uv_available_real(self, code_dir):
         """Test is_uv_available with real uv check."""
         if str(code_dir) not in sys.path:
@@ -30,7 +51,20 @@ class TestEnvironmentSetupComprehensive:
 
         result = is_uv_available()
         assert isinstance(result, bool)
-        # Result depends on whether uv is actually installed
+
+    def test_get_uv_path_real(self, code_dir):
+        """Test get_uv_path with real uv check."""
+        if str(code_dir) not in sys.path:
+            sys.path.insert(0, str(code_dir))
+
+        from codomyrmex.environment_setup.env_checker import get_uv_path, is_uv_available
+
+        path = get_uv_path()
+        if is_uv_available():
+            assert path is not None
+            assert os.path.exists(path)
+        else:
+            assert path is None
 
     def test_is_uv_environment_active(self, code_dir):
         """Test is_uv_environment when UV_ACTIVE is set with real env vars."""
@@ -50,177 +84,40 @@ class TestEnvironmentSetupComprehensive:
             elif "UV_ACTIVE" in os.environ:
                 del os.environ["UV_ACTIVE"]
 
-    def test_is_uv_environment_virtual_env_with_uv(self, code_dir):
-        """Test is_uv_environment when VIRTUAL_ENV contains 'uv' with real env vars."""
+    def test_check_dependencies_standard_library(self, code_dir):
+        """Test check_dependencies with standard library packages."""
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from codomyrmex.environment_setup.env_checker import is_uv_environment
+        from codomyrmex.environment_setup.env_checker import check_dependencies
 
-        original_virtual_env = os.environ.get("VIRTUAL_ENV")
-        try:
-            os.environ["VIRTUAL_ENV"] = "/path/to/uv/env"
-            result = is_uv_environment()
-            assert result is True
-        finally:
-            if original_virtual_env is not None:
-                os.environ["VIRTUAL_ENV"] = original_virtual_env
-            elif "VIRTUAL_ENV" in os.environ:
-                del os.environ["VIRTUAL_ENV"]
+        # 'os' and 'sys' are built-in, but can be checked via find_spec
+        results = check_dependencies(["os", "sys", "nonexistent_pkg_xyz"])
+        
+        assert results[0].name == "os"
+        assert results[0].installed is True
+        
+        assert results[1].name == "sys"
+        assert results[1].installed is True
+        
+        assert results[2].name == "nonexistent_pkg_xyz"
+        assert results[2].installed is False
 
-    def test_is_uv_environment_normal_virtual_env(self, code_dir):
-        """Test is_uv_environment with normal virtual environment.
-
-        Note: is_uv_environment() returns True if VIRTUAL_ENV is set OR if uv
-        is available in PATH. So with VIRTUAL_ENV set, it returns True regardless.
-        """
+    def test_ensure_dependencies_installed_real(self, code_dir):
+        """Test ensure_dependencies_installed with real packages."""
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from codomyrmex.environment_setup.env_checker import is_uv_environment
+        from codomyrmex.environment_setup.env_checker import ensure_dependencies_installed
 
-        original_virtual_env = os.environ.get("VIRTUAL_ENV")
-        original_uv_active = os.environ.get("UV_ACTIVE")
-        try:
-            # Clear UV_ACTIVE and set normal VIRTUAL_ENV
-            if "UV_ACTIVE" in os.environ:
-                del os.environ["UV_ACTIVE"]
-            os.environ["VIRTUAL_ENV"] = "/path/to/normal/env"
-            result = is_uv_environment()
-            # VIRTUAL_ENV is set, so function returns True
-            assert result is True
-        finally:
-            if original_virtual_env is not None:
-                os.environ["VIRTUAL_ENV"] = original_virtual_env
-            elif "VIRTUAL_ENV" in os.environ:
-                del os.environ["VIRTUAL_ENV"]
-            if original_uv_active is not None:
-                os.environ["UV_ACTIVE"] = original_uv_active
+        # Test with packages that should exist
+        assert ensure_dependencies_installed(["os", "pathlib"]) is True
 
-    def test_is_uv_environment_no_env(self, code_dir):
-        """Test is_uv_environment with no environment variables.
+        # Test with package that doesn't exist
+        assert ensure_dependencies_installed(["nonexistent_pkg_abc"]) is False
 
-        Note: is_uv_environment() also checks is_uv_available(), so if uv is
-        installed on the system, it will return True even without env vars.
-        """
-        if str(code_dir) not in sys.path:
-            sys.path.insert(0, str(code_dir))
-
-        from codomyrmex.environment_setup.env_checker import (
-            is_uv_available,
-            is_uv_environment,
-        )
-
-        original_virtual_env = os.environ.get("VIRTUAL_ENV")
-        original_uv_active = os.environ.get("UV_ACTIVE")
-        try:
-            # Clear both environment variables
-            if "VIRTUAL_ENV" in os.environ:
-                del os.environ["VIRTUAL_ENV"]
-            if "UV_ACTIVE" in os.environ:
-                del os.environ["UV_ACTIVE"]
-            result = is_uv_environment()
-            # Result depends on whether uv is available in PATH
-            assert result == is_uv_available()
-        finally:
-            if original_virtual_env is not None:
-                os.environ["VIRTUAL_ENV"] = original_virtual_env
-            if original_uv_active is not None:
-                os.environ["UV_ACTIVE"] = original_uv_active
-
-    def test_ensure_dependencies_installed_both_available(self, code_dir, capsys):
-        """Test ensure_dependencies_installed when both dependencies are available."""
-        if str(code_dir) not in sys.path:
-            sys.path.insert(0, str(code_dir))
-
-        from codomyrmex.environment_setup.env_checker import (
-            ensure_dependencies_installed,
-        )
-
-        # Test with real imports - check if dependencies are actually available
-        try:
-            import dotenv  # noqa: F401
-            import kit  # noqa: F401
-            # Both are available - test should pass
-            result = ensure_dependencies_installed()
-
-            captured = capsys.readouterr()
-            assert "[INFO] cased/kit library found." in captured.out
-            assert "[INFO] python-dotenv library found." in captured.out
-            assert result is True
-        except ImportError:
-            # If dependencies are not available, test that the function handles it
-            result = ensure_dependencies_installed()
-            captured = capsys.readouterr()
-            # Should show error messages for missing dependencies
-            assert "[ERROR]" in captured.err or "[INFO]" in captured.out
-
-    def test_ensure_dependencies_installed_kit_missing(self, code_dir, capsys):
-        """Test ensure_dependencies_installed when kit is missing with real import check."""
-        if str(code_dir) not in sys.path:
-            sys.path.insert(0, str(code_dir))
-
-        from codomyrmex.environment_setup.env_checker import (
-            ensure_dependencies_installed,
-        )
-
-        # Test with real import checking - if kit is actually missing, function will exit
-        # If kit is available, test will pass
-        try:
-            ensure_dependencies_installed()
-            captured = capsys.readouterr()
-            # If dependencies are installed, we should see success messages
-            assert "[INFO]" in captured.out or "[ERROR]" in captured.err
-        except SystemExit as e:
-            # Expected if dependencies are missing
-            captured = capsys.readouterr()
-            assert "[ERROR]" in captured.err
-            assert e.code == 1
-
-    def test_ensure_dependencies_installed_dotenv_missing(self, code_dir, capsys):
-        """Test ensure_dependencies_installed when python-dotenv is missing with real import check."""
-        if str(code_dir) not in sys.path:
-            sys.path.insert(0, str(code_dir))
-
-        from codomyrmex.environment_setup.env_checker import (
-            ensure_dependencies_installed,
-        )
-
-        # Test with real import checking - if dotenv is actually missing, function will exit
-        try:
-            ensure_dependencies_installed()
-            captured = capsys.readouterr()
-            # If dependencies are installed, we should see success messages
-            assert "[INFO]" in captured.out or "[ERROR]" in captured.err
-        except SystemExit as e:
-            # Expected if dependencies are missing
-            captured = capsys.readouterr()
-            assert "[ERROR]" in captured.err
-            assert e.code == 1
-
-    def test_ensure_dependencies_installed_both_missing(self, code_dir, capsys):
-        """Test ensure_dependencies_installed when both dependencies are missing with real import check."""
-        if str(code_dir) not in sys.path:
-            sys.path.insert(0, str(code_dir))
-
-        from codomyrmex.environment_setup.env_checker import (
-            ensure_dependencies_installed,
-        )
-
-        # Test with real import checking - if both are actually missing, function will exit
-        try:
-            ensure_dependencies_installed()
-            captured = capsys.readouterr()
-            # If dependencies are installed, we should see success messages
-            assert "[INFO]" in captured.out or "[ERROR]" in captured.err
-        except SystemExit as e:
-            # Expected if dependencies are missing
-            captured = capsys.readouterr()
-            assert "[ERROR]" in captured.err
-            assert e.code == 1
-
-    def test_check_and_setup_env_vars_file_exists(self, code_dir, capsys, tmp_path):
-        """Test check_and_setup_env_vars when .env file exists."""
+    def test_check_and_setup_env_vars_real(self, code_dir, tmp_path):
+        """Test check_and_setup_env_vars with real .env file."""
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
@@ -228,190 +125,74 @@ class TestEnvironmentSetupComprehensive:
 
         # Create a dummy .env file
         env_file = tmp_path / ".env"
-        env_file.write_text("TEST_KEY=test_value\n")
+        env_file.write_text("TEST_REQUIRED_VAR=present\n")
 
-        # check_and_setup_env_vars returns True when .env is found
-        result = check_and_setup_env_vars(str(tmp_path))
-        assert result is True
-
-    def test_check_and_setup_env_vars_file_missing(self, code_dir, capsys, tmp_path):
-        """Test check_and_setup_env_vars when .env file is missing."""
-        if str(code_dir) not in sys.path:
-            sys.path.insert(0, str(code_dir))
-
-        from codomyrmex.environment_setup.env_checker import check_and_setup_env_vars
-
-        # Ensure .env file doesn't exist
-        env_file_path = tmp_path / ".env"
-        assert not env_file_path.exists()
-
-        # check_and_setup_env_vars returns False when .env is not found
-        result = check_and_setup_env_vars(str(tmp_path))
-        assert result is False
-
-    def test_env_checker_module_structure(self, code_dir):
-        """Test that env_checker has expected structure."""
-        if str(code_dir) not in sys.path:
-            sys.path.insert(0, str(code_dir))
-
-        from codomyrmex.environment_setup import env_checker
-
-        # Check that all expected functions exist
-        expected_functions = [
-            'is_uv_available',
-            'is_uv_environment',
-            'ensure_dependencies_installed',
-            'check_and_setup_env_vars'
-        ]
-
-        for func_name in expected_functions:
-            assert hasattr(env_checker, func_name), f"Missing function: {func_name}"
-            assert callable(getattr(env_checker, func_name)), f"{func_name} is not callable"
-
-    def test_env_checker_constants(self, code_dir):
-        """Test that env_checker has expected constants."""
-        if str(code_dir) not in sys.path:
-            sys.path.insert(0, str(code_dir))
-
-        from codomyrmex.environment_setup import env_checker
-
-        # Check that _script_dir is defined
-        assert hasattr(env_checker, '_script_dir')
-        assert isinstance(env_checker._script_dir, str)
-
-    def test_ensure_dependencies_installed_error_handling(self, code_dir, capsys):
-        """Test ensure_dependencies_installed error handling."""
-        if str(code_dir) not in sys.path:
-            sys.path.insert(0, str(code_dir))
-
-        from codomyrmex.environment_setup.env_checker import (
-            ensure_dependencies_installed,
+        # Test with required var that is present in .env
+        missing = check_and_setup_env_vars(
+            repo_root=str(tmp_path),
+            required=["TEST_REQUIRED_VAR"]
         )
+        assert "TEST_REQUIRED_VAR" not in missing
+        assert os.environ.get("TEST_REQUIRED_VAR") == "present"
 
-        # Test with real imports - if kit fails with unexpected error, function should handle it
-        # This tests error handling in the real implementation
-        try:
-            ensure_dependencies_installed()
-            captured = capsys.readouterr()
-            # Function should handle errors gracefully
-            assert "[INFO]" in captured.out or "[ERROR]" in captured.err
-        except SystemExit as e:
-            # Expected if dependencies are missing or error occurs
-            captured = capsys.readouterr()
-            assert "[ERROR]" in captured.err
-            assert e.code == 1
-
-    def test_check_and_setup_env_vars_path_handling(self, code_dir, tmp_path):
-        """Test check_and_setup_env_vars path handling with real paths."""
-        if str(code_dir) not in sys.path:
-            sys.path.insert(0, str(code_dir))
-
-        from codomyrmex.environment_setup.env_checker import check_and_setup_env_vars
-
-        # Create real .env file
-        env_file = tmp_path / ".env"
-        env_file.write_text("TEST_KEY=test_value")
-
-        result = check_and_setup_env_vars(str(tmp_path))
-        assert result is True
-
-    def test_is_uv_available_exception_handling(self, code_dir):
-        """Test is_uv_available exception handling with real subprocess."""
-        if str(code_dir) not in sys.path:
-            sys.path.insert(0, str(code_dir))
-
-        from codomyrmex.environment_setup.env_checker import is_uv_available
-
-        # Test with real subprocess - function should handle exceptions gracefully
-        result = is_uv_available()
-        assert isinstance(result, bool)
-        # Function should return False on any error
-
-    def test_is_uv_environment_edge_cases(self, code_dir):
-        """Test is_uv_environment with edge cases.
-
-        Note: is_uv_environment checks VIRTUAL_ENV or is_uv_available().
-        An empty string for UV_ACTIVE is not checked (function doesn't use UV_ACTIVE).
-        Setting VIRTUAL_ENV to any path makes it return True.
-        """
-        if str(code_dir) not in sys.path:
-            sys.path.insert(0, str(code_dir))
-
-        from codomyrmex.environment_setup.env_checker import (
-            is_uv_environment,
+        # Test with required var that is missing
+        missing = check_and_setup_env_vars(
+            repo_root=str(tmp_path),
+            required=["MISSING_VAR_XYZ"]
         )
+        assert "MISSING_VAR_XYZ" in missing
 
-        # Test with VIRTUAL_ENV set (any value makes is_uv_environment return True)
-        original_virtual_env = os.environ.get("VIRTUAL_ENV")
+    def test_check_api_keys_real(self, code_dir):
+        """Test check_api_keys with real env vars."""
+        if str(code_dir) not in sys.path:
+            sys.path.insert(0, str(code_dir))
+
+        from codomyrmex.environment_setup.env_checker import check_api_keys
+
+        original_val = os.environ.get("MY_TEST_API_KEY")
         try:
-            os.environ["VIRTUAL_ENV"] = "/path/to/venv"
-            result = is_uv_environment()
-            assert result is True
+            os.environ["MY_TEST_API_KEY"] = "sk-test"
+            report = check_api_keys(["MY_TEST_API_KEY", "NONEXISTENT_KEY"])
+            
+            assert report.all_present is False
+            assert "MY_TEST_API_KEY" not in report.missing
+            assert "NONEXISTENT_KEY" in report.missing
         finally:
-            if original_virtual_env is not None:
-                os.environ["VIRTUAL_ENV"] = original_virtual_env
-            elif "VIRTUAL_ENV" in os.environ:
-                del os.environ["VIRTUAL_ENV"]
+            if original_val is not None:
+                os.environ["MY_TEST_API_KEY"] = original_val
+            elif "MY_TEST_API_KEY" in os.environ:
+                del os.environ["MY_TEST_API_KEY"]
 
-    def test_ensure_dependencies_installed_instruction_format(self, code_dir, capsys):
-        """Test that ensure_dependencies_installed provides properly formatted instructions."""
+    def test_validate_environment_real(self, code_dir):
+        """Test validate_environment status."""
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from codomyrmex.environment_setup.env_checker import (
-            ensure_dependencies_installed,
-        )
+        from codomyrmex.environment_setup.env_checker import validate_environment
 
-        # Test with real imports - if both are missing, function will exit
-        try:
-            ensure_dependencies_installed()
-            captured = capsys.readouterr()
-            # If dependencies are installed, we should see success messages
-            assert "[INFO]" in captured.out or "[ERROR]" in captured.err
-        except SystemExit as e:
-            # Expected if dependencies are missing
-            captured = capsys.readouterr()
-            assert "[ERROR]" in captured.err
-            assert e.code == 1
+        report = validate_environment(min_python="3.0")
+        assert isinstance(report.valid, bool)
+        assert isinstance(report.missing_items, list)
 
-    def test_check_and_setup_env_vars_instruction_format(self, code_dir, tmp_path):
-        """Test that check_and_setup_env_vars returns False when .env missing."""
+    def test_generate_environment_report_real(self, code_dir):
+        """Test generate_environment_report format."""
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from codomyrmex.environment_setup.env_checker import check_and_setup_env_vars
+        from codomyrmex.environment_setup.env_checker import generate_environment_report
 
-        # check_and_setup_env_vars returns a bool, does not print instructions
-        result = check_and_setup_env_vars(str(tmp_path))
-        assert result is False
+        report = generate_environment_report()
+        assert "Codomyrmex Environment Report" in report
+        assert "Python Version" in report
+        assert "UV Available" in report
 
-    def test_module_integration_with_logging(self, code_dir):
-        """Test that env_checker integrates properly with logging system."""
+    def test_validate_environment_completeness_legacy(self, code_dir, tmp_path):
+        """Test legacy wrapper validate_environment_completeness."""
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from codomyrmex.environment_setup import env_checker
+        from codomyrmex.environment_setup.env_checker import validate_environment_completeness
 
-        # Test that the module can access logging functions
-        assert hasattr(env_checker, 'sys')
-        assert hasattr(env_checker, 'os')
-        assert hasattr(env_checker, 'shutil')
-
-    def test_env_checker_standalone_execution(self, code_dir, capsys):
-        """Test env_checker standalone execution."""
-        if str(code_dir) not in sys.path:
-            sys.path.insert(0, str(code_dir))
-
-        # This would normally be tested by running the module directly,
-        # but we can test the functions it calls
-        from codomyrmex.environment_setup.env_checker import (
-            check_and_setup_env_vars,
-            ensure_dependencies_installed,
-        )
-
-        # Test that the functions can be called without errors
-        ensure_dependencies_installed()
-        result = check_and_setup_env_vars("/tmp")
-
-        # check_and_setup_env_vars returns bool
+        # Should return a boolean
+        result = validate_environment_completeness(repo_root=str(tmp_path))
         assert isinstance(result, bool)

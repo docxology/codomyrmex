@@ -6,10 +6,15 @@ from codomyrmex.model_context_protocol.decorators import mcp_tool
 
 logger = get_logger(__name__)
 
+@mcp_tool(name="git_add")
 def add_files(file_paths: list[str], repository_path: str = None) -> bool:
     """Add files to the Git staging area."""
     if repository_path is None:
         repository_path = os.getcwd()
+
+    if not file_paths:
+        logger.warning("No files specified to add")
+        return True
 
     try:
         logger.info(f"Adding files to staging area: {file_paths}")
@@ -31,7 +36,7 @@ def add_files(file_paths: list[str], repository_path: str = None) -> bool:
         logger.error(f"Unexpected error adding files: {e}")
         return False
 
-@mcp_tool()
+@mcp_tool(name="git_repo_status")
 def get_status(repository_path: str = None) -> dict[str, any]:
     """Get the current Git repository status."""
     if repository_path is None:
@@ -106,27 +111,19 @@ def get_status(repository_path: str = None) -> dict[str, any]:
         logger.error(f"Unexpected error getting status: {e}")
         return {"error": str(e)}
 
+@mcp_tool(name="git_clean")
 def clean_repository(force: bool = False, directories: bool = False, repository_path: str = None) -> bool:
     """Clean untracked files from the repository."""
     if repository_path is None:
         repository_path = os.getcwd()
 
     try:
-        cmd = ["git", "clean", "-f"]
-        if force:
-            cmd.append("-x") # Remove ignored files too if force is very true, typically just -f is enough for tracked, but here force param usually implies -f. Actually git clean requires -f.
-            # Let's interpret 'force' as -x (ignored files) and always use -f.
-            pass
-
-        # Actually, standard git clean usage:
-        # -f is required via configuration or flag.
-        # -d for directories.
-        # -x for ignored files.
-
-        base_cmd = ["git", "clean", "-f"] # Force is required by default in most extensive configs
+        # -f is required to actually delete things unless clean.requireForce is set to false
+        base_cmd = ["git", "clean", "-f"]
         if directories:
             base_cmd.append("-d")
         if force:
+            # -x also removes ignored files
             base_cmd.append("-x")
 
         logger.info(f"Cleaning repository in {repository_path}")
@@ -140,8 +137,14 @@ def clean_repository(force: bool = False, directories: bool = False, repository_
         return True
     except subprocess.CalledProcessError as e:
         logger.error(f"Failed to clean repository: {e}")
+        if e.stderr:
+            logger.error(f"Git error: {e.stderr}")
+        return False
+    except Exception as e:
+        logger.error(f"Unexpected error cleaning repository: {e}")
         return False
 
+@mcp_tool(name="git_diff")
 def get_diff(target: str = "HEAD", repository_path: str = None, cached: bool = False) -> str:
     """Get the diff of current changes against a target."""
     if repository_path is None:
@@ -171,10 +174,11 @@ def get_diff(target: str = "HEAD", repository_path: str = None, cached: bool = F
         logger.error(f"Unexpected error getting diff: {e}")
         return ""
 
+@mcp_tool(name="git_diff_files")
 def get_diff_files(
     file_path: str = None, staged: bool = False, repository_path: str = None
 ) -> str:
-    """Get diff of changes."""
+    """Get diff of changes for a specific file or all files."""
     if repository_path is None:
         repository_path = os.getcwd()
 
@@ -201,6 +205,7 @@ def get_diff_files(
         logger.error(f"Unexpected error getting diff: {e}")
         return ""
 
+@mcp_tool(name="git_reset")
 def reset_changes(
     mode: str = "mixed", target: str = "HEAD", repository_path: str = None
 ) -> bool:

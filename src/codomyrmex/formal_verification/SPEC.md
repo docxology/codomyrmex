@@ -26,20 +26,22 @@ Provide deterministic constraint solving capabilities via Z3 SMT solver, impleme
 ## Public API
 
 ### Classes
-- `ConstraintSolver` — High-level solver with mcp-solver interface
+- `ConstraintSolver` — High-level solver with mcp-solver interface, now supports incremental scopes (`push`, `pop`)
 - `SolverBackend` — Abstract base for backend implementations
-- `SolverResult` — Solver output container
+- `SolverResult` — Solver output container, now includes `engine` in statistics
 - `SolverStatus` — Enum: SAT, UNSAT, UNKNOWN, TIMEOUT, ERROR
-- `ISCVerificationResult` — ISC verification output
+- `ISCVerificationResult` — ISC verification output, now includes `conflicts` extraction
 
 ### Functions
-- `verify_criteria_consistency(criteria, timeout_ms)` — Check ISC consistency
+- `verify_criteria_consistency(criteria, timeout_ms)` — Check ISC consistency, detects conflicts via unsat cores
 - `clear_model()` — MCP tool
 - `add_item(item, index)` — MCP tool
 - `delete_item(index)` — MCP tool
 - `replace_item(index, new_item)` — MCP tool
 - `get_model()` — MCP tool
 - `solve_model(timeout_ms)` — MCP tool
+- `push()` — MCP tool
+- `pop(n)` — MCP tool
 
 ### Exceptions
 - `SolverError` — Base

@@ -209,7 +209,7 @@ class TestTokenProvider:
 class TestIdentityLogin:
     """Tests for Identity.login."""
 
-    def setup_method(self):
+    def setup_method(self, method):
         self.ident = Identity()
         self.prov = PasswordProvider()
         self.prov.register("alice", "s3cret")
@@ -254,7 +254,7 @@ class TestIdentityLogin:
 class TestIdentitySession:
     """Tests for Identity session management."""
 
-    def setup_method(self):
+    def setup_method(self, method):
         self.ident = Identity()
         self.prov = PasswordProvider()
         self.prov.register("u", "p")
@@ -329,7 +329,7 @@ class TestIdentitySession:
 class TestIdentityAuditLog:
     """Tests for Identity audit logging."""
 
-    def setup_method(self):
+    def setup_method(self, method):
         self.ident = Identity()
         self.prov = PasswordProvider()
         self.prov.register("u", "p")

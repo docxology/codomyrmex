@@ -6,8 +6,11 @@ communication within a swarm.
 
 from __future__ import annotations
 
+import asyncio
+import re
 from collections.abc import Callable
 from dataclasses import dataclass
+from typing import Any, Union
 
 from codomyrmex.collaboration.swarm.protocol import SwarmMessage
 from codomyrmex.logging_monitoring import get_logger
@@ -15,7 +18,7 @@ from codomyrmex.logging_monitoring import get_logger
 logger = get_logger(__name__)
 
 
-MessageHandler = Callable[[SwarmMessage], None]
+MessageHandler = Callable[[SwarmMessage], Union[None, Any]]
 
 
 @dataclass
@@ -36,7 +39,8 @@ class Subscription:
 class MessageBus:
     """Topic-routed in-process pub/sub message bus.
 
-    Supports wildcard topics with ``*`` matching any single segment.
+    Supports wildcard topics with ``*`` matching any single segment
+    and ``#`` matching multi-segment suffix.
 
     Usage::
 
@@ -96,7 +100,7 @@ class MessageBus:
         removed = before - len(self._subscriptions)
         return removed
 
-    def publish(self, topic: str, message: SwarmMessage) -> int:
+    async def publish(self, topic: str, message: SwarmMessage) -> int:
         """Publish a message to a topic.
 
         All subscribers whose topic pattern matches will receive the message.
@@ -115,21 +119,31 @@ class MessageBus:
 
         # Deliver to matching subscribers
         delivered = 0
+        tasks = []
         for sub in self._subscriptions:
             if self._topic_matches(sub.topic, topic):
-                try:
-                    sub.handler(message)
-                    delivered += 1
-                except Exception as exc:
-                    logger.warning(
-                        "Handler error",
-                        extra={
-                            "subscriber": sub.subscriber_id,
-                            "error": str(exc),
-                        },
-                    )
+                if asyncio.iscoroutinefunction(sub.handler):
+                    # For async handlers, we MUST wait for them if we want sequential execution in the demo,
+                    # but typically pub/sub is fire-and-forget.
+                    # HOWEVER, in our demo, the "agent" is on the same loop.
+                    tasks.append(asyncio.create_task(sub.handler(message)))
+                else:
+                    try:
+                        sub.handler(message)
+                    except Exception as exc:
+                        logger.warning(
+                            "Handler error",
+                            extra={
+                                "subscriber": sub.subscriber_id,
+                                "error": str(exc),
+                            },
+                        )
+                delivered += 1
 
-        logger.info(
+        # We don't await them here to keep it async fire-and-forget
+        # but they are now running on the loop.
+
+        logger.debug(
             "Message published",
             extra={"topic": topic, "delivered": delivered},
         )
@@ -138,10 +152,12 @@ class MessageBus:
 
     @property
     def subscription_count(self) -> int:
+        """Total number of active subscriptions."""
         return len(self._subscriptions)
 
     @property
     def history_size(self) -> int:
+        """Total number of messages in history."""
         return len(self._history)
 
     def recent_messages(self, limit: int = 10) -> list[SwarmMessage]:
@@ -155,24 +171,12 @@ class MessageBus:
         Supports ``*`` as single-segment wildcard and ``#`` as
         multi-segment wildcard.
         """
-        pattern_parts = pattern.split(".")
-        topic_parts = topic.split(".")
-
-        if "#" in pattern_parts:
-            # Multi-segment wildcard: matches any suffix
-            idx = pattern_parts.index("#")
-            return topic_parts[:idx] == pattern_parts[:idx]
-
-        if len(pattern_parts) != len(topic_parts):
-            return False
-
-        for p, t in zip(pattern_parts, topic_parts, strict=False):
-            if p == "*":
-                continue
-            if p != t:
-                return False
-
-        return True
+        # Escape dots for regex, replace * with segment regex, replace # with suffix regex
+        regex_pattern = pattern.replace(".", r"\.")
+        regex_pattern = regex_pattern.replace("*", r"[^.]+")
+        regex_pattern = regex_pattern.replace("#", r".*")
+        
+        return re.fullmatch(regex_pattern, topic) is not None
 
 
 __all__ = [

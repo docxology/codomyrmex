@@ -7,37 +7,11 @@ migration, and administration capabilities for the Codomyrmex ecosystem.
 Submodules:
     lineage: Consolidated lineage capabilities.
     migration: Consolidated migration capabilities.
-
-Integration:
-- Uses `logging_monitoring` for all logging (ensure `setup_logging()` is called in your main app).
-- Integrates with `security` for database security and compliance.
-- Works with `config_management` for database configuration management.
-- Supports `performance` for database performance monitoring.
-
-Available functions:
-- manage_databases: Comprehensive database administration
-- run_migrations: Database migration management and execution
-- backup_database: Automated database backup and recovery
-- monitor_database: Database performance and health monitoring
-- optimize_database: Database optimization and tuning
-- audit_database: Database security and compliance auditing
-- replicate_database: Database replication and synchronization
-- generate_schema: Database schema generation and management
-
-Data structures:
-- DatabaseConnection: Database connection configuration and management
-- Migration: Database migration definition and tracking
-- Backup: Database backup configuration and status
-- DatabaseMetrics: Database performance and health metrics
-- SchemaDefinition: Database schema definition and management
+    backup: Database backup and recovery.
+    connections: Connection pooling and management.
+    performance_monitor: Performance monitoring and optimization.
+    schema_generator: Schema generation and management.
 """
-
-# Shared schemas for cross-module interop
-try:
-    from codomyrmex.validation.schemas import Result, ResultStatus
-except ImportError:
-    Result = None
-    ResultStatus = None
 
 from . import audit, backup, connections, lineage, migration, replication, sharding
 from .backup.backup_manager import (
@@ -48,6 +22,10 @@ from .backup.backup_manager import (
 from .db_manager import (
     DatabaseConnection,
     DatabaseManager,
+    DatabaseType,
+    QueryResult,
+    connect_database,
+    execute_query,
     manage_databases,
 )
 from .migration.migration_manager import (
@@ -96,16 +74,23 @@ def cli_commands():
 __all__ = [
     "lineage",
     "migration",
+    "backup",
+    "connections",
+    "audit",
+    "sharding",
+    "replication",
+    "performance_monitor",
+    "schema_generator",
     # CLI integration
     "cli_commands",
-    'audit',
-    'sharding',
-    'replication',
-    'connections',
     # Database management
     "DatabaseManager",
     "manage_databases",
     "DatabaseConnection",
+    "DatabaseType",
+    "QueryResult",
+    "connect_database",
+    "execute_query",
     # Migration management
     "MigrationManager",
     "run_migrations",

@@ -148,7 +148,7 @@ class TaskDecomposer:
 
         for st in subtasks:
             for dep_id in st.depends_on:
-                if dep_id in adj:
+                if dep_id and dep_id in adj:
                     adj[dep_id].append(st.task_id)
                     in_degree[st.task_id] += 1
 

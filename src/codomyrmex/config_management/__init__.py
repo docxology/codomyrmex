@@ -47,7 +47,7 @@ from .deployment import (
     ConfigurationDeployer,
     deploy_configuration,
 )
-from .monitoring import (
+from codomyrmex.config_monitoring import (
     ConfigAudit,
     ConfigurationMonitor,
     ConfigWatcher,

@@ -69,10 +69,20 @@ class DocumentReader:
             elif format == DocumentFormat.PDF:
                 from codomyrmex.documents.formats.pdf_handler import read_pdf
                 pdf_doc = read_pdf(str(file_path))
+                # For PDF, we keep the PDFDocument object as content
                 content = pdf_doc
             elif format == DocumentFormat.TEXT:
                 from codomyrmex.documents.formats.text_handler import read_text
                 content = read_text(str(file_path), encoding=encoding)
+            elif format == DocumentFormat.HTML:
+                from codomyrmex.documents.formats.html_handler import read_html
+                content = read_html(str(file_path), encoding=encoding)
+            elif format == DocumentFormat.XML:
+                from codomyrmex.documents.formats.xml_handler import read_xml
+                content = read_xml(str(file_path), encoding=encoding)
+            elif format == DocumentFormat.CSV:
+                from codomyrmex.documents.formats.csv_handler import read_csv
+                content = read_csv(str(file_path), encoding=encoding)
             else:
                 raise UnsupportedFormatError(
                     f"Format {format.value} not yet implemented",
@@ -87,15 +97,17 @@ class DocumentReader:
                 encoding=encoding,
             )
 
-            # Extract metadata
+            # Extract metadata and update document.metadata
             from codomyrmex.documents.metadata.extractor import extract_metadata
-            metadata = extract_metadata(str(file_path))
-            document.metadata = metadata
+            raw_metadata = extract_metadata(str(file_path))
+            document.metadata.update(raw_metadata)
 
             return document
 
         except Exception as e:
             logger.error(f"Error reading document {file_path}: {e}")
+            if isinstance(e, (DocumentReadError, UnsupportedFormatError)):
+                raise
             raise DocumentReadError(
                 f"Failed to read document: {str(e)}",
                 file_path=str(file_path)
@@ -141,4 +153,3 @@ def read_document(
     """
     reader = DocumentReader()
     return reader.read(file_path, format=format, encoding=encoding)
-

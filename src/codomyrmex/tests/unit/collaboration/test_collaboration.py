@@ -1,7 +1,7 @@
 """Unit tests for collaboration module."""
 import pytest
 
-from codomyrmex.collaboration import AgentProxy, SwarmManager, TaskDecomposer
+from codomyrmex.collaboration.protocols.swarm import AgentProxy, SwarmManager, TaskDecomposer
 
 
 @pytest.mark.unit
@@ -25,15 +25,17 @@ def test_swarm_execution():
 @pytest.mark.unit
 def test_task_decomposition():
     """Test mission splitting."""
+    # Legacy TaskDecomposer is just a shim
     tasks = TaskDecomposer.decompose("Design and Build")
     assert len(tasks) == 2
-    assert "Design" in tasks
-    assert "Build" in tasks
+    assert "Design" in tasks[0]
+    assert "Build" in tasks[1]
 
 @pytest.mark.unit
 def test_consensus():
     """Test voting logic."""
     manager = SwarmManager()
+    # AgentProxy uses register_agent through add_agent shim
     manager.add_agent(AgentProxy("A1", "Voter"))
     manager.add_agent(AgentProxy("A2", "Voter"))
     manager.add_agent(AgentProxy("A3", "Voter"))

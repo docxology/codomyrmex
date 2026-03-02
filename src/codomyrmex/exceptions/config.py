@@ -30,9 +30,36 @@ class ConfigurationError(CodomyrmexError):
 
 class EnvironmentError(CodomyrmexError):
     """Raised when the environment is not properly set up."""
-    pass
+
+    def __init__(
+        self,
+        message: str,
+        variable_name: str | None = None,
+        expected_value: str | None = None,
+        **kwargs: Any,
+    ) -> None:
+        super().__init__(message, **kwargs)
+        if variable_name:
+            self.context["variable_name"] = variable_name
+        if expected_value:
+            self.context["expected_value"] = expected_value
 
 
 class DependencyError(CodomyrmexError):
     """Raised when a required dependency is missing or incompatible."""
-    pass
+
+    def __init__(
+        self,
+        message: str,
+        dependency_name: str | None = None,
+        required_version: str | None = None,
+        installed_version: str | None = None,
+        **kwargs: Any,
+    ) -> None:
+        super().__init__(message, **kwargs)
+        if dependency_name:
+            self.context["dependency_name"] = dependency_name
+        if required_version:
+            self.context["required_version"] = required_version
+        if installed_version:
+            self.context["installed_version"] = installed_version

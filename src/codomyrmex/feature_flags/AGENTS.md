@@ -1,6 +1,6 @@
 # Agent Guidelines - Feature Flags
 
-**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Module Overview
 
@@ -8,78 +8,54 @@ Runtime feature toggles for gradual rollouts and quick incident response.
 
 ## Key Classes
 
-- **FlagManager** — Create and manage feature flags
-- **FlagEvaluator** — Evaluate flags for users
-- **RolloutStrategy** — Percentage-based rollouts
-- **FlagStore** — Persistent flag storage
+- **`FeatureManager`** — Main entry point for management and evaluation.
+- **`FlagEvaluator`** — Stateless evaluator for flag logic.
+- **`RolloutManager`** — Manages staged rollout state.
+- **`FlagStore`** — Abstract interface for persistence.
 
 ## Agent Instructions
 
-1. **Default to off** — New flags should be disabled by default
-2. **Use descriptive names** — `enable_new_checkout` not `flag_1`
-3. **Clean up** — Remove flags after full rollout
-4. **Percentage rollouts** — Use for gradual releases
-5. **Override for testing** — Use test overrides, not hardcodes
+1. **Prefer `FeatureManager`** — Always use the high-level manager for standard operations.
+2. **Context Matters** — Always provide `user_id` when evaluating flags with percentage rollouts to ensure consistency.
+3. **Descriptive Metadata** — Use the `metadata` field for multivariate flag values or extra tracking info.
+4. **Cleanup** — Actively remove flags that are 100% rolled out and no longer needed in code.
 
 ## Common Patterns
 
+### Creating a Flag
 ```python
-from codomyrmex.feature_flags import FlagManager, FlagEvaluator
-
-# Initialize flag manager
-flags = FlagManager()
-
-# Create a feature flag
-flags.create("new_dashboard", default=False, description="New dashboard UI")
-
-# Percentage rollout
-flags.set_rollout("new_dashboard", percentage=10)  # 10% of users
-
-# Evaluate for a user
-evaluator = FlagEvaluator(flags)
-if evaluator.is_enabled("new_dashboard", user_id=user.id):
-    show_new_dashboard()
-else:
-    show_old_dashboard()
-
-# Override for testing
-with flags.override("new_dashboard", True):
-    test_new_dashboard()
+manager.create_flag(
+    "enable_ai_agent",
+    enabled=True,
+    percentage=10.0,
+    description="Gradual rollout of AI assistant"
+)
 ```
 
-## Testing Patterns
-
+### Evaluating with Context
 ```python
-# Verify flag creation
-flags = FlagManager()
-flags.create("test_flag", default=False)
-assert not flags.is_enabled("test_flag")
-
-# Verify rollout
-flags.set_rollout("test_flag", percentage=100)
-assert flags.is_enabled("test_flag", user_id="any")
-
-# Verify override
-with flags.override("test_flag", True):
-    assert flags.is_enabled("test_flag")
+is_on = manager.is_enabled(
+    "enable_ai_agent",
+    user_id="alice",
+    tier="pro",
+    region="us-east-1"
+)
 ```
 
-## PAI Agent Role Access Matrix
+### Overriding for Tests
+```python
+manager.set_override("experimental_feature", True)
+# ... run tests ...
+manager.clear_override("experimental_feature")
+```
 
-| PAI Agent | Access Level | Primary Capabilities | Trust Level |
-|-----------|-------------|---------------------|-------------|
-| **Engineer** | Full | Direct Python import, class instantiation, full API access | TRUSTED |
-| **Architect** | Read + Design | API review, interface design, dependency analysis | OBSERVED |
-| **QATester** | Validation | Integration testing via pytest, output validation | OBSERVED |
+## Targeting Rule Operators
 
-### Engineer Agent
-**Use Cases**: Enable/disable feature flags, configure rollout strategies, manage FlagManager during BUILD/EXECUTE phases
-
-### Architect Agent
-**Use Cases**: Design flag evaluation logic, rollout strategy architecture, flag lifecycle and cleanup patterns
-
-### QATester Agent
-**Use Cases**: Unit and integration test execution, rollout percentage validation, flag override verification
+- `eq`, `neq`: Equality
+- `in`, `not_in`: Set membership
+- `contains`: Substring or collection search
+- `gt`, `lt`, `gte`, `lte`: Numeric comparisons
+- `regex`: Regular expression matching
 
 ## Navigation
 

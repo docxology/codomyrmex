@@ -9,7 +9,7 @@ from __future__ import annotations
 
 import hashlib
 from dataclasses import dataclass, field
-from typing import Any
+from typing import Any, List, Optional, Dict
 
 from codomyrmex.feature_flags.strategies import (
     EvaluationContext,
@@ -38,27 +38,44 @@ class TargetingRule:
         """Return True if this rule matches the given context."""
         actual = context.get_attribute(self.attribute)
         if actual is None:
-            return False
+            # Special case for user_id and session_id as they are top-level on context
+            if self.attribute == "user_id":
+                actual = context.user_id
+            elif self.attribute == "session_id":
+                actual = context.session_id
+            
+            if actual is None:
+                return False
 
         operators = {
             "eq": lambda a, b: a == b,
             "neq": lambda a, b: a != b,
             "in": lambda a, b: a in b,
+            "not_in": lambda a, b: a not in b,
             "contains": lambda a, b: b in a,
             "gt": lambda a, b: a > b,
             "lt": lambda a, b: a < b,
             "gte": lambda a, b: a >= b,
             "lte": lambda a, b: a <= b,
+            "regex": self._regex_match,
         }
 
         op_fn = operators.get(self.operator)
         if op_fn is None:
+            logger.warning("Unknown operator: %s", self.operator)
             return False
 
         try:
             return op_fn(actual, self.value)
         except (TypeError, ValueError) as e:
             logger.warning("Targeting rule comparison failed for attribute %s: %s", self.attribute, e)
+            return False
+
+    def _regex_match(self, actual: Any, pattern: str) -> bool:
+        import re
+        try:
+            return bool(re.search(pattern, str(actual)))
+        except re.error:
             return False
 
 
@@ -71,11 +88,15 @@ class FlagDefinition:
         enabled: Global kill-switch; if False the flag is always off.
         percentage: Rollout percentage (0.0 - 100.0).
         targeting_rules: Optional list of targeting rules.
+        metadata: Arbitrary metadata for the flag.
+        description: Description of the flag's purpose.
     """
     name: str
     enabled: bool = True
     percentage: float = 100.0
-    targeting_rules: list[TargetingRule] = field(default_factory=list)
+    targeting_rules: List[TargetingRule] = field(default_factory=list)
+    metadata: Dict[str, Any] = field(default_factory=dict)
+    description: str = ""
 
 
 class FlagEvaluator:
@@ -112,7 +133,7 @@ class FlagEvaluator:
                 reason="flag_disabled",
             )
 
-        # 2. Targeting rules (if any exist, at least one must match)
+        # 2. Targeting rules (if any exist, at least one must match - OR logic)
         if flag.targeting_rules:
             if not self.evaluate_targeting_rules(flag.targeting_rules, context):
                 return EvaluationResult(
@@ -134,7 +155,7 @@ class FlagEvaluator:
 
     def evaluate_targeting_rules(
         self,
-        rules: list[TargetingRule],
+        rules: List[TargetingRule],
         context: EvaluationContext,
     ) -> bool:
         """Return True if at least one targeting rule matches the context.
@@ -165,6 +186,9 @@ class FlagEvaluator:
         Returns:
             True if the user is within the rollout percentage.
         """
+        if not user_id:
+            return False
+            
         hash_input = f"{flag.name}:{user_id}"
         digest = hashlib.sha256(hash_input.encode()).hexdigest()
         bucket = int(digest[:8], 16) % 10000  # 0-9999 for 0.01% granularity

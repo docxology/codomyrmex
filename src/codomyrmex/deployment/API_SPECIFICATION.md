@@ -1,8 +1,10 @@
 # Deployment - API Specification
 
+**Version**: v0.2.0 | **Status**: Active | **Last Updated**: March 2026
+
 ## Introduction
 
-The Deployment module provides tools for managing application deployments, including various deployment strategies (canary, blue-green) and GitOps synchronization capabilities.
+The Deployment module provides tools for managing application deployments, including various deployment strategies (canary, blue-green, rolling), a high-level manager, and GitOps synchronization capabilities.
 
 ## Endpoints / Functions / Interfaces
 
@@ -10,122 +12,94 @@ The Deployment module provides tools for managing application deployments, inclu
 
 - **Description**: Central manager for deployment operations.
 - **Constructor**:
-    - `strategy` (DeploymentStrategy, optional): Default deployment strategy.
     - `config` (dict, optional): Deployment configuration.
 - **Methods**:
 
-#### `deploy(target: str, version: str, options: dict | None = None) -> DeploymentResult`
+#### `deploy(service_name: str, version: str, strategy: DeploymentStrategy | None = None, targets: list[DeploymentTarget] | None = None) -> DeploymentResult`
 
-- **Description**: Deploy a new version to the target environment.
-- **Parameters/Arguments**:
-    - `target` (str): Target environment (e.g., "production", "staging").
+- **Description**: Deploy a new version of a service.
+- **Parameters**:
+    - `service_name` (str): Name of the service to deploy.
     - `version` (str): Version to deploy.
-    - `options` (dict, optional): Deployment options.
+    - `strategy` (DeploymentStrategy, optional): Strategy to use. Defaults to `RollingDeployment`.
+    - `targets` (list[DeploymentTarget], optional): List of targets. Defaults to auto-generated mocks if None.
 - **Returns**:
-    - `DeploymentResult`: Deployment outcome.
+    - `DeploymentResult`: Outcome of the deployment.
 
-#### `rollback(target: str, version: str | None = None) -> DeploymentResult`
+#### `rollback(service_name: str, previous_version: str, strategy: DeploymentStrategy | None = None, targets: list[DeploymentTarget] | None = None) -> DeploymentResult`
 
 - **Description**: Rollback to a previous version.
-- **Parameters/Arguments**:
-    - `target` (str): Target environment.
-    - `version` (str, optional): Version to rollback to. Defaults to previous version.
+- **Parameters**:
+    - `service_name` (str): Service name.
+    - `previous_version` (str): Version to rollback to.
+    - `strategy` (DeploymentStrategy, optional): Strategy to use.
+    - `targets` (list[DeploymentTarget], optional): List of targets.
 - **Returns**:
-    - `DeploymentResult`: Rollback outcome.
+    - `DeploymentResult`: Outcome of the rollback.
 
-#### `get_status(target: str) -> DeploymentStatus`
+#### `get_active_version(service_name: str) -> str | None`
 
-- **Description**: Get current deployment status.
-- **Parameters/Arguments**:
-    - `target` (str): Target environment.
+- **Description**: Get the currently active version for a service.
 - **Returns**:
-    - `DeploymentStatus`: Current deployment status.
+    - `str | None`: Active version or None.
 
-### Class: `DeploymentStrategy`
+### Class: `DeploymentStrategy` (Abstract)
 
-- **Description**: Base class for deployment strategies.
 - **Methods**:
-    - `execute(deployment: Deployment) -> DeploymentResult`: Execute the deployment.
-    - `validate(deployment: Deployment) -> bool`: Validate deployment before execution.
+    - `deploy(targets: list[DeploymentTarget], version: str, deploy_fn: Callable) -> DeploymentResult`: Execute deployment.
+    - `rollback(targets: list[DeploymentTarget], previous_version: str, deploy_fn: Callable) -> DeploymentResult`: Execute rollback.
 
-### Class: `CanaryStrategy`
+### Class: `RollingDeployment`
 
-- **Description**: Canary deployment strategy with gradual traffic shifting.
 - **Constructor**:
-    - `initial_percentage` (float): Initial traffic percentage (0-100). Default: 10.
-    - `increment` (float): Traffic increment per step. Default: 10.
-    - `interval` (int): Seconds between increments. Default: 300.
-    - `health_check_url` (str, optional): Health check endpoint.
-- **Methods**: Inherits from `DeploymentStrategy`.
+    - `batch_size` (int): Number of targets per batch. Default: 1.
+    - `delay_seconds` (float): Delay between batches. Default: 0.0.
+    - `health_check` (Callable, optional): Health check function.
 
-### Class: `BlueGreenStrategy`
+### Class: `BlueGreenDeployment`
 
-- **Description**: Blue-green deployment with instant traffic switch.
 - **Constructor**:
-    - `switch_delay` (int): Delay before traffic switch in seconds. Default: 0.
-    - `health_check_url` (str, optional): Health check endpoint.
-- **Methods**: Inherits from `DeploymentStrategy`.
+    - `switch_fn` (Callable, optional): Function to switch traffic.
+    - `health_check` (Callable, optional): Health check function.
+
+### Class: `CanaryDeployment`
+
+- **Constructor**:
+    - `stages` (list[float], optional): Traffic percentages per stage. Default: [10, 25, 50, 100].
+    - `stage_duration_seconds` (float): Delay between stages. Default: 0.0.
+    - `health_check` (Callable, optional): Health check function.
+    - `success_threshold` (float): Success rate required to proceed. Default: 0.95.
 
 ### Class: `GitOpsSynchronizer`
 
-- **Description**: Synchronizes deployments with Git repository state.
 - **Constructor**:
     - `repo_url` (str): Git repository URL.
-    - `branch` (str): Branch to watch. Default: "main".
-    - `path` (str): Path to deployment manifests. Default: "/".
+    - `local_path` (str): Local path for the repository.
 - **Methods**:
-
-#### `sync() -> SyncResult`
-
-- **Description**: Synchronize current state with Git repository.
-- **Returns**:
-    - `SyncResult`: Synchronization result.
-
-#### `watch(callback: Callable) -> None`
-
-- **Description**: Watch for changes and trigger callbacks.
-- **Parameters/Arguments**:
-    - `callback` (Callable): Function to call on changes.
-
-#### `get_diff() -> list[Change]`
-
-- **Description**: Get differences between current state and repository.
-- **Returns**:
-    - `list[Change]`: List of detected changes.
+    - `sync(branch: str = "main") -> bool`: Synchronize with the remote repository.
+    - `get_version() -> str | None`: Get the current commit SHA.
+    - `checkout(revision: str) -> bool`: Checkout a specific revision.
+    - `is_dirty() -> bool`: Check for uncommitted local changes.
 
 ## Data Models
 
-### Model: `DeploymentResult`
-- `success` (bool): Whether deployment succeeded.
-- `version` (str): Deployed version.
-- `target` (str): Target environment.
-- `strategy` (str): Strategy used.
-- `duration` (float): Deployment duration in seconds.
-- `errors` (list[str] | None): Any errors encountered.
-
-### Model: `DeploymentStatus`
-- `target` (str): Target environment.
-- `current_version` (str): Currently deployed version.
-- `status` (str): Status (running, deployed, failed, rolling_back).
-- `health` (str): Health status (healthy, degraded, unhealthy).
-- `instances` (int): Number of running instances.
-
-### Model: `Deployment`
-- `id` (str): Unique deployment identifier.
-- `target` (str): Target environment.
-- `version` (str): Version being deployed.
-- `strategy` (DeploymentStrategy): Deployment strategy.
-- `created_at` (datetime): Creation timestamp.
+### Model: `DeploymentTarget`
+- `id` (str): Unique target identifier.
+- `name` (str): Human-readable name.
+- `address` (str): Network address.
+- `healthy` (bool): Current health status.
+- `version` (str | None): Currently deployed version.
 - `metadata` (dict): Additional metadata.
 
-## Authentication & Authorization
+### Model: `DeploymentResult`
+- `success` (bool): Whether the operation succeeded.
+- `targets_updated` (int): Number of targets successfully updated.
+- `targets_failed` (int): Number of targets that failed update.
+- `duration_ms` (float): Duration of the operation in milliseconds.
+- `state` (DeploymentState): Final state (COMPLETED, FAILED, ROLLED_BACK).
+- `errors` (list[str]): List of error messages.
+- `metadata` (dict): Additional operation metadata.
 
-Deployment operations require appropriate credentials for target environments. Configure authentication via environment variables or configuration files.
+## Navigation
 
-## Rate Limiting
-
-N/A - Deployment operations are not rate-limited but may have environment-specific constraints.
-
-## Versioning
-
-This API follows semantic versioning. Breaking changes will be documented in the changelog.
+- [README](README.md) | [SPEC](SPEC.md) | [AGENTS.md](AGENTS.md)

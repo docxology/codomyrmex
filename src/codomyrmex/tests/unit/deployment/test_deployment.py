@@ -4,18 +4,23 @@ Tests cover deployment strategies, health checks, rollback, the DeploymentManage
 GitOpsSynchronizer, and edge cases such as failed deployments and invalid configs.
 """
 
+import os
+import shutil
 import subprocess
 
 import pytest
 
 from codomyrmex.deployment import (
+    BlueGreenDeployment,
     BlueGreenStrategy,
+    CanaryDeployment,
     CanaryStrategy,
     DeploymentManager,
     DeploymentResult,
     DeploymentState,
     DeploymentTarget,
     GitOpsSynchronizer,
+    RollingDeployment,
     RollingStrategy,
     create_strategy,
 )
@@ -106,7 +111,7 @@ def test_deployment_state_values():
 @pytest.mark.unit
 def test_rolling_deployment_all_succeed():
     """Test rolling deployment where all targets succeed."""
-    strategy = RollingStrategy(batch_size=2, delay_seconds=0)
+    strategy = RollingDeployment(batch_size=2, delay_seconds=0)
     targets = [
         DeploymentTarget(id=f"t-{i}", name=f"n-{i}", address=f"localhost:{8000 + i}")
         for i in range(4)
@@ -124,7 +129,7 @@ def test_rolling_deployment_all_succeed():
 @pytest.mark.unit
 def test_rolling_deployment_partial_failure():
     """Test rolling deployment where some targets fail."""
-    strategy = RollingStrategy(batch_size=1, delay_seconds=0)
+    strategy = RollingDeployment(batch_size=1, delay_seconds=0)
     targets = [
         DeploymentTarget(id=f"t-{i}", name=f"n-{i}", address=f"localhost:{8000 + i}")
         for i in range(3)
@@ -145,7 +150,7 @@ def test_rolling_deployment_partial_failure():
 @pytest.mark.unit
 def test_rolling_deployment_with_health_check():
     """Test rolling deployment with health check callback."""
-    strategy = RollingStrategy(
+    strategy = RollingDeployment(
         batch_size=1, delay_seconds=0,
         health_check=lambda t: t.id != "t-1",  # t-1 fails health check
     )
@@ -160,7 +165,7 @@ def test_rolling_deployment_with_health_check():
 @pytest.mark.unit
 def test_rolling_deployment_rollback():
     """Test rolling rollback delegates to deploy."""
-    strategy = RollingStrategy(batch_size=1, delay_seconds=0)
+    strategy = RollingDeployment(batch_size=1, delay_seconds=0)
     targets = [
         DeploymentTarget(id="t-0", name="n-0", address="localhost:8000")
     ]
@@ -176,7 +181,7 @@ def test_rolling_deployment_rollback():
 def test_blue_green_deployment_success():
     """Test blue-green deployment with successful switch."""
     switch_calls = []
-    strategy = BlueGreenStrategy(switch_fn=lambda v: switch_calls.append(v) or True)
+    strategy = BlueGreenDeployment(switch_fn=lambda v: switch_calls.append(v) or True)
     targets = [
         DeploymentTarget(id="t-0", name="blue", address="localhost:8000"),
         DeploymentTarget(id="t-1", name="green", address="localhost:8001"),
@@ -190,7 +195,7 @@ def test_blue_green_deployment_success():
 def test_blue_green_deployment_rollback():
     """Test blue-green rollback switches traffic back."""
     switch_calls = []
-    strategy = BlueGreenStrategy(switch_fn=lambda v: switch_calls.append(v) or True)
+    strategy = BlueGreenDeployment(switch_fn=lambda v: switch_calls.append(v) or True)
     targets = [DeploymentTarget(id="t-0", name="n", address="localhost:8000")]
     result = strategy.rollback(targets, "v1", lambda t, v: True)
     assert result.success is True
@@ -204,7 +209,7 @@ def test_blue_green_deployment_rollback():
 @pytest.mark.unit
 def test_canary_deployment_full_rollout():
     """Test canary deployment progresses through all stages."""
-    strategy = CanaryStrategy(stages=[50, 100], stage_duration_seconds=0)
+    strategy = CanaryDeployment(stages=[50, 100], stage_duration_seconds=0)
     targets = [
         DeploymentTarget(id=f"t-{i}", name=f"n-{i}", address=f"localhost:{8000 + i}")
         for i in range(4)
@@ -217,7 +222,7 @@ def test_canary_deployment_full_rollout():
 @pytest.mark.unit
 def test_canary_deployment_stops_on_failure():
     """Test canary halts when success rate drops below threshold."""
-    strategy = CanaryStrategy(
+    strategy = CanaryDeployment(
         stages=[50, 100], stage_duration_seconds=0, success_threshold=1.0,
     )
     targets = [
@@ -277,7 +282,7 @@ def test_manager_default_strategy():
     """Test manager uses rolling strategy by default."""
     manager = DeploymentManager()
     result = manager.deploy("svc-a", "v1")
-    assert result is True
+    assert result.success is True
 
 
 @pytest.mark.unit
@@ -286,24 +291,27 @@ def test_manager_deployment_history():
     manager = DeploymentManager()
     manager.deploy("svc-a", "v1")
     manager.deploy("svc-b", "v2")
-    history = manager.get_deployment_history()
+    history = manager.history
     assert len(history) == 2
-    assert history[0]["service"] == "svc-a"
-    assert history[1]["version"] == "v2"
+    # result doesn't store service/version anymore, but manager history is list of results
+    assert history[0].success is True
+    assert history[1].success is True
 
 
 @pytest.mark.unit
 def test_manager_deploy_failure_recorded():
     """Test manager records failed deployments from raising strategies."""
     class FailingStrategy:
-        def deploy(self, service_name, version):
+        def deploy(self, targets, version, deploy_fn):
             raise RuntimeError("crash")
+        def rollback(self, targets, version, deploy_fn):
+            return DeploymentResult(False, 0, 0, 0, DeploymentState.FAILED)
 
     manager = DeploymentManager()
     result = manager.deploy("svc-fail", "v1", FailingStrategy())
-    assert result is False
-    history = manager.get_deployment_history()
-    assert history[-1]["success"] is False
+    assert result.success is False
+    history = manager.history
+    assert history[-1].success is False
 
 
 @pytest.mark.unit
@@ -311,7 +319,7 @@ def test_manager_rollback():
     """Test manager rollback delegates to deploy."""
     manager = DeploymentManager()
     result = manager.rollback("svc-a", "v0")
-    assert result is True
+    assert result.success is True
 
 
 # ---------------------------------------------------------------------------
@@ -426,28 +434,45 @@ def test_aggregated_health_to_dict():
 # ---------------------------------------------------------------------------
 
 @pytest.mark.unit
-def test_gitops_sync_method():
-    """Test GitOpsSynchronizer sync sets synced flag."""
-    sync = GitOpsSynchronizer(repo_url="https://example.com/repo.git")
-    assert sync.is_synced() is False
-    result = sync.sync()
-    assert result is True
-    assert sync.is_synced() is True
+def test_gitops_sync_method(tmp_path):
+    """Test GitOpsSynchronizer sync with real git repo."""
+    repo_dir = tmp_path / "repo"
+    repo_dir.mkdir()
+    local_dir = tmp_path / "local"
+
+    # Ensure path is absolute
+    repo_path = str(repo_dir.resolve())
+
+    subprocess.run(["git", "init"], cwd=repo_path, capture_output=True, check=True)
+    # Ensure 'main' exists
+    subprocess.run(["git", "checkout", "-b", "main"], cwd=repo_path, capture_output=True, check=True)
+    
+    subprocess.run(["git", "config", "user.email", "t@t.com"], cwd=repo_path, check=True)
+    subprocess.run(["git", "config", "user.name", "T"], cwd=repo_path, check=True)
+    
+    (repo_dir / "f").write_text("c")
+    subprocess.run(["git", "add", "."], cwd=repo_path, check=True)
+    subprocess.run(["git", "commit", "-m", "i"], cwd=repo_path, check=True)
+
+    sync = GitOpsSynchronizer(repo_path, str(local_dir.resolve()))
+    # First sync should clone.
+    assert sync.sync() is True
+    assert os.path.exists(local_dir / ".git")
+    
+    # Second sync should fetch/reset
+    (repo_dir / "f2").write_text("c2")
+    subprocess.run(["git", "add", "."], cwd=repo_path, check=True)
+    subprocess.run(["git", "commit", "-m", "i2"], cwd=repo_path, check=True)
+    
+    assert sync.sync() is True
+    assert os.path.exists(local_dir / "f2")
 
 
 @pytest.mark.unit
-def test_gitops_version_unknown_before_sync():
-    """Test version returns 'unknown' before sync without local_path."""
-    sync = GitOpsSynchronizer()
-    assert sync.get_version() == "unknown"
-
-
-@pytest.mark.unit
-def test_gitops_version_after_sync():
-    """Test version returns v1.0.0 after sync without local_path."""
-    sync = GitOpsSynchronizer()
-    sync.sync()
-    assert sync.get_version() == "v1.0.0"
+def test_gitops_version_none_before_sync():
+    """Test version returns None before sync."""
+    sync = GitOpsSynchronizer("url", "path")
+    assert sync.get_version() is None
 
 
 @pytest.mark.unit
@@ -504,7 +529,7 @@ def test_deployment_result_success_state():
 @pytest.mark.unit
 def test_rolling_deployment_batch_size_larger_than_targets():
     """Rolling deployment with batch_size > targets still works."""
-    strategy = RollingStrategy(batch_size=100, delay_seconds=0)
+    strategy = RollingDeployment(batch_size=100, delay_seconds=0)
     targets = [
         DeploymentTarget(id="t-0", name="n-0", address="localhost:8000")
     ]
@@ -515,7 +540,7 @@ def test_rolling_deployment_batch_size_larger_than_targets():
 @pytest.mark.unit
 def test_canary_deployment_single_stage():
     """Canary with single 100% stage works."""
-    strategy = CanaryStrategy(stages=[100], stage_duration_seconds=0)
+    strategy = CanaryDeployment(stages=[100], stage_duration_seconds=0)
     targets = [
         DeploymentTarget(id="t-0", name="n-0", address="localhost:8000")
     ]
@@ -534,7 +559,7 @@ def test_create_strategy_rolling_defaults():
 def test_manager_get_empty_history():
     """Manager with no deployments has empty history."""
     manager = DeploymentManager()
-    assert manager.get_deployment_history() == []
+    assert manager.history == []
 
 
 @pytest.mark.unit

@@ -222,9 +222,18 @@ class Transform3D:
         return cls(translation=(x, y, z))
 
     @classmethod
+    def from_rotation(cls, roll: float, pitch: float, yaw: float) -> Transform3D:
+        """Create a pure rotation transform."""
+        return cls(rotation=(roll, pitch, yaw))
+
+    @classmethod
     def from_yaw(cls, yaw_rad: float) -> Transform3D:
         """Create a pure yaw (Z-axis) rotation transform."""
         return cls(rotation=(0.0, 0.0, yaw_rad))
+
+    def apply(self, point: tuple[float, float, float]) -> tuple[float, float, float]:
+        """Alias for transform_point."""
+        return self.transform_point(point)
 
     def to_dict(self) -> dict[str, Any]:
         """Serialize to a JSON-compatible dict."""

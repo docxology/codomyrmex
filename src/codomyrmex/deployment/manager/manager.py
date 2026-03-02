@@ -1,16 +1,16 @@
-"""Deployment manager — orchestrates deployments with history and rollback.
-
-Coordinates deployment strategies, tracks deployment history, and
-provides rollback capabilities.
-"""
+"""Deployment manager — orchestrates deployments with history and rollback."""
 
 from __future__ import annotations
 
+import os
 from typing import Any
 
-from codomyrmex.deployment.strategies.strategies import (
+from codomyrmex.deployment.strategies import (
+    DeploymentResult,
     DeploymentState,
     DeploymentStrategy,
+    DeploymentTarget,
+    RollingDeployment,
 )
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
@@ -21,96 +21,116 @@ class DeploymentManager:
     """Orchestrates deployments using pluggable strategies.
 
     Tracks deployment history and supports rollback to the previous state.
-
-    Example::
-
-        from codomyrmex.deployment.strategies.strategies import CanaryStrategy
-
-        mgr = DeploymentManager()
-        state = mgr.deploy("api-server", "v2.1.0", CanaryStrategy())
-        assert state.status == "completed"
-        assert len(mgr.history) == 1
     """
 
-    def __init__(self) -> None:
-        self._history: list[DeploymentState] = []
-        self._active: dict[str, DeploymentState] = {}
+    def __init__(self, config: dict[str, Any] | None = None):
+        """Initialize the deployment manager."""
+        self.config = config or {}
+        self._history: list[DeploymentResult] = []
+        self._active: dict[str, str] = {}  # service_name -> version
+        self._default_strategy = RollingDeployment()
 
     def deploy(
         self,
         service_name: str,
         version: str,
-        strategy: DeploymentStrategy,
-    ) -> DeploymentState:
+        strategy: DeploymentStrategy | None = None,
+        targets: list[DeploymentTarget] | None = None,
+    ) -> DeploymentResult:
         """Execute a deployment using the given strategy.
 
         Args:
             service_name: Name of the service to deploy.
             version: Version string to deploy.
             strategy: The deployment strategy to use.
+            targets: List of deployment targets.
 
         Returns:
-            DeploymentState reflecting the outcome.
+            DeploymentResult reflecting the outcome.
         """
+        strategy = strategy or self._default_strategy
         logger.info("Deploying %s:%s using %s", service_name, version, type(strategy).__name__)
+
+        if targets is None:
+            targets = [
+                DeploymentTarget(
+                    id=f"{service_name}-{i}",
+                    name=f"{service_name}-instance-{i}",
+                    address=f"{os.getenv('DEPLOY_HOST', 'localhost')}:{int(os.getenv('DEPLOY_BASE_PORT', '8000')) + i}",
+                )
+                for i in range(3)
+            ]
+
+        def deploy_fn(target: DeploymentTarget, ver: str) -> bool:
+            target.version = ver
+            return True
+
         try:
-            state = strategy.execute(service_name, version)
-            self._history.append(state)
-            self._active[service_name] = state
-            logger.info("Deployment %s:%s → %s", service_name, version, state.status)
-            return state
+            result = strategy.deploy(targets, version, deploy_fn)
+            self._history.append(result)
+            if result.success:
+                self._active[service_name] = version
+            logger.info("Deployment %s:%s → %s", service_name, version, result.state.value)
+            return result
         except Exception as e:
-            state = DeploymentState(
-                service=service_name,
-                version=version,
-                strategy=type(strategy).__name__,
-            )
-            state.fail(str(e))
-            self._history.append(state)
             logger.error("Deployment failed for %s:%s: %s", service_name, version, e)
-            return state
+            result = DeploymentResult(
+                success=False,
+                targets_updated=0,
+                targets_failed=len(targets),
+                duration_ms=0,
+                state=DeploymentState.FAILED,
+                errors=[str(e)],
+            )
+            self._history.append(result)
+            return result
 
-    def rollback(self, service_name: str, strategy: DeploymentStrategy) -> DeploymentState | None:
-        """Roll back the most recent deployment of a service.
+    def rollback(
+        self,
+        service_name: str,
+        previous_version: str,
+        strategy: DeploymentStrategy | None = None,
+        targets: list[DeploymentTarget] | None = None,
+    ) -> DeploymentResult:
+        """Roll back a service to a previous version."""
+        strategy = strategy or self._default_strategy
+        logger.info("Rolling back %s to version %s", service_name, previous_version)
 
-        Args:
-            service_name: Name of the service to roll back.
-            strategy: The strategy to use for rollback.
+        if targets is None:
+            targets = [
+                DeploymentTarget(
+                    id=f"{service_name}-{i}",
+                    name=f"{service_name}-instance-{i}",
+                    address=f"{os.getenv('DEPLOY_HOST', 'localhost')}:{int(os.getenv('DEPLOY_BASE_PORT', '8000')) + i}",
+                )
+                for i in range(3)
+            ]
 
-        Returns:
-            Updated DeploymentState, or None if no active deployment found.
-        """
-        active = self._active.get(service_name)
-        if active is None:
-            logger.warning("No active deployment for %s to roll back", service_name)
-            return None
+        def deploy_fn(target: DeploymentTarget, ver: str) -> bool:
+            target.version = ver
+            return True
 
-        rolled = strategy.rollback(active)
-        self._history.append(rolled)
-        del self._active[service_name]
-        logger.info("Rolled back %s to previous state", service_name)
-        return rolled
+        result = strategy.rollback(targets, previous_version, deploy_fn)
+        self._history.append(result)
+        if result.success:
+            self._active[service_name] = previous_version
+        return result
 
-    def get_active(self, service_name: str) -> DeploymentState | None:
-        """Get the current active deployment for a service."""
+    def get_active_version(self, service_name: str) -> str | None:
+        """Get the current active version for a service."""
         return self._active.get(service_name)
 
     @property
-    def history(self) -> list[DeploymentState]:
+    def history(self) -> list[DeploymentResult]:
         """Return the full deployment history."""
         return list(self._history)
-
-    @property
-    def active_deployments(self) -> dict[str, DeploymentState]:
-        """Return all currently active deployments."""
-        return dict(self._active)
 
     def summary(self) -> dict[str, Any]:
         """Return a summary of deployment activity."""
         return {
             "total_deployments": len(self._history),
             "active_services": list(self._active.keys()),
-            "completed": sum(1 for s in self._history if s.status == "completed"),
-            "failed": sum(1 for s in self._history if s.status == "failed"),
-            "rolled_back": sum(1 for s in self._history if s.status == "rolled_back"),
+            "completed": sum(1 for r in self._history if r.state == DeploymentState.COMPLETED),
+            "failed": sum(1 for r in self._history if r.state == DeploymentState.FAILED),
+            "rolled_back": sum(1 for r in self._history if r.state == DeploymentState.ROLLED_BACK),
         }

@@ -10,6 +10,13 @@ import re
 from collections import defaultdict
 from dataclasses import dataclass, field
 
+# Basic English stopwords
+STOPWORDS = {
+    "a", "an", "and", "are", "as", "at", "be", "by", "for", "from", "has", "he",
+    "in", "is", "it", "its", "of", "on", "that", "the", "to", "was", "were",
+    "will", "with",
+}
+
 
 @dataclass
 class SearchResult:
@@ -89,7 +96,8 @@ class SearchIndex:
 
         # Index tags
         for tag in (tags or []):
-            self._inverted[tag.lower()].add(doc_id)
+            for t in self._tokenize(tag):
+                self._inverted[t].add(doc_id)
 
     def remove(self, doc_id: str) -> bool:
         """Remove a document from the index."""
@@ -99,6 +107,9 @@ class SearchIndex:
         tokens = self._tokenize(entry.title + " " + entry.content)
         for token in tokens:
             self._inverted[token].discard(doc_id)
+        for tag in entry.tags:
+            for t in self._tokenize(tag):
+                self._inverted[t].discard(doc_id)
         return True
 
     def search(self, query: str, limit: int = 10) -> list[SearchResult]:
@@ -126,7 +137,7 @@ class SearchIndex:
             entry = self._docs[doc_id]
             title_tokens = set(self._tokenize(entry.title))
             overlap = len(title_tokens & set(query_tokens))
-            scores[doc_id] += overlap * 2.0  # Title matches worth 2x
+            scores[doc_id] += overlap * 2.0  # Title matches worth 2x extra
 
         # Sort by score descending
         ranked = sorted(scores.items(), key=lambda x: x[1], reverse=True)[:limit]
@@ -146,24 +157,46 @@ class SearchIndex:
         return results
 
     def _tokenize(self, text: str) -> list[str]:
-        """Tokenize text into lowercase words."""
-        return re.findall(r"\w{2,}", text.lower())
+        """Tokenize text into lowercase words, splitting CamelCase and snake_case."""
+        # Split CamelCase
+        text = re.sub(r"([a-z0-9])([A-Z])", r"\1 \2", text)
+        # Split snake_case and non-alphanumeric
+        tokens = re.findall(r"[a-z0-9]{2,}", text.lower())
+        # Filter stopwords
+        return [t for t in tokens if t not in STOPWORDS]
 
     def _extract_snippet(self, content: str, query_tokens: list[str], max_len: int = 200) -> str:
         """Extract a relevant snippet from content."""
         lower = content.lower()
-        best_pos = 0
+        best_pos = -1
+
+        # Find the first occurrence of any query token
         for token in query_tokens:
             pos = lower.find(token)
             if pos >= 0:
-                best_pos = max(0, pos - 50)
-                break
+                if best_pos == -1 or pos < best_pos:
+                    best_pos = pos
 
-        snippet = content[best_pos:best_pos + max_len]
-        if best_pos > 0:
-            snippet = "..." + snippet
-        if best_pos + max_len < len(content):
-            snippet += "..."
+        if best_pos == -1:
+            snippet = content[:max_len]
+            if len(content) > max_len:
+                snippet += "..."
+            return snippet
+
+        # Try to center around the match, but stay within bounds
+        start = max(0, best_pos - max_len // 2)
+        end = min(len(content), start + max_len)
+
+        # Adjust start if end hit the limit
+        if end == len(content):
+            start = max(0, end - max_len)
+
+        snippet = content[start:end]
+        if start > 0:
+            snippet = "..." + snippet.lstrip()
+        if end < len(content):
+            snippet = snippet.rstrip() + "..."
+
         return snippet
 
 

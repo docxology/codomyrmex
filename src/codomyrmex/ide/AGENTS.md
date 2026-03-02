@@ -10,6 +10,8 @@ Programmatic integration with IDEs: Antigravity, Cursor, and VS Code.
 
 - **IDEClient** — Abstract base for all IDE integrations
 - **CursorClient** — Cursor AI-first editor client
+- **VSCodeClient** — VS Code integration client
+- **AntigravityClient** — Antigravity IDE integration client
 - **IDECommand** — Command with name, args, timeout
 - **IDECommandResult** — Result with success, output, error
 - **FileInfo** — File metadata (path, language, lines)

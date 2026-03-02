@@ -22,7 +22,8 @@ def generate_module_docs(module_name: str) -> dict:
         return {"status": "error", "message": f"Module {module_name} not found."}
 
     try:
-        generate_pai_md(str(module_path))
+        from codomyrmex.documentation import write_pai_md
+        write_pai_md(module_name, module_path)
         return {
             "status": "success",
             "message": f"Documentation generated for {module_name}",

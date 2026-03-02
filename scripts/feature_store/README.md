@@ -1,8 +1,17 @@
-# Codomyrmex Root
+# Feature Store Orchestrator
 
 ## Overview
-This directory contains the real, functional implementations and components for the `Codomyrmex Root` module within the Codomyrmex ecosystem.
+The `feature_store_demo.py` script is a thin orchestrator that demonstrates the core capabilities of the `codomyrmex.feature_store` module.
 
-## Principles
-- **Functional Integrity**: All methods and classes within this directory are designed to be fully operational and production-ready.
-- **Zero-Mock Policy**: Code herein adheres to the strict Zero-Mock testing policy, ensuring all tests run against real logic.
+## Usage
+Run the script directly from the project root:
+```bash
+python3 scripts/feature_store/feature_store_demo.py
+```
+
+## Features Demonstrated
+- Feature definition and registration.
+- Batch ingestion of data.
+- Feature vector retrieval with defaults.
+- On-the-fly feature transformations.
+- Type validation and error handling.

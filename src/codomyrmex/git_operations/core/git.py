@@ -3,6 +3,7 @@ Core module for executing Git operations.
 """
 
 import time
+import os
 
 from codomyrmex.logging_monitoring.core.logger_config import get_logger, setup_logging
 from codomyrmex.performance import monitor_performance, performance_context
@@ -130,27 +131,27 @@ __all__ = [
 if __name__ == "__main__":
     # Ensure logging is set up when script is run directly
     setup_logging()
-    logger.info("Executing git_manager.py directly for testing example.")
+    logger.info("Executing git.py directly for testing example.")
 
     # Example usage
     if check_git_availability():
         logger.info("Git operations available. Testing basic functionality...")
 
         # Test repository detection
-        is_repo = is_git_repository()
+        is_repo = is_git_repository(os.getcwd())
         logger.info(f"Current directory is Git repository: {is_repo}")
 
         if is_repo:
             # Test getting status
-            status = get_status()
+            status = get_status(os.getcwd())
             logger.info(f"Repository status: {status}")
 
             # Test getting current branch
-            branch = get_current_branch()
+            branch = get_current_branch(os.getcwd())
             logger.info(f"Current branch: {branch}")
 
             # Test getting commit history
-            commits = get_commit_history(5)
+            commits = get_commit_history(limit=5, repository_path=os.getcwd())
             logger.info(f"Recent commits: {len(commits)}")
     else:
         logger.warning("Git is not available. Cannot test Git operations.")

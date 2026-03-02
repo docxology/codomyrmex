@@ -1,206 +1,205 @@
-"""Feature manager — evaluation engine for feature flags and rollouts.
+"""Feature manager — thin orchestrator for feature flags and rollouts.
 
-Supports:
-- Boolean flags (on/off per environment)
-- Percentage-based rollout (deterministic hashing per user)
-- User/group targeting (allowlist/denylist)
-- Time-based flags (scheduled activation windows)
-- Flag lifecycle: create, enable, disable, archive
-- In-memory override stack for testing
+This module integrates evaluation logic, storage backends, and rollout management.
 """
 
 from __future__ import annotations
 
 import json
-import time
-from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any
+from typing import Any, Dict, List, Optional
 
+from codomyrmex.feature_flags.evaluation import FlagDefinition, FlagEvaluator, TargetingRule
+from codomyrmex.feature_flags.rollout import RolloutManager, RolloutConfig
+from codomyrmex.feature_flags.storage import FlagStore, InMemoryFlagStore
+from codomyrmex.feature_flags.strategies import EvaluationContext
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 logger = get_logger(__name__)
 
 
-@dataclass
-class FlagDefinition:
-    """Full definition of a feature flag."""
-
-    key: str
-    enabled: bool = False
-    percentage: float | None = None  # 0-100 rollout percentage
-    allowlist: list[str] = field(default_factory=list)
-    denylist: list[str] = field(default_factory=list)
-    start_time: float | None = None  # unix timestamp — flag active after this
-    end_time: float | None = None  # unix timestamp — flag inactive after this
-    description: str = ""
-    metadata: dict[str, Any] = field(default_factory=dict)
-
-
 class FeatureManager:
-    """Manages feature flags with multi-strategy evaluation.
-
-    Evaluation order for is_enabled():
-    1. Test overrides (highest priority)
-    2. Denylist → always False
-    3. Allowlist → always True
-    4. Time window check
-    5. Percentage-based rollout (deterministic)
-    6. Boolean enabled flag (default)
+    """Manages feature flags by orchestrating evaluation, storage, and rollouts.
 
     Example::
 
         fm = FeatureManager()
         fm.create_flag("dark_mode", enabled=True)
-        fm.create_flag("new_checkout", percentage=25)
+        fm.create_flag("new_checkout", percentage=25.0)
 
-        assert fm.is_enabled("dark_mode")
-        # 25% of users get new_checkout
-        fm.is_enabled("new_checkout", user_id="alice")
+        if fm.is_enabled("dark_mode"):
+            # ...
     """
 
-    def __init__(self, config: dict[str, Any] | None = None) -> None:
-        self._flags: dict[str, FlagDefinition] = {}
-        self._overrides: dict[str, bool] = {}  # test overrides
+    def __init__(
+        self,
+        storage: Optional[FlagStore] = None,
+        evaluator: Optional[FlagEvaluator] = None,
+        rollout_manager: Optional[RolloutManager] = None,
+        config: Optional[Dict[str, Any]] = None,
+    ) -> None:
+        self._storage = storage or InMemoryFlagStore()
+        self._evaluator = evaluator or FlagEvaluator()
+        self._rollout_manager = rollout_manager or RolloutManager()
+        self._overrides: Dict[str, bool] = {}
 
-        # Bootstrap from config dict
         if config:
-            for key, val in config.items():
-                if isinstance(val, bool):
-                    self.create_flag(key, enabled=val)
-                elif isinstance(val, dict):
-                    self.create_flag(key, **val)
-                else:
-                    # Scalar multivariate value (str, int, float, etc.)
-                    self.create_flag(key, enabled=True, metadata={"value": val})
+            self._bootstrap_config(config)
 
-    # ── Flag lifecycle ──────────────────────────────────────────────
-
-    def create_flag(self, key: str, **kwargs: Any) -> FlagDefinition:
-        """Create or update a flag definition."""
-        flag = FlagDefinition(key=key, **kwargs)
-        self._flags[key] = flag
-        logger.info("Flag created/updated: %s", key)
-        return flag
-
-    def delete_flag(self, key: str) -> bool:
-        """Remove a flag definition."""
-        if key in self._flags:
-            del self._flags[key]
-            return True
-        return False
-
-    def get_flag(self, key: str) -> FlagDefinition | None:
-        """Get the full flag definition."""
-        return self._flags.get(key)
-
-    def list_flags(self) -> list[FlagDefinition]:
-        """List all registered flags."""
-        return list(self._flags.values())
-
-    # ── Evaluation ──────────────────────────────────────────────────
-
-    def is_enabled(self, key: str, default: bool = False, **context: Any) -> bool:
-        """Evaluate whether a flag is enabled for the given context.
-
-        Args:
-            key: Flag key.
-            default: Fallback if flag doesn't exist.
-            **context: Evaluation context (user_id, group, etc.).
-        """
-        # 1. Test override
-        if key in self._overrides:
-            return self._overrides[key]
-
-        flag = self._flags.get(key)
-        if flag is None:
-            return default
-
-        user_id = str(context.get("user_id", ""))
-
-        # 2. Denylist
-        if user_id and user_id in flag.denylist:
-            return False
-
-        # 3. Allowlist
-        if user_id and user_id in flag.allowlist:
-            return True
-
-        # 4. Time window
-        now = time.time()
-        if flag.start_time and now < flag.start_time:
-            return False
-        if flag.end_time and now > flag.end_time:
-            return False
-
-        # 5. Percentage rollout
-        if flag.percentage is not None:
-            if not user_id:
-                return False
-            score = hash(f"{key}:{user_id}") % 100
-            return score < flag.percentage
-
-        # 6. Boolean
-        return flag.enabled
-
-    def get_value(self, key: str, default: Any = None, **context: Any) -> Any:
-        """Get a multivariate flag value."""
-        flag = self._flags.get(key)
-        if flag is None:
-            return default
-        return flag.metadata.get("value", default)
-
-    # ── Test overrides ──────────────────────────────────────────────
-
-    def set_override(self, key: str, value: bool) -> None:
-        """Set a test override (highest priority)."""
-        self._overrides[key] = value
-
-    def clear_override(self, key: str) -> None:
-        """Remove a test override."""
-        self._overrides.pop(key, None)
-
-    def clear_all_overrides(self) -> None:
-        """Remove all test overrides."""
-        self._overrides.clear()
-
-    # ── Persistence ─────────────────────────────────────────────────
-
-    def load_from_file(self, file_path: str) -> int:
-        """Load flags from a JSON file. Returns count of flags loaded."""
-        data = json.loads(Path(file_path).read_text())
-        count = 0
-        for key, val in data.items():
+    def _bootstrap_config(self, config: Dict[str, Any]) -> None:
+        """Bootstrap flags from a configuration dictionary."""
+        for key, val in config.items():
             if isinstance(val, bool):
                 self.create_flag(key, enabled=val)
             elif isinstance(val, dict):
                 self.create_flag(key, **val)
-            count += 1
-        return count
+            else:
+                # Multivariate value
+                self.create_flag(key, enabled=True, metadata={"value": val})
+
+    # ── Flag Lifecycle ──────────────────────────────────────────────
+
+    def create_flag(
+        self,
+        name: str,
+        enabled: bool = True,
+        percentage: float = 100.0,
+        targeting_rules: Optional[List[TargetingRule]] = None,
+        metadata: Optional[Dict[str, Any]] = None,
+        description: str = "",
+        **kwargs: Any,
+    ) -> FlagDefinition:
+        """Create or update a flag definition."""
+        # Handle legacy kwargs mapping
+        if "allowlist" in kwargs:
+            targeting_rules = targeting_rules or []
+            targeting_rules.append(TargetingRule("user_id", "in", kwargs["allowlist"]))
+        if "denylist" in kwargs:
+            targeting_rules = targeting_rules or []
+            targeting_rules.append(TargetingRule("user_id", "not_in", kwargs["denylist"]))
+        
+        flag = FlagDefinition(
+            name=name,
+            enabled=enabled,
+            percentage=percentage,
+            targeting_rules=targeting_rules or [],
+            description=description,
+            metadata=metadata or {},
+        )
+        self._storage.set(name, flag.__dict__) # Simple serialization for now
+        logger.info("Flag created/updated: %s", name)
+        return flag
+
+    def delete_flag(self, name: str) -> bool:
+        """Remove a flag definition."""
+        return self._storage.delete(name)
+
+    def get_flag(self, name: str) -> Optional[FlagDefinition]:
+        """Get the full flag definition."""
+        data = self._storage.get(name)
+        if data:
+            # Reconstruct FlagDefinition
+            # Note: targeting_rules need special handling if they are dicts
+            rules_data = data.get("targeting_rules", [])
+            rules = [TargetingRule(**r) if isinstance(r, dict) else r for r in rules_data]
+            return FlagDefinition(
+                name=data["name"],
+                enabled=data["enabled"],
+                percentage=data["percentage"],
+                targeting_rules=rules,
+                description=data.get("description", ""),
+                metadata=data.get("metadata", {}),
+            )
+        return None
+
+    def list_flags(self) -> List[FlagDefinition]:
+        """List all registered flags."""
+        return [self.get_flag(name) for name in self._storage.list_all().keys()] # type: ignore
+
+    # ── Evaluation ──────────────────────────────────────────────────
+
+    def is_enabled(self, name: str, default: bool = False, **context_attrs: Any) -> bool:
+        """Evaluate whether a flag is enabled for the given context."""
+        if name in self._overrides:
+            return self._overrides[name]
+
+        flag = self.get_flag(name)
+        if flag is None:
+            return default
+
+        # Create EvaluationContext
+        user_id = context_attrs.pop("user_id", None)
+        session_id = context_attrs.pop("session_id", None)
+        environment = context_attrs.pop("environment", "production")
+        
+        context = EvaluationContext(
+            user_id=user_id,
+            session_id=session_id,
+            environment=environment,
+            attributes=context_attrs,
+        )
+
+        result = self._evaluator.evaluate(flag, context)
+        return result.enabled
+
+    def get_value(self, name: str, default: Any = None, **context_attrs: Any) -> Any:
+        """Get a multivariate flag value."""
+        flag = self.get_flag(name)
+        if flag is None:
+            return default
+        
+        # If enabled, return the value from metadata
+        if self.is_enabled(name, **context_attrs):
+            return flag.metadata.get("value", default)
+        return default
+
+    # ── Overrides ───────────────────────────────────────────────────
+
+    def set_override(self, name: str, enabled: bool) -> None:
+        """Set a runtime override for a flag."""
+        self._overrides[name] = enabled
+
+    def clear_override(self, name: str) -> None:
+        """Clear a runtime override."""
+        self._overrides.pop(name, None)
+
+    # ── Persistence ─────────────────────────────────────────────────
+
+    def load_from_file(self, file_path: str) -> int:
+        """Load flags from a JSON file."""
+        path = Path(file_path)
+        if not path.exists():
+            return 0
+        
+        with open(path, "r") as f:
+            data = json.load(f)
+            self._bootstrap_config(data)
+            return len(data)
 
     def save_to_file(self, file_path: str) -> None:
         """Save all flags to a JSON file."""
-        data = {}
-        for key, flag in self._flags.items():
-            data[key] = {
+        flags_data = {}
+        for flag in self.list_flags():
+            flags_data[flag.name] = {
                 "enabled": flag.enabled,
                 "percentage": flag.percentage,
-                "allowlist": flag.allowlist,
-                "denylist": flag.denylist,
-                "start_time": flag.start_time,
-                "end_time": flag.end_time,
                 "description": flag.description,
                 "metadata": flag.metadata,
+                "targeting_rules": [r.__dict__ for r in flag.targeting_rules],
             }
-        Path(file_path).write_text(json.dumps(data, indent=2))
+        
+        with open(file_path, "w") as f:
+            json.dump(flags_data, f, indent=2)
 
     # ── Summary ─────────────────────────────────────────────────────
 
-    def summary(self) -> dict[str, Any]:
-        """Return a summary of flag states."""
+    def summary(self) -> Dict[str, Any]:
+        """Return a summary of the managed flags."""
+        all_flags = self.list_flags()
         return {
-            "total_flags": len(self._flags),
-            "enabled": sum(1 for f in self._flags.values() if f.enabled),
-            "percentage_rollouts": sum(1 for f in self._flags.values() if f.percentage is not None),
-            "overrides_active": len(self._overrides),
+            "total_flags": len(all_flags),
+            "enabled_globally": sum(1 for f in all_flags if f.enabled),
+            "with_rollout": sum(1 for f in all_flags if f.percentage < 100.0),
+            "with_rules": sum(1 for f in all_flags if f.targeting_rules),
+            "overrides": len(self._overrides),
         }

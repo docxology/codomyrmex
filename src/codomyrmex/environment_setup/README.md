@@ -1,77 +1,71 @@
 # Environment Setup Module
 
-**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-Development environment validation, dependency management, and uv integration.
+The `environment_setup` module provides tools for validating the development environment, managing dependencies, and configuring environment variables.
 
 ## PAI Integration
 
 | Algorithm Phase | Role | Tools Used |
 |----------------|------|-----------|
-| **OBSERVE** | Validate environment dependencies at session start | Direct Python import |
-| **VERIFY** | Run environment health checks after configuration changes | Direct Python import |
-| **PLAN** | Check capability prerequisites before task execution | Direct Python import |
+| **OBSERVE** | Validate system dependencies before session start | `validate_environment()` |
+| **VERIFY** | Run environment health checks after configuration changes | `generate_environment_report()` |
+| **PLAN** | Check capability prerequisites before task execution | `check_dependencies(list)` |
 
-PAI agents access this module via direct Python import through the MCP bridge. The Architect agent calls `validate_environment_completeness()` during OBSERVE phase to confirm all dependencies are present before delegating work.
+PAI agents access this module to confirm all dependencies are present before delegating work. The Architect agent calls `validate_environment()` during OBSERVE phase.
 
 ## Key Exports
 
 ### Functions
-- **`ensure_dependencies_installed()`** — Check if primary dependencies are installed and accessible.
-- **`check_and_setup_env_vars()`** — Load environment variables from a .env file.
-- **`validate_python_version()`** — Validate that the Python version meets minimum requirements.
-- **`is_uv_available()`** — Check if the 'uv' package manager is available in the system PATH.
-- **`is_uv_environment()`** — Check if the current Python interpreter is running within a uv-managed environment.
-- **`generate_environment_report()`** — Generate an environment status report.
-- **`validate_environment_completeness()`** — Validate that the environment is fully configured for Codomyrmex.
+- **`validate_environment(min_python)`** — Comprehensive validation of Python version and core packages.
+- **`check_dependencies(list)`** — Detailed check for specified installed packages.
+- **`ensure_dependencies_installed(list)`** — Logs status of dependencies, returns True if all exist.
+- **`install_dependencies(source)`** — Trigger `uv` or `pip` to install packages from `pyproject.toml` or `requirements.txt`.
+- **`check_and_setup_env_vars(repo_root, required, optional)`** — Load `.env` and verify required key presence.
+- **`check_api_keys(keys)`** — specific check for credentials.
+- **`is_uv_available()`** — Check if `uv` is in system PATH.
+- **`get_uv_path()`** — Get path to `uv` executable.
+- **`is_uv_environment()`** — Check if current environment is uv-managed.
+- **`generate_environment_report()`** — Detailed report of system configuration.
 
 ## Quick Start
 
 ```python
 from codomyrmex.environment_setup import (
-    is_uv_available,
-    is_uv_environment,
-    ensure_dependencies_installed,
+    validate_environment,
     check_and_setup_env_vars,
-    validate_python_version,
+    is_uv_available
 )
 
-# Validate Python version
-validate_python_version(min_version="3.11")
-
-# Check uv package manager
-if is_uv_available():
-    print("uv is installed")
-if is_uv_environment():
-    print("Running in uv-managed environment")
-
-# Ensure dependencies are installed
-ensure_dependencies_installed(["pydantic", "httpx", "pytest"])
-
-# Setup and validate environment variables
-missing = check_and_setup_env_vars(
-    required=["OPENAI_API_KEY", "DATABASE_URL"],
-    optional=["DEBUG", "LOG_LEVEL"]
-)
+# 1. Load env vars and check for required keys
+missing = check_and_setup_env_vars(required=["OPENAI_API_KEY", "ANTHROPIC_API_KEY"])
 if missing:
-    print(f"Missing required variables: {missing}")
+    print(f"Required API keys missing: {missing}")
+
+# 2. Comprehensive system validation
+report = validate_environment(min_python="3.11")
+if not report.valid:
+    print(f"Environment check failed: {report.missing_items}")
+
+# 3. Quick check for uv
+if is_uv_available():
+    print("Fast package management enabled via uv.")
 ```
 
 ## Exports
 
-| Function | Description |
-|----------|-------------|
-| `validate_python_version(min)` | Check Python meets minimum version |
-| `is_uv_available()` | Check if uv package manager is installed |
-| `is_uv_environment()` | Check if running in uv environment |
-| `ensure_dependencies_installed(list)` | Install missing packages |
-| `check_and_setup_env_vars(req, opt)` | Validate and load env vars from .env |
+| Category | Exports |
+|----------|---------|
+| **Validation** | `validate_environment`, `validate_python_version`, `validate_environment_completeness` |
+| **Dependencies** | `check_dependencies`, `ensure_dependencies_installed`, `install_dependencies`, `DependencyResolver` |
+| **Configuration** | `check_and_setup_env_vars`, `check_api_keys`, `APIKeyReport` |
+| **System Info** | `is_uv_available`, `get_uv_path`, `is_uv_environment`, `generate_environment_report` |
 
 ## Documentation
 
-- [Module Documentation](../../../docs/modules/environment_setup/README.md)
-- [Agent Guide](../../../docs/modules/environment_setup/AGENTS.md)
-- [Specification](../../../docs/modules/environment_setup/SPEC.md)
+- [Functional Specification](SPEC.md)
+- [Agent Guidelines](AGENTS.md)
+- [Module USAGE](USAGE_EXAMPLES.md)
 
 ## Navigation
 

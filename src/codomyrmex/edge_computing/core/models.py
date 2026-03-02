@@ -48,6 +48,13 @@ class ResourceUsage:
     def is_overloaded(self) -> bool:
         return self.cpu_percent > 90 or self.memory_percent > 90
 
+    def update_usage(self, cpu: float, mem: float, disk: float | None = None) -> None:
+        """Update resource usage metrics."""
+        self.cpu_percent = max(0.0, min(100.0, cpu))
+        self.memory_mb = max(0.0, min(self.memory_max_mb, mem))
+        if disk is not None:
+            self.disk_mb = disk
+
 
 @dataclass
 class EdgeNode:
@@ -62,9 +69,13 @@ class EdgeNode:
     resources: ResourceUsage = field(default_factory=ResourceUsage)
     max_functions: int = 10
 
-    def heartbeat(self) -> None:
-        """Update the last heartbeat timestamp."""
+    def heartbeat(self, status: EdgeNodeStatus | None = None) -> None:
+        """Update the last heartbeat timestamp and optionally status."""
         self.last_heartbeat = datetime.now(UTC)
+        if status:
+            self.status = status
+        else:
+            self.status = EdgeNodeStatus.ONLINE
 
     @property
     def seconds_since_heartbeat(self) -> float:

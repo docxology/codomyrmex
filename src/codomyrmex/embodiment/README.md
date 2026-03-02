@@ -1,8 +1,15 @@
 # Embodiment Module
 
-**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 Robotics integration with ROS2, sensors, actuators, and 3D transforms.
+
+## Features
+
+- **ROS2Bridge**: In-process pub/sub system mirroring ROS2 semantics.
+- **Transform3D**: 3D rigid-body transformations (translation + ZYX Euler rotation).
+- **Sensors**: Base classes for sensor integration with mock implementations.
+- **Actuators**: Base classes for motor/actuator control with mock implementations.
 
 ## PAI Integration
 
@@ -12,51 +19,67 @@ Robotics integration with ROS2, sensors, actuators, and 3D transforms.
 | **OBSERVE** | Collect sensor data from cameras, lidar, and actuators | Direct Python import |
 | **BUILD** | Configure embodiment parameters and 3D transforms | Direct Python import |
 
-PAI agents access this module via direct Python import through the MCP bridge. The Engineer agent uses ROS2Bridge and Transform3D to interface with physical systems during EXECUTE phase.
-
 ## Installation
 
 ```bash
 uv add codomyrmex
 ```
 
-Or for development:
-
-```bash
-uv sync
-```
-
-## Key Exports
-
-### Submodules
-- **`actuators/`** — Actuator control submodule.
-- **`ros/`** — ROS integration submodule.
-- **`sensors/`** — Sensor interfaces submodule.
-- **`transformation/`** — Transformations submodule.
-
 ## Quick Start
 
+### ROS2 Integration
+
 ```python
-from codomyrmex.embodiment import ROS2Bridge, Transform3D
+from codomyrmex.embodiment import ROS2Bridge
+import asyncio
 
-# ROS2 integration
-bridge = ROS2Bridge()
-bridge.connect(uri="localhost:9090")
+async def main():
+    bridge = ROS2Bridge(node_name="my_robot")
+    await bridge.connect(uri="localhost:9090")
 
-# Subscribe to sensor data
-bridge.subscribe("/camera/image", on_image)
-bridge.subscribe("/lidar/scan", on_scan)
+    async def on_image(msg):
+        print(f"Received image: {msg.payload}")
 
-# Publish commands
-bridge.publish("/cmd_vel", {"linear": 0.5, "angular": 0.1})
+    await bridge.subscribe("/camera/image", on_image)
+    await bridge.publish("/cmd_vel", {"linear": 0.5, "angular": 0.1})
 
-# 3D transforms
+asyncio.run(main())
+```
+
+### 3D Transforms
+
+```python
+from codomyrmex.embodiment import Transform3D
+
+# Create transform
 transform = Transform3D()
-transform.translate(1.0, 0.0, 0.5)
-transform.rotate_euler(roll=0, pitch=0, yaw=45)
+transform = Transform3D.from_translation(1.0, 0.0, 0.5)
+transform = transform.compose(Transform3D.from_rotation(0, 0, 0.785)) # 45 degrees
 
 # Apply to point
-world_point = transform.apply([0, 0, 0])
+world_point = transform.apply((0, 0, 0))
+print(f"World point: {world_point}")
+```
+
+### Sensors and Actuators
+
+```python
+from codomyrmex.embodiment.sensors import MockSensor
+from codomyrmex.embodiment.actuators import MockActuator, ActuatorCommand
+
+# Sensor usage
+sensor = MockSensor("temp_1", default_value=25.0)
+sensor.connect()
+data = sensor.read()
+print(f"Sensor data: {data.data}")
+
+# Actuator usage
+actuator = MockActuator("motor_1")
+actuator.connect()
+cmd = ActuatorCommand("motor_1", "move", {"target": 10.0})
+actuator.execute(cmd)
+status = actuator.get_status()
+print(f"Actuator status: {status.feedback}")
 ```
 
 ## Submodules
@@ -67,13 +90,6 @@ world_point = transform.apply([0, 0, 0])
 | `sensors` | Sensor data processing |
 | `actuators` | Motor and actuator control |
 | `transformation` | 3D coordinate transforms |
-
-## Exports
-
-| Class | Description |
-|-------|-------------|
-| `ROS2Bridge` | WebSocket bridge to ROS2 |
-| `Transform3D` | 3D position and rotation transform |
 
 ## Testing
 
@@ -89,4 +105,4 @@ uv run python -m pytest src/codomyrmex/tests/ -k embodiment -v
 
 ## Navigation
 
-- [SPEC](SPEC.md) | [AGENTS](AGENTS.md) | [PAI](PAI.md)
+- [SPEC](SPEC.md) | [AGENTS](AGENTS.md) | [PAI.md](PAI.md)

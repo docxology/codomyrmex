@@ -80,16 +80,25 @@ class EdgeSynchronizer:
     def get_local_state(self) -> SyncState | None:
         return self._local_state
 
-    def update_local(self, data: dict[str, Any]) -> SyncState:
-        """Update local state and queue a change for sync."""
+    def update_local(self, data: dict[str, Any], is_delta: bool = False) -> SyncState:
+        """Update local state and queue a change for sync.
+
+        If `is_delta` is True, `data` is treated as a partial update.
+        """
         with self._lock:
             version = (self._local_state.version if self._local_state else 0) + 1
+            if is_delta and self._local_state:
+                new_data = self._local_state.data.copy()
+                new_data.update(data)
+                data = new_data
+
             self._local_state = SyncState.from_data(data, version)
             self._pending_changes.append({
                 "type": "update",
                 "version": version,
                 "data": data,
                 "timestamp": time.time(),
+                "is_delta": is_delta,
             })
             # Trim oldest if over max
             if len(self._pending_changes) > self._max_pending:

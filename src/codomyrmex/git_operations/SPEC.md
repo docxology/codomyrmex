@@ -1,6 +1,6 @@
 # git_operations - Functional Specification
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.1.0 | **Status**: Active | **Last Updated**: April 2026
 
 ## Purpose
 
@@ -41,8 +41,8 @@ graph TD
 ### Core Capabilities
 
 1. **Lifecycle**: `initialize`, `clone`.
-2. **Worktree**: `add_files`, `stash`, `apply_stash`.
-3. **History**: `commit_changes`, `get_commit_history`.
+2. **Worktree**: `add_files`, `stash`, `apply_stash`, `clean`.
+3. **History**: `commit_changes`, `get_commit_history`, `get_commit_history_filtered`.
 4. **Branching**: `create_branch`, `switch_branch`, `merge_branch`, `rebase_branch`.
 5. **Remote**: `push_changes`, `pull_changes`.
 6. **State**: `get_status`, `is_git_repository`.
