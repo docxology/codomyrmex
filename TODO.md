@@ -30,12 +30,18 @@ All RASP documentation enrichment complete across all 88 modules:
 - [x] **PAI.md MCP Tools table** — added to all 88 modules (was 30/88)
 - [x] **SPEC.md expansion** — 4 of 8 stub files expanded (agentic_memory, bio_simulation, ci_cd_automation, config_management); 4 pending (finance, model_context_protocol, physical_management, system_discovery)
 
-### Documentation — Remaining SPEC.md Stubs (4/8 done)
+### Documentation — SPEC.md Expansion COMPLETE ✅ *(March 2026)*
 
-- [ ] `finance/SPEC.md` — still 43 lines, needs expansion
-- [ ] `model_context_protocol/SPEC.md` — still 49 lines, needs expansion
-- [ ] `physical_management/SPEC.md` — still 49 lines, needs expansion
-- [ ] `system_discovery/SPEC.md` — still 49 lines, needs expansion
+All 8 stub SPEC.md files expanded to 143-190 lines with Error Conditions, Data Contracts, Performance SLOs, Design Constraints, and PAI Algorithm Integration sections:
+
+- [x] `agentic_memory/SPEC.md` — 49 → 143 lines
+- [x] `bio_simulation/SPEC.md` — 43 → 162 lines
+- [x] `ci_cd_automation/SPEC.md` — 49 → 159 lines
+- [x] `config_management/SPEC.md` — 49 → 181 lines
+- [x] `finance/SPEC.md` — 43 → 167 lines
+- [x] `model_context_protocol/SPEC.md` — 49 → 172 lines
+- [x] `physical_management/SPEC.md` — 49 → 190 lines
+- [x] `system_discovery/SPEC.md` — 49 → 177 lines
 
 ### MCP Coverage (48+ modules missing `mcp_tools.py`)
 
