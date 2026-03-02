@@ -1,10 +1,9 @@
-from __future__ import annotations
-
-"""
-Git and Version Control Exceptions
+"""Git and Version Control Exceptions.
 
 Errors related to git operations and repository management.
 """
+
+from __future__ import annotations
 
 from pathlib import Path
 from typing import Any

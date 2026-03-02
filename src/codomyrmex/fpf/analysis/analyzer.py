@@ -10,7 +10,7 @@ from collections import defaultdict
 
 import networkx as nx
 
-from ..core.models import FPFSpec
+from codomyrmex.fpf.core.models import FPFSpec
 
 
 class FPFAnalyzer:

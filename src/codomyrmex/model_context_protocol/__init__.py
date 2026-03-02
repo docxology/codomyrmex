@@ -22,6 +22,37 @@ from . import adapters, discovery, quality, reliability, schemas, transport, val
 
 # MCP Decorators
 from .decorators import mcp_tool
+
+# MCP Errors and Validation (v0.1.8 Stream 1)
+from .discovery import (
+    DiscoveryMetrics,
+    DiscoveryReport,
+    FailedModule,
+    MCPDiscovery,
+)
+from .errors import FieldError, MCPErrorCode, MCPToolError
+
+# MCP Tool Taxonomy (v0.2.0 Stream 1)
+from .quality.taxonomy import (
+    TaxonomyReport,
+    ToolCategory,
+    categorize_all_tools,
+    categorize_tool,
+    generate_taxonomy_report,
+)
+from .quality.validation import ValidationResult, validate_tool_arguments
+
+# MCP Transport Robustness (v0.1.8 Stream 2)
+from .reliability.circuit_breaker import (
+    CircuitBreaker,
+    CircuitBreakerConfig,
+    CircuitOpenError,
+    CircuitState,
+    get_all_circuit_metrics,
+    get_circuit_breaker,
+    reset_all_circuits,
+)
+from .reliability.rate_limiter import RateLimiter, RateLimiterConfig
 from .schemas.mcp_schemas import (
     MCPErrorDetail,
     MCPMessage,
@@ -71,38 +102,6 @@ def cli_commands():
             ),
         },
     }
-
-
-# MCP Errors and Validation (v0.1.8 Stream 1)
-from .discovery import (
-    DiscoveryMetrics,
-    DiscoveryReport,
-    FailedModule,
-    MCPDiscovery,
-)
-from .errors import FieldError, MCPErrorCode, MCPToolError
-
-# MCP Tool Taxonomy (v0.2.0 Stream 1)
-from .quality.taxonomy import (
-    TaxonomyReport,
-    ToolCategory,
-    categorize_all_tools,
-    categorize_tool,
-    generate_taxonomy_report,
-)
-from .quality.validation import ValidationResult, validate_tool_arguments
-
-# MCP Transport Robustness (v0.1.8 Stream 2)
-from .reliability.circuit_breaker import (
-    CircuitBreaker,
-    CircuitBreakerConfig,
-    CircuitOpenError,
-    CircuitState,
-    get_all_circuit_metrics,
-    get_circuit_breaker,
-    reset_all_circuits,
-)
-from .reliability.rate_limiter import RateLimiter, RateLimiterConfig
 
 __all__ = [
     "MCPErrorDetail",

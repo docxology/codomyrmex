@@ -10,12 +10,9 @@ Provides deployment strategies, managers, and utilities:
 import os
 from typing import Any, Optional
 
-# Shared schemas for cross-module interop
-try:
-    from codomyrmex.validation.schemas import Result, ResultStatus
-except ImportError:
-    Result = None
-    ResultStatus = None
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
+
+from . import health_checks, rollback, strategies
 
 # Import strategies and create aliases for common naming conventions
 from .strategies import (
@@ -29,15 +26,17 @@ from .strategies import (
     create_strategy,
 )
 
+# Shared schemas for cross-module interop
+try:
+    from codomyrmex.validation.schemas import Result, ResultStatus
+except ImportError:
+    Result = None
+    ResultStatus = None
+
 # Create convenience aliases for different naming conventions
 CanaryStrategy = CanaryDeployment
 BlueGreenStrategy = BlueGreenDeployment
 RollingStrategy = RollingDeployment
-
-# Submodule exports
-from codomyrmex.logging_monitoring.core.logger_config import get_logger
-
-from . import health_checks, rollback, strategies
 
 logger = get_logger(__name__)
 

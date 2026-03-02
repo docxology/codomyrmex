@@ -1,5 +1,3 @@
-from codomyrmex.logging_monitoring import get_logger
-
 """Orchestrator Reporting.
 
 Handles logging, summary generation, and documentation.
@@ -12,7 +10,6 @@ Usage:
     from reporting import FunctionName, ClassName
     # Example usage here
 """
-logger = get_logger(__name__)
 
 import json
 import os
@@ -22,13 +19,15 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any
 
+from codomyrmex.logging_monitoring import get_logger
+from codomyrmex.orchestrator.discovery import discover_scripts
 from codomyrmex.utils.cli_helpers import (
     print_info,
     print_section,
     print_success,
 )
 
-from ..discovery import discover_scripts
+logger = get_logger(__name__)
 
 
 def save_log(

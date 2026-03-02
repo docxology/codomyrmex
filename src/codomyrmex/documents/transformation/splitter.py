@@ -1,10 +1,9 @@
 """Document splitting operations."""
 
 
+from codomyrmex.documents.exceptions import DocumentConversionError
+from codomyrmex.documents.models.document import Document
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
-
-from ..exceptions import DocumentConversionError
-from ..models.document import Document
 
 logger = get_logger(__name__)
 

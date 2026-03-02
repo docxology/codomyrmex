@@ -33,6 +33,8 @@ Data structures:
 - RollbackStrategy: Rollback configuration and execution
 """
 
+from . import build, pipeline
+
 # Shared schemas for cross-module interop
 try:
     from codomyrmex.validation.schemas import Result, ResultStatus
@@ -103,8 +105,6 @@ def cli_commands():
         },
     }
 
-
-from . import build, pipeline
 
 __all__ = [
     # CLI integration

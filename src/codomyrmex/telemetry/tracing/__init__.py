@@ -11,6 +11,7 @@ import json
 import threading
 import time
 import uuid
+from abc import ABC, abstractmethod
 from collections.abc import Callable, Generator
 from contextlib import contextmanager
 from dataclasses import dataclass, field
@@ -195,9 +196,6 @@ class Span:
             "attributes": self.attributes,
             "events": self.events,
         }
-
-from abc import ABC, abstractmethod
-
 
 class SpanExporter(ABC):
     """Base class for span exporters."""

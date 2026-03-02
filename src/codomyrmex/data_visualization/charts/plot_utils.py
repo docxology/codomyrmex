@@ -177,7 +177,11 @@ def apply_theme_to_axes(ax, theme_name):
         The styled axes object.
     """
     try:
-        from ..themes import ThemeName, apply_theme, get_theme
+        from codomyrmex.data_visualization.themes import (
+            ThemeName,
+            apply_theme,
+            get_theme,
+        )
         if isinstance(theme_name, str):
             theme_name = ThemeName(theme_name)
         theme = get_theme(theme_name)

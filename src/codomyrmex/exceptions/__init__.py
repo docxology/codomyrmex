@@ -1,7 +1,4 @@
-"""Module for exceptions."""
-from __future__ import annotations
-
-"""Codomyrmex Exception Classes
+"""Codomyrmex Exception Classes.
 
 This package provides all exception classes used throughout the Codomyrmex
 project. It maintains a hierarchical structure rooted at CodomyrmexError.
@@ -20,6 +17,8 @@ Exception Categories:
     - cerebrum: CerebrumError hierarchy (cases, inference, models)
     - specialized: All domain-specific exceptions (IDE, cache, plugins, etc.)
 """
+
+from __future__ import annotations
 
 # Base
 # AI and Code Generation

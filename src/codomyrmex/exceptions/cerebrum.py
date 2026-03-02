@@ -1,10 +1,9 @@
-from __future__ import annotations
-
-"""
-CEREBRUM Exceptions
+"""CEREBRUM Exceptions.
 
 Errors related to the CEREBRUM cognitive system, cases, and Bayesian inference.
 """
+
+from __future__ import annotations
 
 from .base import CodomyrmexError
 

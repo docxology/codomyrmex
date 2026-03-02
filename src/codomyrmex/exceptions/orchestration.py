@@ -1,10 +1,9 @@
-from __future__ import annotations
-
-"""
-Orchestration and Project Management Exceptions
+"""Orchestration and Project Management Exceptions.
 
 Errors related to orchestration, workflows, and task execution.
 """
+
+from __future__ import annotations
 
 from .base import CodomyrmexError
 

@@ -25,6 +25,13 @@ from .models import (
     Language,
     QualityGateResult,
 )
+from .reviewer_impl import (
+    AnalysisPatternsMixin,
+    DashboardMixin,
+    LintToolsMixin,
+    PerformanceOptMixin,
+    ReportingMixin,
+)
 
 logger = get_logger(__name__)
 
@@ -62,16 +69,6 @@ except ImportError:
             """Exit performance context."""
             duration = time.time() - self.start_time
             logger.debug(f"Exiting performance context: {self.context_name} (Duration: {duration:.4f}s)")
-
-
-
-from .reviewer_impl import (
-    AnalysisPatternsMixin,
-    DashboardMixin,
-    LintToolsMixin,
-    PerformanceOptMixin,
-    ReportingMixin,
-)
 
 
 class CodeReviewer(

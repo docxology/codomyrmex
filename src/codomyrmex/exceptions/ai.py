@@ -1,10 +1,9 @@
-from __future__ import annotations
-
-"""
-AI and Code Generation Exceptions
+"""AI and Code Generation Exceptions.
 
 Errors related to AI providers, code generation, and model context.
 """
+
+from __future__ import annotations
 
 from .base import CodomyrmexError
 

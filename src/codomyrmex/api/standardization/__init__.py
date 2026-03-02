@@ -6,15 +6,19 @@ API versioning, and OpenAPI specification generation for consistent API developm
 """
 
 # REST API components
-from ..openapi_generator import (
+from codomyrmex.api.openapi_generator import (
     OpenAPISpecification,
     create_openapi_from_graphql_api,
     create_openapi_from_rest_api,
 )
 
 # OpenAPI Generation components (from parent module)
-from ..openapi_generator import StandardizationOpenAPIGenerator as OpenAPIGenerator
-from ..openapi_generator import create_openapi_generator as generate_openapi_spec
+from codomyrmex.api.openapi_generator import (
+    StandardizationOpenAPIGenerator as OpenAPIGenerator,
+)
+from codomyrmex.api.openapi_generator import (
+    create_openapi_generator as generate_openapi_spec,
+)
 
 # API Versioning components
 from .api_versioning import (

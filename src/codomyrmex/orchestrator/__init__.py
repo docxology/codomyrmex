@@ -30,6 +30,7 @@ from . import (
     observability,
     pipelines,
     resilience,
+    scheduler,
     state,
     templates,
     triggers,
@@ -125,8 +126,6 @@ def cli_commands():
         },
     }
 
-
-from . import scheduler
 
 __all__ = [
     "scheduler",

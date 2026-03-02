@@ -10,7 +10,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from datetime import datetime
 
-from ..taxes.calculator import TaxCalculator, TaxResult
+from codomyrmex.finance.taxes.calculator import TaxCalculator, TaxResult
 
 # Standard FICA rates (2024)
 SOCIAL_SECURITY_RATE = 0.062

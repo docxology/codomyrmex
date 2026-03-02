@@ -1,10 +1,9 @@
-from __future__ import annotations
-
-"""
-Base Exception Classes
+"""Base Exception Classes.
 
 Root exception class and utility functions for the Codomyrmex package.
 """
+
+from __future__ import annotations
 
 from typing import Any
 

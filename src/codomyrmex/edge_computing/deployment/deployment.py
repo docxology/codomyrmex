@@ -9,8 +9,8 @@ from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any
 
-from ..core.cluster import EdgeCluster
-from ..core.models import EdgeFunction, EdgeNodeStatus
+from codomyrmex.edge_computing.core.cluster import EdgeCluster
+from codomyrmex.edge_computing.core.models import EdgeFunction, EdgeNodeStatus
 
 
 class DeploymentStrategy(Enum):

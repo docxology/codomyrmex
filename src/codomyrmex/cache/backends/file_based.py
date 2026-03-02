@@ -8,10 +8,9 @@ import time
 from pathlib import Path
 from typing import Any
 
+from codomyrmex.cache.cache import Cache
+from codomyrmex.cache.stats import CacheStats
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
-
-from ..cache import Cache
-from ..stats import CacheStats
 
 logger = get_logger(__name__)
 

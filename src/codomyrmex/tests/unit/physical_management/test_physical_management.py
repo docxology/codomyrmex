@@ -1,8 +1,7 @@
-import time
-
 """Unit tests for physical_management module."""
 
 import sys
+import time
 
 import pytest
 

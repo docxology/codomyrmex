@@ -28,14 +28,8 @@ Example:
     >>> fixed = debugger.debug(code, stdout, stderr, exit_code)
 """
 
-# Shared schemas for cross-module interop
-try:
-    from codomyrmex.validation.schemas import Result, ResultStatus
-except ImportError:
-    Result = None
-    ResultStatus = None
+from . import pattern_matching, static_analysis
 
-# Execution submodule
 # Debugging submodule
 from .debugging import (
     Debugger,
@@ -46,6 +40,8 @@ from .debugging import (
     PatchGenerator,
     VerificationResult,
 )
+
+# Execution submodule
 from .execution import (
     SUPPORTED_LANGUAGES,
     execute_code,
@@ -94,6 +90,13 @@ from .sandbox import (
     sandbox_process_isolation,
 )
 
+# Shared schemas for cross-module interop
+try:
+    from codomyrmex.validation.schemas import Result, ResultStatus
+except ImportError:
+    Result = None
+    ResultStatus = None
+
 
 def cli_commands():
     """Return CLI commands for the coding module."""
@@ -116,9 +119,6 @@ def cli_commands():
         "languages": _list_languages,
         "execute": _execute,
     }
-
-
-from . import pattern_matching, static_analysis
 
 __all__ = [
     "pattern_matching",

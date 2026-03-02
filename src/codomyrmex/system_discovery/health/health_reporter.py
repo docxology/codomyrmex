@@ -20,7 +20,11 @@ except ImportError:
 
 # Import health checker
 try:
-    from ..health.health_checker import HealthChecker, HealthCheckResult, HealthStatus
+    from codomyrmex.system_discovery.health.health_checker import (
+        HealthChecker,
+        HealthCheckResult,
+        HealthStatus,
+    )
 except ImportError:
     HealthChecker = None
     HealthStatus = None

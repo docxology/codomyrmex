@@ -13,7 +13,7 @@ import pytest
 
 pydantic = pytest.importorskip("pydantic")
 
-from codomyrmex.model_context_protocol.schemas import (
+from codomyrmex.model_context_protocol.schemas import (  # noqa: E402
     ContentType,
     Conversation,
     FileContent,
@@ -29,7 +29,7 @@ from codomyrmex.model_context_protocol.schemas import (
     ToolResult,
     create_tool,
 )
-from codomyrmex.model_context_protocol.schemas.mcp_schemas import (
+from codomyrmex.model_context_protocol.schemas.mcp_schemas import (  # noqa: E402
     MCPMessage,
     MCPToolCall,
     MCPToolRegistry,

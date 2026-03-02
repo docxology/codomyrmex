@@ -1,10 +1,9 @@
-from __future__ import annotations
-
-"""
-Configuration and Setup Exceptions
+"""Configuration and Setup Exceptions.
 
 Errors related to configuration, environment, and dependencies.
 """
+
+from __future__ import annotations
 
 from pathlib import Path
 from typing import Any

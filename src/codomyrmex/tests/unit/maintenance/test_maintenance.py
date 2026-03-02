@@ -1,11 +1,10 @@
-import time
-
 """Unit tests for tools module - comprehensive testing with real implementations.
 
 Tests for DependencyAnalyzer, DependencyChecker, project analysis functions,
 dependency consolidator, deprecation notice utilities, and validate_dependencies.
 """
 
+import time
 from pathlib import Path
 
 import pytest

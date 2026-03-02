@@ -1,10 +1,9 @@
-from __future__ import annotations
-
-"""
-Analysis Exceptions
+"""Analysis Exceptions.
 
 Errors related to static analysis, pattern matching, and security auditing.
 """
+
+from __future__ import annotations
 
 from .base import CodomyrmexError
 

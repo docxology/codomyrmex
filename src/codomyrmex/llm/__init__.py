@@ -26,15 +26,19 @@ except ImportError:
 
 # modular Ollama implementation
 # Submodule exports
+from codomyrmex.model_context_protocol.decorators import mcp_tool
+
 from . import (
     chains,
     cost_tracking,
     embeddings,
     guardrails,
     memory,
+    multimodal,
     prompts,
     providers,
     rag,
+    safety,
     streaming,
     tools,
 )
@@ -83,9 +87,6 @@ def cli_commands():
         "providers": _list_providers,
     }
 
-
-from . import multimodal, safety
-
 __all__ = [
     "safety",
     "multimodal",
@@ -125,13 +126,6 @@ __all__ = [
     'prompts',
     'ask',
 ]
-
-
-# =============================================================================
-# MCP Tools
-# =============================================================================
-
-from codomyrmex.model_context_protocol.decorators import mcp_tool
 
 
 @mcp_tool(category="llm")

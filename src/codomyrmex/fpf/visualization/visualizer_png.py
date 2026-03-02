@@ -17,8 +17,8 @@ import numpy as np
 
 from codomyrmex.cerebrum.visualization.visualization_base import BaseNetworkVisualizer
 from codomyrmex.cerebrum.visualization.visualization_theme import get_default_theme
+from codomyrmex.fpf.core.models import FPFSpec
 
-from ..core.models import FPFSpec
 from .graph_generator import GraphGenerator
 from .term_analyzer import TermAnalyzer
 

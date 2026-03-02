@@ -6,7 +6,7 @@ and concept clusters from FPF specifications.
 """
 
 
-from ..core.models import FPFSpec
+from codomyrmex.fpf.core.models import FPFSpec
 
 
 class SectionManager:

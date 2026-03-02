@@ -23,9 +23,15 @@ import os
 import sys
 import threading
 import uuid
+import uuid as _uuid
 from datetime import datetime
+from datetime import datetime as _datetime
 from pathlib import Path
 from typing import Any
+
+from codomyrmex.logging_monitoring.audit.audit_logger import (
+    AuditLogger as _StandaloneAuditLogger,  # noqa: F401
+)
 
 # Default log format
 DEFAULT_LOG_FORMAT = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
@@ -314,12 +320,6 @@ class LogContext:
 
 # Re-exports for convenience.
 # AuditLogger re-export.
-import uuid as _uuid
-from datetime import datetime as _datetime
-
-from ..audit.audit_logger import (
-    AuditLogger as _StandaloneAuditLogger,  # noqa: E402, F401
-)
 
 
 class AuditLogger:

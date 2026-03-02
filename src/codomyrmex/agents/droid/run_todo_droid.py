@@ -5,6 +5,12 @@ import sys
 import time
 from collections.abc import Callable, Iterable
 
+from codomyrmex.agents.droid.controller import (
+    DroidController,
+    create_default_controller,
+    load_config_from_file,
+)
+from codomyrmex.agents.droid.todo import TodoItem, TodoManager
 from codomyrmex.logging_monitoring import get_logger, setup_logging
 
 setup_logging()
@@ -44,13 +50,6 @@ Usage:
     from codomyrmex.exceptions import CodomyrmexError
     processed = list(run_todos(controller, manager, 3))
 """
-
-from codomyrmex.agents.droid.controller import (
-    DroidController,
-    create_default_controller,
-    load_config_from_file,
-)
-from codomyrmex.agents.droid.todo import TodoItem, TodoManager
 
 # Enhanced prompt with Codomyrmex-specific context and rules
 CODOMYRMEX_ENHANCED_PROMPT = (

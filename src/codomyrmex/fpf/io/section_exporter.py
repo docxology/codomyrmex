@@ -10,7 +10,8 @@ and concept clusters to separate JSON files.
 import json
 from pathlib import Path
 
-from ..core.models import Concept, Pattern, Relationship
+from codomyrmex.fpf.core.models import Concept, Pattern, Relationship
+
 from .section_manager import SectionManager
 
 

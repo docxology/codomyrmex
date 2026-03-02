@@ -39,7 +39,7 @@ except ImportError:
     Result = None
     ResultStatus = None
 
-from . import audit, connections, replication, sharding
+from . import audit, backup, connections, lineage, migration, replication, sharding
 from .backup.backup_manager import (
     Backup,
     BackupManager,
@@ -92,12 +92,6 @@ def cli_commands():
         },
     }
 
-
-from . import (
-    backup,  # noqa: F401
-    lineage,
-    migration,
-)
 
 __all__ = [
     "lineage",

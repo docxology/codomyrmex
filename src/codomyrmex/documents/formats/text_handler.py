@@ -4,10 +4,9 @@ from __future__ import annotations
 
 from pathlib import Path
 
+from codomyrmex.documents.config import get_config
+from codomyrmex.documents.exceptions import DocumentReadError, DocumentWriteError
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
-
-from ..config import get_config
-from ..exceptions import DocumentReadError, DocumentWriteError
 
 logger = get_logger(__name__)
 
@@ -30,7 +29,7 @@ def read_text(file_path: str | Path, encoding: str | None = None) -> str:
 
     # Try to detect encoding if not provided
     if encoding is None:
-        from ..utils.encoding_detector import detect_encoding
+        from codomyrmex.documents.utils.encoding_detector import detect_encoding
         encoding = detect_encoding(file_path) or get_config().default_encoding
 
     try:

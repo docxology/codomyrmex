@@ -3,9 +3,9 @@
 import re
 from collections import Counter
 
+from codomyrmex.documents.models.document import Document
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
-from ..models.document import Document
 from .indexer import InMemoryIndex
 
 logger = get_logger(__name__)

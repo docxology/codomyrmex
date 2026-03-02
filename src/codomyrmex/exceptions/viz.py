@@ -1,10 +1,9 @@
-from __future__ import annotations
-
-"""
-Visualization and Documentation Exceptions
+"""Visualization and Documentation Exceptions.
 
 Errors related to data visualization, plotting, and documentation.
 """
+
+from __future__ import annotations
 
 from .base import CodomyrmexError
 

@@ -4,7 +4,8 @@ Provides the fundamental logging setup, logger retrieval, context management,
 and correlation ID generation for the Codomyrmex logging system.
 """
 
-from ..handlers.performance import PerformanceLogger
+from codomyrmex.logging_monitoring.handlers.performance import PerformanceLogger
+
 from .correlation import (
     CorrelationFilter,
     clear_correlation_id,

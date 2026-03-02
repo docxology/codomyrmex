@@ -17,6 +17,8 @@ from datetime import datetime
 from enum import Enum
 from typing import Any, Optional, TypeVar
 
+from codomyrmex.exceptions import BulkheadFullError, CircuitOpenError
+
 T = TypeVar('T')
 
 class CircuitState(Enum):
@@ -245,8 +247,6 @@ class CircuitBreaker:
             self.record_success()
         else:
             self.record_failure()
-
-from codomyrmex.exceptions import BulkheadFullError, CircuitOpenError
 
 
 class RetryPolicy:

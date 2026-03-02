@@ -285,8 +285,8 @@ def chain_scripts(
         script_path = Path(script)
         if not script_path.exists():
             results.append({"script": str(script), "error": "Not found", "success": False})
+            overall_success = False
             if stop_on_error:
-                overall_success = False
                 break
             continue
 

@@ -10,7 +10,8 @@ with analysis, statistics, and visualizations.
 from datetime import datetime
 from pathlib import Path
 
-from ..core.models import FPFSpec
+from codomyrmex.fpf.core.models import FPFSpec
+
 from .analyzer import FPFAnalyzer
 from .term_analyzer import TermAnalyzer
 

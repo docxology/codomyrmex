@@ -11,11 +11,11 @@ from collections.abc import Callable
 from datetime import datetime, timedelta
 from typing import Optional
 
+from codomyrmex.collaboration.exceptions import AgentNotFoundError
+from codomyrmex.collaboration.models import AgentStatus, SwarmStatus
+from codomyrmex.collaboration.protocols import AgentState
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
-from ..exceptions import AgentNotFoundError
-from ..models import AgentStatus, SwarmStatus
-from ..protocols import AgentState
 from .base import CollaborativeAgent
 
 logger = get_logger(__name__)

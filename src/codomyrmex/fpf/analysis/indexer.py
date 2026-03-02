@@ -9,7 +9,7 @@ and concepts.
 
 from typing import Any
 
-from ..core.models import FPFIndex, FPFSpec, Pattern
+from codomyrmex.fpf.core.models import FPFIndex, FPFSpec, Pattern
 
 
 class FPFIndexer:

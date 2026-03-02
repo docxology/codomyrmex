@@ -1,7 +1,8 @@
 """Finance report."""
 from pathlib import Path
 
-from ..core.ui import Card, Dashboard
+from codomyrmex.data_visualization.core.ui import Card, Dashboard
+
 from ._base import BaseReport
 
 

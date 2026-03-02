@@ -489,8 +489,8 @@ class AdvancedPlotter:
 
         heatmap = sns.heatmap(
             data,
-            xticklabels=x_labels,
-            yticklabels=y_labels,
+            xticklabels=x_labels if x_labels is not None else "auto",
+            yticklabels=y_labels if y_labels is not None else "auto",
             cmap=cmap,
             annot=annot,
             fmt=fmt,

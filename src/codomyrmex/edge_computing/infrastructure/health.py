@@ -9,7 +9,7 @@ from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from typing import Any
 
-from ..core.models import EdgeNode, EdgeNodeStatus
+from codomyrmex.edge_computing.core.models import EdgeNode, EdgeNodeStatus
 
 
 @dataclass

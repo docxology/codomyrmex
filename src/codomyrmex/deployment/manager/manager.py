@@ -8,9 +8,11 @@ from __future__ import annotations
 
 from typing import Any
 
+from codomyrmex.deployment.strategies.strategies import (
+    DeploymentState,
+    DeploymentStrategy,
+)
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
-
-from ..strategies.strategies import DeploymentState, DeploymentStrategy
 
 logger = get_logger(__name__)
 

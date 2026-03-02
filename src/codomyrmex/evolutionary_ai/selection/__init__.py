@@ -14,7 +14,7 @@ from dataclasses import dataclass, field
 from typing import Any, Generic, TypeVar
 
 # Re-use the Individual dataclass from operators to stay consistent
-from ..operators import Individual
+from codomyrmex.evolutionary_ai.operators import Individual
 
 T = TypeVar("T")
 

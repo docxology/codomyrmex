@@ -18,8 +18,17 @@ from __future__ import annotations
 import os
 from typing import Any, NoReturn
 
-from ..exceptions import EmailAPIError, EmailAuthError, MessageNotFoundError
-from ..generics import EmailAddress, EmailDraft, EmailMessage, EmailProvider
+from codomyrmex.email.exceptions import (
+    EmailAPIError,
+    EmailAuthError,
+    MessageNotFoundError,
+)
+from codomyrmex.email.generics import (
+    EmailAddress,
+    EmailDraft,
+    EmailMessage,
+    EmailProvider,
+)
 
 try:
     from agentmail import AgentMail

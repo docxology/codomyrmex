@@ -3,8 +3,8 @@
 import asyncio
 from typing import Any
 
-from ..core.event_bus import get_event_bus
-from ..core.event_schema import Event, EventType
+from codomyrmex.events.core.event_bus import get_event_bus
+from codomyrmex.events.core.event_schema import Event, EventType
 
 
 class AsyncEventEmitter:

@@ -121,7 +121,7 @@ def execute_with_limits(
     Returns:
         Dictionary with execution results including resource usage
     """
-    from ..monitoring.resource_tracker import ResourceMonitor
+    from codomyrmex.coding.monitoring.resource_tracker import ResourceMonitor
 
     monitor = ResourceMonitor()
 
@@ -130,7 +130,7 @@ def execute_with_limits(
         monitor.start_monitoring()
 
         # Execute the code
-        from ..execution.executor import execute_code
+        from codomyrmex.coding.execution.executor import execute_code
         result = execute_code(language, code, stdin, limits.time_limit, session_id)
 
         # Update monitoring during execution (in a separate thread for better tracking)
@@ -194,7 +194,7 @@ def sandbox_process_isolation(
             resource.setrlimit(resource.RLIMIT_AS, (memory_bytes, memory_bytes))
 
             # Execute the code
-            from ..execution.executor import execute_code
+            from codomyrmex.coding.execution.executor import execute_code
             result = execute_code(language, code, stdin, limits.time_limit)
 
             # Cap output size

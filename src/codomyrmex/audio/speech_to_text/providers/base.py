@@ -7,7 +7,11 @@ from abc import ABC, abstractmethod
 from collections.abc import AsyncIterator
 from pathlib import Path
 
-from ..models import TranscriptionConfig, TranscriptionResult, WhisperModelSize
+from codomyrmex.audio.speech_to_text.models import (
+    TranscriptionConfig,
+    TranscriptionResult,
+    WhisperModelSize,
+)
 
 
 class STTProvider(ABC):

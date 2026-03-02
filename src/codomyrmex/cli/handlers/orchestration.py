@@ -1,7 +1,11 @@
 import json
 from pathlib import Path
 
-from ..utils import TERMINAL_INTERFACE_AVAILABLE, TerminalFormatter, get_logger
+from codomyrmex.cli.utils import (
+    TERMINAL_INTERFACE_AVAILABLE,
+    TerminalFormatter,
+    get_logger,
+)
 
 logger = get_logger(__name__)
 

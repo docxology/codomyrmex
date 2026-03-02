@@ -7,7 +7,7 @@ OAuth integration, and access control.
 
 from typing import Optional
 
-from codomyrmex.exceptions import CodomyrmexError
+from codomyrmex.exceptions import AuthenticationError, CodomyrmexError
 
 from .core import Authenticator
 from .providers import APIKeyManager
@@ -63,9 +63,6 @@ __all__ = [
 ]
 
 __version__ = "0.1.0"
-
-
-from codomyrmex.exceptions import AuthenticationError
 
 
 def authenticate(credentials: dict) -> Token | None:

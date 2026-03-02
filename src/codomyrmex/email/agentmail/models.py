@@ -7,7 +7,7 @@ from typing import Any
 
 from pydantic import BaseModel
 
-from ..generics import EmailAddress, EmailMessage
+from codomyrmex.email.generics import EmailAddress, EmailMessage
 
 
 class AgentMailInbox(BaseModel):

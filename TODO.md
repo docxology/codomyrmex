@@ -64,12 +64,15 @@ Modules with no MCP exposure — invisible to the PAI bridge:
 - [ ] Add `py.typed` markers across all modules with type hints (PEP 561)
 - [ ] Check and complete: `cerebrum/`, `events/`, `search/`, `config_management/`, etc.
 
-### Ruff Violations — Sprint 14 COMPLETE ✅ *(March 2026)*
+### Ruff Violations — Sprint 15 COMPLETE ✅ *(March 2026)*
 
 - [x] Reduced 1,531 → 607 violations (-60.4%, Sprint 14)
 - [x] Fixed all F821 source bugs, UP042 StrEnum, E721, B004, B005, B025, B006, B017, B023, B028, F811, F601, F402, B018, B027, UP022, UP036
-- [ ] Remaining 607: TID252 (404 relative imports), E402 (160 conditional imports), F405 (43 star-import usage) — architectural, deferred
-- [ ] Target: reduce TID252/E402 in Sprint 15 by migrating key modules to absolute imports
+- [x] **Sprint 15: 607 → 43 violations** (−93% from Sprint 14): all TID252 (241 relative imports → 0), all E402 (160 imports not at top → 0) eliminated across 107+ files
+- [x] Remaining 43: F405 star-import usage in `physical_management/__init__.py` and `spatial/three_d/__init__.py` — structural, not fixable without major refactoring
+- [x] Fixed circular import in `ide/__init__.py` (CursorClient deferred post class-defs with `# noqa: E402`)
+- [x] Fixed seaborn heatmap `xticklabels=None` TypeError in `data_visualization/engines/advanced_plotter.py`
+- [x] Fixed `test_task_master.py` ANTHROPIC_API_KEY isolation (collection-time `skipif` → execution-time `autouse` fixture)
 
 ---
 
@@ -170,6 +173,14 @@ Modules with no MCP exposure — invisible to the PAI bridge:
 - [x] Fixed hub file versions: README.md, PAI.md, src/codomyrmex/PAI.md → v1.0.5 / March 2026
 - [x] Added `## PAI Integration` table to root README.md (7-phase Algorithm table)
 - [x] Updated root README.md test badge to 16,190, coverage gate reference to 68%
+
+### Sprint 15 (March 2026) — Ruff Cleanup & Bug Fixes
+- [x] **TID252 eliminated**: 241 relative parent imports converted to absolute across 107 source files
+- [x] **E402 eliminated**: 160 "imports not at top" fixed across 120+ files (logger placement, cli_commands, docstring order)
+- [x] Ruff total: 607 → 43 violations (93% reduction; only F405 structural star imports remain)
+- [x] Fixed circular import in `ide/__init__.py` — CursorClient deferred with `# noqa: E402`
+- [x] Fixed seaborn `xticklabels=None` TypeError (→ `"auto"`) in `advanced_plotter.py`
+- [x] Fixed `test_task_master.py` ANTHROPIC_API_KEY collection-time skip → execution-time `autouse` fixture
 
 ### Sprint 14 (March 2026) — Rules Submodule
 - [x] Moved `cursorrules/` → `src/codomyrmex/agentic_memory/rules/` via `git mv`

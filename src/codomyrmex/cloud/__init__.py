@@ -26,6 +26,8 @@ Usage:
 Submodules:
     cost_management: Consolidated cost management capabilities."""
 
+from . import cost_management
+
 # Shared schemas for cross-module interop
 try:
     from codomyrmex.validation.schemas import Result, ResultStatus
@@ -161,8 +163,6 @@ def cli_commands():
         "status": _cloud_status,
     }
 
-
-from . import cost_management
 
 __all__ = [
     "cost_management",

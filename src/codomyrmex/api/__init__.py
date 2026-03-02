@@ -26,6 +26,8 @@ The module is organized into submodules:
 Submodules:
     rate_limiting: Consolidated rate limiting capabilities."""
 
+from . import rate_limiting
+
 # Shared schemas for cross-module interop
 try:
     from codomyrmex.validation.schemas import Result, ResultStatus
@@ -224,8 +226,6 @@ def cli_commands():
         "status": _api_status,
     }
 
-
-from . import rate_limiting
 
 __all__ = [
     "rate_limiting",

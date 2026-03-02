@@ -6,10 +6,13 @@ import json
 from pathlib import Path
 from typing import Any
 
+from codomyrmex.documents.config import get_config
+from codomyrmex.documents.exceptions import (
+    DocumentReadError,
+    DocumentValidationError,
+    DocumentWriteError,
+)
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
-
-from ..config import get_config
-from ..exceptions import DocumentReadError, DocumentValidationError, DocumentWriteError
 
 logger = get_logger(__name__)
 

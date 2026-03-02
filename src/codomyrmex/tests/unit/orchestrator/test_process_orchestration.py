@@ -1,5 +1,3 @@
-import asyncio
-
 """Tests for Sprint 34: Multi-Process Agent Orchestration.
 
 Covers HeartbeatMonitor (registration, beats, status detection),
@@ -7,6 +5,7 @@ AgentSupervisor (restart strategies, escalation), and
 ProcessOrchestrator (spawn, shutdown, crash recovery, health).
 """
 
+import asyncio
 
 from codomyrmex.orchestrator.agent_supervisor import (
     AgentSupervisor,

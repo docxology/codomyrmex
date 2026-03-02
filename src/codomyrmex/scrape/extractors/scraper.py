@@ -7,9 +7,8 @@ interface for scraping operations, delegating to provider-specific adapters.
 from urllib.parse import urlparse
 
 from codomyrmex.logging_monitoring import get_logger
-
-from ..config import ScrapeConfig, get_config
-from ..core import (
+from codomyrmex.scrape.config import ScrapeConfig, get_config
+from codomyrmex.scrape.core import (
     BaseScraper,
     CrawlResult,
     ExtractResult,
@@ -18,7 +17,7 @@ from ..core import (
     ScrapeResult,
     SearchResult,
 )
-from ..exceptions import ScrapeError, ScrapeValidationError
+from codomyrmex.scrape.exceptions import ScrapeError, ScrapeValidationError
 
 logger = get_logger(__name__)
 
@@ -57,7 +56,7 @@ class Scraper(BaseScraper):
         if self.adapter is None:
             # Try to create a default adapter (Firecrawl)
             try:
-                from ..firecrawl.adapter import FirecrawlAdapter
+                from codomyrmex.scrape.firecrawl.adapter import FirecrawlAdapter
 
                 self.adapter = FirecrawlAdapter(config=self.config)
                 logger.info("Using FirecrawlAdapter as default scraper")

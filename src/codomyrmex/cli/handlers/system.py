@@ -1,6 +1,6 @@
 import sys
 
-from ..utils import (
+from codomyrmex.cli.utils import (
     PERFORMANCE_MONITORING_AVAILABLE,
     TERMINAL_INTERFACE_AVAILABLE,
     TerminalFormatter,

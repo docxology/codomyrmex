@@ -15,7 +15,7 @@ from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any
 
-from ..core.models import SyncState
+from codomyrmex.edge_computing.core.models import SyncState
 
 
 class ConflictStrategy(Enum):

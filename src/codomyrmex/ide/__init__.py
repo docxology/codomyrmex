@@ -24,6 +24,17 @@ from enum import Enum
 from pathlib import Path
 from typing import Any, Optional
 
+from codomyrmex.exceptions import (
+    ArtifactError,
+    CommandExecutionError,
+    IDEError,
+    SessionError,
+)
+from codomyrmex.exceptions import (
+    IDEConnectionError as ConnectionError,
+)
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
+
 # Shared schemas for cross-module interop
 from codomyrmex.validation.schemas import Result, ResultStatus
 
@@ -250,19 +261,11 @@ class IDEClient(ABC):
         successes = sum(1 for cmd in self._command_history if cmd.success)
         return successes / len(self._command_history)
 
-from codomyrmex.exceptions import (
-    ArtifactError,
-    CommandExecutionError,
-    IDEError,
-    SessionError,
-)
-from codomyrmex.exceptions import (
-    IDEConnectionError as ConnectionError,
-)
 
-# Import submodule clients
-from codomyrmex.ide.cursor import CursorClient
-from codomyrmex.logging_monitoring.core.logger_config import get_logger
+
+# CursorClient must be imported after IDEClient is defined to avoid circular import
+# (ide.cursor.__init__ imports IDEClient from ide)
+from codomyrmex.ide.cursor import CursorClient  # noqa: E402
 
 
 def cli_commands():

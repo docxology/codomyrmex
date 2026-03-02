@@ -580,17 +580,22 @@ class TestRetryConstants:
 # API-dependent methods (skipped without key)
 # ---------------------------------------------------------------------------
 
-SKIP_NO_KEY = pytest.mark.skipif(
-    os.getenv("ANTHROPIC_API_KEY") is None,
-    reason="ANTHROPIC_API_KEY not set",
-)
-
 
 @pytest.mark.unit
 class TestAPIMethodsSkippedWithoutKey:
-    """Methods that require a live API key -- skipped by default."""
+    """Methods that require a live API key -- skipped by default.
 
-    @SKIP_NO_KEY
+    The skip check is performed at test-execution time (not collection time)
+    so that changes to ANTHROPIC_API_KEY between collection and execution are
+    handled correctly.
+    """
+
+    @pytest.fixture(autouse=True)
+    def require_api_key(self):
+        """Skip all tests in this class when ANTHROPIC_API_KEY is absent."""
+        if not os.getenv("ANTHROPIC_API_KEY"):
+            pytest.skip("ANTHROPIC_API_KEY not set")
+
     def test_execute_task_returns_dict(self):
         m = ClaudeTaskMaster()
         result = m.execute_task("Say hello in one word")
@@ -598,28 +603,24 @@ class TestAPIMethodsSkippedWithoutKey:
         assert "task_id" in result
         assert result["status"] in ("completed", "failed")
 
-    @SKIP_NO_KEY
     def test_decompose_task_returns_subtasks(self):
         m = ClaudeTaskMaster()
         result = m.decompose_task("Build a REST API", max_subtasks=3)
         assert isinstance(result, dict)
         assert "subtasks" in result
 
-    @SKIP_NO_KEY
     def test_analyze_task_returns_analysis(self):
         m = ClaudeTaskMaster()
         result = m.analyze_task("Refactor the payment module")
         assert isinstance(result, dict)
         assert "analysis" in result
 
-    @SKIP_NO_KEY
     def test_plan_workflow_returns_plan(self):
         m = ClaudeTaskMaster()
         result = m.plan_workflow("Deploy microservices")
         assert isinstance(result, dict)
         assert "plan" in result
 
-    @SKIP_NO_KEY
     def test_generate_code_returns_code(self):
         m = ClaudeTaskMaster()
         result = m.generate_code("A function that adds two numbers", language="python")

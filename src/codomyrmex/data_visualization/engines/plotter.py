@@ -10,16 +10,16 @@ import logging
 import matplotlib.pyplot as plt
 import numpy as np
 
-from ..charts.bar_chart import create_bar_chart
-from ..charts.histogram import create_histogram
-from ..charts.line_plot import create_line_plot
-from ..charts.pie_chart import create_pie_chart
-from ..charts.plot_utils import (
+from codomyrmex.data_visualization.charts.bar_chart import create_bar_chart
+from codomyrmex.data_visualization.charts.histogram import create_histogram
+from codomyrmex.data_visualization.charts.line_plot import create_line_plot
+from codomyrmex.data_visualization.charts.pie_chart import create_pie_chart
+from codomyrmex.data_visualization.charts.plot_utils import (
     DEFAULT_FIGURE_SIZE,
     apply_common_aesthetics,
     save_plot,
 )
-from ..charts.scatter_plot import create_scatter_plot
+from codomyrmex.data_visualization.charts.scatter_plot import create_scatter_plot
 
 # Attempt to import Codomyrmex logging utilities
 try:

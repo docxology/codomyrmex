@@ -10,7 +10,7 @@ that appear across different patterns and sections of the FPF specification.
 import re
 from collections import Counter, defaultdict
 
-from ..core.models import FPFSpec, Pattern
+from codomyrmex.fpf.core.models import FPFSpec, Pattern
 
 
 class TermAnalyzer:

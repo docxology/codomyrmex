@@ -17,7 +17,11 @@ except ImportError:
     logger = logging.getLogger(__name__)
 
 # Import plugin system components
-from ..validation.plugin_validator import PluginValidator, ValidationResult
+from codomyrmex.plugin_system.validation.plugin_validator import (
+    PluginValidator,
+    ValidationResult,
+)
+
 from .plugin_loader import LoadResult, PluginLoader
 from .plugin_registry import (
     Hook,

@@ -5,7 +5,7 @@ This module defines the interface that all TTS providers must implement.
 
 from abc import ABC, abstractmethod
 
-from ..models import SynthesisResult, TTSConfig, VoiceInfo
+from codomyrmex.audio.text_to_speech.models import SynthesisResult, TTSConfig, VoiceInfo
 
 
 class TTSProvider(ABC):

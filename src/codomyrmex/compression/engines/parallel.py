@@ -14,7 +14,7 @@ from collections.abc import Callable
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import dataclass
 
-from ..core.compressor import Compressor
+from codomyrmex.compression.core.compressor import Compressor
 
 
 @dataclass

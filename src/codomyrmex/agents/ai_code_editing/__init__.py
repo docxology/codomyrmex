@@ -30,7 +30,7 @@ Data structures:
 - CodeStyle: Enum of code style preferences
 """
 
-from ..droid import (
+from codomyrmex.agents.droid import (
     DroidConfig,
     DroidController,
     DroidMetrics,
@@ -42,6 +42,7 @@ from ..droid import (
     load_config_from_file,
     save_config_to_file,
 )
+
 from .ai_code_helpers import (
     CodeAnalysisRequest,
     CodeComplexity,

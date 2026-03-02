@@ -4,11 +4,10 @@ from __future__ import annotations
 
 from pathlib import Path
 
+from codomyrmex.documents.config import get_config
+from codomyrmex.documents.exceptions import DocumentWriteError, UnsupportedFormatError
+from codomyrmex.documents.models.document import Document, DocumentFormat
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
-
-from ..config import get_config
-from ..exceptions import DocumentWriteError, UnsupportedFormatError
-from ..models.document import Document, DocumentFormat
 
 logger = get_logger(__name__)
 
@@ -49,11 +48,11 @@ class DocumentWriter:
 
         try:
             if format == DocumentFormat.MARKDOWN:
-                from ..formats.markdown_handler import write_markdown
+                from codomyrmex.documents.formats.markdown_handler import write_markdown
                 content = document.get_content_as_string()
                 write_markdown(content, str(file_path), encoding=encoding)
             elif format == DocumentFormat.JSON:
-                from ..formats.json_handler import write_json
+                from codomyrmex.documents.formats.json_handler import write_json
                 if isinstance(document.content, dict):
                     write_json(document.content, str(file_path), encoding=encoding)
                 else:
@@ -61,7 +60,7 @@ class DocumentWriter:
                     data = json.loads(document.get_content_as_string())
                     write_json(data, str(file_path), encoding=encoding)
             elif format == DocumentFormat.YAML:
-                from ..formats.yaml_handler import write_yaml
+                from codomyrmex.documents.formats.yaml_handler import write_yaml
                 if isinstance(document.content, dict):
                     write_yaml(document.content, str(file_path), encoding=encoding)
                 else:
@@ -69,11 +68,11 @@ class DocumentWriter:
                     data = yaml.safe_load(document.get_content_as_string())
                     write_yaml(data, str(file_path), encoding=encoding)
             elif format == DocumentFormat.PDF:
-                from ..formats.pdf_handler import write_pdf
+                from codomyrmex.documents.formats.pdf_handler import write_pdf
                 content = document.get_content_as_string()
                 write_pdf(content, str(file_path), metadata=document.metadata)
             elif format == DocumentFormat.TEXT:
-                from ..formats.text_handler import write_text
+                from codomyrmex.documents.formats.text_handler import write_text
                 content = document.get_content_as_string()
                 write_text(content, str(file_path), encoding=encoding)
             else:

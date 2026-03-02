@@ -14,10 +14,10 @@ from typing import Any
 
 from codomyrmex.logging_monitoring import get_logger
 
-logger = get_logger(__name__)
-
 from .health_mixin import HealthProviderMixin
 from .pai_mixin import PAIProviderMixin
+
+logger = get_logger(__name__)
 
 
 class DataProvider(HealthProviderMixin, PAIProviderMixin):

@@ -1,8 +1,7 @@
 """Document formatting utilities."""
 
+from codomyrmex.documents.models.document import Document
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
-
-from ..models.document import Document
 
 logger = get_logger(__name__)
 

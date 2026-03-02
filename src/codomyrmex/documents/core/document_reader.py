@@ -4,13 +4,12 @@ from __future__ import annotations
 
 from pathlib import Path
 
+from codomyrmex.documents.config import get_config
+from codomyrmex.documents.exceptions import DocumentReadError, UnsupportedFormatError
+from codomyrmex.documents.models.document import Document, DocumentFormat
+from codomyrmex.documents.utils.encoding_detector import detect_encoding
+from codomyrmex.documents.utils.mime_type_detector import detect_format_from_path
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
-
-from ..config import get_config
-from ..exceptions import DocumentReadError, UnsupportedFormatError
-from ..models.document import Document, DocumentFormat
-from ..utils.encoding_detector import detect_encoding
-from ..utils.mime_type_detector import detect_format_from_path
 
 logger = get_logger(__name__)
 
@@ -59,20 +58,20 @@ class DocumentReader:
         # Read based on format
         try:
             if format == DocumentFormat.MARKDOWN:
-                from ..formats.markdown_handler import read_markdown
+                from codomyrmex.documents.formats.markdown_handler import read_markdown
                 content = read_markdown(str(file_path), encoding=encoding)
             elif format == DocumentFormat.JSON:
-                from ..formats.json_handler import read_json
+                from codomyrmex.documents.formats.json_handler import read_json
                 content = read_json(str(file_path), encoding=encoding)
             elif format == DocumentFormat.YAML:
-                from ..formats.yaml_handler import read_yaml
+                from codomyrmex.documents.formats.yaml_handler import read_yaml
                 content = read_yaml(str(file_path), encoding=encoding)
             elif format == DocumentFormat.PDF:
-                from ..formats.pdf_handler import read_pdf
+                from codomyrmex.documents.formats.pdf_handler import read_pdf
                 pdf_doc = read_pdf(str(file_path))
                 content = pdf_doc
             elif format == DocumentFormat.TEXT:
-                from ..formats.text_handler import read_text
+                from codomyrmex.documents.formats.text_handler import read_text
                 content = read_text(str(file_path), encoding=encoding)
             else:
                 raise UnsupportedFormatError(
@@ -89,7 +88,7 @@ class DocumentReader:
             )
 
             # Extract metadata
-            from ..metadata.extractor import extract_metadata
+            from codomyrmex.documents.metadata.extractor import extract_metadata
             metadata = extract_metadata(str(file_path))
             document.metadata = metadata
 

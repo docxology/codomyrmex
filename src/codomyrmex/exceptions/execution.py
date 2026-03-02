@@ -1,10 +1,9 @@
-from __future__ import annotations
-
-"""
-Execution Exceptions
+"""Execution Exceptions.
 
 Errors related to code execution, sandboxing, and containers.
 """
+
+from __future__ import annotations
 
 from typing import Any
 

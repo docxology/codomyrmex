@@ -11,10 +11,9 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Any
 
+from codomyrmex.collaboration.exceptions import MessageDeliveryError
+from codomyrmex.collaboration.protocols import AgentMessage, MessageType
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
-
-from ..exceptions import MessageDeliveryError
-from ..protocols import AgentMessage, MessageType
 
 logger = get_logger(__name__)
 

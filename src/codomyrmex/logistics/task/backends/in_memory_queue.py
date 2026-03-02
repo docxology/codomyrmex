@@ -7,8 +7,7 @@ import time
 from datetime import datetime
 
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
-
-from ..job import Job, JobStatus
+from codomyrmex.logistics.task.job import Job, JobStatus
 
 logger = get_logger(__name__)
 

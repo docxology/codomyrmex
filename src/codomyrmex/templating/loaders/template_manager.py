@@ -14,8 +14,7 @@ from pathlib import Path
 from typing import Any
 
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
-
-from ..engines.template_engine import Template, TemplateEngine
+from codomyrmex.templating.engines.template_engine import Template, TemplateEngine
 
 logger = get_logger(__name__)
 

@@ -25,9 +25,6 @@ from typing import Any, Optional, TypeVar, Union
 
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
-logger = get_logger(__name__)
-
-
 # Import subprocess utilities
 from .process.subprocess import (
     CommandError,
@@ -43,6 +40,8 @@ from .process.subprocess import (
     stream_command,
 )
 from .refined import RefinedUtilities
+
+logger = get_logger(__name__)
 
 T = TypeVar("T")
 
@@ -297,11 +296,11 @@ except ImportError as e:
     pass
 
 # Script base utilities
-from . import (
+from . import (  # noqa: E402
     i18n,
     process,  # noqa: F401
 )
-from .process.script_base import (
+from .process.script_base import (  # noqa: E402
     ConfigurableScript,
     ScriptBase,
     ScriptConfig,

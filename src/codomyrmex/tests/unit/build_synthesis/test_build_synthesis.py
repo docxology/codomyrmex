@@ -1,5 +1,3 @@
-import pytest
-
 #!/usr/bin/env python3
 """
 Unit tests for the Build Synthesis module.
@@ -9,6 +7,8 @@ import json
 import os
 import sys
 import time
+
+import pytest
 
 # Add src to path for imports
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', 'src'))

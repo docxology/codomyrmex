@@ -13,7 +13,7 @@ from collections.abc import Callable
 from dataclasses import dataclass, field
 from typing import Any, Generic, TypeVar
 
-from ..operators import (
+from codomyrmex.evolutionary_ai.operators import (
     CrossoverOperator,
     Individual,
     MutationOperator,

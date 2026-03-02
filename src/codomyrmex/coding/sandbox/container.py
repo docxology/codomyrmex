@@ -10,9 +10,9 @@ import tempfile
 import time
 from typing import Any
 
+from codomyrmex.coding.execution.language_support import SUPPORTED_LANGUAGES
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
-from ..execution.language_support import SUPPORTED_LANGUAGES
 from .resource_limits import DEFAULT_DOCKER_ARGS
 
 logger = get_logger(__name__)

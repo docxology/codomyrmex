@@ -10,7 +10,7 @@ from __future__ import annotations
 
 import random
 
-from ..genome.genome import Genome
+from codomyrmex.evolutionary_ai.genome.genome import Genome
 
 # ─── Crossover Operators ────────────────────────────────────────────────
 

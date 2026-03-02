@@ -1,5 +1,3 @@
-import pytest
-
 #!/usr/bin/env python3
 """
 Advanced Git Operations Tests - Comprehensive Testing for Fractal Git Operations.
@@ -20,6 +18,8 @@ Test Coverage:
 import os
 import subprocess
 import sys
+
+import pytest
 
 # Removed mock imports to follow TDD principle: no mock methods, always do real data analysis
 

@@ -16,6 +16,24 @@ from datetime import datetime, timedelta
 from enum import Enum
 from typing import Any, Optional
 
+from .aggregator import MetricAggregator
+
+try:
+    from .prometheus_exporter import PrometheusExporter
+except ImportError:
+    PrometheusExporter = None
+
+try:
+    from .statsd_client import StatsDClient
+except ImportError:
+    StatsDClient = None
+
+try:
+    from codomyrmex.exceptions import CodomyrmexError
+except ImportError:
+    class CodomyrmexError(Exception):
+        pass
+
 
 class MetricType(Enum):
     """Types of metrics."""
@@ -364,23 +382,7 @@ class MetricsRegistry:
         """Get a metric by name."""
         with self._lock:
             return self._metrics.get(name)
-from .aggregator import MetricAggregator
 
-try:
-    from .prometheus_exporter import PrometheusExporter
-except ImportError:
-    PrometheusExporter = None
-
-try:
-    from .statsd_client import StatsDClient
-except ImportError:
-    StatsDClient = None
-
-try:
-    from codomyrmex.exceptions import CodomyrmexError
-except ImportError:
-    class CodomyrmexError(Exception):
-        pass
 
 class MetricsError(CodomyrmexError):
     """Base class for metrics errors."""

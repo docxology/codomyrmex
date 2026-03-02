@@ -15,6 +15,7 @@ except ImportError:
     Result = None
     ResultStatus = None
 
+from . import chaos, workflow
 from .fixture_utils import (
     Fixture,
     FixtureManager,
@@ -63,8 +64,6 @@ def cli_commands():
         },
     }
 
-
-from . import chaos, workflow
 
 __all__ = [
     "chaos",

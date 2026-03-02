@@ -12,10 +12,9 @@ S3 Endpoints:
 
 from typing import Any
 
+from codomyrmex.cloud.common import StorageClient
+from codomyrmex.cloud.infomaniak.base import InfomaniakOpenStackBase, InfomaniakS3Base
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
-
-from ...common import StorageClient
-from ..base import InfomaniakOpenStackBase, InfomaniakS3Base
 
 logger = get_logger(__name__)
 

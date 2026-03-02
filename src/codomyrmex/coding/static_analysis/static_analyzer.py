@@ -1,3 +1,9 @@
+"""Comprehensive static analysis functionality for Codomyrmex.
+
+This module provides advanced static analysis capabilities including code quality,
+security analysis, performance analysis, and maintainability assessment.
+"""
+
 import ast
 
 # from performance import monitor_performance, performance_context # Moved to try/except
@@ -10,13 +16,6 @@ from pathlib import Path
 
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
 from codomyrmex.model_context_protocol.decorators import mcp_tool
-
-"""
-Comprehensive static analysis functionality for Codomyrmex.
-
-This module provides advanced static analysis capabilities including code quality,
-security analysis, performance analysis, and maintainability assessment.
-"""
 
 from .models import (
     AnalysisResult,

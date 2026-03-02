@@ -4,7 +4,12 @@ Engines submodule for data_visualization.
 Provides core plotting engines and utilities.
 """
 
-from ..charts.plot_utils import apply_style, configure_plot, save_plot
+from codomyrmex.data_visualization.charts.plot_utils import (
+    apply_style,
+    configure_plot,
+    save_plot,
+)
+
 from .advanced_plotter import AdvancedPlotter
 from .plotter import Plotter
 

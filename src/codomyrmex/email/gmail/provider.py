@@ -12,13 +12,18 @@ except Exception:
     logger = logging.getLogger(__name__)
 from email.message import EmailMessage as PyEmailMessage
 
-from ..exceptions import (
+from codomyrmex.email.exceptions import (
     EmailAPIError,
     EmailAuthError,
     InvalidMessageError,
     MessageNotFoundError,
 )
-from ..generics import EmailAddress, EmailDraft, EmailMessage, EmailProvider
+from codomyrmex.email.generics import (
+    EmailAddress,
+    EmailDraft,
+    EmailMessage,
+    EmailProvider,
+)
 
 try:
     from google.oauth2.credentials import Credentials

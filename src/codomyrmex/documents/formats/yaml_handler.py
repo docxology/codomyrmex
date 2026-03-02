@@ -5,10 +5,9 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Any
 
+from codomyrmex.documents.config import get_config
+from codomyrmex.documents.exceptions import DocumentReadError, DocumentWriteError
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
-
-from ..config import get_config
-from ..exceptions import DocumentReadError, DocumentWriteError
 
 logger = get_logger(__name__)
 

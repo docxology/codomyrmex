@@ -18,8 +18,8 @@ try:
 except ImportError:
     logger = logging.getLogger(__name__)
 
-from ..core.event_bus import EventBus, get_event_bus
-from ..core.event_schema import Event, EventType
+from codomyrmex.events.core.event_bus import EventBus, get_event_bus
+from codomyrmex.events.core.event_schema import Event, EventType
 
 
 class EventLogEntry:

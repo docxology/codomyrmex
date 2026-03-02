@@ -13,8 +13,8 @@ from datetime import datetime
 from enum import Enum
 from typing import Any
 
-from ..health_checks import HealthChecker, HealthStatus
-from ..strategies import (
+from codomyrmex.deployment.health_checks import HealthChecker, HealthStatus
+from codomyrmex.deployment.strategies import (
     DeploymentResult,
     DeploymentState,
     DeploymentStrategy,

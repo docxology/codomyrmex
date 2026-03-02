@@ -1,10 +1,9 @@
-from __future__ import annotations
-
-"""
-Network, API, and Validation Exceptions
+"""Network, API, and Validation Exceptions.
 
 Errors related to networking, APIs, validation, and timeouts.
 """
+
+from __future__ import annotations
 
 from typing import Any
 

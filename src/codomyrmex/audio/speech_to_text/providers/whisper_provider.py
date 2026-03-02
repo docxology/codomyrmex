@@ -20,14 +20,14 @@ from codomyrmex.audio.exceptions import (
     ProviderNotAvailableError,
     TranscriptionError,
 )
-
-from ..models import (
+from codomyrmex.audio.speech_to_text.models import (
     Segment,
     TranscriptionConfig,
     TranscriptionResult,
     WhisperModelSize,
     Word,
 )
+
 from .base import STTProvider
 
 # Check if faster-whisper is available

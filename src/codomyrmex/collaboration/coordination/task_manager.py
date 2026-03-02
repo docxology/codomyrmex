@@ -11,14 +11,13 @@ from collections.abc import Callable
 from dataclasses import dataclass, field
 from enum import Enum
 
-from codomyrmex.logging_monitoring.core.logger_config import get_logger
-
-from ..agents.base import CollaborativeAgent
-from ..exceptions import (
+from codomyrmex.collaboration.agents.base import CollaborativeAgent
+from codomyrmex.collaboration.exceptions import (
     TaskNotFoundError,
 )
-from ..models import Task, TaskResult, TaskStatus
-from ..protocols import AgentState
+from codomyrmex.collaboration.models import Task, TaskResult, TaskStatus
+from codomyrmex.collaboration.protocols import AgentState
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 logger = get_logger(__name__)
 

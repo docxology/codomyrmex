@@ -22,12 +22,12 @@ import matplotlib.patches as mpatches
 import matplotlib.pyplot as plt
 
 # Import from data_visualization module
-from ..charts.plot_utils import (
+from codomyrmex.data_visualization.charts.plot_utils import (
     apply_common_aesthetics,
     get_codomyrmex_logger,
     save_plot,
 )
-from ..mermaid.mermaid_generator import (
+from codomyrmex.data_visualization.mermaid.mermaid_generator import (
     MermaidDiagramGenerator,
 )
 

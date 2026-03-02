@@ -1,10 +1,9 @@
-from __future__ import annotations
-
-"""
-File and I/O Exceptions
+"""File and I/O Exceptions.
 
 Errors related to file and directory operations.
 """
+
+from __future__ import annotations
 
 from pathlib import Path
 from typing import Any

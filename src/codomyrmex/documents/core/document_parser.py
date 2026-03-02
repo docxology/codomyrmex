@@ -4,10 +4,9 @@ from __future__ import annotations
 
 from typing import Any
 
+from codomyrmex.documents.exceptions import DocumentParseError
+from codomyrmex.documents.models.document import Document, DocumentFormat
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
-
-from ..exceptions import DocumentParseError
-from ..models.document import Document, DocumentFormat
 
 logger = get_logger(__name__)
 

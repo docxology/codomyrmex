@@ -17,7 +17,7 @@ MODULE_DIR = TEST_DIR.parent.parent
 SRC_DIR = MODULE_DIR.parent.parent
 sys.path.insert(0, str(SRC_DIR))
 
-from codomyrmex.website.accessibility import models, utils
+from codomyrmex.website.accessibility import models, utils  # noqa: E402
 
 # ── AccessibilityReport Model Tests ───────────────────────────────────
 

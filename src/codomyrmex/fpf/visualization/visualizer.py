@@ -10,7 +10,7 @@ and reports from FPF specifications.
 from pathlib import Path
 from typing import Any
 
-from ..core.models import FPFSpec, Pattern
+from codomyrmex.fpf.core.models import FPFSpec, Pattern
 
 
 class FPFVisualizer:

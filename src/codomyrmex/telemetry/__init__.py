@@ -14,8 +14,10 @@ except ImportError:
     Result = None
     ResultStatus = None
 
+from codomyrmex.logging_monitoring.core.logger_config import get_logger  # noqa: F401
+
 # Submodule exports - import first
-from . import exporters, metrics, spans
+from . import dashboard, exporters, metrics, spans
 
 # Try optional submodules
 try:
@@ -87,10 +89,6 @@ def cli_commands():
         "export": {"handler": _export, "help": "Export telemetry data"},
     }
 
-
-from codomyrmex.logging_monitoring.core.logger_config import get_logger
-
-from . import dashboard
 
 __all__ = [
     "dashboard",

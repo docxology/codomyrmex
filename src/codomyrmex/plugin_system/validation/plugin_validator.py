@@ -10,7 +10,7 @@ import re
 from dataclasses import dataclass, field
 from typing import Any
 
-from ..core.plugin_registry import Plugin, PluginInfo
+from codomyrmex.plugin_system.core.plugin_registry import Plugin, PluginInfo
 
 
 @dataclass

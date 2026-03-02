@@ -9,8 +9,8 @@ from pathlib import Path
 from typing import Any
 
 from codomyrmex.logging_monitoring import get_logger
+from codomyrmex.system_discovery.health.health_checker import HealthChecker
 
-from ..health.health_checker import HealthChecker
 from .discovery_engine import SystemDiscovery
 
 # from .capability_scanner import CapabilityScanner # Optional, might be heavy

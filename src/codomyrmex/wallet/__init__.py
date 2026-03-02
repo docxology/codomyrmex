@@ -12,7 +12,7 @@ Core Components:
 Submodules:
     contracts: Consolidated contracts capabilities."""
 
-from . import security
+from . import contracts, security
 from .core import WalletManager
 from .exceptions import RitualError, WalletError, WalletKeyError, WalletNotFoundError
 from .security.backup import BackupManager
@@ -49,8 +49,6 @@ def cli_commands():
         },
     }
 
-
-from . import contracts
 
 __all__ = [
     "contracts",

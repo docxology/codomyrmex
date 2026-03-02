@@ -1,5 +1,3 @@
-import pytest
-
 #!/usr/bin/env python3
 """
 Comprehensive Unit Tests for Git Operations Module.
@@ -19,6 +17,8 @@ Test Plan Structure:
 
 import os
 import sys
+
+import pytest
 
 # Removed mock imports to follow TDD principle: no mock methods, always do real data analysis
 
@@ -569,7 +569,7 @@ class TestGitOperations:
         assert result is True
 
 
-import subprocess
+import subprocess  # noqa: E402
 
 
 class TestGitCoreDeep:

@@ -258,7 +258,9 @@ class MCPClient:
         # Parse structured MCPToolError from server response
         if result.get("isError"):
             try:
-                from ..errors import MCPToolError as _MCPToolError
+                from codomyrmex.model_context_protocol.errors import (
+                    MCPToolError as _MCPToolError,
+                )
                 content_text = result.get("content", [{}])[0].get("text", "")
                 parsed = _MCPToolError.from_json(content_text)
                 if parsed:

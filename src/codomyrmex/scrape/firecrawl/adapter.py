@@ -7,9 +7,8 @@ using the Firecrawl service via FirecrawlClient.
 from typing import Any
 
 from codomyrmex.logging_monitoring import get_logger
-
-from ..config import ScrapeConfig
-from ..core import (
+from codomyrmex.scrape.config import ScrapeConfig
+from codomyrmex.scrape.core import (
     BaseScraper,
     CrawlResult,
     ExtractResult,
@@ -19,7 +18,8 @@ from ..core import (
     ScrapeResult,
     SearchResult,
 )
-from ..exceptions import ScrapeError
+from codomyrmex.scrape.exceptions import ScrapeError
+
 from .client import FirecrawlClient
 
 logger = get_logger(__name__)
@@ -53,7 +53,7 @@ class FirecrawlAdapter(BaseScraper):
         Raises:
             FirecrawlError: If Firecrawl client cannot be initialized
         """
-        from ..config import get_config
+        from codomyrmex.scrape.config import get_config
 
         self.config = config or get_config()
         self.client = FirecrawlClient(self.config)

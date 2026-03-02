@@ -10,13 +10,13 @@ Provides Active Countermeasures and Rabbit Hole containment.
 
 import warnings as _warnings
 
+from .active import ActiveDefense
+from .rabbithole import RabbitHole
+
 _warnings.warn(
     "codomyrmex.defense is deprecated. Use codomyrmex.security.ai_safety instead.",
     DeprecationWarning,
     stacklevel=2,
 )
-
-from .active import ActiveDefense
-from .rabbithole import RabbitHole
 
 __all__ = ["ActiveDefense", "RabbitHole"]

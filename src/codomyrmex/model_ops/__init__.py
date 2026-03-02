@@ -24,7 +24,7 @@ except ImportError:
     ResultStatus = None
 
 # Submodule exports
-from . import evaluation, training
+from . import evaluation, feature_store, optimization, registry, training
 
 # Import evaluation components (scorer/benchmark/quality + metrics patterns)
 try:
@@ -327,8 +327,6 @@ def cli_commands():
             ),
         },
     }
-
-from . import feature_store, optimization, registry
 
 __all__ = [
     "feature_store",

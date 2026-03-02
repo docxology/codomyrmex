@@ -7,18 +7,22 @@ This module provides:
 - Discovery, execution, and reporting of Python scripts
 """
 
-from codomyrmex.logging_monitoring import get_logger
-from codomyrmex.logging_monitoring.core.logger_config import LogContext
-from codomyrmex.logging_monitoring.handlers.performance import PerformanceLogger
-
-logger = get_logger(__name__)
-
-
 import argparse
 import sys
 from datetime import datetime
 from pathlib import Path
 
+from codomyrmex.logging_monitoring import get_logger
+from codomyrmex.logging_monitoring.core.logger_config import LogContext
+from codomyrmex.logging_monitoring.handlers.performance import PerformanceLogger
+from codomyrmex.orchestrator.config import get_script_config, load_config
+from codomyrmex.orchestrator.discovery import discover_scripts
+from codomyrmex.orchestrator.execution.runner import run_script
+from codomyrmex.orchestrator.observability.reporting import (
+    generate_report,
+    generate_script_documentation,
+    save_log,
+)
 from codomyrmex.utils.cli_helpers import (
     ProgressReporter,
     print_error,
@@ -29,14 +33,7 @@ from codomyrmex.utils.cli_helpers import (
     print_with_color,
 )
 
-from .config import get_script_config, load_config
-from .discovery import discover_scripts
-from .execution.runner import run_script
-from .observability.reporting import (
-    generate_report,
-    generate_script_documentation,
-    save_log,
-)
+logger = get_logger(__name__)
 
 
 def _parse_args(argv=None) -> argparse.Namespace:

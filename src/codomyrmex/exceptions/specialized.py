@@ -1,12 +1,11 @@
-from __future__ import annotations
-
-"""
-Specialized Domain Exceptions
+"""Specialized Domain Exceptions.
 
 Exceptions for monitoring, system discovery, 3D modeling, terminals,
 databases, CI/CD, resources, spatial, events, skills, templates, plugins,
 auth, caching, serialization, compression, encryption, and IDE operations.
 """
+
+from __future__ import annotations
 
 from typing import Any
 

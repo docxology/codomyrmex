@@ -12,10 +12,9 @@ Environment Variables:
 import os
 from typing import Any
 
+from codomyrmex.cloud.infomaniak.base import InfomaniakRESTBase
+from codomyrmex.cloud.infomaniak.exceptions import classify_http_error
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
-
-from ..base import InfomaniakRESTBase
-from ..exceptions import classify_http_error
 
 logger = get_logger(__name__)
 

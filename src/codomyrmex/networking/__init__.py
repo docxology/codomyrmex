@@ -17,6 +17,7 @@ except ImportError:
 # Re-export base NetworkError from main exceptions module
 from codomyrmex.exceptions import NetworkError
 
+from . import service_mesh
 from .exceptions import (
     ConnectionError,
     DNSResolutionError,
@@ -75,8 +76,6 @@ def cli_commands():
         "check": {"handler": _check, "help": "Check network connectivity"},
     }
 
-
-from . import service_mesh
 
 __all__ = [
     "service_mesh",

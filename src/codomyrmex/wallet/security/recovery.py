@@ -10,8 +10,7 @@ import hashlib
 from dataclasses import dataclass
 
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
-
-from ..exceptions import RitualError
+from codomyrmex.wallet.exceptions import RitualError
 
 logger = get_logger(__name__)
 

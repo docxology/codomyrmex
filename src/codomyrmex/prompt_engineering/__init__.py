@@ -15,6 +15,8 @@ from typing import Any
 
 __version__ = "0.1.0"
 
+from . import testing
+
 # Core template management
 # Evaluation
 from .evaluation import (
@@ -155,8 +157,6 @@ def _cli_evaluate(args: Any) -> None:
     result = quick_evaluate(prompt_text, response_text)
     print(json.dumps(result, indent=2))
 
-
-from . import testing
 
 __all__ = [
     "testing",

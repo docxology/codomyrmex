@@ -10,13 +10,13 @@ try:
 except Exception:
     logger = logging.getLogger(__name__)
 
-from ..exceptions import (
+from codomyrmex.calendar_integration.exceptions import (
     CalendarAPIError,
     CalendarAuthError,
     EventNotFoundError,
     InvalidEventError,
 )
-from ..generics import CalendarEvent, CalendarProvider
+from codomyrmex.calendar_integration.generics import CalendarEvent, CalendarProvider
 
 try:
     from google.oauth2.credentials import Credentials

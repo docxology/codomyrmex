@@ -482,6 +482,7 @@ print("Result:", algorithm_b({10000}))
         if available_workflows:
             assert len(self.workflow_results) >= 0
 
+    @pytest.mark.smoke
     def test_error_handling_across_workflows(self):
         """Test error handling when workflows encounter issues."""
         # Test with various error conditions
@@ -531,6 +532,7 @@ eval(input("Enter code: "))  # Code injection
             finally:
                 os.unlink(temp_file)
 
+    @pytest.mark.smoke
     def test_workflow_performance_metrics(self):
         """Test that workflow performance can be measured and tracked."""
         start_time = time.time()
@@ -569,6 +571,7 @@ eval(input("Enter code: "))  # Code injection
             avg_time_per_step = total_time / steps_completed
             assert avg_time_per_step < 10.0  # Less than 10 seconds per step
 
+    @pytest.mark.smoke
     def test_data_consistency_across_workflows(self):
         """Test that data formats are consistent across different workflow modules."""
         # Test that different modules can work with similar data structures
@@ -617,6 +620,7 @@ eval(input("Enter code: "))  # Code injection
         for module, success in results.items():
             assert success, f"Module {module} failed consistency test"
 
+    @pytest.mark.smoke
     def test_module_interoperability(self):
         """Test that modules can interoperate through common interfaces."""
         # Test that results from one module can be used as input to another

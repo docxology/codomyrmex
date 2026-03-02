@@ -7,9 +7,12 @@ and error translation to module exceptions.
 from typing import Any
 
 from codomyrmex.logging_monitoring import get_logger
-
-from ..config import ScrapeConfig
-from ..exceptions import FirecrawlError, ScrapeConnectionError, ScrapeTimeoutError
+from codomyrmex.scrape.config import ScrapeConfig
+from codomyrmex.scrape.exceptions import (
+    FirecrawlError,
+    ScrapeConnectionError,
+    ScrapeTimeoutError,
+)
 
 logger = get_logger(__name__)
 

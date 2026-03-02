@@ -13,8 +13,7 @@ from pathlib import Path
 from typing import Any
 
 from codomyrmex.logging_monitoring.core.correlation import with_correlation
-
-from ..schemas.mcp_schemas import (
+from codomyrmex.model_context_protocol.schemas.mcp_schemas import (
     MCPToolCall,
     MCPToolRegistry,
 )
@@ -76,7 +75,10 @@ class MCPServer:
             self._call_tool = call_tool_fn  # type: ignore[assignment]
 
         # Rate limiter
-        from ..reliability.rate_limiter import RateLimiter, RateLimiterConfig
+        from codomyrmex.model_context_protocol.reliability.rate_limiter import (
+            RateLimiter,
+            RateLimiterConfig,
+        )
         self._rate_limiter = RateLimiter(RateLimiterConfig(
             rate=self.config.rate_limit_rate,
             burst=self.config.rate_limit_burst,
@@ -335,7 +337,7 @@ class MCPServer:
         includes a 'structuredContent' field with the typed return value
         alongside the standard 'content' array.
         """
-        from ..errors import (
+        from codomyrmex.model_context_protocol.errors import (
             FieldError,
             MCPErrorCode,
             MCPToolError,
@@ -343,7 +345,9 @@ class MCPServer:
             not_found_error,
             validation_error,
         )
-        from ..quality.validation import validate_tool_arguments
+        from codomyrmex.model_context_protocol.quality.validation import (
+            validate_tool_arguments,
+        )
 
         tool_name = params.get("name", "")
         arguments = params.get("arguments", {})

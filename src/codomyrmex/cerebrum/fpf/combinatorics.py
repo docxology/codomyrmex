@@ -1,28 +1,3 @@
-import csv
-import json
-import logging
-from collections import defaultdict
-from pathlib import Path
-from typing import Any
-
-logger = logging.getLogger(__name__)
-
-import matplotlib.pyplot as plt
-import networkx as nx
-import numpy as np
-from matplotlib.patches import Patch
-
-from codomyrmex.cerebrum import (
-    Case,
-    CerebrumEngine,
-)
-from codomyrmex.cerebrum.visualization.base import (
-    BaseHeatmapVisualizer,
-    BaseNetworkVisualizer,
-)
-from codomyrmex.fpf import FPFAnalyzer, FPFClient, TermAnalyzer
-from codomyrmex.logging_monitoring import get_logger
-
 """Comprehensive combinatorics analysis using CEREBRUM on FPF.
 
 This module generates all possible combinations and analyses of FPF patterns
@@ -34,12 +9,36 @@ using CEREBRUM methods, including:
 - Term network analysis
 """
 
+import csv
+import json
+from collections import defaultdict
+from pathlib import Path
+from typing import Any
+
 try:
+    import matplotlib.pyplot as plt
+    import networkx as nx
+    import numpy as np
+    from matplotlib.patches import Patch
+
     HAS_MATPLOTLIB = True
 except ImportError:
     HAS_MATPLOTLIB = False
     plt = None
     nx = None
+    np = None
+    Patch = None
+
+from codomyrmex.cerebrum import (
+    Case,
+    CerebrumEngine,
+)
+from codomyrmex.cerebrum.visualization.base import (
+    BaseHeatmapVisualizer,
+    BaseNetworkVisualizer,
+)
+from codomyrmex.fpf import FPFAnalyzer, FPFClient, TermAnalyzer
+from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
 

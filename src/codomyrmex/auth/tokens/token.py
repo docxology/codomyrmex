@@ -12,6 +12,8 @@ from dataclasses import dataclass, field
 
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
+from .validator import TokenValidator
+
 logger = get_logger(__name__)
 
 
@@ -52,9 +54,6 @@ class Token:
             expires_at=data.get("expires_at"),
             created_at=data.get("created_at", time.time()),
         )
-
-
-from .validator import TokenValidator
 
 
 class TokenManager:

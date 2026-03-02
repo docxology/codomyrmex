@@ -16,13 +16,13 @@ except ImportError:
     import logging
     logger = logging.getLogger(__name__)
 
-from ..core.event_bus import (
+from codomyrmex.events.core.event_bus import (
     EventBus,
     get_event_bus,
     subscribe_to_events,
     unsubscribe_from_events,
 )
-from ..core.event_schema import Event, EventType
+from codomyrmex.events.core.event_schema import Event, EventType
 
 
 class EventListener:

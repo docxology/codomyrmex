@@ -253,7 +253,7 @@ class APIHandler:
         GET /api/tests/status to retrieve results.
         """
         # Import the server class to access class-level state
-        from ..server import WebsiteServer
+        from codomyrmex.website.server import WebsiteServer
 
         with self._test_lock:
             if self._test_running:
@@ -306,7 +306,7 @@ class APIHandler:
 
     def handle_tests_status(self) -> None:
         """Handle GET /api/tests/status -- poll for test results."""
-        from ..server import WebsiteServer
+        from codomyrmex.website.server import WebsiteServer
 
         with self._test_lock:
             running = self._test_running
@@ -463,7 +463,7 @@ class APIHandler:
 
     def handle_agent_dispatch(self) -> None:
         """Handle POST /api/agent/dispatch -- start an orchestrator run."""
-        from ..server import WebsiteServer
+        from codomyrmex.website.server import WebsiteServer
 
         try:
             content_length = int(self.headers.get('Content-Length', 0))
@@ -536,7 +536,7 @@ class APIHandler:
 
     def handle_agent_dispatch_stop(self) -> None:
         """Handle POST /api/agent/dispatch/stop -- stop orchestrator."""
-        from ..server import WebsiteServer
+        from codomyrmex.website.server import WebsiteServer
 
         with self._dispatch_lock:
             if WebsiteServer._dispatch_orch:
@@ -546,7 +546,7 @@ class APIHandler:
 
     def handle_agent_dispatch_status(self) -> None:
         """Handle GET /api/agent/dispatch/status -- poll transcript."""
-        from ..server import WebsiteServer
+        from codomyrmex.website.server import WebsiteServer
 
         with self._dispatch_lock:
             if not WebsiteServer._dispatch_orch:

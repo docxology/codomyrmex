@@ -4,14 +4,14 @@ This module provides functionality to fetch the latest FPF specification
 from GitHub and manage local caching.
 """
 
-from codomyrmex.logging_monitoring import get_logger
-
-logger = get_logger(__name__)
-
 import hashlib
 from pathlib import Path
 
 import requests
+
+from codomyrmex.logging_monitoring import get_logger
+
+logger = get_logger(__name__)
 
 
 class FPFFetcher:

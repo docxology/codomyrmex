@@ -8,13 +8,13 @@ from __future__ import annotations
 
 from typing import Any
 
-from ...exceptions import EmailAPIError
-from ...generics import EmailDraft, EmailMessage
-from ..models import (
+from codomyrmex.email.agentmail.models import (
     AgentMailDraft,
     _sdk_draft_to_model,
     _sdk_message_to_email_message,
 )
+from codomyrmex.email.exceptions import EmailAPIError
+from codomyrmex.email.generics import EmailDraft, EmailMessage
 
 try:
     from agentmail.core import ApiError
@@ -24,7 +24,7 @@ except ImportError:
 
 def _raise_for_api_error(exc: Exception, context: str):
     """Import and delegate to the module-level error raiser."""
-    from ..provider import _raise_for_api_error as _raise
+    from codomyrmex.email.agentmail.provider import _raise_for_api_error as _raise
     _raise(exc, context)
 
 

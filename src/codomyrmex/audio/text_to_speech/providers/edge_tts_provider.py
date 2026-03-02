@@ -23,14 +23,14 @@ from codomyrmex.audio.exceptions import (
     SynthesisError,
     VoiceNotFoundError,
 )
-
-from ..models import (
+from codomyrmex.audio.text_to_speech.models import (
     AudioFormat,
     SynthesisResult,
     TTSConfig,
     VoiceGender,
     VoiceInfo,
 )
+
 from .base import TTSProvider
 
 # Check if edge-tts is available

@@ -435,7 +435,7 @@ class TestStepsEdgeCases:
         # After adding "second", it should depend on "first"
         # After adding "third", it should depend on "second"
         # We can verify via the underlying workflow tasks
-        tasks = w.workflow._tasks
+        tasks = w.workflow.tasks
         if "second" in tasks:
             assert "first" in tasks["second"].dependencies
         if "third" in tasks:
@@ -447,7 +447,7 @@ class TestStepsEdgeCases:
         w.add("step_a", lambda: "a")
         w.add("step_b", lambda: "b")
         w.add("step_c", lambda: "c", depends_on=["step_a"])  # Skips step_b
-        tasks = w.workflow._tasks
+        tasks = w.workflow.tasks
         if "step_c" in tasks:
             assert "step_a" in tasks["step_c"].dependencies
             assert "step_b" not in tasks["step_c"].dependencies
@@ -462,7 +462,7 @@ class TestStepsEdgeCases:
         )
         assert "p1" in w._steps
         assert "p2" in w._steps
-        tasks = w.workflow._tasks
+        tasks = w.workflow.tasks
         if "p1" in tasks:
             assert "setup" in tasks["p1"].dependencies
         if "p2" in tasks:
@@ -474,7 +474,7 @@ class TestStepsEdgeCases:
         w.add_parallel([("a", lambda: 1), ("b", lambda: 2)])
         assert "a" in w._steps
         assert "b" in w._steps
-        tasks = w.workflow._tasks
+        tasks = w.workflow.tasks
         if "a" in tasks:
             assert len(tasks["a"].dependencies) == 0
 
@@ -504,7 +504,7 @@ class TestStepsEdgeCases:
         """Steps.add() with retry > 1 creates RetryPolicy."""
         w = workflow("retry_test")
         w.add("retried_step", lambda: "ok", retry=3)
-        tasks = w.workflow._tasks
+        tasks = w.workflow.tasks
         if "retried_step" in tasks:
             assert tasks["retried_step"].retry_policy is not None
             assert tasks["retried_step"].retry_policy.max_attempts == 3
@@ -513,7 +513,7 @@ class TestStepsEdgeCases:
         """Steps.add() with retry=1 does not create RetryPolicy."""
         w = workflow("no_retry")
         w.add("single_try", lambda: "ok", retry=1)
-        tasks = w.workflow._tasks
+        tasks = w.workflow.tasks
         if "single_try" in tasks:
             assert tasks["single_try"].retry_policy is None
 

@@ -8,9 +8,8 @@ import os
 import shutil
 import tempfile
 
+from codomyrmex.coding.execution.language_support import SUPPORTED_LANGUAGES
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
-
-from ..execution.language_support import SUPPORTED_LANGUAGES
 
 logger = get_logger(__name__)
 

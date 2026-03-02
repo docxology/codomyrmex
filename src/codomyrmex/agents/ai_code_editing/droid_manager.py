@@ -19,10 +19,10 @@ logger = get_logger(__name__)
 # Import core droid components
 try:
     # Try relative imports first (when used as module)
-    from ..droid.controller import (
+    from codomyrmex.agents.droid.controller import (
         DroidController,
     )
-    from ..droid.todo import TodoManager
+    from codomyrmex.agents.droid.todo import TodoManager
 except ImportError:
     try:
         # Try absolute imports (when run directly)

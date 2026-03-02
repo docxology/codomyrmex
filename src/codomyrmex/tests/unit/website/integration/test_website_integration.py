@@ -18,9 +18,9 @@ MODULE_DIR = TEST_DIR.parent.parent
 SRC_DIR = MODULE_DIR.parent.parent
 sys.path.insert(0, str(SRC_DIR))
 
-from codomyrmex.website.data_provider import DataProvider
-from codomyrmex.website.generator import WebsiteGenerator
-from codomyrmex.website.server import WebsiteServer
+from codomyrmex.website.data_provider import DataProvider  # noqa: E402
+from codomyrmex.website.generator import WebsiteGenerator  # noqa: E402
+from codomyrmex.website.server import WebsiteServer  # noqa: E402
 
 
 @pytest.mark.integration

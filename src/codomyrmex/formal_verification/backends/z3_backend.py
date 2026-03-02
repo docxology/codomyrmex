@@ -17,7 +17,12 @@ try:
 except ImportError:
     z3 = None  # type: ignore[assignment]
 
-from ..exceptions import BackendNotAvailableError, ModelBuildError, SolverTimeoutError
+from codomyrmex.formal_verification.exceptions import (
+    BackendNotAvailableError,
+    ModelBuildError,
+    SolverTimeoutError,
+)
+
 from .base import SolverBackend, SolverResult, SolverStatus
 
 

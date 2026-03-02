@@ -1,9 +1,9 @@
-import hashlib
-
 """Zero-Mock tests for the privacy module (crumbs + mixnet).
 
 Uses real time.sleep with minimal delays for mixnet relay tests.
 """
+
+import hashlib
 
 import pytest
 

@@ -2,9 +2,8 @@
 
 from pathlib import Path
 
+from codomyrmex.documents.config import get_config
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
-
-from ..config import get_config
 
 logger = get_logger(__name__)
 

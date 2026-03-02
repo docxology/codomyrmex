@@ -10,7 +10,7 @@ from separate JSON files into a unified FPF specification.
 import json
 from pathlib import Path
 
-from ..core.models import (
+from codomyrmex.fpf.core.models import (
     Concept,
     ConceptType,
     FPFSpec,

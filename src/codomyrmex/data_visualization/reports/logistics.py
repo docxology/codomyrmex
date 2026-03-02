@@ -1,8 +1,9 @@
 """Logistics report."""
 from pathlib import Path
 
-from ..core.ui import Card, Dashboard
-from ..plots.sankey import SankeyDiagram
+from codomyrmex.data_visualization.core.ui import Card, Dashboard
+from codomyrmex.data_visualization.plots.sankey import SankeyDiagram
+
 from ._base import BaseReport
 
 
