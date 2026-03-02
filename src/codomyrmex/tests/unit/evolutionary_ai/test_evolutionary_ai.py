@@ -6,6 +6,7 @@ import pytest
 
 import codomyrmex.evolutionary_ai as eai
 
+
 @pytest.mark.unit
 class TestEvolutionaryAIModuleExports:
     def test_core_exports(self):
@@ -32,10 +33,10 @@ class TestEvolutionEndToEnd:
 
         # Small population for fast test
         pop = eai.Population.random_genome_population(size=20, genome_length=3, gene_low=-5, gene_high=5)
-        
+
         pop.evaluate(objective)
         initial_best = pop.get_best().fitness
-        
+
         # Evolve for some generations
         for _ in range(50):
             pop.evaluate(objective)
@@ -45,10 +46,10 @@ class TestEvolutionEndToEnd:
                 mutation_operator=eai.GaussianMutation(0.1, 0.2),
                 elitism=2
             )
-        
+
         pop.evaluate(objective)
         final_best = pop.get_best().fitness
-        
+
         # Should have improved (increased, since negative)
         assert final_best >= initial_best
         # Should be closer to zero

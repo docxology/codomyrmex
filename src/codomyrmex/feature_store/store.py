@@ -6,10 +6,14 @@ Storage backends for feature data.
 
 import threading
 from abc import ABC, abstractmethod
-from typing import Any, Dict, List, Optional
+from typing import Any
 
+from .exceptions import (
+    FeatureNotFoundError,
+    FeatureRegistrationError,
+    FeatureValidationError,
+)
 from .models import FeatureDefinition, FeatureValue, FeatureVector
-from .exceptions import FeatureNotFoundError, FeatureRegistrationError, FeatureValidationError
 
 
 class FeatureStore(ABC):
@@ -21,7 +25,7 @@ class FeatureStore(ABC):
         pass
 
     @abstractmethod
-    def get_feature_definition(self, name: str) -> Optional[FeatureDefinition]:
+    def get_feature_definition(self, name: str) -> FeatureDefinition | None:
         """Get feature definition by name."""
         pass
 
@@ -31,17 +35,17 @@ class FeatureStore(ABC):
         pass
 
     @abstractmethod
-    def get_value(self, feature_name: str, entity_id: str) -> Optional[FeatureValue]:
+    def get_value(self, feature_name: str, entity_id: str) -> FeatureValue | None:
         """Get a feature value for an entity."""
         pass
 
     @abstractmethod
-    def get_vector(self, entity_id: str, feature_names: List[str]) -> FeatureVector:
+    def get_vector(self, entity_id: str, feature_names: list[str]) -> FeatureVector:
         """Get multiple features for an entity."""
         pass
 
     @abstractmethod
-    def list_features(self) -> List[FeatureDefinition]:
+    def list_features(self) -> list[FeatureDefinition]:
         """List all registered features."""
         pass
 
@@ -74,41 +78,41 @@ class InMemoryFeatureStore(FeatureStore):
     """
 
     def __init__(self):
-        self._definitions: Dict[str, FeatureDefinition] = {}
-        self._values: Dict[str, Dict[str, FeatureValue]] = {}  # feature_name -> entity_id -> value
+        self._definitions: dict[str, FeatureDefinition] = {}
+        self._values: dict[str, dict[str, FeatureValue]] = {}  # feature_name -> entity_id -> value
         self._lock = threading.Lock()
 
     def register_feature(self, definition: FeatureDefinition) -> None:
         """
         Register a feature definition.
-        
+
         Args:
             definition: The feature definition to register.
-            
+
         Raises:
             FeatureRegistrationError: If definition is invalid.
         """
         if not definition or not definition.name:
             raise FeatureRegistrationError("Invalid feature definition: name is required")
-            
+
         with self._lock:
             self._definitions[definition.name] = definition
             if definition.name not in self._values:
                 self._values[definition.name] = {}
 
-    def get_feature_definition(self, name: str) -> Optional[FeatureDefinition]:
+    def get_feature_definition(self, name: str) -> FeatureDefinition | None:
         """Get feature definition by name."""
         return self._definitions.get(name)
 
     def set_value(self, feature_name: str, entity_id: str, value: Any) -> None:
         """
         Set a feature value for an entity.
-        
+
         Args:
             feature_name: Name of the feature.
             entity_id: ID of the entity.
             value: Feature value.
-            
+
         Raises:
             FeatureNotFoundError: If feature is not registered.
             FeatureValidationError: If value does not match feature definition.
@@ -116,7 +120,7 @@ class InMemoryFeatureStore(FeatureStore):
         definition = self.get_feature_definition(feature_name)
         if not definition:
             raise FeatureNotFoundError(f"Feature '{feature_name}' not registered")
-            
+
         if not definition.validate_value(value):
             raise FeatureValidationError(
                 f"Value {value} is not valid for feature '{feature_name}' (type: {definition.value_type.value})"
@@ -136,20 +140,20 @@ class InMemoryFeatureStore(FeatureStore):
                 version=version,
             )
 
-    def get_value(self, feature_name: str, entity_id: str) -> Optional[FeatureValue]:
+    def get_value(self, feature_name: str, entity_id: str) -> FeatureValue | None:
         """Get a feature value for an entity."""
         if feature_name not in self._values:
             return None
         return self._values[feature_name].get(entity_id)
 
-    def get_vector(self, entity_id: str, feature_names: List[str]) -> FeatureVector:
+    def get_vector(self, entity_id: str, feature_names: list[str]) -> FeatureVector:
         """
         Get multiple features for an entity.
-        
+
         Args:
             entity_id: ID of the entity.
             feature_names: List of feature names to retrieve.
-            
+
         Returns:
             FeatureVector containing the requested features.
         """
@@ -166,7 +170,7 @@ class InMemoryFeatureStore(FeatureStore):
 
         return FeatureVector(entity_id=entity_id, features=features)
 
-    def list_features(self) -> List[FeatureDefinition]:
+    def list_features(self) -> list[FeatureDefinition]:
         """List all registered features."""
         return list(self._definitions.values())
 

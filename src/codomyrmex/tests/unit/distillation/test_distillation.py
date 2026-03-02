@@ -15,7 +15,6 @@ import pytest
 
 from codomyrmex.distillation import DistillationLoss, distillation_loss, soft_labels
 
-
 # ---------------------------------------------------------------------------
 # soft_labels
 # ---------------------------------------------------------------------------

@@ -1,12 +1,13 @@
 """Tests for the identity module (persona, manager, biocognitive, and orchestrator)."""
 
-import pytest
 import time
 
-from codomyrmex.identity.manager import IdentityManager
-from codomyrmex.identity.persona import Persona, VerificationLevel
+import pytest
+
 from codomyrmex.identity.biocognitive import BioCognitiveVerifier
 from codomyrmex.identity.identity import Identity, PasswordProvider
+from codomyrmex.identity.manager import IdentityManager
+from codomyrmex.identity.persona import Persona, VerificationLevel
 
 try:
     import numpy as np  # noqa: F401

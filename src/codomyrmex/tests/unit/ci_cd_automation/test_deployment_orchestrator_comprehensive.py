@@ -10,6 +10,7 @@ from codomyrmex.ci_cd_automation.deployment_orchestrator import (
     EnvironmentType,
 )
 
+
 @pytest.mark.unit
 class TestDeploymentOrchestrator:
     @pytest.fixture
@@ -62,7 +63,7 @@ class TestDeploymentOrchestrator:
         orchestrator = DeploymentOrchestrator(config_file)
         env = orchestrator.environments["staging"]
         env.pre_deploy_hooks = ["exit 1"]
-        
+
         deployment = orchestrator.create_deployment(
             "fail-hook", "1.0", "staging", []
         )
@@ -82,7 +83,7 @@ class TestDeploymentOrchestrator:
         # Actually it's better to ensure port is closed
         # We can't easily do it but usually it's closed in this environment
         orchestrator.deploy("hc-fail")
-        
+
         # If health check fails, it should be ROLLED_BACK (since rollback_on_failure=True)
         # Or FAILURE if rollback fails.
         assert deployment.status in (DeploymentStatus.ROLLED_BACK, DeploymentStatus.FAILURE)

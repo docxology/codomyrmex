@@ -35,7 +35,7 @@ def gateway_complete(
         Dictionary with provider used, response text, latency, and success flag.
     """
     try:
-        from .gateway import AIGateway, Provider, GatewayConfig
+        from .gateway import AIGateway, GatewayConfig, Provider
 
         if not providers:
             return {

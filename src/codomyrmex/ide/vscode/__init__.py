@@ -169,7 +169,7 @@ class VSCodeClient(IDEClient):
         """
         if not self._connected:
             return []
-        
+
         # Simulated
         return [str(p.absolute()) for p in self.workspace_path.glob("*.py")][:3]
 

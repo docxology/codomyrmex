@@ -56,7 +56,9 @@ class EventLoggingBridge:
     ) -> None:
         self._event_bus = event_bus
         if event_types is None:
-            from codomyrmex.events.core.event_schema import EventType  # lazy import at use-site
+            from codomyrmex.events.core.event_schema import (
+                EventType,  # lazy import at use-site
+            )
             event_types = list(EventType)
         self._event_types = event_types
         self._logger = logging.getLogger(logger_name)

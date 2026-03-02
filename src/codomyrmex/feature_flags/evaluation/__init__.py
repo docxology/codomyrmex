@@ -9,7 +9,7 @@ from __future__ import annotations
 
 import hashlib
 from dataclasses import dataclass, field
-from typing import Any, List, Optional, Dict
+from typing import Any, Optional
 
 from codomyrmex.feature_flags.strategies import (
     EvaluationContext,
@@ -43,7 +43,7 @@ class TargetingRule:
                 actual = context.user_id
             elif self.attribute == "session_id":
                 actual = context.session_id
-            
+
             if actual is None:
                 return False
 
@@ -94,8 +94,8 @@ class FlagDefinition:
     name: str
     enabled: bool = True
     percentage: float = 100.0
-    targeting_rules: List[TargetingRule] = field(default_factory=list)
-    metadata: Dict[str, Any] = field(default_factory=dict)
+    targeting_rules: list[TargetingRule] = field(default_factory=list)
+    metadata: dict[str, Any] = field(default_factory=dict)
     description: str = ""
 
 
@@ -155,7 +155,7 @@ class FlagEvaluator:
 
     def evaluate_targeting_rules(
         self,
-        rules: List[TargetingRule],
+        rules: list[TargetingRule],
         context: EvaluationContext,
     ) -> bool:
         """Return True if at least one targeting rule matches the context.
@@ -188,7 +188,7 @@ class FlagEvaluator:
         """
         if not user_id:
             return False
-            
+
         hash_input = f"{flag.name}:{user_id}"
         digest = hashlib.sha256(hash_input.encode()).hexdigest()
         bucket = int(digest[:8], 16) % 10000  # 0-9999 for 0.01% granularity

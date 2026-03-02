@@ -2,11 +2,13 @@
 
 import pytest
 import yaml
+
 from codomyrmex.ci_cd_automation.pipeline import (
+    ArtifactManager,
     PipelineBuilder,
     WorkflowGenerator,
-    ArtifactManager
 )
+
 
 @pytest.mark.unit
 class TestPipelineBuilder:
@@ -14,7 +16,7 @@ class TestPipelineBuilder:
         builder = PipelineBuilder("test-p")
         builder.add_stage("build", ["echo 'building'"])
         pipeline = builder.build()
-        
+
         assert pipeline.name == "test-p"
         assert len(pipeline.stages) == 1
         assert pipeline.stages[0].name == "build"
@@ -25,7 +27,7 @@ class TestPipelineBuilder:
         builder.add_stage("build", ["echo 'b'"])
         builder.add_stage("test", ["echo 't'"], dependencies=["build"])
         pipeline = builder.build()
-        
+
         assert len(pipeline.stages) == 2
         assert pipeline.stages[1].dependencies == ["build"]
 
@@ -33,7 +35,7 @@ class TestPipelineBuilder:
         builder = PipelineBuilder("branch-p")
         builder.add_stage("deploy", ["echo 'd'"], on_branch="main")
         pipeline = builder.build()
-        
+
         assert pipeline.variables["STAGE_deploy_BRANCH"] == "main"
 
 @pytest.mark.unit
@@ -42,11 +44,11 @@ class TestWorkflowGenerator:
         builder = PipelineBuilder("gh-p")
         builder.add_stage("build", ["echo 'b'"])
         pipeline = builder.build()
-        
+
         generator = WorkflowGenerator("github")
         workflow = generator.from_pipeline(pipeline)
         wd = workflow.to_dict()
-        
+
         assert wd["name"] == "gh-p"
         assert "build" in wd["jobs"]
         assert wd["jobs"]["build"]["steps"][-1]["run"] == "echo 'b'"
@@ -55,11 +57,11 @@ class TestWorkflowGenerator:
         builder = PipelineBuilder("gl-p")
         builder.add_stage("build", ["echo 'b'"])
         pipeline = builder.build()
-        
+
         generator = WorkflowGenerator("gitlab")
         workflow = generator.from_pipeline(pipeline)
         wd = workflow.to_dict()
-        
+
         assert "build" in wd
         assert wd["build"]["stage"] == "build"
         assert "echo 'b'" in wd["build"]["script"]
@@ -68,13 +70,13 @@ class TestWorkflowGenerator:
         builder = PipelineBuilder("save-p")
         builder.add_stage("build", ["echo 'b'"])
         pipeline = builder.build()
-        
+
         generator = WorkflowGenerator("github")
         workflow = generator.from_pipeline(pipeline)
-        
+
         wf_path = tmp_path / "ci.yml"
         workflow.save(str(wf_path))
-        
+
         assert wf_path.exists()
         with open(wf_path) as f:
             data = yaml.safe_load(f)
@@ -85,17 +87,17 @@ class TestArtifactManager:
     def test_upload_and_download(self, tmp_path):
         storage = tmp_path / "storage"
         am = ArtifactManager(str(storage))
-        
+
         # Create a dummy file
         work_dir = tmp_path / "work"
         work_dir.mkdir()
         dummy_file = work_dir / "app.txt"
         dummy_file.write_text("hello")
-        
+
         # Upload
         am.upload(str(dummy_file), "1.0.0")
         assert (storage / "1.0.0" / "app.txt").exists()
-        
+
         # Download
         target = tmp_path / "target"
         am.download("app.txt", "1.0.0", str(target))

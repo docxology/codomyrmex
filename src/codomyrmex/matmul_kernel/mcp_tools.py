@@ -1,6 +1,8 @@
 import numpy as np
+
 from codomyrmex.model_context_protocol.decorators import mcp_tool
-from .kernel import tiled_matmul, benchmark_matmul, matmul_flops
+
+from .kernel import benchmark_matmul, matmul_flops, tiled_matmul
 
 
 @mcp_tool(category="matmul_kernel")

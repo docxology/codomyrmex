@@ -1,13 +1,13 @@
-import numpy as np
 import time
-from typing import Optional
+
+import numpy as np
 
 
 def tiled_matmul(
     A: np.ndarray,
     B: np.ndarray,
     tile_size: int = 64,
-    out: Optional[np.ndarray] = None
+    out: np.ndarray | None = None
 ) -> np.ndarray:
     """
     Tiled matrix multiplication C = A @ B using cache-blocking.

@@ -140,7 +140,7 @@ class APIDocExtractor:
         arg_strings = []
 
         # Positional-only args
-        for i, arg in enumerate(node.args.posonlyargs):
+        for _, arg in enumerate(node.args.posonlyargs):
             s = arg.arg
             if arg.annotation:
                 s += f": {ast.unparse(arg.annotation)}"

@@ -6,7 +6,6 @@ Covers RollingDeployment, CanaryDeployment, and BlueGreenDeployment.
 
 from __future__ import annotations
 
-
 import pytest
 
 from codomyrmex.deployment.strategies import (

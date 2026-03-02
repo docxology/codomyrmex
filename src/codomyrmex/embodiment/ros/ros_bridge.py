@@ -11,8 +11,8 @@ transport layer while keeping the same API surface.
 
 from __future__ import annotations
 
-import time
 import asyncio
+import time
 from collections import deque
 from collections.abc import Callable
 from dataclasses import dataclass, field
@@ -138,9 +138,9 @@ class ROS2Bridge:
         """
         if not self._is_connected:
             logger.warning("Attempted to publish to '%s' while disconnected", topic)
-            # For simulation, we might still want it to work or fail. 
+            # For simulation, we might still want it to work or fail.
             # Given SPEC requirements, let's assume it needs connection.
-        
+
         self.create_topic(topic)
         msg = Message(topic=topic, payload=payload, sender=self.node_name)
 

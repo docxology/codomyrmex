@@ -7,14 +7,12 @@ returning the same type with a correctly wired backward function.
 
 from __future__ import annotations
 
-from typing import Union
-
 import numpy as np
 
 from .engine import Tensor, Value
 
 
-def relu(x: Union[Value, Tensor]) -> Union[Value, Tensor]:
+def relu(x: Value | Tensor) -> Value | Tensor:
     """ReLU activation: max(0, x).
 
     Args:
@@ -38,7 +36,7 @@ def relu(x: Union[Value, Tensor]) -> Union[Value, Tensor]:
     return out
 
 
-def tanh(x: Union[Value, Tensor]) -> Union[Value, Tensor]:
+def tanh(x: Value | Tensor) -> Value | Tensor:
     """Hyperbolic tangent activation.
 
     Args:
@@ -63,7 +61,7 @@ def tanh(x: Union[Value, Tensor]) -> Union[Value, Tensor]:
     return out
 
 
-def sigmoid(x: Union[Value, Tensor]) -> Union[Value, Tensor]:
+def sigmoid(x: Value | Tensor) -> Value | Tensor:
     """Sigmoid activation: 1 / (1 + exp(-x)).
 
     Args:

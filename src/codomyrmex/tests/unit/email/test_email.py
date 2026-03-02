@@ -8,7 +8,7 @@ Zero-mock policy: no MagicMock or monkeypatch.
 Live Gmail / AgentMail API tests are guarded by pytest.mark.skipif.
 """
 
-from datetime import UTC, datetime, timezone
+from datetime import UTC, datetime
 
 import pytest
 
@@ -273,7 +273,7 @@ class TestEmailProviderAbstractInterface:
                     id=message_id,
                     subject="Test",
                     sender=EmailAddress(email="a@b.com"),
-                    date=datetime.now(timezone.utc)
+                    date=datetime.now(UTC)
                 )
             def send_message(self, draft):
                 raise NotImplementedError()

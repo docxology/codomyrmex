@@ -56,7 +56,10 @@ class TestEnvironmentSetupComprehensive:
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from codomyrmex.environment_setup.env_checker import get_uv_path, is_uv_available
+        from codomyrmex.environment_setup.env_checker import (
+            get_uv_path,
+            is_uv_available,
+        )
 
         path = get_uv_path()
         if is_uv_available():
@@ -92,13 +95,13 @@ class TestEnvironmentSetupComprehensive:
 
         # 'os' and 'sys' are built-in, but can be checked via find_spec
         results = check_dependencies(["os", "sys", "nonexistent_pkg_xyz"])
-        
+
         assert results[0].name == "os"
         assert results[0].installed is True
-        
+
         assert results[1].name == "sys"
         assert results[1].installed is True
-        
+
         assert results[2].name == "nonexistent_pkg_xyz"
         assert results[2].installed is False
 
@@ -107,7 +110,9 @@ class TestEnvironmentSetupComprehensive:
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from codomyrmex.environment_setup.env_checker import ensure_dependencies_installed
+        from codomyrmex.environment_setup.env_checker import (
+            ensure_dependencies_installed,
+        )
 
         # Test with packages that should exist
         assert ensure_dependencies_installed(["os", "pathlib"]) is True
@@ -152,7 +157,7 @@ class TestEnvironmentSetupComprehensive:
         try:
             os.environ["MY_TEST_API_KEY"] = "sk-test"
             report = check_api_keys(["MY_TEST_API_KEY", "NONEXISTENT_KEY"])
-            
+
             assert report.all_present is False
             assert "MY_TEST_API_KEY" not in report.missing
             assert "NONEXISTENT_KEY" in report.missing
@@ -190,7 +195,9 @@ class TestEnvironmentSetupComprehensive:
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from codomyrmex.environment_setup.env_checker import validate_environment_completeness
+        from codomyrmex.environment_setup.env_checker import (
+            validate_environment_completeness,
+        )
 
         # Should return a boolean
         result = validate_environment_completeness(repo_root=str(tmp_path))

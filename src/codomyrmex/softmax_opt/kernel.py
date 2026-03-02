@@ -62,7 +62,6 @@ def online_softmax(x: np.ndarray, axis: int = -1) -> np.ndarray:
 
     # CUDA_ACCELERATE: Tree reduction for parallel online softmax
     """
-    shape = x.shape
     x_flat = np.moveaxis(x, axis, -1).reshape(-1, x.shape[axis])
 
     result = np.zeros_like(x_flat)

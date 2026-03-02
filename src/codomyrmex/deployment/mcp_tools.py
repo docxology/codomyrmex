@@ -35,7 +35,7 @@ def deployment_execute(
         Dictionary containing deployment results.
     """
     strat = create_strategy(strategy, **kwargs)
-    
+
     deployment_targets = None
     if targets:
         deployment_targets = [
@@ -49,7 +49,7 @@ def deployment_execute(
         ]
 
     result = _manager.deploy(service_name, version, strat, deployment_targets)
-    
+
     output = result.to_dict()
     output["service"] = service_name
     output["version"] = version

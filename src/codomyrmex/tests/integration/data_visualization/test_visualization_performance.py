@@ -93,6 +93,7 @@ class TestVisualizationPerformanceWorkflow:
     def test_basic_visualization_creation(self):
         """Test that basic visualizations can be created."""
         import matplotlib
+
         from codomyrmex.data_visualization import create_bar_chart, create_line_plot
 
         # Test bar chart creation

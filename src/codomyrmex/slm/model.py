@@ -6,8 +6,9 @@ Architecture:
 - Language model head (d_model -> vocab_size)
 - Greedy autoregressive generation
 """
-import numpy as np
 from dataclasses import dataclass
+
+import numpy as np
 
 
 @dataclass

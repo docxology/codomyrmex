@@ -27,9 +27,9 @@ except ImportError:
     RedisLock = None
 from .dead_letter import DeadLetterQueue
 from .semaphores.semaphore import (
+    AsyncLocalSemaphore,
     BaseSemaphore,
     LocalSemaphore,
-    AsyncLocalSemaphore,
 )
 from .workers.pool import AsyncWorkerPool, PoolStats, TaskResult
 

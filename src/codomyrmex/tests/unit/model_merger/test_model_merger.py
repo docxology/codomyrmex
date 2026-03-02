@@ -12,7 +12,12 @@ if not HAS_NUMPY:
     pytest.skip("numpy not installed", allow_module_level=True)
 
 try:
-    from codomyrmex.model_merger import slerp, linear_interpolate, model_soup, ModelMerger
+    from codomyrmex.model_merger import (
+        ModelMerger,
+        linear_interpolate,
+        model_soup,
+        slerp,
+    )
     HAS_MODULE = True
 except ImportError:
     HAS_MODULE = False

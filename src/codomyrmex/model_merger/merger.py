@@ -1,7 +1,7 @@
 """Model merging utilities: SLERP, linear interpolation, and model soups."""
 
+
 import numpy as np
-from typing import Optional
 
 
 def slerp(
@@ -79,7 +79,7 @@ def linear_interpolate(
 
 def model_soup(
     param_dicts: list[dict[str, np.ndarray]],
-    weights: Optional[list[float]] = None,
+    weights: list[float] | None = None,
 ) -> dict[str, np.ndarray]:
     """
     Model Soup (Wortsman et al. 2022): weighted average of model parameters.

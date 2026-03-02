@@ -15,8 +15,7 @@ import math
 import numpy as np
 import pytest
 
-from codomyrmex.autograd import Value, Tensor, relu, tanh, sigmoid, softmax
-
+from codomyrmex.autograd import Tensor, Value, relu, sigmoid, softmax, tanh
 
 # ---------------------------------------------------------------------------
 # Value (scalar autograd)
@@ -594,7 +593,10 @@ class TestMCPTools:
 
     @pytest.mark.unit
     def test_mcp_tool_metadata(self):
-        from codomyrmex.autograd.mcp_tools import autograd_compute, autograd_gradient_check
+        from codomyrmex.autograd.mcp_tools import (
+            autograd_compute,
+            autograd_gradient_check,
+        )
 
         assert hasattr(autograd_compute, "_mcp_tool")
         assert autograd_compute._mcp_tool["category"] == "autograd"

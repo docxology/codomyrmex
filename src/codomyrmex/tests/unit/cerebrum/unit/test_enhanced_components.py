@@ -1,11 +1,13 @@
 import pytest
+
 from codomyrmex.cerebrum import (
-    WorkingMemory, 
-    ReasoningChain, 
-    DecisionModule, 
+    Case,
     CerebrumEngine,
-    Case
+    DecisionModule,
+    ReasoningChain,
+    WorkingMemory,
 )
+
 
 @pytest.mark.unit
 class TestCognitiveComponents:
@@ -16,10 +18,10 @@ class TestCognitiveComponents:
         memory.store("goal", "test")
         assert memory.retrieve("goal") == "test"
         assert "goal" in memory.list_keys()
-        
+
         memory.delete("goal")
         assert memory.retrieve("goal") is None
-        
+
         memory.store("x", 1)
         memory.clear()
         assert memory.list_keys() == []
@@ -27,10 +29,10 @@ class TestCognitiveComponents:
     def test_reasoning_chain(self):
         chain = ReasoningChain()
         memory = WorkingMemory()
-        
+
         chain.add_step("Step 1", lambda m: m.store("val", 10))
         chain.add_step("Step 2", lambda m: m.retrieve("val") * 2)
-        
+
         result = chain.execute(memory)
         assert result.success
         assert result.steps_completed == 2
@@ -40,14 +42,14 @@ class TestCognitiveComponents:
     def test_reasoning_chain_failure(self):
         chain = ReasoningChain()
         memory = WorkingMemory()
-        
+
         def failing_action(m):
             raise ValueError("Failure")
-            
+
         chain.add_step("Good step", lambda m: "ok")
         chain.add_step("Bad step", failing_action)
         chain.add_step("Unreached step", lambda m: "never")
-        
+
         result = chain.execute(memory)
         assert not result.success
         assert result.steps_completed == 1
@@ -59,7 +61,7 @@ class TestCognitiveComponents:
         options = ["A", "B", "C"]
         criteria = {"cost": 0.5, "quality": 0.5}
         context = {}
-        
+
         decision = dm.decide(options, criteria, context)
         assert decision.choice in options
         assert 0 <= decision.confidence <= 1
@@ -67,11 +69,11 @@ class TestCognitiveComponents:
 
     def test_engine_integration(self):
         engine = CerebrumEngine()
-        
+
         # Test decide via engine
         decision = engine.decide(["Option 1"], {"weight": 1.0})
         assert decision.choice == "Option 1"
-        
+
         # Test reasoning chain via engine
         chain = engine.create_reasoning_chain()
         chain.add_step("test", lambda m: "done")
@@ -82,14 +84,14 @@ class TestCognitiveComponents:
 @pytest.mark.unit
 class TestReasoningEngineEnhanced:
     """Test ReasoningEngine with enhanced functionality."""
-    
+
     def test_reasoning_with_retrieval(self):
         engine = CerebrumEngine()
         engine.add_case(Case(case_id="c1", features={"f1": 1}, outcome="out1"))
-        
+
         query = Case(case_id="q", features={"f1": 1})
         result = engine.reason(query)
-        
+
         assert result.prediction == "out1"
         assert len(result.retrieved_cases) == 1
         assert result.retrieved_cases[0].case_id == "c1"

@@ -8,7 +8,6 @@ from a provided schema. Pure Python, no LLM dependency.
 
 import re
 from dataclasses import dataclass
-from typing import Optional
 
 
 @dataclass
@@ -34,7 +33,7 @@ class SQLResult:
     confidence: float
     tables_used: list[str]
     valid: bool
-    error: Optional[str] = None
+    error: str | None = None
 
 
 class SQLValidator:
@@ -52,7 +51,7 @@ class SQLValidator:
     ]
 
     @classmethod
-    def validate(cls, sql: str) -> tuple[bool, Optional[str]]:
+    def validate(cls, sql: str) -> tuple[bool, str | None]:
         """Returns (is_valid, error_message)."""
         sql_upper = sql.upper().strip()
 
@@ -102,7 +101,7 @@ class TextToSQLEngine:
         self.schema = schema
         self.validator = SQLValidator()
 
-    def _find_table(self, question: str) -> Optional[str]:
+    def _find_table(self, question: str) -> str | None:
         """Find the most relevant table based on question keywords."""
         question_lower = question.lower()
         best_match = None

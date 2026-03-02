@@ -123,13 +123,13 @@ class AutoEventListener(EventListener):
                 event_types = getattr(attr, '_event_types', [])
                 filter_func = getattr(attr, '_event_filter', None)
                 priority = getattr(attr, '_event_priority', 0)
-                
+
                 # Check if it's already bound or needs binding
                 if hasattr(attr, '__get__') and not inspect.ismethod(attr):
                     bound_handler = attr.__get__(obj, obj.__class__)
                 else:
                     bound_handler = attr
-                    
+
                 self.on(event_types, bound_handler, f"auto_{attr_name}", filter_func, priority)
 
 

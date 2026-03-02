@@ -80,7 +80,7 @@ class DatabaseConnection:
             self.host = self.host or os.getenv("DB_HOST", DEFAULT_POSTGRES_HOST)
             self.port = self.port or int(os.getenv("DB_PORT", DEFAULT_POSTGRES_PORT))
             self.username = self.username or os.getenv("DB_USER", DEFAULT_POSTGRES_USER)
-            
+
             if self.db_type == DatabaseType.MYSQL:
                 if self.port == int(DEFAULT_POSTGRES_PORT):
                     self.port = 3306
@@ -130,7 +130,7 @@ class DatabaseConnection:
 
     def execute(self, query: str, params: tuple | None = None, commit: bool = True) -> QueryResult:
         """Execute a query and return QueryResult.
-        
+
         Args:
             query: SQL query string.
             params: Optional tuple of parameters.
@@ -202,7 +202,7 @@ class DatabaseManager:
         """Initialize database manager."""
         self.connections: dict[str, DatabaseConnection] = {}
         self.default_connection_name: str | None = None
-        
+
         if database_url:
             self.connect(database_url)
 
@@ -305,7 +305,7 @@ class DatabaseManager:
         conn = self.get_connection(connection_name)
         if not conn:
             raise CodomyrmexError("No database connection available")
-        
+
         with conn.transaction() as tx:
             yield tx
 

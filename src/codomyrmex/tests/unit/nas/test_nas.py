@@ -11,8 +11,13 @@ Tests cover:
 
 import pytest
 
-from codomyrmex.nas import NASSearchSpace, ArchConfig, NASSearcher, random_search, evolutionary_search
-
+from codomyrmex.nas import (
+    ArchConfig,
+    NASSearcher,
+    NASSearchSpace,
+    evolutionary_search,
+    random_search,
+)
 
 # ---------------------------------------------------------------------------
 # ArchConfig
@@ -239,7 +244,8 @@ class TestMutation:
     def test_mutate_produces_valid_config(self):
         """Mutated configs should still have valid head/model divisibility."""
         space = NASSearchSpace()
-        eval_fn = lambda c: 1.0
+        def eval_fn(c):
+            return 1.0
         searcher = NASSearcher(space, eval_fn)
         parent = space.sample(seed=42)
         for _ in range(50):
@@ -250,7 +256,8 @@ class TestMutation:
     def test_mutate_changes_something(self):
         """At least one dimension should differ after mutation (usually)."""
         space = NASSearchSpace()
-        eval_fn = lambda c: 1.0
+        def eval_fn(c):
+            return 1.0
         searcher = NASSearcher(space, eval_fn)
         parent = space.sample(seed=42)
         # Run many mutations; at least some should differ

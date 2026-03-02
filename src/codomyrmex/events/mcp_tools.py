@@ -1,10 +1,12 @@
 """MCP tools for the events module."""
 
 from typing import Any
-from codomyrmex.model_context_protocol.decorators import mcp_tool
+
 from codomyrmex.events.core.event_bus import get_event_bus
 from codomyrmex.events.core.event_schema import Event, EventType
 from codomyrmex.events.handlers.event_logger import get_event_logger
+from codomyrmex.model_context_protocol.decorators import mcp_tool
+
 
 @mcp_tool(category="events")
 def emit_event(
@@ -26,7 +28,7 @@ def emit_event(
     """
     try:
         bus = get_event_bus()
-        
+
         # Try to find the EventType enum member
         try:
             etype = EventType(event_type)
@@ -43,9 +45,9 @@ def emit_event(
             epriority = EventPriority.NORMAL
 
         event = Event(
-            event_type=etype, 
-            data=payload, 
-            source=source, 
+            event_type=etype,
+            data=payload,
+            source=source,
             priority=epriority
         )
         bus.publish(event)
@@ -96,13 +98,13 @@ def get_event_history(
     try:
         logger = get_event_logger()
         entries = logger.get_events(event_type=event_type)
-        
+
         # Sort by timestamp descending and apply limit
         entries.sort(key=lambda x: x.timestamp, reverse=True)
         entries = entries[:limit]
-        
+
         history = [entry.to_dict() for entry in entries]
-        
+
         return {
             "status": "success",
             "events": history,

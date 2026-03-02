@@ -14,11 +14,11 @@ from __future__ import annotations
 
 import json
 import sqlite3
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
-from codomyrmex.agentic_memory.models import Memory, MemoryImportance, MemoryType
+from codomyrmex.agentic_memory.models import MemoryImportance, MemoryType
 
 # CogniLayer default paths
 COGNILAYER_HOME = Path.home() / ".cognilayer"
@@ -68,7 +68,7 @@ def store_memory(
     """
     conn = _get_db_connection()
     try:
-        now = datetime.now(timezone.utc).isoformat()
+        now = datetime.now(UTC).isoformat()
         tag_str = ",".join(tags) if tags else ""
         meta_str = json.dumps(metadata) if metadata else "{}"
 
@@ -189,7 +189,7 @@ def consolidate_memories() -> dict[str, Any]:
             "before": total_before,
             "after": total_after,
             "removed": total_before - total_after,
-            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "timestamp": datetime.now(UTC).isoformat(),
         }
     finally:
         conn.close()
@@ -228,5 +228,3 @@ def get_memory_stats() -> dict[str, Any]:
         return stats
     finally:
         conn.close()
-""",
-<parameter name="EmptyFile">false

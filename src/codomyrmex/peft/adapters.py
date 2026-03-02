@@ -6,9 +6,10 @@ and IA3 (Liu et al. 2022) as pure NumPy adapters. These demonstrate
 the math behind PEFT methods without requiring PyTorch.
 """
 
-import numpy as np
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
+
+import numpy as np
 
 
 @dataclass

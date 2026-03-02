@@ -46,10 +46,10 @@ class RedisLock(BaseLock):
             if self.redis.set(self.key, self.owner_id, nx=True, ex=self.ttl):
                 self.is_held = True
                 return True
-            
+
             if time.time() - start_time >= timeout:
                 return False
-                
+
             time.sleep(retry_interval)
 
     def release(self) -> None:

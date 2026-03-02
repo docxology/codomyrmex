@@ -12,7 +12,7 @@ def handle_skills_sync(force: bool) -> bool:
     try:
         from codomyrmex.skills import get_skills_manager
         manager = get_skills_manager()
-        
+
         print("Syncing skills with upstream repository...")
         success = manager.sync_upstream(force=force)
 
@@ -37,7 +37,7 @@ def handle_skills_list(category: str | None) -> bool:
         skills = manager.list_skills(category=category)
 
         if not skills:
-            print(f"No skills found" + (f" in category '{category}'" if category else ""))
+            print("No skills found" + (f" in category '{category}'" if category else ""))
             return True
 
         print(f"Found {len(skills)} skill(s):\n")

@@ -4,6 +4,12 @@ Feature Store
 Feature management, storage, and serving for ML applications.
 """
 
+from .exceptions import (
+    FeatureNotFoundError,
+    FeatureRegistrationError,
+    FeatureStoreError,
+    FeatureValidationError,
+)
 from .models import (
     TIMESTAMP_FEATURE,
     USER_ID_FEATURE,
@@ -21,12 +27,6 @@ from .service import (
 from .store import (
     FeatureStore,
     InMemoryFeatureStore,
-)
-from .exceptions import (
-    FeatureStoreError,
-    FeatureNotFoundError,
-    FeatureRegistrationError,
-    FeatureValidationError,
 )
 
 # Shared schemas for cross-module interop

@@ -17,7 +17,6 @@ import pytest
 from codomyrmex.distributed_training import AllReduce, FSDPShard, simulate_fsdp_step
 from codomyrmex.distributed_training.fsdp import all_gather, reduce_scatter
 
-
 # ---------------------------------------------------------------------------
 # FSDPShard
 # ---------------------------------------------------------------------------

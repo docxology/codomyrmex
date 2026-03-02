@@ -11,9 +11,8 @@ Tests cover:
 
 import pytest
 
-from codomyrmex.text_to_sql import TextToSQLEngine, SQLSchema, SQLResult
+from codomyrmex.text_to_sql import SQLResult, SQLSchema, TextToSQLEngine
 from codomyrmex.text_to_sql.engine import SQLValidator
-
 
 # ---------------------------------------------------------------------------
 # Test fixtures

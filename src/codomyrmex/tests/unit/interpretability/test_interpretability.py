@@ -12,7 +12,11 @@ if not HAS_NUMPY:
     pytest.skip("numpy not installed", allow_module_level=True)
 
 try:
-    from codomyrmex.interpretability import SparseAutoencoder, train_sae, analyze_features
+    from codomyrmex.interpretability import (
+        SparseAutoencoder,
+        analyze_features,
+        train_sae,
+    )
     HAS_MODULE = True
 except ImportError:
     HAS_MODULE = False

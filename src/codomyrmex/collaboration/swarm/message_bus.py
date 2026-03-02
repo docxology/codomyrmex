@@ -10,7 +10,7 @@ import asyncio
 import re
 from collections.abc import Callable
 from dataclasses import dataclass
-from typing import Any, Union
+from typing import Any
 
 from codomyrmex.collaboration.swarm.protocol import SwarmMessage
 from codomyrmex.logging_monitoring import get_logger
@@ -18,7 +18,7 @@ from codomyrmex.logging_monitoring import get_logger
 logger = get_logger(__name__)
 
 
-MessageHandler = Callable[[SwarmMessage], Union[None, Any]]
+MessageHandler = Callable[[SwarmMessage], None | Any]
 
 
 @dataclass
@@ -175,7 +175,7 @@ class MessageBus:
         regex_pattern = pattern.replace(".", r"\.")
         regex_pattern = regex_pattern.replace("*", r"[^.]+")
         regex_pattern = regex_pattern.replace("#", r".*")
-        
+
         return re.fullmatch(regex_pattern, topic) is not None
 
 

@@ -1,9 +1,10 @@
-from dataclasses import dataclass, field
-from typing import Any, Dict, Optional
 import time
+from dataclasses import dataclass, field
+from typing import Any
 
 import docker
 from loguru import logger
+
 
 @dataclass
 class ResourceUsage:
@@ -15,7 +16,7 @@ class ResourceUsage:
     memory_percent: float
     timestamp: float = field(default_factory=time.time)
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Convert to dictionary."""
         return {
             "container_id": self.container_id,
@@ -31,7 +32,7 @@ class ResourceTuner:
     Analyzes container resource usage and suggests optimal limits.
     """
 
-    def __init__(self, client: Optional[docker.DockerClient] = None):
+    def __init__(self, client: docker.DockerClient | None = None):
         """Initialize the resource tuner."""
         try:
             self.client = client or docker.from_env()
@@ -49,7 +50,7 @@ class ResourceTuner:
         try:
             container = self.client.containers.get(container_id)
             stats = container.stats(stream=False)
-            
+
             # CPU calculation
             cpu_delta = stats['cpu_stats']['cpu_usage']['total_usage'] - stats['precpu_stats']['cpu_usage']['total_usage']
             system_delta = stats['cpu_stats']['system_cpu_usage'] - stats['precpu_stats']['system_cpu_usage']
@@ -61,7 +62,7 @@ class ResourceTuner:
             mem_usage = stats['memory_stats']['usage']
             mem_limit = stats['memory_stats']['limit']
             mem_percent = (mem_usage / mem_limit) * 100.0 if mem_limit > 0 else 0.0
-            
+
             return ResourceUsage(
                 container_id=container_id,
                 cpu_percent=cpu_percent,
@@ -75,7 +76,7 @@ class ResourceTuner:
             logger.error(f"Failed to analyze container {container_id}: {e}")
             raise
 
-    def suggest_limits(self, usage: ResourceUsage) -> Dict[str, str]:
+    def suggest_limits(self, usage: ResourceUsage) -> dict[str, str]:
         """
         Suggest optimal resource limits based on usage.
         """
@@ -83,10 +84,10 @@ class ResourceTuner:
         suggested_mem_mb = int((usage.memory_usage_bytes * 1.2) / (1024 * 1024))
         # Ensure at least 64MB
         suggested_mem_mb = max(64, suggested_mem_mb)
-        
+
         # Suggest 0.5 CPU if usage < 10%, otherwise current + 0.5
         suggested_cpu = 0.5 if usage.cpu_percent < 10 else (usage.cpu_percent / 100.0) + 0.5
-        
+
         return {
             "cpu_limit": f"{suggested_cpu:.1f}",
             "memory_limit": f"{suggested_mem_mb}m",

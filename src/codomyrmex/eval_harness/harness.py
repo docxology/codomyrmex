@@ -8,9 +8,10 @@ Provides:
 - EvalHarness: Runs a model function against multiple tasks
 """
 import time
-import numpy as np
+from collections.abc import Callable
 from dataclasses import dataclass, field
-from typing import Callable
+
+import numpy as np
 
 
 @dataclass
@@ -56,7 +57,7 @@ class ExactMatchMetric:
         """
         correct = sum(
             normalize_answer(p) == normalize_answer(t)
-            for p, t in zip(predictions, targets)
+            for p, t in zip(predictions, targets, strict=False)
         )
         return correct / len(targets) if targets else 0.0
 
@@ -92,7 +93,7 @@ class F1Metric:
         if not targets:
             return 0.0
         return float(
-            np.mean([cls._f1_single(p, t) for p, t in zip(predictions, targets)])
+            np.mean([cls._f1_single(p, t) for p, t in zip(predictions, targets, strict=False)])
         )
 
 
@@ -145,7 +146,7 @@ class EvalHarness:
                 "prediction": p,
                 "correct": normalize_answer(p) == normalize_answer(t),
             }
-            for ex, t, p in zip(task.examples, targets, predictions)
+            for ex, t, p in zip(task.examples, targets, predictions, strict=False)
         ]
 
         result = EvalResult(

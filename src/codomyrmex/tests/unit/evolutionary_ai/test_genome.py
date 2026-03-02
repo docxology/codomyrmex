@@ -2,13 +2,15 @@
 Unit tests for evolutionary_ai.genome — Zero-Mock compliant.
 """
 
-import pytest
 import math
 
+import pytest
+
 from codomyrmex.evolutionary_ai.genome.genome import (
-    Individual,
     Genome,
+    Individual,
 )
+
 
 @pytest.mark.unit
 class TestIndividual:
@@ -22,7 +24,7 @@ class TestIndividual:
         ind1 = Individual(genes=[1], fitness=10.0)
         ind2 = Individual(genes=[2], fitness=20.0)
         ind3 = Individual(genes=[3], fitness=None)
-        
+
         assert ind1 < ind2
         assert not (ind2 < ind1)
         assert ind3 < ind1
@@ -33,7 +35,7 @@ class TestIndividual:
         ind1 = Individual(genes=[1, 2, 3])
         ind2 = Individual(genes=[1, 2, 3])
         ind3 = Individual(genes=[1, 2, 4])
-        
+
         assert ind1 == ind2
         assert ind1 != ind3
         assert ind1 != "not an individual"
@@ -52,11 +54,11 @@ class TestGenome:
     def test_genome_clone(self):
         g1 = Genome(genes=[0.1, 0.2], fitness=0.5, metadata={"a": 1})
         g2 = g1.clone()
-        
+
         assert g1 == g2
         assert g1.fitness == g2.fitness
         assert g1.metadata == g2.metadata
-        
+
         # Verify independence
         g2.genes[0] = 0.9
         g2.metadata["a"] = 2
@@ -99,7 +101,7 @@ class TestGenome:
         g1 = Genome(genes=[0.1, 0.2], fitness=0.8, metadata={"m": "data"})
         data = g1.to_dict()
         g2 = Genome.from_dict(data)
-        
+
         assert g1 == g2
         assert g1.fitness == g2.fitness
         assert g1.metadata == g2.metadata

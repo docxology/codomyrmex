@@ -16,7 +16,6 @@ these into single-call sampling APIs.
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
-from typing import Optional
 
 import numpy as np
 
@@ -26,7 +25,7 @@ class LogitProcessor(ABC):
 
     @abstractmethod
     def __call__(
-        self, logits: np.ndarray, input_ids: Optional[list[int]] = None
+        self, logits: np.ndarray, input_ids: list[int] | None = None
     ) -> np.ndarray:
         """Process logits before sampling.
 
@@ -54,7 +53,7 @@ class TemperatureProcessor(LogitProcessor):
         self.temperature = temperature
 
     def __call__(
-        self, logits: np.ndarray, input_ids: Optional[list[int]] = None
+        self, logits: np.ndarray, input_ids: list[int] | None = None
     ) -> np.ndarray:
         return logits / self.temperature
 
@@ -71,7 +70,7 @@ class TopKProcessor(LogitProcessor):
         self.top_k = top_k
 
     def __call__(
-        self, logits: np.ndarray, input_ids: Optional[list[int]] = None
+        self, logits: np.ndarray, input_ids: list[int] | None = None
     ) -> np.ndarray:
         k = min(self.top_k, len(logits))
         # Find k-th largest value threshold
@@ -95,7 +94,7 @@ class TopPProcessor(LogitProcessor):
         self.top_p = top_p
 
     def __call__(
-        self, logits: np.ndarray, input_ids: Optional[list[int]] = None
+        self, logits: np.ndarray, input_ids: list[int] | None = None
     ) -> np.ndarray:
         # Compute probabilities
         shifted = logits - np.max(logits)
@@ -135,7 +134,7 @@ class RepetitionPenaltyProcessor(LogitProcessor):
         self.penalty = penalty
 
     def __call__(
-        self, logits: np.ndarray, input_ids: Optional[list[int]] = None
+        self, logits: np.ndarray, input_ids: list[int] | None = None
     ) -> np.ndarray:
         if not input_ids:
             return logits
@@ -158,7 +157,7 @@ class LogitProcessorList(LogitProcessor):
         self.processors = list(processors)
 
     def __call__(
-        self, logits: np.ndarray, input_ids: Optional[list[int]] = None
+        self, logits: np.ndarray, input_ids: list[int] | None = None
     ) -> np.ndarray:
         result = logits
         for processor in self.processors:
@@ -176,8 +175,8 @@ def sample_token(
     top_k: int = 0,
     top_p: float = 1.0,
     repetition_penalty: float = 1.0,
-    input_ids: Optional[list[int]] = None,
-    seed: Optional[int] = None,
+    input_ids: list[int] | None = None,
+    seed: int | None = None,
 ) -> int:
     """Sample next token from logits using configurable sampling strategy.
 

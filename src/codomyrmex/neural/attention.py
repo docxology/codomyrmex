@@ -2,14 +2,13 @@
 from __future__ import annotations
 
 import numpy as np
-from typing import Optional
 
 
 def scaled_dot_product_attention(
     Q: np.ndarray,
     K: np.ndarray,
     V: np.ndarray,
-    mask: Optional[np.ndarray] = None,
+    mask: np.ndarray | None = None,
 ) -> tuple[np.ndarray, np.ndarray]:
     """Scaled dot-product attention.
 
@@ -78,7 +77,7 @@ class MultiHeadAttention:
         query: np.ndarray,
         key: np.ndarray,
         value: np.ndarray,
-        mask: Optional[np.ndarray] = None,
+        mask: np.ndarray | None = None,
     ) -> tuple[np.ndarray, np.ndarray]:
         """Forward pass of multi-head attention.
 

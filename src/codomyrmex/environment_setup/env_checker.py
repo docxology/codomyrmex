@@ -10,7 +10,6 @@ import os
 import shutil
 import sys
 from dataclasses import dataclass, field
-from typing import List, Optional
 
 import dotenv
 
@@ -26,7 +25,7 @@ _script_dir = os.path.dirname(__file__)
 class ValidationReport:
     """Report on environment validation status."""
     valid: bool
-    missing_items: List[str] = field(default_factory=list)
+    missing_items: list[str] = field(default_factory=list)
 
 
 @dataclass
@@ -40,7 +39,7 @@ class DependencyStatus:
 class APIKeyReport:
     """Report on API key presence."""
     all_present: bool
-    missing: List[str] = field(default_factory=list)
+    missing: list[str] = field(default_factory=list)
 
 
 def validate_python_version(min_version: str = "3.10") -> bool:
@@ -65,7 +64,7 @@ def is_uv_available() -> bool:
     return shutil.which("uv") is not None
 
 
-def get_uv_path() -> Optional[str]:
+def get_uv_path() -> str | None:
     """Get the path to the 'uv' executable if available."""
     return shutil.which("uv")
 
@@ -79,7 +78,7 @@ def is_uv_environment() -> bool:
     )
 
 
-def check_dependencies(dependencies: List[str]) -> List[DependencyStatus]:
+def check_dependencies(dependencies: list[str]) -> list[DependencyStatus]:
     """Check if specified dependencies are installed.
 
     Args:
@@ -95,7 +94,7 @@ def check_dependencies(dependencies: List[str]) -> List[DependencyStatus]:
     return results
 
 
-def ensure_dependencies_installed(dependencies: Optional[List[str]] = None) -> bool:
+def ensure_dependencies_installed(dependencies: list[str] | None = None) -> bool:
     """Check if required dependencies are installed and accessible.
 
     Args:
@@ -125,10 +124,10 @@ def ensure_dependencies_installed(dependencies: Optional[List[str]] = None) -> b
 
 
 def check_and_setup_env_vars(
-    repo_root: Optional[str] = None,
-    required: Optional[List[str]] = None,
-    optional: Optional[List[str]] = None
-) -> List[str]:
+    repo_root: str | None = None,
+    required: list[str] | None = None,
+    optional: list[str] | None = None
+) -> list[str]:
     """Load environment variables from a .env file and check for required keys.
 
     Args:
@@ -161,7 +160,7 @@ def check_and_setup_env_vars(
     return missing
 
 
-def check_api_keys(keys: List[str]) -> APIKeyReport:
+def check_api_keys(keys: list[str]) -> APIKeyReport:
     """Check if required API keys are set in the environment.
 
     Args:
@@ -215,7 +214,7 @@ def generate_environment_report() -> str:
     return "\n".join(report)
 
 
-def validate_environment_completeness(repo_root: Optional[str] = None) -> bool:
+def validate_environment_completeness(repo_root: str | None = None) -> bool:
     """Legacy wrapper for backward compatibility."""
     if repo_root is None:
         # Default to repo root (3 levels up from this file)

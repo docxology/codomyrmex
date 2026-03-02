@@ -285,7 +285,7 @@ class EventBus:
         with self._lock:
             for sub in self.subscriptions.values():
                 all_patterns.update(sub.event_patterns)
-        return sorted(list(all_patterns), key=str)
+        return sorted(all_patterns, key=str)
 
 
 _event_bus = None

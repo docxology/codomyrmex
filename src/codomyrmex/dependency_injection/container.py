@@ -297,7 +297,7 @@ class Container:
         """
         with self._lock:
             descriptors = list(self._registry.get(interface, []))
-        
+
         scope_ctx = self._current_scope()
         return [self._resolve_descriptor(d, scope_ctx) for d in descriptors]
 
@@ -318,7 +318,7 @@ class Container:
         scope_context: ScopeContext | None = None,
     ) -> Any:
         """Core resolution logic with support for List, Optional, and named resolution."""
-        
+
         # Handle List[T] / Iterable[T] for collection resolution
         origin = get_origin(interface)
         if origin is list or origin is Iterable:
@@ -347,7 +347,7 @@ class Container:
         if descriptor is None:
             raise KeyError(
                 f"No registration found for {interface.__name__}" + (f" (name='{name}')" if name else "") + ". "
-                f"Register it with container.register() first."
+                "Register it with container.register() first."
             )
 
         return self._resolve_descriptor(descriptor, scope_context)
@@ -360,7 +360,7 @@ class Container:
         """Resolve a specific service descriptor."""
         interface = descriptor.interface
         name = descriptor.name
-        
+
         # Circular dependency detection (per-thread)
         resolving_set = self._get_resolving_set()
         res_key = (interface, name)

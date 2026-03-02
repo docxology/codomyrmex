@@ -367,7 +367,7 @@ class CerebrumEngine:
             self.logger.error(f"Knowledge file not found: {path}")
             return
 
-        with open(path, "r") as f:
+        with open(path) as f:
             data = json.load(f)
             if "case_base" in data:
                 self.case_base = CaseBase.from_dict(data["case_base"])

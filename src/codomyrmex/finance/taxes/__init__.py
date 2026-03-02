@@ -1,5 +1,5 @@
 """Tax calculation submodule."""
 
-from .calculator import TaxCalculator, TaxResult, TaxError
+from .calculator import TaxCalculator, TaxError, TaxResult
 
 __all__ = ["TaxCalculator", "TaxResult", "TaxError"]

@@ -81,7 +81,7 @@ class CloudClient(ABC):
 
     provider: CloudProvider
 
-    def __init__(self, credentials: Optional[CloudCredentials] = None):
+    def __init__(self, credentials: CloudCredentials | None = None):
         self.credentials = credentials
         self.region = credentials.region if credentials else None
 

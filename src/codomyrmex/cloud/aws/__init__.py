@@ -5,15 +5,15 @@ from typing import Any, Optional
 import boto3
 from botocore.exceptions import ClientError
 
-from codomyrmex.logging_monitoring.core.logger_config import get_logger
 from codomyrmex.cloud.common import StorageClient
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 logger = get_logger(__name__)
 
 class S3Client(StorageClient):
     """Wrapper for AWS S3 operations."""
 
-    def __init__(self, region_name: str | None = None, session: Optional[boto3.Session] = None):
+    def __init__(self, region_name: str | None = None, session: boto3.Session | None = None):
         self.session = session or boto3.Session()
         self.client = self.session.client('s3', region_name=region_name)
 

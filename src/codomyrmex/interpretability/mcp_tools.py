@@ -41,7 +41,8 @@ def sae_train(
     """
     try:
         import numpy as np
-        from .sae import train_sae, analyze_features
+
+        from .sae import analyze_features, train_sae
 
         if seed is not None:
             np.random.seed(seed)
@@ -92,6 +93,7 @@ def sae_analyze(
     """
     try:
         import numpy as np
+
         from .sae import SparseAutoencoder, analyze_features
 
         np.random.seed(seed)

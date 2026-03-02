@@ -1,7 +1,11 @@
 """Unit tests for collaboration module."""
 import pytest
 
-from codomyrmex.collaboration.protocols.swarm import AgentProxy, SwarmManager, TaskDecomposer
+from codomyrmex.collaboration.protocols.swarm import (
+    AgentProxy,
+    SwarmManager,
+    TaskDecomposer,
+)
 
 
 @pytest.mark.unit
@@ -128,7 +132,9 @@ class TestTaskManagerDeep:
 
     def test_scheduling_strategy_all_values(self):
         """SchedulingStrategy enum exposes all four expected strategies."""
-        from codomyrmex.collaboration.coordination.task_manager import SchedulingStrategy
+        from codomyrmex.collaboration.coordination.task_manager import (
+            SchedulingStrategy,
+        )
         names = {s.name for s in SchedulingStrategy}
         assert {"FIFO", "PRIORITY", "SHORTEST_FIRST", "ROUND_ROBIN"}.issubset(names)
 

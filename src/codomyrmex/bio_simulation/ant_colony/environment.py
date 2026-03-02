@@ -57,7 +57,7 @@ class Environment:
 
         # Food sources
         self._food_sources: list[FoodSource] = []
-        
+
         # Add random food sources if requested (simulated for now, usually done by Colony)
         # In a real impl, we might use a seed here too.
 
@@ -128,7 +128,7 @@ class Environment:
             rate: Decay multiplier in (0, 1). Defaults to (1 - self.pheromone_decay).
         """
         decay_rate = 1.0 - self.pheromone_decay if rate is None else rate
-        
+
         to_remove: list[tuple[int, int]] = []
         for pos in self._pheromones:
             self._pheromones[pos] *= decay_rate

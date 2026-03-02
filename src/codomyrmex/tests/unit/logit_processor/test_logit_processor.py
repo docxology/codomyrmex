@@ -1,7 +1,7 @@
 """Unit tests for the logit_processor module."""
 
-import pytest
 import numpy as np
+import pytest
 
 from codomyrmex.logit_processor import (
     LogitProcessorList,

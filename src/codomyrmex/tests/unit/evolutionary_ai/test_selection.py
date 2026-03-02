@@ -65,7 +65,7 @@ class TestTournamentSelection:
         pop = _pop([1.0, 2.0, 3.0])
         selected = sel.select(pop, 1)
         # Mutating the selected individual's genes should not affect the original
-        original_genes = list(selected[0].genes)
+        list(selected[0].genes)
         if isinstance(selected[0].genes, list):
             selected[0].genes.append(99)
         # The population should not be affected

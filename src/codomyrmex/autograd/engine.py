@@ -9,10 +9,8 @@ Implements reverse-mode automatic differentiation from scratch:
 from __future__ import annotations
 
 import math
-from typing import Union
 
 import numpy as np
-
 
 # ---------------------------------------------------------------------------
 # Scalar Autograd: Value
@@ -31,7 +29,7 @@ class Value:
     def __init__(
         self,
         data: float,
-        _children: tuple["Value", ...] = (),
+        _children: tuple[Value, ...] = (),
         _op: str = "",
         label: str = "",
     ) -> None:
@@ -44,7 +42,7 @@ class Value:
 
     # -- forward ops --------------------------------------------------------
 
-    def __add__(self, other: Union["Value", float, int]) -> "Value":
+    def __add__(self, other: Value | float | int) -> Value:
         other = other if isinstance(other, Value) else Value(other)
         out = Value(self.data + other.data, (self, other), "+")
 
@@ -55,7 +53,7 @@ class Value:
         out._backward = _backward
         return out
 
-    def __mul__(self, other: Union["Value", float, int]) -> "Value":
+    def __mul__(self, other: Value | float | int) -> Value:
         other = other if isinstance(other, Value) else Value(other)
         out = Value(self.data * other.data, (self, other), "*")
 
@@ -66,7 +64,7 @@ class Value:
         out._backward = _backward
         return out
 
-    def __pow__(self, other: Union[float, int]) -> "Value":
+    def __pow__(self, other: float | int) -> Value:
         if isinstance(other, Value):
             raise NotImplementedError("Value**Value is not supported; use float exponent")
         out = Value(self.data ** other, (self,), f"**{other}")
@@ -77,30 +75,30 @@ class Value:
         out._backward = _backward
         return out
 
-    def __neg__(self) -> "Value":
+    def __neg__(self) -> Value:
         return self * -1
 
-    def __sub__(self, other: Union["Value", float, int]) -> "Value":
+    def __sub__(self, other: Value | float | int) -> Value:
         return self + (-other if isinstance(other, Value) else Value(-other))
 
-    def __truediv__(self, other: Union["Value", float, int]) -> "Value":
+    def __truediv__(self, other: Value | float | int) -> Value:
         return self * (other ** -1 if isinstance(other, Value) else Value(other) ** -1)
 
-    def __radd__(self, other: Union[float, int]) -> "Value":
+    def __radd__(self, other: float | int) -> Value:
         return self + other
 
-    def __rmul__(self, other: Union[float, int]) -> "Value":
+    def __rmul__(self, other: float | int) -> Value:
         return self * other
 
-    def __rsub__(self, other: Union[float, int]) -> "Value":
+    def __rsub__(self, other: float | int) -> Value:
         return Value(other) + (-self)
 
-    def __rtruediv__(self, other: Union[float, int]) -> "Value":
+    def __rtruediv__(self, other: float | int) -> Value:
         return Value(other) * (self ** -1)
 
     # -- special math -------------------------------------------------------
 
-    def exp(self) -> "Value":
+    def exp(self) -> Value:
         """Compute e^self with correct backward."""
         val = math.exp(self.data)
         out = Value(val, (self,), "exp")
@@ -111,7 +109,7 @@ class Value:
         out._backward = _backward
         return out
 
-    def tanh(self) -> "Value":
+    def tanh(self) -> Value:
         """Compute tanh(self) with correct backward."""
         t = math.tanh(self.data)
         out = Value(t, (self,), "tanh")
@@ -122,7 +120,7 @@ class Value:
         out._backward = _backward
         return out
 
-    def relu(self) -> "Value":
+    def relu(self) -> Value:
         """Compute max(0, self) with correct backward."""
         out = Value(max(0.0, self.data), (self,), "relu")
 
@@ -132,7 +130,7 @@ class Value:
         out._backward = _backward
         return out
 
-    def sigmoid(self) -> "Value":
+    def sigmoid(self) -> Value:
         """Compute 1/(1+exp(-self)) with correct backward."""
         s = 1.0 / (1.0 + math.exp(-self.data))
         out = Value(s, (self,), "sigmoid")
@@ -189,9 +187,9 @@ class Tensor:
 
     def __init__(
         self,
-        data: Union[list, np.ndarray],
+        data: list | np.ndarray,
         requires_grad: bool = False,
-        _children: tuple["Tensor", ...] = (),
+        _children: tuple[Tensor, ...] = (),
         _op: str = "",
     ) -> None:
         if isinstance(data, np.ndarray):
@@ -207,7 +205,7 @@ class Tensor:
 
     # -- forward ops --------------------------------------------------------
 
-    def __add__(self, other: Union["Tensor", float, int, np.ndarray]) -> "Tensor":
+    def __add__(self, other: Tensor | float | int | np.ndarray) -> Tensor:
         other = other if isinstance(other, Tensor) else Tensor(np.asarray(other))
         out = Tensor(self.data + other.data, _children=(self, other), _op="+")
 
@@ -229,7 +227,7 @@ class Tensor:
         out._backward = _backward
         return out
 
-    def __mul__(self, other: Union["Tensor", float, int, np.ndarray]) -> "Tensor":
+    def __mul__(self, other: Tensor | float | int | np.ndarray) -> Tensor:
         other = other if isinstance(other, Tensor) else Tensor(np.asarray(other))
         out = Tensor(self.data * other.data, _children=(self, other), _op="*")
 
@@ -250,7 +248,7 @@ class Tensor:
         out._backward = _backward
         return out
 
-    def __matmul__(self, other: "Tensor") -> "Tensor":
+    def __matmul__(self, other: Tensor) -> Tensor:
         out = Tensor(self.data @ other.data, _children=(self, other), _op="@")
 
         def _backward() -> None:
@@ -264,22 +262,22 @@ class Tensor:
         out._backward = _backward
         return out
 
-    def __neg__(self) -> "Tensor":
+    def __neg__(self) -> Tensor:
         return self * -1.0
 
-    def __sub__(self, other: Union["Tensor", float, int, np.ndarray]) -> "Tensor":
+    def __sub__(self, other: Tensor | float | int | np.ndarray) -> Tensor:
         other = other if isinstance(other, Tensor) else Tensor(np.asarray(other))
         return self + (other * -1.0)
 
-    def __radd__(self, other: Union[float, int]) -> "Tensor":
+    def __radd__(self, other: float | int) -> Tensor:
         return self + other
 
-    def __rmul__(self, other: Union[float, int]) -> "Tensor":
+    def __rmul__(self, other: float | int) -> Tensor:
         return self * other
 
     # -- reductions ---------------------------------------------------------
 
-    def sum(self, axis: int | None = None, keepdims: bool = False) -> "Tensor":
+    def sum(self, axis: int | None = None, keepdims: bool = False) -> Tensor:
         """Sum elements along an axis (or all elements)."""
         result = np.sum(self.data, axis=axis, keepdims=keepdims)
         out = Tensor(result, _children=(self,), _op="sum")
@@ -298,7 +296,7 @@ class Tensor:
         out._backward = _backward
         return out
 
-    def mean(self, axis: int | None = None, keepdims: bool = False) -> "Tensor":
+    def mean(self, axis: int | None = None, keepdims: bool = False) -> Tensor:
         """Mean of elements along an axis (or all elements)."""
         result = np.mean(self.data, axis=axis, keepdims=keepdims)
         out = Tensor(result, _children=(self,), _op="mean")
@@ -318,7 +316,7 @@ class Tensor:
         out._backward = _backward
         return out
 
-    def reshape(self, *shape: int) -> "Tensor":
+    def reshape(self, *shape: int) -> Tensor:
         """Reshape tensor data, preserving gradient flow."""
         original_shape = self.data.shape
         out = Tensor(self.data.reshape(shape), _children=(self,), _op="reshape")
@@ -374,7 +372,7 @@ def _unbroadcast(grad: np.ndarray, target_shape: tuple[int, ...]) -> np.ndarray:
 
     # Sum over axes that were broadcast (size-1 in target or added)
     axes_to_sum = []
-    for i, (g, t) in enumerate(zip(grad.shape, padded)):
+    for i, (g, t) in enumerate(zip(grad.shape, padded, strict=False)):
         if t == 1 and g != 1:
             axes_to_sum.append(i)
         elif t != g:

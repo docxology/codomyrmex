@@ -119,16 +119,16 @@ class Population:
         all_traits = set()
         for g in self._individuals:
             all_traits.update(g.traits.keys())
-            
+
         for trait in all_traits:
             values = [g.traits.get(trait, 0.0) for g in self._individuals]
             if not values:
                 continue
-            
+
             mean = sum(values) / len(values)
             variance = sum((x - mean) ** 2 for x in values) / len(values)
             std = variance ** 0.5
-            
+
             stats[trait] = {
                 "mean": round(mean, 4),
                 "std": round(std, 4),

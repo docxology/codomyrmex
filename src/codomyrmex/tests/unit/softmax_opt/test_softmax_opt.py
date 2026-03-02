@@ -1,6 +1,7 @@
-import pytest
 import numpy as np
-from codomyrmex.softmax_opt import softmax, log_softmax, online_softmax
+import pytest
+
+from codomyrmex.softmax_opt import log_softmax, online_softmax, softmax
 
 
 class TestSoftmax:

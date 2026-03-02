@@ -1,18 +1,19 @@
 """Unit tests for feature_store module."""
 import pytest
+
 from codomyrmex.feature_store import (
-    FeatureType,
-    ValueType,
     FeatureDefinition,
-    FeatureValue,
-    FeatureVector,
     FeatureGroup,
-    InMemoryFeatureStore,
-    FeatureTransform,
-    FeatureService,
     FeatureNotFoundError,
     FeatureRegistrationError,
+    FeatureService,
+    FeatureTransform,
+    FeatureType,
     FeatureValidationError,
+    FeatureValue,
+    FeatureVector,
+    InMemoryFeatureStore,
+    ValueType,
 )
 
 
@@ -347,9 +348,9 @@ class TestFeatureTransform:
         transform = FeatureTransform()
         def failing_transform(v):
             raise ValueError("Failed")
-            
+
         transform.add("bad", failing_transform)
-        
+
         vector = FeatureVector(entity_id="test", features={"bad": 10})
         result = transform.apply(vector)
         assert result.features["bad"] == 10  # Original value preserved
@@ -418,9 +419,9 @@ class TestFeatureService:
         )
         service.register_group(group)
         service.ingest({"f1": 10}, "e1")
-        
+
         vector = service.get_group_features("e1", "g1")
         assert vector.features["f1"] == 10
-        
+
         empty = service.get_group_features("e1", "unknown")
         assert empty.features == {}

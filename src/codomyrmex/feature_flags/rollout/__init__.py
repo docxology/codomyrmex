@@ -11,7 +11,7 @@ import threading
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional
+from typing import Any, Optional
 
 
 class RolloutState(Enum):
@@ -31,7 +31,7 @@ class RolloutConfig:
         stages: List of rollout percentages (e.g. [5, 25, 50, 100]).
         stage_delay_seconds: Minimum seconds between automatic stage advances.
     """
-    stages: List[float] = field(default_factory=lambda: [5.0, 25.0, 50.0, 100.0])
+    stages: list[float] = field(default_factory=lambda: [5.0, 25.0, 50.0, 100.0])
     stage_delay_seconds: float = 3600.0
 
     def __post_init__(self) -> None:
@@ -61,7 +61,7 @@ class RolloutStatus:
     current_percentage: float
     started_at: datetime
     updated_at: datetime
-    metadata: Dict[str, Any] = field(default_factory=dict)
+    metadata: dict[str, Any] = field(default_factory=dict)
 
 
 class RolloutManager:
@@ -72,7 +72,7 @@ class RolloutManager:
     """
 
     def __init__(self) -> None:
-        self._rollouts: Dict[str, _RolloutEntry] = {}
+        self._rollouts: dict[str, _RolloutEntry] = {}
         self._lock = threading.Lock()
 
     def create_rollout(self, flag_name: str, config: RolloutConfig) -> RolloutStatus:

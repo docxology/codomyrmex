@@ -4,6 +4,7 @@ Data Lineage Module
 Track data lineage through transformations with graph-based analysis.
 """
 
+from .data_lineage import DataLineage, create_data_lineage
 from .graph import LineageGraph
 from .models import (
     DataAsset,
@@ -13,7 +14,6 @@ from .models import (
     NodeType,
 )
 from .tracker import ImpactAnalyzer, LineageTracker
-from .data_lineage import DataLineage, create_data_lineage
 
 __all__ = [
     "NodeType",

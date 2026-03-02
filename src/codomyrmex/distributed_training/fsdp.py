@@ -8,9 +8,9 @@ understanding distributed training mechanics without actual multi-GPU setup.
 Pure Python + NumPy. No PyTorch or NCCL dependency.
 """
 
-import numpy as np
 from dataclasses import dataclass, field
-from typing import Optional
+
+import numpy as np
 
 
 @dataclass
@@ -30,7 +30,7 @@ class FSDPShard:
     device_id: int
     world_size: int
     param_shard: np.ndarray  # This device's param shard
-    grad_shard: Optional[np.ndarray] = field(default=None)
+    grad_shard: np.ndarray | None = field(default=None)
 
     def __post_init__(self):
         if self.grad_shard is None:

@@ -1,7 +1,9 @@
 """Workflow generator for CI/CD platforms."""
 
 from typing import Any
+
 from .models import Pipeline
+
 
 class WorkflowGenerator:
     """
@@ -41,18 +43,18 @@ class Workflow:
                 "runs-on": "ubuntu-latest",
                 "steps": [{"uses": "actions/checkout@v4"}]
             }
-            
+
             if stage.dependencies:
                 github_job["needs"] = [dep.replace(" ", "_") for dep in stage.dependencies]
-                
+
             steps = []
             for job in stage.jobs:
                 for cmd in job.commands:
                     steps.append({"name": job.name, "run": cmd})
-            
+
             github_job["steps"].extend(steps)
             jobs[job_name] = github_job
-            
+
         return {
             "name": self.pipeline.name,
             "on": ["push", "pull_request"],
@@ -70,7 +72,7 @@ class Workflow:
             }
             if stage.dependencies:
                 gitlab_ci[job_name]["needs"] = [dep.replace(" ", "_") for dep in stage.dependencies]
-                
+
         return gitlab_ci
 
     def save(self, filepath: str):

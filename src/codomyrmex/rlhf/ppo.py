@@ -5,8 +5,9 @@ Implements the PPO-Clip algorithm (Schulman et al. 2017) with:
 - Generalized Advantage Estimation (Schulman et al. 2015)
 - Bradley-Terry reward model for preference learning
 """
-import numpy as np
 from dataclasses import dataclass
+
+import numpy as np
 
 
 @dataclass

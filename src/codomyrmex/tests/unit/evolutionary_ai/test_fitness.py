@@ -4,13 +4,13 @@ Unit tests for evolutionary_ai.fitness — Zero-Mock compliant.
 
 import pytest
 
-from codomyrmex.evolutionary_ai.genome.genome import Individual
 from codomyrmex.evolutionary_ai.fitness.fitness import (
     ConstrainedFitness,
     FitnessResult,
     MultiObjectiveFitness,
     ScalarFitness,
 )
+from codomyrmex.evolutionary_ai.genome.genome import Individual
 
 # ── FitnessResult ─────────────────────────────────────────────────────
 

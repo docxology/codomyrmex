@@ -138,7 +138,7 @@ class CursorClient(IDEClient):
         # Simulated implementation based on common source files
         if not self._connected:
             return []
-        
+
         files = []
         for p in self.workspace_path.glob("**/*"):
             if p.is_file() and p.suffix in {".py", ".ts", ".js", ".md"}:

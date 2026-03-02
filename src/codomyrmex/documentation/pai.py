@@ -138,7 +138,7 @@ def generate_pai_md(module_name: str, module_dir: Path) -> str:
     """Generate improved PAI.md content for a module."""
     if not isinstance(module_dir, Path):
         module_dir = Path(module_dir)
-        
+
     init_path = module_dir / "__init__.py"
     readme_path = module_dir / "README.md"
 
@@ -221,7 +221,7 @@ def write_pai_md(module_name: str, module_dir: Path) -> Path:
     """Generate and write PAI.md for a module."""
     if not isinstance(module_dir, Path):
         module_dir = Path(module_dir)
-        
+
     content = generate_pai_md(module_name, module_dir)
     pai_path = module_dir / "PAI.md"
     pai_path.write_text(content, encoding="utf-8")

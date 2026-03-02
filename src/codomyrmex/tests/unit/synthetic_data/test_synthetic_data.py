@@ -3,16 +3,18 @@
 import pytest
 
 try:
-    from codomyrmex.synthetic_data import SyntheticDataGenerator, DataSchema, TemplateGenerator
+    from codomyrmex.synthetic_data import (
+        DataSchema,
+        SyntheticDataGenerator,
+        TemplateGenerator,
+    )
     HAS_MODULE = True
 except ImportError:
     HAS_MODULE = False
 
-try:
-    import numpy as np
-    HAS_NUMPY = True
-except ImportError:
-    HAS_NUMPY = False
+import importlib.util
+
+HAS_NUMPY = importlib.util.find_spec("numpy") is not None
 
 if not HAS_MODULE:
     pytest.skip("synthetic_data module not available", allow_module_level=True)

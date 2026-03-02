@@ -3,7 +3,6 @@
 import os
 import shutil
 import subprocess
-from typing import Optional
 
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
@@ -63,7 +62,7 @@ class GitOpsSynchronizer:
                 if res.returncode != 0:
                     logger.error("Git fetch failed: %s", res.stderr)
                     return False
-                    
+
                 res = subprocess.run(
                     ["git", "-C", self.local_path, "reset", "--hard", f"origin/{branch}"],
                     capture_output=True,
@@ -77,7 +76,7 @@ class GitOpsSynchronizer:
             logger.error("GitOps sync failed: %s", str(e))
             return False
 
-    def get_version(self) -> Optional[str]:
+    def get_version(self) -> str | None:
         """Get the current commit SHA of the synchronized repo.
 
         Returns:

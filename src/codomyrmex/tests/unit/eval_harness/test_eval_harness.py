@@ -17,13 +17,12 @@ import pytest
 
 from codomyrmex.eval_harness import (
     EvalHarness,
-    EvalTask,
     EvalResult,
+    EvalTask,
     ExactMatchMetric,
     F1Metric,
 )
 from codomyrmex.eval_harness.harness import normalize_answer
-
 
 # ---------------------------------------------------------------------------
 # normalize_answer

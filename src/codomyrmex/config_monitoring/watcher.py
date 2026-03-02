@@ -44,7 +44,7 @@ class ConfigWatcher:
                 return
             self._stop_event.clear()
             self._thread = threading.Thread(
-                target=self._run, 
+                target=self._run,
                 name=f"ConfigWatcher-{self.file_path.name}",
                 daemon=True
             )

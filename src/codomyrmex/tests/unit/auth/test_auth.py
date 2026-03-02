@@ -687,7 +687,7 @@ class TestAuthenticatorExtended:
         """Create a fresh Authenticator."""
         # Authenticator is a singleton, so we might need to reset it if it was dirty
         # but for unit tests we assume it's okay or we provide a way to reset it.
-        # Since I can't easily reset it without adding a reset method, 
+        # Since I can't easily reset it without adding a reset method,
         # I'll just use it and be careful.
         from codomyrmex.auth.core.authenticator import Authenticator
         a = Authenticator()
@@ -721,7 +721,7 @@ class TestAuthenticatorExtended:
         auth.register_user("dan", "pass", roles=["viewer"])
         token = auth.authenticate({"username": "dan", "password": "pass"})
         assert token.jwt is not None
-        
+
         # Authorize using the signed string (JWT)
         assert auth.authorize(token.jwt, "report", "read")
 

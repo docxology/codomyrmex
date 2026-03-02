@@ -1,6 +1,6 @@
 """Tests for Mamba SSM and Flash Attention implementations."""
-import pytest
 import numpy as np
+import pytest
 
 from codomyrmex.ssm import MambaBlock, SelectiveSSM, mamba_forward
 

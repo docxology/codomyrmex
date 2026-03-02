@@ -132,7 +132,7 @@ class Forecaster:
         for i, y in enumerate(self.data):
             y_pred = slope * Decimal(str(i)) + intercept
             residuals.append(y - y_pred)
-        
+
         std_dev = (sum(r**2 for r in residuals) / Decimal(str(n))).sqrt()
 
         return {
@@ -154,7 +154,7 @@ class Forecaster:
         """
         if len(self.data) < 3:
             raise ForecastError("Forecaster requires minimum 3 periods for projection.")
-        
+
         trend = self.linear_trend()
         slope = trend["slope"]
         intercept = trend["intercept"]
@@ -169,12 +169,12 @@ class Forecaster:
                 noise = Decimal(str(random.gauss(0, std_dev)))
                 val = slope * Decimal(str(n + i)) + intercept + noise
                 results[i].append(val)
-        
+
         projections = []
         for i in range(periods):
             avg = sum(results[i], Decimal("0")) / Decimal(str(iterations))
             projections.append(avg)
-        
+
         return {
             "projections": projections,
             "method": "Monte Carlo Linear Trend",
@@ -197,7 +197,7 @@ class Forecaster:
             qty = Decimal(str(pos["quantity"]))
             price = Decimal(str(pos["current_price"]))
             cost = Decimal(str(pos["cost_basis"]))
-            
+
             total_value += qty * price
             total_cost += qty * cost
 

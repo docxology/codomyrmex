@@ -4,6 +4,7 @@ Feature Store Exceptions
 
 from codomyrmex.exceptions.base import CodomyrmexError
 
+
 class FeatureStoreError(CodomyrmexError):
     """Base exception for feature store operations."""
     pass

@@ -11,8 +11,7 @@ Tests cover:
 import numpy as np
 import pytest
 
-from codomyrmex.data_curation import MinHash, LSHIndex, DataCurator
-
+from codomyrmex.data_curation import DataCurator, LSHIndex, MinHash
 
 # ---------------------------------------------------------------------------
 # MinHash

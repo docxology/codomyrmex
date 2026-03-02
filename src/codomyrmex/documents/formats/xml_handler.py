@@ -67,7 +67,7 @@ def write_xml(content: str, file_path: str | Path, encoding: str | None = None) 
     try:
         # Validate content is well-formed XML
         ET.fromstring(content)
-        
+
         file_path.parent.mkdir(parents=True, exist_ok=True)
         with open(file_path, 'w', encoding=encoding) as f:
             f.write(content)

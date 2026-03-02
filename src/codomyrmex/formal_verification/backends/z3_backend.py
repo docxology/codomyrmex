@@ -122,14 +122,14 @@ class Z3Backend(SolverBackend):
                 for decl in z3_model.decls():
                     val = z3_model[decl]
                     model_dict[str(decl)] = str(val)
-                
+
                 stats = {
                     "num_constraints": len(engine.assertions()),
                     "engine": "Optimize" if engine is optimizer else "Solver",
                 }
                 if engine is solver:
                     stats["num_scopes"] = solver.num_scopes()
-                
+
                 return SolverResult(
                     status=SolverStatus.SAT,
                     model=model_dict,

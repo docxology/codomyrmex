@@ -10,7 +10,7 @@ import pytest
 
 _GIT_AVAILABLE = shutil.which("git") is not None
 
-from codomyrmex.git_operations.merge_resolver import (
+from codomyrmex.git_operations.merge_resolver import (  # noqa: E402
     ConflictBlock,
     MergeConflictReport,
     MergeResolver,

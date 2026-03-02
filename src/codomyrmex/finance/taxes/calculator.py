@@ -7,7 +7,7 @@ portions of income are taxed at increasing rates.
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from decimal import Decimal, ROUND_HALF_EVEN
+from decimal import ROUND_HALF_EVEN, Decimal
 
 # Default US-style federal brackets (simplified, 2024-era rates)
 US_FEDERAL_2024: list[dict] = [

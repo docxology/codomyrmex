@@ -239,7 +239,7 @@ class AntigravityClient(IDEClient):
         # Simulated based on artifacts
         if not self._connected:
             return []
-        
+
         return [a.path for a in self._context.artifacts if a.path]
 
     def save_file(self, path: str) -> bool:

@@ -10,7 +10,8 @@ from __future__ import annotations
 import random
 from typing import Any
 
-from ..genomics.genome import Genome
+from src.codomyrmex.bio_simulation.genomics.genome import Genome
+
 from .ant import Ant, AntState
 from .environment import Environment
 
@@ -143,7 +144,7 @@ class Colony:
                 self._total_deaths += 1
             else:
                 active_ants.append(ant)
-        
+
         # Remove dead ants from the population
         self.ants = active_ants
 

@@ -6,7 +6,7 @@ Defines the core Persona structure and verification levels for the identity syst
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from enum import Enum
 
 
@@ -30,7 +30,7 @@ class Persona:
     id: str
     name: str
     level: VerificationLevel
-    created_at: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
+    created_at: datetime = field(default_factory=lambda: datetime.now(UTC))
     attributes: dict[str, str] = field(default_factory=dict)
     # Crumbs (tracking data) are siloed per persona
     crumbs: list[str] = field(default_factory=list)

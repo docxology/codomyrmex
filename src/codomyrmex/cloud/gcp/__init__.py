@@ -4,15 +4,15 @@ from typing import Any, Optional
 
 from google.cloud import storage
 
-from codomyrmex.logging_monitoring.core.logger_config import get_logger
 from codomyrmex.cloud.common import StorageClient
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 logger = get_logger(__name__)
 
 class GCSClient(StorageClient):
     """Wrapper for Google Cloud Storage operations."""
 
-    def __init__(self, project: str | None = None, client: Optional[storage.Client] = None):
+    def __init__(self, project: str | None = None, client: storage.Client | None = None):
         self.client = client or storage.Client(project=project)
 
     def list_buckets(self) -> list[str]:

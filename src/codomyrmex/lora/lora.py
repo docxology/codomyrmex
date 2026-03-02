@@ -8,9 +8,9 @@ where A and B are low-rank matrices with r << min(d, k).
 Pure Python + NumPy. No PyTorch dependency.
 """
 
-import numpy as np
 from dataclasses import dataclass, field
-from typing import Optional
+
+import numpy as np
 
 
 @dataclass
@@ -45,7 +45,7 @@ class LoRALayer:
         config: LoRA configuration
     """
 
-    def __init__(self, weight: np.ndarray, config: Optional[LoRAConfig] = None):
+    def __init__(self, weight: np.ndarray, config: LoRAConfig | None = None):
         self.config = config or LoRAConfig()
         self.W_0 = weight.copy()  # Frozen base weight
         d, k = weight.shape

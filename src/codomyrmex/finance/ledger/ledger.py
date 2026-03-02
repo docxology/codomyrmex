@@ -11,8 +11,8 @@ from __future__ import annotations
 import uuid
 from dataclasses import dataclass, field
 from datetime import UTC, datetime
+from decimal import ROUND_HALF_EVEN, Decimal
 from enum import Enum
-from decimal import Decimal, ROUND_HALF_EVEN
 from typing import Any
 
 from codomyrmex.logging_monitoring.core.logger_config import get_logger

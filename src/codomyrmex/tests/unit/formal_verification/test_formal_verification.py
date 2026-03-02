@@ -182,11 +182,11 @@ class TestConstraintSolver:
         solver.add_item("x = Int('x')")
         solver.add_item("solver.add(x > 0)")
         assert solver.is_satisfiable()
-        
+
         solver.push()
         solver.add_item("solver.add(x < 0)")
         assert not solver.is_satisfiable()
-        
+
         solver.pop()
         assert solver.is_satisfiable()
 

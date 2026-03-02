@@ -47,7 +47,7 @@ class Token:
         }
 
     @classmethod
-    def from_dict(cls, data: dict) -> "Token":
+    def from_dict(cls, data: dict) -> Token:
         """Create token from dictionary."""
         return cls(
             token_id=data["token_id"],
@@ -85,17 +85,17 @@ class TokenManager:
         """
         token_id = str(uuid.uuid4())
         expires_at = time.time() + ttl if ttl > 0 else None
-        
+
         token = Token(
             token_id=token_id,
             user_id=user_id,
             permissions=permissions or [],
             expires_at=expires_at,
         )
-        
+
         # Create signed JWT-like string
         token.jwt = self.validator.sign_token_data(token.to_dict())
-        
+
         self._tokens[token_id] = token
         return token
 
@@ -125,7 +125,7 @@ class TokenManager:
             return False
 
         if token_id not in self._tokens:
-            # We don't have it in memory, but if it was signed correctly 
+            # We don't have it in memory, but if it was signed correctly
             # and not expired, in a stateless system it might be valid.
             # However, this implementation tracks tokens.
             return False

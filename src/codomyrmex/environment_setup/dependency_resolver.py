@@ -139,7 +139,7 @@ class DependencyResolver:
                         issues.append(f"Unpinned dependency: {dep}")
         except Exception as e:
             issues.append(f"Failed to parse pyproject.toml: {e}")
-            
+
         return issues
 
     def install_dependencies(self, source: str = "pyproject.toml") -> bool:
@@ -161,8 +161,8 @@ class DependencyResolver:
 
         if source.endswith(".toml"):
             if uv_path:
-                # uv can install directly from pyproject.toml if in the same dir, 
-                # but let's be explicit and use -r if it was requirements, 
+                # uv can install directly from pyproject.toml if in the same dir,
+                # but let's be explicit and use -r if it was requirements,
                 # for pyproject we might need a different approach or just use pip/uv on current dir
                 cmd = [uv_path, "pip", "install", "-e", "."] if source == "pyproject.toml" else [uv_path, "pip", "install", "-r", source]
             else:
@@ -172,7 +172,7 @@ class DependencyResolver:
 
         try:
             logger.info("Installing dependencies from %s using %s", source, cmd[0])
-            result = subprocess.run(cmd, check=True, capture_output=True, text=True)
+            subprocess.run(cmd, check=True, capture_output=True, text=True)
             logger.info("Successfully installed dependencies.")
             return True
         except subprocess.CalledProcessError as e:

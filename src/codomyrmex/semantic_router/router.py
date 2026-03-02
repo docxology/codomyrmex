@@ -5,8 +5,9 @@ Each route is defined by example utterances. During routing, the input
 is embedded and compared to all route examples via cosine similarity.
 The route with highest similarity (above threshold) is selected.
 """
-import numpy as np
 from dataclasses import dataclass
+
+import numpy as np
 
 
 @dataclass
@@ -87,7 +88,7 @@ class SemanticRouter:
         best_route = None
         best_score = -1.0
 
-        for name, route in self.routes.items():
+        for _name, route in self.routes.items():
             if route.embeddings is None:
                 continue
             # Cosine similarity to each example, take max

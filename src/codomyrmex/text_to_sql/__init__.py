@@ -1,4 +1,4 @@
 """Text-to-SQL engine -- schema-aware natural language to SQL query generation."""
-from .engine import TextToSQLEngine, SQLSchema, SQLResult
+from .engine import SQLResult, SQLSchema, TextToSQLEngine
 
 __all__ = ["TextToSQLEngine", "SQLSchema", "SQLResult"]

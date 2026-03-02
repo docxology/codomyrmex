@@ -1,10 +1,12 @@
 """Zero-mock tests for document transformation (convert, merge, split)."""
 
 import pytest
+
 from codomyrmex.documents.models.document import Document, DocumentFormat
 from codomyrmex.documents.transformation.converter import convert_document
 from codomyrmex.documents.transformation.merger import merge_documents
 from codomyrmex.documents.transformation.splitter import split_document
+
 
 @pytest.mark.unit
 class TestTransformation:

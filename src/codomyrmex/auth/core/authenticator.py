@@ -5,7 +5,7 @@ Authentication and authorization module.
 from __future__ import annotations
 
 import threading
-from typing import Any, Dict, Optional, List
+from typing import Any
 
 from codomyrmex.auth.providers.api_key_manager import APIKeyManager
 from codomyrmex.auth.rbac.permissions import PermissionRegistry
@@ -23,14 +23,14 @@ class Authenticator:
     It manages users, tokens, API keys, and RBAC permissions.
     """
 
-    _instance: Optional[Authenticator] = None
+    _instance: Authenticator | None = None
     _lock = threading.Lock()
 
     def __new__(cls):
         """Ensures Authenticator is a singleton to maintain shared state across imports."""
         with cls._lock:
             if cls._instance is None:
-                cls._instance = super(Authenticator, cls).__new__(cls)
+                cls._instance = super().__new__(cls)
                 cls._instance._initialized = False
             return cls._instance
 
@@ -38,16 +38,16 @@ class Authenticator:
         """Initialize authenticator."""
         if getattr(self, "_initialized", False):
             return
-            
+
         self.token_manager = TokenManager()
         self.api_key_manager = APIKeyManager()
         self.permissions = PermissionRegistry()
         # User database for demonstration purposes
-        self._users: Dict[str, Dict[str, Any]] = {}
+        self._users: dict[str, dict[str, Any]] = {}
         self._initialized = True
         logger.debug("Authenticator initialized")
 
-    def register_user(self, username: str, password: str, roles: Optional[List[str]] = None) -> bool:
+    def register_user(self, username: str, password: str, roles: list[str] | None = None) -> bool:
         """Register a new user.
 
         Args:
@@ -61,20 +61,20 @@ class Authenticator:
         if username in self._users:
             logger.warning("User registration failed: username '%s' already exists", username)
             return False
-            
+
         self._users[username] = {
             "password": password,
             "roles": roles or ["default"]
         }
-        
+
         # Register user in RBAC
         for role in roles or ["default"]:
             self.permissions.assign_role(username, role)
-            
+
         logger.info("User registered: %s", username)
         return True
 
-    def authenticate(self, credentials: Dict[str, Any]) -> Optional[Token]:
+    def authenticate(self, credentials: dict[str, Any]) -> Token | None:
         """Authenticate a user with provided credentials.
 
         Args:
@@ -149,7 +149,7 @@ class Authenticator:
         # 1. Check direct permissions from token
         if "admin" in token_permissions or permission in token_permissions:
             return True
-            
+
         # 2. Check wildcard permissions from token
         for tp in token_permissions:
             if tp.endswith(".*") and permission.startswith(tp[:-1]):
@@ -161,11 +161,11 @@ class Authenticator:
         if self.permissions.check(user_id, permission, resource):
             return True
 
-        logger.warning("Authorization failed for user '%s' on resource '%s' with permission '%s'", 
+        logger.warning("Authorization failed for user '%s' on resource '%s' with permission '%s'",
                        user_id, resource, permission)
         return False
 
-    def refresh_token(self, token: Token) -> Optional[Token]:
+    def refresh_token(self, token: Token) -> Token | None:
         """Refresh an authentication token."""
         return self.token_manager.refresh_token(token)
 

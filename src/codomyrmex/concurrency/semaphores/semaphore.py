@@ -4,7 +4,6 @@ import asyncio
 import threading
 import time
 from abc import ABC, abstractmethod
-from typing import Optional
 
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
@@ -62,18 +61,18 @@ class AsyncLocalSemaphore(BaseSemaphore):
         self._sync_lock = threading.Lock()
         self._sync_count = value
 
-    async def acquire_async(self, timeout: Optional[float] = None) -> bool:
+    async def acquire_async(self, timeout: float | None = None) -> bool:
         """Acquire a semaphore unit asynchronously."""
         try:
             if timeout is not None:
                 await asyncio.wait_for(self._semaphore.acquire(), timeout=timeout)
             else:
                 await self._semaphore.acquire()
-            
+
             with self._sync_lock:
                 self._sync_count -= 1
             return True
-        except (asyncio.TimeoutError, TimeoutError):
+        except TimeoutError:
             return False
 
     async def __aenter__(self):
@@ -93,7 +92,7 @@ class AsyncLocalSemaphore(BaseSemaphore):
         except ValueError:
             # Too many releases for the internal semaphore
             pass
-            
+
         with self._sync_lock:
             if self._sync_count < self.initial_value:
                 self._sync_count += 1
@@ -106,7 +105,7 @@ class AsyncLocalSemaphore(BaseSemaphore):
         """
         try:
             # Check if there's a running event loop
-            loop = asyncio.get_running_loop()
+            asyncio.get_running_loop()
             # We're inside an async context - use the sync counter fallback to avoid blocking the loop
             logger.warning(
                 "Synchronous acquire() called from async context. "
@@ -122,7 +121,7 @@ class AsyncLocalSemaphore(BaseSemaphore):
                         return True
                 time.sleep(0.01)
             return False
-            
+
         except RuntimeError:
             # No running event loop - we can create one temporarily
             async def _acquire_with_timeout():

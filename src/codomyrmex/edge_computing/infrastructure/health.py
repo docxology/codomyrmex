@@ -103,16 +103,16 @@ class HealthMonitor:
         history = self.get_history(node_id, limit=5)
         if not history:
             return "No data"
-        
+
         if self.detect_flapping(node_id):
             return "Reboot node (flapping detected)"
-        
+
         if not history[-1].healthy:
             age = history[-1].details.get("heartbeat_age_seconds", 0)
             if age > 3600:
                 return "Decommission node (offline > 1h)"
             return "Investigate connectivity (stale heartbeat)"
-            
+
         return "Normal"
 
     def summary(self) -> dict[str, Any]:

@@ -152,11 +152,11 @@ class BayesianNetwork:
                 raise NetworkStructureError(f"Cycle detected in Bayesian network involving node {node}")
             if node in visited:
                 return
-            
+
             temp_visited.add(node)
             for parent in self.parents[node]:
                 visit(parent)
-            
+
             temp_visited.remove(node)
             visited.add(node)
             order.append(node)

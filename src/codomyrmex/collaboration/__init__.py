@@ -50,24 +50,24 @@ from .protocols import (
     RoundRobinProtocol,
 )
 
-# Swarm components (modern interface)
-from .swarm import (
-    SwarmManager, 
-    AgentPool, 
-    MessageBus, 
-    TaskDecomposer, 
-    SwarmAgent, 
-    SwarmMessage,
-    TaskAssignment,
-    AgentRole,
-    SwarmMessageType,
-    Vote,
-    ConsensusResult,
-    Decision
-)
-
 # Legacy swarm components (for backward compatibility)
 from .protocols.swarm import AgentProxy
+
+# Swarm components (modern interface)
+from .swarm import (
+    AgentPool,
+    AgentRole,
+    ConsensusResult,
+    Decision,
+    MessageBus,
+    SwarmAgent,
+    SwarmManager,
+    SwarmMessage,
+    SwarmMessageType,
+    TaskAssignment,
+    TaskDecomposer,
+    Vote,
+)
 
 # Shared schemas for cross-module interop
 try:

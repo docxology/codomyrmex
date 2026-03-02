@@ -10,8 +10,8 @@ L = alpha * T^2 * KL(student_soft || teacher_soft) + (1 - alpha) * CE(student, l
 Pure Python + NumPy. No PyTorch dependency.
 """
 
+
 import numpy as np
-from typing import Optional
 
 
 def soft_labels(logits: np.ndarray, temperature: float = 4.0) -> np.ndarray:
@@ -37,7 +37,7 @@ def soft_labels(logits: np.ndarray, temperature: float = 4.0) -> np.ndarray:
 def distillation_loss(
     student_logits: np.ndarray,
     teacher_logits: np.ndarray,
-    true_labels: Optional[np.ndarray] = None,
+    true_labels: np.ndarray | None = None,
     temperature: float = 4.0,
     alpha: float = 0.7,
 ) -> dict:

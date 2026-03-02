@@ -52,7 +52,7 @@ def flash_attention(
     _, _, seq_k, d_v = V.shape
     scale = 1.0 / np.sqrt(d_k)
 
-    O = np.zeros((batch, n_heads, seq_q, d_v))
+    out = np.zeros((batch, n_heads, seq_q, d_v))
 
     # Process Q in tiles
     for q_start in range(0, seq_q, block_size):
@@ -102,12 +102,12 @@ def flash_attention(
             m_i = m_new
             l_i = l_new
 
-        O[:, :, q_start:q_end, :] = O_i
+        out[:, :, q_start:q_end, :] = O_i
 
     if orig_ndim == 3:
-        O = O[:, 0, :, :]
+        out = out[:, 0, :, :]
 
-    return O
+    return out
 
 
 def verify_flash_vs_standard(

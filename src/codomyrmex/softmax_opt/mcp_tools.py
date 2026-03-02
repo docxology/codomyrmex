@@ -1,6 +1,8 @@
 import numpy as np
+
 from codomyrmex.model_context_protocol.decorators import mcp_tool
-from .kernel import softmax, log_softmax, online_softmax
+
+from .kernel import log_softmax, online_softmax, softmax
 
 
 @mcp_tool(category="softmax_opt")

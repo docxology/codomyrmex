@@ -4,15 +4,21 @@ Strict zero-mock policy. All tests use real filesystem.
 """
 
 import pytest
-from codomyrmex.documentation.quality.consistency_checker import DocumentationConsistencyChecker
-from codomyrmex.documentation.quality.quality_assessment import DocumentationQualityAnalyzer
+
+from codomyrmex.documentation.quality.consistency_checker import (
+    DocumentationConsistencyChecker,
+)
+from codomyrmex.documentation.quality.quality_assessment import (
+    DocumentationQualityAnalyzer,
+)
+
 
 @pytest.fixture
 def tmp_docs(tmp_path):
     """Create a temporary documentation structure."""
     docs_dir = tmp_path / "docs"
     docs_dir.mkdir()
-    
+
     # Valid README
     readme = docs_dir / "README.md"
     readme.write_text("""# Test Module
@@ -34,11 +40,11 @@ The purpose is testing.
     # Invalid file (missing sections, broken link)
     invalid = docs_dir / "INVALID.md"
     invalid.write_text("# Invalid File\n\n[Broken](./NONEXISTENT.md)")
-    
+
     # RASP file with missing sections
     spec = docs_dir / "SPEC.md"
     spec.write_text("# Specification\n\nMissing mandatory sections.")
-    
+
     return docs_dir
 
 class TestConsistencyChecker:
@@ -100,7 +106,7 @@ Here are some examples of usage.
 This class uses a decorator and returns a generator. It handles exceptions properly and provides an interface for asynchronous operations.
 Version: v1.0.0
 """)
-        
+
         analysis = analyzer.analyze_file(high_quality)
         assert analysis["overall_score"] > 80
         assert analysis["completeness"] == 100.0
@@ -110,7 +116,7 @@ Version: v1.0.0
         analyzer = DocumentationQualityAnalyzer()
         low_quality = tmp_docs / "LOW_QUALITY.md"
         low_quality.write_text("# Low\n\nToo short.")
-        
+
         analysis = analyzer.analyze_file(low_quality)
         # Score might be exactly 40 if some default conditions are met
         assert analysis["overall_score"] <= 40

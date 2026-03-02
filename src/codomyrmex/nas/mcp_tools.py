@@ -9,7 +9,7 @@ from __future__ import annotations
 
 from codomyrmex.model_context_protocol.decorators import mcp_tool
 
-from .search import NASSearchSpace, NASSearcher, ArchConfig
+from .search import ArchConfig, NASSearcher, NASSearchSpace
 
 
 @mcp_tool(category="nas")

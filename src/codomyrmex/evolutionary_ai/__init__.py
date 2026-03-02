@@ -8,32 +8,32 @@ Provides genetic algorithm components:
 - Fitness Evaluation Framework
 """
 
-from .genome.genome import Genome, Individual, GenomeStats
-from .population.population import Population, GenerationStats
-from .operators.operators import (
-    MutationOperator,
-    BitFlipMutation,
-    SwapMutation,
-    GaussianMutation,
-    ScrambleMutation,
-    CrossoverOperator,
-    SinglePointCrossover,
-    TwoPointCrossover,
-    UniformCrossover,
-    BlendCrossover,
-)
-from .selection.selection import (
-    SelectionOperator,
-    TournamentSelection,
-    RouletteWheelSelection,
-    RankSelection,
-)
 from .fitness.fitness import (
+    ConstrainedFitness,
     FitnessFunction,
     FitnessResult,
-    ScalarFitness,
     MultiObjectiveFitness,
-    ConstrainedFitness,
+    ScalarFitness,
+)
+from .genome.genome import Genome, GenomeStats, Individual
+from .operators.operators import (
+    BitFlipMutation,
+    BlendCrossover,
+    CrossoverOperator,
+    GaussianMutation,
+    MutationOperator,
+    ScrambleMutation,
+    SinglePointCrossover,
+    SwapMutation,
+    TwoPointCrossover,
+    UniformCrossover,
+)
+from .population.population import GenerationStats, Population
+from .selection.selection import (
+    RankSelection,
+    RouletteWheelSelection,
+    SelectionOperator,
+    TournamentSelection,
 )
 
 __all__ = [

@@ -1,6 +1,7 @@
 """Pipeline builder for programmatic pipeline construction."""
 
-from .models import Pipeline, PipelineStage, PipelineJob
+from .models import Pipeline, PipelineJob, PipelineStage
+
 
 class PipelineBuilder:
     """
@@ -22,18 +23,18 @@ class PipelineBuilder:
         """
         # Create a job with the provided commands
         job = PipelineJob(name=f"{name}_job", commands=commands)
-        
+
         # Create a stage and add the job
         stage = PipelineStage(
             name=name,
             jobs=[job],
             dependencies=dependencies or []
         )
-        
+
         # Branch constraint logic could be expanded, for now we add to variables if present
         if on_branch:
             self.pipeline.variables[f"STAGE_{name}_BRANCH"] = on_branch
-            
+
         self.pipeline.stages.append(stage)
         return self
 

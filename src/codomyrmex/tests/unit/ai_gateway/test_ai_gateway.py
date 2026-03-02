@@ -3,7 +3,7 @@
 import pytest
 
 try:
-    from codomyrmex.ai_gateway import AIGateway, Provider, CircuitBreaker, GatewayConfig
+    from codomyrmex.ai_gateway import AIGateway, CircuitBreaker, GatewayConfig, Provider
     from codomyrmex.ai_gateway.gateway import CircuitState
     HAS_MODULE = True
 except ImportError:
@@ -172,7 +172,6 @@ class TestAIGateway:
 
     def test_failover_to_next_provider(self):
         """Gateway fails over to the next provider when one raises."""
-        call_count = 0
 
         def failing_fn(prompt):
             raise RuntimeError("provider is down")

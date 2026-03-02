@@ -1,6 +1,7 @@
-import pytest
 import numpy as np
-from codomyrmex.matmul_kernel import tiled_matmul, batched_matmul, matmul_flops
+import pytest
+
+from codomyrmex.matmul_kernel import batched_matmul, matmul_flops, tiled_matmul
 
 
 class TestTiledMatmul:
@@ -42,8 +43,8 @@ class TestTiledMatmul:
     @pytest.mark.unit
     def test_identity_matrix(self):
         A = np.random.randn(5, 5).astype(np.float32)
-        I = np.eye(5, dtype=np.float32)
-        C = tiled_matmul(A, I)
+        identity = np.eye(5, dtype=np.float32)
+        C = tiled_matmul(A, identity)
         np.testing.assert_allclose(C, A, rtol=1e-5)
 
 

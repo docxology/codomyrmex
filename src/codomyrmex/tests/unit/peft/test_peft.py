@@ -12,8 +12,7 @@ Tests cover:
 import numpy as np
 import pytest
 
-from codomyrmex.peft import LoRAAdapter, PrefixTuningAdapter, IA3Adapter, PEFTConfig
-
+from codomyrmex.peft import IA3Adapter, LoRAAdapter, PEFTConfig, PrefixTuningAdapter
 
 # ---------------------------------------------------------------------------
 # LoRA Adapter

@@ -5,12 +5,13 @@ Unit tests for evolutionary_ai.population — Zero-Mock compliant.
 import pytest
 
 from codomyrmex.evolutionary_ai.genome.genome import Genome, Individual
-from codomyrmex.evolutionary_ai.population.population import Population, GenerationStats
 from codomyrmex.evolutionary_ai.operators.operators import (
-    SinglePointCrossover,
     GaussianMutation,
+    SinglePointCrossover,
 )
+from codomyrmex.evolutionary_ai.population.population import GenerationStats, Population
 from codomyrmex.evolutionary_ai.selection.selection import TournamentSelection
+
 
 @pytest.mark.unit
 class TestPopulation:
@@ -39,14 +40,14 @@ class TestPopulation:
         pop = Population.random_genome_population(size=20, genome_length=5)
         pop.evaluate(lambda ind: sum(ind.genes))
         initial_best = pop.get_best().fitness
-        
+
         stats = pop.evolve(elitism=2)
-        
+
         assert pop.generation == 1
         assert len(pop.individuals) == 20
         assert stats.generation == 1
         assert len(pop.history) == 1
-        
+
         pop.evaluate(lambda ind: sum(ind.genes))
         assert pop.get_best().fitness >= initial_best
 
@@ -55,7 +56,7 @@ class TestPopulation:
         sel = TournamentSelection(tournament_size=2)
         cross = SinglePointCrossover(crossover_rate=0.5)
         mut = GaussianMutation(mutation_rate=0.2)
-        
+
         pop.evaluate(lambda ind: sum(ind.genes))
         pop.evolve(selection_operator=sel, crossover_operator=cross, mutation_operator=mut)
         assert pop.generation == 1

@@ -548,7 +548,7 @@ class TestCursorClient:
             (Path(tmpdir) / "b.ts").write_text("b")
             client = CursorClient(workspace_path=tmpdir)
             client._connected = True
-            
+
             open_files = client.get_open_files()
             assert len(open_files) > 0
             assert any(f.endswith("a.py") for f in open_files)

@@ -7,14 +7,15 @@ import pytest
 from codomyrmex.evolutionary_ai.genome.genome import Individual
 from codomyrmex.evolutionary_ai.operators.operators import (
     BitFlipMutation,
-    SwapMutation,
+    BlendCrossover,
     GaussianMutation,
     ScrambleMutation,
     SinglePointCrossover,
+    SwapMutation,
     TwoPointCrossover,
     UniformCrossover,
-    BlendCrossover,
 )
+
 
 @pytest.mark.unit
 class TestMutationOperators:
@@ -53,7 +54,7 @@ class TestCrossoverOperators:
         p1 = Individual(genes=[0, 0, 0, 0])
         p2 = Individual(genes=[1, 1, 1, 1])
         c1, c2 = cross.crossover(p1, p2)
-        
+
         # Verify crossover happened at some point
         found_point = False
         for i in range(1, 4):

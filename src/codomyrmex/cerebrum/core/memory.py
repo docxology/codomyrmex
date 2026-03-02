@@ -1,4 +1,5 @@
 from typing import Any
+
 from codomyrmex.logging_monitoring import get_logger
 
 """Working memory for short-term context storage."""

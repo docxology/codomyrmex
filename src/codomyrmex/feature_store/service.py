@@ -6,11 +6,11 @@ High-level feature service including transforms and batch operations.
 
 import logging
 from collections.abc import Callable
-from typing import Any, Dict, List, Optional
+from typing import Any
 
+from .exceptions import FeatureStoreError
 from .models import FeatureDefinition, FeatureGroup, FeatureVector
 from .store import FeatureStore, InMemoryFeatureStore
-from .exceptions import FeatureStoreError
 
 logger = logging.getLogger(__name__)
 
@@ -28,7 +28,7 @@ class FeatureTransform:
     """
 
     def __init__(self):
-        self._transforms: Dict[str, Callable[[Any], Any]] = {}
+        self._transforms: dict[str, Callable[[Any], Any]] = {}
 
     def add(self, feature_name: str, func: Callable[[Any], Any]) -> "FeatureTransform":
         """Add a transform for a feature."""
@@ -82,12 +82,12 @@ class FeatureService:
 
     def __init__(
         self,
-        store: Optional[FeatureStore] = None,
-        transform: Optional[FeatureTransform] = None,
+        store: FeatureStore | None = None,
+        transform: FeatureTransform | None = None,
     ):
         self.store = store or InMemoryFeatureStore()
         self.transform = transform
-        self._groups: Dict[str, FeatureGroup] = {}
+        self._groups: dict[str, FeatureGroup] = {}
 
     def register_group(self, group: FeatureGroup) -> None:
         """Register a feature group."""
@@ -101,7 +101,7 @@ class FeatureService:
 
     def ingest(
         self,
-        features: Dict[str, Any],
+        features: dict[str, Any],
         entity_id: str,
     ) -> None:
         """Ingest feature values for an entity."""
@@ -114,7 +114,7 @@ class FeatureService:
 
     def ingest_batch(
         self,
-        batch: List[Dict[str, Any]],
+        batch: list[dict[str, Any]],
         entity_id_field: str = "entity_id",
     ) -> int:
         """Ingest batch of feature values."""
@@ -135,7 +135,7 @@ class FeatureService:
     def get_features(
         self,
         entity_id: str,
-        feature_names: List[str],
+        feature_names: list[str],
         apply_transform: bool = True,
     ) -> FeatureVector:
         """Get features for an entity."""
@@ -159,6 +159,6 @@ class FeatureService:
 
         return self.get_features(entity_id, group.feature_names)
 
-    def list_groups(self) -> List[str]:
+    def list_groups(self) -> list[str]:
         """List registered feature groups."""
         return list(self._groups.keys())

@@ -1,6 +1,7 @@
 """Document format conversion."""
 
 import copy as py_copy
+
 from codomyrmex.documents.exceptions import (
     DocumentConversionError,
     UnsupportedFormatError,

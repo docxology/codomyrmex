@@ -10,7 +10,7 @@ def handle_fpf_fetch(repo: str, branch: str, output: str | None) -> bool:
     try:
         from codomyrmex.fpf import FPFFetcher
         fetcher = FPFFetcher()
-        
+
         print(f"Fetching FPF specification from {repo} ({branch})...")
         content = fetcher.fetch_latest(repo, branch)
 
@@ -95,6 +95,7 @@ def handle_fpf_visualize(file: str, viz_type: str, output: str, format: str, lay
     """Handle FPF visualize command."""
     try:
         from codomyrmex.fpf.visualizer_png import FPFVisualizerPNG
+
         from codomyrmex.fpf import FPFClient, FPFVisualizer
 
         client = FPFClient()
@@ -170,6 +171,7 @@ def handle_fpf_export_section(file: str, part: str | None, pattern: str | None, 
     try:
         from codomyrmex.fpf.section_exporter import SectionExporter
         from codomyrmex.fpf.section_manager import SectionManager
+
         from codomyrmex.fpf import FPFClient
 
         client = FPFClient()
@@ -199,6 +201,7 @@ def handle_fpf_analyze(file: str, output: str | None) -> bool:
     """Handle FPF analyze command."""
     try:
         from codomyrmex.fpf.analyzer import FPFAnalyzer
+
         from codomyrmex.fpf import FPFClient
 
         client = FPFClient()
@@ -225,6 +228,7 @@ def handle_fpf_report(file: str, output: str, include_analysis: bool) -> bool:
     """Handle FPF report command."""
     try:
         from codomyrmex.fpf.report_generator import ReportGenerator
+
         from codomyrmex.fpf import FPFClient
 
         client = FPFClient()

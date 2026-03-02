@@ -6,8 +6,8 @@ from codomyrmex.cli.utils import (
     TerminalFormatter,
     get_logger,
     print_error,
-    print_success,
     print_header,
+    print_success,
 )
 
 logger = get_logger(__name__)

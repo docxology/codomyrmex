@@ -18,7 +18,6 @@ import pytest
 
 from codomyrmex.lora import LoRAConfig, LoRALayer, apply_lora, merge_lora
 
-
 # ---------------------------------------------------------------------------
 # LoRAConfig
 # ---------------------------------------------------------------------------

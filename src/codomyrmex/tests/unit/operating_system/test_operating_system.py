@@ -18,7 +18,6 @@ Covers:
 
 import pytest
 
-
 # ===================================================================
 # Platform Detection
 # ===================================================================
@@ -38,6 +37,7 @@ class TestPlatformDetection:
     def test_detect_platform_matches_system(self):
         """Test functionality: detected platform matches platform.system()."""
         import platform
+
         from codomyrmex.operating_system.detector import detect_platform
         result = detect_platform()
         system = platform.system().lower()
@@ -70,6 +70,7 @@ class TestProviderDispatch:
     def test_provider_class_name_matches_platform(self):
         """Test functionality: provider class name matches detected platform."""
         import platform as _platform
+
         from codomyrmex.operating_system.detector import get_provider
         provider = get_provider()
         system = _platform.system().lower()

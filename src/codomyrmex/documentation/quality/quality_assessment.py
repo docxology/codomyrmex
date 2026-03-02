@@ -54,7 +54,7 @@ class DocumentationQualityAnalyzer:
         for section in essential_sections:
             if re.search(rf'^#+.*{section}', content, re.IGNORECASE | re.MULTILINE):
                 found_sections += 1
-        
+
         score += (found_sections / len(essential_sections)) * 60.0
 
         # Check for code examples

@@ -194,7 +194,7 @@ class Int8Quantizer:
         self.zero_point: int | np.ndarray | None = None
         self._calibrated = False
 
-    def calibrate(self, x: np.ndarray) -> "Int8Quantizer":
+    def calibrate(self, x: np.ndarray) -> Int8Quantizer:
         """Compute scale and zero_point from calibration data.
 
         Args:

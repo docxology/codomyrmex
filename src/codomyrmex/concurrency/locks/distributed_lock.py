@@ -2,10 +2,9 @@
 
 import fcntl
 import os
-import time
 import threading
+import time
 from abc import ABC, abstractmethod
-from typing import Optional
 
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
@@ -48,7 +47,7 @@ class BaseLock(ABC):
 
 class LocalLock(BaseLock):
     """File-based lock for local multi-process synchronization.
-    
+
     Now includes thread-safety via a re-entrant threading lock.
     """
 
@@ -57,18 +56,18 @@ class LocalLock(BaseLock):
         self.lock_path = os.path.join(lock_dir, f"{name}.lock")
         self._lock_dir = lock_dir
         os.makedirs(lock_dir, exist_ok=True)
-        self._lock_file: Optional[int] = None
+        self._lock_file: int | None = None
         self._thread_lock = threading.RLock()
         self._nesting_level = 0
 
     def acquire(self, timeout: float = 10.0, retry_interval: float = 0.1) -> bool:
         """Acquire the lock with retry logic and thread safety."""
         start_time = time.time()
-        
+
         # First acquire the thread-level lock
         if not self._thread_lock.acquire(timeout=timeout):
             return False
-        
+
         if self.is_held:
             self._nesting_level += 1
             return True
@@ -83,7 +82,7 @@ class LocalLock(BaseLock):
                     self.is_held = True
                     self._nesting_level = 1
                     return True
-                except (OSError, IOError):
+                except OSError:
                     os.close(fd)
             except Exception as e:
                 logger.debug("Error opening lock file %s: %s", self.lock_path, e)
@@ -91,7 +90,7 @@ class LocalLock(BaseLock):
             if time.time() - start_time >= timeout:
                 self._thread_lock.release()
                 return False
-                
+
             time.sleep(retry_interval)
 
     def release(self) -> None:
@@ -113,7 +112,7 @@ class LocalLock(BaseLock):
                 finally:
                     self._lock_file = None
                     self.is_held = False
-                    
+
             try:
                 if os.path.exists(self.lock_path):
                     os.remove(self.lock_path)

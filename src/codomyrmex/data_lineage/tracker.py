@@ -71,7 +71,7 @@ class LineageTracker:
             # Outputs must be registered before adding edges
             if not self.graph.get_node(output_id):
                  self.register_dataset(output_id, output_id)
-            
+
             self.graph.add_edge(LineageEdge(
                 source_id=id,
                 target_id=output_id,

@@ -128,7 +128,7 @@ def train_sae(
 
     sae = SparseAutoencoder(d_input, d_features, lambda_l1)
 
-    for step in range(n_steps):
+    for _step in range(n_steps):
         batch_size = min(32, len(activations))
         idx = np.random.choice(len(activations), batch_size, replace=False)
         batch = activations[idx]

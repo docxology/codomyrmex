@@ -37,6 +37,7 @@ def merge_models(
     """
     try:
         import numpy as np
+
         from .merger import ModelMerger
 
         np_a = {k: np.array(v) for k, v in params_a.items()}
@@ -75,6 +76,7 @@ def create_model_soup(
     """
     try:
         import numpy as np
+
         from .merger import model_soup
 
         np_dicts = [

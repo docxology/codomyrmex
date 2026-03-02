@@ -281,7 +281,7 @@ class ConfigurationMonitor:
         )
 
         self._snapshots[snapshot_id] = snapshot
-        
+
         # Persist to disk
         snap_file = self.snapshots_dir / f"{snapshot_id}.json"
         with open(snap_file, 'w') as f:
@@ -313,12 +313,12 @@ class ConfigurationMonitor:
 
         snapshot = self._snapshots[snapshot_id]
         current_dir = Path(config_dir).absolute()
-        
-        current_files = {str(f.absolute()): self.calculate_file_hash(f) 
+
+        current_files = {str(f.absolute()): self.calculate_file_hash(f)
                          for f in current_dir.rglob("*") if f.is_file()}
-        
+
         drift_details = []
-        
+
         # Check snapshot files against current
         for path, expected_hash in snapshot.config_hashes.items():
             if path not in current_files:
@@ -389,7 +389,7 @@ class ConfigurationMonitor:
         for f in path.rglob("*"):
             if not f.is_file():
                 continue
-            
+
             files_audited += 1
             # Check permissions (on Unix-like)
             try:
@@ -421,7 +421,7 @@ class ConfigurationMonitor:
         )
 
         self._audits.append(audit)
-        
+
         # Persist audit
         audit_file = self.audits_dir / f"{audit_id}.json"
         with open(audit_file, 'w') as f:

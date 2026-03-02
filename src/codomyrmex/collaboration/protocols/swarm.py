@@ -1,14 +1,13 @@
 """Swarm coordination implementation (Legacy Compatibility).
 
-This module provides legacy access to swarm functionality. 
+This module provides legacy access to swarm functionality.
 New code should use codomyrmex.collaboration.swarm.
 """
 
-from codomyrmex.collaboration.swarm import (
-    SwarmManager as NewSwarmManager,
-    TaskDecomposer as NewTaskDecomposer,
-    AgentRole
-)
+from codomyrmex.collaboration.swarm import AgentRole
+from codomyrmex.collaboration.swarm import SwarmManager as NewSwarmManager
+from codomyrmex.collaboration.swarm import TaskDecomposer as NewTaskDecomposer
+
 
 class AgentProxy:
     """Mock-friendly proxy for a Codomyrmex agent (Legacy)."""
@@ -22,7 +21,7 @@ class AgentProxy:
 
 class SwarmManager(NewSwarmManager):
     """Orchestrates multiple agents working together (Legacy Compatibility)."""
-    
+
     def add_agent(self, agent: AgentProxy):
         from codomyrmex.collaboration.swarm import SwarmAgent
         # Try to map legacy role to AgentRole enum
@@ -30,20 +29,20 @@ class SwarmManager(NewSwarmManager):
             role = AgentRole(agent.role.lower())
         except ValueError:
             role = AgentRole.CODER
-            
+
         self.register_agent(SwarmAgent(agent.name, role))
 
     def execute(self, mission: str) -> dict[str, str]:
         """Distribute a mission across the swarm (Legacy Compatibility)."""
         import asyncio
-        # We need to run it synchronously for legacy compatibility if possible, 
+        # We need to run it synchronously for legacy compatibility if possible,
         # but execute_task is async. This is a shim.
         try:
             loop = asyncio.get_event_loop()
         except RuntimeError:
             loop = asyncio.new_event_loop()
             asyncio.set_event_loop(loop)
-            
+
         # Simpler implementation for shim
         results = {}
         for agent_id in self.pool._agents:
@@ -54,7 +53,7 @@ class SwarmManager(NewSwarmManager):
 
     def consensus_vote(self, proposal: str) -> bool:
         """Simple majority vote among agents (Legacy Compatibility)."""
-        from codomyrmex.collaboration.swarm import Vote, Decision
+        from codomyrmex.collaboration.swarm import Decision, Vote
         votes = [Vote(aid, True) for aid in self.pool._agents]
         if not votes:
             return False
@@ -63,7 +62,7 @@ class SwarmManager(NewSwarmManager):
 
 class TaskDecomposer(NewTaskDecomposer):
     """Utilities for breaking down complex missions (Legacy Compatibility)."""
-    
+
     @staticmethod
     def decompose(mission: str) -> list[str]:
         """Break down a mission into primitive tasks (Legacy)."""

@@ -35,6 +35,13 @@ except ImportError:
     Result = None
     ResultStatus = None
 
+from codomyrmex.config_monitoring import (
+    ConfigAudit,
+    ConfigurationMonitor,
+    ConfigWatcher,
+    monitor_config_changes,
+)
+
 from .core import (
     ConfigSchema,
     Configuration,
@@ -46,12 +53,6 @@ from .deployment import (
     ConfigDeployment,
     ConfigurationDeployer,
     deploy_configuration,
-)
-from codomyrmex.config_monitoring import (
-    ConfigAudit,
-    ConfigurationMonitor,
-    ConfigWatcher,
-    monitor_config_changes,
 )
 
 # Import secret management conditionally (requires cryptography)

@@ -7,7 +7,7 @@ Data classes and enums for feature management.
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any, Optional
+from typing import Any
 
 
 class FeatureType(Enum):
@@ -50,7 +50,7 @@ class FeatureDefinition:
         """Validate if a value matches this definition's type."""
         if value is None:
             return True
-            
+
         if self.value_type == ValueType.INT:
             return isinstance(value, int)
         if self.value_type == ValueType.FLOAT:
@@ -63,7 +63,7 @@ class FeatureDefinition:
             return isinstance(value, list)
         if self.value_type == ValueType.DICT:
             return isinstance(value, dict)
-            
+
         return True
 
     def to_dict(self) -> dict[str, Any]:
@@ -125,7 +125,7 @@ class FeatureGroup:
         """Get list of feature names."""
         return [f.name for f in self.features]
 
-    def get_feature(self, name: str) -> Optional[FeatureDefinition]:
+    def get_feature(self, name: str) -> FeatureDefinition | None:
         """Get feature by name."""
         for f in self.features:
             if f.name == name:

@@ -107,8 +107,8 @@ def verify_criteria_consistency(
             try:
                 # We wrap the constraint to label it for unsat core extraction if it contains solver.add
                 if "solver.add(" in constraint:
-                    labeled_constraint = constraint.replace(
-                        "solver.add(", f"solver.assert_and_track("
+                    constraint.replace(
+                        "solver.add(", "solver.assert_and_track("
                     )
                     # We need to provide the label as second arg: solver.assert_and_track(expr, label)
                     # This is tricky with raw strings. A better way is needed if we want full unsat core.
@@ -129,7 +129,7 @@ def verify_criteria_consistency(
                     # If it's a solver.add, we can label it
                     if item.startswith("solver.add("):
                         label = f"label_{cid}_{idx}_{sub_idx}".replace("-", "_")
-                        labeled_item = item.replace("solver.add(", f"solver.assert_and_track(", 1)
+                        labeled_item = item.replace("solver.add(", "solver.assert_and_track(", 1)
                         labeled_item = labeled_item[:-1] + f", '{label}')"
                         solver.add_item(labeled_item)
                     else:

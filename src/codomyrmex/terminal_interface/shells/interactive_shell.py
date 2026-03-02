@@ -1,3 +1,11 @@
+#!/usr/bin/env python3
+"""Interactive Shell for Codomyrmex
+
+Provides an engaging, interactive terminal interface for exploring the
+Codomyrmex ecosystem - like being an epistemic forager in a vast,
+structured nest.
+"""
+
 import cmd
 import logging
 import os
@@ -11,15 +19,6 @@ from pathlib import Path
 # Foundation -> Core layer boundary.  Only Foundation-layer imports appear
 # at the top level.
 from codomyrmex.logging_monitoring import get_logger
-
-#!/usr/bin/env python3
-
-"""Interactive Shell for Codomyrmex
-
-Provides an engaging, interactive terminal interface for exploring the
-Codomyrmex ecosystem - like being an epistemic forager in a vast,
-structured nest.
-"""
 
 try:
     logger = get_logger(__name__)

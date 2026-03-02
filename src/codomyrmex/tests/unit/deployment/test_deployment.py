@@ -445,10 +445,10 @@ def test_gitops_sync_method(tmp_path):
     subprocess.run(["git", "init"], cwd=repo_path, capture_output=True, check=True)
     # Ensure 'main' exists
     subprocess.run(["git", "checkout", "-b", "main"], cwd=repo_path, capture_output=True, check=True)
-    
+
     subprocess.run(["git", "config", "user.email", "t@t.com"], cwd=repo_path, check=True)
     subprocess.run(["git", "config", "user.name", "T"], cwd=repo_path, check=True)
-    
+
     (repo_dir / "f").write_text("c")
     subprocess.run(["git", "add", "."], cwd=repo_path, check=True)
     subprocess.run(["git", "commit", "-m", "i"], cwd=repo_path, check=True)
@@ -457,12 +457,12 @@ def test_gitops_sync_method(tmp_path):
     # First sync should clone.
     assert sync.sync() is True
     assert os.path.exists(local_dir / ".git")
-    
+
     # Second sync should fetch/reset
     (repo_dir / "f2").write_text("c2")
     subprocess.run(["git", "add", "."], cwd=repo_path, check=True)
     subprocess.run(["git", "commit", "-m", "i2"], cwd=repo_path, check=True)
-    
+
     assert sync.sync() is True
     assert os.path.exists(local_dir / "f2")
 

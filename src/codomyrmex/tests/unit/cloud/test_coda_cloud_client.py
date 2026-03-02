@@ -6,8 +6,9 @@ Uses strictly zero-mock tests with the Stub class.
 
 import pytest
 from _stubs import Stub
+
 from codomyrmex.cloud.coda_io import CodaClient
-from codomyrmex.cloud.common import ResourceType, CloudProvider
+from codomyrmex.cloud.common import CloudProvider, ResourceType
 
 
 class TestCodaCloudClient:
@@ -44,9 +45,9 @@ class TestCodaCloudClient:
             ]
         }
         client.session.request.return_value = mock_response
-        
+
         resources = client.list_resources(ResourceType.DOCUMENT)
-        
+
         assert len(resources) == 1
         assert resources[0].id == "doc1"
         assert resources[0].name == "Document 1"
@@ -71,9 +72,9 @@ class TestCodaCloudClient:
         }
         mock_response.json.return_value = doc_data
         client.session.request.return_value = mock_response
-        
+
         resource = client.get_resource("doc1")
-        
+
         assert resource is not None
         assert resource.id == "doc1"
         assert resource.name == "Document 1"
@@ -96,9 +97,9 @@ class TestCodaCloudClient:
         }
         mock_response.json.return_value = doc_data
         client.session.request.return_value = mock_response
-        
+
         resource = client.create_resource("New Document", ResourceType.DOCUMENT, {})
-        
+
         assert resource.id == "new-doc"
         assert resource.name == "New Document"
         assert resource.provider == CloudProvider.CODA
@@ -109,6 +110,6 @@ class TestCodaCloudClient:
         mock_response.status_code = 202
         mock_response.json.return_value = {}
         client.session.request.return_value = mock_response
-        
+
         assert client.delete_resource("doc-to-delete") is True
         client.session.request.assert_called_once()

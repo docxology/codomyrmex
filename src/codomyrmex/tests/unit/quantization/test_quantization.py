@@ -1,17 +1,17 @@
 """Unit tests for Int8 and FP4 quantization."""
 
-import pytest
 import numpy as np
+import pytest
 
 from codomyrmex.quantization import (
-    Int8Quantizer,
-    quantize_int8,
-    dequantize_int8,
     FP4Quantizer,
-    quantize_fp4,
-    dequantize_fp4,
+    Int8Quantizer,
     compute_scale_zero_point,
+    dequantize_fp4,
+    dequantize_int8,
     per_channel_scale,
+    quantize_fp4,
+    quantize_int8,
 )
 from codomyrmex.quantization.utils import quantization_error
 

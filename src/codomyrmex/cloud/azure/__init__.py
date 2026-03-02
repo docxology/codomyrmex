@@ -1,20 +1,21 @@
 """Azure integration submodule."""
 
 import os
+from datetime import UTC
 from typing import Any, Optional
 
 from azure.identity import DefaultAzureCredential
 from azure.storage.blob import BlobServiceClient, ContentSettings
 
-from codomyrmex.logging_monitoring.core.logger_config import get_logger
 from codomyrmex.cloud.common import StorageClient
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 logger = get_logger(__name__)
 
 class AzureBlobClient(StorageClient):
     """Wrapper for Azure Blob Storage operations."""
 
-    def __init__(self, account_url: str | None = None, client: Optional[BlobServiceClient] = None):
+    def __init__(self, account_url: str | None = None, client: BlobServiceClient | None = None):
         if client:
             self.client = client
         elif account_url:
@@ -143,12 +144,13 @@ class AzureBlobClient(StorageClient):
     ) -> str:
         """Generate a SAS URL."""
         from datetime import datetime, timedelta, timezone
-        from azure.storage.blob import generate_blob_sas, BlobSasPermissions
+
+        from azure.storage.blob import BlobSasPermissions, generate_blob_sas
 
         if not self.client:
             return ""
-        
-        # Note: generate_blob_sas requires account_key. 
+
+        # Note: generate_blob_sas requires account_key.
         # If using DefaultAzureCredential, user should use User Delegation SAS or other methods.
         # We provide a basic implementation but warn if account_key is missing.
         account_key = getattr(self.client.credential, 'account_key', None)
@@ -164,7 +166,7 @@ class AzureBlobClient(StorageClient):
                 blob_name=key,
                 account_key=account_key,
                 permission=permission,
-                expiry=datetime.now(timezone.utc) + timedelta(seconds=expires_in)
+                expiry=datetime.now(UTC) + timedelta(seconds=expires_in)
             )
             return f"{self.client.url}{bucket}/{key}?{sas_token}"
         except Exception as e:

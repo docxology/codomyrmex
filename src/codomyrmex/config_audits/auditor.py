@@ -32,7 +32,7 @@ class ConfigAuditor:
         """
         path = Path(file_path)
         issues = []
-        
+
         if not path.exists():
             return AuditResult(
                 audit_id=str(uuid.uuid4()),
@@ -100,7 +100,7 @@ class ConfigAuditor:
 
         # Support common config extensions if pattern is default
         patterns = [pattern] if pattern != "*.json" else ["*.json", "*.yaml", "*.yml"]
-        
+
         found_files = []
         for p in patterns:
             found_files.extend(path.glob(p))

@@ -76,7 +76,7 @@ class Document:
     def __post_init__(self):
         if self.document_type is None:
             self.document_type = _FORMAT_TYPE_MAP.get(self.format, DocumentType.TEXT)
-        
+
         if not isinstance(self.metadata, DocumentMetadata):
             if isinstance(self.metadata, dict):
                 self.metadata = DocumentMetadata.from_dict(self.metadata)

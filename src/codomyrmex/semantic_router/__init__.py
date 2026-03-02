@@ -1,4 +1,4 @@
 """Semantic Router -- embedding-based intent routing."""
-from .router import SemanticRouter, Route, RouteMatch
+from .router import Route, RouteMatch, SemanticRouter
 
 __all__ = ["SemanticRouter", "Route", "RouteMatch"]

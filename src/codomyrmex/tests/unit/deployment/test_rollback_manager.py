@@ -16,7 +16,6 @@ from codomyrmex.deployment.rollback import (
     SnapshotState,
 )
 
-
 # ── SnapshotState ──────────────────────────────────────────────────────────
 
 
@@ -151,7 +150,7 @@ class TestRollbackManagerCreateSnapshot:
 
     def test_create_supersedes_previous_active(self):
         mgr = RollbackManager()
-        snap1 = mgr.create_snapshot("v1.0.0")
+        mgr.create_snapshot("v1.0.0")
         mgr.create_snapshot("v2.0.0")
         # After creating v2, v1 should be superseded
         # list_snapshots returns copies, snap1 is the original

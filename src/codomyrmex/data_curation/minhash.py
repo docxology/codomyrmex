@@ -151,7 +151,7 @@ class DataCurator:
         # Build index
         signatures = [self.minhash.signature(t) for t in texts]
 
-        for i, (text, sig) in enumerate(zip(texts, signatures)):
+        for i, (_text, sig) in enumerate(zip(texts, signatures, strict=False)):
             doc_id = str(i)
             candidates = self.lsh.query(sig)
 

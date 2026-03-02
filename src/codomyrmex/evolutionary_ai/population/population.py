@@ -283,7 +283,7 @@ class Population:
             if not isinstance(self.individuals[i], Genome):
                 can_dist = False
                 break
-        
+
         if not can_dist:
             return 0.0
 

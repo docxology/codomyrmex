@@ -15,7 +15,6 @@ import pytest
 
 from codomyrmex.dpo import DPOLoss, compute_dpo_loss, compute_log_probs
 
-
 # ---------------------------------------------------------------------------
 # compute_log_probs
 # ---------------------------------------------------------------------------
@@ -71,7 +70,6 @@ class TestComputeDPOLoss:
     def test_loss_formula_correct(self):
         """Manual calculation vs compute_dpo_loss."""
         np.random.seed(42)
-        batch = 4
         policy_w = np.array([1.0, 2.0, 1.5, 0.5])
         policy_l = np.array([0.5, 1.0, 0.5, 0.0])
         ref_w = np.array([0.8, 1.8, 1.3, 0.3])

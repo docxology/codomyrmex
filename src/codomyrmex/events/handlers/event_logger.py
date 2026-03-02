@@ -35,12 +35,12 @@ class EventLogEntry:
     def to_dict(self) -> dict[str, Any]:
         """Return a dictionary representation of this object."""
         etype = self.event.event_type.value if hasattr(self.event.event_type, 'value') else str(self.event.event_type)
-        
+
         # Handle priority which might be an int or EventPriority enum
         priority = self.event.priority
         if hasattr(priority, 'value'):
             priority = priority.value
-        
+
         return {
             'event_id': self.event_id,
             'event_type': etype,
@@ -142,9 +142,9 @@ class EventLogger:
                         "max_ms": max(times) * 1000
                     }
                     all_times.extend(times)
-            
+
             total_avg = (sum(all_times) / len(all_times) * 1000) if all_times else 0
-            
+
             return {
                 "by_type": report,
                 "overall_avg_ms": total_avg,

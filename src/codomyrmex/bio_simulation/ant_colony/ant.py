@@ -12,7 +12,7 @@ from enum import Enum, auto
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from ..genomics.genome import Genome
+    from src.codomyrmex.bio_simulation.genomics.genome import Genome
 
 
 class AntState(Enum):
@@ -86,7 +86,7 @@ class Ant:
         cost = speed * 0.005
         if self.genome and "endurance" in self.genome.traits:
             cost *= (1.5 - self.genome.traits["endurance"])
-        
+
         self.energy = max(0.0, self.energy - cost)
         self.age_ticks += 1
 
@@ -144,7 +144,7 @@ class Ant:
         """Drop all carried food (at the nest). Returns amount dropped."""
         if not self.is_alive():
             return 0.0
-            
+
         dropped = self._carried_amount
         self._carried_amount = 0.0
         self.carrying = False

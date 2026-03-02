@@ -18,7 +18,14 @@ Tests cover:
 
 import pytest
 
-from codomyrmex.bio_simulation import Ant, AntState, Colony, Environment, Genome, Population
+from codomyrmex.bio_simulation import (
+    Ant,
+    AntState,
+    Colony,
+    Environment,
+    Genome,
+    Population,
+)
 
 # ======================================================================
 # Basic tests (Colony, Ant, Environment)
@@ -284,14 +291,14 @@ def test_colony_death_tracking():
     colony.ants[0].energy = 0
     # Run a step (60 ticks)
     colony.step(hours=1)
-    
+
     stats = colony.stats()
     assert stats["dead"] == 1
     assert stats["alive"] == 9
     assert len(colony.ants) == 9
-    
+
     # Run another step
     colony.step(hours=1)
     stats = colony.stats()
     # Should still be 1 if no more died
-    assert stats["dead"] >= 1 
+    assert stats["dead"] >= 1

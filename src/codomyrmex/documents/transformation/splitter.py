@@ -64,7 +64,7 @@ def _split_by_sections(document: Document, criteria: dict) -> list[Document]:
     for i, section_content in enumerate(sections):
         new_metadata = document.metadata.copy()
         new_metadata.custom_fields["section_index"] = i
-        
+
         split_doc = Document(
             content=section_content,
             format=document.format,
@@ -85,7 +85,7 @@ def _split_by_size(document: Document, criteria: dict) -> list[Document]:
         chunk = content[i:i + max_size]
         new_metadata = document.metadata.copy()
         new_metadata.custom_fields["chunk_index"] = i // max_size
-        
+
         split_doc = Document(
             content=chunk,
             format=document.format,
@@ -106,13 +106,13 @@ def _split_by_rows(document: Document, criteria: dict) -> list[Document]:
     rows_per_chunk = criteria.get("rows_per_chunk", 100)
     if not isinstance(document.content, list):
         return [document]
-    
+
     split_docs = []
     for i in range(0, len(document.content), rows_per_chunk):
         chunk = document.content[i:i + rows_per_chunk]
         new_metadata = document.metadata.copy()
         new_metadata.custom_fields["chunk_index"] = i // rows_per_chunk
-        
+
         split_doc = Document(
             content=chunk,
             format=document.format,
@@ -134,7 +134,7 @@ def _split_by_lines(document: Document, criteria: dict) -> list[Document]:
         chunk_content = '\n'.join(chunk_lines)
         new_metadata = document.metadata.copy()
         new_metadata.custom_fields["chunk_index"] = i // lines_per_chunk
-        
+
         split_doc = Document(
             content=chunk_content,
             format=document.format,

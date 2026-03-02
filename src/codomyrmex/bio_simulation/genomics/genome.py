@@ -76,13 +76,13 @@ class Genome:
         """
         child1_traits = {}
         child2_traits = {}
-        
+
         all_traits = list(set(self.traits.keys()) | set(other.traits.keys()))
         if not all_traits:
             return Genome(), Genome()
-            
+
         point = random.randint(0, len(all_traits))
-        
+
         for i, trait in enumerate(all_traits):
             if i < point:
                 child1_traits[trait] = self.traits.get(trait, 0.5)
@@ -90,7 +90,7 @@ class Genome:
             else:
                 child1_traits[trait] = other.traits.get(trait, 0.5)
                 child2_traits[trait] = self.traits.get(trait, 0.5)
-                
+
         return Genome(traits=child1_traits), Genome(traits=child2_traits)
 
     def fitness_score(self) -> float:

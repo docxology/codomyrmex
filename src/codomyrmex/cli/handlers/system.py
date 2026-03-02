@@ -1,6 +1,6 @@
-import sys
-import platform
 import os
+import platform
+import sys
 
 from codomyrmex.cli.utils import (
     PERFORMANCE_MONITORING_AVAILABLE,

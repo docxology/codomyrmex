@@ -548,7 +548,7 @@ class DeploymentOrchestrator:
                 env = os.environ.copy()
                 env.update(deployment.environment.variables)
                 env["DEPLOYMENT_VERSION"] = deployment.version
-                
+
                 result = subprocess.run(
                     hook, shell=True, capture_output=True, text=True, cwd=os.getcwd(), env=env
                 )

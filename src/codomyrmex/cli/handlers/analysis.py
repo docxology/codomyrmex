@@ -14,7 +14,7 @@ def handle_code_analysis(path: str, output_dir: str | None) -> bool:
 
         print(f"Analyzing project at: {path}...")
         result = analyze_project(path)
-        
+
         print_success(f"Code quality analysis for: {path}")
         print(f"Quality Score: {result.get('score', 'N/A')}/10")
 
@@ -73,15 +73,15 @@ def handle_module_test(module_name: str) -> bool:
             Path("src/codomyrmex/tests/unit") / module_name,
             Path("tests/unit") / module_name,
         ]
-        
+
         test_path = None
         for loc in test_locations:
             if loc.exists():
                 test_path = loc
                 break
-                
+
         if not test_path:
-            print_error(f"Tests not found for module '{module_name}'. Checked: {', '.join(str(l) for l in test_locations)}")
+            print_error(f"Tests not found for module '{module_name}'. Checked: {', '.join(str(loc) for loc in test_locations)}")
             return False
 
         print(f"Running tests for module: {module_name} (at {test_path})...")

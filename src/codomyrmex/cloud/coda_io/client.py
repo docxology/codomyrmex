@@ -8,8 +8,13 @@ API Documentation: https://coda.io/developers/apis/v1
 """
 
 
+from codomyrmex.cloud.common import (
+    CloudClient,
+    CloudProvider,
+    CloudResource,
+    ResourceType,
+)
 from codomyrmex.logging_monitoring import get_logger
-from codomyrmex.cloud.common import CloudClient, CloudProvider, CloudResource, ResourceType
 
 from .mixins.access import AccessMixin
 from .mixins.analytics import AnalyticsMixin
@@ -98,7 +103,7 @@ class CodaClient(BaseMixin, DocsMixin, PagesMixin, TablesMixin, ElementsMixin, A
         """List Coda documents as cloud resources."""
         if resource_type and resource_type != ResourceType.DOCUMENT:
             return []
-        
+
         docs = self.list_docs()
         return [
             CloudResource(
@@ -135,7 +140,7 @@ class CodaClient(BaseMixin, DocsMixin, PagesMixin, TablesMixin, ElementsMixin, A
         """Create a new Coda document."""
         if resource_type != ResourceType.DOCUMENT:
             raise ValueError(f"Unsupported resource type for Coda: {resource_type}")
-        
+
         doc = self.create_doc(title=name, **config)
         return CloudResource(
             id=doc.id,

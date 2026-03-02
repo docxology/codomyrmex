@@ -19,8 +19,8 @@ from .ledger import (
     Transaction,
     TransactionEntry,
 )
-from .payroll import PayrollProcessor, PayStub, PayrollError
-from .taxes import TaxCalculator, TaxResult, TaxError
+from .payroll import PayrollError, PayrollProcessor, PayStub
+from .taxes import TaxCalculator, TaxError, TaxResult
 
 __all__ = [
     # Ledger

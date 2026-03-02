@@ -5,7 +5,7 @@ This module provides authentication and authorization with API key management,
 OAuth integration, and Role-Based Access Control (RBAC).
 """
 
-from typing import Optional, Dict, Any
+from typing import Any, Optional
 
 from codomyrmex.exceptions import AuthenticationError, CodomyrmexError
 
@@ -23,9 +23,9 @@ except ImportError:
     ResultStatus = None
 
 
-def authenticate(credentials: Dict[str, Any]) -> Optional[Token]:
+def authenticate(credentials: dict[str, Any]) -> Token | None:
     """Authenticate with credentials.
-    
+
     Convenience function that uses the Authenticator singleton.
     """
     return Authenticator().authenticate(credentials)
@@ -33,7 +33,7 @@ def authenticate(credentials: Dict[str, Any]) -> Optional[Token]:
 
 def authorize(token: Token | str, resource: str, permission: str) -> bool:
     """Check if token has permission.
-    
+
     Convenience function that uses the Authenticator singleton.
     """
     return Authenticator().authorize(token, resource, permission)

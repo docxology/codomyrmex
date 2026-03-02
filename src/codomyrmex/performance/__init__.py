@@ -102,6 +102,4 @@ if PERFORMANCE_MONITOR_AVAILABLE:
     __all__.append("performance_context")
     __all__.append("get_system_metrics")
 
-__version__ = "0.1.0"
-
 from . import analysis, benchmarking  # noqa: E402, F401

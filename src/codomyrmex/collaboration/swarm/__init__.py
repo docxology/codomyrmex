@@ -1,15 +1,15 @@
 """Swarm orchestration subpackage."""
 
+from .consensus import ConsensusEngine, ConsensusResult, Decision, Vote
+from .decomposer import SubTask, TaskDecomposer
 from .manager import SwarmManager
-from .pool import AgentPool
 from .message_bus import MessageBus
-from .decomposer import TaskDecomposer, SubTask
-from .consensus import ConsensusEngine, Vote, ConsensusResult, Decision
+from .pool import AgentPool
 from .protocol import (
     AgentRole,
-    SwarmMessageType,
     SwarmAgent,
     SwarmMessage,
+    SwarmMessageType,
     TaskAssignment,
     TaskStatus,
 )

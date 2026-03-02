@@ -1,5 +1,6 @@
 """Pipeline submodule -- models, manager, async manager, convenience functions."""
 
+from .artifact_manager import ArtifactManager
 from .async_manager import (
     AsyncPipelineManager,
     AsyncPipelineResult,
@@ -7,7 +8,9 @@ from .async_manager import (
     async_trigger_pipeline,
     async_wait_for_completion,
 )
+from .builder import PipelineBuilder
 from .functions import create_pipeline, run_pipeline
+from .generator import Workflow, WorkflowGenerator
 from .manager import PipelineManager
 from .models import (
     JobStatus,
@@ -17,9 +20,6 @@ from .models import (
     PipelineStatus,
     StageStatus,
 )
-from .builder import PipelineBuilder
-from .generator import WorkflowGenerator, Workflow
-from .artifact_manager import ArtifactManager
 
 __all__ = [
     "JobStatus",

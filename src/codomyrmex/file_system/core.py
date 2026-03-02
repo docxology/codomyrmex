@@ -5,11 +5,11 @@ This module provides the main FileSystemManager class for managing
 files and directories, as well as several utility functions.
 """
 
-import shutil
 import hashlib
+import shutil
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Union
+from typing import Any
 
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
@@ -19,7 +19,7 @@ logger = get_logger(__name__)
 class FileSystemManager:
     """Main class for filesystem operations in Codomyrmex."""
 
-    def __init__(self, config: Optional[Dict[str, Any]] = None):
+    def __init__(self, config: dict[str, Any] | None = None):
         """
         Initialize the FileSystemManager.
 
@@ -29,7 +29,7 @@ class FileSystemManager:
         self.config = config or {}
         logger.info("FileSystemManager initialized")
 
-    def create_file(self, path: Union[str, Path], content: str = "", overwrite: bool = True) -> Path:
+    def create_file(self, path: str | Path, content: str = "", overwrite: bool = True) -> Path:
         """
         Create a file with the given content.
 
@@ -48,13 +48,13 @@ class FileSystemManager:
         if path.exists() and not overwrite:
             logger.error(f"File already exists: {path}")
             raise FileExistsError(f"File exists: {path}")
-        
+
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text(content, encoding='utf-8')
         logger.info(f"File created: {path}")
         return path
 
-    def read_file(self, path: Union[str, Path]) -> str:
+    def read_file(self, path: str | Path) -> str:
         """
         Read file content as a string.
 
@@ -71,10 +71,10 @@ class FileSystemManager:
         if not path.is_file():
             logger.error(f"File not found: {path}")
             raise FileNotFoundError(f"File not found: {path}")
-        
+
         return path.read_text(encoding='utf-8')
 
-    def append_to_file(self, path: Union[str, Path], content: str) -> Path:
+    def append_to_file(self, path: str | Path, content: str) -> Path:
         """
         Append content to an existing file.
 
@@ -91,7 +91,7 @@ class FileSystemManager:
         logger.debug(f"Appended to file: {path}")
         return path
 
-    def delete(self, path: Union[str, Path], recursive: bool = False) -> bool:
+    def delete(self, path: str | Path, recursive: bool = False) -> bool:
         """
         Delete a file or directory.
 
@@ -109,7 +109,7 @@ class FileSystemManager:
         if not path.exists():
             logger.warning(f"Path does not exist, nothing to delete: {path}")
             return False
-        
+
         if path.is_file():
             path.unlink()
         elif path.is_dir():
@@ -117,11 +117,11 @@ class FileSystemManager:
                 shutil.rmtree(path)
             else:
                 path.rmdir()
-        
+
         logger.info(f"Deleted path: {path}")
         return True
 
-    def create_directory(self, path: Union[str, Path], exist_ok: bool = True) -> Path:
+    def create_directory(self, path: str | Path, exist_ok: bool = True) -> Path:
         """
         Create a new directory.
 
@@ -137,7 +137,7 @@ class FileSystemManager:
         logger.info(f"Directory created: {path}")
         return path
 
-    def list_dir(self, path: Union[str, Path] = ".", recursive: bool = False) -> List[Path]:
+    def list_dir(self, path: str | Path = ".", recursive: bool = False) -> list[Path]:
         """
         List directory contents.
 
@@ -153,7 +153,7 @@ class FileSystemManager:
             return list(path.rglob("*"))
         return list(path.iterdir())
 
-    def get_info(self, path: Union[str, Path]) -> Dict[str, Any]:
+    def get_info(self, path: str | Path) -> dict[str, Any]:
         """
         Retrieve detailed information about a file or directory.
 
@@ -166,7 +166,7 @@ class FileSystemManager:
         path = Path(path)
         if not path.exists():
             raise FileNotFoundError(f"Path does not exist: {path}")
-        
+
         stats = path.stat()
         return {
             "name": path.name,
@@ -179,7 +179,7 @@ class FileSystemManager:
             "permissions": oct(stats.st_mode)[-3:],
         }
 
-    def find_files(self, pattern: str, search_path: Union[str, Path] = ".") -> List[Path]:
+    def find_files(self, pattern: str, search_path: str | Path = ".") -> list[Path]:
         """
         Search for files by pattern.
 
@@ -193,7 +193,7 @@ class FileSystemManager:
         search_path = Path(search_path)
         return list(search_path.rglob(pattern))
 
-    def get_hash(self, path: Union[str, Path], algorithm: str = "sha256") -> str:
+    def get_hash(self, path: str | Path, algorithm: str = "sha256") -> str:
         """
         Calculate a file's content hash.
 
@@ -207,14 +207,14 @@ class FileSystemManager:
         path = Path(path)
         if not path.is_file():
             raise ValueError(f"Not a file: {path}")
-            
+
         hasher = hashlib.new(algorithm)
         with path.open("rb") as f:
             for chunk in iter(lambda: f.read(4096), b""):
                 hasher.update(chunk)
         return hasher.hexdigest()
 
-    def find_duplicates(self, path: Union[str, Path] = ".") -> Dict[str, List[Path]]:
+    def find_duplicates(self, path: str | Path = ".") -> dict[str, list[Path]]:
         """
         Find duplicate files based on content hash.
 
@@ -235,11 +235,11 @@ class FileSystemManager:
                     hashes[h].append(item)
                 except Exception as e:
                     logger.error(f"Error hashing {item}: {e}")
-        
+
         # Only return items with duplicates
         return {h: paths for h, paths in hashes.items() if len(paths) > 1}
 
-    def get_disk_usage(self, path: Union[str, Path] = ".") -> Dict[str, Any]:
+    def get_disk_usage(self, path: str | Path = ".") -> dict[str, Any]:
         """
         Calculate disk usage for the given path.
 
@@ -261,6 +261,6 @@ class FileSystemManager:
         }
 
 
-def create_file_system_manager(config: Optional[Dict[str, Any]] = None) -> FileSystemManager:
+def create_file_system_manager(config: dict[str, Any] | None = None) -> FileSystemManager:
     """Convenience function to create FileSystemManager."""
     return FileSystemManager(config)

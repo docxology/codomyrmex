@@ -50,8 +50,6 @@ from .core.git import (
     # Tag operations
     create_tag,
     delete_branch,
-    # Branch listing
-    list_branches,
     fetch_changes,
     # History & information
     get_blame,
@@ -65,6 +63,8 @@ from .core.git import (
     get_status,
     initialize_git_repository,
     is_git_repository,
+    # Branch listing
+    list_branches,
     list_remotes,
     list_stashes,
     list_tags,

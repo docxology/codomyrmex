@@ -3,6 +3,7 @@
 import shutil
 from pathlib import Path
 
+
 class ArtifactManager:
     """
     Manager for build artifacts in CI/CD pipelines.
@@ -21,15 +22,15 @@ class ArtifactManager:
         files = glob.glob(pattern)
         version_dir = self.storage_dir / version
         version_dir.mkdir(parents=True, exist_ok=True)
-        
+
         for f in files:
             shutil.copy2(f, version_dir)
-            
+
     def download(self, name: str, version: str, target_dir: str):
         """Download an artifact from storage."""
         source = self.storage_dir / version / name
         if not source.exists():
             raise FileNotFoundError(f"Artifact {name} v{version} not found")
-            
+
         Path(target_dir).mkdir(parents=True, exist_ok=True)
         shutil.copy2(source, target_dir)

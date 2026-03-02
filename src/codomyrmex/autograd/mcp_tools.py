@@ -10,12 +10,10 @@ from __future__ import annotations
 import operator
 from typing import Any
 
-
 from codomyrmex.model_context_protocol.decorators import mcp_tool
 
 from .engine import Value
 from .ops import relu, sigmoid, tanh
-
 
 # ---------------------------------------------------------------------------
 # Safe expression evaluator

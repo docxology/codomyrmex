@@ -15,9 +15,8 @@ Tests cover:
 import numpy as np
 import pytest
 
-from codomyrmex.rlhf import PPOTrainer, Actor, Critic, RewardModel, ppo_step
+from codomyrmex.rlhf import Actor, Critic, PPOTrainer, RewardModel, ppo_step
 from codomyrmex.rlhf.ppo import PPOConfig, compute_gae
-
 
 # ---------------------------------------------------------------------------
 # compute_gae
@@ -180,8 +179,8 @@ class TestRewardModel:
         """Preference loss should be a scalar float."""
         rm = RewardModel(d_state=8)
         w = np.random.randn(4, 8)
-        l = np.random.randn(4, 8)
-        loss = rm.preference_loss(w, l)
+        loss_input = np.random.randn(4, 8)
+        loss = rm.preference_loss(w, loss_input)
         assert isinstance(loss, float)
         assert np.isfinite(loss)
 

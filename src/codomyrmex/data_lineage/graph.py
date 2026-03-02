@@ -159,7 +159,7 @@ class LineageGraph:
         """Export graph to DOT format for visualization."""
         dot = ["digraph G {"]
         dot.append("  node [shape=box];")
-        
+
         # Add nodes
         for node_id, node in self._nodes.items():
             color = "lightblue"
@@ -168,11 +168,11 @@ class LineageGraph:
             elif node.node_type == NodeType.MODEL:
                 color = "lightgreen"
             dot.append(f'  "{node_id}" [label="{node.name}\\n({node.node_type.value})", style=filled, fillcolor={color}];')
-            
+
         # Add edges
         for edge in self._edges:
             dot.append(f'  "{edge.source_id}" -> "{edge.target_id}" [label="{edge.edge_type.value}"];')
-            
+
         dot.append("}")
         return "\n".join(dot)
 

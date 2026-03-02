@@ -27,9 +27,9 @@ from codomyrmex.collaboration.swarm.pool import (
 )
 from codomyrmex.collaboration.swarm.protocol import (
     AgentRole,
-    SwarmMessageType,
     SwarmAgent,
     SwarmMessage,
+    SwarmMessageType,
     TaskAssignment,
     TaskStatus,
 )

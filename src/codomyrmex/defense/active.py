@@ -7,7 +7,7 @@ embedding generation (poisoning), exploit detection, and honeytoken traps.
 import random
 import threading
 import uuid
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from enum import Enum
 from typing import Any
 
@@ -137,7 +137,7 @@ class ActiveDefense:
             "attacker_id": attacker_id,
             "poisoned_content": poison,
             "intensity": intensity,
-            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "timestamp": datetime.now(UTC).isoformat(),
         }
 
     # ── Honeytoken subsystem ─────────────────────────────────────────
@@ -160,7 +160,7 @@ class ActiveDefense:
             self._honeytokens[token] = {
                 "label": label or "unnamed",
                 "context": context,
-                "created_at": datetime.now(timezone.utc).isoformat(),
+                "created_at": datetime.now(UTC).isoformat(),
                 "triggered": False,
                 "trigger_count": 0,
             }
@@ -182,7 +182,7 @@ class ActiveDefense:
                 if token in text:
                     info["triggered"] = True
                     info["trigger_count"] += 1
-                    info["last_triggered_at"] = datetime.now(timezone.utc).isoformat()
+                    info["last_triggered_at"] = datetime.now(UTC).isoformat()
                     self._metrics["honeytokens_triggered"] += 1
                     triggered.append(token)
                     logger.warning(

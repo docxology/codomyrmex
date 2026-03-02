@@ -284,9 +284,9 @@ class IDEClient(ABC):
 
 # CursorClient must be imported after IDEClient is defined to avoid circular import
 # (ide.cursor.__init__ imports IDEClient from ide)
+from codomyrmex.ide.antigravity import AntigravityClient  # noqa: E402
 from codomyrmex.ide.cursor import CursorClient  # noqa: E402
 from codomyrmex.ide.vscode import VSCodeClient  # noqa: E402
-from codomyrmex.ide.antigravity import AntigravityClient  # noqa: E402
 
 
 def cli_commands():

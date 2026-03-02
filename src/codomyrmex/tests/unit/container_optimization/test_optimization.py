@@ -1,8 +1,14 @@
-import pytest
-import docker
 import time
+
+import docker
+import pytest
+
 from codomyrmex.container_optimization.optimizer import ContainerOptimizer
-from codomyrmex.container_optimization.resource_tuner import ResourceTuner, ResourceUsage
+from codomyrmex.container_optimization.resource_tuner import (
+    ResourceTuner,
+    ResourceUsage,
+)
+
 
 @pytest.fixture(scope="session")
 def docker_client():
@@ -24,19 +30,19 @@ def existing_image(docker_client):
 @pytest.fixture(scope="module")
 def running_container(docker_client, existing_image):
     """Runs a container for testing resource tuning."""
-    # We try to run the existing image if possible. 
+    # We try to run the existing image if possible.
     # This might fail if the entrypoint is not suitable.
     try:
         container = docker_client.containers.run(
-            existing_image, 
-            command="sleep 100", 
+            existing_image,
+            command="sleep 100",
             detach=True,
             remove=True
         )
         yield container
         try:
             container.stop(timeout=1)
-        except:
+        except Exception:
             pass
     except Exception as e:
         pytest.skip(f"Could not run container for test: {e}")
@@ -47,7 +53,7 @@ class TestContainerOptimizer:
     def test_analyze_image(self, existing_image):
         optimizer = ContainerOptimizer()
         analysis = optimizer.analyze_image(existing_image)
-        
+
         assert analysis.image_name == existing_image
         assert analysis.size_bytes >= 0
         assert isinstance(analysis.base_image, str)
@@ -60,14 +66,14 @@ class TestContainerOptimizer:
     def test_get_optimization_report(self, existing_image):
         optimizer = ContainerOptimizer()
         report = optimizer.get_optimization_report(existing_image)
-        
+
         assert "analysis" in report
         assert "suggestions" in report
         assert "score" in report
 
 class TestResourceTuner:
     """Zero-mock tests for ResourceTuner."""
-    
+
     def test_analyze_usage_real(self, running_container):
         tuner = ResourceTuner()
         time.sleep(1) # Wait for stats to be available

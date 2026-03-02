@@ -6,7 +6,7 @@ import hashlib
 import hmac
 import json
 import time
-from typing import Any, Dict, Optional
+from typing import Any
 
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
@@ -29,7 +29,7 @@ class TokenValidator:
             raise ValueError("Secret key cannot be empty")
         self.secret = secret.encode()
 
-    def _generate_signature(self, payload_dict: Dict[str, Any]) -> str:
+    def _generate_signature(self, payload_dict: dict[str, Any]) -> str:
         """Generate a signature for a payload.
 
         Sorts keys to ensure consistent signature for the same dictionary content.
@@ -38,7 +38,7 @@ class TokenValidator:
         signature = hmac.new(self.secret, payload_json, hashlib.sha256).hexdigest()
         return signature
 
-    def sign_token_data(self, token_data: Dict[str, Any]) -> str:
+    def sign_token_data(self, token_data: dict[str, Any]) -> str:
         """Add a signature to token data and return as a base64 string.
 
         Args:
@@ -55,7 +55,7 @@ class TokenValidator:
         token_bytes = json.dumps(full_token).encode()
         return base64.b64encode(token_bytes).decode()
 
-    def validate_signed_token(self, token_str: str) -> Optional[Dict[str, Any]]:
+    def validate_signed_token(self, token_str: str) -> dict[str, Any] | None:
         """Validate a base64 encoded signed token.
 
         Checks:

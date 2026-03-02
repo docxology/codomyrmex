@@ -7,9 +7,13 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any
 
-from codomyrmex.feature_flags.evaluation import FlagDefinition, FlagEvaluator, TargetingRule
+from codomyrmex.feature_flags.evaluation import (
+    FlagDefinition,
+    FlagEvaluator,
+    TargetingRule,
+)
 from codomyrmex.feature_flags.rollout import RolloutManager
 from codomyrmex.feature_flags.storage import FlagStore, InMemoryFlagStore
 from codomyrmex.feature_flags.strategies import EvaluationContext
@@ -33,20 +37,20 @@ class FeatureManager:
 
     def __init__(
         self,
-        storage: Optional[FlagStore] = None,
-        evaluator: Optional[FlagEvaluator] = None,
-        rollout_manager: Optional[RolloutManager] = None,
-        config: Optional[Dict[str, Any]] = None,
+        storage: FlagStore | None = None,
+        evaluator: FlagEvaluator | None = None,
+        rollout_manager: RolloutManager | None = None,
+        config: dict[str, Any] | None = None,
     ) -> None:
         self._storage = storage or InMemoryFlagStore()
         self._evaluator = evaluator or FlagEvaluator()
         self._rollout_manager = rollout_manager or RolloutManager()
-        self._overrides: Dict[str, bool] = {}
+        self._overrides: dict[str, bool] = {}
 
         if config:
             self._bootstrap_config(config)
 
-    def _bootstrap_config(self, config: Dict[str, Any]) -> None:
+    def _bootstrap_config(self, config: dict[str, Any]) -> None:
         """Bootstrap flags from a configuration dictionary."""
         for key, val in config.items():
             if isinstance(val, bool):
@@ -64,8 +68,8 @@ class FeatureManager:
         name: str,
         enabled: bool = True,
         percentage: float = 100.0,
-        targeting_rules: Optional[List[TargetingRule]] = None,
-        metadata: Optional[Dict[str, Any]] = None,
+        targeting_rules: list[TargetingRule] | None = None,
+        metadata: dict[str, Any] | None = None,
         description: str = "",
         **kwargs: Any,
     ) -> FlagDefinition:
@@ -77,7 +81,7 @@ class FeatureManager:
         if "denylist" in kwargs:
             targeting_rules = targeting_rules or []
             targeting_rules.append(TargetingRule("user_id", "not_in", kwargs["denylist"]))
-        
+
         flag = FlagDefinition(
             name=name,
             enabled=enabled,
@@ -94,7 +98,7 @@ class FeatureManager:
         """Remove a flag definition."""
         return self._storage.delete(name)
 
-    def get_flag(self, name: str) -> Optional[FlagDefinition]:
+    def get_flag(self, name: str) -> FlagDefinition | None:
         """Get the full flag definition."""
         data = self._storage.get(name)
         if data:
@@ -112,7 +116,7 @@ class FeatureManager:
             )
         return None
 
-    def list_flags(self) -> List[FlagDefinition]:
+    def list_flags(self) -> list[FlagDefinition]:
         """List all registered flags."""
         return [self.get_flag(name) for name in self._storage.list_all().keys()] # type: ignore
 
@@ -131,7 +135,7 @@ class FeatureManager:
         user_id = context_attrs.pop("user_id", None)
         session_id = context_attrs.pop("session_id", None)
         environment = context_attrs.pop("environment", "production")
-        
+
         context = EvaluationContext(
             user_id=user_id,
             session_id=session_id,
@@ -147,7 +151,7 @@ class FeatureManager:
         flag = self.get_flag(name)
         if flag is None:
             return default
-        
+
         # If enabled, return the value from metadata
         if self.is_enabled(name, **context_attrs):
             return flag.metadata.get("value", default)
@@ -170,8 +174,8 @@ class FeatureManager:
         path = Path(file_path)
         if not path.exists():
             return 0
-        
-        with open(path, "r") as f:
+
+        with open(path) as f:
             data = json.load(f)
             self._bootstrap_config(data)
             return len(data)
@@ -187,13 +191,13 @@ class FeatureManager:
                 "metadata": flag.metadata,
                 "targeting_rules": [r.__dict__ for r in flag.targeting_rules],
             }
-        
+
         with open(file_path, "w") as f:
             json.dump(flags_data, f, indent=2)
 
     # ── Summary ─────────────────────────────────────────────────────
 
-    def summary(self) -> Dict[str, Any]:
+    def summary(self) -> dict[str, Any]:
         """Return a summary of the managed flags."""
         all_flags = self.list_flags()
         return {

@@ -31,7 +31,7 @@ class TestDeploymentManager:
         """Deploying a service using the rolling strategy."""
         mgr = DeploymentManager()
         strat = RollingDeployment(batch_size=1, delay_seconds=0)
-        
+
         result = mgr.deploy("api", "v1.0", strat)
 
         assert result.success is True
@@ -43,7 +43,7 @@ class TestDeploymentManager:
     def test_deploy_rolling_failure(self):
         """Deploying a service that fails updating some targets."""
         mgr = DeploymentManager()
-        strat = RollingDeployment(batch_size=1, delay_seconds=0)
+        RollingDeployment(batch_size=1, delay_seconds=0)
 
         # Custom deploy function to simulate failure
         class BadStrategy(RollingDeployment):
@@ -100,7 +100,7 @@ class TestDeploymentManager:
     def test_summary_accuracy(self):
         """Summary metrics should accurately reflect history."""
         mgr = DeploymentManager()
-        
+
         # 1 Success
         mgr.deploy("svc1", "v1", RollingDeployment())
         # 1 Fail

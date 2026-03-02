@@ -15,8 +15,7 @@ Tests cover:
 import numpy as np
 import pytest
 
-from codomyrmex.semantic_router import SemanticRouter, Route, RouteMatch
-
+from codomyrmex.semantic_router import Route, RouteMatch, SemanticRouter
 
 # ---------------------------------------------------------------------------
 # SemanticRouter - Basic

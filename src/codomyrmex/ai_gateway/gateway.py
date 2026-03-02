@@ -1,9 +1,9 @@
 """AI Gateway with load balancing, health checks, and circuit breaking."""
 
-import time
 import random
+import time
+from collections.abc import Callable
 from dataclasses import dataclass
-from typing import Callable, Optional
 from enum import Enum
 
 
@@ -18,7 +18,7 @@ class Provider:
     """An LLM provider endpoint."""
     name: str
     endpoint: str
-    model_fn: Optional[Callable[[str], str]] = None
+    model_fn: Callable[[str], str] | None = None
     weight: float = 1.0
     max_retries: int = 3
     timeout_s: float = 30.0
@@ -42,7 +42,7 @@ class CircuitBreaker:
         self.recovery_timeout_s = recovery_timeout_s
         self.failure_count = 0
         self.state = CircuitState.CLOSED
-        self.last_failure_time: Optional[float] = None
+        self.last_failure_time: float | None = None
 
     def call(self, fn: Callable, *args, **kwargs):
         """Execute fn through circuit breaker."""

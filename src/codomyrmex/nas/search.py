@@ -7,8 +7,8 @@ is pluggable, making this a general NAS framework.
 """
 
 import random
+from collections.abc import Callable
 from dataclasses import dataclass, field
-from typing import Callable
 
 import numpy as np
 
@@ -96,7 +96,7 @@ class NASSearcher:
         best_config = None
         best_score = float("-inf")
 
-        for i in range(n_trials):
+        for _i in range(n_trials):
             config = self.search_space.sample()
             score = self.eval_fn(config)
             self.history.append((config, score))
@@ -121,12 +121,12 @@ class NASSearcher:
         # Initialize population
         population = [self.search_space.sample() for _ in range(population_size)]
         scores = [self.eval_fn(c) for c in population]
-        self.history.extend(zip(population, scores))
+        self.history.extend(zip(population, scores, strict=False))
 
-        for gen in range(n_generations):
+        for _gen in range(n_generations):
             # Select top half
             ranked = sorted(
-                zip(scores, population), key=lambda x: x[0], reverse=True
+                zip(scores, population, strict=False), key=lambda x: x[0], reverse=True
             )
             top_configs = [c for _, c in ranked[: population_size // 2]]
 
@@ -139,7 +139,7 @@ class NASSearcher:
 
             population = new_population
             scores = [self.eval_fn(c) for c in population]
-            self.history.extend(zip(population, scores))
+            self.history.extend(zip(population, scores, strict=False))
 
         best_idx = int(np.argmax(scores))
         return population[best_idx]

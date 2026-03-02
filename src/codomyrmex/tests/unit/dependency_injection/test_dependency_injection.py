@@ -5,9 +5,9 @@ Tests cover the Container, Scope, ScopeContext, ServiceDescriptor,
 decorators (@injectable, @inject), exceptions, and introspection functions.
 """
 
-import threading
 import sys
-from typing import List, Optional
+import threading
+from typing import Optional
 
 import pytest
 
@@ -727,7 +727,7 @@ class TestContainerAdvancedFeatures:
 
         container.register(IService, AnotherImpl)
 
-        services = container.resolve(List[IService])
+        services = container.resolve(list[IService])
         assert len(services) == 2
         assert any(isinstance(s, ConcreteService) for s in services)
         assert any(isinstance(s, AnotherImpl) for s in services)
@@ -735,12 +735,12 @@ class TestContainerAdvancedFeatures:
     def test_resolve_optional(self, container: Container):
         """Test functionality: resolve optional dependency via Optional[T]."""
         # Not registered
-        val = container.resolve(Optional[IService])
+        val = container.resolve(Optional[IService])  # noqa: UP045
         assert val is None
 
         # Registered
         container.register(IService, ConcreteService)
-        val = container.resolve(Optional[IService])
+        val = container.resolve(Optional[IService])  # noqa: UP045
         assert isinstance(val, ConcreteService)
 
     def test_scan_auto_registration(self, container: Container):
@@ -767,13 +767,13 @@ class TestContainerAdvancedFeatures:
         container.register(A, A, name="a_named")
         container.register(B, B, name="b_named")
 
-        # Since auto-resolver doesn't know about names yet, we just trigger 
+        # Since auto-resolver doesn't know about names yet, we just trigger
         # a circular dependency by resolving one that depends on the other.
-        # Here we manually simulate the chain if needed, or just let auto-resolve 
+        # Here we manually simulate the chain if needed, or just let auto-resolve
         # (which uses default None name) fail if they were registered without names.
-        
+
         # To actually use the names in auto-resolve, we'd need @inject(b='b_named')
         # For now, let's just verify circular detection works with the new key format.
-        
+
         with pytest.raises(CircularDependencyError, match="a_named"):
             container.resolve(A, name="a_named")

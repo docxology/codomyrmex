@@ -8,14 +8,15 @@ import sys
 
 import pytest
 
+from codomyrmex.cli.core import Cli
+from codomyrmex.cli.doctor import run_doctor
 from codomyrmex.cli.handlers.system import (
     check_environment,
     show_info,
     show_modules,
     show_system_status,
 )
-from codomyrmex.cli.doctor import run_doctor
-from codomyrmex.cli.core import Cli
+
 
 @pytest.mark.unit
 class TestCLIIntegrated:
@@ -100,7 +101,7 @@ class TestCLIIntegrated:
     def test_cli_class_dispatch_integrated(self):
         """Test the main Cli class dispatching to handlers."""
         cli = Cli()
-        
+
         # Test a few safe commands that don't perform heavy side effects
         captured = io.StringIO()
         sys.stdout = captured
@@ -118,7 +119,7 @@ class TestCLIIntegrated:
     def test_cli_test_handler_real_module(self):
         """Test the test handler with a real module."""
         cli = Cli()
-        
+
         captured = io.StringIO()
         sys.stdout = captured
         try:

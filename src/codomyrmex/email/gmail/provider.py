@@ -5,7 +5,7 @@ from __future__ import annotations
 import base64
 import logging
 import os
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 try:
     from codomyrmex.logging_monitoring.core.logger_config import get_logger
@@ -73,7 +73,7 @@ class GmailProvider(EmailProvider):
             raise EmailAuthError(f"Failed to initialize Gmail API service: {e}") from e
 
     @classmethod
-    def from_env(cls) -> "GmailProvider":
+    def from_env(cls) -> GmailProvider:
         """Create a GmailProvider from environment variables.
 
         Tries OAuth2 env vars first (GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET,
@@ -169,7 +169,7 @@ class GmailProvider(EmailProvider):
 
             date_str = headers.get('date', '')
             import email.utils
-            parsed_date = email.utils.parsedate_to_datetime(date_str) if date_str else datetime.now(timezone.utc)
+            parsed_date = email.utils.parsedate_to_datetime(date_str) if date_str else datetime.now(UTC)
 
             body_text = ""
             body_html = ""

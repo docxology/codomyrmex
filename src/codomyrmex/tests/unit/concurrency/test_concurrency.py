@@ -6,18 +6,20 @@ RedisLock tests use fakeredis for zero-mock, authentic behavior without a real R
 import asyncio
 import threading
 import time
-import pytest
+
 import fakeredis
+import pytest
 
 from codomyrmex.concurrency import (
+    AsyncLocalSemaphore,
+    AsyncWorkerPool,
     LocalLock,
     LocalSemaphore,
     LockManager,
     ReadWriteLock,
     RedisLock,
-    AsyncLocalSemaphore,
-    AsyncWorkerPool
 )
+
 
 def test_local_lock_lifecycle(tmp_path):
     """Test the basic lifecycle of a LocalLock."""
@@ -47,13 +49,13 @@ def test_local_lock_reentry(tmp_path):
     """Test that LocalLock supports re-entry (recursion)."""
     lock_dir = str(tmp_path / "locks")
     lock = LocalLock("reentry-lock", lock_dir=lock_dir)
-    
+
     assert lock.acquire(timeout=1) is True
     assert lock.acquire(timeout=1) is True  # Second acquisition
-    
+
     lock.release()
     assert lock.is_held is True  # Still held due to nesting
-    
+
     lock.release()
     assert lock.is_held is False
 
@@ -74,19 +76,19 @@ def test_redis_lock_fakeredis():
 
     lock1 = RedisLock("test-redis-lock", client, ttl=10)
     lock2 = RedisLock("test-redis-lock", client, ttl=10)
-    
+
     assert lock1.acquire(timeout=1) is True
     assert lock1.is_held is True
     assert lock2.acquire(timeout=0.1) is False
-    
+
     assert lock1.is_locked_externally() is True
-    
+
     assert lock1.extend(20) is True
-    
+
     lock1.release()
     assert lock1.is_held is False
     assert lock1.is_locked_externally() is False
-    
+
     assert lock2.acquire(timeout=1) is True
     assert lock2.is_held is True
     lock2.release()
@@ -105,10 +107,10 @@ def test_lock_manager(tmp_path):
     assert l1.is_held is True
     assert l2.is_held is True
 
-    # Attempting to acquire again should fail (since they are already held by this thread, 
+    # Attempting to acquire again should fail (since they are already held by this thread,
     # but acquire_all treats them as separate requests)
     # Actually, LocalLock is re-entrant, so acquire_all(["l1"]) would succeed.
-    
+
     manager.release_all(["l1", "l2"])
     assert l1.is_held is False
     assert l2.is_held is False
@@ -117,10 +119,10 @@ def test_rw_lock_priorities():
     """Test ReadWriteLock reader/writer priorities."""
     rw = ReadWriteLock()
     results = []
-    
+
     # Acquire a read lock
     rw.acquire_read()
-    
+
     def try_write():
         # This should block until read is released
         if rw.acquire_write(timeout=2.0):
@@ -135,17 +137,17 @@ def test_rw_lock_priorities():
 
     tw = threading.Thread(target=try_write)
     tr = threading.Thread(target=try_read)
-    
+
     tw.start()
     time.sleep(0.1) # Ensure writer starts waiting
     tr.start()
-    
+
     time.sleep(0.1)
     rw.release_read() # Release initial read
-    
+
     tw.join()
     tr.join()
-    
+
     # Writer should have priority over the second reader
     assert results == ["writer", "reader"]
 
@@ -185,7 +187,7 @@ async def test_async_worker_pool():
         assert len(results) == 5
         assert all(r.success for r in results)
         assert [r.result for r in results] == [2, 4, 6, 8, 10]
-        
+
         stats = pool.stats
         assert stats.completed == 5
         assert stats.submitted == 5
@@ -194,16 +196,16 @@ async def test_async_worker_pool():
 async def test_async_semaphore_bridge():
     """Test AsyncLocalSemaphore sync/async bridging."""
     sem = AsyncLocalSemaphore(value=1)
-    
+
     # Async acquire
     assert await sem.acquire_async() is True
-    
+
     # Sync acquire (should fail/timeout since already held)
     # Using a small timeout to avoid blocking too long
     assert sem.acquire(timeout=0.1) is False
-    
+
     sem.release()
-    
+
     # Sync acquire (should succeed)
     assert sem.acquire(timeout=1.0) is True
     sem.release()

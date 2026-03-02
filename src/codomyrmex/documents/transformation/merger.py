@@ -90,7 +90,7 @@ def _merge_json(documents: list[Document]) -> dict | list:
         for doc in documents:
             merged_list.extend(doc.content)
         return merged_list
-    
+
     merged_dict = {}
     for doc in documents:
         if isinstance(doc.content, dict):

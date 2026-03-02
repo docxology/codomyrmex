@@ -12,7 +12,6 @@ from __future__ import annotations
 
 import time
 from dataclasses import dataclass, field
-from typing import Dict, List, Set
 
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
@@ -42,14 +41,14 @@ class PermissionRegistry:
     """
 
     def __init__(self) -> None:
-        self._roles: Dict[str, Set[str]] = {}
-        self._role_hierarchy: Dict[str, Set[str]] = {}
-        self._user_roles: Dict[str, Set[str]] = {}
-        self._audit_log: List[PermissionCheck] = []
+        self._roles: dict[str, set[str]] = {}
+        self._role_hierarchy: dict[str, set[str]] = {}
+        self._user_roles: dict[str, set[str]] = {}
+        self._audit_log: list[PermissionCheck] = []
 
     # ── Role management ─────────────────────────────────────────────
 
-    def register_role(self, role: str, permissions: List[str] | None = None) -> None:
+    def register_role(self, role: str, permissions: list[str] | None = None) -> None:
         """Register a role with direct permissions."""
         if role not in self._roles:
             self._roles[role] = set()
@@ -80,7 +79,7 @@ class PermissionRegistry:
             user_roles.discard(role)
         return True
 
-    def list_roles(self) -> List[str]:
+    def list_roles(self) -> list[str]:
         """List all registered role names."""
         return sorted(self._roles.keys())
 
@@ -102,13 +101,13 @@ class PermissionRegistry:
                 return True
         return False
 
-    def get_user_roles(self, user_id: str) -> Set[str]:
+    def get_user_roles(self, user_id: str) -> set[str]:
         """Get all roles assigned to a user."""
         return self._user_roles.get(user_id, set()).copy()
 
     # ── Permission resolution ───────────────────────────────────────
 
-    def get_permissions(self, role: str, _visited: Set[str] | None = None) -> Set[str]:
+    def get_permissions(self, role: str, _visited: set[str] | None = None) -> set[str]:
         """Get all permissions for a role, including inherited (cycle-safe)."""
         if _visited is None:
             _visited = set()
@@ -121,9 +120,9 @@ class PermissionRegistry:
             permissions.update(self.get_permissions(parent, _visited))
         return permissions
 
-    def get_user_permissions(self, user_id: str) -> Set[str]:
+    def get_user_permissions(self, user_id: str) -> set[str]:
         """Get all effective permissions for a user across all assigned roles."""
-        perms: Set[str] = set()
+        perms: set[str] = set()
         for role in self._user_roles.get(user_id, set()):
             perms.update(self.get_permissions(role))
         return perms
@@ -166,7 +165,7 @@ class PermissionRegistry:
             True if any of the user's roles grant the permission.
         """
         roles = self._user_roles.get(user_id, set())
-        
+
         # Check all assigned roles
         for role in roles:
             if self.has_permission(role, permission):
@@ -184,7 +183,7 @@ class PermissionRegistry:
         return False
 
     @property
-    def audit_log(self) -> List[PermissionCheck]:
+    def audit_log(self) -> list[PermissionCheck]:
         return list(self._audit_log)
 
     @property

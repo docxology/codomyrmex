@@ -1,11 +1,13 @@
 """Unit tests for embodiment module."""
 
-import math
-import pytest
 import asyncio
+import math
+
+import pytest
+
 from codomyrmex.embodiment import ROS2Bridge, Transform3D
+from codomyrmex.embodiment.actuators import ActuatorCommand, MockActuator
 from codomyrmex.embodiment.sensors import MockSensor
-from codomyrmex.embodiment.actuators import MockActuator, ActuatorCommand
 
 
 @pytest.mark.asyncio
@@ -25,7 +27,7 @@ async def test_ros_bridge_pub_sub():
     # Simulate an incoming message
     test_msg = {"value": 42}
     bridge.simulate_message("/sensor/data", test_msg)
-    
+
     # Wait for async delivery if needed (though simulate_message is currently sync or async-tasked)
     await asyncio.sleep(0.01)
 
@@ -69,17 +71,17 @@ def test_sensors():
     """Test sensor interface and mock sensor."""
     sensor = MockSensor("temp_1", default_value=25.0)
     assert not sensor.is_connected
-    
+
     with pytest.raises(RuntimeError):
         sensor.read()
-        
+
     sensor.connect()
     assert sensor.is_connected
-    
+
     data = sensor.read()
     assert data.sensor_id == "temp_1"
     assert data.data["value"] == 25.0
-    
+
     sensor.disconnect()
     assert not sensor.is_connected
 
@@ -88,16 +90,16 @@ def test_actuators():
     """Test actuator interface and mock actuator."""
     actuator = MockActuator("motor_1")
     assert not actuator.is_connected
-    
+
     cmd = ActuatorCommand("motor_1", "move", {"target": 10.0})
     assert not actuator.execute(cmd)
-    
+
     actuator.connect()
     assert actuator.is_connected
-    
+
     assert actuator.execute(cmd)
     status = actuator.get_status()
     assert status.feedback["position"] == 10.0
-    
+
     actuator.disconnect()
     assert not actuator.is_connected

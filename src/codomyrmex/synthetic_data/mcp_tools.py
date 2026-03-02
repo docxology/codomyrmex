@@ -35,7 +35,7 @@ def synth_generate_structured(
         Dictionary with status, sample count, and generated records.
     """
     try:
-        from .generator import SyntheticDataGenerator, DataSchema
+        from .generator import DataSchema, SyntheticDataGenerator
 
         schema = DataSchema(fields=fields, n_samples=n_samples)
         gen = SyntheticDataGenerator()

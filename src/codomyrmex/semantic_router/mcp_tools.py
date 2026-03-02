@@ -20,7 +20,7 @@ def semantic_router_route(
     Returns:
         dict with: route_name, score, matched, all_routes
     """
-    from .router import SemanticRouter, Route
+    from .router import Route, SemanticRouter
 
     if routes is None:
         routes = [

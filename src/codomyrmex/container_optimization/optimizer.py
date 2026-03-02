@@ -1,9 +1,10 @@
 import re
 from dataclasses import dataclass, field
-from typing import Any, List, Dict, Optional
+from typing import Any
 
 import docker
 from loguru import logger
+
 
 @dataclass
 class OptimizationSuggestion:
@@ -12,10 +13,10 @@ class OptimizationSuggestion:
     description: str
     impact: str  # "high", "medium", "low"
     effort: str  # "easy", "medium", "hard"
-    dockerfile_changes: List[str] = field(default_factory=list)
-    size_reduction_mb: Optional[float] = None
+    dockerfile_changes: list[str] = field(default_factory=list)
+    size_reduction_mb: float | None = None
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Convert to dictionary."""
         return {
             "category": self.category,
@@ -33,15 +34,15 @@ class ImageAnalysis:
     size_bytes: int
     layers_count: int
     base_image: str
-    exposed_ports: List[str]
-    volumes: List[str]
-    environment_vars: List[str]
-    commands: List[str]
+    exposed_ports: list[str]
+    volumes: list[str]
+    environment_vars: list[str]
+    commands: list[str]
     user: str
-    potential_optimizations: List[str] = field(default_factory=list)
+    potential_optimizations: list[str] = field(default_factory=list)
     optimization_score: float = 0.0
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Convert to dictionary representation."""
         return {
             "image_name": self.image_name,
@@ -62,7 +63,7 @@ class ContainerOptimizer:
     Docker image optimizer with comprehensive analysis and optimization capabilities.
     """
 
-    def __init__(self, client: Optional[docker.DockerClient] = None):
+    def __init__(self, client: docker.DockerClient | None = None):
         """Initialize the image optimizer."""
         try:
             self.client = client or docker.from_env()
@@ -80,19 +81,19 @@ class ContainerOptimizer:
         try:
             image = self.client.images.get(image_name)
             attrs = image.attrs
-            
+
             size_bytes = attrs.get("Size", 0)
             layers = attrs.get("RootFS", {}).get("Layers", [])
             config = attrs.get("Config", {})
-            
+
             exposed_ports = list(config.get("ExposedPorts", {}).keys()) if config.get("ExposedPorts") else []
             volumes = list(config.get("Volumes", {}).keys()) if config.get("Volumes") else []
             env_vars = config.get("Env", [])
             commands = config.get("Cmd", []) or []
             user = config.get("User", "")
-            
+
             base_image = self._extract_base_image(image)
-            
+
             analysis = ImageAnalysis(
                 image_name=image_name,
                 size_bytes=size_bytes,
@@ -104,10 +105,10 @@ class ContainerOptimizer:
                 commands=commands,
                 user=user
             )
-            
+
             analysis.potential_optimizations = self._analyze_optimizations(analysis)
             analysis.optimization_score = self._calculate_score(analysis)
-            
+
             return analysis
         except docker.errors.ImageNotFound as exc:
             raise ValueError(f"Image '{image_name}' not found") from exc
@@ -115,7 +116,7 @@ class ContainerOptimizer:
             logger.error(f"Failed to analyze image {image_name}: {e}")
             raise
 
-    def suggest_optimizations(self, image_name: str) -> List[OptimizationSuggestion]:
+    def suggest_optimizations(self, image_name: str) -> list[OptimizationSuggestion]:
         """Generate specific optimization suggestions."""
         analysis = self.analyze_image(image_name)
         suggestions = []
@@ -150,11 +151,11 @@ class ContainerOptimizer:
 
         return suggestions
 
-    def get_optimization_report(self, image_name: str) -> Dict[str, Any]:
+    def get_optimization_report(self, image_name: str) -> dict[str, Any]:
         """Generate a complete optimization report."""
         analysis = self.analyze_image(image_name)
         suggestions = self.suggest_optimizations(image_name)
-        
+
         return {
             "analysis": analysis.to_dict(),
             "suggestions": [s.to_dict() for s in suggestions],
@@ -176,7 +177,7 @@ class ContainerOptimizer:
             logger.debug(f"Failed to extract base image from history: {e}")
         return "unknown"
 
-    def _analyze_optimizations(self, analysis: ImageAnalysis) -> List[str]:
+    def _analyze_optimizations(self, analysis: ImageAnalysis) -> list[str]:
         opts = []
         if analysis.size_bytes > 500 * 1024 * 1024:
             opts.append("Use multi-stage builds")
@@ -188,13 +189,17 @@ class ContainerOptimizer:
 
     def _calculate_score(self, analysis: ImageAnalysis) -> float:
         score = 100.0
-        if analysis.size_bytes > 1024 * 1024 * 1024: score -= 30
-        elif analysis.size_bytes > 500 * 1024 * 1024: score -= 15
-        
-        if analysis.layers_count > 30: score -= 20
-        elif analysis.layers_count > 15: score -= 10
-        
+        if analysis.size_bytes > 1024 * 1024 * 1024:
+            score -= 30
+        elif analysis.size_bytes > 500 * 1024 * 1024:
+            score -= 15
+
+        if analysis.layers_count > 30:
+            score -= 20
+        elif analysis.layers_count > 15:
+            score -= 10
+
         if not analysis.user or analysis.user == "root":
             score -= 10
-            
+
         return max(0.0, score)

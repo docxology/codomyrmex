@@ -9,15 +9,19 @@ from __future__ import annotations
 import asyncio
 from typing import Any
 
-from codomyrmex.collaboration.swarm.consensus import ConsensusEngine, ConsensusResult, Vote
+from codomyrmex.collaboration.swarm.consensus import (
+    ConsensusEngine,
+    ConsensusResult,
+    Vote,
+)
 from codomyrmex.collaboration.swarm.decomposer import TaskDecomposer
 from codomyrmex.collaboration.swarm.message_bus import MessageBus
 from codomyrmex.collaboration.swarm.pool import AgentPool
 from codomyrmex.collaboration.swarm.protocol import (
     AgentRole,
-    SwarmMessageType,
     SwarmAgent,
     SwarmMessage,
+    SwarmMessageType,
     TaskAssignment,
     TaskStatus,
 )
@@ -37,7 +41,7 @@ class SwarmManager:
 
         manager = SwarmManager()
         manager.register_agent(SwarmAgent("agent-1", AgentRole.CODER))
-        
+
         # Complex mission
         results = await manager.execute_mission("Add auth and tests")
     """
@@ -52,14 +56,14 @@ class SwarmManager:
     def register_agent(self, agent: SwarmAgent) -> None:
         """Register an agent with the swarm."""
         self.pool.register(agent)
-        
+
         # Subscribe manager to results from this agent
         self.bus.subscribe(
             "manager",
             f"results.agent.{agent.agent_id}",
             self._handle_result
         )
-        
+
         logger.info(f"Agent {agent.agent_id} registered and results subscription established.")
 
     def _handle_result(self, message: SwarmMessage) -> None:
@@ -72,8 +76,8 @@ class SwarmManager:
                 logger.debug(f"Received result for task {task_id}")
 
     async def execute_task(
-        self, 
-        description: str, 
+        self,
+        description: str,
         role: AgentRole = AgentRole.CODER,
         timeout: float = 30.0
     ) -> dict[str, Any]:
@@ -91,15 +95,15 @@ class SwarmManager:
             description=description,
             required_role=role,
         )
-        
+
         try:
             agent = self.pool.assign(assignment)
             logger.info(f"Assigned task {assignment.task_id} to {agent.agent_id}")
-            
+
             # Prepare for result
             future = asyncio.get_running_loop().create_future()
             self._pending_results[assignment.task_id] = future
-            
+
             # Publish assignment message
             await self.bus.publish(
                 f"tasks.role.{role.value}",
@@ -117,7 +121,7 @@ class SwarmManager:
                 assignment.status = TaskStatus.COMPLETED
                 assignment.result = result
                 return result
-            except asyncio.TimeoutError:
+            except TimeoutError:
                 logger.error(f"Task {assignment.task_id} timed out after {timeout}s")
                 self._pending_results.pop(assignment.task_id, None)
                 return {"status": "error", "message": "timeout"}
@@ -140,7 +144,7 @@ class SwarmManager:
         logger.info(f"Starting mission: {mission}")
         subtasks = self.decomposer.decompose(mission)
         order = self.decomposer.execution_order(subtasks)
-        
+
         results = []
         for st in order:
             res = await self.execute_task(st.description, st.role)
@@ -149,7 +153,7 @@ class SwarmManager:
                 "description": st.description,
                 "result": res
             })
-            
+
         return results
 
     async def request_consensus(self, proposal: str, votes: list[Vote], strategy: str = "majority") -> ConsensusResult:
@@ -165,7 +169,7 @@ class SwarmManager:
         """
         logger.info(f"Requesting consensus for: {proposal}")
         result = self.consensus_engine.resolve(votes, strategy=strategy)
-        
+
         # Publish result to the swarm
         await self.bus.publish(
             "broadcast.consensus",
@@ -175,7 +179,7 @@ class SwarmManager:
                 payload={"proposal": proposal, "result": result.to_dict()}
             )
         )
-        
+
         return result
 
     def get_status(self) -> dict[str, Any]:
