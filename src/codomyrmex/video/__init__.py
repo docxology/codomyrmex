@@ -19,7 +19,7 @@ Installation:
 
 Quick Start:
     ```python
-    from codomyrmex.video import VideoProcessor, FrameExtractor, VideoAnalyzer
+    from codomyrmex.video import VideoProcessor, FrameExtractor, VideoAnalyzer, VideoGenerator
 
     # Process video
     processor = VideoProcessor()
@@ -109,6 +109,13 @@ except ImportError:
     VideoAnalyzer = None  # type: ignore
     ANALYSIS_AVAILABLE = False
 
+# Import generation
+try:
+    from .generation import VideoGenerator
+    GENERATION_AVAILABLE = True
+except ImportError:
+    pass
+
 
 def cli_commands():
     """Return CLI commands for the video module."""
@@ -182,3 +189,6 @@ if EXTRACTION_AVAILABLE:
 
 if ANALYSIS_AVAILABLE:
     __all__.append("VideoAnalyzer")
+
+if GENERATION_AVAILABLE:
+    __all__.append("VideoGenerator")
