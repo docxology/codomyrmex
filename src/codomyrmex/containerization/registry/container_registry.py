@@ -1,12 +1,22 @@
+"""Module docstring."""
 import base64
 from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
 from typing import Any
 
-import docker
+try:
+    import docker
+except ImportError:
+    docker = None
 import requests
-from docker.errors import APIError, DockerException, ImageNotFound
+
+try:
+    from docker.errors import APIError, DockerException, ImageNotFound
+except ImportError:
+    APIError = Exception
+    DockerException = Exception
+    ImageNotFound = Exception
 
 from codomyrmex.exceptions import CodomyrmexError
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
@@ -36,6 +46,7 @@ except ImportError:
 @dataclass
 class ContainerImage:
     """Container image information."""
+
     name: str
     tag: str
     registry_url: str
@@ -49,6 +60,7 @@ class ContainerImage:
 @dataclass
 class RegistryCredentials:
     """Container registry credentials."""
+
     username: str
     password: str
     registry_url: str
@@ -78,6 +90,7 @@ class ContainerRegistry:
         Args:
             registry_url: URL of the container registry (e.g., docker.io, gcr.io)
             credentials: Registry authentication credentials
+
         """
         self.registry_url = registry_url.rstrip('/')
         self.credentials = credentials
@@ -131,6 +144,7 @@ class ContainerRegistry:
 
         Raises:
             CodomyrmexError: If push fails
+
         """
         full_name = self._get_full_image_name(image_name, image_tag)
         local_name = local_image or f"{image_name}:{image_tag}"
@@ -213,6 +227,7 @@ class ContainerRegistry:
 
         Raises:
             CodomyrmexError: If pull fails
+
         """
         full_name = self._get_full_image_name(image_name, image_tag)
 
@@ -281,6 +296,7 @@ class ContainerRegistry:
 
         Returns:
             Build and push result
+
         """
         full_name = self._get_full_image_name(image_name, image_tag)
 
@@ -344,6 +360,7 @@ class ContainerRegistry:
 
         Returns:
             List of image information
+
         """
         if not self.is_available():
             return []
@@ -391,6 +408,7 @@ class ContainerRegistry:
 
         Returns:
             List of image information from registry
+
         """
         if not REQUESTS_AVAILABLE or not self._session:
             logger.warning("Requests not available for registry API calls")
@@ -447,6 +465,7 @@ class ContainerRegistry:
 
         Returns:
             True if deleted successfully
+
         """
         full_name = self._get_full_image_name(image_name, image_tag)
 
@@ -502,6 +521,7 @@ class ContainerRegistry:
 
         Returns:
             Image information or None if not found
+
         """
         full_name = self._get_full_image_name(image_name, image_tag)
 
@@ -554,6 +574,7 @@ class ContainerRegistry:
 
         Returns:
             True if tagged successfully
+
         """
         if not self.is_available():
             logger.info(f"[SIMULATED] Tag image: {source_image} -> {target_name}:{target_tag}")
@@ -586,6 +607,7 @@ class ContainerRegistry:
 
         Returns:
             Manifest information
+
         """
         if not REQUESTS_AVAILABLE or not self._session:
             return None
@@ -623,6 +645,7 @@ def manage_container_registry(
 
     Returns:
         Operation result
+
     """
     creds = None
     if credentials:

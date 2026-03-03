@@ -1,3 +1,4 @@
+"""Module docstring."""
 import os
 from dataclasses import dataclass, field
 from datetime import datetime
@@ -5,8 +6,6 @@ from pathlib import Path
 from typing import Any
 
 import yaml
-from kubernetes import client, config
-from kubernetes.client.rest import ApiException
 
 from codomyrmex.exceptions import CodomyrmexError
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
@@ -17,6 +16,8 @@ logger = get_logger(__name__)
 
 # Try to import kubernetes client
 try:
+    from kubernetes import client, config
+    from kubernetes.client.rest import ApiException
     KUBERNETES_AVAILABLE = True
 except ImportError:
     client = None
@@ -30,6 +31,7 @@ except ImportError:
 @dataclass
 class KubernetesDeployment:
     """Kubernetes deployment configuration."""
+
     name: str
     image: str
     namespace: str = "default"
@@ -49,6 +51,7 @@ class KubernetesDeployment:
 @dataclass
 class KubernetesService:
     """Kubernetes service configuration."""
+
     name: str
     namespace: str = "default"
     type: str = "ClusterIP"  # ClusterIP, NodePort, LoadBalancer
@@ -71,6 +74,7 @@ class KubernetesOrchestrator:
         Args:
             kubeconfig_path: Path to Kubernetes configuration file
             in_cluster: Whether running inside a Kubernetes cluster
+
         """
         self.kubeconfig_path = kubeconfig_path
         self.in_cluster = in_cluster
@@ -127,6 +131,7 @@ class KubernetesOrchestrator:
 
         Raises:
             CodomyrmexError: If deployment creation fails
+
         """
         if not self.is_available():
             logger.info(f"[SIMULATED] Created deployment: {deployment.name}")
@@ -211,6 +216,7 @@ class KubernetesOrchestrator:
 
         Raises:
             CodomyrmexError: If service creation fails
+
         """
         if not self.is_available():
             logger.info(f"[SIMULATED] Created service: {service.name}")
@@ -275,6 +281,7 @@ class KubernetesOrchestrator:
 
         Returns:
             True if scaled successfully
+
         """
         if not self.is_available():
             logger.info(f"[SIMULATED] Scaled {deployment_name} to {replicas} replicas")
@@ -316,6 +323,7 @@ class KubernetesOrchestrator:
 
         Returns:
             Deployment status information
+
         """
         if not self.is_available():
             return {
@@ -370,6 +378,7 @@ class KubernetesOrchestrator:
 
         Returns:
             List of deployment information
+
         """
         if not self.is_available():
             return []
@@ -406,6 +415,7 @@ class KubernetesOrchestrator:
 
         Returns:
             True if deleted successfully
+
         """
         if not self.is_available():
             logger.info(f"[SIMULATED] Deleted deployment: {deployment_name}")
@@ -439,6 +449,7 @@ class KubernetesOrchestrator:
 
         Returns:
             True if deleted successfully
+
         """
         if not self.is_available():
             logger.info(f"[SIMULATED] Deleted service: {service_name}")
@@ -476,6 +487,7 @@ class KubernetesOrchestrator:
 
         Returns:
             Pod logs as string
+
         """
         if not self.is_available():
             return "[SIMULATED] No logs available"
@@ -506,6 +518,7 @@ class KubernetesOrchestrator:
 
         Returns:
             List of pod information
+
         """
         if not self.is_available():
             return []
@@ -546,6 +559,7 @@ class KubernetesOrchestrator:
 
         Returns:
             Result of the apply operation
+
         """
         if not self.is_available():
             return {"status": "simulated", "kind": manifest.get("kind", "Unknown")}
@@ -584,6 +598,7 @@ class KubernetesOrchestrator:
 
         Returns:
             List of apply results
+
         """
         results = []
         path = Path(yaml_path)
@@ -613,6 +628,7 @@ def orchestrate_kubernetes(
 
     Returns:
         Orchestration result
+
     """
     orchestrator = KubernetesOrchestrator(kubeconfig_path=kubeconfig_path)
 

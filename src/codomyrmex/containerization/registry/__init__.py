@@ -1,5 +1,4 @@
-"""
-Registry submodule for containerization.
+"""Registry submodule for containerization.
 
 Provides container registry management.
 """

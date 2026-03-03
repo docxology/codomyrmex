@@ -17,6 +17,7 @@ from typing import Any
 @dataclass
 class ContainerMetrics:
     """Container performance metrics."""
+
     container_id: str
     cpu_percent: float = 0.0
     memory_usage_mb: float = 0.0
@@ -66,8 +67,7 @@ class PerformanceOptimizer:
 
 
 class ContainerOptimizer:
-    """
-    Container performance optimizer.
+    """Container performance optimizer.
 
     Provides resource optimization for containers including:
     - CPU and memory allocation optimization
@@ -78,18 +78,17 @@ class ContainerOptimizer:
     """
 
     def __init__(self, config: dict[str, Any] | None = None):
-        """
-        Initialize the container optimizer.
+        """Initialize the container optimizer.
 
         Args:
             config: Optional configuration dictionary
+
         """
         self.config = config or {}
         self._metrics_history: list[ContainerMetrics] = []
 
     def collect_metrics(self, container_id: str) -> ContainerMetrics:
-        """
-        Collect current metrics for a container via `docker stats`.
+        """Collect current metrics for a container via `docker stats`.
 
         Args:
             container_id: Container ID or name
@@ -99,6 +98,7 @@ class ContainerOptimizer:
 
         Raises:
             NotImplementedError: If Docker CLI is not available
+
         """
         cli = shutil.which("docker")
         if not cli:
@@ -167,9 +167,9 @@ class ContainerOptimizer:
             ) from e
 
     def optimize_resources(self, container_id: str) -> dict[str, Any]:
-        """
-        Produce data-driven resource optimization recommendations by inspecting
-        the container via `docker inspect`.
+        """Produce data-driven resource optimization recommendations by inspecting.
+
+        The container is inspected via `docker inspect`.
 
         Args:
             container_id: Container ID or name
@@ -179,6 +179,7 @@ class ContainerOptimizer:
 
         Raises:
             NotImplementedError: If Docker CLI is not available
+
         """
         cli = shutil.which("docker")
         if not cli:
@@ -214,8 +215,7 @@ class ContainerOptimizer:
             ) from e
 
     def get_recommendations(self, container_id: str) -> list[str]:
-        """
-        Get performance recommendations for a container based on current metrics.
+        """Get performance recommendations for a container based on current metrics.
 
         Collects real metrics and inspect data to produce container-specific advice.
 
@@ -227,6 +227,7 @@ class ContainerOptimizer:
 
         Raises:
             NotImplementedError: If Docker CLI is not available
+
         """
         metrics = self.collect_metrics(container_id)
         config = self.optimize_resources(container_id)
@@ -263,8 +264,7 @@ def optimize_containers(
     container_ids: list[str],
     optimizer: ContainerOptimizer | None = None
 ) -> dict[str, dict[str, Any]]:
-    """
-    Optimize multiple containers.
+    """Optimize multiple containers.
 
     Args:
         container_ids: List of container IDs to optimize
@@ -272,6 +272,7 @@ def optimize_containers(
 
     Returns:
         Dictionary mapping container IDs to optimization results
+
     """
     if optimizer is None:
         optimizer = ContainerOptimizer()

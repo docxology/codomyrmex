@@ -22,6 +22,7 @@ class DockerStage:
         name: Stage name (e.g. ``builder``, ``runtime``).
         base_image: Base image for this stage.
         commands: Dockerfile commands for this stage.
+
     """
 
     name: str
@@ -44,6 +45,7 @@ class DockerfileSpec:
         python_version: Python version to use.
         stages: Dockerfile stages.
         labels: OCI labels.
+
     """
 
     project_name: str = ""
@@ -63,6 +65,7 @@ class DockerfileSpec:
 
     @property
     def stage_count(self) -> int:
+        """Get the number of stages in the build."""
         return len(self.stages)
 
 
@@ -84,6 +87,7 @@ class AutoBuilder:
 
         Returns:
             ``DockerfileSpec`` with multi-stage build.
+
         """
         path = Path(pyproject_path)
         if not path.exists():

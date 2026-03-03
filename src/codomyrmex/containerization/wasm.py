@@ -1,5 +1,4 @@
-"""
-WebAssembly Runtime Support
+"""WebAssembly Runtime Support.
 
 WASM runtime support for containerization.
 """
@@ -14,6 +13,7 @@ from typing import Any
 
 class WASMRuntime(Enum):
     """Supported WASM runtimes."""
+
     WASMTIME = "wasmtime"
     WASMER = "wasmer"
     WAZERO = "wazero"
@@ -23,6 +23,7 @@ class WASMRuntime(Enum):
 @dataclass
 class WASMModule:
     """A WebAssembly module."""
+
     name: str
     path: str
     runtime: WASMRuntime = WASMRuntime.WASMTIME
@@ -36,6 +37,7 @@ class WASMModule:
 @dataclass
 class WASMInstance:
     """A running WASM instance."""
+
     id: str
     module: WASMModule
     created_at: datetime = field(default_factory=datetime.now)
@@ -47,6 +49,7 @@ class WASMInstance:
 @dataclass
 class WASMExecution:
     """Result of a WASM function execution."""
+
     success: bool
     result: Any = None
     error: str | None = None
@@ -89,6 +92,7 @@ class WasmtimeClient(WASMRuntimeClient):
     """Wasmtime runtime client (mock implementation for structure)."""
 
     def __init__(self):
+        """Initialize the class."""
         self._instances: dict[str, WASMInstance] = {}
         self._counter = 0
         self._lock = threading.Lock()
@@ -151,6 +155,7 @@ class WASMOrchestrator:
     """Orchestrate WASM containers."""
 
     def __init__(self):
+        """Initialize the class."""
         self._runtimes: dict[WASMRuntime, WASMRuntimeClient] = {}
         self._modules: dict[str, WASMModule] = {}
 
@@ -200,6 +205,7 @@ class WASMComponentModel:
     """Support for WASM Component Model (interface types)."""
 
     def __init__(self):
+        """Initialize the class."""
         self._interfaces: dict[str, dict[str, Any]] = {}
 
     def define_interface(
