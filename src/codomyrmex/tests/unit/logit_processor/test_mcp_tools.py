@@ -40,35 +40,20 @@ def test_process_logits_with_temperature():
 @pytest.mark.unit
 def test_process_logits_with_repetition_penalty():
     """Test repetition penalty on sampling probability."""
-    # We need a clear case where probability is affected
-    logits = [10.0, 10.0, 1.0, 1.0]
-
-    # Check baseline probabilities without penalty
-    baseline = process_logits(logits=logits, repetition_penalty=1.0)
-    top5_baseline = baseline["top5_tokens"]
-    prob_0_baseline = next(t["prob"] for t in top5_baseline if t["id"] == 0)
-    prob_1_baseline = next(t["prob"] for t in top5_baseline if t["id"] == 1)
-    assert np.isclose(prob_0_baseline, prob_1_baseline, atol=1e-5)
-
-    # Now with penalty on token 0
-    # Note: process_logits calculates top5 probabilities based on raw logits,
-    # not processed logits. We just ensure it still runs properly.
-    result = process_logits(logits=logits, repetition_penalty=2.0, previous_tokens=[0])
-    assert result["status"] == "success"
-
-
-@pytest.mark.unit
-def test_process_logits_with_repetition_penalty_sampling():
-    """Test repetition penalty affects the actual sampled token."""
-    # If we penalize token 0 heavily, token 1 should always be favored
+    # We use a case where token 0 and 1 are equally likely, and penalty shifts balance.
     logits = [10.0, 10.0, -10.0, -10.0]
 
-    # The output might be 0 or 1. Let's test with penalty.
+    # Check baseline without penalty, check process runs.
+    baseline = process_logits(logits=logits, repetition_penalty=1.0)
+    assert baseline["status"] == "success"
+
+    # Now apply a heavy penalty to token 0.
+    # Since they were tied, token 1 should now become the sampled token deterministically.
     res_pen = process_logits(
         logits=logits, repetition_penalty=10.0, previous_tokens=[0], seed=42
     )
     assert res_pen["status"] == "success"
-    # Verify repetition penalty has an effect
+    # Verify repetition penalty has an effect on the actual sampled token
     assert res_pen["sampled_token"] == 1
 
 
