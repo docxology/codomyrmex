@@ -1,4 +1,4 @@
-# Events Streaming — Technical Specification
+# Streaming — Technical Specification
 
 **Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
 

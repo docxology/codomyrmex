@@ -91,7 +91,16 @@ class Subscription:
 def create_event(
     data: Any,
     event_type: EventType = EventType.MESSAGE,
-    **metadata,
+    **metadata: Any,
 ) -> Event:
-    """Create a new event."""
+    """Create a new event.
+
+    Args:
+        data: The event payload.
+        event_type: The type of the event.
+        **metadata: Additional metadata for the event.
+
+    Returns:
+        The created Event instance.
+    """
     return Event(type=event_type, data=data, metadata=metadata)
