@@ -17,8 +17,8 @@ except ImportError:
 
 import argparse
 import os
-import subprocess
 import platform
+import subprocess
 
 
 def get_system_info() -> dict:
@@ -30,20 +30,20 @@ def get_system_info() -> dict:
         "python_version": platform.python_version(),
         "hostname": platform.node(),
     }
-    
+
     # Get CPU info
     try:
         info["cpu"] = platform.processor() or "unknown"
     except:
         info["cpu"] = "unknown"
-    
+
     return info
 
 
 def discover_services() -> list:
     """Discover running services."""
     services = []
-    
+
     # Common ports to check
     common_services = {
         3000: "Node.js/React",
@@ -55,7 +55,7 @@ def discover_services() -> list:
         27017: "MongoDB",
         11434: "Ollama",
     }
-    
+
     import socket
     for port, name in common_services.items():
         try:
@@ -67,7 +67,7 @@ def discover_services() -> list:
                 services.append({"port": port, "name": name, "status": "running"})
         except:
             pass
-    
+
     return services
 
 
@@ -79,54 +79,54 @@ def discover_environment() -> dict:
         "node_version": None,
         "python_packages": 0,
     }
-    
+
     # Check Node
     try:
         result = subprocess.run(["node", "--version"], capture_output=True, text=True)
         env["node_version"] = result.stdout.strip()
     except:
         pass
-    
+
     # Count Python packages
     try:
-        result = subprocess.run([sys.executable, "-m", "pip", "list", "--format=json"], 
+        result = subprocess.run([sys.executable, "-m", "pip", "list", "--format=json"],
                               capture_output=True, text=True)
         import json
         env["python_packages"] = len(json.loads(result.stdout))
     except:
         pass
-    
+
     return env
 
 
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
+
+    import yaml
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "system_discovery" / "config.yaml"
-    config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
-            config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/system_discovery/config.yaml")
+        with open(config_path) as f:
+            yaml.safe_load(f) or {}
+            print("Loaded config from config/system_discovery/config.yaml")
 
     parser = argparse.ArgumentParser(description="System discovery")
     subparsers = parser.add_subparsers(dest="command")
-    
+
     # System command
     subparsers.add_parser("system", help="System info")
-    
+
     # Services command
     subparsers.add_parser("services", help="Discover services")
-    
+
     # Environment command
     subparsers.add_parser("env", help="Dev environment")
-    
+
     # All command
     subparsers.add_parser("all", help="Full discovery")
-    
+
     args = parser.parse_args()
-    
+
     if not args.command:
         print("🔍 System Discovery\n")
         print("Commands:")
@@ -135,7 +135,7 @@ def main():
         print("  env      - Development environment")
         print("  all      - Full discovery")
         return 0
-    
+
     if args.command in ["system", "all"]:
         info = get_system_info()
         print("💻 System Info:\n")
@@ -143,7 +143,7 @@ def main():
         print(f"   Hostname: {info['hostname']}")
         print(f"   Python: {info['python_version']}")
         print()
-    
+
     if args.command in ["services", "all"]:
         services = discover_services()
         print("🔌 Services:\n")
@@ -153,7 +153,7 @@ def main():
         else:
             print("   No common services detected")
         print()
-    
+
     if args.command in ["env", "all"]:
         env = discover_environment()
         print("🛠️  Development Environment:\n")
@@ -164,7 +164,7 @@ def main():
         if env["node_version"]:
             print(f"   Node.js: {env['node_version']}")
         print(f"   Python packages: {env['python_packages']}")
-    
+
     return 0
 
 

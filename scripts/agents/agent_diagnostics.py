@@ -16,16 +16,20 @@ except ImportError:
 
 from codomyrmex.agents import (
     ClaudeClient,
+    CodeEditor,
     CodexClient,
     GeminiClient,
     JulesClient,
     OpenCodeClient,
-    CodeEditor,
 )
 from codomyrmex.utils.cli_helpers import (
-    setup_logging, print_success, print_error, print_info, print_section, print_warning
+    print_error,
+    print_info,
+    print_section,
+    print_success,
+    print_warning,
+    setup_logging,
 )
-
 
 AGENT_CLASSES = [
     ("Claude (API)", ClaudeClient),
@@ -39,14 +43,14 @@ AGENT_CLASSES = [
 
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
+
+    import yaml
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "agents" / "config.yaml"
-    config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
-            config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/agents/config.yaml")
+        with open(config_path) as f:
+            yaml.safe_load(f) or {}
+            print("Loaded config from config/agents/config.yaml")
 
     setup_logging()
     print_section("Agent Diagnostics")
@@ -72,7 +76,7 @@ def main():
     print_section("Diagnostics Summary")
     connected_count = sum(1 for v in results.values() if v == "connected")
     print_info(f"Connected Agents: {connected_count}/{len(AGENT_CLASSES)}")
-    
+
     for name, status in results.items():
         icon = "✓" if status == "connected" else "✗"
         print_info(f"  {icon} {name}: {status}")

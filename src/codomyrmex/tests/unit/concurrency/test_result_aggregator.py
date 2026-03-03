@@ -12,7 +12,6 @@ import pytest
 from codomyrmex.concurrency.result_aggregator import AggregateResult, ResultAggregator
 from codomyrmex.concurrency.tasks.task_worker import TaskResult
 
-
 # ===========================================================================
 # AggregateResult dataclass
 # ===========================================================================
