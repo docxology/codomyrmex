@@ -48,7 +48,6 @@ if PATH_TO_ADD_FOR_MODULE_IMPORT not in sys.path:
 logger = None
 
 try:
-
     # Call setup_logging() which reads .env from the project root and configures handlers.
     # This should be called once, early in the application.
     # setup_logging() itself calls load_dotenv() which should find the .env file

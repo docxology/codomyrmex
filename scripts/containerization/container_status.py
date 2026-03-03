@@ -16,8 +16,8 @@ except ImportError:
     sys.path.insert(0, str(project_root / "src"))
 
 import argparse
-import subprocess
 import json as json_lib
+import subprocess
 
 
 def run_command(cmd: list) -> tuple:
@@ -34,15 +34,15 @@ def run_command(cmd: list) -> tuple:
 def check_docker() -> dict:
     """Check Docker status."""
     status = {"installed": False, "running": False, "version": None}
-    
+
     success, version = run_command(["docker", "--version"])
     if success:
         status["installed"] = True
         status["version"] = version.replace("Docker version ", "").split(",")[0]
-        
+
         success, _ = run_command(["docker", "info"])
         status["running"] = success
-    
+
     return status
 
 
@@ -51,81 +51,92 @@ def get_containers(all_containers: bool = False) -> list:
     cmd = ["docker", "ps", "--format", "{{.ID}}|{{.Image}}|{{.Status}}|{{.Names}}"]
     if all_containers:
         cmd.append("-a")
-    
+
     success, output = run_command(cmd)
     if not success or not output:
         return []
-    
+
     containers = []
     for line in output.split("\n"):
         parts = line.split("|")
         if len(parts) >= 4:
-            containers.append({
-                "id": parts[0][:12],
-                "image": parts[1],
-                "status": parts[2],
-                "name": parts[3],
-            })
-    
+            containers.append(
+                {
+                    "id": parts[0][:12],
+                    "image": parts[1],
+                    "status": parts[2],
+                    "name": parts[3],
+                }
+            )
+
     return containers
 
 
 def get_images() -> list:
     """Get list of Docker images."""
     cmd = ["docker", "images", "--format", "{{.Repository}}:{{.Tag}}|{{.Size}}|{{.ID}}"]
-    
+
     success, output = run_command(cmd)
     if not success or not output:
         return []
-    
+
     images = []
     for line in output.split("\n"):
         parts = line.split("|")
         if len(parts) >= 3:
-            images.append({
-                "name": parts[0],
-                "size": parts[1],
-                "id": parts[2][:12],
-            })
-    
+            images.append(
+                {
+                    "name": parts[0],
+                    "size": parts[1],
+                    "id": parts[2][:12],
+                }
+            )
+
     return images
 
 
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
-    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "containerization" / "config.yaml"
+
+    import yaml
+
+    config_path = (
+        Path(__file__).resolve().parent.parent.parent
+        / "config"
+        / "containerization"
+        / "config.yaml"
+    )
     config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
+        with open(config_path) as f:
             config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/containerization/config.yaml")
+            print("Loaded config from config/containerization/config.yaml")
 
     parser = argparse.ArgumentParser(description="Check container status")
     parser.add_argument("--all", "-a", action="store_true", help="Show all containers")
     parser.add_argument("--images", "-i", action="store_true", help="Show images")
     parser.add_argument("--json", "-j", action="store_true", help="Output as JSON")
     args = parser.parse_args()
-    
+
     print("🐳 Container Status\n")
-    
+
     docker_status = check_docker()
-    
+
     if not docker_status["installed"]:
         print("❌ Docker not installed")
         print("   Install from: https://docs.docker.com/get-docker/")
         return 1
-    
+
     if not docker_status["running"]:
         print(f"⚠️  Docker installed (v{docker_status['version']}) but not running")
         print("   Start Docker Desktop or run: sudo systemctl start docker")
         return 1
-    
+
     print(f"✅ Docker v{docker_status['version']}")
-    
+
     containers = get_containers(args.all)
-    
+
     if args.json:
         output = {
             "docker": docker_status,
@@ -135,7 +146,7 @@ def main():
             output["images"] = get_images()
         print(json_lib.dumps(output, indent=2))
         return 0
-    
+
     print(f"\n📦 Containers ({len(containers)}):")
     if containers:
         running = sum(1 for c in containers if "Up" in c["status"])
@@ -148,13 +159,13 @@ def main():
             print(f"      Status: {c['status']}")
     else:
         print("   No containers found")
-    
+
     if args.images:
         images = get_images()
         print(f"\n🖼️  Images ({len(images)}):")
         for img in images[:10]:
             print(f"   - {img['name']} ({img['size']})")
-    
+
     return 0
 
 

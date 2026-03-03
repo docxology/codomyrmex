@@ -1,18 +1,23 @@
 #!/usr/bin/env python3
-import pathlib
 import argparse
 import csv
+import pathlib
+
 
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
-    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "rna" / "config.yaml"
+
+    import yaml
+
+    config_path = (
+        Path(__file__).resolve().parent.parent.parent / "config" / "rna" / "config.yaml"
+    )
     config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
+        with open(config_path) as f:
             config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/rna/config.yaml")
+            print("Loaded config from config/rna/config.yaml")
 
     parser = argparse.ArgumentParser(description="Find missing Amalgkit samples")
     parser.add_argument("--metadata", required=True, help="Path to metadata.tsv")
@@ -23,7 +28,7 @@ def main():
     work_dir = pathlib.Path(args.work_dir)
     missing = []
 
-    with open(args.metadata, "r") as f:
+    with open(args.metadata) as f:
         reader = csv.DictReader(f, delimiter="\t")
         for row in reader:
             run_id = row["run"]
@@ -38,6 +43,7 @@ def main():
 
     print(f"Found {len(missing)} missing samples.")
     print(f"Written to {args.output}")
+
 
 if __name__ == "__main__":
     main()

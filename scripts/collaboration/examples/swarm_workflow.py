@@ -17,23 +17,36 @@ project_root = Path(__file__).parent.parent.parent.parent
 sys.path.insert(0, str(project_root / "src"))
 
 try:
-    from codomyrmex.utils.cli_helpers import print_success, print_error, print_info
+    from codomyrmex.utils.cli_helpers import print_error, print_info, print_success
 except ImportError:
-    def print_success(msg): print(f"SUCCESS: {msg}")
-    def print_error(msg): print(f"ERROR: {msg}")
-    def print_info(msg): print(f"INFO: {msg}")
+
+    def print_success(msg):
+        print(f"SUCCESS: {msg}")
+
+    def print_error(msg):
+        print(f"ERROR: {msg}")
+
+    def print_info(msg):
+        print(f"INFO: {msg}")
 
 
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
-    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "collaboration" / "config.yaml"
+
+    import yaml
+
+    config_path = (
+        Path(__file__).resolve().parent.parent.parent
+        / "config"
+        / "collaboration"
+        / "config.yaml"
+    )
     config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
+        with open(config_path) as f:
             config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/collaboration/config.yaml")
+            print("Loaded config from config/collaboration/config.yaml")
 
     """Demonstrate advanced swarm coordination workflow."""
     parser = argparse.ArgumentParser(description="Swarm coordination demo")
@@ -46,6 +59,7 @@ def main():
 
     try:
         from codomyrmex.collaboration import SwarmManager, TaskDecomposer
+
         print_success("Imported collaboration module")
 
         # Create swarm manager
@@ -64,8 +78,8 @@ def main():
                 "analyze_code_structure",
                 "check_style_compliance",
                 "identify_security_issues",
-                "suggest_optimizations"
-            ]
+                "suggest_optimizations",
+            ],
         }
 
         print_info(f"\n3. Task to decompose: {complex_task['name']}")
