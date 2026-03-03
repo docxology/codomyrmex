@@ -233,7 +233,9 @@ jobs:
       - name: Consolidate results
         run: |
           # Move all JSON results to output directory
+          mkdir -p artifacts
           find artifacts -name "*.json" -exec cp {} output/ \;
+          mkdir -p artifacts
           find artifacts -name "*.html" -exec cp {} output/ \;
 
       - name: Generate dashboard
@@ -289,6 +291,7 @@ jobs:
 
       - name: Consolidate results
         run: |
+          mkdir -p artifacts
           find artifacts -name "*.json" -exec cp {} output/ \;
 
       - name: Enforce quality gates
