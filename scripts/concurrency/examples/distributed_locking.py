@@ -18,11 +18,17 @@ project_root = Path(__file__).parent.parent.parent.parent
 sys.path.insert(0, str(project_root / "src"))
 
 try:
-    from codomyrmex.utils.cli_helpers import print_success, print_error, print_info
+    from codomyrmex.utils.cli_helpers import print_error, print_info, print_success
 except ImportError:
-    def print_success(msg): print(f"SUCCESS: {msg}")
-    def print_error(msg): print(f"ERROR: {msg}")
-    def print_info(msg): print(f"INFO: {msg}")
+
+    def print_success(msg):
+        print(f"SUCCESS: {msg}")
+
+    def print_error(msg):
+        print(f"ERROR: {msg}")
+
+    def print_info(msg):
+        print(f"INFO: {msg}")
 
 
 async def simulate_distributed_work(worker_id: int, lock, duration: float = 0.1):
@@ -35,14 +41,20 @@ async def simulate_distributed_work(worker_id: int, lock, duration: float = 0.1)
 
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
-    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "concurrency" / "config.yaml"
-    config_data = {}
+
+    import yaml
+
+    config_path = (
+        Path(__file__).resolve().parent.parent.parent
+        / "config"
+        / "concurrency"
+        / "config.yaml"
+    )
     if config_path.exists():
-        with open(config_path, "r") as f:
-            config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/concurrency/config.yaml")
+        with open(config_path) as f:
+            yaml.safe_load(f) or {}
+            print("Loaded config from config/concurrency/config.yaml")
 
     """Demonstrate distributed locking patterns."""
     parser = argparse.ArgumentParser(description="Distributed locking demo")
@@ -72,6 +84,7 @@ def main():
         print_info("\n2. Distributed lock pattern (cross-process)")
         if args.redis_url:
             from codomyrmex.concurrency import RedisLock
+
             print_info(f"   Using Redis at: {args.redis_url}")
             # Would create RedisLock here
         else:

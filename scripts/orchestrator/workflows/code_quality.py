@@ -17,16 +17,16 @@ import asyncio
 import subprocess
 import sys
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any
 
 project_root = Path(__file__).parent.parent.parent.parent
 sys.path.insert(0, str(project_root / "src"))
 
 from codomyrmex.orchestrator import Workflow
-from codomyrmex.utils.cli_helpers import setup_logging, print_info, print_error
+from codomyrmex.utils.cli_helpers import print_error, print_info, setup_logging
 
 
-def run_ruff_lint(_task_results: dict = None, fix: bool = False) -> Dict[str, Any]:
+def run_ruff_lint(_task_results: dict = None, fix: bool = False) -> dict[str, Any]:
     """Run ruff linting."""
     cmd = ["uv", "run", "ruff", "check", "src/"]
     if fix:
@@ -34,11 +34,7 @@ def run_ruff_lint(_task_results: dict = None, fix: bool = False) -> Dict[str, An
     cmd.extend(["--output-format=concise", "--statistics"])
 
     result = subprocess.run(
-        cmd,
-        capture_output=True,
-        text=True,
-        cwd=project_root,
-        timeout=120
+        cmd, capture_output=True, text=True, cwd=project_root, timeout=120
     )
 
     issues = result.stdout.count("\n") if result.stdout else 0
@@ -57,11 +53,11 @@ def run_ruff_lint(_task_results: dict = None, fix: bool = False) -> Dict[str, An
         "issues_found": issues,
         "fixed": fixed,
         "tool": "ruff",
-        "output": result.stdout[:2000] if result.stdout else ""
+        "output": result.stdout[:2000] if result.stdout else "",
     }
 
 
-def run_mypy_check(_task_results: dict = None, strict: bool = False) -> Dict[str, Any]:
+def run_mypy_check(_task_results: dict = None, strict: bool = False) -> dict[str, Any]:
     """Run mypy type checking."""
     cmd = ["uv", "run", "mypy", "src/codomyrmex", "--ignore-missing-imports"]
     if strict:
@@ -69,11 +65,7 @@ def run_mypy_check(_task_results: dict = None, strict: bool = False) -> Dict[str
     cmd.append("--no-error-summary")
 
     result = subprocess.run(
-        cmd,
-        capture_output=True,
-        text=True,
-        cwd=project_root,
-        timeout=180
+        cmd, capture_output=True, text=True, cwd=project_root, timeout=180
     )
 
     errors = result.stdout.count("error:") if result.stdout else 0
@@ -84,11 +76,11 @@ def run_mypy_check(_task_results: dict = None, strict: bool = False) -> Dict[str
         "errors": errors,
         "warnings": warnings,
         "tool": "mypy",
-        "output": result.stdout[:2000] if result.stdout else ""
+        "output": result.stdout[:2000] if result.stdout else "",
     }
 
 
-def check_code_complexity(_task_results: dict = None) -> Dict[str, Any]:
+def check_code_complexity(_task_results: dict = None) -> dict[str, Any]:
     """Check code complexity using radon."""
     # Try radon for complexity analysis
     result = subprocess.run(
@@ -96,7 +88,7 @@ def check_code_complexity(_task_results: dict = None) -> Dict[str, Any]:
         capture_output=True,
         text=True,
         cwd=project_root,
-        timeout=120
+        timeout=120,
     )
 
     # Parse complexity grades
@@ -106,7 +98,7 @@ def check_code_complexity(_task_results: dict = None) -> Dict[str, Any]:
         "C": 0,  # Medium (11-20)
         "D": 0,  # Medium-high (21-30)
         "E": 0,  # High (31-40)
-        "F": 0   # Very high (41+)
+        "F": 0,  # Very high (41+)
     }
 
     if result.stdout:
@@ -126,20 +118,22 @@ def check_code_complexity(_task_results: dict = None) -> Dict[str, Any]:
         "success": True,
         "complexity_distribution": complexity,
         "average_complexity": avg_complexity,
-        "high_complexity_count": complexity.get("D", 0) + complexity.get("E", 0) + complexity.get("F", 0),
+        "high_complexity_count": complexity.get("D", 0)
+        + complexity.get("E", 0)
+        + complexity.get("F", 0),
         "tool": "radon",
-        "available": result.returncode == 0
+        "available": result.returncode == 0,
     }
 
 
-def run_security_scan(_task_results: dict = None) -> Dict[str, Any]:
+def run_security_scan(_task_results: dict = None) -> dict[str, Any]:
     """Run security analysis using bandit."""
     result = subprocess.run(
         ["uv", "run", "bandit", "-r", "src/codomyrmex", "-f", "json", "-q"],
         capture_output=True,
         text=True,
         cwd=project_root,
-        timeout=180
+        timeout=180,
     )
 
     issues = {"high": 0, "medium": 0, "low": 0}
@@ -148,16 +142,19 @@ def run_security_scan(_task_results: dict = None) -> Dict[str, Any]:
     if result.stdout:
         try:
             import json
+
             data = json.loads(result.stdout)
             for issue in data.get("results", []):
                 severity = issue.get("issue_severity", "LOW").lower()
                 issues[severity] = issues.get(severity, 0) + 1
-                results_list.append({
-                    "file": issue.get("filename", ""),
-                    "line": issue.get("line_number", 0),
-                    "severity": severity,
-                    "issue": issue.get("issue_text", "")[:100]
-                })
+                results_list.append(
+                    {
+                        "file": issue.get("filename", ""),
+                        "line": issue.get("line_number", 0),
+                        "severity": severity,
+                        "issue": issue.get("issue_text", "")[:100],
+                    }
+                )
         except Exception:
             pass
 
@@ -169,18 +166,18 @@ def run_security_scan(_task_results: dict = None) -> Dict[str, Any]:
         "total_issues": sum(issues.values()),
         "top_issues": results_list[:5],
         "tool": "bandit",
-        "available": "error" not in result.stderr.lower() if result.stderr else True
+        "available": "error" not in result.stderr.lower() if result.stderr else True,
     }
 
 
-def run_docstring_coverage(_task_results: dict = None) -> Dict[str, Any]:
+def run_docstring_coverage(_task_results: dict = None) -> dict[str, Any]:
     """Check docstring coverage using interrogate."""
     result = subprocess.run(
         ["uv", "run", "interrogate", "src/codomyrmex", "-v", "--fail-under=0"],
         capture_output=True,
         text=True,
         cwd=project_root,
-        timeout=120
+        timeout=120,
     )
 
     coverage = None
@@ -201,14 +198,14 @@ def run_docstring_coverage(_task_results: dict = None) -> Dict[str, Any]:
         "success": True,
         "coverage_percent": coverage,
         "tool": "interrogate",
-        "available": result.returncode in (0, 1, 2)
+        "available": result.returncode in (0, 1, 2),
     }
 
 
-def generate_quality_report(_task_results: dict = None) -> Dict[str, Any]:
+def generate_quality_report(_task_results: dict = None) -> dict[str, Any]:
     """Generate comprehensive quality report."""
     import datetime
-    
+
     _task_results = _task_results or {}
 
     report = {
@@ -216,7 +213,7 @@ def generate_quality_report(_task_results: dict = None) -> Dict[str, Any]:
         "project": "codomyrmex",
         "checks": {},
         "overall_score": 100,
-        "recommendations": []
+        "recommendations": [],
     }
 
     # Process each check result
@@ -230,7 +227,7 @@ def generate_quality_report(_task_results: dict = None) -> Dict[str, Any]:
     report["checks"]["lint"] = {
         "tool": "ruff",
         "issues": lint_result.get("issues_found", 0),
-        "passed": lint_result.get("success", False)
+        "passed": lint_result.get("success", False),
     }
 
     # Type check
@@ -238,14 +235,14 @@ def generate_quality_report(_task_results: dict = None) -> Dict[str, Any]:
         "tool": "mypy",
         "errors": type_result.get("errors", 0),
         "warnings": type_result.get("warnings", 0),
-        "passed": type_result.get("success", False)
+        "passed": type_result.get("success", False),
     }
 
     # Complexity
     report["checks"]["complexity"] = {
         "tool": "radon",
         "average": complexity_result.get("average_complexity"),
-        "high_complexity_functions": complexity_result.get("high_complexity_count", 0)
+        "high_complexity_functions": complexity_result.get("high_complexity_count", 0),
     }
 
     # Security
@@ -253,13 +250,13 @@ def generate_quality_report(_task_results: dict = None) -> Dict[str, Any]:
         "tool": "bandit",
         "high_severity": security_result.get("high_severity", 0),
         "medium_severity": security_result.get("medium_severity", 0),
-        "low_severity": security_result.get("low_severity", 0)
+        "low_severity": security_result.get("low_severity", 0),
     }
 
     # Docstrings
     report["checks"]["docstrings"] = {
         "tool": "interrogate",
-        "coverage": docstring_result.get("coverage_percent")
+        "coverage": docstring_result.get("coverage_percent"),
     }
 
     # Calculate overall score (out of 100)
@@ -291,19 +288,29 @@ def generate_quality_report(_task_results: dict = None) -> Dict[str, Any]:
 
     # Generate recommendations
     if lint_issues > 20:
-        report["recommendations"].append("Run 'ruff check --fix' to auto-fix linting issues")
+        report["recommendations"].append(
+            "Run 'ruff check --fix' to auto-fix linting issues"
+        )
 
     if type_errors > 10:
-        report["recommendations"].append("Address type annotation issues for better code safety")
+        report["recommendations"].append(
+            "Address type annotation issues for better code safety"
+        )
 
     if high_security > 0:
-        report["recommendations"].append("URGENT: Review and fix high-severity security issues")
+        report["recommendations"].append(
+            "URGENT: Review and fix high-severity security issues"
+        )
 
     if high_complexity > 5:
-        report["recommendations"].append("Refactor complex functions to improve maintainability")
+        report["recommendations"].append(
+            "Refactor complex functions to improve maintainability"
+        )
 
     if doc_coverage is not None and doc_coverage < 60:
-        report["recommendations"].append("Improve docstring coverage for better documentation")
+        report["recommendations"].append(
+            "Improve docstring coverage for better documentation"
+        )
 
     # Determine grade
     if report["overall_score"] >= 90:
@@ -317,18 +324,19 @@ def generate_quality_report(_task_results: dict = None) -> Dict[str, Any]:
     else:
         report["grade"] = "F"
 
-    return {
-        "success": True,
-        "report": report
-    }
+    return {"success": True, "report": report}
 
 
 async def main() -> int:
     """Run code quality workflow."""
     setup_logging()
     parser = argparse.ArgumentParser(description="Run code quality checks")
-    parser.add_argument("--fix", action="store_true", help="Auto-fix issues where possible")
-    parser.add_argument("--strict", action="store_true", help="Use strict mode for type checking")
+    parser.add_argument(
+        "--fix", action="store_true", help="Auto-fix issues where possible"
+    )
+    parser.add_argument(
+        "--strict", action="store_true", help="Use strict mode for type checking"
+    )
     parser.add_argument("--verbose", "-v", action="store_true", help="Verbose output")
     args = parser.parse_args()
 
@@ -338,42 +346,28 @@ async def main() -> int:
     workflow = Workflow(
         name="code_quality",
         timeout=900,  # 15 minutes total
-        fail_fast=False
+        fail_fast=False,
     )
 
     # Add all quality checks (can run in parallel)
     workflow.add_task(
-        name="lint",
-        action=lambda _tr=None: run_ruff_lint(fix=args.fix),
-        timeout=120
+        name="lint", action=lambda _tr=None: run_ruff_lint(fix=args.fix), timeout=120
     )
     workflow.add_task(
         name="typecheck",
         action=lambda _tr=None: run_mypy_check(strict=args.strict),
-        timeout=180
+        timeout=180,
     )
-    workflow.add_task(
-        name="complexity",
-        action=check_code_complexity,
-        timeout=120
-    )
-    workflow.add_task(
-        name="security",
-        action=run_security_scan,
-        timeout=180
-    )
-    workflow.add_task(
-        name="docstrings",
-        action=run_docstring_coverage,
-        timeout=120
-    )
+    workflow.add_task(name="complexity", action=check_code_complexity, timeout=120)
+    workflow.add_task(name="security", action=run_security_scan, timeout=180)
+    workflow.add_task(name="docstrings", action=run_docstring_coverage, timeout=120)
 
     # Generate report after all checks
     workflow.add_task(
         name="report",
         action=generate_quality_report,
         dependencies=["lint", "typecheck", "complexity", "security", "docstrings"],
-        timeout=30
+        timeout=30,
     )
 
     try:
@@ -396,7 +390,10 @@ async def main() -> int:
             if name == "lint":
                 issues = result.get("issues_found", "?")
                 fixed = result.get("fixed", 0)
-                print(f"  {icon} Linting:     {issues} issues" + (f" ({fixed} fixed)" if fixed else ""))
+                print(
+                    f"  {icon} Linting:     {issues} issues"
+                    + (f" ({fixed} fixed)" if fixed else "")
+                )
             elif name == "typecheck":
                 errors = result.get("errors", "?")
                 warnings = result.get("warnings", 0)
@@ -404,12 +401,16 @@ async def main() -> int:
             elif name == "complexity":
                 avg = result.get("average_complexity", "?")
                 high = result.get("high_complexity_count", 0)
-                print(f"  {icon} Complexity:  avg {avg}, {high} high-complexity functions")
+                print(
+                    f"  {icon} Complexity:  avg {avg}, {high} high-complexity functions"
+                )
             elif name == "security":
                 high = result.get("high_severity", 0)
                 med = result.get("medium_severity", 0)
                 low = result.get("low_severity", 0)
-                print(f"  {icon} Security:    {high} high, {med} medium, {low} low severity")
+                print(
+                    f"  {icon} Security:    {high} high, {med} medium, {low} low severity"
+                )
             elif name == "docstrings":
                 coverage = result.get("coverage_percent", "?")
                 print(f"  {icon} Docstrings:  {coverage}% coverage")
@@ -438,17 +439,22 @@ async def main() -> int:
         print_error(f"Code quality check failed: {e}")
         return 1
 
-
-
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
-    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "orchestrator" / "config.yaml"
-    config_data = {}
+
+    import yaml
+
+    config_path = (
+        Path(__file__).resolve().parent.parent.parent
+        / "config"
+        / "orchestrator"
+        / "config.yaml"
+    )
     if config_path.exists():
-        with open(config_path, "r") as f:
-            config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/orchestrator/config.yaml")
+        with open(config_path) as f:
+            yaml.safe_load(f) or {}
+            print("Loaded config from config/orchestrator/config.yaml")
+
 
 if __name__ == "__main__":
     sys.exit(asyncio.run(main()))

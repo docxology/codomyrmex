@@ -19,9 +19,11 @@ import argparse
 import re
 from datetime import datetime
 
-
 LOG_LEVELS = ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
-LOG_PATTERN = re.compile(r'(\d{4}-\d{2}-\d{2}[T\s]\d{2}:\d{2}:\d{2})?.*?(DEBUG|INFO|WARNING|ERROR|CRITICAL)', re.IGNORECASE)
+LOG_PATTERN = re.compile(
+    r"(\d{4}-\d{2}-\d{2}[T\s]\d{2}:\d{2}:\d{2})?.*?(DEBUG|INFO|WARNING|ERROR|CRITICAL)",
+    re.IGNORECASE,
+)
 
 
 def parse_log_line(line: str) -> dict:
@@ -41,7 +43,7 @@ def find_log_files(path: str) -> list:
     p = Path(path)
     if p.is_file():
         return [p]
-    
+
     patterns = ["*.log", "*.txt", "logs/*.log"]
     found = []
     for pattern in patterns:
@@ -51,9 +53,9 @@ def find_log_files(path: str) -> list:
 
 def analyze_logs(lines: list) -> dict:
     """Analyze log content."""
-    stats = {level: 0 for level in LOG_LEVELS}
+    stats = dict.fromkeys(LOG_LEVELS, 0)
     errors = []
-    
+
     for line in lines:
         parsed = parse_log_line(line)
         level = parsed.get("level")
@@ -61,46 +63,58 @@ def analyze_logs(lines: list) -> dict:
             stats[level] += 1
         if level in ["ERROR", "CRITICAL"]:
             errors.append(parsed["message"][:100])
-    
+
     return {"stats": stats, "errors": errors[:10]}
 
 
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
-    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "logging_monitoring" / "config.yaml"
-    config_data = {}
+
+    import yaml
+
+    config_path = (
+        Path(__file__).resolve().parent.parent.parent
+        / "config"
+        / "logging_monitoring"
+        / "config.yaml"
+    )
     if config_path.exists():
-        with open(config_path, "r") as f:
-            config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/logging_monitoring/config.yaml")
+        with open(config_path) as f:
+            yaml.safe_load(f) or {}
+            print("Loaded config from config/logging_monitoring/config.yaml")
 
     parser = argparse.ArgumentParser(description="Log viewer and analysis")
     parser.add_argument("path", nargs="?", default=".", help="Log file or directory")
-    parser.add_argument("--level", "-l", choices=LOG_LEVELS, default=None, help="Filter by level")
-    parser.add_argument("--tail", "-t", type=int, default=None, help="Show last N lines")
-    parser.add_argument("--analyze", "-a", action="store_true", help="Analyze log statistics")
+    parser.add_argument(
+        "--level", "-l", choices=LOG_LEVELS, default=None, help="Filter by level"
+    )
+    parser.add_argument(
+        "--tail", "-t", type=int, default=None, help="Show last N lines"
+    )
+    parser.add_argument(
+        "--analyze", "-a", action="store_true", help="Analyze log statistics"
+    )
     parser.add_argument("--errors", "-e", action="store_true", help="Show only errors")
     args = parser.parse_args()
-    
+
     files = find_log_files(args.path)
-    
+
     if not files:
         print("📋 No log files found")
         print("   Searched for: *.log, logs/*.log")
         return 0
-    
+
     print(f"📋 Log Files ({len(files)}):\n")
-    
+
     for log_file in files[:5]:
         size = log_file.stat().st_size / 1024
         mtime = datetime.fromtimestamp(log_file.stat().st_mtime)
         print(f"📄 {log_file.name} ({size:.1f} KB, {mtime.strftime('%Y-%m-%d %H:%M')})")
-        
+
         with open(log_file) as f:
             lines = f.readlines()
-        
+
         if args.analyze:
             analysis = analyze_logs(lines)
             print("   Level distribution:")
@@ -110,23 +124,25 @@ def main():
             if analysis["errors"]:
                 print(f"   Recent errors: {len(analysis['errors'])}")
             continue
-        
+
         # Filter lines
         filtered = lines
         if args.level:
             filtered = [l for l in lines if args.level.upper() in l.upper()]
         if args.errors:
-            filtered = [l for l in lines if any(e in l.upper() for e in ["ERROR", "CRITICAL"])]
+            filtered = [
+                l for l in lines if any(e in l.upper() for e in ["ERROR", "CRITICAL"])
+            ]
         if args.tail:
-            filtered = filtered[-args.tail:]
-        
+            filtered = filtered[-args.tail :]
+
         print(f"   Lines: {len(filtered)}/{len(lines)}")
         for line in filtered[:10]:
             print(f"   {line.strip()[:80]}")
         if len(filtered) > 10:
             print(f"   ... ({len(filtered) - 10} more)")
         print()
-    
+
     return 0
 
 

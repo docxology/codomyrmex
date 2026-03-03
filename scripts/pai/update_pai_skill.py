@@ -5,11 +5,17 @@ Regenerates the tool table in ~/.claude/skills/Codomyrmex/SKILL.md
 to reflect all currently available static and dynamic MCP tools.
 """
 
-import sys
 import re
+import sys
 from pathlib import Path
+
 from codomyrmex.agents.pai.mcp_bridge import get_tool_registry
-from codomyrmex.utils.cli_helpers import setup_logging, print_info, print_success, print_error
+from codomyrmex.utils.cli_helpers import (
+    print_error,
+    print_info,
+    print_success,
+    setup_logging,
+)
 
 SKILL_PATH = Path("~/.claude/skills/Codomyrmex/SKILL.md").expanduser().resolve()
 
@@ -40,13 +46,13 @@ def update_skill_md() -> int:
 
     table_lines = [
         "| Tool | Category | Description |",
-        "|------|----------|-------------|"
+        "|------|----------|-------------|",
     ]
 
     for name in tools:
         tool_data = registry.get(name)
         schema = tool_data.get("schema", {})
-        desc = schema.get("description", "").split('\n')[0].strip()
+        desc = schema.get("description", "").split("\n")[0].strip()
 
         # Infer category
         category = "General"
@@ -113,16 +119,16 @@ def update_skill_md() -> int:
 
     # Find end of table (empty line after start)
     # Scan line by line from start
-    lines = content[start_idx:].split('\n')
+    lines = content[start_idx:].split("\n")
     table_end_offset = 0
     for line in lines:
-        if not line.strip().startswith('|'):
+        if not line.strip().startswith("|"):
             break
-        table_end_offset += len(line) + 1 # +1 for newline
+        table_end_offset += len(line) + 1  # +1 for newline
 
     # Reconstruct content
     pre_table = content[:start_idx]
-    post_table = content[start_idx + table_end_offset:]
+    post_table = content[start_idx + table_end_offset :]
 
     new_content = pre_table + new_table + "\n" + post_table
 
@@ -135,17 +141,19 @@ def main() -> int:
     setup_logging()
     return update_skill_md()
 
-
-
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
-    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "pai" / "config.yaml"
-    config_data = {}
+
+    import yaml
+
+    config_path = (
+        Path(__file__).resolve().parent.parent.parent / "config" / "pai" / "config.yaml"
+    )
     if config_path.exists():
-        with open(config_path, "r") as f:
-            config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/pai/config.yaml")
+        with open(config_path) as f:
+            yaml.safe_load(f) or {}
+            print("Loaded config from config/pai/config.yaml")
+
 
 if __name__ == "__main__":
     sys.exit(main())

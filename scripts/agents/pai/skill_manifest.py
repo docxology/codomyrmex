@@ -25,15 +25,18 @@ except ImportError:
     sys.path.insert(0, str(project_root / "src"))
 
 from codomyrmex.agents.pai import (
-    get_skill_manifest,
-    PAIBridge,
     ALGORITHM_PHASES,
-    TOOL_COUNT,
-    RESOURCE_COUNT,
     PROMPT_COUNT,
+    RESOURCE_COUNT,
+    TOOL_COUNT,
+    PAIBridge,
+    get_skill_manifest,
 )
 from codomyrmex.utils.cli_helpers import (
-    setup_logging, print_info, print_success, print_warning,
+    print_info,
+    print_success,
+    print_warning,
+    setup_logging,
 )
 
 SECTIONS = ["overview", "tools", "mapping", "scope", "workflows"]
@@ -43,8 +46,12 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description="PAI Skill Manifest Inspector — generate and inspect the manifest",
     )
-    parser.add_argument("--section", "-s", choices=SECTIONS, help="Show specific section")
-    parser.add_argument("--json", "-j", action="store_true", dest="json_output", help="JSON output")
+    parser.add_argument(
+        "--section", "-s", choices=SECTIONS, help="Show specific section"
+    )
+    parser.add_argument(
+        "--json", "-j", action="store_true", dest="json_output", help="JSON output"
+    )
     return parser.parse_args()
 
 
@@ -72,7 +79,7 @@ def section_overview(manifest: dict) -> dict:
     resources = manifest.get("resources", [])
     prompts = manifest.get("prompts", [])
 
-    print(f"\n  Manifest contents:")
+    print("\n  Manifest contents:")
     print(f"    Tools     : {len(tools)} (constant: {TOOL_COUNT})")
     print(f"    Resources : {len(resources)} (constant: {RESOURCE_COUNT})")
     print(f"    Prompts   : {len(prompts)} (constant: {PROMPT_COUNT})")
@@ -98,7 +105,11 @@ def section_tools(manifest: dict) -> dict:
     categories: dict[str, list] = {}
     for tool in tools:
         name = tool.get("name", str(tool)) if isinstance(tool, dict) else str(tool)
-        cat = tool.get("category", "uncategorized") if isinstance(tool, dict) else "uncategorized"
+        cat = (
+            tool.get("category", "uncategorized")
+            if isinstance(tool, dict)
+            else "uncategorized"
+        )
         categories.setdefault(cat, []).append(name)
 
     for cat, cat_tools in sorted(categories.items()):
@@ -106,7 +117,10 @@ def section_tools(manifest: dict) -> dict:
         for t in cat_tools:
             print(f"    • {t}")
 
-    return {"categories": {k: len(v) for k, v in categories.items()}, "total": len(tools)}
+    return {
+        "categories": {k: len(v) for k, v in categories.items()},
+        "total": len(tools),
+    }
 
 
 def section_mapping(manifest: dict) -> dict:
@@ -139,7 +153,9 @@ def section_scope(manifest: dict) -> dict:
         # Show skills as proxy
         bridge = PAIBridge()
         skills = bridge.list_skills()
-        print_info(f"  No knowledge_scope in manifest. Showing {len(skills)} skill packs:")
+        print_info(
+            f"  No knowledge_scope in manifest. Showing {len(skills)} skill packs:"
+        )
         for sk in skills:
             tools_icon = "🔧" if sk.has_tools else "  "
             print(f"    {tools_icon} {sk.name:30s}  {sk.file_count} files")
@@ -156,7 +172,11 @@ def section_scope(manifest: dict) -> dict:
             print(f"    ... and {len(module_list) - 8} more")
 
     print(f"\n  Total: {total_modules} modules across {len(scope)} domains")
-    return {"domains": len(scope), "total_modules": total_modules, "from_manifest": True}
+    return {
+        "domains": len(scope),
+        "total_modules": total_modules,
+        "from_manifest": True,
+    }
 
 
 def section_workflows(manifest: dict) -> dict:
@@ -213,17 +233,22 @@ def main() -> int:
     print()
     return 0
 
-
-
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
-    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "agents" / "config.yaml"
-    config_data = {}
+
+    import yaml
+
+    config_path = (
+        Path(__file__).resolve().parent.parent.parent
+        / "config"
+        / "agents"
+        / "config.yaml"
+    )
     if config_path.exists():
-        with open(config_path, "r") as f:
-            config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/agents/config.yaml")
+        with open(config_path) as f:
+            yaml.safe_load(f) or {}
+            print("Loaded config from config/agents/config.yaml")
+
 
 if __name__ == "__main__":
     sys.exit(main())

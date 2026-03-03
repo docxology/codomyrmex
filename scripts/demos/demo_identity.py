@@ -7,15 +7,20 @@ Demonstrates:
 2. Behavior-bio-cognitive verification (keystroke dynamics).
 """
 
+import random
 import sys
 from pathlib import Path
-import random
 
 # Add src to path
 sys.path.append(str(Path(__file__).parent.parent / "src"))
 
-from codomyrmex.identity import IdentityManager, VerificationLevel, BioCognitiveVerifier
-from codomyrmex.utils.cli_helpers import setup_logging, print_info, print_success, print_error
+from codomyrmex.identity import BioCognitiveVerifier, IdentityManager, VerificationLevel
+from codomyrmex.utils.cli_helpers import (
+    print_error,
+    print_info,
+    print_success,
+    setup_logging,
+)
 
 
 def demo_personas():
@@ -27,9 +32,7 @@ def demo_personas():
 
     # 1. KYC Persona (High Trust)
     p_kyc = id_mgr.create_persona(
-        id="persona_kyc",
-        name="Alice RealName (KYC)",
-        level=VerificationLevel.KYC
+        id="persona_kyc", name="Alice RealName (KYC)", level=VerificationLevel.KYC
     )
     print_info(f"Created: {p_kyc.name} [{p_kyc.level.name}]")
 
@@ -37,15 +40,13 @@ def demo_personas():
     p_anon_v = id_mgr.create_persona(
         id="persona_anon_v",
         name="Reputable Anon",
-        level=VerificationLevel.VERIFIED_ANON
+        level=VerificationLevel.VERIFIED_ANON,
     )
     print_info(f"Created: {p_anon_v.name} [{p_anon_v.level.name}]")
 
     # 3. Anon (Low Trust - Burner)
     p_anon = id_mgr.create_persona(
-        id="persona_anon",
-        name="Ghost User",
-        level=VerificationLevel.ANON
+        id="persona_anon", name="Ghost User", level=VerificationLevel.ANON
     )
     print_info(f"Created: {p_anon.name} [{p_anon.level.name}]")
 
@@ -91,13 +92,19 @@ def demo_verification():
 
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
-    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "demos" / "config.yaml"
-    config_data = {}
+
+    import yaml
+
+    config_path = (
+        Path(__file__).resolve().parent.parent.parent
+        / "config"
+        / "demos"
+        / "config.yaml"
+    )
     if config_path.exists():
-        with open(config_path, "r") as f:
-            config_data = yaml.safe_load(f) or {}
+        with open(config_path) as f:
+            yaml.safe_load(f) or {}
             print(f"Loaded config from {config_path.name}")
 
     setup_logging()

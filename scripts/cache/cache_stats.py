@@ -41,26 +41,26 @@ def analyze_cache_dir(cache_path: Path) -> dict:
         "newest": None,
         "by_type": {},
     }
-    
+
     for f in cache_path.rglob("*"):
         if f.is_file():
             size = f.stat().st_size
             mtime = datetime.fromtimestamp(f.stat().st_mtime)
-            
+
             stats["total_size"] += size
             stats["file_count"] += 1
-            
+
             if stats["oldest"] is None or mtime < stats["oldest"]:
                 stats["oldest"] = mtime
             if stats["newest"] is None or mtime > stats["newest"]:
                 stats["newest"] = mtime
-            
+
             ext = f.suffix or "no_ext"
             if ext not in stats["by_type"]:
                 stats["by_type"][ext] = {"count": 0, "size": 0}
             stats["by_type"][ext]["count"] += 1
             stats["by_type"][ext]["size"] += size
-    
+
     return stats
 
 
@@ -75,55 +75,67 @@ def format_size(size_bytes: int) -> str:
 
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
-    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "cache" / "config.yaml"
-    config_data = {}
+
+    import yaml
+
+    config_path = (
+        Path(__file__).resolve().parent.parent.parent
+        / "config"
+        / "cache"
+        / "config.yaml"
+    )
     if config_path.exists():
-        with open(config_path, "r") as f:
-            config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/cache/config.yaml")
+        with open(config_path) as f:
+            yaml.safe_load(f) or {}
+            print("Loaded config from config/cache/config.yaml")
 
     parser = argparse.ArgumentParser(description="Display cache statistics")
     parser.add_argument("--path", "-p", default=None, help="Cache directory path")
-    parser.add_argument("--verbose", "-v", action="store_true", help="Show detailed breakdown")
+    parser.add_argument(
+        "--verbose", "-v", action="store_true", help="Show detailed breakdown"
+    )
     parser.add_argument("--json", "-j", action="store_true", help="Output as JSON")
     args = parser.parse_args()
-    
+
     if args.path:
         cache_dirs = [Path(args.path)]
     else:
         cache_dirs = get_cache_dirs()
-    
+
     if not cache_dirs:
         print("📦 No cache directories found")
-        print("   Searched: ~/.cache/codomyrmex, ~/.codomyrmex/cache, .codomyrmex/cache")
+        print(
+            "   Searched: ~/.cache/codomyrmex, ~/.codomyrmex/cache, .codomyrmex/cache"
+        )
         return 0
-    
+
     all_stats = []
-    
+
     for cache_dir in cache_dirs:
         stats = analyze_cache_dir(cache_dir)
         all_stats.append(stats)
-        
+
         if args.json:
             continue
-        
+
         print(f"📦 Cache: {stats['path']}")
         print(f"   Files: {stats['file_count']}")
         print(f"   Size: {format_size(stats['total_size'])}")
-        
+
         if stats["oldest"]:
             print(f"   Oldest: {stats['oldest'].strftime('%Y-%m-%d %H:%M')}")
         if stats["newest"]:
             print(f"   Newest: {stats['newest'].strftime('%Y-%m-%d %H:%M')}")
-        
+
         if args.verbose and stats["by_type"]:
             print("   By type:")
-            for ext, data in sorted(stats["by_type"].items(), key=lambda x: -x[1]["size"]):
+            for ext, data in sorted(
+                stats["by_type"].items(), key=lambda x: -x[1]["size"]
+            ):
                 print(f"     {ext}: {data['count']} files, {format_size(data['size'])}")
         print()
-    
+
     if args.json:
         output = []
         for s in all_stats:
@@ -131,13 +143,13 @@ def main():
             s["newest"] = s["newest"].isoformat() if s["newest"] else None
             output.append(s)
         print(json.dumps(output, indent=2))
-    
+
     total_size = sum(s["total_size"] for s in all_stats)
     total_files = sum(s["file_count"] for s in all_stats)
-    
+
     if not args.json:
         print(f"📊 Total: {total_files} files, {format_size(total_size)}")
-    
+
     return 0
 
 
