@@ -12,6 +12,7 @@ This module provides comprehensive Git visualization capabilities including:
 - Integrates with both matplotlib (PNG) and Mermaid (text diagrams).
 """
 
+import logging
 import os
 import sys
 from datetime import datetime, timedelta
@@ -21,15 +22,14 @@ from typing import Any
 import matplotlib.patches as mpatches
 import matplotlib.pyplot as plt
 
-# Import from data_visualization module
 from codomyrmex.data_visualization.charts.plot_utils import (
     apply_common_aesthetics,
-    get_codomyrmex_logger,
     save_plot,
 )
 from codomyrmex.data_visualization.mermaid.mermaid_generator import (
     MermaidDiagramGenerator,
 )
+from codomyrmex.logging_monitoring import get_logger
 
 # Import git_operations if available
 try:
@@ -45,7 +45,7 @@ try:
 except ImportError:
     GIT_OPERATIONS_AVAILABLE = False
 
-logger = get_codomyrmex_logger(__name__)
+logger = get_logger(__name__)
 
 
 class GitVisualizer:
@@ -978,9 +978,7 @@ if __name__ == "__main__":
     logger.info(f"Git visualization examples generated in {output_dir}")
 
     # Basic logging setup if running standalone
-    import logging
-
-    if not get_codomyrmex_logger("").hasHandlers():
+    if not logging.getLogger("").hasHandlers():
         logging.basicConfig(
             level=logging.DEBUG,
             format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",

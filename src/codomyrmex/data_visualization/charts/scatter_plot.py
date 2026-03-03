@@ -5,11 +5,15 @@ Generates scatter plots.
 - Recommend calling environment_setup.env_checker.ensure_dependencies_installed() at app startup.
 """
 
+import logging
+
 import matplotlib.pyplot as plt
 
-from .plot_utils import apply_theme_to_axes, get_codomyrmex_logger, save_plot
+from codomyrmex.logging_monitoring import get_logger
 
-logger = get_codomyrmex_logger(__name__)
+from .plot_utils import apply_theme_to_axes, save_plot
+
+logger = get_logger(__name__)
 
 
 def create_scatter_plot(
@@ -179,11 +183,7 @@ if __name__ == "__main__":
 
     # Setup a root logger for the example script if this is run directly
     # (assuming logging_monitoring.setup_logging would handle this in a full app context)
-    import logging
-
-    if not get_codomyrmex_logger(
-        ""
-    ).hasHandlers():  # Check if root logger is already configured
+    if not logging.getLogger("").hasHandlers():  # Check if root logger is already configured
         logging.basicConfig(
             level=logging.DEBUG,
             format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",

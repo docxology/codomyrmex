@@ -7,15 +7,16 @@ Provides both functional and OO interfaces for creating heatmaps.
 import matplotlib.pyplot as plt
 import numpy as np
 
+from codomyrmex.logging_monitoring import get_logger
+
 from .plot_utils import (
     DEFAULT_FIGURE_SIZE,
     apply_common_aesthetics,
     apply_theme_to_axes,
-    get_codomyrmex_logger,
     save_plot,
 )
 
-logger = get_codomyrmex_logger(__name__)
+logger = get_logger(__name__)
 
 
 def create_heatmap(

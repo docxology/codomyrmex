@@ -8,31 +8,11 @@ Provides shared utility functions for chart generation including:
 - Theme integration
 """
 
-import logging
 from pathlib import Path
 
-# Try to import from codomyrmex logging, fallback to standard logging
-try:
-    from codomyrmex.logging_monitoring.core.logger_config import get_logger
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
-    def get_codomyrmex_logger(name: str):
-        """Get a configured logger for the given name."""
-        return get_logger(name)
-except ImportError:
-    def get_codomyrmex_logger(name: str):
-        """Get a standard Python logger."""
-        logger = logging.getLogger(name)
-        if not logger.handlers:
-            handler = logging.StreamHandler()
-            handler.setFormatter(logging.Formatter(
-                '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-            ))
-            logger.addHandler(handler)
-            logger.setLevel(logging.DEBUG)
-        return logger
-
-
-logger = get_codomyrmex_logger(__name__)
+logger = get_logger(__name__)
 
 # Default figure size for plots
 DEFAULT_FIGURE_SIZE = (10, 6)
@@ -117,21 +97,8 @@ def save_plot(
 
 
 def apply_codomyrmex_style(ax, title: str = None):
-    """
-    Apply Codomyrmex styling to a matplotlib axes.
-
-    Args:
-        ax: The matplotlib axes to style.
-        title: Optional title to set.
-    """
-    ax.spines['top'].set_visible(False)
-    ax.spines['right'].set_visible(False)
-    ax.grid(True, alpha=0.3)
-
-    if title:
-        ax.set_title(title, fontsize=12, fontweight='bold')
-
-    return ax
+    """Apply Codomyrmex default styling to a matplotlib axes."""
+    return apply_common_aesthetics(ax, title=title)
 
 
 def get_color_palette(n_colors: int = 10) -> list:
@@ -195,24 +162,6 @@ def apply_theme_to_axes(ax, theme_name):
     return ax
 
 
-def configure_plot(fig, ax, theme_name=None, **kwargs):
-    """
-    Convenience wrapper to configure a plot with optional theme and common settings.
-
-    Args:
-        fig: The matplotlib figure.
-        ax: The matplotlib axes.
-        theme_name: Optional ThemeName enum value or string.
-        **kwargs: Additional settings passed to apply_common_aesthetics.
-
-    Returns:
-        Tuple of (fig, ax).
-    """
-    if theme_name is not None:
-        apply_theme_to_axes(ax, theme_name)
-    apply_common_aesthetics(ax, **kwargs)
-    return fig, ax
-
 
 def apply_style(ax, style_name: str = None):
     """
@@ -233,13 +182,11 @@ def apply_style(ax, style_name: str = None):
 
 
 __all__ = [
-    "get_codomyrmex_logger",
     "save_plot",
     "apply_common_aesthetics",
     "apply_codomyrmex_style",
     "get_color_palette",
     "apply_theme_to_axes",
-    "configure_plot",
     "apply_style",
     "DEFAULT_FIGURE_SIZE",
     "DEFAULT_GRID_STYLE",

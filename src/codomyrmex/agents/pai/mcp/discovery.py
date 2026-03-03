@@ -19,25 +19,29 @@ def tool_invalidate_cache(module: str | None = None) -> dict[str, Any]:
                 If None, clears the entire cache.
     """
     if module:
-        # We call scan_module from discovery engine
         if _DISCOVERY_ENGINE is None:
              return {"error": "Discovery engine not initialized"}
 
         report = _DISCOVERY_ENGINE.scan_module(module)
 
-        # Force a cache refresh next time get_tool_registry is called
         global _CACHE_EXPIRY
         _CACHE_EXPIRY = 0.0  # expired in the past → triggers refresh on next access
 
         return {
-             "cleared": False, # We didn't clear everything
-             "rescanned_module": module,
-             "tools_found": len(report.tools),
-             "failed": bool(report.failed_modules)
+            "cleared": False,
+            "rescanned_module": module,
+            "tools_found": len(report.tools),
+            "failed": bool(report.failed_modules),
         }
     else:
         invalidate_tool_cache()
-        return {"cleared": True, "rescan_duration_ms": 0.0, "new_tool_count": 0} # stats avail on next call
+        # Rescan happens lazily on next access; no stats available yet.
+        return {
+            "cleared": True,
+            "rescanned_module": None,
+            "tools_found": None,
+            "failed": False,
+        }
 
 _DYNAMIC_TOOLS_CACHE: list[tuple[str, str, Any, dict[str, Any]]] | None = None
 
@@ -88,7 +92,6 @@ def _find_mcp_modules() -> list[str]:
             root_path, prefix="codomyrmex."
         ):
             if name.endswith(".mcp_tools"):
-                # e.g. "codomyrmex.security.mcp_tools" -> "codomyrmex.security"
                 parent = name.rsplit(".", 1)[0]
                 parents.add(parent)
 
@@ -103,20 +106,19 @@ def _find_mcp_modules() -> list[str]:
         logger.exception("_find_mcp_modules failed (%s); using fallback targets", exc)
         return list(_FALLBACK_SCAN_TARGETS)
 
-def _discover_dynamic_tools() -> list[tuple[str, str, Any, dict[str, Any]]]:
+def discover_dynamic_tools() -> list[tuple[str, str, Any, dict[str, Any]]]:
     """Scan modules for @mcp_tool definitions using MCPDiscovery engine.
 
     Uses a TTL-based cache.
     """
     global _DYNAMIC_TOOLS_CACHE, _CACHE_EXPIRY, _DISCOVERY_ENGINE
     now = time.monotonic()
-    with _DYNAMIC_TOOLS_CACHE_LOCK:
-        if _DYNAMIC_TOOLS_CACHE is not None and _CACHE_EXPIRY is not None and now < _CACHE_EXPIRY:
-            logger.debug("Discovery cache hit (expires in %.1fs)", _CACHE_EXPIRY - now)
-            # Record cache hit if engine available
-            if _DISCOVERY_ENGINE:
-                 _DISCOVERY_ENGINE.record_cache_hit()
-            return _DYNAMIC_TOOLS_CACHE
+    # Fast path: check cache without holding the lock
+    if _DYNAMIC_TOOLS_CACHE is not None and _CACHE_EXPIRY is not None and now < _CACHE_EXPIRY:
+        logger.debug("Discovery cache hit (expires in %.1fs)", _CACHE_EXPIRY - now)
+        if _DISCOVERY_ENGINE:
+            _DISCOVERY_ENGINE.record_cache_hit()
+        return _DYNAMIC_TOOLS_CACHE
 
     if _DISCOVERY_ENGINE is None:
         from codomyrmex.model_context_protocol.discovery import MCPDiscovery
@@ -145,8 +147,12 @@ def _discover_dynamic_tools() -> list[tuple[str, str, Any, dict[str, Any]]]:
     )
 
     with _DYNAMIC_TOOLS_CACHE_LOCK:
+        # Double-check: another thread may have populated the cache while we scanned
+        now2 = time.monotonic()
+        if _DYNAMIC_TOOLS_CACHE is not None and _CACHE_EXPIRY is not None and now2 < _CACHE_EXPIRY:
+            return _DYNAMIC_TOOLS_CACHE
         _DYNAMIC_TOOLS_CACHE = tools
-        _CACHE_EXPIRY = time.monotonic() + _DEFAULT_CACHE_TTL
+        _CACHE_EXPIRY = now2 + _DEFAULT_CACHE_TTL
 
     return tools
 
@@ -154,12 +160,13 @@ def _discover_dynamic_tools() -> list[tuple[str, str, Any, dict[str, Any]]]:
 def get_discovery_metrics() -> dict[str, Any] | None:
     """Return discovery engine metrics as a plain dict, or None if not initialized.
 
-    Public accessor so callers (e.g. trust_gateway) don't need to import the
-    private ``_DISCOVERY_ENGINE`` module-level variable directly.
+    Public accessor so callers (e.g. trust_gateway, server.py) don't need to
+    import the private ``_DISCOVERY_ENGINE`` or instantiate a fresh scanner.
 
     Returns:
-        Dict with keys ``failed_modules`` (list), ``scan_duration_ms`` (float),
-        and ``last_scan_time`` (datetime or None); or None if engine not yet
+        Dict with keys ``total_tools``, ``modules_scanned``, ``cache_hits``,
+        ``failed_modules`` (list), ``scan_duration_ms`` (float), and
+        ``last_scan_time`` (datetime or None); or None if engine not yet
         initialized.
     """
     if _DISCOVERY_ENGINE is None:
@@ -167,9 +174,12 @@ def get_discovery_metrics() -> dict[str, Any] | None:
     try:
         metrics = _DISCOVERY_ENGINE.get_metrics()
         return {
-            "failed_modules": list(getattr(metrics, "failed_modules", [])),
-            "scan_duration_ms": float(getattr(metrics, "scan_duration_ms", 0.0)),
-            "last_scan_time": getattr(metrics, "last_scan_time", None),
+            "total_tools": int(getattr(metrics, "total_tools", 0)),
+            "modules_scanned": int(getattr(metrics, "modules_scanned", 0)),
+            "cache_hits": int(getattr(metrics, "cache_hits", 0)),
+            "failed_modules": list(metrics.failed_modules),
+            "scan_duration_ms": float(metrics.scan_duration_ms),
+            "last_scan_time": metrics.last_scan_time,
         }
     except AttributeError:
         return None

@@ -17,17 +17,6 @@ matplotlib.use('Agg')
 class TestPlotUtils:
     """Test plot utility functions."""
 
-    def test_get_codomyrmex_logger(self):
-        """Test functionality: get codomyrmex logger."""
-        from codomyrmex.data_visualization.charts.plot_utils import (
-            get_codomyrmex_logger,
-        )
-        logger = get_codomyrmex_logger("test_module")
-        assert hasattr(logger, 'info')
-        assert hasattr(logger, 'debug')
-        assert hasattr(logger, 'warning')
-        assert hasattr(logger, 'error')
-
     def test_save_plot_success(self, tmp_path):
         """Test functionality: save plot success."""
         from codomyrmex.data_visualization.charts.plot_utils import save_plot
@@ -103,16 +92,6 @@ class TestPlotUtils:
         from codomyrmex.data_visualization.charts.plot_utils import get_color_palette
         palette = get_color_palette(15)
         assert len(palette) == 15
-
-    def test_configure_plot(self):
-        """Test functionality: configure plot."""
-        from codomyrmex.data_visualization.charts.plot_utils import configure_plot
-        fig, ax = plt.subplots()
-        result_fig, result_ax = configure_plot(fig, ax, title="Config Test")
-        assert result_fig is fig
-        assert result_ax is ax
-        assert ax.get_title() == "Config Test"
-        plt.close(fig)
 
     def test_apply_style(self):
         """Test functionality: apply style."""

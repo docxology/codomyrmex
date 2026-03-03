@@ -208,15 +208,10 @@ class TestDocumentationAccuracy:
         """Test that documented plot utilities exist."""
         from codomyrmex.data_visualization.charts.plot_utils import (
             apply_common_aesthetics,
-            get_codomyrmex_logger,
             save_plot,
         )
 
-        # Test logger utility
-        logger = get_codomyrmex_logger("test_plot_utils")
-        assert logger is not None
-
-        # Verify other utilities are callable
+        # Verify utilities are callable
         assert callable(save_plot)
         assert callable(apply_common_aesthetics)
 

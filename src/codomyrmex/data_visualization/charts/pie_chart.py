@@ -5,13 +5,16 @@ Generates pie charts.
 - Recommend calling environment_setup.env_checker.ensure_dependencies_installed() at app startup.
 """
 
+import logging
+
 import matplotlib.pyplot as plt
 
+from codomyrmex.logging_monitoring import get_logger
 from codomyrmex.model_context_protocol.decorators import mcp_tool
 
-from .plot_utils import apply_theme_to_axes, get_codomyrmex_logger, save_plot
+from .plot_utils import apply_theme_to_axes, save_plot
 
-logger = get_codomyrmex_logger(__name__)
+logger = get_logger(__name__)
 
 
 @mcp_tool()
@@ -175,9 +178,7 @@ if __name__ == "__main__":
     )
     logger.info(f"Pie chart example saved to {output_dir / 'exploded_pie_chart.png'}")
 
-    import logging
-
-    if not get_codomyrmex_logger("").hasHandlers():
+    if not logging.getLogger("").hasHandlers():
         logging.basicConfig(
             level=logging.DEBUG,
             format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",

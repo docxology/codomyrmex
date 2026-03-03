@@ -7,8 +7,8 @@ from typing import Any
 from codomyrmex.logging_monitoring import get_logger
 
 from .definitions import PROMPT_DEFINITIONS, RESOURCE_DEFINITIONS, TOOL_DEFINITIONS
-from .discovery import _discover_dynamic_tools
-from .proxy_tools import _get_package_version, tool_pai_status
+from .discovery import discover_dynamic_tools
+from .proxy_tools import get_package_version, tool_pai_status
 
 logger = get_logger(__name__)
 
@@ -26,9 +26,6 @@ class _ToolRegistry:
         return sorted(self._tools)
 
     def get(self, name: str) -> dict[str, Any] | None:
-        return self._tools.get(name)
-
-    def get_tool(self, name: str) -> dict[str, Any] | None:
         return self._tools.get(name)
 
 
@@ -53,7 +50,7 @@ def get_tool_registry() -> _ToolRegistry:
         )
 
     # 2. Register Dynamic Module Tools
-    dynamic_tools = _discover_dynamic_tools()
+    dynamic_tools = discover_dynamic_tools()
     for name, description, handler, input_schema in dynamic_tools:
         registry.register(
             tool_name=name,
@@ -91,7 +88,7 @@ def create_codomyrmex_mcp_server(
     # ── Warm-up: eagerly populate discovery cache ─────────────────
     if config.warm_up:
         t0 = time.monotonic()
-        _discover_dynamic_tools()
+        discover_dynamic_tools()
         warm_ms = (time.monotonic() - t0) * 1000
         logger.info("Discovery warm-up completed in %.0fms", warm_ms)
 
@@ -101,7 +98,7 @@ def create_codomyrmex_mcp_server(
     # (or ideally server accepts a pre-built registry, but standard pattern confirms manual reg)
 
     for tool_name in registry.list_tools():
-        tool = registry.get_tool(tool_name)
+        tool = registry.get(tool_name)
         if tool:
             server.register_tool(
                 name=tool_name,
@@ -142,16 +139,18 @@ def create_codomyrmex_mcp_server(
 
     # ── Register discovery metrics resource ────────────────────────
     def _discovery_metrics_provider() -> str:
-        from codomyrmex.model_context_protocol.discovery import MCPDiscovery as _Disc
-        disc = _Disc()
-        m = disc.get_metrics()
+        from codomyrmex.agents.pai.mcp.discovery import get_discovery_metrics
+        metrics = get_discovery_metrics()
+        if metrics is None:
+            return json.dumps({"error": "Discovery engine not yet initialized"})
+        last_scan = metrics.get("last_scan_time")
         return json.dumps({
-            "total_tools": m.total_tools,
-            "scan_duration_ms": m.scan_duration_ms,
-            "failed_modules": m.failed_modules,
-            "modules_scanned": m.modules_scanned,
-            "cache_hits": m.cache_hits,
-            "last_scan_time": m.last_scan_time.isoformat() if m.last_scan_time else None,
+            "total_tools": metrics.get("total_tools", 0),
+            "scan_duration_ms": metrics.get("scan_duration_ms", 0.0),
+            "failed_modules": metrics.get("failed_modules", []),
+            "modules_scanned": metrics.get("modules_scanned", 0),
+            "cache_hits": metrics.get("cache_hits", 0),
+            "last_scan_time": last_scan.isoformat() if last_scan else None,
         })
 
     server.register_resource(
@@ -164,9 +163,9 @@ def create_codomyrmex_mcp_server(
 
     logger.info(
         "Codomyrmex MCP server created: %d tools, %d resources, %d prompts",
-        len(server._tool_registry.list_tools()),
-        len(server._resources),
-        len(server._prompts),
+        server.tool_count,
+        server.resource_count,
+        server.prompt_count,
     )
     return server
 
@@ -253,7 +252,7 @@ def get_skill_manifest() -> dict[str, Any]:
     ]
 
     # Merge dynamic tools
-    dynamic_list = _discover_dynamic_tools()
+    dynamic_list = discover_dynamic_tools()
     dynamic_tools = []
     for t in dynamic_list:
         name, description, handler, input_schema = t
@@ -281,7 +280,7 @@ def get_skill_manifest() -> dict[str, Any]:
 
     return {
         "name": "Codomyrmex",
-        "version": _get_package_version(),
+        "version": get_package_version(),
         "description": (
             "Modular coding workspace exposing 100+ modules for AI-assisted "
             "development, code analysis, testing, documentation, and automation."

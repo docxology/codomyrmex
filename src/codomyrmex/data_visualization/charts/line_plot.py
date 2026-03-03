@@ -8,17 +8,17 @@ import os
 
 import matplotlib.pyplot as plt
 
+from codomyrmex.logging_monitoring import get_logger
 from codomyrmex.model_context_protocol.decorators import mcp_tool
 
 from .plot_utils import (
     DEFAULT_FIGURE_SIZE,
     apply_common_aesthetics,
     apply_theme_to_axes,
-    get_codomyrmex_logger,
     save_plot,
 )
 
-logger = get_codomyrmex_logger(__name__)
+logger = get_logger(__name__)
 
 @mcp_tool()
 def create_line_plot(

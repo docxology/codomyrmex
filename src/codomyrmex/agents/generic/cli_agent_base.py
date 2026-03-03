@@ -24,10 +24,8 @@ def retry_on_failure(max_retries: int = 3, backoff_factor: float = 1.0):
     import time as time_module
 
     def decorator(func):
-        """Decorator."""
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
-            """Wrapper."""
             last_exception = None
             for attempt in range(max_retries + 1):
                 try:
@@ -83,7 +81,7 @@ class CLIAgentBase(BaseAgent):
 
         Prompts user for command path if check fails.
         """
-        if not self._check_command_available():
+        if not self.is_available():
             print(f"Configuring {self.name}...")
             print(f"Command '{self.command}' not found in PATH.")
             path = input(f"Enter absolute path to '{self.command}' executable (or leave empty to skip): ")
@@ -98,7 +96,7 @@ class CLIAgentBase(BaseAgent):
         """
         Test CLI command availability.
         """
-        available = self._check_command_available()
+        available = self.is_available()
         if available:
              self.logger.info(f"Connection test passed for {self.name} (Command available)")
         else:
@@ -113,7 +111,7 @@ class CLIAgentBase(BaseAgent):
             Dict with status, available, version, and response_time
         """
         start_time = time.time()
-        available = self._check_command_available()
+        available = self.is_available()
         response_time = time.time() - start_time
 
         version = None
@@ -194,6 +192,10 @@ class CLIAgentBase(BaseAgent):
                 extra={"command": cmd, "error": str(e)},
             )
             return False
+
+    def is_available(self) -> bool:
+        """Return ``True`` if the CLI command is available on this machine."""
+        return self._check_command_available()
 
     def _build_env(self) -> dict[str, str]:
         """
