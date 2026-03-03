@@ -240,7 +240,9 @@ class VoiceNotFoundError(AudioError):
         if voice_id:
             self.context["voice_id"] = voice_id
         if available_voices:
-            self.context["available_voices"] = available_voices[:10]  # Limit for display
+            self.context["available_voices"] = available_voices[
+                :10
+            ]  # Limit for display
 
 
 __all__ = [

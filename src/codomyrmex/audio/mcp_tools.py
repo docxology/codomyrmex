@@ -3,8 +3,10 @@
 from codomyrmex.model_context_protocol.decorators import mcp_tool
 
 
+from typing import Any
+
 @mcp_tool(category="audio")
-def audio_get_capabilities() -> dict:
+def audio_get_capabilities() -> dict[str, Any]:
     """Return available audio processing capabilities.
 
     Reports which speech-to-text and text-to-speech providers are
@@ -15,25 +17,28 @@ def audio_get_capabilities() -> dict:
 
     """
     try:
-        capabilities: dict = {
+        capabilities: dict[str, list[str]] = {
             "stt_providers": [],
             "tts_providers": [],
         }
 
         try:
             import whisper  # noqa: F401
+
             capabilities["stt_providers"].append("whisper")
         except ImportError:
             pass
 
         try:
             import pyttsx3  # noqa: F401
+
             capabilities["tts_providers"].append("pyttsx3")
         except ImportError:
             pass
 
         try:
             import edge_tts  # noqa: F401
+
             capabilities["tts_providers"].append("edge-tts")
         except ImportError:
             pass
@@ -41,14 +46,16 @@ def audio_get_capabilities() -> dict:
         return {
             "status": "success",
             "capabilities": capabilities,
-            "ready": bool(capabilities["stt_providers"] or capabilities["tts_providers"]),
+            "ready": bool(
+                capabilities["stt_providers"] or capabilities["tts_providers"]
+            ),
         }
     except Exception as e:
         return {"status": "error", "message": str(e)}
 
 
 @mcp_tool(category="audio")
-def audio_list_voices(provider: str = "pyttsx3") -> dict:
+def audio_list_voices(provider: str = "pyttsx3") -> dict[str, Any]:
     """List available text-to-speech voices for a given provider.
 
     Args:
@@ -62,6 +69,7 @@ def audio_list_voices(provider: str = "pyttsx3") -> dict:
         if provider == "pyttsx3":
             try:
                 import pyttsx3
+
                 engine = pyttsx3.init()
                 voices = engine.getProperty("voices")
                 voice_list = [
@@ -71,22 +79,35 @@ def audio_list_voices(provider: str = "pyttsx3") -> dict:
                 engine.stop()
                 return {"status": "success", "provider": provider, "voices": voice_list}
             except ImportError:
-                return {"status": "error", "message": "pyttsx3 not installed. Run: uv sync --extra audio"}
+                return {
+                    "status": "error",
+                    "message": "pyttsx3 not installed. Run: uv sync --extra audio",
+                }
 
         if provider == "edge-tts":
             try:
                 import asyncio
 
                 import edge_tts
+
                 voices_raw = asyncio.run(edge_tts.list_voices())
-                voice_list = [{"name": v["ShortName"], "locale": v["Locale"]} for v in voices_raw]
+                voice_list = [
+                    {"name": v["ShortName"], "locale": v["Locale"]} for v in voices_raw
+                ]
                 return {"status": "success", "provider": provider, "voices": voice_list}
             except ImportError:
-                return {"status": "error", "message": "edge-tts not installed. Run: uv sync --extra audio"}
+                return {
+                    "status": "error",
+                    "message": "edge-tts not installed. Run: uv sync --extra audio",
+                }
 
-        return {"status": "error", "message": f"Unknown provider: {provider!r}. Use 'pyttsx3' or 'edge-tts'"}
+        return {
+            "status": "error",
+            "message": f"Unknown provider: {provider!r}. Use 'pyttsx3' or 'edge-tts'",
+        }
     except Exception as e:
         return {"status": "error", "message": str(e)}
+
 
 @mcp_tool(category="audio")
 def audio_transcribe(
@@ -95,7 +116,7 @@ def audio_transcribe(
     model_size: str = "base",
     output_format: str = "text",
     word_timestamps: bool = True,
-) -> dict:
+) -> dict[str, Any]:
     """Transcribe speech from an audio file to text using Whisper.
 
     Args:
@@ -111,6 +132,7 @@ def audio_transcribe(
     """
     try:
         from codomyrmex.audio.speech_to_text import Transcriber, WhisperModelSize
+
         model_size_enum = WhisperModelSize(model_size)
 
         with Transcriber(model_size=model_size_enum) as transcriber:
@@ -132,13 +154,9 @@ def audio_transcribe(
             "language_confidence": result.language_probability,
             "duration": result.duration,
             "segments": [
-                {
-                    "start": s.start,
-                    "end": s.end,
-                    "text": s.text
-                }
+                {"start": s.start, "end": s.end, "text": s.text}
                 for s in result.segments
-            ]
+            ],
         }
 
         if output_file:
@@ -156,13 +174,13 @@ def audio_transcribe(
             "error": {
                 "type": type(e).__name__,
                 "message": str(e),
-                "context": {"audio_path": audio_path}
-            }
+                "context": {"audio_path": audio_path},
+            },
         }
 
 
 @mcp_tool(category="audio")
-def audio_detect_language(audio_path: str) -> dict:
+def audio_detect_language(audio_path: str) -> dict[str, Any]:
     """Detect the language of speech in an audio file.
 
     Args:
@@ -183,7 +201,7 @@ def audio_detect_language(audio_path: str) -> dict:
             "result": {
                 "language": language,
                 "confidence": confidence,
-            }
+            },
         }
     except Exception as e:
         return {
@@ -191,8 +209,8 @@ def audio_detect_language(audio_path: str) -> dict:
             "error": {
                 "type": type(e).__name__,
                 "message": str(e),
-                "context": {"audio_path": audio_path}
-            }
+                "context": {"audio_path": audio_path},
+            },
         }
 
 
@@ -203,7 +221,7 @@ def audio_synthesize(
     provider: str = "pyttsx3",
     voice: str | None = None,
     rate: float = 1.0,
-) -> dict:
+) -> dict[str, Any]:
     """Generate speech from text using text-to-speech.
 
     Args:
@@ -233,7 +251,7 @@ def audio_synthesize(
                 "format": result.format.value,
                 "voice_used": result.voice_id,
                 "file_size_kb": result.size_kb,
-            }
+            },
         }
     except Exception as e:
         return {
@@ -241,8 +259,8 @@ def audio_synthesize(
             "error": {
                 "type": type(e).__name__,
                 "message": str(e),
-                "context": {"text_length": len(text)}
-            }
+                "context": {"text_length": len(text)},
+            },
         }
 
 
@@ -252,7 +270,7 @@ def audio_batch_transcribe(
     output_directory: str,
     language: str | None = None,
     model_size: str = "base",
-) -> dict:
+) -> dict[str, Any]:
     """Transcribe multiple audio files in batch.
 
     Args:
@@ -266,8 +284,10 @@ def audio_batch_transcribe(
 
     """
     import os
+
     try:
         from codomyrmex.audio.speech_to_text import Transcriber, WhisperModelSize
+
         model_size_enum = WhisperModelSize(model_size)
 
         os.makedirs(output_directory, exist_ok=True)
@@ -279,16 +299,20 @@ def audio_batch_transcribe(
             for path in audio_paths:
                 try:
                     result = transcriber.transcribe(path, language=language)
-                    output_file = os.path.join(output_directory, f"{os.path.basename(path)}.txt")
+                    output_file = os.path.join(
+                        output_directory, f"{os.path.basename(path)}.txt"
+                    )
                     with open(output_file, "w") as f:
                         f.write(result.text)
 
-                    results_list.append({
-                        "input": path,
-                        "output": output_file,
-                        "duration": result.duration,
-                        "language": result.language,
-                    })
+                    results_list.append(
+                        {
+                            "input": path,
+                            "output": output_file,
+                            "duration": result.duration,
+                            "language": result.language,
+                        }
+                    )
                 except Exception:
                     failed += 1
 
@@ -298,7 +322,7 @@ def audio_batch_transcribe(
                 "processed": len(results_list),
                 "failed": failed,
                 "results": results_list,
-            }
+            },
         }
     except Exception as e:
         return {
@@ -306,6 +330,6 @@ def audio_batch_transcribe(
             "error": {
                 "type": type(e).__name__,
                 "message": str(e),
-                "context": {"batch_size": len(audio_paths)}
-            }
+                "context": {"batch_size": len(audio_paths)},
+            },
         }
