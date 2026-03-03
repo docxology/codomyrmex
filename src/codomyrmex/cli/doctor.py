@@ -46,6 +46,7 @@ class CheckResult:
         message: str = "",
         details: dict[str, Any] | None = None,
     ):
+        """Initialize the check result."""
         self.name = name
         self.status = status
         self.message = message

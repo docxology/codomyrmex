@@ -160,7 +160,9 @@ def handle_quick_pipe(commands: list[str], stop_on_error: bool = True) -> bool:
 
         # Create closure to capture cmd
         def make_action(command):
+            """Create an action callback for a command."""
             async def action(_task_results=None):
+                """Execute the command."""
                 return await run_command(command, _task_results)
             return action
 
