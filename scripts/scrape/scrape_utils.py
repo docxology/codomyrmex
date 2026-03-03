@@ -98,9 +98,11 @@ def fetch_url(url: str, timeout: int = 30) -> dict:
 def extract_text(html: str) -> str:
     """Extract text from HTML, removing tags."""
     text = re.sub(
-        r"<script[^>]*>.*?</script>", "", html, flags=re.DOTALL | re.IGNORECASE
+        r"<script[^>]*>.*?</script\s*>", "", html, flags=re.DOTALL | re.IGNORECASE
     )
-    text = re.sub(r"<style[^>]*>.*?</style>", "", text, flags=re.DOTALL | re.IGNORECASE)
+    text = re.sub(
+        r"<style[^>]*>.*?</style\s*>", "", text, flags=re.DOTALL | re.IGNORECASE
+    )
     text = re.sub(r"<[^>]+>", " ", text)
     text = re.sub(r"\s+", " ", text)
     return text.strip()

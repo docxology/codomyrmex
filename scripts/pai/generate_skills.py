@@ -800,7 +800,7 @@ def main() -> int:
     if config_path.exists():
         with open(config_path) as f:
             config_data = yaml.safe_load(f) or {}
-            print("Loaded config from config/pai/config.yaml")
+            # Config loaded
 
 
 if __name__ == "__main__":
