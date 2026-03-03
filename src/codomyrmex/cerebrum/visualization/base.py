@@ -480,7 +480,7 @@ class BaseHeatmapVisualizer(BaseVisualizer):
 
     def create_heatmap(
         self,
-        data: np.ndarray,
+        data: Any,
         row_labels: list[str],
         col_labels: list[str],
         ax: Axes | None = None,
