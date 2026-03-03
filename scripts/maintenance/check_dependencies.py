@@ -17,7 +17,11 @@ def run_command(cmd: list[str], cwd: Path = None) -> tuple[int, str, str]:
     """Run a command and return exit code, stdout, stderr."""
     try:
         result = subprocess.run(
-            cmd, cwd=cwd, capture_output=True, text=True, timeout=120
+            cmd,
+            cwd=cwd,
+            capture_output=True,
+            text=True,
+            timeout=120
         )
         return result.returncode, result.stdout, result.stderr
     except subprocess.TimeoutExpired:
@@ -58,7 +62,7 @@ def check_dependencies(repo_root: Path) -> int:
     # Check for pyproject.toml
     pyproject = repo_root / "pyproject.toml"
     if pyproject.exists():
-        print("\n✅ pyproject.toml exists")
+        print(f"\n✅ pyproject.toml exists")
 
         # Count dependencies (basic check)
         with open(pyproject) as f:
@@ -81,7 +85,10 @@ def check_dependencies(repo_root: Path) -> int:
 def main() -> int:
     parser = argparse.ArgumentParser(description="Check dependency health")
     parser.add_argument(
-        "--repo-root", type=Path, default=Path.cwd(), help="Repository root directory"
+        "--repo-root",
+        type=Path,
+        default=Path.cwd(),
+        help="Repository root directory"
     )
 
     args = parser.parse_args()

@@ -15,20 +15,13 @@ except ImportError:
     project_root = Path(__file__).resolve().parent.parent.parent.parent
     sys.path.insert(0, str(project_root / "src"))
 
+from codomyrmex.utils.cli_helpers import setup_logging, print_success, print_info, print_error
 import asyncio
-
 from codomyrmex.orchestrator import Workflow
-from codomyrmex.utils.cli_helpers import (
-    print_error,
-    print_info,
-    print_success,
-    setup_logging,
-)
-
 
 async def main() -> int:
     setup_logging()
-    print_info("Running Basic orchestrator Usage...")
+    print_info(f"Running Basic orchestrator Usage...")
 
     # 1. Workflow Creation
     print_info("Creating a real orchestration workflow...")
@@ -45,9 +38,7 @@ async def main() -> int:
 
     workflow.add_task(name="task1", action=process_data, kwargs={"data": "A"})
     workflow.add_task(name="task2", action=process_data, kwargs={"data": "B"})
-    workflow.add_task(
-        name="aggregate", action=aggregate_results, dependencies=["task1", "task2"]
-    )
+    workflow.add_task(name="aggregate", action=aggregate_results, dependencies=["task1", "task2"])
 
     # 3. Run Workflow
     print_info("Running workflow...")
@@ -70,26 +61,19 @@ async def main() -> int:
     except Exception as e:
         print_error(f"Workflow execution failed: {e}")
 
-    print_success("Basic orchestrator Usage completed successfully")
+    print_success(f"Basic orchestrator Usage completed successfully")
     return 0
 
+
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
-
-    config_path = (
-        Path(__file__).resolve().parent.parent.parent
-        / "config"
-        / "orchestrator"
-        / "config.yaml"
-    )
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "orchestrator" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
+        with open(config_path, "r") as f:
             config_data = yaml.safe_load(f) or {}
-            print("Loaded config from config/orchestrator/config.yaml")
-
+            print(f"Loaded config from config/orchestrator/config.yaml")
 
 if __name__ == "__main__":
     sys.exit(asyncio.run(main()))

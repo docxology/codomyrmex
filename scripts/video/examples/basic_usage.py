@@ -63,9 +63,7 @@ def main() -> int:
             aspect_ratio="16:9",
             duration_seconds=5,
         )
-        print_success(
-            f"   Got {len(results)} result(s). Keys: {list(results[0].keys())}"
-        )
+        print_success(f"   Got {len(results)} result(s). Keys: {list(results[0].keys())}")
     except Exception as e:
         print_error(f"   Video generation failed: {e}")
         return 1
@@ -79,9 +77,7 @@ def main() -> int:
     if video_bytes:
         out = output_dir / "basic_usage_video.mp4"
         out.write_bytes(video_bytes)
-        print_success(
-            f"   Saved: outputs/videos/basic_usage_video.mp4 ({len(video_bytes):,} bytes)"
-        )
+        print_success(f"   Saved: outputs/videos/basic_usage_video.mp4 ({len(video_bytes):,} bytes)")
     else:
         uri = vid.get("uri") or vid.get("url")
         if uri:
@@ -99,9 +95,7 @@ def main() -> int:
             aspect_ratio="9:16",
             duration_seconds=5,
         )
-        print_success(
-            f"   9:16 video generated. Keys: {list(vertical_results[0].keys())}"
-        )
+        print_success(f"   9:16 video generated. Keys: {list(vertical_results[0].keys())}")
     except Exception as e:
         print_error(f"   Vertical video generation failed: {e}")
 

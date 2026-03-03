@@ -5,7 +5,6 @@ CodeEditor Agent Example
 Demonstrates basic usage of CodeEditor for code generation and refactoring.
 This script handles gracefully when LLM APIs are not configured.
 """
-
 import sys
 from pathlib import Path
 
@@ -16,32 +15,19 @@ except ImportError:
     sys.path.insert(0, str(project_root / "src"))
 
 from codomyrmex.agents import CodeEditor
-from codomyrmex.utils.cli_helpers import (
-    print_error,
-    print_info,
-    print_success,
-    print_warning,
-    setup_logging,
-)
+from codomyrmex.utils.cli_helpers import setup_logging, print_success, print_error, print_info, print_warning
 
 
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
-
-    config_path = (
-        Path(__file__).resolve().parent.parent.parent
-        / "config"
-        / "agents"
-        / "config.yaml"
-    )
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "agents" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
+        with open(config_path, "r") as f:
             config_data = yaml.safe_load(f) or {}
-            print("Loaded config from config/agents/config.yaml")
+            print(f"Loaded config from config/agents/config.yaml")
 
     setup_logging()
     print_info("Initializing CodeEditor Agent...")
@@ -58,18 +44,13 @@ def main():
     try:
         result = editor.generate_code(
             prompt="Write a Python function to reverse a string.",
-            context="Use recursion if possible.",
+            context="Use recursion if possible."
         )
         print_success("Generated Code:")
         print(result)
     except Exception as e:
         error_msg = str(e).lower()
-        if (
-            "api" in error_msg
-            or "key" in error_msg
-            or "401" in str(e)
-            or "authentication" in error_msg
-        ):
+        if "api" in error_msg or "key" in error_msg or "401" in str(e) or "authentication" in error_msg:
             print_warning(f"LLM not configured (API key issue): {e}")
             print_info("To use: configure OPENAI_API_KEY or ANTHROPIC_API_KEY")
             return 0  # Exit gracefully - expected for demo scripts

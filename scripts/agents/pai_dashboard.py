@@ -32,13 +32,8 @@ except ImportError:
     project_root = Path(__file__).resolve().parent.parent.parent
     sys.path.insert(0, str(project_root / "src"))
 
-from codomyrmex.utils.cli_helpers import (
-    print_error,
-    print_info,
-    print_success,
-    setup_logging,
-)
-from codomyrmex.website import DataProvider, WebsiteGenerator, WebsiteServer
+from codomyrmex.utils.cli_helpers import setup_logging, print_success, print_info, print_error
+from codomyrmex.website import DataProvider, WebsiteServer, WebsiteGenerator
 
 
 def parse_args() -> argparse.Namespace:
@@ -46,25 +41,19 @@ def parse_args() -> argparse.Namespace:
         description="Launch the PAI Control Center (Codomyrmex Dashboard → Awareness)",
     )
     parser.add_argument(
-        "--port",
-        type=int,
-        default=8787,
+        "--port", type=int, default=8787,
         help="Port to serve on (default: 8787)",
     )
     parser.add_argument(
-        "--host",
-        default="0.0.0.0",
+        "--host", default="0.0.0.0",
         help="Host to bind to (default: 0.0.0.0)",
     )
     parser.add_argument(
-        "--no-open",
-        action="store_true",
+        "--no-open", action="store_true",
         help="Start server without opening the browser",
     )
     parser.add_argument(
-        "--all",
-        action="store_true",
-        dest="open_main",
+        "--all", action="store_true", dest="open_main",
         help="Open the main dashboard instead of the PAI Awareness page",
     )
     return parser.parse_args()
@@ -93,12 +82,12 @@ def main() -> int:
     try:
         target = "awareness.html" if not args.open_main else "index.html"
         redirect_html = (
-            "<!DOCTYPE html>\n<html>\n<head>\n"
+            '<!DOCTYPE html>\n<html>\n<head>\n'
             f'  <meta http-equiv="refresh" content="0; url=/output/website/{target}">\n'
-            f"  <title>Redirecting to PAI Control Center...</title>\n"
-            "</head>\n<body>\n"
+            f'  <title>Redirecting to PAI Control Center...</title>\n'
+            '</head>\n<body>\n'
             f'  <p>Redirecting to <a href="/output/website/{target}">PAI Control Center</a>...</p>\n'
-            "</body>\n</html>"
+            '</body>\n</html>'
         )
         index_file.write_text(redirect_html)
     except Exception as e:
@@ -139,11 +128,9 @@ def main() -> int:
         socketserver.TCPServer.allow_reuse_address = True
         with socketserver.TCPServer((args.host, args.port), WebsiteServer) as httpd:
             if not args.no_open:
-
                 def _open_browser():
                     time.sleep(1.0)
                     webbrowser.open(url)
-
                 threading.Thread(target=_open_browser, daemon=True).start()
 
             print_success(f"PAI Control Center active → {url}")
@@ -160,23 +147,17 @@ def main() -> int:
 
     return 0
 
+
+
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
-
-    config_path = (
-        Path(__file__).resolve().parent.parent.parent
-        / "config"
-        / "agents"
-        / "config.yaml"
-    )
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "agents" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
+        with open(config_path, "r") as f:
             config_data = yaml.safe_load(f) or {}
-            print("Loaded config from config/agents/config.yaml")
-
+            print(f"Loaded config from config/agents/config.yaml")
 
 if __name__ == "__main__":
     sys.exit(main())

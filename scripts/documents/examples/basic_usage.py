@@ -8,8 +8,8 @@ Demonstrates core document capabilities:
 - Document transformation and search
 """
 
-import shutil
 import sys
+import shutil
 from pathlib import Path
 
 # Ensure codomyrmex is in path
@@ -19,25 +19,19 @@ except ImportError:
     project_root = Path(__file__).resolve().parent.parent.parent.parent
     sys.path.insert(0, str(project_root / "src"))
 
+from codomyrmex.utils.cli_helpers import setup_logging, print_success, print_info, print_error
 from codomyrmex.documents import (
+    read_document,
+    write_document,
     Document,
     DocumentFormat,
     convert_document,
+    merge_documents,
+    split_document,
     create_index,
     index_document,
-    merge_documents,
-    read_document,
-    search_documents,
-    split_document,
-    write_document,
+    search_documents
 )
-from codomyrmex.utils.cli_helpers import (
-    print_error,
-    print_info,
-    print_success,
-    setup_logging,
-)
-
 
 def main():
     setup_logging()
@@ -85,17 +79,11 @@ def main():
     try:
         # Convert MD to HTML (basic)
         html_doc = convert_document(read_doc, DocumentFormat.HTML)
-        print_success(
-            f"  Converted to HTML. Content starts with: {html_doc.get_content_as_string()[:20]}..."
-        )
+        print_success(f"  Converted to HTML. Content starts with: {html_doc.get_content_as_string()[:20]}...")
 
         # Merge
-        merged = merge_documents(
-            [read_doc, Document("## Footer", DocumentFormat.MARKDOWN)]
-        )
-        print_success(
-            f"  Merged documents. Total length: {len(merged.get_content_as_string())}"
-        )
+        merged = merge_documents([read_doc, Document("## Footer", DocumentFormat.MARKDOWN)])
+        print_success(f"  Merged documents. Total length: {len(merged.get_content_as_string())}")
 
         # Split
         chunks = split_document(merged, {"method": "by_sections"})
@@ -118,7 +106,6 @@ def main():
 
     print_success("Document basic usage examples completed successfully")
     return 0
-
 
 if __name__ == "__main__":
     sys.exit(main())

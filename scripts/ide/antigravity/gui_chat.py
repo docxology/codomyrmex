@@ -4,15 +4,14 @@ GUI Chat Automation for Antigravity using AppleScript.
 Sends keystrokes directly to the active window/pane.
 """
 
+import sys
+import subprocess
 import argparse
 import logging
-import subprocess
-import sys
 
 # Configure logging
-logging.basicConfig(level=logging.INFO, format="%(message)s")
+logging.basicConfig(level=logging.INFO, format='%(message)s')
 logger = logging.getLogger("antigravity.gui")
-
 
 def send_gui_message(message: str, app_name: str = "Antigravity"):
     """
@@ -37,14 +36,11 @@ def send_gui_message(message: str, app_name: str = "Antigravity"):
     '''
 
     try:
-        subprocess.run(
-            ["osascript", "-e", apple_script], check=True, capture_output=True
-        )
+        subprocess.run(["osascript", "-e", apple_script], check=True, capture_output=True)
         return True
     except subprocess.CalledProcessError as e:
         logger.error(f"❌ AppleScript failed: {e.stderr.decode()}")
         return False
-
 
 def is_app_running(app_name: str) -> bool:
     """Check if an application is running using AppleScript."""
@@ -55,49 +51,34 @@ def is_app_running(app_name: str) -> bool:
     end tell
     '''
     try:
-        result = subprocess.run(
-            ["osascript", "-e", apple_script], capture_output=True, text=True, timeout=5
-        )
+        result = subprocess.run(["osascript", "-e", apple_script],
+                                capture_output=True, text=True, timeout=5)
         return result.stdout.strip() == "true"
     except Exception:
         return False
 
+
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
-
-    config_path = (
-        Path(__file__).resolve().parent.parent.parent / "config" / "ide" / "config.yaml"
-    )
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "ide" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
+        with open(config_path, "r") as f:
             config_data = yaml.safe_load(f) or {}
-            print("Loaded config from config/ide/config.yaml")
-
+            print(f"Loaded config from config/ide/config.yaml")
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(
-        description="Send GUI chat message to Antigravity."
-    )
-    parser.add_argument(
-        "--message",
-        "-m",
-        default="Hello from orchestrator test",
-        help="Message to send (default: test message)",
-    )
-    parser.add_argument(
-        "--app", default="Antigravity", help="Application name (default: Antigravity)"
-    )
+    parser = argparse.ArgumentParser(description="Send GUI chat message to Antigravity.")
+    parser.add_argument("--message", "-m", default="Hello from orchestrator test",
+                        help="Message to send (default: test message)")
+    parser.add_argument("--app", default="Antigravity", help="Application name (default: Antigravity)")
 
     args = parser.parse_args()
 
     # Check if app is running first
     if not is_app_running(args.app):
-        logger.info(
-            f"ℹ️  {args.app} is not running - skipping GUI automation (success)."
-        )
+        logger.info(f"ℹ️  {args.app} is not running - skipping GUI automation (success).")
         sys.exit(0)
 
     logger.info(f"Sending to {args.app}: '{args.message}'")

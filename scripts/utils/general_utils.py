@@ -16,9 +16,9 @@ except ImportError:
     sys.path.insert(0, str(project_root / "src"))
 
 import argparse
+import uuid
 import hashlib
 import re
-import uuid
 from datetime import datetime
 
 
@@ -41,9 +41,9 @@ def hash_string(text: str, algorithm: str = "sha256") -> str:
 def slugify(text: str) -> str:
     """Convert text to URL-safe slug."""
     text = text.lower()
-    text = re.sub(r"[^\w\s-]", "", text)
-    text = re.sub(r"[-\s]+", "-", text)
-    return text.strip("-")
+    text = re.sub(r'[^\w\s-]', '', text)
+    text = re.sub(r'[-\s]+', '-', text)
+    return text.strip('-')
 
 
 def format_timestamp(timestamp: float = None, fmt: str = "iso") -> str:
@@ -63,7 +63,7 @@ def format_timestamp(timestamp: float = None, fmt: str = "iso") -> str:
 
 def count_words(text: str) -> dict:
     """Count words in text."""
-    words = re.findall(r"\w+", text.lower())
+    words = re.findall(r'\w+', text.lower())
     return {
         "total": len(words),
         "unique": len(set(words)),
@@ -74,21 +74,14 @@ def count_words(text: str) -> dict:
 
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
-
-    config_path = (
-        Path(__file__).resolve().parent.parent.parent
-        / "config"
-        / "utils"
-        / "config.yaml"
-    )
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "utils" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
+        with open(config_path, "r") as f:
             config_data = yaml.safe_load(f) or {}
-            print("Loaded config from config/utils/config.yaml")
+            print(f"Loaded config from config/utils/config.yaml")
 
     parser = argparse.ArgumentParser(description="General utilities")
     subparsers = parser.add_subparsers(dest="command")
@@ -127,7 +120,7 @@ def main():
         return 0
 
     if args.command == "uuid":
-        print("🆔 UUID(s):\n")
+        print(f"🆔 UUID(s):\n")
         for _ in range(args.count):
             print(f"   {generate_uuid()}")
 

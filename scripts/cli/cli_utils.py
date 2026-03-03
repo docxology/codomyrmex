@@ -28,10 +28,7 @@ def get_terminal_size() -> tuple:
 def print_table(headers: list, rows: list, widths: list = None):
     """Print formatted table."""
     if not widths:
-        widths = [
-            max(len(str(r[i])) for r in [headers] + rows) + 2
-            for i in range(len(headers))
-        ]
+        widths = [max(len(str(r[i])) for r in [headers] + rows) + 2 for i in range(len(headers))]
 
     header_row = "".join(h.ljust(w) for h, w in zip(headers, widths))
     print(header_row)
@@ -64,18 +61,14 @@ def colorize(text: str, color: str) -> str:
 
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
-
-    config_path = (
-        Path(__file__).resolve().parent.parent.parent / "config" / "cli" / "config.yaml"
-    )
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "cli" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
+        with open(config_path, "r") as f:
             config_data = yaml.safe_load(f) or {}
-            print("Loaded config from config/cli/config.yaml")
+            print(f"Loaded config from config/cli/config.yaml")
 
     parser = argparse.ArgumentParser(description="CLI utilities")
     subparsers = parser.add_subparsers(dest="command")
@@ -105,7 +98,7 @@ def main():
 
     if args.command == "info":
         cols, rows = get_terminal_size()
-        print("🖥️  Terminal Info:\n")
+        print(f"🖥️  Terminal Info:\n")
         print(f"   Size: {cols}x{rows}")
         print(f"   Python: {sys.version.split()[0]}")
         print(f"   Platform: {sys.platform}")
@@ -122,7 +115,6 @@ def main():
 
     elif args.command == "demo-progress":
         import time
-
         print("📊 Progress Demo:\n")
         for i in range(101):
             print_progress(i, 100)

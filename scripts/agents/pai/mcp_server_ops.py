@@ -25,16 +25,15 @@ except ImportError:
     sys.path.insert(0, str(project_root / "src"))
 
 from codomyrmex.agents.pai import (
-    PROMPT_COUNT,
-    RESOURCE_COUNT,
-    TOOL_COUNT,
     create_codomyrmex_mcp_server,
     get_tool_registry,
+    TOOL_COUNT,
+    RESOURCE_COUNT,
+    PROMPT_COUNT,
 )
 from codomyrmex.agents.pai.mcp_bridge import get_total_tool_count
 from codomyrmex.utils.cli_helpers import (
-    print_success,
-    setup_logging,
+    setup_logging, print_success,
 )
 
 SECTIONS = ["registry", "server", "health"]
@@ -44,12 +43,8 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description="PAI MCP Server Operations — create, inspect, and validate MCP server",
     )
-    parser.add_argument(
-        "--section", "-s", choices=SECTIONS, help="Show specific section"
-    )
-    parser.add_argument(
-        "--json", "-j", action="store_true", dest="json_output", help="JSON output"
-    )
+    parser.add_argument("--section", "-s", choices=SECTIONS, help="Show specific section")
+    parser.add_argument("--json", "-j", action="store_true", dest="json_output", help="JSON output")
     return parser.parse_args()
 
 
@@ -113,24 +108,17 @@ def section_server() -> dict:
     # Show resource definitions
     _header("Resources")
     print(f"  Resource constant: {RESOURCE_COUNT}")
-    print("  Expected resources:")
-    print("    • codomyrmex://modules — Module inventory")
-    print("    • codomyrmex://status  — System health snapshot")
+    print(f"  Expected resources:")
+    print(f"    • codomyrmex://modules — Module inventory")
+    print(f"    • codomyrmex://status  — System health snapshot")
 
     # Show prompt definitions
     _header("Prompts")
     print(f"  Prompt constant: {PROMPT_COUNT}")
     prompts = [
-        "analyze_module",
-        "debug_issue",
-        "create_test",
-        "codomyrmexAnalyze",
-        "codomyrmexMemory",
-        "codomyrmexSearch",
-        "codomyrmexDocs",
-        "codomyrmexStatus",
-        "codomyrmexVerify",
-        "codomyrmexTrust",
+        "analyze_module", "debug_issue", "create_test",
+        "codomyrmexAnalyze", "codomyrmexMemory", "codomyrmexSearch",
+        "codomyrmexDocs", "codomyrmexStatus", "codomyrmexVerify", "codomyrmexTrust",
     ]
     for p in prompts:
         print(f"    • {p}")
@@ -199,23 +187,17 @@ def main() -> int:
     print()
     return 0
 
+
+
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
-
-    config_path = (
-        Path(__file__).resolve().parent.parent.parent
-        / "config"
-        / "agents"
-        / "config.yaml"
-    )
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "agents" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
+        with open(config_path, "r") as f:
             config_data = yaml.safe_load(f) or {}
-            print("Loaded config from config/agents/config.yaml")
-
+            print(f"Loaded config from config/agents/config.yaml")
 
 if __name__ == "__main__":
     sys.exit(main())

@@ -26,16 +26,13 @@ except ImportError:
 import argparse
 import logging
 
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s"
-)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger(__name__)
 
 
 def get_client():
     """Get metering client from environment."""
     from codomyrmex.cloud.infomaniak import InfomaniakMeteringClient
-
     return InfomaniakMeteringClient.from_env()
 
 
@@ -193,50 +190,29 @@ def list_resources(client):
 
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
-
-    config_path = (
-        Path(__file__).resolve().parent.parent.parent
-        / "config"
-        / "cloud"
-        / "config.yaml"
-    )
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "cloud" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
+        with open(config_path, "r") as f:
             config_data = yaml.safe_load(f) or {}
-            print("Loaded config from config/cloud/config.yaml")
+            print(f"Loaded config from config/cloud/config.yaml")
 
     parser = argparse.ArgumentParser(description="Infomaniak Metering Examples")
 
     # Usage operations
     parser.add_argument("--usage", action="store_true", help="Show all usage")
-    parser.add_argument(
-        "--compute-usage", action="store_true", help="Show compute usage"
-    )
-    parser.add_argument(
-        "--storage-usage", action="store_true", help="Show storage usage"
-    )
-    parser.add_argument(
-        "--network-usage", action="store_true", help="Show network usage"
-    )
-    parser.add_argument(
-        "--object-storage-usage", action="store_true", help="Show object storage usage"
-    )
+    parser.add_argument("--compute-usage", action="store_true", help="Show compute usage")
+    parser.add_argument("--storage-usage", action="store_true", help="Show storage usage")
+    parser.add_argument("--network-usage", action="store_true", help="Show network usage")
+    parser.add_argument("--object-storage-usage", action="store_true", help="Show object storage usage")
 
     # Quota operations
     parser.add_argument("--quotas", action="store_true", help="Show all quotas")
-    parser.add_argument(
-        "--compute-quotas", action="store_true", help="Show compute quotas"
-    )
-    parser.add_argument(
-        "--network-quotas", action="store_true", help="Show network quotas"
-    )
-    parser.add_argument(
-        "--storage-quotas", action="store_true", help="Show storage quotas"
-    )
+    parser.add_argument("--compute-quotas", action="store_true", help="Show compute quotas")
+    parser.add_argument("--network-quotas", action="store_true", help="Show network quotas")
+    parser.add_argument("--storage-quotas", action="store_true", help="Show storage quotas")
 
     # Resource listing
     parser.add_argument("--resources", action="store_true", help="List all resources")

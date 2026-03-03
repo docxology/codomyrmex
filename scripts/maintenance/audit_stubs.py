@@ -86,25 +86,11 @@ def audit_stubs_better(src_dir: Path) -> list:
     """
     issues = []
     skip_names = {
-        "__init__",
-        "__post_init__",
-        "__enter__",
-        "__exit__",
-        "close",
-        "shutdown",
-        "cleanup",
-        "update",
-        "setup",
+        "__init__", "__post_init__", "__enter__", "__exit__",
+        "close", "shutdown", "cleanup", "update", "setup",
     }
     abstract_decorators = {"abstractmethod", "overload", "property"}
-    abstract_bases = {
-        "ABC",
-        "Protocol",
-        "Interface",
-        "Exception",
-        "Error",
-        "BaseException",
-    }
+    abstract_bases = {"ABC", "Protocol", "Interface", "Exception", "Error", "BaseException"}
 
     for filepath in sorted(src_dir.rglob("*.py")):
         # Skip __pycache__ and tests subtrees
@@ -114,10 +100,7 @@ def audit_stubs_better(src_dir: Path) -> list:
         fname = filepath.name
         if fname.startswith("test_") or fname == "__init__.py":
             continue
-        if any(kw in fname.lower() for kw in ("interface", "protocol")) or fname in (
-            "base.py",
-            "abc.py",
-        ):
+        if any(kw in fname.lower() for kw in ("interface", "protocol")) or fname in ("base.py", "abc.py"):
             continue
 
         try:
@@ -146,9 +129,7 @@ def audit_stubs_better(src_dir: Path) -> list:
             parent = getattr(node, "parent", None)
             if not is_abstract and isinstance(parent, ast.ClassDef):
                 for base in parent.bases:
-                    if (
-                        getattr(base, "id", "") or getattr(base, "attr", "")
-                    ) in abstract_bases:
+                    if (getattr(base, "id", "") or getattr(base, "attr", "")) in abstract_bases:
                         is_abstract = True
                         break
                 if parent.name.endswith(("Error", "Exception", "Base")):
@@ -163,9 +144,7 @@ def audit_stubs_better(src_dir: Path) -> list:
                 rel = filepath.relative_to(src_dir.parent.parent)
             except ValueError:
                 rel = filepath
-            issues.append(
-                f"- `{node.name}` in [{filepath}](../../{rel}#L{node.lineno})"
-            )
+            issues.append(f"- `{node.name}` in [{filepath}](../../{rel}#L{node.lineno})")
 
     return issues
 

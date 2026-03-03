@@ -22,12 +22,8 @@ except ImportError:
     project_root = Path(__file__).resolve().parent.parent.parent
     sys.path.insert(0, str(project_root / "src"))
 
-from codomyrmex.utils.cli_helpers import (
-    print_error,
-    print_info,
-    print_success,
-    setup_logging,
-)
+from codomyrmex.utils.cli_helpers import setup_logging, print_success, print_info, print_error
+
 
 DEMOS = ["isc", "conflict", "mcp"]
 
@@ -37,14 +33,12 @@ def parse_args() -> argparse.Namespace:
         description="Z3 PAI Agent -- ISC verification demos",
     )
     parser.add_argument(
-        "--demo",
-        "-d",
+        "--demo", "-d",
         choices=DEMOS,
         help="Run a single demo (default: all)",
     )
     parser.add_argument(
-        "--json",
-        "-j",
+        "--json", "-j",
         action="store_true",
         dest="json_output",
         help="Output results as JSON",
@@ -66,17 +60,12 @@ def demo_isc_verification() -> dict:
         {"id": "ISC-C2", "description": "Throughput at least 100 requests per second"},
         {"id": "ISC-C3", "description": "Error rate under 0.5 percent"},
         {"id": "ISC-C4", "description": "Memory usage below 512 megabytes"},
-        {
-            "id": "ISC-C5",
-            "description": "Code quality is maintainable",
-        },  # qualitative -- skipped
+        {"id": "ISC-C5", "description": "Code quality is maintainable"},  # qualitative -- skipped
     ]
 
     result = verify_criteria_consistency(criteria)
     print_info(f"  Consistent: {result.consistent}")
-    print_info(
-        f"  Analyzed: {result.criteria_analyzed}, Skipped: {result.criteria_skipped}"
-    )
+    print_info(f"  Analyzed: {result.criteria_analyzed}, Skipped: {result.criteria_skipped}")
     if result.satisfying_assignment:
         print_info(f"  Satisfying assignment: {result.satisfying_assignment}")
     if result.skipped_reasons:
@@ -100,21 +89,12 @@ def demo_conflict_detection() -> dict:
 
     # Conflicting criteria: fast response + heavy computation
     criteria = [
-        {
-            "id": "ISC-C1",
-            "description": "Response time under 50ms",
-            "constraint": "response_time = Int('response_time')\nsolver.add(response_time < 50)",
-        },
-        {
-            "id": "ISC-C2",
-            "description": "Minimum 10 database joins per request",
-            "constraint": "db_joins = Int('db_joins')\nsolver.add(db_joins >= 10)",
-        },
-        {
-            "id": "ISC-C3",
-            "description": "Each join adds at least 8ms latency",
-            "constraint": "solver.add(response_time >= db_joins * 8)",
-        },
+        {"id": "ISC-C1", "description": "Response time under 50ms",
+         "constraint": "response_time = Int('response_time')\nsolver.add(response_time < 50)"},
+        {"id": "ISC-C2", "description": "Minimum 10 database joins per request",
+         "constraint": "db_joins = Int('db_joins')\nsolver.add(db_joins >= 10)"},
+        {"id": "ISC-C3", "description": "Each join adds at least 8ms latency",
+         "constraint": "solver.add(response_time >= db_joins * 8)"},
     ]
 
     result = verify_criteria_consistency(criteria)
@@ -154,9 +134,7 @@ def demo_mcp_agent_workflow() -> dict:
 
     # Step 4: Solve
     result1 = mcp_tools.solve_model()
-    print_info(
-        f"  [agent] solve_model() -- {result1['status']}, model: {result1['model']}"
-    )
+    print_info(f"  [agent] solve_model() -- {result1['status']}, model: {result1['model']}")
     assert result1["satisfiable"], "Expected SAT"
 
     # Step 5: Tighten constraint (agent refines ISC)
@@ -166,9 +144,7 @@ def demo_mcp_agent_workflow() -> dict:
 
     # Step 6: Re-solve with tighter model
     result2 = mcp_tools.solve_model()
-    print_info(
-        f"  [agent] solve_model() -- {result2['status']}, model: {result2['model']}"
-    )
+    print_info(f"  [agent] solve_model() -- {result2['status']}, model: {result2['model']}")
     assert result2["satisfiable"], "Expected SAT after refinement"
     print_success("  MCP workflow complete -- incremental model building works!")
 
@@ -225,23 +201,17 @@ def main() -> int:
     print_success("All demos passed!")
     return 0
 
+
+
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
-
-    config_path = (
-        Path(__file__).resolve().parent.parent.parent
-        / "config"
-        / "agents"
-        / "config.yaml"
-    )
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "agents" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
+        with open(config_path, "r") as f:
             config_data = yaml.safe_load(f) or {}
-            print("Loaded config from config/agents/config.yaml")
-
+            print(f"Loaded config from config/agents/config.yaml")
 
 if __name__ == "__main__":
     sys.exit(main())

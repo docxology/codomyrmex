@@ -4,58 +4,39 @@ Demonstrates the use of ActiveDefense, RabbitHole, and the combined Defense engi
 """
 
 import asyncio
-
-from codomyrmex.defense import (
-    ActiveDefense,
-    Defense,
-    DetectionRule,
-    RabbitHole,
-    ResponseAction,
-    Severity,
-)
-
+from codomyrmex.defense import Defense, ActiveDefense, RabbitHole, DetectionRule, Severity, ResponseAction
 
 async def demo_defense_pipeline():
     print("--- 1. Defense Engine (Rate Limiting + Rules) ---")
     defense = Defense({"max_requests": 2, "window_seconds": 10})
 
     # Add a custom rule
-    defense.add_detection_rule(
-        DetectionRule(
-            name="sql_injection",
-            category="injection",
-            severity=Severity.HIGH,
-            check=lambda req: "DROP TABLE" in req.get("query", "").upper(),
-            response=ResponseAction.BLOCK,
-        )
-    )
+    defense.add_detection_rule(DetectionRule(
+        name="sql_injection",
+        category="injection",
+        severity=Severity.HIGH,
+        check=lambda req: "DROP TABLE" in req.get("query", "").upper(),
+        response=ResponseAction.BLOCK,
+    ))
 
     source_ip = "1.2.3.4"
 
     # First request: Allowed
-    allowed, threats = defense.process_request(
-        source_ip, {"path": "/api", "query": "SELECT * FROM users"}
-    )
+    allowed, threats = defense.process_request(source_ip, {"path": "/api", "query": "SELECT * FROM users"})
     print(f"Request 1: Allowed={allowed}, Threats={len(threats)}")
 
     # Second request: Allowed
-    allowed, threats = defense.process_request(
-        source_ip, {"path": "/api", "query": "SELECT * FROM products"}
-    )
+    allowed, threats = defense.process_request(source_ip, {"path": "/api", "query": "SELECT * FROM products"})
     print(f"Request 2: Allowed={allowed}, Threats={len(threats)}")
 
     # Third request: Throttled (Rate Limit)
-    allowed, threats = defense.process_request(
-        source_ip, {"path": "/api", "query": "SELECT * FROM orders"}
-    )
+    allowed, threats = defense.process_request(source_ip, {"path": "/api", "query": "SELECT * FROM orders"})
     print(f"Request 3: Allowed={allowed}, Threats={len(threats)}")
     if threats:
         print(f"  Threat: {threats[0].description} (Response: {threats[0].response})")
 
     # Malicious request: Blocked (SQL Injection)
-    allowed, threats = defense.process_request(
-        "5.6.7.8", {"path": "/api", "query": "DROP TABLE users"}
-    )
+    allowed, threats = defense.process_request("5.6.7.8", {"path": "/api", "query": "DROP TABLE users"})
     print(f"Request 4 (Malicious): Allowed={allowed}, Threats={len(threats)}")
     if threats:
         print(f"  Threat: {threats[0].description} (Response: {threats[0].response})")
@@ -72,9 +53,7 @@ async def demo_defense_pipeline():
         poisoned_context = active.poison_context("attacker_1", intensity=0.8)
         print(f"  Poisoned Context generated: {poisoned_context[:50]}...")
 
-        token = active.create_honeytoken(
-            label="admin_password", context="simulated_vault"
-        )
+        token = active.create_honeytoken(label="admin_password", context="simulated_vault")
         print(f"  Created Honeytoken: {token}")
 
     print("\n--- 3. Rabbit Hole (Containment) ---")
@@ -91,23 +70,16 @@ async def demo_defense_pipeline():
 
     print("Demo complete.")
 
+
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
-
-    config_path = (
-        Path(__file__).resolve().parent.parent.parent
-        / "config"
-        / "defense"
-        / "config.yaml"
-    )
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "defense" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
+        with open(config_path, "r") as f:
             config_data = yaml.safe_load(f) or {}
-            print("Loaded config from config/defense/config.yaml")
-
+            print(f"Loaded config from config/defense/config.yaml")
 
 if __name__ == "__main__":
     asyncio.run(demo_defense_pipeline())

@@ -55,7 +55,7 @@ def parse_skill_md(path: Path) -> dict:
                     info[key.strip()] = value.strip()
 
     # Extract first heading
-    match = re.search(r"^#\s+(.+)$", content, re.MULTILINE)
+    match = re.search(r'^#\s+(.+)$', content, re.MULTILINE)
     if match and "name" not in info:
         info["name"] = match.group(1)
 
@@ -69,7 +69,7 @@ def create_skill_template(name: str, output_dir: str = ".agent/skills") -> Path:
     skill_dir = Path(output_dir) / name
     skill_dir.mkdir(parents=True, exist_ok=True)
 
-    skill_md = f"""---
+    skill_md = f'''---
 name: {name}
 description: Description of what this skill does
 version: 0.1.0
@@ -100,7 +100,7 @@ List any requirements or dependencies.
 ```python
 # Example code here
 ```
-"""
+'''
 
     (skill_dir / "SKILL.md").write_text(skill_md)
     return skill_dir
@@ -154,9 +154,7 @@ def main():
         skills = find_skills()
         found = None
         for s in skills:
-            if args.name in str(s) or (
-                s.name == "SKILL.md" and args.name == s.parent.name
-            ):
+            if args.name in str(s) or (s.name == "SKILL.md" and args.name == s.parent.name):
                 found = s
                 break
 

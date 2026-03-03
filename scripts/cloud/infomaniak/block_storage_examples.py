@@ -29,16 +29,13 @@ import argparse
 import json
 import logging
 
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s"
-)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger(__name__)
 
 
 def get_client():
     """Get volume client from environment."""
     from codomyrmex.cloud.infomaniak import InfomaniakVolumeClient
-
     return InfomaniakVolumeClient.from_env()
 
 
@@ -52,13 +49,7 @@ def list_volumes(client):
         return
 
     for vol in volumes:
-        status_icon = (
-            "🟢"
-            if vol["status"] == "available"
-            else "🔵"
-            if vol["status"] == "in-use"
-            else "🔴"
-        )
+        status_icon = "🟢" if vol["status"] == "available" else "🔵" if vol["status"] == "in-use" else "🔴"
         print(f"   {status_icon} {vol['name']} ({vol['size']}GB)")
         print(f"      ID: {vol['id']}")
         print(f"      Status: {vol['status']}")
@@ -66,9 +57,7 @@ def list_volumes(client):
         print(f"      Zone: {vol.get('availability_zone', 'N/A')}")
         if vol.get("attachments"):
             for att in vol["attachments"]:
-                print(
-                    f"      Attached to: {att.get('server_id')} at {att.get('device')}"
-                )
+                print(f"      Attached to: {att.get('server_id')} at {att.get('device')}")
         print()
 
 
@@ -108,15 +97,16 @@ def list_backups(client):
         print()
 
 
-def create_volume(
-    client, name: str, size: int, volume_type: str = None, zone: str = None
-):
+def create_volume(client, name: str, size: int, volume_type: str = None, zone: str = None):
     """Create a new volume."""
     print(f"\n💾 Creating volume: {name}")
     print(f"   Size: {size}GB")
 
     result = client.create_volume(
-        size=size, name=name, volume_type=volume_type, availability_zone=zone
+        size=size,
+        name=name,
+        volume_type=volume_type,
+        availability_zone=zone
     )
 
     if result:
@@ -143,7 +133,9 @@ def create_snapshot(client, volume_id: str, name: str, description: str = None):
     print(f"   Volume: {volume_id}")
 
     result = client.create_snapshot(
-        volume_id=volume_id, name=name, description=description
+        volume_id=volume_id,
+        name=name,
+        description=description
     )
 
     if result:
@@ -152,20 +144,17 @@ def create_snapshot(client, volume_id: str, name: str, description: str = None):
         print("   ❌ Failed to create snapshot")
 
 
-def create_backup(
-    client,
-    volume_id: str,
-    name: str,
-    description: str = None,
-    incremental: bool = False,
-):
+def create_backup(client, volume_id: str, name: str, description: str = None, incremental: bool = False):
     """Create a volume backup."""
     print(f"\n💿 Creating backup: {name}")
     print(f"   Volume: {volume_id}")
     print(f"   Incremental: {incremental}")
 
     result = client.create_backup(
-        volume_id=volume_id, name=name, description=description, incremental=incremental
+        volume_id=volume_id,
+        name=name,
+        description=description,
+        incremental=incremental
     )
 
     if result:
@@ -196,21 +185,14 @@ def delete_volume(client, volume_id: str, force: bool = False):
 
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
-
-    config_path = (
-        Path(__file__).resolve().parent.parent.parent
-        / "config"
-        / "cloud"
-        / "config.yaml"
-    )
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "cloud" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
+        with open(config_path, "r") as f:
             config_data = yaml.safe_load(f) or {}
-            print("Loaded config from config/cloud/config.yaml")
+            print(f"Loaded config from config/cloud/config.yaml")
 
     parser = argparse.ArgumentParser(description="Infomaniak Block Storage Examples")
 
@@ -220,24 +202,16 @@ def main():
     parser.add_argument("--list-backups", action="store_true", help="List backups")
 
     # Get operations
-    parser.add_argument(
-        "--get-volume", type=str, metavar="ID", help="Get volume details"
-    )
+    parser.add_argument("--get-volume", type=str, metavar="ID", help="Get volume details")
 
     # Create operations
     parser.add_argument("--create-volume", action="store_true", help="Create a volume")
-    parser.add_argument(
-        "--create-snapshot", action="store_true", help="Create a snapshot"
-    )
+    parser.add_argument("--create-snapshot", action="store_true", help="Create a snapshot")
     parser.add_argument("--create-backup", action="store_true", help="Create a backup")
 
     # Modify operations
-    parser.add_argument(
-        "--extend-volume", type=str, metavar="ID", help="Extend a volume"
-    )
-    parser.add_argument(
-        "--delete-volume", type=str, metavar="ID", help="Delete a volume"
-    )
+    parser.add_argument("--extend-volume", type=str, metavar="ID", help="Extend a volume")
+    parser.add_argument("--delete-volume", type=str, metavar="ID", help="Delete a volume")
 
     # Creation options
     parser.add_argument("--name", type=str, help="Resource name")
@@ -289,9 +263,7 @@ def main():
         if not args.volume_id or not args.name:
             print("❌ --create-backup requires --volume-id and --name")
             return 1
-        create_backup(
-            client, args.volume_id, args.name, args.description, args.incremental
-        )
+        create_backup(client, args.volume_id, args.name, args.description, args.incremental)
     elif args.extend_volume:
         if not args.new_size:
             print("❌ --extend-volume requires --new-size")

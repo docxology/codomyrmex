@@ -22,8 +22,8 @@ import json
 
 def check_ollama_connection(host: str, port: int) -> bool:
     """Check if Ollama server is accessible."""
-    import urllib.error
     import urllib.request
+    import urllib.error
 
     try:
         url = f"http://{host}:{port}/api/tags"
@@ -46,17 +46,22 @@ def list_models(host: str, port: int) -> list:
         return data.get("models", [])
 
 
-def test_inference(
-    host: str, port: int, model: str, prompt: str = "Hello, how are you?"
-) -> str:
+def test_inference(host: str, port: int, model: str, prompt: str = "Hello, how are you?") -> str:
     """Run a simple inference test."""
     import urllib.request
 
     url = f"http://{host}:{port}/api/generate"
-    payload = json.dumps({"model": model, "prompt": prompt, "stream": False}).encode()
+    payload = json.dumps({
+        "model": model,
+        "prompt": prompt,
+        "stream": False
+    }).encode()
 
     req = urllib.request.Request(
-        url, data=payload, headers={"Content-Type": "application/json"}, method="POST"
+        url,
+        data=payload,
+        headers={"Content-Type": "application/json"},
+        method="POST"
     )
 
     with urllib.request.urlopen(req, timeout=60) as response:
@@ -66,30 +71,20 @@ def test_inference(
 
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
-
-    config_path = (
-        Path(__file__).resolve().parent.parent.parent / "config" / "llm" / "config.yaml"
-    )
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "llm" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
+        with open(config_path, "r") as f:
             config_data = yaml.safe_load(f) or {}
-            print("Loaded config from config/llm/config.yaml")
+            print(f"Loaded config from config/llm/config.yaml")
 
     parser = argparse.ArgumentParser(description="Test Ollama LLM connectivity")
-    parser.add_argument(
-        "--host", default="localhost", help="Ollama host (default: localhost)"
-    )
-    parser.add_argument(
-        "--port", type=int, default=11434, help="Ollama port (default: 11434)"
-    )
+    parser.add_argument("--host", default="localhost", help="Ollama host (default: localhost)")
+    parser.add_argument("--port", type=int, default=11434, help="Ollama port (default: 11434)")
     parser.add_argument("--model", default=None, help="Model to test inference with")
-    parser.add_argument(
-        "--prompt", default="Say hello in one sentence.", help="Test prompt"
-    )
+    parser.add_argument("--prompt", default="Say hello in one sentence.", help="Test prompt")
     args = parser.parse_args()
 
     print(f"🔍 Testing Ollama connection at {args.host}:{args.port}...")
@@ -116,9 +111,7 @@ def main():
         try:
             response = test_inference(args.host, args.port, args.model, args.prompt)
             print(f"   Prompt: {args.prompt}")
-            print(
-                f"   Response: {response[:200]}{'...' if len(response) > 200 else ''}"
-            )
+            print(f"   Response: {response[:200]}{'...' if len(response) > 200 else ''}")
             print("✅ Inference test passed")
         except Exception as e:
             print(f"❌ Inference test failed: {e}")

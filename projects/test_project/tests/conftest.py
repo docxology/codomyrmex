@@ -1,8 +1,7 @@
 """Test configuration and fixtures for test_project."""
 
-from pathlib import Path
-
 import pytest
+from pathlib import Path
 
 
 @pytest.fixture
@@ -114,12 +113,7 @@ def sample_analysis_results() -> dict:
                 },
                 "patterns": ["type_hints"],
                 "issues": [
-                    {
-                        "type": "todo",
-                        "severity": "info",
-                        "message": "TODO comment",
-                        "line": 10,
-                    }
+                    {"type": "todo", "severity": "info", "message": "TODO comment", "line": 10}
                 ],
             },
         ],

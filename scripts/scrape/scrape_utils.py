@@ -16,10 +16,10 @@ except ImportError:
     sys.path.insert(0, str(project_root / "src"))
 
 import argparse
-import json
-import re
-import urllib.error
 import urllib.request
+import urllib.error
+import re
+import json
 from html.parser import HTMLParser
 
 
@@ -79,15 +79,13 @@ class MetaExtractor(HTMLParser):
 def fetch_url(url: str, timeout: int = 30) -> dict:
     """Fetch URL content."""
     try:
-        req = urllib.request.Request(
-            url, headers={"User-Agent": "codomyrmex-scraper/1.0"}
-        )
+        req = urllib.request.Request(url, headers={"User-Agent": "codomyrmex-scraper/1.0"})
         with urllib.request.urlopen(req, timeout=timeout) as response:
             return {
                 "status": response.status,
                 "content": response.read().decode(errors="ignore"),
                 "headers": dict(response.headers),
-                "url": response.url,
+                "url": response.url
             }
     except urllib.error.HTTPError as e:
         return {"status": e.code, "error": str(e.reason)}
@@ -97,40 +95,29 @@ def fetch_url(url: str, timeout: int = 30) -> dict:
 
 def extract_text(html: str) -> str:
     """Extract text from HTML, removing tags."""
-    text = re.sub(
-        r"<script[^>]*>.*?</script>", "", html, flags=re.DOTALL | re.IGNORECASE
-    )
-    text = re.sub(r"<style[^>]*>.*?</style>", "", text, flags=re.DOTALL | re.IGNORECASE)
-    text = re.sub(r"<[^>]+>", " ", text)
-    text = re.sub(r"\s+", " ", text)
+    text = re.sub(r'<script[^>]*>.*?</script>', '', html, flags=re.DOTALL | re.IGNORECASE)
+    text = re.sub(r'<style[^>]*>.*?</style>', '', text, flags=re.DOTALL | re.IGNORECASE)
+    text = re.sub(r'<[^>]+>', ' ', text)
+    text = re.sub(r'\s+', ' ', text)
     return text.strip()
 
 
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
-
-    config_path = (
-        Path(__file__).resolve().parent.parent.parent
-        / "config"
-        / "scrape"
-        / "config.yaml"
-    )
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "scrape" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
+        with open(config_path, "r") as f:
             config_data = yaml.safe_load(f) or {}
-            print("Loaded config from config/scrape/config.yaml")
+            print(f"Loaded config from config/scrape/config.yaml")
 
     parser = argparse.ArgumentParser(description="Web scraping utilities")
     parser.add_argument("url", nargs="?", help="URL to scrape")
     parser.add_argument("--links", "-l", action="store_true", help="Extract links")
     parser.add_argument("--meta", "-m", action="store_true", help="Extract meta tags")
-    parser.add_argument(
-        "--text", "-t", action="store_true", help="Extract text content"
-    )
+    parser.add_argument("--text", "-t", action="store_true", help="Extract text content")
     parser.add_argument("--json", "-j", action="store_true", help="Output as JSON")
     parser.add_argument("--output", "-o", help="Save to file")
     args = parser.parse_args()

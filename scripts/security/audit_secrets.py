@@ -17,28 +17,29 @@ except ImportError:
     sys.path.insert(0, str(project_root / "src"))
 
 import argparse
-import os
 import re
+import os
+
 
 # Patterns for detecting secrets
 SECRET_PATTERNS = {
-    "AWS Access Key": r"AKIA[0-9A-Z]{16}",
+    "AWS Access Key": r'AKIA[0-9A-Z]{16}',
     "AWS Secret Key": r'(?i)aws(.{0,20})?(?-i)[\'"][0-9a-zA-Z/+]{40}[\'"]',
-    "GitHub Token": r"gh[ps]_[a-zA-Z0-9]{36}",
-    "GitHub OAuth": r"gho_[a-zA-Z0-9]{36}",
+    "GitHub Token": r'gh[ps]_[a-zA-Z0-9]{36}',
+    "GitHub OAuth": r'gho_[a-zA-Z0-9]{36}',
     "Generic API Key": r'(?i)(api[_-]?key|apikey)[\'"\s]*[:=][\'"\s]*[a-zA-Z0-9_-]{20,}',
     "Generic Secret": r'(?i)(secret|password|passwd|pwd)[\'"\s]*[:=][\'"\s]*[^\s\'"]{8,}',
-    "Private Key": r"-----BEGIN (RSA |EC |DSA |OPENSSH )?PRIVATE KEY-----",
-    "Slack Token": r"xox[baprs]-[0-9]{10,13}-[a-zA-Z0-9-]+",
-    "Stripe Key": r"sk_live_[a-zA-Z0-9]{24}",
-    "Google API Key": r"AIza[0-9A-Za-z-_]{35}",
-    "JSON Web Token": r"eyJ[a-zA-Z0-9_-]*\.eyJ[a-zA-Z0-9_-]*\.[a-zA-Z0-9_-]*",
-    "Basic Auth": r"(?i)basic\s+[a-zA-Z0-9+/]+={0,2}",
-    "Bearer Token": r"(?i)bearer\s+[a-zA-Z0-9_-]+\.[a-zA-Z0-9_-]+",
+    "Private Key": r'-----BEGIN (RSA |EC |DSA |OPENSSH )?PRIVATE KEY-----',
+    "Slack Token": r'xox[baprs]-[0-9]{10,13}-[a-zA-Z0-9-]+',
+    "Stripe Key": r'sk_live_[a-zA-Z0-9]{24}',
+    "Google API Key": r'AIza[0-9A-Za-z-_]{35}',
+    "JSON Web Token": r'eyJ[a-zA-Z0-9_-]*\.eyJ[a-zA-Z0-9_-]*\.[a-zA-Z0-9_-]*',
+    "Basic Auth": r'(?i)basic\s+[a-zA-Z0-9+/]+={0,2}',
+    "Bearer Token": r'(?i)bearer\s+[a-zA-Z0-9_-]+\.[a-zA-Z0-9_-]+',
     "Database URL": r'(?i)(mysql|postgres|mongodb|redis)://[^\'"\s]+:[^\'"\s]+@',
-    "SSH DSA Private Key": r"-----BEGIN DSA PRIVATE KEY-----",
-    "SSH RSA Private Key": r"-----BEGIN RSA PRIVATE KEY-----",
-    "PEM Certificate": r"-----BEGIN CERTIFICATE-----",
+    "SSH DSA Private Key": r'-----BEGIN DSA PRIVATE KEY-----',
+    "SSH RSA Private Key": r'-----BEGIN RSA PRIVATE KEY-----',
+    "PEM Certificate": r'-----BEGIN CERTIFICATE-----',
 }
 
 # Files/directories to skip
@@ -58,31 +59,10 @@ SKIP_PATTERNS = {
 
 # File extensions to scan
 SCAN_EXTENSIONS = {
-    ".py",
-    ".js",
-    ".ts",
-    ".jsx",
-    ".tsx",
-    ".java",
-    ".go",
-    ".rb",
-    ".php",
-    ".yml",
-    ".yaml",
-    ".json",
-    ".xml",
-    ".env",
-    ".sh",
-    ".bash",
-    ".zsh",
-    ".conf",
-    ".config",
-    ".ini",
-    ".properties",
-    ".toml",
-    ".md",
-    ".txt",
-    ".rst",
+    ".py", ".js", ".ts", ".jsx", ".tsx", ".java", ".go", ".rb", ".php",
+    ".yml", ".yaml", ".json", ".xml", ".env", ".sh", ".bash", ".zsh",
+    ".conf", ".config", ".ini", ".properties", ".toml",
+    ".md", ".txt", ".rst",
 }
 
 
@@ -102,7 +82,7 @@ def scan_file(file_path: Path) -> list:
     findings = []
 
     try:
-        with open(file_path, encoding="utf-8", errors="ignore") as f:
+        with open(file_path, "r", encoding="utf-8", errors="ignore") as f:
             content = f.read()
             lines = content.split("\n")
     except Exception:
@@ -120,22 +100,16 @@ def scan_file(file_path: Path) -> list:
             for match in matches:
                 # Skip example/placeholder values
                 match_str = match if isinstance(match, str) else str(match)
-                if any(
-                    x in match_str.lower()
-                    for x in ["example", "placeholder", "xxx", "your_", "replace"]
-                ):
+                if any(x in match_str.lower() for x in ["example", "placeholder", "xxx", "your_", "replace"]):
                     continue
 
-                findings.append(
-                    {
-                        "file": str(file_path),
-                        "line": i,
-                        "type": pattern_name,
-                        "match": match_str[:50]
-                        + ("..." if len(match_str) > 50 else ""),
-                        "context": line.strip()[:80],
-                    }
-                )
+                findings.append({
+                    "file": str(file_path),
+                    "line": i,
+                    "type": pattern_name,
+                    "match": match_str[:50] + ("..." if len(match_str) > 50 else ""),
+                    "context": line.strip()[:80]
+                })
 
     return findings
 
@@ -150,11 +124,7 @@ def scan_directory(path: str, extensions: set = SCAN_EXTENSIONS) -> list:
             if should_skip(file_path):
                 continue
 
-            if (
-                extensions
-                and file_path.suffix.lower() not in extensions
-                and file_path.name != ".env"
-            ):
+            if extensions and file_path.suffix.lower() not in extensions and file_path.name != ".env":
                 continue
 
             file_findings = scan_file(file_path)
@@ -171,7 +141,7 @@ def check_gitignore(path: str) -> list:
     sensitive_patterns = [".env", "*.pem", "*.key", "secrets.json", "credentials.json"]
 
     if gitignore.exists():
-        with open(gitignore) as f:
+        with open(gitignore, "r") as f:
             content = f.read()
 
         for pattern in sensitive_patterns:
@@ -185,15 +155,9 @@ def check_gitignore(path: str) -> list:
 
 def main():
     parser = argparse.ArgumentParser(description="Audit repository for secrets")
-    parser.add_argument(
-        "--path", "-p", default=".", help="Path to scan (default: current directory)"
-    )
-    parser.add_argument(
-        "--verbose", "-v", action="store_true", help="Show all scanned files"
-    )
-    parser.add_argument(
-        "--all-files", "-a", action="store_true", help="Scan all file types"
-    )
+    parser.add_argument("--path", "-p", default=".", help="Path to scan (default: current directory)")
+    parser.add_argument("--verbose", "-v", action="store_true", help="Show all scanned files")
+    parser.add_argument("--all-files", "-a", action="store_true", help="Scan all file types")
     args = parser.parse_args()
 
     path = os.path.abspath(args.path)

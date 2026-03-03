@@ -14,12 +14,11 @@ except ImportError:
     sys.path.insert(0, str(project_root / "src"))
 
 import logging
-
 from codomyrmex.exceptions import (
-    AIProviderError,
     CodomyrmexError,
-    ConfigurationError,
+    AIProviderError,
     FileOperationError,
+    ConfigurationError,
     InferenceError,
     format_exception_chain,
 )
@@ -27,7 +26,6 @@ from codomyrmex.exceptions import (
 # Configure logging
 logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
 logger = logging.getLogger(__name__)
-
 
 def demonstrate_exceptions():
     """Demonstrate the improved exception system."""
@@ -49,17 +47,16 @@ def demonstrate_exceptions():
     try:
         logger.info("Raising AIProviderError with specific parameters...")
         raise AIProviderError(
-            "API Limit exceeded", provider_name="OpenAI", model_name="gpt-4o"
+            "API Limit exceeded",
+            provider_name="OpenAI",
+            model_name="gpt-4o"
         )
     except AIProviderError as e:
         logger.info(f"Caught: {e}")
         logger.info(f"Context: {e.context}")
-        if (
-            e.context["provider_name"] != "OpenAI"
-            or e.context["model_name"] != "gpt-4o"
-        ):
-            logger.error("Verification failed for AIProviderError context")
-            sys.exit(1)
+        if e.context["provider_name"] != "OpenAI" or e.context["model_name"] != "gpt-4o":
+             logger.error("Verification failed for AIProviderError context")
+             sys.exit(1)
 
     logger.info("-" * 40)
 
@@ -70,7 +67,8 @@ def demonstrate_exceptions():
             raise FileOperationError("File not found", file_path="/tmp/missing.txt")
         except FileOperationError as cause:
             raise ConfigurationError(
-                "Failed to load configuration", config_file="/tmp/missing.txt"
+                "Failed to load configuration",
+                config_file="/tmp/missing.txt"
             ) from cause
     except CodomyrmexError as e:
         logger.info("Caught chained exception:")
@@ -84,7 +82,7 @@ def demonstrate_exceptions():
         raise InferenceError(
             "Inference engine failure",
             inference_engine="BayesianNet",
-            system_component="cerebrum_v1",
+            system_component="cerebrum_v1"
         )
     except InferenceError as e:
         logger.info(f"Caught: {e}")
@@ -93,23 +91,16 @@ def demonstrate_exceptions():
     logger.info("-" * 40)
     logger.info("Demonstration completed successfully.")
 
+
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
-
-    config_path = (
-        Path(__file__).resolve().parent.parent.parent
-        / "config"
-        / "exceptions"
-        / "config.yaml"
-    )
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "exceptions" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
+        with open(config_path, "r") as f:
             config_data = yaml.safe_load(f) or {}
-            print("Loaded config from config/exceptions/config.yaml")
-
+            print(f"Loaded config from config/exceptions/config.yaml")
 
 if __name__ == "__main__":
     try:

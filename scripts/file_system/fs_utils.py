@@ -7,8 +7,8 @@ Usage:
     python fs_utils.py <command> [options]
 """
 
-import argparse
 import sys
+import argparse
 from pathlib import Path
 
 # Add src to sys.path for local development
@@ -29,21 +29,14 @@ def format_size(bytes: int) -> str:
 
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
-
-    config_path = (
-        Path(__file__).resolve().parent.parent.parent
-        / "config"
-        / "file_system"
-        / "config.yaml"
-    )
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "file_system" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
+        with open(config_path, "r") as f:
             config_data = yaml.safe_load(f) or {}
-            print("Loaded config from config/file_system/config.yaml")
+            print(f"Loaded config from config/file_system/config.yaml")
 
     parser = argparse.ArgumentParser(description="Codomyrmex File System Utilities")
     subparsers = parser.add_subparsers(dest="command")
@@ -109,7 +102,7 @@ def main():
             ext_stats[ext]["size"] += f.stat().st_size
 
         print("\n   By extension:")
-        sorted_ext = sorted(ext_stats.items(), key=lambda x: -x[1]["size"])
+        sorted_ext = sorted(ext_stats.items(), key=lambda x: -x[1]['size'])
         for ext, data in sorted_ext[:10]:
             print(f"     {ext}: {data['count']} files, {format_size(data['size'])}")
 
@@ -120,9 +113,7 @@ def main():
         duplicates = fs.find_duplicates(path)
         if duplicates:
             print(f"   Found {len(duplicates)} duplicate groups:\n")
-            for h, paths in sorted(
-                duplicates.items(), key=lambda x: -x[1][0].stat().st_size
-            )[:10]:
+            for h, paths in sorted(duplicates.items(), key=lambda x: -x[1][0].stat().st_size)[:10]:
                 size = paths[0].stat().st_size
                 print(f"   {format_size(size)} (Hash: {h[:12]}...):")
                 for p in paths[:3]:

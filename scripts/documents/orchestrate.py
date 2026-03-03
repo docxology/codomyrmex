@@ -3,8 +3,8 @@
 Orchestrator for documents - A thin wrapper around documents capabilities.
 """
 
-import argparse
 import sys
+import argparse
 from pathlib import Path
 
 # Ensure codomyrmex is in path
@@ -15,41 +15,26 @@ if str(project_root) not in sys.path:
     sys.path.insert(0, str(project_root))
 
 from codomyrmex.documents import (
-    DocumentFormat,
-    convert_document,
     read_document,
     write_document,
+    convert_document,
+    DocumentFormat
 )
-from codomyrmex.utils.cli_helpers import (
-    print_error,
-    print_info,
-    print_success,
-    setup_logging,
-)
-
+from codomyrmex.utils.cli_helpers import setup_logging, print_success, print_info, print_error
 
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
-
-    config_path = (
-        Path(__file__).resolve().parent.parent.parent
-        / "config"
-        / "documents"
-        / "config.yaml"
-    )
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "documents" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
+        with open(config_path, "r") as f:
             config_data = yaml.safe_load(f) or {}
             print(f"Loaded config from {config_path.name}")
 
     parser = argparse.ArgumentParser(description="Documents Orchestrator")
-    parser.add_argument(
-        "action", choices=["convert", "info", "test"], help="Action to perform"
-    )
+    parser.add_argument("action", choices=["convert", "info", "test"], help="Action to perform")
     parser.add_argument("--input", "-i", help="Input file path")
     parser.add_argument("--output", "-o", help="Output file path")
     parser.add_argument("--format", "-f", help="Target format for conversion")
@@ -60,7 +45,6 @@ def main():
     if args.action == "test":
         print_info("Running documents module smoke test...")
         from scripts.documents.examples.basic_usage import main as run_examples
-
         return run_examples()
 
     if not args.input:
@@ -76,7 +60,7 @@ def main():
         doc = read_document(input_path)
 
         if args.action == "info":
-            print_info("Document Info:")
+            print_info(f"Document Info:")
             print_info(f"  Format: {doc.format.value}")
             print_info(f"  Type: {doc.type.value}")
             print_info(f"  Metadata: {doc.metadata.to_dict()}")
@@ -90,15 +74,12 @@ def main():
             target_format = DocumentFormat(args.format.lower())
             converted = convert_document(doc, target_format)
             write_document(converted, args.output)
-            print_success(
-                f"Successfully converted {args.input} to {args.output} ({args.format})"
-            )
+            print_success(f"Successfully converted {args.input} to {args.output} ({args.format})")
             return 0
 
     except Exception as e:
         print_error(f"Action '{args.action}' failed: {e}")
         return 1
-
 
 if __name__ == "__main__":
     sys.exit(main())

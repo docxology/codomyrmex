@@ -19,11 +19,9 @@ import argparse
 import re
 from datetime import datetime
 
+
 LOG_LEVELS = ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
-LOG_PATTERN = re.compile(
-    r"(\d{4}-\d{2}-\d{2}[T\s]\d{2}:\d{2}:\d{2})?.*?(DEBUG|INFO|WARNING|ERROR|CRITICAL)",
-    re.IGNORECASE,
-)
+LOG_PATTERN = re.compile(r'(\d{4}-\d{2}-\d{2}[T\s]\d{2}:\d{2}:\d{2})?.*?(DEBUG|INFO|WARNING|ERROR|CRITICAL)', re.IGNORECASE)
 
 
 def parse_log_line(line: str) -> dict:
@@ -53,7 +51,7 @@ def find_log_files(path: str) -> list:
 
 def analyze_logs(lines: list) -> dict:
     """Analyze log content."""
-    stats = dict.fromkeys(LOG_LEVELS, 0)
+    stats = {level: 0 for level in LOG_LEVELS}
     errors = []
 
     for line in lines:
@@ -69,33 +67,20 @@ def analyze_logs(lines: list) -> dict:
 
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
-
-    config_path = (
-        Path(__file__).resolve().parent.parent.parent
-        / "config"
-        / "logging_monitoring"
-        / "config.yaml"
-    )
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "logging_monitoring" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
+        with open(config_path, "r") as f:
             config_data = yaml.safe_load(f) or {}
-            print("Loaded config from config/logging_monitoring/config.yaml")
+            print(f"Loaded config from config/logging_monitoring/config.yaml")
 
     parser = argparse.ArgumentParser(description="Log viewer and analysis")
     parser.add_argument("path", nargs="?", default=".", help="Log file or directory")
-    parser.add_argument(
-        "--level", "-l", choices=LOG_LEVELS, default=None, help="Filter by level"
-    )
-    parser.add_argument(
-        "--tail", "-t", type=int, default=None, help="Show last N lines"
-    )
-    parser.add_argument(
-        "--analyze", "-a", action="store_true", help="Analyze log statistics"
-    )
+    parser.add_argument("--level", "-l", choices=LOG_LEVELS, default=None, help="Filter by level")
+    parser.add_argument("--tail", "-t", type=int, default=None, help="Show last N lines")
+    parser.add_argument("--analyze", "-a", action="store_true", help="Analyze log statistics")
     parser.add_argument("--errors", "-e", action="store_true", help="Show only errors")
     args = parser.parse_args()
 
@@ -131,11 +116,9 @@ def main():
         if args.level:
             filtered = [l for l in lines if args.level.upper() in l.upper()]
         if args.errors:
-            filtered = [
-                l for l in lines if any(e in l.upper() for e in ["ERROR", "CRITICAL"])
-            ]
+            filtered = [l for l in lines if any(e in l.upper() for e in ["ERROR", "CRITICAL"])]
         if args.tail:
-            filtered = filtered[-args.tail :]
+            filtered = filtered[-args.tail:]
 
         print(f"   Lines: {len(filtered)}/{len(lines)}")
         for line in filtered[:10]:

@@ -25,18 +25,16 @@ except ImportError:
     sys.path.insert(0, str(project_root / "src"))
 
 from codomyrmex.agents.pai import (
-    DESTRUCTIVE_TOOL_COUNT,
-    DESTRUCTIVE_TOOLS,
-    SAFE_TOOL_COUNT,
-    SAFE_TOOLS,
     PAIBridge,
     TrustLevel,
+    SAFE_TOOLS,
+    DESTRUCTIVE_TOOLS,
+    SAFE_TOOL_COUNT,
+    DESTRUCTIVE_TOOL_COUNT,
     get_trust_report,
 )
 from codomyrmex.utils.cli_helpers import (
-    print_info,
-    print_warning,
-    setup_logging,
+    setup_logging, print_info, print_warning,
 )
 
 SECTIONS = ["security", "telos", "classification", "env", "trust"]
@@ -46,12 +44,8 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description="PAI Security Audit — security config, TELOS, tool classification",
     )
-    parser.add_argument(
-        "--section", "-s", choices=SECTIONS, help="Show specific section"
-    )
-    parser.add_argument(
-        "--json", "-j", action="store_true", dest="json_output", help="JSON output"
-    )
+    parser.add_argument("--section", "-s", choices=SECTIONS, help="Show specific section")
+    parser.add_argument("--json", "-j", action="store_true", dest="json_output", help="JSON output")
     return parser.parse_args()
 
 
@@ -110,9 +104,7 @@ def section_classification() -> dict:
     except Exception:
         print(f"    (lazy-evaluated, {SAFE_TOOL_COUNT} total)")
 
-    print(
-        f"\n  Total classified: {SAFE_TOOL_COUNT} safe + {DESTRUCTIVE_TOOL_COUNT} destructive"
-    )
+    print(f"\n  Total classified: {SAFE_TOOL_COUNT} safe + {DESTRUCTIVE_TOOL_COUNT} destructive")
 
     return {
         "destructive_count": int(DESTRUCTIVE_TOOL_COUNT),
@@ -130,14 +122,10 @@ def section_env(bridge: PAIBridge) -> dict:
     if settings:
         print(f"  settings.json keys: {list(settings.keys())}")
         # Highlight security-relevant keys (don't show values)
-        security_keys = [
-            k
-            for k in settings
-            if any(s in k.lower() for s in ["key", "token", "secret", "auth"])
-        ]
+        security_keys = [k for k in settings if any(s in k.lower() for s in ["key", "token", "secret", "auth"])]
         if security_keys:
             print(f"  ⚠️  Security-sensitive keys detected: {security_keys}")
-            print("     (values hidden for security)")
+            print(f"     (values hidden for security)")
     else:
         print_info("  settings.json: not found")
 
@@ -208,23 +196,17 @@ def main() -> int:
     print()
     return 0
 
+
+
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
-
-    config_path = (
-        Path(__file__).resolve().parent.parent.parent
-        / "config"
-        / "agents"
-        / "config.yaml"
-    )
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "agents" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
+        with open(config_path, "r") as f:
             config_data = yaml.safe_load(f) or {}
-            print("Loaded config from config/agents/config.yaml")
-
+            print(f"Loaded config from config/agents/config.yaml")
 
 if __name__ == "__main__":
     sys.exit(main())

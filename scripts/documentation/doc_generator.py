@@ -37,25 +37,21 @@ def extract_module_info(file_path: Path) -> dict:
 
         for node in ast.iter_child_nodes(tree):
             if isinstance(node, ast.FunctionDef):
-                info["functions"].append(
-                    {
-                        "name": node.name,
-                        "docstring": ast.get_docstring(node),
-                        "args": [a.arg for a in node.args.args],
-                    }
-                )
+                info["functions"].append({
+                    "name": node.name,
+                    "docstring": ast.get_docstring(node),
+                    "args": [a.arg for a in node.args.args],
+                })
             elif isinstance(node, ast.ClassDef):
                 methods = []
                 for item in node.body:
                     if isinstance(item, ast.FunctionDef):
                         methods.append(item.name)
-                info["classes"].append(
-                    {
-                        "name": node.name,
-                        "docstring": ast.get_docstring(node),
-                        "methods": methods,
-                    }
-                )
+                info["classes"].append({
+                    "name": node.name,
+                    "docstring": ast.get_docstring(node),
+                    "methods": methods,
+                })
     except:
         pass
 
@@ -95,31 +91,20 @@ def generate_markdown(info: dict) -> str:
 
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
-
-    config_path = (
-        Path(__file__).resolve().parent.parent.parent
-        / "config"
-        / "documentation"
-        / "config.yaml"
-    )
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "documentation" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
+        with open(config_path, "r") as f:
             config_data = yaml.safe_load(f) or {}
-            print("Loaded config from config/documentation/config.yaml")
+            print(f"Loaded config from config/documentation/config.yaml")
 
     parser = argparse.ArgumentParser(description="Generate documentation")
     parser.add_argument("path", nargs="?", help="Python file or directory")
     parser.add_argument("--output", "-o", default=None, help="Output file")
-    parser.add_argument(
-        "--format", "-f", choices=["markdown", "json"], default="markdown"
-    )
-    parser.add_argument(
-        "--list", "-l", action="store_true", help="List undocumented items"
-    )
+    parser.add_argument("--format", "-f", choices=["markdown", "json"], default="markdown")
+    parser.add_argument("--list", "-l", action="store_true", help="List undocumented items")
     args = parser.parse_args()
 
     if not args.path:
@@ -136,9 +121,7 @@ def main():
         return 1
 
     files = [target] if target.is_file() else list(target.rglob("*.py"))
-    files = [
-        f for f in files if "__pycache__" not in str(f) and not f.name.startswith("_")
-    ]
+    files = [f for f in files if "__pycache__" not in str(f) and not f.name.startswith("_")]
 
     print(f"📚 Generating docs for {len(files)} file(s)\n")
 

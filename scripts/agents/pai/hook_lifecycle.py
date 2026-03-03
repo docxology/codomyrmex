@@ -28,9 +28,7 @@ except ImportError:
 
 from codomyrmex.agents.pai import PAIBridge
 from codomyrmex.utils.cli_helpers import (
-    print_info,
-    print_warning,
-    setup_logging,
+    setup_logging, print_info, print_warning,
 )
 
 
@@ -39,12 +37,8 @@ def parse_args() -> argparse.Namespace:
         description="PAI Hook Lifecycle Explorer — enumerate and analyze lifecycle hooks",
     )
     parser.add_argument("--hook", help="Inspect a specific hook by name")
-    parser.add_argument(
-        "--active-only", action="store_true", help="Show only active hooks"
-    )
-    parser.add_argument(
-        "--json", "-j", action="store_true", dest="json_output", help="JSON output"
-    )
+    parser.add_argument("--active-only", action="store_true", help="Show only active hooks")
+    parser.add_argument("--json", "-j", action="store_true", dest="json_output", help="JSON output")
     return parser.parse_args()
 
 
@@ -72,9 +66,7 @@ def overview(bridge: PAIBridge, active_only: bool = False) -> dict:
         status = "📦 archived" if h.is_archived else "✅ active  "
         print(f"  {status}  {h.name:35s}  {h.size_bytes:>6,} bytes")
 
-    print(
-        f"\n  Active: {len(active_hooks)} | Archived: {len(archived)} | Total: {len(all_hooks)}"
-    )
+    print(f"\n  Active: {len(active_hooks)} | Archived: {len(archived)} | Total: {len(all_hooks)}")
     ratio = len(active_hooks) / len(all_hooks) * 100 if all_hooks else 0
     print(f"  Active ratio: {ratio:.0f}%")
 
@@ -131,9 +123,7 @@ def lifecycle_analysis(bridge: PAIBridge) -> dict:
         name_lower = h.name.lower()
         if "session" in name_lower:
             categories["session"].append(h.name)
-        elif (
-            "tool" in name_lower or "pretool" in name_lower or "posttool" in name_lower
-        ):
+        elif "tool" in name_lower or "pretool" in name_lower or "posttool" in name_lower:
             categories["tool"].append(h.name)
         elif "task" in name_lower:
             categories["task"].append(h.name)
@@ -148,7 +138,7 @@ def lifecycle_analysis(bridge: PAIBridge) -> dict:
             for h in hooks:
                 print(f"    • {h}")
         else:
-            print("    (none)")
+            print(f"    (none)")
 
     # Map to Algorithm phases
     phase_mapping = {
@@ -158,7 +148,7 @@ def lifecycle_analysis(bridge: PAIBridge) -> dict:
         "prompt": "OBSERVE (1/7) — user prompt processing",
     }
 
-    print("\n  Hook → Algorithm Phase Mapping:")
+    print(f"\n  Hook → Algorithm Phase Mapping:")
     for cat, phase in phase_mapping.items():
         has = "✅" if categories[cat] else "❌"
         print(f"    {has} {cat:10s} → {phase}")
@@ -188,23 +178,17 @@ def main() -> int:
     print()
     return 0
 
+
+
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
-
-    config_path = (
-        Path(__file__).resolve().parent.parent.parent
-        / "config"
-        / "agents"
-        / "config.yaml"
-    )
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "agents" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
+        with open(config_path, "r") as f:
             config_data = yaml.safe_load(f) or {}
-            print("Loaded config from config/agents/config.yaml")
-
+            print(f"Loaded config from config/agents/config.yaml")
 
 if __name__ == "__main__":
     sys.exit(main())

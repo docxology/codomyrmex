@@ -22,7 +22,7 @@ import subprocess
 
 def analyze_python_file(file_path: Path) -> dict:
     """Analyze a Python file."""
-    with open(file_path) as f:
+    with open(file_path, "r") as f:
         source = f.read()
 
     stats = {
@@ -39,9 +39,7 @@ def analyze_python_file(file_path: Path) -> dict:
         tree = ast.parse(source)
 
         for node in ast.walk(tree):
-            if isinstance(node, ast.FunctionDef) or isinstance(
-                node, ast.AsyncFunctionDef
-            ):
+            if isinstance(node, ast.FunctionDef) or isinstance(node, ast.AsyncFunctionDef):
                 stats["functions"] += 1
                 if ast.get_docstring(node):
                     stats["docstrings"] += 1
@@ -75,9 +73,7 @@ def run_external_linter(path: str, linter: str) -> list:
         return [f"Unknown linter: {linter}"]
 
     try:
-        result = subprocess.run(
-            cmd_map[linter], capture_output=True, text=True, timeout=60
-        )
+        result = subprocess.run(cmd_map[linter], capture_output=True, text=True, timeout=60)
         output = result.stdout + result.stderr
         return [l for l in output.split("\n") if l.strip()][:20]
     except FileNotFoundError:
@@ -88,30 +84,18 @@ def run_external_linter(path: str, linter: str) -> list:
 
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
-
-    config_path = (
-        Path(__file__).resolve().parent.parent.parent
-        / "config"
-        / "static_analysis"
-        / "config.yaml"
-    )
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "static_analysis" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
+        with open(config_path, "r") as f:
             config_data = yaml.safe_load(f) or {}
-            print("Loaded config from config/static_analysis/config.yaml")
+            print(f"Loaded config from config/static_analysis/config.yaml")
 
     parser = argparse.ArgumentParser(description="Static code analysis")
     parser.add_argument("path", nargs="?", help="File or directory to analyze")
-    parser.add_argument(
-        "--type",
-        "-t",
-        choices=["basic", "ruff", "flake8", "pylint", "mypy"],
-        default="basic",
-    )
+    parser.add_argument("--type", "-t", choices=["basic", "ruff", "flake8", "pylint", "mypy"], default="basic")
     parser.add_argument("--verbose", "-v", action="store_true")
     args = parser.parse_args()
 
@@ -167,9 +151,7 @@ def main():
             issues.append(f"{f.name}: Complexity warning (>20 functions or >500 lines)")
 
         if args.verbose:
-            print(
-                f"   📄 {f.name}: {stats['lines']} lines, {stats['functions']} funcs, {stats['classes']} classes"
-            )
+            print(f"   📄 {f.name}: {stats['lines']} lines, {stats['functions']} funcs, {stats['classes']} classes")
 
     print(f"📊 Summary ({total['files']} files):")
     print(f"   Lines: {total['lines']:,}")

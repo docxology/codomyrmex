@@ -16,7 +16,7 @@ project_root = Path(__file__).parent.parent.parent.parent
 sys.path.insert(0, str(project_root / "src"))
 
 from codomyrmex.orchestrator import run_parallel
-from codomyrmex.utils.cli_helpers import print_info, setup_logging
+from codomyrmex.utils.cli_helpers import setup_logging, print_info
 
 
 def main() -> int:
@@ -25,9 +25,7 @@ def main() -> int:
     parser = argparse.ArgumentParser(description="Quick parallel test runner")
     parser.add_argument("--modules", "-m", nargs="+", help="Specific modules to test")
     parser.add_argument("--workers", "-w", type=int, default=4, help="Parallel workers")
-    parser.add_argument(
-        "--timeout", "-t", type=int, default=60, help="Timeout per test"
-    )
+    parser.add_argument("--timeout", "-t", type=int, default=60, help="Timeout per test")
     parser.add_argument("--verbose", "-v", action="store_true", help="Verbose output")
     args = parser.parse_args()
 
@@ -66,7 +64,7 @@ def main() -> int:
         scripts=test_files,
         max_workers=args.workers,
         timeout=args.timeout,
-        progress_callback=on_progress if args.verbose else None,
+        progress_callback=on_progress if args.verbose else None
     )
 
     print()
@@ -87,23 +85,17 @@ def main() -> int:
     # Return 0 to indicate script success, not test success
     return 0
 
+
+
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
-
-    config_path = (
-        Path(__file__).resolve().parent.parent.parent
-        / "config"
-        / "orchestrator"
-        / "config.yaml"
-    )
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "orchestrator" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
+        with open(config_path, "r") as f:
             config_data = yaml.safe_load(f) or {}
-            print("Loaded config from config/orchestrator/config.yaml")
-
+            print(f"Loaded config from config/orchestrator/config.yaml")
 
 if __name__ == "__main__":
     sys.exit(main())

@@ -13,16 +13,16 @@ Examples:
     python run_demo.py ../..     # Analyze parent directories
 """
 
-import sys
 from pathlib import Path
+import sys
 
 # Add src to path for local development
 sys.path.insert(0, str(Path(__file__).parent))
 
 from src.main import run_analysis
-from src.pipeline import AnalysisPipeline
-from src.reporter import ReportConfig, ReportGenerator
 from src.visualizer import DataVisualizer
+from src.reporter import ReportGenerator, ReportConfig
+from src.pipeline import AnalysisPipeline
 
 
 def print_header(text: str) -> None:
@@ -59,9 +59,7 @@ def demo_analysis(target: Path) -> dict:
     if patterns:
         print()
         print("  Patterns detected:")
-        for pattern, count in sorted(
-            patterns.items(), key=lambda x: x[1], reverse=True
-        )[:5]:
+        for pattern, count in sorted(patterns.items(), key=lambda x: x[1], reverse=True)[:5]:
             print(f"    • {pattern.replace('_', ' ').title()}: {count}")
 
     return results
@@ -91,7 +89,9 @@ def demo_reporting(results: dict) -> dict:
     paths = {}
     for fmt in ["html", "json", "markdown"]:
         config = ReportConfig(
-            title="Test Project Analysis Report", format=fmt, author="Codomyrmex Demo"
+            title="Test Project Analysis Report",
+            format=fmt,
+            author="Codomyrmex Demo"
         )
         path = generator.generate(results, config)
         paths[fmt] = path

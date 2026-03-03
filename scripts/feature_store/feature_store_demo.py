@@ -5,8 +5,8 @@ Feature Store Demo Script
 Demonstrates functionality of the feature_store module.
 """
 
-import math
 import sys
+import math
 from pathlib import Path
 
 # Add project root to path
@@ -16,14 +16,13 @@ sys.path.insert(0, str(PROJECT_ROOT / "src"))
 from codomyrmex.feature_store import (
     FeatureDefinition,
     FeatureGroup,
-    FeatureService,
-    FeatureStoreError,
-    FeatureTransform,
     FeatureType,
-    InMemoryFeatureStore,
     ValueType,
+    FeatureService,
+    FeatureTransform,
+    InMemoryFeatureStore,
+    FeatureStoreError,
 )
-
 
 def main() -> int:
     print("--- Codomyrmex Feature Store Orchestrator ---")
@@ -47,46 +46,39 @@ def main() -> int:
                 feature_type=FeatureType.NUMERIC,
                 value_type=ValueType.INT,
                 description="User age",
-                default_value=0,
+                default_value=0
             ),
             FeatureDefinition(
                 name="income",
                 feature_type=FeatureType.NUMERIC,
                 value_type=ValueType.FLOAT,
-                description="Annual income",
+                description="Annual income"
             ),
             FeatureDefinition(
                 name="is_active",
                 feature_type=FeatureType.BOOLEAN,
                 value_type=ValueType.BOOL,
-                default_value=True,
+                default_value=True
             ),
             FeatureDefinition(
                 name="city",
                 feature_type=FeatureType.CATEGORICAL,
                 value_type=ValueType.STRING,
-                default_value="Unknown",
-            ),
+                default_value="Unknown"
+            )
         ],
-        entity_type="user",
+        entity_type="user"
     )
 
     service.register_group(user_features)
-    print(
-        f"Registered group: {user_features.name} with {len(user_features.features)} features."
-    )
+    print(f"Registered group: {user_features.name} with {len(user_features.features)} features.")
 
     # 3. Ingest Data
     print("\n[2] Ingesting batch data...")
     batch_data = [
-        {
-            "entity_id": "user_001",
-            "age": 28,
-            "income": 50000.0,
-            "city": "San Francisco",
-        },
+        {"entity_id": "user_001", "age": 28, "income": 50000.0, "city": "San Francisco"},
         {"entity_id": "user_002", "age": 34, "income": 75000.0, "city": "New York"},
-        {"entity_id": "user_003", "age": 45, "income": 120000.0, "is_active": False},
+        {"entity_id": "user_003", "age": 45, "income": 120000.0, "is_active": False}
     ]
 
     count = service.ingest_batch(batch_data)
@@ -99,16 +91,14 @@ def main() -> int:
         vector = service.get_group_features(user_id, "user_demographics")
 
         # income is log-transformed because of the transform we added
-        income_val = vector.get("income")
+        income_val = vector.get('income')
         if income_val is not None:
-            print(f"  Age: {vector.get('age')}")
-            print(
-                f"  Income (Log): {income_val:.4f} (Original would be {math.exp(income_val) - 1:.0f})"
-            )
-            print(f"  City: {vector.get('city')}")
-            print(f"  Active: {vector.get('is_active')}")
+             print(f"  Age: {vector.get('age')}")
+             print(f"  Income (Log): {income_val:.4f} (Original would be {math.exp(income_val)-1:.0f})")
+             print(f"  City: {vector.get('city')}")
+             print(f"  Active: {vector.get('is_active')}")
         else:
-            print(f"  Found partial data or defaults: {vector.features}")
+             print(f"  Found partial data or defaults: {vector.features}")
 
     # 5. Demonstrate Type Validation
     print("\n[4] Demonstrating type validation...")
@@ -120,23 +110,16 @@ def main() -> int:
     print("\n--- Demo Complete ---")
     return 0
 
+
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
-
-    config_path = (
-        Path(__file__).resolve().parent.parent.parent
-        / "config"
-        / "feature_store"
-        / "config.yaml"
-    )
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "feature_store" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
+        with open(config_path, "r") as f:
             config_data = yaml.safe_load(f) or {}
-            print("Loaded config from config/feature_store/config.yaml")
-
+            print(f"Loaded config from config/feature_store/config.yaml")
 
 if __name__ == "__main__":
     sys.exit(main())

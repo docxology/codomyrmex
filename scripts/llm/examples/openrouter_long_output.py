@@ -31,14 +31,14 @@ Usage:
     python openrouter_long_output.py --template dissertation --topic "Machine Learning" --pages 100 --output thesis.md
 """
 
+import sys
+import os
 import argparse
 import json
-import os
-import sys
 import time
-from dataclasses import dataclass
-from datetime import datetime
 from pathlib import Path
+from datetime import datetime
+from dataclasses import dataclass
 
 # Ensure codomyrmex is in path
 try:
@@ -48,11 +48,11 @@ except ImportError:
     sys.path.insert(0, str(project_root / "src"))
 
 from codomyrmex.llm.providers import (
+    get_provider,
+    ProviderType,
+    ProviderConfig,
     Message,
     OpenRouterProvider,
-    ProviderConfig,
-    ProviderType,
-    get_provider,
 )
 
 # Default config file locations
@@ -84,14 +84,9 @@ Current section: {section}
 Target length: approximately {target_words} words for this section.
 
 {continuation_context}""",
-        "sections": [
-            "Introduction",
-            "Background",
-            "Main Arguments",
-            "Counter-Arguments",
-            "Conclusion",
-        ],
+        "sections": ["Introduction", "Background", "Main Arguments", "Counter-Arguments", "Conclusion"],
     },
+
     "dissertation": {
         "system": """You are an expert PhD dissertation writer. Write comprehensive, 
 rigorous academic content suitable for a doctoral thesis. Include proper academic 
@@ -121,6 +116,7 @@ Guidelines:
             "References (Placeholder)",
         ],
     },
+
     "story": {
         "system": """You are a creative fiction writer. Write engaging, 
 immersive stories with vivid descriptions, compelling characters, 
@@ -131,15 +127,9 @@ Current chapter: {section}
 Target length: approximately {target_words} words.
 
 {continuation_context}""",
-        "sections": [
-            "Prologue",
-            "Chapter 1",
-            "Chapter 2",
-            "Chapter 3",
-            "Chapter 4",
-            "Epilogue",
-        ],
+        "sections": ["Prologue", "Chapter 1", "Chapter 2", "Chapter 3", "Chapter 4", "Epilogue"],
     },
+
     "documentation": {
         "system": """You are a technical documentation expert. Write clear, 
 comprehensive documentation with examples, code snippets, and proper structure.""",
@@ -155,16 +145,9 @@ Include:
 - Common pitfalls
 
 {continuation_context}""",
-        "sections": [
-            "Overview",
-            "Installation",
-            "Quick Start",
-            "Core Concepts",
-            "API Reference",
-            "Examples",
-            "Troubleshooting",
-        ],
+        "sections": ["Overview", "Installation", "Quick Start", "Core Concepts", "API Reference", "Examples", "Troubleshooting"],
     },
+
     "custom": {
         "system": "You are a helpful writing assistant.",
         "structure": """Write about: {topic}
@@ -200,7 +183,6 @@ def get_api_key(cli_key: str | None = None) -> str | None:
 @dataclass
 class GenerationConfig:
     """Configuration for long output generation."""
-
     topic: str
     template: str = "essay"
     target_pages: int | None = None
@@ -311,16 +293,14 @@ class LongOutputGenerator:
         print("=" * 70)
         print(f"\n📝 Topic: {self.config.topic}")
         print(f"📋 Template: {self.config.template}")
-        print(
-            f"📊 Target: ~{self.config.total_target_words:,} words ({len(sections)} sections)"
-        )
+        print(f"📊 Target: ~{self.config.total_target_words:,} words ({len(sections)} sections)")
         print(f"🤖 Model: {self.config.model}")
         print("-" * 70 + "\n")
 
         start_time = time.time()
 
         for i, section in enumerate(sections, 1):
-            print(f"\n{'=' * 60}")
+            print(f"\n{'='*60}")
             print(f"📖 Section {i}/{len(sections)}: {section}")
             print(f"   Target: ~{words_per_section} words")
             print("=" * 60 + "\n")
@@ -330,18 +310,14 @@ class LongOutputGenerator:
                 word_count = self._count_words(content)
                 self.total_words += word_count
 
-                self.generated_content.append(
-                    {
-                        "section": section,
-                        "content": content,
-                        "word_count": word_count,
-                        "timestamp": datetime.now().isoformat(),
-                    }
-                )
+                self.generated_content.append({
+                    "section": section,
+                    "content": content,
+                    "word_count": word_count,
+                    "timestamp": datetime.now().isoformat(),
+                })
 
-                print(
-                    f"\n✅ Section complete: {word_count} words | Total: {self.total_words:,} words"
-                )
+                print(f"\n✅ Section complete: {word_count} words | Total: {self.total_words:,} words")
 
                 # Rate limit awareness - brief pause between sections
                 if i < len(sections):
@@ -349,15 +325,13 @@ class LongOutputGenerator:
 
             except Exception as e:
                 print(f"\n❌ Error generating section '{section}': {e}")
-                self.generated_content.append(
-                    {
-                        "section": section,
-                        "content": f"[Error: {e}]",
-                        "word_count": 0,
-                        "timestamp": datetime.now().isoformat(),
-                        "error": str(e),
-                    }
-                )
+                self.generated_content.append({
+                    "section": section,
+                    "content": f"[Error: {e}]",
+                    "word_count": 0,
+                    "timestamp": datetime.now().isoformat(),
+                    "error": str(e),
+                })
 
         elapsed = time.time() - start_time
 
@@ -385,9 +359,7 @@ class LongOutputGenerator:
         if self.config.output_format == "markdown":
             lines.append(f"# {self.config.topic}\n")
             lines.append(f"*Generated: {datetime.now().strftime('%Y-%m-%d %H:%M')}*\n")
-            lines.append(
-                f"*Template: {self.config.template} | Words: ~{self.total_words:,}*\n"
-            )
+            lines.append(f"*Template: {self.config.template} | Words: ~{self.total_words:,}*\n")
             lines.append("---\n")
 
             for section_data in self.generated_content:
@@ -396,9 +368,7 @@ class LongOutputGenerator:
                 lines.append("\n")
 
         elif self.config.output_format == "latex":
-            lines.append(
-                f"\\documentclass{{article}}\n\\title{{{self.config.topic}}}\n\\begin{{document}}\n\\maketitle\n"
-            )
+            lines.append(f"\\documentclass{{article}}\n\\title{{{self.config.topic}}}\n\\begin{{document}}\n\\maketitle\n")
             for section_data in self.generated_content:
                 lines.append(f"\n\\section{{{section_data['section']}}}\n")
                 lines.append(section_data["content"].replace("_", "\\_"))
@@ -408,9 +378,7 @@ class LongOutputGenerator:
         else:  # plain text
             lines.append(f"{self.config.topic}\n{'=' * len(self.config.topic)}\n")
             for section_data in self.generated_content:
-                lines.append(
-                    f"\n{section_data['section']}\n{'-' * len(section_data['section'])}\n"
-                )
+                lines.append(f"\n{section_data['section']}\n{'-' * len(section_data['section'])}\n")
                 lines.append(section_data["content"])
                 lines.append("\n")
 
@@ -446,18 +414,14 @@ class LongOutputGenerator:
 
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
-
-    config_path = (
-        Path(__file__).resolve().parent.parent.parent / "config" / "llm" / "config.yaml"
-    )
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "llm" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
+        with open(config_path, "r") as f:
             config_data = yaml.safe_load(f) or {}
-            print("Loaded config from config/llm/config.yaml")
+            print(f"Loaded config from config/llm/config.yaml")
 
     parser = argparse.ArgumentParser(
         description="OpenRouter Long Output Generator - Extended Content Creation",
@@ -482,105 +446,59 @@ Examples:
   
   # Custom sections
   python openrouter_long_output.py --topic "Python Guide" --sections "Basics" "Advanced" "Examples"
-        """,
+        """
     )
 
     # Required (unless listing)
-    parser.add_argument(
-        "--topic",
-        "-t",
-        type=str,
-        default=None,
-        help="Main topic for content generation",
-    )
+    parser.add_argument("--topic", "-t", type=str, default=None,
+                        help="Main topic for content generation")
 
     # Length targets (mutually exclusive)
     length_group = parser.add_mutually_exclusive_group()
-    length_group.add_argument(
-        "--pages",
-        "-p",
-        type=int,
-        default=None,
-        help="Target number of pages (~250 words/page)",
-    )
-    length_group.add_argument(
-        "--words", "-w", type=int, default=None, help="Target word count"
-    )
+    length_group.add_argument("--pages", "-p", type=int, default=None,
+                              help="Target number of pages (~250 words/page)")
+    length_group.add_argument("--words", "-w", type=int, default=None,
+                              help="Target word count")
 
     # Template and structure
-    parser.add_argument(
-        "--template",
-        type=str,
-        default="essay",
-        choices=list(TEMPLATES.keys()),
-        help="Document template (default: essay)",
-    )
-    parser.add_argument(
-        "--sections",
-        nargs="+",
-        type=str,
-        default=None,
-        help="Custom section names (overrides template)",
-    )
-    parser.add_argument(
-        "--system",
-        type=str,
-        default=None,
-        help="Custom system prompt (overrides template)",
-    )
+    parser.add_argument("--template", type=str, default="essay",
+                        choices=list(TEMPLATES.keys()),
+                        help="Document template (default: essay)")
+    parser.add_argument("--sections", nargs="+", type=str, default=None,
+                        help="Custom section names (overrides template)")
+    parser.add_argument("--system", type=str, default=None,
+                        help="Custom system prompt (overrides template)")
 
     # Model settings
-    parser.add_argument(
-        "--model",
-        "-m",
-        type=str,
-        default="openrouter/free",
-        help="Model to use (default: openrouter/free)",
-    )
-    parser.add_argument(
-        "--max-tokens",
-        type=int,
-        default=2000,
-        help="Max tokens per chunk (default: 2000)",
-    )
-    parser.add_argument(
-        "--temperature",
-        type=float,
-        default=0.7,
-        help="Generation temperature (default: 0.7)",
-    )
+    parser.add_argument("--model", "-m", type=str, default="openrouter/free",
+                        help="Model to use (default: openrouter/free)")
+    parser.add_argument("--max-tokens", type=int, default=2000,
+                        help="Max tokens per chunk (default: 2000)")
+    parser.add_argument("--temperature", type=float, default=0.7,
+                        help="Generation temperature (default: 0.7)")
 
     # Output
-    parser.add_argument(
-        "--output", "-o", type=str, default=None, help="Output file path"
-    )
-    parser.add_argument(
-        "--format",
-        "-f",
-        type=str,
-        default="markdown",
-        choices=["markdown", "latex", "text"],
-        help="Output format (default: markdown)",
-    )
+    parser.add_argument("--output", "-o", type=str, default=None,
+                        help="Output file path")
+    parser.add_argument("--format", "-f", type=str, default="markdown",
+                        choices=["markdown", "latex", "text"],
+                        help="Output format (default: markdown)")
 
     # Behavior
-    parser.add_argument(
-        "--no-stream", action="store_true", help="Disable streaming output"
-    )
-    parser.add_argument("--verbose", "-v", action="store_true", help="Verbose output")
+    parser.add_argument("--no-stream", action="store_true",
+                        help="Disable streaming output")
+    parser.add_argument("--verbose", "-v", action="store_true",
+                        help="Verbose output")
 
     # API key
-    parser.add_argument(
-        "--api-key", "-k", type=str, default=None, help="OpenRouter API key"
-    )
+    parser.add_argument("--api-key", "-k", type=str, default=None,
+                        help="OpenRouter API key")
 
     # List options
-    parser.add_argument(
-        "--list-templates", action="store_true", help="List available templates"
-    )
-    parser.add_argument(
-        "--list-models", action="store_true", help="List available free models"
-    )
+    parser.add_argument("--list-templates", action="store_true",
+                        help="List available templates")
+    parser.add_argument("--list-models", action="store_true",
+                        help="List available free models")
 
     args = parser.parse_args()
 

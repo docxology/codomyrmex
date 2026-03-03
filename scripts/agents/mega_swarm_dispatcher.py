@@ -21,20 +21,12 @@ REPO_NAME = "docxology/codomyrmex"
 
 # Skip directories that aren't source modules
 EXCLUDES = {
-    "__pycache__",
-    ".claude",
-    ".pipelines",
-    ".workflows",
-    "build",
-    "dist",
-    "docs",
-    "tests",
-    "examples",
+    "__pycache__", ".claude", ".pipelines", ".workflows",
+    "build", "dist", "docs", "tests", "examples"
 }
 
-BATCH_SIZE = 5  # Number of agents to dispatch concurrently before waiting
+BATCH_SIZE = 5      # Number of agents to dispatch concurrently before waiting
 BATCH_DELAY = 10.0  # Seconds to wait between batches
-
 
 def get_valid_modules() -> list[str]:
     """Find all valid top-level directories common to scripts/ or src/codomyrmex/."""
@@ -54,7 +46,6 @@ def get_valid_modules() -> list[str]:
 
     return sorted(list(modules))
 
-
 def dispatch_jules(module_name: str) -> None:
     """Launch a Jules agent for the given module."""
     prompt = (
@@ -70,11 +61,10 @@ def dispatch_jules(module_name: str) -> None:
         subprocess.Popen(
             ["jules", "new", "--repo", REPO_NAME, prompt],
             stdout=subprocess.DEVNULL,
-            stderr=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL
         )
     except FileNotFoundError:
         raise RuntimeError("'jules' CLI not found. Is it installed?") from None
-
 
 def run_swarm(max_agents: int = None) -> None:
     """Run the mega swarm in batches."""
@@ -92,8 +82,8 @@ def run_swarm(max_agents: int = None) -> None:
     print(f"Dispatching {len(modules)} Jules agents in batches of {BATCH_SIZE}...")
 
     for i in range(0, len(modules), BATCH_SIZE):
-        batch = modules[i : i + BATCH_SIZE]
-        print(f"\n--- Batch {i // BATCH_SIZE + 1} ({len(batch)} agents) ---")
+        batch = modules[i:i + BATCH_SIZE]
+        print(f"\n--- Batch {i//BATCH_SIZE + 1} ({len(batch)} agents) ---")
 
         for module in batch:
             dispatch_jules(module)
@@ -109,7 +99,6 @@ def run_swarm(max_agents: int = None) -> None:
 
 if __name__ == "__main__":
     import sys
-
     # Optional arg to limit agents (e.g. ./mega_swarm_dispatcher.py 5)
     limit = None
     if len(sys.argv) > 1:

@@ -3,7 +3,6 @@
 Orchestrator script for configuration audits.
 Demonstrates how to use the codomyrmex.config_audits module.
 """
-
 import json
 import os
 from pathlib import Path
@@ -44,21 +43,14 @@ def create_sample_configs(temp_dir: Path):
 
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
-
-    config_path = (
-        Path(__file__).resolve().parent.parent.parent
-        / "config"
-        / "config_audits"
-        / "config.yaml"
-    )
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "config_audits" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
+        with open(config_path, "r") as f:
             config_data = yaml.safe_load(f) or {}
-            print("Loaded config from config/config_audits/config.yaml")
+            print(f"Loaded config from config/config_audits/config.yaml")
 
     print("Starting Configuration Audit Orchestrator...")
 

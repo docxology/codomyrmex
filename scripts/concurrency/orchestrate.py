@@ -11,22 +11,14 @@ sys.path.insert(0, str(project_root / "src"))
 
 from codomyrmex.orchestrator.core import main as orchestrator_main
 
-
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
-
-    config_path = (
-        Path(__file__).resolve().parent.parent.parent
-        / "config"
-        / "concurrency"
-        / "config.yaml"
-    )
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "concurrency" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
+        with open(config_path, "r") as f:
             config_data = yaml.safe_load(f) or {}
             print(f"Loaded config from {config_path.name}")
 
@@ -34,7 +26,11 @@ def main():
     current_dir = Path(__file__).resolve().parent
 
     # Configure arguments for orchestrator to target this directory
-    args = [f"--scripts-dir={current_dir}", "--verbose", "--timeout=30"]
+    args = [
+        f"--scripts-dir={current_dir}",
+        "--verbose",
+        "--timeout=30"
+    ]
 
     # Support filtering from command line
     if len(sys.argv) > 1:
@@ -47,7 +43,6 @@ def main():
     except Exception as e:
         print(f"❌ Orchestrator failed: {e}")
         return 1
-
 
 if __name__ == "__main__":
     sys.exit(main())

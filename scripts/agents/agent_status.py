@@ -58,7 +58,6 @@ def check_agent_health() -> dict:
 
     try:
         import codomyrmex  # noqa: F401
-
         health["codomyrmex_available"] = True
     except ImportError:
         pass
@@ -73,12 +72,8 @@ def check_agent_health() -> dict:
 
 def main():
     parser = argparse.ArgumentParser(description="Agent system status")
-    parser.add_argument(
-        "--list", "-l", action="store_true", help="List agent configurations"
-    )
-    parser.add_argument(
-        "--health", "-H", action="store_true", help="Check system health"
-    )
+    parser.add_argument("--list", "-l", action="store_true", help="List agent configurations")
+    parser.add_argument("--health", "-H", action="store_true", help="Check system health")
     parser.add_argument("--verbose", "-v", action="store_true", help="Verbose output")
     args = parser.parse_args()
 
@@ -86,11 +81,9 @@ def main():
 
     # Health check
     health = check_agent_health()
-    print("🔧 System:")
+    print(f"🔧 System:")
     print(f"   Python: {health['python_version']}")
-    print(
-        f"   Codomyrmex: {'✅ Available' if health['codomyrmex_available'] else '❌ Not installed'}"
-    )
+    print(f"   Codomyrmex: {'✅ Available' if health['codomyrmex_available'] else '❌ Not installed'}")
     if health["env_vars"]:
         print(f"   Agent env vars: {len(health['env_vars'])}")
         if args.verbose:

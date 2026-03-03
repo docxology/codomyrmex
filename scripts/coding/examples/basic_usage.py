@@ -15,35 +15,26 @@ except ImportError:
     project_root = Path(__file__).resolve().parent.parent.parent.parent
     sys.path.insert(0, str(project_root / "src"))
 
-from codomyrmex.utils.cli_helpers import print_info, print_success, setup_logging
-
+from codomyrmex.utils.cli_helpers import setup_logging, print_success, print_info
 
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
-
-    config_path = (
-        Path(__file__).resolve().parent.parent.parent
-        / "config"
-        / "coding"
-        / "config.yaml"
-    )
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "coding" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
+        with open(config_path, "r") as f:
             config_data = yaml.safe_load(f) or {}
-            print("Loaded config from config/coding/config.yaml")
+            print(f"Loaded config from config/coding/config.yaml")
 
     setup_logging()
-    print_info("Running Basic coding Usage...")
+    print_info(f"Running Basic coding Usage...")
 
     # 1. Code Execution
     print_info("Testing code execution...")
     try:
-        from codomyrmex.coding import SUPPORTED_LANGUAGES, execute_code
-
+        from codomyrmex.coding import execute_code, SUPPORTED_LANGUAGES
         code = "print('Hello from Codomyrmex!')"
         # Correct order: language, code
         result = execute_code("python", code)
@@ -59,7 +50,6 @@ def main():
     print_info("Testing code analysis...")
     try:
         from codomyrmex.coding import analyze_file
-
         # Analyze this script itself
         report = analyze_file(__file__)
         if report:
@@ -71,16 +61,14 @@ def main():
     print_info("Checking Sandbox and Monitor interfaces...")
     try:
         from codomyrmex.coding import ExecutionMonitor, check_docker_available
-
         monitor = ExecutionMonitor()
         docker = check_docker_available()
         print_success(f"  ExecutionMonitor initialized. Docker available: {docker}")
     except Exception as e:
         print_info(f"  Sandbox/Monitor demo: {e}")
 
-    print_success("Coding Usage completed successfully")
+    print_success(f"Coding Usage completed successfully")
     return 0
-
 
 if __name__ == "__main__":
     sys.exit(main())

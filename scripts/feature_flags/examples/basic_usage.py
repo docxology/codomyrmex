@@ -12,7 +12,7 @@ Usage:
 
 import sys
 from pathlib import Path
-from typing import Any
+from typing import Any, Dict
 
 # Setup project root and src path
 project_root = Path(__file__).resolve().parent.parent.parent.parent
@@ -20,10 +20,7 @@ sys.path.insert(0, str(project_root / "src"))
 
 # Direct import to avoid triggering full codomyrmex package init
 import importlib.util
-
-script_base_path = (
-    project_root / "src" / "codomyrmex" / "utils" / "process" / "script_base.py"
-)
+script_base_path = project_root / "src" / "codomyrmex" / "utils" / "process" / "script_base.py"
 
 spec = importlib.util.spec_from_file_location("script_base", script_base_path)
 script_base = importlib.util.module_from_spec(spec)
@@ -46,19 +43,15 @@ class FeatureFlagsScript(ScriptBase):
         """Add feature flags-specific arguments."""
         group = parser.add_argument_group("Feature Flags Options")
         group.add_argument(
-            "--test-users",
-            type=int,
-            default=50,
-            help="Number of test users for rollout simulation (default: 50)",
+            "--test-users", type=int, default=50,
+            help="Number of test users for rollout simulation (default: 50)"
         )
         group.add_argument(
-            "--rollout-percentage",
-            type=float,
-            default=25.0,
-            help="Percentage for rollout tests (default: 25.0)",
+            "--rollout-percentage", type=float, default=25.0,
+            help="Percentage for rollout tests (default: 25.0)"
         )
 
-    def run(self, args, config: ScriptConfig) -> dict[str, Any]:
+    def run(self, args, config: ScriptConfig) -> Dict[str, Any]:
         """Execute feature flags demonstrations."""
         results = {
             "demo_steps": [],
@@ -82,9 +75,7 @@ class FeatureFlagsScript(ScriptBase):
         self.log_success(f"  dark_mode: {'ON' if dark_mode_on else 'OFF'}")
         self.log_success(f"  new_sidebar: {'ON' if sidebar_on else 'OFF'}")
 
-        results["demo_steps"].append(
-            {"step": 1, "dark_mode": dark_mode_on, "new_sidebar": sidebar_on}
-        )
+        results["demo_steps"].append({"step": 1, "dark_mode": dark_mode_on, "new_sidebar": sidebar_on})
 
         # Step 2: Percentage Rollout
         self.log_info(f"Step 2: Percentage Rollout ({args.rollout_percentage}%)")
@@ -96,12 +87,8 @@ class FeatureFlagsScript(ScriptBase):
                 enabled_count += 1
 
         actual_pct = (enabled_count / args.test_users) * 100
-        self.log_success(
-            f"  Rollout for {args.test_users} users: {enabled_count} enabled ({actual_pct:.1f}%)"
-        )
-        results["demo_steps"].append(
-            {"step": 2, "enabled_count": enabled_count, "actual_percentage": actual_pct}
-        )
+        self.log_success(f"  Rollout for {args.test_users} users: {enabled_count} enabled ({actual_pct:.1f}%)")
+        results["demo_steps"].append({"step": 2, "enabled_count": enabled_count, "actual_percentage": actual_pct})
 
         # Step 3: Multivariate Flags
         self.log_info("Step 3: Multivariate Flags")
@@ -120,38 +107,28 @@ class FeatureFlagsScript(ScriptBase):
 
         self.log_success(f"  Premium user access: {'YES' if premium_user else 'NO'}")
         self.log_success(f"  Free user access: {'YES' if free_user else 'NO'}")
-        results["demo_steps"].append(
-            {"step": 4, "premium_user": premium_user, "free_user": free_user}
-        )
+        results["demo_steps"].append({"step": 4, "premium_user": premium_user, "free_user": free_user})
 
         # Step 5: Overrides
         self.log_info("Step 5: Overrides")
         manager.set_override("new_sidebar", True)
         sidebar_override = manager.is_enabled("new_sidebar")
-        self.log_success(
-            f"  new_sidebar after override: {'ON' if sidebar_override else 'OFF'}"
-        )
+        self.log_success(f"  new_sidebar after override: {'ON' if sidebar_override else 'OFF'}")
         results["demo_steps"].append({"step": 5, "sidebar_override": sidebar_override})
 
         return results
 
+
+
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
-
-    config_path = (
-        Path(__file__).resolve().parent.parent.parent
-        / "config"
-        / "feature_flags"
-        / "config.yaml"
-    )
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "feature_flags" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
+        with open(config_path, "r") as f:
             config_data = yaml.safe_load(f) or {}
-            print("Loaded config from config/feature_flags/config.yaml")
-
+            print(f"Loaded config from config/feature_flags/config.yaml")
 
 if __name__ == "__main__":
     script = FeatureFlagsScript()

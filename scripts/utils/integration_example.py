@@ -21,31 +21,19 @@ from pathlib import Path
 project_root = Path(__file__).resolve().parent.parent.parent
 sys.path.insert(0, str(project_root / "src"))
 
-from codomyrmex.utils.cli_helpers import (
-    print_error,
-    print_info,
-    print_success,
-    setup_logging,
-)
+from codomyrmex.utils.cli_helpers import setup_logging, print_success, print_info, print_error
 
 
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
-
-    config_path = (
-        Path(__file__).resolve().parent.parent.parent
-        / "config"
-        / "utils"
-        / "config.yaml"
-    )
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "utils" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
+        with open(config_path, "r") as f:
             config_data = yaml.safe_load(f) or {}
-            print("Loaded config from config/utils/config.yaml")
+            print(f"Loaded config from config/utils/config.yaml")
 
     setup_logging()
     print_info("Cross-Module Integration Example")
@@ -55,7 +43,6 @@ def main():
     print_info("\n1. Setting up structured logging...")
     try:
         from codomyrmex.logging_monitoring import get_logger
-
         logger = get_logger("integration_example")
         logger.info("Integration example started")
         print_success("   Logging initialized")
@@ -67,7 +54,6 @@ def main():
     print_info("\n2. Initializing cache layer...")
     try:
         from codomyrmex.cache import get_cache
-
         cache = get_cache("integration_cache", backend="in_memory")
         print_success("   Cache initialized")
     except ImportError as e:
@@ -81,7 +67,6 @@ def main():
     print_info("\n3. Defining validation schema...")
     try:
         from codomyrmex.validation import is_valid
-
         schema = {
             "type": "object",
             "properties": {

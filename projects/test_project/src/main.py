@@ -16,15 +16,14 @@ Example:
     >>> print(f"Status: {pipeline_result.status.value}")
 """
 
-import logging
-import sys
 from pathlib import Path
-from typing import Any
-
-from codomyrmex.events import Event, EventType, get_event_bus
+from typing import Optional, Dict, Any
+import sys
+import logging
 
 # Real codomyrmex imports - no fallback for mega-seed project
-from codomyrmex.logging_monitoring import get_logger, setup_logging
+from codomyrmex.logging_monitoring import setup_logging, get_logger
+from codomyrmex.events import get_event_bus, Event, EventType
 
 HAS_CODOMYRMEX_LOGGING = True  # Exported for integration tests
 
@@ -32,7 +31,10 @@ logger = get_logger(__name__)
 event_bus = get_event_bus()
 
 
-def run_analysis(target_path: Path, config_path: Path | None = None) -> dict[str, Any]:
+def run_analysis(
+    target_path: Path,
+    config_path: Optional[Path] = None
+) -> Dict[str, Any]:
     """Run project analysis using codomyrmex static_analysis.
 
     Demonstrates integration with:
@@ -58,13 +60,11 @@ def run_analysis(target_path: Path, config_path: Path | None = None) -> dict[str
     logger.info(f"Starting analysis of {target_path}")
 
     # Publish analysis start event
-    event_bus.publish(
-        Event(
-            event_type=EventType.CUSTOM,
-            source="test_project.main",
-            data={"action": "analysis_start", "target": str(target_path)},
-        )
-    )
+    event_bus.publish(Event(
+        event_type=EventType.CUSTOM,
+        source="test_project.main",
+        data={"action": "analysis_start", "target": str(target_path)}
+    ))
 
     # Import here to avoid circular imports
     from .analyzer import ProjectAnalyzer
@@ -92,7 +92,8 @@ def run_analysis(target_path: Path, config_path: Path | None = None) -> dict[str
 
 
 def run_pipeline(
-    target_path: Path | None = None, config_path: Path | None = None
+    target_path: Optional[Path] = None,
+    config_path: Optional[Path] = None
 ) -> "PipelineResult":
     """Run the full analysis pipeline.
 
@@ -169,22 +170,28 @@ Examples:
   python -m src.main                    # Analyze current directory
   python -m src.main src/               # Analyze src directory
   python -m src.main --pipeline src/    # Run full pipeline
-        """,
+        """
     )
     parser.add_argument(
         "target",
         nargs="?",
         default=".",
-        help="Path to analyze (default: current directory)",
+        help="Path to analyze (default: current directory)"
     )
     parser.add_argument(
         "--pipeline",
         action="store_true",
-        help="Run full pipeline instead of just analysis",
+        help="Run full pipeline instead of just analysis"
     )
-    parser.add_argument("--config", type=Path, help="Path to configuration file")
     parser.add_argument(
-        "--verbose", "-v", action="store_true", help="Enable verbose logging"
+        "--config",
+        type=Path,
+        help="Path to configuration file"
+    )
+    parser.add_argument(
+        "--verbose", "-v",
+        action="store_true",
+        help="Enable verbose logging"
     )
 
     args = parser.parse_args()
@@ -198,25 +205,25 @@ Examples:
 
         if args.pipeline:
             result = run_pipeline(target, args.config)
-            print(f"\n{'=' * 60}")
+            print(f"\n{'='*60}")
             print(f"Pipeline Status: {result.status.value}")
             print(f"Duration: {result.duration_seconds:.2f} seconds")
             print(f"Steps Completed: {result.steps_completed}/{result.total_steps}")
             if result.errors:
                 print(f"Errors: {', '.join(result.errors)}")
-            print(f"{'=' * 60}")
+            print(f"{'='*60}")
             return 0 if result.status.value == "completed" else 1
         else:
             results = run_analysis(target, args.config)
             summary = results.get("summary", {})
-            print(f"\n{'=' * 60}")
+            print(f"\n{'='*60}")
             print(f"Analysis Results for: {results.get('target', 'Unknown')}")
-            print(f"{'=' * 60}")
+            print(f"{'='*60}")
             print(f"Files Analyzed:   {summary.get('total_files', 0)}")
             print(f"Total Lines:      {summary.get('total_lines', 0)}")
             print(f"Total Functions:  {summary.get('total_functions', 0)}")
             print(f"Total Classes:    {summary.get('total_classes', 0)}")
-            print(f"{'=' * 60}")
+            print(f"{'='*60}")
             return 0
 
     except Exception as e:

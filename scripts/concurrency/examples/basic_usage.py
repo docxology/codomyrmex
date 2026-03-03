@@ -18,11 +18,11 @@ Environment Variables:
 """
 
 import sys
-import threading
 import time
-from concurrent.futures import ThreadPoolExecutor, as_completed
+import threading
 from pathlib import Path
-from typing import Any
+from typing import Any, Dict
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 # Add project root to path
 project_root = Path(__file__).parent.parent.parent.parent
@@ -30,10 +30,7 @@ sys.path.insert(0, str(project_root / "src"))
 
 # Direct import to avoid triggering full codomyrmex package init
 import importlib.util
-
-script_base_path = (
-    project_root / "src" / "codomyrmex" / "utils" / "process" / "script_base.py"
-)
+script_base_path = project_root / "src" / "codomyrmex" / "utils" / "process" / "script_base.py"
 spec = importlib.util.spec_from_file_location("script_base", script_base_path)
 script_base = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(script_base)
@@ -55,37 +52,27 @@ class ConcurrencyScript(ScriptBase):
         """Add concurrency-specific arguments."""
         group = parser.add_argument_group("Concurrency Options")
         group.add_argument(
-            "--workers",
-            "-w",
-            type=int,
-            default=4,
-            help="Number of concurrent workers (default: 4)",
+            "--workers", "-w", type=int, default=4,
+            help="Number of concurrent workers (default: 4)"
         )
         group.add_argument(
-            "--lock-timeout",
-            type=float,
-            default=5.0,
-            help="Lock acquisition timeout in seconds (default: 5.0)",
+            "--lock-timeout", type=float, default=5.0,
+            help="Lock acquisition timeout in seconds (default: 5.0)"
         )
         group.add_argument(
-            "--semaphore-limit",
-            type=int,
-            default=3,
-            help="Semaphore concurrent limit (default: 3)",
+            "--semaphore-limit", type=int, default=3,
+            help="Semaphore concurrent limit (default: 3)"
         )
         group.add_argument(
-            "--test-iterations",
-            type=int,
-            default=10,
-            help="Number of test iterations per primitive (default: 10)",
+            "--test-iterations", type=int, default=10,
+            help="Number of test iterations per primitive (default: 10)"
         )
         group.add_argument(
-            "--skip-redis",
-            action="store_true",
-            help="Skip Redis lock tests (if Redis unavailable)",
+            "--skip-redis", action="store_true",
+            help="Skip Redis lock tests (if Redis unavailable)"
         )
 
-    def run(self, args, config: ScriptConfig) -> dict[str, Any]:
+    def run(self, args, config: ScriptConfig) -> Dict[str, Any]:
         """Execute concurrency demonstrations and tests."""
         results = {
             "tests_run": 0,
@@ -101,14 +88,10 @@ class ConcurrencyScript(ScriptBase):
         semaphore_limit = args.semaphore_limit
         iterations = args.test_iterations
 
-        self.log_info(
-            f"Configuration: workers={workers}, timeout={lock_timeout}s, iterations={iterations}"
-        )
+        self.log_info(f"Configuration: workers={workers}, timeout={lock_timeout}s, iterations={iterations}")
 
         if config.dry_run:
-            self.log_info(
-                "Would test: LocalLock, LocalSemaphore, LockManager, ReadWriteLock"
-            )
+            self.log_info("Would test: LocalLock, LocalSemaphore, LockManager, ReadWriteLock")
             results["dry_run"] = True
             return results
 
@@ -121,9 +104,7 @@ class ConcurrencyScript(ScriptBase):
             results["primitives_tested"].append("LocalLock")
             results["timing_results"]["local_lock"] = lock_results
             results["tests_passed"] += 1
-            self.log_success(
-                f"LocalLock: {lock_results['acquisitions']} acquisitions, avg {lock_results['avg_time_ms']:.2f}ms"
-            )
+            self.log_success(f"LocalLock: {lock_results['acquisitions']} acquisitions, avg {lock_results['avg_time_ms']:.2f}ms")
         except Exception as e:
             results["tests_failed"] += 1
             results["errors"].append(f"LocalLock: {e}")
@@ -131,17 +112,13 @@ class ConcurrencyScript(ScriptBase):
         results["tests_run"] += 1
 
         # Test 2: LocalSemaphore
-        self.log_info(
-            f"\n2. Testing LocalSemaphore - Counting semaphore (limit={semaphore_limit})"
-        )
+        self.log_info(f"\n2. Testing LocalSemaphore - Counting semaphore (limit={semaphore_limit})")
         try:
             sem_results = self._test_semaphore(semaphore_limit, workers, iterations)
             results["primitives_tested"].append("LocalSemaphore")
             results["timing_results"]["semaphore"] = sem_results
             results["tests_passed"] += 1
-            self.log_success(
-                f"LocalSemaphore: max_concurrent={sem_results['max_concurrent']}, operations={sem_results['total_operations']}"
-            )
+            self.log_success(f"LocalSemaphore: max_concurrent={sem_results['max_concurrent']}, operations={sem_results['total_operations']}")
         except Exception as e:
             results["tests_failed"] += 1
             results["errors"].append(f"LocalSemaphore: {e}")
@@ -155,9 +132,7 @@ class ConcurrencyScript(ScriptBase):
             results["primitives_tested"].append("LockManager")
             results["timing_results"]["lock_manager"] = manager_results
             results["tests_passed"] += 1
-            self.log_success(
-                f"LockManager: {manager_results['multi_lock_acquisitions']} multi-lock acquisitions"
-            )
+            self.log_success(f"LockManager: {manager_results['multi_lock_acquisitions']} multi-lock acquisitions")
         except Exception as e:
             results["tests_failed"] += 1
             results["errors"].append(f"LockManager: {e}")
@@ -171,9 +146,7 @@ class ConcurrencyScript(ScriptBase):
             results["primitives_tested"].append("ReadWriteLock")
             results["timing_results"]["read_write_lock"] = rw_results
             results["tests_passed"] += 1
-            self.log_success(
-                f"ReadWriteLock: {rw_results['reads']} reads, {rw_results['writes']} writes"
-            )
+            self.log_success(f"ReadWriteLock: {rw_results['reads']} reads, {rw_results['writes']} writes")
         except Exception as e:
             results["tests_failed"] += 1
             results["errors"].append(f"ReadWriteLock: {e}")
@@ -186,9 +159,7 @@ class ConcurrencyScript(ScriptBase):
             stress_results = self._stress_test(workers, iterations)
             results["timing_results"]["stress_test"] = stress_results
             results["tests_passed"] += 1
-            self.log_success(
-                f"Stress test: {stress_results['total_operations']} ops in {stress_results['duration_ms']:.2f}ms"
-            )
+            self.log_success(f"Stress test: {stress_results['total_operations']} ops in {stress_results['duration_ms']:.2f}ms")
         except Exception as e:
             results["tests_failed"] += 1
             results["errors"].append(f"Stress test: {e}")
@@ -198,13 +169,11 @@ class ConcurrencyScript(ScriptBase):
         # Add metrics
         self.add_metric("tests_run", results["tests_run"])
         self.add_metric("tests_passed", results["tests_passed"])
-        self.add_metric(
-            "success_rate", results["tests_passed"] / results["tests_run"] * 100
-        )
+        self.add_metric("success_rate", results["tests_passed"] / results["tests_run"] * 100)
 
         return results
 
-    def _test_local_lock(self, iterations: int, timeout: float) -> dict[str, Any]:
+    def _test_local_lock(self, iterations: int, timeout: float) -> Dict[str, Any]:
         """Test LocalLock acquire/release cycles."""
         from codomyrmex.concurrency import LocalLock
 
@@ -228,9 +197,7 @@ class ConcurrencyScript(ScriptBase):
             "min_time_ms": min(times),
         }
 
-    def _test_semaphore(
-        self, limit: int, workers: int, iterations: int
-    ) -> dict[str, Any]:
+    def _test_semaphore(self, limit: int, workers: int, iterations: int) -> Dict[str, Any]:
         """Test semaphore with concurrent access."""
         from codomyrmex.concurrency import LocalSemaphore
 
@@ -270,9 +237,9 @@ class ConcurrencyScript(ScriptBase):
             "within_limit": max_concurrent[0] <= limit,
         }
 
-    def _test_lock_manager(self, iterations: int, timeout: float) -> dict[str, Any]:
+    def _test_lock_manager(self, iterations: int, timeout: float) -> Dict[str, Any]:
         """Test LockManager multi-resource acquisition."""
-        from codomyrmex.concurrency import LocalLock, LockManager
+        from codomyrmex.concurrency import LockManager, LocalLock
 
         manager = LockManager()
         resources = ["resource_a", "resource_b", "resource_c"]
@@ -296,7 +263,7 @@ class ConcurrencyScript(ScriptBase):
             "total_releases": stats.total_releases,
         }
 
-    def _test_read_write_lock(self, workers: int, iterations: int) -> dict[str, Any]:
+    def _test_read_write_lock(self, workers: int, iterations: int) -> Dict[str, Any]:
         """Test ReadWriteLock with concurrent readers and writers."""
         from codomyrmex.concurrency import ReadWriteLock
 
@@ -343,7 +310,7 @@ class ConcurrencyScript(ScriptBase):
             "final_value": shared_data["value"],
         }
 
-    def _stress_test(self, workers: int, iterations: int) -> dict[str, Any]:
+    def _stress_test(self, workers: int, iterations: int) -> Dict[str, Any]:
         """Stress test with mixed concurrent operations."""
         from codomyrmex.concurrency import LocalLock, LocalSemaphore
 

@@ -21,16 +21,7 @@ import argparse
 def find_models(path: str = ".") -> list:
     """Find model files."""
     p = Path(path)
-    extensions = [
-        ".pt",
-        ".pth",
-        ".h5",
-        ".keras",
-        ".onnx",
-        ".pkl",
-        ".joblib",
-        ".safetensors",
-    ]
+    extensions = [".pt", ".pth", ".h5", ".keras", ".onnx", ".pkl", ".joblib", ".safetensors"]
 
     found = []
     for ext in extensions:
@@ -74,21 +65,14 @@ def list_model_registries() -> dict:
 
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
-
-    config_path = (
-        Path(__file__).resolve().parent.parent.parent
-        / "config"
-        / "model_ops"
-        / "config.yaml"
-    )
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "model_ops" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
+        with open(config_path, "r") as f:
             config_data = yaml.safe_load(f) or {}
-            print("Loaded config from config/model_ops/config.yaml")
+            print(f"Loaded config from config/model_ops/config.yaml")
 
     parser = argparse.ArgumentParser(description="Model operations utilities")
     subparsers = parser.add_subparsers(dest="command")

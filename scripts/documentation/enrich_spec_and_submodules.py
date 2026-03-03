@@ -6,7 +6,6 @@
 3. Adds code blocks (API examples) to SPEC.md files without them
 4. Creates missing README.md and AGENTS.md for submodules
 """
-
 import ast
 import os
 import sys
@@ -18,12 +17,7 @@ SRC = os.path.join(REPO, "src", "codomyrmex")
 def get_module_info(mod_path):
     """Extract module info from __init__.py."""
     init = os.path.join(mod_path, "__init__.py")
-    info = {
-        "classes": [],
-        "functions": [],
-        "desc": "",
-        "name": os.path.basename(mod_path),
-    }
+    info = {"classes": [], "functions": [], "desc": "", "name": os.path.basename(mod_path)}
     if not os.path.exists(init):
         return info
     try:
@@ -32,11 +26,7 @@ def get_module_info(mod_path):
     except Exception:
         return info
 
-    if (
-        tree.body
-        and isinstance(tree.body[0], ast.Expr)
-        and isinstance(tree.body[0].value, ast.Constant)
-    ):
+    if tree.body and isinstance(tree.body[0], ast.Expr) and isinstance(tree.body[0].value, ast.Constant):
         info["desc"] = tree.body[0].value.value.strip().split("\n")[0]
 
     seen_c, seen_f = set(), set()
@@ -45,11 +35,7 @@ def get_module_info(mod_path):
             doc = ast.get_docstring(node) or ""
             info["classes"].append((node.name, doc.split("\n")[0] if doc else ""))
             seen_c.add(node.name)
-        elif (
-            isinstance(node, ast.FunctionDef)
-            and not node.name.startswith("_")
-            and node.name not in seen_f
-        ):
+        elif isinstance(node, ast.FunctionDef) and not node.name.startswith("_") and node.name not in seen_f:
             doc = ast.get_docstring(node) or ""
             info["functions"].append((node.name, doc.split("\n")[0] if doc else ""))
             seen_f.add(node.name)
@@ -63,19 +49,11 @@ def get_module_info(mod_path):
                 for node in sub_tree.body:
                     if isinstance(node, ast.ClassDef) and node.name not in seen_c:
                         doc = ast.get_docstring(node) or ""
-                        info["classes"].append(
-                            (node.name, doc.split("\n")[0] if doc else "")
-                        )
+                        info["classes"].append((node.name, doc.split("\n")[0] if doc else ""))
                         seen_c.add(node.name)
-                    elif (
-                        isinstance(node, ast.FunctionDef)
-                        and not node.name.startswith("_")
-                        and node.name not in seen_f
-                    ):
+                    elif isinstance(node, ast.FunctionDef) and not node.name.startswith("_") and node.name not in seen_f:
                         doc = ast.get_docstring(node) or ""
-                        info["functions"].append(
-                            (node.name, doc.split("\n")[0] if doc else "")
-                        )
+                        info["functions"].append((node.name, doc.split("\n")[0] if doc else ""))
                         seen_f.add(node.name)
             except Exception:
                 pass
@@ -118,10 +96,7 @@ def fix_spec_title(mod_name):
     first_line = content.split("\n")[0]
     display = get_display_name(mod_name)
     expected_prefix = f"# {display}"
-    if (
-        display.lower() not in first_line.lower()
-        and mod_name.lower() not in first_line.lower()
-    ):
+    if display.lower() not in first_line.lower() and mod_name.lower() not in first_line.lower():
         new_title = f"# {display} — Functional Specification"
         content = content.replace(first_line, new_title, 1)
         with open(spec_path, "w") as f:
@@ -149,7 +124,7 @@ def enrich_spec(mod_name, info):
 
     # Add API code block if no code blocks exist
     if "```" not in content:
-        code = "\n## API Usage\n\n```python\n"
+        code = f"\n## API Usage\n\n```python\n"
         if info["classes"]:
             imports = ", ".join(c[0] for c in info["classes"][:3])
             code += f"from codomyrmex.{mod_name} import {imports}\n"
@@ -190,7 +165,7 @@ def create_submodule_readme(parent, sub, info):
 
     content = f"# {display}\n\n"
     content += f"**Module**: `codomyrmex.{parent}.{sub}` | **Status**: Active\n\n"
-    content += "## Overview\n\n"
+    content += f"## Overview\n\n"
     content += f"{info['desc'] or f'{display} submodule of {parent_display}.'}\n\n"
 
     if info["classes"] or info["functions"]:
@@ -217,7 +192,7 @@ def create_submodule_readme(parent, sub, info):
     content += "```\n\n"
     content += "## Navigation\n\n"
     content += f"- **📁 Parent**: [{parent_display}](../README.md)\n"
-    content += "- **🏠 Root**: [codomyrmex](../../../../README.md)\n"
+    content += f"- **🏠 Root**: [codomyrmex](../../../../README.md)\n"
 
     with open(sub_path, "w") as f:
         f.write(content)
@@ -230,7 +205,7 @@ def create_submodule_agents(parent, sub, info):
     parent_display = get_display_name(parent)
 
     content = f"# Agent Guidelines — {display}\n\n"
-    content += "## Overview\n\n"
+    content += f"## Overview\n\n"
     content += f"{info['desc'] or f'{display} submodule for agent operations.'}\n\n"
 
     content += "## Operating Contracts\n\n"
@@ -252,7 +227,7 @@ def create_submodule_agents(parent, sub, info):
 
     content += "## Navigation\n\n"
     content += f"- **📁 Parent**: [{parent_display}](../AGENTS.md)\n"
-    content += "- **🏠 Root**: [codomyrmex](../../../../AGENTS.md)\n"
+    content += f"- **🏠 Root**: [codomyrmex](../../../../AGENTS.md)\n"
 
     with open(sub_path, "w") as f:
         f.write(content)
@@ -260,25 +235,17 @@ def create_submodule_agents(parent, sub, info):
 
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
-
-    config_path = (
-        Path(__file__).resolve().parent.parent.parent
-        / "config"
-        / "documentation"
-        / "config.yaml"
-    )
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "documentation" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
+        with open(config_path, "r") as f:
             config_data = yaml.safe_load(f) or {}
-            print("Loaded config from config/documentation/config.yaml")
+            print(f"Loaded config from config/documentation/config.yaml")
 
     modules = sorted(
-        d
-        for d in os.listdir(SRC)
+        d for d in os.listdir(SRC)
         if os.path.isdir(os.path.join(SRC, d)) and d != "__pycache__"
     )
 
@@ -327,9 +294,7 @@ def main():
 
     print(f"\n✅ Submodule README.md created: {sub_readme}")
     print(f"✅ Submodule AGENTS.md created: {sub_agents}")
-    print(
-        f"📊 Total: {title_fixed + spec_fixed + sub_readme + sub_agents} improvements"
-    )
+    print(f"📊 Total: {title_fixed + spec_fixed + sub_readme + sub_agents} improvements")
 
 
 if __name__ == "__main__":

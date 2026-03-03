@@ -42,14 +42,11 @@ def parse_github_workflow(path: Path) -> dict:
     """Parse GitHub Actions workflow."""
     try:
         import yaml
-
         with open(path) as f:
             data = yaml.safe_load(f)
         return {
             "name": data.get("name", path.name),
-            "triggers": list(data.get("on", {}).keys())
-            if isinstance(data.get("on"), dict)
-            else [str(data.get("on", ""))],
+            "triggers": list(data.get("on", {}).keys()) if isinstance(data.get("on"), dict) else [str(data.get("on", ""))],
             "jobs": list(data.get("jobs", {}).keys()),
         }
     except ImportError:
@@ -62,19 +59,16 @@ def get_git_info() -> dict:
     """Get current git info for CI context."""
     info = {}
     try:
-        result = subprocess.run(
-            ["git", "rev-parse", "--abbrev-ref", "HEAD"], capture_output=True, text=True
-        )
+        result = subprocess.run(["git", "rev-parse", "--abbrev-ref", "HEAD"],
+                              capture_output=True, text=True)
         info["branch"] = result.stdout.strip()
 
-        result = subprocess.run(
-            ["git", "rev-parse", "HEAD"], capture_output=True, text=True
-        )
+        result = subprocess.run(["git", "rev-parse", "HEAD"],
+                              capture_output=True, text=True)
         info["commit"] = result.stdout.strip()[:8]
 
-        result = subprocess.run(
-            ["git", "log", "-1", "--format=%s"], capture_output=True, text=True
-        )
+        result = subprocess.run(["git", "log", "-1", "--format=%s"],
+                              capture_output=True, text=True)
         info["message"] = result.stdout.strip()[:50]
     except:
         pass
@@ -83,12 +77,8 @@ def get_git_info() -> dict:
 
 def main():
     parser = argparse.ArgumentParser(description="CI/CD status and utilities")
-    parser.add_argument(
-        "--provider", "-p", choices=["github", "gitlab", "all"], default="all"
-    )
-    parser.add_argument(
-        "--list-workflows", "-l", action="store_true", help="List workflows"
-    )
+    parser.add_argument("--provider", "-p", choices=["github", "gitlab", "all"], default="all")
+    parser.add_argument("--list-workflows", "-l", action="store_true", help="List workflows")
     parser.add_argument("--context", "-c", action="store_true", help="Show CI context")
     args = parser.parse_args()
 
@@ -97,7 +87,7 @@ def main():
     # Git context
     git_info = get_git_info()
     if git_info:
-        print("📌 Current context:")
+        print(f"📌 Current context:")
         print(f"   Branch: {git_info.get('branch', 'unknown')}")
         print(f"   Commit: {git_info.get('commit', 'unknown')}")
         print(f"   Message: {git_info.get('message', '')}")
