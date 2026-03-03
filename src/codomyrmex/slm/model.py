@@ -6,7 +6,9 @@ Architecture:
 - Language model head (d_model -> vocab_size)
 - Greedy autoregressive generation
 """
+
 from dataclasses import dataclass
+from typing import Any
 
 import numpy as np
 
@@ -46,7 +48,7 @@ class SLM:
     - Language model head (d_model -> vocab_size)
     """
 
-    def __init__(self, config: SLMConfig = None):
+    def __init__(self, config: SLMConfig | None = None) -> None:
         self.config = config or SLMConfig()
         c = self.config
 
@@ -63,6 +65,11 @@ class SLM:
         self.pos_enc = pe
 
         # Import neural building blocks -- fall back to inline if not available
+        from typing import Any
+
+        MultiHeadAttention: Any
+        FeedForward: Any
+        LayerNorm: Any
         try:
             from codomyrmex.neural.attention import MultiHeadAttention
             from codomyrmex.neural.layers import FeedForward, LayerNorm
@@ -87,7 +94,7 @@ class SLM:
         self.ln_f = LayerNorm(c.d_model)
         self.lm_head = np.random.randn(c.d_model, c.vocab_size) * scale
 
-    def forward(self, token_ids: np.ndarray) -> np.ndarray:
+    def forward(self, token_ids: np.ndarray) -> Any:
         """Forward pass through the transformer.
 
         Args:
@@ -138,8 +145,15 @@ class SLM:
             context.append(next_token)
         return context
 
-    def __call__(self, x):
-        """Make SLM callable."""
+    def __call__(self, x: np.ndarray) -> Any:
+        """Make SLM callable.
+
+        Args:
+            x: Input token IDs.
+
+        Returns:
+            Logits tensor.
+        """
         return self.forward(x)
 
 
@@ -151,12 +165,26 @@ class SLM:
 class _InlineLayerNorm:
     """Inline LayerNorm fallback."""
 
-    def __init__(self, d_model: int, eps: float = 1e-6):
+    def __init__(self, d_model: int, eps: float = 1e-6) -> None:
+        """Initialize inline layer norm.
+
+        Args:
+            d_model: The model dimension.
+            eps: Epsilon value for numerical stability.
+        """
         self.gamma = np.ones(d_model)
         self.beta = np.zeros(d_model)
         self.eps = eps
 
-    def __call__(self, x: np.ndarray) -> np.ndarray:
+    def __call__(self, x: np.ndarray) -> Any:
+        """Forward pass.
+
+        Args:
+            x: Input tensor.
+
+        Returns:
+            Normalized tensor.
+        """
         mean = np.mean(x, axis=-1, keepdims=True)
         var = np.var(x, axis=-1, keepdims=True)
         return self.gamma * (x - mean) / np.sqrt(var + self.eps) + self.beta
@@ -165,14 +193,28 @@ class _InlineLayerNorm:
 class _InlineFeedForward:
     """Inline FeedForward fallback."""
 
-    def __init__(self, d_model: int, d_ff: int):
+    def __init__(self, d_model: int, d_ff: int) -> None:
+        """Initialize inline feed forward.
+
+        Args:
+            d_model: The model dimension.
+            d_ff: The feed forward hidden dimension.
+        """
         scale = np.sqrt(2.0 / d_model)
         self.W1 = np.random.randn(d_model, d_ff) * scale
         self.b1 = np.zeros(d_ff)
         self.W2 = np.random.randn(d_ff, d_model) * scale
         self.b2 = np.zeros(d_model)
 
-    def __call__(self, x: np.ndarray) -> np.ndarray:
+    def __call__(self, x: np.ndarray) -> Any:
+        """Forward pass.
+
+        Args:
+            x: Input tensor.
+
+        Returns:
+            Output tensor.
+        """
         h = np.maximum(0, x @ self.W1 + self.b1)  # ReLU instead of GELU
         return h @ self.W2 + self.b2
 
@@ -180,7 +222,13 @@ class _InlineFeedForward:
 class _InlineMultiHeadAttention:
     """Inline MultiHeadAttention fallback."""
 
-    def __init__(self, d_model: int, n_heads: int):
+    def __init__(self, d_model: int, n_heads: int) -> None:
+        """Initialize inline multi-head attention.
+
+        Args:
+            d_model: The model dimension.
+            n_heads: Number of attention heads.
+        """
         self.d_model = d_model
         self.n_heads = n_heads
         self.d_k = d_model // n_heads
@@ -190,12 +238,41 @@ class _InlineMultiHeadAttention:
         self.W_V = np.random.randn(d_model, d_model) * scale
         self.W_O = np.random.randn(d_model, d_model) * scale
 
-    def __call__(self, query, key, value, mask=None):
+    def __call__(
+        self,
+        query: np.ndarray,
+        key: np.ndarray,
+        value: np.ndarray,
+        mask: np.ndarray | None = None,
+    ) -> tuple[Any, Any]:
+        """Forward pass.
+
+        Args:
+            query: Query tensor.
+            key: Key tensor.
+            value: Value tensor.
+            mask: Optional attention mask.
+
+        Returns:
+            Output tensor and attention weights.
+        """
         batch, seq_q, _ = query.shape
         _, seq_k, _ = key.shape
-        Q = (query @ self.W_Q).reshape(batch, seq_q, self.n_heads, self.d_k).transpose(0, 2, 1, 3)
-        K = (key @ self.W_K).reshape(batch, seq_k, self.n_heads, self.d_k).transpose(0, 2, 1, 3)
-        V = (value @ self.W_V).reshape(batch, seq_k, self.n_heads, self.d_k).transpose(0, 2, 1, 3)
+        Q = (
+            (query @ self.W_Q)
+            .reshape(batch, seq_q, self.n_heads, self.d_k)
+            .transpose(0, 2, 1, 3)
+        )
+        K = (
+            (key @ self.W_K)
+            .reshape(batch, seq_k, self.n_heads, self.d_k)
+            .transpose(0, 2, 1, 3)
+        )
+        V = (
+            (value @ self.W_V)
+            .reshape(batch, seq_k, self.n_heads, self.d_k)
+            .transpose(0, 2, 1, 3)
+        )
         scores = Q @ K.swapaxes(-2, -1) / np.sqrt(self.d_k)
         if mask is not None:
             scores = np.where(mask, scores, -1e9)

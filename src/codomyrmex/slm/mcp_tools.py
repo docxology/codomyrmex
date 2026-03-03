@@ -1,5 +1,7 @@
 """MCP tools for the Small Language Model module."""
 
+from typing import Any
+
 import numpy as np
 
 from codomyrmex.model_context_protocol.decorators import mcp_tool
@@ -7,14 +9,14 @@ from codomyrmex.model_context_protocol.decorators import mcp_tool
 
 @mcp_tool(category="slm")
 def slm_generate(
-    prompt_tokens: list[int] = None,
+    prompt_tokens: list[int] | None = None,
     max_new_tokens: int = 10,
     vocab_size: int = 100,
     d_model: int = 32,
     n_heads: int = 2,
     n_layers: int = 1,
     seed: int = 42,
-) -> dict:
+) -> dict[str, Any]:
     """Generate tokens from a tiny language model.
 
     Args:
@@ -70,7 +72,7 @@ def slm_forward(
     n_heads: int = 2,
     n_layers: int = 1,
     seed: int = 42,
-) -> dict:
+) -> dict[str, Any]:
     """Run a forward pass through the SLM and return logit statistics.
 
     Args:

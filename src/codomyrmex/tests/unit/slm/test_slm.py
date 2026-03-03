@@ -25,27 +25,27 @@ class TestCausalMask:
     """Tests for the causal attention mask."""
 
     @pytest.mark.unit
-    def test_causal_mask_shape(self):
+    def test_causal_mask_shape(self) -> None:
         """Causal mask should be (seq_len, seq_len)."""
         mask = causal_mask(10)
         assert mask.shape == (10, 10)
 
     @pytest.mark.unit
-    def test_causal_mask_is_lower_triangular(self):
+    def test_causal_mask_is_lower_triangular(self) -> None:
         """Causal mask should be True on and below the diagonal."""
         mask = causal_mask(5)
         expected = np.tril(np.ones((5, 5), dtype=bool))
         np.testing.assert_array_equal(mask, expected)
 
     @pytest.mark.unit
-    def test_causal_mask_diagonal_is_true(self):
+    def test_causal_mask_diagonal_is_true(self) -> None:
         """Diagonal elements should all be True (token can attend to itself)."""
         mask = causal_mask(8)
         for i in range(8):
             assert mask[i, i] is np.bool_(True)
 
     @pytest.mark.unit
-    def test_causal_mask_upper_triangle_is_false(self):
+    def test_causal_mask_upper_triangle_is_false(self) -> None:
         """Upper triangle (future tokens) should all be False."""
         mask = causal_mask(6)
         for i in range(6):
@@ -53,7 +53,7 @@ class TestCausalMask:
                 assert mask[i, j] is np.bool_(False)
 
     @pytest.mark.unit
-    def test_causal_mask_size_one(self):
+    def test_causal_mask_size_one(self) -> None:
         """Size-1 mask should be [[True]]."""
         mask = causal_mask(1)
         assert mask.shape == (1, 1)
@@ -69,7 +69,8 @@ class TestSLMConfig:
     """Tests for SLM configuration."""
 
     @pytest.mark.unit
-    def test_default_config(self):
+    def test_default_config(self) -> None:
+        """Test default_config."""
         config = SLMConfig()
         assert config.vocab_size == 1000
         assert config.d_model == 64
@@ -79,7 +80,8 @@ class TestSLMConfig:
         assert config.max_seq_len == 128
 
     @pytest.mark.unit
-    def test_custom_config(self):
+    def test_custom_config(self) -> None:
+        """Test custom_config."""
         config = SLMConfig(vocab_size=500, d_model=32, n_heads=2, n_layers=1)
         assert config.vocab_size == 500
         assert config.d_model == 32
@@ -94,7 +96,7 @@ class TestSLMForward:
     """Tests for SLM forward pass."""
 
     @pytest.mark.unit
-    def test_forward_output_shape(self):
+    def test_forward_output_shape(self) -> None:
         """Output should be (batch, seq, vocab_size)."""
         np.random.seed(42)
         config = SLMConfig(vocab_size=100, d_model=32, n_heads=2, n_layers=1, d_ff=64)
@@ -104,7 +106,7 @@ class TestSLMForward:
         assert logits.shape == (2, 5, 100)
 
     @pytest.mark.unit
-    def test_forward_single_token(self):
+    def test_forward_single_token(self) -> None:
         """Should work with a single token sequence."""
         np.random.seed(42)
         config = SLMConfig(vocab_size=50, d_model=16, n_heads=2, n_layers=1, d_ff=32)
@@ -114,7 +116,7 @@ class TestSLMForward:
         assert logits.shape == (1, 1, 50)
 
     @pytest.mark.unit
-    def test_forward_logits_are_finite(self):
+    def test_forward_logits_are_finite(self) -> None:
         """All logit values should be finite (no NaN or Inf)."""
         np.random.seed(42)
         config = SLMConfig(vocab_size=50, d_model=16, n_heads=2, n_layers=1, d_ff=32)
@@ -124,7 +126,7 @@ class TestSLMForward:
         assert np.all(np.isfinite(logits))
 
     @pytest.mark.unit
-    def test_forward_callable(self):
+    def test_forward_callable(self) -> None:
         """SLM should be callable (via __call__)."""
         np.random.seed(42)
         config = SLMConfig(vocab_size=50, d_model=16, n_heads=2, n_layers=1, d_ff=32)
@@ -134,7 +136,7 @@ class TestSLMForward:
         assert logits.shape == (1, 4, 50)
 
     @pytest.mark.unit
-    def test_forward_exceeds_max_seq_len_raises(self):
+    def test_forward_exceeds_max_seq_len_raises(self) -> None:
         """Should raise ValueError if sequence exceeds max_seq_len."""
         np.random.seed(42)
         config = SLMConfig(
@@ -155,7 +157,7 @@ class TestSLMGenerate:
     """Tests for SLM greedy generation."""
 
     @pytest.mark.unit
-    def test_generate_returns_list(self):
+    def test_generate_returns_list(self) -> None:
         """Generate should return a list of integers."""
         np.random.seed(42)
         config = SLMConfig(vocab_size=50, d_model=16, n_heads=2, n_layers=1, d_ff=32)
@@ -165,7 +167,7 @@ class TestSLMGenerate:
         assert all(isinstance(t, int) for t in result)
 
     @pytest.mark.unit
-    def test_generate_correct_length(self):
+    def test_generate_correct_length(self) -> None:
         """Generated sequence should be prompt_len + max_new_tokens."""
         np.random.seed(42)
         config = SLMConfig(vocab_size=50, d_model=16, n_heads=2, n_layers=1, d_ff=32)
@@ -176,7 +178,7 @@ class TestSLMGenerate:
         assert len(result) == len(prompt) + max_new
 
     @pytest.mark.unit
-    def test_generate_preserves_prompt(self):
+    def test_generate_preserves_prompt(self) -> None:
         """Generated sequence should start with the original prompt."""
         np.random.seed(42)
         config = SLMConfig(vocab_size=50, d_model=16, n_heads=2, n_layers=1, d_ff=32)
@@ -186,7 +188,7 @@ class TestSLMGenerate:
         assert result[:3] == prompt
 
     @pytest.mark.unit
-    def test_generate_tokens_in_vocab_range(self):
+    def test_generate_tokens_in_vocab_range(self) -> None:
         """All generated tokens should be in [0, vocab_size)."""
         np.random.seed(42)
         config = SLMConfig(vocab_size=50, d_model=16, n_heads=2, n_layers=1, d_ff=32)
@@ -195,7 +197,7 @@ class TestSLMGenerate:
         assert all(0 <= t < 50 for t in result)
 
     @pytest.mark.unit
-    def test_generate_deterministic_with_seed(self):
+    def test_generate_deterministic_with_seed(self) -> None:
         """Same seed should produce same generation."""
         config = SLMConfig(vocab_size=50, d_model=16, n_heads=2, n_layers=1, d_ff=32)
 
@@ -219,7 +221,8 @@ class TestMCPTools:
     """Tests for SLM MCP tool interface."""
 
     @pytest.mark.unit
-    def test_slm_generate_tool(self):
+    def test_slm_generate_tool(self) -> None:
+        """Test slm_generate_tool."""
         from codomyrmex.slm.mcp_tools import slm_generate
 
         result = slm_generate(
@@ -236,7 +239,8 @@ class TestMCPTools:
         assert result["full_sequence"][:3] == [1, 2, 3]
 
     @pytest.mark.unit
-    def test_slm_forward_tool(self):
+    def test_slm_forward_tool(self) -> None:
+        """Test slm_forward_tool."""
         from codomyrmex.slm.mcp_tools import slm_forward
 
         result = slm_forward(
@@ -252,14 +256,16 @@ class TestMCPTools:
         assert result["output_shape"] == [2, 4, 50]
 
     @pytest.mark.unit
-    def test_slm_generate_tool_has_mcp_metadata(self):
+    def test_slm_generate_tool_has_mcp_metadata(self) -> None:
+        """Test slm_generate_tool_has_mcp_metadata."""
         from codomyrmex.slm.mcp_tools import slm_generate
 
         assert hasattr(slm_generate, "_mcp_tool")
         assert slm_generate._mcp_tool["category"] == "slm"
 
     @pytest.mark.unit
-    def test_slm_forward_tool_has_mcp_metadata(self):
+    def test_slm_forward_tool_has_mcp_metadata(self) -> None:
+        """Test slm_forward_tool_has_mcp_metadata."""
         from codomyrmex.slm.mcp_tools import slm_forward
 
         assert hasattr(slm_forward, "_mcp_tool")
