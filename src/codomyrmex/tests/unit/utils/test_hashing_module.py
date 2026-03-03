@@ -42,6 +42,10 @@ class TestContentHash:
         result = content_hash("hello", "sha1")
         assert len(result) == 40
 
+    def test_blake2b_length(self):
+        result = content_hash("hello", "blake2b")
+        assert len(result) == 128
+
     def test_bytes_input(self):
         result = content_hash(b"hello")
         assert len(result) == 64
