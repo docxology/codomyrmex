@@ -4,13 +4,14 @@
 
 ## Module Overview
 
-Graph data structures for building, querying, and traversing networks of typed nodes and weighted edges.
+Graph data structures for building, querying, and traversing networks of typed nodes and weighted edges. Also provides MCP tools for building and traversing networks via LLM prompts.
 
 ## Key Classes
 
 - **`Network`** -- Core graph container with node/edge management
 - **`Node(Generic[T])`** -- Typed node with id, data, and attributes
 - **`Edge`** -- Directed edge with source, target, weight, and attributes
+- **MCP Tools (`mcp_tools.py`)** -- Tools to manage network graphs via agent interaction (`network_get_neighbors`, `network_add_node`, `network_add_edge`)
 
 ## Agent Instructions
 

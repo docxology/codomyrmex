@@ -3,7 +3,7 @@
 from codomyrmex.networks.graph import NetworkGraph
 
 
-def test_graph_add_node():
+def test_graph_add_node() -> None:
     """Test standard node addition."""
     graph = NetworkGraph[str]()
     node = graph.add_node("A", data="Value A")
@@ -14,7 +14,7 @@ def test_graph_add_node():
     assert "A" in graph._nodes
 
 
-def test_graph_add_edge():
+def test_graph_add_edge() -> None:
     """Test standard edge addition."""
     graph = NetworkGraph[str]()
     edge = graph.add_edge("A", "B", weight=2.5, type="directed")
@@ -31,7 +31,7 @@ def test_graph_add_edge():
     assert neighbors[0].id == "B"
 
 
-def test_shortest_path():
+def test_shortest_path() -> None:
     """Test Dijkstra's shortest path."""
     graph = NetworkGraph[str]()
     # A -> B -> C
@@ -43,7 +43,9 @@ def test_shortest_path():
     graph.add_edge("B", "C", weight=1.0)
     graph.add_edge("A", "D", weight=1.0)
     graph.add_edge("D", "E", weight=1.0)
-    graph.add_edge("E", "C", weight=1.0) # Path A->D->E->C is length 3.0, A->B->C is 2.0
+    graph.add_edge(
+        "E", "C", weight=1.0
+    )  # Path A->D->E->C is length 3.0, A->B->C is 2.0
 
     path = graph.shortest_path("A", "C")
     assert path is not None
@@ -51,7 +53,7 @@ def test_shortest_path():
     assert [n.id for n in path] == ["A", "B", "C"]
 
 
-def test_shortest_path_no_path():
+def test_shortest_path_no_path() -> None:
     """Test shortest path when no path exists."""
     graph = NetworkGraph[str]()
     graph.add_node("A")

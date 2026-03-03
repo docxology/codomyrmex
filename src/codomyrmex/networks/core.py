@@ -77,10 +77,14 @@ class Network:
             raise ValueError(f"Node {node_id} does not exist")
         del self.nodes[node_id]
         # Remove edges involving this node
-        self.edges = [e for e in self.edges if e.source != node_id and e.target != node_id]
+        self.edges = [
+            e for e in self.edges if e.source != node_id and e.target != node_id
+        ]
         del self._adj[node_id]
         for nid in self._adj:
-            self._adj[nid] = [e for e in self._adj[nid] if e.target != node_id and e.source != node_id]
+            self._adj[nid] = [
+                e for e in self._adj[nid] if e.target != node_id and e.source != node_id
+            ]
 
     def has_node(self, node_id: str) -> bool:
         return node_id in self.nodes
@@ -112,7 +116,9 @@ class Network:
         self.edges.append(edge)
         self._adj[source].append(edge)
         # Undirected: store reverse reference
-        reverse = Edge(source=target, target=source, weight=weight, attributes=attributes)
+        reverse = Edge(
+            source=target, target=source, weight=weight, attributes=attributes
+        )
         self._adj[target].append(reverse)
         return edge
 
@@ -275,7 +281,12 @@ class Network:
         for nd in data.get("nodes", []):
             net.add_node(nd["id"], data=nd.get("data"), **nd.get("attributes", {}))
         for ed in data.get("edges", []):
-            net.add_edge(ed["source"], ed["target"], weight=ed.get("weight", 1.0), **ed.get("attributes", {}))
+            net.add_edge(
+                ed["source"],
+                ed["target"],
+                weight=ed.get("weight", 1.0),
+                **ed.get("attributes", {}),
+            )
         return net
 
     def __repr__(self) -> str:
