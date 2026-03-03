@@ -66,6 +66,13 @@ class TestHashContent:
 
         assert len(result) == 64  # SHA256 always produces 64 char hex
 
+    def test_invalid_algorithm(self):
+        """Test hashing with an unsupported algorithm raises ValueError."""
+        from codomyrmex.utils import hash_content
+
+        with pytest.raises(ValueError, match="unsupported hash type"):
+            hash_content("test", algorithm="invalid_algo")
+
 
 @pytest.mark.unit
 class TestHashFile:
