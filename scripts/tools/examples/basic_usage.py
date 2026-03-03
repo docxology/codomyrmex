@@ -18,22 +18,26 @@ except ImportError:
     project_root = Path(__file__).resolve().parent.parent.parent.parent
     sys.path.insert(0, str(project_root / "src"))
 
-from codomyrmex.utils.cli_helpers import setup_logging, print_success, print_info, print_error
-from codomyrmex.tools import (
-    analyze_project_structure,
-    DependencyAnalyzer
+from codomyrmex.tools import DependencyAnalyzer, analyze_project_structure
+
+from codomyrmex.utils.cli_helpers import (
+    print_error,
+    print_info,
+    print_success,
+    setup_logging,
 )
+
 
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
+
+    import yaml
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "tools" / "config.yaml"
-    config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
-            config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/tools/config.yaml")
+        with open(config_path) as f:
+            yaml.safe_load(f) or {}
+            print("Loaded config from config/tools/config.yaml")
 
     setup_logging()
     print_info("Running Development Tools Examples...")
@@ -53,7 +57,7 @@ def main():
     # 2. Dependency Analyzer
     print_info("Testing DependencyAnalyzer...")
     try:
-        analyzer = DependencyAnalyzer()
+        DependencyAnalyzer()
         # Analyze a small part of the repo
         # Use a real path if possible, or just initialize
         print_success("  DependencyAnalyzer initialized.")

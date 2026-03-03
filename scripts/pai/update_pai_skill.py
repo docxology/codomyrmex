@@ -5,11 +5,17 @@ Regenerates the tool table in ~/.claude/skills/Codomyrmex/SKILL.md
 to reflect all currently available static and dynamic MCP tools.
 """
 
-import sys
 import re
+import sys
 from pathlib import Path
+
 from codomyrmex.agents.pai.mcp_bridge import get_tool_registry
-from codomyrmex.utils.cli_helpers import setup_logging, print_info, print_success, print_error
+from codomyrmex.utils.cli_helpers import (
+    print_error,
+    print_info,
+    print_success,
+    setup_logging,
+)
 
 SKILL_PATH = Path("~/.claude/skills/Codomyrmex/SKILL.md").expanduser().resolve()
 
@@ -138,14 +144,14 @@ def main() -> int:
 
 
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
+
+    import yaml
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "pai" / "config.yaml"
-    config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
-            config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/pai/config.yaml")
+        with open(config_path) as f:
+            yaml.safe_load(f) or {}
+            print("Loaded config from config/pai/config.yaml")
 
 if __name__ == "__main__":
     sys.exit(main())

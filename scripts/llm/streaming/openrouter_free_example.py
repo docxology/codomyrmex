@@ -12,15 +12,15 @@ Usage:
     python openrouter_free_example.py
 """
 
-import sys
 import os
+import sys
 from pathlib import Path
 
 # Ensure codomyrmex is in path
 PROJECT_ROOT = Path(__file__).parent.parent.parent.parent
 sys.path.insert(0, str(PROJECT_ROOT / "src"))
 
-from codomyrmex.llm.providers import get_provider, ProviderType, ProviderConfig, Message
+from codomyrmex.llm.providers import Message, ProviderConfig, ProviderType, get_provider
 
 # Config file locations
 CONFIG_PATHS = [
@@ -48,21 +48,21 @@ def get_api_key() -> str | None:
 
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
+
+    import yaml
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "llm" / "config.yaml"
-    config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
-            config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/llm/config.yaml")
+        with open(config_path) as f:
+            yaml.safe_load(f) or {}
+            print("Loaded config from config/llm/config.yaml")
 
     """Demonstrate streaming with OpenRouter free models."""
     print("=" * 60)
     print("  OpenRouter Free Example - Streaming")
     print("=" * 60)
     print()
-    
+
     # Check for API key
     api_key = get_api_key()
     if not api_key:
@@ -70,27 +70,27 @@ def main():
         print("   Get your free API key at: https://openrouter.ai/keys")
         print("\n   Setup: export OPENROUTER_API_KEY='key' or ~/.config/openrouter/api_key")
         return 1
-    
+
     config = ProviderConfig(api_key=api_key, timeout=60.0)
     prompt = "Write a short poem about coding (4 lines max)."
-    
+
     print(f"📝 Prompt: \"{prompt}\"")
     print()
     print("📡 Connecting to OpenRouter with free model...")
     print()
-    
+
     with get_provider(ProviderType.OPENROUTER, config=config) as provider:
         messages = [
             Message(role="system", content="You are a creative poet. Be concise."),
             Message(role="user", content=prompt),
         ]
-        
+
         print("🌊 Streaming response:\n")
         print("-" * 40)
-        
+
         total_chars = 0
         chunk_count = 0
-        
+
         for chunk in provider.complete_stream(
             messages=messages,
             model="openrouter/free",
@@ -100,17 +100,17 @@ def main():
             print(chunk, end="", flush=True)
             total_chars += len(chunk)
             chunk_count += 1
-        
+
         print("\n" + "-" * 40)
         print()
-        print(f"📊 Streaming stats:")
+        print("📊 Streaming stats:")
         print(f"   Chunks received: {chunk_count}")
         print(f"   Total characters: {total_chars}")
-    
+
     print()
     print("✅ Example completed successfully!")
     print("   💡 Streaming provides real-time output for better UX!")
-    
+
     return 0
 
 

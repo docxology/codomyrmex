@@ -17,23 +17,23 @@ except ImportError:
 
 import argparse
 import os
-import subprocess
 import shutil
+import subprocess
 
 
 def check_aws_cli() -> dict:
     """Check AWS CLI status."""
     if not shutil.which("aws"):
         return {"installed": False}
-    
+
     try:
         result = subprocess.run(["aws", "--version"], capture_output=True, text=True)
         version = result.stdout.strip().split()[0] if result.stdout else "unknown"
-        
+
         # Check for credentials
         has_creds = bool(os.environ.get("AWS_ACCESS_KEY_ID")) or \
                     Path.home().joinpath(".aws/credentials").exists()
-        
+
         return {"installed": True, "version": version, "configured": has_creds}
     except:
         return {"installed": True, "version": "unknown", "configured": False}
@@ -43,12 +43,12 @@ def check_gcloud() -> dict:
     """Check Google Cloud CLI status."""
     if not shutil.which("gcloud"):
         return {"installed": False}
-    
+
     try:
         result = subprocess.run(["gcloud", "--version"], capture_output=True, text=True, timeout=10)
         lines = result.stdout.strip().split("\n")
         version = lines[0] if lines else "unknown"
-        
+
         return {"installed": True, "version": version}
     except:
         return {"installed": True, "version": "unknown"}
@@ -58,7 +58,7 @@ def check_azure() -> dict:
     """Check Azure CLI status."""
     if not shutil.which("az"):
         return {"installed": False}
-    
+
     try:
         result = subprocess.run(["az", "version", "-o", "json"], capture_output=True, text=True, timeout=10)
         import json
@@ -76,41 +76,41 @@ def check_cloud_env_vars() -> dict:
         "gcp": ["GOOGLE_APPLICATION_CREDENTIALS", "GOOGLE_CLOUD_PROJECT", "GCP_PROJECT"],
         "azure": ["AZURE_SUBSCRIPTION_ID", "AZURE_TENANT_ID", "AZURE_CLIENT_ID"],
     }
-    
+
     found = {}
     for provider, vars in providers.items():
         found[provider] = [v for v in vars if os.environ.get(v)]
-    
+
     return found
 
 
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
+
+    import yaml
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "cloud" / "config.yaml"
-    config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
-            config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/cloud/config.yaml")
+        with open(config_path) as f:
+            yaml.safe_load(f) or {}
+            print("Loaded config from config/cloud/config.yaml")
 
     parser = argparse.ArgumentParser(description="Cloud service status")
     parser.add_argument("--provider", "-p", choices=["aws", "gcp", "azure", "all"], default="all")
     parser.add_argument("--env", "-e", action="store_true", help="Show environment variables")
     args = parser.parse_args()
-    
+
     print("☁️  Cloud Status\n")
-    
+
     providers = {
         "aws": ("AWS", check_aws_cli),
         "gcp": ("Google Cloud", check_gcloud),
         "azure": ("Azure", check_azure),
     }
-    
+
     to_check = providers if args.provider == "all" else {args.provider: providers[args.provider]}
-    
-    for key, (name, check_fn) in to_check.items():
+
+    for _key, (name, check_fn) in to_check.items():
         status = check_fn()
         icon = "✅" if status.get("installed") else "⚪"
         print(f"{icon} {name}:")
@@ -121,7 +121,7 @@ def main():
         else:
             print("   Not installed")
         print()
-    
+
     if args.env:
         env_vars = check_cloud_env_vars()
         print("🔧 Environment Variables:\n")
@@ -130,12 +130,12 @@ def main():
                 print(f"   {provider.upper()}: {', '.join(vars)}")
         if not any(env_vars.values()):
             print("   No cloud environment variables set")
-    
+
     print("\n💡 Tips:")
     print("   - AWS: aws configure")
     print("   - GCP: gcloud auth login")
     print("   - Azure: az login")
-    
+
     return 0
 
 
