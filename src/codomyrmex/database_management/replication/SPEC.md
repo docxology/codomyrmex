@@ -46,7 +46,6 @@ Environment variables:
 
 ### 4.1 Design Decisions
 
-1. **Lazy-import stub**: Module is declared with an empty `__all__` and a commented-out `from .core import *` to support future lazy loading without startup cost.
 
 ### 4.2 Limitations
 
