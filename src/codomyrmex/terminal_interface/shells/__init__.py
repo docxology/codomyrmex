@@ -4,6 +4,7 @@ Terminal shell management utilities.
 Provides utilities for managing terminal shells and sessions.
 """
 
+import logging
 import os
 import queue
 import shlex
@@ -16,6 +17,8 @@ from collections.abc import Callable, Iterator
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any, Optional
+
+logger = logging.getLogger(__name__)
 
 
 class ShellType(Enum):
@@ -222,7 +225,9 @@ class InteractiveShell:
                     self._output_queue.put(line.decode())
                 elif self._process.poll() is not None:
                     break
-            except Exception:
+            except (OSError, ValueError) as exc:
+                logger.warning("Shell output reader terminated: %s", exc)
+                self._running = False
                 break
 
     def send(self, command: str) -> None:

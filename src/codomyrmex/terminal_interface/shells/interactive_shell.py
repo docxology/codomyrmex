@@ -773,12 +773,12 @@ print("Sandbox execution complete! ✅")
         except Exception as e:
             print(f"❌ Could not clear screen: {e}")
 
-        # Reset session data
+        # Reset session data — types must match __init__ initialization
         self.session_data = {
-            'commands_run': 0,
-            'modules_explored': set(),
-            'discoveries_made': set(),
-            'demos_run': set()
+            "commands_run": 0,
+            "modules_explored": set(),
+            "discoveries_made": [],
+            "demos_run": 0,
         }
         self.command_history = []
 

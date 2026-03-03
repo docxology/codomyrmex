@@ -15,7 +15,6 @@ Coverage targets:
 
 from __future__ import annotations
 
-import os
 from pathlib import Path
 
 import pytest
@@ -24,10 +23,10 @@ from codomyrmex.agents.pai.mcp.proxy_tools import (
     _tool_get_module_readme,
     _tool_list_module_functions,
     _tool_list_modules,
+    _tool_list_workflows,
     _tool_module_info,
     _tool_pai_awareness,
     _tool_pai_status,
-    _tool_list_workflows,
 )
 
 # ---------------------------------------------------------------------------

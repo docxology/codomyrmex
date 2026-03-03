@@ -14,7 +14,6 @@ import os
 import tempfile
 import warnings
 from pathlib import Path
-from typing import Any
 
 import pytest
 
@@ -23,10 +22,10 @@ import pytest
 # ---------------------------------------------------------------------------
 cryptography = pytest.importorskip("cryptography", reason="cryptography library required")
 
-from codomyrmex.encryption import (
+from codomyrmex.encryption import (  # noqa: E402
     AESGCMEncryptor,
-    Encryptor,
     EncryptionError,
+    Encryptor,
     KeyManager,
     SecureDataContainer,
     Signer,
@@ -44,7 +43,7 @@ from codomyrmex.encryption import (
     hash_data,
     verify_hmac,
 )
-from codomyrmex.encryption.signing import (
+from codomyrmex.encryption.signing import (  # noqa: E402
     SignatureAlgorithm,
     SignatureResult,
     sign_file,

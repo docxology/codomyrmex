@@ -24,7 +24,6 @@ from codomyrmex.docs_gen import (
 )
 from codomyrmex.docs_gen.search_index import STOPWORDS
 
-
 # ---------------------------------------------------------------------------
 # Shared fixtures
 # ---------------------------------------------------------------------------

@@ -63,7 +63,7 @@ graph LR
 
 **Server**: `scripts/model_context_protocol/run_mcp_server.py`
 **Transports**: stdio (Claude Desktop/Code) and Codomyrmex Admin Dashboard (port 8787)
-**Tools**: 20 static tools (17 core + 3 universal proxy) + ~235 auto-discovered module tools from 74 modules via `pkgutil` scan. Total: **~255 tools** (251 safe + 4 destructive). The Codomyrmex PAI Skill (`~/.claude/skills/Codomyrmex/SKILL.md`) surfaces ~255 tools for MCP exposure.
+**Tools**: 9 static proxy tools + ~303 auto-discovered dynamic tools from 87 modules via `pkgutil` scan (299 safe + 4 destructive). The Codomyrmex PAI Skill (`~/.claude/skills/Codomyrmex/SKILL.md`) surfaces these tools for MCP exposure.
 **Web UI**: `http://localhost:8787/` (Codomyrmex Admin Dashboard) · `http://localhost:8888/` (PAI Project Manager)
 **Config**: Register in `claude_desktop_config.json` (see [Connecting PAI tutorial](docs/getting-started/tutorials/connecting-pai.md))
 **Full docs**: [src/codomyrmex/model_context_protocol/PAI.md](src/codomyrmex/model_context_protocol/PAI.md)

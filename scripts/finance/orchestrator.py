@@ -4,9 +4,6 @@ Orchestrator script for the Finance module.
 Demonstrates Ledger, Taxes, Payroll, and Forecasting.
 """
 
-import sys
-from decimal import Decimal
-from datetime import datetime
 from codomyrmex.finance import (
     Ledger, AccountType, TaxCalculator, PayrollProcessor, Forecaster
 )

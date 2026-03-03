@@ -8,7 +8,6 @@ Demonstrates functionality of the feature_store module.
 import sys
 import math
 from pathlib import Path
-from datetime import datetime
 
 # Add project root to path
 PROJECT_ROOT = Path(__file__).parent.parent.parent

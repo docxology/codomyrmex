@@ -7,12 +7,10 @@ including persona management and bio-cognitive verification.
 """
 
 import sys
-import time
 from codomyrmex.identity import (
     IdentityManager,
     BioCognitiveVerifier,
     VerificationLevel,
-    Persona
 )
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
 

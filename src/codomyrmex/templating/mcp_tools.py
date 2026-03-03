@@ -5,14 +5,7 @@ Exposes template rendering and syntax validation via Jinja2.
 
 from __future__ import annotations
 
-try:
-    from codomyrmex.model_context_protocol.decorators import mcp_tool
-except ImportError:
-    def mcp_tool(**kwargs):
-        def decorator(fn):
-            fn._mcp_tool_meta = kwargs
-            return fn
-        return decorator
+from codomyrmex.model_context_protocol.decorators import mcp_tool
 
 
 @mcp_tool(

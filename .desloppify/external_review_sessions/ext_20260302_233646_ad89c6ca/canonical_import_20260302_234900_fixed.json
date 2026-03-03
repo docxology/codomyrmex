@@ -1,0 +1,370 @@
+{
+  "assessments": {
+    "ai_generated_debt": 42,
+    "abstraction_fitness": 55,
+    "convention_outlier": 72,
+    "cross_module_architecture": 58,
+    "dependency_health": 40,
+    "design_coherence": 52,
+    "error_consistency": 45,
+    "package_organization": 48,
+    "test_strategy": 60
+  },
+  "findings": [
+    {
+      "dimension": "ai_generated_debt",
+      "identifier": "AGD-001",
+      "summary": "Verbose entry/exit logging on trivial git operations duplicates the call itself without adding context",
+      "related_files": [
+        "src/codomyrmex/git_operations/core/commands/branching.py"
+      ],
+      "evidence": [
+        "create_branch logs 'Creating new branch X in Y' before the subprocess call and 'Branch X created and checked out successfully' immediately after \u2014 both restate what the code already expresses. switch_branch does the same pattern. Each function body is only 8-10 lines but carries two logger.info calls that add no domain insight not already visible in the function name and arguments."
+      ],
+      "suggestion": "Collapse to a single debug-level log after success, or remove the entry log entirely since CalledProcessError propagates naturally for failures.",
+      "confidence": "high"
+    },
+    {
+      "dimension": "ai_generated_debt",
+      "identifier": "AGD-002",
+      "summary": "documentation_scan_report.py places the module docstring AFTER the imports, suggesting AI-generated stub not reviewed",
+      "related_files": [
+        "src/codomyrmex/documentation/scripts/documentation_scan_report.py",
+        "src/codomyrmex/documentation/scripts/fix_agents_structure.py",
+        "src/codomyrmex/documentation/scripts/check_doc_links.py"
+      ],
+      "evidence": [
+        "documentation_scan_report.py has imports on lines 1-6 and then the module docstring on lines 10-16. fix_agents_structure.py imports Path and get_logger on lines 1-4 and then places the module docstring on lines 6-17. This is a well-known AI generation artifact: the docstring is placed below the first executable statement rather than at the top of the file as Python requires for __doc__ to be set."
+      ],
+      "suggestion": "Move module-level docstrings to the top of each file, before any imports.",
+      "confidence": "high"
+    },
+    {
+      "dimension": "ai_generated_debt",
+      "identifier": "AGD-003",
+      "summary": "InteractiveShell.do_history explicitly states 'History tracking not implemented in this version' as its body \u2014 stub function shipped as feature",
+      "related_files": [
+        "src/codomyrmex/terminal_interface/shells/interactive_shell.py"
+      ],
+      "evidence": [
+        "Lines 785-799: do_history prints '(History tracking not implemented in this version)' and session_data command count. do_clear resets session_data but also sets 'discoveries_made' to a set() when the rest of the code uses a list (line 780 uses list, line 777 initialises as set at clear-time), revealing a type inconsistency introduced by copypaste. do_exit is a pure one-line wrapper around do_quit with identical docstrings."
+      ],
+      "suggestion": "Implement do_history using readline history or remove the command. Fix the type inconsistency in session_data.discoveries_made. If do_exit is intentional, remove its docstring duplication.",
+      "confidence": "high"
+    },
+    {
+      "dimension": "ai_generated_debt",
+      "identifier": "AGD-004",
+      "summary": "performance/__init__.py cli_commands returns closures that print boilerplate text; functions are diagnostic placeholders not real CLI actions",
+      "related_files": [
+        "src/codomyrmex/performance/__init__.py"
+      ],
+      "evidence": [
+        "_run_profiler() prints 'Performance module v{version}', 'Profiler: PerformanceProfiler', and three bullet lines about usage. _performance_report() prints almost identical content. Neither closure inspects runtime state, runs a benchmark, or reads any file. Both are textual summaries of the module's own imports \u2014 classic AI-generated stub filler."
+      ],
+      "suggestion": "Replace with actual CLI actions: _run_profiler should run profile_function on a sample target; _performance_report should call get_system_metrics() and format output.",
+      "confidence": "high"
+    },
+    {
+      "dimension": "abstraction_fitness",
+      "identifier": "AF-001",
+      "summary": "mcp_bridge.py is a pure re-export facade with no added policy \u2014 all logic lives in sub-packages it merely re-imports",
+      "related_files": [
+        "src/codomyrmex/agents/pai/mcp_bridge.py"
+      ],
+      "evidence": [
+        "mcp_bridge.py is 57 lines. Every line is either a from .mcp.X import Y statement or an __all__ entry. It adds no retry, caching, auth, or transformation logic. The three public functions it re-exports (create_codomyrmex_mcp_server, get_tool_registry, call_tool) come verbatim from mcp/server.py. TOOL_COUNT, RESOURCE_COUNT, PROMPT_COUNT are len() computations on imported lists \u2014 these could live in mcp/definitions.py directly."
+      ],
+      "suggestion": "Either give mcp_bridge.py real responsibility (rate limiting, audit injection, protocol translation) or collapse it into the mcp/ package's __init__.py to reduce the indirection layer.",
+      "confidence": "high"
+    },
+    {
+      "dimension": "abstraction_fitness",
+      "identifier": "AF-002",
+      "summary": "Shell.run_background adds no policy over subprocess.Popen \u2014 it is a thin wrapper with identical logic to Shell.run minus the wait",
+      "related_files": [
+        "src/codomyrmex/terminal_interface/shells/__init__.py"
+      ],
+      "evidence": [
+        "run_background (lines 150-172) duplicates the environment-building block from run (lines 103-110) verbatim: full_env = os.environ.copy(); full_env.update(self.config.env); if env: full_env.update(env). The only functional difference is using Popen instead of run(). The CommandBuilder class similarly has pipe() that appends '|' as a string rather than constructing safe pipeline abstractions, suggesting over-generic design."
+      ],
+      "suggestion": "Extract _build_env into a private helper shared by run and run_background. If CommandBuilder is used widely, strengthen pipe() to accept a CommandBuilder argument rather than a raw string.",
+      "confidence": "medium"
+    },
+    {
+      "dimension": "abstraction_fitness",
+      "identifier": "AF-003",
+      "summary": "exceptions/__init__.py re-exports 70+ symbols from 12 submodules with no grouping logic \u2014 large opaque public surface",
+      "related_files": [
+        "src/codomyrmex/exceptions/__init__.py"
+      ],
+      "evidence": [
+        "The __init__.py imports from ai, analysis, base, cerebrum, config, execution, git, io, network, orchestration, specialized, viz \u2014 12 submodules \u2014 and places all 70+ symbols in __all__. There is no guard, factory, or transform applied at the facade level. While this is intentional for stable import paths, the cerebrum sub-hierarchy (9 classes) is unusually deep for a utilities package and indicates domain leakage into what should be a thin infrastructure layer."
+      ],
+      "suggestion": "Keep the facade pattern but consider whether cerebrum-specific exception types (BayesianInferenceError, ActiveInferenceError, NetworkStructureError) belong in a domain-layer package rather than the global exceptions package.",
+      "confidence": "medium"
+    },
+    {
+      "dimension": "convention_outlier",
+      "identifier": "CO-001",
+      "summary": "Naming data: performance/ directory has 30 camelCase identifiers versus 1813 snake_case, the only module with significant camelCase leakage in production code",
+      "related_files": [
+        "src/codomyrmex/performance/__init__.py"
+      ],
+      "evidence": [
+        "The blind packet's naming_by_directory table shows performance/ has camelCase: 30, PascalCase: 6. All other core modules show 0 or 1 camelCase hits. transport/ also shows camelCase: 54 and shells/ shows camelCase: 6 \u2014 both outliers from the dominant snake_case convention confirmed across 100+ directories."
+      ],
+      "suggestion": "Audit performance/, transport/, and shells/ for Java-style camelCase variable names and rename to snake_case. Confirm the PascalCase hits are legitimate class names not function/variable names.",
+      "confidence": "medium"
+    },
+    {
+      "dimension": "convention_outlier",
+      "identifier": "CO-002",
+      "summary": "documentation/scripts/ accumulates 33 script files mixing utility, audit, fix, and validate concerns in a single flat directory",
+      "related_files": [
+        "src/codomyrmex/documentation/scripts/"
+      ],
+      "evidence": [
+        "Glob result shows 33 Python files in documentation/scripts/ with names spanning: check_doc_links.py, fix_agents_structure.py, audit_agents_filepaths.py, validate_configs.py, generate_missing_readmes.py, boost_quality_score.py, documentation_scan_report.py, triple_check.py, smart_template_engine.py, etc. These mix read-only audits, in-place fixers, validators, and generators with no sub-directory grouping. In contrast, sibling modules like agents/pai/mcp/ uses sub-packages properly."
+      ],
+      "suggestion": "Split documentation/scripts/ into auditors/, fixers/, validators/, generators/ sub-packages to match the pattern used by agents/ and coding/.",
+      "confidence": "high"
+    },
+    {
+      "dimension": "convention_outlier",
+      "identifier": "CO-003",
+      "summary": "InteractiveShell class name collision: two distinct classes named InteractiveShell exist in different modules at the same import path depth",
+      "related_files": [
+        "src/codomyrmex/terminal_interface/shells/__init__.py",
+        "src/codomyrmex/terminal_interface/shells/interactive_shell.py"
+      ],
+      "evidence": [
+        "terminal_interface/shells/__init__.py defines class InteractiveShell (a subprocess-based persistent shell, line 182). terminal_interface/shells/interactive_shell.py also defines class InteractiveShell (a cmd.Cmd-based REPL). Both are in the same shells/ package. The __init__.py __all__ exports the process-based InteractiveShell; the file-based one is imported separately. This name collision will produce confusing ImportError behaviour depending on import order."
+      ],
+      "suggestion": "Rename one class: the cmd.Cmd REPL could be CodomyrmexREPL or ForagerShell; the persistent process shell is better named ProcessShell or PersistentShell.",
+      "confidence": "high"
+    },
+    {
+      "dimension": "cross_module_architecture",
+      "identifier": "CMA-001",
+      "summary": "terminal_interface/shells/interactive_shell.py (Foundation layer) lazy-imports coding and data_visualization (Core layer) inside methods but also holds try/except ImportError around get_logger which is in the same Foundation layer",
+      "related_files": [
+        "src/codomyrmex/terminal_interface/shells/interactive_shell.py"
+      ],
+      "evidence": [
+        "Lines 24-27 wrap get_logger in a try/except ImportError with logging.getLogger fallback. get_logger comes from logging_monitoring which is also Foundation layer \u2014 the guard is unnecessary and implies the author was uncertain about layer boundaries. Lines 379-396 lazy-import codomyrmex.data_visualization and lines 440-453 lazy-import codomyrmex.coding inside methods, which is the correct pattern for cross-layer access. The inconsistency between the guarded Foundation import and the unguarded Core lazy imports signals confused boundary awareness."
+      ],
+      "suggestion": "Remove the try/except around get_logger (Foundation imports same layer). Document the lazy-import pattern as intentional in a comment citing the architecture contract.",
+      "confidence": "high"
+    },
+    {
+      "dimension": "cross_module_architecture",
+      "identifier": "CMA-002",
+      "summary": "git_operations/core/git.py imports from codomyrmex.performance (a Service-layer module) at the top level, creating upward dependency from Core to Service layer",
+      "related_files": [
+        "src/codomyrmex/git_operations/core/git.py"
+      ],
+      "evidence": [
+        "Line 8: from codomyrmex.performance import PERFORMANCE_MONITOR_AVAILABLE. Lines 10-14: conditional import of monitor_performance and performance_context from performance module. git_operations is documented as Core layer; performance is also Core but its monitoring subpackage (psutil dependency) acts as a Service-layer concern. The PERFORMANCE_MONITORING_AVAILABLE alias on line 61 is redundant with PERFORMANCE_MONITOR_AVAILABLE from line 8, naming drift indicating copy-paste."
+      ],
+      "suggestion": "If performance monitoring of git ops is needed, use an optional decorator injected at the call site rather than importing conditionally at module load. Remove the PERFORMANCE_MONITORING_AVAILABLE alias.",
+      "confidence": "medium"
+    },
+    {
+      "dimension": "cross_module_architecture",
+      "identifier": "CMA-003",
+      "summary": "trust_gateway.py imports from mcp_bridge.py and mcp/discovery.py simultaneously, creating an intra-package cycle risk",
+      "related_files": [
+        "src/codomyrmex/agents/pai/trust_gateway.py",
+        "src/codomyrmex/agents/pai/mcp_bridge.py",
+        "src/codomyrmex/agents/pai/mcp/discovery.py"
+      ],
+      "evidence": [
+        "trust_gateway.py lines 35-38 import _discover_dynamic_tools from mcp.discovery and create_codomyrmex_mcp_server, get_tool_registry from mcp_bridge. mcp_bridge.py re-exports from mcp/server.py which calls _discover_dynamic_tools. So trust_gateway -> mcp_bridge -> mcp/server -> mcp/discovery, and trust_gateway -> mcp/discovery directly. This double-path import means any change to mcp/discovery affects trust_gateway through two code paths, creating brittle coupling."
+      ],
+      "suggestion": "trust_gateway should import only from mcp_bridge (the stable facade) and not reach into mcp/discovery directly. Move get_discovery_metrics to mcp_bridge's public API if needed.",
+      "confidence": "high"
+    },
+    {
+      "dimension": "dependency_health",
+      "identifier": "DH-001",
+      "summary": "Core dependencies include heavyweight scientific libraries (scipy, numpy, networkx) as mandatory requirements for all installs",
+      "related_files": [
+        "pyproject.toml"
+      ],
+      "evidence": [
+        "pyproject.toml [project.dependencies] lists numpy>=2.2.0, scipy>=1.7.0, networkx>=3.0.0 as non-optional. These are heavy downloads (~50-200MB combined) required even when users only need git_operations or logging_monitoring. Similarly pylint>=3.0.0, bandit>=1.8.0, radon>=6.0.0, lizard>=1.17.0 are mandated as core when they are only used by static_analysis. fastapi, uvicorn, pydantic are also core but only consumed by a subset of modules."
+      ],
+      "suggestion": "Move scipy, networkx to optional [project.optional-dependencies.ml] or [cerebrum]. Move pylint, bandit, radon, lizard to optional [static_analysis]. Keep only python-dotenv, jsonschema, pyyaml, requests as truly universal core.",
+      "confidence": "high"
+    },
+    {
+      "dimension": "dependency_health",
+      "identifier": "DH-002",
+      "summary": "mcp_tools.py files use a try/except ImportError fallback that silently redefines mcp_tool as a no-op decorator \u2014 violating the project's zero-silent-fallback policy",
+      "related_files": [
+        "src/codomyrmex/performance/mcp_tools.py"
+      ],
+      "evidence": [
+        "performance/mcp_tools.py lines 11-17 wrap the mcp_tool import in try/except ImportError and define a local stub decorator. This means if model_context_protocol is unavailable, the @mcp_tool decorations silently apply nothing \u2014 the tools appear to register but do not. This pattern appears in multiple mcp_tools.py files (same stub definition observed in performance, which is a Sprint 17 addition). The project's zero-silent-fallback policy in CLAUDE.md explicitly prohibits this pattern."
+      ],
+      "suggestion": "Remove the try/except stub. If model_context_protocol is a hard dependency for any module using @mcp_tool, declare it in pyproject.toml. If it is optional, raise ImportError at module load time with a clear message rather than silently degrading.",
+      "confidence": "high"
+    },
+    {
+      "dimension": "design_coherence",
+      "identifier": "DC-001",
+      "summary": "InteractiveShell (interactive_shell.py) mixes REPL logic, module discovery, demo execution, and shell command dispatching in a single 837-line class",
+      "related_files": [
+        "src/codomyrmex/terminal_interface/shells/interactive_shell.py"
+      ],
+      "evidence": [
+        "The 837-line file contains: cmd.Cmd REPL infrastructure (precmd, emptyline, default), module discovery (_ensure_discovery, _explore_overview, _explore_module), demo management (_demo_data_visualization, _demo_logging, _demo_code_execution, _demo_all_modules), system shell pass-through (do_shell), and session statistics (do_session, do_stats). Each of these is a separate concern. _demo_specific_module uses a hardcoded if/elif chain on module name strings (lines 356-364) rather than a dispatch table or plugin pattern, making each new demo require editing the class."
+      ],
+      "suggestion": "Extract DemoRunner, SessionTracker, and ModuleExplorer as separate classes. Replace the if/elif demo dispatch with a dict mapping module names to demo callables.",
+      "confidence": "high"
+    },
+    {
+      "dimension": "design_coherence",
+      "identifier": "DC-002",
+      "summary": "DocumentationScanner stores 7-phase result state as a single nested dict literal in __init__, mixing schema definition with initialization",
+      "related_files": [
+        "src/codomyrmex/documentation/scripts/documentation_scan_report.py"
+      ],
+      "evidence": [
+        "Lines 26-60: __init__ builds self.results as a 7-level nested dict with empty lists/dicts for phase1 through phase7. Each phase key (files_found, content_issues, coverage_gaps, etc.) represents a distinct concern that should be its own dataclass or typed dict. The flat initialization makes it impossible to type-check phase results independently and conflates the scanner's state with its output format."
+      ],
+      "suggestion": "Define typed dataclasses for each phase result (Phase1Result, Phase2Result, etc.) and compose them into a ScanResults container. This enables type checking and makes each phase's contract explicit.",
+      "confidence": "medium"
+    },
+    {
+      "dimension": "error_consistency",
+      "identifier": "EC-001",
+      "summary": "Mixed error strategies within git_operations: some commands return None on failure, others propagate CalledProcessError, others return empty list",
+      "related_files": [
+        "src/codomyrmex/git_operations/core/commands/branching.py"
+      ],
+      "evidence": [
+        "get_current_branch (lines 74-97) catches CalledProcessError and Exception and returns None. list_branches (lines 100-127) catches CalledProcessError and returns []. create_branch and switch_branch (lines 9-47) use check=True without try/except, so they raise CalledProcessError directly to the caller. This means callers cannot predict whether a git failure will be None, [], or an exception \u2014 three different error protocols in the same 128-line file."
+      ],
+      "suggestion": "Standardize: all public git commands should either always raise a domain GitOperationError (wrapping CalledProcessError), or always return Optional[T]/[] with error logged. The None-return strategy loses error context; the raise strategy is preferable for testability.",
+      "confidence": "high"
+    },
+    {
+      "dimension": "error_consistency",
+      "identifier": "EC-002",
+      "summary": "Broad error strategy data shows scripts/ directory has 330 try_catch and 48 returns_null with 0 throws, while src/ has throws \u2014 strategy inversion between production and script code",
+      "related_files": [
+        "src/codomyrmex/documentation/scripts/fix_agents_structure.py"
+      ],
+      "evidence": [
+        "The blind packet error strategy table shows scripts/ at try_catch: 330, returns_null: 48, result_type: 12, throws: 0. src/ shows try_catch: 60, throws: 18, returns_null: 12. fix_agents_structure.py fix_agents_file uses a try/except Exception as e block that logs a warning and silently continues, meaning failures in fixing files are invisible to the caller. Documentation scripts that modify files should raise on failure, not swallow errors."
+      ],
+      "suggestion": "Documentation and maintenance scripts should propagate exceptions or exit with non-zero status on failure. Replace silent except-and-continue patterns with explicit failure modes that surface to CI/CD.",
+      "confidence": "medium"
+    },
+    {
+      "dimension": "error_consistency",
+      "identifier": "EC-003",
+      "summary": "InteractiveShell._read_output swallows all exceptions in the reader thread with a bare except: break",
+      "related_files": [
+        "src/codomyrmex/terminal_interface/shells/__init__.py"
+      ],
+      "evidence": [
+        "Lines 219-226: _read_output() catches Exception with a bare except block and breaks. Any error in stdout.readline() silently terminates the reader thread with no logging, no error state set on the object, and no way for the caller to detect the failure. is_running still returns True after the reader thread exits due to an exception."
+      ],
+      "suggestion": "Log the exception, set a _read_error attribute, and update _running to False. The execute() method should check _read_error and raise rather than returning empty string.",
+      "confidence": "high"
+    },
+    {
+      "dimension": "package_organization",
+      "identifier": "PO-001",
+      "summary": "132 top-level modules in src/codomyrmex/ includes domain-specific modules (meme/, quantum/, bio_simulation/, wallet/, market/, evolutionary_ai/) that have no callers in the core system",
+      "related_files": [
+        "src/codomyrmex/"
+      ],
+      "evidence": [
+        "ls shows 132 entries in src/codomyrmex/. The blind packet naming table shows meme/ at snake_case: 1392, quantum/ at 714, wallet/ at 942, market/ at 354, bio_simulation/ at 174, evolutionary_ai/ at 480 \u2014 all with snake_case only (no upstream fan-in from the architecture table entries visible in the packet). The CLAUDE.md documents 88 modules but the directory contains 132 entries including modules like logit_processor/, matmul_kernel/, softmax_opt/, autograd/ that are ML training infrastructure concerns, not coding workspace concerns."
+      ],
+      "suggestion": "Group experimental/domain modules under a contrib/ or extensions/ sub-namespace. Remove or quarantine modules with 0 documented importers from the core src/codomyrmex/ namespace.",
+      "confidence": "medium"
+    },
+    {
+      "dimension": "package_organization",
+      "identifier": "PO-002",
+      "summary": "agents/ directory has nested worktree copies appearing in god_modules list, indicating the analysis tool scanned .claude/worktrees/ subdirectories as production code",
+      "related_files": [
+        "src/codomyrmex/data_visualization/plots/_base.py"
+      ],
+      "evidence": [
+        "The blind packet god_modules list shows data_visualization/plots/_base.py with importers: 20 appearing six times \u2014 once for the real path and five times for .claude/worktrees/agent-*/src/codomyrmex/ copies. This means worktree directories are included in the analysis corpus, polluting coupling metrics and import counts. The top_imported map lists the same file six times with path prefix variations."
+      ],
+      "suggestion": "Add .claude/worktrees/ to the analysis tool's exclusion list (equivalent to .gitignore). This affects the accuracy of fan-in/fan-out metrics used in package_organization scoring.",
+      "confidence": "high"
+    },
+    {
+      "dimension": "package_organization",
+      "identifier": "PO-003",
+      "summary": "docs_gen/ module exists at top level alongside documentation/ \u2014 two modules with overlapping concern and ambiguous naming",
+      "related_files": [
+        "src/codomyrmex/docs_gen/",
+        "src/codomyrmex/documentation/"
+      ],
+      "evidence": [
+        "src/codomyrmex/ contains both docs_gen/ (snake_case: 508 per naming table) and documentation/ (snake_case: 2562). The naming table also shows docs/ directory with snake_case: 36 and documents/ with snake_case: 1078 \u2014 four directories whose names imply overlapping responsibility for documentation. The blind packet structure profiles show both as active. Without clear ownership contracts, new documentation tooling will be placed arbitrarily."
+      ],
+      "suggestion": "Define explicit ownership contracts: documentation/ owns public-facing doc generation; docs_gen/ either merges into it or is renamed to reflect its distinct role (e.g., api_doc_generation/). Deprecate docs/ as a standalone package.",
+      "confidence": "medium"
+    },
+    {
+      "dimension": "test_strategy",
+      "identifier": "TS-001",
+      "summary": "Unit tests for collaboration module are organized at multiple levels simultaneously: test_collaboration.py, tests/unit/collaboration/test_collaboration.py, and tests/unit/collaboration/swarm/test_swarm.py",
+      "related_files": [
+        "src/codomyrmex/tests/unit/collaboration/test_collaboration.py",
+        "src/codomyrmex/tests/unit/collaboration/swarm/test_swarm.py"
+      ],
+      "evidence": [
+        "test_collaboration.py at line 4 imports from collaboration.protocols.swarm (legacy path). test_swarm.py imports from collaboration.swarm.* (new path). Both exist for the same module. test_collaboration.py comment on line 29 says 'Legacy TaskDecomposer is just a shim', suggesting the test is testing a compatibility wrapper rather than real logic. Having tests for the shim and the real implementation at separate levels makes coverage calculation ambiguous."
+      ],
+      "suggestion": "Remove test_collaboration.py once the shim it tests (TaskDecomposer in protocols/swarm) is deprecated. Keep test_swarm.py as the canonical test file. Add a test that verifies the shim forwards correctly if compatibility must be maintained.",
+      "confidence": "medium"
+    },
+    {
+      "dimension": "test_strategy",
+      "identifier": "TS-002",
+      "summary": "Trust gateway tests in test_trust_gateway_audit.py directly call private functions (_log_audit_entry, _cleanup_expired_confirmations, _pending_confirmations), coupling tests to implementation internals",
+      "related_files": [
+        "src/codomyrmex/tests/unit/agents/test_trust_gateway_audit.py"
+      ],
+      "evidence": [
+        "Lines 16-27 of test_trust_gateway_audit.py import _log_audit_entry, _cleanup_expired_confirmations, _pending_confirmations \u2014 three private functions (underscore-prefixed) from trust_gateway. Test methods call _log_audit_entry directly rather than calling the public trusted_call_tool() path and observing the audit log. This couples tests to private implementation details that can change without changing public behavior."
+      ],
+      "suggestion": "Replace direct calls to _log_audit_entry with calls through the public API (trusted_call_tool or verify_capabilities) and assert on get_audit_log() output. Reserve private-function tests for internal-module unit tests only when the internal logic is complex and cannot be reached through the public API.",
+      "confidence": "high"
+    },
+    {
+      "dimension": "test_strategy",
+      "identifier": "TS-003",
+      "summary": "test_swarm.py uses test class docstrings as 'Test functionality: X' with no domain context \u2014 generic AI-generated test documentation",
+      "related_files": [
+        "src/codomyrmex/tests/unit/collaboration/swarm/test_swarm.py"
+      ],
+      "evidence": [
+        "Lines 42-43: test_auto_id docstring is 'Test functionality: auto id'. Line 49-50: test_to_dict docstring is 'Test functionality: to dict'. Lines 59-60: test_available docstring is 'Test functionality: available'. This pattern of 'Test functionality: X' where X is the method name restated is a canonical AI-generated test docstring pattern with no domain information \u2014 it does not explain WHAT behavior is being verified or WHY it matters."
+      ],
+      "suggestion": "Replace 'Test functionality: X' docstrings with behavior-focused descriptions: 'SwarmMessage auto-assigns a non-empty message_id and positive timestamp on construction.' This makes test failures self-documenting.",
+      "confidence": "high"
+    }
+  ],
+  "provenance": {
+    "kind": "blind_review_batch_import",
+    "blind": true,
+    "runner": "claude",
+    "run_stamp": "ext_20260302_233646_ad89c6ca",
+    "created_at": "2026-03-02T23:49:00+00:00",
+    "packet_path": "/Users/mini/Documents/GitHub/codomyrmex/.desloppify/review_packet_blind.json",
+    "packet_sha256": "8cc2a514f5db269a981d69aa8f133ca1501c01f5a28553b7e064d644db6199d9",
+    "external_session_id": "ext_20260302_233646_ad89c6ca"
+  }
+}

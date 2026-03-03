@@ -13,13 +13,7 @@ Subpackages:
 
 from codomyrmex.exceptions import CodomyrmexError
 
-# Shared schemas for cross-module interop
-try:
-    from codomyrmex.validation.schemas import Result, ResultStatus
-except ImportError:
-    Result = None
-    ResultStatus = None
-
+from . import analysis, benchmarking  # noqa: F401
 from .caching.cache_manager import CacheManager, cached_function
 from .optimization.lazy_loader import LazyLoader, lazy_import
 
@@ -29,7 +23,6 @@ from .profiling.benchmark import (
     profile_function,
     run_benchmark,
 )
-from . import analysis, benchmarking  # noqa: F401
 
 # Import PerformanceMonitor — requires psutil. If unavailable, callers must guard
 # with `if PERFORMANCE_MONITOR_AVAILABLE:` before using monitor_performance.

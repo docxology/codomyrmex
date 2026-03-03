@@ -92,7 +92,7 @@ Each module is self-contained with standard structure:
 - **Model Context Protocol (MCP)**: Standardized interface for AI/LLM integration across modules
 - **Upward dependencies only**: Higher layers depend on lower, preventing circular dependencies
 - **Lazy module loading**: Modules load on-demand to reduce startup time
-- **Auto-discovery**: Modules with an `mcp_tools.py` submodule using `@mcp_tool` decorators are automatically discovered and surfaced via the PAI MCP bridge — no manual registration needed. Currently 81 modules are auto-discovered.
+- **Auto-discovery**: Modules with an `mcp_tools.py` submodule using `@mcp_tool` decorators are automatically discovered and surfaced via the PAI MCP bridge — no manual registration needed. Currently 87 modules are auto-discovered.
 
 ### Extended Modules (auto-discovered via MCP)
 
@@ -129,7 +129,7 @@ Beyond the core layers above, these modules expose MCP tools via `@mcp_tool` dec
 Codomyrmex serves as the toolbox for the [PAI system](https://github.com/danielmiessler/Personal_AI_Infrastructure) (`~/.claude/PAI/`). Key integration points:
 
 - **Detection**: PAI is present when `~/.claude/PAI/SKILL.md` exists
-- **MCP Bridge**: `src/codomyrmex/agents/pai/mcp_bridge.py` exposes 9 static proxy tools + auto-discovered module tools via `pkgutil` scan of all `mcp_tools.py` submodules; the Codomyrmex PAI Skill surfaces ~291 dynamic tools across 81 auto-discovered modules, with 3 resources and 10 prompts
+- **MCP Bridge**: `src/codomyrmex/agents/pai/mcp_bridge.py` exposes 9 static proxy tools + auto-discovered module tools via `pkgutil` scan of all `mcp_tools.py` submodules; the Codomyrmex PAI Skill surfaces ~303 dynamic tools across 87 auto-discovered modules, with 3 resources and 10 prompts
 - **Trust Gateway**: `src/codomyrmex/agents/pai/trust_gateway.py` gates destructive tools (write, execute) behind explicit trust
 - **Workflows**: `/codomyrmexVerify` audits capabilities; `/codomyrmexTrust` enables destructive tools
 - **RASP Pattern**: Each module has `PAI.md` alongside `README.md`, `AGENTS.md`, `SPEC.md` — these describe AI capabilities the module offers
@@ -312,12 +312,12 @@ Last: [first session]
 
 ## Last Session Bridge
 [Emergency bridge — running bridge was not updated]
-No changes or facts in this session.
+Files: src/codomyrmex/tests/unit/agents/cli/test_handlers.py (edit)
 
 ## Crash Recovery
-Last session (2026-03-02T14:47:21.188194) was not properly closed (crash/kill).
-Recorded 0 file changes before crash.
-Last changed files: none
+Last session (2026-03-02T15:35:58.627411) was not properly closed (crash/kill).
+Recorded 3 file changes before crash.
+Last changed files: src/codomyrmex/tests/unit/agents/cli/test_handlers.py
 Bridge from previous session is valid (above).
 For details use: memory_search("changes last session")
 

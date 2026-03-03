@@ -1,7 +1,18 @@
+import os
+import shutil
+
 import pytest
 
-from codomyrmex.agents.core import AgentRequest, AgentResponse
-from codomyrmex.agents.gemini.gemini_cli import GeminiCLIWrapper
+# All tests in this file invoke the real Gemini CLI binary and require live
+# AI API credentials.  Skip unless GEMINI_TEST_ENABLED=1 is set (per skip
+# policy: skip tests requiring network/API keys).
+pytestmark = pytest.mark.skipif(
+    not (shutil.which("gemini") and os.environ.get("GEMINI_TEST_ENABLED") == "1"),
+    reason="Gemini CLI requires AI API access; set GEMINI_TEST_ENABLED=1 to run",
+)
+
+from codomyrmex.agents.core import AgentRequest, AgentResponse  # noqa: E402
+from codomyrmex.agents.gemini.gemini_cli import GeminiCLIWrapper  # noqa: E402
 
 
 def test_gemini_cli_version():

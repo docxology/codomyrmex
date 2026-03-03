@@ -8,15 +8,7 @@ from __future__ import annotations
 
 from typing import Any
 
-try:
-    from codomyrmex.model_context_protocol.decorators import mcp_tool
-except ImportError:
-    def mcp_tool(**kwargs):  # type: ignore[misc]
-        def decorator(fn):
-            fn._mcp_tool_meta = kwargs
-            return fn
-        return decorator
-
+from codomyrmex.model_context_protocol.decorators import mcp_tool
 
 # Module-level singleton — shared across all tool calls within a process session
 _store: Any = None

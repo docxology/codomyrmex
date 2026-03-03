@@ -7,7 +7,6 @@ corresponding dedicated configuration directory in the `/config/` root,
 complete with a comprehensive default `config.yaml`.
 """
 
-import os
 import yaml
 from pathlib import Path
 

@@ -1,8 +1,3 @@
-import os
-from pathlib import Path
-
-from codomyrmex.logging_monitoring import get_logger
-
 """
 Fix AGENTS.md Structure
 
@@ -12,9 +7,12 @@ This script iterates through all AGENTS.md files and ensures they have the requi
 - Operating Contracts
 
 If sections are missing, it adds them with intelligent default content.
-
-
 """
+
+import os
+from pathlib import Path
+
+from codomyrmex.logging_monitoring import get_logger
 
 
 logger = get_logger(__name__)

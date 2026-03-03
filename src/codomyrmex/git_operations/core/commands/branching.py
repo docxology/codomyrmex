@@ -15,7 +15,6 @@ def create_branch(branch_name: str, repository_path: str = None) -> bool:
     if repository_path is None:
         repository_path = os.getcwd()
 
-    logger.info(f"Creating new branch '{branch_name}' in {repository_path}")
     subprocess.run(
         ["git", "checkout", "-b", branch_name],
         cwd=repository_path,
@@ -23,7 +22,7 @@ def create_branch(branch_name: str, repository_path: str = None) -> bool:
         text=True,
         check=True,
     )
-    logger.info(f"Branch '{branch_name}' created and checked out successfully")
+    logger.debug("Branch '%s' created and checked out", branch_name)
     return True
 
 def switch_branch(branch_name: str, repository_path: str = None) -> bool:
@@ -35,7 +34,6 @@ def switch_branch(branch_name: str, repository_path: str = None) -> bool:
     if repository_path is None:
         repository_path = os.getcwd()
 
-    logger.info(f"Switching to branch '{branch_name}' in {repository_path}")
     subprocess.run(
         ["git", "checkout", branch_name],
         cwd=repository_path,
@@ -43,7 +41,7 @@ def switch_branch(branch_name: str, repository_path: str = None) -> bool:
         text=True,
         check=True,
     )
-    logger.info(f"Switched to branch '{branch_name}' successfully")
+    logger.debug("Switched to branch '%s'", branch_name)
     return True
 
 def delete_branch(branch_name: str, repository_path: str = None, force: bool = False) -> bool:
@@ -71,30 +69,25 @@ def delete_branch(branch_name: str, repository_path: str = None, force: bool = F
     logger.info(f"Deleted branch {branch_name} (force={force})")
     return True
 
-def get_current_branch(repository_path: str = None) -> str | None:
-    """Get the name of the current Git branch."""
+def get_current_branch(repository_path: str = None) -> str:
+    """Get the name of the current Git branch.
+
+    Raises:
+        subprocess.CalledProcessError: If git reports a non-zero exit code.
+    """
     if repository_path is None:
         repository_path = os.getcwd()
 
-    try:
-        result = subprocess.run(
-            ["git", "branch", "--show-current"],
-            cwd=repository_path,
-            capture_output=True,
-            text=True,
-            check=True,
-        )
-
-        branch_name = result.stdout.strip()
-        logger.debug(f"Current branch: {branch_name}")
-        return branch_name
-
-    except subprocess.CalledProcessError as e:
-        logger.error(f"Failed to get current branch: {e}")
-        return None
-    except Exception as e:
-        logger.error(f"Unexpected error getting current branch: {e}")
-        return None
+    result = subprocess.run(
+        ["git", "branch", "--show-current"],
+        cwd=repository_path,
+        capture_output=True,
+        text=True,
+        check=True,
+    )
+    branch_name = result.stdout.strip()
+    logger.debug("Current branch: %s", branch_name)
+    return branch_name
 
 
 def list_branches(repository_path: str = None) -> list[str]:
@@ -108,20 +101,16 @@ def list_branches(repository_path: str = None) -> list[str]:
         Returns empty list if not a git repository or on error.
     """
     cwd = repository_path or "."
-    try:
-        result = subprocess.run(
-            ["git", "branch", "--list"],
-            capture_output=True,
-            text=True,
-            cwd=cwd,
-            check=True,
-        )
-        branches = []
-        for line in result.stdout.splitlines():
-            name = line.lstrip("* ").strip()
-            if name:
-                branches.append(name)
-        return branches
-    except subprocess.CalledProcessError as e:
-        logger.error("Failed to list branches", extra={"error": str(e), "path": cwd})
-        return []
+    result = subprocess.run(
+        ["git", "branch", "--list"],
+        capture_output=True,
+        text=True,
+        cwd=cwd,
+        check=True,
+    )
+    branches = []
+    for line in result.stdout.splitlines():
+        name = line.lstrip("* ").strip()
+        if name:
+            branches.append(name)
+    return branches

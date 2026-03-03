@@ -16,7 +16,6 @@ No mocks, stubs, or monkeypatching.
 
 from __future__ import annotations
 
-import tempfile
 from pathlib import Path
 
 import pytest
@@ -828,7 +827,7 @@ class TestMCPTools:
         from codomyrmex.agentic_memory.rules.mcp_tools import rules_get_applicable
 
         result = rules_get_applicable(file_path="test.py")
-        names = {d["name"] for d in result}
+        {d["name"] for d in result}
         # Should have general and cross-module at minimum
         assert len(result) >= 1
 

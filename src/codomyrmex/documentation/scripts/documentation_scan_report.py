@@ -1,3 +1,10 @@
+"""
+Comprehensive Documentation Scan and Improvement Tool
+
+This script implements a 7-phase approach to scan, verify, and improve
+all documentation across the Codomyrmex repository.
+"""
+
 import json
 import re
 import subprocess
@@ -6,16 +13,6 @@ from datetime import datetime
 from pathlib import Path
 
 from codomyrmex.logging_monitoring import get_logger
-
-"""
-Comprehensive Documentation Scan and Improvement Tool
-
-This script implements a 7-phase approach to scan, verify, and improve
-all documentation across the Codomyrmex repository.
-"""
-
-
-
 
 logger = get_logger(__name__)
 

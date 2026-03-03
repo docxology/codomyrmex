@@ -9,14 +9,7 @@ from __future__ import annotations
 
 from typing import Any
 
-try:
-    from codomyrmex.model_context_protocol.decorators import mcp_tool
-except ImportError:
-    def mcp_tool(**kwargs: Any):  # type: ignore[misc]
-        def decorator(func: Any) -> Any:
-            func._mcp_tool_meta = kwargs
-            return func
-        return decorator
+from codomyrmex.model_context_protocol.decorators import mcp_tool
 
 
 def _get_validation_manager():

@@ -10,17 +10,9 @@ from datetime import UTC, datetime, timedelta
 from pathlib import Path
 from typing import Any
 
-try:
-    from codomyrmex.model_context_protocol.decorators import mcp_tool
-except ImportError:
-    def mcp_tool(**kwargs: Any):  # type: ignore
-        def decorator(func: Any) -> Any:
-            func._mcp_tool_meta = kwargs
-            return func
-        return decorator
-
 from codomyrmex.calendar_integration.generics import CalendarEvent
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
+from codomyrmex.model_context_protocol.decorators import mcp_tool
 
 logger = get_logger(__name__)
 

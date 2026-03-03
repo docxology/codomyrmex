@@ -4,7 +4,6 @@ Orchestrator example for the 'ide' module.
 Demonstrates using various IDE clients to manage workspace and execute commands.
 """
 
-import os
 import sys
 import tempfile
 from pathlib import Path
@@ -13,7 +12,7 @@ from pathlib import Path
 project_root = Path(__file__).resolve().parent.parent.parent
 sys.path.insert(0, str(project_root / "src"))
 
-from codomyrmex.ide import CursorClient, VSCodeClient, AntigravityClient, IDECommand
+from codomyrmex.ide import CursorClient, VSCodeClient, AntigravityClient
 
 def demonstrate_cursor(workspace_path):
     print("\n--- Demonstrating CursorClient ---")

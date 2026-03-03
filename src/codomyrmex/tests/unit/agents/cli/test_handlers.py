@@ -11,6 +11,9 @@ guard clauses).
 """
 
 import json
+import os
+import shutil
+import subprocess as _sp
 from types import SimpleNamespace
 
 import pytest
@@ -53,6 +56,26 @@ from codomyrmex.agents.cli.handlers import (
 # ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------
+
+# CLI AI agent tests require live network and API credentials to execute
+# prompts.  They are skipped unless explicitly opted-in via environment
+# variables (per skip policy: skip tests requiring network/API keys).
+# Each binary must be present AND the env var must be set to "1".
+
+def _cli_agent_ready(binary: str, env_var: str) -> bool:
+    """Return True only if binary is found AND test opt-in env var is set."""
+    if not (shutil.which(binary) and os.environ.get(env_var) == "1"):
+        return False
+    try:
+        r = _sp.run([binary, "--version"], capture_output=True, text=True, timeout=3)
+        return r.returncode == 0
+    except Exception:
+        return False
+
+_OPENCODE_READY = _cli_agent_ready("opencode", "OPENCODE_TEST_ENABLED")
+_JULES_READY    = _cli_agent_ready("jules",    "JULES_TEST_ENABLED")
+_GEMINI_READY   = _cli_agent_ready("gemini",   "GEMINI_TEST_ENABLED")
+
 
 def _make_args(**kwargs):
     """Build a SimpleNamespace args object with sensible defaults."""
@@ -229,9 +252,11 @@ class TestAgentExecuteNoneGuard:
 # ---------------------------------------------------------------------------
 
 @pytest.mark.unit
+@pytest.mark.skipif(not _JULES_READY, reason="Jules CLI requires AI API access; set JULES_TEST_ENABLED=1 to run")
 class TestJulesHandlers:
     """Tests for Jules-specific handlers (check, help, command)."""
 
+    @pytest.mark.timeout(10)
     def test_jules_execute_runs(self, capsys):
         """Jules execute -- will fail without jules CLI but should not raise."""
         args = _make_args(prompt="test")
@@ -239,6 +264,7 @@ class TestJulesHandlers:
         # Result depends on JulesClient availability; either True or False
         assert isinstance(result, bool)
 
+    @pytest.mark.timeout(10)
     def test_jules_stream_runs(self, capsys):
         args = _make_args(prompt="test")
         result = handle_jules_stream(args)
@@ -254,11 +280,13 @@ class TestJulesHandlers:
         result = handle_jules_help(args)
         assert isinstance(result, bool)
 
+    @pytest.mark.timeout(10)
     def test_jules_command_runs(self, capsys):
         args = _make_args(cmd="status", args=[])
         result = handle_jules_command(args)
         assert isinstance(result, bool)
 
+    @pytest.mark.timeout(10)
     def test_jules_command_with_verbose(self, capsys):
         args = _make_args(cmd="status", args=[], verbose=True)
         result = handle_jules_command(args)
@@ -284,6 +312,7 @@ class TestClaudeHandlers:
         result = handle_claude_execute(args)
         assert isinstance(result, bool)
 
+    @pytest.mark.timeout(10)
     def test_claude_stream_runs(self, capsys):
         """ClaudeClient streaming acts normally and returns a bool."""
         args = _make_args(prompt="hello")
@@ -313,6 +342,7 @@ class TestCodexHandlers:
         result = handle_codex_execute(args)
         assert isinstance(result, bool)
 
+    @pytest.mark.timeout(10)
     def test_codex_stream_runs(self, capsys):
         args = _make_args(prompt="test")
         result = handle_codex_stream(args)
@@ -329,9 +359,11 @@ class TestCodexHandlers:
 # ---------------------------------------------------------------------------
 
 @pytest.mark.unit
+@pytest.mark.skipif(not _OPENCODE_READY, reason="opencode CLI not available or not responding within 3s")
 class TestOpenCodeHandlers:
     """Tests for OpenCode-specific handlers."""
 
+    @pytest.mark.timeout(10)
     def test_opencode_execute_runs(self, capsys):
         args = _make_args(prompt="test")
         result = handle_opencode_execute(args)
@@ -343,16 +375,19 @@ class TestOpenCodeHandlers:
         result = handle_opencode_stream(args)
         assert isinstance(result, bool)
 
+    @pytest.mark.timeout(10)
     def test_opencode_check_runs(self, capsys):
         args = _make_args()
         result = handle_opencode_check(args)
         assert isinstance(result, bool)
 
+    @pytest.mark.timeout(10)
     def test_opencode_init_runs(self, capsys):
         args = _make_args(path=None)
         result = handle_opencode_init(args)
         assert isinstance(result, bool)
 
+    @pytest.mark.timeout(10)
     def test_opencode_version_runs(self, capsys):
         args = _make_args()
         result = handle_opencode_version(args)
@@ -364,14 +399,17 @@ class TestOpenCodeHandlers:
 # ---------------------------------------------------------------------------
 
 @pytest.mark.unit
+@pytest.mark.skipif(not _GEMINI_READY, reason="Gemini CLI requires AI API access; set GEMINI_TEST_ENABLED=1 to run")
 class TestGeminiHandlers:
     """Tests for Gemini-specific handlers."""
 
+    @pytest.mark.timeout(10)
     def test_gemini_execute_runs(self, capsys):
         args = _make_args(prompt="test")
         result = handle_gemini_execute(args)
         assert isinstance(result, bool)
 
+    @pytest.mark.timeout(10)
     def test_gemini_stream_runs(self, capsys):
         args = _make_args(prompt="test")
         result = handle_gemini_stream(args)
@@ -382,11 +420,13 @@ class TestGeminiHandlers:
         result = handle_gemini_check(args)
         assert isinstance(result, bool)
 
+    @pytest.mark.timeout(10)
     def test_gemini_chat_save_runs(self, capsys):
         args = _make_args(tag="test-session", prompt="save this")
         result = handle_gemini_chat_save(args)
         assert isinstance(result, bool)
 
+    @pytest.mark.timeout(10)
     def test_gemini_chat_resume_runs(self, capsys):
         args = _make_args(tag="test-session")
         result = handle_gemini_chat_resume(args)
