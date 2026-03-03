@@ -13,13 +13,14 @@ Usage:
 import sys
 import time
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any
 
 project_root = Path(__file__).parent.parent.parent.parent
 sys.path.insert(0, str(project_root / "src"))
 
 # Direct import to avoid triggering full codomyrmex package init
 import importlib.util
+
 script_base_path = project_root / "src" / "codomyrmex" / "utils" / "script_base.py"
 spec = importlib.util.spec_from_file_location("script_base", script_base_path)
 script_base = importlib.util.module_from_spec(spec)
@@ -42,27 +43,35 @@ class DeploymentScript(ScriptBase):
         """Add deployment-specific arguments."""
         group = parser.add_argument_group("Deployment Options")
         group.add_argument(
-            "--strategy", choices=["canary", "blue-green", "all"],
-            default="all", help="Deployment strategy to test (default: all)"
+            "--strategy",
+            choices=["canary", "blue-green", "all"],
+            default="all",
+            help="Deployment strategy to test (default: all)",
         )
         group.add_argument(
-            "--canary-percentage", type=int, default=10,
-            help="Initial canary percentage (default: 10)"
+            "--canary-percentage",
+            type=int,
+            default=10,
+            help="Initial canary percentage (default: 10)",
         )
         group.add_argument(
-            "--canary-step", type=int, default=20,
-            help="Canary step percentage (default: 20)"
+            "--canary-step",
+            type=int,
+            default=20,
+            help="Canary step percentage (default: 20)",
         )
         group.add_argument(
-            "--service-name", default="test-service",
-            help="Service name for deployment (default: test-service)"
+            "--service-name",
+            default="test-service",
+            help="Service name for deployment (default: test-service)",
         )
         group.add_argument(
-            "--deploy-version", default="v1.0.0",
-            help="Version to deploy (default: v1.0.0)"
+            "--deploy-version",
+            default="v1.0.0",
+            help="Version to deploy (default: v1.0.0)",
         )
 
-    def run(self, args, config: ScriptConfig) -> Dict[str, Any]:
+    def run(self, args, config: ScriptConfig) -> dict[str, Any]:
         """Execute deployment demonstrations."""
         results = {
             "tests_run": 0,
@@ -79,18 +88,21 @@ class DeploymentScript(ScriptBase):
 
         # Import deployment module (after dry_run check)
         from codomyrmex.deployment import (
-            DeploymentManager, CanaryStrategy, BlueGreenStrategy
+            BlueGreenStrategy,
+            CanaryStrategy,
+            DeploymentManager,
         )
 
         manager = DeploymentManager()
 
         # Test 1: Canary deployment
         if args.strategy in ["canary", "all"]:
-            self.log_info(f"\n1. Testing Canary Strategy ({args.canary_percentage}% initial)")
+            self.log_info(
+                f"\n1. Testing Canary Strategy ({args.canary_percentage}% initial)"
+            )
             try:
                 canary = CanaryStrategy(
-                    percentage=args.canary_percentage,
-                    step=args.canary_step
+                    percentage=args.canary_percentage, step=args.canary_step
                 )
                 start_time = time.perf_counter()
                 success = manager.deploy(args.service_name, args.deploy_version, canary)
@@ -102,14 +114,18 @@ class DeploymentScript(ScriptBase):
                     "step": args.canary_step,
                     "duration_seconds": duration,
                 }
-                results["deployments"].append({
-                    "strategy": "canary",
-                    "service": args.service_name,
-                    "version": args.deploy_version,
-                    "success": success,
-                })
+                results["deployments"].append(
+                    {
+                        "strategy": "canary",
+                        "service": args.service_name,
+                        "version": args.deploy_version,
+                        "success": success,
+                    }
+                )
                 results["tests_passed"] += 1
-                self.log_success(f"Canary deployment: success={success}, duration={duration:.2f}s")
+                self.log_success(
+                    f"Canary deployment: success={success}, duration={duration:.2f}s"
+                )
             except Exception as e:
                 self.log_error(f"Canary deployment failed: {e}")
             results["tests_run"] += 1
@@ -120,21 +136,27 @@ class DeploymentScript(ScriptBase):
             try:
                 blue_green = BlueGreenStrategy()
                 start_time = time.perf_counter()
-                success = manager.deploy(args.service_name, f"{args.deploy_version}-bg", blue_green)
+                success = manager.deploy(
+                    args.service_name, f"{args.deploy_version}-bg", blue_green
+                )
                 duration = time.perf_counter() - start_time
 
                 results["strategy_tests"]["blue_green"] = {
                     "success": success,
                     "duration_seconds": duration,
                 }
-                results["deployments"].append({
-                    "strategy": "blue-green",
-                    "service": args.service_name,
-                    "version": f"{args.deploy_version}-bg",
-                    "success": success,
-                })
+                results["deployments"].append(
+                    {
+                        "strategy": "blue-green",
+                        "service": args.service_name,
+                        "version": f"{args.deploy_version}-bg",
+                        "success": success,
+                    }
+                )
                 results["tests_passed"] += 1
-                self.log_success(f"Blue-Green deployment: success={success}, duration={duration:.2f}s")
+                self.log_success(
+                    f"Blue-Green deployment: success={success}, duration={duration:.2f}s"
+                )
             except Exception as e:
                 self.log_error(f"Blue-Green deployment failed: {e}")
             results["tests_run"] += 1
@@ -173,7 +195,9 @@ class DeploymentScript(ScriptBase):
         # Summary
         results["summary"] = {
             "total_deployments": len(results["deployments"]),
-            "successful_deployments": sum(1 for d in results["deployments"] if d["success"]),
+            "successful_deployments": sum(
+                1 for d in results["deployments"] if d["success"]
+            ),
             "strategies_tested": list(results["strategy_tests"].keys()),
         }
 
@@ -184,17 +208,23 @@ class DeploymentScript(ScriptBase):
 
         return results
 
-
-
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
-    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "deployment" / "config.yaml"
+
+    import yaml
+
+    config_path = (
+        Path(__file__).resolve().parent.parent.parent
+        / "config"
+        / "deployment"
+        / "config.yaml"
+    )
     config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
+        with open(config_path) as f:
             config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/deployment/config.yaml")
+            print("Loaded config from config/deployment/config.yaml")
+
 
 if __name__ == "__main__":
     script = DeploymentScript()
