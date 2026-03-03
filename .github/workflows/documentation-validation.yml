@@ -231,6 +231,8 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           path: artifacts
+          pattern: "*-results"
+          merge-multiple: true
 
       - name: Consolidate results
         run: |
@@ -292,6 +294,8 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           path: artifacts
+          pattern: "*-results"
+          merge-multiple: true
 
       - name: Consolidate results
         run: |
