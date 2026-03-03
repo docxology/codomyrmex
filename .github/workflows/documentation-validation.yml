@@ -202,6 +202,8 @@ jobs:
           fi
 
   generate-dashboard:
+    permissions:
+      contents: read
     name: Generate Documentation Dashboard
     needs: [validate-links, check-quality, validate-structure]
     runs-on: ubuntu-latest
@@ -259,6 +261,10 @@ jobs:
           keep_files: false
 
   enforce-quality-gate:
+    permissions:
+      contents: read
+      pull-requests: write
+      issues: write
     name: Enforce Quality Gates
     needs: [validate-links, check-quality, validate-structure]
     runs-on: ubuntu-latest
