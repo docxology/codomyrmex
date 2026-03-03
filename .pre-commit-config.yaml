@@ -9,7 +9,7 @@ repos:
     rev: 26.1.0
     hooks:
       - id: black
-        language_version: python3
+        language_version: python3.10
         args: [--line-length=88]
 
   # Python linting and import sorting
