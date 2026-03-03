@@ -31,16 +31,28 @@ sys.path.insert(0, str(PROJECT_ROOT))
 
 SUBMODULES = {
     "agents": [
-        ("o1", "OpenAI o1/o3 reasoning model integration for advanced multi-step reasoning tasks"),
+        (
+            "o1",
+            "OpenAI o1/o3 reasoning model integration for advanced multi-step reasoning tasks",
+        ),
         ("deepseek", "DeepSeek Coder integration for code generation and analysis"),
         ("qwen", "Qwen-Coder integration for multilingual code assistance"),
         ("pooling", "Multi-agent load balancing, failover, and intelligent routing"),
-        ("evaluation", "Agent benchmarking, quality metrics, and performance comparison"),
+        (
+            "evaluation",
+            "Agent benchmarking, quality metrics, and performance comparison",
+        ),
         ("history", "Conversation and context persistence for stateful interactions"),
     ],
     "llm": [
-        ("guardrails", "Input/output safety validation including prompt injection defense"),
-        ("streaming", "Streaming response handlers for real-time LLM output processing"),
+        (
+            "guardrails",
+            "Input/output safety validation including prompt injection defense",
+        ),
+        (
+            "streaming",
+            "Streaming response handlers for real-time LLM output processing",
+        ),
         ("embeddings", "Text embedding generation, caching, and similarity search"),
         ("rag", "Retrieval-Augmented Generation pipeline with document processing"),
         ("cost_tracking", "Token counting, billing estimation, and usage analytics"),
@@ -49,7 +61,10 @@ SUBMODULES = {
     "api": [
         ("webhooks", "Webhook dispatch and receipt management for event-driven APIs"),
         ("mocking", "API mock server for development and testing workflows"),
-        ("circuit_breaker", "Resilience patterns including retry, circuit breaker, and bulkhead"),
+        (
+            "circuit_breaker",
+            "Resilience patterns including retry, circuit breaker, and bulkhead",
+        ),
         ("pagination", "Cursor and offset pagination utilities for API responses"),
     ],
     "cache": [
@@ -97,17 +112,38 @@ SUBMODULES = {
 # ============================================================================
 
 NEW_MODULES = [
-    ("graph_rag", "Knowledge graph integration with RAG for structured knowledge retrieval and reasoning"),
-    ("agentic_memory", "Long-term agent memory systems for stateful, persistent agent interactions"),
-    ("prompt_testing", "Prompt evaluation, A/B testing, and quality assurance at scale"),
-    ("inference_optimization", "Model quantization, distillation, and pruning for cost-effective inference"),
+    (
+        "graph_rag",
+        "Knowledge graph integration with RAG for structured knowledge retrieval and reasoning",
+    ),
+    (
+        "agentic_memory",
+        "Long-term agent memory systems for stateful, persistent agent interactions",
+    ),
+    (
+        "prompt_testing",
+        "Prompt evaluation, A/B testing, and quality assurance at scale",
+    ),
+    (
+        "inference_optimization",
+        "Model quantization, distillation, and pruning for cost-effective inference",
+    ),
     ("multimodal", "Vision, audio, and image processing for multi-modal AI workflows"),
-    ("cost_management", "Cloud and API spend tracking, optimization, and budget alerting"),
-    ("observability_dashboard", "Unified dashboards for telemetry visualization and monitoring"),
+    (
+        "cost_management",
+        "Cloud and API spend tracking, optimization, and budget alerting",
+    ),
+    (
+        "observability_dashboard",
+        "Unified dashboards for telemetry visualization and monitoring",
+    ),
     ("workflow_testing", "End-to-end workflow validation and integration testing"),
     ("migration", "Cross-provider migration tools for cloud and database transitions"),
     ("data_lineage", "Data provenance tracking and transformation audit trails"),
-    ("notification", "Multi-channel notification dispatch including email, Slack, and SMS"),
+    (
+        "notification",
+        "Multi-channel notification dispatch including email, Slack, and SMS",
+    ),
     ("feature_store", "ML feature management, versioning, and serving"),
     ("model_registry", "ML model versioning, storage, and deployment tracking"),
 ]
@@ -116,7 +152,7 @@ NEW_MODULES = [
 def generate_readme(name: str, description: str, parent: str = None) -> str:
     """Generate README.md content."""
     full_name = f"{parent}/{name}" if parent else name
-    return f'''# {name.replace("_", " ").title()}
+    return f"""# {name.replace("_", " ").title()}
 
 {description}
 
@@ -155,13 +191,13 @@ See [API_SPECIFICATION.md](./API_SPECIFICATION.md) for detailed API documentatio
 ## Related Modules
 
 - [`{parent}`](../) - Parent module
-'''
+"""
 
 
 def generate_agents(name: str, description: str, parent: str = None) -> str:
     """Generate AGENTS.md content."""
     full_name = f"{parent}/{name}" if parent else name
-    return f'''# AI Agent Guidelines - {name.replace("_", " ").title()}
+    return f"""# AI Agent Guidelines - {name.replace("_", " ").title()}
 
 **Module**: `codomyrmex.{full_name.replace("/", ".")}`
 **Version**: v0.1.0
@@ -209,13 +245,13 @@ Common issues and solutions:
 
 1. **Issue**: Description
    **Solution**: Resolution steps
-'''
+"""
 
 
 def generate_spec(name: str, description: str, parent: str = None) -> str:
     """Generate SPEC.md content."""
     full_name = f"{parent}/{name}" if parent else name
-    return f'''# Technical Specification - {name.replace("_", " ").title()}
+    return f"""# Technical Specification - {name.replace("_", " ").title()}
 
 **Module**: `codomyrmex.{full_name.replace("/", ".")}`
 **Version**: v0.1.0
@@ -280,13 +316,13 @@ pytest tests/{full_name.replace("/", "_")}/
 
 - Enhancement 1
 - Enhancement 2
-'''
+"""
 
 
 def generate_pai(name: str, description: str, parent: str = None) -> str:
     """Generate PAI.md content."""
     full_name = f"{parent}/{name}" if parent else name
-    return f'''# Personal AI Infrastructure - {name.replace("_", " ").title()}
+    return f"""# Personal AI Infrastructure - {name.replace("_", " ").title()}
 
 **Module**: `codomyrmex.{full_name.replace("/", ".")}`
 **Version**: v0.1.0
@@ -330,7 +366,7 @@ except Exception as e:
 
 1. **Enhancement Area 1**: Description
 2. **Enhancement Area 2**: Description
-'''
+"""
 
 
 def generate_init(name: str, description: str, parent: str = None) -> str:
@@ -354,7 +390,7 @@ def create_module_structure(
     name: str,
     description: str,
     parent: str = None,
-    dry_run: bool = False
+    dry_run: bool = False,
 ) -> list:
     """Create the full module/submodule structure."""
     created_files = []
@@ -388,7 +424,7 @@ def create_script_structure(
     name: str,
     description: str,
     parent: str = None,
-    dry_run: bool = False
+    dry_run: bool = False,
 ) -> list:
     """Create corresponding script directory."""
     created_files = []
@@ -479,9 +515,13 @@ def main() -> int:
 
         print(f"\n  {parent}/")
         for name, description in submodules:
-            files = create_module_structure(parent_path, name, description, parent, dry_run)
+            files = create_module_structure(
+                parent_path, name, description, parent, dry_run
+            )
             all_created.extend(files)
-            script_files = create_script_structure(scripts_base, name, description, parent, dry_run)
+            script_files = create_script_structure(
+                scripts_base, name, description, parent, dry_run
+            )
             all_created.extend(script_files)
             print_success(f"  {name}")
 
@@ -490,7 +530,9 @@ def main() -> int:
     for name, description in NEW_MODULES:
         files = create_module_structure(src_base, name, description, None, dry_run)
         all_created.extend(files)
-        script_files = create_script_structure(scripts_base, name, description, None, dry_run)
+        script_files = create_script_structure(
+            scripts_base, name, description, None, dry_run
+        )
         all_created.extend(script_files)
         print_success(f"  {name}")
 

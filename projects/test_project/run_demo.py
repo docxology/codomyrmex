@@ -59,7 +59,9 @@ def demo_analysis(target: Path) -> dict:
     if patterns:
         print()
         print("  Patterns detected:")
-        for pattern, count in sorted(patterns.items(), key=lambda x: x[1], reverse=True)[:5]:
+        for pattern, count in sorted(
+            patterns.items(), key=lambda x: x[1], reverse=True
+        )[:5]:
             print(f"    • {pattern.replace('_', ' ').title()}: {count}")
 
     return results
@@ -89,9 +91,7 @@ def demo_reporting(results: dict) -> dict:
     paths = {}
     for fmt in ["html", "json", "markdown"]:
         config = ReportConfig(
-            title="Test Project Analysis Report",
-            format=fmt,
-            author="Codomyrmex Demo"
+            title="Test Project Analysis Report", format=fmt, author="Codomyrmex Demo"
         )
         path = generator.generate(results, config)
         paths[fmt] = path

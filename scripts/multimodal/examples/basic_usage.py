@@ -23,6 +23,7 @@ except ImportError:
     project_root = Path(__file__).resolve().parent.parent.parent.parent
     sys.path.insert(0, str(project_root / "src"))
 
+from codomyrmex.multimodal.image_generation import ImageGenerator
 from codomyrmex.utils.cli_helpers import (
     print_error,
     print_info,
@@ -31,7 +32,6 @@ from codomyrmex.utils.cli_helpers import (
     print_warning,
     setup_logging,
 )
-from codomyrmex.multimodal.image_generation import ImageGenerator
 
 
 def main() -> int:
@@ -62,7 +62,9 @@ def main() -> int:
             number_of_images=1,
             aspect_ratio="1:1",
         )
-        print_success(f"   Got {len(results)} result(s). Keys: {list(results[0].keys())}")
+        print_success(
+            f"   Got {len(results)} result(s). Keys: {list(results[0].keys())}"
+        )
     except Exception as e:
         print_error(f"   Single image generation failed: {e}")
         return 1
@@ -76,7 +78,9 @@ def main() -> int:
     if image_bytes:
         out = output_dir / "basic_usage_image.png"
         out.write_bytes(image_bytes)
-        print_success(f"   Saved: outputs/images/basic_usage_image.png ({len(image_bytes):,} bytes)")
+        print_success(
+            f"   Saved: outputs/images/basic_usage_image.png ({len(image_bytes):,} bytes)"
+        )
     else:
         print_info(f"   No image_bytes in result — available keys: {list(img.keys())}")
 

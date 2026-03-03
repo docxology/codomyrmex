@@ -15,11 +15,8 @@ from pathlib import Path
 ROOT_DIR = Path(__file__).parent.parent
 SCRIPTS_DIR = ROOT_DIR / "scripts"
 
-VERIFICATION_SCRIPTS = [
-    "verify_phase1.py",
-    "verify_phase2.py",
-    "verify_phase3.py"
-]
+VERIFICATION_SCRIPTS = ["verify_phase1.py", "verify_phase2.py", "verify_phase3.py"]
+
 
 def run_script(script_name: str) -> bool:
     print(f"\n>>> Running {script_name}...")
@@ -28,7 +25,7 @@ def run_script(script_name: str) -> bool:
             [sys.executable, str(SCRIPTS_DIR / script_name)],
             capture_output=True,
             text=True,
-            check=True
+            check=True,
         )
         print(result.stdout)
         return True
@@ -38,12 +35,19 @@ def run_script(script_name: str) -> bool:
         print(e.stderr)
         return False
 
+
 def main():
     # Auto-injected: Load configuration
     from pathlib import Path
 
     import yaml
-    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "verification" / "config.yaml"
+
+    config_path = (
+        Path(__file__).resolve().parent.parent.parent
+        / "config"
+        / "verification"
+        / "config.yaml"
+    )
     if config_path.exists():
         with open(config_path) as f:
             yaml.safe_load(f) or {}
@@ -57,11 +61,16 @@ def main():
             success_count += 1
 
     if success_count == len(VERIFICATION_SCRIPTS):
-        print(f"\n[ALL PASSED] System verified ({success_count}/{len(VERIFICATION_SCRIPTS)})")
+        print(
+            f"\n[ALL PASSED] System verified ({success_count}/{len(VERIFICATION_SCRIPTS)})"
+        )
         sys.exit(0)
     else:
-        print(f"\n[FAILED] System verification incomplete ({success_count}/{len(VERIFICATION_SCRIPTS)})")
+        print(
+            f"\n[FAILED] System verification incomplete ({success_count}/{len(VERIFICATION_SCRIPTS)})"
+        )
         sys.exit(1)
+
 
 if __name__ == "__main__":
     main()

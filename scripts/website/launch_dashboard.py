@@ -34,16 +34,25 @@ from codomyrmex.website import DataProvider, WebsiteGenerator, WebsiteServer
 def parse_args():
     parser = argparse.ArgumentParser(description="Launch Codomyrmex Dashboard")
     parser.add_argument("--port", type=int, default=8787, help="Port to serve on")
-    parser.add_argument("--open", action="store_true", help="Open browser automatically")
+    parser.add_argument(
+        "--open", action="store_true", help="Open browser automatically"
+    )
     parser.add_argument("--host", default="0.0.0.0", help="Host to bind to")
     return parser.parse_args()
+
 
 def main():
     # Auto-injected: Load configuration
     from pathlib import Path
 
     import yaml
-    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "website" / "config.yaml"
+
+    config_path = (
+        Path(__file__).resolve().parent.parent.parent
+        / "config"
+        / "website"
+        / "config.yaml"
+    )
     if config_path.exists():
         with open(config_path) as f:
             yaml.safe_load(f) or {}
@@ -94,7 +103,9 @@ def main():
     try:
         data_provider = DataProvider(root_dir=project_root)
         summary = data_provider.get_system_summary()
-        print_success(f"System loaded. Environment: {summary.get('environment', 'unknown')}")
+        print_success(
+            f"System loaded. Environment: {summary.get('environment', 'unknown')}"
+        )
         print_info(f"Loaded {len(data_provider.get_modules())} modules.")
     except Exception as e:
         print_error(f"Failed to initialize DataProvider: {e}")
@@ -113,22 +124,33 @@ def main():
             try:
                 # Create server with allow_reuse_address to avoid "Address already in use" on restarts
                 socketserver.TCPServer.allow_reuse_address = True
-                with socketserver.TCPServer((args.host, args.port), WebsiteServer) as httpd:
+                with socketserver.TCPServer(
+                    (args.host, args.port), WebsiteServer
+                ) as httpd:
                     if args.open:
-                        threading.Thread(target=lambda p=args.port: (time.sleep(1), webbrowser.open(f"http://localhost:{p}"))).start()
+                        threading.Thread(
+                            target=lambda p=args.port: (
+                                time.sleep(1),
+                                webbrowser.open(f"http://localhost:{p}"),
+                            )
+                        ).start()
 
                     print_success(f"Dashboard active at http://localhost:{args.port}")
                     print_info("Press Ctrl+C to stop.")
                     httpd.serve_forever()
-                break # successful exit
+                break  # successful exit
             except OSError as e:
-                if e.errno == 48: # Address already in use
+                if e.errno == 48:  # Address already in use
                     if attempt < max_retries - 1:
-                        print_error(f"Could not bind to port {args.port}: [Errno 48] Address already in use")
+                        print_error(
+                            f"Could not bind to port {args.port}: [Errno 48] Address already in use"
+                        )
                         args.port += 1
                         print_info(f"Trying port {args.port}...")
                     else:
-                        print_error(f"Could not bind to port {args.port}: [Errno 48] Address already in use (max retries reached)")
+                        print_error(
+                            f"Could not bind to port {args.port}: [Errno 48] Address already in use (max retries reached)"
+                        )
                         return 1
                 else:
                     print_error(f"Could not bind to port {args.port}: {e}")
@@ -140,6 +162,7 @@ def main():
         return 1
 
     return 0
+
 
 if __name__ == "__main__":
     sys.exit(main())

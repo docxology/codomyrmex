@@ -32,7 +32,13 @@ def main():
     from pathlib import Path
 
     import yaml
-    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "validation" / "config.yaml"
+
+    config_path = (
+        Path(__file__).resolve().parent.parent.parent
+        / "config"
+        / "validation"
+        / "config.yaml"
+    )
     if config_path.exists():
         with open(config_path) as f:
             yaml.safe_load(f) or {}
@@ -47,11 +53,8 @@ def main():
         data = {"name": "Test", "age": 30}
         schema = {
             "type": "object",
-            "properties": {
-                "name": {"type": "string"},
-                "age": {"type": "integer"}
-            },
-            "required": ["name"]
+            "properties": {"name": {"type": "string"}, "age": {"type": "integer"}},
+            "required": ["name"],
         }
 
         if is_valid(data, schema):
@@ -69,6 +72,7 @@ def main():
 
     print_success("Validation examples completed successfully")
     return 0
+
 
 if __name__ == "__main__":
     sys.exit(main())

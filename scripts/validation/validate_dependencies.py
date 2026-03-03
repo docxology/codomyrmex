@@ -54,7 +54,13 @@ def parse_requirements(path: Path) -> dict[str, str]:
         for line in f:
             line = line.strip()
             if line and not line.startswith("#") and not line.startswith("-"):
-                name = line.split("[")[0].split(">=")[0].split("==")[0].split("<")[0].strip()
+                name = (
+                    line.split("[")[0]
+                    .split(">=")[0]
+                    .split("==")[0]
+                    .split("<")[0]
+                    .strip()
+                )
                 deps[name.lower()] = line
 
     return deps
@@ -118,7 +124,13 @@ def main():
     from pathlib import Path
 
     import yaml
-    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "validation" / "config.yaml"
+
+    config_path = (
+        Path(__file__).resolve().parent.parent.parent
+        / "config"
+        / "validation"
+        / "config.yaml"
+    )
     if config_path.exists():
         with open(config_path) as f:
             yaml.safe_load(f) or {}
@@ -126,16 +138,9 @@ def main():
 
     parser = argparse.ArgumentParser(description="Validate dependency consistency")
     parser.add_argument(
-        "--repo-root",
-        type=Path,
-        default=Path.cwd(),
-        help="Repository root directory"
+        "--repo-root", type=Path, default=Path.cwd(), help="Repository root directory"
     )
-    parser.add_argument(
-        "--strict",
-        action="store_true",
-        help="Fail on warnings"
-    )
+    parser.add_argument("--strict", action="store_true", help="Fail on warnings")
 
     args = parser.parse_args()
 

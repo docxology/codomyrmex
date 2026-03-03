@@ -25,6 +25,7 @@ def main() -> int:
     print_info("=== Validation Schemas Demo ===")
     try:
         from codomyrmex.validation.schemas import Result, ResultStatus
+
         obj = Result(status=ResultStatus.SUCCESS, data="demo")
         print_success(f"Result loaded: {obj!r}")
     except ImportError as e:
@@ -36,17 +37,22 @@ def main() -> int:
     print_success("Validation Schemas demo complete")
     return 0
 
-
-
     # Auto-injected: Load configuration
     from pathlib import Path
 
     import yaml
-    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "validation" / "config.yaml"
+
+    config_path = (
+        Path(__file__).resolve().parent.parent.parent
+        / "config"
+        / "validation"
+        / "config.yaml"
+    )
     if config_path.exists():
         with open(config_path) as f:
             yaml.safe_load(f) or {}
             print("Loaded config from config/validation/config.yaml")
+
 
 if __name__ == "__main__":
     sys.exit(main())

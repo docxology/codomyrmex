@@ -59,7 +59,9 @@ def build_dependency_graph(src_dir: Path) -> dict[str, set[str]]:
     return dict(graph)
 
 
-def find_cycles(graph: dict[str, set[str]], start: str, visited: set[str], path: list) -> list:
+def find_cycles(
+    graph: dict[str, set[str]], start: str, visited: set[str], path: list
+) -> list:
     """Find cycles in the dependency graph using DFS."""
     cycles = []
 
@@ -136,7 +138,13 @@ def main():
     from pathlib import Path
 
     import yaml
-    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "validation" / "config.yaml"
+
+    config_path = (
+        Path(__file__).resolve().parent.parent.parent
+        / "config"
+        / "validation"
+        / "config.yaml"
+    )
     if config_path.exists():
         with open(config_path) as f:
             yaml.safe_load(f) or {}
@@ -144,15 +152,10 @@ def main():
 
     parser = argparse.ArgumentParser(description="Analyze module dependency hierarchy")
     parser.add_argument(
-        "--repo-root",
-        type=Path,
-        default=Path.cwd(),
-        help="Repository root directory"
+        "--repo-root", type=Path, default=Path.cwd(), help="Repository root directory"
     )
     parser.add_argument(
-        "--output",
-        type=Path,
-        help="Output file for dependency graph (JSON)"
+        "--output", type=Path, help="Output file for dependency graph (JSON)"
     )
 
     args = parser.parse_args()

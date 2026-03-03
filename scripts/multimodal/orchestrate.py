@@ -37,6 +37,7 @@ except ImportError:
     project_root = Path(__file__).resolve().parent.parent.parent
     sys.path.insert(0, str(project_root / "src"))
 
+from codomyrmex.multimodal.image_generation import ImageGenerator
 from codomyrmex.utils.cli_helpers import (
     print_error,
     print_info,
@@ -45,7 +46,6 @@ from codomyrmex.utils.cli_helpers import (
     print_warning,
     setup_logging,
 )
-from codomyrmex.multimodal.image_generation import ImageGenerator
 
 _PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 _CONFIG_PATH = _PROJECT_ROOT / "config" / "multimodal" / "config.yaml"
@@ -114,7 +114,9 @@ def run_image_generation(config: dict, prompt_override: str | None = None) -> bo
             print_info(f"  [{i + 1}] Result keys: {list(img.keys())}")
 
     if saved:
-        print_success(f"  {saved} file(s) written to {gen_cfg.get('output_dir', 'outputs/images')}")
+        print_success(
+            f"  {saved} file(s) written to {gen_cfg.get('output_dir', 'outputs/images')}"
+        )
 
     return True
 

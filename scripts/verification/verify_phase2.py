@@ -36,6 +36,7 @@ def verify_defense():
     assert len(stalled_resp) > 0
     print("✓ Rabbit Hole engagement works")
 
+
 def verify_market():
     print("\n--- Verifying Market ---")
     auction = ReverseAuction()
@@ -75,12 +76,19 @@ def verify_market():
 
     print("✓ Demand Aggregation triggers bulk auction")
 
+
 def main():
     # Auto-injected: Load configuration
     from pathlib import Path
 
     import yaml
-    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "verification" / "config.yaml"
+
+    config_path = (
+        Path(__file__).resolve().parent.parent.parent
+        / "config"
+        / "verification"
+        / "config.yaml"
+    )
     if config_path.exists():
         with open(config_path) as f:
             yaml.safe_load(f) or {}
@@ -89,6 +97,7 @@ def main():
     verify_defense()
     verify_market()
     print("\n[SUCCESS] Phase 2 Verification Complete")
+
 
 if __name__ == "__main__":
     main()

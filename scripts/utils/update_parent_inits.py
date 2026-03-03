@@ -16,52 +16,52 @@ UPDATES = {
         "docstring_additions": """    - webhooks: Webhook dispatch and receipt management
     - mocking: API mock server for development and testing
     - circuit_breaker: Resilience patterns (retry, circuit breaker, bulkhead)
-    - pagination: Cursor and offset pagination utilities"""
+    - pagination: Cursor and offset pagination utilities""",
     },
     "cache": {
         "submodules": ["warmers", "async_ops", "replication"],
         "docstring_additions": """    - warmers: Cache pre-population and predictive caching
     - async_ops: Async cache operations for non-blocking access
-    - replication: Cross-region cache synchronization"""
+    - replication: Cross-region cache synchronization""",
     },
     "security": {
         "submodules": ["scanning", "secrets", "compliance", "audit"],
         "docstring_additions": """    - scanning: SAST/DAST integration for automated security testing
     - secrets: Secret detection, rotation, and secure storage
     - compliance: GDPR, SOC2, HIPAA compliance checking
-    - audit: Security audit logging and forensic analysis"""
+    - audit: Security audit logging and forensic analysis""",
     },
     "telemetry": {
         "submodules": ["tracing", "sampling", "alerting"],
         "docstring_additions": """    - tracing: Distributed tracing setup helpers
     - sampling: Dynamic sampling strategies
-    - alerting: Alert rule configuration and routing"""
+    - alerting: Alert rule configuration and routing""",
     },
     "orchestrator": {
         "submodules": ["pipelines", "triggers", "state", "templates"],
         "docstring_additions": """    - pipelines: Multi-step pipeline definitions with DAG support
     - triggers: Event and time-based workflow triggers
     - state: State machine implementations
-    - templates: Reusable workflow templates"""
+    - templates: Reusable workflow templates""",
     },
     "database_management": {
         "submodules": ["connections", "replication", "sharding", "audit"],
         "docstring_additions": """    - connections: Connection pooling and lifecycle management
     - replication: Read replica routing and load balancing
     - sharding: Horizontal sharding utilities
-    - audit: Query logging and slow query detection"""
+    - audit: Query logging and slow query detection""",
     },
     "validation": {
         "submodules": ["schemas", "sanitizers", "rules"],
         "docstring_additions": """    - schemas: Schema registry and versioning
     - sanitizers: Input sanitization utilities
-    - rules: Custom validation rule definitions"""
+    - rules: Custom validation rule definitions""",
     },
     "skills": {
         "submodules": ["marketplace", "versioning", "permissions"],
         "docstring_additions": """    - marketplace: Skill discovery from external sources
     - versioning: Skill version management
-    - permissions: Skill capability permissions"""
+    - permissions: Skill capability permissions""",
     },
 }
 
@@ -86,11 +86,11 @@ def update_init_file(module_name: str, info: dict) -> bool:
 
     if import_lines:
         # Find a good place to insert imports (after existing imports)
-        lines = content.split('\n')
+        lines = content.split("\n")
         insert_idx = len(lines)
 
         for i, line in enumerate(lines):
-            if line.startswith('__all__') or line.startswith('__version__'):
+            if line.startswith("__all__") or line.startswith("__version__"):
                 insert_idx = i
                 break
 
@@ -99,7 +99,7 @@ def update_init_file(module_name: str, info: dict) -> bool:
             lines.insert(insert_idx, import_line)
             insert_idx += 1
 
-        content = '\n'.join(lines)
+        content = "\n".join(lines)
         modified = True
 
     # Add submodules to __all__ if it exists
@@ -108,7 +108,9 @@ def update_init_file(module_name: str, info: dict) -> bool:
         if all_entry not in content and f'"{submod}"' not in content:
             # Find __all__ and add to it
             if "__all__ = [" in content:
-                content = content.replace("__all__ = [", f"__all__ = [\n    '{submod}',")
+                content = content.replace(
+                    "__all__ = [", f"__all__ = [\n    '{submod}',"
+                )
                 modified = True
 
     if modified:
@@ -123,7 +125,13 @@ def main():
     from pathlib import Path
 
     import yaml
-    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "utils" / "config.yaml"
+
+    config_path = (
+        Path(__file__).resolve().parent.parent.parent
+        / "config"
+        / "utils"
+        / "config.yaml"
+    )
     if config_path.exists():
         with open(config_path) as f:
             yaml.safe_load(f) or {}

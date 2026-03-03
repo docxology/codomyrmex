@@ -23,7 +23,13 @@ def main():
     from pathlib import Path
 
     import yaml
-    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "website" / "config.yaml"
+
+    config_path = (
+        Path(__file__).resolve().parent.parent.parent
+        / "config"
+        / "website"
+        / "config.yaml"
+    )
     if config_path.exists():
         with open(config_path) as f:
             yaml.safe_load(f) or {}
@@ -35,6 +41,7 @@ def main():
     # Import validation
     try:
         import codomyrmex.website  # noqa: F401
+
         print_info("Successfully imported codomyrmex.website")
     except ImportError as e:
         print_info(f"Warning: Could not import codomyrmex.website: {e}")
@@ -43,6 +50,7 @@ def main():
     # Advanced logic here
     print_success("Advanced website Workflow completed successfully")
     return 0
+
 
 if __name__ == "__main__":
     sys.exit(main())

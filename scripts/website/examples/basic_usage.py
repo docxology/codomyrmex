@@ -33,7 +33,13 @@ def main():
     from pathlib import Path
 
     import yaml
-    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "website" / "config.yaml"
+
+    config_path = (
+        Path(__file__).resolve().parent.parent.parent
+        / "config"
+        / "website"
+        / "config.yaml"
+    )
     if config_path.exists():
         with open(config_path) as f:
             yaml.safe_load(f) or {}
@@ -83,6 +89,7 @@ def main():
 
     print_success("Website generation examples completed successfully")
     return 0
+
 
 if __name__ == "__main__":
     sys.exit(main())

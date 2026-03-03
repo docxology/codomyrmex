@@ -45,14 +45,16 @@ def analyze_html(path: Path) -> dict:
     }
 
     # Extract title
-    match = re.search(r'<title>([^<]+)</title>', content, re.IGNORECASE)
+    match = re.search(r"<title>([^<]+)</title>", content, re.IGNORECASE)
     if match:
         info["title"] = match.group(1)
 
-    info["links"] = len(re.findall(r'<a\s', content, re.IGNORECASE))
-    info["images"] = len(re.findall(r'<img\s', content, re.IGNORECASE))
-    info["scripts"] = len(re.findall(r'<script', content, re.IGNORECASE))
-    info["styles"] = len(re.findall(r'<link.*stylesheet|<style', content, re.IGNORECASE))
+    info["links"] = len(re.findall(r"<a\s", content, re.IGNORECASE))
+    info["images"] = len(re.findall(r"<img\s", content, re.IGNORECASE))
+    info["scripts"] = len(re.findall(r"<script", content, re.IGNORECASE))
+    info["styles"] = len(
+        re.findall(r"<link.*stylesheet|<style", content, re.IGNORECASE)
+    )
 
     return info
 
@@ -69,7 +71,9 @@ def check_broken_links(path: Path) -> list:
     links = re.findall(r'(?:href|src)=["\']([^"\']+)["\']', content)
 
     for link in links:
-        if link.startswith(("http://", "https://", "#", "mailto:", "tel:", "javascript:")):
+        if link.startswith(
+            ("http://", "https://", "#", "mailto:", "tel:", "javascript:")
+        ):
             continue
 
         link_path = base / link.split("?")[0].split("#")[0]
@@ -84,7 +88,13 @@ def main():
     from pathlib import Path
 
     import yaml
-    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "website" / "config.yaml"
+
+    config_path = (
+        Path(__file__).resolve().parent.parent.parent
+        / "config"
+        / "website"
+        / "config.yaml"
+    )
     if config_path.exists():
         with open(config_path) as f:
             yaml.safe_load(f) or {}
@@ -124,7 +134,9 @@ def main():
             info = analyze_html(f)
             title = info["title"] or "(no title)"
             print(f"   📄 {f.name}: {title}")
-            print(f"      Links: {info['links']}, Images: {info['images']}, Scripts: {info['scripts']}")
+            print(
+                f"      Links: {info['links']}, Images: {info['images']}, Scripts: {info['scripts']}"
+            )
 
     elif args.command == "check-links":
         files = find_html_files(args.path)
