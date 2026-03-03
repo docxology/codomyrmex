@@ -1,9 +1,5 @@
 from dataclasses import dataclass
 
-import matplotlib.pyplot as plt
-from matplotlib.patches import Patch
-from matplotlib.ticker import PercentFormatter, ScalarFormatter
-
 from codomyrmex.logging_monitoring import get_logger
 
 """Professional academic visualization theme system for CEREBRUM.
@@ -12,8 +8,10 @@ This module provides a centralized theme system for consistent, publication-qual
 visualizations with professional fonts, colorblind-safe palettes, and standardized styling.
 """
 
-
 try:
+    import matplotlib.pyplot as plt
+    from matplotlib.patches import Patch
+    from matplotlib.ticker import PercentFormatter, ScalarFormatter
 
     HAS_MATPLOTLIB = True
 except ImportError:
@@ -365,7 +363,6 @@ class VisualizationTheme:
         if not HAS_MATPLOTLIB:
             return
 
-
         formatter = ScalarFormatter(useMathText=True)
         formatter.set_scientific(True)
         formatter.set_powerlimits((-2, 2))
@@ -384,7 +381,6 @@ class VisualizationTheme:
         """
         if not HAS_MATPLOTLIB:
             return
-
 
         if axis in ("x", "both"):
             ax.xaxis.set_major_formatter(PercentFormatter(1.0))
@@ -454,4 +450,3 @@ def set_default_theme(theme: VisualizationTheme) -> None:
     """
     global _default_theme
     _default_theme = theme
-
