@@ -11,7 +11,7 @@ import re
 import subprocess
 
 from codomyrmex.coding.static_analysis.pyrefly_runner import run_pyrefly
-from codomyrmex.logging_monitoring.core.logger_config import get_logger
+from codomyrmex.logging_monitoring import get_logger
 
 from .models import AnalysisResult, SeverityLevel
 

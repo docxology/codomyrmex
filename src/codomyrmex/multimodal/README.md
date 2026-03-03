@@ -2,7 +2,7 @@
 
 **Status**: Active | **Last Updated**: March 2026
 
-Image generation using Google's Imagen 3 model via the Gemini API. Provides a high-level `ImageGenerator` class that wraps `GeminiClient.generate_images` for text-to-image workflows.
+Image generation using Google's Imagen 4 model via the Gemini API. Provides a high-level `ImageGenerator` class that wraps `GeminiClient.generate_images` for text-to-image workflows.
 
 ## Quick Start
 
@@ -39,7 +39,7 @@ pip install google-genai Pillow
 
 | Class | Module | Description |
 |-------|--------|-------------|
-| `ImageGenerator` | `image_generation` | High-level wrapper for Imagen 3 text-to-image generation |
+| `ImageGenerator` | `image_generation` | High-level wrapper for Imagen 4 text-to-image generation |
 | `GeminiClient` | `agents.gemini.gemini_client` | Underlying client that communicates with the Google AI SDK |
 
 ## API Reference
@@ -56,7 +56,7 @@ If no `client` is provided, a new `GeminiClient()` is instantiated (which reads 
 def generate(
     self,
     prompt: str,
-    model: str = "imagen-3.0-generate-002",
+    model: str = "imagen-4.0-generate-001",
     **kwargs: Any,
 ) -> list[dict[str, Any]]
 ```
@@ -66,7 +66,7 @@ def generate(
 | Parameter | Type | Default | Description |
 |-----------|------|---------|-------------|
 | `prompt` | `str` | required | Text description of the image to generate |
-| `model` | `str` | `"imagen-3.0-generate-002"` | Imagen model identifier |
+| `model` | `str` | `"imagen-4.0-generate-001"` | Imagen model identifier |
 | `**kwargs` | `Any` | -- | Additional config passed to the API (e.g., `number_of_images`, `aspect_ratio`) |
 
 **Returns:** A list of dictionary representations of the generated image objects.
@@ -80,6 +80,16 @@ def generate_images(self, prompt: str, model: str = "imagen-latest", **kwargs) -
 def upscale_image(self, image: Any, model: str = "imagen-latest", **kwargs) -> list[dict[str, Any]]
 def edit_image(self, prompt: str, image: Any, model: str = "imagen-latest", **kwargs) -> list[dict[str, Any]]
 ```
+
+## Google AI Ultra Support
+
+The Codomyrmex ecosystem is optimized for the **Google AI Ultra subscription** via the Gemini API.
+
+Accessing models with an Ultra-level API key (via Google Workspace or Consumer Google One) unlocks the highest usage limits and advanced multimodal functionality:
+
+- **Gemini Core:** Direct high-limit access to models like Gemini 1.5 Pro.
+- **Advanced Video & Audio:** Natively supports long-running inference for high-definition video tools like Veo 3 / 3.1, including Flow & Whisk capabilities, intrinsically generating native audio alongside the video.
+- **US Regional Previews:** Support for Deep Think Agent features and Project Mariner (automated browser tasks) are accessible exclusively for US regions.
 
 ## Environment Variables
 

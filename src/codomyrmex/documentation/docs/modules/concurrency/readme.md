@@ -1,108 +1,47 @@
-# Concurrency Module
+# Concurrency
 
-**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.0.8 | **Status**: Active | **Last Updated**: March 2026
 
-Distributed locks, semaphores, and synchronization primitives.
+## Overview
 
-## PAI Integration
+Concurrency and synchronization module for Codomyrmex.
 
-| Algorithm Phase | Role | Tools Used |
-|----------------|------|-----------|
-| **EXECUTE** | Run parallel agent tasks with distributed locking | Direct Python import |
-| **BUILD** | Parallelize build steps using semaphores and lock managers | Direct Python import |
-| **OBSERVE** | Monitor concurrent task status and lock contention | Direct Python import |
+## Architecture Overview
 
-PAI agents access this module via direct Python import through the MCP bridge. The Engineer agent uses `LockManager` and `LocalSemaphore` to coordinate parallel build and execution tasks safely across concurrent agent operations.
-
-## Installation
-
-```bash
-uv add codomyrmex
 ```
-
-Or for development:
-
-```bash
-uv sync
+concurrency/
+    __init__.py              # Public API exports
+    mcp_tools.py             # MCP tool definitions
 ```
 
 ## Key Exports
 
-### Classes
-- **`BaseLock`** — Abstract base class for all lock implementations.
-- **`LocalLock`** — File-based lock for local multi-process synchronization.
-- **`LockStats`** — Statistics for lock manager telemetry.
-- **`LockManager`** — Orchestrates multiple locks and provides multi-resource acquisition.
-- **`ReadWriteLock`** — In-process Read-Write lock (shared/exclusive).
-- **`RedisLock`** — Distributed lock using Redis SETNX and TTL.
-- **`BaseSemaphore`** — Abstract base class for all semaphore implementations.
-- **`LocalSemaphore`** — Local thread-safe semaphore wrapper.
+- **`BaseLock`**
+- **`LocalLock`**
+- **`BaseSemaphore`**
+- **`LocalSemaphore`**
+- **`AsyncLocalSemaphore`**
+- **`RedisLock`**
+- **`LockManager`**
+- **`ReadWriteLock`**
+- **`AsyncWorkerPool`**
+- **`PoolStats`**
+- **`TaskResult`**
+- **`DeadLetterQueue`**
+- **`cli_commands`**
 
-## Quick Start
+## MCP Tools Reference
 
-```python
-from codomyrmex.concurrency import (
-    LocalLock, LockManager, ReadWriteLock, LocalSemaphore
-)
+| Tool | Trust Level |
+|------|-------------|
+| `concurrency_pool_status` | Safe |
+| `concurrency_list_locks` | Safe |
 
-# Local lock (thread-safe)
-lock = LocalLock("resource-1")
-with lock:
-    # Critical section
-    update_shared_resource()
+## Related Modules
 
-# Lock manager for multiple resources
-manager = LockManager()
-with manager.acquire("database", timeout=5.0):
-    run_database_operation()
-
-# Read-write lock (multiple readers, exclusive writers)
-rw_lock = ReadWriteLock()
-with rw_lock.read():
-    data = read_shared_data()
-with rw_lock.write():
-    write_shared_data(data)
-
-# Semaphore for limiting concurrent access
-sem = LocalSemaphore(max_concurrent=3)
-with sem:
-    # Only 3 concurrent executions allowed
-    process_request()
-```
-
-## Redis Lock (Distributed)
-
-```python
-from codomyrmex.concurrency import RedisLock
-
-lock = RedisLock("resource", redis_url="redis://localhost")
-with lock:
-    # Distributed critical section
-    pass
-```
-
-## Exports
-
-| Class | Description |
-|-------|-------------|
-| `LocalLock` | Thread-safe local lock |
-| `RedisLock` | Redis-backed distributed lock |
-| `LockManager` | Manage multiple named locks |
-| `ReadWriteLock` | Multiple readers, single writer |
-| `LocalSemaphore` | Limit concurrent access |
-
-## Testing
-
-```bash
-uv run python -m pytest src/codomyrmex/tests/ -k concurrency -v
-```
-
-## Documentation
-
-- [Module Documentation](../../../docs/modules/concurrency/README.md)
-- [Agent Guide](../../../docs/modules/concurrency/AGENTS.md)
-- [Specification](../../../docs/modules/concurrency/SPEC.md)
+See [All Modules](../README.md) for the complete module listing.
 
 ## Navigation
 
-- [SPEC](SPEC.md) | [AGENTS](AGENTS.md) | [PAI](PAI.md)
+- **Source**: [src/codomyrmex/concurrency/](../../../../src/codomyrmex/concurrency/)
+- **Parent**: [All Modules](../README.md)

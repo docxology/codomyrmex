@@ -18,7 +18,7 @@ except ImportError:
 import time
 from typing import Any
 
-from codomyrmex.logging_monitoring.core.logger_config import get_logger
+from codomyrmex.logging_monitoring import get_logger
 
 from .config import DEFAULT_LLM_PROVIDER, get_llm_client
 from .models import CodeGenerationRequest, CodeGenerationResult

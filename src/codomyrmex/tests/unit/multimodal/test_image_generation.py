@@ -52,7 +52,7 @@ class TestImageGenerator:
         """Test generating an image using the real API."""
         generator = ImageGenerator()
 
-        # Test with standard imagen-3.0-generate-002 model
+        # Test with standard imagen-4.0-generate-001 model
         results = generator.generate(
             prompt="A photorealistic blue butterfly resting on a dandelion, morning light.",
             number_of_images=1,
@@ -79,6 +79,6 @@ class TestImageGenerator:
         call = fake_client.calls[0]
         assert call["method"] == "generate_images"
         assert call["prompt"] == prompt
-        assert call["model"] == "imagen-3.0-generate-002"
+        assert call["model"] == "imagen-4.0-generate-001"
         assert call["kwargs"] == kwargs
         assert results == [{"image_bytes": b"fake_data"}]

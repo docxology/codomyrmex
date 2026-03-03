@@ -12,7 +12,7 @@ setup_logging()  # Initialize logging system
 # ensure_dependencies_installed()  # Conceptual: Check for required dependencies
 ```
 
-Make sure to create the output directory (e.g., `./plot_outputs/`) if it doesn't exist, or ensure your script has permissions to create it.
+Make sure to create the output directory (e.g., `./plot_output/`) if it doesn't exist, or ensure your script has permissions to create it.
 
 ```python
 import os
@@ -239,7 +239,7 @@ create_heatmap(
     x_labels=[f"Col {i+1}" for i in range(12)],
     y_labels=[f"Row {i+1}" for i in range(8)],
     title="Random Data Heatmap",
-    output_path="./plot_outputs/heatmap_example.png",
+    output_path="./plot_output/heatmap_example.png",
     annot=True
 )
 ```
@@ -268,14 +268,14 @@ Below are a couple of examples of how these tools might be invoked.
     "title": "MCP Generated Line Plot",
     "x_label": "Time (s)",
     "y_label": "Value",
-    "output_path": "./plot_outputs/mcp_line_plot.png",
+    "output_path": "./plot_output/mcp_line_plot.png",
     "markers": true
   }
 }
 ```
 
 **Expected Outcome (via MCP Response and file system):**
-- An MCP response similar to: `{"output_path": "./plot_outputs/mcp_line_plot.png", "fig_details": {"status": "saved_to_path"}}` (Actual path in response might be absolute if server resolves it).
+- An MCP response similar to: `{"output_path": "./plot_output/mcp_line_plot.png", "fig_details": {"status": "saved_to_path"}}` (Actual path in response might be absolute if server resolves it).
 - A PNG file named `mcp_line_plot.png` saved in the `./plot_outputs` directory (or other designated MCP output location).
 
 ### MCP Example 2: Creating a Bar Chart
@@ -290,7 +290,7 @@ Below are a couple of examples of how these tools might be invoked.
     "title": "MCP Generated Bar Chart",
     "x_label": "Group",
     "y_label": "Count",
-    "output_path": "./plot_outputs/mcp_bar_chart.png",
+    "output_path": "./plot_output/mcp_bar_chart.png",
     "horizontal": false,
     "bar_color": "teal"
   }
@@ -298,7 +298,7 @@ Below are a couple of examples of how these tools might be invoked.
 ```
 
 **Expected Outcome (via MCP Response and file system):**
-- An MCP response similar to: `{"output_path": "./plot_outputs/mcp_bar_chart.png", "fig_details": {"status": "saved_to_path"}}`.
+- An MCP response similar to: `{"output_path": "./plot_output/mcp_bar_chart.png", "fig_details": {"status": "saved_to_path"}}`.
 - A PNG file named `mcp_bar_chart.png` saved in the `./plot_outputs` directory.
 
 ### MCP Example 3: Creating a Histogram
@@ -313,7 +313,7 @@ Below are a couple of examples of how these tools might be invoked.
     "title": "MCP Generated Histogram",
     "x_label": "Measurement",
     "y_label": "Frequency",
-    "output_path": "./plot_outputs/mcp_histogram.png",
+    "output_path": "./plot_output/mcp_histogram.png",
     "hist_color": "#FF9900",
     "density": false
   }
@@ -321,7 +321,7 @@ Below are a couple of examples of how these tools might be invoked.
 ```
 
 **Expected Outcome (via MCP Response and file system):**
-- An MCP response similar to: `{"output_path": "./plot_outputs/mcp_histogram.png", "fig_details": {"status": "saved_to_path"}}`.
+- An MCP response similar to: `{"output_path": "./plot_output/mcp_histogram.png", "fig_details": {"status": "saved_to_path"}}`.
 - A PNG file named `mcp_histogram.png` saved in the `./plot_outputs` directory.
 
 ### MCP Example 4: Creating a Pie Chart
@@ -334,7 +334,7 @@ Below are a couple of examples of how these tools might be invoked.
     "labels": ["Alpha", "Bravo", "Charlie", "Delta"],
     "sizes": [20, 30, 25, 25],
     "title": "MCP Generated Pie Chart",
-    "output_path": "./plot_outputs/mcp_pie_chart.png",
+    "output_path": "./plot_output/mcp_pie_chart.png",
     "explode": [0, 0.1, 0, 0],
     "startangle": 90,
     "autopct": "%1.1f%%"
@@ -343,7 +343,7 @@ Below are a couple of examples of how these tools might be invoked.
 ```
 
 **Expected Outcome (via MCP Response and file system):**
-- An MCP response similar to: `{"output_path": "./plot_outputs/mcp_pie_chart.png", "fig_details": {"status": "saved_to_path"}}`.
+- An MCP response similar to: `{"output_path": "./plot_output/mcp_pie_chart.png", "fig_details": {"status": "saved_to_path"}}`.
 - A PNG file named `mcp_pie_chart.png` saved in the `./plot_outputs` directory.
 
 ### General Notes for MCP Usage:

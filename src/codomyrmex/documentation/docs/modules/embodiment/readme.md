@@ -1,92 +1,33 @@
-# Embodiment Module
+# Embodiment
 
-**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.0.8 | **Status**: Active | **Last Updated**: March 2026
 
-Robotics integration with ROS2, sensors, actuators, and 3D transforms.
+## Overview
 
-## PAI Integration
+Embodiment module for Codomyrmex.
 
-| Algorithm Phase | Role | Tools Used |
-|----------------|------|-----------|
-| **EXECUTE** | Control robotic and physical systems via ROS2 bridge | Direct Python import |
-| **OBSERVE** | Collect sensor data from cameras, lidar, and actuators | Direct Python import |
-| **BUILD** | Configure embodiment parameters and 3D transforms | Direct Python import |
+## Architecture Overview
 
-PAI agents access this module via direct Python import through the MCP bridge. The Engineer agent uses ROS2Bridge and Transform3D to interface with physical systems during EXECUTE phase.
-
-## Installation
-
-```bash
-uv add codomyrmex
 ```
-
-Or for development:
-
-```bash
-uv sync
+embodiment/
+    __init__.py              # Public API exports
 ```
 
 ## Key Exports
 
-### Submodules
-- **`actuators/`** — Actuator control submodule.
-- **`ros/`** — ROS integration submodule.
-- **`sensors/`** — Sensor interfaces submodule.
-- **`transformation/`** — Transformations submodule.
+- **`ROS2Bridge`**
+- **`Transform3D`**
+- **`Vec3`**
+- **`ros`**
+- **`sensors`**
+- **`actuators`**
+- **`transformation`**
 
-## Quick Start
+## Related Modules
 
-```python
-from codomyrmex.embodiment import ROS2Bridge, Transform3D
-
-# ROS2 integration
-bridge = ROS2Bridge()
-bridge.connect(uri="localhost:9090")
-
-# Subscribe to sensor data
-bridge.subscribe("/camera/image", on_image)
-bridge.subscribe("/lidar/scan", on_scan)
-
-# Publish commands
-bridge.publish("/cmd_vel", {"linear": 0.5, "angular": 0.1})
-
-# 3D transforms
-transform = Transform3D()
-transform.translate(1.0, 0.0, 0.5)
-transform.rotate_euler(roll=0, pitch=0, yaw=45)
-
-# Apply to point
-world_point = transform.apply([0, 0, 0])
-```
-
-## Submodules
-
-| Module | Description |
-|--------|-------------|
-| `ros` | ROS2 bridge and message handling |
-| `sensors` | Sensor data processing |
-| `actuators` | Motor and actuator control |
-| `transformation` | 3D coordinate transforms |
-
-## Exports
-
-| Class | Description |
-|-------|-------------|
-| `ROS2Bridge` | WebSocket bridge to ROS2 |
-| `Transform3D` | 3D position and rotation transform |
-
-## Testing
-
-```bash
-uv run python -m pytest src/codomyrmex/tests/ -k embodiment -v
-```
-
-## Documentation
-
-- [Module Documentation](../../../docs/modules/embodiment/README.md)
-- [Agent Guide](../../../docs/modules/embodiment/AGENTS.md)
-- [Specification](../../../docs/modules/embodiment/SPEC.md)
+See [All Modules](../README.md) for the complete module listing.
 
 ## Navigation
 
-- [SPEC](SPEC.md) | [AGENTS](AGENTS.md) | [PAI](PAI.md)
+- **Source**: [src/codomyrmex/embodiment/](../../../../src/codomyrmex/embodiment/)
+- **Parent**: [All Modules](../README.md)

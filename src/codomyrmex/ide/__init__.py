@@ -33,7 +33,7 @@ from codomyrmex.exceptions import (
 from codomyrmex.exceptions import (
     IDEConnectionError as ConnectionError,
 )
-from codomyrmex.logging_monitoring.core.logger_config import get_logger
+from codomyrmex.logging_monitoring import get_logger
 
 # Shared schemas for cross-module interop
 from codomyrmex.validation.schemas import Result, ResultStatus

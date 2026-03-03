@@ -17,7 +17,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 from codomyrmex.coding.debugging.patch_generator import Patch
-from codomyrmex.logging_monitoring.core.logger_config import get_logger
+from codomyrmex.logging_monitoring import get_logger
 
 # In a real scenario, this would import the Execution module
 # from codomyrmex.coding.execution import execute_code

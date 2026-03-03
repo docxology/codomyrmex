@@ -34,7 +34,9 @@ class OpenRouterProvider(LLMProvider):
         # Meta Llama
         "meta-llama/llama-3.3-70b-instruct:free",
         "meta-llama/llama-3.2-3b-instruct:free",
-        # Google Gemma
+        # Google Gemma & Gemini Previews
+        "google/gemini-3.1-pro-preview:free",
+        "google/gemini-3.1-flash-image-preview:free",
         "google/gemma-3-27b-it:free",
         "google/gemma-3-12b-it:free",
         # Mistral

@@ -1,158 +1,134 @@
-# Audio Module
+# Audio
 
-**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.0.8 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-The audio module provides comprehensive audio processing capabilities including speech-to-text (STT) transcription and text-to-speech (TTS) synthesis. It supports multiple providers for flexibility between offline and cloud-based processing.
+The Audio module provides comprehensive audio processing capabilities including speech-to-text (STT) transcription using Whisper and text-to-speech (TTS) synthesis using pyttsx3 and Edge TTS. It supports multiple providers for flexibility between offline and cloud-based processing, with 99+ language support for transcription and 300+ neural voices for synthesis. This is an optional module requiring `uv sync --extra audio` for dependency installation.
 
-## Features
+## Architecture Overview
 
-### Speech-to-Text (STT)
-- **Whisper transcription** via faster-whisper (CTranslate2 backend)
-- 99+ languages supported
-- Word-level timestamps
-- Voice activity detection (VAD) filtering
-- Export to SRT/VTT subtitle formats
-- Batch transcription support
+The module is organized into two main subpackages: `speech_to_text` for transcription and `text_to_speech` for synthesis. Both follow a provider pattern, with availability flags that allow graceful degradation when optional dependencies are not installed.
 
-### Text-to-Speech (TTS)
-- **Offline synthesis** via pyttsx3 (SAPI5/NSSpeech/espeak)
-- **Neural TTS** via Microsoft Edge TTS (300+ voices, free)
-- Multiple output formats (WAV, MP3)
-- Voice listing and selection
-- Rate, pitch, and volume control
+```
+audio/
+├── __init__.py              # Public API with conditional imports and availability flags
+├── exceptions.py            # AudioError hierarchy (7 exception types)
+├── mcp_tools.py             # MCP tools (audio_get_capabilities, audio_list_voices)
+├── speech_to_text/          # STT submodule (Whisper-based transcription)
+│   └── ...                  # Transcriber, TranscriptionResult, Segment, Word
+└── text_to_speech/          # TTS submodule (pyttsx3, Edge TTS)
+    └── ...                  # Synthesizer, SynthesisResult, VoiceInfo
+```
 
 ## PAI Integration
 
-| Algorithm Phase | Role | Tools Used |
-|----------------|------|-----------|
-| **BUILD** | Generate audio output via TTS synthesis | Direct Python import |
-| **EXECUTE** | Play and process audio files, run TTS/STT pipelines | Direct Python import |
-| **OBSERVE** | Analyze audio content via speech-to-text transcription | Direct Python import |
+### Algorithm Phase Mapping
 
-PAI agents access this module via direct Python import through the MCP bridge. The Engineer agent uses it during BUILD phase to generate speech audio, and during OBSERVE phase to transcribe audio input for analysis.
+| Algorithm Phase | Role | Key Operations |
+|----------------|------|---------------|
+| OBSERVE | Analyze audio content via speech-to-text transcription | Transcriber.transcribe() |
+| BUILD | Generate audio output via TTS synthesis | Synthesizer.synthesize() |
+| EXECUTE | Play and process audio files, run TTS/STT pipelines | Direct Python import |
 
-## Installation
-
-```bash
-uv add codomyrmex
-```
-
-Or for development:
-
-```bash
-uv sync
-```
-
-## Quick Start
+## Key Classes and Functions
 
 ### Speech-to-Text
+
+**`Transcriber`** -- Main STT class for audio transcription with Whisper models.
 
 ```python
 from codomyrmex.audio import Transcriber, WhisperModelSize
 
-# Basic transcription
-transcriber = Transcriber()
+transcriber = Transcriber(model_size=WhisperModelSize.BASE)
 result = transcriber.transcribe("interview.mp3")
 print(result.text)
-
-# With larger model for better accuracy
-transcriber = Transcriber(model_size=WhisperModelSize.LARGE_V3)
-result = transcriber.transcribe("spanish.wav", language="es")
-
-# Export to subtitles
 result.save_srt("subtitles.srt")
-result.save_vtt("subtitles.vtt")
-
-# Language detection
-lang, confidence = transcriber.detect_language("audio.mp3")
-print(f"Detected: {lang} ({confidence:.2%})")
 ```
 
+**`TranscriptionResult`** -- Result containing text, segments, word-level timestamps, and language detection.
+
+**`WhisperModelSize`** -- Enum: TINY, BASE, SMALL, MEDIUM, LARGE_V3.
+
 ### Text-to-Speech
+
+**`Synthesizer`** -- Main TTS class for speech synthesis with provider selection.
 
 ```python
 from codomyrmex.audio import Synthesizer
 
-# Offline synthesis (fast, no internet required)
+# Offline (pyttsx3)
 synth = Synthesizer(provider="pyttsx3")
 result = synth.synthesize("Hello world!")
 result.save("hello.wav")
 
-# Neural TTS (high quality, requires internet)
+# Neural (Edge TTS, requires internet)
 synth = Synthesizer(provider="edge-tts")
 result = synth.synthesize("Hello!", voice="en-US-AriaNeural")
 result.save("hello.mp3")
+```
 
-# List available voices
+### Exceptions
+
+`AudioError`, `TranscriptionError`, `SynthesisError`, `AudioFormatError`, `ModelNotLoadedError`, `ProviderNotAvailableError`, `VoiceNotFoundError`
+
+## MCP Tools Reference
+
+| Tool | Description | Parameters | Trust Level |
+|------|-------------|------------|-------------|
+| `audio_get_capabilities` | Report available STT and TTS providers | (none) | Safe |
+| `audio_list_voices` | List available TTS voices for a provider | `provider: str = "pyttsx3"` | Safe |
+
+## Configuration
+
+```bash
+# Install audio dependencies
+uv sync --extra audio
+
+# No environment variables required for offline usage
+# Edge TTS requires internet connectivity
+```
+
+## Usage Examples
+
+### Example 1: Transcribe with Language Detection
+
+```python
+from codomyrmex.audio import Transcriber
+
+transcriber = Transcriber()
+lang, confidence = transcriber.detect_language("audio.mp3")
+print(f"Detected: {lang} ({confidence:.2%})")
+
+result = transcriber.transcribe("audio.mp3", language=lang)
+print(result.text)
+```
+
+### Example 2: List Available Voices
+
+```python
+from codomyrmex.audio import Synthesizer
+
+synth = Synthesizer(provider="edge-tts")
 voices = synth.list_voices(language="en")
 for voice in voices[:5]:
     print(f"{voice.id}: {voice.name}")
 ```
 
-## Key Exports
+## Error Handling
 
-### Exceptions
-- **`AudioError`** — Base exception for all audio-related errors
-- **`TranscriptionError`** — Raised when speech-to-text transcription fails (invalid audio, model failure)
-- **`SynthesisError`** — Raised when text-to-speech synthesis fails (empty input, provider errors)
-- **`AudioFormatError`** — Raised when the audio format is unsupported or invalid
-- **`ModelNotLoadedError`** — Raised when the required model is not loaded or unavailable
-- **`ProviderNotAvailableError`** — Raised when a provider's dependencies are not installed
-- **`VoiceNotFoundError`** — Raised when the requested voice is not available for the provider
+- `ProviderNotAvailableError` -- Raised when required provider dependencies are not installed
+- `ModelNotLoadedError` -- Raised when the Whisper model cannot be loaded
+- `AudioFormatError` -- Raised for unsupported audio format input
+- `VoiceNotFoundError` -- Raised when the requested TTS voice is not available
 
-### Availability Flags
-- **`STT_AVAILABLE`** — Boolean flag indicating whether speech-to-text dependencies are available
-- **`TTS_AVAILABLE`** — Boolean flag indicating whether text-to-speech dependencies are available
-- **`WHISPER_AVAILABLE`** — Boolean flag indicating whether Whisper (faster-whisper) dependencies are available
-- **`PYTTSX3_AVAILABLE`** — Boolean flag indicating whether pyttsx3 offline TTS dependencies are available
-- **`EDGE_TTS_AVAILABLE`** — Boolean flag indicating whether Microsoft Edge TTS dependencies are available
+## Related Modules
 
-### Speech-to-Text (when STT_AVAILABLE)
-- **`Transcriber`** — Main STT class for audio transcription
-- **`TranscriptionResult`** / **`TranscriptionConfig`** / **`Segment`** / **`Word`** — Data models
-- **`WhisperModelSize`** / **`STTProvider`** — Enums for model size and provider selection
-
-### Text-to-Speech (when TTS_AVAILABLE)
-- **`Synthesizer`** — Main TTS class for speech synthesis
-- **`SynthesisResult`** / **`TTSConfig`** / **`AudioFormat`** / **`VoiceInfo`** — Data models
-- **`VoiceGender`** / **`TTSProvider`** — Enums for voice gender and provider selection
-
-## Directory Contents
-
-- `__init__.py` - Main module exports
-- `exceptions.py` - Audio-specific exception classes
-- `README.md` - This file
-- `SPEC.md` - Technical specification
-- `AGENTS.md` - AI agent guidance
-- `PAI.md` - Programmable AI Interface
-- `API_SPECIFICATION.md` - Detailed API reference
-- `MCP_TOOL_SPECIFICATION.md` - Model Context Protocol tools
-- `speech_to_text/` - STT submodule
-- `text_to_speech/` - TTS submodule
-
-## Supported Formats
-
-### Input (STT)
-WAV, MP3, FLAC, OGG, M4A, WEBM, MP4, OPUS
-
-### Output (TTS)
-- pyttsx3: WAV
-- edge-tts: MP3
-
-## Model Sizes (Whisper)
-
-| Model | Parameters | VRAM | Speed | Quality |
-|-------|-----------|------|-------|---------|
-| tiny | 39M | ~1GB | Fastest | Basic |
-| base | 74M | ~1GB | Fast | Good |
-| small | 244M | ~2GB | Medium | Better |
-| medium | 769M | ~5GB | Slow | Great |
-| large-v3 | 1550M | ~10GB | Slowest | Best |
+- [`video`](../video/readme.md) -- Video processing that may include audio tracks
+- [`llm`](../llm/readme.md) -- LLM infrastructure for multimodal processing
 
 ## Navigation
 
-- **Full Documentation**: [docs/modules/audio/](../../../docs/modules/audio/)
-- **Parent Directory**: [codomyrmex](../README.md)
-- **Project Root**: ../../../README.md
+- **Source**: [src/codomyrmex/audio/](../../../../src/codomyrmex/audio/)
+- **API Spec**: [API_SPECIFICATION.md](../../../../src/codomyrmex/audio/API_SPECIFICATION.md)
+- **Parent**: [All Modules](../README.md)

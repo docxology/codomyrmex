@@ -19,7 +19,7 @@ from codomyrmex.coding.execution.executor import execute_code
 from codomyrmex.coding.static_analysis import analyze_file
 from codomyrmex.environment_setup.env_checker import validate_environment_completeness
 from codomyrmex.git_operations.core.git import check_git_availability
-from codomyrmex.logging_monitoring.core.logger_config import (
+from codomyrmex.logging_monitoring import (
     get_logger,
     log_with_context,
 )
@@ -179,8 +179,6 @@ class HealthChecker:
 
         if critical_issues:
             return HealthStatus.UNHEALTHY
-        elif len(result.issues) > 2:
-            return HealthStatus.DEGRADED
         else:
             return HealthStatus.DEGRADED
 

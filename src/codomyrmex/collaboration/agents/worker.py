@@ -12,7 +12,7 @@ from typing import Any
 from codomyrmex.collaboration.exceptions import CapabilityMismatchError
 from codomyrmex.collaboration.models import Task, TaskResult
 from codomyrmex.collaboration.protocols import AgentCapability
-from codomyrmex.logging_monitoring.core.logger_config import get_logger
+from codomyrmex.logging_monitoring import get_logger
 
 from .base import CollaborativeAgent
 

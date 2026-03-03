@@ -47,6 +47,6 @@ def logging_format_structured(
         )
         formatter = StructuredFormatter()
         line = formatter.format(entry)
-        return {"status": "ok", "formatted": json.loads(line)}
+        return {"status": "success", "formatted": json.loads(line)}
     except Exception as exc:
-        return {"status": "error", "error": str(exc)}
+        return {"status": "error", "message": str(exc)}

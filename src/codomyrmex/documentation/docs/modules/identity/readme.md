@@ -1,97 +1,31 @@
-# Identity Module
+# Identity
 
-**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.0.8 | **Status**: Active | **Last Updated**: March 2026
 
-Persona management and bio-cognitive verification for agent identity.
+## Overview
 
-## PAI Integration
+The Identity module provides specialized capabilities for the codomyrmex platform.
 
-| Algorithm Phase | Role | Tools Used |
-|----------------|------|-----------|
-| **OBSERVE** | Verify identity claims and inspect persona states | Direct Python import |
-| **EXECUTE** | Identity operations including registration and promotion | Direct Python import |
-| **VERIFY** | Validate identity assertions via bio-cognitive challenges | Direct Python import |
+## Architecture Overview
 
-PAI agents access this module via direct Python import through the MCP bridge. The QATester agent uses BioCognitiveVerifier during VERIFY to validate agent authenticity, while the Engineer agent manages persona lifecycle during EXECUTE.
-
-## Installation
-
-```bash
-uv add codomyrmex
 ```
-
-Or for development:
-
-```bash
-uv sync
+identity/
+    __init__.py              # Public API exports
 ```
 
 ## Key Exports
 
-### Classes
-- **`BioCognitiveVerifier`** — Verifies identity based on behavioral biometrics.
-- **`Identity`** — Main class for identity functionality.
-- **`IdentityManager`** — Manages user personas and identity switching.
-- **`VerificationLevel`** — Level of identity verification.
-- **`Persona`** — Represents a distinct identity persona.
+- **`Persona`**
+- **`VerificationLevel`**
+- **`IdentityManager`**
+- **`BioCognitiveVerifier`**
+- **`cli_commands`**
 
-### Functions
-- **`create_identity()`** — Create a new Identity instance.
+## Related Modules
 
-## Quick Start
-
-```python
-from codomyrmex.identity import (
-    Persona, VerificationLevel, IdentityManager, BioCognitiveVerifier
-)
-
-# Create and manage personas
-manager = IdentityManager()
-
-persona = Persona(
-    id="agent-001",
-    name="ResearchAssistant",
-    capabilities=["search", "summarize", "cite"],
-    trust_level=VerificationLevel.VERIFIED
-)
-
-manager.register(persona)
-active = manager.get("agent-001")
-
-# Bio-cognitive verification
-verifier = BioCognitiveVerifier()
-
-# Challenge-response verification
-challenge = verifier.create_challenge(persona)
-response = agent.respond_to_challenge(challenge)
-is_authentic = verifier.verify(persona, response)
-
-# Update trust level based on verification
-if is_authentic:
-    manager.promote("agent-001", VerificationLevel.TRUSTED)
-```
-
-## Exports
-
-| Class | Description |
-|-------|-------------|
-| `Persona` | Agent identity with capabilities |
-| `VerificationLevel` | Enum: unverified, verified, trusted |
-| `IdentityManager` | Register and manage personas |
-| `BioCognitiveVerifier` | Challenge-response authentication |
-
-## Testing
-
-```bash
-uv run python -m pytest src/codomyrmex/tests/ -k identity -v
-```
-
-## Documentation
-
-- [Module Documentation](../../../docs/modules/identity/README.md)
-- [Agent Guide](../../../docs/modules/identity/AGENTS.md)
-- [Specification](../../../docs/modules/identity/SPEC.md)
+See [All Modules](../README.md) for the complete module listing.
 
 ## Navigation
 
-- [SPEC](SPEC.md) | [AGENTS](AGENTS.md) | [PAI](PAI.md)
+- **Source**: [src/codomyrmex/identity/](../../../../src/codomyrmex/identity/)
+- **Parent**: [All Modules](../README.md)

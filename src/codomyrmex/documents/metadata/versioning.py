@@ -5,7 +5,7 @@ from __future__ import annotations
 from pathlib import Path
 
 from codomyrmex.documents.exceptions import MetadataError
-from codomyrmex.logging_monitoring.core.logger_config import get_logger
+from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
 

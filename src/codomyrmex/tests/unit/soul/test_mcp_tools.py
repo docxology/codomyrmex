@@ -15,7 +15,6 @@ from codomyrmex.soul.mcp_tools import (
     soul_status,
 )
 
-
 # ---------------------------------------------------------------------------
 # soul_status — fully testable without soul-agent (pure file system)
 # ---------------------------------------------------------------------------

@@ -10,15 +10,22 @@ from datetime import datetime
 from enum import Enum
 from typing import Any
 
-import matplotlib.pyplot as plt
-import numpy as np
-import pandas as pd
-import seaborn as sns
+try:
+    import matplotlib.pyplot as plt
+    import numpy as np
+    import pandas as pd
+    import seaborn as sns
+except ImportError as _e:
+    raise ImportError(
+        "matplotlib, numpy, pandas, and seaborn are required for "
+        "data_visualization.engines.advanced_plotter. "
+        "Install with: uv sync --extra visualization"
+    ) from _e
 
 from codomyrmex.data_visualization._compat import monitor_performance
 
 try:
-    from codomyrmex.logging_monitoring.core.logger_config import get_logger
+    from codomyrmex.logging_monitoring import get_logger
 except ImportError:
     from logging import getLogger as get_logger
 

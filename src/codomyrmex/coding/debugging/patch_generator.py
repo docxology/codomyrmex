@@ -19,7 +19,7 @@ from typing import Any
 
 from codomyrmex.agents.llm_client import AgentRequest
 from codomyrmex.coding.debugging.error_analyzer import ErrorDiagnosis
-from codomyrmex.logging_monitoring.core.logger_config import get_logger
+from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
 

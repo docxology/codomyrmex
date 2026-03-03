@@ -20,7 +20,7 @@ from codomyrmex.data_visualization import create_line_plot
 from codomyrmex.logging_monitoring import get_logger as _get_logger
 
 try:
-    from codomyrmex.logging_monitoring.core.logger_config import (
+    from codomyrmex.logging_monitoring import (
         get_logger,
         setup_logging,
     )

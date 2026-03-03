@@ -9,6 +9,7 @@ The audio module provides comprehensive audio processing capabilities including 
 ## Features
 
 ### Speech-to-Text (STT)
+
 - **Whisper transcription** via faster-whisper (CTranslate2 backend)
 - 99+ languages supported
 - Word-level timestamps
@@ -17,11 +18,16 @@ The audio module provides comprehensive audio processing capabilities including 
 - Batch transcription support
 
 ### Text-to-Speech (TTS)
+
 - **Offline synthesis** via pyttsx3 (SAPI5/NSSpeech/espeak)
 - **Neural TTS** via Microsoft Edge TTS (300+ voices, free)
 - Multiple output formats (WAV, MP3)
 - Voice listing and selection
 - Rate, pitch, and volume control
+
+### Native Video Audio (Google AI Ultra)
+
+- While `pyttsx3` and `edge-tts` handle dedicated TTS, **Google AI Ultra** users (via `codomyrmex.agents.gemini`) can natively generate high-fidelity audio tracks (environmental sounds and character dialogue) deeply integrated into video generation powered by **Veo 3** and **Veo 3.1** models. This is natively unlocked via the Google Workspace or Google One AI Ultra plan limits.
 
 ## PAI Integration
 
@@ -94,6 +100,7 @@ for voice in voices[:5]:
 ## Key Exports
 
 ### Exceptions
+
 - **`AudioError`** — Base exception for all audio-related errors
 - **`TranscriptionError`** — Raised when speech-to-text transcription fails (invalid audio, model failure)
 - **`SynthesisError`** — Raised when text-to-speech synthesis fails (empty input, provider errors)
@@ -103,6 +110,7 @@ for voice in voices[:5]:
 - **`VoiceNotFoundError`** — Raised when the requested voice is not available for the provider
 
 ### Availability Flags
+
 - **`STT_AVAILABLE`** — Boolean flag indicating whether speech-to-text dependencies are available
 - **`TTS_AVAILABLE`** — Boolean flag indicating whether text-to-speech dependencies are available
 - **`WHISPER_AVAILABLE`** — Boolean flag indicating whether Whisper (faster-whisper) dependencies are available
@@ -110,11 +118,13 @@ for voice in voices[:5]:
 - **`EDGE_TTS_AVAILABLE`** — Boolean flag indicating whether Microsoft Edge TTS dependencies are available
 
 ### Speech-to-Text (when STT_AVAILABLE)
+
 - **`Transcriber`** — Main STT class for audio transcription
 - **`TranscriptionResult`** / **`TranscriptionConfig`** / **`Segment`** / **`Word`** — Data models
 - **`WhisperModelSize`** / **`STTProvider`** — Enums for model size and provider selection
 
 ### Text-to-Speech (when TTS_AVAILABLE)
+
 - **`Synthesizer`** — Main TTS class for speech synthesis
 - **`SynthesisResult`** / **`TTSConfig`** / **`AudioFormat`** / **`VoiceInfo`** — Data models
 - **`VoiceGender`** / **`TTSProvider`** — Enums for voice gender and provider selection
@@ -135,9 +145,11 @@ for voice in voices[:5]:
 ## Supported Formats
 
 ### Input (STT)
+
 WAV, MP3, FLAC, OGG, M4A, WEBM, MP4, OPUS
 
 ### Output (TTS)
+
 - pyttsx3: WAV
 - edge-tts: MP3
 

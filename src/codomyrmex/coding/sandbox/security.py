@@ -9,7 +9,7 @@ import shutil
 import tempfile
 
 from codomyrmex.coding.execution.language_support import SUPPORTED_LANGUAGES
-from codomyrmex.logging_monitoring.core.logger_config import get_logger
+from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
 

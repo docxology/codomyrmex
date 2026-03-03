@@ -1,97 +1,48 @@
-# Scrape Module
+# Scrape
 
-**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.0.8 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Web scraping module providing a unified interface for extracting content from websites. Supports multiple output formats (Markdown, HTML), site crawling, URL mapping, search, and structured data extraction. Abstracts provider-specific details (currently Firecrawl) behind a consistent API with configurable options and a robust exception hierarchy.
+Scrape Module for Codomyrmex.
 
-## PAI Integration
+## Architecture Overview
 
-| Algorithm Phase | Role | Tools Used |
-|----------------|------|-----------|
-| **OBSERVE** | Extract web content for research and information gathering | `scrape_extract_content` |
-| **THINK** | Compute text similarity to find relevant analogous content | `scrape_text_similarity` |
-
-PAI's OBSERVE phase uses `scrape_extract_content` for external data gathering. `scrape_text_similarity` supports THINK phase by identifying content relevance. URL validation (http/https only) is enforced -- no local file scraping.
-
-## Installation
-
-```bash
-uv add codomyrmex
 ```
-
-Or for development:
-
-```bash
-uv sync
+scrape/
+    __init__.py              # Public API exports
+    mcp_tools.py             # MCP tool definitions
 ```
 
 ## Key Exports
 
-### Main Classes
+- **`Scraper`**
+- **`BaseScraper`**
+- **`ScrapeConfig`**
+- **`ScrapeResult`**
+- **`ScrapeOptions`**
+- **`ScrapeFormat`**
+- **`CrawlResult`**
+- **`MapResult`**
+- **`SearchResult`**
+- **`ExtractResult`**
+- **`ScrapeError`**
+- **`ScrapeConnectionError`**
+- **`ScrapeTimeoutError`**
+- **`ScrapeValidationError`**
+- **`FirecrawlError`**
 
-- **`Scraper`** -- Primary scraping interface that delegates to provider-specific backends; supports `scrape()`, `crawl()`, `map()`, `search()`, and `extract()` operations
-- **`BaseScraper`** -- Abstract base class defining the scraper contract for provider implementations
-- **`ScrapeConfig`** -- Configuration dataclass holding API keys, timeouts, and provider settings
+## MCP Tools Reference
 
-### Core Types
+| Tool | Trust Level |
+|------|-------------|
+| `scrape_text_similarity` | Safe |
 
-- **`ScrapeResult`** -- Result object from a single page scrape containing content and metadata
-- **`ScrapeOptions`** -- Options dataclass for configuring scrape behavior (formats, selectors, wait strategies)
-- **`ScrapeFormat`** -- Enum of supported output formats (`MARKDOWN`, `HTML`, etc.)
-- **`CrawlResult`** -- Result object from a multi-page crawl operation
-- **`MapResult`** -- Result object from a site URL mapping operation
-- **`SearchResult`** -- Result object from a web search operation
-- **`ExtractResult`** -- Result object from structured data extraction
+## Related Modules
 
-### Exceptions
-
-- **`ScrapeError`** -- Base exception for all scraping errors
-- **`ScrapeConnectionError`** -- Raised when connection to the target URL fails
-- **`ScrapeTimeoutError`** -- Raised when a scrape operation exceeds the configured timeout
-- **`ScrapeValidationError`** -- Raised for invalid input parameters or configuration
-- **`FirecrawlError`** -- Raised for Firecrawl provider-specific errors
-
-### Config Functions
-
-- **`get_config()`** -- Retrieve the current scrape configuration
-- **`set_config()`** -- Update scrape configuration values
-- **`reset_config()`** -- Reset configuration to defaults
-
-## Directory Contents
-
-- `scraper.py` -- `Scraper` class implementation with provider delegation
-- `core.py` -- `BaseScraper` ABC and all result/option dataclasses and enums
-- `config.py` -- `ScrapeConfig` and configuration management functions
-- `exceptions.py` -- Exception hierarchy for scrape error handling
-- `firecrawl/` -- Firecrawl provider implementation
-
-## Quick Start
-
-```python
-from codomyrmex.scrape import Scraper, ScrapeConfig, ScrapeOptions, ScrapeFormat
-
-# Configure and scrape a page
-config = ScrapeConfig(timeout=30)
-scraper = Scraper(config=config)
-result = scraper.scrape("https://example.com")
-print(result.content)
-
-# Scrape with specific format options
-options = ScrapeOptions(formats=[ScrapeFormat.MARKDOWN, ScrapeFormat.HTML])
-result = scraper.scrape("https://example.com", options)
-print(result.content)
-```
-
-## Testing
-
-```bash
-uv run python -m pytest src/codomyrmex/tests/ -k scrape -v
-```
+See [All Modules](../README.md) for the complete module listing.
 
 ## Navigation
 
-- **Full Documentation**: [docs/modules/scrape/](../../../docs/modules/scrape/)
-- **Parent Directory**: [codomyrmex](../README.md)
-- **Project Root**: ../../../README.md
+- **Source**: [src/codomyrmex/scrape/](../../../../src/codomyrmex/scrape/)
+- **Parent**: [All Modules](../README.md)

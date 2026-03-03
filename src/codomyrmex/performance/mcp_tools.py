@@ -48,7 +48,7 @@ def performance_check_regression(
         result = BenchmarkResult(benchmark_name, value=measured_value, higher_is_better=higher_is_better)
         report = detector.check(result)
         return {
-            "status": "ok",
+            "status": "success",
             "benchmark": benchmark_name,
             "is_regression": report.is_regression,
             "severity": report.severity.value,
@@ -56,7 +56,7 @@ def performance_check_regression(
             "message": report.message,
         }
     except Exception as exc:
-        return {"status": "error", "error": str(exc)}
+        return {"status": "error", "message": str(exc)}
 
 
 @mcp_tool(
@@ -83,7 +83,7 @@ def performance_compare_benchmarks(
         )
         delta = compute_delta(name, before, after, higher_is_better)
         return {
-            "status": "ok",
+            "status": "success",
             "name": name,
             "before": delta.before,
             "after": delta.after,
@@ -92,4 +92,4 @@ def performance_compare_benchmarks(
             "improved": delta.improved,
         }
     except Exception as exc:
-        return {"status": "error", "error": str(exc)}
+        return {"status": "error", "message": str(exc)}

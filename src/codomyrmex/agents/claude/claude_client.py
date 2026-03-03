@@ -19,7 +19,7 @@ from codomyrmex.agents.core import (
 from codomyrmex.agents.core.exceptions import ClaudeError
 from codomyrmex.agents.core.session import SessionManager
 from codomyrmex.agents.generic.api_agent_base import APIAgentBase
-from codomyrmex.logging_monitoring.core.logger_config import get_logger
+from codomyrmex.logging_monitoring import get_logger
 
 from .mixins.code_intel import CodeIntelMixin
 from .mixins.execution import ExecutionMixin

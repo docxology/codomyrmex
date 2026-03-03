@@ -20,7 +20,7 @@ def container_runtime_status() -> dict[str, Any]:
     from . import HAS_DOCKER_MANAGER, HAS_K8S, HAS_OPTIMIZER, HAS_REGISTRY, HAS_SCANNER
 
     return {
-        "status": "ok",
+        "status": "success",
         "runtimes": {
             "docker": HAS_DOCKER_MANAGER,
             "kubernetes": HAS_K8S,
@@ -45,12 +45,12 @@ def container_build(
         from . import DockerManager
 
         if DockerManager is None:
-            return {"status": "error", "error": "Docker manager not available"}
+            return {"status": "error", "message": "Docker manager not available"}
         mgr = DockerManager()
         result = mgr.build_image(image_name, dockerfile_path, tag=tag)
-        return {"status": "ok", "image": f"{image_name}:{tag}", "result": result}
+        return {"status": "success", "image": f"{image_name}:{tag}", "result": result}
     except Exception as exc:
-        return {"status": "error", "error": str(exc)}
+        return {"status": "error", "message": str(exc)}
 
 
 @mcp_tool(
@@ -63,12 +63,12 @@ def container_list() -> dict[str, Any]:
         from . import DockerManager
 
         if DockerManager is None:
-            return {"status": "error", "error": "Docker manager not available"}
+            return {"status": "error", "message": "Docker manager not available"}
         mgr = DockerManager()
         containers = mgr.list_containers()
-        return {"status": "ok", "containers": containers}
+        return {"status": "success", "containers": containers}
     except Exception as exc:
-        return {"status": "error", "error": str(exc)}
+        return {"status": "error", "message": str(exc)}
 
 
 @mcp_tool(
@@ -81,9 +81,9 @@ def container_security_scan(image: str) -> dict[str, Any]:
         from . import HAS_SCANNER, ContainerSecurityScanner
 
         if not HAS_SCANNER or ContainerSecurityScanner is None:
-            return {"status": "error", "error": "Security scanner not available"}
+            return {"status": "error", "message": "Security scanner not available"}
         scanner = ContainerSecurityScanner()
         result = scanner.scan(image)
-        return {"status": "ok", "image": image, "scan_result": result}
+        return {"status": "success", "image": image, "scan_result": result}
     except Exception as exc:
-        return {"status": "error", "error": str(exc)}
+        return {"status": "error", "message": str(exc)}

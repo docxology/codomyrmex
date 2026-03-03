@@ -87,12 +87,12 @@ class TestGeminiProviderModels:
 
     def test_get_model_uses_config_default_model(self):
         """Test that get_model uses config default_model if set."""
-        config = ProviderConfig(api_key="test-key", default_model="gemini-2.0-flash")
+        config = ProviderConfig(api_key="test-key", default_model="gemini-3.1-pro-preview")
         provider = GeminiProvider(config)
 
         model = provider.get_model(None)
 
-        assert model == "gemini-2.0-flash"
+        assert model == "gemini-3.1-pro-preview"
 
     def test_gemini_models_constant_is_populated(self):
         """Test that the GEMINI_MODELS list is populated."""
@@ -164,11 +164,11 @@ class TestGeminiProviderComplete:
         config = ProviderConfig(api_key=_GEMINI_KEY)
         with GeminiProvider(config) as provider:
             messages = [Message(role="user", content="Say hello in one word")]
-            response = provider.complete(messages, model="gemini-2.0-flash")
+            response = provider.complete(messages, model="gemini-3.1-pro-preview")
 
             assert len(response.content) > 0
             assert response.provider == ProviderType.GOOGLE
-            assert response.model == "gemini-2.0-flash"
+            assert response.model == "gemini-3.1-pro-preview"
 
     def test_complete_with_system_instruction(self):
         """Test that system instructions are handled."""
@@ -178,7 +178,7 @@ class TestGeminiProviderComplete:
                 Message(role="system", content="You are a pirate. Reply in pirate speak."),
                 Message(role="user", content="Hello"),
             ]
-            response = provider.complete(messages, model="gemini-2.0-flash")
+            response = provider.complete(messages, model="gemini-3.1-pro-preview")
 
             assert len(response.content) > 0
 
@@ -187,7 +187,7 @@ class TestGeminiProviderComplete:
         config = ProviderConfig(api_key=_GEMINI_KEY)
         with GeminiProvider(config) as provider:
             messages = [Message(role="user", content="Say hi")]
-            response = provider.complete(messages, model="gemini-2.0-flash")
+            response = provider.complete(messages, model="gemini-3.1-pro-preview")
 
             assert response.usage is not None
             assert response.usage.get("total_tokens", 0) > 0
@@ -197,7 +197,7 @@ class TestGeminiProviderComplete:
         config = ProviderConfig(api_key=_GEMINI_KEY)
         with GeminiProvider(config) as provider:
             messages = [Message(role="user", content="Count from 1 to 3")]
-            chunks = list(provider.complete_stream(messages, model="gemini-2.0-flash"))
+            chunks = list(provider.complete_stream(messages, model="gemini-3.1-pro-preview"))
 
             assert len(chunks) >= 1
             assert any(len(c) > 0 for c in chunks)

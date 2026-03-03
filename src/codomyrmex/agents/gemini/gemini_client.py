@@ -54,7 +54,7 @@ class GeminiClient(BaseAgent):
                 raise GeminiError(f"Failed to initialize Gemini Client: {e}") from e
 
         self.default_model = self.get_config_value(
-            "gemini_model", default="gemini-2.5-pro", config=config
+            "gemini_model", default="gemini-3.1-pro-preview", config=config
         )
 
     def _execute_impl(self, request: AgentRequest) -> AgentResponse:
@@ -255,7 +255,7 @@ class GeminiClient(BaseAgent):
             raise GeminiError(f"Failed to embed content: {e}") from e
 
     def generate_images(
-        self, prompt: str, model: str = "imagen-latest", **kwargs: Any
+        self, prompt: str, model: str = "imagen-4.0-generate-001", **kwargs: Any
     ) -> list[dict[str, Any]]:
         if not self.client:
             raise GeminiError("Gemini Client not initialized")
@@ -267,8 +267,9 @@ class GeminiClient(BaseAgent):
             result = self.client.models.generate_images(
                 model=model, prompt=prompt, config=config
             )
-            return [img.model_dump() for img in result.images]
-        except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
+            # Bypass Pydantic internals to prevent 'KeyboardInterrupt' resolution hangs
+            return [{"image_bytes": img.image_bytes} for img in result.images]
+        except Exception as e:
             logger.error(f"Failed to generate images: {e}")
             raise GeminiError(f"Failed to generate images: {e}") from e
 
@@ -309,7 +310,7 @@ class GeminiClient(BaseAgent):
             raise GeminiError(f"Failed to edit image: {e}") from e
 
     def generate_videos(
-        self, prompt: str, model: str = "veo-latest", **kwargs: Any
+        self, prompt: str, model: str = "veo-2.0-generate-001", **kwargs: Any
     ) -> list[dict[str, Any]]:
         if not self.client:
             raise GeminiError("Gemini Client not initialized")
@@ -318,11 +319,36 @@ class GeminiClient(BaseAgent):
             if config is None and kwargs:
                 config = kwargs
 
-            result = self.client.models.generate_videos(
+            operation = self.client.models.generate_videos(
                 model=model, prompt=prompt, config=config
             )
-            return [video.model_dump() for video in result.videos]
-        except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
+
+            # Veo 2.0 returns a LongRunning Operation that requires polling
+            if hasattr(operation, "done"):
+                import time
+                while not operation.done:
+                    time.sleep(5)
+                    operation = self.client.operations.get(operation=operation)
+
+                if operation.error:
+                    raise GeminiError(f"Video operation failed: {operation.error}")
+                result = operation.result
+            else:
+                result = operation
+
+            # Bypass Pydantic dump crash
+            outputs = []
+            for video in getattr(result, "videos", []):
+                outputs.append({"video_bytes": getattr(video, "video_bytes", getattr(video, "video", getattr(video, "uri", b"")))})
+
+            # If the genai sdk natively unpacks it into a `uri` string instead of `video_bytes` (like gemini sometimes does):
+            if not outputs and getattr(result, "videos", []):
+                for video in result.videos:
+                    if hasattr(video, "uri") and video.uri:
+                        outputs.append({"uri": video.uri})
+
+            return outputs
+        except Exception as e:
             logger.error(f"Failed to generate videos: {e}")
             raise GeminiError(f"Failed to generate videos: {e}") from e
 

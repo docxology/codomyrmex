@@ -2,7 +2,7 @@ import os
 import subprocess
 from typing import Any
 
-from codomyrmex.logging_monitoring.core.logger_config import get_logger
+from codomyrmex.logging_monitoring import get_logger
 from codomyrmex.model_context_protocol.decorators import mcp_tool
 
 _GIT_TIMEOUT = 60  # seconds

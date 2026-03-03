@@ -579,7 +579,7 @@ class TestToolsMixin:
     def _make_tools_mixin(self):
         """Create a ToolsMixin instance with required attributes."""
         from codomyrmex.agents.claude.mixins.tools import ToolsMixin
-        from codomyrmex.logging_monitoring.core.logger_config import get_logger
+        from codomyrmex.logging_monitoring import get_logger
         mixin = ToolsMixin()
         mixin._tools = []
         mixin.logger = get_logger("test_tools_mixin")

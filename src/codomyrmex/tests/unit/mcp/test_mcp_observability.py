@@ -13,7 +13,7 @@ from __future__ import annotations
 import json
 import logging
 
-from codomyrmex.logging_monitoring.core.logger_config import (
+from codomyrmex.logging_monitoring import (
     JSONFormatter,
     configure_all_structured,
     enable_structured_json,

@@ -12,7 +12,7 @@ import pytest
 
 try:
     from codomyrmex.coding import ExecutionLimits, execute_code, execute_with_limits
-    from codomyrmex.logging_monitoring.core.logger_config import (
+    from codomyrmex.logging_monitoring import (
         get_logger,
         setup_logging,
     )

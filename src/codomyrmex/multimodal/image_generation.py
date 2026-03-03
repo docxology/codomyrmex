@@ -1,5 +1,5 @@
 """
-Image Generation module using Google AI (Imagen 3).
+Image Generation module using Google AI (Imagen 4).
 """
 
 from typing import Any
@@ -10,7 +10,7 @@ from codomyrmex.agents.gemini.gemini_client import GeminiClient
 class ImageGenerator:
     """
     Generator for creating images using the Google AI SDK (via GeminiClient).
-    Defaults to the Imagen 3 model (``imagen-3.0-generate-002``).
+    Defaults to the Imagen 4 model (``imagen-4.0-generate-001``).
     """
 
     def __init__(self, client: GeminiClient | None = None) -> None:
@@ -25,7 +25,7 @@ class ImageGenerator:
     def generate(
         self,
         prompt: str,
-        model: str = "imagen-3.0-generate-002",
+        model: str = "imagen-4.0-generate-001",
         **kwargs: Any
     ) -> list[dict[str, Any]]:
         """
@@ -33,7 +33,7 @@ class ImageGenerator:
 
         Args:
             prompt: Text description of the image to generate.
-            model: The image generation model to use. Default is Imagen 3.
+            model: The image generation model to use. Default is Imagen 4.
             **kwargs: Additional generation parameters (e.g., number of images, aspect ratio).
 
         Returns:

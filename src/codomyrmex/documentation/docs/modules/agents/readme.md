@@ -1,167 +1,152 @@
-# Agents Module
+# Agents
 
-**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.0.8 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Agentic framework integrations providing AI code editing, task management, and multi-provider support. Core layer for intelligent automation workflows with 12 provider integrations, session management, response parsing, and theoretical architecture foundations.
+The Agents module is the core agentic framework for codomyrmex, providing integration with 13 AI agent providers across API-based, CLI-based, and local deployment models. It serves as the Core layer's primary capability for intelligent automation workflows, offering session management, response parsing, multi-agent orchestration, and theoretical architecture foundations. When used with PAI, this module maps to PAI's three-tier agent system: Task Subagents dispatch through `AgentOrchestrator`, Named Agents consume tools via MCP, and Custom Agents extend `BaseAgent`.
 
-When used with [PAI](../../../PAI.md) (`~/.claude/PAI/`), this module maps to PAI's three-tier agent system: Task Subagents (Engineer, Architect, QATester) dispatch through `AgentOrchestrator`, Named Agents consume tools via MCP, and Custom Agents extend `BaseAgent`. See [PAI.md](PAI.md) for full integration details.
+## Architecture Overview
+
+The module follows a provider-plugin architecture. A shared core framework defines interfaces (`AgentInterface`, `BaseAgent`), configuration (`AgentConfig`), and session management (`SessionManager`). Provider-specific clients implement these interfaces for each supported AI service. The `generic/` package provides base classes (`APIAgentBase`, `CLIAgentBase`) that handle the common concerns of API-based and CLI-based agent communication.
+
+```
+agents/
+├── __init__.py              # Public API (40+ exports, lazy-loaded providers)
+├── core/                    # Core framework (base classes, config, sessions, parsers, exceptions)
+├── generic/                 # Base classes: APIAgentBase, CLIAgentBase, AgentOrchestrator
+├── agent_setup/             # Agent discovery, YAML config, AgentRegistry
+├── ai_code_editing/         # CodeEditor for AI-powered code generation
+├── claude/                  # Claude API client
+├── codex/                   # OpenAI Codex client
+├── deepseek/                # DeepSeek Coder client
+├── droid/                   # Droid controller integration
+├── every_code/              # Every Code multi-agent orchestration
+├── gemini/                  # Gemini CLI client
+├── git_agent/               # Git-specialized agent (GitAgent)
+├── infrastructure/          # Infrastructure management agent
+├── jules/                   # Jules CLI client
+├── mistral_vibe/            # Mistral Vibe CLI client
+├── o1/                      # OpenAI o1/o3 reasoning models
+├── openclaw/                # OpenClaw CLI client
+├── opencode/                # OpenCode CLI client
+├── qwen/                    # Qwen-Coder client
+├── agentic_seek/            # agenticSeek CLI client
+├── pooling/                 # Multi-agent load balancing and failover
+├── evaluation/              # Agent benchmarking and quality metrics
+├── history/                 # Conversation and context persistence
+├── theory/                  # Theoretical foundations (reactive, deliberative, hybrid)
+├── pai/                     # PAI system bridge (MCP discovery, trust, status)
+├── cli/                     # CLI subcommands and handlers
+└── mcp_tools.py             # MCP tool definitions (execute_agent, list_agents, get_agent_memory)
+```
 
 ## PAI Integration
 
-| Algorithm Phase | Role | Tools Used |
-|----------------|------|-----------|
-| **OBSERVE** | Explore agent reads codebase using `system_discovery`, patterns via `search` | `list_agents`, `get_agent_memory` |
-| **THINK** | Capability selection — which agent provider/model for the task | `list_agents` (inventory) |
-| **BUILD** | Engineer agent runs code editing, generation, refactoring via `CodeEditor` | `execute_agent` |
-| **EXECUTE** | All 12 provider clients dispatch tasks (Claude, Codex, Gemini, O1, etc.) | `execute_agent` |
-| **VERIFY** | QATester agent runs benchmarks, validates agent output quality | `execute_agent`, `list_agents` |
-| **LEARN** | Session history captured; agent memory stored via `agentic_memory` | `get_agent_memory` |
+### Algorithm Phase Mapping
 
-PAI agents invoke this module via the MCP bridge (`execute_agent`, `list_agents`, `get_agent_memory`). The Engineer subagent drives `CodeEditor` and `AgentOrchestrator` during BUILD; QATester drives `AgentEvaluator` during VERIFY.
+| Algorithm Phase | Role | Key Operations |
+|----------------|------|---------------|
+| OBSERVE | Agent reads codebase, discovers capabilities | `list_agents`, `get_agent_memory` |
+| THINK | Select optimal agent provider/model for the task | `list_agents` (inventory check) |
+| BUILD | Engineer agent runs code editing, generation, refactoring | `execute_agent` via CodeEditor |
+| EXECUTE | All 13 provider clients dispatch tasks | `execute_agent` with specific agent_name |
+| VERIFY | QATester agent runs benchmarks, validates output quality | `execute_agent`, `list_agents` |
+| LEARN | Session history captured, agent memory stored | `get_agent_memory` |
 
-## Installation
-
-```bash
-uv add codomyrmex
-```
-
-Or for development:
-
-```bash
-uv sync
-```
-
-## Key Exports
+## Key Classes and Functions
 
 ### Core Framework
 
-- **`AgentInterface`** — Abstract base class for all agents
-- **`BaseAgent`** — Base implementation with common agent behavior
-- **`AgentIntegrationAdapter`** — Adapter pattern for integrating external agent frameworks
-- **`APIAgentBase`** / **`CLIAgentBase`** — Base classes for API-based and CLI-based agents
-- **`AgentCapabilities`** — Enum of agent capabilities
-- **`AgentRequest`** — Dataclass request structure for agent operations (prompt, context, parameters)
-- **`AgentResponse`** — Dataclass response structure from agent operations (content, error, tokens)
-- **`AgentConfig`** / `get_config` / `set_config` / `reset_config` — Configuration management
+**`AgentInterface`** -- Abstract base class defining the contract for all agents.
 
-### Git Operations
+**`BaseAgent`** -- Base implementation with common agent behavior (execute, session management).
 
-- **`GitAgent`** — Agent specialized for Git and GitHub operations: repository sync, remote management, and issue management (extends BaseAgent)
+**`AgentConfig`** -- Configuration management for all agent providers.
 
-### Code Editing
+```python
+from codomyrmex.agents import AgentConfig, get_config, set_config
 
-- **`CodeEditor`** — Agent specialized in code editing, generation, and analysis (extends BaseAgent)
+config = get_config()
+set_config(AgentConfig(timeout=30, max_retries=3))
+```
+
+**`AgentOrchestrator`** -- Multi-agent orchestration for task decomposition and delegation.
 
 ### Provider Clients
 
-- **`ClaudeClient`** — Claude API integration
-- **`CodexClient`** — OpenAI Codex integration
-- **`GeminiClient`** — Gemini CLI integration
-- **`JulesClient`** — Jules CLI integration
-- **`MistralVibeClient`** — Mistral Vibe CLI integration
-- **`EveryCodeClient`** — Every Code CLI (multi-agent orchestration)
-- **`OpenCodeClient`** — OpenCode CLI integration
-- **`OpenClawClient`** — OpenClaw CLI integration
-- **`DroidController`** — Droid controller integration
-- **`O1Client`** — OpenAI o1/o3 reasoning models (lazy-loaded)
-- **`DeepSeekClient`** — DeepSeek Coder integration (lazy-loaded)
-- **`QwenClient`** — Qwen-Coder integration (lazy-loaded)
+**API-based:** `ClaudeClient`, `CodexClient`, `O1Client`, `DeepSeekClient`, `QwenClient`
 
-### Session & Parsing
+**CLI-based:** `JulesClient`, `OpenCodeClient`, `OpenClawClient`, `GeminiClient`, `MistralVibeClient`, `EveryCodeClient`, `AgenticSeekClient`
 
-- **`AgentSession`** / **`SessionManager`** / **`Message`** — Session lifecycle management
-- **`parse_json_response`** / **`parse_code_blocks`** / **`parse_first_code_block`** — Response parsing utilities
-- **`parse_structured_output`** / **`CodeBlock`** / **`ParseResult`** / **`clean_response`**
+**Local:** Ollama (via `llm/ollama/`)
 
-### Architecture & Theory
+### Session and Parsing
 
-- **`ReactiveArchitecture`** / **`DeliberativeArchitecture`** / **`HybridArchitecture`** — Agent architectures
-- **`KnowledgeBase`** — Knowledge management for agents
-- **`AgentOrchestrator`** — Multi-agent orchestration
+**`SessionManager`** -- Manages agent session lifecycle with message history.
 
-### Additional Submodules (lazy-loaded)
+**`parse_code_blocks()`** / **`parse_json_response()`** -- Extract structured data from agent responses.
 
-- **`AgentPool`** — Multi-agent load balancing and failover (`pooling/`)
-- **`AgentEvaluator`** — Agent benchmarking and quality metrics (`evaluation/`)
-- **`ConversationHistory`** — Conversation and context persistence (`history/`)
-- **`InfrastructureAgent`** — Infrastructure management agent (`infrastructure/`)
-- **`AgentRegistry`** — Declarative agent catalog with live health probes (`agent_setup/`)
+## MCP Tools Reference
 
-### Exceptions
+| Tool | Description | Parameters | Trust Level |
+|------|-------------|------------|-------------|
+| `execute_agent` | Execute an agent conversation with a prompt | `agent_name: str`, `prompt: str` | Safe |
+| `list_agents` | Return all available AI agents with status | (none) | Safe |
+| `get_agent_memory` | Retrieve interaction logs for a session | `session_id: str` | Safe |
 
-- `AgentError`, `AgentTimeoutError`, `AgentConfigurationError`, `ExecutionError`, `ToolError`, `ContextError`, `SessionError`
-
-## Directory Contents
-
-- `AGENT_COMPARISON.md` - Provider comparison reference
-- `API_SPECIFICATION.md` - Programmatic interface documentation
-- `MCP_TOOL_SPECIFICATION.md` - Model Context Protocol tool definitions
-- `PAI.md` - PAI integration details (three-tier agent mapping, Algorithm capability selection, composition patterns)
-- `SPEC.md` - Functional specification
-- `__init__.py` - Module exports (40+ items)
-- `exceptions.py` - Agent exception hierarchy
-- `ai_code_editing/` - AI-powered code editing integration
-- `claude/` - Claude API client
-- `cli/` - CLI subcommands and handlers
-- `codex/` - OpenAI Codex client
-- `core/` - Core agent framework (base classes, config, sessions, parsers)
-- `deepseek/` - DeepSeek Coder integration
-- `droid/` - Droid controller integration
-- `evaluation/` - Agent benchmarking and quality metrics
-- `every_code/` - Every Code multi-agent orchestration
-- `gemini/` - Gemini CLI client
-- `generic/` - Base agent classes (APIAgentBase, CLIAgentBase, AgentOrchestrator)
-- `git_agent/` - Git-specialized agent (GitAgent)
-- `history/` - Conversation and context persistence
-- `infrastructure/` - Infrastructure management agent
-- `jules/` - Jules CLI client
-- `mistral_vibe/` - Mistral Vibe CLI client
-- `o1/` - OpenAI o1/o3 reasoning model client
-- `openclaw/` - OpenClaw CLI client
-- `opencode/` - OpenCode CLI client
-- `pai/` - PAI system bridge (discovery, validation, status)
-- `pooling/` - Multi-agent load balancing and failover
-- `qwen/` - Qwen-Coder integration
-- `theory/` - Theoretical foundations (reactive, deliberative, hybrid architectures)
-
-## Quick Start
-
-```python
-import codomyrmex.agents
-
-# Check which agents are available
-from codomyrmex.agents.agent_setup import AgentRegistry
-registry = AgentRegistry()
-for r in registry.probe_all():
-    print(f"{r.name}: {r.status}")
-
-# Run the orchestration demo
-# uv run python src/codomyrmex/examples/agent_orchestration_demo.py
-```
-
-## Testing
-
-Running the full Zero-Mock test suite:
+## Configuration
 
 ```bash
-# Run all agent tests (350+ tests, zero-mock)
-uv run python -m pytest src/codomyrmex/tests/unit/agents/ -v
-
-# Run specific component tests
-uv run python -m pytest src/codomyrmex/tests/unit/agents/test_agents_core_config.py
-uv run python -m pytest src/codomyrmex/tests/unit/agents/test_agents_core_session.py
-uv run python -m pytest src/codomyrmex/tests/unit/agents/test_agents_core_tools.py
-uv run python -m pytest src/codomyrmex/tests/unit/agents/test_agents_core_orchestration.py
+export ANTHROPIC_API_KEY="sk-..."     # For Claude provider
+export OPENAI_API_KEY="sk-..."        # For Codex/O1 providers
+export GEMINI_API_KEY="..."           # For Gemini provider
+export DEEPSEEK_API_KEY="..."         # For DeepSeek provider
 ```
 
-### Zero-Mock Policy
+## Usage Examples
 
-Tests use `FakeLLMClient` and real `BaseAgent` implementations (`ConcreteAgent`, `FailingAgent`) instead of `unittest.mock.MagicMock`. This ensures robust integration testing of the agent framework's core logic.
+### Example 1: List Available Agents
+
+```python
+from codomyrmex.agents.agent_setup import AgentRegistry
+
+registry = AgentRegistry()
+for agent_info in registry.probe_all():
+    print(f"{agent_info.name}: {agent_info.status}")
+```
+
+### Example 2: Execute an Agent Task
+
+```python
+from codomyrmex.agents import AgentRequest
+from codomyrmex.agents.agent_setup import AgentRegistry
+
+registry = AgentRegistry()
+agent = registry.create_agent("claude")
+request = AgentRequest(prompt="Explain the observer pattern")
+response = agent.execute(request)
+print(response.content)
+```
+
+## Error Handling
+
+- `AgentError` -- Base exception for all agent-related errors
+- `AgentTimeoutError` -- Raised when an agent does not respond within the configured timeout
+- `AgentConfigurationError` -- Raised for invalid agent configuration
+- `ExecutionError` -- Raised when agent execution fails
+- `ToolError` -- Raised when a tool invocation within an agent fails
+- `ContextError` -- Raised for context management failures
+- `SessionError` -- Raised for session lifecycle failures
+
+## Related Modules
+
+- [`agentic_memory`](../agentic_memory/readme.md) -- Memory storage consumed by agents for context continuity
+- [`llm`](../llm/readme.md) -- LLM infrastructure (Ollama, providers) that agents delegate to
+- [`coding`](../coding/readme.md) -- Code execution sandbox used by code editing agents
 
 ## Navigation
 
-- **Full Documentation**: [docs/modules/agents/](../../../docs/modules/agents/)
-- **Parent Directory**: [codomyrmex](../README.md)
-- **Project Root**: ../../../README.md
+- **Source**: [src/codomyrmex/agents/](../../../../src/codomyrmex/agents/)
+- **API Spec**: [API_SPECIFICATION.md](../../../../src/codomyrmex/agents/API_SPECIFICATION.md)
+- **Parent**: [All Modules](../README.md)

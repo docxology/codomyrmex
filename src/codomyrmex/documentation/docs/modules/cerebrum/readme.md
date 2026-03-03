@@ -1,117 +1,73 @@
-# Cerebrum Module
+# Cerebrum
 
-**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.0.8 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Case-Enabled Reasoning Engine with Bayesian Representations for Unified Modeling (CEREBRUM). Combines case-based reasoning with Bayesian probabilistic inference for cognitive modeling, code reasoning, and AI enhancement. Provides a full pipeline from case storage and retrieval through Bayesian network inference and active inference agents based on the free energy principle, with visualization tools for models, cases, and inference results.
+CEREBRUM (Case-Enabled Reasoning Engine with Bayesian Representations for Unified Modeling) provides case-based reasoning combined with Bayesian probabilistic inference for cognitive modeling, code reasoning, and AI enhancement. It includes a reasoning engine, case management, Bayesian networks, active inference agents, model transformations, visualization tools, and optional FPF (Functional Programming Format) integration.
+
+## Architecture Overview
+
+```
+cerebrum/
+├── __init__.py              # Public API (40+ exports)
+├── core/                    # CerebrumEngine, ModelManager, ReasoningEngine, WorkingMemory
+│   ├── case.py              # Case, CaseBase, CaseRetriever
+│   ├── model.py             # Model, ModelBase
+│   └── transformations.py   # ModelTransformer, AdaptationTransformer, LearningTransformer
+├── inference/               # BayesianNetwork, InferenceEngine, ActiveInferenceAgent
+│   ├── bayesian.py          # BayesianNetwork, Distribution, PriorBuilder
+│   └── active.py            # ActiveInferenceAgent, BeliefState, VariationalFreeEnergy
+├── visualization/           # ModelVisualizer, CaseVisualizer, InferenceVisualizer
+├── fpf/                     # FPF integration (optional)
+└── mcp_tools.py             # MCP tools (query_knowledge_base, add_case_reference)
+```
 
 ## PAI Integration
 
-| Algorithm Phase | Role | Tools Used |
-|----------------|------|-----------|
-| **THINK** | Case-based reasoning to select optimal capabilities and strategies | `query_knowledge_base` |
-| **OBSERVE** | Retrieve prior knowledge about similar problems | `query_knowledge_base` |
-| **LEARN** | Store new case references for future reasoning | `add_case_reference` |
+### Algorithm Phase Mapping
 
-PAI's THINK phase uses `query_knowledge_base` to retrieve analogous cases from the knowledge base, informing capability selection. The Engineer subagent has full access; `add_case_reference` is called during LEARN to capture new problem-solution pairs.
+| Algorithm Phase | Role | Key Operations |
+|----------------|------|---------------|
+| THINK | Load case-based reasoning context and prior knowledge | `query_knowledge_base` |
+| LEARN | Store new case references for future retrieval | `add_case_reference` |
 
-## Key Exports
+## Key Classes and Functions
 
-### Core Engine
+**`CerebrumEngine`** -- Main orchestrator for case-based reasoning and Bayesian inference.
 
-- **`CerebrumEngine`** -- Main orchestrator coordinating case-based reasoning and Bayesian inference pipelines
-- **`ModelManager`** -- Manages model lifecycle (creation, storage, retrieval, versioning)
-- **`ReasoningEngine`** -- Executes reasoning workflows combining case retrieval with probabilistic inference
+**`BayesianNetwork`** -- Probabilistic graphical model for inference.
 
-### Case Management
+**`ActiveInferenceAgent`** -- Agent based on the free energy principle.
 
-- **`Case`** -- Dataclass representing a single case with features, solution, and metadata
-- **`CaseBase`** -- Collection of cases supporting storage, retrieval, and similarity-based lookup
-- **`CaseRetriever`** -- Retrieves the most relevant cases from a CaseBase given a query
+**`Case`** / **`CaseBase`** / **`CaseRetriever`** -- Case management and retrieval.
 
-### Bayesian Inference
+**`ReasoningChain`** -- Chain of reasoning steps with execution results.
 
-- **`BayesianNetwork`** -- Directed acyclic graph of probabilistic variables with conditional probability tables
-- **`InferenceEngine`** -- Runs inference queries on a BayesianNetwork (exact and approximate methods)
-- **`Distribution`** -- Probability distribution representation for network variables
-- **`PriorBuilder`** -- Utility for constructing prior distributions from data or domain knowledge
+## MCP Tools Reference
 
-### Active Inference
+| Tool | Description | Parameters | Trust Level |
+|------|-------------|------------|-------------|
+| `query_knowledge_base` | Query the cerebrum knowledge base for relevant cases | `query: str` | Safe |
+| `add_case_reference` | Add a new case reference to the knowledge base | `case: dict` | Safe |
 
-- **`ActiveInferenceAgent`** -- Agent that selects actions to minimize variational free energy
-- **`BeliefState`** -- Represents the agent's current beliefs about the environment
-- **`VariationalFreeEnergy`** -- Computes free energy for belief evaluation and action selection
-- **`PolicySelector`** -- Selects optimal policies based on expected free energy
-
-### Models and Results
-
-- **`Model` / `ModelBase`** -- Model structures used by the reasoning engine
-- **`ReasoningResult`** -- Container for reasoning output including confidence and explanation
-
-### Transformations
-
-- **`ModelTransformer`** -- Base class for model transformation operations
-- **`AdaptationTransformer`** -- Adapts models based on new evidence or domain shifts
-- **`LearningTransformer`** -- Updates model parameters from training data
-- **`TransformationManager`** -- Orchestrates sequences of model transformations
-
-### Visualization
-
-- **`ModelVisualizer`** -- Renders model structures as diagrams
-- **`CaseVisualizer`** -- Visualizes case distributions and similarity spaces
-- **`InferenceVisualizer`** -- Plots inference results and belief updates
-
-### Configuration and Utilities
-
-- **`CerebrumConfig`** -- Configuration dataclass for engine parameters
-- **`compute_hash()`** -- Hash computation for case deduplication
-- **`normalize_features()`** -- Feature vector normalization
-- **`compute_euclidean_distance()` / `compute_cosine_similarity()`** -- Distance metrics for case similarity
-- **`softmax()`** -- Softmax transformation for probability normalization
-
-### Exceptions
-
-- **`CerebrumError`** -- Base exception for all CEREBRUM errors
-- **`CaseError` / `CaseNotFoundError` / `InvalidCaseError`** -- Case-related exceptions
-- **`BayesianInferenceError` / `InferenceError` / `NetworkStructureError`** -- Inference exceptions
-- **`ActiveInferenceError`** -- Active inference agent exceptions
-- **`ModelError` / `TransformationError` / `VisualizationError`** -- Model and visualization exceptions
-
-### Optional Integration
-
-- **`FPFOrchestrator`** -- Orchestrates First Principles Framework integration (requires fpf submodule)
-- **`FPFCombinatoricsAnalyzer`** -- Combinatorial analysis of FPF patterns (requires fpf submodule)
-
-## Directory Contents
-
-- `core/` -- Engine, case management, model definitions, transformers, configuration, exceptions, and utilities
-- `inference/` -- Bayesian network, inference engine, active inference agent, belief states, and priors
-- `visualization/` -- Model, case, and inference visualizers
-- `fpf/` -- Optional FPF integration (orchestrator and combinatorics analyzer)
-- `visualization_base.py` -- Base classes for visualization components
-- `visualization_theme.py` -- Theming support for visualization output
-
-## Quick Start
+## Usage Examples
 
 ```python
-from codomyrmex.cerebrum import BaseNetworkVisualizer, BaseChartVisualizer
+from codomyrmex.cerebrum import CerebrumEngine, Case
 
-# Create a BaseNetworkVisualizer instance
-basenetworkvisualizer = BaseNetworkVisualizer()
-
-# Use BaseChartVisualizer for additional functionality
-basechartvisualizer = BaseChartVisualizer()
+engine = CerebrumEngine()
+case = Case(features={"language": "python", "pattern": "singleton"})
+engine.add_case(case)
+results = engine.retrieve(query_features={"pattern": "singleton"})
 ```
 
-## Testing
+## Related Modules
 
-```bash
-uv run python -m pytest src/codomyrmex/tests/ -k cerebrum -v
-```
+- [`agentic_memory`](../agentic_memory/readme.md) -- Memory storage that complements case-based reasoning
+- [`agents/core`](../agents/readme.md) -- ThinkingAgent reasoning traces
 
 ## Navigation
 
-- **Full Documentation**: [docs/modules/cerebrum/](../../../docs/modules/cerebrum/)
-- **Parent Directory**: [codomyrmex](../README.md)
-- **Project Root**: ../../../README.md
+- **Source**: [src/codomyrmex/cerebrum/](../../../../src/codomyrmex/cerebrum/)
+- **Parent**: [All Modules](../README.md)

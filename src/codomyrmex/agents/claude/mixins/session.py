@@ -6,7 +6,7 @@ from codomyrmex.agents.core import (
     AgentResponse,
 )
 from codomyrmex.agents.core.session import AgentSession
-from codomyrmex.logging_monitoring.core.logger_config import get_logger
+from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
 

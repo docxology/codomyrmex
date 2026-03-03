@@ -6,7 +6,7 @@ from pathlib import Path
 from codomyrmex.documentation.scripts.smart_template_engine import SmartTemplateEngine
 
 try:
-    from codomyrmex.logging_monitoring.core.logger_config import get_logger
+    from codomyrmex.logging_monitoring import get_logger
     logger = get_logger(__name__)
 except Exception:
     logger = logging.getLogger(__name__)

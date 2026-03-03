@@ -9,7 +9,7 @@ whether the prover knows them.
 import hashlib
 from dataclasses import dataclass
 
-from codomyrmex.logging_monitoring.core.logger_config import get_logger
+from codomyrmex.logging_monitoring import get_logger
 from codomyrmex.wallet.exceptions import RitualError
 
 logger = get_logger(__name__)

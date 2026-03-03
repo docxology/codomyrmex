@@ -7,7 +7,7 @@ from prometheus_client import (
     start_http_server,
 )
 
-from codomyrmex.logging_monitoring.core.logger_config import get_logger
+from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
 

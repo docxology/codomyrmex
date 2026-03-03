@@ -173,7 +173,14 @@ def create_text_node(
     height: int = 140,
     color: str | None = None,
 ) -> CanvasNode:
-    """Create a text node with an auto-generated ID."""
+    """Create a text node with an auto-generated ID.
+
+    Raises ``ValueError`` if *text* is empty or dimensions are non-positive.
+    """
+    if not text or not text.strip():
+        raise ValueError("text must be a non-empty string")
+    if width <= 0 or height <= 0:
+        raise ValueError(f"width and height must be positive, got {width}x{height}")
     return CanvasNode(
         id=f"node-{uuid.uuid4().hex[:8]}",
         type="text",
@@ -190,7 +197,14 @@ def create_file_node(
     width: int = 250,
     height: int = 140,
 ) -> CanvasNode:
-    """Create a file-reference node with an auto-generated ID."""
+    """Create a file-reference node with an auto-generated ID.
+
+    Raises ``ValueError`` if *file* is empty or dimensions are non-positive.
+    """
+    if not file or not file.strip():
+        raise ValueError("file must be a non-empty path string")
+    if width <= 0 or height <= 0:
+        raise ValueError(f"width and height must be positive, got {width}x{height}")
     return CanvasNode(
         id=f"node-{uuid.uuid4().hex[:8]}",
         type="file",
@@ -207,7 +221,14 @@ def create_link_node(
     width: int = 250,
     height: int = 140,
 ) -> CanvasNode:
-    """Create a link node with an auto-generated ID."""
+    """Create a link node with an auto-generated ID.
+
+    Raises ``ValueError`` if *url* is empty or dimensions are non-positive.
+    """
+    if not url or not url.strip():
+        raise ValueError("url must be a non-empty string")
+    if width <= 0 or height <= 0:
+        raise ValueError(f"width and height must be positive, got {width}x{height}")
     return CanvasNode(
         id=f"node-{uuid.uuid4().hex[:8]}",
         type="link",

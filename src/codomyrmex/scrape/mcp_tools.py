@@ -29,7 +29,7 @@ def scrape_extract_content(
         extractor = ContentExtractor(base_url=base_url)
         result = extractor.extract(html)
         return {
-            "status": "ok",
+            "status": "success",
             "title": result.title,
             "headings": [{"level": h[0], "text": h[1]} for h in result.headings],
             "paragraph_count": len(result.paragraphs),
@@ -40,7 +40,7 @@ def scrape_extract_content(
             "meta": result.meta,
         }
     except Exception as exc:
-        return {"status": "error", "error": str(exc)}
+        return {"status": "error", "message": str(exc)}
 
 
 @mcp_tool(
@@ -60,6 +60,6 @@ def scrape_text_similarity(
     try:
         from codomyrmex.scrape.extractors.content_extractor import text_similarity
         score = text_similarity(text_a, text_b)
-        return {"status": "ok", "similarity": score}
+        return {"status": "success", "similarity": score}
     except Exception as exc:
-        return {"status": "error", "error": str(exc)}
+        return {"status": "error", "message": str(exc)}

@@ -13,7 +13,7 @@ import time
 from dataclasses import dataclass
 from typing import Any
 
-from codomyrmex.logging_monitoring.core.logger_config import get_logger
+from codomyrmex.logging_monitoring import get_logger
 
 from .models import EdgeExecutionError, EdgeFunction, EdgeNode
 

@@ -5,9 +5,16 @@ This module consolidates and exports plotting functions from the charts package.
 It acts as the primary entry point for accessing visualization capabilities.
 """
 
-import matplotlib.pyplot as plt
-import numpy as np
+try:
+    import matplotlib.pyplot as plt
+    import numpy as np
+except ImportError as _e:
+    raise ImportError(
+        "matplotlib and numpy are required for data_visualization.engines.plotter. "
+        "Install with: uv sync --extra visualization"
+    ) from _e
 
+from codomyrmex.data_visualization._compat import monitor_performance
 from codomyrmex.data_visualization.charts.bar_chart import create_bar_chart
 from codomyrmex.data_visualization.charts.histogram import create_histogram
 from codomyrmex.data_visualization.charts.line_plot import create_line_plot
@@ -21,10 +28,6 @@ from codomyrmex.data_visualization.charts.scatter_plot import create_scatter_plo
 from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
-
-from codomyrmex.data_visualization._compat import (
-    monitor_performance,
-)
 
 
 class Plotter:

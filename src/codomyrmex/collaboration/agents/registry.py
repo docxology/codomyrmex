@@ -14,7 +14,7 @@ from typing import Optional
 from codomyrmex.collaboration.exceptions import AgentNotFoundError
 from codomyrmex.collaboration.models import AgentStatus, SwarmStatus
 from codomyrmex.collaboration.protocols import AgentState
-from codomyrmex.logging_monitoring.core.logger_config import get_logger
+from codomyrmex.logging_monitoring import get_logger
 
 from .base import CollaborativeAgent
 

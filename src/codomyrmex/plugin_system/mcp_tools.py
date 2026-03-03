@@ -27,7 +27,7 @@ def plugin_scan_entry_points(
         discovery = PluginDiscovery(entry_point_group=entry_point_group)
         result = discovery.scan_entry_points()
         return {
-            "status": "ok",
+            "status": "success",
             "plugin_count": len(result.plugins),
             "plugins": [
                 {"name": p.name, "module": p.module_path, "state": p.state.value}
@@ -36,7 +36,7 @@ def plugin_scan_entry_points(
             "errors": [{"source": s, "error": e} for s, e in result.errors],
         }
     except Exception as exc:
-        return {"status": "error", "error": str(exc)}
+        return {"status": "error", "message": str(exc)}
 
 
 @mcp_tool(
@@ -64,11 +64,11 @@ def plugin_resolve_dependencies(
             ))
         result = resolver.resolve()
         return {
-            "status": "ok",
+            "status": "success",
             "resolution_status": result.status.value,
             "load_order": result.load_order,
             "missing": result.missing,
             "circular": result.circular,
         }
     except Exception as exc:
-        return {"status": "error", "error": str(exc)}
+        return {"status": "error", "message": str(exc)}

@@ -420,3 +420,78 @@ class TestFullWorkflow:
         # Other destructive tool still blocked
         with pytest.raises(SecurityError):
             trusted_call_tool("codomyrmex.write_file", path="/tmp/x", content="y")
+
+
+# =====================================================================
+# Module __getattr__ Lazy Cache
+# =====================================================================
+
+class TestModuleGetattr:
+    """Test the module-level __getattr__ lazy initialization and caching.
+
+    These tests exercise the lazy computation path for SAFE_TOOLS,
+    SAFE_TOOL_COUNT, and DESTRUCTIVE_TOOL_COUNT by evicting cached
+    values from module.__dict__ and re-accessing them.
+    """
+
+    def test_safe_tools_is_frozenset(self):
+        """SAFE_TOOLS lazy-computed value is a frozenset of tool names."""
+        import codomyrmex.agents.pai.trust_gateway as tg
+        val = tg.SAFE_TOOLS
+        assert isinstance(val, frozenset)
+        assert len(val) > 0
+
+    def test_safe_tool_count_matches_safe_tools(self):
+        """SAFE_TOOL_COUNT equals len(SAFE_TOOLS) at every access."""
+        import codomyrmex.agents.pai.trust_gateway as tg
+        count = tg.SAFE_TOOL_COUNT
+        tools = tg.SAFE_TOOLS
+        assert count == len(tools)
+
+    def test_destructive_tool_count_positive_int(self):
+        """DESTRUCTIVE_TOOL_COUNT is a positive integer (≥4 built-ins)."""
+        import codomyrmex.agents.pai.trust_gateway as tg
+        count = tg.DESTRUCTIVE_TOOL_COUNT
+        assert isinstance(count, int)
+        assert count >= 4
+
+    def test_safe_tools_recomputed_after_cache_eviction(self):
+        """SAFE_TOOLS and SAFE_TOOL_COUNT recomputed when evicted from module globals."""
+        import codomyrmex.agents.pai.trust_gateway as tg
+        # Save originals
+        orig_tools = tg.__dict__.pop("SAFE_TOOLS", None)
+        tg.__dict__.pop("SAFE_TOOL_COUNT", None)
+        try:
+            # Re-access triggers __getattr__ lazy path
+            val = tg.SAFE_TOOLS
+            assert isinstance(val, frozenset)
+            count = tg.SAFE_TOOL_COUNT
+            assert count == len(val)
+        finally:
+            # Restore cache (avoids polluting other tests)
+            if orig_tools is not None:
+                tg.__dict__["SAFE_TOOLS"] = orig_tools
+            tg.__dict__.pop("SAFE_TOOL_COUNT", None)
+
+    def test_safe_tool_count_uses_none_check_not_falsy(self):
+        """SAFE_TOOL_COUNT uses 'is not None' — an empty frozenset cache is respected."""
+        import codomyrmex.agents.pai.trust_gateway as tg
+        orig_tools = tg.__dict__.pop("SAFE_TOOLS", None)
+        tg.__dict__.pop("SAFE_TOOL_COUNT", None)
+        # Inject empty frozenset to validate is-not-None check (not falsy check)
+        tg.__dict__["SAFE_TOOLS"] = frozenset()
+        try:
+            count = tg.SAFE_TOOL_COUNT
+            # __getattr__ reads cached empty frozenset (not None) → len = 0
+            assert count == 0
+        finally:
+            tg.__dict__.pop("SAFE_TOOLS", None)
+            tg.__dict__.pop("SAFE_TOOL_COUNT", None)
+            if orig_tools is not None:
+                tg.__dict__["SAFE_TOOLS"] = orig_tools
+
+    def test_unknown_attribute_raises_attribute_error(self):
+        """Accessing an undefined module attribute raises AttributeError."""
+        import codomyrmex.agents.pai.trust_gateway as tg
+        with pytest.raises(AttributeError, match="has no attribute"):
+            _ = tg.NONEXISTENT_ATTRIBUTE_XYZ_TRUST_GATEWAY

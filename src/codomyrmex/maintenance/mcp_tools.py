@@ -38,14 +38,14 @@ def maintenance_health_check(
         ))
         result = checker.run(name)
         return {
-            "status": "ok",
+            "status": "success",
             "check_name": name,
             "health_status": result.status.value,
             "message": result.message,
             "duration_ms": result.duration_ms,
         }
     except Exception as exc:
-        return {"status": "error", "error": str(exc)}
+        return {"status": "error", "message": str(exc)}
 
 
 @mcp_tool(
@@ -58,10 +58,10 @@ def maintenance_list_tasks() -> dict[str, Any]:
         from codomyrmex.maintenance.health.scheduler import MaintenanceScheduler
         scheduler = MaintenanceScheduler()
         return {
-            "status": "ok",
+            "status": "success",
             "task_count": scheduler.task_count,
             "tasks": [],
             "message": "No tasks registered in this ephemeral instance",
         }
     except Exception as exc:
-        return {"status": "error", "error": str(exc)}
+        return {"status": "error", "message": str(exc)}

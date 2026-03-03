@@ -111,7 +111,7 @@ Runs inference on locally-hosted Ollama models. Provides privacy-preserving loca
 | `options.top_p` | `float` | No | Top-p sampling. Default: 0.9 | `0.95` |
 | `options.num_predict` | `integer` | No | Max tokens to generate. Default: 2048 | `1024` |
 | `save_output` | `boolean` | No | Save output to file. Default: false | `true` |
-| `output_dir` | `string` | No | Directory for saved outputs | `"./outputs/ollama/"` |
+| `output_dir` | `string` | No | Directory for saved outputs | `"./output/ollama/"` |
 
 ### 4. Output Schema (Return Value)
 

@@ -49,10 +49,11 @@ import yaml
 
 # Ensure codomyrmex is importable
 try:
-    from codomyrmex.logging_monitoring import get_logger, setup_logging
-    from codomyrmex.logging_monitoring.core.logger_config import (
+    from codomyrmex.logging_monitoring import (
         LogContext,
         PerformanceLogger,
+        get_logger,
+        setup_logging,
     )
 except ImportError:
     # Fallback for standalone execution

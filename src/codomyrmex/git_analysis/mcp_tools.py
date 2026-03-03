@@ -5,8 +5,8 @@ Exposes 16 tools in two groups:
   - 9 GitPython tools: commit history, contributors, churn, topology,
     filtered history, file history, directory churn, hotspots
 
-All tools return {"status": "ok", ...} on success or
-{"status": "error", "error": "<message>"} on failure.
+All tools return {"status": "success", ...} on success or
+{"status": "error", "message": "<message>"} on failure.
 
 GitNexus tools gracefully return an error dict when Node.js is unavailable
 rather than raising exceptions, enabling mixed environments.
@@ -54,13 +54,12 @@ def git_analysis_index_repo(repo_path: str) -> dict[str, Any]:
         b = _bridge(repo_path)
         if not b.check_availability():
             return {
-                "status": "error",
-                "error": "GitNexus not available. Install Node.js or npx.",
+                "status": "error", "message": "GitNexus not available. Install Node.js or npx.",
             }
         result = b.analyze()
-        return {"status": "ok", "repo_path": repo_path, "result": result}
+        return {"status": "success", "repo_path": repo_path, "result": result}
     except Exception as exc:
-        return {"status": "error", "error": str(exc)}
+        return {"status": "error", "message": str(exc)}
 
 
 @mcp_tool(
@@ -79,13 +78,12 @@ def git_analysis_query(
         b = _bridge(repo_path)
         if not b.check_availability():
             return {
-                "status": "error",
-                "error": "GitNexus not available. Install Node.js or npx.",
+                "status": "error", "message": "GitNexus not available. Install Node.js or npx.",
             }
         result = b.query(query_text, limit=limit)
-        return {"status": "ok", "query": query_text, "results": result}
+        return {"status": "success", "query": query_text, "results": result}
     except Exception as exc:
-        return {"status": "error", "error": str(exc)}
+        return {"status": "error", "message": str(exc)}
 
 
 @mcp_tool(
@@ -101,13 +99,12 @@ def git_analysis_symbol_context(repo_path: str, symbol: str) -> dict[str, Any]:
         b = _bridge(repo_path)
         if not b.check_availability():
             return {
-                "status": "error",
-                "error": "GitNexus not available. Install Node.js or npx.",
+                "status": "error", "message": "GitNexus not available. Install Node.js or npx.",
             }
         result = b.get_context(symbol)
-        return {"status": "ok", "symbol": symbol, "context": result}
+        return {"status": "success", "symbol": symbol, "context": result}
     except Exception as exc:
-        return {"status": "error", "error": str(exc)}
+        return {"status": "error", "message": str(exc)}
 
 
 @mcp_tool(
@@ -123,13 +120,12 @@ def git_analysis_impact(repo_path: str, symbol: str) -> dict[str, Any]:
         b = _bridge(repo_path)
         if not b.check_availability():
             return {
-                "status": "error",
-                "error": "GitNexus not available. Install Node.js or npx.",
+                "status": "error", "message": "GitNexus not available. Install Node.js or npx.",
             }
         result = b.assess_impact(symbol)
-        return {"status": "ok", "symbol": symbol, "impact": result}
+        return {"status": "success", "symbol": symbol, "impact": result}
     except Exception as exc:
-        return {"status": "error", "error": str(exc)}
+        return {"status": "error", "message": str(exc)}
 
 
 @mcp_tool(
@@ -147,13 +143,12 @@ def git_analysis_detect_changes(
         b = _bridge(repo_path)
         if not b.check_availability():
             return {
-                "status": "error",
-                "error": "GitNexus not available. Install Node.js or npx.",
+                "status": "error", "message": "GitNexus not available. Install Node.js or npx.",
             }
         result = b.detect_changes(diff=diff)
-        return {"status": "ok", "impact": result}
+        return {"status": "success", "impact": result}
     except Exception as exc:
-        return {"status": "error", "error": str(exc)}
+        return {"status": "error", "message": str(exc)}
 
 
 @mcp_tool(
@@ -169,13 +164,12 @@ def git_analysis_cypher_query(repo_path: str, cypher_query: str) -> dict[str, An
         b = _bridge(repo_path)
         if not b.check_availability():
             return {
-                "status": "error",
-                "error": "GitNexus not available. Install Node.js or npx.",
+                "status": "error", "message": "GitNexus not available. Install Node.js or npx.",
             }
         result = b.run_cypher(cypher_query)
-        return {"status": "ok", "query": cypher_query, "result": result}
+        return {"status": "success", "query": cypher_query, "result": result}
     except Exception as exc:
-        return {"status": "error", "error": str(exc)}
+        return {"status": "error", "message": str(exc)}
 
 
 @mcp_tool(
@@ -192,13 +186,12 @@ def git_analysis_list_indexed() -> dict[str, Any]:
         b = _bridge(".")
         if not b.check_availability():
             return {
-                "status": "error",
-                "error": "GitNexus not available. Install Node.js or npx.",
+                "status": "error", "message": "GitNexus not available. Install Node.js or npx.",
             }
         repos = b.list_repos()
-        return {"status": "ok", "repos": repos, "count": len(repos)}
+        return {"status": "success", "repos": repos, "count": len(repos)}
     except Exception as exc:
-        return {"status": "error", "error": str(exc)}
+        return {"status": "error", "message": str(exc)}
 
 
 # ── GitPython Tools (commit history analysis) ───────────────────────────────
@@ -220,11 +213,11 @@ def git_analysis_commit_history(
         result = _analyzer(repo_path).get_commit_history(
             max_count=max_count, branch=branch
         )
-        return {"status": "ok", "commits": result, "count": len(result)}
+        return {"status": "success", "commits": result, "count": len(result)}
     except ValueError as exc:
-        return {"status": "error", "error": str(exc)}
+        return {"status": "error", "message": str(exc)}
     except Exception as exc:
-        return {"status": "error", "error": str(exc)}
+        return {"status": "error", "message": str(exc)}
 
 
 @mcp_tool(
@@ -238,9 +231,9 @@ def git_analysis_contributor_stats(repo_path: str = ".") -> dict[str, Any]:
     """Get per-contributor aggregate statistics across the full git history."""
     try:
         result = _analyzer(repo_path).get_contributor_stats()
-        return {"status": "ok", "contributors": result, "count": len(result)}
+        return {"status": "success", "contributors": result, "count": len(result)}
     except Exception as exc:
-        return {"status": "error", "error": str(exc)}
+        return {"status": "error", "message": str(exc)}
 
 
 @mcp_tool(
@@ -255,11 +248,11 @@ def git_analysis_code_churn(repo_path: str = ".", top_n: int = 20) -> dict[str, 
     try:
         top_n = _validate_positive_int("top_n", top_n, 20)
         result = _analyzer(repo_path).get_code_churn(top_n=top_n)
-        return {"status": "ok", "files": result, "count": len(result)}
+        return {"status": "success", "files": result, "count": len(result)}
     except ValueError as exc:
-        return {"status": "error", "error": str(exc)}
+        return {"status": "error", "message": str(exc)}
     except Exception as exc:
-        return {"status": "error", "error": str(exc)}
+        return {"status": "error", "message": str(exc)}
 
 
 @mcp_tool(
@@ -273,9 +266,9 @@ def git_analysis_branch_topology(repo_path: str = ".") -> dict[str, Any]:
     """Get branch names, tip commits, and active branch for a repository."""
     try:
         result = _analyzer(repo_path).get_branch_topology()
-        return {"status": "ok", **result}
+        return {"status": "success", **result}
     except Exception as exc:
-        return {"status": "error", "error": str(exc)}
+        return {"status": "error", "message": str(exc)}
 
 
 @mcp_tool(
@@ -290,12 +283,12 @@ def git_analysis_commit_frequency(
 ) -> dict[str, Any]:
     """Get commit frequency bucketed by time period (day/week/month)."""
     if by not in {"day", "week", "month"}:
-        return {"status": "error", "error": f"by must be one of 'day', 'week', 'month', got {by!r}"}
+        return {"status": "error", "message": f"by must be one of 'day', 'week', 'month', got {by!r}"}
     try:
         result = _analyzer(repo_path).get_commit_frequency(by=by)
-        return {"status": "ok", "frequency": result, "bucket": by}
+        return {"status": "success", "frequency": result, "bucket": by}
     except Exception as exc:
-        return {"status": "error", "error": str(exc)}
+        return {"status": "error", "message": str(exc)}
 
 
 @mcp_tool(
@@ -319,11 +312,11 @@ def git_analysis_filtered_history(
         result = _analyzer(repo_path).get_commit_history_filtered(
             max_count=max_count, since=since, until=until, author=author, branch=branch
         )
-        return {"status": "ok", "commits": result, "count": len(result)}
+        return {"status": "success", "commits": result, "count": len(result)}
     except ValueError as exc:
-        return {"status": "error", "error": str(exc)}
+        return {"status": "error", "message": str(exc)}
     except Exception as exc:
-        return {"status": "error", "error": str(exc)}
+        return {"status": "error", "message": str(exc)}
 
 
 @mcp_tool(
@@ -340,11 +333,11 @@ def git_analysis_file_history(
     try:
         max_count = _validate_positive_int("max_count", max_count, 50)
         result = _analyzer(repo_path).get_file_history(file_path=file_path, max_count=max_count)
-        return {"status": "ok", "file": file_path, "commits": result, "count": len(result)}
+        return {"status": "success", "file": file_path, "commits": result, "count": len(result)}
     except ValueError as exc:
-        return {"status": "error", "error": str(exc)}
+        return {"status": "error", "message": str(exc)}
     except Exception as exc:
-        return {"status": "error", "error": str(exc)}
+        return {"status": "error", "message": str(exc)}
 
 
 @mcp_tool(
@@ -361,11 +354,11 @@ def git_analysis_directory_churn(
     try:
         top_n = _validate_positive_int("top_n", top_n, 10)
         result = _analyzer(repo_path).get_churn_by_directory(top_n=top_n)
-        return {"status": "ok", "directories": result, "count": len(result)}
+        return {"status": "success", "directories": result, "count": len(result)}
     except ValueError as exc:
-        return {"status": "error", "error": str(exc)}
+        return {"status": "error", "message": str(exc)}
     except Exception as exc:
-        return {"status": "error", "error": str(exc)}
+        return {"status": "error", "message": str(exc)}
 
 
 @mcp_tool(
@@ -382,8 +375,8 @@ def git_analysis_hotspots(
     try:
         top_n = _validate_positive_int("top_n", top_n, 20)
         result = _analyzer(repo_path).get_hotspot_analysis(top_n=top_n)
-        return {"status": "ok", "hotspots": result, "count": len(result)}
+        return {"status": "success", "hotspots": result, "count": len(result)}
     except ValueError as exc:
-        return {"status": "error", "error": str(exc)}
+        return {"status": "error", "message": str(exc)}
     except Exception as exc:
-        return {"status": "error", "error": str(exc)}
+        return {"status": "error", "message": str(exc)}

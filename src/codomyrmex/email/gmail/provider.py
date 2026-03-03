@@ -8,7 +8,7 @@ import os
 from datetime import UTC, datetime
 
 try:
-    from codomyrmex.logging_monitoring.core.logger_config import get_logger
+    from codomyrmex.logging_monitoring import get_logger
     logger = get_logger(__name__)
 except Exception:
     logger = logging.getLogger(__name__)

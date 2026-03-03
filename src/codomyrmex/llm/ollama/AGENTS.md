@@ -27,7 +27,7 @@ Local LLM integration via Ollama. Manages server lifecycle, model listing/downlo
 - `run_model` tries HTTP API first, falls back to CLI subprocess.
 - `base_url` defaults to `os.getenv("OLLAMA_BASE_URL", DEFAULT_OLLAMA_URL)`.
 - `ModelRunner.run_batch` uses `asyncio.Semaphore` for concurrency control.
-- `OutputManager` creates directory structure (`outputs/`, `configs/`, `logs/`, `reports/`) on init.
+- `OutputManager` creates directory structure (`output/`, `configs/`, `logs/`, `reports/`) on init.
 - Errors must be logged via `logging_monitoring` before re-raising.
 
 ## Integration Points

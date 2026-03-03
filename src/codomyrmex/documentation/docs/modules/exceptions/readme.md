@@ -1,81 +1,41 @@
-# Exceptions Module
+# Exceptions
 
-**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.0.8 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-The `exceptions` package provides a comprehensive, hierarchical error handling system for the Codomyrmex ecosystem. It defines a base `CodomyrmexError` class and specialized exceptions for all major domains (AI, I/O, Git, Validation, CEREBRUM, etc.), ensuring consistent error reporting and handling across the codebase.
+Codomyrmex Exception Classes.
 
-## PAI Integration
+## Architecture Overview
 
-| Algorithm Phase | Role | Tools Used |
-|----------------|------|-----------|
-| **ALL PHASES** | Raise and catch structured errors throughout the pipeline | Direct Python import |
-| **VERIFY** | Validate error handling behavior and exception chains | Direct Python import |
-
-PAI agents access this module via direct Python import through the MCP bridge. All agents import CodomyrmexError subclasses for structured error handling; the QATester validates exception chains during VERIFY phase.
-
-## Key Components
-
-### Base Exceptions (`base.py`)
-
-- **`CodomyrmexError`** — The root exception class. All project exceptions inherit from this.
-  - Attributes: `message`, `context` (dict), `error_code`.
-  - Methods: `to_dict()` for serialization.
-- **`format_exception_chain()`** — continued utility for formatting exception chains.
-- **`create_error_context()`** — Utility for creating structured error contexts.
-
-### Categories
-
-The exceptions are organized into logical modules:
-
-- **`config.py`** — `ConfigurationError`, `EnvironmentError`, `DependencyError`
-- **`io.py`** — `FileOperationError`, `DirectoryError`
-- **`ai.py`** — `AIProviderError`, `CodeGenerationError`, `ModelContextError`
-- **`analysis.py`** — `StaticAnalysisError`, `SecurityAuditError`
-- **`execution.py`** — `CodeExecutionError`, `SandboxError`, `BuildError`
-- **`git.py`** — `GitOperationError`, `RepositoryError`
-- **`network.py`** — `NetworkError`, `APIError`, `ValidationError`
-- **`orchestration.py`** — `OrchestrationError`, `WorkflowError`
-- **`viz.py`** — `VisualizationError`, `DocumentationError`
-- **`cerebrum.py`** — Cognitive system errors (`CerebrumError`, `InferenceError`)
-- **`specialized.py`** — Domain-specific errors (`DatabaseError`, `CacheError`, `PluginError`)
-
-## Usage
-
-```python
-from codomyrmex.exceptions import FileOperationError, create_error_context
-
-try:
-    process_file("data.txt")
-except FileOperationError as e:
-    # Access structured context
-    filepath = e.context.get("file_path")
-    logger.error(f"Failed to process {filepath}: {e}")
 ```
-
-## Directory Structure
-
-```text
 exceptions/
-├── __init__.py      # Re-exports all exceptions
-├── base.py          # Root CodomyrmexError
-├── config.py        # Config/Env errors
-├── io.py            # File/Dir errors
-├── ai.py            # AI/LLM errors
-├── analysis.py      # Static analysis errors
-├── execution.py     # Runtime/Sandbox errors
-├── git.py           # VSC errors
-├── network.py       # API/Net errors
-├── orchestration.py # Workflow errors
-├── viz.py           # Visualization errors
-├── cerebrum.py      # Cognitive errors
-└── specialized.py   # Misc domain errors
+    __init__.py              # Public API exports
 ```
+
+## Key Exports
+
+- **`CodomyrmexError`**
+- **`format_exception_chain`**
+- **`create_error_context`**
+- **`ConfigurationError`**
+- **`EnvironmentError`**
+- **`DependencyError`**
+- **`FileOperationError`**
+- **`DirectoryError`**
+- **`AIProviderError`**
+- **`CodeGenerationError`**
+- **`CodeEditingError`**
+- **`ModelContextError`**
+- **`StaticAnalysisError`**
+- **`PatternMatchingError`**
+- **`SecurityAuditError`**
+
+## Related Modules
+
+See [All Modules](../README.md) for the complete module listing.
 
 ## Navigation
 
-- **Extended Docs**: [docs/modules/exceptions/](../../../docs/modules/exceptions/)
-- **Parent Directory**: [codomyrmex](../README.md)
-- **Project Root**: ../../../README.md
-- **Related**: [Validation](../validation/README.md)
+- **Source**: [src/codomyrmex/exceptions/](../../../../src/codomyrmex/exceptions/)
+- **Parent**: [All Modules](../README.md)

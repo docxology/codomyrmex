@@ -14,7 +14,7 @@ except ImportError:
     ResultStatus = None
 
 # Submodule exports - import first to make available
-from codomyrmex.logging_monitoring.core.logger_config import get_logger
+from codomyrmex.logging_monitoring import get_logger
 
 from . import context, engines, filters
 

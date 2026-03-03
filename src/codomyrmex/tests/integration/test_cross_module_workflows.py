@@ -69,13 +69,13 @@ except ImportError:
     MODULE_AVAILABILITY["ci_cd"] = False
 
 try:
-    from codomyrmex.logging_monitoring.core.logger_config import PerformanceLogger
+    from codomyrmex.logging_monitoring import PerformanceLogger
     MODULE_AVAILABILITY["performance_logging"] = True
 except ImportError:
     MODULE_AVAILABILITY["performance_logging"] = False
 
 try:
-    from codomyrmex.logging_monitoring.core.logger_config import (
+    from codomyrmex.logging_monitoring import (
         get_logger,
         setup_logging,
     )

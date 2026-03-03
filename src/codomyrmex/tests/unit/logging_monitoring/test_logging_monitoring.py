@@ -69,7 +69,7 @@ class TestLoggingMonitoring:
 
     def test_json_logging_format(self):
         """Test JSON logging format capabilities."""
-        from codomyrmex.logging_monitoring.core.logger_config import JSONFormatter
+        from codomyrmex.logging_monitoring import JSONFormatter
 
         # Test that JSONFormatter exists and can be instantiated
         formatter = JSONFormatter()
@@ -96,7 +96,7 @@ class TestLoggingMonitoring:
 
     def test_environment_variable_configuration(self):
         """Test that environment variables are properly read."""
-        from codomyrmex.logging_monitoring.core.logger_config import (
+        from codomyrmex.logging_monitoring import (
             DEFAULT_LOG_FORMAT,
             DETAILED_LOG_FORMAT,
         )
@@ -154,7 +154,7 @@ class TestLoggingMonitoring:
 
     def test_log_with_context(self, caplog):
         """Test logging with structured context."""
-        from codomyrmex.logging_monitoring.core.logger_config import log_with_context
+        from codomyrmex.logging_monitoring import log_with_context
 
         with caplog.at_level(logging.INFO):
             context = {"user_id": "12345", "operation": "test_op"}
@@ -170,7 +170,7 @@ class TestLoggingMonitoring:
 
     def test_create_correlation_id(self):
         """Test correlation ID generation."""
-        from codomyrmex.logging_monitoring.core.logger_config import (
+        from codomyrmex.logging_monitoring import (
             create_correlation_id,
         )
 
@@ -189,7 +189,7 @@ class TestLoggingMonitoring:
 
     def test_log_context_manager(self, caplog):
         """Test LogContext context manager."""
-        from codomyrmex.logging_monitoring.core.logger_config import (
+        from codomyrmex.logging_monitoring import (
             LogContext,
             log_with_context,
         )

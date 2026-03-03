@@ -1,166 +1,114 @@
 # Orchestrator Module
 
-**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.0.8 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Script orchestration engine for discovering, configuring, and running Python scripts within the Codomyrmex project. Provides workflow DAG execution with dependency resolution, parallel execution with resource management, retry logic with exponential backoff, conditional step execution, and CI/CD pipeline integration. Includes both a full-featured workflow system and a thin convenience API for common patterns.
+The Orchestrator module provides script discovery, workflow DAG execution, parallel and async runners, retry policies, and CI/CD integration bridges. It enables both simple script execution and complex multi-step workflow orchestration with dependency resolution, progress streaming, and resource management.
 
 ## PAI Integration
 
-The orchestrator module is central to PAI's **PLAN phase**. The `Architect` subagent uses `analyze_workflow_dependencies` to validate DAG structure and detect cycles before BUILD begins. The `QATester` subagent reads `get_scheduler_metrics` during VERIFY to confirm workflow execution completed without deadlocks or timeouts. See [AGENTS.md](AGENTS.md) for the full agent role access matrix.
-
 | Algorithm Phase | Orchestrator Role |
-|----------------|------------------|
-| PLAN | `Architect` → `analyze_workflow_dependencies` to validate DAG |
-| EXECUTE | `Engineer` → `Workflow` / `ParallelRunner` for parallel task execution |
-| VERIFY | `QATester` → `get_scheduler_metrics` to confirm execution health |
+|----------------|-------------------|
+| PLAN | Workflow DAG construction and dependency analysis |
+| EXECUTE | Script/function execution, parallel runners, async schedulers |
+| VERIFY | Workflow validation (cycle detection), scheduler metrics |
+| OBSERVE | Execution result reporting, progress streaming |
 
 ## Key Exports
 
-### Core Orchestration
-
-- **`run_orchestrator`** -- Main entry point from `core.py` for running the orchestrator
-- **`load_config()`** -- Load orchestrator configuration from file
-- **`get_script_config()`** -- Get configuration for a specific script
-- **`discover_scripts()`** -- Discover runnable scripts in the project
-
-### Workflow DAG
-
-- **`Workflow`** -- DAG-based workflow with task dependencies, parallel execution, and cycle detection
-- **`Task`** -- A single unit of work within a workflow with status tracking
-- **`TaskStatus`** -- Task lifecycle states (pending, running, completed, failed)
-- **`TaskResult`** -- Result of task execution with output and error info
-- **`RetryPolicy`** -- Configurable retry strategy with backoff parameters
-- **`chain()`** -- Helper to create a linear chain of dependent tasks
-- **`parallel()`** -- Helper to create tasks that run in parallel
-- **`fan_out_fan_in()`** -- Pattern for distributing work and collecting results
-
-### Exceptions
-
-- **`WorkflowError`** -- Base workflow exception
-- **`CycleError`** -- Raised when a dependency cycle is detected in the workflow DAG
-- **`TaskFailedError`** -- Raised when a task fails execution
-- **`StepError`** -- Error in a specific orchestration step
-- **`OrchestratorTimeoutError`** -- Raised when execution exceeds timeout
-- **`StateError`** -- Invalid orchestrator state transition
-- **`DependencyResolutionError`** -- Cannot resolve task dependencies
-- **`ConcurrencyError`** -- Error in parallel execution
-
-### Runners
-
-- **`run_script()`** -- Execute a script by path
-- **`run_function()`** -- Execute a Python callable as a task
-- **`ParallelRunner`** -- Manages concurrent execution of multiple tasks with thread/process pools
-- **`BatchRunner`** -- Runs tasks in configurable batch sizes
-- **`ExecutionResult`** -- Result container for parallel execution
-- **`run_parallel()`** -- Synchronous parallel execution helper
-- **`run_parallel_async()`** -- Async parallel execution helper
-
-### Thin API
-
-- **`run()`** -- Simple synchronous script runner
-- **`run_async()`** -- Simple async script runner
-- **`pipe()`** -- Pipe output of one step into the next
-- **`batch()`** -- Run items in batches
-- **`chain_scripts()`** -- Chain scripts sequentially
-- **`workflow()`** -- Define a workflow from step functions
-- **`step()`** -- Define a single step
-- **`Steps`** -- Collection of step definitions
-- **`StepResult`** -- Result of a thin-API step
-- **`shell()`** -- Run a shell command as a step
-- **`python_func()`** -- Run a Python function as a step
-- **`retry()`** -- Retry decorator for steps
-- **`timeout()`** -- Timeout decorator for steps
-- **`condition()`** -- Conditional execution wrapper
-
-### Integration Bridges
-
-- **`OrchestratorBridge`** -- Bridge between orchestrator and external systems
-- **`CICDBridge`** -- Integration with CI/CD pipelines
-- **`AgentOrchestrator`** -- Orchestrate AI agent task execution
-- **`StageConfig`** -- Configuration for a CI/CD pipeline stage
-- **`PipelineConfig`** -- Full pipeline configuration
-- **`create_pipeline_workflow()`** -- Convert pipeline config into a workflow
-- **`run_ci_stage()`** -- Execute a single CI/CD stage
-- **`run_agent_task()`** -- Execute an agent-orchestrated task
-
-### Submodules
-
-- **`engines`** -- Execution engine implementations
-- **`schedulers`** -- Task scheduling strategies
-- **`workflows`** -- Pre-built workflow templates
-- **`monitors`** -- Execution monitoring and observability
-- **`pipelines`** -- Pipeline definition and management
-- **`triggers`** -- Event-based workflow triggers
-- **`state`** -- Workflow state persistence
-- **`templates`** -- Reusable workflow templates
-
-## Directory Contents
-
-- `__init__.py` - Module exports and submodule registration
-- `core.py` - Main orchestrator entry point
-- `config.py` - Configuration loading and script config access
-- `discovery.py` - Script discovery across the project
-- `workflow.py` - Workflow DAG, Task, RetryPolicy, and topology helpers
-- `exceptions.py` - Orchestrator-specific exception hierarchy
-- `runner.py` - Single-script and function execution
-- `parallel_runner.py` - ParallelRunner, BatchRunner, and parallel execution helpers
-- `thin.py` - Thin convenience API (run, pipe, batch, shell, etc.)
-- `integration.py` - CI/CD and agent integration bridges
-- `reporting.py` - Execution reporting utilities
-- `engines/` - Execution engine implementations
-- `schedulers/` - Task scheduling strategies
-- `workflows/` - Pre-built workflow definitions
-- `monitors/` - Execution monitoring
-- `pipelines/` - Pipeline management
-- `triggers/` - Event-based triggers
-- `state/` - State persistence
-- `templates/` - Reusable templates
+| Export | Type | Description |
+|--------|------|-------------|
+| `Workflow` | class | DAG-based workflow with tasks and dependencies |
+| `Task` | class | Individual workflow task with function, retry, and timeout |
+| `TaskStatus` | enum | Task states (PENDING, RUNNING, COMPLETED, FAILED, etc.) |
+| `ParallelRunner` | class | Concurrent execution of multiple targets |
+| `BatchRunner` | class | Batch processing with worker pools |
+| `AsyncScheduler` | class | Async job scheduling with metrics tracking |
+| `AsyncParallelRunner` | class | Async parallel execution |
+| `with_retry` | decorator | Retry decorator with configurable policy |
+| `run_script` | function | Execute a Python script with timeout |
+| `run_function` | function | Execute a Python function with tracing |
+| `discover_scripts` | function | Discover scripts in a directory tree |
+| `chain` | function | Chain tasks sequentially in a workflow |
+| `parallel` | function | Run tasks in parallel in a workflow |
+| `fan_out_fan_in` | function | Fan-out/fan-in workflow pattern |
+| `OrchestratorBridge` | class | Bridge to external orchestration systems |
+| `CICDBridge` | class | CI/CD pipeline integration |
+| `AgentOrchestrator` | class | Agent task orchestration |
 
 ## Quick Start
 
 ```python
-import asyncio
-from codomyrmex.orchestrator import Workflow, RetryPolicy
+from codomyrmex.orchestrator import Workflow, Task, chain, parallel
 
-def fetch_data():
-    return {"users": 150}
+# Build a workflow
+wf = Workflow(name="my_pipeline")
+t1 = Task(id="lint", func=lambda: print("Linting..."))
+t2 = Task(id="test", func=lambda: print("Testing..."))
+t3 = Task(id="build", func=lambda: print("Building..."))
 
-def transform(data):
-    return {k: v * 2 for k, v in data.items()}
+wf.add_task(t1)
+wf.add_task(t2)
+wf.add_task(t3)
+wf.add_dependency("test", "lint")  # test depends on lint
+wf.add_dependency("build", "test") # build depends on test
 
-def report(result):
-    print(f"Report: {result}")
-
-wf = Workflow(name="etl-pipeline", fail_fast=True)
-wf.add_task("fetch", action=fetch_data)
-wf.add_task("transform", action=transform, dependencies=["fetch"],
-            retry_policy=RetryPolicy(max_attempts=3))
-wf.add_task("report", action=report, dependencies=["transform"])
-
-results = asyncio.run(wf.run())
-print(wf.get_summary())
+wf.execute()
 ```
+
+## Architecture
+
+```
+orchestrator/
+  __init__.py              # Public API (60+ exports)
+  core.py                  # Main entry point, argument parsing, script runner
+  config.py                # load_config, get_script_config
+  discovery.py             # discover_scripts
+  exceptions.py            # StepError, OrchestratorTimeoutError, StateError, etc.
+  thin.py                  # Lightweight orchestration: run, pipe, batch, step, shell
+  integration.py           # OrchestratorBridge, CICDBridge, AgentOrchestrator
+  mcp_tools.py             # MCP tools: get_scheduler_metrics, analyze_workflow_dependencies
+  agent_supervisor.py      # Agent supervision
+  heartbeat.py             # Heartbeat monitoring
+  module_connector.py      # Module connection
+  process_orchestrator.py  # Process-level orchestration
+  triage_engine.py         # Triage and routing
+  engines/                 # Execution engine implementations
+  execution/
+    runner.py              # run_script, run_function
+    parallel_runner.py     # ParallelRunner, BatchRunner, run_parallel
+    async_runner.py        # AsyncParallelRunner, AsyncTaskResult
+    async_scheduler.py     # AsyncScheduler, AsyncJob, SchedulerMetrics
+  monitors/                # Execution monitoring
+  observability/
+    reporting.py           # generate_report, save_log
+  pipelines/               # Pipeline definitions
+  resilience/
+    retry_policy.py        # with_retry decorator
+  scheduler/               # Scheduler implementations
+  state/                   # State management
+  templates/               # Workflow templates
+  triggers/                # Event triggers
+  workflows/
+    workflow.py            # Workflow, Task, TaskResult, TaskStatus, chain, parallel, fan_out_fan_in
+```
+
+## MCP Tools
+
+| Tool Name | Description | Parameters |
+|-----------|-------------|------------|
+| `get_scheduler_metrics` | Retrieve AsyncScheduler metrics (jobs scheduled, completed, failed) | None |
+| `analyze_workflow_dependencies` | Analyze a proposed workflow DAG for cyclic dependencies | `tasks` (list of dicts with `id` and `dependencies`) |
 
 ## Testing
 
 ```bash
-uv run python -m pytest src/codomyrmex/tests/ -k orchestrator -v
+uv run pytest src/codomyrmex/tests/unit/orchestrator/ -v
 ```
-
-## Consolidated Sub-modules
-
-The following modules have been consolidated into this module as sub-packages:
-
-| Sub-module | Description |
-|------------|-------------|
-| **`scheduler/`** | Cron-like scheduling, one-off timers, recurring tasks |
-
-Original standalone modules remain as backward-compatible re-export wrappers.
 
 ## Navigation
 
-- **Full Documentation**: [docs/modules/orchestrator/](../../../docs/modules/orchestrator/)
-- **Parent Directory**: [codomyrmex](../README.md)
-- **Project Root**: ../../../README.md
+- [AGENTS.md](AGENTS.md) -- Agent coordination documentation
+- [SPEC.md](SPEC.md) -- Technical specification
+- [Source Module](../../../../orchestrator/)

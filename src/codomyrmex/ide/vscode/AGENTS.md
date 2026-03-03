@@ -1,6 +1,6 @@
 # Codomyrmex Agents — src/codomyrmex/ide/vscode
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.0.8 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
 

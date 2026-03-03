@@ -4,7 +4,7 @@ Core module for executing Git operations.
 
 import os
 
-from codomyrmex.logging_monitoring.core.logger_config import get_logger, setup_logging
+from codomyrmex.logging_monitoring import get_logger, setup_logging
 from codomyrmex.performance import PERFORMANCE_MONITOR_AVAILABLE
 
 if PERFORMANCE_MONITOR_AVAILABLE:

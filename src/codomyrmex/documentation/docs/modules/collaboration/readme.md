@@ -1,118 +1,52 @@
-# Collaboration Module
+# Collaboration
 
-**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.0.8 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-The collaboration module provides multi-agent collaboration capabilities including agent management, communication channels, task coordination, and message-passing protocols. It supports round-robin, broadcast, capability-routing, and consensus protocols, along with swarm-based task decomposition and parallel execution for orchestrating complex multi-agent workflows.
+The Collaboration module provides multi-agent collaboration capabilities including agent management, communication channels, task coordination, consensus protocols, leader election, and swarm behavior. It enables multiple AI agents to work together on complex tasks through structured communication and task decomposition.
 
-## PAI Integration
+## Architecture Overview
 
-| Algorithm Phase | Role | Tools Used |
-|----------------|------|-----------|
-| **EXECUTE** | Coordinate multi-agent task execution via swarm submission | `swarm_submit_task` |
-| **OBSERVE** | Monitor agent pool availability and capacity | `pool_status`, `list_agents` |
-| **VERIFY** | Confirm task completion and agent pool health | `pool_status` |
-
-PAI uses the collaboration module to orchestrate multi-agent workflows. Engineer agents use `swarm_submit_task` during EXECUTE for parallelized work; `pool_status` monitors agent availability during OBSERVE. This module enables PAI's Fan-out composition pattern across multiple specialized agents.
-
-## Installation
-
-```bash
-uv add codomyrmex
+```
+collaboration/
+├── __init__.py              # Public API (40+ exports)
+├── models.py                # Task, TaskResult, TaskPriority, TaskStatus, AgentStatus, SwarmStatus
+├── exceptions.py            # CollaborationError hierarchy (12 exception types)
+├── mcp_tools.py             # MCP tools (swarm_submit_task, pool_status, list_agents)
+├── agents/                  # Agent management (workers, supervisors, registry)
+├── communication/           # Channels, broadcasting, direct messaging
+├── coordination/            # Task management, consensus, leader election
+├── protocols/               # Message passing, swarm behavior, routing protocols
+└── swarm/                   # SwarmManager, AgentPool, MessageBus, TaskDecomposer
 ```
 
-Or for development:
+## Key Classes and Functions
 
-```bash
-uv sync
-```
+**`SwarmManager`** -- High-level swarm orchestration managing agent pools and task distribution.
 
-## Key Exports
+**`AgentPool`** -- Pool of agents with load balancing.
 
-### Data Models
+**`MessageBus`** -- Inter-agent message bus for communication.
 
-- **`TaskPriority`** -- Enum for task priority levels used in coordination
-- **`TaskStatus`** -- Enum tracking task lifecycle states
-- **`Task`** -- Core task representation with priority, status, dependencies, and metadata
-- **`TaskResult`** -- Result container for completed task executions
-- **`SwarmStatus`** -- Status tracking for swarm-based multi-agent operations
-- **`AgentStatus`** -- Individual agent availability and health status
+**`TaskDecomposer`** -- Breaks complex tasks into subtasks for parallel execution.
 
-### Protocol Classes
+**Protocol classes:** `RoundRobinProtocol`, `BroadcastProtocol`, `CapabilityRoutingProtocol`, `ConsensusProtocol`.
 
-- **`AgentState`** -- Enum representing agent operational states
-- **`MessageType`** -- Enum classifying inter-agent message types
-- **`AgentMessage`** -- Structured message for agent-to-agent communication
-- **`AgentCapability`** -- Declares what an agent can do, used for capability-based routing
-- **`AgentProtocol`** -- Abstract base protocol for agent communication patterns
-- **`BaseAgent`** -- Base class for all collaborative agents with message handling
-- **`AgentCoordinator`** -- Central coordinator managing agent registration and task dispatch
-- **`RoundRobinProtocol`** -- Distributes tasks evenly across available agents in rotation
-- **`BroadcastProtocol`** -- Sends messages to all registered agents simultaneously
-- **`CapabilityRoutingProtocol`** -- Routes tasks to agents based on declared capabilities
-- **`ConsensusProtocol`** -- Achieves agreement among agents through voting mechanisms
+## MCP Tools Reference
 
-### Swarm Components
+| Tool | Description | Parameters | Trust Level |
+|------|-------------|------------|-------------|
+| `swarm_submit_task` | Submit a task to the swarm for execution | `task: dict` | Safe |
+| `pool_status` | Get current agent pool status | (none) | Safe |
+| `list_agents` | List agents in the collaboration system | (none) | Safe |
 
-- **`SwarmManager`** -- Orchestrates swarm-based parallel task execution across agent proxies
-- **`AgentProxy`** -- Lightweight proxy representing a remote agent in the swarm
-- **`TaskDecomposer`** -- Breaks complex tasks into subtasks for parallel swarm execution
+## Related Modules
 
-### Exceptions
-
-- **`CollaborationError`** -- Base exception for all collaboration failures
-- **`AgentNotFoundError`** -- Raised when referencing a non-existent agent
-- **`AgentBusyError`** -- Raised when an agent cannot accept new tasks
-- **`TaskExecutionError`** -- Raised when task execution fails
-- **`TaskNotFoundError`** -- Raised when referencing a non-existent task
-- **`TaskDependencyError`** -- Raised when task dependencies cannot be satisfied
-- **`ConsensusError`** -- Raised when consensus cannot be reached
-- **`ChannelError`** -- Raised on communication channel failures
-- **`MessageDeliveryError`** -- Raised when message delivery fails
-- **`CoordinationError`** -- Raised on general coordination failures
-- **`LeaderElectionError`** -- Raised when leader election fails
-- **`CapabilityMismatchError`** -- Raised when no agent matches required capabilities
-
-### Submodules
-
-- **`agents`** -- Agent definitions, workers, supervisors, and registry
-- **`communication`** -- Communication channels, broadcasting, and direct messaging
-- **`coordination`** -- Task management, consensus, and leader election
-- **`protocols`** -- Message passing protocols and swarm behavior
-
-## Directory Contents
-
-- `__init__.py` - Module entry point; exports all models, protocols, exceptions, and submodules
-- `models.py` - Core data models (`Task`, `TaskResult`, `TaskPriority`, `TaskStatus`, `SwarmStatus`, `AgentStatus`)
-- `exceptions.py` - Full exception hierarchy for collaboration error handling (deprecated, now uses global exceptions)
-- `agents/` - Agent implementations (workers, supervisors, registry)
-- `communication/` - Channel-based messaging (broadcast, direct, pub/sub)
-- `coordination/` - Task coordination, consensus algorithms, leader election
-- `protocols/` - Communication protocols (round-robin, broadcast, capability routing, consensus, swarm)
-- `AGENTS.md` - Agent integration specification
-- `API_SPECIFICATION.md` - Programmatic interface documentation
-- `SECURITY.md` - Security considerations
-- `SPEC.md` - Module specification
-- `PAI.md` - PAI integration notes
-
-## Quick Start
-
-```python
-from codomyrmex.collaboration import CollaborationError, AgentNotFoundError, AgentBusyError
-
-# Initialize CollaborationError
-instance = CollaborationError()
-```
-
-## Testing
-
-```bash
-uv run python -m pytest src/codomyrmex/tests/ -k collaboration -v
-```
+- [`agents`](../agents/readme.md) -- Individual agent implementations
+- [`orchestrator`](../orchestrator/readme.md) -- Workflow orchestration
 
 ## Navigation
 
-- **Full Documentation**: [docs/modules/collaboration/](../../../docs/modules/collaboration/)
-- **Parent Directory**: [codomyrmex](../README.md)
-- **Project Root**: ../../../README.md
+- **Source**: [src/codomyrmex/collaboration/](../../../../src/codomyrmex/collaboration/)
+- **Parent**: [All Modules](../README.md)

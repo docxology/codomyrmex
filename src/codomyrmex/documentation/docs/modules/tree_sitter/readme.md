@@ -1,98 +1,41 @@
-# Tree-Sitter Module
+# Tree Sitter
 
-**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.0.8 | **Status**: Active | **Last Updated**: March 2026
 
-Code parsing with tree-sitter for syntax analysis and transformations.
+## Overview
 
-## PAI Integration
+Tree-sitter parsing module for Codomyrmex.
 
-| Algorithm Phase | Role | Tools Used |
-|----------------|------|-----------|
-| **OBSERVE** | Parse code into ASTs for deep structural analysis | Direct Python import |
-| **BUILD** | Extract code structure to inform code generation | Direct Python import |
-| **VERIFY** | Validate syntax correctness of generated or modified code | Direct Python import |
+## Architecture Overview
 
-PAI agents access this module via direct Python import through the MCP bridge to parse, query, and transform syntax trees across supported languages.
-
-## Installation
-
-```bash
-uv add codomyrmex
 ```
-
-Or for development:
-
-```bash
-uv sync
+tree_sitter/
+    __init__.py              # Public API exports
+    mcp_tools.py             # MCP tool definitions
 ```
 
 ## Key Exports
 
-### Submodules
+- **`TreeSitterParser`**
+- **`LanguageManager`**
+- **`parsers`**
+- **`languages`**
+- **`queries`**
+- **`transformers`**
 
-- **`languages/`** — Language support submodule.
-- **`parsers/`** — Tree-sitter parser utilities.
-- **`queries/`** — Query building submodule.
-- **`transformers/`** — AST transformers submodule.
+## MCP Tools Reference
 
-## Quick Start
+| Tool | Trust Level |
+|------|-------------|
+| `parse_code` | Safe |
+| `list_languages` | Safe |
+| `extract_symbols` | Safe |
 
-```python
-from codomyrmex.coding.parsers.tree_sitter import TreeSitterParser, LanguageManager
+## Related Modules
 
-# Load language
-manager = LanguageManager()
-manager.load("python")
-manager.load("javascript")
-
-# Parse code
-parser = TreeSitterParser(language="python")
-tree = parser.parse('''
-def hello(name):
-    return f"Hello, {name}!"
-''')
-
-# Query syntax tree
-functions = parser.query("(function_definition) @func")
-for node in functions:
-    print(f"Function: {node.text}")
-
-# Extract structure
-classes = parser.query("(class_definition name: (identifier) @name)")
-```
-
-## Submodules
-
-| Module | Description |
-|--------|-------------|
-| `parsers` | Parser implementation |
-| `languages` | Language loading and management |
-| `queries` | Tree-sitter query patterns |
-| `transformers` | AST transformations |
-
-## Exports
-
-| Class | Description |
-|-------|-------------|
-| `TreeSitterParser` | Parse code to syntax tree |
-| `LanguageManager` | Load and manage languages |
-
-## Supported Languages
-
-Python, JavaScript, TypeScript, Go, Rust, C, C++, Java, and more via language packs.
-
-## Testing
-
-```bash
-uv run python -m pytest src/codomyrmex/tests/ -k tree_sitter -v
-```
-
-## Documentation
-
-- [Module Documentation](../../../../../docs/modules/tree_sitter/README.md)
-- [Agent Guide](../../../../../docs/modules/tree_sitter/AGENTS.md)
-- [Specification](../../../../../docs/modules/tree_sitter/SPEC.md)
+See [All Modules](../README.md) for the complete module listing.
 
 ## Navigation
 
-- [SPEC](SPEC.md) | [AGENTS](AGENTS.md) | [PAI](PAI.md)
+- **Source**: [src/codomyrmex/tree_sitter/](../../../../src/codomyrmex/tree_sitter/)
+- **Parent**: [All Modules](../README.md)

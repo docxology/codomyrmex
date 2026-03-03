@@ -19,6 +19,7 @@ PAI agents access this module via direct Python import through the MCP bridge to
 ## Features
 
 ### Video Processing
+
 - **Resize** - Scale videos to target dimensions
 - **Crop** - Extract regions from video
 - **Rotate** - Rotate by any angle
@@ -28,29 +29,46 @@ PAI agents access this module via direct Python import through the MCP bridge to
 - **Merge** - Concatenate multiple videos
 
 ### Frame Extraction
+
 - Extract single frames at timestamp
 - Extract frames at intervals
 - Generate thumbnails
 - Save frames to files
 
 ### Audio Extraction
+
 - Extract audio tracks
 - Multiple output formats (MP3, WAV, AAC)
 
 ### Video Analysis
+
 - Get complete video metadata
 - Duration, resolution, FPS, codec
 - Frame count, aspect ratio
 - Compare two videos
 
+## AI Generation & Google AI Ultra Support
+
+While this structural module executes manual video processing ops via OpenCV and MoviePy, the Codomyrmex multi-modal ecosystem inherently connects to generative models natively.
+
+For advanced generative workflows, Codomyrmex officially recommends leveraging the **Google AI Ultra subscription** via the `codomyrmex.agents.gemini` sub-module:
+
+- **Veo 3 & 3.1 Support:** The API pipelines natively hook into Veo architectures, allowing text-to-video and image-to-video (Flow & Whisk) processing.
+- **Native Audio Generation:** The Veo 3/3.1 pipelines intrinsically generate companion environmental tracks and character dialogue locked to the visual output.
+- **Quota Reliability:** By bridging an API key authorized on a Google Workspace or Consumer Google One Ultra tier, the ecosystem bypasses the 429 quota exhaustion commonly seen on Gemini's free tier.
+
+*Note: Access to bleeding-edge tools like Project Mariner and Deep Think Agent features remains US-only per Google's rollout strategy.*
+
 ## Key Exports
 
 ### Processing Classes (when dependencies available)
+
 - **`VideoProcessor`** — Video manipulation operations (resize, crop, rotate, convert, filter, trim, merge)
 - **`FrameExtractor`** — Frame extraction, thumbnail generation, and audio extraction from video
 - **`VideoAnalyzer`** — Video metadata extraction, duration queries, and comparison
 
 ### Exceptions
+
 - **`VideoError`** — Base exception for all video-related errors
 - **`VideoReadError`** — Raised when reading a video file fails (not found, corrupted, missing codec)
 - **`VideoWriteError`** — Raised when writing a video file fails (invalid path, disk full, codec error)
@@ -61,10 +79,12 @@ PAI agents access this module via direct Python import through the MCP bridge to
 - **`VideoAnalysisError`** — Raised when video analysis fails (metadata extraction, codec detection)
 
 ### Configuration
+
 - **`VideoConfig`** — Global configuration for video processing (temp dir, codecs, FPS, bitrate defaults)
 - `get_config` / `set_config` / `reset_config` / `configure` — Configuration management functions
 
 ### Data Models
+
 - **`VideoCodec`** — Enum of common video codecs (H264, H265, VP8, VP9, AV1, MPEG4, MJPEG)
 - **`AudioCodec`** — Enum of common audio codecs (AAC, MP3, OPUS, VORBIS, FLAC, PCM)
 - **`VideoInfo`** — Dataclass with complete video file metadata (duration, resolution, FPS, codec, bitrate)
@@ -74,6 +94,7 @@ PAI agents access this module via direct Python import through the MCP bridge to
 - **`FilterType`** — Enum of available video filters (grayscale, blur, sharpen, brightness, etc.)
 
 ### Availability Flags
+
 - **`PIL_AVAILABLE`** — Boolean flag indicating whether Pillow (PIL) image dependencies are available
 - **`MOVIEPY_AVAILABLE`** — Boolean flag indicating whether moviepy video editing dependencies are available
 - **`OPENCV_AVAILABLE`** — Boolean flag indicating whether OpenCV (cv2) dependencies are available
@@ -178,9 +199,11 @@ is_valid = analyzer.is_valid_video("video.mp4")
 ## Supported Formats
 
 ### Input
+
 MP4, AVI, MOV, MKV, WEBM, WMV, FLV, M4V
 
 ### Output
+
 MP4, AVI, MOV, WEBM, MKV
 
 ## Available Filters

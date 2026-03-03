@@ -1,7 +1,7 @@
 import os
 import subprocess
 
-from codomyrmex.logging_monitoring.core.logger_config import get_logger
+from codomyrmex.logging_monitoring import get_logger
 from codomyrmex.model_context_protocol.decorators import mcp_tool
 
 from .status import add_files

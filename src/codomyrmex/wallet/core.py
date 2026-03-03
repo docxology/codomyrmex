@@ -10,7 +10,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 
 from codomyrmex.encryption.keys.key_manager import KeyManager
-from codomyrmex.logging_monitoring.core.logger_config import get_logger
+from codomyrmex.logging_monitoring import get_logger
 
 from .exceptions import WalletError, WalletKeyError, WalletNotFoundError
 

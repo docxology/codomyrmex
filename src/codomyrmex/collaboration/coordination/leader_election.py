@@ -15,7 +15,7 @@ from typing import Any
 
 from codomyrmex.collaboration.agents.base import CollaborativeAgent
 from codomyrmex.collaboration.protocols import AgentState
-from codomyrmex.logging_monitoring.core.logger_config import get_logger
+from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
 

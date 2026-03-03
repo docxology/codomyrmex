@@ -2,7 +2,7 @@
 
 from codomyrmex.documents.exceptions import DocumentConversionError
 from codomyrmex.documents.models.document import Document, DocumentFormat
-from codomyrmex.logging_monitoring.core.logger_config import get_logger
+from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
 

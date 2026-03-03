@@ -189,7 +189,7 @@ class TestDocumentationAccuracy:
 
     def test_logging_api_exists(self):
         """Test that documented logging functions exist."""
-        from codomyrmex.logging_monitoring.core.logger_config import (
+        from codomyrmex.logging_monitoring import (
             get_logger,
             setup_logging,
         )

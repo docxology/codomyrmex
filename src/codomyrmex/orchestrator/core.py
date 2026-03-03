@@ -12,8 +12,7 @@ import sys
 from datetime import datetime
 from pathlib import Path
 
-from codomyrmex.logging_monitoring import get_logger
-from codomyrmex.logging_monitoring.core.logger_config import LogContext
+from codomyrmex.logging_monitoring import LogContext, get_logger
 from codomyrmex.logging_monitoring.handlers.performance import PerformanceLogger
 from codomyrmex.orchestrator.config import get_script_config, load_config
 from codomyrmex.orchestrator.discovery import discover_scripts

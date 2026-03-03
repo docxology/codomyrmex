@@ -17,7 +17,7 @@ from codomyrmex.feature_flags.evaluation import (
 from codomyrmex.feature_flags.rollout import RolloutManager
 from codomyrmex.feature_flags.storage import FlagStore, InMemoryFlagStore
 from codomyrmex.feature_flags.strategies import EvaluationContext
-from codomyrmex.logging_monitoring.core.logger_config import get_logger
+from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
 

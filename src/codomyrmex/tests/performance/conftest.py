@@ -6,7 +6,7 @@ from typing import Any
 
 import pytest
 
-from codomyrmex.logging_monitoring.core.logger_config import setup_logging
+from codomyrmex.logging_monitoring import setup_logging
 
 """
 Shared fixtures and configuration for performance tests.

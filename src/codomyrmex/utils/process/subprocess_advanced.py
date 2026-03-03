@@ -13,7 +13,7 @@ import time
 from collections.abc import Callable, Generator, Mapping, Sequence
 from typing import Any
 
-from codomyrmex.logging_monitoring.core.logger_config import get_logger
+from codomyrmex.logging_monitoring import get_logger
 
 from .subprocess import (
     SubprocessResult,

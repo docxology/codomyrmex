@@ -1,99 +1,32 @@
-# Feature Flags Module
+# Feature Flags
 
-**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.0.8 | **Status**: Active | **Last Updated**: March 2026
 
-Feature flag management with evaluation strategies and gradual rollout.
+## Overview
 
-## PAI Integration
+Feature Flags module for Codomyrmex.
 
-| Algorithm Phase | Role | Tools Used |
-|----------------|------|-----------|
-| **OBSERVE** | Check flag states and current rollout percentages | Direct Python import |
-| **PLAN** | Configure rollout strategies and experiment parameters | Direct Python import |
-| **EXECUTE** | Toggle features during deployments and A/B test execution | Direct Python import |
+## Architecture Overview
 
-PAI agents access this module via direct Python import through the MCP bridge. The Architect agent configures rollout strategies during PLAN, while the Engineer agent toggles flags during EXECUTE for gradual feature releases.
-
-## Installation
-
-```bash
-uv add codomyrmex
 ```
-
-Or for development:
-
-```bash
-uv sync
+feature_flags/
+    __init__.py              # Public API exports
+    mcp_tools.py             # MCP tool definitions
 ```
 
 ## Key Exports
 
-### Classes
-- **`VariantType`** — Experiment variant types.
-- **`Variant`** — An experiment variant.
-- **`Experiment`** — An A/B test experiment.
-- **`Assignment`** — User's experiment assignment.
-- **`ExperimentEvent`** — An experiment analytics event.
-- **`ExperimentManager`** — Manage A/B test experiments.
+- **`strategies`**
+- **`storage`**
+- **`evaluation`**
+- **`rollout`**
+- **`cli_commands`**
 
-### Submodules
-- **`core/`** — Core flag management submodule.
-- **`evaluation/`** — Flag evaluation submodule.
-- **`rollout/`** — Gradual rollout submodule.
-- **`storage/`** — Flag storage submodule.
-- **`strategies/`** — Feature flag evaluation strategies.
+## Related Modules
 
-## Quick Start
-
-```python
-from codomyrmex.feature_flags import strategies, storage, evaluation, rollout
-
-# Using FeatureManager (if available)
-from codomyrmex.feature_flags import FeatureManager
-
-manager = FeatureManager()
-
-# Define flags
-manager.define("dark_mode", default=False)
-manager.define("new_checkout", default=False, rollout_percent=25)
-
-# Check flags
-if manager.is_enabled("dark_mode", user_id="user-123"):
-    show_dark_mode()
-
-# Gradual rollout
-if manager.is_enabled("new_checkout", user_id="user-123"):
-    render_new_checkout()
-else:
-    render_old_checkout()
-
-# Override for testing
-with manager.override("experimental_feature", True):
-    run_experiment()
-```
-
-## Submodules
-
-| Module | Description |
-|--------|-------------|
-| `strategies` | Evaluation strategies (percentage, user segment, etc.) |
-| `storage` | Flag storage backends (memory, file, redis) |
-| `evaluation` | Flag evaluation logic |
-| `rollout` | Gradual rollout management |
-| `core` | Core flag manager |
-
-## Exports
-
-| Class | Description |
-|-------|-------------|
-| `FeatureManager` | Main flag manager |
-
-## Documentation
-
-- [Module Documentation](../../../docs/modules/feature_flags/README.md)
-- [Agent Guide](../../../docs/modules/feature_flags/AGENTS.md)
-- [Specification](../../../docs/modules/feature_flags/SPEC.md)
+See [All Modules](../README.md) for the complete module listing.
 
 ## Navigation
 
-- [SPEC](SPEC.md) | [AGENTS](AGENTS.md) | [PAI](PAI.md)
+- **Source**: [src/codomyrmex/feature_flags/](../../../../src/codomyrmex/feature_flags/)
+- **Parent**: [All Modules](../README.md)

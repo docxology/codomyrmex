@@ -10,7 +10,7 @@ from codomyrmex.coding.review.models import (
     ComplexityReductionSuggestion,
     DeadCodeFinding,
 )
-from codomyrmex.logging_monitoring.core.logger_config import get_logger
+from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
 

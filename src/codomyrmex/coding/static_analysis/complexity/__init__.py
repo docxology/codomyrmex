@@ -10,7 +10,7 @@ import re
 from dataclasses import dataclass, field
 from enum import Enum
 
-from codomyrmex.logging_monitoring.core.logger_config import get_logger
+from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
 

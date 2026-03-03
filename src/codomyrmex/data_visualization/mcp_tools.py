@@ -40,12 +40,9 @@ def generate_chart(
     try:
         factory = chart_factories[chart_type]
 
-        # Some factories might have different signatures, mapping basic ones
-        if chart_type == "bar":
-            result = factory(data, title=title)
-        else:
-            # Fallback for dynamic unpacking based on the provided dictionary
-            result = factory(**data)
+        call_data = {**data}
+        call_data.setdefault("title", title)
+        result = factory(**call_data)
 
         response: dict = {
             "status": "success",

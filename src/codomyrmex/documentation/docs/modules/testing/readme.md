@@ -1,94 +1,78 @@
-# Testing Module
+# testing
 
-**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.0.8 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Test fixtures, generators, and utilities for the Codomyrmex test suite. Provides a structured framework for creating reusable test data, managing fixture lifecycles with scoping and dependency resolution, and generating random typed data for property-based and integration testing.
+Testing utilities module providing property-based testing, fuzzing, fixture management, and test data generation. Includes configurable generator strategies for producing synthetic test data (integers, floats, strings, lists, dicts) and a `Fuzzer` for randomized input testing. Also contains `chaos` and `workflow` submodules for chaos engineering and workflow testing.
 
 ## PAI Integration
 
-| Algorithm Phase | Role | Tools Used |
-|----------------|------|-----------|
-| **VERIFY** | Define and run test strategies with fixture management | Direct Python import |
-| **BUILD** | Write test cases using generators and fixture builders | Direct Python import |
-| **OBSERVE** | Analyze test coverage and fixture dependency graphs | Direct Python import |
-
-PAI agents access this module via direct Python import through the MCP bridge for test data generation and fixture lifecycle management.
-
-## Installation
-
-```bash
-uv add codomyrmex
-```
-
-Or for development:
-
-```bash
-uv sync
-```
+| PAI Phase | Capability |
+|-----------|-----------|
+| VERIFY | Property-based testing via `property_test`, fuzz testing via `Fuzzer` |
+| BUILD | Test data generation via generator strategies |
+| EXECUTE | Fixture management via `FixtureManager`, chaos scenarios |
 
 ## Key Exports
 
-### Fixtures (`fixture_utils.py` & `fixtures/`)
+- **`property_test`** -- Decorator for property-based testing
+- **`PropertyTestResult`** -- Result of a property test run
+- **`Fuzzer`** -- Fuzzing engine with configurable strategies
+- **`FuzzingStrategy`** -- Base class for fuzzing strategies
+- **`FuzzResult`** -- Result of a fuzz test run
+- **`Fixture`** -- Test fixture base class
+- **`FixtureManager`** -- Manages fixture lifecycle and dependencies
+- **`fixture`** -- Decorator for registering fixtures
+- **`TestDataFactory`** -- Factory for creating test data
+- **Generator strategies**: `IntGenerator`, `FloatGenerator`, `StringGenerator`, `ListGenerator`, `DictGenerator`, `OneOfGenerator`, `GeneratorStrategy`
 
-- **`FixtureManager`** — Core fixture lifecycle manager with `register()`, `get()`, `cleanup()`, and context manager `use()`. Supports scoped fixtures (function, class, module, session) and dependency resolution.
-- **`DataFixture`** — Pre-defined data fixture with `filter()`, `find()`, and `all()` methods for querying test records.
-- **`JSONFixtureLoader`** — Loads fixtures from JSON files with caching. Instantiated with a base path, then `load("name")` returns a `DataFixture`.
-- **`FixtureBuilder`** — Fluent builder for creating fixture data: `FixtureBuilder("user").with_field("name", "Alice").build()`.
-- **`FixtureScope`** — Enum: `FUNCTION`, `CLASS`, `MODULE`, `SESSION`.
+## MCP Tools
 
-### Generators (`strategies.py` & `generators/`)
+| Tool | Description |
+|------|-------------|
+| `testing_generate_data` | Generate synthetic test data using a named strategy (int/float/string/list/dict) |
+| `testing_list_strategies` | List available generator strategy type names |
 
-- **`RecordGenerator`** — Generates structured records from field-level generators: `gen.add_field("name", NameGenerator()).generate()`.
-- **`DatasetGenerator`** — Generates complete datasets with `generate(rows=N)` and `generate_csv()`.
-- **Type Generators** — `StringGenerator`, `IntegerGenerator`, `FloatGenerator`, `BooleanGenerator`, `DateGenerator`, `EmailGenerator`, `UUIDGenerator`, `NameGenerator`, `ChoiceGenerator`.
-- **`DataType`** — Enum of supported types: STRING, INTEGER, FLOAT, BOOLEAN, DATE, EMAIL, UUID, NAME, ADDRESS, PHONE.
-
-## Usage
+## Quick Start
 
 ```python
-from codomyrmex.testing.fixture_utils import FixtureManager, FixtureScope
-from codomyrmex.testing.strategies import RecordGenerator, NameGenerator, EmailGenerator
+from codomyrmex.testing import IntGenerator, Fuzzer, property_test
 
-# Fixture management
-fixtures = FixtureManager()
-fixtures.register("db", lambda: create_test_db(), scope=FixtureScope.SESSION)
+# Generate test data
+gen = IntGenerator(min_val=0, max_val=100)
+values = [gen.generate() for _ in range(10)]
 
-with fixtures.use("db") as db:
-    # test with db fixture
-    pass
+# Property-based testing
+@property_test(num_cases=100)
+def test_addition_commutative(a: int, b: int):
+    assert a + b == b + a
 
-# Data generation
-gen = RecordGenerator()
-gen.add_field("name", NameGenerator())
-gen.add_field("email", EmailGenerator())
-records = gen.generate_many(100)
+# Fuzzing
+fuzzer = Fuzzer()
+result = fuzzer.fuzz(target_function, iterations=1000)
 ```
 
-## Directory Contents
+## Architecture
 
-- `API_SPECIFICATION.md` - Programmatic interface documentation
-- `SPEC.md` - Functional specification
-- `PAI.md` - PAI integration details
-- `fixtures/` - Fixture management (pre-existing subpackage)
-- `generators/` - Data generators (pre-existing subpackage)
-- `fixture_utils.py` - Core fixture utilities (FixtureManager, decorator)
-- `strategies.py` - Generation strategies (GeneratorStrategy, IntGenerator, etc.)
+```
+testing/
+  __init__.py         -- Package root; exports all components
+  strategies.py       -- GeneratorStrategy, IntGenerator, FloatGenerator, etc.
+  property_testing.py -- property_test decorator, PropertyTestResult
+  fuzzing.py          -- Fuzzer, FuzzingStrategy, FuzzResult
+  fixture_utils.py    -- Fixture, FixtureManager, fixture decorator, TestDataFactory
+  mcp_tools.py        -- 2 MCP tool definitions
+  chaos/              -- Chaos engineering scenarios
+  workflow/           -- Workflow testing utilities
+```
 
-## Consolidated Sub-modules
+## Testing
 
-The following modules have been consolidated into this module as sub-packages:
-
-| Sub-module | Description |
-|------------|-------------|
-| **`workflow/`** | Workflow validation and end-to-end testing |
-| **`chaos/`** | Fault injection and resilience testing |
-
-Original standalone modules remain as backward-compatible re-export wrappers.
+```bash
+uv run pytest src/codomyrmex/tests/unit/testing/ -v
+```
 
 ## Navigation
 
-- **Full Documentation**: [docs/modules/testing/](../../../docs/modules/testing/)
-- **Parent Directory**: [codomyrmex](../README.md)
-- **Project Root**: ../../../README.md
+- [Root](../../../../../../README.md)

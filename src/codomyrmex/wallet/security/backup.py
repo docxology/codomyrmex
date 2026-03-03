@@ -11,7 +11,7 @@ from pathlib import Path
 from typing import Any
 
 from codomyrmex.encryption.keys.key_manager import KeyManager
-from codomyrmex.logging_monitoring.core.logger_config import get_logger
+from codomyrmex.logging_monitoring import get_logger
 from codomyrmex.wallet.exceptions import WalletNotFoundError
 
 logger = get_logger(__name__)

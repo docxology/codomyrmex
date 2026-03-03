@@ -15,7 +15,7 @@ from queue import Queue
 from typing import Any, Optional
 
 from codomyrmex.config_management.defaults import DEFAULT_OTEL_ENDPOINT
-from codomyrmex.logging_monitoring.core.logger_config import get_logger
+from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
 

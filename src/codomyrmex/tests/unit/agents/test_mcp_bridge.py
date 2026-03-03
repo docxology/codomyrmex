@@ -365,15 +365,15 @@ class TestDynamicDiscovery:
 
     def test_dynamic_discovery_returns_tools(self):
         """Dynamic discovery finds at least some tools from modules."""
-        from codomyrmex.agents.pai.mcp.discovery import _discover_dynamic_tools
-        tools = _discover_dynamic_tools()
+        from codomyrmex.agents.pai.mcp.discovery import discover_dynamic_tools
+        tools = discover_dynamic_tools()
         assert isinstance(tools, list)
         assert len(tools) > 0, "Dynamic discovery should find at least 1 tool"
 
     def test_dynamic_tool_structure(self):
         """Each discovered tool has correct tuple structure."""
-        from codomyrmex.agents.pai.mcp.discovery import _discover_dynamic_tools
-        tools = _discover_dynamic_tools()
+        from codomyrmex.agents.pai.mcp.discovery import discover_dynamic_tools
+        tools = discover_dynamic_tools()
         for name, desc, handler, schema in tools:
             assert isinstance(name, str), f"Tool name should be str, got {type(name)}"
             assert isinstance(desc, str), f"Tool desc should be str, got {type(desc)}"
@@ -382,9 +382,9 @@ class TestDynamicDiscovery:
 
     def test_dynamic_tools_included_in_registry(self):
         """Dynamic tools should be in the full tool registry."""
-        from codomyrmex.agents.pai.mcp.discovery import _discover_dynamic_tools
+        from codomyrmex.agents.pai.mcp.discovery import discover_dynamic_tools
         reg = get_tool_registry()
         reg_names = set(reg.list_tools())
-        dynamic = _discover_dynamic_tools()
+        dynamic = discover_dynamic_tools()
         for name, _, _, _ in dynamic:
             assert name in reg_names, f"Dynamic tool {name} not in registry"

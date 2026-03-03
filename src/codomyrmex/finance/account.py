@@ -8,7 +8,7 @@ Provides:
 
 from __future__ import annotations
 
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from enum import Enum, auto
 from typing import Any
 from uuid import uuid4
@@ -38,7 +38,7 @@ class Account:
         self.account_type = account_type
         self.code = code
         self.balance: float = 0.0
-        self.created_at: str = datetime.now(timezone.utc).isoformat()
+        self.created_at: str = datetime.now(UTC).isoformat()
         self._frozen: bool = False
 
     @property

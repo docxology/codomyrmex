@@ -42,7 +42,7 @@ Registers all tools, 2 static resources + 1 discovery metrics resource, and 10 p
 
 Direct Python tool invocation that delegates to `trust_gateway.trusted_call_tool()`. Wraps errors into structured `MCPToolError` dicts with appropriate error codes (ACCESS_DENIED, TIMEOUT, validation_error, execution_error).
 
-### `_discover_dynamic_tools()` (discovery.py)
+### `discover_dynamic_tools()` (discovery.py)
 
 Thread-safe, TTL-cached discovery. Uses `_find_mcp_modules()` to locate all packages with `mcp_tools` submodules, then delegates to `MCPDiscovery.scan_package()` for `@mcp_tool` extraction.
 

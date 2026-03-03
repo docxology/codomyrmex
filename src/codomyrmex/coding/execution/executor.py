@@ -22,7 +22,7 @@ from codomyrmex.coding.sandbox.security import (
     prepare_code_file,
     prepare_stdin_file,
 )
-from codomyrmex.logging_monitoring.core.logger_config import get_logger
+from codomyrmex.logging_monitoring import get_logger
 from codomyrmex.model_context_protocol.decorators import mcp_tool
 
 from .language_support import SUPPORTED_LANGUAGES, validate_language

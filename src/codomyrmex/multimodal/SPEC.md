@@ -4,7 +4,7 @@
 
 ## Purpose
 
-The multimodal module provides text-to-image generation using Google AI's Imagen 3 model via the Gemini API. It wraps the `GeminiClient` from the agents module into a high-level `ImageGenerator` class for straightforward image creation from text prompts.
+The multimodal module provides text-to-image generation using Google AI's Imagen 4 model via the Gemini API. It wraps the `GeminiClient` from the agents module into a high-level `ImageGenerator` class for straightforward image creation from text prompts.
 
 ## Architecture
 
@@ -33,10 +33,10 @@ multimodal/
 [Google AI SDK]   <-- google-genai package
       |
       v
-[Imagen 3 API]   <-- remote service
+[Imagen 4 API]   <-- remote service
 ```
 
-The module follows a thin-wrapper pattern: `ImageGenerator` delegates all API communication to `GeminiClient.generate_images()`, adding only default model selection (`imagen-3.0-generate-002`) and optional client auto-instantiation.
+The module follows a thin-wrapper pattern: `ImageGenerator` delegates all API communication to `GeminiClient.generate_images()`, adding only default model selection (`imagen-4.0-generate-001`) and optional client auto-instantiation.
 
 ## Data Flows
 
@@ -45,7 +45,7 @@ The module follows a thin-wrapper pattern: `ImageGenerator` delegates all API co
 | Input | Type | Source | Description |
 |-------|------|--------|-------------|
 | `prompt` | `str` | Caller | Natural language description of the desired image |
-| `model` | `str` | Caller (optional) | Imagen model identifier; defaults to `imagen-3.0-generate-002` |
+| `model` | `str` | Caller (optional) | Imagen model identifier; defaults to `imagen-4.0-generate-001` |
 | `**kwargs` | `Any` | Caller (optional) | Additional generation parameters (`number_of_images`, `aspect_ratio`, etc.) |
 | `client` | `GeminiClient` or `None` | Constructor | Pre-configured client; auto-created if not provided |
 
@@ -75,10 +75,10 @@ class ImageGenerator:
     def generate(
         self,
         prompt: str,
-        model: str = "imagen-3.0-generate-002",
+        model: str = "imagen-4.0-generate-001",
         **kwargs: Any,
     ) -> list[dict[str, Any]]:
-        """Generate images from a text prompt via Imagen 3."""
+        """Generate images from a text prompt via Imagen 4."""
 ```
 
 ### Module Exports (`__init__.py`)
@@ -100,7 +100,7 @@ __all__ = ["ImageGenerator"]
 | Setting | Source | Default | Description |
 |---------|--------|---------|-------------|
 | `GEMINI_API_KEY` | Environment variable | None (required) | Google AI API key |
-| `model` | `generate()` parameter | `imagen-3.0-generate-002` | Imagen model version |
+| `model` | `generate()` parameter | `imagen-4.0-generate-001` | Imagen model version |
 
 No file-based configuration. All settings are passed at construction or call time.
 
@@ -111,7 +111,7 @@ No file-based configuration. All settings are passed at construction or call tim
 3. **No MCP tools**: Not auto-discovered by the MCP bridge. Must be called directly from Python.
 4. **No caching**: Generated images are not cached. Repeated identical prompts produce new API calls.
 5. **API rate limits**: Subject to Google AI API rate limits and quotas.
-6. **Model availability**: Imagen 3 model access depends on Google AI API tier and region.
+6. **Model availability**: Imagen 4 model access depends on Google AI API tier and region.
 
 ## Testing
 

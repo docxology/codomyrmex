@@ -33,7 +33,7 @@ def _get_solver_safe() -> tuple[ConstraintSolver | None, dict[str, str] | None]:
     try:
         return _get_solver(), None
     except BackendNotAvailableError as exc:
-        return None, {"status": "error", "error": str(exc)}
+        return None, {"status": "error", "message": str(exc)}
 
 
 @mcp_tool(
@@ -46,7 +46,7 @@ def clear_model() -> dict[str, str]:
     if err:
         return err
     solver.clear_model()
-    return {"status": "ok", "message": "Model cleared"}
+    return {"status": "success", "message": "Model cleared"}
 
 
 @mcp_tool(
@@ -64,7 +64,7 @@ def add_item(item: str, index: int | None = None) -> dict[str, Any]:
     if err:
         return err
     idx = solver.add_item(item, index)
-    return {"status": "ok", "index": idx, "item": item}
+    return {"status": "success", "index": idx, "item": item}
 
 
 @mcp_tool(
@@ -83,8 +83,8 @@ def delete_item(index: int) -> dict[str, Any]:
     try:
         removed = solver.delete_item(index)
     except ModelBuildError as exc:
-        return {"status": "error", "error": str(exc)}
-    return {"status": "ok", "removed_item": removed, "index": index}
+        return {"status": "error", "message": str(exc)}
+    return {"status": "success", "removed_item": removed, "index": index}
 
 
 @mcp_tool(
@@ -104,8 +104,8 @@ def replace_item(index: int, new_item: str) -> dict[str, Any]:
     try:
         old = solver.replace_item(index, new_item)
     except ModelBuildError as exc:
-        return {"status": "error", "error": str(exc)}
-    return {"status": "ok", "old_item": old, "new_item": new_item, "index": index}
+        return {"status": "error", "message": str(exc)}
+    return {"status": "success", "old_item": old, "new_item": new_item, "index": index}
 
 
 @mcp_tool(
@@ -119,7 +119,7 @@ def get_model() -> dict[str, Any]:
         return err
     items = solver.get_model()
     return {
-        "status": "ok",
+        "status": "success",
         "item_count": len(items),
         "items": [{"index": idx, "content": content} for idx, content in items],
     }
@@ -159,7 +159,7 @@ def push() -> dict[str, str]:
     if err:
         return err
     solver.push()
-    return {"status": "ok", "message": "Solver scope pushed"}
+    return {"status": "success", "message": "Solver scope pushed"}
 
 
 @mcp_tool(
@@ -172,4 +172,4 @@ def pop(n: int = 1) -> dict[str, str]:
     if err:
         return err
     solver.pop(n)
-    return {"status": "ok", "message": f"Popped {n} scope(s)"}
+    return {"status": "success", "message": f"Popped {n} scope(s)"}

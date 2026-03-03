@@ -9,6 +9,7 @@ reports on system status, and provides interactive exploration tools.
 from .core.capability_scanner import CapabilityScanner
 from .core.context import get_system_context
 from .core.discovery_engine import SystemDiscovery
+from .health.health_checker import HealthChecker
 from .reporting.status_reporter import StatusReporter
 
 # Shared schemas for cross-module interop
@@ -48,6 +49,7 @@ __all__ = [
     "SystemDiscovery",
     "StatusReporter",
     "CapabilityScanner",
+    "HealthChecker",
     "get_system_context",
     "cli_commands",
 ]

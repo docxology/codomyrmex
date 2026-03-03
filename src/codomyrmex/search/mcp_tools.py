@@ -32,7 +32,7 @@ def search_documents(
     try:
         results = quick_search(documents, query, k=top_k)
         return {
-            "status": "ok",
+            "status": "success",
             "query": query,
             "results": [
                 {
@@ -45,7 +45,7 @@ def search_documents(
             ],
         }
     except Exception as exc:
-        return {"status": "error", "error": str(exc)}
+        return {"status": "error", "message": str(exc)}
 
 
 @mcp_tool(
@@ -70,7 +70,7 @@ def search_index_query(
             index.index(Document(id=str(i), content=content))
         results = index.search(query, k=top_k)
         return {
-            "status": "ok",
+            "status": "success",
             "query": query,
             "index_size": len(documents),
             "results": [
@@ -84,7 +84,7 @@ def search_index_query(
             ],
         }
     except Exception as exc:
-        return {"status": "error", "error": str(exc)}
+        return {"status": "error", "message": str(exc)}
 
 
 @mcp_tool(
@@ -112,10 +112,10 @@ def search_fuzzy(
         scored.sort(key=lambda x: x["score"], reverse=True)
         best = FuzzyMatcher.find_best_match(query, candidates, threshold=threshold)
         return {
-            "status": "ok",
+            "status": "success",
             "query": query,
             "best_match": best,
             "matches": scored,
         }
     except Exception as exc:
-        return {"status": "error", "error": str(exc)}
+        return {"status": "error", "message": str(exc)}

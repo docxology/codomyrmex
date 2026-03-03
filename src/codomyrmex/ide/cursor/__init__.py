@@ -15,7 +15,7 @@ from pathlib import Path
 from typing import Any, Optional
 
 from codomyrmex.ide import CommandExecutionError, ConnectionError, IDEClient, IDEError
-from codomyrmex.logging_monitoring.core.logger_config import get_logger
+from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
 

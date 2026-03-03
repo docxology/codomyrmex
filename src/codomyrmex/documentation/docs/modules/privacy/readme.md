@@ -1,92 +1,29 @@
-# Privacy Module
+# Privacy
 
-**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.0.8 | **Status**: Active | **Last Updated**: March 2026
 
-Data sanitization and anonymous routing for privacy protection.
+## Overview
 
-## PAI Integration
+The Privacy module provides specialized capabilities for the codomyrmex platform.
 
-| Algorithm Phase | Role | Tools Used |
-|----------------|------|-----------|
-| **VERIFY** | Validate PII handling and data sanitization | Direct Python import |
-| **BUILD** | Implement privacy controls and mixnet routing | Direct Python import |
-| **OBSERVE** | Audit data flows for sensitive information | Direct Python import |
+## Architecture Overview
 
-PAI agents access this module via direct Python import through the MCP bridge. The Engineer agent imports `CrumbCleaner` during BUILD to sanitize PII from outputs, and during VERIFY to validate that sensitive data is properly masked.
-
-## Installation
-
-```bash
-uv add codomyrmex
 ```
-
-Or for development:
-
-```bash
-uv sync
+privacy/
+    __init__.py              # Public API exports
 ```
 
 ## Key Exports
 
-### Classes
-- **`CrumbCleaner`** — Sanitizes data by removing tracking crumbs and metadata.
-- **`Packet`** — Packet
-- **`MixNode`** — A single node in the mixnet overlay.
-- **`MixnetProxy`** — Manages anonymous routing through the mixnet.
-- **`Privacy`** — Main class for privacy functionality.
+- **`CrumbCleaner`**
+- **`MixnetProxy`**
+- **`cli_commands`**
 
-### Functions
-- **`create_privacy()`** — Create a new Privacy instance.
+## Related Modules
 
-## Quick Start
-
-```python
-from codomyrmex.privacy import CrumbCleaner, MixnetProxy
-
-# Data sanitization
-cleaner = CrumbCleaner()
-
-# Remove PII from text
-sanitized = cleaner.clean("Contact me at john@example.com or 555-1234")
-# "Contact me at [EMAIL] or [PHONE]"
-
-# Configure patterns
-cleaner.add_pattern("ssn", r"\d{3}-\d{2}-\d{4}", "[SSN]")
-cleaner.add_pattern("credit_card", r"\d{4}-\d{4}-\d{4}-\d{4}", "[CARD]")
-
-# Anonymous routing via mixnet
-proxy = MixnetProxy()
-proxy.configure(hop_count=3, encryption="aes-256")
-
-# Route request anonymously
-response = proxy.route(request, destination="api.example.com")
-```
-
-## Exports
-
-| Class | Description |
-|-------|-------------|
-| `CrumbCleaner` | PII detection and sanitization |
-| `MixnetProxy` | Anonymous multi-hop routing |
-
-## Use Cases
-
-- **Log sanitization** — Remove sensitive data before logging
-- **Data export** — Clean PII from datasets
-- **Anonymous requests** — Route API calls through mixnet
-
-## Testing
-
-```bash
-uv run python -m pytest src/codomyrmex/tests/ -k privacy -v
-```
-
-## Documentation
-
-- [Module Documentation](../../../docs/modules/privacy/README.md)
-- [Agent Guide](../../../docs/modules/privacy/AGENTS.md)
-- [Specification](../../../docs/modules/privacy/SPEC.md)
+See [All Modules](../README.md) for the complete module listing.
 
 ## Navigation
 
-- [SPEC](SPEC.md) | [AGENTS](AGENTS.md) | [PAI](PAI.md)
+- **Source**: [src/codomyrmex/privacy/](../../../../src/codomyrmex/privacy/)
+- **Parent**: [All Modules](../README.md)

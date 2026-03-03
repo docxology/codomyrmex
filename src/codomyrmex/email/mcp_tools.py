@@ -65,8 +65,8 @@ def agentmail_send_message(
         inbox_id: Sending inbox ID. Defaults to AGENTMAIL_DEFAULT_INBOX env var.
 
     Returns:
-        ``{"status": "ok", "message_id": "...", "subject": "..."}`` on success.
-        ``{"status": "error", "error": "..."}`` on failure.
+        ``{"status": "success", "message_id": "...", "subject": "..."}`` on success.
+        ``{"status": "error", "message": "..."}`` on failure.
     """
     try:
         from .generics import EmailDraft
@@ -81,14 +81,14 @@ def agentmail_send_message(
         )
         sent = provider.send_message(draft, inbox_id=inbox_id)
         return {
-            "status": "ok",
+            "status": "success",
             "message_id": sent.id,
             "thread_id": sent.thread_id,
             "subject": sent.subject,
             "to": [a.email for a in sent.to],
         }
     except Exception as exc:
-        return {"status": "error", "error": str(exc)}
+        return {"status": "error", "message": str(exc)}
 
 
 @mcp_tool(
@@ -108,7 +108,7 @@ def agentmail_list_messages(
         labels: Optional list of labels to filter by.
 
     Returns:
-        ``{"status": "ok", "count": N, "messages": [...]}`` on success.
+        ``{"status": "success", "count": N, "messages": [...]}`` on success.
     """
     try:
         provider = _get_provider(inbox_id)
@@ -118,7 +118,7 @@ def agentmail_list_messages(
             labels=labels,
         )
         return {
-            "status": "ok",
+            "status": "success",
             "count": len(messages),
             "messages": [
                 {
@@ -134,7 +134,7 @@ def agentmail_list_messages(
             ],
         }
     except Exception as exc:
-        return {"status": "error", "error": str(exc)}
+        return {"status": "error", "message": str(exc)}
 
 
 @mcp_tool(
@@ -152,13 +152,13 @@ def agentmail_get_message(
         inbox_id: Inbox containing the message. Defaults to AGENTMAIL_DEFAULT_INBOX.
 
     Returns:
-        ``{"status": "ok", "message": {...}}`` with full message fields on success.
+        ``{"status": "success", "message": {...}}`` with full message fields on success.
     """
     try:
         provider = _get_provider(inbox_id)
         msg = provider.get_message(message_id, inbox_id=inbox_id)
         return {
-            "status": "ok",
+            "status": "success",
             "message": {
                 "message_id": msg.id,
                 "thread_id": msg.thread_id,
@@ -174,7 +174,7 @@ def agentmail_get_message(
             },
         }
     except Exception as exc:
-        return {"status": "error", "error": str(exc)}
+        return {"status": "error", "message": str(exc)}
 
 
 @mcp_tool(
@@ -198,7 +198,7 @@ def agentmail_reply_to_message(
         inbox_id: Sending inbox. Defaults to AGENTMAIL_DEFAULT_INBOX.
 
     Returns:
-        ``{"status": "ok", "message_id": "..."}`` on success.
+        ``{"status": "success", "message_id": "..."}`` on success.
     """
     try:
         provider = _get_provider(inbox_id)
@@ -210,13 +210,13 @@ def agentmail_reply_to_message(
             inbox_id=inbox_id,
         )
         return {
-            "status": "ok",
+            "status": "success",
             "message_id": sent.id,
             "thread_id": sent.thread_id,
             "subject": sent.subject,
         }
     except Exception as exc:
-        return {"status": "error", "error": str(exc)}
+        return {"status": "error", "message": str(exc)}
 
 
 @mcp_tool(
@@ -230,13 +230,13 @@ def agentmail_list_inboxes(limit: int = 50) -> dict[str, Any]:
         limit: Maximum number of inboxes to return (default 50).
 
     Returns:
-        ``{"status": "ok", "count": N, "inboxes": [...]}`` on success.
+        ``{"status": "success", "count": N, "inboxes": [...]}`` on success.
     """
     try:
         provider = _get_provider()
         inboxes = provider.list_inboxes(limit=limit)
         return {
-            "status": "ok",
+            "status": "success",
             "count": len(inboxes),
             "inboxes": [
                 {
@@ -249,7 +249,7 @@ def agentmail_list_inboxes(limit: int = 50) -> dict[str, Any]:
             ],
         }
     except Exception as exc:
-        return {"status": "error", "error": str(exc)}
+        return {"status": "error", "message": str(exc)}
 
 
 @mcp_tool(
@@ -267,20 +267,20 @@ def agentmail_create_inbox(
         display_name: Human-readable label for the inbox.
 
     Returns:
-        ``{"status": "ok", "inbox_id": "...", "display_name": "..."}`` on success.
+        ``{"status": "success", "inbox_id": "...", "display_name": "..."}`` on success.
     """
     try:
         provider = _get_provider()
         inbox = provider.create_inbox(username=username, display_name=display_name)
         return {
-            "status": "ok",
+            "status": "success",
             "inbox_id": inbox.inbox_id,
             "display_name": inbox.display_name,
             "pod_id": inbox.pod_id,
             "created_at": inbox.created_at.isoformat() if inbox.created_at else None,
         }
     except Exception as exc:
-        return {"status": "error", "error": str(exc)}
+        return {"status": "error", "message": str(exc)}
 
 
 @mcp_tool(
@@ -300,13 +300,13 @@ def agentmail_list_threads(
         labels: Optional label filter.
 
     Returns:
-        ``{"status": "ok", "count": N, "threads": [...]}`` on success.
+        ``{"status": "success", "count": N, "threads": [...]}`` on success.
     """
     try:
         provider = _get_provider(inbox_id)
         threads = provider.list_threads(inbox_id=inbox_id, limit=limit, labels=labels)
         return {
-            "status": "ok",
+            "status": "success",
             "count": len(threads),
             "threads": [
                 {
@@ -321,7 +321,7 @@ def agentmail_list_threads(
             ],
         }
     except Exception as exc:
-        return {"status": "error", "error": str(exc)}
+        return {"status": "error", "message": str(exc)}
 
 
 @mcp_tool(
@@ -350,8 +350,8 @@ def gmail_send_message(
         bcc: Optional BCC recipient list.
 
     Returns:
-        ``{"status": "ok", "message_id": "...", "subject": "..."}`` on success.
-        ``{"status": "error", "error": "..."}`` on failure.
+        ``{"status": "success", "message_id": "...", "subject": "..."}`` on success.
+        ``{"status": "error", "message": "..."}`` on failure.
     """
     try:
         from .generics import EmailDraft
@@ -366,14 +366,14 @@ def gmail_send_message(
         )
         sent = provider.send_message(draft)
         return {
-            "status": "ok",
+            "status": "success",
             "message_id": sent.id,
             "thread_id": sent.thread_id,
             "subject": sent.subject,
             "to": [a.email for a in sent.to],
         }
     except Exception as exc:
-        return {"status": "error", "error": str(exc)}
+        return {"status": "error", "message": str(exc)}
 
 
 @mcp_tool(
@@ -397,14 +397,14 @@ def gmail_list_messages(
         max_results: Maximum number of messages to return (default 20).
 
     Returns:
-        ``{"status": "ok", "count": N, "messages": [...]}`` on success.
-        ``{"status": "error", "error": "..."}`` on failure.
+        ``{"status": "success", "count": N, "messages": [...]}`` on success.
+        ``{"status": "error", "message": "..."}`` on failure.
     """
     try:
         provider = _get_gmail_provider()
         messages = provider.list_messages(query=query, max_results=max_results)
         return {
-            "status": "ok",
+            "status": "success",
             "count": len(messages),
             "messages": [
                 {
@@ -420,7 +420,7 @@ def gmail_list_messages(
             ],
         }
     except Exception as exc:
-        return {"status": "error", "error": str(exc)}
+        return {"status": "error", "message": str(exc)}
 
 
 @mcp_tool(
@@ -437,14 +437,14 @@ def gmail_get_message(message_id: str) -> dict[str, Any]:
         message_id: The Gmail message ID (opaque string from the Gmail API).
 
     Returns:
-        ``{"status": "ok", "message": {...}}`` with full message fields on success.
-        ``{"status": "error", "error": "..."}`` on failure.
+        ``{"status": "success", "message": {...}}`` with full message fields on success.
+        ``{"status": "error", "message": "..."}`` on failure.
     """
     try:
         provider = _get_gmail_provider()
         msg = provider.get_message(message_id)
         return {
-            "status": "ok",
+            "status": "success",
             "message": {
                 "message_id": msg.id,
                 "thread_id": msg.thread_id,
@@ -460,7 +460,7 @@ def gmail_get_message(message_id: str) -> dict[str, Any]:
             },
         }
     except Exception as exc:
-        return {"status": "error", "error": str(exc)}
+        return {"status": "error", "message": str(exc)}
 
 
 @mcp_tool(
@@ -490,8 +490,8 @@ def gmail_create_draft(
         bcc: Optional BCC recipient list.
 
     Returns:
-        ``{"status": "ok", "draft_id": "..."}`` on success.
-        ``{"status": "error", "error": "..."}`` on failure.
+        ``{"status": "success", "draft_id": "..."}`` on success.
+        ``{"status": "error", "message": "..."}`` on failure.
     """
     try:
         from .generics import EmailDraft
@@ -506,11 +506,11 @@ def gmail_create_draft(
         )
         draft_id = provider.create_draft(draft)
         return {
-            "status": "ok",
+            "status": "success",
             "draft_id": draft_id,
         }
     except Exception as exc:
-        return {"status": "error", "error": str(exc)}
+        return {"status": "error", "message": str(exc)}
 
 
 @mcp_tool(
@@ -531,17 +531,17 @@ def agentmail_create_webhook(
         inbox_ids: Scope events to specific inboxes. Defaults to all inboxes.
 
     Returns:
-        ``{"status": "ok", "webhook_id": "...", "url": "..."}`` on success.
+        ``{"status": "success", "webhook_id": "...", "url": "..."}`` on success.
     """
     try:
         provider = _get_provider()
         webhook = provider.create_webhook(url=url, event_types=event_types, inbox_ids=inbox_ids)
         return {
-            "status": "ok",
+            "status": "success",
             "webhook_id": webhook.webhook_id,
             "url": webhook.url,
             "event_types": webhook.event_types,
             "inbox_ids": webhook.inbox_ids,
         }
     except Exception as exc:
-        return {"status": "error", "error": str(exc)}
+        return {"status": "error", "message": str(exc)}

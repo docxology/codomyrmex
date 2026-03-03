@@ -9,7 +9,7 @@ from codomyrmex.git_operations.core.metadata import (
     RepositoryMetadataManager,
 )
 from codomyrmex.git_operations.core.repository import RepositoryManager
-from codomyrmex.logging_monitoring.core.logger_config import get_logger
+from codomyrmex.logging_monitoring import get_logger
 
 # Add src to path for imports
 current_dir = Path(__file__).parent

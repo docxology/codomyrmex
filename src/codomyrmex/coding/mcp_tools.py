@@ -34,9 +34,9 @@ def code_execute(
     try:
         execute_code = _get_execute_code()
         result = execute_code(language, code, timeout=timeout)
-        return {"status": "ok", "result": result}
+        return {"status": "success", "result": result}
     except Exception as exc:
-        return {"status": "error", "error": str(exc)}
+        return {"status": "error", "message": str(exc)}
 
 
 @mcp_tool(
@@ -47,7 +47,7 @@ def code_list_languages() -> dict[str, Any]:
     """List supported languages."""
     SUPPORTED_LANGUAGES = _get_supported_languages()
     return {
-        "status": "ok",
+        "status": "success",
         "languages": sorted(SUPPORTED_LANGUAGES),
     }
 
@@ -62,9 +62,9 @@ def code_review_file(path: str) -> dict[str, Any]:
         from . import analyze_file
 
         result = analyze_file(path)
-        return {"status": "ok", "analysis": result}
+        return {"status": "success", "analysis": result}
     except Exception as exc:
-        return {"status": "error", "error": str(exc)}
+        return {"status": "error", "message": str(exc)}
 
 
 @mcp_tool(
@@ -77,9 +77,9 @@ def code_review_project(path: str) -> dict[str, Any]:
         from . import analyze_project
 
         result = analyze_project(path)
-        return {"status": "ok", "analysis": result}
+        return {"status": "success", "analysis": result}
     except Exception as exc:
-        return {"status": "error", "error": str(exc)}
+        return {"status": "error", "message": str(exc)}
 
 
 @mcp_tool(
@@ -98,6 +98,6 @@ def code_debug(
 
         debugger = Debugger()
         result = debugger.debug(code, stdout, stderr, exit_code)
-        return {"status": "ok", "diagnosis": result}
+        return {"status": "success", "diagnosis": result}
     except Exception as exc:
-        return {"status": "error", "error": str(exc)}
+        return {"status": "error", "message": str(exc)}

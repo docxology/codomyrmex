@@ -52,11 +52,11 @@ def relations_score_strength(
             ))
         score = scorer.score(source, target, now=time.time())
         return {
-            "status": "ok",
+            "status": "success",
             "source": source,
             "target": target,
             "raw_score": score.raw_score,
             "interaction_count": score.interaction_count,
         }
     except Exception as exc:
-        return {"status": "error", "error": str(exc)}
+        return {"status": "error", "message": str(exc)}

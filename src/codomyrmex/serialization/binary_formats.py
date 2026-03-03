@@ -7,7 +7,7 @@ import fastavro
 import msgpack
 import pandas as pd
 
-from codomyrmex.logging_monitoring.core.logger_config import get_logger
+from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
 

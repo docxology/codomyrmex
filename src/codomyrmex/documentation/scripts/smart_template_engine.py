@@ -17,7 +17,7 @@ from typing import Any
 
 # Try to import Codomyrmex logger, fall back to standard logging
 try:
-    from codomyrmex.logging_monitoring.core.logger_config import (
+    from codomyrmex.logging_monitoring import (
         get_logger,
         setup_logging,
     )

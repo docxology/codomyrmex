@@ -5,7 +5,7 @@ multi-backend architecture. Z3 is the primary backend; others can be
 added by subclassing SolverBackend.
 """
 
-from codomyrmex.logging_monitoring.core.logger_config import get_logger
+from codomyrmex.logging_monitoring import get_logger
 
 from .base import SolverBackend, SolverResult, SolverStatus
 

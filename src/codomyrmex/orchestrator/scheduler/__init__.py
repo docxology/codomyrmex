@@ -14,7 +14,7 @@ except ImportError:
     Result = None
     ResultStatus = None
 
-from codomyrmex.logging_monitoring.core.logger_config import get_logger
+from codomyrmex.logging_monitoring import get_logger
 
 from .models import Job, JobStatus
 from .scheduler import Scheduler, at, cron, every

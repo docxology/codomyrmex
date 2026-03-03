@@ -1,6 +1,6 @@
 """Zero-mock tests for agents/pai/mcp discovery, definitions, and proxy_tools.
 
-Covers: _find_mcp_modules, _discover_dynamic_tools cache mechanics,
+Covers: _find_mcp_modules, discover_dynamic_tools cache mechanics,
 invalidate_tool_cache, get_discovery_metrics, TOOL_DEFINITIONS structure,
 RESOURCE_DEFINITIONS, PROMPT_DEFINITIONS, and proxy tool helpers.
 
@@ -20,8 +20,8 @@ from codomyrmex.agents.pai.mcp.discovery import (
     _DEFAULT_CACHE_TTL,
     _DYNAMIC_TOOLS_CACHE_LOCK,
     _FALLBACK_SCAN_TARGETS,
-    _discover_dynamic_tools,
     _find_mcp_modules,
+    discover_dynamic_tools,
     get_discovery_metrics,
     invalidate_tool_cache,
 )
@@ -120,18 +120,18 @@ class TestInvalidateToolCache:
 
 
 # ============================================================================
-# _discover_dynamic_tools Tests
+# discover_dynamic_tools Tests
 # ============================================================================
 
 
 @pytest.mark.unit
 class TestDiscoverDynamicTools:
-    """Tests for _discover_dynamic_tools main discovery function."""
+    """Tests for discover_dynamic_tools main discovery function."""
 
     def test_returns_list_of_tuples(self):
         # Reset cache to force fresh scan
         invalidate_tool_cache()
-        tools = _discover_dynamic_tools()
+        tools = discover_dynamic_tools()
         assert isinstance(tools, list)
         for entry in tools:
             assert isinstance(entry, tuple)
@@ -140,7 +140,7 @@ class TestDiscoverDynamicTools:
     def test_tuple_structure(self):
         """Each tool tuple should be (name:str, description:str, handler, params:dict)."""
         invalidate_tool_cache()
-        tools = _discover_dynamic_tools()
+        tools = discover_dynamic_tools()
         if not tools:
             pytest.skip("No dynamic tools discovered (may require full install)")
         for name, description, handler, params in tools:
@@ -152,7 +152,7 @@ class TestDiscoverDynamicTools:
     def test_discovers_known_tools(self):
         """Should discover at least some well-known @mcp_tool decorated tools."""
         invalidate_tool_cache()
-        tools = _discover_dynamic_tools()
+        tools = discover_dynamic_tools()
         tool_names = {t[0] for t in tools}
         # These are known tools from modules with @mcp_tool decorators
         # At minimum a few core tools should be found
@@ -161,17 +161,17 @@ class TestDiscoverDynamicTools:
     def test_cache_hit_returns_same_result(self):
         """Second call within TTL should return cached result."""
         invalidate_tool_cache()
-        tools_first = _discover_dynamic_tools()
-        tools_second = _discover_dynamic_tools()
+        tools_first = discover_dynamic_tools()
+        tools_second = discover_dynamic_tools()
         # Same object (cache hit)
         assert tools_first is tools_second
 
     def test_cache_invalidation_triggers_rescan(self):
         """After invalidation, next call should rescan."""
         invalidate_tool_cache()
-        tools_first = _discover_dynamic_tools()
+        tools_first = discover_dynamic_tools()
         invalidate_tool_cache()
-        tools_second = _discover_dynamic_tools()
+        tools_second = discover_dynamic_tools()
         # Different objects (both valid, but not the same ref)
         # Note: might be same content, but identity should differ after invalidation
         assert isinstance(tools_second, list)
@@ -211,7 +211,7 @@ class TestGetDiscoveryMetrics:
     def test_dict_has_expected_keys_after_discovery(self):
         """After running discovery, metrics should have known keys."""
         invalidate_tool_cache()
-        _discover_dynamic_tools()  # Ensure engine is initialized
+        discover_dynamic_tools()  # Ensure engine is initialized
         result = get_discovery_metrics()
         if result is None:
             pytest.skip("Discovery engine not initialized")
@@ -221,7 +221,7 @@ class TestGetDiscoveryMetrics:
 
     def test_failed_modules_is_list(self):
         invalidate_tool_cache()
-        _discover_dynamic_tools()
+        discover_dynamic_tools()
         result = get_discovery_metrics()
         if result is None:
             pytest.skip("Discovery engine not initialized")
@@ -229,7 +229,7 @@ class TestGetDiscoveryMetrics:
 
     def test_scan_duration_is_float(self):
         invalidate_tool_cache()
-        _discover_dynamic_tools()
+        discover_dynamic_tools()
         result = get_discovery_metrics()
         if result is None:
             pytest.skip("Discovery engine not initialized")

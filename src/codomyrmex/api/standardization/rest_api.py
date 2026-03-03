@@ -8,7 +8,7 @@ from enum import Enum
 from typing import Any
 from urllib.parse import parse_qs, urlparse
 
-from codomyrmex.logging_monitoring.core.logger_config import get_logger
+from codomyrmex.logging_monitoring import get_logger
 
 """REST API Implementation for Codomyrmex
 

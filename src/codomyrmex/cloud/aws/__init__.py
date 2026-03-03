@@ -6,7 +6,7 @@ import boto3
 from botocore.exceptions import ClientError
 
 from codomyrmex.cloud.common import StorageClient
-from codomyrmex.logging_monitoring.core.logger_config import get_logger
+from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
 

@@ -1,6 +1,6 @@
 # Agent Guidelines - IDE
 
-**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.0.8 | **Status**: Active | **Last Updated**: March 2026
 
 ## Module Overview
 

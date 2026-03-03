@@ -1,7 +1,7 @@
 import os
 import subprocess
 
-from codomyrmex.logging_monitoring.core.logger_config import get_logger
+from codomyrmex.logging_monitoring import get_logger
 
 _GIT_TIMEOUT = 60  # seconds
 

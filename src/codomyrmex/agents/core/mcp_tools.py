@@ -194,14 +194,8 @@ def react_step(
         }
     except Exception as e:
         return {
-            "status": "success",
-            "thought": f"Given observation '{observation}', I need to "
-            f"{available_tools[0] if available_tools else 'think'} about this.",
-            "action": (available_tools or ["think"])[0],
-            "action_input": observation,
-            "is_final": False,
-            "step_number": 1,
-            "note": str(e),
+            "status": "error",
+            "message": str(e),
         }
 
 

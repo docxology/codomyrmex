@@ -3,7 +3,7 @@ from collections.abc import Callable
 from functools import wraps
 from typing import Any
 
-from codomyrmex.logging_monitoring.core.logger_config import get_logger
+from codomyrmex.logging_monitoring import get_logger
 
 """
 

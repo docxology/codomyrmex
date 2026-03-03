@@ -1,101 +1,62 @@
-# Auth Module
+# Auth
 
-**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.0.8 | **Status**: Active | **Last Updated**: March 2026
 
-Authentication with API keys, tokens, OAuth, and access control.
+## Overview
 
-## PAI Integration
+The Auth module provides authentication and authorization infrastructure for the codomyrmex platform, including API key management, OAuth integration, token-based authentication, token validation, and Role-Based Access Control (RBAC). It sits at the Core layer, providing security primitives consumed by API, cloud, and agent modules.
 
-| Algorithm Phase | Role | Tools Used |
-|----------------|------|-----------|
-| **OBSERVE** | Check authentication state and token validity | Direct Python import |
-| **EXECUTE** | Authenticate users and issue tokens | Direct Python import |
-| **VERIFY** | Validate tokens, sessions, and API key permissions | Direct Python import |
+## Architecture Overview
 
-PAI agents access this module via direct Python import through the MCP bridge. The Engineer agent uses it during EXECUTE phase to authenticate against external services, and the QATester validates token lifecycle during VERIFY phase.
-
-## Installation
-
-```bash
-uv add codomyrmex
+```
+auth/
+├── __init__.py              # Public API (authenticate, authorize, get_authenticator)
+├── core/
+│   └── authenticator.py     # Authenticator singleton with authenticate/authorize
+├── providers/
+│   └── api_key_manager.py   # APIKeyManager for API key lifecycle
+├── rbac/
+│   └── permissions.py       # PermissionRegistry for RBAC
+└── tokens/
+    ├── token.py             # Token and TokenManager classes
+    └── validator.py         # TokenValidator for token verification
 ```
 
-Or for development:
+## Key Classes and Functions
 
-```bash
-uv sync
-```
+**`Authenticator`** -- Singleton authenticator with `authenticate(credentials)` and `authorize(token, resource, permission)`.
 
-## Key Exports
+**`Token`** / **`TokenManager`** -- Token creation, storage, and lifecycle management.
 
-### Functions
-- **`authenticate()`** — Authenticate with credentials.
-- **`authorize()`** — Check if token has permission.
-- **`get_authenticator()`** — Get an authenticator instance.
+**`APIKeyManager`** -- API key generation, validation, and revocation.
 
-## Quick Start
+**`PermissionRegistry`** -- RBAC permission definitions and checks.
+
+**`TokenValidator`** -- Token signature and expiration verification.
+
+### Convenience Functions
+
+- `authenticate(credentials: dict) -> Token | None`
+- `authorize(token: Token | str, resource: str, permission: str) -> bool`
+- `get_authenticator() -> Authenticator`
+
+## Usage Examples
 
 ```python
-from codomyrmex.auth import (
-    authenticate, authorize, Authenticator, Token, APIKeyManager
-)
+from codomyrmex.auth import authenticate, authorize
 
-# Authenticate with credentials
-token = authenticate({"username": "user", "password": "secret"})
+token = authenticate({"api_key": "my-key"})
 if token:
-    print(f"Authenticated: {token.user_id}, expires: {token.expires_at}")
-
-# Check authorization
-if authorize(token, resource="documents", permission="write"):
-    save_document()
-
-# API key management
-key_manager = APIKeyManager()
-api_key = key_manager.create(user_id="user-123", scopes=["read", "write"])
-print(f"API Key: {api_key.key}")
-
-# Validate API key
-is_valid = key_manager.validate(api_key.key)
-key_manager.revoke(api_key.key)
+    allowed = authorize(token, "modules", "read")
 ```
 
-## Token Management
+## Related Modules
 
-```python
-from codomyrmex.auth import TokenManager, TokenValidator
-
-manager = TokenManager(secret="your-secret")
-token = manager.create(user_id="user-123", roles=["admin"])
-
-validator = TokenValidator(secret="your-secret")
-claims = validator.validate(token.jwt)
-```
-
-## Exports
-
-| Class | Description |
-|-------|-------------|
-| `Authenticator` | Main authentication handler |
-| `Token` | JWT token with claims |
-| `TokenManager` | Create and refresh tokens |
-| `TokenValidator` | Validate and decode tokens |
-| `APIKeyManager` | API key CRUD operations |
-| `PermissionRegistry` | Define and check permissions |
-| `authenticate(creds)` | Authenticate with credentials |
-| `authorize(token, res, perm)` | Check permission |
-
-## Testing
-
-```bash
-uv run python -m pytest src/codomyrmex/tests/ -k auth -v
-```
-
-## Documentation
-
-- [Module Documentation](../../../docs/modules/auth/README.md)
-- [Agent Guide](../../../docs/modules/auth/AGENTS.md)
-- [Specification](../../../docs/modules/auth/SPEC.md)
+- [`api`](../api/readme.md) -- API authentication middleware integration
+- [`security`](../security/readme.md) -- Security scanning and auditing
+- [`encryption`](../encryption/readme.md) -- Cryptographic operations for token signing
 
 ## Navigation
 
-- [SPEC](SPEC.md) | [AGENTS](AGENTS.md) | [PAI](PAI.md)
+- **Source**: [src/codomyrmex/auth/](../../../../src/codomyrmex/auth/)
+- **Parent**: [All Modules](../README.md)

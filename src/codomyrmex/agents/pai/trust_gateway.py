@@ -32,7 +32,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any, TypedDict
 
-from codomyrmex.agents.pai.mcp.discovery import _discover_dynamic_tools
+from codomyrmex.agents.pai.mcp.discovery import discover_dynamic_tools
 from codomyrmex.agents.pai.mcp_bridge import (
     create_codomyrmex_mcp_server,
     get_tool_registry,
@@ -58,10 +58,6 @@ class TrustLevel(enum.Enum):
 class SecurityError(Exception):
     """Raised when a security policy is violated."""
     pass
-
-
-# Global Trust State
-_trust_level: TrustLevel = TrustLevel.UNTRUSTED
 
 
 # Tools that can mutate state — require explicit TRUSTED promotion.
@@ -297,13 +293,22 @@ class _LazyToolSets:
         return _get_destructive_tools()
 
 
-# Module-level convenience accessors — eagerly evaluated.
-# These are safe to compute at module load because TrustRegistry.__init__
-# (line ~476) calls get_tool_registry() anyway, which fully populates the
-# static + dynamic tool lists before any test imports these symbols.
-SAFE_TOOLS: frozenset[str] = _get_safe_tools()
-SAFE_TOOL_COUNT: int = len(SAFE_TOOLS)
-DESTRUCTIVE_TOOL_COUNT: int = len(_get_destructive_tools())
+def __getattr__(name: str):  # noqa: N802
+    """Lazy module-level accessors — computed on first access and cached."""
+    if name == "SAFE_TOOLS":
+        val: frozenset[str] = _get_safe_tools()
+        globals()["SAFE_TOOLS"] = val
+        return val
+    if name == "SAFE_TOOL_COUNT":
+        cached = globals().get("SAFE_TOOLS")
+        val_i: int = len(cached if cached is not None else _get_safe_tools())
+        globals()["SAFE_TOOL_COUNT"] = val_i
+        return val_i
+    if name == "DESTRUCTIVE_TOOL_COUNT":
+        val_d: int = len(_get_destructive_tools())
+        globals()["DESTRUCTIVE_TOOL_COUNT"] = val_d
+        return val_d
+    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
 
 
 
@@ -367,7 +372,7 @@ class TrustRegistry:
         """Promote all safe (read-only) tools to VERIFIED. Return promoted names."""
         self._load() # Refresh first
         promoted = []
-        for name in SAFE_TOOLS:
+        for name in _get_safe_tools():
             if name in self._levels and self._levels[name] == TrustLevel.UNTRUSTED:
                 self._levels[name] = TrustLevel.VERIFIED
                 promoted.append(name)
@@ -506,7 +511,7 @@ def verify_capabilities() -> dict[str, Any]:
     # ── Tool registry ─────────────────────────────────────────────
     # Ensures detailed tool stats, including versions and availability
     # Refresh discovery first just in case
-    _discover_dynamic_tools()
+    discover_dynamic_tools()
 
     registry = get_tool_registry()
     tool_names = sorted(registry.list_tools())
@@ -612,16 +617,7 @@ def trust_tool(tool_name: str) -> dict[str, Any]:
     Returns:
         Trust state after promotion.
     """
-    global _trust_level
     new_level = _registry.trust_tool(tool_name)
-    # Keep _trust_level global in sync with the registry aggregate so that
-    # get_current_trust_level() is consistent regardless of which function
-    # is consulted. _registry.trust_tool() fires _trigger_trust_change for
-    # the per-tool transition; we only update the global if the aggregate
-    # actually changed to avoid spurious global-level events.
-    derived = TrustLevel(_registry.get_aggregate_level())
-    if derived != _trust_level:
-        _trust_level = derived
     return {
         "tool": tool_name,
         "new_level": new_level.value,
@@ -635,13 +631,8 @@ def trust_all() -> dict[str, Any]:
     Returns:
         Trust state after promotion.
     """
+    old_level = TrustLevel(_registry.get_aggregate_level())
     promoted = _registry.trust_all()
-
-    # Update global level if it wasn't already TRUSTED
-    # Note: _registry.trust_all() trusts individual tools, but we also track global level
-    global _trust_level
-    old_level = _trust_level
-    _trust_level = TrustLevel.TRUSTED
     _trigger_trust_change(old_level, TrustLevel.TRUSTED)
 
     return {
@@ -796,9 +787,7 @@ def get_current_trust_level() -> TrustLevel:
 
 def reset_trust() -> None:
     """Reset all trust levels to UNTRUSTED."""
-    global _trust_level
-    old_level = _trust_level
-    _trust_level = TrustLevel.UNTRUSTED
+    old_level = TrustLevel(_registry.get_aggregate_level())
     _registry.reset()
     _trigger_trust_change(old_level, TrustLevel.UNTRUSTED)
 
@@ -813,9 +802,9 @@ __all__ = [
     "TrustLevel",
     "TrustRegistry",
     "DESTRUCTIVE_TOOLS",
-    "SAFE_TOOLS",
-    "SAFE_TOOL_COUNT",
-    "DESTRUCTIVE_TOOL_COUNT",
+    "SAFE_TOOLS",  # noqa: F822 — defined via module __getattr__
+    "SAFE_TOOL_COUNT",  # noqa: F822
+    "DESTRUCTIVE_TOOL_COUNT",  # noqa: F822
     "verify_capabilities",
     "trust_tool",
     "trust_all",

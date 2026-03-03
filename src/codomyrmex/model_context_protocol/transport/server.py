@@ -85,6 +85,25 @@ class MCPServer:
         ))
 
     # =========================================================================
+    # Public count properties
+    # =========================================================================
+
+    @property
+    def tool_count(self) -> int:
+        """Number of registered tools."""
+        return len(self._tool_registry.list_tools())
+
+    @property
+    def resource_count(self) -> int:
+        """Number of registered resources."""
+        return len(self._resources)
+
+    @property
+    def prompt_count(self) -> int:
+        """Number of registered prompts."""
+        return len(self._prompts)
+
+    # =========================================================================
     # Tool Management
     # =========================================================================
 

@@ -1,74 +1,63 @@
-# Module Template Module
+# Module Template
 
-**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.0.8 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Scaffolding module for creating new Codomyrmex modules from a standardized template. The `scaffold_new_module()` function generates a complete module directory with all required documentation files (README, AGENTS, SPEC, API_SPECIFICATION, CHANGELOG, MCP_TOOL_SPECIFICATION, SECURITY, USAGE_EXAMPLES), a customized `__init__.py`, and a core Python source file with a boilerplate class and factory function. Module names are validated to enforce snake_case naming conventions.
+The Module Template provides a standardized template and scaffolding utility for creating new Codomyrmex modules. It includes all required RASP documentation files (README.md, AGENTS.md, SPEC.md, PAI.md), API and MCP specification templates, a changelog template, and a programmatic scaffolding function that generates a complete module structure from the template.
 
 ## PAI Integration
 
-| Algorithm Phase | Role | Tools Used |
-|----------------|------|-----------|
-| **BUILD** | Scaffold new modules from standardized template | Direct Python import |
-| **PLAN** | Plan module structure and RASP documentation | Direct Python import |
-| **VERIFY** | Validate RASP compliance of generated modules | Direct Python import |
-
-PAI agents access this module via direct Python import through the MCP bridge. The Engineer agent calls `scaffold_new_module()` during BUILD to generate new modules with all required RASP documentation files.
-
-## Installation
-
-```bash
-uv add codomyrmex
-```
-
-Or for development:
-
-```bash
-uv sync
-```
+| Algorithm Phase | Module Template Role |
+|----------------|---------------------|
+| BUILD | Scaffold new modules with `scaffold_new_module()` |
+| PLAN | Reference template structure when designing new modules |
 
 ## Key Exports
 
-### Functions
-
-- **`scaffold_new_module()`** -- Create a new Codomyrmex module directory from the template, copying and customizing all standard files. Accepts module_name, target_path, description, and author. Raises FileExistsError if target exists, ValueError for invalid names.
-- **`list_template_files()`** -- List all files available in the module template directory
-
-### Internal Helpers
-
-- **`_copy_and_customize()`** -- Copy a template file to the target, performing text replacements for module name and description
-- **`_create_core_module()`** -- Generate the main Python source file with a boilerplate class and factory function
-
-## Directory Contents
-
-- `__init__.py` - Package marker with module docstring
-- `scaffold.py` - Core scaffolding logic: `scaffold_new_module()`, `list_template_files()`, and template file helpers
-- `requirements.template.txt` - Template requirements file copied into new modules
-- `AGENTS.md` - Template AGENTS documentation
-- `API_SPECIFICATION.md` - Template API specification
-- `CHANGELOG.md` - Template changelog
-- `MCP_TOOL_SPECIFICATION.md` - Template MCP tool specification
-- `SECURITY.md` - Template security documentation
-- `SPEC.md` - Template module specification
-- `USAGE_EXAMPLES.md` - Template usage examples
+The module_template package does not export any classes or functions via `__init__.py`. The scaffolding utility is accessed directly from `scaffold.py`.
 
 ## Quick Start
 
 ```python
-from codomyrmex.module_template import scaffold_new_module, list_template_files
+from codomyrmex.module_template.scaffold import scaffold_new_module
 
-result = scaffold_new_module()
+# Create a new module from the template
+module_path = scaffold_new_module(
+    module_name="my_new_module",
+    description="A new module for doing interesting things",
+    author="Developer Name",
+)
+# Creates: src/codomyrmex/my_new_module/ with all RASP docs and __init__.py
+```
+
+## Architecture
+
+```
+module_template/
+  __init__.py                # Package marker (no public exports)
+  scaffold.py                # scaffold_new_module(), template file copying/customization
+  README.md                  # Template README for new modules
+  AGENTS.md                  # Template agent coordination doc
+  SPEC.md                    # Template technical specification
+  PAI.md                     # Template PAI integration doc
+  API_SPECIFICATION.md       # Template API specification
+  MCP_TOOL_SPECIFICATION.md  # Template MCP tool specification
+  CHANGELOG.md               # Template changelog
+  SECURITY.md                # Template security documentation
+  USAGE_EXAMPLES.md          # Template usage examples
+  requirements.template.txt  # Template requirements file
+  py.typed                   # PEP 561 marker for type checking
 ```
 
 ## Testing
 
 ```bash
-uv run python -m pytest src/codomyrmex/tests/ -k module_template -v
+uv run pytest src/codomyrmex/tests/unit/module_template/ -v
 ```
 
 ## Navigation
 
-- **Full Documentation**: [docs/modules/module_template/](../../../docs/modules/module_template/)
-- **Parent Directory**: [codomyrmex](../README.md)
-- **Project Root**: ../../../README.md
+- [AGENTS.md](AGENTS.md) -- Agent coordination documentation
+- [SPEC.md](SPEC.md) -- Technical specification
+- [Source Module](../../../../module_template/)

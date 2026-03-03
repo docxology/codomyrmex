@@ -29,7 +29,7 @@ from codomyrmex.audio.text_to_speech.models import (
     VoiceGender,
     VoiceInfo,
 )
-from codomyrmex.logging_monitoring.core.logger_config import get_logger
+from codomyrmex.logging_monitoring import get_logger
 
 from .base import TTSProvider
 

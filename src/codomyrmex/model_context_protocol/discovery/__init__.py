@@ -19,7 +19,7 @@ from pathlib import Path
 from types import ModuleType
 from typing import Any
 
-from codomyrmex.logging_monitoring.core.logger_config import get_logger
+from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
 
@@ -272,7 +272,7 @@ class MCPDiscovery:
                     description=meta["description"] or (obj.__doc__ or "").strip(),
                     module_path=module.__name__,
                     callable_name=name,
-                    parameters=meta.get("parameters", {}),
+                    parameters=meta.get("schema", meta.get("parameters", {})),
                     tags=meta.get("tags", []),
                     version=meta.get("version", "1.0"),
                     requires=meta.get("requires", []),

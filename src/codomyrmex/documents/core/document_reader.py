@@ -9,7 +9,7 @@ from codomyrmex.documents.exceptions import DocumentReadError, UnsupportedFormat
 from codomyrmex.documents.models.document import Document, DocumentFormat
 from codomyrmex.documents.utils.encoding_detector import detect_encoding
 from codomyrmex.documents.utils.mime_type_detector import detect_format_from_path
-from codomyrmex.logging_monitoring.core.logger_config import get_logger
+from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
 

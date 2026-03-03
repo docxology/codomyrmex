@@ -11,11 +11,6 @@ import io
 from dataclasses import dataclass, field
 from typing import Any
 
-import matplotlib
-
-matplotlib.use("Agg")          # non-interactive backend
-import matplotlib.pyplot as plt  # noqa: E402
-
 
 @dataclass
 class BasePlot:
@@ -43,6 +38,10 @@ class BasePlot:
 
     def to_html(self) -> str:
         """Render the plot as an ``<img>`` tag containing a base64 PNG."""
+        import matplotlib
+        if matplotlib.get_backend().lower() != "agg":
+            matplotlib.use("Agg")
+        import matplotlib.pyplot as plt
         fig, ax = plt.subplots(
             figsize=(self.width / 100, self.height / 100), dpi=100
         )

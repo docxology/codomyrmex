@@ -124,7 +124,7 @@ with get_provider(ProviderType.OPENROUTER, api_key=key) as provider:
 | `cost_tracking/` | Token counting and billing estimation |
 | `prompts/` | Prompt versioning and template management |
 | `prompt_templates/` | Prompt template storage |
-| `outputs/` | Output handling and formatting |
+| `output/` | Output handling and formatting |
 
 ## Environment Variables
 

@@ -1,79 +1,58 @@
 # Examples Module
 
-**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
-
-Reference implementations, sample outputs, and learning resources.
+**Version**: v1.0.8 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Example files demonstrating Codomyrmex capabilities. No programmatic exports — access content directly as reference files.
+The Examples module contains reference implementations and demonstrations that showcase how to use various Codomyrmex capabilities. It includes an agent orchestration demo (parallel execution, sequential execution, circuit breaker patterns) and a REST API endpoint example, along with sample configuration validation and link check output reports.
 
 ## PAI Integration
 
-| Algorithm Phase | Role | Tools Used |
-|----------------|------|-----------|
-| **OBSERVE** | Reference examples for report formats and patterns | Direct Python import |
-| **THINK** | Use examples as context for architectural decisions | Direct Python import |
+| Algorithm Phase | Examples Role |
+|----------------|---------------|
+| LEARN | Reference implementations for understanding Codomyrmex patterns |
+| BUILD | Code templates and patterns for new feature development |
 
-PAI agents access this module via direct Python import through the MCP bridge. Agents load example JSON reports during OBSERVE phase to understand expected output formats before generating their own.
+## Key Exports
 
-## Quick Reference
+The examples module does not export any public classes or functions via `__init__.py`. Examples are accessed by running the scripts directly.
 
-```bash
-# View configuration validation example
-cat src/codomyrmex/examples/config_validation_report.json
-
-# View link check example
-cat src/codomyrmex/examples/link_check_report.json
-```
-
-## Example Files
-
-| File | Description |
-|------|-------------|
-| `config_validation_report.json` | Sample validation report structure |
-| `link_check_report.json` | Sample link checker output |
-
-## Using Examples
-
-```python
-import json
-from pathlib import Path
-
-# Load example report
-examples_dir = Path(__file__).parent / "examples"
-report = json.loads((examples_dir / "config_validation_report.json").read_text())
-
-# Understand report structure
-print(f"Report fields: {list(report.keys())}")
-```
-
-## For Developers
-
-Use these examples to:
-
-- Understand report formats before implementing
-- Test parsing logic against known-good data
-- Learn module integration patterns
-
-## Installation
+## Quick Start
 
 ```bash
-uv add codomyrmex
+# Run the agent orchestration demo
+uv run python src/codomyrmex/examples/agent_orchestration_demo.py
+
+# Run the API endpoint example
+uv run python src/codomyrmex/examples/api_endpoint_example.py
 ```
 
-Or for development:
+## Architecture
+
+```
+examples/
+  __init__.py                    # Package marker (no public exports)
+  agent_orchestration_demo.py    # Multi-agent orchestration patterns demo
+                                 #   - SimulatedAgent (configurable delay/failure)
+                                 #   - Parallel execution with ThreadPoolExecutor
+                                 #   - Sequential execution
+                                 #   - Circuit breaker / fallback strategies
+  api_endpoint_example.py        # REST API endpoint creation example
+                                 #   - APIRouter with GET/POST endpoints
+                                 #   - Request/response handling patterns
+  config_validation_report.json  # Sample config validation output
+  link_check_report.json         # Sample link check output
+  output/                        # Example output directory
+```
+
+## Testing
 
 ```bash
-uv sync
+uv run pytest src/codomyrmex/tests/unit/examples/ -v
 ```
-
-## Documentation
-
-- [Module Documentation](../../../docs/modules/examples/README.md)
-- [Agent Guide](../../../docs/modules/examples/AGENTS.md)
-- [Specification](../../../docs/modules/examples/SPEC.md)
 
 ## Navigation
 
-- [SPEC](SPEC.md) | [AGENTS](AGENTS.md) | [PAI](PAI.md)
+- [AGENTS.md](AGENTS.md) -- Agent coordination documentation
+- [SPEC.md](SPEC.md) -- Technical specification
+- [Source Module](../../../../examples/)

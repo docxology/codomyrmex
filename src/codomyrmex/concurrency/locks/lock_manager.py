@@ -4,7 +4,7 @@ import threading
 import time
 from dataclasses import dataclass, field
 
-from codomyrmex.logging_monitoring.core.logger_config import get_logger
+from codomyrmex.logging_monitoring import get_logger
 
 from .distributed_lock import BaseLock
 

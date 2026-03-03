@@ -12,7 +12,7 @@ import time
 import uuid
 from dataclasses import dataclass, field
 
-from codomyrmex.logging_monitoring.core.logger_config import get_logger
+from codomyrmex.logging_monitoring import get_logger
 
 from .validator import TokenValidator
 

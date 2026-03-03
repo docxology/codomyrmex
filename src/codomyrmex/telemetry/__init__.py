@@ -14,7 +14,7 @@ except ImportError:
     Result = None
     ResultStatus = None
 
-from codomyrmex.logging_monitoring.core.logger_config import get_logger  # noqa: F401
+from codomyrmex.logging_monitoring import get_logger  # noqa: F401
 
 # Submodule exports - import first
 from . import dashboard, exporters, metrics, spans

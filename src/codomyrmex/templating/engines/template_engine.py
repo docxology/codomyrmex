@@ -6,7 +6,7 @@ from jinja2 import Environment, FileSystemLoader
 from mako.template import Template as MakoTemplate
 
 from codomyrmex.exceptions import CodomyrmexError
-from codomyrmex.logging_monitoring.core.logger_config import get_logger
+from codomyrmex.logging_monitoring import get_logger
 
 """Template engine implementations.
 """

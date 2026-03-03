@@ -64,7 +64,7 @@ except ImportError:
     MODULE_AVAILABILITY["performance"] = False
 
 try:
-    from codomyrmex.logging_monitoring.core.logger_config import (
+    from codomyrmex.logging_monitoring import (
         PerformanceLogger,  # noqa: F401
     )
     MODULE_AVAILABILITY["performance_logging"] = True
@@ -72,7 +72,7 @@ except ImportError:
     MODULE_AVAILABILITY["performance_logging"] = False
 
 try:
-    from codomyrmex.logging_monitoring.core.logger_config import (
+    from codomyrmex.logging_monitoring import (
         get_logger,  # noqa: F401
     )
 
@@ -534,7 +534,7 @@ class TestPerformanceBenchmarking:
         if not MODULE_AVAILABILITY.get("performance_logging", False):
             pytest.skip("Performance logging not available")
 
-        from codomyrmex.logging_monitoring.core.logger_config import PerformanceLogger
+        from codomyrmex.logging_monitoring import PerformanceLogger
 
         perf_logger = PerformanceLogger("test_performance")
 

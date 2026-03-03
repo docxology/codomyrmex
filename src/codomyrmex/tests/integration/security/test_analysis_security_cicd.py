@@ -42,7 +42,7 @@ except ImportError:
     CI_CD_AVAILABLE = False
 
 try:
-    from codomyrmex.logging_monitoring.core.logger_config import (
+    from codomyrmex.logging_monitoring import (
         get_logger,
         setup_logging,
     )

@@ -16,7 +16,7 @@ from codomyrmex.collaboration.exceptions import (
 )
 from codomyrmex.collaboration.models import Task, TaskResult
 from codomyrmex.collaboration.protocols import AgentCapability, AgentState
-from codomyrmex.logging_monitoring.core.logger_config import get_logger
+from codomyrmex.logging_monitoring import get_logger
 
 from .base import CollaborativeAgent
 from .worker import WorkerAgent
