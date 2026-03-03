@@ -67,7 +67,10 @@ def _safe_eval_expression(expression: str, variables: dict[str, float]) -> Value
 # ---------------------------------------------------------------------------
 
 
-@mcp_tool(category="autograd")
+@mcp_tool(
+    category="autograd",
+    description="Evaluate a simple expression and compute its gradient.",
+)
 def autograd_compute(expression: str, variables: dict) -> dict:
     """Evaluate a simple expression and compute its gradient.
 
@@ -112,7 +115,10 @@ def autograd_compute(expression: str, variables: dict) -> dict:
     }
 
 
-@mcp_tool(category="autograd")
+@mcp_tool(
+    category="autograd",
+    description="Numerically verify that analytic gradients match finite differences.",
+)
 def autograd_gradient_check(func_name: str, inputs: list) -> dict:
     """Numerically verify that analytic gradients match finite differences.
 
