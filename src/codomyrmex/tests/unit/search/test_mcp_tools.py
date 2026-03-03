@@ -1,5 +1,11 @@
 import pytest
-from codomyrmex.search.mcp_tools import search_documents, search_index_query, search_fuzzy
+
+from codomyrmex.search.mcp_tools import (
+    search_documents,
+    search_fuzzy,
+    search_index_query,
+)
+
 
 @pytest.mark.unit
 class TestSearchMcpTools:
