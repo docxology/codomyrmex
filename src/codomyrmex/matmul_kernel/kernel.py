@@ -91,7 +91,22 @@ def matmul_flops(M: int, K: int, N: int) -> int:
 
 
 def benchmark_matmul(sizes: list[int] = None) -> dict:
-    """Benchmark tiled matmul vs numpy.dot for various sizes."""
+    """
+    Benchmark tiled matmul vs numpy.dot for various sizes.
+
+    Args:
+        sizes: List of matrix dimensions (N) to benchmark. If None,
+               defaults to [32, 64, 128, 256].
+
+    Returns:
+        dict: A dictionary mapping each size N to a dictionary containing:
+              - size: The matrix dimension N.
+              - flops: The number of floating point operations performed.
+              - tiled_ms: Execution time of the tiled matmul in milliseconds.
+              - numpy_ms: Execution time of numpy.dot in milliseconds.
+              - max_error: The maximum absolute difference between tiled and numpy results.
+              - correct: Boolean indicating if the max error is less than 1e-4.
+    """
     if sizes is None:
         sizes = [32, 64, 128, 256]
 
