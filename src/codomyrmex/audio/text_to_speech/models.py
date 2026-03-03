@@ -41,6 +41,7 @@ class VoiceInfo:
         description: Optional description of the voice
         sample_rate: Native sample rate in Hz
         styles: Available speaking styles (if supported)
+
     """
 
     id: str
@@ -81,6 +82,7 @@ class SynthesisResult:
         text: Original input text
         provider: Provider that generated the audio
         processing_time: Time taken to synthesize
+
     """
 
     audio_data: bytes
@@ -100,6 +102,7 @@ class SynthesisResult:
 
         Returns:
             Path to the saved file
+
         """
         path = Path(path)
         path.write_bytes(self.audio_data)
@@ -143,6 +146,7 @@ class TTSConfig:
         sample_rate: Output sample rate
         style: Speaking style (if supported by voice)
         emotion: Emotion to convey (if supported)
+
     """
 
     voice: str | None = None
@@ -165,6 +169,7 @@ class SSMLOptions:
         auto_breaks: Automatically add breaks at punctuation
         emphasis: Default emphasis level
         prosody: Prosody settings (rate, pitch, volume)
+
     """
 
     use_ssml: bool = False

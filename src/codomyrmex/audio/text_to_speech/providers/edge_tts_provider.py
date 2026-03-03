@@ -70,6 +70,7 @@ class EdgeTTSProvider(TTSProvider):
     Attributes:
         name: Provider identifier
         is_available: Whether edge-tts is installed
+
     """
 
     name: str = "edge-tts"
@@ -80,6 +81,7 @@ class EdgeTTSProvider(TTSProvider):
 
         Raises:
             ProviderNotAvailableError: If edge-tts is not installed
+
         """
         if not EDGE_TTS_AVAILABLE:
             raise ProviderNotAvailableError(
@@ -146,6 +148,7 @@ class EdgeTTSProvider(TTSProvider):
 
         Returns:
             SynthesisResult with audio data
+
         """
         return asyncio.get_event_loop().run_until_complete(
             self.synthesize_async(text, config)
@@ -168,6 +171,7 @@ class EdgeTTSProvider(TTSProvider):
         Raises:
             SynthesisError: If synthesis fails
             VoiceNotFoundError: If requested voice is not available
+
         """
         if not text or not text.strip():
             raise SynthesisError("Cannot synthesize empty text")
@@ -260,6 +264,7 @@ class EdgeTTSProvider(TTSProvider):
 
         Returns:
             Path to the saved file
+
         """
         config = config or TTSConfig()
         output_path = Path(output_path)
@@ -289,6 +294,7 @@ class EdgeTTSProvider(TTSProvider):
 
         Returns:
             List of available VoiceInfo objects
+
         """
         # Ensure voices are loaded
         if not self._voices_loaded:
@@ -312,6 +318,7 @@ class EdgeTTSProvider(TTSProvider):
 
         Returns:
             List of available VoiceInfo objects
+
         """
         await self._load_voices()
 
@@ -330,6 +337,7 @@ class EdgeTTSProvider(TTSProvider):
 
         Returns:
             VoiceInfo if found, None otherwise
+
         """
         if not self._voices_loaded:
             asyncio.get_event_loop().run_until_complete(self._load_voices())
@@ -344,6 +352,7 @@ class EdgeTTSProvider(TTSProvider):
 
         Returns:
             List of unique language codes
+
         """
         if not self._voices_loaded:
             asyncio.get_event_loop().run_until_complete(self._load_voices())
@@ -359,6 +368,7 @@ class EdgeTTSProvider(TTSProvider):
 
         Returns:
             Default voice identifier (en-US-AriaNeural)
+
         """
         return "en-US-AriaNeural"
 

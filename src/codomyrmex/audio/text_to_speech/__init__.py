@@ -18,6 +18,7 @@ Example:
     result = synth.synthesize("Hello!", voice="en-US-AriaNeural")
     result.save("hello.mp3")
     ```
+
 """
 
 from .models import (

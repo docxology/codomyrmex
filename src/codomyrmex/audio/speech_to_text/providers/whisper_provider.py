@@ -73,6 +73,7 @@ class WhisperProvider(STTProvider):
         name: Provider identifier
         model_size: Current model size
         device: Compute device being used
+
     """
 
     name: str = "whisper"
@@ -99,6 +100,7 @@ class WhisperProvider(STTProvider):
 
         Raises:
             ProviderNotAvailableError: If faster-whisper is not installed
+
         """
         if not FASTER_WHISPER_AVAILABLE:
             raise ProviderNotAvailableError(
@@ -147,6 +149,7 @@ class WhisperProvider(STTProvider):
         Raises:
             TranscriptionError: If file doesn't exist
             AudioFormatError: If format is not supported
+
         """
         path = Path(audio_path)
 
@@ -182,6 +185,7 @@ class WhisperProvider(STTProvider):
         Raises:
             TranscriptionError: If transcription fails
             ModelNotLoadedError: If model is not loaded
+
         """
         if not self._model:
             raise ModelNotLoadedError(
@@ -286,6 +290,7 @@ class WhisperProvider(STTProvider):
 
         Returns:
             TranscriptionResult with text and segments
+
         """
         loop = asyncio.get_event_loop()
         return await loop.run_in_executor(
@@ -306,6 +311,7 @@ class WhisperProvider(STTProvider):
 
         Yields:
             Partial TranscriptionResult with accumulated segments
+
         """
         if not self._model:
             raise ModelNotLoadedError(
@@ -385,6 +391,7 @@ class WhisperProvider(STTProvider):
 
         Returns:
             Tuple of (language_code, probability)
+
         """
         if not self._model:
             raise ModelNotLoadedError(
@@ -413,6 +420,7 @@ class WhisperProvider(STTProvider):
 
         Returns:
             List of ISO 639-1 language codes supported by Whisper
+
         """
         return WHISPER_LANGUAGES.copy()
 

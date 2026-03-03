@@ -43,6 +43,7 @@ class Word:
         start: Start time in seconds
         end: End time in seconds
         probability: Confidence probability (0.0-1.0)
+
     """
 
     word: str
@@ -69,6 +70,7 @@ class Segment:
         avg_logprob: Average log probability of tokens
         no_speech_prob: Probability that segment contains no speech
         compression_ratio: Text compression ratio
+
     """
 
     id: int
@@ -93,6 +95,7 @@ class Segment:
 
         Returns:
             SRT-formatted string for this segment
+
         """
         start_time = self._format_time_srt(self.start)
         end_time = self._format_time_srt(self.end)
@@ -103,6 +106,7 @@ class Segment:
 
         Returns:
             VTT-formatted string for this segment
+
         """
         start_time = self._format_time_vtt(self.start)
         end_time = self._format_time_vtt(self.end)
@@ -140,6 +144,7 @@ class TranscriptionResult:
         processing_time: Time taken to transcribe in seconds
         model_size: Model size used for transcription
         source_path: Path to the source audio file
+
     """
 
     text: str
@@ -166,6 +171,7 @@ class TranscriptionResult:
 
         Returns:
             Complete SRT-formatted subtitle string
+
         """
         lines = []
         for i, segment in enumerate(self.segments, start=1):
@@ -177,6 +183,7 @@ class TranscriptionResult:
 
         Returns:
             Complete VTT-formatted subtitle string
+
         """
         lines = ["WEBVTT\n"]
         for segment in self.segments:
@@ -188,6 +195,7 @@ class TranscriptionResult:
 
         Returns:
             Plain text transcription
+
         """
         return self.text
 
@@ -196,6 +204,7 @@ class TranscriptionResult:
 
         Returns:
             Dictionary with all transcription data
+
         """
         return {
             "text": self.text,
@@ -235,6 +244,7 @@ class TranscriptionResult:
 
         Returns:
             Path to the saved file
+
         """
         path = Path(path)
         path.write_text(self.to_srt(), encoding="utf-8")
@@ -248,6 +258,7 @@ class TranscriptionResult:
 
         Returns:
             Path to the saved file
+
         """
         path = Path(path)
         path.write_text(self.to_vtt(), encoding="utf-8")
@@ -271,6 +282,7 @@ class TranscriptionConfig:
         word_timestamps: Enable word-level timestamps
         vad_filter: Enable voice activity detection filtering
         vad_parameters: VAD filter parameters
+
     """
 
     language: str | None = None
