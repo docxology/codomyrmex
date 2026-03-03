@@ -12,7 +12,8 @@ logger = get_logger(__name__)
 class CrumbCleaner:
     """Sanitizes data by removing tracking crumbs and metadata."""
 
-    def __init__(self):
+    def __init__(self) -> None:
+        """Initialize CrumbCleaner with a default blacklist."""
         self._blacklist: set[str] = {
             "timestamp", "created_at", "updated_at",
             "ip_address", "device_id", "geo_lat", "geo_lon",
@@ -21,8 +22,13 @@ class CrumbCleaner:
         }
 
     def scrub(self, data: Any) -> Any:
-        """
-        Recursively remove blacklisted keys from dictionaries and lists.
+        """Recursively remove blacklisted keys from dictionaries and lists.
+
+        Args:
+            data: The dictionary, list, or primitive to scrub.
+
+        Returns:
+            A sanitized copy of the data.
         """
         if isinstance(data, dict):
             return {
@@ -36,12 +42,24 @@ class CrumbCleaner:
             return data
 
     def generate_noise(self, size_bytes: int = 64) -> bytes:
-        """Generate random noise to obscure activity patterns."""
+        """Generate random noise to obscure activity patterns.
+
+        Args:
+            size_bytes: The number of random bytes to generate. Defaults to 64.
+
+        Returns:
+            A byte string of random noise.
+        """
         import os
         return os.urandom(size_bytes)
 
-    def configure_blacklist(self, add: list[str] = None, remove: list[str] = None) -> None:
-        """Dynamically configure the metadata blacklist."""
+    def configure_blacklist(self, add: list[str] | None = None, remove: list[str] | None = None) -> None:
+        """Dynamically configure the metadata blacklist.
+
+        Args:
+            add: A list of keys to add to the blacklist.
+            remove: A list of keys to remove from the blacklist.
+        """
         if add:
             for key in add:
                 self._blacklist.add(key.lower())

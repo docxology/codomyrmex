@@ -62,6 +62,17 @@ proxy.configure(hop_count=3, encryption="aes-256")
 response = proxy.route(request, destination="api.example.com")
 ```
 
+## MCP Tools
+
+The following tools are exposed via the Model Context Protocol (MCP):
+
+| Tool | Description |
+|------|-------------|
+| `privacy_scan` | Scans provided data for PII and privacy issues. |
+| `privacy_scrub_crumbs` | Sanitizes data by recursively removing tracking crumbs and metadata. |
+| `privacy_route_payload` | Routes a string payload through simulated anonymous mix nodes. |
+| `privacy_process` | Applies configured privacy rules to anonymize a specific payload. |
+
 ## Exports
 
 | Class | Description |
