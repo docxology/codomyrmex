@@ -206,6 +206,9 @@ jobs:
     needs: [validate-links, check-quality, validate-structure]
     runs-on: ubuntu-latest
     if: always()
+    permissions:
+      contents: read
+      pull-requests: write
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
