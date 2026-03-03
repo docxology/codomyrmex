@@ -8,7 +8,12 @@ from __future__ import annotations
 
 import struct
 
-from PIL import Image
+try:
+    from PIL import Image
+    HAS_PIL = True
+except ImportError:
+    Image = None
+    HAS_PIL = False
 
 from codomyrmex.crypto.exceptions import SteganographyError
 from codomyrmex.logging_monitoring import get_logger
@@ -52,6 +57,8 @@ def calculate_capacity(image_path: str) -> int:
     Raises:
         SteganographyError: If the image cannot be opened.
     """
+    if not HAS_PIL:
+        raise ImportError("PIL (Pillow) is required for image steganography")
     try:
         img = Image.open(image_path)
     except Exception as e:
@@ -89,6 +96,8 @@ def embed_in_image(image_path: str, message: str, output_path: str) -> bool:
         SteganographyError: If the message is too large for the image,
             or if the image cannot be processed.
     """
+    if not HAS_PIL:
+        raise ImportError("PIL (Pillow) is required for image steganography")
     try:
         img = Image.open(image_path)
     except Exception as e:
@@ -167,6 +176,8 @@ def extract_from_image(image_path: str) -> str:
         SteganographyError: If the image cannot be read or the
             extracted data is invalid.
     """
+    if not HAS_PIL:
+        raise ImportError("PIL (Pillow) is required for image steganography")
     try:
         img = Image.open(image_path)
     except Exception as e:
