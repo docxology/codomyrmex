@@ -169,6 +169,45 @@ class TestFileHash:
         assert file_hash(path) == expected
         path.unlink()
 
+    def test_file_hash_empty_file(self):
+        from codomyrmex.utils.hashing import content_hash, file_hash
+
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".txt", delete=False) as f:
+            f.write("")
+            f.flush()
+            path = Path(f.name)
+
+        expected = content_hash("")
+        assert file_hash(path) == expected
+        path.unlink()
+
+    def test_file_hash_streaming(self):
+        from codomyrmex.utils.hashing import content_hash, file_hash
+
+        large_content = "a" * 10000
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".txt", delete=False) as f:
+            f.write(large_content)
+            f.flush()
+            path = Path(f.name)
+
+        expected = content_hash(large_content)
+        # Use a small chunk size to trigger the streaming logic
+        assert file_hash(path, chunk_size=1024) == expected
+        path.unlink()
+
+    def test_file_hash_different_algorithms(self):
+        from codomyrmex.utils.hashing import content_hash, file_hash
+
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".txt", delete=False) as f:
+            f.write("test content")
+            f.flush()
+            path = Path(f.name)
+
+        for algo in ["md5", "sha1", "sha256", "sha512"]:
+            expected = content_hash("test content", algorithm=algo)
+            assert file_hash(path, algorithm=algo) == expected
+        path.unlink()
+
 
 # From test_coverage_boost.py
 class TestDictHash:
@@ -226,6 +265,22 @@ class TestConsistentHash:
         ring = ConsistentHash()
         with pytest.raises(ValueError, match="No nodes"):
             ring.get_node("key")
+
+    def test_get_node_wraparound(self, monkeypatch):
+        from codomyrmex.utils.hashing import ConsistentHash
+
+        ring = ConsistentHash(["a", "b", "c"])
+
+        # Patch the internal _hash method to return a value larger than
+        # any element in the ring, which forces `idx >= len(self._ring)`
+        def mock_hash(key):
+            return ring._ring[-1] + 1
+
+        monkeypatch.setattr(ring, "_hash", mock_hash)
+
+        # The first node in the ring should be returned (idx = 0)
+        expected_node = ring._node_map[ring._ring[0]]
+        assert ring.get_node("any-key") == expected_node
 
 
 # From test_coverage_boost.py
