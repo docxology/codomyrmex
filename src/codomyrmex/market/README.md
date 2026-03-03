@@ -78,6 +78,16 @@ print(f"Total demand: {bulk_order.quantity}")
 | `AuctionRequest` | Buyer's resource request |
 | `DemandAggregator` | Consolidate demand for bulk pricing |
 
+## MCP Tools
+
+The module exposes Model Context Protocol (MCP) tools in `mcp_tools.py` for interacting with the marketplace:
+- `market_create_auction`: Create a new reverse auction request.
+- `market_place_bid`: Place a bid on an active auction.
+- `market_get_best_bid`: Get the current best bid for an auction.
+- `market_register_demand`: Register demand for a category to participate in collective bargaining.
+- `market_trigger_bulk_auction`: Trigger a bulk auction if demand meets the threshold.
+- `market_get_stats`: Get marketplace statistics including agents and tasks.
+
 ## Testing
 
 ```bash

@@ -33,10 +33,20 @@ class ReverseAuction:
     """Manages anonymous reverse auctions."""
 
     def __init__(self):
+        """Initialize ReverseAuction."""
         self._auctions: dict[str, AuctionRequest] = {}
 
     def create_request(self, persona_id: str, description: str, max_price: float) -> str:
-        """Create a new auction request."""
+        """Create a new auction request.
+
+        Args:
+            persona_id: ID of the requesting persona.
+            description: Description of the requested item or service.
+            max_price: Maximum acceptable price.
+
+        Returns:
+            ID of the newly created auction request.
+        """
         auction_id = str(uuid.uuid4())
         request = AuctionRequest(
             id=auction_id,
@@ -49,7 +59,17 @@ class ReverseAuction:
         return auction_id
 
     def place_bid(self, auction_id: str, provider_id: str, amount: float, details: str) -> bool:
-        """Place a bid on an active auction."""
+        """Place a bid on an active auction.
+
+        Args:
+            auction_id: ID of the auction to bid on.
+            provider_id: ID of the bidding provider.
+            amount: Bid amount (must be <= max_price).
+            details: Additional details for the bid.
+
+        Returns:
+            True if bid was successfully placed, False otherwise.
+        """
         if auction_id not in self._auctions:
             return False
 
@@ -69,7 +89,14 @@ class ReverseAuction:
         return True
 
     def get_best_bid(self, auction_id: str) -> Bid | None:
-        """Get the current best bid."""
+        """Get the current best bid.
+
+        Args:
+            auction_id: ID of the auction.
+
+        Returns:
+            The lowest Bid if available, None otherwise.
+        """
         if auction_id not in self._auctions:
             return None
         auction = self._auctions[auction_id]
@@ -78,7 +105,15 @@ class ReverseAuction:
         return auction.bids[0]
 
     def close_auction(self, auction_id: str, requester_id: str) -> bool:
-        """Close the auction and select winner."""
+        """Close the auction and select winner.
+
+        Args:
+            auction_id: ID of the auction.
+            requester_id: ID of the requester who owns the auction.
+
+        Returns:
+            True if auction was closed, False if not found or unauthorized.
+        """
         if auction_id not in self._auctions:
             return False
         auction = self._auctions[auction_id]
@@ -89,7 +124,15 @@ class ReverseAuction:
         return True
 
     def cancel_auction(self, auction_id: str, requester_id: str) -> bool:
-        """Cancel an open auction."""
+        """Cancel an open auction.
+
+        Args:
+            auction_id: ID of the auction.
+            requester_id: ID of the requester who owns the auction.
+
+        Returns:
+            True if auction was cancelled, False if not found or unauthorized.
+        """
         if auction_id not in self._auctions:
             return False
         auction = self._auctions[auction_id]
@@ -103,7 +146,14 @@ class ReverseAuction:
         return True
 
     def get_history(self, persona_id: str) -> list[AuctionRequest]:
-        """Get auction history for a persona."""
+        """Get auction history for a persona.
+
+        Args:
+            persona_id: ID of the persona.
+
+        Returns:
+            List of AuctionRequests created by the persona.
+        """
         return [
             a for a in self._auctions.values()
             if a.requester_persona_id == persona_id
