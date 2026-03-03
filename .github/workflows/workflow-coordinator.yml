@@ -99,6 +99,7 @@ jobs:
       contains(github.event.inputs.workflows, 'all')
     permissions:
       actions: write
+      issues: write
       contents: read
     steps:
       - name: Trigger CI Workflow
