@@ -12,14 +12,15 @@ High-fidelity biological simulation engine. Provides digital twins of ant coloni
 - **Agent State Machine**: High-fidelity behavioral states (FORAGING, RETURNING, RESTING).
 - **Spatial Environment**: Grid-based world with resources, obstacles, and pheromone dynamics.
 - **Genomics**: Trait-based genetic representation with mutation and crossover for evolutionary studies.
+- **MCP Tools**: Easy-to-use Model Context Protocol integration for controlling and analyzing simulations.
 
 ## PAI Integration
 
 | Algorithm Phase | Role | Tools Used |
 |----------------|------|-----------|
-| **THINK** | Run biological models to explore emergent behavior | Direct Python import |
+| **THINK** | Run biological models to explore emergent behavior | Direct Python import, `bio_simulation_run_colony` |
 | **BUILD** | Configure colony simulations and genomics parameters | Direct Python import |
-| **VERIFY** | Validate simulation outputs against expected distributions | Direct Python import |
+| **VERIFY** | Validate simulation outputs against expected distributions | Direct Python import, `bio_simulation_evolve_population` |
 
 ## Installation
 
