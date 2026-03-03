@@ -14,6 +14,9 @@ The `container_optimization` module is designed to provide automated container o
 - `analyze_usage(container_id: str) -> ResourceUsage`: Monitors and analyzes the CPU and memory usage of a running container.
 - `suggest_limits(usage: ResourceUsage) -> dict[str, str]`: Recommends resource limits based on historical usage.
 
+### MCP Tools
+Tools are exposed in `mcp_tools.py` via `@mcp_tool(category="container_optimization")` for auto-discovery, mirroring the capabilities of `ContainerOptimizer` and `ResourceTuner`.
+
 ## Data Models
 - `ImageAnalysis`: Contains size, layer count, base image, and discovered optimizations.
 - `OptimizationSuggestion`: Describes a specific improvement, its impact, and effort.
