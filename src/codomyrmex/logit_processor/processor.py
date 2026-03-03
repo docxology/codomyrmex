@@ -48,6 +48,11 @@ class TemperatureProcessor(LogitProcessor):
     """
 
     def __init__(self, temperature: float = 1.0) -> None:
+        """Initialize processor with given temperature.
+
+        Args:
+            temperature: Sampling temperature. Defaults to 1.0.
+        """
         if temperature <= 0:
             raise ValueError(f"Temperature must be positive, got {temperature}")
         self.temperature = temperature
@@ -55,6 +60,15 @@ class TemperatureProcessor(LogitProcessor):
     def __call__(
         self, logits: np.ndarray, input_ids: list[int] | None = None
     ) -> np.ndarray:
+        """Process logits by dividing by temperature.
+
+        Args:
+            logits: Array of raw logits.
+            input_ids: Not used in this processor.
+
+        Returns:
+            Scaled logits array.
+        """
         return logits / self.temperature
 
 
@@ -65,6 +79,11 @@ class TopKProcessor(LogitProcessor):
     """
 
     def __init__(self, top_k: int = 50) -> None:
+        """Initialize processor with top-k cutoff.
+
+        Args:
+            top_k: Number of highest logits to keep. Defaults to 50.
+        """
         if top_k <= 0:
             raise ValueError(f"top_k must be positive, got {top_k}")
         self.top_k = top_k
@@ -72,6 +91,15 @@ class TopKProcessor(LogitProcessor):
     def __call__(
         self, logits: np.ndarray, input_ids: list[int] | None = None
     ) -> np.ndarray:
+        """Process logits by filtering top-k values.
+
+        Args:
+            logits: Array of raw logits.
+            input_ids: Not used in this processor.
+
+        Returns:
+            Filtered logits array with values outside top-k set to -inf.
+        """
         k = min(self.top_k, len(logits))
         # Find k-th largest value threshold
         top_k_indices = np.argpartition(logits, -k)[-k:]
@@ -89,6 +117,11 @@ class TopPProcessor(LogitProcessor):
     """
 
     def __init__(self, top_p: float = 0.9) -> None:
+        """Initialize processor with cumulative probability threshold.
+
+        Args:
+            top_p: Nucleus threshold parameter. Defaults to 0.9.
+        """
         if not 0 < top_p <= 1.0:
             raise ValueError(f"top_p must be in (0, 1], got {top_p}")
         self.top_p = top_p
@@ -96,6 +129,15 @@ class TopPProcessor(LogitProcessor):
     def __call__(
         self, logits: np.ndarray, input_ids: list[int] | None = None
     ) -> np.ndarray:
+        """Process logits by applying nucleus filtering.
+
+        Args:
+            logits: Array of raw logits.
+            input_ids: Not used in this processor.
+
+        Returns:
+            Filtered logits array.
+        """
         # Compute probabilities
         shifted = logits - np.max(logits)
         probs = np.exp(shifted) / np.sum(np.exp(shifted))
@@ -127,6 +169,11 @@ class RepetitionPenaltyProcessor(LogitProcessor):
     """
 
     def __init__(self, penalty: float = 1.3) -> None:
+        """Initialize processor with given penalty factor.
+
+        Args:
+            penalty: The repetition penalty factor. Defaults to 1.3.
+        """
         if penalty < 1.0:
             raise ValueError(
                 f"Repetition penalty must be >= 1.0, got {penalty}"
@@ -136,6 +183,15 @@ class RepetitionPenaltyProcessor(LogitProcessor):
     def __call__(
         self, logits: np.ndarray, input_ids: list[int] | None = None
     ) -> np.ndarray:
+        """Process logits by penalizing previous tokens.
+
+        Args:
+            logits: Array of raw logits.
+            input_ids: History of generated token IDs.
+
+        Returns:
+            Penalized logits array.
+        """
         if not input_ids:
             return logits
 
@@ -154,18 +210,36 @@ class LogitProcessorList(LogitProcessor):
     """Apply a sequence of logit processors in order."""
 
     def __init__(self, processors: list[LogitProcessor]) -> None:
+        """Initialize list from given processors.
+
+        Args:
+            processors: Initial sequence of processors.
+        """
         self.processors = list(processors)
 
     def __call__(
         self, logits: np.ndarray, input_ids: list[int] | None = None
     ) -> np.ndarray:
+        """Process logits by chaining through all processors.
+
+        Args:
+            logits: Array of raw logits.
+            input_ids: Previous tokens passed to each processor.
+
+        Returns:
+            Fully processed logits array.
+        """
         result = logits
         for processor in self.processors:
             result = processor(result, input_ids)
         return result
 
     def append(self, processor: LogitProcessor) -> None:
-        """Append a processor to the chain."""
+        """Append a processor to the chain.
+
+        Args:
+            processor: Processor to add to end of chain.
+        """
         self.processors.append(processor)
 
 
