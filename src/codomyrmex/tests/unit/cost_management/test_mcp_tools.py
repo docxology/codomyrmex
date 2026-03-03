@@ -22,6 +22,7 @@ def reset_stores():
     _budget_manager._triggered_alerts.clear()
     yield
 
+
 @pytest.mark.unit
 def test_cost_management_record_cost():
     result = cost_management_record_cost(
@@ -34,6 +35,7 @@ def test_cost_management_record_cost():
     assert result.data["category"] == "llm_inference"
     assert result.data["description"] == "Test cost"
 
+
 @pytest.mark.unit
 def test_cost_management_record_cost_invalid_category():
     result = cost_management_record_cost(
@@ -42,6 +44,7 @@ def test_cost_management_record_cost_invalid_category():
     )
     assert result.status == ResultStatus.FAILURE
     assert "Invalid category" in result.message
+
 
 @pytest.mark.unit
 def test_cost_management_get_summary():
@@ -53,6 +56,7 @@ def test_cost_management_get_summary():
     assert "total" in result.data
     assert "entry_count" in result.data
 
+
 @pytest.mark.unit
 def test_cost_management_get_summary_invalid():
     result = cost_management_get_summary(
@@ -60,6 +64,7 @@ def test_cost_management_get_summary_invalid():
     )
     assert result.status == ResultStatus.FAILURE
     assert "Invalid period or category" in result.message
+
 
 @pytest.mark.unit
 def test_cost_management_create_budget():
@@ -74,6 +79,7 @@ def test_cost_management_create_budget():
     assert result.data["amount"] == 100.0
     assert result.data["period"] == "monthly"
 
+
 @pytest.mark.unit
 def test_cost_management_create_budget_invalid():
     result = cost_management_create_budget(
@@ -83,6 +89,7 @@ def test_cost_management_create_budget_invalid():
     )
     assert result.status == ResultStatus.FAILURE
     assert "Invalid input" in result.message
+
 
 @pytest.mark.unit
 def test_cost_management_can_spend():
@@ -118,6 +125,7 @@ def test_cost_management_can_spend():
     assert result2.status == ResultStatus.SUCCESS
     assert result2.data["can_spend"] is True
 
+
 @pytest.mark.unit
 def test_cost_management_can_spend_invalid():
     result = cost_management_can_spend(
@@ -126,6 +134,7 @@ def test_cost_management_can_spend_invalid():
     )
     assert result.status == ResultStatus.FAILURE
     assert "Invalid category" in result.message
+
 
 @pytest.mark.unit
 def test_cost_management_check_budgets():
