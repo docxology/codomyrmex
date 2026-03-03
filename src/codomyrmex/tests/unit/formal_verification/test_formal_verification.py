@@ -726,7 +726,12 @@ class TestSolverStatusProperties:
 
     @pytest.mark.skipif(z3 is None, reason="z3-solver not installed")
     def test_mcp_push(self):
-        from codomyrmex.formal_verification.mcp_tools import clear_model, add_item, solve_model, push
+        from codomyrmex.formal_verification.mcp_tools import (
+            add_item,
+            clear_model,
+            push,
+            solve_model,
+        )
         clear_model()
         add_item("x = Int('x')")
         add_item("solver.add(x == 10)")
@@ -740,7 +745,13 @@ class TestSolverStatusProperties:
 
     @pytest.mark.skipif(z3 is None, reason="z3-solver not installed")
     def test_mcp_pop(self):
-        from codomyrmex.formal_verification.mcp_tools import clear_model, add_item, solve_model, push, pop
+        from codomyrmex.formal_verification.mcp_tools import (
+            add_item,
+            clear_model,
+            pop,
+            push,
+            solve_model,
+        )
         clear_model()
         add_item("x = Int('x')")
         add_item("solver.add(x == 10)")
