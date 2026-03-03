@@ -56,6 +56,7 @@ Main package directory containing 88 specialized modules for the Codomyrmex plat
 - `graph_rag/` – Module
 - `ide/` – Module
 - `identity/` – Module
+- `language_detection/` – Module
 - `llm/` – Module
 - `logging_monitoring/` – Module
 - `logistics/` – Module

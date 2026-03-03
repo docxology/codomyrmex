@@ -839,6 +839,7 @@ dependencies = [
     { name = "fastavro" },
     { name = "gitpython" },
     { name = "jsonschema" },
+    { name = "langdetect" },
     { name = "lizard" },
     { name = "loguru" },
     { name = "mako" },
@@ -1056,6 +1057,7 @@ requires-dist = [
     { name = "google-generativeai", marker = "extra == 'llm-providers'", specifier = ">=0.3.0" },
     { name = "jinja2", marker = "extra == 'security-audit'", specifier = ">=3.1.0" },
     { name = "jsonschema", specifier = ">=4.23.0" },
+    { name = "langdetect", specifier = ">=1.0.9" },
     { name = "lizard", specifier = ">=1.17.0" },
     { name = "loguru", specifier = ">=0.7.0" },
     { name = "mako", specifier = ">=1.2.0" },
@@ -2939,6 +2941,15 @@ sdist = { url = "https://files.pythonhosted.org/packages/2c/8f/85bf51ad4150f64e8
 wheels = [
     { url = "https://files.pythonhosted.org/packages/0c/70/05b685ea2dffcb2adbf3cdcea5d8865b7bc66f67249084cf845012a0ff13/kubernetes-35.0.0-py2.py3-none-any.whl", hash = "sha256:39e2b33b46e5834ef6c3985ebfe2047ab39135d41de51ce7641a7ca5b372a13d", size = 2017602, upload-time = "2026-01-16T01:05:25.991Z" },
 ]
+
+[[package]]
+name = "langdetect"
+version = "1.0.9"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "six" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/0e/72/a3add0e4eec4eb9e2569554f7c70f4a3c27712f40e3284d483e88094cc0e/langdetect-1.0.9.tar.gz", hash = "sha256:cbc1fef89f8d062739774bd51eda3da3274006b3661d199c2655f6b3f6d605a0", size = 981474, upload-time = "2021-05-07T07:54:13.562Z" }
 
 [[package]]
 name = "lark"
