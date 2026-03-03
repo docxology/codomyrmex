@@ -11,9 +11,15 @@ Usage:
 """
 
 import sys
-from pathlib import Path
 from datetime import datetime
-from codomyrmex.utils.cli_helpers import setup_logging, print_info, print_success, print_warning
+from pathlib import Path
+
+from codomyrmex.utils.cli_helpers import (
+    print_info,
+    print_success,
+    print_warning,
+    setup_logging,
+)
 
 # Add project root to path
 PROJECT_ROOT = Path(__file__).parent.parent.parent
@@ -25,16 +31,28 @@ sys.path.insert(0, str(PROJECT_ROOT))
 
 SUBMODULES = {
     "agents": [
-        ("o1", "OpenAI o1/o3 reasoning model integration for advanced multi-step reasoning tasks"),
+        (
+            "o1",
+            "OpenAI o1/o3 reasoning model integration for advanced multi-step reasoning tasks",
+        ),
         ("deepseek", "DeepSeek Coder integration for code generation and analysis"),
         ("qwen", "Qwen-Coder integration for multilingual code assistance"),
         ("pooling", "Multi-agent load balancing, failover, and intelligent routing"),
-        ("evaluation", "Agent benchmarking, quality metrics, and performance comparison"),
+        (
+            "evaluation",
+            "Agent benchmarking, quality metrics, and performance comparison",
+        ),
         ("history", "Conversation and context persistence for stateful interactions"),
     ],
     "llm": [
-        ("guardrails", "Input/output safety validation including prompt injection defense"),
-        ("streaming", "Streaming response handlers for real-time LLM output processing"),
+        (
+            "guardrails",
+            "Input/output safety validation including prompt injection defense",
+        ),
+        (
+            "streaming",
+            "Streaming response handlers for real-time LLM output processing",
+        ),
         ("embeddings", "Text embedding generation, caching, and similarity search"),
         ("rag", "Retrieval-Augmented Generation pipeline with document processing"),
         ("cost_tracking", "Token counting, billing estimation, and usage analytics"),
@@ -43,7 +61,10 @@ SUBMODULES = {
     "api": [
         ("webhooks", "Webhook dispatch and receipt management for event-driven APIs"),
         ("mocking", "API mock server for development and testing workflows"),
-        ("circuit_breaker", "Resilience patterns including retry, circuit breaker, and bulkhead"),
+        (
+            "circuit_breaker",
+            "Resilience patterns including retry, circuit breaker, and bulkhead",
+        ),
         ("pagination", "Cursor and offset pagination utilities for API responses"),
     ],
     "cache": [
@@ -91,17 +112,38 @@ SUBMODULES = {
 # ============================================================================
 
 NEW_MODULES = [
-    ("graph_rag", "Knowledge graph integration with RAG for structured knowledge retrieval and reasoning"),
-    ("agentic_memory", "Long-term agent memory systems for stateful, persistent agent interactions"),
-    ("prompt_testing", "Prompt evaluation, A/B testing, and quality assurance at scale"),
-    ("inference_optimization", "Model quantization, distillation, and pruning for cost-effective inference"),
+    (
+        "graph_rag",
+        "Knowledge graph integration with RAG for structured knowledge retrieval and reasoning",
+    ),
+    (
+        "agentic_memory",
+        "Long-term agent memory systems for stateful, persistent agent interactions",
+    ),
+    (
+        "prompt_testing",
+        "Prompt evaluation, A/B testing, and quality assurance at scale",
+    ),
+    (
+        "inference_optimization",
+        "Model quantization, distillation, and pruning for cost-effective inference",
+    ),
     ("multimodal", "Vision, audio, and image processing for multi-modal AI workflows"),
-    ("cost_management", "Cloud and API spend tracking, optimization, and budget alerting"),
-    ("observability_dashboard", "Unified dashboards for telemetry visualization and monitoring"),
+    (
+        "cost_management",
+        "Cloud and API spend tracking, optimization, and budget alerting",
+    ),
+    (
+        "observability_dashboard",
+        "Unified dashboards for telemetry visualization and monitoring",
+    ),
     ("workflow_testing", "End-to-end workflow validation and integration testing"),
     ("migration", "Cross-provider migration tools for cloud and database transitions"),
     ("data_lineage", "Data provenance tracking and transformation audit trails"),
-    ("notification", "Multi-channel notification dispatch including email, Slack, and SMS"),
+    (
+        "notification",
+        "Multi-channel notification dispatch including email, Slack, and SMS",
+    ),
     ("feature_store", "ML feature management, versioning, and serving"),
     ("model_registry", "ML model versioning, storage, and deployment tracking"),
 ]
@@ -110,7 +152,7 @@ NEW_MODULES = [
 def generate_readme(name: str, description: str, parent: str = None) -> str:
     """Generate README.md content."""
     full_name = f"{parent}/{name}" if parent else name
-    return f'''# {name.replace("_", " ").title()}
+    return f"""# {name.replace("_", " ").title()}
 
 {description}
 
@@ -149,16 +191,16 @@ See [API_SPECIFICATION.md](./API_SPECIFICATION.md) for detailed API documentatio
 ## Related Modules
 
 - [`{parent}`](../) - Parent module
-'''
+"""
 
 
 def generate_agents(name: str, description: str, parent: str = None) -> str:
     """Generate AGENTS.md content."""
     full_name = f"{parent}/{name}" if parent else name
-    return f'''# AI Agent Guidelines - {name.replace("_", " ").title()}
+    return f"""# AI Agent Guidelines - {name.replace("_", " ").title()}
 
-**Module**: `codomyrmex.{full_name.replace("/", ".")}`  
-**Version**: v0.1.0  
+**Module**: `codomyrmex.{full_name.replace("/", ".")}`
+**Version**: v0.1.0
 **Status**: Active
 
 ## Purpose
@@ -203,16 +245,16 @@ Common issues and solutions:
 
 1. **Issue**: Description
    **Solution**: Resolution steps
-'''
+"""
 
 
 def generate_spec(name: str, description: str, parent: str = None) -> str:
     """Generate SPEC.md content."""
     full_name = f"{parent}/{name}" if parent else name
-    return f'''# Technical Specification - {name.replace("_", " ").title()}
+    return f"""# Technical Specification - {name.replace("_", " ").title()}
 
-**Module**: `codomyrmex.{full_name.replace("/", ".")}`  
-**Version**: v0.1.0  
+**Module**: `codomyrmex.{full_name.replace("/", ".")}`
+**Version**: v0.1.0
 **Last Updated**: {datetime.now().strftime("%Y-%m-%d")}
 
 ## 1. Purpose
@@ -274,16 +316,16 @@ pytest tests/{full_name.replace("/", "_")}/
 
 - Enhancement 1
 - Enhancement 2
-'''
+"""
 
 
 def generate_pai(name: str, description: str, parent: str = None) -> str:
     """Generate PAI.md content."""
     full_name = f"{parent}/{name}" if parent else name
-    return f'''# Personal AI Infrastructure - {name.replace("_", " ").title()}
+    return f"""# Personal AI Infrastructure - {name.replace("_", " ").title()}
 
-**Module**: `codomyrmex.{full_name.replace("/", ".")}`  
-**Version**: v0.1.0  
+**Module**: `codomyrmex.{full_name.replace("/", ".")}`
+**Version**: v0.1.0
 **Status**: Active
 
 ## Context
@@ -324,12 +366,11 @@ except Exception as e:
 
 1. **Enhancement Area 1**: Description
 2. **Enhancement Area 2**: Description
-'''
+"""
 
 
 def generate_init(name: str, description: str, parent: str = None) -> str:
     """Generate __init__.py content."""
-    full_name = f"{parent}.{name}" if parent else name
     return f'''"""
 {name.replace("_", " ").title()} {"Submodule" if parent else "Module"}
 
@@ -345,19 +386,19 @@ __all__ = []
 
 
 def create_module_structure(
-    base_path: Path, 
-    name: str, 
-    description: str, 
+    base_path: Path,
+    name: str,
+    description: str,
     parent: str = None,
-    dry_run: bool = False
+    dry_run: bool = False,
 ) -> list:
     """Create the full module/submodule structure."""
     created_files = []
     module_path = base_path / name
-    
+
     if not dry_run:
         module_path.mkdir(parents=True, exist_ok=True)
-    
+
     files = {
         "README.md": generate_readme(name, description, parent),
         "AGENTS.md": generate_agents(name, description, parent),
@@ -365,7 +406,7 @@ def create_module_structure(
         "PAI.md": generate_pai(name, description, parent),
         "__init__.py": generate_init(name, description, parent),
     }
-    
+
     for filename, content in files.items():
         file_path = module_path / filename
         if not dry_run:
@@ -374,33 +415,33 @@ def create_module_structure(
                 created_files.append(str(file_path))
         else:
             created_files.append(f"[DRY RUN] Would create: {file_path}")
-    
+
     return created_files
 
 
 def create_script_structure(
     scripts_base: Path,
-    name: str, 
+    name: str,
     description: str,
     parent: str = None,
-    dry_run: bool = False
+    dry_run: bool = False,
 ) -> list:
     """Create corresponding script directory."""
     created_files = []
-    
+
     if parent:
         script_path = scripts_base / parent / name
     else:
         script_path = scripts_base / name
-    
+
     if not dry_run:
         script_path.mkdir(parents=True, exist_ok=True)
-    
+
     # Construct components
     title = name.replace("_", " ").title()
     submod_type = "submodule" if parent else "module"
     parent_levels = "/.." if parent else ""
-    
+
     demo_script = f'''#!/usr/bin/env python3
 """
 {title} Demo Script
@@ -416,15 +457,6 @@ PROJECT_ROOT = Path(__file__).parent.parent.parent{parent_levels}
 sys.path.insert(0, str(PROJECT_ROOT / "src"))
 
 def main():
-    # Auto-injected: Load configuration
-    import yaml
-    from pathlib import Path
-    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "utils" / "config.yaml"
-    config_data = {}
-    if config_path.exists():
-        with open(config_path, "r") as f:
-            config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/utils/config.yaml")
 
     """Main demonstration."""
     raise NotImplementedError(
@@ -444,7 +476,7 @@ if __name__ == "__main__":
             created_files.append(str(demo_path))
     else:
         created_files.append(f"[DRY RUN] Would create: {demo_path}")
-    
+
     return created_files
 
 
@@ -452,18 +484,18 @@ def main() -> int:
     """Main execution."""
     setup_logging()
     dry_run = "--dry-run" in sys.argv
-    
+
     src_base = PROJECT_ROOT / "src" / "codomyrmex"
     scripts_base = PROJECT_ROOT / "scripts"
-    
+
     all_created = []
-    
+
     print("=" * 60)
     print_info("CODOMYRMEX MODULE SCAFFOLDING")
     print("=" * 60)
     if dry_run:
         print_info("DRY RUN MODE - No files will be created")
-    
+
     # Phase 1: Create submodules
     print_info("Phase 1: Creating Submodules")
     for parent, submodules in SUBMODULES.items():
@@ -471,34 +503,40 @@ def main() -> int:
         if not parent_path.exists():
             print_warning(f"Parent module not found: {parent}")
             continue
-            
+
         print(f"\n  {parent}/")
         for name, description in submodules:
-            files = create_module_structure(parent_path, name, description, parent, dry_run)
+            files = create_module_structure(
+                parent_path, name, description, parent, dry_run
+            )
             all_created.extend(files)
-            script_files = create_script_structure(scripts_base, name, description, parent, dry_run)
+            script_files = create_script_structure(
+                scripts_base, name, description, parent, dry_run
+            )
             all_created.extend(script_files)
             print_success(f"  {name}")
-    
+
     # Phase 2: Create new modules
     print_info("Phase 2: Creating New Modules")
     for name, description in NEW_MODULES:
         files = create_module_structure(src_base, name, description, None, dry_run)
         all_created.extend(files)
-        script_files = create_script_structure(scripts_base, name, description, None, dry_run)
+        script_files = create_script_structure(
+            scripts_base, name, description, None, dry_run
+        )
         all_created.extend(script_files)
         print_success(f"  {name}")
-    
+
     # Summary
     print("\n" + "=" * 60)
     print_info(f"{'Would create' if dry_run else 'Created'} {len(all_created)} files")
     print("=" * 60)
-    
+
     if dry_run:
         print_info("Run without --dry-run to create files")
     else:
         print_success("All modules scaffolded successfully")
-    
+
     return 0
 
 
