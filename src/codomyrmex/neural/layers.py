@@ -1,4 +1,7 @@
 """Core neural network layers: LayerNorm, FeedForward, PositionalEncoding, Embedding."""
+
+import typing
+
 import numpy as np
 
 
@@ -9,6 +12,7 @@ class LayerNorm:
     """
 
     def __init__(self, d_model: int, eps: float = 1e-6):
+        """Initialize LayerNorm."""
         self.d_model = d_model
         self.eps = eps
         self.gamma = np.ones(d_model)  # scale
@@ -22,13 +26,14 @@ class LayerNorm:
 
         Returns:
             Normalized tensor (..., d_model)
+
         """
         mean = np.mean(x, axis=-1, keepdims=True)
         var = np.var(x, axis=-1, keepdims=True)
         x_norm = (x - mean) / np.sqrt(var + self.eps)
-        return self.gamma * x_norm + self.beta
+        return self.gamma * x_norm + self.beta  # type: ignore
 
-    def __call__(self, x):
+    def __call__(self, x: np.ndarray) -> np.ndarray:
         """Make LayerNorm callable."""
         return self.forward(x)
 
@@ -40,6 +45,7 @@ class FeedForward:
     """
 
     def __init__(self, d_model: int, d_ff: int):
+        """Initialize FeedForward."""
         self.d_model = d_model
         self.d_ff = d_ff
         scale = np.sqrt(2.0 / d_model)
@@ -56,13 +62,14 @@ class FeedForward:
 
         Returns:
             (..., d_model)
+
         """
         from .activations import gelu
 
         h = gelu(x @ self.W1 + self.b1)
-        return h @ self.W2 + self.b2
+        return h @ self.W2 + self.b2  # type: ignore
 
-    def __call__(self, x):
+    def __call__(self, x: np.ndarray) -> np.ndarray:
         """Make FeedForward callable."""
         return self.forward(x)
 
@@ -75,6 +82,7 @@ class PositionalEncoding:
     """
 
     def __init__(self, d_model: int, max_len: int = 5000):
+        """Initialize PositionalEncoding."""
         self.d_model = d_model
         pe = np.zeros((max_len, d_model))
         position = np.arange(max_len)[:, np.newaxis]
@@ -91,11 +99,12 @@ class PositionalEncoding:
 
         Returns:
             (batch, seq, d_model) with positional encoding added
+
         """
         seq_len = x.shape[1]
         return x + self.pe[:seq_len][np.newaxis, :, :]
 
-    def __call__(self, x):
+    def __call__(self, x: np.ndarray) -> np.ndarray:
         """Make PositionalEncoding callable."""
         return self.forward(x)
 
@@ -107,6 +116,7 @@ class Embedding:
     """
 
     def __init__(self, vocab_size: int, d_model: int):
+        """Initialize Embedding."""
         self.vocab_size = vocab_size
         self.d_model = d_model
         self.weight = np.random.randn(vocab_size, d_model) * np.sqrt(1.0 / d_model)
@@ -119,9 +129,10 @@ class Embedding:
 
         Returns:
             (batch, seq, d_model) scaled embeddings
-        """
-        return self.weight[token_ids] * np.sqrt(self.d_model)
 
-    def __call__(self, x):
+        """
+        return self.weight[token_ids] * np.sqrt(self.d_model)  # type: ignore
+
+    def __call__(self, x: np.ndarray) -> np.ndarray:
         """Make Embedding callable."""
         return self.forward(x)

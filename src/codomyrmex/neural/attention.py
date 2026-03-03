@@ -1,4 +1,5 @@
 """Multi-head attention mechanism from 'Attention Is All You Need' (Vaswani et al. 2017)."""
+
 from __future__ import annotations
 
 import numpy as np
@@ -24,6 +25,7 @@ def scaled_dot_product_attention(
     Returns:
         output: shape (..., seq_len_q, d_v)
         weights: Attention weights, shape (..., seq_len_q, seq_len_k)
+
     """
     d_k = Q.shape[-1]
     scores = Q @ K.swapaxes(-2, -1) / np.sqrt(d_k)  # (..., seq_q, seq_k)
@@ -51,6 +53,7 @@ class MultiHeadAttention:
     """
 
     def __init__(self, d_model: int, n_heads: int, dropout: float = 0.0):
+        """Initialize MultiHeadAttention."""
         if d_model % n_heads != 0:
             raise AssertionError(
                 f"d_model ({d_model}) must be divisible by n_heads ({n_heads})"
@@ -90,6 +93,7 @@ class MultiHeadAttention:
         Returns:
             output: (batch, seq_q, d_model)
             weights: (batch, n_heads, seq_q, seq_k)
+
         """
         batch_size, seq_len_q, _ = query.shape
         _, seq_len_k, _ = key.shape
@@ -127,6 +131,12 @@ class MultiHeadAttention:
 
         return output, attn_weights
 
-    def __call__(self, query, key, value, mask=None):
+    def __call__(
+        self,
+        query: np.ndarray,
+        key: np.ndarray,
+        value: np.ndarray,
+        mask: np.ndarray | None = None,
+    ) -> tuple[np.ndarray, np.ndarray]:
         """Make MultiHeadAttention callable."""
         return self.forward(query, key, value, mask)

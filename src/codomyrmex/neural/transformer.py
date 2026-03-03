@@ -1,6 +1,9 @@
 """Transformer encoder and decoder blocks from 'Attention Is All You Need'."""
 from __future__ import annotations
 
+import typing
+
+
 import numpy as np
 
 from .attention import MultiHeadAttention
@@ -16,12 +19,13 @@ class TransformerBlock:
     """
 
     def __init__(self, d_model: int, n_heads: int, d_ff: int, dropout: float = 0.0):
+        """Initialize TransformerBlock."""
         self.self_attn = MultiHeadAttention(d_model, n_heads, dropout)
         self.ffn = FeedForward(d_model, d_ff)
         self.ln1 = LayerNorm(d_model)
         self.ln2 = LayerNorm(d_model)
 
-    def forward(self, x: np.ndarray, mask: np.ndarray = None) -> np.ndarray:
+    def forward(self, x: np.ndarray, mask: np.ndarray | None = None) -> np.ndarray:
         """Forward pass through one transformer block.
 
         Args:
@@ -30,6 +34,7 @@ class TransformerBlock:
 
         Returns:
             (batch, seq, d_model)
+
         """
         # Self-attention with residual (pre-LN)
         normed = self.ln1(x)
@@ -39,7 +44,7 @@ class TransformerBlock:
         x = x + self.ffn(self.ln2(x))
         return x
 
-    def __call__(self, x, mask=None):
+    def __call__(self, x: np.ndarray, mask: np.ndarray | None = None) -> np.ndarray:
         """Make TransformerBlock callable."""
         return self.forward(x, mask)
 
@@ -61,6 +66,7 @@ class TransformerEncoder:
         max_len: int = 512,
         dropout: float = 0.0,
     ):
+        """Initialize TransformerEncoder."""
         self.d_model = d_model
         self.embedding = Embedding(vocab_size, d_model) if vocab_size > 0 else None
         self.pos_enc = PositionalEncoding(d_model, max_len)
@@ -69,7 +75,7 @@ class TransformerEncoder:
         ]
         self.ln = LayerNorm(d_model)
 
-    def forward(self, x: np.ndarray, mask: np.ndarray = None) -> np.ndarray:
+    def forward(self, x: np.ndarray, mask: np.ndarray | None = None) -> np.ndarray:
         """Forward pass through the encoder stack.
 
         Args:
@@ -78,6 +84,7 @@ class TransformerEncoder:
 
         Returns:
             (batch, seq, d_model) encoded representations
+
         """
         if x.ndim == 2 and self.embedding is not None:
             x = self.embedding(x)  # (batch, seq, d_model)
@@ -86,7 +93,7 @@ class TransformerEncoder:
             x = layer(x, mask)
         return self.ln(x)
 
-    def __call__(self, x, mask=None):
+    def __call__(self, x: np.ndarray, mask: np.ndarray | None = None) -> np.ndarray:
         """Make TransformerEncoder callable."""
         return self.forward(x, mask)
 
@@ -102,7 +109,8 @@ class TransformerDecoder:
     """
 
     def __init__(self, n_layers: int, d_model: int, n_heads: int, d_ff: int):
-        self.layers = []
+        """Initialize TransformerDecoder."""
+        self.layers: list[dict[str, typing.Any]] = []
         for _ in range(n_layers):
             self.layers.append(
                 {
@@ -121,8 +129,8 @@ class TransformerDecoder:
         self,
         tgt: np.ndarray,
         memory: np.ndarray,
-        tgt_mask=None,
-        memory_mask=None,
+        tgt_mask: np.ndarray | None = None,
+        memory_mask: np.ndarray | None = None,
     ) -> np.ndarray:
         """Forward pass through the decoder stack.
 
@@ -134,20 +142,40 @@ class TransformerDecoder:
 
         Returns:
             (batch, tgt_seq, d_model) decoded representations
+
         """
         x = tgt
         for layer in self.layers:
             # Masked self-attention
             normed1 = layer["ln1"](x)
-            attn1, _ = layer["self_attn"](normed1, normed1, normed1, tgt_mask)
+            attn1, _ = layer["self_attn"](
+                normed1, normed1, normed1, tgt_mask
+            )
             x = x + attn1
             # Cross-attention to encoder memory
-            attn2, _ = layer["cross_attn"](layer["ln2"](x), memory, memory, memory_mask)
+            attn2, _ = layer["cross_attn"](
+                layer["ln2"](x), memory, memory, memory_mask
+            )
             x = x + attn2
             # FFN
-            x = x + layer["ffn"](layer["ln3"](x))
+            x = typing.cast(
+                np.ndarray,
+                x
+                + typing.cast(
+                    np.ndarray,
+                    layer["ffn"](
+                        layer["ln3"](x)
+                    ),
+                ),
+            )
         return self.ln(x)
 
-    def __call__(self, tgt, memory, tgt_mask=None, memory_mask=None):
+    def __call__(
+        self,
+        tgt: np.ndarray,
+        memory: np.ndarray,
+        tgt_mask: np.ndarray | None = None,
+        memory_mask: np.ndarray | None = None,
+    ) -> np.ndarray:
         """Make TransformerDecoder callable."""
         return self.forward(tgt, memory, tgt_mask, memory_mask)

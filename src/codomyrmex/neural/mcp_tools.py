@@ -1,4 +1,6 @@
 """MCP tools for neural network primitives."""
+
+import typing
 import numpy as np
 
 from codomyrmex.model_context_protocol.decorators import mcp_tool
@@ -10,7 +12,7 @@ def transformer_encode(
     d_model: int = 64,
     n_heads: int = 4,
     n_layers: int = 2,
-) -> dict:
+) -> dict[str, typing.Any]:
     """Run a forward pass through a randomly-initialized Transformer encoder.
 
     Args:
@@ -21,6 +23,7 @@ def transformer_encode(
 
     Returns:
         dict with: output_shape, d_model, n_heads, n_layers, sequence_length
+
     """
     from .transformer import TransformerEncoder
 
@@ -45,7 +48,7 @@ def attention_forward(
     seq_len: int = 6,
     d_model: int = 32,
     n_heads: int = 4,
-) -> dict:
+) -> dict[str, typing.Any]:
     """Run multi-head attention on random inputs.
 
     Args:
@@ -55,6 +58,7 @@ def attention_forward(
 
     Returns:
         dict with: output_shape, attention_weights_shape, d_k (head dimension)
+
     """
     from .attention import MultiHeadAttention
 
