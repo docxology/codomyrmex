@@ -84,5 +84,6 @@ def test_db_generate_schema_empty_models():
 @pytest.mark.unit
 def test_db_generate_schema_invalid_models():
     """Test db_generate_schema edge case: invalid models data type."""
-    result = db_generate_schema(models="invalid_data_type", output_dir="/tmp/invalid")  # type: ignore
-    assert isinstance(result, dict)
+    with tempfile.TemporaryDirectory() as temp_dir:
+        result = db_generate_schema(models="invalid_data_type", output_dir=temp_dir)  # type: ignore
+        assert isinstance(result, dict)
