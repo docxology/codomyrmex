@@ -963,6 +963,10 @@ class TestLoadSaveJsonFile:
         hasattr(os, "geteuid") and os.geteuid() == 0,
         reason="Root user bypasses file permissions",
     )
+    @pytest.mark.skipif(
+        os.name == "nt",
+        reason="chmod(0o000) does not prevent read on Windows",
+    )
     def test_load_json_file_permission_error(self, tmp_path):
         """Test generic Exception handling in load_json_file using PermissionError."""
         # Create a valid JSON file
