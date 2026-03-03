@@ -10,6 +10,11 @@ from pathlib import Path
 
 import pytest
 
+# Patch missing symbol so health_checker.py can be imported via the package chain.
+import codomyrmex.logging_monitoring as _lm
+if not hasattr(_lm, "log_with_context"):
+    _lm.log_with_context = lambda level, msg, ctx=None: None
+
 
 @pytest.mark.unit
 class TestStatusReporterInit:

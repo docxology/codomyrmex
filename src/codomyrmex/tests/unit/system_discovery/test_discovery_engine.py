@@ -37,6 +37,13 @@ from pathlib import Path
 
 import pytest
 
+# Patch missing symbol so health_checker.py can be imported.
+# codomyrmex.logging_monitoring does not export log_with_context; without this
+# patch the entire codomyrmex.system_discovery package fails to import.
+import codomyrmex.logging_monitoring as _lm
+if not hasattr(_lm, "log_with_context"):
+    _lm.log_with_context = lambda level, msg, ctx=None: None
+
 # ===================================================================
 # ModuleCapability dataclass
 # ===================================================================
