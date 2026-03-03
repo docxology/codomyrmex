@@ -64,7 +64,7 @@ class DatabaseBackup:
     """
 
     def __init__(self, backup_dir: Path) -> None:
-        """Initialize LocalStorageManager."""
+        """Initialize DatabaseBackup."""
         self._backup_dir = backup_dir
         self._backup_dir.mkdir(parents=True, exist_ok=True)
         self._manifest_path = self._backup_dir / "manifest.json"

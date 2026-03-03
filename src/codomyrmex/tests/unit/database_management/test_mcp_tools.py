@@ -1,11 +1,12 @@
 import os
 import tempfile
+
 import pytest
 
 from codomyrmex.database_management.mcp_tools import (
+    db_generate_schema,
     db_list_adapters,
     db_monitor,
-    db_generate_schema,
 )
 
 
@@ -48,7 +49,15 @@ def test_db_monitor_invalid_connection():
 @pytest.mark.unit
 def test_db_generate_schema():
     """Test db_generate_schema accurately processes simple model structures."""
-    models = [{"name": "User", "columns": [{"name": "id", "data_type": "int"}, {"name": "name", "data_type": "str"}]}]
+    models = [
+        {
+            "name": "User",
+            "columns": [
+                {"name": "id", "data_type": "int"},
+                {"name": "name", "data_type": "str"},
+            ],
+        }
+    ]
 
     with tempfile.TemporaryDirectory() as temp_dir:
         result = db_generate_schema(models=models, output_dir=temp_dir)
@@ -75,5 +84,5 @@ def test_db_generate_schema_empty_models():
 @pytest.mark.unit
 def test_db_generate_schema_invalid_models():
     """Test db_generate_schema edge case: invalid models data type."""
-    result = db_generate_schema(models="invalid_data_type", output_dir="/tmp/invalid") # type: ignore
+    result = db_generate_schema(models="invalid_data_type", output_dir="/tmp/invalid")  # type: ignore
     assert isinstance(result, dict)
