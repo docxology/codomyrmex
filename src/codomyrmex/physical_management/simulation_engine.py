@@ -1,14 +1,12 @@
-"""Physical simulation engine for object interactions."""
-
 import math
 from dataclasses import dataclass, field
 from typing import Any
 
 from codomyrmex.logging_monitoring import get_logger
 
+"""Physical simulation engine for object interactions."""
+
 logger = get_logger(__name__)
-
-
 @dataclass
 class Vector3D:
     """3D vector for physics calculations."""
@@ -78,7 +76,8 @@ class PhysicsSimulator:
     """Physics simulation engine."""
 
     def __init__(self):
-        """Init  ."""
+        """  Init  .
+            """
         self.gravity = Vector3D(0, -9.81, 0)
         self.force_fields: list[ForceField] = []
         self.constraints: list[Constraint] = []

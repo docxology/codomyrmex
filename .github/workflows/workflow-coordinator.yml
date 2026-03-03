@@ -239,7 +239,7 @@ jobs:
           fi
           
           echo "strategy=$strategy" >> $GITHUB_OUTPUT
-          echo "modules=$(printf '%s\n' "${affected_modules[@]}" | jq -R . | jq -s -c .)" >> $GITHUB_OUTPUT
+          echo "modules=$(printf '%s\n' "${affected_modules[@]}" | jq -R . | jq -s .)" >> $GITHUB_OUTPUT
           
           echo "Test strategy: $strategy"
           echo "Affected modules: ${affected_modules[*]}"

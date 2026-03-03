@@ -1,5 +1,3 @@
-"""Advanced usage examples for physical management."""
-
 import math
 import random
 import time
@@ -35,6 +33,30 @@ except ImportError:
     SensorType = None
     StreamingAnalytics = None
     Vector3D = None
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 def example_smart_factory_monitoring():
@@ -134,8 +156,12 @@ def example_iot_sensor_network():
     temp_stream = analytics.create_stream(
         "temperature", buffer_size=5000, window_duration=30.0
     )
-    analytics.create_stream("humidity", buffer_size=5000, window_duration=30.0)
-    analytics.create_stream("pressure", buffer_size=5000, window_duration=30.0)
+    analytics.create_stream(
+        "humidity", buffer_size=5000, window_duration=30.0
+    )
+    analytics.create_stream(
+        "pressure", buffer_size=5000, window_duration=30.0
+    )
 
     # Set up predictive analytics
     predictor = PredictiveAnalytics(min_data_points=10)
@@ -369,6 +395,7 @@ def example_thermal_management():
 
     # Simulate thermal equilibration
     print("Simulating thermal equilibration...")
+
 
     for minute in range(5):  # 5 minutes of thermal simulation
         for second in range(60):
