@@ -12,7 +12,12 @@ from pathlib import Path
 PROJECT_ROOT = Path(__file__).parent.parent.parent  # 3 levels up
 sys.path.insert(0, str(PROJECT_ROOT / "src"))
 
-from codomyrmex.utils.cli_helpers import setup_logging, print_info, print_success, print_error
+from codomyrmex.utils.cli_helpers import (
+    print_error,
+    print_info,
+    print_success,
+    setup_logging,
+)
 
 
 def main() -> int:
@@ -20,6 +25,7 @@ def main() -> int:
     print_info("=== Graph RAG Demo ===")
     try:
         from codomyrmex.graph_rag import KnowledgeGraph
+
         obj = KnowledgeGraph()
         print_success(f"KnowledgeGraph loaded: {obj!r}")
     except ImportError as e:
@@ -31,17 +37,22 @@ def main() -> int:
     print_success("Graph RAG demo complete")
     return 0
 
-
-
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
-    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "graph_rag" / "config.yaml"
-    config_data = {}
+
+    import yaml
+
+    config_path = (
+        Path(__file__).resolve().parent.parent.parent
+        / "config"
+        / "graph_rag"
+        / "config.yaml"
+    )
     if config_path.exists():
-        with open(config_path, "r") as f:
-            config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/graph_rag/config.yaml")
+        with open(config_path) as f:
+            yaml.safe_load(f) or {}
+            print("Loaded config from config/graph_rag/config.yaml")
+
 
 if __name__ == "__main__":
     sys.exit(main())

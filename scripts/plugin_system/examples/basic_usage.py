@@ -18,24 +18,36 @@ except ImportError:
     project_root = Path(__file__).resolve().parent.parent.parent.parent
     sys.path.insert(0, str(project_root / "src"))
 
-from codomyrmex.utils.cli_helpers import setup_logging, print_success, print_info, print_error
 from codomyrmex.plugin_system import (
+    PluginInfo,
     PluginManager,
     PluginRegistry,
-    PluginInfo,
-    PluginState
+    PluginState,
 )
+from codomyrmex.utils.cli_helpers import (
+    print_error,
+    print_info,
+    print_success,
+    setup_logging,
+)
+
 
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
-    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "plugin_system" / "config.yaml"
-    config_data = {}
+
+    import yaml
+
+    config_path = (
+        Path(__file__).resolve().parent.parent.parent
+        / "config"
+        / "plugin_system"
+        / "config.yaml"
+    )
     if config_path.exists():
-        with open(config_path, "r") as f:
-            config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/plugin_system/config.yaml")
+        with open(config_path) as f:
+            yaml.safe_load(f) or {}
+            print("Loaded config from config/plugin_system/config.yaml")
 
     setup_logging()
     print_info("Running Plugin System Examples...")
@@ -43,22 +55,29 @@ def main():
     # 1. Plugin Manager
     print_info("Testing PluginManager and Registry...")
     try:
-        manager = PluginManager()
+        PluginManager()
         registry = PluginRegistry()
-        print_success(f"  PluginManager initialized. Registry has {len(registry.plugins)} plugins.")
+        print_success(
+            f"  PluginManager initialized. Registry has {len(registry.plugins)} plugins."
+        )
     except Exception as e:
         print_error(f"  Manager/Registry failed: {e}")
 
     # 2. Plugin Info
     print_info("Testing Plugin models...")
     try:
-        info = PluginInfo(name="test_plugin", version="0.1.0", state=PluginState.REGISTERED)
-        print_success(f"  PluginInfo instance created: {info.name} (Status: {info.state.value})")
+        info = PluginInfo(
+            name="test_plugin", version="0.1.0", state=PluginState.REGISTERED
+        )
+        print_success(
+            f"  PluginInfo instance created: {info.name} (Status: {info.state.value})"
+        )
     except Exception as e:
         print_error(f"  Models check failed: {e}")
 
     print_success("Plugin system examples completed successfully")
     return 0
+
 
 if __name__ == "__main__":
     sys.exit(main())

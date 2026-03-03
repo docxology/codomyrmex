@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Enrich the 17 remaining thin README files by reading deeper into module structure."""
+
 import ast
 import os
 
@@ -8,14 +9,23 @@ DOCS = os.path.join(REPO, "docs", "modules")
 SRC = os.path.join(REPO, "src", "codomyrmex")
 
 DISPLAY = {
-    "build_synthesis": "Build Synthesis", "ci_cd_automation": "CI/CD Automation",
-    "config_management": "Config Management", "defense": "Defense",
-    "environment_setup": "Environment Setup", "examples": "Examples",
-    "identity": "Identity", "logging_monitoring": "Logging & Monitoring",
-    "market": "Market", "module_template": "Module Template",
-    "pattern_matching": "Pattern Matching", "physical_management": "Physical Management",
-    "plugin_system": "Plugin System", "privacy": "Privacy",
-    "system_discovery": "System Discovery", "tools": "Tools", "website": "Website",
+    "build_synthesis": "Build Synthesis",
+    "ci_cd_automation": "CI/CD Automation",
+    "config_management": "Config Management",
+    "defense": "Defense",
+    "environment_setup": "Environment Setup",
+    "examples": "Examples",
+    "identity": "Identity",
+    "logging_monitoring": "Logging & Monitoring",
+    "market": "Market",
+    "module_template": "Module Template",
+    "pattern_matching": "Pattern Matching",
+    "physical_management": "Physical Management",
+    "plugin_system": "Plugin System",
+    "privacy": "Privacy",
+    "system_discovery": "System Discovery",
+    "tools": "Tools",
+    "website": "Website",
 }
 
 # For modules whose __init__.py docstring is too generic, provide curated descriptions
@@ -43,7 +53,9 @@ DESCRIPTIONS = {
 def get_py_files(mod):
     """Get all .py file names in a module directory."""
     mod_dir = os.path.join(SRC, mod)
-    return sorted(f for f in os.listdir(mod_dir) if f.endswith(".py") and f != "__init__.py")
+    return sorted(
+        f for f in os.listdir(mod_dir) if f.endswith(".py") and f != "__init__.py"
+    )
 
 
 def get_submodules(mod):
@@ -52,11 +64,17 @@ def get_submodules(mod):
     subs = []
     for child in sorted(os.listdir(mod_dir)):
         child_path = os.path.join(mod_dir, child)
-        if os.path.isdir(child_path) and os.path.exists(os.path.join(child_path, "__init__.py")):
+        if os.path.isdir(child_path) and os.path.exists(
+            os.path.join(child_path, "__init__.py")
+        ):
             sub_doc = ""
             try:
                 tree = ast.parse(open(os.path.join(child_path, "__init__.py")).read())
-                if tree.body and isinstance(tree.body[0], ast.Expr) and isinstance(tree.body[0].value, ast.Constant):
+                if (
+                    tree.body
+                    and isinstance(tree.body[0], ast.Expr)
+                    and isinstance(tree.body[0].value, ast.Constant)
+                ):
                     sub_doc = tree.body[0].value.value.strip().split("\n")[0]
             except Exception:
                 pass
@@ -95,7 +113,11 @@ def get_functions_from_files(mod):
         try:
             tree = ast.parse(open(os.path.join(mod_dir, f)).read())
             for node in tree.body:
-                if isinstance(node, ast.FunctionDef) and not node.name.startswith("_") and node.name not in seen:
+                if (
+                    isinstance(node, ast.FunctionDef)
+                    and not node.name.startswith("_")
+                    and node.name not in seen
+                ):
                     doc = ast.get_docstring(node) or ""
                     funcs.append((node.name, doc.split("\n")[0] if doc else ""))
                     seen.add(node.name)
@@ -113,7 +135,11 @@ def get_version(mod):
         for node in ast.walk(tree):
             if isinstance(node, ast.Assign):
                 for target in node.targets:
-                    if isinstance(target, ast.Name) and target.id == "__version__" and isinstance(node.value, ast.Constant):
+                    if (
+                        isinstance(target, ast.Name)
+                        and target.id == "__version__"
+                        and isinstance(node.value, ast.Constant)
+                    ):
                         return str(node.value.value)
     except Exception:
         pass
@@ -122,14 +148,20 @@ def get_version(mod):
 
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
-    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "documentation" / "config.yaml"
-    config_data = {}
+
+    import yaml
+
+    config_path = (
+        Path(__file__).resolve().parent.parent.parent
+        / "config"
+        / "documentation"
+        / "config.yaml"
+    )
     if config_path.exists():
-        with open(config_path, "r") as f:
-            config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/documentation/config.yaml")
+        with open(config_path) as f:
+            yaml.safe_load(f) or {}
+            print("Loaded config from config/documentation/config.yaml")
 
     thin_mods = []
     for d in sorted(os.listdir(DOCS)):
@@ -140,9 +172,9 @@ def main():
             lc = sum(1 for _ in f)
         if lc < 30:
             thin_mods.append(d)
-    
+
     print(f"Found {len(thin_mods)} thin README files to enrich")
-    
+
     fixed = 0
     for mod in thin_mods:
         display = DISPLAY.get(mod, mod.replace("_", " ").title())
@@ -152,7 +184,7 @@ def main():
         submodules = get_submodules(mod)
         classes = get_classes_from_files(mod)
         functions = get_functions_from_files(mod)
-        
+
         lines = [
             f"# {display} Module Documentation",
             "",
@@ -163,20 +195,20 @@ def main():
             desc,
             "",
         ]
-        
+
         # Key Features from classes + functions
         features = []
         for name, doc, _ in classes[:6]:
             features.append(f"- **{name}** — {doc or name}")
         for name, doc in functions[:4]:
             features.append(f"- `{name}()` — {doc or name}")
-        
+
         if features:
             lines.append("## Key Features")
             lines.append("")
             lines.extend(features)
             lines.append("")
-        
+
         # Submodules
         if submodules:
             lines.append("## Submodules")
@@ -186,7 +218,7 @@ def main():
             for name, doc in submodules:
                 lines.append(f"| `{name}` | {doc} |")
             lines.append("")
-        
+
         # Quick Start
         lines.append("## Quick Start")
         lines.append("")
@@ -204,10 +236,10 @@ def main():
         else:
             lines.append(f"from codomyrmex.{mod} import *")
             lines.append("")
-            lines.append(f"# See source module for available APIs")
+            lines.append("# See source module for available APIs")
         lines.append("```")
         lines.append("")
-        
+
         # Source Structure
         if py_files:
             lines.append("## Source Files")
@@ -217,7 +249,7 @@ def main():
             if len(py_files) > 8:
                 lines.append(f"- ...and {len(py_files) - 8} more")
             lines.append("")
-        
+
         # Directory Contents
         lines.append("## Directory Contents")
         lines.append("")
@@ -231,20 +263,22 @@ def main():
             if os.path.isdir(os.path.join(docs_dir, child)):
                 lines.append(f"| `{child}/` | {child.replace('_', ' ').title()} |")
         lines.append("")
-        
+
         # Navigation
         lines.append("## Navigation")
         lines.append("")
-        lines.append(f"- **Source**: [src/codomyrmex/{mod}/](../../../src/codomyrmex/{mod}/)")
+        lines.append(
+            f"- **Source**: [src/codomyrmex/{mod}/](../../../src/codomyrmex/{mod}/)"
+        )
         lines.append("- **Parent**: [Modules](../README.md)")
         lines.append("")
-        
+
         readme_path = os.path.join(DOCS, mod, "README.md")
         with open(readme_path, "w") as f:
             f.write("\n".join(lines))
         fixed += 1
         print(f"  ✅ {mod}/README.md ({len(lines)} lines)")
-    
+
     print(f"\n✅ Enriched {fixed} README files")
 
 

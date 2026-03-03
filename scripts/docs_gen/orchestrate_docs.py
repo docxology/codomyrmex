@@ -22,10 +22,10 @@ __all__ = ["ExampleClient", "process_data"]
 
 class ExampleClient:
     """A client for demonstrating class documentation.
-    
+
     Inherits from nothing in particular.
     """
-    
+
     def __init__(self, endpoint: str, timeout: float = 30.0) -> None:
         """Initialize the client."""
         self.endpoint = endpoint
@@ -45,39 +45,46 @@ def process_data(data: list[int], *, factor: int = 1, verbose: bool = False) -> 
     return [d * factor for d in data]
 '''
 
+
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
-    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "docs_gen" / "config.yaml"
-    config_data = {}
+
+    import yaml
+
+    config_path = (
+        Path(__file__).resolve().parent.parent.parent
+        / "config"
+        / "docs_gen"
+        / "config.yaml"
+    )
     if config_path.exists():
-        with open(config_path, "r") as f:
-            config_data = yaml.safe_load(f) or {}
+        with open(config_path) as f:
+            yaml.safe_load(f) or {}
             print(f"Loaded config from {config_path.name}")
 
     print("--- Starting Docs Generation Orchestrator ---")
-    
+
     # 1. Initialize SiteGenerator
     gen = SiteGenerator(title="Codomyrmex Improved Docs")
-    
+
     # 2. Add module source
     print("Extracting documentation from example source...")
     gen.add_module_source(SAMPLE_SOURCE, "example_mod")
-    
+
     # 3. Add a custom page
     print("Adding custom introduction page...")
     intro_content = """# Introduction
-    
+
 Welcome to the improved documentation system.
 This site was generated using the `docs_gen` orchestrator.
 """
     gen.add_page("index.md", intro_content, title="Welcome")
-    
+
     # 4. Search demonstration
     print("\n--- Search Index Demonstration ---")
     idx = gen.search_index
-    
+
     queries = ["ExampleClient", "process_data", "request", "connected"]
     for query in queries:
         results = idx.search(query, limit=3)
@@ -90,13 +97,14 @@ This site was generated using the `docs_gen` orchestrator.
     mkdocs_yaml = gen.to_mkdocs_yaml()
     print("Generated mkdocs.yml snippet (first 20 lines):")
     print("\n".join(mkdocs_yaml.splitlines()[:20]))
-    
+
     pages = gen.generate_pages()
     print(f"\nTotal pages generated: {len(pages)}")
     for path in pages:
         print(f"  - {path} ({len(pages[path])} chars)")
 
     print("\n--- Orchestration Complete ---")
+
 
 if __name__ == "__main__":
     main()

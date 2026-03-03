@@ -89,7 +89,7 @@ def run_isc_demo():
     print_info(f"Consistent: {result.consistent}")
     if result.consistent:
         print_success(f"Satisfying assignment: {result.satisfying_assignment}")
-    
+
     print_info("\nAdding a conflicting criterion...")
     criteria.append({"id": "ISC-C4", "description": "Response time above 500ms"})
     result = verify_criteria_consistency(criteria)
@@ -115,23 +115,29 @@ def run_optimization_demo():
     if result.is_sat:
         print_success(f"Optimized model: {result.model}")
         # x should be 10 if we maximized it
-        assert int(result.model['x']) == 10
+        assert int(result.model["x"]) == 10
 
 
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
-    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "formal_verification" / "config.yaml"
-    config_data = {}
+
+    import yaml
+
+    config_path = (
+        Path(__file__).resolve().parent.parent.parent
+        / "config"
+        / "formal_verification"
+        / "config.yaml"
+    )
     if config_path.exists():
-        with open(config_path, "r") as f:
-            config_data = yaml.safe_load(f) or {}
+        with open(config_path) as f:
+            yaml.safe_load(f) or {}
             print(f"Loaded config from {config_path.name}")
 
     setup_logging()
     print_section("Codomyrmex Formal Verification Orchestrator", separator="=")
-    
+
     try:
         import z3  # noqa: F401
     except ImportError:
@@ -142,7 +148,7 @@ def main():
     run_incremental_demo()
     run_isc_demo()
     run_optimization_demo()
-    
+
     print_section("Demos completed successfully", separator="=")
     return 0
 

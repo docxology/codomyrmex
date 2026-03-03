@@ -2,16 +2,16 @@
 MCP Tools for Streaming Module
 """
 
-import json
+from typing import Any
 
 from codomyrmex.model_context_protocol.decorators import mcp_tool
 from codomyrmex.streaming.models import EventType, create_event
 
 
-from typing import Any
-
 @mcp_tool()
-def streaming_create_event(type_str: str, data: dict[str, Any], topic: str = "*") -> dict[str, Any]:
+def streaming_create_event(
+    type_str: str, data: dict[str, Any], topic: str = "*"
+) -> dict[str, Any]:
     """Create a new streaming event payload and return it as a dictionary.
 
     Args:
@@ -24,8 +24,10 @@ def streaming_create_event(type_str: str, data: dict[str, Any], topic: str = "*"
     """
     try:
         event_type = EventType(type_str)
-    except ValueError as e:
-        return {"error": f"Invalid event type '{type_str}'. Allowed types: {[t.value for t in EventType]}"}
+    except ValueError:
+        return {
+            "error": f"Invalid event type '{type_str}'. Allowed types: {[t.value for t in EventType]}"
+        }
 
     event = create_event(data=data, event_type=event_type, topic=topic)
     return event.to_dict()

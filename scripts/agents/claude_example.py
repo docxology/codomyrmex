@@ -5,6 +5,7 @@ Claude Agent Example
 Demonstrates basic usage of ClaudeClient for API-based code generation.
 This script handles gracefully when Claude API is not configured.
 """
+
 import sys
 from pathlib import Path
 
@@ -14,21 +15,34 @@ except ImportError:
     project_root = Path(__file__).resolve().parent.parent.parent
     sys.path.insert(0, str(project_root / "src"))
 
-from codomyrmex.agents import ClaudeClient, AgentRequest
 from codomyrmex.agents.exceptions import AgentConfigurationError
-from codomyrmex.utils.cli_helpers import setup_logging, print_success, print_error, print_info, print_warning
+
+from codomyrmex.agents import AgentRequest, ClaudeClient
+from codomyrmex.utils.cli_helpers import (
+    print_error,
+    print_info,
+    print_success,
+    print_warning,
+    setup_logging,
+)
 
 
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
-    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "agents" / "config.yaml"
-    config_data = {}
+
+    import yaml
+
+    config_path = (
+        Path(__file__).resolve().parent.parent.parent
+        / "config"
+        / "agents"
+        / "config.yaml"
+    )
     if config_path.exists():
-        with open(config_path, "r") as f:
-            config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/agents/config.yaml")
+        with open(config_path) as f:
+            yaml.safe_load(f) or {}
+            print("Loaded config from config/agents/config.yaml")
 
     setup_logging()
     print_info("Initializing Claude Agent...")
@@ -40,7 +54,7 @@ def main():
         print_warning(f"Claude not configured: {e}")
         print_info("To configure: set ANTHROPIC_API_KEY environment variable")
         return 0  # Exit gracefully - this is expected for demo scripts
-    
+
     # Test connection
     if not client.test_connection():
         print_warning("Claude connection test failed. Check API key.")
