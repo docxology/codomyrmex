@@ -94,13 +94,13 @@ graph TB
             Compute[ComputeClient ABC]
             Serverless[ServerlessClient ABC]
         end
-        
+
         subgraph "AWS Provider"
             S3[S3Client]
             EC2[EC2Client - planned]
             Lambda[LambdaClient - planned]
         end
-        
+
         subgraph "GCP Provider"
             GCS[GCSClient]
             GCE[GCEClient - planned]
@@ -112,7 +112,7 @@ graph TB
             VM[VMClient - planned]
             AzFunc[AzureFunctions - planned]
         end
-        
+
         subgraph "Coda.io"
             Coda[CodaClient]
             Models[Data Models]

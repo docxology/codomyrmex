@@ -29,7 +29,11 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
-permissions: {}
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+  actions: write
 
 env:
   PYTHON_VERSION: "3.11"
