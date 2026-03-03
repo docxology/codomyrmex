@@ -7,8 +7,8 @@ Remediates documentation gaps:
 2. Generates missing RASP files (README, AGENTS, SPEC, PAI) with template content.
 """
 
-import os
 import argparse
+import os
 from pathlib import Path
 
 REQUIRED_DOCS = ["README.md", "AGENTS.md", "SPEC.md", "PAI.md"]
@@ -87,7 +87,7 @@ def is_package(path: Path) -> bool:
 
 def remediate_module(path: Path, src_dir: Path):
     print(f"Checking {path.relative_to(src_dir)}")
-    
+
     # 1. Ensure py.typed
     py_typed = path / "py.typed"
     if not py_typed.exists():
@@ -97,7 +97,7 @@ def remediate_module(path: Path, src_dir: Path):
     # 2. Ensure RASP files
     name = path.name.replace("_", " ").title()
     summary = get_docstring_summary(path)
-    
+
     for doc_name, template in TEMPLATES.items():
         doc_path = path / doc_name
         if not doc_path.exists():
@@ -107,14 +107,15 @@ def remediate_module(path: Path, src_dir: Path):
 
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
+
+    import yaml
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "docs" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
+        with open(config_path) as f:
             config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/docs/config.yaml")
+            print("Loaded config from config/docs/config.yaml")
 
     parser = argparse.ArgumentParser(description="Remediate documentation gaps.")
     parser.add_argument("--root", type=Path, default=Path(__file__).parent.parent, help="Project root directory")
@@ -122,7 +123,7 @@ def main():
 
     root_dir = args.root
     src_dir = root_dir / "src" / "codomyrmex"
-    
+
     if not src_dir.exists():
         print(f"Error: Source directory {src_dir} does not exist.")
         return
@@ -130,7 +131,7 @@ def main():
     count = 0
     for root, dirs, files in os.walk(src_dir):
         root_path = Path(root)
-        
+
         # Skip hidden directories
         if any(part.startswith('.') for part in root_path.relative_to(src_dir).parts):
             continue
@@ -138,7 +139,7 @@ def main():
         if is_package(root_path):
             remediate_module(root_path, src_dir)
             count += 1
-            
+
     print(f"\nRemediation complete. Processed {count} modules.")
 
 if __name__ == "__main__":

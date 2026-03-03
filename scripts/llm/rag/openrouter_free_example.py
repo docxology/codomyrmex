@@ -13,15 +13,15 @@ Usage:
     python openrouter_free_example.py
 """
 
-import sys
 import os
+import sys
 from pathlib import Path
 
 # Ensure codomyrmex is in path
 PROJECT_ROOT = Path(__file__).parent.parent.parent.parent
 sys.path.insert(0, str(PROJECT_ROOT / "src"))
 
-from codomyrmex.llm.providers import get_provider, ProviderType, ProviderConfig, Message
+from codomyrmex.llm.providers import Message, ProviderConfig, ProviderType, get_provider
 
 # Config file locations
 CONFIG_PATHS = [
@@ -54,7 +54,7 @@ KNOWLEDGE_BASE = [
         "content": "Python is a high-level programming language created by Guido van Rossum in 1991. It emphasizes code readability with significant whitespace."
     },
     {
-        "source": "openrouter_docs.txt", 
+        "source": "openrouter_docs.txt",
         "content": "OpenRouter is an API gateway providing unified access to 100+ LLM models through a single API. It includes free models for development."
     },
     {
@@ -88,7 +88,7 @@ Context:
 Question: {question}
 
 Answer:"""
-    
+
     messages = [Message(role="user", content=prompt)]
     response = provider.complete(messages=messages, model="openrouter/free", temperature=0.3, max_tokens=150)
     return response.content, docs
@@ -96,21 +96,22 @@ Answer:"""
 
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
+
+    import yaml
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "llm" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
+        with open(config_path) as f:
             config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/llm/config.yaml")
+            print("Loaded config from config/llm/config.yaml")
 
     """Demonstrate RAG with OpenRouter free models."""
     print("=" * 60)
     print("  OpenRouter Free Example - RAG Pipeline")
     print("=" * 60)
     print()
-    
+
     # Check for API key
     api_key = get_api_key()
     if not api_key:
@@ -118,31 +119,31 @@ def main():
         print("   Get your free API key at: https://openrouter.ai/keys")
         print("\n   Setup: export OPENROUTER_API_KEY='key' or ~/.config/openrouter/api_key")
         return 1
-    
+
     config = ProviderConfig(api_key=api_key, timeout=60.0)
     question = "What is Python and who created it?"
-    
+
     print(f"❓ Question: \"{question}\"")
     print()
-    
+
     with get_provider(ProviderType.OPENROUTER, config=config) as provider:
         print("🔍 Step 1: Retrieving relevant context...")
         docs = simple_retrieve(question, top_k=2)
         for doc in docs:
             print(f"   📄 {doc['source']}")
         print()
-        
+
         print("🤖 Step 2: Generating augmented response...")
         answer, _ = rag_completion(provider, question)
         print()
-        
+
         print("📤 Answer:")
         print(f"   {answer}")
-    
+
     print()
     print("✅ Example completed successfully!")
     print("   💡 RAG combines retrieval with generation for grounded responses!")
-    
+
     return 0
 
 

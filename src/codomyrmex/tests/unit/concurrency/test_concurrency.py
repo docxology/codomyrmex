@@ -9,7 +9,6 @@ RedisLock tests are gated behind a skipif for the fakeredis dependency.
 """
 
 import asyncio
-import os
 import tempfile
 import threading
 import time

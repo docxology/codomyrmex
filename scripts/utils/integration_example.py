@@ -21,24 +21,30 @@ from pathlib import Path
 project_root = Path(__file__).resolve().parent.parent.parent
 sys.path.insert(0, str(project_root / "src"))
 
-from codomyrmex.utils.cli_helpers import setup_logging, print_success, print_info, print_error
+from codomyrmex.utils.cli_helpers import (
+    print_error,
+    print_info,
+    print_success,
+    setup_logging,
+)
 
 
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
+
+    import yaml
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "utils" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
+        with open(config_path) as f:
             config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/utils/config.yaml")
+            print("Loaded config from config/utils/config.yaml")
 
     setup_logging()
     print_info("Cross-Module Integration Example")
     print_info("=" * 50)
-    
+
     # Step 1: Initialize logging
     print_info("\n1. Setting up structured logging...")
     try:
@@ -86,7 +92,7 @@ def main():
         "operation": "analyze",
         "data": {"file": "example.py", "depth": 3},
     }
-    
+
     # Validate input
     if is_valid:
         try:

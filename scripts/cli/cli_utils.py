@@ -29,7 +29,7 @@ def print_table(headers: list, rows: list, widths: list = None):
     """Print formatted table."""
     if not widths:
         widths = [max(len(str(r[i])) for r in [headers] + rows) + 2 for i in range(len(headers))]
-    
+
     header_row = "".join(h.ljust(w) for h, w in zip(headers, widths))
     print(header_row)
     print("-" * sum(widths))
@@ -61,32 +61,33 @@ def colorize(text: str, color: str) -> str:
 
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
+
+    import yaml
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "cli" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
+        with open(config_path) as f:
             config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/cli/config.yaml")
+            print("Loaded config from config/cli/config.yaml")
 
     parser = argparse.ArgumentParser(description="CLI utilities")
     subparsers = parser.add_subparsers(dest="command")
-    
+
     # Demo table
     subparsers.add_parser("demo-table", help="Demo table output")
-    
+
     # Demo progress
     subparsers.add_parser("demo-progress", help="Demo progress bar")
-    
+
     # Demo colors
     subparsers.add_parser("demo-colors", help="Demo colors")
-    
+
     # Terminal info
     subparsers.add_parser("info", help="Show terminal info")
-    
+
     args = parser.parse_args()
-    
+
     if not args.command:
         print("🖥️  CLI Utilities\n")
         print("Commands:")
@@ -95,14 +96,14 @@ def main():
         print("  demo-progress - Demo progress bar")
         print("  demo-colors   - Demo ANSI colors")
         return 0
-    
+
     if args.command == "info":
         cols, rows = get_terminal_size()
-        print(f"🖥️  Terminal Info:\n")
+        print("🖥️  Terminal Info:\n")
         print(f"   Size: {cols}x{rows}")
         print(f"   Python: {sys.version.split()[0]}")
         print(f"   Platform: {sys.platform}")
-    
+
     elif args.command == "demo-table":
         headers = ["Name", "Status", "Score"]
         rows = [
@@ -112,7 +113,7 @@ def main():
         ]
         print("📊 Table Demo:\n")
         print_table(headers, rows)
-    
+
     elif args.command == "demo-progress":
         import time
         print("📊 Progress Demo:\n")
@@ -120,12 +121,12 @@ def main():
             print_progress(i, 100)
             time.sleep(0.02)
         print("\n\n   Done!")
-    
+
     elif args.command == "demo-colors":
         print("🎨 Color Demo:\n")
         for color in ["red", "green", "yellow", "blue", "magenta", "cyan"]:
             print(f"   {colorize(color.capitalize(), color)}")
-    
+
     return 0
 
 

@@ -18,23 +18,26 @@ except ImportError:
     project_root = Path(__file__).resolve().parent.parent.parent.parent
     sys.path.insert(0, str(project_root / "src"))
 
-from codomyrmex.utils.cli_helpers import setup_logging, print_success, print_info, print_error
-from codomyrmex.ide import (
-    CursorClient,
-    IDECommand,
-    FileInfo
+from codomyrmex.ide import CursorClient, FileInfo, IDECommand
+from codomyrmex.utils.cli_helpers import (
+    print_error,
+    print_info,
+    print_success,
+    setup_logging,
 )
+
 
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
+
+    import yaml
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "ide" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
+        with open(config_path) as f:
             config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/ide/config.yaml")
+            print("Loaded config from config/ide/config.yaml")
 
     setup_logging()
     print_info("Running IDE Integration Examples...")
@@ -52,7 +55,7 @@ def main():
     try:
         cmd = IDECommand(name="openFile", args={"path": "README.md"})
         print_success(f"  IDECommand instance created for: {cmd.name}")
-        
+
         info = FileInfo(path="src/README.md", name="README.md", language="markdown")
         print_success(f"  FileInfo model instance created: {info.name}")
     except Exception as e:

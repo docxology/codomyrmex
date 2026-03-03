@@ -8,8 +8,8 @@ Demonstrates actual skills capabilities:
 - Skill discovery and status
 """
 
-import sys
 import shutil
+import sys
 from pathlib import Path
 
 # Ensure codomyrmex is in path
@@ -19,22 +19,26 @@ except ImportError:
     project_root = Path(__file__).resolve().parent.parent.parent.parent
     sys.path.insert(0, str(project_root / "src"))
 
-from codomyrmex.utils.cli_helpers import setup_logging, print_success, print_info, print_error
-from codomyrmex.skills import (
-    get_skills_manager,
-    SkillsManager
+from codomyrmex.skills import SkillsManager, get_skills_manager
+from codomyrmex.utils.cli_helpers import (
+    print_error,
+    print_info,
+    print_success,
+    setup_logging,
 )
+
 
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
+
+    import yaml
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "skills" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
+        with open(config_path) as f:
             config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/skills/config.yaml")
+            print("Loaded config from config/skills/config.yaml")
 
     setup_logging()
     print_info("Running Skills Management Examples...")
@@ -47,14 +51,14 @@ def main():
         if temp_skills_dir.exists():
             shutil.rmtree(temp_skills_dir)
         temp_skills_dir.mkdir(parents=True, exist_ok=True)
-        
+
         mgr = get_skills_manager(
             skills_dir=temp_skills_dir,
             auto_sync=False
         )
         if isinstance(mgr, SkillsManager):
             print_success(f"  SkillsManager initialized at: {mgr.skills_dir}")
-            
+
         # Initialize directories
         mgr.initialize()
         print_success("  SkillsManager directories initialized.")
@@ -74,17 +78,17 @@ def main():
         }
         if mgr.add_custom_skill(category="general", name="greeter", skill_data=skill_data):
             print_success("  Custom skill 'general/greeter' added successfully.")
-            
+
         # Verify it's in the registry
         skills = mgr.list_skills(category="general")
         if any(s["name"] == "greeter" for s in skills):
             print_success("  Skill found in registry listing.")
-            
+
         # Search
         search_results = mgr.search_skills("greet")
         if search_results:
             print_success(f"  Search for 'greet' found {len(search_results)} result(s).")
-            
+
     except Exception as e:
         print_error(f"  Custom skill operations failed: {e}")
 

@@ -34,20 +34,20 @@ def clear_cache(cache_path: Path, older_than_days: int = None, file_types: list 
     """Clear cache entries based on criteria."""
     stats = {"deleted": 0, "size_freed": 0, "skipped": 0}
     cutoff = datetime.now() - timedelta(days=older_than_days) if older_than_days else None
-    
+
     for f in cache_path.rglob("*"):
         if f.is_file():
             should_delete = True
-            
+
             if cutoff:
                 mtime = datetime.fromtimestamp(f.stat().st_mtime)
                 if mtime > cutoff:
                     should_delete = False
-            
+
             if file_types:
                 if f.suffix.lstrip(".") not in file_types:
                     should_delete = False
-            
+
             if should_delete:
                 size = f.stat().st_size
                 if not dry_run:
@@ -56,7 +56,7 @@ def clear_cache(cache_path: Path, older_than_days: int = None, file_types: list 
                 stats["size_freed"] += size
             else:
                 stats["skipped"] += 1
-    
+
     return stats
 
 
@@ -70,14 +70,15 @@ def format_size(size_bytes: int) -> str:
 
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
+
+    import yaml
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "cache" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
+        with open(config_path) as f:
             config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/cache/config.yaml")
+            print("Loaded config from config/cache/config.yaml")
 
     parser = argparse.ArgumentParser(description="Clear cache entries")
     parser.add_argument("--all", "-a", action="store_true", help="Clear all cache entries")
@@ -87,7 +88,7 @@ def main():
     parser.add_argument("--dry-run", "-n", action="store_true", help="Show what would be deleted")
     parser.add_argument("--force", "-f", action="store_true", help="Skip confirmation")
     args = parser.parse_args()
-    
+
     if not args.all and not args.older_than and not args.type:
         print("🗑️  Cache Cleaner")
         print("\n   Specify what to clear:")
@@ -96,43 +97,43 @@ def main():
         print("   --type EXT         Clear specific file types")
         print("\n   Add --dry-run to preview without deleting")
         return 0
-    
+
     if args.path:
         cache_dirs = [Path(args.path)]
     else:
         cache_dirs = get_cache_dirs()
-    
+
     if not cache_dirs:
         print("📦 No cache directories found")
         return 0
-    
+
     dry_run = args.dry_run or not args.force
-    
+
     if dry_run and not args.dry_run:
         print("⚠️  Running in dry-run mode (use --force to actually delete)\n")
-    
+
     total_deleted = 0
     total_freed = 0
-    
+
     for cache_dir in cache_dirs:
         older_than = args.older_than if not args.all else None
         file_types = args.type
-        
+
         stats = clear_cache(cache_dir, older_than, file_types, dry_run)
         total_deleted += stats["deleted"]
         total_freed += stats["size_freed"]
-        
+
         action = "Would delete" if dry_run else "Deleted"
         print(f"📦 {cache_dir}")
         print(f"   {action}: {stats['deleted']} files ({format_size(stats['size_freed'])})")
         if stats["skipped"]:
             print(f"   Skipped: {stats['skipped']} files")
-    
+
     print(f"\n{'🔍 Preview' if dry_run else '✅ Complete'}: {total_deleted} files, {format_size(total_freed)}")
-    
+
     if dry_run and total_deleted > 0:
         print("\n   To delete, run with --force")
-    
+
     return 0
 
 
