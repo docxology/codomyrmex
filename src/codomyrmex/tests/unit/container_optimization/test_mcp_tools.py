@@ -21,7 +21,11 @@ def docker_client():
 @pytest.fixture(scope="module")
 def existing_image(docker_client):
     """Uses an existing image to avoid build issues in restricted environments."""
-    images = docker_client.images.list()
+    try:
+        images = docker_client.images.list()
+    except Exception as e:
+        pytest.skip(f"Docker is unavailable or images could not be listed: {e}")
+
     if not images:
         pytest.skip("No Docker images available for testing")
     # Prefer non-sha256 tags if possible for better test visibility
