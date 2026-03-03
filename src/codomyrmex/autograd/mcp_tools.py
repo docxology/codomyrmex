@@ -7,8 +7,8 @@ Protocol so that AI agents can evaluate expressions and verify gradients.
 
 from __future__ import annotations
 
+import ast
 import operator
-from typing import Any
 
 from codomyrmex.model_context_protocol.decorators import mcp_tool
 
@@ -19,47 +19,73 @@ from .ops import relu, sigmoid, tanh
 # Safe expression evaluator
 # ---------------------------------------------------------------------------
 
-_ALLOWED_OPS = {
-    "+": operator.add,
-    "-": operator.sub,
-    "*": operator.mul,
-    "**": operator.pow,
+_MATH_OPS = {
+    ast.Add: operator.add,
+    ast.Sub: operator.sub,
+    ast.Mult: operator.mul,
+    ast.Pow: operator.pow,
+    ast.USub: operator.neg,
 }
+
+
+def _safe_eval_node(node: ast.AST, variables: dict[str, Value]) -> Value:
+    """Evaluate an AST node using Value objects."""
+    if isinstance(node, ast.Expression):
+        return _safe_eval_node(node.body, variables)
+    elif isinstance(node, ast.BinOp):
+        left = _safe_eval_node(node.left, variables)
+        right = _safe_eval_node(node.right, variables)
+        if type(node.op) not in _MATH_OPS:
+            raise ValueError(f"Unsupported operator: {type(node.op)}")
+
+        if isinstance(node.op, ast.Pow):
+            # Value.__pow__ only supports float/int exponent
+            exponent = right.data if isinstance(right, Value) else right
+            return _MATH_OPS[type(node.op)](left, exponent)
+
+        return _MATH_OPS[type(node.op)](left, right)
+    elif isinstance(node, ast.UnaryOp):
+        operand = _safe_eval_node(node.operand, variables)
+        if type(node.op) not in _MATH_OPS:
+            raise ValueError(f"Unsupported unary operator: {type(node.op)}")
+        return _MATH_OPS[type(node.op)](operand)
+    elif isinstance(node, ast.Name):
+        if node.id not in variables:
+            raise ValueError(f"Unknown variable: {node.id}")
+        return variables[node.id]
+    elif isinstance(node, ast.Constant):
+        if not isinstance(node.value, (int, float)):
+            raise ValueError(f"Unsupported constant type: {type(node.value)}")
+        # If it's used in a power operation (which gets caught here recursively),
+        # we want to allow float directly. But since we evaluate bottom-up,
+        # let's return Value, and in pow we'll extract it or handle it.
+        # Actually, Value.__pow__ takes a float, so if `right` is a Value,
+        # we need to extract its data in the `ast.Pow` handling.
+        return Value(float(node.value))
+    else:
+        raise ValueError(f"Unsupported expression construct: {type(node)}")
 
 
 def _safe_eval_expression(expression: str, variables: dict[str, float]) -> Value:
     """Evaluate a simple math expression using Value objects.
 
     Supports: variable names, float literals, +, -, *, **, parentheses,
-    unary minus.  Uses Python's ``compile`` with a restricted global
-    namespace containing only Value-wrapped variables and builtins
-    stripped out.
+    unary minus. Uses AST-based evaluation instead of eval() to prevent
+    code injection.
     """
-    # Build namespace with Value-wrapped variables
-    namespace: dict[str, Any] = {}
+    # Build Value-wrapped variables
+    var_values: dict[str, Value] = {}
     for name, val in variables.items():
         if not name.isidentifier():
             raise ValueError(f"Invalid variable name: {name!r}")
-        namespace[name] = Value(float(val), label=name)
+        var_values[name] = Value(float(val), label=name)
 
-    # Restrict builtins to nothing
-    namespace["__builtins__"] = {}
-
-    # Compile and evaluate
     try:
-        code = compile(expression, "<autograd_compute>", "eval")
+        tree = ast.parse(expression, mode="eval")
     except SyntaxError as exc:
         raise ValueError(f"Invalid expression syntax: {exc}") from exc
 
-    # Verify code only uses allowed operations
-    # (compile already restricts to expressions, and namespace has no builtins)
-    result = eval(code, namespace)  # noqa: S307
-
-    if not isinstance(result, Value):
-        # Expression evaluated to a raw number (no variables used)
-        return Value(float(result))
-
-    return result
+    return _safe_eval_node(tree, var_values)
 
 
 # ---------------------------------------------------------------------------
@@ -80,25 +106,18 @@ def autograd_compute(expression: str, variables: dict) -> dict:
     """
     # Build Value objects for each variable
     var_values: dict[str, Value] = {}
-    namespace: dict[str, Any] = {"__builtins__": {}}
-
     for name, val in variables.items():
         if not name.isidentifier():
             raise ValueError(f"Invalid variable name: {name!r}")
-        v = Value(float(val), label=name)
-        var_values[name] = v
-        namespace[name] = v
+        var_values[name] = Value(float(val), label=name)
 
-    # Compile and evaluate
+    # Parse and evaluate expression safely using AST
     try:
-        code = compile(expression, "<autograd_compute>", "eval")
+        tree = ast.parse(expression, mode="eval")
     except SyntaxError as exc:
         raise ValueError(f"Invalid expression syntax: {exc}") from exc
 
-    result = eval(code, namespace)  # noqa: S307
-
-    if not isinstance(result, Value):
-        result = Value(float(result))
+    result = _safe_eval_node(tree, var_values)
 
     # Run backward pass
     result.backward()
@@ -135,8 +154,7 @@ def autograd_gradient_check(func_name: str, inputs: list) -> dict:
 
     if func_name not in func_map:
         raise ValueError(
-            f"Unknown function: {func_name!r}. "
-            f"Supported: {sorted(func_map.keys())}"
+            f"Unknown function: {func_name!r}. Supported: {sorted(func_map.keys())}"
         )
 
     fn = func_map[func_name]

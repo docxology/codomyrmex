@@ -229,12 +229,17 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           path: artifacts
+        continue-on-error: true
 
       - name: Consolidate results
         run: |
-          # Move all JSON results to output directory
-          find artifacts -name "*.json" -exec cp {} output/ \;
-          find artifacts -name "*.html" -exec cp {} output/ \;
+          # Move all JSON results to output directory (skip if no artifacts)
+          if [ -d "artifacts" ]; then
+            find artifacts -name "*.json" -exec cp {} output/ \;
+            find artifacts -name "*.html" -exec cp {} output/ \;
+          else
+            echo "No artifacts directory found. Proceeding with empty outputs."
+          fi
 
       - name: Generate dashboard
         run: |
@@ -263,6 +268,10 @@ jobs:
     needs: [validate-links, check-quality, validate-structure]
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request'
+    permissions:
+      pull-requests: write
+      issues: write
+      contents: read
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -286,10 +295,15 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           path: artifacts
+        continue-on-error: true
 
       - name: Consolidate results
         run: |
-          find artifacts -name "*.json" -exec cp {} output/ \;
+          if [ -d "artifacts" ]; then
+            find artifacts -name "*.json" -exec cp {} output/ \;
+          else
+            echo "No artifacts directory found. Proceeding with empty outputs."
+          fi
 
       - name: Enforce quality gates
         run: |
