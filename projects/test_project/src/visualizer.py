@@ -13,14 +13,15 @@ Example:
     >>> print(f"Dashboard saved to: {dashboard_path}")
 """
 
-from pathlib import Path
-from typing import Dict, Any, List, Optional
 from dataclasses import dataclass
 from datetime import datetime
+from pathlib import Path
+from typing import Any
+
+from codomyrmex.data_visualization.reports.general import GeneralSystemReport
 
 # Real codomyrmex imports - no fallback for mega-seed project
 from codomyrmex.logging_monitoring import get_logger
-from codomyrmex.data_visualization.reports.general import GeneralSystemReport
 
 HAS_CODOMYRMEX_LOGGING = True  # Exported for integration tests
 HAS_VISUALIZATION_MODULE = True  # Exported for integration tests
@@ -78,7 +79,7 @@ class DataVisualizer:
         >>> path = visualizer.create_dashboard(results)
     """
 
-    def __init__(self, output_dir: Optional[Path] = None):
+    def __init__(self, output_dir: Path | None = None):
         """Initialize the visualizer.
 
         Args:
@@ -101,8 +102,8 @@ class DataVisualizer:
 
     def visualize_metrics(
         self,
-        metrics: Dict[str, Any],
-        config: Optional[ChartConfig] = None
+        metrics: dict[str, Any],
+        config: ChartConfig | None = None
     ) -> Path:
         """Create visualization of analysis metrics.
 
@@ -135,8 +136,8 @@ class DataVisualizer:
 
     def create_dashboard(
         self,
-        analysis_results: Dict[str, Any],
-        output_path: Optional[Path] = None
+        analysis_results: dict[str, Any],
+        output_path: Path | None = None
     ) -> Path:
         """Create interactive dashboard from analysis results.
 
@@ -199,7 +200,7 @@ class DataVisualizer:
 
         return output_path
 
-    def _create_header_section(self, results: Dict[str, Any]) -> str:
+    def _create_header_section(self, results: dict[str, Any]) -> str:
         """Create dashboard header."""
         target = results.get("target", "Unknown")
         timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -208,13 +209,13 @@ class DataVisualizer:
         <div class="header">
             <h1>🔬 Code Analysis Dashboard</h1>
             <p class="subtitle">
-                <strong>Target:</strong> {target} | 
+                <strong>Target:</strong> {target} |
                 <strong>Generated:</strong> {timestamp}
             </p>
         </div>
         """
 
-    def _create_summary_section(self, summary: Dict[str, Any]) -> str:
+    def _create_summary_section(self, summary: dict[str, Any]) -> str:
         """Create summary section HTML with metric cards."""
         metrics = [
             ("📁", "Files Analyzed", summary.get("total_files", 0)),
@@ -242,7 +243,7 @@ class DataVisualizer:
         </div>
         """
 
-    def _create_patterns_section(self, patterns: Dict[str, int]) -> str:
+    def _create_patterns_section(self, patterns: dict[str, int]) -> str:
         """Create patterns section with visual chart."""
         if not patterns:
             return ""
@@ -272,7 +273,7 @@ class DataVisualizer:
         </div>
         """
 
-    def _create_files_section(self, files: List[Dict]) -> str:
+    def _create_files_section(self, files: list[dict]) -> str:
         """Create files table section HTML."""
         rows = ""
         for f in files[:20]:  # Limit to 20 files
@@ -327,13 +328,13 @@ class DataVisualizer:
         </div>
         """
 
-    def _create_issues_section(self, issues: List[Dict]) -> str:
+    def _create_issues_section(self, issues: list[dict]) -> str:
         """Create issues summary section."""
         if not issues:
             return ""
 
         # Group by severity
-        by_severity: Dict[str, List[Dict]] = {}
+        by_severity: dict[str, list[dict]] = {}
         for issue in issues:
             severity = issue.get("severity", "info")
             if severity not in by_severity:
@@ -368,7 +369,7 @@ class DataVisualizer:
         </div>
         """
 
-    def _generate_metrics_chart(self, metrics: Dict[str, Any], config: ChartConfig) -> str:
+    def _generate_metrics_chart(self, metrics: dict[str, Any], config: ChartConfig) -> str:
         """Generate a simple bar chart for metrics."""
         bars = ""
         max_val = max(metrics.values()) if metrics else 1
@@ -422,7 +423,7 @@ class DataVisualizer:
 </html>
 """
 
-    def _write_dashboard(self, path: Path, sections: List[str]) -> None:
+    def _write_dashboard(self, path: Path, sections: list[str]) -> None:
         """Write dashboard HTML file with modern styling."""
         html = f"""<!DOCTYPE html>
 <html>
@@ -432,7 +433,7 @@ class DataVisualizer:
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         * {{ box-sizing: border-box; margin: 0; padding: 0; }}
-        
+
         body {{
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, {self.colors['background']} 0%, #0f0f23 100%);
@@ -440,7 +441,7 @@ class DataVisualizer:
             min-height: 100vh;
             padding: 20px;
         }}
-        
+
         .header {{
             background: linear-gradient(135deg, {self.colors['primary']} 0%, {self.colors['secondary']} 100%);
             padding: 40px;
@@ -448,17 +449,17 @@ class DataVisualizer:
             margin-bottom: 30px;
             text-align: center;
         }}
-        
+
         .header h1 {{
             font-size: 2.5em;
             margin-bottom: 10px;
         }}
-        
+
         .header .subtitle {{
             opacity: 0.9;
             font-size: 1.1em;
         }}
-        
+
         .section {{
             background: {self.colors['surface']};
             padding: 24px;
@@ -466,20 +467,20 @@ class DataVisualizer:
             border-radius: 12px;
             box-shadow: 0 4px 20px rgba(0,0,0,0.3);
         }}
-        
+
         .section h2 {{
             margin-bottom: 20px;
             font-size: 1.4em;
             border-bottom: 2px solid {self.colors['primary']};
             padding-bottom: 10px;
         }}
-        
+
         .metrics-grid {{
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
             gap: 16px;
         }}
-        
+
         .metric-card {{
             background: {self.colors['background']};
             padding: 20px;
@@ -488,45 +489,45 @@ class DataVisualizer:
             border: 1px solid rgba(255,255,255,0.1);
             transition: transform 0.2s, box-shadow 0.2s;
         }}
-        
+
         .metric-card:hover {{
             transform: translateY(-4px);
             box-shadow: 0 8px 24px rgba(102, 126, 234, 0.3);
         }}
-        
+
         .metric-icon {{
             font-size: 1.8em;
             display: block;
             margin-bottom: 8px;
         }}
-        
+
         .metric-value {{
             font-size: 2em;
             font-weight: bold;
             color: {self.colors['primary']};
             display: block;
         }}
-        
+
         .metric-label {{
             color: {self.colors['muted']};
             font-size: 0.9em;
         }}
-        
+
         .bar-chart {{
             padding: 10px 0;
         }}
-        
+
         .bar-row {{
             display: flex;
             align-items: center;
             margin: 12px 0;
         }}
-        
+
         .bar-label {{
             width: 140px;
             font-size: 0.95em;
         }}
-        
+
         .bar-container {{
             flex: 1;
             background: {self.colors['background']};
@@ -535,30 +536,30 @@ class DataVisualizer:
             height: 24px;
             overflow: hidden;
         }}
-        
+
         .bar {{
             background: linear-gradient(90deg, {self.colors['primary']}, {self.colors['secondary']});
             height: 100%;
             border-radius: 6px;
             transition: width 0.3s ease;
         }}
-        
+
         .bar-value {{
             width: 50px;
             text-align: right;
             color: {self.colors['accent']};
             font-weight: bold;
         }}
-        
+
         .table-container {{
             overflow-x: auto;
         }}
-        
+
         table {{
             width: 100%;
             border-collapse: collapse;
         }}
-        
+
         th {{
             background: {self.colors['primary']};
             color: white;
@@ -566,34 +567,34 @@ class DataVisualizer:
             text-align: left;
             font-weight: 600;
         }}
-        
+
         td {{
             padding: 12px 14px;
             border-bottom: 1px solid rgba(255,255,255,0.1);
         }}
-        
+
         tr:hover {{
             background: rgba(102, 126, 234, 0.1);
         }}
-        
+
         .file-cell {{
             max-width: 200px;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
         }}
-        
+
         .number-cell {{
             text-align: center;
             font-family: monospace;
         }}
-        
+
         .patterns-cell {{
             display: flex;
             gap: 4px;
             flex-wrap: wrap;
         }}
-        
+
         .badge {{
             background: {self.colors['primary']};
             color: white;
@@ -601,22 +602,22 @@ class DataVisualizer:
             border-radius: 10px;
             font-size: 0.75em;
         }}
-        
+
         .issue-count-warning {{
             color: {self.colors['accent']};
             font-weight: bold;
         }}
-        
+
         .issue-count-ok {{
             color: #4ade80;
         }}
-        
+
         .issues-list {{
             display: flex;
             flex-direction: column;
             gap: 8px;
         }}
-        
+
         .issue-item {{
             background: {self.colors['background']};
             padding: 12px;
@@ -625,7 +626,7 @@ class DataVisualizer:
             align-items: center;
             gap: 12px;
         }}
-        
+
         .issue-severity {{
             padding: 4px 8px;
             border-radius: 4px;
@@ -633,17 +634,17 @@ class DataVisualizer:
             font-weight: bold;
             color: white;
         }}
-        
+
         .issue-file {{
             font-family: monospace;
             color: {self.colors['muted']};
             min-width: 150px;
         }}
-        
+
         .issue-message {{
             flex: 1;
         }}
-        
+
         .muted {{
             color: {self.colors['muted']};
             font-size: 0.9em;
@@ -660,8 +661,8 @@ class DataVisualizer:
 
     def create_visualization_report(
         self,
-        analysis_results: Dict[str, Any],
-        output_path: Optional[Path] = None,
+        analysis_results: dict[str, Any],
+        output_path: Path | None = None,
     ) -> Path:
         """Create a report using the unified codomyrmex.visualization system.
 

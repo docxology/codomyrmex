@@ -16,14 +16,15 @@ Example:
     >>> print(f"Status: {pipeline_result.status.value}")
 """
 
-from pathlib import Path
-from typing import Optional, Dict, Any
-import sys
 import logging
+import sys
+from pathlib import Path
+from typing import Any
+
+from codomyrmex.events import Event, EventType, get_event_bus
 
 # Real codomyrmex imports - no fallback for mega-seed project
-from codomyrmex.logging_monitoring import setup_logging, get_logger
-from codomyrmex.events import get_event_bus, Event, EventType
+from codomyrmex.logging_monitoring import get_logger, setup_logging
 
 HAS_CODOMYRMEX_LOGGING = True  # Exported for integration tests
 
@@ -33,8 +34,8 @@ event_bus = get_event_bus()
 
 def run_analysis(
     target_path: Path,
-    config_path: Optional[Path] = None
-) -> Dict[str, Any]:
+    config_path: Path | None = None
+) -> dict[str, Any]:
     """Run project analysis using codomyrmex static_analysis.
 
     Demonstrates integration with:
@@ -92,9 +93,9 @@ def run_analysis(
 
 
 def run_pipeline(
-    target_path: Optional[Path] = None,
-    config_path: Optional[Path] = None
-) -> "PipelineResult":
+    target_path: Path | None = None,
+    config_path: Path | None = None
+) -> dict:
     """Run the full analysis pipeline.
 
     Demonstrates orchestrator module integration with DAG-based

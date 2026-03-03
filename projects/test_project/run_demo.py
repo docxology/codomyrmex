@@ -13,16 +13,16 @@ Examples:
     python run_demo.py ../..     # Analyze parent directories
 """
 
-from pathlib import Path
 import sys
+from pathlib import Path
 
 # Add src to path for local development
 sys.path.insert(0, str(Path(__file__).parent))
 
 from src.main import run_analysis
-from src.visualizer import DataVisualizer
-from src.reporter import ReportGenerator, ReportConfig
 from src.pipeline import AnalysisPipeline
+from src.reporter import ReportConfig, ReportGenerator
+from src.visualizer import DataVisualizer
 
 
 def print_header(text: str) -> None:
@@ -168,7 +168,7 @@ def main() -> int:
         print(f"    • {dashboard_path.relative_to(Path(__file__).parent)}")
         print()
         print("  Reports:")
-        for fmt, path in report_paths.items():
+        for _fmt, path in report_paths.items():
             print(f"    • {path.relative_to(Path(__file__).parent)}")
         print()
         print("  Open the HTML files in your browser to view!")

@@ -12,11 +12,11 @@ Example:
     >>> report_path = generator.generate(analysis_results, config)
 """
 
-from pathlib import Path
-from typing import Dict, Any, Optional
+import json
 from dataclasses import dataclass
 from datetime import datetime
-import json
+from pathlib import Path
+from typing import Any
 
 # Real codomyrmex imports - no fallback for mega-seed project
 from codomyrmex.logging_monitoring import get_logger
@@ -81,7 +81,7 @@ class ReportGenerator:
         >>> path = generator.generate(results, ReportConfig(format="html"))
     """
 
-    def __init__(self, output_dir: Optional[Path] = None):
+    def __init__(self, output_dir: Path | None = None):
         """Initialize the report generator.
 
         Args:
@@ -93,8 +93,8 @@ class ReportGenerator:
 
     def generate(
         self,
-        analysis_results: Dict[str, Any],
-        config: Optional[ReportConfig] = None
+        analysis_results: dict[str, Any],
+        config: ReportConfig | None = None
     ) -> Path:
         """Generate report from analysis results.
 
@@ -131,9 +131,9 @@ class ReportGenerator:
 
     def generate_all_formats(
         self,
-        analysis_results: Dict[str, Any],
-        base_config: Optional[ReportConfig] = None
-    ) -> Dict[str, Path]:
+        analysis_results: dict[str, Any],
+        base_config: ReportConfig | None = None
+    ) -> dict[str, Path]:
         """Generate reports in all supported formats.
 
         Args:
@@ -171,7 +171,7 @@ class ReportGenerator:
 
     def _generate_json_report(
         self,
-        results: Dict[str, Any],
+        results: dict[str, Any],
         path: Path,
         config: ReportConfig
     ) -> None:
@@ -200,7 +200,7 @@ class ReportGenerator:
 
     def _generate_markdown_report(
         self,
-        results: Dict[str, Any],
+        results: dict[str, Any],
         path: Path,
         config: ReportConfig
     ) -> None:
@@ -210,8 +210,8 @@ class ReportGenerator:
 
         content = f"""# {config.title}
 
-**Generated**: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}  
-**Author**: {config.author}  
+**Generated**: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}
+**Author**: {config.author}
 **Target**: `{target}`
 
 ---
@@ -246,7 +246,7 @@ class ReportGenerator:
         # Files section
         if config.include_file_details:
             files = results.get("files", [])
-            content += f"""## 📄 File Analysis
+            content += """## 📄 File Analysis
 
 """
             for f in files[:config.max_files]:
@@ -296,7 +296,7 @@ class ReportGenerator:
 
     def _generate_html_report(
         self,
-        results: Dict[str, Any],
+        results: dict[str, Any],
         path: Path,
         config: ReportConfig
     ) -> None:
@@ -367,22 +367,22 @@ class ReportGenerator:
             --muted: #64748b;
             --border: #e2e8f0;
         }}
-        
+
         * {{ box-sizing: border-box; margin: 0; padding: 0; }}
-        
+
         body {{
             font-family: 'Segoe UI', system-ui, sans-serif;
             background: var(--bg);
             color: var(--text);
             line-height: 1.6;
         }}
-        
+
         .container {{
             max-width: 1200px;
             margin: 0 auto;
             padding: 40px 20px;
         }}
-        
+
         .header {{
             background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
             color: white;
@@ -391,16 +391,16 @@ class ReportGenerator:
             margin-bottom: 40px;
             box-shadow: 0 10px 40px rgba(102, 126, 234, 0.3);
         }}
-        
+
         .header h1 {{
             font-size: 2.5rem;
             margin-bottom: 10px;
         }}
-        
+
         .header .meta {{
             opacity: 0.9;
         }}
-        
+
         .card {{
             background: var(--surface);
             border-radius: 12px;
@@ -409,7 +409,7 @@ class ReportGenerator:
             box-shadow: 0 1px 3px rgba(0,0,0,0.1);
             border: 1px solid var(--border);
         }}
-        
+
         .card h2 {{
             font-size: 1.5rem;
             margin-bottom: 24px;
@@ -418,47 +418,47 @@ class ReportGenerator:
             align-items: center;
             gap: 10px;
         }}
-        
+
         .metrics-grid {{
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
             gap: 20px;
         }}
-        
+
         .metric {{
             background: linear-gradient(135deg, #f0f4ff 0%, #fdf4ff 100%);
             padding: 24px;
             border-radius: 12px;
             text-align: center;
         }}
-        
+
         .metric .icon {{
             font-size: 2rem;
             margin-bottom: 8px;
         }}
-        
+
         .metric .value {{
             font-size: 2.5rem;
             font-weight: 700;
             color: var(--primary);
         }}
-        
+
         .metric .label {{
             color: var(--muted);
             font-size: 0.9rem;
         }}
-        
+
         .bar-row {{
             display: flex;
             align-items: center;
             margin: 12px 0;
         }}
-        
+
         .bar-row .label {{
             width: 160px;
             font-size: 0.95rem;
         }}
-        
+
         .bar-bg {{
             flex: 1;
             background: var(--border);
@@ -467,26 +467,26 @@ class ReportGenerator:
             margin: 0 16px;
             overflow: hidden;
         }}
-        
+
         .bar {{
             background: linear-gradient(90deg, var(--primary), var(--secondary));
             height: 100%;
             border-radius: 8px;
             transition: width 0.3s;
         }}
-        
+
         .bar-row .value {{
             width: 40px;
             text-align: right;
             font-weight: 600;
             color: var(--primary);
         }}
-        
+
         table {{
             width: 100%;
             border-collapse: collapse;
         }}
-        
+
         th {{
             background: var(--primary);
             color: white;
@@ -494,16 +494,16 @@ class ReportGenerator:
             text-align: left;
             font-weight: 600;
         }}
-        
+
         td {{
             padding: 14px 16px;
             border-bottom: 1px solid var(--border);
         }}
-        
+
         tr:hover {{
             background: #f8fafc;
         }}
-        
+
         .file-cell {{
             max-width: 200px;
             overflow: hidden;
@@ -512,21 +512,21 @@ class ReportGenerator:
             font-family: 'SF Mono', monospace;
             font-size: 0.9rem;
         }}
-        
+
         .num {{
             text-align: center;
             font-family: 'SF Mono', monospace;
         }}
-        
+
         .num.warning {{
             color: var(--accent);
             font-weight: 600;
         }}
-        
+
         .num.success {{
             color: #10b981;
         }}
-        
+
         .badge {{
             background: var(--primary);
             color: white;
@@ -535,7 +535,7 @@ class ReportGenerator:
             font-size: 0.75rem;
             margin-right: 4px;
         }}
-        
+
         .footer {{
             text-align: center;
             padding: 40px;
@@ -548,12 +548,12 @@ class ReportGenerator:
         <div class="header">
             <h1>📊 {config.title}</h1>
             <p class="meta">
-                <strong>Target:</strong> {target} | 
+                <strong>Target:</strong> {target} |
                 <strong>Generated:</strong> {datetime.now().strftime("%Y-%m-%d %H:%M:%S")} |
                 <strong>Author:</strong> {config.author}
             </p>
         </div>
-        
+
         <div class="card">
             <h2>📈 Summary Metrics</h2>
             <div class="metrics-grid">
@@ -589,14 +589,14 @@ class ReportGenerator:
                 </div>
             </div>
         </div>
-        
+
         {f'''
         <div class="card">
             <h2>🎯 Patterns Detected</h2>
             {pattern_bars}
         </div>
         ''' if pattern_bars else ''}
-        
+
         <div class="card">
             <h2>📄 File Analysis</h2>
             <table>
@@ -616,7 +616,7 @@ class ReportGenerator:
             </table>
             {self._truncation_notice(files, config)}
         </div>
-        
+
         <div class="footer">
             <p>Generated by <strong>Codomyrmex Test Project</strong></p>
         </div>

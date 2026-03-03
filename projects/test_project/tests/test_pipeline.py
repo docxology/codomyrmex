@@ -1,9 +1,9 @@
 """Tests for the pipeline module."""
 
-import pytest
 from pathlib import Path
 
-from src.pipeline import AnalysisPipeline, PipelineStep, PipelineResult, PipelineStatus
+import pytest
+from src.pipeline import AnalysisPipeline, PipelineResult, PipelineStatus, PipelineStep
 
 
 class TestPipelineStatus:

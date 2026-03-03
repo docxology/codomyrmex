@@ -3,7 +3,7 @@
 import json
 from pathlib import Path
 
-from src.reporter import ReportGenerator, ReportConfig
+from src.reporter import ReportConfig, ReportGenerator
 
 
 class TestReportConfig:
@@ -99,7 +99,7 @@ class TestReportGenerator:
         assert "json" in paths
         assert "markdown" in paths
 
-        for fmt, path in paths.items():
+        for _fmt, path in paths.items():
             assert path.exists()
 
     def test_report_includes_summary(self, output_directory: Path, sample_analysis_results: dict):
