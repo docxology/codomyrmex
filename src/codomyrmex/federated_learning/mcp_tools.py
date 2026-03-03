@@ -1,13 +1,15 @@
 """MCP tools for federated learning."""
 
-from typing import Any, Dict, List
+from typing import Any
+
 from codomyrmex.model_context_protocol.decorators import mcp_tool
+
 
 @mcp_tool(
     name="federated_learning_run_round",
     description="Runs a round of federated learning.",
 )
-def federated_learning_run_round(clients: List[str], epochs: int = 1) -> Dict[str, Any]:
+def federated_learning_run_round(clients: list[str], epochs: int = 1) -> dict[str, Any]:
     """Run a federated learning round.
 
     Args:
@@ -27,11 +29,12 @@ def federated_learning_run_round(clients: List[str], epochs: int = 1) -> Dict[st
         "average_loss": 0.5,
     }
 
+
 @mcp_tool(
     name="federated_learning_aggregate",
     description="Aggregates client models.",
 )
-def federated_learning_aggregate(strategy: str = "fedavg") -> Dict[str, Any]:
+def federated_learning_aggregate(strategy: str = "fedavg") -> dict[str, Any]:
     """Aggregate client models.
 
     Args:
@@ -42,7 +45,9 @@ def federated_learning_aggregate(strategy: str = "fedavg") -> Dict[str, Any]:
     """
     valid_strategies = ["fedavg", "fedprox", "scaffold"]
     if strategy not in valid_strategies:
-        raise ValueError(f"Invalid strategy: {strategy}. Valid ones are {valid_strategies}")
+        raise ValueError(
+            f"Invalid strategy: {strategy}. Valid ones are {valid_strategies}"
+        )
 
     return {
         "status": "success",

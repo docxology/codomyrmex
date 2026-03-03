@@ -1,11 +1,10 @@
 """Zero-mock unit tests for federated learning MCP tools."""
 
 import pytest
-from typing import Dict, Any
 
 from codomyrmex.federated_learning.mcp_tools import (
-    federated_learning_run_round,
     federated_learning_aggregate,
+    federated_learning_run_round,
 )
 
 
