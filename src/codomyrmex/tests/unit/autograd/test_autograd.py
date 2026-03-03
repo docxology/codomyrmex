@@ -363,6 +363,30 @@ class TestTensorBackward:
     """Backward-pass correctness for Tensor operations."""
 
     @pytest.mark.unit
+    def test_unbroadcast(self):
+        from codomyrmex.autograd.engine import _unbroadcast
+
+        # Test 1: No broadcasting occurred
+        grad = np.ones((2, 3))
+        res = _unbroadcast(grad, (2, 3))
+        np.testing.assert_array_equal(res, grad)
+
+        # Test 2: Broadcasting along added leading dimensions
+        grad2 = np.ones((4, 2, 3))
+        res2 = _unbroadcast(grad2, (2, 3))
+        np.testing.assert_array_equal(res2, np.ones((2, 3)) * 4)
+
+        # Test 3: Broadcasting along size-1 dimension
+        grad3 = np.ones((2, 3))
+        res3 = _unbroadcast(grad3, (2, 1))
+        np.testing.assert_array_equal(res3, np.ones((2, 1)) * 3)
+
+        # Test 4: Both
+        grad4 = np.ones((4, 2, 3))
+        res4 = _unbroadcast(grad4, (1, 3))
+        np.testing.assert_array_equal(res4, np.ones((1, 3)) * 8)
+
+    @pytest.mark.unit
     def test_add_backward(self):
         a = Tensor([1.0, 2.0])
         b = Tensor([3.0, 4.0])
@@ -522,6 +546,27 @@ class TestActivationsTensor:
 
 class TestMCPTools:
     """MCP tool interface tests."""
+
+    @pytest.mark.unit
+    def test_safe_eval_expression(self):
+        from codomyrmex.autograd.mcp_tools import _safe_eval_expression
+
+        # Valid
+        res = _safe_eval_expression("x * 2 + y", {"x": 2.0, "y": 3.0})
+        assert res.data == 7.0
+        assert res.label == "" # Result of an operation
+
+        # Literal result
+        res2 = _safe_eval_expression("4 + 5", {})
+        assert res2.data == 9.0
+
+        # Invalid variable name
+        with pytest.raises(ValueError, match="Invalid variable"):
+            _safe_eval_expression("x + 1", {"1bad": 1.0})
+
+        # Invalid syntax
+        with pytest.raises(ValueError, match="Invalid expression syntax"):
+            _safe_eval_expression("x +* 1", {"x": 1.0})
 
     @pytest.mark.unit
     def test_autograd_compute_simple(self):

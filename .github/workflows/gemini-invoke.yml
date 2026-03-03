@@ -37,8 +37,19 @@ jobs:
           permission-issues: 'write'
           permission-pull-requests: 'write'
 
+
+      - name: 'Check Gemini API Key'
+        id: check_key
+        run: |
+          if [ -n "${{ secrets.GEMINI_API_KEY }}" ] || [ -n "${{ secrets.GOOGLE_API_KEY }}" ] || [ -n "${{ vars.GCP_WIF_PROVIDER }}" ]; then
+            echo "has_key=true" >> $GITHUB_OUTPUT
+          else
+            echo "has_key=false" >> $GITHUB_OUTPUT
+          fi
+
       - name: 'Run Gemini CLI'
         id: 'run_gemini'
+        if: steps.check_key.outputs.has_key == 'true'
         uses: 'google-github-actions/run-gemini-cli@v0' # ratchet:exclude
         env:
           TITLE: '${{ github.event.pull_request.title || github.event.issue.title }}'

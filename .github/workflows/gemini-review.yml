@@ -41,7 +41,18 @@ jobs:
       - name: 'Checkout repository'
         uses: 'actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8' # ratchet:actions/checkout@v6
 
+
+      - name: 'Check Gemini API Key'
+        id: check_key
+        run: |
+          if [ -n "${{ secrets.GEMINI_API_KEY }}" ] || [ -n "${{ secrets.GOOGLE_API_KEY }}" ] || [ -n "${{ vars.GCP_WIF_PROVIDER }}" ]; then
+            echo "has_key=true" >> $GITHUB_OUTPUT
+          else
+            echo "has_key=false" >> $GITHUB_OUTPUT
+          fi
+
       - name: 'Run Gemini pull request review'
+        if: steps.check_key.outputs.has_key == 'true'
         uses: 'google-github-actions/run-gemini-cli@v0' # ratchet:exclude
         id: 'gemini_pr_review'
         env:

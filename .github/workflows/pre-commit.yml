@@ -23,6 +23,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Install UV
         uses: astral-sh/setup-uv@v5
@@ -59,10 +61,15 @@ jobs:
           pre-commit install
           echo "✅ Pre-commit hooks installed from .pre-commit-config.yaml"
 
-      - name: Run pre-commit on all files
+      - name: Run pre-commit
         run: |
-          echo "🔍 Running pre-commit hooks on all files..."
-          pre-commit run --all-files --show-diff-on-failure
+          if [ "${{ github.event_name }}" == "pull_request" ]; then
+            echo "🔍 Running pre-commit hooks on changed files in PR..."
+            pre-commit run --show-diff-on-failure --from-ref ${{ github.event.pull_request.base.sha }} --to-ref ${{ github.event.pull_request.head.sha }}
+          else
+            echo "🔍 Running pre-commit hooks on all files..."
+            pre-commit run --all-files --show-diff-on-failure
+          fi
 
   commit-message-check:
     name: Commit Message Validation
@@ -131,6 +138,9 @@ jobs:
     name: File Changes Analysis
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request'
+    permissions:
+      pull-requests: write
+      issues: write
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
