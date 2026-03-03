@@ -23,7 +23,7 @@ project_root = Path(__file__).parent.parent.parent
 sys.path.insert(0, str(project_root / "src"))
 sys.path.insert(0, str(project_root))  # Add for scripts package imports
 
-from scripts.orchestrator.workflows import list_workflows, get_workflow
+from scripts.orchestrator.workflows import get_workflow, list_workflows
 
 
 def main() -> int:
@@ -46,28 +46,18 @@ Example:
   python run_workflow.py build_and_validate --verbose
   python run_workflow.py code_quality --fix
   python run_workflow.py --list
-        """
+        """,
     )
 
+    parser.add_argument("workflow", nargs="?", help="Workflow name to run")
     parser.add_argument(
-        "workflow",
-        nargs="?",
-        help="Workflow name to run"
+        "--list", "-l", action="store_true", help="List available workflows"
     )
-    parser.add_argument(
-        "--list", "-l",
-        action="store_true",
-        help="List available workflows"
-    )
-    parser.add_argument(
-        "--verbose", "-v",
-        action="store_true",
-        help="Verbose output"
-    )
+    parser.add_argument("--verbose", "-v", action="store_true", help="Verbose output")
     parser.add_argument(
         "--dry-run",
         action="store_true",
-        help="Show what would be run without executing"
+        help="Show what would be run without executing",
     )
 
     # Parse known args, pass rest to workflow
@@ -121,17 +111,23 @@ Example:
     result = subprocess.run(cmd, cwd=project_root)
     return result.returncode
 
-
-
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
-    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "orchestrator" / "config.yaml"
+
+    import yaml
+
+    config_path = (
+        Path(__file__).resolve().parent.parent.parent
+        / "config"
+        / "orchestrator"
+        / "config.yaml"
+    )
     config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
+        with open(config_path) as f:
             config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/orchestrator/config.yaml")
+            print("Loaded config from config/orchestrator/config.yaml")
+
 
 if __name__ == "__main__":
     sys.exit(main())

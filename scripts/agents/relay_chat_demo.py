@@ -17,8 +17,8 @@ Demonstrates a permanent, ping-ponging conversation between two autonomous agent
 Uses the modular `AutonomousAgent` class from `codomyrmex.agents`.
 """
 
-import time
 import sys
+import time
 from pathlib import Path
 
 # Ensure src is in path if run directly
@@ -34,21 +34,29 @@ from codomyrmex.ide.antigravity.agent_relay import AgentRelay
 CHANNEL = "demo-chat"
 RUNNING = True
 
+
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
-    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "agents" / "config.yaml"
+
+    import yaml
+
+    config_path = (
+        Path(__file__).resolve().parent.parent.parent
+        / "config"
+        / "agents"
+        / "config.yaml"
+    )
     config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
+        with open(config_path) as f:
             config_data = yaml.safe_load(f) or {}
             print(f"Loaded config from {config_path.name}")
 
     global RUNNING
     # Clean up any previous run
     AgentRelay(CHANNEL).clear()
-    
+
     print("=== Starting Long-Lived Relay Chat (Modular) ===")
     print("Press Ctrl+C to stop.")
 
@@ -58,31 +66,33 @@ def main():
         identity="antigravity",
         persona="Curious Scientist. Ask deep questions about the universe.",
         channel=CHANNEL,
-        think_time=2.0
+        think_time=2.0,
     )
-    
+
     # Claude Side
     cc_agent = AutonomousAgent(
         identity="claude_code",
         persona="Wise Philosopher. Provide thoughtful, abstract answers.",
         channel=CHANNEL,
-        think_time=2.0
+        think_time=2.0,
     )
 
     # 2. Start Agents (in background threads)
     # The AutonomousAgent.start() method blocks if background=False
     # We want them parallel, so we run them in threads or async
     # AutonomousAgent uses ClaudeCodeEndpoint which is threaded, so .start() is non-blocking?
-    # Let's check implementation. created file says: 
+    # Let's check implementation. created file says:
     # self.endpoint.start() ... if not background: while loop
     # So start(background=True) is non-blocking.
-    
+
     ag_agent.start(background=True)
     cc_agent.start(background=True)
 
     # 3. Kickoff
     time.sleep(2)
-    ag_agent.send("Hello! I am ready to explore the mysteries of the cosmos. What is your perspective on time?")
+    ag_agent.send(
+        "Hello! I am ready to explore the mysteries of the cosmos. What is your perspective on time?"
+    )
 
     # 4. Main Loop
     try:
@@ -90,10 +100,11 @@ def main():
             time.sleep(1)
     except KeyboardInterrupt:
         print("\n[Main] Interrupted! Shutting down...")
-        
+
     ag_agent.stop()
     cc_agent.stop()
     print("\nDemo complete.")
+
 
 if __name__ == "__main__":
     main()

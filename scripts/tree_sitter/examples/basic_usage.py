@@ -13,13 +13,14 @@ Usage:
 import sys
 import time
 from pathlib import Path
-from typing import Any, Dict, Optional
+from typing import Any
 
 project_root = Path(__file__).parent.parent.parent.parent
 sys.path.insert(0, str(project_root / "src"))
 
 # Direct import to avoid triggering full codomyrmex package init
 import importlib.util
+
 script_base_path = project_root / "src" / "codomyrmex" / "utils" / "script_base.py"
 spec = importlib.util.spec_from_file_location("script_base", script_base_path)
 script_base = importlib.util.module_from_spec(spec)
@@ -42,28 +43,39 @@ class TreeSitterScript(ScriptBase):
         """Add tree-sitter-specific arguments."""
         group = parser.add_argument_group("Tree-Sitter Options")
         group.add_argument(
-            "--language", default="python",
-            choices=["python", "javascript", "typescript", "go", "rust", "java", "c", "cpp"],
-            help="Target language for parsing (default: python)"
+            "--language",
+            default="python",
+            choices=[
+                "python",
+                "javascript",
+                "typescript",
+                "go",
+                "rust",
+                "java",
+                "c",
+                "cpp",
+            ],
+            help="Target language for parsing (default: python)",
         )
         group.add_argument(
-            "--source-file", type=Path,
-            help="Source file to parse (uses built-in samples if not provided)"
+            "--source-file",
+            type=Path,
+            help="Source file to parse (uses built-in samples if not provided)",
         )
         group.add_argument(
-            "--query", type=str,
-            help="Tree-sitter query pattern to execute"
+            "--query", type=str, help="Tree-sitter query pattern to execute"
         )
         group.add_argument(
-            "--benchmark-iterations", type=int, default=100,
-            help="Number of iterations for parsing benchmark (default: 100)"
+            "--benchmark-iterations",
+            type=int,
+            default=100,
+            help="Number of iterations for parsing benchmark (default: 100)",
         )
         group.add_argument(
-            "--show-ast", action="store_true",
-            help="Display full AST structure"
+            "--show-ast", action="store_true", help="Display full AST structure"
         )
 
-    def run(self, args, config: ScriptConfig) -> Dict[str, Any]:
+    def run(self, args, config: ScriptConfig) -> dict[str, Any]:
         """Execute tree-sitter demonstrations."""
         results = {
             "tests_run": 0,
@@ -80,7 +92,7 @@ class TreeSitterScript(ScriptBase):
             return results
 
         # Import tree_sitter module (after dry_run check)
-        from codomyrmex.tree_sitter import TreeSitterParser, LanguageManager
+        from codomyrmex.tree_sitter import LanguageManager, TreeSitterParser
 
         # Sample code for different languages
         sample_code = self._get_sample_code(args.language)
@@ -97,7 +109,9 @@ class TreeSitterScript(ScriptBase):
                 "initialized": True,
             }
             results["tests_passed"] += 1
-            self.log_success(f"LanguageManager initialized, {len(available_languages)} languages available")
+            self.log_success(
+                f"LanguageManager initialized, {len(available_languages)} languages available"
+            )
         except Exception as e:
             self.log_error(f"LanguageManager initialization failed: {e}")
             results["language_manager"] = {"error": str(e)}
@@ -148,7 +162,9 @@ class TreeSitterScript(ScriptBase):
                 "has_errors": root_node.has_error,
             }
             results["tests_passed"] += 1
-            self.log_success(f"Parsed {len(source)} chars in {parse_time:.2f}ms, {node_count} nodes")
+            self.log_success(
+                f"Parsed {len(source)} chars in {parse_time:.2f}ms, {node_count} nodes"
+            )
 
             # Show AST if requested
             if args.show_ast:
@@ -170,20 +186,24 @@ class TreeSitterScript(ScriptBase):
             for query_name, query_pattern in queries.items():
                 try:
                     matches = parser.query(tree, query_pattern)
-                    query_results.append({
-                        "name": query_name,
-                        "pattern": query_pattern,
-                        "match_count": len(matches),
-                        "success": True,
-                    })
+                    query_results.append(
+                        {
+                            "name": query_name,
+                            "pattern": query_pattern,
+                            "match_count": len(matches),
+                            "success": True,
+                        }
+                    )
                     self.log_info(f"   Query '{query_name}': {len(matches)} matches")
                 except Exception as e:
-                    query_results.append({
-                        "name": query_name,
-                        "pattern": query_pattern,
-                        "error": str(e),
-                        "success": False,
-                    })
+                    query_results.append(
+                        {
+                            "name": query_name,
+                            "pattern": query_pattern,
+                            "error": str(e),
+                            "success": False,
+                        }
+                    )
 
             results["query_tests"] = {
                 "queries_run": len(queries),
@@ -210,7 +230,11 @@ class TreeSitterScript(ScriptBase):
                 "original_length": len(source),
                 "modified_length": len(modified_source),
                 "incremental_time_ms": incremental_time,
-                "speedup_vs_full": parse_time / incremental_time if incremental_time > 0 else float('inf'),
+                "speedup_vs_full": (
+                    parse_time / incremental_time
+                    if incremental_time > 0
+                    else float("inf")
+                ),
             }
             results["tests_passed"] += 1
             self.log_success(f"Incremental parse in {incremental_time:.2f}ms")
@@ -220,7 +244,9 @@ class TreeSitterScript(ScriptBase):
         results["tests_run"] += 1
 
         # Test 6: Parsing performance benchmark
-        self.log_info(f"\n6. Performance benchmark ({args.benchmark_iterations} iterations)")
+        self.log_info(
+            f"\n6. Performance benchmark ({args.benchmark_iterations} iterations)"
+        )
         try:
             parse_times = []
             for _ in range(args.benchmark_iterations):
@@ -237,10 +263,14 @@ class TreeSitterScript(ScriptBase):
                 "avg_time_ms": avg_time,
                 "min_time_ms": min_time,
                 "max_time_ms": max_time,
-                "throughput_ops_per_sec": 1000 / avg_time if avg_time > 0 else float('inf'),
+                "throughput_ops_per_sec": (
+                    1000 / avg_time if avg_time > 0 else float("inf")
+                ),
             }
             results["tests_passed"] += 1
-            self.log_success(f"Benchmark: avg={avg_time:.3f}ms, min={min_time:.3f}ms, max={max_time:.3f}ms")
+            self.log_success(
+                f"Benchmark: avg={avg_time:.3f}ms, min={min_time:.3f}ms, max={max_time:.3f}ms"
+            )
         except Exception as e:
             self.log_error(f"Benchmark failed: {e}")
             results["benchmark"] = {"error": str(e)}
@@ -255,7 +285,9 @@ class TreeSitterScript(ScriptBase):
             results["traversal"] = {
                 "unique_node_types": len(node_types),
                 "node_type_counts": node_types,
-                "most_common": max(node_types.items(), key=lambda x: x[1]) if node_types else None,
+                "most_common": (
+                    max(node_types.items(), key=lambda x: x[1]) if node_types else None
+                ),
             }
             results["tests_passed"] += 1
             self.log_success(f"Found {len(node_types)} unique node types")
@@ -275,7 +307,9 @@ class TreeSitterScript(ScriptBase):
         self.add_metric("tests_run", results["tests_run"])
         self.add_metric("tests_passed", results["tests_passed"])
         if "benchmark" in results and "throughput_ops_per_sec" in results["benchmark"]:
-            self.add_metric("parsing_throughput", results["benchmark"]["throughput_ops_per_sec"])
+            self.add_metric(
+                "parsing_throughput", results["benchmark"]["throughput_ops_per_sec"]
+            )
 
         return results
 
@@ -313,7 +347,7 @@ class Calculator:
 if __name__ == "__main__":
     print(fibonacci(10))
 ''',
-            "javascript": '''
+            "javascript": """
 function fibonacci(n) {
     if (n <= 1) return n;
     return fibonacci(n - 1) + fibonacci(n - 2);
@@ -331,8 +365,8 @@ class Calculator {
 }
 
 console.log(fibonacci(10));
-''',
-            "typescript": '''
+""",
+            "typescript": """
 function fibonacci(n: number): number {
     if (n <= 1) return n;
     return fibonacci(n - 1) + fibonacci(n - 2);
@@ -352,8 +386,8 @@ class Calculator {
 }
 
 console.log(fibonacci(10));
-''',
-            "go": '''
+""",
+            "go": """
 package main
 
 import "fmt"
@@ -377,8 +411,8 @@ func (c *Calculator) Add(x float64) float64 {
 func main() {
     fmt.Println(fibonacci(10))
 }
-''',
-            "rust": '''
+""",
+            "rust": """
 fn fibonacci(n: u32) -> u32 {
     if n <= 1 {
         return n;
@@ -404,8 +438,8 @@ impl Calculator {
 fn main() {
     println!("{}", fibonacci(10));
 }
-''',
-            "java": '''
+""",
+            "java": """
 public class Main {
     public static int fibonacci(int n) {
         if (n <= 1) return n;
@@ -429,8 +463,8 @@ class Calculator {
         return this.value;
     }
 }
-''',
-            "c": '''
+""",
+            "c": """
 #include <stdio.h>
 
 int fibonacci(int n) {
@@ -455,8 +489,8 @@ int main() {
     printf("%d\\n", fibonacci(10));
     return 0;
 }
-''',
-            "cpp": '''
+""",
+            "cpp": """
 #include <iostream>
 
 int fibonacci(int n) {
@@ -481,11 +515,13 @@ int main() {
     std::cout << fibonacci(10) << std::endl;
     return 0;
 }
-''',
+""",
         }
         return samples.get(language, samples["python"])
 
-    def _get_default_queries(self, language: str, custom_query: Optional[str] = None) -> Dict[str, str]:
+    def _get_default_queries(
+        self, language: str, custom_query: str | None = None
+    ) -> dict[str, str]:
         """Get default queries for the language."""
         queries = {}
 
@@ -494,37 +530,49 @@ int main() {
 
         # Language-specific queries
         if language == "python":
-            queries.update({
-                "functions": "(function_definition name: (identifier) @name)",
-                "classes": "(class_definition name: (identifier) @name)",
-                "imports": "(import_statement) @import",
-            })
+            queries.update(
+                {
+                    "functions": "(function_definition name: (identifier) @name)",
+                    "classes": "(class_definition name: (identifier) @name)",
+                    "imports": "(import_statement) @import",
+                }
+            )
         elif language in ["javascript", "typescript"]:
-            queries.update({
-                "functions": "(function_declaration name: (identifier) @name)",
-                "classes": "(class_declaration name: (identifier) @name)",
-                "arrow_functions": "(arrow_function) @arrow",
-            })
+            queries.update(
+                {
+                    "functions": "(function_declaration name: (identifier) @name)",
+                    "classes": "(class_declaration name: (identifier) @name)",
+                    "arrow_functions": "(arrow_function) @arrow",
+                }
+            )
         elif language == "go":
-            queries.update({
-                "functions": "(function_declaration name: (identifier) @name)",
-                "structs": "(type_declaration (type_spec name: (type_identifier) @name))",
-            })
+            queries.update(
+                {
+                    "functions": "(function_declaration name: (identifier) @name)",
+                    "structs": "(type_declaration (type_spec name: (type_identifier) @name))",
+                }
+            )
         elif language == "rust":
-            queries.update({
-                "functions": "(function_item name: (identifier) @name)",
-                "structs": "(struct_item name: (type_identifier) @name)",
-            })
+            queries.update(
+                {
+                    "functions": "(function_item name: (identifier) @name)",
+                    "structs": "(struct_item name: (type_identifier) @name)",
+                }
+            )
         elif language == "java":
-            queries.update({
-                "methods": "(method_declaration name: (identifier) @name)",
-                "classes": "(class_declaration name: (identifier) @name)",
-            })
+            queries.update(
+                {
+                    "methods": "(method_declaration name: (identifier) @name)",
+                    "classes": "(class_declaration name: (identifier) @name)",
+                }
+            )
         elif language in ["c", "cpp"]:
-            queries.update({
-                "functions": "(function_definition declarator: (function_declarator declarator: (identifier) @name))",
-                "structs": "(struct_specifier name: (type_identifier) @name)",
-            })
+            queries.update(
+                {
+                    "functions": "(function_definition declarator: (function_declarator declarator: (identifier) @name))",
+                    "structs": "(struct_specifier name: (type_identifier) @name)",
+                }
+            )
 
         return queries
 
@@ -535,7 +583,7 @@ int main() {
             count += self._count_nodes(child)
         return count
 
-    def _collect_node_types(self, node, types: Dict[str, int]):
+    def _collect_node_types(self, node, types: dict[str, int]):
         """Collect node type counts."""
         types[node.type] = types.get(node.type, 0) + 1
         for child in node.children:
@@ -544,25 +592,31 @@ int main() {
     def _print_ast(self, node, indent: int = 0):
         """Print AST structure."""
         prefix = " " * indent
-        text = node.text[:50].decode('utf-8') if node.text else ""
-        text = text.replace('\n', '\\n')
+        text = node.text[:50].decode("utf-8") if node.text else ""
+        text = text.replace("\n", "\\n")
         self.log_info(f"{prefix}{node.type}: {text}")
         for child in node.children[:5]:  # Limit children to avoid too much output
             self._print_ast(child, indent + 2)
         if len(node.children) > 5:
             self.log_info(f"{prefix}  ... ({len(node.children) - 5} more children)")
 
-
-
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
-    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "tree_sitter" / "config.yaml"
+
+    import yaml
+
+    config_path = (
+        Path(__file__).resolve().parent.parent.parent
+        / "config"
+        / "tree_sitter"
+        / "config.yaml"
+    )
     config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
+        with open(config_path) as f:
             config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/tree_sitter/config.yaml")
+            print("Loaded config from config/tree_sitter/config.yaml")
+
 
 if __name__ == "__main__":
     script = TreeSitterScript()

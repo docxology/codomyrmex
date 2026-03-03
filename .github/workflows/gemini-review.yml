@@ -26,10 +26,23 @@ jobs:
       issues: 'write'
       pull-requests: 'write'
     steps:
+      - name: Check for credentials
+        id: check_creds
+        run: |
+          if [ -n "${{ secrets.GEMINI_API_KEY }}" ]; then
+            echo "has_creds=true" >> $GITHUB_OUTPUT
+          elif [ -n "${{ secrets.GOOGLE_API_KEY }}" ]; then
+            echo "has_creds=true" >> $GITHUB_OUTPUT
+          elif [ -n "${{ vars.GCP_WIF_PROVIDER }}" ]; then
+            echo "has_creds=true" >> $GITHUB_OUTPUT
+          else
+            echo "has_creds=false" >> $GITHUB_OUTPUT
+          fi
+
       - name: 'Mint identity token'
         id: 'mint_identity_token'
         if: |-
-          ${{ vars.APP_ID }}
+          ${{ vars.APP_ID }} && steps.check_creds.outputs.has_creds == 'true'
         uses: 'actions/create-github-app-token@29824e69f54612133e76f7eaac726eef6c875baf' # ratchet:actions/create-github-app-token@v2
         with:
           app-id: '${{ vars.APP_ID }}'
@@ -39,9 +52,11 @@ jobs:
           permission-pull-requests: 'write'
 
       - name: 'Checkout repository'
+        if: steps.check_creds.outputs.has_creds == 'true'
         uses: 'actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8' # ratchet:actions/checkout@v6
 
       - name: 'Run Gemini pull request review'
+        if: steps.check_creds.outputs.has_creds == 'true'
         uses: 'google-github-actions/run-gemini-cli@v0' # ratchet:exclude
         id: 'gemini_pr_review'
         env:

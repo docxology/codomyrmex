@@ -19,25 +19,38 @@ except ImportError:
     project_root = Path(__file__).resolve().parent.parent.parent.parent
     sys.path.insert(0, str(project_root / "src"))
 
-from codomyrmex.utils.cli_helpers import setup_logging, print_success, print_info, print_error
 from codomyrmex.utils import (
     ensure_directory,
-    safe_json_loads,
-    safe_json_dumps,
     hash_content,
-    timing_decorator
+    safe_json_dumps,
+    safe_json_loads,
+    timing_decorator,
 )
+from codomyrmex.utils.cli_helpers import (
+    print_error,
+    print_info,
+    print_success,
+    setup_logging,
+)
+
 
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
-    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "utils" / "config.yaml"
+
+    import yaml
+
+    config_path = (
+        Path(__file__).resolve().parent.parent.parent
+        / "config"
+        / "utils"
+        / "config.yaml"
+    )
     config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
+        with open(config_path) as f:
             config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/utils/config.yaml")
+            print("Loaded config from config/utils/config.yaml")
 
     setup_logging()
     print_info("Running Utility Examples...")
@@ -75,18 +88,22 @@ def main():
     # 4. Decorators
     print_info("Testing decorators (timing)...")
     try:
+
         @timing_decorator
         def task():
             return {"status": "ok"}
-        
+
         result = task()
         if "execution_time_ms" in result:
-            print_success(f"  Timing decorator verified: {result['execution_time_ms']}ms")
+            print_success(
+                f"  Timing decorator verified: {result['execution_time_ms']}ms"
+            )
     except Exception as e:
         print_error(f"  Decorators failed: {e}")
 
     print_success("Utility examples completed successfully")
     return 0
+
 
 if __name__ == "__main__":
     sys.exit(main())
