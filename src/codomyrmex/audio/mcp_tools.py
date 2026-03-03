@@ -1,11 +1,10 @@
 """MCP tools for the audio module."""
 
-import os
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any
 
-from codomyrmex.model_context_protocol.tool_decorator import mcp_tool
 from codomyrmex.audio import Transcriber, WhisperModelSize
+from codomyrmex.model_context_protocol.tool_decorator import mcp_tool
 
 
 @mcp_tool(category="audio")
@@ -26,18 +25,21 @@ def audio_get_capabilities() -> dict:
 
         try:
             import whisper  # noqa: F401
+
             capabilities["stt_providers"].append("whisper")
         except ImportError:
             pass
 
         try:
             import pyttsx3  # noqa: F401
+
             capabilities["tts_providers"].append("pyttsx3")
         except ImportError:
             pass
 
         try:
             import edge_tts  # noqa: F401
+
             capabilities["tts_providers"].append("edge-tts")
         except ImportError:
             pass
@@ -45,7 +47,9 @@ def audio_get_capabilities() -> dict:
         return {
             "status": "success",
             "capabilities": capabilities,
-            "ready": bool(capabilities["stt_providers"] or capabilities["tts_providers"]),
+            "ready": bool(
+                capabilities["stt_providers"] or capabilities["tts_providers"]
+            ),
         }
     except Exception as e:
         return {"status": "error", "message": str(e)}
@@ -65,6 +69,7 @@ def audio_list_voices(provider: str = "pyttsx3") -> dict:
         if provider == "pyttsx3":
             try:
                 import pyttsx3
+
                 engine = pyttsx3.init()
                 voices = engine.getProperty("voices")
                 voice_list = [
@@ -74,26 +79,38 @@ def audio_list_voices(provider: str = "pyttsx3") -> dict:
                 engine.stop()
                 return {"status": "success", "provider": provider, "voices": voice_list}
             except ImportError:
-                return {"status": "error", "message": "pyttsx3 not installed. Run: uv sync --extra audio"}
+                return {
+                    "status": "error",
+                    "message": "pyttsx3 not installed. Run: uv sync --extra audio",
+                }
 
         if provider == "edge-tts":
             try:
                 import asyncio
 
                 import edge_tts
+
                 voices_raw = asyncio.run(edge_tts.list_voices())
-                voice_list = [{"name": v["ShortName"], "locale": v["Locale"]} for v in voices_raw]
+                voice_list = [
+                    {"name": v["ShortName"], "locale": v["Locale"]} for v in voices_raw
+                ]
                 return {"status": "success", "provider": provider, "voices": voice_list}
             except ImportError:
-                return {"status": "error", "message": "edge-tts not installed. Run: uv sync --extra audio"}
+                return {
+                    "status": "error",
+                    "message": "edge-tts not installed. Run: uv sync --extra audio",
+                }
 
-        return {"status": "error", "message": f"Unknown provider: {provider!r}. Use 'pyttsx3' or 'edge-tts'"}
+        return {
+            "status": "error",
+            "message": f"Unknown provider: {provider!r}. Use 'pyttsx3' or 'edge-tts'",
+        }
     except Exception as e:
         return {"status": "error", "message": str(e)}
 
 
 @mcp_tool(category="audio")
-def audio_list_formats() -> Dict[str, Any]:
+def audio_list_formats() -> dict[str, Any]:
     """List supported audio formats for processing.
 
     Returns:
@@ -102,13 +119,20 @@ def audio_list_formats() -> Dict[str, Any]:
     return {
         "status": "success",
         "supported_formats": [
-            "wav", "mp3", "flac", "ogg", "m4a", "webm", "mp4", "opus"
-        ]
+            "wav",
+            "mp3",
+            "flac",
+            "ogg",
+            "m4a",
+            "webm",
+            "mp4",
+            "opus",
+        ],
     }
 
 
 @mcp_tool(category="audio")
-def audio_get_info(filepath: str) -> Dict[str, Any]:
+def audio_get_info(filepath: str) -> dict[str, Any]:
     """Get metadata about an audio file.
 
     Args:
@@ -126,7 +150,7 @@ def audio_get_info(filepath: str) -> Dict[str, Any]:
             return {"status": "error", "message": f"Path is not a file: {filepath}"}
 
         stat = path.stat()
-        extension = path.suffix.lower().lstrip('.')
+        extension = path.suffix.lower().lstrip(".")
 
         return {
             "status": "success",
@@ -135,7 +159,7 @@ def audio_get_info(filepath: str) -> Dict[str, Any]:
                 "filename": path.name,
                 "extension": extension,
                 "size_bytes": stat.st_size,
-            }
+            },
         }
     except Exception as e:
         return {"status": "error", "message": str(e)}
@@ -143,10 +167,8 @@ def audio_get_info(filepath: str) -> Dict[str, Any]:
 
 @mcp_tool(category="audio")
 def audio_transcribe(
-    filepath: str,
-    language: str | None = None,
-    model_size: str = "base"
-) -> Dict[str, Any]:
+    filepath: str, language: str | None = None, model_size: str = "base"
+) -> dict[str, Any]:
     """Transcribe an audio file to text using available STT provider.
 
     Args:
@@ -168,8 +190,8 @@ def audio_transcribe(
         except ValueError:
             return {
                 "status": "error",
-                "message": f"Invalid model size: {model_size}. Valid options: " +
-                           ", ".join([e.value for e in WhisperModelSize])
+                "message": f"Invalid model size: {model_size}. Valid options: "
+                + ", ".join([e.value for e in WhisperModelSize]),
             }
 
         transcriber = Transcriber(model_size=size_enum)
@@ -181,13 +203,9 @@ def audio_transcribe(
             "language": result.language,
             "duration": result.duration,
             "segments": [
-                {
-                    "start": seg.start,
-                    "end": seg.end,
-                    "text": seg.text
-                }
+                {"start": seg.start, "end": seg.end, "text": seg.text}
                 for seg in result.segments
-            ]
+            ],
         }
     except Exception as e:
         return {"status": "error", "message": str(e)}
