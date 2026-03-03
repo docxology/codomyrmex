@@ -22,11 +22,17 @@ class AsyncStream:
         self,
         buffer_size: int = 1000,
         enable_backpressure: bool = True,
-    ):
-        self._buffer: asyncio.Queue = asyncio.Queue(maxsize=buffer_size if enable_backpressure else 0)
-        self._subscribers: dict[str, asyncio.Queue] = {}
+    ) -> None:
+        """Initialize async stream.
+
+        Args:
+            buffer_size: Maximum buffer capacity.
+            enable_backpressure: Whether to enforce max size on the queue.
+        """
+        self._buffer: asyncio.Queue[Event] = asyncio.Queue(maxsize=buffer_size if enable_backpressure else 0)
+        self._subscribers: dict[str, asyncio.Queue[Event]] = {}
         self._running = False
-        self._dispatcher_task: asyncio.Task | None = None
+        self._dispatcher_task: asyncio.Task[None] | None = None
 
     async def start(self) -> None:
         """Start the stream dispatcher."""
@@ -106,7 +112,8 @@ class AsyncStream:
 class WebSocketStream:
     """WebSocket-compatible stream."""
 
-    def __init__(self):
+    def __init__(self) -> None:
+        """Initialize the WebSocket stream adapter."""
         self._connections: dict[str, Any] = {}
         self._base_stream = AsyncStream()
 
@@ -151,14 +158,20 @@ class BatchingStream:
         self,
         batch_size: int = 100,
         flush_interval: float = 1.0,
-    ):
+    ) -> None:
+        """Initialize batching stream.
+
+        Args:
+            batch_size: Number of events to batch before flushing.
+            flush_interval: Time to wait before flushing batch.
+        """
         self._batch: list[Event] = []
         self._batch_size = batch_size
         self._flush_interval = flush_interval
         self._lock = asyncio.Lock()
         self._handlers: list[Callable[[list[Event]], None]] = []
         self._running = False
-        self._flush_task: asyncio.Task | None = None
+        self._flush_task: asyncio.Task[None] | None = None
 
     async def start(self) -> None:
         """Start the batching stream."""

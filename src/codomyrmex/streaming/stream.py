@@ -21,7 +21,11 @@ class Stream(ABC):
 
     @abstractmethod
     async def publish(self, event: Event) -> None:
-        """Publish an event to the stream."""
+        """Publish an event to the stream.
+
+        Args:
+            event: The event to publish.
+        """
         pass
 
     @abstractmethod
@@ -31,19 +35,36 @@ class Stream(ABC):
         topic: str = "*",
         filter_fn: Callable[[Event], bool] | None = None,
     ) -> Subscription:
-        """Subscribe to events."""
+        """Subscribe to events on the stream.
+
+        Args:
+            handler: Callback invoked with matching events.
+            topic: Topic string to match. Defaults to '*'.
+            filter_fn: Optional predicate to filter events.
+
+        Returns:
+            The created Subscription.
+        """
         pass
 
     @abstractmethod
     async def unsubscribe(self, subscription_id: str) -> bool:
-        """Unsubscribe from events."""
+        """Unsubscribe from events on the stream.
+
+        Args:
+            subscription_id: The ID of the subscription to cancel.
+
+        Returns:
+            True if the subscription was found and removed, False otherwise.
+        """
         pass
 
 
 class InMemoryStream(Stream):
     """In-memory stream implementation."""
 
-    def __init__(self):
+    def __init__(self) -> None:
+        """Initialize the in-memory stream with empty state."""
         self._subscriptions: dict[str, Subscription] = {}
         self._event_buffer: list[Event] = []
         self._buffer_size = 1000
@@ -91,9 +112,14 @@ class InMemoryStream(Stream):
 class SSEStream(Stream):
     """Server-Sent Events stream implementation."""
 
-    def __init__(self, buffer_size: int = 100):
+    def __init__(self, buffer_size: int = 100) -> None:
+        """Initialize SSE stream.
+
+        Args:
+            buffer_size: Maximum number of events to buffer in memory.
+        """
         self._subscriptions: dict[str, Subscription] = {}
-        self._event_queues: dict[str, asyncio.Queue] = {}
+        self._event_queues: dict[str, asyncio.Queue[Event]] = {}
         self._buffer_size = buffer_size
         self._event_buffer: list[Event] = []
 
@@ -149,9 +175,10 @@ class SSEStream(Stream):
 class TopicStream:
     """Stream with topic-based routing."""
 
-    def __init__(self):
+    def __init__(self) -> None:
+        """Initialize topic stream."""
         self._topics: dict[str, InMemoryStream] = {}
-        self._default = InMemoryStream()
+        self._default: InMemoryStream = InMemoryStream()
 
     def topic(self, name: str) -> InMemoryStream:
         """Get or create a topic stream."""

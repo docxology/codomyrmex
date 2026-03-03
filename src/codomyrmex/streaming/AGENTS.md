@@ -1,4 +1,4 @@
-# Codomyrmex Agents — src/codomyrmex/events/streaming
+# Codomyrmex Agents — src/codomyrmex/streaming
 
 **Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
 
@@ -23,6 +23,8 @@ Provides async event streaming infrastructure with multiple backend implementati
 | `async_stream.py` | `WebSocketStream` | WebSocket adapter wrapping `AsyncStream` with `connect()`, `disconnect()`, `broadcast()`, and `send_to()` for individual clients |
 | `async_stream.py` | `BatchingStream` | Batches events by count or time interval; flushes to registered batch handlers |
 | `processors.py` | `StreamProcessor` | Fluent pipeline: `map()`, `filter()`, `sink()` transformations on a source `Stream` |
+| `mcp_tools.py` | `streaming_create_event` | MCP tool to construct an event and return it as a dictionary. |
+| `mcp_tools.py` | `streaming_format_sse` | MCP tool to format an event directly into an SSE string. |
 
 ## Operating Contracts
 
@@ -41,5 +43,5 @@ Provides async event streaming infrastructure with multiple backend implementati
 
 ## Navigation
 
-- **Parent**: [events](../README.md)
-- **Root**: [Codomyrmex](../../../../../README.md)
+- **Parent**: [Codomyrmex](../README.md)
+- **Root**: [Codomyrmex](../../../README.md)

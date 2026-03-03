@@ -18,11 +18,11 @@ from .stream import (
 try:
     from codomyrmex.validation.schemas import Result, ResultStatus
 except ImportError:
-    Result = None
-    ResultStatus = None
+    Result = None  # type: ignore[assignment,misc]
+    ResultStatus = None  # type: ignore[assignment,misc]
 
 
-def cli_commands():
+def cli_commands() -> dict[str, dict[str, str | object]]:
     """Return CLI commands for the streaming module."""
     return {
         "streams": {
