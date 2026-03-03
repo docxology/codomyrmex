@@ -72,14 +72,17 @@ class CodeReviewReport:
 
     @property
     def error_count(self) -> int:
+        """Get the number of errors in the report."""
         return sum(1 for f in self.findings if f.severity == "error")
 
     @property
     def warning_count(self) -> int:
+        """Get the number of warnings in the report."""
         return sum(1 for f in self.findings if f.severity == "warning")
 
     @property
     def is_clean(self) -> bool:
+        """Return True if there are no findings."""
         return len(self.findings) == 0
 
     def to_dict(self) -> dict[str, Any]:
@@ -137,14 +140,16 @@ class CodeReviewer:
         # Run anti-pattern detection
         analysis = self._detector.analyze_source(source, filename)
         for pattern in analysis.patterns:
-            report.findings.append(ReviewFinding(
-                category="anti-pattern",
-                message=pattern.message,
-                severity=pattern.severity.value,
-                file=pattern.file,
-                line=pattern.line,
-                suggestion=pattern.suggestion,
-            ))
+            report.findings.append(
+                ReviewFinding(
+                    category="anti-pattern",
+                    message=pattern.message,
+                    severity=pattern.severity.value,
+                    file=pattern.file,
+                    line=pattern.line,
+                    suggestion=pattern.suggestion,
+                )
+            )
 
         # Generate summary
         report.summary = self._generate_summary(report)
@@ -181,39 +186,47 @@ class CodeReviewer:
         # Anti-patterns in new code
         analysis = self._detector.analyze_source(new_source, filename)
         for pattern in analysis.patterns:
-            report.findings.append(ReviewFinding(
-                category="anti-pattern",
-                message=pattern.message,
-                severity=pattern.severity.value,
-                file=pattern.file,
-                line=pattern.line,
-                suggestion=pattern.suggestion,
-            ))
+            report.findings.append(
+                ReviewFinding(
+                    category="anti-pattern",
+                    message=pattern.message,
+                    severity=pattern.severity.value,
+                    file=pattern.file,
+                    line=pattern.line,
+                    suggestion=pattern.suggestion,
+                )
+            )
 
         # Concept drift between old and new
         snapshot = self._drift_tracker.compare(
-            [old_source], [new_source],
-            version_a="old", version_b="new",
+            [old_source],
+            [new_source],
+            version_a="old",
+            version_b="new",
         )
         if snapshot.magnitude > 0.3:
-            report.findings.append(ReviewFinding(
-                category="drift",
-                message=f"Significant concept drift detected "
-                        f"(magnitude: {snapshot.magnitude:.1%})",
-                severity="warning",
-                file=filename,
-                suggestion="Review terminology changes for consistency",
-            ))
+            report.findings.append(
+                ReviewFinding(
+                    category="drift",
+                    message=f"Significant concept drift detected "
+                    f"(magnitude: {snapshot.magnitude:.1%})",
+                    severity="warning",
+                    file=filename,
+                    suggestion="Review terminology changes for consistency",
+                )
+            )
 
         for event in snapshot.events[:5]:  # Top 5 drift events
             if event.category == "shifted":
-                report.findings.append(ReviewFinding(
-                    category="drift",
-                    message=f"Term '{event.term}' changed meaning",
-                    severity="info",
-                    file=filename,
-                    suggestion=f"Was: {event.old_context[:50]} → Now: {event.new_context[:50]}",
-                ))
+                report.findings.append(
+                    ReviewFinding(
+                        category="drift",
+                        message=f"Term '{event.term}' changed meaning",
+                        severity="info",
+                        file=filename,
+                        suggestion=f"Was: {event.old_context[:50]} → Now: {event.new_context[:50]}",
+                    )
+                )
 
         report.summary = self._generate_summary(report)
         return report

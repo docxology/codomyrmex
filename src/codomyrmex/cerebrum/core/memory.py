@@ -6,6 +6,7 @@ from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
 
+
 class WorkingMemory:
     """Represents a short-term memory for storing reasoning context."""
 

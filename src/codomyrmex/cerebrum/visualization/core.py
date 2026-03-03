@@ -91,12 +91,16 @@ class ModelVisualizer(BaseNetworkVisualizer):
         pos = self.apply_layout(G, layout=layout, k=2.0, iterations=100)
 
         # Get node sizes by importance
-        node_sizes = self.get_node_sizes(G, metric=node_size_metric, min_size=300, max_size=3000)
+        node_sizes = self.get_node_sizes(
+            G, metric=node_size_metric, min_size=300, max_size=3000
+        )
 
         # Get node colors (use primary palette)
         node_colors = self.theme.get_color_sequence(len(G.nodes()), "primary")
         if len(node_colors) < len(G.nodes()):
-            node_colors = (node_colors * ((len(G.nodes()) // len(node_colors)) + 1))[:len(G.nodes())]
+            node_colors = (node_colors * ((len(G.nodes()) // len(node_colors)) + 1))[
+                : len(G.nodes())
+            ]
 
         # Get edge widths
         edge_widths = self.get_edge_widths(G, min_width=0.8, max_width=2.5)
@@ -128,7 +132,9 @@ class ModelVisualizer(BaseNetworkVisualizer):
         )
 
         # Draw labels with better positioning
-        labels = {node: node[:20] + "..." if len(node) > 20 else node for node in G.nodes()}
+        labels = {
+            node: node[:20] + "..." if len(node) > 20 else node for node in G.nodes()
+        }
         nx.draw_networkx_labels(
             G,
             pos,
@@ -164,7 +170,9 @@ class ModelVisualizer(BaseNetworkVisualizer):
                     alpha=0.6,
                 ),
             ]
-            self.theme.create_legend(ax, legend_elements, ["Node", "Edge"], loc="upper right")
+            self.theme.create_legend(
+                ax, legend_elements, ["Node", "Edge"], loc="upper right"
+            )
 
         plt.tight_layout(pad=self.theme.figure.tight_layout_pad)
         return fig
@@ -250,8 +258,18 @@ class ModelVisualizer(BaseNetworkVisualizer):
             # Add legend
             if idx == 0:
                 legend_elements = [
-                    Patch(facecolor="#440154", edgecolor="black", label="Low Probability", alpha=0.8),
-                    Patch(facecolor="#fde725", edgecolor="black", label="High Probability", alpha=0.8),
+                    Patch(
+                        facecolor="#440154",
+                        edgecolor="black",
+                        label="Low Probability",
+                        alpha=0.8,
+                    ),
+                    Patch(
+                        facecolor="#fde725",
+                        edgecolor="black",
+                        label="High Probability",
+                        alpha=0.8,
+                    ),
                     plt.Line2D(
                         [0],
                         [0],
@@ -261,7 +279,9 @@ class ModelVisualizer(BaseNetworkVisualizer):
                         linewidth=1.5,
                     ),
                 ]
-                self.theme.create_legend(ax, legend_elements, ["Low", "High", "Uniform"], loc="upper right")
+                self.theme.create_legend(
+                    ax, legend_elements, ["Low", "High", "Uniform"], loc="upper right"
+                )
 
         plt.tight_layout(pad=self.theme.figure.tight_layout_pad)
         return fig
@@ -319,7 +339,9 @@ class CaseVisualizer(BaseChartVisualizer):
 
         # Get colors based on similarity (gradient)
         bar_colors = [
-            self.get_color_for_value(sim, min(similarities), max(similarities), "viridis")
+            self.get_color_for_value(
+                sim, min(similarities), max(similarities), "viridis"
+            )
             for sim in similarities
         ]
 
@@ -372,8 +394,18 @@ class CaseVisualizer(BaseChartVisualizer):
 
         # Add legend
         legend_elements = [
-            Patch(facecolor="#440154", edgecolor="black", label="Low Similarity", alpha=0.8),
-            Patch(facecolor="#fde725", edgecolor="black", label="High Similarity", alpha=0.8),
+            Patch(
+                facecolor="#440154",
+                edgecolor="black",
+                label="Low Similarity",
+                alpha=0.8,
+            ),
+            Patch(
+                facecolor="#fde725",
+                edgecolor="black",
+                label="High Similarity",
+                alpha=0.8,
+            ),
         ]
         if show_threshold:
             legend_elements.append(

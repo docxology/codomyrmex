@@ -183,7 +183,9 @@ class PolicySelector:
         selected_idx = np.random.choice(len(policies), p=probabilities)
         return policies[selected_idx]
 
-    def select_greedy(self, policies: list[str], expected_free_energies: list[float]) -> str:
+    def select_greedy(
+        self, policies: list[str], expected_free_energies: list[float]
+    ) -> str:
         """Select policy with lowest expected free energy (greedy).
 
         Args:
@@ -243,9 +245,7 @@ class ActiveInferenceAgent:
         uniform_prob = 1.0 / len(states) if states else 1.0
         self.beliefs.states = dict.fromkeys(states, uniform_prob)
 
-    def set_transition_model(
-        self, model: dict[str, dict[str, float]]
-    ) -> None:
+    def set_transition_model(self, model: dict[str, dict[str, float]]) -> None:
         """Set state transition model.
 
         Args:
@@ -254,9 +254,7 @@ class ActiveInferenceAgent:
         self.transition_model = model
         self.logger.debug("Set transition model")
 
-    def set_observation_model(
-        self, model: dict[str, dict[str, float]]
-    ) -> None:
+    def set_observation_model(self, model: dict[str, dict[str, float]]) -> None:
         """Set observation model.
 
         Args:
@@ -375,7 +373,9 @@ class ActiveInferenceAgent:
         self.logger.debug("Updated beliefs")
 
     def compute_free_energy(
-        self, beliefs: BeliefState | None = None, observations: dict[str, Any] | None = None
+        self,
+        beliefs: BeliefState | None = None,
+        observations: dict[str, Any] | None = None,
     ) -> float:
         """Compute variational free energy.
 
@@ -389,7 +389,9 @@ class ActiveInferenceAgent:
         beliefs = beliefs or self.beliefs
         observations = observations or self.beliefs.observations
 
-        return self.free_energy_calculator.compute(beliefs, observations, self.likelihood)
+        return self.free_energy_calculator.compute(
+            beliefs, observations, self.likelihood
+        )
 
     def get_beliefs(self) -> BeliefState:
         """Get current belief state."""
@@ -402,4 +404,3 @@ class ActiveInferenceAgent:
         self.beliefs.states = dict.fromkeys(self.states, uniform_prob)
         self.beliefs.observations = {}
         self.logger.debug("Reset agent")
-

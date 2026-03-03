@@ -9,7 +9,6 @@ repos:
     rev: 26.1.0
     hooks:
       - id: black
-        language_version: python3.10
         args: [--line-length=88]
 
   # Python linting and import sorting
@@ -22,11 +21,11 @@ repos:
 
   # Type checking
   - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.19.1
+    rev: v1.15.0
     hooks:
       - id: mypy
-        additional_dependencies: [types-all]
         args: [--ignore-missing-imports]
+        additional_dependencies: [types-requests, types-PyYAML]
 
   # Security scanning
   - repo: https://github.com/PyCQA/bandit

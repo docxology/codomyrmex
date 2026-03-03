@@ -22,18 +22,29 @@ def query_knowledge_base(query: str, limit: int = 5) -> dict:
         retriever = CaseRetriever(base)
 
         # Searching by conceptual similarity (using query as a feature filter)
-        results = retriever.retrieve({"concept": query}, k=limit)
+        import uuid
+
+        from codomyrmex.cerebrum import Case
+
+        query_case = Case(case_id=str(uuid.uuid4()), features={"concept": query})
+        results = retriever.retrieve(query_case, k=limit)
 
         formatted_results = []
         for case, score in results:
-            formatted_results.append({
-                "id": case.id,
-                "features": case.features,
-                "solution": case.solution,
-                "similarity_score": score
-            })
+            formatted_results.append(
+                {
+                    "id": case.case_id,
+                    "features": case.features,
+                    "solution": case.outcome,
+                    "similarity_score": score,
+                }
+            )
 
-        return {"status": "success", "results": formatted_results, "count": len(formatted_results)}
+        return {
+            "status": "success",
+            "results": formatted_results,
+            "count": len(formatted_results),
+        }
     except Exception as e:
         return {"status": "error", "message": f"Knowledge base query failed: {e}"}
 
@@ -53,13 +64,17 @@ def add_case_reference(concept: str, solution: str) -> dict:
 
     try:
         base = CaseBase()
-        case = Case(features={"concept": concept}, solution=solution)
+        import uuid
+
+        case = Case(
+            case_id=str(uuid.uuid4()), features={"concept": concept}, outcome=solution
+        )
         base.add_case(case)
 
         return {
             "status": "success",
             "message": "Case stored successfully",
-            "case_id": case.id
+            "case_id": case.case_id,
         }
     except Exception as e:
         return {"status": "error", "message": f"Failed to store case: {e}"}

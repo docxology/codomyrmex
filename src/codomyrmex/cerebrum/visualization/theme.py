@@ -14,7 +14,6 @@ visualizations with professional fonts, colorblind-safe palettes, and standardiz
 
 
 try:
-
     HAS_MATPLOTLIB = True
 except ImportError:
     HAS_MATPLOTLIB = False
@@ -365,7 +364,6 @@ class VisualizationTheme:
         if not HAS_MATPLOTLIB:
             return
 
-
         formatter = ScalarFormatter(useMathText=True)
         formatter.set_scientific(True)
         formatter.set_powerlimits((-2, 2))
@@ -384,7 +382,6 @@ class VisualizationTheme:
         """
         if not HAS_MATPLOTLIB:
             return
-
 
         if axis in ("x", "both"):
             ax.xaxis.set_major_formatter(PercentFormatter(1.0))
@@ -454,4 +451,3 @@ def set_default_theme(theme: VisualizationTheme) -> None:
     """
     global _default_theme
     _default_theme = theme
-

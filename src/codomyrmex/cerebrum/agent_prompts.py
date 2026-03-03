@@ -172,8 +172,7 @@ class AgentPromptSelector:
 
         if category:
             candidates = [
-                t for t in candidates
-                if t.metadata.get("category") == category
+                t for t in candidates if t.metadata.get("category") == category
             ]
 
         if not candidates:

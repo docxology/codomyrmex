@@ -62,14 +62,17 @@ class DriftSnapshot:
 
     @property
     def shifted_count(self) -> int:
+        """Get the number of shifted concept events."""
         return sum(1 for e in self.events if e.category == "shifted")
 
     @property
     def new_count(self) -> int:
+        """Get the number of new concept events."""
         return sum(1 for e in self.events if e.category == "new")
 
     @property
     def lost_count(self) -> int:
+        """Get the number of lost concept events."""
         return sum(1 for e in self.events if e.category == "lost")
 
     def to_dict(self) -> dict[str, Any]:
@@ -150,31 +153,37 @@ class ConceptDriftTracker:
             jaccard = intersection / union if union > 0 else 1.0
 
             if jaccard < self._shift_threshold:
-                events.append(DriftEvent(
-                    term=term,
-                    old_context=" ".join(sorted(ctx_a)[:5]),
-                    new_context=" ".join(sorted(ctx_b)[:5]),
-                    drift_score=1.0 - jaccard,
-                    category="shifted",
-                ))
+                events.append(
+                    DriftEvent(
+                        term=term,
+                        old_context=" ".join(sorted(ctx_a)[:5]),
+                        new_context=" ".join(sorted(ctx_b)[:5]),
+                        drift_score=1.0 - jaccard,
+                        category="shifted",
+                    )
+                )
 
         # New concepts
         for term in keys_b - keys_a:
-            events.append(DriftEvent(
-                term=term,
-                new_context=" ".join(sorted(terms_b[term])[:5]),
-                drift_score=1.0,
-                category="new",
-            ))
+            events.append(
+                DriftEvent(
+                    term=term,
+                    new_context=" ".join(sorted(terms_b[term])[:5]),
+                    drift_score=1.0,
+                    category="new",
+                )
+            )
 
         # Lost concepts
         for term in keys_a - keys_b:
-            events.append(DriftEvent(
-                term=term,
-                old_context=" ".join(sorted(terms_a[term])[:5]),
-                drift_score=1.0,
-                category="lost",
-            ))
+            events.append(
+                DriftEvent(
+                    term=term,
+                    old_context=" ".join(sorted(terms_a[term])[:5]),
+                    drift_score=1.0,
+                    category="lost",
+                )
+            )
 
         total_concepts = len(keys_a | keys_b)
         magnitude = len(events) / total_concepts if total_concepts > 0 else 0.0
@@ -201,15 +210,44 @@ class ConceptDriftTracker:
     @staticmethod
     def _extract_terms(corpus: list[str]) -> dict[str, list[str]]:
         """Extract terms and their contexts from a corpus."""
-        stop_words = {"the", "a", "an", "is", "are", "was", "were", "in", "on",
-                      "at", "to", "for", "of", "and", "or", "but", "not", "with",
-                      "from", "by", "as", "it", "this", "that", "def", "class",
-                      "self", "return", "import", "none", "true", "false"}
+        stop_words = {
+            "the",
+            "a",
+            "an",
+            "is",
+            "are",
+            "was",
+            "were",
+            "in",
+            "on",
+            "at",
+            "to",
+            "for",
+            "of",
+            "and",
+            "or",
+            "but",
+            "not",
+            "with",
+            "from",
+            "by",
+            "as",
+            "it",
+            "this",
+            "that",
+            "def",
+            "class",
+            "self",
+            "return",
+            "import",
+            "none",
+            "true",
+            "false",
+        }
         terms: dict[str, list[str]] = {}
 
         for text in corpus:
-            words = [w.strip(".,!?;:\"'()[]{}#").lower()
-                     for w in text.split()]
+            words = [w.strip(".,!?;:\"'()[]{}#").lower() for w in text.split()]
             clean = [w for w in words if len(w) > 2 and w not in stop_words]
 
             for i, word in enumerate(clean):

@@ -107,4 +107,3 @@ class ModelBase(ABC):
             "name": self.name,
             "config": self.config,
         }
-
