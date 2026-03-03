@@ -15,6 +15,7 @@ T = TypeVar("T")
 @dataclass
 class ChannelClosed(Exception):
     """Raised when attempting to operate on a closed channel."""
+
     pass
 
 
@@ -25,6 +26,7 @@ class Channel(Generic[T]):
     """
 
     def __init__(self, capacity: int = 0) -> None:
+        """Initialize channel."""
         self._capacity = max(0, capacity)
         self._queue: asyncio.Queue[T] = asyncio.Queue(maxsize=max(1, self._capacity))
         self._closed = False

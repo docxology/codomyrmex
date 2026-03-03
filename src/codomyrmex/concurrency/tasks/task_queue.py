@@ -61,6 +61,7 @@ class Task:
         retry_count: Current retry count.
         status: Current status.
         created_at: Creation timestamp.
+
     """
 
     task_id: str = ""
@@ -74,6 +75,7 @@ class Task:
     created_at: float = field(default_factory=time.time)
 
     def __post_init__(self) -> None:
+        """Initialize task ID if not provided."""
         if not self.task_id:
             self.task_id = f"task-{uuid.uuid4().hex[:10]}"
 
@@ -90,6 +92,7 @@ class TaskQueue:
     """
 
     def __init__(self, max_retries: int = 3) -> None:
+        """Initialize the task queue."""
         self._heap: list[QueueEntry] = []
         self._sequence = 0
         self._in_flight: dict[str, Task] = {}
@@ -122,6 +125,7 @@ class TaskQueue:
 
         Returns:
             True if enqueued, False if duplicate.
+
         """
         if task.task_id in self._seen_ids:
             return False
@@ -143,6 +147,7 @@ class TaskQueue:
 
         Returns:
             Next task, or None if queue is empty.
+
         """
         while self._heap:
             entry = heapq.heappop(self._heap)
@@ -168,6 +173,7 @@ class TaskQueue:
 
         Returns:
             True if acknowledged.
+
         """
         task = self._in_flight.pop(task_id, None)
         if task is not None:
@@ -183,6 +189,7 @@ class TaskQueue:
 
         Returns:
             True if requeued, False if dead-lettered.
+
         """
         task = self._in_flight.pop(task_id, None)
         if task is None:
@@ -205,6 +212,7 @@ class TaskQueue:
 
         Returns:
             Number of tasks requeued.
+
         """
         count = 0
         for task in self._dead_letters:

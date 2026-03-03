@@ -22,6 +22,7 @@ class AggregateResult:
         results: Individual task results.
         mean_duration_ms: Average processing time.
         worker_stats: Per-worker statistics.
+
     """
 
     total_tasks: int = 0
@@ -33,6 +34,7 @@ class AggregateResult:
 
     @property
     def success_rate(self) -> float:
+        """Return the overall success rate."""
         return self.successful / self.total_tasks if self.total_tasks > 0 else 0.0
 
 
@@ -48,6 +50,7 @@ class ResultAggregator:
     """
 
     def __init__(self) -> None:
+        """Initialize the task result aggregator."""
         self._results: list[TaskResult] = []
 
     @property
@@ -68,6 +71,7 @@ class ResultAggregator:
 
         Returns:
             AggregateResult with summary metrics.
+
         """
         total = len(self._results)
         successful = sum(1 for r in self._results if r.success)

@@ -29,6 +29,7 @@ class WorkerInfo:
         capabilities: Task types this worker can handle.
         max_concurrent: Maximum concurrent tasks.
         current_load: Tasks currently assigned.
+
     """
 
     worker_id: str
@@ -48,6 +49,7 @@ class TaskScheduler:
     """
 
     def __init__(self, strategy: SchedulingStrategy = SchedulingStrategy.ROUND_ROBIN) -> None:
+        """Initialize the task scheduler."""
         self._strategy = strategy
         self._workers: dict[str, WorkerInfo] = {}
         self._round_robin_index = 0
@@ -55,6 +57,7 @@ class TaskScheduler:
 
     @property
     def worker_count(self) -> int:
+        """Return the number of registered workers."""
         return len(self._workers)
 
     @property
@@ -74,6 +77,7 @@ class TaskScheduler:
             worker_id: Worker identifier.
             capabilities: Task types this worker handles.
             max_concurrent: Max concurrent tasks.
+
         """
         self._workers[worker_id] = WorkerInfo(
             worker_id=worker_id,
@@ -91,6 +95,7 @@ class TaskScheduler:
         Args:
             task_type: Task type to route.
             worker_id: Preferred worker.
+
         """
         self._affinity_map[task_type] = worker_id
 
@@ -102,6 +107,7 @@ class TaskScheduler:
 
         Returns:
             Worker ID, or empty string if no worker available.
+
         """
         if not self._workers:
             return ""
@@ -124,6 +130,7 @@ class TaskScheduler:
 
         Args:
             worker_id: Worker that completed.
+
         """
         info = self._workers.get(worker_id)
         if info and info.current_load > 0:
@@ -134,6 +141,7 @@ class TaskScheduler:
 
         Returns:
             List of (from_worker, to_worker) reassignment suggestions.
+
         """
         if len(self._workers) < 2:
             return []

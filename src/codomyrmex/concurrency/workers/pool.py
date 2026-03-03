@@ -52,9 +52,11 @@ class AsyncWorkerPool:
     Args:
         max_workers: Maximum concurrent tasks.
         name: Pool name for logging.
+
     """
 
     def __init__(self, max_workers: int = 4, *, name: str = "pool"):
+        """Initialize worker pool."""
         self._max_workers = max_workers
         self._name = name
         self._semaphore = asyncio.Semaphore(max_workers)
@@ -63,9 +65,11 @@ class AsyncWorkerPool:
         self._closed = False
 
     async def __aenter__(self) -> AsyncWorkerPool:
+        """Enter async context."""
         return self
 
     async def __aexit__(self, *exc: Any) -> None:
+        """Exit async context."""
         await self.shutdown()
 
     async def submit(
@@ -85,6 +89,7 @@ class AsyncWorkerPool:
 
         Returns:
             TaskResult with success/error details.
+
         """
         if self._closed:
             raise RuntimeError(f"Pool {self._name!r} is shut down")
@@ -124,6 +129,7 @@ class AsyncWorkerPool:
 
         Returns:
             List of TaskResults in input order.
+
         """
         tasks = [
             self.submit(coro_fn, item, task_id=f"{self._name}-{i}")

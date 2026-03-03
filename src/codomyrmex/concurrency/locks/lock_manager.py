@@ -14,6 +14,7 @@ logger = get_logger(__name__)
 @dataclass
 class LockStats:
     """Statistics for lock manager telemetry."""
+
     total_locks: int = 0
     total_acquisitions: int = 0
     total_releases: int = 0
@@ -24,6 +25,7 @@ class LockManager:
     """Orchestrates multiple locks and provides multi-resource acquisition."""
 
     def __init__(self):
+        """Initialize the lock manager."""
         self._locks: dict[str, BaseLock] = {}
         self._total_acquisitions = 0
         self._total_releases = 0
@@ -111,6 +113,7 @@ class ReadWriteLock:
     """
 
     def __init__(self):
+        """Initialize a read-write lock."""
         self._lock = threading.Lock()
         self._read_ready = threading.Condition(self._lock)
         self._readers = 0

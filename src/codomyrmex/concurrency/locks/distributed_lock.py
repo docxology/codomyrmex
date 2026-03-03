@@ -14,6 +14,7 @@ class BaseLock(ABC):
     """Abstract base class for all lock implementations."""
 
     def __init__(self, name: str):
+        """Initialize the base lock."""
         self.name = name
         self.is_held = False
 
@@ -27,6 +28,7 @@ class BaseLock(ABC):
 
         Returns:
             True if acquired, False otherwise.
+
         """
         pass
 
@@ -52,6 +54,7 @@ class LocalLock(BaseLock):
     """
 
     def __init__(self, name: str, lock_dir: str = "/tmp/codomyrmex/locks"):
+        """Initialize a local file-based lock."""
         super().__init__(name)
         self.lock_path = os.path.join(lock_dir, f"{name}.lock")
         self._lock_dir = lock_dir

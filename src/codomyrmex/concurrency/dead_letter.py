@@ -30,9 +30,11 @@ class DeadLetterQueue:
 
     Args:
         path: Path to the JSONL file for persistence.
+
     """
 
     def __init__(self, path: str | Path = "/tmp/codomyrmex-dlq.jsonl"):
+        """Initialize the dead letter queue."""
         self._path = Path(path)
         self._lock = threading.Lock()
         self._path.parent.mkdir(parents=True, exist_ok=True)
@@ -55,6 +57,7 @@ class DeadLetterQueue:
 
         Returns:
             Entry ID (UUID).
+
         """
         entry_id = str(uuid.uuid4())
         entry = {
@@ -87,6 +90,7 @@ class DeadLetterQueue:
 
         Returns:
             List of entry dicts.
+
         """
         entries: list[dict[str, Any]] = []
         with self._lock:
@@ -123,6 +127,7 @@ class DeadLetterQueue:
 
         Returns:
             Dict with replay outcome.
+
         """
         entries = self.list_entries(include_replayed=True)
         target = next((e for e in entries if e["id"] == entry_id), None)
@@ -164,6 +169,7 @@ class DeadLetterQueue:
 
         Returns:
             Number of entries removed.
+
         """
         with self._lock:
             if not self._path.exists():
