@@ -290,3 +290,19 @@ class TestInterpretabilityMCPTools:
         result = sae_analyze(d_input=8, d_features=16, n_samples=50, seed=42)
         assert result["status"] == "success"
         assert "top_features" in result
+
+    def test_sae_train_tool_error_handling(self):
+        """MCP sae_train handles exceptions and returns error status."""
+        from codomyrmex.interpretability.mcp_tools import sae_train
+        # Passing d_input=None will cause TypeError in np.random.randn
+        result = sae_train(d_input=None)
+        assert result["status"] == "error"
+        assert "message" in result
+
+    def test_sae_analyze_tool_error_handling(self):
+        """MCP sae_analyze handles exceptions and returns error status."""
+        from codomyrmex.interpretability.mcp_tools import sae_analyze
+        # Passing d_input=None will cause TypeError in np.random.randn
+        result = sae_analyze(d_input=None)
+        assert result["status"] == "error"
+        assert "message" in result
