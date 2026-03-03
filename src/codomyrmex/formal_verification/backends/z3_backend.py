@@ -12,6 +12,8 @@ from __future__ import annotations
 
 from typing import Any
 
+import ast
+
 try:
     import z3
 except ImportError:
@@ -79,7 +81,8 @@ class Z3Backend(SolverBackend):
         _require_z3()
 
         # Build a namespace with z3 imports for executing model items
-        namespace: dict[str, Any] = {"z3": z3}
+        # Set __builtins__ to empty dict to prevent access to built-in functions during exec
+        namespace: dict[str, Any] = {"z3": z3, "__builtins__": {}}
         # Pre-populate common z3 types for convenience
         for name in [
             "Int", "Real", "Bool", "BitVec", "Array", "IntSort", "RealSort",
@@ -103,9 +106,44 @@ class Z3Backend(SolverBackend):
         optimizer.set("timeout", timeout_ms)
         namespace["optimizer"] = optimizer
 
+        class SecurityVisitor(ast.NodeVisitor):
+            """Visitor to validate AST before execution to prevent malicious code."""
+            ALLOWED_NODES = {
+                ast.Module, ast.Assign, ast.Expr, ast.Name, ast.Load, ast.Store,
+                ast.Call, ast.Constant, ast.Attribute, ast.Compare,
+                ast.Gt, ast.Lt, ast.Eq, ast.GtE, ast.LtE, ast.NotEq,
+                ast.BinOp, ast.Add, ast.Sub, ast.Mult, ast.Div, ast.Mod, ast.Pow,
+                ast.UnaryOp, ast.USub, ast.UAdd, ast.Not, ast.Invert,
+                ast.BoolOp, ast.And, ast.Or,
+                ast.Tuple, ast.List, ast.Dict, ast.Set,
+                ast.Subscript, ast.Index, ast.Slice,
+                ast.BitAnd, ast.BitOr, ast.BitXor, ast.LShift, ast.RShift,
+                ast.keyword
+            }
+
+            def generic_visit(self, node: ast.AST) -> None:
+                if type(node) not in self.ALLOWED_NODES:
+                    raise ValueError(f"Disallowed Python construct: {type(node).__name__}")
+                super().generic_visit(node)
+
+            def visit_Name(self, node: ast.Name) -> None:
+                if node.id.startswith("__"):
+                    raise ValueError(f"Disallowed name access: {node.id}")
+                if node.id in ("eval", "exec", "compile", "open", "globals", "locals", "vars", "getattr", "setattr", "delattr", "hasattr", "__import__"):
+                    raise ValueError(f"Disallowed built-in: {node.id}")
+                self.generic_visit(node)
+
+            def visit_Attribute(self, node: ast.Attribute) -> None:
+                if node.attr.startswith("__"):
+                    raise ValueError(f"Disallowed attribute access: {node.attr}")
+                self.generic_visit(node)
+
         try:
             for idx, item in enumerate(self._items):
                 try:
+                    tree = ast.parse(item)
+                    validator = SecurityVisitor()
+                    validator.visit(tree)
                     exec(item, namespace)  # noqa: S102
                 except Exception as exc:
                     raise ModelBuildError(
