@@ -34,7 +34,15 @@ _PII_PATTERNS: dict[str, re.Pattern[str]] = {
 
 @dataclass
 class PIIMatch:
-    """A detected PII occurrence."""
+    """A detected PII occurrence.
+
+    Attributes:
+        field: The field name where PII was detected.
+        pii_type: The type of PII detected (e.g., 'email', 'phone').
+        value: The matched PII string.
+        start: The start index of the match in the string.
+        end: The end index of the match in the string.
+    """
 
     field: str
     pii_type: str
@@ -194,7 +202,13 @@ def dp_count(count: int, epsilon: float) -> float:
 
 @dataclass
 class PrivacyRule:
-    """A rule specifying how to anonymize a specific field."""
+    """A rule specifying how to anonymize a specific field.
+
+    Attributes:
+        field: The name of the field to anonymize.
+        strategy: The anonymization strategy to apply (e.g., 'hash', 'redact').
+        params: Optional parameters for the strategy.
+    """
 
     field: str
     strategy: str  # "hash", "redact", "partial", "email", "noise"
@@ -222,7 +236,11 @@ class Privacy:
         logger.info("Privacy engine initialized")
 
     def add_rule(self, rule: PrivacyRule) -> None:
-        """Register a privacy rule for a field."""
+        """Register a privacy rule for a field.
+
+        Args:
+            rule: The PrivacyRule object to register.
+        """
         self._rules[rule.field] = rule
 
     def process(self, data: dict[str, Any]) -> dict[str, Any]:
@@ -256,7 +274,14 @@ class Privacy:
         return result
 
     def scan_pii(self, data: dict[str, Any]) -> list[PIIMatch]:
-        """Scan all string fields in data for PII patterns."""
+        """Scan all string fields in data for PII patterns.
+
+        Args:
+            data: A dict of field->value pairs to scan.
+
+        Returns:
+            A list of PIIMatch objects for all detected PII occurrences.
+        """
         matches: list[PIIMatch] = []
         for key, val in data.items():
             if isinstance(val, str):
@@ -265,5 +290,12 @@ class Privacy:
 
 
 def create_privacy(config: dict[str, Any] | None = None) -> Privacy:
-    """Create a new Privacy instance."""
+    """Create a new Privacy instance.
+
+    Args:
+        config: Optional configuration dict for the Privacy instance.
+
+    Returns:
+        A new Privacy instance.
+    """
     return Privacy(config)

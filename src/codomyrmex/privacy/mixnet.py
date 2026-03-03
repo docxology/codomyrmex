@@ -14,18 +14,36 @@ logger = get_logger(__name__)
 
 @dataclass
 class Packet:
-    """A routable encrypted data unit in the mixnet, tracking payload, route, and remaining hops."""
+    """A routable encrypted data unit in the mixnet, tracking payload, route, and remaining hops.
+
+    Attributes:
+        payload: The actual data being routed.
+        route_id: A unique identifier for the route.
+        hops_remaining: The number of remaining mix node hops.
+    """
     payload: bytes
     route_id: str
     hops_remaining: int
 
 class MixNode:
     """A single node in the mixnet overlay."""
-    def __init__(self, node_id: str):
+    def __init__(self, node_id: str) -> None:
+        """Initialize a MixNode.
+
+        Args:
+            node_id: Unique string identifier for this node.
+        """
         self.node_id = node_id
 
     def relay(self, packet: Packet) -> Packet | None:
-        """Process and forward a packet."""
+        """Process and forward a packet.
+
+        Args:
+            packet: The packet to route.
+
+        Returns:
+            The processed Packet with decremented hops.
+        """
         # Simulate processing delay to thwart timing analysis
         time.sleep(random.uniform(0.01, 0.05))
 
@@ -41,13 +59,19 @@ class MixNode:
 class MixnetProxy:
     """Manages anonymous routing through the mixnet."""
 
-    def __init__(self):
+    def __init__(self) -> None:
+        """Initialize MixnetProxy with a pool of MixNodes."""
         self._nodes = [MixNode(f"node_{i}") for i in range(10)]
 
     def route_payload(self, payload: bytes, hops: int = 3) -> bytes:
-        """
-        Route a payload through random mix nodes.
-        Returns the payload as 'received' at the destination.
+        """Route a payload through random mix nodes.
+
+        Args:
+            payload: The binary payload to route.
+            hops: The number of routing hops (default 3).
+
+        Returns:
+            The payload as 'received' at the destination.
         """
         route_id = str(uuid.uuid4())
         packet = Packet(payload, route_id, hops)

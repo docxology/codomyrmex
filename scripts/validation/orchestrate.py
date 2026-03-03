@@ -16,6 +16,7 @@ except ImportError:
 from codomyrmex.orchestrator.core import main
 
 
+if __name__ == "__main__":
     # Auto-injected: Load configuration
     import yaml
     from pathlib import Path
@@ -24,9 +25,8 @@ from codomyrmex.orchestrator.core import main
     if config_path.exists():
         with open(config_path, "r") as f:
             config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/validation/config.yaml")
+            print("Loaded config from config/validation/config.yaml")
 
-if __name__ == "__main__":
     # Run the orchestrator for this specific module directory
     # We must explicitly set the scripts directory to avoid recursive discovery of the parent 'scripts' folder
     current_dir = Path(__file__).resolve().parent
