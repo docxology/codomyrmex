@@ -33,6 +33,14 @@ class Value:
         _op: str = "",
         label: str = "",
     ) -> None:
+        """Initialize a new Value node.
+
+        Args:
+            data: The scalar float value.
+            _children: Tuple of parent nodes in the computation graph.
+            _op: The operation that produced this node.
+            label: An optional string label for debugging.
+        """
         self.data = float(data)
         self.grad = 0.0
         self._backward = lambda: None
@@ -43,6 +51,7 @@ class Value:
     # -- forward ops --------------------------------------------------------
 
     def __add__(self, other: Value | float | int) -> Value:
+        """Add two Values or a Value and a scalar."""
         other = other if isinstance(other, Value) else Value(other)
         out = Value(self.data + other.data, (self, other), "+")
 
@@ -54,6 +63,7 @@ class Value:
         return out
 
     def __mul__(self, other: Value | float | int) -> Value:
+        """Multiply two Values or a Value and a scalar."""
         other = other if isinstance(other, Value) else Value(other)
         out = Value(self.data * other.data, (self, other), "*")
 
@@ -65,6 +75,7 @@ class Value:
         return out
 
     def __pow__(self, other: float | int) -> Value:
+        """Raise a Value to a scalar power."""
         if isinstance(other, Value):
             raise NotImplementedError("Value**Value is not supported; use float exponent")
         out = Value(self.data ** other, (self,), f"**{other}")
@@ -76,24 +87,31 @@ class Value:
         return out
 
     def __neg__(self) -> Value:
+        """Negate a Value."""
         return self * -1
 
     def __sub__(self, other: Value | float | int) -> Value:
+        """Subtract a Value or scalar from this Value."""
         return self + (-other if isinstance(other, Value) else Value(-other))
 
     def __truediv__(self, other: Value | float | int) -> Value:
+        """Divide this Value by another Value or scalar."""
         return self * (other ** -1 if isinstance(other, Value) else Value(other) ** -1)
 
     def __radd__(self, other: float | int) -> Value:
+        """Add a scalar to this Value (reflected)."""
         return self + other
 
     def __rmul__(self, other: float | int) -> Value:
+        """Multiply a scalar by this Value (reflected)."""
         return self * other
 
     def __rsub__(self, other: float | int) -> Value:
+        """Subtract this Value from a scalar (reflected)."""
         return Value(other) + (-self)
 
     def __rtruediv__(self, other: float | int) -> Value:
+        """Divide a scalar by this Value (reflected)."""
         return Value(other) * (self ** -1)
 
     # -- special math -------------------------------------------------------
@@ -169,6 +187,7 @@ class Value:
     # -- repr ---------------------------------------------------------------
 
     def __repr__(self) -> str:
+        """Return a string representation of the Value."""
         label_part = f", label={self.label!r}" if self.label else ""
         return f"Value(data={self.data:.6f}, grad={self.grad:.6f}{label_part})"
 
@@ -192,6 +211,14 @@ class Tensor:
         _children: tuple[Tensor, ...] = (),
         _op: str = "",
     ) -> None:
+        """Initialize a new Tensor node.
+
+        Args:
+            data: The tensor data as a list or numpy array.
+            requires_grad: Whether this tensor requires gradients.
+            _children: Tuple of parent nodes in the computation graph.
+            _op: The operation that produced this node.
+        """
         if isinstance(data, np.ndarray):
             self.data = data.astype(np.float64)
         else:
@@ -206,6 +233,7 @@ class Tensor:
     # -- forward ops --------------------------------------------------------
 
     def __add__(self, other: Tensor | float | int | np.ndarray) -> Tensor:
+        """Add two Tensors or a Tensor and a scalar/array."""
         other = other if isinstance(other, Tensor) else Tensor(np.asarray(other))
         out = Tensor(self.data + other.data, _children=(self, other), _op="+")
 
@@ -228,6 +256,7 @@ class Tensor:
         return out
 
     def __mul__(self, other: Tensor | float | int | np.ndarray) -> Tensor:
+        """Multiply two Tensors or a Tensor and a scalar/array element-wise."""
         other = other if isinstance(other, Tensor) else Tensor(np.asarray(other))
         out = Tensor(self.data * other.data, _children=(self, other), _op="*")
 
@@ -249,6 +278,7 @@ class Tensor:
         return out
 
     def __matmul__(self, other: Tensor) -> Tensor:
+        """Matrix multiply two Tensors."""
         out = Tensor(self.data @ other.data, _children=(self, other), _op="@")
 
         def _backward() -> None:
@@ -263,16 +293,20 @@ class Tensor:
         return out
 
     def __neg__(self) -> Tensor:
+        """Negate a Tensor."""
         return self * -1.0
 
     def __sub__(self, other: Tensor | float | int | np.ndarray) -> Tensor:
+        """Subtract a Tensor or scalar/array from this Tensor."""
         other = other if isinstance(other, Tensor) else Tensor(np.asarray(other))
         return self + (other * -1.0)
 
     def __radd__(self, other: float | int) -> Tensor:
+        """Add a scalar to this Tensor (reflected)."""
         return self + other
 
     def __rmul__(self, other: float | int) -> Tensor:
+        """Multiply a scalar by this Tensor (reflected)."""
         return self * other
 
     # -- reductions ---------------------------------------------------------
@@ -357,6 +391,7 @@ class Tensor:
     # -- repr ---------------------------------------------------------------
 
     def __repr__(self) -> str:
+        """Return a string representation of the Tensor."""
         return f"Tensor(shape={self.shape}, data={self.data})"
 
 
@@ -365,7 +400,15 @@ class Tensor:
 # ---------------------------------------------------------------------------
 
 def _unbroadcast(grad: np.ndarray, target_shape: tuple[int, ...]) -> np.ndarray:
-    """Sum out dimensions that were broadcast to match *target_shape*."""
+    """Sum out dimensions that were broadcast to match *target_shape*.
+
+    Args:
+        grad: The gradient array to unbroadcast.
+        target_shape: The original shape before broadcasting.
+
+    Returns:
+        The unbroadcasted gradient array matching target_shape.
+    """
     # Pad target_shape with leading 1s to match grad ndim
     ndim_diff = grad.ndim - len(target_shape)
     padded = (1,) * ndim_diff + target_shape
