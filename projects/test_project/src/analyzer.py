@@ -57,7 +57,7 @@ class AnalysisResult:
     @property
     def is_complex(self) -> bool:
         """Check if file has high complexity."""
-        complexity = self.metrics.get("complexity", 0)
+        complexity = int(self.metrics.get("complexity", 0))
         return complexity > 10
 
     def to_dict(self) -> dict[str, Any]:
@@ -124,7 +124,7 @@ class ProjectAnalyzer:
         if self.config_path and self.config_path.exists():
             logger.info(f"Loading config from {self.config_path}")
             try:
-                import yaml
+                import yaml  # type: ignore[import-untyped]
 
                 with open(self.config_path) as f:
                     config = yaml.safe_load(f)
@@ -238,17 +238,28 @@ class ProjectAnalyzer:
         lines = content.split("\n")
 
         # 1. Integration with codomyrmex.static_analysis
-        from codomyrmex.coding.static_analysis.static_analyzer import StaticAnalyzer, AnalysisType
+        from codomyrmex.coding.static_analysis.static_analyzer import (
+            StaticAnalyzer,
+        )
+
         analyzer = StaticAnalyzer()
         try:
-            static_results = analyzer.analyze_file(str(file_path), [AnalysisType.QUALITY, AnalysisType.COMPLEXITY])
+            static_results = analyzer.analyze_file(
+                str(file_path), ["QUALITY", "COMPLEXITY"]
+            )
             for res in static_results:
-                result.issues.append({
-                    "type": res.category or "quality",
-                    "severity": res.severity.value if hasattr(res.severity, "value") else str(res.severity),
-                    "message": res.message,
-                    "line": res.line_number
-                })
+                result.issues.append(
+                    {
+                        "type": res.category or "quality",
+                        "severity": (
+                            res.severity.value
+                            if hasattr(res.severity, "value")
+                            else str(res.severity)
+                        ),
+                        "message": res.message,
+                        "line": res.line_number,
+                    }
+                )
         except Exception as e:
             logger.warning(f"StaticAnalyzer failed for {file_path}: {e}")
 
@@ -257,7 +268,7 @@ class ProjectAnalyzer:
             metrics = analyzer.calculate_metrics(str(file_path))
             complexity = metrics.cyclomatic_complexity
             loc = metrics.lines_of_code
-        except Exception as e:
+        except Exception:
             complexity = 0
             loc = len(lines)
 
@@ -265,9 +276,13 @@ class ProjectAnalyzer:
         result.metrics = {
             "lines_of_code": loc,
             "non_empty_lines": len([line for line in lines if line.strip()]),
-            "comment_lines": len([line for line in lines if line.strip().startswith("#")]),
+            "comment_lines": len(
+                [line for line in lines if line.strip().startswith("#")]
+            ),
             "functions": len(re.findall(r"^\s*def\s+\w+", content, re.MULTILINE)),
-            "async_functions": len(re.findall(r"^\s*async\s+def\s+\w+", content, re.MULTILINE)),
+            "async_functions": len(
+                re.findall(r"^\s*async\s+def\s+\w+", content, re.MULTILINE)
+            ),
             "classes": len(re.findall(r"^\s*class\s+\w+", content, re.MULTILINE)),
             "imports": len(re.findall(r"^(?:import|from)\s+", content, re.MULTILINE)),
             "complexity": complexity,
@@ -275,12 +290,13 @@ class ProjectAnalyzer:
 
         # 2. Integration with codomyrmex.pattern_matching
         from codomyrmex.coding.pattern_matching.code_patterns import PatternDetector
+
         try:
             detector = PatternDetector()
             matches = detector.detect_patterns(content)
             # Use a dict to preserve order while removing duplicates
             unique_patterns = {match["pattern"]: None for match in matches}
-            
+
             # Additional regex-based generic pattern detection (from old implementation)
             # to preserve original test_project feature completeness checks
             pattern_checks = {
@@ -293,7 +309,7 @@ class ProjectAnalyzer:
             for pattern_name, regex in pattern_checks.items():
                 if re.search(regex, content):
                     unique_patterns[pattern_name] = None
-                    
+
             result.patterns = list(unique_patterns.keys())
         except Exception as e:
             logger.warning(f"Pattern matching failed for {file_path}: {e}")
