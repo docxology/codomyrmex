@@ -14,7 +14,6 @@ Lightweight, thread-safe Inversion of Control (IoC) container for managing servi
 | `container.py` | IoC container: `register()`, `register_instance()`, `register_factory()`, `resolve()`, `resolve_all()`, `scan()`, `has()`, `reset()` |
 | `scopes.py` | `Scope` enum (`SINGLETON`, `TRANSIENT`, `SCOPED`) and `ScopeContext` context manager for scoped resolution |
 | `decorators.py` | `@injectable(scope, auto_register, tags)` and `@inject` decorators with `InjectableMetadata` and `InjectMetadata` dataclasses |
-| `mcp_tools.py` | Exposes DI introspection tools (`di_get_injectable_metadata`, `di_get_inject_metadata`) |
 
 ## Key Classes
 

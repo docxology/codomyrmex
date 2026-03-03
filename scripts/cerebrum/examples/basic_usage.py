@@ -19,28 +19,41 @@ except ImportError:
     project_root = Path(__file__).resolve().parent.parent.parent.parent
     sys.path.insert(0, str(project_root / "src"))
 
-from codomyrmex.utils.cli_helpers import setup_logging, print_success, print_info, print_error
 from codomyrmex.cerebrum import (
-    CerebrumEngine,
-    CerebrumConfig,
+    ActiveInferenceAgent,
+    BayesianNetwork,
     Case,
     CaseBase,
-    BayesianNetwork,
+    CerebrumConfig,
+    CerebrumEngine,
     InferenceEngine,
-    ActiveInferenceAgent,
-    compute_hash
+    compute_hash,
 )
+from codomyrmex.utils.cli_helpers import (
+    print_error,
+    print_info,
+    print_success,
+    setup_logging,
+)
+
 
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
-    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "cerebrum" / "config.yaml"
+
+    import yaml
+
+    config_path = (
+        Path(__file__).resolve().parent.parent.parent
+        / "config"
+        / "cerebrum"
+        / "config.yaml"
+    )
     config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
+        with open(config_path) as f:
             config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/cerebrum/config.yaml")
+            print("Loaded config from config/cerebrum/config.yaml")
 
     setup_logging()
     print_info("Running CEREBRUM Examples...")
@@ -60,7 +73,7 @@ def main():
         case = Case(
             case_id="case_001",
             features={"type": "bug", "severity": "high"},
-            outcome="Update imports"
+            outcome="Update imports",
         )
         base = CaseBase()
         base.add_case(case)
@@ -74,7 +87,9 @@ def main():
     try:
         network = BayesianNetwork(name="example_net")
         inference = InferenceEngine(network=network)
-        print_success(f"  BayesianNetwork '{network.name}' and InferenceEngine initialized.")
+        print_success(
+            f"  BayesianNetwork '{network.name}' and InferenceEngine initialized."
+        )
     except Exception as e:
         print_error(f"  Bayesian components failed: {e}")
 
@@ -94,6 +109,7 @@ def main():
 
     print_success("CEREBRUM examples completed successfully")
     return 0
+
 
 if __name__ == "__main__":
     sys.exit(main())

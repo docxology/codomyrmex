@@ -71,13 +71,6 @@ with ScopeContext(container) as scope:
     assert session1 is session2 # Same within the same context
 ```
 
-## MCP Tools
-
-This module exposes the following tools via the Model Context Protocol in `mcp_tools.py`:
-
-- `di_get_injectable_metadata`: Inspects `@injectable` metadata for a class.
-- `di_get_inject_metadata`: Inspects `@inject` metadata and parameter types for a constructor.
-
 ## Testing
 
 ```bash

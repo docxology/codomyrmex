@@ -34,7 +34,6 @@ service lifetimes and constructor-based dependency injection.
 - `@injectable` (Decorator)
 - `@inject` (Decorator)
 - `ResolutionError`, `CircularDependencyError`
-- `mcp_tools.py` (Introspection tools)
 
 ## 4. Implementation Details
 
