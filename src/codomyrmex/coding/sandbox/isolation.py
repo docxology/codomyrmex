@@ -24,7 +24,6 @@ except ImportError:
         """No-op psutil stub used when psutil is not installed; all metrics return zero."""
 
         def cpu_percent(self, interval=None):
-            """cpu_percent function/class."""
             return 0.0
 
         class NoSuchProcess(Exception):
