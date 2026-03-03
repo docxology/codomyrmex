@@ -13,16 +13,17 @@ except ImportError:
     project_root = Path(__file__).resolve().parent.parent.parent
     sys.path.insert(0, str(project_root / "src"))
 
-from codomyrmex.orchestrator.core import main
-
+from pathlib import Path
 
 # Auto-injected: Load configuration
 import yaml
-from pathlib import Path
+
+from codomyrmex.orchestrator.core import main
+
 config_path = Path(__file__).resolve().parent.parent.parent / "config" / "website" / "config.yaml"
 config_data = {}
 if config_path.exists():
-    with open(config_path, "r") as f:
+    with open(config_path) as f:
         config_data = yaml.safe_load(f) or {}
         print("Loaded config from config/website/config.yaml")
 
@@ -33,5 +34,5 @@ if __name__ == "__main__":
     # Check if --scripts-dir is already passed
     if not any(arg.startswith("--scripts-dir") for arg in sys.argv):
         sys.argv.append(f"--scripts-dir={current_dir}")
-        
+
     sys.exit(main())

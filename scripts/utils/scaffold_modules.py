@@ -426,7 +426,7 @@ def main():
             config_data = yaml.safe_load(f) or {}
             print("Loaded config from config/utils/config.yaml")
 
-    """Main demonstration."""
+    print("Main demonstration.")
     raise NotImplementedError(
         "Demo for '{name}' is not yet implemented. "
         "Implement src/codomyrmex/{name}/ first, "
