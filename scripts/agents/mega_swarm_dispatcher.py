@@ -21,30 +21,39 @@ REPO_NAME = "docxology/codomyrmex"
 
 # Skip directories that aren't source modules
 EXCLUDES = {
-    "__pycache__", ".claude", ".pipelines", ".workflows", 
-    "build", "dist", "docs", "tests", "examples"
+    "__pycache__",
+    ".claude",
+    ".pipelines",
+    ".workflows",
+    "build",
+    "dist",
+    "docs",
+    "tests",
+    "examples",
 }
 
-BATCH_SIZE = 5      # Number of agents to dispatch concurrently before waiting
+BATCH_SIZE = 5  # Number of agents to dispatch concurrently before waiting
 BATCH_DELAY = 10.0  # Seconds to wait between batches
+
 
 def get_valid_modules() -> list[str]:
     """Find all valid top-level directories common to scripts/ or src/codomyrmex/."""
     modules = set()
-    
+
     # Check src/codomyrmex/
     if SRC_DIR.exists():
         for item in SRC_DIR.iterdir():
             if item.is_dir() and item.name not in EXCLUDES:
                 modules.add(item.name)
-                
+
     # Check scripts/
     if SCRIPTS_DIR.exists():
         for item in SCRIPTS_DIR.iterdir():
             if item.is_dir() and item.name not in EXCLUDES:
                 modules.add(item.name)
-                
+
     return sorted(list(modules))
+
 
 def dispatch_jules(module_name: str) -> None:
     """Launch a Jules agent for the given module."""
@@ -54,17 +63,18 @@ def dispatch_jules(module_name: str) -> None:
         "add/improve all methods, strictly zero-mock tests, and documentation (AGENTS.md, README.md, SPEC.md). "
         "Ensure the orchestrator is a working, tested example of the improved module."
     )
-    
+
     print(f"\n🚀 Dispatching agent for: {module_name}")
     try:
         # Launch non-blocking (in background)
         subprocess.Popen(
             ["jules", "new", "--repo", REPO_NAME, prompt],
             stdout=subprocess.DEVNULL,
-            stderr=subprocess.DEVNULL
+            stderr=subprocess.DEVNULL,
         )
     except FileNotFoundError:
         raise RuntimeError("'jules' CLI not found. Is it installed?") from None
+
 
 def run_swarm(max_agents: int = None) -> None:
     """Run the mega swarm in batches."""
@@ -72,26 +82,26 @@ def run_swarm(max_agents: int = None) -> None:
     if not modules:
         print("No valid modules found to dispatch.")
         return
-        
+
     print(f"Found {len(modules)} modules for the swarm: {', '.join(modules[:5])}...")
-    
+
     if max_agents:
         modules = modules[:max_agents]
         print(f"Limiting to first {max_agents} agents for testing.")
-        
+
     print(f"Dispatching {len(modules)} Jules agents in batches of {BATCH_SIZE}...")
-    
+
     for i in range(0, len(modules), BATCH_SIZE):
-        batch = modules[i:i + BATCH_SIZE]
-        print(f"\n--- Batch {i//BATCH_SIZE + 1} ({len(batch)} agents) ---")
-        
+        batch = modules[i : i + BATCH_SIZE]
+        print(f"\n--- Batch {i // BATCH_SIZE + 1} ({len(batch)} agents) ---")
+
         for module in batch:
             dispatch_jules(module)
-            
+
         if i + BATCH_SIZE < len(modules):
             print(f"Waiting {BATCH_DELAY}s before next batch...")
             time.sleep(BATCH_DELAY)
-            
+
     print("\n✅ Mega Swarm Initialized.")
     print("Use 'jules remote list --session' to monitor your agents.")
     print("Use 'jules remote pull --session <ID> --apply' to merge completed work.")
@@ -99,6 +109,7 @@ def run_swarm(max_agents: int = None) -> None:
 
 if __name__ == "__main__":
     import sys
+
     # Optional arg to limit agents (e.g. ./mega_swarm_dispatcher.py 5)
     limit = None
     if len(sys.argv) > 1:

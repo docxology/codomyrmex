@@ -9,7 +9,9 @@ import sys
 from datetime import datetime
 
 # Add src to sys.path to allow importing codomyrmex if not installed
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../../src")))
+sys.path.insert(
+    0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../../src"))
+)
 
 from codomyrmex.email import (
     AGENTMAIL_AVAILABLE,
@@ -59,7 +61,7 @@ def run_agentmail_demo():
         draft = EmailDraft(
             subject=f"Test from Orchestrator - {datetime.now().isoformat()}",
             to=[inbox.inbox_id],
-            body_text="This is a test message sent by the email orchestrator script."
+            body_text="This is a test message sent by the email orchestrator script.",
         )
         print(f"Sending test message to {inbox.inbox_id}...")
         sent_msg = provider.send_message(draft, inbox_id=inbox.inbox_id)
@@ -97,7 +99,7 @@ def run_gmail_demo():
         draft = EmailDraft(
             subject=f"Draft from Orchestrator - {datetime.now().isoformat()}",
             to=["recipient@example.com"],
-            body_text="This is a draft message created by the email orchestrator script."
+            body_text="This is a draft message created by the email orchestrator script.",
         )
         draft_id = provider.create_draft(draft)
         print(f"Created Gmail draft with ID: {draft_id}")
@@ -110,16 +112,23 @@ def run_gmail_demo():
 
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
-    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "email" / "config.yaml"
+
+    import yaml
+
+    config_path = (
+        Path(__file__).resolve().parent.parent.parent
+        / "config"
+        / "email"
+        / "config.yaml"
+    )
     config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
+        with open(config_path) as f:
             config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/email/config.yaml")
+            print("Loaded config from config/email/config.yaml")
 
-    print(f"Codomyrmex Email Orchestrator")
+    print("Codomyrmex Email Orchestrator")
     print(f"Date: {datetime.now().isoformat()}")
     print("=" * 30)
 
