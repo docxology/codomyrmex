@@ -1,9 +1,5 @@
 from dataclasses import dataclass
 
-import matplotlib.pyplot as plt
-from matplotlib.patches import Patch
-from matplotlib.ticker import PercentFormatter, ScalarFormatter
-
 from codomyrmex.logging_monitoring import get_logger
 
 """Professional academic visualization theme system for CEREBRUM.
@@ -14,7 +10,9 @@ visualizations with professional fonts, colorblind-safe palettes, and standardiz
 
 
 try:
-
+    import matplotlib.pyplot as plt
+    from matplotlib.patches import Patch
+    from matplotlib.ticker import PercentFormatter, ScalarFormatter
     HAS_MATPLOTLIB = True
 except ImportError:
     HAS_MATPLOTLIB = False
