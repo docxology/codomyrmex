@@ -7,6 +7,8 @@ from codomyrmex.logging_monitoring import get_logger
 """Utility functions for CEREBRUM module."""
 
 logger = get_logger(__name__)
+
+
 def compute_hash(data: Any) -> str:
     """Compute a hash for the given data.
 
@@ -52,7 +54,7 @@ def compute_euclidean_distance(vec1: dict[str, float], vec2: dict[str, float]) -
     """
     all_keys = set(vec1.keys()) | set(vec2.keys())
     squared_diff = sum((vec1.get(k, 0.0) - vec2.get(k, 0.0)) ** 2 for k in all_keys)
-    return (squared_diff ** 0.5) if squared_diff > 0 else 0.0
+    return (squared_diff**0.5) if squared_diff > 0 else 0.0
 
 
 def compute_cosine_similarity(vec1: dict[str, float], vec2: dict[str, float]) -> float:
@@ -67,8 +69,8 @@ def compute_cosine_similarity(vec1: dict[str, float], vec2: dict[str, float]) ->
     """
     all_keys = set(vec1.keys()) | set(vec2.keys())
     dot_product = sum(vec1.get(k, 0.0) * vec2.get(k, 0.0) for k in all_keys)
-    magnitude1 = sum(v ** 2 for v in vec1.values()) ** 0.5
-    magnitude2 = sum(v ** 2 for v in vec2.values()) ** 0.5
+    magnitude1 = sum(v**2 for v in vec1.values()) ** 0.5
+    magnitude2 = sum(v**2 for v in vec2.values()) ** 0.5
 
     if magnitude1 == 0 or magnitude2 == 0:
         return 0.0
@@ -96,11 +98,10 @@ def softmax(values: list[float], temperature: float = 1.0) -> list[float]:
     exp_values = [v / temperature for v in values]
     max_exp = max(exp_values)
     exp_values = [v - max_exp for v in exp_values]  # Numerical stability
-    exp_values = [2.718281828459045 ** v for v in exp_values]
+    exp_values = [2.718281828459045**v for v in exp_values]
     sum_exp = sum(exp_values)
 
     if sum_exp == 0:
         return [1.0 / len(values)] * len(values)
 
     return [v / sum_exp for v in exp_values]
-

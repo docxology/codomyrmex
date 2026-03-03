@@ -19,6 +19,7 @@ logger = get_logger(__name__)
 
 class Severity(Enum):
     """Severity level for detected anti-patterns."""
+
     INFO = "info"
     WARNING = "warning"
     ERROR = "error"
@@ -72,6 +73,7 @@ class AnalysisReport:
 
     @property
     def count_by_severity(self) -> dict[str, int]:
+        """Get the count of patterns grouped by severity."""
         counts: dict[str, int] = {}
         for p in self.patterns:
             key = p.severity.value
@@ -80,6 +82,7 @@ class AnalysisReport:
 
     @property
     def has_errors(self) -> bool:
+        """Return True if any patterns have error severity."""
         return any(p.severity == Severity.ERROR for p in self.patterns)
 
     def to_dict(self) -> dict[str, Any]:
@@ -136,13 +139,15 @@ class AntiPatternDetector:
         try:
             tree = ast.parse(source, filename=filename)
         except SyntaxError as exc:
-            report.patterns.append(AntiPattern(
-                name="syntax-error",
-                message=f"Cannot parse: {exc}",
-                severity=Severity.ERROR,
-                file=filename,
-                line=getattr(exc, "lineno", 0) or 0,
-            ))
+            report.patterns.append(
+                AntiPattern(
+                    name="syntax-error",
+                    message=f"Cannot parse: {exc}",
+                    severity=Severity.ERROR,
+                    file=filename,
+                    line=getattr(exc, "lineno", 0) or 0,
+                )
+            )
             return report
 
         for node in ast.walk(tree):
@@ -173,58 +178,64 @@ class AntiPatternDetector:
         if hasattr(node, "end_lineno") and node.end_lineno:
             func_lines = node.end_lineno - node.lineno + 1
             if func_lines > self._max_function_lines:
-                report.patterns.append(AntiPattern(
-                    name="god-function",
-                    message=f"Function '{node.name}' is {func_lines} lines "
-                            f"(max {self._max_function_lines})",
-                    severity=Severity.WARNING,
-                    file=filename,
-                    line=node.lineno,
-                    suggestion="Split into smaller, focused functions",
-                ))
+                report.patterns.append(
+                    AntiPattern(
+                        name="god-function",
+                        message=f"Function '{node.name}' is {func_lines} lines "
+                        f"(max {self._max_function_lines})",
+                        severity=Severity.WARNING,
+                        file=filename,
+                        line=node.lineno,
+                        suggestion="Split into smaller, focused functions",
+                    )
+                )
 
         # Too many parameters
         params = node.args
         param_count = (
-            len(params.args)
-            + len(params.posonlyargs)
-            + len(params.kwonlyargs)
+            len(params.args) + len(params.posonlyargs) + len(params.kwonlyargs)
         )
         if param_count > self._max_params:
-            report.patterns.append(AntiPattern(
-                name="too-many-params",
-                message=f"Function '{node.name}' has {param_count} parameters "
-                        f"(max {self._max_params})",
-                severity=Severity.WARNING,
-                file=filename,
-                line=node.lineno,
-                suggestion="Use a config dataclass or kwargs",
-            ))
+            report.patterns.append(
+                AntiPattern(
+                    name="too-many-params",
+                    message=f"Function '{node.name}' has {param_count} parameters "
+                    f"(max {self._max_params})",
+                    severity=Severity.WARNING,
+                    file=filename,
+                    line=node.lineno,
+                    suggestion="Use a config dataclass or kwargs",
+                )
+            )
 
         # Deeply nested code
         max_depth = self._measure_nesting(node.body)
         if max_depth > self._max_nesting:
-            report.patterns.append(AntiPattern(
-                name="deep-nesting",
-                message=f"Function '{node.name}' has nesting depth {max_depth} "
-                        f"(max {self._max_nesting})",
-                severity=Severity.WARNING,
-                file=filename,
-                line=node.lineno,
-                suggestion="Use early returns or extract helper functions",
-            ))
+            report.patterns.append(
+                AntiPattern(
+                    name="deep-nesting",
+                    message=f"Function '{node.name}' has nesting depth {max_depth} "
+                    f"(max {self._max_nesting})",
+                    severity=Severity.WARNING,
+                    file=filename,
+                    line=node.lineno,
+                    suggestion="Use early returns or extract helper functions",
+                )
+            )
 
         # Bare except
         for child in ast.walk(node):
             if isinstance(child, ast.ExceptHandler) and child.type is None:
-                report.patterns.append(AntiPattern(
-                    name="bare-except",
-                    message=f"Bare 'except' in '{node.name}'",
-                    severity=Severity.ERROR,
-                    file=filename,
-                    line=getattr(child, "lineno", node.lineno),
-                    suggestion="Catch specific exceptions",
-                ))
+                report.patterns.append(
+                    AntiPattern(
+                        name="bare-except",
+                        message=f"Bare 'except' in '{node.name}'",
+                        severity=Severity.ERROR,
+                        file=filename,
+                        line=getattr(child, "lineno", node.lineno),
+                        suggestion="Catch specific exceptions",
+                    )
+                )
 
     def _check_class(
         self,
@@ -233,16 +244,22 @@ class AntiPatternDetector:
         report: AnalysisReport,
     ) -> None:
         """Check a class for anti-patterns."""
-        methods = [n for n in node.body if isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef))]
+        methods = [
+            n
+            for n in node.body
+            if isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef))
+        ]
         if len(methods) > 20:
-            report.patterns.append(AntiPattern(
-                name="god-class",
-                message=f"Class '{node.name}' has {len(methods)} methods (max 20)",
-                severity=Severity.WARNING,
-                file=filename,
-                line=node.lineno,
-                suggestion="Apply Single Responsibility Principle",
-            ))
+            report.patterns.append(
+                AntiPattern(
+                    name="god-class",
+                    message=f"Class '{node.name}' has {len(methods)} methods (max 20)",
+                    severity=Severity.WARNING,
+                    file=filename,
+                    line=node.lineno,
+                    suggestion="Apply Single Responsibility Principle",
+                )
+            )
 
     def _measure_nesting(self, body: list[ast.stmt], depth: int = 0) -> int:
         """Recursively measure max nesting depth."""
