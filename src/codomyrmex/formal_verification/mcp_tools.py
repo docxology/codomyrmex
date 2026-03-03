@@ -20,7 +20,9 @@ except ImportError:
         def decorator(func: Any) -> Any:
             func._mcp_tool_meta = kwargs
             return func
+
         return decorator
+
 
 from .exceptions import BackendNotAvailableError, ModelBuildError
 from .solver import ConstraintSolver

@@ -73,6 +73,7 @@ def _cmd_status(**kwargs):
     results = {"z3_available": False, "version": __version__}
     try:
         import z3
+
         results["z3_available"] = True
         results["z3_version"] = z3.get_version_string()
     except ImportError:
@@ -85,9 +86,18 @@ def _cmd_backends(**kwargs):
     backends = []
     try:
         from .backends.z3_backend import Z3Backend
-        backends.append({"name": "z3", "status": "available", "description": "Z3 SMT Solver"})
+
+        backends.append(
+            {"name": "z3", "status": "available", "description": "Z3 SMT Solver"}
+        )
     except ImportError:
-        backends.append({"name": "z3", "status": "unavailable", "description": "Install: pip install z3-solver"})
+        backends.append(
+            {
+                "name": "z3",
+                "status": "unavailable",
+                "description": "Install: pip install z3-solver",
+            }
+        )
     return {"backends": backends}
 
 
@@ -99,6 +109,10 @@ def _cmd_check(expression: str = "", **kwargs):
         solver = ConstraintSolver()
         solver.add_item(expression)
         result = solver.solve(timeout_ms=5000)
-        return {"expression": expression, "status": result.status.value, "model": result.model}
+        return {
+            "expression": expression,
+            "status": result.status.value,
+            "model": result.model,
+        }
     except Exception as exc:
         return {"expression": expression, "error": str(exc)}

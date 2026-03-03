@@ -107,9 +107,7 @@ def verify_criteria_consistency(
             try:
                 # We wrap the constraint to label it for unsat core extraction if it contains solver.add
                 if "solver.add(" in constraint:
-                    constraint.replace(
-                        "solver.add(", "solver.assert_and_track("
-                    )
+                    constraint.replace("solver.add(", "solver.assert_and_track(")
                     # We need to provide the label as second arg: solver.assert_and_track(expr, label)
                     # This is tricky with raw strings. A better way is needed if we want full unsat core.
                     # For now, we'll just add it normally.
@@ -129,7 +127,9 @@ def verify_criteria_consistency(
                     # If it's a solver.add, we can label it
                     if item.startswith("solver.add("):
                         label = f"label_{cid}_{idx}_{sub_idx}".replace("-", "_")
-                        labeled_item = item.replace("solver.add(", "solver.assert_and_track(", 1)
+                        labeled_item = item.replace(
+                            "solver.add(", "solver.assert_and_track(", 1
+                        )
                         labeled_item = labeled_item[:-1] + f", '{label}')"
                         solver.add_item(labeled_item)
                     else:
@@ -182,13 +182,16 @@ def verify_criteria_consistency(
             if len(core_ids) >= 2:
                 # Add all pairs for now (simplified)
                 from itertools import combinations
+
                 conflicts = list(combinations(core_ids, 2))
 
         return ISCVerificationResult(
             consistent=False,
             conflicts=conflicts,
             satisfying_assignment=None,
-            warnings=["Criteria set is unsatisfiable — check for conflicting requirements"],
+            warnings=[
+                "Criteria set is unsatisfiable — check for conflicting requirements"
+            ],
             solver_status="unsat",
             criteria_analyzed=analyzed,
             criteria_skipped=skipped,
@@ -226,26 +229,38 @@ def _extract_numeric_constraint(cid: str, description: str) -> list[str] | None:
     items: list[str] = []
 
     # Handle "Response time" or similar prefixes by extracting the metric name
-    metric_match = re.match(r"^([a-z\s]+)\s+(?:under|below|less|more|above|greater|at|minimum|maximum|no|not|between|exactly)", description, re.IGNORECASE)
+    metric_match = re.match(
+        r"^([a-z\s]+)\s+(?:under|below|less|more|above|greater|at|minimum|maximum|no|not|between|exactly)",
+        description,
+        re.IGNORECASE,
+    )
     if metric_match:
         metric_name = metric_match.group(1).strip().replace(" ", "_").lower()
         if metric_name:
             var_name = metric_name
 
     # "under/below/less than X"
-    m = re.search(r"(?:under|below|less\s+than)\s+(\d+(?:\.\d+)?)", description, re.IGNORECASE)
+    m = re.search(
+        r"(?:under|below|less\s+than)\s+(\d+(?:\.\d+)?)", description, re.IGNORECASE
+    )
     if m:
         val = m.group(1)
         z3t = _z3_type_for(val)
         items.append(f"{var_name} = {z3t}('{var_name}')")
         items.append(f"solver.add({var_name} < {val})")
         # Heuristic: metrics like response time/memory are usually non-negative
-        if not re.search(r"temperature|offset|balance|level", description, re.IGNORECASE):
+        if not re.search(
+            r"temperature|offset|balance|level", description, re.IGNORECASE
+        ):
             items.append(f"solver.add({var_name} >= 0)")
         return items
 
     # "more than/greater than/above X"
-    m = re.search(r"(?:more\s+than|greater\s+than|above)\s+(\d+(?:\.\d+)?)", description, re.IGNORECASE)
+    m = re.search(
+        r"(?:more\s+than|greater\s+than|above)\s+(\d+(?:\.\d+)?)",
+        description,
+        re.IGNORECASE,
+    )
     if m:
         val = m.group(1)
         z3t = _z3_type_for(val)
@@ -254,7 +269,11 @@ def _extract_numeric_constraint(cid: str, description: str) -> list[str] | None:
         return items
 
     # "at least/minimum/no less than/not less than X"
-    m = re.search(r"(?:at\s+least|minimum|(?:no|not)\s+less\s+than)\s+(\d+(?:\.\d+)?)", description, re.IGNORECASE)
+    m = re.search(
+        r"(?:at\s+least|minimum|(?:no|not)\s+less\s+than)\s+(\d+(?:\.\d+)?)",
+        description,
+        re.IGNORECASE,
+    )
     if m:
         val = m.group(1)
         z3t = _z3_type_for(val)
@@ -263,18 +282,26 @@ def _extract_numeric_constraint(cid: str, description: str) -> list[str] | None:
         return items
 
     # "at most/maximum/no more than/not more than X"
-    m = re.search(r"(?:at\s+most|maximum|(?:no|not)\s+more\s+than)\s+(\d+(?:\.\d+)?)", description, re.IGNORECASE)
+    m = re.search(
+        r"(?:at\s+most|maximum|(?:no|not)\s+more\s+than)\s+(\d+(?:\.\d+)?)",
+        description,
+        re.IGNORECASE,
+    )
     if m:
         val = m.group(1)
         z3t = _z3_type_for(val)
         items.append(f"{var_name} = {z3t}('{var_name}')")
         items.append(f"solver.add({var_name} <= {val})")
-        if not re.search(r"temperature|offset|balance|level", description, re.IGNORECASE):
+        if not re.search(
+            r"temperature|offset|balance|level", description, re.IGNORECASE
+        ):
             items.append(f"solver.add({var_name} >= 0)")
         return items
 
     # "between X and Y"
-    m = re.search(r"between\s+(\d+(?:\.\d+)?)\s+and\s+(\d+(?:\.\d+)?)", description, re.IGNORECASE)
+    m = re.search(
+        r"between\s+(\d+(?:\.\d+)?)\s+and\s+(\d+(?:\.\d+)?)", description, re.IGNORECASE
+    )
     if m:
         lo, hi = m.group(1), m.group(2)
         z3t = _z3_type_for(lo) if "." in lo else _z3_type_for(hi)
@@ -300,7 +327,9 @@ def _extract_numeric_constraint(cid: str, description: str) -> list[str] | None:
     return None
 
 
-def _find_conflicts(solver: Any, criteria: list[dict[str, str]]) -> list[tuple[str, str]]:
+def _find_conflicts(
+    solver: Any, criteria: list[dict[str, str]]
+) -> list[tuple[str, str]]:
     """Attempt to identify pairwise conflicts in an unsatisfiable criteria set.
 
     This is a best-effort heuristic — it tries removing criteria one at a time

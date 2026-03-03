@@ -45,6 +45,7 @@ class ConstraintSolver:
         if name == "z3":
             try:
                 from .backends.z3_backend import Z3Backend
+
                 return Z3Backend()
             except (ImportError, BackendNotAvailableError) as exc:
                 raise BackendNotAvailableError(
