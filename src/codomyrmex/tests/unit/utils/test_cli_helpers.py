@@ -617,26 +617,65 @@ class TestPrintWithColor:
 class TestSetupLogging:
     """Tests for setup_logging."""
 
-    def test_setup_logging_default(self):
+    def test_setup_logging_default(self, monkeypatch):
         import logging
+
+        called_kwargs = {}
+
+        def mock_basic_config(**kwargs):
+            called_kwargs.update(kwargs)
+
+        monkeypatch.setattr(logging, "basicConfig", mock_basic_config)
+
         setup_logging()
-        assert len(logging.getLogger().handlers) > 0
 
-    def test_setup_logging_quiet(self):
+        assert called_kwargs["level"] == logging.INFO
+        assert called_kwargs["format"] == "%(levelname)s: %(message)s"
+
+    def test_setup_logging_quiet(self, monkeypatch):
         import logging
+
+        called_kwargs = {}
+
+        def mock_basic_config(**kwargs):
+            called_kwargs.update(kwargs)
+
+        monkeypatch.setattr(logging, "basicConfig", mock_basic_config)
+
         setup_logging(quiet=True)
-        assert len(logging.getLogger().handlers) > 0
 
-    def test_setup_logging_debug_level(self):
+        assert called_kwargs["level"] == logging.ERROR
+        assert called_kwargs["format"] == "%(levelname)s: %(message)s"
+
+    def test_setup_logging_debug_level(self, monkeypatch):
         import logging
+
+        called_kwargs = {}
+
+        def mock_basic_config(**kwargs):
+            called_kwargs.update(kwargs)
+
+        monkeypatch.setattr(logging, "basicConfig", mock_basic_config)
+
         setup_logging(level="DEBUG")
-        assert len(logging.getLogger().handlers) > 0
 
-    def test_setup_logging_case_insensitive(self):
+        assert called_kwargs["level"] == logging.DEBUG
+        assert called_kwargs["format"] == "%(levelname)s: %(message)s"
+
+    def test_setup_logging_case_insensitive(self, monkeypatch):
         import logging
-        # The code calls level.upper(), so lowercase should work
+
+        called_kwargs = {}
+
+        def mock_basic_config(**kwargs):
+            called_kwargs.update(kwargs)
+
+        monkeypatch.setattr(logging, "basicConfig", mock_basic_config)
+
         setup_logging(level="warning")
-        assert len(logging.getLogger().handlers) > 0
+
+        assert called_kwargs["level"] == logging.WARNING
+        assert called_kwargs["format"] == "%(levelname)s: %(message)s"
 
 
 # ---------------------------------------------------------------------------
