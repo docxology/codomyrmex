@@ -116,3 +116,27 @@ class TestSafeJsonDumps:
         assert "level1" in result
         assert "level2" in result
         assert "42" in result
+
+    def test_type_error_fallback(self):
+        """Test fallback on TypeError (e.g., tuple as dictionary key)."""
+        from codomyrmex.utils import safe_json_dumps
+
+        # A tuple as a dictionary key causes a TypeError in json.dumps
+        # because JSON keys must be strings, integers, floats, bools, or None.
+        result = safe_json_dumps({(1, 2): "value"}, default='{"fallback": true}')
+
+        assert result == '{"fallback": true}'
+
+    def test_value_error_fallback(self):
+        """Test fallback on ValueError."""
+        from codomyrmex.utils import safe_json_dumps
+
+        # Create an object that causes a ValueError in the json.dumps default
+        # fallback (the str() function).
+        class ValueErrorObject:
+            def __str__(self):
+                raise ValueError("Cannot stringify this object")
+
+        result = safe_json_dumps(ValueErrorObject(), default='{"fallback": true}')
+
+        assert result == '{"fallback": true}'
