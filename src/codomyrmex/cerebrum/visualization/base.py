@@ -372,10 +372,17 @@ class BaseChartVisualizer(BaseVisualizer):
             normalized = max(0.0, min(1.0, normalized))
 
         try:
-            cmap = plt.cm.get_cmap(colormap)
-        except ValueError:
+            # Use modern Matplotlib API if available (3.7+), otherwise fallback
+            if hasattr(matplotlib, "colormaps"):
+                cmap = matplotlib.colormaps[colormap]
+            else:
+                cmap = plt.cm.get_cmap(colormap)
+        except (ValueError, KeyError):
             # Fallback to viridis
-            cmap = plt.cm.get_cmap("viridis")
+            if hasattr(matplotlib, "colormaps"):
+                cmap = matplotlib.colormaps["viridis"]
+            else:
+                cmap = plt.cm.get_cmap("viridis")
         rgba = cmap(normalized)
         return matplotlib.colors.rgb2hex(rgba)
 
