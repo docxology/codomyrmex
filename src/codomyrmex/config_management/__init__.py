@@ -96,9 +96,70 @@ def cli_commands():
     }
 
 
+from typing import Any
+
+
+def get_config(key: str, default: Any = None, namespace: str = "default") -> Any:
+    """Retrieve a configuration value by key.
+
+    Args:
+        key: Configuration key to look up (e.g., 'database.host').
+        default: Default value if the key is not found.
+        namespace: Configuration namespace. Defaults to 'default'.
+
+    Returns:
+        The configuration value.
+    """
+    manager = ConfigurationManager()
+    config = manager.get_configuration(namespace)
+    if not config:
+        config = manager.load_configuration(namespace)
+    return config.get_value(key, default)
+
+
+def set_config(key: str, value: Any, namespace: str = "default") -> None:
+    """Set a configuration value.
+
+    Args:
+        key: Configuration key to set.
+        value: Value to store.
+        namespace: Configuration namespace. Defaults to 'default'.
+    """
+    manager = ConfigurationManager()
+    config = manager.get_configuration(namespace)
+    if not config:
+        config = manager.load_configuration(namespace)
+    config.set_value(key, value)
+    manager.save_configuration(namespace, f"{manager.config_dir}/{namespace}.yaml")
+
+
+def validate_config(namespace: str = "default") -> dict[str, Any]:
+    """Validate configuration consistency and completeness.
+
+    Args:
+        namespace: Configuration namespace to validate.
+
+    Returns:
+        Validation report dictionary containing valid status and issues.
+    """
+    manager = ConfigurationManager()
+    config = manager.get_configuration(namespace)
+    if not config:
+        config = manager.load_configuration(namespace)
+
+    errors = config.validate()
+    return {
+        "valid": len(errors) == 0,
+        "issues": errors,
+    }
+
+
 # Build __all__ dynamically based on available components
 __all__ = [
     # Configuration management
+    "get_config",
+    "set_config",
+    "validate_config",
     "ConfigurationManager",
     "load_configuration",
     "validate_configuration",
