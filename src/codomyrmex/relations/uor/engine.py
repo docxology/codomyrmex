@@ -9,6 +9,7 @@ Critical Identity: neg(bnot(x)) = x + 1 mod 2^n
 References:
     - https://github.com/UOR-Foundation/prism
     - https://github.com/UOR-Foundation/UOR-Framework
+
 """
 
 from __future__ import annotations
@@ -25,6 +26,7 @@ class TriadicCoordinate:
         datum: The identity — value as a tuple of bytes (big-endian).
         stratum: The magnitude — popcount (Hamming weight) per byte.
         spectrum: The structure — active bit positions per byte.
+
     """
 
     datum: tuple[int, ...]
@@ -58,18 +60,20 @@ class PrismEngine:
 
     Args:
         quantum: Non-negative integer specifying the quantum level.
+
     """
 
     BYTE_BITS = 8
     BYTE_CYCLE = 256
 
     def __init__(self, quantum: int = 0) -> None:
+        """Initialize PrismEngine with the specified quantum level."""
         if quantum < 0:
             raise ValueError("Quantum must be non-negative")
         self.quantum = quantum
         self.width = quantum + 1
         self.bits = self.BYTE_BITS * self.width
-        self.cycle = self.BYTE_CYCLE ** self.width
+        self.cycle = self.BYTE_CYCLE**self.width
         self._mask = self.cycle - 1
         self._coherent = False
 
@@ -119,19 +123,25 @@ class PrismEngine:
         b = self._normalize(n)
         return tuple(byte ^ 0xFF for byte in b)
 
-    def xor(self, a: int | tuple[int, ...], b: int | tuple[int, ...]) -> tuple[int, ...]:
+    def xor(
+        self, a: int | tuple[int, ...], b: int | tuple[int, ...]
+    ) -> tuple[int, ...]:
         """Bitwise XOR (per byte). Commutative, associative."""
         ba = self._normalize(a)
         bb = self._normalize(b)
         return tuple(x ^ y for x, y in zip(ba, bb, strict=False))
 
-    def band(self, a: int | tuple[int, ...], b: int | tuple[int, ...]) -> tuple[int, ...]:
+    def band(
+        self, a: int | tuple[int, ...], b: int | tuple[int, ...]
+    ) -> tuple[int, ...]:
         """Bitwise AND (per byte). Commutative, associative."""
         ba = self._normalize(a)
         bb = self._normalize(b)
         return tuple(x & y for x, y in zip(ba, bb, strict=False))
 
-    def bor(self, a: int | tuple[int, ...], b: int | tuple[int, ...]) -> tuple[int, ...]:
+    def bor(
+        self, a: int | tuple[int, ...], b: int | tuple[int, ...]
+    ) -> tuple[int, ...]:
         """Bitwise OR (per byte). Commutative, associative."""
         ba = self._normalize(a)
         bb = self._normalize(b)
@@ -155,7 +165,7 @@ class PrismEngine:
 
     @staticmethod
     def _byte_popcnt(n: int) -> int:
-        """Population count (Hamming weight) of a single byte."""
+        """Return the population count (Hamming weight) of a single byte."""
         return n.bit_count()
 
     @staticmethod
@@ -181,6 +191,7 @@ class PrismEngine:
 
         Returns:
             TriadicCoordinate with datum, stratum, and spectrum.
+
         """
         b = self._normalize(n)
         return TriadicCoordinate(
@@ -209,6 +220,7 @@ class PrismEngine:
         Returns:
             Dict with keys: difference_stratum, total_difference,
             max_difference, fidelity.
+
         """
         ba = self._normalize(a)
         bb = self._normalize(b)
@@ -241,6 +253,7 @@ class PrismEngine:
 
         Returns:
             Float in [0.0, 1.0] where 1.0 means identical.
+
         """
         return self.correlate(a, b)["fidelity"]
 
@@ -259,6 +272,7 @@ class PrismEngine:
 
         Raises:
             RuntimeError: If any algebraic law is violated.
+
         """
         self._verify_q0_exhaustive()
 

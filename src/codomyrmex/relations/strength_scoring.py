@@ -33,6 +33,7 @@ class Interaction:
         timestamp: Unix timestamp of the interaction.
         weight: Base weight of this interaction (default 1.0).
         metadata: Optional extra data about the interaction.
+
     """
 
     source: str
@@ -56,6 +57,7 @@ class StrengthConfig:
         type_weights: Mapping of interaction_type -> multiplier.
             Unknown types get a multiplier of 1.0.
         min_score: Scores below this threshold are clamped to 0.
+
     """
 
     decay_function: DecayFunction = DecayFunction.EXPONENTIAL
@@ -77,6 +79,7 @@ class StrengthScore:
             the strongest relationship in the scorer.
         interaction_count: Number of interactions considered.
         latest_interaction: Timestamp of the most recent interaction.
+
     """
 
     source: str
@@ -105,6 +108,7 @@ class RelationStrengthScorer:
     """
 
     def __init__(self, config: StrengthConfig | None = None) -> None:
+        """Initialize the scorer."""
         self._config = config or StrengthConfig()
         self._interactions: list[Interaction] = []
 
@@ -134,6 +138,7 @@ class RelationStrengthScorer:
 
         Returns:
             Multiplier in [0, 1].
+
         """
         cfg = self._config
 
@@ -172,6 +177,7 @@ class RelationStrengthScorer:
 
         Returns:
             A StrengthScore with raw and normalized values.
+
         """
         key = self._pair_key(source, target)
         cfg = self._config
@@ -215,6 +221,7 @@ class RelationStrengthScorer:
 
         Returns:
             List of StrengthScore objects, sorted by raw_score descending.
+
         """
         pairs: set[tuple[str, str]] = set()
         for ix in self._interactions:
@@ -240,6 +247,7 @@ class RelationStrengthScorer:
 
         Returns:
             List of StrengthScore objects sorted descending by raw_score.
+
         """
         partners: set[str] = set()
         for ix in self._interactions:

@@ -21,9 +21,11 @@ class EntityManager:
 
     Args:
         quantum: Quantum level for the PRISM engine (default 0 = 8-bit).
+
     """
 
     def __init__(self, quantum: int = 0) -> None:
+        """Initialize EntityManager."""
         self._entities: dict[str, UOREntity] = {}
         self._engine = PrismEngine(quantum=quantum)
 
@@ -50,6 +52,7 @@ class EntityManager:
 
         Returns:
             The newly created UOREntity.
+
         """
         attrs = attributes or {}
         entity = UOREntity(name=name, entity_type=entity_type, attributes=attrs)
@@ -65,6 +68,7 @@ class EntityManager:
 
         Returns:
             The entity if found, otherwise None.
+
         """
         return self._entities.get(entity_id)
 
@@ -73,6 +77,7 @@ class EntityManager:
 
         Returns:
             True if the entity was found and removed.
+
         """
         if entity_id in self._entities:
             del self._entities[entity_id]
@@ -95,6 +100,7 @@ class EntityManager:
 
         Returns:
             List of matching entities.
+
         """
         q = query.lower()
         results: list[UOREntity] = []
@@ -127,6 +133,7 @@ class EntityManager:
         Returns:
             List of (entity, fidelity) tuples, sorted by descending fidelity.
             Excludes the reference entity itself.
+
         """
         ref = self._entities.get(entity_id)
         if ref is None:
@@ -159,6 +166,7 @@ class EntityManager:
         Returns:
             List of groups, where each group contains 2+ entities
             sharing the same content hash.
+
         """
         hash_groups: dict[str, list[UOREntity]] = {}
         for entity in self._entities.values():

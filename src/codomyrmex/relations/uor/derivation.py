@@ -6,6 +6,7 @@ derivation model.
 
 References:
     - https://github.com/UOR-Foundation/prism (Derivation class)
+
 """
 
 from __future__ import annotations
@@ -31,23 +32,25 @@ class DerivationRecord:
         inputs: Dictionary of input data for the operation.
         result_hash: Content hash of the resulting state.
         timestamp: ISO-format timestamp when the derivation was created.
+
     """
 
     entity_id: str
     operation: str
     inputs: dict[str, Any] = field(default_factory=dict)
     result_hash: str = ""
-    timestamp: str = field(
-        default_factory=lambda: datetime.now(UTC).isoformat()
-    )
+    timestamp: str = field(default_factory=lambda: datetime.now(UTC).isoformat())
     id: str = field(default="")
 
     def __post_init__(self) -> None:
+        """Initialize derivation id if empty."""
         if not self.id:
             object.__setattr__(
-                self, "id", self._compute_derivation_id(
+                self,
+                "id",
+                self._compute_derivation_id(
                     self.entity_id, self.operation, self.inputs, self.result_hash
-                )
+                ),
             )
 
     @staticmethod
@@ -79,6 +82,7 @@ class DerivationTracker:
     """
 
     def __init__(self) -> None:
+        """Initialize DerivationTracker."""
         self._records: list[DerivationRecord] = []
 
     def record(
@@ -98,6 +102,7 @@ class DerivationTracker:
 
         Returns:
             The created DerivationRecord.
+
         """
         record = DerivationRecord(
             entity_id=entity_id,
@@ -116,6 +121,7 @@ class DerivationTracker:
 
         Returns:
             List of derivation records in chronological order.
+
         """
         return [r for r in self._records if r.entity_id == entity_id]
 
@@ -133,12 +139,15 @@ class DerivationTracker:
 
         Raises:
             RuntimeError: If a derivation ID mismatch is detected.
+
         """
         history = self.get_history(entity_id)
         for record in history:
             expected_id = DerivationRecord._compute_derivation_id(
-                record.entity_id, record.operation,
-                record.inputs, record.result_hash,
+                record.entity_id,
+                record.operation,
+                record.inputs,
+                record.result_hash,
             )
             if record.id != expected_id:
                 raise RuntimeError(
@@ -196,4 +205,3 @@ class DerivationTracker:
     def __len__(self) -> int:
         """Return the number of items."""
         return len(self._records)
-
