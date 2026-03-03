@@ -12,7 +12,6 @@ class ConfigWatcher:
     """Watches a configuration file for changes and triggers a callback."""
 
     def __init__(self, file_path: str, callback: Callable[[], None], interval: int = 5):
-        """Initialize this instance."""
         self.file_path = file_path
         self.callback = callback
         self.interval = interval

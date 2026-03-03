@@ -45,7 +45,7 @@ class AntiPattern:
     suggestion: str = ""
 
     def to_dict(self) -> dict[str, Any]:
-        """Return a dictionary representation of this object."""
+        """Returns a dictionary representation of this object's fields."""
         return {
             "name": self.name,
             "message": self.message,
@@ -83,7 +83,7 @@ class AnalysisReport:
         return any(p.severity == Severity.ERROR for p in self.patterns)
 
     def to_dict(self) -> dict[str, Any]:
-        """Return a dictionary representation of this object."""
+        """Returns a dictionary representation of this object's fields."""
         return {
             "patterns": [p.to_dict() for p in self.patterns],
             "files_scanned": self.files_scanned,

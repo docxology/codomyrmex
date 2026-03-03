@@ -8,6 +8,16 @@ from __future__ import annotations
 import os
 import tempfile
 
+import pytest
+
+try:
+    from codomyrmex.api.health import HealthStatus as _probe  # noqa: F401
+    _API_AVAILABLE = True
+except ImportError:
+    _API_AVAILABLE = False
+
+pytestmark = pytest.mark.skipif(not _API_AVAILABLE, reason="api extra not installed; run: uv sync --extra api")
+
 from codomyrmex.api.health import (
     ComponentHealth,
     HealthChecker,

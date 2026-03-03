@@ -40,7 +40,7 @@ class CodeBundle:
         return len(self.source.strip().splitlines())
 
     def to_dict(self) -> dict[str, Any]:
-        """Return a dictionary representation of this object."""
+        """Returns a dictionary representation of this object's fields."""
         return {
             "filename": self.filename,
             "language": self.language,

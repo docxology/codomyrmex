@@ -45,7 +45,7 @@ class AgentMessage:
     reply_to: str | None = None
 
     def to_dict(self) -> dict[str, Any]:
-        """Return a dictionary representation of this object."""
+        """Returns a dictionary representation of this object's fields."""
         return {
             "id": self.id,
             "sender_id": self.sender_id,
@@ -77,7 +77,7 @@ class AgentCapability:
     output_schema: dict[str, Any] | None = None
 
     def to_dict(self) -> dict[str, Any]:
-        """Return a dictionary representation of this object."""
+        """Returns a dictionary representation of this object's fields."""
         return {
             "name": self.name,
             "description": self.description,
@@ -141,7 +141,7 @@ class BaseAgent(ABC):
         return [c.name for c in self.capabilities]
 
     def to_dict(self) -> dict[str, Any]:
-        """Return a dictionary representation of this object."""
+        """Returns a dictionary representation of this object's fields."""
         return {
             "agent_id": self.agent_id,
             "name": self.name,

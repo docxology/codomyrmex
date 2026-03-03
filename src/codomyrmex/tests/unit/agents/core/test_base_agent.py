@@ -14,6 +14,7 @@ import pytest
 
 from codomyrmex.agents.core.base import (
     AgentCapabilities,
+    AgentIntegrationAdapter,
     AgentRequest,
     AgentResponse,
     BaseAgent,
@@ -22,6 +23,7 @@ from codomyrmex.agents.core.base import (
 # ---------------------------------------------------------------------------
 # Concrete BaseAgent subclass for testing
 # ---------------------------------------------------------------------------
+
 
 class _EchoAgent(BaseAgent):
     """Minimal concrete agent that echoes the prompt back."""
@@ -51,6 +53,7 @@ class _RaisingAgent(BaseAgent):
 # AgentCapabilities enum
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestAgentCapabilities:
     """Tests for AgentCapabilities enum."""
@@ -70,6 +73,7 @@ class TestAgentCapabilities:
 # ---------------------------------------------------------------------------
 # AgentRequest
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestAgentRequest:
@@ -112,6 +116,7 @@ class TestAgentRequest:
 # AgentResponse
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestAgentResponse:
     """Tests for AgentResponse dataclass."""
@@ -137,6 +142,7 @@ class TestAgentResponse:
 # ---------------------------------------------------------------------------
 # BaseAgent — execute() delegation and error routing
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestBaseAgentExecute:
@@ -186,6 +192,7 @@ class TestBaseAgentExecute:
 # BaseAgent — stream() error routing
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestBaseAgentStream:
     """Tests for BaseAgent.stream() method."""
@@ -216,6 +223,7 @@ class TestBaseAgentStream:
 # ---------------------------------------------------------------------------
 # BaseAgent — plan / act / observe default implementations
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestBaseAgentPlanActObserve:
@@ -258,6 +266,7 @@ class TestBaseAgentPlanActObserve:
 # BaseAgent — capabilities
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestBaseAgentCapabilities:
     """Tests for BaseAgent capability methods."""
@@ -266,7 +275,10 @@ class TestBaseAgentCapabilities:
         """get_capabilities() returns the capabilities provided at construction."""
         agent = _EchoAgent(
             name="test",
-            capabilities=[AgentCapabilities.CODE_GENERATION, AgentCapabilities.STREAMING],
+            capabilities=[
+                AgentCapabilities.CODE_GENERATION,
+                AgentCapabilities.STREAMING,
+            ],
         )
         caps = agent.get_capabilities()
         assert AgentCapabilities.CODE_GENERATION in caps

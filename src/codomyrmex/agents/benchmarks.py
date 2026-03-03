@@ -27,7 +27,7 @@ class BenchmarkResult:
     timestamp: float = field(default_factory=time.time)
 
     def to_dict(self) -> dict[str, Any]:
-        """Return a dictionary representation of this object."""
+        """Returns a dictionary representation of this object's fields."""
         return {
             "task_name": self.task_name,
             "agent_name": self.agent_name,

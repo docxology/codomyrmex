@@ -76,7 +76,7 @@ class SwarmMessage:
             self.timestamp = time.time()
 
     def to_dict(self) -> dict[str, Any]:
-        """Return a dictionary representation of this object."""
+        """Returns a dictionary representation of this object's fields."""
         return {
             "message_type": self.message_type.value,
             "sender": self.sender,
@@ -116,7 +116,7 @@ class SwarmAgent:
         return self.active_tasks / self.max_concurrent if self.max_concurrent > 0 else 1.0
 
     def to_dict(self) -> dict[str, Any]:
-        """Return a dictionary representation of this object."""
+        """Returns a dictionary representation of this object's fields."""
         return {
             "agent_id": self.agent_id,
             "role": self.role.value,
@@ -156,7 +156,7 @@ class TaskAssignment:
             self.task_id = str(uuid.uuid4())[:8]
 
     def to_dict(self) -> dict[str, Any]:
-        """Return a dictionary representation of this object."""
+        """Returns a dictionary representation of this object's fields."""
         return {
             "task_id": self.task_id,
             "description": self.description,

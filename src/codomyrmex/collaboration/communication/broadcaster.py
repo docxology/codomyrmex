@@ -38,7 +38,7 @@ class TopicInfo:
     created_at: datetime
 
     def to_dict(self) -> dict[str, Any]:
-        """Return a dictionary representation of this object."""
+        """Returns a dictionary representation of this object's fields."""
         return {
             "topic": self.topic,
             "subscriber_count": self.subscriber_count,

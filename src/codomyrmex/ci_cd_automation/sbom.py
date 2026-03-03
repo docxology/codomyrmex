@@ -43,7 +43,7 @@ class SBOMComponent:
             self.purl = f"pkg:pypi/{self.name.lower()}{version_part}"
 
     def to_dict(self) -> dict[str, Any]:
-        """Return a dictionary representation of this object."""
+        """Returns a dictionary representation of this object's fields."""
         return {
             "type": self.component_type,
             "name": self.name,

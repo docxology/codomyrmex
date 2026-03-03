@@ -97,7 +97,7 @@ class KernelPrimitive:
     enabled: bool = True
 
     def to_dict(self) -> dict[str, Any]:
-        """Return a dictionary representation of this object."""
+        """Returns a dictionary representation of this object's fields."""
         return {
             "name": self.name,
             "layer": self.layer.value,
@@ -120,7 +120,7 @@ class ResearchClaim:
     confidence: float = 0.8
 
     def to_dict(self) -> dict[str, Any]:
-        """Return a dictionary representation of this object."""
+        """Returns a dictionary representation of this object's fields."""
         return {
             "claim_id": self.claim_id,
             "statement": self.statement,
@@ -142,7 +142,7 @@ class DimensionSignal:
     timestamp: str = field(default_factory=lambda: datetime.now(UTC).isoformat())
 
     def to_dict(self) -> dict[str, Any]:
-        """Return a dictionary representation of this object."""
+        """Returns a dictionary representation of this object's fields."""
         return {
             "dimension": self.dimension.value,
             "value": self.value,
@@ -165,7 +165,7 @@ class StageResult:
     error: str | None = None
 
     def to_dict(self) -> dict[str, Any]:
-        """Return a dictionary representation of this object."""
+        """Returns a dictionary representation of this object's fields."""
         return {
             "stage": self.stage.value,
             "input_content": self.input_content,
@@ -191,7 +191,7 @@ class VaultHealthReport:
     errors: list[str] = field(default_factory=list)
 
     def to_dict(self) -> dict[str, Any]:
-        """Return a dictionary representation of this object."""
+        """Returns a dictionary representation of this object's fields."""
         return {
             "status": self.status.value,
             "spaces_present": self.spaces_present,
@@ -244,7 +244,7 @@ class VaultConfig:
     created_at: str = field(default_factory=lambda: datetime.now(UTC).isoformat())
 
     def to_dict(self) -> dict[str, Any]:
-        """Return a dictionary representation of this object."""
+        """Returns a dictionary representation of this object's fields."""
         return {
             "vault_path": str(self.vault_path),
             "kernel": {

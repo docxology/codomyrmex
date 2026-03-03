@@ -66,7 +66,7 @@ class ClassifiedError:
             self.suggested_strategies = list(RECOVERY_MAP.get(self.category, []))
 
     def to_dict(self) -> dict[str, Any]:
-        """Return a dictionary representation of this object."""
+        """Returns a dictionary representation of this object's fields."""
         return {
             "category": self.category.value,
             "original_error": self.original_error,

@@ -40,7 +40,7 @@ class EncryptedEntry:
     rotated_at: float = 0.0
 
     def to_dict(self) -> dict[str, Any]:
-        """Return a dictionary representation of this object."""
+        """Returns a dictionary representation of this object's fields."""
         return {
             "key": self.key,
             "ciphertext": self.ciphertext,

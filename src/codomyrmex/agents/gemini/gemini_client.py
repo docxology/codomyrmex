@@ -339,13 +339,18 @@ class GeminiClient(BaseAgent):
             # Bypass Pydantic dump crash
             outputs = []
             for video in getattr(result, "videos", []):
-                outputs.append({"video_bytes": getattr(video, "video_bytes", getattr(video, "video", getattr(video, "uri", b"")))})
-
-            # If the genai sdk natively unpacks it into a `uri` string instead of `video_bytes` (like gemini sometimes does):
-            if not outputs and getattr(result, "videos", []):
-                for video in result.videos:
-                    if hasattr(video, "uri") and video.uri:
-                        outputs.append({"uri": video.uri})
+                v_bytes = getattr(video, "video_bytes", None) or getattr(video, "video", None)
+                v_uri = getattr(video, "uri", None)
+                if v_bytes:
+                    outputs.append({"video_bytes": v_bytes})
+                elif v_uri:
+                    import urllib.request
+                    try:
+                        req = urllib.request.urlopen(v_uri)
+                        outputs.append({"video_bytes": req.read()})
+                    except Exception as e:
+                        logger.warning(f"Failed to download video URI {v_uri}: {e}")
+                        outputs.append({"uri": v_uri})
 
             return outputs
         except Exception as e:

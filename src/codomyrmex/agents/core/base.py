@@ -1,3 +1,5 @@
+"""Core agent interfaces and base classes."""
+
 from abc import ABC, abstractmethod
 from collections.abc import Iterator
 from dataclasses import dataclass
@@ -5,12 +7,6 @@ from enum import Enum
 from typing import Any, Protocol, runtime_checkable
 
 from codomyrmex.logging_monitoring import get_logger
-
-"""Core agent interfaces and base classes."""
-
-
-
-
 
 logger = get_logger(__name__)
 

@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 
 from codomyrmex.logging_monitoring import get_logger
 
-from .plot_utils import (
+from codomyrmex.data_visualization.utils import (
     DEFAULT_FIGURE_SIZE,
     apply_common_aesthetics,
     apply_theme_to_axes,

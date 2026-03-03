@@ -38,7 +38,12 @@ class EventLogEntry:
         self.event_id = event.event_id
 
     def to_dict(self) -> dict[str, Any]:
-        """Return a dictionary representation of this object."""
+        """Serialize the log entry to a dict.
+
+        Keys: ``event_id``, ``event_type``, ``priority``, ``timestamp``
+        (ISO-8601 str), ``handler_count``, ``processing_time``, ``source``,
+        ``data``, ``metadata``, ``correlation_id``.
+        """
         etype = _event_type_str(self.event.event_type)
 
         # Handle priority which might be an int or EventPriority enum
@@ -173,7 +178,9 @@ class EventLogger:
 _logger = None
 _logger_lock = threading.Lock()
 
+
 def get_event_logger() -> EventLogger:
+    """Return the module-level singleton EventLogger, creating it on first call."""
     global _logger
     if _logger is None:
         with _logger_lock:
@@ -181,9 +188,36 @@ def get_event_logger() -> EventLogger:
                 _logger = EventLogger()
     return _logger
 
-def get_event_stats(): return get_event_logger().get_event_statistics()
-def get_recent_events(limit=50): return get_event_logger().get_recent_events(limit)
-def get_events(**kwargs): return get_event_logger().get_events(**kwargs)
-def generate_performance_report(): return get_event_logger().get_performance_report()
-def log_event_to_monitoring(e, c=0, t=0): get_event_logger().log_event(e, c, t)
-def export_event_logs(p, f='json'): get_event_logger().export_logs(p, f)
+
+def get_event_stats() -> dict[str, Any]:
+    """Return aggregate statistics from the singleton EventLogger."""
+    return get_event_logger().get_event_statistics()
+
+
+def get_recent_events(limit: int = 50) -> list[EventLogEntry]:
+    """Return the most recent *limit* events from the singleton EventLogger."""
+    return get_event_logger().get_recent_events(limit)
+
+
+def get_events(**kwargs: Any) -> list[EventLogEntry]:
+    """Query events from the singleton EventLogger with optional filters."""
+    return get_event_logger().get_events(**kwargs)
+
+
+def generate_performance_report() -> dict[str, Any]:
+    """Generate a processing-performance report from the singleton EventLogger."""
+    return get_event_logger().get_performance_report()
+
+
+def log_event_to_monitoring(
+    event: Any,
+    handler_count: int = 0,
+    processing_time: float = 0,
+) -> None:
+    """Log *event* to the singleton EventLogger."""
+    get_event_logger().log_event(event, handler_count, processing_time)
+
+
+def export_event_logs(path: str, format: str = "json") -> None:
+    """Export all logged events to *path* in the given *format* ('json' or 'csv')."""
+    get_event_logger().export_logs(path, format)

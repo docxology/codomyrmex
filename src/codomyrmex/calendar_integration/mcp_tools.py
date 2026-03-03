@@ -16,11 +16,15 @@ from codomyrmex.model_context_protocol.decorators import mcp_tool
 
 logger = get_logger(__name__)
 
-# Default attendee injected into every create/update call.
-# Override via CODOMYRMEX_CALENDAR_ATTENDEE env var.
-_DEFAULT_ATTENDEE: str = os.environ.get(
-    "CODOMYRMEX_CALENDAR_ATTENDEE", "FristonBlanket@gmail.com"
-)
+_DEFAULT_ATTENDEE: str = os.environ.get("CODOMYRMEX_CALENDAR_ATTENDEE", "")
+
+
+def _with_default_attendee(attendees: list[str] | None) -> list[str]:
+    """Return *attendees* with _DEFAULT_ATTENDEE injected if non-empty and absent."""
+    result = list(attendees) if attendees is not None else []
+    if _DEFAULT_ATTENDEE and _DEFAULT_ATTENDEE not in result:
+        result.append(_DEFAULT_ATTENDEE)
+    return result
 
 
 def _get_provider() -> Any:
@@ -162,20 +166,13 @@ def calendar_create_event(
     """
     try:
         provider = _get_provider()
-
-        # Ensure the default attendee is included
-        if attendees is None:
-            attendees = [_DEFAULT_ATTENDEE]
-        elif _DEFAULT_ATTENDEE not in attendees:
-            attendees.append(_DEFAULT_ATTENDEE)
-
         evt = CalendarEvent(
             summary=summary,
             description=description,
             start_time=datetime.fromisoformat(start_time.replace('Z', '+00:00')),
             end_time=datetime.fromisoformat(end_time.replace('Z', '+00:00')),
             location=location,
-            attendees=attendees
+            attendees=_with_default_attendee(attendees),
         )
         created = provider.create_event(evt)
         return {
@@ -288,20 +285,13 @@ def calendar_update_event(
     """
     try:
         provider = _get_provider()
-
-        # Ensure the default attendee is included
-        if attendees is None:
-            attendees = [_DEFAULT_ATTENDEE]
-        elif _DEFAULT_ATTENDEE not in attendees:
-            attendees.append(_DEFAULT_ATTENDEE)
-
         evt = CalendarEvent(
             summary=summary,
             description=description,
             start_time=datetime.fromisoformat(start_time.replace('Z', '+00:00')),
             end_time=datetime.fromisoformat(end_time.replace('Z', '+00:00')),
             location=location,
-            attendees=attendees
+            attendees=_with_default_attendee(attendees),
         )
         updated_event = provider.update_event(event_id, evt)
         return {

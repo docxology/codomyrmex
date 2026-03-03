@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 
 from codomyrmex.logging_monitoring import get_logger
 
-from .plot_utils import apply_theme_to_axes, save_plot
+from codomyrmex.data_visualization.utils import apply_theme_to_axes, save_plot
 
 logger = get_logger(__name__)
 

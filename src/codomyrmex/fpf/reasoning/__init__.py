@@ -32,7 +32,7 @@ class Premise:
     depends_on: list[str] = field(default_factory=list)
 
     def to_dict(self) -> dict[str, Any]:
-        """Return a dictionary representation of this object."""
+        """Returns a dictionary representation of this object's fields."""
         return {
             "id": self.id,
             "content": self.content,
@@ -107,7 +107,7 @@ class ReasoningChain:
         return confidence
 
     def to_dict(self) -> dict[str, Any]:
-        """Return a dictionary representation of this object."""
+        """Returns a dictionary representation of this object's fields."""
         return {
             "id": self.id,
             "goal": self.goal,
@@ -251,7 +251,7 @@ class ProblemSpace:
     assumptions: list[str] = field(default_factory=list)
 
     def to_dict(self) -> dict[str, Any]:
-        """Return a dictionary representation of this object."""
+        """Returns a dictionary representation of this object's fields."""
         return {
             "problem": self.problem,
             "constraints": self.constraints,

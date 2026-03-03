@@ -21,6 +21,8 @@ Example::
 from __future__ import annotations
 
 import logging
+import os
+import re
 import time
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -96,7 +98,6 @@ class EditingConfig:
     channel: str = ""
 
     def __post_init__(self) -> None:
-        import os
         if not self.ollama_model:
             self.ollama_model = os.environ.get("OLLAMA_MODEL", "codellama:latest")
         if not self.review_model:
@@ -127,7 +128,6 @@ class EditingOrchestrator:
         self.config = config or EditingConfig()
 
         # Planner: always Ollama (fast, local).
-        import os
         base_url = os.environ.get("OLLAMA_BASE_URL", "http://localhost:11434")
         self._planner = OllamaClient(
             model=self.config.ollama_model, base_url=base_url,
@@ -401,10 +401,7 @@ class EditingOrchestrator:
         Returns:
             List of (find_text, replace_text) tuples.
         """
-        import re
-
         edits: list[tuple[str, str]] = []
-        # Match FIND: ... REPLACE: ... blocks (greedy within step boundaries).
         pattern = re.compile(
             r"FIND:\s*(.+?)REPLACE:\s*(.+?)(?=(?:STEP\s+\d|FIND:|$))",
             re.DOTALL,
@@ -496,7 +493,6 @@ class EditingOrchestrator:
     @staticmethod
     def _parse_score(review_text: str) -> float:
         """Extract a numeric score from review text."""
-        import re
         match = re.search(r"SCORE:\s*([\d.]+)", review_text, re.IGNORECASE)
         if match:
             try:
@@ -508,7 +504,6 @@ class EditingOrchestrator:
     @staticmethod
     def _parse_notes(review_text: str) -> str:
         """Extract notes from review text."""
-        import re
         match = re.search(r"NOTES:\s*(.+)", review_text, re.IGNORECASE | re.DOTALL)
         if match:
             return match.group(1).strip()

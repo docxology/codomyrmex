@@ -52,7 +52,7 @@ class WorkflowStep:
     duration_ms: float = 0.0
 
     def to_dict(self) -> dict[str, Any]:
-        """Return a dictionary representation of this object."""
+        """Returns a dictionary representation of this object's fields."""
         return {
             "name": self.name,
             "status": self.status.value,
@@ -91,7 +91,7 @@ class WorkflowResult:
         return sum(1 for s in self.steps if s.status == StepStatus.FAILED)
 
     def to_dict(self) -> dict[str, Any]:
-        """Return a dictionary representation of this object."""
+        """Returns a dictionary representation of this object's fields."""
         return {
             "workflow_id": self.workflow_id,
             "success": self.success,

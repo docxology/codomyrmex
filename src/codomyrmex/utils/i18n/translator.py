@@ -32,7 +32,7 @@ class MessageBundle:
         return list(self._messages.keys())
 
     def to_dict(self) -> dict[str, str]:
-        """Return a dictionary representation of this object."""
+        """Returns a dictionary representation of this object's fields."""
         return self._messages.copy()
 
     @classmethod

@@ -41,7 +41,7 @@ class BackupMetadata:
     error: str | None = None
 
     def to_dict(self) -> dict[str, Any]:
-        """Return a dictionary representation of this object."""
+        """Returns a dictionary representation of this object's fields."""
         return {
             "backup_id": self.backup_id,
             "source": self.source,

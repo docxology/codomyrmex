@@ -170,6 +170,19 @@ class ConversationLog:
 
 # ── LLM Clients ─────────────────────────────────────────────────────
 
+
+class AntigravityCodeImplementerWrapper:
+    """Adapts a base IDE client to the execute_with_session interface expected by the orchestrator."""
+
+    def __init__(self, base_client: Any) -> None:
+        self.client = base_client
+
+    def execute_with_session(self, request: Any) -> Any:
+        if hasattr(self.client, "execute_with_tools"):
+            return self.client.execute_with_tools(request, auto_execute=True, max_tool_rounds=15)
+        return self.client.execute_with_session(request)
+
+
 def _create_llm_client(spec: AgentSpec) -> Any:
     """Create a real LLM client for the given agent spec.
 
@@ -215,18 +228,6 @@ def _create_llm_client(spec: AgentSpec) -> Any:
                             input_schema=tool.args_schema,
                             handler=tool.func
                         )
-
-                    # Wrap the client so execute_with_session calls execute_with_tools
-                    class AntigravityCodeImplementerWrapper:
-                        """Adapts a base IDE client to the execute_with_session interface expected by the orchestrator."""
-                        def __init__(self, base_client):
-                            self.client = base_client
-
-                        def execute_with_session(self, request, session=None, session_id=None):
-                            if hasattr(self.client, 'execute_with_tools'):
-                                logger.info(f"[{spec.identity}] Executing with full Antigravity tool loop...")
-                                return self.client.execute_with_tools(request, auto_execute=True, max_tool_rounds=15)
-                            return self.client.execute_with_session(request, session, session_id)
 
                     return AntigravityCodeImplementerWrapper(client)
                 return client

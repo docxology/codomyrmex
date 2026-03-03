@@ -8,26 +8,20 @@ except ImportError:
         return logging.getLogger(name)
 
 try:
-    from codomyrmex.terminal_interface.terminal_utils import (
-        CommandRunner,
-        TerminalFormatter,
-    )
+    from codomyrmex.terminal_interface.terminal_utils import TerminalFormatter
     TERMINAL_INTERFACE_AVAILABLE = True
 except ImportError:
     TERMINAL_INTERFACE_AVAILABLE = False
-    TerminalFormatter = None
-    CommandRunner = None
+    TerminalFormatter = None  # type: ignore[assignment,misc]
 
 try:
-    from codomyrmex.performance.monitoring.performance_monitor import (
+    from codomyrmex.performance.monitoring.performance_monitor import (  # noqa: F401
         PerformanceMonitor,
         monitor_performance,
     )
     PERFORMANCE_MONITORING_AVAILABLE = True
 except ImportError:
     PERFORMANCE_MONITORING_AVAILABLE = False
-    PerformanceMonitor = None
-    monitor_performance = None
 
 def get_formatter() -> Any | None:
     """Get TerminalFormatter if available."""

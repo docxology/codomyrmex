@@ -77,7 +77,6 @@ class RollingStrategy(DeploymentStrategy):
         batch_count: int = 4,
         pause_seconds: float = 0.0,
     ) -> None:
-        """Initialize this instance."""
         self.batch_size = batch_size
         self.batch_count = batch_count
         self.pause_seconds = pause_seconds
@@ -124,7 +123,6 @@ class CanaryStrategy(DeploymentStrategy):
         step: int = 20,
         max_steps: int = 5,
     ) -> None:
-        """Initialize this instance."""
         self.initial_percentage = initial_percentage
         self.step = step
         self.max_steps = max_steps
@@ -199,7 +197,6 @@ class FeatureFlagStrategy(DeploymentStrategy):
     """
 
     def __init__(self, flag_name: str = "", initial_rollout: float = 0.0) -> None:
-        """Initialize this instance."""
         self.flag_name = flag_name
         self.initial_rollout = initial_rollout
 

@@ -61,7 +61,7 @@ class Diagnosis:
             self.diagnosed_at = time.time()
 
     def to_dict(self) -> dict[str, Any]:
-        """Return a dictionary representation of this object."""
+        """Returns a dictionary representation of this object's fields."""
         return {
             "error": self.error.to_dict(),
             "root_cause": self.root_cause,

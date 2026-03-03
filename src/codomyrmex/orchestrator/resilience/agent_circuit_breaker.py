@@ -51,7 +51,7 @@ class AgentHealth:
         return self.total_failures / total if total > 0 else 0.0
 
     def to_dict(self) -> dict[str, Any]:
-        """Return a dictionary representation of this object."""
+        """Returns a dictionary representation of this object's fields."""
         return {
             "agent_id": self.agent_id,
             "state": self.state.value,

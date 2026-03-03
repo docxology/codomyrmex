@@ -607,7 +607,7 @@ class CellEdit:
     value: Any
 
     def to_dict(self) -> dict[str, Any]:
-        """Return a dictionary representation of this object."""
+        """Returns a dictionary representation of this object's fields."""
         return {
             "column": self.column,
             "value": self.value,
@@ -620,7 +620,7 @@ class RowEdit:
     cells: list[CellEdit]
 
     def to_dict(self) -> dict[str, Any]:
-        """Return a dictionary representation of this object."""
+        """Returns a dictionary representation of this object's fields."""
         return {"cells": [cell.to_dict() for cell in self.cells]}
 
 
@@ -728,7 +728,7 @@ class Principal:
         )
 
     def to_dict(self) -> dict[str, Any]:
-        """Return a dictionary representation of this object."""
+        """Returns a dictionary representation of this object's fields."""
 
         result = {"type": self.type}
         if self.email:

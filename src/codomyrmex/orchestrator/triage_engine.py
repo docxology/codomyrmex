@@ -54,7 +54,7 @@ class ModuleProfile:
     merge_target: str = ""
 
     def to_dict(self) -> dict[str, Any]:
-        """Return a dictionary representation of this object."""
+        """Returns a dictionary representation of this object's fields."""
         return {
             "name": self.name,
             "loc": self.loc,

@@ -27,7 +27,7 @@ class Panel:
     thresholds: list[float] = field(default_factory=list)
 
     def to_dict(self) -> dict[str, Any]:
-        """Return a dictionary representation of this object."""
+        """Returns a dictionary representation of this object's fields."""
         return {
             "title": self.title,
             "type": self.panel_type,
@@ -60,7 +60,7 @@ class Dashboard:
     refresh: str = "30s"
 
     def to_dict(self) -> dict[str, Any]:
-        """Return a dictionary representation of this object."""
+        """Returns a dictionary representation of this object's fields."""
         return {
             "dashboard": {
                 "title": self.title,

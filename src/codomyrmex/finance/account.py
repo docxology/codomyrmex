@@ -32,7 +32,6 @@ class Account:
     """
 
     def __init__(self, name: str, account_type: AccountType, code: str = "") -> None:
-        """Initialize this instance."""
         self.id: str = str(uuid4())
         self.name = name
         self.account_type = account_type
@@ -77,7 +76,7 @@ class Account:
         self._frozen = False
 
     def to_dict(self) -> dict[str, Any]:
-        """Return a dictionary representation of this object."""
+        """Returns a dictionary representation of this object's fields."""
         return {
             "id": self.id,
             "name": self.name,
@@ -104,7 +103,6 @@ class AccountChart:
     """
 
     def __init__(self) -> None:
-        """Initialize this instance."""
         self._accounts: dict[str, Account] = {}
 
     def create(self, name: str, account_type: AccountType, code: str = "") -> Account:

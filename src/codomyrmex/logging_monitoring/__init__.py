@@ -43,7 +43,15 @@ from .core.correlation import (
     set_correlation_id,
     with_correlation,
 )
-from .core.logger_config import LogContext, get_logger, log_with_context, setup_logging
+from .core.logger_config import (
+    JSONFormatter,
+    LogContext,
+    configure_all_structured,
+    enable_structured_json,
+    get_logger,
+    log_with_context,
+    setup_logging,
+)
 
 
 def cli_commands() -> dict[str, object]:
@@ -85,4 +93,8 @@ __all__ = [
     # context management
     "LogContext",
     "log_with_context",
+    # structured JSON logging
+    "JSONFormatter",
+    "enable_structured_json",
+    "configure_all_structured",
 ]

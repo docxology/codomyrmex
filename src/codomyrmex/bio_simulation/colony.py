@@ -97,7 +97,7 @@ class Ant:
         return math.sqrt(self.x ** 2 + self.y ** 2)
 
     def to_dict(self) -> dict[str, Any]:
-        """Return a dictionary representation of this object."""
+        """Returns a dictionary representation of this object's fields."""
         return {
             "id": self.id, "state": self.state.name, "energy": self.energy,
             "x": self.x, "y": self.y, "carrying": self.carrying, "age": self.age,
@@ -127,7 +127,6 @@ class Colony:
     """
 
     def __init__(self, population_size: int, grid_size: int = 100) -> None:
-        """Initialize this instance."""
         self.ants = [Ant(id=i) for i in range(population_size)]
         self.tick = 0
         self.grid_size = grid_size

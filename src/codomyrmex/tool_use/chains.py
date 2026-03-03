@@ -43,7 +43,7 @@ class ChainStep:
     output_key: str = ""
 
     def to_dict(self) -> dict[str, Any]:
-        """Return a dictionary representation of this object."""
+        """Returns a dictionary representation of this object's fields."""
         return {
             "tool_name": self.tool_name,
             "input_mapping": self.input_mapping,
@@ -71,7 +71,7 @@ class ChainResult:
     duration_ms: float = 0.0
 
     def to_dict(self) -> dict[str, Any]:
-        """Return a dictionary representation of this object."""
+        """Returns a dictionary representation of this object's fields."""
         return {
             "success": self.success,
             "context": self.context,

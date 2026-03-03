@@ -33,7 +33,7 @@ class TextContent:
     text: str = ""
 
     def to_dict(self) -> dict[str, Any]:
-        """Return a dictionary representation of this object."""
+        """Returns a dictionary representation of this object's fields."""
         return {"type": self.type, "text": self.text}
 
 @dataclass
@@ -45,7 +45,7 @@ class ImageContent:
     alt_text: str | None = None
 
     def to_dict(self) -> dict[str, Any]:
-        """Return a dictionary representation of this object."""
+        """Returns a dictionary representation of this object's fields."""
         result = {
             "type": self.type,
             "source": self.source,
@@ -65,7 +65,7 @@ class FileContent:
     size: int | None = None
 
     def to_dict(self) -> dict[str, Any]:
-        """Return a dictionary representation of this object."""
+        """Returns a dictionary representation of this object's fields."""
         result = {
             "type": self.type,
             "name": self.name,
@@ -87,7 +87,7 @@ class ToolParameter:
     enum: list[Any] | None = None
 
     def to_dict(self) -> dict[str, Any]:
-        """Return a dictionary representation of this object."""
+        """Returns a dictionary representation of this object's fields."""
         result = {
             "name": self.name,
             "type": self.param_type,
@@ -120,7 +120,7 @@ class Tool:
     version: str = "1.0.0"
 
     def to_dict(self) -> dict[str, Any]:
-        """Return a dictionary representation of this object."""
+        """Returns a dictionary representation of this object's fields."""
         return {
             "name": self.name,
             "description": self.description,
@@ -160,7 +160,7 @@ class ToolCall:
     arguments: dict[str, Any] = field(default_factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        """Return a dictionary representation of this object."""
+        """Returns a dictionary representation of this object's fields."""
         return {
             "type": "tool_call",
             "id": self.id,
@@ -176,7 +176,7 @@ class ToolResult:
     is_error: bool = False
 
     def to_dict(self) -> dict[str, Any]:
-        """Return a dictionary representation of this object."""
+        """Returns a dictionary representation of this object's fields."""
         return {
             "type": "tool_result",
             "tool_call_id": self.tool_call_id,
@@ -193,7 +193,7 @@ class Message:
     metadata: dict[str, Any] = field(default_factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        """Return a dictionary representation of this object."""
+        """Returns a dictionary representation of this object's fields."""
         result = {
             "role": self.role.value,
             "content": [c.to_dict() for c in self.content],
@@ -241,7 +241,7 @@ class Conversation:
         self.messages.append(Message.from_text(MessageRole.ASSISTANT, text))
 
     def to_dict(self) -> dict[str, Any]:
-        """Return a dictionary representation of this object."""
+        """Returns a dictionary representation of this object's fields."""
         return {
             "id": self.id,
             "messages": [m.to_dict() for m in self.messages],
@@ -264,7 +264,7 @@ class Request:
     stop_sequences: list[str] = field(default_factory=list)
 
     def to_dict(self) -> dict[str, Any]:
-        """Return a dictionary representation of this object."""
+        """Returns a dictionary representation of this object's fields."""
         return {
             "conversation": self.conversation.to_dict(),
             "tools": [t.to_dict() for t in self.tools],
@@ -283,7 +283,7 @@ class Response:
     model: str = ""
 
     def to_dict(self) -> dict[str, Any]:
-        """Return a dictionary representation of this object."""
+        """Returns a dictionary representation of this object's fields."""
         return {
             "message": self.message.to_dict(),
             "finish_reason": self.finish_reason,

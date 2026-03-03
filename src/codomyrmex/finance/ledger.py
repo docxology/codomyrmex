@@ -25,7 +25,6 @@ class Ledger:
     """Double-entry bookkeeping engine."""
 
     def __init__(self):
-        """Initialize this instance."""
         self._accounts: dict[str, Account] = {}
         self._transactions: list[Transaction] = []
 

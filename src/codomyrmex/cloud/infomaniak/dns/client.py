@@ -45,7 +45,7 @@ class InfomaniakDNSClient(InfomaniakOpenStackBase):
             ]
         except Exception as e:
             logger.error(f"Failed to list zones: {e}")
-            return []
+            raise
 
     def get_zone(self, zone_id: str) -> dict[str, Any] | None:
         """Get a specific zone by ID or name."""
@@ -62,7 +62,7 @@ class InfomaniakDNSClient(InfomaniakOpenStackBase):
             return None
         except Exception as e:
             logger.error(f"Failed to get zone {zone_id}: {e}")
-            return None
+            raise
 
     def create_zone(
         self,
@@ -95,7 +95,7 @@ class InfomaniakDNSClient(InfomaniakOpenStackBase):
             return {"id": zone.id, "name": zone.name}
         except Exception as e:
             logger.error(f"Failed to create zone {name}: {e}")
-            return None
+            raise
 
     def delete_zone(self, zone_id: str) -> bool:
         """Delete a DNS zone."""
@@ -105,7 +105,7 @@ class InfomaniakDNSClient(InfomaniakOpenStackBase):
             return True
         except Exception as e:
             logger.error(f"Failed to delete zone {zone_id}: {e}")
-            return False
+            raise
 
     def update_zone(
         self,
@@ -129,7 +129,7 @@ class InfomaniakDNSClient(InfomaniakOpenStackBase):
             return True
         except Exception as e:
             logger.error(f"Failed to update zone {zone_id}: {e}")
-            return False
+            raise
 
     # =========================================================================
     # Record Set Operations
@@ -152,7 +152,7 @@ class InfomaniakDNSClient(InfomaniakOpenStackBase):
             ]
         except Exception as e:
             logger.error(f"Failed to list records in zone {zone_id}: {e}")
-            return []
+            raise
 
     def get_record(self, zone_id: str, record_id: str) -> dict[str, Any] | None:
         """Get a specific record set."""
@@ -169,7 +169,7 @@ class InfomaniakDNSClient(InfomaniakOpenStackBase):
             return None
         except Exception as e:
             logger.error(f"Failed to get record {record_id}: {e}")
-            return None
+            raise
 
     def create_record(
         self,
@@ -208,7 +208,7 @@ class InfomaniakDNSClient(InfomaniakOpenStackBase):
             return {"id": record.id, "name": record.name, "type": record_type}
         except Exception as e:
             logger.error(f"Failed to create record {name}: {e}")
-            return None
+            raise
 
     def update_record(
         self,
@@ -233,7 +233,7 @@ class InfomaniakDNSClient(InfomaniakOpenStackBase):
             return True
         except Exception as e:
             logger.error(f"Failed to update record {record_id}: {e}")
-            return False
+            raise
 
     def delete_record(self, zone_id: str, record_id: str) -> bool:
         """Delete a DNS record set."""
@@ -243,7 +243,7 @@ class InfomaniakDNSClient(InfomaniakOpenStackBase):
             return True
         except Exception as e:
             logger.error(f"Failed to delete record {record_id}: {e}")
-            return False
+            raise
 
     # =========================================================================
     # Reverse DNS (PTR) Operations
@@ -264,7 +264,7 @@ class InfomaniakDNSClient(InfomaniakOpenStackBase):
             ]
         except Exception as e:
             logger.error(f"Failed to list PTR records: {e}")
-            return []
+            raise
 
     def set_reverse_dns(
         self,
@@ -303,7 +303,7 @@ class InfomaniakDNSClient(InfomaniakOpenStackBase):
             return {"id": ptr.id, "address": floating_ip, "ptrdname": hostname}
         except Exception as e:
             logger.error(f"Failed to set reverse DNS for {floating_ip}: {e}")
-            return None
+            raise
 
     def get_reverse_dns(self, floating_ip: str) -> dict[str, Any] | None:
         """Get reverse DNS (PTR record) for a floating IP."""
@@ -323,7 +323,7 @@ class InfomaniakDNSClient(InfomaniakOpenStackBase):
             return None
         except Exception as e:
             logger.error(f"Failed to get reverse DNS for {floating_ip}: {e}")
-            return None
+            raise
 
     def delete_reverse_dns(self, floating_ip: str) -> bool:
         """Delete reverse DNS (PTR record) for a floating IP."""
@@ -338,4 +338,4 @@ class InfomaniakDNSClient(InfomaniakOpenStackBase):
             return True
         except Exception as e:
             logger.error(f"Failed to delete reverse DNS for {floating_ip}: {e}")
-            return False
+            raise

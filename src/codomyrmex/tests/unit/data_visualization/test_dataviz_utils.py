@@ -19,7 +19,7 @@ class TestPlotUtils:
 
     def test_save_plot_success(self, tmp_path):
         """Test functionality: save plot success."""
-        from codomyrmex.data_visualization.charts.plot_utils import save_plot
+        from codomyrmex.data_visualization.utils import save_plot
         fig, ax = plt.subplots()
         ax.plot([1, 2, 3], [1, 2, 3])
         output_path = str(tmp_path / "test_save.png")
@@ -31,7 +31,7 @@ class TestPlotUtils:
 
     def test_save_plot_creates_directory(self, tmp_path):
         """Test functionality: save plot creates directory."""
-        from codomyrmex.data_visualization.charts.plot_utils import save_plot
+        from codomyrmex.data_visualization.utils import save_plot
         fig, ax = plt.subplots()
         ax.plot([1, 2], [3, 4])
         output_path = str(tmp_path / "nested" / "dir" / "plot.png")
@@ -47,7 +47,7 @@ class TestPlotUtils:
         when 9,000+ tests are collected/imported beforehand. SVG exercises
         the same save_plot code path without the backend fragility.
         """
-        from codomyrmex.data_visualization.charts.plot_utils import save_plot
+        from codomyrmex.data_visualization.utils import save_plot
         fig, ax = plt.subplots()
         ax.plot([1, 2], [3, 4])
         output_path = str(tmp_path / "test_save.svg")
@@ -61,7 +61,7 @@ class TestPlotUtils:
 
     def test_apply_common_aesthetics(self):
         """Test functionality: apply common aesthetics."""
-        from codomyrmex.data_visualization.charts.plot_utils import (
+        from codomyrmex.data_visualization.utils import (
             apply_common_aesthetics,
         )
         fig, ax = plt.subplots()
@@ -76,26 +76,26 @@ class TestPlotUtils:
 
     def test_get_color_palette_default(self):
         """Test functionality: get color palette default."""
-        from codomyrmex.data_visualization.charts.plot_utils import get_color_palette
+        from codomyrmex.data_visualization.utils import get_color_palette
         palette = get_color_palette()
         assert len(palette) == 10
         assert all(c.startswith('#') for c in palette)
 
     def test_get_color_palette_custom_size(self):
         """Test functionality: get color palette custom size."""
-        from codomyrmex.data_visualization.charts.plot_utils import get_color_palette
+        from codomyrmex.data_visualization.utils import get_color_palette
         palette = get_color_palette(5)
         assert len(palette) == 5
 
     def test_get_color_palette_more_than_base(self):
         """Test functionality: get color palette more than base."""
-        from codomyrmex.data_visualization.charts.plot_utils import get_color_palette
+        from codomyrmex.data_visualization.utils import get_color_palette
         palette = get_color_palette(15)
         assert len(palette) == 15
 
     def test_apply_style(self):
         """Test functionality: apply style."""
-        from codomyrmex.data_visualization.charts.plot_utils import apply_style
+        from codomyrmex.data_visualization.utils import apply_style
         fig, ax = plt.subplots()
         result = apply_style(ax, "default")
         assert result is ax
@@ -105,5 +105,5 @@ class TestPlotUtils:
 
     def test_default_figure_size(self):
         """Test functionality: default figure size."""
-        from codomyrmex.data_visualization.charts.plot_utils import DEFAULT_FIGURE_SIZE
+        from codomyrmex.data_visualization.utils import DEFAULT_FIGURE_SIZE
         assert DEFAULT_FIGURE_SIZE == (10, 6)

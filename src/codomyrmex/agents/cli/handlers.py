@@ -114,7 +114,7 @@ def _handle_agent_execute(client_class, client_name: str, args: Any) -> bool:
             return False
 
     except Exception as e:
-        logger.error(f"{client_name} error: {str(e)}")
+        logger.exception("%s error", client_name)
         print_error(f"{client_name} error", context=str(e), exception=e)
         return False
 
@@ -150,7 +150,7 @@ def _handle_agent_stream(client_class, client_name: str, args: Any) -> bool:
         return True
 
     except Exception as e:
-        logger.error(f"{client_name} streaming error: {str(e)}")
+        logger.exception("%s streaming error", client_name)
         print_error(f"{client_name} streaming error", context=str(e), exception=e)
         return False
 
@@ -168,7 +168,7 @@ def handle_agent_setup(client_class, client_name: str, args: Any) -> bool:
         print_success(f"{client_name} setup completed")
         return True
     except Exception as e:
-        logger.warning("Failed to set up %s: %s", client_name, e)
+        logger.exception("Failed to set up %s", client_name)
         print_error(f"Error setting up {client_name}", exception=e)
         return False
 
@@ -189,7 +189,7 @@ def handle_agent_test(client_class, client_name: str, args: Any) -> bool:
             print_error(f"{client_name} connection test failed")
         return result
     except Exception as e:
-        logger.warning("Failed to test %s connection: %s", client_name, e)
+        logger.exception("Failed to test %s connection", client_name)
         print_error(f"Error testing {client_name} connection", exception=e)
         return False
 
@@ -526,7 +526,7 @@ def _get_droid_controller() -> Any | None:
         try:
             _droid_controller = create_default_controller()
         except Exception as e:
-            logger.error(f"Failed to create droid controller: {e}")
+            logger.exception("Failed to create droid controller")
             return None
     return _droid_controller
 

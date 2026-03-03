@@ -31,7 +31,7 @@ class AuditRecord:
     category: str = "general"  # auth, access, admin, data, system
 
     def to_dict(self) -> dict[str, Any]:
-        """Return a dictionary representation of this object."""
+        """Returns a dictionary representation of this object's fields."""
         return {
             "event_type": self.event_type,
             "user_id": self.user_id,

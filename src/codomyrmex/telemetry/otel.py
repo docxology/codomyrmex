@@ -61,7 +61,7 @@ class Span:
         self.status = status
 
     def to_dict(self) -> dict[str, Any]:
-        """Return a dictionary representation of this object."""
+        """Returns a dictionary representation of this object's fields."""
         return {
             "name": self.name,
             "trace_id": self.trace_id,

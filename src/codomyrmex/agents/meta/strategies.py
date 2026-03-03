@@ -39,7 +39,7 @@ class Strategy:
         self.success_rate = self.success_rate * (1 - weight) + (1.0 if success else 0.0) * weight
 
     def to_dict(self) -> dict[str, Any]:
-        """Return a dictionary representation of this object."""
+        """Returns a dictionary representation of this object's fields."""
         return {
             "name": self.name,
             "prompt_template": self.prompt_template[:100],
@@ -97,7 +97,7 @@ class StrategyLibrary:
         return len(self._strategies)
 
     def to_dict(self) -> dict[str, Any]:
-        """Return a dictionary representation of this object."""
+        """Returns a dictionary representation of this object's fields."""
         return {
             "strategies": [s.to_dict() for s in self.list_strategies()],
             "total": self.size,

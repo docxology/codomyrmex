@@ -1,3 +1,11 @@
+"""
+Health Checker for Codomyrmex System Discovery
+
+This module provides health checking capabilities for all
+Codomyrmex modules, including dependency validation, performance monitoring,
+and system health assessment.
+"""
+
 import importlib
 import inspect
 import logging
@@ -15,28 +23,11 @@ except ImportError:
     HAS_DOCKER = False
     docker = None
 
-from codomyrmex.coding.execution.executor import execute_code
-from codomyrmex.coding.static_analysis import analyze_file
-from codomyrmex.environment_setup.env_checker import validate_environment_completeness
-from codomyrmex.git_operations.core.git import check_git_availability
 from codomyrmex.logging_monitoring import (
     get_logger,
     log_with_context,
 )
-from codomyrmex.logistics.orchestration.project.workflow_dag import WorkflowDAG
-from codomyrmex.performance import get_system_metrics, profile_function
-from codomyrmex.security.digital import analyze_file_security
 
-"""
-Health Checker for Codomyrmex System Discovery
-
-This module provides health checking capabilities for all
-Codomyrmex modules, including dependency validation, performance monitoring,
-and system health assessment.
-"""
-
-
-# Import logging
 try:
     logger = get_logger(__name__)
 except ImportError:
@@ -213,12 +204,9 @@ class HealthChecker:
         result.checks_performed.extend(["logger_creation", "structured_logging"])
 
         try:
-
-            # Test logger creation
             test_logger = get_logger("health_check_test")
             test_logger.info("Health check test message")
 
-            # Test structured logging
             log_with_context("INFO", "Structured logging test", {"test": True})
 
             result.add_metric("logger_available", True)
@@ -231,8 +219,10 @@ class HealthChecker:
         result.checks_performed.extend(["dependency_check", "python_version"])
 
         try:
+            from codomyrmex.environment_setup.env_checker import (
+                validate_environment_completeness,
+            )
 
-            # Get the project root (assuming we're in the project)
             project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 
             is_complete, report = validate_environment_completeness(project_root)
@@ -251,8 +241,8 @@ class HealthChecker:
         result.checks_performed.extend(["docker_availability", "sandbox_execution", "code_review"])
 
         try:
+            from codomyrmex.coding.execution.executor import execute_code
 
-            # Test basic execution (this might require Docker)
             test_result = execute_code("python", "print('test')", timeout=5)
 
             if test_result.get("status") == "success":
@@ -268,8 +258,7 @@ class HealthChecker:
         result.checks_performed.extend(["tool_availability", "analysis_execution"])
 
         try:
-
-            # Create a simple test file
+            from codomyrmex.coding.static_analysis import analyze_file
 
             with tempfile.NamedTemporaryFile(mode='w', suffix='.py', delete=False) as f:
                 f.write("def test(): pass\n")
@@ -290,8 +279,7 @@ class HealthChecker:
         result.checks_performed.extend(["vulnerability_scanning", "secrets_detection"])
 
         try:
-
-            # Create a test file with potential security issues
+            from codomyrmex.security.digital import analyze_file_security
 
             with tempfile.NamedTemporaryFile(mode='w', suffix='.py', delete=False) as f:
                 f.write("import os\nos.system('ls')  # Potential security issue\n")
@@ -312,8 +300,8 @@ class HealthChecker:
         result.checks_performed.extend(["performance_monitoring", "resource_tracking"])
 
         try:
+            from codomyrmex.performance import get_system_metrics, profile_function
 
-            # Test performance profiling
             @profile_function
             def test_func():
                 return sum(range(100))
@@ -321,7 +309,6 @@ class HealthChecker:
             test_func()
             result.add_metric("profiling_working", True)
 
-            # Test system metrics
             metrics = get_system_metrics()
             result.add_metric("system_metrics_available", bool(metrics))
 
@@ -333,8 +320,10 @@ class HealthChecker:
         result.checks_performed.extend(["workflow_creation", "dag_validation"])
 
         try:
+            from codomyrmex.logistics.orchestration.project.workflow_dag import (
+                WorkflowDAG,
+            )
 
-            # Test DAG creation
             tasks = [
                 {"name": "task1", "module": "test", "action": "run", "dependencies": []},
                 {"name": "task2", "module": "test", "action": "run", "dependencies": ["task1"]},
@@ -357,14 +346,11 @@ class HealthChecker:
         result.checks_performed.extend(["docker_client", "image_management"])
 
         try:
-
-            # Test Docker client
             client = docker.from_env()
-            client.ping()  # Test connection
+            client.ping()
 
             result.add_metric("docker_available", True)
 
-            # Get basic info
             info = client.info()
             result.add_metric("docker_containers", info.get("Containers", 0))
             result.add_metric("docker_images", info.get("Images", 0))
@@ -374,21 +360,17 @@ class HealthChecker:
         except Exception as e:
             result.add_issue(f"Docker connection error: {str(e)}", "Check Docker daemon status")
 
-    # Add more module-specific checks as needed
     def _check_model_context_protocol(self, result: HealthCheckResult) -> None:
         """Check model context protocol module health."""
         result.checks_performed.append("mcp_initialization")
-        # Basic check - module import already verified
 
     def _check_terminal_interface(self, result: HealthCheckResult) -> None:
         """Check terminal interface module health."""
         result.checks_performed.append("terminal_capabilities")
-        # Basic check - module import already verified
 
     def _check_ai_code_editing(self, result: HealthCheckResult) -> None:
         """Check AI code editing module health."""
         result.checks_performed.append("ai_services")
-        # Would check AI service availability if configured
 
     def _check_data_visualization(self, result: HealthCheckResult) -> None:
         """Check data visualization module health."""
@@ -402,13 +384,13 @@ class HealthChecker:
     def _check_pattern_matching(self, result: HealthCheckResult) -> None:
         """Check pattern matching module health."""
         result.checks_performed.append("ast_processing")
-        # Basic AST functionality check
 
     def _check_git_operations(self, result: HealthCheckResult) -> None:
         """Check git operations module health."""
         result.checks_performed.append("git_availability")
 
         try:
+            from codomyrmex.git_operations.core.git import check_git_availability
             git_available = check_git_availability()
             result.add_metric("git_available", git_available)
 

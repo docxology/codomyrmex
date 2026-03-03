@@ -206,7 +206,7 @@ class TestDocumentationAccuracy:
 
     def test_plot_utilities_api_exists(self):
         """Test that documented plot utilities exist."""
-        from codomyrmex.data_visualization.charts.plot_utils import (
+        from codomyrmex.data_visualization.utils import (
             apply_common_aesthetics,
             save_plot,
         )

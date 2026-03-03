@@ -96,7 +96,7 @@ class Route:
         self.total_load += load
 
     def to_dict(self) -> dict[str, Any]:
-        """Return a dictionary representation of this object."""
+        """Returns a dictionary representation of this object's fields."""
         return {
             "id": self.id,
             "stops": [

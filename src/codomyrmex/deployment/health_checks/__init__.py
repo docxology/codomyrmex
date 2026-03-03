@@ -38,7 +38,7 @@ class HealthCheckResult:
     details: dict[str, Any] = field(default_factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        """Return a dictionary representation of this object."""
+        """Returns a dictionary representation of this object's fields."""
         return {
             "name": self.name,
             "status": self.status.value,
@@ -65,7 +65,7 @@ class AggregatedHealth:
         return sum(1 for c in self.checks if c.status == HealthStatus.UNHEALTHY)
 
     def to_dict(self) -> dict[str, Any]:
-        """Return a dictionary representation of this object."""
+        """Returns a dictionary representation of this object's fields."""
         return {
             "overall_status": self.overall_status.value,
             "healthy_count": self.healthy_count,

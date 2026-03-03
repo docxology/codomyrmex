@@ -40,7 +40,7 @@ class SubTask:
             self.task_id = str(uuid.uuid4())[:8]
 
     def to_dict(self) -> dict[str, Any]:
-        """Return a dictionary representation of this object."""
+        """Returns a dictionary representation of this object's fields."""
         return {
             "task_id": self.task_id,
             "description": self.description,

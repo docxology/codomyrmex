@@ -11,6 +11,14 @@ from datetime import UTC, datetime
 
 import pytest
 
+try:
+    from codomyrmex.api.openapi_generator import generate_openapi_spec as _probe  # noqa: F401
+    _API_AVAILABLE = True
+except ImportError:
+    _API_AVAILABLE = False
+
+pytestmark = pytest.mark.skipif(not _API_AVAILABLE, reason="api extra not installed; run: uv sync --extra api")
+
 from codomyrmex.api.documentation.doc_generator import (
     APIDocumentation,
     APIDocumentationGenerator,

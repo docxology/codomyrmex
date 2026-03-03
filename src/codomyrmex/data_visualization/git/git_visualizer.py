@@ -22,7 +22,7 @@ from typing import Any
 import matplotlib.patches as mpatches
 import matplotlib.pyplot as plt
 
-from codomyrmex.data_visualization.charts.plot_utils import (
+from codomyrmex.data_visualization.utils import (
     apply_common_aesthetics,
     save_plot,
 )
