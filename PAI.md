@@ -1,6 +1,6 @@
 # Codomyrmex &harr; PAI System Bridge
 
-**Version**: v1.0.8 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.0.7 | **Status**: Active | **Last Updated**: March 2026
 
 ## What Is PAI?
 
@@ -9,8 +9,8 @@ PAI (Personal AI Infrastructure) is the system at `~/.claude/PAI/`. It is **not*
 | Component | Count | Location |
 |-----------|-------|----------|
 | Algorithm | v3.5.0 | `~/.claude/PAI/SKILL.md` (CORE) |
-| Skills | 100 | `~/.claude/skills/` |
-| Hooks | 29 | `~/.claude/hooks/` |
+| Skills | 77+ | `~/.claude/skills/` |
+| Hooks | 22 | `~/.claude/hooks/` |
 | Tools | 60+ | `~/.claude/PAI/Tools/` |
 | Agents | 13 + subagent types | `~/.claude/PAI/PAIAGENTSYSTEM.md` |
 | Memory | WORK / STATE / LEARNING | `~/.claude/MEMORY/` |

@@ -6,9 +6,9 @@ from typing import Any
 
 from codomyrmex.logging_monitoring import get_logger
 
-from .definitions import PROMPT_DEFINITIONS, RESOURCE_DEFINITIONS, TOOL_DEFINITIONS
+from .definitions import _PROMPT_DEFINITIONS, _RESOURCE_DEFINITIONS, _TOOL_DEFINITIONS
 from .discovery import _discover_dynamic_tools
-from .proxy_tools import _get_package_version, tool_pai_status
+from .proxy_tools import _get_package_version, _tool_pai_status
 
 logger = get_logger(__name__)
 
@@ -41,7 +41,7 @@ def get_tool_registry() -> _ToolRegistry:
     registry = _ToolRegistry()
 
     # 1. Register Core Static Tools
-    for name, description, handler, input_schema in TOOL_DEFINITIONS:
+    for name, description, handler, input_schema in _TOOL_DEFINITIONS:
         registry.register(
             tool_name=name,
             schema={
@@ -110,7 +110,7 @@ def create_codomyrmex_mcp_server(
             )
 
     # ── Register resources ────────────────────────────────────────
-    for uri, res_name, res_desc, mime in RESOURCE_DEFINITIONS:
+    for uri, res_name, res_desc, mime in _RESOURCE_DEFINITIONS:
         if uri == "codomyrmex://modules":
             def _modules_provider() -> str:
                 import codomyrmex
@@ -118,7 +118,7 @@ def create_codomyrmex_mcp_server(
             provider = _modules_provider
         elif uri == "codomyrmex://status":
             def _status_provider() -> str:
-                return json.dumps(tool_pai_status())
+                return json.dumps(_tool_pai_status())
             provider = _status_provider
         else:
             provider = None
@@ -132,7 +132,7 @@ def create_codomyrmex_mcp_server(
         )
 
     # ── Register prompts ──────────────────────────────────────────
-    for prompt_name, prompt_desc, prompt_args, template in PROMPT_DEFINITIONS:
+    for prompt_name, prompt_desc, prompt_args, template in _PROMPT_DEFINITIONS:
         server.register_prompt(
             name=prompt_name,
             description=prompt_desc,
@@ -205,7 +205,7 @@ def call_tool(name: str, **kwargs: Any) -> dict[str, Any]:
             return trusted_call_tool(name, **kwargs)
         except KeyError:
             # Re-raise KeyError to maintain contract if tool not found
-            all_static = sorted(t[0] for t in TOOL_DEFINITIONS)
+            all_static = sorted(t[0] for t in _TOOL_DEFINITIONS)
             raise KeyError(f"Unknown tool: {name!r}. Available (static): {all_static}") from None
         except SecurityError as exc:
             return {"error": MCPToolError(
@@ -249,7 +249,7 @@ def get_skill_manifest() -> dict[str, Any]:
             "category": t[0].split(".")[1] if "." in t[0] else "general",
             "input_schema": t[3],
         }
-        for t in TOOL_DEFINITIONS
+        for t in _TOOL_DEFINITIONS
     ]
 
     # Merge dynamic tools
@@ -291,11 +291,11 @@ def get_skill_manifest() -> dict[str, Any]:
         "tools": all_tools,
         "resources": [
             {"uri": r[0], "name": r[1], "description": r[2]}
-            for r in RESOURCE_DEFINITIONS
+            for r in _RESOURCE_DEFINITIONS
         ],
         "prompts": [
             {"name": p[0], "description": p[1]}
-            for p in PROMPT_DEFINITIONS
+            for p in _PROMPT_DEFINITIONS
         ],
         "workflows": [
             {

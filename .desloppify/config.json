@@ -5,7 +5,7 @@
   "holistic_max_age_days": 30,
   "generate_scorecard": true,
   "badge_path": "scorecard.png",
-  "exclude": [".claude", ".gemini", ".benchmarks", ".pipelines", ".mypy_cache"],
+  "exclude": [],
   "ignore": [],
   "ignore_metadata": {},
   "zone_overrides": {

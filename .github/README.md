@@ -1,9 +1,8 @@
 <p align="center">
-  <a href="https://github.com/docxology/codomyrmex/actions/workflows/ci.yml"><img src="https://github.com/docxology/codomyrmex/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
-  <a href="https://github.com/docxology/codomyrmex/actions/workflows/security.yml"><img src="https://github.com/docxology/codomyrmex/actions/workflows/security.yml/badge.svg" alt="Security"></a>
-  <a href="https://github.com/docxology/codomyrmex/actions/workflows/auto-merge.yml"><img src="https://github.com/docxology/codomyrmex/actions/workflows/auto-merge.yml/badge.svg" alt="Auto-Merge"></a>
   <img src="https://img.shields.io/badge/Codomyrmex-v1.0.7-blue?style=for-the-badge" alt="Version">
   <img src="https://img.shields.io/badge/Modules-122-green?style=for-the-badge" alt="Modules">
+  <img src="https://img.shields.io/badge/Python_Files-1800+-orange?style=for-the-badge" alt="Python Files">
+  <img src="https://img.shields.io/badge/Tests-800+-purple?style=for-the-badge" alt="Tests">
   <img src="https://img.shields.io/badge/Zero--Mock-100%25-brightgreen?style=for-the-badge" alt="Zero Mock">
   <img src="https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge" alt="License">
 </p>

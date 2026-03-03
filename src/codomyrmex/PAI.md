@@ -1,6 +1,6 @@
 # Personal AI Infrastructure — src/codomyrmex
 
-**Version**: v1.0.8 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 

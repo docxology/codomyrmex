@@ -270,11 +270,6 @@ cache = [
     "redis>=5.0.0",
 ]
 
-# soul.py — Markdown-based persistent LLM agent memory — install with: uv sync --extra soul
-soul = [
-    "soul-agent>=0.1.4",  # Zero-database, file-based persistent agent memory
-]
-
 [project.urls]
 Homepage = "https://github.com/docxology/codomyrmex"
 Repository = "https://github.com/docxology/codomyrmex"

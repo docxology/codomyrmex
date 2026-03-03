@@ -101,4 +101,4 @@ Tests that require a live `GEMINI_API_KEY` are guarded with `@pytest.mark.skipif
 
 ---
 
-See [AGENTS.md](AGENTS.md), [SPEC.md](SPEC.md), and [PAI.md](PAI.md) for companion documentation.
+This module does not yet have AGENTS.md, SPEC.md, or PAI.md companion files.

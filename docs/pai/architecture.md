@@ -1,10 +1,10 @@
 # PAI-Codomyrmex Architecture
 
-**Version**: v1.0.8 | **Last Updated**: March 2026
+**Version**: v1.0.5 | **Last Updated**: March 2026
 
 ## System Overview
 
-PAI (Personal AI Infrastructure) is the orchestrator that runs The Algorithm on every Claude Code prompt. Codomyrmex is the toolbox that PAI agents consume via MCP (Model Context Protocol). The PAI Dashboard (port 8787) is a Codomyrmex-integrated fork of [danielmiessler/Personal_AI_Infrastructure](https://github.com/danielmiessler/Personal_AI_Infrastructure).
+PAI (Personal AI Infrastructure) is the orchestrator that runs The Algorithm on every Claude Code prompt. Codomyrmex is the toolbox that PAI agents consume via MCP (Model Context Protocol). The PAI Dashboard (port 8889) is a Codomyrmex-integrated fork of [danielmiessler/Personal_AI_Infrastructure](https://github.com/danielmiessler/Personal_AI_Infrastructure).
 
 ![PAI Analytics Dashboard — The primary interface showing missions, projects, tasks, and completion metrics](screenshots/pai_analytics.png)
 
@@ -32,7 +32,7 @@ PAI (Personal AI Infrastructure) is the orchestrator that runs The Algorithm on 
 │                                      │
 │  ┌───────────┐  ┌────────────────┐   │
 │  │ PAIBridge  │  │ MCP Bridge     │   │
-│  │ Discovery  │  │ 9 static proxy tools + │   │
+│  │ Discovery  │  │ 20 static +    │   │
 │  │ Validation │  │ auto-discovered│   │
 │  └───────────┘  └───────┬────────┘   │
 │                         │            │

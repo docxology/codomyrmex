@@ -379,8 +379,8 @@ class APIHandler:
                 result = {"message": "Trust levels reset to UNTRUSTED"}
             elif action == "status":
                 try:
-                    from codomyrmex.agents.pai.mcp_bridge import tool_pai_status
-                    result = tool_pai_status()
+                    from codomyrmex.agents.pai.mcp_bridge import _tool_pai_status
+                    result = _tool_pai_status()
                 except Exception as _status_err:
                     result = {
                         "status": "degraded",

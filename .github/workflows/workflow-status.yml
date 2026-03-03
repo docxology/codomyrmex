@@ -9,20 +9,6 @@ on:
       - "Documentation Build and Deploy"
       - "Performance Benchmarks"
       - "Repository Maintenance"
-      - "Auto-Merge Agent PRs"
-      - "PR Auto-Labeler"
-      - "Agent PR Welcome"
-      - "Agent Metrics Dashboard"
-      - "Code Health Dashboard"
-      - "PR Title Check"
-      - "Dependabot Auto Approve"
-      - "Dependency Review"
-      - "Auto Assign PR Author"
-      - "First Interaction"
-      - "PR Linter Comments"
-      - "Post Coverage Comment"
-      - "Release Drafter"
-      - "First PR Merged Celebration"
     types:
       - completed
   schedule:
@@ -59,21 +45,7 @@ jobs:
               'Security Scanning and Dependency Management',
               'Documentation Build and Deploy',
               'Performance Benchmarks',
-              'Repository Maintenance',
-              'Auto-Merge Agent PRs',
-              'PR Auto-Labeler',
-              'Agent PR Welcome',
-              'Agent Metrics Dashboard',
-              'Code Health Dashboard',
-              'PR Title Check',
-              'Dependabot Auto Approve',
-              'Dependency Review',
-              'Auto Assign PR Author',
-              'First Interaction',
-              'PR Linter Comments',
-              'Post Coverage Comment',
-              'Release Drafter',
-              'First PR Merged Celebration'
+              'Repository Maintenance'
             ];
             
             // Proper name-to-filename mapping
@@ -83,21 +55,7 @@ jobs:
               'Security Scanning and Dependency Management': 'security.yml',
               'Documentation Build and Deploy': 'documentation.yml',
               'Performance Benchmarks': 'benchmarks.yml',
-              'Repository Maintenance': 'maintenance.yml',
-              'Auto-Merge Agent PRs': 'auto-merge.yml',
-              'PR Auto-Labeler': 'pr-labeler.yml',
-              'Agent PR Welcome': 'agent-welcome.yml',
-              'Agent Metrics Dashboard': 'agent-metrics.yml',
-              'Code Health Dashboard': 'code-health.yml',
-              'PR Title Check': 'pr-title-check.yml',
-              'Dependabot Auto Approve': 'dependabot-auto-approve.yml',
-              'Dependency Review': 'dependency-review.yml',
-              'Auto Assign PR Author': 'auto-assign.yml',
-              'First Interaction': 'first-interaction.yml',
-              'PR Linter Comments': 'pr-linter-comments.yml',
-              'Post Coverage Comment': 'pr-coverage-comment.yml',
-              'Release Drafter': 'release-drafter.yml',
-              'First PR Merged Celebration': 'first-pr-merged.yml'
+              'Repository Maintenance': 'maintenance.yml'
             };
             
             let statusData = {

@@ -14,11 +14,11 @@ class TestWorkflowConcurrent:
     """Concurrent execution of workflow functions."""
 
     def test_concurrent_module_listing(self):
-        """10 concurrent tool_list_modules calls complete without deadlock."""
-        from codomyrmex.agents.pai.mcp_bridge import tool_list_modules
+        """10 concurrent _tool_list_modules calls complete without deadlock."""
+        from codomyrmex.agents.pai.mcp_bridge import _tool_list_modules
 
         with concurrent.futures.ThreadPoolExecutor(max_workers=10) as pool:
-            futures = [pool.submit(tool_list_modules) for _ in range(10)]
+            futures = [pool.submit(_tool_list_modules) for _ in range(10)]
             results = [f.result(timeout=30) for f in futures]
 
         assert len(results) == 10
@@ -28,13 +28,13 @@ class TestWorkflowConcurrent:
 
     def test_concurrent_readme_fetches(self):
         """Concurrent README fetches for different modules succeed."""
-        from codomyrmex.agents.pai.mcp_bridge import tool_get_module_readme
+        from codomyrmex.agents.pai.mcp_bridge import _tool_get_module_readme
 
         modules = ["agents", "events", "orchestrator", "utils", "coding"]
 
         with concurrent.futures.ThreadPoolExecutor(max_workers=5) as pool:
             futures = {
-                module: pool.submit(tool_get_module_readme, module=module)
+                module: pool.submit(_tool_get_module_readme, module=module)
                 for module in modules
             }
             results = {m: f.result(timeout=30) for m, f in futures.items()}
@@ -58,13 +58,13 @@ class TestWorkflowConcurrent:
     def test_concurrent_results_independent(self):
         """Concurrent calls produce independent results (no cross-contamination)."""
         from codomyrmex.agents.pai.mcp_bridge import (
-            tool_list_modules,
-            tool_pai_status,
+            _tool_list_modules,
+            _tool_pai_status,
         )
 
         with concurrent.futures.ThreadPoolExecutor(max_workers=4) as pool:
-            f_mod = pool.submit(tool_list_modules)
-            f_status = pool.submit(tool_pai_status)
+            f_mod = pool.submit(_tool_list_modules)
+            f_status = pool.submit(_tool_pai_status)
 
             mod_result = f_mod.result(timeout=30)
             status_result = f_status.result(timeout=30)

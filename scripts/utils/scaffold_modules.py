@@ -424,7 +424,7 @@ def main():
     if config_path.exists():
         with open(config_path, "r") as f:
             config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/utils/config.yaml")
+            print("Loaded config from config/utils/config.yaml")
 
     """Main demonstration."""
     raise NotImplementedError(

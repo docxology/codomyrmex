@@ -83,17 +83,17 @@ jobs:
           # Timing configuration
           days-before-stale: 60
           days-before-close: 7
-          days-before-pr-stale: 90
-          days-before-pr-close: 14
+          days-before-pr-stale: 30
+          days-before-pr-close: 7
           
           # Label configuration
           stale-issue-label: 'stale'
           stale-pr-label: 'stale'
-          exempt-issue-labels: 'keep-open,pinned,security,help-wanted,good-first-issue,jules,agent-task'
-          exempt-pr-labels: 'keep-open,pinned,security,work-in-progress,wip,jules,agent-pr,auto-merge'
+          exempt-issue-labels: 'keep-open,pinned,security,help-wanted,good-first-issue'
+          exempt-pr-labels: 'keep-open,pinned,security,work-in-progress,wip'
           
           # Operation limits
-          operations-per-run: 100
+          operations-per-run: 30
           remove-stale-when-updated: true
           
           # Enable debug output

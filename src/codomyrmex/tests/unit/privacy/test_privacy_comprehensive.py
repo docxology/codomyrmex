@@ -206,7 +206,7 @@ class TestMaskHash:
 
     def test_deterministic(self):
         """Same input produces same output."""
-        assert mask_hash("secret") == mask_hash("secret")
+        assert mask_hash("dummy_sec") == mask_hash("dummy_sec")
 
     def test_different_inputs_differ(self):
         """Different inputs produce different hashes."""
@@ -301,8 +301,8 @@ class TestMaskPartial:
 
     def test_single_visible_char(self):
         """Only last character visible."""
-        result = mask_partial("SECRET", visible_chars=1)
-        assert result == "*****T"
+        result = mask_partial("HIDDEN", visible_chars=1)
+        assert result == "*****N"
 
     def test_zero_visible_chars(self):
         """Zero visible chars: masks full length then appends value[-0:] which is full value.
@@ -600,18 +600,18 @@ class TestPrivacyClass:
     def test_process_hash_strategy(self):
         """Hash strategy produces correct sha256 output."""
         p = Privacy()
-        p.add_rule(PrivacyRule("secret", "hash"))
-        result = p.process({"secret": "password123"})
-        expected = hashlib.sha256(b"password123").hexdigest()
-        assert result["secret"] == expected
+        p.add_rule(PrivacyRule("dummy_sec", "hash"))
+        result = p.process({"dummy_sec": "dummy_pass_word"})
+        expected = hashlib.sha256(b"dummy_pass_word").hexdigest()
+        assert result["dummy_sec"] == expected
 
     def test_process_hash_with_md5(self):
         """Hash strategy with md5 algorithm parameter."""
         p = Privacy()
-        p.add_rule(PrivacyRule("secret", "hash", {"algorithm": "md5"}))
-        result = p.process({"secret": "password123"})
-        expected = hashlib.md5(b"password123").hexdigest()
-        assert result["secret"] == expected
+        p.add_rule(PrivacyRule("dummy_sec", "hash", {"algorithm": "md5"}))
+        result = p.process({"dummy_sec": "dummy_pass_word"})
+        expected = hashlib.md5(b"dummy_pass_word").hexdigest()
+        assert result["dummy_sec"] == expected
 
     def test_process_redact_strategy(self):
         """Redact strategy replaces with ***."""
@@ -703,12 +703,12 @@ class TestPrivacyClass:
         p = Privacy()
         p.add_rule(PrivacyRule("email", "email"))
         p.add_rule(PrivacyRule("ssn", "redact"))
-        p.add_rule(PrivacyRule("secret", "hash"))
-        data = {"email": "a@b.com", "ssn": "111-22-3333", "secret": "pwd"}
+        p.add_rule(PrivacyRule("dummy_sec", "hash"))
+        data = {"email": "a@b.com", "ssn": "111-22-3333", "dummy_sec": "pwd"}
         result = p.process(data)
         assert "@b.com" in result["email"]
         assert result["ssn"] == "***"
-        assert result["secret"] == hashlib.sha256(b"pwd").hexdigest()
+        assert result["dummy_sec"] == hashlib.sha256(b"pwd").hexdigest()
 
     def test_process_converts_to_string_for_hash(self):
         """Numeric value is converted to string before hashing."""

@@ -6,21 +6,21 @@ or direct Python calls.
 """
 
 from .mcp.definitions import (
-    PROMPT_DEFINITIONS,
-    RESOURCE_DEFINITIONS,
-    TOOL_DEFINITIONS,
+    _PROMPT_DEFINITIONS,
+    _RESOURCE_DEFINITIONS,
+    _TOOL_DEFINITIONS,
 )
 from .mcp.discovery import get_discovery_metrics, invalidate_tool_cache
 from .mcp.proxy_tools import (
-    tool_call_module_function,
-    tool_get_module_readme,
-    tool_list_module_functions,
-    tool_list_modules,
-    tool_list_workflows,
-    tool_module_info,
-    tool_pai_awareness,
-    tool_pai_status,
-    tool_run_tests,
+    _tool_call_module_function,
+    _tool_get_module_readme,
+    _tool_list_module_functions,
+    _tool_list_modules,
+    _tool_list_workflows,
+    _tool_module_info,
+    _tool_pai_awareness,
+    _tool_pai_status,
+    _tool_run_tests,
 )
 from .mcp.server import (
     call_tool,
@@ -41,17 +41,17 @@ __all__ = [
     "TOOL_COUNT",
     "RESOURCE_COUNT",
     "PROMPT_COUNT",
-    "tool_call_module_function",
-    "tool_get_module_readme",
-    "tool_list_module_functions",
-    "tool_list_modules",
-    "tool_list_workflows",
-    "tool_module_info",
-    "tool_pai_awareness",
-    "tool_pai_status",
-    "tool_run_tests",
+    "_tool_call_module_function",
+    "_tool_get_module_readme",
+    "_tool_list_module_functions",
+    "_tool_list_modules",
+    "_tool_list_workflows",
+    "_tool_module_info",
+    "_tool_pai_awareness",
+    "_tool_pai_status",
+    "_tool_run_tests",
 ]
 
-TOOL_COUNT: int = len(TOOL_DEFINITIONS)
-RESOURCE_COUNT: int = len(RESOURCE_DEFINITIONS)
-PROMPT_COUNT: int = len(PROMPT_DEFINITIONS)
+TOOL_COUNT: int = len(_TOOL_DEFINITIONS)
+RESOURCE_COUNT: int = len(_RESOURCE_DEFINITIONS)
+PROMPT_COUNT: int = len(_PROMPT_DEFINITIONS)

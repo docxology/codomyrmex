@@ -27,7 +27,7 @@ Four-file decomposition of the original monolithic `mcp_bridge.py`:
 
 ### `get_tool_registry()` (server.py)
 
-Returns a fully-populated `_ToolRegistry` with all static tools from `TOOL_DEFINITIONS` and all dynamically discovered module tools.
+Returns a fully-populated `_ToolRegistry` with all static tools from `_TOOL_DEFINITIONS` and all dynamically discovered module tools.
 
 ### `create_codomyrmex_mcp_server()` (server.py)
 
@@ -69,8 +69,8 @@ Thread-safe, TTL-cached discovery. Uses `_find_mcp_modules()` to locate all pack
 ## Constraints
 
 - Cache TTL defaults to 300 seconds; configurable via `CODOMYRMEX_MCP_CACHE_TTL` environment variable.
-- `tool_call_module_function` blocks private function calls (names starting with `_`) and non-callable attributes.
-- `tool_run_tests` enforces a 120-second subprocess timeout.
+- `_tool_call_module_function` blocks private function calls (names starting with `_`) and non-callable attributes.
+- `_tool_run_tests` enforces a 120-second subprocess timeout.
 - Zero-mock: all tools perform real operations; `NotImplementedError` for unimplemented paths.
 
 ## Error Handling

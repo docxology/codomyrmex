@@ -11,11 +11,11 @@ from pathlib import Path
 import pytest
 
 from codomyrmex.agents.pai.mcp.discovery import (
-    tool_invalidate_cache,
+    _tool_invalidate_cache,
 )
 from codomyrmex.agents.pai.mcp.proxy_tools import (
     _PROJECT_ROOT,
-    tool_list_workflows,
+    _tool_list_workflows,
 )
 from codomyrmex.agents.pai.mcp_bridge import (
     get_tool_registry,
@@ -102,10 +102,7 @@ def test_verify_capabilities_structure():
     assert "destructive" in tools
     assert "total" in tools
     assert "by_category" in tools
-    assert (
-        tools["by_category"]["safe"] + tools["by_category"]["destructive"]
-        == tools["total"]
-    )
+    assert tools["by_category"]["safe"] + tools["by_category"]["destructive"] == tools["total"]
 
     # Check trust structure
     trust = report["trust"]
@@ -178,16 +175,16 @@ def test_trusted_call_tool_validation_failure(fresh_trust_registry):
         trusted_call_tool("codomyrmex.read_file", path=123)
 
 
-# ── Test: tool_list_workflows ────────────────────────────────────────
+# ── Test: _tool_list_workflows ────────────────────────────────────────
 
 
-def testtool_list_workflows_structure():
-    """Test that tool_list_workflows returns a well-structured dict.
+def test_tool_list_workflows_structure():
+    """Test that _tool_list_workflows returns a well-structured dict.
 
     Calls the real function against the real _PROJECT_ROOT. We verify
     the return shape regardless of whether workflows exist.
     """
-    result = tool_list_workflows()
+    result = _tool_list_workflows()
 
     assert isinstance(result, dict)
     assert "count" in result
@@ -197,13 +194,15 @@ def testtool_list_workflows_structure():
     assert result["count"] >= 0
 
 
-def testtool_list_workflows_with_files(_cleanup_workflow_dir):
+def test_tool_list_workflows_with_files(_cleanup_workflow_dir):
     """Test listing workflows when .agent/workflows contains .md files."""
     workflows_dir, created_files = _cleanup_workflow_dir
 
     # Create a valid workflow with frontmatter
     wf1 = workflows_dir / "_test_hardening_flow.md"
-    wf1.write_text("---\ndescription: Test workflow\n---\nSteps...", encoding="utf-8")
+    wf1.write_text(
+        "---\ndescription: Test workflow\n---\nSteps...", encoding="utf-8"
+    )
     created_files.append(wf1)
 
     # Create a workflow without frontmatter
@@ -211,25 +210,29 @@ def testtool_list_workflows_with_files(_cleanup_workflow_dir):
     wf2.write_text("# Just markdown", encoding="utf-8")
     created_files.append(wf2)
 
-    result = tool_list_workflows()
+    result = _tool_list_workflows()
 
     # We created 2 files; there may be others already present
     assert result["count"] >= 2
     workflows = result["workflows"]
 
-    item1 = next((w for w in workflows if w["name"] == "_test_hardening_flow"), None)
+    item1 = next(
+        (w for w in workflows if w["name"] == "_test_hardening_flow"), None
+    )
     assert item1 is not None, "Did not find _test_hardening_flow in results"
     assert item1["description"] == "Test workflow"
 
-    item2 = next((w for w in workflows if w["name"] == "_test_hardening_raw"), None)
+    item2 = next(
+        (w for w in workflows if w["name"] == "_test_hardening_raw"), None
+    )
     assert item2 is not None, "Did not find _test_hardening_raw in results"
     assert item2["description"] == "No description"
 
 
-# ── Test: tool_invalidate_cache ──────────────────────────────────────
+# ── Test: _tool_invalidate_cache ──────────────────────────────────────
 
 
-def testtool_invalidate_cache_full():
+def test_tool_invalidate_cache_full():
     """Test full cache invalidation using real functions.
 
     Calls the real invalidate_tool_cache, then verifies that the bridge
@@ -238,13 +241,13 @@ def testtool_invalidate_cache_full():
     # Ensure cache is populated first by calling get_tool_registry
     get_tool_registry()
 
-    result = tool_invalidate_cache()
+    result = _tool_invalidate_cache()
     assert isinstance(result, dict)
     assert result["cleared"] is True
 
 
 @pytest.mark.slow
-def testtool_invalidate_cache_module():
+def test_tool_invalidate_cache_module():
     """Test partial module rescan using a real module.
 
     Scans a real codomyrmex module with @mcp_tool decorators and
@@ -254,7 +257,7 @@ def testtool_invalidate_cache_module():
     get_tool_registry()
 
     # Rescan a real module — git_analysis.mcp_tools has @mcp_tool decorators
-    result = tool_invalidate_cache(module="codomyrmex.git_analysis.mcp_tools")
+    result = _tool_invalidate_cache(module="codomyrmex.git_analysis.mcp_tools")
 
     assert isinstance(result, dict)
     assert result["cleared"] is False

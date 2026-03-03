@@ -92,7 +92,7 @@ class TestCrumbCleaner:
         """Test functionality: configure blacklist add."""
         self.cleaner.configure_blacklist(add=["custom_field"])
         assert "custom_field" in self.cleaner._blacklist
-        data = {"custom_field": "secret", "name": "test"}
+        data = {"custom_field": "dummy_sec", "name": "test"}
         result = self.cleaner.scrub(data)
         assert "custom_field" not in result
 
@@ -156,7 +156,7 @@ class TestMixnetProxy:
     def test_route_payload(self):
         """Test functionality: route payload."""
         proxy = MixnetProxy()
-        payload = b"secret message"
+        payload = b"hidden message"
         result = proxy.route_payload(payload, hops=3)
         assert result == payload
 
@@ -233,8 +233,8 @@ class TestMasking:
     def test_mask_hash(self):
         from codomyrmex.privacy.privacy import mask_hash
 
-        result = mask_hash("secret")
-        expected = hashlib.sha256(b"secret").hexdigest()
+        result = mask_hash("dummy_sec")
+        expected = hashlib.sha256(b"dummy_sec").hexdigest()
         assert result == expected
 
     def test_mask_redact(self):
@@ -313,9 +313,9 @@ class TestPrivacyProcessor:
         from codomyrmex.privacy.privacy import Privacy, PrivacyRule
 
         p = Privacy()
-        p.add_rule(PrivacyRule("secret", "hash"))
-        result = p.process({"secret": "my-password"})
-        assert result["secret"] == hashlib.sha256(b"my-password").hexdigest()
+        p.add_rule(PrivacyRule("dummy_sec", "hash"))
+        result = p.process({"dummy_sec": "dummy_pass_word_2"})
+        assert result["dummy_sec"] == hashlib.sha256(b"dummy_pass_word_2").hexdigest()
 
     def test_partial_strategy(self):
         from codomyrmex.privacy.privacy import Privacy, PrivacyRule
@@ -376,10 +376,10 @@ class TestCrumbCleanerEdgeCases:
 
     def test_configure_blacklist_add_and_remove(self):
         """Adding and removing blacklist entries in sequence works."""
-        self.cleaner.configure_blacklist(add=["custom_secret"])
-        assert "custom_secret" in self.cleaner._blacklist
-        self.cleaner.configure_blacklist(remove=["custom_secret"])
-        assert "custom_secret" not in self.cleaner._blacklist
+        self.cleaner.configure_blacklist(add=["custom_hidden"])
+        assert "custom_hidden" in self.cleaner._blacklist
+        self.cleaner.configure_blacklist(remove=["custom_hidden"])
+        assert "custom_hidden" not in self.cleaner._blacklist
 
     def test_scrub_preserves_numeric_values(self):
         """Scrub preserves integer and float values."""

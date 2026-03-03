@@ -11,7 +11,7 @@ from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
 
-def tool_invalidate_cache(module: str | None = None) -> dict[str, Any]:
+def _tool_invalidate_cache(module: str | None = None) -> dict[str, Any]:
     """Invalidate the dynamic tool discovery cache.
 
     Args:
