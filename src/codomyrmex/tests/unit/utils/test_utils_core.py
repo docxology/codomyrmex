@@ -206,53 +206,46 @@ class TestTruncateString:
 class TestGetEnv:
     """Tests for get_env function."""
 
-    def test_existing_env_var(self):
+    def test_existing_env_var(self, monkeypatch):
         """Test getting existing environment variable."""
         from codomyrmex.utils import get_env
 
-        os.environ["TEST_VAR"] = "test_value"
-        try:
-            result = get_env("TEST_VAR")
-            assert result == "test_value"
-        finally:
-            del os.environ["TEST_VAR"]
+        monkeypatch.setenv("TEST_VAR", "test_value")
+        result = get_env("TEST_VAR")
+        assert result == "test_value"
 
-    def test_missing_env_var_with_default(self):
+    def test_missing_env_var_with_default(self, monkeypatch):
         """Test missing env var with default."""
         from codomyrmex.utils import get_env
 
+        monkeypatch.delenv("NONEXISTENT_VAR", raising=False)
         result = get_env("NONEXISTENT_VAR", default="default_value")
 
         assert result == "default_value"
 
-    def test_missing_required_env_var(self):
+    def test_missing_required_env_var(self, monkeypatch):
         """Test missing required env var raises error."""
         from codomyrmex.utils import get_env
 
+        monkeypatch.delenv("NONEXISTENT_VAR", raising=False)
         with pytest.raises(ValueError):
             get_env("NONEXISTENT_VAR", required=True)
 
-    def test_existing_required_env_var(self):
+    def test_existing_required_env_var(self, monkeypatch):
         """Test existing required env var succeeds."""
         from codomyrmex.utils import get_env
 
-        os.environ["REQUIRED_VAR"] = "value"
-        try:
-            result = get_env("REQUIRED_VAR", required=True)
-            assert result == "value"
-        finally:
-            del os.environ["REQUIRED_VAR"]
+        monkeypatch.setenv("REQUIRED_VAR", "value")
+        result = get_env("REQUIRED_VAR", required=True)
+        assert result == "value"
 
-    def test_env_var_with_empty_value(self):
+    def test_env_var_with_empty_value(self, monkeypatch):
         """Test env var with empty value."""
         from codomyrmex.utils import get_env
 
-        os.environ["EMPTY_VAR"] = ""
-        try:
-            result = get_env("EMPTY_VAR", default="default")
-            assert result == ""  # Empty string is valid
-        finally:
-            del os.environ["EMPTY_VAR"]
+        monkeypatch.setenv("EMPTY_VAR", "")
+        result = get_env("EMPTY_VAR", default="default")
+        assert result == ""  # Empty string is valid
 
 
 @pytest.mark.unit
