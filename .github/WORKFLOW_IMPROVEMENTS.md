@@ -2,61 +2,66 @@
 
 **Last Updated**: March 2026
 
-## Current State: 24 Active Workflows
+## Current State: 29 Active Workflows
 
-### Core CI/CD (4)
+### Core CI/CD & Security (5)
 
 | # | Workflow | File | Status |
 |:-:|---------|------|:------:|
 | 1 | Continuous Integration | `ci.yml` | ✅ |
 | 2 | Pre-commit Checks | `pre-commit.yml` | ✅ |
 | 3 | Security Scanning | `security.yml` | ✅ |
-| 4 | Release & PyPI | `release.yml` | ✅ |
+| 4 | Dependency Review | `dependency-review.yml` | ✅ |
+| 5 | Release & PyPI | `release.yml` | ✅ |
 
-### Agent Infrastructure (6)
+### PR Automation & Agent Infrastructure (10)
 
 | # | Workflow | File | Status |
 |:-:|---------|------|:------:|
-| 5 | Auto-Merge Agent PRs | `auto-merge.yml` | ✅ |
-| 6 | PR Auto-Labeler | `pr-labeler.yml` | ✅ |
-| 7 | PR Conflict Checker | `pr-conflict-check.yml` | ✅ |
-| 8 | Agent PR Welcome | `agent-welcome.yml` | ✅ |
-| 9 | Agent Metrics Dashboard | `agent-metrics.yml` | ✅ |
-| 10 | Jules Batch Dispatch | `jules-dispatch.yml` | ✅ |
+| 6 | Auto-Merge Agent PRs | `auto-merge.yml` | ✅ |
+| 7 | PR Auto-Labeler | `pr-labeler.yml` | ✅ |
+| 8 | PR Title Semantic Check | `pr-title-check.yml` | ✅ |
+| 9 | PR Auto-Assigner | `auto-assign.yml` | ✅ |
+| 10 | PR Conflict Checker | `pr-conflict-check.yml` | ✅ |
+| 11 | Dependabot Auto-Approve | `dependabot-auto-approve.yml` | ✅ |
+| 12 | Agent PR Welcome | `agent-welcome.yml` | ✅ |
+| 13 | Agent Metrics Dashboard | `agent-metrics.yml` | ✅ |
+| 14 | Jules Batch Dispatch | `jules-dispatch.yml` | ✅ |
+| 15 | First Interaction Greeter | `first-interaction.yml` | ✅ |
 
 ### Documentation (2)
 
 | # | Workflow | File | Status |
 |:-:|---------|------|:------:|
-| 11 | Doc Build & Deploy | `documentation.yml` | ✅ |
-| 12 | Doc Quality Gate | `documentation-validation.yml` | ✅ |
+| 16 | Doc Build & Deploy | `documentation.yml` | ✅ |
+| 17 | Doc Quality Gate | `documentation-validation.yml` | ✅ |
 
 ### Repository Health (5)
 
 | # | Workflow | File | Status |
 |:-:|---------|------|:------:|
-| 13 | Code Health Dashboard | `code-health.yml` | ✅ |
-| 14 | Performance Benchmarks | `benchmarks.yml` | ✅ |
-| 15 | Repository Maintenance | `maintenance.yml` | ✅ |
-| 16 | Branch Cleanup | `cleanup-branches.yml` | ✅ |
-| 17 | Lock Old Threads | `lock-threads.yml` | ✅ |
+| 18 | Code Health Dashboard | `code-health.yml` | ✅ |
+| 19 | Performance Benchmarks | `benchmarks.yml` | ✅ |
+| 20 | Repository Maintenance | `maintenance.yml` | ✅ |
+| 21 | Branch Cleanup | `cleanup-branches.yml` | ✅ |
+| 22 | Lock Old Threads | `lock-threads.yml` | ✅ |
 
 ### Orchestration (2)
 
 | # | Workflow | File | Status |
 |:-:|---------|------|:------:|
-| 18 | Workflow Coordinator | `workflow-coordinator.yml` | ✅ |
-| 19 | Workflow Status Dashboard | `workflow-status.yml` | ✅ |
+| 23 | Workflow Coordinator | `workflow-coordinator.yml` | ✅ |
+| 24 | Workflow Status Dashboard | `workflow-status.yml` | ✅ |
 
 ### Gemini AI (5)
 
 | # | Workflow | File | Status |
 |:-:|---------|------|:------:|
-| 20 | Gemini Dispatch | `gemini-dispatch.yml` | ✅ |
-| 21 | Gemini Review | `gemini-review.yml` | ✅ |
-| 22 | Gemini Triage | `gemini-triage.yml` | ✅ |
-| 23 | Gemini Scheduled Triage | `gemini-scheduled-triage.yml` | ✅ |
-| 24 | Gemini Invoke | `gemini-invoke.yml` | ✅ |
+| 25 | Gemini Dispatch | `gemini-dispatch.yml` | ✅ |
+| 26 | Gemini Review | `gemini-review.yml` | ✅ |
+| 27 | Gemini Triage | `gemini-triage.yml` | ✅ |
+| 28 | Gemini Scheduled Triage | `gemini-scheduled-triage.yml` | ✅ |
+| 29 | Gemini Invoke | `gemini-invoke.yml` | ✅ |
 
 ---
 
@@ -65,15 +70,20 @@
 ```
 PR Opened (by Jules/Dependabot/Gemini)
   │
-  ├─ pr-labeler.yml ─────→ Auto-label (paths, branch, size, module)
-  ├─ agent-welcome.yml ──→ Post agent-specific welcome + checklist
-  ├─ ci.yml ──────────────→ Lint + Test (ubuntu/3.11 for PRs)
-  ├─ pre-commit.yml ─────→ Commit checks (soft-fail for agents)
-  ├─ gemini-review.yml ──→ AI code review comments
+  ├─ pr-labeler.yml ────────→ Auto-label (paths, branch, size, module)
+  ├─ pr-title-check.yml ────→ Enforce semantic PR title
+  ├─ auto-assign.yml ───────→ Assign PR to creator
+  ├─ first-interaction.yml ─→ Welcome first-time contributors
+  ├─ dependency-review.yml ─→ Security scan of lockfile changes
+  ├─ agent-welcome.yml ─────→ Post agent-specific welcome + checklist
+  ├─ ci.yml ────────────────→ Lint + Test (ubuntu/3.11 for PRs)
+  ├─ pre-commit.yml ───────→ Commit checks (soft-fail for agents)
+  ├─ gemini-review.yml ─────→ AI code review comments
   │
   ├─ pr-conflict-check.yml → Labels 'conflict' if conflicting (every 6h)
   │
-  └─ auto-merge.yml ─────→ Squash-merge when all checks pass
+  └─ auto-merge.yml ────────→ Squash-merge when all checks pass
+          ↑ (Dependabot auto-approved by dependabot-auto-approve.yml)
 ```
 
 ## Scheduled Tasks

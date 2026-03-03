@@ -14,6 +14,11 @@ on:
       - "Agent PR Welcome"
       - "Agent Metrics Dashboard"
       - "Code Health Dashboard"
+      - "PR Title Check"
+      - "Dependabot Auto Approve"
+      - "Dependency Review"
+      - "Auto Assign PR Author"
+      - "First Interaction"
     types:
       - completed
   schedule:
@@ -55,7 +60,12 @@ jobs:
               'PR Auto-Labeler',
               'Agent PR Welcome',
               'Agent Metrics Dashboard',
-              'Code Health Dashboard'
+              'Code Health Dashboard',
+              'PR Title Check',
+              'Dependabot Auto Approve',
+              'Dependency Review',
+              'Auto Assign PR Author',
+              'First Interaction'
             ];
             
             // Proper name-to-filename mapping
@@ -70,7 +80,12 @@ jobs:
               'PR Auto-Labeler': 'pr-labeler.yml',
               'Agent PR Welcome': 'agent-welcome.yml',
               'Agent Metrics Dashboard': 'agent-metrics.yml',
-              'Code Health Dashboard': 'code-health.yml'
+              'Code Health Dashboard': 'code-health.yml',
+              'PR Title Check': 'pr-title-check.yml',
+              'Dependabot Auto Approve': 'dependabot-auto-approve.yml',
+              'Dependency Review': 'dependency-review.yml',
+              'Auto Assign PR Author': 'auto-assign.yml',
+              'First Interaction': 'first-interaction.yml'
             };
             
             let statusData = {

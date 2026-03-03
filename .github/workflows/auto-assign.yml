@@ -1,0 +1,28 @@
+name: Auto Assign PR Author
+
+on:
+  pull_request:
+    types: [opened]
+
+permissions:
+  pull-requests: write
+
+jobs:
+  assign:
+    name: Assign PR Creator
+    runs-on: ubuntu-latest
+    steps:
+      - name: Assign creator to PR
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          PR_AUTHOR: ${{ github.event.pull_request.user.login }}
+        run: |
+          # Don't assign bots
+          if [[ "$PR_AUTHOR" == *"bot"* ]] || [[ "$PR_AUTHOR" == "dependabot"* ]]; then
+            echo "Skipping assignment for bot: $PR_AUTHOR"
+            exit 0
+          fi
+          
+          gh pr edit "$PR_URL" --add-assignee "$PR_AUTHOR" 2>/dev/null || true
+          echo "✅ Assigned PR to creator: $PR_AUTHOR"

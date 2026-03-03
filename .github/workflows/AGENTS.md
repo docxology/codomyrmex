@@ -5,7 +5,7 @@
 ## Purpose
 
 GitHub Actions workflow definitions for CI/CD, security, multi-agent infrastructure,
-documentation, benchmarks, and repository maintenance. 24 workflows total.
+documentation, benchmarks, PR automation, and repository maintenance. 29 workflows total.
 
 ## Workflow Inventory
 
@@ -18,16 +18,25 @@ documentation, benchmarks, and repository maintenance. 24 workflows total.
 | `security.yml` | schedule daily + push | dependency-scan, bandit, semgrep, codeql, trufflehog |
 | `release.yml` | tag `v*.*.*` | quality-gate (25%), build, PyPI publish |
 
-### Agent Infrastructure
+### Agent & PR Infrastructure
 
 | File | Trigger | Purpose |
 |------|---------|---------|
-| `auto-merge.yml` | check_suite, label, dispatch | Squash-merge PRs with `jules`/`auto-merge` labels |
+| `auto-merge.yml` | check_suite, label | Squash-merge PRs with `jules`/`auto-merge` labels |
 | `pr-labeler.yml` | PR opened/sync | Auto-label by paths, branch, size, module |
+| `pr-title-check.yml` | PR open/edit/sync | Enforce Semantic/Conventional Commits for PR titles |
+| `auto-assign.yml` | PR opened | Auto-assign PR creator as assignee |
 | `pr-conflict-check.yml` | push main, every 6h | Detect + label conflicting PRs |
 | `agent-welcome.yml` | PR opened | Agent-specific welcome message + checklist |
 | `agent-metrics.yml` | weekly Monday | Agent PR/issue/workflow health dashboard |
 | `jules-dispatch.yml` | workflow_dispatch | Batch create Jules task issues |
+| `dependabot-auto-approve.yml`| PR opened | Auto-approve Dependabot PRs to unblock auto-merge |
+
+### Community Health
+
+| File | Trigger | Purpose |
+|------|---------|---------|
+| `first-interaction.yml` | Issue/PR opened | Greet first-time contributors with helpful links |
 
 ### Documentation
 
