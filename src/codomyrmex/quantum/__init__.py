@@ -16,14 +16,18 @@ from .visualization import circuit_stats, circuit_to_ascii
 try:
     from codomyrmex.validation.schemas import Result, ResultStatus
 except ImportError:
-    Result = None
-    ResultStatus = None
+    Result = None  # type: ignore[misc, assignment]
+    ResultStatus = None  # type: ignore[misc, assignment]
 
 
-def cli_commands():
+from collections.abc import Callable
+from typing import Any
+
+
+def cli_commands() -> dict[str, Callable[[], None]]:
     """Return CLI commands for the quantum module."""
 
-    def _backends():
+    def _backends() -> None:
         """List available simulator backends."""
         print("Quantum Simulator Backends")
         print(f"  Gate Types: {[gt.value for gt in GateType]}")
@@ -31,7 +35,7 @@ def cli_commands():
         sim = QuantumSimulator()
         print(f"  Simulator: {sim.__class__.__name__}")
 
-    def _simulate():
+    def _simulate() -> None:
         """Run a quantum simulation (Bell state demo)."""
         print("Running Bell State simulation...")
         circuit = bell_state()

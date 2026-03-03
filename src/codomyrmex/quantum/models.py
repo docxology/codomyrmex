@@ -8,6 +8,7 @@ from enum import Enum
 
 class GateType(Enum):
     """Quantum gate types."""
+
     H = "H"  # Hadamard
     X = "X"  # Pauli-X (NOT)
     Y = "Y"  # Pauli-Y
@@ -25,6 +26,7 @@ class GateType(Enum):
 @dataclass
 class Gate:
     """A quantum gate."""
+
     gate_type: GateType
     target: int
     control: int | None = None
@@ -34,43 +36,44 @@ class Gate:
 @dataclass
 class Qubit:
     """A quantum bit state."""
+
     alpha: complex = 1.0 + 0j  # |0> amplitude
     beta: complex = 0.0 + 0j  # |1> amplitude
 
     @classmethod
     def zero(cls) -> "Qubit":
-        """Zero."""
+        """Create a qubit in the |0> computational basis state."""
         return cls(1.0 + 0j, 0.0 + 0j)
 
     @classmethod
     def one(cls) -> "Qubit":
-        """One."""
+        """Create a qubit in the |1> computational basis state."""
         return cls(0.0 + 0j, 1.0 + 0j)
 
     @classmethod
     def plus(cls) -> "Qubit":
-        """|+> state."""
+        """Create a qubit in the |+> superposition state (Hadamard applied to |0>)."""
         s = 1 / math.sqrt(2)
         return cls(s + 0j, s + 0j)
 
     @classmethod
     def minus(cls) -> "Qubit":
-        """|-> state."""
+        """Create a qubit in the |-> superposition state (Hadamard applied to |1>)."""
         s = 1 / math.sqrt(2)
         return cls(s + 0j, -s + 0j)
 
     @property
     def prob_0(self) -> float:
-        """prob 0 ."""
+        """Calculate the probability of measuring this qubit in the |0> state."""
         return abs(self.alpha) ** 2
 
     @property
     def prob_1(self) -> float:
-        """prob 1 ."""
+        """Calculate the probability of measuring this qubit in the |1> state."""
         return abs(self.beta) ** 2
 
     def measure(self) -> int:
-        """Measure qubit, collapsing state."""
+        """Measure qubit in the computational basis, probabilistically collapsing its state."""
         if random.random() < self.prob_0:
             self.alpha = 1.0 + 0j
             self.beta = 0.0 + 0j

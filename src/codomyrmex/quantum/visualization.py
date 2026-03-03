@@ -96,7 +96,7 @@ def circuit_to_ascii(circuit: QuantumCircuit) -> str:
     return "\n".join(lines)
 
 
-def circuit_stats(circuit: QuantumCircuit) -> dict:
+def circuit_stats(circuit: QuantumCircuit) -> dict[str, int | bool | dict[str, int]]:
     """Return circuit statistics.
 
     Returns a dict with:

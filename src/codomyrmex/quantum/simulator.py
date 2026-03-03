@@ -11,38 +11,50 @@ from .models import GateType
 class QuantumSimulator:
     """Simple statevector quantum simulator."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         self._state: list[complex] = []
 
-    def _init_state(self, num_qubits: int):
+    def _init_state(self, num_qubits: int) -> None:
         """Initialize to |00...0> state."""
-        self._state = [0 + 0j] * (2 ** num_qubits)
+        self._state = [0 + 0j] * (2**num_qubits)
         self._state[0] = 1 + 0j
 
-    def _apply_single_gate(self, gate: GateType, target: int, num_qubits: int, param: float | None = None):
-        """Apply single-qubit gate."""
+    def _apply_single_gate(
+        self, gate: GateType, target: int, num_qubits: int, param: float | None = None
+    ) -> None:
+        """Apply a single-qubit gate to the current statevector.
+
+        Args:
+            gate: The type of gate to apply.
+            target: The index of the target qubit.
+            num_qubits: Total number of qubits in the system.
+            param: Optional parameter for rotation gates.
+        """
         # Gate matrices
         sqrt2 = math.sqrt(2)
-        matrices = {
-            GateType.H: [[1/sqrt2, 1/sqrt2], [1/sqrt2, -1/sqrt2]],
-            GateType.X: [[0, 1], [1, 0]],
-            GateType.Y: [[0, -1j], [1j, 0]],
-            GateType.Z: [[1, 0], [0, -1]],
-            GateType.S: [[1, 0], [0, 1j]],
-            GateType.T: [[1, 0], [0, cmath.exp(1j * math.pi / 4)]],
+        matrices: dict[GateType, list[list[complex]]] = {
+            GateType.H: [
+                [1 / sqrt2 + 0j, 1 / sqrt2 + 0j],
+                [1 / sqrt2 + 0j, -1 / sqrt2 + 0j],
+            ],
+            GateType.X: [[0j, 1 + 0j], [1 + 0j, 0j]],
+            GateType.Y: [[0j, -1j], [1j, 0j]],
+            GateType.Z: [[1 + 0j, 0j], [0j, -1 + 0j]],
+            GateType.S: [[1 + 0j, 0j], [0j, 1j]],
+            GateType.T: [[1 + 0j, 0j], [0j, cmath.exp(1j * math.pi / 4)]],
         }
 
         if gate in matrices:
             matrix = matrices[gate]
         elif gate == GateType.RX and param is not None:
-            c, s = math.cos(param/2), math.sin(param/2)
-            matrix = [[c, -1j*s], [-1j*s, c]]
+            c, s = math.cos(param / 2), math.sin(param / 2)
+            matrix = [[c + 0j, -1j * s], [-1j * s, c + 0j]]
         elif gate == GateType.RY and param is not None:
-            c, s = math.cos(param/2), math.sin(param/2)
-            matrix = [[c, -s], [s, c]]
+            c, s = math.cos(param / 2), math.sin(param / 2)
+            matrix = [[c + 0j, -s + 0j], [s + 0j, c + 0j]]
         elif gate == GateType.RZ and param is not None:
             e = cmath.exp(1j * param / 2)
-            matrix = [[1/e, 0], [0, e]]
+            matrix = [[1 / e, 0j], [0j, e]]
         else:
             return
 
@@ -53,13 +65,22 @@ class QuantumSimulator:
             i1 = i | (1 << target)
 
             if bit == 0:
-                new_state[i0] += matrix[0][0] * self._state[i0] + matrix[0][1] * self._state[i1]
-                new_state[i1] += matrix[1][0] * self._state[i0] + matrix[1][1] * self._state[i1]
+                new_state[i0] += (
+                    matrix[0][0] * self._state[i0] + matrix[0][1] * self._state[i1]
+                )
+                new_state[i1] += (
+                    matrix[1][0] * self._state[i0] + matrix[1][1] * self._state[i1]
+                )
 
         self._state = new_state
 
-    def _apply_cnot(self, control: int, target: int):
-        """Apply CNOT gate."""
+    def _apply_cnot(self, control: int, target: int) -> None:
+        """Apply a CNOT (Controlled-NOT) gate to the current statevector.
+
+        Args:
+            control: The index of the control qubit.
+            target: The index of the target qubit.
+        """
         new_state = list(self._state)
         for i in range(len(self._state)):
             if (i >> control) & 1:
@@ -68,8 +89,13 @@ class QuantumSimulator:
                 new_state[j] = self._state[i]
         self._state = new_state
 
-    def _apply_swap(self, qubit1: int, qubit2: int):
-        """Apply SWAP gate by swapping amplitudes."""
+    def _apply_swap(self, qubit1: int, qubit2: int) -> None:
+        """Apply a SWAP gate by exchanging the amplitudes of two qubits.
+
+        Args:
+            qubit1: The index of the first qubit to swap.
+            qubit2: The index of the second qubit to swap.
+        """
         new_state = list(self._state)
         for i in range(len(self._state)):
             bit1 = (i >> qubit1) & 1
@@ -104,13 +130,17 @@ class QuantumSimulator:
 
             # Measure
             result = self._measure()
-            bitstring = format(result, f'0{circuit.num_qubits}b')
+            bitstring = format(result, f"0{circuit.num_qubits}b")
             counts[bitstring] = counts.get(bitstring, 0) + 1
 
         return counts
 
     def _measure(self) -> int:
-        """Measure all qubits."""
+        """Measure all qubits in the computational basis.
+
+        Returns:
+            An integer representing the measured multi-qubit bitstring.
+        """
         probs = [abs(a) ** 2 for a in self._state]
         r = random.random()
         cumulative = 0.0
