@@ -23,9 +23,7 @@ import os
 import sys
 import threading
 import uuid
-import uuid as _uuid
 from datetime import datetime
-from datetime import datetime as _datetime
 from pathlib import Path
 from typing import Any
 
@@ -376,8 +374,8 @@ class AuditLogger:
             ...           {"reason": "account_expired", "requested_by": "system"})
         """
         audit_record = {
-            "audit_id": str(_uuid.uuid4()),
-            "timestamp": _datetime.now().isoformat(),
+            "audit_id": str(uuid.uuid4()),
+            "timestamp": datetime.now().isoformat(),
             "actor": actor,
             "action": action,
             "resource": resource,

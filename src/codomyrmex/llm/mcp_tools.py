@@ -129,13 +129,4 @@ def reason(prompt: str, depth: str = "normal", max_steps: int = 5) -> dict:
             "depth": depth,
         }
     except Exception as e:
-        # If CoT hasn't been fully initialized, return a structured stub
-        return {
-            "status": "success",
-            "steps": [{"step": 1, "type": "analysis", "content": f"Analyzing: {prompt}"}],
-            "conclusion": f"Reasoned response to: {prompt}",
-            "confidence": 0.7,
-            "step_count": 1,
-            "depth": depth,
-            "note": f"CoT chain: {e}",
-        }
+        return {"status": "error", "message": str(e)}

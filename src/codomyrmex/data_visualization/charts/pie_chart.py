@@ -10,14 +10,12 @@ import logging
 import matplotlib.pyplot as plt
 
 from codomyrmex.logging_monitoring import get_logger
-from codomyrmex.model_context_protocol.decorators import mcp_tool
 
 from .plot_utils import apply_theme_to_axes, save_plot
 
 logger = get_logger(__name__)
 
 
-@mcp_tool()
 def create_pie_chart(
     labels: list,
     sizes: list,

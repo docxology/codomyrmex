@@ -43,7 +43,6 @@ def mcp_tool(
             return a + b
     """
     def decorator(func: Callable[..., Any]) -> Callable[..., Any]:
-        """Decorator."""
         # Get metadata
         base_name = name or func.__name__
         if not base_name.startswith("codomyrmex."):
@@ -67,12 +66,10 @@ def mcp_tool(
             "version": version or "1.0",
             "deprecated_in": deprecated_in,
         }
-        func._mcp_tool = tool_meta
         func._mcp_tool_meta = tool_meta
 
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
-            """Wrapper."""
             if deprecated_in:
                 import warnings
                 warnings.warn(
@@ -83,7 +80,6 @@ def mcp_tool(
             return func(*args, **kwargs)
 
         # Copy metadata onto wrapper so scanners find it via dir()
-        wrapper._mcp_tool = tool_meta  # type: ignore[attr-defined]
         wrapper._mcp_tool_meta = tool_meta  # type: ignore[attr-defined]
 
         return wrapper
