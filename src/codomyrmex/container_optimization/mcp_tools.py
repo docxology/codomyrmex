@@ -6,9 +6,12 @@ capabilities as Model Context Protocol (MCP) tools.
 
 from typing import Any
 
-from codomyrmex.model_context_protocol.decorators import mcp_tool
 from codomyrmex.container_optimization.optimizer import ContainerOptimizer
-from codomyrmex.container_optimization.resource_tuner import ResourceTuner, ResourceUsage
+from codomyrmex.container_optimization.resource_tuner import (
+    ResourceTuner,
+    ResourceUsage,
+)
+from codomyrmex.model_context_protocol.decorators import mcp_tool
 
 
 @mcp_tool(category="container_optimization")
@@ -27,7 +30,9 @@ def container_optimization_analyze_image(image_name: str) -> dict[str, Any]:
 
 
 @mcp_tool(category="container_optimization")
-def container_optimization_suggest_optimizations(image_name: str) -> list[dict[str, Any]]:
+def container_optimization_suggest_optimizations(
+    image_name: str,
+) -> list[dict[str, Any]]:
     """Generate specific optimization suggestions for a Docker image.
 
     Args:
@@ -76,7 +81,7 @@ def container_optimization_suggest_limits(
     cpu_percent: float,
     memory_usage_bytes: int,
     memory_limit_bytes: int,
-    memory_percent: float
+    memory_percent: float,
 ) -> dict[str, str]:
     """Suggest optimal resource limits based on provided usage data.
 
@@ -95,7 +100,7 @@ def container_optimization_suggest_limits(
         cpu_percent=cpu_percent,
         memory_usage_bytes=memory_usage_bytes,
         memory_limit_bytes=memory_limit_bytes,
-        memory_percent=memory_percent
+        memory_percent=memory_percent,
     )
     tuner = ResourceTuner()
     return tuner.suggest_limits(usage)

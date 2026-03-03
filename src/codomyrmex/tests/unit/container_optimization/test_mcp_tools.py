@@ -10,17 +10,19 @@ import pytest
 
 from codomyrmex.container_optimization.mcp_tools import (
     container_optimization_analyze_image,
-    container_optimization_suggest_optimizations,
-    container_optimization_get_optimization_report,
     container_optimization_analyze_usage,
+    container_optimization_get_optimization_report,
     container_optimization_suggest_limits,
+    container_optimization_suggest_optimizations,
 )
+
 
 # Re-using fixtures from test_optimization.py structure
 @pytest.fixture(scope="session")
 def docker_client():
     """Provides a Docker client for tests."""
     return docker.from_env()
+
 
 @pytest.fixture(scope="module")
 def existing_image(docker_client):
@@ -33,15 +35,13 @@ def existing_image(docker_client):
             return img.tags[0]
     return images[0].id
 
+
 @pytest.fixture(scope="module")
 def running_container(docker_client, existing_image):
     """Runs a container for testing resource tuning."""
     try:
         container = docker_client.containers.run(
-            existing_image,
-            command="sleep 100",
-            detach=True,
-            remove=True
+            existing_image, command="sleep 100", detach=True, remove=True
         )
         yield container
         try:
@@ -92,10 +92,12 @@ def test_container_optimization_suggest_limits_tool():
         cpu_percent=15.0,
         memory_usage_bytes=100 * 1024 * 1024,
         memory_limit_bytes=512 * 1024 * 1024,
-        memory_percent=20.0
+        memory_percent=20.0,
     )
     assert isinstance(result, dict)
     assert "cpu_limit" in result
     assert "memory_limit" in result
-    assert result["cpu_limit"] in ("0.6", "0.7")  # 15/100 + 0.5 = 0.65 -> stringified format %.1f rounds to 0.7 depending on platform
+    assert (
+        result["cpu_limit"] in ("0.6", "0.7")
+    )  # 15/100 + 0.5 = 0.65 -> stringified format %.1f rounds to 0.7 depending on platform
     assert result["memory_limit"] == "120m"
