@@ -79,15 +79,14 @@ def search_pattern(path: Path, pattern: str) -> list:
 
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
+    from pathlib import Path
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "tree_sitter" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
+        with open(config_path, "r") as f:
             config_data = yaml.safe_load(f) or {}
-            print("Loaded config from config/tree_sitter/config.yaml")
+            print(f"Loaded config from config/tree_sitter/config.yaml")
 
     parser = argparse.ArgumentParser(description="Tree-sitter parsing utilities")
     parser.add_argument("file", nargs="?", help="File to parse")
@@ -151,7 +150,7 @@ def main():
     else:
         print(f"📄 File: {path.name}")
         print(f"   Size: {path.stat().st_size} bytes")
-        print("   Note: Only Python parsing supported in this utility")
+        print(f"   Note: Only Python parsing supported in this utility")
 
     return 0
 

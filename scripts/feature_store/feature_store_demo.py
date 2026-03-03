@@ -5,8 +5,8 @@ Feature Store Demo Script
 Demonstrates functionality of the feature_store module.
 """
 
-import math
 import sys
+import math
 from pathlib import Path
 
 # Add project root to path
@@ -16,14 +16,13 @@ sys.path.insert(0, str(PROJECT_ROOT / "src"))
 from codomyrmex.feature_store import (
     FeatureDefinition,
     FeatureGroup,
-    FeatureService,
-    FeatureStoreError,
-    FeatureTransform,
     FeatureType,
-    InMemoryFeatureStore,
     ValueType,
+    FeatureService,
+    FeatureTransform,
+    InMemoryFeatureStore,
+    FeatureStoreError,
 )
-
 
 def main() -> int:
     print("--- Codomyrmex Feature Store Orchestrator ---")
@@ -113,15 +112,14 @@ def main() -> int:
 
 
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
+    from pathlib import Path
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "feature_store" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
+        with open(config_path, "r") as f:
             config_data = yaml.safe_load(f) or {}
-            print("Loaded config from config/feature_store/config.yaml")
+            print(f"Loaded config from config/feature_store/config.yaml")
 
 if __name__ == "__main__":
     sys.exit(main())

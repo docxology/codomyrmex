@@ -6,11 +6,11 @@ config_management modules for structured logging and configuration.
 Example:
     >>> from pathlib import Path
     >>> from src.main import run_analysis, run_pipeline
-    >>> 
+    >>>
     >>> # Run analysis on a directory
     >>> results = run_analysis(Path("src"))
     >>> print(f"Files: {results['summary']['total_files']}")
-    >>> 
+    >>>
     >>> # Run full pipeline
     >>> pipeline_result = run_pipeline()
     >>> print(f"Status: {pipeline_result.status.value}")
@@ -37,22 +37,22 @@ def run_analysis(
     config_path: Path | None = None
 ) -> dict[str, Any]:
     """Run project analysis using codomyrmex static_analysis.
-    
+
     Demonstrates integration with:
     - codomyrmex.logging_monitoring for structured logging
     - codomyrmex.config_management for configuration loading
     - codomyrmex.static_analysis for code analysis
-    
+
     Args:
         target_path: Path to file or directory to analyze.
         config_path: Optional path to configuration YAML file.
-        
+
     Returns:
         Dictionary containing analysis results with keys:
         - target: str - Target path analyzed
         - files: List[dict] - Per-file analysis results
         - summary: dict - Aggregate statistics
-        
+
     Example:
         >>> results = run_analysis(Path("src"))
         >>> print(f"Total lines: {results['summary']['total_lines']}")
@@ -95,25 +95,25 @@ def run_analysis(
 def run_pipeline(
     target_path: Path | None = None,
     config_path: Path | None = None
-) -> "PipelineResult":
+) -> Any:
     """Run the full analysis pipeline.
-    
+
     Demonstrates orchestrator module integration with DAG-based
     workflow execution. The pipeline executes these steps:
-    
+
     1. load_config - Load project configuration
     2. validate - Validate inputs and settings
     3. analyze - Run code analysis
     4. visualize - Generate visualizations
     5. report - Create final reports
-    
+
     Args:
         target_path: Optional target path to analyze. Defaults to current directory.
         config_path: Optional path to configuration file.
-        
+
     Returns:
         PipelineResult with execution status, duration, and step results.
-        
+
     Example:
         >>> result = run_pipeline(Path("src"))
         >>> print(f"Status: {result.status.value}")
@@ -151,13 +151,13 @@ def run_pipeline(
 
 def main() -> int:
     """Command-line entry point.
-    
+
     Usage:
         python -m src.main [target_path]
-        
+
     Args:
         target_path: Optional path to analyze (default: current directory)
-        
+
     Returns:
         Exit code (0 for success, 1 for error)
     """

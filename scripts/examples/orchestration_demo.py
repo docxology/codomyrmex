@@ -20,8 +20,8 @@ except ImportError:
     sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "src"))
 
 # ── 1. Document Conversion ────────────────────────────────────────────
-from codomyrmex.documents.models.document import DocumentFormat
 from codomyrmex.documents.transformation.converter import _to_markdown
+from codomyrmex.documents.models.document import DocumentFormat
 
 html_input = "<h1>Hello</h1><p>This is a <strong>test</strong> document.</p>"
 md_output = _to_markdown(html_input, DocumentFormat.HTML)
@@ -52,8 +52,8 @@ with tempfile.TemporaryDirectory() as tmpdir:
     assert updated == "def456", f"Expected def456, got {updated}"
 
     print("─── Config Change Detection (Hash Persistence) ───")
-    print("  Stored: abc123 → Retrieved: abc123 ✓")
-    print("  Updated: def456 → Retrieved: def456 ✓")
+    print(f"  Stored: abc123 → Retrieved: abc123 ✓")
+    print(f"  Updated: def456 → Retrieved: def456 ✓")
     print("  ✅ Real filesystem I/O — no mocks\n")
 
 

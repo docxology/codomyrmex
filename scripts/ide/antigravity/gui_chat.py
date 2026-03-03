@@ -4,10 +4,10 @@ GUI Chat Automation for Antigravity using AppleScript.
 Sends keystrokes directly to the active window/pane.
 """
 
+import sys
+import subprocess
 import argparse
 import logging
-import subprocess
-import sys
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(message)s')
@@ -59,15 +59,14 @@ def is_app_running(app_name: str) -> bool:
 
 
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
+    from pathlib import Path
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "ide" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
+        with open(config_path, "r") as f:
             config_data = yaml.safe_load(f) or {}
-            print("Loaded config from config/ide/config.yaml")
+            print(f"Loaded config from config/ide/config.yaml")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Send GUI chat message to Antigravity.")

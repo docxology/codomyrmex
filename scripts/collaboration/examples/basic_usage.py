@@ -13,14 +13,13 @@ Usage:
 import sys
 import time
 from pathlib import Path
-from typing import Any
+from typing import Any, Dict
 
 project_root = Path(__file__).parent.parent.parent.parent
 sys.path.insert(0, str(project_root / "src"))
 
 # Direct import to avoid triggering full codomyrmex package init
 import importlib.util
-
 script_base_path = project_root / "src" / "codomyrmex" / "utils" / "script_base.py"
 spec = importlib.util.spec_from_file_location("script_base", script_base_path)
 script_base = importlib.util.module_from_spec(spec)
@@ -55,7 +54,7 @@ class CollaborationScript(ScriptBase):
             help="Agent roles (default: researcher coder reviewer)"
         )
 
-    def run(self, args, config: ScriptConfig) -> dict[str, Any]:
+    def run(self, args, config: ScriptConfig) -> Dict[str, Any]:
         """Execute collaboration demonstrations."""
         results = {
             "tests_run": 0,
@@ -71,7 +70,7 @@ class CollaborationScript(ScriptBase):
             return results
 
         # Import collaboration module (after dry_run check)
-        from codomyrmex.collaboration import AgentProxy, SwarmManager, TaskDecomposer
+        from codomyrmex.collaboration import SwarmManager, AgentProxy, TaskDecomposer
 
         # Test 1: SwarmManager creation
         self.log_info(f"\n1. Creating SwarmManager with {args.agents} agents")
@@ -181,15 +180,14 @@ class CollaborationScript(ScriptBase):
 
 
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
+    from pathlib import Path
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "collaboration" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
+        with open(config_path, "r") as f:
             config_data = yaml.safe_load(f) or {}
-            print("Loaded config from config/collaboration/config.yaml")
+            print(f"Loaded config from config/collaboration/config.yaml")
 
 if __name__ == "__main__":
     script = CollaborationScript()

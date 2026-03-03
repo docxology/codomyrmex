@@ -25,18 +25,15 @@ except ImportError:
     sys.path.insert(0, str(project_root / "src"))
 
 from codomyrmex.agents.pai import (
-    ALGORITHM_PHASES,
-    PROMPT_COUNT,
-    RESOURCE_COUNT,
-    TOOL_COUNT,
-    PAIBridge,
     get_skill_manifest,
+    PAIBridge,
+    ALGORITHM_PHASES,
+    TOOL_COUNT,
+    RESOURCE_COUNT,
+    PROMPT_COUNT,
 )
 from codomyrmex.utils.cli_helpers import (
-    print_info,
-    print_success,
-    print_warning,
-    setup_logging,
+    setup_logging, print_info, print_success, print_warning,
 )
 
 SECTIONS = ["overview", "tools", "mapping", "scope", "workflows"]
@@ -75,7 +72,7 @@ def section_overview(manifest: dict) -> dict:
     resources = manifest.get("resources", [])
     prompts = manifest.get("prompts", [])
 
-    print("\n  Manifest contents:")
+    print(f"\n  Manifest contents:")
     print(f"    Tools     : {len(tools)} (constant: {TOOL_COUNT})")
     print(f"    Resources : {len(resources)} (constant: {RESOURCE_COUNT})")
     print(f"    Prompts   : {len(prompts)} (constant: {PROMPT_COUNT})")
@@ -219,15 +216,14 @@ def main() -> int:
 
 
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
+    from pathlib import Path
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "agents" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
+        with open(config_path, "r") as f:
             config_data = yaml.safe_load(f) or {}
-            print("Loaded config from config/agents/config.yaml")
+            print(f"Loaded config from config/agents/config.yaml")
 
 if __name__ == "__main__":
     sys.exit(main())

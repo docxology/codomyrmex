@@ -5,10 +5,10 @@ Scans the repository for required documentation files (README.md, AGENTS.md, SPE
 and reports on coverage and quality (stub detection).
 """
 
+from pathlib import Path
+from typing import Dict, List, Any
 import os
 import sys
-from pathlib import Path
-from typing import Any
 
 # Ensure codomyrmex is in path
 _project_root = Path(__file__).resolve().parents[2]
@@ -16,7 +16,6 @@ if str(_project_root / "src") not in sys.path:
     sys.path.insert(0, str(_project_root / "src"))
 
 from codomyrmex.utils import ScriptBase
-
 
 class DocumentationAudit(ScriptBase):
     def __init__(self):
@@ -38,7 +37,7 @@ class DocumentationAudit(ScriptBase):
             help="Attempt to create missing files (Dry run recommended first)"
         )
 
-    def scan_directory(self, path: Path) -> dict[str, Any]:
+    def scan_directory(self, path: Path) -> Dict[str, Any]:
         """Scan a single directory for documentation status."""
         stats = {
             "path": str(path.relative_to(self.root_dir)),
@@ -59,7 +58,7 @@ class DocumentationAudit(ScriptBase):
 
         return stats
 
-    def calculate_score(self, stats: dict[str, Any]) -> float:
+    def calculate_score(self, stats: Dict[str, Any]) -> float:
         """Calculate a compliance score (0-100)."""
         total = len(self.required_files)
         present = total - len(stats["missing"])
@@ -69,7 +68,7 @@ class DocumentationAudit(ScriptBase):
         score = (present / total) * 50 + (non_stubs / total) * 50
         return score
 
-    def generate_report(self, results: list[dict[str, Any]]) -> None:
+    def generate_report(self, results: List[Dict[str, Any]]) -> None:
         """Generate a markdown report."""
         report_lines = [
             "# Documentation Audit Report",
@@ -158,15 +157,14 @@ class DocumentationAudit(ScriptBase):
 
 
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
+    from pathlib import Path
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "documentation" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
+        with open(config_path, "r") as f:
             config_data = yaml.safe_load(f) or {}
-            print("Loaded config from config/documentation/config.yaml")
+            print(f"Loaded config from config/documentation/config.yaml")
 
 if __name__ == "__main__":
     import sys

@@ -19,6 +19,7 @@ except ImportError:
 import argparse
 import re
 
+
 # Built-in demo templates
 DEMO_TEMPLATES = {
     "code_review": """You are a code reviewer. Review the following code:
@@ -89,13 +90,12 @@ def parse_var_arg(var_str: str) -> tuple:
 
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
+    from pathlib import Path
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "llm" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
+        with open(config_path, "r") as f:
             config_data = yaml.safe_load(f) or {}
             print(f"Loaded config from {config_path.name}")
 

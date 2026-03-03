@@ -17,8 +17,9 @@ except ImportError:
     sys.path.insert(0, str(project_root / "src"))
 
 import argparse
-import os
 import re
+import os
+
 
 # Patterns for detecting secrets
 SECRET_PATTERNS = {
@@ -81,7 +82,7 @@ def scan_file(file_path: Path) -> list:
     findings = []
 
     try:
-        with open(file_path, encoding="utf-8", errors="ignore") as f:
+        with open(file_path, "r", encoding="utf-8", errors="ignore") as f:
             content = f.read()
             lines = content.split("\n")
     except Exception:
@@ -140,7 +141,7 @@ def check_gitignore(path: str) -> list:
     sensitive_patterns = [".env", "*.pem", "*.key", "secrets.json", "credentials.json"]
 
     if gitignore.exists():
-        with open(gitignore) as f:
+        with open(gitignore, "r") as f:
             content = f.read()
 
         for pattern in sensitive_patterns:

@@ -4,13 +4,13 @@ Periodic Chat Messaging for Antigravity.
 Simulates a "Real IDE UX" by sending status updates or messages on a timer.
 """
 
+import sys
+import os
+import time
 import argparse
 import logging
-import os
-import sys
-import time
-from datetime import datetime
 from pathlib import Path
+from datetime import datetime
 
 # Ensure project root is in path
 project_root = Path(__file__).resolve().parent.parent.parent.parent
@@ -80,15 +80,14 @@ def run_periodic_chat(interval: int, limit: int = -1, use_gui: bool = False):
 
 
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
+    from pathlib import Path
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "ide" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
+        with open(config_path, "r") as f:
             config_data = yaml.safe_load(f) or {}
-            print("Loaded config from config/ide/config.yaml")
+            print(f"Loaded config from config/ide/config.yaml")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Send periodic chat messages to Antigravity.")

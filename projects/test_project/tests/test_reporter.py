@@ -3,7 +3,7 @@
 import json
 from pathlib import Path
 
-from src.reporter import ReportConfig, ReportGenerator
+from src.reporter import ReportGenerator, ReportConfig
 
 
 class TestReportConfig:

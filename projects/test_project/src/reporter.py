@@ -12,11 +12,11 @@ Example:
     >>> report_path = generator.generate(analysis_results, config)
 """
 
-import json
+from pathlib import Path
+from typing import Dict, Any, Optional
 from dataclasses import dataclass
 from datetime import datetime
-from pathlib import Path
-from typing import Any
+import json
 
 # Real codomyrmex imports - no fallback for mega-seed project
 from codomyrmex.logging_monitoring import get_logger
@@ -81,7 +81,7 @@ class ReportGenerator:
         >>> path = generator.generate(results, ReportConfig(format="html"))
     """
 
-    def __init__(self, output_dir: Path | None = None):
+    def __init__(self, output_dir: Optional[Path] = None):
         """Initialize the report generator.
         
         Args:
@@ -93,8 +93,8 @@ class ReportGenerator:
 
     def generate(
         self,
-        analysis_results: dict[str, Any],
-        config: ReportConfig | None = None
+        analysis_results: Dict[str, Any],
+        config: Optional[ReportConfig] = None
     ) -> Path:
         """Generate report from analysis results.
         
@@ -131,9 +131,9 @@ class ReportGenerator:
 
     def generate_all_formats(
         self,
-        analysis_results: dict[str, Any],
-        base_config: ReportConfig | None = None
-    ) -> dict[str, Path]:
+        analysis_results: Dict[str, Any],
+        base_config: Optional[ReportConfig] = None
+    ) -> Dict[str, Path]:
         """Generate reports in all supported formats.
         
         Args:
@@ -171,7 +171,7 @@ class ReportGenerator:
 
     def _generate_json_report(
         self,
-        results: dict[str, Any],
+        results: Dict[str, Any],
         path: Path,
         config: ReportConfig
     ) -> None:
@@ -200,7 +200,7 @@ class ReportGenerator:
 
     def _generate_markdown_report(
         self,
-        results: dict[str, Any],
+        results: Dict[str, Any],
         path: Path,
         config: ReportConfig
     ) -> None:
@@ -246,7 +246,7 @@ class ReportGenerator:
         # Files section
         if config.include_file_details:
             files = results.get("files", [])
-            content += """## 📄 File Analysis
+            content += f"""## 📄 File Analysis
 
 """
             for f in files[:config.max_files]:
@@ -296,7 +296,7 @@ class ReportGenerator:
 
     def _generate_html_report(
         self,
-        results: dict[str, Any],
+        results: Dict[str, Any],
         path: Path,
         config: ReportConfig
     ) -> None:

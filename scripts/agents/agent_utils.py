@@ -4,15 +4,14 @@ Provides a unified factory to get a real LLM client (Claude or Ollama).
 Strictly enforces real/live functionality - no mocks allowed.
 """
 
-import json
-import logging
 import os
+import json
 import time
-import urllib.error
+import logging
 import urllib.request
-from dataclasses import dataclass
+import urllib.error
 from typing import Any
-
+from dataclasses import dataclass
 
 @dataclass
 class AgentRequest:
@@ -144,13 +143,12 @@ def get_llm_client(identity="agent"):
 
 
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
+    from pathlib import Path
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "agents" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
+        with open(config_path, "r") as f:
             config_data = yaml.safe_load(f) or {}
-            print("Loaded config from config/agents/config.yaml")
+            print(f"Loaded config from config/agents/config.yaml")
 

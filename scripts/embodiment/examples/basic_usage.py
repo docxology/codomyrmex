@@ -10,18 +10,17 @@ Usage:
     python basic_usage.py --verbose                # Verbose output
 """
 
-import asyncio
-import math
 import sys
+import math
+import asyncio
 from pathlib import Path
-from typing import Any
+from typing import Any, Dict
 
 project_root = Path(__file__).parent.parent.parent.parent
 sys.path.insert(0, str(project_root / "src"))
 
 # Direct import to avoid triggering full codomyrmex package init
 import importlib.util
-
 script_base_path = project_root / "src" / "codomyrmex" / "utils" / "process" / "script_base.py"
 spec = importlib.util.spec_from_file_location("script_base", script_base_path)
 script_base = importlib.util.module_from_spec(spec)
@@ -56,11 +55,11 @@ class EmbodimentScript(ScriptBase):
             help="Simulated publish rate in Hz (default: 10.0)"
         )
 
-    async def _run_async(self, args, config: ScriptConfig, results: dict[str, Any]):
+    async def _run_async(self, args, config: ScriptConfig, results: Dict[str, Any]):
         """Async portion of the script execution."""
         from codomyrmex.embodiment import ROS2Bridge, Transform3D
-        from codomyrmex.embodiment.actuators import ActuatorCommand, MockActuator
         from codomyrmex.embodiment.sensors import MockSensor
+        from codomyrmex.embodiment.actuators import MockActuator, ActuatorCommand
 
         # Test 1: ROS2Bridge creation
         self.log_info(f"\n1. Creating ROS2Bridge node '{args.node_name}'")
@@ -154,7 +153,7 @@ class EmbodimentScript(ScriptBase):
             self.log_error(f"Hardware tests failed: {e}")
         results["tests_run"] += 1
 
-    def run(self, args, config: ScriptConfig) -> dict[str, Any]:
+    def run(self, args, config: ScriptConfig) -> Dict[str, Any]:
         """Execute embodiment demonstrations."""
         results = {
             "tests_run": 0,
@@ -187,15 +186,14 @@ class EmbodimentScript(ScriptBase):
 
 
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
+    from pathlib import Path
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "embodiment" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
+        with open(config_path, "r") as f:
             config_data = yaml.safe_load(f) or {}
-            print("Loaded config from config/embodiment/config.yaml")
+            print(f"Loaded config from config/embodiment/config.yaml")
 
 if __name__ == "__main__":
     script = EmbodimentScript()

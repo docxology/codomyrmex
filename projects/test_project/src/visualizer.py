@@ -13,15 +13,14 @@ Example:
     >>> print(f"Dashboard saved to: {dashboard_path}")
 """
 
+from pathlib import Path
+from typing import Dict, Any, List, Optional
 from dataclasses import dataclass
 from datetime import datetime
-from pathlib import Path
-from typing import Any
-
-from codomyrmex.data_visualization.reports.general import GeneralSystemReport
 
 # Real codomyrmex imports - no fallback for mega-seed project
 from codomyrmex.logging_monitoring import get_logger
+from codomyrmex.data_visualization.reports.general import GeneralSystemReport
 
 HAS_CODOMYRMEX_LOGGING = True  # Exported for integration tests
 HAS_VISUALIZATION_MODULE = True  # Exported for integration tests
@@ -79,7 +78,7 @@ class DataVisualizer:
         >>> path = visualizer.create_dashboard(results)
     """
 
-    def __init__(self, output_dir: Path | None = None):
+    def __init__(self, output_dir: Optional[Path] = None):
         """Initialize the visualizer.
         
         Args:
@@ -102,8 +101,8 @@ class DataVisualizer:
 
     def visualize_metrics(
         self,
-        metrics: dict[str, Any],
-        config: ChartConfig | None = None
+        metrics: Dict[str, Any],
+        config: Optional[ChartConfig] = None
     ) -> Path:
         """Create visualization of analysis metrics.
         
@@ -136,8 +135,8 @@ class DataVisualizer:
 
     def create_dashboard(
         self,
-        analysis_results: dict[str, Any],
-        output_path: Path | None = None
+        analysis_results: Dict[str, Any],
+        output_path: Optional[Path] = None
     ) -> Path:
         """Create interactive dashboard from analysis results.
         
@@ -200,7 +199,7 @@ class DataVisualizer:
 
         return output_path
 
-    def _create_header_section(self, results: dict[str, Any]) -> str:
+    def _create_header_section(self, results: Dict[str, Any]) -> str:
         """Create dashboard header."""
         target = results.get("target", "Unknown")
         timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -215,7 +214,7 @@ class DataVisualizer:
         </div>
         """
 
-    def _create_summary_section(self, summary: dict[str, Any]) -> str:
+    def _create_summary_section(self, summary: Dict[str, Any]) -> str:
         """Create summary section HTML with metric cards."""
         metrics = [
             ("📁", "Files Analyzed", summary.get("total_files", 0)),
@@ -243,7 +242,7 @@ class DataVisualizer:
         </div>
         """
 
-    def _create_patterns_section(self, patterns: dict[str, int]) -> str:
+    def _create_patterns_section(self, patterns: Dict[str, int]) -> str:
         """Create patterns section with visual chart."""
         if not patterns:
             return ""
@@ -273,7 +272,7 @@ class DataVisualizer:
         </div>
         """
 
-    def _create_files_section(self, files: list[dict]) -> str:
+    def _create_files_section(self, files: List[Dict]) -> str:
         """Create files table section HTML."""
         rows = ""
         for f in files[:20]:  # Limit to 20 files
@@ -328,13 +327,13 @@ class DataVisualizer:
         </div>
         """
 
-    def _create_issues_section(self, issues: list[dict]) -> str:
+    def _create_issues_section(self, issues: List[Dict]) -> str:
         """Create issues summary section."""
         if not issues:
             return ""
 
         # Group by severity
-        by_severity: dict[str, list[dict]] = {}
+        by_severity: Dict[str, List[Dict]] = {}
         for issue in issues:
             severity = issue.get("severity", "info")
             if severity not in by_severity:
@@ -369,7 +368,7 @@ class DataVisualizer:
         </div>
         """
 
-    def _generate_metrics_chart(self, metrics: dict[str, Any], config: ChartConfig) -> str:
+    def _generate_metrics_chart(self, metrics: Dict[str, Any], config: ChartConfig) -> str:
         """Generate a simple bar chart for metrics."""
         bars = ""
         max_val = max(metrics.values()) if metrics else 1
@@ -423,7 +422,7 @@ class DataVisualizer:
 </html>
 """
 
-    def _write_dashboard(self, path: Path, sections: list[str]) -> None:
+    def _write_dashboard(self, path: Path, sections: List[str]) -> None:
         """Write dashboard HTML file with modern styling."""
         html = f"""<!DOCTYPE html>
 <html>
@@ -661,8 +660,8 @@ class DataVisualizer:
 
     def create_visualization_report(
         self,
-        analysis_results: dict[str, Any],
-        output_path: Path | None = None,
+        analysis_results: Dict[str, Any],
+        output_path: Optional[Path] = None,
     ) -> Path:
         """Create a report using the unified codomyrmex.visualization system.
 

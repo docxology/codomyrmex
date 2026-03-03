@@ -5,7 +5,7 @@ Demonstrates the use of the IoC container, scoping, and auto-injection.
 """
 
 import sys
-from typing import Protocol
+from typing import Protocol, List
 
 from codomyrmex.dependency_injection import (
     Container,
@@ -52,7 +52,7 @@ class MockRepository:
 @injectable(scope="scoped")
 class ProcessingService:
     @inject
-    def __init__(self, repos: list[IDataRepository], config: Configuration):
+    def __init__(self, repos: List[IDataRepository], config: Configuration):
         self.repos = repos
         self.config = config
 
@@ -115,15 +115,14 @@ def run_orchestrator():
 
 
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
+    from pathlib import Path
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "dependency_injection" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
+        with open(config_path, "r") as f:
             config_data = yaml.safe_load(f) or {}
-            print("Loaded config from config/dependency_injection/config.yaml")
+            print(f"Loaded config from config/dependency_injection/config.yaml")
 
 if __name__ == "__main__":
     try:

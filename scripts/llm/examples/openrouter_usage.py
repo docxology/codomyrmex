@@ -34,10 +34,10 @@ Usage:
     python openrouter_usage.py --prompt-key --prompt "Hello"
 """
 
+import sys
+import os
 import argparse
 import getpass
-import os
-import sys
 from pathlib import Path
 
 # Ensure codomyrmex is in path
@@ -47,19 +47,13 @@ except ImportError:
     project_root = Path(__file__).resolve().parent.parent.parent.parent
     sys.path.insert(0, str(project_root / "src"))
 
+from codomyrmex.utils.cli_helpers import setup_logging, print_success, print_info, print_error, print_warning
 from codomyrmex.llm.providers import (
+    get_provider,
+    ProviderType,
+    ProviderConfig,
     Message,
     OpenRouterProvider,
-    ProviderConfig,
-    ProviderType,
-    get_provider,
-)
-from codomyrmex.utils.cli_helpers import (
-    print_error,
-    print_info,
-    print_success,
-    print_warning,
-    setup_logging,
 )
 
 # Default config file locations
@@ -216,7 +210,7 @@ def complete_prompt(
             print("─" * 50)
 
             if response.usage:
-                print_info("\n📊 Token usage:")
+                print_info(f"\n📊 Token usage:")
                 print(f"   Prompt: {response.usage.get('prompt_tokens', 'N/A')}")
                 print(f"   Completion: {response.usage.get('completion_tokens', 'N/A')}")
                 print(f"   Total: {response.usage.get('total_tokens', 'N/A')}")
@@ -247,15 +241,14 @@ def demonstrate_context_manager(
 
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
+    from pathlib import Path
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "llm" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
+        with open(config_path, "r") as f:
             config_data = yaml.safe_load(f) or {}
-            print("Loaded config from config/llm/config.yaml")
+            print(f"Loaded config from config/llm/config.yaml")
 
     parser = argparse.ArgumentParser(
         description="OpenRouter LLM Provider Examples",

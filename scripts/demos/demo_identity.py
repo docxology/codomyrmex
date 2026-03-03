@@ -7,20 +7,15 @@ Demonstrates:
 2. Behavior-bio-cognitive verification (keystroke dynamics).
 """
 
-import random
 import sys
 from pathlib import Path
+import random
 
 # Add src to path
 sys.path.append(str(Path(__file__).parent.parent / "src"))
 
-from codomyrmex.identity import BioCognitiveVerifier, IdentityManager, VerificationLevel
-from codomyrmex.utils.cli_helpers import (
-    print_error,
-    print_info,
-    print_success,
-    setup_logging,
-)
+from codomyrmex.identity import IdentityManager, VerificationLevel, BioCognitiveVerifier
+from codomyrmex.utils.cli_helpers import setup_logging, print_info, print_success, print_error
 
 
 def demo_personas():
@@ -96,13 +91,12 @@ def demo_verification():
 
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
+    from pathlib import Path
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "demos" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
+        with open(config_path, "r") as f:
             config_data = yaml.safe_load(f) or {}
             print(f"Loaded config from {config_path.name}")
 

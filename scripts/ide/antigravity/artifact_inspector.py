@@ -4,10 +4,10 @@ Artifact Inspector for Antigravity
 Lists and inspects all artifacts in the current conversation.
 """
 
-import logging
 import sys
-from datetime import datetime
 from pathlib import Path
+import logging
+from datetime import datetime
 
 # Ensure project root is in path
 project_root = Path(__file__).resolve().parent.parent.parent.parent
@@ -43,15 +43,14 @@ def inspect_artifacts():
 
 
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
+    from pathlib import Path
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "ide" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
+        with open(config_path, "r") as f:
             config_data = yaml.safe_load(f) or {}
-            print("Loaded config from config/ide/config.yaml")
+            print(f"Loaded config from config/ide/config.yaml")
 
 if __name__ == "__main__":
     inspect_artifacts()

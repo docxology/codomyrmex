@@ -16,10 +16,10 @@ except ImportError:
     sys.path.insert(0, str(project_root / "src"))
 
 import argparse
-import json
-import re
-import urllib.error
 import urllib.request
+import urllib.error
+import re
+import json
 from html.parser import HTMLParser
 
 
@@ -104,15 +104,14 @@ def extract_text(html: str) -> str:
 
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
+    from pathlib import Path
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "scrape" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
+        with open(config_path, "r") as f:
             config_data = yaml.safe_load(f) or {}
-            print("Loaded config from config/scrape/config.yaml")
+            print(f"Loaded config from config/scrape/config.yaml")
 
     parser = argparse.ArgumentParser(description="Web scraping utilities")
     parser.add_argument("url", nargs="?", help="URL to scrape")

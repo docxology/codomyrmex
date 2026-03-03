@@ -16,8 +16,8 @@ except ImportError:
     sys.path.insert(0, str(project_root / "src"))
 
 import argparse
-import os
 import subprocess
+import os
 
 
 def find_deploy_configs() -> list:
@@ -97,7 +97,7 @@ def main():
 
     if args.command == "status":
         env = check_deploy_env()
-        print("🚀 Deployment Status\n")
+        print(f"🚀 Deployment Status\n")
         print(f"   Environment: {env['env'].upper()}")
 
         services = get_docker_compose_services()

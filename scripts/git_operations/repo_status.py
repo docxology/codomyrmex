@@ -17,8 +17,8 @@ except ImportError:
     sys.path.insert(0, str(project_root / "src"))
 
 import argparse
-import os
 import subprocess
+import os
 
 
 def run_git(args: list, cwd: str = ".") -> tuple:
@@ -114,15 +114,14 @@ def get_stash_info(path: str) -> list:
 
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
+    from pathlib import Path
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "git_operations" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
+        with open(config_path, "r") as f:
             config_data = yaml.safe_load(f) or {}
-            print("Loaded config from config/git_operations/config.yaml")
+            print(f"Loaded config from config/git_operations/config.yaml")
 
     parser = argparse.ArgumentParser(description="Display Git repository status")
     parser.add_argument("--path", "-p", default=".", help="Repository path (default: current directory)")

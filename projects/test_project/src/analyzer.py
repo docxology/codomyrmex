@@ -238,10 +238,7 @@ class ProjectAnalyzer:
         lines = content.split("\n")
 
         # 1. Integration with codomyrmex.static_analysis
-        from codomyrmex.coding.static_analysis.static_analyzer import (
-            AnalysisType,
-            StaticAnalyzer,
-        )
+        from codomyrmex.coding.static_analysis.static_analyzer import StaticAnalyzer, AnalysisType
         analyzer = StaticAnalyzer()
         try:
             static_results = analyzer.analyze_file(str(file_path), [AnalysisType.QUALITY, AnalysisType.COMPLEXITY])
@@ -260,7 +257,7 @@ class ProjectAnalyzer:
             metrics = analyzer.calculate_metrics(str(file_path))
             complexity = metrics.cyclomatic_complexity
             loc = metrics.lines_of_code
-        except Exception:
+        except Exception as e:
             complexity = 0
             loc = len(lines)
 

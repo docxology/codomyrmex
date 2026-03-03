@@ -2,7 +2,7 @@
 
 from pathlib import Path
 
-from src.analyzer import AnalysisResult, ProjectAnalyzer
+from src.analyzer import ProjectAnalyzer, AnalysisResult
 
 
 class TestAnalysisResult:

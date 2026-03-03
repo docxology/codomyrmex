@@ -3,8 +3,8 @@
 Orchestrator for documents - A thin wrapper around documents capabilities.
 """
 
-import argparse
 import sys
+import argparse
 from pathlib import Path
 
 # Ensure codomyrmex is in path
@@ -15,28 +15,21 @@ if str(project_root) not in sys.path:
     sys.path.insert(0, str(project_root))
 
 from codomyrmex.documents import (
-    DocumentFormat,
-    convert_document,
     read_document,
     write_document,
+    convert_document,
+    DocumentFormat
 )
-from codomyrmex.utils.cli_helpers import (
-    print_error,
-    print_info,
-    print_success,
-    setup_logging,
-)
-
+from codomyrmex.utils.cli_helpers import setup_logging, print_success, print_info, print_error
 
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
+    from pathlib import Path
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "documents" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
+        with open(config_path, "r") as f:
             config_data = yaml.safe_load(f) or {}
             print(f"Loaded config from {config_path.name}")
 
@@ -67,7 +60,7 @@ def main():
         doc = read_document(input_path)
 
         if args.action == "info":
-            print_info("Document Info:")
+            print_info(f"Document Info:")
             print_info(f"  Format: {doc.format.value}")
             print_info(f"  Type: {doc.type.value}")
             print_info(f"  Metadata: {doc.metadata.to_dict()}")

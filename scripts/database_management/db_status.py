@@ -16,8 +16,8 @@ except ImportError:
     sys.path.insert(0, str(project_root / "src"))
 
 import argparse
-import json
 import os
+import json
 
 
 def check_sqlite(path: str) -> dict:
@@ -101,15 +101,14 @@ def find_local_databases() -> list:
 
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
+    from pathlib import Path
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "database_management" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
+        with open(config_path, "r") as f:
             config_data = yaml.safe_load(f) or {}
-            print("Loaded config from config/database_management/config.yaml")
+            print(f"Loaded config from config/database_management/config.yaml")
 
     parser = argparse.ArgumentParser(description="Check database status")
     parser.add_argument("--url", "-u", default=None, help="Database URL")
@@ -130,7 +129,7 @@ def main():
         # Check environment variables
         db_url = os.environ.get("DATABASE_URL")
         if db_url:
-            print("📌 Found DATABASE_URL environment variable")
+            print(f"📌 Found DATABASE_URL environment variable")
             if "postgres" in db_url:
                 results.append(check_postgres(db_url))
             else:

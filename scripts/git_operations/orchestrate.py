@@ -18,8 +18,8 @@ Workflow:
 
 import os
 import shutil
-import sys
 import tempfile
+import sys
 from pathlib import Path
 
 # Ensure codomyrmex is in path
@@ -29,26 +29,19 @@ except ImportError:
     project_root = Path(__file__).resolve().parent.parent.parent
     sys.path.insert(0, str(project_root / "src"))
 
+from codomyrmex.utils.cli_helpers import setup_logging, print_success, print_info, print_error, print_section
 from codomyrmex.git_operations import (
+    initialize_git_repository,
     add_files,
     commit_changes,
     create_branch,
-    delete_branch,
+    switch_branch,
+    merge_branch,
+    get_status,
     get_commit_history,
     get_current_branch,
-    get_status,
-    initialize_git_repository,
-    merge_branch,
-    switch_branch,
+    delete_branch
 )
-from codomyrmex.utils.cli_helpers import (
-    print_error,
-    print_info,
-    print_section,
-    print_success,
-    setup_logging,
-)
-
 
 def run_workflow():
     setup_logging()
@@ -148,15 +141,14 @@ def run_workflow():
 
 
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
+    from pathlib import Path
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "git_operations" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
+        with open(config_path, "r") as f:
             config_data = yaml.safe_load(f) or {}
-            print("Loaded config from config/git_operations/config.yaml")
+            print(f"Loaded config from config/git_operations/config.yaml")
 
 if __name__ == "__main__":
     # If run as orchestrator (with --scripts-dir), it will find this file.

@@ -174,7 +174,7 @@ def list_ptr_records(client):
 
 def set_reverse_dns(client, floating_ip: str, hostname: str, ttl: int = 3600):
     """Set reverse DNS for a floating IP."""
-    print("\n🔄 Setting reverse DNS")
+    print(f"\n🔄 Setting reverse DNS")
     print(f"   IP: {floating_ip}")
     print(f"   Hostname: {hostname}")
 
@@ -187,15 +187,14 @@ def set_reverse_dns(client, floating_ip: str, hostname: str, ttl: int = 3600):
 
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
+    from pathlib import Path
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "cloud" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
+        with open(config_path, "r") as f:
             config_data = yaml.safe_load(f) or {}
-            print("Loaded config from config/cloud/config.yaml")
+            print(f"Loaded config from config/cloud/config.yaml")
 
     parser = argparse.ArgumentParser(description="Infomaniak DNS Examples")
 

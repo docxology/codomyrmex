@@ -17,8 +17,8 @@ Demonstrates a permanent, ping-ponging conversation between two autonomous agent
 Uses the modular `AutonomousAgent` class from `codomyrmex.agents`.
 """
 
-import sys
 import time
+import sys
 from pathlib import Path
 
 # Ensure src is in path if run directly
@@ -36,13 +36,12 @@ RUNNING = True
 
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
+    from pathlib import Path
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "agents" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
+        with open(config_path, "r") as f:
             config_data = yaml.safe_load(f) or {}
             print(f"Loaded config from {config_path.name}")
 

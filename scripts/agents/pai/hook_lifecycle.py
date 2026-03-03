@@ -28,9 +28,7 @@ except ImportError:
 
 from codomyrmex.agents.pai import PAIBridge
 from codomyrmex.utils.cli_helpers import (
-    print_info,
-    print_warning,
-    setup_logging,
+    setup_logging, print_info, print_warning,
 )
 
 
@@ -140,7 +138,7 @@ def lifecycle_analysis(bridge: PAIBridge) -> dict:
             for h in hooks:
                 print(f"    • {h}")
         else:
-            print("    (none)")
+            print(f"    (none)")
 
     # Map to Algorithm phases
     phase_mapping = {
@@ -150,7 +148,7 @@ def lifecycle_analysis(bridge: PAIBridge) -> dict:
         "prompt": "OBSERVE (1/7) — user prompt processing",
     }
 
-    print("\n  Hook → Algorithm Phase Mapping:")
+    print(f"\n  Hook → Algorithm Phase Mapping:")
     for cat, phase in phase_mapping.items():
         has = "✅" if categories[cat] else "❌"
         print(f"    {has} {cat:10s} → {phase}")
@@ -183,15 +181,14 @@ def main() -> int:
 
 
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
+    from pathlib import Path
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "agents" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
+        with open(config_path, "r") as f:
             config_data = yaml.safe_load(f) or {}
-            print("Loaded config from config/agents/config.yaml")
+            print(f"Loaded config from config/agents/config.yaml")
 
 if __name__ == "__main__":
     sys.exit(main())

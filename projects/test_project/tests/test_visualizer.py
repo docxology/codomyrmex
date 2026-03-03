@@ -2,7 +2,7 @@
 
 from pathlib import Path
 
-from src.visualizer import ChartConfig, DataVisualizer
+from src.visualizer import DataVisualizer, ChartConfig
 
 
 class TestChartConfig:

@@ -23,7 +23,6 @@ except ImportError:
     project_root = Path(__file__).resolve().parent.parent.parent.parent
     sys.path.insert(0, str(project_root / "src"))
 
-from codomyrmex.multimodal.image_generation import ImageGenerator
 from codomyrmex.utils.cli_helpers import (
     print_error,
     print_info,
@@ -32,6 +31,7 @@ from codomyrmex.utils.cli_helpers import (
     print_warning,
     setup_logging,
 )
+from codomyrmex.multimodal.image_generation import ImageGenerator
 
 
 def main() -> int:

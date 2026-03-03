@@ -1,16 +1,15 @@
 #!/usr/bin/env python3
-import os
 import sys
 from pathlib import Path
+import os
 
 # Ensure codomyrmex is in path
 project_root = Path(__file__).resolve().parent.parent.parent
 sys.path.insert(0, str(project_root / "src"))
 
-from codomyrmex.agents import AgentOrchestrator, AgentRequest, CodeEditor, GeminiClient
+from codomyrmex.agents import GeminiClient, CodeEditor, AgentOrchestrator, AgentRequest
 from codomyrmex.logging_monitoring import setup_logging
-from codomyrmex.utils.cli_helpers import print_error, print_info, print_success
-
+from codomyrmex.utils.cli_helpers import print_success, print_error, print_info
 
 def test_gemini_client():
     if os.getenv("CODOMYRMEX_TEST_MODE") == "1":
@@ -103,15 +102,14 @@ def test_orchestrator_dispatch():
 
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
+    from pathlib import Path
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "agents" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
+        with open(config_path, "r") as f:
             config_data = yaml.safe_load(f) or {}
-            print("Loaded config from config/agents/config.yaml")
+            print(f"Loaded config from config/agents/config.yaml")
 
     setup_logging()
 

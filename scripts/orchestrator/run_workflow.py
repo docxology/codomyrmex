@@ -23,7 +23,7 @@ project_root = Path(__file__).parent.parent.parent
 sys.path.insert(0, str(project_root / "src"))
 sys.path.insert(0, str(project_root))  # Add for scripts package imports
 
-from scripts.orchestrator.workflows import get_workflow, list_workflows
+from scripts.orchestrator.workflows import list_workflows, get_workflow
 
 
 def main() -> int:
@@ -124,15 +124,14 @@ Example:
 
 
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
+    from pathlib import Path
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "orchestrator" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
+        with open(config_path, "r") as f:
             config_data = yaml.safe_load(f) or {}
-            print("Loaded config from config/orchestrator/config.yaml")
+            print(f"Loaded config from config/orchestrator/config.yaml")
 
 if __name__ == "__main__":
     sys.exit(main())

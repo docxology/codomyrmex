@@ -6,9 +6,9 @@ Usage:
     python event_demo.py [--demo TYPE]
 """
 
-import argparse
 import sys
 import time
+import argparse
 from pathlib import Path
 
 # Ensure codomyrmex is in path
@@ -20,19 +20,14 @@ except ImportError:
 
 from codomyrmex.events import (
     Event,
-    EventPriority,
     EventType,
+    EventPriority,
     get_event_bus,
-    get_event_stats,
     publish_event,
+    get_event_stats
 )
 from codomyrmex.events.emitters.event_emitter import EventEmitter
-from codomyrmex.events.handlers.event_listener import (
-    AutoEventListener,
-    EventListener,
-    event_handler,
-)
-
+from codomyrmex.events.handlers.event_listener import EventListener, event_handler, AutoEventListener
 
 def demo_basic():
     """Basic event publishing and subscription demo."""
@@ -117,13 +112,12 @@ def demo_auto_listener():
 
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
+    from pathlib import Path
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "events" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
+        with open(config_path, "r") as f:
             config_data = yaml.safe_load(f) or {}
             print(f"Loaded config from {config_path.name}")
 

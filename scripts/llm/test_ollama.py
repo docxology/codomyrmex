@@ -22,8 +22,8 @@ import json
 
 def check_ollama_connection(host: str, port: int) -> bool:
     """Check if Ollama server is accessible."""
-    import urllib.error
     import urllib.request
+    import urllib.error
 
     try:
         url = f"http://{host}:{port}/api/tags"
@@ -71,15 +71,14 @@ def test_inference(host: str, port: int, model: str, prompt: str = "Hello, how a
 
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
+    from pathlib import Path
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "llm" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
+        with open(config_path, "r") as f:
             config_data = yaml.safe_load(f) or {}
-            print("Loaded config from config/llm/config.yaml")
+            print(f"Loaded config from config/llm/config.yaml")
 
     parser = argparse.ArgumentParser(description="Test Ollama LLM connectivity")
     parser.add_argument("--host", default="localhost", help="Ollama host (default: localhost)")

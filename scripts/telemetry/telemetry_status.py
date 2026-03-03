@@ -16,8 +16,8 @@ except ImportError:
     sys.path.insert(0, str(project_root / "src"))
 
 import argparse
-import json
 import os
+import json
 from datetime import datetime
 
 
@@ -70,15 +70,14 @@ def parse_metrics_file(path: Path) -> list:
 
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
+    from pathlib import Path
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "telemetry" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
+        with open(config_path, "r") as f:
             config_data = yaml.safe_load(f) or {}
-            print("Loaded config from config/telemetry/config.yaml")
+            print(f"Loaded config from config/telemetry/config.yaml")
 
     parser = argparse.ArgumentParser(description="Display telemetry status")
     parser.add_argument("--verbose", "-v", action="store_true", help="Show detailed info")

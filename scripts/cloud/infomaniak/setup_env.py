@@ -10,10 +10,10 @@ Usage:
     python setup_env.py --test-connection    # Test OpenStack connection
 """
 
-import argparse
-import os
 import sys
 from pathlib import Path
+import argparse
+import os
 
 ENV_TEMPLATE = """# Infomaniak Public Cloud Configuration
 # ======================================
@@ -130,7 +130,7 @@ def test_connection():
         print("   Testing API connectivity...")
         flavors = client.list_flavors()
 
-        print("\n   ✅ Connection successful!")
+        print(f"\n   ✅ Connection successful!")
         print(f"   📊 Found {len(flavors)} available flavors")
 
         # Show some flavors
@@ -152,15 +152,14 @@ def test_connection():
 
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
+    from pathlib import Path
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "cloud" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
+        with open(config_path, "r") as f:
             config_data = yaml.safe_load(f) or {}
-            print("Loaded config from config/cloud/config.yaml")
+            print(f"Loaded config from config/cloud/config.yaml")
 
     parser = argparse.ArgumentParser(description="Infomaniak Environment Setup")
     parser.add_argument("--create-template", action="store_true",

@@ -13,16 +13,14 @@ Usage:
 
 import sys
 import time
-from collections.abc import Callable
 from pathlib import Path
-from typing import Any
+from typing import Any, Dict, Callable
 
 project_root = Path(__file__).parent.parent.parent.parent
 sys.path.insert(0, str(project_root / "src"))
 
 # Direct import to avoid triggering full codomyrmex package init
 import importlib.util
-
 script_base_path = project_root / "src" / "codomyrmex" / "utils" / "process" / "script_base.py"
 if not script_base_path.exists():
     # Try alternate location if project structure differs
@@ -73,7 +71,7 @@ class EvolutionaryAIScript(ScriptBase):
             default="sum", help="Fitness function to use (default: sum)"
         )
 
-    def run(self, args, config: ScriptConfig) -> dict[str, Any]:
+    def run(self, args, config: ScriptConfig) -> Dict[str, Any]:
         """Execute evolutionary algorithm demonstrations."""
         results = {
             "config": {
@@ -94,10 +92,7 @@ class EvolutionaryAIScript(ScriptBase):
 
         # Import improved evolutionary_ai module
         from codomyrmex.evolutionary_ai import (
-            GaussianMutation,
-            Population,
-            SinglePointCrossover,
-            TournamentSelection,
+            Population, TournamentSelection, GaussianMutation, SinglePointCrossover
         )
 
         # Select fitness function
@@ -202,15 +197,14 @@ class EvolutionaryAIScript(ScriptBase):
 
 
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
+    from pathlib import Path
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "evolutionary_ai" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
+        with open(config_path, "r") as f:
             config_data = yaml.safe_load(f) or {}
-            print("Loaded config from config/evolutionary_ai/config.yaml")
+            print(f"Loaded config from config/evolutionary_ai/config.yaml")
 
 if __name__ == "__main__":
     script = EvolutionaryAIScript()

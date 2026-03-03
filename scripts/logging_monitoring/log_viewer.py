@@ -19,6 +19,7 @@ import argparse
 import re
 from datetime import datetime
 
+
 LOG_LEVELS = ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
 LOG_PATTERN = re.compile(r'(\d{4}-\d{2}-\d{2}[T\s]\d{2}:\d{2}:\d{2})?.*?(DEBUG|INFO|WARNING|ERROR|CRITICAL)', re.IGNORECASE)
 
@@ -50,7 +51,7 @@ def find_log_files(path: str) -> list:
 
 def analyze_logs(lines: list) -> dict:
     """Analyze log content."""
-    stats = dict.fromkeys(LOG_LEVELS, 0)
+    stats = {level: 0 for level in LOG_LEVELS}
     errors = []
 
     for line in lines:
@@ -66,15 +67,14 @@ def analyze_logs(lines: list) -> dict:
 
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
+    from pathlib import Path
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "logging_monitoring" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
+        with open(config_path, "r") as f:
             config_data = yaml.safe_load(f) or {}
-            print("Loaded config from config/logging_monitoring/config.yaml")
+            print(f"Loaded config from config/logging_monitoring/config.yaml")
 
     parser = argparse.ArgumentParser(description="Log viewer and analysis")
     parser.add_argument("path", nargs="?", default=".", help="Log file or directory")

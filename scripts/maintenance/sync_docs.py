@@ -41,7 +41,7 @@ def sync_subdirectories():
 
 def fix_file(filepath, count):
     if not os.path.exists(filepath): return
-    with open(filepath) as f:
+    with open(filepath, 'r') as f:
         content = f.read()
 
     original = content

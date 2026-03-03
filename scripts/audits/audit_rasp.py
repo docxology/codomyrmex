@@ -6,8 +6,8 @@ Thin wrapper around codomyrmex.documentation.audit.audit_rasp.
 """
 
 import argparse
-import sys
 from pathlib import Path
+import sys
 
 # Ensure src is in path
 PROJ_ROOT = Path(__file__).resolve().parent.parent
@@ -25,15 +25,14 @@ except ImportError as e:
 
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
+    from pathlib import Path
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "audits" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
+        with open(config_path, "r") as f:
             config_data = yaml.safe_load(f) or {}
-            print("Loaded config from config/audits/config.yaml")
+            print(f"Loaded config from config/audits/config.yaml")
 
     parser = argparse.ArgumentParser(description="Audit RASP documentation breadth.")
     parser.add_argument("--root", type=Path, default=PROJ_ROOT, help="Project root directory")

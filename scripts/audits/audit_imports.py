@@ -17,7 +17,7 @@ if str(SRC_DIR) not in sys.path:
     sys.path.insert(0, str(SRC_DIR))
 
 try:
-    from codomyrmex.static_analysis.imports import check_layer_violations, scan_imports
+    from codomyrmex.static_analysis.imports import scan_imports, check_layer_violations
 except ImportError as e:
     print(f"Error importing codomyrmex module: {e}")
     sys.exit(1)
@@ -25,15 +25,14 @@ except ImportError as e:
 
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
+    from pathlib import Path
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "audits" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
+        with open(config_path, "r") as f:
             config_data = yaml.safe_load(f) or {}
-            print("Loaded config from config/audits/config.yaml")
+            print(f"Loaded config from config/audits/config.yaml")
 
     parser = argparse.ArgumentParser(description="Audit cross-module imports")
     parser.add_argument("--json", action="store_true", help="Output JSON")
