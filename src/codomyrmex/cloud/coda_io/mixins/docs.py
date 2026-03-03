@@ -26,8 +26,7 @@ class DocsMixin:
         limit: int = 25,
         page_token: str | None = None,
     ) -> DocList:
-        """
-        List accessible docs.
+        """List accessible docs.
 
         Returns docs in reverse chronological order by last relevant event.
 
@@ -45,6 +44,7 @@ class DocsMixin:
 
         Returns:
             DocList with items and pagination info
+
         """
         params = {
             "isOwner": is_owner,
@@ -69,8 +69,7 @@ class DocsMixin:
         folder_id: str | None = None,
         initial_page: dict[str, Any] | None = None,
     ) -> Doc:
-        """
-        Create a new doc.
+        """Create a new doc.
 
         Note: Creating a doc requires Doc Maker role in the workspace.
 
@@ -83,6 +82,7 @@ class DocsMixin:
 
         Returns:
             The created Doc
+
         """
         body = {}
         if title:
@@ -100,27 +100,27 @@ class DocsMixin:
         return Doc.from_dict(data)
 
     def get_doc(self, doc_id: str) -> Doc:
-        """
-        Get metadata for a specific doc.
+        """Get metadata for a specific doc.
 
         Args:
             doc_id: The doc ID
 
         Returns:
             Doc metadata
+
         """
         data = self._get(f"/docs/{self._encode_id(doc_id)}")
         return Doc.from_dict(data)
 
     def delete_doc(self, doc_id: str) -> dict[str, Any]:
-        """
-        Delete a doc.
+        """Delete a doc.
 
         Args:
             doc_id: The doc ID to delete
 
         Returns:
             Deletion result
+
         """
         return self._delete(f"/docs/{self._encode_id(doc_id)}")
 
@@ -130,8 +130,7 @@ class DocsMixin:
         title: str | None = None,
         icon_name: str | None = None,
     ) -> dict[str, Any]:
-        """
-        Update doc metadata.
+        """Update doc metadata.
 
         Note: Updating title requires Doc Maker role.
 
@@ -142,6 +141,7 @@ class DocsMixin:
 
         Returns:
             Update result
+
         """
         body = {}
         if title:

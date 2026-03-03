@@ -1,5 +1,4 @@
-"""
-AWS Serverless submodule.
+"""AWS Serverless submodule.
 
 Lambda functions
 """

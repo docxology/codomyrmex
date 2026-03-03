@@ -128,18 +128,23 @@ class GCSClient(StorageClient):
 
     # Legacy methods for backward compatibility
     def upload_blob(self, bucket_name: str, source_file_name: str, destination_blob_name: str) -> bool:
+        """Alias for upload_file."""
         return self.upload_file(bucket_name, destination_blob_name, source_file_name)
 
     def list_blobs(self, bucket_name: str) -> list[str]:
+        """Alias for list_objects."""
         return self.list_objects(bucket_name)
 
     def download_blob(self, bucket_name: str, source_blob_name: str, destination_file_name: str) -> bool:
+        """Alias for download_file."""
         return self.download_file(bucket_name, source_blob_name, destination_file_name)
 
     def get_metadata(self, bucket_name: str, blob_name: str) -> dict:
+        """Alias for get_object_metadata."""
         return self.get_object_metadata(bucket_name, blob_name)
 
     def ensure_bucket(self, bucket_name: str, location: str = "US") -> bool:
+        """Ensure a bucket exists by creating it if necessary."""
         if self.bucket_exists(bucket_name):
             return True
         return self.create_bucket(bucket_name, region=location)

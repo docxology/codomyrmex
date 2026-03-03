@@ -1,5 +1,4 @@
-"""
-Infomaniak Public Cloud Integration.
+"""Infomaniak Public Cloud Integration.
 
 This module provides comprehensive APIs for interacting with Infomaniak's
 OpenStack-based cloud platform, including:

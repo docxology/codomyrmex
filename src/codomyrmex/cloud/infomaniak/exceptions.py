@@ -1,5 +1,4 @@
-"""
-Infomaniak Cloud Error Hierarchy.
+"""Infomaniak Cloud Error Hierarchy.
 
 Provides structured exception types for all Infomaniak cloud operations,
 enabling precise error handling and classification.
@@ -13,13 +12,13 @@ except ImportError:
 
 
 class InfomaniakCloudError(Exception):
-    """
-    Base exception for all Infomaniak cloud operations.
+    """Base exception for all Infomaniak cloud operations.
 
     Attributes:
         service: The cloud service that raised the error (e.g., "compute", "network")
         operation: The operation that failed (e.g., "create_instance", "list_volumes")
         resource_id: Optional resource identifier involved in the error
+
     """
 
     def __init__(
@@ -37,31 +36,37 @@ class InfomaniakCloudError(Exception):
 
 class InfomaniakAuthError(InfomaniakCloudError):
     """Raised when authentication with Infomaniak fails."""
+
     pass
 
 
 class InfomaniakNotFoundError(InfomaniakCloudError):
     """Raised when a requested resource is not found (HTTP 404)."""
+
     pass
 
 
 class InfomaniakConflictError(InfomaniakCloudError):
     """Raised on state conflicts (HTTP 409), e.g., deleting an in-use resource."""
+
     pass
 
 
 class InfomaniakQuotaExceededError(InfomaniakCloudError):
     """Raised when a quota limit is exceeded (HTTP 413)."""
+
     pass
 
 
 class InfomaniakConnectionError(InfomaniakCloudError):
     """Raised when a connection to the Infomaniak API fails."""
+
     pass
 
 
 class InfomaniakTimeoutError(InfomaniakCloudError):
     """Raised when an operation times out."""
+
     pass
 
 
@@ -71,8 +76,7 @@ def classify_openstack_error(
     operation: str = "",
     resource_id: str = "",
 ) -> InfomaniakCloudError:
-    """
-    Classify an OpenStack SDK or HTTP error into the appropriate
+    """Classify an OpenStack SDK or HTTP error into the appropriate
     Infomaniak error type.
 
     Args:
@@ -83,6 +87,7 @@ def classify_openstack_error(
 
     Returns:
         An appropriate InfomaniakCloudError subclass instance
+
     """
     error_str = str(error).lower()
     kwargs = {"service": service, "operation": operation, "resource_id": resource_id}
@@ -110,8 +115,7 @@ def classify_http_error(
     operation: str = "",
     resource_id: str = "",
 ) -> InfomaniakCloudError:
-    """
-    Classify a ``requests`` HTTP error into the appropriate
+    """Classify a ``requests`` HTTP error into the appropriate
     Infomaniak error type based on the HTTP status code.
 
     Works with ``requests.exceptions.HTTPError`` (extracts status code
@@ -126,6 +130,7 @@ def classify_http_error(
 
     Returns:
         An appropriate InfomaniakCloudError subclass instance.
+
     """
     kwargs = {"service": service, "operation": operation, "resource_id": resource_id}
 

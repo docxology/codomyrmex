@@ -1,5 +1,4 @@
-"""
-Infomaniak Network Client (Neutron/Octavia).
+"""Infomaniak Network Client (Neutron/Octavia).
 
 Provides network, router, security group, and load balancer operations.
 """
@@ -13,8 +12,7 @@ logger = get_logger(__name__)
 
 
 class InfomaniakNetworkClient(InfomaniakOpenStackBase):
-    """
-    Client for Infomaniak networking (Neutron) operations.
+    """Client for Infomaniak networking (Neutron) operations.
 
     Provides methods for managing networks, routers, security groups,
     and load balancers.
@@ -235,8 +233,7 @@ class InfomaniakNetworkClient(InfomaniakOpenStackBase):
         ethertype: str = "IPv4",
         **kwargs
     ) -> dict[str, Any] | None:
-        """
-        Add a rule to a security group.
+        """Add a rule to a security group.
 
         Args:
             security_group_id: Target security group
@@ -246,6 +243,7 @@ class InfomaniakNetworkClient(InfomaniakOpenStackBase):
             port_range_max: Ending port (None for all)
             remote_ip_prefix: CIDR for allowed IPs (e.g., "0.0.0.0/0")
             ethertype: "IPv4" or "IPv6"
+
         """
         try:
             rule = self._conn.network.create_security_group_rule(
@@ -689,6 +687,7 @@ class InfomaniakNetworkClient(InfomaniakOpenStackBase):
             timeout: Timeout for each check in seconds.
             max_retries: Max retries before marking member down.
             name: Optional monitor name.
+
         """
         try:
             hm = self._conn.load_balancer.create_health_monitor(

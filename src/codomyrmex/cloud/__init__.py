@@ -1,5 +1,4 @@
-"""
-Cloud Services Module for Codomyrmex.
+"""Cloud Services Module for Codomyrmex.
 
 This module provides integrations with various cloud service APIs including:
 - Coda.io: Document and database API for Coda docs
@@ -24,7 +23,8 @@ Usage:
 
 
 Submodules:
-    common: Shared cloud utilities."""
+    common: Shared cloud utilities.
+"""
 
 
 # Shared schemas for cross-module interop

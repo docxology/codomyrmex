@@ -1,5 +1,4 @@
-"""
-Infomaniak Metering Client.
+"""Infomaniak Metering Client.
 
 Provides usage and billing data retrieval.
 """
@@ -14,8 +13,7 @@ logger = get_logger(__name__)
 
 
 class InfomaniakMeteringClient(InfomaniakOpenStackBase):
-    """
-    Client for Infomaniak metering and billing operations.
+    """Client for Infomaniak metering and billing operations.
 
     Provides methods for retrieving resource usage and billing data.
     """
@@ -31,12 +29,12 @@ class InfomaniakMeteringClient(InfomaniakOpenStackBase):
         start: datetime | None = None,
         end: datetime | None = None
     ) -> dict[str, Any]:
-        """
-        Get compute resource usage summary.
+        """Get compute resource usage summary.
 
         Args:
             start: Start datetime (defaults to current month start)
             end: End datetime (defaults to now)
+
         """
         try:
             # List all instances and sum up resources

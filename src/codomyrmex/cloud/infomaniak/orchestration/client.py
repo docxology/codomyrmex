@@ -1,5 +1,4 @@
-"""
-Infomaniak Orchestration Client (Heat).
+"""Infomaniak Orchestration Client (Heat).
 
 Provides stack management via OpenStack Heat templates.
 """
@@ -13,8 +12,7 @@ logger = get_logger(__name__)
 
 
 class InfomaniakHeatClient(InfomaniakOpenStackBase):
-    """
-    Client for Infomaniak orchestration (Heat) operations.
+    """Client for Infomaniak orchestration (Heat) operations.
 
     Provides methods for managing Heat stacks and templates.
     """
@@ -74,8 +72,7 @@ class InfomaniakHeatClient(InfomaniakOpenStackBase):
         disable_rollback: bool = False,
         **kwargs
     ) -> dict[str, Any] | None:
-        """
-        Create a new Heat stack.
+        """Create a new Heat stack.
 
         Args:
             name: Stack name
@@ -84,6 +81,7 @@ class InfomaniakHeatClient(InfomaniakOpenStackBase):
             environment: Environment file contents
             timeout_mins: Stack creation timeout
             disable_rollback: Whether to disable rollback on failure
+
         """
         try:
             stack = self._conn.orchestration.create_stack(
@@ -251,8 +249,7 @@ class InfomaniakHeatClient(InfomaniakOpenStackBase):
         template: str,
         environment: dict[str, Any] | None = None
     ) -> dict[str, Any]:
-        """
-        Validate a Heat template.
+        """Validate a Heat template.
 
         Args:
             template: Heat template (YAML string)
@@ -260,6 +257,7 @@ class InfomaniakHeatClient(InfomaniakOpenStackBase):
 
         Returns:
             Validation result with parameters and description
+
         """
         try:
             result = self._conn.orchestration.validate_template(

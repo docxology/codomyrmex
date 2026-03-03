@@ -1,5 +1,4 @@
-"""
-Infomaniak Authentication Utilities.
+"""Infomaniak Authentication Utilities.
 
 Provides credential management and OpenStack connection creation
 for Infomaniak Public Cloud services.
@@ -30,8 +29,7 @@ DEFAULT_S3_REGION = "us-east-1"  # S3-compatible default region
 
 @dataclass
 class InfomaniakCredentials:
-    """
-    Credentials for Infomaniak OpenStack services.
+    """Credentials for Infomaniak OpenStack services.
 
     Uses Application Credentials for secure programmatic access.
     These are project-scoped tokens created in the Infomaniak dashboard.
@@ -42,7 +40,9 @@ class InfomaniakCredentials:
         auth_url: Keystone identity endpoint
         project_id: Optional project ID for scoped operations
         region: Region name (default: dc3-a)
+
     """
+
     application_credential_id: str
     application_credential_secret: str
     auth_url: str = DEFAULT_AUTH_URL
@@ -52,8 +52,7 @@ class InfomaniakCredentials:
 
     @classmethod
     def from_env(cls) -> "InfomaniakCredentials":
-        """
-        Create credentials from environment variables.
+        """Create credentials from environment variables.
 
         Environment Variables:
             INFOMANIAK_APP_CREDENTIAL_ID: Application credential ID
@@ -67,6 +66,7 @@ class InfomaniakCredentials:
 
         Raises:
             InfomaniakAuthError: If required credentials are missing
+
         """
         credential_id = os.environ.get("INFOMANIAK_APP_CREDENTIAL_ID")
         credential_secret = os.environ.get("INFOMANIAK_APP_CREDENTIAL_SECRET")
@@ -96,8 +96,7 @@ class InfomaniakCredentials:
 
 @dataclass
 class InfomaniakS3Credentials:
-    """
-    Credentials for Infomaniak S3-compatible Object Storage.
+    """Credentials for Infomaniak S3-compatible Object Storage.
 
     These are EC2-style credentials created via the OpenStack CLI:
         openstack ec2 credentials create
@@ -107,7 +106,9 @@ class InfomaniakS3Credentials:
         secret_key: S3 secret access key
         endpoint_url: S3 endpoint URL
         region: S3 region (default: us-east-1 for compatibility)
+
     """
+
     access_key: str
     secret_key: str
     endpoint_url: str = DEFAULT_S3_ENDPOINT
@@ -115,8 +116,7 @@ class InfomaniakS3Credentials:
 
     @classmethod
     def from_env(cls) -> "InfomaniakS3Credentials":
-        """
-        Create S3 credentials from environment variables.
+        """Create S3 credentials from environment variables.
 
         Environment Variables:
             INFOMANIAK_S3_ACCESS_KEY: S3 access key
@@ -129,6 +129,7 @@ class InfomaniakS3Credentials:
 
         Raises:
             InfomaniakAuthError: If required credentials are missing
+
         """
         access_key = os.environ.get("INFOMANIAK_S3_ACCESS_KEY")
         secret_key = os.environ.get("INFOMANIAK_S3_SECRET_KEY")
@@ -151,8 +152,7 @@ def create_openstack_connection(
     credentials: InfomaniakCredentials | None = None,
     **kwargs
 ) -> Any:
-    """
-    Create an OpenStack SDK connection to Infomaniak.
+    """Create an OpenStack SDK connection to Infomaniak.
 
     Args:
         credentials: InfomaniakCredentials instance. If None, reads from env.
@@ -164,6 +164,7 @@ def create_openstack_connection(
     Raises:
         ImportError: If openstacksdk is not installed
         InfomaniakAuthError: If authentication fails
+
     """
     try:
         import openstack
@@ -196,8 +197,7 @@ def create_s3_client(
     credentials: InfomaniakS3Credentials | None = None,
     **kwargs
 ) -> Any:
-    """
-    Create a boto3 S3 client for Infomaniak Object Storage.
+    """Create a boto3 S3 client for Infomaniak Object Storage.
 
     Args:
         credentials: InfomaniakS3Credentials instance. If None, reads from env.
@@ -209,6 +209,7 @@ def create_s3_client(
     Raises:
         ImportError: If boto3 is not installed
         InfomaniakAuthError: If credentials are missing
+
     """
     try:
         import boto3

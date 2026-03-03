@@ -1,5 +1,4 @@
-"""
-Coda.io REST API v1 Client.
+"""Coda.io REST API v1 Client.
 
 This module provides a comprehensive Python client for the Coda.io API,
 enabling programmatic access to Coda docs, pages, tables, rows, and more.
@@ -34,8 +33,7 @@ logger = get_logger(__name__)
 
 
 class CodaClient(BaseMixin, DocsMixin, PagesMixin, TablesMixin, ElementsMixin, AccessMixin, AnalyticsMixin, UtilsMixin, CloudClient):
-    """
-    Coda.io REST API v1 client.
+    """Coda.io REST API v1 client.
 
     This client provides methods for all Coda API v1 endpoints including:
     - Docs: List, create, get, update, delete documents
@@ -60,6 +58,7 @@ class CodaClient(BaseMixin, DocsMixin, PagesMixin, TablesMixin, ElementsMixin, A
         api_token: The Coda API token for authentication
         base_url: The base URL for the Coda API (default: https://coda.io/apis/v1)
         session: The requests session used for HTTP calls
+
     """
 
     DEFAULT_BASE_URL = "https://coda.io/apis/v1"
@@ -71,8 +70,7 @@ class CodaClient(BaseMixin, DocsMixin, PagesMixin, TablesMixin, ElementsMixin, A
         base_url: str = DEFAULT_BASE_URL,
         timeout: int = 30,
     ):
-        """
-        Initialize the Coda API client.
+        """Initialize the Coda API client.
 
         Args:
             api_token: Your Coda API token. Get one from https://coda.io/account
@@ -81,6 +79,7 @@ class CodaClient(BaseMixin, DocsMixin, PagesMixin, TablesMixin, ElementsMixin, A
 
         Raises:
             ImportError: If the requests library is not installed.
+
         """
         if requests is None:
             raise ImportError(

@@ -14,11 +14,11 @@ class UtilsMixin:
     """UtilsMixin class."""
 
     def whoami(self) -> User:
-        """
-        Get info about the current user.
+        """Get info about the current user.
 
         Returns:
             User info
+
         """
         data = self._get("/whoami")
         return User.from_dict(data)
@@ -28,8 +28,7 @@ class UtilsMixin:
         url: str,
         degrade_gracefully: bool = False,
     ) -> dict[str, Any]:
-        """
-        Resolve a Coda browser URL to API metadata.
+        """Resolve a Coda browser URL to API metadata.
 
         Args:
             url: The browser URL to resolve
@@ -37,6 +36,7 @@ class UtilsMixin:
 
         Returns:
             Resolved resource info with API href
+
         """
         params = {"url": url}
         if degrade_gracefully:
@@ -45,14 +45,14 @@ class UtilsMixin:
         return self._get("/resolveBrowserLink", params=params)
 
     def get_mutation_status(self, request_id: str) -> MutationStatus:
-        """
-        Get status of an async mutation.
+        """Get status of an async mutation.
 
         Args:
             request_id: The mutation request ID
 
         Returns:
             MutationStatus with completed flag
+
         """
         path = f"/mutationStatus/{request_id}"
         data = self._get(path)

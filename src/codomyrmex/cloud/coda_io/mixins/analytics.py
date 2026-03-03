@@ -23,8 +23,7 @@ class AnalyticsMixin:
         order_by: str | None = None,
         direction: str | None = None,
     ) -> dict[str, Any]:
-        """
-        Get doc analytics data.
+        """Get doc analytics data.
 
         Args:
             doc_ids: Filter by doc IDs
@@ -41,6 +40,7 @@ class AnalyticsMixin:
 
         Returns:
             Analytics data with items
+
         """
         params = {
             "workspaceId": workspace_id,
@@ -66,8 +66,7 @@ class AnalyticsMixin:
         until_date: str | None = None,
         workspace_id: str | None = None,
     ) -> dict[str, Any]:
-        """
-        Get summarized doc analytics.
+        """Get summarized doc analytics.
 
         Args:
             is_published: Filter by published status
@@ -77,6 +76,7 @@ class AnalyticsMixin:
 
         Returns:
             Summary with totalSessions
+
         """
         params = {
             "isPublished": is_published,
@@ -94,8 +94,7 @@ class AnalyticsMixin:
         limit: int = 1000,
         page_token: str | None = None,
     ) -> dict[str, Any]:
-        """
-        Get page analytics for a doc (Enterprise workspaces only).
+        """Get page analytics for a doc (Enterprise workspaces only).
 
         Args:
             doc_id: The doc ID
@@ -106,6 +105,7 @@ class AnalyticsMixin:
 
         Returns:
             Page analytics data
+
         """
         params = {
             "sinceDate": since_date,

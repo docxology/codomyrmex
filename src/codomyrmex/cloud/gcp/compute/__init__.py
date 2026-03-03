@@ -1,5 +1,4 @@
-"""
-GCP Compute submodule.
+"""GCP Compute submodule.
 
 GCE and GKE
 """

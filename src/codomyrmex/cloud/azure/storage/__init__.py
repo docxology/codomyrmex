@@ -1,5 +1,4 @@
-"""
-Azure Storage submodule.
+"""Azure Storage submodule.
 
 Blob storage
 """

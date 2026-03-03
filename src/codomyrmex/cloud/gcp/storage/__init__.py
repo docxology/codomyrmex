@@ -1,5 +1,4 @@
-"""
-GCP Storage submodule.
+"""GCP Storage submodule.
 
 Cloud Storage
 """

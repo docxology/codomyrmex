@@ -1,5 +1,4 @@
-"""
-Infomaniak Newsletter API Client.
+"""Infomaniak Newsletter API Client.
 
 Provides campaign management, mailing list operations, and contact
 management via the Infomaniak REST API.

@@ -1,5 +1,4 @@
-"""
-Coda.io API Client Submodule.
+"""Coda.io API Client Submodule.
 
 This submodule provides a comprehensive Python client for the Coda.io REST API v1,
 enabling programmatic access to Coda docs, pages, tables, rows, and more.

@@ -27,8 +27,7 @@ class TablesMixin:
         sort_by: str | None = None,
         table_types: list[str] | None = None,
     ) -> TableList:
-        """
-        List tables and views in a doc.
+        """List tables and views in a doc.
 
         Args:
             doc_id: The doc ID
@@ -39,6 +38,7 @@ class TablesMixin:
 
         Returns:
             TableList with items
+
         """
         params = {
             "limit": limit,
@@ -57,8 +57,7 @@ class TablesMixin:
         table_id_or_name: str,
         use_updated_table_layouts: bool = False,
     ) -> Table:
-        """
-        Get details about a table or view.
+        """Get details about a table or view.
 
         Args:
             doc_id: The doc ID
@@ -67,6 +66,7 @@ class TablesMixin:
 
         Returns:
             Table details
+
         """
         params = {}
         if use_updated_table_layouts:
@@ -84,8 +84,7 @@ class TablesMixin:
         page_token: str | None = None,
         visible_only: bool = False,
     ) -> ColumnList:
-        """
-        List columns in a table.
+        """List columns in a table.
 
         Args:
             doc_id: The doc ID
@@ -96,6 +95,7 @@ class TablesMixin:
 
         Returns:
             ColumnList with items
+
         """
         params = {
             "limit": limit,
@@ -114,8 +114,7 @@ class TablesMixin:
         table_id_or_name: str,
         column_id_or_name: str,
     ) -> Column:
-        """
-        Get details about a column.
+        """Get details about a column.
 
         Args:
             doc_id: The doc ID
@@ -124,6 +123,7 @@ class TablesMixin:
 
         Returns:
             Column details
+
         """
         path = (
             f"/docs/{self._encode_id(doc_id)}"
@@ -146,8 +146,7 @@ class TablesMixin:
         page_token: str | None = None,
         sync_token: str | None = None,
     ) -> RowList:
-        """
-        List rows in a table.
+        """List rows in a table.
 
         Args:
             doc_id: The doc ID
@@ -163,6 +162,7 @@ class TablesMixin:
 
         Returns:
             RowList with items
+
         """
         params = {
             "query": query,
@@ -187,8 +187,7 @@ class TablesMixin:
         key_columns: list[str] | None = None,
         disable_parsing: bool = False,
     ) -> InsertRowsResult:
-        """
-        Insert rows into a table.
+        """Insert rows into a table.
 
         If key_columns are provided, this becomes an upsert operation.
         Note: Only works for base tables, not views.
@@ -202,6 +201,7 @@ class TablesMixin:
 
         Returns:
             InsertRowsResult with request_id and added_row_ids
+
         """
         # Convert RowEdit objects to dicts
         row_dicts = []
@@ -231,8 +231,7 @@ class TablesMixin:
         use_column_names: bool = False,
         value_format: str = "simple",
     ) -> Row:
-        """
-        Get a specific row.
+        """Get a specific row.
 
         Args:
             doc_id: The doc ID
@@ -243,6 +242,7 @@ class TablesMixin:
 
         Returns:
             Row details
+
         """
         params = {
             "valueFormat": value_format,
@@ -266,8 +266,7 @@ class TablesMixin:
         row: RowEdit | dict[str, Any],
         disable_parsing: bool = False,
     ) -> dict[str, Any]:
-        """
-        Update a row.
+        """Update a row.
 
         Args:
             doc_id: The doc ID
@@ -278,6 +277,7 @@ class TablesMixin:
 
         Returns:
             Update result with request_id
+
         """
         if isinstance(row, RowEdit):
             row_dict = row.to_dict()
@@ -301,8 +301,7 @@ class TablesMixin:
         table_id_or_name: str,
         row_id_or_name: str,
     ) -> dict[str, Any]:
-        """
-        Delete a row.
+        """Delete a row.
 
         Args:
             doc_id: The doc ID
@@ -311,6 +310,7 @@ class TablesMixin:
 
         Returns:
             Deletion result
+
         """
         path = (
             f"/docs/{self._encode_id(doc_id)}"
@@ -325,8 +325,7 @@ class TablesMixin:
         table_id_or_name: str,
         row_ids: list[str],
     ) -> dict[str, Any]:
-        """
-        Delete multiple rows.
+        """Delete multiple rows.
 
         Args:
             doc_id: The doc ID
@@ -335,6 +334,7 @@ class TablesMixin:
 
         Returns:
             Deletion result
+
         """
         path = f"/docs/{self._encode_id(doc_id)}/tables/{self._encode_id(table_id_or_name)}/rows"
         return self._delete(path, json_data={"rowIds": row_ids})

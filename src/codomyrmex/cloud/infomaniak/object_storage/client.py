@@ -1,5 +1,4 @@
-"""
-Infomaniak Object Storage Clients.
+"""Infomaniak Object Storage Clients.
 
 Provides both Swift (native OpenStack) and S3-compatible clients
 for Infomaniak Public Cloud object storage.
@@ -20,8 +19,7 @@ logger = get_logger(__name__)
 
 
 class InfomaniakObjectStorageClient(InfomaniakOpenStackBase):
-    """
-    Swift-based object storage client using OpenStack SDK.
+    """Swift-based object storage client using OpenStack SDK.
 
     Provides native Swift API access for containers and objects.
     """
@@ -177,12 +175,12 @@ class InfomaniakObjectStorageClient(InfomaniakOpenStackBase):
     # =========================================================================
 
     def set_container_read_acl(self, container: str, acl: str) -> bool:
-        """
-        Set container read ACL.
+        """Set container read ACL.
 
         Args:
             container: Container name
             acl: ACL string (e.g., ".r:*" for public read)
+
         """
         try:
             self._conn.object_store.set_container_metadata(
@@ -210,8 +208,7 @@ class InfomaniakObjectStorageClient(InfomaniakOpenStackBase):
 
 
 class InfomaniakS3Client(InfomaniakS3Base, StorageClient):
-    """
-    S3-compatible client for Infomaniak Object Storage.
+    """S3-compatible client for Infomaniak Object Storage.
 
     Uses boto3 with Infomaniak's S3 endpoint.
 
@@ -298,9 +295,9 @@ class InfomaniakS3Client(InfomaniakS3Base, StorageClient):
     ) -> bool:
         """Upload a local file to a bucket."""
         try:
-            extra_args = {}
+            extra_args = None
             if content_type:
-                extra_args["ContentType"] = content_type
+                extra_args = {"ContentType": content_type}
             self._client.upload_file(file_path, bucket, key, ExtraArgs=extra_args)
             logger.info(f"Uploaded file: {bucket}/{key}")
             return True
@@ -365,7 +362,13 @@ class InfomaniakS3Client(InfomaniakS3Base, StorageClient):
         """Get object metadata."""
         try:
             response = self._client.head_object(Bucket=bucket, Key=key)
-            return response.get("Metadata", {})
+            return {
+                "content_length": response.get("ContentLength"),
+                "content_type": response.get("ContentType"),
+                "etag": response.get("ETag"),
+                "last_modified": str(response.get("LastModified")) if response.get("LastModified") else None,
+                "metadata": response.get("Metadata", {}),
+            }
         except Exception as e:
             logger.error(f"Failed to get metadata for {bucket}/{key}: {e}")
             return {}
@@ -379,18 +382,25 @@ class InfomaniakS3Client(InfomaniakS3Base, StorageClient):
         bucket: str,
         key: str,
         expires_in: int = 3600,
-        operation: str = "get_object"
+        operation: str = "get_object",
+        **kwargs
     ) -> str:
-        """
-        Generate a presigned URL for temporary access.
+        """Generate a presigned URL for temporary access.
 
         Args:
             bucket: Bucket name
             key: Object key
             expires_in: URL expiration in seconds
             operation: Operation type (e.g., "get_object", "put_object")
+
         """
         try:
+            # Handle http_method kwarg for compatibility with test
+            if "http_method" in kwargs:
+                if kwargs["http_method"].upper() == "GET":
+                    operation = "get_object"
+                elif kwargs["http_method"].upper() == "PUT":
+                    operation = "put_object"
             url = self._client.generate_presigned_url(
                 ClientMethod=operation,
                 Params={"Bucket": bucket, "Key": key},
@@ -451,13 +461,13 @@ class InfomaniakS3Client(InfomaniakS3Base, StorageClient):
         bucket: str,
         keys: list[str]
     ) -> dict[str, Any]:
-        """
-        Delete multiple objects in a single request.
+        """Delete multiple objects in a single request.
 
         Auto-batches if more than 1000 keys (S3 limit per request).
 
         Returns:
             Dict with 'deleted' count and 'errors' list
+
         """
         deleted_count = 0
         errors: list[dict[str, Any]] = []
@@ -497,11 +507,11 @@ class InfomaniakS3Client(InfomaniakS3Base, StorageClient):
             return False
 
     def get_versioning(self, bucket: str) -> str | None:
-        """
-        Get versioning status of a bucket.
+        """Get versioning status of a bucket.
 
         Returns:
             "Enabled", "Suspended", or None if never configured
+
         """
         try:
             response = self._client.get_bucket_versioning(Bucket=bucket)
@@ -511,11 +521,11 @@ class InfomaniakS3Client(InfomaniakS3Base, StorageClient):
             return None
 
     def get_bucket_policy(self, bucket: str) -> str | None:
-        """
-        Get the bucket policy as a JSON string.
+        """Get the bucket policy as a JSON string.
 
         Returns:
             JSON policy string or None if no policy set
+
         """
         try:
             response = self._client.get_bucket_policy(Bucket=bucket)
@@ -528,12 +538,12 @@ class InfomaniakS3Client(InfomaniakS3Base, StorageClient):
             return None
 
     def put_bucket_policy(self, bucket: str, policy: str) -> bool:
-        """
-        Set the bucket policy.
+        """Set the bucket policy.
 
         Args:
             bucket: Bucket name
             policy: JSON policy string
+
         """
         try:
             self._client.put_bucket_policy(Bucket=bucket, Policy=policy)
