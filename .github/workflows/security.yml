@@ -495,6 +495,9 @@ jobs:
     runs-on: ubuntu-latest
     needs: [dependency-scan, bandit-scan, license-scan]
     if: always()
+    permissions:
+      contents: read
+      pull-requests: write
     steps:
       - name: Download all security artifacts
         uses: actions/download-artifact@v4
