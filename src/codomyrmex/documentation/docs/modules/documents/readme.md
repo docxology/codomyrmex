@@ -1,6 +1,6 @@
 # Documents Module
 
-**Version**: v1.1.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
@@ -20,32 +20,45 @@ PAI agents access this module via direct Python import through the MCP bridge. T
 
 ```bash
 uv add codomyrmex
-# Or for full document support:
-uv sync --extra documents
+```
+
+Or for development:
+
+```bash
+uv sync
 ```
 
 ## Key Exports
 
 ### Classes
-- **`Document`** — Core document model with content and metadata.
-- **`DocumentFormat`** — Enum for supported formats (MARKDOWN, JSON, YAML, CSV, etc.).
-- **`DocumentMetadata`** — Container for document metadata.
 - **`DocumentsConfig`** — Configuration for document operations.
 - **`DocumentsError`** — Base exception class for all Documents module errors.
+- **`DocumentReadError`** — Raised when document reading fails.
+- **`DocumentWriteError`** — Raised when document writing fails.
+- **`DocumentParseError`** — Raised when document parsing fails.
+- **`DocumentValidationError`** — Raised when document validation fails.
+- **`DocumentConversionError`** — Raised when document format conversion fails.
+- **`UnsupportedFormatError`** — Raised when an unsupported document format is requested.
 
 ### Functions
-- **`read_document(file_path)`** — Read a document with auto-detection.
-- **`write_document(document, file_path)`** — Write a document to disk.
-- **`convert_document(document, target_format)`** — Convert between formats.
-- **`merge_documents(documents)`** — Merge multiple documents.
-- **`split_document(document, criteria)`** — Split a document into chunks.
+- **`get_config()`** — Get the global documents configuration.
+- **`set_config()`** — Set the global documents configuration.
+
+### Submodules
+- **`core/`** — Core document operations.
+- **`formats/`** — Format-specific document handlers.
+- **`metadata/`** — Document metadata operations.
+- **`models/`** — Document data models.
+- **`search/`** — Document search and indexing operations.
+- **`transformation/`** — Document transformation operations.
+- **`utils/`** — Document utilities.
 
 ## Quick Start
 
 ```python
 from codomyrmex.documents import (
     Document, DocumentFormat,
-    read_document, write_document,
+    read_document, write_document, parse_document, validate_document,
     convert_document, merge_documents, split_document,
 )
 
@@ -54,13 +67,12 @@ doc = read_document("example.md")
 
 # Create a document in-memory
 doc = Document(content="# Hello World", format=DocumentFormat.MARKDOWN)
-doc.metadata.title = "My Document"
 
 # Write to file
 write_document(doc, "output.md")
 
 # Convert between formats
-html_doc = convert_document(doc, DocumentFormat.HTML)
+json_doc = convert_document(doc, DocumentFormat.JSON)
 
 # Merge multiple documents
 merged = merge_documents([doc1, doc2, doc3])
@@ -81,28 +93,45 @@ chunks = split_document(doc, {"method": "by_sections"})
 - `Document` - Core document dataclass with auto-generated ID, type detection, and content serialization
 - `DocumentFormat` - Enum of supported formats (MARKDOWN, TEXT, HTML, JSON, XML, YAML, CSV, PDF, etc.)
 - `DocumentType` - Enum of document types (TEXT, MARKUP, STRUCTURED, BINARY, CODE)
-- `DocumentMetadata` - Metadata container with serialization and update support
+- `DocumentMetadata` - Metadata container with serialization and copy support
+- `MetadataField` - Individual metadata field descriptor
 
 ### Formats (`formats/`)
 Format-specific read/write handlers:
 - `markdown_handler` - Markdown files
 - `json_handler` - JSON files with optional schema validation
 - `yaml_handler` - YAML files
-- `text_handler` - Plain text files
+- `text_handler` - Plain text files with encoding fallback
 - `html_handler` - HTML files with tag stripping utility
 - `xml_handler` - XML files with parse validation
-- `csv_handler` - CSV files (read/write as list of dicts)
+- `csv_handler` - CSV files (read as list of dicts, write from list of dicts)
 - `pdf_handler` - PDF files (requires pypdf or PyPDF2)
 
 ### Transformation (`transformation/`)
-- `convert_document` - Convert between formats (e.g., MD to HTML, JSON to YAML)
-- `merge_documents` - Merge multiple documents into one
-- `split_document` - Split by sections, size, lines, or CSV rows
+- `convert_document` - Convert between formats
+- `merge_documents` - Merge multiple documents
+- `split_document` - Split by sections, size, lines, or pages
+- `format_document` - Format JSON/YAML with compact or pretty styles
 
 ### Search (`search/`)
 - `InMemoryIndex` - In-memory inverted index for document search
 - `index_document` / `create_index` - Index documents for search
 - `search_documents` / `search_index` - Search with TF-based scoring
+- `QueryBuilder` / `build_query` - Fluent query construction
+
+### Metadata (`metadata/`)
+- `extract_metadata` - Extract file system and format-specific metadata
+- `update_metadata` - Update markdown frontmatter
+- `get_document_version` / `set_document_version` - Version management
+
+### Utils (`utils/`)
+- `detect_encoding` - Encoding detection (uses chardet if available)
+- `detect_format_from_path` / `detect_mime_type` - Format and MIME type detection
+- `validate_file_path` / `check_file_size` - File validation
+
+### Config (`config.py`)
+- `DocumentsConfig` - Configuration (encoding, max file size, caching, validation)
+- `get_config` / `set_config` - Global configuration management
 
 ## Supported Formats
 
@@ -112,30 +141,35 @@ Format-specific read/write handlers:
 | JSON | Yes | Yes | Yes | Yes |
 | YAML | Yes | Yes | Yes | Yes |
 | Text | Yes | Yes | Yes | Yes |
-| HTML | Yes | Yes | Yes | Yes |
+| HTML | Yes | Yes | - | - |
 | XML | Yes | Yes | - | - |
-| CSV | Yes | Yes | Yes | - |
+| CSV | Yes | Yes | - | - |
 | PDF | Yes* | Yes* | - | - |
 
 *Requires optional dependencies (pypdf, reportlab, or fpdf)
 
+## Directory Contents
+
+- `API_SPECIFICATION.md` - Detailed API documentation
+- `__init__.py` - Module exports
+- `config.py` - Configuration management
+- `exceptions.py` - Exception classes
+- `core/` - Core read/write/parse/validate operations
+- `formats/` - Format-specific handlers
+- `metadata/` - Metadata extraction and management
+- `models/` - Data models
+- `search/` - Search and indexing
+- `transformation/` - Convert, merge, split, format
+- `utils/` - Encoding detection, file validation
+
 ## Testing
 
 ```bash
-uv run python -m pytest src/codomyrmex/tests/unit/documents/ -v
+uv run python -m pytest src/codomyrmex/tests/ -k documents -v
 ```
 
-## Orchestrator
+## Navigation
 
-The module includes a thin orchestrator for CLI operations:
-
-```bash
-# Run smoke tests
-uv run python scripts/documents/orchestrate.py test
-
-# Get document info
-uv run python scripts/documents/orchestrate.py info -i sample.md
-
-# Convert document
-uv run python scripts/documents/orchestrate.py convert -i sample.md -o sample.html -f html
-```
+- **Full Documentation**: [docs/modules/documents/](../../../docs/modules/documents/)
+- **Parent Directory**: [codomyrmex](../README.md)
+- **Project Root**: ../../../README.md

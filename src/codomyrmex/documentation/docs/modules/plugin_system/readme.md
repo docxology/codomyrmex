@@ -79,17 +79,6 @@ class MyPlugin(Plugin):
         print("Plugin deactivated")
 ```
 
-## Directory Structure
-
-```
-plugin_system/
-├── __init__.py              # Module exports (PluginManager, PluginLoader, PluginRegistry, Plugin)
-├── mcp_tools.py             # MCP: plugin_scan_entry_points, plugin_resolve_dependencies
-├── discovery.py             # Entry-point scanning and plugin discovery
-├── dependency_resolver.py   # Dependency graph resolution for plugin loading order
-└── exceptions.py            # PluginError, LoadError, DependencyError, HookError, etc.
-```
-
 ## Exports
 
 | Class | Description |

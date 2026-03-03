@@ -1,6 +1,6 @@
 # Email Module
 
-**Version**: v1.0.6 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
@@ -21,7 +21,7 @@ PAI agents use the email module for inter-agent communication and user notificat
 
 ```bash
 uv add codomyrmex
-# For Gmail and AgentMail support:
+# For Gmail support:
 uv sync --extra email
 ```
 
@@ -64,7 +64,6 @@ if AGENTMAIL_AVAILABLE:
         body_text="All tasks completed successfully."
     )
     sent = provider.send_message(draft)
-    print(sent.summary)
 ```
 
 ### Gmail Provider
@@ -76,13 +75,7 @@ if GMAIL_AVAILABLE:
     # Reads GOOGLE_REFRESH_TOKEN + GOOGLE_CLIENT_ID + GOOGLE_CLIENT_SECRET from env
     gmail = GmailProvider.from_env()
     messages = gmail.list_messages(query="is:unread")
-    for msg in messages:
-        print(msg.summary)
 ```
-
-## Orchestrator Script
-
-A working example of the email module can be found in `scripts/email/orchestrator.py`. This script demonstrates how to initialize both providers and perform basic operations like listing messages and sending test emails.
 
 ## Architecture
 
@@ -98,7 +91,7 @@ email/
 │   └── provider.py  # AgentMailProvider (35+ methods)
 └── gmail/           # Gmail provider (OAuth2)
     ├── __init__.py
-    └── provider.py  # GmailProvider (12 methods)
+    └── provider.py  # GmailProvider (11 methods)
 ```
 
 ## Navigation

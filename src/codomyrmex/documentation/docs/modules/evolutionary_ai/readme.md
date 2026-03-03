@@ -1,41 +1,20 @@
 # Evolutionary AI Module
 
-**Version**: v1.1.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-The `evolutionary_ai` module provides a comprehensive genetic algorithm framework for optimization and evolutionary discovery. It features a flexible architecture with pluggable operators for selection, crossover, and mutation, supporting both standard float-vector genomes and arbitrary genetic representations.
+The evolutionary_ai module provides a complete genetic algorithm framework for evolutionary optimization. It includes genome representation with float-valued genes, population management with elitism-preserving evolution, and a rich library of pluggable operators for mutation (bit-flip, swap, Gaussian, scramble), crossover (single-point, two-point, uniform, blend), and selection (tournament, roulette, rank, elitism) -- all accessible via factory functions.
 
-## Key Components
+## PAI Integration
 
-### 1. Representation (`genome` submodule)
+| Algorithm Phase | Role | Tools Used |
+|----------------|------|-----------|
+| **THINK** | Evolve candidate algorithms and solution strategies | Direct Python import |
+| **BUILD** | Configure population parameters and fitness functions | Direct Python import |
+| **LEARN** | Capture evolved solutions and optimal configurations | Direct Python import |
 
-- **`Individual[T]`** -- Base class for any evolved entity, wrapping genes of type `T` and tracking `fitness`.
-- **`Genome`** -- Specialization of `Individual[list[float]]` for real-valued optimization. Includes distance metrics (`distance`), statistics (`stats`), and clamping.
-
-### 2. Population Management (`population` submodule)
-
-- **`Population`** -- Manages a collection of individuals.
-- **`evolve()`** -- Performs generational transition using selection, crossover, and mutation operators. Supports elitism.
-- **`evaluate()`** -- Applies a fitness function to all individuals.
-- **`is_converged()`** -- Detects evolutionary stagnation.
-
-### 3. Operators (`operators` submodule)
-
-- **Mutation**: `BitFlipMutation`, `SwapMutation`, `GaussianMutation`, `ScrambleMutation`.
-- **Crossover**: `SinglePointCrossover`, `TwoPointCrossover`, `UniformCrossover`, `BlendCrossover`.
-
-### 4. Selection Strategies (`selection` submodule)
-
-- **`TournamentSelection`** -- Selects best from a random subset.
-- **`RouletteWheelSelection`** -- Fitness-proportionate selection.
-- **`RankSelection`** -- Probability based on rank order.
-
-### 5. Fitness Framework (`fitness` submodule)
-
-- **`ScalarFitness`** -- Standard single-objective evaluation.
-- **`MultiObjectiveFitness`** -- Pareto-based multi-objective optimization.
-- **`ConstrainedFitness`** -- Applies penalties for constraint violations.
+PAI agents access this module via direct Python import through the MCP bridge. The Architect agent uses Population and Genome to evolve solution strategies during THINK phase, selecting optimal approaches through tournament selection.
 
 ## Installation
 
@@ -43,42 +22,98 @@ The `evolutionary_ai` module provides a comprehensive genetic algorithm framewor
 uv add codomyrmex
 ```
 
+Or for development:
+
+```bash
+uv sync
+```
+
+## Key Exports
+
+### Core Classes
+
+- **`Genome`** -- Represents an individual's genetic material as a list of float genes (0-1 range). Supports random initialization, copying, indexing, and iteration. Tracks fitness score.
+- **`Population`** -- Manages a collection of `Genome` individuals with methods for `evaluate()` (apply fitness function), `get_best()` / `get_worst()`, and `evolve()` with configurable mutation rate, crossover rate, and elitism count.
+- **`Individual`** -- Alternative individual representation from the operators submodule.
+
+### Convenience Functions
+
+- **`crossover()`** -- Perform single-point crossover between two genomes, returning two child genomes.
+- **`mutate()`** -- Apply Gaussian mutation to a genome with configurable per-gene mutation rate, clamping values to [0, 1].
+- **`tournament_selection()`** -- Select an individual from a population using tournament selection with configurable tournament size (default 3).
+
+### Operator Type Enums
+
+- **`MutationType`** -- Enum of available mutation types
+- **`CrossoverType`** -- Enum of available crossover types
+- **`SelectionType`** -- Enum of available selection types
+
+### Mutation Operators
+
+- **`MutationOperator`** -- Abstract base class for mutation operators
+- **`BitFlipMutation`** -- Flips bits in binary-encoded genomes
+- **`SwapMutation`** -- Swaps two random gene positions
+- **`GaussianMutation`** -- Adds Gaussian noise to gene values
+- **`ScrambleMutation`** -- Randomly reorders a segment of the genome
+
+### Crossover Operators
+
+- **`CrossoverOperator`** -- Abstract base class for crossover operators
+- **`SinglePointCrossover`** -- Crosses parents at a single random point
+- **`TwoPointCrossover`** -- Crosses parents between two random points
+- **`UniformCrossover`** -- Each gene independently selected from either parent
+- **`BlendCrossover`** -- Blends parent gene values using interpolation
+
+### Selection Operators
+
+- **`SelectionOperator`** -- Abstract base class for selection operators
+- **`TournamentSelection`** -- Selects winners from random tournament subsets
+- **`RouletteSelection`** -- Probability of selection proportional to fitness
+- **`RankSelection`** -- Selection probability based on fitness rank ordering
+- **`ElitismSelection`** -- Directly preserves the top-performing individuals
+
+### Factory Functions
+
+- **`create_mutation()`** -- Create a mutation operator by type enum
+- **`create_crossover()`** -- Create a crossover operator by type enum
+- **`create_selection()`** -- Create a selection operator by type enum
+
+### Submodules
+
+- **`operators`** -- All operator implementations and type enums
+- **`selection`** -- Extended selection strategy implementations
+- **`fitness`** -- Fitness function definitions and evaluation utilities
+
+## Directory Contents
+
+- `__init__.py` - Module entry point with `Genome`, `Population`, convenience functions, and all operator exports
+- `operators/` - Mutation, crossover, and selection operator implementations with type enums and factory functions
+- `selection/` - Extended selection strategy implementations
+- `fitness/` - Fitness function definitions and evaluation utilities
+- `genome/` - Extended genome representations
+- `population/` - Extended population management utilities
+- `AGENTS.md` - Agent integration specification
+- `API_SPECIFICATION.md` - Programmatic interface documentation
+- `SPEC.md` - Module specification
+- `PAI.md` - PAI integration notes
+
 ## Quick Start
 
 ```python
-import random
-from codomyrmex.evolutionary_ai import Population, Genome, ScalarFitness
+from codomyrmex.evolutionary_ai import Genome, Population
 
-# 1. Define fitness function (maximize sum of genes)
-def fitness_fn(genes):
-    return sum(genes)
-
-# 2. Create a population of 20 individuals with 10 genes each
-pop = Population.random_genome_population(size=20, genome_length=10)
-
-# 3. Evolve for 50 generations
-for gen in range(50):
-    pop.evaluate(fitness_fn)
-    stats = pop.evolve(elitism=2)
-
-    if gen % 10 == 0:
-        print(f"Gen {gen}: best fitness = {stats.best_fitness:.4f}")
-
-# 4. Get the result
-best = pop.get_best()
-print(f"Optimal solution: {best.genes}")
+# Initialize Genome
+instance = Genome()
 ```
 
 ## Testing
 
-The module uses strictly zero-mock tests to verify evolutionary convergence and operator correctness.
-
 ```bash
-uv run pytest src/codomyrmex/tests/unit/evolutionary_ai/
+uv run python -m pytest src/codomyrmex/tests/ -k evolutionary_ai -v
 ```
 
 ## Navigation
 
-- [SPEC.md](SPEC.md) - Detailed technical specification
-- [AGENTS.md](AGENTS.md) - Integration instructions for AI agents
-- [PAI.md](PAI.md) - Project AI Integration details
+- **Full Documentation**: [docs/modules/evolutionary_ai/](../../../docs/modules/evolutionary_ai/)
+- **Parent Directory**: [codomyrmex](../README.md)
+- **Project Root**: ../../../README.md

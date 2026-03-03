@@ -20,12 +20,9 @@ PAI's THINK phase uses `query_knowledge_base` to retrieve analogous cases from t
 
 ### Core Engine
 
-- **`CerebrumEngine`** -- Main orchestrator coordinating case-based reasoning, Bayesian inference, and cognitive workflows
+- **`CerebrumEngine`** -- Main orchestrator coordinating case-based reasoning and Bayesian inference pipelines
 - **`ModelManager`** -- Manages model lifecycle (creation, storage, retrieval, versioning)
 - **`ReasoningEngine`** -- Executes reasoning workflows combining case retrieval with probabilistic inference
-- **`WorkingMemory`** -- Short-term storage for reasoning context
-- **`ReasoningChain`** -- Orchestrates step-by-step chain-of-thought reasoning
-- **`DecisionModule`** -- Handles multi-criteria decision making
 
 ### Case Management
 

@@ -1,12 +1,12 @@
 # docs_gen -- Documentation Generation
 
-**Version**: v1.1.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
 The `docs_gen` module is the codomyrmex documentation pipeline. It extracts structured API documentation from Python source code using AST parsing, builds searchable in-memory inverted indices over the extracted documentation, and generates static documentation site configuration compatible with MkDocs and mkdocs-material.
 
-Three components work together: `APIDocExtractor` parses Python source into structured `ModuleDoc`, `ClassDoc`, and `FunctionDoc` dataclasses with full support for modern Python features like type hints and async. `SearchIndex` builds a tokenized inverted index with relevance scoring, CamelCase/snake_case awareness, and stopword filtering. `SiteGenerator` orchestrates extraction and indexing, then outputs a `SiteConfig` containing navigation trees and page definitions ready for rendering.
+Three components work together: `APIDocExtractor` parses Python source into structured `ModuleDoc`, `ClassDoc`, and `FunctionDoc` dataclasses. `SearchIndex` builds a tokenized inverted index with relevance scoring over the extracted documentation. `SiteGenerator` orchestrates extraction and indexing, then outputs a `SiteConfig` containing navigation trees and page definitions ready for rendering.
 
 This module does not expose MCP tools. It is used as a Python library within build scripts, CI/CD pipelines, and other codomyrmex modules that need programmatic access to documentation extraction and indexing.
 
@@ -22,18 +22,16 @@ PAI agents access this module via direct Python import through the MCP bridge. T
 
 ## Key Capabilities
 
-- **AST-based documentation extraction** -- Parses Python source via `ast` to extract module docstrings, class hierarchies (including base classes), function signatures (including type hints, defaults, `*args`, `**kwargs`, and positional-only args), decorator names, and async/sync status.
+- **AST-based documentation extraction** -- Parses Python source via `ast` to extract module docstrings, class hierarchies (including base classes), function signatures (including parameter lists), decorator names, and async/sync status.
 - **Structured documentation models** -- `ModuleDoc`, `ClassDoc`, and `FunctionDoc` dataclasses provide typed, structured representations of extracted documentation with full attribute access.
 - **`__all__` export detection** -- Automatically extracts module-level `__all__` lists to identify public API surface.
-- **Markdown rendering** -- `APIDocExtractor.to_markdown()` converts extracted `ModuleDoc` objects into formatted Markdown with enhanced structure, including class base lists and decorator blocks.
-- **In-memory inverted index** -- `SearchIndex` tokenizes document content and titles into a word-level inverted index. Supports CamelCase and snake_case splitting and stopword filtering.
+- **Markdown rendering** -- `APIDocExtractor.to_markdown()` converts extracted `ModuleDoc` objects into formatted Markdown suitable for documentation sites.
+- **In-memory inverted index** -- `SearchIndex` tokenizes document content and titles into a word-level inverted index for fast full-text search with no external dependencies.
 - **Relevance scoring** -- Search results are ranked by token hit count with a 2x bonus for title matches, producing meaningful ordering without heavyweight search infrastructure.
 - **Snippet extraction** -- Search results include context-aware snippets centered around the first matching token in the document content.
 - **Tag-based indexing** -- Documents can be indexed with custom tags for categorical search alongside full-text.
 - **MkDocs site generation** -- `SiteGenerator` produces complete `mkdocs.yml` configuration including navigation trees, theme settings (material with slate scheme), and plugin declarations.
 - **Custom page support** -- `SiteGenerator.add_page()` allows injecting arbitrary Markdown pages alongside auto-generated API reference pages.
-- **Sorted navigation** -- Automatically generates sorted navigation trees for API reference and custom pages.
-- **Extra CSS/JS support** -- `SiteGenerator` supports adding custom CSS and JavaScript files to the generated configuration.
 
 ## Quick Start
 
@@ -63,7 +61,7 @@ from codomyrmex.docs_gen import SearchIndex, SearchResult
 
 # Build a searchable index
 index = SearchIndex()
-index.add(doc_id="my_module", title="My Module", content=markdown, path="api/my_module.md", tags=["api", "core"])
+index.add(doc_id="my_module", title="My Module", content=markdown, path="api/my_module.md")
 results: list[SearchResult] = index.search("function_name", limit=5)
 for r in results:
     print(f"{r.title} (score={r.score}): {r.snippet}")
@@ -76,7 +74,6 @@ from codomyrmex.docs_gen import SiteGenerator
 gen = SiteGenerator(title="My Project Docs")
 gen.add_module_source(source, "my_module")
 gen.add_page("guides/quickstart.md", "# Quick Start\n...", title="Quick Start")
-gen.add_extra_css("assets/custom.css")
 
 mkdocs_yaml = gen.to_mkdocs_yaml()  # Ready to write to mkdocs.yml
 pages = gen.generate_pages()         # dict[str, str] of path -> markdown content
@@ -104,8 +101,6 @@ pages = gen.generate_pages()         # dict[str, str] of path -> markdown conten
 - `plugins` -- Enabled plugins (default: `["search", "mkdocstrings"]`)
 - `base_url` -- Base URL (default: `"/"`)
 - `nav` -- Auto-generated navigation structure
-- `extra_css` -- Extra CSS files
-- `extra_javascript` -- Extra JS files
 
 `SearchIndex.search()` accepts a `limit` parameter (default: `10`) to control maximum result count.
 
@@ -122,12 +117,6 @@ pages = gen.generate_pages()         # dict[str, str] of path -> markdown conten
 - [search/](../search/) -- General-purpose search (docs_gen search is specialized for API docs)
 - [PAI.md](PAI.md) -- PAI integration details
 - [Root PAI bridge](../../../PAI.md) -- Authoritative PAI system bridge document
-
-## Testing
-
-```bash
-uv run pytest src/codomyrmex/tests/unit/docs_gen/
-```
 
 ## Navigation
 

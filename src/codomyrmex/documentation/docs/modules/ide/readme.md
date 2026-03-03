@@ -34,9 +34,6 @@ uv sync
 - **`IDECommandResult`** — Result of an IDE command execution.
 - **`FileInfo`** — Information about a file in the IDE.
 - **`IDEClient`** — Abstract base class for IDE integrations.
-- **`CursorClient`** — Cursor IDE integration.
-- **`VSCodeClient`** — VS Code integration.
-- **`AntigravityClient`** — Antigravity IDE integration.
 
 ### Submodules
 - **`antigravity/`** — Antigravity IDE Integration
@@ -84,8 +81,6 @@ client.disconnect()
 |-------|-------------|
 | `IDEClient` | Abstract base class for IDE integrations |
 | `CursorClient` | Cursor AI-first editor client |
-| `VSCodeClient` | VS Code integration client |
-| `AntigravityClient` | Antigravity IDE integration client |
 | `IDEStatus` | Enum: disconnected, connecting, connected, error |
 | `IDECommand` | Command with name, args, timeout |
 | `IDECommandResult` | Result with success, output, execution_time |

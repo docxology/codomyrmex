@@ -106,27 +106,6 @@ print(f"CPU: {metrics['cpu_percent']}%, Memory: {metrics['memory_percent']}%")
 | `monitor_performance` | Decorator for timing |
 | `performance_context` | Context manager for profiling |
 
-## Directory Structure
-
-```
-performance/
-├── __init__.py          # Module exports (LazyLoader, CacheManager, AsyncProfiler, etc.)
-├── mcp_tools.py         # MCP: performance_check_regression, performance_compare_benchmarks
-├── load_tester.py       # Load testing utilities
-├── profiling/           # AsyncProfiler, PerformanceProfiler, benchmark runner
-├── monitoring/          # PerformanceMonitor, resource_tracker (requires psutil)
-├── caching/             # CacheManager with TTL and pluggable backends
-├── optimization/        # LazyLoader, lazy_import — deferred module loading
-├── benchmarking/        # benchmark_runner, benchmark_comparison
-└── analysis/            # regression_detector, memory_profiler
-```
-
-## Testing
-
-```bash
-uv run pytest src/codomyrmex/tests/unit/performance/
-```
-
 ## Documentation
 
 - [Module Documentation](../../../docs/modules/performance/README.md)

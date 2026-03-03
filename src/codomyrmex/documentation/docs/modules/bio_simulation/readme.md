@@ -1,17 +1,10 @@
 # Bio-Simulation Module
 
-**Version**: v1.1.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
 High-fidelity biological simulation engine. Provides digital twins of ant colonies for emergent behavior study, individual agent simulation, pheromone-based communication, and genomics pipeline integration.
-
-## Features
-
-- **Colony Simulation**: Discrete-time simulation of large ant populations.
-- **Agent State Machine**: High-fidelity behavioral states (FORAGING, RETURNING, RESTING).
-- **Spatial Environment**: Grid-based world with resources, obstacles, and pheromone dynamics.
-- **Genomics**: Trait-based genetic representation with mutation and crossover for evolutionary studies.
 
 ## PAI Integration
 
@@ -21,11 +14,31 @@ High-fidelity biological simulation engine. Provides digital twins of ant coloni
 | **BUILD** | Configure colony simulations and genomics parameters | Direct Python import |
 | **VERIFY** | Validate simulation outputs against expected distributions | Direct Python import |
 
+PAI agents access this module via direct Python import through the MCP bridge. The Engineer agent uses it during BUILD phase to configure simulation parameters, and during THINK phase to run colony models and analyze emergent patterns.
+
 ## Installation
 
 ```bash
 uv add codomyrmex
 ```
+
+## Key Exports
+
+### Ant Colony Simulation
+
+| Export | Type | Purpose |
+|--------|------|---------|
+| `Colony` | Class | Ant colony simulation environment with population dynamics |
+| `Ant` | Class | Individual agent in simulation with state machine behavior |
+| `AntState` | Enum | Agent state: FORAGING, RETURNING, RESTING, etc. |
+| `Environment` | Class | Spatial environment with resources and obstacles |
+
+### Genomics
+
+| Export | Type | Purpose |
+|--------|------|---------|
+| `Genome` | Class | Gene sequence representation with expression modeling |
+| `Population` | Class | Population genetics simulation and trait mapping |
 
 ## Quick Start
 
@@ -38,10 +51,10 @@ colony.step(hours=24)
 
 # Access individual agent states
 for ant in colony.ants[:10]:
-    print(f"Ant {ant.id}: state={ant.state}, energy={ant.energy:.2f}")
+    print(f"Ant {ant.id}: state={ant.state}, food={ant.carrying}")
 
 # Population genomics
-population = Population(genomes=[ant.genome for ant in colony.ants])
+population = Population(genomes=[Genome.random() for _ in range(100)])
 traits = population.trait_distribution()
 ```
 
@@ -62,4 +75,5 @@ bio_simulation/
 
 ## Navigation
 
-- [SPEC.md](SPEC.md) | [AGENTS.md](AGENTS.md) | [PAI.md](PAI.md)
+- **Extended Docs**: [docs/modules/bio_simulation/](../../../docs/modules/bio_simulation/)
+- [SPEC.md](SPEC.md) | [AGENTS.md](AGENTS.md) | [PAI.md](PAI.md) | [Parent](../README.md)

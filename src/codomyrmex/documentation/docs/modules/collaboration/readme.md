@@ -1,92 +1,118 @@
 # Collaboration Module
 
-**Version**: v0.2.1 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-The collaboration module provides multi-agent collaboration capabilities including agent management, communication channels, task coordination, and message-passing protocols. It features a robust **Swarm** system for orchestrating complex workflows across multiple specialized agents.
+The collaboration module provides multi-agent collaboration capabilities including agent management, communication channels, task coordination, and message-passing protocols. It supports round-robin, broadcast, capability-routing, and consensus protocols, along with swarm-based task decomposition and parallel execution for orchestrating complex multi-agent workflows.
 
 ## PAI Integration
 
 | Algorithm Phase | Role | Tools Used |
 |----------------|------|-----------|
-| **EXECUTE** | Orchestrate parallel workloads across a swarm of agents | `swarm_submit_task`, `pool_status` |
-| **OBSERVE** | Inspect active agents and current swarm topology | `list_agents`, `pool_status` |
-| **VERIFY** | Confirm all swarm tasks completed successfully | `pool_status`, `list_agents` |
+| **EXECUTE** | Coordinate multi-agent task execution via swarm submission | `swarm_submit_task` |
+| **OBSERVE** | Monitor agent pool availability and capacity | `pool_status`, `list_agents` |
+| **VERIFY** | Confirm task completion and agent pool health | `pool_status` |
 
-PAI's Engineer agent uses `swarm_submit_task` to decompose complex missions into parallel sub-tasks during EXECUTE. `pool_status` provides real-time visibility into swarm progress. `list_agents` supports OBSERVE-phase enumeration of active agent capabilities before delegating work.
+PAI uses the collaboration module to orchestrate multi-agent workflows. Engineer agents use `swarm_submit_task` during EXECUTE for parallelized work; `pool_status` monitors agent availability during OBSERVE. This module enables PAI's Fan-out composition pattern across multiple specialized agents.
 
-## Key Components
+## Installation
 
-### Swarm Management (`collaboration.swarm`)
+```bash
+uv add codomyrmex
+```
 
-- **`SwarmManager`** — Central orchestrator for the swarm. Integrates pool, bus, and decomposer. Supports async task execution with result waiting.
-- **`AgentPool`** — Manages a collection of agents, providing capability-based routing and load balancing.
-- **`MessageBus`** — In-process topic-based pub/sub for inter-agent communication. Supports wildcards and async handlers.
-- **`TaskDecomposer`** — Breaks complex missions into dependency-ordered sub-tasks using role-based heuristics.
-- **`ConsensusEngine`** — Resolves votes using majority, weighted, or veto strategies.
+Or for development:
 
-### Protocols (`collaboration.protocols`)
+```bash
+uv sync
+```
 
-- **`RoundRobinProtocol`** — Distributes tasks evenly.
-- **`BroadcastProtocol`** — Sends tasks to all agents.
-- **`CapabilityRoutingProtocol`** — Routes based on specific agent skills.
-- **`ConsensusProtocol`** — Requires agreement for task completion.
+## Key Exports
 
-### Agents (`collaboration.agents`)
+### Data Models
 
-- **`WorkerAgent`** — Executes specific tasks based on capabilities.
-- **`SupervisorAgent`** — Orchestrates workers and manages workflows.
-- **`AgentRegistry`** — Central registry for all collaborative agents.
+- **`TaskPriority`** -- Enum for task priority levels used in coordination
+- **`TaskStatus`** -- Enum tracking task lifecycle states
+- **`Task`** -- Core task representation with priority, status, dependencies, and metadata
+- **`TaskResult`** -- Result container for completed task executions
+- **`SwarmStatus`** -- Status tracking for swarm-based multi-agent operations
+- **`AgentStatus`** -- Individual agent availability and health status
+
+### Protocol Classes
+
+- **`AgentState`** -- Enum representing agent operational states
+- **`MessageType`** -- Enum classifying inter-agent message types
+- **`AgentMessage`** -- Structured message for agent-to-agent communication
+- **`AgentCapability`** -- Declares what an agent can do, used for capability-based routing
+- **`AgentProtocol`** -- Abstract base protocol for agent communication patterns
+- **`BaseAgent`** -- Base class for all collaborative agents with message handling
+- **`AgentCoordinator`** -- Central coordinator managing agent registration and task dispatch
+- **`RoundRobinProtocol`** -- Distributes tasks evenly across available agents in rotation
+- **`BroadcastProtocol`** -- Sends messages to all registered agents simultaneously
+- **`CapabilityRoutingProtocol`** -- Routes tasks to agents based on declared capabilities
+- **`ConsensusProtocol`** -- Achieves agreement among agents through voting mechanisms
+
+### Swarm Components
+
+- **`SwarmManager`** -- Orchestrates swarm-based parallel task execution across agent proxies
+- **`AgentProxy`** -- Lightweight proxy representing a remote agent in the swarm
+- **`TaskDecomposer`** -- Breaks complex tasks into subtasks for parallel swarm execution
+
+### Exceptions
+
+- **`CollaborationError`** -- Base exception for all collaboration failures
+- **`AgentNotFoundError`** -- Raised when referencing a non-existent agent
+- **`AgentBusyError`** -- Raised when an agent cannot accept new tasks
+- **`TaskExecutionError`** -- Raised when task execution fails
+- **`TaskNotFoundError`** -- Raised when referencing a non-existent task
+- **`TaskDependencyError`** -- Raised when task dependencies cannot be satisfied
+- **`ConsensusError`** -- Raised when consensus cannot be reached
+- **`ChannelError`** -- Raised on communication channel failures
+- **`MessageDeliveryError`** -- Raised when message delivery fails
+- **`CoordinationError`** -- Raised on general coordination failures
+- **`LeaderElectionError`** -- Raised when leader election fails
+- **`CapabilityMismatchError`** -- Raised when no agent matches required capabilities
+
+### Submodules
+
+- **`agents`** -- Agent definitions, workers, supervisors, and registry
+- **`communication`** -- Communication channels, broadcasting, and direct messaging
+- **`coordination`** -- Task management, consensus, and leader election
+- **`protocols`** -- Message passing protocols and swarm behavior
+
+## Directory Contents
+
+- `__init__.py` - Module entry point; exports all models, protocols, exceptions, and submodules
+- `models.py` - Core data models (`Task`, `TaskResult`, `TaskPriority`, `TaskStatus`, `SwarmStatus`, `AgentStatus`)
+- `exceptions.py` - Full exception hierarchy for collaboration error handling (deprecated, now uses global exceptions)
+- `agents/` - Agent implementations (workers, supervisors, registry)
+- `communication/` - Channel-based messaging (broadcast, direct, pub/sub)
+- `coordination/` - Task coordination, consensus algorithms, leader election
+- `protocols/` - Communication protocols (round-robin, broadcast, capability routing, consensus, swarm)
+- `AGENTS.md` - Agent integration specification
+- `API_SPECIFICATION.md` - Programmatic interface documentation
+- `SECURITY.md` - Security considerations
+- `SPEC.md` - Module specification
+- `PAI.md` - PAI integration notes
 
 ## Quick Start
 
 ```python
-import asyncio
-from codomyrmex.collaboration import (
-    SwarmManager,
-    SwarmAgent,
-    AgentRole,
-    SwarmMessage,
-    SwarmMessageType
-)
+from codomyrmex.collaboration import CollaborationError, AgentNotFoundError, AgentBusyError
 
-async def main():
-    manager = SwarmManager()
-    manager.register_agent(SwarmAgent("coder-1", AgentRole.CODER))
-
-    # In a real scenario, the agent would be a separate process or object
-    # subscribing to the bus. For this example, we'll just show the call.
-    # results = await manager.execute_mission("Add auth and tests")
-    # print(results)
-
-if __name__ == "__main__":
-    asyncio.run(main())
-```
-
-## Directory Structure
-
-```
-collaboration/
-├── __init__.py          # Module exports (SwarmManager, AgentPool, MessageBus, protocols)
-├── mcp_tools.py         # MCP: swarm_submit_task, pool_status, list_agents
-├── models.py            # Task, TaskResult, AgentStatus, SwarmStatus data models
-├── exceptions.py        # CollaborationError hierarchy
-├── swarm/               # SwarmManager, AgentPool, MessageBus, TaskDecomposer, ConsensusEngine
-├── agents/              # WorkerAgent, SupervisorAgent, AgentRegistry
-├── communication/       # Channel-based inter-agent messaging
-├── coordination/        # Task scheduling and consensus algorithms
-└── protocols/           # BaseAgent, AgentProtocol, RoundRobin, Broadcast, CapabilityRouting
+# Initialize CollaborationError
+instance = CollaborationError()
 ```
 
 ## Testing
 
 ```bash
-uv run pytest src/codomyrmex/tests/unit/collaboration/
+uv run python -m pytest src/codomyrmex/tests/ -k collaboration -v
 ```
 
-## Documentation
+## Navigation
 
-- [SPEC.md](SPEC.md) — Technical specification.
-- [AGENTS.md](AGENTS.md) — Guidelines for agent integration.
-- [PAI.md](PAI.md) — PAI integration notes.
+- **Full Documentation**: [docs/modules/collaboration/](../../../docs/modules/collaboration/)
+- **Parent Directory**: [codomyrmex](../README.md)
+- **Project Root**: ../../../README.md

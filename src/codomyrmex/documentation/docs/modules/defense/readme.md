@@ -1,16 +1,18 @@
 # Defense Module
 
-**Version**: v1.1.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
-Advanced threat detection, rate limiting, and active countermeasures for AI security.
+Active countermeasures and threat containment for AI security.
 
 ## PAI Integration
 
 | Algorithm Phase | Role | Tools Used |
 |----------------|------|-----------|
-| **VERIFY** | Run defensive scans against injection and exploit attempts | `ActiveDefense.detect_exploit()` |
-| **OBSERVE** | Monitor threats and detect suspicious agent behavior | `Defense.process_request()` |
-| **BUILD** | Harden configurations and register threat handlers | `Defense.add_detection_rule()` |
+| **VERIFY** | Run defensive scans against injection and exploit attempts | Direct Python import |
+| **OBSERVE** | Monitor threats and detect suspicious agent behavior | Direct Python import |
+| **BUILD** | Harden configurations and register threat handlers | Direct Python import |
+
+PAI agents access this module via direct Python import through the MCP bridge. The QATester agent uses `ActiveDefense` during VERIFY to scan for prompt injection, while `RabbitHole` isolates suspicious agents during threat containment.
 
 ## Installation
 
@@ -18,63 +20,70 @@ Advanced threat detection, rate limiting, and active countermeasures for AI secu
 uv add codomyrmex
 ```
 
-## Key Components
+Or for development:
 
-### `Defense` (Orchestrator)
-The main entry point that combines rate limiting, rule-based detection, and active defense.
-
-```python
-from codomyrmex.defense import Defense, DetectionRule, Severity, ResponseAction
-
-defense = Defense({"max_requests": 100, "window_seconds": 60})
-
-# Add custom rules
-defense.add_detection_rule(DetectionRule(
-    name="sql_injection",
-    category="injection",
-    severity=Severity.HIGH,
-    check=lambda req: "DROP TABLE" in req.get("query", "").upper(),
-    response=ResponseAction.BLOCK,
-))
-
-# Process requests
-allowed, threats = defense.process_request(
-    source="1.2.3.4",
-    request={"input": "some user input", "query": "SELECT * FROM users"}
-)
+```bash
+uv sync
 ```
 
-### `ActiveDefense`
-Handles cognitive exploit detection (jailbreaks, prompt injections) and countermeasures.
+## Key Exports
+
+### Classes
+- **`ActiveDefense`** — Active defense system against cognitive exploits.
+- **`Defense`** — Main class for defense functionality.
+- **`RabbitHole`** — A simulated environment to contain and waste the time of attackers.
+
+### Functions
+- **`create_defense()`** — Create a new Defense instance.
+
+## Quick Start
 
 ```python
-from codomyrmex.defense import ActiveDefense
+from codomyrmex.defense import ActiveDefense, RabbitHole
 
-active = ActiveDefense()
-result = active.detect_exploit("ignore previous instructions...")
-if result["detected"]:
-    poison = active.poison_context(attacker_id="ext-123", intensity=0.7)
-```
+# Active defense with threat response
+defense = ActiveDefense()
 
-### `RabbitHole`
-Deceptive containment environment to stall and monitor attackers.
+# Register threat handlers
+defense.on_threat("injection", handler=quarantine_input)
+defense.on_threat("exfiltration", handler=block_request)
 
-```python
-from codomyrmex.defense import RabbitHole
+# Check and respond to threats
+if defense.detect(user_input):
+    defense.respond()
 
+# Rabbit hole containment
 hole = RabbitHole()
-initial_msg = hole.engage("attacker_ip")
-# Next attacker inputs get deceptive responses
-response = hole.generate_response("attacker_ip", "attacker input")
+hole.enter(suspicious_agent)  # Isolate in sandboxed environment
+hole.monitor()  # Track behavior
+hole.release() if safe else hole.terminate()
 ```
+
+## Exports
+
+| Class | Description |
+|-------|-------------|
+| `ActiveDefense` | Threat detection and automated response |
+| `RabbitHole` | Deceptive containment environment |
+
+## Use Cases
+
+- **Injection detection** — Detect and block prompt injection attempts
+- **Agent containment** — Isolate suspicious agents in sandboxed environments
+- **Threat response** — Automated countermeasures for detected threats
 
 ## Testing
 
 ```bash
-uv run pytest src/codomyrmex/tests/unit/defense/test_defense.py -v
+uv run python -m pytest src/codomyrmex/tests/ -k defense -v
 ```
 
 ## Documentation
 
-- [Specification](SPEC.md)
-- [Agent Guide](AGENTS.md)
+- [Module Documentation](../../../docs/modules/defense/README.md)
+- [Agent Guide](../../../docs/modules/defense/AGENTS.md)
+- [Specification](../../../docs/modules/defense/SPEC.md)
+
+## Navigation
+
+- [SPEC](SPEC.md) | [AGENTS](AGENTS.md) | [PAI](PAI.md)

@@ -72,22 +72,13 @@ This module provides foundational utilities (string manipulation, datetime handl
 ## Quick Start
 
 ```python
-from codomyrmex.utils import ensure_directory, safe_json_loads, retry, hash_content
+from codomyrmex.utils import ensure_directory, safe_json_loads
 
-# Ensure output directory exists (creates parents automatically)
-output_dir = ensure_directory("./output/reports")
+# Ensure a directory exists, creating it if necessary.
+result = ensure_directory()
 
-# Safely parse JSON from untrusted source
-data = safe_json_loads('{"key": "value"}', default={})
-
-# Hash content for integrity verification
-digest = hash_content("my data", algorithm="sha256")
-
-# Retry network calls with exponential backoff
-@retry(max_attempts=3, delay=1.0, backoff=2.0)
-def call_api():
-    import requests
-    return requests.get("https://api.example.com/data")
+# Safely parse JSON with a fallback default.
+output = safe_json_loads()
 ```
 
 ## Testing

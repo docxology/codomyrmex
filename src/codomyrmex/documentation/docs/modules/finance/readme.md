@@ -1,6 +1,6 @@
 # Finance Module
 
-**Version**: v1.1.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
@@ -51,21 +51,16 @@ from codomyrmex.finance import Ledger, Transaction, Forecaster, TaxCalculator
 
 # Double-entry bookkeeping
 ledger = Ledger()
-cash = ledger.create_account("Assets:Cash", AccountType.ASSET)
-revenue = ledger.create_account("Revenue:Sales", AccountType.REVENUE)
-ledger.post_transaction([
-    {"account_id": cash.id, "amount": 100},
-    {"account_id": revenue.id, "amount": -100}
-], description="Sale")
+ledger.record(Transaction(amount=100.00, debit="Assets:Cash", credit="Revenue:Sales"))
 balance = ledger.trial_balance()
 
-# Financial forecasting (Monte Carlo)
-forecaster = Forecaster([100, 110, 120, 115, 130])
-projection = forecaster.project(periods=12)
+# Financial forecasting
+forecaster = Forecaster()
+projection = forecaster.project(ledger, months=12)
 
 # Tax calculation
 tax = TaxCalculator(jurisdiction="US")
-result = tax.calculate_tax(85000)
+result = tax.estimate(ledger, year=2026)
 ```
 
 ## Architecture

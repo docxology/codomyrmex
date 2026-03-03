@@ -104,12 +104,6 @@ Both modules can be used together: use `git_operations` to manage repos, then `g
   - Install: `npm install -g gitnexus` or use `npx` (zero-install)
   - Vendor build: `cd vendor/gitnexus && npm install && npm run build`
 
-## Testing
-
-```bash
-uv run pytest src/codomyrmex/tests/unit/git_analysis/
-```
-
 ## Navigation
 
 - **Extended Docs**: [docs/modules/git_analysis/](../../../docs/modules/git_analysis/)

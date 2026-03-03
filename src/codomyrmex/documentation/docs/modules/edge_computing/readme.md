@@ -40,14 +40,11 @@ uv sync
 
 ## Directory Structure
 
-- `models.py` — Data models (EdgeNodeStatus, EdgeNode, EdgeFunction, SyncState, EdgeExecutionError, ResourceUsage)
+- `models.py` — Data models (EdgeNodeStatus, EdgeNode, EdgeFunction, SyncState, EdgeExecutionError)
 - `runtime.py` — Edge function execution runtime (EdgeRuntime)
 - `cluster.py` — Multi-node cluster management (EdgeCluster)
-- `sync.py` — State synchronization with delta support (EdgeSynchronizer)
+- `sync.py` — State synchronization between edge and cloud (EdgeSynchronizer)
 - `metrics.py` — Invocation metrics and tracking (EdgeMetrics, InvocationRecord)
-- `deployment/` — Strategies: ROLLING, BLUE_GREEN, CANARY
-- `scheduling/` — Periodic and one-shot job execution
-- `infrastructure/` — Health monitoring, caching, and sync
 - `__init__.py` — Public API re-exports
 
 ## Quick Start

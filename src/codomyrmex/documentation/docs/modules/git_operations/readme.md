@@ -1,6 +1,6 @@
 # Git Operations Module
 
-**Version**: v1.1.0 | **Status**: Active | **Last Updated**: April 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
@@ -54,7 +54,6 @@ Git operations are central to PAI's **EXECUTE phase**. `Engineer` agents invoke 
 ### History, Config, and Advanced
 
 - **`get_commit_history()`** -- Retrieve commit log entries
-- **`get_commit_history_filtered()`** -- Retrieve commit log entries with specific filters (author, date, file)
 - **`get_config()` / `set_config()`** -- Read and write git configuration values
 - **`cherry_pick()`** -- Apply a specific commit to the current branch
 - **`create_tag()` / `list_tags()`** -- Create and list git tags
