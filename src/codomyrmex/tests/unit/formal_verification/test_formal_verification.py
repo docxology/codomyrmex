@@ -732,6 +732,7 @@ class TestSolverStatusProperties:
             push,
             solve_model,
         )
+
         clear_model()
         add_item("x = Int('x')")
         add_item("solver.add(x == 10)")
@@ -752,6 +753,7 @@ class TestSolverStatusProperties:
             push,
             solve_model,
         )
+
         clear_model()
         add_item("x = Int('x')")
         add_item("solver.add(x == 10)")
