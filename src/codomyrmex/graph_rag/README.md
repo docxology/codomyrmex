@@ -79,6 +79,7 @@ print(context.to_text())
 - `models.py` — Data models (Entity, Relationship, GraphContext, etc.)
 - `graph.py` — Knowledge graph implementation (KnowledgeGraph)
 - `pipeline.py` — RAG pipeline logic (GraphRAGPipeline)
+- `mcp_tools.py` — MCP tools (`graph_rag_search_entities`, `graph_rag_get_stats`, `graph_rag_get_neighbors`)
 - `__init__.py` — Public API re-exports
 
 ## Exports

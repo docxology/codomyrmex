@@ -15,6 +15,13 @@ Knowledge graph-enhanced RAG with entity relationships and traversal.
 - **RelationType** — Enum: is_a, part_of, related_to, authored_by, etc.
 - **GraphRAGPipeline** — Query graph for LLM context
 
+## MCP Tools
+
+The following MCP tools are available for agents to interact with the knowledge graph:
+- **`graph_rag_search_entities`** — Search for entities matching a query string
+- **`graph_rag_get_neighbors`** — Retrieve neighbors of a specific entity
+- **`graph_rag_get_stats`** — Get entity and relationship counts
+
 ## Agent Instructions
 
 1. **Build graph incrementally** — Add entities and relationships as discovered
