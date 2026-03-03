@@ -6,7 +6,7 @@ showcasing integration with codomyrmex modules.
 
 Usage:
     python run_demo.py [target_path]
-    
+
 Examples:
     python run_demo.py           # Analyze src/ directory
     python run_demo.py .         # Analyze current directory
@@ -168,7 +168,7 @@ def main() -> int:
         print(f"    • {dashboard_path.relative_to(Path(__file__).parent)}")
         print()
         print("  Reports:")
-        for fmt, path in report_paths.items():
+        for _fmt, path in report_paths.items():
             print(f"    • {path.relative_to(Path(__file__).parent)}")
         print()
         print("  Open the HTML files in your browser to view!")
