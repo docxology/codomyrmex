@@ -19,6 +19,16 @@ CostTracker ──> CostStore (ABC)
 BudgetManager ──> CostTracker
 ```
 
+## MCP Integration
+
+The `mcp_tools.py` file exposes the functionality of `CostTracker` and `BudgetManager` as standard Model Context Protocol (MCP) tools:
+
+- `cost_management_record_cost`: Record a cost entry.
+- `cost_management_get_summary`: Get a summary of costs with filters.
+- `cost_management_create_budget`: Create a budget allocation.
+- `cost_management_check_budgets`: Get triggered budget alerts.
+- `cost_management_can_spend`: Check if spending amount is allowed within budget constraints.
+
 ## Key Classes
 
 ### `CostTracker`

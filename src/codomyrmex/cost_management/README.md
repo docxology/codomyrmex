@@ -11,6 +11,7 @@ The `cost_management` module provides a comprehensive framework for tracking, ag
 - **Multi-backend Storage**: Choose between `InMemoryCostStore` for volatile tracking or `JSONCostStore` for persistent tracking.
 - **Cost Aggregation**: Generate summaries and reports broken down by category, resource, and tags.
 - **Spend Gating**: Use `BudgetManager.can_spend()` to proactively prevent overspending.
+- **MCP Integration**: Exposes core functionality (`cost_management_record_cost`, `cost_management_create_budget`, etc.) as Model Context Protocol tools via `mcp_tools.py`.
 
 ## Installation
 The module is part of the core `codomyrmex` package. No additional dependencies are required beyond the standard library.
