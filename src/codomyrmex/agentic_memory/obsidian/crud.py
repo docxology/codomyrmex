@@ -58,7 +58,6 @@ def create_note(
         If ``True``, replace an existing note.
     template : str | None
         If given, read the template file and use its content as a base.
-
     """
     path = _resolve_path(vault.path, name)
     if path.exists() and not overwrite:
@@ -147,16 +146,9 @@ def append_note(
 
     Parameters
     ----------
-    vault : Any
-        Vault object.
-    name : str
-        Note name.
-    content : str
-        Content to append.
     newline : bool
         If ``True``, prepend a newline before the appended content if
         the file doesn't already end with one.
-
     """
     path = _resolve_path(vault.path, name)
     if not path.exists():
@@ -180,16 +172,9 @@ def prepend_note(
 
     Parameters
     ----------
-    vault : Any
-        Vault object.
-    name : str
-        Note name.
-    content : str
-        Content to prepend.
     after_frontmatter : bool
         If ``True`` (default), insert after any YAML frontmatter block.
         If ``False``, insert at the very start of the file.
-
     """
     path = _resolve_path(vault.path, name)
     if not path.exists():
@@ -288,13 +273,8 @@ def move_note(vault: Any, name: str, *, to: str) -> Note:
 
     Parameters
     ----------
-    vault : Any
-        Vault object.
-    name : str
-        Name of the note.
     to : str
         Target path (folder/name.md or just folder/).
-
     """
     old_path = _resolve_path(vault.path, name)
     if not old_path.exists():

@@ -16,8 +16,8 @@ except ImportError:
     sys.path.insert(0, str(project_root / "src"))
 
 import argparse
-import json
 import csv
+import json
 
 
 def load_json(path: Path) -> any:
@@ -73,7 +73,7 @@ def main():
     parser.add_argument("--format", "-f", choices=["json", "csv", "yaml"], help="Output format")
     parser.add_argument("--pretty", "-p", action="store_true", help="Pretty print output")
     args = parser.parse_args()
-    
+
     if not args.input:
         print("🔄 Data Converter\n")
         print("Converts between JSON, CSV, and YAML formats.\n")
@@ -82,25 +82,25 @@ def main():
         print("  python convert_data.py data.yaml data.json")
         print("  python convert_data.py data.csv data.yaml")
         return 0
-    
+
     input_path = Path(args.input)
     if not input_path.exists():
         print(f"❌ Input not found: {args.input}")
         return 1
-    
+
     # Determine formats
     input_ext = input_path.suffix.lower()
     if input_ext not in LOADERS:
         print(f"❌ Unsupported input format: {input_ext}")
         return 1
-    
+
     if args.output:
         output_path = Path(args.output)
         output_ext = output_path.suffix.lower() if not args.format else f".{args.format}"
     else:
         output_path = None
         output_ext = None
-    
+
     # Load
     print(f"📥 Loading: {input_path.name}")
     try:
@@ -108,19 +108,19 @@ def main():
     except Exception as e:
         print(f"❌ Load error: {e}")
         return 1
-    
+
     # Stats
     if isinstance(data, list):
         print(f"   Records: {len(data)}")
     elif isinstance(data, dict):
         print(f"   Keys: {len(data)}")
-    
+
     # Save or print
     if output_path:
         if output_ext not in SAVERS:
             print(f"❌ Unsupported output format: {output_ext}")
             return 1
-        
+
         print(f"📤 Saving: {output_path.name}")
         try:
             SAVERS[output_ext](data, output_path)
@@ -133,7 +133,7 @@ def main():
         print(json.dumps(data, indent=2)[:500])
         if len(json.dumps(data)) > 500:
             print("\n   ... (truncated)")
-    
+
     return 0
 
 

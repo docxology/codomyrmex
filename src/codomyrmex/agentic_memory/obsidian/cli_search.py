@@ -31,8 +31,6 @@ def cli_search(
 
     Parameters
     ----------
-    cli : ObsidianCLI
-        The CLI instance.
     query : str
         The search query string.
     path : str | None
@@ -47,7 +45,6 @@ def cli_search(
         Case-sensitive search.
     vault : str | None
         Override the default vault.
-
     """
     params: dict[str, str] = {"query": query}
     flags: list[str] = []

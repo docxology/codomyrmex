@@ -33,7 +33,6 @@ class ObsidianCLIError(RuntimeError):
     """Raised when the ``obsidian`` CLI returns a non-zero exit code."""
 
     def __init__(self, returncode: int, stderr: str, cmd: list[str]) -> None:
-        """Initialize ObsidianCLIError."""
         self.returncode = returncode
         self.stderr = stderr
         self.cmd = cmd
@@ -82,7 +81,6 @@ class ObsidianCLI:
         command unless overridden per-call.
     timeout : float
         Maximum seconds to wait for a command to complete.
-
     """
 
     def __init__(
@@ -92,7 +90,6 @@ class ObsidianCLI:
         vault: str | Path | None = None,
         timeout: float = 30.0,
     ) -> None:
-        """Initialize ObsidianCLI wrapper."""
         self._binary = binary
         self._vault = str(vault) if vault else None
         self._timeout = timeout
@@ -188,7 +185,6 @@ class ObsidianCLI:
             If the binary is not on PATH.
         ObsidianCLIError
             If the command exits with a non-zero status.
-
         """
         self._ensure_available()
 

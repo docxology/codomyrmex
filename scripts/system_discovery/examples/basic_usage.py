@@ -18,24 +18,30 @@ except ImportError:
     project_root = Path(__file__).resolve().parent.parent.parent.parent
     sys.path.insert(0, str(project_root / "src"))
 
-from codomyrmex.utils.cli_helpers import setup_logging, print_success, print_info, print_error
 from codomyrmex.system_discovery import (
-    SystemDiscovery,
     CapabilityScanner,
     StatusReporter,
-    get_system_context
+    SystemDiscovery,
+    get_system_context,
 )
+from codomyrmex.utils.cli_helpers import (
+    print_error,
+    print_info,
+    print_success,
+    setup_logging,
+)
+
 
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
+
+    import yaml
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "system_discovery" / "config.yaml"
-    config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
-            config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/system_discovery/config.yaml")
+        with open(config_path) as f:
+            yaml.safe_load(f) or {}
+            print("Loaded config from config/system_discovery/config.yaml")
 
     setup_logging()
     print_info("Running System Discovery Examples...")
@@ -46,20 +52,20 @@ def main():
         discovery = SystemDiscovery()
         inventory = discovery.scan_system()
         print_success("  System scan completed.")
-        
+
         # Show some stats from the real scan
         modules_count = len(inventory.get("modules", []))
         health = inventory.get("health_status", "Unknown")
         print_success(f"  Discovered {modules_count} modules.")
         print_success(f"  System health status: {health}")
-        
+
     except Exception as e:
         print_error(f"  SystemDiscovery scan failed: {e}")
 
     # 2. Capability Scanner
     print_info("Initializing CapabilityScanner...")
     try:
-        scanner = CapabilityScanner()
+        CapabilityScanner()
         print_success("  CapabilityScanner initialized successfully.")
     except Exception as e:
         print_error(f"  CapabilityScanner failed: {e}")
@@ -67,7 +73,7 @@ def main():
     # 3. Status Reporter
     print_info("Initializing StatusReporter...")
     try:
-        reporter = StatusReporter()
+        StatusReporter()
         print_success("  StatusReporter initialized successfully.")
     except Exception as e:
         print_error(f"  StatusReporter failed: {e}")

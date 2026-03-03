@@ -37,7 +37,6 @@ class RuleRegistry:
     """
 
     def __init__(self, rules_root: Path) -> None:
-        """Initialize registry caching loaded rules from rules_root."""
         self._root = rules_root
         self._cache: dict[str, Rule] = {}
 

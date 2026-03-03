@@ -41,7 +41,6 @@ class RuleEngine:
             rules_root: Path to the directory containing ``general.cursorrules``
                 and the ``modules/``, ``cross-module/``, and ``file-specific/``
                 subdirectories.  Defaults to the ``rules/`` package directory.
-
         """
         if rules_root is None:
             rules_root = _DEFAULT_RULES_ROOT
@@ -75,7 +74,6 @@ class RuleEngine:
 
         Returns:
             A :class:`RuleSet` containing all applicable rules.
-
         """
         rules: list[Rule] = []
 

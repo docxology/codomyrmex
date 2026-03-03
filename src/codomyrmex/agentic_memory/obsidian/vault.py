@@ -37,10 +37,8 @@ class ObsidianVault:
 
     @property
     def notes(self) -> dict[str, Note]:
-        """Lazy-loaded mapping.
-
-        Returns ``relative_path → Note``. Call :meth:`refresh` to invalidate.
-        """
+        """Lazy-loaded mapping ``relative_path → Note``.  Call :meth:`refresh`
+        to invalidate."""
         if self._notes is None:
             self._notes = self._scan()
         return self._notes
@@ -174,17 +172,13 @@ class ObsidianVault:
     # ── magic methods ────────────────────────────────────────────
 
     def __repr__(self) -> str:
-        """Return string representation."""
         return f"ObsidianVault({self.path!r})"
 
     def __len__(self) -> int:
-        """Return vault note count."""
         return len(self.notes)
 
     def __contains__(self, name: str) -> bool:
-        """Check if vault has note."""
         return self.has_note(name)
 
     def __iter__(self):
-        """Iterate over vault notes."""
         return iter(self.notes.values())

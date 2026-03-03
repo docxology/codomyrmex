@@ -40,15 +40,12 @@ class MemoryConsolidator:
     """
 
     def __init__(self, config: ConsolidationConfig | None = None) -> None:
-        """Initialize the consolidator with a config."""
         self.config = config or ConsolidationConfig()
         self._seen: set[str] = set()
 
     def consolidate(self, memories: list[Memory]) -> list[Case]:
-        """Return at most ``batch_size`` cases.
-
-        Skips duplicates and entries below the configured thresholds.
-        """
+        """Return at most ``batch_size`` cases, skipping duplicates and
+        entries below the configured thresholds."""
         cases: list[Case] = []
         for mem in memories:
             if len(cases) >= self.config.batch_size:
