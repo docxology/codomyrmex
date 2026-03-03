@@ -116,7 +116,9 @@ def list_patterns() -> dict[str, Any]:
             "design_patterns": design_patterns,
             "ast_patterns": ast_patterns,
             "anti_patterns": anti_patterns,
-            "total_count": len(design_patterns) + len(ast_patterns) + len(anti_patterns),
+            "total_count": len(design_patterns)
+            + len(ast_patterns)
+            + len(anti_patterns),
         }
     except NotImplementedError as exc:
         return {"status": "error", "message": f"not yet implemented: {exc}"}

@@ -69,6 +69,7 @@ def analyze_code_quality(path: str = None, **kwargs) -> dict:
         Dictionary with analysis results
     """
     import os
+
     target_path = path or os.getcwd()
 
     try:
@@ -78,10 +79,10 @@ def analyze_code_quality(path: str = None, **kwargs) -> dict:
         return {
             "success": True,
             "path": target_path,
-            "issues_count": getattr(result, 'issues_count', 0),
-            "errors": getattr(result, 'errors', []),
-            "warnings": getattr(result, 'warnings', []),
-            "summary": getattr(result, 'summary', "Analysis complete"),
+            "issues_count": getattr(result, "issues_count", 0),
+            "errors": getattr(result, "errors", []),
+            "warnings": getattr(result, "warnings", []),
+            "summary": getattr(result, "summary", "Analysis complete"),
         }
     except Exception as e:
         return {
@@ -96,9 +97,11 @@ def analyze_code_quality(path: str = None, **kwargs) -> dict:
 
 def cli_commands():
     """Return CLI commands for the static_analysis module."""
+
     def _analyze(path=None):
         """Analyze."""
         import os
+
         target = path or os.getcwd()
         result = analyze_code_quality(target)
         print(f"Analysis of: {result['path']}")

@@ -1,3 +1,5 @@
+"""Module traditional.py."""
+
 import json
 import re
 import subprocess
@@ -15,16 +17,23 @@ logger = get_logger(__name__)
 try:
     from codomyrmex.performance import monitor_performance
 except ImportError:
+
     def monitor_performance(*args, **kwargs):
+        """monitor_performance function/class."""
+
         def decorator(func):
+            """decorator function/class."""
             return func
+
         return decorator
 
 
 class TraditionalMixin:
     """TraditionalMixin functionality."""
 
-    def _run_traditional_analysis(self, file_path: str, analysis_types: list[str]) -> list[AnalysisResult]:
+    def _run_traditional_analysis(
+        self, file_path: str, analysis_types: list[str]
+    ) -> list[AnalysisResult]:
         """Run traditional static analysis tools."""
         results = []
         language = self._detect_language(file_path)
@@ -34,7 +43,9 @@ class TraditionalMixin:
 
         return results
 
-    def _analyze_python_file(self, file_path: str, analysis_types: list[str]) -> list[AnalysisResult]:
+    def _analyze_python_file(
+        self, file_path: str, analysis_types: list[str]
+    ) -> list[AnalysisResult]:
         """Analyze a Python file using traditional tools."""
         results = []
 
@@ -80,16 +91,20 @@ class TraditionalMixin:
                         "fatal": SeverityLevel.CRITICAL,
                     }
 
-                    results.append(AnalysisResult(
-                        file_path=issue["path"],
-                        line_number=issue["line"],
-                        column_number=issue["column"],
-                        severity=severity_map.get(issue["type"], SeverityLevel.WARNING),
-                        message=issue["message"],
-                        rule_id=issue["message-id"],
-                        category="pylint",
-                        suggestion=issue.get("suggestion"),
-                    ))
+                    results.append(
+                        AnalysisResult(
+                            file_path=issue["path"],
+                            line_number=issue["line"],
+                            column_number=issue["column"],
+                            severity=severity_map.get(
+                                issue["type"], SeverityLevel.WARNING
+                            ),
+                            message=issue["message"],
+                            rule_id=issue["message-id"],
+                            category="pylint",
+                            suggestion=issue.get("suggestion"),
+                        )
+                    )
 
         except (subprocess.TimeoutExpired, json.JSONDecodeError, Exception) as e:
             logger.error(f"Error running pylint on {file_path}: {e}")
@@ -128,15 +143,17 @@ class TraditionalMixin:
                             elif rule_id.startswith("F"):
                                 severity = SeverityLevel.ERROR
 
-                            results.append(AnalysisResult(
-                                file_path=file_path,
-                                line_number=int(line_num),
-                                column_number=int(col_num),
-                                severity=severity,
-                                message=message.strip(),
-                                rule_id=rule_id,
-                                category="flake8",
-                            ))
+                            results.append(
+                                AnalysisResult(
+                                    file_path=file_path,
+                                    line_number=int(line_num),
+                                    column_number=int(col_num),
+                                    severity=severity,
+                                    message=message.strip(),
+                                    rule_id=rule_id,
+                                    category="flake8",
+                                )
+                            )
 
         except (subprocess.TimeoutExpired, Exception) as e:
             logger.error(f"Error running flake8 on {file_path}: {e}")
@@ -159,17 +176,21 @@ class TraditionalMixin:
                             r"([^:]+):(\d+):(\d+): error: (.+) \[([^\]]+)\]", line
                         )
                         if match:
-                            file_path, line_num, col_num, message, error_code = match.groups()
+                            file_path, line_num, col_num, message, error_code = (
+                                match.groups()
+                            )
 
-                            results.append(AnalysisResult(
-                                file_path=file_path,
-                                line_number=int(line_num),
-                                column_number=int(col_num),
-                                severity=SeverityLevel.ERROR,
-                                message=message,
-                                rule_id=error_code,
-                                category="mypy",
-                            ))
+                            results.append(
+                                AnalysisResult(
+                                    file_path=file_path,
+                                    line_number=int(line_num),
+                                    column_number=int(col_num),
+                                    severity=SeverityLevel.ERROR,
+                                    message=message,
+                                    rule_id=error_code,
+                                    category="mypy",
+                                )
+                            )
 
         except (subprocess.TimeoutExpired, Exception) as e:
             logger.error(f"Error running mypy on {file_path}: {e}")
@@ -195,16 +216,20 @@ class TraditionalMixin:
                         "CRITICAL": SeverityLevel.CRITICAL,
                     }
 
-                    results.append(AnalysisResult(
-                        file_path=issue["filename"],
-                        line_number=issue["line_number"],
-                        column_number=0,
-                        severity=severity_map.get(issue["issue_severity"], SeverityLevel.WARNING),
-                        message=issue["issue_text"],
-                        rule_id=issue["test_id"],
-                        category="security",
-                        suggestion=issue.get("more_info"),
-                    ))
+                    results.append(
+                        AnalysisResult(
+                            file_path=issue["filename"],
+                            line_number=issue["line_number"],
+                            column_number=0,
+                            severity=severity_map.get(
+                                issue["issue_severity"], SeverityLevel.WARNING
+                            ),
+                            message=issue["issue_text"],
+                            rule_id=issue["test_id"],
+                            category="security",
+                            suggestion=issue.get("more_info"),
+                        )
+                    )
 
         except (subprocess.TimeoutExpired, json.JSONDecodeError, Exception) as e:
             logger.error(f"Error running bandit on {file_path}: {e}")
@@ -226,16 +251,18 @@ class TraditionalMixin:
                         if len(parts) >= 3:
                             file_path, line_num, message = parts
 
-                            results.append(AnalysisResult(
-                                file_path=file_path,
-                                line_number=int(line_num),
-                                column_number=0,
-                                severity=SeverityLevel.WARNING,
-                                message=message.strip(),
-                                rule_id="VULTURE",
-                                category="quality",
-                                suggestion="Consider removing unused code or adding tests",
-                            ))
+                            results.append(
+                                AnalysisResult(
+                                    file_path=file_path,
+                                    line_number=int(line_num),
+                                    column_number=0,
+                                    severity=SeverityLevel.WARNING,
+                                    message=message.strip(),
+                                    rule_id="VULTURE",
+                                    category="quality",
+                                    suggestion="Consider removing unused code or adding tests",
+                                )
+                            )
 
         except (subprocess.TimeoutExpired, Exception) as e:
             logger.error(f"Error running vulture on {file_path}: {e}")

@@ -14,15 +14,24 @@ from typing import Any
 
 try:
     import psutil
+
     PSUTIL_AVAILABLE = True
 except ImportError:
     PSUTIL_AVAILABLE = False
+
     # Create a dummy psutil module for type hints
     class _DummyPSUtil:
         """No-op psutil stub used when psutil is not installed; all metrics return zero."""
-        def cpu_percent(self, interval=None): return 0.0
+
+        def cpu_percent(self, interval=None):
+            """cpu_percent function/class."""
+            return 0.0
+
         class NoSuchProcess(Exception):
+            """NoSuchProcess function/class."""
+
             pass
+
     psutil = _DummyPSUtil()
 
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
@@ -36,6 +45,7 @@ MAX_TIMEOUT = 300
 @dataclass
 class ExecutionLimits:
     """Structured configuration for execution resource limits."""
+
     time_limit: int = 30  # seconds
     memory_limit: int = 256  # MB
     cpu_limit: float = 0.5  # CPU cores
@@ -70,9 +80,9 @@ def resource_limits_context(limits: ExecutionLimits):
         relative_limit = int(current_cpu) + limits.time_limit + 1
 
         if hard != resource.RLIM_INFINITY:
-             limited_time = min(relative_limit, hard)
+            limited_time = min(relative_limit, hard)
         else:
-             limited_time = relative_limit
+            limited_time = relative_limit
 
         try:
             resource.setrlimit(resource.RLIMIT_CPU, (limited_time, hard))
@@ -131,6 +141,7 @@ def execute_with_limits(
 
         # Execute the code
         from codomyrmex.coding.execution.executor import execute_code
+
         result = execute_code(language, code, stdin, limits.time_limit, session_id)
 
         # Update monitoring during execution (in a separate thread for better tracking)
@@ -151,15 +162,17 @@ def execute_with_limits(
         resource_usage = monitor.get_resource_usage()
 
         # Merge resource usage into result
-        result.update({
-            "resource_usage": resource_usage,
-            "limits_applied": {
-                "time_limit_seconds": limits.time_limit,
-                "memory_limit_mb": limits.memory_limit,
-                "cpu_limit_cores": limits.cpu_limit,
-                "max_output_chars": limits.max_output_chars,
+        result.update(
+            {
+                "resource_usage": resource_usage,
+                "limits_applied": {
+                    "time_limit_seconds": limits.time_limit,
+                    "memory_limit_mb": limits.memory_limit,
+                    "cpu_limit_cores": limits.cpu_limit,
+                    "max_output_chars": limits.max_output_chars,
+                },
             }
-        })
+        )
 
         return result
 
@@ -185,23 +198,33 @@ def sandbox_process_isolation(
     Returns:
         Dictionary with execution results
     """
+
     def execute_in_subprocess(queue):
         """Execute code in a subprocess with resource limits."""
         try:
             # Set resource limits in the subprocess
-            resource.setrlimit(resource.RLIMIT_CPU, (limits.time_limit, limits.time_limit + 10))
+            resource.setrlimit(
+                resource.RLIMIT_CPU, (limits.time_limit, limits.time_limit + 10)
+            )
             memory_bytes = limits.memory_limit * 1024 * 1024
             resource.setrlimit(resource.RLIMIT_AS, (memory_bytes, memory_bytes))
 
             # Execute the code
             from codomyrmex.coding.execution.executor import execute_code
+
             result = execute_code(language, code, stdin, limits.time_limit)
 
             # Cap output size
             if len(result.get("stdout", "")) > limits.max_output_chars:
-                result["stdout"] = result["stdout"][:limits.max_output_chars] + "\n... [Output truncated]"
+                result["stdout"] = (
+                    result["stdout"][: limits.max_output_chars]
+                    + "\n... [Output truncated]"
+                )
             if len(result.get("stderr", "")) > limits.max_output_chars:
-                result["stderr"] = result["stderr"][:limits.max_output_chars] + "\n... [Error output truncated]"
+                result["stderr"] = (
+                    result["stderr"][: limits.max_output_chars]
+                    + "\n... [Error output truncated]"
+                )
 
             queue.put(("success", result))
 
@@ -243,29 +266,31 @@ def sandbox_process_isolation(
                 "memory_limit_mb": limits.memory_limit,
                 "cpu_limit_cores": limits.cpu_limit,
                 "max_output_chars": limits.max_output_chars,
-            }
+            },
         }
 
     if not queue.empty():
         status, data = queue.get()
         if status == "success":
             # Add resource usage information
-            data.update({
-                "resource_usage": {
-                    "execution_time_seconds": data.get("execution_time", 0),
-                    "memory_start_mb": 0,  # Not available in subprocess
-                    "memory_peak_mb": 0,   # Not available in subprocess
-                    "cpu_samples": 0,
-                    "cpu_average_percent": 0,
-                    "cpu_peak_percent": 0,
-                },
-                "limits_applied": {
-                    "time_limit_seconds": limits.time_limit,
-                    "memory_limit_mb": limits.memory_limit,
-                    "cpu_limit_cores": limits.cpu_limit,
-                    "max_output_chars": limits.max_output_chars,
+            data.update(
+                {
+                    "resource_usage": {
+                        "execution_time_seconds": data.get("execution_time", 0),
+                        "memory_start_mb": 0,  # Not available in subprocess
+                        "memory_peak_mb": 0,  # Not available in subprocess
+                        "cpu_samples": 0,
+                        "cpu_average_percent": 0,
+                        "cpu_peak_percent": 0,
+                    },
+                    "limits_applied": {
+                        "time_limit_seconds": limits.time_limit,
+                        "memory_limit_mb": limits.memory_limit,
+                        "cpu_limit_cores": limits.cpu_limit,
+                        "max_output_chars": limits.max_output_chars,
+                    },
                 }
-            })
+            )
             return data
         else:
             return {
@@ -288,7 +313,7 @@ def sandbox_process_isolation(
                     "memory_limit_mb": limits.memory_limit,
                     "cpu_limit_cores": limits.cpu_limit,
                     "max_output_chars": limits.max_output_chars,
-                }
+                },
             }
 
     # Queue was empty (unexpected)
@@ -312,6 +337,5 @@ def sandbox_process_isolation(
             "memory_limit_mb": limits.memory_limit,
             "cpu_limit_cores": limits.cpu_limit,
             "max_output_chars": limits.max_output_chars,
-        }
+        },
     }
-

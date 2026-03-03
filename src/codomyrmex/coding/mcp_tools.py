@@ -14,12 +14,14 @@ from codomyrmex.model_context_protocol.decorators import mcp_tool
 def _get_execute_code():
     """Lazy import to avoid circular import with coding.__init__."""
     from .execution import execute_code
+
     return execute_code
 
 
 def _get_supported_languages():
     """Lazy import to avoid circular import with coding.__init__."""
     from .execution import SUPPORTED_LANGUAGES
+
     return SUPPORTED_LANGUAGES
 
 
@@ -27,9 +29,7 @@ def _get_supported_languages():
     category="coding",
     description="Execute code in a sandboxed environment. Supports Python, JavaScript, and more.",
 )
-def code_execute(
-    language: str, code: str, timeout: int = 30
-) -> dict[str, Any]:
+def code_execute(language: str, code: str, timeout: int = 30) -> dict[str, Any]:
     """Execute code and return output."""
     try:
         execute_code = _get_execute_code()

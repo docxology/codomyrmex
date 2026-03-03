@@ -15,6 +15,7 @@ logger = get_logger(__name__)
 @dataclass
 class PatternMatch:
     """Represents a pattern match."""
+
     pattern_name: str
     file_path: str
     line_number: int
@@ -25,6 +26,7 @@ class PatternMatch:
 @dataclass
 class AnalysisResult:
     """Result of pattern analysis."""
+
     total_files: int
     files_analyzed: int
     matches: list[PatternMatch] = field(default_factory=list)
@@ -42,26 +44,30 @@ class PatternAnalyzer:
         """Analyze a single file for patterns."""
         matches = []
         try:
-            with open(file_path, encoding='utf-8', errors='ignore') as f:
+            with open(file_path, encoding="utf-8", errors="ignore") as f:
                 lines = f.readlines()
 
             for i, line in enumerate(lines, 1):
                 for name, pattern in self.patterns.items():
                     if pattern in line:
-                        matches.append(PatternMatch(
-                            pattern_name=name,
-                            file_path=file_path,
-                            line_number=i,
-                            matched_text=line.strip()[:100]
-                        ))
+                        matches.append(
+                            PatternMatch(
+                                pattern_name=name,
+                                file_path=file_path,
+                                line_number=i,
+                                matched_text=line.strip()[:100],
+                            )
+                        )
         except Exception as e:
             logger.error(f"Error analyzing {file_path}: {e}")
 
         return matches
 
-    def analyze_directory(self, directory: str, extensions: list[str] | None = None) -> AnalysisResult:
+    def analyze_directory(
+        self, directory: str, extensions: list[str] | None = None
+    ) -> AnalysisResult:
         """Analyze all files in a directory."""
-        extensions = extensions or ['.py', '.js', '.ts']
+        extensions = extensions or [".py", ".js", ".ts"]
         all_matches = []
         errors = []
         files_analyzed = 0
@@ -82,15 +88,18 @@ class PatternAnalyzer:
             total_files=total_files,
             files_analyzed=files_analyzed,
             matches=all_matches,
-            errors=errors
+            errors=errors,
         )
 
 
 # Convenience functions
-def run_codomyrmex_analysis(directory: str, patterns: dict[str, str] | None = None) -> AnalysisResult:
+def run_codomyrmex_analysis(
+    directory: str, patterns: dict[str, str] | None = None
+) -> AnalysisResult:
     """Run pattern analysis on a directory."""
     analyzer = PatternAnalyzer(patterns or {})
     return analyzer.analyze_directory(directory)
+
 
 def get_embedding_function() -> Any:
     """Get a deterministic hash-based embedding function.
@@ -118,29 +127,36 @@ def get_embedding_function() -> Any:
 
     return _hash_embed
 
+
 def analyze_repository_path(path: str) -> dict[str, Any]:
     """Analyze a repository path."""
     return {"path": path, "status": "analyzed"}
+
 
 def run_full_analysis(path: str) -> dict[str, Any]:
     """Run full analysis sequence."""
     return {"path": path, "full_analysis": True}
 
+
 def print_once(msg: str) -> None:
     """Print a message only once."""
     print(msg)
+
 
 def _perform_repository_index(path: str) -> None:
     """Index repository."""
     logger.info(f"Indexing {path}")
 
+
 def _perform_dependency_analysis(path: str) -> None:
     """Analyze dependencies."""
     logger.info(f"Analyzing dependencies for {path}")
 
+
 def _perform_text_search(query: str, path: str) -> list[Any]:
     """Perform text search."""
     return []
+
 
 def _perform_code_summarization(path: str) -> str:
     """Summarize code by extracting top-level class and function definitions via AST."""
@@ -160,7 +176,11 @@ def _perform_code_summarization(path: str) -> str:
     functions = []
     for node in ast.iter_child_nodes(tree):
         if isinstance(node, ast.ClassDef):
-            methods = [n.name for n in ast.iter_child_nodes(node) if isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef))]
+            methods = [
+                n.name
+                for n in ast.iter_child_nodes(node)
+                if isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef))
+            ]
             classes.append(f"class {node.name}({len(methods)} methods)")
         elif isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
             functions.append(f"def {node.name}")
@@ -175,9 +195,11 @@ def _perform_code_summarization(path: str) -> str:
 
     return "; ".join(parts)
 
+
 def _perform_docstring_indexing(path: str) -> None:
     """Index docstrings."""
     logger.info(f"Indexing docstrings for {path}")
+
 
 def _perform_symbol_extraction(path: str) -> list[str]:
     """Extract top-level symbol names (classes and functions) from a Python file."""
@@ -231,6 +253,7 @@ def _perform_symbol_usage_analysis(path: str) -> dict[str, int]:
 
     return usage
 
+
 def _perform_text_search_context_extraction(query: str, path: str) -> str:
     """Extract context surrounding search matches in a file.
 
@@ -260,7 +283,10 @@ def _perform_text_search_context_extraction(query: str, path: str) -> str:
     if not matches:
         return f"No matches for '{query}' in {path}"
 
-    return f"Found {len(matches)} match(es) in {file_path.name}:\n\n" + "\n---\n".join(matches)
+    return f"Found {len(matches)} match(es) in {file_path.name}:\n\n" + "\n---\n".join(
+        matches
+    )
+
 
 def _perform_chunking_examples(text: str) -> list[str]:
     """Demonstrate chunking."""
