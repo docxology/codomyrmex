@@ -17,7 +17,7 @@ if str(SRC_DIR) not in sys.path:
     sys.path.insert(0, str(SRC_DIR))
 
 try:
-    from codomyrmex.static_analysis.imports import scan_imports, check_layer_violations
+    from codomyrmex.static_analysis.imports import check_layer_violations, scan_imports
 except ImportError as e:
     print(f"Error importing codomyrmex module: {e}")
     sys.exit(1)
@@ -25,18 +25,26 @@ except ImportError as e:
 
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
-    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "audits" / "config.yaml"
-    config_data = {}
+
+    import yaml
+
+    config_path = (
+        Path(__file__).resolve().parent.parent.parent
+        / "config"
+        / "audits"
+        / "config.yaml"
+    )
     if config_path.exists():
-        with open(config_path, "r") as f:
-            config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/audits/config.yaml")
+        with open(config_path) as f:
+            yaml.safe_load(f) or {}
+            print("Loaded config from config/audits/config.yaml")
 
     parser = argparse.ArgumentParser(description="Audit cross-module imports")
     parser.add_argument("--json", action="store_true", help="Output JSON")
-    parser.add_argument("--root", type=Path, default=PROJ_ROOT, help="Project root directory")
+    parser.add_argument(
+        "--root", type=Path, default=PROJ_ROOT, help="Project root directory"
+    )
     args = parser.parse_args()
 
     src_dir = args.root / "src" / "codomyrmex"
@@ -61,13 +69,18 @@ def main():
         unique_violations[key]["files"].append(v["file"])
 
     if args.json:
-        print(json.dumps({
-            "total_edges": len(unique_edges),
-            "violations": [
-                {"src": k[0], "dst": k[1], **v}
-                for k, v in unique_violations.items()
-            ]
-        }, indent=2))
+        print(
+            json.dumps(
+                {
+                    "total_edges": len(unique_edges),
+                    "violations": [
+                        {"src": k[0], "dst": k[1], **v}
+                        for k, v in unique_violations.items()
+                    ],
+                },
+                indent=2,
+            )
+        )
     else:
         print(f"Import edges: {len(unique_edges)}")
         print(f"Violations:   {len(unique_violations)}")

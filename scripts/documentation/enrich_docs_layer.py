@@ -7,6 +7,7 @@
 4. Deepen thin README.md files (20 under 40 lines)
 5. Deepen thin SPEC.md (2 under 35 lines)
 """
+
 import ast
 import os
 import sys
@@ -16,10 +17,19 @@ SRC = os.path.join(REPO, "src", "codomyrmex")
 DOCS = os.path.join(REPO, "docs", "modules")
 
 DISPLAY_MAP = {
-    "api": "API", "cli": "CLI", "llm": "LLM", "ide": "IDE", "fpf": "FPF",
-    "i18n": "i18n", "ci_cd_automation": "CI/CD Automation", "utils": "Utilities",
-    "logging_monitoring": "Logging & Monitoring", "tree_sitter": "Tree-sitter",
-    "auth": "Authentication", "dark": "Dark Modes", "cerebrum": "CEREBRUM",
+    "api": "API",
+    "cli": "CLI",
+    "llm": "LLM",
+    "ide": "IDE",
+    "fpf": "FPF",
+    "i18n": "i18n",
+    "ci_cd_automation": "CI/CD Automation",
+    "utils": "Utilities",
+    "logging_monitoring": "Logging & Monitoring",
+    "tree_sitter": "Tree-sitter",
+    "auth": "Authentication",
+    "dark": "Dark Modes",
+    "cerebrum": "CEREBRUM",
     "graph_rag": "Graph RAG",
 }
 
@@ -42,7 +52,11 @@ def get_exports(mod_name):
                 doc = ast.get_docstring(node) or ""
                 classes.append((node.name, doc.split("\n")[0] if doc else ""))
                 seen_c.add(node.name)
-            elif isinstance(node, ast.FunctionDef) and not node.name.startswith("_") and node.name not in seen_f:
+            elif (
+                isinstance(node, ast.FunctionDef)
+                and not node.name.startswith("_")
+                and node.name not in seen_f
+            ):
                 doc = ast.get_docstring(node) or ""
                 functions.append((node.name, doc.split("\n")[0] if doc else ""))
                 seen_f.add(node.name)
@@ -62,7 +76,11 @@ def get_exports(mod_name):
                         doc = ast.get_docstring(node) or ""
                         classes.append((node.name, doc.split("\n")[0] if doc else ""))
                         seen_c.add(node.name)
-                    elif isinstance(node, ast.FunctionDef) and not node.name.startswith("_") and node.name not in seen_f:
+                    elif (
+                        isinstance(node, ast.FunctionDef)
+                        and not node.name.startswith("_")
+                        and node.name not in seen_f
+                    ):
                         doc = ast.get_docstring(node) or ""
                         functions.append((node.name, doc.split("\n")[0] if doc else ""))
                         seen_f.add(node.name)
@@ -80,7 +98,11 @@ def get_submodules(mod_name):
     subs = []
     for d in sorted(os.listdir(p)):
         sp = os.path.join(p, d)
-        if os.path.isdir(sp) and d != "__pycache__" and os.path.exists(os.path.join(sp, "__init__.py")):
+        if (
+            os.path.isdir(sp)
+            and d != "__pycache__"
+            and os.path.exists(os.path.join(sp, "__init__.py"))
+        ):
             subs.append(d)
     return subs
 
@@ -97,7 +119,7 @@ def enrich_docs_agents(mod_name):
     original = content
     content_lower = content.lower()
     classes, functions = get_exports(mod_name)
-    display = get_display(mod_name)
+    get_display(mod_name)
     subs = get_submodules(mod_name)
 
     # Add testing section if missing
@@ -117,7 +139,7 @@ def enrich_docs_agents(mod_name):
 
     # Add code examples if missing
     if "```" not in content:
-        code = f"\n## Common Patterns\n\n```python\n"
+        code = "\n## Common Patterns\n\n```python\n"
         if classes:
             imports = ", ".join(c[0] for c in classes[:3])
             code += f"from codomyrmex.{mod_name} import {imports}\n\n"
@@ -138,7 +160,7 @@ def enrich_docs_agents(mod_name):
 
     # Add key components if thin (under 30 lines)
     if sum(1 for _ in content.split("\n")) < 35 and (classes or functions or subs):
-        components = f"\n## Key Components\n\n"
+        components = "\n## Key Components\n\n"
         if classes:
             for name, doc in classes[:5]:
                 components += f"- **`{name}`** — {doc or name}\n"
@@ -146,7 +168,7 @@ def enrich_docs_agents(mod_name):
             for name, doc in functions[:5]:
                 components += f"- **`{name}()`** — {doc or name}\n"
         if subs:
-            components += f"\n### Submodules\n\n"
+            components += "\n### Submodules\n\n"
             for sub in subs[:8]:
                 components += f"- `{sub}` — {get_display(sub)}\n"
         components += "\n"
@@ -185,9 +207,7 @@ def enrich_docs_readme(mod_name):
 
     # Add Installation if missing
     if "install" not in content.lower() and "pip" not in content.lower():
-        install = (
-            "\n## Installation\n\n```bash\npip install codomyrmex\n```\n"
-        )
+        install = "\n## Installation\n\n```bash\npip install codomyrmex\n```\n"
         for anchor in ["## API", "## Key", "## Quick", "## Testing", "## Navigation"]:
             if anchor in content:
                 content = content.replace(anchor, install + "\n" + anchor)
@@ -197,7 +217,7 @@ def enrich_docs_readme(mod_name):
 
     # Add Quick Start if missing code blocks
     if "```" not in content:
-        code = f"\n## Quick Start\n\n```python\n"
+        code = "\n## Quick Start\n\n```python\n"
         if classes:
             code += f"from codomyrmex.{mod_name} import {classes[0][0]}\n\n"
             code += f"{classes[0][0].lower()} = {classes[0][0]}()\n"
@@ -219,7 +239,11 @@ def enrich_docs_readme(mod_name):
         content = content.rstrip() + "\n" + testing
 
     # Add submodule listing if present
-    if subs and "submodule" not in content.lower() and "sub-module" not in content.lower():
+    if (
+        subs
+        and "submodule" not in content.lower()
+        and "sub-module" not in content.lower()
+    ):
         sub_section = "\n## Submodules\n\n"
         for sub in subs[:10]:
             sub_section += f"- **`{sub}`** — {get_display(sub)}\n"
@@ -256,7 +280,7 @@ def enrich_docs_spec(mod_name):
 
     # Add code block if missing
     if "```" not in content:
-        code = f"\n## API Usage\n\n```python\n"
+        code = "\n## API Usage\n\n```python\n"
         if classes:
             code += f"from codomyrmex.{mod_name} import {classes[0][0]}\n"
         elif functions:
@@ -284,18 +308,23 @@ def enrich_docs_spec(mod_name):
 
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
-    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "documentation" / "config.yaml"
-    config_data = {}
+
+    import yaml
+
+    config_path = (
+        Path(__file__).resolve().parent.parent.parent
+        / "config"
+        / "documentation"
+        / "config.yaml"
+    )
     if config_path.exists():
-        with open(config_path, "r") as f:
-            config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/documentation/config.yaml")
+        with open(config_path) as f:
+            yaml.safe_load(f) or {}
+            print("Loaded config from config/documentation/config.yaml")
 
     modules = sorted(
-        d for d in os.listdir(DOCS)
-        if os.path.isdir(os.path.join(DOCS, d))
+        d for d in os.listdir(DOCS) if os.path.isdir(os.path.join(DOCS, d))
     )
 
     agents_improved = 0

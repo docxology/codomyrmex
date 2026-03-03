@@ -39,7 +39,7 @@ except ImportError as e:
         print_info("Install with: pip install aiohttp")
         print_info("Skipping agents examples - success.")
         return 0
-    
+
     if __name__ == "__main__":
         import sys
         sys.exit(main())
@@ -51,7 +51,7 @@ except ImportError as e:
 class DemoAgent(BaseAgent):
     def __init__(self, name="demo_agent"):
         super().__init__(name=name, capabilities=[AgentCapabilities.TEXT_COMPLETION])
-    
+
     def _execute_impl(self, request: AgentRequest) -> AgentResponse:
         self.logger.info(f"Agent {self.name} processing prompt: {request.prompt[:20]}...")
         return AgentResponse(
@@ -77,15 +77,15 @@ def main():
     print_info("Initializing real AgentOrchestrator with demo agents...")
     agent_a = DemoAgent(name="Agent_A")
     agent_b = DemoAgent(name="Agent_B")
-    
+
     orchestrator = AgentOrchestrator(agents=[agent_a, agent_b])
-    
+
     request = AgentRequest(prompt="What is the capital of France?")
-    
+
     # 2. Parallel Execution
     print_info("Executing request in parallel across orchestrated agents...")
     responses = orchestrator.execute_parallel(request)
-    
+
     for resp in responses:
         if resp.is_success():
             print_success(f"  {resp.metadata.get('agent', 'Unknown agent')}: {resp.content}")

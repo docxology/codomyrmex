@@ -16,9 +16,9 @@ except ImportError:
     sys.path.insert(0, str(project_root / "src"))
 
 import argparse
-import time
 import json
 import statistics
+import time
 
 
 # Built-in benchmark suite
@@ -48,17 +48,17 @@ def benchmark_dict_operations(n=10000):
 
 def benchmark_file_io(n=100):
     """Benchmark file write/read operations."""
-    import tempfile
     import os
-    
-    with tempfile.NamedTemporaryFile(mode='w', delete=False) as f:
+    import tempfile
+
+    with tempfile.NamedTemporaryFile(mode="w", delete=False) as f:
         path = f.name
         for i in range(n):
             f.write(f"Line {i}\n" * 100)
-    
-    with open(path, 'r') as f:
+
+    with open(path) as f:
         lines = f.readlines()
-    
+
     os.unlink(path)
     return len(lines)
 
@@ -75,13 +75,13 @@ def run_benchmark(name: str, func, iterations: int = 5) -> dict:
     """Run a benchmark multiple times and collect stats."""
     times = []
     result = None
-    
+
     for _ in range(iterations):
         start = time.perf_counter()
         result = func()
         elapsed = time.perf_counter() - start
         times.append(elapsed)
-    
+
     return {
         "name": name,
         "iterations": iterations,
@@ -119,24 +119,41 @@ def save_baseline(results: list, path: Path):
 
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
-    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "performance" / "config.yaml"
-    config_data = {}
+
+    import yaml
+
+    config_path = (
+        Path(__file__).resolve().parent.parent.parent
+        / "config"
+        / "performance"
+        / "config.yaml"
+    )
     if config_path.exists():
-        with open(config_path, "r") as f:
-            config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/performance/config.yaml")
+        with open(config_path) as f:
+            yaml.safe_load(f) or {}
+            print("Loaded config from config/performance/config.yaml")
 
     parser = argparse.ArgumentParser(description="Run performance benchmarks")
-    parser.add_argument("--suite", "-s", default="all", help="Benchmark suite (all, string, list, dict, file_io)")
-    parser.add_argument("--iterations", "-i", type=int, default=5, help="Iterations per benchmark")
-    parser.add_argument("--save-baseline", action="store_true", help="Save results as baseline")
-    parser.add_argument("--compare", "-c", action="store_true", help="Compare to baseline")
+    parser.add_argument(
+        "--suite",
+        "-s",
+        default="all",
+        help="Benchmark suite (all, string, list, dict, file_io)",
+    )
+    parser.add_argument(
+        "--iterations", "-i", type=int, default=5, help="Iterations per benchmark"
+    )
+    parser.add_argument(
+        "--save-baseline", action="store_true", help="Save results as baseline"
+    )
+    parser.add_argument(
+        "--compare", "-c", action="store_true", help="Compare to baseline"
+    )
     args = parser.parse_args()
-    
+
     print("⚡ Performance Benchmark Runner\n")
-    
+
     # Select benchmarks
     if args.suite == "all":
         benchmarks = BENCHMARKS
@@ -146,46 +163,56 @@ def main():
         print(f"❌ Unknown suite: {args.suite}")
         print(f"   Available: all, {', '.join(BENCHMARKS.keys())}")
         return 1
-    
+
     baseline_path = Path(__file__).parent / "benchmark_baseline.json"
     baseline = load_baseline(baseline_path) if args.compare else {}
-    
+
     results = []
-    
-    print(f"Running {len(benchmarks)} benchmark(s) with {args.iterations} iterations each\n")
-    
+
+    print(
+        f"Running {len(benchmarks)} benchmark(s) with {args.iterations} iterations each\n"
+    )
+
     for name, func in benchmarks.items():
         print(f"🔄 {name}...", end=" ", flush=True)
         result = run_benchmark(name, func, args.iterations)
         results.append(result)
-        
+
         baseline_result = baseline.get(name)
         if baseline_result:
-            diff = (result["mean"] - baseline_result["mean"]) / baseline_result["mean"] * 100
+            diff = (
+                (result["mean"] - baseline_result["mean"])
+                / baseline_result["mean"]
+                * 100
+            )
             if diff > 5:
                 indicator = f"🔴 +{diff:.1f}%"
             elif diff < -5:
                 indicator = f"🟢 {diff:.1f}%"
             else:
                 indicator = f"🟡 {diff:+.1f}%"
-            print(f"{format_time(result['mean'])} (±{format_time(result['stdev'])}) {indicator}")
+            print(
+                f"{format_time(result['mean'])} (±{format_time(result['stdev'])}) {indicator}"
+            )
         else:
             print(f"{format_time(result['mean'])} (±{format_time(result['stdev'])})")
-    
+
     print("\n📊 Summary:")
     print("-" * 60)
     print(f"{'Benchmark':<15} {'Min':<12} {'Mean':<12} {'Max':<12} {'StdDev':<12}")
     print("-" * 60)
-    
+
     for r in results:
-        print(f"{r['name']:<15} {format_time(r['min']):<12} {format_time(r['mean']):<12} {format_time(r['max']):<12} {format_time(r['stdev']):<12}")
-    
+        print(
+            f"{r['name']:<15} {format_time(r['min']):<12} {format_time(r['mean']):<12} {format_time(r['max']):<12} {format_time(r['stdev']):<12}"
+        )
+
     if args.save_baseline:
         save_baseline(results, baseline_path)
         print(f"\n💾 Baseline saved to: {baseline_path}")
     elif not baseline and baseline_path.exists():
-        print(f"\n💡 Use --compare to compare with baseline")
-    
+        print("\n💡 Use --compare to compare with baseline")
+
     return 0
 
 

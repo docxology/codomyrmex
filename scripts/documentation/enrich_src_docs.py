@@ -5,6 +5,7 @@ Reads __init__.py via AST to extract classes, functions, submodules.
 Injects missing sections: Quick Start, Key Exports, code examples.
 Preserves existing content — only appends/inserts missing sections.
 """
+
 import ast
 import os
 import sys
@@ -16,7 +17,13 @@ SRC = os.path.join(REPO, "src", "codomyrmex")
 def get_module_info(mod_name):
     """Extract module info from __init__.py."""
     init = os.path.join(SRC, mod_name, "__init__.py")
-    info = {"classes": [], "functions": [], "submodules": [], "version": "0.1.0", "desc": ""}
+    info = {
+        "classes": [],
+        "functions": [],
+        "submodules": [],
+        "version": "0.1.0",
+        "desc": "",
+    }
     if not os.path.exists(init):
         return info
     try:
@@ -26,7 +33,11 @@ def get_module_info(mod_name):
         return info
 
     # Module docstring
-    if tree.body and isinstance(tree.body[0], ast.Expr) and isinstance(tree.body[0].value, ast.Constant):
+    if (
+        tree.body
+        and isinstance(tree.body[0], ast.Expr)
+        and isinstance(tree.body[0].value, ast.Constant)
+    ):
         info["desc"] = tree.body[0].value.value.strip().split("\n")[0]
 
     # Top-level classes and functions only
@@ -36,13 +47,21 @@ def get_module_info(mod_name):
             doc = ast.get_docstring(node) or ""
             info["classes"].append((node.name, doc.split("\n")[0] if doc else ""))
             seen_c.add(node.name)
-        elif isinstance(node, ast.FunctionDef) and not node.name.startswith("_") and node.name not in seen_f:
+        elif (
+            isinstance(node, ast.FunctionDef)
+            and not node.name.startswith("_")
+            and node.name not in seen_f
+        ):
             doc = ast.get_docstring(node) or ""
             info["functions"].append((node.name, doc.split("\n")[0] if doc else ""))
             seen_f.add(node.name)
         elif isinstance(node, ast.Assign):
             for target in node.targets:
-                if isinstance(target, ast.Name) and target.id == "__version__" and isinstance(node.value, ast.Constant):
+                if (
+                    isinstance(target, ast.Name)
+                    and target.id == "__version__"
+                    and isinstance(node.value, ast.Constant)
+                ):
                     info["version"] = str(node.value.value)
 
     # Also scan .py files for top-level classes/functions if __init__.py had none
@@ -56,11 +75,19 @@ def get_module_info(mod_name):
                 for node in sub_tree.body:
                     if isinstance(node, ast.ClassDef) and node.name not in seen_c:
                         doc = ast.get_docstring(node) or ""
-                        info["classes"].append((node.name, doc.split("\n")[0] if doc else ""))
+                        info["classes"].append(
+                            (node.name, doc.split("\n")[0] if doc else "")
+                        )
                         seen_c.add(node.name)
-                    elif isinstance(node, ast.FunctionDef) and not node.name.startswith("_") and node.name not in seen_f:
+                    elif (
+                        isinstance(node, ast.FunctionDef)
+                        and not node.name.startswith("_")
+                        and node.name not in seen_f
+                    ):
                         doc = ast.get_docstring(node) or ""
-                        info["functions"].append((node.name, doc.split("\n")[0] if doc else ""))
+                        info["functions"].append(
+                            (node.name, doc.split("\n")[0] if doc else "")
+                        )
                         seen_f.add(node.name)
             except Exception:
                 pass
@@ -71,15 +98,27 @@ def get_module_info(mod_name):
     mod_dir = os.path.join(SRC, mod_name)
     for child in sorted(os.listdir(mod_dir)):
         child_path = os.path.join(mod_dir, child)
-        if os.path.isdir(child_path) and os.path.exists(os.path.join(child_path, "__init__.py")) and child != "__pycache__":
+        if (
+            os.path.isdir(child_path)
+            and os.path.exists(os.path.join(child_path, "__init__.py"))
+            and child != "__pycache__"
+        ):
             sub_doc = ""
             try:
-                sub_tree = ast.parse(open(os.path.join(child_path, "__init__.py")).read())
-                if sub_tree.body and isinstance(sub_tree.body[0], ast.Expr) and isinstance(sub_tree.body[0].value, ast.Constant):
+                sub_tree = ast.parse(
+                    open(os.path.join(child_path, "__init__.py")).read()
+                )
+                if (
+                    sub_tree.body
+                    and isinstance(sub_tree.body[0], ast.Expr)
+                    and isinstance(sub_tree.body[0].value, ast.Constant)
+                ):
                     sub_doc = sub_tree.body[0].value.value.strip().split("\n")[0]
             except Exception:
                 pass
-            info["submodules"].append((child, sub_doc or child.replace("_", " ").title()))
+            info["submodules"].append(
+                (child, sub_doc or child.replace("_", " ").title())
+            )
 
     return info
 
@@ -173,11 +212,21 @@ def enrich_readme(mod_name, info):
 
     # Add Key Exports if no features/exports section
     content_lower = content.lower()
-    has_features = any(kw in content_lower for kw in [
-        "key export", "features", "key class", "api reference",
-        "directory structure", "component", "key function",
-    ])
-    if not has_features and (info["classes"] or info["functions"] or info["submodules"]):
+    has_features = any(
+        kw in content_lower
+        for kw in [
+            "key export",
+            "features",
+            "key class",
+            "api reference",
+            "directory structure",
+            "component",
+            "key function",
+        ]
+    )
+    if not has_features and (
+        info["classes"] or info["functions"] or info["submodules"]
+    ):
         ke = build_key_exports(mod_name, info)
         # Insert after description / Overview section, before Quick Start
         if "## Quick Start" in content:
@@ -225,17 +274,24 @@ def enrich_agents(mod_name, info):
 
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
-    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "documentation" / "config.yaml"
-    config_data = {}
+
+    import yaml
+
+    config_path = (
+        Path(__file__).resolve().parent.parent.parent
+        / "config"
+        / "documentation"
+        / "config.yaml"
+    )
     if config_path.exists():
-        with open(config_path, "r") as f:
-            config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/documentation/config.yaml")
+        with open(config_path) as f:
+            yaml.safe_load(f) or {}
+            print("Loaded config from config/documentation/config.yaml")
 
     modules = sorted(
-        d for d in os.listdir(SRC)
+        d
+        for d in os.listdir(SRC)
         if os.path.isdir(os.path.join(SRC, d)) and d != "__pycache__"
     )
 

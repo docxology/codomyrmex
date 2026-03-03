@@ -15,7 +15,12 @@ from pathlib import Path
 sys.path.append(str(Path(__file__).parent.parent / "src"))
 
 from codomyrmex.defense import ActiveDefense, RabbitHole
-from codomyrmex.utils.cli_helpers import setup_logging, print_info, print_success, print_error
+from codomyrmex.utils.cli_helpers import (
+    print_error,
+    print_info,
+    print_success,
+    setup_logging,
+)
 
 
 def demo_active_defense():
@@ -54,7 +59,7 @@ def demo_rabbit_hole():
     print_info(f"Rabbit Hole Response: {welcome}")
 
     # Simulate interaction loop
-    for i in range(3):
+    for _i in range(3):
         fake_response = hole.generate_response(attacker_ip, "ls -la")
         print_info(f"Attacker cmd 'ls -la' -> Response: '{fake_response}'")
 
@@ -63,13 +68,19 @@ def demo_rabbit_hole():
 
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
-    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "demos" / "config.yaml"
-    config_data = {}
+
+    import yaml
+
+    config_path = (
+        Path(__file__).resolve().parent.parent.parent
+        / "config"
+        / "demos"
+        / "config.yaml"
+    )
     if config_path.exists():
-        with open(config_path, "r") as f:
-            config_data = yaml.safe_load(f) or {}
+        with open(config_path) as f:
+            yaml.safe_load(f) or {}
             print(f"Loaded config from {config_path.name}")
 
     setup_logging()

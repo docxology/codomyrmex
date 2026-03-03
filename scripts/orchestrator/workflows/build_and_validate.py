@@ -22,8 +22,8 @@ from pathlib import Path
 project_root = Path(__file__).parent.parent.parent.parent
 sys.path.insert(0, str(project_root / "src"))
 
-from codomyrmex.orchestrator import Workflow, RetryPolicy
-from codomyrmex.utils.cli_helpers import setup_logging, print_info, print_error
+from codomyrmex.orchestrator import RetryPolicy, Workflow
+from codomyrmex.utils.cli_helpers import print_error, print_info, setup_logging
 
 
 async def clean_build(_task_results: dict = None) -> dict:
@@ -55,7 +55,7 @@ async def run_linting(_task_results: dict = None) -> dict:
         ["uv", "run", "ruff", "check", "src/", "--output-format=concise"],
         capture_output=True,
         text=True,
-        cwd=project_root
+        cwd=project_root,
     )
 
     issues = result.stdout.count("\n") if result.stdout else 0
@@ -63,18 +63,25 @@ async def run_linting(_task_results: dict = None) -> dict:
     return {
         "success": result.returncode == 0,
         "issues": issues,
-        "output": result.stdout[:1000] if result.stdout else ""
+        "output": result.stdout[:1000] if result.stdout else "",
     }
 
 
 async def run_type_checking(_task_results: dict = None) -> dict:
     """Run mypy type checking."""
     result = subprocess.run(
-        ["uv", "run", "mypy", "src/codomyrmex", "--ignore-missing-imports", "--no-error-summary"],
+        [
+            "uv",
+            "run",
+            "mypy",
+            "src/codomyrmex",
+            "--ignore-missing-imports",
+            "--no-error-summary",
+        ],
         capture_output=True,
         text=True,
         timeout=120,
-        cwd=project_root
+        cwd=project_root,
     )
 
     errors = result.stdout.count("error:") if result.stdout else 0
@@ -82,7 +89,7 @@ async def run_type_checking(_task_results: dict = None) -> dict:
     return {
         "success": result.returncode == 0,
         "errors": errors,
-        "output": result.stdout[:1000] if result.stdout else ""
+        "output": result.stdout[:1000] if result.stdout else "",
     }
 
 
@@ -93,7 +100,7 @@ async def run_tests(_task_results: dict = None) -> dict:
         capture_output=True,
         text=True,
         timeout=300,
-        cwd=project_root
+        cwd=project_root,
     )
 
     # Extract pass/fail counts
@@ -104,12 +111,12 @@ async def run_tests(_task_results: dict = None) -> dict:
             for i, p in enumerate(parts):
                 if p == "passed" and i > 0:
                     try:
-                        passed = int(parts[i-1])
+                        passed = int(parts[i - 1])
                     except ValueError:
                         pass
                 if p == "failed" and i > 0:
                     try:
-                        failed = int(parts[i-1])
+                        failed = int(parts[i - 1])
                     except ValueError:
                         pass
 
@@ -117,17 +124,14 @@ async def run_tests(_task_results: dict = None) -> dict:
         "success": result.returncode == 0,
         "passed": passed,
         "failed": failed,
-        "output": result.stdout[-500:] if result.stdout else ""
+        "output": result.stdout[-500:] if result.stdout else "",
     }
 
 
 async def build_package(_task_results: dict = None) -> dict:
     """Build the package."""
     result = subprocess.run(
-        ["uv", "build"],
-        capture_output=True,
-        text=True,
-        cwd=project_root
+        ["uv", "build"], capture_output=True, text=True, cwd=project_root
     )
 
     # Find built files
@@ -137,7 +141,7 @@ async def build_package(_task_results: dict = None) -> dict:
     return {
         "success": result.returncode == 0,
         "files": [f.name for f in built_files],
-        "output": result.stdout
+        "output": result.stdout,
     }
 
 
@@ -168,7 +172,7 @@ async def validate_build(_task_results: dict = None) -> dict:
         result = subprocess.run(
             ["python", "-m", "zipfile", "-l", str(wheels[0])],
             capture_output=True,
-            text=True
+            text=True,
         )
         if result.returncode != 0:
             issues.append("Wheel file inspection failed")
@@ -178,7 +182,7 @@ async def validate_build(_task_results: dict = None) -> dict:
         "success": validation_passed,
         "wheels": [w.name for w in wheels],
         "tarballs": [t.name for t in tarballs],
-        "issues": issues
+        "issues": issues,
     }
 
 
@@ -199,7 +203,7 @@ async def main() -> int:
         name="build_and_validate",
         timeout=600,
         fail_fast=True,
-        progress_callback=on_progress
+        progress_callback=on_progress,
     )
 
     # Clean
@@ -208,16 +212,13 @@ async def main() -> int:
     # Parallel linting and type checking
     if not args.skip_lint:
         workflow.add_task(
-            name="lint",
-            action=run_linting,
-            dependencies=["clean"],
-            timeout=60
+            name="lint", action=run_linting, dependencies=["clean"], timeout=60
         )
         workflow.add_task(
             name="typecheck",
             action=run_type_checking,
             dependencies=["clean"],
-            timeout=120
+            timeout=120,
         )
 
     # Tests after lint/typecheck
@@ -230,7 +231,7 @@ async def main() -> int:
             action=run_tests,
             dependencies=deps,
             timeout=300,
-            retry_policy=RetryPolicy(max_attempts=2)
+            retry_policy=RetryPolicy(max_attempts=2),
         )
 
     # Build after all checks pass
@@ -241,18 +242,12 @@ async def main() -> int:
         build_deps.append("tests")
 
     workflow.add_task(
-        name="build",
-        action=build_package,
-        dependencies=build_deps,
-        timeout=60
+        name="build", action=build_package, dependencies=build_deps, timeout=60
     )
 
     # Validate after build
     workflow.add_task(
-        name="validate",
-        action=validate_build,
-        dependencies=["build"],
-        timeout=30
+        name="validate", action=validate_build, dependencies=["build"], timeout=30
     )
 
     print_info("Running build workflow...")
@@ -281,17 +276,22 @@ async def main() -> int:
         print_error(f"Build failed: {e}")
         return 1
 
-
-
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
-    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "orchestrator" / "config.yaml"
-    config_data = {}
+
+    import yaml
+
+    config_path = (
+        Path(__file__).resolve().parent.parent.parent
+        / "config"
+        / "orchestrator"
+        / "config.yaml"
+    )
     if config_path.exists():
-        with open(config_path, "r") as f:
-            config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/orchestrator/config.yaml")
+        with open(config_path) as f:
+            yaml.safe_load(f) or {}
+            print("Loaded config from config/orchestrator/config.yaml")
+
 
 if __name__ == "__main__":
     sys.exit(asyncio.run(main()))

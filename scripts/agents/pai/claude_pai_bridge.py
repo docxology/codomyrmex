@@ -30,11 +30,14 @@ except ImportError:
 from codomyrmex.agents.pai import (
     PAIBridge,
     call_tool,
-    get_tool_registry,
     get_skill_manifest,
+    get_tool_registry,
 )
 from codomyrmex.utils.cli_helpers import (
-    setup_logging, print_info, print_success, print_warning,
+    print_info,
+    print_success,
+    print_warning,
+    setup_logging,
 )
 
 DEMOS = ["discover", "register", "manifest", "review"]
@@ -45,7 +48,9 @@ def parse_args() -> argparse.Namespace:
         description="Claude + PAI Bridge Integration — combined workflow demo",
     )
     parser.add_argument("--demo", "-d", choices=DEMOS, help="Run specific demo")
-    parser.add_argument("--json", "-j", action="store_true", dest="json_output", help="JSON output")
+    parser.add_argument(
+        "--json", "-j", action="store_true", dest="json_output", help="JSON output"
+    )
     return parser.parse_args()
 
 
@@ -59,6 +64,7 @@ def _get_claude_client():
     """Try to create a ClaudeClient, return None if unavailable."""
     try:
         from codomyrmex.agents.claude.claude_client import ClaudeClient
+
         client = ClaudeClient()
         if client.test_connection():
             return client
@@ -89,7 +95,7 @@ def demo_discover() -> dict:
         print(f"  Agents: {len(agents)} personalities")
 
         # Show how this context informs Claude
-        print(f"\n  Claude integration context:")
+        print("\n  Claude integration context:")
         print(f"    Agent personalities available for delegation: {len(agents)}")
         print(f"    Skill packs for capability assessment: {len(skills)}")
         print(f"    Tools for Algorithm phase execution: {len(tools)}")
@@ -141,9 +147,15 @@ def demo_register() -> dict:
 
     api_available = client is not None
     if not api_available:
-        print_info("\n  (Dry run — no API key. Tools listed but not actually registered)")
+        print_info(
+            "\n  (Dry run — no API key. Tools listed but not actually registered)"
+        )
 
-    return {"tools_available": len(tools), "registered": registered, "api_available": api_available}
+    return {
+        "tools_available": len(tools),
+        "registered": registered,
+        "api_available": api_available,
+    }
 
 
 def demo_manifest() -> dict:
@@ -161,16 +173,16 @@ def demo_manifest() -> dict:
     resources = manifest.get("resources", [])
     prompts = manifest.get("prompts", [])
 
-    print(f"\n  System context for Claude:")
+    print("\n  System context for Claude:")
     print(f"    Available tools: {len(tools)}")
     print(f"    Available resources: {len(resources)}")
     print(f"    Available prompts: {len(prompts)}")
 
     # Show a sample system prompt fragment
-    print(f"\n  Sample system prompt fragment:")
+    print("\n  Sample system prompt fragment:")
     print(f"    'You have access to {len(tools)} Codomyrmex tools via MCP.'")
-    print(f"    'Use codomyrmex.list_modules to discover available modules.'")
-    print(f"    'Use codomyrmex.pai_status to check PAI integration status.'")
+    print("    'Use codomyrmex.list_modules to discover available modules.'")
+    print("    'Use codomyrmex.pai_status to check PAI integration status.'")
 
     return {
         "manifest_keys": list(manifest.keys()),
@@ -187,7 +199,9 @@ def demo_review() -> dict:
     # Read PAI bridge source via call_tool
     print_info("  Reading PAI bridge source via call_tool:")
     try:
-        result = call_tool("codomyrmex.read_file", path="src/codomyrmex/agents/pai/__init__.py")
+        result = call_tool(
+            "codomyrmex.read_file", path="src/codomyrmex/agents/pai/__init__.py"
+        )
         content = result.get("content", "") if isinstance(result, dict) else ""
         lines = content.count("\n") + 1 if content else 0
         print(f"    Read {lines} lines from agents/pai/__init__.py")
@@ -216,17 +230,21 @@ def demo_review() -> dict:
     else:
         print_info("  (Claude API not available — showing what would be reviewed)")
         print(f"    File: agents/pai/__init__.py ({lines} lines)")
-        print(f"    Analysis: general code quality review")
-        print(f"    Context: PAI bridge public API exports")
+        print("    Analysis: general code quality review")
+        print("    Context: PAI bridge public API exports")
 
-    return {"review": "skipped", "lines_available": lines, "api_available": client is not None}
+    return {
+        "review": "skipped",
+        "lines_available": lines,
+        "api_available": client is not None,
+    }
 
 
 def main() -> int:
     args = parse_args()
     setup_logging()
 
-    print(f"🔗 Claude + PAI Bridge Integration Demo")
+    print("🔗 Claude + PAI Bridge Integration Demo")
 
     results: dict = {}
     fns = {
@@ -248,17 +266,22 @@ def main() -> int:
     print()
     return 0
 
-
-
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
-    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "agents" / "config.yaml"
-    config_data = {}
+
+    import yaml
+
+    config_path = (
+        Path(__file__).resolve().parent.parent.parent
+        / "config"
+        / "agents"
+        / "config.yaml"
+    )
     if config_path.exists():
-        with open(config_path, "r") as f:
-            config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/agents/config.yaml")
+        with open(config_path) as f:
+            yaml.safe_load(f) or {}
+            print("Loaded config from config/agents/config.yaml")
+
 
 if __name__ == "__main__":
     sys.exit(main())

@@ -18,19 +18,27 @@ except ImportError:
     project_root = Path(__file__).resolve().parent.parent.parent.parent
     sys.path.insert(0, str(project_root / "src"))
 
-from codomyrmex.utils.cli_helpers import setup_logging, print_success, print_info
 from codomyrmex.metrics import get_metrics
+
+from codomyrmex.utils.cli_helpers import print_info, print_success, setup_logging
+
 
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
-    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "metrics" / "config.yaml"
-    config_data = {}
+
+    import yaml
+
+    config_path = (
+        Path(__file__).resolve().parent.parent.parent
+        / "config"
+        / "metrics"
+        / "config.yaml"
+    )
     if config_path.exists():
-        with open(config_path, "r") as f:
-            config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/metrics/config.yaml")
+        with open(config_path) as f:
+            yaml.safe_load(f) or {}
+            print("Loaded config from config/metrics/config.yaml")
 
     setup_logging()
     print_info("Running Metrics Collection Examples...")
@@ -38,7 +46,7 @@ def main():
     # 1. Get Metrics Instance
     print_info("Initializing metrics (in_memory)...")
     m = get_metrics(backend="in_memory")
-    
+
     # 2. Counter
     print_info("Testing Counter...")
     c = m.counter("requests_total")
@@ -46,7 +54,7 @@ def main():
     c.inc(5)
     if c.get() == 6:
         print_success("  Counter functional.")
-    
+
     # 3. Gauge
     print_info("Testing Gauge...")
     g = m.gauge("memory_usage")
@@ -65,6 +73,7 @@ def main():
 
     print_success("Metrics collection examples completed successfully")
     return 0
+
 
 if __name__ == "__main__":
     sys.exit(main())

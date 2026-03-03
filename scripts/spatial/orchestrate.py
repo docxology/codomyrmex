@@ -30,5 +30,5 @@ if __name__ == "__main__":
     current_dir = Path(__file__).resolve().parent
     if not any(arg.startswith("--scripts-dir") for arg in sys.argv):
         sys.argv.append(f"--scripts-dir={current_dir}")
-        
+
     sys.exit(main())
