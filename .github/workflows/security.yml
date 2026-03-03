@@ -169,7 +169,7 @@ jobs:
         continue-on-error: true
         run: |
           # Install sarif-tools for conversion
-          uv pip install sarif-tools
+          uv run pip install sarif-tools
           
           # Convert JSON to SARIF if available
           if [ -f "bandit-report.json" ]; then
