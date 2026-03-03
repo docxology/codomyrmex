@@ -36,13 +36,11 @@ class TestCompressionModuleImport:
     def test_compression_module_import(self):
         """Test that compression module can be imported."""
         from codomyrmex import compression
-
         assert compression is not None
 
     def test_compression_module_exports(self):
         """Test compression module exports key components."""
         from codomyrmex import compression
-
         assert hasattr(compression, "Compressor")
         assert hasattr(compression, "CompressionError")
         assert hasattr(compression, "compress")
@@ -677,9 +675,7 @@ class TestArchiveManager:
 
         output_archive = tmp_path / "archive.zip"
         manager = ArchiveManager()
-        result = manager.create_archive(
-            [existing_file, missing_file], output_archive, format="zip"
-        )
+        result = manager.create_archive([existing_file, missing_file], output_archive, format="zip")
 
         assert result is True  # Should succeed, ignoring missing files
 
@@ -772,7 +768,6 @@ class TestEdgeCases:
     def test_compress_incompressible_data(self):
         """Test compressing incompressible data (random bytes)."""
         import os
-
         data = os.urandom(1000)
         compressor = Compressor("gzip")
         compressed = compressor.compress(data)

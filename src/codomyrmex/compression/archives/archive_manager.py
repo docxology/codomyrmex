@@ -8,6 +8,7 @@ from codomyrmex.logging_monitoring.core.logger_config import get_logger
 """Archive management for creating and extracting archives."""
 
 
+
 logger = get_logger(__name__)
 
 
@@ -20,9 +21,7 @@ class CompressionError(CodomyrmexError):
 class ArchiveManager:
     """Manager for archive operations."""
 
-    def create_archive(
-        self, files: list[Path], output: Path, format: str = "zip"
-    ) -> bool:
+    def create_archive(self, files: list[Path], output: Path, format: str = "zip") -> bool:
         """Create an archive containing multiple files.
 
         Args:
@@ -77,11 +76,7 @@ class ArchiveManager:
                     zf.extractall(output)
                 return True
             elif archive.suffix in [".tar", ".gz"] or archive.name.endswith(".tar.gz"):
-                mode = (
-                    "r:gz"
-                    if archive.name.endswith(".tar.gz") or archive.suffix == ".gz"
-                    else "r"
-                )
+                mode = "r:gz" if archive.name.endswith(".tar.gz") or archive.suffix == ".gz" else "r"
                 with tarfile.open(archive, mode) as tf:
                     tf.extractall(output)
                 return True

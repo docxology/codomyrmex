@@ -7,7 +7,6 @@ This module provides data compression and decompression utilities supporting:
 - Stream-based compression
 - Automatic format detection via magic bytes
 """
-
 import gzip
 import os
 import zipfile
@@ -45,9 +44,7 @@ class Compressor:
             ValueError: If format is not supported
         """
         if format not in self.SUPPORTED_FORMATS:
-            raise ValueError(
-                f"Unsupported format: {format}. Use one of: {self.SUPPORTED_FORMATS}"
-            )
+            raise ValueError(f"Unsupported format: {format}. Use one of: {self.SUPPORTED_FORMATS}")
         self.format = format
 
     def compress(self, data: bytes, level: int = 6) -> bytes:
@@ -70,9 +67,7 @@ class Compressor:
                 return zlib.compress(data, level=level)
             elif self.format == "zip":
                 buffer = BytesIO()
-                with zipfile.ZipFile(
-                    buffer, "w", zipfile.ZIP_DEFLATED, compresslevel=level
-                ) as zf:
+                with zipfile.ZipFile(buffer, "w", zipfile.ZIP_DEFLATED, compresslevel=level) as zf:
                     zf.writestr("data", data)
                 return buffer.getvalue()
             else:
@@ -107,9 +102,7 @@ class Compressor:
             logger.error(f"Decompression error: {e}")
             raise CompressionError(f"Failed to decompress: {str(e)}") from e
 
-    def compress_stream(
-        self, input_stream: IO[bytes], output_stream: IO[bytes], level: int = 6
-    ) -> None:
+    def compress_stream(self, input_stream: IO[bytes], output_stream: IO[bytes], level: int = 6) -> None:
         """Compress data from input stream to output stream.
 
         Args:
@@ -121,9 +114,7 @@ class Compressor:
         compressed = self.compress(data, level)
         output_stream.write(compressed)
 
-    def decompress_stream(
-        self, input_stream: IO[bytes], output_stream: IO[bytes]
-    ) -> None:
+    def decompress_stream(self, input_stream: IO[bytes], output_stream: IO[bytes]) -> None:
         """Decompress data from input stream to output stream.
 
         Args:
@@ -154,9 +145,7 @@ class Compressor:
 
     # --- File Utilities ---
 
-    def compress_file(
-        self, input_path: str, output_path: str | None = None, level: int = 6
-    ) -> str:
+    def compress_file(self, input_path: str, output_path: str | None = None, level: int = 6) -> str:
         """Compress a file.
 
         Args:
@@ -185,13 +174,9 @@ class Compressor:
 
             original_size = os.path.getsize(input_path)
             compressed_size = len(compressed)
-            ratio = (
-                (1 - compressed_size / original_size) * 100 if original_size > 0 else 0
-            )
+            ratio = (1 - compressed_size / original_size) * 100 if original_size > 0 else 0
 
-            logger.info(
-                f"Compressed {input_path} -> {output_path} ({ratio:.1f}% reduction)"
-            )
+            logger.info(f"Compressed {input_path} -> {output_path} ({ratio:.1f}% reduction)")
             return output_path
         except Exception as e:
             logger.error(f"File compression error: {e}")
@@ -215,7 +200,7 @@ class Compressor:
                 # Remove common compression extensions
                 for ext in [".gz", ".gzip", ".zlib", ".zip", ".compressed"]:
                     if input_path.endswith(ext):
-                        output_path = input_path[: -len(ext)]
+                        output_path = input_path[:-len(ext)]
                         break
                 else:
                     output_path = input_path + ".decompressed"
@@ -319,9 +304,7 @@ def compare_formats(data: bytes, level: int = 6) -> dict[str, dict[str, float]]:
         try:
             compressed = compressor.compress(data, level)
             elapsed = (time.time() - start) * 1000
-            ratio = (
-                (1 - len(compressed) / original_size) * 100 if original_size > 0 else 0
-            )
+            ratio = (1 - len(compressed) / original_size) * 100 if original_size > 0 else 0
             results[fmt] = {
                 "compressed_size": len(compressed),
                 "ratio": round(ratio, 2),
