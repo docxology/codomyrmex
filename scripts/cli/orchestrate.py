@@ -21,34 +21,38 @@ from codomyrmex.cli.doctor import run_doctor
 
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
-    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "cli" / "config.yaml"
+
+    import yaml
+
+    config_path = (
+        Path(__file__).resolve().parent.parent.parent / "config" / "cli" / "config.yaml"
+    )
     config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
+        with open(config_path) as f:
             config_data = yaml.safe_load(f) or {}
             print(f"Loaded config from {config_path.name}")
 
     print("=== Codomyrmex CLI Module Orchestrator ===")
-    
+
     # 1. Show Platform Info
     print("\n[1] Platform Information")
     show_info()
-    
+
     # 2. Check Environment
     print("\n[2] Environment Check")
     env_ok = check_environment()
     print(f"Environment Status: {'PASS' if env_ok else 'FAIL'}")
-    
+
     # 3. Show Available Modules
     print("\n[3] Module Discovery")
     show_modules()
-    
+
     # 4. Show System Status Dashboard
     print("\n[4] System Status Dashboard")
     show_system_status()
-    
+
     # 5. Run Doctor (Diagnostic)
     print("\n[5] System Doctor (Diagnostics)")
     doctor_ok = run_doctor(imports=True)
@@ -56,6 +60,7 @@ def main():
 
     print("\n=== Orchestration Complete ===")
     return True
+
 
 if __name__ == "__main__":
     try:
