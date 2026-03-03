@@ -137,13 +137,6 @@ class DynamicBlacklist:
     def matches(key: str) -> bool
 ```
 
-### MCP Tools
-
-- `privacy_scan(data: dict[str, Any]) -> list[dict[str, Any]]`: Scans provided data for PII and privacy issues.
-- `privacy_scrub_crumbs(data: Any) -> Any`: Sanitizes data by recursively removing tracking crumbs and metadata.
-- `privacy_route_payload(payload: str, hops: int = 3) -> str`: Routes a string payload through simulated anonymous mix nodes.
-- `privacy_process(data: dict[str, Any], rules: list[dict[str, Any]]) -> dict[str, Any]`: Applies configured privacy rules to anonymize a specific payload.
-
 ### Dependencies
 
 - **Internal**: `codomyrmex.logging_monitoring`.

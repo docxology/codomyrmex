@@ -33,9 +33,9 @@ updates:
           - "Mattraks/*"
           - "dorny/*"
     reviewers:
-      - "docxology/codomyrmex-maintainers"
+      - "docxology"
     assignees:
-      - "docxology/codomyrmex-maintainers"
+      - "docxology"
 
   # Python dependencies (using uv.lock)
   - package-ecosystem: "pip"
@@ -52,6 +52,14 @@ updates:
     commit-message:
       prefix: "chore"
       include: "scope"
+    # Group minor/patch bumps into a single PR
+    groups:
+      python-minor-patch:
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
     # Focus on security updates for Python
     allow:
       - dependency-type: "direct"
@@ -60,9 +68,9 @@ updates:
       - dependency-name: "*"
         update-types: ["version-update:semver-major"]
     reviewers:
-      - "docxology/codomyrmex-maintainers"
+      - "docxology"
     assignees:
-      - "docxology/codomyrmex-maintainers"
+      - "docxology"
 
   # Node.js dependencies for documentation build
   - package-ecosystem: "npm"
@@ -79,9 +87,14 @@ updates:
     commit-message:
       prefix: "chore"
       include: "scope"
+    groups:
+      js-minor-patch:
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
     reviewers:
-      - "docxology/codomyrmex-maintainers"
+      - "docxology"
     assignees:
-      - "docxology/codomyrmex-maintainers"
-
-
+      - "docxology"

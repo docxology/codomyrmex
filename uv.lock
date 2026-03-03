@@ -992,6 +992,9 @@ serialization = [
     { name = "protobuf" },
     { name = "pyarrow" },
 ]
+soul = [
+    { name = "soul-agent" },
+]
 static-analysis = [
     { name = "pyrefly" },
 ]
@@ -1117,6 +1120,7 @@ requires-dist = [
     { name = "seaborn", marker = "extra == 'data-visualization'", specifier = ">=0.13.0" },
     { name = "sentence-transformers", marker = "extra == 'embedding'", specifier = ">=2.0.0" },
     { name = "smbus2", marker = "extra == 'physical-management'", specifier = ">=0.4.0" },
+    { name = "soul-agent", marker = "extra == 'soul'", specifier = ">=0.1.4" },
     { name = "soundfile", marker = "extra == 'audio'", specifier = ">=0.12.0" },
     { name = "sqlalchemy", marker = "extra == 'physical-management'", specifier = ">=1.4.0" },
     { name = "statsd", marker = "extra == 'observability'", specifier = ">=4.0.0" },
@@ -1135,7 +1139,7 @@ requires-dist = [
     { name = "websockets", marker = "extra == 'physical-management'", specifier = ">=10.0" },
     { name = "z3-solver", marker = "extra == 'formal-verification'", specifier = ">=4.8.0" },
 ]
-provides-extras = ["code-review", "language-models", "cloud", "serialization", "parsing", "modeling-3d", "performance", "observability", "physical-management", "security-audit", "static-analysis", "scrape", "fpf", "crypto", "documents", "audio", "video", "dark", "formal-verification", "obsidian", "calendar", "email", "llm-providers", "embedding", "containerization", "data-visualization", "cache"]
+provides-extras = ["code-review", "language-models", "cloud", "serialization", "parsing", "modeling-3d", "performance", "observability", "physical-management", "security-audit", "static-analysis", "scrape", "fpf", "crypto", "documents", "audio", "video", "dark", "formal-verification", "obsidian", "calendar", "email", "llm-providers", "embedding", "containerization", "data-visualization", "cache", "soul"]
 
 [package.metadata.requires-dev]
 dev = [
@@ -9272,6 +9276,18 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/e8/c4/ba2f8066cceb6f23394729afe52f3bf7adec04bf9ed2c820b39e19299111/sortedcontainers-2.4.0.tar.gz", hash = "sha256:25caa5a06cc30b6b83d11423433f65d1f9d76c4c6a0c90e3379eaa43b9bfdb88", size = 30594, upload-time = "2021-05-16T22:03:42.897Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/32/46/9cb0e58b2deb7f82b84065f37f3bffeb12413f947f9388e4cac22c4621ce/sortedcontainers-2.4.0-py2.py3-none-any.whl", hash = "sha256:a163dcaede0f1c021485e957a39245190e74249897e2ae4b2aa38595db237ee0", size = 29575, upload-time = "2021-05-16T22:03:41.177Z" },
+]
+
+[[package]]
+name = "soul-agent"
+version = "0.1.4"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "requests" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/f8/60/abf50f2fe115d6e1035f525976c9322f028dd6c7cd934b53b45fd3067de1/soul_agent-0.1.4.tar.gz", hash = "sha256:d6f28d7ecf98f05aac4c0be9e6ba671c68cfef74c0b9c04b86525cb912c21eac", size = 16341, upload-time = "2026-03-03T02:30:38.024Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/8d/73/ed2179b3964165385e3a2ac4ca579d5f3355d4bd66620560e9f129645417/soul_agent-0.1.4-py3-none-any.whl", hash = "sha256:26932ee6ce132daab8dd4b2a903b3327b4224aebdad1c0bb1688da9983697cd2", size = 15450, upload-time = "2026-03-03T02:30:36.817Z" },
 ]
 
 [[package]]

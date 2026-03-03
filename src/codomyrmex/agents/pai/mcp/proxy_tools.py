@@ -22,13 +22,13 @@ def _get_package_version() -> str:
     except ImportError:
         return "unknown"
 
-def _tool_list_modules(**_kwargs: Any) -> dict[str, Any]:
+def tool_list_modules(**_kwargs: Any) -> dict[str, Any]:
     """List all available Codomyrmex modules."""
     import codomyrmex
     modules = codomyrmex.list_modules()
     return {"modules": modules, "count": len(modules)}
 
-def _tool_module_info(*, module_name: str) -> dict[str, Any]:
+def tool_module_info(*, module_name: str) -> dict[str, Any]:
     """Get info about a specific Codomyrmex module (docstring, exports, path)."""
     try:
         mod = importlib.import_module(f"codomyrmex.{module_name}")
@@ -47,7 +47,7 @@ def _tool_module_info(*, module_name: str) -> dict[str, Any]:
         "path": str(mod_path) if mod_path else None,
     }
 
-def _tool_list_module_functions(*, module: str = "") -> dict[str, Any]:
+def tool_list_module_functions(*, module: str = "") -> dict[str, Any]:
     """List all public callable functions in a Codomyrmex module.
 
     Args:
@@ -93,7 +93,7 @@ def _tool_list_module_functions(*, module: str = "") -> dict[str, Any]:
         "total_callables": len(functions) + len(classes),
     }
 
-def _tool_call_module_function(*, function: str = "", kwargs: dict | None = None) -> dict[str, Any]:
+def tool_call_module_function(*, function: str = "", kwargs: dict | None = None) -> dict[str, Any]:
     """Call any public function from any Codomyrmex module.
 
     Args:
@@ -138,7 +138,7 @@ def _tool_call_module_function(*, function: str = "", kwargs: dict | None = None
     except Exception as e:
         return {"error": f"{type(e).__name__}: {e}"}
 
-def _tool_get_module_readme(*, module: str = "") -> dict[str, Any]:
+def tool_get_module_readme(*, module: str = "") -> dict[str, Any]:
     """Read the README.md for a Codomyrmex module.
 
     Args:
@@ -168,13 +168,13 @@ def _tool_get_module_readme(*, module: str = "") -> dict[str, Any]:
 
     return {"module": full_path, "path": str(readme), "content": content}
 
-def _tool_pai_status(**_kwargs: Any) -> dict[str, Any]:
+def tool_pai_status(**_kwargs: Any) -> dict[str, Any]:
     """Get PAI installation status via PAIBridge."""
     from codomyrmex.agents.pai import PAIBridge
     bridge = PAIBridge()
     return bridge.get_status()
 
-def _tool_pai_awareness(**_kwargs: Any) -> dict[str, Any]:
+def tool_pai_awareness(**_kwargs: Any) -> dict[str, Any]:
     """Get full PAI awareness data (missions, projects, tasks, TELOS, memory)."""
     try:
         from codomyrmex.website.data_provider import DataProvider
@@ -184,7 +184,7 @@ def _tool_pai_awareness(**_kwargs: Any) -> dict[str, Any]:
         logger.warning("PAI awareness data unavailable: %s", exc)
         return {"error": str(exc)}
 
-def _tool_run_tests(*, module: str | None = None, verbose: bool = False) -> dict[str, Any]:
+def tool_run_tests(*, module: str | None = None, verbose: bool = False) -> dict[str, Any]:
     """Run pytest for a specific module or the whole project."""
     cmd = [sys.executable, "-m", "pytest"]
     if module:
@@ -217,7 +217,7 @@ def _tool_run_tests(*, module: str | None = None, verbose: bool = False) -> dict
     except (subprocess.SubprocessError, OSError) as exc:
         return {"error": str(exc)}
 
-def _tool_list_workflows(project_root=None, **_kwargs: Any) -> dict[str, Any]:
+def tool_list_workflows(project_root=None, **_kwargs: Any) -> dict[str, Any]:
     """List available Claude Code workflows from .agent/workflows.
 
     Parses YAML frontmatter to extract descriptions.

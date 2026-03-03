@@ -1,3 +1,8 @@
+"""CLI Handlers for Agents Module.
+
+Contains the logic for handling CLI commands for the agents module.
+Intended to be called by the thin orchestrator script.
+"""
 import json
 from pathlib import Path
 from typing import Any
@@ -32,13 +37,6 @@ try:
 except ImportError:
     DroidController = None
     create_default_controller = None
-
-"""
-CLI Handlers for Agents Module
-
-This module contains the logic for handling CLI commands for the agents module.
-It is intended to be called by the thin orchestrator script.
-"""
 
 logger = get_logger(__name__)
 

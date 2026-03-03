@@ -48,14 +48,6 @@ blacklist.add_pattern("timestamp")
 blacklist.add_pattern("ip_address")
 ```
 
-### MCP Tools
-
-Agents can use the following tools exposed via the Model Context Protocol (MCP):
-- `privacy_scan`: Scans provided data for PII and privacy issues.
-- `privacy_scrub_crumbs`: Sanitizes data by recursively removing tracking crumbs and metadata.
-- `privacy_route_payload`: Routes a string payload through simulated anonymous mix nodes.
-- `privacy_process`: Applies configured privacy rules to anonymize a specific payload.
-
 ## Agent Guidelines
 
 1. **Scrub Everything**: Always scrub before external transmission

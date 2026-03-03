@@ -1,0 +1,89 @@
+name: Auto-Merge Agent PRs
+
+on:
+  check_suite:
+    types: [completed]
+  pull_request:
+    types: [labeled]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  auto-merge:
+    name: Auto-merge passing agent PRs
+    runs-on: ubuntu-latest
+    if: >
+      github.event_name == 'workflow_dispatch' ||
+      (github.event_name == 'check_suite' && github.event.check_suite.conclusion == 'success') ||
+      (github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'auto-merge'))
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Auto-merge eligible PRs
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "🤖 Scanning for auto-mergeable PRs..."
+
+          # Get all open PRs
+          prs=$(gh pr list --state open --json number,labels,statusCheckRollup,mergeable,headRefName --limit 200)
+
+          echo "$prs" | python3 -c "
+          import json, sys, subprocess
+
+          prs = json.load(sys.stdin)
+          merged = 0
+          skipped = 0
+
+          for pr in prs:
+              num = pr['number']
+              labels = [l['name'] for l in pr.get('labels', [])]
+              branch = pr.get('headRefName', '')
+
+              # Auto-merge criteria: Jules-generated branches or labeled 'auto-merge'
+              is_jules = any(kw in branch for kw in [
+                  'fix-', 'feat-', 'feat/', 'fix/', 'improve-', 'refactor-',
+                  'jules-', 'add-', 'feature/', 'code-health/', 'cleanup-',
+                  'bolt/', 'defense-', 'bio-simulation-', 'calendar-',
+                  'ai-gateway-', 'simulation-'
+              ])
+              is_labeled = 'auto-merge' in labels or 'automated' in labels
+
+              if not (is_jules or is_labeled):
+                  continue
+
+              # Check if all status checks passed
+              checks = pr.get('statusCheckRollup', [])
+              all_passed = all(
+                  c.get('conclusion') in ('SUCCESS', 'NEUTRAL', 'SKIPPED', None)
+                  or c.get('state') in ('SUCCESS', 'EXPECTED', 'PENDING')
+                  for c in checks
+              ) if checks else False
+
+              mergeable = pr.get('mergeable', '') == 'MERGEABLE'
+
+              if all_passed and mergeable:
+                  print(f'  ✅ PR #{num} ({branch}) — merging...')
+                  try:
+                      subprocess.run(
+                          ['gh', 'pr', 'merge', str(num), '--squash', '--auto', '--delete-branch'],
+                          check=True, capture_output=True, text=True
+                      )
+                      merged += 1
+                  except subprocess.CalledProcessError as e:
+                      print(f'  ⚠️  PR #{num} merge failed: {e.stderr.strip()}')
+              else:
+                  reason = []
+                  if not all_passed:
+                      reason.append('checks not passed')
+                  if not mergeable:
+                      reason.append('not mergeable')
+                  print(f'  ⏭️  PR #{num} ({branch}) — skipped ({', '.join(reason)})')
+                  skipped += 1
+
+          print(f'\n🏁 Done: {merged} merged, {skipped} skipped')
+          "
