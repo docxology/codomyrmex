@@ -222,12 +222,22 @@ jobs:
             if (fs.existsSync('change-analysis.md')) {
               const analysis = fs.readFileSync('change-analysis.md', 'utf8');
               
-              github.rest.issues.createComment({
-                issue_number: context.issue.number,
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                body: `## 📊 File Changes Analysis\n\n${analysis}`
-              });
+              // Only create a comment if the event is from a pull request where context.issue.number exists
+              if (context.issue && context.issue.number) {
+                try {
+                  await github.rest.issues.createComment({
+                    issue_number: context.issue.number,
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    body: `## 📊 File Changes Analysis\n\n${analysis}`
+                  });
+                } catch (e) {
+                  console.error("Failed to create issue comment:", e);
+                }
+              } else {
+                console.log("No issue number available to comment on.");
+                console.log(analysis);
+              }
             }
 
   size-check:

@@ -155,6 +155,29 @@ class TestTimedMetric:
         h = metrics.get_all()["histograms"]["fast_op_duration_ms"]
         assert h["min"] >= 0
 
+    def test_records_with_labels(self):
+        """Test functionality: records histogram with labels."""
+        with timed_metric("db_query", labels={"table": "users"}):
+            time.sleep(0.01)
+        all_m = metrics.get_all()
+        # The key format is name{label_k=label_v}
+        expected_key = "db_query_duration_ms{table=users}"
+        assert expected_key in all_m["histograms"]
+        assert all_m["histograms"][expected_key]["count"] == 1
+        assert all_m["histograms"][expected_key]["min"] > 0
+
+    def test_records_on_exception(self):
+        """Test functionality: records histogram even when exception occurs."""
+        with pytest.raises(ValueError, match="boom"):
+            with timed_metric("failing_op"):
+                time.sleep(0.01)
+                raise ValueError("boom")
+
+        all_m = metrics.get_all()
+        assert "failing_op_duration_ms" in all_m["histograms"]
+        assert all_m["histograms"]["failing_op_duration_ms"]["count"] == 1
+        assert all_m["histograms"]["failing_op_duration_ms"]["min"] > 0
+
 
 @pytest.mark.unit
 class TestCountCalls:
