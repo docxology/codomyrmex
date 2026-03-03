@@ -178,6 +178,14 @@ class ContainerOptimizer:
         return "unknown"
 
     def _analyze_optimizations(self, analysis: ImageAnalysis) -> list[str]:
+        """Analyze an image analysis result to extract potential optimizations.
+
+        Args:
+            analysis: The image analysis data.
+
+        Returns:
+            list[str]: A list of potential optimization strategies.
+        """
         opts = []
         if analysis.size_bytes > 500 * 1024 * 1024:
             opts.append("Use multi-stage builds")
@@ -188,6 +196,14 @@ class ContainerOptimizer:
         return opts
 
     def _calculate_score(self, analysis: ImageAnalysis) -> float:
+        """Calculate an optimization score based on the image analysis.
+
+        Args:
+            analysis: The image analysis data.
+
+        Returns:
+            float: A score from 0.0 to 100.0 indicating optimization level.
+        """
         score = 100.0
         if analysis.size_bytes > 1024 * 1024 * 1024:
             score -= 30

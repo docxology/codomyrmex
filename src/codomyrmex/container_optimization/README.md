@@ -17,5 +17,8 @@ report = optimizer.get_optimization_report("my-image:latest")
 print(report)
 ```
 
+## MCP Tools
+The module exposes multiple MCP tools in `mcp_tools.py` via the `@mcp_tool` decorator. These tools are auto-discovered by the PAI MCP bridge and provide capabilities to analyze images, suggest optimizations, evaluate resource usage, and generate tuning recommendations.
+
 ## Zero-Mock Policy
 Following the Codomyrmex Zero-Mock Policy, all tests for this module must use real Docker interactions and authentic fixtures instead of mocks.

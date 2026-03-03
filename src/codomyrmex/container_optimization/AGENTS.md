@@ -11,3 +11,5 @@
 - [x] Implement `ResourceTuner`
 - [x] Add zero-mock tests
 - [x] Create orchestrator script
+- [x] Expose functionality via `mcp_tools.py` using `@mcp_tool`
+- [x] Add zero-mock tests for `mcp_tools.py`
