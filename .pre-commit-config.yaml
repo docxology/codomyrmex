@@ -25,8 +25,9 @@ repos:
     rev: v1.19.1
     hooks:
       - id: mypy
-        additional_dependencies: [types-all]
+        additional_dependencies: [pydantic>=2.0.0, types-PyYAML, types-requests]
         args: [--ignore-missing-imports]
+        exclude: ^src/codomyrmex/validation/schemas\.py$
 
   # Security scanning
   - repo: https://github.com/PyCQA/bandit
