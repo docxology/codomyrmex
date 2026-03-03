@@ -555,6 +555,14 @@ class TestMCPTools:
             autograd_compute("x + y", {"123bad": 1.0})
 
     @pytest.mark.unit
+    def test_autograd_compute_raw_number(self):
+        from codomyrmex.autograd.mcp_tools import autograd_compute
+
+        result = autograd_compute("2 + 2", {})
+        assert abs(result["result"] - 4.0) < 1e-9
+        assert result["gradients"] == {}
+
+    @pytest.mark.unit
     def test_gradient_check_tanh_passes(self):
         from codomyrmex.autograd.mcp_tools import autograd_gradient_check
 
@@ -602,3 +610,13 @@ class TestMCPTools:
         assert autograd_compute._mcp_tool["category"] == "autograd"
         assert hasattr(autograd_gradient_check, "_mcp_tool")
         assert autograd_gradient_check._mcp_tool["category"] == "autograd"
+
+    @pytest.mark.unit
+    def test_mcp_tool_descriptions(self):
+        from codomyrmex.autograd.mcp_tools import (
+            autograd_compute,
+            autograd_gradient_check,
+        )
+
+        assert "Evaluate a simple expression" in autograd_compute._mcp_tool["description"]
+        assert "Numerically verify" in autograd_gradient_check._mcp_tool["description"]

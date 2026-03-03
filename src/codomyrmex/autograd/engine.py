@@ -43,6 +43,7 @@ class Value:
     # -- forward ops --------------------------------------------------------
 
     def __add__(self, other: Value | float | int) -> Value:
+        """Add two Values or a Value and a scalar."""
         other = other if isinstance(other, Value) else Value(other)
         out = Value(self.data + other.data, (self, other), "+")
 
@@ -54,6 +55,7 @@ class Value:
         return out
 
     def __mul__(self, other: Value | float | int) -> Value:
+        """Multiply two Values or a Value and a scalar."""
         other = other if isinstance(other, Value) else Value(other)
         out = Value(self.data * other.data, (self, other), "*")
 
@@ -65,6 +67,7 @@ class Value:
         return out
 
     def __pow__(self, other: float | int) -> Value:
+        """Raise Value to a scalar power."""
         if isinstance(other, Value):
             raise NotImplementedError("Value**Value is not supported; use float exponent")
         out = Value(self.data ** other, (self,), f"**{other}")
@@ -76,24 +79,31 @@ class Value:
         return out
 
     def __neg__(self) -> Value:
+        """Negate a Value."""
         return self * -1
 
     def __sub__(self, other: Value | float | int) -> Value:
+        """Subtract a Value or scalar from a Value."""
         return self + (-other if isinstance(other, Value) else Value(-other))
 
     def __truediv__(self, other: Value | float | int) -> Value:
+        """Divide a Value by a Value or scalar."""
         return self * (other ** -1 if isinstance(other, Value) else Value(other) ** -1)
 
     def __radd__(self, other: float | int) -> Value:
+        """Add a scalar to a Value (right-add)."""
         return self + other
 
     def __rmul__(self, other: float | int) -> Value:
+        """Multiply a scalar by a Value (right-multiply)."""
         return self * other
 
     def __rsub__(self, other: float | int) -> Value:
+        """Subtract a Value from a scalar (right-subtract)."""
         return Value(other) + (-self)
 
     def __rtruediv__(self, other: float | int) -> Value:
+        """Divide a scalar by a Value (right-divide)."""
         return Value(other) * (self ** -1)
 
     # -- special math -------------------------------------------------------
@@ -206,6 +216,7 @@ class Tensor:
     # -- forward ops --------------------------------------------------------
 
     def __add__(self, other: Tensor | float | int | np.ndarray) -> Tensor:
+        """Element-wise addition with broadcasting support."""
         other = other if isinstance(other, Tensor) else Tensor(np.asarray(other))
         out = Tensor(self.data + other.data, _children=(self, other), _op="+")
 
@@ -228,6 +239,7 @@ class Tensor:
         return out
 
     def __mul__(self, other: Tensor | float | int | np.ndarray) -> Tensor:
+        """Element-wise multiplication with broadcasting support."""
         other = other if isinstance(other, Tensor) else Tensor(np.asarray(other))
         out = Tensor(self.data * other.data, _children=(self, other), _op="*")
 
@@ -249,6 +261,7 @@ class Tensor:
         return out
 
     def __matmul__(self, other: Tensor) -> Tensor:
+        """Matrix multiplication of two Tensors."""
         out = Tensor(self.data @ other.data, _children=(self, other), _op="@")
 
         def _backward() -> None:
@@ -263,16 +276,20 @@ class Tensor:
         return out
 
     def __neg__(self) -> Tensor:
+        """Element-wise negation."""
         return self * -1.0
 
     def __sub__(self, other: Tensor | float | int | np.ndarray) -> Tensor:
+        """Element-wise subtraction."""
         other = other if isinstance(other, Tensor) else Tensor(np.asarray(other))
         return self + (other * -1.0)
 
     def __radd__(self, other: float | int) -> Tensor:
+        """Right-addition by a scalar."""
         return self + other
 
     def __rmul__(self, other: float | int) -> Tensor:
+        """Right-multiplication by a scalar."""
         return self * other
 
     # -- reductions ---------------------------------------------------------
