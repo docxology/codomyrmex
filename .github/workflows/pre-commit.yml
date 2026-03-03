@@ -131,6 +131,9 @@ jobs:
     name: File Changes Analysis
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request'
+    permissions:
+      pull-requests: write
+      issues: write
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -222,12 +225,17 @@ jobs:
             if (fs.existsSync('change-analysis.md')) {
               const analysis = fs.readFileSync('change-analysis.md', 'utf8');
               
-              github.rest.issues.createComment({
-                issue_number: context.issue.number,
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                body: `## 📊 File Changes Analysis\n\n${analysis}`
-              });
+              try {
+                await github.rest.issues.createComment({
+                  issue_number: context.issue.number,
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  body: `## 📊 File Changes Analysis\n\n${analysis}`
+                });
+              } catch (error) {
+                console.log("Failed to create PR comment (likely missing permissions). Analysis was:");
+                console.log(analysis);
+              }
             }
 
   size-check:
