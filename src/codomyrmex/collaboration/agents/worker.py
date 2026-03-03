@@ -1,5 +1,4 @@
-"""
-Worker agent implementation for task execution.
+"""Worker agent implementation for task execution.
 
 Provides a concrete agent implementation for executing tasks
 with capability-based routing and configurable execution handlers.
@@ -20,8 +19,7 @@ logger = get_logger(__name__)
 
 
 class WorkerAgent(CollaborativeAgent):
-    """
-    A worker agent that executes tasks based on capabilities.
+    """A worker agent that executes tasks based on capabilities.
 
     Worker agents are the primary workhorses of a swarm. They register
     capabilities and execute tasks that match those capabilities.
@@ -29,6 +27,7 @@ class WorkerAgent(CollaborativeAgent):
     Attributes:
         task_handlers: Mapping of capability names to handler functions.
         max_concurrent_tasks: Maximum number of tasks to process concurrently.
+
     """
 
     def __init__(
@@ -49,13 +48,13 @@ class WorkerAgent(CollaborativeAgent):
         handler: Callable[[Task], Any],
         description: str = "",
     ) -> None:
-        """
-        Register a handler for a capability.
+        """Register a handler for a capability.
 
         Args:
             capability_name: Name of the capability this handler provides.
             handler: Async or sync function that processes tasks.
             description: Human-readable description of the capability.
+
         """
         self._task_handlers[capability_name] = handler
 
@@ -75,8 +74,7 @@ class WorkerAgent(CollaborativeAgent):
         return all(self.has_capability(cap) for cap in task.required_capabilities)
 
     async def _execute_task(self, task: Task) -> Any:
-        """
-        Execute a task using registered handlers.
+        """Execute a task using registered handlers.
 
         Finds the appropriate handler based on task capabilities
         and executes it.
@@ -110,14 +108,14 @@ class WorkerAgent(CollaborativeAgent):
         return result
 
     async def execute_batch(self, tasks: list[Task]) -> list[TaskResult]:
-        """
-        Execute a batch of tasks, respecting concurrency limits.
+        """Execute a batch of tasks, respecting concurrency limits.
 
         Args:
             tasks: List of tasks to execute.
 
         Returns:
             List of task results in the same order as input tasks.
+
         """
         semaphore = asyncio.Semaphore(self._max_concurrent_tasks)
 
@@ -147,8 +145,7 @@ class WorkerAgent(CollaborativeAgent):
 
 
 class SpecializedWorker(WorkerAgent):
-    """
-    A worker specialized for a single capability.
+    """A worker specialized for a single capability.
 
     This is a convenience class for workers that only perform
     one type of task.

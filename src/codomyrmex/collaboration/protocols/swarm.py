@@ -13,6 +13,7 @@ class AgentProxy:
     """Mock-friendly proxy for a Codomyrmex agent (Legacy)."""
 
     def __init__(self, name: str, role: str):
+        """Initialize legacy AgentProxy."""
         self.name = name
         self.role = role
 
@@ -22,6 +23,7 @@ class AgentProxy:
         Raises:
             NotImplementedError: Legacy AgentProxy does not implement task execution.
                 Use codomyrmex.collaboration.swarm.SwarmManager for real delegation.
+
         """
         raise NotImplementedError(
             "AgentProxy.send_task is not implemented. "
@@ -32,6 +34,7 @@ class SwarmManager(NewSwarmManager):
     """Orchestrates multiple agents working together (Legacy Compatibility)."""
 
     def add_agent(self, agent: AgentProxy):
+        """Add legacy AgentProxy."""
         from codomyrmex.collaboration.swarm import SwarmAgent
         # Try to map legacy role to AgentRole enum
         try:
@@ -50,12 +53,13 @@ class SwarmManager(NewSwarmManager):
 
         Returns:
             Mapping of task_id to task description for each decomposed subtask.
+
         """
         subtasks = self.decomposer.decompose(mission)
         return {st.task_id: st.description for st in subtasks}
 
     def consensus_vote(self, proposal: str) -> bool:
-        """Simple majority vote among agents (Legacy Compatibility)."""
+        """Perform simple majority vote among agents (Legacy Compatibility)."""
         import asyncio
 
         from codomyrmex.collaboration.swarm import Decision, Vote

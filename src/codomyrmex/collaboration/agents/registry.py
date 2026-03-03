@@ -1,5 +1,4 @@
-"""
-Agent registry for discovery and lifecycle management.
+"""Agent registry for discovery and lifecycle management.
 
 Provides centralized agent registration, lookup by capability,
 and health monitoring functionality.
@@ -22,8 +21,7 @@ logger = get_logger(__name__)
 
 
 class AgentRegistry:
-    """
-    Centralized registry for agent discovery and management.
+    """Centralized registry for agent discovery and management.
 
     The registry maintains a catalog of all agents in the system,
     enabling lookup by ID, capability, or state. It also monitors
@@ -32,6 +30,7 @@ class AgentRegistry:
     Attributes:
         health_check_interval: Seconds between health checks.
         heartbeat_timeout: Seconds before an agent is considered unhealthy.
+
     """
 
     _instance: Optional["AgentRegistry"] = None
@@ -78,14 +77,14 @@ class AgentRegistry:
             cls._instance = None
 
     def register(self, agent: CollaborativeAgent) -> str:
-        """
-        Register an agent with the registry.
+        """Register an agent with the registry.
 
         Args:
             agent: The agent to register.
 
         Returns:
             The agent's ID.
+
         """
         self._agents[agent.agent_id] = agent
 
@@ -101,14 +100,14 @@ class AgentRegistry:
         return agent.agent_id
 
     def unregister(self, agent_id: str) -> bool:
-        """
-        Unregister an agent from the registry.
+        """Unregister an agent from the registry.
 
         Args:
             agent_id: ID of the agent to unregister.
 
         Returns:
             True if the agent was found and removed.
+
         """
         if agent_id not in self._agents:
             return False
@@ -129,11 +128,11 @@ class AgentRegistry:
         return True
 
     def get(self, agent_id: str) -> CollaborativeAgent:
-        """
-        Get an agent by ID.
+        """Get an agent by ID.
 
         Raises:
             AgentNotFoundError: If the agent is not registered.
+
         """
         if agent_id not in self._agents:
             raise AgentNotFoundError(agent_id)

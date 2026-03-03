@@ -45,6 +45,7 @@ class KnowledgeEntry:
         created_at: Creation timestamp.
         updated_at: Last update timestamp.
         metadata: Additional context.
+
     """
 
     key: str
@@ -77,6 +78,7 @@ class ExpertiseProfile:
         tags: Tags this agent is knowledgeable about.
         contribution_count: Number of knowledge entries contributed.
         last_active: Timestamp of last contribution.
+
     """
 
     agent_id: str
@@ -96,6 +98,7 @@ class QueryResult:
         routed_to: Agent ID the query was routed to (if any).
         confidence: Routing confidence score.
         search_time_ms: Time to execute the search.
+
     """
 
     query: str
@@ -112,6 +115,7 @@ class NamespaceACL:
     Attributes:
         owner: Agent ID that owns the namespace.
         permissions: Mapping of agent_id → AccessLevel.
+
     """
 
     owner: str

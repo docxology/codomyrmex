@@ -47,6 +47,7 @@ class SwarmManager:
     """
 
     def __init__(self) -> None:
+        """Initialize swarm manager."""
         self.pool = AgentPool()
         self.bus = MessageBus()
         self.decomposer = TaskDecomposer()
@@ -90,6 +91,7 @@ class SwarmManager:
 
         Returns:
             The task result.
+
         """
         assignment = TaskAssignment(
             description=description,
@@ -140,6 +142,7 @@ class SwarmManager:
 
         Returns:
             List of results for each sub-task.
+
         """
         logger.info(f"Starting mission: {mission}")
         subtasks = self.decomposer.decompose(mission)
@@ -166,6 +169,7 @@ class SwarmManager:
 
         Returns:
             Consensus decision.
+
         """
         logger.info(f"Requesting consensus for: {proposal}")
         result = self.consensus_engine.resolve(votes, strategy=strategy)

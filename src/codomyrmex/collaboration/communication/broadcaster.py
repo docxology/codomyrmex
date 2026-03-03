@@ -1,5 +1,4 @@
-"""
-Broadcast messaging for one-to-many communication.
+"""Broadcast messaging for one-to-many communication.
 
 Provides topic-based pub/sub patterns for agent swarms.
 """
@@ -21,6 +20,7 @@ logger = get_logger(__name__)
 @dataclass
 class Subscription:
     """A subscription to a topic."""
+
     subscription_id: str
     topic: str
     subscriber_id: str
@@ -32,6 +32,7 @@ class Subscription:
 @dataclass
 class TopicInfo:
     """Information about a topic."""
+
     topic: str
     subscriber_count: int
     message_count: int
@@ -48,14 +49,14 @@ class TopicInfo:
 
 
 class Broadcaster:
-    """
-    Broadcast messenger for one-to-many communication.
+    """Broadcast messenger for one-to-many communication.
 
     Implements a topic-based publish/subscribe pattern where agents
     can subscribe to topics and receive all messages published to them.
 
     Attributes:
         retention_count: Number of messages to retain per topic for replay.
+
     """
 
     def __init__(self, retention_count: int = 100):
@@ -99,8 +100,7 @@ class Broadcaster:
         filter_fn: Callable[[AgentMessage], bool] | None = None,
         replay_retained: bool = False,
     ) -> str:
-        """
-        Subscribe to a topic.
+        """Subscribe to a topic.
 
         Args:
             topic: Topic to subscribe to.
@@ -111,6 +111,7 @@ class Broadcaster:
 
         Returns:
             Subscription ID.
+
         """
         # Create topic if it doesn't exist
         if topic not in self._topics:
@@ -149,7 +150,7 @@ class Broadcaster:
         return self._unsubscribe(subscription_id)
 
     def _unsubscribe(self, subscription_id: str) -> bool:
-        """Internal unsubscribe implementation."""
+        """Execute internal unsubscribe implementation."""
         if subscription_id not in self._subscriptions:
             return False
 
@@ -171,8 +172,7 @@ class Broadcaster:
         return count
 
     async def publish(self, topic: str, message: AgentMessage) -> int:
-        """
-        Publish a message to a topic.
+        """Publish a message to a topic.
 
         Args:
             topic: Topic to publish to.
@@ -180,6 +180,7 @@ class Broadcaster:
 
         Returns:
             Number of subscribers that received the message.
+
         """
         if topic not in self._topics:
             raise ChannelError(topic, "Topic does not exist")
@@ -213,7 +214,7 @@ class Broadcaster:
         return delivered
 
     def publish_sync(self, topic: str, message: AgentMessage) -> int:
-        """Synchronous publish (creates task for async handlers)."""
+        """Publish synchronously (creates task for async handlers)."""
         if topic not in self._topics:
             raise ChannelError(topic, "Topic does not exist")
 

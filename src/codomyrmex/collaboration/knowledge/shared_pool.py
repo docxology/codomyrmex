@@ -26,6 +26,7 @@ class NamespaceStats:
         entry_count: Number of entries.
         domain_counts: Count per domain.
         total_citations: Sum of citations.
+
     """
 
     agent_id: str
@@ -66,6 +67,7 @@ class SharedMemoryPool:
         Args:
             agent_id: Agent identifier (becomes namespace owner).
             permissions: Optional ACL for other agents.
+
         """
         if agent_id not in self._namespaces:
             self._namespaces[agent_id] = {}
@@ -98,6 +100,7 @@ class SharedMemoryPool:
 
         Returns:
             True if written, False if ACL denied.
+
         """
         # Find which namespace to write to
         target_ns = agent_id
@@ -133,6 +136,7 @@ class SharedMemoryPool:
 
         Returns:
             KnowledgeEntry if found and allowed, None otherwise.
+
         """
         target_ns = namespace or agent_id
         if target_ns not in self._namespaces:
@@ -156,6 +160,7 @@ class SharedMemoryPool:
 
         Returns:
             True if deleted, False if not found or not allowed.
+
         """
         if agent_id not in self._namespaces:
             return False
@@ -181,6 +186,7 @@ class SharedMemoryPool:
 
         Returns:
             List of matching entries from all accessible namespaces.
+
         """
         results: list[KnowledgeEntry] = []
         terms_lower = [t.lower() for t in query_terms]
@@ -239,6 +245,7 @@ class SharedMemoryPool:
 
         Returns:
             True if granted, False if namespace not found.
+
         """
         acl = self._acls.get(owner)
         if acl is None:

@@ -27,6 +27,7 @@ class SubTask:
         role: Recommended agent role.
         depends_on: IDs of prerequisite sub-tasks.
         priority: Task priority (lower = higher).
+
     """
 
     task_id: str = ""
@@ -36,6 +37,7 @@ class SubTask:
     priority: int = 5
 
     def __post_init__(self) -> None:
+        """Initialize missing task id."""
         if not self.task_id:
             self.task_id = str(uuid.uuid4())[:8]
 
@@ -92,6 +94,7 @@ class TaskDecomposer:
 
         Returns:
             List of ``SubTask`` objects with ``depends_on`` edges.
+
         """
         task_lower = task.lower()
         subtasks: list[SubTask] = []
@@ -141,6 +144,7 @@ class TaskDecomposer:
 
         Raises:
             CyclicDependencyError: If dependencies form a cycle.
+
         """
         task_map = {st.task_id: st for st in subtasks}
         in_degree: dict[str, int] = {st.task_id: 0 for st in subtasks}

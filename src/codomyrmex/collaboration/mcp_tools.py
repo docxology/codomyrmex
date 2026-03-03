@@ -11,14 +11,24 @@ from typing import Any
 from codomyrmex.model_context_protocol.decorators import mcp_tool
 
 
-def _get_swarm_manager():
-    """Lazy import SwarmManager to avoid circular imports."""
+def _get_swarm_manager() -> Any:
+    """Lazy import SwarmManager to avoid circular imports.
+
+    Returns:
+        SwarmManager: The swarm manager instance.
+
+    """
     from codomyrmex.collaboration.protocols.swarm import SwarmManager
     return SwarmManager()
 
 
-def _get_task_decomposer():
-    """Lazy import TaskDecomposer to avoid circular imports."""
+def _get_task_decomposer() -> Any:
+    """Lazy import TaskDecomposer to avoid circular imports.
+
+    Returns:
+        Type[TaskDecomposer]: The task decomposer class.
+
+    """
     from codomyrmex.collaboration.protocols.swarm import TaskDecomposer
     return TaskDecomposer
 
@@ -40,6 +50,7 @@ def swarm_submit_task(
 
     Returns:
         Dictionary with agent names as keys and their results as values.
+
     """
     from codomyrmex.collaboration.protocols.swarm import AgentProxy
 
@@ -65,7 +76,7 @@ def swarm_submit_task(
         "mission": mission,
         "results": results,
         "subtasks": subtasks,
-        "agent_count": len(swarm.agents),
+        "agent_count": swarm.pool.size,
     }
 
 
@@ -78,6 +89,7 @@ def pool_status() -> dict[str, Any]:
 
     Returns:
         Dictionary with pool capacity, protocol information, and available agents.
+
     """
     from codomyrmex.collaboration import (
         TaskPriority,
@@ -110,8 +122,8 @@ def list_agents() -> dict[str, Any]:
 
     Returns:
         Dictionary with agent types, protocol classes, and capability info.
-    """
 
+    """
     return {
         "agent_classes": ["BaseAgent", "AgentProxy"],
         "coordinator": "AgentCoordinator",

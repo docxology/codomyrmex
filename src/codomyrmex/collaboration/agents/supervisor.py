@@ -1,5 +1,4 @@
-"""
-Supervisor agent for orchestrating worker agents.
+"""Supervisor agent for orchestrating worker agents.
 
 Provides delegation, result aggregation, and worker coordination
 for complex multi-step workflows.
@@ -25,8 +24,7 @@ logger = get_logger(__name__)
 
 
 class SupervisorAgent(CollaborativeAgent):
-    """
-    A supervisor agent that delegates tasks to worker agents.
+    """A supervisor agent that delegates tasks to worker agents.
 
     Supervisors manage a pool of workers, delegate tasks based on
     capabilities, aggregate results, and handle failures with retry logic.
@@ -35,6 +33,7 @@ class SupervisorAgent(CollaborativeAgent):
         workers: List of managed worker agents.
         delegation_strategy: Strategy for selecting workers ("round_robin", "capability", "least_busy").
         max_retries: Maximum retries for failed tasks.
+
     """
 
     def __init__(
@@ -81,11 +80,11 @@ class SupervisorAgent(CollaborativeAgent):
         return [w for w in self._workers.values() if w.can_handle_task(task)]
 
     def _select_worker(self, task: Task) -> WorkerAgent:
-        """
-        Select a worker for a task based on delegation strategy.
+        """Select a worker for a task based on delegation strategy.
 
         Raises:
             CapabilityMismatchError: If no worker can handle the task.
+
         """
         capable_workers = self.find_capable_workers(task)
 
@@ -116,8 +115,7 @@ class SupervisorAgent(CollaborativeAgent):
             return best_worker
 
     async def delegate(self, task: Task) -> TaskResult:
-        """
-        Delegate a task to an appropriate worker.
+        """Delegate a task to an appropriate worker.
 
         Selects a worker based on the delegation strategy and
         monitors task execution.
@@ -155,8 +153,7 @@ class SupervisorAgent(CollaborativeAgent):
         tasks: list[Task],
         parallel: bool = True,
     ) -> list[TaskResult]:
-        """
-        Delegate a batch of tasks to workers.
+        """Delegate a batch of tasks to workers.
 
         Args:
             tasks: List of tasks to delegate.
@@ -164,6 +161,7 @@ class SupervisorAgent(CollaborativeAgent):
 
         Returns:
             List of task results.
+
         """
         if parallel:
             results = await asyncio.gather(
@@ -191,8 +189,7 @@ class SupervisorAgent(CollaborativeAgent):
         tasks: list[Task],
         on_progress: Callable[[Task, TaskResult], None] | None = None,
     ) -> dict[str, TaskResult]:
-        """
-        Execute a workflow with task dependencies.
+        """Execute a workflow with task dependencies.
 
         Tasks are executed in order respecting dependencies.
         Each task waits for its dependencies to complete.
@@ -203,6 +200,7 @@ class SupervisorAgent(CollaborativeAgent):
 
         Returns:
             Dictionary mapping task IDs to results.
+
         """
         results: dict[str, TaskResult] = {}
         completed_ids: list[str] = []

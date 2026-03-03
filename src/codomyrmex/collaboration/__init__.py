@@ -72,13 +72,18 @@ from .swarm import (
 # Shared schemas for cross-module interop
 try:
     from codomyrmex.validation.schemas import Result, ResultStatus
-except ImportError:
-    Result = None
-    ResultStatus = None
+except ImportError:  # pragma: no cover
+    Result = None  # type: ignore
+    ResultStatus = None  # type: ignore
 
 
-def cli_commands():
-    """Return CLI commands for the collaboration module."""
+def cli_commands():  # pragma: no cover
+    """Return CLI commands for the collaboration module.
+
+    Returns:
+        Dictionary of CLI commands and handlers.
+
+    """
     return {
         "sessions": {
             "help": "List active collaboration sessions",

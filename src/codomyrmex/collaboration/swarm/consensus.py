@@ -16,6 +16,7 @@ logger = get_logger(__name__)
 
 class Decision(Enum):
     """Outcome of a consensus round."""
+
     APPROVED = "approved"
     REJECTED = "rejected"
     DEADLOCK = "deadlock"
@@ -31,6 +32,7 @@ class Vote:
         approve: True = approve, False = reject.
         weight: Vote weight (for weighted voting).
         reason: Optional rationale.
+
     """
 
     agent_id: str
@@ -48,6 +50,7 @@ class ConsensusResult:
         votes: All cast votes.
         approval_score: Fraction of approval (0-1).
         strategy: Strategy used.
+
     """
 
     decision: Decision
@@ -98,6 +101,7 @@ class ConsensusEngine:
 
         Returns:
             ``ConsensusResult`` with the decision.
+
         """
         if not votes:
             return ConsensusResult(
@@ -114,7 +118,7 @@ class ConsensusEngine:
             return self._majority(votes, threshold)
 
     def _majority(self, votes: list[Vote], threshold: float) -> ConsensusResult:
-        """Simple majority vote."""
+        """Calculate simple majority vote."""
         approvals = sum(1 for v in votes if v.approve)
         total = len(votes)
         score = approvals / total

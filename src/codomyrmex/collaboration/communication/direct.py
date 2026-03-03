@@ -1,5 +1,4 @@
-"""
-Direct messaging for point-to-point communication.
+"""Direct messaging for point-to-point communication.
 
 Provides request-response patterns and direct agent-to-agent messaging.
 """
@@ -21,6 +20,7 @@ logger = get_logger(__name__)
 @dataclass
 class PendingRequest:
     """A pending request awaiting a response."""
+
     request_id: str
     sender_id: str
     receiver_id: str
@@ -37,14 +37,14 @@ class PendingRequest:
 
 
 class DirectMessenger:
-    """
-    Direct messenger for point-to-point agent communication.
+    """Direct messenger for point-to-point agent communication.
 
     Supports both fire-and-forget messages and request-response patterns
     with timeout handling.
 
     Attributes:
         default_timeout: Default timeout for requests in seconds.
+
     """
 
     def __init__(self, default_timeout: float = 30.0):
@@ -59,12 +59,12 @@ class DirectMessenger:
         agent_id: str,
         handler: Callable[[AgentMessage], Awaitable[Any]],
     ) -> None:
-        """
-        Register a message handler for an agent.
+        """Register a message handler for an agent.
 
         Args:
             agent_id: ID of the agent receiving messages.
             handler: Async function to handle incoming messages.
+
         """
         self._handlers[agent_id] = handler
         logger.info(f"Registered message handler for agent: {agent_id}")
@@ -83,8 +83,7 @@ class DirectMessenger:
         content: Any,
         metadata: dict[str, Any] | None = None,
     ) -> None:
-        """
-        Send a message to another agent (fire-and-forget).
+        """Send a message to another agent (fire-and-forget).
 
         Args:
             sender_id: ID of the sending agent.
@@ -94,6 +93,7 @@ class DirectMessenger:
 
         Raises:
             MessageDeliveryError: If the receiver has no registered handler.
+
         """
         if receiver_id not in self._handlers:
             raise MessageDeliveryError(
@@ -136,8 +136,7 @@ class DirectMessenger:
         timeout: float | None = None,
         metadata: dict[str, Any] | None = None,
     ) -> Any:
-        """
-        Send a request and wait for a response.
+        """Send a request and wait for a response.
 
         Args:
             sender_id: ID of the sending agent.
@@ -152,6 +151,7 @@ class DirectMessenger:
         Raises:
             MessageDeliveryError: If delivery fails.
             asyncio.TimeoutError: If no response within timeout.
+
         """
         if receiver_id not in self._handlers:
             raise MessageDeliveryError(
@@ -219,13 +219,13 @@ class DirectMessenger:
         content: Any,
         metadata: dict[str, Any] | None = None,
     ) -> None:
-        """
-        Send a response to a request.
+        """Send a response to a request.
 
         Args:
             original_message: The message being responded to.
             content: Response content.
             metadata: Optional response metadata.
+
         """
         response = original_message.create_reply(content, **(metadata or {}))
         self._log_message(response)
@@ -247,8 +247,7 @@ class DirectMessenger:
         agent_id: str | None = None,
         limit: int = 100,
     ) -> list[AgentMessage]:
-        """
-        Get message log, optionally filtered by agent.
+        """Get message log, optionally filtered by agent.
 
         Args:
             agent_id: Filter to messages involving this agent.
@@ -256,6 +255,7 @@ class DirectMessenger:
 
         Returns:
             List of messages, most recent first.
+
         """
         messages = self._message_log
 
@@ -283,8 +283,7 @@ class DirectMessenger:
 
 
 class ConversationTracker:
-    """
-    Tracks conversations between agents.
+    """Tracks conversations between agents.
 
     Groups related messages into conversations for context tracking.
     """

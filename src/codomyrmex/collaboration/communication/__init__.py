@@ -1,5 +1,4 @@
-"""
-Inter-agent messaging submodule.
+"""Inter-agent messaging submodule.
 
 Message passing, channel management, and communication patterns
 for multi-agent collaboration.
