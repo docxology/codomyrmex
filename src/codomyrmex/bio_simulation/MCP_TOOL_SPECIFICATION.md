@@ -2,13 +2,25 @@
 
 This document outlines the specification for tools within the Bio-Simulation module that are intended to be integrated with the Model Context Protocol (MCP).
 
-## Current Status: No MCP Tools Defined
+## Current Status: Active MCP Tools
 
-The Bio-Simulation module provides ant colony simulation and genomics integration capabilities for internal use by other Codomyrmex modules. These functions are primarily for programmatic integration within the application lifecycle and are not suited for exposure as Model Context Protocol (MCP) tools.
+The Bio-Simulation module exposes tools for integrating biological simulation runs and genomics analysis into an external agent's context using the Model Context Protocol (MCP).
 
-MCP tools are typically designed for discrete, invocable actions or queries that an external agent (like an LLM) would trigger. The internal biological simulation mechanisms do not fit this paradigm.
+### Tool: `bio_simulate_colony`
 
-If future enhancements to this module introduce features that are appropriate for MCP (e.g., running a colony simulation with configurable parameters and returning results, or querying colony fitness metrics), this document will be updated accordingly.
+- **Purpose**: Instantiates and steps an ant colony simulation.
+- **Parameters**:
+  - `population` (int): Number of ant agents to spawn.
+  - `hours` (int): Number of hours to advance the simulation.
+- **Returns**: A dictionary containing statistics of the simulated colony including life/death counts, food collected, and state distributions.
+
+### Tool: `bio_analyze_genetics`
+
+- **Purpose**: Instantiates and evolves a population of genomes using a genetic algorithm.
+- **Parameters**:
+  - `population_size` (int): Total genomes in the population.
+  - `generations` (int): Number of generations to evolve.
+- **Returns**: A dictionary detailing trait distribution statistics (mean, std, min, max) for standard traits.
 
 For details on how to use the bio_simulation functionalities within your Python code, please refer to the module's `README.md` and `API_SPECIFICATION.md`.
 

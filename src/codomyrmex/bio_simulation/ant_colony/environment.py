@@ -13,6 +13,7 @@ from dataclasses import dataclass
 @dataclass
 class FoodSource:
     """A localized food deposit in the environment."""
+
     position: tuple[int, int]
     amount: float
 
@@ -137,7 +138,9 @@ class Environment:
         for pos in to_remove:
             del self._pheromones[pos]
 
-    def get_neighbors(self, position: tuple[int, int], radius: int = 1) -> list[tuple[int, int]]:
+    def get_neighbors(
+        self, position: tuple[int, int], radius: int = 1
+    ) -> list[tuple[int, int]]:
         """Return passable neighboring cells within a Chebyshev radius.
 
         Args:
@@ -158,12 +161,16 @@ class Environment:
                     neighbors.append((nx, ny))
         return neighbors
 
-    def food_at(self, position: tuple[int, int], radius: float = 1.5) -> FoodSource | None:
+    def food_at(
+        self, position: tuple[int, int], radius: float = 1.5
+    ) -> FoodSource | None:
         """Find the nearest food source within the given radius of a position."""
         best: FoodSource | None = None
         best_dist = float("inf")
         for fs in self._food_sources:
-            dist = math.hypot(fs.position[0] - position[0], fs.position[1] - position[1])
+            dist = math.hypot(
+                fs.position[0] - position[0], fs.position[1] - position[1]
+            )
             if dist <= radius and dist < best_dist:
                 best = fs
                 best_dist = dist
@@ -171,10 +178,18 @@ class Environment:
 
     @property
     def food_sources(self) -> list[FoodSource]:
-        """Read-only access to current food sources."""
+        """Read-only access to current food sources in the environment.
+
+        Returns:
+            A list containing all current FoodSource objects.
+        """
         return list(self._food_sources)
 
     @property
     def obstacles(self) -> set[tuple[int, int]]:
-        """Read-only access to obstacle positions."""
+        """Read-only access to impassable obstacle grid positions.
+
+        Returns:
+            A set of (x, y) coordinate tuples representing obstacles.
+        """
         return set(self._obstacles)
