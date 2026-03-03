@@ -113,11 +113,28 @@ class DistillationLoss:
     """Stateful knowledge distillation loss."""
 
     def __init__(self, temperature: float = 4.0, alpha: float = 0.7):
+        """
+        Initialize the DistillationLoss.
+
+        Args:
+            temperature: Distillation temperature T (>1 = softer distribution)
+            alpha: Weight for distillation loss (1-alpha for CE loss)
+        """
         self.temperature = temperature
         self.alpha = alpha
 
     def __call__(self, student_logits, teacher_logits, labels=None):
-        """Compute distillation loss."""
+        """
+        Compute distillation loss.
+
+        Args:
+            student_logits: Student model outputs (batch, num_classes)
+            teacher_logits: Teacher model outputs (batch, num_classes)
+            labels: Ground truth class indices (batch,), optional
+
+        Returns:
+            dict with: total_loss, distillation_loss, ce_loss, teacher_accuracy
+        """
         return distillation_loss(
             student_logits,
             teacher_logits,
