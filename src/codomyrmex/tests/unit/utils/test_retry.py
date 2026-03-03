@@ -246,3 +246,69 @@ class TestAsyncRetryDecorator:
         with pytest.raises(TypeError):
             await async_type_error()
         assert call_count[0] == 1
+
+
+@pytest.mark.unit
+class TestRetryLoggingAndSleep:
+    def test_sync_retry_sleep_and_logging(self, monkeypatch, caplog):
+        import time
+        from codomyrmex.utils.retry import logger
+
+        sleeps = []
+        def mock_sleep(seconds):
+            sleeps.append(seconds)
+
+        monkeypatch.setattr(time, "sleep", mock_sleep)
+
+        call_count = [0]
+
+        @retry(max_attempts=3, base_delay=1.0, exponential_base=2.0, jitter=False)
+        def fail_twice():
+            call_count[0] += 1
+            if call_count[0] < 3:
+                raise ValueError(f"fail {call_count[0]}")
+            return "success"
+
+        with caplog.at_level("WARNING", logger=logger.name):
+            result = fail_twice()
+
+        assert result == "success"
+        assert call_count[0] == 3
+        assert len(sleeps) == 2
+        assert sleeps[0] == 1.0
+        assert sleeps[1] == 2.0
+
+        assert "Retry 1/3 for fail_twice after 1.00s: fail 1" in caplog.text
+        assert "Retry 2/3 for fail_twice after 2.00s: fail 2" in caplog.text
+
+    @pytest.mark.asyncio
+    async def test_async_retry_sleep_and_logging(self, monkeypatch, caplog):
+        import asyncio
+        from codomyrmex.utils.retry import logger
+
+        sleeps = []
+        async def mock_sleep(seconds):
+            sleeps.append(seconds)
+
+        monkeypatch.setattr(asyncio, "sleep", mock_sleep)
+
+        call_count = [0]
+
+        @async_retry(max_attempts=3, base_delay=1.0, exponential_base=2.0, jitter=False)
+        async def async_fail_twice():
+            call_count[0] += 1
+            if call_count[0] < 3:
+                raise ValueError(f"async fail {call_count[0]}")
+            return "async success"
+
+        with caplog.at_level("WARNING", logger=logger.name):
+            result = await async_fail_twice()
+
+        assert result == "async success"
+        assert call_count[0] == 3
+        assert len(sleeps) == 2
+        assert sleeps[0] == 1.0
+        assert sleeps[1] == 2.0
+
+        assert "Async retry 1/3 for async_fail_twice after 1.00s: async fail 1" in caplog.text
+        assert "Async retry 2/3 for async_fail_twice after 2.00s: async fail 2" in caplog.text
