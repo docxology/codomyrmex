@@ -1,3 +1,9 @@
+"""
+Event Schema for Codomyrmex Event System
+
+This module defines event types, schemas, and validation for the Codomyrmex
+event-driven architecture.
+"""
 import json
 import logging
 from dataclasses import dataclass, field
@@ -7,13 +13,6 @@ from typing import Any
 import jsonschema
 
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
-
-"""
-Event Schema for Codomyrmex Event System
-
-This module defines event types, schemas, and validation for the Codomyrmex
-event-driven architecture.
-"""
 
 # Import logging
 try:

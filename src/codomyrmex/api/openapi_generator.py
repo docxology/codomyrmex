@@ -41,9 +41,10 @@ else:
     try:
         from codomyrmex.api.standardization.graphql_api import GraphQLAPI
         from codomyrmex.api.standardization.rest_api import RESTAPI
-    except (ImportError, AttributeError):
-        RESTAPI = None
-        GraphQLAPI = None
+    except (ImportError, AttributeError) as exc:
+        raise ImportError(
+            "api.standardization module not available; run: uv sync --extra api"
+        ) from exc
 
 
 @dataclass
@@ -179,14 +180,6 @@ def create_openapi_from_rest_api(api: RESTAPI) -> OpenAPISpecification:
     Returns:
         OpenAPI specification
     """
-    global RESTAPI
-    if RESTAPI is None:
-        try:
-            from codomyrmex.api.standardization.rest_api import RESTAPI as _RESTAPI
-            RESTAPI = _RESTAPI
-        except ImportError:
-            raise ImportError("RESTAPI class not available. Ensure standardization module is properly imported.") from None
-
     generator = StandardizationOpenAPIGenerator(
         title=api.title,
         version=api.version,
@@ -206,9 +199,6 @@ def create_openapi_from_graphql_api(api: GraphQLAPI) -> OpenAPISpecification:
     Returns:
         OpenAPI specification
     """
-    if GraphQLAPI is None:
-        raise ImportError("GraphQLAPI class not available. Ensure standardization module is properly imported.")
-
     generator = StandardizationOpenAPIGenerator(
         title="GraphQL API",
         version="1.0.0",

@@ -23,6 +23,11 @@ from codomyrmex.events.core.event_bus import EventBus, get_event_bus
 from codomyrmex.events.core.event_schema import Event, EventType
 
 
+def _event_type_str(event_type: Any) -> str:
+    """Return the string value of an event type, handling both enum and plain string."""
+    return event_type.value if hasattr(event_type, 'value') else str(event_type)
+
+
 class EventLogEntry:
     """Represents a logged event with additional metadata."""
     def __init__(self, event: Event, handler_count: int = 0, processing_time: float | None = None):
@@ -34,7 +39,7 @@ class EventLogEntry:
 
     def to_dict(self) -> dict[str, Any]:
         """Return a dictionary representation of this object."""
-        etype = self.event.event_type.value if hasattr(self.event.event_type, 'value') else str(self.event.event_type)
+        etype = _event_type_str(self.event.event_type)
 
         # Handle priority which might be an int or EventPriority enum
         priority = self.event.priority
@@ -72,7 +77,7 @@ class EventLogger:
         with self.lock:
             entry = EventLogEntry(event, handler_count, processing_time)
             self.entries.append(entry)
-            etype = event.event_type.value if hasattr(event.event_type, 'value') else str(event.event_type)
+            etype = _event_type_str(event.event_type)
             self.event_counts[etype] += 1
             if "error" in etype.lower():
                 self.error_counts[etype] += 1
@@ -94,7 +99,7 @@ class EventLogger:
         with self.lock:
             res = list(self.entries)
             if event_type:
-                res = [e for e in res if (e.event.event_type.value if hasattr(e.event.event_type, 'value') else str(e.event.event_type)) == event_type]
+                res = [e for e in res if _event_type_str(e.event.event_type) == event_type]
             if start_time:
                 res = [e for e in res if e.timestamp >= start_time]
             if end_time:
@@ -103,13 +108,13 @@ class EventLogger:
 
     def get_events_by_type(self, event_type: EventType | str) -> list[EventLogEntry]:
         """Query events by type."""
-        t = event_type.value if hasattr(event_type, 'value') else str(event_type)
+        t = _event_type_str(event_type)
         return self.get_events(event_type=t)
 
     def get_error_events(self) -> list[EventLogEntry]:
         """Query all error events."""
         with self.lock:
-            return [e for e in self.entries if "error" in (e.event.event_type.value if hasattr(e.event.event_type, 'value') else str(e.event.event_type)).lower()]
+            return [e for e in self.entries if "error" in _event_type_str(e.event.event_type).lower()]
 
     def get_events_in_time_range(self, start: datetime, end: datetime) -> list[EventLogEntry]:
         """Query events within a time range."""

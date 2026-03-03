@@ -23,8 +23,11 @@ def _git():
 )
 def git_check_availability() -> dict[str, Any]:
     """Check if git is available."""
-    available = _git().check_git_availability()
-    return {"status": "success", "git_available": available}
+    try:
+        available = _git().check_git_availability()
+        return {"status": "success", "git_available": available}
+    except Exception as exc:
+        return {"status": "error", "message": str(exc)}
 
 
 @mcp_tool(

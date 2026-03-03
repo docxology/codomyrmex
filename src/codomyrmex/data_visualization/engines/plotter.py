@@ -5,8 +5,6 @@ This module consolidates and exports plotting functions from the charts package.
 It acts as the primary entry point for accessing visualization capabilities.
 """
 
-import logging
-
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -20,44 +18,13 @@ from codomyrmex.data_visualization.charts.plot_utils import (
     save_plot,
 )
 from codomyrmex.data_visualization.charts.scatter_plot import create_scatter_plot
+from codomyrmex.logging_monitoring import get_logger
 
-# Attempt to import Codomyrmex logging utilities
-try:
-    from codomyrmex.logging_monitoring.core.logger_config import get_logger
-    logger = get_logger(__name__)
-except ImportError:
-    logger = logging.getLogger(__name__)
-    if not logger.hasHandlers():
-        logging.basicConfig(
-            level=logging.INFO,
-            format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-        )
+logger = get_logger(__name__)
 
-# Import performance monitoring
-try:
-    from codomyrmex.performance import monitor_performance, performance_context
-    PERFORMANCE_MONITORING_AVAILABLE = True
-except ImportError:
-    logger.debug("Performance monitoring not available - decorators will be no-op")
-    PERFORMANCE_MONITORING_AVAILABLE = False
-
-    def monitor_performance(*args, **kwargs):
-        """Decorator for performance monitoring (fallback)."""
-        def decorator(func):
-            """Decorator."""
-            return func
-        return decorator
-
-    class performance_context:
-        """Performance Context (fallback)."""
-        def __init__(self, *args, **kwargs):
-            return None  # Intentional no-op
-        def __enter__(self):
-            """Enter the context manager."""
-            return self
-        def __exit__(self, *args):
-            """Exit the context manager and clean up."""
-            return None  # Intentional no-op
+from codomyrmex.data_visualization._compat import (
+    monitor_performance,
+)
 
 
 class Plotter:

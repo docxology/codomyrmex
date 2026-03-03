@@ -1,10 +1,9 @@
+"""Utility functions for CEREBRUM module."""
 import hashlib
 import json
 from typing import Any
 
 from codomyrmex.logging_monitoring import get_logger
-
-"""Utility functions for CEREBRUM module."""
 
 logger = get_logger(__name__)
 def compute_hash(data: Any) -> str:

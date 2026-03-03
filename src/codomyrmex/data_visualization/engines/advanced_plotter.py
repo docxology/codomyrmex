@@ -15,37 +15,12 @@ import numpy as np
 import pandas as pd
 import seaborn as sns
 
+from codomyrmex.data_visualization._compat import monitor_performance
+
 try:
     from codomyrmex.logging_monitoring.core.logger_config import get_logger
 except ImportError:
     from logging import getLogger as get_logger
-
-try:
-    from codomyrmex.performance import monitor_performance, performance_context
-    PERFORMANCE_MONITORING_AVAILABLE = True
-except ImportError:
-    PERFORMANCE_MONITORING_AVAILABLE = False
-
-    def monitor_performance(*args, **kwargs):
-        """No-op decorator."""
-        def decorator(func):
-            """Decorator."""
-            return func
-        return decorator
-
-    class performance_context:
-        """No-op context manager used when PerformanceMonitor is not installed."""
-        def __init__(self, *args, **kwargs):
-            return None  # Intentional no-op
-        def __enter__(self):
-            """Enter the context manager."""
-            return self
-        def __exit__(self, *args):
-            """Exit the context manager and clean up."""
-            return None  # Intentional no-op
-
-
-
 
 
 # Get module logger
