@@ -21,6 +21,8 @@ on:
       - "First Interaction"
       - "PR Linter Comments"
       - "Post Coverage Comment"
+      - "Release Drafter"
+      - "First PR Merged Celebration"
     types:
       - completed
   schedule:
@@ -69,7 +71,9 @@ jobs:
               'Auto Assign PR Author',
               'First Interaction',
               'PR Linter Comments',
-              'Post Coverage Comment'
+              'Post Coverage Comment',
+              'Release Drafter',
+              'First PR Merged Celebration'
             ];
             
             // Proper name-to-filename mapping
@@ -91,7 +95,9 @@ jobs:
               'Auto Assign PR Author': 'auto-assign.yml',
               'First Interaction': 'first-interaction.yml',
               'PR Linter Comments': 'pr-linter-comments.yml',
-              'Post Coverage Comment': 'pr-coverage-comment.yml'
+              'Post Coverage Comment': 'pr-coverage-comment.yml',
+              'Release Drafter': 'release-drafter.yml',
+              'First PR Merged Celebration': 'first-pr-merged.yml'
             };
             
             let statusData = {

@@ -5,7 +5,7 @@
 ## Purpose
 
 GitHub Actions workflow definitions for CI/CD, security, multi-agent infrastructure,
-documentation, benchmarks, PR automation, and repository maintenance. 31 workflows total.
+documentation, benchmarks, PR automation, and repository maintenance. 33 workflows total.
 
 ## Workflow Inventory
 
@@ -34,11 +34,13 @@ documentation, benchmarks, PR automation, and repository maintenance. 31 workflo
 | `jules-dispatch.yml` | workflow_dispatch | Batch create Jules task issues |
 | `dependabot-auto-approve.yml`| PR opened | Auto-approve Dependabot PRs to unblock auto-merge |
 
-### Community Health
+### Community & Release Automation
 
 | File | Trigger | Purpose |
 |------|---------|---------|
 | `first-interaction.yml` | Issue/PR opened | Greet first-time contributors with helpful links |
+| `first-pr-merged.yml` | PR closed (merged) | Post congratulatory welcome on first merged PR |
+| `release-drafter.yml` | push main | Auto-draft release notes based on PR labels |
 
 ### Documentation
 

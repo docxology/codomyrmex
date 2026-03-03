@@ -2,7 +2,7 @@
 
 **Last Updated**: March 2026
 
-## Current State: 31 Active Workflows
+## Current State: 33 Active Workflows
 
 ### Core CI/CD & Security (5)
 
@@ -70,7 +70,7 @@
 ## Agent PR Pipeline
 
 ```
-PR Opened (by Jules/Dependabot/Gemini)
+PR Opened (by Jules/Dependabot/Gemini/Human)
   │
   ├─ pr-labeler.yml ────────→ Auto-label (paths, branch, size, module)
   ├─ pr-title-check.yml ────→ Enforce semantic PR title
@@ -86,8 +86,13 @@ PR Opened (by Jules/Dependabot/Gemini)
   │
   ├─ pr-conflict-check.yml → Labels 'conflict' if conflicting (every 6h)
   │
-  └─ auto-merge.yml ────────→ Squash-merge when all checks pass
-          ↑ (Dependabot auto-approved by dependabot-auto-approve.yml)
+  └─ auto-merge.yml ────────→ Squash-merge execution when all gates clear
+          ↑ (Approved instantly by `dependabot-auto-approve.yml` for bots)
+
+PR Merged to `main`
+  │
+  ├─ first-pr-merged.yml ───→ Congratulatory comment if it's their 1st merged PR
+  └─ release-drafter.yml ───→ Sort PR into Draft Release using `pr-labeler` tags
 ```
 
 ## Scheduled Tasks
