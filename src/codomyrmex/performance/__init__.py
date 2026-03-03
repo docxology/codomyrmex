@@ -44,6 +44,24 @@ except ImportError:
     PerformanceMonitor = None
     PERFORMANCE_MONITOR_AVAILABLE = False
 
+    # Provide no-op fallbacks
+    def monitor_performance(*args, **kwargs):
+        def decorator(func):
+            return func
+        if len(args) == 1 and callable(args[0]):
+            return args[0]
+        return decorator
+
+    class _NoOpContext:
+        def __enter__(self): return self
+        def __exit__(self, exc_type, exc_val, exc_tb): pass
+
+    def performance_context(*args, **kwargs):
+        return _NoOpContext()
+
+    def get_system_metrics(*args, **kwargs):
+        return {}
+
 
 __version__ = "0.1.0"
 
@@ -92,7 +110,10 @@ __all__ = [
 
 if PERFORMANCE_MONITOR_AVAILABLE:
     __all__.append("PerformanceMonitor")
-    __all__.append("monitor_performance")
-    __all__.append("performance_context")
-    __all__.append("get_system_metrics")
+
+__all__.extend([
+    "monitor_performance",
+    "performance_context",
+    "get_system_metrics"
+])
 
