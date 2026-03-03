@@ -10,10 +10,8 @@ Verifies Identity and Wallet module functionality:
 """
 
 import hashlib
-
-from codomyrmex.identity import BioCognitiveVerifier, IdentityManager, VerificationLevel
-from codomyrmex.wallet import NaturalRitualRecovery, RitualStep, WalletManager
-
+from codomyrmex.identity import IdentityManager, VerificationLevel, BioCognitiveVerifier
+from codomyrmex.wallet import WalletManager, NaturalRitualRecovery, RitualStep
 
 def verify_identity():
     print("\n--- Verifying Identity ---")
@@ -44,7 +42,6 @@ def verify_identity():
     assert not bio.verify("p2", "keystroke", 0.50)
     print("✓ Bio-cognitive verification logic works")
 
-
 def verify_wallet():
     print("\n--- Verifying Wallet ---")
     wallet_mgr = WalletManager()
@@ -69,7 +66,7 @@ def verify_wallet():
     # Define ritual (Secret: "Blue", "Mountain")
     steps = [
         RitualStep("Color?", hashlib.sha256(b"Blue").hexdigest()),
-        RitualStep("Place?", hashlib.sha256(b"Mountain").hexdigest()),
+        RitualStep("Place?", hashlib.sha256(b"Mountain").hexdigest())
     ]
     recovery.register_ritual(user_id, steps)
 
@@ -83,28 +80,20 @@ def verify_wallet():
     assert not fail
     print("✓ Natural Ritual Recovery (Failure Case)")
 
-
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
-
-    config_path = (
-        Path(__file__).resolve().parent.parent.parent
-        / "config"
-        / "verification"
-        / "config.yaml"
-    )
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "verification" / "config.yaml"
+    config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
-            yaml.safe_load(f) or {}
-            print("Loaded config from config/verification/config.yaml")
+        with open(config_path, "r") as f:
+            config_data = yaml.safe_load(f) or {}
+            print(f"Loaded config from config/verification/config.yaml")
 
     verify_identity()
     verify_wallet()
     print("\n[SUCCESS] Phase 1 Verification Complete")
-
 
 if __name__ == "__main__":
     main()

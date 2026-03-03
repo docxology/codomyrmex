@@ -11,15 +11,9 @@ Usage:
 """
 
 import sys
-from datetime import datetime
 from pathlib import Path
-
-from codomyrmex.utils.cli_helpers import (
-    print_info,
-    print_success,
-    print_warning,
-    setup_logging,
-)
+from datetime import datetime
+from codomyrmex.utils.cli_helpers import setup_logging, print_info, print_success, print_warning
 
 # Add project root to path
 PROJECT_ROOT = Path(__file__).parent.parent.parent
@@ -335,6 +329,7 @@ except Exception as e:
 
 def generate_init(name: str, description: str, parent: str = None) -> str:
     """Generate __init__.py content."""
+    full_name = f"{parent}.{name}" if parent else name
     return f'''"""
 {name.replace("_", " ").title()} {"Submodule" if parent else "Module"}
 
@@ -421,17 +416,17 @@ PROJECT_ROOT = Path(__file__).parent.parent.parent{parent_levels}
 sys.path.insert(0, str(PROJECT_ROOT / "src"))
 
 def main():
-    """Main demonstration."""
     # Auto-injected: Load configuration
     import yaml
     from pathlib import Path
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "utils" / "config.yaml"
-    config_data = {{}}
+    config_data = {}
     if config_path.exists():
         with open(config_path, "r") as f:
-            config_data = yaml.safe_load(f) or {{}}
+            config_data = yaml.safe_load(f) or {}
             print(f"Loaded config from config/utils/config.yaml")
 
+    """Main demonstration."""
     raise NotImplementedError(
         "Demo for '{name}' is not yet implemented. "
         "Implement src/codomyrmex/{name}/ first, "

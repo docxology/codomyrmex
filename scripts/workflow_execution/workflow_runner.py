@@ -29,7 +29,6 @@ def load_workflow(path: Path) -> dict:
     elif path.suffix in [".yaml", ".yml"]:
         try:
             import yaml
-
             with open(path) as f:
                 return yaml.safe_load(f)
         except ImportError:
@@ -52,13 +51,7 @@ def execute_step(step: dict, dry_run: bool = False) -> dict:
 
         try:
             start = time.time()
-            proc = subprocess.run(
-                cmd,
-                shell=True,
-                capture_output=True,
-                text=True,
-                timeout=step.get("timeout", 60),
-            )
+            proc = subprocess.run(cmd, shell=True, capture_output=True, text=True, timeout=step.get("timeout", 60))
             result["status"] = "success" if proc.returncode == 0 else "failed"
             result["exit_code"] = proc.returncode
             result["duration"] = round(time.time() - start, 2)
@@ -97,9 +90,7 @@ def run_workflow(workflow: dict, dry_run: bool = False) -> list:
 def main():
     parser = argparse.ArgumentParser(description="Workflow runner")
     parser.add_argument("workflow", nargs="?", help="Workflow file (JSON/YAML)")
-    parser.add_argument(
-        "--dry-run", "-n", action="store_true", help="Show what would run"
-    )
+    parser.add_argument("--dry-run", "-n", action="store_true", help="Show what would run")
     parser.add_argument("--demo", action="store_true", help="Run demo workflow")
     args = parser.parse_args()
 
@@ -110,7 +101,7 @@ def main():
                 {"name": "Check Python", "command": "python --version"},
                 {"name": "List files", "command": "ls -la | head -5"},
                 {"name": "Show date", "command": "date"},
-            ],
+            ]
         }
     elif args.workflow:
         path = Path(args.workflow)
@@ -128,9 +119,7 @@ def main():
         print("  python workflow_runner.py workflow.yaml --dry-run")
         print("  python workflow_runner.py --demo")
         print("\nWorkflow format:")
-        print(
-            '  {"name": "My Workflow", "steps": [{"name": "Step 1", "command": "echo hello"}]}'
-        )
+        print('  {"name": "My Workflow", "steps": [{"name": "Step 1", "command": "echo hello"}]}')
         return 0
 
     name = workflow.get("name", "Unnamed Workflow")
@@ -145,9 +134,7 @@ def main():
     results = run_workflow(workflow, args.dry_run)
 
     for r in results:
-        icon = {"success": "✅", "failed": "❌", "dry_run": "🔍", "timeout": "⏰"}.get(
-            r["status"], "⚪"
-        )
+        icon = {"success": "✅", "failed": "❌", "dry_run": "🔍", "timeout": "⏰"}.get(r["status"], "⚪")
         print(f"   {icon} {r['name']}: {r['status']}")
         if "duration" in r:
             print(f"      Duration: {r['duration']}s")

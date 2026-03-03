@@ -15,18 +15,18 @@ except ImportError:
 
 from codomyrmex.orchestrator.core import main
 
-if __name__ == "__main__":
-    # Auto-injected: Load configuration
-    from pathlib import Path
 
+    # Auto-injected: Load configuration
     import yaml
+    from pathlib import Path
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "website" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
+        with open(config_path, "r") as f:
             config_data = yaml.safe_load(f) or {}
-            print("Loaded config from config/website/config.yaml")
+            print(f"Loaded config from config/website/config.yaml")
 
+if __name__ == "__main__":
     # Run the orchestrator for this specific module directory
     # We must explicitly set the scripts directory to avoid recursive discovery of the parent 'scripts' folder
     current_dir = Path(__file__).resolve().parent
