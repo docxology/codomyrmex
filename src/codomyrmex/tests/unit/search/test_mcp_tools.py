@@ -43,3 +43,4 @@ class TestSearchMcpTools:
     def test_search_fuzzy_error(self):
         res = search_fuzzy("pythn", None)
         assert res["status"] == "error"
+# Update
