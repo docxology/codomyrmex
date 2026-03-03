@@ -199,9 +199,7 @@ class BudgetManager:
         """Initialize the budget manager."""
         self.tracker = tracker
         self._budgets: dict[str, Budget] = {}
-        self._triggered_alerts: set[str] = (
-            set()
-        )  # Track which thresholds were triggered
+        self._triggered_alerts: set[str] = set()  # Track which thresholds were triggered
         self._lock = threading.Lock()
 
     def create(
