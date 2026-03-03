@@ -1,4 +1,5 @@
-"""Feature Service.
+"""
+Feature Service
 
 High-level feature service including transforms and batch operations.
 """
@@ -15,7 +16,8 @@ logger = logging.getLogger(__name__)
 
 
 class FeatureTransform:
-    """Transform features before serving.
+    """
+    Transform features before serving.
 
     Usage:
         transform = FeatureTransform()
@@ -26,7 +28,6 @@ class FeatureTransform:
     """
 
     def __init__(self):
-        """Initialize empty transforms."""
         self._transforms: dict[str, Callable[[Any], Any]] = {}
 
     def add(self, feature_name: str, func: Callable[[Any], Any]) -> "FeatureTransform":
@@ -56,7 +57,8 @@ class FeatureTransform:
 
 
 class FeatureService:
-    """High-level feature service for ML applications.
+    """
+    High-level feature service for ML applications.
 
     Usage:
         service = FeatureService(store=InMemoryFeatureStore())
@@ -83,7 +85,6 @@ class FeatureService:
         store: FeatureStore | None = None,
         transform: FeatureTransform | None = None,
     ):
-        """Initialize service with optional store and transform pipeline."""
         self.store = store or InMemoryFeatureStore()
         self.transform = transform
         self._groups: dict[str, FeatureGroup] = {}

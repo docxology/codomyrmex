@@ -1,4 +1,5 @@
-"""Feature Store Backends.
+"""
+Feature Store Backends
 
 Storage backends for feature data.
 """
@@ -55,7 +56,8 @@ class FeatureStore(ABC):
 
 
 class InMemoryFeatureStore(FeatureStore):
-    """In-memory feature store for development and testing.
+    """
+    In-memory feature store for development and testing.
 
     Usage:
         store = InMemoryFeatureStore()
@@ -76,20 +78,19 @@ class InMemoryFeatureStore(FeatureStore):
     """
 
     def __init__(self):
-        """Initialize empty in-memory store."""
         self._definitions: dict[str, FeatureDefinition] = {}
         self._values: dict[str, dict[str, FeatureValue]] = {}  # feature_name -> entity_id -> value
         self._lock = threading.Lock()
 
     def register_feature(self, definition: FeatureDefinition) -> None:
-        """Register a feature definition.
+        """
+        Register a feature definition.
 
         Args:
             definition: The feature definition to register.
 
         Raises:
             FeatureRegistrationError: If definition is invalid.
-
         """
         if not definition or not definition.name:
             raise FeatureRegistrationError("Invalid feature definition: name is required")
@@ -104,7 +105,8 @@ class InMemoryFeatureStore(FeatureStore):
         return self._definitions.get(name)
 
     def set_value(self, feature_name: str, entity_id: str, value: Any) -> None:
-        """Set a feature value for an entity.
+        """
+        Set a feature value for an entity.
 
         Args:
             feature_name: Name of the feature.
@@ -114,7 +116,6 @@ class InMemoryFeatureStore(FeatureStore):
         Raises:
             FeatureNotFoundError: If feature is not registered.
             FeatureValidationError: If value does not match feature definition.
-
         """
         definition = self.get_feature_definition(feature_name)
         if not definition:
@@ -146,7 +147,8 @@ class InMemoryFeatureStore(FeatureStore):
         return self._values[feature_name].get(entity_id)
 
     def get_vector(self, entity_id: str, feature_names: list[str]) -> FeatureVector:
-        """Get multiple features for an entity.
+        """
+        Get multiple features for an entity.
 
         Args:
             entity_id: ID of the entity.
@@ -154,7 +156,6 @@ class InMemoryFeatureStore(FeatureStore):
 
         Returns:
             FeatureVector containing the requested features.
-
         """
         features = {}
         for name in feature_names:

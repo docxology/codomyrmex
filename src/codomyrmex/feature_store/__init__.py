@@ -1,4 +1,5 @@
-"""Feature Store.
+"""
+Feature Store
 
 Feature management, storage, and serving for ML applications.
 """
