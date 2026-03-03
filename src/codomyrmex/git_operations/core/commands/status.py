@@ -5,6 +5,8 @@ from typing import Any
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
 from codomyrmex.model_context_protocol.decorators import mcp_tool
 
+_GIT_TIMEOUT = 60  # seconds
+
 logger = get_logger(__name__)
 
 @mcp_tool(name="git_add")
@@ -22,7 +24,8 @@ def add_files(file_paths: list[str], repository_path: str = None) -> bool:
 
         cmd = ["git", "add"] + file_paths
         subprocess.run(
-            cmd, cwd=repository_path, capture_output=True, text=True, check=True
+            cmd, cwd=repository_path, capture_output=True, text=True, check=True,
+        timeout=_GIT_TIMEOUT
         )
 
         logger.info("Files added to staging area successfully")
@@ -52,6 +55,7 @@ def get_status(repository_path: str = None) -> dict[str, Any]:
             capture_output=True,
             text=True,
             check=True,
+        timeout=_GIT_TIMEOUT,
         )
 
         status_lines = (
@@ -134,6 +138,7 @@ def clean_repository(force: bool = False, directories: bool = False, repository_
             capture_output=True,
             text=True,
             check=True,
+        timeout=_GIT_TIMEOUT,
         )
         return True
     except subprocess.CalledProcessError as e:
@@ -163,6 +168,7 @@ def get_diff(target: str = "HEAD", repository_path: str = None, cached: bool = F
             capture_output=True,
             text=True,
             check=True,
+        timeout=_GIT_TIMEOUT,
         )
         return result.stdout
     except subprocess.CalledProcessError as e:
@@ -193,7 +199,8 @@ def get_diff_files(
             cmd.append(file_path)
 
         result = subprocess.run(
-            cmd, cwd=repository_path, capture_output=True, text=True, check=True
+            cmd, cwd=repository_path, capture_output=True, text=True, check=True,
+        timeout=_GIT_TIMEOUT
         )
 
         logger.debug(f"Retrieved diff ({len(result.stdout)} characters)")
@@ -226,7 +233,8 @@ def reset_changes(
 
         cmd = ["git", "reset", f"--{mode}", target]
         subprocess.run(
-            cmd, cwd=repository_path, capture_output=True, text=True, check=True
+            cmd, cwd=repository_path, capture_output=True, text=True, check=True,
+        timeout=_GIT_TIMEOUT
         )
 
         logger.info("Repository reset successfully")

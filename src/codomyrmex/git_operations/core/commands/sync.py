@@ -6,6 +6,8 @@ from codomyrmex.model_context_protocol.decorators import mcp_tool
 
 from .branching import get_current_branch
 
+_GIT_TIMEOUT = 120  # seconds
+
 logger = get_logger(__name__)
 
 @mcp_tool(name="git_push")
@@ -31,6 +33,7 @@ def push_changes(
             capture_output=True,
             text=True,
             check=True,
+        timeout=_GIT_TIMEOUT,
         )
 
         logger.info("Changes pushed successfully")
@@ -68,6 +71,7 @@ def pull_changes(
             capture_output=True,
             text=True,
             check=True,
+        timeout=_GIT_TIMEOUT,
         )
 
         logger.info("Changes pulled successfully")
@@ -109,6 +113,7 @@ def fetch_changes(
             capture_output=True,
             text=True,
             check=True,
+        timeout=_GIT_TIMEOUT,
         )
 
         logger.info(f"Successfully fetched changes from {remote}")

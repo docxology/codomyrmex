@@ -6,6 +6,8 @@ from codomyrmex.model_context_protocol.decorators import mcp_tool
 
 from .status import add_files
 
+_GIT_TIMEOUT = 60  # seconds
+
 logger = get_logger(__name__)
 
 @mcp_tool(name="git_commit")
@@ -51,6 +53,7 @@ def commit_changes(
                 capture_output=True,
                 text=True,
                 check=True,
+            timeout=_GIT_TIMEOUT,
             )
             logger.debug("Staged all tracked, modified files")
 
@@ -68,6 +71,7 @@ def commit_changes(
                 capture_output=True,
                 text=True,
                 check=False,
+            timeout=_GIT_TIMEOUT,
             )
             email = email_result.stdout.strip() if email_result.returncode == 0 else ""
             if email:
@@ -82,6 +86,7 @@ def commit_changes(
                 capture_output=True,
                 text=True,
                 check=False,
+            timeout=_GIT_TIMEOUT,
             )
             name = name_result.stdout.strip() if name_result.returncode == 0 else "Unknown"
             cmd.extend(["--author", f"{name} <{author_email}>"])
@@ -96,6 +101,7 @@ def commit_changes(
             capture_output=True,
             text=True,
             check=True,
+        timeout=_GIT_TIMEOUT,
         )
 
         # Get commit SHA
@@ -105,6 +111,7 @@ def commit_changes(
             capture_output=True,
             text=True,
             check=True,
+        timeout=_GIT_TIMEOUT,
         )
 
         commit_sha = sha_result.stdout.strip()
@@ -135,6 +142,7 @@ def revert_commit(commit_sha: str, repository_path: str = None) -> bool:
             capture_output=True,
             text=True,
             check=True,
+        timeout=_GIT_TIMEOUT,
         )
         logger.info(f"Successfully reverted commit {commit_sha[:8]}")
         return True
@@ -169,6 +177,7 @@ def cherry_pick(
             capture_output=True,
             text=True,
             check=True,
+        timeout=_GIT_TIMEOUT,
         )
 
         logger.info(f"Successfully cherry-picked commit {commit_sha[:8]}")
@@ -220,6 +229,7 @@ def amend_commit(
                 capture_output=True,
                 text=True,
                 check=False,
+            timeout=_GIT_TIMEOUT,
             )
             email = email_result.stdout.strip() if email_result.returncode == 0 else ""
             if email:
@@ -233,6 +243,7 @@ def amend_commit(
                 capture_output=True,
                 text=True,
                 check=False,
+            timeout=_GIT_TIMEOUT,
             )
             name = name_result.stdout.strip() if name_result.returncode == 0 else "Unknown"
             cmd.extend(["--author", f"{name} <{author_email}>"])
@@ -243,6 +254,7 @@ def amend_commit(
             capture_output=True,
             text=True,
             check=True,
+        timeout=_GIT_TIMEOUT,
         )
 
         # Get amended commit SHA
@@ -252,6 +264,7 @@ def amend_commit(
             capture_output=True,
             text=True,
             check=True,
+        timeout=_GIT_TIMEOUT,
         )
 
         commit_sha = sha_result.stdout.strip()

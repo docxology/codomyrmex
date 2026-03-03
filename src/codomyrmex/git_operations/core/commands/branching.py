@@ -3,6 +3,8 @@ import subprocess
 
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
+_GIT_TIMEOUT = 60  # seconds
+
 logger = get_logger(__name__)
 
 
@@ -21,6 +23,7 @@ def create_branch(branch_name: str, repository_path: str = None) -> bool:
         capture_output=True,
         text=True,
         check=True,
+    timeout=_GIT_TIMEOUT,
     )
     logger.debug("Branch '%s' created and checked out", branch_name)
     return True
@@ -40,6 +43,7 @@ def switch_branch(branch_name: str, repository_path: str = None) -> bool:
         capture_output=True,
         text=True,
         check=True,
+    timeout=_GIT_TIMEOUT,
     )
     logger.debug("Switched to branch '%s'", branch_name)
     return True
@@ -65,6 +69,7 @@ def delete_branch(branch_name: str, repository_path: str = None, force: bool = F
         capture_output=True,
         text=True,
         check=True,
+    timeout=_GIT_TIMEOUT,
     )
     logger.info(f"Deleted branch {branch_name} (force={force})")
     return True
@@ -84,6 +89,7 @@ def get_current_branch(repository_path: str = None) -> str:
         capture_output=True,
         text=True,
         check=True,
+    timeout=_GIT_TIMEOUT,
     )
     branch_name = result.stdout.strip()
     logger.debug("Current branch: %s", branch_name)
@@ -107,6 +113,7 @@ def list_branches(repository_path: str = None) -> list[str]:
         text=True,
         cwd=cwd,
         check=True,
+    timeout=_GIT_TIMEOUT,
     )
     branches = []
     for line in result.stdout.splitlines():

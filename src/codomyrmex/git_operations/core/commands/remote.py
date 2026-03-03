@@ -4,6 +4,8 @@ import subprocess
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
 from codomyrmex.model_context_protocol.decorators import mcp_tool
 
+_GIT_TIMEOUT = 120  # seconds
+
 logger = get_logger(__name__)
 
 @mcp_tool(name="git_fetch")
@@ -20,6 +22,7 @@ def fetch_remote(remote: str = "origin", repository_path: str = None) -> bool:
             capture_output=True,
             text=True,
             check=True,
+        timeout=_GIT_TIMEOUT,
         )
         return True
     except subprocess.CalledProcessError as e:
@@ -45,6 +48,7 @@ def prune_remote(remote: str = "origin", repository_path: str = None) -> bool:
             capture_output=True,
             text=True,
             check=True,
+        timeout=_GIT_TIMEOUT,
         )
         return True
     except subprocess.CalledProcessError as e:
@@ -73,6 +77,7 @@ def add_remote(
             capture_output=True,
             text=True,
             check=True,
+        timeout=_GIT_TIMEOUT,
         )
 
         logger.info(f"Remote '{remote_name}' added successfully")
@@ -102,6 +107,7 @@ def remove_remote(remote_name: str, repository_path: str = None) -> bool:
             capture_output=True,
             text=True,
             check=True,
+        timeout=_GIT_TIMEOUT,
         )
 
         logger.info(f"Remote '{remote_name}' removed successfully")
@@ -131,6 +137,7 @@ def list_remotes(repository_path: str = None) -> list[dict[str, str]]:
             capture_output=True,
             text=True,
             check=True,
+        timeout=_GIT_TIMEOUT,
         )
 
         remotes = []
