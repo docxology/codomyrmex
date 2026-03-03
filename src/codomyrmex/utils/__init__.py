@@ -236,6 +236,12 @@ def get_env(key: str, default: str | None = None, required: bool = False) -> str
 def flatten_dict(d: dict, parent_key: str = "", sep: str = ".") -> dict:
     """Flatten a nested dictionary.
 
+    Example:
+        >>> flatten_dict({"a": {"b": 1, "c": {"d": 2}}, "e": 3})
+        {'a.b': 1, 'a.c.d': 2, 'e': 3}
+        >>> flatten_dict({"x": {"y": 1}}, sep="/")
+        {'x/y': 1}
+
     Args:
         d: Dictionary to flatten
         parent_key: Prefix for keys
