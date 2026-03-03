@@ -5,7 +5,7 @@ as auto-discovered MCP tools via the ``@mcp_tool`` decorator.
 Zero external dependencies beyond the prompt_engineering module itself.
 """
 
-from __future__ import annotations
+from typing import Any
 
 from codomyrmex.model_context_protocol.decorators import mcp_tool
 
@@ -45,7 +45,7 @@ def prompt_list_strategies() -> list[str]:
         "Returns a dictionary with per-criterion scores and a weighted total."
     ),
 )
-def prompt_evaluate(prompt: str, response: str) -> dict:
+def prompt_evaluate(prompt: str, response: str) -> dict[str, Any]:
     """Evaluate a prompt-response pair and return scores.
 
     Args:
