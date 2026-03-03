@@ -86,5 +86,9 @@ class RabbitHole:
         await asyncio.sleep(duration)
 
     def get_active_sessions(self) -> list[str]:
-        """Return a list of currently engaged attacker IDs."""
+        """Return a list of currently engaged attacker IDs.
+
+        Returns:
+            A list of engaged attacker ID strings.
+        """
         return list(self._active_sessions.keys())
