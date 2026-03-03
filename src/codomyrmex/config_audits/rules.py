@@ -6,7 +6,15 @@ from .models import AuditIssue, AuditRule, Severity
 
 
 def check_secrets(content: Any, file_path: str | None) -> list[AuditIssue]:
-    """Check for potential secrets in configuration content."""
+    """Check for potential secrets in configuration content.
+
+    Args:
+        content: The configuration file content to inspect.
+        file_path: The optional path to the file.
+
+    Returns:
+        A list of AuditIssue objects representing any found secrets.
+    """
     import re
     issues = []
     if not isinstance(content, str):
@@ -35,7 +43,15 @@ def check_secrets(content: Any, file_path: str | None) -> list[AuditIssue]:
 
 
 def check_permissions(content: Any, file_path: str | None) -> list[AuditIssue]:
-    """Check file permissions for configuration files."""
+    """Check file permissions for configuration files.
+
+    Args:
+        content: The configuration file content.
+        file_path: The optional path to the file to stat.
+
+    Returns:
+        A list of AuditIssue objects representing permissive permissions.
+    """
     issues = []
     if not file_path:
         return issues
@@ -58,7 +74,15 @@ def check_permissions(content: Any, file_path: str | None) -> list[AuditIssue]:
 
 
 def check_json_syntax(content: Any, file_path: str | None) -> list[AuditIssue]:
-    """Check if the content is valid JSON (if it's supposed to be)."""
+    """Check if the content is valid JSON (if it's supposed to be).
+
+    Args:
+        content: The configuration file content to parse.
+        file_path: The optional path to the file, used to check for a .json extension.
+
+    Returns:
+        A list of AuditIssue objects representing JSON syntax errors.
+    """
     issues = []
     if not file_path or not file_path.endswith(".json"):
         return issues
@@ -78,7 +102,15 @@ def check_json_syntax(content: Any, file_path: str | None) -> list[AuditIssue]:
 
 
 def check_debug_enabled(content: Any, file_path: str | None) -> list[AuditIssue]:
-    """Check if debug mode is enabled in production configuration."""
+    """Check if debug mode is enabled in production configuration.
+
+    Args:
+        content: The configuration file content to inspect.
+        file_path: The optional path to the file, used to determine if it is a production config.
+
+    Returns:
+        A list of AuditIssue objects representing the presence of debug mode.
+    """
     issues = []
     if not file_path or "prod" not in file_path.lower():
         return issues
