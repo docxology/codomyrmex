@@ -68,7 +68,7 @@ class TestSafeJsonLoads:
         from codomyrmex.utils import safe_json_loads
 
         # Passing a dict to json.loads raises TypeError
-        result = safe_json_loads({"key": "value"}, default="default")
+        result = safe_json_loads({"key": "value"}, default="default")  # type: ignore
 
         assert result == "default"
 
