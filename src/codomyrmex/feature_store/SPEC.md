@@ -50,6 +50,13 @@ Three-layer design: **models** (dataclasses and enums), **store** (abstract back
 | `add` | `feature_name, func` | `FeatureTransform` | Register a transform callable (chainable) |
 | `apply` | `vector: FeatureVector` | `FeatureVector` | Apply transforms, returning new vector |
 
+### MCP Tools
+
+The `mcp_tools.py` module exposes tools for integrating the Feature Store via the Model Context Protocol:
+- `feature_store_register_feature`: Register new definitions dynamically.
+- `feature_store_ingest`: Store entity feature values.
+- `feature_store_get_features`: Retrieve computed feature vectors for an entity.
+
 ## Exceptions
 
 - `FeatureStoreError`: Base exception for feature store operations.
