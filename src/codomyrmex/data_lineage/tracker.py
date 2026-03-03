@@ -24,6 +24,7 @@ class LineageTracker:
     """
 
     def __init__(self, graph: LineageGraph | None = None):
+        """Initialize LineageTracker."""
         self.graph = graph or LineageGraph()
 
     def register_dataset(
@@ -102,6 +103,7 @@ class ImpactAnalyzer:
     """
 
     def __init__(self, graph: LineageGraph):
+        """Initialize ImpactAnalyzer."""
         self.graph = graph
 
     def analyze_change(self, node_id: str) -> dict[str, Any]:
