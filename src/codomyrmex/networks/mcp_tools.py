@@ -76,9 +76,6 @@ def network_add_node(
 
     attrs = attributes or {}
 
-    # The SPEC says "Returns error if no network with network_name is registered."
-    # But for a tool building networks dynamically, if it doesn't exist, we might want to auto-create
-    # Wait, the spec strictly says: Returns error if no network with `network_name` is registered.
     if network_name not in _networks:
         return {"error": f"Network '{network_name}' not found."}
 
