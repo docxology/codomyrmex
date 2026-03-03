@@ -7,6 +7,7 @@ The `container_optimization` module provides tools and utilities to analyze, opt
 - **ContainerOptimizer**: Analyzes Docker images for size, layer efficiency, and security best practices.
 - **ResourceTuner**: Evaluates container resource usage and suggests optimal limits and requests.
 - **Dockerfile Improvement**: Suggests automated improvements for Dockerfiles based on optimization best practices.
+- **MCP Tools**: Exposes these capabilities as Model Context Protocol (MCP) tools via the `@mcp_tool` decorator.
 
 ## Usage
 ```python
