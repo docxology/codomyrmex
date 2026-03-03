@@ -312,13 +312,7 @@ Last: [first session]
 
 ## Last Session Bridge
 [Emergency bridge — running bridge was not updated]
-Files: src/codomyrmex/tests/unit/agents/cli/test_handlers.py (edit)
-
-## Crash Recovery
-Last session (2026-03-02T15:35:58.627411) was not properly closed (crash/kill).
-Recorded 3 file changes before crash.
-Last changed files: src/codomyrmex/tests/unit/agents/cli/test_handlers.py
-Bridge from previous session is valid (above).
-For details use: memory_search("changes last session")
+Files: /Users/mini/.claude/MEMORY/WORK/20260302-160000_pai-upgrade-check/PRD.md (edit), ~/.claude/Plans/modular-tumbling-flask.md (create), ~/.claude/Plans/splendid-doodling-toast.md (create), pyproject.toml (edit), src/codomyrmex/soul/exceptions.py (create), src/codomyrmex/soul/agent.py (create), src/codomyrmex/soul/mcp_tools.py (create), src/codomyrmex/soul/__init__.py (create), src/codomyrmex/soul/py.typed (create), src/codomyrmex/tests/unit/soul/__init__.py (create)
+  ... and 34 more
 
 # === END COGNILAYER ===

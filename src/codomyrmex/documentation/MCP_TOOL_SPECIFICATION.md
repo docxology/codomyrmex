@@ -1,121 +1,134 @@
-# Documentation - MCP Tool Specification
+# Documentation -- MCP Tool Specification
 
-This document outlines the specification for tools within the Documentation module that are intended to be integrated with the Model Context Protocol (MCP). These tools primarily interact with the Docusaurus documentation website generation process.
+This document specifies the MCP-discoverable tools exposed by the `documentation` module. These tools provide documentation generation and RASP compliance auditing for Codomyrmex modules.
 
 ## General Considerations
 
-- **Dependencies**: These tools rely on Node.js, npm/yarn, and the Docusaurus installation within the `documentation` module directory.
-- **Working Directory**: Operations are typically performed relative to the `documentation` module directory or the project root.
-- **File System Access**: Tools will interact with the file system to run builds and potentially serve content.
+- **Auto-Discovery**: Tools use the `@mcp_tool(category="documentation")` decorator and are auto-discovered via the MCP bridge.
+- **Dependencies**: Requires the `documentation` module's internal `write_pai_md` and `audit_rasp` functions.
+- **Working Directory**: Module paths are resolved relative to `src/codomyrmex/` in the project root.
+- **Error Handling**: All tools return `{"status": "error", "message": "..."}` on failure.
 
 ---
 
-## Tool: `trigger_documentation_build`
+## Tool: `generate_module_docs`
 
 ### 1. Tool Purpose and Description
 
-Triggers the build process for the Docusaurus documentation website. This generates a static version of the site.
+Generate or update the RASP documentation suite (README.md, AGENTS.md, SPEC.md, PAI.md) for a specific module. Currently focuses on generating the PAI.md file for the target module.
 
 ### 2. Invocation Name
 
-`trigger_documentation_build`
+`generate_module_docs`
 
 ### 3. Input Schema (Parameters)
 
-| Parameter Name    | Type     | Required | Description                                                                                           | Example Value |
-| :---------------- | :------- | :------- | :---------------------------------------------------------------------------------------------------- | :------------ |
-| `clean_build`     | `boolean`| No       | Whether to perform a clean build (e.g., remove previous `build` directory contents). Default: `false`. | `true`        |
-| `package_manager` | `string` | No       | Specifies the package manager to use (`"npm"` or `"yarn"`). Default: `"npm"`.                      | `"yarn"`      |
+| Parameter Name | Type | Required | Description | Example Value |
+| :--- | :--- | :--- | :--- | :--- |
+| `module_name` | `string` | Yes | Name of the module to generate documentation for (must exist under `src/codomyrmex/`) | `"cerebrum"` |
 
 ### 4. Output Schema (Return Value)
 
-| Field Name      | Type     | Description                                                                            | Example Value                                      |
-| :-------------- | :------- | :------------------------------------------------------------------------------------- | :------------------------------------------------- |
-| `status`        | `string` | Build status: "success", "failure".                                                    | `"success"`                                        |
-| `output_path`   | `string` | Path to the directory containing the built static site (e.g., `"documentation/build/"`). | `"./documentation/build/"`                       |
-| `log_output`    | `string` | A summary or key excerpts from the build log.                                          | `"Docusaurus build completed successfully."`       |
-| `error_message` | `string` | Error description if `status` is "failure".                                            | `"npm run build command failed with exit code 1."` |
+| Field Name | Type | Description | Example Value |
+| :--- | :--- | :--- | :--- |
+| `status` | `string` | `"success"` or `"error"` | `"success"` |
+| `message` | `string` | Confirmation or error description | `"Documentation generated for cerebrum"` |
+| `paths` | `array` | List of file paths that were generated (only on success) | `["src/codomyrmex/cerebrum/PAI.md"]` |
 
 ### 5. Error Handling
 
-- Failures during the build process (e.g., Docusaurus errors, command execution failures) will result in a "failure" status and details in `error_message` and `log_output`.
+- If the module directory does not exist at `src/codomyrmex/{module_name}`, returns an error with `"Module {module_name} not found."`.
+- Documentation generation failures (import errors, write errors) return an error with the exception message.
 
 ### 6. Idempotency
 
-- **Idempotent**: No, if `clean_build` is false and sources change. Yes, if `clean_build` is true and sources are the same (though timestamps might differ).
-- **Explanation**: The build process modifies the `documentation/build` directory. Subsequent calls can produce different results if underlying documentation source files have changed.
+- **Idempotent**: Yes
+- **Explanation**: Regenerating documentation for the same module overwrites the same files with the same content (assuming the module source has not changed). Safe to call repeatedly.
 
-### 7. Usage Examples (for MCP context)
+### 7. Usage Examples
 
 ```json
 {
-  "tool_name": "trigger_documentation_build",
+  "tool_name": "generate_module_docs",
   "arguments": {
-    "clean_build": true,
-    "package_manager": "yarn"
+    "module_name": "crypto"
   }
 }
 ```
 
 ### 8. Security Considerations
 
-- **Command Execution**: Ensures that only predefined build commands are executed. No arbitrary command execution based on input.
-- **Resource Usage**: Documentation builds can consume resources. Ensure this is managed if run in constrained environments.
+- This tool writes files to the module directory. It should be gated by the trust gateway.
+- The tool only writes to the module's own directory under `src/codomyrmex/`. Path traversal via `module_name` is limited by the `Path(f"src/codomyrmex/{module_name}")` construction, but callers should still validate module names.
 
 ---
 
-## Tool: `check_documentation_environment`
+## Tool: `audit_rasp_compliance`
 
 ### 1. Tool Purpose and Description
 
-Checks if the necessary environment (Node.js, npm/yarn) for building and serving the Docusaurus documentation is correctly set up.
+Audit the repository for RASP (README, AGENTS, SPEC, PAI) compliance. Can audit a single module or the entire `src/codomyrmex/` tree. Returns the count of missing documentation files.
 
 ### 2. Invocation Name
 
-`check_documentation_environment`
+`audit_rasp_compliance`
 
 ### 3. Input Schema (Parameters)
 
-(This tool currently takes no input parameters.)
+| Parameter Name | Type | Required | Description | Example Value |
+| :--- | :--- | :--- | :--- | :--- |
+| `module_name` | `string \| null` | No | Module name to audit specifically. If not provided (or null), audits the entire repository. | `"agents"` |
 
 ### 4. Output Schema (Return Value)
 
-| Field Name      | Type     | Description                                                                      | Example Value                                                |
-| :-------------- | :------- | :------------------------------------------------------------------------------- | :----------------------------------------------------------- |
-| `status`        | `string` | Overall check status: "success" (all good), "warning" (minor issues), "error" (major issues). | `"success"`                                                  |
-| `node_detected` | `boolean`| Whether Node.js was found.                                                         | `true`                                                       |
-| `node_version`  | `string` | Detected Node.js version, or null if not found.                                  | `"v18.16.0"`                                                 |
-| `npm_detected`  | `boolean`| Whether npm was found.                                                             | `true`                                                       |
-| `npm_version`   | `string` | Detected npm version, or null if not found.                                      | `"9.5.1"`                                                    |
-| `yarn_detected` | `boolean`| Whether yarn was found.                                                            | `false`                                                      |
-| `yarn_version`  | `string` | Detected yarn version, or null if not found.                                     | `null`                                                       |
-| `message`       | `string` | A summary message about the environment status.                                    | `"Node.js and npm detected. Yarn not found (optional)."`       |
+| Field Name | Type | Description | Example Value |
+| :--- | :--- | :--- | :--- |
+| `status` | `string` | `"success"` or `"error"` | `"success"` |
+| `compliant` | `boolean` | Whether the audited scope is fully RASP-compliant (no missing files) | `true` |
+| `missing_count` | `integer` | Number of missing RASP documentation files found | `0` |
+| `message` | `string` | Error description (only on error) | `"Audit function not available"` |
 
 ### 5. Error Handling
 
-- Errors during command execution (e.g., `node --version`) are caught and reflected in the status and message.
+- Import failures for the `audit_rasp` function return an error status.
+- File system access errors during the audit return an error with the exception message.
 
 ### 6. Idempotency
 
-- **Idempotent**: Yes. Checking the environment does not change its state.
+- **Idempotent**: Yes
+- **Explanation**: Auditing is a read-only operation that scans for the presence of documentation files without modifying anything.
 
-### 7. Usage Examples (for MCP context)
+### 7. Usage Examples
+
+Audit a single module:
 
 ```json
 {
-  "tool_name": "check_documentation_environment",
+  "tool_name": "audit_rasp_compliance",
+  "arguments": {
+    "module_name": "cerebrum"
+  }
+}
+```
+
+Audit the entire repository:
+
+```json
+{
+  "tool_name": "audit_rasp_compliance",
   "arguments": {}
 }
 ```
 
 ### 8. Security Considerations
 
-- Executes version checking commands (`node --version`, etc.). Assumes these commands are safe and do not pose a risk in the execution environment.
+- This is a read-only operation that only checks for file existence. No elevated trust level required.
+- Audit results may reveal information about the project's documentation structure.
 
---- 
+---
+
 ## Navigation Links
 
-- **Parent**: [Project Overview](../README.md)
+- **Parent**: [Module README](./README.md)
 - **Module Index**: [All Agents](../../AGENTS.md)
-- **Documentation**: [Reference Guides](../../../docs/README.md)
 - **Home**: [Root README](../../../README.md)

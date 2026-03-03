@@ -1,9 +1,9 @@
 # Codomyrmex
 
-**Version**: v1.0.7 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.0.8 | **Status**: Active | **Last Updated**: March 2026
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python](https://img.shields.io/badge/python-≥3.10-blue.svg)](https://www.python.org/downloads/)
-[![Version](https://img.shields.io/badge/version-1.0.6-blue.svg)](https://github.com/docxology/codomyrmex)
+[![Version](https://img.shields.io/badge/version-1.0.8-blue.svg)](https://github.com/docxology/codomyrmex)
 [![Tests](https://img.shields.io/badge/tests-21,035%20collected-brightgreen.svg)](https://github.com/docxology/codomyrmex)
 [![Coverage](https://img.shields.io/badge/coverage-~32%25-blue.svg)](https://github.com/docxology/codomyrmex)
 
@@ -167,7 +167,7 @@ Codomyrmex is the **toolbox** for [PAI v4.0.1](https://github.com/danielmiessler
 | VERIFY | `static_analysis`, `security`, `validation` |
 | LEARN | `agentic_memory`, `logging_monitoring` |
 
-**MCP Bridge**: ~367 tools across 74 auto-discovered modules — see [`PAI.md`](PAI.md)
+**MCP Bridge**: ~303 dynamic tools across 87 auto-discovered modules — see [`PAI.md`](PAI.md)
 **Trust Model**: UNTRUSTED → VERIFIED (`/codomyrmexVerify`) → TRUSTED (`/codomyrmexTrust`)
 **Deep Dive**: [`PAI.md`](PAI.md) · [`docs/pai/README.md`](docs/pai/README.md) · [`docs/pai/architecture.md`](docs/pai/architecture.md)
 
