@@ -9,7 +9,7 @@ repos:
     rev: 26.1.0
     hooks:
       - id: black
-        language_version: python3.10
+        language_version: python3.12
         args: [--line-length=88]
 
   # Python linting and import sorting
@@ -61,7 +61,7 @@ repos:
 
   # Markdown linting
   - repo: https://github.com/igorshubovych/markdownlint-cli
-    rev: v0.47.0
+    rev: v0.48.0
     hooks:
       - id: markdownlint
         args: [--disable=MD013, MD033, MD041]

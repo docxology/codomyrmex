@@ -17,11 +17,18 @@ except ImportError:
 
 from codomyrmex.utils.cli_helpers import setup_logging, print_success, print_info
 
+
 def main():
     # Auto-injected: Load configuration
     import yaml
     from pathlib import Path
-    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "validation" / "config.yaml"
+
+    config_path = (
+        Path(__file__).resolve().parent.parent.parent
+        / "config"
+        / "validation"
+        / "config.yaml"
+    )
     config_data = {}
     if config_path.exists():
         with open(config_path, "r") as f:
@@ -34,6 +41,7 @@ def main():
     # Import validation
     try:
         import codomyrmex.validation  # noqa: F401
+
         print_info("Successfully imported codomyrmex.validation")
     except ImportError as e:
         print_info(f"Warning: Could not import codomyrmex.validation: {e}")
@@ -42,6 +50,7 @@ def main():
     # Advanced logic here
     print_success(f"Advanced validation Workflow completed successfully")
     return 0
+
 
 if __name__ == "__main__":
     sys.exit(main())
