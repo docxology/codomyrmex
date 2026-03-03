@@ -105,11 +105,17 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
+            let refToTrigger = 'main';
+            if (context.eventName === 'pull_request') {
+              refToTrigger = context.payload.pull_request.head.ref;
+            } else if (context.ref) {
+              refToTrigger = context.ref.replace('refs/heads/', '');
+            }
             await github.rest.actions.createWorkflowDispatch({
               owner: context.repo.owner,
               repo: context.repo.repo,
               workflow_id: 'ci.yml',
-              ref: context.ref.replace('refs/heads/', '') || 'main'
+              ref: refToTrigger
             });
 
   coordinate-security:
@@ -131,11 +137,17 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
+            let refToTrigger = 'main';
+            if (context.eventName === 'pull_request') {
+              refToTrigger = context.payload.pull_request.head.ref;
+            } else if (context.ref) {
+              refToTrigger = context.ref.replace('refs/heads/', '');
+            }
             await github.rest.actions.createWorkflowDispatch({
               owner: context.repo.owner,
               repo: context.repo.repo,
               workflow_id: 'security.yml',
-              ref: context.ref.replace('refs/heads/', '') || 'main'
+              ref: refToTrigger
             });
 
   coordinate-docs:
@@ -209,7 +221,7 @@ jobs:
           
           if [ -z "$changed_files" ]; then
             echo "strategy=minimal" >> $GITHUB_OUTPUT
-            echo "modules=[]" >> $GITHUB_OUTPUT
+            { echo 'modules<<EOF'; echo '[]'; echo 'EOF'; } >> "$GITHUB_OUTPUT"
             echo "No Python files changed, using minimal testing"
             exit 0
           fi
@@ -239,7 +251,11 @@ jobs:
           fi
           
           echo "strategy=$strategy" >> $GITHUB_OUTPUT
-          echo "modules=$(printf '%s\n' "${affected_modules[@]}" | jq -R . | jq -s .)" >> $GITHUB_OUTPUT
+          {
+            echo "modules<<EOF"
+            printf '%s\n' "${affected_modules[@]}" | jq -R . | jq -s . || echo "[]"
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
           
           echo "Test strategy: $strategy"
           echo "Affected modules: ${affected_modules[*]}"

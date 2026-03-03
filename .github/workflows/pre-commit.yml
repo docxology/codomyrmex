@@ -222,12 +222,20 @@ jobs:
             if (fs.existsSync('change-analysis.md')) {
               const analysis = fs.readFileSync('change-analysis.md', 'utf8');
               
-              github.rest.issues.createComment({
-                issue_number: context.issue.number,
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                body: `## 📊 File Changes Analysis\n\n${analysis}`
-              });
+              try {
+                await github.rest.issues.createComment({
+                  issue_number: context.issue.number,
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  body: `## 📊 File Changes Analysis\n\n${analysis}`
+                });
+              } catch (error) {
+                if (error.status === 403 && error.message.includes('Resource not accessible by integration')) {
+                  console.log("Skipping PR comment due to insufficient permissions (expected for forks).");
+                } else {
+                  throw error;
+                }
+              }
             }
 
   size-check:
