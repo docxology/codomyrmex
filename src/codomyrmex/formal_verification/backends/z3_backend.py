@@ -6,6 +6,7 @@ booleans, integers, reals, bitvectors, and arrays with quantifier support.
 References:
     - Z3 Prover: https://github.com/Z3Prover/z3
     - mcp-solver Z3 mode: https://github.com/szeider/mcp-solver
+
 """
 
 from __future__ import annotations
@@ -27,7 +28,7 @@ from .base import SolverBackend, SolverResult, SolverStatus
 
 
 def _require_z3() -> None:
-    """require Z3 ."""
+    """Require Z3."""
     if z3 is None:
         raise BackendNotAvailableError(
             "z3-solver is not installed. Install with: pip install z3-solver"
@@ -43,13 +44,16 @@ class Z3Backend(SolverBackend):
     """
 
     def __init__(self) -> None:
+        """Initialize the Z3 backend."""
         _require_z3()
         self._items: list[str] = []
 
     def clear_model(self) -> None:
+        """Clear the current model items."""
         self._items.clear()
 
     def add_item(self, item: str, index: int | None = None) -> int:
+        """Add an item to the model at an optional index."""
         if index is None:
             self._items.append(item)
             return len(self._items) - 1
@@ -57,6 +61,7 @@ class Z3Backend(SolverBackend):
         return index
 
     def delete_item(self, index: int) -> str:
+        """Delete an item from the model by index."""
         if not self._items:
             raise ModelBuildError(f"Cannot delete index {index}: model is empty")
         if not 0 <= index < len(self._items):
@@ -64,6 +69,7 @@ class Z3Backend(SolverBackend):
         return self._items.pop(index)
 
     def replace_item(self, index: int, new_item: str) -> str:
+        """Replace an item in the model at index with a new item."""
         if not self._items:
             raise ModelBuildError(f"Cannot replace index {index}: model is empty")
         if not 0 <= index < len(self._items):
@@ -73,9 +79,11 @@ class Z3Backend(SolverBackend):
         return old
 
     def get_model(self) -> list[tuple[int, str]]:
+        """Get all items in the model."""
         return list(enumerate(self._items))
 
     def solve_model(self, timeout_ms: int = 30000) -> SolverResult:
+        """Solve the model with a given timeout."""
         _require_z3()
 
         # Build a namespace with z3 imports for executing model items
@@ -162,10 +170,13 @@ class Z3Backend(SolverBackend):
             )
 
     def push(self) -> None:
+        """Push a solver scope to the model."""
         self._items.append("solver.push()")
 
     def pop(self, n: int = 1) -> None:
+        """Pop a number of solver scopes from the model."""
         self._items.append(f"solver.pop({n})")
 
     def backend_name(self) -> str:
+        """Get the name of the backend."""
         return "Z3 SMT Solver"

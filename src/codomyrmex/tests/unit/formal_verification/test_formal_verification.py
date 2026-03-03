@@ -723,3 +723,32 @@ class TestSolverStatusProperties:
         from codomyrmex.formal_verification import BackendNotAvailableError, SolverError
         error = BackendNotAvailableError("no backend")
         assert isinstance(error, SolverError)
+
+    @pytest.mark.skipif(z3 is None, reason="z3-solver not installed")
+    def test_mcp_push(self):
+        from codomyrmex.formal_verification.mcp_tools import clear_model, add_item, solve_model, push
+        clear_model()
+        add_item("x = Int('x')")
+        add_item("solver.add(x == 10)")
+        res1 = solve_model()
+        assert res1["satisfiable"] is True
+
+        push()
+        add_item("solver.add(x == 20)")
+        res2 = solve_model()
+        assert res2["satisfiable"] is False
+
+    @pytest.mark.skipif(z3 is None, reason="z3-solver not installed")
+    def test_mcp_pop(self):
+        from codomyrmex.formal_verification.mcp_tools import clear_model, add_item, solve_model, push, pop
+        clear_model()
+        add_item("x = Int('x')")
+        add_item("solver.add(x == 10)")
+        push()
+        add_item("solver.add(x == 20)")
+        res1 = solve_model()
+        assert res1["satisfiable"] is False
+
+        pop()
+        res2 = solve_model()
+        assert res2["satisfiable"] is True
