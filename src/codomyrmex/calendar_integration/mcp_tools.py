@@ -41,6 +41,7 @@ def _get_provider() -> Any:
             4. **Missing env vars** — ``GOOGLE_CLIENT_ID`` or
                ``GOOGLE_CLIENT_SECRET`` are not set.  Load them from a ``.env``
                file or export them in the shell before invoking MCP tools.
+
     """
     try:
         from google.oauth2.credentials import Credentials
@@ -99,6 +100,7 @@ def calendar_list_events(days_ahead: int = 7) -> dict[str, Any]:
         ``description``, ``location``, ``attendees``, ``html_link``.
         ``{"status": "error", "error": "<message>"}`` on failure — check
         ``result["status"]`` before accessing other keys.
+
     """
     try:
         provider = _get_provider()
@@ -159,6 +161,7 @@ def calendar_create_event(
     Returns:
         ``{"status": "ok", "event_id": "<id>", "link": "<url>"}`` on success.
         ``{"status": "error", "error": "<message>"}`` on failure.
+
     """
     try:
         provider = _get_provider()
@@ -204,6 +207,7 @@ def calendar_get_event(event_id: str) -> dict[str, Any]:
         ``description``, ``location``, ``attendees``, ``html_link``.
         ``{"status": "error", "error": "<message>"}`` if the event is not found
         or on API failure.
+
     """
     try:
         provider = _get_provider()
@@ -239,6 +243,7 @@ def calendar_delete_event(event_id: str) -> dict[str, Any]:
         ``{"status": "ok", "deleted": True}`` on success.
         ``{"status": "error", "error": "<message>"}`` if the event is not found
         or on API failure.
+
     """
     try:
         provider = _get_provider()
@@ -285,6 +290,7 @@ def calendar_update_event(
         ``{"status": "ok", "event_id": "<id>", "link": "<url>"}`` on success.
         ``{"status": "error", "error": "<message>"}`` if the event is not found
         or on API failure.
+
     """
     try:
         provider = _get_provider()
