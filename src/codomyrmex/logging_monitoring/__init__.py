@@ -43,7 +43,7 @@ from .core.correlation import (
     set_correlation_id,
     with_correlation,
 )
-from .core.logger_config import get_logger, setup_logging
+from .core.logger_config import LogContext, get_logger, log_with_context, setup_logging
 
 
 def cli_commands() -> dict[str, object]:
@@ -82,4 +82,7 @@ __all__ = [
     "CorrelationFilter",
     "enrich_event_data",
     "create_mcp_correlation_header",
+    # context management
+    "LogContext",
+    "log_with_context",
 ]
