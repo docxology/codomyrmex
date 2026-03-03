@@ -3,7 +3,6 @@
 Tests behavior like missing tokens, bad dependencies, and environment variable behavior.
 """
 
-import os
 from pathlib import Path
 
 import pytest
@@ -17,16 +16,19 @@ from codomyrmex.calendar_integration.mcp_tools import (
     calendar_update_event,
 )
 
+
 @pytest.fixture
 def no_gcal_token(monkeypatch, tmp_path):
     """Fixture to ensure the token file does not exist during tests."""
     monkeypatch.setattr(Path, "home", lambda: tmp_path)
     return tmp_path
 
+
 def test_get_provider_no_token(no_gcal_token):
     """Test _get_provider raises RuntimeError when token file is missing."""
     with pytest.raises(RuntimeError, match="Google Calendar not authenticated"):
         _get_provider()
+
 
 def test_calendar_list_events_error(no_gcal_token):
     """Test calendar_list_events returns error dict on failure."""
@@ -34,13 +36,17 @@ def test_calendar_list_events_error(no_gcal_token):
     assert result["status"] == "error"
     assert "Google Calendar not authenticated" in result["error"]
 
+
 def test_calendar_create_event_error(no_gcal_token):
     """Test calendar_create_event returns error dict on failure."""
     result = calendar_create_event(
-        summary="Test", start_time="2026-01-01T10:00:00Z", end_time="2026-01-01T11:00:00Z"
+        summary="Test",
+        start_time="2026-01-01T10:00:00Z",
+        end_time="2026-01-01T11:00:00Z",
     )
     assert result["status"] == "error"
     assert "Google Calendar not authenticated" in result["error"]
+
 
 def test_calendar_get_event_error(no_gcal_token):
     """Test calendar_get_event returns error dict on failure."""
@@ -48,19 +54,25 @@ def test_calendar_get_event_error(no_gcal_token):
     assert result["status"] == "error"
     assert "Google Calendar not authenticated" in result["error"]
 
+
 def test_calendar_delete_event_error(no_gcal_token):
     """Test calendar_delete_event returns error dict on failure."""
     result = calendar_delete_event(event_id="123")
     assert result["status"] == "error"
     assert "Google Calendar not authenticated" in result["error"]
 
+
 def test_calendar_update_event_error(no_gcal_token):
     """Test calendar_update_event returns error dict on failure."""
     result = calendar_update_event(
-        event_id="123", summary="Test", start_time="2026-01-01T10:00:00Z", end_time="2026-01-01T11:00:00Z"
+        event_id="123",
+        summary="Test",
+        start_time="2026-01-01T10:00:00Z",
+        end_time="2026-01-01T11:00:00Z",
     )
     assert result["status"] == "error"
     assert "Google Calendar not authenticated" in result["error"]
+
 
 def test_get_provider_missing_env_vars(no_gcal_token, monkeypatch, tmp_path):
     """Test _get_provider raises RuntimeError when env vars are missing."""
@@ -72,8 +84,12 @@ def test_get_provider_missing_env_vars(no_gcal_token, monkeypatch, tmp_path):
     monkeypatch.delenv("GOOGLE_CLIENT_ID", raising=False)
     monkeypatch.delenv("GOOGLE_CLIENT_SECRET", raising=False)
 
-    with pytest.raises(RuntimeError, match="GOOGLE_CLIENT_ID or GOOGLE_CLIENT_SECRET environment variables are missing"):
+    with pytest.raises(
+        RuntimeError,
+        match="GOOGLE_CLIENT_ID or GOOGLE_CLIENT_SECRET environment variables are missing",
+    ):
         _get_provider()
+
 
 def test_get_provider_bad_json(no_gcal_token, monkeypatch, tmp_path):
     """Test _get_provider raises RuntimeError when token file is bad json."""
