@@ -29,13 +29,11 @@ class PEFTAdapter(ABC):
     @abstractmethod
     def adapt(self, x: np.ndarray, **kwargs) -> np.ndarray:
         """Apply adaptation to input."""
-        ...
 
     @property
     @abstractmethod
     def trainable_params(self) -> int:
         """Number of trainable parameters."""
-        ...
 
 
 class LoRAAdapter(PEFTAdapter):
@@ -50,17 +48,18 @@ class LoRAAdapter(PEFTAdapter):
     """
 
     def __init__(self, d_in: int, d_out: int, rank: int = 4, alpha: float = 8.0):
+        """Initialize LoRA adapter."""
         self.rank = rank
         self.scaling = alpha / rank
         scale = np.sqrt(2.0 / d_in)
-        self.A = np.random.randn(rank, d_in) * scale
-        self.B = np.zeros((d_out, rank))  # B=0 for zero init
+        self.a_matrix = np.random.randn(rank, d_in) * scale
+        self.b_matrix = np.zeros((d_out, rank))  # B=0 for zero init
         self.d_in = d_in
         self.d_out = d_out
 
     def adapt(self, x: np.ndarray, base_output: np.ndarray = None, **kwargs) -> np.ndarray:
         """Compute LoRA delta and add to base output."""
-        lora_output = (x @ self.A.T) @ self.B.T * self.scaling
+        lora_output = (x @ self.a_matrix.T) @ self.b_matrix.T * self.scaling
         if base_output is not None:
             return base_output + lora_output
         return lora_output
@@ -79,6 +78,7 @@ class PrefixTuningAdapter(PEFTAdapter):
     """
 
     def __init__(self, d_model: int, n_prefix: int = 10, n_layers: int = 2):
+        """Initialize Prefix Tuning adapter."""
         self.d_model = d_model
         self.n_prefix = n_prefix
         self.n_layers = n_layers
@@ -118,6 +118,7 @@ class IA3Adapter(PEFTAdapter):
     """
 
     def __init__(self, d_model: int, d_ff: int = None):
+        """Initialize IA3 adapter."""
         self.d_model = d_model
         self.d_ff = d_ff or 4 * d_model
 
@@ -138,9 +139,9 @@ class IA3Adapter(PEFTAdapter):
         """
         if mode == "keys":
             return x * self.l_k
-        elif mode == "values":
+        if mode == "values":
             return x * self.l_v
-        elif mode == "ffn":
+        if mode == "ffn":
             return x * self.l_ff[: x.shape[-1]]
         return x
 

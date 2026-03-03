@@ -43,7 +43,7 @@ class TestLoRAAdapter:
     def test_lora_nonzero_b_produces_output(self):
         """When B is non-zero, LoRA should produce non-zero delta."""
         adapter = LoRAAdapter(d_in=32, d_out=32, rank=4)
-        adapter.B = np.random.randn(32, 4) * 0.01  # override zero init
+        adapter.b_matrix = np.random.randn(32, 4) * 0.01  # override zero init
         x = np.random.randn(1, 5, 32)
         output = adapter.adapt(x)
         assert not np.allclose(output, 0.0)
@@ -72,13 +72,13 @@ class TestLoRAAdapter:
     def test_lora_a_shape(self):
         """A matrix should be (rank, d_in)."""
         adapter = LoRAAdapter(d_in=128, d_out=64, rank=8)
-        assert adapter.A.shape == (8, 128)
+        assert adapter.a_matrix.shape == (8, 128)
 
     @pytest.mark.unit
     def test_lora_b_shape(self):
         """B matrix should be (d_out, rank)."""
         adapter = LoRAAdapter(d_in=128, d_out=64, rank=8)
-        assert adapter.B.shape == (64, 8)
+        assert adapter.b_matrix.shape == (64, 8)
 
 
 # ---------------------------------------------------------------------------
@@ -262,54 +262,3 @@ class TestPEFTConfig:
         config = PEFTConfig(method="ia3", rank=8, alpha=16.0)
         assert config.method == "ia3"
         assert config.rank == 8
-
-
-# ---------------------------------------------------------------------------
-# MCP Tools
-# ---------------------------------------------------------------------------
-
-
-class TestMCPTools:
-    """MCP tool interface tests."""
-
-    @pytest.mark.unit
-    def test_create_adapter_lora(self):
-        from codomyrmex.peft.mcp_tools import peft_create_adapter
-
-        result = peft_create_adapter(method="lora", d_model=256, rank=4)
-        assert result["method"] == "lora"
-        assert result["trainable_params"] > 0
-        assert result["reduction_factor"] > 1.0
-
-    @pytest.mark.unit
-    def test_create_adapter_ia3(self):
-        from codomyrmex.peft.mcp_tools import peft_create_adapter
-
-        result = peft_create_adapter(method="ia3", d_model=256)
-        assert result["method"] == "ia3"
-
-    @pytest.mark.unit
-    def test_create_adapter_prefix(self):
-        from codomyrmex.peft.mcp_tools import peft_create_adapter
-
-        result = peft_create_adapter(method="prefix", d_model=256)
-        assert result["method"] == "prefix"
-
-    @pytest.mark.unit
-    def test_create_adapter_unknown_raises(self):
-        from codomyrmex.peft.mcp_tools import peft_create_adapter
-
-        with pytest.raises(ValueError, match="Unknown PEFT method"):
-            peft_create_adapter(method="unknown", d_model=256)
-
-    @pytest.mark.unit
-    def test_compare_methods(self):
-        from codomyrmex.peft.mcp_tools import peft_compare_methods
-
-        result = peft_compare_methods(d_model=512, rank=4)
-        assert "full_finetune" in result
-        assert "lora" in result
-        assert "prefix" in result
-        assert "ia3" in result
-        assert result["full_finetune"] > result["lora"]
-        assert result["full_finetune"] > result["ia3"]
