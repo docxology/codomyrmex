@@ -7,6 +7,7 @@ from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 logger = get_logger(__name__)
 
+
 class TCPClient:
     """Simple TCP client."""
 
@@ -39,6 +40,7 @@ class TCPClient:
         """Close the resource and release associated handles."""
         self.sock.close()
 
+
 class TCPServer:
     """Simple TCP server."""
 
@@ -54,14 +56,19 @@ class TCPServer:
         self.sock.listen(1)
         logger.info(f"TCP server listening on {self.host}:{self.port}")
 
-    def accept(self):
-        """Accept."""
+    def accept(self) -> tuple[socket.socket, Any]:
+        """Accept a connection.
+
+        Returns:
+            A tuple containing the connection socket and client address.
+        """
         conn, addr = self.sock.accept()
         return conn, addr
 
     def close(self) -> None:
         """Close the resource and release associated handles."""
         self.sock.close()
+
 
 class UDPClient:
     """Simple UDP client."""
@@ -83,6 +90,7 @@ class UDPClient:
         """Close the resource and release associated handles."""
         self.sock.close()
 
+
 class PortScanner:
     """Utility for scanning open ports on a host."""
 
@@ -99,7 +107,9 @@ class PortScanner:
                 return False
 
     @staticmethod
-    def scan_range(host: str, start_port: int, end_port: int, timeout: float = 0.5) -> list[int]:
+    def scan_range(
+        host: str, start_port: int, end_port: int, timeout: float = 0.5
+    ) -> list[int]:
         """Scan a range of ports (synchronous)."""
         open_ports = []
         for port in range(start_port, end_port + 1):

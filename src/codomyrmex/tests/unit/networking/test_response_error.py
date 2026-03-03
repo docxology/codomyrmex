@@ -1,4 +1,3 @@
-
 import json
 
 import pytest
@@ -13,11 +12,12 @@ def test_response_json_wrapping():
         headers={},
         content=b"invalid json",
         text="invalid json",
-        json_data=None
+        json_data=None,
     )
 
     with pytest.raises(NetworkingError, match="Failed to decode JSON"):
         response.json()
+
 
 def test_response_json_success():
     """Verify Response.json() returns data on valid JSON."""
@@ -27,7 +27,7 @@ def test_response_json_success():
         headers={},
         content=json.dumps(data).encode(),
         text=json.dumps(data),
-        json_data=None
+        json_data=None,
     )
 
     assert response.json() == data

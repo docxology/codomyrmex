@@ -11,6 +11,7 @@ from typing import Any
 
 class CircuitState(Enum):
     """Circuit breaker states."""
+
     CLOSED = "closed"
     OPEN = "open"
     HALF_OPEN = "half_open"
@@ -19,6 +20,7 @@ class CircuitState(Enum):
 @dataclass
 class CircuitBreakerConfig:
     """Circuit breaker configuration."""
+
     failure_threshold: int = 5
     success_threshold: int = 2
     timeout_seconds: float = 30.0
@@ -27,16 +29,19 @@ class CircuitBreakerConfig:
 
 class CircuitOpenError(Exception):
     """Raised when circuit is open."""
+
     pass
 
 
 class NoHealthyInstanceError(Exception):
     """Raised when no healthy instances are available."""
+
     pass
 
 
 class LoadBalancerStrategy(Enum):
     """Load balancing strategies."""
+
     ROUND_ROBIN = "round_robin"
     RANDOM = "random"
     WEIGHTED = "weighted"
@@ -46,6 +51,7 @@ class LoadBalancerStrategy(Enum):
 @dataclass
 class ServiceInstance:
     """A service instance endpoint."""
+
     id: str
     host: str
     port: int
@@ -56,5 +62,9 @@ class ServiceInstance:
 
     @property
     def address(self) -> str:
-        """Address."""
+        """Address.
+
+        Returns:
+            Formatted address string as host:port.
+        """
         return f"{self.host}:{self.port}"
