@@ -1,14 +1,6 @@
 from abc import ABC
 from typing import TYPE_CHECKING, Any
 
-import matplotlib
-import matplotlib.colors
-import matplotlib.pyplot as plt
-import networkx as nx
-import numpy as np
-from matplotlib.axes import Axes
-from matplotlib.figure import Figure
-
 from codomyrmex.cerebrum.core.exceptions import VisualizationError
 from codomyrmex.cerebrum.visualization.theme import (
     VisualizationTheme,
@@ -17,6 +9,12 @@ from codomyrmex.cerebrum.visualization.theme import (
 from codomyrmex.logging_monitoring import get_logger
 
 try:
+    import matplotlib
+    import matplotlib.colors
+    import matplotlib.pyplot as plt
+    import numpy as np
+    from matplotlib.axes import Axes
+    from matplotlib.figure import Figure
     HAS_MATPLOTLIB = True
 except ImportError:
     HAS_MATPLOTLIB = False
