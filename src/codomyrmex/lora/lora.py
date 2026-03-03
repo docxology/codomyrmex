@@ -1,5 +1,4 @@
-"""
-LoRA (Low-Rank Adaptation) implementation.
+"""LoRA (Low-Rank Adaptation) implementation.
 
 Implements the LoRA technique from Hu et al. (2021) for parameter-efficient
 fine-tuning. A pretrained weight W_0 is reparameterized as W = W_0 + B @ A * (alpha / r),
@@ -29,8 +28,7 @@ class LoRAConfig:
 
 
 class LoRALayer:
-    """
-    LoRA weight adaptation layer.
+    """LoRA weight adaptation layer.
 
     For a pretrained weight W_0 in R^{d x k}, LoRA reparameterizes:
     W = W_0 + B @ A * (alpha / r)
@@ -43,9 +41,11 @@ class LoRALayer:
     Args:
         weight: Pretrained weight matrix W_0 (d, k)
         config: LoRA configuration
+
     """
 
     def __init__(self, weight: np.ndarray, config: LoRAConfig | None = None):
+        """Initialize the LoRA layer."""
         self.config = config or LoRAConfig()
         self.W_0 = weight.copy()  # Frozen base weight
         d, k = weight.shape
@@ -59,8 +59,7 @@ class LoRALayer:
         self._merged = False
 
     def forward(self, x: np.ndarray) -> np.ndarray:
-        """
-        Compute the forward pass through the LoRA-adapted weight.
+        """Compute the forward pass through the LoRA-adapted weight.
 
         For x: (batch, k) or (batch, seq, k):
         base: x @ W_0^T
