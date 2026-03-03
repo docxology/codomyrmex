@@ -7,15 +7,15 @@ Demonstrates:
 2. Mixnet Proxy: Anonymous routing simulation.
 """
 
+import json
 import sys
 from pathlib import Path
-import json
 
 # Add src to path
 sys.path.append(str(Path(__file__).parent.parent / "src"))
 
 from codomyrmex.privacy import CrumbCleaner, MixnetProxy
-from codomyrmex.utils.cli_helpers import setup_logging, print_info, print_success
+from codomyrmex.utils.cli_helpers import print_info, print_success, setup_logging
 
 
 def demo_crumb_scrubbing():
@@ -67,13 +67,13 @@ def demo_mixnet():
 
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
+
+    import yaml
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "demos" / "config.yaml"
-    config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
-            config_data = yaml.safe_load(f) or {}
+        with open(config_path) as f:
+            yaml.safe_load(f) or {}
             print(f"Loaded config from {config_path.name}")
 
     setup_logging()

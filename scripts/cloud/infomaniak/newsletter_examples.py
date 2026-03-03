@@ -247,7 +247,7 @@ def import_contacts(client, list_id: str, contacts_file: str):
     print(f"\n📥 Importing contacts into list {list_id} from {contacts_file}")
 
     try:
-        with open(contacts_file, "r") as f:
+        with open(contacts_file) as f:
             contacts = json.load(f)
     except (FileNotFoundError, json.JSONDecodeError) as e:
         print(f"   ❌ Failed to read contacts file: {e}")
@@ -337,14 +337,14 @@ def get_task_status(client, task_id: str):
 
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
+
+    import yaml
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "cloud" / "config.yaml"
-    config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
-            config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/cloud/config.yaml")
+        with open(config_path) as f:
+            yaml.safe_load(f) or {}
+            print("Loaded config from config/cloud/config.yaml")
 
     parser = argparse.ArgumentParser(description="Infomaniak Newsletter Examples")
 

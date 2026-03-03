@@ -37,19 +37,19 @@ def run_orchestration():
 
     # 1. Initialize Manager
     manager = DeploymentManager()
-    
+
     # 2. Define Targets
     targets = [
         DeploymentTarget(id="web-01", name="Web Server 01", address="10.0.0.1"),
         DeploymentTarget(id="web-02", name="Web Server 02", address="10.0.0.2"),
         DeploymentTarget(id="web-03", name="Web Server 03", address="10.0.0.3"),
     ]
-    
+
     print(f"\n📦 Target inventory: {len(targets)} nodes identified.")
 
     # 3. Rolling Deployment
     print("\n🔄 Step 1: Performing Rolling Deployment of 'api-service' v1.2.0")
-    
+
     # Create a health checker to be used during deployment
     # (Simulated: in real scenario, this would check the actual target)
     def simple_hc(target):
@@ -58,7 +58,7 @@ def run_orchestration():
 
     rolling = RollingStrategy(batch_size=1, delay_seconds=0.1, health_check=simple_hc)
     result = manager.deploy("api-service", "v1.2.0", strategy=rolling, targets=targets)
-    
+
     if result.success:
         print(f"✅ Rolling deployment completed successfully in {result.duration_ms:.1f}ms")
     else:
@@ -67,16 +67,16 @@ def run_orchestration():
 
     # 4. Canary Rollout
     print("\n🐥 Step 2: Starting Canary Rollout of 'api-service' v1.3.0-rc1")
-    
+
     canary_strat = CanaryStrategy(
         stages=[33.0, 66.0, 100.0],
         stage_duration_seconds=0.1,
         health_check=simple_hc
     )
-    
+
     # Execute canary rollout
     canary_result = manager.deploy("api-service", "v1.3.0-rc1", strategy=canary_strat, targets=targets)
-    
+
     if canary_result.success:
         print(f"✅ Canary rollout completed: {canary_result.targets_updated} targets updated.")
     else:
@@ -85,14 +85,14 @@ def run_orchestration():
     # 5. Canary Analysis
     print("\n📊 Step 3: Analyzing Canary Metrics")
     analyzer = CanaryAnalyzer(promote_threshold=0.8)
-    
+
     # Simulated metrics
     baseline = {"error_rate": 0.02, "p99_latency": 120}
     canary = {"error_rate": 0.05, "p99_latency": 145}
-    
+
     report = analyzer.analyze(baseline, canary)
     print(f"   Result: {report.decision.value.upper()} (Pass rate: {report.pass_rate:.1%})")
-    
+
     for comp in report.comparisons:
         status = "✅" if comp.passed else "❌"
         print(f"   {status} {comp.metric_name}: baseline={comp.baseline_value}, canary={comp.canary_value}")
@@ -115,20 +115,20 @@ def run_orchestration():
     print(f"Rolled Back:      {summary['rolled_back']}")
     print(f"Active Services:  {', '.join(summary['active_services'])}")
     print(f"Current Version:  {manager.get_active_version('api-service')}")
-    
+
     print("\n✨ Orchestration Demo Finished Successfully")
 
 
 
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
+
+    import yaml
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "deployment" / "config.yaml"
-    config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
-            config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/deployment/config.yaml")
+        with open(config_path) as f:
+            yaml.safe_load(f) or {}
+            print("Loaded config from config/deployment/config.yaml")
 
 if __name__ == "__main__":
     try:
