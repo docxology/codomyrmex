@@ -9,7 +9,6 @@ RedisLock tests are gated behind a skipif for the fakeredis dependency.
 """
 
 import asyncio
-import os
 import tempfile
 import threading
 import time
@@ -651,7 +650,7 @@ class TestAsyncWorkerPoolBasic:
             return x
 
         async with AsyncWorkerPool(max_workers=2) as pool:
-            results = await pool.map(sometimes_fail, [1, 2, 3, 4])
+            await pool.map(sometimes_fail, [1, 2, 3, 4])
             stats = pool.stats
             assert stats.submitted == 4
             assert stats.completed == 2  # 1 and 3 succeed

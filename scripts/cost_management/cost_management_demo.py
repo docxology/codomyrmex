@@ -13,12 +13,13 @@ PROJECT_ROOT = Path(__file__).parent.parent.parent
 sys.path.insert(0, str(PROJECT_ROOT / "src"))
 
 from codomyrmex.cost_management import (
-    CostTracker,
     BudgetManager,
-    CostCategory,
     BudgetPeriod,
-    JSONCostStore
+    CostCategory,
+    CostTracker,
+    JSONCostStore,
 )
+
 
 def run_demo():
     print("--- Codomyrmex Cost Management Demo ---")
@@ -37,14 +38,14 @@ def run_demo():
 
     # 2. Setup Budgets
     print("\nSetting up budgets...")
-    llm_budget = budgets.create(
+    budgets.create(
         name="Daily LLM",
         amount=1.00,  # $1.00 budget
         period=BudgetPeriod.DAILY,
         category=CostCategory.LLM_INFERENCE
     )
 
-    compute_budget = budgets.create(
+    budgets.create(
         name="Weekly Compute",
         amount=10.00,
         period=BudgetPeriod.WEEKLY,
@@ -129,14 +130,14 @@ def main() -> int:
 
 
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
+
+    import yaml
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "cost_management" / "config.yaml"
-    config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
-            config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/cost_management/config.yaml")
+        with open(config_path) as f:
+            yaml.safe_load(f) or {}
+            print("Loaded config from config/cost_management/config.yaml")
 
 if __name__ == "__main__":
     sys.exit(main())

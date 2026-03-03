@@ -19,28 +19,34 @@ except ImportError:
     project_root = Path(__file__).resolve().parent.parent.parent.parent
     sys.path.insert(0, str(project_root / "src"))
 
-from codomyrmex.utils.cli_helpers import setup_logging, print_success, print_info, print_error
 from codomyrmex.cerebrum import (
-    CerebrumEngine,
-    CerebrumConfig,
+    ActiveInferenceAgent,
+    BayesianNetwork,
     Case,
     CaseBase,
-    BayesianNetwork,
+    CerebrumConfig,
+    CerebrumEngine,
     InferenceEngine,
-    ActiveInferenceAgent,
-    compute_hash
+    compute_hash,
 )
+from codomyrmex.utils.cli_helpers import (
+    print_error,
+    print_info,
+    print_success,
+    setup_logging,
+)
+
 
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
+
+    import yaml
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "cerebrum" / "config.yaml"
-    config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
-            config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/cerebrum/config.yaml")
+        with open(config_path) as f:
+            yaml.safe_load(f) or {}
+            print("Loaded config from config/cerebrum/config.yaml")
 
     setup_logging()
     print_info("Running CEREBRUM Examples...")
@@ -49,7 +55,7 @@ def main():
     print_info("Initializing CerebrumEngine...")
     try:
         config = CerebrumConfig()
-        engine = CerebrumEngine(config=config)
+        CerebrumEngine(config=config)
         print_success("  CerebrumEngine initialized successfully.")
     except Exception as e:
         print_error(f"  CerebrumEngine failed: {e}")
@@ -73,7 +79,7 @@ def main():
     print_info("Testing Bayesian components...")
     try:
         network = BayesianNetwork(name="example_net")
-        inference = InferenceEngine(network=network)
+        InferenceEngine(network=network)
         print_success(f"  BayesianNetwork '{network.name}' and InferenceEngine initialized.")
     except Exception as e:
         print_error(f"  Bayesian components failed: {e}")
@@ -81,7 +87,7 @@ def main():
     # 4. Active Inference
     print_info("Testing Active Inference agent...")
     try:
-        agent = ActiveInferenceAgent()
+        ActiveInferenceAgent()
         print_success("  ActiveInferenceAgent initialized successfully.")
     except Exception as e:
         print_error(f"  ActiveInferenceAgent failed: {e}")

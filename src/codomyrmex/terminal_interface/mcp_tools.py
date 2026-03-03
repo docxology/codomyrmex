@@ -2,7 +2,6 @@
 
 import os
 import shutil
-import subprocess
 
 from codomyrmex.model_context_protocol.decorators import mcp_tool
 
@@ -24,74 +23,6 @@ def terminal_info() -> dict:
             "lines": size.lines,
             "colorterm": os.environ.get("COLORTERM", ""),
             "term_program": os.environ.get("TERM_PROGRAM", ""),
-        }
-    except Exception as e:
-        return {"status": "error", "message": str(e)}
-
-
-@mcp_tool(category="terminal_interface")
-def terminal_list_shells() -> dict:
-    """List available shell types.
-
-    Returns:
-        Dictionary with a list of available shell types.
-    """
-    try:
-        shells = ["interactive", "standard", "headless"]
-        return {"status": "success", "shells": shells}
-    except Exception as e:
-        return {"status": "error", "message": str(e)}
-
-
-@mcp_tool(category="terminal_interface")
-def terminal_get_history(limit: int = 10) -> dict:
-    """Retrieve recent terminal history.
-
-    Args:
-        limit: Maximum number of history entries to return (default: 10).
-
-    Returns:
-        Dictionary containing a list of recent commands.
-    """
-    try:
-        # Currently returns mock/empty history, can be expanded to hook into InteractiveShell's history
-        history = []
-        return {"status": "success", "history": history[:limit]}
-    except Exception as e:
-        return {"status": "error", "message": str(e)}
-
-
-@mcp_tool(category="terminal_interface")
-def terminal_run_command(command: str, timeout: int = 60) -> dict:
-    """Execute a shell command.
-
-    Args:
-        command: The shell command to execute.
-        timeout: Maximum execution time in seconds (default: 60).
-
-    Returns:
-        Dictionary with execution results, including stdout, stderr, and return code.
-    """
-    try:
-        result = subprocess.run(
-            command,
-            shell=True,
-            capture_output=True,
-            text=True,
-            timeout=timeout,
-        )
-        return {
-            "status": "success",
-            "stdout": result.stdout,
-            "stderr": result.stderr,
-            "returncode": result.returncode,
-        }
-    except subprocess.TimeoutExpired as e:
-        return {
-            "status": "error",
-            "message": f"Command timed out after {timeout} seconds.",
-            "stdout": e.stdout.decode() if isinstance(e.stdout, bytes) else e.stdout,
-            "stderr": e.stderr.decode() if isinstance(e.stderr, bytes) else e.stderr,
         }
     except Exception as e:
         return {"status": "error", "message": str(e)}

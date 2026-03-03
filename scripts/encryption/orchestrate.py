@@ -23,34 +23,35 @@ except ImportError:
     project_root = Path(__file__).resolve().parent.parent.parent
     sys.path.insert(0, str(project_root / "src"))
 
-from codomyrmex.utils.cli_helpers import (
-    setup_logging,
-    print_success,
-    print_info,
-    print_error,
-    print_section
-)
 from codomyrmex.encryption import (
     AESGCMEncryptor,
+    EncryptionError,
     Encryptor,
-    Signer,
     KeyManager,
-    encrypt_file,
+    Signer,
     decrypt_file,
-    hash_data,
+    encrypt_file,
     generate_key,
-    EncryptionError
+    hash_data,
 )
+from codomyrmex.utils.cli_helpers import (
+    print_error,
+    print_info,
+    print_section,
+    print_success,
+    setup_logging,
+)
+
 
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
+
+    import yaml
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "encryption" / "config.yaml"
-    config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
-            config_data = yaml.safe_load(f) or {}
+        with open(config_path) as f:
+            yaml.safe_load(f) or {}
             print(f"Loaded config from {config_path.name}")
 
     setup_logging()
@@ -62,16 +63,16 @@ def main():
         data = b"Highly sensitive secret data"
         key = generate_key(algorithm="AES")
         gcm = AESGCMEncryptor(key)
-        
+
         # AAD (Additional Authenticated Data)
         aad = b"context-v1"
         ciphertext = gcm.encrypt(data, associated_data=aad)
-        print_success(f"  AES-GCM encryption successful.")
-        
+        print_success("  AES-GCM encryption successful.")
+
         decrypted = gcm.decrypt(ciphertext, associated_data=aad)
         if decrypted == data:
             print_success("  AES-GCM decryption successful (Data matches).")
-            
+
         # Tampering detection
         tampered = bytearray(ciphertext)
         tampered[-1] ^= 0xFF
@@ -88,11 +89,11 @@ def main():
     try:
         rsa_enc = Encryptor(algorithm="RSA")
         priv, pub = rsa_enc.generate_key_pair(2048)
-        
+
         plaintext = b"RSA Secret Message"
         ciphertext = rsa_enc.encrypt(plaintext, pub)
         print_success("  RSA encryption successful.")
-        
+
         decrypted = rsa_enc.decrypt(ciphertext, priv)
         if decrypted == plaintext:
             print_success("  RSA decryption successful.")
@@ -106,10 +107,10 @@ def main():
         obj = {"action": "deploy", "version": "1.2.3"}
         signed_obj = signer.sign_json(obj)
         print_success("  JSON object signed.")
-        
+
         if signer.verify_json(signed_obj):
             print_success("  JSON signature verified.")
-            
+
         signed_obj["action"] = "malicious-deploy"
         if not signer.verify_json(signed_obj):
             print_success("  JSON tampering detected.")
@@ -124,11 +125,11 @@ def main():
         with tempfile.TemporaryDirectory() as tmpdir:
             mgr = KeyManager(key_dir=Path(tmpdir))
             key_id = "master_vault_key"
-            
+
             old_key = generate_key("AES")
             mgr.store_key(key_id, old_key)
             print_success(f"  Stored key '{key_id}'.")
-            
+
             # Rotate
             new_key = generate_key("AES")
             returned_old = mgr.rotate_key(key_id, new_key)
@@ -143,19 +144,19 @@ def main():
         with tempfile.TemporaryDirectory() as tmpdir:
             test_dir = Path(tmpdir)
             key = generate_key("AES")
-            
+
             input_file = test_dir / "secret.txt"
             input_file.write_text("This is a secret file content.")
-            
+
             enc_file = test_dir / "secret.enc"
             with warnings.catch_warnings():
                 warnings.simplefilter("ignore", DeprecationWarning)
                 if encrypt_file(input_file, enc_file, key):
-                    print_success(f"  File encrypted via AES-CBC (legacy).")
-                    
+                    print_success("  File encrypted via AES-CBC (legacy).")
+
                 dec_file = test_dir / "secret.dec.txt"
                 if decrypt_file(enc_file, dec_file, key):
-                    print_success(f"  File decrypted.")
+                    print_success("  File decrypted.")
                     if dec_file.read_text() == "This is a secret file content.":
                         print_success("  Decrypted content matches original.")
     except Exception as e:

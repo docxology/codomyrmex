@@ -14,9 +14,6 @@ from __future__ import annotations
 
 import argparse
 import json
-import os
-import tempfile
-from pathlib import Path
 
 import pytest
 
@@ -32,15 +29,7 @@ from codomyrmex.ide.antigravity.agent_relay import (
 )
 from codomyrmex.ide.antigravity.relay_cli import (
     build_parser,
-    cmd_clear,
-    cmd_history,
-    cmd_list,
-    cmd_send,
-    cmd_stats,
-    cmd_stop,
-    main,
 )
-
 
 # ---------------------------------------------------------------------------
 # Fixtures

@@ -14,7 +14,6 @@ import os
 import tempfile
 import warnings
 from pathlib import Path
-from typing import Any
 
 import pytest
 
@@ -25,8 +24,8 @@ cryptography = pytest.importorskip("cryptography", reason="cryptography library 
 
 from codomyrmex.encryption import (
     AESGCMEncryptor,
-    Encryptor,
     EncryptionError,
+    Encryptor,
     KeyManager,
     SecureDataContainer,
     Signer,

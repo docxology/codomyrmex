@@ -7,9 +7,9 @@ corresponding dedicated configuration directory in the `/config/` root,
 complete with a comprehensive default `config.yaml`.
 """
 
-import os
-import yaml
 from pathlib import Path
+
+import yaml
 
 REPO_ROOT = Path(__file__).resolve().parent.parent.parent
 SRC_DIR = REPO_ROOT / "src" / "codomyrmex"
@@ -17,7 +17,7 @@ CONFIG_DIR = REPO_ROOT / "config"
 
 # Subdirectories in src/ that are not product modules
 EXCLUDES = {
-    "__pycache__", "tests", "examples", "docs", "scripts", 
+    "__pycache__", "tests", "examples", "docs", "scripts",
     "image", "vision", "demos"
 }
 
@@ -55,18 +55,18 @@ def sync_configs():
     """Create config directories and files for all modules."""
     CONFIG_DIR.mkdir(parents=True, exist_ok=True)
     modules = get_valid_modules()
-    
+
     print(f"Found {len(modules)} valid modules. Synchronizing config/... ")
-    
+
     created_count = 0
     updated_count = 0
-    
+
     for mod in modules:
         mod_config_dir = CONFIG_DIR / mod
         mod_config_dir.mkdir(parents=True, exist_ok=True)
-        
+
         config_file = mod_config_dir / "config.yaml"
-        
+
         if not config_file.exists():
             default_config = generate_default_config(mod)
             with open(config_file, "w") as f:
@@ -75,8 +75,8 @@ def sync_configs():
             print(f"  [+] Created {mod}/config.yaml")
         else:
             updated_count += 1
-            
-    print(f"\n✅ Synchronization complete.")
+
+    print("\n✅ Synchronization complete.")
     print(f"Created {created_count} new config files. Skipped {updated_count} existing.")
 
 if __name__ == "__main__":

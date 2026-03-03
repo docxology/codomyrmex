@@ -32,8 +32,6 @@ import sys
 import time
 import urllib.error
 import urllib.request
-from pathlib import Path
-
 
 BASE_URL = "http://localhost:8888"
 
@@ -338,14 +336,14 @@ def main() -> int:
 
 
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
+
+    import yaml
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "pai" / "config.yaml"
-    config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
-            config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/pai/config.yaml")
+        with open(config_path) as f:
+            yaml.safe_load(f) or {}
+            print("Loaded config from config/pai/config.yaml")
 
 if __name__ == "__main__":
     sys.exit(main())
