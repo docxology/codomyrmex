@@ -20,6 +20,7 @@ def semantic_drift(meme: Meme, intensity: float = 0.1) -> Meme:
 
     Returns:
         New Meme with drifted content and reduced fidelity.
+
     """
     words = meme.content.split()
     if not words:
@@ -50,6 +51,7 @@ def recombine(meme_a: Meme, meme_b: Meme, crossover_point: float | None = None) 
 
     Returns:
         New Meme with recombined content and averaged properties.
+
     """
     if crossover_point is None:
         crossover_point = random.random()
@@ -86,6 +88,7 @@ def splice(host: Meme, insert: Meme, position: float | None = None) -> Meme:
 
     Returns:
         New Meme with spliced content.
+
     """
     if position is None:
         position = 0.5
@@ -116,6 +119,7 @@ def batch_mutate(
 
     Returns:
         New population list (unmutated memes are referenced, not copied).
+
     """
     result = []
     for meme in population:

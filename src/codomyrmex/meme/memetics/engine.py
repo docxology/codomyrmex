@@ -42,6 +42,7 @@ class MemeticEngine:
 
         Returns:
             List of Meme objects, one per detected meme unit.
+
         """
         sentences = self._SENTENCE_RE.split(text.strip())
         sentences = [s.strip() for s in sentences if s.strip()]
@@ -88,6 +89,7 @@ class MemeticEngine:
 
         Returns:
             Combined text string.
+
         """
         return separator.join(m.content for m in memes)
 
@@ -99,6 +101,7 @@ class MemeticEngine:
 
         Returns:
             FitnessMap mapping each memeplex ID to its fitness.
+
         """
         fmap = FitnessMap()
         for mplex in population:
@@ -117,6 +120,7 @@ class MemeticEngine:
 
         Returns:
             Selected memeplexes.
+
         """
         if not population:
             return []

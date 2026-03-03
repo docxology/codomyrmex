@@ -6,7 +6,7 @@ from codomyrmex.meme.swarm.models import SwarmAgent
 
 
 def reach_consensus(agents: list[SwarmAgent], proposal: str, threshold: float = 0.6) -> bool:
-    """Simple majority/threshold consensus check.
+    """Perform simple majority/threshold consensus check.
 
     Agents vote based on internal state — 'positive' state counts as yes.
     """

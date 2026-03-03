@@ -27,6 +27,7 @@ class Sign:
         cultural_context: The context in which this meaning holds.
         stability: How fixed the signifier-signified relationship is (0-1).
         id: Unique identifier used for graph nodes.
+
     """
 
     signifier: str
@@ -37,6 +38,7 @@ class Sign:
     id: str = field(default="")
 
     def __post_init__(self) -> None:
+        """Post-init hook."""
         if not self.id:
             h = hashlib.sha256(f"{self.signifier}:{self.signified}".encode())
             self.id = h.hexdigest()[:16]
@@ -52,6 +54,7 @@ class SemanticTerritory:
         signs: The key signs that define this territory.
         boundaries: Map of adjacent domains and their semantic distance.
         contested: Whether this territory is currently under semiotic dispute.
+
     """
 
     domain: str
@@ -78,6 +81,7 @@ class DriftReport:
         lost_signs: Signs present in source but not target.
         drift_magnitude: Overall quantitative measure of drift (0-1).
         timestamp: Time of analysis.
+
     """
 
     shifted_signs: list[Sign] = field(default_factory=list)

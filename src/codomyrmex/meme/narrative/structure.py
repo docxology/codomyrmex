@@ -7,7 +7,7 @@ from codomyrmex.meme.narrative.models import NarrativeArc
 # Standard tension curves (normalized 0-1 duration, 0-1 tension)
 
 def heros_journey_arc() -> NarrativeArc:
-    """The Monomyth structure."""
+    """Return the Monomyth narrative structure."""
     return NarrativeArc(
         name="Hero's Journey",
         tension_curve=[

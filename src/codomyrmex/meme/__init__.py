@@ -1,5 +1,4 @@
-"""
-codomyrmex.meme — Unified Memetic Warfare & Information Dynamics Module.
+"""codomyrmex.meme — Unified Memetic Warfare & Information Dynamics Module.
 
 A comprehensive framework for modeling, analyzing, and engineering the
 propagation, mutation, and evolution of information units (memes) through

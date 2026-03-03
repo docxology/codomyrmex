@@ -21,6 +21,7 @@ class ProjectionType(StrEnum):
 @dataclass
 class CoordinateSystem:
     """Definition of the mapping space."""
+
     dimensions: int = 2
     bounds: list[float] = field(default_factory=lambda: [-100.0, 100.0, -100.0, 100.0])
     projection: ProjectionType = ProjectionType.MERCATOR
@@ -35,7 +36,9 @@ class MapFeature:
         position: Coordinates.
         feature_type: Classification (e.g. 'peak', 'valley', 'cluster').
         magnitude: Size/Importance.
+
     """
+
     name: str
     position: np.ndarray = field(default_factory=lambda: np.zeros(2))
     feature_type: str = "point"
@@ -43,6 +46,7 @@ class MapFeature:
     metadata: dict[str, str] = field(default_factory=dict)
 
     def __post_init__(self):
+        """Post-init hook."""
         if isinstance(self.position, list):
             self.position = np.array(self.position)
 
@@ -55,7 +59,9 @@ class IdeoscapeLayer:
         name: Layer name (e.g. 'Sentiment', 'Keywords').
         data_points: Raw data points.
         opacity: Visual weight.
+
     """
+
     name: str
     data_points: list[MapFeature] = field(default_factory=list)
     opacity: float = 1.0
@@ -69,12 +75,15 @@ class TerrainMap:
         height_map: 2D array representing 'elevation' (e.g. attention/virality).
         resolution: Grid resolution.
         features: Identified features.
+
     """
+
     height_map: np.ndarray = field(default_factory=lambda: np.zeros((100, 100)))
     resolution: int = 100
     features: list[MapFeature] = field(default_factory=list)
     timestamp: float = field(default_factory=time.time)
 
     def __post_init__(self):
+        """Post-init hook."""
         if isinstance(self.height_map, list):
             self.height_map = np.array(self.height_map)

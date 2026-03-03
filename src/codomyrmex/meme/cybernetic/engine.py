@@ -15,6 +15,7 @@ class CyberneticEngine:
     """Engine for managing cybernetic systems and feedback loops."""
 
     def __init__(self):
+        """Initialize the engine."""
         self._controllers: dict[str, PIDController] = {}
         self._last_tick = time.time()
 
@@ -27,6 +28,7 @@ class CyberneticEngine:
 
         Returns:
             Dict of control signals (adjustments) for each variable.
+
         """
         now = time.time()
         dt = now - self._last_tick

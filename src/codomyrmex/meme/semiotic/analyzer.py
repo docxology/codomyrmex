@@ -33,6 +33,7 @@ class SemioticAnalyzer:
 
         Returns:
             List of Sign objects found in the text.
+
         """
         signs: list[Sign] = []
         words = text.split()
@@ -85,6 +86,7 @@ class SemioticAnalyzer:
 
         Returns:
             DriftReport detailing shifts, stability, and new/lost signs.
+
         """
         signs_a = {}
         for text in corpus_a:
@@ -147,6 +149,7 @@ class SemioticAnalyzer:
 
         Returns:
             List of SemanticTerritory objects.
+
         """
         all_signs = []
         for text in corpus:

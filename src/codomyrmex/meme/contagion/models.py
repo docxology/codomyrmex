@@ -26,6 +26,7 @@ class Cascade:
         duration: Time span of the cascade.
         velocity: Average new nodes per time unit.
         cascade_type: Classification.
+
     """
 
     seed_id: str
@@ -47,6 +48,7 @@ class PropagationTrace:
         susceptible_counts: Number of susceptible nodes at each step.
         recovered_counts: Number of recovered nodes at each step.
         seed_meme: The meme being propagated.
+
     """
 
     time_steps: list[int] = field(default_factory=list)
@@ -73,6 +75,7 @@ class ResonanceMap:
     Attributes:
         nodes: Map of node ID to resonance score (0-1).
         clusters: Identified high-resonance clusters.
+
     """
 
     nodes: dict[str, float] = field(default_factory=dict)
@@ -87,6 +90,7 @@ class ContagionModel:
         infection_rate: Probability of transmission per contact (beta).
         recovery_rate: Probability of recovery per step (gamma).
         network_size: Total population size.
+
     """
 
     infection_rate: float = 0.3

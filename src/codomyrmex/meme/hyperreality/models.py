@@ -18,6 +18,7 @@ class SimulationLevel(int, Enum):
 
 class OntologicalStatus(StrEnum):
     """The status of an object's existence."""
+
     REAL = "real"
     VIRTUAL = "virtual"
     HYPERREAL = "hyperreal"
@@ -34,6 +35,7 @@ class Simulacrum:
         level: Simulation level (1-4).
         fidelity: Visual/Sensory fidelity (0-1).
         autonomy: Independence from creator/referent (0-1).
+
     """
 
     referent: str
@@ -52,6 +54,7 @@ class RealityTunnel:
         name: Name of the tunnel (e.g. 'Materialist', 'Conspiratorial').
         filters: List of cognitive filters applied.
         distortion: Degree of distortion from baseline consensus reality (0-1).
+
     """
 
     name: str

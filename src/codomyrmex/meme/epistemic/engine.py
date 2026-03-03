@@ -10,6 +10,7 @@ class EpistemicEngine:
     """Engine for managing knowledge, truth, and belief systems."""
 
     def __init__(self) -> None:
+        """Initialize the engine."""
         self.state = EpistemicState()
 
     def add_fact(self, fact: Fact) -> None:

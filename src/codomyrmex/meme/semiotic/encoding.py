@@ -34,6 +34,7 @@ class SemioticEncoder:
 
         Returns:
             Modified carrier text containing the payload.
+
         """
         payload_bits = self._to_bits(payload)
         words = carrier.split()
@@ -64,6 +65,7 @@ class SemioticEncoder:
 
         Returns:
             List of integers representing payload bits.
+
         """
         words = encoded.split()
         bits: list[int] = []

@@ -25,6 +25,7 @@ def run_simulation(
 
     Returns:
         PropagationTrace object.
+
     """
     # For this phase, we use the mean-field approximation
     # Future versions will build explicit NetworkX graphs here
