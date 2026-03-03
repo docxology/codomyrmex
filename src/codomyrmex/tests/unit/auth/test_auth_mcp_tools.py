@@ -67,3 +67,58 @@ def test_authenticate_with_empty_credentials() -> None:
     result = auth_authenticate({})
     # Either None (no match) or a dict (token)
     assert result is None or isinstance(result, dict)
+
+
+def test_authenticate_success() -> None:
+    """auth_authenticate returns a token dict when authentication succeeds."""
+    from codomyrmex.auth import get_authenticator
+    from codomyrmex.auth.mcp_tools import auth_authenticate
+
+    # Register a user to authenticate against
+    auth = get_authenticator()
+    auth.register_user("mcp_test_user", "mcp_test_password", roles=["mcp_role"])
+
+    credentials = {"username": "mcp_test_user", "password": "mcp_test_password"}
+    result = auth_authenticate(credentials)
+
+    assert isinstance(result, dict)
+    assert "user_id" in result
+    assert result["user_id"] == "mcp_test_user"
+
+
+def test_validate_token_valid() -> None:
+    """auth_validate_token returns valid=True for a valid token."""
+    from codomyrmex.auth import TokenValidator
+    from codomyrmex.auth.mcp_tools import auth_validate_token
+
+    # Generate a valid token signed with the key used in auth_validate_token
+    validator = TokenValidator(secret="mcp_tool_validation_key")
+    token_value = validator.sign_token_data({"user_id": "test_user"})
+
+    result = auth_validate_token(token_value)
+    assert isinstance(result, dict)
+    assert result.get("valid") is True
+    assert result.get("reason") == "ok"
+
+
+def test_validate_token_invalid_format() -> None:
+    """auth_validate_token returns valid=False for completely invalid tokens."""
+    from codomyrmex.auth.mcp_tools import auth_validate_token
+
+    result = auth_validate_token("not_a_base64_string")
+    assert isinstance(result, dict)
+    assert result.get("valid") is False
+    assert result.get("reason") == "invalid or expired token"
+
+
+def test_validate_token_exception_handling() -> None:
+    """auth_validate_token catches exceptions and returns valid=False."""
+    from codomyrmex.auth.mcp_tools import auth_validate_token
+
+    # Provide a value that causes an exception in TokenValidator.validate_signed_token
+    # For example, passing an integer instead of string or something that base64 fails on
+    # Though mypy enforces string, let's pass an invalid type to trigger the catch block
+    result = auth_validate_token(12345) # type: ignore
+    assert isinstance(result, dict)
+    assert result.get("valid") is False
+    assert "reason" in result
