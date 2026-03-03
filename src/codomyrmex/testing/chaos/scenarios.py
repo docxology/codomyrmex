@@ -10,7 +10,7 @@ import time
 from collections.abc import Callable
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any
+from typing import Any, Awaitable
 
 from . import FaultInjector
 
@@ -50,9 +50,9 @@ class ScenarioResult:
 class ChaosScenarioRunner:
     """Run pre-built chaos scenarios."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         self._injector = FaultInjector()
-        self._scenarios: dict[ScenarioType, Callable] = {
+        self._scenarios: dict[ScenarioType, Callable[[ScenarioConfig], Awaitable[ScenarioResult]]] = {
             ScenarioType.NETWORK_PARTITION: self._run_network_partition,
             ScenarioType.SERVICE_OUTAGE: self._run_service_outage,
             ScenarioType.HIGH_LATENCY: self._run_high_latency,
@@ -83,7 +83,7 @@ class ChaosScenarioRunner:
         time.time()
         partition_active = True
 
-        async def partition_behavior():
+        async def partition_behavior() -> None:
             nonlocal errors
             while partition_active:
                 if random.random() < config.intensity:
@@ -187,7 +187,7 @@ class ChaosScenarioRunner:
 class GameDay:
     """Run a coordinated chaos game day."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         self._runner = ChaosScenarioRunner()
         self._scenarios: list[ScenarioConfig] = []
         self._results: list[ScenarioResult] = []

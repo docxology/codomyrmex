@@ -9,7 +9,7 @@ __version__ = "0.1.0"
 import json
 import threading
 from abc import ABC, abstractmethod
-from collections.abc import Callable
+from collections.abc import Callable, Iterator
 from contextlib import contextmanager
 from dataclasses import dataclass, field
 from datetime import datetime
@@ -64,7 +64,7 @@ class FixtureManager:
             pass
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         self._definitions: dict[str, FixtureDefinition] = {}
         self._instances: dict[str, FixtureInstance] = {}
         self._lock = threading.Lock()
@@ -133,7 +133,7 @@ class FixtureManager:
             self.cleanup(name)
 
     @contextmanager
-    def use(self, name: str):
+    def use(self, name: str) -> Iterator[Any]:
         """Context manager for using a fixture."""
         value = self.get(name)
         try:
@@ -161,7 +161,7 @@ class DataFixture:
         assert len(users) == 2
     """
 
-    def __init__(self, data: list[dict[str, Any]]):
+    def __init__(self, data: list[dict[str, Any]]) -> None:
         self._data = data
 
     def __getitem__(self, index: int) -> dict[str, Any]:
@@ -172,11 +172,11 @@ class DataFixture:
         """Return the number of items."""
         return len(self._data)
 
-    def __iter__(self):
+    def __iter__(self) -> Iterator[dict[str, Any]]:
         """Return an iterator over items."""
         return iter(self._data)
 
-    def filter(self, **kwargs) -> list[dict[str, Any]]:
+    def filter(self, **kwargs: Any) -> list[dict[str, Any]]:
         """Filter records by field values."""
         results = []
         for record in self._data:
@@ -185,7 +185,7 @@ class DataFixture:
                 results.append(record)
         return results
 
-    def find(self, **kwargs) -> dict[str, Any] | None:
+    def find(self, **kwargs: Any) -> dict[str, Any] | None:
         """Find first matching record."""
         filtered = self.filter(**kwargs)
         return filtered[0] if filtered else None
@@ -203,7 +203,7 @@ class JSONFixtureLoader:
         users = loader.load("users")
     """
 
-    def __init__(self, base_path: str):
+    def __init__(self, base_path: str) -> None:
         self.base_path = Path(base_path)
         self._cache: dict[str, DataFixture] = {}
 
@@ -216,7 +216,7 @@ class JSONFixtureLoader:
         if not file_path.exists():
             raise FileNotFoundError(f"Fixture file not found: {file_path}")
 
-        with open(file_path) as f:
+        with open(file_path, encoding="utf-8") as f:
             data = json.load(f)
 
         fixture = DataFixture(data if isinstance(data, list) else [data])
@@ -240,7 +240,7 @@ class FixtureBuilder:
             .build())
     """
 
-    def __init__(self, name: str):
+    def __init__(self, name: str) -> None:
         self.name = name
         self._data: dict[str, Any] = {}
 
@@ -249,7 +249,7 @@ class FixtureBuilder:
         self._data[key] = value
         return self
 
-    def with_fields(self, **kwargs) -> "FixtureBuilder":
+    def with_fields(self, **kwargs: Any) -> "FixtureBuilder":
         """Add multiple fields."""
         self._data.update(kwargs)
         return self

@@ -40,6 +40,16 @@ def test_generate_int_data() -> None:
     assert all(isinstance(v, int) for v in results)
 
 
+def test_generate_float_data() -> None:
+    """testing_generate_data returns a list of floats for strategy_type='float'."""
+    from codomyrmex.testing.mcp_tools import testing_generate_data
+
+    results = testing_generate_data("float", count=5)
+    assert isinstance(results, list)
+    assert len(results) == 5
+    assert all(isinstance(v, float) for v in results)
+
+
 def test_generate_string_data() -> None:
     """testing_generate_data returns a list of strings for strategy_type='string'."""
     from codomyrmex.testing.mcp_tools import testing_generate_data
@@ -58,6 +68,16 @@ def test_generate_list_data() -> None:
     assert isinstance(results, list)
     assert len(results) == 3
     assert all(isinstance(v, list) for v in results)
+
+
+def test_generate_dict_data() -> None:
+    """testing_generate_data returns a list of dicts for strategy_type='dict'."""
+    from codomyrmex.testing.mcp_tools import testing_generate_data
+
+    results = testing_generate_data("dict", count=3)
+    assert isinstance(results, list)
+    assert len(results) == 3
+    assert all(isinstance(v, dict) for v in results)
 
 
 def test_generate_unknown_strategy_raises() -> None:

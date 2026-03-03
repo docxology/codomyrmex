@@ -37,13 +37,13 @@ class AssertionExecutor(StepExecutor):
             if assertion_type == "equals":
                 passed = actual == expected
             elif assertion_type == "contains":
-                passed = expected in str(actual)
+                passed = expected is not None and str(expected) in str(actual)
             elif assertion_type == "not_null":
                 passed = actual is not None
             elif assertion_type == "greater_than":
-                passed = float(actual) > float(expected)
+                passed = actual is not None and expected is not None and float(actual) > float(expected)
             elif assertion_type == "less_than":
-                passed = float(actual) < float(expected)
+                passed = actual is not None and expected is not None and float(actual) < float(expected)
 
             duration = (time.time() - start) * 1000
 

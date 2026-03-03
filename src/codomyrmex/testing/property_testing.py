@@ -26,14 +26,14 @@ class PropertyTestResult:
 def property_test(
     iterations: int = 100,
     **generators: GeneratorStrategy,
-):
+) -> Callable[[Callable[..., Any]], Callable[..., PropertyTestResult]]:
     """Decorator for property-based tests."""
-    def decorator(func: Callable) -> Callable:
+    def decorator(func: Callable[..., Any]) -> Callable[..., PropertyTestResult]:
         """Decorator."""
         @functools.wraps(func)
-        def wrapper(*args, **kwargs):
+        def wrapper(*args: Any, **kwargs: Any) -> PropertyTestResult:
             """Wrapper."""
-            failures = []
+            failures: list[dict[str, Any]] = []
             start = datetime.now()
 
             for _i in range(iterations):

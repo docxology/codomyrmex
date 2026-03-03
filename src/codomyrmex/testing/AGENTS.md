@@ -6,7 +6,7 @@
 
 Test utilities, data factories, and testing patterns for the Codomyrmex platform. Provides
 `RealDataFactory` for generating realistic test data under the Zero-Mock policy, `TestRunner` for
-configurable test execution, and `FixtureManager` for shared fixture lifecycle. Two MCP tools
+configurable test execution, and `FixtureManager` for shared fixture lifecycle. Both MCP tools
 (`testing_generate_data`, `testing_list_strategies`) expose data generation capabilities to PAI
 agents.
 

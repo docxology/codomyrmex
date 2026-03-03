@@ -6,10 +6,11 @@ Fixture management and test data factory.
 
 import random
 import string
+import uuid
 from collections.abc import Callable
 from dataclasses import dataclass
 from datetime import datetime, timedelta
-from typing import Any
+from typing import Any, cast
 
 from .strategies import FloatGenerator, IntGenerator, StringGenerator
 
@@ -26,7 +27,7 @@ class Fixture:
 class FixtureManager:
     """Manage test fixtures."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         self._fixtures: dict[str, Fixture] = {}
         self._active: dict[str, Any] = {}
 
@@ -64,12 +65,12 @@ class FixtureManager:
                 del self._active[fixture_name]
 
 
-def fixture(name: str, scope: str = "function"):
+def fixture(name: str, scope: str = "function") -> Callable[[Callable[..., Any]], Callable[..., Any]]:
     """Decorator to create fixtures."""
-    def decorator(func: Callable) -> Callable:
+    def decorator(func: Callable[..., Any]) -> Callable[..., Any]:
         """Decorator."""
-        func._fixture_name = name
-        func._fixture_scope = scope
+        setattr(func, "_fixture_name", name)
+        setattr(func, "_fixture_scope", scope)
         return func
     return decorator
 
@@ -92,13 +93,12 @@ class TestDataFactory:
     @staticmethod
     def uuid() -> str:
         """Uuid."""
-        import uuid
         return str(uuid.uuid4())
 
     @staticmethod
     def date(
-        start: datetime = None,
-        end: datetime = None,
+        start: datetime | None = None,
+        end: datetime | None = None,
     ) -> datetime:
         """Date."""
         start = start or datetime(2000, 1, 1)
@@ -108,7 +108,7 @@ class TestDataFactory:
         return start + timedelta(seconds=random_seconds)
 
     @staticmethod
-    def json_object(depth: int = 2, breadth: int = 3) -> dict[str, Any]:
+    def json_object(depth: int = 2, breadth: int = 3) -> Any:
         """Generate random JSON-like object."""
         if depth == 0:
             return random.choice([
@@ -118,7 +118,7 @@ class TestDataFactory:
                 True, False, None,
             ])
 
-        result = {}
+        result: dict[str, Any] = {}
         for _ in range(breadth):
             key = StringGenerator(5, 10).generate()
             if random.random() < 0.3:

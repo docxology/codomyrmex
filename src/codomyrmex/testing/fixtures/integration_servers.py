@@ -1,5 +1,8 @@
+"""Integration testing server utilities."""
+
 import threading
 from collections.abc import Callable
+from typing import Any
 
 import uvicorn
 from fastapi import FastAPI
@@ -14,7 +17,7 @@ class TestServerManager:
     without relying on external physical infrastructure or using 'unittest.mock'.
     """
 
-    def __init__(self, host: str = "127.0.0.1", port: int = 8000):
+    def __init__(self, host: str = "127.0.0.1", port: int = 8000) -> None:
         self.host = host
         self.port = port
         self.app = FastAPI(title="Codomyrmex Integration Test Server")
@@ -24,16 +27,21 @@ class TestServerManager:
 
         # Default health check
         @self.app.get("/health")
-        def health_check():
+        def health_check() -> dict[str, str]:
             return {"status": "ok"}
 
-    def add_route(self, path: str, endpoint: Callable, methods: list[str] | None = None):
+    def add_route(
+        self,
+        path: str,
+        endpoint: Callable[..., Any],
+        methods: list[str] | None = None
+    ) -> None:
         """Add a route to the FastAPI application."""
         if methods is None:
             methods = ["GET"]
         self.app.add_api_route(path, endpoint, methods=methods)
 
-    def _run_server(self):
+    def _run_server(self) -> None:
         """Run the uvicorn server in the current thread."""
         config = uvicorn.Config(
             app=self.app,
@@ -46,14 +54,14 @@ class TestServerManager:
         # Override the server's startup to signal our event
         original_startup = self.server.startup
 
-        async def hooked_startup(*args, **kwargs):
+        async def hooked_startup(*args: Any, **kwargs: Any) -> None:
             await original_startup(*args, **kwargs)
             self._startup_event.set()
 
-        self.server.startup = hooked_startup
+        self.server.startup = hooked_startup  # type: ignore[method-assign]
         self.server.run()
 
-    def start(self):
+    def start(self) -> None:
         """Start the server in a background thread."""
         if self._thread is not None and self._thread.is_alive():
             return
@@ -67,7 +75,7 @@ class TestServerManager:
         if not started:
             raise RuntimeError("Failed to start integration test server within timeout.")
 
-    def stop(self):
+    def stop(self) -> None:
         """Stop the background server."""
         if self.server:
             self.server.should_exit = True

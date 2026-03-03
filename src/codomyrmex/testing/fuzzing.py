@@ -5,6 +5,7 @@ Fuzz testing strategies and execution.
 """
 
 import random
+import time
 from collections.abc import Callable
 from dataclasses import dataclass
 from enum import Enum
@@ -37,14 +38,14 @@ class Fuzzer:
         self,
         strategy: FuzzingStrategy = FuzzingStrategy.RANDOM,
         max_iterations: int = 1000,
-    ):
+    ) -> None:
         self.strategy = strategy
         self.max_iterations = max_iterations
         self._results: list[FuzzResult] = []
 
     def fuzz(
         self,
-        func: Callable,
+        func: Callable[..., Any],
         generator: GeneratorStrategy,
     ) -> list[FuzzResult]:
         """Run fuzz testing on a function."""
@@ -63,9 +64,8 @@ class Fuzzer:
 
         return self._results
 
-    def _execute_one(self, func: Callable, input_data: Any) -> FuzzResult:
+    def _execute_one(self, func: Callable[..., Any], input_data: Any) -> FuzzResult:
         """Execute function with one input."""
-        import time
         start = time.time()
 
         try:
@@ -87,9 +87,9 @@ class Fuzzer:
         """Apply boundary value mutations."""
         if isinstance(value, int):
             return random.choice([0, -1, 1, 2**31-1, -2**31, 2**63-1])
-        elif isinstance(value, str):
+        if isinstance(value, str):
             return random.choice(["", " ", "\n", "\x00", "a" * 10000])
-        elif isinstance(value, list):
+        if isinstance(value, list):
             return random.choice([[], [None], list(range(1000))])
         return value
 
@@ -99,7 +99,7 @@ class Fuzzer:
             # Random character flip
             idx = random.randint(0, len(value) - 1)
             return value[:idx] + chr(random.randint(0, 255)) + value[idx+1:]
-        elif isinstance(value, int):
+        if isinstance(value, int):
             return value + random.randint(-10, 10)
         return value
 

@@ -8,12 +8,15 @@ Submodules:
     chaos: Consolidated chaos capabilities.
     workflow: Consolidated workflow capabilities."""
 
+from collections.abc import Callable
+from typing import Any
+
 # Shared schemas for cross-module interop
 try:
     from codomyrmex.validation.schemas import Result, ResultStatus
 except ImportError:
-    Result = None
-    ResultStatus = None
+    Result = Any  # type: ignore[misc, assignment]
+    ResultStatus = Any  # type: ignore[misc, assignment]
 
 from . import chaos, workflow
 from .fixture_utils import (
@@ -42,7 +45,7 @@ from .strategies import (
 )
 
 
-def cli_commands():
+def cli_commands() -> dict[str, dict[str, Any]]:
     """Return CLI commands for the testing module."""
     return {
         "frameworks": {

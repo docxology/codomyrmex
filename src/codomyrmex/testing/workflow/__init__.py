@@ -4,6 +4,9 @@ Workflow Testing Module
 Test workflows with step-based assertions, waits, and scripts.
 """
 
+from collections.abc import Callable
+from typing import Any
+
 from .executors import (
     AssertionExecutor,
     ScriptExecutor,
@@ -24,11 +27,11 @@ from .runner import WorkflowRunner
 try:
     from codomyrmex.validation.schemas import Result, ResultStatus
 except ImportError:
-    Result = None
-    ResultStatus = None
+    Result = Any  # type: ignore[misc, assignment]
+    ResultStatus = Any  # type: ignore[misc, assignment]
 
 
-def cli_commands():
+def cli_commands() -> dict[str, Callable[..., None]]:
     """Return CLI commands for the workflow_testing module."""
     return {
         "suites": lambda: print(

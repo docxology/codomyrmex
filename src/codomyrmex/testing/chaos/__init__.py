@@ -20,8 +20,8 @@ from typing import Any, Optional
 try:
     from codomyrmex.validation.schemas import Result, ResultStatus
 except ImportError:
-    Result = None
-    ResultStatus = None
+    Result = Any  # type: ignore[misc, assignment]
+    ResultStatus = Any  # type: ignore[misc, assignment]
 
 class FaultType(Enum):
     """Types of injectable faults."""
@@ -43,7 +43,7 @@ class FaultConfig:
 class FaultInjector:
     """Inject faults into system components."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         self._active_faults: dict[str, FaultConfig] = {}
         self._lock = threading.Lock()
 
@@ -119,7 +119,7 @@ class ChaosExperiment:
         hypothesis: SteadyStateHypothesis,
         action: Callable[[], None],
         rollback: Callable[[], None] | None = None,
-    ):
+    ) -> None:
         self.name = name
         self.hypothesis = hypothesis
         self.action = action
@@ -185,7 +185,7 @@ class ChaosExperiment:
 class ChaosMonkey:
     """Automated chaos testing."""
 
-    def __init__(self, injector: FaultInjector | None = None):
+    def __init__(self, injector: FaultInjector | None = None) -> None:
         self.injector = injector or FaultInjector()
         self._experiments: list[ChaosExperiment] = []
         self._results: list[ExperimentResult] = []
@@ -220,21 +220,21 @@ class ChaosMonkey:
 def with_chaos(
     injector: FaultInjector,
     fault_name: str,
-) -> Callable:
+) -> Callable[[Callable[..., Any]], Callable[..., Any]]:
     """Decorator to inject chaos into a function."""
-    def decorator(func: Callable) -> Callable:
+    def decorator(func: Callable[..., Any]) -> Callable[..., Any]:
         """Decorator."""
-        def wrapper(*args, **kwargs):
+        def wrapper(*args: Any, **kwargs: Any) -> Any:
             """Wrapper."""
             injector.maybe_inject(fault_name)
             return func(*args, **kwargs)
         return wrapper
     return decorator
 
-def cli_commands():
+def cli_commands() -> dict[str, Callable[..., None]]:
     """Return CLI commands for the chaos_engineering module."""
 
-    def _experiments():
+    def _experiments(**kwargs: Any) -> None:
         """List registered chaos experiments."""
         print("Chaos Engineering Experiments")
         print(f"  Fault Types: {[ft.value for ft in FaultType]}")
@@ -242,7 +242,7 @@ def cli_commands():
         print(f"  Registered Experiments: {len(monkey._experiments)}")
         print(f"  Past Results: {len(monkey.results)}")
 
-    def _run(name: str = ""):
+    def _run(name: str = "", **kwargs: Any) -> None:
         """Run a chaos experiment by --name."""
         if not name:
             print("Usage: chaos_engineering run --name <experiment_name>")

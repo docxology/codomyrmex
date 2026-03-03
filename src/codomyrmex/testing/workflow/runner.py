@@ -42,7 +42,7 @@ class WorkflowRunner:
         print(f"Pass rate: {result.pass_rate:.1%}")
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         self._executors: dict[WorkflowStepType, StepExecutor] = {
             WorkflowStepType.ASSERTION: AssertionExecutor(),
             WorkflowStepType.WAIT: WaitExecutor(),
@@ -81,16 +81,17 @@ class WorkflowRunner:
 
         for step in workflow.steps:
             step_result = self._run_step(step, context)
-            result.step_results.append(step_result)
+            if step_result:
+                result.step_results.append(step_result)
 
-            # Store output in context
-            if step_result.output:
-                context[f"step_{step.id}"] = step_result.output
+                # Store output in context
+                if step_result.output:
+                    context[f"step_{step.id}"] = step_result.output
 
-            if not step_result.passed:
-                all_passed = False
-                if step_result.status == StepStatus.ERROR:
-                    break
+                if not step_result.passed:
+                    all_passed = False
+                    if step_result.status == StepStatus.ERROR:
+                        break
 
         result.status = StepStatus.PASSED if all_passed else StepStatus.FAILED
         result.completed_at = datetime.now()
@@ -108,12 +109,20 @@ class WorkflowRunner:
                 error=f"No executor for step type: {step.step_type}",
             )
 
-        last_result = None
+        last_result: StepResult | None = None
         for attempt in range(step.retry_count + 1):
             last_result = executor.execute(step, context)
-            last_result.retries = attempt
+            if last_result:
+                last_result.retries = attempt
 
-            if last_result.passed:
-                break
+                if last_result.passed:
+                    break
+
+        if last_result is None:
+             return StepResult(
+                 step_id=step.id,
+                 status=StepStatus.ERROR,
+                 error="Executor returned no result",
+             )
 
         return last_result

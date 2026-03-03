@@ -4,7 +4,7 @@
 
 ## Purpose
 
-Testing module providing test framework utilities, fixtures, and test infrastructure for the Codomyrmex platform.
+Testing module providing test framework utilities, fixtures, test data generators, and test infrastructure for the Codomyrmex platform.
 
 ## Functional Requirements
 

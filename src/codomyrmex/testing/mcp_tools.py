@@ -6,7 +6,54 @@ All generators are pure Python with no external dependencies.
 
 from __future__ import annotations
 
+from typing import Any
+
 from codomyrmex.model_context_protocol.decorators import mcp_tool
+from codomyrmex.testing import (
+    DictGenerator,
+    FloatGenerator,
+    IntGenerator,
+    ListGenerator,
+    StringGenerator,
+    GeneratorStrategy,
+)
+
+
+def _get_generator(strategy_type: str, cfg: dict[str, Any]) -> GeneratorStrategy:
+    """Helper to return the right generator."""
+    if strategy_type == "int":
+        return IntGenerator(
+            min_val=cfg.get("min_val", 0),
+            max_val=cfg.get("max_val", 100),
+        )
+    if strategy_type == "float":
+        return FloatGenerator(
+            min_val=cfg.get("min_val", 0.0),
+            max_val=cfg.get("max_val", 1.0),
+        )
+    if strategy_type == "string":
+        return StringGenerator(
+            min_length=cfg.get("min_length", 1),
+            max_length=cfg.get("max_length", 20),
+        )
+    if strategy_type == "list":
+        return ListGenerator(
+            element_generator=IntGenerator(0, 10),
+            min_length=cfg.get("min_length", 1),
+            max_length=cfg.get("max_length", 5),
+        )
+    if strategy_type == "dict":
+        return DictGenerator(
+            key_generator=StringGenerator(min_length=3, max_length=10),
+            value_generator=IntGenerator(0, 100),
+            min_size=cfg.get("min_size", 1),
+            max_size=cfg.get("max_size", 5),
+        )
+
+    raise ValueError(
+        f"Unknown strategy_type: {strategy_type!r}. "
+        f"Use one of: ['int', 'float', 'string', 'list', 'dict']"
+    )
 
 
 @mcp_tool(
@@ -22,68 +69,11 @@ from codomyrmex.model_context_protocol.decorators import mcp_tool
 def testing_generate_data(
     strategy_type: str,
     count: int = 10,
-    config: dict | None = None,
-) -> list:
+    config: dict[str, Any] | None = None,
+) -> list[Any]:
     """Generate a list of synthetic test values."""
-    from codomyrmex.testing import (
-        DictGenerator,
-        FloatGenerator,
-        IntGenerator,
-        ListGenerator,
-        StringGenerator,
-    )
-
     cfg = config or {}
-
-    def _int_gen():
-        return IntGenerator(
-            min_val=cfg.get("min_val", 0),
-            max_val=cfg.get("max_val", 100),
-        )
-
-    def _float_gen():
-        return FloatGenerator(
-            min_val=cfg.get("min_val", 0.0),
-            max_val=cfg.get("max_val", 1.0),
-        )
-
-    def _string_gen():
-        return StringGenerator(
-            min_length=cfg.get("min_length", 1),
-            max_length=cfg.get("max_length", 20),
-        )
-
-    def _list_gen():
-        return ListGenerator(
-            element_generator=IntGenerator(0, 10),
-            min_length=cfg.get("min_length", 1),
-            max_length=cfg.get("max_length", 5),
-        )
-
-    def _dict_gen():
-        return DictGenerator(
-            key_generator=StringGenerator(min_length=3, max_length=10),
-            value_generator=IntGenerator(0, 100),
-            min_size=cfg.get("min_size", 1),
-            max_size=cfg.get("max_size", 5),
-        )
-
-    generators = {
-        "int": _int_gen,
-        "float": _float_gen,
-        "string": _string_gen,
-        "list": _list_gen,
-        "dict": _dict_gen,
-    }
-
-    gen_factory = generators.get(strategy_type)
-    if gen_factory is None:
-        raise ValueError(
-            f"Unknown strategy_type: {strategy_type!r}. "
-            f"Use one of: {list(generators.keys())}"
-        )
-
-    gen = gen_factory()
+    gen = _get_generator(strategy_type, cfg)
     return [gen.generate() for _ in range(count)]
 
 

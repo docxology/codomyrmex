@@ -63,7 +63,7 @@ class StringGenerator(Generator):
         min_length: int = 5,
         max_length: int = 20,
         charset: str = string.ascii_letters + string.digits,
-    ):
+    ) -> None:
         self.min_length = min_length
         self.max_length = max_length
         self.charset = charset
@@ -76,7 +76,7 @@ class StringGenerator(Generator):
 class IntegerGenerator(Generator):
     """Generates random integers."""
 
-    def __init__(self, min_value: int = 0, max_value: int = 1000):
+    def __init__(self, min_value: int = 0, max_value: int = 1000) -> None:
         self.min_value = min_value
         self.max_value = max_value
 
@@ -92,7 +92,7 @@ class FloatGenerator(Generator):
         min_value: float = 0.0,
         max_value: float = 100.0,
         precision: int = 2,
-    ):
+    ) -> None:
         self.min_value = min_value
         self.max_value = max_value
         self.precision = precision
@@ -105,7 +105,7 @@ class FloatGenerator(Generator):
 class BooleanGenerator(Generator):
     """Generates random booleans."""
 
-    def __init__(self, true_probability: float = 0.5):
+    def __init__(self, true_probability: float = 0.5) -> None:
         self.true_probability = true_probability
 
     def generate(self) -> bool:
@@ -119,7 +119,7 @@ class DateGenerator(Generator):
         self,
         start_date: datetime | None = None,
         end_date: datetime | None = None,
-    ):
+    ) -> None:
         self.start_date = start_date or datetime(2020, 1, 1)
         self.end_date = end_date or datetime.now()
 
@@ -134,7 +134,7 @@ class EmailGenerator(Generator):
 
     DOMAINS = ["example.com", "test.org", "mail.net", "demo.io"]
 
-    def __init__(self):
+    def __init__(self) -> None:
         self._string_gen = StringGenerator(min_length=5, max_length=10, charset=string.ascii_lowercase)
 
     def generate(self) -> str:
@@ -173,7 +173,7 @@ class NameGenerator(Generator):
 class ChoiceGenerator(Generator):
     """Generates random choice from list."""
 
-    def __init__(self, choices: list[Any]):
+    def __init__(self, choices: list[Any]) -> None:
         self.choices = choices
 
     def generate(self) -> Any:
@@ -194,7 +194,7 @@ class RecordGenerator:
         records = gen.generate_many(100)
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         self._fields: dict[str, Generator] = {}
 
     def add_field(self, name: str, generator: Generator) -> "RecordGenerator":
@@ -223,7 +223,7 @@ class DatasetGenerator:
         data = dataset.generate(rows=1000)
     """
 
-    def __init__(self, name: str):
+    def __init__(self, name: str) -> None:
         self.name = name
         self._columns: dict[str, Generator] = {}
 
