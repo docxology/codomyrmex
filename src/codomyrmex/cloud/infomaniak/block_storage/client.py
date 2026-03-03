@@ -1,5 +1,4 @@
-"""
-Infomaniak Block Storage Client (Cinder).
+"""Infomaniak Block Storage Client (Cinder).
 
 Provides volume and backup operations via the OpenStack Cinder API.
 """
@@ -13,8 +12,7 @@ logger = get_logger(__name__)
 
 
 class InfomaniakVolumeClient(InfomaniakOpenStackBase):
-    """
-    Client for Infomaniak block storage (Cinder) operations.
+    """Client for Infomaniak block storage (Cinder) operations.
 
     Provides methods for managing volumes and backups.
 
@@ -32,11 +30,11 @@ class InfomaniakVolumeClient(InfomaniakOpenStackBase):
     # =========================================================================
 
     def list_volumes(self) -> list[dict[str, Any]]:
-        """
-        List all block storage volumes.
+        """List all block storage volumes.
 
         Returns:
             List of volume dictionaries
+
         """
         try:
             volumes = list(self._conn.block_storage.volumes())
@@ -46,14 +44,14 @@ class InfomaniakVolumeClient(InfomaniakOpenStackBase):
             return []
 
     def get_volume(self, volume_id: str) -> dict[str, Any] | None:
-        """
-        Get details for a specific volume.
+        """Get details for a specific volume.
 
         Args:
             volume_id: Volume UUID
 
         Returns:
             Volume details dict or None if not found
+
         """
         try:
             volume = self._conn.block_storage.get_volume(volume_id)
@@ -73,8 +71,7 @@ class InfomaniakVolumeClient(InfomaniakOpenStackBase):
         image_id: str | None = None,
         **kwargs
     ) -> dict[str, Any] | None:
-        """
-        Create a new block storage volume.
+        """Create a new block storage volume.
 
         Args:
             size: Volume size in GB
@@ -88,6 +85,7 @@ class InfomaniakVolumeClient(InfomaniakOpenStackBase):
 
         Returns:
             Created volume dict or None on failure
+
         """
         try:
             volume = self._conn.block_storage.create_volume(
@@ -107,8 +105,7 @@ class InfomaniakVolumeClient(InfomaniakOpenStackBase):
             return None
 
     def delete_volume(self, volume_id: str, force: bool = False) -> bool:
-        """
-        Delete a volume.
+        """Delete a volume.
 
         Args:
             volume_id: Volume UUID
@@ -116,6 +113,7 @@ class InfomaniakVolumeClient(InfomaniakOpenStackBase):
 
         Returns:
             True if successful
+
         """
         try:
             self._conn.block_storage.delete_volume(volume_id, force=force)
@@ -126,8 +124,7 @@ class InfomaniakVolumeClient(InfomaniakOpenStackBase):
             return False
 
     def extend_volume(self, volume_id: str, new_size: int) -> bool:
-        """
-        Extend a volume's size.
+        """Extend a volume's size.
 
         Args:
             volume_id: Volume UUID
@@ -135,6 +132,7 @@ class InfomaniakVolumeClient(InfomaniakOpenStackBase):
 
         Returns:
             True if successful
+
         """
         try:
             self._conn.block_storage.extend_volume(volume_id, new_size)
@@ -150,8 +148,7 @@ class InfomaniakVolumeClient(InfomaniakOpenStackBase):
         instance_id: str,
         device: str | None = None
     ) -> bool:
-        """
-        Attach a volume to an instance.
+        """Attach a volume to an instance.
 
         Args:
             volume_id: Volume UUID
@@ -160,6 +157,7 @@ class InfomaniakVolumeClient(InfomaniakOpenStackBase):
 
         Returns:
             True if successful
+
         """
         try:
             self._conn.compute.create_volume_attachment(
@@ -174,8 +172,7 @@ class InfomaniakVolumeClient(InfomaniakOpenStackBase):
             return False
 
     def detach_volume(self, volume_id: str, instance_id: str) -> bool:
-        """
-        Detach a volume from an instance.
+        """Detach a volume from an instance.
 
         Args:
             volume_id: Volume UUID
@@ -183,6 +180,7 @@ class InfomaniakVolumeClient(InfomaniakOpenStackBase):
 
         Returns:
             True if successful
+
         """
         try:
             # Find the attachment
@@ -206,11 +204,11 @@ class InfomaniakVolumeClient(InfomaniakOpenStackBase):
     # =========================================================================
 
     def list_backups(self) -> list[dict[str, Any]]:
-        """
-        List volume backups.
+        """List volume backups.
 
         Returns:
             List of backup dictionaries
+
         """
         try:
             backups = list(self._conn.block_storage.backups())
@@ -237,8 +235,7 @@ class InfomaniakVolumeClient(InfomaniakOpenStackBase):
         incremental: bool = False,
         force: bool = False
     ) -> dict[str, Any] | None:
-        """
-        Create a backup of a volume.
+        """Create a backup of a volume.
 
         Args:
             volume_id: Volume UUID to backup
@@ -249,6 +246,7 @@ class InfomaniakVolumeClient(InfomaniakOpenStackBase):
 
         Returns:
             Created backup dict or None on failure
+
         """
         try:
             backup = self._conn.block_storage.create_backup(
@@ -275,8 +273,7 @@ class InfomaniakVolumeClient(InfomaniakOpenStackBase):
         volume_id: str | None = None,
         name: str | None = None
     ) -> dict[str, Any] | None:
-        """
-        Restore a backup to a new or existing volume.
+        """Restore a backup to a new or existing volume.
 
         Args:
             backup_id: Backup UUID to restore
@@ -285,6 +282,7 @@ class InfomaniakVolumeClient(InfomaniakOpenStackBase):
 
         Returns:
             Restored volume dict or None on failure
+
         """
         try:
             result = self._conn.block_storage.restore_backup(
@@ -299,8 +297,7 @@ class InfomaniakVolumeClient(InfomaniakOpenStackBase):
             return None
 
     def delete_backup(self, backup_id: str, force: bool = False) -> bool:
-        """
-        Delete a backup.
+        """Delete a backup.
 
         Args:
             backup_id: Backup UUID
@@ -308,6 +305,7 @@ class InfomaniakVolumeClient(InfomaniakOpenStackBase):
 
         Returns:
             True if successful
+
         """
         try:
             self._conn.block_storage.delete_backup(backup_id, force=force)

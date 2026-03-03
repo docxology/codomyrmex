@@ -1,5 +1,4 @@
-"""
-GCP Serverless submodule.
+"""GCP Serverless submodule.
 
 Cloud Run and Functions
 """

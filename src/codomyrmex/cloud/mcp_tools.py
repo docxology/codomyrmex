@@ -9,6 +9,7 @@ def list_cloud_instances() -> dict:
 
     Returns:
         A list of active instances or an error if authentication fails.
+
     """
     from codomyrmex.cloud.infomaniak import InfomaniakComputeClient
 
@@ -37,6 +38,7 @@ def list_s3_buckets() -> dict:
 
     Returns:
         A list of available S3 buckets.
+
     """
     from codomyrmex.cloud.infomaniak import InfomaniakS3Client
 
@@ -61,12 +63,14 @@ def upload_file_to_s3(file_path: str, bucket: str, object_name: str | None = Non
 
     Returns:
         Status of the upload operation.
+
     """
     from codomyrmex.cloud.infomaniak import InfomaniakS3Client
 
     try:
         client = InfomaniakS3Client.from_env()
-        client.upload_file(file_path=file_path, bucket=bucket, object_name=object_name)
+        key = object_name or file_path.split("/")[-1]
+        client.upload_file(bucket=bucket, key=key, file_path=file_path)
 
         return {
             "status": "success",

@@ -22,8 +22,7 @@ class ElementsMixin:
         row_id_or_name: str,
         column_id_or_name: str,
     ) -> dict[str, Any]:
-        """
-        Push a button in a table.
+        """Push a button in a table.
 
         The button can perform any action on the document.
 
@@ -35,6 +34,7 @@ class ElementsMixin:
 
         Returns:
             Result with request_id
+
         """
         path = (
             f"/docs/{self._encode_id(doc_id)}"
@@ -51,8 +51,7 @@ class ElementsMixin:
         page_token: str | None = None,
         sort_by: str | None = None,
     ) -> FormulaList:
-        """
-        List named formulas in a doc.
+        """List named formulas in a doc.
 
         Args:
             doc_id: The doc ID
@@ -62,6 +61,7 @@ class ElementsMixin:
 
         Returns:
             FormulaList with items
+
         """
         params = {"limit": limit, "pageToken": page_token, "sortBy": sort_by}
         path = f"/docs/{self._encode_id(doc_id)}/formulas"
@@ -69,8 +69,7 @@ class ElementsMixin:
         return FormulaList.from_dict(data)
 
     def get_formula(self, doc_id: str, formula_id_or_name: str) -> Formula:
-        """
-        Get a formula's current value.
+        """Get a formula's current value.
 
         Args:
             doc_id: The doc ID
@@ -78,6 +77,7 @@ class ElementsMixin:
 
         Returns:
             Formula with computed value
+
         """
         path = f"/docs/{self._encode_id(doc_id)}/formulas/{self._encode_id(formula_id_or_name)}"
         data = self._get(path)
@@ -90,8 +90,7 @@ class ElementsMixin:
         page_token: str | None = None,
         sort_by: str | None = None,
     ) -> ControlList:
-        """
-        List controls in a doc.
+        """List controls in a doc.
 
         Args:
             doc_id: The doc ID
@@ -101,6 +100,7 @@ class ElementsMixin:
 
         Returns:
             ControlList with items
+
         """
         params = {"limit": limit, "pageToken": page_token, "sortBy": sort_by}
         path = f"/docs/{self._encode_id(doc_id)}/controls"
@@ -108,8 +108,7 @@ class ElementsMixin:
         return ControlList.from_dict(data)
 
     def get_control(self, doc_id: str, control_id_or_name: str) -> Control:
-        """
-        Get a control's current value.
+        """Get a control's current value.
 
         Args:
             doc_id: The doc ID
@@ -117,6 +116,7 @@ class ElementsMixin:
 
         Returns:
             Control with current value
+
         """
         path = f"/docs/{self._encode_id(doc_id)}/controls/{self._encode_id(control_id_or_name)}"
         data = self._get(path)
@@ -128,8 +128,7 @@ class ElementsMixin:
         rule_id: str,
         payload: dict[str, Any] | None = None,
     ) -> dict[str, Any]:
-        """
-        Trigger a webhook automation.
+        """Trigger a webhook automation.
 
         Args:
             doc_id: The doc ID
@@ -138,6 +137,7 @@ class ElementsMixin:
 
         Returns:
             Result with request_id
+
         """
         path = f"/docs/{self._encode_id(doc_id)}/hooks/automation/{self._encode_id(rule_id)}"
         return self._post(path, json_data=payload or {})

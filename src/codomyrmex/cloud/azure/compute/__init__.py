@@ -1,5 +1,4 @@
-"""
-Azure Compute submodule.
+"""Azure Compute submodule.
 
 VM and AKS
 """

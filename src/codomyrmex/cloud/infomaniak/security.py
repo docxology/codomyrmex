@@ -32,6 +32,7 @@ except ImportError:
 
 class OperationRisk(Enum):
     """Risk level for cloud operations."""
+
     READ = auto()
     WRITE = auto()
     DELETE = auto()
@@ -41,6 +42,7 @@ class OperationRisk(Enum):
 @dataclass
 class SecurityCheckResult:
     """Result of a security pipeline check."""
+
     allowed: bool = True
     reason: str = ""
     risk_level: OperationRisk = OperationRisk.READ
@@ -137,14 +139,18 @@ class CloudSecurityPipeline:
         # Check 1: Exploit detection on string params
         if self._defense is not None:
             for key, value in parameters.items():
-                if isinstance(value, str) and self._defense.detect_exploit(value):
-                    result.allowed = False
-                    result.reason = f"Exploit detected in parameter '{key}'"
-                    result.checks_failed.append("exploit_detection")
-                    logger.warning(
-                        f"Security: blocked {operation_name} — exploit in '{key}'"
-                    )
-                    return result
+                if isinstance(value, str):
+                    defense_result = self._defense.detect_exploit(value)
+                    # Check if defense_result is a dict or a boolean-like
+                    is_exploit = defense_result.get("detected", False) if isinstance(defense_result, dict) else bool(defense_result)
+                    if is_exploit:
+                        result.allowed = False
+                        result.reason = f"Exploit detected in parameter '{key}'"
+                        result.checks_failed.append("exploit_detection")
+                        logger.warning(
+                            f"Security: blocked {operation_name} — exploit in '{key}'"
+                        )
+                        return result
             result.checks_passed.append("exploit_detection")
 
         # Check 2: Identity verification for risky operations

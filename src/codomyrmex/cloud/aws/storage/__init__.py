@@ -1,5 +1,4 @@
-"""
-AWS Storage submodule.
+"""AWS Storage submodule.
 
 S3 object storage
 """

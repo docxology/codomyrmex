@@ -1,5 +1,4 @@
-"""
-Edge Computing Provider Support
+"""Edge Computing Provider Support
 
 Support for edge computing providers: Cloudflare Workers, Fastly Compute@Edge, etc.
 """
@@ -13,6 +12,7 @@ from typing import Any
 
 class EdgeProvider(Enum):
     """Supported edge providers."""
+
     CLOUDFLARE_WORKERS = "cloudflare_workers"
     FASTLY_COMPUTE = "fastly_compute"
     AWS_LAMBDA_EDGE = "aws_lambda_edge"
@@ -22,6 +22,7 @@ class EdgeProvider(Enum):
 
 class EdgeRegion(Enum):
     """Common edge regions."""
+
     GLOBAL = "global"
     US_EAST = "us-east"
     US_WEST = "us-west"
@@ -32,6 +33,7 @@ class EdgeRegion(Enum):
 @dataclass
 class EdgeFunctionConfig:
     """Configuration for an edge function."""
+
     name: str
     provider: EdgeProvider
     entry_point: str = "handler"
@@ -47,6 +49,7 @@ class EdgeFunctionConfig:
 @dataclass
 class EdgeDeployment:
     """An edge function deployment."""
+
     id: str
     function_name: str
     provider: EdgeProvider
@@ -116,6 +119,7 @@ class CloudflareWorkersClient(EdgeClient):
         return deployment
 
     def list_deployments(self) -> list[EdgeDeployment]:
+        """List active Edge Deployments."""
         return list(self._deployments.values())
 
     def delete(self, deployment_id: str) -> bool:
@@ -126,6 +130,7 @@ class CloudflareWorkersClient(EdgeClient):
         return False
 
     def get_logs(self, deployment_id: str, limit: int = 100) -> list[dict[str, Any]]:
+        """Retrieve execution logs for an Edge Deployment."""
         return []
 
 
@@ -158,6 +163,7 @@ class FastlyComputeClient(EdgeClient):
         return deployment
 
     def list_deployments(self) -> list[EdgeDeployment]:
+        """List active Edge Deployments."""
         return list(self._deployments.values())
 
     def delete(self, deployment_id: str) -> bool:
@@ -168,6 +174,7 @@ class FastlyComputeClient(EdgeClient):
         return False
 
     def get_logs(self, deployment_id: str, limit: int = 100) -> list[dict[str, Any]]:
+        """Retrieve execution logs for an Edge Deployment."""
         return []
 
 

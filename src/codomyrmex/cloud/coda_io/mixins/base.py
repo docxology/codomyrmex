@@ -20,8 +20,7 @@ class BaseMixin:
         json_data: dict[str, Any] | None = None,
         headers: dict[str, str] | None = None,
     ) -> dict[str, Any]:
-        """
-        Make an HTTP request to the Coda API.
+        """Make an HTTP request to the Coda API.
 
         Args:
             method: HTTP method (GET, POST, PUT, PATCH, DELETE)
@@ -35,6 +34,7 @@ class BaseMixin:
 
         Raises:
             CodaAPIError: On API errors
+
         """
         url = f"{self.base_url}{path}"
 

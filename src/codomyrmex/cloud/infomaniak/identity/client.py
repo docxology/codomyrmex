@@ -1,5 +1,4 @@
-"""
-Infomaniak Identity Client (Keystone).
+"""Infomaniak Identity Client (Keystone).
 
 Provides authentication, application credentials, and user management
 via the OpenStack Keystone API.
@@ -14,8 +13,7 @@ logger = get_logger(__name__)
 
 
 class InfomaniakIdentityClient(InfomaniakOpenStackBase):
-    """
-    Client for Infomaniak identity (Keystone) operations.
+    """Client for Infomaniak identity (Keystone) operations.
 
     Provides methods for managing application credentials, EC2 credentials,
     users, and projects.
@@ -123,8 +121,7 @@ class InfomaniakIdentityClient(InfomaniakOpenStackBase):
         roles: list[str] | None = None,
         unrestricted: bool = False
     ) -> dict[str, Any] | None:
-        """
-        Create an application credential.
+        """Create an application credential.
 
         Args:
             name: Credential name
@@ -135,6 +132,7 @@ class InfomaniakIdentityClient(InfomaniakOpenStackBase):
 
         Returns:
             Credential dict including the secret (only returned once!)
+
         """
         try:
             user_id = self._conn.current_user_id
@@ -253,14 +251,14 @@ class InfomaniakIdentityClient(InfomaniakOpenStackBase):
         self,
         project_id: str | None = None
     ) -> dict[str, Any] | None:
-        """
-        Create EC2-style credentials for S3 access.
+        """Create EC2-style credentials for S3 access.
 
         Args:
             project_id: Project ID (defaults to current project)
 
         Returns:
             Credential dict with access and secret keys
+
         """
         try:
             user_id = self._conn.current_user_id

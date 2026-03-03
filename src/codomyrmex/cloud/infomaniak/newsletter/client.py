@@ -1,5 +1,4 @@
-"""
-Infomaniak Newsletter REST API Client.
+"""Infomaniak Newsletter REST API Client.
 
 Uses the Infomaniak API (https://api.infomaniak.com) with OAuth2 Bearer
 token authentication for newsletter/mailing list operations.
@@ -44,6 +43,7 @@ class InfomaniakNewsletterClient(InfomaniakRESTBase):
 
         Raises:
             ValueError: If required environment variables are missing.
+
         """
         token = os.environ.get("INFOMANIAK_NEWSLETTER_TOKEN")
         newsletter_id = os.environ.get("INFOMANIAK_NEWSLETTER_ID")
@@ -191,6 +191,7 @@ class InfomaniakNewsletterClient(InfomaniakRESTBase):
         Args:
             campaign_id: Campaign ID.
             send_at: ISO 8601 datetime string for scheduled send time.
+
         """
         result = self._post(
             f"campaigns/{campaign_id}/schedule",
@@ -258,6 +259,7 @@ class InfomaniakNewsletterClient(InfomaniakRESTBase):
         Args:
             list_id: Mailing list ID.
             contacts: List of contact dicts with at least 'email' key.
+
         """
         return self._post(
             f"mailing-lists/{list_id}/contacts/import",
@@ -278,6 +280,7 @@ class InfomaniakNewsletterClient(InfomaniakRESTBase):
 
         Raises:
             ValueError: If action is not 'subscribe' or 'unsubscribe'.
+
         """
         if action not in self._VALID_ACTIONS:
             raise ValueError(

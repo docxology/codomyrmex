@@ -1,5 +1,4 @@
-"""
-Infomaniak Compute Client (Nova).
+"""Infomaniak Compute Client (Nova).
 
 Provides instance, image, keypair, and availability zone operations
 via the OpenStack Nova API.
@@ -15,8 +14,7 @@ logger = get_logger(__name__)
 
 
 class InfomaniakComputeClient(InfomaniakOpenStackBase, ComputeClient):
-    """
-    Client for Infomaniak compute (Nova) operations.
+    """Client for Infomaniak compute (Nova) operations.
 
     Provides methods for managing instances, images, keypairs,
     and availability zones.
@@ -35,11 +33,11 @@ class InfomaniakComputeClient(InfomaniakOpenStackBase, ComputeClient):
     # =========================================================================
 
     def list_instances(self) -> list[dict[str, Any]]:
-        """
-        List all compute instances.
+        """List all compute instances.
 
         Returns:
             List of instance dictionaries with id, name, status, etc.
+
         """
         try:
             servers = list(self._conn.compute.servers())
@@ -49,14 +47,14 @@ class InfomaniakComputeClient(InfomaniakOpenStackBase, ComputeClient):
             return []
 
     def get_instance(self, instance_id: str) -> dict[str, Any] | None:
-        """
-        Get details for a specific instance.
+        """Get details for a specific instance.
 
         Args:
             instance_id: Instance UUID
 
         Returns:
             Instance details dict or None if not found
+
         """
         try:
             server = self._conn.compute.get_server(instance_id)
@@ -77,8 +75,7 @@ class InfomaniakComputeClient(InfomaniakOpenStackBase, ComputeClient):
         availability_zone: str | None = None,
         **kwargs
     ) -> dict[str, Any] | None:
-        """
-        Create a new compute instance.
+        """Create a new compute instance.
 
         Args:
             name: Instance name
@@ -93,6 +90,7 @@ class InfomaniakComputeClient(InfomaniakOpenStackBase, ComputeClient):
 
         Returns:
             Created instance dict or None on failure
+
         """
         try:
             # Resolve flavor
@@ -135,14 +133,14 @@ class InfomaniakComputeClient(InfomaniakOpenStackBase, ComputeClient):
             return None
 
     def start_instance(self, instance_id: str) -> bool:
-        """
-        Start a stopped instance.
+        """Start a stopped instance.
 
         Args:
             instance_id: Instance UUID
 
         Returns:
             True if successful
+
         """
         try:
             self._conn.compute.start_server(instance_id)
@@ -153,14 +151,14 @@ class InfomaniakComputeClient(InfomaniakOpenStackBase, ComputeClient):
             return False
 
     def stop_instance(self, instance_id: str) -> bool:
-        """
-        Stop a running instance.
+        """Stop a running instance.
 
         Args:
             instance_id: Instance UUID
 
         Returns:
             True if successful
+
         """
         try:
             self._conn.compute.stop_server(instance_id)
@@ -171,8 +169,7 @@ class InfomaniakComputeClient(InfomaniakOpenStackBase, ComputeClient):
             return False
 
     def reboot_instance(self, instance_id: str, reboot_type: str = "SOFT") -> bool:
-        """
-        Reboot an instance.
+        """Reboot an instance.
 
         Args:
             instance_id: Instance UUID
@@ -180,6 +177,7 @@ class InfomaniakComputeClient(InfomaniakOpenStackBase, ComputeClient):
 
         Returns:
             True if successful
+
         """
         try:
             self._conn.compute.reboot_server(instance_id, reboot_type)
@@ -190,8 +188,7 @@ class InfomaniakComputeClient(InfomaniakOpenStackBase, ComputeClient):
             return False
 
     def delete_instance(self, instance_id: str, force: bool = False) -> bool:
-        """
-        Delete an instance.
+        """Delete an instance.
 
         Args:
             instance_id: Instance UUID
@@ -199,6 +196,7 @@ class InfomaniakComputeClient(InfomaniakOpenStackBase, ComputeClient):
 
         Returns:
             True if successful
+
         """
         try:
             self._conn.compute.delete_server(instance_id, force=force)
@@ -209,14 +207,14 @@ class InfomaniakComputeClient(InfomaniakOpenStackBase, ComputeClient):
             return False
 
     def terminate_instance(self, instance_id: str) -> bool:
-        """
-        Terminate (delete) an instance. ABC-compatible alias for delete_instance.
+        """Terminate (delete) an instance. ABC-compatible alias for delete_instance.
 
         Args:
             instance_id: Instance UUID
 
         Returns:
             True if successful
+
         """
         return self.delete_instance(instance_id, force=True)
 
@@ -225,11 +223,11 @@ class InfomaniakComputeClient(InfomaniakOpenStackBase, ComputeClient):
     # =========================================================================
 
     def list_images(self) -> list[dict[str, Any]]:
-        """
-        List available images.
+        """List available images.
 
         Returns:
             List of image dictionaries
+
         """
         try:
             images = list(self._conn.image.images())
@@ -272,11 +270,11 @@ class InfomaniakComputeClient(InfomaniakOpenStackBase, ComputeClient):
     # =========================================================================
 
     def list_flavors(self) -> list[dict[str, Any]]:
-        """
-        List available flavors (instance types).
+        """List available flavors (instance types).
 
         Returns:
             List of flavor dictionaries
+
         """
         try:
             flavors = list(self._conn.compute.flavors())
@@ -300,11 +298,11 @@ class InfomaniakComputeClient(InfomaniakOpenStackBase, ComputeClient):
     # =========================================================================
 
     def list_keypairs(self) -> list[dict[str, Any]]:
-        """
-        List SSH key pairs.
+        """List SSH key pairs.
 
         Returns:
             List of keypair dictionaries
+
         """
         try:
             keypairs = list(self._conn.compute.keypairs())
@@ -325,8 +323,7 @@ class InfomaniakComputeClient(InfomaniakOpenStackBase, ComputeClient):
         name: str,
         public_key: str | None = None
     ) -> dict[str, Any] | None:
-        """
-        Create or import an SSH key pair.
+        """Create or import an SSH key pair.
 
         Args:
             name: Key pair name
@@ -334,6 +331,7 @@ class InfomaniakComputeClient(InfomaniakOpenStackBase, ComputeClient):
 
         Returns:
             Keypair dict (includes private_key if generated)
+
         """
         try:
             keypair = self._conn.compute.create_keypair(
@@ -356,14 +354,14 @@ class InfomaniakComputeClient(InfomaniakOpenStackBase, ComputeClient):
             return None
 
     def delete_keypair(self, name: str) -> bool:
-        """
-        Delete an SSH key pair.
+        """Delete an SSH key pair.
 
         Args:
             name: Key pair name
 
         Returns:
             True if successful
+
         """
         try:
             self._conn.compute.delete_keypair(name)
@@ -378,11 +376,11 @@ class InfomaniakComputeClient(InfomaniakOpenStackBase, ComputeClient):
     # =========================================================================
 
     def list_availability_zones(self) -> list[dict[str, Any]]:
-        """
-        List availability zones.
+        """List availability zones.
 
         Returns:
             List of availability zone dictionaries
+
         """
         try:
             zones = list(self._conn.compute.availability_zones())

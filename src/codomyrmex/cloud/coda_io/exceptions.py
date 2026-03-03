@@ -19,6 +19,7 @@ class CodaAPIError(Exception):
         message: Human-readable error message
         status_code: HTTP status code from the API response
         response_body: Raw response body from the API, if available
+
     """
 
     def __init__(
@@ -181,6 +182,7 @@ def raise_for_status(status_code: int, response_body: dict[str, Any] | None = No
         CodaRateLimitError: For 429 responses
         CodaValidationError: For 400 responses
         CodaAPIError: For other error responses
+
     """
     if status_code < 400:
         return

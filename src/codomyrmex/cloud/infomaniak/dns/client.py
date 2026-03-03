@@ -1,5 +1,4 @@
-"""
-Infomaniak DNS Client (Designate).
+"""Infomaniak DNS Client (Designate).
 
 Provides DNS zone and record management, including reverse DNS (PTR records).
 """
@@ -13,8 +12,7 @@ logger = get_logger(__name__)
 
 
 class InfomaniakDNSClient(InfomaniakOpenStackBase):
-    """
-    Client for Infomaniak DNS (Designate) operations.
+    """Client for Infomaniak DNS (Designate) operations.
 
     Provides methods for managing DNS zones, record sets,
     and reverse DNS (PTR records) for floating IPs.
@@ -71,14 +69,14 @@ class InfomaniakDNSClient(InfomaniakOpenStackBase):
         ttl: int = 3600,
         description: str | None = None
     ) -> dict[str, Any] | None:
-        """
-        Create a new DNS zone.
+        """Create a new DNS zone.
 
         Args:
             name: Zone name (must end with '.')
             email: Admin email for SOA record
             ttl: Default TTL for records
             description: Optional description
+
         """
         try:
             # Ensure zone name ends with dot
@@ -180,8 +178,7 @@ class InfomaniakDNSClient(InfomaniakOpenStackBase):
         ttl: int = 3600,
         description: str | None = None
     ) -> dict[str, Any] | None:
-        """
-        Create a DNS record set.
+        """Create a DNS record set.
 
         Args:
             zone_id: Zone ID or name
@@ -190,6 +187,7 @@ class InfomaniakDNSClient(InfomaniakOpenStackBase):
             records: List of record values
             ttl: Time to live in seconds
             description: Optional description
+
         """
         try:
             # Ensure name ends with dot
@@ -273,14 +271,14 @@ class InfomaniakDNSClient(InfomaniakOpenStackBase):
         ttl: int = 3600,
         description: str | None = None
     ) -> dict[str, Any] | None:
-        """
-        Set reverse DNS (PTR record) for a floating IP.
+        """Set reverse DNS (PTR record) for a floating IP.
 
         Args:
             floating_ip: Floating IP address
             hostname: Hostname for PTR record (must end with '.')
             ttl: Time to live
             description: Optional description
+
         """
         try:
             # Ensure hostname ends with dot

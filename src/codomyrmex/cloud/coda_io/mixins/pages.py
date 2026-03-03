@@ -19,8 +19,7 @@ class PagesMixin:
         limit: int = 25,
         page_token: str | None = None,
     ) -> PageList:
-        """
-        List pages in a doc.
+        """List pages in a doc.
 
         Args:
             doc_id: The doc ID
@@ -29,6 +28,7 @@ class PagesMixin:
 
         Returns:
             PageList with items and pagination info
+
         """
         params = {"limit": limit, "pageToken": page_token}
         data = self._get(f"/docs/{self._encode_id(doc_id)}/pages", params=params)
@@ -44,8 +44,7 @@ class PagesMixin:
         parent_page_id: str | None = None,
         page_content: dict[str, Any] | None = None,
     ) -> dict[str, Any]:
-        """
-        Create a new page in a doc.
+        """Create a new page in a doc.
 
         Note: Requires Doc Maker role.
 
@@ -60,6 +59,7 @@ class PagesMixin:
 
         Returns:
             Creation result with request_id and page id
+
         """
         body = {}
         if name:
@@ -78,8 +78,7 @@ class PagesMixin:
         return self._post(f"/docs/{self._encode_id(doc_id)}/pages", json_data=body)
 
     def get_page(self, doc_id: str, page_id_or_name: str) -> Page:
-        """
-        Get details about a page.
+        """Get details about a page.
 
         Args:
             doc_id: The doc ID
@@ -87,6 +86,7 @@ class PagesMixin:
 
         Returns:
             Page details
+
         """
         path = f"/docs/{self._encode_id(doc_id)}/pages/{self._encode_id(page_id_or_name)}"
         data = self._get(path)
@@ -103,8 +103,7 @@ class PagesMixin:
         is_hidden: bool | None = None,
         content_update: dict[str, Any] | None = None,
     ) -> dict[str, Any]:
-        """
-        Update a page.
+        """Update a page.
 
         Args:
             doc_id: The doc ID
@@ -118,6 +117,7 @@ class PagesMixin:
 
         Returns:
             Update result
+
         """
         body = {}
         if name is not None:
@@ -137,8 +137,7 @@ class PagesMixin:
         return self._put(path, json_data=body)
 
     def delete_page(self, doc_id: str, page_id_or_name: str) -> dict[str, Any]:
-        """
-        Delete a page.
+        """Delete a page.
 
         Args:
             doc_id: The doc ID
@@ -146,6 +145,7 @@ class PagesMixin:
 
         Returns:
             Deletion result
+
         """
         path = f"/docs/{self._encode_id(doc_id)}/pages/{self._encode_id(page_id_or_name)}"
         return self._delete(path)
@@ -157,8 +157,7 @@ class PagesMixin:
         limit: int = 50,
         page_token: str | None = None,
     ) -> dict[str, Any]:
-        """
-        List content elements in a page.
+        """List content elements in a page.
 
         Args:
             doc_id: The doc ID
@@ -168,6 +167,7 @@ class PagesMixin:
 
         Returns:
             Page content with items
+
         """
         params = {"limit": limit, "pageToken": page_token}
         path = f"/docs/{self._encode_id(doc_id)}/pages/{self._encode_id(page_id_or_name)}/content"
@@ -179,8 +179,7 @@ class PagesMixin:
         page_id_or_name: str,
         output_format: str = "html",
     ) -> dict[str, Any]:
-        """
-        Begin exporting page content.
+        """Begin exporting page content.
 
         Args:
             doc_id: The doc ID
@@ -189,6 +188,7 @@ class PagesMixin:
 
         Returns:
             Export status with request ID and href to poll
+
         """
         path = f"/docs/{self._encode_id(doc_id)}/pages/{self._encode_id(page_id_or_name)}/export"
         return self._post(path, json_data={"outputFormat": output_format})
@@ -199,8 +199,7 @@ class PagesMixin:
         page_id_or_name: str,
         request_id: str,
     ) -> dict[str, Any]:
-        """
-        Check page export status.
+        """Check page export status.
 
         Args:
             doc_id: The doc ID
@@ -209,6 +208,7 @@ class PagesMixin:
 
         Returns:
             Export status with download link when complete
+
         """
         path = f"/docs/{self._encode_id(doc_id)}/pages/{self._encode_id(page_id_or_name)}/export/{request_id}"
         return self._get(path)

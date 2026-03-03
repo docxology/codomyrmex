@@ -16,14 +16,14 @@ class AccessMixin:
     """AccessMixin class."""
 
     def get_sharing_metadata(self, doc_id: str) -> SharingMetadata:
-        """
-        Get sharing metadata for a doc.
+        """Get sharing metadata for a doc.
 
         Args:
             doc_id: The doc ID
 
         Returns:
             SharingMetadata with sharing permissions
+
         """
         path = f"/docs/{self._encode_id(doc_id)}/acl/metadata"
         data = self._get(path)
@@ -35,8 +35,7 @@ class AccessMixin:
         limit: int = 25,
         page_token: str | None = None,
     ) -> PermissionList:
-        """
-        List permissions for a doc.
+        """List permissions for a doc.
 
         Args:
             doc_id: The doc ID
@@ -45,6 +44,7 @@ class AccessMixin:
 
         Returns:
             PermissionList with items
+
         """
         params = {"limit": limit, "pageToken": page_token}
         path = f"/docs/{self._encode_id(doc_id)}/acl/permissions"
@@ -58,8 +58,7 @@ class AccessMixin:
         principal: Principal | dict[str, Any],
         suppress_email: bool = False,
     ) -> dict[str, Any]:
-        """
-        Add a permission to a doc.
+        """Add a permission to a doc.
 
         Args:
             doc_id: The doc ID
@@ -69,6 +68,7 @@ class AccessMixin:
 
         Returns:
             Result
+
         """
         if isinstance(principal, Principal):
             principal_dict = principal.to_dict()
@@ -85,8 +85,7 @@ class AccessMixin:
         return self._post(path, json_data=body)
 
     def delete_permission(self, doc_id: str, permission_id: str) -> dict[str, Any]:
-        """
-        Delete a permission.
+        """Delete a permission.
 
         Args:
             doc_id: The doc ID
@@ -94,6 +93,7 @@ class AccessMixin:
 
         Returns:
             Deletion result
+
         """
         path = f"/docs/{self._encode_id(doc_id)}/acl/permissions/{self._encode_id(permission_id)}"
         return self._delete(path)
@@ -103,8 +103,7 @@ class AccessMixin:
         doc_id: str,
         query: str | None = None,
     ) -> dict[str, Any]:
-        """
-        Search for principals that the doc can be shared with.
+        """Search for principals that the doc can be shared with.
 
         Args:
             doc_id: The doc ID
@@ -112,20 +111,21 @@ class AccessMixin:
 
         Returns:
             Dict with users and groups lists
+
         """
         params = {"query": query} if query else {}
         path = f"/docs/{self._encode_id(doc_id)}/acl/principals/search"
         return self._get(path, params=params if params else None)
 
     def get_acl_settings(self, doc_id: str) -> ACLSettings:
-        """
-        Get ACL settings for a doc.
+        """Get ACL settings for a doc.
 
         Args:
             doc_id: The doc ID
 
         Returns:
             ACLSettings
+
         """
         path = f"/docs/{self._encode_id(doc_id)}/acl/settings"
         data = self._get(path)
@@ -138,8 +138,7 @@ class AccessMixin:
         allow_copying: bool | None = None,
         allow_viewers_to_request_editing: bool | None = None,
     ) -> ACLSettings:
-        """
-        Update ACL settings for a doc.
+        """Update ACL settings for a doc.
 
         Args:
             doc_id: The doc ID
@@ -149,6 +148,7 @@ class AccessMixin:
 
         Returns:
             Updated ACLSettings
+
         """
         body = {}
         if allow_editors_to_change_permissions is not None:
@@ -163,11 +163,11 @@ class AccessMixin:
         return ACLSettings.from_dict(data)
 
     def get_categories(self) -> dict[str, Any]:
-        """
-        Get all available doc categories.
+        """Get all available doc categories.
 
         Returns:
             Dict with items list of categories
+
         """
         return self._get("/categories")
 
@@ -180,8 +180,7 @@ class AccessMixin:
         category_names: list[str] | None = None,
         mode: str | None = None,
     ) -> dict[str, Any]:
-        """
-        Publish a doc.
+        """Publish a doc.
 
         Args:
             doc_id: The doc ID
@@ -193,6 +192,7 @@ class AccessMixin:
 
         Returns:
             Result with request_id
+
         """
         body = {}
         if slug is not None:
@@ -210,14 +210,14 @@ class AccessMixin:
         return self._put(path, json_data=body)
 
     def unpublish_doc(self, doc_id: str) -> dict[str, Any]:
-        """
-        Unpublish a doc.
+        """Unpublish a doc.
 
         Args:
             doc_id: The doc ID
 
         Returns:
             Result
+
         """
         path = f"/docs/{self._encode_id(doc_id)}/publish"
         return self._delete(path)

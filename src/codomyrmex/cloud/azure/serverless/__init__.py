@@ -1,5 +1,4 @@
-"""
-Azure Serverless submodule.
+"""Azure Serverless submodule.
 
 Azure Functions
 """

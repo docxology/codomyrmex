@@ -1,5 +1,4 @@
-"""
-AWS Compute submodule.
+"""AWS Compute submodule.
 
 EC2 and container instances
 """

@@ -1,5 +1,4 @@
-"""
-Cloud common utilities.
+"""Cloud common utilities.
 
 Provides common abstractions for cloud operations.
 """
@@ -13,6 +12,7 @@ from typing import Any, Optional
 
 class CloudProvider(Enum):
     """Supported cloud providers."""
+
     AWS = "aws"
     GCP = "gcp"
     AZURE = "azure"
@@ -22,6 +22,7 @@ class CloudProvider(Enum):
 
 class ResourceType(Enum):
     """Types of cloud resources."""
+
     COMPUTE = "compute"
     STORAGE = "storage"
     DATABASE = "database"
@@ -33,6 +34,7 @@ class ResourceType(Enum):
 
 class CloudError(Exception):
     """Base class for cloud-related errors."""
+
     def __init__(self, message: str, provider: CloudProvider | None = None, **kwargs):
         super().__init__(message)
         self.provider = provider
@@ -41,6 +43,7 @@ class CloudError(Exception):
 @dataclass
 class CloudCredentials:
     """Credentials for cloud access."""
+
     provider: CloudProvider
     access_key: str | None = None
     secret_key: str | None = None
@@ -52,6 +55,7 @@ class CloudCredentials:
 @dataclass
 class CloudResource:
     """A cloud resource."""
+
     id: str
     name: str
     resource_type: ResourceType

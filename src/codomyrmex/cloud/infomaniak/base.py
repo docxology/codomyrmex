@@ -1,5 +1,4 @@
-"""
-Infomaniak Base Client Classes.
+"""Infomaniak Base Client Classes.
 
 Provides shared functionality for all Infomaniak cloud clients,
 eliminating factory method duplication across 8+ client modules.
@@ -20,8 +19,7 @@ logger = get_logger(__name__)
 
 
 class InfomaniakOpenStackBase:
-    """
-    Base class for Infomaniak clients using OpenStack SDK.
+    """Base class for Infomaniak clients using OpenStack SDK.
 
     Provides shared __init__, from_env(), from_credentials(),
     context manager protocol, and connection validation.
@@ -32,11 +30,11 @@ class InfomaniakOpenStackBase:
     _service_name: str = "openstack"
 
     def __init__(self, connection: Any):
-        """
-        Initialize with an OpenStack connection.
+        """Initialize with an OpenStack connection.
 
         Args:
             connection: openstack.connection.Connection object
+
         """
         self._conn = connection
 
@@ -56,14 +54,14 @@ class InfomaniakOpenStackBase:
         auth_url: str | None = None,
         region: str = "dc3-a",
     ) -> "InfomaniakOpenStackBase":
-        """
-        Create client with explicit credentials.
+        """Create client with explicit credentials.
 
         Args:
             application_credential_id: Infomaniak app credential ID
             application_credential_secret: Infomaniak app credential secret
             auth_url: Optional auth URL override
             region: Region name
+
         """
         from .auth import InfomaniakCredentials, create_openstack_connection
 
@@ -94,11 +92,11 @@ class InfomaniakOpenStackBase:
                 logger.warning(f"Error closing {self._service_name} connection: {e}")
 
     def validate_connection(self) -> bool:
-        """
-        Lightweight health check by listing projects.
+        """Lightweight health check by listing projects.
 
         Returns:
             True if the connection is valid
+
         """
         try:
             list(self._conn.identity.projects())
@@ -109,8 +107,7 @@ class InfomaniakOpenStackBase:
 
 
 class InfomaniakS3Base:
-    """
-    Base class for Infomaniak S3-compatible clients using boto3.
+    """Base class for Infomaniak S3-compatible clients using boto3.
 
     Provides shared __init__, from_env(), from_credentials(),
     context manager protocol, and connection validation.
@@ -120,11 +117,11 @@ class InfomaniakS3Base:
     DEFAULT_REGION = "us-east-1"
 
     def __init__(self, client: Any):
-        """
-        Initialize with a boto3 S3 client.
+        """Initialize with a boto3 S3 client.
 
         Args:
             client: boto3.client('s3') instance
+
         """
         self._client = client
 
@@ -173,11 +170,11 @@ class InfomaniakS3Base:
         return None  # boto3 session cleanup handled by GC
 
     def validate_connection(self) -> bool:
-        """
-        Lightweight health check by listing buckets.
+        """Lightweight health check by listing buckets.
 
         Returns:
             True if the connection is valid
+
         """
         try:
             self._client.list_buckets()
@@ -188,8 +185,7 @@ class InfomaniakS3Base:
 
 
 class InfomaniakRESTBase:
-    """
-    Base class for Infomaniak REST API clients using Bearer token auth.
+    """Base class for Infomaniak REST API clients using Bearer token auth.
 
     Provides shared __init__, from_env(), context manager protocol,
     and connection validation for REST-based Infomaniak services
@@ -202,12 +198,12 @@ class InfomaniakRESTBase:
     _service_name: str = "rest"
 
     def __init__(self, token: str, base_url: str = "https://api.infomaniak.com"):
-        """
-        Initialize with a Bearer token.
+        """Initialize with a Bearer token.
 
         Args:
             token: OAuth2 bearer token for API authentication.
             base_url: API base URL (default: https://api.infomaniak.com).
+
         """
         self._token = token
         self._base_url = base_url.rstrip("/")
@@ -245,11 +241,11 @@ class InfomaniakRESTBase:
                 logger.warning(f"Error closing {self._service_name} session: {e}")
 
     def validate_connection(self) -> bool:
-        """
-        Lightweight health check — subclasses should override with
+        """Lightweight health check — subclasses should override with
         a service-specific GET request.
 
         Returns:
             True if the connection is valid.
+
         """
         return True
