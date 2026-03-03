@@ -243,3 +243,34 @@ class TestFingerprint:
         from codomyrmex.utils.hashing import fingerprint
 
         assert fingerprint("a", 1) != fingerprint("a", 2)
+
+    def test_no_args(self):
+        from codomyrmex.utils.hashing import fingerprint
+
+        # With no args, it joins an empty list -> "", so it hashes the empty string
+        result = fingerprint()
+        assert len(result) == 64
+
+    def test_single_arg(self):
+        from codomyrmex.utils.hashing import fingerprint
+
+        result = fingerprint("test")
+        assert len(result) == 64
+
+    def test_delimiter_collision(self):
+        from codomyrmex.utils.hashing import fingerprint
+
+        # Since fingerprint uses "|" as a delimiter, "a|b" and ("a", "b")
+        # result in the exact same string before hashing
+        assert fingerprint("a|b") == fingerprint("a", "b")
+
+    def test_with_objects(self):
+        from codomyrmex.utils.hashing import fingerprint
+
+        class Dummy:
+            def __str__(self):
+                return "dummy_object"
+
+        fp1 = fingerprint(Dummy())
+        fp2 = fingerprint("dummy_object")
+        assert fp1 == fp2
