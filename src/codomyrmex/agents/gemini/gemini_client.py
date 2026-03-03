@@ -4,14 +4,7 @@ from typing import Any
 
 from google import genai
 from google.genai import types
-
-try:
-    from PIL import Image
-
-    PIL_AVAILABLE = True
-except ImportError:
-    Image = type("Image", (), {})
-    PIL_AVAILABLE = False
+from PIL import Image
 
 from codomyrmex.agents.core import (
     AgentCapabilities,

@@ -26,8 +26,8 @@ try:
 
     GCAL_AVAILABLE = True
 except ImportError:
-    Credentials = type("Credentials", (), {})
-    Resource = type("Resource", (), {})
+    Credentials = None
+    Resource = None
     HttpError = Exception
     build = None
     GCAL_AVAILABLE = False
