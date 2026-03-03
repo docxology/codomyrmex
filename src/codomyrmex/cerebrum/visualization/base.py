@@ -21,6 +21,7 @@ except ImportError:
     Figure = Any
     Axes = Any
     plt = None
+    np = Any
 
 try:
     import networkx as nx
