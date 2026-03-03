@@ -1,5 +1,4 @@
-"""
-Plugin Loader for Codomyrmex Plugin System
+"""Plugin Loader for Codomyrmex Plugin System.
 
 This module handles the loading, initialization, and lifecycle management
 of plugins in the Codomyrmex system.
@@ -27,6 +26,7 @@ from .plugin_registry import Plugin, PluginInfo, PluginState
 @dataclass
 class LoadResult:
     """Result of plugin loading operation."""
+
     plugin_name: str
     success: bool
     plugin_instance: Plugin | None = None
@@ -34,25 +34,24 @@ class LoadResult:
     warnings: list[str] = None
 
     def __post_init__(self):
-
+        """Initialize the default fields."""
         if self.warnings is None:
             self.warnings = []
 
 
 class PluginLoader:
-    """
-    Plugin loader responsible for discovering, loading, and initializing plugins.
+    """Plugin loader responsible for discovering, loading, and initializing plugins.
 
     Handles dynamic loading of plugin modules, dependency resolution,
     and proper initialization with configuration.
     """
 
     def __init__(self, plugin_directories: list[str] | None = None):
-        """
-        Initialize the plugin loader.
+        """Initialize the plugin loader.
 
         Args:
             plugin_directories: List of directories to search for plugins
+
         """
         self.plugin_directories = plugin_directories or [
             Path.cwd() / "plugins",
@@ -67,11 +66,11 @@ class PluginLoader:
         self.load_cache: dict[str, Any] = {}
 
     def discover_plugins(self) -> list[PluginInfo]:
-        """
-        Discover available plugins in configured directories.
+        """Discover available plugins in configured directories.
 
         Returns:
             List of discovered PluginInfo objects
+
         """
         discovered_plugins = []
 
@@ -97,8 +96,7 @@ class PluginLoader:
         return discovered_plugins
 
     def load_plugin(self, plugin_info: PluginInfo, config: dict[str, Any] | None = None) -> LoadResult:
-        """
-        Load and initialize a plugin.
+        """Load and initialize a plugin.
 
         Args:
             plugin_info: Plugin metadata
@@ -106,6 +104,7 @@ class PluginLoader:
 
         Returns:
             LoadResult with loading outcome
+
         """
         result = LoadResult(plugin_name=plugin_info.name, success=False)
 
@@ -155,14 +154,14 @@ class PluginLoader:
         return result
 
     def unload_plugin(self, plugin_name: str) -> bool:
-        """
-        Unload a plugin.
+        """Unload a plugin.
 
         Args:
             plugin_name: Name of the plugin to unload
 
         Returns:
             True if successfully unloaded
+
         """
         if plugin_name not in self.loaded_plugins:
             logger.warning(f"Plugin '{plugin_name}' not loaded")
@@ -189,8 +188,7 @@ class PluginLoader:
             return False
 
     def reload_plugin(self, plugin_name: str, config: dict[str, Any] | None = None) -> LoadResult:
-        """
-        Reload a plugin.
+        """Reload a plugin.
 
         Args:
             plugin_name: Name of the plugin to reload
@@ -198,6 +196,7 @@ class PluginLoader:
 
         Returns:
             LoadResult with reload outcome
+
         """
         # Unload first
         self.unload_plugin(plugin_name)
@@ -218,35 +217,35 @@ class PluginLoader:
         return self.load_plugin(plugin_info, config)
 
     def get_loaded_plugins(self) -> dict[str, Plugin]:
-        """
-        Get all currently loaded plugins.
+        """Get all currently loaded plugins.
 
         Returns:
             Dictionary of plugin name to Plugin instance
+
         """
         return self.loaded_plugins.copy()
 
     def get_plugin(self, plugin_name: str) -> Plugin | None:
-        """
-        Get a loaded plugin by name.
+        """Get a loaded plugin by name.
 
         Args:
             plugin_name: Name of the plugin
 
         Returns:
             Plugin instance if loaded, None otherwise
+
         """
         return self.loaded_plugins.get(plugin_name)
 
     def validate_plugin_dependencies(self, plugin_info: PluginInfo) -> list[str]:
-        """
-        Validate that plugin dependencies are available.
+        """Validate that plugin dependencies are available.
 
         Args:
             plugin_info: Plugin metadata
 
         Returns:
             List of missing dependencies
+
         """
         missing = []
 
@@ -260,14 +259,14 @@ class PluginLoader:
         return missing
 
     def _load_plugin_module(self, plugin_info: PluginInfo) -> Any | None:
-        """
-        Load a plugin module from its entry point.
+        """Load a plugin module from its entry point.
 
         Args:
             plugin_info: Plugin metadata
 
         Returns:
             Loaded module or None if loading failed
+
         """
         entry_point = plugin_info.entry_point
 
@@ -312,8 +311,7 @@ class PluginLoader:
                 return None
 
     def _find_plugin_class(self, module: Any, plugin_info: PluginInfo) -> type[Plugin] | None:
-        """
-        Find the plugin class in a loaded module.
+        """Find the plugin class in a loaded module.
 
         Args:
             module: Loaded plugin module
@@ -321,6 +319,7 @@ class PluginLoader:
 
         Returns:
             Plugin class if found, None otherwise
+
         """
         # Look for classes that inherit from Plugin
         from .plugin_registry import Plugin as BasePlugin
@@ -342,14 +341,14 @@ class PluginLoader:
         return None
 
     def _load_plugin_metadata(self, plugin_dir: Path) -> PluginInfo | None:
-        """
-        Load plugin metadata from a plugin directory.
+        """Load plugin metadata from a plugin directory.
 
         Args:
             plugin_dir: Plugin directory path
 
         Returns:
             PluginInfo if metadata found, None otherwise
+
         """
         # Look for metadata files
         metadata_files = [
@@ -404,14 +403,14 @@ class PluginLoader:
         return None
 
     def _load_plugin_metadata_from_file(self, plugin_file: Path) -> PluginInfo | None:
-        """
-        Load plugin metadata from a single plugin file.
+        """Load plugin metadata from a single plugin file.
 
         Args:
             plugin_file: Plugin file path
 
         Returns:
             PluginInfo if metadata found, None otherwise
+
         """
         # For single-file plugins, extract metadata from docstring or comments
         try:
@@ -450,19 +449,18 @@ class PluginLoader:
 # Convenience functions
 
 def discover_plugins() -> list[PluginInfo]:
-    """
-    Convenience function to discover plugins.
+    """Provide a convenience function to discover plugins.
 
     Returns:
         List of discovered PluginInfo objects
+
     """
     loader = PluginLoader()
     return loader.discover_plugins()
 
 
 def load_plugin(plugin_info: PluginInfo, config: dict[str, Any] | None = None) -> LoadResult:
-    """
-    Convenience function to load a plugin.
+    """Provide a convenience function to load a plugin.
 
     Args:
         plugin_info: Plugin metadata
@@ -470,20 +468,21 @@ def load_plugin(plugin_info: PluginInfo, config: dict[str, Any] | None = None) -
 
     Returns:
         LoadResult with loading outcome
+
     """
     loader = PluginLoader()
     return loader.load_plugin(plugin_info, config)
 
 
 def unload_plugin(plugin_name: str) -> bool:
-    """
-    Convenience function to unload a plugin.
+    """Provide a convenience function to unload a plugin.
 
     Args:
         plugin_name: Name of the plugin
 
     Returns:
         True if successfully unloaded
+
     """
     loader = PluginLoader()
     return loader.unload_plugin(plugin_name)

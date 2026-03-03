@@ -31,6 +31,7 @@ class PluginError(CodomyrmexError):
             plugin_name: Name of the plugin
             plugin_version: Version of the plugin
             **kwargs: Additional context passed to parent
+
         """
         super().__init__(message, **kwargs)
         if plugin_name:
@@ -60,6 +61,7 @@ class LoadError(PluginError):
             plugin_path: Path to the plugin file or directory
             module_name: Name of the module that failed to load
             **kwargs: Additional context passed to parent
+
         """
         super().__init__(message, **kwargs)
         if plugin_path:
@@ -91,6 +93,7 @@ class DependencyError(PluginError):
             required_version: Version required by the plugin
             available_version: Version that is actually available
             **kwargs: Additional context passed to parent
+
         """
         super().__init__(message, **kwargs)
         if required_dependency:
@@ -122,6 +125,7 @@ class HookError(PluginError):
             hook_name: Name of the hook
             hook_type: Type of hook (pre, post, filter, etc.)
             **kwargs: Additional context passed to parent
+
         """
         super().__init__(message, **kwargs)
         if hook_name:
@@ -149,6 +153,7 @@ class PluginValidationError(PluginError):
             message: Error description
             validation_errors: List of validation error messages
             **kwargs: Additional context passed to parent
+
         """
         super().__init__(message, **kwargs)
         if validation_errors:
@@ -176,6 +181,7 @@ class PluginStateError(PluginError):
             current_state: Current state of the plugin
             attempted_state: State transition that was attempted
             **kwargs: Additional context passed to parent
+
         """
         super().__init__(message, **kwargs)
         if current_state:
@@ -205,6 +211,7 @@ class PluginConflictError(PluginError):
             conflicting_plugin: Name of the conflicting plugin
             conflict_type: Type of conflict (namespace, resource, etc.)
             **kwargs: Additional context passed to parent
+
         """
         super().__init__(message, **kwargs)
         if conflicting_plugin:

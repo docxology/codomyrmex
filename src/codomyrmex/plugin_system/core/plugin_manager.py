@@ -1,5 +1,4 @@
-"""
-Plugin Manager for Codomyrmex Plugin System
+"""Plugin Manager for Codomyrmex Plugin System.
 
 This module provides the main plugin management interface, coordinating
 plugin discovery, validation, loading, and lifecycle management.
@@ -34,9 +33,7 @@ from .plugin_registry import (
 
 
 class PluginManager:
-    """
-    Central plugin management system for Codomyrmex.
-    """
+    """Central plugin management system for Codomyrmex."""
 
     def __init__(self, plugin_directories: list[str] | None = None):
         """Initialize the plugin manager."""
@@ -198,10 +195,19 @@ class PluginManager:
 
 
 def get_plugin_manager() -> PluginManager:
+    """Get the singleton instance of the PluginManager."""
     if not hasattr(get_plugin_manager, '_manager'):
         get_plugin_manager._manager = PluginManager()
     return get_plugin_manager._manager
 
-def discover_plugins() -> list[PluginInfo]: return get_plugin_manager().discover_plugins()
-def load_plugin(name: str, config=None) -> LoadResult: return get_plugin_manager().load_plugin(name, config)
-def unload_plugin(name: str) -> bool: return get_plugin_manager().unload_plugin(name)
+def discover_plugins() -> list[PluginInfo]:
+    """Discover plugins using the global plugin manager."""
+    return get_plugin_manager().discover_plugins()
+
+def load_plugin(name: str, config=None) -> LoadResult:
+    """Load a plugin using the global plugin manager."""
+    return get_plugin_manager().load_plugin(name, config)
+
+def unload_plugin(name: str) -> bool:
+    """Unload a plugin using the global plugin manager."""
+    return get_plugin_manager().unload_plugin(name)
