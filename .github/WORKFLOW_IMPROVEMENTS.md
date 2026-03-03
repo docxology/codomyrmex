@@ -2,7 +2,7 @@
 
 **Last Updated**: March 2026
 
-## Current State: 29 Active Workflows
+## Current State: 31 Active Workflows
 
 ### Core CI/CD & Security (5)
 
@@ -14,7 +14,7 @@
 | 4 | Dependency Review | `dependency-review.yml` | ✅ |
 | 5 | Release & PyPI | `release.yml` | ✅ |
 
-### PR Automation & Agent Infrastructure (10)
+### PR Automation & Agent Infrastructure (12)
 
 | # | Workflow | File | Status |
 |:-:|---------|------|:------:|
@@ -25,9 +25,11 @@
 | 10 | PR Conflict Checker | `pr-conflict-check.yml` | ✅ |
 | 11 | Dependabot Auto-Approve | `dependabot-auto-approve.yml` | ✅ |
 | 12 | Agent PR Welcome | `agent-welcome.yml` | ✅ |
-| 13 | Agent Metrics Dashboard | `agent-metrics.yml` | ✅ |
-| 14 | Jules Batch Dispatch | `jules-dispatch.yml` | ✅ |
-| 15 | First Interaction Greeter | `first-interaction.yml` | ✅ |
+| 13 | PR Linter Comments | `pr-linter-comments.yml`| ✅ |
+| 14 | Post Coverage Comment | `pr-coverage-comment.yml`| ✅ |
+| 15 | Agent Metrics Dashboard | `agent-metrics.yml` | ✅ |
+| 16 | Jules Batch Dispatch | `jules-dispatch.yml` | ✅ |
+| 17 | First Interaction Greeter | `first-interaction.yml` | ✅ |
 
 ### Documentation (2)
 
@@ -76,7 +78,9 @@ PR Opened (by Jules/Dependabot/Gemini)
   ├─ first-interaction.yml ─→ Welcome first-time contributors
   ├─ dependency-review.yml ─→ Security scan of lockfile changes
   ├─ agent-welcome.yml ─────→ Post agent-specific welcome + checklist
+  ├─ pr-linter-comments.yml ─→ Runs Ruff and posts inline PR review comments
   ├─ ci.yml ────────────────→ Lint + Test (ubuntu/3.11 for PRs)
+  │  └─ pr-coverage-comment.yml → Cross-run workflow that posts code coverage delta
   ├─ pre-commit.yml ───────→ Commit checks (soft-fail for agents)
   ├─ gemini-review.yml ─────→ AI code review comments
   │

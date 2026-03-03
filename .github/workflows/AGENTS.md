@@ -5,7 +5,7 @@
 ## Purpose
 
 GitHub Actions workflow definitions for CI/CD, security, multi-agent infrastructure,
-documentation, benchmarks, PR automation, and repository maintenance. 29 workflows total.
+documentation, benchmarks, PR automation, and repository maintenance. 31 workflows total.
 
 ## Workflow Inventory
 
@@ -27,6 +27,8 @@ documentation, benchmarks, PR automation, and repository maintenance. 29 workflo
 | `pr-title-check.yml` | PR open/edit/sync | Enforce Semantic/Conventional Commits for PR titles |
 | `auto-assign.yml` | PR opened | Auto-assign PR creator as assignee |
 | `pr-conflict-check.yml` | push main, every 6h | Detect + label conflicting PRs |
+| `pr-linter-comments.yml`| PR opened/sync | Post inline Ruff linter comments on changed files |
+| `pr-coverage-comment.yml`| CI complete | Post coverage delta and missing test lines |
 | `agent-welcome.yml` | PR opened | Agent-specific welcome message + checklist |
 | `agent-metrics.yml` | weekly Monday | Agent PR/issue/workflow health dashboard |
 | `jules-dispatch.yml` | workflow_dispatch | Batch create Jules task issues |

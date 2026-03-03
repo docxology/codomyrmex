@@ -1,0 +1,56 @@
+name: PR Linter Comments
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+permissions:
+  pull-requests: write
+  contents: read
+
+env:
+  PYTHON_VERSION: "3.11"
+  UV_VERSION: "0.5.7"
+
+jobs:
+  ruff-comments:
+    name: Ruff Inline Comments
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install UV
+        uses: astral-sh/setup-uv@v5
+        with:
+          version: ${{ env.UV_VERSION }}
+
+      - name: Set up Python
+        run: uv python install ${{ env.PYTHON_VERSION }}
+
+      - name: Install dependencies
+        run: uv sync --all-extras --dev
+
+      - name: Re-run Ruff and output GitHub annotations
+        run: |
+          # Use --output-format=github to generate inline annotations
+          # We only want to run it on changed files in the PR
+          
+          # Get list of changed Python files
+          files=$(git diff --name-only origin/main...HEAD | grep '\.py$' || true)
+          
+          if [ -z "$files" ]; then
+            echo "No Python files changed, skipping Ruff."
+            exit 0
+          fi
+          
+          echo "Running Ruff on changed files..."
+          uv run ruff check $files --output-format=github || true
+          
+      - name: Run Ruff Format check
+        run: |
+          files=$(git diff --name-only origin/main...HEAD | grep '\.py$' || true)
+          if [ -z "$files" ]; then exit 0; fi
+          uv run ruff format --check $files || true

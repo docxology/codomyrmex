@@ -19,6 +19,8 @@ on:
       - "Dependency Review"
       - "Auto Assign PR Author"
       - "First Interaction"
+      - "PR Linter Comments"
+      - "Post Coverage Comment"
     types:
       - completed
   schedule:
@@ -65,7 +67,9 @@ jobs:
               'Dependabot Auto Approve',
               'Dependency Review',
               'Auto Assign PR Author',
-              'First Interaction'
+              'First Interaction',
+              'PR Linter Comments',
+              'Post Coverage Comment'
             ];
             
             // Proper name-to-filename mapping
@@ -85,7 +89,9 @@ jobs:
               'Dependabot Auto Approve': 'dependabot-auto-approve.yml',
               'Dependency Review': 'dependency-review.yml',
               'Auto Assign PR Author': 'auto-assign.yml',
-              'First Interaction': 'first-interaction.yml'
+              'First Interaction': 'first-interaction.yml',
+              'PR Linter Comments': 'pr-linter-comments.yml',
+              'Post Coverage Comment': 'pr-coverage-comment.yml'
             };
             
             let statusData = {
