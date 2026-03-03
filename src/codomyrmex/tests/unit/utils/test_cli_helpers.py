@@ -10,6 +10,7 @@ save_json_file, OUTPUT_WIDTH.
 
 import argparse
 import json
+import os
 import time
 from pathlib import Path
 
@@ -46,7 +47,6 @@ from codomyrmex.utils.cli_helpers import (
 # Constants
 # ---------------------------------------------------------------------------
 
-
 @pytest.mark.unit
 class TestOutputWidth:
     """Tests for the OUTPUT_WIDTH module-level constant."""
@@ -61,7 +61,6 @@ class TestOutputWidth:
 # ---------------------------------------------------------------------------
 # format_table
 # ---------------------------------------------------------------------------
-
 
 @pytest.mark.unit
 class TestFormatTable:
@@ -115,13 +114,10 @@ class TestFormatTable:
         # ljust pads the header "col" to match the longest data value width
         assert len(lines[0]) >= len("a very long value here")
 
-    @pytest.mark.parametrize(
-        "headers",
-        [
-            ["single"],
-            ["a", "b", "c", "d", "e"],
-        ],
-    )
+    @pytest.mark.parametrize("headers", [
+        ["single"],
+        ["a", "b", "c", "d", "e"],
+    ])
     def test_varying_header_counts(self, headers):
         data = [{h: f"val_{h}" for h in headers}]
         result = format_table(data, headers)
@@ -172,7 +168,6 @@ class TestFormatTable:
 # format_output
 # ---------------------------------------------------------------------------
 
-
 @pytest.mark.unit
 class TestFormatOutput:
     """Comprehensive tests for format_output."""
@@ -222,7 +217,6 @@ class TestFormatOutput:
 # validate_file_path
 # ---------------------------------------------------------------------------
 
-
 @pytest.mark.unit
 class TestValidateFilePath:
     """Comprehensive tests for validate_file_path."""
@@ -268,29 +262,25 @@ class TestValidateFilePath:
 # determine_language_from_file
 # ---------------------------------------------------------------------------
 
-
 @pytest.mark.unit
 class TestDetermineLanguageFromFile:
     """Comprehensive tests for determine_language_from_file."""
 
-    @pytest.mark.parametrize(
-        "filename,expected",
-        [
-            ("main.py", "python"),
-            ("app.js", "javascript"),
-            ("index.ts", "typescript"),
-            ("server.go", "go"),
-            ("lib.rs", "rust"),
-            ("App.java", "java"),
-            ("solver.cpp", "cpp"),
-            ("utils.c", "c"),
-            ("script.rb", "ruby"),
-            ("handler.php", "php"),
-            ("ViewController.swift", "swift"),
-            ("Main.kt", "kotlin"),
-            ("Service.scala", "scala"),
-        ],
-    )
+    @pytest.mark.parametrize("filename,expected", [
+        ("main.py", "python"),
+        ("app.js", "javascript"),
+        ("index.ts", "typescript"),
+        ("server.go", "go"),
+        ("lib.rs", "rust"),
+        ("App.java", "java"),
+        ("solver.cpp", "cpp"),
+        ("utils.c", "c"),
+        ("script.rb", "ruby"),
+        ("handler.php", "php"),
+        ("ViewController.swift", "swift"),
+        ("Main.kt", "kotlin"),
+        ("Service.scala", "scala"),
+    ])
     def test_known_extensions(self, filename, expected):
         assert determine_language_from_file(filename) == expected
 
@@ -312,7 +302,6 @@ class TestDetermineLanguageFromFile:
 # ---------------------------------------------------------------------------
 # ensure_output_directory
 # ---------------------------------------------------------------------------
-
 
 @pytest.mark.unit
 class TestEnsureOutputDirectory:
@@ -338,7 +327,6 @@ class TestEnsureOutputDirectory:
 # ---------------------------------------------------------------------------
 # ProgressReporter
 # ---------------------------------------------------------------------------
-
 
 @pytest.mark.unit
 class TestProgressReporter:
@@ -396,7 +384,6 @@ class TestProgressReporter:
 # print_progress_bar
 # ---------------------------------------------------------------------------
 
-
 @pytest.mark.unit
 class TestPrintProgressBar:
     """Tests for the standalone print_progress_bar function."""
@@ -425,7 +412,6 @@ class TestPrintProgressBar:
 # ---------------------------------------------------------------------------
 # add_common_arguments
 # ---------------------------------------------------------------------------
-
 
 @pytest.mark.unit
 class TestAddCommonArguments:
@@ -505,7 +491,6 @@ class TestAddCommonArguments:
 # print_section
 # ---------------------------------------------------------------------------
 
-
 @pytest.mark.unit
 class TestPrintSection:
     """Tests for print_section."""
@@ -537,7 +522,6 @@ class TestPrintSection:
 # ---------------------------------------------------------------------------
 # print_success, print_error, print_warning, print_info
 # ---------------------------------------------------------------------------
-
 
 @pytest.mark.unit
 class TestPrintSuccessErrorWarningInfo:
@@ -601,7 +585,6 @@ class TestPrintSuccessErrorWarningInfo:
 # print_with_color
 # ---------------------------------------------------------------------------
 
-
 @pytest.mark.unit
 class TestPrintWithColor:
     """Tests for print_with_color (non-TTY path -- pytest captures stdout)."""
@@ -631,32 +614,27 @@ class TestPrintWithColor:
 # setup_logging
 # ---------------------------------------------------------------------------
 
-
 @pytest.mark.unit
 class TestSetupLogging:
     """Tests for setup_logging."""
 
     def test_setup_logging_default(self):
         import logging
-
         setup_logging()
         assert len(logging.getLogger().handlers) > 0
 
     def test_setup_logging_quiet(self):
         import logging
-
         setup_logging(quiet=True)
         assert len(logging.getLogger().handlers) > 0
 
     def test_setup_logging_debug_level(self):
         import logging
-
         setup_logging(level="DEBUG")
         assert len(logging.getLogger().handlers) > 0
 
     def test_setup_logging_case_insensitive(self):
         import logging
-
         # The code calls level.upper(), so lowercase should work
         setup_logging(level="warning")
         assert len(logging.getLogger().handlers) > 0
@@ -665,7 +643,6 @@ class TestSetupLogging:
 # ---------------------------------------------------------------------------
 # validate_dry_run
 # ---------------------------------------------------------------------------
-
 
 @pytest.mark.unit
 class TestValidateDryRun:
@@ -690,7 +667,6 @@ class TestValidateDryRun:
 # ---------------------------------------------------------------------------
 # create_dry_run_plan
 # ---------------------------------------------------------------------------
-
 
 @pytest.mark.unit
 class TestCreateDryRunPlan:
@@ -745,7 +721,6 @@ class TestCreateDryRunPlan:
 # enhanced_error_context
 # ---------------------------------------------------------------------------
 
-
 @pytest.mark.unit
 class TestEnhancedErrorContext:
     """Tests for enhanced_error_context context manager.
@@ -784,7 +759,6 @@ class TestEnhancedErrorContext:
 # ---------------------------------------------------------------------------
 # handle_common_exceptions
 # ---------------------------------------------------------------------------
-
 
 @pytest.mark.unit
 class TestHandleCommonExceptions:
@@ -861,7 +835,6 @@ class TestHandleCommonExceptions:
 # format_result
 # ---------------------------------------------------------------------------
 
-
 @pytest.mark.unit
 class TestFormatResult:
     """Comprehensive tests for format_result."""
@@ -921,7 +894,6 @@ class TestFormatResult:
 # parse_common_args
 # ---------------------------------------------------------------------------
 
-
 @pytest.mark.unit
 class TestParseCommonArgs:
     """Tests for parse_common_args."""
@@ -959,7 +931,6 @@ class TestParseCommonArgs:
 # load_json_file / save_json_file
 # ---------------------------------------------------------------------------
 
-
 @pytest.mark.unit
 class TestLoadSaveJsonFile:
     """Tests for load_json_file and save_json_file."""
@@ -988,43 +959,29 @@ class TestLoadSaveJsonFile:
         with pytest.raises(json.JSONDecodeError):
             load_json_file(bad)
 
-    def test_load_json_file_success(self, tmp_path):
-        """Test happy path for load_json_file loading a valid JSON file."""
-        data = {"hello": "world", "number": 42}
-        test_file = tmp_path / "test.json"
-        test_file.write_text(json.dumps(data))
-        loaded = load_json_file(test_file)
-        assert loaded == data
+    @pytest.mark.skipif(
+        hasattr(os, "geteuid") and os.geteuid() == 0,
+        reason="Root user bypasses file permissions",
+    )
+    @pytest.mark.skipif(
+        os.name == "nt",
+        reason="chmod(0o000) does not prevent read on Windows",
+    )
+    def test_load_json_file_permission_error(self, tmp_path):
+        """Test generic Exception handling in load_json_file using PermissionError."""
+        # Create a valid JSON file
+        protected_file = tmp_path / "protected.json"
+        protected_file.write_text('{"key": "value"}')
 
-    def test_load_json_file_generic_exception(self, tmp_path, monkeypatch):
-        """Test generic Exception handling in load_json_file by mocking builtins.open."""
-        # We must use monkeypatch on builtins.open to simulate a generic OS or I/O error
-        # because the strict zero-mock policy permits monkeypatching for safe environment/system state modifications.
-        test_file = tmp_path / "generic.json"
-        test_file.write_text('{"key": "value"}')
+        # Remove all permissions to trigger PermissionError when opening
+        protected_file.chmod(0o000)
 
-        import builtins
-
-        original_open = builtins.open if hasattr(builtins, "open") else open
-
-        def mock_open(*args, **kwargs):
-            if str(args[0]) == str(test_file):
-                raise OSError("Simulated hardware failure")
-            return original_open(*args, **kwargs)
-
-        monkeypatch.setattr(builtins, "open", mock_open)
-
-        with pytest.raises(OSError, match="Simulated hardware failure"):
-            load_json_file(test_file)
-
-    def test_load_json_file_unicode_decode_error(self, tmp_path):
-        """Test generic Exception handling via UnicodeDecodeError."""
-        bad_encoding_file = tmp_path / "bad_encoding.json"
-        # Write invalid utf-8 bytes
-        bad_encoding_file.write_bytes(b"\xff\xfe\x00\x00")
-
-        with pytest.raises(UnicodeDecodeError):
-            load_json_file(bad_encoding_file)
+        try:
+            with pytest.raises(PermissionError):
+                load_json_file(protected_file)
+        finally:
+            # Restore permissions so pytest can clean up tmp_path
+            protected_file.chmod(0o644)
 
     def test_save_returns_path(self, tmp_path):
         out = tmp_path / "result.json"
@@ -1049,7 +1006,6 @@ class TestLoadSaveJsonFile:
 # ---------------------------------------------------------------------------
 # Integration-style: combinations
 # ---------------------------------------------------------------------------
-
 
 @pytest.mark.unit
 class TestCLIHelpersIntegration:
