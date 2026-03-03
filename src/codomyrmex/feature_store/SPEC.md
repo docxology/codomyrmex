@@ -43,6 +43,13 @@ Three-layer design: **models** (dataclasses and enums), **store** (abstract back
 | `get_features` | `entity_id, feature_names, apply_transform` | `FeatureVector` | Retrieve with optional transform |
 | `get_group_features` | `entity_id, group_name` | `FeatureVector` | Retrieve all features in a named group |
 
+### `mcp_tools`
+Model Context Protocol tools allow agentic integration with the feature store:
+- `fs_list_groups`: List all registered feature groups.
+- `fs_list_features`: List all registered features, optionally filtered by a specific group.
+- `fs_get_features`: Get feature values for a specific entity.
+- `fs_ingest_features`: Ingest feature values for a specific entity.
+
 ### `FeatureTransform`
 
 | Method | Parameters | Returns | Description |

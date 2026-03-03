@@ -1,5 +1,4 @@
-"""
-Feature Store Models
+"""Feature Store Models.
 
 Data classes and enums for feature management.
 """
@@ -12,6 +11,7 @@ from typing import Any
 
 class FeatureType(Enum):
     """Types of features."""
+
     NUMERIC = "numeric"
     CATEGORICAL = "categorical"
     EMBEDDING = "embedding"
@@ -22,6 +22,7 @@ class FeatureType(Enum):
 
 class ValueType(Enum):
     """Data types for feature values."""
+
     INT = "int"
     FLOAT = "float"
     STRING = "string"
@@ -33,6 +34,7 @@ class ValueType(Enum):
 @dataclass
 class FeatureDefinition:
     """Definition of a feature."""
+
     name: str
     feature_type: FeatureType
     value_type: ValueType
@@ -82,6 +84,7 @@ class FeatureDefinition:
 @dataclass
 class FeatureValue:
     """A feature value with metadata."""
+
     feature_name: str
     entity_id: str
     value: Any
@@ -97,6 +100,7 @@ class FeatureValue:
 @dataclass
 class FeatureVector:
     """A collection of feature values for an entity."""
+
     entity_id: str
     features: dict[str, Any]
     timestamp: datetime = field(default_factory=datetime.now)
@@ -114,6 +118,7 @@ class FeatureVector:
 @dataclass
 class FeatureGroup:
     """A group of related features."""
+
     name: str
     features: list[FeatureDefinition]
     description: str = ""

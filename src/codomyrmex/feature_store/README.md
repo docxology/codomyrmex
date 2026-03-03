@@ -46,6 +46,7 @@ No optional extras are required for this module.
 | `InMemoryFeatureStore` | `store` | Thread-safe in-memory storage backend for development and testing |
 | `FeatureTransform` | `service` | Chainable per-feature transforms applied before serving |
 | `FeatureService` | `service` | High-level service combining store, groups, transforms, and batch ingestion |
+| `mcp_tools` | `mcp_tools` | Model Context Protocol tools (`fs_list_groups`, `fs_list_features`, `fs_get_features`, `fs_ingest_features`) |
 
 ## Built-in Feature Definitions
 
