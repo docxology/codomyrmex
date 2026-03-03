@@ -223,7 +223,9 @@ jobs:
           uv sync --all-extras --dev
 
       - name: Create output directory
-        run: mkdir -p output
+        run: |
+          mkdir -p output
+          mkdir -p artifacts
 
       - name: Download all artifacts
         uses: actions/download-artifact@v4
@@ -263,6 +265,9 @@ jobs:
     needs: [validate-links, check-quality, validate-structure]
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request'
+    permissions:
+      pull-requests: write
+      issues: write
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -280,7 +285,9 @@ jobs:
           uv sync --all-extras --dev
 
       - name: Create output directory
-        run: mkdir -p output
+        run: |
+          mkdir -p output
+          mkdir -p artifacts
 
       - name: Download all artifacts
         uses: actions/download-artifact@v4
