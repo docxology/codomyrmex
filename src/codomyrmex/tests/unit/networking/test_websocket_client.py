@@ -47,6 +47,7 @@ async def test_websocket_client_on_async_handler():
 
     # Mock async handler
     handler_called = False
+
     async def async_handler(data):
         nonlocal handler_called
         handler_called = True
@@ -180,7 +181,7 @@ async def test_websocket_client_empty_message():
     client.on(handler)
 
     # Empty JSON object
-    await client._handle_message('{}')
+    await client._handle_message("{}")
 
     assert received == [{}]
 

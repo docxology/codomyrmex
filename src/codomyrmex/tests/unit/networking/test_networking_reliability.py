@@ -1,4 +1,3 @@
-
 from codomyrmex.networking.http_client import HTTPClient
 from codomyrmex.testing import (
     FloatGenerator,
@@ -13,18 +12,16 @@ class TestNetworkingReliability:
     @property_test(
         timeout=IntGenerator(min_val=1, max_val=60),
         max_retries=IntGenerator(min_val=0, max_val=10),
-        retry_backoff=FloatGenerator(min_val=0.1, max_val=5.0)
+        retry_backoff=FloatGenerator(min_val=0.1, max_val=5.0),
     )
     def test_http_client_config_fuzzing(self, **kwargs):
         """Verify HTTPClient initializes correctly with fuzzed configuration."""
-        timeout = kwargs['timeout']
-        max_retries = kwargs['max_retries']
-        retry_backoff = kwargs['retry_backoff']
+        timeout = kwargs["timeout"]
+        max_retries = kwargs["max_retries"]
+        retry_backoff = kwargs["retry_backoff"]
 
         client = HTTPClient(
-            timeout=timeout,
-            max_retries=max_retries,
-            retry_backoff=retry_backoff
+            timeout=timeout, max_retries=max_retries, retry_backoff=retry_backoff
         )
 
         # Verify public attributes
@@ -42,13 +39,13 @@ class TestNetworkingReliability:
     @property_test(
         initial=FloatGenerator(min_val=0.1, max_val=5.0),
         max_delay=FloatGenerator(min_val=10.0, max_val=60.0),
-        loop_count=IntGenerator(min_val=1, max_val=20)
+        loop_count=IntGenerator(min_val=1, max_val=20),
     )
     def test_websocket_backoff_algorithm(self, **kwargs):
         """Verify exponential backoff calculation logic."""
-        initial = kwargs['initial']
-        max_delay = kwargs['max_delay']
-        loop_count = kwargs['loop_count']
+        initial = kwargs["initial"]
+        max_delay = kwargs["max_delay"]
+        loop_count = kwargs["loop_count"]
 
         # This mirrors the logic in WebSocketClient.connect
         delay = initial

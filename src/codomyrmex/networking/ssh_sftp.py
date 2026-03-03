@@ -6,10 +6,18 @@ from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 logger = get_logger(__name__)
 
+
 class SSHClient:
     """Wrapper for SSH operations using Paramiko."""
 
-    def __init__(self, hostname: str, username: str, password: str | None = None, key_filename: str | None = None, port: int = 22):
+    def __init__(
+        self,
+        hostname: str,
+        username: str,
+        password: str | None = None,
+        key_filename: str | None = None,
+        port: int = 22,
+    ):
         self.hostname = hostname
         self.username = username
         self.password = password
@@ -25,7 +33,7 @@ class SSHClient:
             port=self.port,
             username=self.username,
             password=self.password,
-            key_filename=self.key_filename
+            key_filename=self.key_filename,
         )
         logger.info(f"Connected to {self.username}@{self.hostname}:{self.port}")
 
