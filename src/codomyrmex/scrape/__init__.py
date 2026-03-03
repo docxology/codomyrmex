@@ -14,6 +14,8 @@ Example:
     ```
 """
 
+from typing import Any
+
 from . import extractors
 from .config import ScrapeConfig, get_config, reset_config, set_config
 from .core import (
@@ -39,12 +41,13 @@ from .extractors.scraper import Scraper
 try:
     from codomyrmex.validation.schemas import Result, ResultStatus
 except ImportError:
-    Result = None
-    ResultStatus = None
+    Result: Any = None  # type: ignore[no-redef]
+    ResultStatus: Any = None  # type: ignore[no-redef]
 
 
-def cli_commands():
+def cli_commands() -> dict[str, Any]:
     """Return CLI commands for the scrape module."""
+    from typing import Any
     return {
         "fetch": {
             "help": "Fetch a URL and return scraped content",

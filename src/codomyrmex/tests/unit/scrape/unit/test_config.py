@@ -12,7 +12,7 @@ from codomyrmex.scrape.exceptions import ScrapeValidationError
 class TestScrapeConfig:
     """Test ScrapeConfig class."""
 
-    def test_default_config(self):
+    def test_default_config(self) -> None:
         """Test default configuration values."""
         config = ScrapeConfig()
         assert config.api_key is None
@@ -21,7 +21,7 @@ class TestScrapeConfig:
         assert config.max_retries == 3
         assert config.respect_robots_txt is True
 
-    def test_custom_config(self):
+    def test_custom_config(self) -> None:
         """Test custom configuration."""
         config = ScrapeConfig(
             api_key="test-key",
@@ -34,7 +34,7 @@ class TestScrapeConfig:
         assert config.default_timeout == 60.0
         assert config.max_retries == 5
 
-    def test_from_env(self):
+    def test_from_env(self) -> None:
         """Test creating config from environment variables."""
         orig_api = os.environ.get("FIRECRAWL_API_KEY")
         orig_timeout = os.environ.get("SCRAPE_TIMEOUT")
@@ -59,7 +59,7 @@ class TestScrapeConfig:
                 else:
                     os.environ[key] = orig
 
-    def test_from_env_fc_api_key(self):
+    def test_from_env_fc_api_key(self) -> None:
         """Test creating config from FC_API_KEY environment variable."""
         orig_fc = os.environ.get("FC_API_KEY")
         orig_firecrawl = os.environ.get("FIRECRAWL_API_KEY")
@@ -79,7 +79,7 @@ class TestScrapeConfig:
             else:
                 os.environ["FIRECRAWL_API_KEY"] = orig_firecrawl
 
-    def test_from_env_respect_robots_txt(self):
+    def test_from_env_respect_robots_txt(self) -> None:
         """Test respect_robots_txt from environment."""
         orig = os.environ.get("SCRAPE_RESPECT_ROBOTS_TXT")
         try:
@@ -96,31 +96,31 @@ class TestScrapeConfig:
             else:
                 os.environ["SCRAPE_RESPECT_ROBOTS_TXT"] = orig
 
-    def test_validate_without_api_key(self):
+    def test_validate_without_api_key(self) -> None:
         """Test validation without API key."""
         config = ScrapeConfig(api_key=None)
         with pytest.raises(ScrapeValidationError):
             config.validate()
 
-    def test_validate_with_api_key(self):
+    def test_validate_with_api_key(self) -> None:
         """Test validation with API key."""
         config = ScrapeConfig(api_key="test-key")
         # Should not raise
         config.validate()
 
-    def test_validate_invalid_timeout(self):
+    def test_validate_invalid_timeout(self) -> None:
         """Test validation with invalid timeout."""
         config = ScrapeConfig(api_key="test-key", default_timeout=-1.0)
         with pytest.raises(ScrapeValidationError):
             config.validate()
 
-    def test_validate_invalid_retries(self):
+    def test_validate_invalid_retries(self) -> None:
         """Test validation with invalid retries."""
         config = ScrapeConfig(api_key="test-key", max_retries=-1)
         with pytest.raises(ScrapeValidationError):
             config.validate()
 
-    def test_to_dict(self):
+    def test_to_dict(self) -> None:
         """Test converting config to dictionary."""
         config = ScrapeConfig(api_key="test-key", default_timeout=60.0)
         result = config.to_dict()
@@ -134,20 +134,20 @@ class TestScrapeConfig:
 class TestConfigFunctions:
     """Test global config functions."""
 
-    def test_get_config_default(self):
+    def test_get_config_default(self) -> None:
         """Test getting default config."""
         reset_config()
         config = get_config()
         assert isinstance(config, ScrapeConfig)
 
-    def test_set_config(self):
+    def test_set_config(self) -> None:
         """Test setting global config."""
         reset_config()
         config = ScrapeConfig(api_key="test-key")
         set_config(config)
         assert get_config() == config
 
-    def test_reset_config(self):
+    def test_reset_config(self) -> None:
         """Test resetting global config."""
         config = ScrapeConfig(api_key="test-key")
         set_config(config)

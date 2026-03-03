@@ -18,21 +18,21 @@ from codomyrmex.scrape.core import (
 class TestScrapeFormat:
     """Test ScrapeFormat enum."""
 
-    def test_format_values(self):
+    def test_format_values(self) -> None:
         """Test that format values are correct."""
-        assert ScrapeFormat.MARKDOWN == "markdown"
-        assert ScrapeFormat.HTML == "html"
-        assert ScrapeFormat.JSON == "json"
-        assert ScrapeFormat.LINKS == "links"
-        assert ScrapeFormat.SCREENSHOT == "screenshot"
-        assert ScrapeFormat.METADATA == "metadata"
+        assert ScrapeFormat.MARKDOWN.value == "markdown"
+        assert ScrapeFormat.HTML.value == "html"
+        assert ScrapeFormat.JSON.value == "json"
+        assert ScrapeFormat.LINKS.value == "links"
+        assert ScrapeFormat.SCREENSHOT.value == "screenshot"
+        assert ScrapeFormat.METADATA.value == "metadata"
 
 
 @pytest.mark.unit
 class TestScrapeResult:
     """Test ScrapeResult dataclass."""
 
-    def test_basic_creation(self):
+    def test_basic_creation(self) -> None:
         """Test creating a basic ScrapeResult."""
         result = ScrapeResult(url="https://example.com")
         assert result.url == "https://example.com"
@@ -40,7 +40,7 @@ class TestScrapeResult:
         assert result.success is True
         assert result.error is None
 
-    def test_with_content(self):
+    def test_with_content(self) -> None:
         """Test ScrapeResult with content."""
         result = ScrapeResult(
             url="https://example.com",
@@ -50,7 +50,7 @@ class TestScrapeResult:
         assert result.content == "Test content"
         assert result.status_code == 200
 
-    def test_get_format(self):
+    def test_get_format(self) -> None:
         """Test get_format method."""
         result = ScrapeResult(
             url="https://example.com",
@@ -60,7 +60,7 @@ class TestScrapeResult:
         assert result.get_format("html") == "<html>content</html>"
         assert result.get_format("json") is None
 
-    def test_has_format(self):
+    def test_has_format(self) -> None:
         """Test has_format method."""
         result = ScrapeResult(
             url="https://example.com",
@@ -74,7 +74,7 @@ class TestScrapeResult:
 class TestScrapeOptions:
     """Test ScrapeOptions dataclass."""
 
-    def test_default_options(self):
+    def test_default_options(self) -> None:
         """Test default ScrapeOptions."""
         options = ScrapeOptions()
         assert ScrapeFormat.MARKDOWN in options.formats
@@ -82,7 +82,7 @@ class TestScrapeOptions:
         assert options.follow_links is True
         assert options.respect_robots_txt is True
 
-    def test_custom_options(self):
+    def test_custom_options(self) -> None:
         """Test custom ScrapeOptions."""
         options = ScrapeOptions(
             formats=[ScrapeFormat.MARKDOWN, ScrapeFormat.HTML],
@@ -95,7 +95,7 @@ class TestScrapeOptions:
         assert options.limit == 10
         assert options.max_depth == 2
 
-    def test_to_dict(self):
+    def test_to_dict(self) -> None:
         """Test to_dict method."""
         options = ScrapeOptions(
             formats=[ScrapeFormat.MARKDOWN],
@@ -112,7 +112,7 @@ class TestScrapeOptions:
 class TestCrawlResult:
     """Test CrawlResult dataclass."""
 
-    def test_basic_creation(self):
+    def test_basic_creation(self) -> None:
         """Test creating a basic CrawlResult."""
         result = CrawlResult(job_id="test-123", status="pending")
         assert result.job_id == "test-123"
@@ -125,13 +125,13 @@ class TestCrawlResult:
 class TestMapResult:
     """Test MapResult dataclass."""
 
-    def test_basic_creation(self):
+    def test_basic_creation(self) -> None:
         """Test creating a basic MapResult."""
         result = MapResult()
         assert len(result.links) == 0
         assert result.total == 0
 
-    def test_with_links(self):
+    def test_with_links(self) -> None:
         """Test MapResult with links."""
         links = [
             {"url": "https://example.com/page1", "title": "Page 1"},
@@ -146,7 +146,7 @@ class TestMapResult:
 class TestSearchResult:
     """Test SearchResult dataclass."""
 
-    def test_basic_creation(self):
+    def test_basic_creation(self) -> None:
         """Test creating a basic SearchResult."""
         result = SearchResult(query="test query")
         assert result.query == "test query"
@@ -158,7 +158,7 @@ class TestSearchResult:
 class TestExtractResult:
     """Test ExtractResult dataclass."""
 
-    def test_basic_creation(self):
+    def test_basic_creation(self) -> None:
         """Test creating a basic ExtractResult."""
         result = ExtractResult()
         assert result.status == "completed"
@@ -170,7 +170,7 @@ class TestExtractResult:
 class TestBaseScraper:
     """Test BaseScraper abstract class."""
 
-    def test_is_abstract(self):
+    def test_is_abstract(self) -> None:
         """Test that BaseScraper cannot be instantiated."""
         with pytest.raises(TypeError):
             BaseScraper()  # type: ignore

@@ -4,6 +4,7 @@ This module provides the main Scraper class that serves as the primary
 interface for scraping operations, delegating to provider-specific adapters.
 """
 
+from typing import Any
 from urllib.parse import urlparse
 
 from codomyrmex.logging_monitoring import get_logger
@@ -63,7 +64,7 @@ class Scraper(BaseScraper):
             except ImportError as e:
                 raise ScrapeValidationError(
                     "No scraper adapter available. Install firecrawl-py: pip install firecrawl-py",
-                    context={"import_error": str(e)},
+
                 ) from e
             except Exception as e:
                 raise ScrapeError(
@@ -98,7 +99,7 @@ class Scraper(BaseScraper):
 
         logger.info(f"Scraping URL: {url}")
         try:
-            result = self.adapter.scrape(url, options)
+            result = self.adapter.scrape(url, options)  # type: ignore[union-attr]
             logger.debug(f"Successfully scraped {url}, status: {result.status_code}")
             return result
         except ScrapeError:
@@ -131,7 +132,7 @@ class Scraper(BaseScraper):
 
         logger.info(f"Starting crawl from URL: {url}")
         try:
-            result = self.adapter.crawl(url, options)
+            result = self.adapter.crawl(url, options)  # type: ignore[union-attr]
             logger.info(f"Crawl job {result.job_id} created, status: {result.status}")
             return result
         except ScrapeError:
@@ -164,7 +165,7 @@ class Scraper(BaseScraper):
 
         logger.info(f"Mapping website structure: {url}" + (f" (search: {search})" if search else ""))
         try:
-            result = self.adapter.map(url, search)
+            result = self.adapter.map(url, search)  # type: ignore[union-attr]
             logger.info(f"Found {result.total} links for {url}")
             return result
         except ScrapeError:
@@ -194,7 +195,7 @@ class Scraper(BaseScraper):
 
         logger.info(f"Searching web: {query}")
         try:
-            result = self.adapter.search(query, options)
+            result = self.adapter.search(query, options)  # type: ignore[union-attr]
             logger.info(f"Found {result.total} results for query: {query}")
             return result
         except ScrapeError:
@@ -206,7 +207,7 @@ class Scraper(BaseScraper):
     def extract(
         self,
         urls: list[str],
-        schema: dict | None = None,
+        schema: dict[str, Any] | None = None,
         prompt: str | None = None,
     ) -> ExtractResult:
         """Extract structured data from URLs using LLM.
@@ -241,7 +242,7 @@ class Scraper(BaseScraper):
 
         logger.info(f"Extracting data from {len(urls)} URL(s)")
         try:
-            result = self.adapter.extract(urls, schema, prompt)
+            result = self.adapter.extract(urls, schema, prompt)  # type: ignore[union-attr]
             logger.info(f"Extraction completed, status: {result.status}")
             return result
         except ScrapeError:

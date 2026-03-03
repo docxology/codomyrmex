@@ -1,3 +1,4 @@
+# mypy: ignore-errors
 """Tests for the scrape module.
 
 Tests cover:
@@ -33,14 +34,14 @@ from codomyrmex.scrape import (
 
 
 @pytest.mark.unit
-def test_scrape_module_import():
+def test_scrape_module_import() -> None:
     """Verify that the scrape module can be imported successfully."""
     assert scrape is not None
     assert hasattr(scrape, "__path__")
 
 
 @pytest.mark.unit
-def test_scrape_module_structure():
+def test_scrape_module_structure() -> None:
     """Verify basic structure of scrape module."""
     assert hasattr(scrape, "__file__")
 
@@ -49,7 +50,7 @@ def test_scrape_module_structure():
 
 
 @pytest.mark.unit
-def test_scrape_format_enum_values():
+def test_scrape_format_enum_values() -> None:
     """ScrapeFormat contains all expected format types."""
     assert ScrapeFormat.MARKDOWN.value == "markdown"
     assert ScrapeFormat.HTML.value == "html"
@@ -63,7 +64,7 @@ def test_scrape_format_enum_values():
 
 
 @pytest.mark.unit
-def test_scrape_result_construction():
+def test_scrape_result_construction() -> None:
     """ScrapeResult can be constructed with required and optional fields."""
     result = ScrapeResult(
         url="https://example.com",
@@ -79,7 +80,7 @@ def test_scrape_result_construction():
 
 
 @pytest.mark.unit
-def test_scrape_result_get_format():
+def test_scrape_result_get_format() -> None:
     """ScrapeResult.get_format retrieves content by format type."""
     result = ScrapeResult(
         url="https://example.com",
@@ -91,7 +92,7 @@ def test_scrape_result_get_format():
 
 
 @pytest.mark.unit
-def test_scrape_result_has_format():
+def test_scrape_result_has_format() -> None:
     """ScrapeResult.has_format checks format availability."""
     result = ScrapeResult(url="https://example.com", formats={"markdown": "data"})
     assert result.has_format(ScrapeFormat.MARKDOWN) is True
@@ -102,7 +103,7 @@ def test_scrape_result_has_format():
 
 
 @pytest.mark.unit
-def test_scrape_options_defaults():
+def test_scrape_options_defaults() -> None:
     """ScrapeOptions has sensible defaults."""
     opts = ScrapeOptions()
     assert opts.formats == [ScrapeFormat.MARKDOWN]
@@ -114,7 +115,7 @@ def test_scrape_options_defaults():
 
 
 @pytest.mark.unit
-def test_scrape_options_to_dict():
+def test_scrape_options_to_dict() -> None:
     """ScrapeOptions serializes to dictionary with correct format values."""
     opts = ScrapeOptions(
         formats=[ScrapeFormat.MARKDOWN, ScrapeFormat.HTML],
@@ -132,7 +133,7 @@ def test_scrape_options_to_dict():
 
 
 @pytest.mark.unit
-def test_scrape_config_defaults():
+def test_scrape_config_defaults() -> None:
     """ScrapeConfig has sensible defaults."""
     config = ScrapeConfig()
     assert config.api_key is None
@@ -143,7 +144,7 @@ def test_scrape_config_defaults():
 
 
 @pytest.mark.unit
-def test_scrape_config_validate_missing_api_key():
+def test_scrape_config_validate_missing_api_key() -> None:
     """ScrapeConfig.validate raises on missing API key."""
     config = ScrapeConfig(api_key=None)
     with pytest.raises(ScrapeValidationError):
@@ -151,7 +152,7 @@ def test_scrape_config_validate_missing_api_key():
 
 
 @pytest.mark.unit
-def test_scrape_config_validate_negative_timeout():
+def test_scrape_config_validate_negative_timeout() -> None:
     """ScrapeConfig.validate raises on non-positive timeout."""
     config = ScrapeConfig(api_key="test-key", default_timeout=-1.0)
     with pytest.raises(ScrapeValidationError):
@@ -159,7 +160,7 @@ def test_scrape_config_validate_negative_timeout():
 
 
 @pytest.mark.unit
-def test_scrape_config_to_dict_masks_api_key():
+def test_scrape_config_to_dict_masks_api_key() -> None:
     """ScrapeConfig.to_dict masks the API key."""
     config = ScrapeConfig(api_key="secret-key-123")
     d = config.to_dict()
@@ -170,7 +171,7 @@ def test_scrape_config_to_dict_masks_api_key():
 
 
 @pytest.mark.unit
-def test_crawl_result_construction():
+def test_crawl_result_construction() -> None:
     """CrawlResult can be constructed with expected fields."""
     result = CrawlResult(job_id="job-1", status="completed", total=5, completed=5)
     assert result.job_id == "job-1"
@@ -179,7 +180,7 @@ def test_crawl_result_construction():
 
 
 @pytest.mark.unit
-def test_map_result_auto_total():
+def test_map_result_auto_total() -> None:
     """MapResult auto-calculates total from links."""
     links = [{"url": "https://a.com"}, {"url": "https://b.com"}]
     result = MapResult(links=links)
@@ -187,7 +188,7 @@ def test_map_result_auto_total():
 
 
 @pytest.mark.unit
-def test_search_result_construction():
+def test_search_result_construction() -> None:
     """SearchResult stores query and results."""
     result = SearchResult(query="test search", total=0)
     assert result.query == "test search"
@@ -195,7 +196,7 @@ def test_search_result_construction():
 
 
 @pytest.mark.unit
-def test_extract_result_defaults():
+def test_extract_result_defaults() -> None:
     """ExtractResult has sensible defaults."""
     result = ExtractResult()
     assert result.status == "completed"
@@ -207,7 +208,7 @@ def test_extract_result_defaults():
 
 
 @pytest.mark.unit
-def test_exception_hierarchy():
+def test_exception_hierarchy() -> None:
     """Scrape exceptions follow expected hierarchy."""
     assert issubclass(ScrapeConnectionError, ScrapeError)
     assert issubclass(ScrapeTimeoutError, ScrapeError)
@@ -216,7 +217,7 @@ def test_exception_hierarchy():
 
 
 @pytest.mark.unit
-def test_scrape_connection_error_context():
+def test_scrape_connection_error_context() -> None:
     """ScrapeConnectionError stores URL and status code as attributes."""
     err = ScrapeConnectionError("Connection failed", url="https://example.com", status_code=503)
     assert err.url == "https://example.com"
@@ -227,7 +228,7 @@ def test_scrape_connection_error_context():
 class TestCrawler:
     """Tests for Crawler."""
 
-    def test_add_seeds_dedup(self):
+    def test_add_seeds_dedup(self) -> None:
         """Test functionality: add seeds dedup."""
         from codomyrmex.scrape.extractors.crawler import CrawlConfig, Crawler
         crawler = Crawler(config=CrawlConfig(max_pages=10))
@@ -235,7 +236,7 @@ class TestCrawler:
         assert added == 1
         assert crawler.frontier_size == 1
 
-    def test_has_next_respects_max(self):
+    def test_has_next_respects_max(self) -> None:
         """Test functionality: has next respects max."""
         from codomyrmex.scrape.extractors.crawler import (
             CrawlConfig,
@@ -249,7 +250,7 @@ class TestCrawler:
         crawler.record_result(CrawlResult(url=url, status=CrawlStatus.SUCCESS, depth=depth))
         assert crawler.has_next() is False
 
-    def test_domain_filtering(self):
+    def test_domain_filtering(self) -> None:
         """Test functionality: domain filtering."""
         from codomyrmex.scrape.extractors.crawler import CrawlConfig, Crawler
         crawler = Crawler(config=CrawlConfig(allowed_domains=["example.com"]))
@@ -261,14 +262,14 @@ class TestCrawler:
 class TestContentExtractor:
     """Tests for ContentExtractor."""
 
-    def test_extract_title(self):
+    def test_extract_title(self) -> None:
         """Test functionality: extract title."""
         from codomyrmex.scrape.extractors.content_extractor import ContentExtractor
         ext = ContentExtractor()
         result = ext.extract("<html><title>Hello World</title></html>")
         assert result.title == "Hello World"
 
-    def test_extract_headings(self):
+    def test_extract_headings(self) -> None:
         """Test functionality: extract headings."""
         from codomyrmex.scrape.extractors.content_extractor import ContentExtractor
         ext = ContentExtractor()
@@ -277,7 +278,7 @@ class TestContentExtractor:
         assert len(result.headings) == 2
         assert result.headings[0] == (1, "Main")
 
-    def test_extract_links(self):
+    def test_extract_links(self) -> None:
         """Test functionality: extract links."""
         from codomyrmex.scrape.extractors.content_extractor import ContentExtractor
         ext = ContentExtractor(base_url="https://example.com")
@@ -286,7 +287,7 @@ class TestContentExtractor:
         assert len(result.links) == 1
         assert result.links[0][0] == "https://example.com/page"
 
-    def test_text_similarity(self):
+    def test_text_similarity(self) -> None:
         """Test functionality: text similarity."""
         from codomyrmex.scrape.extractors.content_extractor import text_similarity
         assert text_similarity("hello world", "hello world") == 1.0
@@ -297,57 +298,57 @@ class TestContentExtractor:
 class TestScrapeDataclasses:
     """Tests for scrape dataclasses and enums."""
 
-    def test_scrape_format_enum(self):
+    def test_scrape_format_enum(self) -> None:
         from codomyrmex.scrape.core import ScrapeFormat
         assert len(list(ScrapeFormat)) > 0
 
-    def test_scrape_options_defaults(self):
+    def test_scrape_options_defaults(self) -> None:
         from codomyrmex.scrape.core import ScrapeOptions
         opts = ScrapeOptions()
         assert opts.follow_links is True
         assert opts.respect_robots_txt is True
 
-    def test_scrape_options_to_dict(self):
+    def test_scrape_options_to_dict(self) -> None:
         from codomyrmex.scrape.core import ScrapeFormat, ScrapeOptions
         opts = ScrapeOptions(formats=[ScrapeFormat.MARKDOWN], timeout=30.0)
         d = opts.to_dict()
         assert isinstance(d, dict)
 
-    def test_scrape_result_creation(self):
+    def test_scrape_result_creation(self) -> None:
         from codomyrmex.scrape.core import ScrapeResult
         r = ScrapeResult(url="https://example.com", content="Hello", status_code=200)
         assert r.url == "https://example.com"
         assert r.success is True
 
-    def test_scrape_result_has_format(self):
+    def test_scrape_result_has_format(self) -> None:
         from codomyrmex.scrape.core import ScrapeResult
         r = ScrapeResult(url="https://ex.com", formats={"markdown": "# Title"})
         assert r.has_format("markdown") is True
         assert r.has_format("html") is False
 
-    def test_scrape_result_get_format(self):
+    def test_scrape_result_get_format(self) -> None:
         from codomyrmex.scrape.core import ScrapeResult
         r = ScrapeResult(url="https://ex.com", formats={"markdown": "# Title"})
         assert r.get_format("markdown") == "# Title"
         assert r.get_format("html") is None
 
-    def test_crawl_result(self):
+    def test_crawl_result(self) -> None:
         from codomyrmex.scrape.core import CrawlResult
         cr = CrawlResult(job_id="job1", status="completed", total=10, completed=10)
         assert cr.total == 10
         assert cr.credits_used == 0
 
-    def test_extract_result(self):
+    def test_extract_result(self) -> None:
         from codomyrmex.scrape.core import ExtractResult
         er = ExtractResult(data={"key": "value"}, urls=["https://ex.com"])
         assert er.status == "completed"
 
-    def test_map_result(self):
+    def test_map_result(self) -> None:
         from codomyrmex.scrape.core import MapResult
         mr = MapResult(links=[{"url": "https://ex.com", "title": "Ex"}], total=1)
         assert mr.total == 1
 
-    def test_search_result(self):
+    def test_search_result(self) -> None:
         from codomyrmex.scrape.core import SearchResult
         sr = SearchResult(query="python scraping")
         assert sr.query == "python scraping"

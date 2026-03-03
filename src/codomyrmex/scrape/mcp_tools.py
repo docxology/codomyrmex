@@ -23,6 +23,9 @@ def scrape_extract_content(
     Args:
         html: Raw HTML string.
         base_url: Base URL for resolving relative links.
+
+    Returns:
+        Dictionary containing status and extracted content.
     """
     try:
         from codomyrmex.scrape.extractors.content_extractor import ContentExtractor
@@ -56,6 +59,9 @@ def scrape_text_similarity(
     Args:
         text_a: First text.
         text_b: Second text.
+
+    Returns:
+        Dictionary containing status and similarity score.
     """
     try:
         from codomyrmex.scrape.extractors.content_extractor import text_similarity

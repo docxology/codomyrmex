@@ -144,7 +144,7 @@ class MapResult:
     links: list[dict[str, Any]] = field(default_factory=list)
     total: int = 0
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         """Auto-calculate total from links if not explicitly set."""
         if self.total == 0 and self.links:
             self.total = len(self.links)

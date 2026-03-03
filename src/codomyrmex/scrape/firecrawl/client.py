@@ -44,7 +44,7 @@ class FirecrawlClient:
             FirecrawlError: If firecrawl-py is not installed or initialization fails
         """
         try:
-            from firecrawl import Firecrawl
+            from firecrawl import Firecrawl  # type: ignore
         except ImportError as e:
             raise FirecrawlError(
                 "firecrawl-py package is not installed. Install it with: pip install firecrawl-py",
@@ -62,7 +62,7 @@ class FirecrawlClient:
         formats: list[str] | None = None,
         actions: list[dict[str, Any]] | None = None,
         wait_for: str | None = None,
-    ) -> dict[str, Any]:
+    ) -> Any:
         """Scrape a single URL.
 
         Args:
@@ -115,7 +115,7 @@ class FirecrawlClient:
         url: str,
         limit: int | None = None,
         scrape_options: dict[str, Any] | None = None,
-    ) -> dict[str, Any]:
+    ) -> Any:
         """Start a crawl job for a URL.
 
         Args:
@@ -163,7 +163,7 @@ class FirecrawlClient:
             else:
                 raise FirecrawlError(f"Firecrawl error crawling {url}: {e}", firecrawl_error=e) from e
 
-    def map_url(self, url: str, search: str | None = None) -> dict[str, Any]:
+    def map_url(self, url: str, search: str | None = None) -> Any:
         """Map the structure of a website.
 
         Args:
@@ -207,7 +207,7 @@ class FirecrawlClient:
         query: str,
         limit: int | None = None,
         scrape_options: dict[str, Any] | None = None,
-    ) -> dict[str, Any]:
+    ) -> Any:
         """Search the web and optionally scrape results.
 
         Args:
@@ -255,7 +255,7 @@ class FirecrawlClient:
         urls: list[str],
         schema: dict[str, Any] | None = None,
         prompt: str | None = None,
-    ) -> dict[str, Any]:
+    ) -> Any:
         """Extract structured data from URLs using LLM.
 
         Args:

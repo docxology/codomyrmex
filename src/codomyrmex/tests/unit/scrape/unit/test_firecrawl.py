@@ -1,3 +1,4 @@
+# mypy: ignore-errors
 """Unit tests for Firecrawl integration.
 
 Tests use real implementations only. When firecrawl-py is not available,
@@ -27,7 +28,7 @@ except ImportError:
 class TestFirecrawlClient:
     """Test FirecrawlClient wrapper with real implementations."""
 
-    def test_init_without_firecrawl_package(self):
+    def test_init_without_firecrawl_package(self) -> None:
         """Test that FirecrawlClient raises error when firecrawl-py is not installed."""
         if FIRECRAWL_AVAILABLE:
             pytest.skip("firecrawl-py is installed, cannot test import error")
@@ -36,7 +37,7 @@ class TestFirecrawlClient:
         with pytest.raises(FirecrawlError):
             FirecrawlClient(config)
 
-    def test_init_without_api_key(self):
+    def test_init_without_api_key(self) -> None:
         """Test that FirecrawlClient validates API key."""
         config = ScrapeConfig(api_key=None)
         # This will fail at validation (ScrapeValidationError or FirecrawlError)
@@ -44,7 +45,7 @@ class TestFirecrawlClient:
             FirecrawlClient(config)
 
     @pytest.mark.skipif(not FIRECRAWL_AVAILABLE, reason="firecrawl-py not installed")
-    def test_init_success(self):
+    def test_init_success(self) -> None:
         """Test successful FirecrawlClient initialization with real SDK."""
         config = ScrapeConfig(api_key="test-key")
         # This will fail validation if API key is invalid, but tests the real initialization
@@ -62,7 +63,7 @@ class TestFirecrawlClient:
 class TestFirecrawlAdapter:
     """Test FirecrawlAdapter with real implementations."""
 
-    def test_init_without_firecrawl_package(self):
+    def test_init_without_firecrawl_package(self) -> None:
         """Test that FirecrawlAdapter raises error when firecrawl-py is not installed."""
         if FIRECRAWL_AVAILABLE:
             pytest.skip("firecrawl-py is installed, cannot test import error")
@@ -71,14 +72,14 @@ class TestFirecrawlAdapter:
         with pytest.raises(ScrapingError, match=r".+"):
             FirecrawlAdapter(config)
 
-    def test_adapter_implements_base_scraper(self):
+    def test_adapter_implements_base_scraper(self) -> None:
         """Test that FirecrawlAdapter implements BaseScraper interface."""
         from codomyrmex.scrape.core import BaseScraper
 
         assert issubclass(FirecrawlAdapter, BaseScraper)
 
     @pytest.mark.skipif(not FIRECRAWL_AVAILABLE, reason="firecrawl-py not installed")
-    def test_adapter_initialization(self):
+    def test_adapter_initialization(self) -> None:
         """Test FirecrawlAdapter initialization with real client."""
         config = ScrapeConfig(api_key="test-key")
         try:
@@ -95,7 +96,7 @@ class TestFirecrawlAdapter:
 class TestFirecrawlConversion:
     """Test Firecrawl result conversion methods with real data structures."""
 
-    def test_convert_scrape_result_from_dict(self):
+    def test_convert_scrape_result_from_dict(self) -> None:
         """Test converting Firecrawl dict result to ScrapeResult."""
         from codomyrmex.scrape.firecrawl.adapter import FirecrawlAdapter
 
@@ -118,7 +119,7 @@ class TestFirecrawlConversion:
         assert result.status_code == 200
         assert result.metadata.get("title") == "Test"
 
-    def test_convert_scrape_result_from_document_object(self):
+    def test_convert_scrape_result_from_document_object(self) -> None:
         """Test converting Firecrawl Document object to ScrapeResult."""
         from codomyrmex.scrape.firecrawl.adapter import FirecrawlAdapter
 
@@ -126,6 +127,7 @@ class TestFirecrawlConversion:
 
         # Real Document-like object structure
         class DocumentObject:
+
             """Real Document object structure from firecrawl-py."""
 
             def __init__(self):
@@ -141,7 +143,7 @@ class TestFirecrawlConversion:
         assert result.formats.get("markdown") == "# Test"
         assert result.status_code == 200
 
-    def test_convert_crawl_result(self):
+    def test_convert_crawl_result(self) -> None:
         """Test converting Firecrawl crawl result to CrawlResult."""
         from codomyrmex.scrape.firecrawl.adapter import FirecrawlAdapter
 
@@ -173,7 +175,7 @@ class TestFirecrawlConversion:
         assert len(result.results) == 1
         assert result.results[0].url == "https://example.com/page1"
 
-    def test_convert_map_result(self):
+    def test_convert_map_result(self) -> None:
         """Test converting Firecrawl map result to MapResult."""
         from codomyrmex.scrape.firecrawl.adapter import FirecrawlAdapter
 
@@ -193,7 +195,7 @@ class TestFirecrawlConversion:
         assert result.links[0]["url"] == "https://example.com/page1"
         assert result.links[0]["title"] == "Page 1"
 
-    def test_convert_search_result(self):
+    def test_convert_search_result(self) -> None:
         """Test converting Firecrawl search result to SearchResult."""
         from codomyrmex.scrape.firecrawl.adapter import FirecrawlAdapter
 
@@ -218,7 +220,7 @@ class TestFirecrawlConversion:
         assert result.results[0].url == "https://example.com"
         assert result.results[0].content == "Content"
 
-    def test_convert_extract_result(self):
+    def test_convert_extract_result(self) -> None:
         """Test converting Firecrawl extract result to ExtractResult."""
         from codomyrmex.scrape.firecrawl.adapter import FirecrawlAdapter
 
@@ -239,7 +241,7 @@ class TestFirecrawlConversion:
         assert result.data == {"title": "Test", "content": "Content"}
         assert result.urls == urls
 
-    def test_convert_with_empty_data(self):
+    def test_convert_with_empty_data(self) -> None:
         """Test conversion with empty or missing data."""
         from codomyrmex.scrape.firecrawl.adapter import FirecrawlAdapter
 
@@ -257,7 +259,7 @@ class TestFirecrawlConversion:
         assert result.url == "https://example.com"
         assert result.content == "string"
 
-    def test_convert_crawl_result_with_empty_data(self):
+    def test_convert_crawl_result_with_empty_data(self) -> None:
         """Test converting crawl result with empty data array."""
         from codomyrmex.scrape.firecrawl.adapter import FirecrawlAdapter
 
@@ -277,7 +279,7 @@ class TestFirecrawlConversion:
         assert result.total == 0
         assert len(result.results) == 0
 
-    def test_convert_with_missing_fields(self):
+    def test_convert_with_missing_fields(self) -> None:
         """Test conversion with missing optional fields."""
         from codomyrmex.scrape.firecrawl.adapter import FirecrawlAdapter
 

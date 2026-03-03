@@ -1,3 +1,4 @@
+# mypy: ignore-errors
 """Integration tests for scraping workflows.
 
 Note: These tests may require actual API keys and network access.
@@ -8,6 +9,7 @@ with caution and proper API key configuration.
 import os
 
 import pytest
+from typing import Any
 
 from codomyrmex.scrape import ScrapeConfig, ScrapeFormat, ScrapeOptions, Scraper
 from codomyrmex.scrape.exceptions import ScrapeError
@@ -28,12 +30,12 @@ class TestScrapeIntegration:
     """
 
     @pytest.fixture
-    def scraper(self):
+    def scraper(self) -> Any:
         """Create a scraper instance for testing."""
         config = ScrapeConfig.from_env()
         return Scraper(config=config)
 
-    def test_basic_scrape(self, scraper):
+    def test_basic_scrape(self, scraper) -> None:
         """Test basic scraping functionality."""
         # Use a simple, reliable test URL
         result = scraper.scrape("https://example.com")
@@ -41,7 +43,7 @@ class TestScrapeIntegration:
         assert result.url == "https://example.com"
         assert len(result.content) > 0
 
-    def test_scrape_with_formats(self, scraper):
+    def test_scrape_with_formats(self, scraper) -> None:
         """Test scraping with multiple formats."""
         options = ScrapeOptions(
             formats=[ScrapeFormat.MARKDOWN, ScrapeFormat.METADATA]
@@ -50,20 +52,20 @@ class TestScrapeIntegration:
         assert result.success is True
         assert result.has_format(ScrapeFormat.MARKDOWN)
 
-    def test_map_website(self, scraper):
+    def test_map_website(self, scraper) -> None:
         """Test website mapping."""
         result = scraper.map("https://example.com")
         assert result.total >= 0
         # Example.com may have links or may not, so we just check structure
 
-    def test_search_web(self, scraper):
+    def test_search_web(self, scraper) -> None:
         """Test web search."""
         result = scraper.search("python programming")
         assert result.query == "python programming"
         assert result.total >= 0
         # Search results may vary, so we just check structure
 
-    def test_extract_data(self, scraper):
+    def test_extract_data(self, scraper) -> None:
         """Test data extraction."""
         schema = {
             "type": "object",
@@ -97,18 +99,18 @@ class TestScrapeErrorHandling:
     """
 
     @pytest.fixture
-    def scraper(self):
+    def scraper(self) -> Any:
         """Create a scraper instance for testing."""
         config = ScrapeConfig(api_key="invalid-key-for-testing")
         return Scraper(config=config)
 
-    def test_invalid_api_key_handling(self, scraper):
+    def test_invalid_api_key_handling(self, scraper) -> None:
         """Test that invalid API keys are handled gracefully."""
         # This will likely fail, but should raise a proper exception
         with pytest.raises(ScrapeError):
             scraper.scrape("https://example.com")
 
-    def test_invalid_url_handling(self, scraper):
+    def test_invalid_url_handling(self, scraper) -> None:
         """Test that invalid URLs are handled."""
         from codomyrmex.scrape.exceptions import ScrapeValidationError
 

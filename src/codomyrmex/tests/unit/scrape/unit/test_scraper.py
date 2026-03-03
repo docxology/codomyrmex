@@ -1,3 +1,4 @@
+# mypy: ignore-errors
 """Unit tests for the main Scraper class.
 
 Tests use real implementations only. TestAdapter is a test adapter that implements
@@ -6,6 +7,7 @@ processing logic use real implementations.
 """
 
 import pytest
+from typing import Any
 
 from codomyrmex.scrape.config import ScrapeConfig, reset_config
 from codomyrmex.scrape.core import BaseScraper, ScrapeFormat, ScrapeOptions
@@ -21,31 +23,31 @@ from codomyrmex.scrape.extractors.scraper import Scraper
 class TestAdapter(BaseScraper):
     """Test adapter implementing BaseScraper interface with real data structures."""
 
-    def scrape(self, url, options=None):
+    def scrape(self, url, options=None) -> Any:
         from codomyrmex.scrape.core import ScrapeResult
 
         # Real ScrapeResult with actual data
         return ScrapeResult(url=url, content=f"Content from {url}", status_code=200)
 
-    def crawl(self, url, options=None):
+    def crawl(self, url, options=None) -> Any:
         from codomyrmex.scrape.core import CrawlResult
 
         # Real CrawlResult with actual data
         return CrawlResult(job_id="test-123", status="completed", total=1, completed=1)
 
-    def map(self, url, search=None):
+    def map(self, url, search=None) -> Any:
         from codomyrmex.scrape.core import MapResult
 
         # Real MapResult with actual data
         return MapResult(links=[{"url": url, "title": "Test"}], total=1)
 
-    def search(self, query, options=None):
+    def search(self, query, options=None) -> Any:
         from codomyrmex.scrape.core import SearchResult
 
         # Real SearchResult with actual data
         return SearchResult(query=query, total=1)
 
-    def extract(self, urls, schema=None, prompt=None):
+    def extract(self, urls, schema=None, prompt=None) -> Any:
         from codomyrmex.scrape.core import ExtractResult
 
         # Real ExtractResult with actual data
@@ -56,7 +58,7 @@ class TestAdapter(BaseScraper):
 class TestScraper:
     """Test Scraper class with real implementations."""
 
-    def test_init_with_adapter(self):
+    def test_init_with_adapter(self) -> None:
         """Test initializing Scraper with a test adapter."""
         adapter = TestAdapter()
         config = ScrapeConfig(api_key="test-key")
@@ -64,7 +66,7 @@ class TestScraper:
         assert scraper.adapter == adapter
         assert scraper.config == config
 
-    def test_init_with_config_only(self):
+    def test_init_with_config_only(self) -> None:
         """Test initializing Scraper with config only (uses default adapter if available)."""
         config = ScrapeConfig(api_key="test-key")
         # This will try to create FirecrawlAdapter if firecrawl-py is available
@@ -77,7 +79,7 @@ class TestScraper:
             # Expected if firecrawl-py is not installed
             pytest.skip("firecrawl-py not installed, cannot test default adapter")
 
-    def test_init_without_adapter_or_firecrawl(self):
+    def test_init_without_adapter_or_firecrawl(self) -> None:
         """Test that Scraper raises error when no adapter available."""
         # Reset config to ensure clean state
         reset_config()
@@ -93,7 +95,7 @@ class TestScraper:
             # Expected when no adapter can be created
             pass
 
-    def test_scrape_success(self):
+    def test_scrape_success(self) -> None:
         """Test successful scraping with real data."""
         adapter = TestAdapter()
         scraper = Scraper(adapter=adapter)
@@ -103,7 +105,7 @@ class TestScraper:
         assert result.status_code == 200
         assert result.success is True
 
-    def test_scrape_with_options(self):
+    def test_scrape_with_options(self) -> None:
         """Test scraping with options."""
         adapter = TestAdapter()
         scraper = Scraper(adapter=adapter)
@@ -112,7 +114,7 @@ class TestScraper:
         assert result.success is True
         assert result.url == "https://example.com"
 
-    def test_scrape_invalid_url(self):
+    def test_scrape_invalid_url(self) -> None:
         """Test scraping with invalid URL."""
         adapter = TestAdapter()
         scraper = Scraper(adapter=adapter)
@@ -122,14 +124,14 @@ class TestScraper:
         with pytest.raises(ScrapeValidationError):
             scraper.scrape(None)  # type: ignore
 
-    def test_scrape_non_string_url(self):
+    def test_scrape_non_string_url(self) -> None:
         """Test scraping with non-string URL."""
         adapter = TestAdapter()
         scraper = Scraper(adapter=adapter)
         with pytest.raises(ScrapeValidationError):
             scraper.scrape(123)  # type: ignore
 
-    def test_crawl_success(self):
+    def test_crawl_success(self) -> None:
         """Test successful crawling with real data."""
         adapter = TestAdapter()
         scraper = Scraper(adapter=adapter)
@@ -139,7 +141,7 @@ class TestScraper:
         assert result.total == 1
         assert result.completed == 1
 
-    def test_crawl_with_options(self):
+    def test_crawl_with_options(self) -> None:
         """Test crawling with options."""
         adapter = TestAdapter()
         scraper = Scraper(adapter=adapter)
@@ -148,14 +150,14 @@ class TestScraper:
         assert result.job_id == "test-123"
         assert result.status == "completed"
 
-    def test_crawl_invalid_url(self):
+    def test_crawl_invalid_url(self) -> None:
         """Test crawling with invalid URL."""
         adapter = TestAdapter()
         scraper = Scraper(adapter=adapter)
         with pytest.raises(ScrapeValidationError):
             scraper.crawl("")
 
-    def test_map_success(self):
+    def test_map_success(self) -> None:
         """Test successful mapping with real data."""
         adapter = TestAdapter()
         scraper = Scraper(adapter=adapter)
@@ -164,28 +166,28 @@ class TestScraper:
         assert len(result.links) == 1
         assert result.links[0]["url"] == "https://example.com"
 
-    def test_map_with_search(self):
+    def test_map_with_search(self) -> None:
         """Test mapping with search term."""
         adapter = TestAdapter()
         scraper = Scraper(adapter=adapter)
         result = scraper.map("https://example.com", search="test")
         assert result.total == 1
 
-    def test_map_without_search(self):
+    def test_map_without_search(self) -> None:
         """Test mapping without search term."""
         adapter = TestAdapter()
         scraper = Scraper(adapter=adapter)
         result = scraper.map("https://example.com", search=None)
         assert result.total == 1
 
-    def test_map_invalid_url(self):
+    def test_map_invalid_url(self) -> None:
         """Test mapping with invalid URL."""
         adapter = TestAdapter()
         scraper = Scraper(adapter=adapter)
         with pytest.raises(ScrapeValidationError):
             scraper.map("")
 
-    def test_search_success(self):
+    def test_search_success(self) -> None:
         """Test successful searching with real data."""
         adapter = TestAdapter()
         scraper = Scraper(adapter=adapter)
@@ -193,7 +195,7 @@ class TestScraper:
         assert result.query == "test query"
         assert result.total == 1
 
-    def test_search_with_options(self):
+    def test_search_with_options(self) -> None:
         """Test searching with options."""
         adapter = TestAdapter()
         scraper = Scraper(adapter=adapter)
@@ -202,7 +204,7 @@ class TestScraper:
         assert result.query == "test query"
         assert result.total == 1
 
-    def test_search_invalid_query(self):
+    def test_search_invalid_query(self) -> None:
         """Test searching with invalid query."""
         adapter = TestAdapter()
         scraper = Scraper(adapter=adapter)
@@ -212,7 +214,7 @@ class TestScraper:
         with pytest.raises(ScrapeValidationError):
             scraper.search(None)  # type: ignore
 
-    def test_extract_success(self):
+    def test_extract_success(self) -> None:
         """Test successful extraction with real data."""
         adapter = TestAdapter()
         scraper = Scraper(adapter=adapter)
@@ -221,7 +223,7 @@ class TestScraper:
         assert "extracted" in result.data
         assert result.data["extracted"] == "data"
 
-    def test_extract_with_schema(self):
+    def test_extract_with_schema(self) -> None:
         """Test extraction with schema."""
         adapter = TestAdapter()
         scraper = Scraper(adapter=adapter)
@@ -230,7 +232,7 @@ class TestScraper:
         assert len(result.urls) == 1
         assert result.data is not None
 
-    def test_extract_with_prompt(self):
+    def test_extract_with_prompt(self) -> None:
         """Test extraction with prompt."""
         adapter = TestAdapter()
         scraper = Scraper(adapter=adapter)
@@ -238,7 +240,7 @@ class TestScraper:
         assert len(result.urls) == 1
         assert result.data is not None
 
-    def test_extract_with_multiple_urls(self):
+    def test_extract_with_multiple_urls(self) -> None:
         """Test extraction with multiple URLs."""
         adapter = TestAdapter()
         scraper = Scraper(adapter=adapter)
@@ -247,7 +249,7 @@ class TestScraper:
         assert len(result.urls) == 2
         assert result.urls == urls
 
-    def test_extract_invalid_urls(self):
+    def test_extract_invalid_urls(self) -> None:
         """Test extraction with invalid URLs."""
         adapter = TestAdapter()
         scraper = Scraper(adapter=adapter)
@@ -257,7 +259,7 @@ class TestScraper:
         with pytest.raises(ScrapeValidationError):
             scraper.extract(None)  # type: ignore
 
-    def test_extract_invalid_url_in_list(self):
+    def test_extract_invalid_url_in_list(self) -> None:
         """Test extraction with invalid URL in list."""
         adapter = TestAdapter()
         scraper = Scraper(adapter=adapter)
@@ -267,32 +269,32 @@ class TestScraper:
         with pytest.raises(ScrapeValidationError):
             scraper.extract([None])  # type: ignore
 
-    def test_extract_non_string_url(self):
+    def test_extract_non_string_url(self) -> None:
         """Test extraction with non-string URL in list."""
         adapter = TestAdapter()
         scraper = Scraper(adapter=adapter)
         with pytest.raises(ScrapeValidationError):
             scraper.extract([123])  # type: ignore
 
-    def test_error_handling(self):
+    def test_error_handling(self) -> None:
         """Test error handling in scraper with real error propagation."""
 
         class ErrorAdapter(BaseScraper):
             """Adapter that raises real errors for testing."""
 
-            def scrape(self, url, options=None):
+            def scrape(self, url, options=None) -> Any:
                 raise Exception("Test error")
 
-            def crawl(self, url, options=None):
+            def crawl(self, url, options=None) -> Any:
                 raise Exception("Test error")
 
-            def map(self, url, search=None):
+            def map(self, url, search=None) -> Any:
                 raise Exception("Test error")
 
-            def search(self, query, options=None):
+            def search(self, query, options=None) -> Any:
                 raise Exception("Test error")
 
-            def extract(self, urls, schema=None, prompt=None):
+            def extract(self, urls, schema=None, prompt=None) -> Any:
                 raise Exception("Test error")
 
         adapter = ErrorAdapter()
@@ -300,27 +302,27 @@ class TestScraper:
         with pytest.raises(ScrapeError):
             scraper.scrape("https://example.com")
 
-    def test_scrape_error_propagation(self):
+    def test_scrape_error_propagation(self) -> None:
         """Test that ScrapeError exceptions are properly propagated."""
 
         class ScrapeErrorAdapter(BaseScraper):
             """Adapter that raises ScrapeError for testing."""
 
-            def scrape(self, url, options=None):
+            def scrape(self, url, options=None) -> Any:
                 from codomyrmex.scrape.exceptions import ScrapeConnectionError
 
                 raise ScrapeConnectionError("Connection failed", url=url)
 
-            def crawl(self, url, options=None):
+            def crawl(self, url, options=None) -> Any:
                 raise ScrapeError("Crawl failed")
 
-            def map(self, url, search=None):
+            def map(self, url, search=None) -> Any:
                 raise ScrapeError("Map failed")
 
-            def search(self, query, options=None):
+            def search(self, query, options=None) -> Any:
                 raise ScrapeError("Search failed")
 
-            def extract(self, urls, schema=None, prompt=None):
+            def extract(self, urls, schema=None, prompt=None) -> Any:
                 raise ScrapeError("Extract failed")
 
         adapter = ScrapeErrorAdapter()

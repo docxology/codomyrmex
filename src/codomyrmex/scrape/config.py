@@ -105,7 +105,7 @@ class ScrapeConfig:
 
     def to_dict(self) -> dict[str, Any]:
         """Convert configuration to dictionary."""
-        result: dict[str, any] = {
+        result: dict[str, Any] = {
             "base_url": self.base_url,
             "default_timeout": self.default_timeout,
             "default_formats": self.default_formats,
