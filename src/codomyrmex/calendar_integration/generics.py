@@ -44,6 +44,7 @@ class CalendarProvider(abc.ABC):
         Raises:
             CalendarAuthError: If credentials are invalid or expired.
             CalendarAPIError: If the provider returns an unexpected error.
+
         """
 
     @abc.abstractmethod
@@ -61,6 +62,7 @@ class CalendarProvider(abc.ABC):
         Raises:
             CalendarAuthError: If credentials are invalid or expired.
             CalendarAPIError: If the provider rejects the payload.
+
         """
 
     @abc.abstractmethod
@@ -77,6 +79,7 @@ class CalendarProvider(abc.ABC):
             EventNotFoundError: If no event with ``event_id`` exists.
             CalendarAuthError: If credentials are invalid or expired.
             CalendarAPIError: On unexpected provider errors.
+
         """
 
     @abc.abstractmethod
@@ -99,6 +102,7 @@ class CalendarProvider(abc.ABC):
             EventNotFoundError: If ``event_id`` does not exist.
             CalendarAuthError: If credentials are invalid or expired.
             CalendarAPIError: On unexpected provider errors.
+
         """
 
     @abc.abstractmethod
@@ -115,4 +119,5 @@ class CalendarProvider(abc.ABC):
             EventNotFoundError: If ``event_id`` does not exist.
             CalendarAuthError: If credentials are invalid or expired.
             CalendarAPIError: On unexpected provider errors.
+
         """

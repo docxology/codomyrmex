@@ -24,10 +24,10 @@ try:
     from googleapiclient.errors import HttpError
     GCAL_AVAILABLE = True
 except ImportError:
-    Credentials = None
-    Resource = None
-    HttpError = Exception
-    build = None
+    Credentials = None  # type: ignore
+    Resource = None  # type: ignore
+    HttpError = Exception  # type: ignore
+    build = None  # type: ignore
     GCAL_AVAILABLE = False
 
 _GCAL_SCOPES = ["https://www.googleapis.com/auth/calendar"]
@@ -36,13 +36,13 @@ _GCAL_SCOPES = ["https://www.googleapis.com/auth/calendar"]
 class GoogleCalendar(CalendarProvider):
     """Google Calendar provider implementation."""
 
-    def __init__(self, credentials: Credentials | None = None, service: Resource | None = None):
-        """
-        Initialize the Google Calendar provider.
+    def __init__(self, credentials: 'Credentials | None' = None, service: 'Resource | None' = None):
+        """Initialize the Google Calendar provider.
 
         Args:
             credentials: A google.oauth2.credentials.Credentials object.
             service: A pre-built and authenticated Google Calendar API resource object.
+
         """
         if not GCAL_AVAILABLE:
             raise ImportError(
@@ -69,6 +69,7 @@ class GoogleCalendar(CalendarProvider):
         Raises:
             ImportError: If Google Calendar dependencies are not installed.
             CalendarAuthError: If no valid credentials are available.
+
         """
         if not GCAL_AVAILABLE:
             raise ImportError(
@@ -152,6 +153,7 @@ class GoogleCalendar(CalendarProvider):
             Optional fields (``description``, ``location``, ``attendees``) are
             omitted entirely when the corresponding attribute is ``None`` or an
             empty list — they are **not** set to ``null`` or ``[]``.
+
         """
         body = {
             'summary': event.summary,
@@ -201,6 +203,7 @@ class GoogleCalendar(CalendarProvider):
         Raises:
             InvalidEventError: If required keys (``start``, ``end``) are
                 missing or if the datetime strings cannot be parsed.
+
         """
         try:
             # Handle start/end which can be either 'dateTime' or 'date' (all-day event)

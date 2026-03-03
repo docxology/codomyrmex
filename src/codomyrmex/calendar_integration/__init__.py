@@ -26,7 +26,9 @@ from .generics import CalendarEvent, CalendarProvider
 
 try:
     from .gcal import GCAL_AVAILABLE, GoogleCalendar
-    CALENDAR_AVAILABLE = True
+    CALENDAR_AVAILABLE = GCAL_AVAILABLE
+    if not GCAL_AVAILABLE:
+        GoogleCalendar = None  # type: ignore
 except ImportError:
     GCAL_AVAILABLE = False
     CALENDAR_AVAILABLE = False
