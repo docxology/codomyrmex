@@ -23,27 +23,42 @@ from codomyrmex.git_operations.api import visualization as viz_mod  # noqa: E402
 # Helpers
 # ---------------------------------------------------------------------------
 
+
 def _make_git_repo(path):
     """Create a minimal git repo with a few commits at *path*."""
-    subprocess.run(["git", "init", "-b", "main"], cwd=path, check=True, capture_output=True)
-    subprocess.run(["git", "config", "user.email", "t@t.com"], cwd=path, check=True, capture_output=True)
-    subprocess.run(["git", "config", "user.name", "T"], cwd=path, check=True, capture_output=True)
+    subprocess.run(
+        ["git", "init", "-b", "main"], cwd=path, check=True, capture_output=True
+    )
+    subprocess.run(
+        ["git", "config", "user.email", "t@t.com"],
+        cwd=path,
+        check=True,
+        capture_output=True,
+    )
+    subprocess.run(
+        ["git", "config", "user.name", "T"], cwd=path, check=True, capture_output=True
+    )
 
     readme = path / "README.md"
     readme.write_text("# Test Repo\n")
     subprocess.run(["git", "add", "."], cwd=path, check=True, capture_output=True)
-    subprocess.run(["git", "commit", "-m", "init"], cwd=path, check=True, capture_output=True)
+    subprocess.run(
+        ["git", "commit", "-m", "init"], cwd=path, check=True, capture_output=True
+    )
 
     # Add a second commit for richer history
     (path / "src").mkdir(exist_ok=True)
     (path / "src" / "main.py").write_text("print('hello')\n")
     subprocess.run(["git", "add", "."], cwd=path, check=True, capture_output=True)
-    subprocess.run(["git", "commit", "-m", "add source"], cwd=path, check=True, capture_output=True)
+    subprocess.run(
+        ["git", "commit", "-m", "add source"], cwd=path, check=True, capture_output=True
+    )
 
 
 # ---------------------------------------------------------------------------
 # get_repository_metadata — does NOT require visualization dep
 # ---------------------------------------------------------------------------
+
 
 class TestGetRepositoryMetadata:
     """get_repository_metadata only needs git, not data_visualization."""
@@ -57,8 +72,16 @@ class TestGetRepositoryMetadata:
     def test_contains_expected_keys(self, tmp_path):
         _make_git_repo(tmp_path)
         result = viz_mod.get_repository_metadata(str(tmp_path))
-        expected_keys = {"path", "name", "is_git_repo", "current_branch", "status",
-                         "recent_commits", "stashes", "structure_stats"}
+        expected_keys = {
+            "path",
+            "name",
+            "is_git_repo",
+            "current_branch",
+            "status",
+            "recent_commits",
+            "stashes",
+            "structure_stats",
+        }
         assert expected_keys.issubset(result.keys())
 
     def test_current_branch_is_main(self, tmp_path):
@@ -93,8 +116,8 @@ class TestGetRepositoryMetadata:
 # Internal helpers — _analyze_directory_structure, _get_structure_stats
 # ---------------------------------------------------------------------------
 
-class TestAnalyzeDirectoryStructure:
 
+class TestAnalyzeDirectoryStructure:
     def test_returns_dict_with_children(self, tmp_path):
         (tmp_path / "a.txt").write_text("a")
         (tmp_path / "subdir").mkdir()
@@ -116,7 +139,6 @@ class TestAnalyzeDirectoryStructure:
 
 
 class TestGetStructureStats:
-
     def test_counts_files_and_dirs(self, tmp_path):
         (tmp_path / "a.txt").write_text("a")
         (tmp_path / "sub").mkdir()
@@ -137,6 +159,7 @@ class TestGetStructureStats:
 # Functions that require VISUALIZATION_AVAILABLE
 # These return an error dict when the dep is missing, which is valid behaviour.
 # ---------------------------------------------------------------------------
+
 
 class TestCreateGitAnalysisReport:
     """Tests for create_git_analysis_report — graceful degradation."""
@@ -166,7 +189,6 @@ class TestCreateGitAnalysisReport:
 
 
 class TestVisualizeGitBranches:
-
     def test_returns_dict(self, tmp_path):
         _make_git_repo(tmp_path)
         result = viz_mod.visualize_git_branches(str(tmp_path))
@@ -178,7 +200,6 @@ class TestVisualizeGitBranches:
 
 
 class TestVisualizeCommitActivity:
-
     def test_returns_dict(self, tmp_path):
         _make_git_repo(tmp_path)
         result = viz_mod.visualize_commit_activity(str(tmp_path))
@@ -190,7 +211,6 @@ class TestVisualizeCommitActivity:
 
 
 class TestCreateGitWorkflowDiagram:
-
     def test_returns_dict(self):
         result = viz_mod.create_git_workflow_diagram()
         assert isinstance(result, dict)
@@ -202,7 +222,6 @@ class TestCreateGitWorkflowDiagram:
 
 
 class TestAnalyzeRepositoryStructure:
-
     def test_returns_dict(self, tmp_path):
         _make_git_repo(tmp_path)
         result = viz_mod.analyze_repository_structure(str(tmp_path))

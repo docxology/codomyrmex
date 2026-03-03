@@ -18,9 +18,11 @@ except ImportError:
 
 logger = get_logger(__name__)
 
+
 def get_supported_languages() -> list[CodeLanguage]:
     """Get list of supported programming languages."""
     return list(CodeLanguage)
+
 
 def get_supported_providers() -> list[str]:
     """Get list of supported LLM providers."""
@@ -29,15 +31,23 @@ def get_supported_providers() -> list[str]:
         providers.append("ollama")
     return providers
 
+
 def get_available_models(provider: str) -> list[str]:
     """Get list of available models for a provider."""
     models = {
         "openai": ["gpt-3.5-turbo", "gpt-4", "gpt-4-turbo"],
         "anthropic": ["claude-instant-1", "claude-2", "claude-3-sonnet"],
         "google": ["gemini-pro", "gemini-pro-vision"],
-        "ollama": ["llama3.1:latest", "llama3.1:8b", "codellama:latest", "gemma2:2b", "mistral:latest"],
+        "ollama": [
+            "llama3.1:latest",
+            "llama3.1:8b",
+            "codellama:latest",
+            "gemma2:2b",
+            "mistral:latest",
+        ],
     }
     return models.get(provider.lower(), [])
+
 
 def validate_api_keys() -> dict[str, bool]:
     """Validate API keys for all supported providers."""
@@ -48,6 +58,7 @@ def validate_api_keys() -> dict[str, bool]:
         validation_results[provider] = bool(os.environ.get(key_name))
 
     return validation_results
+
 
 def setup_environment() -> bool:
     # Setup environment variables and check dependencies.
@@ -72,4 +83,3 @@ def setup_environment() -> bool:
     except (OSError, ValueError, AttributeError, RuntimeError) as e:
         logger.error(f"Error setting up environment: {e}")
         return False
-

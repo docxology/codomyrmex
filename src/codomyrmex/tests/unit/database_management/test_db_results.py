@@ -15,6 +15,7 @@ from codomyrmex.database_management.migration.migration_manager import (
 # Result Set Iteration Tests
 # ==============================================================================
 
+
 @pytest.mark.database
 class TestResultSetIteration:
     """Tests for iterating over query results."""
@@ -45,7 +46,9 @@ class TestResultSetIteration:
 
     def test_result_columns_access(self, db_connector):
         """Test accessing column names from result."""
-        _, cursor = db_connector.execute("SELECT id, category, value FROM items LIMIT 1")
+        _, cursor = db_connector.execute(
+            "SELECT id, category, value FROM items LIMIT 1"
+        )
         columns = [desc[0] for desc in cursor.description]
 
         assert columns == ["id", "category", "value"]
@@ -64,7 +67,7 @@ class TestResultSetIteration:
             rows=[(1, "test")],
             columns=["id", "name"],
             row_count=1,
-            execution_time=0.01
+            execution_time=0.01,
         )
         assert result.valid == result.success
 
@@ -82,6 +85,7 @@ class TestResultSetIteration:
 # ==============================================================================
 # Batch Operations Tests
 # ==============================================================================
+
 
 @pytest.mark.database
 class TestBatchOperations:

@@ -67,4 +67,3 @@ def cleanup_temp_files(temp_dir: str) -> None:
         shutil.rmtree(temp_dir)
     except OSError as e:
         logger.warning(f"Failed to clean up temporary directory {temp_dir}: {str(e)}")
-

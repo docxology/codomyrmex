@@ -16,6 +16,7 @@ from .base import (
 
 logger = get_logger(__name__)
 
+
 def create_pull_request(
     repo_owner: str,
     repo_name: str,
@@ -103,6 +104,7 @@ def create_pull_request(
         logger.error(error_msg)
         raise GitHubAPIError(error_msg) from None
 
+
 def get_pull_requests(
     repo_owner: str,
     repo_name: str,
@@ -173,6 +175,7 @@ def get_pull_requests(
         error_msg = f"Network error fetching PRs: {e}"
         logger.error(error_msg)
         raise GitHubAPIError(error_msg) from None
+
 
 def get_pull_request(
     repo_owner: str, repo_name: str, pr_number: int, github_token: str | None = None
@@ -245,6 +248,7 @@ def get_pull_request(
         logger.error(error_msg)
         raise GitHubAPIError(error_msg) from None
 
+
 async def async_list_pull_requests(
     repo_owner: str,
     repo_name: str,
@@ -308,6 +312,7 @@ async def async_list_pull_requests(
 
         logger.error(error_msg)
         raise GitHubAPIError(error_msg) from None
+
 
 async def async_create_pull_request(
     repo_owner: str,
@@ -389,6 +394,7 @@ async def async_create_pull_request(
         logger.error(error_msg)
         raise GitHubAPIError(error_msg) from None
 
+
 async def async_get_pull_request(
     repo_owner: str, repo_name: str, pr_number: int, github_token: str | None = None
 ) -> dict:
@@ -452,4 +458,3 @@ async def async_get_pull_request(
 
         logger.error(error_msg)
         raise GitHubAPIError(error_msg) from None
-

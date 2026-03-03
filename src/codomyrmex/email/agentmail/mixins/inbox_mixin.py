@@ -22,6 +22,7 @@ except ImportError:
 def _raise_for_api_error(exc: Exception, context: str):
     """Import and delegate to the module-level error raiser."""
     from codomyrmex.email.agentmail.provider import _raise_for_api_error as _raise
+
     _raise(exc, context)
 
 
@@ -72,7 +73,9 @@ class InboxMixin:
         except ApiError as exc:
             _raise_for_api_error(exc, f"get_inbox({inbox_id})")
         except Exception as exc:
-            raise EmailAPIError(f"Unexpected error fetching inbox {inbox_id}: {exc}") from exc
+            raise EmailAPIError(
+                f"Unexpected error fetching inbox {inbox_id}: {exc}"
+            ) from exc
 
     def create_inbox(
         self,
@@ -119,4 +122,6 @@ class InboxMixin:
         except ApiError as exc:
             _raise_for_api_error(exc, f"delete_inbox({inbox_id})")
         except Exception as exc:
-            raise EmailAPIError(f"Unexpected error deleting inbox {inbox_id}: {exc}") from exc
+            raise EmailAPIError(
+                f"Unexpected error deleting inbox {inbox_id}: {exc}"
+            ) from exc

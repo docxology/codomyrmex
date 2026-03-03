@@ -170,6 +170,7 @@ class TestSpan:
 
     def test_duration_ms_positive_after_start_end(self):
         import time
+
         s = Span("op").start()
         time.sleep(0.001)
         s.end()

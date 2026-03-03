@@ -21,6 +21,7 @@ logger = get_logger(__name__)
 
 class HealthStatus(Enum):
     """Health check status."""
+
     HEALTHY = "healthy"
     UNHEALTHY = "unhealthy"
     DEGRADED = "degraded"
@@ -30,6 +31,7 @@ class HealthStatus(Enum):
 @dataclass
 class HealthCheckResult:
     """Result of a health check."""
+
     name: str
     status: HealthStatus
     message: str = ""
@@ -52,6 +54,7 @@ class HealthCheckResult:
 @dataclass
 class AggregatedHealth:
     """Aggregated health status from multiple checks."""
+
     overall_status: HealthStatus
     checks: list[HealthCheckResult]
     timestamp: datetime = field(default_factory=datetime.now)
@@ -131,7 +134,7 @@ class HTTPHealthCheck(HealthCheck):
             )
             with urllib.request.urlopen(request, timeout=self.timeout) as response:
                 latency_ms = (time.time() - start_time) * 1000
-                body = response.read().decode('utf-8')
+                body = response.read().decode("utf-8")
                 status_code = response.status
 
                 if status_code != self.expected_status:
@@ -239,6 +242,7 @@ class CommandHealthCheck(HealthCheck):
     def check(self) -> HealthCheckResult:
         """Check the condition and return the result."""
         import subprocess
+
         start_time = time.time()
         try:
             result = subprocess.run(
@@ -310,6 +314,7 @@ class MemoryHealthCheck(HealthCheck):
         start_time = time.time()
         try:
             import psutil
+
             memory = psutil.virtual_memory()
             percent = memory.percent
             latency_ms = (time.time() - start_time) * 1000
@@ -379,6 +384,7 @@ class DiskHealthCheck(HealthCheck):
         start_time = time.time()
         try:
             import shutil
+
             usage = shutil.disk_usage(self.path)
             percent = (usage.used / usage.total) * 100
             latency_ms = (time.time() - start_time) * 1000
@@ -427,7 +433,7 @@ class HealthChecker:
     def __init__(self):
         self.checks: list[HealthCheck] = []
 
-    def add_check(self, check: HealthCheck) -> 'HealthChecker':
+    def add_check(self, check: HealthCheck) -> "HealthChecker":
         """Add a health check."""
         self.checks.append(check)
         return self
@@ -452,8 +458,7 @@ class HealthChecker:
         )
 
     def _determine_overall_status(
-        self,
-        results: list[HealthCheckResult]
+        self, results: list[HealthCheckResult]
     ) -> HealthStatus:
         """Determine overall status from results."""
         critical_unhealthy = any(

@@ -23,7 +23,7 @@ import pytest
 # Removed mock imports to follow TDD principle: no mock methods, always do real data analysis
 
 # Add src to path for imports
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', 'src'))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "..", "src"))
 
 from codomyrmex.git_operations.core.git import (
     add_files,
@@ -44,7 +44,9 @@ from codomyrmex.git_operations.core.git import (
 _GIT_AVAILABLE = check_git_availability()
 pytestmark = [
     pytest.mark.unit,
-    pytest.mark.skipif(not _GIT_AVAILABLE, reason="Git is not available on this system"),
+    pytest.mark.skipif(
+        not _GIT_AVAILABLE, reason="Git is not available on this system"
+    ),
 ]
 
 
@@ -88,11 +90,11 @@ class TestGitOperationsComprehensive:
 
         # Test 3: Test with invalid git command to simulate failure
         # We can test this by temporarily modifying the environment
-        original_path = os.environ.get('PATH', '')
+        original_path = os.environ.get("PATH", "")
         try:
             # Create a fake PATH that doesn't include git
-            fake_path = '/nonexistent/path'
-            os.environ['PATH'] = fake_path
+            fake_path = "/nonexistent/path"
+            os.environ["PATH"] = fake_path
 
             # This should fail since git is not in the fake path
             result = check_git_availability()
@@ -101,9 +103,9 @@ class TestGitOperationsComprehensive:
         finally:
             # Restore original PATH
             if original_path:
-                os.environ['PATH'] = original_path
+                os.environ["PATH"] = original_path
             else:
-                os.environ.pop('PATH', None)
+                os.environ.pop("PATH", None)
 
     # ==================== REPOSITORY DETECTION TESTS ====================
 
@@ -126,7 +128,7 @@ class TestGitOperationsComprehensive:
 
         # Test 5: Test with file instead of directory
         test_file = os.path.join(self.test_dir, "test.txt")
-        with open(test_file, 'w') as f:
+        with open(test_file, "w") as f:
             f.write("test")
         assert not is_git_repository(test_file)
 
@@ -226,7 +228,7 @@ class TestGitOperationsComprehensive:
 
         # Test 1: Add single file
         test_file1 = os.path.join(self.repo_dir, "test1.txt")
-        with open(test_file1, 'w') as f:
+        with open(test_file1, "w") as f:
             f.write("Test content 1")
 
         result = add_files(["test1.txt"], self.repo_dir)
@@ -235,9 +237,9 @@ class TestGitOperationsComprehensive:
         # Test 2: Add multiple files
         test_file2 = os.path.join(self.repo_dir, "test2.txt")
         test_file3 = os.path.join(self.repo_dir, "test3.txt")
-        with open(test_file2, 'w') as f:
+        with open(test_file2, "w") as f:
             f.write("Test content 2")
-        with open(test_file3, 'w') as f:
+        with open(test_file3, "w") as f:
             f.write("Test content 3")
 
         result = add_files(["test2.txt", "test3.txt"], self.repo_dir)
@@ -264,7 +266,7 @@ class TestGitOperationsComprehensive:
         # Test 6: Add and commit with working directory context
         os.chdir(self.repo_dir)
         test_file4 = "test4.txt"
-        with open(test_file4, 'w') as f:
+        with open(test_file4, "w") as f:
             f.write("Test content 4")
 
         result = add_files([test_file4])
@@ -287,7 +289,7 @@ class TestGitOperationsComprehensive:
 
         # Test 2: Repository with untracked files
         test_file = os.path.join(self.repo_dir, "untracked.txt")
-        with open(test_file, 'w') as f:
+        with open(test_file, "w") as f:
             f.write("Untracked content")
 
         status = get_status(self.repo_dir)
@@ -301,7 +303,7 @@ class TestGitOperationsComprehensive:
 
         # Test 4: Repository with modified files
         commit_changes("Add untracked file", self.repo_dir)
-        with open(test_file, 'w') as f:
+        with open(test_file, "w") as f:
             f.write("Modified content")
 
         status = get_status(self.repo_dir)
@@ -309,7 +311,9 @@ class TestGitOperationsComprehensive:
         # Note: the filename in status might be different due to Git's internal handling
         assert not status["clean"]
         # Check that there are modified files (the exact filename might vary)
-        assert len(status["modified"]) > 0 or any("untracked" in f for f in status["modified"])
+        assert len(status["modified"]) > 0 or any(
+            "untracked" in f for f in status["modified"]
+        )
 
         # Test 5: Status in non-repository
         status = get_status(self.test_dir)
@@ -323,7 +327,7 @@ class TestGitOperationsComprehensive:
         # Create multiple commits
         for i in range(5):
             test_file = os.path.join(self.repo_dir, f"file{i}.txt")
-            with open(test_file, 'w') as f:
+            with open(test_file, "w") as f:
                 f.write(f"Content {i}")
             add_files([f"file{i}.txt"], self.repo_dir)
             commit_changes(f"Add file{i}.txt", self.repo_dir)
@@ -389,8 +393,9 @@ class TestGitOperationsComprehensive:
         assert not result
 
         # Test 3: Clone with specific branch
-        result = clone_repository("https://invalid.url/repo.git",
-                                clone_dest + "_branch", branch="main")
+        result = clone_repository(
+            "https://invalid.url/repo.git", clone_dest + "_branch", branch="main"
+        )
         assert not result  # Should fail due to invalid URL
 
     # ==================== ERROR HANDLING AND EDGE CASES ====================
@@ -437,7 +442,7 @@ class TestGitOperationsComprehensive:
         # Step 2: Create and add initial files
         for i in range(3):
             test_file = os.path.join(self.repo_dir, f"initial_{i}.txt")
-            with open(test_file, 'w') as f:
+            with open(test_file, "w") as f:
                 f.write(f"Initial content {i}")
 
         assert add_files([f"initial_{i}.txt" for i in range(3)], self.repo_dir)
@@ -448,7 +453,7 @@ class TestGitOperationsComprehensive:
 
         # Step 4: Add feature files
         feature_file = os.path.join(self.repo_dir, "feature.txt")
-        with open(feature_file, 'w') as f:
+        with open(feature_file, "w") as f:
             f.write("Feature content")
 
         assert add_files(["feature.txt"], self.repo_dir)
@@ -479,7 +484,7 @@ class TestGitOperationsComprehensive:
         for i in range(file_count):
             file_name = f"perf_test_{i:03d}.txt"
             file_path = os.path.join(self.repo_dir, file_name)
-            with open(file_path, 'w') as f:
+            with open(file_path, "w") as f:
                 f.write(f"Performance test content {i}")
             file_names.append(file_name)
 
@@ -488,7 +493,9 @@ class TestGitOperationsComprehensive:
         assert result
 
         # Test committing all files
-        result = commit_changes(f"Add {file_count} performance test files", self.repo_dir)
+        result = commit_changes(
+            f"Add {file_count} performance test files", self.repo_dir
+        )
         assert result
 
         # Test status with many files
@@ -529,7 +536,7 @@ class TestGitOperationsComprehensive:
 
         for file_name in special_files:
             file_path = os.path.join(self.repo_dir, file_name)
-            with open(file_path, 'w') as f:
+            with open(file_path, "w") as f:
                 f.write(f"Content for {file_name}")
 
         result = add_files(special_files, self.repo_dir)
@@ -543,7 +550,7 @@ class TestGitOperationsComprehensive:
 
         # Add a new file for the long message test
         long_msg_file = os.path.join(self.repo_dir, "long_msg_test.txt")
-        with open(long_msg_file, 'w') as f:
+        with open(long_msg_file, "w") as f:
             f.write("Long message test")
 
         add_files(["long_msg_test.txt"], self.repo_dir)
@@ -557,13 +564,16 @@ class TestGitOperations:
 
     def test_add_files_nonexistent(self, tmp_path):
         from codomyrmex.git_operations.core.git import add_files
+
         result = add_files(["nonexistent.py"], repository_path=str(tmp_path))
         assert isinstance(result, bool)
 
     def test_init_repo(self, tmp_path):
         import subprocess
+
         subprocess.run(["git", "init", str(tmp_path)], capture_output=True)
         from codomyrmex.git_operations.core.git import add_files
+
         f = tmp_path / "test.txt"
         f.write_text("hello")
         result = add_files([str(f)], repository_path=str(tmp_path))
@@ -579,24 +589,28 @@ class TestGitCoreDeep:
     def test_get_diff_empty_repo(self, tmp_path):
         subprocess.run(["git", "init", str(tmp_path)], capture_output=True)
         from codomyrmex.git_operations.core.git import get_diff
+
         diff = get_diff(repository_path=str(tmp_path))
         assert isinstance(diff, str)
 
     def test_get_log_empty_repo(self, tmp_path):
         subprocess.run(["git", "init", str(tmp_path)], capture_output=True)
         from codomyrmex.git_operations.core.git import get_commit_history
+
         log = get_commit_history(repository_path=str(tmp_path))
         assert isinstance(log, (str, list))
 
     def test_get_status(self, tmp_path):
         subprocess.run(["git", "init", str(tmp_path)], capture_output=True)
         from codomyrmex.git_operations.core.git import get_status
+
         status = get_status(repository_path=str(tmp_path))
         assert isinstance(status, (str, dict))
 
     def test_get_branch_name(self, tmp_path):
         subprocess.run(["git", "init", str(tmp_path)], capture_output=True)
         from codomyrmex.git_operations.core.git import get_current_branch
+
         branch = get_current_branch(repository_path=str(tmp_path))
         assert isinstance(branch, (str, type(None)))
 
@@ -606,8 +620,11 @@ class TestGitCoreDeep:
         f = tmp_path / "init.txt"
         f.write_text("init")
         subprocess.run(["git", "-C", str(tmp_path), "add", "."], capture_output=True)
-        subprocess.run(["git", "-C", str(tmp_path), "commit", "-m", "init"], capture_output=True)
+        subprocess.run(
+            ["git", "-C", str(tmp_path), "commit", "-m", "init"], capture_output=True
+        )
         from codomyrmex.git_operations.core.git import create_branch
+
         result = create_branch("test-branch", repository_path=str(tmp_path))
         assert isinstance(result, bool)
 
@@ -616,43 +633,71 @@ class TestGitCoreDeep:
         f = tmp_path / "init.txt"
         f.write_text("init")
         subprocess.run(["git", "-C", str(tmp_path), "add", "."], capture_output=True)
-        subprocess.run(["git", "-C", str(tmp_path), "commit", "-m", "init"], capture_output=True)
+        subprocess.run(
+            ["git", "-C", str(tmp_path), "commit", "-m", "init"], capture_output=True
+        )
         from codomyrmex.git_operations.core.git import list_tags
+
         tags = list_tags(repository_path=str(tmp_path))
         assert isinstance(tags, (list, str))
 
     def test_commit_changes(self, tmp_path):
         subprocess.run(["git", "init", str(tmp_path)], capture_output=True)
-        subprocess.run(["git", "-C", str(tmp_path), "config", "user.email", "t@t.com"], capture_output=True)
-        subprocess.run(["git", "-C", str(tmp_path), "config", "user.name", "Test"], capture_output=True)
+        subprocess.run(
+            ["git", "-C", str(tmp_path), "config", "user.email", "t@t.com"],
+            capture_output=True,
+        )
+        subprocess.run(
+            ["git", "-C", str(tmp_path), "config", "user.name", "Test"],
+            capture_output=True,
+        )
         f = tmp_path / "file.txt"
         f.write_text("hello")
         subprocess.run(["git", "-C", str(tmp_path), "add", "."], capture_output=True)
         from codomyrmex.git_operations.core.git import commit_changes
+
         sha = commit_changes("test commit", repository_path=str(tmp_path))
         assert sha is not None
 
     def test_get_file_history(self, tmp_path):
         subprocess.run(["git", "init", str(tmp_path)], capture_output=True)
-        subprocess.run(["git", "-C", str(tmp_path), "config", "user.email", "t@t.com"], capture_output=True)
-        subprocess.run(["git", "-C", str(tmp_path), "config", "user.name", "Test"], capture_output=True)
+        subprocess.run(
+            ["git", "-C", str(tmp_path), "config", "user.email", "t@t.com"],
+            capture_output=True,
+        )
+        subprocess.run(
+            ["git", "-C", str(tmp_path), "config", "user.name", "Test"],
+            capture_output=True,
+        )
         f = tmp_path / "tracked.txt"
         f.write_text("v1")
         subprocess.run(["git", "-C", str(tmp_path), "add", "."], capture_output=True)
-        subprocess.run(["git", "-C", str(tmp_path), "commit", "-m", "v1"], capture_output=True)
+        subprocess.run(
+            ["git", "-C", str(tmp_path), "commit", "-m", "v1"], capture_output=True
+        )
         from codomyrmex.git_operations.core.git import get_blame
+
         blame = get_blame("tracked.txt", repository_path=str(tmp_path))
         assert isinstance(blame, (str, dict, type(None)))
 
     def test_stash_changes(self, tmp_path):
         subprocess.run(["git", "init", str(tmp_path)], capture_output=True)
-        subprocess.run(["git", "-C", str(tmp_path), "config", "user.email", "t@t.com"], capture_output=True)
-        subprocess.run(["git", "-C", str(tmp_path), "config", "user.name", "Test"], capture_output=True)
+        subprocess.run(
+            ["git", "-C", str(tmp_path), "config", "user.email", "t@t.com"],
+            capture_output=True,
+        )
+        subprocess.run(
+            ["git", "-C", str(tmp_path), "config", "user.name", "Test"],
+            capture_output=True,
+        )
         f = tmp_path / "file.txt"
         f.write_text("initial")
         subprocess.run(["git", "-C", str(tmp_path), "add", "."], capture_output=True)
-        subprocess.run(["git", "-C", str(tmp_path), "commit", "-m", "init"], capture_output=True)
+        subprocess.run(
+            ["git", "-C", str(tmp_path), "commit", "-m", "init"], capture_output=True
+        )
         f.write_text("modified")
         from codomyrmex.git_operations.core.git import stash_changes
+
         result = stash_changes(repository_path=str(tmp_path))
         assert isinstance(result, bool)

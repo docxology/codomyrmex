@@ -17,6 +17,7 @@ import pytest
 
 try:
     import psutil
+
     HAS_PSUTIL = True
 except ImportError:
     psutil = None  # type: ignore[assignment]
@@ -27,18 +28,21 @@ MODULE_AVAILABILITY = {}
 
 try:
     from codomyrmex.coding import execute_code
+
     MODULE_AVAILABILITY["code_execution"] = True
 except ImportError:
     MODULE_AVAILABILITY["code_execution"] = False
 
 try:
     from codomyrmex.coding.static_analysis import analyze_file  # noqa: F401
+
     MODULE_AVAILABILITY["static_analysis"] = True
 except ImportError:
     MODULE_AVAILABILITY["static_analysis"] = False
 
 try:
     from codomyrmex.security.digital import analyze_file_security  # noqa: F401
+
     MODULE_AVAILABILITY["security"] = True
 except ImportError:
     MODULE_AVAILABILITY["security"] = False
@@ -50,6 +54,7 @@ except ImportError:
 
 try:
     from codomyrmex.data_visualization import create_bar_chart  # noqa: F401
+
     MODULE_AVAILABILITY["data_visualization"] = True
 except ImportError:
     MODULE_AVAILABILITY["data_visualization"] = False
@@ -59,6 +64,7 @@ try:
         profile_function,  # noqa: F401
         run_benchmark,  # noqa: F401
     )
+
     MODULE_AVAILABILITY["performance"] = True
 except ImportError:
     MODULE_AVAILABILITY["performance"] = False
@@ -67,6 +73,7 @@ try:
     from codomyrmex.logging_monitoring.core.logger_config import (
         PerformanceLogger,  # noqa: F401
     )
+
     MODULE_AVAILABILITY["performance_logging"] = True
 except ImportError:
     MODULE_AVAILABILITY["performance_logging"] = False
@@ -84,6 +91,7 @@ except ImportError:
 @dataclass
 class PerformanceBaseline:
     """Performance baseline data for a module operation."""
+
     module_name: str
     operation_name: str
     baseline_time: float  # seconds
@@ -99,6 +107,7 @@ class PerformanceBaseline:
 @dataclass
 class PerformanceResult:
     """Result of a performance measurement."""
+
     operation: str
     execution_time: float
     memory_usage: float
@@ -121,29 +130,40 @@ class PerformanceBaselineManager:
         # For now, using hardcoded baseline values
         self.baselines = {
             "code_execution.execute_code": PerformanceBaseline(
-                "code_execution", "execute_code",
-                baseline_time=0.5, baseline_memory=200.0
+                "code_execution",
+                "execute_code",
+                baseline_time=0.5,
+                baseline_memory=200.0,
             ),
             "static_analysis.analyze_file": PerformanceBaseline(
-                "static_analysis", "analyze_file",
-                baseline_time=0.2, baseline_memory=30.0
+                "static_analysis",
+                "analyze_file",
+                baseline_time=0.2,
+                baseline_memory=30.0,
             ),
             "security_audit.analyze_file_security": PerformanceBaseline(
-                "security_audit", "analyze_file_security",
-                baseline_time=1.0, baseline_memory=80.0
+                "security_audit",
+                "analyze_file_security",
+                baseline_time=1.0,
+                baseline_memory=80.0,
             ),
             "data_visualization.create_bar_chart": PerformanceBaseline(
-                "data_visualization", "create_bar_chart",
-                baseline_time=0.1, baseline_memory=20.0
+                "data_visualization",
+                "create_bar_chart",
+                baseline_time=0.1,
+                baseline_memory=20.0,
             ),
             "performance.profile_function": PerformanceBaseline(
-                "performance", "profile_function",
-                baseline_time=0.05, baseline_memory=15.0
+                "performance",
+                "profile_function",
+                baseline_time=0.05,
+                baseline_memory=15.0,
             ),
         }
 
-    def check_regression(self, operation: str, execution_time: float,
-                        memory_usage: float) -> dict[str, Any]:
+    def check_regression(
+        self, operation: str, execution_time: float, memory_usage: float
+    ) -> dict[str, Any]:
         """Check if performance regressed against baseline."""
         if operation not in self.baselines:
             return {"regression": False, "reason": "no_baseline"}
@@ -151,10 +171,14 @@ class PerformanceBaselineManager:
         baseline = self.baselines[operation]
 
         # Check time regression
-        time_regression = execution_time > baseline.baseline_time * (1 + baseline.tolerance_percent / 100)
+        time_regression = execution_time > baseline.baseline_time * (
+            1 + baseline.tolerance_percent / 100
+        )
 
         # Check memory regression
-        memory_regression = memory_usage > baseline.baseline_memory * (1 + baseline.tolerance_percent / 100)
+        memory_regression = memory_usage > baseline.baseline_memory * (
+            1 + baseline.tolerance_percent / 100
+        )
 
         regression = time_regression or memory_regression
 
@@ -166,7 +190,7 @@ class PerformanceBaselineManager:
             "baseline_memory": baseline.baseline_memory,
             "actual_time": execution_time,
             "actual_memory": memory_usage,
-            "tolerance_percent": baseline.tolerance_percent
+            "tolerance_percent": baseline.tolerance_percent,
         }
 
 
@@ -177,8 +201,13 @@ class PerformanceTestSuite:
         self.baseline_manager = baseline_manager or PerformanceBaselineManager()
         self.results: list[PerformanceResult] = []
 
-    def run_performance_test(self, operation_name: str, test_function: Callable,
-                           iterations: int = 5, warmup_iterations: int = 2) -> PerformanceResult:
+    def run_performance_test(
+        self,
+        operation_name: str,
+        test_function: Callable,
+        iterations: int = 5,
+        warmup_iterations: int = 2,
+    ) -> PerformanceResult:
         """Run a performance test and return results."""
         import os
 
@@ -199,8 +228,7 @@ class PerformanceTestSuite:
         for _ in range(iterations):
             # Measure memory before
             memory_before = (
-                process.memory_info().rss / 1024 / 1024  # MB
-                if process else 0.0
+                process.memory_info().rss / 1024 / 1024 if process else 0.0  # MB
             )
 
             # Execute function and measure time
@@ -216,8 +244,7 @@ class PerformanceTestSuite:
 
             # Measure memory after
             memory_after = (
-                process.memory_info().rss / 1024 / 1024  # MB
-                if process else 0.0
+                process.memory_info().rss / 1024 / 1024 if process else 0.0  # MB
             )
             memory_usage = max(memory_before, memory_after)
 
@@ -248,7 +275,7 @@ class PerformanceTestSuite:
             cpu_usage=avg_cpu,
             status=status,
             regression_detected=baseline_check["regression"],
-            baseline_comparison=baseline_check
+            baseline_comparison=baseline_check,
         )
 
         self.results.append(result)
@@ -268,18 +295,22 @@ class PerformanceTestSuite:
             "passed_tests": passed_tests,
             "failed_tests": total_tests - passed_tests,
             "regressed_tests": regressed_tests,
-            "success_rate": (passed_tests / total_tests) * 100 if total_tests > 0 else 0,
-            "regression_rate": (regressed_tests / total_tests) * 100 if total_tests > 0 else 0,
+            "success_rate": (
+                (passed_tests / total_tests) * 100 if total_tests > 0 else 0
+            ),
+            "regression_rate": (
+                (regressed_tests / total_tests) * 100 if total_tests > 0 else 0
+            ),
             "results": [
                 {
                     "operation": r.operation,
                     "execution_time": r.execution_time,
                     "memory_usage": r.memory_usage,
                     "status": r.status,
-                    "regression": r.regression_detected
+                    "regression": r.regression_detected,
                 }
                 for r in self.results
-            ]
+            ],
         }
 
 
@@ -300,8 +331,10 @@ class TestModulePerformanceBaselines:
     """Test performance baselines for all modules."""
 
     @pytest.mark.performance
-    @pytest.mark.skipif(not MODULE_AVAILABILITY.get("code_execution", False),
-                       reason="Code execution module not available")
+    @pytest.mark.skipif(
+        not MODULE_AVAILABILITY.get("code_execution", False),
+        reason="Code execution module not available",
+    )
     def test_code_execution_performance(self, performance_suite, tmp_path):
         """Test code execution performance baselines."""
         # Create a simple test script
@@ -323,11 +356,17 @@ class TestModulePerformanceBaselines:
         # Memory usage can fluctuate based on environment; warning instead of failing.
         if result.regression_detected:
             import warnings
-            warnings.warn(f"Performance regression detected in code_execution: {result.baseline_comparison}", stacklevel=2)
+
+            warnings.warn(
+                f"Performance regression detected in code_execution: {result.baseline_comparison}",
+                stacklevel=2,
+            )
 
     @pytest.mark.performance
-    @pytest.mark.skipif(not MODULE_AVAILABILITY.get("static_analysis", False),
-                       reason="Static analysis module not available")
+    @pytest.mark.skipif(
+        not MODULE_AVAILABILITY.get("static_analysis", False),
+        reason="Static analysis module not available",
+    )
     def test_static_analysis_performance(self, performance_suite, tmp_path):
         """Test static analysis performance baselines."""
         # Create a test Python file
@@ -347,6 +386,7 @@ class TestClass:
 
         def analyze_test():
             from codomyrmex.coding.static_analysis import analyze_file
+
             return analyze_file(str(test_file))
 
         result = performance_suite.run_performance_test(
@@ -357,13 +397,15 @@ class TestClass:
         assert result.memory_usage >= 0
 
     @pytest.mark.performance
-    @pytest.mark.skipif(not MODULE_AVAILABILITY.get("security", False),
-                       reason="Security module not available")
+    @pytest.mark.skipif(
+        not MODULE_AVAILABILITY.get("security", False),
+        reason="Security module not available",
+    )
     def test_security_audit_performance(self, performance_suite, tmp_path):
         """Test security audit performance baselines."""
         # Create a test file with some security issues
         test_file = tmp_path / "security_test.py"
-        test_file.write_text('''
+        test_file.write_text("""
 import os
 
 def insecure_function(user_input):
@@ -372,10 +414,11 @@ def insecure_function(user_input):
 
 # Hard-coded password
 PASSWORD = "admin123"
-''')
+""")
 
         def security_test():
             from codomyrmex.security import analyze_file_security
+
             return analyze_file_security(str(test_file))
 
         result = performance_suite.run_performance_test(
@@ -386,21 +429,22 @@ PASSWORD = "admin123"
         assert result.memory_usage >= 0
 
     @pytest.mark.performance
-    @pytest.mark.skipif(not MODULE_AVAILABILITY.get("data_visualization", False),
-                       reason="Data visualization module not available")
+    @pytest.mark.skipif(
+        not MODULE_AVAILABILITY.get("data_visualization", False),
+        reason="Data visualization module not available",
+    )
     def test_data_visualization_performance(self, performance_suite):
         """Test data visualization performance baselines."""
         test_data = {
             "categories": ["A", "B", "C", "D", "E"],
-            "values": [10, 20, 15, 25, 30]
+            "values": [10, 20, 15, 25, 30],
         }
 
         def visualize_test():
             from codomyrmex.data_visualization import create_bar_chart
+
             return create_bar_chart(
-                test_data["categories"],
-                test_data["values"],
-                "Performance Test Chart"
+                test_data["categories"], test_data["values"], "Performance Test Chart"
             )
 
         result = performance_suite.run_performance_test(
@@ -409,16 +453,22 @@ PASSWORD = "admin123"
 
         assert result.execution_time >= 0
         assert result.memory_usage >= 0
-        assert result.status in ("success", "failed")  # may fail at runtime without display backend
+        assert result.status in (
+            "success",
+            "failed",
+        )  # may fail at runtime without display backend
 
     @pytest.mark.performance
-    @pytest.mark.skipif(not MODULE_AVAILABILITY.get("performance", False),
-                       reason="Performance module not available")
+    @pytest.mark.skipif(
+        not MODULE_AVAILABILITY.get("performance", False),
+        reason="Performance module not available",
+    )
     def test_performance_module_performance(self, performance_suite):
         """Test performance module's own performance."""
 
         def profile_test():
             from codomyrmex.performance import profile_function
+
             return profile_function(lambda: sum(range(100)))
 
         result = performance_suite.run_performance_test(
@@ -446,7 +496,9 @@ class TestPerformanceRegressionDetection:
 
         # Test performance regression
         result = baseline_manager.check_regression(
-            "code_execution.execute_code", 2.0, 800.0  # Much slower and more memory
+            "code_execution.execute_code",
+            2.0,
+            800.0,  # Much slower and more memory
         )
 
         assert result["regression"]
@@ -455,9 +507,7 @@ class TestPerformanceRegressionDetection:
 
     def test_missing_baseline(self, baseline_manager):
         """Test handling of missing baselines."""
-        result = baseline_manager.check_regression(
-            "nonexistent.operation", 1.0, 50.0
-        )
+        result = baseline_manager.check_regression("nonexistent.operation", 1.0, 50.0)
 
         assert not result["regression"]
         assert result["reason"] == "no_baseline"
@@ -473,14 +523,14 @@ class TestPerformanceReporting:
             operation="test.operation1",
             execution_time=0.5,
             memory_usage=25.0,
-            status="success"
+            status="success",
         )
         mock_result2 = PerformanceResult(
             operation="test.operation2",
             execution_time=1.2,
             memory_usage=60.0,
             status="success",
-            regression_detected=True
+            regression_detected=True,
         )
 
         performance_suite.results = [mock_result1, mock_result2]
@@ -504,8 +554,10 @@ class TestPerformanceReporting:
 class TestPerformanceBenchmarking:
     """Test performance benchmarking utilities."""
 
-    @pytest.mark.skipif(not MODULE_AVAILABILITY.get("performance", False),
-                       reason="Performance module not available")
+    @pytest.mark.skipif(
+        not MODULE_AVAILABILITY.get("performance", False),
+        reason="Performance module not available",
+    )
     def test_benchmark_vs_profile_comparison(self):
         """Compare results between benchmark and profile functions."""
         from codomyrmex.performance import profile_function, run_benchmark

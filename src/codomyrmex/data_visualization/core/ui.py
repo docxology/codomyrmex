@@ -10,6 +10,7 @@ from .theme import DEFAULT_THEME, Theme
 @dataclass
 class Card:
     """Card component for highlighting information."""
+
     title: str = ""
     content: str = ""
     value: Any = None
@@ -20,7 +21,7 @@ class Card:
         """Render."""
         parts = [f"<h3>{self.title}</h3>"]
         if self.value is not None:
-             parts.append(f"<div class='value'>{self.value}</div>")
+            parts.append(f"<div class='value'>{self.value}</div>")
         if self.content:
             parts.append(f"<p>{self.content}</p>")
         if self.description:
@@ -37,7 +38,9 @@ class Card:
 class Table:
     """Table component for data display."""
 
-    def __init__(self, headers: list[str] | None = None, rows: list[list] | None = None, **kwargs):
+    def __init__(
+        self, headers: list[str] | None = None, rows: list[list] | None = None, **kwargs
+    ):
         self.headers = headers or []
         self.rows = rows or []
 
@@ -81,6 +84,7 @@ class Dashboard:
         html = f"<html><head><style>{css}</style></head><body><h1>{self.title}</h1>{inner}</body></html>"
         if output_path:
             from pathlib import Path
+
             Path(output_path).write_text(html)
         return html
 

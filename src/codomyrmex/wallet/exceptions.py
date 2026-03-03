@@ -20,7 +20,9 @@ from codomyrmex.exceptions import CodomyrmexError
 class WalletError(CodomyrmexError):
     """Base exception for wallet operations."""
 
-    def __init__(self, message: str = "", code: str = "", details: dict[str, Any] | None = None) -> None:
+    def __init__(
+        self, message: str = "", code: str = "", details: dict[str, Any] | None = None
+    ) -> None:
         self.code = code
         self.details = details or {}
         super().__init__(message)
@@ -41,13 +43,17 @@ class WalletNotFoundError(WalletError):
     def __init__(self, user_id: str = "", message: str = "Wallet not found") -> None:
         self.user_id = user_id
         final_msg = f"{message}: {user_id}" if user_id else message
-        super().__init__(final_msg, code="WALLET_NOT_FOUND", details={"user_id": user_id})
+        super().__init__(
+            final_msg, code="WALLET_NOT_FOUND", details={"user_id": user_id}
+        )
 
 
 class WalletKeyError(WalletError):
     """Raised when key storage or retrieval fails."""
 
-    def __init__(self, message: str = "Key operation failed", key_type: str = "") -> None:
+    def __init__(
+        self, message: str = "Key operation failed", key_type: str = ""
+    ) -> None:
         self.key_type = key_type
         super().__init__(message, code="KEY_ERROR", details={"key_type": key_type})
 
@@ -57,7 +63,9 @@ class RitualError(WalletError):
 
     def __init__(self, message: str = "Ritual failed", ritual_step: str = "") -> None:
         self.ritual_step = ritual_step
-        super().__init__(message, code="RITUAL_ERROR", details={"ritual_step": ritual_step})
+        super().__init__(
+            message, code="RITUAL_ERROR", details={"ritual_step": ritual_step}
+        )
 
 
 class InsufficientFundsError(WalletError):
@@ -75,7 +83,11 @@ class InsufficientFundsError(WalletError):
         super().__init__(
             f"Insufficient {currency}: need {required}, have {available}",
             code="INSUFFICIENT_FUNDS",
-            details={"required": required, "available": available, "currency": currency},
+            details={
+                "required": required,
+                "available": available,
+                "currency": currency,
+            },
         )
 
 
@@ -90,7 +102,9 @@ class TransactionError(WalletError):
     ) -> None:
         self.tx_hash = tx_hash
         self.reason = reason
-        super().__init__(message, code="TX_ERROR", details={"tx_hash": tx_hash, "reason": reason})
+        super().__init__(
+            message, code="TX_ERROR", details={"tx_hash": tx_hash, "reason": reason}
+        )
 
 
 class ContractError(WalletError):
@@ -104,10 +118,14 @@ class ContractError(WalletError):
     ) -> None:
         self.contract_address = contract_address
         self.function_name = function_name
-        super().__init__(message, code="CONTRACT_ERROR", details={
-            "contract_address": contract_address,
-            "function_name": function_name,
-        })
+        super().__init__(
+            message,
+            code="CONTRACT_ERROR",
+            details={
+                "contract_address": contract_address,
+                "function_name": function_name,
+            },
+        )
 
 
 class GasEstimationError(WalletError):

@@ -11,6 +11,7 @@ try:
         BatchingStream,
         WebSocketStream,
     )
+
     HAS_MODULE = True
 except ImportError:
     HAS_MODULE = False
@@ -28,9 +29,11 @@ def _run(coro):
 # AsyncStream
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestAsyncStream:
     """Test suite for AsyncStream."""
+
     def test_create(self):
         """Test functionality: create."""
         stream = AsyncStream(buffer_size=100)
@@ -48,71 +51,86 @@ class TestAsyncStream:
 
     def test_start_stop(self):
         """Test functionality: start stop."""
+
         async def _test():
             stream = AsyncStream()
             await stream.start()
             assert stream._running is True
             await stream.stop()
             assert stream._running is False
+
         _run(_test())
 
     def test_subscribe(self):
         """Test functionality: subscribe."""
+
         async def _test():
             stream = AsyncStream()
             sub_id = await stream.subscribe()
             assert sub_id is not None
             assert isinstance(sub_id, str)
             assert sub_id in stream._subscribers
+
         _run(_test())
 
     def test_unsubscribe(self):
         """Test functionality: unsubscribe."""
+
         async def _test():
             stream = AsyncStream()
             sub_id = await stream.subscribe()
             result = await stream.unsubscribe(sub_id)
             assert result is True
             assert sub_id not in stream._subscribers
+
         _run(_test())
 
     def test_unsubscribe_nonexistent(self):
         """Test functionality: unsubscribe nonexistent."""
+
         async def _test():
             stream = AsyncStream()
             result = await stream.unsubscribe("nonexistent")
             assert result is False
+
         _run(_test())
 
     def test_publish(self):
         """Test functionality: publish."""
+
         async def _test():
             stream = AsyncStream()
             event = Event(type=EventType.MESSAGE, data="hello")
             result = await stream.publish(event)
             assert result is True
+
         _run(_test())
 
     def test_subscribe_custom_buffer(self):
         """Test functionality: subscribe custom buffer."""
+
         async def _test():
             stream = AsyncStream()
             sub_id = await stream.subscribe(buffer_size=50)
             assert stream._subscribers[sub_id].maxsize == 50
+
         _run(_test())
 
     def test_multiple_subscribers(self):
         """Test functionality: multiple subscribers."""
+
         async def _test():
             stream = AsyncStream()
             sub1 = await stream.subscribe()
             sub2 = await stream.subscribe()
             assert sub1 != sub2
             assert len(stream._subscribers) == 2
+
         _run(_test())
 
     def test_broadcast_to_subscribers(self):
         """Test functionality: broadcast to subscribers."""
+
         async def _test():
             stream = AsyncStream()
             sub_id = await stream.subscribe()
@@ -122,6 +140,7 @@ class TestAsyncStream:
             assert not queue.empty()
             received = queue.get_nowait()
             assert received.data == "test"
+
         _run(_test())
 
 
@@ -129,9 +148,11 @@ class TestAsyncStream:
 # WebSocketStream
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestWebSocketStream:
     """Test suite for WebSocketStream."""
+
     def test_create(self):
         """Test functionality: create."""
         ws_stream = WebSocketStream()
@@ -139,6 +160,7 @@ class TestWebSocketStream:
 
     def test_connect(self):
         """Test functionality: connect."""
+
         async def _test():
             ws_stream = WebSocketStream()
 
@@ -150,10 +172,12 @@ class TestWebSocketStream:
             sub_id = await ws_stream.connect(ws, "client1")
             assert sub_id is not None
             assert "client1" in ws_stream._connections
+
         _run(_test())
 
     def test_disconnect(self):
         """Test functionality: disconnect."""
+
         async def _test():
             ws_stream = WebSocketStream()
 
@@ -165,26 +189,32 @@ class TestWebSocketStream:
             await ws_stream.connect(ws, "client1")
             await ws_stream.disconnect("client1")
             assert "client1" not in ws_stream._connections
+
         _run(_test())
 
     def test_disconnect_nonexistent(self):
         """Test functionality: disconnect nonexistent."""
+
         async def _test():
             ws_stream = WebSocketStream()
             await ws_stream.disconnect("nonexistent")
+
         _run(_test())
 
     def test_send_to_nonexistent(self):
         """Test functionality: send to nonexistent."""
+
         async def _test():
             ws_stream = WebSocketStream()
             event = Event(type=EventType.MESSAGE, data="hello")
             result = await ws_stream.send_to("nonexistent", event)
             assert result is False
+
         _run(_test())
 
     def test_send_to_connected(self):
         """Test functionality: send to connected."""
+
         async def _test():
             ws_stream = WebSocketStream()
             sent_data = []
@@ -199,10 +229,12 @@ class TestWebSocketStream:
             result = await ws_stream.send_to("client1", event)
             assert result is True
             assert len(sent_data) == 1
+
         _run(_test())
 
     def test_send_to_failing_ws(self):
         """Test functionality: send to failing ws."""
+
         async def _test():
             ws_stream = WebSocketStream()
 
@@ -215,6 +247,7 @@ class TestWebSocketStream:
             event = Event(type=EventType.MESSAGE, data="hello")
             result = await ws_stream.send_to("client1", event)
             assert result is False
+
         _run(_test())
 
 
@@ -222,9 +255,11 @@ class TestWebSocketStream:
 # BatchingStream
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestBatchingStream:
     """Test suite for BatchingStream."""
+
     def test_create(self):
         """Test functionality: create."""
         stream = BatchingStream(batch_size=100, flush_interval=1.0)
@@ -234,15 +269,18 @@ class TestBatchingStream:
 
     def test_add_event(self):
         """Test functionality: add event."""
+
         async def _test():
             stream = BatchingStream(batch_size=100)
             event = Event(type=EventType.MESSAGE, data="test")
             await stream.add(event)
             assert len(stream._batch) == 1
+
         _run(_test())
 
     def test_on_batch_handler(self):
         """Test functionality: on batch handler."""
+
         async def _test():
             batches_received = []
             stream = BatchingStream(batch_size=2)
@@ -253,37 +291,45 @@ class TestBatchingStream:
 
             assert len(batches_received) == 1
             assert len(batches_received[0]) == 2
+
         _run(_test())
 
     def test_flush_empties_batch(self):
         """Test functionality: flush empties batch."""
+
         async def _test():
             stream = BatchingStream(batch_size=100)
             await stream.add(Event(type=EventType.MESSAGE, data="test"))
             assert len(stream._batch) == 1
             await stream._flush()
             assert len(stream._batch) == 0
+
         _run(_test())
 
     def test_flush_empty_batch_noop(self):
         """Test functionality: flush empty batch noop."""
+
         async def _test():
             stream = BatchingStream()
             await stream._flush()
+
         _run(_test())
 
     def test_start_stop(self):
         """Test functionality: start stop."""
+
         async def _test():
             stream = BatchingStream(flush_interval=0.05)
             await stream.start()
             assert stream._running is True
             await stream.stop()
             assert stream._running is False
+
         _run(_test())
 
     def test_stop_flushes_remaining(self):
         """Test functionality: stop flushes remaining."""
+
         async def _test():
             flushed = []
             stream = BatchingStream(batch_size=100, flush_interval=10.0)
@@ -291,10 +337,12 @@ class TestBatchingStream:
             await stream.add(Event(type=EventType.MESSAGE, data="remaining"))
             await stream.stop()
             assert len(flushed) == 1
+
         _run(_test())
 
     def test_multiple_handlers(self):
         """Test functionality: multiple handlers."""
+
         async def _test():
             handler1_calls = []
             handler2_calls = []
@@ -307,4 +355,5 @@ class TestBatchingStream:
 
             assert len(handler1_calls) == 1
             assert len(handler2_calls) == 1
+
         _run(_test())

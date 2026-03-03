@@ -9,6 +9,7 @@ Example:
     >>> client.connect()
     >>> extensions = client.list_extensions()
 """
+
 import json
 from pathlib import Path
 from typing import Any, Optional
@@ -23,6 +24,7 @@ from codomyrmex.ide import (
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 logger = get_logger(__name__)
+
 
 class VSCodeClient(IDEClient):
     """Client for interacting with Visual Studio Code.
@@ -191,9 +193,24 @@ class VSCodeClient(IDEClient):
         """
         # Common extensions that might be installed
         return [
-            {"name": "python", "publisher": "ms-python", "version": "2024.0.0", "enabled": True},
-            {"name": "pylance", "publisher": "ms-python", "version": "2024.0.0", "enabled": True},
-            {"name": "gitlens", "publisher": "eamodio", "version": "14.0.0", "enabled": True},
+            {
+                "name": "python",
+                "publisher": "ms-python",
+                "version": "2024.0.0",
+                "enabled": True,
+            },
+            {
+                "name": "pylance",
+                "publisher": "ms-python",
+                "version": "2024.0.0",
+                "enabled": True,
+            },
+            {
+                "name": "gitlens",
+                "publisher": "eamodio",
+                "version": "14.0.0",
+                "enabled": True,
+            },
         ]
 
     def list_commands(self) -> list[str]:
@@ -215,7 +232,11 @@ class VSCodeClient(IDEClient):
             try:
                 return json.loads(settings_path.read_text())
             except json.JSONDecodeError as e:
-                logger.warning("Failed to parse VS Code settings JSON at %s: %s", settings_path, str(e))
+                logger.warning(
+                    "Failed to parse VS Code settings JSON at %s: %s",
+                    settings_path,
+                    str(e),
+                )
                 raise
         return {}
 
@@ -267,5 +288,6 @@ class VSCodeClient(IDEClient):
         if not self._connected:
             raise IDEError("Not connected to VS Code")
         return True
+
 
 __all__ = ["VSCodeClient"]

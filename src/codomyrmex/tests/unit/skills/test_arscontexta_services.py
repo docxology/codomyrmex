@@ -238,12 +238,14 @@ class TestServicesDerivationEngine:
     def test_ingest_from_text_matches_multiple_dimensions(self):
         """Text with multiple keywords triggers signals across dimensions."""
         engine = DerivationEngine()
-        signals = engine.ingest_from_text("I use vim for daily research notes in markdown")
+        signals = engine.ingest_from_text(
+            "I use vim for daily research notes in markdown"
+        )
         dims = {s.dimension for s in signals}
-        assert ConfigDimension.TOOLCHAIN in dims      # "vim"
+        assert ConfigDimension.TOOLCHAIN in dims  # "vim"
         assert ConfigDimension.TEMPORAL_SCOPE in dims  # "daily"
-        assert ConfigDimension.DOMAIN in dims          # "research"
-        assert ConfigDimension.OUTPUT_FORMAT in dims   # "markdown"
+        assert ConfigDimension.DOMAIN in dims  # "research"
+        assert ConfigDimension.OUTPUT_FORMAT in dims  # "markdown"
 
     def test_ingest_from_text_case_insensitive(self):
         """Keyword matching is case-insensitive."""
@@ -262,12 +264,20 @@ class TestServicesDerivationEngine:
     def test_overall_confidence_average(self):
         """Overall confidence is the average of all signal confidences."""
         engine = DerivationEngine()
-        engine.ingest_signal(DimensionSignal(
-            dimension=ConfigDimension.DOMAIN, value="a", confidence=0.8,
-        ))
-        engine.ingest_signal(DimensionSignal(
-            dimension=ConfigDimension.DOMAIN, value="b", confidence=0.4,
-        ))
+        engine.ingest_signal(
+            DimensionSignal(
+                dimension=ConfigDimension.DOMAIN,
+                value="a",
+                confidence=0.8,
+            )
+        )
+        engine.ingest_signal(
+            DimensionSignal(
+                dimension=ConfigDimension.DOMAIN,
+                value="b",
+                confidence=0.4,
+            )
+        )
         assert engine.get_overall_confidence() == pytest.approx(0.6)
 
     def test_reset_clears_all_signals(self):
@@ -290,9 +300,7 @@ class TestServicesDerivationEngine:
         """Each of the 8 config dimensions can be triggered by keywords."""
         engine = DerivationEngine()
         # This text contains at least one keyword per dimension
-        text = (
-            "software zettelkasten detail daily solo markdown obsidian visual"
-        )
+        text = "software zettelkasten detail daily solo markdown obsidian visual"
         signals = engine.ingest_from_text(text)
         dims_found = {s.dimension for s in signals}
         assert ConfigDimension.DOMAIN in dims_found

@@ -67,12 +67,16 @@ class TestCallToolFnInjection:
             handler=lambda: "should not be called",
         )
 
-        resp = _run(srv.handle_request({
-            "jsonrpc": "2.0",
-            "id": 1,
-            "method": "tools/call",
-            "params": {"name": "dummy", "arguments": {}},
-        }))
+        resp = _run(
+            srv.handle_request(
+                {
+                    "jsonrpc": "2.0",
+                    "id": 1,
+                    "method": "tools/call",
+                    "params": {"name": "dummy", "arguments": {}},
+                }
+            )
+        )
 
         # The custom call_tool_fn was invoked
         assert len(call_log) == 1
@@ -92,12 +96,16 @@ class TestCallToolFnInjection:
         def ping(message: str = "pong") -> str:
             return json.dumps({"reply": message})
 
-        resp = _run(srv.handle_request({
-            "jsonrpc": "2.0",
-            "id": 1,
-            "method": "tools/call",
-            "params": {"name": "ping", "arguments": {"message": "hello"}},
-        }))
+        resp = _run(
+            srv.handle_request(
+                {
+                    "jsonrpc": "2.0",
+                    "id": 1,
+                    "method": "tools/call",
+                    "params": {"name": "ping", "arguments": {"message": "hello"}},
+                }
+            )
+        )
 
         result = resp["result"]
         assert "content" in result
@@ -123,12 +131,16 @@ class TestToolDecoratorTypedParams:
         def add(a: int, b: int) -> int:
             return a + b
 
-        resp = _run(srv.handle_request({
-            "jsonrpc": "2.0",
-            "id": 1,
-            "method": "tools/list",
-            "params": {},
-        }))
+        resp = _run(
+            srv.handle_request(
+                {
+                    "jsonrpc": "2.0",
+                    "id": 1,
+                    "method": "tools/list",
+                    "params": {},
+                }
+            )
+        )
         tool_schema = resp["result"]["tools"][0]
         props = tool_schema["inputSchema"]["properties"]
         assert props["a"]["type"] == "integer"
@@ -144,12 +156,16 @@ class TestToolDecoratorTypedParams:
         def scale(value: float, factor: float = 1.0) -> float:
             return value * factor
 
-        resp = _run(srv.handle_request({
-            "jsonrpc": "2.0",
-            "id": 1,
-            "method": "tools/list",
-            "params": {},
-        }))
+        resp = _run(
+            srv.handle_request(
+                {
+                    "jsonrpc": "2.0",
+                    "id": 1,
+                    "method": "tools/list",
+                    "params": {},
+                }
+            )
+        )
         tool_schema = resp["result"]["tools"][0]
         props = tool_schema["inputSchema"]["properties"]
         assert props["value"]["type"] == "number"
@@ -166,12 +182,16 @@ class TestToolDecoratorTypedParams:
         def toggle(enabled: bool, verbose: bool = False) -> str:
             return json.dumps({"enabled": enabled, "verbose": verbose})
 
-        resp = _run(srv.handle_request({
-            "jsonrpc": "2.0",
-            "id": 1,
-            "method": "tools/list",
-            "params": {},
-        }))
+        resp = _run(
+            srv.handle_request(
+                {
+                    "jsonrpc": "2.0",
+                    "id": 1,
+                    "method": "tools/list",
+                    "params": {},
+                }
+            )
+        )
         tool_schema = resp["result"]["tools"][0]
         props = tool_schema["inputSchema"]["properties"]
         assert props["enabled"]["type"] == "boolean"
@@ -187,12 +207,16 @@ class TestToolDecoratorTypedParams:
         def mixed(name: str, count: int, weight: float, active: bool) -> str:
             return "ok"
 
-        resp = _run(srv.handle_request({
-            "jsonrpc": "2.0",
-            "id": 1,
-            "method": "tools/list",
-            "params": {},
-        }))
+        resp = _run(
+            srv.handle_request(
+                {
+                    "jsonrpc": "2.0",
+                    "id": 1,
+                    "method": "tools/list",
+                    "params": {},
+                }
+            )
+        )
         tool_schema = resp["result"]["tools"][0]
         props = tool_schema["inputSchema"]["properties"]
         assert props["name"]["type"] == "string"
@@ -230,12 +254,16 @@ class TestToolDecoratorOutputSchema:
         def structured_tool(input_text: str) -> str:
             return json.dumps({"result": input_text.upper()})
 
-        resp = _run(srv.handle_request({
-            "jsonrpc": "2.0",
-            "id": 1,
-            "method": "tools/list",
-            "params": {},
-        }))
+        resp = _run(
+            srv.handle_request(
+                {
+                    "jsonrpc": "2.0",
+                    "id": 1,
+                    "method": "tools/list",
+                    "params": {},
+                }
+            )
+        )
         tool_schema = resp["result"]["tools"][0]
         assert "outputSchema" in tool_schema
         assert tool_schema["outputSchema"]["type"] == "object"
@@ -249,12 +277,16 @@ class TestToolDecoratorOutputSchema:
         def plain_tool(text: str) -> str:
             return text
 
-        resp = _run(srv.handle_request({
-            "jsonrpc": "2.0",
-            "id": 1,
-            "method": "tools/list",
-            "params": {},
-        }))
+        resp = _run(
+            srv.handle_request(
+                {
+                    "jsonrpc": "2.0",
+                    "id": 1,
+                    "method": "tools/list",
+                    "params": {},
+                }
+            )
+        )
         tool_schema = resp["result"]["tools"][0]
         assert "outputSchema" not in tool_schema
 
@@ -270,12 +302,16 @@ class TestToolDecoratorOutputSchema:
         def titled_tool(x: str) -> str:
             return x
 
-        resp = _run(srv.handle_request({
-            "jsonrpc": "2.0",
-            "id": 1,
-            "method": "tools/list",
-            "params": {},
-        }))
+        resp = _run(
+            srv.handle_request(
+                {
+                    "jsonrpc": "2.0",
+                    "id": 1,
+                    "method": "tools/list",
+                    "params": {},
+                }
+            )
+        )
         tool_schema = resp["result"]["tools"][0]
         assert tool_schema["title"] == "My Titled Tool"
 
@@ -304,12 +340,16 @@ class TestRegisterToolWithTitleAndOutputSchema:
             title="Manual Tool Title",
         )
 
-        resp = _run(srv.handle_request({
-            "jsonrpc": "2.0",
-            "id": 1,
-            "method": "tools/list",
-            "params": {},
-        }))
+        resp = _run(
+            srv.handle_request(
+                {
+                    "jsonrpc": "2.0",
+                    "id": 1,
+                    "method": "tools/list",
+                    "params": {},
+                }
+            )
+        )
         tool_schema = resp["result"]["tools"][0]
         assert tool_schema["title"] == "Manual Tool Title"
 
@@ -329,12 +369,16 @@ class TestRegisterToolWithTitleAndOutputSchema:
             output_schema=out_schema,
         )
 
-        resp = _run(srv.handle_request({
-            "jsonrpc": "2.0",
-            "id": 1,
-            "method": "tools/list",
-            "params": {},
-        }))
+        resp = _run(
+            srv.handle_request(
+                {
+                    "jsonrpc": "2.0",
+                    "id": 1,
+                    "method": "tools/list",
+                    "params": {},
+                }
+            )
+        )
         tool_schema = resp["result"]["tools"][0]
         assert "outputSchema" in tool_schema
         assert tool_schema["outputSchema"]["type"] == "object"
@@ -356,12 +400,16 @@ class TestRegisterToolWithTitleAndOutputSchema:
             output_schema=out_schema,
         )
 
-        resp = _run(srv.handle_request({
-            "jsonrpc": "2.0",
-            "id": 1,
-            "method": "tools/list",
-            "params": {},
-        }))
+        resp = _run(
+            srv.handle_request(
+                {
+                    "jsonrpc": "2.0",
+                    "id": 1,
+                    "method": "tools/list",
+                    "params": {},
+                }
+            )
+        )
         tool_schema = resp["result"]["tools"][0]
         assert tool_schema["title"] == "Full Tool"
         assert tool_schema["outputSchema"]["type"] == "string"
@@ -385,12 +433,16 @@ class TestRegisterFileResource:
         srv.register_file_resource(str(test_file))
 
         # Verify it appears in resources list
-        list_resp = _run(srv.handle_request({
-            "jsonrpc": "2.0",
-            "id": 1,
-            "method": "resources/list",
-            "params": {},
-        }))
+        list_resp = _run(
+            srv.handle_request(
+                {
+                    "jsonrpc": "2.0",
+                    "id": 1,
+                    "method": "resources/list",
+                    "params": {},
+                }
+            )
+        )
         resources = list_resp["result"]["resources"]
         assert len(resources) == 1
         assert resources[0]["name"] == "hello.txt"
@@ -399,12 +451,16 @@ class TestRegisterFileResource:
 
         # Verify content can be read back
         uri = resources[0]["uri"]
-        read_resp = _run(srv.handle_request({
-            "jsonrpc": "2.0",
-            "id": 2,
-            "method": "resources/read",
-            "params": {"uri": uri},
-        }))
+        read_resp = _run(
+            srv.handle_request(
+                {
+                    "jsonrpc": "2.0",
+                    "id": 2,
+                    "method": "resources/read",
+                    "params": {"uri": uri},
+                }
+            )
+        )
         contents = read_resp["result"]["contents"]
         assert contents[0]["text"] == "Hello, file resource!"
 
@@ -416,12 +472,16 @@ class TestRegisterFileResource:
 
         srv.register_file_resource(str(json_file))
 
-        list_resp = _run(srv.handle_request({
-            "jsonrpc": "2.0",
-            "id": 1,
-            "method": "resources/list",
-            "params": {},
-        }))
+        list_resp = _run(
+            srv.handle_request(
+                {
+                    "jsonrpc": "2.0",
+                    "id": 1,
+                    "method": "resources/list",
+                    "params": {},
+                }
+            )
+        )
         assert list_resp["result"]["resources"][0]["mimeType"] == "application/json"
 
     def test_register_markdown_file_gets_markdown_mime_type(self, tmp_path):
@@ -432,12 +492,16 @@ class TestRegisterFileResource:
 
         srv.register_file_resource(str(md_file))
 
-        list_resp = _run(srv.handle_request({
-            "jsonrpc": "2.0",
-            "id": 1,
-            "method": "resources/list",
-            "params": {},
-        }))
+        list_resp = _run(
+            srv.handle_request(
+                {
+                    "jsonrpc": "2.0",
+                    "id": 1,
+                    "method": "resources/list",
+                    "params": {},
+                }
+            )
+        )
         assert list_resp["result"]["resources"][0]["mimeType"] == "text/markdown"
 
     def test_register_python_file_gets_python_mime_type(self, tmp_path):
@@ -448,12 +512,16 @@ class TestRegisterFileResource:
 
         srv.register_file_resource(str(py_file))
 
-        list_resp = _run(srv.handle_request({
-            "jsonrpc": "2.0",
-            "id": 1,
-            "method": "resources/list",
-            "params": {},
-        }))
+        list_resp = _run(
+            srv.handle_request(
+                {
+                    "jsonrpc": "2.0",
+                    "id": 1,
+                    "method": "resources/list",
+                    "params": {},
+                }
+            )
+        )
         assert list_resp["result"]["resources"][0]["mimeType"] == "text/x-python"
 
     def test_register_unknown_extension_defaults_to_text_plain(self, tmp_path):
@@ -464,12 +532,16 @@ class TestRegisterFileResource:
 
         srv.register_file_resource(str(unk_file))
 
-        list_resp = _run(srv.handle_request({
-            "jsonrpc": "2.0",
-            "id": 1,
-            "method": "resources/list",
-            "params": {},
-        }))
+        list_resp = _run(
+            srv.handle_request(
+                {
+                    "jsonrpc": "2.0",
+                    "id": 1,
+                    "method": "resources/list",
+                    "params": {},
+                }
+            )
+        )
         assert list_resp["result"]["resources"][0]["mimeType"] == "text/plain"
 
 
@@ -497,12 +569,16 @@ class TestPerToolTimeout:
             return json.dumps({"value": value})
 
         # Tool should execute normally (it's fast, well within 5s timeout)
-        resp = _run(srv.handle_request({
-            "jsonrpc": "2.0",
-            "id": 1,
-            "method": "tools/call",
-            "params": {"name": "fast_tool", "arguments": {"value": "hello"}},
-        }))
+        resp = _run(
+            srv.handle_request(
+                {
+                    "jsonrpc": "2.0",
+                    "id": 1,
+                    "method": "tools/call",
+                    "params": {"name": "fast_tool", "arguments": {"value": "hello"}},
+                }
+            )
+        )
         result = resp["result"]
         assert "content" in result
         assert "isError" not in result
@@ -521,12 +597,16 @@ class TestPerToolTimeout:
         def normal_tool(text: str = "hi") -> str:
             return json.dumps({"text": text})
 
-        resp = _run(srv.handle_request({
-            "jsonrpc": "2.0",
-            "id": 1,
-            "method": "tools/call",
-            "params": {"name": "normal_tool", "arguments": {"text": "world"}},
-        }))
+        resp = _run(
+            srv.handle_request(
+                {
+                    "jsonrpc": "2.0",
+                    "id": 1,
+                    "method": "tools/call",
+                    "params": {"name": "normal_tool", "arguments": {"text": "world"}},
+                }
+            )
+        )
         result = resp["result"]
         assert "content" in result
         assert "isError" not in result
@@ -549,12 +629,16 @@ class TestValidationErrorResponse:
         def requires_path(path: str) -> str:
             return json.dumps({"path": path})
 
-        resp = _run(srv.handle_request({
-            "jsonrpc": "2.0",
-            "id": 1,
-            "method": "tools/call",
-            "params": {"name": "requires_path", "arguments": {}},
-        }))
+        resp = _run(
+            srv.handle_request(
+                {
+                    "jsonrpc": "2.0",
+                    "id": 1,
+                    "method": "tools/call",
+                    "params": {"name": "requires_path", "arguments": {}},
+                }
+            )
+        )
         result = resp["result"]
         assert result.get("isError") is True
         error_text = result["content"][0]["text"]
@@ -571,12 +655,19 @@ class TestValidationErrorResponse:
             return json.dumps({"count": count})
 
         # Pass a non-coercible string where int is expected
-        resp = _run(srv.handle_request({
-            "jsonrpc": "2.0",
-            "id": 1,
-            "method": "tools/call",
-            "params": {"name": "int_tool", "arguments": {"count": "not_a_number"}},
-        }))
+        resp = _run(
+            srv.handle_request(
+                {
+                    "jsonrpc": "2.0",
+                    "id": 1,
+                    "method": "tools/call",
+                    "params": {
+                        "name": "int_tool",
+                        "arguments": {"count": "not_a_number"},
+                    },
+                }
+            )
+        )
         result = resp["result"]
         assert result.get("isError") is True
         error_text = result["content"][0]["text"]
@@ -616,12 +707,19 @@ class TestStructuredContentResponse:
             handler=lambda text="hello": json.dumps({"result": text}),
         )
 
-        resp = _run(srv.handle_request({
-            "jsonrpc": "2.0",
-            "id": 1,
-            "method": "tools/call",
-            "params": {"name": "structured_out", "arguments": {"text": "world"}},
-        }))
+        resp = _run(
+            srv.handle_request(
+                {
+                    "jsonrpc": "2.0",
+                    "id": 1,
+                    "method": "tools/call",
+                    "params": {
+                        "name": "structured_out",
+                        "arguments": {"text": "world"},
+                    },
+                }
+            )
+        )
         result = resp["result"]
         # Should have both content and structuredContent
         assert "content" in result
@@ -637,12 +735,16 @@ class TestStructuredContentResponse:
         def plain(text: str = "hi") -> str:
             return json.dumps({"echo": text})
 
-        resp = _run(srv.handle_request({
-            "jsonrpc": "2.0",
-            "id": 1,
-            "method": "tools/call",
-            "params": {"name": "plain", "arguments": {"text": "hello"}},
-        }))
+        resp = _run(
+            srv.handle_request(
+                {
+                    "jsonrpc": "2.0",
+                    "id": 1,
+                    "method": "tools/call",
+                    "params": {"name": "plain", "arguments": {"text": "hello"}},
+                }
+            )
+        )
         result = resp["result"]
         assert "content" in result
         assert "structuredContent" not in result
@@ -671,12 +773,16 @@ class TestToolExecutionErrorWrapping:
         def crashy(msg: str = "boom") -> str:
             raise RuntimeError(f"Intentional crash: {msg}")
 
-        resp = _run(srv.handle_request({
-            "jsonrpc": "2.0",
-            "id": 1,
-            "method": "tools/call",
-            "params": {"name": "crashy", "arguments": {"msg": "test"}},
-        }))
+        resp = _run(
+            srv.handle_request(
+                {
+                    "jsonrpc": "2.0",
+                    "id": 1,
+                    "method": "tools/call",
+                    "params": {"name": "crashy", "arguments": {"msg": "test"}},
+                }
+            )
+        )
         result = resp["result"]
         assert result.get("isError") is True
         error_data = json.loads(result["content"][0]["text"])
@@ -702,12 +808,16 @@ class TestToolExecutionErrorWrapping:
         def value_error_tool(x: str = "bad") -> str:
             raise ValueError(f"Invalid value: {x}")
 
-        resp = _run(srv.handle_request({
-            "jsonrpc": "2.0",
-            "id": 1,
-            "method": "tools/call",
-            "params": {"name": "value_error_tool", "arguments": {"x": "oops"}},
-        }))
+        resp = _run(
+            srv.handle_request(
+                {
+                    "jsonrpc": "2.0",
+                    "id": 1,
+                    "method": "tools/call",
+                    "params": {"name": "value_error_tool", "arguments": {"x": "oops"}},
+                }
+            )
+        )
         result = resp["result"]
         assert result.get("isError") is True
         error_data = json.loads(result["content"][0]["text"])
@@ -733,12 +843,16 @@ class TestGetPromptWithArgSubstitution:
             arguments=[{"name": "name", "description": "The name"}],
         )
 
-        resp = _run(srv.handle_request({
-            "jsonrpc": "2.0",
-            "id": 1,
-            "method": "prompts/get",
-            "params": {"name": "greeting", "arguments": {"name": "Alice"}},
-        }))
+        resp = _run(
+            srv.handle_request(
+                {
+                    "jsonrpc": "2.0",
+                    "id": 1,
+                    "method": "prompts/get",
+                    "params": {"name": "greeting", "arguments": {"name": "Alice"}},
+                }
+            )
+        )
         messages = resp["result"]["messages"]
         assert messages[0]["content"]["text"] == "Hello Alice!"
 
@@ -755,12 +869,19 @@ class TestGetPromptWithArgSubstitution:
             ],
         )
 
-        resp = _run(srv.handle_request({
-            "jsonrpc": "2.0",
-            "id": 1,
-            "method": "prompts/get",
-            "params": {"name": "intro", "arguments": {"name": "Bob", "age": "30"}},
-        }))
+        resp = _run(
+            srv.handle_request(
+                {
+                    "jsonrpc": "2.0",
+                    "id": 1,
+                    "method": "prompts/get",
+                    "params": {
+                        "name": "intro",
+                        "arguments": {"name": "Bob", "age": "30"},
+                    },
+                }
+            )
+        )
         text = resp["result"]["messages"][0]["content"]["text"]
         assert text == "My name is Bob and I am 30 years old."
 
@@ -768,12 +889,16 @@ class TestGetPromptWithArgSubstitution:
         """Test functionality: getting a nonexistent prompt returns error (line 478)."""
         srv = MCPServer(MCPServerConfig(name="no-prompt", version="0.1.0"))
 
-        resp = _run(srv.handle_request({
-            "jsonrpc": "2.0",
-            "id": 1,
-            "method": "prompts/get",
-            "params": {"name": "nonexistent", "arguments": {}},
-        }))
+        resp = _run(
+            srv.handle_request(
+                {
+                    "jsonrpc": "2.0",
+                    "id": 1,
+                    "method": "prompts/get",
+                    "params": {"name": "nonexistent", "arguments": {}},
+                }
+            )
+        )
         assert "error" in resp
         assert resp["error"]["code"] == -32603
         assert "Prompt not found" in resp["error"]["message"]
@@ -787,12 +912,16 @@ class TestGetPromptWithArgSubstitution:
             template="No variables here.",
         )
 
-        resp = _run(srv.handle_request({
-            "jsonrpc": "2.0",
-            "id": 1,
-            "method": "prompts/get",
-            "params": {"name": "static", "arguments": {}},
-        }))
+        resp = _run(
+            srv.handle_request(
+                {
+                    "jsonrpc": "2.0",
+                    "id": 1,
+                    "method": "prompts/get",
+                    "params": {"name": "static", "arguments": {}},
+                }
+            )
+        )
         text = resp["result"]["messages"][0]["content"]["text"]
         assert text == "No variables here."
 
@@ -810,12 +939,16 @@ class TestUnknownMethodDispatch:
         """Test functionality: unknown method via dispatch returns -32603 error."""
         srv = MCPServer(MCPServerConfig(name="unknown-method", version="0.1.0"))
 
-        resp = _run(srv.handle_request({
-            "jsonrpc": "2.0",
-            "id": 42,
-            "method": "fantasy/method",
-            "params": {},
-        }))
+        resp = _run(
+            srv.handle_request(
+                {
+                    "jsonrpc": "2.0",
+                    "id": 42,
+                    "method": "fantasy/method",
+                    "params": {},
+                }
+            )
+        )
         assert "error" in resp
         assert resp["error"]["code"] == -32603
         assert "Unknown method" in resp["error"]["message"]
@@ -824,12 +957,16 @@ class TestUnknownMethodDispatch:
         """Test functionality: empty method string returns error."""
         srv = MCPServer(MCPServerConfig(name="empty-method", version="0.1.0"))
 
-        resp = _run(srv.handle_request({
-            "jsonrpc": "2.0",
-            "id": 43,
-            "method": "",
-            "params": {},
-        }))
+        resp = _run(
+            srv.handle_request(
+                {
+                    "jsonrpc": "2.0",
+                    "id": 43,
+                    "method": "",
+                    "params": {},
+                }
+            )
+        )
         assert "error" in resp
         assert resp["error"]["code"] == -32603
 
@@ -856,12 +993,16 @@ class TestZeroTimeoutToolExecution:
         def sync_tool(value: str = "sync") -> str:
             return json.dumps({"mode": "sync", "value": value})
 
-        resp = _run(srv.handle_request({
-            "jsonrpc": "2.0",
-            "id": 1,
-            "method": "tools/call",
-            "params": {"name": "sync_tool", "arguments": {"value": "test"}},
-        }))
+        resp = _run(
+            srv.handle_request(
+                {
+                    "jsonrpc": "2.0",
+                    "id": 1,
+                    "method": "tools/call",
+                    "params": {"name": "sync_tool", "arguments": {"value": "test"}},
+                }
+            )
+        )
         result = resp["result"]
         assert "content" in result
         data = json.loads(result["content"][0]["text"])
@@ -890,16 +1031,18 @@ class TestInitializeCapabilities:
         srv.register_resource(
             uri="test://r1", name="R1", content_provider=lambda: "data"
         )
-        srv.register_prompt(
-            name="p1", description="Prompt 1", template="Hello"
-        )
+        srv.register_prompt(name="p1", description="Prompt 1", template="Hello")
 
-        resp = _run(srv.handle_request({
-            "jsonrpc": "2.0",
-            "id": 1,
-            "method": "initialize",
-            "params": {},
-        }))
+        resp = _run(
+            srv.handle_request(
+                {
+                    "jsonrpc": "2.0",
+                    "id": 1,
+                    "method": "initialize",
+                    "params": {},
+                }
+            )
+        )
         caps = resp["result"]["capabilities"]
         assert "tools" in caps
         assert "resources" in caps
@@ -913,12 +1056,16 @@ class TestInitializeCapabilities:
         def only_tool() -> str:
             return "ok"
 
-        resp = _run(srv.handle_request({
-            "jsonrpc": "2.0",
-            "id": 1,
-            "method": "initialize",
-            "params": {},
-        }))
+        resp = _run(
+            srv.handle_request(
+                {
+                    "jsonrpc": "2.0",
+                    "id": 1,
+                    "method": "initialize",
+                    "params": {},
+                }
+            )
+        )
         caps = resp["result"]["capabilities"]
         assert "tools" in caps
         assert "resources" not in caps
@@ -940,7 +1087,7 @@ class TestRateLimitPath:
             name="rate-limit-test",
             version="0.1.0",
             rate_limit_rate=0.001,  # Very low rate
-            rate_limit_burst=1,     # Only 1 allowed
+            rate_limit_burst=1,  # Only 1 allowed
         )
         srv = MCPServer(cfg)
 
@@ -949,20 +1096,28 @@ class TestRateLimitPath:
             return json.dumps({"x": x})
 
         # First call should succeed
-        resp1 = _run(srv.handle_request({
-            "jsonrpc": "2.0",
-            "id": 1,
-            "method": "tools/call",
-            "params": {"name": "limited", "arguments": {}},
-        }))
+        resp1 = _run(
+            srv.handle_request(
+                {
+                    "jsonrpc": "2.0",
+                    "id": 1,
+                    "method": "tools/call",
+                    "params": {"name": "limited", "arguments": {}},
+                }
+            )
+        )
 
         # Second call may be rate-limited (burst=1)
-        resp2 = _run(srv.handle_request({
-            "jsonrpc": "2.0",
-            "id": 2,
-            "method": "tools/call",
-            "params": {"name": "limited", "arguments": {}},
-        }))
+        resp2 = _run(
+            srv.handle_request(
+                {
+                    "jsonrpc": "2.0",
+                    "id": 2,
+                    "method": "tools/call",
+                    "params": {"name": "limited", "arguments": {}},
+                }
+            )
+        )
 
         # At least one should work; the second may be rate limited
         results = [resp1["result"], resp2["result"]]
@@ -986,12 +1141,16 @@ class TestToolNotFoundPath:
         """Test functionality: empty tool name returns NOT_FOUND error."""
         srv = MCPServer(MCPServerConfig(name="not-found", version="0.1.0"))
 
-        resp = _run(srv.handle_request({
-            "jsonrpc": "2.0",
-            "id": 1,
-            "method": "tools/call",
-            "params": {"name": "", "arguments": {}},
-        }))
+        resp = _run(
+            srv.handle_request(
+                {
+                    "jsonrpc": "2.0",
+                    "id": 1,
+                    "method": "tools/call",
+                    "params": {"name": "", "arguments": {}},
+                }
+            )
+        )
         result = resp["result"]
         assert result.get("isError") is True
         error_data = json.loads(result["content"][0]["text"])
@@ -1018,12 +1177,16 @@ class TestToolDecoratorSelfClsSkip:
         # Register the unbound method to test the 'self' skip path.
         srv.tool(name="process", description="Process data")(MyService.process)
 
-        resp = _run(srv.handle_request({
-            "jsonrpc": "2.0",
-            "id": 1,
-            "method": "tools/list",
-            "params": {},
-        }))
+        resp = _run(
+            srv.handle_request(
+                {
+                    "jsonrpc": "2.0",
+                    "id": 1,
+                    "method": "tools/list",
+                    "params": {},
+                }
+            )
+        )
         tool_schema = resp["result"]["tools"][0]
         props = tool_schema["inputSchema"]["properties"]
         # 'self' should NOT be in the properties
@@ -1043,12 +1206,16 @@ class TestToolDecoratorSelfClsSkip:
 
         srv.tool(name="factory", description="Factory method")(factory)
 
-        resp = _run(srv.handle_request({
-            "jsonrpc": "2.0",
-            "id": 1,
-            "method": "tools/list",
-            "params": {},
-        }))
+        resp = _run(
+            srv.handle_request(
+                {
+                    "jsonrpc": "2.0",
+                    "id": 1,
+                    "method": "tools/list",
+                    "params": {},
+                }
+            )
+        )
         tool_schema = resp["result"]["tools"][0]
         props = tool_schema["inputSchema"]["properties"]
         assert "cls" not in props
@@ -1084,12 +1251,16 @@ class TestToolTimeoutError:
             time.sleep(duration)  # Will exceed the 1ms timeout
             return json.dumps({"done": True})
 
-        resp = _run(srv.handle_request({
-            "jsonrpc": "2.0",
-            "id": 1,
-            "method": "tools/call",
-            "params": {"name": "slow_tool", "arguments": {"duration": 2.0}},
-        }))
+        resp = _run(
+            srv.handle_request(
+                {
+                    "jsonrpc": "2.0",
+                    "id": 1,
+                    "method": "tools/call",
+                    "params": {"name": "slow_tool", "arguments": {"duration": 2.0}},
+                }
+            )
+        )
         result = resp["result"]
         assert result.get("isError") is True
         error_data = json.loads(result["content"][0]["text"])

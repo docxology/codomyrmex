@@ -16,6 +16,7 @@ and the overall specification.
 
 logger = get_logger(__name__)
 
+
 class PatternStatus(StrEnum):
     """Status values for FPF patterns."""
 
@@ -120,9 +121,7 @@ class Relationship(BaseModel):
     source: str = Field(..., description="Source pattern/concept ID")
     target: str = Field(..., description="Target pattern/concept ID")
     type: RelationshipType = Field(..., description="Type of relationship")
-    strength: str | None = Field(
-        None, description="Relationship strength (optional)"
-    )
+    strength: str | None = Field(None, description="Relationship strength (optional)")
     description: str | None = Field(
         None, description="Human-readable description of the relationship"
     )
@@ -154,6 +153,7 @@ class FPFSpec(BaseModel):
                 logger.warning("Failed to parse last_updated date '%s': %s", v, e)
                 return None
         return v
+
     source_url: str | None = Field(None, description="Source URL or path")
     source_hash: str | None = Field(None, description="Content hash for versioning")
     patterns: list[Pattern] = Field(
@@ -241,7 +241,9 @@ class FPFIndex(BaseModel):
                 matches.add(pattern_id)
 
         # Apply filters
-        results = [self.pattern_index[pid] for pid in matches if pid in self.pattern_index]
+        results = [
+            self.pattern_index[pid] for pid in matches if pid in self.pattern_index
+        ]
         if filters:
             if "status" in filters:
                 results = [r for r in results if r.status == filters["status"]]
@@ -274,4 +276,3 @@ class FPFIndex(BaseModel):
                     to_visit.append((neighbor, current_depth + 1))
 
         return related
-

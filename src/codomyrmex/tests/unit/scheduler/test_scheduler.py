@@ -16,6 +16,7 @@ try:
         cron,
         every,
     )
+
     HAS_MODULE = True
 except ImportError:
     HAS_MODULE = False
@@ -27,6 +28,7 @@ if not HAS_MODULE:
 @pytest.mark.unit
 class TestJobStatus:
     """Test suite for JobStatus."""
+
     def test_pending_status(self):
         """Test functionality: pending status."""
         assert JobStatus.PENDING is not None
@@ -43,6 +45,7 @@ class TestJobStatus:
 @pytest.mark.unit
 class TestTriggerType:
     """Test suite for TriggerType."""
+
     def test_once_type(self):
         """Test functionality: once type."""
         assert TriggerType.ONCE is not None
@@ -59,6 +62,7 @@ class TestTriggerType:
 @pytest.mark.unit
 class TestOnceTrigger:
     """Test suite for OnceTrigger."""
+
     def test_create_trigger(self):
         """Test functionality: create trigger."""
         trigger = OnceTrigger(run_at=datetime.now() + timedelta(hours=1))
@@ -80,6 +84,7 @@ class TestOnceTrigger:
 @pytest.mark.unit
 class TestIntervalTrigger:
     """Test suite for IntervalTrigger."""
+
     def test_create_trigger(self):
         """Test functionality: create trigger."""
         trigger = IntervalTrigger(seconds=30)
@@ -100,6 +105,7 @@ class TestIntervalTrigger:
 @pytest.mark.unit
 class TestCronTrigger:
     """Test suite for CronTrigger."""
+
     def test_create_trigger(self):
         """Test functionality: create trigger."""
         trigger = CronTrigger(minute="*", hour="*")
@@ -116,6 +122,7 @@ class TestCronTrigger:
 @pytest.mark.unit
 class TestJob:
     """Test suite for Job."""
+
     def test_create_job(self):
         """Test functionality: create job."""
         job = Job(
@@ -141,6 +148,7 @@ class TestJob:
 @pytest.mark.unit
 class TestScheduler:
     """Test suite for Scheduler."""
+
     def test_create_scheduler(self):
         """Test functionality: create scheduler."""
         scheduler = Scheduler()
@@ -184,6 +192,7 @@ class TestScheduler:
 @pytest.mark.unit
 class TestConvenienceFunctions:
     """Test suite for ConvenienceFunctions."""
+
     def test_every_creates_trigger(self):
         """Test functionality: every creates trigger."""
         trigger = every(seconds=30)

@@ -1,8 +1,9 @@
 """Generator content."""
 
+
 def generate_physical_api_spec() -> str:
     """Generate API specification for the physical management module."""
-    return '''# Physical Management Module API Specification
+    return """# Physical Management Module API Specification
 
 ## Core Classes
 
@@ -117,5 +118,4 @@ def generate_physical_api_spec() -> str:
 
 ### CoordinateSystem
 - Static methods for coordinate transformations
-'''
-
+"""

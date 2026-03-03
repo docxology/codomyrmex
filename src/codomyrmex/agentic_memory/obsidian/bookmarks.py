@@ -32,15 +32,15 @@ def _parse_bookmarks(lines: list[str]) -> list[BookmarkItem]:
             continue
         parts = stripped.split("\t")
         if len(parts) >= 2:
-            bookmarks.append(BookmarkItem(
-                title=parts[0].strip(),
-                path=parts[1].strip(),
-                raw=line,
-            ))
+            bookmarks.append(
+                BookmarkItem(
+                    title=parts[0].strip(),
+                    path=parts[1].strip(),
+                    raw=line,
+                )
+            )
         else:
-            bookmarks.append(BookmarkItem(
-                title=stripped, path=stripped, raw=line
-            ))
+            bookmarks.append(BookmarkItem(title=stripped, path=stripped, raw=line))
     return bookmarks
 
 
@@ -80,6 +80,7 @@ def bookmark_file(
     Maps to ``obsidian bookmark [file=|path=]``.
     """
     from codomyrmex.agentic_memory.obsidian.cli import _file_or_path
+
     params = _file_or_path(file, path)
     return cli.run("bookmark", vault=vault, params=params or None)
 

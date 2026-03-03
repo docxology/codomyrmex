@@ -9,9 +9,6 @@ from codomyrmex.logging_monitoring import get_logger
 """Core agent interfaces and base classes."""
 
 
-
-
-
 logger = get_logger(__name__)
 
 
@@ -299,7 +296,9 @@ class BaseAgent(AgentInterface):
         if request.capabilities:
             for cap in request.capabilities:
                 if cap not in self.capabilities:
-                    self.logger.warning(f"Request requires capability {cap} not supported by agent {self.name}")
+                    self.logger.warning(
+                        f"Request requires capability {cap} not supported by agent {self.name}"
+                    )
 
     def _execute_impl(self, request: AgentRequest) -> AgentResponse:
         """

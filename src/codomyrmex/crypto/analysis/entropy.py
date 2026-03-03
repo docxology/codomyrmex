@@ -48,7 +48,9 @@ def shannon_entropy(data: bytes | str) -> float:
             p = count / total
             entropy -= p * math.log2(p)
 
-    logger.debug("Shannon entropy calculated: %.4f bits over %d symbols", entropy, total)
+    logger.debug(
+        "Shannon entropy calculated: %.4f bits over %d symbols", entropy, total
+    )
     return entropy
 
 
@@ -188,7 +190,9 @@ def chi_squared_test(data: bytes) -> ChiSquaredResult:
 
     logger.debug(
         "Chi-squared test: statistic=%.2f, p_value=%.6f, uniform=%s",
-        chi2, p_value, uniform,
+        chi2,
+        p_value,
+        uniform,
     )
     return ChiSquaredResult(statistic=chi2, p_value=p_value, uniform=uniform)
 

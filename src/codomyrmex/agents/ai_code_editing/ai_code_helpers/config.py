@@ -25,9 +25,11 @@ except ImportError:
 try:
     from codomyrmex.performance import monitor_performance
 except ImportError:
+
     def monitor_performance(name):
         def decorator(func):
             return func
+
         return decorator
 
 
@@ -50,6 +52,7 @@ MAX_RETRIES = 3
 
 RETRY_DELAY = 1.0  # seconds
 
+
 # LLM client initialization
 @monitor_performance("llm_client_initialization")
 def get_llm_client(provider: str, model_name: str | None = None) -> tuple[Any, str]:
@@ -71,7 +74,6 @@ def get_llm_client(provider: str, model_name: str | None = None) -> tuple[Any, s
 
     if provider == "openai":
         try:
-
             # Check for API key
             api_key = os.environ.get("OPENAI_API_KEY")
             if not api_key:
@@ -88,7 +90,6 @@ def get_llm_client(provider: str, model_name: str | None = None) -> tuple[Any, s
 
     elif provider == "anthropic":
         try:
-
             # Check for API key
             api_key = os.environ.get("ANTHROPIC_API_KEY")
             if not api_key:
@@ -106,16 +107,22 @@ def get_llm_client(provider: str, model_name: str | None = None) -> tuple[Any, s
     elif provider == "google":
         try:
             # Check for API key (support both variations)
-            api_key = os.environ.get("GEMINI_API_KEY") or os.environ.get("GOOGLE_API_KEY")
+            api_key = os.environ.get("GEMINI_API_KEY") or os.environ.get(
+                "GOOGLE_API_KEY"
+            )
             if not api_key:
-                raise ValueError("Neither GEMINI_API_KEY nor GOOGLE_API_KEY environment variable is set")
+                raise ValueError(
+                    "Neither GEMINI_API_KEY nor GOOGLE_API_KEY environment variable is set"
+                )
 
             client = genai.Client(api_key=api_key)
             model = model_name or DEFAULT_LLM_MODEL["google"]
             return client, model
 
         except (ImportError, ValueError, AttributeError, OSError) as e:
-            raise RuntimeError(f"Failed to initialize Google Gemini client: {e}") from None
+            raise RuntimeError(
+                f"Failed to initialize Google Gemini client: {e}"
+            ) from None
 
     elif provider == "ollama":
         if not OLLAMA_AVAILABLE:
@@ -133,4 +140,3 @@ def get_llm_client(provider: str, model_name: str | None = None) -> tuple[Any, s
         raise ValueError(
             f"Unsupported LLM provider: {provider}. Supported providers: openai, anthropic, google, ollama"
         )
-

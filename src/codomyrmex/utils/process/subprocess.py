@@ -109,7 +109,11 @@ class CommandError(Exception):
         """Return string representation of the error."""
         parts = [self.message]
         if self.command:
-            cmd_str = self.command if isinstance(self.command, str) else " ".join(self.command)
+            cmd_str = (
+                self.command
+                if isinstance(self.command, str)
+                else " ".join(self.command)
+            )
             parts.append(f"Command: {cmd_str}")
         if self.return_code is not None:
             parts.append(f"Return code: {self.return_code}")
@@ -197,8 +201,16 @@ class SubprocessResult:
             CommandError: If the command failed.
         """
         if not self.success:
-            error_msg = message or self.error_message or f"Command failed with code {self.return_code}"
-            error_type = CommandErrorType.TIMEOUT if self.timed_out else CommandErrorType.EXECUTION_FAILED
+            error_msg = (
+                message
+                or self.error_message
+                or f"Command failed with code {self.return_code}"
+            )
+            error_type = (
+                CommandErrorType.TIMEOUT
+                if self.timed_out
+                else CommandErrorType.EXECUTION_FAILED
+            )
             raise CommandError(
                 message=error_msg,
                 error_type=error_type,
@@ -373,7 +385,11 @@ def run_command(
             duration=duration,
             command=command,
             timed_out=False,
-            error_message=None if process_result.returncode == 0 else f"Command exited with code {process_result.returncode}",
+            error_message=(
+                None
+                if process_result.returncode == 0
+                else f"Command exited with code {process_result.returncode}"
+            ),
         )
 
         logger.debug(
@@ -561,7 +577,9 @@ async def run_command_async(
             )
         else:
             # For non-shell mode, use list command
-            cmd_list = shlex.split(command) if isinstance(command, str) else list(command)
+            cmd_list = (
+                shlex.split(command) if isinstance(command, str) else list(command)
+            )
             logger.debug(f"Running async command: {' '.join(cmd_list)}")
 
             process = await asyncio.create_subprocess_exec(

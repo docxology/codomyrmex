@@ -34,13 +34,15 @@ except ImportError as e:
     logger.debug("Advanced scheduler extensions not available: %s", e)
     pass
 
+
 def cli_commands():
     """Return CLI commands for the scheduler module."""
+
     def _list_jobs():
         """List scheduled jobs."""
         try:
             scheduler = Scheduler()
-            jobs = scheduler.get_jobs() if hasattr(scheduler, 'get_jobs') else []
+            jobs = scheduler.get_jobs() if hasattr(scheduler, "get_jobs") else []
             if jobs:
                 for job in jobs:
                     print(f"  {job}")

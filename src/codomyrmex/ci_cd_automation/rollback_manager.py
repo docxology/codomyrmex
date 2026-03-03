@@ -21,6 +21,7 @@ logger = get_logger(__name__)
 
 class RollbackStrategy(Enum):
     """Rollback strategy types."""
+
     IMMEDIATE = "immediate"
     ROLLING = "rolling"
     BLUE_GREEN = "blue_green"
@@ -31,6 +32,7 @@ class RollbackStrategy(Enum):
 @dataclass
 class RollbackStep:
     """Individual step in a rollback strategy."""
+
     name: str
     description: str
     action: Callable
@@ -42,6 +44,7 @@ class RollbackStep:
 @dataclass
 class RollbackPlan:
     """Complete rollback plan for a deployment."""
+
     deployment_id: str
     strategy: RollbackStrategy
     steps: list[RollbackStep]
@@ -54,6 +57,7 @@ class RollbackPlan:
 @dataclass
 class RollbackExecution:
     """Execution record for a rollback operation."""
+
     execution_id: str
     deployment_id: str
     strategy: RollbackStrategy
@@ -95,7 +99,7 @@ class RollbackManager:
         deployment_id: str,
         strategy: RollbackStrategy,
         reason: str,
-        custom_steps: list[RollbackStep] | None = None
+        custom_steps: list[RollbackStep] | None = None,
     ) -> RollbackPlan:
         """Create a rollback plan for a failed deployment.
 
@@ -120,23 +124,38 @@ class RollbackManager:
             steps=steps,
             created_at=datetime.now(),
             reason=reason,
-            estimated_duration=self._calculate_estimated_duration(steps)
+            estimated_duration=self._calculate_estimated_duration(steps),
         )
 
         # Save plan
-        plan_file = self.rollback_plans_dir / f"plan_{deployment_id}_{int(time.time())}.json"
-        with open(plan_file, 'w') as f:
-            json.dump({
-                "deployment_id": plan.deployment_id,
-                "strategy": plan.strategy.value,
-                "steps": [{"name": s.name, "description": s.description, "timeout": s.timeout} for s in plan.steps],
-                "created_at": plan.created_at.isoformat(),
-                "reason": plan.reason,
-                "estimated_duration": plan.estimated_duration
-            }, f, indent=2)
+        plan_file = (
+            self.rollback_plans_dir / f"plan_{deployment_id}_{int(time.time())}.json"
+        )
+        with open(plan_file, "w") as f:
+            json.dump(
+                {
+                    "deployment_id": plan.deployment_id,
+                    "strategy": plan.strategy.value,
+                    "steps": [
+                        {
+                            "name": s.name,
+                            "description": s.description,
+                            "timeout": s.timeout,
+                        }
+                        for s in plan.steps
+                    ],
+                    "created_at": plan.created_at.isoformat(),
+                    "reason": plan.reason,
+                    "estimated_duration": plan.estimated_duration,
+                },
+                f,
+                indent=2,
+            )
 
         self._rollback_plans[deployment_id] = plan
-        logger.info(f"Created rollback plan for deployment {deployment_id} using {strategy.value} strategy")
+        logger.info(
+            f"Created rollback plan for deployment {deployment_id} using {strategy.value} strategy"
+        )
 
         return plan
 
@@ -148,20 +167,20 @@ class RollbackManager:
                     name="stop_services",
                     description="Stop all running services",
                     action=self._stop_services,
-                    timeout=60
+                    timeout=60,
                 ),
                 RollbackStep(
                     name="restore_backup",
                     description="Restore from backup",
                     action=self._restore_backup,
-                    timeout=300
+                    timeout=300,
                 ),
                 RollbackStep(
                     name="restart_services",
                     description="Restart services with restored version",
                     action=self._restart_services,
-                    timeout=120
-                )
+                    timeout=120,
+                ),
             ]
         elif strategy == RollbackStrategy.ROLLING:
             return [
@@ -169,20 +188,20 @@ class RollbackManager:
                     name="identify_healthy_instances",
                     description="Identify instances that are still healthy",
                     action=self._identify_healthy_instances,
-                    timeout=30
+                    timeout=30,
                 ),
                 RollbackStep(
                     name="rollback_instances",
                     description="Rollback instances one by one",
                     action=self._rollback_rolling,
-                    timeout=600
+                    timeout=600,
                 ),
                 RollbackStep(
                     name="validate_rollback",
                     description="Validate that rollback completed successfully",
                     action=self._validate_rollback,
-                    timeout=120
-                )
+                    timeout=120,
+                ),
             ]
         else:
             # Generic steps for other strategies
@@ -191,20 +210,20 @@ class RollbackManager:
                     name="prepare_rollback",
                     description="Prepare for rollback",
                     action=self._prepare_rollback,
-                    timeout=60
+                    timeout=60,
                 ),
                 RollbackStep(
                     name="execute_rollback",
                     description="Execute rollback procedure",
                     action=self._execute_rollback,
-                    timeout=300
+                    timeout=300,
                 ),
                 RollbackStep(
                     name="validate_rollback",
                     description="Validate rollback success",
                     action=self._validate_rollback,
-                    timeout=120
-                )
+                    timeout=120,
+                ),
             ]
 
     def _calculate_estimated_duration(self, steps: list[RollbackStep]) -> int:
@@ -221,7 +240,9 @@ class RollbackManager:
             Rollback execution record
         """
         if deployment_id not in self._rollback_plans:
-            raise CodomyrmexError(f"No rollback plan found for deployment {deployment_id}")
+            raise CodomyrmexError(
+                f"No rollback plan found for deployment {deployment_id}"
+            )
 
         plan = self._rollback_plans[deployment_id]
 
@@ -232,27 +253,30 @@ class RollbackManager:
             deployment_id=deployment_id,
             strategy=plan.strategy,
             status="running",
-            start_time=datetime.now()
+            start_time=datetime.now(),
         )
 
         self._active_rollbacks[execution_id] = execution
 
         try:
-            logger.info(f"Starting rollback execution {execution_id} for deployment {deployment_id}")
+            logger.info(
+                f"Starting rollback execution {execution_id} for deployment {deployment_id}"
+            )
 
             # Execute steps
             for i, step in enumerate(plan.steps):
                 execution.current_step = i
 
                 try:
-                    logger.info(f"Executing rollback step {i+1}/{len(plan.steps)}: {step.name}")
+                    logger.info(
+                        f"Executing rollback step {i + 1}/{len(plan.steps)}: {step.name}"
+                    )
 
                     # Execute step with timeout
                     # In a real implementation we would actually await self._execute_step_async(step)
                     # Here we simulate it
                     await asyncio.wait_for(
-                        self._execute_step_async(step),
-                        timeout=step.timeout
+                        self._execute_step_async(step), timeout=step.timeout
                     )
 
                     execution.completed_steps += 1
@@ -260,7 +284,9 @@ class RollbackManager:
 
                 except TimeoutError:
                     execution.failed_steps += 1
-                    execution.errors.append(f"Step '{step.name}' timed out after {step.timeout}s")
+                    execution.errors.append(
+                        f"Step '{step.name}' timed out after {step.timeout}s"
+                    )
                     logger.error(f"Rollback step '{step.name}' timed out")
 
                     # For immediate strategy, fail fast
@@ -282,7 +308,9 @@ class RollbackManager:
                 logger.info(f"Rollback execution {execution_id} completed successfully")
             else:
                 execution.status = "failed"
-                logger.error(f"Rollback execution {execution_id} failed with {execution.failed_steps} failed steps")
+                logger.error(
+                    f"Rollback execution {execution_id} failed with {execution.failed_steps} failed steps"
+                )
 
         except Exception as e:
             execution.status = "failed"
@@ -294,20 +322,28 @@ class RollbackManager:
 
             # Save execution history
             history_file = self.rollback_history_dir / f"execution_{execution_id}.json"
-            with open(history_file, 'w') as f:
-                json.dump({
-                    "execution_id": execution.execution_id,
-                    "deployment_id": execution.deployment_id,
-                    "strategy": execution.strategy.value,
-                    "status": execution.status,
-                    "start_time": execution.start_time.isoformat(),
-                    "end_time": execution.end_time.isoformat() if execution.end_time else None,
-                    "current_step": execution.current_step,
-                    "completed_steps": execution.completed_steps,
-                    "failed_steps": execution.failed_steps,
-                    "errors": execution.errors,
-                    "warnings": execution.warnings
-                }, f, indent=2)
+            with open(history_file, "w") as f:
+                json.dump(
+                    {
+                        "execution_id": execution.execution_id,
+                        "deployment_id": execution.deployment_id,
+                        "strategy": execution.strategy.value,
+                        "status": execution.status,
+                        "start_time": execution.start_time.isoformat(),
+                        "end_time": (
+                            execution.end_time.isoformat()
+                            if execution.end_time
+                            else None
+                        ),
+                        "current_step": execution.current_step,
+                        "completed_steps": execution.completed_steps,
+                        "failed_steps": execution.failed_steps,
+                        "errors": execution.errors,
+                        "warnings": execution.warnings,
+                    },
+                    f,
+                    indent=2,
+                )
 
         return execution
 
@@ -401,7 +437,7 @@ def handle_rollback(
     deployment_id: str,
     strategy: RollbackStrategy = RollbackStrategy.IMMEDIATE,
     reason: str = "Deployment failure",
-    workspace_dir: str | None = None
+    workspace_dir: str | None = None,
 ) -> RollbackExecution:
     """Handle rollback for a failed deployment.
 
@@ -438,5 +474,5 @@ def handle_rollback(
             strategy=strategy,
             status="failed",
             start_time=datetime.now(),
-            errors=[str(e)]
+            errors=[str(e)],
         )

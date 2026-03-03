@@ -162,9 +162,13 @@ class NASSearcher:
             d_model = config.d_model
             n_heads = config.n_heads
 
-        dropout = random.choice(space.dropout) if mutation == "dropout" else config.dropout
+        dropout = (
+            random.choice(space.dropout) if mutation == "dropout" else config.dropout
+        )
         activation = (
-            random.choice(space.activation) if mutation == "activation" else config.activation
+            random.choice(space.activation)
+            if mutation == "activation"
+            else config.activation
         )
 
         return ArchConfig(

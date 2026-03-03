@@ -13,6 +13,7 @@ from .base import (
 
 logger = get_logger(__name__)
 
+
 def create_issue(
     owner: str,
     repo_name: str,
@@ -46,7 +47,9 @@ def create_issue(
             logger.info(f"Successfully created issue #{issue['number']}")
             return issue
         else:
-            error_msg = f"Failed to create issue: {response.status_code} - {response.text}"
+            error_msg = (
+                f"Failed to create issue: {response.status_code} - {response.text}"
+            )
             logger.error(error_msg)
             raise GitHubAPIError(error_msg) from None
 
@@ -54,6 +57,7 @@ def create_issue(
         error_msg = f"Network error creating issue: {e}"
         logger.error(error_msg)
         raise GitHubAPIError(error_msg) from None
+
 
 def list_issues(
     owner: str,
@@ -89,7 +93,9 @@ def list_issues(
             logger.info(f"Found {len(issues)} issues")
             return issues
         else:
-            error_msg = f"Failed to list issues: {response.status_code} - {response.text}"
+            error_msg = (
+                f"Failed to list issues: {response.status_code} - {response.text}"
+            )
             logger.error(error_msg)
             raise GitHubAPIError(error_msg) from None
 
@@ -97,6 +103,7 @@ def list_issues(
         error_msg = f"Network error listing issues: {e}"
         logger.error(error_msg)
         raise GitHubAPIError(error_msg) from None
+
 
 def close_issue(
     owner: str,
@@ -123,7 +130,9 @@ def close_issue(
             logger.info(f"Successfully closed issue #{issue_number}")
             return response.json()
         else:
-            error_msg = f"Failed to close issue: {response.status_code} - {response.text}"
+            error_msg = (
+                f"Failed to close issue: {response.status_code} - {response.text}"
+            )
             logger.error(error_msg)
             raise GitHubAPIError(error_msg) from None
 
@@ -131,6 +140,7 @@ def close_issue(
         error_msg = f"Network error closing issue: {e}"
         logger.error(error_msg)
         raise GitHubAPIError(error_msg) from None
+
 
 def add_comment(
     owner: str,
@@ -158,7 +168,9 @@ def add_comment(
             logger.info(f"Successfully added comment to #{issue_number}")
             return response.json()
         else:
-            error_msg = f"Failed to add comment: {response.status_code} - {response.text}"
+            error_msg = (
+                f"Failed to add comment: {response.status_code} - {response.text}"
+            )
             logger.error(error_msg)
             raise GitHubAPIError(error_msg) from None
 
@@ -166,6 +178,7 @@ def add_comment(
         error_msg = f"Network error adding comment: {e}"
         logger.error(error_msg)
         raise GitHubAPIError(error_msg) from None
+
 
 async def async_create_issue(
     owner: str,
@@ -226,6 +239,7 @@ async def async_create_issue(
         logger.error(error_msg)
         raise GitHubAPIError(error_msg) from None
 
+
 async def async_list_issues(
     owner: str,
     repo_name: str,
@@ -281,6 +295,7 @@ async def async_list_issues(
         logger.error(error_msg)
         raise GitHubAPIError(error_msg) from None
 
+
 async def async_close_issue(
     owner: str,
     repo_name: str,
@@ -326,6 +341,7 @@ async def async_close_issue(
 
         logger.error(error_msg)
         raise GitHubAPIError(error_msg) from None
+
 
 async def async_add_comment(
     owner: str,
@@ -374,4 +390,3 @@ async def async_add_comment(
 
         logger.error(error_msg)
         raise GitHubAPIError(error_msg) from None
-

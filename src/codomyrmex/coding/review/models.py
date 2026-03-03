@@ -371,6 +371,7 @@ class CodeReviewError(CodomyrmexError):
 
     Parent class for all code review-related exceptions.
     """
+
     pass
 
 
@@ -379,6 +380,7 @@ class PyscnError(CodeReviewError):
 
     Raised when pyscn analysis fails or produces invalid results.
     """
+
     pass
 
 
@@ -388,6 +390,7 @@ class ToolNotFoundError(CodeReviewError):
     Raised when a required external tool (e.g., pylint, pyscn)
     is not installed or not available in PATH.
     """
+
     pass
 
 
@@ -396,5 +399,5 @@ class ConfigurationError(CodeReviewError):
 
     Raised when analysis configuration is invalid or incomplete.
     """
-    pass
 
+    pass

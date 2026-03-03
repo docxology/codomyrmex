@@ -58,6 +58,7 @@ def _badge(status: str) -> str:
 
 # ── Display helpers ───────────────────────────────────────────────────────
 
+
 def print_banner():
     print(f"""
 {_BOLD}{_CYAN}╔══════════════════════════════════════════════════════════════╗
@@ -78,7 +79,9 @@ def print_status_table(results: list[ProbeResult]):
         desc = descs.get(r.name)
         agent_type = desc.agent_type if desc else "?"
         latency = f" ({r.latency_ms:.0f}ms)" if r.latency_ms is not None else ""
-        print(f"  {r.name:<22} {agent_type:<8} {_badge(r.status):<32} {r.detail}{latency}")
+        print(
+            f"  {r.name:<22} {agent_type:<8} {_badge(r.status):<32} {r.detail}{latency}"
+        )
 
     operative = sum(1 for r in results if r.is_operative)
     total = len(results)
@@ -86,6 +89,7 @@ def print_status_table(results: list[ProbeResult]):
 
 
 # ── Interactive setup ─────────────────────────────────────────────────────
+
 
 def _prompt_api_key(agent_name: str, env_var: str) -> str | None:
     """Prompt for an API key (hidden input)."""
@@ -165,7 +169,9 @@ def run_setup_wizard(
 
         elif desc.agent_type == "local":
             print(f"\n  {_CYAN}{desc.display_name}{_RESET}: {probe.detail}")
-            url = input("  Enter Ollama URL (default http://localhost:11434, Enter to skip): ").strip()
+            url = input(
+                "  Enter Ollama URL (default http://localhost:11434, Enter to skip): "
+            ).strip()
             if url:
                 os.environ["OLLAMA_BASE_URL"] = url
                 if "ollama" not in agents_config:
@@ -185,7 +191,9 @@ def run_setup_wizard(
 
     if updated:
         existing_config["agents"] = agents_config
-        save_choice = input(f"  Save config to {DEFAULT_CONFIG_PATH}? [Y/n] ").strip().lower()
+        save_choice = (
+            input(f"  Save config to {DEFAULT_CONFIG_PATH}? [Y/n] ").strip().lower()
+        )
         if save_choice in ("", "y", "yes"):
             path = save_config(existing_config, config_path)
             print(f"  {_GREEN}Saved to {path}{_RESET}")

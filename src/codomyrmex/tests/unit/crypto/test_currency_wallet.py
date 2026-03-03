@@ -154,7 +154,9 @@ class TestAddressGeneration:
     def test_bitcoin_address_starts_with_1(self, wallet):
         """Test functionality: bitcoin address starts with 1."""
         addr = wallet.get_address("bitcoin")
-        assert addr.startswith("1"), f"Bitcoin mainnet address should start with '1', got {addr}"
+        assert addr.startswith("1"), (
+            f"Bitcoin mainnet address should start with '1', got {addr}"
+        )
 
     def test_ethereum_address_starts_with_0x(self, wallet):
         """Test functionality: ethereum address starts with 0x."""

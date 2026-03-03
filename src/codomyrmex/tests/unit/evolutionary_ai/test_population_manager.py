@@ -58,7 +58,9 @@ class TestPopulation:
         mut = GaussianMutation(mutation_rate=0.2)
 
         pop.evaluate(lambda ind: sum(ind.genes))
-        pop.evolve(selection_operator=sel, crossover_operator=cross, mutation_operator=mut)
+        pop.evolve(
+            selection_operator=sel, crossover_operator=cross, mutation_operator=mut
+        )
         assert pop.generation == 1
 
     def test_get_best_worst(self):

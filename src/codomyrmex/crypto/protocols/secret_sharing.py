@@ -88,17 +88,13 @@ def split_secret(secret: bytes, n: int, k: int) -> list[Share]:
     if k < 2:
         raise ProtocolError(f"Threshold k must be >= 2, got {k}")
     if n < k:
-        raise ProtocolError(
-            f"Total shares n must be >= threshold k, got n={n}, k={k}"
-        )
+        raise ProtocolError(f"Total shares n must be >= threshold k, got n={n}, k={k}")
     if not secret:
         raise ProtocolError("Secret must not be empty")
 
     secret_int = _int_from_bytes(secret)
     if secret_int >= PRIME:
-        raise ProtocolError(
-            "Secret is too large for the field (must be < PRIME)"
-        )
+        raise ProtocolError("Secret is too large for the field (must be < PRIME)")
 
     logger.debug("Splitting secret into %d shares with threshold %d", n, k)
 

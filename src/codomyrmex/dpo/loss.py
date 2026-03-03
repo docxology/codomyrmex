@@ -31,8 +31,10 @@ def compute_log_probs(
 
     # Numerically stable log-softmax
     logits_max = np.max(logits, axis=-1, keepdims=True)
-    log_probs_all = logits - logits_max - np.log(
-        np.sum(np.exp(logits - logits_max), axis=-1, keepdims=True) + 1e-9
+    log_probs_all = (
+        logits
+        - logits_max
+        - np.log(np.sum(np.exp(logits - logits_max), axis=-1, keepdims=True) + 1e-9)
     )
 
     # Gather log probs at label positions

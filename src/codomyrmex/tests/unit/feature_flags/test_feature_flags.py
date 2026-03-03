@@ -521,7 +521,8 @@ class TestFlagEvaluator:
         """Test FlagEvaluator passes when targeting rules match."""
         evaluator = FlagEvaluator()
         flag = FlagDefinition(
-            name="targeted-flag", enabled=True,
+            name="targeted-flag",
+            enabled=True,
             targeting_rules=[TargetingRule("plan", "eq", "pro")],
         )
         ctx = EvaluationContext(attributes={"plan": "pro"})
@@ -532,7 +533,8 @@ class TestFlagEvaluator:
         """Test FlagEvaluator disables when targeting rules do not match."""
         evaluator = FlagEvaluator()
         flag = FlagDefinition(
-            name="targeted-flag", enabled=True,
+            name="targeted-flag",
+            enabled=True,
             targeting_rules=[TargetingRule("plan", "eq", "pro")],
         )
         ctx = EvaluationContext(attributes={"plan": "free"})

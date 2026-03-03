@@ -17,7 +17,6 @@ Covers:
 Zero-mock policy: all tests use real objects only.
 """
 
-
 import pytest
 
 from codomyrmex.logistics.orchestration.project.parallel_executor import (
@@ -102,7 +101,15 @@ class TestExecutionResult:
     def test_to_dict_keys(self):
         r = ExecutionResult(task_name="x", status=ExecutionStatus.FAILED, error="boom")
         d = r.to_dict()
-        expected_keys = {"task_name", "status", "result", "error", "start_time", "end_time", "duration"}
+        expected_keys = {
+            "task_name",
+            "status",
+            "result",
+            "error",
+            "start_time",
+            "end_time",
+            "duration",
+        }
         assert set(d.keys()) == expected_keys
 
     def test_to_dict_status_is_string(self):
@@ -112,7 +119,9 @@ class TestExecutionResult:
         assert isinstance(d["status"], str)
 
     def test_to_dict_preserves_error(self):
-        r = ExecutionResult(task_name="t", status=ExecutionStatus.FAILED, error="bad input")
+        r = ExecutionResult(
+            task_name="t", status=ExecutionStatus.FAILED, error="bad input"
+        )
         assert r.to_dict()["error"] == "bad input"
 
     def test_to_dict_none_defaults(self):
@@ -355,8 +364,7 @@ class TestExecuteTaskGroup:
     def test_multiple_tasks_all_complete(self):
         with ParallelExecutor(max_workers=4) as pe:
             tasks = [
-                {"name": f"task_{i}", "module": "m", "action": "a"}
-                for i in range(3)
+                {"name": f"task_{i}", "module": "m", "action": "a"} for i in range(3)
             ]
             results = pe.execute_task_group(tasks)
             assert len(results) == 3
@@ -442,7 +450,10 @@ class TestExecuteTasks:
             results = pe.execute_tasks(tasks, deps, timeout=0.05)
             # At least one task should be TIMEOUT (the dependent one almost certainly)
             statuses = {r.status for r in results.values()}
-            assert ExecutionStatus.TIMEOUT in statuses or ExecutionStatus.COMPLETED in statuses
+            assert (
+                ExecutionStatus.TIMEOUT in statuses
+                or ExecutionStatus.COMPLETED in statuses
+            )
 
     def test_uses_default_timeout_when_none(self):
         with ParallelExecutor(max_workers=2, timeout=120.0) as pe:

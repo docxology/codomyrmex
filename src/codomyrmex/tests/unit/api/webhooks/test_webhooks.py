@@ -202,9 +202,7 @@ class TestWebhookSignature:
         """Test functionality: hmac sha512."""
         payload = "data"
         secret = "key"
-        sig = WebhookSignature.sign(
-            payload, secret, SignatureAlgorithm.HMAC_SHA512
-        )
+        sig = WebhookSignature.sign(payload, secret, SignatureAlgorithm.HMAC_SHA512)
         assert len(sig) == 128  # SHA-512 hex digest length
         assert WebhookSignature.verify(
             payload, secret, sig, SignatureAlgorithm.HMAC_SHA512
@@ -214,12 +212,8 @@ class TestWebhookSignature:
         """Test functionality: different algorithms produce different signatures."""
         payload = "same-payload"
         secret = "same-secret"
-        sig256 = WebhookSignature.sign(
-            payload, secret, SignatureAlgorithm.HMAC_SHA256
-        )
-        sig512 = WebhookSignature.sign(
-            payload, secret, SignatureAlgorithm.HMAC_SHA512
-        )
+        sig256 = WebhookSignature.sign(payload, secret, SignatureAlgorithm.HMAC_SHA256)
+        sig512 = WebhookSignature.sign(payload, secret, SignatureAlgorithm.HMAC_SHA512)
         assert sig256 != sig512
 
 
@@ -465,8 +459,6 @@ class TestFactories:
 
     def test_create_webhook_dispatcher_with_custom_transport(self):
         """Test functionality: create webhook dispatcher with custom transport."""
-        transport = HTTPWebhookTransport(
-            handler=lambda u, p, h, t: (201, "Created")
-        )
+        transport = HTTPWebhookTransport(handler=lambda u, p, h, t: (201, "Created"))
         dispatcher = create_webhook_dispatcher(transport=transport)
         assert dispatcher.transport is transport

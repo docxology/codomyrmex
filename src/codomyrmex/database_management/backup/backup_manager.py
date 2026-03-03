@@ -26,6 +26,7 @@ logger = get_logger(__name__)
 @dataclass
 class Backup:
     """Database backup information."""
+
     backup_id: str
     database_name: str
     database_type: str
@@ -42,6 +43,7 @@ class Backup:
 @dataclass
 class BackupResult:
     """Result of a backup operation."""
+
     backup_id: str
     success: bool
     duration: float
@@ -55,9 +57,7 @@ class BackupManager:
     """Database backup and restore management system."""
 
     def __init__(
-        self,
-        workspace_dir: str | None = None,
-        database_url: str | None = None
+        self, workspace_dir: str | None = None, database_url: str | None = None
     ):
         """Initialize backup manager."""
         self.workspace_dir = Path(workspace_dir) if workspace_dir else Path.cwd()
@@ -73,21 +73,26 @@ class BackupManager:
     def _parse_database_url(self, url: str) -> dict[str, Any]:
         """Parse database URL into components."""
         if url.startswith("sqlite"):
-            match = re.match(r'sqlite:///(.+)', url)
+            match = re.match(r"sqlite:///(.+)", url)
             if match:
                 return {"type": "sqlite", "database": match.group(1)}
 
-        pattern = r'(?:postgresql|postgres|mysql)://(?:([^:]+):([^@]+)@)?([^:\/]+)(?::(\d+))?/(.+)'
+        pattern = r"(?:postgresql|postgres|mysql)://(?:([^:]+):([^@]+)@)?([^:\/]+)(?::(\d+))?/(.+)"
         match = re.match(pattern, url)
         if match:
             db_type = "postgresql" if "postgres" in url else "mysql"
             return {
                 "type": db_type,
-                "user": match.group(1) or ("postgres" if db_type == "postgresql" else "root"),
+                "user": match.group(1)
+                or ("postgres" if db_type == "postgresql" else "root"),
                 "password": match.group(2) or "",
                 "host": match.group(3),
-                "port": int(match.group(4)) if match.group(4) else (5432 if db_type == "postgresql" else 3306),
-                "database": match.group(5)
+                "port": (
+                    int(match.group(4))
+                    if match.group(4)
+                    else (5432 if db_type == "postgresql" else 3306)
+                ),
+                "database": match.group(5),
             }
 
         raise CodomyrmexError(f"Invalid database URL: {url}")
@@ -107,7 +112,7 @@ class BackupManager:
         backup_type: str = "full",
         compression: str = "gzip",
         include_schema: bool = True,
-        include_data: bool = True
+        include_data: bool = True,
     ) -> BackupResult:
         """Create a database backup."""
         url = database_url or self._database_url
@@ -129,11 +134,25 @@ class BackupManager:
 
         try:
             if db_type == "sqlite":
-                self._backup_sqlite(db_params["database"], str(backup_path), compression)
+                self._backup_sqlite(
+                    db_params["database"], str(backup_path), compression
+                )
             elif db_type == "postgresql":
-                self._backup_postgresql(db_params, str(backup_path), compression, include_schema, include_data)
+                self._backup_postgresql(
+                    db_params,
+                    str(backup_path),
+                    compression,
+                    include_schema,
+                    include_data,
+                )
             elif db_type == "mysql":
-                self._backup_mysql(db_params, str(backup_path), compression, include_schema, include_data)
+                self._backup_mysql(
+                    db_params,
+                    str(backup_path),
+                    compression,
+                    include_schema,
+                    include_data,
+                )
             else:
                 raise CodomyrmexError(f"Unsupported database type: {db_type}")
 
@@ -154,7 +173,7 @@ class BackupManager:
                 metadata={
                     "include_schema": include_schema,
                     "include_data": include_data,
-                }
+                },
             )
 
             self._backups[backup_id] = backup
@@ -165,7 +184,7 @@ class BackupManager:
                 duration=duration,
                 file_size_mb=file_size,
                 warnings=warnings,
-                checksum=checksum
+                checksum=checksum,
             )
 
         except Exception as e:
@@ -176,7 +195,7 @@ class BackupManager:
                 success=False,
                 duration=duration,
                 file_size_mb=0.0,
-                error_message=str(e)
+                error_message=str(e),
             )
 
     def _backup_sqlite(self, db_path: str, backup_path: str, compression: str):
@@ -187,11 +206,11 @@ class BackupManager:
         conn = sqlite3.connect(db_path)
         try:
             if compression == "gzip":
-                with gzip.open(backup_path, 'wt', encoding='utf-8') as f:
+                with gzip.open(backup_path, "wt", encoding="utf-8") as f:
                     for line in conn.iterdump():
                         f.write(f"{line}\n")
             else:
-                with open(backup_path, 'w', encoding='utf-8') as f:
+                with open(backup_path, "w", encoding="utf-8") as f:
                     for line in conn.iterdump():
                         f.write(f"{line}\n")
         finally:
@@ -203,7 +222,7 @@ class BackupManager:
         backup_path: str,
         compression: str,
         include_schema: bool,
-        include_data: bool
+        include_data: bool,
     ):
         """Backup PostgreSQL database using pg_dump."""
         if not shutil.which("pg_dump"):
@@ -211,11 +230,15 @@ class BackupManager:
 
         cmd = [
             "pg_dump",
-            "-h", params["host"],
-            "-p", str(params["port"]),
-            "-U", params["user"],
-            "-d", params["database"],
-            "--no-password"
+            "-h",
+            params["host"],
+            "-p",
+            str(params["port"]),
+            "-U",
+            params["user"],
+            "-d",
+            params["database"],
+            "--no-password",
         ]
 
         if not include_data:
@@ -231,10 +254,10 @@ class BackupManager:
             raise CodomyrmexError(f"pg_dump failed: {result.stderr.decode()}")
 
         if compression == "gzip":
-            with gzip.open(backup_path, 'wb') as f:
+            with gzip.open(backup_path, "wb") as f:
                 f.write(result.stdout)
         else:
-            with open(backup_path, 'wb') as f:
+            with open(backup_path, "wb") as f:
                 f.write(result.stdout)
 
     def _backup_mysql(
@@ -243,7 +266,7 @@ class BackupManager:
         backup_path: str,
         compression: str,
         include_schema: bool,
-        include_data: bool
+        include_data: bool,
     ):
         """Backup MySQL database using mysqldump."""
         if not shutil.which("mysqldump"):
@@ -251,11 +274,14 @@ class BackupManager:
 
         cmd = [
             "mysqldump",
-            "-h", params["host"],
-            "-P", str(params["port"]),
-            "-u", params["user"],
+            "-h",
+            params["host"],
+            "-P",
+            str(params["port"]),
+            "-u",
+            params["user"],
             f"-p{params.get('password', '')}",
-            params["database"]
+            params["database"],
         ]
 
         if not include_data:
@@ -268,10 +294,10 @@ class BackupManager:
             raise CodomyrmexError(f"mysqldump failed: {result.stderr.decode()}")
 
         if compression == "gzip":
-            with gzip.open(backup_path, 'wb') as f:
+            with gzip.open(backup_path, "wb") as f:
                 f.write(result.stdout)
         else:
-            with open(backup_path, 'wb') as f:
+            with open(backup_path, "wb") as f:
                 f.write(result.stdout)
 
     def list_backups(self, database_name: str | None = None) -> list[dict[str, Any]]:
@@ -280,12 +306,14 @@ class BackupManager:
         for backup in self._backups.values():
             if database_name and backup.database_name != database_name:
                 continue
-            backups.append({
-                "backup_id": backup.backup_id,
-                "database_name": backup.database_name,
-                "size_mb": backup.size_mb,
-                "created_at": backup.created_at.isoformat(),
-            })
+            backups.append(
+                {
+                    "backup_id": backup.backup_id,
+                    "database_name": backup.database_name,
+                    "size_mb": backup.size_mb,
+                    "created_at": backup.created_at.isoformat(),
+                }
+            )
         return sorted(backups, key=lambda b: b["created_at"], reverse=True)
 
     def delete_backup(self, backup_id: str) -> bool:
@@ -307,7 +335,7 @@ def backup_database(
     database_name: str,
     database_url: str | None = None,
     backup_type: str = "full",
-    compression: str = "gzip"
+    compression: str = "gzip",
 ) -> BackupResult:
     """Convenience function to backup a database."""
     manager = BackupManager()

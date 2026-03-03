@@ -22,7 +22,7 @@ class ContainerError(BaseContainerError):
         message: str,
         container_id: str | None = None,
         container_name: str | None = None,
-        **kwargs: Any
+        **kwargs: Any,
     ):
         """Initialize ContainerError.
 
@@ -53,7 +53,7 @@ class ImageBuildError(BaseContainerError):
         image_tag: str | None = None,
         dockerfile_path: str | None = None,
         build_step: int | None = None,
-        **kwargs: Any
+        **kwargs: Any,
     ):
         """Initialize ImageBuildError.
 
@@ -89,7 +89,7 @@ class NetworkError(BaseContainerError):
         network_name: str | None = None,
         network_id: str | None = None,
         driver: str | None = None,
-        **kwargs: Any
+        **kwargs: Any,
     ):
         """Initialize NetworkError.
 
@@ -122,7 +122,7 @@ class VolumeError(BaseContainerError):
         volume_name: str | None = None,
         mount_point: str | None = None,
         driver: str | None = None,
-        **kwargs: Any
+        **kwargs: Any,
     ):
         """Initialize VolumeError.
 
@@ -154,7 +154,7 @@ class RegistryError(BaseContainerError):
         message: str,
         registry_url: str | None = None,
         image_reference: str | None = None,
-        **kwargs: Any
+        **kwargs: Any,
     ):
         """Initialize RegistryError.
 
@@ -184,7 +184,7 @@ class KubernetesError(BaseContainerError):
         resource_type: str | None = None,
         resource_name: str | None = None,
         namespace: str | None = None,
-        **kwargs: Any
+        **kwargs: Any,
     ):
         """Initialize KubernetesError.
 

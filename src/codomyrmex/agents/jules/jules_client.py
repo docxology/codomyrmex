@@ -67,8 +67,14 @@ class JulesClient(CLIAgentBase):
                 # Check for auth errors in output
                 stdout = result.get("stdout", "")
                 stderr = result.get("stderr", "")
-                if any(x in stdout.lower() or x in stderr.lower() for x in ["unauthorized", "unauthenticated", "401"]):
-                    raise JulesError("Jules authentication failed. Please run 'jules auth login'.", command=self.command)
+                if any(
+                    x in stdout.lower() or x in stderr.lower()
+                    for x in ["unauthorized", "unauthenticated", "401"]
+                ):
+                    raise JulesError(
+                        "Jules authentication failed. Please run 'jules auth login'.",
+                        command=self.command,
+                    )
 
                 return self._build_response_from_result(
                     result,
@@ -83,13 +89,20 @@ class JulesClient(CLIAgentBase):
                 # Timeouts might be transient
                 if attempt < retries - 1:
                     continue
-                raise JulesError(f"Jules command timed out after {retries} attempts: {str(e)}", command=self.command) from e
+                raise JulesError(
+                    f"Jules command timed out after {retries} attempts: {str(e)}",
+                    command=self.command,
+                ) from e
             except AgentError as e:
                 # Other agent errors
-                raise JulesError(f"Jules command failed: {str(e)}", command=self.command) from e
+                raise JulesError(
+                    f"Jules command failed: {str(e)}", command=self.command
+                ) from e
             except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
                 self.logger.error(f"Jules execution failed: {e}", exc_info=True)
-                raise JulesError(f"Jules command failed: {str(e)}", command=self.command) from e
+                raise JulesError(
+                    f"Jules command failed: {str(e)}", command=self.command
+                ) from e
 
     def _stream_impl(self, request: AgentRequest) -> Iterator[str]:
         """Stream Jules command output."""
@@ -105,10 +118,10 @@ class JulesClient(CLIAgentBase):
         if context.get("command"):
             cmd = context["command"]
             if cmd in ["auth", "config", "login", "logout"]:
-                 args = [cmd]
-                 if context.get("args"):
-                     args.extend(context["args"])
-                 return args
+                args = [cmd]
+                if context.get("args"):
+                    args.extend(context["args"])
+                return args
 
         args = ["new"]
 
@@ -132,9 +145,19 @@ class JulesClient(CLIAgentBase):
             }
         except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
             self.logger.warning(f"Failed to get Jules help: {e}")
-            return {"help_text": "", "exit_code": -1, "available": False, "error": str(e)}
+            return {
+                "help_text": "",
+                "exit_code": -1,
+                "available": False,
+                "error": str(e),
+            }
 
-    def execute_jules_command(self, command: str, args: list[str] | None = None, config_path: Path | None = None) -> dict[str, Any]:
+    def execute_jules_command(
+        self,
+        command: str,
+        args: list[str] | None = None,
+        config_path: Path | None = None,
+    ) -> dict[str, Any]:
         """
         Execute a jules command.
 

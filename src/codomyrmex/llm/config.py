@@ -8,6 +8,8 @@ from codomyrmex.logging_monitoring import get_logger
 """Configuration management for Language Models module."""
 
 logger = get_logger(__name__)
+
+
 class LLMConfig:
     """
     Configuration manager for LLM parameters and settings.
@@ -82,18 +84,26 @@ class LLMConfig:
             output_root: Root directory for outputs
         """
         self.model = model or self._get_env_var("LLM_MODEL", self.DEFAULT_MODEL)
-        self.temperature = temperature or self._get_env_float("LLM_TEMPERATURE", self.DEFAULT_TEMPERATURE)
-        self.max_tokens = max_tokens or self._get_env_int("LLM_MAX_TOKENS", self.DEFAULT_MAX_TOKENS)
+        self.temperature = temperature or self._get_env_float(
+            "LLM_TEMPERATURE", self.DEFAULT_TEMPERATURE
+        )
+        self.max_tokens = max_tokens or self._get_env_int(
+            "LLM_MAX_TOKENS", self.DEFAULT_MAX_TOKENS
+        )
         self.top_p = top_p or self._get_env_float("LLM_TOP_P", self.DEFAULT_TOP_P)
         self.top_k = top_k or self._get_env_int("LLM_TOP_K", self.DEFAULT_TOP_K)
         self.timeout = timeout or self._get_env_int("LLM_TIMEOUT", self.DEFAULT_TIMEOUT)
-        self.base_url = base_url or self._get_env_var("LLM_BASE_URL", self.DEFAULT_BASE_URL)
+        self.base_url = base_url or self._get_env_var(
+            "LLM_BASE_URL", self.DEFAULT_BASE_URL
+        )
 
         # Output configuration
         if output_root:
             self.output_root = Path(output_root)
         else:
-            self.output_root = Path(self._get_env_var("LLM_OUTPUT_ROOT", str(self.OUTPUT_ROOT)))
+            self.output_root = Path(
+                self._get_env_var("LLM_OUTPUT_ROOT", str(self.OUTPUT_ROOT))
+            )
 
         self.test_results_dir = self.output_root / "test_results"
         self.llm_outputs_dir = self.output_root / "llm_outputs"
@@ -135,7 +145,7 @@ class LLMConfig:
             self.logs_dir,
             self.models_dir,
             self.performance_dir,
-            self.integration_dir
+            self.integration_dir,
         ]:
             directory.mkdir(parents=True, exist_ok=True)
 
@@ -210,7 +220,7 @@ class LLMConfig:
             "output_root": str(self.output_root),
         }
 
-        with open(filepath, 'w', encoding='utf-8') as f:
+        with open(filepath, "w", encoding="utf-8") as f:
             json.dump(core_config, f, indent=2, ensure_ascii=False)
 
     @classmethod
@@ -225,7 +235,7 @@ class LLMConfig:
             LLMConfig instance
         """
 
-        with open(filepath, encoding='utf-8') as f:
+        with open(filepath, encoding="utf-8") as f:
             config_dict = json.load(f)
 
         return cls(**config_dict)

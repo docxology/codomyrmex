@@ -12,6 +12,7 @@ from typing import Any
 
 class FailureCategory(Enum):
     """Categories of failures."""
+
     CONFIG_ERROR = "config_error"
     RESOURCE_EXHAUSTION = "resource_exhaustion"
     DEPENDENCY_FAILURE = "dependency_failure"
@@ -23,6 +24,7 @@ class FailureCategory(Enum):
 
 class RecoveryStrategy(Enum):
     """Recovery strategies for each failure category."""
+
     RETRY = "retry"
     ADJUST_CONFIG = "adjust_config"
     FALLBACK = "fallback"
@@ -33,9 +35,18 @@ class RecoveryStrategy(Enum):
 
 # Mapping from failure category to recommended recovery
 RECOVERY_MAP: dict[FailureCategory, list[RecoveryStrategy]] = {
-    FailureCategory.CONFIG_ERROR: [RecoveryStrategy.ADJUST_CONFIG, RecoveryStrategy.ESCALATE],
-    FailureCategory.RESOURCE_EXHAUSTION: [RecoveryStrategy.RETRY, RecoveryStrategy.FALLBACK],
-    FailureCategory.DEPENDENCY_FAILURE: [RecoveryStrategy.FALLBACK, RecoveryStrategy.RETRY],
+    FailureCategory.CONFIG_ERROR: [
+        RecoveryStrategy.ADJUST_CONFIG,
+        RecoveryStrategy.ESCALATE,
+    ],
+    FailureCategory.RESOURCE_EXHAUSTION: [
+        RecoveryStrategy.RETRY,
+        RecoveryStrategy.FALLBACK,
+    ],
+    FailureCategory.DEPENDENCY_FAILURE: [
+        RecoveryStrategy.FALLBACK,
+        RecoveryStrategy.RETRY,
+    ],
     FailureCategory.LOGIC_ERROR: [RecoveryStrategy.ESCALATE],
     FailureCategory.TIMEOUT: [RecoveryStrategy.RETRY, RecoveryStrategy.SKIP],
     FailureCategory.PERMISSION_ERROR: [RecoveryStrategy.ESCALATE],
@@ -98,7 +109,10 @@ def classify_error(error: Exception | str) -> ClassifiedError:
         return ClassifiedError(FailureCategory.TIMEOUT, str(error))
     if any(kw in msg for kw in ("permission", "denied", "forbidden", "unauthorized")):
         return ClassifiedError(FailureCategory.PERMISSION_ERROR, str(error))
-    if any(kw in msg for kw in ("assertion", "type error", "key error", "index", "attribute")):
+    if any(
+        kw in msg
+        for kw in ("assertion", "type error", "key error", "index", "attribute")
+    ):
         return ClassifiedError(FailureCategory.LOGIC_ERROR, str(error))
 
     return ClassifiedError(FailureCategory.UNKNOWN, str(error), confidence=0.5)

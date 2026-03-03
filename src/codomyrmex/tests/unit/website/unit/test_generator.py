@@ -5,7 +5,6 @@ Tests use real Jinja2 templates and a real DataProvider against
 temporary project structures. No unittest.mock is used.
 """
 
-
 import pytest
 
 from codomyrmex.website.generator import WebsiteGenerator
@@ -117,9 +116,16 @@ class TestWebsiteGeneratorGenerate:
         gen.generate()
 
         expected_pages = [
-            "index.html", "health.html", "modules.html", "scripts.html",
-            "chat.html", "agents.html", "config.html", "docs.html",
-            "pipelines.html", "awareness.html",
+            "index.html",
+            "health.html",
+            "modules.html",
+            "scripts.html",
+            "chat.html",
+            "agents.html",
+            "config.html",
+            "docs.html",
+            "pipelines.html",
+            "awareness.html",
         ]
         for page in expected_pages:
             assert (output_dir / page).exists(), f"Missing page: {page}"
@@ -141,6 +147,7 @@ class TestWebsiteGeneratorRenderPage:
         # Override templates dir to use our simple templates
         gen.templates_dir = simple_template_dir
         from jinja2 import Environment, FileSystemLoader, select_autoescape
+
         gen.env = Environment(
             loader=FileSystemLoader(simple_template_dir),
             autoescape=select_autoescape(["html", "xml"]),
@@ -158,6 +165,7 @@ class TestWebsiteGeneratorRenderPage:
 
         gen = WebsiteGenerator(output_dir=str(output_dir))
         from jinja2 import Environment, FileSystemLoader, select_autoescape
+
         gen.env = Environment(
             loader=FileSystemLoader(simple_template_dir),
             autoescape=select_autoescape(["html", "xml"]),
@@ -196,7 +204,9 @@ class TestWebsiteGeneratorCopyAssets:
 
         assert (output_dir / "assets" / "css" / "style.css").exists()
         assert (output_dir / "assets" / "js" / "app.js").exists()
-        assert (output_dir / "assets" / "css" / "style.css").read_text() == "body { color: red; }"
+        assert (
+            output_dir / "assets" / "css" / "style.css"
+        ).read_text() == "body { color: red; }"
 
     def test_copy_assets_handles_missing_assets_dir(self, tmp_path):
         """Test that _copy_assets handles missing assets directory gracefully."""
@@ -327,6 +337,7 @@ class TestGeneratorErrorHandling:
 
         # _render_page should raise TemplateNotFound for missing template
         from jinja2 import TemplateNotFound
+
         with pytest.raises(TemplateNotFound):
             gen._render_page("nonexistent_page.html", {"system": {}})
 

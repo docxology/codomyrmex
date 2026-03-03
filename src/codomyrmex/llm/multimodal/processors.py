@@ -39,7 +39,7 @@ class ImageProcessor(MultimodalProcessor):
         supported_formats: list[str] | None = None,
     ):
         self.max_size_bytes = max_size_bytes
-        self.supported_formats = supported_formats or ['png', 'jpeg', 'gif', 'webp']
+        self.supported_formats = supported_formats or ["png", "jpeg", "gif", "webp"]
 
     def validate(self, content: MediaContent) -> tuple[bool, str]:
         """Validate image content."""
@@ -47,7 +47,10 @@ class ImageProcessor(MultimodalProcessor):
             return False, "Not an image"
 
         if content.size_bytes > self.max_size_bytes:
-            return False, f"Image too large: {content.size_bytes} > {self.max_size_bytes}"
+            return (
+                False,
+                f"Image too large: {content.size_bytes} > {self.max_size_bytes}",
+            )
 
         if content.format and content.format not in self.supported_formats:
             return False, f"Unsupported format: {content.format}"
@@ -100,7 +103,7 @@ class AudioProcessor(MultimodalProcessor):
         supported_formats: list[str] | None = None,
     ):
         self.max_duration_seconds = max_duration_seconds
-        self.supported_formats = supported_formats or ['wav', 'mp3', 'ogg', 'flac']
+        self.supported_formats = supported_formats or ["wav", "mp3", "ogg", "flac"]
 
     def validate(self, content: MediaContent) -> tuple[bool, str]:
         """Validate audio content."""

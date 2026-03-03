@@ -11,6 +11,7 @@ try:
         ModelStats,
         RoutingStrategy,
     )
+
     HAS_MODULE = True
 except ImportError:
     HAS_MODULE = False
@@ -22,6 +23,7 @@ if not HAS_MODULE:
 @pytest.mark.unit
 class TestRoutingStrategy:
     """Test suite for RoutingStrategy."""
+
     def test_priority(self):
         """Test functionality: priority."""
         assert isinstance(RoutingStrategy.PRIORITY.value, (str, int))
@@ -46,6 +48,7 @@ class TestRoutingStrategy:
 @pytest.mark.unit
 class TestModelConfig:
     """Test suite for ModelConfig."""
+
     def test_create_config(self):
         """Test functionality: create config."""
         config = ModelConfig(name="gpt-4", provider="openai", model_id="gpt-4")
@@ -75,6 +78,7 @@ class TestModelConfig:
 @pytest.mark.unit
 class TestModelStats:
     """Test suite for ModelStats."""
+
     def test_create_stats(self):
         """Test functionality: create stats."""
         stats = ModelStats()
@@ -96,6 +100,7 @@ class TestModelStats:
 @pytest.mark.unit
 class TestModelRouter:
     """Test suite for ModelRouter."""
+
     def test_create_router(self):
         """Test functionality: create router."""
         router = ModelRouter()
@@ -128,6 +133,7 @@ class TestModelRouter:
 @pytest.mark.unit
 class TestFallbackChain:
     """Test suite for FallbackChain."""
+
     def test_create_chain(self):
         """Test functionality: create chain."""
         chain = FallbackChain(models=["gpt-4", "gpt-3.5"])
@@ -137,6 +143,7 @@ class TestFallbackChain:
 @pytest.mark.unit
 class TestCostTracker:
     """Test suite for CostTracker."""
+
     def test_create_tracker(self):
         """Test functionality: create tracker."""
         tracker = CostTracker()

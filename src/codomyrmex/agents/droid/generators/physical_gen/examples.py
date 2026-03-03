@@ -1,5 +1,6 @@
 """Generator content."""
 
+
 def generate_physical_examples() -> str:
     """Generate usage examples for the physical management module."""
     return '''"""Comprehensive examples for the Physical Management module."""
@@ -132,4 +133,3 @@ def comprehensive_demo():
 if __name__ == "__main__":
     comprehensive_demo()
 '''
-

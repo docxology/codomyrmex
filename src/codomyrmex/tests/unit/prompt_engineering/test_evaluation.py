@@ -75,7 +75,9 @@ class TestScoreRelevance:
     def test_high_overlap(self):
         """Response containing all prompt keywords should score high."""
         prompt = "Explain machine learning algorithms"
-        response = "Machine learning algorithms include decision trees and neural networks."
+        response = (
+            "Machine learning algorithms include decision trees and neural networks."
+        )
         score = score_relevance(prompt, response)
         assert score > 0.5
 
@@ -176,7 +178,9 @@ class TestScoreCompleteness:
     def test_truncated_response_penalized(self):
         """Response that appears truncated (no terminal punctuation) should score lower."""
         score_complete = score_completeness("prompt", "Full answer ending properly.")
-        score_truncated = score_completeness("prompt", "Answer that seems to cut off mid")
+        score_truncated = score_completeness(
+            "prompt", "Answer that seems to cut off mid"
+        )
         assert score_complete >= score_truncated
 
     def test_very_short_answer(self):
@@ -303,7 +307,7 @@ class TestPromptEvaluator:
         result = evaluator.evaluate(
             prompt="Explain testing",
             response="Testing is the process of verifying software. "
-                     "It includes unit tests, integration tests, and end-to-end tests.",
+            "It includes unit tests, integration tests, and end-to-end tests.",
         )
         assert isinstance(result, EvaluationResult)
         assert 0.0 <= result.weighted_score <= 1.0

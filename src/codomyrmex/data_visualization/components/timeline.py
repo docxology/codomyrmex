@@ -1,4 +1,5 @@
 """Component module."""
+
 from dataclasses import dataclass, field
 
 from ._base import BaseComponent
@@ -7,6 +8,7 @@ from ._base import BaseComponent
 @dataclass
 class TimelineEvent(BaseComponent):
     """A single event in a timeline."""
+
     timestamp: str = ""
     label: str = ""
     description: str = ""
@@ -15,19 +17,21 @@ class TimelineEvent(BaseComponent):
         """Render."""
         return (
             f'<div class="timeline-event">'
-            f'<time>{self.timestamp}</time>'
-            f'<h4>{self.label}</h4>'
-            f'<p>{self.description}</p>'
-            f'</div>'
+            f"<time>{self.timestamp}</time>"
+            f"<h4>{self.label}</h4>"
+            f"<p>{self.description}</p>"
+            f"</div>"
         )
 
     def __str__(self) -> str:
         """Return human-readable string."""
         return self.render()
 
+
 @dataclass
 class Timeline(BaseComponent):
     """Timeline component."""
+
     events: list = field(default_factory=list)
 
     def render(self) -> str:

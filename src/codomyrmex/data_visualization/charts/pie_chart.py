@@ -97,7 +97,7 @@ class PieChart:
         title: str = "Pie Chart",
         autopct: str = "%1.1f%%",
         startangle: int = 90,
-        explode: list = None
+        explode: list = None,
     ):
         """
         Initialize a pie chart.
@@ -133,7 +133,7 @@ class PieChart:
             show_plot=show_plot,
             autopct=self.autopct,
             startangle=self.startangle,
-            explode=self.explode
+            explode=self.explode,
         )
 
     def save(self, output_path: str):

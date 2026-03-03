@@ -11,12 +11,14 @@ def main():
         description="Codomyrmex Agent Setup — configure and verify agents",
     )
     parser.add_argument(
-        "--config", "-c",
+        "--config",
+        "-c",
         help="Path to YAML config file (default ~/.codomyrmex/agents.yaml)",
         default=None,
     )
     parser.add_argument(
-        "--status-only", "-s",
+        "--status-only",
+        "-s",
         action="store_true",
         help="Print status table and exit (no interactive prompts)",
     )

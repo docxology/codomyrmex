@@ -18,6 +18,7 @@ import pytest
 # Streaming Models
 # ===================================================================
 
+
 @pytest.mark.unit
 class TestStreamingModels:
     """Test streaming event models."""
@@ -25,6 +26,7 @@ class TestStreamingModels:
     def test_event_creation_defaults(self):
         """Test functionality: event creation defaults."""
         from codomyrmex.events.streaming.models import Event, EventType
+
         e = Event()
         assert e.type == EventType.MESSAGE
         assert e.data is None
@@ -34,6 +36,7 @@ class TestStreamingModels:
     def test_event_creation_with_data(self):
         """Test functionality: event creation with data."""
         from codomyrmex.events.streaming.models import Event, EventType
+
         e = Event(type=EventType.ERROR, data={"msg": "fail"})
         assert e.type == EventType.ERROR
         assert e.data == {"msg": "fail"}
@@ -41,6 +44,7 @@ class TestStreamingModels:
     def test_event_to_dict(self):
         """Test functionality: event to dict."""
         from codomyrmex.events.streaming.models import Event, EventType
+
         e = Event(type=EventType.CONNECT, data="hello")
         d = e.to_dict()
         assert d["type"] == "connect"
@@ -51,6 +55,7 @@ class TestStreamingModels:
     def test_event_to_sse(self):
         """Test functionality: event to sse."""
         from codomyrmex.events.streaming.models import Event, EventType
+
         e = Event(id="test-id", type=EventType.MESSAGE, data="payload")
         sse = e.to_sse()
         assert "id: test-id" in sse
@@ -60,6 +65,7 @@ class TestStreamingModels:
     def test_event_from_dict(self):
         """Test functionality: event from dict."""
         from codomyrmex.events.streaming.models import Event, EventType
+
         d = {"id": "abc", "type": "error", "data": 42, "metadata": {"k": "v"}}
         e = Event.from_dict(d)
         assert e.id == "abc"
@@ -70,6 +76,7 @@ class TestStreamingModels:
     def test_event_from_dict_defaults(self):
         """Test functionality: event from dict defaults."""
         from codomyrmex.events.streaming.models import Event, EventType
+
         e = Event.from_dict({})
         assert e.type == EventType.MESSAGE
         assert e.data is None
@@ -77,6 +84,7 @@ class TestStreamingModels:
     def test_event_type_values(self):
         """Test functionality: event type values."""
         from codomyrmex.events.streaming.models import EventType
+
         assert EventType.MESSAGE.value == "message"
         assert EventType.ERROR.value == "error"
         assert EventType.HEARTBEAT.value == "heartbeat"
@@ -86,6 +94,7 @@ class TestStreamingModels:
     def test_subscription_creation(self):
         """Test functionality: subscription creation."""
         from codomyrmex.events.streaming.models import Subscription
+
         s = Subscription()
         assert s.topic == "*"
         assert s.active is True
@@ -94,6 +103,7 @@ class TestStreamingModels:
     def test_subscription_cancel(self):
         """Test functionality: subscription cancel."""
         from codomyrmex.events.streaming.models import Subscription
+
         s = Subscription()
         assert s.active is True
         s.cancel()
@@ -102,6 +112,7 @@ class TestStreamingModels:
     def test_subscription_should_receive_wildcard(self):
         """Test functionality: subscription should receive wildcard."""
         from codomyrmex.events.streaming.models import Event, Subscription
+
         s = Subscription(topic="*")
         e = Event(data="test")
         assert s.should_receive(e) is True
@@ -109,6 +120,7 @@ class TestStreamingModels:
     def test_subscription_should_receive_inactive(self):
         """Test functionality: subscription should receive inactive."""
         from codomyrmex.events.streaming.models import Event, Subscription
+
         s = Subscription(topic="*")
         s.cancel()
         e = Event(data="test")
@@ -117,6 +129,7 @@ class TestStreamingModels:
     def test_subscription_should_receive_topic_match(self):
         """Test functionality: subscription should receive topic match."""
         from codomyrmex.events.streaming.models import Event, Subscription
+
         s = Subscription(topic="alerts")
         e = Event(data="test", metadata={"topic": "alerts"})
         assert s.should_receive(e) is True
@@ -124,6 +137,7 @@ class TestStreamingModels:
     def test_subscription_should_receive_topic_mismatch(self):
         """Test functionality: subscription should receive topic mismatch."""
         from codomyrmex.events.streaming.models import Event, Subscription
+
         s = Subscription(topic="alerts")
         e = Event(data="test", metadata={"topic": "metrics"})
         assert s.should_receive(e) is False
@@ -131,6 +145,7 @@ class TestStreamingModels:
     def test_subscription_filter_fn(self):
         """Test functionality: subscription filter fn."""
         from codomyrmex.events.streaming.models import Event, Subscription
+
         s = Subscription(filter_fn=lambda e: e.data == "yes")
         assert s.should_receive(Event(data="yes")) is True
         assert s.should_receive(Event(data="no")) is False
@@ -138,6 +153,7 @@ class TestStreamingModels:
     def test_create_event_helper(self):
         """Test functionality: create event helper."""
         from codomyrmex.events.streaming.models import EventType, create_event
+
         e = create_event("hello", event_type=EventType.ERROR, source="test")
         assert e.data == "hello"
         assert e.type == EventType.ERROR
@@ -148,6 +164,7 @@ class TestStreamingModels:
 # Stream Implementations
 # ===================================================================
 
+
 @pytest.mark.unit
 class TestInMemoryStream:
     """Test InMemoryStream implementation."""
@@ -156,6 +173,7 @@ class TestInMemoryStream:
         """Test functionality: publish and buffer."""
         from codomyrmex.events.streaming.models import Event
         from codomyrmex.events.streaming.stream import InMemoryStream
+
         stream = InMemoryStream()
         e = Event(data="test")
         asyncio.run(stream.publish(e))
@@ -167,20 +185,18 @@ class TestInMemoryStream:
         """Test functionality: subscribe and receive."""
         from codomyrmex.events.streaming.models import Event
         from codomyrmex.events.streaming.stream import InMemoryStream
+
         stream = InMemoryStream()
         received = []
-        asyncio.run(
-            stream.subscribe(handler=lambda e: received.append(e))
-        )
-        asyncio.run(
-            stream.publish(Event(data="hello"))
-        )
+        asyncio.run(stream.subscribe(handler=lambda e: received.append(e)))
+        asyncio.run(stream.publish(Event(data="hello")))
         assert len(received) == 1
 
     def test_unsubscribe(self):
         """Test functionality: unsubscribe."""
         from codomyrmex.events.streaming.models import Event
         from codomyrmex.events.streaming.stream import InMemoryStream
+
         stream = InMemoryStream()
         received = []
 
@@ -197,16 +213,16 @@ class TestInMemoryStream:
     def test_unsubscribe_unknown_id(self):
         """Test functionality: unsubscribe unknown id."""
         from codomyrmex.events.streaming.stream import InMemoryStream
+
         stream = InMemoryStream()
-        result = asyncio.run(
-            stream.unsubscribe("nonexistent")
-        )
+        result = asyncio.run(stream.unsubscribe("nonexistent"))
         assert result is False
 
     def test_buffer_overflow(self):
         """Test functionality: buffer overflow."""
         from codomyrmex.events.streaming.models import Event
         from codomyrmex.events.streaming.stream import InMemoryStream
+
         stream = InMemoryStream()
         stream._buffer_size = 5
 
@@ -222,6 +238,7 @@ class TestInMemoryStream:
         """Test functionality: get recent events count."""
         from codomyrmex.events.streaming.models import Event
         from codomyrmex.events.streaming.stream import InMemoryStream
+
         stream = InMemoryStream()
 
         async def run():
@@ -241,6 +258,7 @@ class TestTopicStream:
         """Test functionality: publish to topic."""
         from codomyrmex.events.streaming.models import Event
         from codomyrmex.events.streaming.stream import TopicStream
+
         ts = TopicStream()
 
         async def run():
@@ -255,6 +273,7 @@ class TestTopicStream:
         """Test functionality: subscribe to topic."""
         from codomyrmex.events.streaming.models import Event
         from codomyrmex.events.streaming.stream import TopicStream
+
         ts = TopicStream()
         received = []
 
@@ -271,12 +290,14 @@ class TestTopicStream:
     def test_list_topics_empty(self):
         """Test functionality: list topics empty."""
         from codomyrmex.events.streaming.stream import TopicStream
+
         ts = TopicStream()
         assert ts.list_topics() == []
 
     def test_topic_creates_on_access(self):
         """Test functionality: topic creates on access."""
         from codomyrmex.events.streaming.stream import TopicStream
+
         ts = TopicStream()
         stream = ts.topic("new_topic")
         assert stream is not None
@@ -291,6 +312,7 @@ class TestBroadcast:
         """Test functionality: broadcast to multiple streams."""
         from codomyrmex.events.streaming.models import Event
         from codomyrmex.events.streaming.stream import InMemoryStream, broadcast
+
         s1 = InMemoryStream()
         s2 = InMemoryStream()
         e = Event(data="broadcast_msg")
@@ -303,6 +325,7 @@ class TestBroadcast:
 # Core Event Bus
 # ===================================================================
 
+
 @pytest.mark.unit
 class TestEventBus:
     """Test the core EventBus."""
@@ -311,12 +334,13 @@ class TestEventBus:
         """Test functionality: subscribe and publish."""
         from codomyrmex.events.core.event_bus import EventBus
         from codomyrmex.events.core.event_schema import Event, EventType
+
         bus = EventBus()
         received = []
         bus.subscribe(
             event_patterns=[EventType.SYSTEM_STARTUP.value],
             handler=lambda e: received.append(e),
-            subscriber_id="test-sub"
+            subscriber_id="test-sub",
         )
         event = Event(event_type=EventType.SYSTEM_STARTUP, source="test")
         bus.publish(event)
@@ -326,12 +350,13 @@ class TestEventBus:
         """Test functionality: unsubscribe."""
         from codomyrmex.events.core.event_bus import EventBus
         from codomyrmex.events.core.event_schema import Event, EventType
+
         bus = EventBus()
         received = []
         bus.subscribe(
             event_patterns=[EventType.SYSTEM_STARTUP.value],
             handler=lambda e: received.append(e),
-            subscriber_id="sub-to-remove"
+            subscriber_id="sub-to-remove",
         )
         bus.unsubscribe("sub-to-remove")
         bus.publish(Event(event_type=EventType.SYSTEM_STARTUP, source="test"))
@@ -341,6 +366,7 @@ class TestEventBus:
         """Test functionality: emit typed."""
         from codomyrmex.events.core.event_bus import EventBus
         from codomyrmex.events.core.event_schema import Event, EventType
+
         bus = EventBus()
         received = []
         bus.subscribe(
@@ -355,6 +381,7 @@ class TestEventBus:
         """Test functionality: subscribe typed."""
         from codomyrmex.events.core.event_bus import EventBus
         from codomyrmex.events.core.event_schema import Event, EventType
+
         bus = EventBus()
         received = []
         bus.subscribe_typed(
@@ -368,6 +395,7 @@ class TestEventBus:
         """Test functionality: get stats."""
         from codomyrmex.events.core.event_bus import EventBus
         from codomyrmex.events.core.event_schema import Event, EventType
+
         bus = EventBus()
         bus.subscribe(event_patterns=["*"], handler=lambda e: None)
         bus.publish(Event(event_type=EventType.SYSTEM_STARTUP, source="test"))
@@ -380,6 +408,7 @@ class TestEventBus:
         """Test functionality: reset stats."""
         from codomyrmex.events.core.event_bus import EventBus
         from codomyrmex.events.core.event_schema import Event, EventType
+
         bus = EventBus()
         bus.publish(Event(event_type=EventType.SYSTEM_STARTUP, source="test"))
         bus.reset_stats()
@@ -390,6 +419,7 @@ class TestEventBus:
         """Test functionality: multiple subscribers."""
         from codomyrmex.events.core.event_bus import EventBus
         from codomyrmex.events.core.event_schema import Event, EventType
+
         bus = EventBus()
         received_a = []
         received_b = []
@@ -404,6 +434,7 @@ class TestEventBus:
 # Event Schema & Validation
 # ===================================================================
 
+
 @pytest.mark.unit
 class TestEventSchema:
     """Test Event and EventSchema."""
@@ -411,6 +442,7 @@ class TestEventSchema:
     def test_event_creation(self):
         """Test functionality: event creation."""
         from codomyrmex.events.core.event_schema import Event, EventType
+
         e = Event(event_type=EventType.SYSTEM_STARTUP, source="test")
         assert e.event_type == EventType.SYSTEM_STARTUP
         assert e.source == "test"
@@ -419,7 +451,10 @@ class TestEventSchema:
     def test_event_to_dict(self):
         """Test functionality: event to dict."""
         from codomyrmex.events.core.event_schema import Event, EventType
-        e = Event(event_type=EventType.SYSTEM_STARTUP, source="test", data={"version": "1.0"})
+
+        e = Event(
+            event_type=EventType.SYSTEM_STARTUP, source="test", data={"version": "1.0"}
+        )
         d = e.to_dict()
         assert d["event_type"] == "system.startup"
         assert d["source"] == "test"
@@ -428,6 +463,7 @@ class TestEventSchema:
     def test_event_to_json(self):
         """Test functionality: event to json."""
         from codomyrmex.events.core.event_schema import Event, EventType
+
         e = Event(event_type=EventType.SYSTEM_STARTUP, source="test")
         j = e.to_json()
         parsed = json.loads(j)
@@ -436,6 +472,7 @@ class TestEventSchema:
     def test_event_from_dict(self):
         """Test functionality: event from dict."""
         from codomyrmex.events.core.event_schema import Event, EventType
+
         d = {
             "event_type": "system.startup",
             "source": "test",
@@ -448,6 +485,7 @@ class TestEventSchema:
     def test_event_from_json(self):
         """Test functionality: event from json."""
         from codomyrmex.events.core.event_schema import Event, EventType
+
         j = json.dumps({"event_type": "system.error", "source": "test", "data": {}})
         e = Event.from_json(j)
         assert e.event_type == EventType.SYSTEM_ERROR
@@ -455,6 +493,7 @@ class TestEventSchema:
     def test_event_schema_validate(self):
         """Test functionality: event schema validate."""
         from codomyrmex.events.core.event_schema import Event, EventSchema, EventType
+
         schema = EventSchema()
         e = Event(
             event_type=EventType.SYSTEM_STARTUP,
@@ -468,6 +507,7 @@ class TestEventSchema:
     def test_event_schema_register_and_get(self):
         """Test functionality: event schema register and get."""
         from codomyrmex.events.core.event_schema import EventSchema, EventType
+
         schema = EventSchema()
         custom = {"type": "object", "properties": {"x": {"type": "integer"}}}
         schema.register_event_schema(EventType.CUSTOM, custom)
@@ -477,6 +517,7 @@ class TestEventSchema:
     def test_event_schema_list_registered(self):
         """Test functionality: event schema list registered."""
         from codomyrmex.events.core.event_schema import EventSchema
+
         schema = EventSchema()
         registered = schema.list_registered_schemas()
         assert isinstance(registered, list)
@@ -485,6 +526,7 @@ class TestEventSchema:
 # ===================================================================
 # Convenience Event Creators
 # ===================================================================
+
 
 @pytest.mark.unit
 class TestEventCreators:
@@ -496,6 +538,7 @@ class TestEventCreators:
             EventType,
             create_system_startup_event,
         )
+
         e = create_system_startup_event("1.0", ["a", "b"])
         assert e.event_type == EventType.SYSTEM_STARTUP
         assert e.data["version"] == "1.0"
@@ -507,6 +550,7 @@ class TestEventCreators:
             EventType,
             create_module_load_event,
         )
+
         e = create_module_load_event("agents", "0.1.0", 0.5)
         assert e.event_type == EventType.MODULE_LOAD
         assert e.data["module_name"] == "agents"
@@ -517,6 +561,7 @@ class TestEventCreators:
             EventType,
             create_analysis_start_event,
         )
+
         e = create_analysis_start_event("coverage", "/src")
         assert e.event_type == EventType.ANALYSIS_START
 
@@ -526,6 +571,7 @@ class TestEventCreators:
             EventType,
             create_analysis_complete_event,
         )
+
         e = create_analysis_complete_event("lint", "/src", {"issues": 0}, 1.5, True)
         assert e.event_type == EventType.ANALYSIS_COMPLETE
         assert e.data["success"] is True
@@ -533,6 +579,7 @@ class TestEventCreators:
     def test_create_error_event(self):
         """Test functionality: create error event."""
         from codomyrmex.events.core.event_schema import EventType, create_error_event
+
         e = create_error_event(EventType.SYSTEM_ERROR, "test", "boom")
         assert e.event_type == EventType.SYSTEM_ERROR
         assert e.data["error_message"] == "boom"
@@ -540,6 +587,7 @@ class TestEventCreators:
     def test_create_metric_event(self):
         """Test functionality: create metric event."""
         from codomyrmex.events.core.event_schema import EventType, create_metric_event
+
         e = create_metric_event("cpu_usage", 75.5, metric_type="gauge")
         assert e.event_type == EventType.METRIC_UPDATE
         assert e.data["metric_value"] == 75.5
@@ -547,13 +595,17 @@ class TestEventCreators:
     def test_create_alert_event(self):
         """Test functionality: create alert event."""
         from codomyrmex.events.core.event_schema import create_alert_event
-        e = create_alert_event("high_load", "critical", "CPU at 95%", threshold=90, current_value=95)
+
+        e = create_alert_event(
+            "high_load", "critical", "CPU at 95%", threshold=90, current_value=95
+        )
         assert e.data["alert_name"] == "high_load"
 
 
 # ===================================================================
 # Notification System
 # ===================================================================
+
 
 @pytest.mark.unit
 class TestNotificationRouter:
@@ -566,6 +618,7 @@ class TestNotificationRouter:
             NotificationChannel,
         )
         from codomyrmex.events.notification.service import NotificationRouter
+
         router = NotificationRouter()
         n = Notification(id="1", subject="Test", body="Hello")
         assert router.route(n) == NotificationChannel.CONSOLE
@@ -577,6 +630,7 @@ class TestNotificationRouter:
             NotificationChannel,
         )
         from codomyrmex.events.notification.service import NotificationRouter
+
         router = NotificationRouter()
         router.add_default(NotificationChannel.SLACK)
         n = Notification(id="1", subject="Test", body="Hello")
@@ -590,12 +644,15 @@ class TestNotificationRouter:
             NotificationPriority,
         )
         from codomyrmex.events.notification.service import NotificationRouter
+
         router = NotificationRouter()
         router.add_rule(
             lambda n: n.priority == NotificationPriority.CRITICAL,
             NotificationChannel.SLACK,
         )
-        critical = Notification(id="1", subject="Alert", body="Fire", priority=NotificationPriority.CRITICAL)
+        critical = Notification(
+            id="1", subject="Alert", body="Fire", priority=NotificationPriority.CRITICAL
+        )
         normal = Notification(id="2", subject="Info", body="OK")
         assert router.route(critical) == NotificationChannel.SLACK
         assert router.route(normal) == NotificationChannel.CONSOLE
@@ -612,6 +669,7 @@ class TestNotificationService:
             NotificationStatus,
         )
         from codomyrmex.events.notification.service import NotificationService
+
         svc = NotificationService()
         result = svc.send(Notification(id="1", subject="Test", body="Hello"))
         assert result.status == NotificationStatus.FAILED
@@ -620,6 +678,7 @@ class TestNotificationService:
         """Test functionality: send from missing template fails."""
         from codomyrmex.events.notification.models import NotificationStatus
         from codomyrmex.events.notification.service import NotificationService
+
         svc = NotificationService()
         result = svc.send_from_template("nonexistent", id="1")
         assert result.status == NotificationStatus.FAILED
@@ -628,6 +687,7 @@ class TestNotificationService:
         """Test functionality: history tracking."""
         from codomyrmex.events.notification.models import Notification
         from codomyrmex.events.notification.service import NotificationService
+
         svc = NotificationService()
         svc.send(Notification(id="1", subject="Test", body="Hello"))
         assert len(svc.history) == 1
@@ -639,8 +699,11 @@ class TestNotificationService:
             NotificationChannel,
         )
         from codomyrmex.events.notification.service import NotificationService
+
         svc = NotificationService()
         n = Notification(id="1", subject="Test", body="Hello")
-        results = svc.broadcast(n, [NotificationChannel.CONSOLE, NotificationChannel.SLACK])
+        results = svc.broadcast(
+            n, [NotificationChannel.CONSOLE, NotificationChannel.SLACK]
+        )
         assert len(results) == 2
         assert len(svc.history) == 2

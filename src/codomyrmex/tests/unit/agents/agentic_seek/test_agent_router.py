@@ -22,6 +22,7 @@ def router() -> AgenticSeekRouter:
 # classify_query – keyword matching
 # ===================================================================
 
+
 class TestClassifyQueryKeywords:
     """Verify keyword-based classification for each agent type."""
 
@@ -42,7 +43,9 @@ class TestClassifyQueryKeywords:
         assert result is AgenticSeekAgentType.BROWSER
 
     def test_file_find(self, router):
-        result = router.classify_query("Find a file called report.pdf in my Downloads folder")
+        result = router.classify_query(
+            "Find a file called report.pdf in my Downloads folder"
+        )
         assert result is AgenticSeekAgentType.FILE
 
     def test_file_create(self, router):
@@ -64,6 +67,7 @@ class TestClassifyQueryKeywords:
 # classify_query – heuristic fallbacks
 # ===================================================================
 
+
 class TestClassifyQueryHeuristics:
     """Verify structural heuristics when no keywords match."""
 
@@ -84,6 +88,7 @@ class TestClassifyQueryHeuristics:
 # classify_query – edge cases
 # ===================================================================
 
+
 class TestClassifyQueryEdgeCases:
     """Edge cases: empty, whitespace, special characters."""
 
@@ -101,6 +106,7 @@ class TestClassifyQueryEdgeCases:
 # ===================================================================
 # estimate_complexity
 # ===================================================================
+
 
 class TestEstimateComplexity:
     """Verify LOW vs HIGH complexity estimation."""
@@ -129,6 +135,7 @@ class TestEstimateComplexity:
 # ===================================================================
 # _score helper
 # ===================================================================
+
 
 class TestScoreHelper:
     def test_no_match_returns_zero(self):

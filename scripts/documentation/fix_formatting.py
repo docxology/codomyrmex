@@ -6,10 +6,9 @@
 3. Fill empty sections with placeholder content
 4. Add Installation sections to 3 remaining READMEs
 """
-import ast
+
 import os
 import re
-import sys
 
 REPO = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 SRC = os.path.join(REPO, "src", "codomyrmex")
@@ -131,7 +130,14 @@ def add_installation(mod_name):
     )
 
     # Insert before Key Exports, Quick Start, Testing, or Navigation
-    for anchor in ["## Key Export", "## Quick Start", "## Feature", "## Testing", "## Documentation", "## Navigation"]:
+    for anchor in [
+        "## Key Export",
+        "## Quick Start",
+        "## Feature",
+        "## Testing",
+        "## Documentation",
+        "## Navigation",
+    ]:
         if anchor in content:
             content = content.replace(anchor, install + "\n" + anchor)
             break
@@ -145,14 +151,21 @@ def add_installation(mod_name):
 
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
-    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "documentation" / "config.yaml"
+
+    import yaml
+
+    config_path = (
+        Path(__file__).resolve().parent.parent.parent
+        / "config"
+        / "documentation"
+        / "config.yaml"
+    )
     config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
+        with open(config_path) as f:
             config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/documentation/config.yaml")
+            print("Loaded config from config/documentation/config.yaml")
 
     fixes = {"unclosed": 0, "duplicate": 0, "empty": 0, "install": 0}
 
@@ -194,7 +207,8 @@ def main():
 
     # Add missing Installation sections
     modules = sorted(
-        d for d in os.listdir(SRC)
+        d
+        for d in os.listdir(SRC)
         if os.path.isdir(os.path.join(SRC, d)) and d != "__pycache__"
     )
     for mod in modules:

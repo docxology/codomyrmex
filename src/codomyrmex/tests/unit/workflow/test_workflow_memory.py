@@ -24,6 +24,7 @@ from codomyrmex.orchestrator.workflows.workflow_templates import (
 
 class TestWorkflowStep:
     """Test suite for WorkflowStep."""
+
     def test_to_dict(self) -> None:
         """Test functionality: to dict."""
         s = WorkflowStep("build")
@@ -34,17 +35,21 @@ class TestWorkflowStep:
 
 class TestWorkflowRunner:
     """Test suite for WorkflowRunner."""
+
     def test_linear_pipeline(self) -> None:
         """Test functionality: linear pipeline."""
         runner = WorkflowRunner()
         runner.add_step(WorkflowStep("a", action=lambda ctx: "done_a"))
-        runner.add_step(WorkflowStep("b", action=lambda ctx: "done_b", depends_on=["a"]))
+        runner.add_step(
+            WorkflowStep("b", action=lambda ctx: "done_b", depends_on=["a"])
+        )
         result = runner.run()
         assert result.success
         assert result.completed_count == 2
 
     def test_failed_step_skips_dependents(self) -> None:
         """Test functionality: failed step skips dependents."""
+
         def fail(ctx):
             raise RuntimeError("boom")
 
@@ -75,6 +80,7 @@ class TestWorkflowRunner:
 
     def test_context_passing(self) -> None:
         """Test functionality: context passing."""
+
         def write_ctx(ctx):
             ctx["key"] = "value"
 
@@ -96,16 +102,19 @@ class TestWorkflowRunner:
 
 class TestWorkflowTemplates:
     """Test suite for WorkflowTemplates."""
+
     def test_ci_cd(self) -> None:
         """Test functionality: ci cd."""
         t = ci_cd_template()
         assert len(t.steps) == 4
-        runner = t.instantiate({
-            "lint": lambda ctx: "ok",
-            "build": lambda ctx: "ok",
-            "test": lambda ctx: "ok",
-            "deploy": lambda ctx: "ok",
-        })
+        runner = t.instantiate(
+            {
+                "lint": lambda ctx: "ok",
+                "build": lambda ctx: "ok",
+                "test": lambda ctx: "ok",
+                "deploy": lambda ctx: "ok",
+            }
+        )
         assert runner.step_count == 4
         result = runner.run()
         assert result.success
@@ -127,6 +136,7 @@ class TestWorkflowTemplates:
 
 class TestMemoryStore:
     """Test suite for MemoryStore."""
+
     def test_put_get(self) -> None:
         """Test functionality: put get."""
         store = MemoryStore()
@@ -172,6 +182,7 @@ class TestMemoryStore:
 
 class TestConversationHistory:
     """Test suite for ConversationHistory."""
+
     def test_add_and_count(self) -> None:
         """Test functionality: add and count."""
         h = ConversationHistory()
@@ -215,6 +226,7 @@ class TestConversationHistory:
 
 class TestLearningJournal:
     """Test suite for LearningJournal."""
+
     def test_record(self) -> None:
         """Test functionality: record."""
         j = LearningJournal()

@@ -20,28 +20,43 @@ def _make_test_graph() -> KnowledgeGraph:
     """Construct a small test knowledge graph."""
     g = KnowledgeGraph()
     g.add_entity(Entity(id="python", name="Python", entity_type=EntityType.CONCEPT))
-    g.add_entity(Entity(id="ml", name="Machine Learning", entity_type=EntityType.CONCEPT))
+    g.add_entity(
+        Entity(id="ml", name="Machine Learning", entity_type=EntityType.CONCEPT)
+    )
     g.add_entity(Entity(id="pytorch", name="PyTorch", entity_type=EntityType.CONCEPT))
     g.add_entity(Entity(id="numpy", name="NumPy", entity_type=EntityType.CONCEPT))
-    g.add_entity(Entity(id="guido", name="Guido van Rossum", entity_type=EntityType.PERSON))
+    g.add_entity(
+        Entity(id="guido", name="Guido van Rossum", entity_type=EntityType.PERSON)
+    )
 
-    g.add_relationship(Relationship(
-        source_id="python", target_id="ml", relation_type=RelationType.RELATED_TO
-    ))
-    g.add_relationship(Relationship(
-        source_id="pytorch", target_id="ml", relation_type=RelationType.PART_OF
-    ))
-    g.add_relationship(Relationship(
-        source_id="numpy", target_id="python", relation_type=RelationType.PART_OF
-    ))
-    g.add_relationship(Relationship(
-        source_id="guido", target_id="python", relation_type=RelationType.AUTHORED_BY
-    ))
+    g.add_relationship(
+        Relationship(
+            source_id="python", target_id="ml", relation_type=RelationType.RELATED_TO
+        )
+    )
+    g.add_relationship(
+        Relationship(
+            source_id="pytorch", target_id="ml", relation_type=RelationType.PART_OF
+        )
+    )
+    g.add_relationship(
+        Relationship(
+            source_id="numpy", target_id="python", relation_type=RelationType.PART_OF
+        )
+    )
+    g.add_relationship(
+        Relationship(
+            source_id="guido",
+            target_id="python",
+            relation_type=RelationType.AUTHORED_BY,
+        )
+    )
     return g
 
 
 class TestLinkedEntity:
     """Test suite for LinkedEntity."""
+
     def test_create(self) -> None:
         """Test functionality: create."""
         e = Entity(id="x", name="X")
@@ -52,6 +67,7 @@ class TestLinkedEntity:
 
 class TestGraphRetriever:
     """Test suite for GraphRetriever."""
+
     def test_retrieve_basic(self) -> None:
         """Test functionality: retrieve basic."""
         g = _make_test_graph()
@@ -120,7 +136,9 @@ class TestGraphRetriever:
 
     def test_extract_terms(self) -> None:
         """Test functionality: extract terms."""
-        terms = GraphRetriever._extract_terms("How do I use Python for machine learning?")
+        terms = GraphRetriever._extract_terms(
+            "How do I use Python for machine learning?"
+        )
         assert "python" in terms
         assert "machine" in terms
         assert "learning" in terms

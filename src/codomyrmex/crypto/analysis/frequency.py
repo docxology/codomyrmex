@@ -68,7 +68,9 @@ def character_frequency(text: str) -> dict[str, float]:
     counts = collections.Counter(alpha_chars)
     freq = {char: (count / total) * 100.0 for char, count in counts.items()}
 
-    logger.debug("Character frequency analysis: %d unique chars from %d total", len(freq), total)
+    logger.debug(
+        "Character frequency analysis: %d unique chars from %d total", len(freq), total
+    )
     return freq
 
 
@@ -99,7 +101,9 @@ def bigram_frequency(text: str) -> dict[str, float]:
     counts = collections.Counter(bigrams)
     freq = {bg: (count / total) * 100.0 for bg, count in counts.items()}
 
-    logger.debug("Bigram frequency analysis: %d unique bigrams from %d total", len(freq), total)
+    logger.debug(
+        "Bigram frequency analysis: %d unique bigrams from %d total", len(freq), total
+    )
     return freq
 
 

@@ -36,12 +36,15 @@ from .workers.pool import AsyncWorkerPool, PoolStats, TaskResult
 
 def cli_commands():
     """Return CLI commands for the concurrency module."""
+
     def _pools(**kwargs):
         """List thread/process pools."""
         mgr = LockManager()
         print("=== Concurrency Pools ===")
-        print("  Lock types available: LocalLock, ReadWriteLock" +
-              (", RedisLock" if RedisLock is not None else ""))
+        print(
+            "  Lock types available: LocalLock, ReadWriteLock"
+            + (", RedisLock" if RedisLock is not None else "")
+        )
         print("  Semaphore types: LocalSemaphore, AsyncLocalSemaphore")
         active = mgr.list_locks() if hasattr(mgr, "list_locks") else []
         print(f"  Active locks: {len(active)}")

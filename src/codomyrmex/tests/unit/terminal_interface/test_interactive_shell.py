@@ -25,6 +25,7 @@ pytestmark = [
 # Helper: build a shell instance while capturing stdout (the constructor prints intro)
 # ---------------------------------------------------------------------------
 
+
 def _make_shell():
     """Create an InteractiveShell, suppressing the intro banner print."""
     from codomyrmex.terminal_interface.shells.interactive_shell import InteractiveShell
@@ -55,6 +56,7 @@ def _run_cmd(shell, method_name, arg=""):
 # ===========================================================================
 # Tests
 # ===========================================================================
+
 
 class TestInteractiveShellInit:
     """Tests for constructor / initial state."""
@@ -96,8 +98,12 @@ class TestInteractiveShellInit:
         from codomyrmex.terminal_interface.shells.interactive_shell import (
             InteractiveShell,
         )
+
         assert "Welcome" in InteractiveShell.intro
-        assert "forager" in InteractiveShell.intro.lower() or "forag" in InteractiveShell.intro.lower()
+        assert (
+            "forager" in InteractiveShell.intro.lower()
+            or "forag" in InteractiveShell.intro.lower()
+        )
 
 
 class TestEmptylineAndDefault:
@@ -131,7 +137,11 @@ class TestDoExplore:
     def test_explore_with_unknown_module(self):
         shell, _ = _make_shell()
         output, _ = _run_cmd(shell, "do_explore", "nonexistent_module_xyz")
-        assert "not found" in output.lower() or "not available" in output.lower() or "empty" in output.lower()
+        assert (
+            "not found" in output.lower()
+            or "not available" in output.lower()
+            or "empty" in output.lower()
+        )
 
     def test_explore_no_arg_shows_overview(self):
         shell, _ = _make_shell()
@@ -162,7 +172,11 @@ class TestExploreOverview:
             sys.stdout = old
         output = buf.getvalue()
         # Should print the header and either scan or show empty message
-        assert "ECOSYSTEM" in output or "Scanning" in output.lower() or "empty" in output.lower()
+        assert (
+            "ECOSYSTEM" in output
+            or "Scanning" in output.lower()
+            or "empty" in output.lower()
+        )
 
 
 class TestExploreModule:
@@ -229,7 +243,11 @@ class TestDoStatus:
     def test_status_shows_session_stats(self):
         shell, _ = _make_shell()
         output, _ = _run_cmd(shell, "do_status", "")
-        assert "Session" in output or "Commands" in output.lower() or "session" in output.lower()
+        assert (
+            "Session" in output
+            or "Commands" in output.lower()
+            or "session" in output.lower()
+        )
 
     def test_status_increments_commands_run(self):
         shell, _ = _make_shell()
@@ -414,7 +432,9 @@ class TestDoShell:
 
     def test_shell_invalid_command(self):
         shell, _ = _make_shell()
-        output, _ = _run_cmd(shell, "do_shell", "this_command_definitely_does_not_exist_xyz")
+        output, _ = _run_cmd(
+            shell, "do_shell", "this_command_definitely_does_not_exist_xyz"
+        )
         # Should print error
         assert "Error" in output or "error" in output or "not found" in output.lower()
 

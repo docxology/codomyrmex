@@ -7,6 +7,7 @@ from codomyrmex.model_context_protocol.decorators import mcp_tool
 
 logger = get_logger(__name__)
 
+
 @mcp_tool(name="git_add")
 def add_files(file_paths: list[str], repository_path: str = None) -> bool:
     """Add files to the Git staging area."""
@@ -36,6 +37,7 @@ def add_files(file_paths: list[str], repository_path: str = None) -> bool:
     except Exception as e:
         logger.error(f"Unexpected error adding files: {e}")
         return False
+
 
 @mcp_tool(name="git_repo_status")
 def get_status(repository_path: str = None) -> dict[str, Any]:
@@ -112,8 +114,11 @@ def get_status(repository_path: str = None) -> dict[str, Any]:
         logger.error(f"Unexpected error getting status: {e}")
         return {"error": str(e)}
 
+
 @mcp_tool(name="git_clean")
-def clean_repository(force: bool = False, directories: bool = False, repository_path: str = None) -> bool:
+def clean_repository(
+    force: bool = False, directories: bool = False, repository_path: str = None
+) -> bool:
     """Clean untracked files from the repository."""
     if repository_path is None:
         repository_path = os.getcwd()
@@ -145,8 +150,11 @@ def clean_repository(force: bool = False, directories: bool = False, repository_
         logger.error(f"Unexpected error cleaning repository: {e}")
         return False
 
+
 @mcp_tool(name="git_diff")
-def get_diff(target: str = "HEAD", repository_path: str = None, cached: bool = False) -> str:
+def get_diff(
+    target: str = "HEAD", repository_path: str = None, cached: bool = False
+) -> str:
     """Get the diff of current changes against a target."""
     if repository_path is None:
         repository_path = os.getcwd()
@@ -174,6 +182,7 @@ def get_diff(target: str = "HEAD", repository_path: str = None, cached: bool = F
     except Exception as e:
         logger.error(f"Unexpected error getting diff: {e}")
         return ""
+
 
 @mcp_tool(name="git_diff_files")
 def get_diff_files(
@@ -205,6 +214,7 @@ def get_diff_files(
     except Exception as e:
         logger.error(f"Unexpected error getting diff: {e}")
         return ""
+
 
 @mcp_tool(name="git_reset")
 def reset_changes(
@@ -240,4 +250,3 @@ def reset_changes(
     except Exception as e:
         logger.error(f"Unexpected error resetting repository: {e}")
         return False
-

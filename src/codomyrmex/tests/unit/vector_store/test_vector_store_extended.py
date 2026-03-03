@@ -88,7 +88,14 @@ class TestVectorEntry:
     def test_to_dict_keys(self):
         e = VectorEntry(id="v1", embedding=[1.0, 2.0])
         d = e.to_dict()
-        for key in ("id", "embedding", "metadata", "dimension", "magnitude", "created_at"):
+        for key in (
+            "id",
+            "embedding",
+            "metadata",
+            "dimension",
+            "magnitude",
+            "created_at",
+        ):
             assert key in d
 
     def test_to_dict_values(self):
@@ -253,18 +260,22 @@ class TestInMemoryVectorStoreMetrics:
 class TestInMemoryVectorStoreAddBatch:
     def test_add_batch_returns_count(self):
         store = InMemoryVectorStore()
-        n = store.add_batch([
-            ("a", [1.0, 0.0], {"tag": "first"}),
-            ("b", [0.0, 1.0], {"tag": "second"}),
-        ])
+        n = store.add_batch(
+            [
+                ("a", [1.0, 0.0], {"tag": "first"}),
+                ("b", [0.0, 1.0], {"tag": "second"}),
+            ]
+        )
         assert n == 2
 
     def test_add_batch_vectors_searchable(self):
         store = InMemoryVectorStore()
-        store.add_batch([
-            ("doc1", [1.0, 0.0], None),
-            ("doc2", [0.0, 1.0], None),
-        ])
+        store.add_batch(
+            [
+                ("doc1", [1.0, 0.0], None),
+                ("doc2", [0.0, 1.0], None),
+            ]
+        )
         assert store.count() == 2
 
     def test_add_batch_metadata_stored(self):
@@ -309,7 +320,9 @@ class TestInMemoryVectorStoreFilter:
         store = InMemoryVectorStore()
         store.add("tagged", [1.0, 0.0], metadata={"keep": True})
         store.add("untagged", [1.0, 0.0], metadata={"keep": False})
-        results = store.search([1.0, 0.0], k=10, filter_fn=lambda m: m.get("keep") is True)
+        results = store.search(
+            [1.0, 0.0], k=10, filter_fn=lambda m: m.get("keep") is True
+        )
         ids = [r.id for r in results]
         assert "tagged" in ids
         assert "untagged" not in ids

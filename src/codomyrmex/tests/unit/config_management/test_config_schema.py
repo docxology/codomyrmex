@@ -10,6 +10,7 @@ from codomyrmex.config_management.core.config_loader import (
 # ConfigSchema tests
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestConfigSchemaValidation:
     """Tests for ConfigSchema.validate() using real jsonschema validation."""
@@ -177,6 +178,7 @@ class TestConfigSchemaValidation:
 # ---------------------------------------------------------------------------
 # ConfigSchema -- error and edge-case paths (lines 99, 105-108)
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestConfigSchemaErrorPaths:

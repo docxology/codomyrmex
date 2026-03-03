@@ -92,7 +92,10 @@ class AgentDeserializer:
         return True
 
     def deserialize_verified(
-        self, data: bytes, signature: str, key: str,
+        self,
+        data: bytes,
+        signature: str,
+        key: str,
     ) -> AgentSnapshot:
         """Deserialize with mandatory HMAC verification.
 
@@ -113,7 +116,9 @@ class AgentDeserializer:
     def _compute_hmac(self, data: bytes, key: str) -> str:
         """Compute HMAC-SHA256 for data."""
         return hmac.new(
-            key.encode("utf-8"), data, hashlib.sha256,
+            key.encode("utf-8"),
+            data,
+            hashlib.sha256,
         ).hexdigest()
 
 

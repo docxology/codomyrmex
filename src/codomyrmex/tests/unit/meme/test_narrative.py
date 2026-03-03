@@ -28,6 +28,7 @@ from codomyrmex.meme.narrative.structure import (
 # Archetype enum
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestArchetype:
     """Tests for the Archetype Jungian/Campbellian enum."""
@@ -35,8 +36,14 @@ class TestArchetype:
     def test_all_eight_values(self) -> None:
         """All eight archetypes are present."""
         expected = {
-            "hero", "shadow", "mentor", "trickster",
-            "herald", "threshold_guardian", "shapeshifter", "ally",
+            "hero",
+            "shadow",
+            "mentor",
+            "trickster",
+            "herald",
+            "threshold_guardian",
+            "shapeshifter",
+            "ally",
         }
         actual = {a.value for a in Archetype}
         assert actual == expected
@@ -50,6 +57,7 @@ class TestArchetype:
 # ---------------------------------------------------------------------------
 # NarrativeArc dataclass
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestNarrativeArc:
@@ -79,6 +87,7 @@ class TestNarrativeArc:
 # NarrativeTemplate dataclass
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestNarrativeTemplate:
     """Tests for the NarrativeTemplate dataclass."""
@@ -103,6 +112,7 @@ class TestNarrativeTemplate:
 # ---------------------------------------------------------------------------
 # Narrative dataclass
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestNarrative:
@@ -158,6 +168,7 @@ class TestNarrative:
 # Structure arc factory functions
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestStructureArcs:
     """Tests for the pre-built narrative arc factories."""
@@ -206,6 +217,7 @@ class TestStructureArcs:
 # ---------------------------------------------------------------------------
 # NarrativeEngine
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestNarrativeEngine:
@@ -259,7 +271,9 @@ class TestNarrativeEngine:
             stages=["Setup", "Conflict", "Resolution"],
             roles=[Archetype.HERO],
         )
-        story = engine.generate(template, {"protagonist": "Alice", "context": "a forest"})
+        story = engine.generate(
+            template, {"protagonist": "Alice", "context": "a forest"}
+        )
         lines = story.strip().split("\n")
         assert len(lines) == 3
         assert "Alice" in story
@@ -327,6 +341,7 @@ class TestNarrativeEngine:
 # ---------------------------------------------------------------------------
 # synthesize_myth
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestSynthesizMyth:

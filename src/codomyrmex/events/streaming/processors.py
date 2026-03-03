@@ -26,8 +26,10 @@ class StreamProcessor:
 
     def filter(self, fn: Callable[[Event], bool]) -> "StreamProcessor":
         """Add a filter transformation."""
+
         def filter_transform(event: Event) -> Event | None:
             return event if fn(event) else None
+
         self._transforms.append(filter_transform)
         return self
 
@@ -38,6 +40,7 @@ class StreamProcessor:
 
     async def start(self) -> Subscription:
         """Start processing."""
+
         async def process_event(event: Event) -> None:
             result = event
             for transform in self._transforms:

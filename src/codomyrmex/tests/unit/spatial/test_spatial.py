@@ -23,6 +23,7 @@ from codomyrmex.spatial.three_d.engine_3d import (
 # Vector3D
 # ---------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestVector3D:
     """Behavioural tests for Vector3D dataclass."""
@@ -91,6 +92,7 @@ class TestVector3D:
 # Quaternion
 # ---------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestQuaternion:
     """Behavioural tests for Quaternion dataclass."""
@@ -115,6 +117,7 @@ class TestQuaternion:
 # ---------------------------------------------------------------
 # Object3D
 # ---------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestObject3D:
@@ -167,6 +170,7 @@ class TestObject3D:
 # ---------------------------------------------------------------
 # PhysicsEngine
 # ---------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestPhysicsEngine:
@@ -222,6 +226,7 @@ class TestPhysicsEngine:
 # Light3D
 # ---------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestLight3D:
     """Behavioural tests for Light3D dataclass."""
@@ -249,6 +254,7 @@ class TestLight3D:
 # Camera3D
 # ---------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestCamera3D:
     """Behavioural tests for Camera3D dataclass."""
@@ -268,8 +274,10 @@ class TestCamera3D:
         """look_at should mutate the camera rotation quaternion."""
         cam = Camera3D(position=Vector3D(0.0, 0.0, 0.0))
         original_rotation = Quaternion(
-            cam.rotation.x, cam.rotation.y,
-            cam.rotation.z, cam.rotation.w,
+            cam.rotation.x,
+            cam.rotation.y,
+            cam.rotation.z,
+            cam.rotation.w,
         )
 
         target = Vector3D(10.0, 5.0, 10.0)
@@ -289,13 +297,21 @@ class TestCamera3D:
         cam = Camera3D(position=Vector3D(0.0, 0.0, 0.0))
         cam.look_at(Vector3D(1.0, 0.0, 1.0))
 
-        for component in (cam.rotation.x, cam.rotation.y, cam.rotation.z, cam.rotation.w):
-            assert math.isfinite(component), f"Non-finite quaternion component: {component}"
+        for component in (
+            cam.rotation.x,
+            cam.rotation.y,
+            cam.rotation.z,
+            cam.rotation.w,
+        ):
+            assert math.isfinite(component), (
+                f"Non-finite quaternion component: {component}"
+            )
 
 
 # ---------------------------------------------------------------
 # Scene3D
 # ---------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestScene3D:
@@ -352,6 +368,7 @@ class TestScene3D:
 # WorldModel ABC
 # ---------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestWorldModelABC:
     """Tests that WorldModel is a properly enforced ABC."""
@@ -359,6 +376,7 @@ class TestWorldModelABC:
     def test_world_model_cannot_be_instantiated(self):
         """WorldModel.update() is abstract — direct instantiation must raise TypeError."""
         from codomyrmex.spatial.world_models import WorldModel
+
         with pytest.raises(TypeError):
             WorldModel()
 

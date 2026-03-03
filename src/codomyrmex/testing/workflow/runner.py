@@ -49,7 +49,9 @@ class WorkflowRunner:
             WorkflowStepType.SCRIPT: ScriptExecutor(),
         }
 
-    def register_executor(self, step_type: WorkflowStepType, executor: StepExecutor) -> None:
+    def register_executor(
+        self, step_type: WorkflowStepType, executor: StepExecutor
+    ) -> None:
         """Register a step executor."""
         self._executors[step_type] = executor
 

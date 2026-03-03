@@ -180,7 +180,9 @@ class TestCodaValidationError:
             "message": "Invalid parameter 'limit'",
             "details": {"parameter": "limit", "value": -1},
         }
-        error = CodaValidationError(message="Invalid parameter 'limit'", response_body=body)
+        error = CodaValidationError(
+            message="Invalid parameter 'limit'", response_body=body
+        )
 
         assert "limit" in str(error)
         assert error.response_body["details"]["value"] == -1
@@ -328,7 +330,9 @@ class TestExceptionHierarchy:
         ]
 
         for exc_class in exceptions:
-            assert issubclass(exc_class, CodaAPIError), f"{exc_class.__name__} should inherit from CodaAPIError"
+            assert issubclass(exc_class, CodaAPIError), (
+                f"{exc_class.__name__} should inherit from CodaAPIError"
+            )
 
     def test_all_exceptions_inherit_from_exception(self):
         """Test all custom exceptions inherit from Exception."""
@@ -353,7 +357,9 @@ class TestExceptionHierarchy:
         ]
 
         for exc_class in exceptions:
-            assert issubclass(exc_class, Exception), f"{exc_class.__name__} should inherit from Exception"
+            assert issubclass(exc_class, Exception), (
+                f"{exc_class.__name__} should inherit from Exception"
+            )
 
     def test_can_catch_specific_or_base(self):
         """Test exceptions can be caught specifically or via base class."""

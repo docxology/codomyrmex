@@ -12,6 +12,7 @@ from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 logger = get_logger(__name__)
 
+
 class ToolsMixin:
     """ToolsMixin class."""
 
@@ -151,7 +152,10 @@ class ToolsMixin:
                 content, _ = self._extract_response_content(response)
                 return AgentResponse(
                     content=content,
-                    metadata={"tool_calls": tool_calls, "requires_tool_execution": True},
+                    metadata={
+                        "tool_calls": tool_calls,
+                        "requires_tool_execution": True,
+                    },
                 )
 
             # Add assistant response to messages
@@ -165,23 +169,30 @@ class ToolsMixin:
                     result = self.execute_tool_call(
                         tool_call["name"], tool_call["input"]
                     )
-                    tool_results.append({
-                        "type": "tool_result",
-                        "tool_use_id": tool_call["id"],
-                        "content": str(result),
-                    })
-                except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
-                    tool_results.append({
-                        "type": "tool_result",
-                        "tool_use_id": tool_call["id"],
-                        "content": f"Error: {str(e)}",
-                        "is_error": True,
-                    })
+                    tool_results.append(
+                        {
+                            "type": "tool_result",
+                            "tool_use_id": tool_call["id"],
+                            "content": str(result),
+                        }
+                    )
+                except (
+                    ValueError,
+                    RuntimeError,
+                    AttributeError,
+                    OSError,
+                    TypeError,
+                ) as e:
+                    tool_results.append(
+                        {
+                            "type": "tool_result",
+                            "tool_use_id": tool_call["id"],
+                            "content": f"Error: {str(e)}",
+                            "is_error": True,
+                        }
+                    )
 
             messages.append({"role": "user", "content": tool_results})
 
         # Max rounds exceeded
-        raise ClaudeError(
-            f"Maximum tool execution rounds ({max_tool_rounds}) exceeded"
-        )
-
+        raise ClaudeError(f"Maximum tool execution rounds ({max_tool_rounds}) exceeded")

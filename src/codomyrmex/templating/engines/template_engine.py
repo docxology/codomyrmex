@@ -13,10 +13,12 @@ from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 logger = get_logger(__name__)
 
+
 class TemplatingError(CodomyrmexError):
     """Raised when templating operations fail."""
 
     pass
+
 
 class Template:
     """Template object."""
@@ -39,6 +41,7 @@ class Template:
             return self.template_obj.render(**context)
         else:
             raise TemplatingError(f"Unknown engine: {self.engine}")
+
 
 class TemplateEngine:
     """Template engine interface."""
@@ -131,7 +134,6 @@ class TemplateEngine:
     def _render_jinja2(self, template: str, context: dict) -> str:
         """Render using Jinja2."""
         try:
-
             env = Environment()
             # Register custom filters
             for name, func in self._filters.items():
@@ -140,12 +142,13 @@ class TemplateEngine:
             template_obj = env.from_string(template)
             return template_obj.render(**context)
         except ImportError:
-            raise TemplatingError("jinja2 package not available. Install with: pip install jinja2") from None
+            raise TemplatingError(
+                "jinja2 package not available. Install with: pip install jinja2"
+            ) from None
 
     def _load_jinja2(self, path: str) -> Any:
         """Load template using Jinja2."""
         try:
-
             path_obj = Path(path)
             env = Environment(loader=FileSystemLoader(str(path_obj.parent)))
             # Register custom filters
@@ -154,22 +157,25 @@ class TemplateEngine:
 
             return env.get_template(path_obj.name)
         except ImportError:
-            raise TemplatingError("jinja2 package not available. Install with: pip install jinja2") from None
+            raise TemplatingError(
+                "jinja2 package not available. Install with: pip install jinja2"
+            ) from None
 
     def _render_mako(self, template: str, context: dict) -> str:
         """Render using Mako."""
         try:
-
             template_obj = MakoTemplate(template)
             return template_obj.render(**context)
         except ImportError:
-            raise TemplatingError("mako package not available. Install with: pip install mako") from None
+            raise TemplatingError(
+                "mako package not available. Install with: pip install mako"
+            ) from None
 
     def _load_mako(self, path: str) -> Any:
         """Load template using Mako."""
         try:
-
             return MakoTemplate(filename=path)
         except ImportError:
-            raise TemplatingError("mako package not available. Install with: pip install mako") from None
-
+            raise TemplatingError(
+                "mako package not available. Install with: pip install mako"
+            ) from None

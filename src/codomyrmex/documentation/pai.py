@@ -14,14 +14,33 @@ logger = get_logger(__name__)
 MAX_STUB_LINES = 55
 
 # Layer classification for modules
-FOUNDATION = {"logging_monitoring", "environment_setup", "model_context_protocol", "terminal_interface"}
+FOUNDATION = {
+    "logging_monitoring",
+    "environment_setup",
+    "model_context_protocol",
+    "terminal_interface",
+}
 CORE = {
-    "agents", "static_analysis", "coding", "llm", "pattern_matching", "git_operations",
-    "search", "documents", "agentic_memory", "cerebrum", "graph_rag",
+    "agents",
+    "static_analysis",
+    "coding",
+    "llm",
+    "pattern_matching",
+    "git_operations",
+    "search",
+    "documents",
+    "agentic_memory",
+    "cerebrum",
+    "graph_rag",
 }
 SERVICE = {
-    "build_synthesis", "documentation", "ci_cd_automation", "containerization",
-    "orchestrator", "events", "logistics",
+    "build_synthesis",
+    "documentation",
+    "ci_cd_automation",
+    "containerization",
+    "orchestrator",
+    "events",
+    "logistics",
 }
 APPLICATION = {"cli", "system_discovery", "website", "ide"}
 
@@ -52,12 +71,14 @@ def extract_exports(init_path: Path) -> dict[str, Any]:
         tree = ast.parse(content)
         docstring = ast.get_docstring(tree) or ""
     except SyntaxError as e:
-        logger.warning("Documentation: syntax error in source file %s: %s", init_path, str(e))
+        logger.warning(
+            "Documentation: syntax error in source file %s: %s", init_path, str(e)
+        )
         raise
 
     # Extract __all__ list
     all_exports = []
-    all_match = re.search(r'__all__\s*=\s*\[([^\]]+)\]', content, re.DOTALL)
+    all_match = re.search(r"__all__\s*=\s*\[([^\]]+)\]", content, re.DOTALL)
     if all_match:
         items = re.findall(r'"([^"]+)"|\'([^\']+)\'', all_match.group(1))
         all_exports = [a or b for a, b in items]
@@ -108,24 +129,44 @@ def humanize_name(module_name: str) -> str:
     return module_name.replace("_", " ").title()
 
 
-def infer_pai_phase(module_name: str, functions: list[str], classes: list[str]) -> dict[str, str]:
+def infer_pai_phase(
+    module_name: str, functions: list[str], classes: list[str]
+) -> dict[str, str]:
     """Infer PAI Algorithm phase mapping from module content."""
     phases = {}
     all_names = " ".join(functions + classes).lower()
 
-    if any(w in all_names for w in ["get_", "list_", "read_", "search", "discover", "status", "fetch"]):
+    if any(
+        w in all_names
+        for w in ["get_", "list_", "read_", "search", "discover", "status", "fetch"]
+    ):
         phases["OBSERVE"] = "Data gathering and state inspection"
-    if any(w in all_names for w in ["analyz", "reason", "match", "pattern", "cerebr", "graph"]):
+    if any(
+        w in all_names
+        for w in ["analyz", "reason", "match", "pattern", "cerebr", "graph"]
+    ):
         phases["THINK"] = "Analysis and reasoning"
-    if any(w in all_names for w in ["plan", "schedule", "orchestrat", "workflow", "dag"]):
+    if any(
+        w in all_names for w in ["plan", "schedule", "orchestrat", "workflow", "dag"]
+    ):
         phases["PLAN"] = "Workflow planning and scheduling"
-    if any(w in all_names for w in ["generat", "create", "build", "write_", "render", "compil"]):
+    if any(
+        w in all_names
+        for w in ["generat", "create", "build", "write_", "render", "compil"]
+    ):
         phases["BUILD"] = "Artifact creation and code generation"
-    if any(w in all_names for w in ["execut", "run_", "deploy", "send", "push", "process"]):
+    if any(
+        w in all_names for w in ["execut", "run_", "deploy", "send", "push", "process"]
+    ):
         phases["EXECUTE"] = "Execution and deployment"
-    if any(w in all_names for w in ["verif", "validat", "check", "test", "scan", "audit", "lint"]):
+    if any(
+        w in all_names
+        for w in ["verif", "validat", "check", "test", "scan", "audit", "lint"]
+    ):
         phases["VERIFY"] = "Validation and quality checks"
-    if any(w in all_names for w in ["learn", "store", "memory", "log", "metric", "record"]):
+    if any(
+        w in all_names for w in ["learn", "store", "memory", "log", "metric", "record"]
+    ):
         phases["LEARN"] = "Learning and knowledge capture"
 
     if not phases:
@@ -151,14 +192,19 @@ def generate_pai_md(module_name: str, module_dir: Path) -> str:
     # Build overview
     overview = exports["docstring"].split("\n")[0] if exports["docstring"] else ""
     if not overview:
-        overview = readme_desc or f"The {human_name} module provides capabilities for the codomyrmex ecosystem."
+        overview = (
+            readme_desc
+            or f"The {human_name} module provides capabilities for the codomyrmex ecosystem."
+        )
 
     # Build the document
     sections = []
 
     # Header
     sections.append(f"# Personal AI Infrastructure — {human_name} Module\n")
-    sections.append("**Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026\n")
+    sections.append(
+        "**Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026\n"
+    )
 
     # Overview
     sections.append("## Overview\n")
@@ -178,7 +224,9 @@ def generate_pai_md(module_name: str, module_dir: Path) -> str:
 
         if imports:
             import_str = ", ".join(imports)
-            sections.append(f"```python\nfrom codomyrmex.{module_name} import {import_str}\n```\n")
+            sections.append(
+                f"```python\nfrom codomyrmex.{module_name} import {import_str}\n```\n"
+            )
 
     # Key Exports table
     if exports["all"]:
@@ -188,11 +236,17 @@ def generate_pai_md(module_name: str, module_dir: Path) -> str:
         for name in exports["all"][:15]:  # Limit to 15 to keep reasonable
             if name == "cli_commands":
                 continue
-            etype = "Class" if name[0].isupper() and not name.startswith("SUPPORTED") else "Function/Constant"
+            etype = (
+                "Class"
+                if name[0].isupper() and not name.startswith("SUPPORTED")
+                else "Function/Constant"
+            )
             purpose = name.replace("_", " ").capitalize()
             sections.append(f"| `{name}` | {etype} | {purpose} |")
         if len(exports["all"]) > 15:
-            sections.append(f"\n*Plus {len(exports['all']) - 15} additional exports.*\n")
+            sections.append(
+                f"\n*Plus {len(exports['all']) - 15} additional exports.*\n"
+            )
         sections.append("")
 
     # PAI Algorithm Phase Mapping
@@ -205,14 +259,22 @@ def generate_pai_md(module_name: str, module_dir: Path) -> str:
 
     # Architecture Role
     sections.append("## Architecture Role\n")
-    sections.append(f"**{layer} Layer** — Part of the codomyrmex layered architecture.\n")
+    sections.append(
+        f"**{layer} Layer** — Part of the codomyrmex layered architecture.\n"
+    )
 
     # Navigation
     sections.append("## Navigation\n")
     sections.append("- **Self**: [PAI.md](PAI.md)")
-    sections.append("- **Parent**: [../PAI.md](../PAI.md) — Source-level PAI module map")
-    sections.append("- **Root Bridge**: [../../../PAI.md](../../../PAI.md) — Authoritative PAI system bridge doc")
-    sections.append("- **Siblings**: [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [API_SPECIFICATION.md](API_SPECIFICATION.md)")
+    sections.append(
+        "- **Parent**: [../PAI.md](../PAI.md) — Source-level PAI module map"
+    )
+    sections.append(
+        "- **Root Bridge**: [../../../PAI.md](../../../PAI.md) — Authoritative PAI system bridge doc"
+    )
+    sections.append(
+        "- **Siblings**: [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [API_SPECIFICATION.md](API_SPECIFICATION.md)"
+    )
 
     return "\n".join(sections) + "\n"
 
@@ -228,7 +290,9 @@ def write_pai_md(module_name: str, module_dir: Path) -> Path:
     return pai_path
 
 
-def update_pai_docs(src_dir: Path, apply: bool = False, max_lines: int = MAX_STUB_LINES) -> None:
+def update_pai_docs(
+    src_dir: Path, apply: bool = False, max_lines: int = MAX_STUB_LINES
+) -> None:
     """Batch update stub PAI.md files."""
     updated = 0
     skipped = 0
@@ -258,13 +322,19 @@ def update_pai_docs(src_dir: Path, apply: bool = False, max_lines: int = MAX_STU
 
             if apply:
                 pai_path.write_text(new_content, encoding="utf-8")
-                print(f"  UPDATED  {module_name}/PAI.md ({current_lines} -> {new_lines} lines)")
+                print(
+                    f"  UPDATED  {module_name}/PAI.md ({current_lines} -> {new_lines} lines)"
+                )
             else:
-                print(f"  WOULD UPDATE  {module_name}/PAI.md ({current_lines} -> {new_lines} lines)")
+                print(
+                    f"  WOULD UPDATE  {module_name}/PAI.md ({current_lines} -> {new_lines} lines)"
+                )
 
             updated += 1
         except Exception as e:
             print(f"  ERROR    {module_name}/PAI.md: {e}")
             errors += 1
 
-    print(f"\n{'Applied' if apply else 'Dry run'}: {updated} updated, {skipped} skipped (already good), {errors} errors")
+    print(
+        f"\n{'Applied' if apply else 'Dry run'}: {updated} updated, {skipped} skipped (already good), {errors} errors"
+    )

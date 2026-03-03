@@ -7,6 +7,7 @@ Provides:
 - F1Metric: Token-level F1 score
 - EvalHarness: Runs a model function against multiple tasks
 """
+
 import time
 from collections.abc import Callable
 from dataclasses import dataclass, field
@@ -93,7 +94,12 @@ class F1Metric:
         if not targets:
             return 0.0
         return float(
-            np.mean([cls._f1_single(p, t) for p, t in zip(predictions, targets, strict=False)])
+            np.mean(
+                [
+                    cls._f1_single(p, t)
+                    for p, t in zip(predictions, targets, strict=False)
+                ]
+            )
         )
 
 

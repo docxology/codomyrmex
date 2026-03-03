@@ -33,7 +33,7 @@ def _make_conversation(
         title=title,
         updated_at=updated_at or datetime.now(),
     )
-    for role, content in (messages or []):
+    for role, content in messages or []:
         conv.add_message(role, content)
     return conv
 
@@ -41,6 +41,7 @@ def _make_conversation(
 # ────────────────────────────────────────────────────────────────────
 # InMemoryHistoryStore
 # ────────────────────────────────────────────────────────────────────
+
 
 @pytest.mark.unit
 class TestInMemoryHistoryStore:
@@ -154,6 +155,7 @@ class TestInMemoryHistoryStore:
 # FileHistoryStore
 # ────────────────────────────────────────────────────────────────────
 
+
 @pytest.mark.unit
 class TestFileHistoryStore:
     """Tests for FileHistoryStore (JSON-based file storage)."""
@@ -231,6 +233,7 @@ class TestFileHistoryStore:
 # SQLiteHistoryStore
 # ────────────────────────────────────────────────────────────────────
 
+
 @pytest.mark.unit
 class TestSQLiteHistoryStore:
     """Tests for SQLiteHistoryStore."""
@@ -238,6 +241,7 @@ class TestSQLiteHistoryStore:
     def test_init_creates_tables(self, tmp_path):
         """Initialization creates conversations and messages tables."""
         import sqlite3
+
         db_path = str(tmp_path / "test.db")
         SQLiteHistoryStore(db_path)
         conn = sqlite3.connect(db_path)
@@ -298,7 +302,9 @@ class TestSQLiteHistoryStore:
         store = SQLiteHistoryStore(str(tmp_path / "test.db"))
         now = datetime.now()
         for i in range(5):
-            store.save(_make_conversation(f"sc{i}", updated_at=now - timedelta(hours=i)))
+            store.save(
+                _make_conversation(f"sc{i}", updated_at=now - timedelta(hours=i))
+            )
         result = store.list_conversations(limit=2, offset=1)
         assert len(result) == 2
         assert result[0].conversation_id == "sc1"

@@ -24,7 +24,13 @@ from codomyrmex.system_discovery.core.capability_scanner import (
 # Helpers
 # ---------------------------------------------------------------------------
 
-def _make_module(tmp_path: Path, name: str, init_content: str = "", files: dict[str, str] | None = None) -> Path:
+
+def _make_module(
+    tmp_path: Path,
+    name: str,
+    init_content: str = "",
+    files: dict[str, str] | None = None,
+) -> Path:
     """Create a fake module directory under a fake codomyrmex package tree.
 
     Returns the module directory path.
@@ -53,6 +59,7 @@ def _scanner_for(tmp_path: Path) -> CapabilityScanner:
 # ---------------------------------------------------------------------------
 # Dataclass construction tests
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestFunctionCapabilityDataclass:
@@ -147,6 +154,7 @@ class TestModuleCapabilityDataclass:
 # CapabilityScanner init tests
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestCapabilityScannerInit:
     """Tests for CapabilityScanner.__init__."""
@@ -167,6 +175,7 @@ class TestCapabilityScannerInit:
 # ---------------------------------------------------------------------------
 # _calculate_complexity tests
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestCalculateComplexity:
@@ -259,6 +268,7 @@ class TestCalculateComplexity:
 # _extract_parameters tests
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestExtractParameters:
     """Tests for CapabilityScanner._extract_parameters."""
@@ -319,6 +329,7 @@ class TestExtractParameters:
 # _extract_return_annotation tests
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestExtractReturnAnnotation:
     """Tests for CapabilityScanner._extract_return_annotation."""
@@ -344,6 +355,7 @@ class TestExtractReturnAnnotation:
 # ---------------------------------------------------------------------------
 # _build_signature tests
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestBuildSignature:
@@ -380,6 +392,7 @@ class TestBuildSignature:
 # _extract_decorators tests
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestExtractDecorators:
     """Tests for CapabilityScanner._extract_decorators."""
@@ -407,6 +420,7 @@ class TestExtractDecorators:
 # _is_generator tests
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestIsGenerator:
     """Tests for CapabilityScanner._is_generator."""
@@ -431,15 +445,20 @@ class TestIsGenerator:
 # _analyze_function tests
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestAnalyzeFunction:
     """Tests for CapabilityScanner._analyze_function."""
 
-    def _analyze(self, source: str, is_async: bool = False) -> FunctionCapability | None:
+    def _analyze(
+        self, source: str, is_async: bool = False
+    ) -> FunctionCapability | None:
         tree = ast.parse(textwrap.dedent(source))
         func_node = tree.body[0]
         scanner = CapabilityScanner()
-        return scanner._analyze_function(func_node, Path("/fake/mod.py"), is_async=is_async)
+        return scanner._analyze_function(
+            func_node, Path("/fake/mod.py"), is_async=is_async
+        )
 
     def test_basic_function(self):
         fc = self._analyze('''
@@ -456,11 +475,14 @@ def greet(name: str) -> str:
         assert fc.line_number == 2
 
     def test_async_function(self):
-        fc = self._analyze('''
+        fc = self._analyze(
+            '''
 async def fetch(url: str) -> bytes:
     """Fetch data."""
     pass
-''', is_async=True)
+''',
+            is_async=True,
+        )
         assert fc is not None
         assert fc.is_async is True
 
@@ -500,6 +522,7 @@ def gen():
 # ---------------------------------------------------------------------------
 # _analyze_class tests
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestAnalyzeClass:
@@ -606,6 +629,7 @@ class Config:
 # _analyze_ast tests
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestAnalyzeAst:
     """Tests for CapabilityScanner._analyze_ast."""
@@ -648,19 +672,19 @@ class Foo:
         assert classes[0].name == "Foo"
 
     def test_private_classes_excluded(self):
-        _, classes, _, _ = self._run('''
+        _, classes, _, _ = self._run("""
 class _Internal:
     pass
-''')
+""")
         assert len(classes) == 0
 
     def test_captures_constants(self):
-        _, _, consts, _ = self._run('''
+        _, _, consts, _ = self._run("""
 VERSION = "1.0"
 MAX_RETRIES = 3
 _PRIVATE = "hidden"
 lowercase = "not constant"
-''')
+""")
         assert "VERSION" in consts
         assert consts["VERSION"] == "1.0"
         assert "MAX_RETRIES" in consts
@@ -669,12 +693,12 @@ lowercase = "not constant"
         assert "lowercase" not in consts
 
     def test_captures_imports(self):
-        _, _, _, imports = self._run('''
+        _, _, _, imports = self._run("""
 import os
 import sys
 from pathlib import Path
 from typing import Any
-''')
+""")
         assert "os" in imports
         assert "sys" in imports
         assert "pathlib" in imports
@@ -682,15 +706,16 @@ from typing import Any
 
     def test_import_without_module_ignored(self):
         # from . import something has module=None -- should not crash
-        _, _, _, imports = self._run('''
+        _, _, _, imports = self._run("""
 import json
-''')
+""")
         assert "json" in imports
 
 
 # ---------------------------------------------------------------------------
 # _get_module_docstring tests
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestGetModuleDocstring:
@@ -727,6 +752,7 @@ class TestGetModuleDocstring:
 # _get_last_modified_time tests
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestGetLastModifiedTime:
     """Tests for CapabilityScanner._get_last_modified_time."""
@@ -757,6 +783,7 @@ class TestGetLastModifiedTime:
 # ---------------------------------------------------------------------------
 # scan_module tests
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestScanModule:
@@ -837,15 +864,24 @@ class TestScanModule:
 # scan_all_modules tests
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestScanAllModules:
     """Tests for CapabilityScanner.scan_all_modules."""
 
     def test_scans_multiple_modules(self, tmp_path: Path):
-        _make_module(tmp_path, "mod_a", init_content='"""Module A."""\n',
-                     files={"a.py": "def func_a(): pass\n"})
-        _make_module(tmp_path, "mod_b", init_content='"""Module B."""\n',
-                     files={"b.py": "def func_b(): pass\n"})
+        _make_module(
+            tmp_path,
+            "mod_a",
+            init_content='"""Module A."""\n',
+            files={"a.py": "def func_a(): pass\n"},
+        )
+        _make_module(
+            tmp_path,
+            "mod_b",
+            init_content='"""Module B."""\n',
+            files={"b.py": "def func_b(): pass\n"},
+        )
 
         scanner = _scanner_for(tmp_path)
         result = scanner.scan_all_modules()
@@ -854,10 +890,8 @@ class TestScanAllModules:
         assert "mod_b" in result
 
     def test_skips_dot_directories(self, tmp_path: Path):
-        _make_module(tmp_path, ".hidden",
-                     files={"h.py": "def hidden_func(): pass\n"})
-        _make_module(tmp_path, "visible",
-                     files={"v.py": "def visible_func(): pass\n"})
+        _make_module(tmp_path, ".hidden", files={"h.py": "def hidden_func(): pass\n"})
+        _make_module(tmp_path, "visible", files={"v.py": "def visible_func(): pass\n"})
 
         scanner = _scanner_for(tmp_path)
         result = scanner.scan_all_modules()
@@ -873,8 +907,7 @@ class TestScanAllModules:
         no_init.mkdir()
         (no_init / "stuff.py").write_text("x = 1\n", encoding="utf-8")
 
-        _make_module(tmp_path, "proper_mod",
-                     files={"m.py": "y = 2\n"})
+        _make_module(tmp_path, "proper_mod", files={"m.py": "y = 2\n"})
 
         scanner = _scanner_for(tmp_path)
         result = scanner.scan_all_modules()
@@ -893,36 +926,77 @@ class TestScanAllModules:
 # analyze_capability_relationships tests
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestAnalyzeCapabilityRelationships:
     """Tests for CapabilityScanner.analyze_capability_relationships."""
 
     def _make_caps(self) -> dict[str, ModuleCapability]:
         func_a = FunctionCapability(
-            name="shared_func", signature="shared_func()", docstring="",
-            parameters=[], return_annotation="", file_path="", line_number=1,
-            is_async=False, is_generator=False, decorators=[], complexity_score=3,
+            name="shared_func",
+            signature="shared_func()",
+            docstring="",
+            parameters=[],
+            return_annotation="",
+            file_path="",
+            line_number=1,
+            is_async=False,
+            is_generator=False,
+            decorators=[],
+            complexity_score=3,
         )
         func_b = FunctionCapability(
-            name="shared_func", signature="shared_func()", docstring="",
-            parameters=[], return_annotation="", file_path="", line_number=1,
-            is_async=False, is_generator=False, decorators=[], complexity_score=15,
+            name="shared_func",
+            signature="shared_func()",
+            docstring="",
+            parameters=[],
+            return_annotation="",
+            file_path="",
+            line_number=1,
+            is_async=False,
+            is_generator=False,
+            decorators=[],
+            complexity_score=15,
         )
         func_c = FunctionCapability(
-            name="unique_func", signature="unique_func()", docstring="",
-            parameters=[], return_annotation="", file_path="", line_number=1,
-            is_async=False, is_generator=False, decorators=[], complexity_score=1,
+            name="unique_func",
+            signature="unique_func()",
+            docstring="",
+            parameters=[],
+            return_annotation="",
+            file_path="",
+            line_number=1,
+            is_async=False,
+            is_generator=False,
+            decorators=[],
+            complexity_score=1,
         )
 
         mod_a = ModuleCapability(
-            name="mod_a", path="", docstring="", functions=[func_a, func_c],
-            classes=[], constants={}, imports=[], exports=[], file_count=1,
-            line_count=10, last_modified="",
+            name="mod_a",
+            path="",
+            docstring="",
+            functions=[func_a, func_c],
+            classes=[],
+            constants={},
+            imports=[],
+            exports=[],
+            file_count=1,
+            line_count=10,
+            last_modified="",
         )
         mod_b = ModuleCapability(
-            name="mod_b", path="", docstring="", functions=[func_b],
-            classes=[], constants={}, imports=[], exports=[], file_count=1,
-            line_count=10, last_modified="",
+            name="mod_b",
+            path="",
+            docstring="",
+            functions=[func_b],
+            classes=[],
+            constants={},
+            imports=[],
+            exports=[],
+            file_count=1,
+            line_count=10,
+            last_modified="",
         )
         return {"mod_a": mod_a, "mod_b": mod_b}
 
@@ -957,14 +1031,30 @@ class TestAnalyzeCapabilityRelationships:
 
     def test_no_shared_functions(self):
         func_a = FunctionCapability(
-            name="only_a", signature="only_a()", docstring="",
-            parameters=[], return_annotation="", file_path="", line_number=1,
-            is_async=False, is_generator=False, decorators=[], complexity_score=2,
+            name="only_a",
+            signature="only_a()",
+            docstring="",
+            parameters=[],
+            return_annotation="",
+            file_path="",
+            line_number=1,
+            is_async=False,
+            is_generator=False,
+            decorators=[],
+            complexity_score=2,
         )
         mod_a = ModuleCapability(
-            name="mod_a", path="", docstring="", functions=[func_a],
-            classes=[], constants={}, imports=[], exports=[], file_count=1,
-            line_count=10, last_modified="",
+            name="mod_a",
+            path="",
+            docstring="",
+            functions=[func_a],
+            classes=[],
+            constants={},
+            imports=[],
+            exports=[],
+            file_count=1,
+            line_count=10,
+            last_modified="",
         )
         scanner = CapabilityScanner()
         rels = scanner.analyze_capability_relationships({"mod_a": mod_a})
@@ -975,29 +1065,49 @@ class TestAnalyzeCapabilityRelationships:
 # export_capabilities_report tests
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestExportCapabilitiesReport:
     """Tests for CapabilityScanner.export_capabilities_report."""
 
     def _sample_caps(self) -> dict[str, ModuleCapability]:
         func = FunctionCapability(
-            name="example", signature="example(x: int) -> str",
-            docstring="Example func.", parameters=[{"name": "x", "annotation": "int", "default": None}],
-            return_annotation="str", file_path="/src/m.py", line_number=5,
-            is_async=False, is_generator=False, decorators=["staticmethod"],
+            name="example",
+            signature="example(x: int) -> str",
+            docstring="Example func.",
+            parameters=[{"name": "x", "annotation": "int", "default": None}],
+            return_annotation="str",
+            file_path="/src/m.py",
+            line_number=5,
+            is_async=False,
+            is_generator=False,
+            decorators=["staticmethod"],
             complexity_score=2,
         )
         cls = ClassCapability(
-            name="Widget", docstring="A widget.", methods=[func],
-            properties=["size"], class_variables=["DEFAULT"], inheritance=["Base"],
-            file_path="/src/m.py", line_number=20, is_abstract=False,
+            name="Widget",
+            docstring="A widget.",
+            methods=[func],
+            properties=["size"],
+            class_variables=["DEFAULT"],
+            inheritance=["Base"],
+            file_path="/src/m.py",
+            line_number=20,
+            is_abstract=False,
             decorators=["dataclass"],
         )
         mod = ModuleCapability(
-            name="widgets", path="/src/widgets", docstring="Widgets module.",
-            functions=[func], classes=[cls], constants={"MAX": 100},
-            imports=["os"], exports=["Widget", "example"], file_count=2,
-            line_count=50, last_modified="2026-01-15 12:00:00",
+            name="widgets",
+            path="/src/widgets",
+            docstring="Widgets module.",
+            functions=[func],
+            classes=[cls],
+            constants={"MAX": 100},
+            imports=["os"],
+            exports=["Widget", "example"],
+            file_count=2,
+            line_count=50,
+            last_modified="2026-01-15 12:00:00",
         )
         return {"widgets": mod}
 
@@ -1062,6 +1172,7 @@ class TestExportCapabilitiesReport:
 # End-to-end: scan_module with complex source
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestScanModuleEndToEnd:
     """End-to-end test scanning a module with diverse Python constructs."""
@@ -1114,7 +1225,8 @@ class TestScanModuleEndToEnd:
         ''')
 
         module_dir = _make_module(
-            tmp_path, "complex_mod",
+            tmp_path,
+            "complex_mod",
             init_content='"""Complex module."""\n',
             files={"logic.py": source},
         )

@@ -18,6 +18,7 @@ logger = get_logger(__name__)
 @dataclass
 class Tool:
     """Represents a tool available to an agent."""
+
     name: str
     func: Callable
     description: str
@@ -29,8 +30,9 @@ class Tool:
         return {
             "name": self.name,
             "description": self.description,
-            "parameters": self.args_schema
+            "parameters": self.args_schema,
         }
+
 
 class ToolRegistry:
     """Registry for managing available tools."""
@@ -48,21 +50,19 @@ class ToolRegistry:
             self._tools[tool.name] = tool
             self.logger.debug(f"Registered tool: {tool.name}")
 
-    def register_function(self, func: Callable, name: str | None = None, description: str | None = None):
+    def register_function(
+        self, func: Callable, name: str | None = None, description: str | None = None
+    ):
         """Register a python function as a tool."""
         tool_name = name or func.__name__
         tool_desc = description or func.__doc__ or "No description provided."
 
         # Simple schema extraction (can be enhanced with Pydantic)
         sig = inspect.signature(func)
-        parameters = {
-            "type": "object",
-            "properties": {},
-            "required": []
-        }
+        parameters = {"type": "object", "properties": {}, "required": []}
 
         for param_name, param in sig.parameters.items():
-            param_type = "string" # Default
+            param_type = "string"  # Default
             if param.annotation is not inspect.Parameter.empty:
                 if param.annotation is int:
                     param_type = "integer"
@@ -77,17 +77,14 @@ class ToolRegistry:
 
             parameters["properties"][param_name] = {
                 "type": param_type,
-                "description": f"Parameter {param_name}"
+                "description": f"Parameter {param_name}",
             }
 
             if param.default == inspect.Parameter.empty:
                 parameters["required"].append(param_name)
 
         tool = Tool(
-            name=tool_name,
-            func=func,
-            description=tool_desc,
-            args_schema=parameters
+            name=tool_name, func=func, description=tool_desc, args_schema=parameters
         )
         self.register(tool)
 
@@ -143,7 +140,9 @@ class ToolRegistry:
             name = f"{prefix}{mcp_tool.name}" if prefix else mcp_tool.name
             description = getattr(mcp_tool, "description", "MCP tool")
             handler = getattr(mcp_tool, "handler", None)
-            input_schema = getattr(mcp_tool, "input_schema", {"type": "object", "properties": {}})
+            input_schema = getattr(
+                mcp_tool, "input_schema", {"type": "object", "properties": {}}
+            )
 
             if handler is None:
                 registry.logger.warning(f"MCP tool '{name}' has no handler, skipping")

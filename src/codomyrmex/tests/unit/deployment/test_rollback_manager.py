@@ -98,7 +98,9 @@ class TestRollbackResult:
         assert r.message == ""
 
     def test_message_stored(self):
-        r = RollbackResult(success=False, from_version="a", to_version="b", message="err")
+        r = RollbackResult(
+            success=False, from_version="a", to_version="b", message="err"
+        )
         assert r.message == "err"
 
     def test_performed_at_set(self):

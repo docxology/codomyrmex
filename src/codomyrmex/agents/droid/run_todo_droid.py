@@ -195,7 +195,7 @@ def run_todos(
         progress = (i - 1) / len(to_process)
         filled = int(bar_width * progress)
         bar = "█" * filled + "░" * (bar_width - filled)
-        print(f"   📊 Progress: [{bar}] {progress*100:.1f}%")
+        print(f"   📊 Progress: [{bar}] {progress * 100:.1f}%")
 
         try:
             # Resolve handler: use explicit path when provided, otherwise infer from task_name
@@ -204,7 +204,7 @@ def run_todos(
                 base = item.task_name.strip()
                 for prefix in ("implement_", "create_", "build_", "generate_", "add_"):
                     if base.startswith(prefix):
-                        base = base[len(prefix):]
+                        base = base[len(prefix) :]
                         break
                 candidate = base.strip().lower()
                 # map some common names
@@ -222,12 +222,25 @@ def run_todos(
                             _ = resolve_handler(try_path)
                             inferred_handler = try_path
                             break
-                        except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
-                            logger.debug("Handler resolution failed for %s via %s: %s", candidate, try_path, e)
+                        except (
+                            ValueError,
+                            RuntimeError,
+                            AttributeError,
+                            OSError,
+                            TypeError,
+                        ) as e:
+                            logger.debug(
+                                "Handler resolution failed for %s via %s: %s",
+                                candidate,
+                                try_path,
+                                e,
+                            )
                             pass
             handler_path = item.handler_path or inferred_handler
             if not handler_path:
-                raise ValueError(f"No handler specified or inferable for task '{item.task_name}'")
+                raise ValueError(
+                    f"No handler specified or inferable for task '{item.task_name}'"
+                )
             handler = resolve_handler(handler_path)
 
             # Execute with enhanced monitoring
@@ -260,9 +273,7 @@ def run_todos(
             task_times.append(task_duration)
             task_status.append("❌")
 
-            print(
-                f"   ❌ Failed in {task_duration:.3f}s ({item.task_name}): {str(e)}"
-            )
+            print(f"   ❌ Failed in {task_duration:.3f}s ({item.task_name}): {str(e)}")
             print(f"   💡 Error: {type(e).__name__}")
 
         # Real-time statistics display
@@ -361,7 +372,9 @@ def _determine_count(args, todo_items: list) -> int | None:
         if args.count == -1:
             return len(todo_items)  # Process all
         elif args.count < -1:
-            print(f"❌ Invalid count: {args.count}. Use positive numbers or -1 for all.")
+            print(
+                f"❌ Invalid count: {args.count}. Use positive numbers or -1 for all."
+            )
             return None
         else:
             return args.count
@@ -381,7 +394,9 @@ def _show_dry_run(count: int, todo_items: list) -> None:
             print(f"     → Outcomes: {item.outcomes}")
 
 
-def _process_todos(controller: DroidController, manager: TodoManager, count: int) -> None:
+def _process_todos(
+    controller: DroidController, manager: TodoManager, count: int
+) -> None:
     """Process TODOs and handle errors."""
     try:
         processed = list(run_todos(controller, manager, count))

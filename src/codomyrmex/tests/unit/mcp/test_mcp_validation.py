@@ -4,7 +4,6 @@ All zero-mock — validates real JSON Schema checking, type coercion,
 and error reporting.
 """
 
-
 from codomyrmex.model_context_protocol.quality.validation import (
     validate_tool_arguments,
 )
@@ -85,6 +84,7 @@ SCHEMA_ARRAY = {
 
 # ── Basic validation ─────────────────────────────────────────────────
 
+
 def test_valid_args_pass():
     """Test functionality: valid args pass."""
     result = validate_tool_arguments(TOOL, {"name": "hello", "count": 5}, SCHEMA_SIMPLE)
@@ -119,6 +119,7 @@ def test_extra_field_ignored():
 
 # ── Type coercion ────────────────────────────────────────────────────
 
+
 def test_coerce_str_to_int():
     """Test functionality: coerce str to int."""
     result = validate_tool_arguments(TOOL, {"name": "x", "count": "42"}, SCHEMA_SIMPLE)
@@ -146,6 +147,7 @@ def test_coerce_str_to_bool_false():
 
 # ── Enum validation ──────────────────────────────────────────────────
 
+
 def test_enum_valid():
     """Test functionality: enum valid."""
     result = validate_tool_arguments(TOOL, {"level": "high"}, SCHEMA_ENUM)
@@ -160,6 +162,7 @@ def test_enum_invalid():
 
 
 # ── Numeric range ────────────────────────────────────────────────────
+
 
 def test_minimum_violated():
     """Test functionality: minimum violated."""
@@ -183,6 +186,7 @@ def test_in_range_passes():
 
 # ── Pattern validation ───────────────────────────────────────────────
 
+
 def test_pattern_match():
     """Test functionality: pattern match."""
     result = validate_tool_arguments(TOOL, {"email": "a@b.com"}, SCHEMA_PATTERN)
@@ -197,6 +201,7 @@ def test_pattern_mismatch():
 
 
 # ── Nested / array schemas ──────────────────────────────────────────
+
 
 def test_nested_schema_valid():
     """Test functionality: nested schema valid."""
@@ -218,6 +223,7 @@ def test_array_schema_valid():
 
 # ── Edge cases ───────────────────────────────────────────────────────
 
+
 def test_no_schema_passes_through():
     """Tool with no inputSchema validation passes everything."""
     result = validate_tool_arguments(TOOL, {"anything": "goes"}, {})
@@ -226,13 +232,19 @@ def test_no_schema_passes_through():
 
 def test_empty_args_with_no_required():
     """Test functionality: empty args with no required."""
-    schema = {"inputSchema": {"type": "object", "properties": {"x": {"type": "string"}}}}
+    schema = {
+        "inputSchema": {"type": "object", "properties": {"x": {"type": "string"}}}
+    }
     result = validate_tool_arguments(TOOL, {}, schema)
     assert result.valid
 
 
 def test_bare_json_schema_detected():
     """Schema that IS a JSON Schema object (not wrapped in inputSchema) is handled."""
-    bare = {"type": "object", "properties": {"name": {"type": "string"}}, "required": ["name"]}
+    bare = {
+        "type": "object",
+        "properties": {"name": {"type": "string"}},
+        "required": ["name"],
+    }
     result = validate_tool_arguments(TOOL, {"name": "ok"}, bare)
     assert result.valid

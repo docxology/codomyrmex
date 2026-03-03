@@ -46,12 +46,16 @@ class InfomaniakIdentityClient(InfomaniakOpenStackBase):
         """Get a specific user by ID."""
         try:
             user = self._conn.identity.get_user(user_id)
-            return {
-                "id": user.id,
-                "name": user.name,
-                "email": getattr(user, "email", None),
-                "domain_id": user.domain_id,
-            } if user else None
+            return (
+                {
+                    "id": user.id,
+                    "name": user.name,
+                    "email": getattr(user, "email", None),
+                    "domain_id": user.domain_id,
+                }
+                if user
+                else None
+            )
         except Exception as e:
             logger.error(f"Failed to get user {user_id}: {e}")
             return None
@@ -83,11 +87,15 @@ class InfomaniakIdentityClient(InfomaniakOpenStackBase):
         try:
             project_id = self._conn.current_project_id
             project = self._conn.identity.get_project(project_id)
-            return {
-                "id": project.id,
-                "name": project.name,
-                "description": project.description,
-            } if project else {}
+            return (
+                {
+                    "id": project.id,
+                    "name": project.name,
+                    "description": project.description,
+                }
+                if project
+                else {}
+            )
         except Exception as e:
             logger.error(f"Failed to get current project: {e}")
             return {}
@@ -121,7 +129,7 @@ class InfomaniakIdentityClient(InfomaniakOpenStackBase):
         description: str | None = None,
         expires_at: str | None = None,
         roles: list[str] | None = None,
-        unrestricted: bool = False
+        unrestricted: bool = False,
     ) -> dict[str, Any] | None:
         """
         Create an application credential.
@@ -145,7 +153,7 @@ class InfomaniakIdentityClient(InfomaniakOpenStackBase):
                 description=description,
                 expires_at=expires_at,
                 roles=roles,
-                unrestricted=unrestricted
+                unrestricted=unrestricted,
             )
 
             logger.info(f"Created application credential: {cred.id}")
@@ -164,15 +172,18 @@ class InfomaniakIdentityClient(InfomaniakOpenStackBase):
         try:
             user_id = self._conn.current_user_id
             cred = self._conn.identity.get_application_credential(
-                user=user_id,
-                application_credential=credential_id
+                user=user_id, application_credential=credential_id
             )
-            return {
-                "id": cred.id,
-                "name": cred.name,
-                "description": getattr(cred, "description", None),
-                "expires_at": str(cred.expires_at) if cred.expires_at else None,
-            } if cred else None
+            return (
+                {
+                    "id": cred.id,
+                    "name": cred.name,
+                    "description": getattr(cred, "description", None),
+                    "expires_at": str(cred.expires_at) if cred.expires_at else None,
+                }
+                if cred
+                else None
+            )
         except Exception as e:
             logger.error(f"Failed to get application credential {credential_id}: {e}")
             return None
@@ -182,13 +193,14 @@ class InfomaniakIdentityClient(InfomaniakOpenStackBase):
         try:
             user_id = self._conn.current_user_id
             self._conn.identity.delete_application_credential(
-                user=user_id,
-                application_credential=credential_id
+                user=user_id, application_credential=credential_id
             )
             logger.info(f"Deleted application credential: {credential_id}")
             return True
         except Exception as e:
-            logger.error(f"Failed to delete application credential {credential_id}: {e}")
+            logger.error(
+                f"Failed to delete application credential {credential_id}: {e}"
+            )
             return False
 
     # =========================================================================
@@ -213,10 +225,9 @@ class InfomaniakIdentityClient(InfomaniakOpenStackBase):
             user_id = self._conn.current_user_id
             project_id = project_id or self._conn.current_project_id
 
-            role_assignments = list(self._conn.identity.role_assignments(
-                user=user_id,
-                project=project_id
-            ))
+            role_assignments = list(
+                self._conn.identity.role_assignments(user=user_id, project=project_id)
+            )
 
             roles = []
             for ra in role_assignments:
@@ -243,15 +254,15 @@ class InfomaniakIdentityClient(InfomaniakOpenStackBase):
                     "access": c.access,
                     "project_id": c.project_id,
                 }
-                for c in creds if c.type == "ec2"
+                for c in creds
+                if c.type == "ec2"
             ]
         except Exception as e:
             logger.error(f"Failed to list EC2 credentials: {e}")
             return []
 
     def create_ec2_credentials(
-        self,
-        project_id: str | None = None
+        self, project_id: str | None = None
     ) -> dict[str, Any] | None:
         """
         Create EC2-style credentials for S3 access.
@@ -270,7 +281,7 @@ class InfomaniakIdentityClient(InfomaniakOpenStackBase):
                 user_id=user_id,
                 type="ec2",
                 project_id=project_id,
-                blob='{"access": "", "secret": ""}'  # Keystone generates these
+                blob='{"access": "", "secret": ""}',  # Keystone generates these
             )
 
             logger.info(f"Created EC2 credentials: {cred.id}")

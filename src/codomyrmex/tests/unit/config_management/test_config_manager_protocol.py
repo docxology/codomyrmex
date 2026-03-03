@@ -15,6 +15,7 @@ from codomyrmex.config_management.core.config_loader import (
 # ConfigurationManager -- file:// protocol tests
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestConfigurationManagerFileProtocol:
     """Tests for file:// source protocol."""
@@ -26,15 +27,14 @@ class TestConfigurationManagerFileProtocol:
         json_file.write_text(json.dumps(config_data))
 
         manager = ConfigurationManager(config_dir=str(tmp_path))
-        config = manager.load_configuration(
-            "proto", sources=[f"file://{json_file}"]
-        )
+        config = manager.load_configuration("proto", sources=[f"file://{json_file}"])
         assert config.data.get("from_file_protocol") is True
 
 
 # ---------------------------------------------------------------------------
 # ConfigurationManager -- schema validation integration
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestConfigurationManagerSchemaValidation:
@@ -87,6 +87,7 @@ class TestConfigurationManagerSchemaValidation:
 # ---------------------------------------------------------------------------
 # ConfigurationManager -- environment-specific loading
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestConfigurationManagerEnvironments:
@@ -141,6 +142,7 @@ class TestConfigurationManagerEnvironments:
 # ConfigurationManager -- validation warnings during load (line 278)
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestConfigurationManagerValidationWarnings:
     """Tests for validation warnings logged during load_configuration."""
@@ -177,6 +179,7 @@ class TestConfigurationManagerValidationWarnings:
 # ---------------------------------------------------------------------------
 # ConfigurationManager -- load_config_with_validation (lines 556-584)
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestLoadConfigWithValidation:
@@ -231,7 +234,9 @@ class TestLoadConfigWithValidation:
 
         manager = ConfigurationManager(config_dir=str(tmp_path))
         # Pass an unusual schema to exercise error handling
-        result = manager.load_config_with_validation(str(config_file), schema={"type": "invalid_garbage_schema"})
+        result = manager.load_config_with_validation(
+            str(config_file), schema={"type": "invalid_garbage_schema"}
+        )
         # Should return None (caught exception) or a Configuration
         assert result is None or isinstance(result, Configuration)
 
@@ -239,6 +244,7 @@ class TestLoadConfigWithValidation:
 # ---------------------------------------------------------------------------
 # ConfigurationManager -- validate_config_schema (lines 648-655)
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestValidateConfigSchema:
@@ -271,7 +277,11 @@ class TestValidateConfigSchema:
         try:
             is_valid, errors = manager.validate_config_schema(
                 {},
-                {"type": "object", "required": ["name"], "properties": {"name": {"type": "string"}}},
+                {
+                    "type": "object",
+                    "required": ["name"],
+                    "properties": {"name": {"type": "string"}},
+                },
             )
             assert isinstance(is_valid, bool)
             assert isinstance(errors, list)
@@ -283,6 +293,7 @@ class TestValidateConfigSchema:
 # ---------------------------------------------------------------------------
 # ConfigurationManager -- get_validation_report (lines 667-703)
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestGetValidationReport:

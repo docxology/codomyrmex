@@ -7,6 +7,7 @@ from typing import Any
 @dataclass
 class Theme:
     """Visual theme configuration."""
+
     name: str = "default"
     primary_color: str = "#2c3e50"
     secondary_color: str = "#95a5a6"
@@ -19,10 +20,16 @@ class Theme:
 
     def __init__(self, name: str = "default", **kwargs: Any) -> None:
         self.name = name
-        self.primary_color = kwargs.get("primary", kwargs.get("primary_color", "#2c3e50"))
+        self.primary_color = kwargs.get(
+            "primary", kwargs.get("primary_color", "#2c3e50")
+        )
         # Map 'accent' to secondary if provided
-        self.secondary_color = kwargs.get("accent", kwargs.get("secondary", kwargs.get("secondary_color", "#95a5a6")))
-        self.background_color = kwargs.get("background", kwargs.get("background_color", "#ecf0f1"))
+        self.secondary_color = kwargs.get(
+            "accent", kwargs.get("secondary", kwargs.get("secondary_color", "#95a5a6"))
+        )
+        self.background_color = kwargs.get(
+            "background", kwargs.get("background_color", "#ecf0f1")
+        )
         self.text_color = kwargs.get("text", kwargs.get("text_color", "#2c3e50"))
         self.font_family = kwargs.get("font_family", "'Segoe UI', sans-serif")
         self.font_size = kwargs.get("font_size", 14)

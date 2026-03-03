@@ -22,7 +22,7 @@ class PipelineError(CICDError):
         message: str,
         pipeline_name: str | None = None,
         stage: str | None = None,
-        **kwargs: Any
+        **kwargs: Any,
     ):
         """Initialize PipelineError.
 
@@ -52,7 +52,7 @@ class BuildError(CICDError):
         build_id: str | None = None,
         build_target: str | None = None,
         exit_code: int | None = None,
-        **kwargs: Any
+        **kwargs: Any,
     ):
         """Initialize BuildError.
 
@@ -85,7 +85,7 @@ class DeploymentError(CICDError):
         deployment_id: str | None = None,
         environment: str | None = None,
         target_version: str | None = None,
-        **kwargs: Any
+        **kwargs: Any,
     ):
         """Initialize DeploymentError.
 
@@ -118,7 +118,7 @@ class ArtifactError(CICDError):
         artifact_name: str | None = None,
         artifact_version: str | None = None,
         registry: str | None = None,
-        **kwargs: Any
+        **kwargs: Any,
     ):
         """Initialize ArtifactError.
 
@@ -146,7 +146,7 @@ class StageError(CICDError):
         message: str,
         stage_name: str | None = None,
         job_name: str | None = None,
-        **kwargs: Any
+        **kwargs: Any,
     ):
         """Initialize StageError.
 
@@ -171,7 +171,7 @@ class RollbackError(CICDError):
         message: str,
         from_version: str | None = None,
         to_version: str | None = None,
-        **kwargs: Any
+        **kwargs: Any,
     ):
         """Initialize RollbackError.
 

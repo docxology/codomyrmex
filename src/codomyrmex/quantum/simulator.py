@@ -16,15 +16,17 @@ class QuantumSimulator:
 
     def _init_state(self, num_qubits: int):
         """Initialize to |00...0> state."""
-        self._state = [0 + 0j] * (2 ** num_qubits)
+        self._state = [0 + 0j] * (2**num_qubits)
         self._state[0] = 1 + 0j
 
-    def _apply_single_gate(self, gate: GateType, target: int, num_qubits: int, param: float | None = None):
+    def _apply_single_gate(
+        self, gate: GateType, target: int, num_qubits: int, param: float | None = None
+    ):
         """Apply single-qubit gate."""
         # Gate matrices
         sqrt2 = math.sqrt(2)
         matrices = {
-            GateType.H: [[1/sqrt2, 1/sqrt2], [1/sqrt2, -1/sqrt2]],
+            GateType.H: [[1 / sqrt2, 1 / sqrt2], [1 / sqrt2, -1 / sqrt2]],
             GateType.X: [[0, 1], [1, 0]],
             GateType.Y: [[0, -1j], [1j, 0]],
             GateType.Z: [[1, 0], [0, -1]],
@@ -35,14 +37,14 @@ class QuantumSimulator:
         if gate in matrices:
             matrix = matrices[gate]
         elif gate == GateType.RX and param is not None:
-            c, s = math.cos(param/2), math.sin(param/2)
-            matrix = [[c, -1j*s], [-1j*s, c]]
+            c, s = math.cos(param / 2), math.sin(param / 2)
+            matrix = [[c, -1j * s], [-1j * s, c]]
         elif gate == GateType.RY and param is not None:
-            c, s = math.cos(param/2), math.sin(param/2)
+            c, s = math.cos(param / 2), math.sin(param / 2)
             matrix = [[c, -s], [s, c]]
         elif gate == GateType.RZ and param is not None:
             e = cmath.exp(1j * param / 2)
-            matrix = [[1/e, 0], [0, e]]
+            matrix = [[1 / e, 0], [0, e]]
         else:
             return
 
@@ -53,8 +55,12 @@ class QuantumSimulator:
             i1 = i | (1 << target)
 
             if bit == 0:
-                new_state[i0] += matrix[0][0] * self._state[i0] + matrix[0][1] * self._state[i1]
-                new_state[i1] += matrix[1][0] * self._state[i0] + matrix[1][1] * self._state[i1]
+                new_state[i0] += (
+                    matrix[0][0] * self._state[i0] + matrix[0][1] * self._state[i1]
+                )
+                new_state[i1] += (
+                    matrix[1][0] * self._state[i0] + matrix[1][1] * self._state[i1]
+                )
 
         self._state = new_state
 
@@ -104,7 +110,7 @@ class QuantumSimulator:
 
             # Measure
             result = self._measure()
-            bitstring = format(result, f'0{circuit.num_qubits}b')
+            bitstring = format(result, f"0{circuit.num_qubits}b")
             counts[bitstring] = counts.get(bitstring, 0) + 1
 
         return counts

@@ -240,9 +240,7 @@ class Population:
 
     def _compute_stats(self) -> GenerationStats:
         """Compute statistics for the current generation."""
-        fitnesses = [
-            ind.fitness for ind in self.individuals if ind.fitness is not None
-        ]
+        fitnesses = [ind.fitness for ind in self.individuals if ind.fitness is not None]
         if not fitnesses:
             return GenerationStats(
                 generation=self.generation,

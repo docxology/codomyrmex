@@ -15,6 +15,7 @@ T = TypeVar("T")
 @dataclass
 class ChannelClosed(Exception):
     """Raised when attempting to operate on a closed channel."""
+
     pass
 
 
@@ -67,10 +68,7 @@ async def select(*channels: Channel, timeout: float | None = None) -> tuple[int,
 
     Returns (channel_index, item) tuple.
     """
-    tasks = [
-        asyncio.create_task(ch.receive(timeout=timeout))
-        for ch in channels
-    ]
+    tasks = [asyncio.create_task(ch.receive(timeout=timeout)) for ch in channels]
     done, pending = await asyncio.wait(tasks, return_when=asyncio.FIRST_COMPLETED)
     for task in pending:
         task.cancel()

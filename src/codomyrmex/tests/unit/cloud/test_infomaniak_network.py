@@ -28,6 +28,7 @@ class TestInfomaniakNetwork:
     def client(self, mock_openstack_connection):
         """Create a network client with a mocked connection."""
         from codomyrmex.cloud.infomaniak.network.client import InfomaniakNetworkClient
+
         return InfomaniakNetworkClient(mock_openstack_connection)
 
     # =====================================================================
@@ -77,7 +78,9 @@ class TestInfomaniakNetwork:
 
     def test_create_network_error_returns_none(self, client, mock_openstack_connection):
         """create_network returns None on API error."""
-        mock_openstack_connection.network.create_network.side_effect = Exception("conflict")
+        mock_openstack_connection.network.create_network.side_effect = Exception(
+            "conflict"
+        )
 
         result = client.create_network(name="bad-net")
 
@@ -88,11 +91,17 @@ class TestInfomaniakNetwork:
         result = client.delete_network("net-del")
 
         assert result is True
-        mock_openstack_connection.network.delete_network.assert_called_once_with("net-del")
+        mock_openstack_connection.network.delete_network.assert_called_once_with(
+            "net-del"
+        )
 
-    def test_delete_network_error_returns_false(self, client, mock_openstack_connection):
+    def test_delete_network_error_returns_false(
+        self, client, mock_openstack_connection
+    ):
         """delete_network returns False on error."""
-        mock_openstack_connection.network.delete_network.side_effect = Exception("not found")
+        mock_openstack_connection.network.delete_network.side_effect = Exception(
+            "not found"
+        )
 
         result = client.delete_network("net-missing")
 
@@ -172,7 +181,9 @@ class TestInfomaniakNetwork:
         result = client.delete_subnet("sub-del")
 
         assert result is True
-        mock_openstack_connection.network.delete_subnet.assert_called_once_with("sub-del")
+        mock_openstack_connection.network.delete_subnet.assert_called_once_with(
+            "sub-del"
+        )
 
     # =====================================================================
     # Router Operations
@@ -193,7 +204,9 @@ class TestInfomaniakNetwork:
         assert result[0]["id"] == "rtr-1"
         assert result[0]["external_gateway"] == {"network_id": "ext-net"}
 
-    def test_create_router_with_external_network(self, client, mock_openstack_connection):
+    def test_create_router_with_external_network(
+        self, client, mock_openstack_connection
+    ):
         """create_router sets external_gateway_info when external_network found."""
         ext_net = Stub()
         ext_net.id = "ext-net-id"
@@ -222,7 +235,9 @@ class TestInfomaniakNetwork:
 
     def test_delete_router_error_returns_false(self, client, mock_openstack_connection):
         """delete_router returns False on API error."""
-        mock_openstack_connection.network.delete_router.side_effect = Exception("in use")
+        mock_openstack_connection.network.delete_router.side_effect = Exception(
+            "in use"
+        )
 
         result = client.delete_router("rtr-busy")
 
@@ -254,7 +269,9 @@ class TestInfomaniakNetwork:
         mock_sg.name = "db-sg"
         mock_openstack_connection.network.create_security_group.return_value = mock_sg
 
-        result = client.create_security_group(name="db-sg", description="Database access")
+        result = client.create_security_group(
+            name="db-sg", description="Database access"
+        )
 
         assert result is not None
         assert result["id"] == "sg-new"
@@ -264,7 +281,9 @@ class TestInfomaniakNetwork:
         """add_security_group_rule returns id, direction, protocol on success."""
         mock_rule = Stub()
         mock_rule.id = "rule-new"
-        mock_openstack_connection.network.create_security_group_rule.return_value = mock_rule
+        mock_openstack_connection.network.create_security_group_rule.return_value = (
+            mock_rule
+        )
 
         result = client.add_security_group_rule(
             security_group_id="sg-1",
@@ -285,7 +304,9 @@ class TestInfomaniakNetwork:
         result = client.delete_security_group("sg-del")
 
         assert result is True
-        mock_openstack_connection.network.delete_security_group.assert_called_once_with("sg-del")
+        mock_openstack_connection.network.delete_security_group.assert_called_once_with(
+            "sg-del"
+        )
 
     # =====================================================================
     # Floating IP Operations
@@ -323,7 +344,9 @@ class TestInfomaniakNetwork:
             floating_network_id="ext-net-id"
         )
 
-    def test_allocate_floating_ip_network_not_found(self, client, mock_openstack_connection):
+    def test_allocate_floating_ip_network_not_found(
+        self, client, mock_openstack_connection
+    ):
         """allocate_floating_ip returns None when external network not found."""
         mock_openstack_connection.network.find_network.return_value = None
 
@@ -332,9 +355,13 @@ class TestInfomaniakNetwork:
         assert result is None
         mock_openstack_connection.network.create_ip.assert_not_called()
 
-    def test_allocate_floating_ip_error_returns_none(self, client, mock_openstack_connection):
+    def test_allocate_floating_ip_error_returns_none(
+        self, client, mock_openstack_connection
+    ):
         """allocate_floating_ip returns None on API error."""
-        mock_openstack_connection.network.find_network.side_effect = Exception("API down")
+        mock_openstack_connection.network.find_network.side_effect = Exception(
+            "API down"
+        )
 
         result = client.allocate_floating_ip("public")
 
@@ -392,7 +419,9 @@ class TestInfomaniakNetwork:
         mock_lb.id = "lb-new"
         mock_lb.name = "api-lb"
         mock_lb.vip_address = "10.0.0.200"
-        mock_openstack_connection.load_balancer.create_load_balancer.return_value = mock_lb
+        mock_openstack_connection.load_balancer.create_load_balancer.return_value = (
+            mock_lb
+        )
 
         result = client.create_loadbalancer(name="api-lb", subnet_id="sub-1")
 
@@ -409,9 +438,13 @@ class TestInfomaniakNetwork:
             "lb-del", cascade=True
         )
 
-    def test_delete_loadbalancer_error_returns_false(self, client, mock_openstack_connection):
+    def test_delete_loadbalancer_error_returns_false(
+        self, client, mock_openstack_connection
+    ):
         """delete_loadbalancer returns False on API error."""
-        mock_openstack_connection.load_balancer.delete_load_balancer.side_effect = Exception("in use")
+        mock_openstack_connection.load_balancer.delete_load_balancer.side_effect = (
+            Exception("in use")
+        )
 
         result = client.delete_loadbalancer("lb-busy")
 
@@ -426,7 +459,9 @@ class TestInfomaniakNetwork:
         mock_listener = Stub()
         mock_listener.id = "lis-new"
         mock_listener.name = "https-listener"
-        mock_openstack_connection.load_balancer.create_listener.return_value = mock_listener
+        mock_openstack_connection.load_balancer.create_listener.return_value = (
+            mock_listener
+        )
 
         result = client.create_listener(
             loadbalancer_id="lb-1",
@@ -444,7 +479,9 @@ class TestInfomaniakNetwork:
         result = client.delete_listener("lis-del")
 
         assert result is True
-        mock_openstack_connection.load_balancer.delete_listener.assert_called_once_with("lis-del")
+        mock_openstack_connection.load_balancer.delete_listener.assert_called_once_with(
+            "lis-del"
+        )
 
     # =====================================================================
     # Pool Operations
@@ -473,7 +510,9 @@ class TestInfomaniakNetwork:
         result = client.delete_pool("pool-del")
 
         assert result is True
-        mock_openstack_connection.load_balancer.delete_pool.assert_called_once_with("pool-del")
+        mock_openstack_connection.load_balancer.delete_pool.assert_called_once_with(
+            "pool-del"
+        )
 
     # =====================================================================
     # Pool Member Operations
@@ -514,7 +553,9 @@ class TestInfomaniakNetwork:
         """create_health_monitor returns id, type, and pool_id."""
         mock_hm = Stub()
         mock_hm.id = "hm-new"
-        mock_openstack_connection.load_balancer.create_health_monitor.return_value = mock_hm
+        mock_openstack_connection.load_balancer.create_health_monitor.return_value = (
+            mock_hm
+        )
 
         result = client.create_health_monitor(
             pool_id="pool-1",
@@ -534,16 +575,20 @@ class TestInfomaniakNetwork:
         result = client.delete_health_monitor("hm-del")
 
         assert result is True
-        mock_openstack_connection.load_balancer.delete_health_monitor.assert_called_once_with("hm-del")
+        mock_openstack_connection.load_balancer.delete_health_monitor.assert_called_once_with(
+            "hm-del"
+        )
 
 
 # =========================================================================
+
 
 class TestInfomaniakNetworkClientExpanded:
     """Tests for InfomaniakNetworkClient untested methods."""
 
     def _make_client(self):
         from codomyrmex.cloud.infomaniak.network import InfomaniakNetworkClient
+
         mock_conn = Stub()
         return InfomaniakNetworkClient(connection=mock_conn), mock_conn
 
@@ -567,7 +612,9 @@ class TestInfomaniakNetworkClientExpanded:
         """Test functionality: add router interface."""
         client, mc = self._make_client()
         assert client.add_router_interface("rt1", "sn1") is True
-        mc.network.add_interface_to_router.assert_called_once_with("rt1", subnet_id="sn1")
+        mc.network.add_interface_to_router.assert_called_once_with(
+            "rt1", subnet_id="sn1"
+        )
 
     def test_delete_router(self):
         """Test functionality: delete router."""
@@ -620,8 +667,15 @@ class TestInfomaniakNetworkClientExpanded:
     def test_list_subnets(self):
         """Test functionality: list subnets."""
         client, mc = self._make_client()
-        sn = Stub(id="sn1", name="s", network_id="n1", cidr="10.0.0.0/24",
-                       ip_version=4, gateway_ip="10.0.0.1", is_dhcp_enabled=True)
+        sn = Stub(
+            id="sn1",
+            name="s",
+            network_id="n1",
+            cidr="10.0.0.0/24",
+            ip_version=4,
+            gateway_ip="10.0.0.1",
+            is_dhcp_enabled=True,
+        )
         mc.network.subnets.return_value = [sn]
         result = client.list_subnets()
         assert len(result) == 1
@@ -630,8 +684,14 @@ class TestInfomaniakNetworkClientExpanded:
     def test_get_subnet(self):
         """Test functionality: get subnet."""
         client, mc = self._make_client()
-        sn = Stub(id="sn1", name="s", network_id="n1", cidr="10.0.0.0/24",
-                       ip_version=4, gateway_ip="10.0.0.1")
+        sn = Stub(
+            id="sn1",
+            name="s",
+            network_id="n1",
+            cidr="10.0.0.0/24",
+            ip_version=4,
+            gateway_ip="10.0.0.1",
+        )
         mc.network.get_subnet.return_value = sn
         result = client.get_subnet("sn1")
         assert result["id"] == "sn1"
@@ -698,8 +758,7 @@ class TestInfomaniakNetworkClientExpanded:
     def test_list_pool_members(self):
         """Test functionality: list pool members."""
         client, mc = self._make_client()
-        m = Stub(id="m1", name="srv1", address="10.0.0.2",
-                      protocol_port=80, weight=1)
+        m = Stub(id="m1", name="srv1", address="10.0.0.2", protocol_port=80, weight=1)
         mc.load_balancer.members.return_value = [m]
         result = client.list_pool_members("p1")
         assert len(result) == 1
@@ -721,8 +780,9 @@ class TestInfomaniakNetworkClientExpanded:
     def test_list_health_monitors(self):
         """Test functionality: list health monitors."""
         client, mc = self._make_client()
-        hm = Stub(id="hm1", name="check", type="HTTP",
-                       delay=5, timeout=3, max_retries=3)
+        hm = Stub(
+            id="hm1", name="check", type="HTTP", delay=5, timeout=3, max_retries=3
+        )
         mc.load_balancer.health_monitors.return_value = [hm]
         result = client.list_health_monitors()
         assert len(result) == 1
@@ -732,7 +792,9 @@ class TestInfomaniakNetworkClientExpanded:
         client, mc = self._make_client()
         hm = Stub(id="hm1")
         mc.load_balancer.create_health_monitor.return_value = hm
-        result = client.create_health_monitor("p1", monitor_type="HTTP", delay=5, timeout=3)
+        result = client.create_health_monitor(
+            "p1", monitor_type="HTTP", delay=5, timeout=3
+        )
         assert result["id"] == "hm1"
         assert result["type"] == "HTTP"
 
@@ -745,7 +807,9 @@ class TestInfomaniakNetworkClientExpanded:
         """Test functionality: remove router interface."""
         client, mc = self._make_client()
         assert client.remove_router_interface("rt1", "sn1") is True
-        mc.network.remove_interface_from_router.assert_called_once_with("rt1", subnet_id="sn1")
+        mc.network.remove_interface_from_router.assert_called_once_with(
+            "rt1", subnet_id="sn1"
+        )
 
     def test_remove_router_interface_error(self):
         """Test functionality: remove router interface error."""

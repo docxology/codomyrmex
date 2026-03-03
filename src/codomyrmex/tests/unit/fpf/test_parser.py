@@ -1,6 +1,5 @@
 """Tests for FPF parser."""
 
-
 import pytest
 
 from codomyrmex.fpf import FPFParser
@@ -172,4 +171,3 @@ def test_extract_table_of_contents_multiple_parts():
     toc = parser.extract_table_of_contents(content)
     assert "A" in toc.get("parts", {})
     assert "B" in toc.get("parts", {})
-

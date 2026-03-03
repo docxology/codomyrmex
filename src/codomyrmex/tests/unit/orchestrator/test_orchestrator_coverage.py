@@ -17,6 +17,7 @@ import pytest
 # Scheduler
 # ===================================================================
 
+
 @pytest.mark.unit
 class TestScheduler:
     """Test the task Scheduler."""
@@ -24,6 +25,7 @@ class TestScheduler:
     def test_schedule_basic(self):
         """Test functionality: schedule basic."""
         from codomyrmex.orchestrator.scheduler.scheduler import Scheduler
+
         scheduler = Scheduler()
         job_id = scheduler.schedule(func=lambda: "hello", name="test")
         assert job_id is not None
@@ -32,6 +34,7 @@ class TestScheduler:
     def test_get_job(self):
         """Test functionality: get job."""
         from codomyrmex.orchestrator.scheduler.scheduler import Scheduler
+
         scheduler = Scheduler()
         job_id = scheduler.schedule(func=lambda: 42, name="test")
         job = scheduler.get_job(job_id)
@@ -42,6 +45,7 @@ class TestScheduler:
         """Test functionality: cancel job."""
         from codomyrmex.orchestrator.scheduler.models import JobStatus
         from codomyrmex.orchestrator.scheduler.scheduler import Scheduler
+
         scheduler = Scheduler()
         job_id = scheduler.schedule(func=lambda: None, name="to_cancel")
         result = scheduler.cancel(job_id)
@@ -52,12 +56,14 @@ class TestScheduler:
     def test_cancel_nonexistent(self):
         """Test functionality: cancel nonexistent."""
         from codomyrmex.orchestrator.scheduler.scheduler import Scheduler
+
         scheduler = Scheduler()
         assert scheduler.cancel("nonexistent") is False
 
     def test_list_jobs(self):
         """Test functionality: list jobs."""
         from codomyrmex.orchestrator.scheduler.scheduler import Scheduler
+
         scheduler = Scheduler()
         scheduler.schedule(func=lambda: None, name="a")
         scheduler.schedule(func=lambda: None, name="b")
@@ -68,6 +74,7 @@ class TestScheduler:
         """Test functionality: list jobs by status."""
         from codomyrmex.orchestrator.scheduler.models import JobStatus
         from codomyrmex.orchestrator.scheduler.scheduler import Scheduler
+
         scheduler = Scheduler()
         j1 = scheduler.schedule(func=lambda: None, name="a")
         scheduler.schedule(func=lambda: None, name="b")
@@ -78,6 +85,7 @@ class TestScheduler:
     def test_run_now(self):
         """Test functionality: run now."""
         from codomyrmex.orchestrator.scheduler.scheduler import Scheduler
+
         scheduler = Scheduler()
         job_id = scheduler.schedule(func=lambda: 42, name="immediate")
         result = scheduler.run_now(job_id)
@@ -86,6 +94,7 @@ class TestScheduler:
     def test_run_now_nonexistent_raises(self):
         """Test functionality: run now nonexistent raises."""
         from codomyrmex.orchestrator.scheduler.scheduler import Scheduler
+
         scheduler = Scheduler()
         with pytest.raises(ValueError):
             scheduler.run_now("nonexistent")
@@ -99,6 +108,7 @@ class TestConvenienceTriggers:
         """Test functionality: every."""
         from codomyrmex.orchestrator.scheduler.scheduler import every
         from codomyrmex.orchestrator.scheduler.triggers import IntervalTrigger
+
         trigger = every(seconds=30)
         assert isinstance(trigger, IntervalTrigger)
 
@@ -106,6 +116,7 @@ class TestConvenienceTriggers:
         """Test functionality: at."""
         from codomyrmex.orchestrator.scheduler.scheduler import at
         from codomyrmex.orchestrator.scheduler.triggers import OnceTrigger
+
         trigger = at("23:59")
         assert isinstance(trigger, OnceTrigger)
 
@@ -113,6 +124,7 @@ class TestConvenienceTriggers:
         """Test functionality: cron."""
         from codomyrmex.orchestrator.scheduler.scheduler import cron
         from codomyrmex.orchestrator.scheduler.triggers import CronTrigger
+
         trigger = cron("*/5 * * * *")
         assert isinstance(trigger, CronTrigger)
 
@@ -121,6 +133,7 @@ class TestConvenienceTriggers:
 # Workflow
 # ===================================================================
 
+
 @pytest.mark.unit
 class TestWorkflow:
     """Test the Workflow DAG execution engine."""
@@ -128,6 +141,7 @@ class TestWorkflow:
     def test_add_task(self):
         """Test functionality: add task."""
         from codomyrmex.orchestrator.workflows.workflow import Workflow
+
         wf = Workflow("test_wf")
         wf.add_task("step1", action=lambda: "done")
         assert len(wf.tasks) >= 1
@@ -135,13 +149,14 @@ class TestWorkflow:
     def test_simple_run(self):
         """Test functionality: simple run."""
         from codomyrmex.orchestrator.workflows.workflow import Workflow
+
         wf = Workflow("test_wf")
         wf.add_task("step1", action=lambda: "done")
         results = asyncio.run(wf.run())
         assert "step1" in results
         # run() may return TaskResult objects or raw values
         r = results["step1"]
-        if hasattr(r, 'success'):
+        if hasattr(r, "success"):
             assert r.success is True
         else:
             assert r == "done"
@@ -149,6 +164,7 @@ class TestWorkflow:
     def test_dependency_chain(self):
         """Test functionality: dependency chain."""
         from codomyrmex.orchestrator.workflows.workflow import Workflow
+
         order = []
         wf = Workflow("test_wf")
         wf.add_task("a", action=lambda: order.append("a") or "a")
@@ -160,6 +176,7 @@ class TestWorkflow:
     def test_validate_detects_missing_dep(self):
         """Test functionality: validate detects missing dep."""
         from codomyrmex.orchestrator.workflows.workflow import Workflow, WorkflowError
+
         wf = Workflow("test_wf")
         wf.add_task("a", action=lambda: None, dependencies=["nonexistent"])
         with pytest.raises(WorkflowError):
@@ -168,6 +185,7 @@ class TestWorkflow:
     def test_validate_detects_cycle(self):
         """Test functionality: validate detects cycle."""
         from codomyrmex.orchestrator.workflows.workflow import CycleError, Workflow
+
         wf = Workflow("test_wf")
         wf.add_task("a", action=lambda: None, dependencies=["b"])
         wf.add_task("b", action=lambda: None, dependencies=["a"])
@@ -177,14 +195,16 @@ class TestWorkflow:
     def test_task_failure(self):
         """Test functionality: task failure."""
         from codomyrmex.orchestrator.workflows.workflow import Workflow
+
         def failing():
             raise RuntimeError("boom")
+
         wf = Workflow("test_wf", fail_fast=False)
         wf.add_task("fail", action=failing)
         results = asyncio.run(wf.run())
         # Failed tasks may return None, TaskResult, or error
         r = results.get("fail")
-        if hasattr(r, 'success'):
+        if hasattr(r, "success"):
             assert r.success is False
         else:
             # Failed tasks return None
@@ -193,6 +213,7 @@ class TestWorkflow:
     def test_get_summary(self):
         """Test functionality: get summary."""
         from codomyrmex.orchestrator.workflows.workflow import Workflow
+
         wf = Workflow("test_wf")
         wf.add_task("step1", action=lambda: "ok")
         asyncio.run(wf.run())
@@ -202,6 +223,7 @@ class TestWorkflow:
     def test_get_task_result(self):
         """Test functionality: get task result."""
         from codomyrmex.orchestrator.workflows.workflow import Workflow
+
         wf = Workflow("test_wf")
         wf.add_task("step1", action=lambda: 42)
         asyncio.run(wf.run())
@@ -213,6 +235,7 @@ class TestWorkflow:
 # RetryPolicy
 # ===================================================================
 
+
 @pytest.mark.unit
 class TestRetryPolicy:
     """Test RetryPolicy from retry_policy module."""
@@ -220,6 +243,7 @@ class TestRetryPolicy:
     def test_compute_delay_exponential(self):
         """Test functionality: compute delay exponential."""
         from codomyrmex.orchestrator.resilience.retry_policy import RetryPolicy
+
         policy = RetryPolicy(base_delay=1.0, exponential_base=2.0, jitter=False)
         d1 = policy.compute_delay(1)
         d2 = policy.compute_delay(2)
@@ -228,7 +252,10 @@ class TestRetryPolicy:
     def test_compute_delay_capped(self):
         """Test functionality: compute delay capped."""
         from codomyrmex.orchestrator.resilience.retry_policy import RetryPolicy
-        policy = RetryPolicy(base_delay=1.0, max_delay=10.0, exponential_base=2.0, jitter=False)
+
+        policy = RetryPolicy(
+            base_delay=1.0, max_delay=10.0, exponential_base=2.0, jitter=False
+        )
         delay = policy.compute_delay(100)
         assert delay <= 10.0
 
@@ -238,6 +265,7 @@ class TestRetryPolicy:
             RetryOutcome,
             RetryPolicy,
         )
+
         policy = RetryPolicy(max_attempts=3)
         result = policy.should_retry(ValueError("test"), attempt=1)
         assert result == RetryOutcome.RETRY
@@ -248,6 +276,7 @@ class TestRetryPolicy:
             RetryOutcome,
             RetryPolicy,
         )
+
         policy = RetryPolicy(max_attempts=3)
         result = policy.should_retry(ValueError("test"), attempt=3)
         assert result in (RetryOutcome.ABORT, RetryOutcome.DEAD_LETTER)
@@ -263,6 +292,7 @@ class TestPipelineRetryExecutor:
             PipelineRetryExecutor,
             RetryOutcome,
         )
+
         executor = PipelineRetryExecutor()
         result = executor.execute("test_step", lambda: 42)
         assert result.outcome == RetryOutcome.SUCCESS
@@ -275,13 +305,16 @@ class TestPipelineRetryExecutor:
             RetryOutcome,
             RetryPolicy,
         )
+
         call_count = 0
+
         def flaky():
             nonlocal call_count
             call_count += 1
             if call_count < 3:
                 raise ValueError("transient")
             return "ok"
+
         executor = PipelineRetryExecutor(
             default_policy=RetryPolicy(max_attempts=5, base_delay=0.01, jitter=False)
         )
@@ -296,11 +329,14 @@ class TestPipelineRetryExecutor:
             RetryOutcome,
             RetryPolicy,
         )
+
         executor = PipelineRetryExecutor(
             default_policy=RetryPolicy(max_attempts=2, base_delay=0.01, jitter=False)
         )
+
         def always_fail():
             raise ValueError("permanent")
+
         result = executor.execute("fail_step", always_fail)
         assert result.outcome in (RetryOutcome.ABORT, RetryOutcome.DEAD_LETTER)
 
@@ -310,6 +346,7 @@ class TestPipelineRetryExecutor:
             PipelineRetryExecutor,
             RetryPolicy,
         )
+
         executor = PipelineRetryExecutor()
         custom = RetryPolicy(max_attempts=10)
         executor.set_policy("special_step", custom)
@@ -321,6 +358,7 @@ class TestPipelineRetryExecutor:
 # with_retry Decorator
 # ===================================================================
 
+
 @pytest.mark.unit
 class TestWithRetryDecorator:
     """Test the @with_retry decorator."""
@@ -328,30 +366,37 @@ class TestWithRetryDecorator:
     def test_successful_function(self):
         """Test functionality: successful function."""
         from codomyrmex.orchestrator.resilience.retry_policy import with_retry
+
         @with_retry(max_attempts=3)
         def succeed():
             return 42
+
         assert succeed() == 42
 
     def test_retries_on_failure(self):
         """Test functionality: retries on failure."""
         from codomyrmex.orchestrator.resilience.retry_policy import with_retry
+
         counter = {"n": 0}
+
         @with_retry(max_attempts=5, base_delay=0.01)
         def flaky():
             counter["n"] += 1
             if counter["n"] < 3:
                 raise ValueError("oops")
             return "ok"
+
         assert flaky() == "ok"
         assert counter["n"] == 3
 
     def test_exhausts_retries(self):
         """Test functionality: exhausts retries."""
         from codomyrmex.orchestrator.resilience.retry_policy import with_retry
+
         @with_retry(max_attempts=2, base_delay=0.01)
         def always_fail():
             raise RuntimeError("nope")
+
         with pytest.raises(RuntimeError):
             always_fail()
 
@@ -360,6 +405,7 @@ class TestWithRetryDecorator:
 # Orchestrator Config
 # ===================================================================
 
+
 @pytest.mark.unit
 class TestOrchestratorConfig:
     """Test orchestrator configuration loading."""
@@ -367,6 +413,7 @@ class TestOrchestratorConfig:
     def test_load_config_empty_dir(self, tmp_path):
         """Test functionality: load config empty dir."""
         from codomyrmex.orchestrator.config import load_config
+
         config = load_config(tmp_path)
         assert isinstance(config, dict)
         assert "skip" in config
@@ -374,7 +421,10 @@ class TestOrchestratorConfig:
     def test_get_script_config(self, tmp_path):
         """Test functionality: get script config."""
         from codomyrmex.orchestrator.config import get_script_config
+
         script = tmp_path / "test.py"
         script.touch()
-        config = get_script_config(script, tmp_path, {"skip": [], "timeout_override": {}, "scripts": {}})
+        config = get_script_config(
+            script, tmp_path, {"skip": [], "timeout_override": {}, "scripts": {}}
+        )
         assert isinstance(config, dict)

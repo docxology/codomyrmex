@@ -128,10 +128,7 @@ class GraphRetriever:
                     paths.append(path)
 
         # Compute confidence based on match quality
-        confidence = (
-            sum(le.score for le in linked) / len(linked)
-            if linked else 0.0
-        )
+        confidence = sum(le.score for le in linked) / len(linked) if linked else 0.0
 
         context = GraphContext(
             query=query,
@@ -172,14 +169,17 @@ class GraphRetriever:
                     seen.add(entity.id)
                     # Score: exact match > partial match
                     score = (
-                        1.0 if term.lower() == entity.name.lower()
+                        1.0
+                        if term.lower() == entity.name.lower()
                         else 0.5 + 0.5 * (len(term) / max(len(entity.name), 1))
                     )
-                    linked.append(LinkedEntity(
-                        entity=entity,
-                        matched_term=term,
-                        score=min(score, 1.0),
-                    ))
+                    linked.append(
+                        LinkedEntity(
+                            entity=entity,
+                            matched_term=term,
+                            score=min(score, 1.0),
+                        )
+                    )
 
             if len(linked) >= limit:
                 break
@@ -195,15 +195,41 @@ class GraphRetriever:
         Splits on whitespace, filters short/stop words, returns
         individual terms plus any 2-gram phrases.
         """
-        stop_words = {"the", "a", "an", "is", "are", "was", "were",
-                      "in", "on", "at", "to", "for", "of", "and", "or",
-                      "but", "not", "with", "from", "by", "as", "it",
-                      "this", "that", "how", "what", "do", "i"}
+        stop_words = {
+            "the",
+            "a",
+            "an",
+            "is",
+            "are",
+            "was",
+            "were",
+            "in",
+            "on",
+            "at",
+            "to",
+            "for",
+            "of",
+            "and",
+            "or",
+            "but",
+            "not",
+            "with",
+            "from",
+            "by",
+            "as",
+            "it",
+            "this",
+            "that",
+            "how",
+            "what",
+            "do",
+            "i",
+        }
         words = [w.strip(".,!?;:\"'()[]{}") for w in query.lower().split()]
         terms = [w for w in words if len(w) > 2 and w not in stop_words]
 
         # Add bigrams for better matching
-        bigrams = [f"{terms[i]} {terms[i+1]}" for i in range(len(terms) - 1)]
+        bigrams = [f"{terms[i]} {terms[i + 1]}" for i in range(len(terms) - 1)]
 
         return terms + bigrams
 

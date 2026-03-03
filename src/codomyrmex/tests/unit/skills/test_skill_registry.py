@@ -33,19 +33,33 @@ def populated_registry(temp_dirs):
 
     # Create test skills
     skills = [
-        ("backend", "api-design", {
-            "description": "API design patterns",
-            "patterns": [{"name": "REST", "description": "RESTful API design"}],
-        }),
-        ("backend", "database", {
-            "description": "Database management patterns",
-            "patterns": [{"name": "ORM", "description": "Object relational mapping"}],
-            "anti_patterns": [{"name": "N+1", "why_bad": "Performance"}],
-        }),
-        ("frontend", "react", {
-            "description": "React development patterns",
-            "patterns": [{"name": "Hooks", "description": "React hooks"}],
-        }),
+        (
+            "backend",
+            "api-design",
+            {
+                "description": "API design patterns",
+                "patterns": [{"name": "REST", "description": "RESTful API design"}],
+            },
+        ),
+        (
+            "backend",
+            "database",
+            {
+                "description": "Database management patterns",
+                "patterns": [
+                    {"name": "ORM", "description": "Object relational mapping"}
+                ],
+                "anti_patterns": [{"name": "N+1", "why_bad": "Performance"}],
+            },
+        ),
+        (
+            "frontend",
+            "react",
+            {
+                "description": "React development patterns",
+                "patterns": [{"name": "Hooks", "description": "React hooks"}],
+            },
+        ),
     ]
 
     for category, name, data in skills:

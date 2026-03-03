@@ -49,6 +49,7 @@ class TestProjectOrchestration:
 
         try:
             from codomyrmex import logistics
+
             assert logistics is not None
         except ImportError as e:
             pytest.fail(f"Failed to import logistics: {e}")
@@ -61,32 +62,74 @@ class TestProjectOrchestration:
 
     def test_project_orchestration_init_file(self, code_dir):
         """Test that project_orchestration has __init__.py."""
-        init_path = code_dir / "codomyrmex" / "logistics" / "orchestration" / "project" / "__init__.py"
+        init_path = (
+            code_dir
+            / "codomyrmex"
+            / "logistics"
+            / "orchestration"
+            / "project"
+            / "__init__.py"
+        )
         assert init_path.exists()
 
     def test_workflow_manager_module_exists(self, code_dir):
         """Test that workflow_manager module exists."""
-        wm_path = code_dir / "codomyrmex" / "logistics" / "orchestration" / "project" / "workflow_manager.py"
+        wm_path = (
+            code_dir
+            / "codomyrmex"
+            / "logistics"
+            / "orchestration"
+            / "project"
+            / "workflow_manager.py"
+        )
         assert wm_path.exists()
 
     def test_task_orchestrator_module_exists(self, code_dir):
         """Test that task_orchestrator module exists."""
-        to_path = code_dir / "codomyrmex" / "logistics" / "orchestration" / "project" / "task_orchestrator.py"
+        to_path = (
+            code_dir
+            / "codomyrmex"
+            / "logistics"
+            / "orchestration"
+            / "project"
+            / "task_orchestrator.py"
+        )
         assert to_path.exists()
 
     def test_project_manager_module_exists(self, code_dir):
         """Test that project_manager module exists."""
-        pm_path = code_dir / "codomyrmex" / "logistics" / "orchestration" / "project" / "project_manager.py"
+        pm_path = (
+            code_dir
+            / "codomyrmex"
+            / "logistics"
+            / "orchestration"
+            / "project"
+            / "project_manager.py"
+        )
         assert pm_path.exists()
 
     def test_resource_manager_module_exists(self, code_dir):
         """Test that resource_manager module exists."""
-        rm_path = code_dir / "codomyrmex" / "logistics" / "orchestration" / "project" / "resource_manager.py"
+        rm_path = (
+            code_dir
+            / "codomyrmex"
+            / "logistics"
+            / "orchestration"
+            / "project"
+            / "resource_manager.py"
+        )
         assert rm_path.exists()
 
     def test_orchestration_engine_module_exists(self, code_dir):
         """Test that orchestration_engine module exists."""
-        oe_path = code_dir / "codomyrmex" / "logistics" / "orchestration" / "project" / "orchestration_engine.py"
+        oe_path = (
+            code_dir
+            / "codomyrmex"
+            / "logistics"
+            / "orchestration"
+            / "project"
+            / "orchestration_engine.py"
+        )
         assert oe_path.exists()
 
     def test_workflow_manager_import(self, code_dir):
@@ -169,17 +212,38 @@ class TestProjectOrchestration:
 
     def test_agents_md_exists(self, code_dir):
         """Test that AGENTS.md exists for project_orchestration module."""
-        agents_path = code_dir / "codomyrmex" / "logistics" / "orchestration" / "project" / "AGENTS.md"
+        agents_path = (
+            code_dir
+            / "codomyrmex"
+            / "logistics"
+            / "orchestration"
+            / "project"
+            / "AGENTS.md"
+        )
         assert agents_path.exists()
 
     def test_readme_exists(self, code_dir):
         """Test that README.md exists for project_orchestration module."""
-        readme_path = code_dir / "codomyrmex" / "logistics" / "orchestration" / "project" / "README.md"
+        readme_path = (
+            code_dir
+            / "codomyrmex"
+            / "logistics"
+            / "orchestration"
+            / "project"
+            / "README.md"
+        )
         assert readme_path.exists()
 
     def test_templates_directory_exists(self, code_dir):
         """Test that templates directory exists for project_orchestration module."""
-        templates_path = code_dir / "codomyrmex" / "logistics" / "orchestration" / "project" / "templates"
+        templates_path = (
+            code_dir
+            / "codomyrmex"
+            / "logistics"
+            / "orchestration"
+            / "project"
+            / "templates"
+        )
         assert templates_path.exists()
         assert templates_path.is_dir()
 
@@ -193,7 +257,12 @@ class TestWorkflowDAG:
         # Create a simple DAG
         tasks = [
             {"name": "task1", "module": "test", "action": "run", "dependencies": []},
-            {"name": "task2", "module": "test", "action": "run", "dependencies": ["task1"]},
+            {
+                "name": "task2",
+                "module": "test",
+                "action": "run",
+                "dependencies": ["task1"],
+            },
         ]
 
         dag = WorkflowDAG(tasks)
@@ -207,9 +276,24 @@ class TestWorkflowDAG:
         """Test DAG validation with valid DAG."""
         tasks = [
             {"name": "task1", "module": "test", "action": "run", "dependencies": []},
-            {"name": "task2", "module": "test", "action": "run", "dependencies": ["task1"]},
-            {"name": "task3", "module": "test", "action": "run", "dependencies": ["task1"]},
-            {"name": "task4", "module": "test", "action": "run", "dependencies": ["task2", "task3"]},
+            {
+                "name": "task2",
+                "module": "test",
+                "action": "run",
+                "dependencies": ["task1"],
+            },
+            {
+                "name": "task3",
+                "module": "test",
+                "action": "run",
+                "dependencies": ["task1"],
+            },
+            {
+                "name": "task4",
+                "module": "test",
+                "action": "run",
+                "dependencies": ["task2", "task3"],
+            },
         ]
 
         dag = WorkflowDAG(tasks)
@@ -221,9 +305,24 @@ class TestWorkflowDAG:
     def test_dag_validation_cycle(self):
         """Test DAG validation with cycle detection."""
         tasks = [
-            {"name": "task1", "module": "test", "action": "run", "dependencies": ["task3"]},
-            {"name": "task2", "module": "test", "action": "run", "dependencies": ["task1"]},
-            {"name": "task3", "module": "test", "action": "run", "dependencies": ["task2"]},
+            {
+                "name": "task1",
+                "module": "test",
+                "action": "run",
+                "dependencies": ["task3"],
+            },
+            {
+                "name": "task2",
+                "module": "test",
+                "action": "run",
+                "dependencies": ["task1"],
+            },
+            {
+                "name": "task3",
+                "module": "test",
+                "action": "run",
+                "dependencies": ["task2"],
+            },
         ]
 
         dag = WorkflowDAG(tasks)
@@ -237,9 +336,24 @@ class TestWorkflowDAG:
         """Test getting execution order from DAG."""
         tasks = [
             {"name": "task1", "module": "test", "action": "run", "dependencies": []},
-            {"name": "task2", "module": "test", "action": "run", "dependencies": ["task1"]},
-            {"name": "task3", "module": "test", "action": "run", "dependencies": ["task1"]},
-            {"name": "task4", "module": "test", "action": "run", "dependencies": ["task2", "task3"]},
+            {
+                "name": "task2",
+                "module": "test",
+                "action": "run",
+                "dependencies": ["task1"],
+            },
+            {
+                "name": "task3",
+                "module": "test",
+                "action": "run",
+                "dependencies": ["task1"],
+            },
+            {
+                "name": "task4",
+                "module": "test",
+                "action": "run",
+                "dependencies": ["task2", "task3"],
+            },
         ]
 
         dag = WorkflowDAG(tasks)
@@ -261,8 +375,18 @@ class TestWorkflowDAG:
         """Test dependency query methods."""
         tasks = [
             {"name": "task1", "module": "test", "action": "run", "dependencies": []},
-            {"name": "task2", "module": "test", "action": "run", "dependencies": ["task1"]},
-            {"name": "task3", "module": "test", "action": "run", "dependencies": ["task2"]},
+            {
+                "name": "task2",
+                "module": "test",
+                "action": "run",
+                "dependencies": ["task1"],
+            },
+            {
+                "name": "task3",
+                "module": "test",
+                "action": "run",
+                "dependencies": ["task2"],
+            },
         ]
 
         dag = WorkflowDAG(tasks)
@@ -279,7 +403,12 @@ class TestWorkflowDAG:
         """Test DAG visualization generation."""
         tasks = [
             {"name": "task1", "module": "test", "action": "run", "dependencies": []},
-            {"name": "task2", "module": "test", "action": "run", "dependencies": ["task1"]},
+            {
+                "name": "task2",
+                "module": "test",
+                "action": "run",
+                "dependencies": ["task1"],
+            },
         ]
 
         dag = WorkflowDAG(tasks)
@@ -375,7 +504,12 @@ class TestWorkflowManagerEnhancements:
 
         tasks = [
             {"name": "task1", "module": "test", "action": "run", "dependencies": []},
-            {"name": "task2", "module": "test", "action": "run", "dependencies": ["task1"]},
+            {
+                "name": "task2",
+                "module": "test",
+                "action": "run",
+                "dependencies": ["task1"],
+            },
         ]
 
         dag = manager.create_workflow_dag(tasks)
@@ -410,8 +544,18 @@ class TestWorkflowManagerEnhancements:
 
         tasks = [
             {"name": "task1", "module": "test", "action": "run", "dependencies": []},
-            {"name": "task2", "module": "test", "action": "run", "dependencies": ["task1"]},
-            {"name": "task3", "module": "test", "action": "run", "dependencies": ["task1"]},
+            {
+                "name": "task2",
+                "module": "test",
+                "action": "run",
+                "dependencies": ["task1"],
+            },
+            {
+                "name": "task3",
+                "module": "test",
+                "action": "run",
+                "dependencies": ["task1"],
+            },
         ]
 
         execution_order = manager.get_workflow_execution_order(tasks)
@@ -425,11 +569,9 @@ class TestWorkflowManagerEnhancements:
         manager = _WorkflowManagerDirect()
 
         workflow = {
-            "tasks": [
-                {"name": "task1", "module": "test", "action": "run"}
-            ],
+            "tasks": [{"name": "task1", "module": "test", "action": "run"}],
             "dependencies": {},
-            "max_parallel": 2
+            "max_parallel": 2,
         }
 
         # Use real ParallelExecutor
@@ -448,11 +590,36 @@ class TestWorkflowManagerEnhancements:
 
         # Create complex workflow with dependencies
         tasks = [
-            {"name": "data_ingest", "module": "data", "action": "ingest", "dependencies": []},
-            {"name": "data_validate", "module": "data", "action": "validate", "dependencies": ["data_ingest"]},
-            {"name": "analysis", "module": "analysis", "action": "run", "dependencies": ["data_validate"]},
-            {"name": "report", "module": "reporting", "action": "generate", "dependencies": ["analysis"]},
-            {"name": "notify", "module": "notification", "action": "send", "dependencies": ["report"]},
+            {
+                "name": "data_ingest",
+                "module": "data",
+                "action": "ingest",
+                "dependencies": [],
+            },
+            {
+                "name": "data_validate",
+                "module": "data",
+                "action": "validate",
+                "dependencies": ["data_ingest"],
+            },
+            {
+                "name": "analysis",
+                "module": "analysis",
+                "action": "run",
+                "dependencies": ["data_validate"],
+            },
+            {
+                "name": "report",
+                "module": "reporting",
+                "action": "generate",
+                "dependencies": ["analysis"],
+            },
+            {
+                "name": "notify",
+                "module": "notification",
+                "action": "send",
+                "dependencies": ["report"],
+            },
         ]
 
         # Create DAG through manager
@@ -522,9 +689,9 @@ class TestWorkflowManagerLocation:
                     "parameters": {},
                     "dependencies": [],
                     "timeout": 60,
-                    "max_retries": 3
+                    "max_retries": 3,
                 }
-            ]
+            ],
         }
 
         workflow_file = production_location / "test_workflow.json"

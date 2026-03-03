@@ -86,7 +86,9 @@ class TestDiscoveryReport:
         tool = DiscoveredTool(
             name="t1", description="d", module_path="m", callable_name="c"
         )
-        fail = FailedModule(module="bad_mod", error="ImportError", error_type="ImportError")
+        fail = FailedModule(
+            module="bad_mod", error="ImportError", error_type="ImportError"
+        )
         report = DiscoveryReport(
             tools=[tool],
             failed_modules=[fail],
@@ -149,15 +151,24 @@ class TestMCPDiscoveryEngine:
         """Test functionality: list_tools filters by tag."""
         engine = MCPDiscovery()
         tool_a = DiscoveredTool(
-            name="a", description="A", module_path="m", callable_name="a",
+            name="a",
+            description="A",
+            module_path="m",
+            callable_name="a",
             tags=["io"],
         )
         tool_b = DiscoveredTool(
-            name="b", description="B", module_path="m", callable_name="b",
+            name="b",
+            description="B",
+            module_path="m",
+            callable_name="b",
             tags=["math"],
         )
         tool_c = DiscoveredTool(
-            name="c", description="C", module_path="m", callable_name="c",
+            name="c",
+            description="C",
+            module_path="m",
+            callable_name="c",
             tags=["io", "math"],
         )
         engine.register_tool(tool_a)
@@ -177,9 +188,14 @@ class TestMCPDiscoveryEngine:
         """Test functionality: list_tools without tag returns everything."""
         engine = MCPDiscovery()
         for i in range(5):
-            engine.register_tool(DiscoveredTool(
-                name=f"t{i}", description=f"T{i}", module_path="m", callable_name=f"t{i}",
-            ))
+            engine.register_tool(
+                DiscoveredTool(
+                    name=f"t{i}",
+                    description=f"T{i}",
+                    module_path="m",
+                    callable_name=f"t{i}",
+                )
+            )
         assert len(engine.list_tools()) == 5
 
     def test_scan_module_with_decorated_functions(self):
@@ -241,7 +257,10 @@ class TestMCPDiscoveryEngine:
         tools = engine._scan_module(mod)
         assert len(tools) == 1
         assert tools[0].available is False
-        assert "this_package_definitely_does_not_exist_xyzzy" in tools[0].unavailable_reason
+        assert (
+            "this_package_definitely_does_not_exist_xyzzy"
+            in tools[0].unavailable_reason
+        )
 
     def test_scan_single_module_incremental(self):
         """Test functionality: scan_module (by name) for a real codomyrmex module."""

@@ -24,6 +24,7 @@ from codomyrmex.api.rate_limiting import (
 # RateLimitResult
 # ---------------------------------------------------------------------------
 
+
 class TestRateLimitResult:
     """Tests for the RateLimitResult dataclass."""
 
@@ -64,6 +65,7 @@ class TestRateLimitResult:
 # ---------------------------------------------------------------------------
 # FixedWindowLimiter
 # ---------------------------------------------------------------------------
+
 
 class TestFixedWindowLimiter:
     """Tests for the FixedWindowLimiter."""
@@ -134,6 +136,7 @@ class TestFixedWindowLimiter:
 # SlidingWindowLimiter
 # ---------------------------------------------------------------------------
 
+
 class TestSlidingWindowLimiter:
     """Tests for the SlidingWindowLimiter."""
 
@@ -175,6 +178,7 @@ class TestSlidingWindowLimiter:
 # ---------------------------------------------------------------------------
 # TokenBucketLimiter
 # ---------------------------------------------------------------------------
+
 
 class TestTokenBucketLimiter:
     """Tests for the TokenBucketLimiter."""
@@ -228,6 +232,7 @@ class TestTokenBucketLimiter:
 # CompositeRateLimiter
 # ---------------------------------------------------------------------------
 
+
 class TestCompositeRateLimiter:
     """Tests for the CompositeRateLimiter."""
 
@@ -279,6 +284,7 @@ class TestCompositeRateLimiter:
 # RateLimiterMiddleware
 # ---------------------------------------------------------------------------
 
+
 class TestRateLimiterMiddleware:
     """Tests for the RateLimiterMiddleware wrapper."""
 
@@ -313,6 +319,7 @@ class TestRateLimiterMiddleware:
 # ---------------------------------------------------------------------------
 # create_rate_limiter factory
 # ---------------------------------------------------------------------------
+
 
 class TestCreateRateLimiter:
     """Tests for the create_rate_limiter factory function."""

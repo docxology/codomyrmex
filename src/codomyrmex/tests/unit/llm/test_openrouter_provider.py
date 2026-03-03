@@ -36,8 +36,7 @@ class TestOpenRouterProviderInit:
     def test_provider_initialization_preserves_custom_base_url(self):
         """Test that custom base URL is preserved if provided."""
         config = ProviderConfig(
-            api_key="test-key",
-            base_url="https://custom.api.com/v1"
+            api_key="test-key", base_url="https://custom.api.com/v1"
         )
         provider = OpenRouterProvider(config)
 
@@ -93,7 +92,9 @@ class TestOpenRouterProviderModels:
                 providers_found.add("openrouter")
 
         # Should have at least 2 different providers
-        assert len(providers_found) >= 2, f"Expected models from multiple providers, got: {providers_found}"
+        assert len(providers_found) >= 2, (
+            f"Expected models from multiple providers, got: {providers_found}"
+        )
 
     def test_default_model_is_free(self):
         """Test that default model is a free model."""
@@ -111,20 +112,13 @@ class TestOpenRouterProviderFactory:
 
     def test_get_provider_returns_openrouter(self):
         """Test that get_provider returns OpenRouterProvider for OPENROUTER type."""
-        provider = get_provider(
-            ProviderType.OPENROUTER,
-            api_key="test-key"
-        )
+        provider = get_provider(ProviderType.OPENROUTER, api_key="test-key")
 
         assert isinstance(provider, OpenRouterProvider)
 
     def test_get_provider_with_config(self):
         """Test that get_provider accepts ProviderConfig."""
-        config = ProviderConfig(
-            api_key="test-key",
-            timeout=120.0,
-            max_retries=5
-        )
+        config = ProviderConfig(api_key="test-key", timeout=120.0, max_retries=5)
         provider = get_provider(ProviderType.OPENROUTER, config=config)
 
         assert provider.config.timeout == 120.0
@@ -205,8 +199,7 @@ class TestOpenRouterProviderModel:
     def test_get_model_uses_config_default_model(self):
         """Test that get_model uses config default_model if set."""
         config = ProviderConfig(
-            api_key="test-key",
-            default_model="mistralai/mistral-7b-instruct:free"
+            api_key="test-key", default_model="mistralai/mistral-7b-instruct:free"
         )
         provider = OpenRouterProvider(config)
 

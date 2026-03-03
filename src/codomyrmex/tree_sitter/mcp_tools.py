@@ -173,19 +173,23 @@ def extract_symbols(
             if node_type in ("function_definition", "function_declaration"):
                 name_node = node.child_by_field_name("name")
                 name = name_node.text.decode("utf-8") if name_node else "<unknown>"
-                functions.append({
-                    "name": name,
-                    "line": node.start_point[0] + 1,
-                    "col": node.start_point[1],
-                })
+                functions.append(
+                    {
+                        "name": name,
+                        "line": node.start_point[0] + 1,
+                        "col": node.start_point[1],
+                    }
+                )
             elif node_type in ("class_definition", "class_declaration"):
                 name_node = node.child_by_field_name("name")
                 name = name_node.text.decode("utf-8") if name_node else "<unknown>"
-                classes.append({
-                    "name": name,
-                    "line": node.start_point[0] + 1,
-                    "col": node.start_point[1],
-                })
+                classes.append(
+                    {
+                        "name": name,
+                        "line": node.start_point[0] + 1,
+                        "col": node.start_point[1],
+                    }
+                )
 
         return {
             "status": "success",

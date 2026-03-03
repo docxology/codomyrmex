@@ -72,8 +72,10 @@ def detect_lsb_steganography(image_path: str) -> DetectionResult:
     total_lsbs = len(lsb_values)
     if total_lsbs == 0:
         return DetectionResult(
-            detected=False, confidence=0.0,
-            method="lsb_analysis", details={"error": "No pixel data"},
+            detected=False,
+            confidence=0.0,
+            method="lsb_analysis",
+            details={"error": "No pixel data"},
         )
 
     # Test 1: LSB distribution uniformity
@@ -95,8 +97,7 @@ def detect_lsb_steganography(image_path: str) -> DetectionResult:
 
     if expected_pairs > 0:
         chi2_pairs = sum(
-            (count - expected_pairs) ** 2 / expected_pairs
-            for count in pair_counts
+            (count - expected_pairs) ** 2 / expected_pairs for count in pair_counts
         )
         # Normalize chi-squared by degrees of freedom (3)
         chi2_normalized = chi2_pairs / 3.0
@@ -165,11 +166,15 @@ def detect_lsb_steganography(image_path: str) -> DetectionResult:
 
     logger.debug(
         "LSB detection: detected=%s, confidence=%.2f, bias=%.4f",
-        detected, confidence, lsb_bias,
+        detected,
+        confidence,
+        lsb_bias,
     )
     return DetectionResult(
-        detected=detected, confidence=confidence,
-        method="lsb_analysis", details=details,
+        detected=detected,
+        confidence=confidence,
+        method="lsb_analysis",
+        details=details,
     )
 
 
@@ -192,7 +197,8 @@ def analyze_statistical_anomalies(data: bytes) -> DetectionResult:
     """
     if not data:
         return DetectionResult(
-            detected=False, confidence=0.0,
+            detected=False,
+            confidence=0.0,
             method="statistical_anomaly",
             details={"error": "Empty data"},
         )
@@ -266,9 +272,13 @@ def analyze_statistical_anomalies(data: bytes) -> DetectionResult:
 
     logger.debug(
         "Statistical anomaly: detected=%s, confidence=%.2f, entropy=%.4f",
-        detected, confidence, entropy,
+        detected,
+        confidence,
+        entropy,
     )
     return DetectionResult(
-        detected=detected, confidence=confidence,
-        method="statistical_anomaly", details=details,
+        detected=detected,
+        confidence=confidence,
+        method="statistical_anomaly",
+        details=details,
     )

@@ -10,6 +10,3 @@ __all__ = [
     "DocumentMetadata",
     "MetadataField",
 ]
-
-
-

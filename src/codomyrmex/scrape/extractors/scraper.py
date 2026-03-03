@@ -39,7 +39,9 @@ class Scraper(BaseScraper):
         ```
     """
 
-    def __init__(self, config: ScrapeConfig | None = None, adapter: BaseScraper | None = None):
+    def __init__(
+        self, config: ScrapeConfig | None = None, adapter: BaseScraper | None = None
+    ):
         """Initialize the scraper.
 
         Args:
@@ -89,11 +91,15 @@ class Scraper(BaseScraper):
             ScrapeTimeoutError: If operation times out
         """
         if not url or not isinstance(url, str):
-            raise ScrapeValidationError("URL must be a non-empty string", field="url", value=str(url))
+            raise ScrapeValidationError(
+                "URL must be a non-empty string", field="url", value=str(url)
+            )
         parsed = urlparse(url)
         if parsed.scheme not in ("http", "https") or not parsed.netloc:
             raise ScrapeValidationError(
-                f"URL must start with http:// or https://, got: {url}", field="url", value=url
+                f"URL must start with http:// or https://, got: {url}",
+                field="url",
+                value=url,
             )
 
         logger.info(f"Scraping URL: {url}")
@@ -122,11 +128,15 @@ class Scraper(BaseScraper):
             ScrapeConnectionError: If connection fails
         """
         if not url or not isinstance(url, str):
-            raise ScrapeValidationError("URL must be a non-empty string", field="url", value=str(url))
+            raise ScrapeValidationError(
+                "URL must be a non-empty string", field="url", value=str(url)
+            )
         parsed = urlparse(url)
         if parsed.scheme not in ("http", "https") or not parsed.netloc:
             raise ScrapeValidationError(
-                f"URL must start with http:// or https://, got: {url}", field="url", value=url
+                f"URL must start with http:// or https://, got: {url}",
+                field="url",
+                value=url,
             )
 
         logger.info(f"Starting crawl from URL: {url}")
@@ -155,14 +165,21 @@ class Scraper(BaseScraper):
             ScrapeConnectionError: If connection fails
         """
         if not url or not isinstance(url, str):
-            raise ScrapeValidationError("URL must be a non-empty string", field="url", value=str(url))
+            raise ScrapeValidationError(
+                "URL must be a non-empty string", field="url", value=str(url)
+            )
         parsed = urlparse(url)
         if parsed.scheme not in ("http", "https") or not parsed.netloc:
             raise ScrapeValidationError(
-                f"URL must start with http:// or https://, got: {url}", field="url", value=url
+                f"URL must start with http:// or https://, got: {url}",
+                field="url",
+                value=url,
             )
 
-        logger.info(f"Mapping website structure: {url}" + (f" (search: {search})" if search else ""))
+        logger.info(
+            f"Mapping website structure: {url}"
+            + (f" (search: {search})" if search else "")
+        )
         try:
             result = self.adapter.map(url, search)
             logger.info(f"Found {result.total} links for {url}")
@@ -173,9 +190,7 @@ class Scraper(BaseScraper):
             logger.error(f"Unexpected error mapping {url}: {e}")
             raise ScrapeError(f"Failed to map {url}: {e}") from e
 
-    def search(
-        self, query: str, options: ScrapeOptions | None = None
-    ) -> SearchResult:
+    def search(self, query: str, options: ScrapeOptions | None = None) -> SearchResult:
         """Search the web and optionally scrape results.
 
         Args:
@@ -190,7 +205,9 @@ class Scraper(BaseScraper):
             ScrapeConnectionError: If connection fails
         """
         if not query or not isinstance(query, str):
-            raise ScrapeValidationError("Query must be a non-empty string", field="query", value=str(query))
+            raise ScrapeValidationError(
+                "Query must be a non-empty string", field="query", value=str(query)
+            )
 
         logger.info(f"Searching web: {query}")
         try:
@@ -224,7 +241,9 @@ class Scraper(BaseScraper):
             ScrapeConnectionError: If connection fails
         """
         if not urls or not isinstance(urls, list):
-            raise ScrapeValidationError("URLs must be a non-empty list", field="urls", value=str(urls))
+            raise ScrapeValidationError(
+                "URLs must be a non-empty list", field="urls", value=str(urls)
+            )
 
         for url in urls:
             if not isinstance(url, str) or not url:
@@ -236,7 +255,9 @@ class Scraper(BaseScraper):
             parsed = urlparse(url)
             if parsed.scheme not in ("http", "https") or not parsed.netloc:
                 raise ScrapeValidationError(
-                    f"URL must start with http:// or https://, got: {url}", field="urls", value=url
+                    f"URL must start with http:// or https://, got: {url}",
+                    field="urls",
+                    value=url,
                 )
 
         logger.info(f"Extracting data from {len(urls)} URL(s)")
@@ -249,5 +270,3 @@ class Scraper(BaseScraper):
         except Exception as e:
             logger.error(f"Unexpected error extracting from URLs: {e}")
             raise ScrapeError(f"Failed to extract data: {e}") from e
-
-

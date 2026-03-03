@@ -62,7 +62,8 @@ def check_all_defined(init_path: Path) -> tuple[bool, list[str] | None]:
                         names = [
                             elt.value
                             for elt in node.value.elts
-                            if isinstance(elt, ast.Constant) and isinstance(elt.value, str)
+                            if isinstance(elt, ast.Constant)
+                            and isinstance(elt.value, str)
                         ]
                         return True, names
                     return True, None
@@ -111,7 +112,9 @@ def _collect_all_imports(src_dir: Path) -> set[str]:
         if any(skip in py_file.parts for skip in SKIP_DIRS):
             continue
         try:
-            tree = ast.parse(py_file.read_text(encoding="utf-8", errors="replace"), str(py_file))
+            tree = ast.parse(
+                py_file.read_text(encoding="utf-8", errors="replace"), str(py_file)
+            )
         except SyntaxError:
             continue
         for node in ast.walk(tree):
@@ -158,7 +161,9 @@ def find_dead_exports(src_dir: Path) -> list[dict[str, Any]]:
 def _collect_defined_functions(py_file: Path) -> list[str]:
     """Extract top-level function names from a Python file."""
     try:
-        tree = ast.parse(py_file.read_text(encoding="utf-8", errors="replace"), str(py_file))
+        tree = ast.parse(
+            py_file.read_text(encoding="utf-8", errors="replace"), str(py_file)
+        )
     except SyntaxError as e:
         logger.warning("Skipping file with syntax error %s: %s", py_file, e)
         return []
@@ -173,7 +178,9 @@ def _collect_defined_functions(py_file: Path) -> list[str]:
 def _collect_name_references(py_file: Path) -> set[str]:
     """Collect all Name references in a Python file."""
     try:
-        tree = ast.parse(py_file.read_text(encoding="utf-8", errors="replace"), str(py_file))
+        tree = ast.parse(
+            py_file.read_text(encoding="utf-8", errors="replace"), str(py_file)
+        )
     except SyntaxError:
         return set()
     return {node.id for node in ast.walk(tree) if isinstance(node, ast.Name)}

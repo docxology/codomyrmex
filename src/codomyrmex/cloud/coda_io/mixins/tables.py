@@ -16,6 +16,7 @@ from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
 
+
 class TablesMixin:
     """TablesMixin class."""
 
@@ -293,7 +294,9 @@ class TablesMixin:
             f"/tables/{self._encode_id(table_id_or_name)}"
             f"/rows/{self._encode_id(row_id_or_name)}"
         )
-        return self._put(path, json_data={"row": row_dict}, params=params if params else None)
+        return self._put(
+            path, json_data={"row": row_dict}, params=params if params else None
+        )
 
     def delete_row(
         self,
@@ -338,4 +341,3 @@ class TablesMixin:
         """
         path = f"/docs/{self._encode_id(doc_id)}/tables/{self._encode_id(table_id_or_name)}/rows"
         return self._delete(path, json_data={"rowIds": row_ids})
-

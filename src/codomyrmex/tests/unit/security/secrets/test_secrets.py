@@ -93,18 +93,30 @@ class TestScanResult:
 
     def test_has_secrets_with_findings(self):
         """Should report secrets when present."""
-        result = ScanResult(secrets_found=[
-            DetectedSecret(SecretType.AWS_KEY, SecretSeverity.CRITICAL, (0, 10), "***"),
-        ])
+        result = ScanResult(
+            secrets_found=[
+                DetectedSecret(
+                    SecretType.AWS_KEY, SecretSeverity.CRITICAL, (0, 10), "***"
+                ),
+            ]
+        )
         assert result.has_secrets is True
 
     def test_high_severity_count(self):
         """Should count high severity secrets."""
-        result = ScanResult(secrets_found=[
-            DetectedSecret(SecretType.AWS_KEY, SecretSeverity.CRITICAL, (0, 10), "***"),
-            DetectedSecret(SecretType.API_KEY, SecretSeverity.HIGH, (10, 20), "***"),
-            DetectedSecret(SecretType.PASSWORD, SecretSeverity.MEDIUM, (20, 30), "***"),
-        ])
+        result = ScanResult(
+            secrets_found=[
+                DetectedSecret(
+                    SecretType.AWS_KEY, SecretSeverity.CRITICAL, (0, 10), "***"
+                ),
+                DetectedSecret(
+                    SecretType.API_KEY, SecretSeverity.HIGH, (10, 20), "***"
+                ),
+                DetectedSecret(
+                    SecretType.PASSWORD, SecretSeverity.MEDIUM, (20, 30), "***"
+                ),
+            ]
+        )
         assert result.high_severity_count == 2
 
 
@@ -119,7 +131,7 @@ class TestSecretPatterns:
     def test_custom_patterns(self):
         """Should extend with custom patterns."""
         custom = [
-            (r'custom_secret_[a-z]{10}', SecretType.GENERIC, SecretSeverity.HIGH, 0.8),
+            (r"custom_secret_[a-z]{10}", SecretType.GENERIC, SecretSeverity.HIGH, 0.8),
         ]
         patterns = SecretPatterns(custom_patterns=custom)
         assert len(patterns.patterns) == 14
@@ -170,7 +182,7 @@ class TestSecretScanner:
         """Should scan a file for secrets."""
         scanner = SecretScanner()
 
-        with tempfile.NamedTemporaryFile(mode='w', suffix='.py', delete=False) as f:
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False) as f:
             f.write('api_key = "AKIAIOSFODNN7EXAMPLE"\n')
             f.flush()
             result = scanner.scan_file(f.name)
@@ -206,7 +218,9 @@ class TestSecretScanner:
         scanner = SecretScanner(min_confidence=0.95)
         # Password patterns have confidence 0.6, should be filtered out
         result = scanner.scan_text('password = "mysuperpassword123"')
-        password_findings = [s for s in result.secrets_found if s.secret_type == SecretType.PASSWORD]
+        password_findings = [
+            s for s in result.secrets_found if s.secret_type == SecretType.PASSWORD
+        ]
         assert len(password_findings) == 0
 
     def test_should_ignore(self):
@@ -292,7 +306,9 @@ class TestHelperFunctions:
 
     def test_get_secret_from_env_default(self):
         """Should return default for missing env var."""
-        assert get_secret_from_env("NONEXISTENT_VAR_XYZ", default="fallback") == "fallback"
+        assert (
+            get_secret_from_env("NONEXISTENT_VAR_XYZ", default="fallback") == "fallback"
+        )
 
     def test_mask_secret(self):
         """Should mask middle of secret."""

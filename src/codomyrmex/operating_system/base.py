@@ -17,8 +17,10 @@ from typing import Any
 
 # ── Enums ───────────────────────────────────────────────────────────
 
+
 class OSPlatform(Enum):
     """Supported operating system platforms."""
+
     MACOS = "macos"
     WINDOWS = "windows"
     LINUX = "linux"
@@ -27,6 +29,7 @@ class OSPlatform(Enum):
 
 class ServiceStatus(Enum):
     """Service lifecycle status."""
+
     RUNNING = "running"
     STOPPED = "stopped"
     UNKNOWN = "unknown"
@@ -34,6 +37,7 @@ class ServiceStatus(Enum):
 
 class ProcessStatus(Enum):
     """Process execution status."""
+
     RUNNING = "running"
     SLEEPING = "sleeping"
     STOPPED = "stopped"
@@ -43,9 +47,11 @@ class ProcessStatus(Enum):
 
 # ── Data Models ─────────────────────────────────────────────────────
 
+
 @dataclass
 class SystemInfo:
     """System-level information."""
+
     hostname: str
     platform: OSPlatform
     platform_version: str
@@ -71,6 +77,7 @@ class SystemInfo:
 @dataclass
 class ProcessInfo:
     """Information about a running process."""
+
     pid: int
     name: str
     status: ProcessStatus = ProcessStatus.UNKNOWN
@@ -94,6 +101,7 @@ class ProcessInfo:
 @dataclass
 class DiskInfo:
     """Disk / volume usage information."""
+
     device: str
     mountpoint: str
     fstype: str
@@ -117,6 +125,7 @@ class DiskInfo:
 @dataclass
 class ServiceInfo:
     """System service / daemon information."""
+
     name: str
     status: ServiceStatus = ServiceStatus.UNKNOWN
     pid: int | None = None
@@ -134,6 +143,7 @@ class ServiceInfo:
 @dataclass
 class NetworkInfo:
     """Network interface information."""
+
     interface: str
     ip_address: str = ""
     mac_address: str = ""
@@ -151,6 +161,7 @@ class NetworkInfo:
 @dataclass
 class CommandResult:
     """Result of an OS command execution."""
+
     command: str
     exit_code: int
     stdout: str
@@ -173,6 +184,7 @@ class CommandResult:
 
 
 # ── Abstract Provider ───────────────────────────────────────────────
+
 
 class OSProviderBase(ABC):
     """Abstract base class for platform-specific OS providers.

@@ -45,6 +45,7 @@ except ImportError:
 
 try:
     from codomyrmex.logging_monitoring import get_logger
+
     logger = get_logger(__name__)
 except ImportError:
     logging.basicConfig(level=logging.INFO)
@@ -190,6 +191,7 @@ if BaseAgent is not None:
             """
             if self._client is None:
                 from codomyrmex.ide.antigravity import AntigravityClient
+
                 self._client = AntigravityClient()
             return self._client
 
@@ -211,9 +213,15 @@ if BaseAgent is not None:
 
             if tool_name is None:
                 # Default to grep_search for analysis, view_file for viewing
-                if request.capabilities and AgentCapabilities.CODE_ANALYSIS in request.capabilities:
+                if (
+                    request.capabilities
+                    and AgentCapabilities.CODE_ANALYSIS in request.capabilities
+                ):
                     tool_name = "grep_search"
-                elif request.capabilities and AgentCapabilities.FILE_OPERATIONS in request.capabilities:
+                elif (
+                    request.capabilities
+                    and AgentCapabilities.FILE_OPERATIONS in request.capabilities
+                ):
                     tool_name = "view_file"
                 else:
                     tool_name = "grep_search"
@@ -249,13 +257,16 @@ if BaseAgent is not None:
                     request_id=request.id,
                 )
 
-        def execute_with_session(self, request: AgentRequest, session: Any = None, session_id: Any = None) -> Any:
+        def execute_with_session(
+            self, request: AgentRequest, session: Any = None, session_id: Any = None
+        ) -> Any:
             """Adapter for ConversationOrchestrator's expected LLM client interface."""
             response = self.execute(request)
 
             # ConversationOrchestrator expects an object with `is_success()`, `content`, `tokens_used`, etc.
             class AdapterResponse:
                 """Normalises a raw provider response to the agent response interface expected by the IDE bridge."""
+
                 def __init__(self, resp):
                     self.content = resp.content
                     self.tokens_used = 0
@@ -305,6 +316,7 @@ if BaseAgent is not None:
                 from codomyrmex.ide.antigravity.tool_provider import (
                     AntigravityToolProvider,
                 )
+
                 provider = AntigravityToolProvider(self.client)
                 self._tool_registry = provider.get_tool_registry()
             return self._tool_registry

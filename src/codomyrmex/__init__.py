@@ -15,17 +15,21 @@ from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 logger = get_logger(__name__)
 
+
 def get_version() -> str:
     """Get the package version."""
     return __version__
+
 
 def get_module_path() -> Path:
     """Get the absolute path to the package directory."""
     return Path(__file__).parent
 
+
 def list_modules() -> list[str]:
     """List all available submodules in the package."""
     return [name for _, name, _ in pkgutil.iter_modules([str(get_module_path())])]
+
 
 # Explicitly export major submodules for easier access
 # Use lazy imports to avoid requiring all optional dependencies
@@ -122,18 +126,23 @@ _submodules = [
     "website",
 ]
 
+
 # Import submodules lazily with error handling
 def __getattr__(name):
     """Lazy import submodules on first access."""
     if name in _submodules:
         import importlib
+
         try:
             module = importlib.import_module(f".{name}", __package__)
             globals()[name] = module
             return module
         except ImportError as e:
-            raise ImportError(f"Failed to import {name}: {e}. You may need to install optional dependencies.") from e
+            raise ImportError(
+                f"Failed to import {name}: {e}. You may need to install optional dependencies."
+            ) from e
     raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
+
 
 # Eager imports for convenience.
 # These are the "always available" modules

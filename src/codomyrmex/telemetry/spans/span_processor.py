@@ -8,11 +8,15 @@ from opentelemetry.sdk.trace.export import SimpleSpanProcessor as OTSimpleSpanPr
 
 class SimpleSpanProcessor(OTSimpleSpanProcessor):
     """Processor that exports spans immediately."""
+
     pass
+
 
 class BatchSpanProcessor(OTBatchSpanProcessor):
     """Processor that batches spans before exporting."""
+
     pass
+
 
 def add_span_processor(processor: SpanProcessor) -> None:
     """Add a span processor to the global tracer provider."""

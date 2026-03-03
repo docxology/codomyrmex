@@ -12,21 +12,30 @@ from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 logger = get_logger(__name__)
 
+
 class AzureBlobClient(StorageClient):
     """Wrapper for Azure Blob Storage operations."""
 
-    def __init__(self, account_url: str | None = None, client: BlobServiceClient | None = None):
+    def __init__(
+        self, account_url: str | None = None, client: BlobServiceClient | None = None
+    ):
         if client:
             self.client = client
         elif account_url:
-            self.client = BlobServiceClient(account_url, credential=DefaultAzureCredential())
+            self.client = BlobServiceClient(
+                account_url, credential=DefaultAzureCredential()
+            )
         else:
             env_url = os.environ.get("AZURE_STORAGE_ACCOUNT_URL")
             if env_url:
-                self.client = BlobServiceClient(env_url, credential=DefaultAzureCredential())
+                self.client = BlobServiceClient(
+                    env_url, credential=DefaultAzureCredential()
+                )
             else:
                 self.client = None
-                logger.warning("Azure account_url not provided and AZURE_STORAGE_ACCOUNT_URL not set.")
+                logger.warning(
+                    "Azure account_url not provided and AZURE_STORAGE_ACCOUNT_URL not set."
+                )
 
     def list_buckets(self) -> list[str]:
         """List containers (buckets)."""
@@ -72,15 +81,21 @@ class AzureBlobClient(StorageClient):
             logger.error(f"Azure bucket_exists (container) error: {e}")
             return False
 
-    def upload_file(self, bucket: str, key: str, file_path: str, content_type: str | None = None) -> bool:
+    def upload_file(
+        self, bucket: str, key: str, file_path: str, content_type: str | None = None
+    ) -> bool:
         """Upload a blob from local disk."""
         if not self.client:
             return False
         try:
             blob_client = self.client.get_blob_client(container=bucket, blob=key)
-            content_settings = ContentSettings(content_type=content_type) if content_type else None
+            content_settings = (
+                ContentSettings(content_type=content_type) if content_type else None
+            )
             with open(file_path, "rb") as data:
-                blob_client.upload_blob(data, overwrite=True, content_settings=content_settings)
+                blob_client.upload_blob(
+                    data, overwrite=True, content_settings=content_settings
+                )
             return True
         except Exception as e:
             logger.error(f"Azure upload_file error: {e}")
@@ -153,20 +168,26 @@ class AzureBlobClient(StorageClient):
         # Note: generate_blob_sas requires account_key.
         # If using DefaultAzureCredential, user should use User Delegation SAS or other methods.
         # We provide a basic implementation but warn if account_key is missing.
-        account_key = getattr(self.client.credential, 'account_key', None)
+        account_key = getattr(self.client.credential, "account_key", None)
         if not account_key:
-            logger.warning("generate_blob_sas requires an account_key which is not available on this credential.")
+            logger.warning(
+                "generate_blob_sas requires an account_key which is not available on this credential."
+            )
             return ""
 
         try:
-            permission = BlobSasPermissions(read=True) if operation == "get_object" else BlobSasPermissions(write=True)
+            permission = (
+                BlobSasPermissions(read=True)
+                if operation == "get_object"
+                else BlobSasPermissions(write=True)
+            )
             sas_token = generate_blob_sas(
                 account_name=self.client.account_name,
                 container_name=bucket,
                 blob_name=key,
                 account_key=account_key,
                 permission=permission,
-                expiry=datetime.now(UTC) + timedelta(seconds=expires_in)
+                expiry=datetime.now(UTC) + timedelta(seconds=expires_in),
             )
             return f"{self.client.url}{bucket}/{key}?{sas_token}"
         except Exception as e:
@@ -180,7 +201,9 @@ class AzureBlobClient(StorageClient):
     def list_blobs(self, container_name: str) -> list[str]:
         return self.list_objects(container_name)
 
-    def download_blob(self, container_name: str, blob_name: str, file_path: str) -> bool:
+    def download_blob(
+        self, container_name: str, blob_name: str, file_path: str
+    ) -> bool:
         return self.download_file(container_name, blob_name, file_path)
 
     def get_metadata(self, container_name: str, blob_name: str) -> dict:

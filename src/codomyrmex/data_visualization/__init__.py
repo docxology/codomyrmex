@@ -57,7 +57,9 @@ def create_bar_chart(data: Any, title: str = "Bar Chart") -> Any:
 BarPlot = BarChart
 
 
-def generate_report(output_dir: str | Path = ".", report_type: str = "general", **kwargs) -> str:
+def generate_report(
+    output_dir: str | Path = ".", report_type: str = "general", **kwargs
+) -> str:
     """Generate an HTML report and save it to disk.
 
     Args:

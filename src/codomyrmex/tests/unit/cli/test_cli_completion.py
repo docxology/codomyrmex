@@ -147,7 +147,11 @@ class TestFishCompletion:
     def test_includes_options_as_subcommand_completions(self):
         result = generate_fish_completion(_CMDS)
         # Options for run: --verbose, --dry-run → should appear as -l entries
-        assert "-l 'verbose'" in result or "-l '--verbose'" in result or "verbose" in result
+        assert (
+            "-l 'verbose'" in result
+            or "-l '--verbose'" in result
+            or "verbose" in result
+        )
 
     def test_custom_program_name(self):
         result = generate_fish_completion(_CMDS, program_name="myapp")

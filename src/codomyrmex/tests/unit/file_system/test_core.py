@@ -110,7 +110,7 @@ def test_get_info(fs_manager, tmp_path):
 
     info = fs_manager.get_info(file_path)
     assert info["name"] == "info_test.txt"
-    assert info["size"] == len(content.encode('utf-8'))
+    assert info["size"] == len(content.encode("utf-8"))
     assert info["is_dir"] is False
     assert info["extension"] == ".txt"
     assert "created_at" in info

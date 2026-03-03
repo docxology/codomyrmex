@@ -54,6 +54,7 @@ _skip_no_fabric = pytest.mark.skipif(
 # Test the LLM Config Module
 # ============================================================================
 
+
 @pytest.mark.unit
 class TestLLMConfig:
     """Tests for LLMConfig class."""
@@ -67,8 +68,15 @@ class TestLLMConfig:
     def _cleanup_env(self):
         """Clean up LLM environment variables after each test."""
         yield
-        for key in ['LLM_MODEL', 'LLM_TEMPERATURE', 'LLM_MAX_TOKENS',
-                    'LLM_TOP_P', 'LLM_TOP_K', 'LLM_TIMEOUT', 'LLM_BASE_URL']:
+        for key in [
+            "LLM_MODEL",
+            "LLM_TEMPERATURE",
+            "LLM_MAX_TOKENS",
+            "LLM_TOP_P",
+            "LLM_TOP_K",
+            "LLM_TIMEOUT",
+            "LLM_BASE_URL",
+        ]:
             if key in os.environ:
                 del os.environ[key]
 
@@ -98,7 +106,7 @@ class TestLLMConfig:
             top_k=50,
             timeout=60,
             base_url="http://custom:8080",
-            output_root=self.temp_dir
+            output_root=self.temp_dir,
         )
 
         assert config.model == "custom-model:latest"
@@ -113,13 +121,13 @@ class TestLLMConfig:
         """Test LLMConfig reads from environment variables."""
         from codomyrmex.llm.config import LLMConfig
 
-        os.environ['LLM_MODEL'] = 'env-model:v1'
-        os.environ['LLM_TEMPERATURE'] = '0.9'
-        os.environ['LLM_MAX_TOKENS'] = '500'
+        os.environ["LLM_MODEL"] = "env-model:v1"
+        os.environ["LLM_TEMPERATURE"] = "0.9"
+        os.environ["LLM_MAX_TOKENS"] = "500"
 
         config = LLMConfig(output_root=self.temp_dir)
 
-        assert config.model == 'env-model:v1'
+        assert config.model == "env-model:v1"
         assert config.temperature == 0.9
         assert config.max_tokens == 500
 
@@ -132,15 +140,15 @@ class TestLLMConfig:
             top_p=0.8,
             top_k=30,
             max_tokens=1500,
-            output_root=self.temp_dir
+            output_root=self.temp_dir,
         )
 
         options = config.get_generation_options()
 
-        assert options['temperature'] == 0.5
-        assert options['top_p'] == 0.8
-        assert options['top_k'] == 30
-        assert options['num_predict'] == 1500
+        assert options["temperature"] == 0.5
+        assert options["top_p"] == 0.8
+        assert options["top_k"] == 30
+        assert options["num_predict"] == 1500
 
     def test_llm_config_get_client_kwargs(self):
         """Test get_client_kwargs returns correct parameters."""
@@ -150,14 +158,14 @@ class TestLLMConfig:
             base_url="http://test:1234",
             model="test-model",
             timeout=120,
-            output_root=self.temp_dir
+            output_root=self.temp_dir,
         )
 
         kwargs = config.get_client_kwargs()
 
-        assert kwargs['base_url'] == "http://test:1234"
-        assert kwargs['model'] == "test-model"
-        assert kwargs['timeout'] == 120
+        assert kwargs["base_url"] == "http://test:1234"
+        assert kwargs["model"] == "test-model"
+        assert kwargs["timeout"] == 120
 
     def test_llm_config_to_dict(self):
         """Test to_dict serialization."""
@@ -168,10 +176,10 @@ class TestLLMConfig:
         config_dict = config.to_dict()
 
         assert isinstance(config_dict, dict)
-        assert 'model' in config_dict
-        assert 'temperature' in config_dict
-        assert 'max_tokens' in config_dict
-        assert 'output_root' in config_dict
+        assert "model" in config_dict
+        assert "temperature" in config_dict
+        assert "max_tokens" in config_dict
+        assert "output_root" in config_dict
 
     def test_llm_config_save_and_load(self):
         """Test saving and loading configuration from file."""
@@ -181,9 +189,7 @@ class TestLLMConfig:
 
         # Create and save config
         config1 = LLMConfig(
-            model="test-model",
-            temperature=0.3,
-            output_root=self.temp_dir
+            model="test-model", temperature=0.3, output_root=self.temp_dir
         )
         config1.save_config(config_path)
 
@@ -222,6 +228,7 @@ class TestLLMConfig:
 # Test the Execution Options
 # ============================================================================
 
+
 @pytest.mark.unit
 class TestExecutionOptions:
     """Tests for ExecutionOptions dataclass."""
@@ -257,7 +264,7 @@ class TestExecutionOptions:
             stream=True,
             format="json",
             system_prompt="You are helpful.",
-            context_window=4096
+            context_window=4096,
         )
 
         assert options.temperature == 0.3
@@ -276,6 +283,7 @@ class TestExecutionOptions:
 # Test Model Runner with Mocks
 # ============================================================================
 
+
 @pytest.mark.unit
 @_skip_no_ollama
 class TestModelRunner:
@@ -293,7 +301,7 @@ class TestModelRunner:
     def test_model_runner_initialization(self):
         """Test ModelRunner initializes correctly."""
         assert self.runner.ollama_manager is self.manager
-        assert hasattr(self.runner.logger, 'info')
+        assert hasattr(self.runner.logger, "info")
 
     def test_format_conversation_single_user_message(self):
         """Test _format_conversation with single user message."""
@@ -307,7 +315,7 @@ class TestModelRunner:
             {"role": "system", "content": "You are helpful."},
             {"role": "user", "content": "Hello"},
             {"role": "assistant", "content": "Hi there!"},
-            {"role": "user", "content": "How are you?"}
+            {"role": "user", "content": "How are you?"},
         ]
         result = self.runner._format_conversation(messages)
 
@@ -325,7 +333,7 @@ class TestModelRunner:
         model_name = models[0].name
         result = self.runner.run_with_options(model_name, "Say hello in one word")
         assert result.success is True
-        assert hasattr(result, 'response')
+        assert hasattr(result, "response")
 
     def test_run_conversation_formats_messages(self):
         """Test run_conversation properly formats and executes conversation."""
@@ -334,9 +342,7 @@ class TestModelRunner:
             pytest.skip("No Ollama models installed")
 
         model_name = models[0].name
-        messages = [
-            {"role": "user", "content": "Hello"}
-        ]
+        messages = [{"role": "user", "content": "Hello"}]
 
         result = self.runner.run_conversation(model_name, messages)
         assert result.success is True
@@ -351,16 +357,17 @@ class TestModelRunner:
         test_prompts = ["Say hi"]
         results = self.runner.benchmark_model(model_name, test_prompts)
 
-        assert 'model_name' in results
-        assert 'total_prompts' in results
-        assert 'successful_runs' in results
-        assert 'total_time' in results
-        assert results['total_prompts'] == 1
+        assert "model_name" in results
+        assert "total_prompts" in results
+        assert "successful_runs" in results
+        assert "total_time" in results
+        assert results["total_prompts"] == 1
 
 
 # ============================================================================
 # Test Ollama Manager with Mocks
 # ============================================================================
+
 
 @pytest.mark.unit
 @_skip_no_ollama
@@ -396,7 +403,7 @@ class TestOllamaManager:
 
         if models:
             assert manager.is_model_available(models[0].name) is True
-        assert manager.is_model_available('nonexistent-model-xyz-999') is False
+        assert manager.is_model_available("nonexistent-model-xyz-999") is False
 
     def test_run_model_returns_result_on_success(self):
         """Test run_model returns ModelExecutionResult on success."""
@@ -410,7 +417,9 @@ class TestOllamaManager:
         if not models:
             pytest.skip("No Ollama models installed")
 
-        result = manager.run_model(models[0].name, 'Say hello in one word', save_output=False)
+        result = manager.run_model(
+            models[0].name, "Say hello in one word", save_output=False
+        )
 
         assert isinstance(result, ModelExecutionResult)
         assert result.success is True
@@ -422,10 +431,12 @@ class TestOllamaManager:
         from codomyrmex.llm.ollama.ollama_manager import OllamaManager
 
         manager = OllamaManager(auto_start_server=False)
-        result = manager.run_model('nonexistent-model-xyz-999', 'test prompt', save_output=False)
+        result = manager.run_model(
+            "nonexistent-model-xyz-999", "test prompt", save_output=False
+        )
 
         assert result.success is False
-        assert 'not available' in result.error_message.lower()
+        assert "not available" in result.error_message.lower()
 
     def test_get_model_stats_structure(self):
         """Test get_model_stats returns proper structure."""
@@ -434,10 +445,10 @@ class TestOllamaManager:
         manager = OllamaManager(auto_start_server=False)
         stats = manager.get_model_stats()
 
-        assert 'total_models' in stats
-        assert 'total_size_bytes' in stats
-        assert 'total_size_mb' in stats
-        assert 'models_by_family' in stats
+        assert "total_models" in stats
+        assert "total_size_bytes" in stats
+        assert "total_size_mb" in stats
+        assert "models_by_family" in stats
 
     def test_parse_size_converts_correctly(self):
         """Test _parse_size converts size strings correctly."""
@@ -456,6 +467,7 @@ class TestOllamaManager:
 # Test Output Manager
 # ============================================================================
 
+
 @pytest.mark.unit
 class TestOutputManager:
     """Tests for OutputManager class."""
@@ -465,6 +477,7 @@ class TestOutputManager:
         """Set up test fixtures."""
         self.temp_dir = str(tmp_path)
         from codomyrmex.llm.ollama.output_manager import OutputManager
+
         self.output_manager = OutputManager(self.temp_dir)
 
     def test_output_manager_creates_directories(self):
@@ -482,7 +495,7 @@ class TestOutputManager:
             prompt="test prompt",
             response="test response",
             execution_time=1.5,
-            metadata={'test': True}
+            metadata={"test": True},
         )
 
         assert Path(output_path).exists()
@@ -490,10 +503,10 @@ class TestOutputManager:
         with open(output_path) as f:
             content = f.read()
 
-        assert 'test-model' in content
-        assert 'test prompt' in content
-        assert 'test response' in content
-        assert '1.5' in content
+        assert "test-model" in content
+        assert "test prompt" in content
+        assert "test response" in content
+        assert "1.5" in content
 
     def test_save_execution_result_creates_json(self):
         """Test save_execution_result creates JSON file."""
@@ -505,7 +518,7 @@ class TestOutputManager:
             response="test response",
             execution_time=1.5,
             success=True,
-            tokens_used=50
+            tokens_used=50,
         )
 
         output_path = self.output_manager.save_execution_result(result)
@@ -515,33 +528,29 @@ class TestOutputManager:
         with open(output_path) as f:
             data = json.load(f)
 
-        assert data['model_name'] == 'test-model'
-        assert data['success'] is True
-        assert data['execution_time'] == 1.5
+        assert data["model_name"] == "test-model"
+        assert data["success"] is True
+        assert data["execution_time"] == 1.5
 
     def test_save_and_load_model_config(self):
         """Test saving and loading model configuration."""
-        test_config = {
-            'temperature': 0.7,
-            'max_tokens': 500,
-            'custom_setting': 'value'
-        }
+        test_config = {"temperature": 0.7, "max_tokens": 500, "custom_setting": "value"}
 
         # Save config
         config_path = self.output_manager.save_model_config(
-            model_name="test-model",
-            config=test_config,
-            config_name="test_config"
+            model_name="test-model", config=test_config, config_name="test_config"
         )
 
         assert Path(config_path).exists()
 
         # Load config
-        loaded_config = self.output_manager.load_model_config("test-model", "test_config")
+        loaded_config = self.output_manager.load_model_config(
+            "test-model", "test_config"
+        )
 
-        assert loaded_config['temperature'] == 0.7
-        assert loaded_config['max_tokens'] == 500
-        assert loaded_config['custom_setting'] == 'value'
+        assert loaded_config["temperature"] == 0.7
+        assert loaded_config["max_tokens"] == 500
+        assert loaded_config["custom_setting"] == "value"
 
     def test_save_batch_results(self):
         """Test save_batch_results creates batch file."""
@@ -553,15 +562,15 @@ class TestOutputManager:
                 prompt="prompt1",
                 response="response1",
                 execution_time=0.5,
-                success=True
+                success=True,
             ),
             ModelExecutionResult(
                 model_name="model1",
                 prompt="prompt2",
                 response="response2",
                 execution_time=0.6,
-                success=True
-            )
+                success=True,
+            ),
         ]
 
         batch_path = self.output_manager.save_batch_results(results, "test_batch")
@@ -571,9 +580,9 @@ class TestOutputManager:
         with open(batch_path) as f:
             data = json.load(f)
 
-        assert data['batch_name'] == 'test_batch'
-        assert data['total_executions'] == 2
-        assert data['successful_executions'] == 2
+        assert data["batch_name"] == "test_batch"
+        assert data["total_executions"] == 2
+        assert data["successful_executions"] == 2
 
     def test_get_output_stats(self):
         """Test get_output_stats returns correct statistics."""
@@ -583,20 +592,21 @@ class TestOutputManager:
                 model_name=f"model{i}",
                 prompt=f"prompt{i}",
                 response=f"response{i}",
-                execution_time=1.0
+                execution_time=1.0,
             )
 
         stats = self.output_manager.get_output_stats()
 
-        assert 'total_outputs' in stats
-        assert 'total_size' in stats
-        assert 'by_type' in stats
-        assert 'by_model' in stats
+        assert "total_outputs" in stats
+        assert "total_size" in stats
+        assert "by_type" in stats
+        assert "by_model" in stats
 
 
 # ============================================================================
 # Test Config Manager
 # ============================================================================
+
 
 @pytest.mark.unit
 class TestConfigManager:
@@ -614,7 +624,7 @@ class TestConfigManager:
         # Use a non-existent config path so defaults are used
         manager = ConfigManager(str(Path(self.temp_dir) / "nonexistent_config.json"))
 
-        assert hasattr(manager.config, 'ollama_binary')
+        assert hasattr(manager.config, "ollama_binary")
         assert manager.config.ollama_binary == "ollama"
         assert manager.config.default_model == "llama3.1:latest"
 
@@ -625,10 +635,7 @@ class TestConfigManager:
         config_file = Path(self.temp_dir) / "config.json"
         manager = ConfigManager(str(config_file))
 
-        manager.update_config(
-            default_model="new-model",
-            auto_start_server=False
-        )
+        manager.update_config(default_model="new-model", auto_start_server=False)
 
         # May fail if directory doesn't exist, but config should be updated
         assert manager.config.default_model == "new-model"
@@ -642,11 +649,11 @@ class TestConfigManager:
         manager = ConfigManager()
         presets = manager.get_execution_presets()
 
-        assert 'fast' in presets
-        assert 'creative' in presets
-        assert 'balanced' in presets
-        assert 'precise' in presets
-        assert 'long_form' in presets
+        assert "fast" in presets
+        assert "creative" in presets
+        assert "balanced" in presets
+        assert "precise" in presets
+        assert "long_form" in presets
 
         # Verify presets are ExecutionOptions instances
         for _name, preset in presets.items():
@@ -659,11 +666,11 @@ class TestConfigManager:
         manager = ConfigManager()
         validation = manager.validate_config()
 
-        assert 'valid' in validation
-        assert 'errors' in validation
-        assert 'warnings' in validation
-        assert isinstance(validation['errors'], list)
-        assert isinstance(validation['warnings'], list)
+        assert "valid" in validation
+        assert "errors" in validation
+        assert "warnings" in validation
+        assert isinstance(validation["errors"], list)
+        assert isinstance(validation["warnings"], list)
 
     def test_reset_to_defaults(self):
         """Test reset_to_defaults restores default configuration."""
@@ -685,6 +692,7 @@ class TestConfigManager:
 # Test LLM Exceptions
 # ============================================================================
 
+
 @pytest.mark.unit
 class TestLLMExceptions:
     """Tests for LLM exception classes."""
@@ -694,9 +702,7 @@ class TestLLMExceptions:
         from codomyrmex.llm.exceptions import LLMConnectionError
 
         error = LLMConnectionError(
-            "Connection failed",
-            provider="ollama",
-            endpoint="http://localhost:11434"
+            "Connection failed", provider="ollama", endpoint="http://localhost:11434"
         )
 
         assert "Connection failed" in str(error)
@@ -708,9 +714,7 @@ class TestLLMExceptions:
         from codomyrmex.llm.exceptions import LLMTimeoutError
 
         error = LLMTimeoutError(
-            "Request timed out",
-            timeout_seconds=30.0,
-            provider="ollama"
+            "Request timed out", timeout_seconds=30.0, provider="ollama"
         )
 
         assert "timed out" in str(error)
@@ -725,7 +729,7 @@ class TestLLMExceptions:
             "Prompt exceeds limit",
             token_count=10000,
             max_tokens=4096,
-            model="llama3.1:latest"
+            model="llama3.1:latest",
         )
 
         assert error.context.get("token_count") == 10000
@@ -740,7 +744,7 @@ class TestLLMExceptions:
         error = ResponseParsingError(
             "Failed to parse response",
             expected_format="json",
-            raw_response=long_response
+            raw_response=long_response,
         )
 
         assert error.context.get("expected_format") == "json"
@@ -755,7 +759,7 @@ class TestLLMExceptions:
             "Model not found",
             model="nonexistent:latest",
             provider="ollama",
-            available_models=["llama3.1:latest", "codellama:latest"]
+            available_models=["llama3.1:latest", "codellama:latest"],
         )
 
         assert error.context.get("model") == "nonexistent:latest"
@@ -765,10 +769,7 @@ class TestLLMExceptions:
         """Test StreamingError with chunks received."""
         from codomyrmex.llm.exceptions import StreamingError
 
-        error = StreamingError(
-            "Stream interrupted",
-            chunks_received=5
-        )
+        error = StreamingError("Stream interrupted", chunks_received=5)
 
         assert error.context.get("chunks_received") == 5
 
@@ -780,7 +781,7 @@ class TestLLMExceptions:
             "Rate limit exceeded",
             provider="openai",
             retry_after=60.0,
-            limit_type="requests_per_minute"
+            limit_type="requests_per_minute",
         )
 
         assert error.context.get("retry_after") == 60.0
@@ -790,6 +791,7 @@ class TestLLMExceptions:
 # ============================================================================
 # Test Fabric Manager with Mocks
 # ============================================================================
+
 
 @pytest.mark.unit
 class TestFabricManager:
@@ -838,8 +840,8 @@ class TestFabricManager:
 
         result = manager.run_pattern(patterns[0], "test input")
 
-        assert 'success' in result
-        assert 'pattern' in result
+        assert "success" in result
+        assert "pattern" in result
 
     def test_run_pattern_unavailable_returns_error(self):
         """Test run_pattern returns error when fabric unavailable."""
@@ -851,13 +853,14 @@ class TestFabricManager:
         manager = FabricManager()
         result = manager.run_pattern("test_pattern", "test input")
 
-        assert result['success'] is False
-        assert 'not available' in result['error'].lower()
+        assert result["success"] is False
+        assert "not available" in result["error"].lower()
 
 
 # ============================================================================
 # Test Fabric Orchestrator
 # ============================================================================
+
 
 @pytest.mark.unit
 class TestFabricOrchestrator:
@@ -869,7 +872,7 @@ class TestFabricOrchestrator:
 
         orchestrator = FabricOrchestrator()
 
-        assert hasattr(orchestrator.fabric_manager, 'list_patterns')
+        assert hasattr(orchestrator.fabric_manager, "list_patterns")
 
     @_skip_no_fabric
     def test_analyze_code_returns_results(self):
@@ -879,10 +882,10 @@ class TestFabricOrchestrator:
         orchestrator = FabricOrchestrator()
         result = orchestrator.analyze_code("def test(): pass", "quality")
 
-        assert 'analysis_type' in result
-        assert 'patterns_used' in result
-        assert 'results' in result
-        assert 'summary' in result
+        assert "analysis_type" in result
+        assert "patterns_used" in result
+        assert "results" in result
+        assert "summary" in result
 
     def test_analysis_summary_structure(self):
         """Test _create_analysis_summary returns correct structure."""
@@ -891,21 +894,22 @@ class TestFabricOrchestrator:
         orchestrator = FabricOrchestrator()
 
         results = {
-            'pattern1': {'success': True, 'output': 'output1', 'duration': 1.0},
-            'pattern2': {'success': True, 'output': 'output2', 'duration': 2.0},
-            'pattern3': {'success': False, 'output': '', 'duration': 0.5}
+            "pattern1": {"success": True, "output": "output1", "duration": 1.0},
+            "pattern2": {"success": True, "output": "output2", "duration": 2.0},
+            "pattern3": {"success": False, "output": "", "duration": 0.5},
         }
 
         summary = orchestrator._create_analysis_summary(results)
 
-        assert summary['successful_patterns'] == 2
-        assert summary['total_patterns'] == 3
-        assert summary['success_rate'] == pytest.approx(66.67, rel=0.1)
+        assert summary["successful_patterns"] == 2
+        assert summary["total_patterns"] == 3
+        assert summary["success_rate"] == pytest.approx(66.67, rel=0.1)
 
 
 # ============================================================================
 # Test Async Model Runner Methods
 # ============================================================================
+
 
 @pytest.mark.unit
 @_skip_no_ollama
@@ -925,28 +929,28 @@ class TestAsyncModelRunner:
         """Test async_run_model method exists and is async."""
         import inspect
 
-        assert hasattr(self.runner, 'async_run_model')
+        assert hasattr(self.runner, "async_run_model")
         assert inspect.iscoroutinefunction(self.runner.async_run_model)
 
     def test_async_chat_method_exists(self):
         """Test async_chat method exists and is async."""
         import inspect
 
-        assert hasattr(self.runner, 'async_chat')
+        assert hasattr(self.runner, "async_chat")
         assert inspect.iscoroutinefunction(self.runner.async_chat)
 
     def test_async_generate_stream_method_exists(self):
         """Test async_generate_stream method exists and is async generator."""
         import inspect
 
-        assert hasattr(self.runner, 'async_generate_stream')
+        assert hasattr(self.runner, "async_generate_stream")
         assert inspect.isasyncgenfunction(self.runner.async_generate_stream)
 
     def test_async_run_batch_method_exists(self):
         """Test async_run_batch method exists and is async."""
         import inspect
 
-        assert hasattr(self.runner, 'async_run_batch')
+        assert hasattr(self.runner, "async_run_batch")
         assert inspect.iscoroutinefunction(self.runner.async_run_batch)
 
     def test_async_generate_is_alias(self):
@@ -966,6 +970,7 @@ class TestAsyncModelRunner:
 # Test Global Config Functions
 # ============================================================================
 
+
 @pytest.mark.unit
 class TestGlobalConfigFunctions:
     """Tests for global config functions."""
@@ -974,6 +979,7 @@ class TestGlobalConfigFunctions:
     def _reset_config(self):
         """Reset global config before and after each test."""
         from codomyrmex.llm.config import reset_config
+
         reset_config()
         yield
         reset_config()
@@ -985,7 +991,7 @@ class TestGlobalConfigFunctions:
         reset_config()
         config = get_config()
 
-        assert hasattr(config, 'model')
+        assert hasattr(config, "model")
         assert config.model == "llama3.1:latest"
 
     def test_set_config_updates_global(self):
@@ -1009,12 +1015,14 @@ class TestGlobalConfigFunctions:
 
         # Accessing _config_instance directly to verify reset
         import codomyrmex.llm.config as config_module
+
         assert config_module._config_instance is None
 
 
 # ============================================================================
 # Test Token Counting Simulation
 # ============================================================================
+
 
 @pytest.mark.unit
 class TestTokenCounting:
@@ -1030,7 +1038,7 @@ class TestTokenCounting:
             response="test response",
             execution_time=1.0,
             tokens_used=150,
-            success=True
+            success=True,
         )
 
         assert result.tokens_used == 150
@@ -1047,7 +1055,7 @@ class TestTokenCounting:
         if not models:
             pytest.skip("No Ollama models installed")
 
-        result = manager.run_model(models[0].name, 'Say hello', save_output=False)
+        result = manager.run_model(models[0].name, "Say hello", save_output=False)
         # tokens_used should be set when available
         assert result.success is True
 
@@ -1055,6 +1063,7 @@ class TestTokenCounting:
 # ============================================================================
 # Test Error Recovery Patterns
 # ============================================================================
+
 
 @pytest.mark.unit
 class TestErrorRecovery:
@@ -1079,14 +1088,16 @@ class TestErrorRecovery:
         from codomyrmex.llm.ollama.ollama_manager import OllamaManager
 
         manager = OllamaManager(auto_start_server=False)
-        result = manager.run_model('nonexistent-model-xyz-999', 'test prompt', save_output=False)
+        result = manager.run_model(
+            "nonexistent-model-xyz-999", "test prompt", save_output=False
+        )
 
         # Should handle gracefully with success=False
         assert result.success is False
 
 
-if __name__ == '__main__':
-    pytest.main([__file__, '-v'])
+if __name__ == "__main__":
+    pytest.main([__file__, "-v"])
 
 
 # Coverage push -- llm/router
@@ -1095,6 +1106,7 @@ class TestCostTracker:
 
     def test_init(self):
         from codomyrmex.llm.router import CostTracker
+
         tracker = CostTracker()
         assert isinstance(tracker, CostTracker)
         assert tracker.get_total_cost() == 0.0
@@ -1105,15 +1117,21 @@ class TestCostTrackerDeep:
 
     def test_record_and_total(self):
         from codomyrmex.llm.router import CostTracker
+
         tracker = CostTracker()
-        tracker.record(model_name="gpt-4", input_tokens=100, output_tokens=50, cost=0.01)
+        tracker.record(
+            model_name="gpt-4", input_tokens=100, output_tokens=50, cost=0.01
+        )
         total = tracker.get_total_cost()
         assert isinstance(total, (int, float))
         assert total >= 0
 
     def test_get_usage_report(self):
         from codomyrmex.llm.router import CostTracker
+
         tracker = CostTracker()
-        tracker.record(model_name="gpt-4", input_tokens=100, output_tokens=50, cost=0.01)
+        tracker.record(
+            model_name="gpt-4", input_tokens=100, output_tokens=50, cost=0.01
+        )
         report = tracker.get_usage_report()
         assert isinstance(report, (dict, str))

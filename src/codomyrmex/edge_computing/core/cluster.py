@@ -176,7 +176,9 @@ class EdgeCluster:
         and try to redeploy them elsewhere.
         """
         moves = 0
-        overloaded = [nid for nid, node in self._nodes.items() if node.resources.is_overloaded]
+        overloaded = [
+            nid for nid, node in self._nodes.items() if node.resources.is_overloaded
+        ]
 
         for source_id in overloaded:
             runtime = self._runtimes[source_id]
@@ -217,7 +219,11 @@ class EdgeCluster:
             "nodes": [
                 {
                     "id": nid,
-                    "status": node.status.value if hasattr(node.status, "value") else str(node.status),
+                    "status": (
+                        node.status.value
+                        if hasattr(node.status, "value")
+                        else str(node.status)
+                    ),
                     "functions": self._runtimes[nid].function_count,
                     "draining": nid in self._draining,
                     "overloaded": self._nodes[nid].resources.is_overloaded,

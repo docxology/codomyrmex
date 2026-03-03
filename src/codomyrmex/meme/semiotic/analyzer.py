@@ -21,9 +21,7 @@ class SemioticAnalyzer:
     """
 
     # Unicode ranges for emoji and symbols (Icons)
-    _ICON_PATTERNS = re.compile(
-        r"[\U0001F300-\U0001F9FF]|[\u2600-\u26FF]", re.UNICODE
-    )
+    _ICON_PATTERNS = re.compile(r"[\U0001F300-\U0001F9FF]|[\u2600-\u26FF]", re.UNICODE)
 
     def decode(self, text: str) -> list[Sign]:
         """Extract signs from text via keyword and pattern heuristics.
@@ -158,7 +156,18 @@ class SemioticAnalyzer:
             context_words.extend(s.signified.split())
 
         # Filter stop words (simple list for now)
-        stop_words = {"the", "a", "an", "is", "of", "to", "in", "and", "sign", "context"}
+        stop_words = {
+            "the",
+            "a",
+            "an",
+            "is",
+            "of",
+            "to",
+            "in",
+            "and",
+            "sign",
+            "context",
+        }
         clean_words = [w.lower().strip(".,!?") for w in context_words]
         clean_words = [w for w in clean_words if w not in stop_words and len(w) > 3]
 
@@ -168,9 +177,7 @@ class SemioticAnalyzer:
         territories = []
         for domain in top_domains:
             # Gather signs that appear in this domain's context
-            domain_signs = [
-                s for s in all_signs if domain in s.signified.lower()
-            ]
+            domain_signs = [s for s in all_signs if domain in s.signified.lower()]
             # De-duplicate by signifier
             unique_signs = {s.signifier: s for s in domain_signs}.values()
 

@@ -106,11 +106,14 @@ def parse_event_log(topics: list[str], data: str) -> dict[str, Any]:
     }
     # Split data into 64-char (32-byte) segments
     clean = data.replace("0x", "")
-    result["data_segments"] = [clean[i:i+64] for i in range(0, len(clean), 64) if clean[i:i+64]]
+    result["data_segments"] = [
+        clean[i : i + 64] for i in range(0, len(clean), 64) if clean[i : i + 64]
+    ]
     return result
 
 
 # ── Ether / Wei / Gwei conversion (backward compat) ────────────────
+
 
 def ether_to_wei(ether: float) -> int:
     """Convert ether to wei (1 ether = 10^18 wei)."""
@@ -125,4 +128,3 @@ def gwei_to_wei(gwei: float) -> int:
 def wei_to_ether(wei: int) -> float:
     """Convert wei to ether."""
     return wei / 10**18
-

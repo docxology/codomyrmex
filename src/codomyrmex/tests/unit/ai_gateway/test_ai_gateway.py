@@ -5,6 +5,7 @@ import pytest
 try:
     from codomyrmex.ai_gateway import AIGateway, CircuitBreaker, GatewayConfig, Provider
     from codomyrmex.ai_gateway.gateway import CircuitState
+
     HAS_MODULE = True
 except ImportError:
     HAS_MODULE = False
@@ -141,7 +142,7 @@ class TestAIGateway:
             providers.append(
                 Provider(
                     name=name,
-                    endpoint=f"http://localhost:{8000+i}",
+                    endpoint=f"http://localhost:{8000 + i}",
                     model_fn=lambda prompt, n=name: f"[{n}] {prompt[:20]}",
                 )
             )
@@ -154,8 +155,12 @@ class TestAIGateway:
 
         results = [gw.complete("test")["provider"] for _ in range(6)]
         assert results == [
-            "provider_0", "provider_1", "provider_2",
-            "provider_0", "provider_1", "provider_2",
+            "provider_0",
+            "provider_1",
+            "provider_2",
+            "provider_0",
+            "provider_1",
+            "provider_2",
         ]
 
     def test_complete_returns_success(self):
@@ -180,8 +185,12 @@ class TestAIGateway:
             return f"ok: {prompt[:10]}"
 
         providers = [
-            Provider(name="bad", endpoint="http://bad", model_fn=failing_fn, max_retries=3),
-            Provider(name="good", endpoint="http://good", model_fn=working_fn, max_retries=3),
+            Provider(
+                name="bad", endpoint="http://bad", model_fn=failing_fn, max_retries=3
+            ),
+            Provider(
+                name="good", endpoint="http://good", model_fn=working_fn, max_retries=3
+            ),
         ]
         gw = AIGateway(providers, GatewayConfig(strategy="round_robin"))
 
@@ -191,11 +200,14 @@ class TestAIGateway:
 
     def test_all_providers_down_returns_failure(self):
         """When all providers fail, complete returns success=False."""
+
         def failing_fn(prompt):
             raise RuntimeError("down")
 
         providers = [
-            Provider(name=f"p{i}", endpoint="http://x", model_fn=failing_fn, max_retries=1)
+            Provider(
+                name=f"p{i}", endpoint="http://x", model_fn=failing_fn, max_retries=1
+            )
             for i in range(2)
         ]
         config = GatewayConfig(
@@ -225,6 +237,7 @@ class TestAIGateway:
 
     def test_metrics_track_requests_and_failures(self):
         """Metrics increment correctly on success and failure."""
+
         def working_fn(prompt):
             return "ok"
 
@@ -240,10 +253,13 @@ class TestAIGateway:
     def test_unhealthy_provider_skipped(self):
         """Provider with is_healthy=False is not selected."""
         providers = [
-            Provider(name="unhealthy", endpoint="http://x", is_healthy=False,
-                     model_fn=lambda p: "should not run"),
-            Provider(name="healthy", endpoint="http://y",
-                     model_fn=lambda p: "ok"),
+            Provider(
+                name="unhealthy",
+                endpoint="http://x",
+                is_healthy=False,
+                model_fn=lambda p: "should not run",
+            ),
+            Provider(name="healthy", endpoint="http://y", model_fn=lambda p: "ok"),
         ]
         gw = AIGateway(providers)
         result = gw.complete("test")
@@ -253,6 +269,7 @@ class TestAIGateway:
 
     def test_no_retry_on_failure(self):
         """With retry_on_failure=False, gateway does not retry."""
+
         def failing_fn(prompt):
             raise RuntimeError("fail")
 
@@ -282,6 +299,7 @@ class TestAIGatewayMCPTools:
     def test_gateway_complete_no_providers(self):
         """gateway_complete returns error when no providers given."""
         from codomyrmex.ai_gateway.mcp_tools import gateway_complete
+
         result = gateway_complete(prompt="hello")
         assert result["status"] == "error"
         assert "No providers" in result["message"]
@@ -289,5 +307,6 @@ class TestAIGatewayMCPTools:
     def test_gateway_health_no_providers(self):
         """gateway_health returns error when no providers given."""
         from codomyrmex.ai_gateway.mcp_tools import gateway_health
+
         result = gateway_health()
         assert result["status"] == "error"

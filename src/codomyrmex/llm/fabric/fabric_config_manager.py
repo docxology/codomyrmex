@@ -15,6 +15,7 @@ logger = get_logger(__name__)
 @dataclass
 class FabricPattern:
     """Represents a Fabric pattern."""
+
     name: str
     description: str
     system_prompt: str
@@ -27,6 +28,7 @@ class FabricPattern:
 @dataclass
 class FabricConfig:
     """Fabric configuration."""
+
     api_key: str | None = None
     default_model: str = "gpt-4"
     patterns_dir: str | None = None
@@ -38,7 +40,9 @@ class FabricConfigManager:
 
     def __init__(self, config_path: str | None = None):
         """Initialize config manager."""
-        self.config_path = config_path or os.path.expanduser("~/.config/fabric/config.json")
+        self.config_path = config_path or os.path.expanduser(
+            "~/.config/fabric/config.json"
+        )
         self.config = self._load_config()
         self.patterns: dict[str, FabricPattern] = {}
 
@@ -51,7 +55,7 @@ class FabricConfigManager:
                 return FabricConfig(
                     api_key=data.get("api_key"),
                     default_model=data.get("default_model", "gpt-4"),
-                    patterns_dir=data.get("patterns_dir")
+                    patterns_dir=data.get("patterns_dir"),
                 )
             except Exception as e:
                 logger.warning(f"Failed to load config: {e}")
@@ -60,12 +64,16 @@ class FabricConfigManager:
     def save_config(self):
         """Save configuration to file."""
         os.makedirs(os.path.dirname(self.config_path), exist_ok=True)
-        with open(self.config_path, 'w') as f:
-            json.dump({
-                "api_key": self.config.api_key,
-                "default_model": self.config.default_model,
-                "patterns_dir": self.config.patterns_dir
-            }, f, indent=2)
+        with open(self.config_path, "w") as f:
+            json.dump(
+                {
+                    "api_key": self.config.api_key,
+                    "default_model": self.config.default_model,
+                    "patterns_dir": self.config.patterns_dir,
+                },
+                f,
+                indent=2,
+            )
 
     def get_pattern(self, name: str) -> FabricPattern | None:
         """Get a pattern by name."""

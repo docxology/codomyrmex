@@ -160,7 +160,9 @@ class NaturalRitualRecovery:
             return False
 
         if self.is_locked(user_id):
-            raise RitualError(f"User {user_id} is locked out after {self._max_attempts} attempts")
+            raise RitualError(
+                f"User {user_id} is locked out after {self._max_attempts} attempts"
+            )
 
         steps = self._rituals[user_id]
         if len(responses) != len(steps):

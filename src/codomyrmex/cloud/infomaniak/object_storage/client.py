@@ -84,19 +84,12 @@ class InfomaniakObjectStorageClient(InfomaniakOpenStackBase):
             return []
 
     def upload_object(
-        self,
-        container: str,
-        name: str,
-        data: bytes,
-        content_type: str | None = None
+        self, container: str, name: str, data: bytes, content_type: str | None = None
     ) -> bool:
         """Upload an object to a container."""
         try:
             self._conn.object_store.upload_object(
-                container=container,
-                name=name,
-                data=data,
-                content_type=content_type
+                container=container, name=name, data=data, content_type=content_type
             )
             logger.info(f"Uploaded object: {container}/{name}")
             return True
@@ -105,15 +98,11 @@ class InfomaniakObjectStorageClient(InfomaniakOpenStackBase):
             return False
 
     def upload_file(
-        self,
-        container: str,
-        name: str,
-        file_path: str,
-        content_type: str | None = None
+        self, container: str, name: str, file_path: str, content_type: str | None = None
     ) -> bool:
         """Upload a local file to a container."""
         try:
-            with open(file_path, 'rb') as f:
+            with open(file_path, "rb") as f:
                 data = f.read()
             return self.upload_object(container, name, data, content_type)
         except Exception as e:
@@ -129,17 +118,12 @@ class InfomaniakObjectStorageClient(InfomaniakOpenStackBase):
             logger.error(f"Failed to download object {container}/{name}: {e}")
             return None
 
-    def download_file(
-        self,
-        container: str,
-        name: str,
-        file_path: str
-    ) -> bool:
+    def download_file(self, container: str, name: str, file_path: str) -> bool:
         """Download an object to a local file."""
         try:
             data = self.download_object(container, name)
             if data:
-                with open(file_path, 'wb') as f:
+                with open(file_path, "wb") as f:
                     f.write(data)
                 return True
             return False
@@ -166,7 +150,9 @@ class InfomaniakObjectStorageClient(InfomaniakOpenStackBase):
                 "content_length": obj.content_length,
                 "content_type": obj.content_type,
                 "etag": obj.etag,
-                "last_modified": str(obj.last_modified_at) if obj.last_modified_at else None,
+                "last_modified": (
+                    str(obj.last_modified_at) if obj.last_modified_at else None
+                ),
             }
         except Exception as e:
             logger.error(f"Failed to get object metadata {container}/{name}: {e}")
@@ -185,10 +171,7 @@ class InfomaniakObjectStorageClient(InfomaniakOpenStackBase):
             acl: ACL string (e.g., ".r:*" for public read)
         """
         try:
-            self._conn.object_store.set_container_metadata(
-                container,
-                read_acl=acl
-            )
+            self._conn.object_store.set_container_metadata(container, read_acl=acl)
             logger.info(f"Set read ACL for {container}: {acl}")
             return True
         except Exception as e:
@@ -198,10 +181,7 @@ class InfomaniakObjectStorageClient(InfomaniakOpenStackBase):
     def set_container_write_acl(self, container: str, acl: str) -> bool:
         """Set container write ACL."""
         try:
-            self._conn.object_store.set_container_metadata(
-                container,
-                write_acl=acl
-            )
+            self._conn.object_store.set_container_metadata(container, write_acl=acl)
             logger.info(f"Set write ACL for {container}: {acl}")
             return True
         except Exception as e:
@@ -272,10 +252,7 @@ class InfomaniakS3Client(InfomaniakS3Base, StorageClient):
     # =========================================================================
 
     def list_objects(
-        self,
-        bucket: str,
-        prefix: str | None = None,
-        max_keys: int = 1000
+        self, bucket: str, prefix: str | None = None, max_keys: int = 1000
     ) -> list[str]:
         """List objects in a bucket."""
         try:
@@ -290,11 +267,7 @@ class InfomaniakS3Client(InfomaniakS3Base, StorageClient):
             return []
 
     def upload_file(
-        self,
-        bucket: str,
-        key: str,
-        file_path: str,
-        content_type: str | None = None
+        self, bucket: str, key: str, file_path: str, content_type: str | None = None
     ) -> bool:
         """Upload a local file to a bucket."""
         try:
@@ -309,11 +282,7 @@ class InfomaniakS3Client(InfomaniakS3Base, StorageClient):
             return False
 
     def upload_data(
-        self,
-        bucket: str,
-        key: str,
-        data: bytes,
-        content_type: str | None = None
+        self, bucket: str, key: str, data: bytes, content_type: str | None = None
     ) -> bool:
         """Upload raw data to a bucket."""
         try:
@@ -379,7 +348,7 @@ class InfomaniakS3Client(InfomaniakS3Base, StorageClient):
         bucket: str,
         key: str,
         expires_in: int = 3600,
-        operation: str = "get_object"
+        operation: str = "get_object",
     ) -> str:
         """
         Generate a presigned URL for temporary access.
@@ -394,7 +363,7 @@ class InfomaniakS3Client(InfomaniakS3Base, StorageClient):
             url = self._client.generate_presigned_url(
                 ClientMethod=operation,
                 Params={"Bucket": bucket, "Key": key},
-                ExpiresIn=expires_in
+                ExpiresIn=expires_in,
             )
             return url
         except Exception as e:
@@ -406,18 +375,14 @@ class InfomaniakS3Client(InfomaniakS3Base, StorageClient):
     # =========================================================================
 
     def copy_object(
-        self,
-        src_bucket: str,
-        src_key: str,
-        dst_bucket: str,
-        dst_key: str
+        self, src_bucket: str, src_key: str, dst_bucket: str, dst_key: str
     ) -> bool:
         """Copy an object between buckets or within a bucket."""
         try:
             self._client.copy_object(
                 Bucket=dst_bucket,
                 Key=dst_key,
-                CopySource={"Bucket": src_bucket, "Key": src_key}
+                CopySource={"Bucket": src_bucket, "Key": src_key},
             )
             logger.info(f"Copied {src_bucket}/{src_key} -> {dst_bucket}/{dst_key}")
             return True
@@ -426,9 +391,7 @@ class InfomaniakS3Client(InfomaniakS3Base, StorageClient):
             return False
 
     def list_objects_paginated(
-        self,
-        bucket: str,
-        prefix: str | None = None
+        self, bucket: str, prefix: str | None = None
     ) -> list[str]:
         """List all objects using pagination (handles >1000 objects)."""
         try:
@@ -446,11 +409,7 @@ class InfomaniakS3Client(InfomaniakS3Base, StorageClient):
             logger.error(f"Failed to list objects (paginated) in {bucket}: {e}")
             return []
 
-    def delete_objects_batch(
-        self,
-        bucket: str,
-        keys: list[str]
-    ) -> dict[str, Any]:
+    def delete_objects_batch(self, bucket: str, keys: list[str]) -> dict[str, Any]:
         """
         Delete multiple objects in a single request.
 
@@ -465,13 +424,13 @@ class InfomaniakS3Client(InfomaniakS3Base, StorageClient):
         try:
             # Batch in groups of 1000
             for i in range(0, len(keys), 1000):
-                batch = keys[i:i + 1000]
+                batch = keys[i : i + 1000]
                 response = self._client.delete_objects(
                     Bucket=bucket,
                     Delete={
                         "Objects": [{"Key": k} for k in batch],
                         "Quiet": False,
-                    }
+                    },
                 )
                 deleted_count += len(response.get("Deleted", []))
                 errors.extend(response.get("Errors", []))
@@ -487,8 +446,7 @@ class InfomaniakS3Client(InfomaniakS3Base, StorageClient):
         """Enable versioning on a bucket."""
         try:
             self._client.put_bucket_versioning(
-                Bucket=bucket,
-                VersioningConfiguration={"Status": "Enabled"}
+                Bucket=bucket, VersioningConfiguration={"Status": "Enabled"}
             )
             logger.info(f"Enabled versioning on bucket: {bucket}")
             return True

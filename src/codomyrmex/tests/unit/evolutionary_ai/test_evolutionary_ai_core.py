@@ -47,6 +47,7 @@ class TestMutationOperators:
         assert len(mutated.genes) == 10
         assert sorted(mutated.genes) == list(range(10))
 
+
 @pytest.mark.unit
 class TestCrossoverOperators:
     def test_single_point_crossover(self):
@@ -58,15 +59,15 @@ class TestCrossoverOperators:
         # Verify crossover happened at some point
         found_point = False
         for i in range(1, 4):
-            if c1.genes[:i] == [0]*i and c1.genes[i:] == [1]*(4-i):
+            if c1.genes[:i] == [0] * i and c1.genes[i:] == [1] * (4 - i):
                 found_point = True
                 break
         assert found_point
 
     def test_two_point_crossover(self):
         cross = TwoPointCrossover(crossover_rate=1.0)
-        p1 = Individual(genes=[0]*10)
-        p2 = Individual(genes=[1]*10)
+        p1 = Individual(genes=[0] * 10)
+        p2 = Individual(genes=[1] * 10)
         c1, c2 = cross.crossover(p1, p2)
         assert len(c1.genes) == 10
         assert len(c2.genes) == 10
@@ -75,8 +76,8 @@ class TestCrossoverOperators:
 
     def test_uniform_crossover(self):
         cross = UniformCrossover(crossover_rate=1.0, mixing_ratio=0.5)
-        p1 = Individual(genes=[0]*100)
-        p2 = Individual(genes=[1]*100)
+        p1 = Individual(genes=[0] * 100)
+        p2 = Individual(genes=[1] * 100)
         c1, c2 = cross.crossover(p1, p2)
         # Statistics: approximately 50/50
         zeros = sum(1 for g in c1.genes if g == 0)

@@ -12,6 +12,7 @@ try:
         analyze_communication,
         detect_social_engineering,
     )
+
     SOCIAL_ENGINEERING_AVAILABLE = True
 except ImportError:
     SocialEngineeringDetector = None
@@ -25,6 +26,7 @@ try:
         analyze_email,
         detect_phishing_attempt,
     )
+
     PHISHING_ANALYSIS_AVAILABLE = True
 except ImportError:
     PhishingAnalyzer = None
@@ -38,6 +40,7 @@ try:
         assess_training_effectiveness,
         create_training_module,
     )
+
     AWARENESS_TRAINING_AVAILABLE = True
 except ImportError:
     AwarenessTrainer = None
@@ -51,6 +54,7 @@ try:
         assess_cognitive_threats,
         evaluate_human_factors,
     )
+
     COGNITIVE_THREAT_AVAILABLE = True
 except ImportError:
     CognitiveThreatAssessor = None
@@ -64,6 +68,7 @@ try:
         analyze_user_behavior,
         detect_anomalous_behavior,
     )
+
     BEHAVIOR_ANALYSIS_AVAILABLE = True
 except ImportError:
     BehaviorAnalyzer = None
@@ -74,39 +79,46 @@ except ImportError:
 __all__ = []
 
 if SOCIAL_ENGINEERING_AVAILABLE:
-    __all__.extend([
-        "SocialEngineeringDetector",
-        "detect_social_engineering",
-        "analyze_communication",
-    ])
+    __all__.extend(
+        [
+            "SocialEngineeringDetector",
+            "detect_social_engineering",
+            "analyze_communication",
+        ]
+    )
 
 if PHISHING_ANALYSIS_AVAILABLE:
-    __all__.extend([
-        "PhishingAnalyzer",
-        "analyze_email",
-        "detect_phishing_attempt",
-    ])
+    __all__.extend(
+        [
+            "PhishingAnalyzer",
+            "analyze_email",
+            "detect_phishing_attempt",
+        ]
+    )
 
 if AWARENESS_TRAINING_AVAILABLE:
-    __all__.extend([
-        "AwarenessTrainer",
-        "create_training_module",
-        "assess_training_effectiveness",
-    ])
+    __all__.extend(
+        [
+            "AwarenessTrainer",
+            "create_training_module",
+            "assess_training_effectiveness",
+        ]
+    )
 
 if COGNITIVE_THREAT_AVAILABLE:
-    __all__.extend([
-        "CognitiveThreatAssessor",
-        "assess_cognitive_threats",
-        "evaluate_human_factors",
-    ])
+    __all__.extend(
+        [
+            "CognitiveThreatAssessor",
+            "assess_cognitive_threats",
+            "evaluate_human_factors",
+        ]
+    )
 
 if BEHAVIOR_ANALYSIS_AVAILABLE:
-    __all__.extend([
-        "BehaviorAnalyzer",
-        "analyze_user_behavior",
-        "detect_anomalous_behavior",
-    ])
-
-
-
+    __all__.extend(
+        [
+            "BehaviorAnalyzer",
+            "analyze_user_behavior",
+            "detect_anomalous_behavior",
+        ]
+    )

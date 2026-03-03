@@ -7,12 +7,17 @@ from codomyrmex.logging_monitoring.core.logger_config import get_logger
 logger = get_logger(__name__)
 
 
-def create_3d_module_documentation(module_path, docs_content, files_created, logger, description):
+def create_3d_module_documentation(
+    module_path, docs_content, files_created, logger, description
+):
     """Create documentation for 3D module."""
     (module_path / "docs" / "architecture.md").write_text(docs_content)
     files_created.append("docs/architecture.md")
 
-    logger.info(f"3D modeling module created at {module_path}", extra={"description": description})
+    logger.info(
+        f"3D modeling module created at {module_path}",
+        extra={"description": description},
+    )
     return f"3D modeling module created with {len(files_created)} files"
 
 
@@ -348,7 +353,7 @@ class RenderPipeline:
 
 def generate_3d_readme_content() -> str:
     """Generate README content for the 3D module."""
-    return '''# 3D Modeling and Rendering Module
+    return """# 3D Modeling and Rendering Module
 
 A comprehensive 3D modeling, rendering, and AR/VR/XR module for the Codomyrmex platform.
 
@@ -413,12 +418,12 @@ vr_renderer.render_stereo(scene)
 ## Requirements
 
 See [requirements.txt](requirements.txt) for dependencies.
-'''
+"""
 
 
 def generate_3d_api_spec() -> str:
     """Generate API specification for the 3D module."""
-    return '''# 3D Modeling Module API Specification
+    return """# 3D Modeling Module API Specification
 
 ## Core Classes
 
@@ -482,7 +487,7 @@ def generate_3d_api_spec() -> str:
 - **Purpose**: Manages texture resources
 - **Methods**:
   - `load_texture(name: str, file_path: str) -> bool`
-'''
+"""
 
 
 def generate_3d_examples() -> str:
@@ -741,7 +746,7 @@ mypy>=0.910
 
 def generate_3d_docs_content() -> str:
     """Generate architecture documentation."""
-    return '''# 3D Modeling Module Architecture
+    return """# 3D Modeling Module Architecture
 
 ## Overview
 
@@ -834,5 +839,4 @@ Input Data → Scene Setup → Transform Objects → Lighting → Rendering → 
 - Procedural content generation
 - Real-time global illumination
 - Advanced material systems (PBR, subsurface scattering)
-'''
-
+"""

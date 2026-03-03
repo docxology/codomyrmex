@@ -30,6 +30,7 @@ class TestInfomaniakIdentity:
     def _make_client(self, conn):
         """Helper to create an InfomaniakIdentityClient from a mock connection."""
         from codomyrmex.cloud.infomaniak.identity.client import InfomaniakIdentityClient
+
         return InfomaniakIdentityClient(conn)
 
     # =====================================================================
@@ -55,11 +56,15 @@ class TestInfomaniakIdentity:
         assert result["email"] == "alice@infomaniak.cloud"
         assert result["domain_id"] == "domain-abc"
         assert result["is_enabled"] is True
-        mock_openstack_connection.identity.get_user.assert_called_once_with("user-test-123")
+        mock_openstack_connection.identity.get_user.assert_called_once_with(
+            "user-test-123"
+        )
 
     def test_get_current_user_error_returns_empty_dict(self, mock_openstack_connection):
         """get_current_user returns {} on exception."""
-        mock_openstack_connection.identity.get_user.side_effect = Exception("auth failure")
+        mock_openstack_connection.identity.get_user.side_effect = Exception(
+            "auth failure"
+        )
 
         client = self._make_client(mock_openstack_connection)
         result = client.get_current_user()
@@ -84,7 +89,9 @@ class TestInfomaniakIdentity:
         assert result["name"] == "bob"
         assert result["email"] == "bob@example.com"
         assert result["domain_id"] == "domain-xyz"
-        mock_openstack_connection.identity.get_user.assert_called_once_with("user-other-789")
+        mock_openstack_connection.identity.get_user.assert_called_once_with(
+            "user-other-789"
+        )
 
     def test_get_user_error_returns_none(self, mock_openstack_connection):
         """get_user returns None on exception."""
@@ -115,7 +122,10 @@ class TestInfomaniakIdentity:
         mock_proj2.is_enabled = False
         mock_proj2.domain_id = "domain-abc"
 
-        mock_openstack_connection.identity.projects.return_value = [mock_proj1, mock_proj2]
+        mock_openstack_connection.identity.projects.return_value = [
+            mock_proj1,
+            mock_proj2,
+        ]
 
         client = self._make_client(mock_openstack_connection)
         result = client.list_projects()
@@ -151,11 +161,17 @@ class TestInfomaniakIdentity:
         assert result["id"] == "proj-test-456"
         assert result["name"] == "main-project"
         assert result["description"] == "The main project"
-        mock_openstack_connection.identity.get_project.assert_called_once_with("proj-test-456")
+        mock_openstack_connection.identity.get_project.assert_called_once_with(
+            "proj-test-456"
+        )
 
-    def test_get_current_project_error_returns_empty_dict(self, mock_openstack_connection):
+    def test_get_current_project_error_returns_empty_dict(
+        self, mock_openstack_connection
+    ):
         """get_current_project returns {} on exception."""
-        mock_openstack_connection.identity.get_project.side_effect = Exception("timeout")
+        mock_openstack_connection.identity.get_project.side_effect = Exception(
+            "timeout"
+        )
 
         client = self._make_client(mock_openstack_connection)
         result = client.get_current_project()
@@ -175,7 +191,9 @@ class TestInfomaniakIdentity:
         mock_cred.expires_at = "2026-12-31T23:59:59Z"
         mock_cred.roles = [{"name": "member"}, {"name": "reader"}]
 
-        mock_openstack_connection.identity.application_credentials.return_value = [mock_cred]
+        mock_openstack_connection.identity.application_credentials.return_value = [
+            mock_cred
+        ]
 
         client = self._make_client(mock_openstack_connection)
         result = client.list_application_credentials()
@@ -191,9 +209,13 @@ class TestInfomaniakIdentity:
             user="user-test-123"
         )
 
-    def test_list_application_credentials_error_returns_empty_list(self, mock_openstack_connection):
+    def test_list_application_credentials_error_returns_empty_list(
+        self, mock_openstack_connection
+    ):
         """list_application_credentials returns [] on exception."""
-        mock_openstack_connection.identity.application_credentials.side_effect = Exception("denied")
+        mock_openstack_connection.identity.application_credentials.side_effect = (
+            Exception("denied")
+        )
 
         client = self._make_client(mock_openstack_connection)
         result = client.list_application_credentials()
@@ -232,10 +254,12 @@ class TestInfomaniakIdentity:
             unrestricted=False,
         )
 
-    def test_create_application_credential_error_returns_none(self, mock_openstack_connection):
+    def test_create_application_credential_error_returns_none(
+        self, mock_openstack_connection
+    ):
         """create_application_credential returns None on exception."""
-        mock_openstack_connection.identity.create_application_credential.side_effect = Exception(
-            "duplicate name"
+        mock_openstack_connection.identity.create_application_credential.side_effect = (
+            Exception("duplicate name")
         )
 
         client = self._make_client(mock_openstack_connection)
@@ -251,7 +275,9 @@ class TestInfomaniakIdentity:
         mock_cred.description = "Some description"
         mock_cred.expires_at = "2027-06-01T00:00:00Z"
 
-        mock_openstack_connection.identity.get_application_credential.return_value = mock_cred
+        mock_openstack_connection.identity.get_application_credential.return_value = (
+            mock_cred
+        )
 
         client = self._make_client(mock_openstack_connection)
         result = client.get_application_credential("appcred-fetch")
@@ -266,10 +292,12 @@ class TestInfomaniakIdentity:
             application_credential="appcred-fetch",
         )
 
-    def test_get_application_credential_error_returns_none(self, mock_openstack_connection):
+    def test_get_application_credential_error_returns_none(
+        self, mock_openstack_connection
+    ):
         """get_application_credential returns None on exception."""
-        mock_openstack_connection.identity.get_application_credential.side_effect = Exception(
-            "not found"
+        mock_openstack_connection.identity.get_application_credential.side_effect = (
+            Exception("not found")
         )
 
         client = self._make_client(mock_openstack_connection)
@@ -288,10 +316,12 @@ class TestInfomaniakIdentity:
             application_credential="appcred-del",
         )
 
-    def test_delete_application_credential_error_returns_false(self, mock_openstack_connection):
+    def test_delete_application_credential_error_returns_false(
+        self, mock_openstack_connection
+    ):
         """delete_application_credential returns False on exception."""
-        mock_openstack_connection.identity.delete_application_credential.side_effect = Exception(
-            "forbidden"
+        mock_openstack_connection.identity.delete_application_credential.side_effect = (
+            Exception("forbidden")
         )
 
         client = self._make_client(mock_openstack_connection)
@@ -327,7 +357,9 @@ class TestInfomaniakIdentity:
 
     def test_list_roles_error_returns_empty_list(self, mock_openstack_connection):
         """list_roles returns [] on exception."""
-        mock_openstack_connection.identity.roles.side_effect = Exception("service unavailable")
+        mock_openstack_connection.identity.roles.side_effect = Exception(
+            "service unavailable"
+        )
 
         client = self._make_client(mock_openstack_connection)
         result = client.list_roles()
@@ -341,7 +373,10 @@ class TestInfomaniakIdentity:
         mock_ra2 = Stub()
         mock_ra2.role = {"id": "role-2"}
 
-        mock_openstack_connection.identity.role_assignments.return_value = [mock_ra1, mock_ra2]
+        mock_openstack_connection.identity.role_assignments.return_value = [
+            mock_ra1,
+            mock_ra2,
+        ]
 
         mock_resolved_role1 = Stub()
         mock_resolved_role1.id = "role-1"
@@ -382,7 +417,9 @@ class TestInfomaniakIdentity:
 
     def test_list_user_roles_error_returns_empty_list(self, mock_openstack_connection):
         """list_user_roles returns [] on exception."""
-        mock_openstack_connection.identity.role_assignments.side_effect = Exception("timeout")
+        mock_openstack_connection.identity.role_assignments.side_effect = Exception(
+            "timeout"
+        )
 
         client = self._make_client(mock_openstack_connection)
         result = client.list_user_roles()
@@ -423,9 +460,13 @@ class TestInfomaniakIdentity:
             user_id="user-test-123"
         )
 
-    def test_list_ec2_credentials_error_returns_empty_list(self, mock_openstack_connection):
+    def test_list_ec2_credentials_error_returns_empty_list(
+        self, mock_openstack_connection
+    ):
         """list_ec2_credentials returns [] on exception."""
-        mock_openstack_connection.identity.credentials.side_effect = Exception("connection error")
+        mock_openstack_connection.identity.credentials.side_effect = Exception(
+            "connection error"
+        )
 
         client = self._make_client(mock_openstack_connection)
         result = client.list_ec2_credentials()
@@ -457,7 +498,9 @@ class TestInfomaniakIdentity:
             blob='{"access": "", "secret": ""}',
         )
 
-    def test_create_ec2_credentials_with_explicit_project(self, mock_openstack_connection):
+    def test_create_ec2_credentials_with_explicit_project(
+        self, mock_openstack_connection
+    ):
         """create_ec2_credentials uses provided project_id when specified."""
         mock_cred = Stub()
         mock_cred.id = "ec2-custom"
@@ -481,7 +524,9 @@ class TestInfomaniakIdentity:
 
     def test_create_ec2_credentials_error_returns_none(self, mock_openstack_connection):
         """create_ec2_credentials returns None on exception."""
-        mock_openstack_connection.identity.create_credential.side_effect = Exception("quota exceeded")
+        mock_openstack_connection.identity.create_credential.side_effect = Exception(
+            "quota exceeded"
+        )
 
         client = self._make_client(mock_openstack_connection)
         result = client.create_ec2_credentials()
@@ -494,11 +539,17 @@ class TestInfomaniakIdentity:
         result = client.delete_ec2_credentials("ec2-del")
 
         assert result is True
-        mock_openstack_connection.identity.delete_credential.assert_called_once_with("ec2-del")
+        mock_openstack_connection.identity.delete_credential.assert_called_once_with(
+            "ec2-del"
+        )
 
-    def test_delete_ec2_credentials_error_returns_false(self, mock_openstack_connection):
+    def test_delete_ec2_credentials_error_returns_false(
+        self, mock_openstack_connection
+    ):
         """delete_ec2_credentials returns False on exception."""
-        mock_openstack_connection.identity.delete_credential.side_effect = Exception("not found")
+        mock_openstack_connection.identity.delete_credential.side_effect = Exception(
+            "not found"
+        )
 
         client = self._make_client(mock_openstack_connection)
         result = client.delete_ec2_credentials("ec2-missing")
@@ -508,11 +559,13 @@ class TestInfomaniakIdentity:
 
 # =========================================================================
 
+
 class TestInfomaniakIdentityClientExpanded:
     """Tests for InfomaniakIdentityClient untested methods."""
 
     def _make_client(self):
         from codomyrmex.cloud.infomaniak.identity import InfomaniakIdentityClient
+
         mock_conn = Stub()
         mock_conn.current_user_id = "uid-1"
         mock_conn.current_project_id = "proj-1"

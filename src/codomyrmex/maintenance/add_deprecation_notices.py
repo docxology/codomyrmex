@@ -31,8 +31,13 @@ def get_module_name(file_path: Path) -> str:
 def get_dependency_location(module_name: str) -> str:
     """Determine where dependencies are located in pyproject.toml."""
     optional_deps = {
-        "code_review", "llm", "spatial.three_d", "performance",
-        "physical_management", "security", "static_analysis"
+        "code_review",
+        "llm",
+        "spatial.three_d",
+        "performance",
+        "physical_management",
+        "security",
+        "static_analysis",
     }
     if module_name in optional_deps:
         return f"pyproject.toml [project.optional-dependencies.{module_name}]"
@@ -91,6 +96,7 @@ def add_deprecation_notice(file_path: Path) -> str:
 
 # ── Scanning ────────────────────────────────────────────────────────
 
+
 def scan_for_deprecated(root: Path) -> list[dict[str, Any]]:
     """Scan the project for requirements.txt files and their deprecation status.
 
@@ -112,12 +118,14 @@ def scan_for_deprecated(root: Path) -> list[dict[str, Any]]:
         req_file = module_dir / "requirements.txt"
         if req_file.exists():
             content = req_file.read_text(encoding="utf-8")
-            results.append({
-                "module": module_dir.name,
-                "file": str(req_file),
-                "deprecated": content.startswith("# DEPRECATED"),
-                "size_bytes": req_file.stat().st_size,
-            })
+            results.append(
+                {
+                    "module": module_dir.name,
+                    "file": str(req_file),
+                    "deprecated": content.startswith("# DEPRECATED"),
+                    "size_bytes": req_file.stat().st_size,
+                }
+            )
     return results
 
 

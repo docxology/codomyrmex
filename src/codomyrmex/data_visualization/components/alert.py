@@ -1,4 +1,5 @@
 """Component module."""
+
 from dataclasses import dataclass
 
 from ._base import BaseComponent
@@ -7,6 +8,7 @@ from ._base import BaseComponent
 @dataclass
 class Alert(BaseComponent):
     """Alert component."""
+
     message: str = ""
     level: str = "info"
 
@@ -23,7 +25,7 @@ class Alert(BaseComponent):
         return (
             f'<div class="alert alert-{self.level}" '
             f'style="background-color: {bg}; padding: 12px; border-radius: 4px;">'
-            f'{self.message}</div>'
+            f"{self.message}</div>"
         )
 
     def __str__(self) -> str:

@@ -73,11 +73,13 @@ class TestInMemoryAuditStore:
         store = InMemoryAuditStore(max_events=5)
 
         for i in range(10):
-            store.store(AuditEvent(
-                id=f"e{i}",
-                event_type=AuditEventType.DATA_ACCESS,
-                action="read",
-            ))
+            store.store(
+                AuditEvent(
+                    id=f"e{i}",
+                    event_type=AuditEventType.DATA_ACCESS,
+                    action="read",
+                )
+            )
 
         assert len(store.get_all()) == 5
 
@@ -107,10 +109,12 @@ class TestFileAuditStore:
 
     def test_store_and_query(self):
         """Should store and query from file."""
-        with tempfile.NamedTemporaryFile(mode='w', delete=False) as f:
+        with tempfile.NamedTemporaryFile(mode="w", delete=False) as f:
             store = FileAuditStore(f.name)
 
-            store.store(AuditEvent("e1", AuditEventType.AUTH_LOGIN, "login", actor="user"))
+            store.store(
+                AuditEvent("e1", AuditEventType.AUTH_LOGIN, "login", actor="user")
+            )
 
             results = store.query(actor="user")
 

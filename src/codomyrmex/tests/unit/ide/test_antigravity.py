@@ -179,7 +179,9 @@ class TestAntigravityArtifactCRUD:
     def test_create_artifact_writes_file(self, tmp_path):
         """create_artifact should write a .md file to disk."""
         client, conv_dir = self._make_connected_client(tmp_path)
-        result = client.create_artifact("my_task", "# Task content", artifact_type="task")
+        result = client.create_artifact(
+            "my_task", "# Task content", artifact_type="task"
+        )
         assert result["created"] is True
         assert (conv_dir / "my_task.md").exists()
         assert (conv_dir / "my_task.md").read_text() == "# Task content"
@@ -478,7 +480,9 @@ class TestAntigravityClientArtifacts:
         """create_artifact writes a .md file and returns metadata."""
         client, conv_dir = self._connected(tmp_path)
         result = client.create_artifact(
-            name="plan", content="## Implementation Plan", artifact_type="implementation_plan"
+            name="plan",
+            content="## Implementation Plan",
+            artifact_type="implementation_plan",
         )
         assert result["created"] is True
         assert result["type"] == "implementation_plan"
@@ -776,7 +780,9 @@ class TestAntigravityEventHandlers:
         conv = tmp_path / "dc_conv"
         conv.mkdir()
         client = AntigravityClient(artifact_dir=str(tmp_path))
-        client.register_event_handler("disconnected", lambda data: received.append(data))
+        client.register_event_handler(
+            "disconnected", lambda data: received.append(data)
+        )
         client.connect()
         client.disconnect()
         assert len(received) == 1
@@ -787,7 +793,9 @@ class TestAntigravityEventHandlers:
         conv = tmp_path / "ac_conv"
         conv.mkdir()
         client = AntigravityClient(artifact_dir=str(tmp_path))
-        client.register_event_handler("artifact_created", lambda data: received.append(data))
+        client.register_event_handler(
+            "artifact_created", lambda data: received.append(data)
+        )
         client.connect()
         client.create_artifact("evt_doc", "Content", artifact_type="other")
         assert len(received) == 1

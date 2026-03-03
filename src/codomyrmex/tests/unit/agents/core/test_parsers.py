@@ -31,7 +31,9 @@ class TestCodeBlock:
         assert str(block) == "x = 1"
 
     def test_fields(self):
-        block = CodeBlock(language="js", code="console.log(1)", start_line=5, end_line=7)
+        block = CodeBlock(
+            language="js", code="console.log(1)", start_line=5, end_line=7
+        )
         assert block.language == "js"
         assert block.start_line == 5
         assert block.end_line == 7

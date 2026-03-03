@@ -39,17 +39,13 @@ def emit_event(
             payload["original_type"] = event_type
 
         from codomyrmex.events.core.event_schema import EventPriority
+
         try:
             epriority = EventPriority(priority.lower())
         except ValueError:
             epriority = EventPriority.NORMAL
 
-        event = Event(
-            event_type=etype,
-            data=payload,
-            source=source,
-            priority=epriority
-        )
+        event = Event(event_type=etype, data=payload, source=source, priority=epriority)
         bus.publish(event)
         return {
             "status": "success",

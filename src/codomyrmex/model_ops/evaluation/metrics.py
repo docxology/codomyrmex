@@ -16,6 +16,7 @@ from typing import Any
 
 class TaskType(Enum):
     """Model evaluation task types."""
+
     BINARY_CLASSIFICATION = "binary_classification"
     MULTICLASS_CLASSIFICATION = "multiclass_classification"
     REGRESSION = "regression"
@@ -24,6 +25,7 @@ class TaskType(Enum):
 @dataclass
 class EvaluationResult:
     """Result of a model evaluation."""
+
     metrics: dict[str, float]
     task_type: TaskType
     sample_count: int
@@ -66,7 +68,9 @@ class AccuracyMetric(Metric):
         """Compute."""
         if not y_true:
             return 0.0
-        return sum(1 for t, p in zip(y_true, y_pred, strict=False) if t == p) / len(y_true)
+        return sum(1 for t, p in zip(y_true, y_pred, strict=False) if t == p) / len(
+            y_true
+        )
 
 
 class PrecisionMetric(Metric):
@@ -82,8 +86,16 @@ class PrecisionMetric(Metric):
 
     def compute(self, y_true: list, y_pred: list) -> float:
         """Compute."""
-        tp = sum(1 for t, p in zip(y_true, y_pred, strict=False) if p == self.positive_class and t == self.positive_class)
-        fp = sum(1 for t, p in zip(y_true, y_pred, strict=False) if p == self.positive_class and t != self.positive_class)
+        tp = sum(
+            1
+            for t, p in zip(y_true, y_pred, strict=False)
+            if p == self.positive_class and t == self.positive_class
+        )
+        fp = sum(
+            1
+            for t, p in zip(y_true, y_pred, strict=False)
+            if p == self.positive_class and t != self.positive_class
+        )
         if tp + fp == 0:
             return 0.0
         return tp / (tp + fp)
@@ -102,8 +114,16 @@ class RecallMetric(Metric):
 
     def compute(self, y_true: list, y_pred: list) -> float:
         """Compute."""
-        tp = sum(1 for t, p in zip(y_true, y_pred, strict=False) if p == self.positive_class and t == self.positive_class)
-        fn = sum(1 for t, p in zip(y_true, y_pred, strict=False) if p != self.positive_class and t == self.positive_class)
+        tp = sum(
+            1
+            for t, p in zip(y_true, y_pred, strict=False)
+            if p == self.positive_class and t == self.positive_class
+        )
+        fn = sum(
+            1
+            for t, p in zip(y_true, y_pred, strict=False)
+            if p != self.positive_class and t == self.positive_class
+        )
         if tp + fn == 0:
             return 0.0
         return tp / (tp + fn)
@@ -141,7 +161,9 @@ class MSEMetric(Metric):
         """Compute."""
         if not y_true:
             return 0.0
-        return sum((t - p) ** 2 for t, p in zip(y_true, y_pred, strict=False)) / len(y_true)
+        return sum((t - p) ** 2 for t, p in zip(y_true, y_pred, strict=False)) / len(
+            y_true
+        )
 
 
 class MAEMetric(Metric):
@@ -156,7 +178,9 @@ class MAEMetric(Metric):
         """Compute."""
         if not y_true:
             return 0.0
-        return sum(abs(t - p) for t, p in zip(y_true, y_pred, strict=False)) / len(y_true)
+        return sum(abs(t - p) for t, p in zip(y_true, y_pred, strict=False)) / len(
+            y_true
+        )
 
 
 class RMSEMetric(Metric):
@@ -264,7 +288,10 @@ class ModelEvaluator:
         self.metrics: list[Metric] = self._default_metrics()
 
     def _default_metrics(self) -> list[Metric]:
-        if self.task_type in (TaskType.BINARY_CLASSIFICATION, TaskType.MULTICLASS_CLASSIFICATION):
+        if self.task_type in (
+            TaskType.BINARY_CLASSIFICATION,
+            TaskType.MULTICLASS_CLASSIFICATION,
+        ):
             return [AccuracyMetric(), PrecisionMetric(), RecallMetric(), F1Metric()]
         elif self.task_type == TaskType.REGRESSION:
             return [MSEMetric(), MAEMetric(), RMSEMetric(), R2Metric()]

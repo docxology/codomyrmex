@@ -99,9 +99,7 @@ class MCPToolError:
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> MCPToolError:
         """Reconstruct from a dictionary (e.g. parsed from JSON)."""
-        field_errors = [
-            FieldError(**fe) for fe in data.get("field_errors", [])
-        ]
+        field_errors = [FieldError(**fe) for fe in data.get("field_errors", [])]
         return cls(
             code=MCPErrorCode(data["code"]),
             message=data["message"],

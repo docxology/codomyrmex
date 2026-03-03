@@ -17,6 +17,7 @@ from . import FaultInjector
 
 class ScenarioType(Enum):
     """Pre-built chaos scenarios."""
+
     NETWORK_PARTITION = "network_partition"
     SERVICE_OUTAGE = "service_outage"
     DATABASE_FAILURE = "database_failure"
@@ -30,6 +31,7 @@ class ScenarioType(Enum):
 @dataclass
 class ScenarioConfig:
     """Configuration for a chaos scenario."""
+
     type: ScenarioType
     duration_seconds: float = 30.0
     intensity: float = 0.5  # 0-1
@@ -40,6 +42,7 @@ class ScenarioConfig:
 @dataclass
 class ScenarioResult:
     """Result of running a chaos scenario."""
+
     scenario_type: ScenarioType
     success: bool
     errors_detected: int
@@ -77,7 +80,9 @@ class ChaosScenarioRunner:
         observations = []
         errors = 0
 
-        observations.append(f"Starting network partition for {config.duration_seconds}s")
+        observations.append(
+            f"Starting network partition for {config.duration_seconds}s"
+        )
 
         # Inject latency and failures
         time.time()

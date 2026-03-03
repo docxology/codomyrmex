@@ -27,10 +27,12 @@ class TestDataset:
         assert ds.data == items
 
     def test_validate_valid_messages(self):
-        ds = Dataset([
-            {"messages": [{"role": "user", "content": "hi"}]},
-            {"messages": [{"role": "user", "content": "hello"}]},
-        ])
+        ds = Dataset(
+            [
+                {"messages": [{"role": "user", "content": "hi"}]},
+                {"messages": [{"role": "user", "content": "hello"}]},
+            ]
+        )
         assert ds.validate() is True
 
     def test_validate_valid_prompt(self):
@@ -38,10 +40,12 @@ class TestDataset:
         assert ds.validate() is True
 
     def test_validate_mixed_formats(self):
-        ds = Dataset([
-            {"messages": "some"},
-            {"prompt": "some"},
-        ])
+        ds = Dataset(
+            [
+                {"messages": "some"},
+                {"prompt": "some"},
+            ]
+        )
         assert ds.validate() is True
 
     def test_validate_invalid_item(self):
@@ -54,11 +58,13 @@ class TestDataset:
         assert ds.validate() is True
 
     def test_validate_stops_at_first_invalid(self):
-        ds = Dataset([
-            {"messages": "ok"},
-            {"bad_key": "value"},
-            {"messages": "also ok"},
-        ])
+        ds = Dataset(
+            [
+                {"messages": "ok"},
+                {"bad_key": "value"},
+                {"messages": "also ok"},
+            ]
+        )
         # Second item is invalid — returns False
         assert ds.validate() is False
 
@@ -76,9 +82,7 @@ class TestDataset:
         assert loaded.data == original
 
     def test_from_file_each_line_parsed(self):
-        with tempfile.NamedTemporaryFile(
-            mode="w", suffix=".jsonl", delete=False
-        ) as f:
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".jsonl", delete=False) as f:
             for i in range(5):
                 f.write(json.dumps({"id": i, "messages": f"msg{i}"}) + "\n")
             path = f.name
@@ -95,10 +99,12 @@ class TestDataset:
 @pytest.mark.unit
 class TestDatasetSanitizer:
     def test_strip_keys_removes_specified(self):
-        ds = Dataset([
-            {"name": "Alice", "ssn": "123-45-6789", "age": 30},
-            {"name": "Bob", "ssn": "987-65-4321", "age": 25},
-        ])
+        ds = Dataset(
+            [
+                {"name": "Alice", "ssn": "123-45-6789", "age": 30},
+                {"name": "Bob", "ssn": "987-65-4321", "age": 25},
+            ]
+        )
         cleaned = DatasetSanitizer.strip_keys(ds, ["ssn"])
         for item in cleaned.data:
             assert "ssn" not in item
@@ -120,11 +126,13 @@ class TestDatasetSanitizer:
         assert cleaned is not ds
 
     def test_filter_by_length_within_range(self):
-        ds = Dataset([
-            {"prompt": "short"},
-            {"prompt": "a" * 100},
-            {"prompt": "a" * 200},
-        ])
+        ds = Dataset(
+            [
+                {"prompt": "short"},
+                {"prompt": "a" * 100},
+                {"prompt": "a" * 200},
+            ]
+        )
         filtered = DatasetSanitizer.filter_by_length(ds, min_len=5, max_len=150)
         assert len(filtered.data) == 2
 

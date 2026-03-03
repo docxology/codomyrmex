@@ -47,6 +47,7 @@ TASK_MASTER_PRICING = {
 
 class TaskPriority(Enum):
     """Task priority levels."""
+
     LOW = "low"
     MEDIUM = "medium"
     HIGH = "high"
@@ -55,6 +56,7 @@ class TaskPriority(Enum):
 
 class TaskStatus(Enum):
     """Task execution status."""
+
     PENDING = "pending"
     IN_PROGRESS = "in_progress"
     COMPLETED = "completed"
@@ -65,6 +67,7 @@ class TaskStatus(Enum):
 @dataclass
 class Task:
     """Task definition for Claude Task Master."""
+
     description: str
     priority: TaskPriority = TaskPriority.MEDIUM
     context: str | None = None
@@ -76,6 +79,7 @@ class Task:
 @dataclass
 class TaskResult:
     """Result of task execution."""
+
     task_id: str
     status: TaskStatus
     result: Any
@@ -142,7 +146,9 @@ class ClaudeTaskMaster:
         self._total_tokens = 0
 
         if not self.api_key:
-            logger.warning("ANTHROPIC_API_KEY not set - Task Master operations will fail")
+            logger.warning(
+                "ANTHROPIC_API_KEY not set - Task Master operations will fail"
+            )
 
     def _get_client(self) -> Anthropic:
         """Lazily initialize Anthropic client."""
@@ -172,7 +178,7 @@ class ClaudeTaskMaster:
         system: str,
         max_tokens: int = MAX_TOKENS,
         temperature: float = DEFAULT_TEMPERATURE,
-        **kwargs: Any
+        **kwargs: Any,
     ) -> tuple[Any, int]:
         """Execute API call with retry logic.
 
@@ -196,24 +202,26 @@ class ClaudeTaskMaster:
                     temperature=temperature,
                     system=system,
                     messages=messages,
-                    **kwargs
+                    **kwargs,
                 )
                 return response, attempt
             except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
                 error_str = str(e).lower()
                 is_retryable = (
-                    "rate_limit" in error_str or
-                    "overloaded" in error_str or
-                    "503" in error_str or
-                    "529" in error_str or
-                    "timeout" in error_str
+                    "rate_limit" in error_str
+                    or "overloaded" in error_str
+                    or "503" in error_str
+                    or "529" in error_str
+                    or "timeout" in error_str
                 )
 
                 if not is_retryable or attempt >= self.max_retries:
                     raise
 
-                delay = self.DEFAULT_INITIAL_DELAY * (self.DEFAULT_BACKOFF_FACTOR ** attempt)
-                delay *= (0.75 + random.random() * 0.5)  # Add jitter
+                delay = self.DEFAULT_INITIAL_DELAY * (
+                    self.DEFAULT_BACKOFF_FACTOR**attempt
+                )
+                delay *= 0.75 + random.random() * 0.5  # Add jitter
 
                 logger.warning(
                     f"Retryable error, attempt {attempt + 1}/{self.max_retries + 1}, "
@@ -229,7 +237,7 @@ class ClaudeTaskMaster:
         context: str | None = None,
         max_tokens: int = MAX_TOKENS,
         temperature: float = DEFAULT_TEMPERATURE,
-        **kwargs: Any
+        **kwargs: Any,
     ) -> dict[str, Any]:
         """Execute a task using Claude.
 
@@ -259,7 +267,7 @@ class ClaudeTaskMaster:
                 system=system_prompt,
                 max_tokens=max_tokens,
                 temperature=temperature,
-                **kwargs
+                **kwargs,
             )
 
             execution_time = time.time() - start_time
@@ -320,7 +328,7 @@ class ClaudeTaskMaster:
         context: str | None = None,
         max_tokens: int = MAX_TOKENS,
         temperature: float = DEFAULT_TEMPERATURE,
-        **kwargs: Any
+        **kwargs: Any,
     ) -> Iterator[str]:
         """Execute a task with streaming response.
 
@@ -345,7 +353,7 @@ class ClaudeTaskMaster:
                 temperature=temperature,
                 system=system_prompt,
                 messages=[{"role": "user", "content": user_message}],
-                **kwargs
+                **kwargs,
             ) as stream:
                 yield from stream.text_stream
 
@@ -359,7 +367,7 @@ class ClaudeTaskMaster:
         max_subtasks: int = 10,
         context: str | None = None,
         include_dependencies: bool = False,
-        **kwargs: Any
+        **kwargs: Any,
     ) -> dict[str, Any]:
         """Decompose a complex task into subtasks.
 
@@ -390,7 +398,9 @@ class ClaudeTaskMaster:
 
             system_prompt += "\n\nFormat your response as a numbered list of subtasks."
 
-            user_message = f"Decompose this task into at most {max_subtasks} subtasks:\n\n{task}"
+            user_message = (
+                f"Decompose this task into at most {max_subtasks} subtasks:\n\n{task}"
+            )
             if context:
                 user_message += f"\n\nContext: {context}"
 
@@ -399,7 +409,7 @@ class ClaudeTaskMaster:
                 system=system_prompt,
                 max_tokens=2048,
                 temperature=0.2,
-                **kwargs
+                **kwargs,
             )
 
             execution_time = time.time() - start_time
@@ -437,10 +447,7 @@ class ClaudeTaskMaster:
             raise RuntimeError(f"Task decomposition failed: {e}") from None
 
     def analyze_task(
-        self,
-        task: str,
-        context: str | None = None,
-        **kwargs: Any
+        self, task: str, context: str | None = None, **kwargs: Any
     ) -> dict[str, Any]:
         """Analyze a task for complexity, requirements, and approach.
 
@@ -474,7 +481,7 @@ class ClaudeTaskMaster:
                 system=system_prompt,
                 max_tokens=2048,
                 temperature=0.2,
-                **kwargs
+                **kwargs,
             )
 
             execution_time = time.time() - start_time
@@ -516,7 +523,7 @@ class ClaudeTaskMaster:
         goal: str,
         constraints: list[str] | None = None,
         context: str | None = None,
-        **kwargs: Any
+        **kwargs: Any,
     ) -> dict[str, Any]:
         """Create a workflow plan to achieve a goal.
 
@@ -545,7 +552,9 @@ class ClaudeTaskMaster:
 
             user_message = f"Create a workflow plan to achieve:\n\n{goal}"
             if constraints:
-                user_message += "\n\nConstraints:\n" + "\n".join(f"- {c}" for c in constraints)
+                user_message += "\n\nConstraints:\n" + "\n".join(
+                    f"- {c}" for c in constraints
+                )
             if context:
                 user_message += f"\n\nContext: {context}"
 
@@ -554,7 +563,7 @@ class ClaudeTaskMaster:
                 system=system_prompt,
                 max_tokens=4096,
                 temperature=0.3,
-                **kwargs
+                **kwargs,
             )
 
             execution_time = time.time() - start_time
@@ -593,7 +602,7 @@ class ClaudeTaskMaster:
         description: str,
         language: str = "python",
         context: str | None = None,
-        **kwargs: Any
+        **kwargs: Any,
     ) -> dict[str, Any]:
         """Generate code based on a description.
 
@@ -617,14 +626,16 @@ class ClaudeTaskMaster:
 
             user_message = f"Generate {language} code for:\n\n{description}"
             if context:
-                user_message += f"\n\nContext/existing code:\n```{language}\n{context}\n```"
+                user_message += (
+                    f"\n\nContext/existing code:\n```{language}\n{context}\n```"
+                )
 
             response, retries = self._execute_with_retry(
                 messages=[{"role": "user", "content": user_message}],
                 system=system_prompt,
                 max_tokens=4096,
                 temperature=0.2,
-                **kwargs
+                **kwargs,
             )
 
             execution_time = time.time() - start_time
@@ -697,18 +708,16 @@ class ClaudeTaskMaster:
         return f"Task: {task}"
 
     def _parse_subtasks(
-        self,
-        response: str,
-        include_dependencies: bool = False
+        self, response: str, include_dependencies: bool = False
     ) -> list[dict[str, Any]]:
         """Parse subtasks from Claude's response."""
         subtasks = []
-        lines = response.strip().split('\n')
+        lines = response.strip().split("\n")
 
         for i, line in enumerate(lines):
             line = line.strip()
             # Match numbered items: 1. Task, 1) Task, - Task, * Task
-            match = re.match(r'^(?:(\d+)[\.\)]\s*|[-*]\s*)(.+)$', line)
+            match = re.match(r"^(?:(\d+)[\.\)]\s*|[-*]\s*)(.+)$", line)
             if match:
                 number = match.group(1)
                 task_text = match.group(2).strip()
@@ -720,12 +729,14 @@ class ClaudeTaskMaster:
                     }
 
                     if include_dependencies:
-                        dep_match = re.search(r'\[Depends on:\s*([^\]]+)\]', task_text, re.IGNORECASE)
+                        dep_match = re.search(
+                            r"\[Depends on:\s*([^\]]+)\]", task_text, re.IGNORECASE
+                        )
                         if dep_match:
-                            deps = [d.strip() for d in dep_match.group(1).split(',')]
+                            deps = [d.strip() for d in dep_match.group(1).split(",")]
                             subtask["dependencies"] = deps
                             subtask["description"] = re.sub(
-                                r'\s*\[Depends on:[^\]]+\]', '', task_text
+                                r"\s*\[Depends on:[^\]]+\]", "", task_text
                             ).strip()
 
                     subtasks.append(subtask)
@@ -785,6 +796,7 @@ class ClaudeTaskMaster:
 
 # Module-level convenience functions
 
+
 def execute_task(task: str, **kwargs: Any) -> dict[str, Any]:
     """Execute a task using Claude (module-level convenience function)."""
     master = ClaudeTaskMaster()
@@ -809,7 +821,9 @@ def plan_workflow(goal: str, **kwargs: Any) -> dict[str, Any]:
     return master.plan_workflow(goal, **kwargs)
 
 
-def generate_code(description: str, language: str = "python", **kwargs: Any) -> dict[str, Any]:
+def generate_code(
+    description: str, language: str = "python", **kwargs: Any
+) -> dict[str, Any]:
     """Generate code from description."""
     master = ClaudeTaskMaster()
     return master.generate_code(description, language, **kwargs)

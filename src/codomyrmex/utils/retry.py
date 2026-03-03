@@ -23,6 +23,7 @@ F = TypeVar("F", bound=Callable[..., Any])
 @dataclass
 class RetryConfig:
     """Configuration for retry behavior."""
+
     max_attempts: int = 3
     base_delay: float = 1.0
     max_delay: float = 60.0
@@ -33,7 +34,7 @@ class RetryConfig:
 
 def _compute_delay(attempt: int, config: RetryConfig) -> float:
     """Compute delay for a given attempt number."""
-    delay = config.base_delay * (config.exponential_base ** attempt)
+    delay = config.base_delay * (config.exponential_base**attempt)
     delay = min(delay, config.max_delay)
     if config.jitter:
         delay *= random.uniform(0.5, 1.5)
@@ -74,6 +75,7 @@ def retry(
 
     def decorator(func: F) -> F:
         """Decorator."""
+
         @functools.wraps(func)
         def wrapper(*args: Any, **kwargs: Any) -> Any:
             """Wrapper."""
@@ -87,12 +89,17 @@ def retry(
                         delay = _compute_delay(attempt, config)
                         logger.warning(
                             "Retry %d/%d for %s after %.2fs: %s",
-                            attempt + 1, config.max_attempts,
-                            func.__name__, delay, e,
+                            attempt + 1,
+                            config.max_attempts,
+                            func.__name__,
+                            delay,
+                            e,
                         )
                         time.sleep(delay)
             raise last_exception  # type: ignore[misc]
+
         return wrapper  # type: ignore[return-value]
+
     return decorator
 
 
@@ -116,6 +123,7 @@ def async_retry(
 
     def decorator(func: Callable) -> Callable:
         """Decorator."""
+
         @functools.wraps(func)
         async def wrapper(*args: Any, **kwargs: Any) -> Any:
             last_exception: Exception | None = None
@@ -128,10 +136,15 @@ def async_retry(
                         delay = _compute_delay(attempt, config)
                         logger.warning(
                             "Async retry %d/%d for %s after %.2fs: %s",
-                            attempt + 1, config.max_attempts,
-                            func.__name__, delay, e,
+                            attempt + 1,
+                            config.max_attempts,
+                            func.__name__,
+                            delay,
+                            e,
                         )
                         await asyncio.sleep(delay)
             raise last_exception  # type: ignore[misc]
+
         return wrapper
+
     return decorator

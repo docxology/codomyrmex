@@ -36,6 +36,7 @@ from codomyrmex.deployment.health_checks import (
 # DeploymentTarget
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 def test_deployment_target_creation():
     """Test DeploymentTarget default construction."""
@@ -50,8 +51,12 @@ def test_deployment_target_creation():
 def test_deployment_target_with_metadata():
     """Test DeploymentTarget with metadata and version."""
     target = DeploymentTarget(
-        id="t-2", name="node-2", address="10.0.0.1:8080",
-        healthy=False, version="v1.2", metadata={"zone": "us-east"},
+        id="t-2",
+        name="node-2",
+        address="10.0.0.1:8080",
+        healthy=False,
+        version="v1.2",
+        metadata={"zone": "us-east"},
     )
     assert target.version == "v1.2"
     assert target.metadata["zone"] == "us-east"
@@ -62,12 +67,16 @@ def test_deployment_target_with_metadata():
 # DeploymentResult
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 def test_deployment_result_to_dict():
     """Test DeploymentResult serialization."""
     result = DeploymentResult(
-        success=True, targets_updated=3, targets_failed=0,
-        duration_ms=150.0, state=DeploymentState.COMPLETED,
+        success=True,
+        targets_updated=3,
+        targets_failed=0,
+        duration_ms=150.0,
+        state=DeploymentState.COMPLETED,
     )
     d = result.to_dict()
     assert d["success"] is True
@@ -80,8 +89,11 @@ def test_deployment_result_to_dict():
 def test_deployment_result_with_errors():
     """Test DeploymentResult with failures recorded."""
     result = DeploymentResult(
-        success=False, targets_updated=1, targets_failed=2,
-        duration_ms=500.0, state=DeploymentState.FAILED,
+        success=False,
+        targets_updated=1,
+        targets_failed=2,
+        duration_ms=500.0,
+        state=DeploymentState.FAILED,
         errors=["timeout on t-2", "crash on t-3"],
     )
     assert len(result.errors) == 2
@@ -91,6 +103,7 @@ def test_deployment_result_with_errors():
 # ---------------------------------------------------------------------------
 # DeploymentState enum
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 def test_deployment_state_values():
@@ -107,6 +120,7 @@ def test_deployment_state_values():
 # RollingDeployment strategy
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 def test_rolling_deployment_all_succeed():
     """Test rolling deployment where all targets succeed."""
@@ -115,8 +129,10 @@ def test_rolling_deployment_all_succeed():
         DeploymentTarget(id=f"t-{i}", name=f"n-{i}", address=f"localhost:{8000 + i}")
         for i in range(4)
     ]
+
     def deploy_fn(t, v):
         return True
+
     result = strategy.deploy(targets, "v2", deploy_fn)
 
     assert result.success is True
@@ -135,6 +151,7 @@ def test_rolling_deployment_partial_failure():
     ]
     # Second target fails
     call_count = 0
+
     def deploy_fn(t, v):
         nonlocal call_count
         call_count += 1
@@ -150,7 +167,8 @@ def test_rolling_deployment_partial_failure():
 def test_rolling_deployment_with_health_check():
     """Test rolling deployment with health check callback."""
     strategy = RollingDeployment(
-        batch_size=1, delay_seconds=0,
+        batch_size=1,
+        delay_seconds=0,
         health_check=lambda t: t.id != "t-1",  # t-1 fails health check
     )
     targets = [
@@ -165,9 +183,7 @@ def test_rolling_deployment_with_health_check():
 def test_rolling_deployment_rollback():
     """Test rolling rollback delegates to deploy."""
     strategy = RollingDeployment(batch_size=1, delay_seconds=0)
-    targets = [
-        DeploymentTarget(id="t-0", name="n-0", address="localhost:8000")
-    ]
+    targets = [DeploymentTarget(id="t-0", name="n-0", address="localhost:8000")]
     result = strategy.rollback(targets, "v1", lambda t, v: True)
     assert result.success is True
 
@@ -175,6 +191,7 @@ def test_rolling_deployment_rollback():
 # ---------------------------------------------------------------------------
 # BlueGreenDeployment strategy
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 def test_blue_green_deployment_success():
@@ -205,6 +222,7 @@ def test_blue_green_deployment_rollback():
 # CanaryDeployment strategy
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 def test_canary_deployment_full_rollout():
     """Test canary deployment progresses through all stages."""
@@ -222,13 +240,16 @@ def test_canary_deployment_full_rollout():
 def test_canary_deployment_stops_on_failure():
     """Test canary halts when success rate drops below threshold."""
     strategy = CanaryDeployment(
-        stages=[50, 100], stage_duration_seconds=0, success_threshold=1.0,
+        stages=[50, 100],
+        stage_duration_seconds=0,
+        success_threshold=1.0,
     )
     targets = [
         DeploymentTarget(id=f"t-{i}", name=f"n-{i}", address=f"localhost:{8000 + i}")
         for i in range(4)
     ]
     call_count = 0
+
     def flaky_deploy(t, v):
         nonlocal call_count
         call_count += 1
@@ -243,6 +264,7 @@ def test_canary_deployment_stops_on_failure():
 # ---------------------------------------------------------------------------
 # create_strategy factory
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 def test_create_strategy_rolling():
@@ -276,6 +298,7 @@ def test_create_strategy_unknown_raises():
 # DeploymentManager
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 def test_manager_default_strategy():
     """Test manager uses rolling strategy by default."""
@@ -300,9 +323,11 @@ def test_manager_deployment_history():
 @pytest.mark.unit
 def test_manager_deploy_failure_recorded():
     """Test manager records failed deployments from raising strategies."""
+
     class FailingStrategy:
         def deploy(self, targets, version, deploy_fn):
             raise RuntimeError("crash")
+
         def rollback(self, targets, version, deploy_fn):
             return DeploymentResult(False, 0, 0, 0, DeploymentState.FAILED)
 
@@ -325,6 +350,7 @@ def test_manager_rollback():
 # HealthCheck classes
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 def test_health_status_enum_values():
     """Test HealthStatus has all expected values."""
@@ -338,8 +364,10 @@ def test_health_status_enum_values():
 def test_health_check_result_to_dict():
     """Test HealthCheckResult serialization."""
     result = HealthCheckResult(
-        name="test-check", status=HealthStatus.HEALTHY,
-        message="OK", latency_ms=5.2,
+        name="test-check",
+        status=HealthStatus.HEALTHY,
+        message="OK",
+        latency_ms=5.2,
     )
     d = result.to_dict()
     assert d["name"] == "test-check"
@@ -351,8 +379,10 @@ def test_health_check_result_to_dict():
 def test_command_health_check_success():
     """Test CommandHealthCheck with a simple successful command."""
     check = CommandHealthCheck(
-        name="echo-check", command=["echo", "hello"],
-        expected_exit_code=0, timeout=5.0,
+        name="echo-check",
+        command=["echo", "hello"],
+        expected_exit_code=0,
+        timeout=5.0,
     )
     result = check.check()
     assert result.status == HealthStatus.HEALTHY
@@ -363,8 +393,10 @@ def test_command_health_check_success():
 def test_command_health_check_failure():
     """Test CommandHealthCheck with a failing command."""
     check = CommandHealthCheck(
-        name="fail-check", command=["false"],
-        expected_exit_code=0, timeout=5.0,
+        name="fail-check",
+        command=["false"],
+        expected_exit_code=0,
+        timeout=5.0,
     )
     result = check.check()
     assert result.status == HealthStatus.UNHEALTHY
@@ -398,7 +430,9 @@ def test_health_checker_aggregation_mixed():
     """Test HealthChecker returns DEGRADED when a non-critical check fails."""
     checker = HealthChecker()
     checker.add_check(CommandHealthCheck(name="ok", command=["true"], critical=True))
-    checker.add_check(CommandHealthCheck(name="fail", command=["false"], critical=False))
+    checker.add_check(
+        CommandHealthCheck(name="fail", command=["false"], critical=False)
+    )
     aggregated = checker.run_all()
 
     # Non-critical failure => DEGRADED
@@ -409,7 +443,9 @@ def test_health_checker_aggregation_mixed():
 def test_health_checker_aggregation_critical_fail():
     """Test HealthChecker returns UNHEALTHY when a critical check fails."""
     checker = HealthChecker()
-    checker.add_check(CommandHealthCheck(name="critical-fail", command=["false"], critical=True))
+    checker.add_check(
+        CommandHealthCheck(name="critical-fail", command=["false"], critical=True)
+    )
     aggregated = checker.run_all()
     assert aggregated.overall_status == HealthStatus.UNHEALTHY
 
@@ -432,6 +468,7 @@ def test_aggregated_health_to_dict():
 # GitOpsSynchronizer
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 def test_gitops_sync_method(tmp_path):
     """Test GitOpsSynchronizer sync with real git repo."""
@@ -444,9 +481,16 @@ def test_gitops_sync_method(tmp_path):
 
     subprocess.run(["git", "init"], cwd=repo_path, capture_output=True, check=True)
     # Ensure 'main' exists
-    subprocess.run(["git", "checkout", "-b", "main"], cwd=repo_path, capture_output=True, check=True)
+    subprocess.run(
+        ["git", "checkout", "-b", "main"],
+        cwd=repo_path,
+        capture_output=True,
+        check=True,
+    )
 
-    subprocess.run(["git", "config", "user.email", "t@t.com"], cwd=repo_path, check=True)
+    subprocess.run(
+        ["git", "config", "user.email", "t@t.com"], cwd=repo_path, check=True
+    )
     subprocess.run(["git", "config", "user.name", "T"], cwd=repo_path, check=True)
 
     (repo_dir / "f").write_text("c")
@@ -483,17 +527,25 @@ def test_gitops_real_git_repo(tmp_path):
     subprocess.run(["git", "init"], cwd=str(repo_dir), capture_output=True, check=True)
     subprocess.run(
         ["git", "config", "user.email", "test@test.com"],
-        cwd=str(repo_dir), capture_output=True, check=True,
+        cwd=str(repo_dir),
+        capture_output=True,
+        check=True,
     )
     subprocess.run(
         ["git", "config", "user.name", "Test"],
-        cwd=str(repo_dir), capture_output=True, check=True,
+        cwd=str(repo_dir),
+        capture_output=True,
+        check=True,
     )
     (repo_dir / "README.md").write_text("# Test")
-    subprocess.run(["git", "add", "."], cwd=str(repo_dir), capture_output=True, check=True)
+    subprocess.run(
+        ["git", "add", "."], cwd=str(repo_dir), capture_output=True, check=True
+    )
     subprocess.run(
         ["git", "commit", "-m", "init"],
-        cwd=str(repo_dir), capture_output=True, check=True,
+        cwd=str(repo_dir),
+        capture_output=True,
+        check=True,
     )
 
     sync = GitOpsSynchronizer(str(repo_dir), str(repo_dir))
@@ -518,8 +570,11 @@ def test_deployment_target_default_healthy():
 def test_deployment_result_success_state():
     """Successful DeploymentResult has zero failures."""
     result = DeploymentResult(
-        success=True, targets_updated=5, targets_failed=0,
-        duration_ms=100.0, state=DeploymentState.COMPLETED,
+        success=True,
+        targets_updated=5,
+        targets_failed=0,
+        duration_ms=100.0,
+        state=DeploymentState.COMPLETED,
     )
     assert result.targets_failed == 0
     assert result.success is True
@@ -529,9 +584,7 @@ def test_deployment_result_success_state():
 def test_rolling_deployment_batch_size_larger_than_targets():
     """Rolling deployment with batch_size > targets still works."""
     strategy = RollingDeployment(batch_size=100, delay_seconds=0)
-    targets = [
-        DeploymentTarget(id="t-0", name="n-0", address="localhost:8000")
-    ]
+    targets = [DeploymentTarget(id="t-0", name="n-0", address="localhost:8000")]
     result = strategy.deploy(targets, "v1", lambda t, v: True)
     assert result.success is True
 
@@ -540,9 +593,7 @@ def test_rolling_deployment_batch_size_larger_than_targets():
 def test_canary_deployment_single_stage():
     """Canary with single 100% stage works."""
     strategy = CanaryDeployment(stages=[100], stage_duration_seconds=0)
-    targets = [
-        DeploymentTarget(id="t-0", name="n-0", address="localhost:8000")
-    ]
+    targets = [DeploymentTarget(id="t-0", name="n-0", address="localhost:8000")]
     result = strategy.deploy(targets, "v1", lambda t, v: True)
     assert result.success is True
 

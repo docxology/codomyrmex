@@ -12,6 +12,7 @@ from typing import Any
 
 try:
     from codomyrmex.logging_monitoring.core.logger_config import get_logger
+
     logger = get_logger(__name__)
 except ImportError:
     logging.basicConfig(level=logging.INFO)
@@ -20,6 +21,7 @@ except ImportError:
 
 class SkillExecutionError(Exception):
     """Raised when skill execution fails."""
+
     pass
 
 
@@ -50,23 +52,31 @@ class SkillExecutor:
         Raises:
             SkillExecutionError: If execution fails
         """
-        skill_name = getattr(getattr(skill, 'metadata', None), 'name', str(skill))
+        skill_name = getattr(getattr(skill, "metadata", None), "name", str(skill))
         logger.info(f"Executing skill: {skill_name}")
         start_time = time.monotonic()
 
         try:
-            errors = skill.validate_params(**kwargs) if hasattr(skill, 'validate_params') else []
+            errors = (
+                skill.validate_params(**kwargs)
+                if hasattr(skill, "validate_params")
+                else []
+            )
             if errors:
-                raise SkillExecutionError(f"Parameter validation failed: {', '.join(errors)}")
+                raise SkillExecutionError(
+                    f"Parameter validation failed: {', '.join(errors)}"
+                )
 
             result = skill.execute(**kwargs)
             elapsed = time.monotonic() - start_time
 
-            self._execution_log.append({
-                "skill": skill_name,
-                "status": "success",
-                "elapsed": elapsed,
-            })
+            self._execution_log.append(
+                {
+                    "skill": skill_name,
+                    "status": "success",
+                    "elapsed": elapsed,
+                }
+            )
             logger.info(f"Skill {skill_name} completed in {elapsed:.3f}s")
             return result
 
@@ -74,12 +84,14 @@ class SkillExecutor:
             raise
         except Exception as e:
             elapsed = time.monotonic() - start_time
-            self._execution_log.append({
-                "skill": skill_name,
-                "status": "error",
-                "elapsed": elapsed,
-                "error": str(e),
-            })
+            self._execution_log.append(
+                {
+                    "skill": skill_name,
+                    "status": "error",
+                    "elapsed": elapsed,
+                    "error": str(e),
+                }
+            )
             raise SkillExecutionError(f"Skill {skill_name} failed: {e}") from e
 
     def execute_with_timeout(self, skill, timeout: float, **kwargs) -> Any:
@@ -97,7 +109,7 @@ class SkillExecutor:
         Raises:
             SkillExecutionError: If execution fails or times out
         """
-        skill_name = getattr(getattr(skill, 'metadata', None), 'name', str(skill))
+        skill_name = getattr(getattr(skill, "metadata", None), "name", str(skill))
 
         with ThreadPoolExecutor(max_workers=1) as executor:
             future = executor.submit(self.execute, skill, **kwargs)

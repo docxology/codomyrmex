@@ -19,6 +19,7 @@ import pytest
 # VideoConfig
 # ---------------------------------------------------------------------------
 
+
 class TestVideoConfigConstruction:
     """VideoConfig dataclass construction and field defaults."""
 
@@ -114,11 +115,19 @@ class TestVideoConfigSerialization:
 
         d = VideoConfig().to_dict()
         expected_keys = {
-            "temp_directory", "default_output_format", "default_codec",
-            "default_audio_codec", "default_fps", "default_bitrate",
-            "thumbnail_width", "max_concurrent_operations",
-            "cleanup_temp_files", "ffmpeg_path", "opencv_backend",
-            "max_resolution", "quality_preset",
+            "temp_directory",
+            "default_output_format",
+            "default_codec",
+            "default_audio_codec",
+            "default_fps",
+            "default_bitrate",
+            "thumbnail_width",
+            "max_concurrent_operations",
+            "cleanup_temp_files",
+            "ffmpeg_path",
+            "opencv_backend",
+            "max_resolution",
+            "quality_preset",
         }
         assert expected_keys.issubset(set(d.keys()))
 
@@ -259,6 +268,7 @@ class TestGlobalConfigManagement:
 # Models
 # ---------------------------------------------------------------------------
 
+
 class TestVideoInfoModel:
     """VideoInfo dataclass properties and serialization."""
 
@@ -295,10 +305,19 @@ class TestVideoInfoModel:
         from codomyrmex.video.models import VideoInfo
 
         info = VideoInfo(
-            file_path=Path("/v.mp4"), duration=60.0, width=1280,
-            height=720, fps=30.0, frame_count=1800, video_codec="h264",
-            audio_codec="aac", bitrate=5000000, file_size=75000000,
-            has_audio=True, creation_time="2025-01-01", rotation=90,
+            file_path=Path("/v.mp4"),
+            duration=60.0,
+            width=1280,
+            height=720,
+            fps=30.0,
+            frame_count=1800,
+            video_codec="h264",
+            audio_codec="aac",
+            bitrate=5000000,
+            file_size=75000000,
+            has_audio=True,
+            creation_time="2025-01-01",
+            rotation=90,
         )
         d = info.to_dict()
         assert d["file_path"] == "/v.mp4"
@@ -322,8 +341,11 @@ class TestProcessingResultModel:
         from codomyrmex.video.models import ProcessingResult
 
         result = ProcessingResult(
-            output_path=Path("/o.mp4"), operation="resize", success=True,
-            processing_time=2.5, message="done",
+            output_path=Path("/o.mp4"),
+            operation="resize",
+            success=True,
+            processing_time=2.5,
+            message="done",
         )
         d = result.to_dict()
         assert d["operation"] == "resize"
@@ -371,7 +393,8 @@ class TestVideoComparisonModel:
         from codomyrmex.video.models import VideoComparison
 
         comp = VideoComparison(
-            video1_path=Path("/a.mp4"), video2_path=Path("/b.mp4"),
+            video1_path=Path("/a.mp4"),
+            video2_path=Path("/b.mp4"),
         )
         assert comp.same_resolution is False
         assert comp.same_duration is False
@@ -386,9 +409,13 @@ class TestVideoComparisonModel:
         from codomyrmex.video.models import VideoComparison
 
         comp = VideoComparison(
-            video1_path=Path("/a.mp4"), video2_path=Path("/b.mp4"),
-            same_resolution=True, same_duration=True,
-            duration_diff=0.1, size_diff=500, details={"note": "ok"},
+            video1_path=Path("/a.mp4"),
+            video2_path=Path("/b.mp4"),
+            same_resolution=True,
+            same_duration=True,
+            duration_diff=0.1,
+            size_diff=500,
+            details={"note": "ok"},
         )
         assert comp.same_resolution is True
         assert comp.details["note"] == "ok"
@@ -397,6 +424,7 @@ class TestVideoComparisonModel:
 # ---------------------------------------------------------------------------
 # Enums
 # ---------------------------------------------------------------------------
+
 
 class TestEnums:
     """Enum completeness and value correctness."""
@@ -444,6 +472,7 @@ class TestEnums:
 # Exceptions
 # ---------------------------------------------------------------------------
 
+
 class TestExceptionHierarchy:
     """All video exceptions inherit from VideoError and store context."""
 
@@ -474,7 +503,9 @@ class TestExceptionHierarchy:
         from codomyrmex.video.exceptions import UnsupportedFormatError
 
         err = UnsupportedFormatError(
-            "nope", format_type=".xyz", supported_formats=[".mp4", ".avi"],
+            "nope",
+            format_type=".xyz",
+            supported_formats=[".mp4", ".avi"],
         )
         assert err.context["format_type"] == ".xyz"
         assert ".mp4" in err.context["supported_formats"]
@@ -493,9 +524,13 @@ class TestExceptionHierarchy:
         )
 
         for exc_cls in [
-            VideoReadError, VideoWriteError, VideoProcessingError,
-            FrameExtractionError, AudioExtractionError,
-            UnsupportedFormatError, VideoAnalysisError,
+            VideoReadError,
+            VideoWriteError,
+            VideoProcessingError,
+            FrameExtractionError,
+            AudioExtractionError,
+            UnsupportedFormatError,
+            VideoAnalysisError,
         ]:
             assert issubclass(exc_cls, VideoError)
 
@@ -503,6 +538,7 @@ class TestExceptionHierarchy:
 # ---------------------------------------------------------------------------
 # Supported format constants
 # ---------------------------------------------------------------------------
+
 
 class TestSupportedFormats:
     """Processor, extractor, and analyzer supported format sets."""
@@ -540,6 +576,7 @@ class TestSupportedFormats:
 # Module-level availability flags and version
 # ---------------------------------------------------------------------------
 
+
 class TestModuleLevel:
     """Module-level attributes exposed via __init__."""
 
@@ -562,9 +599,12 @@ class TestModuleLevel:
         )
 
         for flag in [
-            PROCESSING_AVAILABLE, EXTRACTION_AVAILABLE,
-            ANALYSIS_AVAILABLE, MOVIEPY_AVAILABLE,
-            OPENCV_AVAILABLE, PIL_AVAILABLE,
+            PROCESSING_AVAILABLE,
+            EXTRACTION_AVAILABLE,
+            ANALYSIS_AVAILABLE,
+            MOVIEPY_AVAILABLE,
+            OPENCV_AVAILABLE,
+            PIL_AVAILABLE,
         ]:
             assert isinstance(flag, bool)
 

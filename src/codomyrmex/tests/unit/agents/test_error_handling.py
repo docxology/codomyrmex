@@ -4,7 +4,6 @@ Tests use real implementations only. FailingAgent is a test adapter
 that implements BaseAgent interface for testing error scenarios, not a mock.
 """
 
-
 import pytest
 
 try:
@@ -23,6 +22,7 @@ try:
     )
     from codomyrmex.agents.generic.agent_orchestrator import AgentOrchestrator
     from codomyrmex.agents.opencode import OpenCodeClient
+
     _HAS_AGENTS = True
 except ImportError:
     _HAS_AGENTS = False
@@ -39,9 +39,7 @@ class FailingAgent(BaseAgent):
 
     def __init__(self, name: str, failure_type: str = "error_response"):
         super().__init__(
-            name=name,
-            capabilities=[AgentCapabilities.CODE_GENERATION],
-            config={}
+            name=name, capabilities=[AgentCapabilities.CODE_GENERATION], config={}
         )
         self.failure_type = failure_type
 
@@ -68,14 +66,18 @@ class TestNetworkFailuresAndRetries:
     def test_agent_unavailable_handling(self):
         """Test handling when agent is unavailable."""
         # Use invalid command to trigger real FileNotFoundError
-        client = OpenCodeClient(config={"opencode_command": "nonexistent-opencode-command-xyz"})
+        client = OpenCodeClient(
+            config={"opencode_command": "nonexistent-opencode-command-xyz"}
+        )
         request = AgentRequest(prompt="test")
 
         response = client.execute(request)
 
         assert not response.is_success()
         assert response.error is not None
-        assert "not found" in response.error.lower() or "failed" in response.error.lower()
+        assert (
+            "not found" in response.error.lower() or "failed" in response.error.lower()
+        )
 
     def test_partial_network_failure(self):
         """Test partial network failure in multi-agent scenario."""
@@ -152,10 +154,7 @@ class TestInvalidConfigurationHandling:
 
     def test_missing_api_key_handling(self):
         """Test handling of missing API keys."""
-        config = AgentConfig(
-            claude_api_key=None,
-            codex_api_key=None
-        )
+        config = AgentConfig(claude_api_key=None, codex_api_key=None)
 
         errors = config.validate()
 
@@ -310,11 +309,9 @@ class TestErrorPropagationAndRecovery:
         secondary_agent = FailingAgent("secondary", "success")
         tertiary_agent = FailingAgent("tertiary", "success")
 
-        orchestrator = AgentOrchestrator([
-            primary_agent,
-            secondary_agent,
-            tertiary_agent
-        ])
+        orchestrator = AgentOrchestrator(
+            [primary_agent, secondary_agent, tertiary_agent]
+        )
 
         request = AgentRequest(prompt="test")
 
@@ -383,7 +380,7 @@ class TestEdgeCases:
         # Request capability agent doesn't support
         request = AgentRequest(
             prompt="test",
-            capabilities=[AgentCapabilities.CODE_EXECUTION]  # Not supported
+            capabilities=[AgentCapabilities.CODE_EXECUTION],  # Not supported
         )
 
         # _validate_request logs a warning but does not block execution

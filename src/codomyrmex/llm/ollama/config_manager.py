@@ -31,6 +31,7 @@ class OllamaConfig:
         Execution Defaults: Default execution options
         Integration Settings: Feature flags for integrations
     """
+
     # General settings
     ollama_binary: str = "ollama"  # Path to ollama binary
     auto_start_server: bool = True  # Automatically start Ollama server if not running
@@ -104,13 +105,20 @@ class ConfigManager:
         """
         try:
             if self.config_file.exists():
-                with open(self.config_file, encoding='utf-8') as f:
+                with open(self.config_file, encoding="utf-8") as f:
                     config_data = json.load(f)
 
                 # Filter out metadata fields that aren't part of OllamaConfig
                 filtered_config = {}
                 for key, value in config_data.items():
-                    if key not in ['saved_at', 'config_version', 'export_timestamp', 'main_config', 'execution_presets', 'model_configs']:
+                    if key not in [
+                        "saved_at",
+                        "config_version",
+                        "export_timestamp",
+                        "main_config",
+                        "execution_presets",
+                        "model_configs",
+                    ]:
                         filtered_config[key] = value
 
                 self.config = OllamaConfig(**filtered_config)
@@ -140,10 +148,10 @@ class ConfigManager:
             config_dict = asdict(self.config)
 
             # Add metadata
-            config_dict['saved_at'] = time.strftime('%Y-%m-%d %H:%M:%S')
-            config_dict['config_version'] = '1.0.0'
+            config_dict["saved_at"] = time.strftime("%Y-%m-%d %H:%M:%S")
+            config_dict["config_version"] = "1.0.0"
 
-            with open(self.config_file, 'w', encoding='utf-8') as f:
+            with open(self.config_file, "w", encoding="utf-8") as f:
                 json.dump(config_dict, f, indent=2, default=str)
 
             self.logger.info(f"Saved configuration to: {self.config_file}")
@@ -194,11 +202,16 @@ class ConfigManager:
             return None
 
         # Look for model-specific configuration
-        model_config_file = Path(self.config.base_output_dir) / "configs" / model_name / "model_config.json"
+        model_config_file = (
+            Path(self.config.base_output_dir)
+            / "configs"
+            / model_name
+            / "model_config.json"
+        )
 
         if model_config_file.exists():
             try:
-                with open(model_config_file, encoding='utf-8') as f:
+                with open(model_config_file, encoding="utf-8") as f:
                     return json.load(f)
             except Exception as e:
                 self.logger.warning(f"Error loading model config for {model_name}: {e}")
@@ -220,22 +233,26 @@ class ConfigManager:
             return False
 
         try:
-            model_config_dir = Path(self.config.base_output_dir) / "configs" / model_name
+            model_config_dir = (
+                Path(self.config.base_output_dir) / "configs" / model_name
+            )
             model_config_dir.mkdir(parents=True, exist_ok=True)
 
             model_config_file = model_config_dir / "model_config.json"
 
             # Add metadata
             config_with_metadata = {
-                'model_name': model_name,
-                'created_at': time.strftime('%Y-%m-%d %H:%M:%S'),
-                'configuration': config
+                "model_name": model_name,
+                "created_at": time.strftime("%Y-%m-%d %H:%M:%S"),
+                "configuration": config,
             }
 
-            with open(model_config_file, 'w', encoding='utf-8') as f:
+            with open(model_config_file, "w", encoding="utf-8") as f:
                 json.dump(config_with_metadata, f, indent=2, default=str)
 
-            self.logger.info(f"Saved model config for {model_name} to: {model_config_file}")
+            self.logger.info(
+                f"Saved model config for {model_name} to: {model_config_file}"
+            )
             return True
 
         except Exception as e:
@@ -250,36 +267,21 @@ class ConfigManager:
             Dictionary of preset names to ExecutionOptions
         """
         return {
-            'fast': ExecutionOptions(
-                temperature=0.1,
-                top_p=0.5,
-                max_tokens=512,
-                timeout=60
+            "fast": ExecutionOptions(
+                temperature=0.1, top_p=0.5, max_tokens=512, timeout=60
             ),
-            'creative': ExecutionOptions(
-                temperature=0.9,
-                top_p=0.95,
-                max_tokens=1024,
-                timeout=120
+            "creative": ExecutionOptions(
+                temperature=0.9, top_p=0.95, max_tokens=1024, timeout=120
             ),
-            'balanced': ExecutionOptions(
-                temperature=0.7,
-                top_p=0.9,
-                max_tokens=1024,
-                timeout=120
+            "balanced": ExecutionOptions(
+                temperature=0.7, top_p=0.9, max_tokens=1024, timeout=120
             ),
-            'precise': ExecutionOptions(
-                temperature=0.3,
-                top_p=0.7,
-                max_tokens=2048,
-                timeout=180
+            "precise": ExecutionOptions(
+                temperature=0.3, top_p=0.7, max_tokens=2048, timeout=180
             ),
-            'long_form': ExecutionOptions(
-                temperature=0.7,
-                top_p=0.9,
-                max_tokens=4096,
-                timeout=300
-            )
+            "long_form": ExecutionOptions(
+                temperature=0.7, top_p=0.9, max_tokens=4096, timeout=300
+            ),
         }
 
     def export_config(self, export_path: str) -> bool:
@@ -297,10 +299,13 @@ class ConfigManager:
 
             # Create comprehensive export
             export_data = {
-                'export_timestamp': time.strftime('%Y-%m-%d %H:%M:%S'),
-                'main_config': asdict(self.config) if self.config else {},
-                'execution_presets': {name: asdict(preset) for name, preset in self.get_execution_presets().items()},
-                'model_configs': {}
+                "export_timestamp": time.strftime("%Y-%m-%d %H:%M:%S"),
+                "main_config": asdict(self.config) if self.config else {},
+                "execution_presets": {
+                    name: asdict(preset)
+                    for name, preset in self.get_execution_presets().items()
+                },
+                "model_configs": {},
             }
 
             # Include model-specific configurations
@@ -312,12 +317,16 @@ class ConfigManager:
                             model_config_file = model_dir / "model_config.json"
                             if model_config_file.exists():
                                 try:
-                                    with open(model_config_file, encoding='utf-8') as f:
-                                        export_data['model_configs'][model_dir.name] = json.load(f)
+                                    with open(model_config_file, encoding="utf-8") as f:
+                                        export_data["model_configs"][model_dir.name] = (
+                                            json.load(f)
+                                        )
                                 except Exception as e:
-                                    self.logger.warning(f"Error reading model config for {model_dir.name}: {e}")
+                                    self.logger.warning(
+                                        f"Error reading model config for {model_dir.name}: {e}"
+                                    )
 
-            with open(export_file, 'w', encoding='utf-8') as f:
+            with open(export_file, "w", encoding="utf-8") as f:
                 json.dump(export_data, f, indent=2, default=str)
 
             self.logger.info(f"Exported configuration to: {export_file}")
@@ -344,16 +353,16 @@ class ConfigManager:
                 self.logger.error(f"Import file not found: {import_file}")
                 return False
 
-            with open(import_file, encoding='utf-8') as f:
+            with open(import_file, encoding="utf-8") as f:
                 import_data = json.load(f)
 
             # Update main configuration
-            if 'main_config' in import_data:
-                self.config = OllamaConfig(**import_data['main_config'])
+            if "main_config" in import_data:
+                self.config = OllamaConfig(**import_data["main_config"])
 
             # Import model-specific configurations
-            if 'model_configs' in import_data and self.config:
-                for model_name, model_config in import_data['model_configs'].items():
+            if "model_configs" in import_data and self.config:
+                for model_name, model_config in import_data["model_configs"].items():
                     self.save_model_config(model_name, model_config)
 
             # Save updated configuration
@@ -389,7 +398,7 @@ class ConfigManager:
             Validation results dictionary
         """
         if not self.config:
-            return {'valid': False, 'errors': ['No configuration loaded']}
+            return {"valid": False, "errors": ["No configuration loaded"]}
 
         errors = []
         warnings = []
@@ -405,8 +414,11 @@ class ConfigManager:
         # Validate binary path
         try:
             import shutil
+
             if not shutil.which(self.config.ollama_binary):
-                warnings.append(f"Ollama binary not found in PATH: {self.config.ollama_binary}")
+                warnings.append(
+                    f"Ollama binary not found in PATH: {self.config.ollama_binary}"
+                )
         except Exception as e:
             errors.append(f"Error checking ollama binary: {e}")
 
@@ -417,7 +429,9 @@ class ConfigManager:
                     errors.append(f"Invalid model in preferred_models: {model}")
 
         # Validate execution options
-        if self.config.default_options and isinstance(self.config.default_options, ExecutionOptions):
+        if self.config.default_options and isinstance(
+            self.config.default_options, ExecutionOptions
+        ):
             if not (0.0 <= self.config.default_options.temperature <= 2.0):
                 errors.append("Temperature must be between 0.0 and 2.0")
 
@@ -430,11 +444,7 @@ class ConfigManager:
             if self.config.default_options.timeout < 1:
                 errors.append("timeout must be positive")
 
-        return {
-            'valid': len(errors) == 0,
-            'errors': errors,
-            'warnings': warnings
-        }
+        return {"valid": len(errors) == 0, "errors": errors, "warnings": warnings}
 
     def get_available_models(self) -> list[str]:
         """
@@ -448,11 +458,12 @@ class ConfigManager:
 
         try:
             import requests
+
             url = f"http://{self.config.server_host}:{self.config.server_port}/api/tags"
             response = requests.get(url, timeout=2)
             if response.status_code == 200:
                 data = response.json()
-                return [model['name'] for model in data.get('models', [])]
+                return [model["name"] for model in data.get("models", [])]
         except Exception as e:
             self.logger.warning(f"Failed to fetch models from Ollama: {e}")
 

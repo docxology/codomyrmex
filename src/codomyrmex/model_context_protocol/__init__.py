@@ -103,6 +103,7 @@ def cli_commands():
         },
     }
 
+
 __all__ = [
     "MCPErrorDetail",
     "MCPMessage",
@@ -155,5 +156,3 @@ __all__ = [
 ]
 
 from . import versioning as versioning_module  # noqa: E402, F401
-
-

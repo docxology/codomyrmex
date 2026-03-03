@@ -17,6 +17,7 @@ from datetime import date
 # Configuration
 # ---------------------------------------------------------------------------
 
+
 @dataclass(frozen=True)
 class AgenticSeekBrowserConfig:
     """Configuration for agenticSeek browser automation.
@@ -112,6 +113,7 @@ def extract_form_fields(text: str) -> list[dict[str, str]]:
 # Prompt builders (mirrors BrowserAgent.make_*_prompt)
 # ---------------------------------------------------------------------------
 
+
 def build_search_prompt(
     user_query: str,
     search_results: list[dict[str, str]],
@@ -133,7 +135,7 @@ def build_search_prompt(
         f"Your goal is to find accurate and complete information "
         f"to satisfy the user's request.\n"
         f"User request: {user_query}\n"
-        f'To proceed, choose a relevant link from the search results. '
+        f"To proceed, choose a relevant link from the search results. "
         f'Announce your choice by saying: "I will navigate to <link>"\n'
         f"Do not explain your choice."
     )
@@ -184,6 +186,7 @@ def build_navigation_prompt(
 # ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------
+
 
 def get_today_date() -> str:
     """Return today's date as a human-readable string."""

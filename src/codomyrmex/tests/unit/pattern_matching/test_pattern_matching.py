@@ -27,6 +27,7 @@ class TestPatternMatching:
 
         try:
             from codomyrmex.coding.pattern_matching import run_codomyrmex_analysis
+
             assert run_codomyrmex_analysis is not None
         except ImportError as e:
             pytest.fail(f"Failed to import run_codomyrmex_analysis: {e}")
@@ -39,10 +40,10 @@ class TestPatternMatching:
         import codomyrmex.coding.pattern_matching as pm_pkg
 
         # Check the package exports the key names
-        assert hasattr(pm_pkg, 'run_codomyrmex_analysis')
-        assert hasattr(pm_pkg, 'run_full_analysis')
-        assert hasattr(pm_pkg, 'analyze_repository_path')
-        assert hasattr(pm_pkg, 'PatternAnalyzer')
+        assert hasattr(pm_pkg, "run_codomyrmex_analysis")
+        assert hasattr(pm_pkg, "run_full_analysis")
+        assert hasattr(pm_pkg, "analyze_repository_path")
+        assert hasattr(pm_pkg, "PatternAnalyzer")
 
     def test_embedding_consistency(self, code_dir):
         """Test get_embedding_function returns a callable."""
@@ -159,7 +160,9 @@ class TestPatternMatching:
             )
 
             # It should return a string (either with match info or a 'not found' message)
-            result = _perform_text_search_context_extraction("query", "/nonexistent/path")
+            result = _perform_text_search_context_extraction(
+                "query", "/nonexistent/path"
+            )
             assert isinstance(result, str)
         finally:
             if str(code_dir) in sys.path:
@@ -367,7 +370,9 @@ class TestPatternMatching:
         names = {m.pattern_name for m in matches}
         assert names == {"todo", "fixme"}
 
-    def test_pattern_analyzer_multiple_matches_different_lines(self, tmp_path, code_dir):
+    def test_pattern_analyzer_multiple_matches_different_lines(
+        self, tmp_path, code_dir
+    ):
         """Pattern found on multiple lines produces multiple matches."""
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
@@ -499,7 +504,15 @@ class TestPatternMatching:
                 _perform_code_summarization,
             )
 
-            result = _perform_code_summarization(str(code_dir / "codomyrmex" / "coding" / "pattern_matching" / "run_codomyrmex_analysis.py"))
+            result = _perform_code_summarization(
+                str(
+                    code_dir
+                    / "codomyrmex"
+                    / "coding"
+                    / "pattern_matching"
+                    / "run_codomyrmex_analysis.py"
+                )
+            )
             assert isinstance(result, str)
             assert "File:" in result
         finally:

@@ -16,13 +16,14 @@ from typing import Any, Optional
 @dataclass
 class Location:
     """A geographic location."""
+
     id: str
     name: str
     latitude: float
     longitude: float
     metadata: dict[str, Any] = field(default_factory=dict)
 
-    def distance_to(self, other: 'Location') -> float:
+    def distance_to(self, other: "Location") -> float:
         """Calculate haversine distance to another location (in km)."""
         R = 6371  # Earth's radius in km
 
@@ -32,14 +33,19 @@ class Location:
         dlat = lat2 - lat1
         dlon = lon2 - lon1
 
-        a = math.sin(dlat/2)**2 + math.cos(lat1) * math.cos(lat2) * math.sin(dlon/2)**2
+        a = (
+            math.sin(dlat / 2) ** 2
+            + math.cos(lat1) * math.cos(lat2) * math.sin(dlon / 2) ** 2
+        )
         c = 2 * math.asin(math.sqrt(a))
 
         return R * c
 
+
 @dataclass
 class RoutingConstraints:
     """Constraints for routing optimization."""
+
     max_distance: float | None = None  # km
     max_duration: float | None = None  # minutes
     max_stops: int | None = None
@@ -48,18 +54,22 @@ class RoutingConstraints:
     vehicle_capacity: float | None = None
     time_windows: dict[str, tuple[int, int]] = field(default_factory=dict)
 
+
 @dataclass
 class RouteStop:
     """A stop in a route."""
+
     location: Location
     arrival_time: float | None = None
     departure_time: float | None = None
     service_time: float = 0.0
     load: float = 0.0
 
+
 @dataclass
 class Route:
     """A complete route."""
+
     id: str
     stops: list[RouteStop]
     total_distance: float = 0.0
@@ -112,6 +122,7 @@ class Route:
             "total_duration_min": round(self.total_duration, 2),
         }
 
+
 class RoutingAlgorithm(ABC):
     """Abstract base class for routing algorithms."""
 
@@ -125,6 +136,7 @@ class RoutingAlgorithm(ABC):
     ) -> Route:
         """Optimize a route through the given locations."""
         pass
+
 
 class NearestNeighborRouting(RoutingAlgorithm):
     """Simple nearest neighbor heuristic."""
@@ -148,7 +160,7 @@ class NearestNeighborRouting(RoutingAlgorithm):
         while remaining:
             # Find nearest unvisited
             nearest = None
-            nearest_dist = float('inf')
+            nearest_dist = float("inf")
 
             for loc_id in remaining:
                 loc = location_map[loc_id]
@@ -168,6 +180,7 @@ class NearestNeighborRouting(RoutingAlgorithm):
             route.add_stop(end, dist)
 
         return route
+
 
 class TwoOptRouting(RoutingAlgorithm):
     """2-opt improvement algorithm."""
@@ -192,7 +205,7 @@ class TwoOptRouting(RoutingAlgorithm):
         j: int,
     ) -> list[Location]:
         """Perform a 2-opt swap."""
-        new_route = route[:i] + route[i:j+1][::-1] + route[j+1:]
+        new_route = route[:i] + route[i : j + 1][::-1] + route[j + 1 :]
         return new_route
 
     def optimize(
@@ -244,6 +257,7 @@ class TwoOptRouting(RoutingAlgorithm):
 
         return result
 
+
 class DijkstraRouting:
     """Dijkstra's shortest path algorithm for graph-based routing."""
 
@@ -274,9 +288,9 @@ class DijkstraRouting:
     ) -> tuple[list[str], float]:
         """Find shortest path between two nodes."""
         if start_id not in self.graph:
-            return [], float('inf')
+            return [], float("inf")
 
-        distances = {node: float('inf') for node in self.graph}
+        distances = {node: float("inf") for node in self.graph}
         distances[start_id] = 0
         previous = dict.fromkeys(self.graph)
         visited = set()
@@ -314,9 +328,10 @@ class DijkstraRouting:
         path.reverse()
 
         if path[0] != start_id:
-            return [], float('inf')
+            return [], float("inf")
 
         return path, distances[end_id]
+
 
 class AStarRouting:
     """A* pathfinding algorithm."""
@@ -346,7 +361,7 @@ class AStarRouting:
         if cost is None:
             x1, y1 = self.positions.get(from_id, (0, 0))
             x2, y2 = self.positions.get(to_id, (0, 0))
-            cost = math.sqrt((x2 - x1)**2 + (y2 - y1)**2)
+            cost = math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)
 
         if from_id not in self.graph:
             self.graph[from_id] = {}
@@ -359,7 +374,7 @@ class AStarRouting:
 
         x1, y1 = self.positions[node_id]
         x2, y2 = self.positions[goal_id]
-        return math.sqrt((x2 - x1)**2 + (y2 - y1)**2)
+        return math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)
 
     def find_path(
         self,
@@ -368,7 +383,7 @@ class AStarRouting:
     ) -> tuple[list[str], float]:
         """Find optimal path using A*."""
         if start_id not in self.graph:
-            return [], float('inf')
+            return [], float("inf")
 
         open_set = [(0, start_id)]
         came_from: dict[str, str] = {}
@@ -387,12 +402,12 @@ class AStarRouting:
                     current = came_from[current]
                     path.append(current)
                 path.reverse()
-                return path, g_score.get(goal_id, float('inf'))
+                return path, g_score.get(goal_id, float("inf"))
 
             for neighbor, cost in self.graph.get(current, {}).items():
-                tentative_g = g_score.get(current, float('inf')) + cost
+                tentative_g = g_score.get(current, float("inf")) + cost
 
-                if tentative_g < g_score.get(neighbor, float('inf')):
+                if tentative_g < g_score.get(neighbor, float("inf")):
                     came_from[neighbor] = current
                     g_score[neighbor] = tentative_g
                     f = tentative_g + self._heuristic(neighbor, goal_id)
@@ -402,12 +417,10 @@ class AStarRouting:
                         heapq.heappush(open_set, (f, neighbor))
                         open_set_hash.add(neighbor)
 
-        return [], float('inf')
+        return [], float("inf")
 
-def create_routing_algorithm(
-    algorithm_type: str,
-    **kwargs
-) -> RoutingAlgorithm:
+
+def create_routing_algorithm(algorithm_type: str, **kwargs) -> RoutingAlgorithm:
     """Factory function for routing algorithms."""
     algorithms = {
         "nearest_neighbor": NearestNeighborRouting,
@@ -419,6 +432,7 @@ def create_routing_algorithm(
         raise ValueError(f"Unknown algorithm: {algorithm_type}")
 
     return algo_class(**kwargs)
+
 
 __all__ = [
     "Location",

@@ -16,6 +16,7 @@ try:
     from codomyrmex.agents.generic.agent_orchestrator import AgentOrchestrator
     from codomyrmex.agents.jules import JulesClient, JulesIntegrationAdapter
     from codomyrmex.agents.opencode import OpenCodeClient, OpenCodeIntegrationAdapter
+
     _HAS_AGENTS = True
 except ImportError:
     _HAS_AGENTS = False
@@ -30,7 +31,12 @@ class StubAgent(BaseAgent):
     This is a test adapter implementing BaseAgent interface, not a mock.
     """
 
-    def __init__(self, name: str, capabilities: list[AgentCapabilities], should_succeed: bool = True):
+    def __init__(
+        self,
+        name: str,
+        capabilities: list[AgentCapabilities],
+        should_succeed: bool = True,
+    ):
         super().__init__(name=name, capabilities=capabilities, config={})
         self.should_succeed = should_succeed
         self.execution_count = 0
@@ -40,7 +46,7 @@ class StubAgent(BaseAgent):
         if self.should_succeed:
             return AgentResponse(
                 content=f"Response from {self.name}",
-                metadata={"execution_count": self.execution_count}
+                metadata={"execution_count": self.execution_count},
             )
         else:
             return AgentResponse(content="", error=f"Error from {self.name}")
@@ -91,14 +97,14 @@ class StubAgentSwapping:
 
     def test_agent_capability_discovery(self):
         """Test discovering agent capabilities."""
-        agent1 = StubAgent("agent1", [
-            AgentCapabilities.CODE_GENERATION,
-            AgentCapabilities.CODE_EDITING
-        ])
-        agent2 = StubAgent("agent2", [
-            AgentCapabilities.CODE_ANALYSIS,
-            AgentCapabilities.TEXT_COMPLETION
-        ])
+        agent1 = StubAgent(
+            "agent1",
+            [AgentCapabilities.CODE_GENERATION, AgentCapabilities.CODE_EDITING],
+        )
+        agent2 = StubAgent(
+            "agent2",
+            [AgentCapabilities.CODE_ANALYSIS, AgentCapabilities.TEXT_COMPLETION],
+        )
 
         # Check capabilities
         assert agent1.supports_capability(AgentCapabilities.CODE_GENERATION)
@@ -112,10 +118,10 @@ class StubAgentSwapping:
         """Test selecting agents by capability."""
         agent1 = StubAgent("agent1", [AgentCapabilities.CODE_GENERATION])
         agent2 = StubAgent("agent2", [AgentCapabilities.CODE_EDITING])
-        agent3 = StubAgent("agent3", [
-            AgentCapabilities.CODE_GENERATION,
-            AgentCapabilities.CODE_EDITING
-        ])
+        agent3 = StubAgent(
+            "agent3",
+            [AgentCapabilities.CODE_GENERATION, AgentCapabilities.CODE_EDITING],
+        )
 
         orchestrator = AgentOrchestrator([agent1, agent2, agent3])
 
@@ -135,11 +141,9 @@ class StubAgentSwapping:
         code_edit_agent = StubAgent("code_edit", [AgentCapabilities.CODE_EDITING])
         analysis_agent = StubAgent("analysis", [AgentCapabilities.CODE_ANALYSIS])
 
-        orchestrator = AgentOrchestrator([
-            code_gen_agent,
-            code_edit_agent,
-            analysis_agent
-        ])
+        orchestrator = AgentOrchestrator(
+            [code_gen_agent, code_edit_agent, analysis_agent]
+        )
 
         request = AgentRequest(prompt="test")
         responses = orchestrator.execute_parallel(request)
@@ -237,11 +241,14 @@ class TestModularIntegration:
         """Test dynamic capability matching for agent selection."""
         agent1 = StubAgent("agent1", [AgentCapabilities.CODE_GENERATION])
         agent2 = StubAgent("agent2", [AgentCapabilities.CODE_EDITING])
-        agent3 = StubAgent("agent3", [
-            AgentCapabilities.CODE_GENERATION,
-            AgentCapabilities.CODE_EDITING,
-            AgentCapabilities.CODE_ANALYSIS
-        ])
+        agent3 = StubAgent(
+            "agent3",
+            [
+                AgentCapabilities.CODE_GENERATION,
+                AgentCapabilities.CODE_EDITING,
+                AgentCapabilities.CODE_ANALYSIS,
+            ],
+        )
 
         orchestrator = AgentOrchestrator([agent1, agent2, agent3])
 

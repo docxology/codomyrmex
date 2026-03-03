@@ -330,9 +330,7 @@ class TestRunCommand:
 
     def test_check_raises_on_failure(self):
         with pytest.raises(CommandError) as ctx:
-            run_command(
-                [sys.executable, "-c", "import sys; sys.exit(1)"], check=True
-            )
+            run_command([sys.executable, "-c", "import sys; sys.exit(1)"], check=True)
         assert ctx.value.error_type == CommandErrorType.EXECUTION_FAILED
 
     def test_check_success_no_raise(self):
@@ -341,13 +339,12 @@ class TestRunCommand:
 
     def test_cwd(self):
         with tempfile.TemporaryDirectory() as tmpdir:
-            result = run_command([sys.executable, "-c", "import os; print(os.getcwd())"], cwd=tmpdir)
+            result = run_command(
+                [sys.executable, "-c", "import os; print(os.getcwd())"], cwd=tmpdir
+            )
             assert result.success
             # Resolve both to handle symlinks (e.g., /var -> /private/var on macOS)
-            assert (
-                os.path.realpath(result.stdout.strip())
-                == os.path.realpath(tmpdir)
-            )
+            assert os.path.realpath(result.stdout.strip()) == os.path.realpath(tmpdir)
 
     def test_invalid_cwd(self):
         # _validate_working_directory raises CommandError which is re-raised
@@ -366,7 +363,11 @@ class TestRunCommand:
 
     def test_env_variables(self):
         result = run_command(
-            [sys.executable, "-c", "import os; print(os.environ.get('MY_TEST_VAR', ''))"],
+            [
+                sys.executable,
+                "-c",
+                "import os; print(os.environ.get('MY_TEST_VAR', ''))",
+            ],
             env={"MY_TEST_VAR": "test_value_123"},
         )
         assert result.success
@@ -472,9 +473,7 @@ class TestRunCommandAsync:
         assert not result.success
 
     def test_command_not_found(self):
-        result = self._run(
-            run_command_async(["nonexistent_binary_xyz_abc_123"])
-        )
+        result = self._run(run_command_async(["nonexistent_binary_xyz_abc_123"]))
         assert not result.success
         assert result.error_message is not None
 
@@ -487,10 +486,7 @@ class TestRunCommandAsync:
                 )
             )
             assert result.success
-            assert (
-                os.path.realpath(result.stdout.strip())
-                == os.path.realpath(tmpdir)
-            )
+            assert os.path.realpath(result.stdout.strip()) == os.path.realpath(tmpdir)
 
     def test_input_data(self):
         result = self._run(

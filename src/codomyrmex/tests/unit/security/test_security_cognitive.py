@@ -95,7 +95,7 @@ class TestAwarenessTraining:
             title="Phishing Awareness",
             description="Learn to identify phishing attempts",
             content="Phishing emails often contain...",
-            difficulty="beginner"
+            difficulty="beginner",
         )
         assert module is not None
         assert module.module_id == "phishing-101"
@@ -124,10 +124,7 @@ class TestCognitiveThreatAssessment:
 
     def test_assess_cognitive_threats(self):
         """Test assessing cognitive threats."""
-        context = {
-            "environment": "remote_work",
-            "training_level": "low"
-        }
+        context = {"environment": "remote_work", "training_level": "low"}
         assessment = assess_cognitive_threats(context)
         assert isinstance(assessment, dict)
         assert "total_threats" in assessment
@@ -137,7 +134,7 @@ class TestCognitiveThreatAssessment:
         scenario = {
             "training_level": "intermediate",
             "experience": "high",
-            "stress_level": "medium"
+            "stress_level": "medium",
         }
         factors = evaluate_human_factors(scenario)
         assert isinstance(factors, dict)
@@ -160,7 +157,7 @@ class TestBehaviorAnalysis:
         behavior_data = {
             "login_time": "02:00",
             "location": "unusual",
-            "actions": ["sensitive_access"]
+            "actions": ["sensitive_access"],
         }
         patterns = analyze_user_behavior("user123", behavior_data)
         assert isinstance(patterns, list)
@@ -170,9 +167,7 @@ class TestBehaviorAnalysis:
         current_behavior = {
             "login_time": "02:00",
             "location": "unusual",
-            "actions": ["sensitive_access"]
+            "actions": ["sensitive_access"],
         }
         anomalies = detect_anomalous_behavior("user123", current_behavior)
         assert isinstance(anomalies, list)
-
-

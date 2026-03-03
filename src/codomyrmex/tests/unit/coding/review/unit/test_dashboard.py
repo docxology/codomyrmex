@@ -28,6 +28,7 @@ from codomyrmex.coding.review.reviewer_impl.dashboard import DashboardMixin
 # attributes without requiring the full CodeReviewer + pyscn stack.
 # ---------------------------------------------------------------------------
 
+
 class _StubAnalyzer:
     """Minimal pyscn analyzer stand-in that returns controllable data.
 
@@ -64,7 +65,9 @@ class _StubAnalyzer:
             raise RuntimeError("analyzer error")
         return self._coupling
 
-    def find_clones(self, files: list[str], threshold: float = 0.8) -> list[dict[str, Any]]:
+    def find_clones(
+        self, files: list[str], threshold: float = 0.8
+    ) -> list[dict[str, Any]]:
         if self._raise:
             raise RuntimeError("analyzer error")
         return self._clones
@@ -102,6 +105,7 @@ class _ConcreteReviewer(DashboardMixin):
 # ---------------------------------------------------------------------------
 # Fixtures
 # ---------------------------------------------------------------------------
+
 
 @pytest.fixture
 def small_project(tmp_path: Path) -> Path:
@@ -203,7 +207,7 @@ class TestCalculateOverallScore:
         result = reviewer._calculate_overall_score(
             {"score": 80.0},  # complexity: 80 * 0.25 = 20
             {"score": 60.0},  # dead_code:  60 * 0.20 = 12
-            {"score": 100.0}, # duplication: 100 * 0.15 = 15
+            {"score": 100.0},  # duplication: 100 * 0.15 = 15
             {"score": 40.0},  # coupling:   40 * 0.20 = 8
             {"score": 90.0},  # architecture: 90 * 0.20 = 18
         )
@@ -232,33 +236,61 @@ class TestDeterminePriorityActions:
 
     def test_high_complexity_generates_action(self, reviewer: _ConcreteReviewer):
         complexity_issues = [
-            {"function_name": "big_func", "file_path": "a.py", "complexity": 25, "line_number": 10}
+            {
+                "function_name": "big_func",
+                "file_path": "a.py",
+                "complexity": 25,
+                "line_number": 10,
+            }
         ]
-        actions = reviewer._determine_priority_actions_from_dashboard(complexity_issues, [], [])
+        actions = reviewer._determine_priority_actions_from_dashboard(
+            complexity_issues, [], []
+        )
         assert len(actions) == 1
         assert actions[0]["type"] == "complexity_reduction"
         assert actions[0]["priority"] == "high"
 
     def test_low_complexity_no_action(self, reviewer: _ConcreteReviewer):
         complexity_issues = [
-            {"function_name": "small_func", "file_path": "b.py", "complexity": 10, "line_number": 5}
+            {
+                "function_name": "small_func",
+                "file_path": "b.py",
+                "complexity": 10,
+                "line_number": 5,
+            }
         ]
-        actions = reviewer._determine_priority_actions_from_dashboard(complexity_issues, [], [])
+        actions = reviewer._determine_priority_actions_from_dashboard(
+            complexity_issues, [], []
+        )
         assert len(actions) == 0
 
     def test_critical_dead_code_generates_action(self, reviewer: _ConcreteReviewer):
         dead_code_issues = [
-            {"file_path": "c.py", "line_number": 3, "reason": "unused", "severity": "critical"}
+            {
+                "file_path": "c.py",
+                "line_number": 3,
+                "reason": "unused",
+                "severity": "critical",
+            }
         ]
-        actions = reviewer._determine_priority_actions_from_dashboard([], dead_code_issues, [])
+        actions = reviewer._determine_priority_actions_from_dashboard(
+            [], dead_code_issues, []
+        )
         assert len(actions) == 1
         assert actions[0]["type"] == "dead_code_removal"
 
     def test_warning_dead_code_no_action(self, reviewer: _ConcreteReviewer):
         dead_code_issues = [
-            {"file_path": "d.py", "line_number": 7, "reason": "unused import", "severity": "warning"}
+            {
+                "file_path": "d.py",
+                "line_number": 7,
+                "reason": "unused import",
+                "severity": "warning",
+            }
         ]
-        actions = reviewer._determine_priority_actions_from_dashboard([], dead_code_issues, [])
+        actions = reviewer._determine_priority_actions_from_dashboard(
+            [], dead_code_issues, []
+        )
         assert len(actions) == 0
 
 
@@ -270,7 +302,9 @@ class TestIdentifyQuickWins:
         assert reviewer._identify_quick_wins([]) == []
 
     def test_critical_dead_code_is_quick_win(self, reviewer: _ConcreteReviewer):
-        issues = [{"file_path": "/path/to/file.py", "line_number": 10, "severity": "critical"}]
+        issues = [
+            {"file_path": "/path/to/file.py", "line_number": 10, "severity": "critical"}
+        ]
         wins = reviewer._identify_quick_wins(issues)
         assert len(wins) == 1
         assert wins[0]["type"] == "dead_code_cleanup"
@@ -508,16 +542,25 @@ class TestGetArchitectureMetrics:
     def test_mixed_severity_violations(self, tmp_path: Path):
         violations = [
             ArchitectureViolation(
-                file_path="a.py", violation_type="circular", description="circ",
-                severity="high", suggestion="fix it",
+                file_path="a.py",
+                violation_type="circular",
+                description="circ",
+                severity="high",
+                suggestion="fix it",
             ),
             ArchitectureViolation(
-                file_path="b.py", violation_type="naming", description="bad name",
-                severity="medium", suggestion="rename",
+                file_path="b.py",
+                violation_type="naming",
+                description="bad name",
+                severity="medium",
+                suggestion="rename",
             ),
             ArchitectureViolation(
-                file_path="c.py", violation_type="style", description="minor",
-                severity="low", suggestion="minor fix",
+                file_path="c.py",
+                violation_type="style",
+                description="minor",
+                severity="low",
+                suggestion="minor fix",
             ),
         ]
         rev = _ConcreteReviewer(
@@ -598,7 +641,10 @@ class TestTopIssues:
         assert len(top) == 3
 
     def test_top_complexity_limits_to_five(self, tmp_path: Path):
-        funcs = [{"name": f"f{i}", "complexity": i, "file_path": "f.py", "line_number": i} for i in range(10)]
+        funcs = [
+            {"name": f"f{i}", "complexity": i, "file_path": "f.py", "line_number": i}
+            for i in range(10)
+        ]
         rev = _ConcreteReviewer(
             project_root=str(tmp_path),
             pyscn_analyzer=_StubAnalyzer(complexity_results=funcs),
@@ -607,9 +653,21 @@ class TestTopIssues:
 
     def test_top_dead_code_sorted_by_severity(self, tmp_path: Path):
         findings = [
-            {"severity": "info", "location": {"file_path": "a.py", "start_line": 1}, "reason": "r1"},
-            {"severity": "critical", "location": {"file_path": "b.py", "start_line": 2}, "reason": "r2"},
-            {"severity": "warning", "location": {"file_path": "c.py", "start_line": 3}, "reason": "r3"},
+            {
+                "severity": "info",
+                "location": {"file_path": "a.py", "start_line": 1},
+                "reason": "r1",
+            },
+            {
+                "severity": "critical",
+                "location": {"file_path": "b.py", "start_line": 2},
+                "reason": "r2",
+            },
+            {
+                "severity": "warning",
+                "location": {"file_path": "c.py", "start_line": 3},
+                "reason": "r3",
+            },
         ]
         rev = _ConcreteReviewer(
             project_root=str(tmp_path),
@@ -800,7 +858,14 @@ class TestDetectCodeSmells:
         rev = _ConcreteReviewer(
             project_root=str(tmp_path),
             pyscn_analyzer=_StubAnalyzer(
-                complexity_results=[{"name": "f", "complexity": 3, "file_path": "a.py", "line_number": 1}],
+                complexity_results=[
+                    {
+                        "name": "f",
+                        "complexity": 3,
+                        "file_path": "a.py",
+                        "line_number": 1,
+                    }
+                ],
                 coupling_results=[{"name": "C", "coupling": 2, "file_path": "a.py"}],
             ),
         )
@@ -817,7 +882,12 @@ class TestDetectCodeSmells:
             project_root=str(tmp_path),
             pyscn_analyzer=_StubAnalyzer(
                 complexity_results=[
-                    {"name": "huge_func", "complexity": 25, "file_path": "big.py", "line_number": 1}
+                    {
+                        "name": "huge_func",
+                        "complexity": 25,
+                        "file_path": "big.py",
+                        "line_number": 1,
+                    }
                 ],
             ),
         )
@@ -864,8 +934,12 @@ class TestSuggestAutomatedFixes:
     def test_dead_code_fix_suggested(self, tmp_path: Path):
         dead_findings = [
             DeadCodeFinding(
-                file_path="x.py", line_number=5, code_snippet="pass",
-                reason="unused", severity="critical", suggestion="remove it",
+                file_path="x.py",
+                line_number=5,
+                code_snippet="pass",
+                reason="unused",
+                severity="critical",
+                suggestion="remove it",
                 fix_available=True,
             )
         ]
@@ -880,8 +954,11 @@ class TestSuggestAutomatedFixes:
     def test_naming_convention_fix(self, tmp_path: Path):
         violations = [
             ArchitectureViolation(
-                file_path="my_test_file.py", violation_type="naming_convention",
-                description="bad name", severity="medium", suggestion="rename",
+                file_path="my_test_file.py",
+                violation_type="naming_convention",
+                description="bad name",
+                severity="medium",
+                suggestion="rename",
             )
         ]
         rev = _ConcreteReviewer(
@@ -904,8 +981,12 @@ class TestAnalyzeTechnicalDebt:
     def test_debt_from_complexity(self, tmp_path: Path):
         suggestions = [
             ComplexityReductionSuggestion(
-                function_name="big", file_path="a.py", current_complexity=20,
-                suggested_refactoring="split it", estimated_effort="high", benefits=["clarity"],
+                function_name="big",
+                file_path="a.py",
+                current_complexity=20,
+                suggested_refactoring="split it",
+                estimated_effort="high",
+                benefits=["clarity"],
             )
         ]
         rev = _ConcreteReviewer(
@@ -918,8 +999,12 @@ class TestAnalyzeTechnicalDebt:
     def test_debt_from_dead_code(self, tmp_path: Path):
         findings = [
             DeadCodeFinding(
-                file_path="b.py", line_number=10, code_snippet="x=1",
-                reason="unused", severity="critical", suggestion="remove",
+                file_path="b.py",
+                line_number=10,
+                code_snippet="x=1",
+                reason="unused",
+                severity="critical",
+                suggestion="remove",
             )
         ]
         rev = _ConcreteReviewer(
@@ -932,8 +1017,11 @@ class TestAnalyzeTechnicalDebt:
     def test_debt_from_architecture(self, tmp_path: Path):
         violations = [
             ArchitectureViolation(
-                file_path="c.py", violation_type="circular",
-                description="circular dep", severity="high", suggestion="refactor",
+                file_path="c.py",
+                violation_type="circular",
+                description="circular dep",
+                severity="high",
+                suggestion="refactor",
             )
         ]
         rev = _ConcreteReviewer(
@@ -946,20 +1034,31 @@ class TestAnalyzeTechnicalDebt:
     def test_top_debt_items_sorted(self, tmp_path: Path):
         suggestions = [
             ComplexityReductionSuggestion(
-                function_name="f1", file_path="a.py", current_complexity=30,
-                suggested_refactoring="split", estimated_effort="high", benefits=[],
+                function_name="f1",
+                file_path="a.py",
+                current_complexity=30,
+                suggested_refactoring="split",
+                estimated_effort="high",
+                benefits=[],
             )
         ]
         violations = [
             ArchitectureViolation(
-                file_path="b.py", violation_type="circular",
-                description="dep", severity="high", suggestion="fix",
+                file_path="b.py",
+                violation_type="circular",
+                description="dep",
+                severity="high",
+                suggestion="fix",
             )
         ]
         findings = [
             DeadCodeFinding(
-                file_path="c.py", line_number=1, code_snippet="x",
-                reason="unused", severity="critical", suggestion="rm",
+                file_path="c.py",
+                line_number=1,
+                code_snippet="x",
+                reason="unused",
+                severity="critical",
+                suggestion="rm",
             )
         ]
         rev = _ConcreteReviewer(
@@ -983,7 +1082,14 @@ class TestGenerateQualityDashboard:
         rev = _ConcreteReviewer(
             project_root=str(small_project),
             pyscn_analyzer=_StubAnalyzer(
-                complexity_results=[{"name": "f", "complexity": 5, "file_path": "m.py", "line_number": 1}],
+                complexity_results=[
+                    {
+                        "name": "f",
+                        "complexity": 5,
+                        "file_path": "m.py",
+                        "line_number": 1,
+                    }
+                ],
             ),
         )
         dashboard = rev.generate_quality_dashboard()

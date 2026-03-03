@@ -134,4 +134,3 @@ def test_extract_keywords_empty():
     keywords = extractor.extract_keywords(spec)
     assert isinstance(keywords, dict)
     assert len(keywords) == 0
-

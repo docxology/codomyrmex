@@ -1,4 +1,3 @@
-
 """System Context Module.
 
 This module aggregates system information into a standardized context format
@@ -14,6 +13,7 @@ from codomyrmex.system_discovery.health.health_checker import HealthChecker
 from .discovery_engine import SystemDiscovery
 
 logger = get_logger(__name__)
+
 
 def get_system_context(root_dir: str = ".") -> dict[str, Any]:
     """
@@ -34,8 +34,8 @@ def get_system_context(root_dir: str = ".") -> dict[str, Any]:
 
         context = {
             "system_root": root_dir,
-            "modules": [], # List of available modules
-            "health_status": "unknown"
+            "modules": [],  # List of available modules
+            "health_status": "unknown",
         }
 
         # Get module list (simplified)

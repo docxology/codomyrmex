@@ -29,6 +29,7 @@ from codomyrmex.ci_cd_automation.pipeline.models import (
 # Helpers
 # ---------------------------------------------------------------------------
 
+
 def _minimal_config() -> dict:
     """Return the smallest valid pipeline config."""
     return {
@@ -121,6 +122,7 @@ def _write_config(tmp_path, config, filename="pipeline.json"):
 # ---------------------------------------------------------------------------
 # Test class
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestPipelineManagerInit:
@@ -280,7 +282,9 @@ class TestValidatePipelineConfig:
 
     def test_missing_name(self, tmp_path):
         mgr = PipelineManager(workspace_dir=str(tmp_path / "ws"))
-        config = {"stages": [{"name": "s1", "jobs": [{"name": "j1", "commands": ["echo"]}]}]}
+        config = {
+            "stages": [{"name": "s1", "jobs": [{"name": "j1", "commands": ["echo"]}]}]
+        }
         is_valid, errors = mgr.validate_pipeline_config(config)
         assert is_valid is False
         assert any("name" in e.lower() for e in errors)
@@ -543,6 +547,7 @@ class TestCancelPipeline:
         # Simulate an active execution with a real asyncio.Task
         loop = asyncio.new_event_loop()
         try:
+
             async def _dummy():
                 await asyncio.sleep(100)
 
@@ -603,16 +608,18 @@ class TestConditionalStageExecution:
     def test_custom_condition_failure(self, tmp_path):
         mgr = PipelineManager(workspace_dir=str(tmp_path / "ws"))
         stage = {"name": "notify", "conditions": {"custom": "on failure"}}
-        assert mgr.conditional_stage_execution(
-            stage, {"has_previous_failures": True}
-        ) is True
+        assert (
+            mgr.conditional_stage_execution(stage, {"has_previous_failures": True})
+            is True
+        )
 
     def test_custom_condition_success(self, tmp_path):
         mgr = PipelineManager(workspace_dir=str(tmp_path / "ws"))
         stage = {"name": "notify", "conditions": {"custom": "on success"}}
-        assert mgr.conditional_stage_execution(
-            stage, {"has_previous_failures": False}
-        ) is True
+        assert (
+            mgr.conditional_stage_execution(stage, {"has_previous_failures": False})
+            is True
+        )
 
 
 @pytest.mark.unit

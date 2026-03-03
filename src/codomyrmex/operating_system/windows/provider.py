@@ -30,7 +30,11 @@ def _run(cmd: str, timeout: float = 15.0) -> str:
         # On Windows, no need for shell=True with explicit executables,
         # but we keep shell=True for compound commands.
         result = subprocess.run(
-            cmd, shell=True, capture_output=True, text=True, timeout=timeout,
+            cmd,
+            shell=True,
+            capture_output=True,
+            text=True,
+            timeout=timeout,
         )
         return result.stdout.strip()
     except Exception:
@@ -110,15 +114,17 @@ class WindowsProvider(OSProviderBase):
                 mem = int(parts[3])
             except ValueError:
                 mem = 0
-            processes.append(ProcessInfo(
-                pid=pid,
-                name=name,
-                status=ProcessStatus.RUNNING,
-                cpu_percent=cpu,
-                memory_bytes=mem,
-                user=parts[4].strip() if len(parts) > 4 else "",
-                command=name,
-            ))
+            processes.append(
+                ProcessInfo(
+                    pid=pid,
+                    name=name,
+                    status=ProcessStatus.RUNNING,
+                    cpu_percent=cpu,
+                    memory_bytes=mem,
+                    user=parts[4].strip() if len(parts) > 4 else "",
+                    command=name,
+                )
+            )
         return processes
 
     # ── Disk Usage ──────────────────────────────────────────────────
@@ -142,21 +148,25 @@ class WindowsProvider(OSProviderBase):
                 continue
             total = used + free
             percent = (used / total * 100) if total > 0 else 0.0
-            disks.append(DiskInfo(
-                device=f"{drive_letter}:",
-                mountpoint=f"{drive_letter}:\\",
-                fstype="NTFS",
-                total_bytes=total,
-                used_bytes=used,
-                free_bytes=free,
-                percent_used=round(percent, 1),
-            ))
+            disks.append(
+                DiskInfo(
+                    device=f"{drive_letter}:",
+                    mountpoint=f"{drive_letter}:\\",
+                    fstype="NTFS",
+                    total_bytes=total,
+                    used_bytes=used,
+                    free_bytes=free,
+                    percent_used=round(percent, 1),
+                )
+            )
         return disks
 
     # ── Services ────────────────────────────────────────────────────
 
     def get_services(self, pattern: str = "") -> list[ServiceInfo]:
-        filter_clause = f"| Where-Object {{$_.Name -like '*{pattern}*'}}" if pattern else ""
+        filter_clause = (
+            f"| Where-Object {{$_.Name -like '*{pattern}*'}}" if pattern else ""
+        )
         raw = _powershell(
             f"Get-Service {filter_clause} | "
             "Select-Object Name,Status "
@@ -169,13 +179,19 @@ class WindowsProvider(OSProviderBase):
                 continue
             name = parts[0]
             status_str = parts[1].strip().lower()
-            status = ServiceStatus.RUNNING if status_str == "running" else ServiceStatus.STOPPED
-            services.append(ServiceInfo(
-                name=name,
-                status=status,
-                pid=None,
-                enabled=status == ServiceStatus.RUNNING,
-            ))
+            status = (
+                ServiceStatus.RUNNING
+                if status_str == "running"
+                else ServiceStatus.STOPPED
+            )
+            services.append(
+                ServiceInfo(
+                    name=name,
+                    status=status,
+                    pid=None,
+                    enabled=status == ServiceStatus.RUNNING,
+                )
+            )
         return services
 
     # ── Network ─────────────────────────────────────────────────────
@@ -206,11 +222,13 @@ class WindowsProvider(OSProviderBase):
             name = parts[0].strip()
             mac = parts[1].strip()
             status_str = parts[2].strip().lower()
-            interfaces.append(NetworkInfo(
-                interface=name,
-                ip_address=ip_map.get(name, ""),
-                mac_address=mac,
-                is_up=status_str == "up",
-            ))
+            interfaces.append(
+                NetworkInfo(
+                    interface=name,
+                    ip_address=ip_map.get(name, ""),
+                    mac_address=mac,
+                    is_up=status_str == "up",
+                )
+            )
 
         return interfaces

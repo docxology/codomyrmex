@@ -27,21 +27,40 @@ class DocumentationBootstrapper:
 
     # Surface roots to cover
     SURFACE_ROOTS = {
-        'src', 'scripts', 'docs', 'config', 'testing',
-        'projects', 'cursorrules', 'examples'
+        "src",
+        "scripts",
+        "docs",
+        "config",
+        "testing",
+        "projects",
+        "cursorrules",
+        "examples",
     }
 
     # Directories to exclude from processing
     EXCLUDED_DIRS = {
-        'output', '@output', '.git', 'node_modules', '__pycache__',
-        '.venv', 'venv', 'dist', 'build', '.pytest_cache', '.mypy_cache'
+        "output",
+        "@output",
+        ".git",
+        "node_modules",
+        "__pycache__",
+        ".venv",
+        "venv",
+        "dist",
+        "build",
+        ".pytest_cache",
+        ".mypy_cache",
     }
 
     # Files to exclude from inventories (but include README.md if it exists)
     EXCLUDED_FILES = {
-        'AGENTS.md',  # Don't include ourselves, but do include README.md
-        '.git', '.gitignore', '.gitattributes', '.pre-commit-config.yaml',
-        '.editorconfig', '.encryption_key'
+        "AGENTS.md",  # Don't include ourselves, but do include README.md
+        ".git",
+        ".gitignore",
+        ".gitattributes",
+        ".pre-commit-config.yaml",
+        ".editorconfig",
+        ".encryption_key",
     }
 
     def __init__(self, repo_root: Path):
@@ -59,7 +78,7 @@ class DocumentationBootstrapper:
             if part in self.EXCLUDED_DIRS:
                 return False
             # Also exclude dot-directories (directories starting with .)
-            if part.startswith('.'):
+            if part.startswith("."):
                 return False
 
         # Check if this is under an allowed surface root
@@ -80,14 +99,14 @@ class DocumentationBootstrapper:
         try:
             for item in sorted(dir_path.iterdir()):
                 # Include README.md but exclude AGENTS.md and other excluded files
-                if item.name == 'AGENTS.md':
+                if item.name == "AGENTS.md":
                     continue
                 if item.name in self.EXCLUDED_FILES:
                     continue
                 if item.name in self.EXCLUDED_DIRS:
                     continue
                 # Also exclude dot-directories
-                if item.name.startswith('.'):
+                if item.name.startswith("."):
                     continue
 
                 if item.is_file():
@@ -109,14 +128,14 @@ class DocumentationBootstrapper:
         # Calculate path to root README
         depth = len(rel_path.parts)
         root_path = "../" * depth + "README.md"
-        nav_links['root'] = root_path
+        nav_links["root"] = root_path
 
         # Parent directory link (if parent README exists)
         parent = dir_path.parent
         if parent != self.repo_root:
             parent_readme = parent / "README.md"
             if parent_readme.exists():
-                nav_links['parent'] = "../README.md"
+                nav_links["parent"] = "../README.md"
 
         return nav_links
 
@@ -131,7 +150,7 @@ class DocumentationBootstrapper:
 
         content = f"""# Codomyrmex Agents — {rel_path}
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: {datetime.now().strftime('%B %Y')}
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: {datetime.now().strftime("%B %Y")}
 
 ## Purpose
 {purpose}
@@ -141,7 +160,7 @@ class DocumentationBootstrapper:
 
         if inventory:
             for item in inventory:
-                if item.endswith('/'):
+                if item.endswith("/"):
                     content += f"- `{item}` – Directory containing {item.rstrip('/')} components\n"
                 else:
                     content += f"- `{item}` – Project file\n"
@@ -157,7 +176,7 @@ class DocumentationBootstrapper:
 ## Navigation Links
 """
 
-        if 'parent' in nav_links:
+        if "parent" in nav_links:
             content += f"- **📁 Parent Directory**: [{rel_path.parent.name}](../README.md) - Parent directory documentation\n"
         content += f"- **🏠 Project Root**: {'../' * (len(rel_path.parts))}README.md - Main project documentation\n"
 
@@ -174,7 +193,7 @@ class DocumentationBootstrapper:
 
         content = f"""# {rel_path.name}
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: {datetime.now().strftime('%B %Y')}
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: {datetime.now().strftime("%B %Y")}
 
 ## Overview
 
@@ -185,7 +204,7 @@ class DocumentationBootstrapper:
 
         if inventory:
             for item in inventory:
-                if item.endswith('/'):
+                if item.endswith("/"):
                     content += f"- `{item}` – Subdirectory\n"
                 else:
                     content += f"- `{item}` – File\n"
@@ -196,8 +215,10 @@ class DocumentationBootstrapper:
 ## Navigation
 """
 
-        if 'parent' in nav_links:
-            content += f"- **Parent Directory**: [{rel_path.parent.name}](../README.md)\n"
+        if "parent" in nav_links:
+            content += (
+                f"- **Parent Directory**: [{rel_path.parent.name}](../README.md)\n"
+            )
         content += f"- **Project Root**: {'../' * (len(rel_path.parts))}README.md\n"
 
         return content
@@ -211,46 +232,48 @@ class DocumentationBootstrapper:
         if len(rel_path.parts) == 1:
             surface = rel_path.parts[0]
             purposes = {
-                'src': 'Hosts core source code and agent-enabled services for the Codomyrmex platform.',
-                'scripts': 'Maintenance and automation utilities for project management.',
-                'docs': 'Documentation components and guides for the Codomyrmex platform.',
-                'config': 'Configuration templates and examples.',
-                'testing': 'Test suites and validation for the Codomyrmex platform.',
-                'projects': 'Project workspace and templates.',
-                'cursorrules': 'Coding standards and automation rules.',
-                'examples': 'Example implementations and demonstrations.'
+                "src": "Hosts core source code and agent-enabled services for the Codomyrmex platform.",
+                "scripts": "Maintenance and automation utilities for project management.",
+                "docs": "Documentation components and guides for the Codomyrmex platform.",
+                "config": "Configuration templates and examples.",
+                "testing": "Test suites and validation for the Codomyrmex platform.",
+                "projects": "Project workspace and templates.",
+                "cursorrules": "Coding standards and automation rules.",
+                "examples": "Example implementations and demonstrations.",
             }
-            return purposes.get(surface, f'Contains {surface} components for the Codomyrmex platform.')
+            return purposes.get(
+                surface, f"Contains {surface} components for the Codomyrmex platform."
+            )
 
         # Subdirectory purposes based on patterns
-        if 'test' in path_str.lower():
-            return 'Test files and validation suites.'
-        if 'doc' in path_str.lower():
-            return 'Documentation files and guides.'
-        if 'example' in path_str.lower():
-            return 'Example implementations and demonstrations.'
-        if 'script' in path_str.lower():
-            return 'Automation and utility scripts.'
-        if 'config' in path_str.lower():
-            return 'Configuration files and templates.'
+        if "test" in path_str.lower():
+            return "Test files and validation suites."
+        if "doc" in path_str.lower():
+            return "Documentation files and guides."
+        if "example" in path_str.lower():
+            return "Example implementations and demonstrations."
+        if "script" in path_str.lower():
+            return "Automation and utility scripts."
+        if "config" in path_str.lower():
+            return "Configuration files and templates."
 
         # Default purpose
-        return f'Contains components for the {rel_path.parts[0]} system.'
+        return f"Contains components for the {rel_path.parts[0]} system."
 
     def process_directory(self, dir_path: Path) -> None:
         """Process a single directory, creating/updating documentation files."""
-        agents_path = dir_path / 'AGENTS.md'
-        readme_path = dir_path / 'README.md'
+        agents_path = dir_path / "AGENTS.md"
+        readme_path = dir_path / "README.md"
         rel_path = dir_path.relative_to(self.repo_root)
 
         # Create or update AGENTS.md
         content = self.generate_agents_md(dir_path)
-        agents_path.write_text(content, encoding='utf-8')
+        agents_path.write_text(content, encoding="utf-8")
         self.generated_count += 1
 
         # Create or update README.md
         content = self.generate_readme_md(dir_path)
-        readme_path.write_text(content, encoding='utf-8')
+        readme_path.write_text(content, encoding="utf-8")
         self.generated_count += 1
         logger.info(f"Processed documentation for {rel_path}")
 
@@ -272,7 +295,7 @@ class DocumentationBootstrapper:
                 self.process_directory(surface_path)
 
             # Walk all subdirectories recursively
-            for dir_path in surface_path.rglob('*'):
+            for dir_path in surface_path.rglob("*"):
                 if dir_path.is_dir() and self.should_process_directory(dir_path):
                     self.process_directory(dir_path)
 
@@ -285,12 +308,10 @@ def main():
         description="Bootstrap AGENTS.md and README.md files across the repository"
     )
     parser.add_argument(
-        '--repo-root', type=Path, default=Path.cwd(),
-        help='Repository root directory'
+        "--repo-root", type=Path, default=Path.cwd(), help="Repository root directory"
     )
     parser.add_argument(
-        '--dry-run', action='store_true',
-        help='Preview changes without creating files'
+        "--dry-run", action="store_true", help="Preview changes without creating files"
     )
 
     args = parser.parse_args()
@@ -306,5 +327,5 @@ def main():
     print(f"\n📊 Bootstrap Summary: Processed {bootstrapper.generated_count} files")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

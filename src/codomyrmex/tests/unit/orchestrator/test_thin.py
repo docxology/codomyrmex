@@ -45,9 +45,7 @@ class TestRun:
         """Test running a Python script."""
         from codomyrmex.orchestrator.thin import run
 
-        with tempfile.NamedTemporaryFile(
-            mode="w", suffix=".py", delete=False
-        ) as f:
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False) as f:
             f.write("print('hello from python')")
             f.flush()
             script_path = f.name
@@ -184,11 +182,7 @@ class TestPipe:
         """Test piping multiple commands."""
         from codomyrmex.orchestrator.thin import pipe
 
-        result = pipe([
-            "echo line1",
-            "echo line2",
-            "echo line3"
-        ])
+        result = pipe(["echo line1", "echo line2", "echo line3"])
         assert result["success"] is True
         assert result["commands"] == 3
         assert result["completed"] == 3
@@ -197,11 +191,7 @@ class TestPipe:
         """Test pipe stops on error by default."""
         from codomyrmex.orchestrator.thin import pipe
 
-        result = pipe([
-            "echo step1",
-            "exit 1",
-            "echo step3"
-        ], stop_on_error=True)
+        result = pipe(["echo step1", "exit 1", "echo step3"], stop_on_error=True)
         assert result["success"] is False
         assert result["completed"] == 2
 
@@ -209,11 +199,7 @@ class TestPipe:
         """Test pipe can continue on error."""
         from codomyrmex.orchestrator.thin import pipe
 
-        result = pipe([
-            "echo step1",
-            "exit 1",
-            "echo step3"
-        ], stop_on_error=False)
+        result = pipe(["echo step1", "exit 1", "echo step3"], stop_on_error=False)
         assert result["success"] is False
         assert result["completed"] == 3
 
@@ -290,9 +276,7 @@ class TestChainScripts:
             script3.write_text("print('script3')")
 
             result = chain_scripts(
-                [script1, script2, script3],
-                timeout_per_script=30,
-                stop_on_error=True
+                [script1, script2, script3], timeout_per_script=30, stop_on_error=True
             )
             assert result["success"] is False
             assert result["completed"] <= 2
@@ -301,10 +285,7 @@ class TestChainScripts:
         """Test chain with nonexistent script."""
         from codomyrmex.orchestrator.thin import chain_scripts
 
-        result = chain_scripts(
-            ["/nonexistent/script.py"],
-            timeout_per_script=10
-        )
+        result = chain_scripts(["/nonexistent/script.py"], timeout_per_script=10)
         assert result["success"] is False
 
 
@@ -361,10 +342,7 @@ class TestSteps:
 
         steps = Steps(name="parallel_workflow")
         steps.add("setup", lambda: "setup")
-        steps.add_parallel([
-            ("parallel1", parallel1),
-            ("parallel2", parallel2)
-        ])
+        steps.add_parallel([("parallel1", parallel1), ("parallel2", parallel2)])
 
         assert "parallel1" in steps._steps
         assert "parallel2" in steps._steps
@@ -464,7 +442,6 @@ class TestPythonFunc:
         assert isinstance(result, dict)
 
 
-
 class TestRetry:
     """Tests for the retry wrapper."""
 
@@ -556,6 +533,7 @@ class TestTimeout:
         @timeout(0.1)
         def slow_func():
             import time
+
             time.sleep(1)
             return "slow"
 
@@ -583,7 +561,9 @@ class TestCondition:
         """Test creating a condition function."""
         from codomyrmex.orchestrator.thin import condition
 
-        predicate = condition(lambda results: results.get("step1", {}).get("success", False))
+        predicate = condition(
+            lambda results: results.get("step1", {}).get("success", False)
+        )
 
         # Test with passing condition
         assert predicate({"step1": {"success": True}}) is True
@@ -600,15 +580,14 @@ class TestCondition:
 
         predicate = condition(complex_check)
 
-        assert predicate({
-            "step1": {"success": True},
-            "step2": {"success": True}
-        }) is True
+        assert (
+            predicate({"step1": {"success": True}, "step2": {"success": True}}) is True
+        )
 
-        assert predicate({
-            "step1": {"success": True},
-            "step2": {"success": False}
-        }) is False
+        assert (
+            predicate({"step1": {"success": True}, "step2": {"success": False}})
+            is False
+        )
 
 
 class TestStepResult:
@@ -629,10 +608,7 @@ class TestStepResult:
         from codomyrmex.orchestrator.thin import StepResult
 
         result = StepResult(
-            success=True,
-            value={"data": "test"},
-            error=None,
-            execution_time=1.5
+            success=True, value={"data": "test"}, error=None, execution_time=1.5
         )
         assert result.success is True
         assert result.value == {"data": "test"}
@@ -643,9 +619,7 @@ class TestStepResult:
         from codomyrmex.orchestrator.thin import StepResult
 
         result = StepResult(
-            success=False,
-            error="Something went wrong",
-            execution_time=0.5
+            success=False, error="Something went wrong", execution_time=0.5
         )
         assert result.success is False
         assert result.error == "Something went wrong"
@@ -691,9 +665,6 @@ class TestIntegration:
         """Test environment variable propagation in shell."""
         from codomyrmex.orchestrator.thin import shell
 
-        result = shell(
-            "echo $MY_VAR",
-            env={"MY_VAR": "test_value"}
-        )
+        result = shell("echo $MY_VAR", env={"MY_VAR": "test_value"})
         assert result["success"] is True
         assert "test_value" in result.get("stdout", "")

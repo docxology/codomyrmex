@@ -17,26 +17,106 @@ logger = get_logger(__name__)
 
 # Top 100 common passwords (sourced from multiple breach datasets)
 _COMMON_PASSWORDS: set[str] = {
-    "123456", "password", "12345678", "qwerty", "123456789",
-    "12345", "1234", "111111", "1234567", "dragon",
-    "123123", "baseball", "abc123", "football", "monkey",
-    "letmein", "696969", "shadow", "master", "666666",
-    "qwertyuiop", "123321", "mustang", "1234567890", "michael",
-    "654321", "pussy", "superman", "1qaz2wsx", "7777777",
-    "fuckyou", "121212", "000000", "qazwsx", "123qwe",
-    "killer", "trustno1", "jordan", "jennifer", "zxcvbnm",
-    "asdfgh", "hunter", "buster", "soccer", "harley",
-    "batman", "andrew", "tigger", "sunshine", "iloveyou",
-    "fuckme", "charlie", "robert", "thomas", "hockey",
-    "ranger", "daniel", "starwars", "klaster", "112233",
-    "george", "asshole", "computer", "michelle", "jessica",
-    "pepper", "1111", "zxcvbn", "555555", "11111111",
-    "131313", "freedom", "777777", "pass", "fuck",
-    "maggie", "159753", "aaaaaa", "ginger", "princess",
-    "joshua", "cheese", "amanda", "summer", "love",
-    "ashley", "6969", "nicole", "chelsea", "biteme",
-    "matthew", "access", "yankees", "987654321", "dallas",
-    "austin", "thunder", "taylor", "matrix", "admin",
+    "123456",
+    "password",
+    "12345678",
+    "qwerty",
+    "123456789",
+    "12345",
+    "1234",
+    "111111",
+    "1234567",
+    "dragon",
+    "123123",
+    "baseball",
+    "abc123",
+    "football",
+    "monkey",
+    "letmein",
+    "696969",
+    "shadow",
+    "master",
+    "666666",
+    "qwertyuiop",
+    "123321",
+    "mustang",
+    "1234567890",
+    "michael",
+    "654321",
+    "pussy",
+    "superman",
+    "1qaz2wsx",
+    "7777777",
+    "fuckyou",
+    "121212",
+    "000000",
+    "qazwsx",
+    "123qwe",
+    "killer",
+    "trustno1",
+    "jordan",
+    "jennifer",
+    "zxcvbnm",
+    "asdfgh",
+    "hunter",
+    "buster",
+    "soccer",
+    "harley",
+    "batman",
+    "andrew",
+    "tigger",
+    "sunshine",
+    "iloveyou",
+    "fuckme",
+    "charlie",
+    "robert",
+    "thomas",
+    "hockey",
+    "ranger",
+    "daniel",
+    "starwars",
+    "klaster",
+    "112233",
+    "george",
+    "asshole",
+    "computer",
+    "michelle",
+    "jessica",
+    "pepper",
+    "1111",
+    "zxcvbn",
+    "555555",
+    "11111111",
+    "131313",
+    "freedom",
+    "777777",
+    "pass",
+    "fuck",
+    "maggie",
+    "159753",
+    "aaaaaa",
+    "ginger",
+    "princess",
+    "joshua",
+    "cheese",
+    "amanda",
+    "summer",
+    "love",
+    "ashley",
+    "6969",
+    "nicole",
+    "chelsea",
+    "biteme",
+    "matthew",
+    "access",
+    "yankees",
+    "987654321",
+    "dallas",
+    "austin",
+    "thunder",
+    "taylor",
+    "matrix",
+    "admin",
 }
 
 # Algorithm key length requirements in bits
@@ -122,8 +202,10 @@ def assess_password_strength(password: str) -> StrengthResult:
     """
     if not password:
         return StrengthResult(
-            score=0, level="very_weak",
-            feedback=["Password is empty"], entropy_bits=0.0,
+            score=0,
+            level="very_weak",
+            feedback=["Password is empty"],
+            entropy_bits=0.0,
         )
 
     feedback: list[str] = []
@@ -165,10 +247,9 @@ def assess_password_strength(password: str) -> StrengthResult:
     # Detect sequential characters (abc, 123, etc.)
     sequential_count = 0
     for i in range(len(password) - 2):
-        if (
-            ord(password[i]) + 1 == ord(password[i + 1])
-            and ord(password[i + 1]) + 1 == ord(password[i + 2])
-        ):
+        if ord(password[i]) + 1 == ord(password[i + 1]) and ord(
+            password[i + 1]
+        ) + 1 == ord(password[i + 2]):
             sequential_count += 1
     if sequential_count > 0:
         feedback.append("Avoid sequential characters (e.g., abc, 123)")
@@ -195,15 +276,21 @@ def assess_password_strength(password: str) -> StrengthResult:
 
     logger.debug(
         "Password strength: score=%d, level=%s, entropy=%.1f bits",
-        score, level, entropy_bits,
+        score,
+        level,
+        entropy_bits,
     )
     return StrengthResult(
-        score=score, level=level, feedback=feedback, entropy_bits=entropy_bits,
+        score=score,
+        level=level,
+        feedback=feedback,
+        entropy_bits=entropy_bits,
     )
 
 
 def estimate_crack_time(
-    password: str, guesses_per_second: float = 1e10,
+    password: str,
+    guesses_per_second: float = 1e10,
 ) -> float:
     """Estimate time in seconds to brute-force crack a password.
 
@@ -237,7 +324,9 @@ def estimate_crack_time(
 
     logger.debug(
         "Crack time estimate: %.2e seconds (%.1f entropy bits, %.2e guesses/s)",
-        seconds, entropy_bits, guesses_per_second,
+        seconds,
+        entropy_bits,
+        guesses_per_second,
     )
     return seconds
 
@@ -288,7 +377,9 @@ def assess_key_strength(key: bytes, algorithm: str) -> StrengthResult:
             feedback.append(f"Key length {key_bits} bits is valid for {algorithm}")
         elif key_bits >= max_required:
             score = 90
-            feedback.append(f"Key length {key_bits} bits exceeds requirements for {algorithm}")
+            feedback.append(
+                f"Key length {key_bits} bits exceeds requirements for {algorithm}"
+            )
         elif key_bits >= min_required:
             score = 70
             feedback.append(
@@ -312,10 +403,17 @@ def assess_key_strength(key: bytes, algorithm: str) -> StrengthResult:
 
     logger.debug(
         "Key strength for %s: score=%d, level=%s, %d bits, entropy=%.2f",
-        algorithm, score, level, key_bits, entropy,
+        algorithm,
+        score,
+        level,
+        key_bits,
+        entropy,
     )
     return StrengthResult(
-        score=score, level=level, feedback=feedback, entropy_bits=float(key_bits),
+        score=score,
+        level=level,
+        feedback=feedback,
+        entropy_bits=float(key_bits),
     )
 
 

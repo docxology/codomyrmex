@@ -14,9 +14,6 @@ from __future__ import annotations
 
 import argparse
 import json
-import os
-import tempfile
-from pathlib import Path
 
 import pytest
 
@@ -32,15 +29,7 @@ from codomyrmex.ide.antigravity.agent_relay import (
 )
 from codomyrmex.ide.antigravity.relay_cli import (
     build_parser,
-    cmd_clear,
-    cmd_history,
-    cmd_list,
-    cmd_send,
-    cmd_stats,
-    cmd_stop,
-    main,
 )
-
 
 # ---------------------------------------------------------------------------
 # Fixtures
@@ -108,7 +97,9 @@ class TestBuildParser:
     def test_start_custom_model(self):
         """start --model claude-sonnet-4-20250514 parses correctly."""
         parser = build_parser()
-        args = parser.parse_args(["start", "-c", "ch", "-m", "claude-sonnet-4-20250514"])
+        args = parser.parse_args(
+            ["start", "-c", "ch", "-m", "claude-sonnet-4-20250514"]
+        )
         assert args.model == "claude-sonnet-4-20250514"
 
     def test_start_no_auto_flag_default_false(self):

@@ -34,6 +34,7 @@ class MCPServerConfig:
         rate_limit_burst: Global rate limit burst ceiling.
         warm_up: Eagerly populate discovery cache at server start.
     """
+
     name: str = "codomyrmex-mcp-server"
     version: str = "1.0.0"
     transport: str = "stdio"  # "stdio" or "http"
@@ -79,10 +80,13 @@ class MCPServer:
             RateLimiter,
             RateLimiterConfig,
         )
-        self._rate_limiter = RateLimiter(RateLimiterConfig(
-            rate=self.config.rate_limit_rate,
-            burst=self.config.rate_limit_burst,
-        ))
+
+        self._rate_limiter = RateLimiter(
+            RateLimiterConfig(
+                rate=self.config.rate_limit_rate,
+                burst=self.config.rate_limit_burst,
+            )
+        )
 
     # =========================================================================
     # Tool Management
@@ -103,6 +107,7 @@ class MCPServer:
             title: Human-friendly display name (MCP 2025-06-18).
             output_schema: JSON Schema for structured output (MCP 2025-06-18).
         """
+
         def decorator(func: Callable[..., Any]) -> Callable[..., Any]:
             """Decorator."""
             tool_name = name or func.__name__
@@ -113,14 +118,14 @@ class MCPServer:
             from typing import get_type_hints
 
             sig = inspect.signature(func)
-            hints = get_type_hints(func) if hasattr(func, '__annotations__') else {}
+            hints = get_type_hints(func) if hasattr(func, "__annotations__") else {}
 
             properties = {}
             required = []
             type_map = {str: "string", int: "integer", float: "number", bool: "boolean"}
 
             for pname, param in sig.parameters.items():
-                if pname in ('self', 'cls'):
+                if pname in ("self", "cls"):
                     continue
 
                 ptype = hints.get(pname, str)
@@ -138,7 +143,7 @@ class MCPServer:
                     "type": "object",
                     "properties": properties,
                     "required": required,
-                }
+                },
             }
 
             # MCP 2025-06-18: human-friendly display name
@@ -244,9 +249,7 @@ class MCPServer:
     # =========================================================================
 
     async def handle_request(
-        self,
-        message: dict[str, Any],
-        correlation_id: str | None = None
+        self, message: dict[str, Any], correlation_id: str | None = None
     ) -> dict[str, Any] | None:
         """Handle incoming JSON-RPC message."""
         method = message.get("method", "")
@@ -273,7 +276,7 @@ class MCPServer:
                     "error": {
                         "code": -32603,
                         "message": str(e),
-                    }
+                    },
                 }
 
     async def _handle_notification(self, method: str, params: dict[str, Any]) -> None:
@@ -315,7 +318,7 @@ class MCPServer:
             "serverInfo": {
                 "name": self.config.name,
                 "version": self.config.version,
-            }
+            },
         }
 
     async def _list_tools(self, params: dict[str, Any]) -> dict[str, Any]:
@@ -434,12 +437,14 @@ class MCPServer:
         """List available resources."""
         resources = []
         for r in self._resources.values():
-            resources.append({
-                "uri": r["uri"],
-                "name": r["name"],
-                "description": r.get("description"),
-                "mimeType": r.get("mimeType", "text/plain"),
-            })
+            resources.append(
+                {
+                    "uri": r["uri"],
+                    "name": r["name"],
+                    "description": r.get("description"),
+                    "mimeType": r.get("mimeType", "text/plain"),
+                }
+            )
         return {"resources": resources}
 
     async def _read_resource(self, params: dict[str, Any]) -> dict[str, Any]:
@@ -455,22 +460,26 @@ class MCPServer:
         content = provider() if provider else ""
 
         return {
-            "contents": [{
-                "uri": uri,
-                "mimeType": resource.get("mimeType", "text/plain"),
-                "text": content,
-            }]
+            "contents": [
+                {
+                    "uri": uri,
+                    "mimeType": resource.get("mimeType", "text/plain"),
+                    "text": content,
+                }
+            ]
         }
 
     async def _list_prompts(self, params: dict[str, Any]) -> dict[str, Any]:
         """List available prompts."""
         prompts = []
         for p in self._prompts.values():
-            prompts.append({
-                "name": p["name"],
-                "description": p.get("description"),
-                "arguments": p.get("arguments", []),
-            })
+            prompts.append(
+                {
+                    "name": p["name"],
+                    "description": p.get("description"),
+                    "arguments": p.get("arguments", []),
+                }
+            )
         return {"prompts": prompts}
 
     async def _get_prompt(self, params: dict[str, Any]) -> dict[str, Any]:
@@ -491,10 +500,9 @@ class MCPServer:
 
         return {
             "description": prompt.get("description"),
-            "messages": [{
-                "role": "user",
-                "content": {"type": "text", "text": content}
-            }]
+            "messages": [
+                {"role": "user", "content": {"type": "text", "text": content}}
+            ],
         }
 
     # =========================================================================
@@ -583,7 +591,9 @@ class MCPServer:
         @app.post("/mcp")
         async def mcp_endpoint(request: Request) -> JSONResponse:
             body = await request.json()
-            cid = request.headers.get("x-correlation-id") or request.headers.get("X-Correlation-ID")
+            cid = request.headers.get("x-correlation-id") or request.headers.get(
+                "X-Correlation-ID"
+            )
             response = await server.handle_request(body, correlation_id=cid)
 
             headers = {}
@@ -591,7 +601,9 @@ class MCPServer:
                 headers["X-Correlation-ID"] = cid
 
             if response is None:
-                return JSONResponse(content={"status": "accepted"}, status_code=202, headers=headers)
+                return JSONResponse(
+                    content={"status": "accepted"}, status_code=202, headers=headers
+                )
             return JSONResponse(content=response, headers=headers)
 
         # --- Convenience REST endpoints ---
@@ -617,11 +629,15 @@ class MCPServer:
             except Exception:
                 body = {}
 
-            cid = request.headers.get("x-correlation-id") or request.headers.get("X-Correlation-ID")
-            result = await server._call_tool({
-                "name": tool_name,
-                "arguments": body,
-            })
+            cid = request.headers.get("x-correlation-id") or request.headers.get(
+                "X-Correlation-ID"
+            )
+            result = await server._call_tool(
+                {
+                    "name": tool_name,
+                    "arguments": body,
+                }
+            )
 
             headers = {}
             if cid:

@@ -83,8 +83,7 @@ def cli_commands():
         "sessions": {
             "help": "List active collaboration sessions",
             "handler": lambda: print(
-                "Active Collaboration Sessions:\n"
-                "  (no active sessions)"
+                "Active Collaboration Sessions:\n  (no active sessions)"
             ),
         },
         "status": {
@@ -148,7 +147,7 @@ __all__ = [
     "Vote",
     "ConsensusResult",
     "Decision",
-    "AgentProxy", # Legacy
+    "AgentProxy",  # Legacy
     # Submodules
     "agents",
     "communication",

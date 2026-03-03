@@ -5,7 +5,6 @@ tests are skipped rather than using mocks. All data processing and
 conversion logic is tested with real data structures.
 """
 
-
 import pytest
 
 try:
@@ -14,6 +13,7 @@ try:
         EveryCodeIntegrationAdapter,
     )
     from codomyrmex.tests.unit.agents.helpers import EVERY_CODE_AVAILABLE
+
     _HAS_AGENTS = True
 except ImportError:
     _HAS_AGENTS = False
@@ -40,8 +40,7 @@ class TestEveryCodeIntegrationAdapter:
 
         try:
             code = adapter.adapt_for_ai_code_editing(
-                prompt="Create a fibonacci function",
-                language="python"
+                prompt="Create a fibonacci function", language="python"
             )
             # Test real result structure
             assert isinstance(code, str)
@@ -57,9 +56,7 @@ class TestEveryCodeIntegrationAdapter:
 
         try:
             code = adapter.adapt_for_ai_code_editing(
-                prompt="Create a function",
-                language="python",
-                files=["src/models.py"]
+                prompt="Create a function", language="python", files=["src/models.py"]
             )
             # Test real result structure
             assert isinstance(code, str)
@@ -75,7 +72,7 @@ class TestEveryCodeIntegrationAdapter:
 
         messages = [
             {"role": "user", "content": "Hello"},
-            {"role": "assistant", "content": "Hi there"}
+            {"role": "assistant", "content": "Hi there"},
         ]
 
         try:
@@ -154,4 +151,3 @@ class TestEveryCodeIntegrationAdapter:
         except (RuntimeError, Exception):
             # Expected if CLI not available or authentication fails
             pass
-

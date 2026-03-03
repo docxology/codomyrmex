@@ -30,6 +30,7 @@ from codomyrmex.plugin_system.validation.plugin_validator import (
 # Test Plugin Manager
 # ============================================================================
 
+
 @pytest.mark.unit
 class TestPluginManager:
     """Test cases for PluginManager functionality."""
@@ -71,9 +72,9 @@ class TestPlugin:
             "description": "Test",
             "author": "Author",
             "plugin_type": "utility",
-            "entry_point": "test_plugin.py"
+            "entry_point": "test_plugin.py",
         }
-        with open(plugin_json_file, 'w') as f:
+        with open(plugin_json_file, "w") as f:
             json.dump(plugin_json, f)
 
         manager = PluginManager()
@@ -83,16 +84,20 @@ class TestPlugin:
         plugins = manager.discover_plugins()
 
         # Should discover at least our test plugin
-        assert len(plugins) >= 0  # May be 0 if discovery doesn't work, but shouldn't error
+        assert (
+            len(plugins) >= 0
+        )  # May be 0 if discovery doesn't work, but shouldn't error
 
     def test_plugin_listing(self):
         """Test plugin listing through manager."""
         manager = PluginManager()
 
         # Manually add plugin to registry for testing
-        plugin = Plugin(PluginInfo(
-            "test_plugin", "1.0.0", "Test", "Author", PluginType.UTILITY, "test.py"
-        ))
+        plugin = Plugin(
+            PluginInfo(
+                "test_plugin", "1.0.0", "Test", "Author", PluginType.UTILITY, "test.py"
+            )
+        )
         manager.registry.register(plugin)
 
         plugins = manager.list_plugins()
@@ -104,7 +109,9 @@ class TestPlugin:
         manager = PluginManager()
 
         plugins = [
-            Plugin(PluginInfo("analyzer1", "1.0.0", "", "", PluginType.ANALYZER, "a.py")),
+            Plugin(
+                PluginInfo("analyzer1", "1.0.0", "", "", PluginType.ANALYZER, "a.py")
+            ),
             Plugin(PluginInfo("utility1", "1.0.0", "", "", PluginType.UTILITY, "u.py")),
             Plugin(PluginInfo("hook1", "1.0.0", "", "", PluginType.HOOK, "h.py")),
         ]
@@ -140,10 +147,17 @@ class TestPlugin:
         manager = PluginManager()
 
         # Add plugin to registry
-        plugin = Plugin(PluginInfo(
-            "test_plugin", "1.0.0", "Test", "Author", PluginType.UTILITY, "test.py",
-            dependencies=["missing_dep"]
-        ))
+        plugin = Plugin(
+            PluginInfo(
+                "test_plugin",
+                "1.0.0",
+                "Test",
+                "Author",
+                PluginType.UTILITY,
+                "test.py",
+                dependencies=["missing_dep"],
+            )
+        )
         manager.registry.register(plugin)
 
         status = manager.get_plugin_status("test_plugin")
@@ -170,8 +184,26 @@ class TestPlugin:
 
         # Add some plugins
         plugins = [
-            Plugin(PluginInfo("analysis1", "1.0.0", "Analysis 1", "Author", PluginType.ANALYZER, "a1.py")),
-            Plugin(PluginInfo("utility1", "1.0.0", "Utility 1", "Author", PluginType.UTILITY, "u1.py")),
+            Plugin(
+                PluginInfo(
+                    "analysis1",
+                    "1.0.0",
+                    "Analysis 1",
+                    "Author",
+                    PluginType.ANALYZER,
+                    "a1.py",
+                )
+            ),
+            Plugin(
+                PluginInfo(
+                    "utility1",
+                    "1.0.0",
+                    "Utility 1",
+                    "Author",
+                    PluginType.UTILITY,
+                    "u1.py",
+                )
+            ),
         ]
 
         for plugin in plugins:
@@ -188,7 +220,9 @@ class TestPlugin:
         """Test enabling and disabling plugins."""
         manager = PluginManager()
 
-        plugin = Plugin(PluginInfo("toggle_test", "1.0.0", "", "", PluginType.UTILITY, "t.py"))
+        plugin = Plugin(
+            PluginInfo("toggle_test", "1.0.0", "", "", PluginType.UTILITY, "t.py")
+        )
         manager.registry.register(plugin)
 
         # Enable
@@ -231,22 +265,29 @@ class TestPlugin:
             "description": "Test",
             "author": "Author",
             "plugin_type": "utility",
-            "entry_point": "test_plugin.py"
+            "entry_point": "test_plugin.py",
         }
-        with open(plugin_json_file, 'w') as f:
+        with open(plugin_json_file, "w") as f:
             json.dump(plugin_json, f)
 
         # Add plugin to registry first
-        plugin = Plugin(PluginInfo(
-            "test_plugin", "1.0.0", "Test", "Author", PluginType.UTILITY, str(plugin_file)
-        ))
+        plugin = Plugin(
+            PluginInfo(
+                "test_plugin",
+                "1.0.0",
+                "Test",
+                "Author",
+                PluginType.UTILITY,
+                str(plugin_file),
+            )
+        )
         manager.registry.register(plugin)
 
         # Try to load the plugin
         result = manager.load_plugin("test_plugin")
 
         # Should return a result (may succeed or fail depending on implementation)
-        assert hasattr(result, 'success')
+        assert hasattr(result, "success")
         assert isinstance(result.success, bool)
 
     def test_load_plugin_not_found(self):
@@ -264,7 +305,9 @@ class TestPlugin:
 
         # Add plugins and also add them to the loader's loaded_plugins
         for i in range(3):
-            plugin = Plugin(PluginInfo(f"cleanup_{i}", "1.0.0", "", "", PluginType.UTILITY, "t.py"))
+            plugin = Plugin(
+                PluginInfo(f"cleanup_{i}", "1.0.0", "", "", PluginType.UTILITY, "t.py")
+            )
             manager.registry.register(plugin)
             manager.loader.loaded_plugins[f"cleanup_{i}"] = plugin
 
@@ -280,6 +323,7 @@ class TestPlugin:
 # ============================================================================
 # Test Convenience Functions
 # ============================================================================
+
 
 @pytest.mark.unit
 class TestConvenienceFunctions:
@@ -306,7 +350,7 @@ class TestConvenienceFunctions:
             name="helper_test",
             version="1.0.0",
             plugin_type=PluginType.UTILITY,
-            entry_point="test.py"
+            entry_point="test.py",
         )
 
         assert info.name == "helper_test"
@@ -317,6 +361,7 @@ class TestConvenienceFunctions:
 # ============================================================================
 # Test Error Handling
 # ============================================================================
+
 
 @pytest.mark.unit
 class TestErrorHandling:
@@ -332,7 +377,7 @@ class TestErrorHandling:
             description="Test",
             author="Test",
             plugin_type=PluginType.UTILITY,
-            entry_point="/nonexistent/path/plugin.py"
+            entry_point="/nonexistent/path/plugin.py",
         )
 
         result = loader.load_plugin(info)
@@ -346,22 +391,25 @@ class TestErrorHandling:
 
         # Create a file with invalid content
         bad_file = tmp_path / "corrupted.py"
-        bad_file.write_bytes(b'\x00\x01\x02\x03')  # Binary garbage
+        bad_file.write_bytes(b"\x00\x01\x02\x03")  # Binary garbage
 
         result = validator.validate_plugin(str(bad_file))
 
         # Should handle gracefully without crashing
-        assert hasattr(result, 'valid')
+        assert hasattr(result, "valid")
 
     def test_registry_handles_shutdown_errors(self):
         """Test that registry handles shutdown errors gracefully."""
+
         class FaultyPlugin(Plugin):
             def shutdown(self):
                 raise RuntimeError("Shutdown error")
 
         registry = PluginRegistry()
 
-        plugin = FaultyPlugin(PluginInfo("faulty", "1.0.0", "", "", PluginType.UTILITY, "t.py"))
+        plugin = FaultyPlugin(
+            PluginInfo("faulty", "1.0.0", "", "", PluginType.UTILITY, "t.py")
+        )
         registry.register(plugin)
 
         # Should not raise
@@ -404,6 +452,7 @@ class TestErrorHandling:
 # Test Dependency Resolver (from test_tier3_promotions_pass2.py)
 # ============================================================================
 
+
 class TestDependencyResolver:
     """Tests for DependencyResolver."""
 
@@ -414,6 +463,7 @@ class TestDependencyResolver:
             DependencyResolver,
             ResolutionStatus,
         )
+
         resolver = DependencyResolver()
         resolver.add(DependencyNode("auth", dependencies=["db"]))
         resolver.add(DependencyNode("db"))
@@ -428,6 +478,7 @@ class TestDependencyResolver:
             DependencyResolver,
             ResolutionStatus,
         )
+
         resolver = DependencyResolver()
         resolver.add(DependencyNode("auth", dependencies=["nonexistent"]))
         result = resolver.resolve()
@@ -441,6 +492,7 @@ class TestDependencyResolver:
             DependencyResolver,
             ResolutionStatus,
         )
+
         resolver = DependencyResolver()
         resolver.add(DependencyNode("a", dependencies=["b"]))
         resolver.add(DependencyNode("b", dependencies=["a"]))

@@ -36,11 +36,15 @@ else:
         # Create a dummy type for nx when not available
         class _DummyGraph:
             """Minimal graph stub used when networkx is not installed."""
+
             pass
+
         class _DummyNX:
             """Minimal networkx module replacement used when networkx is not installed."""
+
             Graph = _DummyGraph
             DiGraph = _DummyGraph
+
         nx = _DummyNX()
 
 logger = get_logger(__name__)
@@ -70,7 +74,9 @@ class BaseVisualizer(ABC):  # noqa: B024
         self.theme = theme or get_default_theme()
         self.logger = get_logger(__name__)
 
-    def create_figure(self, nrows: int = 1, ncols: int = 1, **kwargs) -> tuple[Figure, Any]:
+    def create_figure(
+        self, nrows: int = 1, ncols: int = 1, **kwargs
+    ) -> tuple[Figure, Any]:
         """Create a figure with theme applied.
 
         Args:
@@ -127,13 +133,23 @@ class BaseVisualizer(ABC):  # noqa: B024
         labelpad = kwargs.pop("labelpad", self.theme.axis.label_pad)
 
         if xlabel:
-            ax.set_xlabel(xlabel, fontsize=fontsize, fontweight=fontweight, labelpad=labelpad, **kwargs)
+            ax.set_xlabel(
+                xlabel,
+                fontsize=fontsize,
+                fontweight=fontweight,
+                labelpad=labelpad,
+                **kwargs,
+            )
         if ylabel:
-            ax.set_ylabel(ylabel, fontsize=fontsize, fontweight=fontweight, labelpad=labelpad, **kwargs)
+            ax.set_ylabel(
+                ylabel,
+                fontsize=fontsize,
+                fontweight=fontweight,
+                labelpad=labelpad,
+                **kwargs,
+            )
 
-    def save_figure(
-        self, fig: Figure, output_path: str, **kwargs
-    ) -> None:
+    def save_figure(self, fig: Figure, output_path: str, **kwargs) -> None:
         """Save figure with theme defaults.
 
         Args:
@@ -195,7 +211,9 @@ class BaseNetworkVisualizer(BaseVisualizer):
                 }
             else:
                 # Use primary palette
-                unique_vals = sorted({G.nodes[node].get(attribute, "default") for node in G.nodes()})
+                unique_vals = sorted(
+                    {G.nodes[node].get(attribute, "default") for node in G.nodes()}
+                )
                 colors = self.theme.get_color_sequence(len(unique_vals), "primary")
                 color_map = {val: colors[i] for i, val in enumerate(unique_vals)}
 
@@ -247,7 +265,10 @@ class BaseNetworkVisualizer(BaseVisualizer):
 
         # Scale to size range
         sizes = [
-            min_size + (importances.get(node, 0) - min_val) / (max_val - min_val) * (max_size - min_size)
+            min_size
+            + (importances.get(node, 0) - min_val)
+            / (max_val - min_val)
+            * (max_size - min_size)
             for node in G.nodes()
         ]
 
@@ -287,7 +308,8 @@ class BaseNetworkVisualizer(BaseVisualizer):
 
         # Scale to width range
         widths = [
-            min_width + (w - min_weight) / (max_weight - min_weight) * (max_width - min_width)
+            min_width
+            + (w - min_weight) / (max_weight - min_weight) * (max_width - min_width)
             for w in weights
         ]
 
@@ -310,7 +332,9 @@ class BaseNetworkVisualizer(BaseVisualizer):
             Dictionary mapping node IDs to (x, y) positions
         """
         if layout == "spring":
-            k = kwargs.pop("k", 1.0 / np.sqrt(len(G.nodes())) if len(G.nodes()) > 0 else 1.0)
+            k = kwargs.pop(
+                "k", 1.0 / np.sqrt(len(G.nodes())) if len(G.nodes()) > 0 else 1.0
+            )
             iterations = kwargs.pop("iterations", 50)
             pos = nx.spring_layout(G, k=k, iterations=iterations, **kwargs)
         elif layout == "circular":

@@ -411,7 +411,9 @@ class GitVisualizer:
             )
             return False
 
-    def _get_repo_data(self, repository_path: str, repo_data: dict[str, Any]) -> dict[str, Any]:
+    def _get_repo_data(
+        self, repository_path: str, repo_data: dict[str, Any]
+    ) -> dict[str, Any]:
         """Get repository data from path or use provided data."""
         if repository_path and GIT_OPERATIONS_AVAILABLE:
             repo_status = get_status(repository_path)
@@ -516,7 +518,9 @@ class GitVisualizer:
                     commit_words[word] = commit_words.get(word, 0) + 1
 
         if commit_words:
-            top_words = sorted(commit_words.items(), key=lambda x: x[1], reverse=True)[:10]
+            top_words = sorted(commit_words.items(), key=lambda x: x[1], reverse=True)[
+                :10
+            ]
             words, counts = zip(*top_words, strict=False)
             ax.barh(words, counts, color=self.colors["develop"])
             ax.set_title("Common Commit Words")
@@ -758,7 +762,7 @@ class GitVisualizer:
             commits.append(
                 {
                     "hash": f"a{i:02d}b{i:02d}c{i:02d}",
-                    "message": f"Sample commit {i+1}",
+                    "message": f"Sample commit {i + 1}",
                     "author_name": "Developer" if i % 2 == 0 else "Contributor",
                     "author_email": "dev@example.com",
                     "date": date.isoformat(),

@@ -188,5 +188,7 @@ class DeadLetterQueue:
                         keep.append(line)
                 except json.JSONDecodeError:
                     keep.append(line)
-            self._path.write_text("\n".join(keep) + "\n" if keep else "", encoding="utf-8")
+            self._path.write_text(
+                "\n".join(keep) + "\n" if keep else "", encoding="utf-8"
+            )
             return removed

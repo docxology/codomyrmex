@@ -34,10 +34,12 @@ class TestSpanContext:
 
     def test_from_dict(self):
         """Should create from dict."""
-        ctx = SpanContext.from_dict({
-            "trace_id": "trace123",
-            "span_id": "span456",
-        })
+        ctx = SpanContext.from_dict(
+            {
+                "trace_id": "trace123",
+                "span_id": "span456",
+            }
+        )
 
         assert ctx.trace_id == "trace123"
         assert ctx.span_id == "span456"
@@ -55,10 +57,12 @@ class TestSpanContext:
 
     def test_from_headers(self):
         """Should extract from HTTP headers."""
-        ctx = SpanContext.from_headers({
-            "X-Trace-Id": "trace123",
-            "X-Span-Id": "span456",
-        })
+        ctx = SpanContext.from_headers(
+            {
+                "X-Trace-Id": "trace123",
+                "X-Span-Id": "span456",
+            }
+        )
 
         assert ctx is not None
         assert ctx.trace_id == "trace123"
@@ -245,6 +249,7 @@ class TestTraceDecorator:
 
     def test_decorator(self):
         """Decorator should trace function."""
+
         @trace("my_operation", tracer_name="test")
         def my_func():
             return 42
@@ -254,6 +259,7 @@ class TestTraceDecorator:
 
     def test_decorator_uses_function_name(self):
         """Decorator should use function name if not specified."""
+
         @trace(tracer_name="test")
         def another_func():
             return "result"

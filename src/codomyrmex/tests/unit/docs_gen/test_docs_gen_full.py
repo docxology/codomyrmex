@@ -24,7 +24,6 @@ from codomyrmex.docs_gen import (
 )
 from codomyrmex.docs_gen.search_index import STOPWORDS
 
-
 # ---------------------------------------------------------------------------
 # Shared fixtures
 # ---------------------------------------------------------------------------
@@ -147,6 +146,7 @@ def func_b():
 # Tests: FunctionDoc dataclass
 # ===========================================================================
 
+
 @pytest.mark.unit
 class TestFunctionDocDataclass:
     """Tests for FunctionDoc dataclass defaults and fields."""
@@ -184,6 +184,7 @@ class TestFunctionDocDataclass:
 # Tests: ClassDoc dataclass
 # ===========================================================================
 
+
 @pytest.mark.unit
 class TestClassDocDataclass:
     """Tests for ClassDoc dataclass."""
@@ -212,6 +213,7 @@ class TestClassDocDataclass:
 # ===========================================================================
 # Tests: ModuleDoc dataclass
 # ===========================================================================
+
 
 @pytest.mark.unit
 class TestModuleDocDataclass:
@@ -243,6 +245,7 @@ class TestModuleDocDataclass:
 # ===========================================================================
 # Tests: APIDocExtractor - extraction
 # ===========================================================================
+
 
 @pytest.mark.unit
 class TestAPIDocExtractorExtraction:
@@ -293,7 +296,9 @@ class TestAPIDocExtractorExtraction:
     def test_async_method_detection(self):
         ext = APIDocExtractor()
         doc = ext.extract_from_source(SIMPLE_MODULE, "simple")
-        async_method = next(m for m in doc.classes[0].methods if m.name == "async_method")
+        async_method = next(
+            m for m in doc.classes[0].methods if m.name == "async_method"
+        )
         assert async_method.is_async is True
         sync_method = next(m for m in doc.classes[0].methods if m.name == "method_one")
         assert sync_method.is_async is False
@@ -343,6 +348,7 @@ class TestAPIDocExtractorExtraction:
 # ===========================================================================
 # Tests: APIDocExtractor - complex signatures
 # ===========================================================================
+
 
 @pytest.mark.unit
 class TestAPIDocExtractorSignatures:
@@ -400,6 +406,7 @@ class TestAPIDocExtractorSignatures:
 # Tests: APIDocExtractor - decorators
 # ===========================================================================
 
+
 @pytest.mark.unit
 class TestAPIDocExtractorDecorators:
     """Tests for decorator extraction."""
@@ -436,6 +443,7 @@ class TestAPIDocExtractorDecorators:
 # Tests: APIDocExtractor - inheritance
 # ===========================================================================
 
+
 @pytest.mark.unit
 class TestAPIDocExtractorInheritance:
     """Tests for class base extraction."""
@@ -463,6 +471,7 @@ class TestAPIDocExtractorInheritance:
 # ===========================================================================
 # Tests: APIDocExtractor - to_markdown
 # ===========================================================================
+
 
 @pytest.mark.unit
 class TestAPIDocExtractorMarkdown:
@@ -562,6 +571,7 @@ class TestAPIDocExtractorMarkdown:
 # Tests: SearchResult dataclass
 # ===========================================================================
 
+
 @pytest.mark.unit
 class TestSearchResultDataclass:
     """Tests for SearchResult dataclass."""
@@ -576,8 +586,11 @@ class TestSearchResultDataclass:
 
     def test_full_construction(self):
         sr = SearchResult(
-            doc_id="d1", title="Title", snippet="snip",
-            score=5.0, path="/a/b.md",
+            doc_id="d1",
+            title="Title",
+            snippet="snip",
+            score=5.0,
+            path="/a/b.md",
         )
         assert sr.title == "Title"
         assert sr.score == 5.0
@@ -586,6 +599,7 @@ class TestSearchResultDataclass:
 # ===========================================================================
 # Tests: IndexEntry dataclass
 # ===========================================================================
+
 
 @pytest.mark.unit
 class TestIndexEntryDataclass:
@@ -610,6 +624,7 @@ class TestIndexEntryDataclass:
 # Tests: STOPWORDS constant
 # ===========================================================================
 
+
 @pytest.mark.unit
 class TestStopwords:
     """Tests for the STOPWORDS set."""
@@ -625,6 +640,7 @@ class TestStopwords:
 # ===========================================================================
 # Tests: SearchIndex - core operations
 # ===========================================================================
+
 
 @pytest.mark.unit
 class TestSearchIndexOperations:
@@ -712,6 +728,7 @@ class TestSearchIndexOperations:
 # Tests: SearchIndex - scoring
 # ===========================================================================
 
+
 @pytest.mark.unit
 class TestSearchIndexScoring:
     """Title boost and relevance scoring."""
@@ -734,7 +751,12 @@ class TestSearchIndexScoring:
 
     def test_tag_search(self):
         idx = SearchIndex()
-        idx.add("tagged", title="Doc", content="content", tags=["important", "api_reference"])
+        idx.add(
+            "tagged",
+            title="Doc",
+            content="content",
+            tags=["important", "api_reference"],
+        )
         results = idx.search("important")
         assert len(results) == 1
         assert results[0].doc_id == "tagged"
@@ -750,6 +772,7 @@ class TestSearchIndexScoring:
 # ===========================================================================
 # Tests: SearchIndex - tokenization
 # ===========================================================================
+
 
 @pytest.mark.unit
 class TestSearchIndexTokenization:
@@ -805,6 +828,7 @@ class TestSearchIndexTokenization:
 # Tests: SearchIndex - snippets
 # ===========================================================================
 
+
 @pytest.mark.unit
 class TestSearchIndexSnippets:
     """Snippet extraction from content."""
@@ -855,6 +879,7 @@ class TestSearchIndexSnippets:
 # Tests: SiteConfig dataclass
 # ===========================================================================
 
+
 @pytest.mark.unit
 class TestSiteConfigDataclass:
     """Tests for SiteConfig dataclass."""
@@ -885,6 +910,7 @@ class TestSiteConfigDataclass:
 # ===========================================================================
 # Tests: SiteGenerator - core operations
 # ===========================================================================
+
 
 @pytest.mark.unit
 class TestSiteGeneratorCore:
@@ -967,6 +993,7 @@ class TestSiteGeneratorCore:
 # Tests: SiteGenerator - generate_config
 # ===========================================================================
 
+
 @pytest.mark.unit
 class TestSiteGeneratorConfig:
     """SiteGenerator.generate_config tests."""
@@ -981,7 +1008,11 @@ class TestSiteGeneratorConfig:
         gen.add_module_source(SIMPLE_MODULE, "mymod")
         config = gen.generate_config()
         api_section = next(
-            (item for item in config.nav if isinstance(item, dict) and "API Reference" in item),
+            (
+                item
+                for item in config.nav
+                if isinstance(item, dict) and "API Reference" in item
+            ),
             None,
         )
         assert api_section is not None
@@ -1035,6 +1066,7 @@ class TestSiteGeneratorConfig:
 # Tests: SiteGenerator - generate_pages
 # ===========================================================================
 
+
 @pytest.mark.unit
 class TestSiteGeneratorPages:
     """SiteGenerator.generate_pages tests."""
@@ -1063,6 +1095,7 @@ class TestSiteGeneratorPages:
 # ===========================================================================
 # Tests: SiteGenerator - to_mkdocs_yaml
 # ===========================================================================
+
 
 @pytest.mark.unit
 class TestSiteGeneratorMkdocsYaml:
@@ -1157,42 +1190,52 @@ class TestSiteGeneratorMkdocsYaml:
 # Tests: __init__.py re-exports
 # ===========================================================================
 
+
 @pytest.mark.unit
 class TestModuleExports:
     """Tests for docs_gen __init__.py re-exports."""
 
     def test_apidocextractor_exported(self):
         from codomyrmex.docs_gen import APIDocExtractor as Cls
+
         assert Cls is APIDocExtractor
 
     def test_classdoc_exported(self):
         from codomyrmex.docs_gen import ClassDoc as Cls
+
         assert Cls is ClassDoc
 
     def test_functiondoc_exported(self):
         from codomyrmex.docs_gen import FunctionDoc as Cls
+
         assert Cls is FunctionDoc
 
     def test_moduledoc_exported(self):
         from codomyrmex.docs_gen import ModuleDoc as Cls
+
         assert Cls is ModuleDoc
 
     def test_indexentry_exported(self):
         from codomyrmex.docs_gen import IndexEntry as Cls
+
         assert Cls is IndexEntry
 
     def test_searchindex_exported(self):
         from codomyrmex.docs_gen import SearchIndex as Cls
+
         assert Cls is SearchIndex
 
     def test_searchresult_exported(self):
         from codomyrmex.docs_gen import SearchResult as Cls
+
         assert Cls is SearchResult
 
     def test_siteconfig_exported(self):
         from codomyrmex.docs_gen import SiteConfig as Cls
+
         assert Cls is SiteConfig
 
     def test_sitegenerator_exported(self):
         from codomyrmex.docs_gen import SiteGenerator as Cls
+
         assert Cls is SiteGenerator

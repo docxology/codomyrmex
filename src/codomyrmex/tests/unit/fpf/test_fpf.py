@@ -222,8 +222,12 @@ def test_context_builder_pattern_not_found():
 @pytest.mark.unit
 def test_context_builder_minimal_context():
     """ContextBuilder.build_minimal_context returns filtered summary."""
-    p1 = Pattern(id="A.1", title="First", status=PatternStatus.STABLE, content="c", part="A")
-    p2 = Pattern(id="B.1", title="Second", status=PatternStatus.DRAFT, content="c", part="B")
+    p1 = Pattern(
+        id="A.1", title="First", status=PatternStatus.STABLE, content="c", part="A"
+    )
+    p2 = Pattern(
+        id="B.1", title="Second", status=PatternStatus.DRAFT, content="c", part="B"
+    )
     spec = FPFSpec(patterns=[p1, p2])
     builder = ContextBuilder(spec)
     ctx = builder.build_minimal_context(filters={"part": "A"})

@@ -3,6 +3,7 @@
 Imported by validation/__init__.py and consumed by 74+ modules via:
     from codomyrmex.validation import Result, ResultStatus
 """
+
 from dataclasses import dataclass, field
 from enum import StrEnum
 from typing import Any

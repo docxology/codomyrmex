@@ -160,7 +160,11 @@ class ObsidianVault:
                     data = json.loads(json_file.read_text())
                     config[json_file.stem] = data
                 except Exception as e:
-                    logger.warning("Obsidian vault config read failed for %s: %s", json_file, str(e))
+                    logger.warning(
+                        "Obsidian vault config read failed for %s: %s",
+                        json_file,
+                        str(e),
+                    )
                     raise
         return config
 

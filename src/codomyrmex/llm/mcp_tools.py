@@ -6,7 +6,9 @@ from codomyrmex.model_context_protocol.decorators import mcp_tool
 
 
 @mcp_tool(category="llm")
-def generate_text(prompt: str, provider: str = "openrouter", model: str = "openrouter/free") -> dict:
+def generate_text(
+    prompt: str, provider: str = "openrouter", model: str = "openrouter/free"
+) -> dict:
     """Generate text using a specified LLM provider and model.
 
     Args:
@@ -19,6 +21,7 @@ def generate_text(prompt: str, provider: str = "openrouter", model: str = "openr
     """
     if provider == "openrouter":
         from codomyrmex.llm import ask
+
         try:
             response = ask(question=prompt, model=model)
             if response.startswith("Error:"):
@@ -30,6 +33,7 @@ def generate_text(prompt: str, provider: str = "openrouter", model: str = "openr
     elif provider == "ollama":
         try:
             from codomyrmex.llm import OllamaManager
+
             manager = OllamaManager()
             result = manager.generate(prompt=prompt, model=model)
             return {"status": "success", "content": result.get("response", "")}
@@ -51,7 +55,11 @@ def list_local_models() -> dict:
     try:
         manager = OllamaManager()
         models = manager.list_models()
-        return {"status": "success", "models": [m.get("name") for m in models], "count": len(models)}
+        return {
+            "status": "success",
+            "models": [m.get("name") for m in models],
+            "count": len(models),
+        }
     except Exception as e:
         return {"status": "error", "message": f"Failed to list local models: {e}"}
 
@@ -68,14 +76,18 @@ def query_fabric_metadata() -> dict:
     try:
         manager = FabricManager()
         if not manager.is_configured():
-            return {"status": "success", "configured": False, "message": "Fabric is not configured currently."}
+            return {
+                "status": "success",
+                "configured": False,
+                "message": "Fabric is not configured currently.",
+            }
 
         settings = manager.get_current_settings()
         return {
             "status": "success",
             "configured": True,
             "workspace": settings.get("workspace_id"),
-            "tenant": settings.get("tenant_id")
+            "tenant": settings.get("tenant_id"),
         }
     except Exception as e:
         return {"status": "error", "message": f"Failed to query Fabric metadata: {e}"}
@@ -132,7 +144,9 @@ def reason(prompt: str, depth: str = "normal", max_steps: int = 5) -> dict:
         # If CoT hasn't been fully initialized, return a structured stub
         return {
             "status": "success",
-            "steps": [{"step": 1, "type": "analysis", "content": f"Analyzing: {prompt}"}],
+            "steps": [
+                {"step": 1, "type": "analysis", "content": f"Analyzing: {prompt}"}
+            ],
             "conclusion": f"Reasoned response to: {prompt}",
             "confidence": 0.7,
             "step_count": 1,

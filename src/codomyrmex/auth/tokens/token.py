@@ -72,7 +72,9 @@ class TokenManager:
         self._tokens: dict[str, Token] = {}
         self._revoked_tokens: set[str] = set()
 
-    def create_token(self, user_id: str, permissions: list[str] | None = None, ttl: int = 3600) -> Token:
+    def create_token(
+        self, user_id: str, permissions: list[str] | None = None, ttl: int = 3600
+    ) -> Token:
         """Create a new authentication token.
 
         Args:

@@ -16,6 +16,7 @@ import pytest
 def reset_cache_manager():
     """Reset the module-level CacheManager singleton between tests."""
     import codomyrmex.cache.mcp_tools as _mod
+
     _mod._manager = None
     yield
     _mod._manager = None
@@ -97,7 +98,7 @@ def test_cache_stats_hit_rate_after_operations() -> None:
 
     cache_name = _unique_cache()
     cache_set("k", "v", cache_name=cache_name)
-    cache_get("k", cache_name=cache_name)      # hit
+    cache_get("k", cache_name=cache_name)  # hit
     cache_get("missing", cache_name=cache_name)  # miss
     stats = cache_stats(cache_name=cache_name)
     # Should have at least 1 hit and 1 miss recorded

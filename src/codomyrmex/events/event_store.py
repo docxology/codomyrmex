@@ -40,7 +40,7 @@ class StreamEvent:
             "event_type": self.event_type,
             "data": self.data,
             "timestamp": self.timestamp,
-            "source": self.source
+            "source": self.source,
         }
 
 

@@ -1,4 +1,3 @@
-
 """PNG visualization engine for FPF specifications.
 
 
@@ -88,7 +87,9 @@ class FPFVisualizerPNG:
         pos = self.network_viz.apply_layout(G, layout="spring", k=2.0, iterations=100)
 
         # Get node sizes and colors
-        node_sizes = self.network_viz.get_node_sizes(G, metric="degree", min_size=300, max_size=3000)
+        node_sizes = self.network_viz.get_node_sizes(
+            G, metric="degree", min_size=300, max_size=3000
+        )
         node_colors = self.theme.get_color_sequence(len(G.nodes()), "primary")
 
         # Get edge widths
@@ -117,7 +118,11 @@ class FPFVisualizerPNG:
         )
 
         # Draw labels for important nodes
-        important_nodes = [n for n in G.nodes() if G.degree(n) > np.percentile([G.degree(n) for n in G.nodes()], 75)]
+        important_nodes = [
+            n
+            for n in G.nodes()
+            if G.degree(n) > np.percentile([G.degree(n) for n in G.nodes()], 75)
+        ]
         labels = {n: n[:20] + "..." if len(n) > 20 else n for n in important_nodes}
         nx.draw_networkx_labels(
             G,
@@ -182,18 +187,26 @@ class FPFVisualizerPNG:
         )
 
         # Draw edges
-        nx.draw_networkx_edges(G, pos, ax=ax, alpha=0.3, edge_color="#95a5a6", arrows=True, arrowsize=20)
+        nx.draw_networkx_edges(
+            G, pos, ax=ax, alpha=0.3, edge_color="#95a5a6", arrows=True, arrowsize=20
+        )
 
         # Draw labels (abbreviated)
         labels = {node: node for node in G.nodes()}
         nx.draw_networkx_labels(G, pos, labels, ax=ax, font_size=6)
 
-        ax.set_title(f"Pattern Dependency Graph ({layout})", fontsize=16, fontweight="bold", pad=20)
+        ax.set_title(
+            f"Pattern Dependency Graph ({layout})",
+            fontsize=16,
+            fontweight="bold",
+            pad=20,
+        )
         ax.axis("off")
 
         # Add legend
         if color_by == "status":
             from matplotlib.patches import Patch
+
             legend_elements = [
                 Patch(facecolor="#2ecc71", label="Stable"),
                 Patch(facecolor="#f39c12", label="Draft"),
@@ -248,7 +261,9 @@ class FPFVisualizerPNG:
         nx.draw_networkx_edges(G, pos, ax=ax, alpha=0.3, edge_color="#95a5a6")
 
         # Draw labels (abbreviated)
-        labels = {node: node[:15] + "..." if len(node) > 15 else node for node in G.nodes()}
+        labels = {
+            node: node[:15] + "..." if len(node) > 15 else node for node in G.nodes()
+        }
         nx.draw_networkx_labels(G, pos, labels, ax=ax, font_size=7)
 
         ax.set_title("Concept Relationship Map", fontsize=16, fontweight="bold", pad=20)
@@ -258,9 +273,7 @@ class FPFVisualizerPNG:
         plt.savefig(output_path, dpi=self.dpi, bbox_inches="tight")
         plt.close()
 
-    def visualize_part_hierarchy(
-        self, spec: FPFSpec, output_path: Path
-    ) -> None:
+    def visualize_part_hierarchy(self, spec: FPFSpec, output_path: Path) -> None:
         """Generate part hierarchy tree visualization.
 
         Args:
@@ -282,8 +295,12 @@ class FPFVisualizerPNG:
 
         # Create edges between parts (if there are relationships)
         for relationship in spec.relationships:
-            source_pattern = next((p for p in spec.patterns if p.id == relationship.source), None)
-            target_pattern = next((p for p in spec.patterns if p.id == relationship.target), None)
+            source_pattern = next(
+                (p for p in spec.patterns if p.id == relationship.source), None
+            )
+            target_pattern = next(
+                (p for p in spec.patterns if p.id == relationship.target), None
+            )
 
             if source_pattern and target_pattern:
                 source_part = source_pattern.part or "Other"
@@ -315,10 +332,15 @@ class FPFVisualizerPNG:
         )
 
         # Draw edges
-        nx.draw_networkx_edges(G, pos, ax=ax, alpha=0.3, edge_color="#95a5a6", arrows=True, arrowsize=20)
+        nx.draw_networkx_edges(
+            G, pos, ax=ax, alpha=0.3, edge_color="#95a5a6", arrows=True, arrowsize=20
+        )
 
         # Draw labels
-        labels = {node: f"{node}\n({G.nodes[node].get('count', 0)} patterns)" for node in G.nodes()}
+        labels = {
+            node: f"{node}\n({G.nodes[node].get('count', 0)} patterns)"
+            for node in G.nodes()
+        }
         nx.draw_networkx_labels(G, pos, labels, ax=ax, font_size=10, font_weight="bold")
 
         ax.set_title("Part Hierarchy", fontsize=16, fontweight="bold", pad=20)
@@ -351,6 +373,7 @@ class FPFVisualizerPNG:
         from codomyrmex.cerebrum.visualization.visualization_base import (
             BaseChartVisualizer,
         )
+
         chart_viz = BaseChartVisualizer(figure_size=self.figsize, dpi=self.dpi)
 
         statuses = list(status_counts.keys())
@@ -388,6 +411,7 @@ class FPFVisualizerPNG:
 
             # Add legend
             from matplotlib.patches import Patch
+
             legend_elements = [
                 Patch(facecolor=color, edgecolor="black", label=status, alpha=0.8)
                 for status, color in zip(statuses, colors, strict=False)
@@ -399,4 +423,3 @@ class FPFVisualizerPNG:
 
         # Save
         chart_viz.save_figure(fig, str(output_path))
-

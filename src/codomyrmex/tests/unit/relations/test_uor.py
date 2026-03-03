@@ -818,9 +818,7 @@ def test_graph_find_path_missing_entity():
 @pytest.mark.unit
 def test_derivation_record_id():
     """DerivationRecord has content-addressed ID."""
-    record = DerivationRecord(
-        entity_id="e1", operation="create", result_hash="abc123"
-    )
+    record = DerivationRecord(entity_id="e1", operation="create", result_hash="abc123")
     assert record.id.startswith("urn:uor:derivation:sha256:")
 
 
@@ -947,8 +945,12 @@ def test_engine_correlate_return_keys():
     engine = PrismEngine()
     result = engine.correlate(10, 20)
     expected_keys = {
-        "a_datum", "b_datum", "difference_stratum",
-        "total_difference", "max_difference", "fidelity",
+        "a_datum",
+        "b_datum",
+        "difference_stratum",
+        "total_difference",
+        "max_difference",
+        "fidelity",
     }
     assert set(result.keys()) == expected_keys
 
@@ -1132,16 +1134,17 @@ def test_engine_q1_critical_identity():
         assert engine.succ(n) == expected
 
 
-
 # From test_coverage_boost_r6.py
 class TestUOREngine:
     def test_triadic_coordinate(self):
         from codomyrmex.relations.uor.engine import TriadicCoordinate
+
         tc = TriadicCoordinate(datum=(1, 2), stratum=(3,), spectrum=((1, 2),))
         assert tc.datum == (1, 2)
 
     def test_prism_engine(self):
         from codomyrmex.relations.uor.engine import PrismEngine
+
         engine = PrismEngine()
         assert engine is not None
 
@@ -1153,6 +1156,7 @@ class TestRelationStrengthScorer:
     def test_score_single_interaction(self):
         """Test UOR relationship weight as strength score."""
         from codomyrmex.relations import Interaction
+
         interaction = Interaction(type="message", notes="test interaction")
         assert interaction.type == "message"
         assert interaction.id != ""
@@ -1160,13 +1164,17 @@ class TestRelationStrengthScorer:
     def test_type_weights(self):
         """Test UOR relationship with custom weight."""
         from codomyrmex.relations.uor.graph import UORRelationship
-        rel = UORRelationship(source_id="a", target_id="b", relationship_type="meeting", weight=3.0)
+
+        rel = UORRelationship(
+            source_id="a", target_id="b", relationship_type="meeting", weight=3.0
+        )
         assert rel.weight == 3.0
         assert rel.relationship_type == "meeting"
 
     def test_score_all_normalized(self):
         """Test UOR graph relationships with varying weights."""
         from codomyrmex.relations.uor.graph import UORGraph
+
         graph = UORGraph()
         a = graph.add_entity("A")
         b = graph.add_entity("B")

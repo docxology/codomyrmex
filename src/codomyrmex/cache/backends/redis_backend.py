@@ -14,6 +14,7 @@ logger = get_logger(__name__)
 
 try:
     import redis
+
     REDIS_AVAILABLE = True
 except ImportError:
     REDIS_AVAILABLE = False
@@ -22,7 +23,9 @@ except ImportError:
 class RedisCache(Cache):
     """Redis cache implementation."""
 
-    def __init__(self, host: str = "", port: int = 0, db: int = 0, default_ttl: int | None = None):
+    def __init__(
+        self, host: str = "", port: int = 0, db: int = 0, default_ttl: int | None = None
+    ):
         """Initialize Redis cache.
 
         Args:
@@ -32,12 +35,16 @@ class RedisCache(Cache):
             default_ttl: Default time-to-live in seconds
         """
         if not REDIS_AVAILABLE:
-            raise ImportError("redis package not available. Install with: pip install redis")
+            raise ImportError(
+                "redis package not available. Install with: pip install redis"
+            )
 
         host = host or os.getenv("REDIS_HOST", "localhost")
         port = port or int(os.getenv("REDIS_PORT", "6379"))
         if not (1 <= port <= 65535):
-            raise ValueError(f"Invalid Redis port: {port}. Must be between 1 and 65535.")
+            raise ValueError(
+                f"Invalid Redis port: {port}. Must be between 1 and 65535."
+            )
         self.client = redis.Redis(host=host, port=port, db=db, decode_responses=False)
         self.default_ttl = default_ttl
         self._stats = CacheStats()
@@ -63,7 +70,9 @@ class RedisCache(Cache):
         """Set a value in the cache."""
         try:
             ttl = ttl or self.default_ttl
-            serialized = json.dumps(value, default=str).encode("utf-8")  # SECURITY: JSON instead of pickle
+            serialized = json.dumps(value, default=str).encode(
+                "utf-8"
+            )  # SECURITY: JSON instead of pickle
             if ttl:
                 self.client.setex(key, ttl, serialized)
             else:
@@ -114,5 +123,3 @@ class RedisCache(Cache):
         except Exception as e:
             logger.warning("Failed to retrieve Redis cache stats: %s", e)
         return self._stats
-
-

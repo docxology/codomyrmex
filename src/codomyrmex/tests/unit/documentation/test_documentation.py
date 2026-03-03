@@ -16,7 +16,8 @@ class TestDocumentation:
 
         try:
             from codomyrmex.documentation import documentation_website
-            assert hasattr(documentation_website, '__file__')
+
+            assert hasattr(documentation_website, "__file__")
         except ImportError as e:
             pytest.fail(f"Failed to import documentation_website: {e}")
 
@@ -27,13 +28,13 @@ class TestDocumentation:
 
         from codomyrmex.documentation import documentation_website
 
-        assert hasattr(documentation_website, '__file__')
-        assert hasattr(documentation_website, 'main')
-        assert hasattr(documentation_website, 'check_doc_environment')
-        assert hasattr(documentation_website, 'install_dependencies')
-        assert hasattr(documentation_website, 'start_dev_server')
-        assert hasattr(documentation_website, 'build_static_site')
-        assert hasattr(documentation_website, 'serve_static_site')
+        assert hasattr(documentation_website, "__file__")
+        assert hasattr(documentation_website, "main")
+        assert hasattr(documentation_website, "check_doc_environment")
+        assert hasattr(documentation_website, "install_dependencies")
+        assert hasattr(documentation_website, "start_dev_server")
+        assert hasattr(documentation_website, "build_static_site")
+        assert hasattr(documentation_website, "serve_static_site")
 
     def test_command_exists(self, code_dir):
         """Test command_exists function with real shutil.which."""
@@ -43,10 +44,10 @@ class TestDocumentation:
         from codomyrmex.documentation.documentation_website import command_exists
 
         # Test with a command that likely exists (python)
-        assert command_exists('python') or command_exists('python3')
+        assert command_exists("python") or command_exists("python3")
 
         # Test with a command that likely doesn't exist
-        assert not command_exists('definitely_does_not_exist_command_12345')
+        assert not command_exists("definitely_does_not_exist_command_12345")
 
     def test_check_doc_environment_success(self, code_dir):
         """Test check_doc_environment with real environment check."""
@@ -77,7 +78,6 @@ class TestDocumentation:
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-
         # This actually runs npm install — skip in unit test context
         pytest.skip("Skipping: runs real npm install (use -m slow to include)")
 
@@ -86,7 +86,6 @@ class TestDocumentation:
         """Test run_command_stream_output function with real subprocess."""
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
-
 
         # This runs a real subprocess — skip in unit test context
         pytest.skip("Skipping: runs real subprocess (use -m slow to include)")
@@ -163,6 +162,7 @@ class TestValidateConfigs:
 
     def test_config_validator_init(self, tmp_path):
         from codomyrmex.documentation.scripts.validate_configs import ConfigValidator
+
         v = ConfigValidator(project_root=tmp_path)
         assert isinstance(v, ConfigValidator)
 
@@ -176,13 +176,17 @@ class TestTripleCheck:
         from codomyrmex.documentation.scripts.triple_check import (
             check_file_completeness,
         )
-        issues = check_file_completeness("# Title\n\nSome content here.", Path("test.md"))
+
+        issues = check_file_completeness(
+            "# Title\n\nSome content here.", Path("test.md")
+        )
         assert isinstance(issues, list)
 
     def test_find_placeholders(self):
         from pathlib import Path
 
         from codomyrmex.documentation.scripts.triple_check import find_placeholders
+
         phs = find_placeholders("TODO: fix this\nXXX placeholder", Path("test.py"))
         assert isinstance(phs, list)
 
@@ -192,6 +196,7 @@ class TestTripleCheckDeep:
 
     def test_analyze_file(self, tmp_path):
         from codomyrmex.documentation.scripts.triple_check import analyze_file
+
         f = tmp_path / "test.md"
         f.write_text("# Title\n\nContent here.\n## Section\nMore content.")
         result = analyze_file(f, tmp_path)
@@ -199,6 +204,7 @@ class TestTripleCheckDeep:
 
     def test_find_placeholders_none(self, tmp_path):
         from codomyrmex.documentation.scripts.triple_check import find_placeholders
+
         phs = find_placeholders("No placeholders here", tmp_path / "clean.md")
         assert isinstance(phs, list)
 
@@ -206,6 +212,7 @@ class TestTripleCheckDeep:
         from codomyrmex.documentation.scripts.triple_check import (
             check_file_completeness,
         )
+
         content = "# Title\n\nThis is a complete document with real content.\n## Features\n- Feature 1\n- Feature 2"
         issues = check_file_completeness(content, tmp_path / "full.md")
         assert isinstance(issues, list)
@@ -216,6 +223,7 @@ class TestConfigValidatorDeep:
 
     def test_validate_project(self, tmp_path):
         from codomyrmex.documentation.scripts.validate_configs import ConfigValidator
+
         # Create minimal project structure
         (tmp_path / "README.md").write_text("# Test Project")
         v = ConfigValidator(project_root=tmp_path)

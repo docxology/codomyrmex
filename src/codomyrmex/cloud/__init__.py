@@ -26,7 +26,6 @@ Usage:
 Submodules:
     common: Shared cloud utilities."""
 
-
 # Shared schemas for cross-module interop
 try:
     from codomyrmex.validation.schemas import Result, ResultStatus
@@ -133,14 +132,23 @@ from . import common
 
 def cli_commands():
     """Return CLI commands for the cloud module."""
+
     def _list_providers():
         """List cloud providers."""
         print("Cloud Providers:")
         print("  coda_io     - Coda.io REST API v1 (always available)")
-        print(f"  aws         - Amazon Web Services S3 ({'available' if S3Client else 'unavailable - install boto3'})")
-        print(f"  gcp         - Google Cloud Storage ({'available' if GCSClient else 'unavailable - install google-cloud-storage'})")
-        print(f"  azure       - Azure Blob Storage ({'available' if AzureBlobClient else 'unavailable - install azure-storage-blob'})")
-        print(f"  infomaniak  - Infomaniak Public Cloud ({'available' if InfomaniakComputeClient else 'unavailable - install openstacksdk'})")
+        print(
+            f"  aws         - Amazon Web Services S3 ({'available' if S3Client else 'unavailable - install boto3'})"
+        )
+        print(
+            f"  gcp         - Google Cloud Storage ({'available' if GCSClient else 'unavailable - install google-cloud-storage'})"
+        )
+        print(
+            f"  azure       - Azure Blob Storage ({'available' if AzureBlobClient else 'unavailable - install azure-storage-blob'})"
+        )
+        print(
+            f"  infomaniak  - Infomaniak Public Cloud ({'available' if InfomaniakComputeClient else 'unavailable - install openstacksdk'})"
+        )
 
     def _cloud_status():
         """Show cloud status."""
@@ -225,4 +233,3 @@ __all__ = [
     "common",
     "cli_commands",
 ]
-

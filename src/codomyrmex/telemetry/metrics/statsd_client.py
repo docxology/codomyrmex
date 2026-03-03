@@ -8,6 +8,7 @@ from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 logger = get_logger(__name__)
 
+
 class StatsDClient:
     """Wrapper for statsd client to send metrics to a StatsD collector."""
 
@@ -22,7 +23,9 @@ class StatsDClient:
         self.host = host or os.environ.get("STATSD_HOST") or "localhost"
         self.port = int(port or os.environ.get("STATSD_PORT") or 8125)
         self.client = statsd.StatsClient(host=self.host, port=self.port, prefix=prefix)
-        logger.info(f"StatsD client initialized for {self.host}:{self.port} with prefix '{prefix}'")
+        logger.info(
+            f"StatsD client initialized for {self.host}:{self.port} with prefix '{prefix}'"
+        )
 
     def incr(self, name: str, count: int = 1, rate: float = 1) -> None:
         """Increment a counter."""

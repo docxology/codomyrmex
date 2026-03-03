@@ -15,7 +15,6 @@ Coverage targets:
 
 from __future__ import annotations
 
-import os
 from pathlib import Path
 
 import pytest
@@ -24,10 +23,10 @@ from codomyrmex.agents.pai.mcp.proxy_tools import (
     _tool_get_module_readme,
     _tool_list_module_functions,
     _tool_list_modules,
+    _tool_list_workflows,
     _tool_module_info,
     _tool_pai_awareness,
     _tool_pai_status,
-    _tool_list_workflows,
 )
 
 # ---------------------------------------------------------------------------
@@ -40,6 +39,7 @@ _PROJECT_ROOT = Path(__file__).resolve().parents[6]
 # ---------------------------------------------------------------------------
 # TestToolListModules
 # ---------------------------------------------------------------------------
+
 
 class TestToolListModules:
     """Tests for _tool_list_modules() -- list all codomyrmex modules."""
@@ -84,6 +84,7 @@ class TestToolListModules:
 # ---------------------------------------------------------------------------
 # TestToolModuleInfo
 # ---------------------------------------------------------------------------
+
 
 class TestToolModuleInfo:
     """Tests for _tool_module_info(module_name) -- module introspection."""
@@ -130,7 +131,9 @@ class TestToolModuleInfo:
         """Unknown module must return a dict with an 'error' key (not raise)."""
         result = _tool_module_info(module_name="this_module_does_not_exist_xyz123")
         assert isinstance(result, dict)
-        assert "error" in result, f"Expected 'error' key for unknown module, got: {result}"
+        assert "error" in result, (
+            f"Expected 'error' key for unknown module, got: {result}"
+        )
 
     def test_unknown_module_error_mentions_name(self):
         """Error message should contain the module name for debugging."""
@@ -160,6 +163,7 @@ class TestToolModuleInfo:
 # ---------------------------------------------------------------------------
 # TestToolPaiStatus
 # ---------------------------------------------------------------------------
+
 
 class TestToolPaiStatus:
     """Tests for _tool_pai_status() -- PAI installation status."""
@@ -215,6 +219,7 @@ class TestToolPaiStatus:
 # TestToolPaiAwareness
 # ---------------------------------------------------------------------------
 
+
 class TestToolPaiAwareness:
     """Tests for _tool_pai_awareness() -- full PAI awareness data."""
 
@@ -235,7 +240,9 @@ class TestToolPaiAwareness:
         """Result is either a data dict or a graceful {'error': ...} dict."""
         result = _tool_pai_awareness()
         # Either it has real data keys, or it has an 'error' key
-        has_data = any(k in result for k in ("missions", "projects", "telos", "memory", "skills"))
+        has_data = any(
+            k in result for k in ("missions", "projects", "telos", "memory", "skills")
+        )
         has_error = "error" in result
         assert has_data or has_error, (
             f"Unexpected result structure from _tool_pai_awareness: {list(result.keys())}"
@@ -243,7 +250,7 @@ class TestToolPaiAwareness:
 
     @pytest.mark.skipif(
         not (Path.home() / ".claude" / "PAI").exists(),
-        reason="PAI installation not present; awareness data requires PAI filesystem"
+        reason="PAI installation not present; awareness data requires PAI filesystem",
     )
     def test_full_awareness_has_expected_keys(self):
         """When PAI is installed, result must contain all major awareness keys."""
@@ -251,12 +258,15 @@ class TestToolPaiAwareness:
         assert "error" not in result, f"Unexpected error with PAI installed: {result}"
         expected_keys = {"missions", "projects", "telos", "memory", "skills"}
         for key in expected_keys:
-            assert key in result, f"Missing expected key '{key}' in pai_awareness result"
+            assert key in result, (
+                f"Missing expected key '{key}' in pai_awareness result"
+            )
 
 
 # ---------------------------------------------------------------------------
 # TestToolListWorkflows
 # ---------------------------------------------------------------------------
+
 
 class TestToolListWorkflows:
     """Tests for _tool_list_workflows() -- scan .agent/workflows/ for workflow files."""
@@ -301,12 +311,15 @@ class TestToolListWorkflows:
         """Each workflow entry must have a 'filepath' field."""
         result = _tool_list_workflows()
         for workflow in result["workflows"]:
-            assert "filepath" in workflow, f"Workflow entry missing 'filepath': {workflow}"
+            assert "filepath" in workflow, (
+                f"Workflow entry missing 'filepath': {workflow}"
+            )
 
 
 # ---------------------------------------------------------------------------
 # TestToolListModuleFunctions
 # ---------------------------------------------------------------------------
+
 
 class TestToolListModuleFunctions:
     """Tests for _tool_list_module_functions() -- inspect public callables."""
@@ -359,6 +372,7 @@ class TestToolListModuleFunctions:
 # ---------------------------------------------------------------------------
 # TestToolGetModuleReadme
 # ---------------------------------------------------------------------------
+
 
 class TestToolGetModuleReadme:
     """Tests for _tool_get_module_readme() -- read README.md or SPEC.md."""

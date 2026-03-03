@@ -43,9 +43,7 @@ class TestInfomaniakAuthModule:
 
         assert issubclass(InfomaniakAuthError, InfomaniakCloudError)
         # Also verify it is raiseable with the expected attributes
-        err = InfomaniakAuthError(
-            "auth failed", service="identity", operation="login"
-        )
+        err = InfomaniakAuthError("auth failed", service="identity", operation="login")
         assert err.service == "identity"
         assert err.operation == "login"
         assert "auth failed" in str(err)
@@ -186,6 +184,7 @@ class TestInfomaniakAuthModule:
 
 # =========================================================================
 
+
 class TestAuthFunctions:
     """Tests for create_openstack_connection and create_s3_client."""
 
@@ -283,7 +282,8 @@ class TestAuthFunctions:
         sys.modules["boto3"] = mock_boto3
         try:
             creds = InfomaniakS3Credentials(
-                access_key="ak", secret_key="sk",
+                access_key="ak",
+                secret_key="sk",
             )
             result = create_s3_client(creds)
             assert result is mock_s3
@@ -341,6 +341,7 @@ class TestAuthFunctions:
             DEFAULT_S3_ENDPOINT,
             DEFAULT_S3_REGION,
         )
+
         assert DEFAULT_AUTH_URL == "https://api.pub1.infomaniak.cloud/identity/v3/"
         assert DEFAULT_S3_ENDPOINT == "https://s3.pub1.infomaniak.cloud/"
         assert DEFAULT_S3_REGION == "us-east-1"
@@ -355,6 +356,7 @@ class TestAuthFunctions:
 
 try:
     import openstack  # noqa: F401
+
     HAS_OPENSTACK = True
 except ImportError:
     HAS_OPENSTACK = False

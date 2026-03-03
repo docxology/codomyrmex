@@ -28,15 +28,26 @@ class BaseNetworkVisualizer:
         else:
             return nx.spring_layout(G, **kwargs)
 
-    def get_node_sizes(self, G: nx.Graph, metric: str = "degree", min_size: int = 100, max_size: int = 1000) -> list:
+    def get_node_sizes(
+        self,
+        G: nx.Graph,
+        metric: str = "degree",
+        min_size: int = 100,
+        max_size: int = 1000,
+    ) -> list:
         """Calculate node sizes based on metric."""
         if metric == "degree":
             degrees = dict(G.degree())
             max_deg = max(degrees.values()) if degrees else 1
-            return [min_size + (degrees[n] / max_deg) * (max_size - min_size) for n in G.nodes()]
+            return [
+                min_size + (degrees[n] / max_deg) * (max_size - min_size)
+                for n in G.nodes()
+            ]
         return [min_size] * len(G.nodes())
 
-    def get_edge_widths(self, G: nx.Graph, min_width: float = 0.5, max_width: float = 5.0) -> list:
+    def get_edge_widths(
+        self, G: nx.Graph, min_width: float = 0.5, max_width: float = 5.0
+    ) -> list:
         """Calculate edge widths based on weights."""
         weights = [G[u][v].get("weight", 1) for u, v in G.edges()]
         if not weights:
@@ -78,11 +89,14 @@ class BaseChartVisualizer:
         """Add labels on top of bars."""
         for rect in rects:
             height = rect.get_height()
-            ax.annotate(format_str.format(height),
-                        xy=(rect.get_x() + rect.get_width() / 2, height),
-                        xytext=(0, 3),
-                        textcoords="offset points",
-                        ha='center', va='bottom')
+            ax.annotate(
+                format_str.format(height),
+                xy=(rect.get_x() + rect.get_width() / 2, height),
+                xytext=(0, 3),
+                textcoords="offset points",
+                ha="center",
+                va="bottom",
+            )
 
     def save_figure(self, fig: Any, path: str) -> None:
         """Save figure to path."""

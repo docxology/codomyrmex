@@ -137,36 +137,44 @@ class RepoIndexer:
         for node in ast.walk(tree):
             if isinstance(node, ast.FunctionDef):
                 doc = ast.get_docstring(node) or ""
-                symbols.append(Symbol(
-                    name=node.name,
-                    kind="function",
-                    file=rel_path,
-                    line=node.lineno,
-                    docstring=doc.split("\n")[0] if doc else "",
-                ))
+                symbols.append(
+                    Symbol(
+                        name=node.name,
+                        kind="function",
+                        file=rel_path,
+                        line=node.lineno,
+                        docstring=doc.split("\n")[0] if doc else "",
+                    )
+                )
             elif isinstance(node, ast.ClassDef):
                 doc = ast.get_docstring(node) or ""
-                symbols.append(Symbol(
-                    name=node.name,
-                    kind="class",
-                    file=rel_path,
-                    line=node.lineno,
-                    docstring=doc.split("\n")[0] if doc else "",
-                ))
+                symbols.append(
+                    Symbol(
+                        name=node.name,
+                        kind="class",
+                        file=rel_path,
+                        line=node.lineno,
+                        docstring=doc.split("\n")[0] if doc else "",
+                    )
+                )
             elif isinstance(node, ast.Import):
                 for alias in node.names:
-                    imports.append(ImportEdge(
-                        source=rel_path,
-                        target=alias.name,
-                    ))
+                    imports.append(
+                        ImportEdge(
+                            source=rel_path,
+                            target=alias.name,
+                        )
+                    )
             elif isinstance(node, ast.ImportFrom):
                 module = node.module or ""
                 names = [alias.name for alias in node.names]
-                imports.append(ImportEdge(
-                    source=rel_path,
-                    target=module,
-                    names=names,
-                ))
+                imports.append(
+                    ImportEdge(
+                        source=rel_path,
+                        target=module,
+                        names=names,
+                    )
+                )
 
         return RepoIndex(
             symbols=symbols,
@@ -187,7 +195,9 @@ class RepoIndexer:
         root_path = Path(root)
 
         for dirpath, dirnames, filenames in os.walk(root_path):
-            dirnames[:] = [d for d in dirnames if d not in {"__pycache__", ".venv", ".git"}]
+            dirnames[:] = [
+                d for d in dirnames if d not in {"__pycache__", ".venv", ".git"}
+            ]
             for fname in filenames:
                 if fname.endswith(".py"):
                     idx = self.index_file(os.path.join(dirpath, fname))

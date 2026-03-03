@@ -45,9 +45,18 @@ class TestReleaseImports:
 
     def test_all_classes_importable(self):
         for cls in (
-            ReleaseValidator, ReleaseCertification, CertificationCheck, CertificationStatus,
-            PackageBuilder, PackageMetadata, BuildArtifact, BuildReport,
-            DistributionManager, DistributionTarget, PreflightResult, PublishResult,
+            ReleaseValidator,
+            ReleaseCertification,
+            CertificationCheck,
+            CertificationStatus,
+            PackageBuilder,
+            PackageMetadata,
+            BuildArtifact,
+            BuildReport,
+            DistributionManager,
+            DistributionTarget,
+            PreflightResult,
+            PublishResult,
         ):
             assert cls is not None
 
@@ -313,7 +322,9 @@ class TestReleaseValidatorCertify:
 
     def test_custom_check_appears_in_certification(self):
         validator = ReleaseValidator()
-        custom = CertificationCheck("Custom Gate", status=CertificationStatus.FAIL, category="custom")
+        custom = CertificationCheck(
+            "Custom Gate", status=CertificationStatus.FAIL, category="custom"
+        )
         validator.add_custom_check(custom)
         cert = validator.certify()
         assert "Custom Gate" in cert.blockers

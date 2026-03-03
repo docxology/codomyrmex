@@ -19,6 +19,7 @@ from typing import Any, Optional
 
 class AuditEventType(Enum):
     """Types of audit events."""
+
     AUTH_LOGIN = "auth.login"
     AUTH_LOGOUT = "auth.logout"
     AUTH_FAILED = "auth.failed"
@@ -31,17 +32,21 @@ class AuditEventType(Enum):
     SYSTEM_ERROR = "system.error"
     ADMIN_ACTION = "admin.action"
 
+
 class AuditSeverity(Enum):
     """Severity of audit events."""
+
     DEBUG = "debug"
     INFO = "info"
     WARNING = "warning"
     ERROR = "error"
     CRITICAL = "critical"
 
+
 @dataclass
 class AuditEvent:
     """An audit log event."""
+
     id: str
     event_type: AuditEventType
     action: str
@@ -78,6 +83,7 @@ class AuditEvent:
         """Convert to JSON string."""
         return json.dumps(self.to_dict())
 
+
 class AuditStore(ABC):
     """Base class for audit storage."""
 
@@ -97,6 +103,7 @@ class AuditStore(ABC):
         """Query audit events."""
         pass
 
+
 class InMemoryAuditStore(AuditStore):
     """In-memory audit storage."""
 
@@ -110,7 +117,7 @@ class InMemoryAuditStore(AuditStore):
         with self._lock:
             self._events.append(event)
             if len(self._events) > self.max_events:
-                self._events = self._events[-self.max_events:]
+                self._events = self._events[-self.max_events :]
 
     def query(
         self,
@@ -142,6 +149,7 @@ class InMemoryAuditStore(AuditStore):
         with self._lock:
             self._events.clear()
 
+
 class FileAuditStore(AuditStore):
     """File-based audit storage."""
 
@@ -152,8 +160,8 @@ class FileAuditStore(AuditStore):
     def store(self, event: AuditEvent) -> None:
         """Store event to file."""
         with self._lock:
-            with open(self.log_path, 'a') as f:
-                f.write(event.to_json() + '\n')
+            with open(self.log_path, "a") as f:
+                f.write(event.to_json() + "\n")
 
     def query(
         self,
@@ -171,32 +179,33 @@ class FileAuditStore(AuditStore):
             for line in f:
                 try:
                     data = json.loads(line.strip())
-                    event_ts = datetime.fromisoformat(data['timestamp'])
+                    event_ts = datetime.fromisoformat(data["timestamp"])
 
                     if start and event_ts < start:
                         continue
                     if end and event_ts > end:
                         continue
-                    if event_type and data['type'] != event_type.value:
+                    if event_type and data["type"] != event_type.value:
                         continue
-                    if actor and data['actor'] != actor:
+                    if actor and data["actor"] != actor:
                         continue
 
                     # Reconstruct event
                     event = AuditEvent(
-                        id=data['id'],
-                        event_type=AuditEventType(data['type']),
-                        action=data['action'],
-                        actor=data['actor'],
-                        resource=data.get('resource', ''),
-                        resource_id=data.get('resource_id', ''),
-                        severity=AuditSeverity(data['severity']),
+                        id=data["id"],
+                        event_type=AuditEventType(data["type"]),
+                        action=data["action"],
+                        actor=data["actor"],
+                        resource=data.get("resource", ""),
+                        resource_id=data.get("resource_id", ""),
+                        severity=AuditSeverity(data["severity"]),
                     )
                     results.append(event)
                 except (json.JSONDecodeError, KeyError, ValueError):
                     continue
 
         return results
+
 
 class AuditLogger:
     """
@@ -274,10 +283,14 @@ class AuditLogger:
         self.store.store(event)
         return event
 
-    def log_login(self, actor: str, ip_address: str = "", success: bool = True) -> AuditEvent:
+    def log_login(
+        self, actor: str, ip_address: str = "", success: bool = True
+    ) -> AuditEvent:
         """Log login attempt."""
         return self.log(
-            event_type=AuditEventType.AUTH_LOGIN if success else AuditEventType.AUTH_FAILED,
+            event_type=(
+                AuditEventType.AUTH_LOGIN if success else AuditEventType.AUTH_FAILED
+            ),
             action="login_attempt",
             actor=actor,
             ip_address=ip_address,
@@ -323,7 +336,10 @@ class AuditLogger:
         actor: str | None = None,
     ) -> list[AuditEvent]:
         """Query audit events."""
-        return self.store.query(start=start, end=end, event_type=event_type, actor=actor)
+        return self.store.query(
+            start=start, end=end, event_type=event_type, actor=actor
+        )
+
 
 __all__ = [
     # Enums

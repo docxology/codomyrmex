@@ -102,9 +102,7 @@ def dh_compute_shared_secret(
     try:
         logger.debug("Computing DH shared secret")
         shared_secret = private_key.exchange(peer_public_key)
-        logger.info(
-            "DH shared secret computed (%d bytes)", len(shared_secret)
-        )
+        logger.info("DH shared secret computed (%d bytes)", len(shared_secret))
         return shared_secret
     except Exception as exc:
         raise ProtocolError(f"DH shared secret computation failed: {exc}") from exc
@@ -148,11 +146,7 @@ def ecdh_compute_shared_secret(
     try:
         logger.debug("Computing X25519 ECDH shared secret")
         shared_secret = private_key.exchange(peer_public_key)
-        logger.info(
-            "X25519 ECDH shared secret computed (%d bytes)", len(shared_secret)
-        )
+        logger.info("X25519 ECDH shared secret computed (%d bytes)", len(shared_secret))
         return shared_secret
     except Exception as exc:
-        raise ProtocolError(
-            f"ECDH shared secret computation failed: {exc}"
-        ) from exc
+        raise ProtocolError(f"ECDH shared secret computation failed: {exc}") from exc

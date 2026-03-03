@@ -31,6 +31,7 @@ if not HAS_MODULE:
 @pytest.mark.unit
 class TestValidationResult:
     """Test suite for ValidationResult."""
+
     def test_default_valid(self):
         """Test functionality: default valid."""
         vr = ValidationResult()
@@ -75,6 +76,7 @@ class TestValidationResult:
 @pytest.mark.unit
 class TestValidation:
     """Test suite for Validation."""
+
     def test_empty_schema_is_valid(self):
         """Test functionality: empty schema is valid."""
         result = validate_input({"anything": True}, {})
@@ -197,6 +199,7 @@ class TestValidation:
 @pytest.mark.unit
 class TestToolEntry:
     """Test suite for ToolEntry."""
+
     def test_create_entry(self):
         """Test functionality: create entry."""
         entry = ToolEntry(
@@ -232,6 +235,7 @@ class TestToolEntry:
 @pytest.mark.unit
 class TestToolRegistry:
     """Test suite for ToolRegistry."""
+
     def _make_entry(self, name="tool1", tags=None):
         return ToolEntry(
             name=name,
@@ -337,13 +341,12 @@ class TestToolRegistry:
 
     def test_invoke_handler_exception(self):
         """Test functionality: invoke handler exception."""
+
         def bad_handler(d):
             raise RuntimeError("boom")
 
         reg = ToolRegistry()
-        reg.register(
-            ToolEntry(name="bad", description="Breaks", handler=bad_handler)
-        )
+        reg.register(ToolEntry(name="bad", description="Breaks", handler=bad_handler))
         result = reg.invoke("bad", {})
         assert not result.ok
         assert "boom" in result.message
@@ -357,8 +360,10 @@ class TestToolRegistry:
 @pytest.mark.unit
 class TestToolDecorator:
     """Test suite for ToolDecorator."""
+
     def test_decorator_creates_tool_entry(self):
         """Test functionality: decorator creates tool entry."""
+
         @tool(name="add", description="Add numbers")
         def add(data):
             return {"sum": data["a"] + data["b"]}
@@ -381,6 +386,7 @@ class TestToolDecorator:
 
     def test_decorated_function_still_callable(self):
         """Test functionality: decorated function still callable."""
+
         @tool(name="fn", description="Test")
         def fn(data):
             return data * 2
@@ -396,6 +402,7 @@ class TestToolDecorator:
 @pytest.mark.unit
 class TestToolChain:
     """Test suite for ToolChain."""
+
     def _setup_registry(self):
         reg = ToolRegistry()
         reg.register(

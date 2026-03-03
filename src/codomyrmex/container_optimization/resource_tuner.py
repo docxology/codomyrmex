@@ -9,6 +9,7 @@ from loguru import logger
 @dataclass
 class ResourceUsage:
     """Resource usage information for a container."""
+
     container_id: str
     cpu_percent: float
     memory_usage_bytes: int
@@ -24,8 +25,9 @@ class ResourceUsage:
             "memory_usage_mb": self.memory_usage_bytes / (1024 * 1024),
             "memory_limit_mb": self.memory_limit_bytes / (1024 * 1024),
             "memory_percent": self.memory_percent,
-            "timestamp": self.timestamp
+            "timestamp": self.timestamp,
         }
+
 
 class ResourceTuner:
     """
@@ -52,15 +54,25 @@ class ResourceTuner:
             stats = container.stats(stream=False)
 
             # CPU calculation
-            cpu_delta = stats['cpu_stats']['cpu_usage']['total_usage'] - stats['precpu_stats']['cpu_usage']['total_usage']
-            system_delta = stats['cpu_stats']['system_cpu_usage'] - stats['precpu_stats']['system_cpu_usage']
+            cpu_delta = (
+                stats["cpu_stats"]["cpu_usage"]["total_usage"]
+                - stats["precpu_stats"]["cpu_usage"]["total_usage"]
+            )
+            system_delta = (
+                stats["cpu_stats"]["system_cpu_usage"]
+                - stats["precpu_stats"]["system_cpu_usage"]
+            )
             cpu_percent = 0.0
             if system_delta > 0 and cpu_delta > 0:
-                cpu_percent = (cpu_delta / system_delta) * len(stats['cpu_stats']['cpu_usage'].get('percpu_usage', [1])) * 100.0
+                cpu_percent = (
+                    (cpu_delta / system_delta)
+                    * len(stats["cpu_stats"]["cpu_usage"].get("percpu_usage", [1]))
+                    * 100.0
+                )
 
             # Memory calculation
-            mem_usage = stats['memory_stats']['usage']
-            mem_limit = stats['memory_stats']['limit']
+            mem_usage = stats["memory_stats"]["usage"]
+            mem_limit = stats["memory_stats"]["limit"]
             mem_percent = (mem_usage / mem_limit) * 100.0 if mem_limit > 0 else 0.0
 
             return ResourceUsage(
@@ -68,7 +80,7 @@ class ResourceTuner:
                 cpu_percent=cpu_percent,
                 memory_usage_bytes=mem_usage,
                 memory_limit_bytes=mem_limit,
-                memory_percent=mem_percent
+                memory_percent=mem_percent,
             )
         except docker.errors.NotFound as exc:
             raise ValueError(f"Container '{container_id}' not found") from exc
@@ -86,10 +98,12 @@ class ResourceTuner:
         suggested_mem_mb = max(64, suggested_mem_mb)
 
         # Suggest 0.5 CPU if usage < 10%, otherwise current + 0.5
-        suggested_cpu = 0.5 if usage.cpu_percent < 10 else (usage.cpu_percent / 100.0) + 0.5
+        suggested_cpu = (
+            0.5 if usage.cpu_percent < 10 else (usage.cpu_percent / 100.0) + 0.5
+        )
 
         return {
             "cpu_limit": f"{suggested_cpu:.1f}",
             "memory_limit": f"{suggested_mem_mb}m",
-            "reasoning": f"Based on peak usage of {usage.cpu_percent:.1f}% CPU and {usage.memory_usage_bytes / (1024*1024):.1f}MB memory."
+            "reasoning": f"Based on peak usage of {usage.cpu_percent:.1f}% CPU and {usage.memory_usage_bytes / (1024 * 1024):.1f}MB memory.",
         }

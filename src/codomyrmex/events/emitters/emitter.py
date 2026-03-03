@@ -15,11 +15,7 @@ class AsyncEventEmitter:
 
     async def emit(self, event_type: EventType, payload: Any, priority: int = 0):
         """Emit an event asynchronously."""
-        event = Event(
-            event_type=event_type,
-            payload=payload,
-            priority=priority
-        )
+        event = Event(event_type=event_type, payload=payload, priority=priority)
         await self.bus.publish_async(event)
 
     def emit_later(self, event_type: EventType, payload: Any, delay: float):

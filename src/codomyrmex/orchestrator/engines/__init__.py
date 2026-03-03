@@ -19,6 +19,7 @@ from typing import Any, Optional
 
 class TaskState(Enum):
     """States a task can be in."""
+
     PENDING = "pending"
     QUEUED = "queued"
     RUNNING = "running"
@@ -27,9 +28,11 @@ class TaskState(Enum):
     CANCELLED = "cancelled"
     SKIPPED = "skipped"
 
+
 @dataclass
 class TaskDefinition:
     """Definition of a task in a workflow."""
+
     id: str = field(default_factory=lambda: str(uuid.uuid4()))
     name: str = ""
     action: Callable | None = None
@@ -40,9 +43,11 @@ class TaskDefinition:
     condition: Callable[[dict], bool] | None = None
     metadata: dict[str, Any] = field(default_factory=dict)
 
+
 @dataclass
 class TaskResult:
     """Result of task execution."""
+
     task_id: str
     state: TaskState
     output: Any = None
@@ -57,9 +62,11 @@ class TaskResult:
             return (self.end_time - self.start_time).total_seconds() * 1000
         return 0.0
 
+
 @dataclass
 class WorkflowDefinition:
     """Definition of a workflow."""
+
     id: str = field(default_factory=lambda: str(uuid.uuid4()))
     name: str = ""
     tasks: list[TaskDefinition] = field(default_factory=list)
@@ -70,14 +77,11 @@ class WorkflowDefinition:
         name: str,
         action: Callable,
         dependencies: list[str] | None = None,
-        **kwargs
+        **kwargs,
     ) -> str:
         """Add a task to the workflow."""
         task = TaskDefinition(
-            name=name,
-            action=action,
-            dependencies=dependencies or [],
-            **kwargs
+            name=name, action=action, dependencies=dependencies or [], **kwargs
         )
         self.tasks.append(task)
         return task.id
@@ -125,9 +129,11 @@ class WorkflowDefinition:
 
         return levels
 
+
 @dataclass
 class WorkflowResult:
     """Result of workflow execution."""
+
     workflow_id: str
     success: bool
     task_results: dict[str, TaskResult] = field(default_factory=dict)
@@ -143,6 +149,7 @@ class WorkflowResult:
 
     def get_task_result(self, task_id: str) -> TaskResult | None:
         return self.task_results.get(task_id)
+
 
 class ExecutionEngine(ABC):
     """Abstract base class for workflow execution engines."""
@@ -164,6 +171,7 @@ class ExecutionEngine(ABC):
     ) -> WorkflowResult:
         """Execute a workflow asynchronously."""
         pass
+
 
 class SequentialEngine(ExecutionEngine):
     """Executes tasks sequentially in dependency order."""
@@ -282,6 +290,7 @@ class SequentialEngine(ExecutionEngine):
             workflow,
             initial_context,
         )
+
 
 class ParallelEngine(ExecutionEngine):
     """Executes independent tasks in parallel."""
@@ -419,6 +428,7 @@ class ParallelEngine(ExecutionEngine):
         loop = asyncio.get_event_loop()
         return await loop.run_in_executor(None, self.execute, workflow, initial_context)
 
+
 def create_engine(engine_type: str = "parallel", **kwargs) -> ExecutionEngine:
     """Factory function for execution engines."""
     engines = {
@@ -431,6 +441,7 @@ def create_engine(engine_type: str = "parallel", **kwargs) -> ExecutionEngine:
         raise ValueError(f"Unknown engine type: {engine_type}")
 
     return engine_class(**kwargs)
+
 
 __all__ = [
     "TaskState",

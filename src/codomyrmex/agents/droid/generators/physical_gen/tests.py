@@ -1,5 +1,6 @@
 """Generator content."""
 
+
 def generate_physical_tests() -> str:
     """Generate test suite for the physical management module."""
     return '''"""Test suite for Physical Management module."""
@@ -228,4 +229,3 @@ class TestIntegration:
 if __name__ == "__main__":
     pytest.main([__file__])
 '''
-

@@ -74,6 +74,7 @@ def encryption_generate_key(
             key = generate_aes_key()
         else:
             import secrets
+
             key = secrets.token_bytes(size)
 
         return {

@@ -30,6 +30,7 @@ logger = get_logger(__name__)
 
 # ── Configuration ────────────────────────────────────────────────────
 
+
 @dataclass
 class RateLimiterConfig:
     """Rate limiter tuning parameters.
@@ -40,6 +41,7 @@ class RateLimiterConfig:
         per_tool_rate: Optional per-tool rate override map.
         per_tool_burst: Optional per-tool burst override map.
     """
+
     rate: float = 50.0
     burst: int = 100
     per_tool_rate: dict[str, float] = field(default_factory=dict)
@@ -47,6 +49,7 @@ class RateLimiterConfig:
 
 
 # ── Token bucket ─────────────────────────────────────────────────────
+
 
 class _TokenBucket:
     """Single token bucket."""
@@ -91,6 +94,7 @@ class _TokenBucket:
 
 
 # ── Rate limiter ─────────────────────────────────────────────────────
+
 
 class RateLimiter:
     """Token-bucket rate limiter with per-tool overrides.

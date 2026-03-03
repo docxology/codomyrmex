@@ -9,6 +9,7 @@ import pytest
 
 try:
     import yaml
+
     YAML_AVAILABLE = True
 except ImportError:
     yaml = None
@@ -27,26 +28,32 @@ def pytest_configure(config):
     config.addinivalue_line("markers", "integration: Integration tests")
     config.addinivalue_line("markers", "slow: Slow running tests")
 
+
 @pytest.fixture
 def project_root():
     """Fixture providing the project root path."""
     return Path(__file__).parent.parent.parent.parent
+
 
 @pytest.fixture
 def code_dir():
     """Fixture providing the code directory path."""
     return Path(__file__).parent.parent.parent.parent / "src"
 
+
 @pytest.fixture
 def temp_env_file(tmp_path):
     """Fixture providing a temporary .env file path."""
     return tmp_path / ".env"
 
+
 @pytest.fixture
 def sample_markdown_file(tmp_path):
     """Fixture providing a sample markdown file."""
     md_file = tmp_path / "sample.md"
-    md_file.write_text("# Sample Document\n\nThis is sample markdown content.", encoding="utf-8")
+    md_file.write_text(
+        "# Sample Document\n\nThis is sample markdown content.", encoding="utf-8"
+    )
     return md_file
 
 
@@ -138,6 +145,7 @@ def setup_test_environment():
 # ===== REAL DATA FIXTURES =====
 # These fixtures provide real implementations instead of mocks
 
+
 @pytest.fixture
 def real_logger_fixture(tmp_path):
     """Create a real logger instance with actual file output."""
@@ -185,7 +193,9 @@ def test_main():
     pytest.skip("placeholder — add real tests here")
 """)
 
-    (project_dir / "README.md").write_text("# Test Project\n\nA test project for Codomyrmex testing.")
+    (project_dir / "README.md").write_text(
+        "# Test Project\n\nA test project for Codomyrmex testing."
+    )
     (project_dir / "requirements.txt").write_text("pytest>=7.0.0\n")
 
     return project_dir
@@ -250,8 +260,12 @@ def real_git_repo(tmp_path):
     subprocess.run(["git", "init"], cwd=repo_dir, check=True, capture_output=True)
 
     # Configure git
-    subprocess.run(["git", "config", "user.name", "Test User"], cwd=repo_dir, check=True)
-    subprocess.run(["git", "config", "user.email", "test@example.com"], cwd=repo_dir, check=True)
+    subprocess.run(
+        ["git", "config", "user.name", "Test User"], cwd=repo_dir, check=True
+    )
+    subprocess.run(
+        ["git", "config", "user.email", "test@example.com"], cwd=repo_dir, check=True
+    )
 
     # Create initial file and commit
     readme = repo_dir / "README.md"
@@ -300,10 +314,7 @@ def real_docker_available():
     """Check actual Docker availability (not mocked)."""
     try:
         result = subprocess.run(
-            ["docker", "--version"],
-            capture_output=True,
-            text=True,
-            timeout=5
+            ["docker", "--version"], capture_output=True, text=True, timeout=5
         )
         return result.returncode == 0
     except (subprocess.SubprocessError, FileNotFoundError, subprocess.TimeoutExpired):
@@ -313,6 +324,7 @@ def real_docker_available():
 @pytest.fixture
 def real_subprocess_result():
     """Execute real subprocess commands in test environment."""
+
     def run_command(cmd, **kwargs):
         """Run a real subprocess command."""
         try:
@@ -325,6 +337,7 @@ def real_subprocess_result():
                     self.stdout = ""
                     self.stderr = str(error)
                     self.exception = error
+
             return SubprocessError(e)
 
     return run_command

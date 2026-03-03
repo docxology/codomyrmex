@@ -15,6 +15,7 @@ from codomyrmex.llm.models.reasoning import ThinkingDepth
 
 class TestThinkingAgentConfig:
     """Test suite for ThinkingAgentConfig."""
+
     def test_defaults(self) -> None:
         """Test functionality: defaults."""
         cfg = ThinkingAgentConfig()
@@ -26,6 +27,7 @@ class TestThinkingAgentConfig:
 
 class TestThinkingAgent:
     """Test suite for ThinkingAgent."""
+
     def test_creation(self) -> None:
         """Test functionality: creation."""
         agent = ThinkingAgent()
@@ -130,6 +132,7 @@ class TestThinkingAgent:
     def test_observe(self) -> None:
         """Test functionality: observe."""
         from codomyrmex.agents.core.base import AgentResponse
+
         agent = ThinkingAgent()
         obs = agent.observe(AgentResponse(content="Done"))
         assert "success" in obs

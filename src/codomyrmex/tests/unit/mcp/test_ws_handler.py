@@ -52,8 +52,13 @@ class TestRecordFormatting:
         logger.setLevel(logging.DEBUG)
 
         record = logger.makeRecord(
-            "test.ws_handler", logging.INFO, "test.py", 42,
-            "hello world", (), None,
+            "test.ws_handler",
+            logging.INFO,
+            "test.py",
+            42,
+            "hello world",
+            (),
+            None,
         )
         entry = handler._format_record(record)
 
@@ -67,7 +72,13 @@ class TestRecordFormatting:
         handler = WebSocketLogHandler()
         logger = logging.getLogger("test.ws_handler.corr")
         record = logger.makeRecord(
-            "test", logging.INFO, "test.py", 1, "msg", (), None,
+            "test",
+            logging.INFO,
+            "test.py",
+            1,
+            "msg",
+            (),
+            None,
         )
         record.correlation_id = "abc-123"
 
@@ -82,8 +93,14 @@ class TestRecordFormatting:
             raise RuntimeError("boom")
         except RuntimeError:
             import sys
+
             record = logger.makeRecord(
-                "test", logging.ERROR, "test.py", 1, "err", (),
+                "test",
+                logging.ERROR,
+                "test.py",
+                1,
+                "err",
+                (),
                 sys.exc_info(),
             )
 
@@ -105,7 +122,13 @@ class TestBackpressure:
 
         for i in range(5):
             record = logger.makeRecord(
-                "test", logging.INFO, "test.py", 1, f"msg_{i}", (), None,
+                "test",
+                logging.INFO,
+                "test.py",
+                1,
+                f"msg_{i}",
+                (),
+                None,
             )
             handler.emit(record)
 
@@ -120,7 +143,13 @@ class TestBackpressure:
 
         for i in range(5):
             record = logger.makeRecord(
-                "test", logging.INFO, "test.py", 1, f"msg_{i}", (), None,
+                "test",
+                logging.INFO,
+                "test.py",
+                1,
+                f"msg_{i}",
+                (),
+                None,
             )
             handler.emit(record)
 
@@ -157,7 +186,13 @@ class TestClientManagement:
 
         logger = logging.getLogger("test.ws_handler.broadcast")
         record = logger.makeRecord(
-            "test", logging.INFO, "test.py", 1, "broadcast_msg", (), None,
+            "test",
+            logging.INFO,
+            "test.py",
+            1,
+            "broadcast_msg",
+            (),
+            None,
         )
         handler.emit(record)
 
@@ -172,7 +207,13 @@ class TestClientManagement:
         logger = logging.getLogger("test.ws_handler.clientbp")
         for i in range(5):
             record = logger.makeRecord(
-                "test", logging.INFO, "test.py", 1, f"msg_{i}", (), None,
+                "test",
+                logging.INFO,
+                "test.py",
+                1,
+                f"msg_{i}",
+                (),
+                None,
             )
             handler.emit(record)
 
@@ -193,7 +234,13 @@ class TestAsyncStream:
 
         # Emit a record
         record = logger.makeRecord(
-            "test", logging.INFO, "test.py", 1, "stream_test", (), None,
+            "test",
+            logging.INFO,
+            "test.py",
+            1,
+            "stream_test",
+            (),
+            None,
         )
         handler.emit(record)
 

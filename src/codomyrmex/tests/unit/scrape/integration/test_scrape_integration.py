@@ -43,9 +43,7 @@ class TestScrapeIntegration:
 
     def test_scrape_with_formats(self, scraper):
         """Test scraping with multiple formats."""
-        options = ScrapeOptions(
-            formats=[ScrapeFormat.MARKDOWN, ScrapeFormat.METADATA]
-        )
+        options = ScrapeOptions(formats=[ScrapeFormat.MARKDOWN, ScrapeFormat.METADATA])
         result = scraper.scrape("https://example.com", options)
         assert result.success is True
         assert result.has_format(ScrapeFormat.MARKDOWN)
@@ -80,10 +78,10 @@ class TestScrapeIntegration:
         assert len(result.urls) == 1
 
 
-
 # Check if firecrawl-py is available
 try:
     from firecrawl import Firecrawl  # noqa: F401
+
     FIRECRAWL_AVAILABLE = True
 except ImportError:
     FIRECRAWL_AVAILABLE = False

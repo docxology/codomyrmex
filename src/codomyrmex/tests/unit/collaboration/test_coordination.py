@@ -2,7 +2,6 @@
 Tests for collaboration coordination submodule.
 """
 
-
 import pytest
 
 from codomyrmex.collaboration.agents import CollaborativeAgent
@@ -362,9 +361,7 @@ class TestBullyElection:
     @pytest.mark.asyncio
     async def test_bully_elect(self):
         """Test running bully election."""
-        election = BullyElection(
-            priority_fn=lambda a: hash(a.agent_id)
-        )
+        election = BullyElection(priority_fn=lambda a: hash(a.agent_id))
 
         agents = [
             CollaborativeAgent(agent_id="a1", name="Agent 1"),

@@ -1,4 +1,5 @@
 """Unit tests for notification module."""
+
 import os
 import tempfile
 
@@ -12,11 +13,13 @@ class TestNotificationImports:
     def test_module_imports(self):
         """Verify module can be imported without errors."""
         from codomyrmex.events import notification
+
         assert notification is not None
 
     def test_public_api_exists(self):
         """Verify expected public API is available."""
         from codomyrmex.events.notification import __all__
+
         expected_exports = [
             "NotificationChannel",
             "NotificationPriority",
@@ -219,7 +222,7 @@ class TestFileProvider:
             NotificationStatus,
         )
 
-        with tempfile.NamedTemporaryFile(mode='w', suffix='.log', delete=False) as f:
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".log", delete=False) as f:
             temp_path = f.name
 
         try:
@@ -387,6 +390,7 @@ class TestNotificationService:
 
         # Should not raise when sending to console
         from codomyrmex.events.notification import Notification
+
         notif = Notification(id="test", subject="Test", body="Test")
         result = service.send(notif)
         assert result.is_success is True

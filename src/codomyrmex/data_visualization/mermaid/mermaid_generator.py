@@ -15,6 +15,7 @@ from typing import Any
 
 try:
     from codomyrmex.logging_monitoring import get_logger
+
     logger = get_logger(__name__)
 except ImportError:
     logger = logging.getLogger(__name__)
@@ -536,6 +537,7 @@ if __name__ == "__main__":
     # Basic logging setup if running standalone
     if not logger.hasHandlers():
         import logging
+
         logging.basicConfig(
             level=logging.DEBUG,
             format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
@@ -543,4 +545,3 @@ if __name__ == "__main__":
         logger.info(
             "Basic logging configured for direct script execution of mermaid_generator.py."
         )
-

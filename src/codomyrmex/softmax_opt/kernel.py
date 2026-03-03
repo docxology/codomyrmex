@@ -67,7 +67,7 @@ def online_softmax(x: np.ndarray, axis: int = -1) -> np.ndarray:
     result = np.zeros_like(x_flat)
     for row_idx in range(x_flat.shape[0]):
         row = x_flat[row_idx]
-        m = float('-inf')
+        m = float("-inf")
         d = 0.0
 
         # Single pass to compute max and normalizer

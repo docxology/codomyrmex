@@ -160,7 +160,9 @@ class AutoBuilder:
             },
         )
 
-        logger.info("Dockerfile generated", extra={"project": name, "stages": spec.stage_count})
+        logger.info(
+            "Dockerfile generated", extra={"project": name, "stages": spec.stage_count}
+        )
         return spec
 
     @staticmethod

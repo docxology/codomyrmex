@@ -57,24 +57,40 @@ try:
 except ImportError:
     # Fallback for standalone execution
     import logging as _logging
+
     def get_logger(name):
         return _logging.getLogger(name)
+
     def setup_logging():
         _logging.basicConfig(level=_logging.INFO)
+
     class LogContext:
         def __init__(self, **kwargs):
-            _logging.warning("codomyrmex not installed: LogContext operating as no-op. Install codomyrmex for full functionality.")
-        def __enter__(self): return self
-        def __exit__(self, *args): return None  # No-op context manager exit
+            _logging.warning(
+                "codomyrmex not installed: LogContext operating as no-op. Install codomyrmex for full functionality."
+            )
+
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *args):
+            return None  # No-op context manager exit
+
     class PerformanceLogger:
         def __init__(self, logger_name):
-            _logging.warning("codomyrmex not installed: PerformanceLogger operating as no-op. Install codomyrmex for full functionality.")
+            _logging.warning(
+                "codomyrmex not installed: PerformanceLogger operating as no-op. Install codomyrmex for full functionality."
+            )
+
         def time_operation(self, name, **kwargs):
             from contextlib import contextmanager
+
             @contextmanager
             def ctx():
                 yield
+
             return ctx()
+
 
 logger = logging.getLogger(__name__)
 
@@ -82,6 +98,7 @@ logger = logging.getLogger(__name__)
 @dataclass
 class ScriptConfig:
     """Configuration container for scripts."""
+
     # Execution settings
     dry_run: bool = False
     verbose: bool = False
@@ -124,6 +141,7 @@ class ScriptConfig:
 @dataclass
 class ScriptResult:
     """Standardized script execution result."""
+
     script_name: str
     status: str  # success, failed, timeout, error, skipped
     start_time: str
@@ -198,73 +216,88 @@ class ScriptBase(ABC):
 
         # Version
         parser.add_argument(
-            "--version", action="version",
-            version=f"%(prog)s {self.version}"
+            "--version", action="version", version=f"%(prog)s {self.version}"
         )
 
         # Execution mode
         exec_group = parser.add_argument_group("Execution Options")
         exec_group.add_argument(
-            "--dry-run", "-n", action="store_true",
-            help="Show what would be done without executing"
+            "--dry-run",
+            "-n",
+            action="store_true",
+            help="Show what would be done without executing",
         )
         exec_group.add_argument(
-            "--timeout", "-t", type=int, default=300,
-            help="Execution timeout in seconds (default: 300)"
+            "--timeout",
+            "-t",
+            type=int,
+            default=300,
+            help="Execution timeout in seconds (default: 300)",
         )
         exec_group.add_argument(
-            "--max-retries", type=int, default=3,
-            help="Maximum retry attempts on failure (default: 3)"
+            "--max-retries",
+            type=int,
+            default=3,
+            help="Maximum retry attempts on failure (default: 3)",
         )
 
         # Output settings
         output_group = parser.add_argument_group("Output Options")
         output_group.add_argument(
-            "--output-dir", "-o", type=Path,
-            help="Output directory for results and logs"
+            "--output-dir",
+            "-o",
+            type=Path,
+            help="Output directory for results and logs",
         )
         output_group.add_argument(
-            "--output-format", choices=["json", "yaml", "text"],
-            default="json", help="Output format (default: json)"
+            "--output-format",
+            choices=["json", "yaml", "text"],
+            default="json",
+            help="Output format (default: json)",
         )
         output_group.add_argument(
-            "--no-save", action="store_true",
-            help="Don't save output files"
+            "--no-save", action="store_true", help="Don't save output files"
         )
 
         # Logging settings
         log_group = parser.add_argument_group("Logging Options")
         log_group.add_argument(
-            "--log-level", "-l",
+            "--log-level",
+            "-l",
             choices=["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"],
-            default="INFO", help="Logging level (default: INFO)"
+            default="INFO",
+            help="Logging level (default: INFO)",
         )
         log_group.add_argument(
-            "--log-file", type=Path,
-            help="Log file path (default: auto-generated in output dir)"
+            "--log-file",
+            type=Path,
+            help="Log file path (default: auto-generated in output dir)",
         )
         log_group.add_argument(
-            "--log-format", choices=["text", "json"],
-            default="text", help="Log format (default: text)"
+            "--log-format",
+            choices=["text", "json"],
+            default="text",
+            help="Log format (default: text)",
         )
         log_group.add_argument(
-            "--verbose", "-v", action="store_true",
-            help="Enable verbose output (sets log level to DEBUG)"
+            "--verbose",
+            "-v",
+            action="store_true",
+            help="Enable verbose output (sets log level to DEBUG)",
         )
         log_group.add_argument(
-            "--quiet", "-q", action="store_true",
-            help="Suppress non-error output"
+            "--quiet", "-q", action="store_true", help="Suppress non-error output"
         )
 
         # Configuration
         config_group = parser.add_argument_group("Configuration Options")
         config_group.add_argument(
-            "--config", "-c", type=Path,
-            help="Configuration file path (YAML or JSON)"
+            "--config", "-c", type=Path, help="Configuration file path (YAML or JSON)"
         )
         config_group.add_argument(
-            "--env-prefix", default=self.name.upper().replace("-", "_"),
-            help=f"Environment variable prefix (default: {self.name.upper().replace('-', '_')})"
+            "--env-prefix",
+            default=self.name.upper().replace("-", "_"),
+            help=f"Environment variable prefix (default: {self.name.upper().replace('-', '_')})",
         )
 
         # Add custom arguments
@@ -284,7 +317,7 @@ Examples:
   {self.name} --output-format yaml     # Output in YAML format
 
 Environment Variables:
-  {self.name.upper().replace('-', '_')}_*  # Script-specific settings
+  {self.name.upper().replace("-", "_")}_*  # Script-specific settings
   CODOMYRMEX_LOG_LEVEL                     # Global log level
   CODOMYRMEX_LOG_FILE                      # Global log file
 """
@@ -319,7 +352,7 @@ Environment Variables:
             config_data.update(self._load_config_file(args.config))
 
         # Load from environment
-        env_prefix = getattr(args, 'env_prefix', self.name.upper().replace("-", "_"))
+        env_prefix = getattr(args, "env_prefix", self.name.upper().replace("-", "_"))
         config_data.update(self._load_env_config(env_prefix))
 
         # Apply CLI arguments (highest priority)
@@ -367,7 +400,7 @@ Environment Variables:
 
         for key, value in os.environ.items():
             if key.startswith(prefix):
-                config_key = key[len(prefix):].lower()
+                config_key = key[len(prefix) :].lower()
                 # Parse boolean values
                 if value.lower() in ("true", "1", "yes"):
                     config[config_key] = True
@@ -394,7 +427,12 @@ Environment Variables:
             base_dir = self.default_output_dir
         else:
             # Default to scripts/output/{script_name}
-            base_dir = Path(__file__).parent.parent.parent.parent.parent / "scripts" / "output" / self.name
+            base_dir = (
+                Path(__file__).parent.parent.parent.parent.parent
+                / "scripts"
+                / "output"
+                / self.name
+            )
 
         self.output_path = base_dir / self.run_id
         self.output_path.mkdir(parents=True, exist_ok=True)
@@ -463,7 +501,9 @@ Environment Variables:
             return None
 
         # Determine output file path
-        ext = {"json": ".json", "yaml": ".yaml", "text": ".txt"}[self.config.output_format]
+        ext = {"json": ".json", "yaml": ".yaml", "text": ".txt"}[
+            self.config.output_format
+        ]
         result_file = self.output_path / f"result{ext}"
 
         try:
@@ -689,8 +729,10 @@ def run_script(
     Returns:
         Exit code
     """
+
     class SimpleScript(ScriptBase):
         """Concrete ScriptBase that delegates add_arguments and run to plain functions, created by script_from_functions."""
+
         def add_arguments(self, parser):
             if add_args_func:
                 add_args_func(parser)

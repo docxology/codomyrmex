@@ -16,6 +16,7 @@ logger = get_logger(__name__)
 @dataclass
 class PyreflyIssue:
     """Represents a Pyrefly issue."""
+
     file_path: str
     line: int
     column: int
@@ -27,6 +28,7 @@ class PyreflyIssue:
 @dataclass
 class PyreflyResult:
     """Result of Pyrefly analysis."""
+
     success: bool
     issues: list[PyreflyIssue] = field(default_factory=list)
     error_message: str | None = None
@@ -54,8 +56,7 @@ class PyreflyRunner:
         """Analyze a single file."""
         if not self.pyrefly_available:
             return PyreflyResult(
-                success=False,
-                error_message="Pyrefly is not installed"
+                success=False, error_message="Pyrefly is not installed"
             )
 
         try:
@@ -63,15 +64,11 @@ class PyreflyRunner:
                 ["pyrefly", "check", file_path, "--output-format", "json"],
                 capture_output=True,
                 text=True,
-                timeout=60
+                timeout=60,
             )
 
             issues = self._parse_output(result.stdout)
-            return PyreflyResult(
-                success=True,
-                issues=issues,
-                files_analyzed=1
-            )
+            return PyreflyResult(success=True, issues=issues, files_analyzed=1)
 
         except subprocess.TimeoutExpired:
             return PyreflyResult(success=False, error_message="Pyrefly timed out")
@@ -82,8 +79,7 @@ class PyreflyRunner:
         """Analyze all Python files in a directory."""
         if not self.pyrefly_available:
             return PyreflyResult(
-                success=False,
-                error_message="Pyrefly is not installed"
+                success=False, error_message="Pyrefly is not installed"
             )
 
         try:
@@ -91,16 +87,14 @@ class PyreflyRunner:
                 ["pyrefly", "check", directory, "--output-format", "json"],
                 capture_output=True,
                 text=True,
-                timeout=300
+                timeout=300,
             )
 
             issues = self._parse_output(result.stdout)
             files_count = len(list(Path(directory).rglob("*.py")))
 
             return PyreflyResult(
-                success=True,
-                issues=issues,
-                files_analyzed=files_count
+                success=True, issues=issues, files_analyzed=files_count
             )
 
         except subprocess.TimeoutExpired:
@@ -117,14 +111,16 @@ class PyreflyRunner:
         try:
             data = json.loads(output)
             for item in data.get("issues", []):
-                issues.append(PyreflyIssue(
-                    file_path=item.get("file", ""),
-                    line=item.get("line", 0),
-                    column=item.get("column", 0),
-                    severity=item.get("severity", "warning"),
-                    message=item.get("message", ""),
-                    rule_id=item.get("rule_id")
-                ))
+                issues.append(
+                    PyreflyIssue(
+                        file_path=item.get("file", ""),
+                        line=item.get("line", 0),
+                        column=item.get("column", 0),
+                        severity=item.get("severity", "warning"),
+                        message=item.get("message", ""),
+                        rule_id=item.get("rule_id"),
+                    )
+                )
         except json.JSONDecodeError:
             logger.warning("Failed to parse Pyrefly output as JSON")
 
@@ -138,6 +134,7 @@ def run_pyrefly(path: str) -> PyreflyResult:
     if Path(path).is_file():
         return runner.analyze_file(path)
     return runner.analyze_directory(path)
+
 
 def check_pyrefly_available() -> bool:
     """Check if Pyrefly is available."""

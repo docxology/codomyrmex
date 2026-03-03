@@ -1,4 +1,5 @@
 """Component module."""
+
 from dataclasses import dataclass
 
 from ._base import BaseComponent
@@ -7,6 +8,7 @@ from ._base import BaseComponent
 @dataclass
 class TextBlock(BaseComponent):
     """Text block component."""
+
     content: str = ""
     is_markdown: bool = False
 
@@ -21,9 +23,11 @@ class TextBlock(BaseComponent):
         """Return human-readable string."""
         return self.render()
 
+
 @dataclass
 class CodeBlock(BaseComponent):
     """Code block component."""
+
     code: str = ""
     language: str = "python"
 

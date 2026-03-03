@@ -43,6 +43,7 @@ def _clear_gemini_env() -> dict[str, str]:
     # Reset the cached AgentConfig singleton so it doesn't retain stale
     # env-derived values from earlier tests (e.g. via load_dotenv).
     from codomyrmex.agents.core.config import reset_config
+
     reset_config()
 
     return saved
@@ -54,12 +55,14 @@ def _restore_gemini_env(saved: dict[str, str]) -> None:
         os.environ[var] = val
     # Re-create the singleton with the restored env
     from codomyrmex.agents.core.config import reset_config
+
     reset_config()
 
 
 # ---------------------------------------------------------------------------
 # Fixtures
 # ---------------------------------------------------------------------------
+
 
 @pytest.fixture()
 def client_no_key():
@@ -86,6 +89,7 @@ def client_with_custom_config():
 # ---------------------------------------------------------------------------
 # Initialization and configuration
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestGeminiClientInit:
@@ -155,6 +159,7 @@ class TestGeminiClientInit:
 # Capabilities
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestGeminiClientCapabilities:
     """Tests for agent capabilities declarations."""
@@ -201,6 +206,7 @@ class TestGeminiClientCapabilities:
 # ---------------------------------------------------------------------------
 # Guard-clause error handling (client=None path)
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestGeminiClientGuardClauses:
@@ -326,6 +332,7 @@ class TestGeminiClientGuardClauses:
 # _build_contents (pure logic, no API needed)
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestBuildContents:
     """Tests for the _build_contents helper method."""
@@ -362,6 +369,7 @@ class TestBuildContents:
 # ---------------------------------------------------------------------------
 # BaseAgent integration (execute wraps _execute_impl errors)
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestBaseAgentIntegration:
@@ -402,6 +410,7 @@ class TestBaseAgentIntegration:
 # ---------------------------------------------------------------------------
 # Method signatures and return type annotations
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestGeminiClientMethodSignatures:
@@ -482,12 +491,14 @@ class TestGeminiClientMethodSignatures:
 # GeminiError exception
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestGeminiError:
     """Tests for the GeminiError exception class."""
 
     def test_gemini_error_is_agent_error(self):
         from codomyrmex.agents.core.exceptions import AgentError
+
         assert issubclass(GeminiError, AgentError)
 
     def test_default_message(self):
@@ -510,6 +521,7 @@ class TestGeminiError:
 # ---------------------------------------------------------------------------
 # AgentProtocol compliance (plan / act / observe)
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestAgentProtocol:

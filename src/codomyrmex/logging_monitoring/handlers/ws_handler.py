@@ -74,7 +74,9 @@ class WebSocketLogHandler(logging.Handler):
         try:
             self._clients.remove(client_queue)
         except ValueError as e:
-            print(f"Warning: remove_client called for unknown queue: {e}", file=sys.stderr)
+            print(
+                f"Warning: remove_client called for unknown queue: {e}", file=sys.stderr
+            )
             pass
 
     @property
@@ -145,7 +147,9 @@ class WebSocketLogHandler(logging.Handler):
             try:
                 self._queue.put_nowait(entry)
             except asyncio.QueueFull as e:
-                print(f"Warning: queue still full after drop-oldest: {e}", file=sys.stderr)
+                print(
+                    f"Warning: queue still full after drop-oldest: {e}", file=sys.stderr
+                )
                 pass
             self._dropped += 1
 
@@ -158,12 +162,18 @@ class WebSocketLogHandler(logging.Handler):
                 try:
                     client_queue.get_nowait()
                 except asyncio.QueueEmpty as e:
-                    print(f"Warning: client queue empty during drop-oldest: {e}", file=sys.stderr)
+                    print(
+                        f"Warning: client queue empty during drop-oldest: {e}",
+                        file=sys.stderr,
+                    )
                     pass
                 try:
                     client_queue.put_nowait(entry)
                 except asyncio.QueueFull as e:
-                    print(f"Warning: client queue still full after drop-oldest: {e}", file=sys.stderr)
+                    print(
+                        f"Warning: client queue still full after drop-oldest: {e}",
+                        file=sys.stderr,
+                    )
                     pass
                 self._dropped += 1
 

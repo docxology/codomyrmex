@@ -31,7 +31,9 @@ class RateLimiter(ABC):
         """Reset quota for a key."""
         pass
 
-    def consume(self, key: str, cost: int = 1, *, tokens: int | None = None) -> RateLimitResult:
+    def consume(
+        self, key: str, cost: int = 1, *, tokens: int | None = None
+    ) -> RateLimitResult:
         """Consume quota, returning a result instead of raising.
 
         This is a convenience wrapper around acquire() that catches
@@ -215,7 +217,9 @@ class TokenBucketLimiter(RateLimiter):
         self.capacity = capacity
         self.refill_rate = refill_rate
         self.refill_interval = refill_interval
-        self._initial_tokens = initial_tokens if initial_tokens is not None else capacity
+        self._initial_tokens = (
+            initial_tokens if initial_tokens is not None else capacity
+        )
         self._buckets: dict[str, tuple[float, float]] = {}
         self._lock = threading.Lock()
 
@@ -294,7 +298,10 @@ class CompositeRateLimiter(RateLimiter):
         most_restrictive = None
         for _name, limiter in self.limiters.items():
             result = limiter.check(key, cost)
-            if most_restrictive is None or result.remaining < most_restrictive.remaining:
+            if (
+                most_restrictive is None
+                or result.remaining < most_restrictive.remaining
+            ):
                 most_restrictive = result
         if most_restrictive is None:
             return RateLimitResult(allowed=True, remaining=0, limit=0)
@@ -374,9 +381,6 @@ def create_rate_limiter(strategy: str, **kwargs) -> RateLimiter:
     }
     if strategy not in factories:
         raise ValueError(
-            f"Unknown limiter type: {strategy!r}. "
-            f"Available: {', '.join(factories)}"
+            f"Unknown limiter type: {strategy!r}. Available: {', '.join(factories)}"
         )
     return factories[strategy](**kwargs)
-
-

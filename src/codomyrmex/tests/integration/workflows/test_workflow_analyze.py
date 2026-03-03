@@ -12,6 +12,7 @@ def _import_analyze():
     """Import analyze_project, skip if pyscn is missing."""
     try:
         from codomyrmex.coding import analyze_project
+
         return analyze_project
     except Exception:
         pytest.skip("analyze_project or its dependency (pyscn) not available")

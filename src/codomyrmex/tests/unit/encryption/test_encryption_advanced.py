@@ -35,6 +35,7 @@ from codomyrmex.exceptions import EncryptionError as ExceptionsEncryptionError
 # AES-GCM Tests
 # ==============================================================================
 
+
 @pytest.mark.crypto
 class TestAESGCM:
     """Tests for AES-GCM authenticated encryption."""
@@ -107,6 +108,7 @@ class TestAESGCM:
 # Secure Data Container Tests
 # ==============================================================================
 
+
 @pytest.mark.crypto
 class TestSecureDataContainer:
     """Tests for SecureDataContainer."""
@@ -147,11 +149,8 @@ class TestSecureDataContainer:
     def test_pack_unpack_nested(self, container):
         """Test packing nested structures."""
         data = {
-            "users": [
-                {"name": "Alice", "age": 30},
-                {"name": "Bob", "age": 25}
-            ],
-            "config": {"enabled": True}
+            "users": [{"name": "Alice", "age": 30}, {"name": "Bob", "age": 25}],
+            "config": {"enabled": True},
         }
         packed = container.pack(data)
         unpacked = container.unpack(packed)
@@ -175,6 +174,7 @@ class TestSecureDataContainer:
 # ==============================================================================
 # Key Manager Tests
 # ==============================================================================
+
 
 @pytest.mark.crypto
 class TestKeyManager:
@@ -275,6 +275,7 @@ class TestKeyManager:
 # Convenience Function Tests
 # ==============================================================================
 
+
 @pytest.mark.crypto
 class TestConvenienceFunctions:
     """Tests for module-level convenience functions."""
@@ -308,6 +309,7 @@ class TestConvenienceFunctions:
 # ==============================================================================
 # __init__.py Convenience Function Tests
 # ==============================================================================
+
 
 @pytest.mark.crypto
 class TestInitConvenienceFunctions:
@@ -357,6 +359,7 @@ class TestInitConvenienceFunctions:
 # Error Handling Tests
 # ==============================================================================
 
+
 @pytest.mark.crypto
 class TestErrorHandling:
     """Tests for error handling."""
@@ -392,6 +395,7 @@ class TestErrorHandling:
 # ==============================================================================
 # HMAC Tests
 # ==============================================================================
+
 
 @pytest.mark.crypto
 class TestHMAC:
@@ -440,6 +444,7 @@ class TestHMAC:
 # HKDF Tests
 # ==============================================================================
 
+
 @pytest.mark.crypto
 class TestHKDF:
     """Tests for HKDF key derivation."""
@@ -486,6 +491,7 @@ class TestHKDF:
 # ==============================================================================
 # Edge Case Tests
 # ==============================================================================
+
 
 @pytest.mark.crypto
 class TestEdgeCases:
@@ -546,7 +552,9 @@ class TestEdgeCases:
         with warnings.catch_warnings(record=True) as w:
             warnings.simplefilter("always")
             enc.encrypt(b"test", key)
-            deprecation_warnings = [x for x in w if issubclass(x.category, DeprecationWarning)]
+            deprecation_warnings = [
+                x for x in w if issubclass(x.category, DeprecationWarning)
+            ]
             assert len(deprecation_warnings) >= 1
             assert "AES-CBC" in str(deprecation_warnings[0].message)
 
@@ -554,6 +562,7 @@ class TestEdgeCases:
 # ==============================================================================
 # Integration Tests
 # ==============================================================================
+
 
 @pytest.mark.crypto
 @pytest.mark.integration

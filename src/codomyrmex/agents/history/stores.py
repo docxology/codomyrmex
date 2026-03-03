@@ -35,11 +35,9 @@ class InMemoryHistoryStore:
     ) -> list[Conversation]:
         """List conversations, most recent first."""
         sorted_convs = sorted(
-            self._conversations.values(),
-            key=lambda c: c.updated_at,
-            reverse=True
+            self._conversations.values(), key=lambda c: c.updated_at, reverse=True
         )
-        return sorted_convs[offset:offset + limit]
+        return sorted_convs[offset : offset + limit]
 
     def search(self, query: str) -> list[Conversation]:
         """Search conversations by content."""
@@ -74,7 +72,7 @@ class FileHistoryStore:
     def save(self, conversation: Conversation) -> None:
         """Save a conversation."""
         path = self._get_path(conversation.conversation_id)
-        with open(path, 'w') as f:
+        with open(path, "w") as f:
             json.dump(conversation.to_dict(), f, indent=2)
 
     def load(self, conversation_id: str) -> Conversation | None:
@@ -107,7 +105,7 @@ class FileHistoryStore:
 
         # Sort by updated_at
         conversations.sort(key=lambda c: c.updated_at, reverse=True)
-        return conversations[offset:offset + limit]
+        return conversations[offset : offset + limit]
 
     def search(self, query: str) -> list[Conversation]:
         """Search conversations."""
@@ -174,39 +172,45 @@ class SQLiteHistoryStore:
         """Save a conversation."""
         with self._get_connection() as conn:
             # Upsert conversation
-            conn.execute("""
+            conn.execute(
+                """
                 INSERT OR REPLACE INTO conversations
                 (conversation_id, title, created_at, updated_at, metadata)
                 VALUES (?, ?, ?, ?, ?)
-            """, (
-                conversation.conversation_id,
-                conversation.title,
-                conversation.created_at.isoformat(),
-                conversation.updated_at.isoformat(),
-                json.dumps(conversation.metadata),
-            ))
+            """,
+                (
+                    conversation.conversation_id,
+                    conversation.title,
+                    conversation.created_at.isoformat(),
+                    conversation.updated_at.isoformat(),
+                    json.dumps(conversation.metadata),
+                ),
+            )
 
             # Delete existing messages
             conn.execute(
                 "DELETE FROM messages WHERE conversation_id = ?",
-                (conversation.conversation_id,)
+                (conversation.conversation_id,),
             )
 
             # Insert messages
             for msg in conversation.messages:
-                conn.execute("""
+                conn.execute(
+                    """
                     INSERT INTO messages
                     (message_id, conversation_id, role, content, timestamp, tokens, metadata)
                     VALUES (?, ?, ?, ?, ?, ?, ?)
-                """, (
-                    msg.message_id,
-                    conversation.conversation_id,
-                    msg.role.value,
-                    msg.content,
-                    msg.timestamp.isoformat(),
-                    msg.tokens,
-                    json.dumps(msg.metadata),
-                ))
+                """,
+                    (
+                        msg.message_id,
+                        conversation.conversation_id,
+                        msg.role.value,
+                        msg.content,
+                        msg.timestamp.isoformat(),
+                        msg.tokens,
+                        json.dumps(msg.metadata),
+                    ),
+                )
 
             conn.commit()
 
@@ -215,7 +219,7 @@ class SQLiteHistoryStore:
         with self._get_connection() as conn:
             row = conn.execute(
                 "SELECT * FROM conversations WHERE conversation_id = ?",
-                (conversation_id,)
+                (conversation_id,),
             ).fetchone()
 
             if not row:
@@ -224,7 +228,7 @@ class SQLiteHistoryStore:
             # Load messages
             msg_rows = conn.execute(
                 "SELECT * FROM messages WHERE conversation_id = ? ORDER BY timestamp",
-                (conversation_id,)
+                (conversation_id,),
             ).fetchall()
 
             messages = [
@@ -252,12 +256,11 @@ class SQLiteHistoryStore:
         """Delete a conversation."""
         with self._get_connection() as conn:
             conn.execute(
-                "DELETE FROM messages WHERE conversation_id = ?",
-                (conversation_id,)
+                "DELETE FROM messages WHERE conversation_id = ?", (conversation_id,)
             )
             result = conn.execute(
                 "DELETE FROM conversations WHERE conversation_id = ?",
-                (conversation_id,)
+                (conversation_id,),
             )
             conn.commit()
             return result.rowcount > 0
@@ -271,7 +274,7 @@ class SQLiteHistoryStore:
         with self._get_connection() as conn:
             rows = conn.execute(
                 "SELECT conversation_id FROM conversations ORDER BY updated_at DESC LIMIT ? OFFSET ?",
-                (limit, offset)
+                (limit, offset),
             ).fetchall()
 
             return [self.load(row[0]) for row in rows if row]
@@ -283,17 +286,15 @@ class SQLiteHistoryStore:
             conv_ids = set()
             rows = conn.execute(
                 "SELECT conversation_id FROM conversations WHERE title LIKE ?",
-                (f"%{query}%",)
+                (f"%{query}%",),
             ).fetchall()
             conv_ids.update(r[0] for r in rows)
 
             # Search in messages
             rows = conn.execute(
                 "SELECT DISTINCT conversation_id FROM messages WHERE content LIKE ?",
-                (f"%{query}%",)
+                (f"%{query}%",),
             ).fetchall()
             conv_ids.update(r[0] for r in rows)
 
             return [self.load(cid) for cid in conv_ids if cid]
-
-

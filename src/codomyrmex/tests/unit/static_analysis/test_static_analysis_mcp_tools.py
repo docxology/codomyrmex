@@ -18,6 +18,7 @@ def test_import_mcp_tools() -> None:
         static_analysis_find_dead_exports,
         static_analysis_full_audit,
     )
+
     assert callable(static_analysis_audit_exports)
     assert callable(static_analysis_find_dead_exports)
     assert callable(static_analysis_full_audit)
@@ -85,5 +86,10 @@ def test_mcp_tool_meta_attached() -> None:
         static_analysis_find_dead_exports,
         static_analysis_full_audit,
     )
-    for fn in (static_analysis_audit_exports, static_analysis_find_dead_exports, static_analysis_full_audit):
+
+    for fn in (
+        static_analysis_audit_exports,
+        static_analysis_find_dead_exports,
+        static_analysis_full_audit,
+    ):
         assert hasattr(fn, "_mcp_tool_meta"), f"{fn.__name__} missing _mcp_tool_meta"

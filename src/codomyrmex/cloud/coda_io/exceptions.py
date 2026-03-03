@@ -11,7 +11,6 @@ and provide structured error handling for API consumers.
 """
 
 
-
 class CodaAPIError(Exception):
     """Base exception for all Coda API errors.
 
@@ -165,7 +164,9 @@ class CodaUnprocessableError(CodaAPIError):
         super().__init__(message, status_code=422, response_body=response_body)
 
 
-def raise_for_status(status_code: int, response_body: dict[str, Any] | None = None) -> None:
+def raise_for_status(
+    status_code: int, response_body: dict[str, Any] | None = None
+) -> None:
     """Raise the appropriate exception based on HTTP status code.
 
     Args:

@@ -84,7 +84,9 @@ class MetricCollector:
         with self._lock:
             for name in self._metrics:
                 before = len(self._metrics[name])
-                self._metrics[name] = [m for m in self._metrics[name] if m.timestamp > cutoff]
+                self._metrics[name] = [
+                    m for m in self._metrics[name] if m.timestamp > cutoff
+                ]
                 removed += before - len(self._metrics[name])
 
         return removed

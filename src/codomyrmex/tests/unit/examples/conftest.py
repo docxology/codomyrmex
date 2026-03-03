@@ -14,7 +14,6 @@ Provides shared fixtures and configuration for testing Codomyrmex examples.
 """
 
 
-
 @pytest.fixture(scope="session")
 def project_root() -> Path:
     """Get the project root directory."""
@@ -47,14 +46,8 @@ def temp_output_dir() -> Generator[Path, None, None]:
 def mock_config() -> dict[str, Any]:
     """Provide a mock configuration for testing."""
     return {
-        "output": {
-            "format": "json",
-            "file": "output/test_results.json"
-        },
-        "logging": {
-            "level": "INFO",
-            "file": "logs/test.log"
-        }
+        "output": {"format": "json", "file": "output/test_results.json"},
+        "logging": {"level": "INFO", "file": "logs/test.log"},
     }
 
 

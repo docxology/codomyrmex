@@ -29,7 +29,7 @@ class TestSoftmax:
     @pytest.mark.unit
     def test_temperature_scaling(self):
         x = np.array([1.0, 2.0, 3.0])
-        out_hot = softmax(x, temperature=0.1)   # peaked
+        out_hot = softmax(x, temperature=0.1)  # peaked
         out_cold = softmax(x, temperature=10.0)  # uniform
         # Low temperature -> max probability higher
         assert np.max(out_hot) > np.max(out_cold)

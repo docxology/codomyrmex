@@ -15,19 +15,23 @@ that can be used in place of mocked objects. Following the repository's TDD prin
 of "no mock methods, always do real data analysis."
 """
 
+
 class RealDataFactory:
     """Factory for creating real test data fixtures."""
 
     @staticmethod
-    def create_python_module(project_path: Path, module_name: str, content: str) -> Path:
+    def create_python_module(
+        project_path: Path, module_name: str, content: str
+    ) -> Path:
         """Create a real Python module file."""
         module_file = project_path / f"{module_name}.py"
         module_file.write_text(content)
         return module_file
 
     @staticmethod
-    def create_package_structure(project_path: Path, package_name: str,
-                               modules: dict[str, str]) -> Path:
+    def create_package_structure(
+        project_path: Path, package_name: str, modules: dict[str, str]
+    ) -> Path:
         """Create a real Python package with multiple modules."""
         package_dir = project_path / package_name
         package_dir.mkdir()
@@ -42,8 +46,12 @@ class RealDataFactory:
         return package_dir
 
     @staticmethod
-    def create_config_file(project_path: Path, filename: str,
-                          config_data: dict[str, Any], format_type: str = "json") -> Path:
+    def create_config_file(
+        project_path: Path,
+        filename: str,
+        config_data: dict[str, Any],
+        format_type: str = "json",
+    ) -> Path:
         """Create a real configuration file."""
         config_file = project_path / filename
 
@@ -65,27 +73,32 @@ class RealDataFactory:
     def create_git_repository(repo_path: Path) -> Path:
         """Create a real git repository with initial commit."""
         # Initialize repository
-        subprocess.run(["git", "init"], cwd=repo_path, check=True,
-                      capture_output=True)
+        subprocess.run(["git", "init"], cwd=repo_path, check=True, capture_output=True)
 
         # Configure git
-        subprocess.run(["git", "config", "user.name", "Test User"],
-                      cwd=repo_path, check=True)
-        subprocess.run(["git", "config", "user.email", "test@example.com"],
-                      cwd=repo_path, check=True)
+        subprocess.run(
+            ["git", "config", "user.name", "Test User"], cwd=repo_path, check=True
+        )
+        subprocess.run(
+            ["git", "config", "user.email", "test@example.com"],
+            cwd=repo_path,
+            check=True,
+        )
 
         # Create README and commit
         readme = repo_path / "README.md"
         readme.write_text("# Test Repository\n\nCreated for testing purposes.")
         subprocess.run(["git", "add", "README.md"], cwd=repo_path, check=True)
-        subprocess.run(["git", "commit", "-m", "Initial commit"],
-                      cwd=repo_path, check=True)
+        subprocess.run(
+            ["git", "commit", "-m", "Initial commit"], cwd=repo_path, check=True
+        )
 
         return repo_path
 
     @staticmethod
-    def create_sqlite_database(db_path: Path, schema: str,
-                              sample_data: list[str] | None = None) -> Path:
+    def create_sqlite_database(
+        db_path: Path, schema: str, sample_data: list[str] | None = None
+    ) -> Path:
         """Create a real SQLite database with schema and data."""
         conn = sqlite3.connect(str(db_path))
 
@@ -106,51 +119,55 @@ class RealDataFactory:
         return db_path
 
     @staticmethod
-    def create_docker_compose_file(project_path: Path, services: dict[str, Any]) -> Path:
+    def create_docker_compose_file(
+        project_path: Path, services: dict[str, Any]
+    ) -> Path:
         """Create a real docker-compose.yml file."""
         compose_data = {"version": "3.8", "services": services}
-        return RealDataFactory.create_config_file(project_path, "docker-compose.yml",
-                                                compose_data, "yaml")
+        return RealDataFactory.create_config_file(
+            project_path, "docker-compose.yml", compose_data, "yaml"
+        )
 
     @staticmethod
     def create_code_with_issues(project_path: Path, issue_type: str) -> Path:
         """Create Python code with specific types of issues for testing."""
         issue_files = {
-            "syntax_error": '''
+            "syntax_error": """
 def broken_function():
     print("Missing closing parenthesis"
     return "This won't execute"
-''',
-            "undefined_variable": '''
+""",
+            "undefined_variable": """
 def problematic_function():
     result = undefined_variable + 1
     return result
-''',
-            "import_error": '''
+""",
+            "import_error": """
 
 def function_with_missing_imports():
     return nonexistent_module.do_something()
-''',
-            "type_error": '''
+""",
+            "type_error": """
 def type_mismatch():
     x = "string"
     y = 5
     return x + y  # Type error: can't concatenate str and int
-''',
-            "indentation_error": '''
+""",
+            "indentation_error": """
 def bad_indentation():
     x = 1
   y = 2  # Inconsistent indentation
     return x + y
-'''
+""",
         }
 
         if issue_type not in issue_files:
             raise ValueError(f"Unknown issue type: {issue_type}")
 
         filename = f"code_with_{issue_type}.py"
-        return RealDataFactory.create_python_module(project_path, filename,
-                                                   issue_files[issue_type])
+        return RealDataFactory.create_python_module(
+            project_path, filename, issue_files[issue_type]
+        )
 
     @staticmethod
     def create_test_project_structure(project_path: Path) -> dict[str, Path]:
@@ -159,9 +176,10 @@ def bad_indentation():
 
         # Create main package
         main_package = RealDataFactory.create_package_structure(
-            project_path, "mypackage",
+            project_path,
+            "mypackage",
             {
-                "__init__": '',
+                "__init__": "",
                 "core": '''
 def core_function():
     """Core functionality."""
@@ -171,8 +189,8 @@ def core_function():
 def helper_function():
     """Helper utility."""
     return "helper result"
-'''
-            }
+''',
+            },
         )
         structure["package"] = main_package
 
@@ -193,7 +211,7 @@ def test_core_function():
 
         # Create configuration files
         pyproject = project_path / "pyproject.toml"
-        pyproject.write_text('''
+        pyproject.write_text("""
 [build-system]
 requires = ["setuptools", "wheel"]
 build-backend = "setuptools.build_meta"
@@ -202,7 +220,7 @@ build-backend = "setuptools.build_meta"
 name = "test-project"
 version = "0.1.0"
 description = "Test project"
-''')
+""")
         structure["pyproject"] = pyproject
 
         # Create README
@@ -214,6 +232,7 @@ description = "Test project"
 
 
 # Convenience functions for common test data patterns
+
 
 def create_valid_python_code() -> str:
     """Return valid Python code for testing."""
@@ -244,21 +263,21 @@ class MathUtils:
 def create_invalid_python_code(error_type: str) -> str:
     """Return Python code with specific errors for testing."""
     error_codes = {
-        "indentation": '''
+        "indentation": """
 def bad_function():
     x = 1
   y = 2  # Bad indentation
     return x + y
-''',
-        "syntax": '''
+""",
+        "syntax": """
 def syntax_error():
     print("Missing parenthesis"
     return "error"
-''',
-        "name": '''
+""",
+        "name": """
 def name_error():
     return undefined_variable
-'''
+""",
     }
     return error_codes.get(error_type, "# No error")
 
@@ -266,20 +285,9 @@ def name_error():
 def create_sample_config() -> dict[str, Any]:
     """Return sample configuration data."""
     return {
-        "app": {
-            "name": "test_app",
-            "version": "1.0.0",
-            "debug": True
-        },
-        "database": {
-            "host": "localhost",
-            "port": 5432,
-            "name": "test_db"
-        },
-        "logging": {
-            "level": "INFO",
-            "file": "/tmp/test.log"
-        }
+        "app": {"name": "test_app", "version": "1.0.0", "debug": True},
+        "database": {"host": "localhost", "port": 5432, "name": "test_db"},
+        "logging": {"level": "INFO", "file": "/tmp/test.log"},
     }
 
 
@@ -292,18 +300,14 @@ def create_sample_workflow_config() -> dict[str, Any]:
             {
                 "name": "setup",
                 "module": "environment_setup",
-                "action": "validate_environment"
+                "action": "validate_environment",
             },
             {
                 "name": "analyze",
                 "module": "static_analysis",
                 "action": "analyze_code",
-                "parameters": {"target": "src/"}
+                "parameters": {"target": "src/"},
             },
-            {
-                "name": "test",
-                "module": "testing",
-                "action": "run_tests"
-            }
-        ]
+            {"name": "test", "module": "testing", "action": "run_tests"},
+        ],
     }

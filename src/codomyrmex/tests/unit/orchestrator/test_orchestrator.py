@@ -105,9 +105,7 @@ class TestWorkflowDefinitionAndParsing:
         """Test adding task with metadata."""
         wf = Workflow(name="test")
         wf.add_task(
-            "task1",
-            lambda: "1",
-            metadata={"priority": "high", "category": "build"}
+            "task1", lambda: "1", metadata={"priority": "high", "category": "build"}
         )
 
         assert wf.tasks["task1"].metadata["priority"] == "high"
@@ -151,6 +149,7 @@ class TestStepExecutionAndSequencing:
             async def task(_task_results=None):
                 execution_order.append(name)
                 return f"result_{name}"
+
             return task
 
         wf = Workflow(name="test")
@@ -165,6 +164,7 @@ class TestStepExecutionAndSequencing:
     @pytest.mark.asyncio
     async def test_sync_function_execution(self):
         """Test synchronous functions can be executed."""
+
         def sync_task():
             return "sync_result"
 
@@ -216,9 +216,15 @@ class TestParallelStepExecution:
             return name
 
         wf = Workflow(name="parallel_test")
-        wf.add_task("p1", lambda _task_results=None: asyncio.create_task(timed_task("p1")))
-        wf.add_task("p2", lambda _task_results=None: asyncio.create_task(timed_task("p2")))
-        wf.add_task("p3", lambda _task_results=None: asyncio.create_task(timed_task("p3")))
+        wf.add_task(
+            "p1", lambda _task_results=None: asyncio.create_task(timed_task("p1"))
+        )
+        wf.add_task(
+            "p2", lambda _task_results=None: asyncio.create_task(timed_task("p2"))
+        )
+        wf.add_task(
+            "p3", lambda _task_results=None: asyncio.create_task(timed_task("p3"))
+        )
 
         # Tasks without dependencies should start nearly simultaneously
         # We verify this by checking they all have no deps
@@ -228,6 +234,7 @@ class TestParallelStepExecution:
 
     def test_parallel_helper_creates_independent_tasks(self):
         """Test parallel helper creates tasks with no dependencies."""
+
         def action1():
             return "1"
 
@@ -245,6 +252,7 @@ class TestParallelStepExecution:
 
     def test_fan_out_fan_in_pattern(self):
         """Test fan-out/fan-in workflow pattern."""
+
         def initial():
             return "start"
 
@@ -262,7 +270,7 @@ class TestParallelStepExecution:
             parallel_tasks=[parallel1, parallel2],
             final=final,
             initial_name="init",
-            final_name="finish"
+            final_name="finish",
         )
 
         # Initial has no deps
@@ -340,7 +348,9 @@ class TestConditionalBranching:
 
         wf = Workflow(name="test")
         wf.add_task("first", first_task)
-        wf.add_task("second", second_task, dependencies=["first"], condition=check_previous)
+        wf.add_task(
+            "second", second_task, dependencies=["first"], condition=check_previous
+        )
 
         await wf.run()
 
@@ -362,6 +372,7 @@ class TestErrorHandlingAndRecovery:
     @pytest.mark.asyncio
     async def test_task_failure_is_captured(self):
         """Test that task failures are properly captured."""
+
         async def failing_task(_task_results=None):
             raise ValueError("Intentional failure")
 
@@ -400,6 +411,7 @@ class TestErrorHandlingAndRecovery:
     @pytest.mark.asyncio
     async def test_dependent_task_skipped_on_failure(self):
         """Test downstream tasks are skipped when dependency fails."""
+
         async def failing_task(_task_results=None):
             raise ValueError("Boom")
 
@@ -466,6 +478,7 @@ class TestWorkflowStateManagement:
     @pytest.mark.asyncio
     async def test_workflow_summary(self):
         """Test workflow summary generation."""
+
         async def success_task(_task_results=None):
             return "success"
 
@@ -490,6 +503,7 @@ class TestWorkflowStateManagement:
     @pytest.mark.asyncio
     async def test_get_task_result(self):
         """Test getting individual task result."""
+
         async def my_task(_task_results=None):
             return {"data": "value"}
 
@@ -507,11 +521,7 @@ class TestWorkflowStateManagement:
     def test_task_result_dataclass(self):
         """Test TaskResult dataclass properties."""
         result = TaskResult(
-            success=True,
-            value="test_value",
-            error=None,
-            execution_time=1.5,
-            attempts=2
+            success=True, value="test_value", error=None, execution_time=1.5, attempts=2
         )
 
         assert result.success is True
@@ -551,6 +561,7 @@ class TestInputOutputMappingBetweenSteps:
     @pytest.mark.asyncio
     async def test_result_transform_function(self):
         """Test result transformation before storing."""
+
         async def my_task(_task_results=None):
             return {"raw": "data", "extra": "field"}
 
@@ -588,6 +599,7 @@ class TestTimeoutHandling:
     @pytest.mark.asyncio
     async def test_task_timeout_triggers(self):
         """Test task timeout causes failure."""
+
         async def slow_task(_task_results=None):
             await asyncio.sleep(10)
             return "done"
@@ -604,6 +616,7 @@ class TestTimeoutHandling:
     @pytest.mark.asyncio
     async def test_workflow_timeout_triggers(self):
         """Test workflow-level timeout."""
+
         async def slow_task1(_task_results=None):
             await asyncio.sleep(5)
             return "1"
@@ -622,6 +635,7 @@ class TestTimeoutHandling:
     @pytest.mark.asyncio
     async def test_timeout_decorator(self):
         """Test timeout decorator function."""
+
         @timeout(0.1)
         def slow_func():
             time.sleep(1)
@@ -633,6 +647,7 @@ class TestTimeoutHandling:
     @pytest.mark.asyncio
     async def test_timeout_decorator_passes_when_fast(self):
         """Test timeout decorator allows fast functions."""
+
         @timeout(5)
         def fast_func():
             return "fast_result"
@@ -823,10 +838,7 @@ class TestIntegrationBridges:
     def test_stage_config_dataclass(self):
         """Test StageConfig dataclass."""
         config = StageConfig(
-            name="build",
-            commands=["make", "make test"],
-            parallel=False,
-            timeout=600
+            name="build", commands=["make", "make test"], parallel=False, timeout=600
         )
 
         assert config.name == "build"
@@ -838,13 +850,10 @@ class TestIntegrationBridges:
         """Test PipelineConfig dataclass."""
         stages = [
             StageConfig(name="build", commands=["make"]),
-            StageConfig(name="test", commands=["make test"])
+            StageConfig(name="test", commands=["make test"]),
         ]
         config = PipelineConfig(
-            name="ci_pipeline",
-            stages=stages,
-            timeout=1800,
-            fail_fast=True
+            name="ci_pipeline", stages=stages, timeout=1800, fail_fast=True
         )
 
         assert config.name == "ci_pipeline"
@@ -855,7 +864,7 @@ class TestIntegrationBridges:
         """Test create_pipeline_workflow helper."""
         stages = [
             {"name": "build", "commands": ["echo build"]},
-            {"name": "test", "commands": ["echo test"]}
+            {"name": "test", "commands": ["echo test"]},
         ]
 
         wf = create_pipeline_workflow(stages, name="test_pipeline")
@@ -931,8 +940,10 @@ class TestAgentOrchestrator:
 
         class RunOnlyAgent:
             """Agent with only run method."""
+
             def __init__(self):
                 self._called = False
+
             async def run(self, task: str = "", **kwargs):
                 self._called = True
                 return {"output": "test"}
@@ -951,7 +962,12 @@ class TestAgentOrchestrator:
 
         tasks = [
             {"name": "task1", "agent": "agent1", "task": "do_task_1"},
-            {"name": "task2", "agent": "agent2", "task": "do_task_2", "depends_on": ["task1"]}
+            {
+                "name": "task2",
+                "agent": "agent2",
+                "task": "do_task_2",
+                "depends_on": ["task1"],
+            },
         ]
 
         wf = orchestrator.create_agent_workflow(tasks, name="agent_workflow")
@@ -969,7 +985,11 @@ class TestStepsBuilder:
         """Test Steps fluent API for chaining."""
         steps = Steps(name="fluent_test")
 
-        result = steps.add("step1", lambda: "1").add("step2", lambda: "2").add("step3", lambda: "3")
+        result = (
+            steps.add("step1", lambda: "1")
+            .add("step2", lambda: "2")
+            .add("step3", lambda: "3")
+        )
 
         assert result is steps
         assert len(steps._steps) == 3
@@ -980,7 +1000,7 @@ class TestStepsBuilder:
 
         steps.add("first", lambda: "1")
         steps.add("second", lambda: "2")  # Should auto-depend on first
-        steps.add("third", lambda: "3")   # Should auto-depend on second
+        steps.add("third", lambda: "3")  # Should auto-depend on second
 
         # Verify second depends on first
         assert "first" in steps._workflow.tasks["second"].dependencies
@@ -1081,11 +1101,7 @@ class TestStepResultDataclass:
 
     def test_step_result_success(self):
         """Test StepResult for success case."""
-        result = StepResult(
-            success=True,
-            value={"data": "test"},
-            execution_time=1.5
-        )
+        result = StepResult(success=True, value={"data": "test"}, execution_time=1.5)
 
         assert result.success is True
         assert result.value == {"data": "test"}
@@ -1095,9 +1111,7 @@ class TestStepResultDataclass:
     def test_step_result_failure(self):
         """Test StepResult for failure case."""
         result = StepResult(
-            success=False,
-            error="Something went wrong",
-            execution_time=0.5
+            success=False, error="Something went wrong", execution_time=0.5
         )
 
         assert result.success is False
@@ -1109,9 +1123,7 @@ class TestStepResultDataclass:
 async def test_run_ci_stage():
     """Test run_ci_stage helper function."""
     result = await run_ci_stage(
-        name="test_stage",
-        commands=["echo step1", "echo step2"],
-        timeout=60
+        name="test_stage", commands=["echo step1", "echo step2"], timeout=60
     )
 
     assert "success" in result

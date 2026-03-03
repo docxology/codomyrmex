@@ -11,6 +11,7 @@ Example:
     >>> result.is_valid
     True
 """
+
 from collections.abc import Callable
 from dataclasses import dataclass, field
 from typing import Any
@@ -23,6 +24,7 @@ from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 logger = get_logger(__name__)
 
+
 class ValidationError(CodomyrmexError):
     """Raised when validation fails.
 
@@ -31,12 +33,19 @@ class ValidationError(CodomyrmexError):
         '[ValidationError] message' with the error_code prefix.
     """
 
-    def __init__(self, message: str, field: str | None = None, code: str | None = None, path: list[str] | None = None):
+    def __init__(
+        self,
+        message: str,
+        field: str | None = None,
+        code: str | None = None,
+        path: list[str] | None = None,
+    ):
 
         super().__init__(message)
         self.field = field
         self.code = code
         self.path = path or []
+
 
 @dataclass
 class ValidationWarning:
@@ -46,6 +55,7 @@ class ValidationWarning:
     message: str
     code: str | None = None
     path: list[str] = field(default_factory=list)
+
 
 @dataclass
 class ValidationResult:
@@ -62,6 +72,7 @@ class ValidationResult:
             True if validation passed (is_valid is True), False otherwise.
         """
         return self.is_valid
+
 
 class Validator:
     """Base validator with support for JSON Schema, Pydantic, and custom validation.
@@ -104,7 +115,11 @@ class Validator:
             logger.error(f"Validation error: {e}")
             return ValidationResult(
                 is_valid=False,
-                errors=[ValidationError(f"Validation failed: {str(e)}", code="validation_error")]
+                errors=[
+                    ValidationError(
+                        f"Validation failed: {str(e)}", code="validation_error"
+                    )
+                ],
             )
 
     def _validate_json_schema(self, data: Any, schema: dict) -> ValidationResult:
@@ -119,10 +134,7 @@ class Validator:
             logger.warning("jsonschema not available, falling back to basic validation")
             return self._basic_validation(data, schema)
         except Exception as e:
-            error = ValidationError(
-                message=str(e),
-                code="json_schema_error"
-            )
+            error = ValidationError(message=str(e), code="json_schema_error")
             return ValidationResult(is_valid=False, errors=[error])
 
     def _validate_pydantic(self, data: Any, model: Any) -> ValidationResult:
@@ -132,7 +144,6 @@ class Validator:
         Pydantic validation errors are converted to ValidationError instances.
         """
         try:
-
             if isinstance(data, dict):
                 model(**data)
             else:
@@ -142,17 +153,23 @@ class Validator:
             logger.warning("pydantic not available")
             return ValidationResult(
                 is_valid=False,
-                errors=[ValidationError("Pydantic not available", code="pydantic_not_available")]
+                errors=[
+                    ValidationError(
+                        "Pydantic not available", code="pydantic_not_available"
+                    )
+                ],
             )
         except PydanticValidationError as e:
             errors = []
             for error in e.errors():
-                errors.append(ValidationError(
-                    message=error.get("msg", "Validation error"),
-                    field=".".join(str(x) for x in error.get("loc", [])),
-                    code=error.get("type", "validation_error"),
-                    path=list(error.get("loc", []))
-                ))
+                errors.append(
+                    ValidationError(
+                        message=error.get("msg", "Validation error"),
+                        field=".".join(str(x) for x in error.get("loc", [])),
+                        code=error.get("type", "validation_error"),
+                        path=list(error.get("loc", [])),
+                    )
+                )
             return ValidationResult(is_valid=False, errors=errors)
 
     def _validate_custom(self, data: Any, validator_func: Callable) -> ValidationResult:
@@ -172,7 +189,12 @@ class Validator:
         except Exception as e:
             return ValidationResult(
                 is_valid=False,
-                errors=[ValidationError(f"Custom validation failed: {str(e)}", code="custom_validation_error")]
+                errors=[
+                    ValidationError(
+                        f"Custom validation failed: {str(e)}",
+                        code="custom_validation_error",
+                    )
+                ],
             )
 
     def _basic_validation(self, data: Any, schema: dict) -> ValidationResult:
@@ -192,22 +214,58 @@ class Validator:
         if "type" in schema:
             expected_type = schema["type"]
             if expected_type == "object" and not isinstance(data, dict):
-                errors.append(ValidationError(f"Expected object, got {type(data).__name__}", code="type_error"))
+                errors.append(
+                    ValidationError(
+                        f"Expected object, got {type(data).__name__}", code="type_error"
+                    )
+                )
             elif expected_type == "array" and not isinstance(data, list):
-                errors.append(ValidationError(f"Expected array, got {type(data).__name__}", code="type_error"))
+                errors.append(
+                    ValidationError(
+                        f"Expected array, got {type(data).__name__}", code="type_error"
+                    )
+                )
             elif expected_type == "string" and not isinstance(data, str):
-                errors.append(ValidationError(f"Expected string, got {type(data).__name__}", code="type_error"))
+                errors.append(
+                    ValidationError(
+                        f"Expected string, got {type(data).__name__}", code="type_error"
+                    )
+                )
             elif expected_type == "integer" and not isinstance(data, int):
-                errors.append(ValidationError(f"Expected integer, got {type(data).__name__}", code="type_error"))
+                errors.append(
+                    ValidationError(
+                        f"Expected integer, got {type(data).__name__}",
+                        code="type_error",
+                    )
+                )
             elif expected_type == "number" and not isinstance(data, (int, float)):
-                errors.append(ValidationError(f"Expected number, got {type(data).__name__}", code="type_error"))
+                errors.append(
+                    ValidationError(
+                        f"Expected number, got {type(data).__name__}", code="type_error"
+                    )
+                )
             elif expected_type == "boolean" and not isinstance(data, bool):
-                errors.append(ValidationError(f"Expected boolean, got {type(data).__name__}", code="type_error"))
+                errors.append(
+                    ValidationError(
+                        f"Expected boolean, got {type(data).__name__}",
+                        code="type_error",
+                    )
+                )
 
-        if "required" in schema and isinstance(schema.get("type"), str) and schema["type"] == "object":
+        if (
+            "required" in schema
+            and isinstance(schema.get("type"), str)
+            and schema["type"] == "object"
+        ):
             for field_name in schema["required"]:
                 if field_name not in data:
-                    errors.append(ValidationError(f"Required field '{field_name}' is missing", field=field_name, code="required_field_missing"))
+                    errors.append(
+                        ValidationError(
+                            f"Required field '{field_name}' is missing",
+                            field=field_name,
+                            code="required_field_missing",
+                        )
+                    )
 
         return ValidationResult(is_valid=len(errors) == 0, errors=errors)
 

@@ -1,6 +1,5 @@
 """Unit tests for spatial.three_d module."""
 
-
 import pytest
 
 
@@ -12,6 +11,7 @@ class TestThreeD:
         """Test that we can import three_d module."""
         try:
             from codomyrmex.spatial import three_d
+
             assert three_d is not None
         except ImportError as e:
             pytest.fail(f"Failed to import three_d: {e}")
@@ -34,7 +34,9 @@ class TestThreeD:
 
     def test_rendering_pipeline_module_exists(self, code_dir):
         """Test that rendering_pipeline module exists."""
-        rp_path = code_dir / "codomyrmex" / "spatial" / "three_d" / "rendering_pipeline.py"
+        rp_path = (
+            code_dir / "codomyrmex" / "spatial" / "three_d" / "rendering_pipeline.py"
+        )
         assert rp_path.exists()
 
     def test_ar_vr_support_module_exists(self, code_dir):
@@ -46,6 +48,7 @@ class TestThreeD:
         """Test that Scene3D class can be imported."""
         try:
             from codomyrmex.spatial.three_d import Scene3D
+
             assert Scene3D is not None
         except ImportError as e:
             pytest.fail(f"Failed to import Scene3D: {e}")
@@ -54,6 +57,7 @@ class TestThreeD:
         """Test that Object3D class can be imported."""
         try:
             from codomyrmex.spatial.three_d import Object3D
+
             assert Object3D is not None
         except ImportError as e:
             pytest.fail(f"Failed to import Object3D: {e}")
@@ -62,6 +66,7 @@ class TestThreeD:
         """Test that Camera3D class can be imported."""
         try:
             from codomyrmex.spatial.three_d import Camera3D
+
             assert Camera3D is not None
         except ImportError as e:
             pytest.fail(f"Failed to import Camera3D: {e}")
@@ -70,6 +75,7 @@ class TestThreeD:
         """Test that Light3D class can be imported."""
         try:
             from codomyrmex.spatial.three_d import Light3D
+
             assert Light3D is not None
         except ImportError as e:
             pytest.fail(f"Failed to import Light3D: {e}")
@@ -77,7 +83,8 @@ class TestThreeD:
     def test_material3d_import(self, code_dir):
         """Test that Material3D class can be imported if available."""
         from codomyrmex.spatial import three_d
-        if not hasattr(three_d, 'Material3D'):
+
+        if not hasattr(three_d, "Material3D"):
             pytest.skip("Material3D not yet implemented")
         assert three_d.Material3D is not None
 
@@ -85,6 +92,7 @@ class TestThreeD:
         """Test that ARSession class can be imported."""
         try:
             from codomyrmex.spatial.three_d import ARSession
+
             assert ARSession is not None
         except ImportError as e:
             pytest.fail(f"Failed to import ARSession: {e}")
@@ -93,6 +101,7 @@ class TestThreeD:
         """Test that VRRenderer class can be imported."""
         try:
             from codomyrmex.spatial.three_d import VRRenderer
+
             assert VRRenderer is not None
         except ImportError as e:
             pytest.fail(f"Failed to import VRRenderer: {e}")
@@ -101,6 +110,7 @@ class TestThreeD:
         """Test that XRInterface class can be imported."""
         try:
             from codomyrmex.spatial.three_d import XRInterface
+
             assert XRInterface is not None
         except ImportError as e:
             pytest.fail(f"Failed to import XRInterface: {e}")
@@ -109,6 +119,7 @@ class TestThreeD:
         """Test that RenderPipeline class can be imported."""
         try:
             from codomyrmex.spatial.three_d import RenderPipeline
+
             assert RenderPipeline is not None
         except ImportError as e:
             pytest.fail(f"Failed to import RenderPipeline: {e}")
@@ -117,6 +128,7 @@ class TestThreeD:
         """Test that ShaderManager class can be imported."""
         try:
             from codomyrmex.spatial.three_d import ShaderManager
+
             assert ShaderManager is not None
         except ImportError as e:
             pytest.fail(f"Failed to import ShaderManager: {e}")
@@ -124,13 +136,15 @@ class TestThreeD:
     def test_mesh_loader_import(self, code_dir):
         """Test that MeshLoader class can be imported if available."""
         from codomyrmex.spatial import three_d
-        if not hasattr(three_d, 'MeshLoader'):
+
+        if not hasattr(three_d, "MeshLoader"):
             pytest.skip("MeshLoader not yet implemented")
         assert three_d.MeshLoader is not None
 
     def test_three_d_version(self, code_dir):
         """Test that three_d has version defined."""
         from codomyrmex.spatial import three_d
+
         assert hasattr(three_d, "__version__")
         assert three_d.__version__ == "0.1.0"
 

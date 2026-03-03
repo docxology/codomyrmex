@@ -70,9 +70,12 @@ def canvas_to_dict(canvas: Canvas) -> dict[str, Any]:
     nodes: list[dict[str, Any]] = []
     for n in canvas.nodes:
         d: dict[str, Any] = {
-            "id": n.id, "type": n.type,
-            "x": n.x, "y": n.y,
-            "width": n.width, "height": n.height,
+            "id": n.id,
+            "type": n.type,
+            "x": n.x,
+            "y": n.y,
+            "width": n.width,
+            "height": n.height,
         }
         for key in ("text", "file", "url", "color", "label"):
             val = getattr(n, key, None)
@@ -96,31 +99,35 @@ def canvas_from_dict(data: dict[str, Any]) -> Canvas:
     """Reconstruct a ``Canvas`` from a dict (e.g. from ``json.load``)."""
     nodes: list[CanvasNode] = []
     for nd in data.get("nodes", []):
-        nodes.append(CanvasNode(
-            id=nd["id"],
-            type=nd["type"],
-            x=nd.get("x", 0),
-            y=nd.get("y", 0),
-            width=nd.get("width", 250),
-            height=nd.get("height", 140),
-            text=nd.get("text"),
-            file=nd.get("file"),
-            url=nd.get("url"),
-            color=nd.get("color"),
-            label=nd.get("label"),
-        ))
+        nodes.append(
+            CanvasNode(
+                id=nd["id"],
+                type=nd["type"],
+                x=nd.get("x", 0),
+                y=nd.get("y", 0),
+                width=nd.get("width", 250),
+                height=nd.get("height", 140),
+                text=nd.get("text"),
+                file=nd.get("file"),
+                url=nd.get("url"),
+                color=nd.get("color"),
+                label=nd.get("label"),
+            )
+        )
 
     edges: list[CanvasEdge] = []
     for ed in data.get("edges", []):
-        edges.append(CanvasEdge(
-            id=ed["id"],
-            fromNode=ed.get("fromNode", ""),
-            toNode=ed.get("toNode", ""),
-            fromSide=ed.get("fromSide"),
-            toSide=ed.get("toSide"),
-            label=ed.get("label"),
-            color=ed.get("color"),
-        ))
+        edges.append(
+            CanvasEdge(
+                id=ed["id"],
+                fromNode=ed.get("fromNode", ""),
+                toNode=ed.get("toNode", ""),
+                fromSide=ed.get("fromSide"),
+                toSide=ed.get("toSide"),
+                label=ed.get("label"),
+                color=ed.get("color"),
+            )
+        )
 
     return Canvas(nodes=nodes, edges=edges)
 
@@ -150,8 +157,7 @@ def remove_canvas_node(canvas: Canvas, node_id: str) -> CanvasNode | None:
     if removed:
         # Also remove connected edges
         canvas.edges = [
-            e for e in canvas.edges
-            if e.fromNode != node_id and e.toNode != node_id
+            e for e in canvas.edges if e.fromNode != node_id and e.toNode != node_id
         ]
     return removed
 
@@ -177,8 +183,12 @@ def create_text_node(
     return CanvasNode(
         id=f"node-{uuid.uuid4().hex[:8]}",
         type="text",
-        x=x, y=y, width=width, height=height,
-        text=text, color=color,
+        x=x,
+        y=y,
+        width=width,
+        height=height,
+        text=text,
+        color=color,
     )
 
 
@@ -194,7 +204,10 @@ def create_file_node(
     return CanvasNode(
         id=f"node-{uuid.uuid4().hex[:8]}",
         type="file",
-        x=x, y=y, width=width, height=height,
+        x=x,
+        y=y,
+        width=width,
+        height=height,
         file=file,
     )
 
@@ -211,7 +224,10 @@ def create_link_node(
     return CanvasNode(
         id=f"node-{uuid.uuid4().hex[:8]}",
         type="link",
-        x=x, y=y, width=width, height=height,
+        x=x,
+        y=y,
+        width=width,
+        height=height,
         url=url,
     )
 

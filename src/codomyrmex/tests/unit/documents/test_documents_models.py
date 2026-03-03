@@ -22,15 +22,13 @@ from codomyrmex.documents.models.metadata import (
 
 # --- Document Model --------------------------------------------------------
 
+
 class TestDocumentModel:
     """Test Document data model."""
 
     def test_document_creation(self):
         """Test creating a Document object."""
-        doc = Document(
-            content="Test content",
-            format=DocumentFormat.TEXT
-        )
+        doc = Document(content="Test content", format=DocumentFormat.TEXT)
         assert doc.content == "Test content"
         assert doc.format == DocumentFormat.TEXT
         assert doc.type == DocumentType.TEXT
@@ -121,6 +119,7 @@ class TestDocumentModel:
 
 # --- Document Metadata Model -----------------------------------------------
 
+
 class TestDocumentMetadataModel:
     """Test DocumentMetadata model."""
 
@@ -165,7 +164,9 @@ class TestDocumentMetadataModel:
 
     def test_metadata_field_creation(self):
         """Test MetadataField creation."""
-        field = MetadataField(name="author", value="John", data_type="string", source="frontmatter")
+        field = MetadataField(
+            name="author", value="John", data_type="string", source="frontmatter"
+        )
         assert field.name == "author"
         assert field.value == "John"
         assert field.data_type == "string"
@@ -173,6 +174,7 @@ class TestDocumentMetadataModel:
 
 
 # --- Config -----------------------------------------------------------------
+
 
 class TestDocumentsConfig:
     """Test DocumentsConfig."""
@@ -210,19 +212,20 @@ class TestDocumentsConfig:
 
     def test_config_env_var_cache_dir(self, tmp_path):
         """Test cache directory from environment variable."""
-        original = os.environ.get('CODOMYRMEX_CACHE_DIR')
-        os.environ['CODOMYRMEX_CACHE_DIR'] = str(tmp_path)
+        original = os.environ.get("CODOMYRMEX_CACHE_DIR")
+        os.environ["CODOMYRMEX_CACHE_DIR"] = str(tmp_path)
         try:
             config = DocumentsConfig()
             assert config.cache_directory == tmp_path / "documents_cache"
         finally:
             if original is None:
-                os.environ.pop('CODOMYRMEX_CACHE_DIR', None)
+                os.environ.pop("CODOMYRMEX_CACHE_DIR", None)
             else:
-                os.environ['CODOMYRMEX_CACHE_DIR'] = original
+                os.environ["CODOMYRMEX_CACHE_DIR"] = original
 
 
 # --- Validation Result ------------------------------------------------------
+
 
 class TestValidationResult:
     """Test ValidationResult."""

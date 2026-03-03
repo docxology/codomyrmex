@@ -30,6 +30,7 @@ def _make_memory(
 
 class TestConsolidationConfig:
     """Test suite for ConsolidationConfig."""
+
     def test_defaults(self) -> None:
         """Test functionality: defaults."""
         cfg = ConsolidationConfig()
@@ -40,6 +41,7 @@ class TestConsolidationConfig:
 
 class TestMemoryConsolidator:
     """Test suite for MemoryConsolidator."""
+
     def test_consolidate_basic(self) -> None:
         """Test functionality: consolidate basic."""
         consolidator = MemoryConsolidator()
@@ -93,9 +95,7 @@ class TestMemoryConsolidator:
 
     def test_batch_size_respected(self) -> None:
         """Test functionality: batch size respected."""
-        consolidator = MemoryConsolidator(
-            config=ConsolidationConfig(batch_size=3)
-        )
+        consolidator = MemoryConsolidator(config=ConsolidationConfig(batch_size=3))
         memories = [_make_memory(memory_id=f"m{i}") for i in range(10)]
         cases = consolidator.consolidate(memories)
         assert len(cases) == 3

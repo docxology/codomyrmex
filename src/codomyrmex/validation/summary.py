@@ -86,7 +86,9 @@ class ValidationSummary:
                 field_counts[issue.field] += 1
         return sorted(field_counts.items(), key=lambda x: x[1], reverse=True)[:n]
 
-    def filter(self, severity: str | None = None, field: str | None = None) -> list[ValidationIssue]:
+    def filter(
+        self, severity: str | None = None, field: str | None = None
+    ) -> list[ValidationIssue]:
         """Filter issues by severity and/or field."""
         result = self.issues
         if severity:
@@ -104,7 +106,12 @@ class ValidationSummary:
             "warning_count": self.warning_count,
             "info_count": self.info_count,
             "issues": [
-                {"field": i.field, "message": i.message, "severity": i.severity, "code": i.code}
+                {
+                    "field": i.field,
+                    "message": i.message,
+                    "severity": i.severity,
+                    "code": i.code,
+                }
                 for i in self.issues
             ],
         }
@@ -113,8 +120,12 @@ class ValidationSummary:
         """Format as plain text report."""
         if not self.issues:
             return "✅ Validation passed — no issues found."
-        lines = [f"Validation: {'FAILED' if not self.is_valid else 'PASSED (with warnings)'}"]
-        lines.append(f"  Errors: {self.error_count}  Warnings: {self.warning_count}  Info: {self.info_count}")
+        lines = [
+            f"Validation: {'FAILED' if not self.is_valid else 'PASSED (with warnings)'}"
+        ]
+        lines.append(
+            f"  Errors: {self.error_count}  Warnings: {self.warning_count}  Info: {self.info_count}"
+        )
         for issue in self.issues:
             lines.append(f"  [{issue.severity.upper()}] {issue.field}: {issue.message}")
         return "\n".join(lines)
@@ -123,7 +134,9 @@ class ValidationSummary:
         """Format as markdown report."""
         if not self.issues:
             return "✅ **Validation passed** — no issues found.\n"
-        status = "❌ **FAILED**" if not self.is_valid else "⚠️ **PASSED** (with warnings)"
+        status = (
+            "❌ **FAILED**" if not self.is_valid else "⚠️ **PASSED** (with warnings)"
+        )
         lines = [f"## Validation: {status}", ""]
         lines.append("| Severity | Count |")
         lines.append("|----------|------:|")

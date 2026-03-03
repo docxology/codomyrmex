@@ -1,4 +1,5 @@
 """Mamba (Gu & Dao 2023) -- selective state space model implementation."""
+
 from __future__ import annotations
 
 import numpy as np
@@ -50,7 +51,9 @@ class SelectiveSSM:
         self.W_B = np.random.randn(d_model, d_state) * scale  # x -> B
         self.W_C = np.random.randn(d_model, d_state) * scale  # x -> C
         self.W_dt = np.random.randn(d_model, self.dt_rank) * scale  # x -> dt
-        self.W_dt_proj = np.random.randn(self.dt_rank, d_model) * scale  # dt rank -> d_model
+        self.W_dt_proj = (
+            np.random.randn(self.dt_rank, d_model) * scale
+        )  # dt rank -> d_model
         self.b_dt = np.ones(d_model) * 0.01  # small positive bias
 
     def forward(self, x: np.ndarray) -> np.ndarray:

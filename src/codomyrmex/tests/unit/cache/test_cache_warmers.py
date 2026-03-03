@@ -175,7 +175,10 @@ class TestCacheWarmer:
         cache = {}
         key_prov = StaticKeyProvider(keys)
         val_loader = CallableValueLoader(loader_fn or (lambda k: k.upper()))
-        return CacheWarmer(cache=cache, key_provider=key_prov, value_loader=val_loader), cache
+        return (
+            CacheWarmer(cache=cache, key_provider=key_prov, value_loader=val_loader),
+            cache,
+        )
 
     def test_warm_populates_cache(self):
         warmer, cache = self._make_warmer(["a", "b", "c"])
@@ -234,7 +237,9 @@ class TestCacheWarmer:
         warmer = CacheWarmer(
             cache={},
             key_provider=StaticKeyProvider([]),
-            value_loader=CallableValueLoader(lambda k: (_ for _ in ()).throw(RuntimeError("fail"))),
+            value_loader=CallableValueLoader(
+                lambda k: (_ for _ in ()).throw(RuntimeError("fail"))
+            ),
         )
         result = warmer.warm_key("x")
         assert result is False

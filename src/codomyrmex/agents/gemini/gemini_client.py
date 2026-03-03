@@ -105,9 +105,11 @@ class GeminiClient(BaseAgent):
             response = self.client.models.generate_content(
                 model=model,
                 contents=contents,
-                config=types.GenerateContentConfig(**config_params)
-                if config_params
-                else None,
+                config=(
+                    types.GenerateContentConfig(**config_params)
+                    if config_params
+                    else None
+                ),
             )
             return self._build_response_from_api_result(response, request)
         except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
@@ -130,9 +132,11 @@ class GeminiClient(BaseAgent):
             response_stream = self.client.models.generate_content_stream(
                 model=model,
                 contents=contents,
-                config=types.GenerateContentConfig(**config_params)
-                if config_params
-                else None,
+                config=(
+                    types.GenerateContentConfig(**config_params)
+                    if config_params
+                    else None
+                ),
             )
             for chunk in response_stream:
                 if chunk.text:
@@ -202,9 +206,11 @@ class GeminiClient(BaseAgent):
             metadata={
                 "model": request.context.get("model", self.default_model),
                 "finish_reason": str(cand.finish_reason),
-                "usage": response.usage_metadata.model_dump()
-                if response.usage_metadata
-                else {},
+                "usage": (
+                    response.usage_metadata.model_dump()
+                    if response.usage_metadata
+                    else {}
+                ),
             },
         )
 

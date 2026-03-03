@@ -115,6 +115,7 @@ class TestMCPClientTools:
 
     def test_list_tools(self, client):
         """Test functionality: list tools."""
+
         async def _test():
             await client.initialize()
             tools = await client.list_tools()
@@ -128,6 +129,7 @@ class TestMCPClientTools:
 
     def test_call_tool_echo(self, client):
         """Test functionality: call tool echo."""
+
         async def _test():
             await client.initialize()
             result = await client.call_tool("echo", {"text": "world"})
@@ -141,6 +143,7 @@ class TestMCPClientTools:
 
     def test_call_tool_add(self, client):
         """Test functionality: call tool add."""
+
         async def _test():
             await client.initialize()
             result = await client.call_tool("add", {"a": 3, "b": 4})
@@ -159,6 +162,7 @@ class TestMCPClientResources:
 
     def test_list_resources(self, client):
         """Test functionality: list resources."""
+
         async def _test():
             await client.initialize()
             resources = await client.list_resources()
@@ -170,6 +174,7 @@ class TestMCPClientResources:
 
     def test_read_resource(self, client):
         """Test functionality: read resource."""
+
         async def _test():
             await client.initialize()
             result = await client.read_resource("test://greeting")
@@ -186,6 +191,7 @@ class TestMCPClientPrompts:
 
     def test_list_prompts(self, client):
         """Test functionality: list prompts."""
+
         async def _test():
             await client.initialize()
             prompts = await client.list_prompts()
@@ -196,9 +202,12 @@ class TestMCPClientPrompts:
 
     def test_get_prompt(self, client):
         """Test functionality: get prompt."""
+
         async def _test():
             await client.initialize()
-            result = await client.get_prompt("greet", {"greeting": "hi", "name": "Alice"})
+            result = await client.get_prompt(
+                "greet", {"greeting": "hi", "name": "Alice"}
+            )
             return result
 
         result = asyncio.run(_test())

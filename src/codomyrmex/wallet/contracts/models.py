@@ -8,6 +8,7 @@ from enum import Enum
 
 class Network(Enum):
     """Blockchain networks."""
+
     ETHEREUM = "ethereum"
     POLYGON = "polygon"
     ARBITRUM = "arbitrum"
@@ -18,6 +19,7 @@ class Network(Enum):
 
 class TransactionStatus(Enum):
     """Transaction status."""
+
     PENDING = "pending"
     CONFIRMED = "confirmed"
     FAILED = "failed"
@@ -26,6 +28,7 @@ class TransactionStatus(Enum):
 @dataclass
 class Address:
     """Blockchain address."""
+
     value: str
     network: Network = Network.ETHEREUM
 
@@ -35,7 +38,13 @@ class Address:
 
     @property
     def is_valid(self) -> bool:
-        if self.network in [Network.ETHEREUM, Network.POLYGON, Network.ARBITRUM, Network.OPTIMISM, Network.BASE]:
+        if self.network in [
+            Network.ETHEREUM,
+            Network.POLYGON,
+            Network.ARBITRUM,
+            Network.OPTIMISM,
+            Network.BASE,
+        ]:
             return len(self.value) == 42 and self.value.startswith("0x")
         return len(self.value) > 0
 
@@ -43,6 +52,7 @@ class Address:
 @dataclass
 class Transaction:
     """A blockchain transaction."""
+
     hash: str
     from_address: Address
     to_address: Address
@@ -59,6 +69,7 @@ class Transaction:
 @dataclass
 class ContractFunction:
     """A smart contract function."""
+
     name: str
     inputs: list[dict[str, str]] = field(default_factory=list)
     outputs: list[dict[str, str]] = field(default_factory=list)

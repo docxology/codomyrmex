@@ -37,8 +37,9 @@ class TestTiledMatmul:
             C = tiled_matmul(A, B, tile_size=tile_size)
             # Wider tolerance for small tile sizes: different accumulation
             # order in float32 changes rounding (expected numerical behavior)
-            np.testing.assert_allclose(C, expected, rtol=1e-3,
-                err_msg=f"Failed for tile_size={tile_size}")
+            np.testing.assert_allclose(
+                C, expected, rtol=1e-3, err_msg=f"Failed for tile_size={tile_size}"
+            )
 
     @pytest.mark.unit
     def test_identity_matrix(self):

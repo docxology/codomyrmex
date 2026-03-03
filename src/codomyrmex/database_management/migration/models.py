@@ -18,6 +18,7 @@ logger = get_logger(__name__)
 
 class MigrationStatus(Enum):
     """Status of a migration."""
+
     PENDING = "pending"
     RUNNING = "running"
     COMPLETED = "completed"
@@ -27,6 +28,7 @@ class MigrationStatus(Enum):
 
 class MigrationDirection(Enum):
     """Direction of migration."""
+
     UP = "up"
     DOWN = "down"
 
@@ -34,6 +36,7 @@ class MigrationDirection(Enum):
 @dataclass
 class MigrationStep:
     """A single migration step."""
+
     id: str
     name: str
     description: str = ""
@@ -57,6 +60,7 @@ class MigrationStep:
 @dataclass
 class MigrationResult:
     """Result of a migration."""
+
     migration_id: str
     status: MigrationStatus
     started_at: datetime = field(default_factory=datetime.now)
@@ -93,6 +97,7 @@ class MigrationResult:
 @dataclass
 class Migration:
     """A complete migration definition."""
+
     id: str
     name: str
     version: str
@@ -155,7 +160,12 @@ class FieldTypeTransformer(DataTransformer):
                 try:
                     result[field_name] = target_type(result[field_name])
                 except (ValueError, TypeError) as e:
-                    logger.warning("Failed to convert field %r to %s: %s", field_name, target_type, e)
+                    logger.warning(
+                        "Failed to convert field %r to %s: %s",
+                        field_name,
+                        target_type,
+                        e,
+                    )
                     pass
         return result
 

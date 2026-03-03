@@ -36,12 +36,13 @@ def read_html(file_path: str | Path, encoding: str | None = None) -> str:
     except Exception as e:
         logger.error(f"Error reading HTML file {file_path}: {e}")
         raise DocumentReadError(
-            f"Failed to read HTML file: {str(e)}",
-            file_path=str(file_path)
+            f"Failed to read HTML file: {str(e)}", file_path=str(file_path)
         ) from e
 
 
-def write_html(content: str, file_path: str | Path, encoding: str | None = None) -> None:
+def write_html(
+    content: str, file_path: str | Path, encoding: str | None = None
+) -> None:
     """
     Write HTML content to a file.
 
@@ -58,14 +59,13 @@ def write_html(content: str, file_path: str | Path, encoding: str | None = None)
 
     try:
         file_path.parent.mkdir(parents=True, exist_ok=True)
-        with open(file_path, 'w', encoding=encoding) as f:
+        with open(file_path, "w", encoding=encoding) as f:
             f.write(content)
         logger.debug(f"Wrote HTML to {file_path}")
     except Exception as e:
         logger.error(f"Error writing HTML file {file_path}: {e}")
         raise DocumentWriteError(
-            f"Failed to write HTML file: {str(e)}",
-            file_path=str(file_path)
+            f"Failed to write HTML file: {str(e)}", file_path=str(file_path)
         ) from e
 
 
@@ -80,9 +80,14 @@ def strip_html_tags(html_content: str) -> str:
         Plain text with HTML tags removed
     """
     # Remove script and style elements entirely
-    clean = re.sub(r'<(script|style)[^>]*>.*?</\1>', '', html_content, flags=re.DOTALL | re.IGNORECASE)
+    clean = re.sub(
+        r"<(script|style)[^>]*>.*?</\1>",
+        "",
+        html_content,
+        flags=re.DOTALL | re.IGNORECASE,
+    )
     # Strip remaining tags
-    clean = re.sub(r'<[^>]+>', '', clean)
+    clean = re.sub(r"<[^>]+>", "", clean)
     # Collapse whitespace
-    clean = re.sub(r'\s+', ' ', clean).strip()
+    clean = re.sub(r"\s+", " ", clean).strip()
     return clean

@@ -27,7 +27,10 @@ class FPFFetcher:
         self.cache_dir.mkdir(parents=True, exist_ok=True)
 
     def fetch_latest(
-        self, repo: str = "ailev/FPF", branch: str = "main", file_path: str = "FPF-Spec.md"
+        self,
+        repo: str = "ailev/FPF",
+        branch: str = "main",
+        file_path: str = "FPF-Spec.md",
     ) -> str:
         """Fetch the latest FPF specification from GitHub.
 
@@ -129,4 +132,3 @@ class FPFFetcher:
         cache_path.write_text(content, encoding="utf-8")
 
         return cache_path
-

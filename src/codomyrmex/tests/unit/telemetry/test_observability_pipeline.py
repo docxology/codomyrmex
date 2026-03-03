@@ -22,6 +22,7 @@ from codomyrmex.telemetry.pipeline import EventKind, ObservabilityPipeline
 
 # ─── ObservabilityPipeline ────────────────────────────────────────────
 
+
 class TestObservabilityPipeline:
     """Test suite for ObservabilityPipeline."""
 
@@ -53,6 +54,7 @@ class TestObservabilityPipeline:
 
 
 # ─── MetricAggregator ────────────────────────────────────────────────
+
 
 class TestMetricAggregator:
     """Test suite for MetricAggregator."""
@@ -91,6 +93,7 @@ class TestMetricAggregator:
 
 # ─── AlertEvaluator ──────────────────────────────────────────────────
 
+
 class TestAlertEvaluator:
     """Test suite for AlertEvaluator."""
 
@@ -99,11 +102,15 @@ class TestAlertEvaluator:
         m = MetricAggregator()
         m.gauge("cpu", 95.0)
         ev = AlertEvaluator(metrics=m)
-        ev.add_rule(AlertRule(
-            name="high_cpu", metric_name="cpu",
-            threshold=80, operator="gt",
-            severity=AlertSeverity.CRITICAL,
-        ))
+        ev.add_rule(
+            AlertRule(
+                name="high_cpu",
+                metric_name="cpu",
+                threshold=80,
+                operator="gt",
+                severity=AlertSeverity.CRITICAL,
+            )
+        )
         alerts = ev.evaluate()
         assert len(alerts) == 1
         assert alerts[0].severity == AlertSeverity.CRITICAL
@@ -141,6 +148,7 @@ class TestAlertEvaluator:
 
 # ─── DashboardBuilder ───────────────────────────────────────────────
 
+
 class TestDashboardBuilder:
     """Test suite for DashboardBuilder."""
 
@@ -163,9 +171,11 @@ class TestDashboardBuilder:
     def test_thresholds(self):
         """Test functionality: thresholds."""
         builder = DashboardBuilder()
-        builder.add_panel(Panel(
-            title="Latency",
-            thresholds=[ThresholdConfig(value=100, color="red")],
-        ))
+        builder.add_panel(
+            Panel(
+                title="Latency",
+                thresholds=[ThresholdConfig(value=100, color="red")],
+            )
+        )
         config = builder.build()
         assert "thresholds" in config["panels"][0]

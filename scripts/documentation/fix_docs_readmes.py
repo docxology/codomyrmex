@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Add Testing, Installation, and code blocks to remaining docs/modules READMEs and SPECs."""
+
 import ast
 import os
 import sys
@@ -28,19 +29,23 @@ def get_exports(mod_name):
         pass
     if not classes and not functions:
         for f in sorted(os.listdir(os.path.join(SRC, mod_name))):
-            if not f.endswith(".py") or f == "__init__.py": continue
+            if not f.endswith(".py") or f == "__init__.py":
+                continue
             try:
                 sub = ast.parse(open(os.path.join(SRC, mod_name, f)).read())
                 for node in sub.body:
                     if isinstance(node, ast.ClassDef):
                         doc = ast.get_docstring(node) or ""
                         classes.append((node.name, doc.split("\n")[0] if doc else ""))
-                    elif isinstance(node, ast.FunctionDef) and not node.name.startswith("_"):
+                    elif isinstance(node, ast.FunctionDef) and not node.name.startswith(
+                        "_"
+                    ):
                         doc = ast.get_docstring(node) or ""
                         functions.append((node.name, doc.split("\n")[0] if doc else ""))
             except Exception:
                 pass
-            if len(classes) >= 3: break
+            if len(classes) >= 3:
+                break
     return classes, functions
 
 
@@ -55,9 +60,21 @@ def fix_readme(mod_name):
     classes, functions = get_exports(mod_name)
 
     # Add Installation
-    if "install" not in content.lower() and "pip" not in content.lower() and "setup" not in content.lower():
+    if (
+        "install" not in content.lower()
+        and "pip" not in content.lower()
+        and "setup" not in content.lower()
+    ):
         install = "\n## Installation\n\n```bash\npip install codomyrmex\n```\n"
-        for anchor in ["## API", "## Key", "## Quick", "## Test", "## Related", "## Navigation", "## References"]:
+        for anchor in [
+            "## API",
+            "## Key",
+            "## Quick",
+            "## Test",
+            "## Related",
+            "## Navigation",
+            "## References",
+        ]:
             if anchor in content:
                 content = content.replace(anchor, install + "\n" + anchor)
                 break
@@ -126,16 +143,25 @@ def fix_spec(mod_name):
 
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
-    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "documentation" / "config.yaml"
+
+    import yaml
+
+    config_path = (
+        Path(__file__).resolve().parent.parent.parent
+        / "config"
+        / "documentation"
+        / "config.yaml"
+    )
     config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
+        with open(config_path) as f:
             config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/documentation/config.yaml")
+            print("Loaded config from config/documentation/config.yaml")
 
-    modules = sorted(d for d in os.listdir(DOCS) if os.path.isdir(os.path.join(DOCS, d)))
+    modules = sorted(
+        d for d in os.listdir(DOCS) if os.path.isdir(os.path.join(DOCS, d))
+    )
     readme_fixed = spec_fixed = 0
     for mod in modules:
         if fix_readme(mod):

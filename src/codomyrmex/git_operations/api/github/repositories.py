@@ -16,6 +16,7 @@ from .base import (
 
 logger = get_logger(__name__)
 
+
 def create_github_repository(
     name: str,
     private: bool = True,
@@ -102,6 +103,7 @@ def create_github_repository(
         logger.error(error_msg)
         raise GitHubAPIError(error_msg) from None
 
+
 def delete_github_repository(
     owner: str, repo_name: str, github_token: str | None = None
 ) -> bool:
@@ -148,6 +150,7 @@ def delete_github_repository(
         error_msg = f"Network error deleting repository: {e}"
         logger.error(error_msg)
         raise GitHubAPIError(error_msg) from None
+
 
 def get_repository_info(
     repo_owner: str, repo_name: str, github_token: str | None = None
@@ -216,6 +219,7 @@ def get_repository_info(
         logger.error(error_msg)
         raise GitHubAPIError(error_msg) from None
 
+
 async def async_get_repo_info(
     repo_owner: str, repo_name: str, github_token: str | None = None
 ) -> dict:
@@ -276,4 +280,3 @@ async def async_get_repo_info(
 
         logger.error(error_msg)
         raise GitHubAPIError(error_msg) from None
-

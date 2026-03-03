@@ -6,7 +6,9 @@ from .kernel import benchmark_matmul, matmul_flops, tiled_matmul
 
 
 @mcp_tool(category="matmul_kernel")
-def matmul_compute(a: list[list[float]], b: list[list[float]], tile_size: int = 32) -> dict:
+def matmul_compute(
+    a: list[list[float]], b: list[list[float]], tile_size: int = 32
+) -> dict:
     """Multiply two matrices using tiled algorithm.
 
     Args:

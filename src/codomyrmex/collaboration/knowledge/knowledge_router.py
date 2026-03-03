@@ -104,9 +104,7 @@ class KnowledgeRouter:
 
             # Composite score
             score = (
-                tag_overlap * 0.4
-                + domain_score * 0.4
-                + recency * self._recency_weight
+                tag_overlap * 0.4 + domain_score * 0.4 + recency * self._recency_weight
             )
 
             if score > best_score:
@@ -169,12 +167,15 @@ class KnowledgeRouter:
             expert_tags = {t.lower() for t in profile.tags}
             tag_overlap = len(query_terms & expert_tags)
             domain_score = sum(
-                conf for dom, conf in profile.domains.items()
+                conf
+                for dom, conf in profile.domains.items()
                 if dom.lower() in query_terms
             )
             age_hours = (now - profile.last_active) / 3600
             recency = 1.0 / (1.0 + age_hours / 24.0)
-            score = tag_overlap * 0.4 + domain_score * 0.4 + recency * self._recency_weight
+            score = (
+                tag_overlap * 0.4 + domain_score * 0.4 + recency * self._recency_weight
+            )
             if score > 0:
                 scored.append((agent_id, min(1.0, score)))
 

@@ -9,7 +9,6 @@ Zero-mock policy: all tests use real data structures, tmp_path fixtures,
 and in-memory strings. No mocks, stubs, or fakes.
 """
 
-
 import pytest
 
 from codomyrmex.maintenance.deps.dependency_analyzer import DependencyAnalyzer
@@ -50,7 +49,11 @@ class TestParseRequirementsFile:
             ("numpy!=1.21.0", "numpy", "!=1.21.0"),
             ("pandas<2.0", "pandas", "<2.0"),
             ("scipy", "scipy", ""),
-            ("black>=22.0,<24.0", "black", ">=22.0"),  # parser captures first operator+version
+            (
+                "black>=22.0,<24.0",
+                "black",
+                ">=22.0",
+            ),  # parser captures first operator+version
         ],
         ids=[
             "pinned-exact",
@@ -79,11 +82,7 @@ class TestParseRequirementsFile:
         """Blank lines and comment-only lines are skipped."""
         req_file = tmp_path / "requirements.txt"
         req_file.write_text(
-            "# full-line comment\n"
-            "\n"
-            "   \n"
-            "requests==2.0\n"
-            "# another comment\n"
+            "# full-line comment\n\n   \nrequests==2.0\n# another comment\n"
         )
 
         result = parse_requirements_file(req_file)
@@ -209,11 +208,7 @@ class TestParsePyprojectDependencies:
 
     def test_parse_main_dependencies_section(self):
         """Parse [project.dependencies] section."""
-        content = (
-            '[project.dependencies]\n'
-            '"requests>=2.28"\n'
-            '"click>=8.0"\n'
-        )
+        content = '[project.dependencies]\n"requests>=2.28"\n"click>=8.0"\n'
 
         result = parse_pyproject_dependencies(content)
 
@@ -224,10 +219,7 @@ class TestParsePyprojectDependencies:
 
     def test_parse_optional_dependencies_section(self):
         """Parse [project.optional-dependencies] section."""
-        content = (
-            '[project.optional-dependencies]\n'
-            '"httpx>=0.24"\n'
-        )
+        content = '[project.optional-dependencies]\n"httpx>=0.24"\n'
 
         result = parse_pyproject_dependencies(content)
 
@@ -236,10 +228,10 @@ class TestParsePyprojectDependencies:
     def test_section_reset_on_new_header(self):
         """Parser resets current section on non-dependency header."""
         content = (
-            '[project.dependencies]\n'
+            "[project.dependencies]\n"
             '"requests>=2.28"\n'
-            '\n'
-            '[tool.pytest.ini_options]\n'
+            "\n"
+            "[tool.pytest.ini_options]\n"
             '"not-a-dep>=1.0"\n'
         )
 
@@ -258,11 +250,7 @@ class TestParsePyprojectDependencies:
 
     def test_comments_are_skipped(self):
         """Lines starting with # inside sections are skipped."""
-        content = (
-            '[project.dependencies]\n'
-            '# This is a comment\n'
-            '"requests>=2.28"\n'
-        )
+        content = '[project.dependencies]\n# This is a comment\n"requests>=2.28"\n'
 
         result = parse_pyproject_dependencies(content)
 
@@ -513,7 +501,12 @@ class TestDependencyTreeGeneration:
         analyzer.modules = {"alpha", "beta"}
         analyzer.imports = {"alpha": {"beta"}, "beta": set()}
         analyzer.violations = [
-            {"module": "alpha", "imported": "beta", "allowed": "none", "severity": "error"}
+            {
+                "module": "alpha",
+                "imported": "beta",
+                "allowed": "none",
+                "severity": "error",
+            }
         ]
         analyzer.circular_deps = []
 
@@ -596,7 +589,9 @@ class TestDependencyConsolidation:
 
     def test_generate_deprecation_notice_contains_new_location(self):
         """Deprecation notice references the migration target."""
-        notice = generate_deprecation_notice("cache", "pyproject.toml [optional-dependencies.cache]")
+        notice = generate_deprecation_notice(
+            "cache", "pyproject.toml [optional-dependencies.cache]"
+        )
 
         assert "pyproject.toml" in notice
 
@@ -620,7 +615,10 @@ class TestRequirementsTxtDeprecation:
         errors = check_requirements_txt_deprecated(tmp_path)
 
         assert len(errors) == 1
-        assert "missing deprecation notice" in errors[0].lower() or "DEPRECATED" in errors[0]
+        assert (
+            "missing deprecation notice" in errors[0].lower()
+            or "DEPRECATED" in errors[0]
+        )
 
     def test_passes_with_deprecation_notice(self, tmp_path):
         """Files starting with '# DEPRECATED' pass the check."""
@@ -664,10 +662,23 @@ class TestCheckerReportGeneration:
 
     def test_report_contains_python_version_section(self):
         """Report includes Python Version section."""
-        py_version = {"current_version": "3.11.5", "meets_requirement": True, "status": "ok"}
+        py_version = {
+            "current_version": "3.11.5",
+            "meets_requirement": True,
+            "status": "ok",
+        }
         deps = {"core": {"click": {"installed": True, "status": "ok"}}}
-        security = {"pip_audit_available": False, "safety_available": False, "vulnerabilities": []}
-        env = {"virtual_env": True, "uv_available": True, "git_available": True, "docker_available": False}
+        security = {
+            "pip_audit_available": False,
+            "safety_available": False,
+            "vulnerabilities": [],
+        }
+        env = {
+            "virtual_env": True,
+            "uv_available": True,
+            "git_available": True,
+            "docker_available": False,
+        }
 
         report = checker_generate_report(py_version, deps, security, env)
 
@@ -676,15 +687,28 @@ class TestCheckerReportGeneration:
 
     def test_report_flags_missing_dependencies(self):
         """Report marks missing dependencies."""
-        py_version = {"current_version": "3.11.0", "meets_requirement": True, "status": "ok"}
+        py_version = {
+            "current_version": "3.11.0",
+            "meets_requirement": True,
+            "status": "ok",
+        }
         deps = {
             "core": {
                 "installed_pkg": {"installed": True, "status": "ok"},
                 "missing_pkg": {"installed": False, "status": "missing"},
             }
         }
-        security = {"pip_audit_available": False, "safety_available": False, "vulnerabilities": []}
-        env = {"virtual_env": True, "uv_available": True, "git_available": True, "docker_available": False}
+        security = {
+            "pip_audit_available": False,
+            "safety_available": False,
+            "vulnerabilities": [],
+        }
+        env = {
+            "virtual_env": True,
+            "uv_available": True,
+            "git_available": True,
+            "docker_available": False,
+        }
 
         report = checker_generate_report(py_version, deps, security, env)
 
@@ -693,10 +717,23 @@ class TestCheckerReportGeneration:
 
     def test_report_security_section(self):
         """Report includes Security section."""
-        py_version = {"current_version": "3.11.0", "meets_requirement": True, "status": "ok"}
+        py_version = {
+            "current_version": "3.11.0",
+            "meets_requirement": True,
+            "status": "ok",
+        }
         deps = {}
-        security = {"pip_audit_available": True, "safety_available": False, "vulnerabilities": []}
-        env = {"virtual_env": False, "uv_available": False, "git_available": False, "docker_available": False}
+        security = {
+            "pip_audit_available": True,
+            "safety_available": False,
+            "vulnerabilities": [],
+        }
+        env = {
+            "virtual_env": False,
+            "uv_available": False,
+            "git_available": False,
+            "docker_available": False,
+        }
 
         report = checker_generate_report(py_version, deps, security, env)
 
@@ -704,10 +741,23 @@ class TestCheckerReportGeneration:
 
     def test_report_environment_section(self):
         """Report includes Development Environment section."""
-        py_version = {"current_version": "3.11.0", "meets_requirement": True, "status": "ok"}
+        py_version = {
+            "current_version": "3.11.0",
+            "meets_requirement": True,
+            "status": "ok",
+        }
         deps = {}
-        security = {"pip_audit_available": False, "safety_available": False, "vulnerabilities": []}
-        env = {"virtual_env": True, "uv_available": True, "git_available": True, "docker_available": True}
+        security = {
+            "pip_audit_available": False,
+            "safety_available": False,
+            "vulnerabilities": [],
+        }
+        env = {
+            "virtual_env": True,
+            "uv_available": True,
+            "git_available": True,
+            "docker_available": True,
+        }
 
         report = checker_generate_report(py_version, deps, security, env)
 
@@ -843,5 +893,7 @@ class TestAnalyzePipelineSynthetic:
         result = analyzer.analyze()
 
         assert result["summary"]["total_modules"] == len(result["modules"])
-        assert result["summary"]["circular_count"] == len(result["circular_dependencies"])
+        assert result["summary"]["circular_count"] == len(
+            result["circular_dependencies"]
+        )
         assert result["summary"]["violation_count"] == len(result["violations"])

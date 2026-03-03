@@ -169,7 +169,9 @@ class CollaborativeAgent(AbstractAgent):
                 if handler:
                     await handler(message)
                 else:
-                    logger.warning(f"No handler for message type: {message.message_type}")
+                    logger.warning(
+                        f"No handler for message type: {message.message_type}"
+                    )
             except TimeoutError:
                 continue
             except Exception as e:
@@ -196,8 +198,7 @@ class CollaborativeAgent(AbstractAgent):
         """
         if self._state == AgentState.BUSY:
             raise AgentBusyError(
-                self._agent_id,
-                self._current_task.id if self._current_task else None
+                self._agent_id, self._current_task.id if self._current_task else None
             )
 
         self._state = AgentState.BUSY
@@ -240,7 +241,9 @@ class CollaborativeAgent(AbstractAgent):
         Subclasses should override this method to implement
         task-specific logic.
         """
-        raise NotImplementedError("Subclasses must implement _execute_task")  # ABC: intentional
+        raise NotImplementedError(
+            "Subclasses must implement _execute_task"
+        )  # ABC: intentional
 
     def to_dict(self) -> dict[str, Any]:
         """Serialize agent to dictionary."""

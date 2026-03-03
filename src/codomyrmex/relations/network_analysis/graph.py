@@ -119,10 +119,7 @@ class SocialGraph:
         if n <= 1:
             return dict.fromkeys(self._nodes, 0.0)
 
-        return {
-            nid: len(self._edges.get(nid, {})) / (n - 1)
-            for nid in self._nodes
-        }
+        return {nid: len(self._edges.get(nid, {})) / (n - 1) for nid in self._nodes}
 
     def shortest_path(self, source: str, target: str) -> list[str]:
         """Find the shortest (fewest hops) path between two nodes via BFS.

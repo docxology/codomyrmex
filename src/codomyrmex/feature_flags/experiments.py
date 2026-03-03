@@ -14,6 +14,7 @@ from typing import Any
 
 class VariantType(Enum):
     """Experiment variant types."""
+
     CONTROL = "control"
     TREATMENT = "treatment"
 
@@ -21,6 +22,7 @@ class VariantType(Enum):
 @dataclass
 class Variant:
     """An experiment variant."""
+
     name: str
     weight: float = 0.5  # Allocation weight
     value: Any = None
@@ -30,6 +32,7 @@ class Variant:
 @dataclass
 class Experiment:
     """An A/B test experiment."""
+
     id: str
     name: str
     variants: list[Variant] = field(default_factory=list)
@@ -55,6 +58,7 @@ class Experiment:
 @dataclass
 class Assignment:
     """User's experiment assignment."""
+
     experiment_id: str
     variant_name: str
     user_id: str
@@ -64,6 +68,7 @@ class Assignment:
 @dataclass
 class ExperimentEvent:
     """An experiment analytics event."""
+
     experiment_id: str
     variant_name: str
     user_id: str
@@ -137,8 +142,12 @@ class ExperimentManager:
             if user_id in self._assignments.get(experiment_id, {}):
                 assignment = self._assignments[experiment_id][user_id]
                 return next(
-                    (v for v in experiment.variants if v.name == assignment.variant_name),
-                    None
+                    (
+                        v
+                        for v in experiment.variants
+                        if v.name == assignment.variant_name
+                    ),
+                    None,
                 )
 
         # Assign variant deterministically

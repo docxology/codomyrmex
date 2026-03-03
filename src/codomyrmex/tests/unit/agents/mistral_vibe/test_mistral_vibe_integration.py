@@ -14,6 +14,7 @@ try:
         MistralVibeIntegrationAdapter,
     )
     from codomyrmex.tests.unit.agents.helpers import VIBE_AVAILABLE
+
     _HAS_AGENTS = True
 except ImportError:
     _HAS_AGENTS = False
@@ -24,7 +25,7 @@ if not _HAS_AGENTS:
 # Skip entire module if vibe CLI is not properly configured
 pytestmark = pytest.mark.skipif(
     not os.getenv("MISTRAL_API_KEY"),
-    reason="MISTRAL_API_KEY not set - skipping mistral_vibe tests"
+    reason="MISTRAL_API_KEY not set - skipping mistral_vibe tests",
 )
 
 
@@ -46,8 +47,7 @@ class TestMistralVibeIntegrationAdapter:
 
         try:
             code = adapter.adapt_for_ai_code_editing(
-                prompt="Create a fibonacci function",
-                language="python"
+                prompt="Create a fibonacci function", language="python"
             )
             # Test real result structure
             assert isinstance(code, str)
@@ -63,9 +63,7 @@ class TestMistralVibeIntegrationAdapter:
 
         try:
             code = adapter.adapt_for_ai_code_editing(
-                prompt="Create a function",
-                language="python",
-                files=["src/models.py"]
+                prompt="Create a function", language="python", files=["src/models.py"]
             )
             # Test real result structure
             assert isinstance(code, str)
@@ -81,7 +79,7 @@ class TestMistralVibeIntegrationAdapter:
 
         messages = [
             {"role": "user", "content": "Hello"},
-            {"role": "assistant", "content": "Hi there"}
+            {"role": "assistant", "content": "Hi there"},
         ]
 
         try:
@@ -160,4 +158,3 @@ class TestMistralVibeIntegrationAdapter:
         except (RuntimeError, Exception):
             # Expected if CLI not available or authentication fails
             pass
-

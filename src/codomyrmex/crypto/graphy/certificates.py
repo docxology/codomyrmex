@@ -65,9 +65,11 @@ def generate_self_signed_cert(
             private_key = key_pair
             public_key = private_key.public_key()
 
-        subject = issuer = x509.Name([
-            x509.NameAttribute(NameOID.COMMON_NAME, common_name),
-        ])
+        subject = issuer = x509.Name(
+            [
+                x509.NameAttribute(NameOID.COMMON_NAME, common_name),
+            ]
+        )
 
         now = datetime.datetime.now(datetime.UTC)
         signing_params = _get_signing_params(private_key)
@@ -86,10 +88,16 @@ def generate_self_signed_cert(
             )
             .sign(private_key, **signing_params)
         )
-        logger.debug("Self-signed certificate generated for CN=%s, valid %d days", common_name, days)
+        logger.debug(
+            "Self-signed certificate generated for CN=%s, valid %d days",
+            common_name,
+            days,
+        )
         return cert
     except Exception as exc:
-        raise CertificateError(f"Self-signed certificate generation failed: {exc}") from exc
+        raise CertificateError(
+            f"Self-signed certificate generation failed: {exc}"
+        ) from exc
 
 
 def generate_csr(
@@ -128,7 +136,9 @@ def generate_csr(
         }
         for attr_name, oid in attr_map.items():
             if attr_name in subject_attrs:
-                name_attributes.append(x509.NameAttribute(oid, subject_attrs[attr_name]))
+                name_attributes.append(
+                    x509.NameAttribute(oid, subject_attrs[attr_name])
+                )
 
         signing_params = _get_signing_params(private_key)
 
@@ -163,7 +173,9 @@ def validate_certificate_chain(cert_chain: list) -> ValidationResult:
     errors: list[str] = []
 
     if not cert_chain:
-        return ValidationResult(valid=False, errors=["Empty certificate chain"], chain_length=0)
+        return ValidationResult(
+            valid=False, errors=["Empty certificate chain"], chain_length=0
+        )
 
     now = datetime.datetime.now(datetime.UTC)
 
@@ -171,9 +183,13 @@ def validate_certificate_chain(cert_chain: list) -> ValidationResult:
         for i, cert in enumerate(cert_chain):
             # Check date validity
             if now < cert.not_valid_before_utc:
-                errors.append(f"Certificate {i}: not yet valid (not_valid_before={cert.not_valid_before_utc})")
+                errors.append(
+                    f"Certificate {i}: not yet valid (not_valid_before={cert.not_valid_before_utc})"
+                )
             if now > cert.not_valid_after_utc:
-                errors.append(f"Certificate {i}: expired (not_valid_after={cert.not_valid_after_utc})")
+                errors.append(
+                    f"Certificate {i}: expired (not_valid_after={cert.not_valid_after_utc})"
+                )
 
         # Check issuer/subject chain linkage
         for i in range(len(cert_chain) - 1):
@@ -194,7 +210,9 @@ def validate_certificate_chain(cert_chain: list) -> ValidationResult:
                     *_get_verify_params(current),
                 )
             except Exception as verify_exc:
-                errors.append(f"Certificate {i}: signature verification failed: {verify_exc}")
+                errors.append(
+                    f"Certificate {i}: signature verification failed: {verify_exc}"
+                )
 
         valid = len(errors) == 0
         logger.debug(
@@ -203,7 +221,9 @@ def validate_certificate_chain(cert_chain: list) -> ValidationResult:
             len(cert_chain),
             len(errors),
         )
-        return ValidationResult(valid=valid, errors=errors, chain_length=len(cert_chain))
+        return ValidationResult(
+            valid=valid, errors=errors, chain_length=len(cert_chain)
+        )
 
     except Exception as exc:
         raise CertificateError(f"Certificate chain validation failed: {exc}") from exc
@@ -223,9 +243,7 @@ def _get_verify_params(cert: Any) -> tuple:
         )
     # EC algorithms
     elif sig_algo.startswith("1.2.840.10045"):
-        return (
-            ec.ECDSA(cert.signature_hash_algorithm),
-        )
+        return (ec.ECDSA(cert.signature_hash_algorithm),)
     # Ed25519
     elif sig_algo == "1.3.101.112":
         return ()

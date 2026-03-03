@@ -4,6 +4,7 @@ from codomyrmex.agents.core import AgentIntegrationAdapter, AgentRequest
 
 """Every Code integration adapters for Codomyrmex modules."""
 
+
 class EveryCodeIntegrationAdapter(AgentIntegrationAdapter):
     """Integration adapter for Every Code with Codomyrmex modules."""
 
@@ -63,9 +64,7 @@ class EveryCodeIntegrationAdapter(AgentIntegrationAdapter):
 
         return response.content
 
-    def adapt_for_llm(
-        self, messages: list[dict], model: str = None, **kwargs
-    ) -> dict:
+    def adapt_for_llm(self, messages: list[dict], model: str = None, **kwargs) -> dict:
         """
         Adapt Every Code for LLM module.
 
@@ -149,4 +148,3 @@ class EveryCodeIntegrationAdapter(AgentIntegrationAdapter):
             "error": response.error,
             "metadata": response.metadata,
         }
-

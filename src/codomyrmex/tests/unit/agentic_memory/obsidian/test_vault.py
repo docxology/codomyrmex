@@ -7,6 +7,7 @@ from codomyrmex.agentic_memory.obsidian.vault import ObsidianVault
 
 class TestObsidianVault:
     """Test suite for ObsidianVault."""
+
     def test_load_vault(self, tmp_vault):
         """Test functionality: load vault."""
         vault = ObsidianVault(tmp_vault)
@@ -29,14 +30,14 @@ class TestObsidianVault:
         """Test functionality: get note by path."""
         vault = ObsidianVault(tmp_vault)
         note = vault.get_note("My Test Note.md")
-        assert hasattr(note, 'title')
+        assert hasattr(note, "title")
         assert note.title == "My Test Note"
 
     def test_get_note_by_title(self, tmp_vault):
         """Test functionality: get note by title."""
         vault = ObsidianVault(tmp_vault)
         note = vault.get_note("Simple Note")
-        assert hasattr(note, 'title')
+        assert hasattr(note, "title")
         assert note.title == "Simple Note"
 
     def test_get_note_without_extension(self, tmp_vault):

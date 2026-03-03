@@ -19,6 +19,7 @@ class SwarmEngine:
 
         # Compute state metrics
         import numpy as np
+
         positions = np.array([a.position for a in self.agents])
         velocities = np.array([a.velocity for a in self.agents])
 
@@ -36,5 +37,5 @@ class SwarmEngine:
             agents=self.agents,
             centroid=centroid,
             avg_velocity=avg_vel,
-            coherence=coherence
+            coherence=coherence,
         )

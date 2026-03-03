@@ -26,7 +26,7 @@ class EventPublishError(EventError):
         event_type: str | None = None,
         event_id: str | None = None,
         channel: str | None = None,
-        **kwargs: Any
+        **kwargs: Any,
     ):
         super().__init__(message, **kwargs)
         if event_type:
@@ -53,7 +53,7 @@ class EventSubscriptionError(EventError):
         event_type: str | None = None,
         subscriber_id: str | None = None,
         reason: str | None = None,
-        **kwargs: Any
+        **kwargs: Any,
     ):
         super().__init__(message, **kwargs)
         if event_type:
@@ -82,7 +82,7 @@ class EventHandlerError(EventError):
         event_type: str | None = None,
         event_id: str | None = None,
         original_error: str | None = None,
-        **kwargs: Any
+        **kwargs: Any,
     ):
         super().__init__(message, **kwargs)
         if handler_name:
@@ -111,7 +111,7 @@ class EventTimeoutError(EventError):
         event_id: str | None = None,
         timeout_seconds: float | None = None,
         processing_stage: str | None = None,
-        **kwargs: Any
+        **kwargs: Any,
     ):
         super().__init__(message, **kwargs)
         if event_id:
@@ -138,7 +138,7 @@ class EventValidationError(EventError):
         event_type: str | None = None,
         validation_errors: list[str] | None = None,
         schema: str | None = None,
-        **kwargs: Any
+        **kwargs: Any,
     ):
         super().__init__(message, **kwargs)
         if event_type:
@@ -165,7 +165,7 @@ class EventQueueError(EventError):
         queue_name: str | None = None,
         queue_size: int | None = None,
         max_size: int | None = None,
-        **kwargs: Any
+        **kwargs: Any,
     ):
         super().__init__(message, **kwargs)
         if queue_name:
@@ -192,7 +192,7 @@ class EventDeliveryError(EventError):
         event_id: str | None = None,
         failed_subscribers: list[str] | None = None,
         retry_count: int | None = None,
-        **kwargs: Any
+        **kwargs: Any,
     ):
         super().__init__(message, **kwargs)
         if event_id:

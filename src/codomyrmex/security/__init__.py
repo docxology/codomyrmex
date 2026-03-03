@@ -25,6 +25,7 @@ from . import audit, compliance, scanning, secrets
 # Import AI safety
 try:
     from .ai_safety import AISafetyMonitor
+
     AI_SAFETY_AVAILABLE = True
 except ImportError:
     AISafetyMonitor = None
@@ -75,6 +76,7 @@ try:
         scan_vulnerabilities,
         validate_ssl_certificates,
     )
+
     DIGITAL_AVAILABLE = True
 except ImportError:
     DIGITAL_AVAILABLE = False
@@ -100,6 +102,7 @@ try:
         scan_physical_vulnerabilities,
         track_asset,
     )
+
     PHYSICAL_AVAILABLE = True
 except ImportError:
     PHYSICAL_AVAILABLE = False
@@ -123,6 +126,7 @@ try:
         detect_social_engineering,
         evaluate_human_factors,
     )
+
     COGNITIVE_AVAILABLE = True
 except ImportError:
     COGNITIVE_AVAILABLE = False
@@ -149,6 +153,7 @@ try:
         get_security_patterns,
         get_security_principles,
     )
+
     THEORY_AVAILABLE = True
 except ImportError:
     THEORY_AVAILABLE = False
@@ -158,107 +163,116 @@ from . import governance
 
 __all__ = [
     "governance",
-    'audit',
-    'compliance',
-    'secrets',
-    'scanning',]
+    "audit",
+    "compliance",
+    "secrets",
+    "scanning",
+]
 
 if DIGITAL_AVAILABLE:
-    __all__.extend([
-        "VulnerabilityScanner",
-        "scan_vulnerabilities",
-        "audit_code_security",
-        "VulnerabilityReport",
-        "SecurityScanResult",
-        "SecretsDetector",
-        "audit_secrets_exposure",
-        "scan_file_for_secrets",
-        "scan_directory_for_secrets",
-        "SecurityAnalyzer",
-        "SecurityFinding",
-        "SecurityIssue",
-        "analyze_file_security",
-        "analyze_directory_security",
-        "ComplianceChecker",
-        "ComplianceCheckResult",
-        "ComplianceRequirement",
-        "ComplianceStandard",
-        "check_compliance",
-        "SecurityMonitor",
-        "monitor_security_events",
-        "audit_access_logs",
-        "SecurityEvent",
-        "EncryptionManager",
-        "encrypt_sensitive_data",
-        "decrypt_sensitive_data",
-        "CertificateValidator",
-        "validate_ssl_certificates",
-        "SSLValidationResult",
-        "SecurityReportGenerator",
-        "generate_security_report",
-    ])
+    __all__.extend(
+        [
+            "VulnerabilityScanner",
+            "scan_vulnerabilities",
+            "audit_code_security",
+            "VulnerabilityReport",
+            "SecurityScanResult",
+            "SecretsDetector",
+            "audit_secrets_exposure",
+            "scan_file_for_secrets",
+            "scan_directory_for_secrets",
+            "SecurityAnalyzer",
+            "SecurityFinding",
+            "SecurityIssue",
+            "analyze_file_security",
+            "analyze_directory_security",
+            "ComplianceChecker",
+            "ComplianceCheckResult",
+            "ComplianceRequirement",
+            "ComplianceStandard",
+            "check_compliance",
+            "SecurityMonitor",
+            "monitor_security_events",
+            "audit_access_logs",
+            "SecurityEvent",
+            "EncryptionManager",
+            "encrypt_sensitive_data",
+            "decrypt_sensitive_data",
+            "CertificateValidator",
+            "validate_ssl_certificates",
+            "SSLValidationResult",
+            "SecurityReportGenerator",
+            "generate_security_report",
+        ]
+    )
 
 if PHYSICAL_AVAILABLE:
-    __all__.extend([
-        "AccessControlSystem",
-        "check_access_permission",
-        "grant_access",
-        "revoke_access",
-        "AssetInventory",
-        "register_asset",
-        "track_asset",
-        "get_asset_status",
-        "SurveillanceMonitor",
-        "monitor_physical_access",
-        "log_physical_event",
-        "PhysicalVulnerabilityScanner",
-        "assess_physical_security",
-        "scan_physical_vulnerabilities",
-        "PerimeterManager",
-        "check_perimeter_security",
-        "manage_access_points",
-    ])
+    __all__.extend(
+        [
+            "AccessControlSystem",
+            "check_access_permission",
+            "grant_access",
+            "revoke_access",
+            "AssetInventory",
+            "register_asset",
+            "track_asset",
+            "get_asset_status",
+            "SurveillanceMonitor",
+            "monitor_physical_access",
+            "log_physical_event",
+            "PhysicalVulnerabilityScanner",
+            "assess_physical_security",
+            "scan_physical_vulnerabilities",
+            "PerimeterManager",
+            "check_perimeter_security",
+            "manage_access_points",
+        ]
+    )
 
 if COGNITIVE_AVAILABLE:
-    __all__.extend([
-        "SocialEngineeringDetector",
-        "detect_social_engineering",
-        "analyze_communication",
-        "PhishingAnalyzer",
-        "analyze_email",
-        "detect_phishing_attempt",
-        "AwarenessTrainer",
-        "create_training_module",
-        "assess_training_effectiveness",
-        "CognitiveThreatAssessor",
-        "assess_cognitive_threats",
-        "evaluate_human_factors",
-        "BehaviorAnalyzer",
-        "analyze_user_behavior",
-        "detect_anomalous_behavior",
-    ])
+    __all__.extend(
+        [
+            "SocialEngineeringDetector",
+            "detect_social_engineering",
+            "analyze_communication",
+            "PhishingAnalyzer",
+            "analyze_email",
+            "detect_phishing_attempt",
+            "AwarenessTrainer",
+            "create_training_module",
+            "assess_training_effectiveness",
+            "CognitiveThreatAssessor",
+            "assess_cognitive_threats",
+            "evaluate_human_factors",
+            "BehaviorAnalyzer",
+            "analyze_user_behavior",
+            "detect_anomalous_behavior",
+        ]
+    )
 
 if THEORY_AVAILABLE:
-    __all__.extend([
-        "SecurityPrinciple",
-        "get_security_principles",
-        "apply_principle",
-        "SecurityFramework",
-        "get_framework",
-        "apply_framework",
-        "ThreatModel",
-        "create_threat_model",
-        "analyze_threats",
-        "RiskAssessment",
-        "assess_risk",
-        "calculate_risk_score",
-        "SecurityPattern",
-        "get_security_patterns",
-        "apply_pattern",
-        "SecurityBestPractice",
-        "get_best_practices",
-        "check_compliance_with_practices",
-    ])
+    __all__.extend(
+        [
+            "SecurityPrinciple",
+            "get_security_principles",
+            "apply_principle",
+            "SecurityFramework",
+            "get_framework",
+            "apply_framework",
+            "ThreatModel",
+            "create_threat_model",
+            "analyze_threats",
+            "RiskAssessment",
+            "assess_risk",
+            "calculate_risk_score",
+            "SecurityPattern",
+            "get_security_patterns",
+            "apply_pattern",
+            "SecurityBestPractice",
+            "get_best_practices",
+            "check_compliance_with_practices",
+        ]
+    )
 
 if AI_SAFETY_AVAILABLE:
     __all__.append("AISafetyMonitor")
@@ -290,8 +304,10 @@ def scan_project_security(path: str = ".") -> dict[str, Any]:
         try:
             vuln_report = scan_vulnerabilities(path)
             results["vulnerabilities"] = {
-                "count": len(vuln_report.findings) if hasattr(vuln_report, "findings") else 0,
-                "report": str(vuln_report)
+                "count": (
+                    len(vuln_report.findings) if hasattr(vuln_report, "findings") else 0
+                ),
+                "report": str(vuln_report),
             }
         except Exception as e:
             results["vulnerabilities"] = {"error": str(e)}
@@ -301,7 +317,7 @@ def scan_project_security(path: str = ".") -> dict[str, Any]:
             secrets = scan_directory_for_secrets(path)
             results["secrets"] = {
                 "count": len(secrets),
-                "findings": [s.to_dict() for s in secrets] if secrets else []
+                "findings": [s.to_dict() for s in secrets] if secrets else [],
             }
         except Exception as e:
             results["secrets"] = {"error": str(e)}
@@ -310,6 +326,7 @@ def scan_project_security(path: str = ".") -> dict[str, Any]:
         return {"error": "Digital security module not available."}
 
     return results
+
 
 @mcp_tool(category="security")
 def security_audit_code(path: str) -> dict[str, Any]:
@@ -329,4 +346,3 @@ def security_audit_code(path: str) -> dict[str, Any]:
         return audit_code_security(path)
     except Exception as e:
         return {"error": str(e)}
-

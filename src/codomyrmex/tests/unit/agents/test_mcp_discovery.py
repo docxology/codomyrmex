@@ -7,12 +7,15 @@ _RESOURCE_DEFINITIONS, _PROMPT_DEFINITIONS, and proxy tool helpers.
 Zero-mock compliant: no unittest.mock, MagicMock, or monkeypatch.
 """
 
-import importlib
 import threading
-import time
 
 import pytest
 
+from codomyrmex.agents.pai.mcp.definitions import (
+    _PROMPT_DEFINITIONS,
+    _RESOURCE_DEFINITIONS,
+    _TOOL_DEFINITIONS,
+)
 from codomyrmex.agents.pai.mcp.discovery import (
     _DEFAULT_CACHE_TTL,
     _DYNAMIC_TOOLS_CACHE_LOCK,
@@ -22,12 +25,6 @@ from codomyrmex.agents.pai.mcp.discovery import (
     get_discovery_metrics,
     invalidate_tool_cache,
 )
-from codomyrmex.agents.pai.mcp.definitions import (
-    _PROMPT_DEFINITIONS,
-    _RESOURCE_DEFINITIONS,
-    _TOOL_DEFINITIONS,
-)
-
 
 # ============================================================================
 # _find_mcp_modules Tests
@@ -148,7 +145,7 @@ class TestDiscoverDynamicTools:
             pytest.skip("No dynamic tools discovered (may require full install)")
         for name, description, handler, params in tools:
             assert isinstance(name, str), f"Tool name should be str, got {type(name)}"
-            assert isinstance(description, str), f"Description should be str"
+            assert isinstance(description, str), "Description should be str"
             assert callable(handler), f"Handler for {name} should be callable"
             assert isinstance(params, dict), f"Params for {name} should be dict"
 
@@ -258,7 +255,9 @@ class TestToolDefinitions:
     def test_each_entry_is_4_tuple(self):
         for entry in _TOOL_DEFINITIONS:
             assert isinstance(entry, tuple), f"Expected tuple, got {type(entry)}"
-            assert len(entry) == 4, f"Expected 4-tuple, got {len(entry)}-tuple: {entry[0] if entry else '?'}"
+            assert len(entry) == 4, (
+                f"Expected 4-tuple, got {len(entry)}-tuple: {entry[0] if entry else '?'}"
+            )
 
     def test_each_entry_structure(self):
         """Each tool: (name:str, description:str, handler:callable, schema:dict)."""
@@ -380,10 +379,14 @@ class TestPromptDefinitions:
     def test_each_entry_structure(self):
         """Each prompt: (name:str, description:str, args:list, template:str)."""
         for name, description, args, template in _PROMPT_DEFINITIONS:
-            assert isinstance(name, str), f"Prompt name should be str"
-            assert isinstance(description, str), f"Prompt description should be str for {name}"
+            assert isinstance(name, str), "Prompt name should be str"
+            assert isinstance(description, str), (
+                f"Prompt description should be str for {name}"
+            )
             assert isinstance(args, list), f"Prompt args should be list for {name}"
-            assert isinstance(template, str), f"Prompt template should be str for {name}"
+            assert isinstance(template, str), (
+                f"Prompt template should be str for {name}"
+            )
 
     def test_prompt_args_are_dicts(self):
         for name, _, args, _ in _PROMPT_DEFINITIONS:
@@ -502,9 +505,7 @@ class TestProxyToolCallModuleFunction:
     def test_nonexistent_function(self):
         from codomyrmex.agents.pai.mcp.proxy_tools import _tool_call_module_function
 
-        result = _tool_call_module_function(
-            function="concurrency.nonexistent_fn_xyz"
-        )
+        result = _tool_call_module_function(function="concurrency.nonexistent_fn_xyz")
         assert "error" in result
         assert "available" in result  # Should suggest available functions
 

@@ -12,6 +12,7 @@ from typing import Any
 
 class WorkflowStepType(Enum):
     """Types of workflow steps."""
+
     HTTP_REQUEST = "http_request"
     ASSERTION = "assertion"
     WAIT = "wait"
@@ -21,6 +22,7 @@ class WorkflowStepType(Enum):
 
 class StepStatus(Enum):
     """Status of a step execution."""
+
     PENDING = "pending"
     RUNNING = "running"
     PASSED = "passed"
@@ -32,6 +34,7 @@ class StepStatus(Enum):
 @dataclass
 class WorkflowStep:
     """A single step in a workflow test."""
+
     id: str
     name: str
     step_type: WorkflowStepType
@@ -53,6 +56,7 @@ class WorkflowStep:
 @dataclass
 class StepResult:
     """Result of executing a step."""
+
     step_id: str
     status: StepStatus
     output: Any = None
@@ -79,6 +83,7 @@ class StepResult:
 @dataclass
 class WorkflowResult:
     """Result of running a complete workflow."""
+
     workflow_id: str
     status: StepStatus
     step_results: list[StepResult] = field(default_factory=list)
@@ -122,6 +127,7 @@ class WorkflowResult:
 @dataclass
 class Workflow:
     """A workflow test definition."""
+
     id: str
     name: str
     description: str = ""

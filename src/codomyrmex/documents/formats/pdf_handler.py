@@ -64,7 +64,7 @@ def read_pdf(file_path: str | Path) -> PDFDocument:
             try:
                 import PyPDF2
 
-                with open(file_path, 'rb') as f:
+                with open(file_path, "rb") as f:
                     pdf_reader = PyPDF2.PdfReader(f)
                     text_content = ""
                     for page in pdf_reader.pages:
@@ -82,14 +82,13 @@ def read_pdf(file_path: str | Path) -> PDFDocument:
             except ImportError:
                 raise DocumentReadError(
                     "PDF libraries not available. Install with: uv pip install pypdf or uv pip install PyPDF2",
-                    file_path=str(file_path)
+                    file_path=str(file_path),
                 ) from None
 
     except Exception as e:
         logger.error(f"Error reading PDF file {file_path}: {e}")
         raise DocumentReadError(
-            f"Failed to read PDF file: {str(e)}",
-            file_path=str(file_path)
+            f"Failed to read PDF file: {str(e)}", file_path=str(file_path)
         ) from e
 
 
@@ -132,7 +131,7 @@ def write_pdf(
             # Write content
             width, height = letter
             y = height - 50
-            lines = content.split('\n')
+            lines = content.split("\n")
 
             for line in lines:
                 if y < 50:
@@ -161,7 +160,7 @@ def write_pdf(
 
                 # Write content
                 pdf.set_font("Arial", size=12)
-                for line in content.split('\n'):
+                for line in content.split("\n"):
                     pdf.cell(0, 10, txt=line, ln=1)
 
                 pdf.output(str(file_path))
@@ -170,15 +169,11 @@ def write_pdf(
             except ImportError:
                 raise DocumentWriteError(
                     "PDF generation libraries not available. Install with: uv pip install reportlab or uv pip install fpdf",
-                    file_path=str(file_path)
+                    file_path=str(file_path),
                 ) from None
 
     except Exception as e:
         logger.error(f"Error writing PDF file {file_path}: {e}")
         raise DocumentWriteError(
-            f"Failed to write PDF file: {str(e)}",
-            file_path=str(file_path)
+            f"Failed to write PDF file: {str(e)}", file_path=str(file_path)
         ) from e
-
-
-

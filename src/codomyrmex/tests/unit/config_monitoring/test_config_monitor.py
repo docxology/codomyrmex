@@ -12,13 +12,14 @@ from codomyrmex.config_monitoring.watcher import ConfigWatcher
 def workspace(tmp_path):
     return tmp_path
 
+
 @pytest.fixture
 def monitor(workspace):
     return ConfigurationMonitor(workspace_dir=workspace)
 
+
 @pytest.mark.unit
 class TestConfigurationMonitor:
-
     def test_calculate_file_hash(self, monitor, workspace):
         f = workspace / "test.txt"
         f.write_text("hello world")
@@ -46,7 +47,7 @@ class TestConfigurationMonitor:
         assert len(changes) == 0
 
         # Modification detection
-        time.sleep(0.01) # Ensure change_id is unique if it uses time
+        time.sleep(0.01)  # Ensure change_id is unique if it uses time
         f1.write_text("v2")
         changes = monitor.detect_config_changes([f1])
         assert len(changes) == 1
@@ -117,17 +118,18 @@ class TestConfigurationMonitor:
         changes = monitor.get_recent_changes(1)
         assert len(changes) == 1
 
-        changes_old = monitor.get_recent_changes(-1) # effectively future
+        changes_old = monitor.get_recent_changes(-1)  # effectively future
         assert len(changes_old) == 0
+
 
 @pytest.mark.unit
 class TestConfigWatcher:
-
     def test_watcher_callback(self, workspace):
         f = workspace / "watch.yaml"
         f.write_text("v1")
 
         results = []
+
         def callback():
             results.append(True)
 

@@ -50,7 +50,9 @@ class GeminiProvider(LLMProvider):
     def __init__(self, config: ProviderConfig) -> None:
         super().__init__(config)
         if not self.config.api_key:
-            self.config.api_key = os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY")
+            self.config.api_key = os.getenv("GEMINI_API_KEY") or os.getenv(
+                "GOOGLE_API_KEY"
+            )
         self._init_client()
 
     def _init_client(self) -> None:
@@ -95,9 +97,11 @@ class GeminiProvider(LLMProvider):
         response = self._client.models.generate_content(
             model=model_name,
             contents=contents,
-            config=self._genai_types.GenerateContentConfig(**config_params)
-            if config_params
-            else None,
+            config=(
+                self._genai_types.GenerateContentConfig(**config_params)
+                if config_params
+                else None
+            ),
             **kwargs,
         )
 
@@ -155,9 +159,11 @@ class GeminiProvider(LLMProvider):
         stream = self._client.models.generate_content_stream(
             model=model_name,
             contents=contents,
-            config=self._genai_types.GenerateContentConfig(**config_params)
-            if config_params
-            else None,
+            config=(
+                self._genai_types.GenerateContentConfig(**config_params)
+                if config_params
+                else None
+            ),
             **kwargs,
         )
 
@@ -178,8 +184,11 @@ class GeminiProvider(LLMProvider):
         Falls back to synchronous call (google-genai async support varies).
         """
         return self.complete(
-            messages, model=model, temperature=temperature,
-            max_tokens=max_tokens, **kwargs,
+            messages,
+            model=model,
+            temperature=temperature,
+            max_tokens=max_tokens,
+            **kwargs,
         )
 
     # ---- models ------------------------------------------------------------

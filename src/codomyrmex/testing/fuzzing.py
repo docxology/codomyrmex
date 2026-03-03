@@ -15,6 +15,7 @@ from .strategies import GeneratorStrategy
 
 class FuzzingStrategy(Enum):
     """Fuzzing strategies."""
+
     RANDOM = "random"
     MUTATION = "mutation"
     BOUNDARY = "boundary"
@@ -23,6 +24,7 @@ class FuzzingStrategy(Enum):
 @dataclass
 class FuzzResult:
     """Result of a fuzz test."""
+
     input_data: Any
     output: Any = None
     crashed: bool = False
@@ -66,6 +68,7 @@ class Fuzzer:
     def _execute_one(self, func: Callable, input_data: Any) -> FuzzResult:
         """Execute function with one input."""
         import time
+
         start = time.time()
 
         try:
@@ -86,7 +89,7 @@ class Fuzzer:
     def _apply_boundary_mutation(self, value: Any) -> Any:
         """Apply boundary value mutations."""
         if isinstance(value, int):
-            return random.choice([0, -1, 1, 2**31-1, -2**31, 2**63-1])
+            return random.choice([0, -1, 1, 2**31 - 1, -(2**31), 2**63 - 1])
         elif isinstance(value, str):
             return random.choice(["", " ", "\n", "\x00", "a" * 10000])
         elif isinstance(value, list):
@@ -98,7 +101,7 @@ class Fuzzer:
         if isinstance(value, str) and value:
             # Random character flip
             idx = random.randint(0, len(value) - 1)
-            return value[:idx] + chr(random.randint(0, 255)) + value[idx+1:]
+            return value[:idx] + chr(random.randint(0, 255)) + value[idx + 1 :]
         elif isinstance(value, int):
             return value + random.randint(-10, 10)
         return value

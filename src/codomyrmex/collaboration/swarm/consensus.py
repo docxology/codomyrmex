@@ -16,6 +16,7 @@ logger = get_logger(__name__)
 
 class Decision(Enum):
     """Outcome of a consensus round."""
+
     APPROVED = "approved"
     REJECTED = "rejected"
     DEADLOCK = "deadlock"

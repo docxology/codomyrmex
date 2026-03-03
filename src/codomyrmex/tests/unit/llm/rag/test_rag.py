@@ -97,10 +97,28 @@ class TestInMemoryVectorStore:
         """Should delete by document ID."""
         store = InMemoryVectorStore()
 
-        store.add([
-            Chunk(id="c1", content="a", document_id="d1", sequence=0, start_char=0, end_char=1, embedding=[1.0]),
-            Chunk(id="c2", content="b", document_id="d2", sequence=0, start_char=0, end_char=1, embedding=[1.0]),
-        ])
+        store.add(
+            [
+                Chunk(
+                    id="c1",
+                    content="a",
+                    document_id="d1",
+                    sequence=0,
+                    start_char=0,
+                    end_char=1,
+                    embedding=[1.0],
+                ),
+                Chunk(
+                    id="c2",
+                    content="b",
+                    document_id="d2",
+                    sequence=0,
+                    start_char=0,
+                    end_char=1,
+                    embedding=[1.0],
+                ),
+            ]
+        )
 
         deleted = store.delete("d1")
         assert deleted == 1
@@ -114,7 +132,14 @@ class TestContextFormatter:
         """Should format results."""
         formatter = ContextFormatter()
 
-        chunk = Chunk(id="c1", content="Test content", document_id="d1", sequence=0, start_char=0, end_char=12)
+        chunk = Chunk(
+            id="c1",
+            content="Test content",
+            document_id="d1",
+            sequence=0,
+            start_char=0,
+            end_char=12,
+        )
         results = [RetrievalResult(chunk=chunk, score=0.9)]
 
         context = formatter.format(results)
@@ -127,7 +152,14 @@ class TestContextFormatter:
         formatter = ContextFormatter(max_context_length=50)
 
         chunks = [
-            Chunk(id=f"c{i}", content="Long content here..." * 10, document_id="d", sequence=i, start_char=0, end_char=100)
+            Chunk(
+                id=f"c{i}",
+                content="Long content here..." * 10,
+                document_id="d",
+                sequence=i,
+                start_char=0,
+                end_char=100,
+            )
             for i in range(5)
         ]
         results = [RetrievalResult(chunk=c, score=0.5) for c in chunks]
@@ -142,9 +174,11 @@ class TestRAGPipeline:
     @pytest.fixture
     def mock_embed_fn(self):
         """Create mock embedding function."""
+
         def embed(texts):
             # Simple deterministic embeddings
             return [[hash(t) % 100 / 100 for _ in range(10)] for t in texts]
+
         return embed
 
     def test_index_document(self, mock_embed_fn):
@@ -199,7 +233,14 @@ class TestRAGPrompt:
         """Should create formatted prompt."""
         from codomyrmex.llm.rag import GenerationContext
 
-        chunk = Chunk(id="c1", content="AI content", document_id="d1", sequence=0, start_char=0, end_char=10)
+        chunk = Chunk(
+            id="c1",
+            content="AI content",
+            document_id="d1",
+            sequence=0,
+            start_char=0,
+            end_char=10,
+        )
         context = GenerationContext(
             query="What is AI?",
             retrieved=[RetrievalResult(chunk=chunk, score=0.9)],

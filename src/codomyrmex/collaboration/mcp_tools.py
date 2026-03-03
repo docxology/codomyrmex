@@ -11,22 +11,26 @@ from typing import Any
 try:
     from codomyrmex.model_context_protocol.decorators import mcp_tool
 except ImportError:
+
     def mcp_tool(**kwargs: Any):  # type: ignore[misc]
         def decorator(func: Any) -> Any:
             func._mcp_tool_meta = kwargs
             return func
+
         return decorator
 
 
 def _get_swarm_manager():
     """Lazy import SwarmManager to avoid circular imports."""
     from codomyrmex.collaboration.protocols.swarm import SwarmManager
+
     return SwarmManager()
 
 
 def _get_task_decomposer():
     """Lazy import TaskDecomposer to avoid circular imports."""
     from codomyrmex.collaboration.protocols.swarm import TaskDecomposer
+
     return TaskDecomposer
 
 

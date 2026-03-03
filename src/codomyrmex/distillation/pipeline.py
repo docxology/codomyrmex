@@ -10,7 +10,6 @@ L = alpha * T^2 * KL(student_soft || teacher_soft) + (1 - alpha) * CE(student, l
 Pure Python + NumPy. No PyTorch dependency.
 """
 
-
 import numpy as np
 
 
@@ -67,8 +66,7 @@ def distillation_loss(
     kl_loss = float(
         np.mean(
             np.sum(
-                teacher_soft
-                * np.log(teacher_soft / (student_soft + 1e-9) + 1e-9),
+                teacher_soft * np.log(teacher_soft / (student_soft + 1e-9) + 1e-9),
                 axis=-1,
             )
         )
@@ -78,9 +76,7 @@ def distillation_loss(
     ce_loss = 0.0
     if true_labels is not None:
         # log-softmax of student
-        student_lse = student_logits - np.max(
-            student_logits, axis=-1, keepdims=True
-        )
+        student_lse = student_logits - np.max(student_logits, axis=-1, keepdims=True)
         log_probs = student_lse - np.log(
             np.sum(np.exp(student_lse), axis=-1, keepdims=True) + 1e-9
         )
@@ -94,9 +90,7 @@ def distillation_loss(
     # Teacher accuracy for comparison
     teacher_preds = np.argmax(teacher_logits, axis=-1)
     teacher_acc = (
-        float(np.mean(teacher_preds == true_labels))
-        if true_labels is not None
-        else 0.0
+        float(np.mean(teacher_preds == true_labels)) if true_labels is not None else 0.0
     )
 
     return {

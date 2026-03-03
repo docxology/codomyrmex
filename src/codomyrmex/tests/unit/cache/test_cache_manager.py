@@ -189,6 +189,7 @@ class TestInMemoryCacheOperations:
 
     def _make_cache(self, **kwargs):
         from codomyrmex.cache.backends.in_memory import InMemoryCache
+
         return InMemoryCache(**kwargs)
 
     def test_set_and_get(self):
@@ -292,6 +293,7 @@ class TestFileBasedCacheOperations:
 
     def _make_cache(self, tmp_path, **kwargs):
         from codomyrmex.cache.backends.file_based import FileBasedCache
+
         return FileBasedCache(cache_dir=tmp_path / "test_cache", **kwargs)
 
     def test_set_and_get(self, tmp_path):
@@ -383,6 +385,7 @@ class TestTTLManager:
         mgr = TTLManager(cleanup_interval=3600)
         # Use a real InMemoryCache as the registrant
         from codomyrmex.cache.backends.in_memory import InMemoryCache
+
         cache = InMemoryCache()
         mgr.register_cache(cache)
         assert cache in mgr._cache_registry
@@ -395,6 +398,7 @@ class TestTTLManager:
 
         class FakeExpirer:
             cleaned = False
+
             def cleanup_expired(self):
                 self.cleaned = True
 
@@ -429,4 +433,5 @@ class TestTTLManager:
 def _redis_available() -> bool:
     """Check if redis package is importable."""
     import importlib.util
+
     return importlib.util.find_spec("redis") is not None

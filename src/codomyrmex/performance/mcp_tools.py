@@ -10,10 +10,12 @@ from typing import Any
 try:
     from codomyrmex.model_context_protocol.decorators import mcp_tool
 except ImportError:
+
     def mcp_tool(**kwargs: Any):  # type: ignore[misc]
         def decorator(func: Any) -> Any:
             func._mcp_tool_meta = kwargs
             return func
+
         return decorator
 
 
@@ -47,12 +49,20 @@ def performance_check_regression(
             BenchmarkResult,
             RegressionDetector,
         )
+
         detector = RegressionDetector()
-        detector.set_baseline(Baseline(
-            benchmark_name, mean=baseline_mean, stddev=baseline_stddev,
-            warning_threshold=warning_threshold, critical_threshold=critical_threshold,
-        ))
-        result = BenchmarkResult(benchmark_name, value=measured_value, higher_is_better=higher_is_better)
+        detector.set_baseline(
+            Baseline(
+                benchmark_name,
+                mean=baseline_mean,
+                stddev=baseline_stddev,
+                warning_threshold=warning_threshold,
+                critical_threshold=critical_threshold,
+            )
+        )
+        result = BenchmarkResult(
+            benchmark_name, value=measured_value, higher_is_better=higher_is_better
+        )
         report = detector.check(result)
         return {
             "status": "ok",
@@ -88,6 +98,7 @@ def performance_compare_benchmarks(
         from codomyrmex.performance.benchmarking.benchmark_comparison import (
             compute_delta,
         )
+
         delta = compute_delta(name, before, after, higher_is_better)
         return {
             "status": "ok",

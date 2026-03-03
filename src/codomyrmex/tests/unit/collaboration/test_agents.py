@@ -2,7 +2,6 @@
 Tests for collaboration agents submodule.
 """
 
-
 import pytest
 
 from codomyrmex.collaboration.agents import (
@@ -62,7 +61,9 @@ class TestCollaborativeAgent:
 
         assert agent.has_capability("new_skill") is False
 
-        agent.add_capability(AgentCapability(name="new_skill", description="A new skill"))
+        agent.add_capability(
+            AgentCapability(name="new_skill", description="A new skill")
+        )
 
         assert agent.has_capability("new_skill") is True
 
@@ -144,6 +145,7 @@ class TestSpecializedWorker:
 
     def test_specialized_worker_creation(self):
         """Test creating a specialized worker."""
+
         def handler(task):
             return "done"
 

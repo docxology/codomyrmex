@@ -87,8 +87,12 @@ class TestPyreflyIssue:
     def test_issue_equality(self):
         """Two PyreflyIssues with identical fields are equal (dataclass)."""
         kwargs = {
-            "file_path": "x.py", "line": 10, "column": 5,
-            "severity": "info", "message": "msg", "rule_id": None,
+            "file_path": "x.py",
+            "line": 10,
+            "column": 5,
+            "severity": "info",
+            "message": "msg",
+            "rule_id": None,
         }
         assert PyreflyIssue(**kwargs) == PyreflyIssue(**kwargs)
 
@@ -319,9 +323,7 @@ class TestExceptionHierarchy:
 
     def test_dependency_analysis_error_stores_dep_info(self):
         """DependencyAnalysisError stores dependency and version."""
-        err = DependencyAnalysisError(
-            "dep issue", dependency="numpy", version="1.24"
-        )
+        err = DependencyAnalysisError("dep issue", dependency="numpy", version="1.24")
         assert err.context["dependency"] == "numpy"
         assert err.context["version"] == "1.24"
 
@@ -340,12 +342,14 @@ class TestExceptionHierarchy:
     def test_ast_error_is_static_analysis_error(self):
         """ASTError inherits from StaticAnalysisError."""
         from codomyrmex.exceptions import StaticAnalysisError
+
         err = ASTError("ast broke")
         assert isinstance(err, StaticAnalysisError)
 
     def test_metrics_error_is_static_analysis_error(self):
         """MetricsError inherits from StaticAnalysisError."""
         from codomyrmex.exceptions import StaticAnalysisError
+
         err = MetricsError("metrics broke")
         assert isinstance(err, StaticAnalysisError)
 

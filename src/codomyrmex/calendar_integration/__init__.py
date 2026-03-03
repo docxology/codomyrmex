@@ -26,11 +26,13 @@ from .generics import CalendarEvent, CalendarProvider
 
 try:
     from .gcal import GCAL_AVAILABLE, GoogleCalendar
+
     CALENDAR_AVAILABLE = True
 except ImportError:
     GCAL_AVAILABLE = False
     CALENDAR_AVAILABLE = False
     GoogleCalendar = None  # type: ignore
+
 
 def cli_commands():
     """Return CLI commands for the calendar module."""
@@ -44,6 +46,7 @@ def cli_commands():
             ),
         }
     }
+
 
 __all__ = [
     # API endpoints

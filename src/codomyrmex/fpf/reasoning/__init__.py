@@ -14,6 +14,7 @@ from typing import Any, Optional
 
 class ReasoningStep(Enum):
     """Types of reasoning steps."""
+
     QUESTION = "question"
     ASSUMPTION = "assumption"
     FACT = "fact"
@@ -21,9 +22,11 @@ class ReasoningStep(Enum):
     CONCLUSION = "conclusion"
     HYPOTHESIS = "hypothesis"
 
+
 @dataclass
 class Premise:
     """A premise in a reasoning chain."""
+
     id: str
     content: str
     step_type: ReasoningStep
@@ -42,29 +45,21 @@ class Premise:
             "depends_on": self.depends_on,
         }
 
+
 @dataclass
 class ReasoningChain:
     """A chain of reasoning steps."""
+
     id: str
     goal: str
     premises: list[Premise] = field(default_factory=list)
     conclusion: str | None = None
     metadata: dict[str, Any] = field(default_factory=dict)
 
-    def add_premise(
-        self,
-        content: str,
-        step_type: ReasoningStep,
-        **kwargs
-    ) -> Premise:
+    def add_premise(self, content: str, step_type: ReasoningStep, **kwargs) -> Premise:
         """Add a premise to the chain."""
         premise_id = f"p{len(self.premises) + 1}"
-        premise = Premise(
-            id=premise_id,
-            content=content,
-            step_type=step_type,
-            **kwargs
-        )
+        premise = Premise(id=premise_id, content=content, step_type=step_type, **kwargs)
         self.premises.append(premise)
         return premise
 
@@ -88,7 +83,9 @@ class ReasoningChain:
                     errors.append(f"Premise {premise.id} depends on unknown {dep}")
 
         # Check for unsupported conclusions
-        has_inference = any(p.step_type == ReasoningStep.INFERENCE for p in self.premises)
+        has_inference = any(
+            p.step_type == ReasoningStep.INFERENCE for p in self.premises
+        )
         if self.conclusion and not has_inference:
             errors.append("Conclusion reached without any inference steps")
 
@@ -117,6 +114,7 @@ class ReasoningChain:
             "metadata": self.metadata,
         }
 
+
 class ReasoningStrategy(ABC):
     """Abstract base class for reasoning strategies."""
 
@@ -124,6 +122,7 @@ class ReasoningStrategy(ABC):
     def apply(self, problem: str) -> ReasoningChain:
         """Apply the reasoning strategy to a problem."""
         pass
+
 
 class DecompositionStrategy(ReasoningStrategy):
     """Break down a problem into smaller components."""
@@ -158,6 +157,7 @@ class DecompositionStrategy(ReasoningStrategy):
 
         return chain
 
+
 class AssumptionAnalysisStrategy(ReasoningStrategy):
     """Identify and challenge assumptions."""
 
@@ -186,6 +186,7 @@ class AssumptionAnalysisStrategy(ReasoningStrategy):
 
         return chain
 
+
 class AnalogicalReasoningStrategy(ReasoningStrategy):
     """Reason by analogy to similar problems."""
 
@@ -212,6 +213,7 @@ class AnalogicalReasoningStrategy(ReasoningStrategy):
         )
 
         return chain
+
 
 class ContradictionStrategy(ReasoningStrategy):
     """Find contradictions to prove or disprove hypotheses."""
@@ -241,9 +243,11 @@ class ContradictionStrategy(ReasoningStrategy):
 
         return chain
 
+
 @dataclass
 class ProblemSpace:
     """A problem space for exploration."""
+
     problem: str
     constraints: list[str] = field(default_factory=list)
     objectives: list[str] = field(default_factory=list)
@@ -259,6 +263,7 @@ class ProblemSpace:
             "known_facts": self.known_facts,
             "assumptions": self.assumptions,
         }
+
 
 class FirstPrinciplesReasoner:
     """Main reasoning engine using first principles."""
@@ -294,7 +299,11 @@ class FirstPrinciplesReasoner:
     def decompose(self, problem: str) -> list[str]:
         """Decompose a problem into sub-problems."""
         # Perform rigorous sentence-level tokenization or structural splitting
-        parts = [p.strip() for p in problem.replace(';', '.').replace('\n', '.').split('.') if p.strip()]
+        parts = [
+            p.strip()
+            for p in problem.replace(";", ".").replace("\n", ".").split(".")
+            if p.strip()
+        ]
 
         if not parts:
             return [problem]
@@ -303,7 +312,14 @@ class FirstPrinciplesReasoner:
         for part in parts:
             if len(part.split()) > 10:
                 # Sub-split long sentences on conjunctions
-                sub_parts = [s.strip() for s in part.replace(' and ', ' | ').replace(' or ', ' | ').replace(', but ', ' | ').split(' | ') if s.strip()]
+                sub_parts = [
+                    s.strip()
+                    for s in part.replace(" and ", " | ")
+                    .replace(" or ", " | ")
+                    .replace(", but ", " | ")
+                    .split(" | ")
+                    if s.strip()
+                ]
                 components.extend(sub_parts)
             else:
                 components.append(part)
@@ -316,17 +332,23 @@ class FirstPrinciplesReasoner:
 
         # Common assumption indicators
         indicators = [
-            "always", "never", "must", "should",
-            "obviously", "clearly", "certainly",
-            "everyone", "no one", "all", "none",
+            "always",
+            "never",
+            "must",
+            "should",
+            "obviously",
+            "clearly",
+            "certainly",
+            "everyone",
+            "no one",
+            "all",
+            "none",
         ]
 
         statement_lower = statement.lower()
         for indicator in indicators:
             if indicator in statement_lower:
-                assumptions.append(
-                    f"Assumption implied by '{indicator}': {statement}"
-                )
+                assumptions.append(f"Assumption implied by '{indicator}': {statement}")
 
         return assumptions
 
@@ -342,9 +364,11 @@ class FirstPrinciplesReasoner:
         """Get reasoning history."""
         return [chain.to_dict() for chain in self.reasoning_history]
 
+
 def create_reasoner() -> FirstPrinciplesReasoner:
     """Create a first principles reasoner."""
     return FirstPrinciplesReasoner()
+
 
 __all__ = [
     "ReasoningStep",

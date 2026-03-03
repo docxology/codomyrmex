@@ -37,6 +37,7 @@ from .templates import (
 
 def cli_commands():
     """Return CLI commands for the notification module."""
+
     def _channels(**kwargs):
         """List notification channels."""
         print("=== Notification Channels ===")
@@ -57,7 +58,11 @@ def cli_commands():
         notification = Notification(
             channel=NotificationChannel("console"),
             message=message,
-            priority=NotificationPriority("normal") if callable(NotificationPriority) else NotificationPriority.NORMAL,
+            priority=(
+                NotificationPriority("normal")
+                if callable(NotificationPriority)
+                else NotificationPriority.NORMAL
+            ),
         )
         result = provider.send(notification)
         status = result.status if hasattr(result, "status") else "sent"

@@ -164,7 +164,9 @@ class TestQualityAnalyzerCompleteness:
     def test_completeness_ends_with_period(self):
         """Text ending with a period gets a completeness bonus."""
         qa = QualityAnalyzer()
-        text = "In conclusion, the results demonstrate a clear improvement in performance."
+        text = (
+            "In conclusion, the results demonstrate a clear improvement in performance."
+        )
         report = qa.analyze(text)
         score = report.get_score(QualityDimension.COMPLETENESS)
         assert score > 0.5
@@ -177,9 +179,7 @@ class TestQualityAnalyzerCompleteness:
         report = qa.analyze(text)
         score = report.get_score(QualityDimension.COMPLETENESS)
         # Has incompletion markers, so score should be lower
-        report_clean = qa.analyze(
-            "The analysis is fully completed and verified."
-        )
+        report_clean = qa.analyze("The analysis is fully completed and verified.")
         score_clean = report_clean.get_score(QualityDimension.COMPLETENESS)
         assert score < score_clean
 
@@ -240,7 +240,9 @@ class TestQualityAnalyzerAccuracy:
         text_firm = "The result is correct and verified."
         report_hedged = qa.analyze(text_hedged)
         report_firm = qa.analyze(text_firm)
-        assert report_hedged.get_score(QualityDimension.ACCURACY) < report_firm.get_score(QualityDimension.ACCURACY)
+        assert report_hedged.get_score(
+            QualityDimension.ACCURACY
+        ) < report_firm.get_score(QualityDimension.ACCURACY)
 
     @pytest.mark.unit
     def test_accuracy_context_overlap_bonus(self):
@@ -250,7 +252,9 @@ class TestQualityAnalyzerAccuracy:
         output = "Python was created by Guido van Rossum in 1991."
         report_with_ctx = qa.analyze(output, context=context)
         report_no_ctx = qa.analyze(output, context="")
-        assert report_with_ctx.get_score(QualityDimension.ACCURACY) >= report_no_ctx.get_score(QualityDimension.ACCURACY)
+        assert report_with_ctx.get_score(
+            QualityDimension.ACCURACY
+        ) >= report_no_ctx.get_score(QualityDimension.ACCURACY)
 
 
 # ---------------------------------------------------------------------------
@@ -272,7 +276,7 @@ class TestQualityReport:
         """weakest_dimension and strongest_dimension are valid dimensions."""
         report = analyze_quality(
             "Python is a versatile programming language used worldwide.",
-            context="programming language"
+            context="programming language",
         )
         assert report.weakest_dimension in QualityDimension
         assert report.strongest_dimension in QualityDimension
@@ -477,10 +481,12 @@ class TestCompositeScorer:
     @pytest.mark.unit
     def test_composite_weighted_average(self):
         """Composite correctly computes weighted average."""
-        scorer = CompositeScorer([
-            WeightedScorer(ExactMatchScorer(case_sensitive=False), weight=2.0),
-            WeightedScorer(ContainsScorer(), weight=1.0),
-        ])
+        scorer = CompositeScorer(
+            [
+                WeightedScorer(ExactMatchScorer(case_sensitive=False), weight=2.0),
+                WeightedScorer(ContainsScorer(), weight=1.0),
+            ]
+        )
         # "hello" vs "hello" => exact=1.0 (w=2), contains=1.0 (w=1)
         # weighted avg = (2*1.0 + 1*1.0) / 3 = 1.0
         assert scorer.score("hello", "hello") == 1.0
@@ -503,10 +509,12 @@ class TestCompositeScorer:
     @pytest.mark.unit
     def test_composite_score_detailed(self):
         """score_detailed returns per-scorer breakdown."""
-        scorer = CompositeScorer([
-            WeightedScorer(ExactMatchScorer(case_sensitive=False), weight=1.0),
-            WeightedScorer(ContainsScorer(), weight=1.0),
-        ])
+        scorer = CompositeScorer(
+            [
+                WeightedScorer(ExactMatchScorer(case_sensitive=False), weight=1.0),
+                WeightedScorer(ContainsScorer(), weight=1.0),
+            ]
+        )
         details = scorer.score_detailed("hello world", "hello")
         assert "overall" in details
         assert len(details["scorers"]) == 2
@@ -548,7 +556,8 @@ class TestBenchmarkCase:
     def test_case_tags_and_metadata(self):
         """BenchmarkCase stores tags and metadata."""
         case = BenchmarkCase(
-            input_text="x", expected_output="y",
+            input_text="x",
+            expected_output="y",
             metadata={"difficulty": "hard"},
             tags=["math", "algebra"],
         )
@@ -579,8 +588,11 @@ class TestBenchmarkResult:
     def test_result_to_dict(self):
         """to_dict returns all expected keys."""
         result = BenchmarkResult(
-            case_id="c1", score=0.9, duration_ms=5.0,
-            scorer_name="exact", actual_output="hello",
+            case_id="c1",
+            score=0.9,
+            duration_ms=5.0,
+            scorer_name="exact",
+            actual_output="hello",
         )
         d = result.to_dict()
         assert d["case_id"] == "c1"
@@ -658,7 +670,9 @@ class TestBenchmarkSuite:
         result = suite.run(model_fn=lambda x: x)
         assert isinstance(result, SuiteResult)
         assert result.total_cases == 3
-        assert result.passed_cases == 2  # hello matches, world matches (case-insensitive), foo != bar
+        assert (
+            result.passed_cases == 2
+        )  # hello matches, world matches (case-insensitive), foo != bar
         assert result.failed_cases == 1
         assert result.average_score == pytest.approx(2.0 / 3.0, abs=1e-5)
         assert 0.0 < result.pass_rate < 1.0
@@ -722,8 +736,12 @@ class TestSuiteResult:
         sr = SuiteResult(
             suite_name="test",
             results=[
-                BenchmarkResult(case_id="a", score=1.0, duration_ms=1.0, scorer_name="em"),
-                BenchmarkResult(case_id="b", score=0.0, duration_ms=2.0, scorer_name="em"),
+                BenchmarkResult(
+                    case_id="a", score=1.0, duration_ms=1.0, scorer_name="em"
+                ),
+                BenchmarkResult(
+                    case_id="b", score=0.0, duration_ms=2.0, scorer_name="em"
+                ),
             ],
         )
         assert sr.get_result("a").score == 1.0
@@ -735,13 +753,22 @@ class TestSuiteResult:
         sr = SuiteResult(
             suite_name="s1",
             results=[
-                BenchmarkResult(case_id="x", score=0.8, duration_ms=5.0, scorer_name="em"),
+                BenchmarkResult(
+                    case_id="x", score=0.8, duration_ms=5.0, scorer_name="em"
+                ),
             ],
         )
         d = sr.to_dict()
         expected_keys = {
-            "suite_name", "total_cases", "passed_cases", "failed_cases",
-            "average_score", "pass_rate", "total_duration_ms", "results", "metadata",
+            "suite_name",
+            "total_cases",
+            "passed_cases",
+            "failed_cases",
+            "average_score",
+            "pass_rate",
+            "total_duration_ms",
+            "results",
+            "metadata",
         }
         assert set(d.keys()) == expected_keys
 
@@ -751,7 +778,9 @@ class TestSuiteResult:
         sr = SuiteResult(
             suite_name="json-test",
             results=[
-                BenchmarkResult(case_id="j1", score=0.5, duration_ms=3.0, scorer_name="em"),
+                BenchmarkResult(
+                    case_id="j1", score=0.5, duration_ms=3.0, scorer_name="em"
+                ),
             ],
         )
         serialized = json.dumps(sr.to_dict())
@@ -767,76 +796,101 @@ class TestMetricsParametrized:
     """Parametrized tests for classification and regression metrics."""
 
     @pytest.mark.unit
-    @pytest.mark.parametrize("y_true,y_pred,expected_accuracy", [
-        ([1, 1, 1, 1], [1, 1, 1, 1], 1.0),
-        ([1, 0, 1, 0], [0, 1, 0, 1], 0.0),
-        ([1, 0, 1, 0, 1], [1, 0, 0, 0, 1], 0.8),
-    ])
+    @pytest.mark.parametrize(
+        "y_true,y_pred,expected_accuracy",
+        [
+            ([1, 1, 1, 1], [1, 1, 1, 1], 1.0),
+            ([1, 0, 1, 0], [0, 1, 0, 1], 0.0),
+            ([1, 0, 1, 0, 1], [1, 0, 0, 0, 1], 0.8),
+        ],
+    )
     def test_accuracy_parametrized(self, y_true, y_pred, expected_accuracy):
         """Accuracy metric across multiple scenarios."""
         metric = AccuracyMetric()
         assert abs(metric.compute(y_true, y_pred) - expected_accuracy) < 1e-9
 
     @pytest.mark.unit
-    @pytest.mark.parametrize("y_true,y_pred,expected_precision", [
-        ([1, 1, 0, 0], [1, 1, 1, 0], 2.0 / 3.0),   # TP=2, FP=1
-        ([1, 1, 0, 0], [0, 0, 0, 0], 0.0),           # No positive predictions
-        ([1, 1, 0, 0], [1, 1, 0, 0], 1.0),            # Perfect
-    ])
+    @pytest.mark.parametrize(
+        "y_true,y_pred,expected_precision",
+        [
+            ([1, 1, 0, 0], [1, 1, 1, 0], 2.0 / 3.0),  # TP=2, FP=1
+            ([1, 1, 0, 0], [0, 0, 0, 0], 0.0),  # No positive predictions
+            ([1, 1, 0, 0], [1, 1, 0, 0], 1.0),  # Perfect
+        ],
+    )
     def test_precision_parametrized(self, y_true, y_pred, expected_precision):
         """Precision metric across multiple scenarios."""
         metric = PrecisionMetric(positive_class=1)
         assert abs(metric.compute(y_true, y_pred) - expected_precision) < 1e-9
 
     @pytest.mark.unit
-    @pytest.mark.parametrize("y_true,y_pred,expected_recall", [
-        ([1, 1, 0, 0], [1, 0, 0, 0], 0.5),          # TP=1, FN=1
-        ([1, 1, 1, 0], [1, 1, 1, 0], 1.0),           # Perfect recall
-        ([0, 0, 0, 0], [1, 1, 1, 1], 0.0),           # No actual positives
-    ])
+    @pytest.mark.parametrize(
+        "y_true,y_pred,expected_recall",
+        [
+            ([1, 1, 0, 0], [1, 0, 0, 0], 0.5),  # TP=1, FN=1
+            ([1, 1, 1, 0], [1, 1, 1, 0], 1.0),  # Perfect recall
+            ([0, 0, 0, 0], [1, 1, 1, 1], 0.0),  # No actual positives
+        ],
+    )
     def test_recall_parametrized(self, y_true, y_pred, expected_recall):
         """Recall metric across multiple scenarios."""
         metric = RecallMetric(positive_class=1)
         assert abs(metric.compute(y_true, y_pred) - expected_recall) < 1e-9
 
     @pytest.mark.unit
-    @pytest.mark.parametrize("y_true,y_pred,expected_f1", [
-        ([1, 1, 0, 0], [1, 1, 0, 0], 1.0),           # Perfect
-        ([1, 1, 0, 0], [0, 0, 1, 1], 0.0),            # All wrong
-        ([1, 0, 1, 0], [1, 0, 0, 1], 0.5),            # TP=1, FP=1, FN=1 -> P=0.5, R=0.5 -> F1=0.5
-    ])
+    @pytest.mark.parametrize(
+        "y_true,y_pred,expected_f1",
+        [
+            ([1, 1, 0, 0], [1, 1, 0, 0], 1.0),  # Perfect
+            ([1, 1, 0, 0], [0, 0, 1, 1], 0.0),  # All wrong
+            (
+                [1, 0, 1, 0],
+                [1, 0, 0, 1],
+                0.5,
+            ),  # TP=1, FP=1, FN=1 -> P=0.5, R=0.5 -> F1=0.5
+        ],
+    )
     def test_f1_parametrized(self, y_true, y_pred, expected_f1):
         """F1 metric across multiple scenarios."""
         metric = F1Metric(positive_class=1)
         assert abs(metric.compute(y_true, y_pred) - expected_f1) < 1e-9
 
     @pytest.mark.unit
-    @pytest.mark.parametrize("y_true,y_pred,expected_mse", [
-        ([1.0, 2.0, 3.0], [1.0, 2.0, 3.0], 0.0),
-        ([0.0, 0.0], [1.0, 1.0], 1.0),
-        ([1.0, 3.0, 5.0], [2.0, 4.0, 6.0], 1.0),
-    ])
+    @pytest.mark.parametrize(
+        "y_true,y_pred,expected_mse",
+        [
+            ([1.0, 2.0, 3.0], [1.0, 2.0, 3.0], 0.0),
+            ([0.0, 0.0], [1.0, 1.0], 1.0),
+            ([1.0, 3.0, 5.0], [2.0, 4.0, 6.0], 1.0),
+        ],
+    )
     def test_mse_parametrized(self, y_true, y_pred, expected_mse):
         """MSE across multiple regression scenarios."""
         metric = MSEMetric()
         assert abs(metric.compute(y_true, y_pred) - expected_mse) < 1e-9
 
     @pytest.mark.unit
-    @pytest.mark.parametrize("y_true,y_pred,expected_mae", [
-        ([1.0, 2.0, 3.0], [1.0, 2.0, 3.0], 0.0),
-        ([0.0, 0.0], [1.0, -1.0], 1.0),
-        ([10.0, 20.0], [12.0, 18.0], 2.0),
-    ])
+    @pytest.mark.parametrize(
+        "y_true,y_pred,expected_mae",
+        [
+            ([1.0, 2.0, 3.0], [1.0, 2.0, 3.0], 0.0),
+            ([0.0, 0.0], [1.0, -1.0], 1.0),
+            ([10.0, 20.0], [12.0, 18.0], 2.0),
+        ],
+    )
     def test_mae_parametrized(self, y_true, y_pred, expected_mae):
         """MAE across multiple regression scenarios."""
         metric = MAEMetric()
         assert abs(metric.compute(y_true, y_pred) - expected_mae) < 1e-9
 
     @pytest.mark.unit
-    @pytest.mark.parametrize("y_true,y_pred,expected_r2", [
-        ([1.0, 2.0, 3.0], [1.0, 2.0, 3.0], 1.0),
-        ([1.0, 2.0, 3.0], [2.0, 2.0, 2.0], 0.0),
-    ])
+    @pytest.mark.parametrize(
+        "y_true,y_pred,expected_r2",
+        [
+            ([1.0, 2.0, 3.0], [1.0, 2.0, 3.0], 1.0),
+            ([1.0, 2.0, 3.0], [2.0, 2.0, 2.0], 0.0),
+        ],
+    )
     def test_r2_parametrized(self, y_true, y_pred, expected_r2):
         """R2 across regression scenarios."""
         metric = R2Metric()

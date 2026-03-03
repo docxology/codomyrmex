@@ -1,4 +1,5 @@
 """Component module."""
+
 from dataclasses import dataclass
 
 from ._base import BaseComponent
@@ -7,6 +8,7 @@ from ._base import BaseComponent
 @dataclass
 class Image(BaseComponent):
     """Image component."""
+
     src: str = ""
     alt: str = ""
     caption: str = ""
@@ -20,9 +22,11 @@ class Image(BaseComponent):
         """Return human-readable string."""
         return self.render()
 
+
 @dataclass
 class Video(BaseComponent):
     """Video component."""
+
     src: str = ""
     autoplay: bool = False
     controls: bool = True
@@ -34,7 +38,7 @@ class Video(BaseComponent):
             attrs.append("controls")
         if self.autoplay:
             attrs.append("autoplay")
-        return f'<video {" ".join(attrs)}></video>'
+        return f"<video {' '.join(attrs)}></video>"
 
     def __str__(self) -> str:
         """Return human-readable string."""

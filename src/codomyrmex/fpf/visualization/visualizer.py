@@ -1,4 +1,3 @@
-
 """Visualizer for FPF specification.
 
 
@@ -45,7 +44,9 @@ class FPFVisualizer:
         for i, pattern in enumerate(patterns):
             node_id = f"P{i}"
             node_ids[pattern.id] = node_id
-            title_short = pattern.title[:30] + "..." if len(pattern.title) > 30 else pattern.title
+            title_short = (
+                pattern.title[:30] + "..." if len(pattern.title) > 30 else pattern.title
+            )
             mermaid_lines.append(f'    {node_id}["{pattern.id}: {title_short}"]')
 
         # Create edges based on dependencies
@@ -55,7 +56,9 @@ class FPFVisualizer:
                 for target in pattern.dependencies["builds_on"]:
                     if target in node_ids:
                         target_id = node_ids[target]
-                        mermaid_lines.append(f"    {source_id} -->|builds_on| {target_id}")
+                        mermaid_lines.append(
+                            f"    {source_id} -->|builds_on| {target_id}"
+                        )
 
         return "\n".join(mermaid_lines)
 
@@ -90,7 +93,9 @@ class FPFVisualizer:
                             arrow_style = "-.->"
                         elif dep_type == "coordinates_with":
                             arrow_style = "==>"
-                        mermaid_lines.append(f'    {source_id} {arrow_style}|{dep_type}| {target_id}')
+                        mermaid_lines.append(
+                            f"    {source_id} {arrow_style}|{dep_type}| {target_id}"
+                        )
 
         return "\n".join(mermaid_lines)
 
@@ -150,7 +155,9 @@ class FPFVisualizer:
         report_lines.append("## Top Concepts")
         report_lines.append("")
         for concept in spec.concepts[:20]:  # Top 20
-            report_lines.append(f"- **{concept.name}** ({concept.type}) - {concept.definition[:100]}...")
+            report_lines.append(
+                f"- **{concept.name}** ({concept.type}) - {concept.definition[:100]}..."
+            )
             report_lines.append("")
 
         output_path.write_text("\n".join(report_lines), encoding="utf-8")
@@ -179,7 +186,9 @@ class FPFVisualizer:
             card_lines.append("### Dependencies")
             for dep_type, deps in pattern.dependencies.items():
                 if deps:
-                    card_lines.append(f"- **{dep_type.replace('_', ' ').title()}:** {', '.join(deps)}")
+                    card_lines.append(
+                        f"- **{dep_type.replace('_', ' ').title()}:** {', '.join(deps)}"
+                    )
             card_lines.append("")
 
         if pattern.sections:
@@ -191,4 +200,3 @@ class FPFVisualizer:
             card_lines.append("")
 
         return "\n".join(card_lines)
-

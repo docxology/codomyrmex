@@ -22,10 +22,23 @@ logger = get_logger(__name__)
 
 # Paths to ignore (matches analyze_content_quality.py)
 IGNORED_DIRS = {
-    '.git', 'node_modules', '__pycache__', '.venv', 'venv',
-    'output', '.pytest_cache', 'plugins', 'templates', 'doc_templates',
-    'docs/project', '_templates', '_common', '_configs', 'outputs',
-    'module_template', 'template'
+    ".git",
+    "node_modules",
+    "__pycache__",
+    ".venv",
+    "venv",
+    "output",
+    ".pytest_cache",
+    "plugins",
+    "templates",
+    "doc_templates",
+    "docs/project",
+    "_templates",
+    "_common",
+    "_configs",
+    "outputs",
+    "module_template",
+    "template",
 }
 
 NAVIGATION_BLOCK = """
@@ -52,6 +65,7 @@ The implementation of this component follows the core principles of the Codomyrm
 The codebase utilizes modern Python features (version 3.10+) to provide a clean, type-safe API. Interaction patterns are documented in the corresponding `AGENTS.md` and `SPEC.md` files, ensuring that both human developers and automated agents can effectively utilize these capabilities.
 """
 
+
 def boost_file(path: Path):
     try:
         content = path.read_text(encoding="utf-8", errors="ignore")
@@ -59,15 +73,28 @@ def boost_file(path: Path):
 
         # 1. Remove placeholders (analyzer patterns)
         placeholders = [
-            r'\[TBD\]', r'\[FIXME\]', r'\[TODO\]', r'\[placeholder\]',
-            r'\[Insert description\]', r'\[Brief description.*?\]',
-            r'\[file\.py\]', r'\[module_path\]', r'\[Module Name\]', r'\[YOUR_.*?\]'
+            r"\[TBD\]",
+            r"\[FIXME\]",
+            r"\[TODO\]",
+            r"\[placeholder\]",
+            r"\[Insert description\]",
+            r"\[Brief description.*?\]",
+            r"\[file\.py\]",
+            r"\[module_path\]",
+            r"\[Module Name\]",
+            r"\[YOUR_.*?\]",
         ]
         for p in placeholders:
-            content = re.sub(p, "Standard Implementation Details", content, flags=re.IGNORECASE)
+            content = re.sub(
+                p, "Standard Implementation Details", content, flags=re.IGNORECASE
+            )
 
         # 2. Ensure Navigation (1.0 completeness)
-        if "## Navigation" not in content and "## Navigation Links" not in content and "Signposting" not in content.lower():
+        if (
+            "## Navigation" not in content
+            and "## Navigation Links" not in content
+            and "Signposting" not in content.lower()
+        ):
             content += NAVIGATION_BLOCK
         elif "Navigation Links" not in content:
             # Add the text but not the header if another nav exists?
@@ -75,8 +102,8 @@ def boost_file(path: Path):
             content += "\n<!-- Navigation Links keyword for score -->\n"
 
         # 3. Ensure Word Count and Sections
-        words = len(re.findall(r'\b\w+\b', content))
-        sections = len(re.findall(r'^#{1,6}\s+.+$', content, re.MULTILINE))
+        words = len(re.findall(r"\b\w+\b", content))
+        sections = len(re.findall(r"^#{1,6}\s+.+$", content, re.MULTILINE))
 
         if words < 250 or sections < 6:
             content += ARCHITECTURE_BLOCK
@@ -94,24 +121,26 @@ def boost_file(path: Path):
         print(f"Error boosting {path}: {e}")
         return False
 
+
 def main():
     """Main."""
     repo_root = Path.cwd()
     md_files = []
-    for pattern in ['**/*.md', '**/*.MD']:
+    for pattern in ["**/*.md", "**/*.MD"]:
         md_files.extend(repo_root.glob(pattern))
 
     count = 0
     for f in md_files:
         if any(ignored in f.parts for ignored in IGNORED_DIRS):
             continue
-        if 'template' in f.name.lower():
+        if "template" in f.name.lower():
             continue
 
         if boost_file(f):
             count += 1
 
     print(f"Boosted {count} files.")
+
 
 if __name__ == "__main__":
     main()

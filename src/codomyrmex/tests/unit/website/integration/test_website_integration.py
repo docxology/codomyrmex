@@ -45,15 +45,19 @@ class TestFullWebsiteGeneration:
         (module2 / "__init__.py").write_text('"""LLM integration module."""')
 
         # Create some mock scripts
-        (tmp_path / "scripts" / "run_tests.py").write_text('"""Run test suite."""\nprint("Running tests")')
-        (tmp_path / "scripts" / "deploy.py").write_text('"""Deploy application."""\nprint("Deploying")')
+        (tmp_path / "scripts" / "run_tests.py").write_text(
+            '"""Run test suite."""\nprint("Running tests")'
+        )
+        (tmp_path / "scripts" / "deploy.py").write_text(
+            '"""Deploy application."""\nprint("Deploying")'
+        )
 
         # Create config files
         (tmp_path / "pyproject.toml").write_text('[tool.pytest]\ntestpaths = ["tests"]')
-        (tmp_path / "config.yaml").write_text('debug: true\nenv: development')
+        (tmp_path / "config.yaml").write_text("debug: true\nenv: development")
 
         # Create docs
-        (tmp_path / "docs" / "README.md").write_text('# Documentation\n\nWelcome!')
+        (tmp_path / "docs" / "README.md").write_text("# Documentation\n\nWelcome!")
 
         return tmp_path
 
@@ -97,8 +101,7 @@ class TestFullWebsiteGeneration:
         output_dir = project_structure / "website_output"
 
         generator = WebsiteGenerator(
-            output_dir=str(output_dir),
-            root_dir=str(project_structure)
+            output_dir=str(output_dir), root_dir=str(project_structure)
         )
 
         # Run generation
@@ -115,7 +118,7 @@ class TestFullWebsiteGeneration:
             "config.html",
             "docs.html",
             "pipelines.html",
-            "awareness.html"
+            "awareness.html",
         ]
 
         for page in expected_pages:
@@ -126,14 +129,17 @@ class TestFullWebsiteGeneration:
         output_dir = project_structure / "website_output"
 
         generator = WebsiteGenerator(
-            output_dir=str(output_dir),
-            root_dir=str(project_structure)
+            output_dir=str(output_dir), root_dir=str(project_structure)
         )
         generator.generate()
 
         # Check index.html contains module count
         index_content = (output_dir / "index.html").read_text()
-        assert "2" in index_content or "Active" in index_content or "Modules" in index_content
+        assert (
+            "2" in index_content
+            or "Active" in index_content
+            or "Modules" in index_content
+        )
 
         # Check modules.html contains module names
         modules_content = (output_dir / "modules.html").read_text()
@@ -220,10 +226,7 @@ class TestAssetsCopying:
 
         output_dir = tmp_path / "website_output"
 
-        generator = WebsiteGenerator(
-            output_dir=str(output_dir),
-            root_dir=str(tmp_path)
-        )
+        generator = WebsiteGenerator(output_dir=str(output_dir), root_dir=str(tmp_path))
 
         # The assets should be copied from the actual module
         if generator.assets_dir.exists():
@@ -242,41 +245,41 @@ class TestWebsiteServerIntegration:
 
     def test_server_class_attributes(self):
         """Test that server has required class attributes."""
-        assert hasattr(WebsiteServer, 'root_dir')
-        assert hasattr(WebsiteServer, 'data_provider')
+        assert hasattr(WebsiteServer, "root_dir")
+        assert hasattr(WebsiteServer, "data_provider")
 
     def test_server_methods_exist(self):
         """Test that all handler methods exist."""
-        assert hasattr(WebsiteServer, 'do_GET')
-        assert hasattr(WebsiteServer, 'do_POST')
-        assert hasattr(WebsiteServer, 'do_OPTIONS')
-        assert hasattr(WebsiteServer, 'handle_execute')
-        assert hasattr(WebsiteServer, 'handle_chat')
-        assert hasattr(WebsiteServer, 'handle_refresh')
-        assert hasattr(WebsiteServer, 'handle_status')
-        assert hasattr(WebsiteServer, 'handle_health')
-        assert hasattr(WebsiteServer, 'handle_tests_run')
-        assert hasattr(WebsiteServer, 'handle_config_list')
-        assert hasattr(WebsiteServer, 'handle_config_get')
-        assert hasattr(WebsiteServer, 'handle_config_save')
-        assert hasattr(WebsiteServer, 'handle_docs_list')
-        assert hasattr(WebsiteServer, 'handle_docs_get')
-        assert hasattr(WebsiteServer, 'handle_modules_list')
-        assert hasattr(WebsiteServer, 'handle_module_detail')
-        assert hasattr(WebsiteServer, 'handle_agents_list')
-        assert hasattr(WebsiteServer, 'handle_scripts_list')
-        assert hasattr(WebsiteServer, 'handle_pipelines_list')
-        assert hasattr(WebsiteServer, 'handle_awareness')
-        assert hasattr(WebsiteServer, 'handle_awareness_summary')
-        assert hasattr(WebsiteServer, 'send_json_response')
-        assert hasattr(WebsiteServer, 'handle_telemetry')
-        assert hasattr(WebsiteServer, 'handle_security_posture')
+        assert hasattr(WebsiteServer, "do_GET")
+        assert hasattr(WebsiteServer, "do_POST")
+        assert hasattr(WebsiteServer, "do_OPTIONS")
+        assert hasattr(WebsiteServer, "handle_execute")
+        assert hasattr(WebsiteServer, "handle_chat")
+        assert hasattr(WebsiteServer, "handle_refresh")
+        assert hasattr(WebsiteServer, "handle_status")
+        assert hasattr(WebsiteServer, "handle_health")
+        assert hasattr(WebsiteServer, "handle_tests_run")
+        assert hasattr(WebsiteServer, "handle_config_list")
+        assert hasattr(WebsiteServer, "handle_config_get")
+        assert hasattr(WebsiteServer, "handle_config_save")
+        assert hasattr(WebsiteServer, "handle_docs_list")
+        assert hasattr(WebsiteServer, "handle_docs_get")
+        assert hasattr(WebsiteServer, "handle_modules_list")
+        assert hasattr(WebsiteServer, "handle_module_detail")
+        assert hasattr(WebsiteServer, "handle_agents_list")
+        assert hasattr(WebsiteServer, "handle_scripts_list")
+        assert hasattr(WebsiteServer, "handle_pipelines_list")
+        assert hasattr(WebsiteServer, "handle_awareness")
+        assert hasattr(WebsiteServer, "handle_awareness_summary")
+        assert hasattr(WebsiteServer, "send_json_response")
+        assert hasattr(WebsiteServer, "handle_telemetry")
+        assert hasattr(WebsiteServer, "handle_security_posture")
 
     def test_deprecated_methods_removed(self):
         """Test that deprecated methods have been removed."""
-        assert not hasattr(DataProvider, 'get_agents_status')
-        assert not hasattr(DataProvider, '_count_agents')
-        assert not hasattr(DataProvider, '_get_script_docstring')
+        assert not hasattr(DataProvider, "get_agents_status")
+        assert not hasattr(DataProvider, "_count_agents")
+        assert not hasattr(DataProvider, "_get_script_docstring")
 
 
 @pytest.mark.integration
@@ -334,8 +337,10 @@ class TestPaiAwarenessIntegration:
     def test_awareness_data_has_mermaid_graph(self):
         """DataProvider.get_pai_awareness_data always returns a mermaid_graph string."""
         import tempfile
+
         with tempfile.TemporaryDirectory() as tmp:
             from pathlib import Path
+
             dp = DataProvider(Path(tmp))
             dp._PAI_ROOT = Path(tmp) / ".claude"  # Isolate from real ~/.claude
             data = dp.get_pai_awareness_data()
@@ -344,10 +349,19 @@ class TestPaiAwarenessIntegration:
     def test_awareness_data_structure_complete(self):
         """get_pai_awareness_data returns all required top-level keys."""
         import tempfile
+
         with tempfile.TemporaryDirectory() as tmp:
             from pathlib import Path
+
             dp = DataProvider(Path(tmp))
             dp._PAI_ROOT = Path(tmp) / ".claude"
             data = dp.get_pai_awareness_data()
-            required_keys = {"missions", "projects", "telos", "memory", "metrics", "mermaid_graph"}
+            required_keys = {
+                "missions",
+                "projects",
+                "telos",
+                "memory",
+                "metrics",
+                "mermaid_graph",
+            }
             assert required_keys.issubset(data.keys())

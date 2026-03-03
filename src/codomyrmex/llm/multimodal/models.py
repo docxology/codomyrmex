@@ -16,6 +16,7 @@ from typing import Any
 
 class MediaType(Enum):
     """Types of media."""
+
     IMAGE = "image"
     AUDIO = "audio"
     VIDEO = "video"
@@ -24,6 +25,7 @@ class MediaType(Enum):
 
 class ImageFormat(Enum):
     """Supported image formats."""
+
     PNG = "png"
     JPEG = "jpeg"
     GIF = "gif"
@@ -32,6 +34,7 @@ class ImageFormat(Enum):
 
 class AudioFormat(Enum):
     """Supported audio formats."""
+
     WAV = "wav"
     MP3 = "mp3"
     OGG = "ogg"
@@ -41,6 +44,7 @@ class AudioFormat(Enum):
 @dataclass
 class MediaContent:
     """Container for media content."""
+
     media_type: MediaType
     data: bytes
     format: str = ""
@@ -58,7 +62,7 @@ class MediaContent:
 
     def to_base64(self) -> str:
         """Convert to base64 string."""
-        return base64.b64encode(self.data).decode('utf-8')
+        return base64.b64encode(self.data).decode("utf-8")
 
     @classmethod
     def from_base64(
@@ -78,13 +82,13 @@ class MediaContent:
         data = path.read_bytes()
 
         # Determine type from extension
-        ext = path.suffix.lower().lstrip('.')
+        ext = path.suffix.lower().lstrip(".")
 
-        if ext in ['png', 'jpg', 'jpeg', 'gif', 'webp']:
+        if ext in ["png", "jpg", "jpeg", "gif", "webp"]:
             media_type = MediaType.IMAGE
-        elif ext in ['wav', 'mp3', 'ogg', 'flac']:
+        elif ext in ["wav", "mp3", "ogg", "flac"]:
             media_type = MediaType.AUDIO
-        elif ext in ['mp4', 'webm', 'avi']:
+        elif ext in ["mp4", "webm", "avi"]:
             media_type = MediaType.VIDEO
         else:
             media_type = MediaType.TEXT
@@ -100,6 +104,7 @@ class MediaContent:
 @dataclass
 class ImageContent(MediaContent):
     """Image-specific content."""
+
     width: int = 0
     height: int = 0
 
@@ -122,6 +127,7 @@ class ImageContent(MediaContent):
 @dataclass
 class AudioContent(MediaContent):
     """Audio-specific content."""
+
     duration_seconds: float = 0.0
     sample_rate: int = 44100
     channels: int = 2
@@ -133,6 +139,7 @@ class AudioContent(MediaContent):
 @dataclass
 class MultimodalMessage:
     """A message containing multiple media types."""
+
     id: str
     contents: list[MediaContent] = field(default_factory=list)
     text: str = ""
@@ -192,19 +199,29 @@ class MultimodalMessage:
 
         for content in self.contents:
             if content.media_type == MediaType.IMAGE:
-                parts.append({
-                    "type": "image",
-                    "data": content.to_base64(),
-                    "format": content.format,
-                })
+                parts.append(
+                    {
+                        "type": "image",
+                        "data": content.to_base64(),
+                        "format": content.format,
+                    }
+                )
             elif content.media_type == MediaType.AUDIO:
-                parts.append({
-                    "type": "audio",
-                    "data": content.to_base64(),
-                    "format": content.format,
-                })
+                parts.append(
+                    {
+                        "type": "audio",
+                        "data": content.to_base64(),
+                        "format": content.format,
+                    }
+                )
 
         return {
             "role": self.role,
-            "content": parts if len(parts) > 1 else parts[0] if parts else {"type": "text", "text": ""},
+            "content": (
+                parts
+                if len(parts) > 1
+                else parts[0]
+                if parts
+                else {"type": "text", "text": ""}
+            ),
         }

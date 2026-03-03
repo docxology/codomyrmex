@@ -19,6 +19,7 @@ from .core.history_analyzer import GitHistoryAnalyzer
 
 try:
     from .core.gitnexus_bridge import GitNexusBridge, GitNexusNotAvailableError
+
     GITNEXUS_AVAILABLE = True
 except ImportError:
     GITNEXUS_AVAILABLE = False

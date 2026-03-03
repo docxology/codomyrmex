@@ -30,6 +30,7 @@ _SRC_CODOMYRMEX = Path(__file__).resolve().parents[1]  # cli → codomyrmex
 
 # ─── Result types ────────────────────────────────────────────────────
 
+
 class CheckResult:
     """Single diagnostic check result."""
 
@@ -63,11 +64,13 @@ class CheckResult:
 
 # ─── Individual checks ───────────────────────────────────────────────
 
+
 def check_module_imports() -> list[CheckResult]:
     """Try importing every submodule of codomyrmex."""
     results: list[CheckResult] = []
     try:
         from codomyrmex import list_modules
+
         module_names = list_modules()
     except Exception as exc:
         return [CheckResult("module_discovery", CheckResult.ERROR, str(exc))]
@@ -81,12 +84,14 @@ def check_module_imports() -> list[CheckResult]:
         except Exception as exc:
             failed.append(f"{name}: {exc}")
 
-    results.append(CheckResult(
-        "module_imports",
-        CheckResult.ERROR if failed else CheckResult.OK,
-        f"{ok} ok, {len(failed)} failed",
-        {"total": ok + len(failed), "ok": ok, "failed": failed},
-    ))
+    results.append(
+        CheckResult(
+            "module_imports",
+            CheckResult.ERROR if failed else CheckResult.OK,
+            f"{ok} ok, {len(failed)} failed",
+            {"total": ok + len(failed), "ok": ok, "failed": failed},
+        )
+    )
     return results
 
 
@@ -108,14 +113,18 @@ def check_pai() -> list[CheckResult]:
         else:
             count = 0
 
-        results.append(CheckResult(
-            "pai_verify_capabilities",
-            CheckResult.OK if count >= 82 else CheckResult.WARN,
-            f"{count} modules, {elapsed_ms:.0f}ms",
-            {"module_count": count, "elapsed_ms": round(elapsed_ms, 1)},
-        ))
+        results.append(
+            CheckResult(
+                "pai_verify_capabilities",
+                CheckResult.OK if count >= 82 else CheckResult.WARN,
+                f"{count} modules, {elapsed_ms:.0f}ms",
+                {"module_count": count, "elapsed_ms": round(elapsed_ms, 1)},
+            )
+        )
     except Exception as exc:
-        results.append(CheckResult("pai_verify_capabilities", CheckResult.ERROR, str(exc)))
+        results.append(
+            CheckResult("pai_verify_capabilities", CheckResult.ERROR, str(exc))
+        )
 
     return results
 
@@ -133,12 +142,14 @@ def check_mcp() -> list[CheckResult]:
         tools = registry.list_tools() if hasattr(registry, "list_tools") else []
         tool_count = len(tools) if isinstance(tools, (list, dict)) else 0
 
-        results.append(CheckResult(
-            "mcp_tool_registry",
-            CheckResult.OK if tool_count >= 10 else CheckResult.WARN,
-            f"{tool_count} tools registered, {elapsed_ms:.0f}ms",
-            {"tool_count": tool_count, "elapsed_ms": round(elapsed_ms, 1)},
-        ))
+        results.append(
+            CheckResult(
+                "mcp_tool_registry",
+                CheckResult.OK if tool_count >= 10 else CheckResult.WARN,
+                f"{tool_count} tools registered, {elapsed_ms:.0f}ms",
+                {"tool_count": tool_count, "elapsed_ms": round(elapsed_ms, 1)},
+            )
+        )
     except Exception as exc:
         results.append(CheckResult("mcp_tool_registry", CheckResult.ERROR, str(exc)))
 
@@ -146,11 +157,13 @@ def check_mcp() -> list[CheckResult]:
         from codomyrmex.agents.pai.mcp_bridge import create_codomyrmex_mcp_server
 
         server = create_codomyrmex_mcp_server(name="doctor-test", transport="stdio")
-        results.append(CheckResult(
-            "mcp_server_creation",
-            CheckResult.OK if server is not None else CheckResult.ERROR,
-            "Server created" if server else "Server creation failed",
-        ))
+        results.append(
+            CheckResult(
+                "mcp_server_creation",
+                CheckResult.OK if server is not None else CheckResult.ERROR,
+                "Server created" if server else "Server creation failed",
+            )
+        )
     except Exception as exc:
         results.append(CheckResult("mcp_server_creation", CheckResult.ERROR, str(exc)))
 
@@ -165,6 +178,7 @@ def check_rasp() -> list[CheckResult]:
 
     try:
         from codomyrmex import list_modules
+
         module_names = list_modules()
     except Exception as exc:
         return [CheckResult("rasp_discovery", CheckResult.ERROR, str(exc))]
@@ -179,12 +193,18 @@ def check_rasp() -> list[CheckResult]:
         if not missing or not any(m.startswith(name) for m in missing):
             complete += 1
 
-    results.append(CheckResult(
-        "rasp_completeness",
-        CheckResult.OK if not missing else CheckResult.WARN,
-        f"{complete} complete, {len(missing)} missing docs",
-        {"complete": complete, "missing_count": len(missing), "missing": missing[:20]},
-    ))
+    results.append(
+        CheckResult(
+            "rasp_completeness",
+            CheckResult.OK if not missing else CheckResult.WARN,
+            f"{complete} complete, {len(missing)} missing docs",
+            {
+                "complete": complete,
+                "missing_count": len(missing),
+                "missing": missing[:20],
+            },
+        )
+    )
     return results
 
 
@@ -194,7 +214,9 @@ def check_workflows() -> list[CheckResult]:
     workflow_dir = _PROJECT_ROOT / ".agent" / "workflows"
 
     if not workflow_dir.exists():
-        return [CheckResult("workflows_dir", CheckResult.ERROR, "Missing .agent/workflows/")]
+        return [
+            CheckResult("workflows_dir", CheckResult.ERROR, "Missing .agent/workflows/")
+        ]
 
     valid = 0
     invalid: list[str] = []
@@ -209,16 +231,19 @@ def check_workflows() -> list[CheckResult]:
                 continue
         invalid.append(wf.name)
 
-    results.append(CheckResult(
-        "workflow_files",
-        CheckResult.OK if not invalid else CheckResult.WARN,
-        f"{valid} valid, {len(invalid)} invalid",
-        {"valid": valid, "invalid": invalid},
-    ))
+    results.append(
+        CheckResult(
+            "workflow_files",
+            CheckResult.OK if not invalid else CheckResult.WARN,
+            f"{valid} valid, {len(invalid)} invalid",
+            {"valid": valid, "invalid": invalid},
+        )
+    )
     return results
 
 
 # ─── Runner ──────────────────────────────────────────────────────────
+
 
 def run_doctor(
     *,
@@ -257,10 +282,17 @@ def run_doctor(
     has_warnings = any(c.status == CheckResult.WARN for c in checks)
 
     if output_json:
-        print(json_mod.dumps({
-            "status": "error" if has_errors else "warn" if has_warnings else "ok",
-            "checks": [c.to_dict() for c in checks],
-        }, indent=2))
+        print(
+            json_mod.dumps(
+                {
+                    "status": (
+                        "error" if has_errors else "warn" if has_warnings else "ok"
+                    ),
+                    "checks": [c.to_dict() for c in checks],
+                },
+                indent=2,
+            )
+        )
     else:
         icons = {CheckResult.OK: "✅", CheckResult.WARN: "⚠️", CheckResult.ERROR: "❌"}
         print("\n🔬 Codomyrmex Doctor\n")

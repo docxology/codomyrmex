@@ -1,4 +1,3 @@
-
 """Extractor for FPF patterns, concepts, and relationships.
 
 
@@ -229,7 +228,9 @@ class FPFExtractor:
 
         return list(u_types)
 
-    def _extract_other_concepts(self, pattern: Pattern) -> list[tuple[str, ConceptType]]:
+    def _extract_other_concepts(
+        self, pattern: Pattern
+    ) -> list[tuple[str, ConceptType]]:
         """Extract other concepts (not U.Types) from a pattern.
 
         Args:
@@ -242,7 +243,11 @@ class FPFExtractor:
         content = pattern.content.lower()
 
         # Check for architheory mentions
-        if "architheory" in content or "-cal" in content.lower() or "-chr" in content.lower():
+        if (
+            "architheory" in content
+            or "-cal" in content.lower()
+            or "-chr" in content.lower()
+        ):
             # Extract architheory names
             archi_matches = re.findall(r"([A-Z][a-z]*-[A-Z]+)", pattern.content)
             for match in archi_matches:
@@ -250,7 +255,9 @@ class FPFExtractor:
 
         # Check for mechanism mentions
         if "mechanism" in content:
-            mech_matches = re.findall(r"([A-Z][a-zA-Z]*\s+[Mm]echanism)", pattern.content)
+            mech_matches = re.findall(
+                r"([A-Z][a-zA-Z]*\s+[Mm]echanism)", pattern.content
+            )
             for match in mech_matches:
                 concepts.append((match.strip(), ConceptType.MECHANISM))
 
@@ -307,4 +314,3 @@ class FPFExtractor:
                 if pattern.id not in references:
                     references.append(pattern.id)
         return references
-

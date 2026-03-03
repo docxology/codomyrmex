@@ -20,6 +20,7 @@ _OLLAMA_BASE_URL: str = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
 
 # ── Skip entire module if Ollama is unreachable ─────────────────────
 
+
 def _ollama_available() -> bool:
     """Check if Ollama is running and has at least one model."""
     try:
@@ -51,8 +52,7 @@ def _get_smallest_model() -> str:
 pytestmark = [
     pytest.mark.integration,
     pytest.mark.skipif(
-        not _ollama_available(),
-        reason="Ollama not running or no models available"
+        not _ollama_available(), reason="Ollama not running or no models available"
     ),
 ]
 
@@ -87,8 +87,12 @@ class TestInfiniteConversation:
         orch = ConversationOrchestrator(
             channel="test-single-turn",
             agents=[
-                {"identity": "agent-alpha", "persona": "helpful assistant",
-                 "provider": "ollama", "model": model_name},
+                {
+                    "identity": "agent-alpha",
+                    "persona": "helpful assistant",
+                    "provider": "ollama",
+                    "model": model_name,
+                },
             ],
             seed_prompt="Say hello in one sentence.",
             relay_dir=relay_dir,
@@ -110,10 +114,18 @@ class TestInfiniteConversation:
         orch = ConversationOrchestrator(
             channel="test-multi-turn",
             agents=[
-                {"identity": "analyst", "persona": "data analyst who asks questions",
-                 "provider": "ollama", "model": model_name},
-                {"identity": "reviewer", "persona": "code reviewer who gives feedback",
-                 "provider": "ollama", "model": model_name},
+                {
+                    "identity": "analyst",
+                    "persona": "data analyst who asks questions",
+                    "provider": "ollama",
+                    "model": model_name,
+                },
+                {
+                    "identity": "reviewer",
+                    "persona": "code reviewer who gives feedback",
+                    "provider": "ollama",
+                    "model": model_name,
+                },
             ],
             seed_prompt="What makes a good code review?",
             relay_dir=relay_dir,
@@ -140,8 +152,12 @@ class TestInfiniteConversation:
         orch = ConversationOrchestrator(
             channel="test-relay-persist",
             agents=[
-                {"identity": "writer", "persona": "creative writer",
-                 "provider": "ollama", "model": model_name},
+                {
+                    "identity": "writer",
+                    "persona": "creative writer",
+                    "provider": "ollama",
+                    "model": model_name,
+                },
             ],
             seed_prompt="Write one sentence about the ocean.",
             relay_dir=relay_dir,
@@ -166,10 +182,18 @@ class TestInfiniteConversation:
         orch = ConversationOrchestrator(
             channel="test-log-structure",
             agents=[
-                {"identity": "bot-a", "persona": "assistant",
-                 "provider": "ollama", "model": model_name},
-                {"identity": "bot-b", "persona": "reviewer",
-                 "provider": "ollama", "model": model_name},
+                {
+                    "identity": "bot-a",
+                    "persona": "assistant",
+                    "provider": "ollama",
+                    "model": model_name,
+                },
+                {
+                    "identity": "bot-b",
+                    "persona": "reviewer",
+                    "provider": "ollama",
+                    "model": model_name,
+                },
             ],
             seed_prompt="Hi",
             relay_dir=relay_dir,
@@ -198,8 +222,12 @@ class TestInfiniteConversation:
         orch = ConversationOrchestrator(
             channel="test-shutdown",
             agents=[
-                {"identity": "infinite-bot", "persona": "chatbot",
-                 "provider": "ollama", "model": model_name},
+                {
+                    "identity": "infinite-bot",
+                    "persona": "chatbot",
+                    "provider": "ollama",
+                    "model": model_name,
+                },
             ],
             seed_prompt="Count from 1 to infinity.",
             relay_dir=relay_dir,
@@ -230,12 +258,24 @@ class TestInfiniteConversation:
         orch = ConversationOrchestrator(
             channel="test-three-agents",
             agents=[
-                {"identity": "planner", "persona": "project planner",
-                 "provider": "ollama", "model": model_name},
-                {"identity": "developer", "persona": "software developer",
-                 "provider": "ollama", "model": model_name},
-                {"identity": "tester", "persona": "QA tester",
-                 "provider": "ollama", "model": model_name},
+                {
+                    "identity": "planner",
+                    "persona": "project planner",
+                    "provider": "ollama",
+                    "model": model_name,
+                },
+                {
+                    "identity": "developer",
+                    "persona": "software developer",
+                    "provider": "ollama",
+                    "model": model_name,
+                },
+                {
+                    "identity": "tester",
+                    "persona": "QA tester",
+                    "provider": "ollama",
+                    "model": model_name,
+                },
             ],
             seed_prompt="How should we build a login page?",
             relay_dir=relay_dir,
@@ -243,7 +283,9 @@ class TestInfiniteConversation:
 
         transcript = orch.run(rounds=2)
 
-        assert len(transcript) == 6, f"Expected 6 turns (3 agents × 2 rounds), got {len(transcript)}"
+        assert len(transcript) == 6, (
+            f"Expected 6 turns (3 agents × 2 rounds), got {len(transcript)}"
+        )
         speakers = [t.speaker for t in transcript]
         assert speakers == ["planner", "developer", "tester"] * 2
 
@@ -262,8 +304,12 @@ class TestInfiniteConversation:
         orch = ConversationOrchestrator(
             channel="test-export",
             agents=[
-                {"identity": "exporter", "persona": "assistant",
-                 "provider": "ollama", "model": model_name},
+                {
+                    "identity": "exporter",
+                    "persona": "assistant",
+                    "provider": "ollama",
+                    "model": model_name,
+                },
             ],
             seed_prompt="Say one word.",
             relay_dir=relay_dir,
@@ -293,8 +339,12 @@ class TestInfiniteConversation:
         orch = ConversationOrchestrator(
             channel="test-cid",
             agents=[
-                {"identity": "cid-bot", "persona": "assistant",
-                 "provider": "ollama", "model": model_name},
+                {
+                    "identity": "cid-bot",
+                    "persona": "assistant",
+                    "provider": "ollama",
+                    "model": model_name,
+                },
             ],
             seed_prompt="Hi",
             relay_dir=relay_dir,
@@ -314,8 +364,12 @@ class TestInfiniteConversation:
         orch = ConversationOrchestrator(
             channel="test-antigravity",
             agents=[
-                {"identity": "antigravity-coder", "persona": "Antigravity code agent",
-                 "provider": "antigravity", "model": model_name},
+                {
+                    "identity": "antigravity-coder",
+                    "persona": "Antigravity code agent",
+                    "provider": "antigravity",
+                    "model": model_name,
+                },
             ],
             seed_prompt="Respond with one word.",
             relay_dir=relay_dir,
@@ -334,10 +388,18 @@ class TestInfiniteConversation:
         orch = ConversationOrchestrator(
             channel="test-personas",
             agents=[
-                {"identity": "poet", "persona": "a poet who speaks in metaphors",
-                 "provider": "ollama", "model": model_name},
-                {"identity": "engineer", "persona": "a systems engineer who is precise",
-                 "provider": "ollama", "model": model_name},
+                {
+                    "identity": "poet",
+                    "persona": "a poet who speaks in metaphors",
+                    "provider": "ollama",
+                    "model": model_name,
+                },
+                {
+                    "identity": "engineer",
+                    "persona": "a systems engineer who is precise",
+                    "provider": "ollama",
+                    "model": model_name,
+                },
             ],
             seed_prompt="Describe the sunrise in one sentence.",
             relay_dir=relay_dir,
@@ -357,10 +419,18 @@ class TestInfiniteConversation:
         orch = ConversationOrchestrator(
             channel="test-providers",
             agents=[
-                {"identity": "o-bot", "persona": "assistant",
-                 "provider": "ollama", "model": model_name},
-                {"identity": "a-bot", "persona": "reviewer",
-                 "provider": "antigravity", "model": model_name},
+                {
+                    "identity": "o-bot",
+                    "persona": "assistant",
+                    "provider": "ollama",
+                    "model": model_name,
+                },
+                {
+                    "identity": "a-bot",
+                    "persona": "reviewer",
+                    "provider": "antigravity",
+                    "model": model_name,
+                },
             ],
             seed_prompt="Hi",
             relay_dir=relay_dir,
@@ -429,8 +499,12 @@ class TestFileInjection:
         orch = ConversationOrchestrator(
             channel="test-ctx-inject",
             agents=[
-                {"identity": "bot", "persona": "assistant who references project files",
-                 "provider": "ollama", "model": model_name},
+                {
+                    "identity": "bot",
+                    "persona": "assistant who references project files",
+                    "provider": "ollama",
+                    "model": model_name,
+                },
             ],
             seed_prompt="Summarize the project described in the attached files.",
             context_files=[str(ctx_file)],
@@ -454,8 +528,12 @@ class TestFileInjection:
         orch = ConversationOrchestrator(
             channel="test-todo-cycle",
             agents=[
-                {"identity": "dev", "persona": "developer",
-                 "provider": "ollama", "model": model_name},
+                {
+                    "identity": "dev",
+                    "persona": "developer",
+                    "provider": "ollama",
+                    "model": model_name,
+                },
             ],
             seed_prompt="Work through each TO-DO item.",
             todo_path=str(todo),
@@ -486,10 +564,18 @@ class TestFileInjection:
             todo_path=str(todo),
             extra_files=[str(extra)],
             agents=[
-                {"identity": "arch", "persona": "architect",
-                 "provider": "ollama", "model": model_name},
-                {"identity": "dev", "persona": "developer",
-                 "provider": "ollama", "model": model_name},
+                {
+                    "identity": "arch",
+                    "persona": "architect",
+                    "provider": "ollama",
+                    "model": model_name,
+                },
+                {
+                    "identity": "dev",
+                    "persona": "developer",
+                    "provider": "ollama",
+                    "model": model_name,
+                },
             ],
             relay_dir=relay_dir,
         )

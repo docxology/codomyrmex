@@ -1,4 +1,5 @@
 """Integration tests for CEREBRUM module."""
+
 import pytest
 
 from codomyrmex.cerebrum import (
@@ -21,7 +22,7 @@ def test_end_to_end_reasoning():
         case = Case(
             case_id=f"case_{i}",
             features={"value": i, "category": "test"},
-            outcome="success" if i < 3 else "failure"
+            outcome="success" if i < 3 else "failure",
         )
         engine.add_case(case)
 
@@ -44,10 +45,13 @@ def test_bayesian_integration():
     network.add_node("feature", values=["low", "high"], prior=[0.5, 0.5])
     network.add_node("outcome", values=["success", "failure"])
     network.add_edge("feature", "outcome")
-    network.set_cpt("outcome", {
-        ("low",): {"success": 0.8, "failure": 0.2},
-        ("high",): {"success": 0.3, "failure": 0.7},
-    })
+    network.set_cpt(
+        "outcome",
+        {
+            ("low",): {"success": 0.8, "failure": 0.2},
+            ("high",): {"success": 0.3, "failure": 0.7},
+        },
+    )
 
     engine.set_bayesian_network(network)
 
@@ -61,5 +65,3 @@ def test_bayesian_integration():
 
     assert result.prediction is not None
     assert "outcome" in result.inference_results or result.prediction is not None
-
-

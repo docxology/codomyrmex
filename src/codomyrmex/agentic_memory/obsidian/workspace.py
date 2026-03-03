@@ -107,6 +107,7 @@ def open_tab(
     Maps to ``obsidian tab:open [file=|path=]``.
     """
     from codomyrmex.agentic_memory.obsidian.cli import _file_or_path
+
     params = _file_or_path(file, path)
     return cli.run("tab:open", vault=vault, params=params or None)
 

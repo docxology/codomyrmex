@@ -2,7 +2,6 @@
 Tests for LLM Streaming Module
 """
 
-
 import pytest
 
 from codomyrmex.llm.streaming import (
@@ -77,7 +76,9 @@ class TestContentFilterProcessor:
     def test_filter_blocked(self):
         """Should filter blocked patterns."""
         proc = ContentFilterProcessor(block_patterns=["password"])
-        event = StreamEvent(event_type=StreamEventType.DELTA, delta="my password is 123")
+        event = StreamEvent(
+            event_type=StreamEventType.DELTA, delta="my password is 123"
+        )
 
         result = proc.process(event)
 

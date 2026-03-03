@@ -12,6 +12,7 @@ try:
         grant_access,
         revoke_access,
     )
+
     ACCESS_CONTROL_AVAILABLE = True
 except ImportError:
     AccessControlSystem = None
@@ -27,6 +28,7 @@ try:
         register_asset,
         track_asset,
     )
+
     ASSET_INVENTORY_AVAILABLE = True
 except ImportError:
     AssetInventory = None
@@ -41,6 +43,7 @@ try:
         log_physical_event,
         monitor_physical_access,
     )
+
     SURVEILLANCE_AVAILABLE = True
 except ImportError:
     SurveillanceMonitor = None
@@ -54,6 +57,7 @@ try:
         assess_physical_security,
         scan_physical_vulnerabilities,
     )
+
     PHYSICAL_VULNERABILITY_AVAILABLE = True
 except ImportError:
     PhysicalVulnerabilityScanner = None
@@ -67,6 +71,7 @@ try:
         check_perimeter_security,
         manage_access_points,
     )
+
     PERIMETER_MANAGEMENT_AVAILABLE = True
 except ImportError:
     PerimeterManager = None
@@ -77,41 +82,48 @@ except ImportError:
 __all__ = []
 
 if ACCESS_CONTROL_AVAILABLE:
-    __all__.extend([
-        "AccessControlSystem",
-        "check_access_permission",
-        "grant_access",
-        "revoke_access",
-    ])
+    __all__.extend(
+        [
+            "AccessControlSystem",
+            "check_access_permission",
+            "grant_access",
+            "revoke_access",
+        ]
+    )
 
 if ASSET_INVENTORY_AVAILABLE:
-    __all__.extend([
-        "AssetInventory",
-        "register_asset",
-        "track_asset",
-        "get_asset_status",
-    ])
+    __all__.extend(
+        [
+            "AssetInventory",
+            "register_asset",
+            "track_asset",
+            "get_asset_status",
+        ]
+    )
 
 if SURVEILLANCE_AVAILABLE:
-    __all__.extend([
-        "SurveillanceMonitor",
-        "monitor_physical_access",
-        "log_physical_event",
-    ])
+    __all__.extend(
+        [
+            "SurveillanceMonitor",
+            "monitor_physical_access",
+            "log_physical_event",
+        ]
+    )
 
 if PHYSICAL_VULNERABILITY_AVAILABLE:
-    __all__.extend([
-        "PhysicalVulnerabilityScanner",
-        "assess_physical_security",
-        "scan_physical_vulnerabilities",
-    ])
+    __all__.extend(
+        [
+            "PhysicalVulnerabilityScanner",
+            "assess_physical_security",
+            "scan_physical_vulnerabilities",
+        ]
+    )
 
 if PERIMETER_MANAGEMENT_AVAILABLE:
-    __all__.extend([
-        "PerimeterManager",
-        "check_perimeter_security",
-        "manage_access_points",
-    ])
-
-
-
+    __all__.extend(
+        [
+            "PerimeterManager",
+            "check_perimeter_security",
+            "manage_access_points",
+        ]
+    )

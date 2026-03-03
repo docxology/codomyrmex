@@ -127,7 +127,7 @@ class Population:
 
             mean = sum(values) / len(values)
             variance = sum((x - mean) ** 2 for x in values) / len(values)
-            std = variance ** 0.5
+            std = variance**0.5
 
             stats[trait] = {
                 "mean": round(mean, 4),
@@ -145,7 +145,9 @@ class Population:
         """Return the mean fitness across all individuals."""
         if not self._individuals:
             return 0.0
-        return sum(g.fitness_score() for g in self._individuals) / len(self._individuals)
+        return sum(g.fitness_score() for g in self._individuals) / len(
+            self._individuals
+        )
 
     @property
     def individuals(self) -> list[Genome]:

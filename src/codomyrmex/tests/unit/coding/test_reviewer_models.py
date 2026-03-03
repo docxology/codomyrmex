@@ -156,7 +156,11 @@ class TestModels:
     def test_quality_gate_result_failures(self):
         failures = [{"gate": "complexity", "threshold": 15, "actual": 25}]
         qgr = QualityGateResult(
-            passed=False, total_checks=1, passed_checks=0, failed_checks=1, failures=failures
+            passed=False,
+            total_checks=1,
+            passed_checks=0,
+            failed_checks=1,
+            failures=failures,
         )
         assert not qgr.passed
         assert len(qgr.failures) == 1

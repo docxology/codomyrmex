@@ -104,9 +104,7 @@ class LoRALayer:
         return self.forward(x)
 
 
-def apply_lora(
-    weight: np.ndarray, rank: int = 4, alpha: float = 8.0
-) -> LoRALayer:
+def apply_lora(weight: np.ndarray, rank: int = 4, alpha: float = 8.0) -> LoRALayer:
     """Wrap a weight matrix with LoRA adaptation."""
     config = LoRAConfig(rank=rank, alpha=alpha)
     return LoRALayer(weight, config)

@@ -23,6 +23,7 @@ from codomyrmex.auth.tokens.validator import TokenValidator
 # Module Import Tests
 # ==============================================================================
 
+
 class TestAuthModuleImport:
     """Test auth module import and structure."""
 
@@ -40,15 +41,14 @@ class TestAuthModuleImport:
 # Token Tests
 # ==============================================================================
 
+
 class TestToken:
     """Tests for Token dataclass."""
 
     def test_token_creation(self):
         """Test basic token creation."""
         token = Token(
-            token_id="test-123",
-            user_id="user-456",
-            permissions=["read", "write"]
+            token_id="test-123", user_id="user-456", permissions=["read", "write"]
         )
         assert token.token_id == "test-123"
         assert token.user_id == "user-456"
@@ -63,20 +63,12 @@ class TestToken:
 
     def test_token_not_expired_when_future_expiration(self):
         """Test token with future expiration is not expired."""
-        token = Token(
-            token_id="test",
-            user_id="user",
-            expires_at=time.time() + 3600
-        )
+        token = Token(token_id="test", user_id="user", expires_at=time.time() + 3600)
         assert not token.is_expired()
 
     def test_token_expired_when_past_expiration(self):
         """Test token with past expiration is expired."""
-        token = Token(
-            token_id="test",
-            user_id="user",
-            expires_at=time.time() - 1
-        )
+        token = Token(token_id="test", user_id="user", expires_at=time.time() - 1)
         assert token.is_expired()
 
     def test_token_to_dict(self):
@@ -86,7 +78,7 @@ class TestToken:
             user_id="user-456",
             permissions=["read"],
             expires_at=1000.0,
-            created_at=500.0
+            created_at=500.0,
         )
         data = token.to_dict()
         assert data["token_id"] == "test-123"
@@ -102,7 +94,7 @@ class TestToken:
             "user_id": "user-456",
             "permissions": ["write"],
             "expires_at": 2000.0,
-            "created_at": 1000.0
+            "created_at": 1000.0,
         }
         token = Token.from_dict(data)
         assert token.token_id == "test-123"
@@ -113,10 +105,7 @@ class TestToken:
 
     def test_token_from_dict_with_defaults(self):
         """Test token deserialization with missing optional fields."""
-        data = {
-            "token_id": "test-123",
-            "user_id": "user-456"
-        }
+        data = {"token_id": "test-123", "user_id": "user-456"}
         token = Token.from_dict(data)
         assert token.token_id == "test-123"
         assert token.permissions == []
@@ -126,6 +115,7 @@ class TestToken:
 # ==============================================================================
 # TokenManager Tests
 # ==============================================================================
+
 
 class TestTokenManager:
     """Tests for TokenManager."""
@@ -145,8 +135,7 @@ class TestTokenManager:
     def test_create_token_with_permissions(self, manager):
         """Test token creation with permissions."""
         token = manager.create_token(
-            user_id="user-123",
-            permissions=["read", "write", "admin"]
+            user_id="user-123", permissions=["read", "write", "admin"]
         )
         assert token.permissions == ["read", "write", "admin"]
 
@@ -214,6 +203,7 @@ class TestTokenManager:
 # APIKeyManager Tests
 # ==============================================================================
 
+
 class TestAPIKeyManager:
     """Tests for APIKeyManager."""
 
@@ -231,8 +221,7 @@ class TestAPIKeyManager:
     def test_generate_api_key_with_permissions(self, manager):
         """Test API key generation with custom permissions."""
         api_key = manager.generate_api_key(
-            user_id="user-123",
-            permissions=["read", "write"]
+            user_id="user-123", permissions=["read", "write"]
         )
         info = manager.validate_api_key(api_key)
         assert info["permissions"] == ["read", "write"]
@@ -277,6 +266,7 @@ class TestAPIKeyManager:
 # ==============================================================================
 # PermissionRegistry Tests
 # ==============================================================================
+
 
 class TestPermissionRegistry:
     """Tests for PermissionRegistry."""
@@ -350,6 +340,7 @@ class TestPermissionRegistry:
 # TokenValidator Tests
 # ==============================================================================
 
+
 @pytest.mark.security
 class TestTokenValidator:
     """Tests for TokenValidator."""
@@ -364,7 +355,7 @@ class TestTokenValidator:
         token_data = {
             "user_id": "user-123",
             "permissions": ["read"],
-            "expires_at": time.time() + 3600
+            "expires_at": time.time() + 3600,
         }
         signed = validator.sign_token_data(token_data)
         validated = validator.validate_signed_token(signed)
@@ -375,10 +366,7 @@ class TestTokenValidator:
 
     def test_validate_expired_token(self, validator):
         """Test validation fails for expired token."""
-        token_data = {
-            "user_id": "user-123",
-            "expires_at": time.time() - 1  # Expired
-        }
+        token_data = {"user_id": "user-123", "expires_at": time.time() - 1}  # Expired
         signed = validator.sign_token_data(token_data)
         validated = validator.validate_signed_token(signed)
         assert validated is None
@@ -391,6 +379,7 @@ class TestTokenValidator:
         # Tamper with the token
         import base64
         import json
+
         decoded = json.loads(base64.b64decode(signed))
         decoded["data"]["user_id"] = "hacker"
         tampered = base64.b64encode(json.dumps(decoded).encode()).decode()
@@ -406,6 +395,7 @@ class TestTokenValidator:
     def test_validate_invalid_json(self, validator):
         """Test validation handles invalid JSON."""
         import base64
+
         invalid = base64.b64encode(b"not json").decode()
         validated = validator.validate_signed_token(invalid)
         assert validated is None
@@ -414,6 +404,7 @@ class TestTokenValidator:
         """Test validation fails when signature is missing."""
         import base64
         import json
+
         token = {"data": {"user_id": "user-123"}}  # No signature
         encoded = base64.b64encode(json.dumps(token).encode()).decode()
         validated = validator.validate_signed_token(encoded)
@@ -436,6 +427,7 @@ class TestTokenValidator:
 # Authenticator Integration Tests
 # ==============================================================================
 
+
 @pytest.mark.security
 class TestAuthenticator:
     """Integration tests for Authenticator."""
@@ -449,8 +441,7 @@ class TestAuthenticator:
         """Test authentication with API key."""
         # Generate an API key
         api_key = authenticator.api_key_manager.generate_api_key(
-            user_id="user-123",
-            permissions=["read", "write"]
+            user_id="user-123", permissions=["read", "write"]
         )
 
         # Authenticate
@@ -470,10 +461,9 @@ class TestAuthenticator:
         # Add a user
         authenticator._users["testuser"] = {"password": "testpass"}
 
-        token = authenticator.authenticate({
-            "username": "testuser",
-            "password": "testpass"
-        })
+        token = authenticator.authenticate(
+            {"username": "testuser", "password": "testpass"}
+        )
         assert token is not None
         assert token.user_id == "testuser"
 
@@ -481,25 +471,22 @@ class TestAuthenticator:
         """Test authentication fails with wrong password."""
         authenticator._users["testuser"] = {"password": "testpass"}
 
-        token = authenticator.authenticate({
-            "username": "testuser",
-            "password": "wrongpass"
-        })
+        token = authenticator.authenticate(
+            {"username": "testuser", "password": "wrongpass"}
+        )
         assert token is None
 
     def test_authenticate_with_nonexistent_user(self, authenticator):
         """Test authentication fails with nonexistent user."""
-        token = authenticator.authenticate({
-            "username": "nonexistent",
-            "password": "anypass"
-        })
+        token = authenticator.authenticate(
+            {"username": "nonexistent", "password": "anypass"}
+        )
         assert token is None
 
     def test_authorize_with_valid_permission(self, authenticator):
         """Test authorization with valid permission."""
         api_key = authenticator.api_key_manager.generate_api_key(
-            user_id="user-123",
-            permissions=["read"]
+            user_id="user-123", permissions=["read"]
         )
         token = authenticator.authenticate({"api_key": api_key})
 
@@ -508,8 +495,7 @@ class TestAuthenticator:
     def test_authorize_with_invalid_permission(self, authenticator):
         """Test authorization fails with invalid permission."""
         api_key = authenticator.api_key_manager.generate_api_key(
-            user_id="user-123",
-            permissions=["read"]
+            user_id="user-123", permissions=["read"]
         )
         token = authenticator.authenticate({"api_key": api_key})
 
@@ -518,8 +504,7 @@ class TestAuthenticator:
     def test_authorize_with_admin_permission(self, authenticator):
         """Test admin permission grants all access."""
         api_key = authenticator.api_key_manager.generate_api_key(
-            user_id="admin-user",
-            permissions=["admin"]
+            user_id="admin-user", permissions=["admin"]
         )
         token = authenticator.authenticate({"api_key": api_key})
 
@@ -530,8 +515,7 @@ class TestAuthenticator:
     def test_authorize_with_revoked_token(self, authenticator):
         """Test authorization fails with revoked token."""
         api_key = authenticator.api_key_manager.generate_api_key(
-            user_id="user-123",
-            permissions=["read"]
+            user_id="user-123", permissions=["read"]
         )
         token = authenticator.authenticate({"api_key": api_key})
         authenticator.revoke_token(token)
@@ -541,8 +525,7 @@ class TestAuthenticator:
     def test_refresh_token(self, authenticator):
         """Test token refresh."""
         api_key = authenticator.api_key_manager.generate_api_key(
-            user_id="user-123",
-            permissions=["read"]
+            user_id="user-123", permissions=["read"]
         )
         original_token = authenticator.authenticate({"api_key": api_key})
         new_token = authenticator.refresh_token(original_token)
@@ -554,8 +537,7 @@ class TestAuthenticator:
     def test_revoke_token(self, authenticator):
         """Test token revocation."""
         api_key = authenticator.api_key_manager.generate_api_key(
-            user_id="user-123",
-            permissions=["read"]
+            user_id="user-123", permissions=["read"]
         )
         token = authenticator.authenticate({"api_key": api_key})
 
@@ -571,8 +553,7 @@ class TestAuthenticator:
 
         # Create token for user
         token = authenticator.token_manager.create_token(
-            user_id="editor_user",
-            permissions=[]
+            user_id="editor_user", permissions=[]
         )
 
         assert authenticator.authorize(token, "resource", "read")
@@ -591,9 +572,11 @@ class TestTokenRoundtrip:
     def test_token_roundtrip_preserves_all_fields(self):
         """Token -> to_dict -> from_dict preserves all data."""
         original = Token(
-            token_id="rt-1", user_id="u-1",
+            token_id="rt-1",
+            user_id="u-1",
             permissions=["read", "write", "admin"],
-            expires_at=99999.0, created_at=10000.0,
+            expires_at=99999.0,
+            created_at=10000.0,
         )
         d = original.to_dict()
         restored = Token.from_dict(d)
@@ -690,6 +673,7 @@ class TestAuthenticatorExtended:
         # Since I can't easily reset it without adding a reset method,
         # I'll just use it and be careful.
         from codomyrmex.auth.core.authenticator import Authenticator
+
         a = Authenticator()
         a._users = {}
         a.permissions = PermissionRegistry()

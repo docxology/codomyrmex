@@ -180,7 +180,11 @@ class QLearningAgent(Agent):
     def _state_key(self, observation: dict[str, Any]) -> str:
         """Convert observation to a hashable state key."""
         # Simple: sort and stringify. Override for custom state representations.
-        items = sorted((k, v) for k, v in observation.items() if isinstance(v, (int, float, str, bool)))
+        items = sorted(
+            (k, v)
+            for k, v in observation.items()
+            if isinstance(v, (int, float, str, bool))
+        )
         return str(items)
 
     def act(self, observation: dict[str, Any]) -> Action:

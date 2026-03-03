@@ -1,6 +1,5 @@
 """Zero-Mock tests for DocumentReader — uses real file I/O via tmp_path."""
 
-
 import pytest
 
 from codomyrmex.documents.core.document_reader import DocumentReader, read_document
@@ -11,6 +10,7 @@ from codomyrmex.documents.models.document import DocumentFormat
 @pytest.mark.unit
 class TestDocumentReader:
     """Test suite for DocumentReader."""
+
     def setup_method(self):
         self.reader = DocumentReader()
 
@@ -60,6 +60,7 @@ class TestDocumentReader:
 @pytest.mark.unit
 class TestReadDocumentConvenience:
     """Test suite for ReadDocumentConvenience."""
+
     def test_read_document_wrapper(self, tmp_path):
         """Test the convenience wrapper returns a real document."""
         f = tmp_path / "test.txt"

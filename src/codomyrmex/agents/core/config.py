@@ -63,7 +63,9 @@ class AgentConfig:
 
     # Every Code configuration
     every_code_command: str = "code"
-    every_code_alt_command: str = "coder"  # Alternative command to avoid VS Code conflicts
+    every_code_alt_command: str = (
+        "coder"  # Alternative command to avoid VS Code conflicts
+    )
     every_code_timeout: int = 120
     every_code_working_dir: str | None = None
     every_code_api_key: str | None = None
@@ -129,25 +131,35 @@ class AgentConfig:
         self.claude_model = _env_or("claude_model", "CLAUDE_MODEL")
         self.claude_timeout = _env_or("claude_timeout", "CLAUDE_TIMEOUT", int)
         self.claude_max_tokens = _env_or("claude_max_tokens", "CLAUDE_MAX_TOKENS", int)
-        self.claude_temperature = _env_or("claude_temperature", "CLAUDE_TEMPERATURE", float)
+        self.claude_temperature = _env_or(
+            "claude_temperature", "CLAUDE_TEMPERATURE", float
+        )
 
         # Codex configuration
         self.codex_api_key = _env_or("codex_api_key", "OPENAI_API_KEY")
         self.codex_model = _env_or("codex_model", "CODEX_MODEL")
         self.codex_timeout = _env_or("codex_timeout", "CODEX_TIMEOUT", int)
         self.codex_max_tokens = _env_or("codex_max_tokens", "CODEX_MAX_TOKENS", int)
-        self.codex_temperature = _env_or("codex_temperature", "CODEX_TEMPERATURE", float)
+        self.codex_temperature = _env_or(
+            "codex_temperature", "CODEX_TEMPERATURE", float
+        )
 
         # OpenClaw configuration
         self.openclaw_command = _env_or("openclaw_command", "OPENCLAW_COMMAND")
         self.openclaw_timeout = _env_or("openclaw_timeout", "OPENCLAW_TIMEOUT", int)
-        self.openclaw_working_dir = _env_or("openclaw_working_dir", "OPENCLAW_WORKING_DIR")
-        self.openclaw_thinking_level = _env_or("openclaw_thinking_level", "OPENCLAW_THINKING_LEVEL")
+        self.openclaw_working_dir = _env_or(
+            "openclaw_working_dir", "OPENCLAW_WORKING_DIR"
+        )
+        self.openclaw_thinking_level = _env_or(
+            "openclaw_thinking_level", "OPENCLAW_THINKING_LEVEL"
+        )
 
         # OpenCode configuration
         self.opencode_command = _env_or("opencode_command", "OPENCODE_COMMAND")
         self.opencode_timeout = _env_or("opencode_timeout", "OPENCODE_TIMEOUT", int)
-        self.opencode_working_dir = _env_or("opencode_working_dir", "OPENCODE_WORKING_DIR")
+        self.opencode_working_dir = _env_or(
+            "opencode_working_dir", "OPENCODE_WORKING_DIR"
+        )
         self.opencode_api_key = _env_or("opencode_api_key", "OPENCODE_API_KEY")
 
         # Gemini configuration
@@ -157,30 +169,50 @@ class AgentConfig:
         self.gemini_api_key = _env_or("gemini_api_key", "GEMINI_API_KEY")
         self.gemini_model = _env_or("gemini_model", "GEMINI_MODEL")
         self.gemini_auth_method = _env_or("gemini_auth_method", "GEMINI_AUTH_METHOD")
-        self.gemini_settings_path = _env_or("gemini_settings_path", "GEMINI_SETTINGS_PATH")
+        self.gemini_settings_path = _env_or(
+            "gemini_settings_path", "GEMINI_SETTINGS_PATH"
+        )
 
         # Mistral Vibe configuration
-        self.mistral_vibe_command = _env_or("mistral_vibe_command", "MISTRAL_VIBE_COMMAND")
-        self.mistral_vibe_timeout = _env_or("mistral_vibe_timeout", "MISTRAL_VIBE_TIMEOUT", int)
-        self.mistral_vibe_working_dir = _env_or("mistral_vibe_working_dir", "MISTRAL_VIBE_WORKING_DIR")
+        self.mistral_vibe_command = _env_or(
+            "mistral_vibe_command", "MISTRAL_VIBE_COMMAND"
+        )
+        self.mistral_vibe_timeout = _env_or(
+            "mistral_vibe_timeout", "MISTRAL_VIBE_TIMEOUT", int
+        )
+        self.mistral_vibe_working_dir = _env_or(
+            "mistral_vibe_working_dir", "MISTRAL_VIBE_WORKING_DIR"
+        )
         self.mistral_vibe_api_key = _env_or("mistral_vibe_api_key", "MISTRAL_API_KEY")
 
         # Every Code configuration
         self.every_code_command = _env_or("every_code_command", "EVERY_CODE_COMMAND")
-        self.every_code_alt_command = _env_or("every_code_alt_command", "EVERY_CODE_ALT_COMMAND")
-        self.every_code_timeout = _env_or("every_code_timeout", "EVERY_CODE_TIMEOUT", int)
-        self.every_code_working_dir = _env_or("every_code_working_dir", "EVERY_CODE_WORKING_DIR")
+        self.every_code_alt_command = _env_or(
+            "every_code_alt_command", "EVERY_CODE_ALT_COMMAND"
+        )
+        self.every_code_timeout = _env_or(
+            "every_code_timeout", "EVERY_CODE_TIMEOUT", int
+        )
+        self.every_code_working_dir = _env_or(
+            "every_code_working_dir", "EVERY_CODE_WORKING_DIR"
+        )
         self.every_code_api_key = _env_or("every_code_api_key", "OPENAI_API_KEY")
-        self.every_code_config_path = os.getenv(
-            "CODE_HOME", os.path.expanduser("~/.code")
-        ) if self.every_code_config_path is None else self.every_code_config_path
+        self.every_code_config_path = (
+            os.getenv("CODE_HOME", os.path.expanduser("~/.code"))
+            if self.every_code_config_path is None
+            else self.every_code_config_path
+        )
 
         # DeepSeek configuration
         self.deepseek_api_key = _env_or("deepseek_api_key", "DEEPSEEK_API_KEY")
         self.deepseek_model = _env_or("deepseek_model", "DEEPSEEK_MODEL")
         self.deepseek_timeout = _env_or("deepseek_timeout", "DEEPSEEK_TIMEOUT", int)
-        self.deepseek_max_tokens = _env_or("deepseek_max_tokens", "DEEPSEEK_MAX_TOKENS", int)
-        self.deepseek_temperature = _env_or("deepseek_temperature", "DEEPSEEK_TEMPERATURE", float)
+        self.deepseek_max_tokens = _env_or(
+            "deepseek_max_tokens", "DEEPSEEK_MAX_TOKENS", int
+        )
+        self.deepseek_temperature = _env_or(
+            "deepseek_temperature", "DEEPSEEK_TEMPERATURE", float
+        )
 
         # O1 / O3 configuration
         self.o1_api_key = _env_or("o1_api_key", "OPENAI_API_KEY")
@@ -198,13 +230,17 @@ class AgentConfig:
 
         # Ollama / local
         self.ollama_base_url = _env_or("ollama_base_url", "OLLAMA_BASE_URL")
-        self.ollama_default_model = _env_or("ollama_default_model", "OLLAMA_DEFAULT_MODEL")
+        self.ollama_default_model = _env_or(
+            "ollama_default_model", "OLLAMA_DEFAULT_MODEL"
+        )
 
         # General configuration
         self.default_timeout = int(
             os.getenv("AGENT_DEFAULT_TIMEOUT", str(self.default_timeout))
         )
-        self.enable_logging = os.getenv("AGENT_ENABLE_LOGGING", "true").lower() == "true"
+        self.enable_logging = (
+            os.getenv("AGENT_ENABLE_LOGGING", "true").lower() == "true"
+        )
         self.log_level = os.getenv("AGENT_LOG_LEVEL", self.log_level)
 
         # Output directory
@@ -358,4 +394,3 @@ def reset_config() -> None:
     """Reset global configuration to default."""
     global _config_instance
     _config_instance = None
-

@@ -16,6 +16,7 @@ class AnthropicProvider(LLMProvider):
     def _init_client(self):
         try:
             from anthropic import Anthropic
+
             self._client = Anthropic(api_key=self.config.api_key)
         except ImportError:
             self._client = None
@@ -26,7 +27,7 @@ class AnthropicProvider(LLMProvider):
         model: str | None = None,
         temperature: float = 0.7,
         max_tokens: int | None = None,
-        **kwargs
+        **kwargs,
     ) -> CompletionResponse:
         """Complete."""
         if not self._client:
@@ -47,7 +48,7 @@ class AnthropicProvider(LLMProvider):
             system=system,
             temperature=temperature,
             max_tokens=max_tokens or 4096,
-            **kwargs
+            **kwargs,
         )
 
         return CompletionResponse(
@@ -58,7 +59,8 @@ class AnthropicProvider(LLMProvider):
             usage={
                 "prompt_tokens": response.usage.input_tokens,
                 "completion_tokens": response.usage.output_tokens,
-                "total_tokens": response.usage.input_tokens + response.usage.output_tokens,
+                "total_tokens": response.usage.input_tokens
+                + response.usage.output_tokens,
             },
             raw_response=response,
         )
@@ -69,7 +71,7 @@ class AnthropicProvider(LLMProvider):
         model: str | None = None,
         temperature: float = 0.7,
         max_tokens: int | None = None,
-        **kwargs
+        **kwargs,
     ) -> Iterator[str]:
         if not self._client:
             raise RuntimeError("Anthropic client not initialized.")
@@ -88,7 +90,7 @@ class AnthropicProvider(LLMProvider):
             system=system,
             temperature=temperature,
             max_tokens=max_tokens or 4096,
-            **kwargs
+            **kwargs,
         ) as stream:
             yield from stream.text_stream
 
@@ -98,10 +100,11 @@ class AnthropicProvider(LLMProvider):
         model: str | None = None,
         temperature: float = 0.7,
         max_tokens: int | None = None,
-        **kwargs
+        **kwargs,
     ) -> CompletionResponse:
         try:
             from anthropic import AsyncAnthropic
+
             async_client = AsyncAnthropic(api_key=self.config.api_key)
 
             system = None
@@ -118,7 +121,7 @@ class AnthropicProvider(LLMProvider):
                 system=system,
                 temperature=temperature,
                 max_tokens=max_tokens or 4096,
-                **kwargs
+                **kwargs,
             )
 
             return CompletionResponse(
@@ -126,11 +129,16 @@ class AnthropicProvider(LLMProvider):
                 model=response.model,
                 provider=self.provider_type,
                 finish_reason=response.stop_reason,
-                usage={
-                    "prompt_tokens": response.usage.input_tokens,
-                    "completion_tokens": response.usage.output_tokens,
-                    "total_tokens": response.usage.input_tokens + response.usage.output_tokens,
-                } if response.usage else None,
+                usage=(
+                    {
+                        "prompt_tokens": response.usage.input_tokens,
+                        "completion_tokens": response.usage.output_tokens,
+                        "total_tokens": response.usage.input_tokens
+                        + response.usage.output_tokens,
+                    }
+                    if response.usage
+                    else None
+                ),
                 raw_response=response,
             )
         except ImportError as e:
@@ -147,5 +155,3 @@ class AnthropicProvider(LLMProvider):
 
     def _default_model(self) -> str:
         return "claude-3-5-sonnet-20241022"
-
-

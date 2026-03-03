@@ -31,7 +31,13 @@ class Role(Enum):
 _ROLE_HIERARCHY: dict[Role, set[Permission]] = {
     Role.VIEWER: {Permission.READ},
     Role.OPERATOR: {Permission.READ, Permission.WRITE, Permission.EXECUTE},
-    Role.ADMIN: {Permission.READ, Permission.WRITE, Permission.EXECUTE, Permission.DELETE, Permission.ADMIN},
+    Role.ADMIN: {
+        Permission.READ,
+        Permission.WRITE,
+        Permission.EXECUTE,
+        Permission.DELETE,
+        Permission.ADMIN,
+    },
 }
 
 
@@ -71,13 +77,18 @@ class PermissionModel:
         return len(self._grants)
 
     def grant(
-        self, principal: str, role: Role,
-        resource: str = "", granted_by: str = "",
+        self,
+        principal: str,
+        role: Role,
+        resource: str = "",
+        granted_by: str = "",
     ) -> None:
         """Grant a role to a principal."""
         g = Grant(
-            principal=principal, role=role,
-            resource=resource, granted_by=granted_by,
+            principal=principal,
+            role=role,
+            resource=resource,
+            granted_by=granted_by,
         )
         self._grants.setdefault(principal, []).append(g)
 
@@ -110,7 +121,9 @@ class PermissionModel:
                 return True
         return False
 
-    def effective_permissions(self, principal: str, resource: str = "") -> set[Permission]:
+    def effective_permissions(
+        self, principal: str, resource: str = ""
+    ) -> set[Permission]:
         """Get all effective permissions for a principal."""
         perms: set[Permission] = set()
         for g in self._grants.get(principal, []):

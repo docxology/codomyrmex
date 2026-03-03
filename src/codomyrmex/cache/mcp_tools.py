@@ -11,11 +11,14 @@ from typing import Any
 try:
     from codomyrmex.model_context_protocol.decorators import mcp_tool
 except ImportError:
+
     def mcp_tool(**kwargs):
         def decorator(fn):
             fn._mcp_tool_meta = kwargs
             return fn
+
         return decorator
+
 
 # Module-level singleton so cache data survives across multiple tool calls.
 _manager: Any = None
@@ -25,6 +28,7 @@ def _get_manager():
     global _manager
     if _manager is None:
         from codomyrmex.cache import CacheManager
+
         _manager = CacheManager()
     return _manager
 

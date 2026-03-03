@@ -12,6 +12,7 @@ from typing import Any
 
 try:
     from codomyrmex.logging_monitoring.core.logger_config import get_logger
+
     logger = get_logger(__name__)
 except Exception:
     logger = logging.getLogger(__name__)
@@ -24,6 +25,7 @@ try:
         SkillCategory,
         SkillMetadata,
     )
+
     _HAS_DISCOVERY = True
 except ImportError:
     _HAS_DISCOVERY = False
@@ -67,7 +69,9 @@ def _build_default_primitives() -> list[KernelPrimitive]:
 def _register_arscontexta_skills() -> None:
     """Register 6 MCP-ready skills into the global discovery registry."""
     if not _HAS_DISCOVERY:
-        logger.debug("Skipping arscontexta skill registration — discovery module unavailable")
+        logger.debug(
+            "Skipping arscontexta skill registration — discovery module unavailable"
+        )
         return
 
     manager = ArsContextaManager()
@@ -107,34 +111,70 @@ def _register_arscontexta_skills() -> None:
             arscontexta_setup,
             "arscontexta_setup",
             "Initialise an Ars Contexta vault at the given path.",
-            [ParameterSchema(name="vault_path", param_type="string", description="Filesystem path for the vault")],
+            [
+                ParameterSchema(
+                    name="vault_path",
+                    param_type="string",
+                    description="Filesystem path for the vault",
+                )
+            ],
         ),
         (
             arscontexta_health,
             "arscontexta_health",
             "Run vault health diagnostics.",
-            [ParameterSchema(name="vault_path", param_type="string", description="Filesystem path of the vault")],
+            [
+                ParameterSchema(
+                    name="vault_path",
+                    param_type="string",
+                    description="Filesystem path of the vault",
+                )
+            ],
         ),
         (
             arscontexta_process,
             "arscontexta_process",
             "Run the 6R processing pipeline on content.",
             [
-                ParameterSchema(name="content", param_type="string", description="Content to process"),
-                ParameterSchema(name="context", param_type="string", description="JSON context object", required=False, default="{}"),
+                ParameterSchema(
+                    name="content",
+                    param_type="string",
+                    description="Content to process",
+                ),
+                ParameterSchema(
+                    name="context",
+                    param_type="string",
+                    description="JSON context object",
+                    required=False,
+                    default="{}",
+                ),
             ],
         ),
         (
             arscontexta_derive,
             "arscontexta_derive",
             "Extract configuration dimension signals from user text.",
-            [ParameterSchema(name="user_text", param_type="string", description="Free-form user text")],
+            [
+                ParameterSchema(
+                    name="user_text",
+                    param_type="string",
+                    description="Free-form user text",
+                )
+            ],
         ),
         (
             arscontexta_primitives,
             "arscontexta_primitives",
             "List kernel primitives, optionally filtered by layer.",
-            [ParameterSchema(name="layer", param_type="string", description="Layer filter", required=False, default="")],
+            [
+                ParameterSchema(
+                    name="layer",
+                    param_type="string",
+                    description="Layer filter",
+                    required=False,
+                    default="",
+                )
+            ],
         ),
         (
             arscontexta_stats,
@@ -162,7 +202,6 @@ def _register_arscontexta_skills() -> None:
         logger.debug("Registered arscontexta skill: %s", name)
 
 
-
 class KernelPrimitiveRegistry:
     """Registry holding the 15 default kernel primitives."""
 
@@ -188,9 +227,7 @@ class KernelPrimitiveRegistry:
             return False
         # Structural check: for folder-structure, verify spaces exist
         if name == "folder-structure":
-            return all(
-                (vault_path / s.value).is_dir() for s in VaultSpace
-            )
+            return all((vault_path / s.value).is_dir() for s in VaultSpace)
         # Default: primitive is registered and enabled
         return prim.enabled
 
@@ -213,7 +250,9 @@ class ProcessingPipeline:
         """Register a handler for a pipeline stage."""
         self._handlers[stage].append(handler)
 
-    def process(self, content: str, context: dict[str, Any] | None = None) -> list[StageResult]:
+    def process(
+        self, content: str, context: dict[str, Any] | None = None
+    ) -> list[StageResult]:
         """Run content through all 6 pipeline stages in order."""
         ctx = context or {}
         self._results = []
@@ -269,7 +308,9 @@ class DerivationEngine:
     def ingest_signal(self, signal: DimensionSignal) -> None:
         self._signals.append(signal)
 
-    def ingest_from_text(self, text: str, source: str = "user") -> list[DimensionSignal]:
+    def ingest_from_text(
+        self, text: str, source: str = "user"
+    ) -> list[DimensionSignal]:
         """Extract dimension signals from free-form text via keyword heuristics."""
         new_signals: list[DimensionSignal] = []
         lower = text.lower()

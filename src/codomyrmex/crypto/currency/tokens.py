@@ -88,7 +88,9 @@ def create_erc20_interface(
     if decimals < 0:
         raise WalletError("Token decimals must be non-negative")
     token = ERC20Token(name=name, symbol=symbol, decimals=decimals)
-    logger.debug("Created ERC20 interface: %s (%s), decimals=%d", name, symbol, decimals)
+    logger.debug(
+        "Created ERC20 interface: %s (%s), decimals=%d", name, symbol, decimals
+    )
     return token
 
 
@@ -126,7 +128,9 @@ def encode_transfer(to: str, amount: int) -> bytes:
         # Normalize address
         addr_hex = to.lower().replace("0x", "")
         if len(addr_hex) != 40:
-            raise WalletError(f"Invalid address length: expected 40 hex chars, got {len(addr_hex)}")
+            raise WalletError(
+                f"Invalid address length: expected 40 hex chars, got {len(addr_hex)}"
+            )
 
         addr_bytes = bytes.fromhex(addr_hex)
         # Left-pad address to 32 bytes

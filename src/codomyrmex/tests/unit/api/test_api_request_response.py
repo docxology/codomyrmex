@@ -10,10 +10,7 @@ class TestAPIRequest:
         """Test creating a basic API request."""
         from codomyrmex.api.standardization.rest_api import APIRequest, HTTPMethod
 
-        request = APIRequest(
-            method=HTTPMethod.GET,
-            path="/users"
-        )
+        request = APIRequest(method=HTTPMethod.GET, path="/users")
 
         assert request.method == HTTPMethod.GET
         assert request.path == "/users"
@@ -26,11 +23,7 @@ class TestAPIRequest:
         from codomyrmex.api.standardization.rest_api import APIRequest, HTTPMethod
 
         headers = {"Authorization": "Bearer token123"}
-        request = APIRequest(
-            method=HTTPMethod.GET,
-            path="/users",
-            headers=headers
-        )
+        request = APIRequest(method=HTTPMethod.GET, path="/users", headers=headers)
 
         assert request.headers["Authorization"] == "Bearer token123"
 
@@ -38,12 +31,8 @@ class TestAPIRequest:
         """Test JSON body parsing."""
         from codomyrmex.api.standardization.rest_api import APIRequest, HTTPMethod
 
-        body = json.dumps({"name": "test"}).encode('utf-8')
-        request = APIRequest(
-            method=HTTPMethod.POST,
-            path="/users",
-            body=body
-        )
+        body = json.dumps({"name": "test"}).encode("utf-8")
+        request = APIRequest(method=HTTPMethod.POST, path="/users", body=body)
 
         assert request.json_body == {"name": "test"}
 
@@ -52,11 +41,7 @@ class TestAPIRequest:
         from codomyrmex.api.standardization.rest_api import APIRequest, HTTPMethod
 
         body = b"not valid json"
-        request = APIRequest(
-            method=HTTPMethod.POST,
-            path="/users",
-            body=body
-        )
+        request = APIRequest(method=HTTPMethod.POST, path="/users", body=body)
 
         assert request.json_body is None
 
@@ -116,11 +101,7 @@ class TestAPIRequestEdgeCases:
         """Test request with empty body."""
         from codomyrmex.api.standardization.rest_api import APIRequest, HTTPMethod
 
-        request = APIRequest(
-            method=HTTPMethod.POST,
-            path="/test",
-            body=b""
-        )
+        request = APIRequest(method=HTTPMethod.POST, path="/test", body=b"")
 
         assert request.json_body is None
 
@@ -128,12 +109,8 @@ class TestAPIRequestEdgeCases:
         """Test request with unicode content in body."""
         from codomyrmex.api.standardization.rest_api import APIRequest, HTTPMethod
 
-        body = json.dumps({"name": "Test User", "emoji": "Hello World"}).encode('utf-8')
-        request = APIRequest(
-            method=HTTPMethod.POST,
-            path="/users",
-            body=body
-        )
+        body = json.dumps({"name": "Test User", "emoji": "Hello World"}).encode("utf-8")
+        request = APIRequest(method=HTTPMethod.POST, path="/users", body=body)
 
         assert request.json_body is not None
         assert request.json_body["name"] == "Test User"
@@ -145,7 +122,7 @@ class TestAPIRequestEdgeCases:
         request = APIRequest(
             method=HTTPMethod.GET,
             path="/search",
-            query_params={"tags": ["python", "api", "rest"]}
+            query_params={"tags": ["python", "api", "rest"]},
         )
 
         assert len(request.query_params["tags"]) == 3
@@ -157,7 +134,7 @@ class TestAPIRequestEdgeCases:
         request = APIRequest(
             method=HTTPMethod.GET,
             path="/test",
-            context={"user_id": 123, "session": "abc"}
+            context={"user_id": 123, "session": "abc"},
         )
 
         assert request.context["user_id"] == 123
@@ -174,7 +151,7 @@ class TestAPIResponseEdgeCases:
         response = APIResponse(
             status_code=HTTPStatus.OK,
             body={"data": "test"},
-            headers={"X-Custom-Header": "custom-value"}
+            headers={"X-Custom-Header": "custom-value"},
         )
 
         assert "X-Custom-Header" in response.headers
@@ -185,9 +162,7 @@ class TestAPIResponseEdgeCases:
         from codomyrmex.api.standardization.rest_api import APIResponse, HTTPStatus
 
         response = APIResponse(
-            status_code=HTTPStatus.OK,
-            body="<html></html>",
-            content_type="text/html"
+            status_code=HTTPStatus.OK, body="<html></html>", content_type="text/html"
         )
 
         assert response.content_type == "text/html"

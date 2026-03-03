@@ -89,6 +89,7 @@ def versioned(version: str = "1.0.0", introduced: str = "1.0.0"):
         version: Current API version string.
         introduced: Version when the function was introduced.
     """
+
     def decorator(func: Callable) -> Callable:
         """Decorator."""
         func._api_version = APIVersion.parse(version)
@@ -108,7 +109,9 @@ def versioned(version: str = "1.0.0", introduced: str = "1.0.0"):
     return decorator
 
 
-def deprecated(since: str = "", removal: str = "", replacement: str = "", message: str = ""):
+def deprecated(
+    since: str = "", removal: str = "", replacement: str = "", message: str = ""
+):
     """Decorator to mark a function as deprecated.
 
     Emits a DeprecationWarning when called.
@@ -119,6 +122,7 @@ def deprecated(since: str = "", removal: str = "", replacement: str = "", messag
         replacement: Suggested replacement.
         message: Custom deprecation message.
     """
+
     def decorator(func: Callable) -> Callable:
         """Decorator."""
         info = DeprecationInfo(
@@ -167,10 +171,12 @@ class CompatibilityMatrix:
         """Record that two versions are compatible."""
         if tool not in self._compat:
             self._compat[tool] = []
-        self._compat[tool].append((
-            APIVersion.parse(from_ver),
-            APIVersion.parse(to_ver),
-        ))
+        self._compat[tool].append(
+            (
+                APIVersion.parse(from_ver),
+                APIVersion.parse(to_ver),
+            )
+        )
 
     def is_compatible(self, tool: str, ver_a: str, ver_b: str) -> bool:
         """Check if two versions are compatible."""

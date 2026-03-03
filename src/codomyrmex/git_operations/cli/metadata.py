@@ -427,7 +427,6 @@ Examples:
     except Exception as e:
         print(f"Error executing command: {e}")
         if args.verbose:
-
             traceback.print_exc()
 
 

@@ -13,7 +13,9 @@ from .adapters import IA3Adapter, LoRAAdapter, PrefixTuningAdapter
 
 
 @mcp_tool(category="peft")
-def peft_create_adapter(method: str, d_model: int, rank: int = 4, alpha: float = 8.0) -> dict:
+def peft_create_adapter(
+    method: str, d_model: int, rank: int = 4, alpha: float = 8.0
+) -> dict:
     """Create a PEFT adapter and return its parameter statistics.
 
     Args:
@@ -35,14 +37,18 @@ def peft_create_adapter(method: str, d_model: int, rank: int = 4, alpha: float =
     elif method == "ia3":
         adapter = IA3Adapter(d_model=d_model)
     else:
-        raise ValueError(f"Unknown PEFT method: {method!r}. Supported: lora, prefix, ia3")
+        raise ValueError(
+            f"Unknown PEFT method: {method!r}. Supported: lora, prefix, ia3"
+        )
 
     trainable = adapter.trainable_params
     return {
         "method": method,
         "trainable_params": trainable,
         "full_finetune_params": full_params,
-        "reduction_factor": round(full_params / trainable, 2) if trainable > 0 else float("inf"),
+        "reduction_factor": (
+            round(full_params / trainable, 2) if trainable > 0 else float("inf")
+        ),
     }
 
 

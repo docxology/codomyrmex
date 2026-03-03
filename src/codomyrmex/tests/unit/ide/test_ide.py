@@ -34,6 +34,7 @@ class TestIDEBaseClasses:
     def test_ide_client_is_abstract(self):
         """IDEClient should be an abstract class."""
         import abc
+
         assert issubclass(IDEClient, abc.ABC)
 
     def test_ide_error_inherits_from_exception(self):
@@ -119,7 +120,9 @@ class TestIDEDataClasses:
 
     def test_file_info_to_dict(self):
         """FileInfo.to_dict should return proper dict."""
-        info = FileInfo(path="/test.py", name="test.py", language="python", line_count=100)
+        info = FileInfo(
+            path="/test.py", name="test.py", language="python", line_count=100
+        )
         d = info.to_dict()
         assert d["path"] == "/test.py"
         assert d["language"] == "python"
@@ -142,7 +145,9 @@ class TestAntigravityDataClasses:
 
     def test_artifact_to_dict(self):
         """Artifact.to_dict should return proper dict."""
-        artifact = Artifact(name="task", path="/task.md", artifact_type="task", size=100)
+        artifact = Artifact(
+            name="task", path="/task.md", artifact_type="task", size=100
+        )
         d = artifact.to_dict()
         assert d["name"] == "task"
         assert d["type"] == "task"
@@ -299,9 +304,7 @@ class TestAntigravityClient:
 
             # Test creation
             result = client.create_artifact(
-                name="test_artifact",
-                content="# Test Content",
-                artifact_type="task"
+                name="test_artifact", content="# Test Content", artifact_type="task"
             )
 
             # Verification
@@ -395,6 +398,7 @@ class TestAntigravityClient:
             # If agy is not on PATH, this uses fallback; if agy IS on PATH,
             # it uses CLI. Either way it should succeed.
             assert result.success is True
+
     def test_get_tool_info_known_tool(self):
         """get_tool_info should return info for known tools."""
         client = AntigravityClient()
@@ -680,7 +684,7 @@ class TestIDEClientHelperMethods:
         client = AntigravityClient()  # Use concrete implementation
         info = client.get_file_info(__file__)
 
-        assert hasattr(info, 'name')
+        assert hasattr(info, "name")
         assert info.name == "test_ide.py"
         assert info.language == "python"
         assert info.line_count > 0
@@ -700,8 +704,8 @@ class TestIDEClientHelperMethods:
         # regardless of whether the CLI is installed.
         commands = [
             IDECommand(name="nonexistent_xyz_command"),  # Always fails — not in TOOLS
-            IDECommand(name="view_file"),                 # Should not run
-            IDECommand(name="list_dir"),                  # Should not run
+            IDECommand(name="view_file"),  # Should not run
+            IDECommand(name="list_dir"),  # Should not run
         ]
 
         results = client.execute_batch(commands, stop_on_error=True)
@@ -764,7 +768,7 @@ class TestIDEClientHelperMethods:
         client.execute_command_safe("list_dir")
 
         last = client.get_last_command()
-        assert hasattr(last, 'command')
+        assert hasattr(last, "command")
         assert last.command == "list_dir"
 
     def test_get_last_command_empty_history(self):

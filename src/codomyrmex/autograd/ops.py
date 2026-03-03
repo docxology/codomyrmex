@@ -55,7 +55,7 @@ def tanh(x: Value | Tensor) -> Value | Tensor:
     def _backward() -> None:
         if x.grad is None:
             x.grad = np.zeros_like(x.data)
-        x.grad += (1.0 - t ** 2) * out.grad
+        x.grad += (1.0 - t**2) * out.grad
 
     out._backward = _backward
     return out

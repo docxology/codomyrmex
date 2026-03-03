@@ -21,6 +21,7 @@ logger = get_logger(__name__)
 
 class ComplianceStandard(Enum):
     """Supported compliance standards."""
+
     OWASP_TOP_10 = "OWASP_TOP_10"
     NIST_800_53 = "NIST_800_53"
     ISO_27001 = "ISO_27001"
@@ -32,6 +33,7 @@ class ComplianceStandard(Enum):
 @dataclass
 class ComplianceControl:
     """Represents a security control."""
+
     control_id: str
     name: str
     description: str
@@ -40,9 +42,11 @@ class ComplianceControl:
     level: str = "required"
     automated: bool = False
 
+
 @dataclass
 class ComplianceResult:
     """Result of a compliance check."""
+
     control_id: str
     status: str
     evidence: str
@@ -67,12 +71,16 @@ class ComplianceChecker:
                 name="Broken Access Control",
                 description="Ensure restrictions on what authenticated users are allowed to do",
                 standard=ComplianceStandard.OWASP_TOP_10,
-                category="Access Control"
+                category="Access Control",
             ),
             # Add more controls as needed
         }
 
-    def check_compliance(self, target_config: dict[str, Any], standards: list[ComplianceStandard] | None = None) -> list[ComplianceResult]:
+    def check_compliance(
+        self,
+        target_config: dict[str, Any],
+        standards: list[ComplianceStandard] | None = None,
+    ) -> list[ComplianceResult]:
         """Check compliance against standards."""
         results = []
         # Mock compliance check logic
@@ -84,13 +92,15 @@ class ComplianceChecker:
         for control_id, control in self.controls.items():
             if control.standard in target_standards:
                 # Mock result -> assumed compliant for demo unless specified
-                results.append(ComplianceResult(
-                    control_id=control_id,
-                    status="compliant",
-                    evidence="Mock evidence: configuration parameter X set to Y",
-                    timestamp=datetime.now(),
-                    details={"checked_config": "config1"}
-                ))
+                results.append(
+                    ComplianceResult(
+                        control_id=control_id,
+                        status="compliant",
+                        evidence="Mock evidence: configuration parameter X set to Y",
+                        timestamp=datetime.now(),
+                        details={"checked_config": "config1"},
+                    )
+                )
 
         return results
 
@@ -104,7 +114,9 @@ class ComplianceChecker:
 
 
 # Convenience functions
-def check_compliance_standards(config: dict[str, Any], standards: list[str] | None = None) -> list[dict[str, Any]]:
+def check_compliance_standards(
+    config: dict[str, Any], standards: list[str] | None = None
+) -> list[dict[str, Any]]:
     """Convenience function to check complianc standards."""
     checker = ComplianceChecker()
     enum_standards = []
@@ -115,13 +127,15 @@ def check_compliance_standards(config: dict[str, Any], standards: list[str] | No
             except KeyError:
                 logger.warning(f"Unknown standard: {s}")
 
-    results = checker.check_compliance(config, enum_standards if enum_standards else None)
+    results = checker.check_compliance(
+        config, enum_standards if enum_standards else None
+    )
     return [
         {
             "control_id": r.control_id,
             "status": r.status,
             "evidence": r.evidence,
-            "timestamp": r.timestamp.isoformat()
+            "timestamp": r.timestamp.isoformat(),
         }
         for r in results
     ]

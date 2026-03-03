@@ -8,6 +8,7 @@ from enum import Enum
 
 class GateType(Enum):
     """Quantum gate types."""
+
     H = "H"  # Hadamard
     X = "X"  # Pauli-X (NOT)
     Y = "Y"  # Pauli-Y
@@ -25,6 +26,7 @@ class GateType(Enum):
 @dataclass
 class Gate:
     """A quantum gate."""
+
     gate_type: GateType
     target: int
     control: int | None = None
@@ -34,6 +36,7 @@ class Gate:
 @dataclass
 class Qubit:
     """A quantum bit state."""
+
     alpha: complex = 1.0 + 0j  # |0> amplitude
     beta: complex = 0.0 + 0j  # |1> amplitude
 

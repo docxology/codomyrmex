@@ -36,10 +36,7 @@ class SecureDataContainer:
             TypeError: If data or metadata is not JSON serializable.
             EncryptionError: If encryption fails.
         """
-        payload = {
-            "data": data,
-            "metadata": metadata or {}
-        }
+        payload = {"data": data, "metadata": metadata or {}}
         json_data = json.dumps(payload).encode("utf-8")
         return self.encryptor.encrypt(json_data)
 

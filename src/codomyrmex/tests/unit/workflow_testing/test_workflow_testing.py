@@ -1,4 +1,5 @@
 """Unit tests for workflow_testing module."""
+
 import time
 
 import pytest
@@ -11,11 +12,13 @@ class TestWorkflowTestingImports:
     def test_module_imports(self):
         """Verify module can be imported without errors."""
         from codomyrmex.testing import workflow as workflow_testing
-        assert hasattr(workflow_testing, '__name__')
+
+        assert hasattr(workflow_testing, "__name__")
 
     def test_public_api_exists(self):
         """Verify expected public API is available."""
         from codomyrmex.testing.workflow import __all__
+
         expected_exports = [
             "WorkflowStepType",
             "StepStatus",
@@ -171,7 +174,7 @@ class TestWorkflowResult:
         assert result.total_steps == 3
         assert result.passed_steps == 2
         assert result.duration_ms == 350.0
-        assert result.pass_rate == 2/3
+        assert result.pass_rate == 2 / 3
 
     def test_result_to_dict(self):
         """Verify result serialization."""
@@ -246,8 +249,12 @@ class TestWorkflow:
 
         workflow = (
             Workflow(id="test", name="Test")
-            .add_step(WorkflowStep(id="s1", name="S1", step_type=WorkflowStepType.SCRIPT))
-            .add_assertion(id="a1", name="Assert", assertion_type="equals", expected=True)
+            .add_step(
+                WorkflowStep(id="s1", name="S1", step_type=WorkflowStepType.SCRIPT)
+            )
+            .add_assertion(
+                id="a1", name="Assert", assertion_type="equals", expected=True
+            )
             .add_wait(id="w1", seconds=1.0)
         )
 
@@ -466,10 +473,12 @@ class TestWorkflowRunner:
 
         runner = WorkflowRunner()
 
-        workflow = (
-            Workflow(id="test", name="Test")
-            .add_assertion(id="a1", name="Check True", assertion_type="equals",
-                          expected=True, actual_key="flag")
+        workflow = Workflow(id="test", name="Test").add_assertion(
+            id="a1",
+            name="Check True",
+            assertion_type="equals",
+            expected=True,
+            actual_key="flag",
         )
 
         result = runner.run(workflow, initial_context={"flag": True})
@@ -513,12 +522,14 @@ class TestWorkflowRunner:
         runner = WorkflowRunner()
 
         workflow = Workflow(id="test", name="Test")
-        workflow.add_step(WorkflowStep(
-            id="compute",
-            name="Compute",
-            step_type=WorkflowStepType.SCRIPT,
-            config={"function": lambda ctx: 100},
-        ))
+        workflow.add_step(
+            WorkflowStep(
+                id="compute",
+                name="Compute",
+                step_type=WorkflowStepType.SCRIPT,
+                config={"function": lambda ctx: 100},
+            )
+        )
         workflow.add_assertion(
             id="check",
             name="Check Output",
@@ -544,12 +555,14 @@ class TestWorkflowRunner:
         runner = WorkflowRunner()
 
         workflow = Workflow(id="test", name="Test")
-        workflow.add_step(WorkflowStep(
-            id="error",
-            name="Error Step",
-            step_type=WorkflowStepType.SCRIPT,
-            config={"function": lambda ctx: 1/0},  # Will raise error
-        ))
+        workflow.add_step(
+            WorkflowStep(
+                id="error",
+                name="Error Step",
+                step_type=WorkflowStepType.SCRIPT,
+                config={"function": lambda ctx: 1 / 0},  # Will raise error
+            )
+        )
         workflow.add_assertion(
             id="should_not_run",
             name="Should Not Run",
@@ -562,7 +575,9 @@ class TestWorkflowRunner:
 
         assert result.status == StepStatus.FAILED
         # Only first step should have run
-        assert len([r for r in result.step_results if r.status != StepStatus.PENDING]) <= 1
+        assert (
+            len([r for r in result.step_results if r.status != StepStatus.PENDING]) <= 1
+        )
 
     def test_runner_register_executor(self):
         """Verify custom executor registration."""
@@ -588,11 +603,13 @@ class TestWorkflowRunner:
         runner.register_executor(WorkflowStepType.CONDITIONAL, CustomExecutor())
 
         workflow = Workflow(id="test", name="Test")
-        workflow.add_step(WorkflowStep(
-            id="custom",
-            name="Custom Step",
-            step_type=WorkflowStepType.CONDITIONAL,
-        ))
+        workflow.add_step(
+            WorkflowStep(
+                id="custom",
+                name="Custom Step",
+                step_type=WorkflowStepType.CONDITIONAL,
+            )
+        )
 
         result = runner.run(workflow)
 
@@ -620,13 +637,15 @@ class TestWorkflowRunner:
         runner = WorkflowRunner()
 
         workflow = Workflow(id="test", name="Test")
-        workflow.add_step(WorkflowStep(
-            id="flaky",
-            name="Flaky Step",
-            step_type=WorkflowStepType.SCRIPT,
-            config={"function": flaky_function},
-            retry_count=5,
-        ))
+        workflow.add_step(
+            WorkflowStep(
+                id="flaky",
+                name="Flaky Step",
+                step_type=WorkflowStepType.SCRIPT,
+                config={"function": flaky_function},
+                retry_count=5,
+            )
+        )
 
         result = runner.run(workflow)
 

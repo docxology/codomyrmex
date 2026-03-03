@@ -1,4 +1,5 @@
 """Tests for Mamba SSM and Flash Attention implementations."""
+
 import numpy as np
 import pytest
 

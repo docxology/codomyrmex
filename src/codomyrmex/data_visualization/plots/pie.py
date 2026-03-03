@@ -1,4 +1,5 @@
 """Pie chart visualization."""
+
 from ._base import BasePlot
 
 

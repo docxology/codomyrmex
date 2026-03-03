@@ -10,7 +10,7 @@ import sys
 import pytest
 
 # Add src to path for imports
-src_path = os.path.join(os.path.dirname(__file__), '..', '..', 'src')
+src_path = os.path.join(os.path.dirname(__file__), "..", "..", "src")
 sys.path.insert(0, src_path)
 
 try:
@@ -19,7 +19,9 @@ except ImportError as e:
     print(f"Import error: {e}")
     print(f"Python path: {sys.path[:3]}")
     print(f"Looking for: {src_path}")
-    print(f"CLI file exists: {os.path.exists(os.path.join(src_path, 'codomyrmex', 'cli.py'))}")
+    print(
+        f"CLI file exists: {os.path.exists(os.path.join(src_path, 'codomyrmex', 'cli.py'))}"
+    )
     raise
 
 
@@ -43,6 +45,7 @@ class TestCLIBasics:
         """Test that CLI module can be imported successfully."""
         try:
             from codomyrmex.cli import check_environment, show_info
+
             assert callable(check_environment)
             assert callable(show_info)
         except ImportError as e:
@@ -93,9 +96,9 @@ class TestCLIModuleStructure:
         import codomyrmex.cli as cli_module
 
         # Check that main functions exist (version is optional)
-        assert hasattr(cli_module, 'main')
-        assert hasattr(cli_module, 'check_environment')
-        assert hasattr(cli_module, 'show_info')
+        assert hasattr(cli_module, "main")
+        assert hasattr(cli_module, "check_environment")
+        assert hasattr(cli_module, "show_info")
 
         # CLI module should have a docstring
         assert cli_module.__doc__ is not None

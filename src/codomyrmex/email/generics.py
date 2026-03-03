@@ -10,6 +10,7 @@ from pydantic import BaseModel, Field
 
 class EmailAddress(BaseModel):
     """Represents a single email address (e.g. 'John Doe <john@example.com>')."""
+
     email: str
     name: str | None = None
 
@@ -21,6 +22,7 @@ class EmailAddress(BaseModel):
 
 class EmailMessage(BaseModel):
     """A generic representation of an email message."""
+
     id: str | None = None
     thread_id: str | None = None
     subject: str
@@ -41,6 +43,7 @@ class EmailMessage(BaseModel):
 
 class EmailDraft(BaseModel):
     """A generic representation of an email draft."""
+
     subject: str
     to: list[str] = Field(default_factory=list)
     cc: list[str] = Field(default_factory=list)
@@ -53,7 +56,9 @@ class EmailProvider(abc.ABC):
     """Abstract base class for all email providers."""
 
     @abc.abstractmethod
-    def list_messages(self, query: str = "", max_results: int = 100) -> list[EmailMessage]:
+    def list_messages(
+        self, query: str = "", max_results: int = 100
+    ) -> list[EmailMessage]:
         """List messages matching the generic query."""
         ...
 
@@ -78,7 +83,9 @@ class EmailProvider(abc.ABC):
         ...
 
     @abc.abstractmethod
-    def modify_labels(self, message_id: str, add_labels: list[str], remove_labels: list[str]) -> None:
+    def modify_labels(
+        self, message_id: str, add_labels: list[str], remove_labels: list[str]
+    ) -> None:
         """Add or remove labels from a message."""
         ...
 

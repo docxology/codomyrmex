@@ -17,6 +17,7 @@ logger = get_logger(__name__)
 @dataclass
 class SimulationConfig:
     """Configuration for a simulation run."""
+
     name: str = "default_simulation"
     max_steps: int = 1000
     seed: int | None = None
@@ -26,6 +27,7 @@ class SimulationConfig:
 @dataclass
 class SimulationResult:
     """Results from a simulation run."""
+
     steps_completed: int
     config_name: str
     status: str
@@ -36,7 +38,9 @@ class SimulationResult:
 class Simulator:
     """Core simulator engine."""
 
-    def __init__(self, config: SimulationConfig | None = None, agents: list[Agent] | None = None):
+    def __init__(
+        self, config: SimulationConfig | None = None, agents: list[Agent] | None = None
+    ):
         """Initialize the simulator.
 
         Args:
@@ -48,7 +52,9 @@ class Simulator:
         self.step_count = 0
         self._running = False
         self._environment_state: dict[str, Any] = {}
-        logger.info(f"Simulator initialized: {self.config.name} with {len(self.agents)} agents")
+        logger.info(
+            f"Simulator initialized: {self.config.name} with {len(self.agents)} agents"
+        )
 
     def add_agent(self, agent: Agent) -> None:
         """Add an agent to the simulation."""
@@ -129,5 +135,5 @@ class Simulator:
             config_name=self.config.name,
             status="completed" if not self._running else "running",
             agent_count=len(self.agents),
-            history=[{"step": self.step_count, "env": self._environment_state.copy()}]
+            history=[{"step": self.step_count, "env": self._environment_state.copy()}],
         )

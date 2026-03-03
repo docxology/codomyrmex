@@ -17,27 +17,33 @@ from enum import Enum
 from pathlib import Path
 from typing import Any, Optional, TypeVar
 
-T = TypeVar('T')
+T = TypeVar("T")
+
 
 class FixtureScope(Enum):
     """Scope of a fixture."""
+
     FUNCTION = "function"
     CLASS = "class"
     MODULE = "module"
     SESSION = "session"
 
+
 @dataclass
 class FixtureDefinition:
     """Definition of a fixture."""
+
     name: str
     factory: Callable[[], Any]
     scope: FixtureScope = FixtureScope.FUNCTION
     cleanup: Callable[[Any], None] | None = None
     dependencies: list[str] = field(default_factory=list)
 
+
 @dataclass
 class FixtureInstance:
     """An instantiated fixture."""
+
     name: str
     value: Any
     scope: FixtureScope
@@ -46,6 +52,7 @@ class FixtureInstance:
     def __repr__(self) -> str:
         """Return string representation."""
         return f"Fixture({self.name})"
+
 
 class FixtureManager:
     """
@@ -147,6 +154,7 @@ class FixtureManager:
         """List all registered fixtures."""
         return list(self._definitions.keys())
 
+
 class DataFixture:
     """
     Pre-defined data fixture.
@@ -194,6 +202,7 @@ class DataFixture:
         """Get all records."""
         return list(self._data)
 
+
 class JSONFixtureLoader:
     """
     Loads fixtures from JSON files.
@@ -227,6 +236,7 @@ class JSONFixtureLoader:
     def clear_cache(self) -> None:
         """Clear the cache."""
         self._cache.clear()
+
 
 class FixtureBuilder:
     """
@@ -266,6 +276,7 @@ class FixtureBuilder:
             data[id_field] = i + 1
             result.append(data)
         return result
+
 
 __all__ = [
     # Enums

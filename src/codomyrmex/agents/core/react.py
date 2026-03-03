@@ -1,10 +1,10 @@
-
 """ReAct Agent Implementation.
 
 This module provides a generic ReAct (Reasoning and Acting) agent
 that uses registered tools to solve problems via the plan→act→observe
 lifecycle.
 """
+
 from __future__ import annotations
 
 import json
@@ -81,7 +81,9 @@ class ReActAgent(BaseAgent):
         if action.startswith("llm_reason_with_tools:"):
             return self._act_llm_loop(context)
 
-        return AgentResponse(content=f"Unknown action: {action}", error="unknown_action")
+        return AgentResponse(
+            content=f"Unknown action: {action}", error="unknown_action"
+        )
 
     def observe(self, response: AgentResponse) -> dict[str, Any]:
         """Extract structured observations from an act() result."""
@@ -174,7 +176,9 @@ class ReActAgent(BaseAgent):
                 if hasattr(self.llm_client, "chat"):
                     response = self.llm_client.chat(history_dicts)
                 elif hasattr(self.llm_client, "complete"):
-                    prompt_text = "\n".join(f"{m.role.value}: {m.content}" for m in history)
+                    prompt_text = "\n".join(
+                        f"{m.role.value}: {m.content}" for m in history
+                    )
                     response = self.llm_client.complete(prompt_text)
                 else:
                     self.logger.warning("LLM client has no chat/complete method")
@@ -187,7 +191,9 @@ class ReActAgent(BaseAgent):
                     break
 
                 if "Action:" in response_text:
-                    action_line = response_text.split("Action:")[-1].split("\n")[0].strip()
+                    action_line = (
+                        response_text.split("Action:")[-1].split("\n")[0].strip()
+                    )
                     try:
                         tool_name = action_line.split()[0]
                         kwargs = self._parse_action_args(action_line)
@@ -195,7 +201,9 @@ class ReActAgent(BaseAgent):
                         history.append(AgentMessage.assistant(response_text))
                         history.append(AgentMessage.user(f"Observation: {result}"))
                     except Exception as tool_error:
-                        history.append(AgentMessage.user(f"Observation: Error - {tool_error}"))
+                        history.append(
+                            AgentMessage.user(f"Observation: Error - {tool_error}")
+                        )
                 else:
                     history.append(AgentMessage.assistant(response_text))
 
@@ -244,7 +252,9 @@ Final Answer: ...
             try:
                 return json.loads(args_str)
             except json.JSONDecodeError as e:
-                logger.debug("Action args not valid JSON, falling back to key=value parse: %s", e)
+                logger.debug(
+                    "Action args not valid JSON, falling back to key=value parse: %s", e
+                )
                 pass
 
         result: dict[str, Any] = {}
@@ -262,4 +272,3 @@ Final Answer: ...
         """Stream agent response."""
         res = self.execute(request)
         yield res.content
-

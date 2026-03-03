@@ -16,6 +16,7 @@ try:
         profile_function,  # noqa: F401
         run_benchmark,  # noqa: F401
     )
+
     PERFORMANCE_AVAILABLE = True
 except ImportError:
     PERFORMANCE_AVAILABLE = False
@@ -24,6 +25,7 @@ try:
     from codomyrmex.logging_monitoring.core.logger_config import (
         PerformanceLogger,  # noqa: F401
     )
+
     PERFORMANCE_LOGGING_AVAILABLE = True
 except ImportError:
     PERFORMANCE_LOGGING_AVAILABLE = False
@@ -251,7 +253,7 @@ class TestBenchmarkingScenarios:
 
         def io_bound_function():
             # Simulate I/O operations
-            with tempfile.NamedTemporaryFile(mode='w', delete=False) as f:
+            with tempfile.NamedTemporaryFile(mode="w", delete=False) as f:
                 for i in range(100):
                     f.write(f"Line {i}\n")
                 temp_file = f.name
@@ -385,6 +387,7 @@ class TestBenchmarkingIntegration:
 
         try:
             from codomyrmex.data_visualization import create_bar_chart
+
             VISUALIZATION_AVAILABLE = True
         except ImportError:
             VISUALIZATION_AVAILABLE = False
@@ -397,8 +400,8 @@ class TestBenchmarkingIntegration:
         # Benchmark multiple functions
         functions = {
             "sum_range": lambda: sum(range(1000)),
-            "list_comp": lambda: [x*x for x in range(1000)],
-            "loop_sum": lambda: sum(x for x in range(1000))
+            "list_comp": lambda: [x * x for x in range(1000)],
+            "loop_sum": lambda: sum(x for x in range(1000)),
         }
 
         results = {}
@@ -409,14 +412,12 @@ class TestBenchmarkingIntegration:
         # Create visualization of results
         chart_data = {
             "categories": list(results.keys()),
-            "values": list(results.values())
+            "values": list(results.values()),
         }
 
         from codomyrmex.data_visualization import create_bar_chart
-        chart = create_bar_chart(
-            chart_data,
-            "Function Performance Comparison"
-        )
+
+        chart = create_bar_chart(chart_data, "Function Performance Comparison")
 
         assert chart is not None
         # assert "Function Performance Comparison" in chart or "bar" in chart.lower()

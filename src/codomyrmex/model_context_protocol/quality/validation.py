@@ -21,6 +21,7 @@ logger = get_logger(__name__)
 # Result container
 # ---------------------------------------------------------------------------
 
+
 @dataclass(slots=True)
 class ValidationResult:
     """Outcome of validating tool arguments against a schema."""
@@ -33,6 +34,7 @@ class ValidationResult:
 # ---------------------------------------------------------------------------
 # Core validation function
 # ---------------------------------------------------------------------------
+
 
 def validate_tool_arguments(
     tool_name: str,
@@ -89,6 +91,7 @@ def validate_tool_arguments(
 # ---------------------------------------------------------------------------
 # Schema extraction
 # ---------------------------------------------------------------------------
+
 
 def _extract_input_schema(schema: dict[str, Any]) -> dict[str, Any] | None:
     """Pull the ``inputSchema`` out of a tool schema dict.
@@ -147,6 +150,7 @@ def _coerce_types(
 # ---------------------------------------------------------------------------
 # Schema validation (pure-Python, no external deps for core path)
 # ---------------------------------------------------------------------------
+
 
 def _validate_against_schema(
     args: dict[str, Any],
@@ -218,17 +222,14 @@ def _validate_builtin(
         if expected and expected in _TYPE_MAP:
             if not isinstance(value, _TYPE_MAP[expected]):
                 errors.append(
-                    f"{key}: expected type '{expected}', "
-                    f"got '{type(value).__name__}'"
+                    f"{key}: expected type '{expected}', got '{type(value).__name__}'"
                 )
                 continue
 
         # Enum
         enum_values = prop_schema.get("enum")
         if enum_values is not None and value not in enum_values:
-            errors.append(
-                f"{key}: value {value!r} not in allowed values {enum_values}"
-            )
+            errors.append(f"{key}: value {value!r} not in allowed values {enum_values}")
 
         # Min / max (numeric)
         if isinstance(value, (int, float)):
@@ -280,9 +281,9 @@ def _generate_schema_from_func(func: Callable[..., Any]) -> dict[str, Any]:
                 param_schema["type"] = "object"
             else:
                 # Fallback or complex types
-                param_schema["type"] = "string" # simplified
+                param_schema["type"] = "string"  # simplified
         else:
-            param_schema["type"] = "string" # default
+            param_schema["type"] = "string"  # default
 
         properties[name] = param_schema
 
@@ -294,6 +295,8 @@ def _generate_schema_from_func(func: Callable[..., Any]) -> dict[str, Any]:
         "properties": properties,
         "required": required,
     }
+
+
 __all__ = [
     "ValidationResult",
     "validate_tool_arguments",

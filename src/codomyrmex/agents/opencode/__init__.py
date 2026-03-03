@@ -7,5 +7,3 @@ __all__ = [
     "OpenCodeClient",
     "OpenCodeIntegrationAdapter",
 ]
-
-

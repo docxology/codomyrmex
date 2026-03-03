@@ -59,7 +59,10 @@ class AlertManager:
         for rule_name, rule in self._rules.items():
             try:
                 if rule["condition"](metrics):
-                    if rule_name not in self._alerts or not self._alerts[rule_name].is_active:
+                    if (
+                        rule_name not in self._alerts
+                        or not self._alerts[rule_name].is_active
+                    ):
                         with self._lock:
                             self._counter += 1
                             alert = Alert(

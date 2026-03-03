@@ -43,6 +43,7 @@ from codomyrmex.agents.pai.trust_gateway import (
 # Helpers
 # ---------------------------------------------------------------------------
 
+
 def _pick_safe_tool() -> str:
     """Return a real safe tool that requires **no** arguments.
 
@@ -103,6 +104,7 @@ def _kwargs_for(tool_name: str) -> dict[str, object]:
 # Fixtures
 # ---------------------------------------------------------------------------
 
+
 @pytest.fixture(autouse=True)
 def reset_trust_gateway_state():
     """Reset global state in trust_gateway before each test.
@@ -136,6 +138,7 @@ def reset_trust_gateway_state():
 # ---------------------------------------------------------------------------
 # TestAuditLog
 # ---------------------------------------------------------------------------
+
 
 class TestAuditLog:
     """Audit log tests using real tool calls."""
@@ -230,6 +233,7 @@ class TestAuditLog:
 # TestTrustHooks
 # ---------------------------------------------------------------------------
 
+
 class TestTrustHooks:
     """Trust-change callback tests using a real closure instead of MagicMock."""
 
@@ -280,6 +284,7 @@ class TestTrustHooks:
 # ---------------------------------------------------------------------------
 # TestTrustRegistry
 # ---------------------------------------------------------------------------
+
 
 class TestTrustRegistry:
     """Direct state-based tests on the TrustRegistry singleton."""
@@ -335,6 +340,7 @@ class TestTrustRegistry:
 # ---------------------------------------------------------------------------
 # TestDestructiveConfirmation
 # ---------------------------------------------------------------------------
+
 
 class TestDestructiveConfirmation:
     """Confirmation flow tests using the real destructive-tool classification.
@@ -408,9 +414,7 @@ class TestDestructiveConfirmation:
         kwargs = _kwargs_for(destructive)
         kwargs["confirmation_token"] = "bogus-token-12345"
 
-        with pytest.raises(
-            trust_gateway.SecurityError, match="Invalid or expired"
-        ):
+        with pytest.raises(trust_gateway.SecurityError, match="Invalid or expired"):
             trusted_call_tool(destructive, **kwargs)
 
     def test_mismatched_token_fails(self, confirmation_enabled):
@@ -425,7 +429,9 @@ class TestDestructiveConfirmation:
         # in the registry.
         candidates = sorted(name for name in DESTRUCTIVE_TOOLS if name in all_tools)
         if len(candidates) < 2:
-            pytest.skip("Need at least 2 destructive tools in DESTRUCTIVE_TOOLS for mismatch test")
+            pytest.skip(
+                "Need at least 2 destructive tools in DESTRUCTIVE_TOOLS for mismatch test"
+            )
 
         tool_a, tool_b = candidates[0], candidates[1]
 
@@ -449,6 +455,7 @@ class TestDestructiveConfirmation:
 # ---------------------------------------------------------------------------
 # TestSecurityErrorOnUntrusted
 # ---------------------------------------------------------------------------
+
 
 class TestSecurityErrorOnUntrusted:
     """Verify that calling tools at insufficient trust levels raises SecurityError."""
@@ -487,6 +494,7 @@ class TestSecurityErrorOnUntrusted:
 # ---------------------------------------------------------------------------
 # TestTrustToolSingleToolFix
 # ---------------------------------------------------------------------------
+
 
 class TestTrustToolSingleToolFix:
     """Validate the bug-fix where get_current_trust_level() derives from the

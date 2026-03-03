@@ -300,7 +300,9 @@ class TestCodeMetrics:
         assert m.documentation_coverage is None
 
     def test_optional_explicit(self):
-        m = CodeMetrics(10, 2, 90.0, 0.5, 1.0, test_coverage=95.0, documentation_coverage=80.0)
+        m = CodeMetrics(
+            10, 2, 90.0, 0.5, 1.0, test_coverage=95.0, documentation_coverage=80.0
+        )
         assert m.test_coverage == 95.0
         assert m.documentation_coverage == 80.0
 
@@ -333,9 +335,19 @@ class TestStaticAnalyzerInit:
 
     def test_tools_available_has_expected_keys(self, analyzer):
         expected_keys = {
-            "pylint", "flake8", "mypy", "bandit", "black",
-            "isort", "pytest", "coverage", "radon", "vulture",
-            "safety", "semgrep", "pyrefly",
+            "pylint",
+            "flake8",
+            "mypy",
+            "bandit",
+            "black",
+            "isort",
+            "pytest",
+            "coverage",
+            "radon",
+            "vulture",
+            "safety",
+            "semgrep",
+            "pyrefly",
         }
         assert set(analyzer.tools_available.keys()) == expected_keys
 
@@ -600,12 +612,16 @@ class TestCalculateMetrics:
         analyzer.calculate_metrics(simple_python_file)
         assert simple_python_file in analyzer.metrics
 
-    def test_complex_file_higher_complexity(self, analyzer, simple_python_file, complex_python_file):
+    def test_complex_file_higher_complexity(
+        self, analyzer, simple_python_file, complex_python_file
+    ):
         simple_metrics = analyzer.calculate_metrics(simple_python_file)
         # Reset to avoid cross-contamination from results
         analyzer.results.clear()
         complex_metrics = analyzer.calculate_metrics(complex_python_file)
-        assert complex_metrics.cyclomatic_complexity > simple_metrics.cyclomatic_complexity
+        assert (
+            complex_metrics.cyclomatic_complexity > simple_metrics.cyclomatic_complexity
+        )
 
     def test_duplicate_file_has_duplication(self, analyzer, duplicate_lines_file):
         metrics = analyzer.calculate_metrics(duplicate_lines_file)
@@ -773,9 +789,7 @@ class TestAnalyzeProject:
 
     def test_custom_analysis_types(self, project_with_files):
         analyzer = StaticAnalyzer(project_root=str(project_with_files))
-        summary = analyzer.analyze_project(
-            analysis_types=[AnalysisType.COMPLEXITY]
-        )
+        summary = analyzer.analyze_project(analysis_types=[AnalysisType.COMPLEXITY])
         assert isinstance(summary, AnalysisSummary)
 
     def test_empty_directory(self, tmp_path):
@@ -880,8 +894,19 @@ class TestExportResults:
     @pytest.fixture(autouse=True)
     def _populate_results(self, analyzer):
         analyzer.results = [
-            AnalysisResult("a.py", 1, 0, SeverityLevel.ERROR, "err msg", "E001", "quality", suggestion="fix it"),
-            AnalysisResult("b.py", 10, 5, SeverityLevel.WARNING, "warn msg", "W002", "style"),
+            AnalysisResult(
+                "a.py",
+                1,
+                0,
+                SeverityLevel.ERROR,
+                "err msg",
+                "E001",
+                "quality",
+                suggestion="fix it",
+            ),
+            AnalysisResult(
+                "b.py", 10, 5, SeverityLevel.WARNING, "warn msg", "W002", "style"
+            ),
         ]
 
     def test_export_json(self, analyzer, tmp_path):
@@ -935,7 +960,9 @@ class TestExportResults:
         assert len(rows) == 1
 
     def test_export_invalid_path(self, analyzer):
-        success = analyzer.export_results("/nonexistent/dir/results.json", format="json")
+        success = analyzer.export_results(
+            "/nonexistent/dir/results.json", format="json"
+        )
         assert success is False
 
     def test_export_json_field_completeness(self, analyzer, tmp_path):
@@ -945,9 +972,17 @@ class TestExportResults:
         with open(out, encoding="utf-8") as f:
             data = json.load(f)
         expected_keys = {
-            "file_path", "line_number", "column_number", "severity",
-            "message", "rule_id", "category", "suggestion", "context",
-            "fix_available", "confidence",
+            "file_path",
+            "line_number",
+            "column_number",
+            "severity",
+            "message",
+            "rule_id",
+            "category",
+            "suggestion",
+            "context",
+            "fix_available",
+            "confidence",
         }
         assert set(data[0].keys()) == expected_keys
 
@@ -1048,8 +1083,12 @@ class TestAnalyzePythonFileDispatch:
             analyzer.tools_available[tool] = False
         results = analyzer._analyze_python_file(
             simple_python_file,
-            [AnalysisType.QUALITY, AnalysisType.SECURITY, AnalysisType.STYLE,
-             AnalysisType.COMPLEXITY],
+            [
+                AnalysisType.QUALITY,
+                AnalysisType.SECURITY,
+                AnalysisType.STYLE,
+                AnalysisType.COMPLEXITY,
+            ],
         )
         assert results == []
 
@@ -1115,9 +1154,7 @@ class TestAnalyzeJavaFile:
         java_file = tmp_path / "Main.java"
         java_file.write_text("public class Main {}\n", encoding="utf-8")
         analyzer.tools_available["spotbugs"] = False
-        results = analyzer._analyze_java_file(
-            str(java_file), [AnalysisType.QUALITY]
-        )
+        results = analyzer._analyze_java_file(str(java_file), [AnalysisType.QUALITY])
         assert results == []
 
 

@@ -220,8 +220,7 @@ class ProcessOrchestrator:
     def running_agents(self) -> list[str]:
         """Get IDs of currently running agents."""
         return [
-            aid for aid, p in self._agents.items()
-            if p.state == ProcessState.RUNNING
+            aid for aid, p in self._agents.items() if p.state == ProcessState.RUNNING
         ]
 
 

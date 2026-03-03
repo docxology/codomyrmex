@@ -109,8 +109,7 @@ class Forecaster:
         y_mean = sum(self.data, Decimal("0")) / Decimal(str(n))
 
         ss_xy = sum(
-            (x - x_mean) * (y - y_mean)
-            for x, y in zip(x_vals, self.data, strict=False)
+            (x - x_mean) * (y - y_mean) for x, y in zip(x_vals, self.data, strict=False)
         )
         ss_xx = sum((x - x_mean) ** 2 for x in x_vals)
         ss_yy = sum((y - y_mean) ** 2 for y in self.data)

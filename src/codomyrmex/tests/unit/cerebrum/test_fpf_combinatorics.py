@@ -163,7 +163,12 @@ class TestFindConceptClusters:
     """Tests for _find_concept_clusters helper."""
 
     def test_returns_list(self, analyzer):
-        cooc = {"a": {"b": 5, "c": 4}, "b": {"a": 5, "d": 3}, "c": {"a": 4}, "d": {"b": 3}}
+        cooc = {
+            "a": {"b": 5, "c": 4},
+            "b": {"a": 5, "d": 3},
+            "c": {"a": 4},
+            "d": {"b": 3},
+        }
         result = analyzer._find_concept_clusters(cooc, min_weight=3)
         assert isinstance(result, list)
 

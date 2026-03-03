@@ -5,13 +5,13 @@ tests are skipped rather than using mocks. All data processing and
 conversion logic is tested with real data structures.
 """
 
-
 import pytest
 
 try:
     from codomyrmex.agents.core import AgentCapabilities, AgentRequest
     from codomyrmex.agents.every_code import EveryCodeClient
     from codomyrmex.tests.unit.agents.helpers import EVERY_CODE_AVAILABLE
+
     _HAS_AGENTS = True
 except ImportError:
     _HAS_AGENTS = False
@@ -62,7 +62,9 @@ class TestEveryCodeClient:
     def test_every_code_client_execute_failure_invalid_command(self):
         """Test handling when command is not found."""
         # Use invalid command to trigger real FileNotFoundError
-        client = EveryCodeClient(config={"every_code_command": "nonexistent-code-command-xyz"})
+        client = EveryCodeClient(
+            config={"every_code_command": "nonexistent-code-command-xyz"}
+        )
         request = AgentRequest(prompt="test prompt")
         response = client.execute(request)
 
@@ -138,8 +140,7 @@ class TestEveryCodeClient:
         """Test file operations structure (without executing)."""
         EveryCodeClient()
         request = AgentRequest(
-            prompt="Analyze this code",
-            context={"files": ["src/main.py"]}
+            prompt="Analyze this code", context={"files": ["src/main.py"]}
         )
 
         # Test that request structure is correct
@@ -184,4 +185,3 @@ class TestEveryCodeClient:
         # Test /code command
         request = AgentRequest(prompt="/code Implement sorting")
         assert request.prompt.startswith("/code")
-

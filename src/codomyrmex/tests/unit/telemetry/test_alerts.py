@@ -142,7 +142,12 @@ class TestAlert:
         assert a.fired_at == pytest.approx(12345.0)
 
     def test_to_dict_has_required_keys(self):
-        a = Alert(rule_name="cpu_high", severity=AlertSeverity.CRITICAL, message="CPU over limit", value=95.0)
+        a = Alert(
+            rule_name="cpu_high",
+            severity=AlertSeverity.CRITICAL,
+            message="CPU over limit",
+            value=95.0,
+        )
         d = a.to_dict()
         assert d["rule"] == "cpu_high"
         assert d["severity"] == "critical"
@@ -182,14 +187,18 @@ class TestAlertEngine:
 
     def test_evaluate_fires_alert_when_condition_met(self):
         engine = AlertEngine()
-        engine.add_rule(AlertRule("high_cpu", "cpu_pct", condition="gt", threshold=80.0))
+        engine.add_rule(
+            AlertRule("high_cpu", "cpu_pct", condition="gt", threshold=80.0)
+        )
         fired = engine.evaluate({"cpu_pct": 90.0})
         assert len(fired) == 1
         assert fired[0].rule_name == "high_cpu"
 
     def test_evaluate_no_alert_when_condition_not_met(self):
         engine = AlertEngine()
-        engine.add_rule(AlertRule("high_cpu", "cpu_pct", condition="gt", threshold=80.0))
+        engine.add_rule(
+            AlertRule("high_cpu", "cpu_pct", condition="gt", threshold=80.0)
+        )
         fired = engine.evaluate({"cpu_pct": 70.0})
         assert fired == []
 

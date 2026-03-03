@@ -12,21 +12,23 @@ from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 logger = get_logger(__name__)
 
+
 class TraceContext:
     """Manager for the global or local trace state."""
 
     _initialized = False
 
     @classmethod
-    def initialize(cls, service_name: str = "codomyrmex", attributes: dict[str, Any] | None = None) -> None:
+    def initialize(
+        cls, service_name: str = "codomyrmex", attributes: dict[str, Any] | None = None
+    ) -> None:
         """Initialize the global tracer provider."""
         if cls._initialized:
             return
 
-        resource = Resource.create(attributes={
-            "service.name": service_name,
-            **(attributes or {})
-        })
+        resource = Resource.create(
+            attributes={"service.name": service_name, **(attributes or {})}
+        )
 
         provider = TracerProvider(resource=resource)
         trace.set_tracer_provider(provider)
@@ -38,7 +40,10 @@ class TraceContext:
         """Get a tracer instance."""
         return trace.get_tracer(name)
 
-def start_span(name: str, attributes: dict[str, Any] | None = None, parent: Span | None = None) -> Span:
+
+def start_span(
+    name: str, attributes: dict[str, Any] | None = None, parent: Span | None = None
+) -> Span:
     """Start a new span.
 
     Args:
@@ -58,20 +63,25 @@ def start_span(name: str, attributes: dict[str, Any] | None = None, parent: Span
 
     return tracer.start_span(name, attributes=attributes)
 
+
 def get_current_span() -> Span:
     """Get the currently active span."""
     return trace.get_current_span()
+
 
 def record_exception(span: Span, exception: Exception, escaped: bool = True) -> None:
     """Record an exception on the span and set status to ERROR."""
     span.record_exception(exception, escaped=escaped)
     span.set_status(Status(StatusCode.ERROR, str(exception)))
 
+
 def traced(name: str | None = None, attributes: dict[str, Any] | None = None):
     """Decorator to automatically wrap a function in a span."""
+
     def decorator(func):
         """Decorator."""
         span_name = name or func.__name__
+
         @wraps(func)
         def wrapper(*args, **kwargs):
             """Wrapper."""
@@ -82,8 +92,11 @@ def traced(name: str | None = None, attributes: dict[str, Any] | None = None):
                 except Exception as e:
                     record_exception(span, e)
                     raise
+
         return wrapper
+
     return decorator
+
 
 def link_span(span: Span, target: Span) -> None:
     """Link two spans together (e.g. for async producer/consumer)."""
@@ -95,6 +108,6 @@ def link_span(span: Span, target: Span) -> None:
             "linked_span",
             attributes={
                 "linked_trace_id": format(ctx.trace_id, "032x"),
-                "linked_span_id": format(ctx.span_id, "016x")
-            }
+                "linked_span_id": format(ctx.span_id, "016x"),
+            },
         )

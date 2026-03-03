@@ -9,6 +9,7 @@ from typing import Any
 
 try:
     from codomyrmex.logging_monitoring.core.logger_config import get_logger
+
     logger = get_logger(__name__)
 except ImportError:
     logging.basicConfig(level=logging.INFO)
@@ -51,12 +52,14 @@ class SkillMarketplace:
         logger.info(f"Searching remote sources for: {query}")
         results = []
         for source in self._sources:
-            results.append({
-                "source": source["name"],
-                "query": query,
-                "status": "remote_search_not_implemented",
-                "message": f"Remote search for '{query}' in {source['name']} requires network access",
-            })
+            results.append(
+                {
+                    "source": source["name"],
+                    "query": query,
+                    "status": "remote_search_not_implemented",
+                    "message": f"Remote search for '{query}' in {source['name']} requires network access",
+                }
+            )
         return results
 
     def install(self, skill_id: str, source: str | None = None) -> dict[str, Any]:
@@ -70,7 +73,9 @@ class SkillMarketplace:
         Returns:
             Installation result dict with 'success' and 'message'
         """
-        source_name = source or (self._sources[0]["name"] if self._sources else "unknown")
+        source_name = source or (
+            self._sources[0]["name"] if self._sources else "unknown"
+        )
         logger.info(f"Installing skill {skill_id} from {source_name}")
 
         return {

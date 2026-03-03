@@ -98,4 +98,3 @@ def validate_language(language: str) -> bool:
         False
     """
     return language in SUPPORTED_LANGUAGES
-

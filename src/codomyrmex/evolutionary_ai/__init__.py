@@ -43,7 +43,6 @@ __all__ = [
     "GenomeStats",
     "Population",
     "GenerationStats",
-
     # Operators
     "MutationOperator",
     "BitFlipMutation",
@@ -55,13 +54,11 @@ __all__ = [
     "TwoPointCrossover",
     "UniformCrossover",
     "BlendCrossover",
-
     # Selection
     "SelectionOperator",
     "TournamentSelection",
     "RouletteWheelSelection",
     "RankSelection",
-
     # Fitness
     "FitnessFunction",
     "FitnessResult",

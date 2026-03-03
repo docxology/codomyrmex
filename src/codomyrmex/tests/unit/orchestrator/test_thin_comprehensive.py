@@ -3,6 +3,7 @@
 Zero-mock policy: uses real subprocess calls (echo, true, false).
 Covers edge cases, boundary conditions, and integration paths not in test_thin.py.
 """
+
 import asyncio
 import os
 import tempfile
@@ -35,6 +36,7 @@ pytestmark = [pytest.mark.orchestrator, pytest.mark.unit]
 # shell() -- edge cases
 # ---------------------------------------------------------------------------
 
+
 class TestShellEdgeCases:
     """Edge-case tests for the shell() function."""
 
@@ -60,7 +62,9 @@ class TestShellEdgeCases:
             result = shell("pwd", cwd=Path(tmpdir))
             assert result["success"] is True
             # Resolve symlinks (macOS /private/var vs /var, /private/tmp vs /tmp)
-            assert os.path.realpath(tmpdir) == os.path.realpath(result["stdout"].strip())
+            assert os.path.realpath(tmpdir) == os.path.realpath(
+                result["stdout"].strip()
+            )
 
     def test_shell_env_merged_with_system_env(self):
         """shell() merges custom env with os.environ (PATH still works)."""
@@ -108,6 +112,7 @@ class TestShellEdgeCases:
 # ---------------------------------------------------------------------------
 # pipe() -- edge cases
 # ---------------------------------------------------------------------------
+
 
 class TestPipeEdgeCases:
     """Edge-case tests for the pipe() function."""
@@ -162,10 +167,7 @@ class TestPipeEdgeCases:
 
     def test_pipe_continue_on_error_runs_all(self):
         """pipe() with stop_on_error=False runs all commands."""
-        result = pipe(
-            ["echo first", "false", "echo third"],
-            stop_on_error=False
-        )
+        result = pipe(["echo first", "false", "echo third"], stop_on_error=False)
         assert result["success"] is False
         assert result["completed"] == 3
         assert len(result["results"]) == 3
@@ -189,6 +191,7 @@ class TestPipeEdgeCases:
 # run() -- edge cases
 # ---------------------------------------------------------------------------
 
+
 class TestRunEdgeCases:
     """Edge-case tests for the run() function."""
 
@@ -206,9 +209,7 @@ class TestRunEdgeCases:
 
     def test_run_real_python_script_with_env(self):
         """run() passes env to Python script execution."""
-        with tempfile.NamedTemporaryFile(
-            mode="w", suffix=".py", delete=False
-        ) as f:
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False) as f:
             f.write("import os; print(os.environ.get('RUN_TEST_VAR', 'MISSING'))")
             f.flush()
             script_path = f.name
@@ -224,9 +225,7 @@ class TestRunEdgeCases:
 
     def test_run_python_script_failure(self):
         """run() captures Python script failure."""
-        with tempfile.NamedTemporaryFile(
-            mode="w", suffix=".py", delete=False
-        ) as f:
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False) as f:
             f.write("raise SystemExit(1)")
             f.flush()
             script_path = f.name
@@ -243,6 +242,7 @@ class TestRunEdgeCases:
 # ---------------------------------------------------------------------------
 # run_async() -- edge cases
 # ---------------------------------------------------------------------------
+
 
 class TestRunAsyncEdgeCases:
     """Edge-case tests for the run_async() function."""
@@ -277,6 +277,7 @@ class TestRunAsyncEdgeCases:
 # batch() -- edge cases
 # ---------------------------------------------------------------------------
 
+
 class TestBatchEdgeCases:
     """Edge-case tests for the batch() function."""
 
@@ -292,9 +293,7 @@ class TestBatchEdgeCases:
         """batch() filters to only existing script paths."""
         from codomyrmex.orchestrator.execution.parallel_runner import ExecutionResult
 
-        with tempfile.NamedTemporaryFile(
-            mode="w", suffix=".py", delete=False
-        ) as f:
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False) as f:
             f.write("print('exists')")
             f.flush()
             existing = f.name
@@ -313,6 +312,7 @@ class TestBatchEdgeCases:
 # ---------------------------------------------------------------------------
 # chain_scripts() -- edge cases
 # ---------------------------------------------------------------------------
+
 
 class TestChainScriptsEdgeCases:
     """Edge-case tests for the chain_scripts() function."""
@@ -335,9 +335,7 @@ class TestChainScriptsEdgeCases:
             )
 
             result = chain_scripts(
-                [script1, script2],
-                pass_results=False,
-                timeout_per_script=30
+                [script1, script2], pass_results=False, timeout_per_script=30
             )
             assert result["scripts"] == 2
             assert result["completed"] == 2
@@ -355,9 +353,7 @@ class TestChainScriptsEdgeCases:
             script3.write_text("print('script3_ok')")
 
             result = chain_scripts(
-                [script1, script2, script3],
-                stop_on_error=False,
-                timeout_per_script=30
+                [script1, script2, script3], stop_on_error=False, timeout_per_script=30
             )
             assert result["success"] is False
             assert result["completed"] == 3
@@ -368,7 +364,7 @@ class TestChainScriptsEdgeCases:
         result = chain_scripts(
             ["/nonexistent/first.py", "/nonexistent/second.py"],
             stop_on_error=True,
-            timeout_per_script=10
+            timeout_per_script=10,
         )
         assert result["success"] is False
         assert result["completed"] == 1  # Stopped after first not-found
@@ -382,7 +378,7 @@ class TestChainScriptsEdgeCases:
             result = chain_scripts(
                 ["/nonexistent/fake.py", real_script],
                 stop_on_error=False,
-                timeout_per_script=30
+                timeout_per_script=30,
             )
             assert result["success"] is False  # Overall fails because one failed
             assert result["completed"] == 2
@@ -415,6 +411,7 @@ class TestChainScriptsEdgeCases:
 # ---------------------------------------------------------------------------
 # Steps -- edge cases
 # ---------------------------------------------------------------------------
+
 
 class TestStepsEdgeCases:
     """Edge-case tests for the Steps workflow builder."""
@@ -457,8 +454,7 @@ class TestStepsEdgeCases:
         w = workflow("parallel_explicit")
         w.add("setup", lambda: "setup_done")
         w.add_parallel(
-            [("p1", lambda: "p1"), ("p2", lambda: "p2")],
-            depends_on=["setup"]
+            [("p1", lambda: "p1"), ("p2", lambda: "p2")], depends_on=["setup"]
         )
         assert "p1" in w._steps
         assert "p2" in w._steps
@@ -539,11 +535,13 @@ class TestStepsEdgeCases:
 # step() decorator -- edge cases
 # ---------------------------------------------------------------------------
 
+
 class TestStepDecoratorEdgeCases:
     """Edge-case tests for the step() decorator."""
 
     def test_step_defaults(self):
         """step() decorator with minimal args sets correct defaults."""
+
         @step(name="minimal")
         def my_func():
             return 42
@@ -554,6 +552,7 @@ class TestStepDecoratorEdgeCases:
 
     def test_step_preserves_return_value(self):
         """step() decorator does not alter function return value."""
+
         @step(name="return_test", timeout=10.0, retry=5)
         def compute():
             return {"result": 42}
@@ -562,6 +561,7 @@ class TestStepDecoratorEdgeCases:
 
     def test_step_preserves_function_name(self):
         """step() decorator preserves original function __name__."""
+
         @step(name="named_step")
         def original_name():
             pass
@@ -571,6 +571,7 @@ class TestStepDecoratorEdgeCases:
 
     def test_step_with_args(self):
         """step() decorated function can accept arguments."""
+
         @step(name="arg_step")
         def add(a, b):
             return a + b
@@ -581,6 +582,7 @@ class TestStepDecoratorEdgeCases:
 # ---------------------------------------------------------------------------
 # python_func() -- edge cases
 # ---------------------------------------------------------------------------
+
 
 class TestPythonFuncEdgeCases:
     """Edge-case tests for the python_func() function.
@@ -626,13 +628,16 @@ class TestPythonFuncEdgeCases:
 # condition() -- edge cases
 # ---------------------------------------------------------------------------
 
+
 class TestConditionEdgeCases:
     """Edge-case tests for the condition() function."""
 
     def test_condition_identity(self):
         """condition() returns the exact same predicate object."""
+
         def pred(r):
             return True
+
         assert condition(pred) is pred
 
     def test_condition_with_empty_results(self):
@@ -643,9 +648,7 @@ class TestConditionEdgeCases:
 
     def test_condition_with_nested_logic(self):
         """condition() works with predicates that check nested data."""
-        cond = condition(
-            lambda r: r.get("step1", {}).get("value", 0) > 10
-        )
+        cond = condition(lambda r: r.get("step1", {}).get("value", 0) > 10)
         assert cond({"step1": {"value": 20}}) is True
         assert cond({"step1": {"value": 5}}) is False
         assert cond({}) is False
@@ -654,6 +657,7 @@ class TestConditionEdgeCases:
 # ---------------------------------------------------------------------------
 # retry() -- edge cases
 # ---------------------------------------------------------------------------
+
 
 class TestRetryEdgeCases:
     """Edge-case tests for the retry() wrapper."""
@@ -676,6 +680,7 @@ class TestRetryEdgeCases:
     @pytest.mark.asyncio
     async def test_retry_passes_args_through(self):
         """retry() passes positional and keyword args to action."""
+
         def greet(name, greeting="hello"):
             return f"{greeting} {name}"
 
@@ -746,12 +751,14 @@ class TestRetryEdgeCases:
 # timeout() -- edge cases
 # ---------------------------------------------------------------------------
 
+
 class TestTimeoutEdgeCases:
     """Edge-case tests for the timeout() decorator."""
 
     @pytest.mark.asyncio
     async def test_timeout_returns_value(self):
         """timeout() passes through return value of wrapped function."""
+
         @timeout(5.0)
         def compute():
             return {"answer": 42}
@@ -762,6 +769,7 @@ class TestTimeoutEdgeCases:
     @pytest.mark.asyncio
     async def test_timeout_with_args(self):
         """timeout() wrapped function accepts arguments."""
+
         @timeout(5.0)
         def add(a, b):
             return a + b
@@ -772,6 +780,7 @@ class TestTimeoutEdgeCases:
     @pytest.mark.asyncio
     async def test_timeout_async_within_limit(self):
         """timeout() with async function that completes in time."""
+
         @timeout(5.0)
         async def async_fast():
             await asyncio.sleep(0.01)
@@ -783,6 +792,7 @@ class TestTimeoutEdgeCases:
     @pytest.mark.asyncio
     async def test_timeout_async_exceeds(self):
         """timeout() with async function that exceeds limit."""
+
         @timeout(0.05)
         async def async_slow():
             await asyncio.sleep(5.0)
@@ -799,6 +809,7 @@ class TestTimeoutEdgeCases:
     @pytest.mark.asyncio
     async def test_timeout_decorator_produces_coroutine(self):
         """timeout() decorated function returns a coroutine when called."""
+
         @timeout(5.0)
         def sync_func():
             return "sync"
@@ -811,6 +822,7 @@ class TestTimeoutEdgeCases:
 # StepResult dataclass -- edge cases
 # ---------------------------------------------------------------------------
 
+
 class TestStepResultEdgeCases:
     """Edge-case tests for the StepResult dataclass."""
 
@@ -822,10 +834,7 @@ class TestStepResultEdgeCases:
     def test_step_result_all_fields(self):
         """StepResult with all fields specified."""
         r = StepResult(
-            success=True,
-            value="result_data",
-            error=None,
-            execution_time=2.5
+            success=True, value="result_data", error=None, execution_time=2.5
         )
         assert r.success is True
         assert r.value == "result_data"
@@ -849,6 +858,7 @@ class TestStepResultEdgeCases:
 # Integration: combining multiple thin utilities
 # ---------------------------------------------------------------------------
 
+
 class TestThinIntegration:
     """Integration tests combining multiple thin.py utilities."""
 
@@ -870,6 +880,7 @@ class TestThinIntegration:
 
     def test_step_decorator_in_workflow(self):
         """step()-decorated functions can be used in workflow."""
+
         @step(name="decorated")
         def my_step():
             return shell("echo from_decorator")
@@ -896,6 +907,7 @@ class TestThinIntegration:
     @pytest.mark.asyncio
     async def test_retry_with_shell(self):
         """retry() wrapping shell() for resilient execution."""
+
         def flaky_shell():
             return shell("echo resilient")
 
@@ -921,6 +933,7 @@ class TestThinIntegration:
 # ---------------------------------------------------------------------------
 # Module exports / __all__
 # ---------------------------------------------------------------------------
+
 
 class TestModuleExports:
     """Verify all __all__ exports are importable and correct types."""
@@ -987,4 +1000,5 @@ class TestModuleExports:
     def test_step_result_is_dataclass(self):
         """StepResult is a dataclass."""
         import dataclasses
+
         assert dataclasses.is_dataclass(StepResult)

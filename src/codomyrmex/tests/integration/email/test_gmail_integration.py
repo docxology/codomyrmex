@@ -30,9 +30,7 @@ import time
 import pytest
 
 _RUN_LIVE = os.getenv("CODOMYRMEX_RUN_LIVE_EMAIL_TESTS") == "1"
-_SKIP_REASON = (
-    "CODOMYRMEX_RUN_LIVE_EMAIL_TESTS != 1 — skipping Gmail integration tests"
-)
+_SKIP_REASON = "CODOMYRMEX_RUN_LIVE_EMAIL_TESTS != 1 — skipping Gmail integration tests"
 SKIP = pytest.mark.skipif(not _RUN_LIVE, reason=_SKIP_REASON)
 
 RECIPIENT = "DanielAriFriedman@gmail.com"
@@ -42,15 +40,18 @@ RECIPIENT = "DanielAriFriedman@gmail.com"
 # Helpers
 # ---------------------------------------------------------------------------
 
+
 def _make_provider():
     """Return a GmailProvider built from environment credentials."""
     from codomyrmex.email.gmail.provider import GmailProvider
+
     return GmailProvider.from_env()
 
 
 # ---------------------------------------------------------------------------
 # Tests
 # ---------------------------------------------------------------------------
+
 
 @SKIP
 @pytest.mark.integration
@@ -205,7 +206,9 @@ def test_gmail_mcp_send_message() -> None:
         ),
     )
     assert result["status"] == "ok", result.get("error")
-    assert result.get("message_id") is not None, "gmail_send_message returned no message_id"
+    assert result.get("message_id") is not None, (
+        "gmail_send_message returned no message_id"
+    )
 
 
 @SKIP

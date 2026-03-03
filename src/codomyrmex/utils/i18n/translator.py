@@ -43,7 +43,7 @@ class MessageBundle:
 
     @classmethod
     def from_json_file(cls, locale: Locale, path: str) -> "MessageBundle":
-        with open(path, encoding='utf-8') as f:
+        with open(path, encoding="utf-8") as f:
             data = json.load(f)
         return cls.from_dict(locale, data)
 
@@ -55,7 +55,7 @@ class Translator:
         self.default_locale = default_locale or Locale("en")
         self._bundles: dict[str, MessageBundle] = {}
         self._current_locale = self.default_locale
-        self._interpolation_pattern = re.compile(r'\{(\w+)\}')
+        self._interpolation_pattern = re.compile(r"\{(\w+)\}")
 
     def add_bundle(self, bundle: MessageBundle) -> None:
         self._bundles[bundle.locale.code] = bundle
@@ -105,10 +105,12 @@ class Translator:
 
     def _interpolate(self, message: str, values: dict[str, Any]) -> str:
         """Interpolate."""
+
         def replacer(match):
             """Replacer."""
             key = match.group(1)
             return str(values.get(key, match.group(0)))
+
         return self._interpolation_pattern.sub(replacer, message)
 
     def load_directory(self, path: str) -> int:

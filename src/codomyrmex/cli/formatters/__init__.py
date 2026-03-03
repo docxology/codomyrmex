@@ -16,10 +16,11 @@ from typing import Any, Optional, Union
 @dataclass
 class Column:
     """Definition of a table column."""
+
     name: str
     key: str
     width: int | None = None
-    align: str = "left"    # Optional formatting function
+    align: str = "left"  # Optional formatting function
     formatter: Callable | None = None
 
     def format_value(self, value: Any) -> str:
@@ -37,6 +38,7 @@ class Column:
                 return text.ljust(self.width)
         return text
 
+
 class OutputFormatter(ABC):
     """Abstract base class for output formatters."""
 
@@ -46,7 +48,9 @@ class OutputFormatter(ABC):
         pass
 
     @abstractmethod
-    def format_table(self, data: list[dict], columns: list[Column] | None = None) -> str:
+    def format_table(
+        self, data: list[dict], columns: list[Column] | None = None
+    ) -> str:
         """Format tabular data."""
         pass
 
@@ -60,6 +64,7 @@ class OutputFormatter(ABC):
         """Format key-value pairs."""
         pass
 
+
 class PlainFormatter(OutputFormatter):
     """Plain text formatter."""
 
@@ -68,7 +73,9 @@ class PlainFormatter(OutputFormatter):
             return json.dumps(data, indent=2)
         return str(data)
 
-    def format_table(self, data: list[dict], columns: list[Column] | None = None) -> str:
+    def format_table(
+        self, data: list[dict], columns: list[Column] | None = None
+    ) -> str:
         if not data:
             return "No data"
 
@@ -80,8 +87,7 @@ class PlainFormatter(OutputFormatter):
         for col in columns:
             if col.width is None:
                 col.width = max(
-                    len(col.name),
-                    max(len(str(row.get(col.key, ""))) for row in data)
+                    len(col.name), max(len(str(row.get(col.key, ""))) for row in data)
                 )
 
         # Build table
@@ -94,10 +100,7 @@ class PlainFormatter(OutputFormatter):
 
         # Rows
         for row in data:
-            line = " | ".join(
-                col.format_value(row.get(col.key, ""))
-                for col in columns
-            )
+            line = " | ".join(col.format_value(row.get(col.key, "")) for col in columns)
             lines.append(line)
 
         return "\n".join(lines)
@@ -114,6 +117,7 @@ class PlainFormatter(OutputFormatter):
             lines.append(f"{key.ljust(max_key_len)}: {value}")
         return "\n".join(lines)
 
+
 class JSONFormatter(OutputFormatter):
     """JSON formatter for machine-readable output."""
 
@@ -123,7 +127,9 @@ class JSONFormatter(OutputFormatter):
     def format_data(self, data: Any) -> str:
         return json.dumps(data, indent=self.indent, default=str)
 
-    def format_table(self, data: list[dict], columns: list[Column] | None = None) -> str:
+    def format_table(
+        self, data: list[dict], columns: list[Column] | None = None
+    ) -> str:
         return self.format_data(data)
 
     def format_list(self, items: list[Any]) -> str:
@@ -131,6 +137,7 @@ class JSONFormatter(OutputFormatter):
 
     def format_key_value(self, data: dict[str, Any]) -> str:
         return self.format_data(data)
+
 
 class TableFormatter(OutputFormatter):
     """Rich table formatter with borders."""
@@ -150,29 +157,57 @@ class TableFormatter(OutputFormatter):
         """Get border characters based on style."""
         styles = {
             "single": {
-                "tl": "┌", "tr": "┐", "bl": "└", "br": "┘",
-                "h": "─", "v": "│",
-                "ml": "├", "mr": "┤", "mt": "┬", "mb": "┴",
-                "c": "┼"
+                "tl": "┌",
+                "tr": "┐",
+                "bl": "└",
+                "br": "┘",
+                "h": "─",
+                "v": "│",
+                "ml": "├",
+                "mr": "┤",
+                "mt": "┬",
+                "mb": "┴",
+                "c": "┼",
             },
             "double": {
-                "tl": "╔", "tr": "╗", "bl": "╚", "br": "╝",
-                "h": "═", "v": "║",
-                "ml": "╠", "mr": "╣", "mt": "╦", "mb": "╩",
-                "c": "╬"
+                "tl": "╔",
+                "tr": "╗",
+                "bl": "╚",
+                "br": "╝",
+                "h": "═",
+                "v": "║",
+                "ml": "╠",
+                "mr": "╣",
+                "mt": "╦",
+                "mb": "╩",
+                "c": "╬",
             },
             "ascii": {
-                "tl": "+", "tr": "+", "bl": "+", "br": "+",
-                "h": "-", "v": "|",
-                "ml": "+", "mr": "+", "mt": "+", "mb": "+",
-                "c": "+"
+                "tl": "+",
+                "tr": "+",
+                "bl": "+",
+                "br": "+",
+                "h": "-",
+                "v": "|",
+                "ml": "+",
+                "mr": "+",
+                "mt": "+",
+                "mb": "+",
+                "c": "+",
             },
             "none": {
-                "tl": " ", "tr": " ", "bl": " ", "br": " ",
-                "h": " ", "v": " ",
-                "ml": " ", "mr": " ", "mt": " ", "mb": " ",
-                "c": " "
-            }
+                "tl": " ",
+                "tr": " ",
+                "bl": " ",
+                "br": " ",
+                "h": " ",
+                "v": " ",
+                "ml": " ",
+                "mr": " ",
+                "mt": " ",
+                "mb": " ",
+                "c": " ",
+            },
         }
         return styles.get(self.border_style, styles["single"])
 
@@ -183,7 +218,9 @@ class TableFormatter(OutputFormatter):
             return self.format_key_value(data)
         return str(data)
 
-    def format_table(self, data: list[dict], columns: list[Column] | None = None) -> str:
+    def format_table(
+        self, data: list[dict], columns: list[Column] | None = None
+    ) -> str:
         if not data:
             return "No data"
 
@@ -194,42 +231,62 @@ class TableFormatter(OutputFormatter):
         for col in columns:
             if col.width is None:
                 col.width = max(
-                    len(col.name),
-                    max(len(str(row.get(col.key, ""))) for row in data)
+                    len(col.name), max(len(str(row.get(col.key, ""))) for row in data)
                 )
 
         b = self._borders
         lines = []
 
         # Top border
-        top = b["tl"] + b["mt"].join(b["h"] * (col.width + 2) for col in columns) + b["tr"]
+        top = (
+            b["tl"]
+            + b["mt"].join(b["h"] * (col.width + 2) for col in columns)
+            + b["tr"]
+        )
         lines.append(top)
 
         # Header
         if self.show_header:
-            header = b["v"] + b["v"].join(
-                f" {col.name.ljust(col.width)} " for col in columns
-            ) + b["v"]
+            header = (
+                b["v"]
+                + b["v"].join(f" {col.name.ljust(col.width)} " for col in columns)
+                + b["v"]
+            )
             lines.append(header)
 
             # Header separator
-            sep = b["ml"] + b["c"].join(b["h"] * (col.width + 2) for col in columns) + b["mr"]
+            sep = (
+                b["ml"]
+                + b["c"].join(b["h"] * (col.width + 2) for col in columns)
+                + b["mr"]
+            )
             lines.append(sep)
 
         # Rows
         for i, row in enumerate(data):
-            line = b["v"] + b["v"].join(
-                f" {col.format_value(row.get(col.key, ''))} "
-                for col in columns
-            ) + b["v"]
+            line = (
+                b["v"]
+                + b["v"].join(
+                    f" {col.format_value(row.get(col.key, ''))} " for col in columns
+                )
+                + b["v"]
+            )
             lines.append(line)
 
             if self.row_separator and i < len(data) - 1:
-                sep = b["ml"] + b["c"].join(b["h"] * (col.width + 2) for col in columns) + b["mr"]
+                sep = (
+                    b["ml"]
+                    + b["c"].join(b["h"] * (col.width + 2) for col in columns)
+                    + b["mr"]
+                )
                 lines.append(sep)
 
         # Bottom border
-        bottom = b["bl"] + b["mb"].join(b["h"] * (col.width + 2) for col in columns) + b["br"]
+        bottom = (
+            b["bl"]
+            + b["mb"].join(b["h"] * (col.width + 2) for col in columns)
+            + b["br"]
+        )
         lines.append(bottom)
 
         return "\n".join(lines)
@@ -242,8 +299,9 @@ class TableFormatter(OutputFormatter):
         table_data = [{"key": k, "value": v} for k, v in data.items()]
         return self.format_table(
             table_data,
-            [Column(name="Key", key="key"), Column(name="Value", key="value")]
+            [Column(name="Key", key="key"), Column(name="Value", key="value")],
         )
+
 
 class YAMLFormatter(OutputFormatter):
     """YAML-like formatter for readable output."""
@@ -293,7 +351,9 @@ class YAMLFormatter(OutputFormatter):
     def format_data(self, data: Any) -> str:
         return self._format_value(data)
 
-    def format_table(self, data: list[dict], columns: list[Column] | None = None) -> str:
+    def format_table(
+        self, data: list[dict], columns: list[Column] | None = None
+    ) -> str:
         return self.format_data(data)
 
     def format_list(self, items: list[Any]) -> str:
@@ -301,6 +361,7 @@ class YAMLFormatter(OutputFormatter):
 
     def format_key_value(self, data: dict[str, Any]) -> str:
         return self.format_data(data)
+
 
 def create_formatter(format_type: str, **kwargs) -> OutputFormatter:
     """Factory function to create formatters."""
@@ -316,6 +377,7 @@ def create_formatter(format_type: str, **kwargs) -> OutputFormatter:
         raise ValueError(f"Unknown format type: {format_type}")
 
     return formatter_class(**kwargs)
+
 
 __all__ = [
     "Column",

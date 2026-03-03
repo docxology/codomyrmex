@@ -240,11 +240,17 @@ class Privacy:
                 continue
             val = result[field_name]
             if rule.strategy == "hash":
-                result[field_name] = mask_hash(str(val), rule.params.get("algorithm", "sha256"))
+                result[field_name] = mask_hash(
+                    str(val), rule.params.get("algorithm", "sha256")
+                )
             elif rule.strategy == "redact":
-                result[field_name] = mask_redact(str(val), rule.params.get("replacement", "***"))
+                result[field_name] = mask_redact(
+                    str(val), rule.params.get("replacement", "***")
+                )
             elif rule.strategy == "partial":
-                result[field_name] = mask_partial(str(val), rule.params.get("visible", 4))
+                result[field_name] = mask_partial(
+                    str(val), rule.params.get("visible", 4)
+                )
             elif rule.strategy == "email":
                 result[field_name] = mask_email(str(val))
             elif rule.strategy == "noise":

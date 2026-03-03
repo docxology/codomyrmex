@@ -278,9 +278,7 @@ class TestMCPToolErrorFromMCPResponse:
         assert MCPToolError.from_mcp_response(resp) is None
 
     def test_structured_error_parsed(self):
-        original = MCPToolError(
-            code=MCPErrorCode.TIMEOUT, message="timeout"
-        )
+        original = MCPToolError(code=MCPErrorCode.TIMEOUT, message="timeout")
         resp = original.to_mcp_response()
         restored = MCPToolError.from_mcp_response(resp)
         assert restored is not None
@@ -374,9 +372,7 @@ class TestConvenienceConstructors:
         assert e.module == "search"
 
     def test_execution_error_with_suggestion(self):
-        e = execution_error(
-            "my_tool", RuntimeError("oops"), suggestion="Check inputs"
-        )
+        e = execution_error("my_tool", RuntimeError("oops"), suggestion="Check inputs")
         assert e.suggestion == "Check inputs"
 
     def test_execution_error_default_module_empty(self):

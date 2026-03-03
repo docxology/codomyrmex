@@ -8,5 +8,3 @@ from .adapter import FirecrawlAdapter
 from .client import FirecrawlClient
 
 __all__ = ["FirecrawlClient", "FirecrawlAdapter"]
-
-

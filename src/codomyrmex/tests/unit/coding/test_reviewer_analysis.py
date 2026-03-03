@@ -254,11 +254,11 @@ class TestCalculateOverallScore:
         r = _make_reviewer(tmp_path)
         # complexity=0.25, dead_code=0.20, duplication=0.15, coupling=0.20, architecture=0.20
         score = r._calculate_overall_score(
-            {"score": 80.0},   # complexity  -> 80 * 0.25 = 20
-            {"score": 60.0},   # dead_code   -> 60 * 0.20 = 12
+            {"score": 80.0},  # complexity  -> 80 * 0.25 = 20
+            {"score": 60.0},  # dead_code   -> 60 * 0.20 = 12
             {"score": 100.0},  # duplication  -> 100 * 0.15 = 15
-            {"score": 50.0},   # coupling    -> 50 * 0.20 = 10
-            {"score": 70.0},   # architecture -> 70 * 0.20 = 14
+            {"score": 50.0},  # coupling    -> 50 * 0.20 = 10
+            {"score": 70.0},  # architecture -> 70 * 0.20 = 14
         )
         # Total = 20 + 12 + 15 + 10 + 14 = 71.0
         assert abs(score - 71.0) < 0.01

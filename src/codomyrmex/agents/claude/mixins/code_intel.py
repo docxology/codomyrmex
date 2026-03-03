@@ -9,6 +9,7 @@ from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 logger = get_logger(__name__)
 
+
 class CodeIntelMixin:
     """CodeIntelMixin class."""
 
@@ -55,7 +56,9 @@ class CodeIntelMixin:
             "performance": "Identify performance issues and optimizations.",
         }
 
-        analysis_instruction = analysis_prompts.get(analysis_type, analysis_prompts["general"])
+        analysis_instruction = analysis_prompts.get(
+            analysis_type, analysis_prompts["general"]
+        )
 
         system_prompt = f"""You are an expert {language} code analyst.
 Provide thorough, actionable code review.
@@ -183,9 +186,15 @@ Structure your response with:
 
             if "issue" in lower_line or "problem" in lower_line or "bug" in lower_line:
                 current_section = "issues"
-            elif "recommend" in lower_line or "suggestion" in lower_line or "improvement" in lower_line:
+            elif (
+                "recommend" in lower_line
+                or "suggestion" in lower_line
+                or "improvement" in lower_line
+            ):
                 current_section = "recommendations"
-            elif line_stripped.startswith(("-", "*", "•", "1", "2", "3", "4", "5", "6", "7", "8", "9")):
+            elif line_stripped.startswith(
+                ("-", "*", "•", "1", "2", "3", "4", "5", "6", "7", "8", "9")
+            ):
                 item = line_stripped.lstrip("-*•0123456789.) ").strip()
                 if item and len(item) > 5:  # Filter out very short items
                     if current_section == "issues":
@@ -271,7 +280,9 @@ Structure your response:
             if "summary" in line.lower() and i + 1 < len(lines):
                 summary = lines[i + 1].strip().lstrip("-•* ")
                 break
-            elif line.strip() and not any(h in line.lower() for h in ["explanation", "concept", "##", "#"]):
+            elif line.strip() and not any(
+                h in line.lower() for h in ["explanation", "concept", "##", "#"]
+            ):
                 summary = line.strip()
                 break
 
@@ -285,7 +296,11 @@ Structure your response:
                 concept = line.strip().lstrip("-*• ").strip()
                 if concept:
                     concepts.append(concept)
-            elif in_concepts and line.strip() and not line.strip().startswith(("-", "*", "•")):
+            elif (
+                in_concepts
+                and line.strip()
+                and not line.strip().startswith(("-", "*", "•"))
+            ):
                 if line.startswith("#"):
                     in_concepts = False
 
@@ -330,7 +345,13 @@ Structure your response:
             >>> print(result["tests"])
         """
         if framework is None:
-            framework = "pytest" if language == "python" else "jest" if language in ("javascript", "typescript") else "default"
+            framework = (
+                "pytest"
+                if language == "python"
+                else "jest"
+                if language in ("javascript", "typescript")
+                else "default"
+            )
 
         system_prompt = f"""You are an expert {language} testing specialist.
 Generate comprehensive tests using {framework}.
@@ -374,7 +395,11 @@ Return:
             line_stripped = line.strip()
             if line_stripped.startswith(("-", "*", "•", "1", "2", "3", "4", "5")):
                 case = line_stripped.lstrip("-*•0123456789.) ").strip()
-                if case and ("test" in case.lower() or "case" in case.lower() or "should" in case.lower()):
+                if case and (
+                    "test" in case.lower()
+                    or "case" in case.lower()
+                    or "should" in case.lower()
+                ):
                     test_cases.append(case)
 
         return {
@@ -387,4 +412,3 @@ Return:
             "tokens_used": response.tokens_used,
             "cost_usd": response.metadata.get("cost_usd", 0.0),
         }
-

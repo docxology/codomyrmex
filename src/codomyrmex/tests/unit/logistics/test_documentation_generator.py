@@ -17,6 +17,7 @@ from codomyrmex.logistics.orchestration.project.documentation_generator import (
 # Fixtures
 # ---------------------------------------------------------------------------
 
+
 @pytest.fixture
 def gen(tmp_path: Path) -> DocumentationGenerator:
     """DocumentationGenerator with a tmp_path-based templates directory."""
@@ -38,6 +39,7 @@ def project_dir(tmp_path: Path) -> Path:
 # ---------------------------------------------------------------------------
 # Tests
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestDocumentationGeneratorInit:
@@ -167,11 +169,18 @@ class TestGetDirectoryAgentPurpose:
 class TestGenerateRootReadme:
     """Root README.md generation."""
 
-    def test_generates_readme_file(self, gen: DocumentationGenerator, project_dir: Path):
+    def test_generates_readme_file(
+        self, gen: DocumentationGenerator, project_dir: Path
+    ):
         """Creates a README.md at project root."""
         result = gen.generate_root_readme(
-            project_dir, "TestProject", "python", "A test project",
-            "1.0.0", "Author", "2026-01-01",
+            project_dir,
+            "TestProject",
+            "python",
+            "A test project",
+            "1.0.0",
+            "Author",
+            "2026-01-01",
         )
         assert result is True
         readme = project_dir / "README.md"
@@ -189,7 +198,13 @@ class TestGenerateRootReadme:
             "# CUSTOM {{project_name}} v{{version}}", encoding="utf-8"
         )
         result = gen.generate_root_readme(
-            project_dir, "Proj", "python", "desc", "2.0", "Auth", "2026",
+            project_dir,
+            "Proj",
+            "python",
+            "desc",
+            "2.0",
+            "Auth",
+            "2026",
             template="special",
         )
         assert result is True
@@ -201,8 +216,13 @@ class TestGenerateRootReadme:
     ):
         """When no template file exists, the built-in default template is used."""
         result = gen.generate_root_readme(
-            project_dir, "FallbackProj", "python", "desc",
-            "0.1", "Auth", "2026",
+            project_dir,
+            "FallbackProj",
+            "python",
+            "desc",
+            "0.1",
+            "Auth",
+            "2026",
         )
         assert result is True
         content = (project_dir / "README.md").read_text(encoding="utf-8")
@@ -215,7 +235,13 @@ class TestGenerateRootReadme:
     ):
         """Empty description is replaced with a project-type-derived string."""
         gen.generate_root_readme(
-            project_dir, "P", "data_science", "", "1.0", "", "2026",
+            project_dir,
+            "P",
+            "data_science",
+            "",
+            "1.0",
+            "",
+            "2026",
         )
         content = (project_dir / "README.md").read_text(encoding="utf-8")
         assert "Data Science" in content
@@ -225,10 +251,15 @@ class TestGenerateRootReadme:
 class TestGenerateRootAgents:
     """Root AGENTS.md generation."""
 
-    def test_generates_agents_file(self, gen: DocumentationGenerator, project_dir: Path):
+    def test_generates_agents_file(
+        self, gen: DocumentationGenerator, project_dir: Path
+    ):
         """Creates an AGENTS.md at project root."""
         result = gen.generate_root_agents(
-            project_dir, "TestProject", "python", "A test project",
+            project_dir,
+            "TestProject",
+            "python",
+            "A test project",
             ["src", "tests"],
         )
         assert result is True
@@ -244,7 +275,11 @@ class TestGenerateRootAgents:
     ):
         """When nested_dirs is empty, active_components says 'No active components'."""
         gen.generate_root_agents(
-            project_dir, "P", "python", "desc", [],
+            project_dir,
+            "P",
+            "python",
+            "desc",
+            [],
         )
         content = (project_dir / "AGENTS.md").read_text(encoding="utf-8")
         assert "No active components" in content
@@ -254,11 +289,17 @@ class TestGenerateRootAgents:
 class TestGenerateNestedReadme:
     """Nested directory README.md generation."""
 
-    def test_generates_nested_readme(self, gen: DocumentationGenerator, project_dir: Path):
+    def test_generates_nested_readme(
+        self, gen: DocumentationGenerator, project_dir: Path
+    ):
         """Creates README.md inside a nested directory."""
         nested = project_dir / "src"
         result = gen.generate_nested_readme(
-            nested, "src", "MyProject", "python", parent_path=project_dir,
+            nested,
+            "src",
+            "MyProject",
+            "python",
+            parent_path=project_dir,
         )
         assert result is True
         readme = nested / "README.md"
@@ -271,13 +312,19 @@ class TestGenerateNestedReadme:
         """Parent link is rendered when parent_path is provided."""
         nested = project_dir / "docs"
         gen.generate_nested_readme(
-            nested, "docs", "P", "python", parent_path=project_dir,
+            nested,
+            "docs",
+            "P",
+            "python",
+            parent_path=project_dir,
         )
         content = (nested / "README.md").read_text(encoding="utf-8")
         assert "Parent Directory" in content
         assert "../README.md" in content
 
-    def test_no_parent_link_when_none(self, gen: DocumentationGenerator, project_dir: Path):
+    def test_no_parent_link_when_none(
+        self, gen: DocumentationGenerator, project_dir: Path
+    ):
         """No parent link when parent_path is None."""
         nested = project_dir / "config"
         gen.generate_nested_readme(nested, "config", "P", "python", parent_path=None)
@@ -289,11 +336,17 @@ class TestGenerateNestedReadme:
 class TestGenerateNestedAgents:
     """Nested directory AGENTS.md generation."""
 
-    def test_generates_nested_agents(self, gen: DocumentationGenerator, project_dir: Path):
+    def test_generates_nested_agents(
+        self, gen: DocumentationGenerator, project_dir: Path
+    ):
         """Creates AGENTS.md inside a nested directory."""
         nested = project_dir / "tests"
         result = gen.generate_nested_agents(
-            nested, "tests", "MyProject", "python", parent_path=project_dir,
+            nested,
+            "tests",
+            "MyProject",
+            "python",
+            parent_path=project_dir,
         )
         assert result is True
         agents = nested / "AGENTS.md"
@@ -308,7 +361,11 @@ class TestGenerateNestedAgents:
         """Parent agents link is rendered when parent_path is provided."""
         nested = project_dir / "src"
         gen.generate_nested_agents(
-            nested, "src", "P", "python", parent_path=project_dir,
+            nested,
+            "src",
+            "P",
+            "python",
+            parent_path=project_dir,
         )
         content = (nested / "AGENTS.md").read_text(encoding="utf-8")
         assert "Parent Agents" in content

@@ -23,7 +23,9 @@ class AsyncStream:
         buffer_size: int = 1000,
         enable_backpressure: bool = True,
     ):
-        self._buffer: asyncio.Queue = asyncio.Queue(maxsize=buffer_size if enable_backpressure else 0)
+        self._buffer: asyncio.Queue = asyncio.Queue(
+            maxsize=buffer_size if enable_backpressure else 0
+        )
         self._subscribers: dict[str, asyncio.Queue] = {}
         self._running = False
         self._dispatcher_task: asyncio.Task | None = None
@@ -77,6 +79,7 @@ class AsyncStream:
     async def subscribe(self, buffer_size: int = 100) -> str:
         """Subscribe and get a subscription ID."""
         import uuid
+
         sub_id = str(uuid.uuid4())
         self._subscribers[sub_id] = asyncio.Queue(maxsize=buffer_size)
         return sub_id
@@ -203,11 +206,17 @@ class BatchingStream:
                 batch = self._batch
                 self._batch = []
 
-            if len(self._batch) == 0 and 'batch' in locals():
+            if len(self._batch) == 0 and "batch" in locals():
                 for handler in self._handlers:
                     try:
                         handler(batch)
-                    except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
+                    except (
+                        ValueError,
+                        RuntimeError,
+                        AttributeError,
+                        OSError,
+                        TypeError,
+                    ) as e:
                         logger.debug("Batch handler error during add: %s", e)
                         pass
 

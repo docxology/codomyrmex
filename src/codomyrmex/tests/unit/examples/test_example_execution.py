@@ -25,7 +25,9 @@ class TestExampleExecution:
         workflow_dir = examples_dir / "multi_module"
         return list(workflow_dir.glob("example_workflow_*.py"))
 
-    def run_example_script(self, script_path: Path, timeout: int = 60) -> tuple[int, str, str]:
+    def run_example_script(
+        self, script_path: Path, timeout: int = 60
+    ) -> tuple[int, str, str]:
         """Run an example script and return exit code, stdout, stderr."""
         try:
             result = subprocess.run(
@@ -33,7 +35,7 @@ class TestExampleExecution:
                 cwd=script_path.parent,
                 capture_output=True,
                 text=True,
-                timeout=timeout
+                timeout=timeout,
             )
             return result.returncode, result.stdout, result.stderr
         except subprocess.TimeoutExpired:
@@ -91,9 +93,9 @@ class TestExampleExecution:
         # Skip examples that are known to have issues
         skip_examples = [
             "model_context_protocol",  # Has import issues
-            "terminal_interface",      # Has import issues
-            "events",                  # Has import issues
-            "api_standardization"      # Has import issues
+            "terminal_interface",  # Has import issues
+            "events",  # Has import issues
+            "api_standardization",  # Has import issues
         ]
 
         successful = 0
@@ -151,7 +153,9 @@ class TestExampleExecution:
             print(f"\nTesting {workflow_name}...")
 
             # Run the workflow
-            exit_code, stdout, stderr = self.run_example_script(workflow_file, timeout=120)  # Longer timeout for workflows
+            exit_code, stdout, stderr = self.run_example_script(
+                workflow_file, timeout=120
+            )  # Longer timeout for workflows
 
             if exit_code == 0:
                 successful += 1

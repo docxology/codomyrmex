@@ -19,12 +19,18 @@ def list_cloud_instances() -> dict:
 
         results = []
         for instance in instances:
-            results.append({
-                "id": instance.id,
-                "name": instance.name,
-                "status": instance.status,
-                "flavor": instance.flavor.get("original_name") if hasattr(instance.flavor, "get") else str(instance.flavor)
-            })
+            results.append(
+                {
+                    "id": instance.id,
+                    "name": instance.name,
+                    "status": instance.status,
+                    "flavor": (
+                        instance.flavor.get("original_name")
+                        if hasattr(instance.flavor, "get")
+                        else str(instance.flavor)
+                    ),
+                }
+            )
 
         return {"status": "success", "instances": results, "count": len(results)}
     except Exception as e:
@@ -45,13 +51,19 @@ def list_s3_buckets() -> dict:
         client = InfomaniakS3Client.from_env()
         buckets = client.list_buckets()
 
-        return {"status": "success", "buckets": [b.get("Name") for b in buckets], "count": len(buckets)}
+        return {
+            "status": "success",
+            "buckets": [b.get("Name") for b in buckets],
+            "count": len(buckets),
+        }
     except Exception as e:
         return {"status": "error", "message": f"Failed to list buckets: {e}"}
 
 
 @mcp_tool(category="cloud")
-def upload_file_to_s3(file_path: str, bucket: str, object_name: str | None = None) -> dict:
+def upload_file_to_s3(
+    file_path: str, bucket: str, object_name: str | None = None
+) -> dict:
     """Upload a local file to Infomaniak S3 storage.
 
     Args:
@@ -70,7 +82,7 @@ def upload_file_to_s3(file_path: str, bucket: str, object_name: str | None = Non
 
         return {
             "status": "success",
-            "message": f"Successfully uploaded {file_path} to {bucket}"
+            "message": f"Successfully uploaded {file_path} to {bucket}",
         }
     except Exception as e:
         return {"status": "error", "message": f"Failed to upload file: {e}"}

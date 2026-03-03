@@ -51,16 +51,13 @@ class CulturalDynamicsEngine:
             new_val = curr + alpha * (sig.valence * sig.strength - curr)
             current_dims[sig.dimension] = new_val
 
-            states.append(CulturalState(
-                dimensions=current_dims.copy(),
-                timestamp=sig.timestamp
-            ))
+            states.append(
+                CulturalState(dimensions=current_dims.copy(), timestamp=sig.timestamp)
+            )
 
         return Trajectory(states=states)
 
-    def mutation_probability(
-        self, state: CulturalState, perturbation: Meme
-    ) -> float:
+    def mutation_probability(self, state: CulturalState, perturbation: Meme) -> float:
         """Calculate probability of cultural mutation given current state.
 
         High 'energy' (tension) increases mutation probability.

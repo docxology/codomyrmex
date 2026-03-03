@@ -26,7 +26,7 @@ class ConnectionError(NetworkError):
         host: str | None = None,
         port: int | None = None,
         protocol: str | None = None,
-        **kwargs: Any
+        **kwargs: Any,
     ):
         super().__init__(message, **kwargs)
         if host:
@@ -53,7 +53,7 @@ class NetworkTimeoutError(NetworkError):
         timeout_seconds: float | None = None,
         operation: str | None = None,
         url: str | None = None,
-        **kwargs: Any
+        **kwargs: Any,
     ):
         super().__init__(message, **kwargs)
         if timeout_seconds is not None:
@@ -80,7 +80,7 @@ class SSLError(NetworkError):
         host: str | None = None,
         certificate_error: str | None = None,
         ssl_version: str | None = None,
-        **kwargs: Any
+        **kwargs: Any,
     ):
         super().__init__(message, **kwargs)
         if host:
@@ -109,7 +109,7 @@ class HTTPError(NetworkError):
         url: str | None = None,
         method: str | None = None,
         response_body: str | None = None,
-        **kwargs: Any
+        **kwargs: Any,
     ):
         super().__init__(message, **kwargs)
         if status_code is not None:
@@ -121,7 +121,9 @@ class HTTPError(NetworkError):
         # Truncate response body to avoid huge context
         if response_body:
             self.context["response_body"] = (
-                response_body[:500] + "..." if len(response_body) > 500 else response_body
+                response_body[:500] + "..."
+                if len(response_body) > 500
+                else response_body
             )
 
 
@@ -139,7 +141,7 @@ class DNSResolutionError(NetworkError):
         message: str,
         hostname: str | None = None,
         dns_server: str | None = None,
-        **kwargs: Any
+        **kwargs: Any,
     ):
         super().__init__(message, **kwargs)
         if hostname:
@@ -164,7 +166,7 @@ class WebSocketError(NetworkError):
         url: str | None = None,
         close_code: int | None = None,
         close_reason: str | None = None,
-        **kwargs: Any
+        **kwargs: Any,
     ):
         super().__init__(message, **kwargs)
         if url:
@@ -191,7 +193,7 @@ class ProxyError(NetworkError):
         proxy_url: str | None = None,
         proxy_type: str | None = None,
         target_url: str | None = None,
-        **kwargs: Any
+        **kwargs: Any,
     ):
         super().__init__(message, **kwargs)
         if proxy_url:
@@ -218,7 +220,7 @@ class RateLimitError(NetworkError):
         url: str | None = None,
         retry_after: float | None = None,
         limit_type: str | None = None,
-        **kwargs: Any
+        **kwargs: Any,
     ):
         super().__init__(message, **kwargs)
         if url:
@@ -245,7 +247,7 @@ class SSHError(NetworkError):
         host: str | None = None,
         port: int | None = None,
         username: str | None = None,
-        **kwargs: Any
+        **kwargs: Any,
     ):
         super().__init__(message, **kwargs)
         if host:

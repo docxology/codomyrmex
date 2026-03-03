@@ -26,7 +26,7 @@ class SimpleVersion:
     """Simple semantic version implementation."""
 
     def __init__(self, version_str: str):
-        parts = version_str.split('.')
+        parts = version_str.split(".")
         if len(parts) != 3:
             raise ValueError(f"Invalid semantic version: {version_str}")
         try:
@@ -34,7 +34,9 @@ class SimpleVersion:
             self.minor = int(parts[1])
             self.patch = int(parts[2])
         except ValueError:
-            raise ValueError(f"Invalid semantic version components: {version_str}") from None
+            raise ValueError(
+                f"Invalid semantic version components: {version_str}"
+            ) from None
 
     def __str__(self):
         """Return human-readable string."""
@@ -44,13 +46,21 @@ class SimpleVersion:
         """Return True if less than other."""
         if not isinstance(other, SimpleVersion):
             return NotImplemented
-        return (self.major, self.minor, self.patch) < (other.major, other.minor, other.patch)
+        return (self.major, self.minor, self.patch) < (
+            other.major,
+            other.minor,
+            other.patch,
+        )
 
     def __eq__(self, other):
         """Return True if equal to other."""
         if not isinstance(other, SimpleVersion):
             return NotImplemented
-        return (self.major, self.minor, self.patch) == (other.major, other.minor, other.patch)
+        return (self.major, self.minor, self.patch) == (
+            other.major,
+            other.minor,
+            other.patch,
+        )
 
     def is_compatible(self, other):
         """Check if compatible (same major version)."""
@@ -59,14 +69,16 @@ class SimpleVersion:
 
 class VersionFormat(Enum):
     """Supported API version formats."""
+
     SEMVER = "semver"  # 1.0.0
-    DATE = "date"      # 2024-01-01
-    INTEGER = "int"    # 1, 2, 3
+    DATE = "date"  # 2024-01-01
+    INTEGER = "int"  # 1, 2, 3
 
 
 @dataclass
 class APIVersion:
     """Represents an API version."""
+
     version: str
     format: VersionFormat
     release_date: datetime
@@ -84,13 +96,15 @@ class APIVersion:
             except ValueError:
                 raise ValueError(f"Invalid semantic version: {self.version}") from None
         elif self.format == VersionFormat.DATE:
-            if not re.match(r'^\d{4}-\d{2}-\d{2}$', self.version):
-                raise ValueError(f"Invalid date format (expected YYYY-MM-DD): {self.version}")
+            if not re.match(r"^\d{4}-\d{2}-\d{2}$", self.version):
+                raise ValueError(
+                    f"Invalid date format (expected YYYY-MM-DD): {self.version}"
+                )
         elif self.format == VersionFormat.INTEGER:
             if not self.version.isdigit():
                 raise ValueError(f"Invalid integer version: {self.version}")
 
-    def is_compatible_with(self, other_version: 'APIVersion') -> bool:
+    def is_compatible_with(self, other_version: "APIVersion") -> bool:
         """
         Check if this version is compatible with another version.
 
@@ -112,7 +126,7 @@ class APIVersion:
         # For date and integer versions, assume backward compatibility
         return True
 
-    def __lt__(self, other: 'APIVersion') -> bool:
+    def __lt__(self, other: "APIVersion") -> bool:
         """Compare versions for ordering."""
         if self.format != other.format:
             return False
@@ -132,6 +146,7 @@ class APIVersion:
 @dataclass
 class VersionedEndpoint:
     """Represents a versioned API endpoint."""
+
     path: str
     versions: dict[str, Callable]  # version -> handler
     default_version: str
@@ -152,10 +167,14 @@ class VersionedEndpoint:
             version = self.default_version
 
         if version in self.deprecated_versions:
-            logger.warning(f"Using deprecated version {version} for endpoint {self.path}")
+            logger.warning(
+                f"Using deprecated version {version} for endpoint {self.path}"
+            )
 
         if version not in self.versions:
-            raise ValueError(f"Version {version} not supported for endpoint {self.path}")
+            raise ValueError(
+                f"Version {version} not supported for endpoint {self.path}"
+            )
 
         return self.versions[version]
 
@@ -188,7 +207,11 @@ class APIVersionManager:
     Manages API versions and versioned endpoints.
     """
 
-    def __init__(self, default_version: str = "1.0.0", version_format: VersionFormat = VersionFormat.SEMVER):
+    def __init__(
+        self,
+        default_version: str = "1.0.0",
+        version_format: VersionFormat = VersionFormat.SEMVER,
+    ):
         """
         Initialize the version manager.
 
@@ -201,17 +224,23 @@ class APIVersionManager:
         self.versions: dict[str, APIVersion] = {}
         self.endpoints: dict[str, VersionedEndpoint] = {}
         self.version_headers = ["X-API-Version", "X-Version"]
-        self.migration_rules: dict[str, dict[str, Callable]] = {}  # from_version -> {to_version: migrator}
+        self.migration_rules: dict[
+            str, dict[str, Callable]
+        ] = {}  # from_version -> {to_version: migrator}
 
         # Register default version
-        self.register_version(APIVersion(
-            version=default_version,
-            format=version_format,
-            release_date=datetime.now(),
-            description="Default API version"
-        ))
+        self.register_version(
+            APIVersion(
+                version=default_version,
+                format=version_format,
+                release_date=datetime.now(),
+                description="Default API version",
+            )
+        )
 
-        logger.info(f"API Version Manager initialized with default version {default_version}")
+        logger.info(
+            f"API Version Manager initialized with default version {default_version}"
+        )
 
     def register_version(self, version: APIVersion) -> None:
         """
@@ -221,7 +250,9 @@ class APIVersionManager:
             version: Version to register
         """
         if version.format != self.version_format:
-            raise ValueError(f"Version format {version.format} does not match manager format {self.version_format}")
+            raise ValueError(
+                f"Version format {version.format} does not match manager format {self.version_format}"
+            )
 
         self.versions[version.version] = version
         logger.info(f"Registered API version: {version}")
@@ -256,12 +287,14 @@ class APIVersionManager:
         """
         if not self.versions:
             # Handle empty versions case
-            return None # type: ignore
+            return None  # type: ignore
 
         versions = list(self.versions.values())
-        return max(versions, key=lambda v: v.version) # type: ignore
+        return max(versions, key=lambda v: v.version)  # type: ignore
 
-    def parse_version_from_request(self, headers: dict[str, str], query_params: dict[str, list[str]]) -> str:
+    def parse_version_from_request(
+        self, headers: dict[str, str], query_params: dict[str, list[str]]
+    ) -> str:
         """
         Parse API version from request headers or query parameters.
 
@@ -281,11 +314,11 @@ class APIVersionManager:
         # Check query parameters
         version = query_params.get("version", [None])[0]
         if version:
-            return version # type: ignore
+            return version  # type: ignore
 
         # Check Accept header for versioned content types
         accept = headers.get("accept", "")
-        version_match = re.search(r'application/vnd\.[^.]+\.v([0-9]+\.[0-9]+)', accept)
+        version_match = re.search(r"application/vnd\.[^.]+\.v([0-9]+\.[0-9]+)", accept)
         if version_match:
             return version_match.group(1)
 
@@ -313,7 +346,9 @@ class APIVersionManager:
         self.endpoints[endpoint.path] = endpoint
         logger.debug(f"Registered versioned endpoint: {endpoint.path}")
 
-    def get_endpoint(self, path: str, version: str | None = None) -> VersionedEndpoint | None:
+    def get_endpoint(
+        self, path: str, version: str | None = None
+    ) -> VersionedEndpoint | None:
         """
         Get a versioned endpoint.
 
@@ -326,7 +361,9 @@ class APIVersionManager:
         """
         return self.endpoints.get(path)
 
-    def add_migration_rule(self, from_version: str, to_version: str, migrator: Callable) -> None:
+    def add_migration_rule(
+        self, from_version: str, to_version: str, migrator: Callable
+    ) -> None:
         """
         Add a migration rule between versions.
 
@@ -362,7 +399,9 @@ class APIVersionManager:
 
         while current_version != to_version:
             if current_version not in self.migration_rules:
-                raise ValueError(f"No migration path from {current_version} to {to_version}")
+                raise ValueError(
+                    f"No migration path from {current_version} to {to_version}"
+                )
 
             # Find next version in migration path
             migration_options = self.migration_rules[current_version]
@@ -374,12 +413,16 @@ class APIVersionManager:
                 # Try to find intermediate migration
                 next_version = None
                 for target_ver in migration_options:
-                    if self.versions[target_ver].is_compatible_with(self.versions[to_version]):
+                    if self.versions[target_ver].is_compatible_with(
+                        self.versions[to_version]
+                    ):
                         next_version = target_ver
                         break
 
                 if next_version is None:
-                    raise ValueError(f"No migration path from {current_version} to {to_version}")
+                    raise ValueError(
+                        f"No migration path from {current_version} to {to_version}"
+                    )
 
                 migrator = migration_options[next_version]
                 migrated_data = migrator(migrated_data)
@@ -401,14 +444,16 @@ class APIVersionManager:
                 "description": version.description,
                 "deprecated": version.deprecated,
                 "breaking_changes": version.breaking_changes,
-                "features": version.features
+                "features": version.features,
             }
 
         return {
             "default_version": self.default_version,
             "supported_versions": list(self.versions.keys()),
-            "latest_version": self.get_latest_version().version if self.versions else None,
-            "versions": versions_info
+            "latest_version": (
+                self.get_latest_version().version if self.versions else None
+            ),
+            "versions": versions_info,
         }
 
     def check_deprecated_usage(self, version: str, endpoint: str) -> bool:
@@ -443,10 +488,12 @@ def version(version_str: str):
     Returns:
         Decorated function
     """
+
     def decorator(func: Callable) -> Callable:
         """Decorator."""
         func._api_version = version_str
         return func
+
     return decorator
 
 
@@ -460,10 +507,12 @@ def deprecated_version(version_str: str):
     Returns:
         Decorated function
     """
+
     def decorator(func: Callable) -> Callable:
         """Decorator."""
         func._deprecated_version = version_str
         return func
+
     return decorator
 
 
@@ -492,8 +541,4 @@ def create_versioned_endpoint(path: str, default_version: str) -> VersionedEndpo
     Returns:
         VersionedEndpoint instance
     """
-    return VersionedEndpoint(
-        path=path,
-        versions={},
-        default_version=default_version
-    )
+    return VersionedEndpoint(path=path, versions={}, default_version=default_version)

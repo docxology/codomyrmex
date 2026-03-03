@@ -211,7 +211,9 @@ class HealthChecker:
             f"({report.healthy_count}✓ {report.degraded_count}~ {report.unhealthy_count}✗)"
         ]
         for r in report.checks:
-            icon = {"healthy": "✓", "degraded": "~", "unhealthy": "✗"}.get(r.status.value, "?")
+            icon = {"healthy": "✓", "degraded": "~", "unhealthy": "✗"}.get(
+                r.status.value, "?"
+            )
             lines.append(f"  {icon} {r.name}: {r.message} ({r.duration_ms:.1f}ms)")
         return "\n".join(lines)
 

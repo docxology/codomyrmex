@@ -42,7 +42,9 @@ class CertificateValidator:
         """
         self.timeout = timeout
 
-    def validate_certificate(self, hostname: str, port: int = 443) -> SSLValidationResult:
+    def validate_certificate(
+        self, hostname: str, port: int = 443
+    ) -> SSLValidationResult:
         """Validate SSL certificate for a hostname.
 
         Args:
@@ -57,7 +59,9 @@ class CertificateValidator:
             cert_pem = self._get_certificate(hostname, port)
 
             # Parse with OpenSSL
-            x509 = OpenSSL.crypto.load_certificate(OpenSSL.crypto.FILETYPE_PEM, cert_pem)
+            x509 = OpenSSL.crypto.load_certificate(
+                OpenSSL.crypto.FILETYPE_PEM, cert_pem
+            )
 
             # Extract info
             subject = dict(x509.get_subject().get_components())
@@ -67,9 +71,11 @@ class CertificateValidator:
             # Check expiration
             not_after_bytes = x509.get_notAfter()
             if not_after_bytes:
-                not_after_str = not_after_bytes.decode('utf-8')
+                not_after_str = not_after_bytes.decode("utf-8")
                 # OpenSSL format: YYYYMMDDhhmmssZ
-                expires_at = datetime.strptime(not_after_str, '%Y%m%d%H%M%SZ').replace(tzinfo=UTC)
+                expires_at = datetime.strptime(not_after_str, "%Y%m%d%H%M%SZ").replace(
+                    tzinfo=UTC
+                )
                 now = datetime.now(UTC)
                 days_left = (expires_at - now).days
                 is_expired = days_left < 0
@@ -95,15 +101,17 @@ class CertificateValidator:
                 valid=is_valid,
                 certificate_info={
                     "version": x509.get_version(),
-                    "signature_algorithm": x509.get_signature_algorithm().decode('utf-8'),
-                    "not_before": x509.get_notBefore().decode('utf-8'),
+                    "signature_algorithm": x509.get_signature_algorithm().decode(
+                        "utf-8"
+                    ),
+                    "not_before": x509.get_notBefore().decode("utf-8"),
                     "not_after": not_after_str,
                 },
                 validation_errors=errors if errors else None,
                 expiration_days=days_left,
                 issuer=issuer_str,
                 subject=subject_str,
-                serial_number=str(serial)
+                serial_number=str(serial),
             )
 
         except Exception as e:
@@ -113,14 +121,16 @@ class CertificateValidator:
                 port=port,
                 valid=False,
                 certificate_info={},
-                validation_errors=[str(e)]
+                validation_errors=[str(e)],
             )
 
     def _get_certificate(self, hostname: str, port: int) -> str:
         """Retrieve certificate from server."""
         context = ssl.create_default_context()
         context.check_hostname = False
-        context.verify_mode = ssl.CERT_NONE  # We just want to fetch it, not enforce validation during fetch
+        context.verify_mode = (
+            ssl.CERT_NONE
+        )  # We just want to fetch it, not enforce validation during fetch
 
         with socket.create_connection((hostname, port), timeout=self.timeout) as sock:
             with context.wrap_socket(sock, server_hostname=hostname) as ssock:
@@ -133,16 +143,18 @@ class CertificateValidator:
         """Format OpenSSL X509 Name components to string."""
         parts = []
         # Common Name
-        if b'CN' in components:
+        if b"CN" in components:
             parts.append(f"CN={components[b'CN'].decode('utf-8', errors='ignore')}")
         # Organization
-        if b'O' in components:
+        if b"O" in components:
             parts.append(f"O={components[b'O'].decode('utf-8', errors='ignore')}")
 
         return ", ".join(parts) or "Unknown"
 
 
-def validate_ssl_certificates(hostname: str, port: int = 443, timeout: int = 10) -> dict[str, Any]:
+def validate_ssl_certificates(
+    hostname: str, port: int = 443, timeout: int = 10
+) -> dict[str, Any]:
     """Validate SSL certificate for *hostname* and return a plain dict result.
 
     Args:

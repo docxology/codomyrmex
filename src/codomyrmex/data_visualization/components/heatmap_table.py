@@ -1,4 +1,5 @@
 """Component module."""
+
 from dataclasses import dataclass, field
 
 from ._base import BaseComponent
@@ -7,6 +8,7 @@ from ._base import BaseComponent
 @dataclass
 class HeatmapTable(BaseComponent):
     """Heatmap table component with colour-coded cells."""
+
     headers: list = field(default_factory=list)
     rows: list = field(default_factory=list)
     title: str = ""
@@ -31,16 +33,16 @@ class HeatmapTable(BaseComponent):
                         f'<td style="background-color: rgba(0, 123, 255, {alpha})">{v}</td>'
                     )
                 else:
-                    cells.append(f'<td>{v}</td>')
-            rows_html.append(f'<tr>{"".join(cells)}</tr>')
+                    cells.append(f"<td>{v}</td>")
+            rows_html.append(f"<tr>{''.join(cells)}</tr>")
 
         title_html = f"<caption>{self.title}</caption>" if self.title else ""
         return (
             f'<table class="heatmap-table">'
-            f'{title_html}'
-            f'<thead><tr>{header_html}</tr></thead>'
-            f'<tbody>{"".join(rows_html)}</tbody>'
-            f'</table>'
+            f"{title_html}"
+            f"<thead><tr>{header_html}</tr></thead>"
+            f"<tbody>{''.join(rows_html)}</tbody>"
+            f"</table>"
         )
 
     def __str__(self) -> str:

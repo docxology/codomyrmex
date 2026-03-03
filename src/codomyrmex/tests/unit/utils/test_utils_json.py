@@ -51,7 +51,7 @@ class TestSafeJsonLoads:
         """Test parsing valid JSON array."""
         from codomyrmex.utils import safe_json_loads
 
-        result = safe_json_loads('[1, 2, 3]')
+        result = safe_json_loads("[1, 2, 3]")
 
         assert result == [1, 2, 3]
 
@@ -59,7 +59,7 @@ class TestSafeJsonLoads:
         """Test parsing valid JSON number."""
         from codomyrmex.utils import safe_json_loads
 
-        result = safe_json_loads('42')
+        result = safe_json_loads("42")
 
         assert result == 42
 

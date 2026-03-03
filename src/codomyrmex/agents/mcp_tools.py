@@ -30,7 +30,10 @@ def execute_agent(agent_name: str, prompt: str) -> dict:
         response = agent.execute(request)
         return {"status": "success", "content": response.content}
     except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
-        return {"status": "error", "message": f"Failed to execute agent {agent_name}: {e}"}
+        return {
+            "status": "error",
+            "message": f"Failed to execute agent {agent_name}: {e}",
+        }
 
 
 @mcp_tool(category="agents")
@@ -64,9 +67,14 @@ def get_agent_memory(session_id: str) -> dict:
         manager = SessionManager()
         session = manager.get_session(session_id)
         if not session:
-             return {"status": "error", "message": f"Session {session_id} not found."}
+            return {"status": "error", "message": f"Session {session_id} not found."}
 
-        logs = [{"role": m.role.value, "content": m.content} for m in session.messages[-50:]]
+        logs = [
+            {"role": m.role.value, "content": m.content} for m in session.messages[-50:]
+        ]
         return {"status": "success", "logs": logs, "session_id": session_id}
     except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
-        return {"status": "error", "message": f"Failed to retrieve memory for {session_id}: {e}"}
+        return {
+            "status": "error",
+            "message": f"Failed to retrieve memory for {session_id}: {e}",
+        }

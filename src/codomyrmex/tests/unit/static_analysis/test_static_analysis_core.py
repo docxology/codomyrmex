@@ -42,6 +42,7 @@ pytestmark = pytest.mark.unit
 # helpers
 # ---------------------------------------------------------------------------
 
+
 def _make_module(base, name: str, init_source: str = "") -> None:
     """Create a fake module directory with __init__.py."""
     mod_dir = base / name
@@ -159,7 +160,7 @@ class TestCheckAllDefined:
     def test_all_assigned_to_non_list_returns_true_none(self, tmp_path):
         """__all__ assigned to a non-list/tuple value returns (True, None)."""
         init = tmp_path / "__init__.py"
-        init.write_text('__all__ = get_exports()\n', encoding="utf-8")
+        init.write_text("__all__ = get_exports()\n", encoding="utf-8")
         has_all, names = check_all_defined(init)
         assert has_all is True
         assert names is None
@@ -233,34 +234,50 @@ class TestCollectAllImports:
 
     def test_collects_from_import(self, tmp_path):
         """from codomyrmex.X import Y collects Y."""
-        _write_py(tmp_path, "mod/consumer.py", """\
+        _write_py(
+            tmp_path,
+            "mod/consumer.py",
+            """\
             from codomyrmex.foo import bar
-        """)
+        """,
+        )
         names = _collect_all_imports(tmp_path)
         assert "bar" in names
 
     def test_collects_import_statement(self, tmp_path):
         """import codomyrmex.X.Y collects Y (last segment)."""
-        _write_py(tmp_path, "mod/consumer.py", """\
+        _write_py(
+            tmp_path,
+            "mod/consumer.py",
+            """\
             import codomyrmex.foo.bar
-        """)
+        """,
+        )
         names = _collect_all_imports(tmp_path)
         assert "bar" in names
 
     def test_ignores_non_codomyrmex_imports(self, tmp_path):
         """Imports not from codomyrmex are ignored."""
-        _write_py(tmp_path, "mod/consumer.py", """\
+        _write_py(
+            tmp_path,
+            "mod/consumer.py",
+            """\
             import os
             from pathlib import Path
-        """)
+        """,
+        )
         names = _collect_all_imports(tmp_path)
         assert len(names) == 0
 
     def test_skips_pycache_dirs(self, tmp_path):
         """Files inside __pycache__ are skipped."""
-        _write_py(tmp_path, "__pycache__/cached.py", """\
+        _write_py(
+            tmp_path,
+            "__pycache__/cached.py",
+            """\
             from codomyrmex.x import y
-        """)
+        """,
+        )
         names = _collect_all_imports(tmp_path)
         assert "y" not in names
 
@@ -276,9 +293,13 @@ class TestFindDeadExports:
     def test_no_dead_when_export_is_imported(self, tmp_path):
         """An export that is imported elsewhere is not dead."""
         _make_module(tmp_path, "provider", '__all__ = ["helper"]\ndef helper(): pass\n')
-        _write_py(tmp_path, "consumer/use.py", """\
+        _write_py(
+            tmp_path,
+            "consumer/use.py",
+            """\
             from codomyrmex.provider import helper
-        """)
+        """,
+        )
         dead = find_dead_exports(tmp_path)
         assert all(d["export_name"] != "helper" for d in dead)
 
@@ -366,24 +387,40 @@ class TestFindUnusedFunctions:
 
     def test_used_function_not_flagged(self, tmp_path):
         """A function referenced elsewhere is not unused."""
-        _write_py(tmp_path, "lib.py", """\
+        _write_py(
+            tmp_path,
+            "lib.py",
+            """\
             def compute(): pass
-        """)
-        _write_py(tmp_path, "main.py", """\
+        """,
+        )
+        _write_py(
+            tmp_path,
+            "main.py",
+            """\
             from lib import compute
             compute()
-        """)
+        """,
+        )
         unused = find_unused_functions(tmp_path)
         assert all(u["function_name"] != "compute" for u in unused)
 
     def test_unused_function_flagged(self, tmp_path):
         """A function never referenced anywhere is flagged."""
-        _write_py(tmp_path, "lib.py", """\
+        _write_py(
+            tmp_path,
+            "lib.py",
+            """\
             def never_called(): pass
-        """)
-        _write_py(tmp_path, "main.py", """\
+        """,
+        )
+        _write_py(
+            tmp_path,
+            "main.py",
+            """\
             x = 1
-        """)
+        """,
+        )
         unused = find_unused_functions(tmp_path)
         flagged_names = {u["function_name"] for u in unused}
         assert "never_called" in flagged_names
@@ -411,11 +448,13 @@ class TestFullAudit:
         report = full_audit(tmp_path)
         assert report["summary"]["modules_missing_all"] == len(report["missing_all"])
         assert report["summary"]["dead_export_count"] == len(report["dead_exports"])
-        assert report["summary"]["unused_function_count"] == len(report["unused_functions"])
+        assert report["summary"]["unused_function_count"] == len(
+            report["unused_functions"]
+        )
 
     def test_clean_codebase_summary_zeros(self, tmp_path):
         """A codebase with properly defined __all__ and no dead code has zero counts."""
-        _make_module(tmp_path, "clean", '__all__ = []\n')
+        _make_module(tmp_path, "clean", "__all__ = []\n")
         report = full_audit(tmp_path)
         assert report["summary"]["modules_missing_all"] == 0
         assert report["summary"]["dead_export_count"] == 0
@@ -465,7 +504,9 @@ class TestExtractImportsAst:
     def test_from_import_extracts_module(self, tmp_path):
         """'from codomyrmex.foo import bar' extracts 'foo'."""
         py = tmp_path / "a.py"
-        py.write_text("from codomyrmex.logging_monitoring import logger\n", encoding="utf-8")
+        py.write_text(
+            "from codomyrmex.logging_monitoring import logger\n", encoding="utf-8"
+        )
         mods = extract_imports_ast(py)
         assert "logging_monitoring" in mods
 
@@ -493,11 +534,14 @@ class TestExtractImportsAst:
     def test_multiple_imports(self, tmp_path):
         """Multiple codomyrmex imports are all extracted."""
         py = tmp_path / "multi.py"
-        py.write_text(textwrap.dedent("""\
+        py.write_text(
+            textwrap.dedent("""\
             from codomyrmex.agents import core
             from codomyrmex.cli import main
             import codomyrmex.llm.provider
-        """), encoding="utf-8")
+        """),
+            encoding="utf-8",
+        )
         mods = extract_imports_ast(py)
         assert "agents" in mods
         assert "cli" in mods
@@ -522,9 +566,13 @@ class TestScanImports:
 
     def test_detects_cross_module_import(self, tmp_path):
         """An import from module A to module B creates an edge."""
-        _write_py(tmp_path, "modA/core.py", """\
+        _write_py(
+            tmp_path,
+            "modA/core.py",
+            """\
             from codomyrmex.modB import helper
-        """)
+        """,
+        )
         _write_py(tmp_path, "modB/__init__.py", "")
         edges = scan_imports(tmp_path)
         cross = [e for e in edges if e["src"] == "modA" and e["dst"] == "modB"]
@@ -532,18 +580,28 @@ class TestScanImports:
 
     def test_self_import_excluded(self, tmp_path):
         """A module importing from itself is not recorded."""
-        _write_py(tmp_path, "self_mod/core.py", """\
+        _write_py(
+            tmp_path,
+            "self_mod/core.py",
+            """\
             from codomyrmex.self_mod import util
-        """)
+        """,
+        )
         edges = scan_imports(tmp_path)
-        self_edges = [e for e in edges if e["src"] == "self_mod" and e["dst"] == "self_mod"]
+        self_edges = [
+            e for e in edges if e["src"] == "self_mod" and e["dst"] == "self_mod"
+        ]
         assert len(self_edges) == 0
 
     def test_edge_contains_layer_info(self, tmp_path):
         """Each edge includes src_layer and dst_layer."""
-        _write_py(tmp_path, "modX/x.py", """\
+        _write_py(
+            tmp_path,
+            "modX/x.py",
+            """\
             from codomyrmex.modY import z
-        """)
+        """,
+        )
         edges = scan_imports(tmp_path)
         for edge in edges:
             assert "src_layer" in edge
@@ -565,62 +623,72 @@ class TestCheckLayerViolations:
 
     def test_foundation_importing_core_is_violation(self):
         """A foundation module importing a core module is a violation."""
-        edges = [{
-            "src": "logging_monitoring",
-            "dst": "coding",
-            "file": "logging_monitoring/bad.py",
-            "src_layer": "foundation",
-            "dst_layer": "core",
-        }]
+        edges = [
+            {
+                "src": "logging_monitoring",
+                "dst": "coding",
+                "file": "logging_monitoring/bad.py",
+                "src_layer": "foundation",
+                "dst_layer": "core",
+            }
+        ]
         violations = check_layer_violations(edges)
         assert len(violations) == 1
         assert "reason" in violations[0]
 
     def test_core_importing_foundation_is_allowed(self):
         """A core module importing a foundation module is NOT a violation."""
-        edges = [{
-            "src": "coding",
-            "dst": "logging_monitoring",
-            "file": "coding/analyzer.py",
-            "src_layer": "core",
-            "dst_layer": "foundation",
-        }]
+        edges = [
+            {
+                "src": "coding",
+                "dst": "logging_monitoring",
+                "file": "coding/analyzer.py",
+                "src_layer": "core",
+                "dst_layer": "foundation",
+            }
+        ]
         violations = check_layer_violations(edges)
         assert violations == []
 
     def test_same_layer_import_is_allowed(self):
         """Imports within the same layer are allowed."""
-        edges = [{
-            "src": "coding",
-            "dst": "security",
-            "file": "coding/scan.py",
-            "src_layer": "core",
-            "dst_layer": "core",
-        }]
+        edges = [
+            {
+                "src": "coding",
+                "dst": "security",
+                "file": "coding/scan.py",
+                "src_layer": "core",
+                "dst_layer": "core",
+            }
+        ]
         violations = check_layer_violations(edges)
         assert violations == []
 
     def test_foundation_importing_specialized_is_violation(self):
         """A foundation module importing a specialized module is a violation."""
-        edges = [{
-            "src": "config_management",
-            "dst": "agents",
-            "file": "config_management/bad.py",
-            "src_layer": "foundation",
-            "dst_layer": "specialized",
-        }]
+        edges = [
+            {
+                "src": "config_management",
+                "dst": "agents",
+                "file": "config_management/bad.py",
+                "src_layer": "foundation",
+                "dst_layer": "specialized",
+            }
+        ]
         violations = check_layer_violations(edges)
         assert len(violations) == 1
 
     def test_other_layer_no_violation(self):
         """Edges with 'other' layer are never flagged (rank is None)."""
-        edges = [{
-            "src": "unknown",
-            "dst": "coding",
-            "file": "unknown/x.py",
-            "src_layer": "other",
-            "dst_layer": "core",
-        }]
+        edges = [
+            {
+                "src": "unknown",
+                "dst": "coding",
+                "file": "unknown/x.py",
+                "src_layer": "other",
+                "dst_layer": "core",
+            }
+        ]
         violations = check_layer_violations(edges)
         assert violations == []
 
@@ -663,7 +731,7 @@ class TestLayerSets:
         """No module appears in more than one layer."""
         all_sets = [FOUNDATION, CORE, SERVICE, SPECIALIZED]
         for i, a in enumerate(all_sets):
-            for b in all_sets[i + 1:]:
+            for b in all_sets[i + 1 :]:
                 overlap = a & b
                 assert overlap == set(), f"Overlap found: {overlap}"
 

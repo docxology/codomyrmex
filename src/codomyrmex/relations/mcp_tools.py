@@ -11,10 +11,12 @@ from typing import Any
 try:
     from codomyrmex.model_context_protocol.decorators import mcp_tool
 except ImportError:
+
     def mcp_tool(**kwargs: Any):  # type: ignore[misc]
         def decorator(func: Any) -> Any:
             func._mcp_tool_meta = kwargs
             return func
+
         return decorator
 
 
@@ -47,16 +49,20 @@ def relations_score_strength(
             RelationStrengthScorer,
             StrengthConfig,
         )
+
         decay = DecayFunction(decay_function)
         config = StrengthConfig(decay_function=decay, half_life=half_life_days * 86400)
         scorer = RelationStrengthScorer(config=config)
         for ix in interactions:
-            scorer.add_interaction(Interaction(
-                source=source, target=target,
-                interaction_type=ix.get("type", "generic"),
-                timestamp=ix.get("timestamp", time.time()),
-                weight=ix.get("weight", 1.0),
-            ))
+            scorer.add_interaction(
+                Interaction(
+                    source=source,
+                    target=target,
+                    interaction_type=ix.get("type", "generic"),
+                    timestamp=ix.get("timestamp", time.time()),
+                    weight=ix.get("weight", 1.0),
+                )
+            )
         score = scorer.score(source, target, now=time.time())
         return {
             "status": "ok",

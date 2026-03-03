@@ -136,6 +136,7 @@ class DarkPDF:
     def page_count(self) -> int:
         """Return the number of pages in the input PDF."""
         import fitz
+
         doc = fitz.open(str(self.input_path))
         count = len(doc)
         doc.close()

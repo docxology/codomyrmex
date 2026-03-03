@@ -58,10 +58,14 @@ class MemoryStore:
     def __init__(self) -> None:
         self._entries: dict[str, MemoryEntry] = {}
 
-    def put(self, key: str, value: Any, ttl: float = 0, tags: list[str] | None = None) -> None:
+    def put(
+        self, key: str, value: Any, ttl: float = 0, tags: list[str] | None = None
+    ) -> None:
         """Store a value."""
         expires = time.time() + ttl if ttl > 0 else 0
-        self._entries[key] = MemoryEntry(key=key, value=value, expires_at=expires, tags=tags or [])
+        self._entries[key] = MemoryEntry(
+            key=key, value=value, expires_at=expires, tags=tags or []
+        )
 
     def get(self, key: str, default: Any = None) -> Any:
         """Retrieve a value."""

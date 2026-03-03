@@ -33,7 +33,9 @@ def balance_table(accounts: list[Account]) -> str:
     lines = [f"{'Account':<30} {'Type':<12} {'Balance':>12}"]
     lines.append("-" * 56)
     for acct in sorted(accounts, key=lambda a: a.account_type.value):
-        lines.append(f"{acct.name:<30} {acct.account_type.value:<12} {acct.balance:>12,.2f}")
+        lines.append(
+            f"{acct.name:<30} {acct.account_type.value:<12} {acct.balance:>12,.2f}"
+        )
     total = sum((a.balance for a in accounts), Decimal("0.00"))
     lines.append("-" * 56)
     lines.append(f"{'TOTAL':<30} {'':12} {total:>12,.2f}")
@@ -123,5 +125,7 @@ def accounts_to_csv(accounts: list[Account]) -> str:
     """Export accounts as CSV."""
     lines = ["name,type,code,balance"]
     for acct in accounts:
-        lines.append(f'"{acct.name}","{acct.account_type.value}","{acct.code}",{acct.balance:.2f}')
+        lines.append(
+            f'"{acct.name}","{acct.account_type.value}","{acct.code}",{acct.balance:.2f}'
+        )
     return "\n".join(lines)

@@ -15,7 +15,6 @@ Tests cover:
 - NetworkGraph: node_count, edge_count
 """
 
-
 import pytest
 
 from codomyrmex.networks.core import Edge as CoreEdge
@@ -28,6 +27,7 @@ from codomyrmex.networks.graph import Node as GraphNode
 # ---------------------------------------------------------------------------
 # core.py -- Node and Edge dataclasses
 # ---------------------------------------------------------------------------
+
 
 class TestCoreNodeEdge:
     """Node and Edge dataclasses from core.py."""
@@ -52,7 +52,9 @@ class TestCoreNodeEdge:
 
     @pytest.mark.unit
     def test_edge_custom_weight(self) -> None:
-        edge = CoreEdge(source="x", target="y", weight=0.5, attributes={"label": "friend"})
+        edge = CoreEdge(
+            source="x", target="y", weight=0.5, attributes={"label": "friend"}
+        )
         assert edge.weight == 0.5
         assert edge.attributes["label"] == "friend"
 
@@ -60,6 +62,7 @@ class TestCoreNodeEdge:
 # ---------------------------------------------------------------------------
 # core.py -- Network class: node operations
 # ---------------------------------------------------------------------------
+
 
 class TestNetworkNodeOps:
     """Network.add_node, remove_node, has_node."""
@@ -106,6 +109,7 @@ class TestNetworkNodeOps:
 # ---------------------------------------------------------------------------
 # core.py -- Network class: edge operations
 # ---------------------------------------------------------------------------
+
 
 class TestNetworkEdgeOps:
     """Network.add_edge, has_edge."""
@@ -156,6 +160,7 @@ class TestNetworkEdgeOps:
 # core.py -- Network class: neighborhood
 # ---------------------------------------------------------------------------
 
+
 class TestNetworkNeighborhood:
     """get_neighbors, degree."""
 
@@ -197,6 +202,7 @@ class TestNetworkNeighborhood:
 # ---------------------------------------------------------------------------
 # core.py -- Network class: traversal
 # ---------------------------------------------------------------------------
+
 
 class TestNetworkTraversal:
     """BFS, DFS, has_path."""
@@ -267,6 +273,7 @@ class TestNetworkTraversal:
 # core.py -- Network class: components and connectivity
 # ---------------------------------------------------------------------------
 
+
 class TestNetworkComponents:
     """connected_components, is_connected."""
 
@@ -316,6 +323,7 @@ class TestNetworkComponents:
 # core.py -- Network class: centrality
 # ---------------------------------------------------------------------------
 
+
 class TestNetworkCentrality:
     """Degree centrality."""
 
@@ -344,6 +352,7 @@ class TestNetworkCentrality:
 # ---------------------------------------------------------------------------
 # core.py -- Network class: properties
 # ---------------------------------------------------------------------------
+
 
 class TestNetworkProperties:
     """node_count, edge_count, density."""
@@ -390,6 +399,7 @@ class TestNetworkProperties:
 # ---------------------------------------------------------------------------
 # core.py -- Network class: serialization
 # ---------------------------------------------------------------------------
+
 
 class TestNetworkSerialization:
     """to_dict / from_dict round-trip."""
@@ -443,6 +453,7 @@ class TestNetworkSerialization:
 # graph.py -- GraphNode and GraphEdge dataclasses
 # ---------------------------------------------------------------------------
 
+
 class TestGraphNodeEdge:
     """Frozen Node and Edge from graph.py."""
 
@@ -476,6 +487,7 @@ class TestGraphNodeEdge:
 # ---------------------------------------------------------------------------
 # graph.py -- NetworkGraph class
 # ---------------------------------------------------------------------------
+
 
 class TestNetworkGraph:
     """NetworkGraph: add_node, add_edge, get_neighbors, shortest_path, counts."""
@@ -568,6 +580,7 @@ class TestNetworkGraph:
 # ---------------------------------------------------------------------------
 # Integration: Network + package __init__
 # ---------------------------------------------------------------------------
+
 
 class TestPackageInit:
     """The networks package __init__ re-exports core classes."""

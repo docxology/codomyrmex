@@ -8,6 +8,7 @@ from .status import add_files
 
 logger = get_logger(__name__)
 
+
 @mcp_tool(name="git_commit")
 def commit_changes(
     message: str,
@@ -83,7 +84,9 @@ def commit_changes(
                 text=True,
                 check=False,
             )
-            name = name_result.stdout.strip() if name_result.returncode == 0 else "Unknown"
+            name = (
+                name_result.stdout.strip() if name_result.returncode == 0 else "Unknown"
+            )
             cmd.extend(["--author", f"{name} <{author_email}>"])
 
         # Add commit message
@@ -120,6 +123,7 @@ def commit_changes(
         logger.error(f"Unexpected error committing changes: {e}")
         return None
 
+
 @mcp_tool(name="git_revert")
 def revert_commit(commit_sha: str, repository_path: str = None) -> bool:
     """Revert a specific commit by creating a new inverse commit."""
@@ -146,6 +150,7 @@ def revert_commit(commit_sha: str, repository_path: str = None) -> bool:
     except Exception as e:
         logger.error(f"Unexpected error reverting commit: {e}")
         return False
+
 
 @mcp_tool(name="git_cherry_pick")
 def cherry_pick(
@@ -182,6 +187,7 @@ def cherry_pick(
     except Exception as e:
         logger.error(f"Unexpected error cherry-picking commit: {e}")
         return False
+
 
 @mcp_tool(name="git_amend")
 def amend_commit(
@@ -234,7 +240,9 @@ def amend_commit(
                 text=True,
                 check=False,
             )
-            name = name_result.stdout.strip() if name_result.returncode == 0 else "Unknown"
+            name = (
+                name_result.stdout.strip() if name_result.returncode == 0 else "Unknown"
+            )
             cmd.extend(["--author", f"{name} <{author_email}>"])
 
         subprocess.run(
@@ -266,4 +274,3 @@ def amend_commit(
     except Exception as e:
         logger.error(f"Unexpected error amending commit: {e}")
         return None
-

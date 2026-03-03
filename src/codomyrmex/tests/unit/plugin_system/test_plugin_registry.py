@@ -19,6 +19,7 @@ from codomyrmex.plugin_system.core.plugin_registry import (
 # Test Plugin Helper Classes
 # ============================================================================
 
+
 class MockPlugin:
     """Mock plugin for testing purposes."""
 
@@ -93,6 +94,7 @@ class ResourceLeakPlugin(MockPlugin):
 # Test Plugin Registry
 # ============================================================================
 
+
 @pytest.mark.unit
 class TestPluginRegistry:
     """Test cases for PluginRegistry functionality."""
@@ -112,7 +114,7 @@ class TestPluginRegistry:
             description="Test plugin",
             author="Test Author",
             plugin_type=PluginType.UTILITY,
-            entry_point="test_plugin.py"
+            entry_point="test_plugin.py",
         )
 
         assert info.name == "test_plugin"
@@ -129,7 +131,7 @@ class TestPluginRegistry:
             plugin_type=PluginType.ANALYZER,
             entry_point="test.py",
             dependencies=["dep1", "dep2"],
-            tags=["test", "serialization"]
+            tags=["test", "serialization"],
         )
 
         info_dict = info.to_dict()
@@ -143,14 +145,16 @@ class TestPluginRegistry:
     def test_plugin_registration(self):
         """Test plugin registration."""
         registry = PluginRegistry()
-        plugin = Plugin(PluginInfo(
-            name="test_plugin",
-            version="1.0.0",
-            description="Test",
-            author="Test",
-            plugin_type=PluginType.UTILITY,
-            entry_point="test.py"
-        ))
+        plugin = Plugin(
+            PluginInfo(
+                name="test_plugin",
+                version="1.0.0",
+                description="Test",
+                author="Test",
+                plugin_type=PluginType.UTILITY,
+                entry_point="test.py",
+            )
+        )
 
         result = registry.register(plugin)
 
@@ -162,22 +166,26 @@ class TestPluginRegistry:
     def test_duplicate_registration_rejected(self):
         """Test that duplicate plugin registration is rejected."""
         registry = PluginRegistry()
-        plugin1 = Plugin(PluginInfo(
-            name="duplicate_test",
-            version="1.0.0",
-            description="First",
-            author="Author",
-            plugin_type=PluginType.UTILITY,
-            entry_point="test.py"
-        ))
-        plugin2 = Plugin(PluginInfo(
-            name="duplicate_test",
-            version="2.0.0",
-            description="Second",
-            author="Author",
-            plugin_type=PluginType.UTILITY,
-            entry_point="test2.py"
-        ))
+        plugin1 = Plugin(
+            PluginInfo(
+                name="duplicate_test",
+                version="1.0.0",
+                description="First",
+                author="Author",
+                plugin_type=PluginType.UTILITY,
+                entry_point="test.py",
+            )
+        )
+        plugin2 = Plugin(
+            PluginInfo(
+                name="duplicate_test",
+                version="2.0.0",
+                description="Second",
+                author="Author",
+                plugin_type=PluginType.UTILITY,
+                entry_point="test2.py",
+            )
+        )
 
         result1 = registry.register(plugin1)
         result2 = registry.register(plugin2)
@@ -190,14 +198,16 @@ class TestPluginRegistry:
     def test_plugin_unregistration(self):
         """Test plugin unregistration."""
         registry = PluginRegistry()
-        plugin = Plugin(PluginInfo(
-            name="unregister_test",
-            version="1.0.0",
-            description="Test",
-            author="Author",
-            plugin_type=PluginType.UTILITY,
-            entry_point="test.py"
-        ))
+        plugin = Plugin(
+            PluginInfo(
+                name="unregister_test",
+                version="1.0.0",
+                description="Test",
+                author="Author",
+                plugin_type=PluginType.UTILITY,
+                entry_point="test.py",
+            )
+        )
 
         registry.register(plugin)
         assert "unregister_test" in registry._plugins
@@ -220,9 +230,36 @@ class TestPluginRegistry:
         registry = PluginRegistry()
 
         plugins = [
-            Plugin(PluginInfo("analyzer_plugin", "1.0.0", "Analysis", "Author", PluginType.ANALYZER, "a.py")),
-            Plugin(PluginInfo("utility_plugin", "1.0.0", "Utility", "Author", PluginType.UTILITY, "u.py")),
-            Plugin(PluginInfo("another_utility", "1.0.0", "Utility 2", "Author", PluginType.UTILITY, "u2.py"))
+            Plugin(
+                PluginInfo(
+                    "analyzer_plugin",
+                    "1.0.0",
+                    "Analysis",
+                    "Author",
+                    PluginType.ANALYZER,
+                    "a.py",
+                )
+            ),
+            Plugin(
+                PluginInfo(
+                    "utility_plugin",
+                    "1.0.0",
+                    "Utility",
+                    "Author",
+                    PluginType.UTILITY,
+                    "u.py",
+                )
+            ),
+            Plugin(
+                PluginInfo(
+                    "another_utility",
+                    "1.0.0",
+                    "Utility 2",
+                    "Author",
+                    PluginType.UTILITY,
+                    "u2.py",
+                )
+            ),
         ]
 
         for plugin in plugins:
@@ -243,14 +280,16 @@ class TestPluginRegistry:
     def test_get_plugin_by_name(self):
         """Test retrieving a plugin by name."""
         registry = PluginRegistry()
-        plugin = Plugin(PluginInfo(
-            name="get_test",
-            version="1.0.0",
-            description="Test",
-            author="Author",
-            plugin_type=PluginType.UTILITY,
-            entry_point="test.py"
-        ))
+        plugin = Plugin(
+            PluginInfo(
+                name="get_test",
+                version="1.0.0",
+                description="Test",
+                author="Author",
+                plugin_type=PluginType.UTILITY,
+                entry_point="test.py",
+            )
+        )
 
         registry.register(plugin)
 
@@ -267,15 +306,17 @@ class TestPluginRegistry:
         registry = PluginRegistry()
 
         # Register plugin with dependencies
-        plugin = Plugin(PluginInfo(
-            name="dependent_plugin",
-            version="1.0.0",
-            description="Dependent",
-            author="Author",
-            plugin_type=PluginType.UTILITY,
-            entry_point="dep.py",
-            dependencies=["base_plugin"]
-        ))
+        plugin = Plugin(
+            PluginInfo(
+                name="dependent_plugin",
+                version="1.0.0",
+                description="Dependent",
+                author="Author",
+                plugin_type=PluginType.UTILITY,
+                entry_point="dep.py",
+                dependencies=["base_plugin"],
+            )
+        )
         registry.register(plugin)
 
         # Check dependencies (base_plugin not registered)
@@ -283,14 +324,16 @@ class TestPluginRegistry:
         assert "base_plugin" in missing
 
         # Register base plugin
-        base_plugin = Plugin(PluginInfo(
-            name="base_plugin",
-            version="1.0.0",
-            description="Base",
-            author="Author",
-            plugin_type=PluginType.UTILITY,
-            entry_point="base.py"
-        ))
+        base_plugin = Plugin(
+            PluginInfo(
+                name="base_plugin",
+                version="1.0.0",
+                description="Base",
+                author="Author",
+                plugin_type=PluginType.UTILITY,
+                entry_point="base.py",
+            )
+        )
         registry.register(base_plugin)
 
         # Check dependencies again
@@ -301,15 +344,17 @@ class TestPluginRegistry:
         """Test checking multiple dependencies."""
         registry = PluginRegistry()
 
-        plugin = Plugin(PluginInfo(
-            name="multi_dep_plugin",
-            version="1.0.0",
-            description="Multi-dependency",
-            author="Author",
-            plugin_type=PluginType.UTILITY,
-            entry_point="multi.py",
-            dependencies=["dep1", "dep2", "dep3"]
-        ))
+        plugin = Plugin(
+            PluginInfo(
+                name="multi_dep_plugin",
+                version="1.0.0",
+                description="Multi-dependency",
+                author="Author",
+                plugin_type=PluginType.UTILITY,
+                entry_point="multi.py",
+                dependencies=["dep1", "dep2", "dep3"],
+            )
+        )
         registry.register(plugin)
 
         missing = registry.check_dependencies("multi_dep_plugin")
@@ -319,7 +364,9 @@ class TestPluginRegistry:
         assert "dep3" in missing
 
         # Register one dependency
-        registry.register(Plugin(PluginInfo("dep1", "1.0.0", "", "", PluginType.UTILITY, "d1.py")))
+        registry.register(
+            Plugin(PluginInfo("dep1", "1.0.0", "", "", PluginType.UTILITY, "d1.py"))
+        )
 
         missing = registry.check_dependencies("multi_dep_plugin")
         assert len(missing) == 2
@@ -335,6 +382,7 @@ class TestPluginRegistry:
 
         # Register handler
         results = []
+
         def test_handler(data):
             """Test functionality: handler."""
             results.append(f"processed_{data}")
@@ -422,9 +470,15 @@ class TestPluginRegistry:
         registry = PluginRegistry()
 
         plugins = [
-            Plugin(PluginInfo("init_test1", "1.0.0", "", "", PluginType.UTILITY, "t1.py")),
-            Plugin(PluginInfo("init_test2", "1.0.0", "", "", PluginType.UTILITY, "t2.py")),
-            Plugin(PluginInfo("init_test3", "1.0.0", "", "", PluginType.UTILITY, "t3.py")),
+            Plugin(
+                PluginInfo("init_test1", "1.0.0", "", "", PluginType.UTILITY, "t1.py")
+            ),
+            Plugin(
+                PluginInfo("init_test2", "1.0.0", "", "", PluginType.UTILITY, "t2.py")
+            ),
+            Plugin(
+                PluginInfo("init_test3", "1.0.0", "", "", PluginType.UTILITY, "t3.py")
+            ),
         ]
 
         for p in plugins:
@@ -440,8 +494,16 @@ class TestPluginRegistry:
         registry = PluginRegistry()
 
         plugins = [
-            Plugin(PluginInfo("shutdown_test1", "1.0.0", "", "", PluginType.UTILITY, "t1.py")),
-            Plugin(PluginInfo("shutdown_test2", "1.0.0", "", "", PluginType.UTILITY, "t2.py")),
+            Plugin(
+                PluginInfo(
+                    "shutdown_test1", "1.0.0", "", "", PluginType.UTILITY, "t1.py"
+                )
+            ),
+            Plugin(
+                PluginInfo(
+                    "shutdown_test2", "1.0.0", "", "", PluginType.UTILITY, "t2.py"
+                )
+            ),
         ]
 
         for p in plugins:
@@ -465,6 +527,7 @@ class TestPluginRegistry:
 # Test Plugin Base Class
 # ============================================================================
 
+
 @pytest.mark.unit
 class TestPluginBaseClass:
     """Test cases for the Plugin base class."""
@@ -477,7 +540,7 @@ class TestPluginBaseClass:
             description="Test plugin",
             author="Test Author",
             plugin_type=PluginType.UTILITY,
-            entry_point="test_plugin.py"
+            entry_point="test_plugin.py",
         )
 
         plugin = Plugin(info)
@@ -496,9 +559,9 @@ class TestPluginBaseClass:
 
     def test_plugin_hook_registration(self):
         """Test plugin hook registration."""
-        plugin = Plugin(PluginInfo(
-            "test", "1.0.0", "Test", "Author", PluginType.UTILITY, "test.py"
-        ))
+        plugin = Plugin(
+            PluginInfo("test", "1.0.0", "Test", "Author", PluginType.UTILITY, "test.py")
+        )
 
         # Register hook
         def test_handler():
@@ -524,9 +587,9 @@ class TestPluginBaseClass:
 
     def test_plugin_lifecycle(self):
         """Test plugin lifecycle methods."""
-        plugin = Plugin(PluginInfo(
-            "test", "1.0.0", "Test", "Author", PluginType.UTILITY, "test.py"
-        ))
+        plugin = Plugin(
+            PluginInfo("test", "1.0.0", "Test", "Author", PluginType.UTILITY, "test.py")
+        )
 
         # Test state changes
         assert plugin.get_state() == PluginState.UNLOADED
@@ -541,7 +604,9 @@ class TestPluginBaseClass:
 
     def test_plugin_initialize_with_config(self):
         """Test plugin initialization with configuration."""
-        plugin = Plugin(PluginInfo("config_test", "1.0.0", "", "", PluginType.UTILITY, "t.py"))
+        plugin = Plugin(
+            PluginInfo("config_test", "1.0.0", "", "", PluginType.UTILITY, "t.py")
+        )
 
         config = {"setting1": "value1", "setting2": 42}
         result = plugin.initialize(config)
@@ -553,7 +618,9 @@ class TestPluginBaseClass:
 
     def test_plugin_shutdown(self):
         """Test plugin shutdown."""
-        plugin = Plugin(PluginInfo("shutdown_test", "1.0.0", "", "", PluginType.UTILITY, "t.py"))
+        plugin = Plugin(
+            PluginInfo("shutdown_test", "1.0.0", "", "", PluginType.UTILITY, "t.py")
+        )
         plugin.initialize()
 
         result = plugin.shutdown()
@@ -566,6 +633,7 @@ class TestPluginBaseClass:
 # Test Plugin Types
 # ============================================================================
 
+
 @pytest.mark.unit
 class TestPluginTypes:
     """Test cases for different plugin types."""
@@ -573,8 +641,15 @@ class TestPluginTypes:
     def test_all_plugin_types_exist(self):
         """Test that all expected plugin types are defined."""
         expected_types = [
-            "ANALYZER", "FORMATTER", "EXPORTER", "IMPORTER",
-            "PROCESSOR", "HOOK", "UTILITY", "ADAPTER", "AGENT"
+            "ANALYZER",
+            "FORMATTER",
+            "EXPORTER",
+            "IMPORTER",
+            "PROCESSOR",
+            "HOOK",
+            "UTILITY",
+            "ADAPTER",
+            "AGENT",
         ]
 
         for type_name in expected_types:
@@ -591,6 +666,7 @@ class TestPluginTypes:
 # Test Plugin States
 # ============================================================================
 
+
 @pytest.mark.unit
 class TestPluginStates:
     """Test cases for plugin state management."""
@@ -598,9 +674,16 @@ class TestPluginStates:
     def test_all_plugin_states_exist(self):
         """Test that all expected plugin states are defined."""
         expected_states = [
-            "UNKNOWN", "REGISTERED", "LOADED", "ACTIVE",
-            "DISABLED", "ERROR", "INITIALIZING", "SHUTTING_DOWN",
-            "LOADING", "UNLOADED"
+            "UNKNOWN",
+            "REGISTERED",
+            "LOADED",
+            "ACTIVE",
+            "DISABLED",
+            "ERROR",
+            "INITIALIZING",
+            "SHUTTING_DOWN",
+            "LOADING",
+            "UNLOADED",
         ]
 
         for state_name in expected_states:
@@ -608,7 +691,9 @@ class TestPluginStates:
 
     def test_plugin_state_transitions(self):
         """Test plugin state transitions."""
-        plugin = Plugin(PluginInfo("state_test", "1.0.0", "", "", PluginType.UTILITY, "t.py"))
+        plugin = Plugin(
+            PluginInfo("state_test", "1.0.0", "", "", PluginType.UTILITY, "t.py")
+        )
 
         # Initial state
         assert plugin.state == PluginState.UNLOADED
@@ -626,14 +711,19 @@ class TestPluginStates:
 # Test Plugin Isolation
 # ============================================================================
 
+
 @pytest.mark.unit
 class TestPluginIsolation:
     """Test cases for plugin isolation."""
 
     def test_plugins_have_separate_state(self):
         """Test that plugins maintain separate state."""
-        plugin1 = Plugin(PluginInfo("isolation1", "1.0.0", "", "", PluginType.UTILITY, "t.py"))
-        plugin2 = Plugin(PluginInfo("isolation2", "1.0.0", "", "", PluginType.UTILITY, "t.py"))
+        plugin1 = Plugin(
+            PluginInfo("isolation1", "1.0.0", "", "", PluginType.UTILITY, "t.py")
+        )
+        plugin2 = Plugin(
+            PluginInfo("isolation2", "1.0.0", "", "", PluginType.UTILITY, "t.py")
+        )
 
         plugin1.set_config({"key": "value1"})
         plugin2.set_config({"key": "value2"})
@@ -643,8 +733,12 @@ class TestPluginIsolation:
 
     def test_plugins_have_separate_hooks(self):
         """Test that plugins have separate hook registrations."""
-        plugin1 = Plugin(PluginInfo("hook_iso1", "1.0.0", "", "", PluginType.UTILITY, "t.py"))
-        plugin2 = Plugin(PluginInfo("hook_iso2", "1.0.0", "", "", PluginType.UTILITY, "t.py"))
+        plugin1 = Plugin(
+            PluginInfo("hook_iso1", "1.0.0", "", "", PluginType.UTILITY, "t.py")
+        )
+        plugin2 = Plugin(
+            PluginInfo("hook_iso2", "1.0.0", "", "", PluginType.UTILITY, "t.py")
+        )
 
         plugin1.register_hook("shared_hook", lambda: "plugin1")
         plugin2.register_hook("shared_hook", lambda: "plugin2")
@@ -660,7 +754,9 @@ class TestPluginIsolation:
         registry1 = PluginRegistry()
         registry2 = PluginRegistry()
 
-        plugin = Plugin(PluginInfo("shared_name", "1.0.0", "", "", PluginType.UTILITY, "t.py"))
+        plugin = Plugin(
+            PluginInfo("shared_name", "1.0.0", "", "", PluginType.UTILITY, "t.py")
+        )
 
         registry1.register(plugin)
 
@@ -671,6 +767,7 @@ class TestPluginIsolation:
 # ============================================================================
 # Test Hook Class
 # ============================================================================
+
 
 @pytest.mark.unit
 class TestHookClass:
@@ -688,8 +785,11 @@ class TestHookClass:
         """Test registering handlers with a hook."""
         hook = Hook("test")
 
-        def handler1(): pass
-        def handler2(): pass
+        def handler1():
+            pass
+
+        def handler2():
+            pass
 
         hook.register(handler1)
         hook.register(handler2)

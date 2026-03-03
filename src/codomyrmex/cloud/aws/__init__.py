@@ -10,18 +10,21 @@ from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 logger = get_logger(__name__)
 
+
 class S3Client(StorageClient):
     """Wrapper for AWS S3 operations."""
 
-    def __init__(self, region_name: str | None = None, session: boto3.Session | None = None):
+    def __init__(
+        self, region_name: str | None = None, session: boto3.Session | None = None
+    ):
         self.session = session or boto3.Session()
-        self.client = self.session.client('s3', region_name=region_name)
+        self.client = self.session.client("s3", region_name=region_name)
 
     def list_buckets(self) -> list[str]:
         """List storage buckets."""
         try:
             response = self.client.list_buckets()
-            return [bucket['Name'] for bucket in response.get('Buckets', [])]
+            return [bucket["Name"] for bucket in response.get("Buckets", [])]
         except ClientError as e:
             logger.error(f"S3 list_buckets error: {e}")
             return []
@@ -32,7 +35,7 @@ class S3Client(StorageClient):
             if region:
                 self.client.create_bucket(
                     Bucket=name,
-                    CreateBucketConfiguration={'LocationConstraint': region}
+                    CreateBucketConfiguration={"LocationConstraint": region},
                 )
             else:
                 self.client.create_bucket(Bucket=name)
@@ -58,11 +61,13 @@ class S3Client(StorageClient):
         except ClientError:
             return False
 
-    def upload_file(self, bucket: str, key: str, file_path: str, content_type: str | None = None) -> bool:
+    def upload_file(
+        self, bucket: str, key: str, file_path: str, content_type: str | None = None
+    ) -> bool:
         """Upload a file from local disk."""
         extra_args = {}
         if content_type:
-            extra_args['ContentType'] = content_type
+            extra_args["ContentType"] = content_type
 
         try:
             self.client.upload_file(file_path, bucket, key, ExtraArgs=extra_args)
@@ -82,13 +87,13 @@ class S3Client(StorageClient):
 
     def list_objects(self, bucket: str, prefix: str | None = None) -> list[str]:
         """List objects in a bucket."""
-        kwargs = {'Bucket': bucket}
+        kwargs = {"Bucket": bucket}
         if prefix:
-            kwargs['Prefix'] = prefix
+            kwargs["Prefix"] = prefix
 
         try:
             response = self.client.list_objects_v2(**kwargs)
-            return [obj['Key'] for obj in response.get('Contents', [])]
+            return [obj["Key"] for obj in response.get("Contents", [])]
         except ClientError as e:
             logger.error(f"S3 list_objects error: {e}")
             return []
@@ -106,7 +111,7 @@ class S3Client(StorageClient):
         """Get object metadata."""
         try:
             response = self.client.head_object(Bucket=bucket, Key=key)
-            return response.get('Metadata', {})
+            return response.get("Metadata", {})
         except ClientError as e:
             logger.error(f"S3 get_object_metadata error: {e}")
             return {}
@@ -122,8 +127,8 @@ class S3Client(StorageClient):
         try:
             return self.client.generate_presigned_url(
                 ClientMethod=operation,
-                Params={'Bucket': bucket, 'Key': key},
-                ExpiresIn=expires_in
+                Params={"Bucket": bucket, "Key": key},
+                ExpiresIn=expires_in,
             )
         except ClientError as e:
             logger.error(f"S3 generate_presigned_url error: {e}")

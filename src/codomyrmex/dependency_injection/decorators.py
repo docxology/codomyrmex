@@ -85,10 +85,7 @@ class InjectMetadata:
 
     def __repr__(self) -> str:
         """Return string representation."""
-        return (
-            f"InjectMetadata(params={self.params}, "
-            f"resolve_all={self.resolve_all})"
-        )
+        return f"InjectMetadata(params={self.params}, resolve_all={self.resolve_all})"
 
 
 def injectable(

@@ -6,10 +6,10 @@ used across all per-client test files.  Zero ``unittest.mock`` usage.
 """
 
 
-
 class _CallRecord:
     """Container for a single call — mirrors ``unittest.mock.call``'s interface."""
-    __slots__ = ('args', 'kwargs')
+
+    __slots__ = ("args", "kwargs")
 
     def __init__(self, args, kwargs):
         self.args = args
@@ -35,6 +35,7 @@ class _CallRecord:
 # =========================================================================
 # Stub — drop-in MagicMock replacement (zero ``unittest.mock``)
 # =========================================================================
+
 
 class Stub:
     """Lightweight MagicMock replacement that records calls.
@@ -67,7 +68,9 @@ class Stub:
         object.__setattr__(self, "_stub_calls", [])
         object.__setattr__(self, "_stub_return_value", Stub._UNSET)
         object.__setattr__(self, "_stub_side_effect", None)
-        object.__setattr__(self, "_stub_restricted", spec is not None and len(spec) == 0)
+        object.__setattr__(
+            self, "_stub_restricted", spec is not None and len(spec) == 0
+        )
         for key, val in attrs.items():
             object.__setattr__(self, key, val)
 
@@ -158,9 +161,7 @@ class Stub:
     def assert_called_once(self):
         calls = object.__getattribute__(self, "_stub_calls")
         if len(calls) != 1:
-            raise AssertionError(
-                f"Expected exactly 1 call, got {len(calls)}"
-            )
+            raise AssertionError(f"Expected exactly 1 call, got {len(calls)}")
 
     def assert_called_once_with(self, *args, **kwargs):
         self.assert_called_once()
@@ -173,9 +174,7 @@ class Stub:
     def assert_not_called(self):
         calls = object.__getattribute__(self, "_stub_calls")
         if calls:
-            raise AssertionError(
-                f"Expected no calls, got {len(calls)}"
-            )
+            raise AssertionError(f"Expected no calls, got {len(calls)}")
 
     # ---- repr -------------------------------------------------------
 
@@ -194,6 +193,7 @@ class Stub:
 # =========================================================================
 # Stub Object Factories
 # =========================================================================
+
 
 def make_stub_server(
     server_id="server-123",

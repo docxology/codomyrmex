@@ -12,6 +12,7 @@ from dataclasses import dataclass
 @dataclass
 class RateLimitConfig:
     """Configuration for rate limiting."""
+
     max_requests: int = 10
     window_seconds: float = 1.0
     burst_size: int | None = None
@@ -68,7 +69,9 @@ class AsyncSlidingWindow:
         while True:
             async with self._lock:
                 now = time.monotonic()
-                self._timestamps = [t for t in self._timestamps if now - t < self._window]
+                self._timestamps = [
+                    t for t in self._timestamps if now - t < self._window
+                ]
                 if len(self._timestamps) < self._max_requests:
                     self._timestamps.append(now)
                     return True

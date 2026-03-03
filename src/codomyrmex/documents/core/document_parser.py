@@ -53,11 +53,17 @@ class DocumentParser:
         """Parse content based on format."""
         if format == DocumentFormat.JSON:
             import json
+
             return json.loads(content)
         elif format == DocumentFormat.YAML:
             import yaml
+
             return yaml.safe_load(content)
-        elif format in [DocumentFormat.MARKDOWN, DocumentFormat.TEXT, DocumentFormat.HTML]:
+        elif format in [
+            DocumentFormat.MARKDOWN,
+            DocumentFormat.TEXT,
+            DocumentFormat.HTML,
+        ]:
             return content
         else:
             # For other formats, return as string for now
@@ -84,6 +90,3 @@ def parse_document(
     """
     parser = DocumentParser()
     return parser.parse(content, format, file_path)
-
-
-

@@ -110,7 +110,13 @@ class DemandAggregator:
             metadata=metadata,
         )
         self._demands.setdefault(category, []).append(entry)
-        logger.info("Registered demand for %s from %s (qty=%d, max=%.2f)", category, persona_id, quantity, max_price)
+        logger.info(
+            "Registered demand for %s from %s (qty=%d, max=%.2f)",
+            category,
+            persona_id,
+            quantity,
+            max_price,
+        )
         return entry
 
     def set_threshold(self, category: str, threshold: int) -> None:
@@ -163,10 +169,17 @@ class DemandAggregator:
             return ""
 
         demands = self._demands[category]
-        effective_threshold = threshold or self._thresholds.get(category, self.default_threshold)
+        effective_threshold = threshold or self._thresholds.get(
+            category, self.default_threshold
+        )
 
         if len(demands) < effective_threshold:
-            logger.debug("Insufficient demand for %s (%d/%d)", category, len(demands), effective_threshold)
+            logger.debug(
+                "Insufficient demand for %s (%d/%d)",
+                category,
+                len(demands),
+                effective_threshold,
+            )
             return ""
 
         # Calculate bulk parameters
@@ -174,7 +187,9 @@ class DemandAggregator:
         avg_price = sum(e.max_price for e in demands) / len(demands)
         target_price_per_unit = avg_price * (1.0 - self.bulk_discount)
 
-        description = f"Bulk: {total_quantity} units of {category} ({len(demands)} buyers)"
+        description = (
+            f"Bulk: {total_quantity} units of {category} ({len(demands)} buyers)"
+        )
         proxy_persona = demands[0].persona_id
 
         auction_id = self.auction_system.create_request(
@@ -185,7 +200,12 @@ class DemandAggregator:
 
         self._triggered_auctions.append(auction_id)
         del self._demands[category]
-        logger.info("Triggered bulk auction %s for %s (%d units)", auction_id, category, total_quantity)
+        logger.info(
+            "Triggered bulk auction %s for %s (%d units)",
+            auction_id,
+            category,
+            total_quantity,
+        )
         return auction_id
 
     def check_all_categories(self) -> list[str]:

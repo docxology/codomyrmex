@@ -32,6 +32,7 @@ except ImportError:
 
 class OperationRisk(Enum):
     """Risk level for cloud operations."""
+
     READ = auto()
     WRITE = auto()
     DELETE = auto()
@@ -41,6 +42,7 @@ class OperationRisk(Enum):
 @dataclass
 class SecurityCheckResult:
     """Result of a security pipeline check."""
+
     allowed: bool = True
     reason: str = ""
     risk_level: OperationRisk = OperationRisk.READ
@@ -162,10 +164,9 @@ class CloudSecurityPipeline:
                     return result
 
                 persona_level_name = persona.level.name
-                if (
-                    _VERIFICATION_ORDER.index(persona_level_name)
-                    < _VERIFICATION_ORDER.index(min_level_name)
-                ):
+                if _VERIFICATION_ORDER.index(
+                    persona_level_name
+                ) < _VERIFICATION_ORDER.index(min_level_name):
                     result.allowed = False
                     result.reason = (
                         f"Operation '{operation_name}' requires "

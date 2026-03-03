@@ -75,8 +75,12 @@ def test_skill_metadata_to_json_schema():
         name="test_skill",
         description="A test skill",
         parameters=[
-            ParameterSchema(name="x", param_type="integer", description="An int", required=True),
-            ParameterSchema(name="y", param_type="string", description="A str", required=False),
+            ParameterSchema(
+                name="x", param_type="integer", description="An int", required=True
+            ),
+            ParameterSchema(
+                name="y", param_type="string", description="A str", required=False
+            ),
         ],
     )
     schema = meta.to_json_schema()
@@ -89,6 +93,7 @@ def test_skill_metadata_to_json_schema():
 @pytest.mark.unit
 def test_function_skill_creation():
     """Test wrapping a function as a FunctionSkill."""
+
     def my_func(x: int, y: str = "hello") -> str:
         """My function."""
         return f"{y}: {x}"
@@ -102,6 +107,7 @@ def test_function_skill_creation():
 @pytest.mark.unit
 def test_function_skill_metadata_inference():
     """Test auto-inference from function signature."""
+
     def add(a: int, b: float = 1.0) -> float:
         """Add two numbers."""
         return a + b
@@ -124,6 +130,7 @@ def test_function_skill_metadata_inference():
 @pytest.mark.unit
 def test_function_skill_execute():
     """Test that execution delegates to the wrapped function."""
+
     def multiply(x: int, y: int) -> int:
         return x * y
 
@@ -135,6 +142,7 @@ def test_function_skill_execute():
 @pytest.mark.unit
 def test_skill_validate_params():
     """Test parameter validation."""
+
     def my_func(required_param: str):
         """Needs a param."""
         return required_param
@@ -193,8 +201,12 @@ def test_registry_search_by_category():
     """Test category filter."""
     registry = SkillRegistry()
 
-    meta1 = SkillMetadata(id="s1", name="skill1", description="Skill 1", category=SkillCategory.CODE)
-    meta2 = SkillMetadata(id="s2", name="skill2", description="Skill 2", category=SkillCategory.WEB)
+    meta1 = SkillMetadata(
+        id="s1", name="skill1", description="Skill 1", category=SkillCategory.CODE
+    )
+    meta2 = SkillMetadata(
+        id="s2", name="skill2", description="Skill 2", category=SkillCategory.WEB
+    )
 
     def f1():
         return 1
@@ -217,7 +229,9 @@ def test_registry_search_by_tags():
     """Test tag filter."""
     registry = SkillRegistry()
 
-    meta = SkillMetadata(id="tagged", name="tagged_skill", description="Tagged", tags=["python", "ai"])
+    meta = SkillMetadata(
+        id="tagged", name="tagged_skill", description="Tagged", tags=["python", "ai"]
+    )
 
     def f():
         return True
@@ -294,6 +308,7 @@ def test_discoverer_from_module():
 @pytest.mark.unit
 def test_default_registry():
     """Test global registry functions."""
+
     def unique_test_func_12345():
         """Unique for testing."""
         return "unique"
