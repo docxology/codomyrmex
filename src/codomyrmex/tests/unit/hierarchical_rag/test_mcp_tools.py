@@ -1,6 +1,10 @@
 """Unit tests for hierarchical_rag MCP tools."""
 
-from codomyrmex.hierarchical_rag.mcp_tools import hierarchical_rag_index_document, hierarchical_rag_query
+from codomyrmex.hierarchical_rag.mcp_tools import (
+    hierarchical_rag_index_document,
+    hierarchical_rag_query,
+)
+
 
 def test_hierarchical_rag_index_document():
     """Test that indexing a document returns a success status and id."""
@@ -9,6 +13,7 @@ def test_hierarchical_rag_index_document():
     assert result["status"] == "success"
     assert "id" in result
     assert "levels" in result
+
 
 def test_hierarchical_rag_query():
     """Test that querying returns results matching the query."""

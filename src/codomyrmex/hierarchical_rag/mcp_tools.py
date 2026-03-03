@@ -5,16 +5,16 @@ Exposes tools for indexing, querying, and managing hierarchical document structu
 
 from __future__ import annotations
 
-from typing import Any, Dict, List
+from typing import Any
 
 from codomyrmex.model_context_protocol.decorators import mcp_tool
 
 
 @mcp_tool(
     category="hierarchical_rag",
-    description="Index a document into the hierarchical RAG system."
+    description="Index a document into the hierarchical RAG system.",
 )
-def hierarchical_rag_index_document(document: Dict[str, Any]) -> Dict[str, Any]:
+def hierarchical_rag_index_document(document: dict[str, Any]) -> dict[str, Any]:
     """Index a document into the hierarchical RAG system.
 
     Args:
@@ -23,14 +23,18 @@ def hierarchical_rag_index_document(document: Dict[str, Any]) -> Dict[str, Any]:
     Returns:
         A dictionary with the indexing status and generated ID.
     """
-    return {"status": "success", "id": "doc_123", "levels": ["chunk", "section", "document"]}
+    return {
+        "status": "success",
+        "id": "doc_123",
+        "levels": ["chunk", "section", "document"],
+    }
 
 
 @mcp_tool(
     category="hierarchical_rag",
-    description="Query the hierarchical RAG system across multiple levels."
+    description="Query the hierarchical RAG system across multiple levels.",
 )
-def hierarchical_rag_query(query: str, max_results: int = 5) -> Dict[str, Any]:
+def hierarchical_rag_query(query: str, max_results: int = 5) -> dict[str, Any]:
     """Query the hierarchical RAG system.
 
     Args:
@@ -43,6 +47,11 @@ def hierarchical_rag_query(query: str, max_results: int = 5) -> Dict[str, Any]:
     return {
         "query": query,
         "results": [
-            {"id": "doc_123", "level": "chunk", "score": 0.95, "content": "Relevant chunk content"}
-        ]
+            {
+                "id": "doc_123",
+                "level": "chunk",
+                "score": 0.95,
+                "content": "Relevant chunk content",
+            }
+        ],
     }
