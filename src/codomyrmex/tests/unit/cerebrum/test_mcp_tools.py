@@ -2,9 +2,7 @@
 
 from __future__ import annotations
 
-import pytest
-
-from codomyrmex.cerebrum import Case, CaseBase, CaseRetriever
+from codomyrmex.cerebrum import Case, CaseBase
 from codomyrmex.cerebrum.mcp_tools import add_case_reference, query_knowledge_base
 
 
@@ -12,8 +10,12 @@ def test_query_knowledge_base_success():
     """Test successful case retrieval using the real CaseBase."""
     # Pre-populate a CaseBase instance with some data to retrieve
     base = CaseBase()
-    case1 = Case(case_id="case1", features={"concept": "test_concept"}, outcome="test_solution")
-    case2 = Case(case_id="case2", features={"concept": "other_concept"}, outcome="other_solution")
+    case1 = Case(
+        case_id="case1", features={"concept": "test_concept"}, outcome="test_solution"
+    )
+    case2 = Case(
+        case_id="case2", features={"concept": "other_concept"}, outcome="other_solution"
+    )
     base.add_case(case1)
     base.add_case(case2)
 
