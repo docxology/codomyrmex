@@ -5,6 +5,7 @@ This module provides database performance monitoring, query optimization,
 and performance analytics capabilities.
 """
 
+import bisect
 import json
 import statistics
 import time
@@ -164,13 +165,23 @@ class DatabasePerformanceMonitor:
 
         for query_type, times in query_types.items():
             if times:
+                times.sort()
+                count = len(times)
+
+                if count % 2 == 1:
+                    median_val = times[count // 2]
+                else:
+                    median_val = (times[count // 2 - 1] + times[count // 2]) / 2.0
+
+                slow_count = count - bisect.bisect_right(times, 1000)
+
                 analysis["query_types"][query_type] = {
-                    "count": len(times),
-                    "avg_time_ms": statistics.mean(times),
-                    "median_time_ms": statistics.median(times),
-                    "min_time_ms": min(times),
-                    "max_time_ms": max(times),
-                    "slow_queries": len([t for t in times if t > 1000])  # Queries > 1 second
+                    "count": count,
+                    "avg_time_ms": sum(times) / count,
+                    "median_time_ms": median_val,
+                    "min_time_ms": times[0],
+                    "max_time_ms": times[-1],
+                    "slow_queries": slow_count
                 }
 
         # Identify slow queries
