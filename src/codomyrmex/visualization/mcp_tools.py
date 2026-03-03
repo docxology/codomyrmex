@@ -4,10 +4,11 @@ Visualization MCP tools.
 
 from codomyrmex.model_context_protocol.tool_decorator import mcp_tool
 
+
 @mcp_tool(
     name="viz_list_chart_types",
     description="List supported chart types for visualization.",
-    category="visualization"
+    category="visualization",
 )
 def viz_list_chart_types() -> list[str]:
     """List supported chart types."""
@@ -17,7 +18,7 @@ def viz_list_chart_types() -> list[str]:
 @mcp_tool(
     name="viz_create_chart",
     description="Create a chart from data.",
-    category="visualization"
+    category="visualization",
 )
 def viz_create_chart(data: dict, chart_type: str, title: str = "") -> str:
     """
@@ -39,7 +40,7 @@ def viz_create_chart(data: dict, chart_type: str, title: str = "") -> str:
 @mcp_tool(
     name="viz_export_chart",
     description="Export a chart to an image file.",
-    category="visualization"
+    category="visualization",
 )
 def viz_export_chart(chart_id: str, format: str = "png", filepath: str = "") -> str:
     """

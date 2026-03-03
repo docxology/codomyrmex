@@ -71,7 +71,9 @@ def test_viz_export_chart_invalid_format():
 def test_mcp_decorator_metadata():
     """Test that the @mcp_tool decorator successfully added metadata."""
     assert hasattr(viz_list_chart_types, "_mcp_tool_meta")
-    assert viz_list_chart_types._mcp_tool_meta["name"] == "codomyrmex.viz_list_chart_types"
+    assert (
+        viz_list_chart_types._mcp_tool_meta["name"] == "codomyrmex.viz_list_chart_types"
+    )
     assert viz_list_chart_types._mcp_tool_meta["category"] == "visualization"
 
     assert hasattr(viz_create_chart, "_mcp_tool_meta")
