@@ -12,11 +12,11 @@ Example:
     >>> report_path = generator.generate(analysis_results, config)
 """
 
-import json
+from pathlib import Path
+from typing import Dict, Any, Optional
 from dataclasses import dataclass
 from datetime import datetime
-from pathlib import Path
-from typing import Any
+import json
 
 # Real codomyrmex imports - no fallback for mega-seed project
 from codomyrmex.logging_monitoring import get_logger
@@ -81,7 +81,7 @@ class ReportGenerator:
         >>> path = generator.generate(results, ReportConfig(format="html"))
     """
 
-    def __init__(self, output_dir: Path | None = None):
+    def __init__(self, output_dir: Optional[Path] = None):
         """Initialize the report generator.
 
         Args:
@@ -92,7 +92,9 @@ class ReportGenerator:
         self.output_dir.mkdir(parents=True, exist_ok=True)
 
     def generate(
-        self, analysis_results: dict[str, Any], config: ReportConfig | None = None
+        self,
+        analysis_results: Dict[str, Any],
+        config: Optional[ReportConfig] = None
     ) -> Path:
         """Generate report from analysis results.
 
@@ -129,9 +131,9 @@ class ReportGenerator:
 
     def generate_all_formats(
         self,
-        analysis_results: dict[str, Any],
-        base_config: ReportConfig | None = None,
-    ) -> dict[str, Path]:
+        analysis_results: Dict[str, Any],
+        base_config: Optional[ReportConfig] = None
+    ) -> Dict[str, Path]:
         """Generate reports in all supported formats.
 
         Args:
@@ -163,12 +165,15 @@ class ReportGenerator:
             total = len(files)
             return (
                 f'<p style="color: var(--muted); margin-top: 16px;">'
-                f"Showing {shown} of {total} files</p>"
+                f'Showing {shown} of {total} files</p>'
             )
-        return ""
+        return ''
 
     def _generate_json_report(
-        self, results: dict[str, Any], path: Path, config: ReportConfig
+        self,
+        results: Dict[str, Any],
+        path: Path,
+        config: ReportConfig
     ) -> None:
         """Generate JSON format report."""
         report = {
@@ -185,7 +190,7 @@ class ReportGenerator:
         if config.include_file_details:
             files = results.get("files", [])
             if len(files) > config.max_files:
-                report["files"] = files[: config.max_files]
+                report["files"] = files[:config.max_files]
                 report["files_truncated"] = True
                 report["total_files_count"] = len(files)
             else:
@@ -194,7 +199,10 @@ class ReportGenerator:
         path.write_text(json.dumps(report, indent=2, default=str))
 
     def _generate_markdown_report(
-        self, results: dict[str, Any], path: Path, config: ReportConfig
+        self,
+        results: Dict[str, Any],
+        path: Path,
+        config: ReportConfig
     ) -> None:
         """Generate Markdown format report."""
         summary = results.get("summary", {})
@@ -212,13 +220,13 @@ class ReportGenerator:
 
 | Metric | Value |
 | :--- | ---: |
-| Files Analyzed | {summary.get("total_files", 0)} |
-| Total Lines | {summary.get("total_lines", 0):,} |
-| Non-Empty Lines | {summary.get("total_non_empty_lines", 0):,} |
-| Functions | {summary.get("total_functions", 0)} |
-| Classes | {summary.get("total_classes", 0)} |
-| Issues Found | {summary.get("total_issues", 0)} |
-| Avg Lines/File | {summary.get("average_lines_per_file", 0):.1f} |
+| Files Analyzed | {summary.get('total_files', 0)} |
+| Total Lines | {summary.get('total_lines', 0):,} |
+| Non-Empty Lines | {summary.get('total_non_empty_lines', 0):,} |
+| Functions | {summary.get('total_functions', 0)} |
+| Classes | {summary.get('total_classes', 0)} |
+| Issues Found | {summary.get('total_issues', 0)} |
+| Avg Lines/File | {summary.get('average_lines_per_file', 0):.1f} |
 
 """
 
@@ -230,9 +238,7 @@ class ReportGenerator:
 | Pattern | Count |
 | :--- | ---: |
 """
-            for pattern, count in sorted(
-                patterns.items(), key=lambda x: x[1], reverse=True
-            ):
+            for pattern, count in sorted(patterns.items(), key=lambda x: x[1], reverse=True):
                 display_name = pattern.replace("_", " ").title()
                 content += f"| {display_name} | {count} |\n"
             content += "\n"
@@ -240,10 +246,10 @@ class ReportGenerator:
         # Files section
         if config.include_file_details:
             files = results.get("files", [])
-            content += """## 📄 File Analysis
+            content += f"""## 📄 File Analysis
 
 """
-            for f in files[: config.max_files]:
+            for f in files[:config.max_files]:
                 file_path = f.get("file", "Unknown")
                 metrics = f.get("metrics", {})
                 patterns = f.get("patterns", [])
@@ -251,10 +257,10 @@ class ReportGenerator:
 
                 content += f"""### `{Path(file_path).name}`
 
-- **Lines**: {metrics.get("lines_of_code", 0)}
-- **Functions**: {metrics.get("functions", 0)}
-- **Classes**: {metrics.get("classes", 0)}
-- **Patterns**: {", ".join(patterns) if patterns else "None"}
+- **Lines**: {metrics.get('lines_of_code', 0)}
+- **Functions**: {metrics.get('functions', 0)}
+- **Classes**: {metrics.get('classes', 0)}
+- **Patterns**: {', '.join(patterns) if patterns else 'None'}
 - **Issues**: {len(issues)}
 
 """
@@ -276,9 +282,9 @@ class ReportGenerator:
 """
             for issue in all_issues[:20]:
                 file_name = Path(issue.get("file", "")).name
-                line_num = issue.get("line", 0)
-                severity = issue.get("severity", "info")
-                message = issue.get("message", "")
+                line_num = issue.get('line', 0)
+                severity = issue.get('severity', 'info')
+                message = issue.get('message', '')
                 content += f"| {file_name} | {line_num} | {severity} | {message} |\n"
 
             if len(all_issues) > 20:
@@ -289,7 +295,10 @@ class ReportGenerator:
         path.write_text(content)
 
     def _generate_html_report(
-        self, results: dict[str, Any], path: Path, config: ReportConfig
+        self,
+        results: Dict[str, Any],
+        path: Path,
+        config: ReportConfig
     ) -> None:
         """Generate HTML format report with modern styling."""
         summary = results.get("summary", {})
@@ -298,7 +307,7 @@ class ReportGenerator:
         # Build file rows
         file_rows = ""
         files = results.get("files", [])
-        for f in files[: config.max_files]:
+        for f in files[:config.max_files]:
             metrics = f.get("metrics", {})
             patterns = f.get("patterns", [])
             issues = f.get("issues", [])
@@ -310,17 +319,17 @@ class ReportGenerator:
                 f'<span class="badge">{p}</span>' for p in patterns[:3]
             )
             if len(patterns) > 3:
-                pattern_badges += f' <span class="badge">+{len(patterns) - 3}</span>'
+                pattern_badges += f' <span class="badge">+{len(patterns)-3}</span>'
 
             issue_class = "warning" if issues else "success"
 
             file_rows += f"""
                 <tr>
                     <td class="file-cell" title="{file_path}">{file_name}</td>
-                    <td class="num">{metrics.get("lines_of_code", 0):,}</td>
-                    <td class="num">{metrics.get("functions", 0)}</td>
-                    <td class="num">{metrics.get("classes", 0)}</td>
-                    <td>{pattern_badges or "-"}</td>
+                    <td class="num">{metrics.get('lines_of_code', 0):,}</td>
+                    <td class="num">{metrics.get('functions', 0)}</td>
+                    <td class="num">{metrics.get('classes', 0)}</td>
+                    <td>{pattern_badges or '-'}</td>
                     <td class="num {issue_class}">{len(issues)}</td>
                 </tr>
             """
@@ -330,9 +339,7 @@ class ReportGenerator:
         pattern_bars = ""
         if patterns:
             max_count = max(patterns.values())
-            for pattern, count in sorted(
-                patterns.items(), key=lambda x: x[1], reverse=True
-            )[:10]:
+            for pattern, count in sorted(patterns.items(), key=lambda x: x[1], reverse=True)[:10]:
                 width = (count / max_count) * 100
                 display_name = pattern.replace("_", " ").title()
                 pattern_bars += f"""
@@ -542,9 +549,7 @@ class ReportGenerator:
             <h1>📊 {config.title}</h1>
             <p class="meta">
                 <strong>Target:</strong> {target} |
-                <strong>Generated:</strong> {
-            datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        } |
+                <strong>Generated:</strong> {datetime.now().strftime("%Y-%m-%d %H:%M:%S")} |
                 <strong>Author:</strong> {config.author}
             </p>
         </div>
@@ -554,48 +559,43 @@ class ReportGenerator:
             <div class="metrics-grid">
                 <div class="metric">
                     <div class="icon">📁</div>
-                    <div class="value">{summary.get("total_files", 0)}</div>
+                    <div class="value">{summary.get('total_files', 0)}</div>
                     <div class="label">Files Analyzed</div>
                 </div>
                 <div class="metric">
                     <div class="icon">📝</div>
-                    <div class="value">{summary.get("total_lines", 0):,}</div>
+                    <div class="value">{summary.get('total_lines', 0):,}</div>
                     <div class="label">Lines of Code</div>
                 </div>
                 <div class="metric">
                     <div class="icon">⚡</div>
-                    <div class="value">{summary.get("total_functions", 0)}</div>
+                    <div class="value">{summary.get('total_functions', 0)}</div>
                     <div class="label">Functions</div>
                 </div>
                 <div class="metric">
                     <div class="icon">🏗️</div>
-                    <div class="value">{summary.get("total_classes", 0)}</div>
+                    <div class="value">{summary.get('total_classes', 0)}</div>
                     <div class="label">Classes</div>
                 </div>
                 <div class="metric">
                     <div class="icon">⚠️</div>
-                    <div class="value">{summary.get("total_issues", 0)}</div>
+                    <div class="value">{summary.get('total_issues', 0)}</div>
                     <div class="label">Issues Found</div>
                 </div>
                 <div class="metric">
                     <div class="icon">📊</div>
-                    <div class="value">{
-            summary.get("average_lines_per_file", 0):.0f}</div>
+                    <div class="value">{summary.get('average_lines_per_file', 0):.0f}</div>
                     <div class="label">Avg Lines/File</div>
                 </div>
             </div>
         </div>
 
-        {
-            f'''
+        {f'''
         <div class="card">
             <h2>🎯 Patterns Detected</h2>
             {pattern_bars}
         </div>
-        '''
-            if pattern_bars
-            else ""
-        }
+        ''' if pattern_bars else ''}
 
         <div class="card">
             <h2>📄 File Analysis</h2>

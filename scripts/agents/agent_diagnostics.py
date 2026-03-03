@@ -5,7 +5,6 @@ Agent Setup and Diagnostics Example
 Demonstrates the setup() and test_connection() lifecycle for all agent types.
 Useful for verifying agent configurations before running workflows.
 """
-
 import sys
 from pathlib import Path
 
@@ -17,20 +16,16 @@ except ImportError:
 
 from codomyrmex.agents import (
     ClaudeClient,
-    CodeEditor,
     CodexClient,
     GeminiClient,
     JulesClient,
     OpenCodeClient,
+    CodeEditor,
 )
 from codomyrmex.utils.cli_helpers import (
-    print_error,
-    print_info,
-    print_section,
-    print_success,
-    print_warning,
-    setup_logging,
+    setup_logging, print_success, print_error, print_info, print_section, print_warning
 )
+
 
 AGENT_CLASSES = [
     ("Claude (API)", ClaudeClient),
@@ -44,20 +39,14 @@ AGENT_CLASSES = [
 
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
-
-    config_path = (
-        Path(__file__).resolve().parent.parent.parent
-        / "config"
-        / "agents"
-        / "config.yaml"
-    )
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "agents" / "config.yaml"
+    config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
-            yaml.safe_load(f) or {}
-            print("Loaded config from config/agents/config.yaml")
+        with open(config_path, "r") as f:
+            config_data = yaml.safe_load(f) or {}
+            print(f"Loaded config from config/agents/config.yaml")
 
     setup_logging()
     print_section("Agent Diagnostics")

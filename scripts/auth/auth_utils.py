@@ -16,12 +16,12 @@ except ImportError:
     sys.path.insert(0, str(project_root / "src"))
 
 import argparse
+import os
 import base64
 import hashlib
-import json
-import os
 import secrets
 import time
+import json
 
 
 def generate_token(length: int = 32, prefix: str = "") -> str:
@@ -51,7 +51,7 @@ def hash_password(password: str, salt: bytes = None) -> tuple:
     if salt is None:
         salt = secrets.token_bytes(16)
 
-    key = hashlib.pbkdf2_hmac("sha256", password.encode(), salt, 100000)
+    key = hashlib.pbkdf2_hmac('sha256', password.encode(), salt, 100000)
     return salt.hex(), key.hex()
 
 
@@ -65,20 +65,14 @@ def check_token_expiry(exp: int) -> dict:
 
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
-
-    config_path = (
-        Path(__file__).resolve().parent.parent.parent
-        / "config"
-        / "auth"
-        / "config.yaml"
-    )
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "auth" / "config.yaml"
+    config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
-            yaml.safe_load(f) or {}
-            print("Loaded config from config/auth/config.yaml")
+        with open(config_path, "r") as f:
+            config_data = yaml.safe_load(f) or {}
+            print(f"Loaded config from config/auth/config.yaml")
 
     parser = argparse.ArgumentParser(description="Authentication utilities")
     subparsers = parser.add_subparsers(dest="command")
@@ -138,14 +132,8 @@ def main():
         print(f"   Hash: {hashed}")
 
     elif args.command == "check-env":
-        auth_vars = [
-            "API_KEY",
-            "SECRET_KEY",
-            "JWT_SECRET",
-            "AUTH_TOKEN",
-            "OAUTH_CLIENT_ID",
-            "OAUTH_CLIENT_SECRET",
-        ]
+        auth_vars = ["API_KEY", "SECRET_KEY", "JWT_SECRET", "AUTH_TOKEN",
+                     "OAUTH_CLIENT_ID", "OAUTH_CLIENT_SECRET"]
         print("🔍 Auth Environment Variables:\n")
         found = 0
         for var in auth_vars:

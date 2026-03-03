@@ -34,10 +34,10 @@ Usage:
     python openrouter_usage.py --prompt-key --prompt "Hello"
 """
 
+import sys
+import os
 import argparse
 import getpass
-import os
-import sys
 from pathlib import Path
 
 # Ensure codomyrmex is in path
@@ -47,19 +47,13 @@ except ImportError:
     project_root = Path(__file__).resolve().parent.parent.parent.parent
     sys.path.insert(0, str(project_root / "src"))
 
+from codomyrmex.utils.cli_helpers import setup_logging, print_success, print_info, print_error, print_warning
 from codomyrmex.llm.providers import (
+    get_provider,
+    ProviderType,
+    ProviderConfig,
     Message,
     OpenRouterProvider,
-    ProviderConfig,
-    ProviderType,
-    get_provider,
-)
-from codomyrmex.utils.cli_helpers import (
-    print_error,
-    print_info,
-    print_success,
-    print_warning,
-    setup_logging,
 )
 
 # Default config file locations
@@ -216,11 +210,9 @@ def complete_prompt(
             print("─" * 50)
 
             if response.usage:
-                print_info("\n📊 Token usage:")
+                print_info(f"\n📊 Token usage:")
                 print(f"   Prompt: {response.usage.get('prompt_tokens', 'N/A')}")
-                print(
-                    f"   Completion: {response.usage.get('completion_tokens', 'N/A')}"
-                )
+                print(f"   Completion: {response.usage.get('completion_tokens', 'N/A')}")
                 print(f"   Total: {response.usage.get('total_tokens', 'N/A')}")
 
             print_success(f"\n✅ Completion successful (model: {response.model})")
@@ -249,17 +241,14 @@ def demonstrate_context_manager(
 
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
-
-    config_path = (
-        Path(__file__).resolve().parent.parent.parent / "config" / "llm" / "config.yaml"
-    )
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "llm" / "config.yaml"
+    config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
-            yaml.safe_load(f) or {}
-            print("Loaded config from config/llm/config.yaml")
+        with open(config_path, "r") as f:
+            config_data = yaml.safe_load(f) or {}
+            print(f"Loaded config from config/llm/config.yaml")
 
     parser = argparse.ArgumentParser(
         description="OpenRouter LLM Provider Examples",
@@ -273,47 +262,27 @@ Examples:
   python openrouter_usage.py --config ~/.openrouter_key --prompt "Hi"
   python openrouter_usage.py --prompt-key --prompt "Hello"
   python openrouter_usage.py --demo
-        """,
+        """
     )
     # Action arguments
-    parser.add_argument(
-        "--list-models", "-l", action="store_true", help="List available free models"
-    )
-    parser.add_argument("--prompt", "-p", type=str, help="Prompt to send to the model")
-    parser.add_argument(
-        "--model",
-        "-m",
-        type=str,
-        default=None,
-        help="Model to use (default: openrouter/free)",
-    )
-    parser.add_argument(
-        "--stream", "-s", action="store_true", help="Use streaming response"
-    )
-    parser.add_argument(
-        "--demo", "-d", action="store_true", help="Run demonstration of features"
-    )
+    parser.add_argument("--list-models", "-l", action="store_true",
+                        help="List available free models")
+    parser.add_argument("--prompt", "-p", type=str,
+                        help="Prompt to send to the model")
+    parser.add_argument("--model", "-m", type=str, default=None,
+                        help="Model to use (default: openrouter/free)")
+    parser.add_argument("--stream", "-s", action="store_true",
+                        help="Use streaming response")
+    parser.add_argument("--demo", "-d", action="store_true",
+                        help="Run demonstration of features")
 
     # API key arguments
-    parser.add_argument(
-        "--api-key",
-        "-k",
-        type=str,
-        default=None,
-        help="OpenRouter API key (overrides env var and config file)",
-    )
-    parser.add_argument(
-        "--config",
-        "-c",
-        type=str,
-        default=None,
-        help="Path to config file containing API key",
-    )
-    parser.add_argument(
-        "--prompt-key",
-        action="store_true",
-        help="Prompt for API key interactively if not found",
-    )
+    parser.add_argument("--api-key", "-k", type=str, default=None,
+                        help="OpenRouter API key (overrides env var and config file)")
+    parser.add_argument("--config", "-c", type=str, default=None,
+                        help="Path to config file containing API key")
+    parser.add_argument("--prompt-key", action="store_true",
+                        help="Prompt for API key interactively if not found")
 
     args = parser.parse_args()
 

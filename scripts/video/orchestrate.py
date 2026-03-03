@@ -121,9 +121,7 @@ def run_video_generation(config: dict, prompt_override: str | None = None) -> bo
                 print_info(f"  [{i + 1}] Result keys: {list(vid.keys())}")
 
     if saved:
-        print_success(
-            f"  {saved} file(s) written to {gen_cfg.get('output_dir', 'outputs/videos')}"
-        )
+        print_success(f"  {saved} file(s) written to {gen_cfg.get('output_dir', 'outputs/videos')}")
 
     return True
 

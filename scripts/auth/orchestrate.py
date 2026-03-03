@@ -22,13 +22,8 @@ except ImportError:
 
 from codomyrmex.auth import Authenticator
 from codomyrmex.utils.cli_helpers import (
-    print_error,
-    print_info,
-    print_section,
-    print_success,
-    setup_logging,
+    setup_logging, print_success, print_info, print_error, print_section
 )
-
 
 def run_auth_lifecycle():
     setup_logging()
@@ -44,9 +39,7 @@ def run_auth_lifecycle():
     auth.permissions.register_role("editor", ["data.write", "reports.create"])
     auth.permissions.add_inheritance("editor", "reader")
     auth.permissions.register_role("admin", ["*"])
-    print_success(
-        "  Registered roles: reader, editor (inherits reader), and admin (*)."
-    )
+    print_success("  Registered roles: reader, editor (inherits reader), and admin (*).")
 
     # 3. User Registration
     print_section("2. User Registration")
@@ -90,9 +83,7 @@ def run_auth_lifecycle():
 
     # 6. API Key Management
     print_section("5. API Key Management")
-    alice_api_key = auth.api_key_manager.generate(
-        "alice", permissions=["data.read", "api.access"]
-    )
+    alice_api_key = auth.api_key_manager.generate("alice", permissions=["data.read", "api.access"])
     print_success(f"  Generated API Key for Alice: {alice_api_key[:15]}...")
 
     # Authenticate via API key
@@ -115,9 +106,7 @@ def run_auth_lifecycle():
     print_section("6. Token Lifecycle Management")
     auth.revoke_token(alice_token)
     if not auth.authorize(alice_token, "database", "data.read"):
-        print_success(
-            "  Alice's session token revoked and authorization failed (Correct)."
-        )
+        print_success("  Alice's session token revoked and authorization failed (Correct).")
     else:
         print_error("  Alice's token still active after revocation.")
         return 1
@@ -125,9 +114,7 @@ def run_auth_lifecycle():
     # 8. Token Lifecycle (Refresh)
     new_bob_token = auth.refresh_token(bob_token)
     if new_bob_token and new_bob_token.token_id != bob_token.token_id:
-        print_success(
-            f"  Bob's token refreshed. New ID: {new_bob_token.token_id[:10]}..."
-        )
+        print_success(f"  Bob's token refreshed. New ID: {new_bob_token.token_id[:10]}...")
     else:
         print_error("  Bob's token refresh failed.")
         return 1
@@ -135,22 +122,16 @@ def run_auth_lifecycle():
     print_section("Auth Lifecycle Demonstration Completed Successfully")
     return 0
 
+
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
-
-    config_path = (
-        Path(__file__).resolve().parent.parent.parent
-        / "config"
-        / "auth"
-        / "config.yaml"
-    )
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "auth" / "config.yaml"
+    config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
-            yaml.safe_load(f) or {}
-            print("Loaded config from config/auth/config.yaml")
-
+        with open(config_path, "r") as f:
+            config_data = yaml.safe_load(f) or {}
+            print(f"Loaded config from config/auth/config.yaml")
 
 if __name__ == "__main__":
     sys.exit(run_auth_lifecycle())

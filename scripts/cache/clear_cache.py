@@ -30,17 +30,10 @@ def get_cache_dirs() -> list:
     return [p for p in cache_locations if p.exists()]
 
 
-def clear_cache(
-    cache_path: Path,
-    older_than_days: int = None,
-    file_types: list = None,
-    dry_run: bool = True,
-) -> dict:
+def clear_cache(cache_path: Path, older_than_days: int = None, file_types: list = None, dry_run: bool = True) -> dict:
     """Clear cache entries based on criteria."""
     stats = {"deleted": 0, "size_freed": 0, "skipped": 0}
-    cutoff = (
-        datetime.now() - timedelta(days=older_than_days) if older_than_days else None
-    )
+    cutoff = datetime.now() - timedelta(days=older_than_days) if older_than_days else None
 
     for f in cache_path.rglob("*"):
         if f.is_file():
@@ -77,42 +70,21 @@ def format_size(size_bytes: int) -> str:
 
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
-
-    config_path = (
-        Path(__file__).resolve().parent.parent.parent
-        / "config"
-        / "cache"
-        / "config.yaml"
-    )
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "cache" / "config.yaml"
+    config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
-            yaml.safe_load(f) or {}
-            print("Loaded config from config/cache/config.yaml")
+        with open(config_path, "r") as f:
+            config_data = yaml.safe_load(f) or {}
+            print(f"Loaded config from config/cache/config.yaml")
 
     parser = argparse.ArgumentParser(description="Clear cache entries")
-    parser.add_argument(
-        "--all", "-a", action="store_true", help="Clear all cache entries"
-    )
-    parser.add_argument(
-        "--older-than",
-        "-o",
-        type=int,
-        default=None,
-        help="Clear entries older than N days",
-    )
-    parser.add_argument(
-        "--type",
-        "-t",
-        action="append",
-        help="Clear specific file types (e.g., json, pickle)",
-    )
+    parser.add_argument("--all", "-a", action="store_true", help="Clear all cache entries")
+    parser.add_argument("--older-than", "-o", type=int, default=None, help="Clear entries older than N days")
+    parser.add_argument("--type", "-t", action="append", help="Clear specific file types (e.g., json, pickle)")
     parser.add_argument("--path", "-p", default=None, help="Specific cache path")
-    parser.add_argument(
-        "--dry-run", "-n", action="store_true", help="Show what would be deleted"
-    )
+    parser.add_argument("--dry-run", "-n", action="store_true", help="Show what would be deleted")
     parser.add_argument("--force", "-f", action="store_true", help="Skip confirmation")
     args = parser.parse_args()
 
@@ -152,15 +124,11 @@ def main():
 
         action = "Would delete" if dry_run else "Deleted"
         print(f"📦 {cache_dir}")
-        print(
-            f"   {action}: {stats['deleted']} files ({format_size(stats['size_freed'])})"
-        )
+        print(f"   {action}: {stats['deleted']} files ({format_size(stats['size_freed'])})")
         if stats["skipped"]:
             print(f"   Skipped: {stats['skipped']} files")
 
-    print(
-        f"\n{'🔍 Preview' if dry_run else '✅ Complete'}: {total_deleted} files, {format_size(total_freed)}"
-    )
+    print(f"\n{'🔍 Preview' if dry_run else '✅ Complete'}: {total_deleted} files, {format_size(total_freed)}")
 
     if dry_run and total_deleted > 0:
         print("\n   To delete, run with --force")

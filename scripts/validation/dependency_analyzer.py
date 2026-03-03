@@ -12,14 +12,15 @@ import ast
 import sys
 from collections import defaultdict
 from pathlib import Path
+from typing import Set
 
 
-def extract_imports(file_path: Path) -> set[str]:
+def extract_imports(file_path: Path) -> Set[str]:
     """Extract import statements from a Python file."""
     imports = set()
 
     try:
-        with open(file_path, encoding="utf-8") as f:
+        with open(file_path, "r", encoding="utf-8") as f:
             tree = ast.parse(f.read(), filename=str(file_path))
     except (SyntaxError, UnicodeDecodeError):
         return imports
@@ -35,7 +36,7 @@ def extract_imports(file_path: Path) -> set[str]:
     return imports
 
 
-def build_dependency_graph(src_dir: Path) -> dict[str, set[str]]:
+def build_dependency_graph(src_dir: Path) -> dict[str, Set[str]]:
     """Build a dependency graph from source files."""
     graph = defaultdict(set)
 
@@ -59,9 +60,7 @@ def build_dependency_graph(src_dir: Path) -> dict[str, set[str]]:
     return dict(graph)
 
 
-def find_cycles(
-    graph: dict[str, set[str]], start: str, visited: set[str], path: list
-) -> list:
+def find_cycles(graph: dict[str, Set[str]], start: str, visited: Set[str], path: list) -> list:
     """Find cycles in the dependency graph using DFS."""
     cycles = []
 
@@ -135,27 +134,26 @@ def analyze_dependencies(repo_root: Path) -> int:
 
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
-
-    config_path = (
-        Path(__file__).resolve().parent.parent.parent
-        / "config"
-        / "validation"
-        / "config.yaml"
-    )
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "validation" / "config.yaml"
+    config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
-            yaml.safe_load(f) or {}
-            print("Loaded config from config/validation/config.yaml")
+        with open(config_path, "r") as f:
+            config_data = yaml.safe_load(f) or {}
+            print(f"Loaded config from config/validation/config.yaml")
 
     parser = argparse.ArgumentParser(description="Analyze module dependency hierarchy")
     parser.add_argument(
-        "--repo-root", type=Path, default=Path.cwd(), help="Repository root directory"
+        "--repo-root",
+        type=Path,
+        default=Path.cwd(),
+        help="Repository root directory"
     )
     parser.add_argument(
-        "--output", type=Path, help="Output file for dependency graph (JSON)"
+        "--output",
+        type=Path,
+        help="Output file for dependency graph (JSON)"
     )
 
     args = parser.parse_args()

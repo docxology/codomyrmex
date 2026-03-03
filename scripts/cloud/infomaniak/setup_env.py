@@ -10,10 +10,10 @@ Usage:
     python setup_env.py --test-connection    # Test OpenStack connection
 """
 
-import argparse
-import os
 import sys
 from pathlib import Path
+import argparse
+import os
 
 ENV_TEMPLATE = """# Infomaniak Public Cloud Configuration
 # ======================================
@@ -52,7 +52,7 @@ def create_template(output_path: str = None):
     if path.exists():
         print(f"⚠️  File already exists: {path}")
         response = input("Overwrite? [y/N]: ")
-        if response.lower() != "y":
+        if response.lower() != 'y':
             print("Aborted.")
             return False
 
@@ -130,16 +130,14 @@ def test_connection():
         print("   Testing API connectivity...")
         flavors = client.list_flavors()
 
-        print("\n   ✅ Connection successful!")
+        print(f"\n   ✅ Connection successful!")
         print(f"   📊 Found {len(flavors)} available flavors")
 
         # Show some flavors
         if flavors:
             print("\n   Sample flavors:")
             for f in flavors[:5]:
-                print(
-                    f"      - {f['name']}: {f.get('vcpus', '?')} vCPUs, {f.get('ram', 0) // 1024}GB RAM"
-                )
+                print(f"      - {f['name']}: {f.get('vcpus', '?')} vCPUs, {f.get('ram', 0) // 1024}GB RAM")
 
         return True
 
@@ -154,35 +152,26 @@ def test_connection():
 
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
-
-    config_path = (
-        Path(__file__).resolve().parent.parent.parent
-        / "config"
-        / "cloud"
-        / "config.yaml"
-    )
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "cloud" / "config.yaml"
+    config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
-            yaml.safe_load(f) or {}
-            print("Loaded config from config/cloud/config.yaml")
+        with open(config_path, "r") as f:
+            config_data = yaml.safe_load(f) or {}
+            print(f"Loaded config from config/cloud/config.yaml")
 
     parser = argparse.ArgumentParser(description="Infomaniak Environment Setup")
-    parser.add_argument(
-        "--create-template", action="store_true", help="Create .env.infomaniak template"
-    )
-    parser.add_argument(
-        "--validate", action="store_true", help="Validate environment variables"
-    )
-    parser.add_argument(
-        "--test-connection", action="store_true", help="Test OpenStack connection"
-    )
-    parser.add_argument(
-        "--output", type=str, default=".env.infomaniak", help="Output file for template"
-    )
-    parser.add_argument("--all", action="store_true", help="Run all checks")
+    parser.add_argument("--create-template", action="store_true",
+                        help="Create .env.infomaniak template")
+    parser.add_argument("--validate", action="store_true",
+                        help="Validate environment variables")
+    parser.add_argument("--test-connection", action="store_true",
+                        help="Test OpenStack connection")
+    parser.add_argument("--output", type=str, default=".env.infomaniak",
+                        help="Output file for template")
+    parser.add_argument("--all", action="store_true",
+                        help="Run all checks")
 
     args = parser.parse_args()
 

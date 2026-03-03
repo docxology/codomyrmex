@@ -26,16 +26,13 @@ except ImportError:
 import argparse
 import logging
 
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s"
-)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger(__name__)
 
 
 def get_client():
     """Get DNS client from environment."""
     from codomyrmex.cloud.infomaniak import InfomaniakDNSClient
-
     return InfomaniakDNSClient.from_env()
 
 
@@ -88,14 +85,15 @@ def list_records(client, zone_id: str):
         print()
 
 
-def create_zone(
-    client, name: str, email: str, ttl: int = 3600, description: str = None
-):
+def create_zone(client, name: str, email: str, ttl: int = 3600, description: str = None):
     """Create a DNS zone."""
     print(f"\n🌐 Creating zone: {name}")
 
     result = client.create_zone(
-        name=name, email=email, ttl=ttl, description=description
+        name=name,
+        email=email,
+        ttl=ttl,
+        description=description
     )
 
     if result:
@@ -115,15 +113,8 @@ def delete_zone(client, zone_id: str):
         print("   ❌ Failed to delete zone")
 
 
-def create_record(
-    client,
-    zone_id: str,
-    name: str,
-    record_type: str,
-    values: list,
-    ttl: int = 3600,
-    description: str = None,
-):
+def create_record(client, zone_id: str, name: str, record_type: str,
+                  values: list, ttl: int = 3600, description: str = None):
     """Create a DNS record."""
     print(f"\n📝 Creating record: {name} ({record_type})")
     print(f"   Zone: {zone_id}")
@@ -135,7 +126,7 @@ def create_record(
         record_type=record_type,
         records=values,
         ttl=ttl,
-        description=description,
+        description=description
     )
 
     if result:
@@ -144,9 +135,8 @@ def create_record(
         print("   ❌ Failed to create record")
 
 
-def update_record(
-    client, zone_id: str, record_id: str, values: list = None, ttl: int = None
-):
+def update_record(client, zone_id: str, record_id: str,
+                  values: list = None, ttl: int = None):
     """Update a DNS record."""
     print(f"\n✏️  Updating record: {record_id}")
 
@@ -184,7 +174,7 @@ def list_ptr_records(client):
 
 def set_reverse_dns(client, floating_ip: str, hostname: str, ttl: int = 3600):
     """Set reverse DNS for a floating IP."""
-    print("\n🔄 Setting reverse DNS")
+    print(f"\n🔄 Setting reverse DNS")
     print(f"   IP: {floating_ip}")
     print(f"   Hostname: {hostname}")
 
@@ -197,20 +187,14 @@ def set_reverse_dns(client, floating_ip: str, hostname: str, ttl: int = 3600):
 
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
-
-    config_path = (
-        Path(__file__).resolve().parent.parent.parent
-        / "config"
-        / "cloud"
-        / "config.yaml"
-    )
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "cloud" / "config.yaml"
+    config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
-            yaml.safe_load(f) or {}
-            print("Loaded config from config/cloud/config.yaml")
+        with open(config_path, "r") as f:
+            config_data = yaml.safe_load(f) or {}
+            print(f"Loaded config from config/cloud/config.yaml")
 
     parser = argparse.ArgumentParser(description="Infomaniak DNS Examples")
 
@@ -221,16 +205,10 @@ def main():
     parser.add_argument("--delete-zone", type=str, metavar="ID", help="Delete a zone")
 
     # Record operations
-    parser.add_argument(
-        "--list-records", action="store_true", help="List records in zone"
-    )
+    parser.add_argument("--list-records", action="store_true", help="List records in zone")
     parser.add_argument("--create-record", action="store_true", help="Create a record")
-    parser.add_argument(
-        "--update-record", type=str, metavar="ID", help="Update a record"
-    )
-    parser.add_argument(
-        "--delete-record", type=str, metavar="ID", help="Delete a record"
-    )
+    parser.add_argument("--update-record", type=str, metavar="ID", help="Update a record")
+    parser.add_argument("--delete-record", type=str, metavar="ID", help="Delete a record")
 
     # PTR operations
     parser.add_argument("--list-ptr", action="store_true", help="List PTR records")
@@ -240,12 +218,8 @@ def main():
     parser.add_argument("--zone", type=str, help="Zone ID or name")
     parser.add_argument("--name", type=str, help="Record/zone name")
     parser.add_argument("--email", type=str, help="Admin email for zone")
-    parser.add_argument(
-        "--type", type=str, choices=["A", "AAAA", "CNAME", "MX", "TXT", "NS", "SRV"]
-    )
-    parser.add_argument(
-        "--value", type=str, action="append", help="Record value (can specify multiple)"
-    )
+    parser.add_argument("--type", type=str, choices=["A", "AAAA", "CNAME", "MX", "TXT", "NS", "SRV"])
+    parser.add_argument("--value", type=str, action="append", help="Record value (can specify multiple)")
     parser.add_argument("--ttl", type=int, default=3600, help="TTL in seconds")
     parser.add_argument("--description", type=str, help="Description")
     parser.add_argument("--ip", type=str, help="Floating IP for PTR record")

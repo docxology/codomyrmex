@@ -1,9 +1,9 @@
 """Tests for the pipeline module."""
 
+import pytest
 from pathlib import Path
 
-import pytest
-from src.pipeline import AnalysisPipeline, PipelineResult, PipelineStatus, PipelineStep
+from src.pipeline import AnalysisPipeline, PipelineStep, PipelineResult, PipelineStatus
 
 
 class TestPipelineStatus:
@@ -22,7 +22,6 @@ class TestPipelineStep:
 
     def test_creation(self):
         """Test step creation."""
-
         def handler(ctx):
             return "result"
 
@@ -35,7 +34,6 @@ class TestPipelineStep:
 
     def test_execute_success(self):
         """Test successful step execution."""
-
         def handler(ctx):
             return {"data": "test"}
 
@@ -49,7 +47,6 @@ class TestPipelineStep:
 
     def test_execute_failure(self):
         """Test failed step execution."""
-
         def handler(ctx):
             raise ValueError("Test error")
 
@@ -70,10 +67,12 @@ class TestPipelineResult:
         from datetime import datetime
 
         success = PipelineResult(
-            status=PipelineStatus.COMPLETED, started_at=datetime.now()
+            status=PipelineStatus.COMPLETED,
+            started_at=datetime.now()
         )
         failure = PipelineResult(
-            status=PipelineStatus.FAILED, started_at=datetime.now()
+            status=PipelineStatus.FAILED,
+            started_at=datetime.now()
         )
 
         assert success.is_success is True
@@ -87,7 +86,9 @@ class TestPipelineResult:
         end = start + timedelta(seconds=5)
 
         result = PipelineResult(
-            status=PipelineStatus.COMPLETED, started_at=start, completed_at=end
+            status=PipelineStatus.COMPLETED,
+            started_at=start,
+            completed_at=end
         )
 
         assert result.duration_seconds == pytest.approx(5.0, rel=0.1)
@@ -114,7 +115,9 @@ class TestAnalysisPipeline:
             return "custom"
 
         pipeline.add_step(
-            name="custom_step", handler=custom_handler, dependencies=["analyze"]
+            name="custom_step",
+            handler=custom_handler,
+            dependencies=["analyze"]
         )
 
         assert len(pipeline.steps) == initial_count + 1
@@ -127,7 +130,7 @@ class TestAnalysisPipeline:
         with pytest.raises(ValueError):
             pipeline.add_step(
                 name="validate",  # Already exists
-                handler=lambda ctx: None,
+                handler=lambda ctx: None
             )
 
     def test_execute_success(self, sample_directory: Path):

@@ -17,23 +17,23 @@ import json
 import subprocess
 import sys
 from pathlib import Path
-from typing import Any
+from typing import Any, Dict
 
 project_root = Path(__file__).parent.parent.parent.parent
 sys.path.insert(0, str(project_root / "src"))
 
 from codomyrmex.orchestrator import Workflow
-from codomyrmex.utils.cli_helpers import print_error, print_info, setup_logging
+from codomyrmex.utils.cli_helpers import setup_logging, print_info, print_error
 
 
-async def list_outdated_packages(_task_results: dict = None) -> dict[str, Any]:
+async def list_outdated_packages(_task_results: dict = None) -> Dict[str, Any]:
     """List outdated packages using pip."""
     result = subprocess.run(
         ["uv", "pip", "list", "--outdated", "--format=json"],
         capture_output=True,
         text=True,
         cwd=project_root,
-        timeout=120,
+        timeout=120
     )
 
     outdated = []
@@ -46,11 +46,11 @@ async def list_outdated_packages(_task_results: dict = None) -> dict[str, Any]:
     return {
         "success": result.returncode == 0,
         "outdated_count": len(outdated),
-        "packages": outdated[:20],  # Limit to top 20
+        "packages": outdated[:20]  # Limit to top 20
     }
 
 
-async def check_security_vulnerabilities(_task_results: dict = None) -> dict[str, Any]:
+async def check_security_vulnerabilities(_task_results: dict = None) -> Dict[str, Any]:
     """Check for known security vulnerabilities."""
     # Try pip-audit or safety
     result = subprocess.run(
@@ -58,7 +58,7 @@ async def check_security_vulnerabilities(_task_results: dict = None) -> dict[str
         capture_output=True,
         text=True,
         cwd=project_root,
-        timeout=180,
+        timeout=180
     )
 
     vulnerabilities = []
@@ -76,18 +76,18 @@ async def check_security_vulnerabilities(_task_results: dict = None) -> dict[str
         "success": True,
         "vulnerabilities_found": len(vulnerabilities),
         "vulnerabilities": vulnerabilities[:10],  # Limit output
-        "audit_available": result.returncode == 0,
+        "audit_available": result.returncode == 0
     }
 
 
-async def check_dependency_tree(_task_results: dict = None) -> dict[str, Any]:
+async def check_dependency_tree(_task_results: dict = None) -> Dict[str, Any]:
     """Analyze dependency tree for issues."""
     result = subprocess.run(
         ["uv", "pip", "check"],
         capture_output=True,
         text=True,
         cwd=project_root,
-        timeout=60,
+        timeout=60
     )
 
     issues = []
@@ -98,11 +98,11 @@ async def check_dependency_tree(_task_results: dict = None) -> dict[str, Any]:
         "success": result.returncode == 0,
         "issues_found": len(issues),
         "issues": issues[:20],
-        "tree_healthy": result.returncode == 0,
+        "tree_healthy": result.returncode == 0
     }
 
 
-async def verify_requirements_files(_task_results: dict = None) -> dict[str, Any]:
+async def verify_requirements_files(_task_results: dict = None) -> Dict[str, Any]:
     """Verify requirements files exist and are valid."""
     req_files = list(project_root.glob("requirements*.txt"))
     pyproject = project_root / "pyproject.toml"
@@ -110,7 +110,7 @@ async def verify_requirements_files(_task_results: dict = None) -> dict[str, Any
     results = {
         "requirements_files": [str(f.relative_to(project_root)) for f in req_files],
         "has_pyproject": pyproject.exists(),
-        "issues": [],
+        "issues": []
     }
 
     # Check pyproject.toml for dependencies section
@@ -126,11 +126,7 @@ async def verify_requirements_files(_task_results: dict = None) -> dict[str, Any
     for req_file in req_files:
         try:
             content = req_file.read_text()
-            lines = [
-                l.strip()
-                for l in content.split("\n")
-                if l.strip() and not l.startswith("#")
-            ]
+            lines = [l.strip() for l in content.split("\n") if l.strip() and not l.startswith("#")]
             results[f"{req_file.name}_entries"] = len(lines)
         except Exception as e:
             results["issues"].append(f"Error reading {req_file.name}: {e}")
@@ -151,9 +147,7 @@ def _extract_result(obj) -> dict:
     return value if isinstance(value, dict) else {}
 
 
-async def generate_dependency_report(
-    task_results: dict = None, _task_results: dict = None
-) -> dict[str, Any]:
+async def generate_dependency_report(task_results: dict = None, _task_results: dict = None) -> Dict[str, Any]:
     """Generate comprehensive dependency report."""
     # Handle both parameter naming conventions
     raw_results = task_results or _task_results or {}
@@ -161,7 +155,7 @@ async def generate_dependency_report(
     report = {
         "timestamp": __import__("datetime").datetime.now().isoformat(),
         "summary": {},
-        "recommendations": [],
+        "recommendations": []
     }
 
     # Aggregate results - extract from TaskResult objects
@@ -180,23 +174,19 @@ async def generate_dependency_report(
         report["recommendations"].append("Consider updating outdated packages")
 
     if security.get("vulnerabilities_found", 0) > 0:
-        report["recommendations"].append(
-            "URGENT: Security vulnerabilities detected - review and update affected packages"
-        )
+        report["recommendations"].append("URGENT: Security vulnerabilities detected - review and update affected packages")
 
     if not tree.get("tree_healthy", True):
-        report["recommendations"].append(
-            "Resolve dependency conflicts before deployment"
-        )
+        report["recommendations"].append("Resolve dependency conflicts before deployment")
 
     if not reqs.get("pyproject_has_deps", True):
         report["recommendations"].append("Migrate dependencies to pyproject.toml")
 
     # Calculate overall health
     issues = (
-        outdated.get("outdated_count", 0)
-        + security.get("vulnerabilities_found", 0) * 5  # Weight security higher
-        + tree.get("issues_found", 0) * 2
+        outdated.get("outdated_count", 0) +
+        security.get("vulnerabilities_found", 0) * 5 +  # Weight security higher
+        tree.get("issues_found", 0) * 2
     )
 
     if issues == 0:
@@ -208,54 +198,44 @@ async def generate_dependency_report(
     else:
         report["overall_health"] = "needs_attention"
 
-    return {"success": True, "report": report}
+    return {
+        "success": True,
+        "report": report
+    }
 
 
 async def main() -> int:
     """Run dependency check workflow."""
     setup_logging()
     parser = argparse.ArgumentParser(description="Check project dependencies")
-    parser.add_argument(
-        "--update", action="store_true", help="Update outdated packages"
-    )
-    parser.add_argument(
-        "--security-only", action="store_true", help="Only run security checks"
-    )
+    parser.add_argument("--update", action="store_true", help="Update outdated packages")
+    parser.add_argument("--security-only", action="store_true", help="Only run security checks")
     parser.add_argument("--verbose", "-v", action="store_true", help="Verbose output")
     args = parser.parse_args()
 
     print_info("Checking project dependencies...")
     print()
 
-    workflow = Workflow(name="dependency_check", timeout=600, fail_fast=False)
+    workflow = Workflow(
+        name="dependency_check",
+        timeout=600,
+        fail_fast=False
+    )
 
     if args.security_only:
         # Only security checks
-        workflow.add_task(
-            name="check_security", action=check_security_vulnerabilities, timeout=180
-        )
+        workflow.add_task(name="check_security", action=check_security_vulnerabilities, timeout=180)
     else:
         # Full dependency check
-        workflow.add_task(
-            name="list_outdated", action=list_outdated_packages, timeout=120
-        )
-        workflow.add_task(
-            name="check_security", action=check_security_vulnerabilities, timeout=180
-        )
+        workflow.add_task(name="list_outdated", action=list_outdated_packages, timeout=120)
+        workflow.add_task(name="check_security", action=check_security_vulnerabilities, timeout=180)
         workflow.add_task(name="check_tree", action=check_dependency_tree, timeout=60)
-        workflow.add_task(
-            name="verify_requirements", action=verify_requirements_files, timeout=30
-        )
+        workflow.add_task(name="verify_requirements", action=verify_requirements_files, timeout=30)
         workflow.add_task(
             name="generate_report",
             action=generate_dependency_report,
-            dependencies=[
-                "list_outdated",
-                "check_security",
-                "check_tree",
-                "verify_requirements",
-            ],
-            timeout=30,
+            dependencies=["list_outdated", "check_security", "check_tree", "verify_requirements"],
+            timeout=30
         )
 
     try:
@@ -276,9 +256,7 @@ async def main() -> int:
                 result_data = task.result
                 if isinstance(result_data, dict):
                     for key, value in result_data.items():
-                        if key not in ("success", "error") and not isinstance(
-                            value, (list, dict)
-                        ):
+                        if key not in ("success", "error") and not isinstance(value, (list, dict)):
                             print(f"      {key}: {value}")
 
         # Print report summary if available
@@ -306,22 +284,17 @@ async def main() -> int:
         print_error(f"Dependency check failed: {e}")
         return 1
 
+
+
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
-
-    config_path = (
-        Path(__file__).resolve().parent.parent.parent
-        / "config"
-        / "orchestrator"
-        / "config.yaml"
-    )
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "orchestrator" / "config.yaml"
+    config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
-            yaml.safe_load(f) or {}
-            print("Loaded config from config/orchestrator/config.yaml")
-
+        with open(config_path, "r") as f:
+            config_data = yaml.safe_load(f) or {}
+            print(f"Loaded config from config/orchestrator/config.yaml")
 
 if __name__ == "__main__":
     sys.exit(asyncio.run(main()))

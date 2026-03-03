@@ -22,7 +22,12 @@ def analyze_principles(path: str = ".") -> dict:
     """Analyze first principles in codebase."""
     p = Path(path)
 
-    analysis = {"modules": 0, "interfaces": 0, "abstractions": 0, "patterns": []}
+    analysis = {
+        "modules": 0,
+        "interfaces": 0,
+        "abstractions": 0,
+        "patterns": []
+    }
 
     # Count Python modules
     py_files = list(p.rglob("*.py"))
@@ -59,8 +64,7 @@ def check_modularity(path: str = ".") -> dict:
             files = list(module_dir.glob("*.py"))
             modules[str(module_dir.relative_to(p))] = {
                 "files": len(files),
-                "has_tests": (module_dir / "tests").exists()
-                or (module_dir / "test").exists(),
+                "has_tests": (module_dir / "tests").exists() or (module_dir / "test").exists(),
             }
 
     return modules
@@ -68,17 +72,14 @@ def check_modularity(path: str = ".") -> dict:
 
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
-
-    config_path = (
-        Path(__file__).resolve().parent.parent.parent / "config" / "fpf" / "config.yaml"
-    )
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "fpf" / "config.yaml"
+    config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
-            yaml.safe_load(f) or {}
-            print("Loaded config from config/fpf/config.yaml")
+        with open(config_path, "r") as f:
+            config_data = yaml.safe_load(f) or {}
+            print(f"Loaded config from config/fpf/config.yaml")
 
     parser = argparse.ArgumentParser(description="FPF utilities")
     subparsers = parser.add_subparsers(dest="command")

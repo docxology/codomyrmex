@@ -17,7 +17,7 @@ if str(SRC_DIR) not in sys.path:
     sys.path.insert(0, str(SRC_DIR))
 
 try:
-    from codomyrmex.static_analysis.imports import get_layer, scan_imports
+    from codomyrmex.static_analysis.imports import scan_imports, get_layer
 except ImportError as e:
     print(f"Error importing codomyrmex module: {e}")
     sys.exit(1)
@@ -44,7 +44,7 @@ def generate_mermaid(src_dir: Path) -> str:
         "core": [],
         "service": [],
         "specialized": [],
-        "other": [],
+        "other": []
     }
 
     for mod in modules:
@@ -85,27 +85,17 @@ def generate_mermaid(src_dir: Path) -> str:
 
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
-
-    config_path = (
-        Path(__file__).resolve().parent.parent.parent
-        / "config"
-        / "docs"
-        / "config.yaml"
-    )
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "docs" / "config.yaml"
+    config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
-            yaml.safe_load(f) or {}
-            print("Loaded config from config/docs/config.yaml")
+        with open(config_path, "r") as f:
+            config_data = yaml.safe_load(f) or {}
+            print(f"Loaded config from config/docs/config.yaml")
 
-    parser = argparse.ArgumentParser(
-        description="Auto-generate Mermaid architecture diagram"
-    )
-    parser.add_argument(
-        "--root", type=Path, default=PROJ_ROOT, help="Project root directory"
-    )
+    parser = argparse.ArgumentParser(description="Auto-generate Mermaid architecture diagram")
+    parser.add_argument("--root", type=Path, default=PROJ_ROOT, help="Project root directory")
     args = parser.parse_args()
 
     src_dir = args.root / "src" / "codomyrmex"

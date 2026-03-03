@@ -18,7 +18,7 @@ import json
 import subprocess
 import sys
 from pathlib import Path
-from typing import Any
+from typing import Any, Dict, List
 
 project_root = Path(__file__).parent.parent.parent.parent
 sys.path.insert(0, str(project_root / "src"))
@@ -28,7 +28,7 @@ from codomyrmex.logging_monitoring import get_logger
 logger = get_logger(__name__)
 
 
-def discover_test_files(test_dir: Path, markers: str = None) -> list[Path]:
+def discover_test_files(test_dir: Path, markers: str = None) -> List[Path]:
     """Discover all test files.
 
     Args:
@@ -44,7 +44,7 @@ def discover_test_files(test_dir: Path, markers: str = None) -> list[Path]:
     return sorted(test_files)
 
 
-def split_into_groups(files: list[Path], num_groups: int) -> list[list[Path]]:
+def split_into_groups(files: List[Path], num_groups: int) -> List[List[Path]]:
     """Split files into roughly equal groups.
 
     Args:
@@ -66,8 +66,11 @@ def split_into_groups(files: list[Path], num_groups: int) -> list[list[Path]]:
 
 
 async def run_test_group(
-    group_id: int, test_files: list[Path], coverage: bool = False, markers: str = None
-) -> dict[str, Any]:
+    group_id: int,
+    test_files: List[Path],
+    coverage: bool = False,
+    markers: str = None
+) -> Dict[str, Any]:
     """Run a group of tests.
 
     Args:
@@ -88,16 +91,18 @@ async def run_test_group(
     cmd.extend(["-q", "--tb=short"])
 
     if coverage:
-        cmd.extend(
-            ["--cov=src/codomyrmex", f"--cov-report=json:.coverage.{group_id}.json"]
-        )
+        cmd.extend(["--cov=src/codomyrmex", f"--cov-report=json:.coverage.{group_id}.json"])
 
     if markers:
         cmd.extend(["-m", markers])
 
     # Run tests
     result = subprocess.run(
-        cmd, capture_output=True, text=True, cwd=project_root, timeout=600
+        cmd,
+        capture_output=True,
+        text=True,
+        cwd=project_root,
+        timeout=600
     )
 
     # Parse results
@@ -111,17 +116,17 @@ async def run_test_group(
             for i, p in enumerate(parts):
                 if p == "passed" and i > 0:
                     try:
-                        passed = int(parts[i - 1])
+                        passed = int(parts[i-1])
                     except ValueError:
                         pass
                 if p == "failed" and i > 0:
                     try:
-                        failed = int(parts[i - 1])
+                        failed = int(parts[i-1])
                     except ValueError:
                         pass
                 if p == "skipped" and i > 0:
                     try:
-                        skipped = int(parts[i - 1])
+                        skipped = int(parts[i-1])
                     except ValueError:
                         pass
 
@@ -134,11 +139,11 @@ async def run_test_group(
         "skipped": skipped,
         "duration": 0,  # Would need timing
         "output": result.stdout[-500:] if result.stdout else "",
-        "errors": result.stderr[-200:] if result.stderr else "",
+        "errors": result.stderr[-200:] if result.stderr else ""
     }
 
 
-async def merge_coverage_reports(num_groups: int) -> dict[str, Any]:
+async def merge_coverage_reports(num_groups: int) -> Dict[str, Any]:
     """Merge coverage reports from parallel runs.
 
     Args:
@@ -161,7 +166,7 @@ async def merge_coverage_reports(num_groups: int) -> dict[str, Any]:
         "files_covered": 0,
         "total_lines": 0,
         "covered_lines": 0,
-        "missing_lines": 0,
+        "missing_lines": 0
     }
 
     for cov_file in coverage_files:
@@ -178,8 +183,8 @@ async def merge_coverage_reports(num_groups: int) -> dict[str, Any]:
     # Calculate percentage
     if total_coverage["covered_lines"] + total_coverage["missing_lines"] > 0:
         total_coverage["percentage"] = (
-            total_coverage["covered_lines"]
-            / (total_coverage["covered_lines"] + total_coverage["missing_lines"])
+            total_coverage["covered_lines"] /
+            (total_coverage["covered_lines"] + total_coverage["missing_lines"])
         ) * 100
     else:
         total_coverage["percentage"] = 0
@@ -191,12 +196,16 @@ async def merge_coverage_reports(num_groups: int) -> dict[str, Any]:
         except Exception:
             pass
 
-    return {"success": True, "coverage": total_coverage}
+    return {
+        "success": True,
+        "coverage": total_coverage
+    }
 
 
 async def generate_test_report(
-    group_results: list[dict[str, Any]], coverage_data: dict[str, Any] = None
-) -> dict[str, Any]:
+    group_results: List[Dict[str, Any]],
+    coverage_data: Dict[str, Any] = None
+) -> Dict[str, Any]:
     """Generate comprehensive test report.
 
     Args:
@@ -213,10 +222,10 @@ async def generate_test_report(
             "total_passed": sum(r.get("passed", 0) for r in group_results),
             "total_failed": sum(r.get("failed", 0) for r in group_results),
             "total_skipped": sum(r.get("skipped", 0) for r in group_results),
-            "all_passed": all(r.get("success", False) for r in group_results),
+            "all_passed": all(r.get("success", False) for r in group_results)
         },
         "groups": group_results,
-        "coverage": coverage_data.get("coverage") if coverage_data else None,
+        "coverage": coverage_data.get("coverage") if coverage_data else None
     }
 
     # Add status
@@ -227,21 +236,20 @@ async def generate_test_report(
     else:
         report["status"] = "PARTIAL"
 
-    return {"success": report["summary"]["all_passed"], "report": report}
+    return {
+        "success": report["summary"]["all_passed"],
+        "report": report
+    }
 
 
 async def main() -> int:
     """Run parallel test workflow."""
     parser = argparse.ArgumentParser(description="Run tests in parallel")
-    parser.add_argument(
-        "--workers", "-w", type=int, default=4, help="Number of parallel workers"
-    )
+    parser.add_argument("--workers", "-w", type=int, default=4, help="Number of parallel workers")
     parser.add_argument("--coverage", action="store_true", help="Collect coverage data")
     parser.add_argument("--markers", "-m", help="Pytest markers to filter tests")
     parser.add_argument("--verbose", "-v", action="store_true", help="Verbose output")
-    parser.add_argument(
-        "--test-dir", default="src/codomyrmex/tests/unit", help="Test directory"
-    )
+    parser.add_argument("--test-dir", default="src/codomyrmex/tests/unit", help="Test directory")
     args = parser.parse_args()
 
     test_dir = project_root / args.test_dir
@@ -278,9 +286,11 @@ async def main() -> int:
     processed_results = []
     for i, result in enumerate(group_results):
         if isinstance(result, Exception):
-            processed_results.append(
-                {"success": False, "group_id": i, "error": str(result)}
-            )
+            processed_results.append({
+                "success": False,
+                "group_id": i,
+                "error": str(result)
+            })
         else:
             processed_results.append(result)
 
@@ -315,38 +325,29 @@ async def main() -> int:
             files = result.get("files_tested", 0)
             passed = result.get("passed", 0)
             failed = result.get("failed", 0)
-            print(
-                f"  {icon} Group {group_id}: {files} files, {passed} passed, {failed} failed"
-            )
+            print(f"  {icon} Group {group_id}: {files} files, {passed} passed, {failed} failed")
 
     # Print coverage
     if coverage_data and coverage_data.get("coverage"):
         cov = coverage_data["coverage"]
         print(f"\nCoverage: {cov.get('percentage', 0):.1f}%")
-        print(
-            f"  Lines: {cov.get('covered_lines', 0)}/{cov.get('covered_lines', 0) + cov.get('missing_lines', 0)}"
-        )
+        print(f"  Lines: {cov.get('covered_lines', 0)}/{cov.get('covered_lines', 0) + cov.get('missing_lines', 0)}")
 
     # Script executed successfully - test results are informational
     # Return 0 to indicate script success, not test success
     return 0
 
+
+
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
-
-    config_path = (
-        Path(__file__).resolve().parent.parent.parent
-        / "config"
-        / "orchestrator"
-        / "config.yaml"
-    )
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "orchestrator" / "config.yaml"
+    config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
-            yaml.safe_load(f) or {}
-            print("Loaded config from config/orchestrator/config.yaml")
-
+        with open(config_path, "r") as f:
+            config_data = yaml.safe_load(f) or {}
+            print(f"Loaded config from config/orchestrator/config.yaml")
 
 if __name__ == "__main__":
     sys.exit(asyncio.run(main()))

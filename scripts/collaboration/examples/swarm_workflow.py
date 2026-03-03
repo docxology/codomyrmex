@@ -17,35 +17,23 @@ project_root = Path(__file__).parent.parent.parent.parent
 sys.path.insert(0, str(project_root / "src"))
 
 try:
-    from codomyrmex.utils.cli_helpers import print_error, print_info, print_success
+    from codomyrmex.utils.cli_helpers import print_success, print_error, print_info
 except ImportError:
-
-    def print_success(msg):
-        print(f"SUCCESS: {msg}")
-
-    def print_error(msg):
-        print(f"ERROR: {msg}")
-
-    def print_info(msg):
-        print(f"INFO: {msg}")
+    def print_success(msg): print(f"SUCCESS: {msg}")
+    def print_error(msg): print(f"ERROR: {msg}")
+    def print_info(msg): print(f"INFO: {msg}")
 
 
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
-
-    config_path = (
-        Path(__file__).resolve().parent.parent.parent
-        / "config"
-        / "collaboration"
-        / "config.yaml"
-    )
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "collaboration" / "config.yaml"
+    config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
-            yaml.safe_load(f) or {}
-            print("Loaded config from config/collaboration/config.yaml")
+        with open(config_path, "r") as f:
+            config_data = yaml.safe_load(f) or {}
+            print(f"Loaded config from config/collaboration/config.yaml")
 
     """Demonstrate advanced swarm coordination workflow."""
     parser = argparse.ArgumentParser(description="Swarm coordination demo")
@@ -58,16 +46,15 @@ def main():
 
     try:
         from codomyrmex.collaboration import SwarmManager, TaskDecomposer
-
         print_success("Imported collaboration module")
 
         # Create swarm manager
         print_info(f"\n1. Initializing swarm with {args.agents} agents...")
-        SwarmManager()
+        swarm = SwarmManager()
 
         # Create task decomposer
         print_info("\n2. Setting up task decomposer...")
-        TaskDecomposer()
+        decomposer = TaskDecomposer()
 
         # Define a complex task
         complex_task = {
@@ -77,8 +64,8 @@ def main():
                 "analyze_code_structure",
                 "check_style_compliance",
                 "identify_security_issues",
-                "suggest_optimizations",
-            ],
+                "suggest_optimizations"
+            ]
         }
 
         print_info(f"\n3. Task to decompose: {complex_task['name']}")

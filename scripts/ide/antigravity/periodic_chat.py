@@ -4,13 +4,13 @@ Periodic Chat Messaging for Antigravity.
 Simulates a "Real IDE UX" by sending status updates or messages on a timer.
 """
 
+import sys
+import os
+import time
 import argparse
 import logging
-import os
-import sys
-import time
-from datetime import datetime
 from pathlib import Path
+from datetime import datetime
 
 # Ensure project root is in path
 project_root = Path(__file__).resolve().parent.parent.parent.parent
@@ -20,10 +20,10 @@ from codomyrmex.ide.antigravity import AntigravityClient
 
 # Configure logging
 logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
 logger = logging.getLogger("antigravity.periodic")
-
 
 def run_periodic_chat(interval: int, limit: int = -1, use_gui: bool = False):
     client = AntigravityClient()
@@ -64,9 +64,7 @@ def run_periodic_chat(interval: int, limit: int = -1, use_gui: bool = False):
 
                     if result.success:
                         method = result.output.get("method", "unknown")
-                        logger.info(
-                            f"   ✅ Sent successfully (via {method}, mode={mode})"
-                        )
+                        logger.info(f"   ✅ Sent successfully (via {method}, mode={mode})")
                     else:
                         logger.error(f"   ❌ Failed: {result.error}")
 
@@ -80,39 +78,23 @@ def run_periodic_chat(interval: int, limit: int = -1, use_gui: bool = False):
 
     return True
 
+
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
-
-    config_path = (
-        Path(__file__).resolve().parent.parent.parent / "config" / "ide" / "config.yaml"
-    )
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "ide" / "config.yaml"
+    config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
-            yaml.safe_load(f) or {}
-            print("Loaded config from config/ide/config.yaml")
-
+        with open(config_path, "r") as f:
+            config_data = yaml.safe_load(f) or {}
+            print(f"Loaded config from config/ide/config.yaml")
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(
-        description="Send periodic chat messages to Antigravity."
-    )
-    parser.add_argument(
-        "--interval", type=int, default=60, help="Interval in seconds (default: 60)"
-    )
-    parser.add_argument(
-        "--limit",
-        type=int,
-        default=-1,
-        help="Number of messages to send (default: infinite)",
-    )
-    parser.add_argument(
-        "--gui", action="store_true", help="Use GUI automation instead of CLI"
-    )
-    parser.add_argument(
-        "--test-mode", action="store_true", help="Run once with 0 delay for testing"
-    )
+    parser = argparse.ArgumentParser(description="Send periodic chat messages to Antigravity.")
+    parser.add_argument("--interval", type=int, default=60, help="Interval in seconds (default: 60)")
+    parser.add_argument("--limit", type=int, default=-1, help="Number of messages to send (default: infinite)")
+    parser.add_argument("--gui", action="store_true", help="Use GUI automation instead of CLI")
+    parser.add_argument("--test-mode", action="store_true", help="Run once with 0 delay for testing")
 
     args = parser.parse_args()
 

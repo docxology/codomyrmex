@@ -85,20 +85,14 @@ def check_env_template() -> dict:
 
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
-
-    config_path = (
-        Path(__file__).resolve().parent.parent.parent
-        / "config"
-        / "environment_setup"
-        / "config.yaml"
-    )
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "environment_setup" / "config.yaml"
+    config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
-            yaml.safe_load(f) or {}
-            print("Loaded config from config/environment_setup/config.yaml")
+        with open(config_path, "r") as f:
+            config_data = yaml.safe_load(f) or {}
+            print(f"Loaded config from config/environment_setup/config.yaml")
 
     parser = argparse.ArgumentParser(description="Environment setup")
     subparsers = parser.add_subparsers(dest="command")
@@ -111,7 +105,7 @@ def main():
     subparsers.add_parser("env", help="Check .env file")
 
     # Create command
-    subparsers.add_parser("create", help="Create .env from template")
+    create = subparsers.add_parser("create", help="Create .env from template")
 
     args = parser.parse_args()
 
@@ -147,7 +141,7 @@ def main():
         print(f"   .env.example exists: {'✅' if result['example_exists'] else '⚪'}")
 
         if result.get("missing_in_env"):
-            print("\n   ⚠️  Missing in .env:")
+            print(f"\n   ⚠️  Missing in .env:")
             for v in result["missing_in_env"][:10]:
                 print(f"      - {v}")
 
@@ -164,9 +158,8 @@ def main():
             return 0
 
         import shutil
-
         shutil.copy(example, env)
-        print("✅ Created .env from .env.example")
+        print(f"✅ Created .env from .env.example")
 
     return 0
 

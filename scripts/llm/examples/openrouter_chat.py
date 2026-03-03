@@ -27,12 +27,12 @@ Usage:
     python openrouter_chat.py --batch "Hello" "How are you?" "Tell me a joke"
 """
 
+import sys
+import os
 import argparse
 import json
-import os
-import sys
-from datetime import datetime
 from pathlib import Path
+from datetime import datetime
 
 # Ensure codomyrmex is in path
 try:
@@ -42,11 +42,11 @@ except ImportError:
     sys.path.insert(0, str(project_root / "src"))
 
 from codomyrmex.llm.providers import (
+    get_provider,
+    ProviderType,
+    ProviderConfig,
     Message,
     OpenRouterProvider,
-    ProviderConfig,
-    ProviderType,
-    get_provider,
 )
 
 # Default config file locations
@@ -98,25 +98,21 @@ class ChatSession:
 
         if system_prompt:
             self.messages.append(Message(role="system", content=system_prompt))
-            self.conversation_log.append(
-                {
-                    "role": "system",
-                    "content": system_prompt,
-                    "timestamp": datetime.now().isoformat(),
-                }
-            )
+            self.conversation_log.append({
+                "role": "system",
+                "content": system_prompt,
+                "timestamp": datetime.now().isoformat(),
+            })
 
     def send(self, user_message: str, stream: bool = False) -> str:
         """Send a message and get a response."""
         # Add user message to history
         self.messages.append(Message(role="user", content=user_message))
-        self.conversation_log.append(
-            {
-                "role": "user",
-                "content": user_message,
-                "timestamp": datetime.now().isoformat(),
-            }
-        )
+        self.conversation_log.append({
+            "role": "user",
+            "content": user_message,
+            "timestamp": datetime.now().isoformat(),
+        })
 
         if stream:
             # Streaming response
@@ -143,14 +139,12 @@ class ChatSession:
 
         # Add assistant response to history
         self.messages.append(Message(role="assistant", content=response_content))
-        self.conversation_log.append(
-            {
-                "role": "assistant",
-                "content": response_content,
-                "timestamp": datetime.now().isoformat(),
-                "model": self.model,
-            }
-        )
+        self.conversation_log.append({
+            "role": "assistant",
+            "content": response_content,
+            "timestamp": datetime.now().isoformat(),
+            "model": self.model,
+        })
 
         return response_content
 
@@ -161,9 +155,7 @@ class ChatSession:
 
         data = {
             "model": self.model,
-            "started_at": self.conversation_log[0]["timestamp"]
-            if self.conversation_log
-            else None,
+            "started_at": self.conversation_log[0]["timestamp"] if self.conversation_log else None,
             "messages": self.conversation_log,
         }
 
@@ -178,11 +170,7 @@ class ChatSession:
         print("=" * 50)
         for msg in self.conversation_log:
             role = msg["role"].upper()
-            content = (
-                msg["content"][:100] + "..."
-                if len(msg["content"]) > 100
-                else msg["content"]
-            )
+            content = msg["content"][:100] + "..." if len(msg["content"]) > 100 else msg["content"]
             print(f"[{role}] {content}")
         print("=" * 50)
 
@@ -238,11 +226,7 @@ def run_interactive_chat(
                     print("\n👋 Goodbye!")
                     break
                 elif cmd == "/save":
-                    filepath = (
-                        arg
-                        or save_to
-                        or f"chat_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
-                    )
+                    filepath = arg or save_to or f"chat_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
                     session.save(filepath)
                 elif cmd == "/history":
                     session.display_history()
@@ -250,9 +234,7 @@ def run_interactive_chat(
                     session.messages.clear()
                     session.conversation_log.clear()
                     if system_prompt:
-                        session.messages.append(
-                            Message(role="system", content=system_prompt)
-                        )
+                        session.messages.append(Message(role="system", content=system_prompt))
                     print("🗑️  Conversation cleared!")
                 elif cmd == "/model":
                     if arg:
@@ -315,7 +297,7 @@ def run_batch_chat(
             print(f"\n[{i}/{len(messages)}] 👤 User: {msg}")
             print("\n🤖 Assistant:")
             try:
-                session.send(msg, stream=True)
+                response = session.send(msg, stream=True)
             except Exception as e:
                 print(f"❌ Error: {e}")
             print()
@@ -329,17 +311,14 @@ def run_batch_chat(
 
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
-
-    config_path = (
-        Path(__file__).resolve().parent.parent.parent / "config" / "llm" / "config.yaml"
-    )
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "llm" / "config.yaml"
+    config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
-            yaml.safe_load(f) or {}
-            print("Loaded config from config/llm/config.yaml")
+        with open(config_path, "r") as f:
+            config_data = yaml.safe_load(f) or {}
+            print(f"Loaded config from config/llm/config.yaml")
 
     parser = argparse.ArgumentParser(
         description="OpenRouter Interactive Chat - Multi-turn Conversations",
@@ -351,59 +330,36 @@ Examples:
   python openrouter_chat.py --model "google/gemma-3-12b-it:free"
   python openrouter_chat.py --batch "Hello" "How are you?"
   python openrouter_chat.py --save-to conversation.json
-        """,
+        """
     )
 
     # Model and behavior
-    parser.add_argument(
-        "--model",
-        "-m",
-        type=str,
-        default="openrouter/free",
-        help="Model to use (default: openrouter/free)",
-    )
-    parser.add_argument(
-        "--system",
-        "-s",
-        type=str,
-        default=None,
-        help="System prompt to set assistant behavior",
-    )
-    parser.add_argument(
-        "--max-tokens",
-        type=int,
-        default=500,
-        help="Maximum tokens per response (default: 500)",
-    )
-    parser.add_argument(
-        "--temperature",
-        type=float,
-        default=0.7,
-        help="Response temperature 0.0-2.0 (default: 0.7)",
-    )
-    parser.add_argument(
-        "--no-stream", action="store_true", help="Disable streaming responses"
-    )
+    parser.add_argument("--model", "-m", type=str, default="openrouter/free",
+                        help="Model to use (default: openrouter/free)")
+    parser.add_argument("--system", "-s", type=str, default=None,
+                        help="System prompt to set assistant behavior")
+    parser.add_argument("--max-tokens", type=int, default=500,
+                        help="Maximum tokens per response (default: 500)")
+    parser.add_argument("--temperature", type=float, default=0.7,
+                        help="Response temperature 0.0-2.0 (default: 0.7)")
+    parser.add_argument("--no-stream", action="store_true",
+                        help="Disable streaming responses")
 
     # Batch mode
-    parser.add_argument(
-        "--batch", nargs="+", type=str, help="Run in batch mode with preset messages"
-    )
+    parser.add_argument("--batch", nargs="+", type=str,
+                        help="Run in batch mode with preset messages")
 
     # Save/load
-    parser.add_argument(
-        "--save-to", type=str, default=None, help="Save conversation to JSON file"
-    )
+    parser.add_argument("--save-to", type=str, default=None,
+                        help="Save conversation to JSON file")
 
     # API key
-    parser.add_argument(
-        "--api-key", "-k", type=str, default=None, help="OpenRouter API key"
-    )
+    parser.add_argument("--api-key", "-k", type=str, default=None,
+                        help="OpenRouter API key")
 
     # List models
-    parser.add_argument(
-        "--list-models", "-l", action="store_true", help="List available free models"
-    )
+    parser.add_argument("--list-models", "-l", action="store_true",
+                        help="List available free models")
 
     args = parser.parse_args()
 

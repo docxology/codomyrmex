@@ -22,9 +22,7 @@ import subprocess
 def run_tool(cmd: list, cwd: str = ".") -> tuple:
     """Run a tool and return (success, output)."""
     try:
-        result = subprocess.run(
-            cmd, capture_output=True, text=True, cwd=cwd, timeout=120
-        )
+        result = subprocess.run(cmd, capture_output=True, text=True, cwd=cwd, timeout=120)
         return result.returncode == 0, result.stdout + result.stderr
     except FileNotFoundError:
         return False, f"Tool not found: {cmd[0]}"
@@ -66,27 +64,19 @@ TOOLS = {
 
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
-
-    config_path = (
-        Path(__file__).resolve().parent.parent.parent
-        / "config"
-        / "coding"
-        / "config.yaml"
-    )
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "coding" / "config.yaml"
+    config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
-            yaml.safe_load(f) or {}
-            print("Loaded config from config/coding/config.yaml")
+        with open(config_path, "r") as f:
+            config_data = yaml.safe_load(f) or {}
+            print(f"Loaded config from config/coding/config.yaml")
 
     parser = argparse.ArgumentParser(description="Code quality checks")
     parser.add_argument("path", nargs="?", default=".", help="File or directory")
     parser.add_argument("--fix", "-f", action="store_true", help="Auto-fix issues")
-    parser.add_argument(
-        "--type", "-t", choices=list(TOOLS.keys()) + ["all"], default="all"
-    )
+    parser.add_argument("--type", "-t", choices=list(TOOLS.keys()) + ["all"], default="all")
     args = parser.parse_args()
 
     if args.path == "." and not Path("pyproject.toml").exists():

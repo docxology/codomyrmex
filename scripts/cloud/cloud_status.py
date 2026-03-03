@@ -17,8 +17,8 @@ except ImportError:
 
 import argparse
 import os
-import shutil
 import subprocess
+import shutil
 
 
 def check_aws_cli() -> dict:
@@ -31,10 +31,8 @@ def check_aws_cli() -> dict:
         version = result.stdout.strip().split()[0] if result.stdout else "unknown"
 
         # Check for credentials
-        has_creds = (
-            bool(os.environ.get("AWS_ACCESS_KEY_ID"))
-            or Path.home().joinpath(".aws/credentials").exists()
-        )
+        has_creds = bool(os.environ.get("AWS_ACCESS_KEY_ID")) or \
+                    Path.home().joinpath(".aws/credentials").exists()
 
         return {"installed": True, "version": version, "configured": has_creds}
     except:
@@ -47,9 +45,7 @@ def check_gcloud() -> dict:
         return {"installed": False}
 
     try:
-        result = subprocess.run(
-            ["gcloud", "--version"], capture_output=True, text=True, timeout=10
-        )
+        result = subprocess.run(["gcloud", "--version"], capture_output=True, text=True, timeout=10)
         lines = result.stdout.strip().split("\n")
         version = lines[0] if lines else "unknown"
 
@@ -64,11 +60,8 @@ def check_azure() -> dict:
         return {"installed": False}
 
     try:
-        result = subprocess.run(
-            ["az", "version", "-o", "json"], capture_output=True, text=True, timeout=10
-        )
+        result = subprocess.run(["az", "version", "-o", "json"], capture_output=True, text=True, timeout=10)
         import json
-
         data = json.loads(result.stdout)
         version = data.get("azure-cli", "unknown")
         return {"installed": True, "version": version}
@@ -79,17 +72,8 @@ def check_azure() -> dict:
 def check_cloud_env_vars() -> dict:
     """Check cloud-related environment variables."""
     providers = {
-        "aws": [
-            "AWS_ACCESS_KEY_ID",
-            "AWS_SECRET_ACCESS_KEY",
-            "AWS_REGION",
-            "AWS_PROFILE",
-        ],
-        "gcp": [
-            "GOOGLE_APPLICATION_CREDENTIALS",
-            "GOOGLE_CLOUD_PROJECT",
-            "GCP_PROJECT",
-        ],
+        "aws": ["AWS_ACCESS_KEY_ID", "AWS_SECRET_ACCESS_KEY", "AWS_REGION", "AWS_PROFILE"],
+        "gcp": ["GOOGLE_APPLICATION_CREDENTIALS", "GOOGLE_CLOUD_PROJECT", "GCP_PROJECT"],
         "azure": ["AZURE_SUBSCRIPTION_ID", "AZURE_TENANT_ID", "AZURE_CLIENT_ID"],
     }
 
@@ -102,28 +86,18 @@ def check_cloud_env_vars() -> dict:
 
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
-
-    config_path = (
-        Path(__file__).resolve().parent.parent.parent
-        / "config"
-        / "cloud"
-        / "config.yaml"
-    )
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "cloud" / "config.yaml"
+    config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
-            yaml.safe_load(f) or {}
-            print("Loaded config from config/cloud/config.yaml")
+        with open(config_path, "r") as f:
+            config_data = yaml.safe_load(f) or {}
+            print(f"Loaded config from config/cloud/config.yaml")
 
     parser = argparse.ArgumentParser(description="Cloud service status")
-    parser.add_argument(
-        "--provider", "-p", choices=["aws", "gcp", "azure", "all"], default="all"
-    )
-    parser.add_argument(
-        "--env", "-e", action="store_true", help="Show environment variables"
-    )
+    parser.add_argument("--provider", "-p", choices=["aws", "gcp", "azure", "all"], default="all")
+    parser.add_argument("--env", "-e", action="store_true", help="Show environment variables")
     args = parser.parse_args()
 
     print("☁️  Cloud Status\n")
@@ -134,13 +108,9 @@ def main():
         "azure": ("Azure", check_azure),
     }
 
-    to_check = (
-        providers
-        if args.provider == "all"
-        else {args.provider: providers[args.provider]}
-    )
+    to_check = providers if args.provider == "all" else {args.provider: providers[args.provider]}
 
-    for _key, (name, check_fn) in to_check.items():
+    for key, (name, check_fn) in to_check.items():
         status = check_fn()
         icon = "✅" if status.get("installed") else "⚪"
         print(f"{icon} {name}:")

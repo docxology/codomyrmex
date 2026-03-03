@@ -16,8 +16,8 @@ except ImportError:
     sys.path.insert(0, str(project_root / "src"))
 
 import argparse
-import shutil
 import subprocess
+import shutil
 
 
 def check_tool(name: str) -> dict:
@@ -32,9 +32,7 @@ def check_tool(name: str) -> dict:
     version_flags = ["--version", "-V", "version"]
     for flag in version_flags:
         try:
-            result = subprocess.run(
-                [name, flag], capture_output=True, text=True, timeout=5
-            )
+            result = subprocess.run([name, flag], capture_output=True, text=True, timeout=5)
             if result.returncode == 0 and result.stdout:
                 info["version"] = result.stdout.strip().split("\n")[0][:50]
                 break
@@ -65,20 +63,14 @@ DEV_TOOLS = {
 
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
-
-    config_path = (
-        Path(__file__).resolve().parent.parent.parent
-        / "config"
-        / "tools"
-        / "config.yaml"
-    )
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "tools" / "config.yaml"
+    config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
-            yaml.safe_load(f) or {}
-            print("Loaded config from config/tools/config.yaml")
+        with open(config_path, "r") as f:
+            config_data = yaml.safe_load(f) or {}
+            print(f"Loaded config from config/tools/config.yaml")
 
     parser = argparse.ArgumentParser(description="Development tools utilities")
     parser.add_argument("--check", "-c", action="store_true", help="Check all tools")
@@ -112,7 +104,6 @@ def main():
 
     if args.json:
         import json
-
         print(json.dumps(results, indent=2))
     else:
         installed = sum(1 for r in results.values() if r["installed"])

@@ -35,9 +35,9 @@ def analyze_document(path: Path) -> dict:
     }
 
     if path.suffix == ".md":
-        info["headings"] = len(re.findall(r"^#{1,6}\s", content, re.MULTILINE))
-        info["links"] = len(re.findall(r"\[.+?\]\(.+?\)", content))
-        info["code_blocks"] = len(re.findall(r"```", content)) // 2
+        info["headings"] = len(re.findall(r'^#{1,6}\s', content, re.MULTILINE))
+        info["links"] = len(re.findall(r'\[.+?\]\(.+?\)', content))
+        info["code_blocks"] = len(re.findall(r'```', content)) // 2
 
     return info
 
@@ -51,9 +51,7 @@ def find_documents(path: str, extensions: list = None) -> list:
     for ext in exts:
         found.extend(p.rglob(f"*{ext}"))
 
-    return [
-        f for f in found if "node_modules" not in str(f) and "__pycache__" not in str(f)
-    ]
+    return [f for f in found if "node_modules" not in str(f) and "__pycache__" not in str(f)]
 
 
 def check_frontmatter(path: Path) -> dict:
@@ -77,20 +75,14 @@ def check_frontmatter(path: Path) -> dict:
 
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
-
-    config_path = (
-        Path(__file__).resolve().parent.parent.parent
-        / "config"
-        / "documents"
-        / "config.yaml"
-    )
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "documents" / "config.yaml"
+    config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
-            yaml.safe_load(f) or {}
-            print("Loaded config from config/documents/config.yaml")
+        with open(config_path, "r") as f:
+            config_data = yaml.safe_load(f) or {}
+            print(f"Loaded config from config/documents/config.yaml")
 
     parser = argparse.ArgumentParser(description="Document utilities")
     subparsers = parser.add_subparsers(dest="command")
@@ -143,9 +135,9 @@ def main():
         print(f"📄 Document: {path.name}\n")
         print(f"   Lines: {info['lines']}")
         print(f"   Words: {info['words']}")
-        if info["headings"]:
+        if info['headings']:
             print(f"   Headings: {info['headings']}")
-        if info["links"]:
+        if info['links']:
             print(f"   Links: {info['links']}")
         if fm and fm["has_frontmatter"]:
             print(f"   Frontmatter: {', '.join(fm['fields'])}")
@@ -164,7 +156,7 @@ def main():
             except:
                 pass
 
-        print("📊 Document Statistics:\n")
+        print(f"📊 Document Statistics:\n")
         print(f"   Documents: {len(docs)}")
         print(f"   Total words: {total_words:,}")
         print(f"   Total lines: {total_lines:,}")

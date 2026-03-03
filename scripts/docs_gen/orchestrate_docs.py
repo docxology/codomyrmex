@@ -45,22 +45,15 @@ def process_data(data: list[int], *, factor: int = 1, verbose: bool = False) -> 
     return [d * factor for d in data]
 '''
 
-
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
-
-    config_path = (
-        Path(__file__).resolve().parent.parent.parent
-        / "config"
-        / "docs_gen"
-        / "config.yaml"
-    )
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "docs_gen" / "config.yaml"
+    config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
-            yaml.safe_load(f) or {}
+        with open(config_path, "r") as f:
+            config_data = yaml.safe_load(f) or {}
             print(f"Loaded config from {config_path.name}")
 
     print("--- Starting Docs Generation Orchestrator ---")
@@ -104,7 +97,6 @@ This site was generated using the `docs_gen` orchestrator.
         print(f"  - {path} ({len(pages[path])} chars)")
 
     print("\n--- Orchestration Complete ---")
-
 
 if __name__ == "__main__":
     main()

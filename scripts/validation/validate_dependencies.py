@@ -36,7 +36,7 @@ def parse_pyproject(path: Path) -> dict[str, Any]:
 
     # Optional dependencies
     optional_deps = project.get("optional-dependencies", {})
-    for _group, group_deps in optional_deps.items():
+    for group, group_deps in optional_deps.items():
         for dep in group_deps:
             name = dep.split("[")[0].split(">=")[0].split("==")[0].split("<")[0].strip()
             deps[name.lower()] = dep
@@ -54,13 +54,7 @@ def parse_requirements(path: Path) -> dict[str, str]:
         for line in f:
             line = line.strip()
             if line and not line.startswith("#") and not line.startswith("-"):
-                name = (
-                    line.split("[")[0]
-                    .split(">=")[0]
-                    .split("==")[0]
-                    .split("<")[0]
-                    .strip()
-                )
+                name = line.split("[")[0].split(">=")[0].split("==")[0].split("<")[0].strip()
                 deps[name.lower()] = line
 
     return deps
@@ -92,7 +86,7 @@ def validate_dependencies(repo_root: Path) -> int:
     if not pyproject_path.exists():
         issues.append("pyproject.toml not found")
     else:
-        print("✅ Found pyproject.toml")
+        print(f"✅ Found pyproject.toml")
         pyproject_deps = parse_pyproject(pyproject_path)
         print(f"   Found {len(pyproject_deps)} dependencies")
 
@@ -103,7 +97,7 @@ def validate_dependencies(repo_root: Path) -> int:
     # Check for requirements.txt (optional)
     requirements = repo_root / "requirements.txt"
     if requirements.exists():
-        print("✅ Found requirements.txt")
+        print(f"✅ Found requirements.txt")
         req_deps = parse_requirements(requirements)
         print(f"   Found {len(req_deps)} dependencies")
 
@@ -121,26 +115,27 @@ def validate_dependencies(repo_root: Path) -> int:
 
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
-
-    config_path = (
-        Path(__file__).resolve().parent.parent.parent
-        / "config"
-        / "validation"
-        / "config.yaml"
-    )
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "validation" / "config.yaml"
+    config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
-            yaml.safe_load(f) or {}
-            print("Loaded config from config/validation/config.yaml")
+        with open(config_path, "r") as f:
+            config_data = yaml.safe_load(f) or {}
+            print(f"Loaded config from config/validation/config.yaml")
 
     parser = argparse.ArgumentParser(description="Validate dependency consistency")
     parser.add_argument(
-        "--repo-root", type=Path, default=Path.cwd(), help="Repository root directory"
+        "--repo-root",
+        type=Path,
+        default=Path.cwd(),
+        help="Repository root directory"
     )
-    parser.add_argument("--strict", action="store_true", help="Fail on warnings")
+    parser.add_argument(
+        "--strict",
+        action="store_true",
+        help="Fail on warnings"
+    )
 
     args = parser.parse_args()
 

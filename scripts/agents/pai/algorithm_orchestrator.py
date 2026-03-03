@@ -28,24 +28,21 @@ except ImportError:
     sys.path.insert(0, str(project_root / "src"))
 
 from codomyrmex.agents.pai import (
+    PAIBridge,
     ALGORITHM_PHASES,
+    RESPONSE_DEPTH_LEVELS,
     PAI_PRINCIPLES,
     PAI_UPSTREAM_URL,
-    RESPONSE_DEPTH_LEVELS,
-    PAIBridge,
     call_tool,
+    verify_capabilities,
+    trust_all,
+    trusted_call_tool,
     get_skill_manifest,
     get_trust_report,
     reset_trust,
-    trust_all,
-    trusted_call_tool,
-    verify_capabilities,
 )
 from codomyrmex.utils.cli_helpers import (
-    print_info,
-    print_success,
-    print_warning,
-    setup_logging,
+    setup_logging, print_info, print_success, print_warning,
 )
 
 
@@ -54,21 +51,14 @@ def parse_args() -> argparse.Namespace:
         description="PAI Algorithm Orchestrator — 7-phase walkthrough with real tools",
     )
     parser.add_argument(
-        "--phase",
-        "-p",
-        type=int,
-        choices=range(1, 8),
+        "--phase", "-p", type=int, choices=range(1, 8),
         help="Run a specific phase (1-7)",
     )
     parser.add_argument(
-        "--depth",
-        choices=["FULL", "ITERATION", "MINIMAL"],
-        default="FULL",
+        "--depth", choices=["FULL", "ITERATION", "MINIMAL"], default="FULL",
         help="Response depth level (default: FULL)",
     )
-    parser.add_argument(
-        "--json", "-j", action="store_true", dest="json_output", help="JSON output"
-    )
+    parser.add_argument("--json", "-j", action="store_true", dest="json_output", help="JSON output")
     return parser.parse_args()
 
 
@@ -93,19 +83,13 @@ def phase_1_observe(bridge: PAIBridge) -> dict:
 
     # System inventory
     components = bridge.get_components()
-    present = sum(
-        1 for v in components.values() if isinstance(v, dict) and v.get("exists", False)
-    )
+    present = sum(1 for v in components.values() if isinstance(v, dict) and v.get("exists", False))
     print(f"  Components: {present}/{len(components)} present")
 
     # Module inventory via call_tool
     try:
         modules_result = call_tool("codomyrmex.list_modules")
-        modules = (
-            modules_result.get("modules", [])
-            if isinstance(modules_result, dict)
-            else []
-        )
+        modules = modules_result.get("modules", []) if isinstance(modules_result, dict) else []
         print(f"  Codomyrmex modules: {len(modules)}")
     except Exception:
         modules = []
@@ -114,11 +98,7 @@ def phase_1_observe(bridge: PAIBridge) -> dict:
     # Git state
     try:
         git_result = call_tool("codomyrmex.git_status")
-        branch = (
-            git_result.get("branch", "unknown")
-            if isinstance(git_result, dict)
-            else "unknown"
-        )
+        branch = git_result.get("branch", "unknown") if isinstance(git_result, dict) else "unknown"
         print(f"  Git branch: {branch}")
     except Exception:
         branch = "unknown"
@@ -171,7 +151,7 @@ def phase_3_plan(bridge: PAIBridge, depth: str) -> dict:
 
     # Show depth levels
     print(f"  Selected depth: {depth}")
-    print("  Available depths:")
+    print(f"  Available depths:")
     for lvl in RESPONSE_DEPTH_LEVELS:
         marker = "→" if lvl["depth"] == depth else " "
         print(f"    {marker} {lvl['depth']:12s}  {lvl['when']}")
@@ -288,7 +268,7 @@ def phase_7_learn(bridge: PAIBridge, all_results: dict) -> dict:
 
     # Summary
     phases_run = len(all_results)
-    print("\n  Summary:")
+    print(f"\n  Summary:")
     print(f"    Phases completed  : {phases_run}/7")
     print(f"    PAI upstream      : {PAI_UPSTREAM_URL}")
     print(f"    Algorithm phases  : {len(ALGORITHM_PHASES)}")
@@ -305,7 +285,7 @@ def main() -> int:
     args = parse_args()
     setup_logging()
 
-    print("🧬 PAI Algorithm Orchestrator — 7-Phase Walkthrough")
+    print(f"🧬 PAI Algorithm Orchestrator — 7-Phase Walkthrough")
     print(f"   Depth: {args.depth} | Upstream: {PAI_UPSTREAM_URL}")
 
     bridge = PAIBridge()
@@ -322,9 +302,7 @@ def main() -> int:
                 2: lambda: phase_2_think(bridge),
                 3: lambda: phase_3_plan(bridge, args.depth),
                 4: phase_4_build,
-                5: lambda: phase_5_execute(
-                    ["codomyrmex.list_modules", "codomyrmex.pai_status"]
-                ),
+                5: lambda: phase_5_execute(["codomyrmex.list_modules", "codomyrmex.pai_status"]),
                 6: lambda: phase_6_verify({}),
                 7: lambda: phase_7_learn(bridge, all_results),
             }
@@ -361,22 +339,17 @@ def main() -> int:
     print()
     return 0
 
+
+
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
-
-    config_path = (
-        Path(__file__).resolve().parent.parent.parent
-        / "config"
-        / "agents"
-        / "config.yaml"
-    )
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "agents" / "config.yaml"
+    config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
-            yaml.safe_load(f) or {}
-            print("Loaded config from config/agents/config.yaml")
-
+        with open(config_path, "r") as f:
+            config_data = yaml.safe_load(f) or {}
+            print(f"Loaded config from config/agents/config.yaml")
 
 if __name__ == "__main__":
     sys.exit(main())

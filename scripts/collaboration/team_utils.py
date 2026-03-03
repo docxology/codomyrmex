@@ -24,7 +24,8 @@ def get_git_contributors() -> list:
     """Get list of contributors from git log."""
     try:
         result = subprocess.run(
-            ["git", "log", "--format=%aN <%aE>"], capture_output=True, text=True
+            ["git", "log", "--format=%aN <%aE>"],
+            capture_output=True, text=True
         )
         contributors = defaultdict(int)
         for line in result.stdout.strip().split("\n"):
@@ -39,7 +40,8 @@ def analyze_file_ownership(path: str = ".") -> dict:
     """Analyze file ownership by contributor."""
     try:
         result = subprocess.run(
-            ["git", "log", "--format=%aN", "--", path], capture_output=True, text=True
+            ["git", "log", "--format=%aN", "--", path],
+            capture_output=True, text=True
         )
         authors = defaultdict(int)
         for line in result.stdout.strip().split("\n"):
@@ -64,27 +66,24 @@ def find_code_owners() -> list:
                     if line and not line.startswith("#"):
                         parts = line.split()
                         if len(parts) >= 2:
-                            entries.append({"pattern": parts[0], "owners": parts[1:]})
+                            entries.append({
+                                "pattern": parts[0],
+                                "owners": parts[1:]
+                            })
             return entries
     return []
 
 
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
-
-    config_path = (
-        Path(__file__).resolve().parent.parent.parent
-        / "config"
-        / "collaboration"
-        / "config.yaml"
-    )
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "collaboration" / "config.yaml"
+    config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
-            yaml.safe_load(f) or {}
-            print("Loaded config from config/collaboration/config.yaml")
+        with open(config_path, "r") as f:
+            config_data = yaml.safe_load(f) or {}
+            print(f"Loaded config from config/collaboration/config.yaml")
 
     parser = argparse.ArgumentParser(description="Team collaboration utilities")
     subparsers = parser.add_subparsers(dest="command")

@@ -18,38 +18,26 @@ except ImportError:
     project_root = Path(__file__).resolve().parent.parent.parent.parent
     sys.path.insert(0, str(project_root / "src"))
 
+from codomyrmex.utils.cli_helpers import setup_logging, print_success, print_info, print_error
 from codomyrmex.git_operations import (
-    RepositoryManager,
     check_git_availability,
+    is_git_repository,
+    get_current_branch,
     get_commit_history,
     get_config,
-    get_current_branch,
-    is_git_repository,
+    RepositoryManager
 )
-from codomyrmex.utils.cli_helpers import (
-    print_error,
-    print_info,
-    print_success,
-    setup_logging,
-)
-
 
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
-
-    config_path = (
-        Path(__file__).resolve().parent.parent.parent
-        / "config"
-        / "git_operations"
-        / "config.yaml"
-    )
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "git_operations" / "config.yaml"
+    config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
-            yaml.safe_load(f) or {}
-            print("Loaded config from config/git_operations/config.yaml")
+        with open(config_path, "r") as f:
+            config_data = yaml.safe_load(f) or {}
+            print(f"Loaded config from config/git_operations/config.yaml")
 
     setup_logging()
     print_info("Running Git Operations Examples...")
@@ -61,7 +49,7 @@ def main():
         print_success("  Git is available.")
 
     if is_git_repository(current_dir):
-        print_success("  Current directory is a Git repository.")
+        print_success(f"  Current directory is a Git repository.")
         try:
             branch = get_current_branch(current_dir)
             print_success(f"  Branch: {branch}")
@@ -78,7 +66,7 @@ def main():
     # 2. Repository Manager
     print_info("Testing RepositoryManager...")
     try:
-        RepositoryManager()
+        mgr = RepositoryManager()
         # Initialize (loads metadata etc)
         print_success("  RepositoryManager initialized.")
     except Exception as e:
@@ -86,7 +74,6 @@ def main():
 
     print_success("Git operations examples completed successfully")
     return 0
-
 
 if __name__ == "__main__":
     sys.exit(main())

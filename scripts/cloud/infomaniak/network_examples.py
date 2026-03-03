@@ -29,16 +29,13 @@ except ImportError:
 import argparse
 import logging
 
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s"
-)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger(__name__)
 
 
 def get_client():
     """Get network client from environment."""
     from codomyrmex.cloud.infomaniak import InfomaniakNetworkClient
-
     return InfomaniakNetworkClient.from_env()
 
 
@@ -149,10 +146,10 @@ def create_network(client, name: str, cidr: str = None, dns: list = None):
     if cidr:
         print(f"\n   Creating subnet with CIDR: {cidr}")
         subnet = client.create_subnet(
-            network_id=result["id"],
+            network_id=result['id'],
             name=f"{name}-subnet",
             cidr=cidr,
-            dns_nameservers=dns or ["8.8.8.8", "8.8.4.4"],
+            dns_nameservers=dns or ["8.8.8.8", "8.8.4.4"]
         )
         if subnet:
             print(f"   ✅ Created subnet: {subnet['id']}")
@@ -182,15 +179,8 @@ def create_security_group(client, name: str, description: str = None):
         print("   ❌ Failed to create security group")
 
 
-def add_security_rule(
-    client,
-    sg_id: str,
-    direction: str,
-    protocol: str,
-    port_min: int = None,
-    port_max: int = None,
-    cidr: str = "0.0.0.0/0",
-):
+def add_security_rule(client, sg_id: str, direction: str, protocol: str,
+                      port_min: int = None, port_max: int = None, cidr: str = "0.0.0.0/0"):
     """Add a security group rule."""
     print(f"\n🔒 Adding rule to {sg_id}")
     print(f"   Direction: {direction}, Protocol: {protocol}")
@@ -201,7 +191,7 @@ def add_security_rule(
         protocol=protocol,
         port_range_min=port_min,
         port_range_max=port_max,
-        remote_ip_prefix=cidr,
+        remote_ip_prefix=cidr
     )
 
     if result:
@@ -224,57 +214,37 @@ def allocate_floating_ip(client, external_network: str):
 
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
-
-    config_path = (
-        Path(__file__).resolve().parent.parent.parent
-        / "config"
-        / "cloud"
-        / "config.yaml"
-    )
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "cloud" / "config.yaml"
+    config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
-            yaml.safe_load(f) or {}
-            print("Loaded config from config/cloud/config.yaml")
+        with open(config_path, "r") as f:
+            config_data = yaml.safe_load(f) or {}
+            print(f"Loaded config from config/cloud/config.yaml")
 
     parser = argparse.ArgumentParser(description="Infomaniak Network Examples")
 
     # List operations
     parser.add_argument("--list-networks", action="store_true", help="List networks")
     parser.add_argument("--list-routers", action="store_true", help="List routers")
-    parser.add_argument(
-        "--list-security-groups", action="store_true", help="List security groups"
-    )
-    parser.add_argument(
-        "--list-floating-ips", action="store_true", help="List floating IPs"
-    )
-    parser.add_argument(
-        "--list-loadbalancers", action="store_true", help="List load balancers"
-    )
+    parser.add_argument("--list-security-groups", action="store_true", help="List security groups")
+    parser.add_argument("--list-floating-ips", action="store_true", help="List floating IPs")
+    parser.add_argument("--list-loadbalancers", action="store_true", help="List load balancers")
 
     # Create operations
     parser.add_argument("--create-network", action="store_true", help="Create network")
     parser.add_argument("--create-router", action="store_true", help="Create router")
-    parser.add_argument(
-        "--create-security-group", action="store_true", help="Create security group"
-    )
-    parser.add_argument(
-        "--add-rule", type=str, metavar="SG_ID", help="Add security group rule"
-    )
-    parser.add_argument(
-        "--allocate-fip", type=str, metavar="EXT_NET", help="Allocate floating IP"
-    )
+    parser.add_argument("--create-security-group", action="store_true", help="Create security group")
+    parser.add_argument("--add-rule", type=str, metavar="SG_ID", help="Add security group rule")
+    parser.add_argument("--allocate-fip", type=str, metavar="EXT_NET", help="Allocate floating IP")
 
     # Creation options
     parser.add_argument("--name", type=str, help="Resource name")
     parser.add_argument("--cidr", type=str, help="Subnet CIDR")
     parser.add_argument("--external-network", type=str, help="External network name/ID")
     parser.add_argument("--description", type=str, help="Description")
-    parser.add_argument(
-        "--direction", type=str, choices=["ingress", "egress"], default="ingress"
-    )
+    parser.add_argument("--direction", type=str, choices=["ingress", "egress"], default="ingress")
     parser.add_argument("--protocol", type=str, choices=["tcp", "udp", "icmp"])
     parser.add_argument("--port", type=int, help="Port number")
     parser.add_argument("--port-range", type=str, help="Port range (e.g., 80-443)")
@@ -328,9 +298,7 @@ def main():
         if args.port_range:
             parts = args.port_range.split("-")
             port_min, port_max = int(parts[0]), int(parts[1])
-        add_security_rule(
-            client, args.add_rule, args.direction, args.protocol, port_min, port_max
-        )
+        add_security_rule(client, args.add_rule, args.direction, args.protocol, port_min, port_max)
     elif args.allocate_fip:
         allocate_floating_ip(client, args.allocate_fip)
     else:

@@ -25,19 +25,19 @@ import asyncio
 import json
 import tempfile
 import time
-from typing import Any
+from typing import Dict, List, Any
+
 
 # ============================================================================
 # TEST INFRASTRUCTURE
 # ============================================================================
-
 
 class TestRunner:
     """Test runner with detailed reporting."""
 
     def __init__(self, verbose: bool = False):
         self.verbose = verbose
-        self.results: dict[str, list[dict]] = {}
+        self.results: Dict[str, List[Dict]] = {}
         self.start_time = None
 
     def run_test(self, category: str, name: str, test_func):
@@ -52,14 +52,12 @@ class TestRunner:
 
             passed = result if isinstance(result, bool) else bool(result)
 
-            self.results[category].append(
-                {
-                    "name": name,
-                    "passed": passed,
-                    "duration_ms": round(duration, 2),
-                    "error": None,
-                }
-            )
+            self.results[category].append({
+                "name": name,
+                "passed": passed,
+                "duration_ms": round(duration, 2),
+                "error": None,
+            })
 
             if self.verbose:
                 status = "✓" if passed else "✗"
@@ -70,25 +68,24 @@ class TestRunner:
         except Exception as e:
             duration = (time.perf_counter() - start) * 1000
 
-            self.results[category].append(
-                {
-                    "name": name,
-                    "passed": False,
-                    "duration_ms": round(duration, 2),
-                    "error": str(e),
-                }
-            )
+            self.results[category].append({
+                "name": name,
+                "passed": False,
+                "duration_ms": round(duration, 2),
+                "error": str(e),
+            })
 
             if self.verbose:
                 print(f"  ✗ {name} - {e}")
 
             return False
 
-    def summary(self) -> dict[str, Any]:
+    def summary(self) -> Dict[str, Any]:
         """Generate test summary."""
         total = sum(len(tests) for tests in self.results.values())
         passed = sum(
-            sum(1 for t in tests if t["passed"]) for tests in self.results.values()
+            sum(1 for t in tests if t["passed"])
+            for tests in self.results.values()
         )
 
         by_category = {}
@@ -138,112 +135,86 @@ class TestRunner:
 # TOOL TESTS
 # ============================================================================
 
-
 def run_tool_tests(runner: TestRunner):
     """Test functional MCP tools."""
     from codomyrmex.model_context_protocol.tools import (
-        analyze_python_file,
-        checksum_file,
-        json_query,
-        list_directory,
-        read_file,
-        run_shell_command,
-        search_codebase,
-        write_file,
+        read_file, write_file, list_directory,
+        analyze_python_file, search_codebase,
+        run_shell_command, json_query, checksum_file,
     )
 
     print("\n📦 Testing MCP Tools...")
 
     # read_file tests
-    runner.run_test(
-        "tools", "read_file - valid file", lambda: read_file(__file__)["success"]
-    )
+    runner.run_test("tools", "read_file - valid file", lambda: (
+        read_file(__file__)["success"]
+    ))
 
-    runner.run_test(
-        "tools",
-        "read_file - nonexistent",
-        lambda: not read_file("/nonexistent/file.txt")["success"],
-    )
+    runner.run_test("tools", "read_file - nonexistent", lambda: (
+        not read_file("/nonexistent/file.txt")["success"]
+    ))
 
     # write_file tests
     with tempfile.NamedTemporaryFile(mode="w", delete=False, suffix=".txt") as f:
         temp_path = f.name
 
-    runner.run_test(
-        "tools",
-        "write_file - create file",
-        lambda: write_file(temp_path, "Hello, MCP!")["success"],
-    )
+    runner.run_test("tools", "write_file - create file", lambda: (
+        write_file(temp_path, "Hello, MCP!")["success"]
+    ))
 
-    runner.run_test(
-        "tools",
-        "write_file - verify content",
-        lambda: read_file(temp_path)["content"] == "Hello, MCP!",
-    )
+    runner.run_test("tools", "write_file - verify content", lambda: (
+        read_file(temp_path)["content"] == "Hello, MCP!"
+    ))
 
     # list_directory tests
-    runner.run_test(
-        "tools", "list_directory - current dir", lambda: list_directory(".")["success"]
-    )
+    runner.run_test("tools", "list_directory - current dir", lambda: (
+        list_directory(".")["success"]
+    ))
 
-    runner.run_test(
-        "tools",
-        "list_directory - with pattern",
-        lambda: len(list_directory(".", pattern="*.py")["items"]) > 0,
-    )
+    runner.run_test("tools", "list_directory - with pattern", lambda: (
+        len(list_directory(".", pattern="*.py")["items"]) > 0
+    ))
 
     # analyze_python_file tests
-    runner.run_test(
-        "tools",
-        "analyze_python_file - this file",
-        lambda: analyze_python_file(__file__)["success"],
-    )
+    runner.run_test("tools", "analyze_python_file - this file", lambda: (
+        analyze_python_file(__file__)["success"]
+    ))
 
-    runner.run_test(
-        "tools",
-        "analyze_python_file - has functions",
-        lambda: len(analyze_python_file(__file__)["functions"]) > 0,
-    )
+    runner.run_test("tools", "analyze_python_file - has functions", lambda: (
+        len(analyze_python_file(__file__)["functions"]) > 0
+    ))
 
     # search_codebase tests
-    runner.run_test(
-        "tools",
-        "search_codebase - find pattern",
-        lambda: search_codebase("def ", ".", [".py"])["success"],
-    )
+    runner.run_test("tools", "search_codebase - find pattern", lambda: (
+        search_codebase("def ", ".", [".py"])["success"]
+    ))
 
     # run_shell_command tests
-    runner.run_test(
-        "tools",
-        "run_shell_command - echo",
-        lambda: "hello" in run_shell_command("echo hello")["stdout"],
-    )
+    runner.run_test("tools", "run_shell_command - echo", lambda: (
+        "hello" in run_shell_command("echo hello")["stdout"]
+    ))
 
-    runner.run_test(
-        "tools", "run_shell_command - pwd", lambda: run_shell_command("pwd")["success"]
-    )
+    runner.run_test("tools", "run_shell_command - pwd", lambda: (
+        run_shell_command("pwd")["success"]
+    ))
 
     # json_query tests
     with tempfile.NamedTemporaryFile(mode="w", delete=False, suffix=".json") as f:
         json.dump({"name": "test", "items": [1, 2, 3]}, f)
         json_path = f.name
 
-    runner.run_test(
-        "tools", "json_query - read file", lambda: json_query(json_path)["success"]
-    )
+    runner.run_test("tools", "json_query - read file", lambda: (
+        json_query(json_path)["success"]
+    ))
 
-    runner.run_test(
-        "tools",
-        "json_query - query path",
-        lambda: json_query(json_path, "name")["result"] == "test",
-    )
+    runner.run_test("tools", "json_query - query path", lambda: (
+        json_query(json_path, "name")["result"] == "test"
+    ))
 
     # checksum_file tests
-    runner.run_test(
-        "tools",
-        "checksum_file - sha256",
-        lambda: len(checksum_file(__file__)["checksum"]) == 64,
-    )
+    runner.run_test("tools", "checksum_file - sha256", lambda: (
+        len(checksum_file(__file__)["checksum"]) == 64
+    ))
 
     # Cleanup
     Path(temp_path).unlink(missing_ok=True)
@@ -254,12 +225,10 @@ def run_tool_tests(runner: TestRunner):
 # SERVER TESTS
 # ============================================================================
 
-
 def run_server_tests(runner: TestRunner):
     """Test MCP server implementation."""
-    from codomyrmex.model_context_protocol.testing import MockMCPClient
-
     from codomyrmex.model_context_protocol import MCPServer
+    from codomyrmex.model_context_protocol.testing import MockMCPClient
 
     print("\n🖥️  Testing MCP Server...")
 
@@ -275,11 +244,9 @@ def run_server_tests(runner: TestRunner):
         return a + b
 
     # Server registration tests
-    runner.run_test(
-        "server",
-        "tool registration",
-        lambda: len(server._tool_registry.list_tools()) >= 2,
-    )
+    runner.run_test("server", "tool registration", lambda: (
+        len(server._tool_registry.list_tools()) >= 2
+    ))
 
     # Async tests using run_until_complete
     async def test_initialize():
@@ -287,11 +254,9 @@ def run_server_tests(runner: TestRunner):
         response = await client.initialize()
         return "result" in response and "protocolVersion" in response["result"]
 
-    runner.run_test(
-        "server",
-        "initialize handshake",
-        lambda: asyncio.get_event_loop().run_until_complete(test_initialize()),
-    )
+    runner.run_test("server", "initialize handshake", lambda: (
+        asyncio.get_event_loop().run_until_complete(test_initialize())
+    ))
 
     async def test_list_tools():
         client = MockMCPClient(server)
@@ -299,11 +264,9 @@ def run_server_tests(runner: TestRunner):
         response = await client.list_tools()
         return "result" in response and "tools" in response["result"]
 
-    runner.run_test(
-        "server",
-        "tools/list endpoint",
-        lambda: asyncio.get_event_loop().run_until_complete(test_list_tools()),
-    )
+    runner.run_test("server", "tools/list endpoint", lambda: (
+        asyncio.get_event_loop().run_until_complete(test_list_tools())
+    ))
 
     async def test_tool_call():
         client = MockMCPClient(server)
@@ -311,11 +274,9 @@ def run_server_tests(runner: TestRunner):
         response = await client.call_tool("test_echo", {"message": "hello"})
         return "result" in response
 
-    runner.run_test(
-        "server",
-        "tools/call endpoint",
-        lambda: asyncio.get_event_loop().run_until_complete(test_tool_call()),
-    )
+    runner.run_test("server", "tools/call endpoint", lambda: (
+        asyncio.get_event_loop().run_until_complete(test_tool_call())
+    ))
 
     # Resource tests
     server.register_resource(
@@ -324,9 +285,9 @@ def run_server_tests(runner: TestRunner):
         description="A test resource",
     )
 
-    runner.run_test(
-        "server", "resource registration", lambda: len(server._resources) > 0
-    )
+    runner.run_test("server", "resource registration", lambda: (
+        len(server._resources) > 0
+    ))
 
     # Prompt tests
     server.register_prompt(
@@ -335,20 +296,19 @@ def run_server_tests(runner: TestRunner):
         template="Hello, {name}!",
     )
 
-    runner.run_test("server", "prompt registration", lambda: len(server._prompts) > 0)
+    runner.run_test("server", "prompt registration", lambda: (
+        len(server._prompts) > 0
+    ))
 
 
 # ============================================================================
 # VALIDATOR TESTS
 # ============================================================================
 
-
 def run_validator_tests(runner: TestRunner):
     """Test MCP validators."""
     from codomyrmex.model_context_protocol.validators import (
-        MessageValidator,
-        SchemaValidator,
-        ToolCallValidator,
+        SchemaValidator, MessageValidator, ToolCallValidator
     )
 
     print("\n✅ Testing Validators...")
@@ -360,111 +320,92 @@ def run_validator_tests(runner: TestRunner):
             "name": {"type": "string"},
             "age": {"type": "integer"},
         },
-        "required": ["name"],
+        "required": ["name"]
     }
     validator = SchemaValidator(schema)
 
-    runner.run_test(
-        "validators",
-        "schema - valid object",
-        lambda: validator.validate({"name": "test", "age": 25}).valid,
-    )
+    runner.run_test("validators", "schema - valid object", lambda: (
+        validator.validate({"name": "test", "age": 25}).valid
+    ))
 
-    runner.run_test(
-        "validators",
-        "schema - missing required",
-        lambda: not validator.validate({"age": 25}).valid,
-    )
+    runner.run_test("validators", "schema - missing required", lambda: (
+        not validator.validate({"age": 25}).valid
+    ))
 
-    runner.run_test(
-        "validators",
-        "schema - wrong type",
-        lambda: not validator.validate({"name": 123}).valid,
-    )
+    runner.run_test("validators", "schema - wrong type", lambda: (
+        not validator.validate({"name": 123}).valid
+    ))
 
     # Message validator tests
     msg_validator = MessageValidator()
 
-    runner.run_test(
-        "validators",
-        "message - valid request",
-        lambda: (
-            msg_validator.validate_request(
-                {"jsonrpc": "2.0", "id": 1, "method": "test"}
-            ).valid
-        ),
-    )
+    runner.run_test("validators", "message - valid request", lambda: (
+        msg_validator.validate_request({
+            "jsonrpc": "2.0",
+            "id": 1,
+            "method": "test"
+        }).valid
+    ))
 
-    runner.run_test(
-        "validators",
-        "message - missing method",
-        lambda: not msg_validator.validate_request({"jsonrpc": "2.0", "id": 1}).valid,
-    )
+    runner.run_test("validators", "message - missing method", lambda: (
+        not msg_validator.validate_request({
+            "jsonrpc": "2.0",
+            "id": 1
+        }).valid
+    ))
 
-    runner.run_test(
-        "validators",
-        "message - valid response",
-        lambda: (
-            msg_validator.validate_response(
-                {"jsonrpc": "2.0", "id": 1, "result": {}}
-            ).valid
-        ),
-    )
+    runner.run_test("validators", "message - valid response", lambda: (
+        msg_validator.validate_response({
+            "jsonrpc": "2.0",
+            "id": 1,
+            "result": {}
+        }).valid
+    ))
 
-    runner.run_test(
-        "validators",
-        "message - error response",
-        lambda: (
-            msg_validator.validate_response(
-                {"jsonrpc": "2.0", "id": 1, "error": {"code": -1, "message": "Error"}}
-            ).valid
-        ),
-    )
+    runner.run_test("validators", "message - error response", lambda: (
+        msg_validator.validate_response({
+            "jsonrpc": "2.0",
+            "id": 1,
+            "error": {"code": -1, "message": "Error"}
+        }).valid
+    ))
 
-    runner.run_test(
-        "validators",
-        "message - both result and error",
-        lambda: (
-            not msg_validator.validate_response(
-                {"jsonrpc": "2.0", "id": 1, "result": {}, "error": {}}
-            ).valid
-        ),
-    )
+    runner.run_test("validators", "message - both result and error", lambda: (
+        not msg_validator.validate_response({
+            "jsonrpc": "2.0",
+            "id": 1,
+            "result": {},
+            "error": {}
+        }).valid
+    ))
 
     # Tool call validator
     tool_schemas = {
         "echo": {
             "type": "object",
             "properties": {"message": {"type": "string"}},
-            "required": ["message"],
+            "required": ["message"]
         }
     }
     tool_validator = ToolCallValidator(tool_schemas)
 
-    runner.run_test(
-        "validators",
-        "tool call - valid",
-        lambda: tool_validator.validate_call("echo", {"message": "hi"}).valid,
-    )
+    runner.run_test("validators", "tool call - valid", lambda: (
+        tool_validator.validate_call("echo", {"message": "hi"}).valid
+    ))
 
-    runner.run_test(
-        "validators",
-        "tool call - unknown tool",
-        lambda: not tool_validator.validate_call("unknown", {}).valid,
-    )
+    runner.run_test("validators", "tool call - unknown tool", lambda: (
+        not tool_validator.validate_call("unknown", {}).valid
+    ))
 
 
 # ============================================================================
 # DISCOVERY TESTS
 # ============================================================================
 
-
 def run_discovery_tests(runner: TestRunner):
     """Test MCP discovery."""
     from codomyrmex.model_context_protocol.discovery import (
-        DiscoveredTool,
-        SpecificationScanner,
-        ToolCatalog,
+        SpecificationScanner, ToolCatalog, DiscoveredTool
     )
 
     print("\n🔍 Testing Discovery...")
@@ -483,56 +424,46 @@ def run_discovery_tests(runner: TestRunner):
 
     catalog.add(tool)
 
-    runner.run_test(
-        "discovery", "catalog - add tool", lambda: catalog.get("test_tool") is not None
-    )
+    runner.run_test("discovery", "catalog - add tool", lambda: (
+        catalog.get("test_tool") is not None
+    ))
 
-    runner.run_test(
-        "discovery", "catalog - list all", lambda: len(catalog.list_all()) == 1
-    )
+    runner.run_test("discovery", "catalog - list all", lambda: (
+        len(catalog.list_all()) == 1
+    ))
 
-    runner.run_test(
-        "discovery",
-        "catalog - search by name",
-        lambda: len(catalog.search(query="test")) == 1,
-    )
+    runner.run_test("discovery", "catalog - search by name", lambda: (
+        len(catalog.search(query="test")) == 1
+    ))
 
-    runner.run_test(
-        "discovery",
-        "catalog - search by tag",
-        lambda: len(catalog.search(tags=["test"])) == 1,
-    )
+    runner.run_test("discovery", "catalog - search by tag", lambda: (
+        len(catalog.search(tags=["test"])) == 1
+    ))
 
-    runner.run_test(
-        "discovery", "catalog - to json", lambda: "test_tool" in catalog.to_json()
-    )
+    runner.run_test("discovery", "catalog - to json", lambda: (
+        "test_tool" in catalog.to_json()
+    ))
 
     # SpecificationScanner tests
     spec_scanner = SpecificationScanner()
     project_root = Path(__file__).parent.parent.parent
-    spec_path = (
-        project_root / "src" / "codomyrmex" / "llm" / "MCP_TOOL_SPECIFICATION.md"
-    )
+    spec_path = project_root / "src" / "codomyrmex" / "llm" / "MCP_TOOL_SPECIFICATION.md"
 
     if spec_path.exists():
-        runner.run_test(
-            "discovery",
-            "spec scanner - parse file",
-            lambda: isinstance(spec_scanner.scan_spec_file(spec_path), list),
-        )
+        runner.run_test("discovery", "spec scanner - parse file", lambda: (
+            isinstance(spec_scanner.scan_spec_file(spec_path), list)
+        ))
 
 
 # ============================================================================
 # INTEGRATION TESTS
 # ============================================================================
 
-
 def run_integration_tests(runner: TestRunner):
     """Test end-to-end MCP workflows."""
-    from codomyrmex.model_context_protocol.testing import MockMCPClient
-
     from codomyrmex.model_context_protocol import MCPServer
-    from codomyrmex.model_context_protocol.tools import checksum_file, read_file
+    from codomyrmex.model_context_protocol.testing import MockMCPClient
+    from codomyrmex.model_context_protocol.tools import read_file, checksum_file
 
     print("\n🔗 Testing Integration...")
 
@@ -560,11 +491,9 @@ def run_integration_tests(runner: TestRunner):
         response = await client.call_tool("read_file", {"path": __file__})
         return "result" in response
 
-    runner.run_test(
-        "integration",
-        "read file through MCP",
-        lambda: asyncio.get_event_loop().run_until_complete(test_read_integration()),
-    )
+    runner.run_test("integration", "read file through MCP", lambda: (
+        asyncio.get_event_loop().run_until_complete(test_read_integration())
+    ))
 
     async def test_checksum_integration():
         client = MockMCPClient(server)
@@ -572,13 +501,9 @@ def run_integration_tests(runner: TestRunner):
         response = await client.call_tool("checksum", {"path": __file__})
         return "result" in response
 
-    runner.run_test(
-        "integration",
-        "checksum through MCP",
-        lambda: asyncio.get_event_loop().run_until_complete(
-            test_checksum_integration()
-        ),
-    )
+    runner.run_test("integration", "checksum through MCP", lambda: (
+        asyncio.get_event_loop().run_until_complete(test_checksum_integration())
+    ))
 
     # Test workflow: read and process
     async def test_workflow():
@@ -591,34 +516,25 @@ def run_integration_tests(runner: TestRunner):
 
         return "read_file" in tool_names and "checksum" in tool_names
 
-    runner.run_test(
-        "integration",
-        "multi-step workflow",
-        lambda: asyncio.get_event_loop().run_until_complete(test_workflow()),
-    )
+    runner.run_test("integration", "multi-step workflow", lambda: (
+        asyncio.get_event_loop().run_until_complete(test_workflow())
+    ))
 
 
 # ============================================================================
 # MAIN
 # ============================================================================
 
-
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
-
-    config_path = (
-        Path(__file__).resolve().parent.parent.parent
-        / "config"
-        / "model_context_protocol"
-        / "config.yaml"
-    )
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "model_context_protocol" / "config.yaml"
+    config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
-            yaml.safe_load(f) or {}
-            print("Loaded config from config/model_context_protocol/config.yaml")
+        with open(config_path, "r") as f:
+            config_data = yaml.safe_load(f) or {}
+            print(f"Loaded config from config/model_context_protocol/config.yaml")
 
     parser = argparse.ArgumentParser(description="MCP Comprehensive Test Suite")
     parser.add_argument("--category", "-c", help="Run specific category")

@@ -26,16 +26,13 @@ if src_path.exists():
 try:
     from codomyrmex.orchestrator.core import main
 except ImportError as e:
-    print(
-        "Error: Could not import codomyrmex.orchestrator. Ensure 'src' is in PYTHONPATH.",
-        file=sys.stderr,
-    )
+    print(f"Error: Could not import codomyrmex.orchestrator. Ensure 'src' is in PYTHONPATH.", file=sys.stderr)
     print(f"Traceback: {e}", file=sys.stderr)
     sys.exit(1)
 
 if __name__ == "__main__":
     # Construct arguments for the orchestrator
-    argv = sys.argv[1:]  # Start with existing args
+    argv = sys.argv[1:] # Start with existing args
 
     # We pass the directory of this script so the orchestrator knows where to start searching
     if "--scripts-dir" not in argv:

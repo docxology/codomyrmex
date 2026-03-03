@@ -2,7 +2,7 @@
 
 from pathlib import Path
 
-from src.visualizer import ChartConfig, DataVisualizer
+from src.visualizer import DataVisualizer, ChartConfig
 
 
 class TestChartConfig:
@@ -39,13 +39,11 @@ class TestDataVisualizer:
     def test_initialization_creates_directory(self, tmp_path: Path):
         """Test that initialization creates output directory."""
         output_dir = tmp_path / "new" / "nested" / "dir"
-        DataVisualizer(output_dir=output_dir)
+        visualizer = DataVisualizer(output_dir=output_dir)
 
         assert output_dir.exists()
 
-    def test_create_dashboard(
-        self, output_directory: Path, sample_analysis_results: dict
-    ):
+    def test_create_dashboard(self, output_directory: Path, sample_analysis_results: dict):
         """Test dashboard creation."""
         visualizer = DataVisualizer(output_dir=output_directory)
 
@@ -58,9 +56,7 @@ class TestDataVisualizer:
         assert "<!DOCTYPE html>" in content
         assert "dashboard" in content.lower() or "analysis" in content.lower()
 
-    def test_dashboard_contains_metrics(
-        self, output_directory: Path, sample_analysis_results: dict
-    ):
+    def test_dashboard_contains_metrics(self, output_directory: Path, sample_analysis_results: dict):
         """Test that dashboard contains metrics from results."""
         visualizer = DataVisualizer(output_dir=output_directory)
         dashboard_path = visualizer.create_dashboard(sample_analysis_results)

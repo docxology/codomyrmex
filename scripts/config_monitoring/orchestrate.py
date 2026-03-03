@@ -5,25 +5,17 @@ Demonstrates change detection, snapshots, drift analysis, auditing, and watching
 """
 
 import time
-
 from codomyrmex.config_monitoring import ConfigurationMonitor, ConfigWatcher
-
 
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
-
-    config_path = (
-        Path(__file__).resolve().parent.parent.parent
-        / "config"
-        / "config_monitoring"
-        / "config.yaml"
-    )
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "config_monitoring" / "config.yaml"
+    config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
-            yaml.safe_load(f) or {}
+        with open(config_path, "r") as f:
+            config_data = yaml.safe_load(f) or {}
             print(f"Loaded config from {config_path.name}")
 
     workspace = Path("config_monitoring_demo")
@@ -57,14 +49,12 @@ def main():
 
     # 5. Modify config and detect drift
     print("\n[3] Modifying config and detecting drift...")
-    time.sleep(1.1)  # Ensure timestamp change
-    db_config.write_text(
-        "database:\n  host: production-db\n  port: 5432\n  password: 'REDACTED_BUT_INSECURE'\n"
-    )
+    time.sleep(1.1) # Ensure timestamp change
+    db_config.write_text("database:\n  host: production-db\n  port: 5432\n  password: 'REDACTED_BUT_INSECURE'\n")
 
     drift = monitor.detect_drift(snapshot.snapshot_id, config_dir)
     print(f"  Drift detected: {drift['drift_detected']}")
-    for d in drift["details"]:
+    for d in drift['details']:
         print(f"  - {d['issue']}: {Path(d['path']).name}")
 
     # 6. Run Compliance Audit
@@ -78,7 +68,6 @@ def main():
 
     # 7. Demonstrate Watcher (briefly)
     print("\n[5] Starting ConfigWatcher for hot-reload demo (5 seconds)...")
-
     def on_change():
         print("  >> CALLBACK: Config file changed! Hot-reloading...")
 
@@ -95,7 +84,6 @@ def main():
     print("\n--- Demo Complete ---")
     summary = monitor.get_monitoring_summary()
     print(f"Final Summary: {summary}")
-
 
 if __name__ == "__main__":
     main()

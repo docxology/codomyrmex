@@ -73,11 +73,8 @@ def run_audio_synthesis(
     """
     # Late import — audio is an optional extra
     try:
-        from codomyrmex.audio import TTS_AVAILABLE, Synthesizer
-        from codomyrmex.audio.exceptions import (
-            ProviderNotAvailableError,
-            SynthesisError,
-        )
+        from codomyrmex.audio import Synthesizer, TTS_AVAILABLE
+        from codomyrmex.audio.exceptions import ProviderNotAvailableError, SynthesisError
     except ImportError:
         print_warning("Audio module not available.")
         print_info("  Install audio extras: uv sync --extra audio")
@@ -103,9 +100,7 @@ def run_audio_synthesis(
     )
     batch_texts = tts_cfg.get("batch_texts", [])
 
-    print_info(
-        f"  Provider:         {default_provider} (fallback: {fallback_provider})"
-    )
+    print_info(f"  Provider:         {default_provider} (fallback: {fallback_provider})")
     print_info(f"  Voice:            {voice}")
     print_info(f"  Rate/Pitch/Vol:   {rate} / {pitch} / {volume}")
     print_info(f"  Output dir:       {tts_cfg.get('output_dir', 'outputs/audio')}")
@@ -146,9 +141,7 @@ def run_audio_synthesis(
         for i, batch_text in enumerate(batch_texts):
             try:
                 out_path = output_dir / f"orchestrate_batch_{i + 1}.mp3"
-                synth.synthesize_to_file(
-                    batch_text, out_path, voice=voice_arg, rate=rate
-                )
+                synth.synthesize_to_file(batch_text, out_path, voice=voice_arg, rate=rate)
                 print_success(f"  [{i + 1}] Saved: {out_path.name}")
             except SynthesisError as e:
                 print_warning(f"  [{i + 1}] Failed: {e}")

@@ -1,7 +1,7 @@
-import re
-import sys
-from pathlib import Path
 
+import re
+from pathlib import Path
+import sys
 
 def verify_skill_md():
     skill_path = Path("~/.claude/skills/Codomyrmex/SKILL.md").expanduser().resolve()
@@ -37,14 +37,14 @@ def verify_skill_md():
 
         # Check specific entries
         if "/codomyrmexVerify" in section:
-            print("  - /codomyrmexVerify (Found)")
+             print("  - /codomyrmexVerify (Found)")
         else:
-            print("  - /codomyrmexVerify (MISSING)")
+             print("  - /codomyrmexVerify (MISSING)")
 
         if "/codomyrmexTrust" in section:
-            print("  - /codomyrmexTrust (Found)")
+             print("  - /codomyrmexTrust (Found)")
         else:
-            print("  - /codomyrmexTrust (MISSING)")
+             print("  - /codomyrmexTrust (MISSING)")
     else:
         print("❌ Workflow Routing section MISSING")
 
@@ -54,9 +54,9 @@ def verify_skill_md():
     if prompts_match:
         section = prompts_match.group(0)
         if "| Name | Description |" in section:
-            print("✅ Prompts table header found")
+             print("✅ Prompts table header found")
         else:
-            print("❌ Prompts table header MISSING")
+             print("❌ Prompts table header MISSING")
 
         # Check for our new prompts
         if "codomyrmexVerify" in section:
@@ -73,13 +73,13 @@ def verify_skill_md():
 
     # Parsing Check (Basic markdown table regex)
     # PAI likely splits by pipe. Let's see if the lines are well-formed.
-    lines = content.split("\n")
+    lines = content.split('\n')
     malformed_lines = []
     for i, line in enumerate(lines):
-        if line.strip().startswith("|"):
+        if line.strip().startswith('|'):
             # Basic check: starts and ends with pipe (ignoring whitespace)
-            if not line.strip().endswith("|"):
-                malformed_lines.append((i + 1, line))
+            if not line.strip().endswith('|'):
+                malformed_lines.append((i+1, line))
 
     if malformed_lines:
         print("\n⚠️ Potential Malformed Table Lines (missing end pipe?):")
@@ -87,7 +87,6 @@ def verify_skill_md():
             print(f"  Line {ln}: {text}")
     else:
         print("\n✅ Table rows look structurally okay (start/end with |)")
-
 
 if __name__ == "__main__":
     verify_skill_md()

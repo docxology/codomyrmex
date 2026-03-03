@@ -19,6 +19,7 @@ except ImportError:
 import argparse
 import subprocess
 
+
 # Conventional commit types
 COMMIT_TYPES = {
     "feat": "A new feature",
@@ -39,7 +40,10 @@ def run_git(args: list) -> tuple:
     """Run a git command and return (success, output)."""
     try:
         result = subprocess.run(
-            ["git"] + args, capture_output=True, text=True, timeout=30
+            ["git"] + args,
+            capture_output=True,
+            text=True,
+            timeout=30
         )
         return result.returncode == 0, result.stdout.strip()
     except Exception as e:
@@ -95,23 +99,17 @@ def infer_type(files: list) -> str:
     # Check for common patterns
     if any("test" in p for p in paths):
         return "test"
-    if any(
-        "readme" in p or "docs/" in p or ".md" in e for p, e in zip(paths, extensions, strict=False)
-    ):
+    if any("readme" in p or "docs/" in p or ".md" in e for p, e in zip(paths, extensions)):
         return "docs"
     if any("ci" in p or ".github" in p or "workflow" in p for p in paths):
         return "ci"
-    if any(
-        "package.json" in p or "requirements" in p or "pyproject" in p for p in paths
-    ):
+    if any("package.json" in p or "requirements" in p or "pyproject" in p for p in paths):
         return "build"
 
     return "feat"  # Default
 
 
-def build_commit_message(
-    commit_type: str, scope: str, message: str, breaking: bool = False
-) -> str:
+def build_commit_message(commit_type: str, scope: str, message: str, breaking: bool = False) -> str:
     """Build conventional commit message."""
     type_part = commit_type
     if breaking:
@@ -124,47 +122,28 @@ def build_commit_message(
 
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
-
-    config_path = (
-        Path(__file__).resolve().parent.parent.parent
-        / "config"
-        / "git_operations"
-        / "config.yaml"
-    )
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "git_operations" / "config.yaml"
+    config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
-            yaml.safe_load(f) or {}
-            print("Loaded config from config/git_operations/config.yaml")
+        with open(config_path, "r") as f:
+            config_data = yaml.safe_load(f) or {}
+            print(f"Loaded config from config/git_operations/config.yaml")
 
     parser = argparse.ArgumentParser(description="Build conventional commit messages")
-    parser.add_argument(
-        "--type",
-        "-t",
-        choices=list(COMMIT_TYPES.keys()),
-        default=None,
-        help="Commit type (auto-detected if not specified)",
-    )
-    parser.add_argument(
-        "--scope",
-        "-s",
-        default=None,
-        help="Commit scope (auto-detected if not specified)",
-    )
-    parser.add_argument(
-        "--message", "-m", default=None, help="Commit message (required)"
-    )
-    parser.add_argument(
-        "--breaking", "-b", action="store_true", help="Mark as breaking change"
-    )
-    parser.add_argument(
-        "--commit", "-c", action="store_true", help="Actually perform the commit"
-    )
-    parser.add_argument(
-        "--list-types", "-l", action="store_true", help="List available commit types"
-    )
+    parser.add_argument("--type", "-t", choices=list(COMMIT_TYPES.keys()), default=None,
+                        help="Commit type (auto-detected if not specified)")
+    parser.add_argument("--scope", "-s", default=None,
+                        help="Commit scope (auto-detected if not specified)")
+    parser.add_argument("--message", "-m", default=None,
+                        help="Commit message (required)")
+    parser.add_argument("--breaking", "-b", action="store_true",
+                        help="Mark as breaking change")
+    parser.add_argument("--commit", "-c", action="store_true",
+                        help="Actually perform the commit")
+    parser.add_argument("--list-types", "-l", action="store_true",
+                        help="List available commit types")
     args = parser.parse_args()
 
     if args.list_types:
@@ -201,15 +180,13 @@ def main():
     # Get message
     if not args.message:
         print("\n❌ Message required. Use --message or -m flag")
-        print(
-            f'\n   Example: python commit_helper.py -t {commit_type} -m "your message here"'
-        )
+        print(f"\n   Example: python commit_helper.py -t {commit_type} -m \"your message here\"")
         return 1
 
     # Build commit message
     full_message = build_commit_message(commit_type, scope, args.message, args.breaking)
 
-    print("\n📝 Commit message:")
+    print(f"\n📝 Commit message:")
     print(f"   {full_message}")
 
     if args.commit:

@@ -24,11 +24,9 @@ except ImportError:
     project_root = Path(__file__).resolve().parent.parent.parent.parent
     sys.path.insert(0, str(project_root / "src"))
 
-from codomyrmex.agents.pai import ALGORITHM_PHASES, PAIBridge
+from codomyrmex.agents.pai import PAIBridge, ALGORITHM_PHASES
 from codomyrmex.utils.cli_helpers import (
-    print_info,
-    print_warning,
-    setup_logging,
+    setup_logging, print_info, print_warning,
 )
 
 
@@ -37,9 +35,7 @@ def parse_args() -> argparse.Namespace:
         description="PAI Memory System Explorer — enumerate and analyze memory stores",
     )
     parser.add_argument("--store", "-s", help="Inspect a specific memory store by name")
-    parser.add_argument(
-        "--json", "-j", action="store_true", dest="json_output", help="JSON output"
-    )
+    parser.add_argument("--json", "-j", action="store_true", dest="json_output", help="JSON output")
     return parser.parse_args()
 
 
@@ -162,22 +158,17 @@ def main() -> int:
     print()
     return 0
 
+
+
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
-
-    config_path = (
-        Path(__file__).resolve().parent.parent.parent
-        / "config"
-        / "agents"
-        / "config.yaml"
-    )
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "agents" / "config.yaml"
+    config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
-            yaml.safe_load(f) or {}
-            print("Loaded config from config/agents/config.yaml")
-
+        with open(config_path, "r") as f:
+            config_data = yaml.safe_load(f) or {}
+            print(f"Loaded config from config/agents/config.yaml")
 
 if __name__ == "__main__":
     sys.exit(main())

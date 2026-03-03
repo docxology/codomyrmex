@@ -5,7 +5,6 @@ Agent Comparison Example
 Compares outputs from different agents for the same task.
 Useful for evaluating agent capabilities and consistency.
 """
-
 import sys
 from pathlib import Path
 
@@ -15,16 +14,11 @@ except ImportError:
     project_root = Path(__file__).resolve().parent.parent.parent
     sys.path.insert(0, str(project_root / "src"))
 
-from codomyrmex.agents.exceptions import AgentConfigurationError
-
 from codomyrmex.agents import AgentRequest
+from codomyrmex.agents.exceptions import AgentConfigurationError
 from codomyrmex.utils.cli_helpers import (
-    print_error,
-    print_info,
-    print_section,
-    print_success,
-    print_warning,
-    setup_logging,
+    setup_logging, print_success, print_error, print_info,
+    print_section, print_warning
 )
 
 
@@ -32,7 +26,7 @@ def test_agent(agent_class, agent_name: str, prompt: str) -> dict:
     """Test an agent and return results."""
     try:
         agent = agent_class()
-        if hasattr(agent, "test_connection") and not agent.test_connection():
+        if hasattr(agent, 'test_connection') and not agent.test_connection():
             return {"status": "skipped", "reason": f"{agent_name} not configured"}
 
         request = AgentRequest(prompt=prompt, context={"language": "python"})
@@ -53,20 +47,14 @@ def test_agent(agent_class, agent_name: str, prompt: str) -> dict:
 
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
-
-    config_path = (
-        Path(__file__).resolve().parent.parent.parent
-        / "config"
-        / "agents"
-        / "config.yaml"
-    )
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "agents" / "config.yaml"
+    config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
-            yaml.safe_load(f) or {}
-            print("Loaded config from config/agents/config.yaml")
+        with open(config_path, "r") as f:
+            config_data = yaml.safe_load(f) or {}
+            print(f"Loaded config from config/agents/config.yaml")
 
     setup_logging()
     print_section("Agent Comparison")
@@ -79,21 +67,18 @@ def main():
 
     try:
         from codomyrmex.agents.claude import ClaudeClient
-
         agents_to_test.append(("Claude", ClaudeClient))
     except ImportError:
         pass
 
     try:
         from codomyrmex.agents import GeminiClient
-
         agents_to_test.append(("Gemini", GeminiClient))
     except ImportError:
         pass
 
     try:
         from codomyrmex.agents import CodeEditor
-
         agents_to_test.append(("CodeEditor", CodeEditor))
     except ImportError:
         pass

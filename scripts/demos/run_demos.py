@@ -5,39 +5,32 @@ scripts/demos/run_demos.py
 Orchestrator script to run system demonstrations using the 'demos' module.
 """
 
-import argparse
 import sys
 from pathlib import Path
+import argparse
 
 # Add src to path
 sys.path.append(str(Path(__file__).parent.parent.parent / "src"))
 
 from codomyrmex.demos.registry import get_registry
 from codomyrmex.utils.cli_helpers import (
-    format_table,
-    print_error,
-    print_info,
-    print_section,
-    print_success,
     setup_logging,
+    print_info,
+    print_success,
+    print_error,
+    print_section,
+    format_table
 )
-
 
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
-
-    config_path = (
-        Path(__file__).resolve().parent.parent.parent
-        / "config"
-        / "demos"
-        / "config.yaml"
-    )
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "demos" / "config.yaml"
+    config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
-            yaml.safe_load(f) or {}
+        with open(config_path, "r") as f:
+            config_data = yaml.safe_load(f) or {}
             print(f"Loaded config from {config_path.name}")
 
     parser = argparse.ArgumentParser(description="Codomyrmex Demo Orchestrator")
@@ -59,12 +52,7 @@ def main():
         demos = registry.list_demos(module=args.module)
         print_section("Available Demonstrations")
         table_data = [
-            {
-                "Name": d.name,
-                "Module": d.module or "N/A",
-                "Category": d.category,
-                "Description": d.description,
-            }
+            {"Name": d.name, "Module": d.module or "N/A", "Category": d.category, "Description": d.description}
             for d in demos
         ]
         print(format_table(table_data, ["Name", "Module", "Category", "Description"]))
@@ -90,7 +78,7 @@ def main():
                 "Name": r.name,
                 "Status": "✅ PASS" if r.success else "❌ FAIL",
                 "Time": f"{r.execution_time:.2f}s",
-                "Error": r.error or "",
+                "Error": r.error or ""
             }
             for r in results
         ]
@@ -100,7 +88,6 @@ def main():
             sys.exit(1)
     else:
         parser.print_help()
-
 
 if __name__ == "__main__":
     main()

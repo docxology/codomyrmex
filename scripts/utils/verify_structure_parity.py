@@ -5,10 +5,11 @@ Verifies that the `scripts/` directory structure mirrors `src/codomyrmex/`
 and that every module has a corresponding orchestrator.
 """
 
+import sys
 import argparse
 import logging
-import sys
 from pathlib import Path
+from typing import Set, Tuple
 
 # Add src to path to import AntigravityClient (scripts/utils/file.py -> parents[2] is repo root)
 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "src"))
@@ -16,22 +17,21 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "src"))
 from codomyrmex.ide.antigravity import AntigravityClient
 
 # Configure logging
-logging.basicConfig(level=logging.INFO, format="%(name)s - %(levelname)s - %(message)s")
+logging.basicConfig(level=logging.INFO, format='%(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger("verify_parity")
 
-
-def get_subdirectories(path: Path) -> set[str]:
+def get_subdirectories(path: Path) -> Set[str]:
     """Get all immediate subdirectories excluding hidden/special ones."""
     if not path.exists():
         return set()
     return {
-        d.name
-        for d in path.iterdir()
-        if d.is_dir() and not d.name.startswith((".", "__")) and d.name != "tests"
+        d.name for d in path.iterdir()
+        if d.is_dir()
+        and not d.name.startswith((".", "__"))
+        and d.name != "tests"
     }
 
-
-def verify_structure(src_root: Path, scripts_root: Path) -> tuple[bool, str]:
+def verify_structure(src_root: Path, scripts_root: Path) -> Tuple[bool, str]:
     """
     Verifies that scripts/ mirrors src/codomyrmex structure.
     Returns (success, report_message).
@@ -59,10 +59,8 @@ def verify_structure(src_root: Path, scripts_root: Path) -> tuple[bool, str]:
 
     if success:
         report.append("\n✅ **SUCCESS:** Structure is fully synchronized.")
-        report.append(
-            f"- All {len(src_modules)} source modules have matching script directories."
-        )
-        report.append("- All script directories contain `orchestrate.py`.")
+        report.append(f"- All {len(src_modules)} source modules have matching script directories.")
+        report.append(f"- All script directories contain `orchestrate.py`.")
     else:
         report.append("\n❌ **FAILURE:** Structure mismatch detected.")
 
@@ -84,30 +82,19 @@ def verify_structure(src_root: Path, scripts_root: Path) -> tuple[bool, str]:
 
     return success, "\n".join(report)
 
-
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
-
-    config_path = (
-        Path(__file__).resolve().parent.parent.parent
-        / "config"
-        / "utils"
-        / "config.yaml"
-    )
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "utils" / "config.yaml"
+    config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
-            yaml.safe_load(f) or {}
-            print("Loaded config from config/utils/config.yaml")
+        with open(config_path, "r") as f:
+            config_data = yaml.safe_load(f) or {}
+            print(f"Loaded config from config/utils/config.yaml")
 
-    parser = argparse.ArgumentParser(
-        description="Verify scripts/ vs src/codomyrmex/ parity."
-    )
-    parser.add_argument(
-        "--gui", action="store_true", help="Send report via GUI automation"
-    )
+    parser = argparse.ArgumentParser(description="Verify scripts/ vs src/codomyrmex/ parity.")
+    parser.add_argument("--gui", action="store_true", help="Send report via GUI automation")
     args = parser.parse_args()
 
     # Path is scripts/utils/verify_structure_parity.py -> parents[2] is scripts/, parents[3] is repo root
@@ -136,7 +123,6 @@ def main():
         logger.info(f"Skipping Antigravity dispatch: {e}")
 
     sys.exit(0 if success else 1)
-
 
 if __name__ == "__main__":
     main()

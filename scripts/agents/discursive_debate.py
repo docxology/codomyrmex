@@ -9,21 +9,18 @@ Flow:
 3. Pessimist -> Relay (broadcast): "AI is dangerous..."
 """
 
-import threading
 import time
+import threading
+from codomyrmex.ide.antigravity.live_bridge import ClaudeCodeEndpoint
+from codomyrmex.ide.antigravity.agent_relay import AgentRelay
+from codomyrmex.agents.core import AgentRequest
 
 from agent_utils import get_llm_client
 
-from codomyrmex.agents.core import AgentRequest
-from codomyrmex.ide.antigravity.agent_relay import AgentRelay
-from codomyrmex.ide.antigravity.live_bridge import ClaudeCodeEndpoint
-
 CHANNEL = "debate-club"
-
 
 class DebaterAgent:
     """Run a debater agent with a specific stance."""
-
     def __init__(self, identity, stance, duration=15):
         self.identity = identity
         self.stance = stance
@@ -35,7 +32,7 @@ class DebaterAgent:
             identity=identity,
             poll_interval=0.5,
             claude_client=self.client,
-            auto_respond=False,
+            auto_respond=False
         )
         self.endpoint.on_message(self._handle_message)
 
@@ -68,38 +65,26 @@ class DebaterAgent:
 
         try:
             response = self.client.execute_with_session(request, session=None)
-            if hasattr(response, "is_success") and response.is_success():
+            if hasattr(response, 'is_success') and response.is_success():
                 return response.content
-            return (
-                f"Error: {response.error}"
-                if hasattr(response, "error")
-                else str(response.content)
-            )
+            return f"Error: {response.error}" if hasattr(response, 'error') else str(response.content)
         except Exception as e:
             return f"Error executing agent: {e}"
-
 
 def run_debater(identity, stance):
     agent = DebaterAgent(identity, stance, duration=20)
     agent.start()
 
-
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
-
-    config_path = (
-        Path(__file__).resolve().parent.parent.parent
-        / "config"
-        / "agents"
-        / "config.yaml"
-    )
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "agents" / "config.yaml"
+    config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
-            yaml.safe_load(f) or {}
-            print("Loaded config from config/agents/config.yaml")
+        with open(config_path, "r") as f:
+            config_data = yaml.safe_load(f) or {}
+            print(f"Loaded config from config/agents/config.yaml")
 
     AgentRelay(CHANNEL).clear()
 
@@ -119,7 +104,6 @@ def main():
     t1.join()
     t2.join()
     print("\nDebate concluded.")
-
 
 if __name__ == "__main__":
     main()

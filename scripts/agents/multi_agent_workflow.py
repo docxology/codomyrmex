@@ -7,7 +7,6 @@ Demonstrates coordinating multiple agents for a complex code review workflow:
 2. Use Claude/Codex (if available) for suggestions
 3. Aggregate results using Droid task management
 """
-
 import sys
 from pathlib import Path
 
@@ -17,15 +16,10 @@ except ImportError:
     project_root = Path(__file__).resolve().parent.parent.parent
     sys.path.insert(0, str(project_root / "src"))
 
-from codomyrmex.agents import AgentRequest, ClaudeClient, CodeEditor
-from codomyrmex.agents.droid import DroidConfig, DroidController
+from codomyrmex.agents import CodeEditor, ClaudeClient, AgentRequest
+from codomyrmex.agents.droid import DroidController, DroidConfig
 from codomyrmex.utils.cli_helpers import (
-    print_error,
-    print_info,
-    print_section,
-    print_success,
-    print_warning,
-    setup_logging,
+    setup_logging, print_success, print_error, print_info, print_section, print_warning
 )
 
 
@@ -35,7 +29,7 @@ def analyze_with_code_editor(code: str) -> dict:
     try:
         result = editor.generate_code(
             prompt=f"Analyze this code and provide improvement suggestions:\n{code}",
-            context="Focus on code quality and best practices.",
+            context="Focus on code quality and best practices."
         )
         return {"status": "success", "analysis": result}
     except Exception as e:
@@ -50,7 +44,7 @@ def get_claude_review(code: str) -> dict:
 
     request = AgentRequest(
         prompt=f"Review this Python code for bugs and improvements:\n{code}",
-        context={"task": "code_review"},
+        context={"task": "code_review"}
     )
     response = client.execute(request)
 
@@ -61,32 +55,26 @@ def get_claude_review(code: str) -> dict:
 
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
-
-    config_path = (
-        Path(__file__).resolve().parent.parent.parent
-        / "config"
-        / "agents"
-        / "config.yaml"
-    )
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "agents" / "config.yaml"
+    config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
-            yaml.safe_load(f) or {}
-            print("Loaded config from config/agents/config.yaml")
+        with open(config_path, "r") as f:
+            config_data = yaml.safe_load(f) or {}
+            print(f"Loaded config from config/agents/config.yaml")
 
     setup_logging()
     print_section("Multi-Agent Code Review Workflow")
 
     # Sample code to review
-    sample_code = """
+    sample_code = '''
 def calculate_average(numbers):
     total = 0
     for n in numbers:
         total = total + n
     return total / len(numbers)
-"""
+'''
 
     print_info("Sample Code:")
     print(sample_code)
@@ -104,7 +92,7 @@ def calculate_average(numbers):
         results["code_editor"] = droid.execute_task(
             operation_id="code_editor_analysis",
             handler=analyze_with_code_editor,
-            code=sample_code,
+            code=sample_code
         )
         print_success(f"CodeEditor: {results['code_editor']['status']}")
     except Exception as e:
@@ -115,7 +103,9 @@ def calculate_average(numbers):
     print_info("\n[Task 2] Running Claude Review...")
     try:
         results["claude"] = droid.execute_task(
-            operation_id="claude_review", handler=get_claude_review, code=sample_code
+            operation_id="claude_review",
+            handler=get_claude_review,
+            code=sample_code
         )
         if results["claude"]["status"] == "skipped":
             print_warning(f"Claude: {results['claude']['reason']}")

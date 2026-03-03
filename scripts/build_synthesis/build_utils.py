@@ -56,9 +56,7 @@ def get_build_info() -> dict:
 
     for tool in tools:
         try:
-            result = subprocess.run(
-                [tool, "--version"], capture_output=True, text=True, timeout=5
-            )
+            result = subprocess.run([tool, "--version"], capture_output=True, text=True, timeout=5)
             if result.returncode == 0:
                 info["tools"][tool] = result.stdout.split("\n")[0][:40]
         except:
@@ -69,20 +67,14 @@ def get_build_info() -> dict:
 
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
-
-    config_path = (
-        Path(__file__).resolve().parent.parent.parent
-        / "config"
-        / "build_synthesis"
-        / "config.yaml"
-    )
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "build_synthesis" / "config.yaml"
+    config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
-            yaml.safe_load(f) or {}
-            print("Loaded config from config/build_synthesis/config.yaml")
+        with open(config_path, "r") as f:
+            config_data = yaml.safe_load(f) or {}
+            print(f"Loaded config from config/build_synthesis/config.yaml")
 
     parser = argparse.ArgumentParser(description="Build utilities")
     subparsers = parser.add_subparsers(dest="command")

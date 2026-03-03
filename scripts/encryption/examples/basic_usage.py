@@ -20,39 +20,27 @@ except ImportError:
     project_root = Path(__file__).resolve().parent.parent.parent.parent
     sys.path.insert(0, str(project_root / "src"))
 
+from codomyrmex.utils.cli_helpers import setup_logging, print_success, print_info, print_error
 from codomyrmex.encryption import (
-    KeyManager,
-    decrypt,
-    decrypt_file,
     encrypt,
-    encrypt_file,
+    decrypt,
     generate_key,
-    hash_data,
+    KeyManager,
+    encrypt_file,
+    decrypt_file,
+    hash_data
 )
-from codomyrmex.utils.cli_helpers import (
-    print_error,
-    print_info,
-    print_success,
-    setup_logging,
-)
-
 
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
-
-    config_path = (
-        Path(__file__).resolve().parent.parent.parent
-        / "config"
-        / "encryption"
-        / "config.yaml"
-    )
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "encryption" / "config.yaml"
+    config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
-            yaml.safe_load(f) or {}
-            print("Loaded config from config/encryption/config.yaml")
+        with open(config_path, "r") as f:
+            config_data = yaml.safe_load(f) or {}
+            print(f"Loaded config from config/encryption/config.yaml")
 
     setup_logging()
     print_info("Running Encryption Examples...")
@@ -65,7 +53,7 @@ def main():
         print_success(f"  AES Key generated (length: {len(key)})")
 
         encrypted = encrypt(data, key, algorithm="AES")
-        print_success("  Data encrypted via AES.")
+        print_success(f"  Data encrypted via AES.")
 
         decrypted = decrypt(encrypted, key, algorithm="AES")
         if decrypted == data:
@@ -104,7 +92,7 @@ def main():
         dec_file = test_dir / "secret.dec.txt"
         if decrypt_file(str(enc_file), str(dec_file), key):
             print_success(f"  File decrypted: {dec_file}")
-            with open(dec_file) as f:
+            with open(dec_file, "r") as f:
                 if f.read() == "This is a secret file.":
                     print_success("  Decrypted file content matches.")
     except Exception as e:
@@ -120,7 +108,6 @@ def main():
 
     print_success("Encryption examples completed successfully")
     return 0
-
 
 if __name__ == "__main__":
     sys.exit(main())

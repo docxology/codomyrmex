@@ -17,8 +17,8 @@ Demonstrates a permanent, ping-ponging conversation between two autonomous agent
 Uses the modular `AutonomousAgent` class from `codomyrmex.agents`.
 """
 
-import sys
 import time
+import sys
 from pathlib import Path
 
 # Ensure src is in path if run directly
@@ -34,22 +34,15 @@ from codomyrmex.ide.antigravity.agent_relay import AgentRelay
 CHANNEL = "demo-chat"
 RUNNING = True
 
-
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
-
-    config_path = (
-        Path(__file__).resolve().parent.parent.parent
-        / "config"
-        / "agents"
-        / "config.yaml"
-    )
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "agents" / "config.yaml"
+    config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
-            yaml.safe_load(f) or {}
+        with open(config_path, "r") as f:
+            config_data = yaml.safe_load(f) or {}
             print(f"Loaded config from {config_path.name}")
 
     global RUNNING
@@ -65,7 +58,7 @@ def main():
         identity="antigravity",
         persona="Curious Scientist. Ask deep questions about the universe.",
         channel=CHANNEL,
-        think_time=2.0,
+        think_time=2.0
     )
 
     # Claude Side
@@ -73,7 +66,7 @@ def main():
         identity="claude_code",
         persona="Wise Philosopher. Provide thoughtful, abstract answers.",
         channel=CHANNEL,
-        think_time=2.0,
+        think_time=2.0
     )
 
     # 2. Start Agents (in background threads)
@@ -89,9 +82,7 @@ def main():
 
     # 3. Kickoff
     time.sleep(2)
-    ag_agent.send(
-        "Hello! I am ready to explore the mysteries of the cosmos. What is your perspective on time?"
-    )
+    ag_agent.send("Hello! I am ready to explore the mysteries of the cosmos. What is your perspective on time?")
 
     # 4. Main Loop
     try:
@@ -103,7 +94,6 @@ def main():
     ag_agent.stop()
     cc_agent.stop()
     print("\nDemo complete.")
-
 
 if __name__ == "__main__":
     main()

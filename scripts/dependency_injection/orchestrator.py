@@ -5,7 +5,7 @@ Demonstrates the use of the IoC container, scoping, and auto-injection.
 """
 
 import sys
-from typing import Protocol
+from typing import Protocol, List
 
 from codomyrmex.dependency_injection import (
     Container,
@@ -22,19 +22,19 @@ logger = get_logger(__name__)
 # Domain Models & Interfaces
 # ---------------------------------------------------------------------------
 
-
 class IDataRepository(Protocol):
-    def get_data(self) -> str: ...
+    def get_data(self) -> str:
+        ...
 
 
 class IProcessingService(Protocol):
-    def process(self) -> str: ...
+    def process(self) -> str:
+        ...
 
 
 # ---------------------------------------------------------------------------
 # Implementations
 # ---------------------------------------------------------------------------
-
 
 @injectable(scope="singleton")
 class Configuration:
@@ -52,7 +52,7 @@ class MockRepository:
 @injectable(scope="scoped")
 class ProcessingService:
     @inject
-    def __init__(self, repos: list[IDataRepository], config: Configuration):
+    def __init__(self, repos: List[IDataRepository], config: Configuration):
         self.repos = repos
         self.config = config
 
@@ -65,7 +65,6 @@ class ProcessingService:
 # Orchestration
 # ---------------------------------------------------------------------------
 
-
 def run_orchestrator():
     print("=== Codomyrmex Dependency Injection Orchestrator ===\n")
 
@@ -75,7 +74,6 @@ def run_orchestrator():
     # 2. Register Services via scanning
     print("[1] Scanning for @injectable services...")
     import __main__
-
     container.scan(__main__)
 
     # Also register some named repositories to demonstrate collection resolution
@@ -106,9 +104,7 @@ def run_orchestrator():
         # Demonstrating transient behavior: resolve twice from container
         repo_a = container.resolve(IDataRepository, name="repo1")
         repo_b = container.resolve(IDataRepository, name="repo1")
-        print(
-            f"Transient check (repo): {repo_a is not repo_b} (IDs: {id(repo_a)}, {id(repo_b)})"
-        )
+        print(f"Transient check (repo): {repo_a is not repo_b} (IDs: {id(repo_a)}, {id(repo_b)})")
 
     print("\n[4] Collection Resolution...")
     all_repos = container.resolve_all(IDataRepository)
@@ -116,22 +112,17 @@ def run_orchestrator():
 
     print("\nOrchestration complete.")
 
+
+
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
-
-    config_path = (
-        Path(__file__).resolve().parent.parent.parent
-        / "config"
-        / "dependency_injection"
-        / "config.yaml"
-    )
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "dependency_injection" / "config.yaml"
+    config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
-            yaml.safe_load(f) or {}
-            print("Loaded config from config/dependency_injection/config.yaml")
-
+        with open(config_path, "r") as f:
+            config_data = yaml.safe_load(f) or {}
+            print(f"Loaded config from config/dependency_injection/config.yaml")
 
 if __name__ == "__main__":
     try:

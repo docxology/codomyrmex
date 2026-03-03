@@ -10,7 +10,6 @@ Demonstrates all Claude Code capabilities available in ClaudeClient v0.2.0:
 
 This script handles gracefully when API key is not configured.
 """
-
 import sys
 from pathlib import Path
 
@@ -20,16 +19,11 @@ except ImportError:
     project_root = Path(__file__).resolve().parent.parent.parent
     sys.path.insert(0, str(project_root / "src"))
 
-from codomyrmex.agents.exceptions import AgentConfigurationError
-
 from codomyrmex.agents.claude import ClaudeClient
+from codomyrmex.agents.exceptions import AgentConfigurationError
 from codomyrmex.utils.cli_helpers import (
-    print_error,
-    print_info,
-    print_section,
-    print_success,
-    print_warning,
-    setup_logging,
+    setup_logging, print_success, print_error, print_info,
+    print_section, print_warning
 )
 
 
@@ -38,9 +32,7 @@ def demo_scan_directory(client: ClaudeClient) -> bool:
     print_section("scan_directory")
     print_info("Scanning the Claude module directory...")
 
-    claude_dir = (
-        Path(__file__).resolve().parent.parent.parent / "src/codomyrmex/agents/claude"
-    )
+    claude_dir = Path(__file__).resolve().parent.parent.parent / "src/codomyrmex/agents/claude"
     result = client.scan_directory(str(claude_dir), max_depth=1)
 
     if result["success"]:
@@ -58,8 +50,8 @@ def demo_generate_diff(client: ClaudeClient) -> bool:
     print_section("generate_diff")
     print_info("Generating diff between two code versions...")
 
-    original = """def add(a, b):
-    return a + b"""
+    original = '''def add(a, b):
+    return a + b'''
 
     modified = '''def add(a: int, b: int) -> int:
     """Add two integers."""
@@ -97,17 +89,13 @@ def demo_get_project_structure(client: ClaudeClient) -> bool:
     print_section("get_project_structure")
     print_info("Analyzing project structure...")
 
-    project_dir = (
-        Path(__file__).resolve().parent.parent.parent / "src/codomyrmex/agents"
-    )
+    project_dir = Path(__file__).resolve().parent.parent.parent / "src/codomyrmex/agents"
     result = client.get_project_structure(str(project_dir), max_depth=2)
 
     if result["success"]:
         print_success(f"Found {result['file_count']} files")
         print_info("Language breakdown:")
-        for lang, count in sorted(
-            result["language_breakdown"].items(), key=lambda x: -x[1]
-        )[:5]:
+        for lang, count in sorted(result["language_breakdown"].items(), key=lambda x: -x[1])[:5]:
             print_info(f"  - {lang}: {count}")
         return True
     else:
@@ -148,19 +136,13 @@ def demo_api_methods(client: ClaudeClient) -> bool:
 
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
-
-    config_path = (
-        Path(__file__).resolve().parent.parent.parent
-        / "config"
-        / "agents"
-        / "config.yaml"
-    )
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "agents" / "config.yaml"
+    config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
-            yaml.safe_load(f) or {}
+        with open(config_path, "r") as f:
+            config_data = yaml.safe_load(f) or {}
             print(f"Loaded config from {config_path.name}")
 
     setup_logging()

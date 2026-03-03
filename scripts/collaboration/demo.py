@@ -18,32 +18,29 @@ project_root = Path(__file__).parent.parent.parent
 sys.path.insert(0, str(project_root / "src"))
 
 from codomyrmex.collaboration import (
-    AgentRole,
-    SwarmAgent,
     SwarmManager,
-    SwarmMessage,
-    SwarmMessageType,
+    SwarmAgent,
+    AgentRole,
     Vote,
+    SwarmMessage,
+    SwarmMessageType
 )
-
 
 class SimulatedAgent:
     """A helper to simulate a real agent reacting to messages."""
-
     def __init__(self, manager: SwarmManager, agent_id: str, role: AgentRole):
         self.manager = manager
         self.agent_id = agent_id
         self.role = role
         # Subscribe to tasks for this role
         self.manager.bus.subscribe(
-            self.agent_id, f"tasks.role.{self.role.value}", self.on_task
+            self.agent_id,
+            f"tasks.role.{self.role.value}",
+            self.on_task
         )
 
     async def on_task(self, message: SwarmMessage):
-        if (
-            message.message_type == SwarmMessageType.TASK_ASSIGNMENT
-            and message.recipient == self.agent_id
-        ):
+        if message.message_type == SwarmMessageType.TASK_ASSIGNMENT and message.recipient == self.agent_id:
             task_id = message.payload["task_id"]
             desc = message.payload["description"]
             print(f"  [Agent {self.agent_id}] Processing: {desc}")
@@ -59,14 +56,10 @@ class SimulatedAgent:
                     sender=self.agent_id,
                     payload={
                         "task_id": task_id,
-                        "result": {
-                            "status": "success",
-                            "output": f"Completed by {self.role.value}",
-                        },
-                    },
-                ),
+                        "result": {"status": "success", "output": f"Completed by {self.role.value}"}
+                    }
+                )
             )
-
 
 async def run_demo():
     print("=== Codomyrmex Collaboration Demo ===")
@@ -79,7 +72,7 @@ async def run_demo():
     agents = [
         ("architect-01", AgentRole.ARCHITECT),
         ("coder-01", AgentRole.CODER),
-        ("tester-01", AgentRole.TESTER),
+        ("tester-01", AgentRole.TESTER)
     ]
 
     sim_agents = []
@@ -99,51 +92,39 @@ async def run_demo():
     print("\n--- Mission Results ---")
     for i, res in enumerate(results, 1):
         print(f"  Step {i}: {res['description']}")
-        print(
-            f"  Result: {res['result'].get('status')} - {res['result'].get('output')}"
-        )
+        print(f"  Result: {res['result'].get('status')} - {res['result'].get('output')}")
 
     # 4. Request consensus on the final output
     print("\n[4] Requesting consensus on deployment...")
     votes = [
         Vote("architect-01", True, reason="Architecture is sound"),
         Vote("coder-01", True, reason="Implementation matches spec"),
-        Vote("tester-01", False, reason="Security audit still pending"),
+        Vote("tester-01", False, reason="Security audit still pending")
     ]
 
-    consensus = await manager.request_consensus(
-        "Deploy to production", votes, strategy="majority"
-    )
-    print("  Proposal: Deploy to production")
+    consensus = await manager.request_consensus("Deploy to production", votes, strategy="majority")
+    print(f"  Proposal: Deploy to production")
     print(f"  Decision: {consensus.decision.value}")
     print(f"  Approval Score: {consensus.approval_score:.2f}")
 
     # 5. Check final status
     print("\n[5] Swarm Status:")
     status = manager.get_status()
-    print(
-        f"  Agents: {status['pool']['total']} total, {status['pool']['available']} available"
-    )
+    print(f"  Agents: {status['pool']['total']} total, {status['pool']['available']} available")
     print(f"  Message Bus: {status['bus']['history_size']} messages in history")
 
     print("\n=== Demo Complete ===")
 
+
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
-
-    config_path = (
-        Path(__file__).resolve().parent.parent.parent
-        / "config"
-        / "collaboration"
-        / "config.yaml"
-    )
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "collaboration" / "config.yaml"
+    config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
-            yaml.safe_load(f) or {}
-            print("Loaded config from config/collaboration/config.yaml")
-
+        with open(config_path, "r") as f:
+            config_data = yaml.safe_load(f) or {}
+            print(f"Loaded config from config/collaboration/config.yaml")
 
 if __name__ == "__main__":
     asyncio.run(run_demo())

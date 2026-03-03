@@ -14,21 +14,15 @@ except ImportError:
     project_root = Path(__file__).resolve().parent.parent.parent
     sys.path.insert(0, str(project_root / "src"))
 
+from codomyrmex.utils.cli_helpers import setup_logging, print_success, print_info, print_error
 from codomyrmex.cerebrum import (
-    ActiveInferenceAgent,
-    BayesianNetwork,
-    Case,
-    CerebrumConfig,
     CerebrumEngine,
+    CerebrumConfig,
+    Case,
+    BayesianNetwork,
     InferenceEngine,
+    ActiveInferenceAgent
 )
-from codomyrmex.utils.cli_helpers import (
-    print_error,
-    print_info,
-    print_success,
-    setup_logging,
-)
-
 
 def setup_demo_environment(engine: CerebrumEngine):
     """Setup a demo environment with some initial cases and a Bayesian network."""
@@ -36,26 +30,10 @@ def setup_demo_environment(engine: CerebrumEngine):
 
     # 1. Add some initial cases (Bug fixing domain)
     cases = [
-        Case(
-            case_id="bug_001",
-            features={"type": "null_pointer", "severity": 5},
-            outcome="Check for null before access",
-        ),
-        Case(
-            case_id="bug_002",
-            features={"type": "syntax_error", "severity": 2},
-            outcome="Fix typo in variable name",
-        ),
-        Case(
-            case_id="bug_003",
-            features={"type": "performance", "severity": 4},
-            outcome="Optimize loop complexity",
-        ),
-        Case(
-            case_id="bug_004",
-            features={"type": "null_pointer", "severity": 3},
-            outcome="Add default value",
-        ),
+        Case(case_id="bug_001", features={"type": "null_pointer", "severity": 5}, outcome="Check for null before access"),
+        Case(case_id="bug_002", features={"type": "syntax_error", "severity": 2}, outcome="Fix typo in variable name"),
+        Case(case_id="bug_003", features={"type": "performance", "severity": 4}, outcome="Optimize loop complexity"),
+        Case(case_id="bug_004", features={"type": "null_pointer", "severity": 3}, outcome="Add default value"),
     ]
     for case in cases:
         engine.add_case(case)
@@ -66,9 +44,7 @@ def setup_demo_environment(engine: CerebrumEngine):
     network = BayesianNetwork(name="bug_diagnostics")
 
     # BugType: NullPointer, Syntax, Performance
-    network.add_node(
-        "BugType", ["NullPointer", "Syntax", "Performance"], [0.4, 0.4, 0.2]
-    )
+    network.add_node("BugType", ["NullPointer", "Syntax", "Performance"], [0.4, 0.4, 0.2])
     # CodeQuality: High, Low
     network.add_node("CodeQuality", ["High", "Low"], [0.6, 0.4])
 
@@ -92,15 +68,12 @@ def setup_demo_environment(engine: CerebrumEngine):
     engine.set_bayesian_network(network)
     print_success("Demo environment setup complete.")
 
-
 def run_workflow(engine: CerebrumEngine):
     """Run a complete cognitive workflow."""
     print_info("Starting cognitive workflow...")
 
     # 1. Define a query (A new bug to solve)
-    query_case = Case(
-        case_id="new_bug", features={"type": "null_pointer", "severity": 4}
-    )
+    query_case = Case(case_id="new_bug", features={"type": "null_pointer", "severity": 4})
     print_info(f"Query: {query_case.features}")
 
     # 2. Use Reasoning Chain for step-by-step process
@@ -122,9 +95,7 @@ def run_workflow(engine: CerebrumEngine):
         evidence = {"BugType": "NullPointer"}
         posterior = inf_engine.infer({"FixDifficulty": None}, evidence)
         memory.store("diagnostic_posterior", posterior)
-        return (
-            f"Posterior for FixDifficulty: {posterior['FixDifficulty'].probabilities}"
-        )
+        return f"Posterior for FixDifficulty: {posterior['FixDifficulty'].probabilities}"
 
     chain.add_step("Perform diagnostic inference", step_diagnose)
 
@@ -135,21 +106,17 @@ def run_workflow(engine: CerebrumEngine):
             agent = ActiveInferenceAgent(
                 states=["Safe", "Risky"],
                 observations=["Success", "Failure"],
-                actions=["Fix", "Ignore"],
+                actions=["Fix", "Ignore"]
             )
             # Simple models
-            agent.set_transition_model(
-                {
-                    "Safe_Fix": {"Safe": 0.9, "Risky": 0.1},
-                    "Risky_Fix": {"Safe": 0.6, "Risky": 0.4},
-                }
-            )
-            agent.set_observation_model(
-                {
-                    "Safe": {"Success": 0.9, "Failure": 0.1},
-                    "Risky": {"Success": 0.3, "Failure": 0.7},
-                }
-            )
+            agent.set_transition_model({
+                "Safe_Fix": {"Safe": 0.9, "Risky": 0.1},
+                "Risky_Fix": {"Safe": 0.6, "Risky": 0.4},
+            })
+            agent.set_observation_model({
+                "Safe": {"Success": 0.9, "Failure": 0.1},
+                "Risky": {"Success": 0.3, "Failure": 0.7},
+            })
             engine.set_active_inference_agent(agent)
 
         action = engine.active_inference_agent.select_action()
@@ -172,10 +139,10 @@ def run_workflow(engine: CerebrumEngine):
             "scores": {
                 "Quick fix": {"Reliability": 0.6, "Speed": 0.9},
                 "Comprehensive refactor": {"Reliability": 0.95, "Speed": 0.3},
-                "Decline": {"Reliability": 0.5, "Speed": 1.0},
+                "Decline": {"Reliability": 0.5, "Speed": 1.0}
             },
             "confidence": reasoning_result.confidence,
-            "agent_hint": agent_action,
+            "agent_hint": agent_action
         }
 
         decision = engine.decide(options, criteria, decision_context)
@@ -190,31 +157,22 @@ def run_workflow(engine: CerebrumEngine):
     if execution_result.success:
         print_success("Reasoning chain executed successfully.")
         for i, step in enumerate(execution_result.steps):
-            print(f"  [{i + 1}] {step.description}: {step.result}")
+            print(f"  [{i+1}] {step.description}: {step.result}")
     else:
         print_error("Reasoning chain failed.")
 
     final_decision = engine.working_memory.retrieve("final_decision")
-    print_success(
-        f"FINAL WORKFLOW OUTPUT: {final_decision.choice if final_decision else 'None'}"
-    )
-
+    print_success(f"FINAL WORKFLOW OUTPUT: {final_decision.choice if final_decision else 'None'}")
 
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
-
-    config_path = (
-        Path(__file__).resolve().parent.parent.parent
-        / "config"
-        / "cerebrum"
-        / "config.yaml"
-    )
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "cerebrum" / "config.yaml"
+    config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
-            yaml.safe_load(f) or {}
+        with open(config_path, "r") as f:
+            config_data = yaml.safe_load(f) or {}
             print(f"Loaded config from {config_path.name}")
 
     setup_logging()
@@ -232,10 +190,8 @@ def main():
     except Exception as e:
         print_error(f"Orchestration failed: {e}")
         import traceback
-
         traceback.print_exc()
         return 1
-
 
 if __name__ == "__main__":
     sys.exit(main())

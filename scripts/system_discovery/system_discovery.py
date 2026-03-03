@@ -17,8 +17,8 @@ except ImportError:
 
 import argparse
 import os
-import platform
 import subprocess
+import platform
 
 
 def get_system_info() -> dict:
@@ -57,7 +57,6 @@ def discover_services() -> list:
     }
 
     import socket
-
     for port, name in common_services.items():
         try:
             sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -90,13 +89,9 @@ def discover_environment() -> dict:
 
     # Count Python packages
     try:
-        result = subprocess.run(
-            [sys.executable, "-m", "pip", "list", "--format=json"],
-            capture_output=True,
-            text=True,
-        )
+        result = subprocess.run([sys.executable, "-m", "pip", "list", "--format=json"],
+                              capture_output=True, text=True)
         import json
-
         env["python_packages"] = len(json.loads(result.stdout))
     except:
         pass
@@ -106,20 +101,14 @@ def discover_environment() -> dict:
 
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
-
-    config_path = (
-        Path(__file__).resolve().parent.parent.parent
-        / "config"
-        / "system_discovery"
-        / "config.yaml"
-    )
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "system_discovery" / "config.yaml"
+    config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
-            yaml.safe_load(f) or {}
-            print("Loaded config from config/system_discovery/config.yaml")
+        with open(config_path, "r") as f:
+            config_data = yaml.safe_load(f) or {}
+            print(f"Loaded config from config/system_discovery/config.yaml")
 
     parser = argparse.ArgumentParser(description="System discovery")
     subparsers = parser.add_subparsers(dest="command")

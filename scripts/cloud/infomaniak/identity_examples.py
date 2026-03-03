@@ -28,16 +28,13 @@ except ImportError:
 import argparse
 import logging
 
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s"
-)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger(__name__)
 
 
 def get_client():
     """Get identity client from environment."""
     from codomyrmex.cloud.infomaniak import InfomaniakIdentityClient
-
     return InfomaniakIdentityClient.from_env()
 
 
@@ -106,21 +103,21 @@ def list_app_credentials(client):
         print()
 
 
-def create_app_credential(
-    client, name: str, description: str = None, expires: str = None
-):
+def create_app_credential(client, name: str, description: str = None, expires: str = None):
     """Create an application credential."""
     print(f"\n🔑 Creating application credential: {name}")
 
     result = client.create_application_credential(
-        name=name, description=description, expires_at=expires
+        name=name,
+        description=description,
+        expires_at=expires
     )
 
     if result:
-        print("\n   ✅ Created application credential")
+        print(f"\n   ✅ Created application credential")
         print(f"   ID: {result['id']}")
         print(f"   Name: {result['name']}")
-        print("\n   ⚠️  SAVE THESE CREDENTIALS - the secret cannot be retrieved later!")
+        print(f"\n   ⚠️  SAVE THESE CREDENTIALS - the secret cannot be retrieved later!")
         print(f"\n   Application Credential ID: {result['id']}")
         print(f"   Application Credential Secret: {result.get('secret')}")
     else:
@@ -189,8 +186,8 @@ def create_ec2_credentials(client):
 
     result = client.create_ec2_credentials()
     if result:
-        print("\n   ✅ Created EC2 credentials")
-        print("\n   ⚠️  SAVE THESE CREDENTIALS!")
+        print(f"\n   ✅ Created EC2 credentials")
+        print(f"\n   ⚠️  SAVE THESE CREDENTIALS!")
         print(f"\n   Access Key: {result.get('access')}")
         print(f"   Secret Key: {result.get('secret')}")
     else:
@@ -199,20 +196,14 @@ def create_ec2_credentials(client):
 
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
-
-    config_path = (
-        Path(__file__).resolve().parent.parent.parent
-        / "config"
-        / "cloud"
-        / "config.yaml"
-    )
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "cloud" / "config.yaml"
+    config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
-            yaml.safe_load(f) or {}
-            print("Loaded config from config/cloud/config.yaml")
+        with open(config_path, "r") as f:
+            config_data = yaml.safe_load(f) or {}
+            print(f"Loaded config from config/cloud/config.yaml")
 
     parser = argparse.ArgumentParser(description="Infomaniak Identity Examples")
 
@@ -222,27 +213,17 @@ def main():
     parser.add_argument("--projects", action="store_true", help="List all projects")
 
     # Application credentials
-    parser.add_argument(
-        "--app-credentials", action="store_true", help="List app credentials"
-    )
-    parser.add_argument(
-        "--create-app-cred", action="store_true", help="Create app credential"
-    )
-    parser.add_argument(
-        "--delete-app-cred", type=str, metavar="ID", help="Delete app credential"
-    )
+    parser.add_argument("--app-credentials", action="store_true", help="List app credentials")
+    parser.add_argument("--create-app-cred", action="store_true", help="Create app credential")
+    parser.add_argument("--delete-app-cred", type=str, metavar="ID", help="Delete app credential")
 
     # Roles
     parser.add_argument("--roles", action="store_true", help="List available roles")
     parser.add_argument("--user-roles", action="store_true", help="List user's roles")
 
     # EC2 credentials
-    parser.add_argument(
-        "--ec2-credentials", action="store_true", help="List EC2 credentials"
-    )
-    parser.add_argument(
-        "--create-ec2-cred", action="store_true", help="Create EC2 credentials"
-    )
+    parser.add_argument("--ec2-credentials", action="store_true", help="List EC2 credentials")
+    parser.add_argument("--create-ec2-cred", action="store_true", help="Create EC2 credentials")
 
     # Options
     parser.add_argument("--name", type=str, help="Credential name")

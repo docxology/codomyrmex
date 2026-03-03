@@ -31,16 +31,13 @@ import argparse
 import json
 import logging
 
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s"
-)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger(__name__)
 
 
 def get_client():
     """Get compute client from environment."""
     from codomyrmex.cloud.infomaniak import InfomaniakComputeClient
-
     return InfomaniakComputeClient.from_env()
 
 
@@ -140,9 +137,7 @@ def list_availability_zones(client):
         print(f"   {zone['name']}: {state}")
 
 
-def create_instance(
-    client, name: str, flavor: str, image: str, network: str, key_name: str = None
-):
+def create_instance(client, name: str, flavor: str, image: str, network: str, key_name: str = None):
     """Create a new compute instance."""
     print(f"\n🚀 Creating instance: {name}")
     print(f"   Flavor: {flavor}")
@@ -150,7 +145,11 @@ def create_instance(
     print(f"   Network: {network}")
 
     result = client.create_instance(
-        name=name, flavor=flavor, image=image, network=network, key_name=key_name
+        name=name,
+        flavor=flavor,
+        image=image,
+        network=network,
+        key_name=key_name
     )
 
     if result:
@@ -173,52 +172,30 @@ def get_instance(client, instance_id: str):
 
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
-
-    config_path = (
-        Path(__file__).resolve().parent.parent.parent
-        / "config"
-        / "cloud"
-        / "config.yaml"
-    )
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "cloud" / "config.yaml"
+    config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
-            yaml.safe_load(f) or {}
-            print("Loaded config from config/cloud/config.yaml")
+        with open(config_path, "r") as f:
+            config_data = yaml.safe_load(f) or {}
+            print(f"Loaded config from config/cloud/config.yaml")
 
     parser = argparse.ArgumentParser(description="Infomaniak Compute Examples")
 
     # List operations
-    parser.add_argument(
-        "--list-instances", action="store_true", help="List compute instances"
-    )
-    parser.add_argument(
-        "--list-flavors", action="store_true", help="List available flavors"
-    )
-    parser.add_argument(
-        "--list-images", action="store_true", help="List available images"
-    )
-    parser.add_argument(
-        "--list-keypairs", action="store_true", help="List SSH keypairs"
-    )
-    parser.add_argument(
-        "--list-zones", action="store_true", help="List availability zones"
-    )
+    parser.add_argument("--list-instances", action="store_true", help="List compute instances")
+    parser.add_argument("--list-flavors", action="store_true", help="List available flavors")
+    parser.add_argument("--list-images", action="store_true", help="List available images")
+    parser.add_argument("--list-keypairs", action="store_true", help="List SSH keypairs")
+    parser.add_argument("--list-zones", action="store_true", help="List availability zones")
 
     # Get operations
-    parser.add_argument(
-        "--get-instance", type=str, metavar="ID", help="Get instance details"
-    )
+    parser.add_argument("--get-instance", type=str, metavar="ID", help="Get instance details")
 
     # Create operations
-    parser.add_argument(
-        "--create-keypair", type=str, metavar="NAME", help="Create SSH keypair"
-    )
-    parser.add_argument(
-        "--create-instance", action="store_true", help="Create an instance"
-    )
+    parser.add_argument("--create-keypair", type=str, metavar="NAME", help="Create SSH keypair")
+    parser.add_argument("--create-instance", action="store_true", help="Create an instance")
 
     # Instance creation options
     parser.add_argument("--name", type=str, help="Instance name")
@@ -267,9 +244,7 @@ def main():
         if not all([args.name, args.flavor, args.image, args.network]):
             print("❌ --create-instance requires --name, --flavor, --image, --network")
             return 1
-        create_instance(
-            client, args.name, args.flavor, args.image, args.network, args.key_name
-        )
+        create_instance(client, args.name, args.flavor, args.image, args.network, args.key_name)
     else:
         parser.print_help()
 

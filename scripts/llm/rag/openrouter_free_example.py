@@ -13,15 +13,15 @@ Usage:
     python openrouter_free_example.py
 """
 
-import os
 import sys
+import os
 from pathlib import Path
 
 # Ensure codomyrmex is in path
 PROJECT_ROOT = Path(__file__).parent.parent.parent.parent
 sys.path.insert(0, str(PROJECT_ROOT / "src"))
 
-from codomyrmex.llm.providers import Message, ProviderConfig, ProviderType, get_provider
+from codomyrmex.llm.providers import get_provider, ProviderType, ProviderConfig, Message
 
 # Config file locations
 CONFIG_PATHS = [
@@ -51,15 +51,15 @@ def get_api_key() -> str | None:
 KNOWLEDGE_BASE = [
     {
         "source": "python_guide.txt",
-        "content": "Python is a high-level programming language created by Guido van Rossum in 1991. It emphasizes code readability with significant whitespace.",
+        "content": "Python is a high-level programming language created by Guido van Rossum in 1991. It emphasizes code readability with significant whitespace."
     },
     {
         "source": "openrouter_docs.txt",
-        "content": "OpenRouter is an API gateway providing unified access to 100+ LLM models through a single API. It includes free models for development.",
+        "content": "OpenRouter is an API gateway providing unified access to 100+ LLM models through a single API. It includes free models for development."
     },
     {
         "source": "ml_basics.txt",
-        "content": "Machine learning is a subset of AI that enables computers to learn from data without being explicitly programmed.",
+        "content": "Machine learning is a subset of AI that enables computers to learn from data without being explicitly programmed."
     },
 ]
 
@@ -90,25 +90,20 @@ Question: {question}
 Answer:"""
 
     messages = [Message(role="user", content=prompt)]
-    response = provider.complete(
-        messages=messages, model="openrouter/free", temperature=0.3, max_tokens=150
-    )
+    response = provider.complete(messages=messages, model="openrouter/free", temperature=0.3, max_tokens=150)
     return response.content, docs
 
 
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
-
-    config_path = (
-        Path(__file__).resolve().parent.parent.parent / "config" / "llm" / "config.yaml"
-    )
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "llm" / "config.yaml"
+    config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
-            yaml.safe_load(f) or {}
-            print("Loaded config from config/llm/config.yaml")
+        with open(config_path, "r") as f:
+            config_data = yaml.safe_load(f) or {}
+            print(f"Loaded config from config/llm/config.yaml")
 
     """Demonstrate RAG with OpenRouter free models."""
     print("=" * 60)
@@ -121,15 +116,13 @@ def main():
     if not api_key:
         print("❌ OPENROUTER_API_KEY not found")
         print("   Get your free API key at: https://openrouter.ai/keys")
-        print(
-            "\n   Setup: export OPENROUTER_API_KEY='key' or ~/.config/openrouter/api_key"
-        )
+        print("\n   Setup: export OPENROUTER_API_KEY='key' or ~/.config/openrouter/api_key")
         return 1
 
     config = ProviderConfig(api_key=api_key, timeout=60.0)
     question = "What is Python and who created it?"
 
-    print(f'❓ Question: "{question}"')
+    print(f"❓ Question: \"{question}\"")
     print()
 
     with get_provider(ProviderType.OPENROUTER, config=config) as provider:

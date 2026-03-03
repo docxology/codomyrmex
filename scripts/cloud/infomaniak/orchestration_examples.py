@@ -28,16 +28,13 @@ import argparse
 import json
 import logging
 
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s"
-)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger(__name__)
 
 
 def get_client():
     """Get Heat client from environment."""
     from codomyrmex.cloud.infomaniak import InfomaniakHeatClient
-
     return InfomaniakHeatClient.from_env()
 
 
@@ -146,7 +143,9 @@ def create_stack(client, name: str, template_path: str, parameters: dict = None)
     print(f"   Template: {template_path}")
 
     result = client.create_stack_from_file(
-        name=name, template_path=template_path, parameters=parameters
+        name=name,
+        template_path=template_path,
+        parameters=parameters
     )
 
     if result:
@@ -160,7 +159,7 @@ def validate_template(client, template_path: str):
     print(f"\n🔍 Validating template: {template_path}")
 
     try:
-        with open(template_path) as f:
+        with open(template_path, 'r') as f:
             template = f.read()
     except Exception as e:
         print(f"   ❌ Failed to read template: {e}")
@@ -226,29 +225,19 @@ def resume_stack(client, stack_id: str):
 
 
 def main():
-    parser = argparse.ArgumentParser(
-        description="Infomaniak Orchestration (Heat) Examples"
-    )
+    parser = argparse.ArgumentParser(description="Infomaniak Orchestration (Heat) Examples")
 
     # List/Get operations
     parser.add_argument("--list-stacks", action="store_true", help="List stacks")
     parser.add_argument("--get-stack", type=str, metavar="ID", help="Get stack details")
-    parser.add_argument(
-        "--list-resources", type=str, metavar="ID", help="List stack resources"
-    )
-    parser.add_argument(
-        "--list-events", type=str, metavar="ID", help="List stack events"
-    )
-    parser.add_argument(
-        "--get-outputs", type=str, metavar="ID", help="Get stack outputs"
-    )
+    parser.add_argument("--list-resources", type=str, metavar="ID", help="List stack resources")
+    parser.add_argument("--list-events", type=str, metavar="ID", help="List stack events")
+    parser.add_argument("--get-outputs", type=str, metavar="ID", help="Get stack outputs")
 
     # Create/Modify operations
     parser.add_argument("--create-stack", action="store_true", help="Create a stack")
     parser.add_argument("--delete-stack", type=str, metavar="ID", help="Delete a stack")
-    parser.add_argument(
-        "--suspend-stack", type=str, metavar="ID", help="Suspend a stack"
-    )
+    parser.add_argument("--suspend-stack", type=str, metavar="ID", help="Suspend a stack")
     parser.add_argument("--resume-stack", type=str, metavar="ID", help="Resume a stack")
 
     # Validation

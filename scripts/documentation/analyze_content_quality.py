@@ -18,7 +18,6 @@ from typing import NamedTuple
 
 class QualityScore(NamedTuple):
     """Quality score for a file."""
-
     file: str
     score: int  # 0-100
     issues: list
@@ -28,7 +27,7 @@ class QualityScore(NamedTuple):
 def analyze_file(file_path: Path, repo_root: Path) -> QualityScore:
     """Analyze a single markdown file for quality."""
     try:
-        content = file_path.read_text(encoding="utf-8")
+        content = file_path.read_text(encoding='utf-8')
     except Exception:
         return QualityScore(str(file_path), 0, ["Could not read file"], {})
 
@@ -37,54 +36,49 @@ def analyze_file(file_path: Path, repo_root: Path) -> QualityScore:
     metrics = {}
     score = 100
 
-    lines = content.split("\n")
+    lines = content.split('\n')
 
     # Check for headings
-    headings = [l for l in lines if l.startswith("#")]
-    metrics["heading_count"] = len(headings)
+    headings = [l for l in lines if l.startswith('#')]
+    metrics['heading_count'] = len(headings)
     if len(headings) == 0:
         issues.append("No headings found")
         score -= 15
 
     # Check for placeholders/TODOs
     placeholder_patterns = [
-        r"\bTODO\b",
-        r"\bFIXME\b",
-        r"\bXXX\b",
-        r"\[placeholder\]",
-        r"\[TBD\]",
-        r"\[WIP\]",
-        r"lorem ipsum",
-        r"example\.com",
+        r'\bTODO\b', r'\bFIXME\b', r'\bXXX\b',
+        r'\[placeholder\]', r'\[TBD\]', r'\[WIP\]',
+        r'lorem ipsum', r'example\.com'
     ]
     placeholder_count = 0
     for pattern in placeholder_patterns:
         placeholder_count += len(re.findall(pattern, content, re.IGNORECASE))
 
-    metrics["placeholder_count"] = placeholder_count
+    metrics['placeholder_count'] = placeholder_count
     if placeholder_count > 0:
         issues.append(f"Found {placeholder_count} placeholders/TODOs")
         score -= min(placeholder_count * 5, 25)
 
     # Check for code examples
-    code_blocks = len(re.findall(r"```", content)) // 2
-    metrics["code_block_count"] = code_blocks
+    code_blocks = len(re.findall(r'```', content)) // 2
+    metrics['code_block_count'] = code_blocks
 
     # Check document length
     word_count = len(content.split())
-    metrics["word_count"] = word_count
+    metrics['word_count'] = word_count
     if word_count < 50:
         issues.append("Document appears too short")
         score -= 10
 
     # Check for links
-    links = len(re.findall(r"\[([^\]]*)\]\([^)]+\)", content))
-    metrics["link_count"] = links
+    links = len(re.findall(r'\[([^\]]*)\]\([^)]+\)', content))
+    metrics['link_count'] = links
 
     # Check for empty sections (heading with no content before next heading)
     empty_sections = 0
     for i, line in enumerate(lines[:-1]):
-        if line.startswith("#") and lines[i + 1].startswith("#"):
+        if line.startswith('#') and lines[i + 1].startswith('#'):
             empty_sections += 1
     if empty_sections > 0:
         issues.append(f"Found {empty_sections} empty sections")
@@ -93,12 +87,8 @@ def analyze_file(file_path: Path, repo_root: Path) -> QualityScore:
     return QualityScore(file_str, max(0, score), issues, metrics)
 
 
-def analyze_content_quality(
-    repo_root: Path,
-    output_dir: Path = None,
-    output_format: str = "both",
-    min_score: int = 60,
-) -> int:
+def analyze_content_quality(repo_root: Path, output_dir: Path = None,
+                          output_format: str = 'both', min_score: int = 60) -> int:
     """Analyze quality of all markdown documentation."""
     print("📝 Analyzing documentation content quality...\n")
 
@@ -110,9 +100,7 @@ def analyze_content_quality(
 
     # Find all markdown files
     md_files = list(repo_root.rglob("*.md"))
-    md_files = [
-        f for f in md_files if ".git" not in str(f) and "node_modules" not in str(f)
-    ]
+    md_files = [f for f in md_files if ".git" not in str(f) and "node_modules" not in str(f)]
 
     print(f"📄 Found {len(md_files)} markdown files")
 
@@ -125,15 +113,15 @@ def analyze_content_quality(
     below_threshold = [r for r in results if r.score < min_score]
 
     # Output results
-    if output_format in ("json", "both"):
+    if output_format in ('json', 'both'):
         json_path = output_dir / "content_quality.json"
-        with open(json_path, "w") as f:
+        with open(json_path, 'w') as f:
             json.dump([r._asdict() for r in results], f, indent=2)
         print(f"📄 JSON report: {json_path}")
 
-    if output_format in ("markdown", "both"):
+    if output_format in ('markdown', 'both'):
         md_path = output_dir / "content_quality.md"
-        with open(md_path, "w") as f:
+        with open(md_path, 'w') as f:
             f.write("# Documentation Quality Report\n\n")
             f.write(f"- **Average Score**: {avg_score:.1f}/100\n")
             f.write(f"- **Files Below {min_score}**: {len(below_threshold)}\n\n")
@@ -161,35 +149,23 @@ def analyze_content_quality(
 
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
-
-    config_path = (
-        Path(__file__).resolve().parent.parent.parent
-        / "config"
-        / "documentation"
-        / "config.yaml"
-    )
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "documentation" / "config.yaml"
+    config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
-            yaml.safe_load(f) or {}
-            print("Loaded config from config/documentation/config.yaml")
+        with open(config_path, "r") as f:
+            config_data = yaml.safe_load(f) or {}
+            print(f"Loaded config from config/documentation/config.yaml")
 
-    parser = argparse.ArgumentParser(
-        description="Analyze documentation content quality"
-    )
+    parser = argparse.ArgumentParser(description="Analyze documentation content quality")
     parser.add_argument("--repo-root", type=Path, default=Path.cwd())
     parser.add_argument("--output", type=Path)
-    parser.add_argument(
-        "--format", choices=["json", "markdown", "both"], default="both"
-    )
+    parser.add_argument("--format", choices=['json', 'markdown', 'both'], default='both')
     parser.add_argument("--min-score", type=int, default=60)
 
     args = parser.parse_args()
-    return analyze_content_quality(
-        args.repo_root, args.output, args.format, args.min_score
-    )
+    return analyze_content_quality(args.repo_root, args.output, args.format, args.min_score)
 
 
 if __name__ == "__main__":

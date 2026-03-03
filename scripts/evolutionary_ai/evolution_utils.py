@@ -33,9 +33,7 @@ def select_parents(population: list, fitnesses: list, count: int = 2) -> list:
     """Tournament selection."""
     parents = []
     for _ in range(count):
-        candidates = random.sample(
-            list(zip(population, fitnesses, strict=False)), min(3, len(population))
-        )
+        candidates = random.sample(list(zip(population, fitnesses)), min(3, len(population)))
         winner = max(candidates, key=lambda x: x[1])
         parents.append(winner[0])
     return parents
@@ -73,29 +71,19 @@ def run_evolution(generations: int = 10, pop_size: int = 20) -> dict:
 
         population = new_pop
 
-    return {
-        "generations": generations,
-        "history": history,
-        "final_best": max(fitnesses),
-    }
+    return {"generations": generations, "history": history, "final_best": max(fitnesses)}
 
 
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
-
-    config_path = (
-        Path(__file__).resolve().parent.parent.parent
-        / "config"
-        / "evolutionary_ai"
-        / "config.yaml"
-    )
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "evolutionary_ai" / "config.yaml"
+    config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
-            yaml.safe_load(f) or {}
-            print("Loaded config from config/evolutionary_ai/config.yaml")
+        with open(config_path, "r") as f:
+            config_data = yaml.safe_load(f) or {}
+            print(f"Loaded config from config/evolutionary_ai/config.yaml")
 
     parser = argparse.ArgumentParser(description="Evolutionary AI utilities")
     subparsers = parser.add_subparsers(dest="command")
@@ -118,14 +106,14 @@ def main():
         return 0
 
     if args.command == "run":
-        print("🧬 Running Evolution\n")
+        print(f"🧬 Running Evolution\n")
         print(f"   Generations: {args.generations}")
         print(f"   Population: {args.population}\n")
 
         result = run_evolution(args.generations, args.population)
 
         print("   Progress:")
-        for h in result["history"][:: max(1, len(result["history"]) // 5)]:
+        for h in result["history"][::max(1, len(result["history"])//5)]:
             bar = "█" * int(h["best"] * 20)
             print(f"   Gen {h['gen']:3d}: {bar} {h['best']:.2f}")
 

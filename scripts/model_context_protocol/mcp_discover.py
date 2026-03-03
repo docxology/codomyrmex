@@ -26,7 +26,7 @@ from codomyrmex.model_context_protocol.discovery import (
     SpecificationScanner,
     ToolCatalog,
 )
-from codomyrmex.utils.cli_helpers import print_info, print_success, setup_logging
+from codomyrmex.utils.cli_helpers import setup_logging, print_info, print_success
 
 
 def find_spec_files(base_path: Path) -> list:
@@ -42,9 +42,7 @@ def discover_all_tools(base_path: Path, module: str = None) -> ToolCatalog:
     spec_scanner = SpecificationScanner()
 
     if module:
-        spec_path = (
-            base_path / "src" / "codomyrmex" / module / "MCP_TOOL_SPECIFICATION.md"
-        )
+        spec_path = base_path / "src" / "codomyrmex" / module / "MCP_TOOL_SPECIFICATION.md"
         if spec_path.exists():
             for tool in spec_scanner.scan_spec_file(spec_path):
                 catalog.add(tool)
@@ -85,15 +83,23 @@ def main() -> int:
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
 
-    parser.add_argument("--module", "-m", help="Specific module to scan")
-    parser.add_argument("--export", "-e", help="Export catalog to JSON file")
     parser.add_argument(
-        "--specs-only", action="store_true", help="Only scan specification files"
+        "--module", "-m",
+        help="Specific module to scan"
+    )
+    parser.add_argument(
+        "--export", "-e",
+        help="Export catalog to JSON file"
+    )
+    parser.add_argument(
+        "--specs-only",
+        action="store_true",
+        help="Only scan specification files"
     )
     parser.add_argument(
         "--list-specs",
         action="store_true",
-        help="List all MCP_TOOL_SPECIFICATION.md files",
+        help="List all MCP_TOOL_SPECIFICATION.md files"
     )
 
     args = parser.parse_args()
@@ -119,22 +125,17 @@ def main() -> int:
 
     return 0
 
+
+
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
-
-    config_path = (
-        Path(__file__).resolve().parent.parent.parent
-        / "config"
-        / "model_context_protocol"
-        / "config.yaml"
-    )
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "model_context_protocol" / "config.yaml"
+    config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
-            yaml.safe_load(f) or {}
-            print("Loaded config from config/model_context_protocol/config.yaml")
-
+        with open(config_path, "r") as f:
+            config_data = yaml.safe_load(f) or {}
+            print(f"Loaded config from config/model_context_protocol/config.yaml")
 
 if __name__ == "__main__":
     sys.exit(main())

@@ -4,10 +4,10 @@ Workflow Manager for Antigravity
 Demonstrates creating and managing task artifacts programmatically.
 """
 
-import logging
 import sys
 import time
 from pathlib import Path
+import logging
 
 # Ensure project root is in path
 project_root = Path(__file__).resolve().parent.parent.parent.parent
@@ -16,9 +16,8 @@ sys.path.insert(0, str(project_root / "src"))
 from codomyrmex.ide.antigravity import AntigravityClient
 
 # Configure logging
-logging.basicConfig(level=logging.INFO, format="%(message)s")
+logging.basicConfig(level=logging.INFO, format='%(message)s')
 logger = logging.getLogger("antigravity.workflow")
-
 
 def run_workflow():
     client = AntigravityClient()
@@ -42,7 +41,9 @@ def run_workflow():
 
     try:
         artifact = client.create_artifact(
-            name=task_name, content=content, artifact_type="task"
+            name=task_name,
+            content=content,
+            artifact_type="task"
         )
         logger.info(f"   ✅ Created artifact at: {artifact['path']}")
     except Exception as e:
@@ -53,9 +54,7 @@ def run_workflow():
     logger.info("\n2. Simulating work (Marking item 1 complete)...")
     time.sleep(1)
 
-    updated_content = content.replace(
-        "- [ ] Initialize system", "- [x] Initialize system"
-    )
+    updated_content = content.replace("- [ ] Initialize system", "- [x] Initialize system")
 
     try:
         client.update_artifact(task_name, updated_content)
@@ -76,19 +75,16 @@ def run_workflow():
     logger.info("\n✨ Workflow demonstration complete!")
     return True
 
+
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
-
-    config_path = (
-        Path(__file__).resolve().parent.parent.parent / "config" / "ide" / "config.yaml"
-    )
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "ide" / "config.yaml"
+    config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
-            yaml.safe_load(f) or {}
-            print("Loaded config from config/ide/config.yaml")
-
+        with open(config_path, "r") as f:
+            config_data = yaml.safe_load(f) or {}
+            print(f"Loaded config from config/ide/config.yaml")
 
 if __name__ == "__main__":
     if run_workflow():

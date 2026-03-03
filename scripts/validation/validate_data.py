@@ -45,7 +45,6 @@ def validate_against_schema(data: dict, schema: dict) -> list:
     """Validate against JSON Schema."""
     try:
         import jsonschema
-
         validator = jsonschema.Draft7Validator(schema)
         errors = list(validator.iter_errors(data))
         return [f"{'.'.join(str(p) for p in e.path)}: {e.message}" for e in errors]
@@ -76,27 +75,19 @@ def infer_types(data: dict, path: str = "") -> dict:
 
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
-
-    config_path = (
-        Path(__file__).resolve().parent.parent.parent
-        / "config"
-        / "validation"
-        / "config.yaml"
-    )
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "validation" / "config.yaml"
+    config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
-            yaml.safe_load(f) or {}
-            print("Loaded config from config/validation/config.yaml")
+        with open(config_path, "r") as f:
+            config_data = yaml.safe_load(f) or {}
+            print(f"Loaded config from config/validation/config.yaml")
 
     parser = argparse.ArgumentParser(description="Validate data files")
     parser.add_argument("data_file", nargs="?", help="JSON data file to validate")
     parser.add_argument("--schema", "-s", default=None, help="JSON Schema file")
-    parser.add_argument(
-        "--infer", "-i", action="store_true", help="Infer and show type structure"
-    )
+    parser.add_argument("--infer", "-i", action="store_true", help="Infer and show type structure")
     parser.add_argument("--strict", action="store_true", help="Fail on warnings")
     args = parser.parse_args()
 

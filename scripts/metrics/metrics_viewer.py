@@ -29,7 +29,6 @@ def collect_system_metrics() -> dict:
 
     try:
         import resource
-
         usage = resource.getrusage(resource.RUSAGE_SELF)
         metrics["memory_mb"] = usage.ru_maxrss / 1024 / 1024
         metrics["user_time"] = usage.ru_utime
@@ -47,16 +46,10 @@ def collect_code_metrics(path: str) -> dict:
         "lines": 0,
         "blank_lines": 0,
         "comment_lines": 0,
-        "by_language": {},
+        "by_language": {}
     }
 
-    extensions = {
-        ".py": "Python",
-        ".js": "JavaScript",
-        ".ts": "TypeScript",
-        ".go": "Go",
-        ".rs": "Rust",
-    }
+    extensions = {".py": "Python", ".js": "JavaScript", ".ts": "TypeScript", ".go": "Go", ".rs": "Rust"}
 
     for f in Path(path).rglob("*"):
         if f.is_file() and f.suffix in extensions:
@@ -92,25 +85,17 @@ def format_metric(name: str, value, unit: str = "") -> str:
 
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
-
-    config_path = (
-        Path(__file__).resolve().parent.parent.parent
-        / "config"
-        / "metrics"
-        / "config.yaml"
-    )
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "metrics" / "config.yaml"
+    config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
-            yaml.safe_load(f) or {}
-            print("Loaded config from config/metrics/config.yaml")
+        with open(config_path, "r") as f:
+            config_data = yaml.safe_load(f) or {}
+            print(f"Loaded config from config/metrics/config.yaml")
 
     parser = argparse.ArgumentParser(description="Metrics viewer")
-    parser.add_argument(
-        "--source", "-s", choices=["system", "code", "all"], default="all"
-    )
+    parser.add_argument("--source", "-s", choices=["system", "code", "all"], default="all")
     parser.add_argument("--path", "-p", default=".", help="Path for code metrics")
     parser.add_argument("--json", "-j", action="store_true", help="Output as JSON")
     args = parser.parse_args()
@@ -142,9 +127,7 @@ def main():
             if code["by_language"]:
                 print("\n   By language:")
                 for lang, stats in code["by_language"].items():
-                    print(
-                        f"      {lang}: {stats['files']} files, {stats['lines']:,} lines"
-                    )
+                    print(f"      {lang}: {stats['files']} files, {stats['lines']:,} lines")
 
     if args.json:
         print(json.dumps(all_metrics, indent=2))

@@ -16,22 +16,20 @@ Example:
     >>> print(f"Status: {result.status.value}")
 """
 
-from collections.abc import Callable
+from pathlib import Path
+from typing import Dict, Any, Optional, List, Callable
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from pathlib import Path
-from typing import Any
 
+# Real codomyrmex imports - no fallback for mega-seed project
+from codomyrmex.logging_monitoring import get_logger
 from codomyrmex.events import get_event_bus
+from codomyrmex.performance import PerformanceProfiler
 from codomyrmex.exceptions import (
     CodomyrmexError,
     WorkflowError,
 )
-
-# Real codomyrmex imports - no fallback for mega-seed project
-from codomyrmex.logging_monitoring import get_logger
-from codomyrmex.performance import PerformanceProfiler
 
 HAS_CODOMYRMEX_LOGGING = True  # Exported for integration tests
 HAS_PERFORMANCE_PROFILING = True  # Exported for integration tests
@@ -80,14 +78,14 @@ class PipelineStep:
     """
 
     name: str
-    handler: Callable[[dict[str, Any]], Any]
+    handler: Callable[[Dict[str, Any]], Any]
     description: str = ""
-    dependencies: list[str] = field(default_factory=list)
+    dependencies: List[str] = field(default_factory=list)
     status: PipelineStatus = PipelineStatus.PENDING
-    result: Any | None = None
-    error: str | None = None
-    started_at: datetime | None = None
-    completed_at: datetime | None = None
+    result: Optional[Any] = None
+    error: Optional[str] = None
+    started_at: Optional[datetime] = None
+    completed_at: Optional[datetime] = None
 
     @property
     def duration_seconds(self) -> float:
@@ -96,7 +94,7 @@ class PipelineStep:
             return (self.completed_at - self.started_at).total_seconds()
         return 0.0
 
-    def execute(self, context: dict[str, Any]) -> Any:
+    def execute(self, context: Dict[str, Any]) -> Any:
         """Execute this pipeline step.
 
         Args:
@@ -116,9 +114,7 @@ class PipelineStep:
             self.result = self.handler(context)
             self.status = PipelineStatus.COMPLETED
             self.completed_at = datetime.now()
-            logger.debug(
-                f"Step '{self.name}' completed in {self.duration_seconds:.2f}s"
-            )
+            logger.debug(f"Step '{self.name}' completed in {self.duration_seconds:.2f}s")
             return self.result
         except Exception as e:
             self.status = PipelineStatus.FAILED
@@ -150,12 +146,12 @@ class PipelineResult:
 
     status: PipelineStatus
     started_at: datetime
-    completed_at: datetime | None = None
+    completed_at: Optional[datetime] = None
     steps_completed: int = 0
     total_steps: int = 0
-    results: dict[str, Any] = field(default_factory=dict)
-    errors: list[str] = field(default_factory=list)
-    step_durations: dict[str, float] = field(default_factory=dict)
+    results: Dict[str, Any] = field(default_factory=dict)
+    errors: List[str] = field(default_factory=list)
+    step_durations: Dict[str, float] = field(default_factory=dict)
 
     @property
     def duration_seconds(self) -> float:
@@ -169,14 +165,12 @@ class PipelineResult:
         """Check if pipeline completed successfully."""
         return self.status == PipelineStatus.COMPLETED
 
-    def to_dict(self) -> dict[str, Any]:
+    def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary for serialization."""
         return {
             "status": self.status.value,
             "started_at": self.started_at.isoformat(),
-            "completed_at": self.completed_at.isoformat()
-            if self.completed_at
-            else None,
+            "completed_at": self.completed_at.isoformat() if self.completed_at else None,
             "duration_seconds": self.duration_seconds,
             "steps_completed": self.steps_completed,
             "total_steps": self.total_steps,
@@ -210,15 +204,15 @@ class AnalysisPipeline:
         ...     print(f"Completed in {result.duration_seconds:.2f}s")
     """
 
-    def __init__(self, config_path: Path | None = None):
+    def __init__(self, config_path: Optional[Path] = None):
         """Initialize the pipeline.
 
         Args:
             config_path: Optional path to workflow YAML configuration.
         """
         self.config_path = config_path
-        self.steps: dict[str, PipelineStep] = {}
-        self.context: dict[str, Any] = {}
+        self.steps: Dict[str, PipelineStep] = {}
+        self.context: Dict[str, Any] = {}
         self._setup_default_pipeline()
 
     def _setup_default_pipeline(self) -> None:
@@ -229,7 +223,7 @@ class AnalysisPipeline:
             name="load_config",
             handler=self._step_load_config,
             description="Load project configuration",
-            dependencies=[],
+            dependencies=[]
         )
 
         # Step 2: Validate inputs
@@ -237,7 +231,7 @@ class AnalysisPipeline:
             name="validate",
             handler=self._step_validate,
             description="Validate inputs and configuration",
-            dependencies=["load_config"],
+            dependencies=["load_config"]
         )
 
         # Step 3: Run analysis
@@ -245,7 +239,7 @@ class AnalysisPipeline:
             name="analyze",
             handler=self._step_analyze,
             description="Run code analysis",
-            dependencies=["validate"],
+            dependencies=["validate"]
         )
 
         # Step 4: Generate visualizations
@@ -253,7 +247,7 @@ class AnalysisPipeline:
             name="visualize",
             handler=self._step_visualize,
             description="Generate visualizations",
-            dependencies=["analyze"],
+            dependencies=["analyze"]
         )
 
         # Step 5: Create report
@@ -261,15 +255,15 @@ class AnalysisPipeline:
             name="report",
             handler=self._step_report,
             description="Create final report",
-            dependencies=["analyze", "visualize"],
+            dependencies=["analyze", "visualize"]
         )
 
     def add_step(
         self,
         name: str,
-        handler: Callable[[dict[str, Any]], Any],
+        handler: Callable[[Dict[str, Any]], Any],
         description: str = "",
-        dependencies: list[str] | None = None,
+        dependencies: Optional[List[str]] = None
     ) -> None:
         """Add a step to the pipeline.
 
@@ -289,7 +283,7 @@ class AnalysisPipeline:
             name=name,
             handler=handler,
             description=description,
-            dependencies=dependencies or [],
+            dependencies=dependencies or []
         )
         logger.debug(f"Added step '{name}' with dependencies {dependencies}")
 
@@ -302,7 +296,7 @@ class AnalysisPipeline:
         if name in self.steps:
             del self.steps[name]
 
-    def execute(self, target_path: Path | None = None) -> PipelineResult:
+    def execute(self, target_path: Optional[Path] = None) -> PipelineResult:
         """Execute the analysis pipeline.
 
         Runs all pipeline steps in dependency order, tracking
@@ -320,15 +314,14 @@ class AnalysisPipeline:
             >>> print(f"Steps: {result.steps_completed}/{result.total_steps}")
         """
         # codomyrmex.performance profiler (used for per-step profiling)
-        PerformanceProfiler()
+        profiler = PerformanceProfiler()
         import time as _time
-
         _pipeline_start = _time.perf_counter()
 
         result = PipelineResult(
             status=PipelineStatus.RUNNING,
             started_at=datetime.now(),
-            total_steps=len(self.steps),
+            total_steps=len(self.steps)
         )
 
         # Initialize context
@@ -356,7 +349,9 @@ class AnalysisPipeline:
 
             # Check dependencies
             if not self._dependencies_satisfied(step):
-                error_msg = f"Dependencies not satisfied for '{step_name}'"
+                error_msg = (
+                    f"Dependencies not satisfied for '{step_name}'"
+                )
                 logger.error(error_msg)
                 result.errors.append(error_msg)
                 result.status = PipelineStatus.FAILED
@@ -373,7 +368,10 @@ class AnalysisPipeline:
             except CodomyrmexError as e:
                 # Structured exceptions from codomyrmex modules
                 error_msg = f"{step_name}: {e}"
-                logger.error(f"Step '{step_name}' failed ({type(e).__name__}): {e}")
+                logger.error(
+                    f"Step '{step_name}' failed "
+                    f"({type(e).__name__}): {e}"
+                )
                 result.errors.append(error_msg)
                 result.status = PipelineStatus.FAILED
                 break
@@ -391,7 +389,9 @@ class AnalysisPipeline:
 
         # Log pipeline performance via codomyrmex.performance
         _pipeline_elapsed = _time.perf_counter() - _pipeline_start
-        logger.info(f"Pipeline profile: {_pipeline_elapsed:.3f}s elapsed")
+        logger.info(
+            f"Pipeline profile: {_pipeline_elapsed:.3f}s elapsed"
+        )
 
         status_emoji = "✅" if result.is_success else "❌"
         logger.info(
@@ -402,7 +402,7 @@ class AnalysisPipeline:
 
         return result
 
-    def _get_execution_order(self) -> list[str]:
+    def _get_execution_order(self) -> List[str]:
         """Get topologically sorted execution order.
 
         Returns:
@@ -446,7 +446,7 @@ class AnalysisPipeline:
 
     # Pipeline step implementations
 
-    def _step_load_config(self, context: dict[str, Any]) -> dict[str, Any]:
+    def _step_load_config(self, context: Dict[str, Any]) -> Dict[str, Any]:
         """Load pipeline configuration.
 
         Args:
@@ -467,7 +467,6 @@ class AnalysisPipeline:
         if self.config_path and self.config_path.exists():
             try:
                 import yaml
-
                 with open(self.config_path) as f:
                     loaded = yaml.safe_load(f)
                     config.update(loaded.get("execution", {}))
@@ -478,7 +477,7 @@ class AnalysisPipeline:
         context["config"] = config
         return config
 
-    def _step_validate(self, context: dict[str, Any]) -> bool:
+    def _step_validate(self, context: Dict[str, Any]) -> bool:
         """Validate inputs and configuration.
 
         Args:
@@ -497,12 +496,14 @@ class AnalysisPipeline:
 
         target_path = Path(target)
         if not target_path.exists():
-            raise WorkflowError(f"Target path does not exist: {target_path}")
+            raise WorkflowError(
+                f"Target path does not exist: {target_path}"
+            )
 
         logger.debug(f"Validated target: {target_path}")
         return True
 
-    def _step_analyze(self, context: dict[str, Any]) -> dict[str, Any]:
+    def _step_analyze(self, context: Dict[str, Any]) -> Dict[str, Any]:
         """Run code analysis.
 
         Args:
@@ -531,7 +532,7 @@ class AnalysisPipeline:
 
         return results
 
-    def _step_visualize(self, context: dict[str, Any]) -> Path | None:
+    def _step_visualize(self, context: Dict[str, Any]) -> Optional[Path]:
         """Generate visualizations.
 
         Args:
@@ -558,7 +559,7 @@ class AnalysisPipeline:
 
         return dashboard_path
 
-    def _step_report(self, context: dict[str, Any]) -> Path | None:
+    def _step_report(self, context: Dict[str, Any]) -> Optional[Path]:
         """Generate final report.
 
         Args:
@@ -567,7 +568,7 @@ class AnalysisPipeline:
         Returns:
             Path to generated report, or None if skipped.
         """
-        from .reporter import ReportConfig, ReportGenerator
+        from .reporter import ReportGenerator, ReportConfig
 
         config = context.get("config", {})
         if not config.get("generate_reports", True):

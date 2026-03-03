@@ -16,17 +16,9 @@ except ImportError:
     project_root = Path(__file__).resolve().parent.parent.parent
     sys.path.insert(0, str(project_root / "src"))
 
-from codomyrmex.cloud import CodaClient, GCSClient, S3Client
 from codomyrmex.cloud.common import CloudConfig, CloudProvider, ResourceType
-from codomyrmex.utils.cli_helpers import (
-    print_error,
-    print_info,
-    print_section,
-    print_success,
-    print_warning,
-    setup_logging,
-)
-
+from codomyrmex.cloud import S3Client, GCSClient, CodaClient
+from codomyrmex.utils.cli_helpers import setup_logging, print_success, print_info, print_error, print_section, print_warning
 
 def demo_storage(config: CloudConfig):
     """Demonstrate unified storage operations."""
@@ -58,7 +50,6 @@ def demo_storage(config: CloudConfig):
     else:
         print_warning("GCP credentials not found. Skipping GCS demo.")
 
-
 def demo_resources(config: CloudConfig):
     """Demonstrate unified resource management."""
     print_section("Unified Resource Management")
@@ -80,23 +71,16 @@ def demo_resources(config: CloudConfig):
     else:
         print_warning("Coda.io credentials not found. Skipping Coda demo.")
 
-
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
-
-    config_path = (
-        Path(__file__).resolve().parent.parent.parent
-        / "config"
-        / "cloud"
-        / "config.yaml"
-    )
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "cloud" / "config.yaml"
+    config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
-            yaml.safe_load(f) or {}
-            print("Loaded config from config/cloud/config.yaml")
+        with open(config_path, "r") as f:
+            config_data = yaml.safe_load(f) or {}
+            print(f"Loaded config from config/cloud/config.yaml")
 
     setup_logging()
     print_section("Cloud Manager Orchestrator")
@@ -120,7 +104,6 @@ def main():
     print_section("Orchestration Summary")
     print_success("Cloud management tasks completed.")
     return 0
-
 
 if __name__ == "__main__":
     sys.exit(main())

@@ -6,9 +6,9 @@ Usage:
     python event_demo.py [--demo TYPE]
 """
 
-import argparse
 import sys
 import time
+import argparse
 from pathlib import Path
 
 # Ensure codomyrmex is in path
@@ -20,19 +20,14 @@ except ImportError:
 
 from codomyrmex.events import (
     Event,
-    EventPriority,
     EventType,
+    EventPriority,
     get_event_bus,
-    get_event_stats,
     publish_event,
+    get_event_stats
 )
 from codomyrmex.events.emitters.event_emitter import EventEmitter
-from codomyrmex.events.handlers.event_listener import (
-    AutoEventListener,
-    EventListener,
-    event_handler,
-)
-
+from codomyrmex.events.handlers.event_listener import EventListener, event_handler, AutoEventListener
 
 def demo_basic():
     """Basic event publishing and subscription demo."""
@@ -49,29 +44,14 @@ def demo_basic():
     bus.subscribe(["system.*"], on_event)
 
     # Publish events
-    publish_event(
-        Event(
-            event_type=EventType.SYSTEM_STARTUP,
-            source="demo_script",
-            data={"version": "1.0"},
-        )
-    )
-    publish_event(
-        Event(
-            event_type=EventType.SYSTEM_ERROR,
-            source="demo_script",
-            priority=EventPriority.ERROR,
-            data={"msg": "test error"},
-        )
-    )
+    publish_event(Event(event_type=EventType.SYSTEM_STARTUP, source="demo_script", data={"version": "1.0"}))
+    publish_event(Event(event_type=EventType.SYSTEM_ERROR, source="demo_script", priority=EventPriority.ERROR, data={"msg": "test error"}))
 
     # Wait a bit for async-like behavior if any (though currently sync by default)
     time.sleep(0.1)
 
     stats = get_event_stats()
-    print(
-        f"\n   Stats: Total events={stats['total_events']}, Counts={stats['event_counts']}"
-    )
+    print(f"\n   Stats: Total events={stats['total_events']}, Counts={stats['event_counts']}")
     return len(received_events) == 2
 
 
@@ -83,11 +63,8 @@ def demo_emitter_listener():
     listener = EventListener(listener_id="monitor_agent")
 
     received = []
-
     def monitor_handler(event: Event):
-        print(
-            f"   👁️  Monitor saw: {event.event_type.value} - {event.data.get('status', 'no status')}"
-        )
+        print(f"   👁️  Monitor saw: {event.event_type.value} - {event.data.get('status', 'no status')}")
         received.append(event)
 
     listener.on(EventType.TASK_STARTED, monitor_handler)
@@ -119,29 +96,15 @@ def demo_auto_listener():
 
         @event_handler(EventType.ANALYSIS_COMPLETE, priority=10)
         def handle_complete(self, event: Event):
-            print(
-                f"   🏁 Component finished analysis. Success: {event.data.get('success')}"
-            )
+            print(f"   🏁 Component finished analysis. Success: {event.data.get('success')}")
             self.events_seen += 1
 
     comp = MyComponent()
     auto_listener = AutoEventListener(listener_id="auto_comp")
     auto_listener.register_handlers(comp)
 
-    publish_event(
-        Event(
-            event_type=EventType.ANALYSIS_START,
-            source="demo",
-            data={"target": "main.py"},
-        )
-    )
-    publish_event(
-        Event(
-            event_type=EventType.ANALYSIS_COMPLETE,
-            source="demo",
-            data={"success": True},
-        )
-    )
+    publish_event(Event(event_type=EventType.ANALYSIS_START, source="demo", data={"target": "main.py"}))
+    publish_event(Event(event_type=EventType.ANALYSIS_COMPLETE, source="demo", data={"success": True}))
 
     time.sleep(0.1)
     return comp.events_seen == 2
@@ -149,25 +112,17 @@ def demo_auto_listener():
 
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
-
-    config_path = (
-        Path(__file__).resolve().parent.parent.parent
-        / "config"
-        / "events"
-        / "config.yaml"
-    )
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "events" / "config.yaml"
+    config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
-            yaml.safe_load(f) or {}
+        with open(config_path, "r") as f:
+            config_data = yaml.safe_load(f) or {}
             print(f"Loaded config from {config_path.name}")
 
     parser = argparse.ArgumentParser(description="Event system demo")
-    parser.add_argument(
-        "--demo", "-d", choices=["basic", "emitter", "auto", "all"], default="all"
-    )
+    parser.add_argument("--demo", "-d", choices=["basic", "emitter", "auto", "all"], default="all")
     args = parser.parse_args()
 
     print("📡 Codomyrmex Event System Demo\n")

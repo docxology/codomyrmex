@@ -17,10 +17,10 @@ except ImportError:
 
 import argparse
 import cProfile
-import importlib.util
-import io
 import pstats
+import io
 import time
+import importlib.util
 
 
 def load_module(module_path: str):
@@ -62,32 +62,20 @@ def format_time(seconds: float) -> str:
 
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
-
-    config_path = (
-        Path(__file__).resolve().parent.parent.parent
-        / "config"
-        / "performance"
-        / "config.yaml"
-    )
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "performance" / "config.yaml"
+    config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
-            yaml.safe_load(f) or {}
-            print("Loaded config from config/performance/config.yaml")
+        with open(config_path, "r") as f:
+            config_data = yaml.safe_load(f) or {}
+            print(f"Loaded config from config/performance/config.yaml")
 
     parser = argparse.ArgumentParser(description="Profile Python module/function")
     parser.add_argument("module_path", nargs="?", help="Path to Python module")
-    parser.add_argument(
-        "--function", "-f", default="main", help="Function to profile (default: main)"
-    )
-    parser.add_argument(
-        "--output", "-o", default=None, help="Output file for profile data"
-    )
-    parser.add_argument(
-        "--top", "-t", type=int, default=15, help="Show top N functions"
-    )
+    parser.add_argument("--function", "-f", default="main", help="Function to profile (default: main)")
+    parser.add_argument("--output", "-o", default=None, help="Output file for profile data")
+    parser.add_argument("--top", "-t", type=int, default=15, help="Show top N functions")
     parser.add_argument("--demo", action="store_true", help="Run a demo profile")
     args = parser.parse_args()
 
@@ -134,11 +122,7 @@ def main():
 
     if not hasattr(module, args.function):
         print(f"❌ Function '{args.function}' not found in module")
-        available = [
-            n
-            for n in dir(module)
-            if not n.startswith("_") and callable(getattr(module, n))
-        ]
+        available = [n for n in dir(module) if not n.startswith("_") and callable(getattr(module, n))]
         if available:
             print(f"   Available: {', '.join(available[:10])}")
         return 1

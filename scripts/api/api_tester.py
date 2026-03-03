@@ -17,14 +17,12 @@ except ImportError:
 
 import argparse
 import json
-import time
-import urllib.error
 import urllib.request
+import urllib.error
+import time
 
 
-def make_request(
-    url: str, method: str = "GET", data: dict = None, headers: dict = None
-) -> dict:
+def make_request(url: str, method: str = "GET", data: dict = None, headers: dict = None) -> dict:
     """Make HTTP request."""
     headers = headers or {}
     headers.setdefault("Content-Type", "application/json")
@@ -67,26 +65,18 @@ def format_json(text: str) -> str:
 
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
-
-    config_path = (
-        Path(__file__).resolve().parent.parent.parent / "config" / "api" / "config.yaml"
-    )
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "api" / "config.yaml"
+    config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
-            yaml.safe_load(f) or {}
-            print("Loaded config from config/api/config.yaml")
+        with open(config_path, "r") as f:
+            config_data = yaml.safe_load(f) or {}
+            print(f"Loaded config from config/api/config.yaml")
 
     parser = argparse.ArgumentParser(description="API testing utility")
     parser.add_argument("url", nargs="?", help="URL to test")
-    parser.add_argument(
-        "--method",
-        "-m",
-        default="GET",
-        choices=["GET", "POST", "PUT", "DELETE", "PATCH"],
-    )
+    parser.add_argument("--method", "-m", default="GET", choices=["GET", "POST", "PUT", "DELETE", "PATCH"])
     parser.add_argument("--data", "-d", default=None, help="Request body as JSON")
     parser.add_argument("--header", "-H", action="append", help="Headers (Key: Value)")
     parser.add_argument("--json", "-j", action="store_true", help="Output as JSON")
@@ -96,12 +86,8 @@ def main():
         print("🌐 API Tester\n")
         print("Usage:")
         print("  python api_tester.py https://api.example.com/endpoint")
-        print(
-            '  python api_tester.py https://api.example.com/data -m POST -d \'{"key":"value"}\''
-        )
-        print(
-            "  python api_tester.py https://api.example.com -H 'Authorization: Bearer token'"
-        )
+        print("  python api_tester.py https://api.example.com/data -m POST -d '{\"key\":\"value\"}'")
+        print("  python api_tester.py https://api.example.com -H 'Authorization: Bearer token'")
         return 0
 
     # Parse headers

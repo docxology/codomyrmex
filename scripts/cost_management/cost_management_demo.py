@@ -13,13 +13,12 @@ PROJECT_ROOT = Path(__file__).parent.parent.parent
 sys.path.insert(0, str(PROJECT_ROOT / "src"))
 
 from codomyrmex.cost_management import (
-    BudgetManager,
-    BudgetPeriod,
-    CostCategory,
     CostTracker,
-    JSONCostStore,
+    BudgetManager,
+    CostCategory,
+    BudgetPeriod,
+    JSONCostStore
 )
-
 
 def run_demo():
     print("--- Codomyrmex Cost Management Demo ---")
@@ -38,18 +37,18 @@ def run_demo():
 
     # 2. Setup Budgets
     print("\nSetting up budgets...")
-    budgets.create(
+    llm_budget = budgets.create(
         name="Daily LLM",
         amount=1.00,  # $1.00 budget
         period=BudgetPeriod.DAILY,
-        category=CostCategory.LLM_INFERENCE,
+        category=CostCategory.LLM_INFERENCE
     )
 
-    budgets.create(
+    compute_budget = budgets.create(
         name="Weekly Compute",
         amount=10.00,
         period=BudgetPeriod.WEEKLY,
-        category=CostCategory.COMPUTE,
+        category=CostCategory.COMPUTE
     )
 
     # 3. Record Costs
@@ -60,14 +59,14 @@ def run_demo():
         amount=0.02,
         category=CostCategory.LLM_INFERENCE,
         description="GPT-4o completion (small)",
-        tags={"model": "gpt-4o", "project": "demo"},
+        tags={"model": "gpt-4o", "project": "demo"}
     )
 
     tracker.record(
         amount=0.45,
         category=CostCategory.LLM_INFERENCE,
         description="Claude 3.5 Sonnet completion (large)",
-        tags={"model": "claude-3-5-sonnet", "project": "demo"},
+        tags={"model": "claude-3-5-sonnet", "project": "demo"}
     )
 
     # Simulated Compute cost
@@ -76,16 +75,14 @@ def run_demo():
         category=CostCategory.COMPUTE,
         description="GPU VM instance hourly",
         resource_id="vm-gpu-01",
-        tags={"provider": "aws"},
+        tags={"provider": "aws"}
     )
 
     # 4. Check Utilization and Alerts
     print("\nChecking budget utilization:")
     for b in budgets.list_budgets():
         util = budgets.get_utilization(b)
-        print(
-            f"  {b.name}: ${util * b.amount:.2f} / ${b.amount:.2f} ({util * 100:.1f}%)"
-        )
+        print(f"  {b.name}: ${util * b.amount:.2f} / ${b.amount:.2f} ({util*100:.1f}%)")
 
     print("\nChecking for alerts...")
     alerts = budgets.check_budgets()
@@ -96,13 +93,13 @@ def run_demo():
     print("\nTesting spend gating:")
     large_llm_cost = 0.60
     can_spend = budgets.can_spend(large_llm_cost, category=CostCategory.LLM_INFERENCE)
-    print(
-        f"  Can spend ${large_llm_cost} on LLM? {'YES' if can_spend else 'NO (Budget limit reached)'}"
-    )
+    print(f"  Can spend ${large_llm_cost} on LLM? {'YES' if can_spend else 'NO (Budget limit reached)'}")
 
     # Record another cost to trigger higher alert
     tracker.record(
-        amount=0.40, category=CostCategory.LLM_INFERENCE, description="Batch processing"
+        amount=0.40,
+        category=CostCategory.LLM_INFERENCE,
+        description="Batch processing"
     )
 
     print("\nChecking for new alerts after additional spend...")
@@ -120,7 +117,6 @@ def run_demo():
 
     print("\nDemo completed successfully.")
 
-
 def main() -> int:
     try:
         run_demo()
@@ -128,26 +124,19 @@ def main() -> int:
     except Exception as e:
         print(f"Error running demo: {e}")
         import traceback
-
         traceback.print_exc()
         return 1
 
+
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
-
-    config_path = (
-        Path(__file__).resolve().parent.parent.parent
-        / "config"
-        / "cost_management"
-        / "config.yaml"
-    )
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "cost_management" / "config.yaml"
+    config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
-            yaml.safe_load(f) or {}
-            print("Loaded config from config/cost_management/config.yaml")
-
+        with open(config_path, "r") as f:
+            config_data = yaml.safe_load(f) or {}
+            print(f"Loaded config from config/cost_management/config.yaml")
 
 if __name__ == "__main__":
     sys.exit(main())

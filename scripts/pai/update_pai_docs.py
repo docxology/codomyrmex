@@ -6,8 +6,8 @@ Thin wrapper around codomyrmex.documentation.pai.update_pai_docs.
 """
 
 import argparse
-import sys
 from pathlib import Path
+import sys
 
 # Ensure src is in path
 PROJ_ROOT = Path(__file__).resolve().parent.parent
@@ -16,7 +16,7 @@ if str(SRC_DIR) not in sys.path:
     sys.path.insert(0, str(SRC_DIR))
 
 try:
-    from codomyrmex.documentation.pai import MAX_STUB_LINES, update_pai_docs
+    from codomyrmex.documentation.pai import update_pai_docs, MAX_STUB_LINES
 except ImportError as e:
     print(f"Error importing codomyrmex module: {e}")
     sys.exit(1)
@@ -24,31 +24,20 @@ except ImportError as e:
 
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
-
-    config_path = (
-        Path(__file__).resolve().parent.parent.parent / "config" / "pai" / "config.yaml"
-    )
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "pai" / "config.yaml"
+    config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
-            yaml.safe_load(f) or {}
-            print("Loaded config from config/pai/config.yaml")
+        with open(config_path, "r") as f:
+            config_data = yaml.safe_load(f) or {}
+            print(f"Loaded config from config/pai/config.yaml")
 
     parser = argparse.ArgumentParser(description="Batch update stub PAI.md files")
-    parser.add_argument(
-        "--apply", action="store_true", help="Apply changes (default: dry run)"
-    )
-    parser.add_argument(
-        "--max-lines",
-        type=int,
-        default=MAX_STUB_LINES,
-        help=f"Maximum lines to consider as stub (default: {MAX_STUB_LINES})",
-    )
-    parser.add_argument(
-        "--root", type=Path, default=PROJ_ROOT, help="Project root directory"
-    )
+    parser.add_argument("--apply", action="store_true", help="Apply changes (default: dry run)")
+    parser.add_argument("--max-lines", type=int, default=MAX_STUB_LINES,
+                        help=f"Maximum lines to consider as stub (default: {MAX_STUB_LINES})")
+    parser.add_argument("--root", type=Path, default=PROJ_ROOT, help="Project root directory")
     args = parser.parse_args()
 
     src_dir = args.root / "src" / "codomyrmex"

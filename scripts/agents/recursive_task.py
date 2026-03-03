@@ -11,21 +11,18 @@ Flow:
 4. Worker -> Manager: "Report generated..."
 """
 
-import threading
 import time
+import threading
+from codomyrmex.ide.antigravity.live_bridge import ClaudeCodeEndpoint
+from codomyrmex.ide.antigravity.agent_relay import AgentRelay
+from codomyrmex.agents.core import AgentRequest
 
 from agent_utils import get_llm_client
 
-from codomyrmex.agents.core import AgentRequest
-from codomyrmex.ide.antigravity.agent_relay import AgentRelay
-from codomyrmex.ide.antigravity.live_bridge import ClaudeCodeEndpoint
-
 CHANNEL = "recursive-task"
-
 
 class TaskAgent:
     """Helper to run a task agent with a specific persona."""
-
     def __init__(self, identity, system_prompt):
         self.identity = identity
         self.system_prompt = system_prompt
@@ -36,7 +33,7 @@ class TaskAgent:
             identity=identity,
             poll_interval=0.5,
             claude_client=self.client,
-            auto_respond=False,  # We handle messages manually to inject system prompt
+            auto_respond=False  # We handle messages manually to inject system prompt
         )
         # Register handler
         self.endpoint.on_message(self._handle_message)
@@ -63,15 +60,14 @@ class TaskAgent:
             # We explicitly invoke the client with our constructed request
             response = self.client.execute_with_session(request, session=None)
 
-            if hasattr(response, "is_success") and response.is_success():
+            if hasattr(response, 'is_success') and response.is_success():
                 return response.content
-            elif hasattr(response, "error"):
+            elif hasattr(response, 'error'):
                 return f"Error: {response.error}"
             return str(response.content)
 
         except Exception as e:
             return f"Error executing agent: {e}"
-
 
 def run_manager():
     """Manager Agent (Alice)."""
@@ -92,7 +88,6 @@ def run_manager():
     time.sleep(15)
     agent.stop()
 
-
 def run_worker():
     """Worker Agent (Bob)."""
     system_prompt = (
@@ -108,23 +103,16 @@ def run_worker():
     time.sleep(16)
     agent.stop()
 
-
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
-
-    config_path = (
-        Path(__file__).resolve().parent.parent.parent
-        / "config"
-        / "agents"
-        / "config.yaml"
-    )
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "agents" / "config.yaml"
+    config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
-            yaml.safe_load(f) or {}
-            print("Loaded config from config/agents/config.yaml")
+        with open(config_path, "r") as f:
+            config_data = yaml.safe_load(f) or {}
+            print(f"Loaded config from config/agents/config.yaml")
 
     AgentRelay(CHANNEL).clear()
 
@@ -137,7 +125,6 @@ def main():
     t1.join()
     t2.join()
     print("\nRecursive task demo complete.")
-
 
 if __name__ == "__main__":
     main()
