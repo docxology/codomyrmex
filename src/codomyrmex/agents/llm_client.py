@@ -9,19 +9,13 @@ import os
 import time
 import urllib.error
 import urllib.request
-from dataclasses import dataclass
 from typing import Any
 
+from codomyrmex.agents.core.base import AgentRequest
 from codomyrmex.config_management.defaults import DEFAULT_OLLAMA_URL
 from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
-
-@dataclass
-class AgentRequest:
-    """Input container for an LLM agent call: the prompt and optional metadata for context injection."""
-    prompt: str
-    metadata: dict[str, Any] | None = None
 
 _OLLAMA_ALLOWED_PREFIXES = ("http://localhost:", "http://127.0.0.1:", "https://localhost:", "https://127.0.0.1:")
 
