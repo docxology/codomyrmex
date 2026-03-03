@@ -15,6 +15,7 @@ This directory contains the real, functional implementations and components for 
 - `ConfigWatcher`: A thread-safe, polling-based filesystem watcher for hot-reloading.
 - `ConfigSnapshot`: A point-in-time record of configuration states.
 - `ConfigAudit`: A compliance report based on security best practices.
+- `mcp_tools.py`: Wrappers around ConfigurationMonitor that expose operations to MCP clients.
 
 ## Usage Example
 ```python
