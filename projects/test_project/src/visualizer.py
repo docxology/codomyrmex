@@ -13,14 +13,15 @@ Example:
     >>> print(f"Dashboard saved to: {dashboard_path}")
 """
 
-from pathlib import Path
-from typing import Dict, Any, List, Optional
 from dataclasses import dataclass
 from datetime import datetime
+from pathlib import Path
+from typing import Any
+
+from codomyrmex.data_visualization.reports.general import GeneralSystemReport
 
 # Real codomyrmex imports - no fallback for mega-seed project
 from codomyrmex.logging_monitoring import get_logger
-from codomyrmex.data_visualization.reports.general import GeneralSystemReport
 
 HAS_CODOMYRMEX_LOGGING = True  # Exported for integration tests
 HAS_VISUALIZATION_MODULE = True  # Exported for integration tests
@@ -44,14 +45,14 @@ class ChartConfig:
         >>> config = ChartConfig(title="Code Metrics", chart_type="bar")
         >>> print(config.theme)  # "dark"
     """
-    
+
     title: str
     chart_type: str = "bar"
     width: int = 800
     height: int = 600
     theme: str = "dark"
     output_format: str = "html"
-    
+
     @property
     def is_interactive(self) -> bool:
         """Check if output format supports interactivity."""
@@ -77,8 +78,8 @@ class DataVisualizer:
         >>> visualizer = DataVisualizer(output_dir=Path("reports"))
         >>> path = visualizer.create_dashboard(results)
     """
-    
-    def __init__(self, output_dir: Optional[Path] = None):
+
+    def __init__(self, output_dir: Path | None = None):
         """Initialize the visualizer.
         
         Args:
@@ -87,7 +88,7 @@ class DataVisualizer:
         """
         self.output_dir = output_dir or Path("reports/visualizations")
         self.output_dir.mkdir(parents=True, exist_ok=True)
-        
+
         # Theme colors
         self.colors = {
             "primary": "#667eea",
@@ -98,11 +99,11 @@ class DataVisualizer:
             "text": "#eee",
             "muted": "#888",
         }
-        
+
     def visualize_metrics(
         self,
-        metrics: Dict[str, Any],
-        config: Optional[ChartConfig] = None
+        metrics: dict[str, Any],
+        config: ChartConfig | None = None
     ) -> Path:
         """Create visualization of analysis metrics.
         
@@ -118,25 +119,25 @@ class DataVisualizer:
             >>> path = visualizer.visualize_metrics(metrics)
         """
         config = config or ChartConfig(title="Code Metrics")
-        
+
         logger.info(f"Generating {config.chart_type} chart: {config.title}")
-        
+
         # Generate safe filename
         safe_title = config.title.lower().replace(" ", "_").replace("/", "_")
         output_path = self.output_dir / f"{safe_title}.{config.output_format}"
-        
+
         # Generate chart HTML
         html = self._generate_metrics_chart(metrics, config)
         output_path.write_text(html)
-        
+
         logger.info(f"Visualization saved to {output_path}")
-        
+
         return output_path
-        
+
     def create_dashboard(
         self,
-        analysis_results: Dict[str, Any],
-        output_path: Optional[Path] = None
+        analysis_results: dict[str, Any],
+        output_path: Path | None = None
     ) -> Path:
         """Create interactive dashboard from analysis results.
         
@@ -160,29 +161,29 @@ class DataVisualizer:
         """
         output_path = output_path or self.output_dir / "dashboard.html"
         output_path.parent.mkdir(parents=True, exist_ok=True)
-        
+
         logger.info(f"Creating dashboard at {output_path}")
-        
+
         # Generate dashboard sections
         sections = []
-        
+
         # Header section
         sections.append(self._create_header_section(analysis_results))
-        
+
         # Summary section
         if "summary" in analysis_results:
             sections.append(self._create_summary_section(analysis_results["summary"]))
-            
+
         # Patterns section
         if "summary" in analysis_results and "patterns_found" in analysis_results["summary"]:
             sections.append(self._create_patterns_section(
                 analysis_results["summary"]["patterns_found"]
             ))
-            
+
         # File metrics section
         if "files" in analysis_results:
             sections.append(self._create_files_section(analysis_results["files"]))
-            
+
         # Issues section
         if "files" in analysis_results:
             all_issues = []
@@ -191,19 +192,19 @@ class DataVisualizer:
                     all_issues.append({**issue, "file": f.get("file", "Unknown")})
             if all_issues:
                 sections.append(self._create_issues_section(all_issues))
-        
+
         # Write dashboard HTML
         self._write_dashboard(output_path, sections)
-        
+
         logger.info(f"Dashboard created: {output_path}")
-        
+
         return output_path
-        
-    def _create_header_section(self, results: Dict[str, Any]) -> str:
+
+    def _create_header_section(self, results: dict[str, Any]) -> str:
         """Create dashboard header."""
         target = results.get("target", "Unknown")
         timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        
+
         return f"""
         <div class="header">
             <h1>🔬 Code Analysis Dashboard</h1>
@@ -213,8 +214,8 @@ class DataVisualizer:
             </p>
         </div>
         """
-        
-    def _create_summary_section(self, summary: Dict[str, Any]) -> str:
+
+    def _create_summary_section(self, summary: dict[str, Any]) -> str:
         """Create summary section HTML with metric cards."""
         metrics = [
             ("📁", "Files Analyzed", summary.get("total_files", 0)),
@@ -224,7 +225,7 @@ class DataVisualizer:
             ("⚠️", "Issues", summary.get("total_issues", 0)),
             ("📊", "Avg Lines/File", f"{summary.get('average_lines_per_file', 0):.1f}"),
         ]
-        
+
         cards = ""
         for icon, label, value in metrics:
             cards += f"""
@@ -234,23 +235,23 @@ class DataVisualizer:
                 <span class="metric-label">{label}</span>
             </div>
             """
-        
+
         return f"""
         <div class="section">
             <h2>📊 Summary Metrics</h2>
             <div class="metrics-grid">{cards}</div>
         </div>
         """
-        
-    def _create_patterns_section(self, patterns: Dict[str, int]) -> str:
+
+    def _create_patterns_section(self, patterns: dict[str, int]) -> str:
         """Create patterns section with visual chart."""
         if not patterns:
             return ""
-            
+
         # Sort by frequency
         sorted_patterns = sorted(patterns.items(), key=lambda x: x[1], reverse=True)
         max_count = max(patterns.values()) if patterns else 1
-        
+
         bars = ""
         for pattern, count in sorted_patterns[:10]:
             width_pct = (count / max_count) * 100
@@ -264,36 +265,36 @@ class DataVisualizer:
                 <span class="bar-value">{count}</span>
             </div>
             """
-        
+
         return f"""
         <div class="section">
             <h2>🎯 Patterns Detected</h2>
             <div class="bar-chart">{bars}</div>
         </div>
         """
-        
-    def _create_files_section(self, files: List[Dict]) -> str:
+
+    def _create_files_section(self, files: list[dict]) -> str:
         """Create files table section HTML."""
         rows = ""
         for f in files[:20]:  # Limit to 20 files
             metrics = f.get("metrics", {})
             patterns = f.get("patterns", [])
             issues = f.get("issues", [])
-            
+
             # Get file name from path
             file_path = f.get("file", "Unknown")
             file_name = Path(file_path).name if file_path else "Unknown"
-            
+
             # Pattern badges
             pattern_badges = ""
             for p in patterns[:3]:
                 pattern_badges += f'<span class="badge">{p}</span>'
             if len(patterns) > 3:
                 pattern_badges += f'<span class="badge">+{len(patterns)-3}</span>'
-            
+
             # Issue indicator
             issue_class = "issue-count-warning" if issues else "issue-count-ok"
-            
+
             rows += f"""
             <tr>
                 <td class="file-cell" title="{file_path}">{file_name}</td>
@@ -304,7 +305,7 @@ class DataVisualizer:
                 <td class="number-cell {issue_class}">{len(issues)}</td>
             </tr>
             """
-            
+
         return f"""
         <div class="section">
             <h2>📄 File Analysis</h2>
@@ -326,32 +327,32 @@ class DataVisualizer:
             {f'<p class="muted">Showing {min(len(files), 20)} of {len(files)} files</p>' if len(files) > 20 else ''}
         </div>
         """
-        
-    def _create_issues_section(self, issues: List[Dict]) -> str:
+
+    def _create_issues_section(self, issues: list[dict]) -> str:
         """Create issues summary section."""
         if not issues:
             return ""
-            
+
         # Group by severity
-        by_severity: Dict[str, List[Dict]] = {}
+        by_severity: dict[str, list[dict]] = {}
         for issue in issues:
             severity = issue.get("severity", "info")
             if severity not in by_severity:
                 by_severity[severity] = []
             by_severity[severity].append(issue)
-            
+
         severity_colors = {
             "error": "#e94560",
             "warning": "#ffa500",
             "info": "#667eea",
         }
-        
+
         items = ""
         for issue in issues[:15]:
             severity = issue.get("severity", "info")
             color = severity_colors.get(severity, "#888")
             file_name = Path(issue.get("file", "")).name
-            
+
             items += f"""
             <div class="issue-item">
                 <span class="issue-severity" style="background: {color}">{severity.upper()}</span>
@@ -359,7 +360,7 @@ class DataVisualizer:
                 <span class="issue-message">{issue.get('message', 'No message')}</span>
             </div>
             """
-        
+
         return f"""
         <div class="section">
             <h2>⚠️ Issues Found ({len(issues)})</h2>
@@ -367,12 +368,12 @@ class DataVisualizer:
             {f'<p class="muted">Showing 15 of {len(issues)} issues</p>' if len(issues) > 15 else ''}
         </div>
         """
-        
-    def _generate_metrics_chart(self, metrics: Dict[str, Any], config: ChartConfig) -> str:
+
+    def _generate_metrics_chart(self, metrics: dict[str, Any], config: ChartConfig) -> str:
         """Generate a simple bar chart for metrics."""
         bars = ""
         max_val = max(metrics.values()) if metrics else 1
-        
+
         for key, value in metrics.items():
             if isinstance(value, (int, float)):
                 width_pct = (value / max_val) * 100
@@ -386,7 +387,7 @@ class DataVisualizer:
                     <span class="bar-value">{value}</span>
                 </div>
                 """
-                
+
         return f"""<!DOCTYPE html>
 <html>
 <head>
@@ -421,8 +422,8 @@ class DataVisualizer:
 </body>
 </html>
 """
-        
-    def _write_dashboard(self, path: Path, sections: List[str]) -> None:
+
+    def _write_dashboard(self, path: Path, sections: list[str]) -> None:
         """Write dashboard HTML file with modern styling."""
         html = f"""<!DOCTYPE html>
 <html>
@@ -660,8 +661,8 @@ class DataVisualizer:
 
     def create_visualization_report(
         self,
-        analysis_results: Dict[str, Any],
-        output_path: Optional[Path] = None,
+        analysis_results: dict[str, Any],
+        output_path: Path | None = None,
     ) -> Path:
         """Create a report using the unified codomyrmex.visualization system.
 

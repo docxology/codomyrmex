@@ -14,6 +14,11 @@ Automated auditing of configuration files for compliance, security, and correctn
 
 ## Interface Contracts
 
+### MCP Tools
+
+- `config_audit_file(file_path: str) -> str`: Audits a single configuration file via MCP.
+- `config_audit_directory(directory_path: str, pattern: str) -> str`: Audits a directory via MCP.
+
 ### `ConfigAuditor`
 
 - `audit_file(file_path: str) -> AuditResult`: Audits a single file.

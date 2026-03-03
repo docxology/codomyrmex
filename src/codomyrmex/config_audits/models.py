@@ -35,7 +35,11 @@ class AuditResult:
 
     @property
     def is_compliant(self) -> bool:
-        """Check if the audit is compliant (no high or critical issues)."""
+        """Check if the audit is compliant (no high or critical issues).
+
+        Returns:
+            True if there are no high or critical severity issues, False otherwise.
+        """
         return not any(
             issue.severity in (Severity.HIGH, Severity.CRITICAL)
             for issue in self.issues

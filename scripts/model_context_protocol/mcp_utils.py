@@ -18,7 +18,6 @@ except ImportError:
 import argparse
 import json
 
-
 # Example MCP tool definitions
 MCP_TOOLS = {
     "execute_code": {
@@ -63,14 +62,14 @@ def validate_tool_call(tool_name: str, args: dict) -> tuple:
     """Validate a tool call."""
     if tool_name not in MCP_TOOLS:
         return False, f"Unknown tool: {tool_name}"
-    
+
     tool = MCP_TOOLS[tool_name]
     errors = []
-    
+
     for param, spec in tool["parameters"].items():
         if spec.get("required") and param not in args:
             errors.append(f"Missing required parameter: {param}")
-    
+
     return (len(errors) == 0), errors
 
 
@@ -78,18 +77,18 @@ def generate_tool_schema(tool_name: str) -> dict:
     """Generate JSON Schema for a tool."""
     if tool_name not in MCP_TOOLS:
         return {"error": f"Unknown tool: {tool_name}"}
-    
+
     tool = MCP_TOOLS[tool_name]
     properties = {}
     required = []
-    
+
     for param, spec in tool["parameters"].items():
         properties[param] = {"type": spec.get("type", "string")}
         if spec.get("default") is not None:
             properties[param]["default"] = spec["default"]
         if spec.get("required"):
             required.append(param)
-    
+
     return {
         "type": "object",
         "properties": properties,
@@ -99,32 +98,33 @@ def generate_tool_schema(tool_name: str) -> dict:
 
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
+
+    import yaml
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "model_context_protocol" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
+        with open(config_path) as f:
             config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/model_context_protocol/config.yaml")
+            print("Loaded config from config/model_context_protocol/config.yaml")
 
     parser = argparse.ArgumentParser(description="MCP utilities")
     subparsers = parser.add_subparsers(dest="command")
-    
+
     # List command
     subparsers.add_parser("list", help="List available tools")
-    
+
     # Schema command
     schema = subparsers.add_parser("schema", help="Get tool schema")
     schema.add_argument("tool", help="Tool name")
-    
+
     # Validate command
     validate = subparsers.add_parser("validate", help="Validate tool call")
     validate.add_argument("tool", help="Tool name")
     validate.add_argument("--args", "-a", default="{}", help="Arguments as JSON")
-    
+
     args = parser.parse_args()
-    
+
     if not args.command:
         print("🔧 MCP Utilities\n")
         print("Commands:")
@@ -136,7 +136,7 @@ def main():
         print("  python mcp_utils.py schema execute_code")
         print('  python mcp_utils.py validate execute_code --args \'{"language":"python","code":"print(1)"}\'')
         return 0
-    
+
     if args.command == "list":
         tools = list_tools()
         print(f"📋 Available MCP Tools ({len(tools)}):\n")
@@ -146,21 +146,21 @@ def main():
             params = list(tool['parameters'].keys())
             print(f"      Parameters: {', '.join(params)}")
             print()
-    
+
     elif args.command == "schema":
         schema = generate_tool_schema(args.tool)
         print(f"📄 Schema for '{args.tool}':\n")
         print(json.dumps(schema, indent=2))
-    
+
     elif args.command == "validate":
         try:
             call_args = json.loads(args.args)
         except json.JSONDecodeError:
             print(f"❌ Invalid JSON: {args.args}")
             return 1
-        
+
         valid, errors = validate_tool_call(args.tool, call_args)
-        
+
         if valid:
             print(f"✅ Valid tool call: {args.tool}")
             print(f"   Arguments: {call_args}")
@@ -169,7 +169,7 @@ def main():
             for e in errors:
                 print(f"   • {e}")
             return 1
-    
+
     return 0
 
 

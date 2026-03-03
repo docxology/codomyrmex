@@ -29,15 +29,16 @@ except ImportError:
 import argparse
 import asyncio
 import json
-from typing import Any, Dict
+from typing import Any
+
+from codomyrmex.logging_monitoring.logger_config import get_logger
 
 from codomyrmex.model_context_protocol import MCPServer, MCPServerConfig
+from codomyrmex.model_context_protocol import tools as mcp_tools
 from codomyrmex.model_context_protocol.discovery import (
     DiscoveredTool,
     discover_tools,
 )
-from codomyrmex.model_context_protocol import tools as mcp_tools
-from codomyrmex.logging_monitoring.logger_config import get_logger
 
 logger = get_logger(__name__)
 
@@ -46,7 +47,7 @@ logger = get_logger(__name__)
 # Known tool-name -> tools.py function mapping for spec-discovered tools
 # ============================================================================
 
-_SPEC_TOOL_IMPLEMENTATIONS: Dict[str, Any] = {
+_SPEC_TOOL_IMPLEMENTATIONS: dict[str, Any] = {
     "git_status": mcp_tools.git_status,
     "git_diff": mcp_tools.git_diff,
     "read_file": mcp_tools.read_file,
@@ -298,7 +299,7 @@ def create_data_tools(server: MCPServer) -> None:
 def create_memory_tools(server: MCPServer) -> None:
     """Register memory/context tools."""
 
-    _memory_store: Dict[str, str] = {}
+    _memory_store: dict[str, str] = {}
 
     @server.tool(name="store_memory", title="Store Memory", description="Store a key-value pair in temporary memory")
     def store_memory(key: str, value: str) -> str:
@@ -438,14 +439,15 @@ def list_available_tools(server: MCPServer) -> None:
 
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
+
+    import yaml
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "model_context_protocol" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
+        with open(config_path) as f:
             config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/model_context_protocol/config.yaml")
+            print("Loaded config from config/model_context_protocol/config.yaml")
 
     parser = argparse.ArgumentParser(
         description="Run Codomyrmex MCP Server",
@@ -503,7 +505,7 @@ Examples:
         server.run()
     else:
         tool_count = len(server._tool_registry.list_tools())
-        print(f"Starting Codomyrmex MCP Server (HTTP)", file=sys.stderr)
+        print("Starting Codomyrmex MCP Server (HTTP)", file=sys.stderr)
         print(f"   URL: http://{args.host}:{args.port}", file=sys.stderr)
         print(f"   Tools: {tool_count}", file=sys.stderr)
         print(f"   Web UI: http://localhost:{args.port}/", file=sys.stderr)

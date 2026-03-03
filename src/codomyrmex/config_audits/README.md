@@ -37,6 +37,7 @@ print(report)
 - `auditor.py`: Main `ConfigAuditor` implementation.
 - `models.py`: Data models for audits, issues, and rules.
 - `rules.py`: Collection of built-in audit rules.
+- `mcp_tools.py`: Exposes auditing capabilities as MCP tools (`config_audit_file`, `config_audit_directory`).
 
 ## Navigation
 
