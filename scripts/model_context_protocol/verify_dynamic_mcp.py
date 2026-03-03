@@ -5,9 +5,10 @@ Checks if tools exposed via @mcp_tool in various modules are correctly
 discovered and registered by the MCP Bridge.
 """
 
-import sys
 import logging
-from codomyrmex.agents.pai.mcp_bridge import get_tool_registry, call_tool
+import sys
+
+from codomyrmex.agents.pai.mcp_bridge import call_tool, get_tool_registry
 
 # Configure logging to see discovery debug messages
 logging.basicConfig(level=logging.DEBUG)
@@ -16,7 +17,7 @@ logger.setLevel(logging.DEBUG)
 
 def verify():
     print("=== Dynamic MCP Discovery Verification ===\n")
-    
+
     # 1. Check Registry
     print("1. Initializing Registry...")
     try:
@@ -24,7 +25,7 @@ def verify():
         tools = registry.list_tools()
         print(f"Total Tools Found: {len(tools)}")
         print(f"Tools: {', '.join(tools)}\n")
-        
+
         # 2. Verify Specific Dynamic Tools
         expected = [
         # Visualization
@@ -60,8 +61,8 @@ def verify():
         "codomyrmex.analyze_project",
         # Documentation
         "codomyrmex.generate_documentation",
-    ]      
-        
+    ]
+
         missing = []
         for name in expected:
             if name in tools:
@@ -72,19 +73,19 @@ def verify():
             else:
                 print(f"❌ MISSING: {name}")
                 missing.append(name)
-                
+
         if missing:
             print(f"\nFAILED: Missing {len(missing)} tools.")
             sys.exit(1)
-            
+
         # 3. Test Invocation (Dry Run / Safe)
         print("\n3. Testing Invocation (llm.ask - check args)...")
         # We won't actually call LLM due to API key, but we check if handler is callable
         # We can call it with invalid key to verify it runs the function
-        
+
         result = call_tool("codomyrmex.ask", question="Test", model="test-model")
         print(f"Result (Expected Error): {result}")
-        
+
         if "OPENROUTER_API_KEY" in str(result) or "Error" in str(result):
              print("✅ Invocation reached function body.")
         else:
@@ -98,14 +99,14 @@ def verify():
 
 
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
+
+    import yaml
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "model_context_protocol" / "config.yaml"
-    config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
-            config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/model_context_protocol/config.yaml")
+        with open(config_path) as f:
+            yaml.safe_load(f) or {}
+            print("Loaded config from config/model_context_protocol/config.yaml")
 
 if __name__ == "__main__":
     verify()

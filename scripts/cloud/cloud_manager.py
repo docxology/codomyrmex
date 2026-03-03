@@ -16,14 +16,22 @@ except ImportError:
     project_root = Path(__file__).resolve().parent.parent.parent
     sys.path.insert(0, str(project_root / "src"))
 
+from codomyrmex.cloud import CodaClient, GCSClient, S3Client
 from codomyrmex.cloud.common import CloudConfig, CloudProvider, ResourceType
-from codomyrmex.cloud import S3Client, GCSClient, CodaClient
-from codomyrmex.utils.cli_helpers import setup_logging, print_success, print_info, print_error, print_section, print_warning
+from codomyrmex.utils.cli_helpers import (
+    print_error,
+    print_info,
+    print_section,
+    print_success,
+    print_warning,
+    setup_logging,
+)
+
 
 def demo_storage(config: CloudConfig):
     """Demonstrate unified storage operations."""
     print_section("Unified Storage Operations")
-    
+
     # Try AWS S3
     if config.has_provider(CloudProvider.AWS):
         print_info("Found AWS credentials. Testing S3Client...")
@@ -53,7 +61,7 @@ def demo_storage(config: CloudConfig):
 def demo_resources(config: CloudConfig):
     """Demonstrate unified resource management."""
     print_section("Unified Resource Management")
-    
+
     # Try Coda.io
     if config.has_provider(CloudProvider.CODA):
         print_info("Found Coda.io credentials. Testing CodaClient...")
@@ -61,7 +69,7 @@ def demo_resources(config: CloudConfig):
             creds = config.get_credentials(CloudProvider.CODA)
             # CodaClient currently takes api_token directly
             client = CodaClient(api_token=creds.access_key)
-            
+
             resources = client.list_resources(ResourceType.DOCUMENT)
             print_success(f"  Coda Documents found: {len(resources)}")
             for r in resources[:5]:
@@ -73,34 +81,34 @@ def demo_resources(config: CloudConfig):
 
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
+
+    import yaml
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "cloud" / "config.yaml"
-    config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
-            config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/cloud/config.yaml")
+        with open(config_path) as f:
+            yaml.safe_load(f) or {}
+            print("Loaded config from config/cloud/config.yaml")
 
     setup_logging()
     print_section("Cloud Manager Orchestrator")
-    
+
     config = CloudConfig.from_env()
-    
+
     # Show configured providers
     providers = []
     for p in CloudProvider:
         if config.has_provider(p):
             providers.append(p.value)
-    
+
     if providers:
         print_info(f"Configured providers: {', '.join(providers)}")
     else:
         print_warning("No cloud providers configured in environment.")
-    
+
     demo_storage(config)
     demo_resources(config)
-    
+
     print_section("Orchestration Summary")
     print_success("Cloud management tasks completed.")
     return 0

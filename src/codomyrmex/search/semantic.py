@@ -1,4 +1,5 @@
-"""Semantic Search Enhancements.
+"""
+Semantic Search Enhancements
 
 Vector-based semantic search and hybrid retrieval.
 """
@@ -14,7 +15,6 @@ from . import Document, InMemoryIndex, SearchResult
 @dataclass
 class SemanticSearchResult:
     """Result from semantic search."""
-
     document: Document
     semantic_score: float
     keyword_score: float
@@ -31,7 +31,6 @@ class HybridSearchIndex:
         vector_store=None,
         semantic_weight: float = 0.5,
     ):
-        """Initialize hybrid search index."""
         self._keyword_index = InMemoryIndex()
         self._embedding_fn = embedding_fn
         self._vector_store = vector_store
@@ -121,7 +120,6 @@ class BM25Index:
         k1: float = 1.5,
         b: float = 0.75,
     ):
-        """Initialize BM25 index with k1 and b parameters."""
         self.k1 = k1
         self.b = b
         self._documents: dict[str, Document] = {}
@@ -131,7 +129,7 @@ class BM25Index:
         self._doc_count = 0
 
     def _tokenize(self, text: str) -> list[str]:
-        """Tokenize text."""
+        """Simple tokenization."""
         import re
         return re.findall(r'\b\w+\b', text.lower())
 
@@ -200,7 +198,6 @@ class AutoCompleteIndex:
     """Fast prefix-based autocomplete."""
 
     def __init__(self, max_suggestions: int = 10):
-        """Initialize autocomplete index."""
         self._trie: dict[str, Any] = {}
         self._max_suggestions = max_suggestions
 

@@ -12,11 +12,11 @@ Example:
     >>> report_path = generator.generate(analysis_results, config)
 """
 
-from pathlib import Path
-from typing import Dict, Any, Optional
+import json
 from dataclasses import dataclass
 from datetime import datetime
-import json
+from pathlib import Path
+from typing import Any
 
 # Real codomyrmex imports - no fallback for mega-seed project
 from codomyrmex.logging_monitoring import get_logger
@@ -40,7 +40,7 @@ class ReportConfig:
     Example:
         >>> config = ReportConfig(title="My Report", format="markdown")
     """
-    
+
     title: str = "Analysis Report"
     format: str = "html"  # html, json, markdown
     include_visualizations: bool = True
@@ -48,15 +48,15 @@ class ReportConfig:
     include_file_details: bool = True
     author: str = "Codomyrmex Test Project"
     max_files: int = 50
-    
+
     @property
     def is_html(self) -> bool:
         return self.format == "html"
-    
+
     @property
     def is_json(self) -> bool:
         return self.format == "json"
-    
+
     @property
     def is_markdown(self) -> bool:
         return self.format == "markdown"
@@ -80,8 +80,8 @@ class ReportGenerator:
         >>> generator = ReportGenerator(output_dir=Path("reports"))
         >>> path = generator.generate(results, ReportConfig(format="html"))
     """
-    
-    def __init__(self, output_dir: Optional[Path] = None):
+
+    def __init__(self, output_dir: Path | None = None):
         """Initialize the report generator.
         
         Args:
@@ -90,11 +90,11 @@ class ReportGenerator:
         """
         self.output_dir = output_dir or Path("reports/output")
         self.output_dir.mkdir(parents=True, exist_ok=True)
-        
+
     def generate(
         self,
-        analysis_results: Dict[str, Any],
-        config: Optional[ReportConfig] = None
+        analysis_results: dict[str, Any],
+        config: ReportConfig | None = None
     ) -> Path:
         """Generate report from analysis results.
         
@@ -110,30 +110,30 @@ class ReportGenerator:
             >>> print(f"Report saved to: {path}")
         """
         config = config or ReportConfig()
-        
+
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         filename = f"report_{timestamp}.{config.format}"
         if config.format == "markdown":
             filename = f"report_{timestamp}.md"
         output_path = self.output_dir / filename
-        
+
         logger.info(f"Generating {config.format} report: {output_path}")
-        
+
         if config.is_json:
             self._generate_json_report(analysis_results, output_path, config)
         elif config.is_markdown:
             self._generate_markdown_report(analysis_results, output_path, config)
         else:
             self._generate_html_report(analysis_results, output_path, config)
-            
+
         logger.info(f"Report generated: {output_path}")
         return output_path
-    
+
     def generate_all_formats(
         self,
-        analysis_results: Dict[str, Any],
-        base_config: Optional[ReportConfig] = None
-    ) -> Dict[str, Path]:
+        analysis_results: dict[str, Any],
+        base_config: ReportConfig | None = None
+    ) -> dict[str, Path]:
         """Generate reports in all supported formats.
         
         Args:
@@ -145,7 +145,7 @@ class ReportGenerator:
         """
         base_config = base_config or ReportConfig()
         paths = {}
-        
+
         for fmt in ["html", "json", "markdown"]:
             config = ReportConfig(
                 title=base_config.title,
@@ -155,7 +155,7 @@ class ReportGenerator:
                 author=base_config.author,
             )
             paths[fmt] = self.generate(analysis_results, config)
-            
+
         return paths
 
     def _truncation_notice(self, files: list, config: "ReportConfig") -> str:
@@ -168,10 +168,10 @@ class ReportGenerator:
                 f'Showing {shown} of {total} files</p>'
             )
         return ''
-        
+
     def _generate_json_report(
         self,
-        results: Dict[str, Any],
+        results: dict[str, Any],
         path: Path,
         config: ReportConfig
     ) -> None:
@@ -186,7 +186,7 @@ class ReportGenerator:
             "target": results.get("target", "Unknown"),
             "summary": results.get("summary", {}),
         }
-        
+
         if config.include_file_details:
             files = results.get("files", [])
             if len(files) > config.max_files:
@@ -195,19 +195,19 @@ class ReportGenerator:
                 report["total_files_count"] = len(files)
             else:
                 report["files"] = files
-        
+
         path.write_text(json.dumps(report, indent=2, default=str))
-        
+
     def _generate_markdown_report(
         self,
-        results: Dict[str, Any],
+        results: dict[str, Any],
         path: Path,
         config: ReportConfig
     ) -> None:
         """Generate Markdown format report."""
         summary = results.get("summary", {})
         target = results.get("target", "Unknown")
-        
+
         content = f"""# {config.title}
 
 **Generated**: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}  
@@ -229,7 +229,7 @@ class ReportGenerator:
 | Avg Lines/File | {summary.get('average_lines_per_file', 0):.1f} |
 
 """
-        
+
         # Patterns section
         patterns = summary.get("patterns_found", {})
         if patterns:
@@ -242,11 +242,11 @@ class ReportGenerator:
                 display_name = pattern.replace("_", " ").title()
                 content += f"| {display_name} | {count} |\n"
             content += "\n"
-        
+
         # Files section
         if config.include_file_details:
             files = results.get("files", [])
-            content += f"""## 📄 File Analysis
+            content += """## 📄 File Analysis
 
 """
             for f in files[:config.max_files]:
@@ -254,7 +254,7 @@ class ReportGenerator:
                 metrics = f.get("metrics", {})
                 patterns = f.get("patterns", [])
                 issues = f.get("issues", [])
-                
+
                 content += f"""### `{Path(file_path).name}`
 
 - **Lines**: {metrics.get('lines_of_code', 0)}
@@ -264,16 +264,16 @@ class ReportGenerator:
 - **Issues**: {len(issues)}
 
 """
-                
+
             if len(files) > config.max_files:
                 content += f"\n*...and {len(files) - config.max_files} more files*\n"
-        
+
         # Issues section
         all_issues = []
         for f in results.get("files", []):
             for issue in f.get("issues", []):
                 all_issues.append({**issue, "file": f.get("file", "Unknown")})
-                
+
         if all_issues:
             content += """## ⚠️ Issues
 
@@ -286,24 +286,24 @@ class ReportGenerator:
                 severity = issue.get('severity', 'info')
                 message = issue.get('message', '')
                 content += f"| {file_name} | {line_num} | {severity} | {message} |\n"
-            
+
             if len(all_issues) > 20:
                 content += f"\n*...and {len(all_issues) - 20} more issues*\n"
-        
+
         content += "\n---\n\n*Generated by Codomyrmex Test Project*\n"
-        
+
         path.write_text(content)
-        
+
     def _generate_html_report(
         self,
-        results: Dict[str, Any],
+        results: dict[str, Any],
         path: Path,
         config: ReportConfig
     ) -> None:
         """Generate HTML format report with modern styling."""
         summary = results.get("summary", {})
         target = results.get("target", "Unknown")
-        
+
         # Build file rows
         file_rows = ""
         files = results.get("files", [])
@@ -311,18 +311,18 @@ class ReportGenerator:
             metrics = f.get("metrics", {})
             patterns = f.get("patterns", [])
             issues = f.get("issues", [])
-            
+
             file_path = f.get("file", "Unknown")
             file_name = Path(file_path).name if file_path else "Unknown"
-            
+
             pattern_badges = " ".join(
                 f'<span class="badge">{p}</span>' for p in patterns[:3]
             )
             if len(patterns) > 3:
                 pattern_badges += f' <span class="badge">+{len(patterns)-3}</span>'
-            
+
             issue_class = "warning" if issues else "success"
-            
+
             file_rows += f"""
                 <tr>
                     <td class="file-cell" title="{file_path}">{file_name}</td>
@@ -333,7 +333,7 @@ class ReportGenerator:
                     <td class="num {issue_class}">{len(issues)}</td>
                 </tr>
             """
-        
+
         # Build pattern chart
         patterns = summary.get("patterns_found", {})
         pattern_bars = ""
@@ -349,7 +349,7 @@ class ReportGenerator:
                         <span class="value">{count}</span>
                     </div>
                 """
-        
+
         html = f"""<!DOCTYPE html>
 <html lang="en">
 <head>

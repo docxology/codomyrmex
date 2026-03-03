@@ -28,7 +28,6 @@ def search_documents(
         query: Search query string.
         documents: List of plain-text strings to search.
         top_k: Maximum number of results to return.
-
     """
     try:
         results = quick_search(documents, query, k=top_k)
@@ -64,7 +63,6 @@ def search_index_query(
         query: Search query string.
         documents: List of plain-text strings to index.
         top_k: Maximum number of results to return.
-
     """
     try:
         index = create_index(backend="memory")
@@ -104,7 +102,6 @@ def search_fuzzy(
         query: String to match against.
         candidates: List of candidate strings.
         threshold: Minimum similarity score (0.0–1.0).
-
     """
     try:
         scored = []

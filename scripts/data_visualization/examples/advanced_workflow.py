@@ -4,7 +4,7 @@ Data Visualization - Advanced Workflow
 
 Demonstrates advanced visualization workflows:
 - Mermaid diagram generation
-- Git repository visualization  
+- Git repository visualization
 - Multi-panel dashboards
 """
 
@@ -18,33 +18,38 @@ except ImportError:
     project_root = Path(__file__).resolve().parent.parent.parent.parent
     sys.path.insert(0, str(project_root / "src"))
 
-from codomyrmex.utils.cli_helpers import setup_logging, print_success, print_info, print_error
+from codomyrmex.utils.cli_helpers import (
+    print_error,
+    print_info,
+    print_success,
+    setup_logging,
+)
 
 
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
+
+    import yaml
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "data_visualization" / "config.yaml"
-    config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
-            config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/data_visualization/config.yaml")
+        with open(config_path) as f:
+            yaml.safe_load(f) or {}
+            print("Loaded config from config/data_visualization/config.yaml")
 
     setup_logging()
     print_info("Running Advanced Data Visualization Workflow...")
 
     try:
         from codomyrmex.data_visualization import (
-            MermaidDiagramGenerator,
-            create_git_branch_diagram,
-            create_repository_structure_diagram,
-            GitVisualizer,
             AdvancedPlotter,
-            PlotConfig,
             ChartStyle,
             ColorPalette,
+            GitVisualizer,
+            MermaidDiagramGenerator,
+            PlotConfig,
+            create_git_branch_diagram,
+            create_repository_structure_diagram,
         )
         print_info("Successfully imported advanced visualization components")
     except ImportError as e:
@@ -71,7 +76,7 @@ def main():
     print("  Chart Styles:")
     for style in list(ChartStyle)[:4]:
         print(f"    - {style.name}: {style.value}")
-    
+
     print("  Color Palettes:")
     for palette in list(ColorPalette)[:4]:
         print(f"    - {palette.name}: {palette.value}")

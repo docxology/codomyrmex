@@ -16,7 +16,6 @@ from typing import Any
 @dataclass
 class SearchResult:
     """A hybrid search result."""
-
     doc_id: str
     score: float
     keyword_score: float = 0.0
@@ -29,7 +28,6 @@ class BM25Index:
     """Simple BM25 keyword index for hybrid search."""
 
     def __init__(self, k1: float = 1.5, b: float = 0.75) -> None:
-        """Initialize BM25 index with k1 and b parameters."""
         self._k1 = k1
         self._b = b
         self._docs: dict[str, list[str]] = {}
@@ -86,7 +84,6 @@ class HybridSearchEngine:
 
     def __init__(self, keyword_weight: float = 0.4,
                  semantic_weight: float = 0.6) -> None:
-        """Initialize hybrid search index with keyword and semantic weights."""
         self._kw_weight = keyword_weight
         self._sem_weight = semantic_weight
         self._bm25 = BM25Index()
@@ -106,7 +103,6 @@ class HybridSearchEngine:
             query: Search query.
             top_k: Number of results.
             semantic_scores: Pre-computed {doc_id: similarity_score} from vector store.
-
         """
         kw_results = dict(self._bm25.search(query, top_k=top_k * 2))
         sem_scores = semantic_scores or {}
