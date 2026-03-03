@@ -16,7 +16,7 @@ class Route:
 
     name: str
     utterances: list[str]  # Example phrases for this route
-    embeddings: np.ndarray = None  # Pre-computed embeddings (set during fit)
+    embeddings: np.ndarray | None = None  # Pre-computed embeddings (set during fit)
     threshold: float = 0.7  # Cosine similarity threshold
 
 
@@ -38,18 +38,25 @@ class SemanticRouter:
     """
 
     def __init__(self, embedding_dim: int = 64):
+        """Initialize the semantic router.
+
+        Args:
+            embedding_dim: Dimension of the embedding vectors.
+
+        """
         self.embedding_dim = embedding_dim
         self.routes: dict[str, Route] = {}
         self._embed_fn = self._simple_embed
 
     def _simple_embed(self, text: str) -> np.ndarray:
-        """Simple hash-based embedding (deterministic, for testing).
+        """Create a simple hash-based embedding (deterministic, for testing).
 
         Args:
             text: Input text string
 
         Returns:
             Normalized embedding vector of shape (embedding_dim,)
+
         """
         vec = np.zeros(self.embedding_dim)
         for i, char in enumerate(text.lower()):
@@ -65,6 +72,7 @@ class SemanticRouter:
 
         Returns:
             self (for chaining)
+
         """
         embeddings = np.stack([self._embed_fn(u) for u in route.utterances])
         route.embeddings = embeddings
@@ -79,6 +87,7 @@ class SemanticRouter:
 
         Returns:
             RouteMatch with route_name, score, and matched flag
+
         """
         if not self.routes:
             return RouteMatch(route_name="no_match", score=0.0, matched=False)
@@ -118,5 +127,6 @@ class SemanticRouter:
 
         Returns:
             List of RouteMatch results
+
         """
         return [self.route(t) for t in texts]

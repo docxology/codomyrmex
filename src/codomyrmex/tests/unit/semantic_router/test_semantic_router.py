@@ -138,6 +138,18 @@ class TestSemanticRouterRouting:
         assert r1.score == r2.score
         assert r1.matched == r2.matched
 
+    @pytest.mark.unit
+    def test_route_without_embeddings_is_skipped(self):
+        """A route with missing embeddings should be gracefully skipped."""
+        router = SemanticRouter(embedding_dim=64)
+        # Manually add a route without embeddings
+        route = Route(name="invalid", utterances=["bad"])
+        router.routes["invalid"] = route
+
+        result = router.route("test text")
+        assert result.matched is False
+        assert result.route_name == "no_match"
+
 
 # ---------------------------------------------------------------------------
 # SemanticRouter - Batch

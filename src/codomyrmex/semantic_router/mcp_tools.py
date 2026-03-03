@@ -1,14 +1,16 @@
 """MCP tools for the Semantic Router module."""
 
+from typing import Any
+
 from codomyrmex.model_context_protocol.decorators import mcp_tool
 
 
 @mcp_tool(category="semantic_router")
 def semantic_router_route(
     text: str = "What is the weather today?",
-    routes: list[dict] = None,
+    routes: list[dict[str, Any]] | None = None,
     embedding_dim: int = 64,
-) -> dict:
+) -> dict[str, Any]:
     """Route an input text to the best matching semantic route.
 
     Args:
@@ -19,6 +21,7 @@ def semantic_router_route(
 
     Returns:
         dict with: route_name, score, matched, all_routes
+
     """
     from .router import Route, SemanticRouter
 
