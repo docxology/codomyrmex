@@ -39,11 +39,16 @@ if str(_PROJECT_ROOT / "src") not in sys.path:
     sys.path.insert(0, str(_PROJECT_ROOT / "src"))
 
 _PAI_PM_SERVER = Path.home() / ".claude" / "skills" / "PAI" / "Tools" / "PMServer.ts"
-_PAI_PM_PORT   = 8888
-_CODO_PORT     = 8787
+_PAI_PM_PORT = 8888
+_CODO_PORT = 8787
 
 try:
-    from codomyrmex.utils.cli_helpers import print_error, print_info, print_success, setup_logging
+    from codomyrmex.utils.cli_helpers import (
+        print_error,
+        print_info,
+        print_success,
+        setup_logging,
+    )
     from codomyrmex.website import DataProvider, WebsiteGenerator, WebsiteServer
 except ImportError as exc:
     print(f"[ERROR] Cannot import codomyrmex: {exc}", file=sys.stderr)
@@ -53,12 +58,15 @@ except ImportError as exc:
 
 # ── helpers ──────────────────────────────────────────────────────────────────
 
+
 def _pids_on_port(port: int) -> list[int]:
     """Return PIDs listening on *port* (macOS/Linux, best-effort)."""
     try:
         result = subprocess.run(
             ["lsof", "-ti", f":{port}"],
-            capture_output=True, text=True, timeout=5,
+            capture_output=True,
+            text=True,
+            timeout=5,
         )
         return [int(p) for p in result.stdout.split() if p.strip().isdigit()]
     except Exception:
@@ -89,6 +97,7 @@ def kill_port(port: int) -> bool:
 def _port_is_live(port: int, timeout: float = 3.0) -> bool:
     """Return True if something responds on *port* within *timeout* seconds."""
     import socket
+
     deadline = time.monotonic() + timeout
     while time.monotonic() < deadline:
         try:
@@ -100,6 +109,7 @@ def _port_is_live(port: int, timeout: float = 3.0) -> bool:
 
 
 # ── phases ────────────────────────────────────────────────────────────────────
+
 
 def phase_restart(ports: list[int]) -> None:
     """Kill any existing process on each port."""
@@ -176,13 +186,20 @@ def phase_pai_pm(restart: bool, port: int = _PAI_PM_PORT) -> subprocess.Popen | 
     if _port_is_live(port, timeout=8.0):
         print_success(f"  PAI Project Manager live → http://localhost:{port}")
     else:
-        print_error(f"  PAI PM did not respond on :{port} within 8s — it may still be starting.")
+        print_error(
+            f"  PAI PM did not respond on :{port} within 8s — it may still be starting."
+        )
 
     return proc
 
 
-def phase_run_codo(project_root: Path, port: int, host: str, open_browser: bool,
-                   pai_pm_port: int | None = None) -> int:
+def phase_run_codo(
+    project_root: Path,
+    port: int,
+    host: str,
+    open_browser: bool,
+    pai_pm_port: int | None = None,
+) -> int:
     """Initialise DataProvider and serve Codomyrmex dashboard. Returns exit code."""
     print_info(f"=== RUN: Starting Codomyrmex Admin on :{port} ===")
 
@@ -204,7 +221,7 @@ def phase_run_codo(project_root: Path, port: int, host: str, open_browser: bool,
             socketserver.TCPServer.allow_reuse_address = True
             with socketserver.TCPServer((host, port), WebsiteServer) as httpd:
                 codo_url = f"http://localhost:{port}/output/website/index.html"
-                pm_url   = f"http://localhost:{pai_pm_port}" if pai_pm_port else None
+                pm_url = f"http://localhost:{pai_pm_port}" if pai_pm_port else None
 
                 print_success(f"  Codomyrmex Admin  → {codo_url}")
                 if pm_url:
@@ -212,12 +229,14 @@ def phase_run_codo(project_root: Path, port: int, host: str, open_browser: bool,
                 print_info("  Press Ctrl+C to stop both servers.\n")
 
                 if open_browser:
+
                     def _open_both():
                         time.sleep(1.2)
                         if pm_url:
-                            webbrowser.open(pm_url)       # primary — opens first
+                            webbrowser.open(pm_url)  # primary — opens first
                             time.sleep(0.4)
-                        webbrowser.open(codo_url)         # secondary — opens in new tab
+                        webbrowser.open(codo_url)  # secondary — opens in new tab
+
                     threading.Thread(target=_open_both, daemon=True).start()
 
                 try:
@@ -233,11 +252,14 @@ def phase_run_codo(project_root: Path, port: int, host: str, open_browser: bool,
                 print_error(f"  Cannot bind to :{port}: {exc}")
                 return 1
 
-    print_error("Could not find a free port. Use --restart to clear existing processes.")
+    print_error(
+        "Could not find a free port. Use --restart to clear existing processes."
+    )
     return 1
 
 
 # ── CLI ───────────────────────────────────────────────────────────────────────
+
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
@@ -245,14 +267,44 @@ def parse_args() -> argparse.Namespace:
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog=__doc__,
     )
-    parser.add_argument("--port",       type=int, default=_CODO_PORT,   help=f"Codomyrmex port (default: {_CODO_PORT})")
-    parser.add_argument("--pm-port",    type=int, default=_PAI_PM_PORT, help=f"PAI PM port (default: {_PAI_PM_PORT})")
-    parser.add_argument("--host",       default="0.0.0.0",              help="Codomyrmex bind host (default: 0.0.0.0)")
-    parser.add_argument("--restart",    action="store_true",             help="Kill existing servers on both ports before starting")
-    parser.add_argument("--no-open",    action="store_true",             help="Do not open browser automatically")
-    parser.add_argument("--setup-only", action="store_true",             help="Generate Codomyrmex files only, do not start servers")
-    parser.add_argument("--no-setup",   action="store_true",             help="Skip file generation, just (re)start servers")
-    parser.add_argument("--no-pai-pm",  action="store_true",             help="Skip PAI PM (port 8888), only run Codomyrmex")
+    parser.add_argument(
+        "--port",
+        type=int,
+        default=_CODO_PORT,
+        help=f"Codomyrmex port (default: {_CODO_PORT})",
+    )
+    parser.add_argument(
+        "--pm-port",
+        type=int,
+        default=_PAI_PM_PORT,
+        help=f"PAI PM port (default: {_PAI_PM_PORT})",
+    )
+    parser.add_argument(
+        "--host", default="0.0.0.0", help="Codomyrmex bind host (default: 0.0.0.0)"
+    )
+    parser.add_argument(
+        "--restart",
+        action="store_true",
+        help="Kill existing servers on both ports before starting",
+    )
+    parser.add_argument(
+        "--no-open", action="store_true", help="Do not open browser automatically"
+    )
+    parser.add_argument(
+        "--setup-only",
+        action="store_true",
+        help="Generate Codomyrmex files only, do not start servers",
+    )
+    parser.add_argument(
+        "--no-setup",
+        action="store_true",
+        help="Skip file generation, just (re)start servers",
+    )
+    parser.add_argument(
+        "--no-pai-pm",
+        action="store_true",
+        help="Skip PAI PM (port 8888), only run Codomyrmex",
+    )
     return parser.parse_args()
 
 
@@ -309,17 +361,20 @@ def main() -> int:
 
     return exit_code
 
-
-
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
-    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "pai" / "config.yaml"
+
+    import yaml
+
+    config_path = (
+        Path(__file__).resolve().parent.parent.parent / "config" / "pai" / "config.yaml"
+    )
     config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
+        with open(config_path) as f:
             config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/pai/config.yaml")
+            print("Loaded config from config/pai/config.yaml")
+
 
 if __name__ == "__main__":
     sys.exit(main())

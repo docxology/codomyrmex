@@ -115,7 +115,9 @@ def extract_module_info(module_dir: Path) -> dict:
     """Extract information from a source module directory."""
     info = {
         "name": module_dir.name,
-        "display_name": DISPLAY_NAMES.get(module_dir.name, module_dir.name.replace("_", " ").title()),
+        "display_name": DISPLAY_NAMES.get(
+            module_dir.name, module_dir.name.replace("_", " ").title()
+        ),
         "docstring": "",
         "classes": [],
         "functions": [],
@@ -124,34 +126,45 @@ def extract_module_info(module_dir: Path) -> dict:
         "has_tests": False,
         "version": "0.1.0",
     }
-    
+
     init_file = module_dir / "__init__.py"
     if init_file.exists():
         content = init_file.read_text()
         try:
             tree = ast.parse(content)
             # Extract module docstring
-            if (tree.body and isinstance(tree.body[0], ast.Expr) 
-                    and isinstance(tree.body[0].value, (ast.Constant, ast.Str))):
-                raw = tree.body[0].value.value if isinstance(tree.body[0].value, ast.Constant) else tree.body[0].value.s
+            if (
+                tree.body
+                and isinstance(tree.body[0], ast.Expr)
+                and isinstance(tree.body[0].value, (ast.Constant, ast.Str))
+            ):
+                raw = (
+                    tree.body[0].value.value
+                    if isinstance(tree.body[0].value, ast.Constant)
+                    else tree.body[0].value.s
+                )
                 info["docstring"] = raw.strip()
-            
+
             # Extract classes
             for node in ast.walk(tree):
                 if isinstance(node, ast.ClassDef):
                     doc = ast.get_docstring(node) or ""
-                    info["classes"].append({
-                        "name": node.name,
-                        "doc": doc.split("\n")[0] if doc else "",
-                    })
+                    info["classes"].append(
+                        {
+                            "name": node.name,
+                            "doc": doc.split("\n")[0] if doc else "",
+                        }
+                    )
                 elif isinstance(node, ast.FunctionDef):
                     if not node.name.startswith("_"):
                         doc = ast.get_docstring(node) or ""
-                        info["functions"].append({
-                            "name": node.name,
-                            "doc": doc.split("\n")[0] if doc else "",
-                        })
-            
+                        info["functions"].append(
+                            {
+                                "name": node.name,
+                                "doc": doc.split("\n")[0] if doc else "",
+                            }
+                        )
+
             # Extract version
             for node in ast.walk(tree):
                 if isinstance(node, ast.Assign):
@@ -162,7 +175,7 @@ def extract_module_info(module_dir: Path) -> dict:
 
         except SyntaxError:
             pass
-    
+
     # Find submodules (subdirectories with __init__.py)
     for child in sorted(module_dir.iterdir()):
         if child.is_dir() and (child / "__init__.py").exists():
@@ -170,9 +183,16 @@ def extract_module_info(module_dir: Path) -> dict:
             sub_init = child / "__init__.py"
             try:
                 sub_tree = ast.parse(sub_init.read_text())
-                if (sub_tree.body and isinstance(sub_tree.body[0], ast.Expr)
-                        and isinstance(sub_tree.body[0].value, (ast.Constant, ast.Str))):
-                    raw = sub_tree.body[0].value.value if isinstance(sub_tree.body[0].value, ast.Constant) else sub_tree.body[0].value.s
+                if (
+                    sub_tree.body
+                    and isinstance(sub_tree.body[0], ast.Expr)
+                    and isinstance(sub_tree.body[0].value, (ast.Constant, ast.Str))
+                ):
+                    raw = (
+                        sub_tree.body[0].value.value
+                        if isinstance(sub_tree.body[0].value, ast.Constant)
+                        else sub_tree.body[0].value.s
+                    )
                     sub_doc = raw.strip().split("\n")[0]
             except (SyntaxError, Exception):
                 pass
@@ -182,7 +202,7 @@ def extract_module_info(module_dir: Path) -> dict:
     for py_file in sorted(module_dir.glob("*.py")):
         if py_file.name != "__init__.py":
             info["py_files"].append(py_file.name)
-    
+
     return info
 
 
@@ -194,7 +214,12 @@ def get_module_description(info: dict) -> str:
         lines = ds.split("\n")
         for line in lines:
             stripped = line.strip()
-            if stripped and not stripped.startswith("Submodule") and stripped != info["display_name"] and stripped != info["name"]:
+            if (
+                stripped
+                and not stripped.startswith("Submodule")
+                and stripped != info["display_name"]
+                and stripped != info["name"]
+            ):
                 # Skip title-like lines
                 if stripped.lower().replace("_", " ") == info["name"].replace("_", " "):
                     continue
@@ -207,7 +232,7 @@ def get_module_description(info: dict) -> str:
 def generate_readme(info: dict) -> str:
     """Generate enriched README.md content."""
     desc = get_module_description(info)
-    
+
     lines = [
         f"# {info['display_name']} Module Documentation",
         "",
@@ -218,7 +243,7 @@ def generate_readme(info: dict) -> str:
         f"{desc}",
         "",
     ]
-    
+
     # Key Features
     features = []
     for cls in info["classes"][:6]:
@@ -231,13 +256,13 @@ def generate_readme(info: dict) -> str:
             features.append(f"- `{fn['name']}()` — {fn['doc']}")
         else:
             features.append(f"- `{fn['name']}()` — {fn['name'].replace('_', ' ')}")
-    
+
     if features:
         lines.append("## Key Features")
         lines.append("")
         lines.extend(features)
         lines.append("")
-    
+
     # Submodules
     if info["submodules"]:
         lines.append("## Submodules")
@@ -248,7 +273,7 @@ def generate_readme(info: dict) -> str:
             doc = sub["doc"] or sub["name"].replace("_", " ").title()
             lines.append(f"| `{sub['name']}` | {doc} |")
         lines.append("")
-    
+
     # Quick Start
     lines.append("## Quick Start")
     lines.append("")
@@ -258,20 +283,22 @@ def generate_readme(info: dict) -> str:
         lines.append(f"from codomyrmex.{info['name']} import {imports}")
         lines.append("")
         first_cls = info["classes"][0]["name"]
-        lines.append(f"# Initialize")
+        lines.append("# Initialize")
         lines.append(f"instance = {first_cls}()")
     elif info["functions"]:
         imports = ", ".join(f["name"] for f in info["functions"][:3])
         lines.append(f"from codomyrmex.{info['name']} import {imports}")
         lines.append("")
         first_fn = info["functions"][0]["name"]
-        lines.append(f"# Use the module")
+        lines.append("# Use the module")
         lines.append(f"result = {first_fn}()")
     else:
-        lines.append(f"from codomyrmex.{info['name']} import *  # See source for specific imports")
+        lines.append(
+            f"from codomyrmex.{info['name']} import *  # See source for specific imports"
+        )
     lines.append("```")
     lines.append("")
-    
+
     # API Reference (if enough classes/functions)
     if len(info["classes"]) > 2 or len(info["functions"]) > 2:
         lines.append("## API Reference")
@@ -294,7 +321,7 @@ def generate_readme(info: dict) -> str:
                 doc = fn["doc"] or fn["name"].replace("_", " ")
                 lines.append(f"| `{fn['name']}()` | {doc} |")
             lines.append("")
-    
+
     # Directory Contents
     lines.append("## Directory Contents")
     lines.append("")
@@ -303,29 +330,33 @@ def generate_readme(info: dict) -> str:
     lines.append("| `README.md` | This documentation |")
     lines.append("| `AGENTS.md` | Agent coordination guide |")
     lines.append("| `SPEC.md` | Technical specification |")
-    
+
     # Check for extra files in docs dir
     docs_dir = DOCS_ROOT / info["name"]
     if docs_dir.exists():
         for child in sorted(docs_dir.iterdir()):
             if child.is_dir():
-                lines.append(f"| `{child.name}/` | {child.name.replace('_', ' ').title()} |")
+                lines.append(
+                    f"| `{child.name}/` | {child.name.replace('_', ' ').title()} |"
+                )
     lines.append("")
-    
+
     # Navigation
     lines.append("## Navigation")
     lines.append("")
-    lines.append(f"- **Source**: [src/codomyrmex/{info['name']}/](../../../src/codomyrmex/{info['name']}/)")
+    lines.append(
+        f"- **Source**: [src/codomyrmex/{info['name']}/](../../../src/codomyrmex/{info['name']}/)"
+    )
     lines.append("- **Parent**: [Modules](../README.md)")
     lines.append("")
-    
+
     return "\n".join(lines)
 
 
 def generate_agents(info: dict) -> str:
     """Generate enriched AGENTS.md content."""
     desc = get_module_description(info)
-    
+
     lines = [
         f"# {info['display_name']} Module — Agent Coordination",
         "",
@@ -336,7 +367,7 @@ def generate_agents(info: dict) -> str:
         "## Key Capabilities",
         "",
     ]
-    
+
     # Capabilities from classes + functions
     caps = []
     for cls in info["classes"][:5]:
@@ -345,13 +376,13 @@ def generate_agents(info: dict) -> str:
     for fn in info["functions"][:3]:
         doc = fn["doc"] or fn["name"].replace("_", " ")
         caps.append(f"- `{fn['name']}()`: {doc}")
-    
+
     if caps:
         lines.extend(caps)
     else:
         lines.append(f"- {info['display_name']} operations and management")
     lines.append("")
-    
+
     # Agent Usage
     lines.append("## Agent Usage Patterns")
     lines.append("")
@@ -368,22 +399,24 @@ def generate_agents(info: dict) -> str:
         lines.append(f"# Agent uses {info['display_name'].lower()} capabilities")
     lines.append("```")
     lines.append("")
-    
+
     # Integration
     lines.append("## Integration Points")
     lines.append("")
-    lines.append(f"- **Source**: [src/codomyrmex/{info['name']}/](../../../src/codomyrmex/{info['name']}/)")
+    lines.append(
+        f"- **Source**: [src/codomyrmex/{info['name']}/](../../../src/codomyrmex/{info['name']}/)"
+    )
     lines.append("- **Docs**: [Module Documentation](README.md)")
     lines.append("- **Spec**: [Technical Specification](SPEC.md)")
     lines.append("")
-    
+
     return "\n".join(lines)
 
 
 def generate_spec(info: dict) -> str:
     """Generate enriched SPEC.md content."""
     desc = get_module_description(info)
-    
+
     lines = [
         f"# {info['display_name']} — Functional Specification",
         "",
@@ -398,7 +431,7 @@ def generate_spec(info: dict) -> str:
         "## 2. Architecture",
         "",
     ]
-    
+
     # Architecture table
     if info["classes"] or info["py_files"]:
         lines.append("### Components")
@@ -412,7 +445,7 @@ def generate_spec(info: dict) -> str:
             doc = fn["doc"] or fn["name"].replace("_", " ")
             lines.append(f"| `{fn['name']}()` | Function | {doc} |")
         lines.append("")
-    
+
     # Submodules
     if info["submodules"]:
         lines.append("### Submodule Structure")
@@ -421,7 +454,7 @@ def generate_spec(info: dict) -> str:
             doc = sub["doc"] or sub["name"].replace("_", " ").title()
             lines.append(f"- `{sub['name']}/` — {doc}")
         lines.append("")
-    
+
     # Source files
     if info["py_files"]:
         lines.append("### Source Files")
@@ -431,30 +464,32 @@ def generate_spec(info: dict) -> str:
         if len(info["py_files"]) > 10:
             lines.append(f"- ...and {len(info['py_files']) - 10} more")
         lines.append("")
-    
+
     # Dependencies
     lines.append("## 3. Dependencies")
     lines.append("")
-    lines.append(f"See `src/codomyrmex/{info['name']}/__init__.py` for import dependencies.")
+    lines.append(
+        f"See `src/codomyrmex/{info['name']}/__init__.py` for import dependencies."
+    )
     lines.append("")
-    
+
     # API
     lines.append("## 4. Public API")
     lines.append("")
     if info["classes"]:
         imports = ", ".join(c["name"] for c in info["classes"][:5])
-        lines.append(f"```python")
+        lines.append("```python")
         lines.append(f"from codomyrmex.{info['name']} import {imports}")
-        lines.append(f"```")
+        lines.append("```")
     elif info["functions"]:
         imports = ", ".join(f["name"] for f in info["functions"][:5])
-        lines.append(f"```python")
+        lines.append("```python")
         lines.append(f"from codomyrmex.{info['name']} import {imports}")
-        lines.append(f"```")
+        lines.append("```")
     else:
-        lines.append(f"See source module for available exports.")
+        lines.append("See source module for available exports.")
     lines.append("")
-    
+
     # Testing
     lines.append("## 5. Testing")
     lines.append("")
@@ -462,7 +497,7 @@ def generate_spec(info: dict) -> str:
     lines.append(f"uv run python -m pytest src/codomyrmex/tests/ -k {info['name']} -v")
     lines.append("```")
     lines.append("")
-    
+
     return "\n".join(lines)
 
 
@@ -472,82 +507,104 @@ def should_enrich(module_name: str, doc_file: Path, info: dict) -> bool:
         return True
     content = doc_file.read_text()
     lines_count = content.count("\n")
-    
+
     # Always enrich if title is wrong
     first_line = content.split("\n")[0] if content else ""
     expected_display = info["display_name"]
-    if first_line and expected_display.lower() not in first_line.lower() and module_name not in first_line.lower():
+    if (
+        first_line
+        and expected_display.lower() not in first_line.lower()
+        and module_name not in first_line.lower()
+    ):
         return True
-    
+
     # Enrich if very thin (under 50 lines for README, 25 for AGENTS/SPEC)
     if doc_file.name == "README.md" and lines_count < 50:
         return True
     if doc_file.name in ("AGENTS.md", "SPEC.md") and lines_count < 25:
         return True
-    
+
     return False
 
 
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
-    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "documentation" / "config.yaml"
+
+    import yaml
+
+    config_path = (
+        Path(__file__).resolve().parent.parent.parent
+        / "config"
+        / "documentation"
+        / "config.yaml"
+    )
     config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
+        with open(config_path) as f:
             config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/documentation/config.yaml")
+            print("Loaded config from config/documentation/config.yaml")
 
     enriched_count = 0
     skipped_count = 0
-    
-    modules = sorted([d.name for d in SRC_ROOT.iterdir() 
-                       if d.is_dir() and d.name != "__pycache__" and (d / "__init__.py").exists()])
-    
+
+    modules = sorted(
+        [
+            d.name
+            for d in SRC_ROOT.iterdir()
+            if d.is_dir() and d.name != "__pycache__" and (d / "__init__.py").exists()
+        ]
+    )
+
     print(f"Found {len(modules)} source modules")
-    
+
     for mod_name in modules:
         src_dir = SRC_ROOT / mod_name
         docs_dir = DOCS_ROOT / mod_name
-        
+
         if not docs_dir.exists():
             print(f"  ⚠️ No docs dir for {mod_name}, skipping")
             continue
-        
+
         info = extract_module_info(src_dir)
-        
+
         # README.md
         readme_path = docs_dir / "README.md"
         if should_enrich(mod_name, readme_path, info):
             readme_content = generate_readme(info)
             readme_path.write_text(readme_content)
             enriched_count += 1
-            print(f"  ✅ Enriched {mod_name}/README.md ({readme_content.count(chr(10))} lines)")
+            print(
+                f"  ✅ Enriched {mod_name}/README.md ({readme_content.count(chr(10))} lines)"
+            )
         else:
             skipped_count += 1
-        
+
         # AGENTS.md
         agents_path = docs_dir / "AGENTS.md"
         if should_enrich(mod_name, agents_path, info):
             agents_content = generate_agents(info)
             agents_path.write_text(agents_content)
             enriched_count += 1
-            print(f"  ✅ Enriched {mod_name}/AGENTS.md ({agents_content.count(chr(10))} lines)")
+            print(
+                f"  ✅ Enriched {mod_name}/AGENTS.md ({agents_content.count(chr(10))} lines)"
+            )
         else:
             skipped_count += 1
-        
+
         # SPEC.md
         spec_path = docs_dir / "SPEC.md"
         if should_enrich(mod_name, spec_path, info):
             spec_content = generate_spec(info)
             spec_path.write_text(spec_content)
             enriched_count += 1
-            print(f"  ✅ Enriched {mod_name}/SPEC.md ({spec_content.count(chr(10))} lines)")
+            print(
+                f"  ✅ Enriched {mod_name}/SPEC.md ({spec_content.count(chr(10))} lines)"
+            )
         else:
             skipped_count += 1
-    
-    print(f"\n{'='*50}")
+
+    print(f"\n{'=' * 50}")
     print(f"✅ Enriched: {enriched_count} files")
     print(f"⏭️ Skipped (already rich): {skipped_count} files")
     print(f"📊 Total processed: {enriched_count + skipped_count} files")

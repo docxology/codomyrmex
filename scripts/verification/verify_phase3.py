@@ -10,7 +10,7 @@ Verifies Privacy module functionality:
 import sys
 
 from codomyrmex.privacy import CrumbCleaner, MixnetProxy
-from codomyrmex.utils.cli_helpers import setup_logging, print_info, print_success
+from codomyrmex.utils.cli_helpers import print_info, print_success, setup_logging
 
 
 def verify_privacy():
@@ -23,10 +23,7 @@ def verify_privacy():
         "timestamp": "2023-01-01",
         "location": {"lat": 10, "lon": 20},
         "payload": "secret message",
-        "meta": {
-             "device_id": "iphone",
-             "valid": True
-        }
+        "meta": {"device_id": "iphone", "valid": True},
     }
 
     clean = cleaner.scrub(data)
@@ -54,17 +51,23 @@ def main() -> int:
     print_success("Phase 3 Verification Complete")
     return 0
 
-
-
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
-    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "verification" / "config.yaml"
+
+    import yaml
+
+    config_path = (
+        Path(__file__).resolve().parent.parent.parent
+        / "config"
+        / "verification"
+        / "config.yaml"
+    )
     config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
+        with open(config_path) as f:
             config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/verification/config.yaml")
+            print("Loaded config from config/verification/config.yaml")
+
 
 if __name__ == "__main__":
     sys.exit(main())
