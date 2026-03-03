@@ -1,10 +1,16 @@
 """MCP tools for the language detection module."""
-from typing import Dict, Any, List
+
+from typing import Any
+
+from codomyrmex.language_detection import (
+    detect_language,
+    detect_languages_with_probabilities,
+)
 from codomyrmex.model_context_protocol.decorators import mcp_tool
-from codomyrmex.language_detection import detect_language, detect_languages_with_probabilities
+
 
 @mcp_tool(category="language_detection")
-def language_detection_detect(text: str) -> Dict[str, Any]:
+def language_detection_detect(text: str) -> dict[str, Any]:
     """Detect the language of the provided text.
 
     Args:
@@ -15,15 +21,13 @@ def language_detection_detect(text: str) -> Dict[str, Any]:
     """
     try:
         lang = detect_language(text)
-        return {
-            "status": "success",
-            "language": lang
-        }
+        return {"status": "success", "language": lang}
     except Exception as e:
         return {"status": "error", "message": str(e)}
 
+
 @mcp_tool(category="language_detection")
-def language_detection_detect_probs(text: str) -> Dict[str, Any]:
+def language_detection_detect_probs(text: str) -> dict[str, Any]:
     """Detect multiple languages with probabilities for the provided text.
 
     Args:
@@ -34,9 +38,6 @@ def language_detection_detect_probs(text: str) -> Dict[str, Any]:
     """
     try:
         results = detect_languages_with_probabilities(text)
-        return {
-            "status": "success",
-            "results": results
-        }
+        return {"status": "success", "results": results}
     except Exception as e:
         return {"status": "error", "message": str(e)}
