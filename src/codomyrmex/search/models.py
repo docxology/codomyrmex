@@ -1,5 +1,4 @@
-"""
-Search Models
+"""Search Models.
 
 Data classes, tokenizers, and utilities for search.
 """
@@ -14,6 +13,7 @@ from typing import Any
 @dataclass
 class Document:
     """A searchable document."""
+
     id: str
     content: str
     metadata: dict[str, Any] = field(default_factory=dict)
@@ -23,6 +23,7 @@ class Document:
 @dataclass
 class SearchResult:
     """A search result."""
+
     document: Document
     score: float
     highlights: list[str] = field(default_factory=list)
@@ -45,6 +46,7 @@ class SimpleTokenizer(Tokenizer):
     """Simple whitespace and punctuation tokenizer."""
 
     def __init__(self, lowercase: bool = True, min_length: int = 2):
+        """Initialize simple tokenizer."""
         self.lowercase = lowercase
         self.min_length = min_length
 
@@ -104,6 +106,7 @@ class QueryParser:
     """Parse search queries with operators."""
 
     def __init__(self):
+        """Initialize query parser."""
         self._operators = {
             '+': 'must',
             '-': 'must_not',

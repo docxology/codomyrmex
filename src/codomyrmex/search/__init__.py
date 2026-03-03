@@ -1,5 +1,4 @@
-"""
-Search Module
+"""Search Module.
 
 Full-text search with TF-IDF scoring, fuzzy matching, and query parsing.
 """
