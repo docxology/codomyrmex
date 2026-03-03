@@ -5,6 +5,8 @@ security analysis, performance analysis, and maintainability assessment.
 """
 
 import ast
+
+# from performance import monitor_performance, performance_context # Moved to try/except
 import csv
 import json
 import math
@@ -31,7 +33,6 @@ logger = get_logger(__name__)
 # Import performance monitoring
 try:
     from codomyrmex.performance import monitor_performance, performance_context
-
     PERFORMANCE_MONITORING_AVAILABLE = True
 except ImportError:
     logger.warning("Performance monitoring not available - decorators will be no-op")
@@ -46,7 +47,6 @@ except ImportError:
 
     class performance_context:
         """No-op context manager used when PerformanceMonitor is not installed."""
-
         def __init__(self, *args, **kwargs):
             return None  # Intentional no-op
 
@@ -99,10 +99,7 @@ class StaticAnalyzer:
             try:
                 if tool == "pyrefly":
                     subprocess.run(
-                        ["pyrefly", "--version"],
-                        capture_output=True,
-                        check=True,
-                        timeout=5,
+                        ["pyrefly", "--version"], capture_output=True, check=True, timeout=5
                     )
                 else:
                     subprocess.run(

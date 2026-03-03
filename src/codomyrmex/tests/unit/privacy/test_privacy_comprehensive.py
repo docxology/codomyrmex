@@ -8,8 +8,6 @@ Zero-mock policy: no unittest.mock, no MagicMock, no monkeypatch.
 """
 
 import hashlib
-import math
-import time
 
 import pytest
 
@@ -28,7 +26,6 @@ from codomyrmex.privacy.privacy import (
     mask_partial,
     mask_redact,
 )
-
 
 # ==============================================================================
 # PIIMatch Dataclass
@@ -224,7 +221,7 @@ class TestMaskHash:
     def test_unicode_input(self):
         """Unicode characters are hashed correctly."""
         result = mask_hash("cafe\u0301")
-        expected = hashlib.sha256("cafe\u0301".encode("utf-8")).hexdigest()
+        expected = hashlib.sha256("cafe\u0301".encode()).hexdigest()
         assert result == expected
 
     def test_invalid_algorithm_raises(self):

@@ -14,19 +14,13 @@ import os
 import tempfile
 import warnings
 from pathlib import Path
-from typing import Any
 
 import pytest
 
-# ---------------------------------------------------------------------------
-# Skip guard: the entire module depends on ``cryptography``
-# ---------------------------------------------------------------------------
-cryptography = pytest.importorskip("cryptography", reason="cryptography library required")
-
 from codomyrmex.encryption import (
     AESGCMEncryptor,
-    Encryptor,
     EncryptionError,
+    Encryptor,
     KeyManager,
     SecureDataContainer,
     Signer,
@@ -50,6 +44,11 @@ from codomyrmex.encryption.signing import (
     sign_file,
     verify_file,
 )
+
+# ---------------------------------------------------------------------------
+# Skip guard: the entire module depends on ``cryptography``
+# ---------------------------------------------------------------------------
+cryptography = pytest.importorskip("cryptography", reason="cryptography library required")
 
 # ==============================================================================
 # Helpers

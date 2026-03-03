@@ -22,7 +22,6 @@ from codomyrmex.module_template.scaffold import (
     scaffold_new_module,
 )
 
-
 # ===========================================================================
 # TEMPLATE_FILES constant
 # ===========================================================================

@@ -7,12 +7,15 @@ _RESOURCE_DEFINITIONS, _PROMPT_DEFINITIONS, and proxy tool helpers.
 Zero-mock compliant: no unittest.mock, MagicMock, or monkeypatch.
 """
 
-import importlib
 import threading
-import time
 
 import pytest
 
+from codomyrmex.agents.pai.mcp.definitions import (
+    _PROMPT_DEFINITIONS,
+    _RESOURCE_DEFINITIONS,
+    _TOOL_DEFINITIONS,
+)
 from codomyrmex.agents.pai.mcp.discovery import (
     _DEFAULT_CACHE_TTL,
     _DYNAMIC_TOOLS_CACHE_LOCK,
@@ -22,12 +25,6 @@ from codomyrmex.agents.pai.mcp.discovery import (
     get_discovery_metrics,
     invalidate_tool_cache,
 )
-from codomyrmex.agents.pai.mcp.definitions import (
-    _PROMPT_DEFINITIONS,
-    _RESOURCE_DEFINITIONS,
-    _TOOL_DEFINITIONS,
-)
-
 
 # ============================================================================
 # _find_mcp_modules Tests
@@ -148,7 +145,7 @@ class TestDiscoverDynamicTools:
             pytest.skip("No dynamic tools discovered (may require full install)")
         for name, description, handler, params in tools:
             assert isinstance(name, str), f"Tool name should be str, got {type(name)}"
-            assert isinstance(description, str), f"Description should be str"
+            assert isinstance(description, str), "Description should be str"
             assert callable(handler), f"Handler for {name} should be callable"
             assert isinstance(params, dict), f"Params for {name} should be dict"
 
@@ -380,7 +377,7 @@ class TestPromptDefinitions:
     def test_each_entry_structure(self):
         """Each prompt: (name:str, description:str, args:list, template:str)."""
         for name, description, args, template in _PROMPT_DEFINITIONS:
-            assert isinstance(name, str), f"Prompt name should be str"
+            assert isinstance(name, str), "Prompt name should be str"
             assert isinstance(description, str), f"Prompt description should be str for {name}"
             assert isinstance(args, list), f"Prompt args should be list for {name}"
             assert isinstance(template, str), f"Prompt template should be str for {name}"
