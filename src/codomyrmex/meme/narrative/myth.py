@@ -26,6 +26,7 @@ def synthesize_myth(
 
     Returns:
         A generated Narrative object skeleton.
+
     """
     # Simply use Hero's Journey as default mythic structure
     arc = heros_journey_arc()

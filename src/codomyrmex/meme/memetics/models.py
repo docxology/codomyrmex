@@ -37,6 +37,7 @@ class Meme:
         metadata: Arbitrary key-value metadata.
         id: Unique identifier, auto-generated from content hash + timestamp.
         created_at: Unix timestamp of creation.
+
     """
 
     content: str
@@ -50,6 +51,7 @@ class Meme:
     created_at: float = field(default_factory=time.time)
 
     def __post_init__(self) -> None:
+        """Post-init hook."""
         if not self.id:
             hash_input = f"{self.content}:{self.created_at}:{uuid.uuid4().hex[:8]}"
             self.id = hashlib.sha256(hash_input.encode()).hexdigest()[:16]
@@ -124,6 +126,7 @@ class Memeplex:
         memes: The constituent memes.
         synergy: How much the memes reinforce each other (0–1).
         id: Unique identifier.
+
     """
 
     name: str
@@ -132,6 +135,7 @@ class Memeplex:
     id: str = field(default="")
 
     def __post_init__(self) -> None:
+        """Post-init hook."""
         if not self.id:
             self.id = hashlib.sha256(
                 f"{self.name}:{uuid.uuid4().hex[:8]}".encode()
@@ -147,7 +151,7 @@ class Memeplex:
         return base * (1.0 + self.synergy)
 
     def robustness_score(self) -> float:
-        """How robust is this memeplex to losing individual memes?
+        """Calculate how robust this memeplex is to losing individual memes.
 
         Uses the Gini coefficient of individual meme fitnesses.
         A highly uniform memeplex is more robust.
@@ -221,18 +225,21 @@ class FitnessMap:
 
     @property
     def mean_fitness(self) -> float:
+        """Calculate mean fitness."""
         if not self.entries:
             return 0.0
         return sum(self.entries.values()) / len(self.entries)
 
     @property
     def max_fitness(self) -> float:
+        """Calculate max fitness."""
         if not self.entries:
             return 0.0
         return max(self.entries.values())
 
     @property
     def min_fitness(self) -> float:
+        """Calculate min fitness."""
         if not self.entries:
             return 0.0
         return min(self.entries.values())

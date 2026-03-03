@@ -14,6 +14,7 @@ def analyze_frames(text: str, known_frames: list[CognitiveFrame]) -> list[Cognit
 
     Returns:
         List of active Frames sorted by relevance.
+
     """
     active = []
     text_lower = text.lower()

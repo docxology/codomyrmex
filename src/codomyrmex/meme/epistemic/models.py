@@ -26,6 +26,7 @@ class Evidence:
         evidence_type: Type classification.
         weight: Strength (0-1).
         validity: Assessed validity (0-1).
+
     """
 
     content: str
@@ -43,6 +44,7 @@ class Fact:
         statement: The factual claim.
         verification_method: How it was verified.
         confidence: Confidence level (0-1).
+
     """
 
     statement: str
@@ -59,6 +61,7 @@ class Belief:
         adherent: Entity holding the belief.
         certainty: Subjective certainty (0-1).
         emotional_investment: Attachment level (0-1).
+
     """
 
     statement: str
@@ -76,6 +79,7 @@ class EpistemicState:
         facts: Known facts.
         beliefs: Held beliefs.
         entropy: Measure of confusion/uncertainty.
+
     """
 
     facts: list[Fact] = field(default_factory=list)

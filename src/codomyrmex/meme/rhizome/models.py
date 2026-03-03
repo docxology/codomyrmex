@@ -9,6 +9,7 @@ from enum import StrEnum
 
 class NetworkTopology(StrEnum):
     """Network structure types."""
+
     RANDOM = "random"
     SCALE_FREE = "scale_free"
     SMALL_WORLD = "small_world"
@@ -25,7 +26,9 @@ class Node:
         content: Payload (e.g. meme content).
         node_type: Classification.
         connections: Set of connected node IDs.
+
     """
+
     id: str = field(default_factory=lambda: str(uuid.uuid4())[:8])
     content: str = ""
     node_type: str = "generic"
@@ -43,7 +46,9 @@ class Edge:
         target: Target Node ID.
         weight: Connection strength (0-1).
         edge_type: Relationship type.
+
     """
+
     source: str
     target: str
     weight: float = 1.0
@@ -51,6 +56,7 @@ class Edge:
     id: str = field(default="")
 
     def __post_init__(self):
+        """Post-init hook."""
         if not self.id:
             # Deterministic ID for undirected edge check
             s, t = sorted([self.source, self.target])
@@ -64,15 +70,19 @@ class Graph:
     Attributes:
         nodes: Map of ID to Node.
         edges: List of Edges.
+
     """
+
     nodes: dict[str, Node] = field(default_factory=dict)
     edges: list[Edge] = field(default_factory=list)
     topology: NetworkTopology = NetworkTopology.RANDOM
 
     def add_node(self, node: Node):
+        """Add a node."""
         self.nodes[node.id] = node
 
     def add_edge(self, edge: Edge):
+        """Add an edge."""
         self.edges.append(edge)
         if edge.source in self.nodes:
             self.nodes[edge.source].connections.add(edge.target)

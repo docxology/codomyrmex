@@ -15,11 +15,13 @@ class SIRModel:
     def __init__(
         self, population_size: int = 1000, beta: float = 0.3, gamma: float = 0.1
     ) -> None:
-        """
+        """Initialize the model.
+
         Args:
             population_size: Total nodes (N).
             beta: Infection rate per contact.
             gamma: Recovery rate per step.
+
         """
         self.N = population_size
         self.beta = beta
@@ -71,6 +73,7 @@ class SISModel:
     def __init__(
         self, population_size: int = 1000, beta: float = 0.3, gamma: float = 0.1
     ) -> None:
+        """Initialize the model."""
         self.N = population_size
         self.beta = beta
         self.gamma = gamma
@@ -119,6 +122,7 @@ class SEIRModel(SIRModel):
         sigma: float = 0.1,  # Incubation rate (1/incubation_period)
         gamma: float = 0.1,
     ) -> None:
+        """Initialize SEIR model."""
         super().__init__(population_size, beta, gamma)
         self.sigma = sigma
 

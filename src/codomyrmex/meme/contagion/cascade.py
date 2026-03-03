@@ -19,6 +19,7 @@ class CascadeDetector:
 
         Returns:
             List of detected Cascades.
+
         """
         # Group by meme_id
         grouped: dict[str, list[dict]] = {}
@@ -64,5 +65,5 @@ class CascadeDetector:
 
 
 def detect_cascades(events: list[dict]) -> list[Cascade]:
-    """Convenience wrapper for CascadeDetector."""
+    """Run the CascadeDetector convenience wrapper."""
     return CascadeDetector().detect(events)

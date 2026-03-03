@@ -1,5 +1,4 @@
-"""
-codomyrmex.meme.memetics — Core Memetic Engine.
+"""codomyrmex.meme.memetics — Core Memetic Engine.
 
 Data structures and algorithms for modeling memes as discrete replicable
 information units with fitness, mutation rates, and transmission vectors.

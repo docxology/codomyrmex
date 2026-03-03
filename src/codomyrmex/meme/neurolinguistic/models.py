@@ -25,6 +25,7 @@ class CognitiveFrame:
         keywords: Words that evoke this frame.
         roles: Semantic roles implied (e.g. 'Victim', 'Villain').
         logic: Underlying logic/implication.
+
     """
 
     name: str
@@ -43,6 +44,7 @@ class LinguisticPattern:
         pattern_type: Classification.
         template: Generation template.
         description: Usage description.
+
     """
 
     name: str
@@ -60,6 +62,7 @@ class PersuasionAttempt:
         technique: Method used.
         content: The actual message.
         success_prob: Estimated probability of success.
+
     """
 
     target: str
@@ -77,6 +80,7 @@ class BiasInstance:
         bias_name: Name of the bias (e.g. 'Confirmation Bias').
         trigger: What triggered it.
         impact_score: Estimated impact (0-1).
+
     """
 
     bias_name: str

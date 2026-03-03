@@ -30,6 +30,7 @@ class NarrativeTemplate:
         name: Template name (e.g. 'Hero's Journey').
         stages: Ordered list of narrative stages.
         roles: Required archetypal roles.
+
     """
 
     name: str
@@ -45,6 +46,7 @@ class NarrativeArc:
         name: Arc name (e.g. 'Tragedy', 'Rags to Riches').
         tension_curve: List of floats representing dramatic tension over time (0-1).
         emotional_valence: List of floats representing emotional state (-1 to 1).
+
     """
 
     name: str
@@ -64,6 +66,7 @@ class Narrative:
         cultural_resonance: Estimated resonance score (0-1).
         content_segments: The actual text/content chunks.
         id: Unique identifier.
+
     """
 
     title: str
@@ -77,5 +80,6 @@ class Narrative:
     created_at: float = field(default_factory=time.time)
 
     def __post_init__(self) -> None:
+        """Post-init hook."""
         if not self.id:
             self.id = str(uuid.uuid4())

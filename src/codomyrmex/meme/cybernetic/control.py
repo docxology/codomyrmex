@@ -10,6 +10,7 @@ from codomyrmex.meme.cybernetic.models import FeedbackLoop, FeedbackType
 @dataclass
 class PIDController:
     """Proportional-Integral-Derivative controller."""
+
     kp: float = 1.0  # Proportional gain
     ki: float = 0.0  # Integral gain
     kd: float = 0.0  # Derivative gain

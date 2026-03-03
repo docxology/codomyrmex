@@ -11,6 +11,7 @@ def map_power_dynamics(entities: list[str], flows: list[tuple[str, str, float]])
     Args:
         entities: List of entity IDs.
         flows: List of (source, target, amount) tuples.
+
     """
     scores = dict.fromkeys(entities, 0.0)
 

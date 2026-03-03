@@ -11,6 +11,7 @@ class NeurolinguisticEngine:
     """Engine for analyzing and checking text against linguistic models."""
 
     def __init__(self):
+        """Initialize the engine."""
         self.known_frames: list[CognitiveFrame] = []
 
     def register_frame(self, frame: CognitiveFrame) -> None:
@@ -22,6 +23,7 @@ class NeurolinguisticEngine:
 
         Returns:
             Dict containing active frames and detected patterns.
+
         """
         frames = analyze_frames(text, self.known_frames)
         patterns = detect_patterns(text)

@@ -19,6 +19,7 @@ def virality_score(meme: Meme, network_size: int = 1000) -> float:
 
     Returns:
         Virality score (0–1).
+
     """
     # Shorter content is more shareable
     word_count = len(meme.content.split())
@@ -44,6 +45,7 @@ def robustness_score(memeplex: Memeplex) -> float:
 
     Returns:
         Robustness score (0–1).
+
     """
     if len(memeplex.memes) < 2:
         return memeplex.synergy
@@ -74,6 +76,7 @@ def decay_rate(meme: Meme, half_life_days: float = 7.0) -> float:
 
     Returns:
         Decay constant (lambda). Higher = faster decay.
+
     """
     adjusted_half_life = half_life_days * (1.0 + meme.longevity * 4.0)
     if adjusted_half_life <= 0:
@@ -89,6 +92,7 @@ def population_fitness_stats(population: list[Meme]) -> dict:
 
     Returns:
         Dict with keys: mean, std, min, max, count.
+
     """
     if not population:
         return {"mean": 0.0, "std": 0.0, "min": 0.0, "max": 0.0, "count": 0}
