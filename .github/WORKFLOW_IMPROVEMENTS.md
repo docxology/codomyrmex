@@ -1,215 +1,107 @@
-# 🚀 GitHub Actions Workflow Improvements Summary
+# 🚀 GitHub Actions Workflow Improvements
 
-## Overview
+**Last Updated**: March 2026
 
-This document outlines the comprehensive improvements made to the GitHub Actions workflows to make them **100% functional, efficient, and robust**.
+## Current State: 24 Active Workflows
 
-## 🎯 Key Improvements Made
+### Core CI/CD (4)
 
-### 1. **Workflow Consolidation & Cleanup**
-- ❌ **Removed duplicate/outdated documentation workflows**
-  - `validate-docs.yml` (consolidated into `documentation-validation.yml`)
-- ✅ **Maintained comprehensive documentation workflows**:
-  - `documentation.yml` - Build and deployment
-  - `documentation-validation.yml` - Quality gates and validation
+| # | Workflow | File | Status |
+|:-:|---------|------|:------:|
+| 1 | Continuous Integration | `ci.yml` | ✅ |
+| 2 | Pre-commit Checks | `pre-commit.yml` | ✅ |
+| 3 | Security Scanning | `security.yml` | ✅ |
+| 4 | Release & PyPI | `release.yml` | ✅ |
 
-### 2. **Version Standardization**
-- 📦 **Updated all workflows to use consistent versions:**
-  - Python: `3.11` (consistent across all workflows)
-  - UV Package Manager: `0.5.7` (latest version, previously `0.4.18`)
-  - Node.js: `20` (upgraded from `18` for better performance)
-  
-### 3. **Enhanced CI Pipeline (`ci.yml`)**
-- 🚀 **Improved caching strategy** - added UV and pip caches
-- 📊 **Enhanced test reporting** - added HTML coverage, JSON reports
-- 🧪 **Added comprehensive test summary job** - aggregates results across matrix
-- 📈 **Improved final status reporting** - detailed GitHub Step Summary
-- ⚡ **Better artifact management** - 30-day retention, organized uploads
+### Agent Infrastructure (6)
 
-### 4. **Pre-commit Workflow Optimization (`pre-commit.yml`)**
-- 🔧 **Fixed environment integration** - uses `uv run pip install`
-- ⚡ **Updated to latest UV version** for better performance
-- ✅ **Maintained all existing functionality** (commit validation, PR analysis, size checks)
+| # | Workflow | File | Status |
+|:-:|---------|------|:------:|
+| 5 | Auto-Merge Agent PRs | `auto-merge.yml` | ✅ |
+| 6 | PR Auto-Labeler | `pr-labeler.yml` | ✅ |
+| 7 | PR Conflict Checker | `pr-conflict-check.yml` | ✅ |
+| 8 | Agent PR Welcome | `agent-welcome.yml` | ✅ |
+| 9 | Agent Metrics Dashboard | `agent-metrics.yml` | ✅ |
+| 10 | Jules Batch Dispatch | `jules-dispatch.yml` | ✅ |
 
-### 5. **Security Workflow Enhancement (`security.yml`)**
-- 🔒 **Improved SARIF integration** - proper GitHub Security tab uploads
-- 🛡️ **Enhanced Bandit result processing** - JSON to SARIF conversion
-- 📊 **Better error handling** - continues on tool failures with fallbacks
-- 🔄 **Updated all security tools** to use latest UV version
+### Documentation (2)
 
-### 6. **Documentation Workflow Updates (`documentation.yml`)**
-- 📚 **Consistent version usage** - UV 0.5.7, Node.js 20
-- 🔗 **Enhanced link checking** - better error handling
-- 🌐 **Improved GitHub Pages integration** - proper permissions and deployment
+| # | Workflow | File | Status |
+|:-:|---------|------|:------:|
+| 11 | Doc Build & Deploy | `documentation.yml` | ✅ |
+| 12 | Doc Quality Gate | `documentation-validation.yml` | ✅ |
 
-### 7. **Release Workflow (`release.yml`)**
-- 🚀 **Updated to latest UV version** for build consistency
-- ✅ **Maintained all release functionality** (PyPI publishing, verification, documentation updates)
+### Repository Health (5)
 
-### 8. **Benchmarks Workflow (`benchmarks.yml`)**
-- ⚡ **Updated to latest UV version**
-- 📈 **Maintained performance tracking capabilities**
+| # | Workflow | File | Status |
+|:-:|---------|------|:------:|
+| 13 | Code Health Dashboard | `code-health.yml` | ✅ |
+| 14 | Performance Benchmarks | `benchmarks.yml` | ✅ |
+| 15 | Repository Maintenance | `maintenance.yml` | ✅ |
+| 16 | Branch Cleanup | `cleanup-branches.yml` | ✅ |
+| 17 | Lock Old Threads | `lock-threads.yml` | ✅ |
 
-### 9. **NEW: Workflow Status Dashboard (`workflow-status.yml`)**
-- 📊 **Real-time workflow health monitoring**
-- 🎯 **Centralized status reporting** with success rates
-- 🔄 **Automated daily updates** via scheduled runs
-- 📋 **Quick action links** to trigger workflows manually
-- 📈 **Health metrics calculation** (success rates, failure tracking)
+### Orchestration (2)
 
-### 10. **NEW: Workflow Coordinator (`workflow-coordinator.yml`)**
-- 🧠 **Smart change detection** - only run workflows when relevant files change
-- ⚡ **Parallel execution coordination** - efficient resource usage
-- 🎯 **Targeted testing strategy** - focus on changed modules
-- 💰 **Cost optimization** - reduce unnecessary workflow runs
-- 📊 **Comprehensive reporting** - detailed coordination summaries
+| # | Workflow | File | Status |
+|:-:|---------|------|:------:|
+| 18 | Workflow Coordinator | `workflow-coordinator.yml` | ✅ |
+| 19 | Workflow Status Dashboard | `workflow-status.yml` | ✅ |
 
-## 🔧 Technical Enhancements
+### Gemini AI (5)
 
-### Caching Improvements
-```yaml
-# Enhanced caching strategy across all workflows
-- name: Cache dependencies and tools
-  uses: actions/cache@v4
-  with:
-    path: |
-      ~/.cache/pre-commit
-      ~/.cache/uv
-      ~/.cache/pip
-    key: ${{ runner.os }}-deps-${{ env.PYTHON_VERSION }}-${{ hashFiles('uv.lock', 'pyproject.toml', 'requirements.txt') }}
+| # | Workflow | File | Status |
+|:-:|---------|------|:------:|
+| 20 | Gemini Dispatch | `gemini-dispatch.yml` | ✅ |
+| 21 | Gemini Review | `gemini-review.yml` | ✅ |
+| 22 | Gemini Triage | `gemini-triage.yml` | ✅ |
+| 23 | Gemini Scheduled Triage | `gemini-scheduled-triage.yml` | ✅ |
+| 24 | Gemini Invoke | `gemini-invoke.yml` | ✅ |
+
+---
+
+## Agent PR Pipeline
+
+```
+PR Opened (by Jules/Dependabot/Gemini)
+  │
+  ├─ pr-labeler.yml ─────→ Auto-label (paths, branch, size, module)
+  ├─ agent-welcome.yml ──→ Post agent-specific welcome + checklist
+  ├─ ci.yml ──────────────→ Lint + Test (ubuntu/3.11 for PRs)
+  ├─ pre-commit.yml ─────→ Commit checks (soft-fail for agents)
+  ├─ gemini-review.yml ──→ AI code review comments
+  │
+  ├─ pr-conflict-check.yml → Labels 'conflict' if conflicting (every 6h)
+  │
+  └─ auto-merge.yml ─────→ Squash-merge when all checks pass
 ```
 
-### Smart Testing Strategy
-- **Minimal**: No Python changes → smoke tests only
-- **Targeted**: Few changes → affected modules only
-- **Cross-Module**: Multiple modules → integration tests
-- **Extended**: Significant changes → comprehensive suite
-- **Comprehensive**: Major changes → full matrix testing
+## Scheduled Tasks
 
-### Security Integration
-- **Proper SARIF uploads** to GitHub Security tab
-- **Multiple security tools** (Bandit, Semgrep, CodeQL, TruffleHog)
-- **Automated dependency updates** with testing
-- **License compliance checking**
+| Schedule | Workflows |
+|----------|-----------|
+| Daily 2 AM | Security scanning |
+| Every 6h | PR conflict check |
+| Daily 9 AM | Workflow status dashboard |
+| Weekly Mon | Agent metrics dashboard |
+| Weekly Wed | Performance benchmarks |
+| Weekly Sun | Maintenance, code health, branch cleanup, lock threads |
 
-## 📊 Workflow Orchestration
+## Key Configuration
 
-### Change Detection Matrix
-| Change Type | Triggers |
-|-------------|----------|
-| Source Code (`src/**/*.py`) | CI, Security |
-| Tests (`testing/**`) | CI |
-| Documentation (`docs/**`, `*.md`) | Documentation |
-| Dependencies (`requirements.txt`, `uv.lock`) | CI, Security |
-| Workflows (`.github/workflows/**`) | All workflows |
+| Setting | Value |
+|---------|-------|
+| Coverage gate (CI) | 25% |
+| Coverage gate (release) | 25% |
+| PR stale threshold | 90 days |
+| Issue stale threshold | 60 days |
+| Jules exempt from stale | ✅ |
+| Agent PR auto-merge | ✅ (with `auto-merge` label) |
+| Operations per maintenance run | 100 |
+| Thread lock (issues) | 90 days after close |
+| Thread lock (PRs) | 60 days after close |
+| Branch cleanup (stale) | 14 days |
 
-### Execution Flow
-```
-Workflow Coordinator (Smart Triggering)
-    ├── CI Pipeline (if source/test changes)
-    ├── Security Scan (if source/dependency changes)  
-    ├── Documentation (if doc changes)
-    └── Benchmarks (main branch only)
-```
+## Navigation
 
-## 🎉 Benefits Achieved
-
-### Performance
-- ⚡ **50% faster workflow execution** through smart caching
-- 🎯 **Reduced unnecessary runs** by 70% with change detection
-- 💰 **Cost optimization** through targeted execution
-
-### Reliability  
-- 🛡️ **Enhanced error handling** with fallback mechanisms
-- 🔄 **Better retry logic** for flaky operations
-- 📊 **Comprehensive reporting** for easier debugging
-
-### Developer Experience
-- 📊 **Real-time status dashboard** for workflow health
-- 🎯 **Smart testing recommendations** based on changes
-- 📈 **Detailed summaries** in GitHub Step Summary
-- 🔗 **Quick action links** for manual workflow triggering
-
-### Security
-- 🔒 **Proper SARIF integration** with GitHub Security tab
-- 🛡️ **Comprehensive security scanning** (SAST, dependency, secrets)
-- 🔄 **Automated dependency updates** with testing
-- 📋 **License compliance monitoring**
-
-## 🚦 Current Status
-
-### Active Workflows (10 total)
-1. ✅ **Continuous Integration** (`ci.yml`) - Enhanced
-2. ✅ **Pre-commit Checks** (`pre-commit.yml`) - Optimized  
-3. ✅ **Security Scanning** (`security.yml`) - Enhanced
-4. ✅ **Documentation Build and Deploy** (`documentation.yml`) - Updated
-5. ✅ **Documentation Quality Gate** (`documentation-validation.yml`) - Comprehensive validation
-6. ✅ **Release and Deployment** (`release.yml`) - Updated with modern actions
-7. ✅ **Performance Benchmarks** (`benchmarks.yml`) - Updated
-8. ✅ **Repository Maintenance** (`maintenance.yml`) - Existing
-9. ✅ **Workflow Status Dashboard** (`workflow-status.yml`) - Real-time monitoring
-10. ✅ **Workflow Coordinator** (`workflow-coordinator.yml`) - Smart orchestration
-
-### Health Metrics
-- **Version Consistency**: 100% ✅
-- **Path Consistency**: 100% ✅  
-- **Error Handling**: Comprehensive ✅
-- **Documentation**: Complete ✅
-- **Testing**: Extensive ✅
-
-## 🛠️ Configuration Requirements
-
-### Repository Secrets Needed
-- `CODECOV_TOKEN` - For code coverage reporting (optional but recommended)
-- `SEMGREP_APP_TOKEN` - For Semgrep security scanning (optional)
-- Standard `GITHUB_TOKEN` - Automatically provided for all GitHub integrations
-
-### Environment Setup
-- **GitHub Pages** enabled for documentation deployment
-- **Security tab** enabled for SARIF uploads
-- **Actions permissions** configured for workflow coordination
-
-### New Configuration Files
-- ✅ `.github/README.md` - Comprehensive workflow documentation
-- ✅ `.github/CODEOWNERS` - Code ownership definitions
-- ✅ `.github/dependabot.yml` - Automated dependency updates
-
-## 📚 Recent Updates (February 2026)
-
-### Professional Enhancements
-- ✅ **Fixed PR Template** - Corrected syntax error in checkbox
-- ✅ **Fixed Workflow Coordinator** - Proper workflow triggering via GitHub API
-- ✅ **Consolidated Documentation Validation** - Removed duplicate `validate-docs.yml`
-- ✅ **Created .github/README.md** - Comprehensive workflow documentation
-- ✅ **Created CODEOWNERS** - Code ownership definitions
-- ✅ **Created dependabot.yml** - Automated dependency updates
-- ✅ **Updated Action Versions** - Replaced deprecated `actions/create-release@v1` with `softprops/action-gh-release@v2`
-- ✅ **Security Improvements** - Pinned TruffleHog to specific version (v3.63.7) instead of `@main`
-
-## 📚 Next Steps
-
-1. 🧪 **Test all workflows** with sample PRs
-2. 🔧 **Fine-tune change detection** patterns if needed  
-3. 📊 **Monitor workflow status dashboard** for health metrics
-4. 🎯 **Optimize based on usage patterns** after deployment
-5. 🔄 **Review dependabot PRs** for action and dependency updates
-
-## 🏆 Summary
-
-The GitHub Actions workflows are now **100% functional, efficient, and production-ready** with:
-
-- ✅ **Comprehensive CI/CD pipeline**
-- ✅ **Smart workflow orchestration** 
-- ✅ **Real-time health monitoring**
-- ✅ **Enhanced security scanning**
-- ✅ **Optimized performance & costs**
-- ✅ **Excellent developer experience**
-
-All workflows follow modern best practices, use consistent tooling, and provide comprehensive feedback to developers and maintainers.
-
-## Navigation Links
-
-- **Parent**: [Project Overview](../README.md)
-- **Module Index**: [All Agents](../AGENTS.md)
-- **Documentation**: [Reference Guides](../docs/README.md)
-- **Home**: [Repository Root](../README.md)
+- [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [README.md](README.md)

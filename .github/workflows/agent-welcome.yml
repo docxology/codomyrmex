@@ -1,0 +1,84 @@
+name: Agent PR Welcome
+
+on:
+  pull_request:
+    types: [opened]
+
+permissions:
+  pull-requests: write
+  contents: read
+
+jobs:
+  welcome:
+    name: Welcome Agent PR
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Detect agent and post welcome
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          PR_BRANCH: ${{ github.event.pull_request.head.ref }}
+          PR_AUTHOR: ${{ github.event.pull_request.user.login }}
+          PR_TITLE: ${{ github.event.pull_request.title }}
+        run: |
+          agent="unknown"
+
+          # Detect which agent created the PR
+          if echo "$PR_BRANCH" | grep -qiE '^(fix|feat|improve|refactor|add|cleanup|code-health|defense|bolt|feature|ai-gateway|simulation|bio-simulation|calendar)-'; then
+            agent="jules"
+          elif [[ "$PR_AUTHOR" == "dependabot"* ]]; then
+            agent="dependabot"
+          elif echo "$PR_TITLE" | grep -qi "gemini"; then
+            agent="gemini"
+          elif echo "$PR_TITLE" | grep -qi "codex"; then
+            agent="codex"
+          fi
+
+          # Only post for detected agents
+          if [ "$agent" = "unknown" ]; then
+            echo "Not an agent PR, skipping welcome"
+            exit 0
+          fi
+
+          # Build greeting file to avoid YAML escaping issues
+          GREETING_FILE=$(mktemp)
+
+          case "$agent" in
+            "jules")
+              cat > "$GREETING_FILE" << 'GREETING_EOF'
+          :robot: **Jules AI** — Thanks for the contribution!
+
+          **Automated Checklist:**
+          - [ ] CI checks pass
+          - [ ] No merge conflicts
+          - [ ] Changes follow zero-mock testing policy
+          - [ ] Documentation updated if needed
+
+          This PR will be auto-labeled and auto-merged if all checks pass.
+          GREETING_EOF
+              ;;
+            "dependabot")
+              cat > "$GREETING_FILE" << 'GREETING_EOF'
+          :package: **Dependabot** — Dependency update detected.
+
+          This PR will be auto-merged if CI passes and it receives the `auto-merge` label.
+          GREETING_EOF
+              ;;
+            "gemini")
+              cat > "$GREETING_FILE" << 'GREETING_EOF'
+          **Gemini CLI** — AI-assisted changes detected.
+
+          Review the changes carefully and approve when ready.
+          GREETING_EOF
+              ;;
+            *)
+              echo ":robot: **Agent PR detected**. Standard review process applies." > "$GREETING_FILE"
+              ;;
+          esac
+
+          gh pr comment "$PR_NUMBER" --body-file "$GREETING_FILE" 2>/dev/null || true
+          rm -f "$GREETING_FILE"
+          echo "Posted welcome for $agent agent PR #$PR_NUMBER"

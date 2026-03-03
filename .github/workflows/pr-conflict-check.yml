@@ -1,0 +1,72 @@
+name: PR Conflict Checker
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: '0 */6 * * *'  # Every 6 hours
+  workflow_dispatch:
+
+permissions:
+  pull-requests: write
+  contents: read
+
+jobs:
+  check-conflicts:
+    name: Check Open PRs for Conflicts
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Scan PRs for conflicts
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "🔍 Scanning open PRs for merge conflicts..."
+
+          conflicted=0
+          clean=0
+          total=0
+
+          gh pr list --state open --json number,headRefName,mergeable,title,labels --limit 200 | \
+            python3 -c "
+          import json, sys, subprocess
+
+          prs = json.load(sys.stdin)
+          conflicted_prs = []
+          clean_prs = []
+
+          for pr in prs:
+              num = pr['number']
+              title = pr.get('title', '')
+              branch = pr.get('headRefName', '')
+              mergeable = pr.get('mergeable', 'UNKNOWN')
+              labels = [l['name'] for l in pr.get('labels', [])]
+
+              if mergeable == 'CONFLICTING':
+                  conflicted_prs.append((num, title, branch))
+                  # Add conflict label if not present
+                  if 'conflict' not in labels:
+                      subprocess.run(['gh', 'pr', 'edit', str(num), '--add-label', 'conflict'], capture_output=True)
+              else:
+                  clean_prs.append(num)
+                  # Remove conflict label if present
+                  if 'conflict' in labels:
+                      subprocess.run(['gh', 'pr', 'edit', str(num), '--remove-label', 'conflict'], capture_output=True)
+
+          print(f'Total: {len(prs)} | Conflicted: {len(conflicted_prs)} | Clean: {len(clean_prs)}')
+
+          if conflicted_prs:
+              print()
+              print('⚠️ PRs with conflicts:')
+              for num, title, branch in conflicted_prs:
+                  print(f'  #{num}: {title} ({branch})')
+          "
+
+          echo ""
+          echo "## PR Conflict Check" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Scan completed at $(date -u)" >> $GITHUB_STEP_SUMMARY

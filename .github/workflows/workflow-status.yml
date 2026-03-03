@@ -9,6 +9,11 @@ on:
       - "Documentation Build and Deploy"
       - "Performance Benchmarks"
       - "Repository Maintenance"
+      - "Auto-Merge Agent PRs"
+      - "PR Auto-Labeler"
+      - "Agent PR Welcome"
+      - "Agent Metrics Dashboard"
+      - "Code Health Dashboard"
     types:
       - completed
   schedule:
@@ -45,7 +50,12 @@ jobs:
               'Security Scanning and Dependency Management',
               'Documentation Build and Deploy',
               'Performance Benchmarks',
-              'Repository Maintenance'
+              'Repository Maintenance',
+              'Auto-Merge Agent PRs',
+              'PR Auto-Labeler',
+              'Agent PR Welcome',
+              'Agent Metrics Dashboard',
+              'Code Health Dashboard'
             ];
             
             // Proper name-to-filename mapping
@@ -55,7 +65,12 @@ jobs:
               'Security Scanning and Dependency Management': 'security.yml',
               'Documentation Build and Deploy': 'documentation.yml',
               'Performance Benchmarks': 'benchmarks.yml',
-              'Repository Maintenance': 'maintenance.yml'
+              'Repository Maintenance': 'maintenance.yml',
+              'Auto-Merge Agent PRs': 'auto-merge.yml',
+              'PR Auto-Labeler': 'pr-labeler.yml',
+              'Agent PR Welcome': 'agent-welcome.yml',
+              'Agent Metrics Dashboard': 'agent-metrics.yml',
+              'Code Health Dashboard': 'code-health.yml'
             };
             
             let statusData = {
