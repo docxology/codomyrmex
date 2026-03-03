@@ -18,6 +18,7 @@ class InMemoryStore:
     """In-process, dict-backed memory store."""
 
     def __init__(self) -> None:
+        """Initialize an empty dictionary store."""
         self._data: dict[str, Memory] = {}
 
     def save(self, memory: Memory) -> None:
@@ -51,6 +52,7 @@ class JSONFileStore:
     """
 
     def __init__(self, path: str) -> None:
+        """Initialize a JSON file store backing to path."""
         self._path = Path(path)
         self._lock = threading.Lock()
         self._data: dict[str, dict[str, Any]] = {}
@@ -97,5 +99,6 @@ class JSONFileStore:
             return False
 
     def list_all(self) -> list[Memory]:
+        """List all memories in the store."""
         with self._lock:
             return [Memory.from_dict(v) for v in self._data.values()]

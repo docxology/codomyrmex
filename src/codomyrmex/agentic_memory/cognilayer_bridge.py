@@ -65,6 +65,7 @@ def store_memory(
         ...     key="pai-tool-count",
         ...     tags=["pai", "mcp", "metrics"],
         ... )
+
     """
     conn = _get_db_connection()
     try:
@@ -130,6 +131,7 @@ def recall_memory(
 
     Example:
         >>> results = recall_memory("PAI tool count", top_k=3)
+
     """
     conn = _get_db_connection()
     try:
@@ -170,6 +172,7 @@ def consolidate_memories() -> dict[str, Any]:
 
     Returns:
         Dict with consolidation statistics.
+
     """
     conn = _get_db_connection()
     try:
@@ -200,6 +203,7 @@ def get_memory_stats() -> dict[str, Any]:
 
     Returns:
         Dict with total memories, tag distribution, type breakdown, and db size.
+
     """
     if not COGNILAYER_DB.exists():
         return {"installed": False, "error": f"Database not found: {COGNILAYER_DB}"}

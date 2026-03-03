@@ -27,12 +27,17 @@ def search_vault(
 
     Parameters
     ----------
+    vault : Any
+        Vault object.
+    query : str
+        Search query.
     limit : int
         Maximum number of results (default 50).
     case_sensitive : bool
         If ``True``, perform case-sensitive matching.
     folder : str | None
         Restrict search to notes within a specific folder.
+
     """
     if not query.strip():
         return []
@@ -109,12 +114,15 @@ def search_regex(
 
     Parameters
     ----------
+    vault : Any
+        Vault object.
     pattern : str
         Regular expression pattern.
     limit : int
         Maximum number of results.
     flags : int
         Regex flags (default ``re.IGNORECASE``).
+
     """
     compiled = re.compile(pattern, flags)
     results: list[SearchResult] = []
@@ -173,11 +181,14 @@ def filter_by_tags(
 
     Parameters
     ----------
+    vault : Any
+        Vault object.
     tags : list[str]
         Tags to filter by (leading ``#`` stripped).
     match_all : bool
         If ``True`` (default), notes must contain ALL tags.
         If ``False``, notes matching ANY tag are included.
+
     """
     cleaned_tags = [t.lstrip("#") for t in tags]
     results: list[Note] = []
@@ -232,8 +243,11 @@ def filter_by_date(
     before: str | None = None,
     date_field: str = "created",
 ) -> list[Note]:
-    """Return notes whose frontmatter *date_field* falls within the
-    ``after``/``before`` range (ISO 8601 date strings)."""
+    """Return notes whose frontmatter falls within range.
+
+    Checks if *date_field* falls within the ``after``/``before`` range
+    (ISO 8601 date strings).
+    """
     after_dt = datetime.fromisoformat(after).date() if after else None
     before_dt = datetime.fromisoformat(before).date() if before else None
 

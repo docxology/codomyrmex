@@ -1,4 +1,6 @@
-"""Obsidian markdown parser — frontmatter, wikilinks, embeds, tags, callouts,
+"""Obsidian markdown parser.
+
+Handles frontmatter, wikilinks, embeds, tags, callouts,
 code blocks, math blocks, Dataview fields, headings.
 
 All extraction is regex/YAML-based with no external Obsidian dependencies.
@@ -70,8 +72,10 @@ def parse_frontmatter(raw: str) -> tuple[dict[str, Any], str]:
 # ── wikilinks ────────────────────────────────────────────────────────
 
 def extract_wikilinks(content: str) -> list[Wikilink]:
-    """Extract ``[[target]]``, ``[[target|alias]]``, ``[[target#heading]]``,
-    ``[[target#^block-id]]``."""
+    """Extract ``[[target]]``, ``[[target|alias]]``, ``[[target#heading]]``.
+
+    Also handles ``[[target#^block-id]]``.
+    """
     results: list[Wikilink] = []
     for m in _WIKILINK_RE.finditer(content):
         raw = m.group(1)

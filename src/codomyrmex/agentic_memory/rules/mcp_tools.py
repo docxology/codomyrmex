@@ -35,6 +35,7 @@ def rules_get_module_rule(module_name: str) -> dict | None:
 
     Args:
         module_name: Codomyrmex module name, e.g. ``"agentic_memory"`` or ``"agents"``.
+
     """
     from .engine import RuleEngine
 
@@ -56,6 +57,7 @@ def rules_get_applicable(file_path: str = "", module_name: str = "") -> list[dic
     Args:
         file_path: File path or filename to determine file-specific rules (optional).
         module_name: Module name to include the module-specific rule (optional).
+
     """
     from .engine import RuleEngine
 
@@ -79,6 +81,7 @@ def rules_get_section(module_name: str, section_number: int) -> dict | None:
     Args:
         module_name: Codomyrmex module name, e.g. ``"agentic_memory"``.
         section_number: Section number 0–7 (§0 Preamble through §7 Final Check).
+
     """
     from .engine import RuleEngine
 
@@ -101,6 +104,7 @@ def rules_search(query: str) -> list[dict]:
 
     Args:
         query: Text to search for, e.g. ``"Zero-Mock"`` or ``"pytest"``.
+
     """
     from .engine import RuleEngine
 

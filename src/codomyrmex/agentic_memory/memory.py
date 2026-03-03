@@ -47,10 +47,12 @@ class AgentMemory:
     """Agent-level memory with remember / recall / forget / search."""
 
     def __init__(self, store: InMemoryStore | None = None) -> None:
+        """Initialize agent memory with an optional store."""
         self.store = store or InMemoryStore()
 
     @property
     def memory_count(self) -> int:
+        """Return the number of stored memories."""
         return len(self.store.list_all())
 
     # -- remember / add -----------------------------------------------
@@ -79,7 +81,7 @@ class AgentMemory:
         content: str,
         importance: MemoryImportance = MemoryImportance.MEDIUM,
     ) -> Memory:
-        """Convenience alias for :meth:`remember`."""
+        """Alias for :meth:`remember`."""
         return self.remember(content, importance=importance)
 
     # -- recall / search ----------------------------------------------
@@ -157,6 +159,7 @@ class VectorStoreMemory:
     """Memory with pluggable store backend and search."""
 
     def __init__(self, store: InMemoryStore | None = None) -> None:
+        """Initialize agent memory with an optional store."""
         self.store = store or InMemoryStore()
         self._agent = AgentMemory(self.store)
 
@@ -179,6 +182,7 @@ class ConversationMemory:
     """Specialised memory for conversation turns."""
 
     def __init__(self, store: InMemoryStore | None = None) -> None:
+        """Initialize specific memory with an optional store."""
         self._agent = AgentMemory(store)
 
     def add_turn(
@@ -188,6 +192,7 @@ class ConversationMemory:
         *,
         turn_number: int = 0,
     ) -> Memory:
+        """Add a conversation turn."""
         return self._agent.remember(
             content,
             memory_type=MemoryType.EPISODIC,
@@ -201,6 +206,7 @@ class KnowledgeMemory:
     """Specialised memory for factual knowledge."""
 
     def __init__(self, store: InMemoryStore | None = None) -> None:
+        """Initialize specific memory with an optional store."""
         self._agent = AgentMemory(store)
 
     def add_fact(
@@ -208,6 +214,7 @@ class KnowledgeMemory:
         fact: str,
         source: str = "",
     ) -> Memory:
+        """Add a factual knowledge."""
         return self._agent.remember(
             fact,
             memory_type=MemoryType.SEMANTIC,

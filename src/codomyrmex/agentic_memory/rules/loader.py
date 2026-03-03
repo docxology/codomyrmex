@@ -25,6 +25,7 @@ class RuleLoader:
         Raises:
             FileNotFoundError: if *path* does not exist.
             ValueError: if *path* is not a .cursorrules file.
+
         """
         if not path.exists():
             raise FileNotFoundError(f"cursorrules file not found: {path}")
@@ -63,6 +64,7 @@ class RuleLoader:
             "python.cursorrules"      → "python"
             "README.md.cursorrules"   → "README.md"
             "general.cursorrules"     → "general"
+
         """
         filename = path.name
         suffix = ".cursorrules"

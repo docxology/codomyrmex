@@ -52,11 +52,11 @@ class _DiGraph:
         return v in self._adj.get(u, set())
 
     def in_degree(self, n: str) -> int:
-        """Number of edges pointing to *n*."""
+        """Count edges pointing to *n*."""
         return len(self.predecessors(n))
 
     def out_degree(self, n: str) -> int:
-        """Number of edges leaving *n*."""
+        """Count edges leaving *n*."""
         return len(self._adj.get(n, set()))
 
     def degree(self, n: str) -> int:
@@ -143,8 +143,10 @@ def find_hubs(vault: Any, *, min_links: int = 5) -> list[tuple[Note, int]]:
 
 
 def find_broken_links(vault: Any) -> list[tuple[Note, Wikilink]]:
-    """Return ``(source_note, wikilink)`` pairs where the target note
-    does not exist in the vault."""
+    """Return ``(source_note, wikilink)`` pairs.
+
+    Filters to links where the target note does not exist in the vault.
+    """
     results: list[tuple[Note, Wikilink]] = []
     existing_titles = {n.title for n in vault.notes.values()}
     for _rel, note in vault.notes.items():

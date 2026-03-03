@@ -11,11 +11,15 @@ from typing import Any
 from codomyrmex.model_context_protocol.decorators import mcp_tool
 
 
-def _agent_memory():
-    """Lazy import AgentMemory to avoid circular imports."""
-    from codomyrmex.agentic_memory.memory import AgentMemory
-    return AgentMemory
+_global_store = None
 
+
+def _get_store():
+    global _global_store
+    if _global_store is None:
+        from codomyrmex.agentic_memory.stores import InMemoryStore
+        _global_store = InMemoryStore()
+    return _global_store
 
 
 @mcp_tool(
@@ -28,9 +32,10 @@ def memory_put(
     importance: str = "medium",
 ) -> dict[str, Any]:
     """Save a memory. Returns the created memory as a dict."""
+    from codomyrmex.agentic_memory.memory import AgentMemory
     from codomyrmex.agentic_memory.models import MemoryImportance, MemoryType
 
-    agent = _agent_memory()()
+    agent = AgentMemory(store=_get_store())
     mem = agent.remember(
         content,
         memory_type=MemoryType(memory_type),
@@ -45,9 +50,7 @@ def memory_put(
 )
 def memory_get(memory_id: str) -> dict[str, Any] | None:
     """Fetch a single memory. Returns None if not found."""
-    from codomyrmex.agentic_memory.stores import InMemoryStore
-
-    store = InMemoryStore()
+    store = _get_store()
     mem = store.get(memory_id)
     return mem.to_dict() if mem else None
 
@@ -61,7 +64,9 @@ def memory_search(
     k: int = 5,
 ) -> list[dict[str, Any]]:
     """Search across stored memories. Returns top-k results."""
-    agent = _agent_memory()()
+    from codomyrmex.agentic_memory.memory import AgentMemory
+
+    agent = AgentMemory(store=_get_store())
     results = agent.search(query, k=k)
     return [
         {

@@ -33,8 +33,11 @@ class UserProfile:
 
     @classmethod
     def load(cls, path: str | Path) -> UserProfile:
-        """Load a profile from disk.  Returns a default profile if the file
-        does not exist."""
+        """Load a profile from disk.
+
+        Returns a default profile if the file
+        does not exist.
+        """
         path = Path(path)
         if not path.exists():
             return cls()
@@ -48,9 +51,11 @@ class UserProfile:
     # ── helpers ──────────────────────────────────────────────────
 
     def set_preference(self, key: str, value: Any) -> None:
+        """Set a user preference."""
         self.preferences[key] = value
 
     def get_preference(self, key: str, default: Any = None) -> Any:
+        """Get a user preference, falling back to default."""
         return self.preferences.get(key, default)
 
     def to_context_string(self) -> str:
