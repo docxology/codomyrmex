@@ -7,6 +7,7 @@ application architecture while returning an empty list.
 
 from typing import Any
 
+
 def register_tools() -> list[Any]:
     """Register MCP tools for the meme module.
 
