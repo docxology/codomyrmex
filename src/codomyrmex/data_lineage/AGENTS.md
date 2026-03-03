@@ -20,6 +20,13 @@ The `data_lineage` module provides a graph-based framework for tracking data mov
 3. **Capture Metadata**: Use the `metadata` field to store environment-specific information like timestamps, row counts, or schema versions.
 4. **Prefer Upstream Tracing**: When diagnosing data quality issues, use `get_origin()` to find the root source of the data.
 
+## MCP Tools
+
+The `mcp_tools.py` file exposes data lineage functionality to agents. Use these tools:
+- `data_lineage_track_event`: Register a new dataset or transformation.
+- `data_lineage_analyze_impact`: Get the impact radius of a node change.
+- `data_lineage_get_origin`: Trace the lineage up to the original source node(s).
+
 ## Common Operations
 
 ### Tracing Upstream

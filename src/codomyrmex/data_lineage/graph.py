@@ -23,6 +23,7 @@ class LineageGraph:
     """
 
     def __init__(self):
+        """Initialize LineageGraph."""
         self._nodes: dict[str, LineageNode] = {}
         self._edges: list[LineageEdge] = []
         self._lock = threading.Lock()
@@ -129,6 +130,7 @@ class LineageGraph:
         rec_stack = set()
 
         def has_cycle(node_id: str) -> bool:
+            """Check if a node has a cycle."""
             visited.add(node_id)
             rec_stack.add(node_id)
 

@@ -45,6 +45,7 @@ print(f"Total affected nodes: {impact['total_affected']}")
 - `__init__.py`: Package entry point and exports.
 - `data_lineage.py`: High-level `DataLineage` orchestrator.
 - `graph.py`: Core `LineageGraph` implementation.
+- `mcp_tools.py`: Auto-discovered Model Context Protocol tools for tracking, analysis, and origins.
 - `models.py`: Data classes for nodes, edges, and assets.
 - `tracker.py`: Lineage tracking and impact analysis logic.
 

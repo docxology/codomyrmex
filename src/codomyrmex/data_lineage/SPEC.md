@@ -36,8 +36,14 @@ graph TD
         IA[ImpactAnalyzer]
     end
 
+    subgraph "MCP Tools"
+        MT[mcp_tools.py]
+    end
+
     LT --> LG
     IA --> LG
+    MT --> LT
+    MT --> IA
 ```
 
 ## Functional Requirements
@@ -62,6 +68,11 @@ graph TD
 #### LineageTracker
 - `register_dataset(id, name, ...)`: Helper to create dataset nodes.
 - `register_transformation(id, name, inputs, outputs)`: Links multiple nodes via a transformation.
+
+#### MCP Tools
+- `data_lineage_track_event(event_type, event_id, ...)`: Tracks a dataset or transformation event.
+- `data_lineage_analyze_impact(node_id)`: Analyzes downstream nodes affected by the change.
+- `data_lineage_get_origin(node_id)`: Returns upstream root dependencies.
 
 ## Quality Standards
 
