@@ -1,5 +1,4 @@
-"""
-Performance optimization utilities for Codomyrmex.
+"""Performance optimization utilities for Codomyrmex.
 
 This module provides lazy loading, caching, and other performance optimizations
 to improve startup time and runtime performance.

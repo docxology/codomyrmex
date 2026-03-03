@@ -1,5 +1,4 @@
-"""
-Monitoring subpackage for Codomyrmex performance module.
+"""Monitoring subpackage for Codomyrmex performance module.
 
 Provides performance monitoring and resource tracking capabilities including
 execution time tracking, memory profiling, CPU usage monitoring, and
@@ -37,17 +36,25 @@ except ImportError:
     def monitor_performance(*args, **kwargs):
         """No-op decorator if dependencies missing."""
         def decorator(func):
-            """Decorator."""
+            """Return the function unmodified."""
             return func
         return decorator
 
     class performance_context:
         """No-op context manager if dependencies missing."""
-        def __init__(self, *args, **kwargs): return None  # No-op stub
-        def __enter__(self): return self
-        def __exit__(self, *args): return None  # No-op stub
+
+        def __init__(self, *args, **kwargs):
+            """Initialize the no-op context manager."""
+            return None  # No-op stub
+        def __enter__(self):
+            """Enter the runtime context."""
+            return self
+        def __exit__(self, *args):
+            """Exit the runtime context."""
+            return None  # No-op stub
 
     def get_system_metrics(*args, **kwargs):
+        """Get system metrics (stub)."""
         return {}
 
 __all__ = [
