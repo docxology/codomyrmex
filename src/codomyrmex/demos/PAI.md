@@ -36,6 +36,6 @@ print(f"Status: {result.status}, Output: {result.output}")
 
 ## Integration Notes
 
-- No `mcp_tools.py` -- this module is not auto-discovered via MCP.
+- Exposed via `mcp_tools.py` to allow AI agents to list and run demos.
 - Used internally for validating module capabilities via demonstration scripts.
 - Call directly from Python when PAI agents need to run or list demos.

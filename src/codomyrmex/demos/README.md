@@ -10,6 +10,11 @@ The `demos` module provides a centralized registry and orchestration framework f
 
 ## Usage
 
+### MCP Tools Integration
+The module exposes two tools via `@mcp_tool` in `mcp_tools.py` to allow agents to discover and trigger demonstrations:
+- `demos_list_demos`
+- `demos_run_demo`
+
 ### Registering a Demo
 
 ```python
