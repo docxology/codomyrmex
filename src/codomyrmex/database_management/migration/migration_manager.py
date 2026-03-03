@@ -41,6 +41,7 @@ except ImportError:
 @dataclass
 class Migration:
     """Database migration definition."""
+
     id: str
     name: str
     description: str
@@ -61,6 +62,7 @@ class Migration:
 @dataclass
 class MigrationResult:
     """Result of a migration execution."""
+
     migration_id: str
     success: bool
     execution_time: float
@@ -80,6 +82,7 @@ class DatabaseConnector:
                 SQLite: sqlite:///path/to/db.sqlite
                 PostgreSQL: postgresql://user:pass@host:port/database
                 MySQL: mysql://user:pass@host:port/database
+
         """
         self.database_url = database_url
         self._connection = None
@@ -174,6 +177,7 @@ class DatabaseConnector:
 
         Returns:
             Tuple of (rows_affected, cursor)
+
         """
         if not self._connection:
             raise CodomyrmexError("Not connected to database")
@@ -198,6 +202,7 @@ class DatabaseConnector:
 
         Returns:
             Tuple of (total_rows_affected, statements_executed)
+
         """
         if not self._connection:
             raise CodomyrmexError("Not connected to database")
@@ -277,6 +282,7 @@ class MigrationManager:
         Args:
             workspace_dir: Directory for storing migration files
             database_url: Database connection URL (optional, can be set later)
+
         """
         self.workspace_dir = Path(workspace_dir) if workspace_dir else Path.cwd()
         self.migrations_dir = self.workspace_dir / "migrations"
@@ -363,6 +369,7 @@ class MigrationManager:
 
         Returns:
             Created migration
+
         """
         migration_id = f"migration_{int(time.time())}_{name.replace(' ', '_').lower()}"
 
@@ -408,6 +415,7 @@ class MigrationManager:
 
         Returns:
             Migration execution result
+
         """
         if migration_id not in self._migrations:
             raise CodomyrmexError(f"Migration not found: {migration_id}")
@@ -502,6 +510,7 @@ class MigrationManager:
 
         Returns:
             Rollback result
+
         """
         if not self._is_migration_applied(migration_id):
             raise CodomyrmexError(f"Migration not applied: {migration_id}")
@@ -671,6 +680,7 @@ def run_migrations(
 
     Returns:
         Migration execution results
+
     """
     manager = MigrationManager(workspace_dir=migration_dir, database_url=database_url)
 

@@ -37,6 +37,7 @@ def db_monitor(connection_string: str = "sqlite:///:memory:") -> dict:
 
     Returns:
         Dictionary of health/performance metrics.
+
     """
     from codomyrmex.database_management import monitor_database
 
@@ -64,6 +65,7 @@ def db_generate_schema(
 
     Returns:
         Dictionary with schema generation results.
+
     """
     from codomyrmex.database_management import generate_schema
 

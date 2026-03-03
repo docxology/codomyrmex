@@ -26,6 +26,7 @@ logger = get_logger(__name__)
 @dataclass
 class Backup:
     """Database backup information."""
+
     backup_id: str
     database_name: str
     database_type: str
@@ -42,6 +43,7 @@ class Backup:
 @dataclass
 class BackupResult:
     """Result of a backup operation."""
+
     backup_id: str
     success: bool
     duration: float
@@ -309,6 +311,6 @@ def backup_database(
     backup_type: str = "full",
     compression: str = "gzip"
 ) -> BackupResult:
-    """Convenience function to backup a database."""
+    """Create a backup of a database."""
     manager = BackupManager()
     return manager.create_backup(database_name, database_url, backup_type, compression)

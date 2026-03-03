@@ -23,6 +23,7 @@ logger = get_logger(__name__)
 
 class QueryMetrics:
     """Query performance metrics."""
+
     query_hash: str
     query_type: str  # "SELECT", "INSERT", "UPDATE", "DELETE"
     execution_time_ms: float
@@ -34,6 +35,7 @@ class QueryMetrics:
 @dataclass
 class DatabaseMetrics:
     """Database performance metrics."""
+
     database_name: str
     timestamp: datetime
     connections_active: int
@@ -46,6 +48,7 @@ class DatabaseMetrics:
 @dataclass
 class PerformanceAlert:
     """Performance alert or warning."""
+
     alert_id: str
     severity: str  # "low", "medium", "high", "critical"
     metric_name: str
@@ -63,6 +66,7 @@ class DatabasePerformanceMonitor:
 
         Args:
             workspace_dir: Directory for storing performance data
+
         """
         self.workspace_dir = Path(workspace_dir) if workspace_dir else Path.cwd()
         self.performance_data_dir = self.workspace_dir / "db_performance"
@@ -82,6 +86,7 @@ class DatabasePerformanceMonitor:
         Args:
             query_hash: Hash of the query
             metrics: Query performance data
+
         """
         query_metric = QueryMetrics(
             query_hash=query_hash,
@@ -107,6 +112,7 @@ class DatabasePerformanceMonitor:
         Args:
             database_name: Name of the database
             metrics: Database performance data
+
         """
         db_metric = DatabaseMetrics(
             database_name=database_name,
@@ -135,6 +141,7 @@ class DatabasePerformanceMonitor:
 
         Returns:
             Query performance analysis
+
         """
         cutoff_time = datetime.now() - timedelta(hours=hours)
 
@@ -201,6 +208,7 @@ class DatabasePerformanceMonitor:
 
         Returns:
             Database performance analysis
+
         """
         cutoff_time = datetime.now() - timedelta(hours=hours)
 
@@ -292,6 +300,7 @@ class DatabasePerformanceMonitor:
 
         Returns:
             List of active alerts
+
         """
         alerts = []
         current_time = datetime.now()
@@ -352,6 +361,7 @@ class DatabasePerformanceMonitor:
 
         Returns:
             Performance report
+
         """
         query_analysis = self.analyze_query_performance(hours)
         db_analysis = self.analyze_database_performance(database_name, hours)
@@ -420,6 +430,7 @@ class DatabasePerformanceMonitor:
 
         Returns:
             List of historical performance data
+
         """
         cutoff_time = datetime.now() - timedelta(days=days)
 
@@ -467,6 +478,7 @@ def monitor_database(database_name: str, workspace_dir: str | None = None) -> di
 
     Returns:
         Monitoring results
+
     """
     monitor = DatabasePerformanceMonitor(workspace_dir)
     return monitor.analyze_database_performance(database_name)
@@ -480,6 +492,7 @@ def optimize_database(database_name: str, workspace_dir: str | None = None) -> d
 
     Returns:
         Optimization results
+
     """
     monitor = DatabasePerformanceMonitor(workspace_dir)
     return monitor.get_performance_report(database_name)

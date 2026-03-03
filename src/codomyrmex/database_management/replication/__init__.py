@@ -1,7 +1,6 @@
-"""
-Replication Submodule
+"""Replication Submodule.
 
-Read replica routing and load balancing
+Read replica routing and load balancing.
 """
 
 __version__ = "0.1.0"
