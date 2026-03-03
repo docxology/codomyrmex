@@ -6,9 +6,9 @@ Enforces strictly zero-mock policy.
 import pytest
 
 from codomyrmex.quantum.mcp_tools import (
-    quantum_run_circuit,
-    quantum_circuit_stats,
     quantum_bell_state_demo,
+    quantum_circuit_stats,
+    quantum_run_circuit,
 )
 
 
@@ -17,10 +17,8 @@ def test_quantum_run_circuit_valid() -> None:
     # Simple circuit: apply X to qubit 0 (making it |1>) and measure
     circuit_data = {
         "num_qubits": 1,
-        "gates": [
-            {"gate_type": "X", "target": 0}
-        ],
-        "measure_all": True
+        "gates": [{"gate_type": "X", "target": 0}],
+        "measure_all": True,
     }
     result = quantum_run_circuit(circuit_data, shots=10)
 
@@ -36,9 +34,9 @@ def test_quantum_run_circuit_bell_state() -> None:
         "num_qubits": 2,
         "gates": [
             {"gate_type": "H", "target": 0},
-            {"gate_type": "CNOT", "target": 1, "control": 0}
+            {"gate_type": "CNOT", "target": 1, "control": 0},
         ],
-        "measure_all": True
+        "measure_all": True,
     }
     result = quantum_run_circuit(circuit_data, shots=100)
 
@@ -52,9 +50,7 @@ def test_quantum_run_circuit_invalid_gate() -> None:
     """Test quantum_run_circuit with an invalid gate type naturally raising ValueError."""
     circuit_data = {
         "num_qubits": 1,
-        "gates": [
-            {"gate_type": "INVALID_GATE", "target": 0}
-        ]
+        "gates": [{"gate_type": "INVALID_GATE", "target": 0}],
     }
     with pytest.raises(ValueError, match="Invalid gate type"):
         quantum_run_circuit(circuit_data)
@@ -62,12 +58,7 @@ def test_quantum_run_circuit_invalid_gate() -> None:
 
 def test_quantum_run_circuit_missing_target() -> None:
     """Test quantum_run_circuit with a missing target natively raising ValueError."""
-    circuit_data = {
-        "num_qubits": 1,
-        "gates": [
-            {"gate_type": "H"}  # Missing target
-        ]
-    }
+    circuit_data = {"num_qubits": 1, "gates": [{"gate_type": "H"}]}  # Missing target
     with pytest.raises(ValueError, match="Gate requires a target qubit"):
         quantum_run_circuit(circuit_data)
 
@@ -76,9 +67,7 @@ def test_quantum_run_circuit_missing_control() -> None:
     """Test quantum_run_circuit with a CNOT gate missing control."""
     circuit_data = {
         "num_qubits": 2,
-        "gates": [
-            {"gate_type": "CNOT", "target": 1}  # Missing control
-        ]
+        "gates": [{"gate_type": "CNOT", "target": 1}],  # Missing control
     }
     with pytest.raises(ValueError, match="CNOT gate requires a control qubit"):
         quantum_run_circuit(circuit_data)
@@ -88,9 +77,7 @@ def test_quantum_run_circuit_missing_parameter() -> None:
     """Test quantum_run_circuit with a rotation gate missing parameter."""
     circuit_data = {
         "num_qubits": 1,
-        "gates": [
-            {"gate_type": "RX", "target": 0}  # Missing parameter
-        ]
+        "gates": [{"gate_type": "RX", "target": 0}],  # Missing parameter
     }
     with pytest.raises(ValueError, match="RX gate requires a parameter"):
         quantum_run_circuit(circuit_data)
@@ -103,9 +90,9 @@ def test_quantum_circuit_stats() -> None:
         "gates": [
             {"gate_type": "H", "target": 0},
             {"gate_type": "CNOT", "target": 1, "control": 0},
-            {"gate_type": "CNOT", "target": 2, "control": 1}
+            {"gate_type": "CNOT", "target": 2, "control": 1},
         ],
-        "measure_all": False
+        "measure_all": False,
     }
     stats = quantum_circuit_stats(circuit_data)
 
