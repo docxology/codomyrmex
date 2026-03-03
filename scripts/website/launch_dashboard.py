@@ -22,14 +22,8 @@ except ImportError:
     project_root = Path(__file__).resolve().parent.parent
     sys.path.insert(0, str(project_root / "src"))
 
-from codomyrmex.utils.cli_helpers import (
-    print_error,
-    print_info,
-    print_success,
-    setup_logging,
-)
-from codomyrmex.website import DataProvider, WebsiteGenerator, WebsiteServer
-
+from codomyrmex.utils.cli_helpers import setup_logging, print_success, print_info, print_error
+from codomyrmex.website import DataProvider, WebsiteServer, WebsiteGenerator
 
 def parse_args():
     parser = argparse.ArgumentParser(description="Launch Codomyrmex Dashboard")
@@ -40,14 +34,14 @@ def parse_args():
 
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
+    from pathlib import Path
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "website" / "config.yaml"
+    config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
-            yaml.safe_load(f) or {}
-            print("Loaded config from config/website/config.yaml")
+        with open(config_path, "r") as f:
+            config_data = yaml.safe_load(f) or {}
+            print(f"Loaded config from config/website/config.yaml")
 
     args = parse_args()
     setup_logging(level="INFO")
