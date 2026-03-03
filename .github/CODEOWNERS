@@ -3,42 +3,42 @@
 # See: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
 
 # Global owners - all files default to these owners
-* @docxology/codomyrmex-maintainers
+* @docxology
 
 # GitHub configuration and workflows
-/.github/ @docxology/codomyrmex-maintainers
-/.github/PULL_REQUEST_TEMPLATE.md @docxology/codomyrmex-maintainers
-/.github/CODEOWNERS @docxology/codomyrmex-maintainers
-/.github/dependabot.yml @docxology/codomyrmex-maintainers
+/.github/ @docxology
+/.github/PULL_REQUEST_TEMPLATE.md @docxology
+/.github/CODEOWNERS @docxology
+/.github/dependabot.yml @docxology
 
 # Core source code
-/src/ @docxology/codomyrmex-maintainers
-/src/codomyrmex/ @docxology/codomyrmex-maintainers
+/src/ @docxology
+/src/codomyrmex/ @docxology
 
 # Documentation
-/docs/ @docxology/codomyrmex-maintainers
-/README.md @docxology/codomyrmex-maintainers
-/AGENTS.md @docxology/codomyrmex-maintainers
-/SECURITY.md @docxology/codomyrmex-maintainers
+/docs/ @docxology
+/README.md @docxology
+/AGENTS.md @docxology
+/SECURITY.md @docxology
 
 # Configuration files
-/pyproject.toml @docxology/codomyrmex-maintainers
-/uv.lock @docxology/codomyrmex-maintainers
-/requirements.txt @docxology/codomyrmex-maintainers
-/pytest.ini @docxology/codomyrmex-maintainers
-/Makefile @docxology/codomyrmex-maintainers
+/pyproject.toml @docxology
+/uv.lock @docxology
+/requirements.txt @docxology
+/pytest.ini @docxology
+/Makefile @docxology
 
 # Scripts and automation
-/scripts/ @docxology/codomyrmex-maintainers
+/scripts/ @docxology
 
 # Testing
-/testing/ @docxology/codomyrmex-maintainers
-/tests/ @docxology/codomyrmex-maintainers
+/testing/ @docxology
+/tests/ @docxology
 
 # CI/CD and build configuration
-/.cursorrules/ @docxology/codomyrmex-maintainers
+/.cursorrules/ @docxology
 
-# Note: Replace @docxology/codomyrmex-maintainers with actual GitHub usernames or team names
+# Note: Replace @docxology with actual GitHub usernames or team names
 # Example formats:
 # * @username
 # * @org/team-name
