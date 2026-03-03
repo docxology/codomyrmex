@@ -1,20 +1,22 @@
 import time
-import pytest
 
 import docker
+import pytest
 
 from codomyrmex.container_optimization.mcp_tools import (
     container_optimization_analyze_image,
-    container_optimization_suggest_optimizations,
-    container_optimization_get_optimization_report,
     container_optimization_analyze_usage,
+    container_optimization_get_optimization_report,
     container_optimization_suggest_limits,
+    container_optimization_suggest_optimizations,
 )
+
 
 @pytest.fixture(scope="session")
 def docker_client():
     """Provides a Docker client for tests."""
     return docker.from_env()
+
 
 @pytest.fixture(scope="module")
 def existing_image(docker_client):
@@ -28,6 +30,7 @@ def existing_image(docker_client):
             return img.tags[0]
     return images[0].id
 
+
 @pytest.fixture(scope="module")
 def running_container(docker_client, existing_image):
     """Runs a container for testing resource tuning."""
@@ -35,10 +38,7 @@ def running_container(docker_client, existing_image):
     # This might fail if the entrypoint is not suitable.
     try:
         container = docker_client.containers.run(
-            existing_image,
-            command="sleep 100",
-            detach=True,
-            remove=True
+            existing_image, command="sleep 100", detach=True, remove=True
         )
         yield container
         try:
@@ -47,6 +47,7 @@ def running_container(docker_client, existing_image):
             pass
     except Exception as e:
         pytest.skip(f"Could not run container for test: {e}")
+
 
 class TestContainerOptimizationMCPTools:
     """Zero-mock tests for Container Optimization MCP Tools."""
@@ -75,7 +76,7 @@ class TestContainerOptimizationMCPTools:
 
     def test_mcp_tool_analyze_usage(self, running_container):
         """Test container_optimization_analyze_usage tool."""
-        time.sleep(1) # Wait for stats to be available
+        time.sleep(1)  # Wait for stats to be available
         usage = container_optimization_analyze_usage(running_container.id)
         assert isinstance(usage, dict)
         assert "container_id" in usage
@@ -85,7 +86,7 @@ class TestContainerOptimizationMCPTools:
 
     def test_mcp_tool_suggest_limits(self, running_container):
         """Test container_optimization_suggest_limits tool."""
-        time.sleep(1) # Wait for stats to be available
+        time.sleep(1)  # Wait for stats to be available
         limits = container_optimization_suggest_limits(running_container.id)
         assert isinstance(limits, dict)
         assert "cpu_limit" in limits
