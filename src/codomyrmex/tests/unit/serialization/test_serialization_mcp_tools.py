@@ -55,6 +55,23 @@ def test_serialize_deserialize_roundtrip() -> None:
     assert recovered == original
 
 
+def test_serialize_binary_format() -> None:
+    """serialize_data handles binary formats like pickle via base64 encoding."""
+    from codomyrmex.serialization.mcp_tools import serialize_data, deserialize_data
+
+    original = {"data": [1, 2, 3], "nested": {"a": "b"}}
+    serialized = serialize_data(original, format="pickle")
+
+    assert isinstance(serialized, str)
+    assert len(serialized) > 0
+
+    recovered = deserialize_data(serialized, format="pickle")
+    import base64
+    import pickle
+    decoded = base64.b64decode(serialized)
+    assert pickle.loads(decoded) == original
+
+
 def test_mcp_tool_meta_attached() -> None:
     """Each MCP tool function has _mcp_tool_meta for bridge discovery."""
     from codomyrmex.serialization.mcp_tools import (

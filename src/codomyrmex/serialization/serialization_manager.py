@@ -42,6 +42,7 @@ class SerializationManager:
     """
 
     def __init__(self) -> None:
+        """Initialize the SerializationManager."""
         self._serializers: dict[str, Serializer] = {}
         self._stats: list[SerializationResult] = []
 
@@ -53,6 +54,7 @@ class SerializationManager:
 
         Returns:
             Serializer instance.
+
         """
         if format not in self._serializers:
             fmt = SerializationFormat(format) if format in [f.value for f in SerializationFormat] else SerializationFormat.JSON
@@ -79,6 +81,7 @@ class SerializationManager:
 
         Returns:
             Serialized data.
+
         """
         start = time.time()
         try:
@@ -112,6 +115,7 @@ class SerializationManager:
 
         Returns:
             Deserialized object.
+
         """
         if format is None:
             serializer = Serializer()
@@ -123,7 +127,8 @@ class SerializationManager:
         serializer = self.get_serializer(format)
         # Convert format string to SerializationFormat enum for the Serializer
         fmt_enum = SerializationFormat(format) if format in [f.value for f in SerializationFormat] else SerializationFormat.JSON
-        return serializer.deserialize(data, fmt_enum)
+        data_bytes = data.encode('utf-8') if isinstance(data, str) else data
+        return serializer.deserialize(data_bytes, fmt_enum)
 
     def serialize_batch(self, objects: list[Any], format: str = "json") -> list[str | bytes]:
         """Serialize multiple objects in sequence.
@@ -134,6 +139,7 @@ class SerializationManager:
 
         Returns:
             List of serialized outputs.
+
         """
         return [self.serialize(obj, format=format) for obj in objects]
 
@@ -142,6 +148,7 @@ class SerializationManager:
 
         Returns:
             The deserialized object after a round trip.
+
         """
         serialized = self.serialize(obj, format=format)
         return self.deserialize(serialized, format=format)
@@ -150,10 +157,12 @@ class SerializationManager:
 
     @property
     def operation_count(self) -> int:
+        """Get the total number of serialization operations performed."""
         return len(self._stats)
 
     @property
     def error_count(self) -> int:
+        """Get the total number of serialization errors encountered."""
         return sum(1 for s in self._stats if not s.success)
 
     def summary(self) -> dict[str, Any]:

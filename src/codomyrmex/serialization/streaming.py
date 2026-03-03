@@ -24,6 +24,7 @@ def stream_jsonl_write(path: Path, items: Iterator[dict[str, Any]],
 
     Returns:
         Number of items written.
+
     """
     count = 0
     with open(path, "w") as f:
@@ -50,7 +51,7 @@ def stream_csv_write(path: Path, items: Iterator[dict[str, Any]],
     count = 0
 
     with open(path, "w", newline="") as f:
-        writer: csv.DictWriter | None = None
+        writer: csv.DictWriter[str] | None = None
         for item in items:
             if writer is None:
                 fields = fieldnames or list(item.keys())
@@ -87,6 +88,7 @@ class StreamBuffer:
 
     def __init__(self, max_size: int = 1000,
                  flush_callback: Any = None) -> None:
+        """Initialize the StreamBuffer."""
         self._max_size = max_size
         self._buffer: list[Any] = []
         self._flush_callback = flush_callback
@@ -114,4 +116,5 @@ class StreamBuffer:
 
     @property
     def total_flushed(self) -> int:
+        """Get the total number of items flushed from the buffer."""
         return self._total_flushed

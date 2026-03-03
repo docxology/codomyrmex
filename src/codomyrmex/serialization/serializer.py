@@ -8,7 +8,7 @@ import pickle
 from pathlib import Path
 
 try:
-    import yaml
+    import yaml  # type: ignore[import-untyped]
     YAML_AVAILABLE = True
 except ImportError:
     YAML_AVAILABLE = False
@@ -26,6 +26,7 @@ T = TypeVar('T')
 
 class SerializationFormat(Enum):
     """Supported serialization formats."""
+
     JSON = "json"
     PICKLE = "pickle"
     YAML = "yaml"
@@ -33,6 +34,7 @@ class SerializationFormat(Enum):
 
 class SerializationError(Exception):
     """Raised when serialization fails."""
+
     pass
 
 
@@ -99,7 +101,7 @@ class Serializer:
         """Serialize to YAML bytes."""
         if not YAML_AVAILABLE:
             raise SerializationError("PyYAML not installed")
-        return yaml.dump(self._to_jsonable(obj), default_flow_style=False).encode('utf-8')
+        return yaml.dump(self._to_jsonable(obj), default_flow_style=False).encode('utf-8')  # type: ignore
 
     def _deserialize_yaml(self, data: bytes, target_type: type[T] | None) -> Any:
         """Deserialize from YAML bytes."""
@@ -118,7 +120,7 @@ class Serializer:
             return obj.isoformat()
         elif isinstance(obj, Enum):
             return obj.value
-        elif is_dataclass(obj):
+        elif is_dataclass(obj) and not isinstance(obj, type):
             return asdict(obj)
         elif isinstance(obj, dict):
             return {k: self._to_jsonable(v) for k, v in obj.items()}
@@ -129,7 +131,7 @@ class Serializer:
         else:
             return str(obj)
 
-    def to_file(self, obj: Any, file_path: str, format: SerializationFormat | None = None):
+    def to_file(self, obj: Any, file_path: str, format: SerializationFormat | None = None) -> None:
         """Serialize object to file."""
         data = self.serialize(obj, format)
         with open(file_path, 'wb') as f:

@@ -1,5 +1,4 @@
-"""
-Serialization module for Codomyrmex.
+"""Serialization module for Codomyrmex.
 
 This module provides unified data serialization/deserialization with support
 for JSON, YAML, TOML, MessagePack, and other formats.
@@ -11,8 +10,8 @@ from typing import Any, Optional, Union
 try:
     from codomyrmex.validation.schemas import Result, ResultStatus
 except ImportError:
-    Result = None
-    ResultStatus = None
+    Result = None  # type: ignore[assignment, misc]
+    ResultStatus = None  # type: ignore[assignment, misc]
 
 from .binary_formats import AvroSerializer, MsgpackSerializer, ParquetSerializer
 from .exceptions import (
@@ -29,9 +28,11 @@ from .serialization_manager import SerializationManager
 from .serializer import SerializationFormat, Serializer
 
 
-def cli_commands():
+from typing import Callable
+
+def cli_commands() -> dict[str, dict[str, Any]]:
     """Return CLI commands for the serialization module."""
-    def _formats(**kwargs):
+    def _formats(**kwargs: Any) -> None:
         """List supported serialization formats."""
         print("=== Serialization Formats ===")
         for fmt in SerializationFormat:
@@ -41,7 +42,7 @@ def cli_commands():
         print("  avro       - Apache Avro (AvroSerializer)")
         print("  parquet    - Apache Parquet (ParquetSerializer)")
 
-    def _convert(**kwargs):
+    def _convert(**kwargs: Any) -> None:
         """Convert data between serialization formats."""
         src_fmt = kwargs.get("from", "json")
         dst_fmt = kwargs.get("to", "yaml")
