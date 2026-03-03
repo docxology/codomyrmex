@@ -18,17 +18,26 @@ except ImportError:
     project_root = Path(__file__).resolve().parent.parent.parent.parent
     sys.path.insert(0, str(project_root / "src"))
 
-from codomyrmex.utils.cli_helpers import setup_logging, print_success, print_info, print_error
-from codomyrmex.validation import (
-    Validator,
-    is_valid
+from codomyrmex.utils.cli_helpers import (
+    setup_logging,
+    print_success,
+    print_info,
+    print_error,
 )
+from codomyrmex.validation import Validator, is_valid
+
 
 def main():
     # Auto-injected: Load configuration
     import yaml
     from pathlib import Path
-    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "validation" / "config.yaml"
+
+    config_path = (
+        Path(__file__).resolve().parent.parent.parent
+        / "config"
+        / "validation"
+        / "config.yaml"
+    )
     config_data = {}
     if config_path.exists():
         with open(config_path, "r") as f:
@@ -44,13 +53,10 @@ def main():
         data = {"name": "Test", "age": 30}
         schema = {
             "type": "object",
-            "properties": {
-                "name": {"type": "string"},
-                "age": {"type": "integer"}
-            },
-            "required": ["name"]
+            "properties": {"name": {"type": "string"}, "age": {"type": "integer"}},
+            "required": ["name"],
         }
-        
+
         if is_valid(data, schema):
             print_success("  Data validated successfully via is_valid.")
     except Exception as e:
@@ -66,6 +72,7 @@ def main():
 
     print_success("Validation examples completed successfully")
     return 0
+
 
 if __name__ == "__main__":
     sys.exit(main())
