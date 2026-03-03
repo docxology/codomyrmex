@@ -238,7 +238,10 @@ class ProjectAnalyzer:
         lines = content.split("\n")
 
         # 1. Integration with codomyrmex.static_analysis
-        from codomyrmex.coding.static_analysis.static_analyzer import StaticAnalyzer, AnalysisType
+        from codomyrmex.coding.static_analysis.static_analyzer import (
+            AnalysisType,
+            StaticAnalyzer,
+        )
         analyzer = StaticAnalyzer()
         try:
             static_results = analyzer.analyze_file(str(file_path), [AnalysisType.QUALITY, AnalysisType.COMPLEXITY])
@@ -257,7 +260,7 @@ class ProjectAnalyzer:
             metrics = analyzer.calculate_metrics(str(file_path))
             complexity = metrics.cyclomatic_complexity
             loc = metrics.lines_of_code
-        except Exception as e:
+        except Exception:
             complexity = 0
             loc = len(lines)
 
@@ -280,7 +283,7 @@ class ProjectAnalyzer:
             matches = detector.detect_patterns(content)
             # Use a dict to preserve order while removing duplicates
             unique_patterns = {match["pattern"]: None for match in matches}
-            
+
             # Additional regex-based generic pattern detection (from old implementation)
             # to preserve original test_project feature completeness checks
             pattern_checks = {
@@ -293,7 +296,7 @@ class ProjectAnalyzer:
             for pattern_name, regex in pattern_checks.items():
                 if re.search(regex, content):
                     unique_patterns[pattern_name] = None
-                    
+
             result.patterns = list(unique_patterns.keys())
         except Exception as e:
             logger.warning(f"Pattern matching failed for {file_path}: {e}")

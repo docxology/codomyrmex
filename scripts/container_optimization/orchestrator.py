@@ -6,12 +6,15 @@ This script demonstrates how to use the ContainerOptimizer and ResourceTuner
 to analyze and optimize Docker images and running containers.
 """
 
-import sys
 import json
+import sys
+
 import fire
 from loguru import logger
+
 from codomyrmex.container_optimization.optimizer import ContainerOptimizer
 from codomyrmex.container_optimization.resource_tuner import ResourceTuner
+
 
 class ContainerOrchestrator:
     """Orchestrates container optimization tasks."""
@@ -57,14 +60,15 @@ class ContainerOrchestrator:
 
 
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
+
+    import yaml
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "container_optimization" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
+        with open(config_path) as f:
             config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/container_optimization/config.yaml")
+            print("Loaded config from config/container_optimization/config.yaml")
 
 if __name__ == "__main__":
     fire.Fire(ContainerOrchestrator)

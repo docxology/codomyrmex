@@ -15,26 +15,27 @@ except ImportError:
     project_root = Path(__file__).resolve().parent.parent.parent.parent
     sys.path.insert(0, str(project_root / "src"))
 
-from codomyrmex.utils.cli_helpers import setup_logging, print_success, print_info
+from codomyrmex.utils.cli_helpers import print_info, print_success, setup_logging
+
 
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
+
+    import yaml
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "coding" / "config.yaml"
-    config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
-            config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/coding/config.yaml")
+        with open(config_path) as f:
+            yaml.safe_load(f) or {}
+            print("Loaded config from config/coding/config.yaml")
 
     setup_logging()
-    print_info(f"Running Basic coding Usage...")
+    print_info("Running Basic coding Usage...")
 
     # 1. Code Execution
     print_info("Testing code execution...")
     try:
-        from codomyrmex.coding import execute_code, SUPPORTED_LANGUAGES
+        from codomyrmex.coding import SUPPORTED_LANGUAGES, execute_code
         code = "print('Hello from Codomyrmex!')"
         # Correct order: language, code
         result = execute_code("python", code)
@@ -61,13 +62,13 @@ def main():
     print_info("Checking Sandbox and Monitor interfaces...")
     try:
         from codomyrmex.coding import ExecutionMonitor, check_docker_available
-        monitor = ExecutionMonitor()
+        ExecutionMonitor()
         docker = check_docker_available()
         print_success(f"  ExecutionMonitor initialized. Docker available: {docker}")
     except Exception as e:
         print_info(f"  Sandbox/Monitor demo: {e}")
 
-    print_success(f"Coding Usage completed successfully")
+    print_success("Coding Usage completed successfully")
     return 0
 
 if __name__ == "__main__":

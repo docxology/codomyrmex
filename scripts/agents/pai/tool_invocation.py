@@ -28,13 +28,17 @@ except ImportError:
 
 from codomyrmex.agents.pai import (
     call_tool,
+    reset_trust,
+    trust_all,
     trusted_call_tool,
     verify_capabilities,
-    trust_all,
-    reset_trust,
 )
 from codomyrmex.utils.cli_helpers import (
-    setup_logging, print_info, print_success, print_warning, print_error,
+    print_error,
+    print_info,
+    print_success,
+    print_warning,
+    setup_logging,
 )
 
 PATTERNS = ["direct", "trusted", "dynamic", "errors"]
@@ -103,7 +107,7 @@ def pattern_trusted() -> dict:
 
     # Try a safe tool (should succeed at VERIFIED)
     try:
-        result = trusted_call_tool("codomyrmex.list_modules")
+        trusted_call_tool("codomyrmex.list_modules")
         print_success("  ✅ trusted_call_tool('list_modules') — PASSED (VERIFIED is sufficient)")
     except PermissionError as e:
         print_error(f"  ❌ Unexpected PermissionError on safe tool: {e}")
@@ -241,14 +245,14 @@ def main() -> int:
 
 
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
+
+    import yaml
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "agents" / "config.yaml"
-    config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
-            config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/agents/config.yaml")
+        with open(config_path) as f:
+            yaml.safe_load(f) or {}
+            print("Loaded config from config/agents/config.yaml")
 
 if __name__ == "__main__":
     sys.exit(main())

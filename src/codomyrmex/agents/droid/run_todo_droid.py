@@ -222,7 +222,7 @@ def run_todos(
                             _ = resolve_handler(try_path)
                             inferred_handler = try_path
                             break
-                        except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
+                        except (ValueError, RuntimeError, AttributeError, OSError, TypeError, ImportError) as e:
                             logger.debug("Handler resolution failed for %s via %s: %s", candidate, try_path, e)
                             pass
             handler_path = item.handler_path or inferred_handler
@@ -330,7 +330,8 @@ def build_controller(config_path: str | None) -> DroidController:
         try:
             return create_default_controller()
         except NameError:
-            return DroidController()
+            from codomyrmex.agents.droid.controller import DroidConfig
+            return DroidController(config=DroidConfig())
 
 
 def _list_todos(todo_items: list[TodoItem], completed_items: list[TodoItem]) -> None:

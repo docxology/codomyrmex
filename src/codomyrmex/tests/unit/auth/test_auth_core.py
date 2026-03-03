@@ -19,7 +19,6 @@ from codomyrmex.auth.rbac.permissions import PermissionCheck, PermissionRegistry
 from codomyrmex.auth.tokens.token import Token, TokenManager
 from codomyrmex.auth.tokens.validator import TokenValidator
 
-
 # ==============================================================================
 # Token Dataclass
 # ==============================================================================
@@ -627,7 +626,7 @@ class TestAPIKeyManagerUnit:
     def test_cleanup_expired(self):
         """cleanup_expired removes expired and revoked keys."""
         mgr = APIKeyManager()
-        k1 = mgr.generate(user_id="alice", ttl_seconds=0.1)
+        mgr.generate(user_id="alice", ttl_seconds=0.1)
         mgr.generate(user_id="bob")
         k3 = mgr.generate(user_id="charlie")
         mgr.revoke(k3)

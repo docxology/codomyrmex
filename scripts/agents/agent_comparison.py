@@ -14,11 +14,16 @@ except ImportError:
     project_root = Path(__file__).resolve().parent.parent.parent
     sys.path.insert(0, str(project_root / "src"))
 
-from codomyrmex.agents import AgentRequest
 from codomyrmex.agents.exceptions import AgentConfigurationError
+
+from codomyrmex.agents import AgentRequest
 from codomyrmex.utils.cli_helpers import (
-    setup_logging, print_success, print_error, print_info, 
-    print_section, print_warning
+    print_error,
+    print_info,
+    print_section,
+    print_success,
+    print_warning,
+    setup_logging,
 )
 
 
@@ -28,10 +33,10 @@ def test_agent(agent_class, agent_name: str, prompt: str) -> dict:
         agent = agent_class()
         if hasattr(agent, 'test_connection') and not agent.test_connection():
             return {"status": "skipped", "reason": f"{agent_name} not configured"}
-        
+
         request = AgentRequest(prompt=prompt, context={"language": "python"})
         response = agent.execute(request)
-        
+
         if response.is_success():
             return {
                 "status": "success",
@@ -47,52 +52,52 @@ def test_agent(agent_class, agent_name: str, prompt: str) -> dict:
 
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
+
+    import yaml
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "agents" / "config.yaml"
-    config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
-            config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/agents/config.yaml")
+        with open(config_path) as f:
+            yaml.safe_load(f) or {}
+            print("Loaded config from config/agents/config.yaml")
 
     setup_logging()
     print_section("Agent Comparison")
-    
+
     prompt = "Write a Python function to check if a number is prime. Include docstring."
     print_info(f"Prompt: {prompt[:50]}...")
-    
+
     # Import agents dynamically
     agents_to_test = []
-    
+
     try:
         from codomyrmex.agents.claude import ClaudeClient
         agents_to_test.append(("Claude", ClaudeClient))
     except ImportError:
         pass
-    
+
     try:
         from codomyrmex.agents import GeminiClient
         agents_to_test.append(("Gemini", GeminiClient))
     except ImportError:
         pass
-    
+
     try:
         from codomyrmex.agents import CodeEditor
         agents_to_test.append(("CodeEditor", CodeEditor))
     except ImportError:
         pass
-    
+
     if not agents_to_test:
         print_warning("No agents available for comparison")
         return 0
-    
+
     results = {}
     for name, agent_class in agents_to_test:
         print_section(f"Testing {name}")
         result = test_agent(agent_class, name, prompt)
         results[name] = result
-        
+
         if result["status"] == "success":
             print_success(f"{name}: Success ({result.get('tokens', '?')} tokens)")
             print_info(f"  Preview: {result['content'][:80]}...")
@@ -100,18 +105,18 @@ def main():
             print_warning(f"{name}: Skipped - {result['reason']}")
         else:
             print_error(f"{name}: Error - {result['reason']}")
-    
+
     # Summary
     print_section("Comparison Summary")
     success_count = sum(1 for r in results.values() if r["status"] == "success")
     skip_count = sum(1 for r in results.values() if r["status"] == "skipped")
     error_count = sum(1 for r in results.values() if r["status"] == "error")
-    
+
     print_info(f"Total Agents: {len(results)}")
     print_info(f"  Success: {success_count}")
     print_info(f"  Skipped: {skip_count}")
     print_info(f"  Errors: {error_count}")
-    
+
     return 0
 
 

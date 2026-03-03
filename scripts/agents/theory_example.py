@@ -14,21 +14,26 @@ except ImportError:
     project_root = Path(__file__).resolve().parent.parent.parent
     sys.path.insert(0, str(project_root / "src"))
 
-from codomyrmex.agents import ReactiveArchitecture, DeliberativeArchitecture
+from codomyrmex.agents import DeliberativeArchitecture, ReactiveArchitecture
 from codomyrmex.agents.theory.reasoning_models import SymbolicReasoningModel
-from codomyrmex.utils.cli_helpers import setup_logging, print_success, print_info, print_section
+from codomyrmex.utils.cli_helpers import (
+    print_info,
+    print_section,
+    print_success,
+    setup_logging,
+)
 
 
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
+
+    import yaml
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "agents" / "config.yaml"
-    config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
-            config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/agents/config.yaml")
+        with open(config_path) as f:
+            yaml.safe_load(f) or {}
+            print("Loaded config from config/agents/config.yaml")
 
     setup_logging()
     print_section("Agent Theory Examples")
@@ -57,10 +62,10 @@ def main():
     # --- Deliberative Architecture with KnowledgeBase ---
     print_info("\n2. Deliberative Architecture Demo")
     deliberative = DeliberativeArchitecture()
-    
+
     # Set goals
     deliberative.set_goal({"type": "simple", "target": "optimize_code"})
-    
+
     # Simulate environment with facts
     environment = {"code_quality": 0.7, "test_coverage": 0.5}
     perception = deliberative.perceive(environment)
