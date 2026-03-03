@@ -37,8 +37,16 @@ def main() -> int:
 
     # ── 0. Import guard ────────────────────────────────────────────────
     try:
-        from codomyrmex.audio import Synthesizer, TTS_AVAILABLE, EDGE_TTS_AVAILABLE, PYTTSX3_AVAILABLE
-        from codomyrmex.audio.exceptions import ProviderNotAvailableError, SynthesisError
+        from codomyrmex.audio import (
+            EDGE_TTS_AVAILABLE,
+            PYTTSX3_AVAILABLE,
+            TTS_AVAILABLE,
+            Synthesizer,
+        )
+        from codomyrmex.audio.exceptions import (
+            ProviderNotAvailableError,
+            SynthesisError,
+        )
     except ImportError:
         print_warning("Audio module not importable.")
         print_info("  Install: uv sync --extra audio")
@@ -60,7 +68,7 @@ def main() -> int:
         print_info("1. edge-tts — Neural TTS (Microsoft Edge voices)...")
         try:
             synth = Synthesizer(provider="edge-tts")
-            print_success(f"   Synthesizer ready with edge-tts.")
+            print_success("   Synthesizer ready with edge-tts.")
 
             # List available English voices
             voices = synth.list_voices(language="en-US")
@@ -76,7 +84,7 @@ def main() -> int:
                 voice="en-US-AriaNeural",
                 rate=1.0,
             )
-            print_success(f"   Saved: outputs/audio/basic_usage_edge_tts.mp3")
+            print_success("   Saved: outputs/audio/basic_usage_edge_tts.mp3")
 
             # Batch synthesis
             batch_texts = [
@@ -109,7 +117,7 @@ def main() -> int:
                 out,
                 rate=1.0,
             )
-            print_success(f"   Saved: outputs/audio/basic_usage_pyttsx3.wav")
+            print_success("   Saved: outputs/audio/basic_usage_pyttsx3.wav")
 
         except ProviderNotAvailableError as e:
             print_warning(f"   pyttsx3 unavailable: {e}")

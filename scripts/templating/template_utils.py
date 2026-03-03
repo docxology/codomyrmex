@@ -16,8 +16,8 @@ except ImportError:
     sys.path.insert(0, str(project_root / "src"))
 
 import argparse
-import re
 import json
+import re
 from string import Template
 
 
@@ -52,14 +52,14 @@ def validate_template(template: str, variables: dict) -> list:
 
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
+
+    import yaml
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "templating" / "config.yaml"
-    config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
-            config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/templating/config.yaml")
+        with open(config_path) as f:
+            yaml.safe_load(f) or {}
+            print("Loaded config from config/templating/config.yaml")
 
     parser = argparse.ArgumentParser(description="Template utilities")
     parser.add_argument("template", nargs="?", help="Template file or string")
@@ -68,7 +68,7 @@ def main():
     parser.add_argument("--output", "-o", help="Output file")
     parser.add_argument("--list-vars", "-l", action="store_true", help="List template variables")
     args = parser.parse_args()
-    
+
     if not args.template:
         print("📝 Template Utilities\n")
         print("Usage:")
@@ -79,7 +79,7 @@ def main():
         print("  $variable or ${variable}")
         print("  {{ variable }}")
         return 0
-    
+
     # Load template
     template_path = Path(args.template)
     if template_path.exists():
@@ -88,7 +88,7 @@ def main():
     else:
         template_content = args.template
         print("📝 Template (inline)\n")
-    
+
     # List variables
     if args.list_vars:
         variables = find_variables(template_content)
@@ -96,7 +96,7 @@ def main():
         for v in variables:
             print(f"   - {v}")
         return 0
-    
+
     # Load variables
     variables = {}
     if args.vars:
@@ -111,16 +111,16 @@ def main():
             print(f"❌ File not found: {args.vars_file}")
             return 1
         variables = json.loads(vars_path.read_text())
-    
+
     # Validate
     missing = validate_template(template_content, variables)
     if missing:
         print(f"⚠️  Missing variables: {', '.join(missing)}")
-    
+
     # Render
     result = render_simple(template_content, variables)
     result = render_jinja_like(result, variables)
-    
+
     if args.output:
         Path(args.output).write_text(result)
         print(f"✅ Output saved to: {args.output}")
@@ -129,7 +129,7 @@ def main():
         print(result[:2000])
         if len(result) > 2000:
             print(f"\n... ({len(result) - 2000} more characters)")
-    
+
     return 0
 
 

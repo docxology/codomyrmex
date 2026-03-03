@@ -32,8 +32,13 @@ except ImportError:
     project_root = Path(__file__).resolve().parent.parent.parent
     sys.path.insert(0, str(project_root / "src"))
 
-from codomyrmex.utils.cli_helpers import setup_logging, print_success, print_info, print_error
-from codomyrmex.website import DataProvider, WebsiteServer, WebsiteGenerator
+from codomyrmex.utils.cli_helpers import (
+    print_error,
+    print_info,
+    print_success,
+    setup_logging,
+)
+from codomyrmex.website import DataProvider, WebsiteGenerator, WebsiteServer
 
 
 def parse_args() -> argparse.Namespace:
@@ -97,7 +102,7 @@ def main() -> int:
     print_info("Initializing Data Provider...")
     try:
         data_provider = DataProvider(root_dir=project_root)
-        summary = data_provider.get_system_summary()
+        data_provider.get_system_summary()
         print_success(f"System loaded — {len(data_provider.get_modules())} modules")
 
         # Quick PAI status
@@ -150,14 +155,14 @@ def main() -> int:
 
 
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
+
+    import yaml
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "agents" / "config.yaml"
-    config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
-            config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/agents/config.yaml")
+        with open(config_path) as f:
+            yaml.safe_load(f) or {}
+            print("Loaded config from config/agents/config.yaml")
 
 if __name__ == "__main__":
     sys.exit(main())

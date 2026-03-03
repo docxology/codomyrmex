@@ -13,13 +13,14 @@ Usage:
 import sys
 import time
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any
 
 project_root = Path(__file__).parent.parent.parent.parent
 sys.path.insert(0, str(project_root / "src"))
 
 # Direct import to avoid triggering full codomyrmex package init
 import importlib.util
+
 script_base_path = project_root / "src" / "codomyrmex" / "utils" / "script_base.py"
 spec = importlib.util.spec_from_file_location("script_base", script_base_path)
 script_base = importlib.util.module_from_spec(spec)
@@ -62,7 +63,7 @@ class DeploymentScript(ScriptBase):
             help="Version to deploy (default: v1.0.0)"
         )
 
-    def run(self, args, config: ScriptConfig) -> Dict[str, Any]:
+    def run(self, args, config: ScriptConfig) -> dict[str, Any]:
         """Execute deployment demonstrations."""
         results = {
             "tests_run": 0,
@@ -79,7 +80,9 @@ class DeploymentScript(ScriptBase):
 
         # Import deployment module (after dry_run check)
         from codomyrmex.deployment import (
-            DeploymentManager, CanaryStrategy, BlueGreenStrategy
+            BlueGreenStrategy,
+            CanaryStrategy,
+            DeploymentManager,
         )
 
         manager = DeploymentManager()
@@ -187,14 +190,15 @@ class DeploymentScript(ScriptBase):
 
 
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
+
+    import yaml
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "deployment" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
+        with open(config_path) as f:
             config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/deployment/config.yaml")
+            print("Loaded config from config/deployment/config.yaml")
 
 if __name__ == "__main__":
     script = DeploymentScript()

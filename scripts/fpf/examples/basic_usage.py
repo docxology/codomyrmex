@@ -18,25 +18,25 @@ except ImportError:
     project_root = Path(__file__).resolve().parent.parent.parent.parent
     sys.path.insert(0, str(project_root / "src"))
 
-from codomyrmex.utils.cli_helpers import setup_logging, print_success, print_info, print_error
-from codomyrmex.fpf import (
-    FPFClient,
-    FPFSpec,
-    Concept,
-    Pattern,
-    Relationship
+from codomyrmex.fpf import Concept, FPFClient, FPFSpec, Pattern, Relationship
+from codomyrmex.utils.cli_helpers import (
+    print_error,
+    print_info,
+    print_success,
+    setup_logging,
 )
+
 
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
+
+    import yaml
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "fpf" / "config.yaml"
-    config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
-            config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/fpf/config.yaml")
+        with open(config_path) as f:
+            yaml.safe_load(f) or {}
+            print("Loaded config from config/fpf/config.yaml")
 
     setup_logging()
     print_info("Running FPF Examples...")
@@ -44,7 +44,7 @@ def main():
     # 1. FPFClient
     print_info("Testing FPFClient initialization...")
     try:
-        client = FPFClient()
+        FPFClient()
         print_success("  FPFClient initialized successfully.")
     except Exception as e:
         print_error(f"  FPFClient failed: {e}")
@@ -54,15 +54,15 @@ def main():
     try:
         spec = FPFSpec(title="Demo Spec", version="1.0.0")
         print_success(f"  FPFSpec instance created: {spec.title}")
-        
+
         concept = Concept(id="concept1", name="Test Concept")
         print_success(f"  Concept model instance created: {concept.name}")
-        
+
         pattern = Pattern(id="pattern1", name="Test Pattern")
         print_success(f"  Pattern model instance created: {pattern.name}")
-        
-        rel = Relationship(id="rel1", source_id="concept1", target_id="pattern1")
-        print_success(f"  Relationship model instance created.")
+
+        Relationship(id="rel1", source_id="concept1", target_id="pattern1")
+        print_success("  Relationship model instance created.")
     except Exception as e:
         print_error(f"  Models check failed: {e}")
 

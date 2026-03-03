@@ -43,7 +43,12 @@ _PAI_PM_PORT   = 8888
 _CODO_PORT     = 8787
 
 try:
-    from codomyrmex.utils.cli_helpers import print_error, print_info, print_success, setup_logging
+    from codomyrmex.utils.cli_helpers import (
+        print_error,
+        print_info,
+        print_success,
+        setup_logging,
+    )
     from codomyrmex.website import DataProvider, WebsiteGenerator, WebsiteServer
 except ImportError as exc:
     print(f"[ERROR] Cannot import codomyrmex: {exc}", file=sys.stderr)
@@ -312,14 +317,14 @@ def main() -> int:
 
 
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
+
+    import yaml
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "pai" / "config.yaml"
-    config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
-            config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/pai/config.yaml")
+        with open(config_path) as f:
+            yaml.safe_load(f) or {}
+            print("Loaded config from config/pai/config.yaml")
 
 if __name__ == "__main__":
     sys.exit(main())

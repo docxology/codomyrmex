@@ -33,7 +33,7 @@ def select_parents(population: list, fitnesses: list, count: int = 2) -> list:
     """Tournament selection."""
     parents = []
     for _ in range(count):
-        candidates = random.sample(list(zip(population, fitnesses)), min(3, len(population)))
+        candidates = random.sample(list(zip(population, fitnesses, strict=False)), min(3, len(population)))
         winner = max(candidates, key=lambda x: x[1])
         parents.append(winner[0])
     return parents
@@ -54,13 +54,13 @@ def run_evolution(generations: int = 10, pop_size: int = 20) -> dict:
     """Run evolutionary algorithm."""
     population = create_population(pop_size)
     history = []
-    
+
     for gen in range(generations):
         fitnesses = [evaluate_fitness(g) for g in population]
         best_fitness = max(fitnesses)
         avg_fitness = sum(fitnesses) / len(fitnesses)
         history.append({"gen": gen, "best": best_fitness, "avg": avg_fitness})
-        
+
         # Create new population
         new_pop = []
         while len(new_pop) < pop_size:
@@ -68,76 +68,76 @@ def run_evolution(generations: int = 10, pop_size: int = 20) -> dict:
             child = crossover(parents[0], parents[1])
             child = mutate(child)
             new_pop.append(child)
-        
+
         population = new_pop
-    
+
     return {"generations": generations, "history": history, "final_best": max(fitnesses)}
 
 
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
+
+    import yaml
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "evolutionary_ai" / "config.yaml"
-    config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
-            config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/evolutionary_ai/config.yaml")
+        with open(config_path) as f:
+            yaml.safe_load(f) or {}
+            print("Loaded config from config/evolutionary_ai/config.yaml")
 
     parser = argparse.ArgumentParser(description="Evolutionary AI utilities")
     subparsers = parser.add_subparsers(dest="command")
-    
+
     # Run command
     run = subparsers.add_parser("run", help="Run evolution")
     run.add_argument("--generations", "-g", type=int, default=10)
     run.add_argument("--population", "-p", type=int, default=20)
-    
+
     # Demo command
     subparsers.add_parser("demo", help="Demo evolution operators")
-    
+
     args = parser.parse_args()
-    
+
     if not args.command:
         print("🧬 Evolutionary AI Utilities\n")
         print("Commands:")
         print("  run  - Run evolutionary algorithm")
         print("  demo - Demo evolution operators")
         return 0
-    
+
     if args.command == "run":
-        print(f"🧬 Running Evolution\n")
+        print("🧬 Running Evolution\n")
         print(f"   Generations: {args.generations}")
         print(f"   Population: {args.population}\n")
-        
+
         result = run_evolution(args.generations, args.population)
-        
+
         print("   Progress:")
         for h in result["history"][::max(1, len(result["history"])//5)]:
             bar = "█" * int(h["best"] * 20)
             print(f"   Gen {h['gen']:3d}: {bar} {h['best']:.2f}")
-        
+
         print(f"\n   Final best: {result['final_best']:.2f}")
-    
+
     elif args.command == "demo":
         print("🧬 Evolution Demo\n")
-        
+
         print("   Create population:")
         pop = create_population(3, 8)
         for i, g in enumerate(pop):
             print(f"      {i}: {''.join(map(str, g))}")
-        
+
         print("\n   Crossover:")
         child = crossover(pop[0], pop[1])
         print(f"      P1: {''.join(map(str, pop[0]))}")
         print(f"      P2: {''.join(map(str, pop[1]))}")
         print(f"      C:  {''.join(map(str, child))}")
-        
+
         print("\n   Mutation:")
         mutated = mutate(child, 0.3)
         print(f"      Before: {''.join(map(str, child))}")
         print(f"      After:  {''.join(map(str, mutated))}")
-    
+
     return 0
 
 

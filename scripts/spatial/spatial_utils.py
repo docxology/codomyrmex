@@ -22,15 +22,15 @@ import math
 def haversine_distance(lat1: float, lon1: float, lat2: float, lon2: float) -> float:
     """Calculate distance between two points in km."""
     R = 6371  # Earth's radius in km
-    
+
     lat1, lon1, lat2, lon2 = map(math.radians, [lat1, lon1, lat2, lon2])
-    
+
     dlat = lat2 - lat1
     dlon = lon2 - lon1
-    
+
     a = math.sin(dlat/2)**2 + math.cos(lat1) * math.cos(lat2) * math.sin(dlon/2)**2
     c = 2 * math.asin(math.sqrt(a))
-    
+
     return R * c
 
 
@@ -49,34 +49,34 @@ def point_in_bbox(lat: float, lon: float, bbox: tuple) -> bool:
 
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
+
+    import yaml
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "spatial" / "config.yaml"
-    config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
-            config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/spatial/config.yaml")
+        with open(config_path) as f:
+            yaml.safe_load(f) or {}
+            print("Loaded config from config/spatial/config.yaml")
 
     parser = argparse.ArgumentParser(description="Spatial utilities")
     subparsers = parser.add_subparsers(dest="command")
-    
+
     # Distance command
     dist = subparsers.add_parser("distance", help="Calculate distance")
     dist.add_argument("lat1", type=float)
     dist.add_argument("lon1", type=float)
     dist.add_argument("lat2", type=float)
     dist.add_argument("lon2", type=float)
-    
+
     # Area command
     area = subparsers.add_parser("area", help="Calculate bbox area")
     area.add_argument("min_lat", type=float)
     area.add_argument("min_lon", type=float)
     area.add_argument("max_lat", type=float)
     area.add_argument("max_lon", type=float)
-    
+
     args = parser.parse_args()
-    
+
     if not args.command:
         print("🌍 Spatial Utilities\n")
         print("Commands:")
@@ -86,17 +86,17 @@ def main():
         print("  python spatial_utils.py distance 40.7128 -74.0060 34.0522 -118.2437")
         print("  python spatial_utils.py area 40.0 -75.0 41.0 -73.0")
         return 0
-    
+
     if args.command == "distance":
         d = haversine_distance(args.lat1, args.lon1, args.lat2, args.lon2)
         print(f"📏 Distance: {d:.2f} km ({d * 0.621371:.2f} mi)")
         print(f"   From: ({args.lat1}, {args.lon1})")
         print(f"   To: ({args.lat2}, {args.lon2})")
-    
+
     elif args.command == "area":
         a = bbox_area(args.min_lat, args.min_lon, args.max_lat, args.max_lon)
         print(f"📐 Area: {a:.2f} km² ({a * 0.386102:.2f} mi²)")
-    
+
     return 0
 
 
