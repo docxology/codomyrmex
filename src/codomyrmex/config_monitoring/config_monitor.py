@@ -1,3 +1,9 @@
+"""Configuration monitoring module for Codomyrmex.
+
+Provides classes and functions to detect changes, audit configurations,
+and manage configuration snapshots.
+"""
+
 import hashlib
 import json
 import re
@@ -14,9 +20,11 @@ from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 logger = get_logger(__name__)
 
+
 @dataclass
 class ConfigChange:
     """Configuration change record."""
+
     change_id: str
     config_path: str
     change_type: str  # "created", "modified", "deleted"
@@ -29,6 +37,7 @@ class ConfigChange:
 @dataclass
 class ConfigAudit:
     """Configuration audit record."""
+
     audit_id: str
     timestamp: datetime
     environment: str
@@ -40,6 +49,7 @@ class ConfigAudit:
 @dataclass
 class ConfigSnapshot:
     """Configuration snapshot for drift detection."""
+
     snapshot_id: str
     timestamp: datetime
     environment: str
@@ -54,6 +64,7 @@ class ConfigurationMonitor:
 
         Args:
             workspace_dir: Workspace directory for monitoring data
+
         """
         self.workspace_dir = Path(workspace_dir) if workspace_dir else Path.cwd()
         self.monitoring_dir = self.workspace_dir / "config_monitoring"
@@ -119,6 +130,7 @@ class ConfigurationMonitor:
 
         Returns:
             SHA-256 hash or empty string if file doesn't exist
+
         """
         path = Path(file_path)
         if not path.is_file():
@@ -149,6 +161,7 @@ class ConfigurationMonitor:
 
         Returns:
             The recorded ConfigChange
+
         """
         change_id = f"chg_{int(time.time() * 1000)}"
         change = ConfigChange(
@@ -173,6 +186,7 @@ class ConfigurationMonitor:
 
         Returns:
             List of detected changes
+
         """
         changes = []
         new_hashes = {}
@@ -261,6 +275,7 @@ class ConfigurationMonitor:
 
         Returns:
             Created snapshot
+
         """
         path = Path(config_dir)
         if not path.is_dir():
@@ -304,6 +319,7 @@ class ConfigurationMonitor:
 
         Returns:
             Drift analysis report
+
         """
         if snapshot_id not in self._snapshots:
             # Try reloading from disk just in case
@@ -369,6 +385,7 @@ class ConfigurationMonitor:
 
         Returns:
             ConfigAudit record
+
         """
         path = Path(config_dir)
         if not path.is_dir():
@@ -445,6 +462,7 @@ class ConfigurationMonitor:
 
         Returns:
             List of changes
+
         """
         if config_path:
             abs_path = str(Path(config_path).absolute())
