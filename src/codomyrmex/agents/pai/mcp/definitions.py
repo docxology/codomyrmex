@@ -15,21 +15,21 @@ from codomyrmex.model_context_protocol.tools import (
     write_file,
 )
 
-from .discovery import _tool_invalidate_cache
+from .discovery import tool_invalidate_cache
 from .proxy_tools import (
-    _tool_call_module_function,
-    _tool_get_module_readme,
-    _tool_list_module_functions,
-    _tool_list_modules,
-    _tool_list_workflows,
-    _tool_module_info,
-    _tool_pai_awareness,
-    _tool_pai_status,
-    _tool_run_tests,
+    tool_call_module_function,
+    tool_get_module_readme,
+    tool_list_module_functions,
+    tool_list_modules,
+    tool_list_workflows,
+    tool_module_info,
+    tool_pai_awareness,
+    tool_pai_status,
+    tool_run_tests,
 )
 
 # Each entry: (name, description, handler, input_schema)
-_TOOL_DEFINITIONS: list[tuple[str, str, Any, dict[str, Any]]] = [
+TOOL_DEFINITIONS: list[tuple[str, str, Any, dict[str, Any]]] = [
     # File Operations
     (
         "codomyrmex.read_file",
@@ -172,13 +172,13 @@ _TOOL_DEFINITIONS: list[tuple[str, str, Any, dict[str, Any]]] = [
     (
         "codomyrmex.list_modules",
         "List all available Codomyrmex modules",
-        _tool_list_modules,
+        tool_list_modules,
         {"type": "object", "properties": {}},
     ),
     (
         "codomyrmex.module_info",
         "Get info about a specific module (docstring, exports, path)",
-        _tool_module_info,
+        tool_module_info,
         {
             "type": "object",
             "properties": {
@@ -191,20 +191,20 @@ _TOOL_DEFINITIONS: list[tuple[str, str, Any, dict[str, Any]]] = [
     (
         "codomyrmex.pai_status",
         "Get PAI installation status and component inventory",
-        _tool_pai_status,
+        tool_pai_status,
         {"type": "object", "properties": {}},
     ),
     (
         "codomyrmex.pai_awareness",
         "Get full PAI awareness data (missions, projects, tasks, memory)",
-        _tool_pai_awareness,
+        tool_pai_awareness,
         {"type": "object", "properties": {}},
     ),
     # Testing
     (
         "codomyrmex.run_tests",
         "Run pytest for a specific module or the whole project",
-        _tool_run_tests,
+        tool_run_tests,
         {
             "type": "object",
             "properties": {
@@ -218,7 +218,7 @@ _TOOL_DEFINITIONS: list[tuple[str, str, Any, dict[str, Any]]] = [
         "codomyrmex.list_module_functions",
         "List all public callable functions and classes in any Codomyrmex module. "
         "Use this to discover what's available before calling call_module_function.",
-        _tool_list_module_functions,
+        tool_list_module_functions,
         {
             "type": "object",
             "properties": {
@@ -234,7 +234,7 @@ _TOOL_DEFINITIONS: list[tuple[str, str, Any, dict[str, Any]]] = [
         "codomyrmex.call_module_function",
         "Call any public function from any Codomyrmex module by path. "
         "Use list_module_functions first to discover available functions.",
-        _tool_call_module_function,
+        tool_call_module_function,
         {
             "type": "object",
             "properties": {
@@ -254,7 +254,7 @@ _TOOL_DEFINITIONS: list[tuple[str, str, Any, dict[str, Any]]] = [
     (
         "codomyrmex.get_module_readme",
         "Read the README.md or SPEC.md documentation for any Codomyrmex module",
-        _tool_get_module_readme,
+        tool_get_module_readme,
         {
             "type": "object",
             "properties": {
@@ -269,13 +269,13 @@ _TOOL_DEFINITIONS: list[tuple[str, str, Any, dict[str, Any]]] = [
     (
         "codomyrmex.list_workflows",
         "List available Claude Code workflows",
-        _tool_list_workflows,
+        tool_list_workflows,
         {"type": "object", "properties": {}},
     ),
     (
         "codomyrmex.invalidate_cache",
         "Invalidate dynamic tool discovery cache",
-        _tool_invalidate_cache,
+        tool_invalidate_cache,
         {
             "type": "object",
             "properties": {
@@ -285,7 +285,7 @@ _TOOL_DEFINITIONS: list[tuple[str, str, Any, dict[str, Any]]] = [
     ),
 ]
 
-_RESOURCE_DEFINITIONS: list[tuple[str, str, str, str]] = [
+RESOURCE_DEFINITIONS: list[tuple[str, str, str, str]] = [
     # (uri, name, description, mime_type)
     (
         "codomyrmex://modules",
@@ -301,7 +301,7 @@ _RESOURCE_DEFINITIONS: list[tuple[str, str, str, str]] = [
     ),
 ]
 
-_PROMPT_DEFINITIONS: list[tuple[str, str, list[dict[str, Any]], str]] = [
+PROMPT_DEFINITIONS: list[tuple[str, str, list[dict[str, Any]], str]] = [
     (
         "codomyrmex.analyze_module",
         "Analyze a Codomyrmex module — structure, exports, tests, documentation",

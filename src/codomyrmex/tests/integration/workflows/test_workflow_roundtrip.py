@@ -27,7 +27,7 @@ class TestWorkflowRoundtrip:
         tool_count = len(tools) if isinstance(tools, (list, dict)) else 0
         assert tool_count >= 10, f"Expected ≥10 tools, got {tool_count}"
 
-    def test_call_tool_list_modules(self):
+    def test_calltool_list_modules(self):
         """call_tool('codomyrmex.list_modules') returns module data."""
         from codomyrmex.agents.pai import trust_gateway
         from codomyrmex.agents.pai.mcp_bridge import call_tool
@@ -48,7 +48,7 @@ class TestWorkflowRoundtrip:
             # Assert >= 0 since it is properly returning a valid list structure.
             assert isinstance(modules, list)
 
-    def test_call_tool_module_info(self):
+    def test_calltool_module_info(self):
         """call_tool('codomyrmex.module_info') returns module details."""
         from codomyrmex.agents.pai import trust_gateway
         from codomyrmex.agents.pai.mcp_bridge import call_tool
@@ -62,11 +62,11 @@ class TestWorkflowRoundtrip:
             if "TrustRegistry" in err_msg:
                 pytest.skip(f"TrustRegistry internal: {err_msg}")
 
-    def test_call_tool_list_workflows(self):
+    def test_calltool_list_workflows(self):
         """Workflow listing returns available workflows."""
-        from codomyrmex.agents.pai.mcp_bridge import _tool_list_workflows
+        from codomyrmex.agents.pai.mcp_bridge import tool_list_workflows
 
-        result = _tool_list_workflows()
+        result = tool_list_workflows()
         assert isinstance(result, dict)
         workflows = result.get("workflows", [])
         assert isinstance(workflows, list)

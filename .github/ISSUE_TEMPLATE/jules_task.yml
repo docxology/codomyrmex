@@ -1,0 +1,99 @@
+name: 🤖 Jules Agent Task
+description: Dispatch a task to Jules AI agent
+title: "[Jules]: "
+labels: ["jules", "agent-task", "automated"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Dispatch a task to the Jules AI agent for automated implementation.
+        Jules will create a feature branch, implement changes, and open a PR.
+
+  - type: dropdown
+    id: task_type
+    attributes:
+      label: Task Type
+      options:
+        - Module improvement (docstrings, tests, MCP tools)
+        - Bug fix
+        - New feature implementation
+        - Code health (linting, formatting, refactoring)
+        - Documentation update
+        - Test coverage improvement
+        - CI/CD improvement
+    validations:
+      required: true
+
+  - type: dropdown
+    id: module
+    attributes:
+      label: Target Module(s)
+      description: Which module(s) should Jules work on?
+      multiple: true
+      options:
+        - ai_code_editing
+        - auth
+        - build_synthesis
+        - code_execution_sandbox
+        - container_optimization
+        - data_visualization
+        - database_management
+        - deployment
+        - documentation
+        - environment_setup
+        - git_operations
+        - logging_monitoring
+        - model_context_protocol
+        - operating_system
+        - pattern_matching
+        - peft
+        - plugin_system
+        - prompt_engineering
+        - quantum
+        - reporting
+        - rlhf
+        - search
+        - static_analysis
+        - system_discovery
+        - terminal_interface
+        - testing
+        - tool_use
+        - utils
+        - All modules
+        - Core framework
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Task Description
+      description: Detailed description of what Jules should do
+      placeholder: |
+        For each target module:
+        1. Add comprehensive docstrings to all public functions
+        2. Create or improve zero-mock unit tests
+        3. Add MCP tool specifications
+    validations:
+      required: true
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      options:
+        - Low
+        - Medium
+        - High
+        - Critical
+    validations:
+      required: true
+
+  - type: textarea
+    id: constraints
+    attributes:
+      label: Constraints & Guidelines
+      description: Any specific constraints or patterns Jules should follow
+      placeholder: |
+        - Follow zero-mock testing policy
+        - Use existing patterns from similar modules
+        - Maintain backwards compatibility

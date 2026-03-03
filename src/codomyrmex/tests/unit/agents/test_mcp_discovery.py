@@ -1,8 +1,8 @@
 """Zero-mock tests for agents/pai/mcp discovery, definitions, and proxy_tools.
 
 Covers: _find_mcp_modules, _discover_dynamic_tools cache mechanics,
-invalidate_tool_cache, get_discovery_metrics, _TOOL_DEFINITIONS structure,
-_RESOURCE_DEFINITIONS, _PROMPT_DEFINITIONS, and proxy tool helpers.
+invalidate_tool_cache, get_discovery_metrics, TOOL_DEFINITIONS structure,
+RESOURCE_DEFINITIONS, PROMPT_DEFINITIONS, and proxy tool helpers.
 
 Zero-mock compliant: no unittest.mock, MagicMock, or monkeypatch.
 """
@@ -12,9 +12,9 @@ import threading
 import pytest
 
 from codomyrmex.agents.pai.mcp.definitions import (
-    _PROMPT_DEFINITIONS,
-    _RESOURCE_DEFINITIONS,
-    _TOOL_DEFINITIONS,
+    PROMPT_DEFINITIONS,
+    RESOURCE_DEFINITIONS,
+    TOOL_DEFINITIONS,
 )
 from codomyrmex.agents.pai.mcp.discovery import (
     _DEFAULT_CACHE_TTL,
@@ -238,40 +238,40 @@ class TestGetDiscoveryMetrics:
 
 
 # ============================================================================
-# _TOOL_DEFINITIONS Tests
+# TOOL_DEFINITIONS Tests
 # ============================================================================
 
 
 @pytest.mark.unit
 class TestToolDefinitions:
-    """Tests for static _TOOL_DEFINITIONS structure."""
+    """Tests for static TOOL_DEFINITIONS structure."""
 
     def test_is_list(self):
-        assert isinstance(_TOOL_DEFINITIONS, list)
+        assert isinstance(TOOL_DEFINITIONS, list)
 
     def test_nonempty(self):
-        assert len(_TOOL_DEFINITIONS) > 0
+        assert len(TOOL_DEFINITIONS) > 0
 
     def test_each_entry_is_4_tuple(self):
-        for entry in _TOOL_DEFINITIONS:
+        for entry in TOOL_DEFINITIONS:
             assert isinstance(entry, tuple), f"Expected tuple, got {type(entry)}"
             assert len(entry) == 4, f"Expected 4-tuple, got {len(entry)}-tuple: {entry[0] if entry else '?'}"
 
     def test_each_entry_structure(self):
         """Each tool: (name:str, description:str, handler:callable, schema:dict)."""
-        for name, desc, handler, schema in _TOOL_DEFINITIONS:
+        for name, desc, handler, schema in TOOL_DEFINITIONS:
             assert isinstance(name, str), f"Name should be str: {name}"
             assert isinstance(desc, str), f"Description should be str for {name}"
             assert callable(handler), f"Handler should be callable for {name}"
             assert isinstance(schema, dict), f"Schema should be dict for {name}"
 
     def test_names_are_unique(self):
-        names = [t[0] for t in _TOOL_DEFINITIONS]
+        names = [t[0] for t in TOOL_DEFINITIONS]
         assert len(names) == len(set(names)), "Duplicate tool names found"
 
     def test_known_tool_names_present(self):
         """Well-known static tools should be defined."""
-        names = {t[0] for t in _TOOL_DEFINITIONS}
+        names = {t[0] for t in TOOL_DEFINITIONS}
         expected = {
             "codomyrmex.read_file",
             "codomyrmex.write_file",
@@ -292,19 +292,19 @@ class TestToolDefinitions:
 
     def test_schemas_have_type_object(self):
         """All input schemas should declare type: object."""
-        for name, _, _, schema in _TOOL_DEFINITIONS:
+        for name, _, _, schema in TOOL_DEFINITIONS:
             assert schema.get("type") == "object", (
                 f"Schema for {name} should have type=object"
             )
 
     def test_schemas_have_properties(self):
         """All schemas should have a properties key (even if empty)."""
-        for name, _, _, schema in _TOOL_DEFINITIONS:
+        for name, _, _, schema in TOOL_DEFINITIONS:
             assert "properties" in schema, f"Schema for {name} missing 'properties'"
 
     def test_required_fields_are_valid(self):
         """If 'required' is present, all listed fields must be in properties."""
-        for name, _, _, schema in _TOOL_DEFINITIONS:
+        for name, _, _, schema in TOOL_DEFINITIONS:
             required = schema.get("required", [])
             properties = schema.get("properties", {})
             for field in required:
@@ -314,82 +314,82 @@ class TestToolDefinitions:
 
     def test_tool_count(self):
         """Should have the expected number of static tools (17 core + invalidate_cache)."""
-        assert len(_TOOL_DEFINITIONS) >= 17, (
-            f"Expected at least 17 tool definitions, got {len(_TOOL_DEFINITIONS)}"
+        assert len(TOOL_DEFINITIONS) >= 17, (
+            f"Expected at least 17 tool definitions, got {len(TOOL_DEFINITIONS)}"
         )
 
 
 # ============================================================================
-# _RESOURCE_DEFINITIONS Tests
+# RESOURCE_DEFINITIONS Tests
 # ============================================================================
 
 
 @pytest.mark.unit
 class TestResourceDefinitions:
-    """Tests for _RESOURCE_DEFINITIONS structure."""
+    """Tests for RESOURCE_DEFINITIONS structure."""
 
     def test_is_list(self):
-        assert isinstance(_RESOURCE_DEFINITIONS, list)
+        assert isinstance(RESOURCE_DEFINITIONS, list)
 
     def test_each_entry_is_4_tuple(self):
-        for entry in _RESOURCE_DEFINITIONS:
+        for entry in RESOURCE_DEFINITIONS:
             assert isinstance(entry, tuple)
             assert len(entry) == 4
 
     def test_each_entry_structure(self):
         """Each resource: (uri:str, name:str, description:str, mime_type:str)."""
-        for uri, name, description, mime_type in _RESOURCE_DEFINITIONS:
+        for uri, name, description, mime_type in RESOURCE_DEFINITIONS:
             assert isinstance(uri, str)
             assert isinstance(name, str)
             assert isinstance(description, str)
             assert isinstance(mime_type, str)
 
     def test_uris_are_codomyrmex_scheme(self):
-        for uri, _, _, _ in _RESOURCE_DEFINITIONS:
+        for uri, _, _, _ in RESOURCE_DEFINITIONS:
             assert uri.startswith("codomyrmex://")
 
     def test_known_resources(self):
-        uris = {r[0] for r in _RESOURCE_DEFINITIONS}
+        uris = {r[0] for r in RESOURCE_DEFINITIONS}
         assert "codomyrmex://modules" in uris
         assert "codomyrmex://status" in uris
 
 
 # ============================================================================
-# _PROMPT_DEFINITIONS Tests
+# PROMPT_DEFINITIONS Tests
 # ============================================================================
 
 
 @pytest.mark.unit
 class TestPromptDefinitions:
-    """Tests for _PROMPT_DEFINITIONS structure."""
+    """Tests for PROMPT_DEFINITIONS structure."""
 
     def test_is_list(self):
-        assert isinstance(_PROMPT_DEFINITIONS, list)
+        assert isinstance(PROMPT_DEFINITIONS, list)
 
     def test_nonempty(self):
-        assert len(_PROMPT_DEFINITIONS) > 0
+        assert len(PROMPT_DEFINITIONS) > 0
 
     def test_each_entry_is_4_tuple(self):
-        for entry in _PROMPT_DEFINITIONS:
+        for entry in PROMPT_DEFINITIONS:
             assert isinstance(entry, tuple)
             assert len(entry) == 4
 
     def test_each_entry_structure(self):
         """Each prompt: (name:str, description:str, args:list, template:str)."""
-        for name, description, args, template in _PROMPT_DEFINITIONS:
+        for name, description, args, template in PROMPT_DEFINITIONS:
             assert isinstance(name, str), "Prompt name should be str"
             assert isinstance(description, str), f"Prompt description should be str for {name}"
             assert isinstance(args, list), f"Prompt args should be list for {name}"
             assert isinstance(template, str), f"Prompt template should be str for {name}"
 
     def test_prompt_args_are_dicts(self):
-        for name, _, args, _ in _PROMPT_DEFINITIONS:
+        for name, _, args, _ in PROMPT_DEFINITIONS:
             for arg in args:
                 assert isinstance(arg, dict), f"Arg for prompt {name} should be dict"
                 assert "name" in arg, f"Arg for prompt {name} missing 'name'"
 
     def test_known_prompts(self):
-        names = {p[0] for p in _PROMPT_DEFINITIONS}
+        names = {p[0] for p in PROMPT_DEFINITIONS}
         expected = {
             "codomyrmex.analyze_module",
             "codomyrmex.debug_issue",
@@ -401,7 +401,7 @@ class TestPromptDefinitions:
             assert prompt_name in names, f"Expected prompt {prompt_name} not found"
 
     def test_prompt_names_unique(self):
-        names = [p[0] for p in _PROMPT_DEFINITIONS]
+        names = [p[0] for p in PROMPT_DEFINITIONS]
         assert len(names) == len(set(names)), "Duplicate prompt names found"
 
 
@@ -412,20 +412,20 @@ class TestPromptDefinitions:
 
 @pytest.mark.unit
 class TestProxyToolListModules:
-    """Tests for _tool_list_modules proxy."""
+    """Tests for tool_list_modules proxy."""
 
     def test_returns_dict(self):
-        from codomyrmex.agents.pai.mcp.proxy_tools import _tool_list_modules
+        from codomyrmex.agents.pai.mcp.proxy_tools import tool_list_modules
 
-        result = _tool_list_modules()
+        result = tool_list_modules()
         assert isinstance(result, dict)
         assert "modules" in result
         assert "count" in result
 
     def test_modules_is_list(self):
-        from codomyrmex.agents.pai.mcp.proxy_tools import _tool_list_modules
+        from codomyrmex.agents.pai.mcp.proxy_tools import tool_list_modules
 
-        result = _tool_list_modules()
+        result = tool_list_modules()
         assert isinstance(result["modules"], list)
         assert isinstance(result["count"], int)
         assert result["count"] == len(result["modules"])
@@ -433,73 +433,73 @@ class TestProxyToolListModules:
 
 @pytest.mark.unit
 class TestProxyToolModuleInfo:
-    """Tests for _tool_module_info proxy."""
+    """Tests for tool_module_info proxy."""
 
     def test_valid_module(self):
-        from codomyrmex.agents.pai.mcp.proxy_tools import _tool_module_info
+        from codomyrmex.agents.pai.mcp.proxy_tools import tool_module_info
 
-        result = _tool_module_info(module_name="concurrency")
+        result = tool_module_info(module_name="concurrency")
         assert isinstance(result, dict)
         assert result["module"] == "concurrency"
         assert "exports" in result
         assert "export_count" in result
 
     def test_invalid_module(self):
-        from codomyrmex.agents.pai.mcp.proxy_tools import _tool_module_info
+        from codomyrmex.agents.pai.mcp.proxy_tools import tool_module_info
 
-        result = _tool_module_info(module_name="nonexistent_module_xyz")
+        result = tool_module_info(module_name="nonexistent_module_xyz")
         assert "error" in result
 
 
 @pytest.mark.unit
 class TestProxyToolListModuleFunctions:
-    """Tests for _tool_list_module_functions proxy."""
+    """Tests for tool_list_module_functions proxy."""
 
     def test_valid_module(self):
-        from codomyrmex.agents.pai.mcp.proxy_tools import _tool_list_module_functions
+        from codomyrmex.agents.pai.mcp.proxy_tools import tool_list_module_functions
 
-        result = _tool_list_module_functions(module="concurrency")
+        result = tool_list_module_functions(module="concurrency")
         assert isinstance(result, dict)
         assert "functions" in result
         assert "classes" in result
         assert "total_callables" in result
 
     def test_invalid_module(self):
-        from codomyrmex.agents.pai.mcp.proxy_tools import _tool_list_module_functions
+        from codomyrmex.agents.pai.mcp.proxy_tools import tool_list_module_functions
 
-        result = _tool_list_module_functions(module="totally_fake_module")
+        result = tool_list_module_functions(module="totally_fake_module")
         assert "error" in result
 
     def test_auto_prefix(self):
-        from codomyrmex.agents.pai.mcp.proxy_tools import _tool_list_module_functions
+        from codomyrmex.agents.pai.mcp.proxy_tools import tool_list_module_functions
 
         # Both should work the same
-        r1 = _tool_list_module_functions(module="concurrency")
-        r2 = _tool_list_module_functions(module="codomyrmex.concurrency")
+        r1 = tool_list_module_functions(module="concurrency")
+        r2 = tool_list_module_functions(module="codomyrmex.concurrency")
         assert r1["module"] == r2["module"]
 
 
 @pytest.mark.unit
 class TestProxyToolCallModuleFunction:
-    """Tests for _tool_call_module_function proxy."""
+    """Tests for tool_call_module_function proxy."""
 
     def test_private_function_rejected(self):
-        from codomyrmex.agents.pai.mcp.proxy_tools import _tool_call_module_function
+        from codomyrmex.agents.pai.mcp.proxy_tools import tool_call_module_function
 
-        result = _tool_call_module_function(function="concurrency._private")
+        result = tool_call_module_function(function="concurrency._private")
         assert "error" in result
         assert "private" in result["error"].lower()
 
     def test_invalid_path_format(self):
-        from codomyrmex.agents.pai.mcp.proxy_tools import _tool_call_module_function
+        from codomyrmex.agents.pai.mcp.proxy_tools import tool_call_module_function
 
-        result = _tool_call_module_function(function="nope")
+        result = tool_call_module_function(function="nope")
         assert "error" in result
 
     def test_nonexistent_function(self):
-        from codomyrmex.agents.pai.mcp.proxy_tools import _tool_call_module_function
+        from codomyrmex.agents.pai.mcp.proxy_tools import tool_call_module_function
 
-        result = _tool_call_module_function(
+        result = tool_call_module_function(
             function="concurrency.nonexistent_fn_xyz"
         )
         assert "error" in result
@@ -508,12 +508,12 @@ class TestProxyToolCallModuleFunction:
 
 @pytest.mark.unit
 class TestProxyToolGetModuleReadme:
-    """Tests for _tool_get_module_readme proxy."""
+    """Tests for tool_get_module_readme proxy."""
 
     def test_valid_module_with_readme(self):
-        from codomyrmex.agents.pai.mcp.proxy_tools import _tool_get_module_readme
+        from codomyrmex.agents.pai.mcp.proxy_tools import tool_get_module_readme
 
-        result = _tool_get_module_readme(module="concurrency")
+        result = tool_get_module_readme(module="concurrency")
         assert isinstance(result, dict)
         # Should have content or error
         if "error" not in result:
@@ -521,20 +521,20 @@ class TestProxyToolGetModuleReadme:
             assert "path" in result
 
     def test_invalid_module(self):
-        from codomyrmex.agents.pai.mcp.proxy_tools import _tool_get_module_readme
+        from codomyrmex.agents.pai.mcp.proxy_tools import tool_get_module_readme
 
-        result = _tool_get_module_readme(module="nonexistent_xyz")
+        result = tool_get_module_readme(module="nonexistent_xyz")
         assert "error" in result
 
 
 @pytest.mark.unit
 class TestProxyToolListWorkflows:
-    """Tests for _tool_list_workflows proxy."""
+    """Tests for tool_list_workflows proxy."""
 
     def test_returns_dict_with_workflows(self):
-        from codomyrmex.agents.pai.mcp.proxy_tools import _tool_list_workflows
+        from codomyrmex.agents.pai.mcp.proxy_tools import tool_list_workflows
 
-        result = _tool_list_workflows()
+        result = tool_list_workflows()
         assert isinstance(result, dict)
         assert "workflows" in result
         assert "count" in result
@@ -542,28 +542,28 @@ class TestProxyToolListWorkflows:
         assert isinstance(result["count"], int)
 
     def test_workflows_have_expected_fields(self):
-        from codomyrmex.agents.pai.mcp.proxy_tools import _tool_list_workflows
+        from codomyrmex.agents.pai.mcp.proxy_tools import tool_list_workflows
 
-        result = _tool_list_workflows()
+        result = tool_list_workflows()
         for wf in result["workflows"]:
             assert "name" in wf
             assert "description" in wf
 
     def test_with_nonexistent_root(self, tmp_path):
-        from codomyrmex.agents.pai.mcp.proxy_tools import _tool_list_workflows
+        from codomyrmex.agents.pai.mcp.proxy_tools import tool_list_workflows
 
-        result = _tool_list_workflows(project_root=str(tmp_path / "nope"))
+        result = tool_list_workflows(project_root=str(tmp_path / "nope"))
         assert result["count"] == 0
 
 
 @pytest.mark.unit
 class TestProxyToolInvalidateCache:
-    """Tests for _tool_invalidate_cache proxy."""
+    """Tests for tool_invalidate_cache proxy."""
 
     def test_invalidate_full_cache(self):
-        from codomyrmex.agents.pai.mcp.discovery import _tool_invalidate_cache
+        from codomyrmex.agents.pai.mcp.discovery import tool_invalidate_cache
 
-        result = _tool_invalidate_cache()
+        result = tool_invalidate_cache()
         assert isinstance(result, dict)
         assert result["cleared"] is True
 
@@ -575,9 +575,9 @@ class TestProxyToolInvalidateCache:
         saved = disc_mod._DISCOVERY_ENGINE
         disc_mod._DISCOVERY_ENGINE = None
         try:
-            from codomyrmex.agents.pai.mcp.discovery import _tool_invalidate_cache
+            from codomyrmex.agents.pai.mcp.discovery import tool_invalidate_cache
 
-            result = _tool_invalidate_cache(module="codomyrmex.search")
+            result = tool_invalidate_cache(module="codomyrmex.search")
             assert "error" in result
         finally:
             disc_mod._DISCOVERY_ENGINE = saved
