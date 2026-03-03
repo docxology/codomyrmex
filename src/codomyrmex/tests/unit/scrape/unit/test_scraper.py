@@ -6,8 +6,9 @@ the BaseScraper interface for testing, not a mock. All data structures and
 processing logic use real implementations.
 """
 
-import pytest
 from typing import Any
+
+import pytest
 
 from codomyrmex.scrape.config import ScrapeConfig, reset_config
 from codomyrmex.scrape.core import BaseScraper, ScrapeFormat, ScrapeOptions

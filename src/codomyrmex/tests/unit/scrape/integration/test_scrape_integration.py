@@ -7,9 +7,9 @@ with caution and proper API key configuration.
 """
 
 import os
+from typing import Any
 
 import pytest
-from typing import Any
 
 from codomyrmex.scrape import ScrapeConfig, ScrapeFormat, ScrapeOptions, Scraper
 from codomyrmex.scrape.exceptions import ScrapeError
