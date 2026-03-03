@@ -1,6 +1,10 @@
 """Strictly zero-mock tests for plugin_system MCP tools."""
 
-from codomyrmex.plugin_system.mcp_tools import plugin_resolve_dependencies, plugin_scan_entry_points
+from codomyrmex.plugin_system.mcp_tools import (
+    plugin_resolve_dependencies,
+    plugin_scan_entry_points,
+)
+
 
 def test_plugin_scan_entry_points_success():
     """Test successful plugin discovery from entry points without mocking."""
