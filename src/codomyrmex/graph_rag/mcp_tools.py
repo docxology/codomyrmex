@@ -20,9 +20,11 @@ _global_graph = KnowledgeGraph()
 @mcp_tool(
     name="graph_rag_search_entities",
     description="Search the knowledge graph for entities matching a query string.",
-    category="graph_rag"
+    category="graph_rag",
 )
-def graph_rag_search_entities(query: str, entity_type: str | None = None) -> list[dict[str, Any]]:
+def graph_rag_search_entities(
+    query: str, entity_type: str | None = None
+) -> list[dict[str, Any]]:
     """
     Search the knowledge graph for entities matching a query string.
 
@@ -47,7 +49,7 @@ def graph_rag_search_entities(query: str, entity_type: str | None = None) -> lis
 @mcp_tool(
     name="graph_rag_get_stats",
     description="Get statistics about the current knowledge graph.",
-    category="graph_rag"
+    category="graph_rag",
 )
 def graph_rag_get_stats() -> dict[str, int]:
     """
@@ -57,15 +59,15 @@ def graph_rag_get_stats() -> dict[str, int]:
         A dictionary with 'entity_count' and 'relationship_count'.
     """
     return {
-        "entity_count": _global_graph.entity_count,
-        "relationship_count": _global_graph.relationship_count,
+        "entity_count": len(_global_graph._entities),
+        "relationship_count": len(_global_graph._relationships),
     }
 
 
 @mcp_tool(
     name="graph_rag_get_neighbors",
     description="Get neighboring entities for a given entity ID.",
-    category="graph_rag"
+    category="graph_rag",
 )
 def graph_rag_get_neighbors(entity_id: str) -> list[dict[str, Any]]:
     """

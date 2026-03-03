@@ -63,7 +63,9 @@ class KnowledgeGraph:
 
             if relationship.target_id not in self._reverse_adjacency:
                 self._reverse_adjacency[relationship.target_id] = []
-            self._reverse_adjacency[relationship.target_id].append(relationship.source_id)
+            self._reverse_adjacency[relationship.target_id].append(
+                relationship.source_id
+            )
 
     def get_neighbors(
         self,

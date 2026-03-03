@@ -31,8 +31,8 @@ def cli_commands():
         print("Graph RAG Statistics")
         print(f"  Entity Types: {[et.value for et in EntityType]}")
         print(f"  Relation Types: {[rt.value for rt in RelationType]}")
-        print(f"  Entities: {graph.entity_count}")
-        print(f"  Relationships: {graph.relationship_count}")
+        print(f"  Entities: {len(graph.entities)}")
+        print(f"  Relationships: {len(graph.relationships)}")
 
     def _query(query: str = ""):
         """Query the knowledge graph with --query arg."""
@@ -40,7 +40,7 @@ def cli_commands():
             print("Usage: graph_rag query --query <search_term>")
             return
         graph = KnowledgeGraph()
-        results = graph.search_entities(query)
+        results = graph.search(query)
         if not results:
             print(f"No results found for: {query}")
         for entity in results:
