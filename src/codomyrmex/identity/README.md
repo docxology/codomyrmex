@@ -38,6 +38,13 @@ uv sync
 ### Functions
 - **`create_identity()`** — Create a new `Identity` instance.
 
+### MCP Tools
+The module exposes multiple MCP tools in `mcp_tools.py` for direct agent usage:
+- `identity_create_persona`, `identity_set_active_persona`, `identity_revoke_persona`
+- `identity_list_personas`, `identity_promote_persona`, `identity_export_persona`
+- `identity_record_metric`, `identity_verify_metric`, `identity_enroll_metric`
+- `identity_get_confidence`
+
 ## Quick Start
 
 ```python

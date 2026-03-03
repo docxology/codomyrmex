@@ -5,6 +5,18 @@ Provides Persona management and Bio-Cognitive Verification.
 
 from .biocognitive import BioCognitiveVerifier
 from .manager import IdentityManager
+from .mcp_tools import (
+    identity_create_persona,
+    identity_enroll_metric,
+    identity_export_persona,
+    identity_get_confidence,
+    identity_list_personas,
+    identity_promote_persona,
+    identity_record_metric,
+    identity_revoke_persona,
+    identity_set_active_persona,
+    identity_verify_metric,
+)
 from .persona import Persona, VerificationLevel
 
 # Shared schemas for cross-module interop
@@ -46,4 +58,14 @@ __all__ = [
     "IdentityManager",
     "BioCognitiveVerifier",
     "cli_commands",
+    "identity_create_persona",
+    "identity_set_active_persona",
+    "identity_revoke_persona",
+    "identity_list_personas",
+    "identity_promote_persona",
+    "identity_export_persona",
+    "identity_record_metric",
+    "identity_verify_metric",
+    "identity_enroll_metric",
+    "identity_get_confidence",
 ]

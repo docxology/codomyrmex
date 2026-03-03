@@ -98,6 +98,8 @@ graph TD
 
 ### Integration Points
 
+- `mcp_tools.py` - Exposes the internal persona and verification logic to agents via MCP.
+
 - `logging_monitoring/` - Identity operation logging (never log persona-to-user mappings).
 - `validation/` - Input and schema validation for identity objects.
 

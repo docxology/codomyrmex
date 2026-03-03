@@ -68,6 +68,7 @@ class PasswordProvider(AuthProvider):
     """Password-based authentication using salted SHA-256 hashing."""
 
     def __init__(self) -> None:
+        """Initialize PasswordProvider."""
         self._users: dict[str, tuple[str, str]] = {}  # user_id -> (salt, hash)
 
     def register(self, user_id: str, password: str) -> None:
@@ -91,6 +92,7 @@ class TokenProvider(AuthProvider):
     """API-key / bearer token authentication."""
 
     def __init__(self) -> None:
+        """Initialize TokenProvider."""
         self._valid_tokens: set[str] = set()
 
     def create_token(self) -> str:
@@ -135,6 +137,7 @@ class Identity:
         config: dict[str, Any] | None = None,
         session_ttl: float = 3600.0,
     ) -> None:
+        """Initialize Identity orchestrator."""
         self.config = config or {}
         self.session_ttl = session_ttl
         self._providers: dict[str, AuthProvider] = {}

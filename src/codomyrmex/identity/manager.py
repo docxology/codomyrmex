@@ -20,6 +20,7 @@ class IdentityManager:
     """
 
     def __init__(self) -> None:
+        """Initialize IdentityManager."""
         self._personas: dict[str, Persona] = {}
         self._active_persona_id: str | None = None
 
