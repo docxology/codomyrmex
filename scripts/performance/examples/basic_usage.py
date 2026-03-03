@@ -19,25 +19,32 @@ except ImportError:
     project_root = Path(__file__).resolve().parent.parent.parent.parent
     sys.path.insert(0, str(project_root / "src"))
 
-from codomyrmex.utils.cli_helpers import setup_logging, print_success, print_info, print_error
 from codomyrmex.performance import (
     CacheManager,
     cached_function,
+    get_system_metrics,
     monitor_performance,
     performance_context,
-    get_system_metrics
 )
+from codomyrmex.utils.cli_helpers import (
+    print_error,
+    print_info,
+    print_success,
+    setup_logging,
+)
+
 
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
+
+    import yaml
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "performance" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
+        with open(config_path) as f:
             config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/performance/config.yaml")
+            print("Loaded config from config/performance/config.yaml")
 
     setup_logging()
     print_info("Running Performance Optimization Examples...")
@@ -57,12 +64,12 @@ def main():
     @cached_function(ttl=60)
     def heavy_comp(n):
         return n * n
-    
+
     res1 = heavy_comp(10)
     res2 = heavy_comp(10)
     if res1 == 100 and res2 == 100:
         print_success("  @cached_function functional.")
-    
+
     # 3. Performance Monitor
     print_info("Testing system metrics...")
     metrics = get_system_metrics()
@@ -79,7 +86,7 @@ def main():
     @monitor_performance("test_decorated")
     def sample_func():
         time.sleep(0.05)
-    
+
     sample_func()
     print_success("  @monitor_performance functional.")
 

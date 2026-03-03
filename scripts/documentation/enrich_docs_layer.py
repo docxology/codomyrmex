@@ -117,7 +117,7 @@ def enrich_docs_agents(mod_name):
 
     # Add code examples if missing
     if "```" not in content:
-        code = f"\n## Common Patterns\n\n```python\n"
+        code = "\n## Common Patterns\n\n```python\n"
         if classes:
             imports = ", ".join(c[0] for c in classes[:3])
             code += f"from codomyrmex.{mod_name} import {imports}\n\n"
@@ -138,7 +138,7 @@ def enrich_docs_agents(mod_name):
 
     # Add key components if thin (under 30 lines)
     if sum(1 for _ in content.split("\n")) < 35 and (classes or functions or subs):
-        components = f"\n## Key Components\n\n"
+        components = "\n## Key Components\n\n"
         if classes:
             for name, doc in classes[:5]:
                 components += f"- **`{name}`** — {doc or name}\n"
@@ -146,7 +146,7 @@ def enrich_docs_agents(mod_name):
             for name, doc in functions[:5]:
                 components += f"- **`{name}()`** — {doc or name}\n"
         if subs:
-            components += f"\n### Submodules\n\n"
+            components += "\n### Submodules\n\n"
             for sub in subs[:8]:
                 components += f"- `{sub}` — {get_display(sub)}\n"
         components += "\n"
@@ -197,7 +197,7 @@ def enrich_docs_readme(mod_name):
 
     # Add Quick Start if missing code blocks
     if "```" not in content:
-        code = f"\n## Quick Start\n\n```python\n"
+        code = "\n## Quick Start\n\n```python\n"
         if classes:
             code += f"from codomyrmex.{mod_name} import {classes[0][0]}\n\n"
             code += f"{classes[0][0].lower()} = {classes[0][0]}()\n"
@@ -256,7 +256,7 @@ def enrich_docs_spec(mod_name):
 
     # Add code block if missing
     if "```" not in content:
-        code = f"\n## API Usage\n\n```python\n"
+        code = "\n## API Usage\n\n```python\n"
         if classes:
             code += f"from codomyrmex.{mod_name} import {classes[0][0]}\n"
         elif functions:
@@ -284,14 +284,15 @@ def enrich_docs_spec(mod_name):
 
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
+
+    import yaml
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "documentation" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
+        with open(config_path) as f:
             config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/documentation/config.yaml")
+            print("Loaded config from config/documentation/config.yaml")
 
     modules = sorted(
         d for d in os.listdir(DOCS)

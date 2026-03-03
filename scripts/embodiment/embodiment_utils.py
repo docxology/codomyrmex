@@ -26,7 +26,7 @@ def check_hardware_interfaces() -> dict:
         "gpio": {"available": False},
         "camera": {"available": False},
     }
-    
+
     # Check for serial ports
     try:
         import glob
@@ -35,7 +35,7 @@ def check_hardware_interfaces() -> dict:
         interfaces["serial"]["ports"] = ports[:5]
     except:
         pass
-    
+
     # Check for USB
     try:
         import subprocess
@@ -43,14 +43,14 @@ def check_hardware_interfaces() -> dict:
         interfaces["usb"]["available"] = "USB" in result.stdout
     except:
         pass
-    
+
     return interfaces
 
 
 def simulate_sensor(sensor_type: str, samples: int = 5) -> list:
     """Simulate sensor readings."""
     import random
-    
+
     sensors = {
         "temperature": lambda: round(20 + random.uniform(-5, 15), 1),
         "humidity": lambda: round(40 + random.uniform(-10, 30), 1),
@@ -58,35 +58,36 @@ def simulate_sensor(sensor_type: str, samples: int = 5) -> list:
         "light": lambda: round(random.uniform(0, 1000)),
         "pressure": lambda: round(1013 + random.uniform(-50, 50), 1),
     }
-    
+
     generator = sensors.get(sensor_type, sensors["temperature"])
     return [generator() for _ in range(samples)]
 
 
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
+
+    import yaml
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "embodiment" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
+        with open(config_path) as f:
             config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/embodiment/config.yaml")
+            print("Loaded config from config/embodiment/config.yaml")
 
     parser = argparse.ArgumentParser(description="Embodiment utilities")
     subparsers = parser.add_subparsers(dest="command")
-    
+
     # Check command
     subparsers.add_parser("check", help="Check hardware interfaces")
-    
+
     # Simulate command
     sim = subparsers.add_parser("simulate", help="Simulate sensor")
     sim.add_argument("sensor", choices=["temperature", "humidity", "distance", "light", "pressure"])
     sim.add_argument("--samples", "-n", type=int, default=5)
-    
+
     args = parser.parse_args()
-    
+
     if not args.command:
         print("🤖 Embodiment Utilities\n")
         print("Physical/robotic integration tools.\n")
@@ -94,7 +95,7 @@ def main():
         print("  check    - Check hardware interfaces")
         print("  simulate - Simulate sensor readings")
         return 0
-    
+
     if args.command == "check":
         interfaces = check_hardware_interfaces()
         print("🔌 Hardware Interfaces:\n")
@@ -104,17 +105,17 @@ def main():
             if info.get("ports"):
                 for p in info["ports"][:3]:
                     print(f"      - {p}")
-    
+
     elif args.command == "simulate":
         readings = simulate_sensor(args.sensor, args.samples)
         units = {"temperature": "°C", "humidity": "%", "distance": "m", "light": "lux", "pressure": "hPa"}
         unit = units.get(args.sensor, "")
-        
+
         print(f"📊 Simulated {args.sensor.title()} readings:\n")
         for i, val in enumerate(readings, 1):
             print(f"   {i}. {val} {unit}")
         print(f"\n   Avg: {sum(readings)/len(readings):.1f} {unit}")
-    
+
     return 0
 
 

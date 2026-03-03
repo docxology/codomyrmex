@@ -80,7 +80,7 @@ def build_usage_example(mod_name, classes, functions):
         lines.append(f"{c[0].lower()} = {c[0]}()")
         if functions:
             fn = functions[0]
-            lines.append(f"")
+            lines.append("")
             lines.append(f"from codomyrmex.{mod_name} import {fn[0]}")
             lines.append(f"result = {fn[0]}()")
     elif functions and len(functions) >= 2:
@@ -137,14 +137,14 @@ def deepen_readme(mod_name):
     content_lower = content.lower()
     if "install" not in content_lower and "setup" not in content_lower and "pip" not in content_lower:
         install = (
-            f"\n## Installation\n\n"
-            f"```bash\n"
-            f"pip install codomyrmex\n"
-            f"```\n\n"
-            f"Or for development:\n\n"
-            f"```bash\n"
-            f"uv sync\n"
-            f"```\n"
+            "\n## Installation\n\n"
+            "```bash\n"
+            "pip install codomyrmex\n"
+            "```\n\n"
+            "Or for development:\n\n"
+            "```bash\n"
+            "uv sync\n"
+            "```\n"
         )
         # Insert after Overview/description, before Key Exports or Quick Start
         for anchor in ["## Key Export", "## Quick Start", "## Feature", "## Source", "## Testing", "## Navigation"]:
@@ -225,9 +225,9 @@ def create_submodule_spec(parent, sub):
 
     content = f"# {display} — Functional Specification\n\n"
     content += f"**Module**: `codomyrmex.{parent}.{sub}`\n"
-    content += f"**Status**: Active\n\n"
+    content += "**Status**: Active\n\n"
     content += f"## 1. Overview\n\n{desc}\n\n"
-    content += f"## 2. Architecture\n\n"
+    content += "## 2. Architecture\n\n"
 
     if classes:
         content += "### Components\n\n"
@@ -237,7 +237,7 @@ def create_submodule_spec(parent, sub):
             content += f"| `{name}` | Class | {doc or name} |\n"
         content += "\n"
 
-    content += f"## 3. API Usage\n\n```python\n"
+    content += "## 3. API Usage\n\n```python\n"
     if classes:
         content += f"from codomyrmex.{parent}.{sub} import {classes[0][0]}\n"
     elif functions:
@@ -254,8 +254,8 @@ def create_submodule_spec(parent, sub):
     content += "```\n\n"
 
     content += "## References\n\n"
-    content += f"- [README.md](README.md)\n"
-    content += f"- [AGENTS.md](AGENTS.md)\n"
+    content += "- [README.md](README.md)\n"
+    content += "- [AGENTS.md](AGENTS.md)\n"
     content += f"- [Parent: {parent_display}](../SPEC.md)\n"
 
     with open(spec_path, "w") as f:
@@ -265,14 +265,15 @@ def create_submodule_spec(parent, sub):
 
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
+
+    import yaml
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "documentation" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
+        with open(config_path) as f:
             config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/documentation/config.yaml")
+            print("Loaded config from config/documentation/config.yaml")
 
     modules = sorted(
         d for d in os.listdir(SRC)

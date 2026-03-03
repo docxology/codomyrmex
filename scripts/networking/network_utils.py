@@ -17,9 +17,9 @@ except ImportError:
 
 import argparse
 import socket
-import urllib.request
-import urllib.error
 import time
+import urllib.error
+import urllib.request
 
 
 def check_port(host: str, port: int, timeout: float = 2) -> bool:
@@ -87,40 +87,41 @@ def check_http(url: str, timeout: float = 10) -> dict:
 
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
+
+    import yaml
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "networking" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
+        with open(config_path) as f:
             config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/networking/config.yaml")
+            print("Loaded config from config/networking/config.yaml")
 
     parser = argparse.ArgumentParser(description="Network utilities")
     subparsers = parser.add_subparsers(dest="command")
-    
+
     # Port check
     port_cmd = subparsers.add_parser("port", help="Check if port is open")
     port_cmd.add_argument("host", help="Host to check")
     port_cmd.add_argument("port", type=int, help="Port number")
-    
+
     # DNS lookup
     dns_cmd = subparsers.add_parser("dns", help="DNS lookup")
     dns_cmd.add_argument("hostname", help="Hostname to resolve")
-    
+
     # HTTP check
     http_cmd = subparsers.add_parser("http", help="Check HTTP endpoint")
     http_cmd.add_argument("url", help="URL to check")
-    
+
     # Public IP
     subparsers.add_parser("ip", help="Get public IP")
-    
+
     # Common ports scan
     scan_cmd = subparsers.add_parser("scan", help="Scan common ports")
     scan_cmd.add_argument("host", help="Host to scan")
-    
+
     args = parser.parse_args()
-    
+
     if not args.command:
         print("🌐 Network Utilities\n")
         print("Commands:")
@@ -130,13 +131,13 @@ def main():
         print("  ip             - Get public IP")
         print("  scan HOST      - Scan common ports")
         return 0
-    
+
     if args.command == "port":
         is_open = check_port(args.host, args.port)
         icon = "✅" if is_open else "❌"
         status = "open" if is_open else "closed"
         print(f"{icon} {args.host}:{args.port} is {status}")
-    
+
     elif args.command == "dns":
         result = check_dns(args.hostname)
         print(f"🔍 DNS: {args.hostname}\n")
@@ -147,7 +148,7 @@ def main():
             if result["aliases"]:
                 print(f"   Aliases: {', '.join(result['aliases'])}")
             print(f"   Time: {result['time_ms']}ms")
-    
+
     elif args.command == "http":
         result = check_http(args.url)
         print(f"🌐 HTTP: {args.url}\n")
@@ -156,11 +157,11 @@ def main():
         else:
             print(f"   ✅ Status: {result['status']}")
             print(f"   Time: {result['time_ms']}ms")
-    
+
     elif args.command == "ip":
         ip = get_public_ip()
         print(f"🌍 Public IP: {ip}")
-    
+
     elif args.command == "scan":
         common_ports = [22, 80, 443, 3000, 3306, 5432, 6379, 8000, 8080, 27017]
         print(f"🔍 Scanning {args.host}...\n")
@@ -169,7 +170,7 @@ def main():
             if is_open:
                 print(f"   ✅ {port}")
         print("\n   Done")
-    
+
     return 0
 
 

@@ -12,15 +12,15 @@ Usage:
     python openrouter_free_example.py
 """
 
-import sys
 import os
+import sys
 from pathlib import Path
 
 # Ensure codomyrmex is in path
 PROJECT_ROOT = Path(__file__).parent.parent.parent.parent
 sys.path.insert(0, str(PROJECT_ROOT / "src"))
 
-from codomyrmex.llm.providers import get_provider, ProviderType, ProviderConfig, Message
+from codomyrmex.llm.providers import Message, ProviderConfig, ProviderType, get_provider
 
 # Config file locations
 CONFIG_PATHS = [
@@ -76,21 +76,22 @@ def render_template(template_name: str, **kwargs) -> str:
 
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
+
+    import yaml
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "llm" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
+        with open(config_path) as f:
             config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/llm/config.yaml")
+            print("Loaded config from config/llm/config.yaml")
 
     """Demonstrate prompt templates with OpenRouter free models."""
     print("=" * 60)
     print("  OpenRouter Free Example - Prompt Templates")
     print("=" * 60)
     print()
-    
+
     # Check for API key
     api_key = get_api_key()
     if not api_key:
@@ -98,12 +99,12 @@ def main():
         print("   Get your free API key at: https://openrouter.ai/keys")
         print("\n   Setup: export OPENROUTER_API_KEY='key' or ~/.config/openrouter/api_key")
         return 1
-    
+
     config = ProviderConfig(api_key=api_key, timeout=60.0)
-    
+
     print("📡 Connecting to OpenRouter with free model...")
     print()
-    
+
     # Example: Explain template
     print("📝 Template: 'explain'")
     prompt = render_template(
@@ -113,10 +114,10 @@ def main():
     )
     print(f"   Rendered prompt: \"{prompt[:60]}...\"")
     print()
-    
+
     with get_provider(ProviderType.OPENROUTER, config=config) as provider:
         messages = [Message(role="user", content=prompt)]
-        
+
         print("🤖 Calling OpenRouter free model...")
         response = provider.complete(
             messages=messages,
@@ -124,18 +125,18 @@ def main():
             temperature=0.7,
             max_tokens=150,
         )
-        
-        print(f"\n📤 Response:\n")
+
+        print("\n📤 Response:\n")
         print(f"   {response.content}")
         print()
-        
+
         if response.usage:
             print(f"📊 Tokens used: {response.usage.get('total_tokens', 'N/A')}")
-    
+
     print()
     print("✅ Example completed successfully!")
     print("   💡 Templates help create consistent, reusable prompts!")
-    
+
     return 0
 
 

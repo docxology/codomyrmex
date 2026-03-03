@@ -4,14 +4,15 @@ Provides a unified factory to get a real LLM client (Claude or Ollama).
 Strictly enforces real/live functionality - no mocks allowed.
 """
 
-import os
 import json
-import time
 import logging
-import urllib.request
+import os
+import time
 import urllib.error
-from typing import Any
+import urllib.request
 from dataclasses import dataclass
+from typing import Any
+
 
 @dataclass
 class AgentRequest:
@@ -37,7 +38,7 @@ class OllamaClient:
         self.base_url = base_url
         self.session_manager = None # dummy for interface compatibility
 
-    def create_session(self, session_id): 
+    def create_session(self, session_id):
         # Ollama manages context internally via /api/chat if messages are sent
         # For this simple client, we rely on prompt context or stateless calls
         return None
@@ -45,11 +46,11 @@ class OllamaClient:
     def execute_with_session(self, request, session=None, session_id=None):
         """Execute request using Ollama /api/chat for real conversation."""
         url = f"{self.base_url}/api/chat"
-        
+
         # Construct chat messages
         # Ideally we would pull history from session, but for now we wrap the prompt
         messages = [{"role": "user", "content": request.prompt}]
-        
+
         # Check if system prompt is embedded in context or prompt
         # (Naive heuristic for demo scripts)
         if "System:" in request.prompt:
@@ -66,12 +67,12 @@ class OllamaClient:
             "messages": messages,
             "stream": False
         }
-        
+
         start_time = time.monotonic()
         content = ""
         try:
             req = urllib.request.Request(
-                url, 
+                url,
                 data=json.dumps(payload).encode("utf-8"),
                 headers={"Content-Type": "application/json"}
             )
@@ -101,10 +102,10 @@ class OllamaClient:
         class Response:
             def is_success(self): return True
             pass
-        
+
         resp = Response()
         resp.content = content
-        resp.tokens_used = 0 
+        resp.tokens_used = 0
         resp.execution_time = elapsed
         return resp
 
@@ -121,7 +122,7 @@ def get_llm_client(identity="agent"):
     if ClaudeClient and os.environ.get("ANTHROPIC_API_KEY"):
         print(f"[{identity}] Using real ClaudeClient (API Key found)")
         return ClaudeClient()
-    
+
     # 2. Check Ollama
     try:
         # Quick health check
@@ -130,10 +131,10 @@ def get_llm_client(identity="agent"):
                 # Use configured model or default
                 model = os.environ.get("OLLAMA_MODEL", "codellama:latest")
                 print(f"[{identity}] Using real OllamaClient (Localhost reachable, model={model})")
-                return OllamaClient(model=model) 
+                return OllamaClient(model=model)
     except Exception:
         pass
-        
+
     raise RuntimeError(
         f"[{identity}] CRITICAL: No Real LLM Available.\n"
         "Please set ANTHROPIC_API_KEY for Claude,\n"
@@ -143,12 +144,13 @@ def get_llm_client(identity="agent"):
 
 
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
+
+    import yaml
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "agents" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
+        with open(config_path) as f:
             config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/agents/config.yaml")
+            print("Loaded config from config/agents/config.yaml")
 

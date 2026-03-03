@@ -17,6 +17,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 
 try:
     import fitz
+
     from codomyrmex.dark.pdf import DarkPDF, apply_dark_mode
 except ImportError as e:
     print(f"Error: Required dependencies not found. {e}")
@@ -101,14 +102,15 @@ def main() -> None:
 
 
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
+
+    import yaml
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "dark" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
+        with open(config_path) as f:
             config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/dark/config.yaml")
+            print("Loaded config from config/dark/config.yaml")
 
 if __name__ == "__main__":
     main()

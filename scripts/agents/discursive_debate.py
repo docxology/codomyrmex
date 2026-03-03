@@ -9,13 +9,14 @@ Flow:
 3. Pessimist -> Relay (broadcast): "AI is dangerous..."
 """
 
-import time
 import threading
-from codomyrmex.ide.antigravity.live_bridge import ClaudeCodeEndpoint
-from codomyrmex.ide.antigravity.agent_relay import AgentRelay
-from codomyrmex.agents.core import AgentRequest
+import time
 
 from agent_utils import get_llm_client
+
+from codomyrmex.agents.core import AgentRequest
+from codomyrmex.ide.antigravity.agent_relay import AgentRelay
+from codomyrmex.ide.antigravity.live_bridge import ClaudeCodeEndpoint
 
 CHANNEL = "debate-club"
 
@@ -26,7 +27,7 @@ class DebaterAgent:
         self.stance = stance
         self.duration = duration
         self.client = get_llm_client(identity=identity)
-        
+
         self.endpoint = ClaudeCodeEndpoint(
             CHANNEL,
             identity=identity,
@@ -43,14 +44,14 @@ class DebaterAgent:
 
     def _handle_message(self, msg):
         print(f"\n[{self.identity.title()}] Received from {msg.sender}: {msg.content}")
-        
+
         # Don't reply to self! (Already filtered by endpoint but good to be safe logic-wise)
         if msg.sender == self.identity:
             return None
 
         # Moderator starts it
         # Or other debater replies
-        
+
         # System Prompt construction
         full_prompt = (
             f"System: You are an {self.stance.title()} debating the topic 'Future of AI'. "
@@ -60,9 +61,9 @@ class DebaterAgent:
             "If the moderator spoke, start your opening statement."
             f"\n\nUser: {msg.content}"
         )
-        
+
         request = AgentRequest(prompt=full_prompt, context=msg.metadata)
-        
+
         try:
             response = self.client.execute_with_session(request, session=None)
             if hasattr(response, 'is_success') and response.is_success():
@@ -77,30 +78,31 @@ def run_debater(identity, stance):
 
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
+
+    import yaml
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "agents" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
+        with open(config_path) as f:
             config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/agents/config.yaml")
+            print("Loaded config from config/agents/config.yaml")
 
     AgentRelay(CHANNEL).clear()
-    
+
     # Start agents
     t1 = threading.Thread(target=run_debater, args=("optimist", "optimist"))
     t2 = threading.Thread(target=run_debater, args=("pessimist", "pessimist"))
-    
+
     t1.start()
     t2.start()
-    
+
     # Kick it off manually
     time.sleep(2)
     relay = AgentRelay(CHANNEL)
     print("\n[Moderator] Topic: The Future of AI. Optimist, start.")
     relay.post_message("moderator", "Topic: The Future of AI. Optimist, please start.")
-    
+
     t1.join()
     t2.join()
     print("\nDebate concluded.")

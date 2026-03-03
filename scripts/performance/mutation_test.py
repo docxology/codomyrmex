@@ -331,7 +331,7 @@ def main() -> int:
                 f"({r.kill_ratio * 100:.0f}%)"
             )
             if r.details:
-                print(f"  Survivors:")
+                print("  Survivors:")
                 for d in r.details[:10]:
                     print(f"    {d}")
 
@@ -358,14 +358,15 @@ def main() -> int:
 
 
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
+
+    import yaml
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "performance" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
+        with open(config_path) as f:
             config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/performance/config.yaml")
+            print("Loaded config from config/performance/config.yaml")
 
 if __name__ == "__main__":
     sys.exit(main())
