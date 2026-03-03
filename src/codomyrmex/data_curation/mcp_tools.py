@@ -13,7 +13,10 @@ from codomyrmex.model_context_protocol.decorators import mcp_tool
 from .minhash import DataCurator, MinHash
 
 
-@mcp_tool(category="data_curation")
+@mcp_tool(
+    category="data_curation",
+    description="Deduplicate a list of texts using MinHash + LSH. texts is a list of strings, threshold is a float (default 0.8).",
+)
 def data_curation_deduplicate(texts: list, threshold: float = 0.8) -> dict:
     """Deduplicate a list of texts using MinHash + LSH.
 
@@ -35,7 +38,10 @@ def data_curation_deduplicate(texts: list, threshold: float = 0.8) -> dict:
     }
 
 
-@mcp_tool(category="data_curation")
+@mcp_tool(
+    category="data_curation",
+    description="Estimate Jaccard similarity between two texts using MinHash. Returns similarity score and a boolean indicating if they are similar at a 0.8 threshold.",
+)
 def data_curation_similarity(text_a: str, text_b: str) -> dict:
     """Estimate Jaccard similarity between two texts using MinHash.
 
