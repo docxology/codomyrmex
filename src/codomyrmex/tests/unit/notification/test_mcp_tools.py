@@ -1,13 +1,14 @@
 """Unit tests for the notification MCP tools."""
 
 import pytest
+
 from codomyrmex.notification.mcp_tools import (
-    notification_send,
-    notification_list_channels,
+    _NOTIFICATION_HISTORY,
     notification_get_history,
-    _AVAILABLE_CHANNELS,
-    _NOTIFICATION_HISTORY
+    notification_list_channels,
+    notification_send,
 )
+
 
 @pytest.fixture(autouse=True)
 def reset_history():
@@ -15,6 +16,7 @@ def reset_history():
     _NOTIFICATION_HISTORY.clear()
     yield
     _NOTIFICATION_HISTORY.clear()
+
 
 def test_notification_list_channels():
     """Test listing available notification channels."""
@@ -25,6 +27,7 @@ def test_notification_list_channels():
     assert "slack" in channels
     assert "sms" in channels
     assert "in_app" in channels
+
 
 def test_notification_send_success():
     """Test successfully sending a notification."""
@@ -42,6 +45,7 @@ def test_notification_send_success():
     assert history_item["status"] == "sent"
     assert "timestamp" in history_item
 
+
 def test_notification_send_invalid_channel():
     """Test sending a notification to an invalid channel."""
     result = notification_send(channel="invalid_channel", message="Hello!")
@@ -52,11 +56,13 @@ def test_notification_send_invalid_channel():
     # Verify it was NOT added to history
     assert len(_NOTIFICATION_HISTORY) == 0
 
+
 def test_notification_get_history_empty():
     """Test retrieving history when it's empty."""
     history = notification_get_history()
     assert isinstance(history, list)
     assert len(history) == 0
+
 
 def test_notification_get_history_limit():
     """Test retrieving history respects the limit parameter."""
