@@ -88,30 +88,79 @@ __version__ = "1.0.0"
 
 
 def compress(data: bytes, level: int = 6, format: str = "gzip") -> bytes:
-    """Compress data."""
+    """Compress data using the specified format.
+
+    Args:
+        data: The byte data to compress.
+        level: Compression level (default 6).
+        format: The format to use ('gzip', 'zlib', 'zip', 'zstd', etc.).
+
+    Returns:
+        The compressed bytes.
+    """
     compressor = Compressor(format=format)
     return compressor.compress(data, level)
 
 
 def decompress(data: bytes, format: str | None = None) -> bytes:
-    """Decompress data."""
+    """Decompress data.
+
+    Args:
+        data: The compressed byte data.
+        format: The expected format. If None, default will be used.
+
+    Returns:
+        The decompressed bytes.
+    """
     compressor = Compressor(format=format)
     return compressor.decompress(data)
 
 
 def get_compressor(format: str = "gzip") -> Compressor:
-    """Get a compressor instance."""
+    """Get a compressor instance for a specific format.
+
+    Args:
+        format: The format the compressor should use.
+
+    Returns:
+        A Compressor instance.
+    """
     return Compressor(format=format)
 
 
-def compress_file(input_path: str, output_path: str | None = None, format: str = "gzip", level: int = 6) -> str:
-    """Compress a file."""
+def compress_file(
+    input_path: str,
+    output_path: str | None = None,
+    format: str = "gzip",
+    level: int = 6,
+) -> str:
+    """Compress a file.
+
+    Args:
+        input_path: Path to the input file.
+        output_path: Optional path for the output file.
+        format: Compression format to use.
+        level: Compression level.
+
+    Returns:
+        The path to the compressed file.
+    """
     compressor = Compressor(format=format)
     return compressor.compress_file(input_path, output_path, level)
 
 
-def decompress_file(input_path: str, output_path: str | None = None, format: str = "gzip") -> str:
-    """Decompress a file."""
+def decompress_file(
+    input_path: str, output_path: str | None = None, format: str = "gzip"
+) -> str:
+    """Decompress a file.
+
+    Args:
+        input_path: Path to the compressed file.
+        output_path: Optional path for the decompressed output file.
+        format: Format used for decompression.
+
+    Returns:
+        The path to the decompressed file.
+    """
     compressor = Compressor(format=format)
     return compressor.decompress_file(input_path, output_path)
-

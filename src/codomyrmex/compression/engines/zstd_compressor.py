@@ -6,16 +6,20 @@ logger = get_logger(__name__)
 
 try:
     import zstandard as zstd
+
     ZSTD_AVAILABLE = True
 except ImportError:
     ZSTD_AVAILABLE = False
+
 
 class ZstdCompressor:
     """Compressor using the Zstandard algorithm."""
 
     def __init__(self, level: int = 3):
         if not ZSTD_AVAILABLE:
-            raise ImportError("zstandard package not available. Install with: pip install zstandard")
+            raise ImportError(
+                "zstandard package not available. Install with: pip install zstandard"
+            )
         self.level = level
         self.cctx = zstd.ZstdCompressor(level=level)
         self.dctx = zstd.ZstdDecompressor()
@@ -26,6 +30,9 @@ class ZstdCompressor:
         Args:
             data: Raw bytes to compress.
             level: Optional compression level override (1-22).
+
+        Returns:
+            The compressed bytes.
         """
         if level is not None and level != self.level:
             ctx = zstd.ZstdCompressor(level=level)
@@ -33,5 +40,12 @@ class ZstdCompressor:
         return self.cctx.compress(data)
 
     def decompress(self, data: bytes) -> bytes:
-        """Decompress data using Zstd."""
+        """Decompress data using Zstd.
+
+        Args:
+            data: Compressed bytes.
+
+        Returns:
+            The decompressed bytes.
+        """
         return self.dctx.decompress(data)

@@ -103,6 +103,13 @@ uv run python -m pytest src/codomyrmex/tests/ -k compression -v
 - [Agent Guide](../../../docs/modules/compression/AGENTS.md)
 - [Specification](../../../docs/modules/compression/SPEC.md)
 
+## MCP Tools
+
+The module exposes MCP tools for compression operations, available in `mcp_tools.py`:
+- `compression_compress_data`
+- `compression_decompress_data`
+- `compression_get_stats`
+
 ## Navigation
 
 - [SPEC](SPEC.md) | [AGENTS](AGENTS.md) | [PAI](PAI.md)
