@@ -2,10 +2,15 @@
 
 import os
 import tempfile
+
 import pytest
 
-from codomyrmex.config_management import ConfigurationManager, Configuration
-from codomyrmex.config_management.mcp_tools import get_config, set_config, validate_config
+from codomyrmex.config_management import Configuration, ConfigurationManager
+from codomyrmex.config_management.mcp_tools import (
+    get_config,
+    set_config,
+    validate_config,
+)
 
 
 @pytest.fixture
@@ -28,7 +33,9 @@ def mock_config_manager(temp_config_dir, monkeypatch):
     # Save a test configuration
     config = Configuration(data={"database": {"host": "localhost", "port": 5432}})
     manager.configurations["default"] = config
-    manager.save_configuration("default", os.path.join(manager.config_dir, "default.yaml"))
+    manager.save_configuration(
+        "default", os.path.join(manager.config_dir, "default.yaml")
+    )
 
     return manager
 

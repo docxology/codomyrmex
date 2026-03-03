@@ -62,6 +62,7 @@ try:
         encrypt_configuration,
         manage_secrets,
     )
+
     SECRET_MANAGEMENT_AVAILABLE = True
 except ImportError:
     # cryptography not available
@@ -70,8 +71,10 @@ except ImportError:
     manage_secrets = None
     SECRET_MANAGEMENT_AVAILABLE = False
 
+
 def cli_commands():
     """Return CLI commands for the config_management module."""
+
     def _show(**kwargs):
         """Show current configuration."""
         mgr = ConfigurationManager()
@@ -92,11 +95,14 @@ def cli_commands():
 
     return {
         "show": {"handler": _show, "help": "Show current configuration"},
-        "validate": {"handler": _validate, "help": "Validate configuration against schemas"},
+        "validate": {
+            "handler": _validate,
+            "help": "Validate configuration against schemas",
+        },
     }
 
 
-from typing import Any
+from typing import Any  # noqa: E402
 
 
 def get_config(key: str, default: Any = None, namespace: str = "default") -> Any:
@@ -179,8 +185,10 @@ __all__ = [
 
 # Add secret management if available
 if SECRET_MANAGEMENT_AVAILABLE:
-    __all__.extend([
-        "SecretManager",
-        "manage_secrets",
-        "encrypt_configuration",
-    ])
+    __all__.extend(
+        [
+            "SecretManager",
+            "manage_secrets",
+            "encrypt_configuration",
+        ]
+    )
