@@ -5,11 +5,13 @@ Full-text search with TF-IDF scoring, fuzzy matching, and query parsing.
 """
 
 # Shared schemas for cross-module interop
+from typing import Any
+
 try:
     from codomyrmex.validation.schemas import Result, ResultStatus
 except ImportError:
-    Result = None
-    ResultStatus = None
+    Result = None  # type: ignore
+    ResultStatus = None  # type: ignore
 
 from .engine import InMemoryIndex, SearchIndex, create_index, quick_search
 from .models import (
@@ -22,7 +24,7 @@ from .models import (
 )
 
 
-def cli_commands():
+def cli_commands() -> dict[str, Any]:
     """Return CLI commands for the search module."""
     return {
         "engines": {

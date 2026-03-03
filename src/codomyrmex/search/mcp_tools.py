@@ -104,12 +104,12 @@ def search_fuzzy(
         threshold: Minimum similarity score (0.0–1.0).
     """
     try:
-        scored = []
+        scored: list[dict[str, Any]] = []
         for c in candidates:
             score = FuzzyMatcher.similarity_ratio(query, c)
             if score >= threshold:
-                scored.append({"candidate": c, "score": score})
-        scored.sort(key=lambda x: x["score"], reverse=True)
+                scored.append({"candidate": c, "score": float(score)})
+        scored.sort(key=lambda x: float(x["score"]), reverse=True)
         best = FuzzyMatcher.find_best_match(query, candidates, threshold=threshold)
         return {
             "status": "ok",

@@ -8,6 +8,7 @@ import math
 import threading
 from abc import ABC, abstractmethod
 from collections import defaultdict
+from typing import Any
 
 from .models import Document, SearchResult, SimpleTokenizer, Tokenizer
 
@@ -40,6 +41,7 @@ class InMemoryIndex(SearchIndex):
     """In-memory inverted index with TF-IDF scoring."""
 
     def __init__(self, tokenizer: Tokenizer | None = None):
+        """Initialize in-memory index."""
         self.tokenizer = tokenizer or SimpleTokenizer()
         self._documents: dict[str, Document] = {}
         self._inverted_index: dict[str, set[str]] = defaultdict(set)
@@ -104,9 +106,13 @@ class InMemoryIndex(SearchIndex):
                     highlight = "..." + doc.content[start:end] + "..."
                     highlights.append(highlight)
 
-            results.append(SearchResult(
-                document=doc, score=score, highlights=highlights[:3],
-            ))
+            results.append(
+                SearchResult(
+                    document=doc,
+                    score=score,
+                    highlights=highlights[:3],
+                )
+            )
 
         results.sort(reverse=True)
         return results[:k]
@@ -128,7 +134,7 @@ class InMemoryIndex(SearchIndex):
         return self._documents.get(doc_id)
 
 
-def create_index(backend: str = "memory", **kwargs) -> SearchIndex:
+def create_index(backend: str = "memory", **kwargs: Any) -> SearchIndex:
     """Create a search index."""
     if backend == "memory":
         return InMemoryIndex(**kwargs)

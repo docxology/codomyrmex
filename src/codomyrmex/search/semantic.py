@@ -15,6 +15,7 @@ from . import Document, InMemoryIndex, SearchResult
 @dataclass
 class SemanticSearchResult:
     """Result from semantic search."""
+
     document: Document
     semantic_score: float
     keyword_score: float
@@ -28,9 +29,10 @@ class HybridSearchIndex:
     def __init__(
         self,
         embedding_fn: Callable[[str], list[float]] | None = None,
-        vector_store=None,
+        vector_store: Any = None,
         semantic_weight: float = 0.5,
-    ):
+    ) -> None:
+        """Initialize hybrid search index."""
         self._keyword_index = InMemoryIndex()
         self._embedding_fn = embedding_fn
         self._vector_store = vector_store
@@ -60,7 +62,9 @@ class HybridSearchIndex:
         semantic_weight: float | None = None,
     ) -> list[SemanticSearchResult]:
         """Hybrid search combining keyword and semantic."""
-        weight = semantic_weight if semantic_weight is not None else self._semantic_weight
+        weight = (
+            semantic_weight if semantic_weight is not None else self._semantic_weight
+        )
 
         # Keyword search
         keyword_results = self._keyword_index.search(query, k=k * 2)
@@ -90,12 +94,14 @@ class HybridSearchIndex:
             sem_score = semantic_scores.get(doc_id, 0)
             combined = (1 - weight) * kw_score + weight * sem_score
 
-            results.append(SemanticSearchResult(
-                document=document,
-                semantic_score=sem_score,
-                keyword_score=kw_score,
-                combined_score=combined,
-            ))
+            results.append(
+                SemanticSearchResult(
+                    document=document,
+                    semantic_score=sem_score,
+                    keyword_score=kw_score,
+                    combined_score=combined,
+                )
+            )
 
         results.sort(key=lambda r: r.combined_score, reverse=True)
         return results[:k]
@@ -119,7 +125,8 @@ class BM25Index:
         self,
         k1: float = 1.5,
         b: float = 0.75,
-    ):
+    ) -> None:
+        """Initialize BM25 index."""
         self.k1 = k1
         self.b = b
         self._documents: dict[str, Document] = {}
@@ -131,7 +138,8 @@ class BM25Index:
     def _tokenize(self, text: str) -> list[str]:
         """Simple tokenization."""
         import re
-        return re.findall(r'\b\w+\b', text.lower())
+
+        return re.findall(r"\b\w+\b", text.lower())
 
     def index(self, document: Document) -> None:
         """Index a document."""
@@ -165,9 +173,7 @@ class BM25Index:
 
             # IDF component
             doc_freq = len(self._inverted_index[token])
-            idf = math.log(
-                (self._doc_count - doc_freq + 0.5) / (doc_freq + 0.5) + 1
-            )
+            idf = math.log((self._doc_count - doc_freq + 0.5) / (doc_freq + 0.5) + 1)
 
             for doc_id, term_freq in self._inverted_index[token].items():
                 doc_len = self._doc_lengths[doc_id]
@@ -197,7 +203,8 @@ class BM25Index:
 class AutoCompleteIndex:
     """Fast prefix-based autocomplete."""
 
-    def __init__(self, max_suggestions: int = 10):
+    def __init__(self, max_suggestions: int = 10) -> None:
+        """Initialize auto-complete index."""
         self._trie: dict[str, Any] = {}
         self._max_suggestions = max_suggestions
 
@@ -228,7 +235,7 @@ class AutoCompleteIndex:
             node = node[char]
 
         # Collect all completions
-        suggestions = []
+        suggestions: list[tuple[str, float]] = []
         self._collect_completions(node, suggestions)
 
         # Sort by weight and return
@@ -237,8 +244,8 @@ class AutoCompleteIndex:
 
     def _collect_completions(
         self,
-        node: dict,
-        results: list,
+        node: dict[str, Any],
+        results: list[tuple[str, float]],
     ) -> None:
         """Recursively collect completions from trie node."""
         if "$" in node:

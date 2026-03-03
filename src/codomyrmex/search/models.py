@@ -14,6 +14,7 @@ from typing import Any
 @dataclass
 class Document:
     """A searchable document."""
+
     id: str
     content: str
     metadata: dict[str, Any] = field(default_factory=dict)
@@ -23,6 +24,7 @@ class Document:
 @dataclass
 class SearchResult:
     """A search result."""
+
     document: Document
     score: float
     highlights: list[str] = field(default_factory=list)
@@ -45,6 +47,7 @@ class SimpleTokenizer(Tokenizer):
     """Simple whitespace and punctuation tokenizer."""
 
     def __init__(self, lowercase: bool = True, min_length: int = 2):
+        """Initialize tokenizer."""
         self.lowercase = lowercase
         self.min_length = min_length
 
@@ -52,7 +55,7 @@ class SimpleTokenizer(Tokenizer):
         """Tokenize."""
         if self.lowercase:
             text = text.lower()
-        tokens = re.findall(r'\b\w+\b', text)
+        tokens = re.findall(r"\b\w+\b", text)
         return [t for t in tokens if len(t) >= self.min_length]
 
 
@@ -67,7 +70,7 @@ class FuzzyMatcher:
         if len(s2) == 0:
             return len(s1)
 
-        prev_row = range(len(s2) + 1)
+        prev_row = list(range(len(s2) + 1))
         for i, c1 in enumerate(s1):
             curr_row = [i + 1]
             for j, c2 in enumerate(s2):
@@ -88,7 +91,9 @@ class FuzzyMatcher:
         return 1.0 - (distance / max_len)
 
     @staticmethod
-    def find_best_match(query: str, candidates: list[str], threshold: float = 0.6) -> str | None:
+    def find_best_match(
+        query: str, candidates: list[str], threshold: float = 0.6
+    ) -> str | None:
         """Find best matching string."""
         best_match = None
         best_score = threshold
@@ -103,35 +108,36 @@ class FuzzyMatcher:
 class QueryParser:
     """Parse search queries with operators."""
 
-    def __init__(self):
+    def __init__(self) -> None:
+        """Initialize query parser."""
         self._operators = {
-            '+': 'must',
-            '-': 'must_not',
-            '"': 'phrase',
+            "+": "must",
+            "-": "must_not",
+            '"': "phrase",
         }
 
     def parse(self, query: str) -> dict[str, Any]:
         """Parse query into structured format."""
-        result = {
-            'terms': [],
-            'must': [],
-            'must_not': [],
-            'phrases': [],
+        result: dict[str, list[str]] = {
+            "terms": [],
+            "must": [],
+            "must_not": [],
+            "phrases": [],
         }
 
         # Extract phrases
         phrases = re.findall(r'"([^"]+)"', query)
-        result['phrases'] = phrases
-        query = re.sub(r'"[^"]+"', '', query)
+        result["phrases"] = phrases
+        query = re.sub(r'"[^"]+"', "", query)
 
         # Parse remaining tokens
         tokens = query.split()
         for token in tokens:
-            if token.startswith('+'):
-                result['must'].append(token[1:])
-            elif token.startswith('-'):
-                result['must_not'].append(token[1:])
+            if token.startswith("+"):
+                result["must"].append(token[1:])
+            elif token.startswith("-"):
+                result["must_not"].append(token[1:])
             elif token:
-                result['terms'].append(token)
+                result["terms"].append(token)
 
         return result
