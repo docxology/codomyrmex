@@ -48,15 +48,39 @@ def test_audio_list_voices():
     assert "Unknown provider" in result["message"]
 
 @pytest.mark.unit
-def test_audio_transcribe_invalid_file():
+def test_audio_transcribe_invalid_file(monkeypatch: pytest.MonkeyPatch):
     """Test transcribe handles missing files."""
+    # Mock transcriber to prevent model download
+    class MockTranscriber:
+        def __init__(self, *args, **kwargs):
+            pass
+        def __enter__(self):
+            return self
+        def __exit__(self, *args):
+            pass
+        def transcribe(self, path, *args, **kwargs):
+            raise Exception("File not found")
+    monkeypatch.setattr("codomyrmex.audio.speech_to_text.Transcriber", MockTranscriber)
+
     result = audio_transcribe("/path/does/not/exist.wav")
     assert result["success"] is False
     assert "error" in result
 
 @pytest.mark.unit
-def test_audio_detect_language_invalid_file():
+def test_audio_detect_language_invalid_file(monkeypatch: pytest.MonkeyPatch):
     """Test detect_language handles missing files."""
+    # Mock transcriber to prevent model download
+    class MockTranscriber:
+        def __init__(self, *args, **kwargs):
+            pass
+        def __enter__(self):
+            return self
+        def __exit__(self, *args):
+            pass
+        def detect_language(self, path, *args, **kwargs):
+            raise Exception("File not found")
+    monkeypatch.setattr("codomyrmex.audio.speech_to_text.Transcriber", MockTranscriber)
+
     result = audio_detect_language("/path/does/not/exist.wav")
     assert result["success"] is False
     assert "error" in result
@@ -70,9 +94,24 @@ def test_audio_synthesize_invalid_provider(temp_output_dir: Path):
     assert "error" in result
 
 @pytest.mark.unit
-def test_audio_batch_transcribe_invalid_files(temp_output_dir: Path):
+def test_audio_batch_transcribe_invalid_files(temp_output_dir: Path, monkeypatch: pytest.MonkeyPatch):
     """Test batch transcribe with invalid files returns failure list."""
-    # This shouldn't crash, but it should return 0 processed, 2 failed
+    # Mock transcriber initialization to prevent downloading large models in tests
+    class MockTranscriber:
+        def __init__(self, *args, **kwargs):
+            pass
+
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *args):
+            pass
+
+        def transcribe(self, path, *args, **kwargs):
+            raise Exception("File not found")
+
+    monkeypatch.setattr("codomyrmex.audio.speech_to_text.Transcriber", MockTranscriber)
+
     result = audio_batch_transcribe(
         ["/invalid/1.wav", "/invalid/2.wav"],
         str(temp_output_dir),
