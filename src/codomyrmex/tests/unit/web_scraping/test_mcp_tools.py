@@ -30,7 +30,7 @@ class MockServerRequestHandler(http.server.SimpleHTTPRequestHandler):
                 <h1>Hello World</h1>
                 <p>This is a <b>test</b> page.</p>
                 <a href="/link1">Link 1</a>
-                <a href="http://external.com">External Link</a>
+                <a href="https://example.com">External Link</a>
             </body>
             </html>
             """
@@ -102,8 +102,8 @@ def test_scraping_extract_links(local_server):
 
     links = result["links"]
     assert len(links) == 2
-    assert f"{local_server}/link1" in links
-    assert "http://external.com" in links
+    assert any(link == f"{local_server}/link1" for link in links)
+    assert any(link == "https://example.com" for link in links)
 
 
 def test_scraping_extract_links_error(local_server):
