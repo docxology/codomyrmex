@@ -60,3 +60,25 @@ __all__ = [
     # CLI
     "cli_commands",
 ]
+
+# Expose MCP tools if the module has them loaded
+try:
+    from .mcp_tools import (
+        cost_management_can_spend,
+        cost_management_check_budgets,
+        cost_management_create_budget,
+        cost_management_get_summary,
+        cost_management_record_cost,
+    )
+
+    __all__.extend(
+        [
+            "cost_management_record_cost",
+            "cost_management_get_summary",
+            "cost_management_create_budget",
+            "cost_management_check_budgets",
+            "cost_management_can_spend",
+        ]
+    )
+except ImportError:
+    pass

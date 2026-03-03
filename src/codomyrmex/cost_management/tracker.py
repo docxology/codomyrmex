@@ -44,6 +44,7 @@ class CostTracker:
     """
 
     def __init__(self, store: CostStore | None = None) -> None:
+        """Initialize the cost tracker."""
         self.store = store or InMemoryCostStore()
         self._counter = 0
         self._lock = threading.Lock()
@@ -195,6 +196,7 @@ class BudgetManager:
     """
 
     def __init__(self, tracker: CostTracker) -> None:
+        """Initialize the budget manager."""
         self.tracker = tracker
         self._budgets: dict[str, Budget] = {}
         self._triggered_alerts: set[str] = set()  # Track which thresholds were triggered

@@ -38,6 +38,7 @@ class InMemoryCostStore(CostStore):
     """In-memory cost storage."""
 
     def __init__(self) -> None:
+        """Initialize in-memory cost store."""
         self._entries: list[CostEntry] = []
         self._lock = threading.Lock()
 
@@ -88,6 +89,7 @@ class JSONCostStore(CostStore):
     """Simple JSON file-based cost storage."""
 
     def __init__(self, filepath: str | Path) -> None:
+        """Initialize JSON file-based cost store."""
         self.filepath = Path(filepath)
         self._lock = threading.Lock()
         if not self.filepath.exists():
