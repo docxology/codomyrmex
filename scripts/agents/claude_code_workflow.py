@@ -11,7 +11,6 @@ Demonstrates a complete Claude Code agentic workflow:
 
 This represents a typical AI-assisted development workflow.
 """
-
 import sys
 from pathlib import Path
 
@@ -21,36 +20,24 @@ except ImportError:
     project_root = Path(__file__).resolve().parent.parent.parent
     sys.path.insert(0, str(project_root / "src"))
 
-from codomyrmex.agents.exceptions import AgentConfigurationError
-
 from codomyrmex.agents.claude import ClaudeClient
+from codomyrmex.agents.exceptions import AgentConfigurationError
 from codomyrmex.utils.cli_helpers import (
-    print_error,
-    print_info,
-    print_section,
-    print_success,
-    print_warning,
-    setup_logging,
+    setup_logging, print_success, print_error, print_info,
+    print_section, print_warning
 )
 
 
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
-
-    config_path = (
-        Path(__file__).resolve().parent.parent.parent
-        / "config"
-        / "agents"
-        / "config.yaml"
-    )
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "agents" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
+        with open(config_path, "r") as f:
             config_data = yaml.safe_load(f) or {}
-            print("Loaded config from config/agents/config.yaml")
+            print(f"Loaded config from config/agents/config.yaml")
 
     setup_logging()
     print_section("Claude Code Workflow Demo")
@@ -69,15 +56,11 @@ def calculate_discount(price, discount_percent):
     print_section("Step 1: Scan Project Context")
     try:
         client = ClaudeClient.__new__(ClaudeClient)  # No API needed
-        project_dir = (
-            Path(__file__).resolve().parent.parent.parent / "src/codomyrmex/agents"
-        )
+        project_dir = Path(__file__).resolve().parent.parent.parent / "src/codomyrmex/agents"
         result = client.get_project_structure(str(project_dir), max_depth=2)
         if result["success"]:
             print_success(f"Found {result['file_count']} files in agents module")
-            print_info(
-                f"Primary language: Python ({result['language_breakdown'].get('Python', 0)} files)"
-            )
+            print_info(f"Primary language: Python ({result['language_breakdown'].get('Python', 0)} files)")
         else:
             print_warning(f"Scan failed: {result.get('error')}")
     except Exception as e:
@@ -97,9 +80,7 @@ def calculate_discount(price, discount_percent):
             return 0
         print_success("Claude client connected")
     except AgentConfigurationError:
-        print_warning(
-            "API key not configured. Set ANTHROPIC_API_KEY to enable full workflow."
-        )
+        print_warning("API key not configured. Set ANTHROPIC_API_KEY to enable full workflow.")
         return 0
 
     # Step 3: Explain the code
@@ -117,9 +98,7 @@ def calculate_discount(price, discount_percent):
     print_section("Step 4: Review Code")
     result = client.review_code(sample_code, language="python", analysis_type="general")
     if result["success"]:
-        print_success(
-            f"Review complete: {len(result['issues'])} issues, {len(result['recommendations'])} recommendations"
-        )
+        print_success(f"Review complete: {len(result['issues'])} issues, {len(result['recommendations'])} recommendations")
         for issue in result["issues"][:2]:
             print_info(f"  Issue: {issue[:60]}...")
     else:

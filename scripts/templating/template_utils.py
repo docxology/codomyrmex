@@ -16,8 +16,8 @@ except ImportError:
     sys.path.insert(0, str(project_root / "src"))
 
 import argparse
-import json
 import re
+import json
 from string import Template
 
 
@@ -38,8 +38,8 @@ def render_jinja_like(template: str, variables: dict) -> str:
 
 def find_variables(template: str) -> list:
     """Find variables in a template."""
-    dollar_vars = re.findall(r"\$(\w+)", template)
-    jinja_vars = re.findall(r"\{\{\s*(\w+)\s*\}\}", template)
+    dollar_vars = re.findall(r'\$(\w+)', template)
+    jinja_vars = re.findall(r'\{\{\s*(\w+)\s*\}\}', template)
     return list(set(dollar_vars + jinja_vars))
 
 
@@ -52,30 +52,21 @@ def validate_template(template: str, variables: dict) -> list:
 
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
-
-    config_path = (
-        Path(__file__).resolve().parent.parent.parent
-        / "config"
-        / "templating"
-        / "config.yaml"
-    )
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "templating" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
+        with open(config_path, "r") as f:
             config_data = yaml.safe_load(f) or {}
-            print("Loaded config from config/templating/config.yaml")
+            print(f"Loaded config from config/templating/config.yaml")
 
     parser = argparse.ArgumentParser(description="Template utilities")
     parser.add_argument("template", nargs="?", help="Template file or string")
     parser.add_argument("--vars", "-v", help="Variables as JSON")
     parser.add_argument("--vars-file", "-f", help="Variables JSON file")
     parser.add_argument("--output", "-o", help="Output file")
-    parser.add_argument(
-        "--list-vars", "-l", action="store_true", help="List template variables"
-    )
+    parser.add_argument("--list-vars", "-l", action="store_true", help="List template variables")
     args = parser.parse_args()
 
     if not args.template:

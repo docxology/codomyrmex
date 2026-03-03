@@ -35,7 +35,7 @@ def run_orchestration():
     missing = check_and_setup_env_vars(
         repo_root=str(project_root),
         required=["OPENAI_API_KEY", "ANTHROPIC_API_KEY"],
-        optional=["LOG_LEVEL", "DEBUG"],
+        optional=["LOG_LEVEL", "DEBUG"]
     )
     if missing:
         print(f"Warning: Missing required environment variables: {missing}")
@@ -60,23 +60,17 @@ def run_orchestration():
     print("\n--- Orchestration Complete ---")
     return val_report.valid
 
+
+
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
-
-    config_path = (
-        Path(__file__).resolve().parent.parent.parent
-        / "config"
-        / "environment_setup"
-        / "config.yaml"
-    )
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "environment_setup" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
+        with open(config_path, "r") as f:
             config_data = yaml.safe_load(f) or {}
-            print("Loaded config from config/environment_setup/config.yaml")
-
+            print(f"Loaded config from config/environment_setup/config.yaml")
 
 if __name__ == "__main__":
     success = run_orchestration()

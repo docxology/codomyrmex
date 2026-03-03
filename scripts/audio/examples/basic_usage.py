@@ -37,16 +37,8 @@ def main() -> int:
 
     # ── 0. Import guard ────────────────────────────────────────────────
     try:
-        from codomyrmex.audio import (
-            EDGE_TTS_AVAILABLE,
-            PYTTSX3_AVAILABLE,
-            TTS_AVAILABLE,
-            Synthesizer,
-        )
-        from codomyrmex.audio.exceptions import (
-            ProviderNotAvailableError,
-            SynthesisError,
-        )
+        from codomyrmex.audio import Synthesizer, TTS_AVAILABLE, EDGE_TTS_AVAILABLE, PYTTSX3_AVAILABLE
+        from codomyrmex.audio.exceptions import ProviderNotAvailableError, SynthesisError
     except ImportError:
         print_warning("Audio module not importable.")
         print_info("  Install: uv sync --extra audio")
@@ -68,7 +60,7 @@ def main() -> int:
         print_info("1. edge-tts — Neural TTS (Microsoft Edge voices)...")
         try:
             synth = Synthesizer(provider="edge-tts")
-            print_success("   Synthesizer ready with edge-tts.")
+            print_success(f"   Synthesizer ready with edge-tts.")
 
             # List available English voices
             voices = synth.list_voices(language="en-US")
@@ -84,7 +76,7 @@ def main() -> int:
                 voice="en-US-AriaNeural",
                 rate=1.0,
             )
-            print_success("   Saved: outputs/audio/basic_usage_edge_tts.mp3")
+            print_success(f"   Saved: outputs/audio/basic_usage_edge_tts.mp3")
 
             # Batch synthesis
             batch_texts = [
@@ -99,9 +91,7 @@ def main() -> int:
         except SynthesisError as e:
             print_error(f"   Synthesis failed: {e}")
     else:
-        print_warning(
-            "1. edge-tts not installed (skip). Install: uv sync --extra audio"
-        )
+        print_warning("1. edge-tts not installed (skip). Install: uv sync --extra audio")
 
     # ── 2. pyttsx3 (offline, system voices) ───────────────────────────
     if PYTTSX3_AVAILABLE:
@@ -119,7 +109,7 @@ def main() -> int:
                 out,
                 rate=1.0,
             )
-            print_success("   Saved: outputs/audio/basic_usage_pyttsx3.wav")
+            print_success(f"   Saved: outputs/audio/basic_usage_pyttsx3.wav")
 
         except ProviderNotAvailableError as e:
             print_warning(f"   pyttsx3 unavailable: {e}")
@@ -130,9 +120,7 @@ def main() -> int:
 
     # ── 3. In-memory synthesis ─────────────────────────────────────────
     print_info("3. In-memory synthesis (no file save)...")
-    provider = (
-        "edge-tts" if EDGE_TTS_AVAILABLE else ("pyttsx3" if PYTTSX3_AVAILABLE else None)
-    )
+    provider = "edge-tts" if EDGE_TTS_AVAILABLE else ("pyttsx3" if PYTTSX3_AVAILABLE else None)
     if provider:
         try:
             synth_mem = Synthesizer(provider=provider)

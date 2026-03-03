@@ -18,40 +18,27 @@ except ImportError:
     project_root = Path(__file__).resolve().parent.parent.parent.parent
     sys.path.insert(0, str(project_root / "src"))
 
+from codomyrmex.utils.cli_helpers import setup_logging, print_success, print_info, print_error
 from codomyrmex.events import (
     Event,
     EventType,
     get_event_bus,
-    get_event_logger,
-    get_event_stats,
     publish_event,
     subscribe_to_events,
+    get_event_logger,
+    get_event_stats
 )
-from codomyrmex.utils.cli_helpers import (
-    print_error,
-    print_info,
-    print_success,
-    setup_logging,
-)
-
 
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
-
-    config_path = (
-        Path(__file__).resolve().parent.parent.parent
-        / "config"
-        / "events"
-        / "config.yaml"
-    )
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "events" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
+        with open(config_path, "r") as f:
             config_data = yaml.safe_load(f) or {}
-            print("Loaded config from config/events/config.yaml")
+            print(f"Loaded config from config/events/config.yaml")
 
     setup_logging()
     print_info("Running Event EDA Examples...")
@@ -61,7 +48,6 @@ def main():
     bus = get_event_bus()
 
     received = []
-
     def handler(event):
         received.append(event)
 
@@ -70,7 +56,7 @@ def main():
     event = Event(
         event_type=EventType.SYSTEM_STARTUP,
         source="basic_usage_script",
-        data={"status": "running", "version": "1.0.0"},
+        data={"status": "running", "version": "1.0.0"}
     )
     publish_event(event)
 
@@ -88,7 +74,6 @@ def main():
 
     print_success("Event EDA examples completed successfully")
     return 0
-
 
 if __name__ == "__main__":
     sys.exit(main())

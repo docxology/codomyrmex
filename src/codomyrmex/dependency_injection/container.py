@@ -93,6 +93,7 @@ class Container:
     """
 
     def __init__(self) -> None:
+        """Initialize the container."""
         self._registry: dict[type[Any], list[ServiceDescriptor]] = {}
         self._named_registry: dict[tuple[type[Any], str], ServiceDescriptor] = {}
         self._lock = threading.RLock()

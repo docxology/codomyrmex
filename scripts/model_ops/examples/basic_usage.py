@@ -12,14 +12,13 @@ Usage:
 
 import sys
 from pathlib import Path
-from typing import Any
+from typing import Any, Dict
 
 project_root = Path(__file__).parent.parent.parent.parent
 sys.path.insert(0, str(project_root / "src"))
 
 # Direct import to avoid triggering full codomyrmex package init
 import importlib.util
-
 script_base_path = project_root / "src" / "codomyrmex" / "utils" / "script_base.py"
 spec = importlib.util.spec_from_file_location("script_base", script_base_path)
 script_base = importlib.util.module_from_spec(spec)
@@ -42,33 +41,27 @@ class ModelOpsScript(ScriptBase):
         """Add model ops-specific arguments."""
         group = parser.add_argument_group("Model Ops Options")
         group.add_argument(
-            "--dataset-size",
-            type=int,
-            default=50,
-            help="Number of examples in synthetic dataset (default: 50)",
+            "--dataset-size", type=int, default=50,
+            help="Number of examples in synthetic dataset (default: 50)"
         )
         group.add_argument(
-            "--min-length",
-            type=int,
-            default=10,
-            help="Minimum content length for filtering (default: 10)",
+            "--min-length", type=int, default=10,
+            help="Minimum content length for filtering (default: 10)"
         )
         group.add_argument(
-            "--max-length",
-            type=int,
-            default=1000,
-            help="Maximum content length for filtering (default: 1000)",
+            "--max-length", type=int, default=1000,
+            help="Maximum content length for filtering (default: 1000)"
         )
         group.add_argument(
-            "--base-model",
-            default="gpt-3.5-turbo",
-            help="Base model for fine-tuning simulation (default: gpt-3.5-turbo)",
+            "--base-model", default="gpt-3.5-turbo",
+            help="Base model for fine-tuning simulation (default: gpt-3.5-turbo)"
         )
         group.add_argument(
-            "--export-dataset", type=Path, help="Export synthetic dataset to JSONL file"
+            "--export-dataset", type=Path,
+            help="Export synthetic dataset to JSONL file"
         )
 
-    def run(self, args, config: ScriptConfig) -> dict[str, Any]:
+    def run(self, args, config: ScriptConfig) -> Dict[str, Any]:
         """Execute model operations demonstrations."""
         results = {
             "tests_run": 0,
@@ -79,24 +72,13 @@ class ModelOpsScript(ScriptBase):
 
         if config.dry_run:
             self.log_info(f"Would create dataset with {args.dataset_size} examples")
-            self.log_info(
-                "Would test: Dataset, DatasetSanitizer, FineTuningJob, Evaluator"
-            )
+            self.log_info(f"Would test: Dataset, DatasetSanitizer, FineTuningJob, Evaluator")
             results["dry_run"] = True
             return results
 
         # Import model_ops module (after dry_run check)
-        from codomyrmex.model_ops.evaluators import (
-            exact_match_metric,
-            length_ratio_metric,
-        )
-
-        from codomyrmex.model_ops import (
-            Dataset,
-            DatasetSanitizer,
-            Evaluator,
-            FineTuningJob,
-        )
+        from codomyrmex.model_ops import Dataset, DatasetSanitizer, FineTuningJob, Evaluator
+        from codomyrmex.model_ops.evaluators import exact_match_metric, length_ratio_metric
 
         # Test 1: Create and validate dataset
         self.log_info(f"\n1. Creating synthetic dataset ({args.dataset_size} examples)")
@@ -106,29 +88,21 @@ class ModelOpsScript(ScriptBase):
             results["dataset_stats"]["created"] = len(dataset.data)
             results["dataset_stats"]["valid"] = is_valid
             results["tests_passed"] += 1
-            self.log_success(
-                f"Dataset created: {len(dataset.data)} examples, valid={is_valid}"
-            )
+            self.log_success(f"Dataset created: {len(dataset.data)} examples, valid={is_valid}")
         except Exception as e:
             self.log_error(f"Dataset creation failed: {e}")
         results["tests_run"] += 1
 
         # Test 2: Dataset sanitization
-        self.log_info(
-            f"\n2. Testing DatasetSanitizer (filter: {args.min_length}-{args.max_length})"
-        )
+        self.log_info(f"\n2. Testing DatasetSanitizer (filter: {args.min_length}-{args.max_length})")
         try:
-            filtered = DatasetSanitizer.filter_by_length(
-                dataset, args.min_length, args.max_length
-            )
+            filtered = DatasetSanitizer.filter_by_length(dataset, args.min_length, args.max_length)
             stripped = DatasetSanitizer.strip_keys(filtered, ["metadata", "timestamp"])
 
             results["dataset_stats"]["after_length_filter"] = len(filtered.data)
             results["dataset_stats"]["after_strip_keys"] = len(stripped.data)
             results["tests_passed"] += 1
-            self.log_success(
-                f"Filtered: {len(filtered.data)} examples passed length filter"
-            )
+            self.log_success(f"Filtered: {len(filtered.data)} examples passed length filter")
         except Exception as e:
             self.log_error(f"Sanitization failed: {e}")
         results["tests_run"] += 1
@@ -167,9 +141,7 @@ class ModelOpsScript(ScriptBase):
             eval_results = evaluator.evaluate(predictions, references)
             results["evaluation_results"] = eval_results
             results["tests_passed"] += 1
-            self.log_success(
-                f"Evaluation: exact_match={eval_results['exact_match']:.2f}, length_ratio={eval_results['length_ratio']:.2f}"
-            )
+            self.log_success(f"Evaluation: exact_match={eval_results['exact_match']:.2f}, length_ratio={eval_results['length_ratio']:.2f}")
         except Exception as e:
             self.log_error(f"Evaluation failed: {e}")
         results["tests_run"] += 1
@@ -182,11 +154,7 @@ class ModelOpsScript(ScriptBase):
                 self.log_info(f"Exported to: {args.export_dataset}")
 
             # Test round-trip to temp file
-            temp_path = (
-                self.output_path / "test_dataset.jsonl"
-                if self.output_path
-                else Path("/tmp/test_dataset.jsonl")
-            )
+            temp_path = self.output_path / "test_dataset.jsonl" if self.output_path else Path("/tmp/test_dataset.jsonl")
             temp_path.parent.mkdir(parents=True, exist_ok=True)
             dataset.to_jsonl(str(temp_path))
             reloaded = Dataset.from_file(str(temp_path))
@@ -197,9 +165,7 @@ class ModelOpsScript(ScriptBase):
                 "round_trip_success": len(dataset.data) == len(reloaded.data),
             }
             results["tests_passed"] += 1
-            self.log_success(
-                f"I/O test: round-trip successful ({len(reloaded.data)} examples)"
-            )
+            self.log_success(f"I/O test: round-trip successful ({len(reloaded.data)} examples)")
         except Exception as e:
             self.log_error(f"I/O test failed: {e}")
         results["tests_run"] += 1
@@ -233,33 +199,25 @@ class ModelOpsScript(ScriptBase):
 
         for i in range(size):
             idx = i % len(prompts)
-            data.append(
-                {
-                    "prompt": f"{prompts[idx]} (Example {i + 1})",
-                    "completion": f"{completions[idx]} This is example {i + 1}.",
-                    "metadata": {"index": i, "category": "ml_basics"},
-                }
-            )
+            data.append({
+                "prompt": f"{prompts[idx]} (Example {i+1})",
+                "completion": f"{completions[idx]} This is example {i+1}.",
+                "metadata": {"index": i, "category": "ml_basics"},
+            })
 
         return Dataset(data=data)
 
+
+
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
-
-    config_path = (
-        Path(__file__).resolve().parent.parent.parent
-        / "config"
-        / "model_ops"
-        / "config.yaml"
-    )
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "model_ops" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
+        with open(config_path, "r") as f:
             config_data = yaml.safe_load(f) or {}
-            print("Loaded config from config/model_ops/config.yaml")
-
+            print(f"Loaded config from config/model_ops/config.yaml")
 
 if __name__ == "__main__":
     script = ModelOpsScript()

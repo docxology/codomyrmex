@@ -15,43 +15,33 @@ except ImportError:
     project_root = Path(__file__).resolve().parent.parent.parent.parent
     sys.path.insert(0, str(project_root / "src"))
 
-from codomyrmex.utils.cli_helpers import print_info, print_success, setup_logging
-
+from codomyrmex.utils.cli_helpers import setup_logging, print_success, print_info
 
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
-
-    config_path = (
-        Path(__file__).resolve().parent.parent.parent
-        / "config"
-        / "config_management"
-        / "config.yaml"
-    )
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "config_management" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
+        with open(config_path, "r") as f:
             config_data = yaml.safe_load(f) or {}
-            print("Loaded config from config/config_management/config.yaml")
+            print(f"Loaded config from config/config_management/config.yaml")
 
     setup_logging()
-    print_info("Running Advanced config_management Workflow...")
+    print_info(f"Running Advanced config_management Workflow...")
 
     # Import validation
     try:
         import codomyrmex.config_management  # noqa: F401
-
         print_info("Successfully imported codomyrmex.config_management")
     except ImportError as e:
         print_info(f"Warning: Could not import codomyrmex.config_management: {e}")
         # We don't exit here because we want the script to be 'resilient' for testing purposes
 
     # Advanced logic here
-    print_success("Advanced config_management Workflow completed successfully")
+    print_success(f"Advanced config_management Workflow completed successfully")
     return 0
-
 
 if __name__ == "__main__":
     sys.exit(main())

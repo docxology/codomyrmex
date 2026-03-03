@@ -13,8 +13,7 @@ from pathlib import Path
 PROJECT_ROOT = Path(__file__).parent.parent.parent
 sys.path.insert(0, str(PROJECT_ROOT / "src"))
 
-from codomyrmex.data_lineage import EdgeType, ImpactAnalyzer, LineageTracker, NodeType
-
+from codomyrmex.data_lineage import LineageTracker, ImpactAnalyzer, NodeType, EdgeType
 
 def main() -> int:
     print("--- Starting Data Lineage Demo ---")
@@ -27,12 +26,12 @@ def main() -> int:
     tracker.register_dataset(
         id="raw_sales",
         name="Raw Sales Data",
-        location="s3://datalake/raw/sales/2026/03/01/",
+        location="s3://datalake/raw/sales/2026/03/01/"
     )
     tracker.register_dataset(
         id="raw_products",
         name="Raw Product Catalog",
-        location="s3://datalake/raw/products/latest",
+        location="s3://datalake/raw/products/latest"
     )
 
     # 3. Register Transformations
@@ -42,40 +41,30 @@ def main() -> int:
         id="clean_sales_job",
         name="Sales Data Cleaning",
         inputs=["raw_sales", "raw_products"],
-        outputs=["clean_sales"],
+        outputs=["clean_sales"]
     )
 
     tracker.register_transformation(
         id="sales_aggregation",
         name="Daily Sales Aggregator",
         inputs=["clean_sales"],
-        outputs=["daily_sales_summary"],
+        outputs=["daily_sales_summary"]
     )
 
     # 4. Register Downstream Consumers (Models/Dashboards)
     print("Registering downstream consumers...")
     # Manual node creation for specific types
-    from codomyrmex.data_lineage import LineageEdge, LineageNode
+    from codomyrmex.data_lineage import LineageNode, LineageEdge
 
     # Model
-    model_node = LineageNode(
-        id="revenue_forecast", name="Revenue Forecast Model", node_type=NodeType.MODEL
-    )
+    model_node = LineageNode(id="revenue_forecast", name="Revenue Forecast Model", node_type=NodeType.MODEL)
     tracker.graph.add_node(model_node)
-    tracker.graph.add_edge(
-        LineageEdge("daily_sales_summary", "revenue_forecast", EdgeType.INPUT_TO)
-    )
+    tracker.graph.add_edge(LineageEdge("daily_sales_summary", "revenue_forecast", EdgeType.INPUT_TO))
 
     # Dashboard
-    dashboard_node = LineageNode(
-        id="exec_dashboard",
-        name="Executive KPI Dashboard",
-        node_type=NodeType.DASHBOARD,
-    )
+    dashboard_node = LineageNode(id="exec_dashboard", name="Executive KPI Dashboard", node_type=NodeType.DASHBOARD)
     tracker.graph.add_node(dashboard_node)
-    tracker.graph.add_edge(
-        LineageEdge("daily_sales_summary", "exec_dashboard", EdgeType.USED_BY)
-    )
+    tracker.graph.add_edge(LineageEdge("daily_sales_summary", "exec_dashboard", EdgeType.USED_BY))
 
     # 5. Perform Traceability Queries
     print("\n--- Lineage Traceability ---")
@@ -113,23 +102,16 @@ def main() -> int:
     print("\n--- Demo Completed Successfully ---")
     return 0
 
+
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
-
-    config_path = (
-        Path(__file__).resolve().parent.parent.parent
-        / "config"
-        / "data_lineage"
-        / "config.yaml"
-    )
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "data_lineage" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
+        with open(config_path, "r") as f:
             config_data = yaml.safe_load(f) or {}
-            print("Loaded config from config/data_lineage/config.yaml")
-
+            print(f"Loaded config from config/data_lineage/config.yaml")
 
 if __name__ == "__main__":
     sys.exit(main())

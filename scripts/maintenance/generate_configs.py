@@ -7,9 +7,8 @@ corresponding dedicated configuration directory in the `/config/` root,
 complete with a comprehensive default `config.yaml`.
 """
 
-from pathlib import Path
-
 import yaml
+from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent.parent
 SRC_DIR = REPO_ROOT / "src" / "codomyrmex"
@@ -17,30 +16,18 @@ CONFIG_DIR = REPO_ROOT / "config"
 
 # Subdirectories in src/ that are not product modules
 EXCLUDES = {
-    "__pycache__",
-    "tests",
-    "examples",
-    "docs",
-    "scripts",
-    "image",
-    "vision",
-    "demos",
+    "__pycache__", "tests", "examples", "docs", "scripts",
+    "image", "vision", "demos"
 }
-
 
 def get_valid_modules() -> list[str]:
     """Find all valid top-level directories common to src/codomyrmex/."""
     modules = []
     if SRC_DIR.exists():
         for item in sorted(SRC_DIR.iterdir()):
-            if (
-                item.is_dir()
-                and item.name not in EXCLUDES
-                and not item.name.startswith(".")
-            ):
+            if item.is_dir() and item.name not in EXCLUDES and not item.name.startswith("."):
                 modules.append(item.name)
     return modules
-
 
 def generate_default_config(module_name: str) -> dict:
     """Generate a comprehensive default config dictionary for a module."""
@@ -50,12 +37,18 @@ def generate_default_config(module_name: str) -> dict:
         "logging": {
             "level": "INFO",
             "format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-            "file": f"logs/{module_name}.log",
+            "file": f"logs/{module_name}.log"
         },
-        "performance": {"max_workers": 4, "timeout_seconds": 30.0, "caching": True},
-        "features": {"experimental": False, "strict_mode": True},
+        "performance": {
+            "max_workers": 4,
+            "timeout_seconds": 30.0,
+            "caching": True
+        },
+        "features": {
+            "experimental": False,
+            "strict_mode": True
+        }
     }
-
 
 def sync_configs():
     """Create config directories and files for all modules."""
@@ -82,11 +75,8 @@ def sync_configs():
         else:
             updated_count += 1
 
-    print("\n✅ Synchronization complete.")
-    print(
-        f"Created {created_count} new config files. Skipped {updated_count} existing."
-    )
-
+    print(f"\n✅ Synchronization complete.")
+    print(f"Created {created_count} new config files. Skipped {updated_count} existing.")
 
 if __name__ == "__main__":
     sync_configs()

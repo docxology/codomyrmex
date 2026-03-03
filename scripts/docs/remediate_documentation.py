@@ -7,8 +7,8 @@ Remediates documentation gaps:
 2. Generates missing RASP files (README, AGENTS, SPEC, PAI) with template content.
 """
 
-import argparse
 import os
+import argparse
 from pathlib import Path
 
 REQUIRED_DOCS = ["README.md", "AGENTS.md", "SPEC.md", "PAI.md"]
@@ -23,6 +23,7 @@ TEMPLATES = {
 **Status**: Active
 **,Last Updated**: February 2026
 """,
+
     "AGENTS.md": """# {name} Agents
 
 **Status**: Active
@@ -36,6 +37,7 @@ TEMPLATES = {
 
 - `__init__.py`: Module entry point
 """,
+
     "SPEC.md": """# {name} Specification
 
 **Status**: Active
@@ -50,6 +52,7 @@ TEMPLATES = {
 
 - Follows standard codomyrmex module structure.
 """,
+
     "PAI.md": """# {name} Personal AI Infrastructure
 
 **Status**: Active
@@ -58,9 +61,8 @@ TEMPLATES = {
 ## AI Capabilities
 
 - Provides context and tools for {name}
-""",
+"""
 }
-
 
 def get_docstring_summary(path: Path) -> str:
     init_file = path / "__init__.py"
@@ -71,19 +73,17 @@ def get_docstring_summary(path: Path) -> str:
             if '"""' in content:
                 parts = content.split('"""')
                 if len(parts) >= 3:
-                    return parts[1].strip().split("\n")[0]
+                    return parts[1].strip().split('\n')[0]
             if "'''" in content:
                 parts = content.split("'''")
                 if len(parts) >= 3:
-                    return parts[1].strip().split("\n")[0]
+                    return parts[1].strip().split('\n')[0]
         except Exception:
             pass
     return f"Module for {path.name}"
 
-
 def is_package(path: Path) -> bool:
     return path.is_dir() and (path / "__init__.py").exists()
-
 
 def remediate_module(path: Path, src_dir: Path):
     print(f"Checking {path.relative_to(src_dir)}")
@@ -105,32 +105,19 @@ def remediate_module(path: Path, src_dir: Path):
             content = template.format(name=name, docstring=summary)
             doc_path.write_text(content)
 
-
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
-
-    config_path = (
-        Path(__file__).resolve().parent.parent.parent
-        / "config"
-        / "docs"
-        / "config.yaml"
-    )
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "docs" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
+        with open(config_path, "r") as f:
             config_data = yaml.safe_load(f) or {}
-            print("Loaded config from config/docs/config.yaml")
+            print(f"Loaded config from config/docs/config.yaml")
 
     parser = argparse.ArgumentParser(description="Remediate documentation gaps.")
-    parser.add_argument(
-        "--root",
-        type=Path,
-        default=Path(__file__).parent.parent,
-        help="Project root directory",
-    )
+    parser.add_argument("--root", type=Path, default=Path(__file__).parent.parent, help="Project root directory")
     args = parser.parse_args()
 
     root_dir = args.root
@@ -145,7 +132,7 @@ def main():
         root_path = Path(root)
 
         # Skip hidden directories
-        if any(part.startswith(".") for part in root_path.relative_to(src_dir).parts):
+        if any(part.startswith('.') for part in root_path.relative_to(src_dir).parts):
             continue
 
         if is_package(root_path):
@@ -153,7 +140,6 @@ def main():
             count += 1
 
     print(f"\nRemediation complete. Processed {count} modules.")
-
 
 if __name__ == "__main__":
     main()

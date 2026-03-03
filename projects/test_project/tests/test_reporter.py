@@ -3,7 +3,7 @@
 import json
 from pathlib import Path
 
-from src.reporter import ReportConfig, ReportGenerator
+from src.reporter import ReportGenerator, ReportConfig
 
 
 class TestReportConfig:
@@ -75,9 +75,7 @@ class TestReportGenerator:
         assert data["metadata"]["title"] == "Test Report"
         assert "summary" in data
 
-    def test_generate_markdown(
-        self, output_directory: Path, sample_analysis_results: dict
-    ):
+    def test_generate_markdown(self, output_directory: Path, sample_analysis_results: dict):
         """Test Markdown report generation."""
         generator = ReportGenerator(output_dir=output_directory)
         config = ReportConfig(title="Test Report", format="markdown")
@@ -91,9 +89,7 @@ class TestReportGenerator:
         assert "# Test Report" in content
         assert "## " in content  # Has sections
 
-    def test_generate_all_formats(
-        self, output_directory: Path, sample_analysis_results: dict
-    ):
+    def test_generate_all_formats(self, output_directory: Path, sample_analysis_results: dict):
         """Test generating reports in all formats."""
         generator = ReportGenerator(output_dir=output_directory)
 
@@ -106,9 +102,7 @@ class TestReportGenerator:
         for fmt, path in paths.items():
             assert path.exists()
 
-    def test_report_includes_summary(
-        self, output_directory: Path, sample_analysis_results: dict
-    ):
+    def test_report_includes_summary(self, output_directory: Path, sample_analysis_results: dict):
         """Test that reports include summary data."""
         generator = ReportGenerator(output_dir=output_directory)
 

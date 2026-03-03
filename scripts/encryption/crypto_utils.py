@@ -16,9 +16,9 @@ except ImportError:
     sys.path.insert(0, str(project_root / "src"))
 
 import argparse
-import base64
 import hashlib
 import secrets
+import base64
 
 
 def generate_key(length: int = 32, encoding: str = "hex") -> str:
@@ -79,54 +79,35 @@ def decode_base64(data: str) -> str:
 
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
-
-    config_path = (
-        Path(__file__).resolve().parent.parent.parent
-        / "config"
-        / "encryption"
-        / "config.yaml"
-    )
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "encryption" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
+        with open(config_path, "r") as f:
             config_data = yaml.safe_load(f) or {}
-            print("Loaded config from config/encryption/config.yaml")
+            print(f"Loaded config from config/encryption/config.yaml")
 
     parser = argparse.ArgumentParser(description="Cryptographic utilities")
     subparsers = parser.add_subparsers(dest="command", help="Command")
 
     # Generate key command
     gen_parser = subparsers.add_parser("generate-key", help="Generate secure key")
-    gen_parser.add_argument(
-        "--length", "-l", type=int, default=32, help="Key length in bytes"
-    )
-    gen_parser.add_argument(
-        "--encoding", "-e", choices=["hex", "base64"], default="hex"
-    )
+    gen_parser.add_argument("--length", "-l", type=int, default=32, help="Key length in bytes")
+    gen_parser.add_argument("--encoding", "-e", choices=["hex", "base64"], default="hex")
     gen_parser.add_argument("--count", "-n", type=int, default=1, help="Number of keys")
 
     # Hash command
     hash_parser = subparsers.add_parser("hash", help="Hash data or file")
     hash_parser.add_argument("input", help="Data to hash or file path with -f")
-    hash_parser.add_argument(
-        "--algorithm",
-        "-a",
-        default="sha256",
-        choices=["md5", "sha1", "sha256", "sha512", "blake2b"],
-    )
-    hash_parser.add_argument(
-        "--file", "-f", action="store_true", help="Input is a file"
-    )
+    hash_parser.add_argument("--algorithm", "-a", default="sha256",
+                            choices=["md5", "sha1", "sha256", "sha512", "blake2b"])
+    hash_parser.add_argument("--file", "-f", action="store_true", help="Input is a file")
 
     # Base64 command
     b64_parser = subparsers.add_parser("base64", help="Base64 encode/decode")
     b64_parser.add_argument("input", help="Data to encode/decode")
-    b64_parser.add_argument(
-        "--decode", "-d", action="store_true", help="Decode instead of encode"
-    )
+    b64_parser.add_argument("--decode", "-d", action="store_true", help="Decode instead of encode")
 
     args = parser.parse_args()
 
@@ -144,9 +125,7 @@ def main():
         return 0
 
     if args.command == "generate-key":
-        print(
-            f"🔑 Generating {args.count} key(s) ({args.length} bytes, {args.encoding}):\n"
-        )
+        print(f"🔑 Generating {args.count} key(s) ({args.length} bytes, {args.encoding}):\n")
         for i in range(args.count):
             key = generate_key(args.length, args.encoding)
             print(f"  {key}")

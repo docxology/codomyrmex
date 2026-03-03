@@ -16,8 +16,8 @@ except ImportError:
     sys.path.insert(0, str(project_root / "src"))
 
 import argparse
-import csv
 import json
+import csv
 
 
 def load_json(path: Path) -> any:
@@ -47,7 +47,6 @@ def save_csv(data: list, path: Path):
 def load_yaml(path: Path) -> any:
     try:
         import yaml
-
         with open(path) as f:
             return yaml.safe_load(f)
     except ImportError:
@@ -57,7 +56,6 @@ def load_yaml(path: Path) -> any:
 def save_yaml(data: any, path: Path):
     try:
         import yaml
-
         with open(path, "w") as f:
             yaml.dump(data, f, default_flow_style=False)
     except ImportError:
@@ -72,12 +70,8 @@ def main():
     parser = argparse.ArgumentParser(description="Convert data between formats")
     parser.add_argument("input", nargs="?", help="Input file")
     parser.add_argument("output", nargs="?", help="Output file")
-    parser.add_argument(
-        "--format", "-f", choices=["json", "csv", "yaml"], help="Output format"
-    )
-    parser.add_argument(
-        "--pretty", "-p", action="store_true", help="Pretty print output"
-    )
+    parser.add_argument("--format", "-f", choices=["json", "csv", "yaml"], help="Output format")
+    parser.add_argument("--pretty", "-p", action="store_true", help="Pretty print output")
     args = parser.parse_args()
 
     if not args.input:
@@ -102,9 +96,7 @@ def main():
 
     if args.output:
         output_path = Path(args.output)
-        output_ext = (
-            output_path.suffix.lower() if not args.format else f".{args.format}"
-        )
+        output_ext = output_path.suffix.lower() if not args.format else f".{args.format}"
     else:
         output_path = None
         output_ext = None

@@ -5,16 +5,14 @@ Checks if tools exposed via @mcp_tool in various modules are correctly
 discovered and registered by the MCP Bridge.
 """
 
-import logging
 import sys
-
-from codomyrmex.agents.pai.mcp_bridge import call_tool, get_tool_registry
+import logging
+from codomyrmex.agents.pai.mcp_bridge import get_tool_registry, call_tool
 
 # Configure logging to see discovery debug messages
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger("codomyrmex")
 logger.setLevel(logging.DEBUG)
-
 
 def verify():
     print("=== Dynamic MCP Discovery Verification ===\n")
@@ -29,40 +27,40 @@ def verify():
 
         # 2. Verify Specific Dynamic Tools
         expected = [
-            # Visualization
-            "codomyrmex.create_line_plot",
-            "codomyrmex.create_bar_chart",
-            "codomyrmex.create_pie_chart",
-            "codomyrmex.create_git_branch_diagram",
-            "codomyrmex.create_git_workflow_diagram",
-            "codomyrmex.create_repository_structure_diagram",
-            "codomyrmex.create_commit_timeline_diagram",
-            # Terminal
-            "codomyrmex.create_ascii_art",
-            # LLM
-            "codomyrmex.ask",
-            "codomyrmex.generate_report",
-            # Memory
-            "codomyrmex.add_memory",
-            "codomyrmex.search_memory",
-            # Security
-            "codomyrmex.scan_project_security",
-            "codomyrmex.security_audit_code",
-            # Git Operations
-            "codomyrmex.initialize_git_repository",
-            "codomyrmex.clone_repository",
-            "codomyrmex.create_branch",
-            "codomyrmex.commit_changes",
-            "codomyrmex.push_changes",
-            "codomyrmex.get_commit_history",
-            # Coding
-            "codomyrmex.execute_code",
-            # Analysis
-            "codomyrmex.analyze_file",
-            "codomyrmex.analyze_project",
-            # Documentation
-            "codomyrmex.generate_documentation",
-        ]
+        # Visualization
+        "codomyrmex.create_line_plot",
+        "codomyrmex.create_bar_chart",
+        "codomyrmex.create_pie_chart",
+        "codomyrmex.create_git_branch_diagram",
+        "codomyrmex.create_git_workflow_diagram",
+        "codomyrmex.create_repository_structure_diagram",
+        "codomyrmex.create_commit_timeline_diagram",
+        # Terminal
+        "codomyrmex.create_ascii_art",
+        # LLM
+        "codomyrmex.ask",
+        "codomyrmex.generate_report",
+        # Memory
+        "codomyrmex.add_memory",
+        "codomyrmex.search_memory",
+        # Security
+        "codomyrmex.scan_project_security",
+        "codomyrmex.security_audit_code",
+        # Git Operations
+        "codomyrmex.initialize_git_repository",
+        "codomyrmex.clone_repository",
+        "codomyrmex.create_branch",
+        "codomyrmex.commit_changes",
+        "codomyrmex.push_changes",
+        "codomyrmex.get_commit_history",
+        # Coding
+        "codomyrmex.execute_code",
+        # Analysis
+        "codomyrmex.analyze_file",
+        "codomyrmex.analyze_project",
+        # Documentation
+        "codomyrmex.generate_documentation",
+    ]
 
         missing = []
         for name in expected:
@@ -88,34 +86,26 @@ def verify():
         print(f"Result (Expected Error): {result}")
 
         if "OPENROUTER_API_KEY" in str(result) or "Error" in str(result):
-            print("✅ Invocation reached function body.")
+             print("✅ Invocation reached function body.")
         else:
-            print("❌ Invocation failed to return expected error.")
+             print("❌ Invocation failed to return expected error.")
 
     except Exception as e:
         print(f"ERROR: {e}")
         import traceback
-
         traceback.print_exc()
         sys.exit(1)
 
+
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
-
-    config_path = (
-        Path(__file__).resolve().parent.parent.parent
-        / "config"
-        / "model_context_protocol"
-        / "config.yaml"
-    )
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "model_context_protocol" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
+        with open(config_path, "r") as f:
             config_data = yaml.safe_load(f) or {}
-            print("Loaded config from config/model_context_protocol/config.yaml")
-
+            print(f"Loaded config from config/model_context_protocol/config.yaml")
 
 if __name__ == "__main__":
     verify()

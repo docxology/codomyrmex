@@ -30,7 +30,6 @@ def check_hardware_interfaces() -> dict:
     # Check for serial ports
     try:
         import glob
-
         ports = glob.glob("/dev/tty.*") + glob.glob("/dev/cu.*")
         interfaces["serial"]["available"] = len(ports) > 0
         interfaces["serial"]["ports"] = ports[:5]
@@ -40,10 +39,7 @@ def check_hardware_interfaces() -> dict:
     # Check for USB
     try:
         import subprocess
-
-        result = subprocess.run(
-            ["system_profiler", "SPUSBDataType"], capture_output=True, text=True
-        )
+        result = subprocess.run(["system_profiler", "SPUSBDataType"], capture_output=True, text=True)
         interfaces["usb"]["available"] = "USB" in result.stdout
     except:
         pass
@@ -69,21 +65,14 @@ def simulate_sensor(sensor_type: str, samples: int = 5) -> list:
 
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
-
-    config_path = (
-        Path(__file__).resolve().parent.parent.parent
-        / "config"
-        / "embodiment"
-        / "config.yaml"
-    )
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "embodiment" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
+        with open(config_path, "r") as f:
             config_data = yaml.safe_load(f) or {}
-            print("Loaded config from config/embodiment/config.yaml")
+            print(f"Loaded config from config/embodiment/config.yaml")
 
     parser = argparse.ArgumentParser(description="Embodiment utilities")
     subparsers = parser.add_subparsers(dest="command")
@@ -93,9 +82,7 @@ def main():
 
     # Simulate command
     sim = subparsers.add_parser("simulate", help="Simulate sensor")
-    sim.add_argument(
-        "sensor", choices=["temperature", "humidity", "distance", "light", "pressure"]
-    )
+    sim.add_argument("sensor", choices=["temperature", "humidity", "distance", "light", "pressure"])
     sim.add_argument("--samples", "-n", type=int, default=5)
 
     args = parser.parse_args()
@@ -120,19 +107,13 @@ def main():
 
     elif args.command == "simulate":
         readings = simulate_sensor(args.sensor, args.samples)
-        units = {
-            "temperature": "°C",
-            "humidity": "%",
-            "distance": "m",
-            "light": "lux",
-            "pressure": "hPa",
-        }
+        units = {"temperature": "°C", "humidity": "%", "distance": "m", "light": "lux", "pressure": "hPa"}
         unit = units.get(args.sensor, "")
 
         print(f"📊 Simulated {args.sensor.title()} readings:\n")
         for i, val in enumerate(readings, 1):
             print(f"   {i}. {val} {unit}")
-        print(f"\n   Avg: {sum(readings) / len(readings):.1f} {unit}")
+        print(f"\n   Avg: {sum(readings)/len(readings):.1f} {unit}")
 
     return 0
 

@@ -16,8 +16,8 @@ except ImportError:
     sys.path.insert(0, str(project_root / "src"))
 
 import argparse
-import ast
 import re
+import ast
 
 
 def search_regex(pattern: str, path: Path, file_extensions: list = None) -> list:
@@ -40,16 +40,14 @@ def search_regex(pattern: str, path: Path, file_extensions: list = None) -> list
             continue
 
         try:
-            with open(f, errors="ignore") as file:
+            with open(f, "r", errors="ignore") as file:
                 for i, line in enumerate(file, 1):
                     if compiled.search(line):
-                        matches.append(
-                            {
-                                "file": str(f),
-                                "line": i,
-                                "content": line.strip()[:100],
-                            }
-                        )
+                        matches.append({
+                            "file": str(f),
+                            "line": i,
+                            "content": line.strip()[:100],
+                        })
         except:
             pass
 
@@ -86,14 +84,12 @@ def search_ast_pattern(pattern_type: str, path: Path) -> list:
             for node in ast.walk(tree):
                 if isinstance(node, target_type):
                     name = getattr(node, "name", None) or str(type(node).__name__)
-                    matches.append(
-                        {
-                            "file": str(f),
-                            "line": node.lineno,
-                            "type": type(node).__name__,
-                            "name": name,
-                        }
-                    )
+                    matches.append({
+                        "file": str(f),
+                        "line": node.lineno,
+                        "type": type(node).__name__,
+                        "name": name,
+                    })
         except:
             pass
 
@@ -105,9 +101,7 @@ def main():
     parser.add_argument("pattern", nargs="?", help="Search pattern (regex or AST type)")
     parser.add_argument("path", nargs="?", default=".", help="Path to search")
     parser.add_argument("--type", "-t", choices=["regex", "ast"], default="regex")
-    parser.add_argument(
-        "--ext", "-e", action="append", help="File extensions (e.g., .py)"
-    )
+    parser.add_argument("--ext", "-e", action="append", help="File extensions (e.g., .py)")
     parser.add_argument("--count", "-c", action="store_true", help="Show count only")
     args = parser.parse_args()
 

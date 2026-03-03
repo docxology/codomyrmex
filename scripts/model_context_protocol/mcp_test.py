@@ -23,12 +23,11 @@ except ImportError:
 import argparse
 import asyncio
 
-from codomyrmex.model_context_protocol.testing import (
-    MockMCPClient,
-    ServerTester,
-)
-
 from codomyrmex.model_context_protocol import MCPServer
+from codomyrmex.model_context_protocol.testing import (
+    ServerTester,
+    MockMCPClient,
+)
 from codomyrmex.model_context_protocol.validators import (
     MessageValidator,
 )
@@ -109,12 +108,12 @@ async def run_tool_tests(server, tool_name: str) -> None:
     response = await client.call_tool(tool_name, test_args)
 
     if "result" in response:
-        print("  ✓ Call succeeded")
+        print(f"  ✓ Call succeeded")
         content = response["result"].get("content", [])
         if content:
             print(f"    Output: {content[0].get('text', '')[:100]}")
     else:
-        print("  ✗ Call failed")
+        print(f"  ✗ Call failed")
         if "error" in response:
             print(f"    Error: {response['error'].get('message')}")
 
@@ -166,9 +165,7 @@ async def run_validation_tests() -> None:
             print(f"  ✓ {case['name']}")
             passed += 1
         else:
-            print(
-                f"  ✗ {case['name']} (expected {'pass' if expected_pass else 'fail'})"
-            )
+            print(f"  ✗ {case['name']} (expected {'pass' if expected_pass else 'fail'})")
             if result.errors:
                 print(f"    Errors: {result.errors}")
 
@@ -186,21 +183,14 @@ async def run_all_tests() -> None:
 
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
-
-    config_path = (
-        Path(__file__).resolve().parent.parent.parent
-        / "config"
-        / "model_context_protocol"
-        / "config.yaml"
-    )
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "model_context_protocol" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
+        with open(config_path, "r") as f:
             config_data = yaml.safe_load(f) or {}
-            print("Loaded config from config/model_context_protocol/config.yaml")
+            print(f"Loaded config from config/model_context_protocol/config.yaml")
 
     parser = argparse.ArgumentParser(
         description="MCP Test Runner",
@@ -209,9 +199,7 @@ def main():
 
     parser.add_argument("--smoke", action="store_true", help="Run smoke tests only")
     parser.add_argument("--tool", "-t", help="Test specific tool")
-    parser.add_argument(
-        "--validation", action="store_true", help="Run validation tests"
-    )
+    parser.add_argument("--validation", action="store_true", help="Run validation tests")
 
     args = parser.parse_args()
 

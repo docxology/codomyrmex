@@ -18,32 +18,22 @@ except ImportError:
     project_root = Path(__file__).resolve().parent.parent.parent.parent
     sys.path.insert(0, str(project_root / "src"))
 
-from codomyrmex.config_management import Configuration, validate_configuration
-from codomyrmex.utils.cli_helpers import (
-    print_error,
-    print_info,
-    print_success,
-    setup_logging,
+from codomyrmex.utils.cli_helpers import setup_logging, print_success, print_info, print_error
+from codomyrmex.config_management import (
+    validate_configuration,
+    Configuration
 )
-
 
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
-
-    config_path = (
-        Path(__file__).resolve().parent.parent.parent
-        / "config"
-        / "config_management"
-        / "config.yaml"
-    )
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "config_management" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
+        with open(config_path, "r") as f:
             config_data = yaml.safe_load(f) or {}
-            print("Loaded config from config/config_management/config.yaml")
+            print(f"Loaded config from config/config_management/config.yaml")
 
     setup_logging()
     print_info("Running Configuration Management Examples...")
@@ -54,9 +44,7 @@ def main():
         # Load from a simple dict (simulating a file source)
         raw_config = {"app": {"name": "Example", "port": 8080}}
         config = Configuration(data=raw_config)
-        print_success(
-            f"  Configuration object created. App Name: {config.get('app.name')}"
-        )
+        print_success(f"  Configuration object created. App Name: {config.get('app.name')}")
     except Exception as e:
         print_error(f"  Config loading failed: {e}")
 
@@ -70,7 +58,6 @@ def main():
 
     print_success("Configuration management examples completed successfully")
     return 0
-
 
 if __name__ == "__main__":
     sys.exit(main())

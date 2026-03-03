@@ -16,8 +16,8 @@ except ImportError:
     sys.path.insert(0, str(project_root / "src"))
 
 import argparse
-import os
 import subprocess
+import os
 
 
 def find_deploy_configs() -> list:
@@ -45,9 +45,7 @@ def get_docker_compose_services() -> list:
     try:
         result = subprocess.run(
             ["docker", "compose", "config", "--services"],
-            capture_output=True,
-            text=True,
-            timeout=10,
+            capture_output=True, text=True, timeout=10
         )
         return result.stdout.strip().split("\n") if result.stdout else []
     except:
@@ -99,7 +97,7 @@ def main():
 
     if args.command == "status":
         env = check_deploy_env()
-        print("🚀 Deployment Status\n")
+        print(f"🚀 Deployment Status\n")
         print(f"   Environment: {env['env'].upper()}")
 
         services = get_docker_compose_services()

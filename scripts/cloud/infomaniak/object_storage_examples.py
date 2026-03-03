@@ -29,30 +29,25 @@ except ImportError:
 import argparse
 import logging
 
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s"
-)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger(__name__)
 
 
 def get_swift_client():
     """Get Swift client from environment."""
     from codomyrmex.cloud.infomaniak import InfomaniakObjectStorageClient
-
     return InfomaniakObjectStorageClient.from_env()
 
 
 def get_s3_client():
     """Get S3 client from environment."""
     from codomyrmex.cloud.infomaniak import InfomaniakS3Client
-
     return InfomaniakS3Client.from_env()
 
 
 # =========================================================================
 # Swift Operations
 # =========================================================================
-
 
 def swift_list_containers(client):
     """List Swift containers."""
@@ -113,7 +108,6 @@ def swift_create_container(client, name: str):
 # =========================================================================
 # S3 Operations
 # =========================================================================
-
 
 def s3_list_buckets(client):
     """List S3 buckets."""
@@ -217,21 +211,14 @@ def s3_delete(client, bucket: str, key: str):
 
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
-
-    config_path = (
-        Path(__file__).resolve().parent.parent.parent
-        / "config"
-        / "cloud"
-        / "config.yaml"
-    )
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "cloud" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
+        with open(config_path, "r") as f:
             config_data = yaml.safe_load(f) or {}
-            print("Loaded config from config/cloud/config.yaml")
+            print(f"Loaded config from config/cloud/config.yaml")
 
     parser = argparse.ArgumentParser(description="Infomaniak Object Storage Examples")
 
@@ -240,33 +227,21 @@ def main():
     parser.add_argument("--s3", action="store_true", help="Use S3 client")
 
     # List operations
-    parser.add_argument(
-        "--list-containers", action="store_true", help="List Swift containers"
-    )
+    parser.add_argument("--list-containers", action="store_true", help="List Swift containers")
     parser.add_argument("--list-buckets", action="store_true", help="List S3 buckets")
-    parser.add_argument(
-        "--list-objects", type=str, metavar="CONTAINER/BUCKET", help="List objects"
-    )
+    parser.add_argument("--list-objects", type=str, metavar="CONTAINER/BUCKET", help="List objects")
 
     # CRUD operations
     parser.add_argument("--upload", action="store_true", help="Upload file")
-    parser.add_argument(
-        "--upload-data", type=str, metavar="DATA", help="Upload raw data"
-    )
+    parser.add_argument("--upload-data", type=str, metavar="DATA", help="Upload raw data")
     parser.add_argument("--download", action="store_true", help="Download object")
     parser.add_argument("--delete", action="store_true", help="Delete object")
-    parser.add_argument(
-        "--create-container", type=str, metavar="NAME", help="Create container"
-    )
-    parser.add_argument(
-        "--create-bucket", type=str, metavar="NAME", help="Create bucket"
-    )
+    parser.add_argument("--create-container", type=str, metavar="NAME", help="Create container")
+    parser.add_argument("--create-bucket", type=str, metavar="NAME", help="Create bucket")
 
     # Other operations
     parser.add_argument("--metadata", action="store_true", help="Get object metadata")
-    parser.add_argument(
-        "--presigned-url", action="store_true", help="Generate presigned URL"
-    )
+    parser.add_argument("--presigned-url", action="store_true", help="Generate presigned URL")
 
     # Options
     parser.add_argument("--bucket", type=str, help="Bucket name")
@@ -276,9 +251,7 @@ def main():
     parser.add_argument("--output", type=str, help="Output file path")
     parser.add_argument("--prefix", type=str, help="Object prefix filter")
     parser.add_argument("--content-type", type=str, help="Content type")
-    parser.add_argument(
-        "--expires", type=int, default=3600, help="URL expiration seconds"
-    )
+    parser.add_argument("--expires", type=int, default=3600, help="URL expiration seconds")
 
     args = parser.parse_args()
 
@@ -330,9 +303,7 @@ def main():
         if not args.bucket or not args.key:
             print("❌ --upload-data requires --bucket and --key")
             return 1
-        s3_upload_data(
-            client, args.bucket, args.key, args.upload_data, args.content_type
-        )
+        s3_upload_data(client, args.bucket, args.key, args.upload_data, args.content_type)
     elif args.download:
         if not args.output:
             print("❌ --download requires --output")

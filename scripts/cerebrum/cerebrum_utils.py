@@ -25,7 +25,7 @@ def analyze_reasoning_chain(steps: list) -> dict:
         "total_steps": len(steps),
         "has_conclusion": False,
         "confidence_scores": [],
-        "missing_evidence": [],
+        "missing_evidence": []
     }
 
     for step in steps:
@@ -38,9 +38,7 @@ def analyze_reasoning_chain(steps: list) -> dict:
                 analysis["missing_evidence"].append(step.get("claim", "unnamed"))
 
     if analysis["confidence_scores"]:
-        analysis["avg_confidence"] = sum(analysis["confidence_scores"]) / len(
-            analysis["confidence_scores"]
-        )
+        analysis["avg_confidence"] = sum(analysis["confidence_scores"]) / len(analysis["confidence_scores"])
 
     return analysis
 
@@ -51,47 +49,29 @@ def create_reasoning_template() -> dict:
         "problem": "Define the problem here",
         "context": "Relevant context and constraints",
         "chain": [
-            {
-                "step": 1,
-                "type": "observation",
-                "claim": "What we observe",
-                "evidence": None,
-            },
-            {
-                "step": 2,
-                "type": "hypothesis",
-                "claim": "What we hypothesize",
-                "confidence": 0.7,
-            },
+            {"step": 1, "type": "observation", "claim": "What we observe", "evidence": None},
+            {"step": 2, "type": "hypothesis", "claim": "What we hypothesize", "confidence": 0.7},
             {"step": 3, "type": "test", "claim": "How to test", "result": None},
-            {
-                "step": 4,
-                "type": "conclusion",
-                "claim": "What we conclude",
-                "confidence": 0.0,
-            },
+            {"step": 4, "type": "conclusion", "claim": "What we conclude", "confidence": 0.0}
         ],
-        "meta": {"created": None, "author": None, "version": "1.0"},
+        "meta": {
+            "created": None,
+            "author": None,
+            "version": "1.0"
+        }
     }
 
 
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
-
-    config_path = (
-        Path(__file__).resolve().parent.parent.parent
-        / "config"
-        / "cerebrum"
-        / "config.yaml"
-    )
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "cerebrum" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
+        with open(config_path, "r") as f:
             config_data = yaml.safe_load(f) or {}
-            print("Loaded config from config/cerebrum/config.yaml")
+            print(f"Loaded config from config/cerebrum/config.yaml")
 
     parser = argparse.ArgumentParser(description="Cerebrum utilities")
     subparsers = parser.add_subparsers(dest="command")

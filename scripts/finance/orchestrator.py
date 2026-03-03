@@ -5,32 +5,20 @@ Demonstrates Ledger, Taxes, Payroll, and Forecasting.
 """
 
 from codomyrmex.finance import (
-    AccountType,
-    Forecaster,
-    Ledger,
-    PayrollProcessor,
-    TaxCalculator,
+    Ledger, AccountType, TaxCalculator, PayrollProcessor, Forecaster
 )
 from codomyrmex.finance.visualization import balance_sheet_text, income_statement_text
 
-
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
-
-    config_path = (
-        Path(__file__).resolve().parent.parent.parent
-        / "config"
-        / "finance"
-        / "config.yaml"
-    )
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "finance" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
+        with open(config_path, "r") as f:
             config_data = yaml.safe_load(f) or {}
-            print("Loaded config from config/finance/config.yaml")
+            print(f"Loaded config from config/finance/config.yaml")
 
     print("--- Codomyrmex Finance Orchestrator ---")
 
@@ -83,9 +71,7 @@ def main():
     # Net income so far: 50000 - 8000 = 42000
     # Annualize it roughly: 42000 * 12 = 504000
     tax_result = tax_calc.calculate_tax(42000.0 * 12)
-    print(
-        f"Annual tax estimate on $504k: ${tax_result.total_tax:,.2f} (Effective: {tax_result.effective_rate * 100:.1f}%)"
-    )
+    print(f"Annual tax estimate on $504k: ${tax_result.total_tax:,.2f} (Effective: {tax_result.effective_rate*100:.1f}%)")
 
     # Record estimated tax for the month
     tax_due = float(tax_result.total_tax / 12)
@@ -113,7 +99,7 @@ def main():
         "positions": [
             {"symbol": "VOO", "quantity": 100, "cost_basis": 400, "current_price": 500},
             {"symbol": "MSFT", "quantity": 50, "cost_basis": 300, "current_price": 420},
-        ],
+        ]
     }
     risk = forecaster.risk_metrics(portfolio)
     print(f"\nPortfolio Value: ${risk['total_value']:,.2f}")
@@ -132,7 +118,6 @@ def main():
 
     income = ledger.get_income_statement()
     print(f"Net Income: ${income['net_income']:,.2f}")
-
 
 if __name__ == "__main__":
     main()

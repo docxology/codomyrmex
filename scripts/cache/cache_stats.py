@@ -75,27 +75,18 @@ def format_size(size_bytes: int) -> str:
 
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
-
-    config_path = (
-        Path(__file__).resolve().parent.parent.parent
-        / "config"
-        / "cache"
-        / "config.yaml"
-    )
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "cache" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
+        with open(config_path, "r") as f:
             config_data = yaml.safe_load(f) or {}
-            print("Loaded config from config/cache/config.yaml")
+            print(f"Loaded config from config/cache/config.yaml")
 
     parser = argparse.ArgumentParser(description="Display cache statistics")
     parser.add_argument("--path", "-p", default=None, help="Cache directory path")
-    parser.add_argument(
-        "--verbose", "-v", action="store_true", help="Show detailed breakdown"
-    )
+    parser.add_argument("--verbose", "-v", action="store_true", help="Show detailed breakdown")
     parser.add_argument("--json", "-j", action="store_true", help="Output as JSON")
     args = parser.parse_args()
 
@@ -106,9 +97,7 @@ def main():
 
     if not cache_dirs:
         print("📦 No cache directories found")
-        print(
-            "   Searched: ~/.cache/codomyrmex, ~/.codomyrmex/cache, .codomyrmex/cache"
-        )
+        print("   Searched: ~/.cache/codomyrmex, ~/.codomyrmex/cache, .codomyrmex/cache")
         return 0
 
     all_stats = []
@@ -131,9 +120,7 @@ def main():
 
         if args.verbose and stats["by_type"]:
             print("   By type:")
-            for ext, data in sorted(
-                stats["by_type"].items(), key=lambda x: -x[1]["size"]
-            ):
+            for ext, data in sorted(stats["by_type"].items(), key=lambda x: -x[1]["size"]):
                 print(f"     {ext}: {data['count']} files, {format_size(data['size'])}")
         print()
 

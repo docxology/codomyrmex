@@ -17,15 +17,19 @@ except ImportError:
     sys.path.insert(0, str(project_root / "src"))
 
 import argparse
-import os
 import subprocess
+import os
 
 
 def run_git(args: list, cwd: str = ".") -> tuple:
     """Run a git command and return (success, output)."""
     try:
         result = subprocess.run(
-            ["git"] + args, cwd=cwd, capture_output=True, text=True, timeout=30
+            ["git"] + args,
+            cwd=cwd,
+            capture_output=True,
+            text=True,
+            timeout=30
         )
         return result.returncode == 0, result.stdout.strip()
     except Exception as e:
@@ -45,9 +49,7 @@ def get_branch_info(path: str) -> dict:
         info["local_branches"] = [b for b in branches if not b.startswith("remotes/")]
         info["remote_branches"] = [b for b in branches if b.startswith("remotes/")]
 
-    success, ahead_behind = run_git(
-        ["rev-list", "--left-right", "--count", "HEAD...@{upstream}"], path
-    )
+    success, ahead_behind = run_git(["rev-list", "--left-right", "--count", "HEAD...@{upstream}"], path)
     if success:
         parts = ahead_behind.split()
         if len(parts) == 2:
@@ -84,7 +86,8 @@ def get_status_info(path: str) -> dict:
 def get_recent_commits(path: str, count: int = 5) -> list:
     """Get recent commit history."""
     success, output = run_git(
-        ["log", f"-{count}", "--oneline", "--pretty=format:%h|%s|%ar"], path
+        ["log", f"-{count}", "--oneline", "--pretty=format:%h|%s|%ar"],
+        path
     )
     if not success:
         return []
@@ -93,9 +96,11 @@ def get_recent_commits(path: str, count: int = 5) -> list:
     for line in output.split("\n"):
         parts = line.split("|")
         if len(parts) >= 3:
-            commits.append(
-                {"hash": parts[0], "message": parts[1][:50], "time": parts[2]}
-            )
+            commits.append({
+                "hash": parts[0],
+                "message": parts[1][:50],
+                "time": parts[2]
+            })
     return commits
 
 
@@ -109,29 +114,18 @@ def get_stash_info(path: str) -> list:
 
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
-
-    config_path = (
-        Path(__file__).resolve().parent.parent.parent
-        / "config"
-        / "git_operations"
-        / "config.yaml"
-    )
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "git_operations" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
+        with open(config_path, "r") as f:
             config_data = yaml.safe_load(f) or {}
-            print("Loaded config from config/git_operations/config.yaml")
+            print(f"Loaded config from config/git_operations/config.yaml")
 
     parser = argparse.ArgumentParser(description="Display Git repository status")
-    parser.add_argument(
-        "--path", "-p", default=".", help="Repository path (default: current directory)"
-    )
-    parser.add_argument(
-        "--verbose", "-v", action="store_true", help="Show detailed information"
-    )
+    parser.add_argument("--path", "-p", default=".", help="Repository path (default: current directory)")
+    parser.add_argument("--verbose", "-v", action="store_true", help="Show detailed information")
     args = parser.parse_args()
 
     path = os.path.abspath(args.path)
@@ -166,12 +160,7 @@ def main():
 
     # Status
     status = get_status_info(path)
-    total_changes = (
-        len(status["staged"])
-        + len(status["modified"])
-        + len(status["untracked"])
-        + len(status["deleted"])
-    )
+    total_changes = len(status["staged"]) + len(status["modified"]) + len(status["untracked"]) + len(status["deleted"])
 
     if total_changes == 0:
         print("✅ Working tree clean")

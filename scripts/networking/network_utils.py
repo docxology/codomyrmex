@@ -17,9 +17,9 @@ except ImportError:
 
 import argparse
 import socket
-import time
-import urllib.error
 import urllib.request
+import urllib.error
+import time
 
 
 def check_port(host: str, port: int, timeout: float = 2) -> bool:
@@ -60,7 +60,7 @@ def check_dns(hostname: str) -> dict:
             "hostname": hostname,
             "ips": ips[2],
             "aliases": ips[1],
-            "time_ms": int(elapsed * 1000),
+            "time_ms": int(elapsed * 1000)
         }
     except socket.gaierror as e:
         return {"hostname": hostname, "error": str(e)}
@@ -70,16 +70,14 @@ def check_http(url: str, timeout: float = 10) -> dict:
     """Check HTTP endpoint."""
     try:
         start = time.time()
-        req = urllib.request.Request(
-            url, headers={"User-Agent": "codomyrmex-network-check/1.0"}
-        )
+        req = urllib.request.Request(url, headers={"User-Agent": "codomyrmex-network-check/1.0"})
         with urllib.request.urlopen(req, timeout=timeout) as response:
             elapsed = time.time() - start
             return {
                 "url": url,
                 "status": response.status,
                 "time_ms": int(elapsed * 1000),
-                "headers": dict(response.headers),
+                "headers": dict(response.headers)
             }
     except urllib.error.HTTPError as e:
         return {"url": url, "status": e.code, "error": str(e.reason)}
@@ -89,21 +87,14 @@ def check_http(url: str, timeout: float = 10) -> dict:
 
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
-
-    config_path = (
-        Path(__file__).resolve().parent.parent.parent
-        / "config"
-        / "networking"
-        / "config.yaml"
-    )
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "networking" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
+        with open(config_path, "r") as f:
             config_data = yaml.safe_load(f) or {}
-            print("Loaded config from config/networking/config.yaml")
+            print(f"Loaded config from config/networking/config.yaml")
 
     parser = argparse.ArgumentParser(description="Network utilities")
     subparsers = parser.add_subparsers(dest="command")

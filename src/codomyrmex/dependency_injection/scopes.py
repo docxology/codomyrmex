@@ -91,6 +91,7 @@ class ScopeContext:
     """
 
     def __init__(self, container: Container) -> None:
+        """Initialize ScopeContext with the given container."""
         self._container = container
         self._instances: dict[Any, Any] = {}
         self._lock = threading.Lock()

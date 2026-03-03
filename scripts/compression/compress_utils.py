@@ -17,8 +17,8 @@ except ImportError:
 
 import argparse
 import gzip
-import tarfile
 import zipfile
+import tarfile
 
 
 def format_size(size: int) -> str:
@@ -44,15 +44,13 @@ def compress_gzip(input_path: Path, output_path: Path = None) -> dict:
         "output": str(output),
         "original_size": original,
         "compressed_size": compressed,
-        "ratio": compressed / original if original > 0 else 0,
+        "ratio": compressed / original if original > 0 else 0
     }
 
 
 def decompress_gzip(input_path: Path, output_path: Path = None) -> dict:
     """Decompress gzip file."""
-    output = output_path or input_path.with_suffix("").with_suffix(
-        input_path.stem.split(".")[-1] if "." in input_path.stem else ""
-    )
+    output = output_path or input_path.with_suffix("").with_suffix(input_path.stem.split(".")[-1] if "." in input_path.stem else "")
     if str(output) == str(input_path):
         output = input_path.with_suffix(".decompressed")
 
@@ -90,21 +88,14 @@ def analyze_archive(path: Path) -> dict:
 
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
-
-    config_path = (
-        Path(__file__).resolve().parent.parent.parent
-        / "config"
-        / "compression"
-        / "config.yaml"
-    )
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "compression" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
+        with open(config_path, "r") as f:
             config_data = yaml.safe_load(f) or {}
-            print("Loaded config from config/compression/config.yaml")
+            print(f"Loaded config from config/compression/config.yaml")
 
     parser = argparse.ArgumentParser(description="Compression utilities")
     subparsers = parser.add_subparsers(dest="command")
