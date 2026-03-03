@@ -1,7 +1,11 @@
 import pytest
-from codomyrmex.cloud.mcp_tools import list_cloud_instances, list_s3_buckets, upload_file_to_s3
-from codomyrmex.cloud.infomaniak.compute.client import InfomaniakComputeClient
-from codomyrmex.cloud.infomaniak.object_storage.client import InfomaniakS3Client
+
+from codomyrmex.cloud.mcp_tools import (
+    list_cloud_instances,
+    list_s3_buckets,
+    upload_file_to_s3,
+)
+
 
 @pytest.mark.unit
 def test_list_cloud_instances_error(monkeypatch):
