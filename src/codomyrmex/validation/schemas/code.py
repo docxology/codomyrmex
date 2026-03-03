@@ -11,6 +11,7 @@ from typing import Any
 
 class CodeEntityType(Enum):
     """Type of code entity."""
+
     FILE = "file"
     CLASS = "class"
     FUNCTION = "function"
@@ -23,6 +24,7 @@ class CodeEntityType(Enum):
 
 class AnalysisSeverity(Enum):
     """Severity level for analysis findings."""
+
     INFO = "info"
     LOW = "low"
     MEDIUM = "medium"
@@ -32,6 +34,7 @@ class AnalysisSeverity(Enum):
 
 class SecuritySeverity(Enum):
     """Severity level for security findings."""
+
     LOW = "low"
     MEDIUM = "medium"
     HIGH = "high"
@@ -40,6 +43,7 @@ class SecuritySeverity(Enum):
 
 class TestStatus(Enum):
     """Status of a test execution."""
+
     PASSED = "passed"
     FAILED = "failed"
     SKIPPED = "skipped"
@@ -54,6 +58,7 @@ class CodeEntity:
 
     Used by static_analysis, pattern_matching, and coding modules.
     """
+
     name: str
     entity_type: CodeEntityType
     file_path: str = ""
@@ -83,6 +88,7 @@ class AnalysisResult:
 
     Used by static_analysis, coding, and security modules.
     """
+
     analyzer: str
     target: str
     severity: AnalysisSeverity = AnalysisSeverity.INFO
@@ -117,6 +123,7 @@ class SecurityFinding:
 
     Used by security, static_analysis modules.
     """
+
     title: str
     severity: SecuritySeverity
     description: str = ""
@@ -149,6 +156,7 @@ class TestResult:
 
     Used by testing, workflow_testing modules.
     """
+
     test_name: str
     status: TestStatus
     duration_ms: float = 0.0

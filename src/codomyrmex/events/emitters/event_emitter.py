@@ -12,9 +12,11 @@ from typing import Any
 # Import logging
 try:
     from codomyrmex.logging_monitoring.core.logger_config import get_logger
+
     logger = get_logger(__name__)
 except ImportError:
     import logging
+
     logger = logging.getLogger(__name__)
 
 from codomyrmex.events.core.event_bus import EventBus, get_event_bus
@@ -45,9 +47,14 @@ class EventEmitter:
 
         logger.debug(f"EventEmitter initialized for source: {source}")
 
-    def emit(self, event_type: EventType, data: dict[str, Any] | None = None,
-             correlation_id: str | None = None, metadata: dict[str, Any] | None = None,
-             priority: int = 0) -> None:
+    def emit(
+        self,
+        event_type: EventType,
+        data: dict[str, Any] | None = None,
+        correlation_id: str | None = None,
+        metadata: dict[str, Any] | None = None,
+        priority: int = 0,
+    ) -> None:
         """
         Emit a single event.
 
@@ -66,7 +73,7 @@ class EventEmitter:
             data=data or {},
             correlation_id=correlation_id,
             metadata=metadata,
-            priority=priority
+            priority=priority,
         )
 
         try:
@@ -75,9 +82,14 @@ class EventEmitter:
         except (RuntimeError, AttributeError) as e:
             logger.error(f"Failed to emit event {event_type.value}: {e}")
 
-    def emit_sync(self, event_type: EventType, data: dict[str, Any] | None = None,
-                 correlation_id: str | None = None, metadata: dict[str, Any] | None = None,
-                 priority: int = 0) -> None:
+    def emit_sync(
+        self,
+        event_type: EventType,
+        data: dict[str, Any] | None = None,
+        correlation_id: str | None = None,
+        metadata: dict[str, Any] | None = None,
+        priority: int = 0,
+    ) -> None:
         """
         Emit a single event synchronously.
 
@@ -90,9 +102,14 @@ class EventEmitter:
         """
         self.emit(event_type, data, correlation_id, metadata, priority)
 
-    async def emit_async(self, event_type: EventType, data: dict[str, Any] | None = None,
-                        correlation_id: str | None = None, metadata: dict[str, Any] | None = None,
-                        priority: int = 0) -> None:
+    async def emit_async(
+        self,
+        event_type: EventType,
+        data: dict[str, Any] | None = None,
+        correlation_id: str | None = None,
+        metadata: dict[str, Any] | None = None,
+        priority: int = 0,
+    ) -> None:
         """
         Emit a single event asynchronously.
 
@@ -111,7 +128,7 @@ class EventEmitter:
             data=data or {},
             correlation_id=correlation_id,
             metadata=metadata,
-            priority=priority
+            priority=priority,
         )
 
         try:
@@ -136,7 +153,7 @@ class EventEmitter:
                 data=event_data.get("data"),
                 correlation_id=event_data.get("correlation_id"),
                 metadata=event_data.get("metadata"),
-                priority=event_data.get("priority", 0)
+                priority=event_data.get("priority", 0),
             )
 
     async def emit_batch_async(self, events: list[dict[str, Any]]) -> None:
@@ -156,7 +173,7 @@ class EventEmitter:
                 data=event_data.get("data", {}),
                 correlation_id=event_data.get("correlation_id"),
                 metadata=event_data.get("metadata"),
-                priority=event_data.get("priority", 0)
+                priority=event_data.get("priority", 0),
             )
 
             tasks.append(self.event_bus.publish_async(event))
@@ -168,7 +185,9 @@ class EventEmitter:
             except (RuntimeError, AttributeError) as e:
                 logger.error(f"Failed to emit batch events: {e}")
 
-    def start_operation(self, operation_name: str, operation_data: dict[str, Any] | None = None) -> str:
+    def start_operation(
+        self, operation_name: str, operation_data: dict[str, Any] | None = None
+    ) -> str:
         """
         Start an operation and emit a start event.
 
@@ -187,17 +206,22 @@ class EventEmitter:
             data={
                 "operation": operation_name,
                 "phase": "start",
-                "operation_data": operation_data or {}
+                "operation_data": operation_data or {},
             },
             correlation_id=correlation_id,
-            metadata={"operation_type": "start"}
+            metadata={"operation_type": "start"},
         )
 
         return correlation_id
 
-    def update_operation(self, correlation_id: str, operation_name: str,
-                        progress: float | None = None, status: str | None = None,
-                        data: dict[str, Any] | None = None) -> None:
+    def update_operation(
+        self,
+        correlation_id: str,
+        operation_name: str,
+        progress: float | None = None,
+        status: str | None = None,
+        data: dict[str, Any] | None = None,
+    ) -> None:
         """
         Update operation progress.
 
@@ -211,7 +235,7 @@ class EventEmitter:
         event_data = {
             "operation": operation_name,
             "phase": "progress",
-            "correlation_id": correlation_id
+            "correlation_id": correlation_id,
         }
 
         if progress is not None:
@@ -225,12 +249,17 @@ class EventEmitter:
             EventType.CUSTOM,
             data=event_data,
             correlation_id=correlation_id,
-            metadata={"operation_type": "progress"}
+            metadata={"operation_type": "progress"},
         )
 
-    def end_operation(self, correlation_id: str, operation_name: str,
-                     success: bool = True, result: Any | None = None,
-                     error: str | None = None) -> None:
+    def end_operation(
+        self,
+        correlation_id: str,
+        operation_name: str,
+        success: bool = True,
+        result: Any | None = None,
+        error: str | None = None,
+    ) -> None:
         """
         End an operation and emit a completion event.
 
@@ -241,11 +270,7 @@ class EventEmitter:
             result: Operation result
             error: Error message if failed
         """
-        event_data = {
-            "operation": operation_name,
-            "phase": "end",
-            "success": success
-        }
+        event_data = {"operation": operation_name, "phase": "end", "success": success}
 
         if result is not None:
             event_data["result"] = result
@@ -257,14 +282,18 @@ class EventEmitter:
             data=event_data,
             correlation_id=correlation_id,
             metadata={"operation_type": "end", "success": success},
-            priority=2 if not success else 0  # High priority for failures
+            priority=2 if not success else 0,  # High priority for failures
         )
 
         self.clear_correlation_context()
 
-    def emit_error(self, error_type: str, error_message: str,
-                  context: dict[str, Any] | None = None,
-                  correlation_id: str | None = None) -> None:
+    def emit_error(
+        self,
+        error_type: str,
+        error_message: str,
+        context: dict[str, Any] | None = None,
+        correlation_id: str | None = None,
+    ) -> None:
         """
         Emit an error event.
 
@@ -279,14 +308,19 @@ class EventEmitter:
             data={
                 "error_type": error_type,
                 "error_message": error_message,
-                "context": context or {}
+                "context": context or {},
             },
             correlation_id=correlation_id,
-            priority=2  # High priority for errors
+            priority=2,  # High priority for errors
         )
 
-    def emit_metric(self, metric_name: str, value: int | float | str | bool,
-                   metric_type: str = "gauge", labels: dict[str, str] | None = None) -> None:
+    def emit_metric(
+        self,
+        metric_name: str,
+        value: int | float | str | bool,
+        metric_type: str = "gauge",
+        labels: dict[str, str] | None = None,
+    ) -> None:
         """
         Emit a metric event.
 
@@ -302,12 +336,18 @@ class EventEmitter:
                 "metric_name": metric_name,
                 "metric_value": value,
                 "metric_type": metric_type,
-                "labels": labels or {}
-            }
+                "labels": labels or {},
+            },
         )
 
-    def emit_alert(self, alert_name: str, level: str, message: str,
-                  threshold: Any | None = None, current_value: Any | None = None) -> None:
+    def emit_alert(
+        self,
+        alert_name: str,
+        level: str,
+        message: str,
+        threshold: Any | None = None,
+        current_value: Any | None = None,
+    ) -> None:
         """
         Emit an alert event.
 
@@ -327,9 +367,9 @@ class EventEmitter:
                 "alert_level": level,
                 "message": message,
                 "threshold": threshold,
-                "current_value": current_value
+                "current_value": current_value,
             },
-            priority=priority_map.get(level, 0)
+            priority=priority_map.get(level, 0),
         )
 
     def set_correlation_context(self, correlation_id: str) -> None:
@@ -362,9 +402,14 @@ class EventEmitter:
         """Disable event emission."""
         self.enabled = False
 
-    def _create_event(self, event_type: EventType, data: dict[str, Any],
-                     correlation_id: str | None, metadata: dict[str, Any] | None,
-                     priority: int) -> Event:
+    def _create_event(
+        self,
+        event_type: EventType,
+        data: dict[str, Any],
+        correlation_id: str | None,
+        metadata: dict[str, Any] | None,
+        priority: int,
+    ) -> Event:
         """Create an event with default values."""
         # Merge default metadata
         final_metadata = self.default_metadata.copy()
@@ -377,7 +422,7 @@ class EventEmitter:
             correlation_id=correlation_id or self.default_correlation_id,
             data=data,
             metadata=final_metadata,
-            priority=priority
+            priority=priority,
         )
 
     def _generate_correlation_id(self) -> str:
@@ -391,8 +436,12 @@ class EventOperationContext:
     Context manager for tracking operations with automatic event emission.
     """
 
-    def __init__(self, emitter: EventEmitter, operation_name: str,
-                 operation_data: dict[str, Any] | None = None):
+    def __init__(
+        self,
+        emitter: EventEmitter,
+        operation_name: str,
+        operation_data: dict[str, Any] | None = None,
+    ):
         """
         Initialize the operation context.
 
@@ -411,14 +460,18 @@ class EventOperationContext:
         """Enter the context manager."""
 
         import time
+
         self.start_time = time.time()
-        self.correlation_id = self.emitter.start_operation(self.operation_name, self.operation_data)
+        self.correlation_id = self.emitter.start_operation(
+            self.operation_name, self.operation_data
+        )
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         """Exit the context manager and clean up."""
 
         import time
+
         end_time = time.time()
         duration = end_time - (self.start_time or end_time)
 
@@ -428,7 +481,7 @@ class EventOperationContext:
                 self.correlation_id,
                 self.operation_name,
                 success=True,
-                result={"duration": duration}
+                result={"duration": duration},
             )
         else:
             # Failure
@@ -438,7 +491,7 @@ class EventOperationContext:
                 self.operation_name,
                 success=False,
                 error=error_msg,
-                result={"duration": duration}
+                result={"duration": duration},
             )
 
 
@@ -456,7 +509,9 @@ def create_emitter(source: str) -> EventEmitter:
     return EventEmitter(source)
 
 
-def emit_event(event_type: EventType, source: str, data: dict[str, Any] | None = None, **kwargs) -> None:
+def emit_event(
+    event_type: EventType, source: str, data: dict[str, Any] | None = None, **kwargs
+) -> None:
     """
     Convenience function to emit a single event.
 

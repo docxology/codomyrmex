@@ -53,8 +53,7 @@ def get_provider(
     provider_class = providers.get(provider_name.lower())
     if provider_class is None:
         raise ValueError(
-            f"Unknown provider: {provider_name}. "
-            f"Available providers: pyttsx3, edge-tts"
+            f"Unknown provider: {provider_name}. Available providers: pyttsx3, edge-tts"
         )
 
     return provider_class(**kwargs)

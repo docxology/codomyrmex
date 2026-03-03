@@ -467,7 +467,10 @@ class TestAuthTokenEdgeCases:
         """Token with expires_at at current time is expired."""
         now = time.time()
         tok = AuthToken(
-            token="t", user_id="u", issued_at=now, expires_at=now,
+            token="t",
+            user_id="u",
+            issued_at=now,
+            expires_at=now,
         )
         # At the exact boundary, is_expired depends on strict comparison
         # The token should be expired or at the boundary
@@ -477,8 +480,10 @@ class TestAuthTokenEdgeCases:
         """All token fields are accessible."""
         now = time.time()
         tok = AuthToken(
-            token="abc123", user_id="user42",
-            issued_at=now, expires_at=now + 100,
+            token="abc123",
+            user_id="user42",
+            issued_at=now,
+            expires_at=now + 100,
             scopes=["read", "write"],
         )
         assert tok.token == "abc123"

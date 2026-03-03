@@ -109,7 +109,9 @@ class FeatureService:
             try:
                 self.store.set_value(name, entity_id, value)
             except FeatureStoreError as e:
-                logger.error(f"Error ingesting feature '{name}' for entity '{entity_id}': {e}")
+                logger.error(
+                    f"Error ingesting feature '{name}' for entity '{entity_id}': {e}"
+                )
                 raise
 
     def ingest_batch(
@@ -127,7 +129,9 @@ class FeatureService:
                     self.ingest(features, entity_id)
                     count += 1
                 except FeatureStoreError as e:
-                    logger.warning(f"Skipping record for entity '{entity_id}' due to error: {e}")
+                    logger.warning(
+                        f"Skipping record for entity '{entity_id}' due to error: {e}"
+                    )
             else:
                 logger.warning(f"Skipping record: missing '{entity_id_field}' field")
         return count

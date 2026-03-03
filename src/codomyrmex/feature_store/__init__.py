@@ -39,6 +39,7 @@ except ImportError:
 
 def cli_commands():
     """Return CLI commands for the feature_store module."""
+
     def _list_features():
         print(
             "Feature Store\n"

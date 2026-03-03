@@ -105,7 +105,7 @@ class TestSpecializedErrors:
             "Command failed",
             exit_code=1,
             stdout="Output message",
-            stderr="Error message"
+            stderr="Error message",
         )
 
         assert error.context["exit_code"] == 1
@@ -121,7 +121,9 @@ class TestSpecializedErrors:
 
     def test_container_error_context(self):
         """Test ContainerError context."""
-        error = ContainerError("Container failed", container_id="cont-1", image_name="ubuntu")
+        error = ContainerError(
+            "Container failed", container_id="cont-1", image_name="ubuntu"
+        )
         assert error.context["container_id"] == "cont-1"
         assert error.context["image_name"] == "ubuntu"
 
@@ -133,13 +135,17 @@ class TestSpecializedErrors:
 
     def test_synthesis_error_context(self):
         """Test SynthesisError context."""
-        error = SynthesisError("Synthesis failed", component="parser", synthesis_mode="fast")
+        error = SynthesisError(
+            "Synthesis failed", component="parser", synthesis_mode="fast"
+        )
         assert error.context["component"] == "parser"
         assert error.context["synthesis_mode"] == "fast"
 
     def test_code_generation_error_context(self):
         """Test CodeGenerationError context."""
-        error = CodeGenerationError("Gen failed", language="python", prompt_preview="hello")
+        error = CodeGenerationError(
+            "Gen failed", language="python", prompt_preview="hello"
+        )
         assert error.context["language"] == "python"
         assert error.context["prompt_preview"] == "hello"
 
@@ -151,7 +157,9 @@ class TestSpecializedErrors:
 
     def test_model_context_error_context(self):
         """Test ModelContextError context."""
-        error = ModelContextError("MCP failed", protocol_version="1.0", operation="list_tools")
+        error = ModelContextError(
+            "MCP failed", protocol_version="1.0", operation="list_tools"
+        )
         assert error.context["protocol_version"] == "1.0"
         assert error.context["operation"] == "list_tools"
 
@@ -181,9 +189,7 @@ class TestSpecializedErrors:
         """Test GitOperationError with git context."""
         repo_path = Path("/test/repo")
         error = GitOperationError(
-            "Git command failed",
-            git_command="git pull",
-            repository_path=repo_path
+            "Git command failed", git_command="git pull", repository_path=repo_path
         )
 
         assert error.context["git_command"] == "git pull"
@@ -222,14 +228,18 @@ class TestErrorHierarchy:
 
     def test_ai_provider_error_hierarchy(self):
         """Test AIProviderError inheritance and context."""
-        error = AIProviderError("AI error", provider_name="Anthropic", model_name="claude-3-5-sonnet")
+        error = AIProviderError(
+            "AI error", provider_name="Anthropic", model_name="claude-3-5-sonnet"
+        )
         assert isinstance(error, CodomyrmexError)
         assert error.context["provider_name"] == "Anthropic"
         assert error.context["model_name"] == "claude-3-5-sonnet"
 
     def test_static_analysis_error_hierarchy(self):
         """Test StaticAnalysisError inheritance and context."""
-        error = StaticAnalysisError("Analysis error", analyzer_name="pylint", file_path="src/main.py")
+        error = StaticAnalysisError(
+            "Analysis error", analyzer_name="pylint", file_path="src/main.py"
+        )
         assert isinstance(error, CodomyrmexError)
         assert error.context["analyzer_name"] == "pylint"
         assert error.context["file_path"] == "src/main.py"
@@ -241,7 +251,9 @@ class TestErrorHierarchy:
 
     def test_orchestration_error_hierarchy(self):
         """Test OrchestrationError inheritance and context."""
-        error = OrchestrationError("Orchestration error", orchestrator_id="orch_1", strategy="parallel")
+        error = OrchestrationError(
+            "Orchestration error", orchestrator_id="orch_1", strategy="parallel"
+        )
         assert isinstance(error, CodomyrmexError)
         assert error.context["orchestrator_id"] == "orch_1"
         assert error.context["strategy"] == "parallel"
@@ -259,9 +271,7 @@ class TestUtilityFunctions:
     def test_create_error_context_filters_none(self):
         """Test that create_error_context filters out None values."""
         context = create_error_context(
-            user="test_user",
-            operation=None,
-            timestamp="2023-01-01"
+            user="test_user", operation=None, timestamp="2023-01-01"
         )
         expected = {"user": "test_user", "timestamp": "2023-01-01"}
         assert context == expected
@@ -290,7 +300,7 @@ class TestUtilityFunctions:
         error.__cause__ = cause
 
         formatted = format_exception_chain(error)
-        lines = formatted.split('\n')
+        lines = formatted.split("\n")
         assert len(lines) == 2
         assert "[ConfigurationError]" in lines[0]
         assert "[CodomyrmexError]" in lines[1]
@@ -302,7 +312,7 @@ class TestUtilityFunctions:
         error.__context__ = context_error
 
         formatted = format_exception_chain(error)
-        lines = formatted.split('\n')
+        lines = formatted.split("\n")
         assert len(lines) == 2
         assert "[CodomyrmexError]" in lines[0]
         assert "[ValueError]" in lines[1]
@@ -315,9 +325,7 @@ class TestErrorSerialization:
         """Test that errors can be serialized to dict."""
         context = {"file": "test.py", "line": 42}
         error = StaticAnalysisError(
-            "Syntax error",
-            context=context,
-            error_code="SYNTAX_001"
+            "Syntax error", context=context, error_code="SYNTAX_001"
         )
 
         serialized = error.to_dict()
@@ -407,7 +415,7 @@ class TestErrorContextManagement:
             "user": "test_user",
             "operation": "complex_operation",
             "timestamp": "2023-01-01T00:00:00Z",
-            "retry_count": 3
+            "retry_count": 3,
         }
         error = CodomyrmexError("Complex error", context=context)
 
@@ -440,7 +448,7 @@ class TestErrorIntegration:
         error = ConfigurationError(
             "JSON test error",
             context={"config_file": "test.yaml", "line": 10},
-            error_code="CONFIG_001"
+            error_code="CONFIG_001",
         )
 
         error_dict = error.to_dict()
@@ -454,7 +462,7 @@ class TestErrorIntegration:
         error = GitOperationError(
             "Failed to push changes",
             git_command="git push origin main",
-            repository_path="/project/repo"
+            repository_path="/project/repo",
         )
 
         formatted = format_exception_chain(error)
@@ -475,6 +483,7 @@ class TestSpecializedExceptions:
     def test_cerebrum_error_hierarchy(self):
         """CerebrumError inherits from CodomyrmexError."""
         from codomyrmex.exceptions import CerebrumError
+
         error = CerebrumError("Cerebrum failure")
         assert isinstance(error, CodomyrmexError)
         assert "Cerebrum failure" in str(error)
@@ -482,6 +491,7 @@ class TestSpecializedExceptions:
     def test_case_error_inherits_cerebrum(self):
         """CaseError inherits from CerebrumError."""
         from codomyrmex.exceptions import CaseError, CerebrumError
+
         error = CaseError("Case problem")
         assert isinstance(error, CerebrumError)
         assert isinstance(error, CodomyrmexError)
@@ -489,6 +499,7 @@ class TestSpecializedExceptions:
     def test_case_not_found_error_chain(self):
         """CaseNotFoundError inherits CaseError -> CerebrumError -> CodomyrmexError."""
         from codomyrmex.exceptions import CaseError, CaseNotFoundError, CerebrumError
+
         error = CaseNotFoundError("Case 42 missing")
         assert isinstance(error, CaseError)
         assert isinstance(error, CerebrumError)
@@ -497,13 +508,17 @@ class TestSpecializedExceptions:
     def test_invalid_case_error_chain(self):
         """InvalidCaseError inherits CaseError."""
         from codomyrmex.exceptions import CaseError, InvalidCaseError
+
         error = InvalidCaseError("Invalid case data")
         assert isinstance(error, CaseError)
 
     def test_network_error_with_url_and_status(self):
         """NetworkError stores url and status_code in context."""
         from codomyrmex.exceptions import NetworkError
-        error = NetworkError("Connection failed", url="https://api.example.com", status_code=503)
+
+        error = NetworkError(
+            "Connection failed", url="https://api.example.com", status_code=503
+        )
         assert error.context["url"] == "https://api.example.com"
         assert error.context["status_code"] == 503
         assert "url=https://api.example.com" in str(error)
@@ -511,6 +526,7 @@ class TestSpecializedExceptions:
     def test_network_error_without_optional_fields(self):
         """NetworkError without optional fields has minimal context."""
         from codomyrmex.exceptions import NetworkError
+
         error = NetworkError("Timeout")
         assert "url" not in error.context
         assert "status_code" not in error.context
@@ -518,6 +534,7 @@ class TestSpecializedExceptions:
     def test_validation_error_with_field_and_rule(self):
         """ValidationError stores field_name and validation_rule."""
         from codomyrmex.exceptions import ValidationError
+
         error = ValidationError(
             "Field invalid", field_name="email", validation_rule="must_contain_at"
         )
@@ -527,24 +544,28 @@ class TestSpecializedExceptions:
     def test_simulation_error_inherits_codomyrmex(self):
         """SimulationError inherits from CodomyrmexError."""
         from codomyrmex.exceptions import SimulationError
+
         error = SimulationError("Simulation crashed")
         assert isinstance(error, CodomyrmexError)
 
     def test_deployment_error_inherits_codomyrmex(self):
         """DeploymentError inherits from CodomyrmexError."""
         from codomyrmex.exceptions import DeploymentError
+
         error = DeploymentError("Deploy failed")
         assert isinstance(error, CodomyrmexError)
 
     def test_compression_error_inherits_codomyrmex(self):
         """CompressionError inherits from CodomyrmexError."""
         from codomyrmex.exceptions import CompressionError
+
         error = CompressionError("Bad data")
         assert isinstance(error, CodomyrmexError)
 
     def test_all_exports_are_importable(self):
         """Every name in __all__ is importable from the exceptions package."""
         import codomyrmex.exceptions as exc_mod
+
         for name in exc_mod.__all__:
             assert hasattr(exc_mod, name), f"{name} listed in __all__ but missing"
 
@@ -555,6 +576,7 @@ class TestSpecializedExceptions:
             CerebrumError,
             InferenceError,
         )
+
         error = InferenceError("Inference failed")
         assert isinstance(error, BayesianInferenceError)
         assert isinstance(error, CerebrumError)
@@ -562,5 +584,6 @@ class TestSpecializedExceptions:
     def test_network_structure_error_chain(self):
         """NetworkStructureError -> BayesianInferenceError."""
         from codomyrmex.exceptions import BayesianInferenceError, NetworkStructureError
+
         error = NetworkStructureError("Bad graph")
         assert isinstance(error, BayesianInferenceError)

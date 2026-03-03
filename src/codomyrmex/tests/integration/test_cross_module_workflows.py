@@ -28,6 +28,7 @@ try:
         execute_with_limits,
     )
     from codomyrmex.coding.sandbox.container import check_docker_available
+
     if check_docker_available():
         MODULE_AVAILABILITY["code_execution"] = True
     else:
@@ -37,6 +38,7 @@ except ImportError:
 
 try:
     from codomyrmex.coding.static_analysis import analyze_file  # noqa: F401
+
     MODULE_AVAILABILITY["static_analysis"] = True
 except ImportError:
     MODULE_AVAILABILITY["static_analysis"] = False
@@ -46,30 +48,35 @@ try:
         analyze_file_security,
         check_compliance,
     )
+
     MODULE_AVAILABILITY["security"] = True
 except ImportError:
     MODULE_AVAILABILITY["security"] = False
 
 try:
     from codomyrmex.data_visualization import create_bar_chart  # noqa: F401
+
     MODULE_AVAILABILITY["data_visualization"] = True
 except ImportError:
     MODULE_AVAILABILITY["data_visualization"] = False
 
 try:
     from codomyrmex.performance import profile_function, run_benchmark  # noqa: F401
+
     MODULE_AVAILABILITY["performance"] = True
 except ImportError:
     MODULE_AVAILABILITY["performance"] = False
 
 try:
     from codomyrmex.ci_cd_automation import create_pipeline  # noqa: F401
+
     MODULE_AVAILABILITY["ci_cd"] = True
 except ImportError:
     MODULE_AVAILABILITY["ci_cd"] = False
 
 try:
     from codomyrmex.logging_monitoring.core.logger_config import PerformanceLogger
+
     MODULE_AVAILABILITY["performance_logging"] = True
 except ImportError:
     MODULE_AVAILABILITY["performance_logging"] = False
@@ -79,6 +86,7 @@ try:
         get_logger,
         setup_logging,
     )
+
     LOGGING_AVAILABLE = True
 except ImportError:
     LOGGING_AVAILABLE = False
@@ -104,6 +112,7 @@ class TestCrossModuleWorkflows:
     def teardown_method(self):
         """Clean up test environment."""
         import shutil
+
         shutil.rmtree(self.test_dir, ignore_errors=True)
 
     def _create_test_project(self) -> dict[str, str]:
@@ -112,7 +121,7 @@ class TestCrossModuleWorkflows:
 
         # Create main Python module
         main_file = os.path.join(self.test_dir, "main.py")
-        with open(main_file, 'w') as f:
+        with open(main_file, "w") as f:
             f.write('''
 import sys
 import os
@@ -158,7 +167,7 @@ if __name__ == "__main__":
 
         # Create test file
         test_file = os.path.join(self.test_dir, "test_main.py")
-        with open(test_file, 'w') as f:
+        with open(test_file, "w") as f:
             f.write('''
 import unittest
 from main import get_users_from_db, process_users
@@ -185,12 +194,12 @@ if __name__ == "__main__":
 
         # Create requirements.txt
         req_file = os.path.join(self.test_dir, "requirements.txt")
-        with open(req_file, 'w') as f:
-            f.write('''
+        with open(req_file, "w") as f:
+            f.write("""
 pytest==7.0.0
 requests==2.28.0
 flask==2.2.0
-''')
+""")
 
         files["main"] = main_file
         files["test"] = test_file
@@ -198,16 +207,27 @@ flask==2.2.0
 
         return files
 
-    @pytest.mark.skipif(not all([
-        MODULE_AVAILABILITY.get("ai_code_editing", False),
-        MODULE_AVAILABILITY.get("code_execution", False),
-        MODULE_AVAILABILITY.get("static_analysis", False)
-    ]), reason="Required modules not available")
+    @pytest.mark.skipif(
+        not all(
+            [
+                MODULE_AVAILABILITY.get("ai_code_editing", False),
+                MODULE_AVAILABILITY.get("code_execution", False),
+                MODULE_AVAILABILITY.get("static_analysis", False),
+            ]
+        ),
+        reason="Required modules not available",
+    )
     def test_development_workflow(self):
         """Test complete development workflow: code generation → analysis → execution."""
-        perf_logger = PerformanceLogger("development_workflow") if MODULE_AVAILABILITY["performance_logging"] else None
+        perf_logger = (
+            PerformanceLogger("development_workflow")
+            if MODULE_AVAILABILITY["performance_logging"]
+            else None
+        )
 
-        with perf_logger.time_operation("development_workflow") if perf_logger else None:
+        with (
+            perf_logger.time_operation("development_workflow") if perf_logger else None
+        ):
             # Step 1: Generate code using AI
             generated_code = r'''
 import re
@@ -225,12 +245,13 @@ for email in emails:
 '''
 
             # Step 2: Analyze the generated code
-            with tempfile.NamedTemporaryFile(mode='w', suffix='.py', delete=False) as f:
+            with tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False) as f:
                 f.write(generated_code)
                 temp_file = f.name
 
             try:
                 from codomyrmex.coding.static_analysis import analyze_file
+
                 analysis_results = analyze_file(temp_file)
 
                 # Step 3: Execute the code
@@ -238,51 +259,66 @@ for email in emails:
 
                 # Validate workflow results
                 assert execution_result["status"] == "success"
-                assert re.search(r"FPF-Spec\.md", execution_result["stdout"]) or re.search(r"FPF-Spec\.md", execution_result["stderr"])
+                assert re.search(
+                    r"FPF-Spec\.md", execution_result["stdout"]
+                ) or re.search(r"FPF-Spec\.md", execution_result["stderr"])
                 assert "invalid-email: False" in execution_result["stdout"]
 
                 # Store results for cross-workflow validation
                 self.workflow_results["development"] = {
                     "analysis": len(analysis_results),
                     "execution": execution_result["status"],
-                    "generated_lines": len(generated_code.split('\n'))
+                    "generated_lines": len(generated_code.split("\n")),
                 }
 
             finally:
                 os.unlink(temp_file)
 
-    @pytest.mark.skipif(not all([
-        MODULE_AVAILABILITY.get("static_analysis", False),
-        MODULE_AVAILABILITY.get("security_audit", False),
-        MODULE_AVAILABILITY.get("ci_cd", False)
-    ]), reason="Required modules not available")
+    @pytest.mark.skipif(
+        not all(
+            [
+                MODULE_AVAILABILITY.get("static_analysis", False),
+                MODULE_AVAILABILITY.get("security_audit", False),
+                MODULE_AVAILABILITY.get("ci_cd", False),
+            ]
+        ),
+        reason="Required modules not available",
+    )
     def test_ci_cd_quality_gate_workflow(self):
         """Test CI/CD quality gate workflow: analysis → security → deployment."""
-        perf_logger = PerformanceLogger("cicd_workflow") if MODULE_AVAILABILITY["performance_logging"] else None
+        perf_logger = (
+            PerformanceLogger("cicd_workflow")
+            if MODULE_AVAILABILITY["performance_logging"]
+            else None
+        )
 
         with perf_logger.time_operation("cicd_workflow") if perf_logger else None:
             test_files = self._create_test_project()
 
             # Step 1: Static analysis
             from codomyrmex.coding.static_analysis import analyze_file
+
             analysis_results = analyze_file(test_files["main"])
 
             # Step 2: Security audit
             from codomyrmex.security import analyze_file_security
+
             security_findings = analyze_file_security(test_files["main"])
 
             # Step 3: Compliance check
             from codomyrmex.security import check_compliance
+
             compliance_results = check_compliance(self.test_dir, ["OWASP_TOP_10"])
 
             # Step 4: Generate CI/CD pipeline based on results
             from codomyrmex.ci_cd_automation import create_pipeline
 
             # Create conditional pipeline based on analysis results
-            has_critical_issues = any(
-                finding.severity == "CRITICAL"
-                for finding in security_findings
-            ) if security_findings else False
+            has_critical_issues = (
+                any(finding.severity == "CRITICAL" for finding in security_findings)
+                if security_findings
+                else False
+            )
 
             pipeline_config = {
                 "name": "quality_gate_pipeline",
@@ -292,30 +328,34 @@ for email in emails:
                         "jobs": [
                             {
                                 "name": "static_analysis",
-                                "script": "python -m codomyrmex.coding.static_analysis analyze_file main.py"
+                                "script": "python -m codomyrmex.coding.static_analysis analyze_file main.py",
                             }
-                        ]
+                        ],
                     },
                     {
                         "name": "security",
                         "jobs": [
                             {
                                 "name": "security_scan",
-                                "script": "python -m codomyrmex.security analyze_file_security main.py"
+                                "script": "python -m codomyrmex.security analyze_file_security main.py",
                             }
-                        ]
+                        ],
                     },
                     {
                         "name": "deploy",
-                        "jobs": [
-                            {
-                                "name": "deploy_app",
-                                "script": "echo 'Deploying application...'",
-                                "dependencies": ["analysis", "security"]
-                            }
-                        ] if not has_critical_issues else []
-                    }
-                ]
+                        "jobs": (
+                            [
+                                {
+                                    "name": "deploy_app",
+                                    "script": "echo 'Deploying application...'",
+                                    "dependencies": ["analysis", "security"],
+                                }
+                            ]
+                            if not has_critical_issues
+                            else []
+                        ),
+                    },
+                ],
             }
 
             pipeline = create_pipeline(pipeline_config)
@@ -335,19 +375,30 @@ for email in emails:
                 "security_findings": len(security_findings),
                 "compliance_checks": len(compliance_results),
                 "pipeline_stages": len(pipeline.stages),
-                "critical_blocking": has_critical_issues
+                "critical_blocking": has_critical_issues,
             }
 
-    @pytest.mark.skipif(not all([
-        MODULE_AVAILABILITY.get("code_execution", False),
-        MODULE_AVAILABILITY.get("performance", False),
-        MODULE_AVAILABILITY.get("data_visualization", False)
-    ]), reason="Required modules not available")
+    @pytest.mark.skipif(
+        not all(
+            [
+                MODULE_AVAILABILITY.get("code_execution", False),
+                MODULE_AVAILABILITY.get("performance", False),
+                MODULE_AVAILABILITY.get("data_visualization", False),
+            ]
+        ),
+        reason="Required modules not available",
+    )
     def test_performance_testing_workflow(self):
         """Test performance testing workflow: execution → monitoring → visualization."""
-        perf_logger = PerformanceLogger("performance_workflow") if MODULE_AVAILABILITY["performance_logging"] else None
+        perf_logger = (
+            PerformanceLogger("performance_workflow")
+            if MODULE_AVAILABILITY["performance_logging"]
+            else None
+        )
 
-        with perf_logger.time_operation("performance_workflow") if perf_logger else None:
+        with (
+            perf_logger.time_operation("performance_workflow") if perf_logger else None
+        ):
             # Step 1: Define functions to test
             def algorithm_a(n):
                 """Algorithm A: Simple loop."""
@@ -372,7 +423,7 @@ for email in emails:
             # Step 3: Execute algorithms with resource monitoring
             from codomyrmex.coding import ExecutionLimits, execute_with_limits
 
-            code_a = f'''
+            code_a = f"""
 def algorithm_a(n):
     result = 0
     for i in range(n):
@@ -380,14 +431,14 @@ def algorithm_a(n):
     return result
 
 print("Result:", algorithm_a({10000}))
-'''
+"""
 
-            code_b = f'''
+            code_b = f"""
 def algorithm_b(n):
     return sum(range(n))
 
 print("Result:", algorithm_b({10000}))
-'''
+"""
 
             limits = ExecutionLimits(time_limit=10, memory_limit=128)
             result_a = execute_with_limits("python", code_a, limits)
@@ -398,13 +449,12 @@ print("Result:", algorithm_b({10000}))
 
             perf_data = {
                 "categories": ["Algorithm A", "Algorithm B"],
-                "values": [
-                    profile_a["execution_time"],
-                    profile_b["execution_time"]
-                ]
+                "values": [profile_a["execution_time"], profile_b["execution_time"]],
             }
 
-            visualization = create_bar_chart(perf_data, "Algorithm Performance Comparison")
+            visualization = create_bar_chart(
+                perf_data, "Algorithm Performance Comparison"
+            )
 
             # Validate workflow results
             assert result_a["status"] == "success"
@@ -422,9 +472,10 @@ print("Result:", algorithm_b({10000}))
             self.workflow_results["performance"] = {
                 "algorithm_a_time": profile_a["execution_time"],
                 "algorithm_b_time": profile_b["execution_time"],
-                "speedup_ratio": profile_a["execution_time"] / profile_b["execution_time"],
+                "speedup_ratio": profile_a["execution_time"]
+                / profile_b["execution_time"],
                 "visualization_created": True,
-                "resource_monitored": True
+                "resource_monitored": True,
             }
 
     def test_workflow_coordination_and_reporting(self):
@@ -434,19 +485,31 @@ print("Result:", algorithm_b({10000}))
         # Run available workflow tests
         available_workflows = []
 
-        if all([MODULE_AVAILABILITY.get("ai_code_editing", False),
+        if all(
+            [
+                MODULE_AVAILABILITY.get("ai_code_editing", False),
                 MODULE_AVAILABILITY.get("code_execution", False),
-                MODULE_AVAILABILITY.get("static_analysis", False)]):
+                MODULE_AVAILABILITY.get("static_analysis", False),
+            ]
+        ):
             available_workflows.append("development")
 
-        if all([MODULE_AVAILABILITY.get("static_analysis", False),
+        if all(
+            [
+                MODULE_AVAILABILITY.get("static_analysis", False),
                 MODULE_AVAILABILITY.get("security_audit", False),
-                MODULE_AVAILABILITY.get("ci_cd", False)]):
+                MODULE_AVAILABILITY.get("ci_cd", False),
+            ]
+        ):
             available_workflows.append("cicd")
 
-        if all([MODULE_AVAILABILITY.get("code_execution", False),
+        if all(
+            [
+                MODULE_AVAILABILITY.get("code_execution", False),
                 MODULE_AVAILABILITY.get("performance", False),
-                MODULE_AVAILABILITY.get("data_visualization", False)]):
+                MODULE_AVAILABILITY.get("data_visualization", False),
+            ]
+        ):
             available_workflows.append("performance")
 
         # Generate a summary report of workflow results
@@ -455,7 +518,7 @@ print("Result:", algorithm_b({10000}))
             "available_workflows": available_workflows,
             "results": self.workflow_results,
             "timestamp": time.time(),
-            "summary": {}
+            "summary": {},
         }
 
         # Calculate summary statistics
@@ -468,8 +531,10 @@ print("Result:", algorithm_b({10000}))
 
             report["summary"] = {
                 "total_workflows": len(self.workflow_results),
-                "workflows_with_results": len([r for r in self.workflow_results.values() if r]),
-                "estimated_total_time": total_execution_time
+                "workflows_with_results": len(
+                    [r for r in self.workflow_results.values() if r]
+                ),
+                "estimated_total_time": total_execution_time,
             }
 
         # Validate report structure
@@ -514,13 +579,13 @@ print("Result:", algorithm_b({10000}))
         if MODULE_AVAILABILITY.get("security_audit", False):
             from codomyrmex.security import analyze_file_security
 
-            dangerous_code = '''
+            dangerous_code = """
 import os
 os.system("rm -rf /")  # Dangerous command
 eval(input("Enter code: "))  # Code injection
-'''
+"""
 
-            with tempfile.NamedTemporaryFile(mode='w', suffix='.py', delete=False) as f:
+            with tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False) as f:
                 f.write(dangerous_code)
                 temp_file = f.name
 
@@ -542,18 +607,21 @@ eval(input("Enter code: "))  # Code injection
 
         if MODULE_AVAILABILITY.get("code_execution", False):
             from codomyrmex.coding import execute_code
+
             result = execute_code("python", "print('Hello Workflow')", timeout=5)
             assert result["status"] == "success"
             steps_completed += 1
 
         if MODULE_AVAILABILITY.get("performance", False):
             from codomyrmex.performance import profile_function
+
             profile_result = profile_function(lambda: sum(range(100)))
             assert profile_result["execution_time"] > 0
             steps_completed += 1
 
         if MODULE_AVAILABILITY.get("data_visualization", False):
             from codomyrmex.data_visualization import create_bar_chart
+
             data = {"categories": ["A"], "values": [1]}
             chart = create_bar_chart(data, "Test")
             assert chart is not None
@@ -580,7 +648,7 @@ eval(input("Enter code: "))  # Code injection
             "code": "print('Hello World')",
             "filename": "test.py",
             "metrics": [0.1, 0.2, 0.3],
-            "categories": ["A", "B", "C"]
+            "categories": ["A", "B", "C"],
         }
 
         results = {}
@@ -588,6 +656,7 @@ eval(input("Enter code: "))  # Code injection
         # Test code execution
         if MODULE_AVAILABILITY.get("code_execution", False):
             from codomyrmex.coding import execute_code
+
             exec_result = execute_code("python", test_data["code"], timeout=5)
             results["execution"] = exec_result["status"] == "success"
 
@@ -595,7 +664,7 @@ eval(input("Enter code: "))  # Code injection
         if MODULE_AVAILABILITY.get("static_analysis", False):
             from codomyrmex.coding.static_analysis import analyze_file
 
-            with tempfile.NamedTemporaryFile(mode='w', suffix='.py', delete=False) as f:
+            with tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False) as f:
                 f.write(test_data["code"])
                 temp_file = f.name
 
@@ -611,7 +680,7 @@ eval(input("Enter code: "))  # Code injection
 
             viz_data = {
                 "categories": test_data["categories"],
-                "values": test_data["metrics"]
+                "values": test_data["metrics"],
             }
             chart = create_bar_chart(viz_data, "Consistency Test")
             results["visualization"] = chart is not None
@@ -638,7 +707,7 @@ result = calculate_fibonacci(10)
 print(f"Fibonacci(10) = {result}")
 '''
 
-        with tempfile.NamedTemporaryFile(mode='w', suffix='.py', delete=False) as f:
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False) as f:
             f.write(test_code)
             temp_file = f.name
 
@@ -648,18 +717,21 @@ print(f"Fibonacci(10) = {result}")
             # Module 1: Static Analysis
             if MODULE_AVAILABILITY.get("static_analysis", False):
                 from codomyrmex.coding.static_analysis import analyze_file
+
                 analysis_results = analyze_file(temp_file)
                 results["static_analysis"] = len(analysis_results)
 
             # Module 2: Security Analysis
             if MODULE_AVAILABILITY.get("security_audit", False):
                 from codomyrmex.security import analyze_file_security
+
                 security_findings = analyze_file_security(temp_file)
                 results["security_analysis"] = len(security_findings)
 
             # Module 3: Code Execution
             if MODULE_AVAILABILITY.get("code_execution", False):
                 from codomyrmex.coding import execute_code
+
                 exec_result = execute_code("python", test_code, timeout=10)
                 results["execution"] = exec_result["status"] == "success"
 

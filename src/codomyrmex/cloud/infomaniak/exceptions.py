@@ -5,7 +5,6 @@ Provides structured exception types for all Infomaniak cloud operations,
 enabling precise error handling and classification.
 """
 
-
 try:
     import requests as _requests
 except ImportError:
@@ -37,31 +36,37 @@ class InfomaniakCloudError(Exception):
 
 class InfomaniakAuthError(InfomaniakCloudError):
     """Raised when authentication with Infomaniak fails."""
+
     pass
 
 
 class InfomaniakNotFoundError(InfomaniakCloudError):
     """Raised when a requested resource is not found (HTTP 404)."""
+
     pass
 
 
 class InfomaniakConflictError(InfomaniakCloudError):
     """Raised on state conflicts (HTTP 409), e.g., deleting an in-use resource."""
+
     pass
 
 
 class InfomaniakQuotaExceededError(InfomaniakCloudError):
     """Raised when a quota limit is exceeded (HTTP 413)."""
+
     pass
 
 
 class InfomaniakConnectionError(InfomaniakCloudError):
     """Raised when a connection to the Infomaniak API fails."""
+
     pass
 
 
 class InfomaniakTimeoutError(InfomaniakCloudError):
     """Raised when an operation times out."""
+
     pass
 
 
@@ -98,7 +103,11 @@ def classify_openstack_error(
         return InfomaniakQuotaExceededError(str(error), **kwargs)
     elif "timeout" in error_str or "timed out" in error_str:
         return InfomaniakTimeoutError(str(error), **kwargs)
-    elif "connection" in error_str or "refused" in error_str or "unreachable" in error_str:
+    elif (
+        "connection" in error_str
+        or "refused" in error_str
+        or "unreachable" in error_str
+    ):
         return InfomaniakConnectionError(str(error), **kwargs)
     else:
         return InfomaniakCloudError(str(error), **kwargs)

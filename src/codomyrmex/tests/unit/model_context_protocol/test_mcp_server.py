@@ -14,6 +14,7 @@ pydantic = pytest.importorskip("pydantic")
 # Helpers
 # ---------------------------------------------------------------------------
 
+
 def _run(coro):
     """Run an async coroutine synchronously."""
     return asyncio.run(coro)
@@ -26,6 +27,7 @@ def _make_server(code_dir):
 
     # Import here so path is set up
     from scripts_helper import create_server
+
     return create_server()
 
 
@@ -44,12 +46,14 @@ def _import_create_server(code_dir):
         MCPServer,
         MCPServerConfig,
     )
+
     return MCPServer, MCPServerConfig
 
 
 # ---------------------------------------------------------------------------
 # Fixtures
 # ---------------------------------------------------------------------------
+
 
 @pytest.fixture
 def server(code_dir):
@@ -83,7 +87,9 @@ def server(code_dir):
     def json_query(path: str, query: str = "") -> str:
         return json.dumps(mcp_tools.json_query(path=path, query=query or None))
 
-    @srv.tool(name="analyze_python_file", title="Analyze Python", description="Analyze .py")
+    @srv.tool(
+        name="analyze_python_file", title="Analyze Python", description="Analyze .py"
+    )
     def analyze_python_file(path: str) -> str:
         return json.dumps(mcp_tools.analyze_python_file(path=path))
 
@@ -114,6 +120,7 @@ def mock_client(server):
         sys.path.insert(0, str(Path(__file__).resolve().parents[3]))
 
     from codomyrmex.model_context_protocol.quality.testing import TestMCPClient
+
     return TestMCPClient(server)
 
 
@@ -121,21 +128,26 @@ def mock_client(server):
 # JSON-RPC Protocol Tests
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestMCPProtocol:
     """Test core JSON-RPC MCP protocol handling."""
 
     def test_initialize_handshake(self, server):
         """Test functionality: initialize handshake."""
-        resp = _run(server.handle_request({
-            "jsonrpc": "2.0",
-            "id": 1,
-            "method": "initialize",
-            "params": {
-                "protocolVersion": "2024-11-05",
-                "clientInfo": {"name": "pytest", "version": "1.0"},
-            },
-        }))
+        resp = _run(
+            server.handle_request(
+                {
+                    "jsonrpc": "2.0",
+                    "id": 1,
+                    "method": "initialize",
+                    "params": {
+                        "protocolVersion": "2024-11-05",
+                        "clientInfo": {"name": "pytest", "version": "1.0"},
+                    },
+                }
+            )
+        )
         assert resp is not None
         assert "result" in resp
         result = resp["result"]
@@ -147,32 +159,44 @@ class TestMCPProtocol:
 
     def test_notification_no_response(self, server):
         """Test functionality: notification no response."""
-        resp = _run(server.handle_request({
-            "jsonrpc": "2.0",
-            "method": "notifications/initialized",
-            "params": {},
-        }))
+        resp = _run(
+            server.handle_request(
+                {
+                    "jsonrpc": "2.0",
+                    "method": "notifications/initialized",
+                    "params": {},
+                }
+            )
+        )
         assert resp is None
 
     def test_unknown_method_returns_error(self, server):
         """Test functionality: unknown method returns error."""
-        resp = _run(server.handle_request({
-            "jsonrpc": "2.0",
-            "id": 99,
-            "method": "nonexistent/method",
-            "params": {},
-        }))
+        resp = _run(
+            server.handle_request(
+                {
+                    "jsonrpc": "2.0",
+                    "id": 99,
+                    "method": "nonexistent/method",
+                    "params": {},
+                }
+            )
+        )
         assert "error" in resp
         assert resp["error"]["code"] == -32603
 
     def test_tools_list(self, server):
         """Test functionality: tools list."""
-        resp = _run(server.handle_request({
-            "jsonrpc": "2.0",
-            "id": 2,
-            "method": "tools/list",
-            "params": {},
-        }))
+        resp = _run(
+            server.handle_request(
+                {
+                    "jsonrpc": "2.0",
+                    "id": 2,
+                    "method": "tools/list",
+                    "params": {},
+                }
+            )
+        )
         tools = resp["result"]["tools"]
         names = [t["name"] for t in tools]
         assert "read_file" in names
@@ -183,46 +207,65 @@ class TestMCPProtocol:
 
     def test_resources_list(self, server):
         """Test functionality: resources list."""
-        resp = _run(server.handle_request({
-            "jsonrpc": "2.0",
-            "id": 3,
-            "method": "resources/list",
-            "params": {},
-        }))
+        resp = _run(
+            server.handle_request(
+                {
+                    "jsonrpc": "2.0",
+                    "id": 3,
+                    "method": "resources/list",
+                    "params": {},
+                }
+            )
+        )
         resources = resp["result"]["resources"]
         assert len(resources) >= 1
         assert resources[0]["uri"] == "test://readme"
 
     def test_resources_read(self, server):
         """Test functionality: resources read."""
-        resp = _run(server.handle_request({
-            "jsonrpc": "2.0",
-            "id": 4,
-            "method": "resources/read",
-            "params": {"uri": "test://readme"},
-        }))
+        resp = _run(
+            server.handle_request(
+                {
+                    "jsonrpc": "2.0",
+                    "id": 4,
+                    "method": "resources/read",
+                    "params": {"uri": "test://readme"},
+                }
+            )
+        )
         contents = resp["result"]["contents"]
         assert contents[0]["text"] == "Hello from test resource"
 
     def test_prompts_list(self, server):
         """Test functionality: prompts list."""
-        resp = _run(server.handle_request({
-            "jsonrpc": "2.0",
-            "id": 5,
-            "method": "prompts/list",
-            "params": {},
-        }))
+        resp = _run(
+            server.handle_request(
+                {
+                    "jsonrpc": "2.0",
+                    "id": 5,
+                    "method": "prompts/list",
+                    "params": {},
+                }
+            )
+        )
         prompts = resp["result"]["prompts"]
         assert any(p["name"] == "test_prompt" for p in prompts)
 
     def test_prompts_get(self, server):
         """Test functionality: prompts get."""
-        resp = _run(server.handle_request({
-            "jsonrpc": "2.0",
-            "id": 6,
-            "method": "prompts/get",
-            "params": {"name": "test_prompt", "arguments": {"greeting": "hello", "name": "world"}},
-        }))
+        resp = _run(
+            server.handle_request(
+                {
+                    "jsonrpc": "2.0",
+                    "id": 6,
+                    "method": "prompts/get",
+                    "params": {
+                        "name": "test_prompt",
+                        "arguments": {"greeting": "hello", "name": "world"},
+                    },
+                }
+            )
+        )
         messages = resp["result"]["messages"]
         assert "hello" in messages[0]["content"]["text"]
         assert "world" in messages[0]["content"]["text"]
@@ -231,6 +274,7 @@ class TestMCPProtocol:
 # ---------------------------------------------------------------------------
 # Tool Execution Tests (tools.py integration)
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestToolExecution:
@@ -241,12 +285,19 @@ class TestToolExecution:
         test_file = tmp_path / "test.txt"
         test_file.write_text("hello world")
 
-        resp = _run(server.handle_request({
-            "jsonrpc": "2.0",
-            "id": 10,
-            "method": "tools/call",
-            "params": {"name": "read_file", "arguments": {"path": str(test_file)}},
-        }))
+        resp = _run(
+            server.handle_request(
+                {
+                    "jsonrpc": "2.0",
+                    "id": 10,
+                    "method": "tools/call",
+                    "params": {
+                        "name": "read_file",
+                        "arguments": {"path": str(test_file)},
+                    },
+                }
+            )
+        )
         result = resp["result"]
         assert "content" in result
         assert "isError" not in result
@@ -258,12 +309,19 @@ class TestToolExecution:
 
     def test_read_file_not_found(self, server):
         """Test functionality: read file not found."""
-        resp = _run(server.handle_request({
-            "jsonrpc": "2.0",
-            "id": 11,
-            "method": "tools/call",
-            "params": {"name": "read_file", "arguments": {"path": "/nonexistent/file.txt"}},
-        }))
+        resp = _run(
+            server.handle_request(
+                {
+                    "jsonrpc": "2.0",
+                    "id": 11,
+                    "method": "tools/call",
+                    "params": {
+                        "name": "read_file",
+                        "arguments": {"path": "/nonexistent/file.txt"},
+                    },
+                }
+            )
+        )
         result = resp["result"]
         data = json.loads(result["content"][0]["text"])
         inner = json.loads(data["result"])
@@ -274,12 +332,19 @@ class TestToolExecution:
         """Test functionality: git status."""
         # Run in the project root (which is a git repo)
         project_root = Path(__file__).resolve().parents[5]
-        resp = _run(server.handle_request({
-            "jsonrpc": "2.0",
-            "id": 12,
-            "method": "tools/call",
-            "params": {"name": "git_status", "arguments": {"path": str(project_root)}},
-        }))
+        resp = _run(
+            server.handle_request(
+                {
+                    "jsonrpc": "2.0",
+                    "id": 12,
+                    "method": "tools/call",
+                    "params": {
+                        "name": "git_status",
+                        "arguments": {"path": str(project_root)},
+                    },
+                }
+            )
+        )
         result = resp["result"]
         data = json.loads(result["content"][0]["text"])
         inner = json.loads(data["result"])
@@ -291,12 +356,19 @@ class TestToolExecution:
         test_file = tmp_path / "check.txt"
         test_file.write_text("checksum me")
 
-        resp = _run(server.handle_request({
-            "jsonrpc": "2.0",
-            "id": 13,
-            "method": "tools/call",
-            "params": {"name": "checksum_file", "arguments": {"path": str(test_file)}},
-        }))
+        resp = _run(
+            server.handle_request(
+                {
+                    "jsonrpc": "2.0",
+                    "id": 13,
+                    "method": "tools/call",
+                    "params": {
+                        "name": "checksum_file",
+                        "arguments": {"path": str(test_file)},
+                    },
+                }
+            )
+        )
         result = resp["result"]
         data = json.loads(result["content"][0]["text"])
         inner = json.loads(data["result"])
@@ -309,12 +381,19 @@ class TestToolExecution:
         json_file = tmp_path / "data.json"
         json_file.write_text(json.dumps({"name": "test", "items": [1, 2, 3]}))
 
-        resp = _run(server.handle_request({
-            "jsonrpc": "2.0",
-            "id": 14,
-            "method": "tools/call",
-            "params": {"name": "json_query", "arguments": {"path": str(json_file), "query": "name"}},
-        }))
+        resp = _run(
+            server.handle_request(
+                {
+                    "jsonrpc": "2.0",
+                    "id": 14,
+                    "method": "tools/call",
+                    "params": {
+                        "name": "json_query",
+                        "arguments": {"path": str(json_file), "query": "name"},
+                    },
+                }
+            )
+        )
         result = resp["result"]
         data = json.loads(result["content"][0]["text"])
         inner = json.loads(data["result"])
@@ -324,16 +403,25 @@ class TestToolExecution:
     def test_analyze_python_file(self, server):
         """Test functionality: analyze python file."""
         # Analyze tools.py itself
-        tools_py = Path(__file__).resolve().parents[3] / "model_context_protocol" / "tools.py"
+        tools_py = (
+            Path(__file__).resolve().parents[3] / "model_context_protocol" / "tools.py"
+        )
         if not tools_py.exists():
             pytest.skip("tools.py not found")
 
-        resp = _run(server.handle_request({
-            "jsonrpc": "2.0",
-            "id": 15,
-            "method": "tools/call",
-            "params": {"name": "analyze_python_file", "arguments": {"path": str(tools_py)}},
-        }))
+        resp = _run(
+            server.handle_request(
+                {
+                    "jsonrpc": "2.0",
+                    "id": 15,
+                    "method": "tools/call",
+                    "params": {
+                        "name": "analyze_python_file",
+                        "arguments": {"path": str(tools_py)},
+                    },
+                }
+            )
+        )
         result = resp["result"]
         data = json.loads(result["content"][0]["text"])
         inner = json.loads(data["result"])
@@ -342,12 +430,16 @@ class TestToolExecution:
 
     def test_unknown_tool_returns_error(self, server):
         """Test functionality: unknown tool returns error."""
-        resp = _run(server.handle_request({
-            "jsonrpc": "2.0",
-            "id": 20,
-            "method": "tools/call",
-            "params": {"name": "nonexistent_tool", "arguments": {}},
-        }))
+        resp = _run(
+            server.handle_request(
+                {
+                    "jsonrpc": "2.0",
+                    "id": 20,
+                    "method": "tools/call",
+                    "params": {"name": "nonexistent_tool", "arguments": {}},
+                }
+            )
+        )
         result = resp["result"]
         assert result.get("isError") is True
 
@@ -355,6 +447,7 @@ class TestToolExecution:
 # ---------------------------------------------------------------------------
 # TestMCPClient Tests
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestMockClient:
@@ -391,6 +484,7 @@ class TestMockClient:
 # ServerTester Tests
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestServerTester:
     """Test the ServerTester smoke test framework."""
@@ -401,6 +495,7 @@ class TestServerTester:
             sys.path.insert(0, str(code_dir))
 
         from codomyrmex.model_context_protocol.quality.testing import ServerTester
+
         tester = ServerTester(server)
         suite = _run(tester.run_smoke_tests())
         assert suite.passed >= 2
@@ -410,6 +505,7 @@ class TestServerTester:
 # ---------------------------------------------------------------------------
 # HTTP Transport Tests (using FastAPI TestClient)
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestHTTPTransport:
@@ -476,7 +572,9 @@ class TestHTTPTransport:
         async def get_tool(tool_name: str):
             tool = srv._tool_registry.get(tool_name)
             if not tool:
-                return JSONResponse(content={"error": f"Tool not found: {tool_name}"}, status_code=404)
+                return JSONResponse(
+                    content={"error": f"Tool not found: {tool_name}"}, status_code=404
+                )
             return JSONResponse(content=tool["schema"])
 
         @app.post("/tools/{tool_name}/call")
@@ -559,12 +657,15 @@ class TestHTTPTransport:
 
     def test_mcp_jsonrpc_endpoint(self, client):
         """Test functionality: mcp jsonrpc endpoint."""
-        resp = client.post("/mcp", json={
-            "jsonrpc": "2.0",
-            "id": 1,
-            "method": "tools/list",
-            "params": {},
-        })
+        resp = client.post(
+            "/mcp",
+            json={
+                "jsonrpc": "2.0",
+                "id": 1,
+                "method": "tools/list",
+                "params": {},
+            },
+        )
         assert resp.status_code == 200
         data = resp.json()
         assert data["jsonrpc"] == "2.0"
@@ -573,11 +674,14 @@ class TestHTTPTransport:
 
     def test_mcp_notification_returns_202(self, client):
         """Test functionality: mcp notification returns 202."""
-        resp = client.post("/mcp", json={
-            "jsonrpc": "2.0",
-            "method": "notifications/initialized",
-            "params": {},
-        })
+        resp = client.post(
+            "/mcp",
+            json={
+                "jsonrpc": "2.0",
+                "method": "notifications/initialized",
+                "params": {},
+            },
+        )
         assert resp.status_code == 202
 
     def test_resources_endpoint(self, client):

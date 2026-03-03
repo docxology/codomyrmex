@@ -29,7 +29,7 @@ class NeurolinguisticEngine:
         return {
             "frames": frames,
             "patterns": patterns,
-            "score": len(frames) + len(patterns)  # Simple impact metric
+            "score": len(frames) + len(patterns),  # Simple impact metric
         }
 
     def spin(self, text: str, target_frame: str) -> str:

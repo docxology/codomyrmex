@@ -18,6 +18,7 @@ try:
         AsyncLocalSemaphore,
         LocalSemaphore,
     )
+
     _HAS_CONCURRENCY = True
 except ImportError:
     _HAS_CONCURRENCY = False
@@ -26,6 +27,7 @@ if not _HAS_CONCURRENCY:
     pytest.skip("concurrency deps not available", allow_module_level=True)
 
 # ==================== ASYNC SEMAPHORE TESTS ====================
+
 
 @pytest.mark.asyncio
 class TestAsyncSemaphoreBasicOperations:
@@ -132,7 +134,7 @@ class TestAsyncSemaphoreBlocking:
         elapsed = time.time() - start_time
 
         assert elapsed >= 0.05  # Should have waited for the release
-        assert elapsed < 0.5    # But not too long
+        assert elapsed < 0.5  # But not too long
 
         sem.release()
         await release_task
@@ -612,6 +614,7 @@ class TestAsyncSemaphoreContextManager:
 
 # ==================== ASYNC LOCK PATTERNS TESTS ====================
 
+
 @pytest.mark.asyncio
 class TestAsyncLockPatterns:
     """Tests for async lock patterns using semaphores and locks."""
@@ -715,10 +718,7 @@ class TestAsyncDeadlockPrevention:
             lock_a.release()
 
         # Should complete without deadlock
-        await asyncio.wait_for(
-            asyncio.gather(worker1(), worker2()),
-            timeout=2.0
-        )
+        await asyncio.wait_for(asyncio.gather(worker1(), worker2()), timeout=2.0)
 
     async def test_trylock_pattern(self):
         """Test try-lock pattern for deadlock avoidance."""
@@ -797,6 +797,7 @@ class TestAsyncSemaphoreStress:
 
 # ==================== LOCAL SEMAPHORE ASYNC INTERACTION TESTS ====================
 
+
 @pytest.mark.asyncio
 class TestLocalSemaphoreAsyncInteraction:
     """Tests for LocalSemaphore interaction with async code."""
@@ -815,10 +816,7 @@ class TestLocalSemaphoreAsyncInteraction:
 
         # Run blocking operations in thread pool
         loop = asyncio.get_running_loop()
-        tasks = [
-            loop.run_in_executor(None, blocking_operation, i)
-            for i in range(5)
-        ]
+        tasks = [loop.run_in_executor(None, blocking_operation, i) for i in range(5)]
 
         await asyncio.gather(*tasks)
 

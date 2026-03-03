@@ -7,7 +7,6 @@ with transformers (rename, type-convert, composite).
 Split from test_database_core.py to reduce file size.
 """
 
-
 import pytest
 
 from codomyrmex.database_management.migration.executor import (
@@ -34,6 +33,7 @@ from codomyrmex.database_management.schema_generator import (
 # =============================================================================
 # Migration Generation (SchemaGenerator.generate_migration) Tests
 # =============================================================================
+
 
 class TestMigrationGeneration:
     """Test SchemaGenerator.generate_migration up/down SQL."""
@@ -161,6 +161,7 @@ class TestMigrationGeneration:
 # Schema Comparison Tests
 # =============================================================================
 
+
 class TestSchemaComparison:
     """Test SchemaGenerator.compare_schemas and drift reports."""
 
@@ -279,7 +280,9 @@ class TestSchemaComparison:
     def test_drift_report_no_drift(self, tmp_path):
         """Drift report for identical schemas shows no drift."""
         gen = SchemaGenerator(workspace_dir=str(tmp_path))
-        schema = {"tables": [{"name": "t", "columns": [{"name": "id", "type": "integer"}]}]}
+        schema = {
+            "tables": [{"name": "t", "columns": [{"name": "id", "type": "integer"}]}]
+        }
         report = gen.get_schema_drift_report(schema, schema)
         assert report["drift_detected"] is False
         assert report["migration_needed"] is False
@@ -290,7 +293,11 @@ class TestSchemaComparison:
         """Drift report with changes shows drift_detected=True."""
         gen = SchemaGenerator(workspace_dir=str(tmp_path))
         current = {"tables": []}
-        target = {"tables": [{"name": "new_t", "columns": [{"name": "id", "type": "integer"}]}]}
+        target = {
+            "tables": [
+                {"name": "new_t", "columns": [{"name": "id", "type": "integer"}]}
+            ]
+        }
         report = gen.get_schema_drift_report(current, target)
         assert report["drift_detected"] is True
         assert report["migration_needed"] is True
@@ -301,6 +308,7 @@ class TestSchemaComparison:
 # =============================================================================
 # Migration Models Tests (migration/models.py)
 # =============================================================================
+
 
 class TestMigrationModels:
     """Test MigrationStep, MigrationResult, Migration dataclasses."""
@@ -387,6 +395,7 @@ class TestMigrationModels:
 # MigrationRunner Tests
 # =============================================================================
 
+
 class TestMigrationRunner:
     """Test MigrationRunner.run, rollback, and completed tracking."""
 
@@ -422,8 +431,12 @@ class TestMigrationRunner:
         """Runner rollback runs steps in reverse and removes from completed."""
         runner = MigrationRunner()
         m = MigrationModel(id="m1", name="test", version="1.0")
-        m.add_simple_step(id="s1", name="step1", up_fn=lambda: True, down_fn=lambda: True)
-        m.add_simple_step(id="s2", name="step2", up_fn=lambda: True, down_fn=lambda: True)
+        m.add_simple_step(
+            id="s1", name="step1", up_fn=lambda: True, down_fn=lambda: True
+        )
+        m.add_simple_step(
+            id="s2", name="step2", up_fn=lambda: True, down_fn=lambda: True
+        )
 
         runner.run(m)
         assert runner.is_completed("m1")
@@ -449,6 +462,7 @@ class TestMigrationRunner:
 # =============================================================================
 # DataMigrator and Transformer Tests
 # =============================================================================
+
 
 class TestDataTransformers:
     """Test FieldRenameTransformer, FieldTypeTransformer, CompositeTransformer."""

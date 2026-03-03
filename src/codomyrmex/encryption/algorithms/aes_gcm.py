@@ -72,4 +72,6 @@ class AESGCMEncryptor:
             return self.aesgcm.decrypt(nonce, ciphertext, associated_data)
         except Exception as e:
             logger.error("AES-GCM decryption error: %s", e)
-            raise EncryptionError(f"AES-GCM decryption/authentication failed: {e}") from e
+            raise EncryptionError(
+                f"AES-GCM decryption/authentication failed: {e}"
+            ) from e

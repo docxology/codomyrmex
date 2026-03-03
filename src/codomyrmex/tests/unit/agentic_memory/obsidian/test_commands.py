@@ -133,7 +133,9 @@ class TestCommandsUnavailable:
 
     def test_get_diff_with_versions(self):
         with pytest.raises(ObsidianCLINotAvailable):
-            get_diff(self._cli(), file="note", from_version=1, to_version=3, filter="local")
+            get_diff(
+                self._cli(), file="note", from_version=1, to_version=3, filter="local"
+            )
 
     def test_get_history(self):
         with pytest.raises(ObsidianCLINotAvailable):

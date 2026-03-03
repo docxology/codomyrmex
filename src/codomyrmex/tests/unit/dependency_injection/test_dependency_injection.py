@@ -153,7 +153,9 @@ class TestContainerRegisterInstance:
         resolved = container.resolve(IService)
         assert resolved is obj
 
-    def test_register_instance_returns_container_for_chaining(self, container: Container):
+    def test_register_instance_returns_container_for_chaining(
+        self, container: Container
+    ):
         """Test functionality: register instance returns container for chaining."""
         result = container.register_instance(IService, ConcreteService())
         assert result is container
@@ -163,7 +165,9 @@ class TestContainerRegisterInstance:
         with pytest.raises(TypeError, match="Cannot register None"):
             container.register_instance(IService, None)  # type: ignore[arg-type]
 
-    def test_register_instance_descriptor_is_instance_registration(self, container: Container):
+    def test_register_instance_descriptor_is_instance_registration(
+        self, container: Container
+    ):
         """Test functionality: register instance descriptor is instance registration."""
         obj = ConcreteService()
         container.register_instance(IService, obj)
@@ -207,7 +211,9 @@ class TestContainerRegisterFactory:
         assert instance_a is not instance_b
         assert call_count == 2
 
-    def test_register_factory_returns_container_for_chaining(self, container: Container):
+    def test_register_factory_returns_container_for_chaining(
+        self, container: Container
+    ):
         """Test functionality: register factory returns container for chaining."""
         result = container.register_factory(IService, ConcreteService)
         assert result is container
@@ -357,7 +363,9 @@ class TestScopeContext:
             b = scope.resolve(IService)
             assert a is b
 
-    def test_scoped_returns_different_instance_across_contexts(self, container: Container):
+    def test_scoped_returns_different_instance_across_contexts(
+        self, container: Container
+    ):
         """Test functionality: scoped returns different instance across contexts."""
         container.register(IService, ConcreteService, scope="scoped")
         with ScopeContext(container) as scope1:
@@ -462,6 +470,7 @@ class TestInjectableDecorator:
 
     def test_injectable_sets_metadata(self):
         """Test functionality: injectable sets metadata."""
+
         @injectable(scope="transient")
         class MyService:
             pass
@@ -474,6 +483,7 @@ class TestInjectableDecorator:
 
     def test_injectable_default_scope_is_singleton(self):
         """Test functionality: injectable default scope is singleton."""
+
         @injectable()
         class MyService:
             pass
@@ -484,6 +494,7 @@ class TestInjectableDecorator:
 
     def test_injectable_with_tags(self):
         """Test functionality: injectable with tags."""
+
         @injectable(scope="scoped", tags=("db", "core"))
         class MyService:
             pass
@@ -494,6 +505,7 @@ class TestInjectableDecorator:
 
     def test_is_injectable_returns_false_for_plain_class(self):
         """Test functionality: is injectable returns false for plain class."""
+
         class Plain:
             pass
 
@@ -506,6 +518,7 @@ class TestInjectDecorator:
 
     def test_inject_sets_metadata(self):
         """Test functionality: inject sets metadata."""
+
         class MyService:
             @inject
             def __init__(self, dep: IService):
@@ -517,6 +530,7 @@ class TestInjectDecorator:
 
     def test_inject_precomputes_params(self):
         """Test functionality: inject precomputes params."""
+
         class MyService:
             @inject
             def __init__(self, dep: IService, other: AnotherService):
@@ -531,6 +545,7 @@ class TestInjectDecorator:
 
     def test_inject_excludes_self_param(self):
         """Test functionality: inject excludes self param."""
+
         class MyService:
             @inject
             def __init__(self, dep: IService):
@@ -570,6 +585,7 @@ class TestIntrospectionFunctions:
 
     def test_get_injectable_metadata_returns_none_for_undecorated(self):
         """Test functionality: get injectable metadata returns none for undecorated."""
+
         class Plain:
             pass
 
@@ -577,6 +593,7 @@ class TestIntrospectionFunctions:
 
     def test_get_inject_metadata_returns_none_for_undecorated(self):
         """Test functionality: get inject metadata returns none for undecorated."""
+
         def plain_func():
             pass
 
@@ -584,6 +601,7 @@ class TestIntrospectionFunctions:
 
     def test_get_injectable_params_returns_empty_for_undecorated(self):
         """Test functionality: get injectable params returns empty for undecorated."""
+
         def plain_func():
             pass
 
@@ -664,6 +682,7 @@ class TestAutoResolutionViaHints:
 
     def test_auto_resolve_constructor_deps(self, container: Container):
         """Test functionality: auto resolve constructor deps."""
+
         class Logger:
             def __init__(self):
                 self.name = "logger"
@@ -679,8 +698,11 @@ class TestAutoResolutionViaHints:
         assert isinstance(worker.logger, Logger)
         assert worker.logger.name == "logger"
 
-    def test_constructor_with_no_hints_creates_plain_instance(self, container: Container):
+    def test_constructor_with_no_hints_creates_plain_instance(
+        self, container: Container
+    ):
         """Test functionality: constructor with no hints creates plain instance."""
+
         class Simple:
             def __init__(self):
                 self.ready = True
@@ -693,6 +715,7 @@ class TestAutoResolutionViaHints:
 # ---------------------------------------------------------------------------
 # Advanced resolution features tests
 # ---------------------------------------------------------------------------
+
 
 @injectable(scope="singleton")
 class GlobalAutoRegistered:
@@ -753,6 +776,7 @@ class TestContainerAdvancedFeatures:
 
     def test_circular_dependency_with_names(self, container: Container):
         """Test functionality: circular dependency detection includes names in error."""
+
         class A:
             def __init__(self, b: "B"):
                 self.b = b
@@ -761,8 +785,8 @@ class TestContainerAdvancedFeatures:
             def __init__(self, a: A):
                 self.a = a
 
-        A.__init__.__annotations__['b'] = B
-        B.__init__.__annotations__['a'] = A
+        A.__init__.__annotations__["b"] = B
+        B.__init__.__annotations__["a"] = A
 
         container.register(A, A, name="a_named")
         container.register(B, B, name="b_named")

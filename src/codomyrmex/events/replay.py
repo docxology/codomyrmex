@@ -17,6 +17,7 @@ from typing import Any
 @dataclass
 class StoredEvent:
     """An event persisted in the event store."""
+
     event_type: str
     payload: dict[str, Any]
     timestamp: float = field(default_factory=time.time)
@@ -61,8 +62,12 @@ class EventStore:
                     last_seq = max(last_seq, evt.get("sequence_number", 0))
         return last_seq
 
-    def append(self, event_type: str, payload: dict[str, Any],
-               metadata: dict[str, Any] | None = None) -> StoredEvent:
+    def append(
+        self,
+        event_type: str,
+        payload: dict[str, Any],
+        metadata: dict[str, Any] | None = None,
+    ) -> StoredEvent:
         """Append a new event to the store."""
         self._sequence += 1
         event = StoredEvent(

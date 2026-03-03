@@ -37,7 +37,9 @@ def generate_symmetric_key(key_size: int = 256) -> bytes:
         SymmetricCipherError: If key_size is invalid.
     """
     if key_size not in (128, 192, 256):
-        raise SymmetricCipherError(f"Invalid key size: {key_size}. Must be 128, 192, or 256.")
+        raise SymmetricCipherError(
+            f"Invalid key size: {key_size}. Must be 128, 192, or 256."
+        )
     logger.debug("Generating %d-bit symmetric key", key_size)
     return os.urandom(key_size // 8)
 
@@ -67,7 +69,9 @@ def encrypt_aes_gcm(
         ct_with_tag = aesgcm.encrypt(nonce, plaintext, aad)
         ciphertext = ct_with_tag[:-16]
         tag = ct_with_tag[-16:]
-        logger.debug("AES-GCM encryption complete, ciphertext length=%d", len(ciphertext))
+        logger.debug(
+            "AES-GCM encryption complete, ciphertext length=%d", len(ciphertext)
+        )
         return CipherResult(ciphertext=ciphertext, nonce=nonce, tag=tag)
     except Exception as exc:
         raise SymmetricCipherError(f"AES-GCM encryption failed: {exc}") from exc
@@ -130,10 +134,15 @@ def encrypt_chacha20(
         ct_with_tag = chacha.encrypt(nonce, plaintext, aad)
         ciphertext = ct_with_tag[:-16]
         tag = ct_with_tag[-16:]
-        logger.debug("ChaCha20-Poly1305 encryption complete, ciphertext length=%d", len(ciphertext))
+        logger.debug(
+            "ChaCha20-Poly1305 encryption complete, ciphertext length=%d",
+            len(ciphertext),
+        )
         return CipherResult(ciphertext=ciphertext, nonce=nonce, tag=tag)
     except Exception as exc:
-        raise SymmetricCipherError(f"ChaCha20-Poly1305 encryption failed: {exc}") from exc
+        raise SymmetricCipherError(
+            f"ChaCha20-Poly1305 encryption failed: {exc}"
+        ) from exc
 
 
 def decrypt_chacha20(
@@ -162,7 +171,11 @@ def decrypt_chacha20(
         chacha = ChaCha20Poly1305(key)
         ct_with_tag = ciphertext + tag
         plaintext = chacha.decrypt(nonce, ct_with_tag, aad)
-        logger.debug("ChaCha20-Poly1305 decryption complete, plaintext length=%d", len(plaintext))
+        logger.debug(
+            "ChaCha20-Poly1305 decryption complete, plaintext length=%d", len(plaintext)
+        )
         return plaintext
     except Exception as exc:
-        raise SymmetricCipherError(f"ChaCha20-Poly1305 decryption failed: {exc}") from exc
+        raise SymmetricCipherError(
+            f"ChaCha20-Poly1305 decryption failed: {exc}"
+        ) from exc

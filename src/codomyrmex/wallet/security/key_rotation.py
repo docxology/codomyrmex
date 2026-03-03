@@ -149,7 +149,9 @@ class KeyRotation:
             except Exception as e:
                 logger.warning(f"Post-rotate hook failed: {e}")
 
-        logger.info(f"Recorded rotation for {user_id}: {old_wallet_id} -> {new_wallet_id}")
+        logger.info(
+            f"Recorded rotation for {user_id}: {old_wallet_id} -> {new_wallet_id}"
+        )
         return record
 
     def get_rotation_history(self, user_id: str) -> list[RotationRecord]:

@@ -267,6 +267,7 @@ class ToolRegistry:
 # Decorator API
 # ======================================================================
 
+
 def tool(
     name: str,
     description: str = "",

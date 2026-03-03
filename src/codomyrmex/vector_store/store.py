@@ -16,7 +16,9 @@ class VectorStore(ABC):
     """Abstract base class for vector storage backends."""
 
     @abstractmethod
-    def add(self, id: str, embedding: list[float], metadata: dict[str, Any] | None = None) -> None:
+    def add(
+        self, id: str, embedding: list[float], metadata: dict[str, Any] | None = None
+    ) -> None:
         """Add a vector to the store."""
         pass
 
@@ -70,13 +72,17 @@ class InMemoryVectorStore(VectorStore):
         else:
             raise ValueError(f"Unknown distance metric: {distance_metric}")
 
-    def add(self, id: str, embedding: list[float], metadata: dict[str, Any] | None = None) -> None:
+    def add(
+        self, id: str, embedding: list[float], metadata: dict[str, Any] | None = None
+    ) -> None:
         """Add a vector to the store."""
         entry = VectorEntry(id=id, embedding=embedding, metadata=metadata or {})
         with self._lock:
             self._vectors[id] = entry
 
-    def add_batch(self, entries: list[tuple[str, list[float], dict[str, Any] | None]]) -> int:
+    def add_batch(
+        self, entries: list[tuple[str, list[float], dict[str, Any] | None]]
+    ) -> int:
         """Add multiple vectors at once."""
         count = 0
         with self._lock:
@@ -85,7 +91,9 @@ class InMemoryVectorStore(VectorStore):
                 embedding = item[1]
                 metadata = item[2] if len(item) > 2 else None
                 self._vectors[id_val] = VectorEntry(
-                    id=id_val, embedding=embedding, metadata=metadata or {},
+                    id=id_val,
+                    embedding=embedding,
+                    metadata=metadata or {},
                 )
                 count += 1
         return count
@@ -114,9 +122,14 @@ class InMemoryVectorStore(VectorStore):
             if filter_fn and not filter_fn(entry.metadata):
                 continue
             score = self._distance_fn(query, entry.embedding)
-            results.append(SearchResult(
-                id=entry.id, score=score, embedding=entry.embedding, metadata=entry.metadata,
-            ))
+            results.append(
+                SearchResult(
+                    id=entry.id,
+                    score=score,
+                    embedding=entry.embedding,
+                    metadata=entry.metadata,
+                )
+            )
         results.sort(key=lambda x: x.score, reverse=self._higher_is_better)
         return results[:k]
 
@@ -157,7 +170,9 @@ class NamespacedVectorStore(VectorStore):
             return self._namespaces[self._current_namespace]
         return self._default_store
 
-    def add(self, id: str, embedding: list[float], metadata: dict[str, Any] | None = None) -> None:
+    def add(
+        self, id: str, embedding: list[float], metadata: dict[str, Any] | None = None
+    ) -> None:
         """Add to current namespace."""
         self._get_store().add(id, embedding, metadata)
 

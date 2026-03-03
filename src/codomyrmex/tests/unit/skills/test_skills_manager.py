@@ -35,11 +35,15 @@ def _init_repo_with_skills(path: Path, skills: dict[str, dict]) -> None:
     subprocess.run(["git", "init"], cwd=str(path), capture_output=True, check=True)
     subprocess.run(
         ["git", "config", "user.email", "test@test.com"],
-        cwd=str(path), capture_output=True, check=True,
+        cwd=str(path),
+        capture_output=True,
+        check=True,
     )
     subprocess.run(
         ["git", "config", "user.name", "Test"],
-        cwd=str(path), capture_output=True, check=True,
+        cwd=str(path),
+        capture_output=True,
+        check=True,
     )
     for rel, data in skills.items():
         skill_dir = path / rel
@@ -49,11 +53,15 @@ def _init_repo_with_skills(path: Path, skills: dict[str, dict]) -> None:
     subprocess.run(["git", "add", "."], cwd=str(path), capture_output=True, check=True)
     subprocess.run(
         ["git", "commit", "-m", "init"],
-        cwd=str(path), capture_output=True, check=True,
+        cwd=str(path),
+        capture_output=True,
+        check=True,
     )
     subprocess.run(
         ["git", "branch", "-M", "main"],
-        cwd=str(path), capture_output=True, check=True,
+        cwd=str(path),
+        capture_output=True,
+        check=True,
     )
 
 
@@ -63,9 +71,7 @@ def _init_repo_with_skills(path: Path, skills: dict[str, dict]) -> None:
 def test_initialize_clone(temp_dir):
     """Test initialization clones a real repo."""
     origin = temp_dir / "origin"
-    _init_repo_with_skills(origin, {
-        "cat1/skill1": {"description": "s1"}
-    })
+    _init_repo_with_skills(origin, {"cat1/skill1": {"description": "s1"}})
 
     skills_dir = temp_dir / "skills"
     manager = SkillsManager(
@@ -83,9 +89,7 @@ def test_initialize_clone(temp_dir):
 def test_initialize_auto_sync(temp_dir):
     """Test initialization with auto-sync pulls updates."""
     origin = temp_dir / "origin"
-    _init_repo_with_skills(origin, {
-        "cat1/skill1": {"description": "s1"}
-    })
+    _init_repo_with_skills(origin, {"cat1/skill1": {"description": "s1"}})
 
     skills_dir = temp_dir / "skills"
     manager = SkillsManager(skills_dir, str(origin), "main", auto_sync=True)
@@ -103,14 +107,11 @@ def test_initialize_auto_sync(temp_dir):
 def test_sync_upstream(temp_dir):
     """Test syncing upstream pulls from remote."""
     origin = temp_dir / "origin"
-    _init_repo_with_skills(origin, {
-        "cat1/skill1": {"description": "s1"}
-    })
+    _init_repo_with_skills(origin, {"cat1/skill1": {"description": "s1"}})
 
     skills_dir = temp_dir / "skills"
     manager = SkillsManager(skills_dir, str(origin), "main")
     manager.initialize()
-
 
     # Configure pull strategy and identity to allow merging
     for args in [

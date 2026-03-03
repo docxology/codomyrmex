@@ -21,8 +21,10 @@ from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
 
+
 class StreamEventType(Enum):
     """Types of streaming events."""
+
     START = "start"
     DELTA = "delta"
     ERROR = "error"
@@ -30,9 +32,11 @@ class StreamEventType(Enum):
     TOOL_CALL = "tool_call"
     METADATA = "metadata"
 
+
 @dataclass
 class StreamEvent:
     """A single streaming event."""
+
     event_type: StreamEventType
     content: str = ""
     delta: str = ""
@@ -53,9 +57,11 @@ class StreamEvent:
             "metadata": self.metadata,
         }
 
+
 @dataclass
 class StreamStats:
     """Statistics for a stream."""
+
     total_tokens: int = 0
     first_token_ms: float = 0.0
     total_duration_ms: float = 0.0
@@ -67,6 +73,7 @@ class StreamStats:
         if self.total_duration_ms == 0:
             return 0.0
         return self.total_tokens / (self.total_duration_ms / 1000)
+
 
 class StreamBuffer:
     """
@@ -118,6 +125,7 @@ class StreamBuffer:
             self._chunks.clear()
             self._total_length = 0
 
+
 class StreamProcessor(ABC):
     """Base class for stream processors."""
 
@@ -126,12 +134,14 @@ class StreamProcessor(ABC):
         """Process a stream event. Return None to filter out."""
         pass
 
+
 class PassthroughProcessor(StreamProcessor):
     """Passes events through unchanged."""
 
     def process(self, event: StreamEvent) -> StreamEvent | None:
         """Process the input and return the result."""
         return event
+
 
 class ContentFilterProcessor(StreamProcessor):
     """Filters content based on patterns."""
@@ -149,6 +159,7 @@ class ContentFilterProcessor(StreamProcessor):
                         delta="[FILTERED]",
                     )
         return event
+
 
 class JSONStreamParser:
     """
@@ -180,7 +191,7 @@ class JSONStreamParser:
                 self._escape_next = False
                 continue
 
-            if char == '\\' and self._in_string:
+            if char == "\\" and self._in_string:
                 self._escape_next = True
                 continue
 
@@ -189,11 +200,11 @@ class JSONStreamParser:
                 continue
 
             if not self._in_string:
-                if char == '{':
+                if char == "{":
                     if self._depth == 0:
                         self._buffer = char
                     self._depth += 1
-                elif char == '}':
+                elif char == "}":
                     self._depth -= 1
                     if self._depth == 0:
                         try:
@@ -201,7 +212,10 @@ class JSONStreamParser:
                             self._objects.append(obj)
                             self._buffer = ""
                         except json.JSONDecodeError as e:
-                            logger.warning("JSONStreamParser: discarding malformed JSON buffer (depth=0): %s", str(e))
+                            logger.warning(
+                                "JSONStreamParser: discarding malformed JSON buffer (depth=0): %s",
+                                str(e),
+                            )
                             self._buffer = ""
 
     @property
@@ -221,6 +235,7 @@ class JSONStreamParser:
         self._objects = []
         self._depth = 0
         self._in_string = False
+
 
 class StreamHandler:
     """
@@ -250,7 +265,9 @@ class StreamHandler:
         self._processors.append(processor)
         return self
 
-    def on_event(self, event_type: StreamEventType, callback: Callable[[StreamEvent], None]) -> "StreamHandler":
+    def on_event(
+        self, event_type: StreamEventType, callback: Callable[[StreamEvent], None]
+    ) -> "StreamHandler":
         """Register a callback for an event type."""
         if event_type not in self._callbacks:
             self._callbacks[event_type] = []
@@ -281,7 +298,9 @@ class StreamHandler:
             try:
                 callback(event)
             except Exception as e:
-                logger.warning("StreamHandler callback raised exception (ignored): %s", str(e))
+                logger.warning(
+                    "StreamHandler callback raised exception (ignored): %s", str(e)
+                )
 
     def iter_events(
         self,
@@ -364,16 +383,19 @@ class StreamHandler:
         """Get stream statistics."""
         return self._stats
 
+
 def stream_to_string(stream: Iterator[str]) -> str:
     """Convert a stream to a complete string."""
     handler = StreamHandler()
     return handler.process_stream(stream)
 
+
 def chunk_stream(text: str, chunk_size: int = 10) -> Generator[str, None, None]:
     """Generate chunks from text (for testing)."""
     for i in range(0, len(text), chunk_size):
-        yield text[i:i + chunk_size]
+        yield text[i : i + chunk_size]
         time.sleep(0.01)  # Simulate network delay
+
 
 __all__ = [
     # Enums

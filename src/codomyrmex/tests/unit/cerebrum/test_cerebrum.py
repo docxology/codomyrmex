@@ -82,7 +82,9 @@ def test_case_empty_features_raises():
 @pytest.mark.unit
 def test_case_serialization_roundtrip():
     """Case can be serialized to dict and reconstructed."""
-    original = Case(case_id="c2", features={"a": 10}, outcome="win", metadata={"tag": "test"})
+    original = Case(
+        case_id="c2", features={"a": 10}, outcome="win", metadata={"tag": "test"}
+    )
     data = original.to_dict()
     restored = Case.from_dict(data)
     assert restored.case_id == original.case_id
@@ -271,9 +273,13 @@ def test_transformation_manager_register_and_transform():
     """TransformationManager dispatches to registered transformers."""
     tm = TransformationManager()
     tm.register_transformer("adaptation", AdaptationTransformer(adaptation_rate=0.2))
-    model = Model(name="test_model", model_type="cognitive", parameters={"feature_x": 5.0})
+    model = Model(
+        name="test_model", model_type="cognitive", parameters={"feature_x": 5.0}
+    )
     case = Case(case_id="adapt_case", features={"x": 10.0})
-    adapted = tm.transform(model, "adapt_to_case", transformer_name="adaptation", case=case)
+    adapted = tm.transform(
+        model, "adapt_to_case", transformer_name="adaptation", case=case
+    )
     assert adapted.name == "test_model_adapted"
 
 

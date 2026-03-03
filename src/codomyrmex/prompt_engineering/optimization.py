@@ -219,10 +219,7 @@ class PromptOptimizer:
 
         # Add output format section if not present
         if not re.search(r"(?i)(format|output|respond)", text):
-            sections.append(
-                "## Output Format\n"
-                "Provide a clear, structured response."
-            )
+            sections.append("## Output Format\nProvide a clear, structured response.")
             changes.append("Added output format section")
 
         result = "\n\n".join(sections)
@@ -292,9 +289,7 @@ class PromptOptimizer:
                 input_text = ex.get("input", "")
                 output_text = ex.get("output", "")
                 parts.append(
-                    f"Example {i}:\n"
-                    f"Input: {input_text}\n"
-                    f"Output: {output_text}"
+                    f"Example {i}:\nInput: {input_text}\nOutput: {output_text}"
                 )
             changes.append(f"Added {len(examples)} few-shot example(s)")
         else:

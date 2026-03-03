@@ -163,8 +163,7 @@ class ParallelCompressor:
             List of compressed chunks. Decompress and concatenate to recover.
         """
         chunks = [
-            data[i: i + self.chunk_size]
-            for i in range(0, len(data), self.chunk_size)
+            data[i : i + self.chunk_size] for i in range(0, len(data), self.chunk_size)
         ]
         return self.compress_batch(chunks, on_progress=on_progress)
 

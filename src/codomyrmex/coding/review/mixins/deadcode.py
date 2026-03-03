@@ -11,9 +11,11 @@ logger = get_logger(__name__)
 try:
     from codomyrmex.performance import monitor_performance
 except ImportError:
+
     def monitor_performance(*args, **kwargs):
         def decorator(func):
             return func
+
         return decorator
 
 
@@ -39,7 +41,9 @@ class DeadCodeMixin:
 
         return findings
 
-    def _enhance_dead_code_finding(self, finding: dict[str, Any]) -> DeadCodeFinding | None:
+    def _enhance_dead_code_finding(
+        self, finding: dict[str, Any]
+    ) -> DeadCodeFinding | None:
         """Enhance a dead code finding with better suggestions."""
         location = finding.get("location", {})
         file_path = location.get("file_path", "")
@@ -58,7 +62,7 @@ class DeadCodeMixin:
             severity=severity,
             suggestion=suggestion,
             fix_available=self._can_auto_fix_dead_code(reason),
-            estimated_savings=self._estimate_dead_code_savings(reason)
+            estimated_savings=self._estimate_dead_code_savings(reason),
         )
 
     def _get_dead_code_suggestion(self, reason: str, severity: str) -> str:
@@ -71,7 +75,7 @@ class DeadCodeMixin:
             "unused_variable": "Remove unused variable or add underscore prefix if intentionally unused",
             "unused_function": "Remove unused function or add proper usage",
             "unused_import": "Remove unused import to reduce namespace pollution",
-            "unused_class": "Remove unused class or add proper usage"
+            "unused_class": "Remove unused class or add proper usage",
         }
 
         return suggestions.get(reason, f"Remove unreachable code (reason: {reason})")
@@ -82,7 +86,7 @@ class DeadCodeMixin:
             "unreachable_after_return",
             "unreachable_after_raise",
             "unreachable_after_break",
-            "unreachable_after_continue"
+            "unreachable_after_continue",
         }
         return reason in auto_fixable
 
@@ -106,7 +110,7 @@ class DeadCodeMixin:
             sorted_results = sorted(
                 dead_code_results,
                 key=lambda x: severity_order.get(x.get("severity", "info"), 0),
-                reverse=True
+                reverse=True,
             )[:5]
 
             return [
@@ -114,7 +118,7 @@ class DeadCodeMixin:
                     "file_path": finding.get("location", {}).get("file_path", ""),
                     "line_number": finding.get("location", {}).get("start_line", 0),
                     "reason": finding.get("reason", ""),
-                    "severity": finding.get("severity", "unknown")
+                    "severity": finding.get("severity", "unknown"),
                 }
                 for finding in sorted_results
             ]

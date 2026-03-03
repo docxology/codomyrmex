@@ -19,7 +19,7 @@ import sys
 import pytest
 
 # Add src to path for imports
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', 'src'))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "..", "src"))
 
 from codomyrmex.cli import (
     check_environment,
@@ -300,7 +300,9 @@ class TestCLIAnalysis:
 
         # Try to initialize git (may fail if git not available)
         try:
-            subprocess.run(["git", "init"], cwd=test_repo, check=True, capture_output=True)
+            subprocess.run(
+                ["git", "init"], cwd=test_repo, check=True, capture_output=True
+            )
         except (subprocess.SubprocessError, FileNotFoundError):
             pytest.skip("Git not available")
 
@@ -499,7 +501,7 @@ class TestCLIMain:
         original_argv = sys.argv.copy()
 
         try:
-            sys.argv = ['codomyrmex', '--help']
+            sys.argv = ["codomyrmex", "--help"]
             # Should exit with SystemExit for help
             with pytest.raises(SystemExit):
                 main()
@@ -512,7 +514,7 @@ class TestCLIMain:
         original_argv = sys.argv.copy()
 
         try:
-            sys.argv = ['codomyrmex', 'check']
+            sys.argv = ["codomyrmex", "check"]
             # Should not raise exception
             main()
         finally:
@@ -524,7 +526,7 @@ class TestCLIMain:
         original_argv = sys.argv.copy()
 
         try:
-            sys.argv = ['codomyrmex', 'info']
+            sys.argv = ["codomyrmex", "info"]
             # Should not raise exception
             main()
         finally:
@@ -536,7 +538,7 @@ class TestCLIMain:
         original_argv = sys.argv.copy()
 
         try:
-            sys.argv = ['codomyrmex', 'modules']
+            sys.argv = ["codomyrmex", "modules"]
             # Should not raise exception
             main()
         finally:
@@ -548,7 +550,7 @@ class TestCLIMain:
         original_argv = sys.argv.copy()
 
         try:
-            sys.argv = ['codomyrmex', 'invalid_command']
+            sys.argv = ["codomyrmex", "invalid_command"]
             # Should exit with SystemExit for invalid command
             with pytest.raises(SystemExit):
                 main()

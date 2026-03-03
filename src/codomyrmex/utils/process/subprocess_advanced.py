@@ -137,8 +137,10 @@ def stream_command(
             # Use select to wait up to 0.05s on POSIX systems so we don't block
             readable = []
             import sys
+
             if sys.platform != "win32":
                 import select
+
                 rlist = []
                 if process.stdout:
                     rlist.append(process.stdout)

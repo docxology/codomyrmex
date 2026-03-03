@@ -8,6 +8,7 @@ try:
         SyntheticDataGenerator,
         TemplateGenerator,
     )
+
     HAS_MODULE = True
 except ImportError:
     HAS_MODULE = False
@@ -184,12 +185,16 @@ class TestSyntheticDataGeneratorClassification:
         """Balanced classification produces roughly equal class sizes."""
         gen = SyntheticDataGenerator()
         features, labels = gen.generate_classification(
-            n_samples=100, n_classes=4, n_features=5, seed=42,
+            n_samples=100,
+            n_classes=4,
+            n_features=5,
+            seed=42,
         )
         assert len(features) == len(labels)
         assert len(features) == 100
 
         from collections import Counter
+
         counts = Counter(labels)
         assert len(counts) == 4
         assert all(c == 25 for c in counts.values())
@@ -198,9 +203,13 @@ class TestSyntheticDataGeneratorClassification:
         """Imbalanced classification produces different class sizes."""
         gen = SyntheticDataGenerator()
         features, labels = gen.generate_classification(
-            n_samples=100, n_classes=3, class_balance="imbalanced", seed=42,
+            n_samples=100,
+            n_classes=3,
+            class_balance="imbalanced",
+            seed=42,
         )
         from collections import Counter
+
         counts = Counter(labels)
         sizes = sorted(counts.values(), reverse=True)
         # First class should have more samples than last
@@ -210,7 +219,9 @@ class TestSyntheticDataGeneratorClassification:
         """Each feature vector has n_features dimensions."""
         gen = SyntheticDataGenerator()
         features, labels = gen.generate_classification(
-            n_samples=50, n_features=7, seed=42,
+            n_samples=50,
+            n_features=7,
+            seed=42,
         )
         for f in features:
             assert len(f) == 7
@@ -269,6 +280,7 @@ class TestSyntheticDataMCPTools:
     def test_synth_generate_structured(self):
         """MCP tool returns structured records."""
         from codomyrmex.synthetic_data.mcp_tools import synth_generate_structured
+
         result = synth_generate_structured(
             fields={"x": {"type": "int", "min": 0, "max": 10}},
             n_samples=5,
@@ -281,8 +293,11 @@ class TestSyntheticDataMCPTools:
     def test_synth_generate_classification(self):
         """MCP tool returns classification data summary."""
         from codomyrmex.synthetic_data.mcp_tools import synth_generate_classification
+
         result = synth_generate_classification(
-            n_samples=30, n_classes=3, seed=42,
+            n_samples=30,
+            n_classes=3,
+            seed=42,
         )
         assert result["status"] == "success"
         assert result["n_samples"] == 30
@@ -290,6 +305,7 @@ class TestSyntheticDataMCPTools:
     def test_synth_generate_preference_pairs(self):
         """MCP tool returns preference pairs."""
         from codomyrmex.synthetic_data.mcp_tools import synth_generate_preference_pairs
+
         result = synth_generate_preference_pairs(n_pairs=5, seed=42)
         assert result["status"] == "success"
         assert result["n_pairs"] == 5

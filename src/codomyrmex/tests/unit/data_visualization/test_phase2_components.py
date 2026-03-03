@@ -10,12 +10,14 @@ def test_badge_component():
     assert "Success" in html
     assert "background-color: #5cb85c" in html
 
+
 def test_alert_component():
     """Test functionality: alert component."""
     alert = Alert(message="Warning!", level="warning")
     html = str(alert)
     assert "Warning!" in html
     assert "background-color: #fcf8e3" in html
+
 
 def test_progress_bar():
     """Test functionality: progress bar."""

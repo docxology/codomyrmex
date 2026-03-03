@@ -20,9 +20,9 @@ logger = get_logger(__name__)
 
 
 @dataclass
-
 class QueryMetrics:
     """Query performance metrics."""
+
     query_hash: str
     query_type: str  # "SELECT", "INSERT", "UPDATE", "DELETE"
     execution_time_ms: float
@@ -31,9 +31,11 @@ class QueryMetrics:
     query_text: str = ""
     database_name: str = ""
 
+
 @dataclass
 class DatabaseMetrics:
     """Database performance metrics."""
+
     database_name: str
     timestamp: datetime
     connections_active: int
@@ -43,9 +45,11 @@ class DatabaseMetrics:
     cache_hit_ratio: float
     disk_io_mb: float
 
+
 @dataclass
 class PerformanceAlert:
     """Performance alert or warning."""
+
     alert_id: str
     severity: str  # "low", "medium", "high", "critical"
     metric_name: str
@@ -54,6 +58,7 @@ class PerformanceAlert:
     description: str
     timestamp: datetime
     resolution_suggestions: list[str] = field(default_factory=list)
+
 
 class DatabasePerformanceMonitor:
     """Database performance monitoring and optimization system."""
@@ -90,7 +95,7 @@ class DatabasePerformanceMonitor:
             rows_affected=metrics.get("rows_affected", 0),
             timestamp=datetime.now(),
             query_text=metrics.get("query_text", ""),
-            database_name=metrics.get("database_name", "")
+            database_name=metrics.get("database_name", ""),
         )
 
         self._query_metrics.append(query_metric)
@@ -116,7 +121,7 @@ class DatabasePerformanceMonitor:
             queries_per_second=metrics.get("queries_per_second", 0.0),
             average_query_time_ms=metrics.get("average_query_time_ms", 0.0),
             cache_hit_ratio=metrics.get("cache_hit_ratio", 0.0),
-            disk_io_mb=metrics.get("disk_io_mb", 0.0)
+            disk_io_mb=metrics.get("disk_io_mb", 0.0),
         )
 
         self._database_metrics.append(db_metric)
@@ -138,16 +143,13 @@ class DatabasePerformanceMonitor:
         """
         cutoff_time = datetime.now() - timedelta(hours=hours)
 
-        recent_queries = [
-            q for q in self._query_metrics
-            if q.timestamp >= cutoff_time
-        ]
+        recent_queries = [q for q in self._query_metrics if q.timestamp >= cutoff_time]
 
         if not recent_queries:
             return {
                 "analysis_period_hours": hours,
                 "queries_analyzed": 0,
-                "message": "No query metrics found for analysis"
+                "message": "No query metrics found for analysis",
             }
 
         # Group by query type
@@ -159,7 +161,7 @@ class DatabasePerformanceMonitor:
         analysis = {
             "analysis_period_hours": hours,
             "queries_analyzed": len(recent_queries),
-            "query_types": {}
+            "query_types": {},
         }
 
         for query_type, times in query_types.items():
@@ -170,12 +172,15 @@ class DatabasePerformanceMonitor:
                     "median_time_ms": statistics.median(times),
                     "min_time_ms": min(times),
                     "max_time_ms": max(times),
-                    "slow_queries": len([t for t in times if t > 1000])  # Queries > 1 second
+                    "slow_queries": len(
+                        [t for t in times if t > 1000]
+                    ),  # Queries > 1 second
                 }
 
         # Identify slow queries
         slow_queries = [
-            q for q in recent_queries
+            q
+            for q in recent_queries
             if q.execution_time_ms > 1000  # More than 1 second
         ]
 
@@ -185,14 +190,20 @@ class DatabasePerformanceMonitor:
                 "execution_time_ms": q.execution_time_ms,
                 "query_type": q.query_type,
                 "timestamp": q.timestamp.isoformat(),
-                "query_text": q.query_text[:100] + "..." if len(q.query_text) > 100 else q.query_text
+                "query_text": (
+                    q.query_text[:100] + "..."
+                    if len(q.query_text) > 100
+                    else q.query_text
+                ),
             }
             for q in slow_queries[:10]  # Top 10 slow queries
         ]
 
         return analysis
 
-    def analyze_database_performance(self, database_name: str, hours: int = 24) -> dict[str, Any]:
+    def analyze_database_performance(
+        self, database_name: str, hours: int = 24
+    ) -> dict[str, Any]:
         """Analyze database performance over time.
 
         Args:
@@ -205,7 +216,8 @@ class DatabasePerformanceMonitor:
         cutoff_time = datetime.now() - timedelta(hours=hours)
 
         db_metrics = [
-            m for m in self._database_metrics
+            m
+            for m in self._database_metrics
             if m.database_name == database_name and m.timestamp >= cutoff_time
         ]
 
@@ -214,7 +226,7 @@ class DatabasePerformanceMonitor:
                 "database_name": database_name,
                 "analysis_period_hours": hours,
                 "metrics_count": 0,
-                "message": "No database metrics found for analysis"
+                "message": "No database metrics found for analysis",
             }
 
         # Calculate statistics
@@ -226,10 +238,20 @@ class DatabasePerformanceMonitor:
             "database_name": database_name,
             "analysis_period_hours": hours,
             "metrics_count": len(db_metrics),
-            "connections_stats": self._calculate_stats(connections_active) if connections_active else None,
-            "query_rate_stats": self._calculate_stats(queries_per_second) if queries_per_second else None,
-            "query_time_stats": self._calculate_stats(avg_query_time) if avg_query_time else None,
-            "performance_issues": self._identify_performance_issues(db_metrics)
+            "connections_stats": (
+                self._calculate_stats(connections_active)
+                if connections_active
+                else None
+            ),
+            "query_rate_stats": (
+                self._calculate_stats(queries_per_second)
+                if queries_per_second
+                else None
+            ),
+            "query_time_stats": (
+                self._calculate_stats(avg_query_time) if avg_query_time else None
+            ),
+            "performance_issues": self._identify_performance_issues(db_metrics),
         }
 
         return analysis
@@ -245,42 +267,52 @@ class DatabasePerformanceMonitor:
             "median": statistics.median(values),
             "min": min(values),
             "max": max(values),
-            "p95": statistics.quantiles(values, n=20)[18] if len(values) >= 20 else max(values)
+            "p95": (
+                statistics.quantiles(values, n=20)[18]
+                if len(values) >= 20
+                else max(values)
+            ),
         }
 
-    def _identify_performance_issues(self, metrics: list[DatabaseMetrics]) -> list[dict[str, Any]]:
+    def _identify_performance_issues(
+        self, metrics: list[DatabaseMetrics]
+    ) -> list[dict[str, Any]]:
         """Identify database performance issues."""
         issues = []
 
         # Check for high connection usage
         avg_connections = statistics.mean([m.connections_active for m in metrics])
         if avg_connections > 50:  # More than 50 active connections
-            issues.append({
-                "type": "high_connection_usage",
-                "severity": "medium",
-                "description": f"Average active connections ({avg_connections:.1f}) is high",
-                "impact": "May indicate connection pool exhaustion",
-                "recommendations": [
-                    "Review connection pool configuration",
-                    "Check for connection leaks in application",
-                    "Consider connection pooling optimization"
-                ]
-            })
+            issues.append(
+                {
+                    "type": "high_connection_usage",
+                    "severity": "medium",
+                    "description": f"Average active connections ({avg_connections:.1f}) is high",
+                    "impact": "May indicate connection pool exhaustion",
+                    "recommendations": [
+                        "Review connection pool configuration",
+                        "Check for connection leaks in application",
+                        "Consider connection pooling optimization",
+                    ],
+                }
+            )
 
         # Check for slow query performance
         avg_query_time = statistics.mean([m.average_query_time_ms for m in metrics])
         if avg_query_time > 100:  # More than 100ms average
-            issues.append({
-                "type": "slow_queries",
-                "severity": "high",
-                "description": f"Average query time ({avg_query_time:.1f}ms) exceeds recommended threshold",
-                "impact": "Application performance may be degraded",
-                "recommendations": [
-                    "Review and optimize slow queries",
-                    "Add appropriate indexes",
-                    "Consider query result caching"
-                ]
-            })
+            issues.append(
+                {
+                    "type": "slow_queries",
+                    "severity": "high",
+                    "description": f"Average query time ({avg_query_time:.1f}ms) exceeds recommended threshold",
+                    "impact": "Application performance may be degraded",
+                    "recommendations": [
+                        "Review and optimize slow queries",
+                        "Add appropriate indexes",
+                        "Consider query result caching",
+                    ],
+                }
+            )
 
         return issues
 
@@ -298,52 +330,61 @@ class DatabasePerformanceMonitor:
 
         # Check recent metrics for alert conditions
         recent_metrics = [
-            m for m in self._database_metrics
-            if m.database_name == database_name and
-            m.timestamp >= current_time - timedelta(minutes=5)
+            m
+            for m in self._database_metrics
+            if m.database_name == database_name
+            and m.timestamp >= current_time - timedelta(minutes=5)
         ]
 
         if recent_metrics:
-            avg_query_time = statistics.mean([m.average_query_time_ms for m in recent_metrics])
+            avg_query_time = statistics.mean(
+                [m.average_query_time_ms for m in recent_metrics]
+            )
             max_connections = max([m.connections_active for m in recent_metrics])
 
             # High query time alert
             if avg_query_time > 500:  # More than 500ms
-                alerts.append(PerformanceAlert(
-                    alert_id=f"high_query_time_{int(time.time())}",
-                    severity="high",
-                    metric_name="average_query_time_ms",
-                    current_value=avg_query_time,
-                    threshold_value=500,
-                    description=f"Average query time ({avg_query_time:.1f}ms) exceeds threshold",
-                    timestamp=current_time,
-                    resolution_suggestions=[
-                        "Review slow queries",
-                        "Add database indexes",
-                        "Optimize query structure"
-                    ]
-                ))
+                alerts.append(
+                    PerformanceAlert(
+                        alert_id=f"high_query_time_{int(time.time())}",
+                        severity="high",
+                        metric_name="average_query_time_ms",
+                        current_value=avg_query_time,
+                        threshold_value=500,
+                        description=f"Average query time ({avg_query_time:.1f}ms) exceeds threshold",
+                        timestamp=current_time,
+                        resolution_suggestions=[
+                            "Review slow queries",
+                            "Add database indexes",
+                            "Optimize query structure",
+                        ],
+                    )
+                )
 
             # High connection usage alert
             if max_connections > 80:  # More than 80 connections
-                alerts.append(PerformanceAlert(
-                    alert_id=f"high_connections_{int(time.time())}",
-                    severity="medium",
-                    metric_name="connections_active",
-                    current_value=max_connections,
-                    threshold_value=80,
-                    description=f"High connection usage ({max_connections} active connections)",
-                    timestamp=current_time,
-                    resolution_suggestions=[
-                        "Review connection pool settings",
-                        "Check for connection leaks",
-                        "Consider load balancing"
-                    ]
-                ))
+                alerts.append(
+                    PerformanceAlert(
+                        alert_id=f"high_connections_{int(time.time())}",
+                        severity="medium",
+                        metric_name="connections_active",
+                        current_value=max_connections,
+                        threshold_value=80,
+                        description=f"High connection usage ({max_connections} active connections)",
+                        timestamp=current_time,
+                        resolution_suggestions=[
+                            "Review connection pool settings",
+                            "Check for connection leaks",
+                            "Consider load balancing",
+                        ],
+                    )
+                )
 
         return alerts
 
-    def get_performance_report(self, database_name: str, hours: int = 24) -> dict[str, Any]:
+    def get_performance_report(
+        self, database_name: str, hours: int = 24
+    ) -> dict[str, Any]:
         """Generate comprehensive performance report.
 
         Args:
@@ -370,27 +411,36 @@ class DatabasePerformanceMonitor:
                     "severity": alert.severity,
                     "description": alert.description,
                     "timestamp": alert.timestamp.isoformat(),
-                    "suggestions": alert.resolution_suggestions
+                    "suggestions": alert.resolution_suggestions,
                 }
                 for alert in alerts
             ],
-            "recommendations": self._generate_recommendations(query_analysis, db_analysis, alerts)
+            "recommendations": self._generate_recommendations(
+                query_analysis, db_analysis, alerts
+            ),
         }
 
         # Save report
-        report_file = self.performance_data_dir / f"performance_report_{database_name}_{int(time.time())}.json"
-        with open(report_file, 'w') as f:
+        report_file = (
+            self.performance_data_dir
+            / f"performance_report_{database_name}_{int(time.time())}.json"
+        )
+        with open(report_file, "w") as f:
             json.dump(report, f, indent=2, default=str)
 
         logger.info(f"Generated performance report for {database_name}")
         return report
 
-    def _generate_recommendations(self, query_analysis: dict, db_analysis: dict, alerts: list) -> list[str]:
+    def _generate_recommendations(
+        self, query_analysis: dict, db_analysis: dict, alerts: list
+    ) -> list[str]:
         """Generate performance recommendations."""
         recommendations = []
 
         if query_analysis.get("slow_queries"):
-            recommendations.append("Review and optimize slow queries identified in the analysis")
+            recommendations.append(
+                "Review and optimize slow queries identified in the analysis"
+            )
 
         if db_analysis.get("performance_issues"):
             for issue in db_analysis["performance_issues"]:
@@ -402,16 +452,20 @@ class DatabasePerformanceMonitor:
 
         # Add general recommendations
         if not recommendations:
-            recommendations.extend([
-                "Monitor query performance regularly",
-                "Review database indexes for optimization opportunities",
-                "Consider connection pooling configuration",
-                "Implement query result caching where appropriate"
-            ])
+            recommendations.extend(
+                [
+                    "Monitor query performance regularly",
+                    "Review database indexes for optimization opportunities",
+                    "Consider connection pooling configuration",
+                    "Implement query result caching where appropriate",
+                ]
+            )
 
         return list(set(recommendations))  # Remove duplicates
 
-    def get_performance_history(self, database_name: str, days: int = 7) -> list[dict[str, Any]]:
+    def get_performance_history(
+        self, database_name: str, days: int = 7
+    ) -> list[dict[str, Any]]:
         """Get performance history for a database.
 
         Args:
@@ -428,7 +482,10 @@ class DatabasePerformanceMonitor:
         # Aggregate metrics by day
         daily_metrics = {}
         for metric in self._database_metrics:
-            if metric.database_name == database_name and metric.timestamp >= cutoff_time:
+            if (
+                metric.database_name == database_name
+                and metric.timestamp >= cutoff_time
+            ):
                 day_key = metric.timestamp.date().isoformat()
 
                 if day_key not in daily_metrics:
@@ -436,21 +493,41 @@ class DatabasePerformanceMonitor:
                         "date": day_key,
                         "connections_active": [],
                         "queries_per_second": [],
-                        "average_query_time_ms": []
+                        "average_query_time_ms": [],
                     }
 
-                daily_metrics[day_key]["connections_active"].append(metric.connections_active)
-                daily_metrics[day_key]["queries_per_second"].append(metric.queries_per_second)
-                daily_metrics[day_key]["average_query_time_ms"].append(metric.average_query_time_ms)
+                daily_metrics[day_key]["connections_active"].append(
+                    metric.connections_active
+                )
+                daily_metrics[day_key]["queries_per_second"].append(
+                    metric.queries_per_second
+                )
+                daily_metrics[day_key]["average_query_time_ms"].append(
+                    metric.average_query_time_ms
+                )
 
         # Calculate daily averages
         for day_key, metrics in daily_metrics.items():
-            history.append({
-                "date": day_key,
-                "avg_connections": statistics.mean(metrics["connections_active"]) if metrics["connections_active"] else 0,
-                "avg_queries_per_second": statistics.mean(metrics["queries_per_second"]) if metrics["queries_per_second"] else 0,
-                "avg_query_time_ms": statistics.mean(metrics["average_query_time_ms"]) if metrics["average_query_time_ms"] else 0
-            })
+            history.append(
+                {
+                    "date": day_key,
+                    "avg_connections": (
+                        statistics.mean(metrics["connections_active"])
+                        if metrics["connections_active"]
+                        else 0
+                    ),
+                    "avg_queries_per_second": (
+                        statistics.mean(metrics["queries_per_second"])
+                        if metrics["queries_per_second"]
+                        else 0
+                    ),
+                    "avg_query_time_ms": (
+                        statistics.mean(metrics["average_query_time_ms"])
+                        if metrics["average_query_time_ms"]
+                        else 0
+                    ),
+                }
+            )
 
         # Sort by date
         history.sort(key=lambda h: h["date"])
@@ -458,7 +535,9 @@ class DatabasePerformanceMonitor:
         return history
 
 
-def monitor_database(database_name: str, workspace_dir: str | None = None) -> dict[str, Any]:
+def monitor_database(
+    database_name: str, workspace_dir: str | None = None
+) -> dict[str, Any]:
     """Monitor database performance.
 
     Args:
@@ -471,7 +550,10 @@ def monitor_database(database_name: str, workspace_dir: str | None = None) -> di
     monitor = DatabasePerformanceMonitor(workspace_dir)
     return monitor.analyze_database_performance(database_name)
 
-def optimize_database(database_name: str, workspace_dir: str | None = None) -> dict[str, Any]:
+
+def optimize_database(
+    database_name: str, workspace_dir: str | None = None
+) -> dict[str, Any]:
     """Optimize database performance.
 
     Args:

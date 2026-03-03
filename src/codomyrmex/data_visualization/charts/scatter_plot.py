@@ -75,7 +75,7 @@ class ScatterPlot:
         y_label: str = "Y-axis",
         dot_size: int = 20,
         dot_color: str = "blue",
-        alpha: float = 0.7
+        alpha: float = 0.7,
     ):
         """
         Initialize a scatter plot.
@@ -122,7 +122,7 @@ class ScatterPlot:
             show_plot=show_plot,
             dot_size=self.dot_size,
             dot_color=self.dot_color,
-            alpha=self.alpha
+            alpha=self.alpha,
         )
 
     def save(self, output_path: str):

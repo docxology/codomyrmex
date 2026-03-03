@@ -1,6 +1,5 @@
 """MCP tools for the system_discovery module."""
 
-
 from codomyrmex.model_context_protocol.decorators import mcp_tool
 
 
@@ -64,6 +63,7 @@ def dependency_tree(module: str) -> dict:
     """
     try:
         import importlib
+
         mod = importlib.import_module(f"codomyrmex.{module}")
         deps: list[str] = []
         if hasattr(mod, "__all__"):
@@ -75,6 +75,10 @@ def dependency_tree(module: str) -> dict:
             "export_count": len(deps),
         }
     except ImportError as e:
-        return {"status": "error", "message": f"Module not found: {module}", "detail": str(e)}
+        return {
+            "status": "error",
+            "message": f"Module not found: {module}",
+            "detail": str(e),
+        }
     except Exception as e:
         return {"status": "error", "message": str(e)}

@@ -42,6 +42,7 @@ def mcp_tool(
             '''Add two numbers.'''
             return a + b
     """
+
     def decorator(func: Callable[..., Any]) -> Callable[..., Any]:
         """Decorator."""
         # Get metadata
@@ -75,6 +76,7 @@ def mcp_tool(
             """Wrapper."""
             if deprecated_in:
                 import warnings
+
                 warnings.warn(
                     f"MCP tool {tool_name!r} deprecated since v{deprecated_in}.",
                     DeprecationWarning,
@@ -103,6 +105,7 @@ def _safe_default(value: Any) -> Any:
         return {str(k): _safe_default(v) for k, v in value.items()}
     # Enum members → use their value
     import enum
+
     if isinstance(value, enum.Enum):
         return value.value
     # Skip callables (factory defaults like list, dict)
@@ -154,7 +157,9 @@ def _generate_schema_from_signature(func: Callable[..., Any]) -> dict[str, Any]:
             "required": required,
         }
     except Exception as e:
-        logger.warning(f"Failed to generate schema for {getattr(func, '__name__', '?')}: {e}")
+        logger.warning(
+            f"Failed to generate schema for {getattr(func, '__name__', '?')}: {e}"
+        )
         return {"type": "object", "properties": {}}  # Fallback
 
 

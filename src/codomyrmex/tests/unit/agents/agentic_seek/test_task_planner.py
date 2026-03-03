@@ -22,6 +22,7 @@ from codomyrmex.agents.agentic_seek.task_planner import (
 # extract_task_names
 # ===================================================================
 
+
 class TestExtractTaskNames:
     def test_numbered_lines(self):
         text = "1. Write code\n2. Test code\n3. Deploy"
@@ -50,6 +51,7 @@ class TestExtractTaskNames:
 # parse_plan_json
 # ===================================================================
 
+
 class TestParsePlanJson:
     def test_basic_plan(self):
         text = '```json\n{"plan": [{"agent": "coder", "id": 1, "task": "Write code"}]}\n```'
@@ -60,7 +62,7 @@ class TestParsePlanJson:
         assert steps[0].description == "Write code"
 
     def test_multi_step_plan(self):
-        text = '''```json
+        text = """```json
 {
   "plan": [
     {"agent": "web", "id": 1, "task": "Search docs"},
@@ -68,7 +70,7 @@ class TestParsePlanJson:
     {"agent": "file", "id": 3, "task": "Save output", "need": [2]}
   ]
 }
-```'''
+```"""
         steps = parse_plan_json(text)
         assert len(steps) == 3
         assert steps[0].agent_type is AgenticSeekAgentType.BROWSER  # "web" → BROWSER
@@ -108,6 +110,7 @@ class TestParsePlanJson:
 # validate_plan
 # ===================================================================
 
+
 class TestValidatePlan:
     def test_valid_plan_no_errors(self):
         steps = [
@@ -119,7 +122,9 @@ class TestValidatePlan:
 
     def test_missing_dependency(self):
         steps = [
-            AgenticSeekTaskStep(AgenticSeekAgentType.CODER, 1, "Code", dependencies=[99]),
+            AgenticSeekTaskStep(
+                AgenticSeekAgentType.CODER, 1, "Code", dependencies=[99]
+            ),
         ]
         errors = validate_plan(steps)
         assert any("99" in e for e in errors)
@@ -158,12 +163,17 @@ class TestValidatePlan:
 # get_execution_order
 # ===================================================================
 
+
 class TestGetExecutionOrder:
     def test_simple_chain(self):
         steps = [
             AgenticSeekTaskStep(AgenticSeekAgentType.CODER, 1, "First"),
-            AgenticSeekTaskStep(AgenticSeekAgentType.FILE, 2, "Second", dependencies=[1]),
-            AgenticSeekTaskStep(AgenticSeekAgentType.CASUAL, 3, "Third", dependencies=[2]),
+            AgenticSeekTaskStep(
+                AgenticSeekAgentType.FILE, 2, "Second", dependencies=[1]
+            ),
+            AgenticSeekTaskStep(
+                AgenticSeekAgentType.CASUAL, 3, "Third", dependencies=[2]
+            ),
         ]
         ordered = get_execution_order(steps)
         ids = [s.task_id for s in ordered]
@@ -203,6 +213,7 @@ class TestGetExecutionOrder:
 # AgenticSeekTaskPlanner facade
 # ===================================================================
 
+
 class TestAgenticSeekTaskPlanner:
     def test_parse(self):
         planner = AgenticSeekTaskPlanner()
@@ -219,7 +230,9 @@ class TestAgenticSeekTaskPlanner:
         planner = AgenticSeekTaskPlanner()
         steps = [
             AgenticSeekTaskStep(AgenticSeekAgentType.CODER, 1, "First"),
-            AgenticSeekTaskStep(AgenticSeekAgentType.FILE, 2, "Second", dependencies=[1]),
+            AgenticSeekTaskStep(
+                AgenticSeekAgentType.FILE, 2, "Second", dependencies=[1]
+            ),
         ]
         ordered = planner.execution_order(steps)
         assert ordered[0].task_id == 1

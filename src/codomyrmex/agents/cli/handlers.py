@@ -53,7 +53,9 @@ def handle_info(args):
         info = {
             "module": "agents",
             "description": "Agent framework integrations",
-            "config": config.to_dict() if hasattr(config, 'to_dict') else config.__dict__,
+            "config": (
+                config.to_dict() if hasattr(config, "to_dict") else config.__dict__
+            ),
         }
 
         print_section("Agents Module Information")
@@ -64,7 +66,18 @@ def handle_info(args):
         print_success("Information retrieved")
         return True
 
-    except (AgentError, ClaudeError, CodexError, GeminiError, JulesError, OpenCodeError, ValueError, RuntimeError, AttributeError, OSError) as e:
+    except (
+        AgentError,
+        ClaudeError,
+        CodexError,
+        GeminiError,
+        JulesError,
+        OpenCodeError,
+        ValueError,
+        RuntimeError,
+        AttributeError,
+        OSError,
+    ) as e:
         logger.exception("Unexpected error retrieving information")
         print_error("Unexpected error retrieving information", exception=e)
         return False
@@ -73,6 +86,7 @@ def handle_info(args):
 # ============================================================================
 # Common Agent Operations (execute, stream, check)
 # ============================================================================
+
 
 def _parse_context(context_str: str | None) -> dict[str, Any]:
     """Parse context JSON string."""
@@ -100,7 +114,9 @@ def _handle_agent_execute(client_class, client_name: str, args: Any) -> bool:
     """Handle execute command for any agent."""
     try:
         if client_class is None:
-            print_error(f"{client_name} client not available", context="Module not imported")
+            print_error(
+                f"{client_name} client not available", context="Module not imported"
+            )
             return False
 
         prompt = args.prompt
@@ -129,7 +145,14 @@ def _handle_agent_execute(client_class, client_name: str, args: Any) -> bool:
             print_error(f"{client_name} execution failed", context=response.error)
             return False
 
-    except (AgentError, ClaudeError, CodexError, GeminiError, JulesError, OpenCodeError) as e:
+    except (
+        AgentError,
+        ClaudeError,
+        CodexError,
+        GeminiError,
+        JulesError,
+        OpenCodeError,
+    ) as e:
         logger.error(f"{client_name} error: {str(e)}")
         print_error(f"{client_name} error", context=str(e), exception=e)
         return False
@@ -143,7 +166,9 @@ def _handle_agent_stream(client_class, client_name: str, args: Any) -> bool:
     """Handle stream command for any agent."""
     try:
         if client_class is None:
-            print_error(f"{client_name} client not available", context="Module not imported")
+            print_error(
+                f"{client_name} client not available", context="Module not imported"
+            )
             return False
 
         prompt = args.prompt
@@ -170,7 +195,14 @@ def _handle_agent_stream(client_class, client_name: str, args: Any) -> bool:
 
         return True
 
-    except (AgentError, ClaudeError, CodexError, GeminiError, JulesError, OpenCodeError) as e:
+    except (
+        AgentError,
+        ClaudeError,
+        CodexError,
+        GeminiError,
+        JulesError,
+        OpenCodeError,
+    ) as e:
         logger.error(f"{client_name} streaming error: {str(e)}")
         print_error(f"{client_name} streaming error", context=str(e), exception=e)
         return False
@@ -184,15 +216,28 @@ def handle_agent_setup(client_class, client_name: str, args: Any) -> bool:
     """Generic handler for agent setup."""
     try:
         if client_class is None:
-             print_error(f"{client_name} client not available", context="Module not imported")
-             return False
+            print_error(
+                f"{client_name} client not available", context="Module not imported"
+            )
+            return False
 
         client = client_class(config=get_config())
         print_section(f"Setting up {client_name}")
         client.setup()
         print_success(f"{client_name} setup completed")
         return True
-    except (AgentError, ClaudeError, CodexError, GeminiError, JulesError, OpenCodeError, ValueError, RuntimeError, AttributeError, OSError) as e:
+    except (
+        AgentError,
+        ClaudeError,
+        CodexError,
+        GeminiError,
+        JulesError,
+        OpenCodeError,
+        ValueError,
+        RuntimeError,
+        AttributeError,
+        OSError,
+    ) as e:
         logger.warning("Failed to set up %s: %s", client_name, e)
         print_error(f"Error setting up {client_name}", exception=e)
         return False
@@ -202,8 +247,10 @@ def handle_agent_test(client_class, client_name: str, args: Any) -> bool:
     """Generic handler for agent connection test."""
     try:
         if client_class is None:
-             print_error(f"{client_name} client not available", context="Module not imported")
-             return False
+            print_error(
+                f"{client_name} client not available", context="Module not imported"
+            )
+            return False
 
         client = client_class(config=get_config())
         print_section(f"Testing {client_name} Connection")
@@ -213,7 +260,18 @@ def handle_agent_test(client_class, client_name: str, args: Any) -> bool:
         else:
             print_error(f"{client_name} connection test failed")
         return result
-    except (AgentError, ClaudeError, CodexError, GeminiError, JulesError, OpenCodeError, ValueError, RuntimeError, AttributeError, OSError) as e:
+    except (
+        AgentError,
+        ClaudeError,
+        CodexError,
+        GeminiError,
+        JulesError,
+        OpenCodeError,
+        ValueError,
+        RuntimeError,
+        AttributeError,
+        OSError,
+    ) as e:
         logger.warning("Failed to test %s connection: %s", client_name, e)
         print_error(f"Error testing {client_name} connection", exception=e)
         return False
@@ -222,6 +280,7 @@ def handle_agent_test(client_class, client_name: str, args: Any) -> bool:
 # ============================================================================
 # Jules Agent Handlers
 # ============================================================================
+
 
 def handle_jules_execute(args):
     """Handle jules execute command."""
@@ -251,12 +310,25 @@ def handle_jules_check(args):
             if client.working_dir:
                 print_info(f"Working directory: {client.working_dir}")
         else:
-            print_warning("Jules CLI is not available", context="Command not found in PATH")
+            print_warning(
+                "Jules CLI is not available", context="Command not found in PATH"
+            )
             print_info("Make sure Jules is installed and in your PATH")
 
         return True
 
-    except (AgentError, ClaudeError, CodexError, GeminiError, JulesError, OpenCodeError, ValueError, RuntimeError, AttributeError, OSError) as e:
+    except (
+        AgentError,
+        ClaudeError,
+        CodexError,
+        GeminiError,
+        JulesError,
+        OpenCodeError,
+        ValueError,
+        RuntimeError,
+        AttributeError,
+        OSError,
+    ) as e:
         logger.exception("Error checking Jules availability")
         print_error("Error checking Jules availability", exception=e)
         return False
@@ -276,11 +348,25 @@ def handle_jules_help(args):
         if help_info.get("available"):
             print(help_info.get("help_text", ""))
         else:
-            print_warning("Could not retrieve Jules help", context=help_info.get("error", "Unknown error"))
+            print_warning(
+                "Could not retrieve Jules help",
+                context=help_info.get("error", "Unknown error"),
+            )
 
         return help_info.get("available", False)
 
-    except (AgentError, ClaudeError, CodexError, GeminiError, JulesError, OpenCodeError, ValueError, RuntimeError, AttributeError, OSError) as e:
+    except (
+        AgentError,
+        ClaudeError,
+        CodexError,
+        GeminiError,
+        JulesError,
+        OpenCodeError,
+        ValueError,
+        RuntimeError,
+        AttributeError,
+        OSError,
+    ) as e:
         logger.exception("Error getting Jules help")
         print_error("Error getting Jules help", exception=e)
         return False
@@ -307,13 +393,26 @@ def handle_jules_command(args):
             print(result.get("output", ""))
             print_success("Jules command executed successfully")
         else:
-            print_error("Jules command failed", context=result.get("stderr", "Unknown error"))
+            print_error(
+                "Jules command failed", context=result.get("stderr", "Unknown error")
+            )
             if result.get("stdout"):
                 print("STDOUT:", result.get("stdout"))
 
         return result.get("success", False)
 
-    except (AgentError, ClaudeError, CodexError, GeminiError, JulesError, OpenCodeError, ValueError, RuntimeError, AttributeError, OSError) as e:
+    except (
+        AgentError,
+        ClaudeError,
+        CodexError,
+        GeminiError,
+        JulesError,
+        OpenCodeError,
+        ValueError,
+        RuntimeError,
+        AttributeError,
+        OSError,
+    ) as e:
         logger.exception("Error executing Jules command")
         print_error("Error executing Jules command", exception=e)
         return False
@@ -322,6 +421,7 @@ def handle_jules_command(args):
 # ============================================================================
 # Claude Agent Handlers
 # ============================================================================
+
 
 def handle_claude_execute(args):
     """Handle claude execute command."""
@@ -347,7 +447,10 @@ def handle_claude_check(args):
         if has_api_key:
             print_success("Claude API key is configured")
         else:
-            print_warning("Claude API key is not configured", context="Set ANTHROPIC_API_KEY environment variable")
+            print_warning(
+                "Claude API key is not configured",
+                context="Set ANTHROPIC_API_KEY environment variable",
+            )
 
         print_info(f"Model: {config.claude_model}")
         print_info(f"Timeout: {config.claude_timeout}s")
@@ -359,7 +462,18 @@ def handle_claude_check(args):
 
         return has_api_key
 
-    except (AgentError, ClaudeError, CodexError, GeminiError, JulesError, OpenCodeError, ValueError, RuntimeError, AttributeError, OSError) as e:
+    except (
+        AgentError,
+        ClaudeError,
+        CodexError,
+        GeminiError,
+        JulesError,
+        OpenCodeError,
+        ValueError,
+        RuntimeError,
+        AttributeError,
+        OSError,
+    ) as e:
         logger.exception("Error checking Claude configuration")
         print_error("Error checking Claude configuration", exception=e)
         return False
@@ -368,6 +482,7 @@ def handle_claude_check(args):
 # ============================================================================
 # Codex Agent Handlers
 # ============================================================================
+
 
 def handle_codex_execute(args):
     """Handle codex execute command."""
@@ -393,7 +508,10 @@ def handle_codex_check(args):
         if has_api_key:
             print_success("Codex API key is configured")
         else:
-            print_warning("Codex API key is not configured", context="Set OPENAI_API_KEY environment variable")
+            print_warning(
+                "Codex API key is not configured",
+                context="Set OPENAI_API_KEY environment variable",
+            )
 
         print_info(f"Model: {config.codex_model}")
         print_info(f"Timeout: {config.codex_timeout}s")
@@ -405,7 +523,18 @@ def handle_codex_check(args):
 
         return has_api_key
 
-    except (AgentError, ClaudeError, CodexError, GeminiError, JulesError, OpenCodeError, ValueError, RuntimeError, AttributeError, OSError) as e:
+    except (
+        AgentError,
+        ClaudeError,
+        CodexError,
+        GeminiError,
+        JulesError,
+        OpenCodeError,
+        ValueError,
+        RuntimeError,
+        AttributeError,
+        OSError,
+    ) as e:
         logger.exception("Error checking Codex configuration")
         print_error("Error checking Codex configuration", exception=e)
         return False
@@ -414,6 +543,7 @@ def handle_codex_check(args):
 # ============================================================================
 # OpenCode Agent Handlers
 # ============================================================================
+
 
 def handle_opencode_execute(args):
     """Handle opencode execute command."""
@@ -443,12 +573,25 @@ def handle_opencode_check(args):
             if client.working_dir:
                 print_info(f"Working directory: {client.working_dir}")
         else:
-            print_warning("OpenCode CLI is not available", context="Command not found in PATH")
+            print_warning(
+                "OpenCode CLI is not available", context="Command not found in PATH"
+            )
             print_info("Make sure OpenCode is installed and in your PATH")
 
         return True
 
-    except (AgentError, ClaudeError, CodexError, GeminiError, JulesError, OpenCodeError, ValueError, RuntimeError, AttributeError, OSError) as e:
+    except (
+        AgentError,
+        ClaudeError,
+        CodexError,
+        GeminiError,
+        JulesError,
+        OpenCodeError,
+        ValueError,
+        RuntimeError,
+        AttributeError,
+        OSError,
+    ) as e:
         logger.exception("Error checking OpenCode availability")
         print_error("Error checking OpenCode availability", exception=e)
         return False
@@ -465,7 +608,9 @@ def handle_opencode_init(args):
         project_path = getattr(args, "path", None)
 
         if getattr(args, "verbose", False):
-            logger.info(f"Initializing OpenCode for project: {project_path or 'current directory'}")
+            logger.info(
+                f"Initializing OpenCode for project: {project_path or 'current directory'}"
+            )
 
         result = client.initialize_project(project_path)
 
@@ -475,11 +620,25 @@ def handle_opencode_init(args):
                 print(result.get("output"))
             print_success("OpenCode initialized successfully")
         else:
-            print_error("OpenCode initialization failed", context=result.get("error", "Unknown error"))
+            print_error(
+                "OpenCode initialization failed",
+                context=result.get("error", "Unknown error"),
+            )
 
         return result.get("success", False)
 
-    except (AgentError, ClaudeError, CodexError, GeminiError, JulesError, OpenCodeError, ValueError, RuntimeError, AttributeError, OSError) as e:
+    except (
+        AgentError,
+        ClaudeError,
+        CodexError,
+        GeminiError,
+        JulesError,
+        OpenCodeError,
+        ValueError,
+        RuntimeError,
+        AttributeError,
+        OSError,
+    ) as e:
         logger.exception("Error initializing OpenCode")
         print_error("Error initializing OpenCode", exception=e)
         return False
@@ -500,11 +659,25 @@ def handle_opencode_version(args):
             print(version_info.get("version", "Unknown version"))
             print_success("OpenCode version retrieved")
         else:
-            print_warning("Could not retrieve OpenCode version", context=version_info.get("error", "Unknown error"))
+            print_warning(
+                "Could not retrieve OpenCode version",
+                context=version_info.get("error", "Unknown error"),
+            )
 
         return version_info.get("available", False)
 
-    except (AgentError, ClaudeError, CodexError, GeminiError, JulesError, OpenCodeError, ValueError, RuntimeError, AttributeError, OSError) as e:
+    except (
+        AgentError,
+        ClaudeError,
+        CodexError,
+        GeminiError,
+        JulesError,
+        OpenCodeError,
+        ValueError,
+        RuntimeError,
+        AttributeError,
+        OSError,
+    ) as e:
         logger.exception("Error getting OpenCode version")
         print_error("Error getting OpenCode version", exception=e)
         return False
@@ -513,6 +686,7 @@ def handle_opencode_version(args):
 # ============================================================================
 # Gemini Agent Handlers
 # ============================================================================
+
 
 def handle_gemini_execute(args):
     """Handle gemini execute command."""
@@ -544,12 +718,25 @@ def handle_gemini_check(args):
             if client.working_dir:
                 print_info(f"Working directory: {client.working_dir}")
         else:
-            print_warning("Gemini CLI is not available", context="Command not found in PATH")
+            print_warning(
+                "Gemini CLI is not available", context="Command not found in PATH"
+            )
             print_info("Make sure Gemini is installed and in your PATH")
 
         return True
 
-    except (AgentError, ClaudeError, CodexError, GeminiError, JulesError, OpenCodeError, ValueError, RuntimeError, AttributeError, OSError) as e:
+    except (
+        AgentError,
+        ClaudeError,
+        CodexError,
+        GeminiError,
+        JulesError,
+        OpenCodeError,
+        ValueError,
+        RuntimeError,
+        AttributeError,
+        OSError,
+    ) as e:
         logger.exception("Error checking Gemini availability")
         print_error("Error checking Gemini availability", exception=e)
         return False
@@ -575,11 +762,25 @@ def handle_gemini_chat_save(args):
         if result.get("success"):
             print_success("Chat session saved successfully")
         else:
-            print_error("Failed to save chat session", context=result.get("error", "Unknown error"))
+            print_error(
+                "Failed to save chat session",
+                context=result.get("error", "Unknown error"),
+            )
 
         return result.get("success", False)
 
-    except (AgentError, ClaudeError, CodexError, GeminiError, JulesError, OpenCodeError, ValueError, RuntimeError, AttributeError, OSError) as e:
+    except (
+        AgentError,
+        ClaudeError,
+        CodexError,
+        GeminiError,
+        JulesError,
+        OpenCodeError,
+        ValueError,
+        RuntimeError,
+        AttributeError,
+        OSError,
+    ) as e:
         logger.exception("Error saving Gemini chat")
         print_error("Error saving Gemini chat", exception=e)
         return False
@@ -606,11 +807,25 @@ def handle_gemini_chat_resume(args):
                 print(result.get("output"))
             print_success("Chat session resumed successfully")
         else:
-            print_error("Failed to resume chat session", context=result.get("error", "Unknown error"))
+            print_error(
+                "Failed to resume chat session",
+                context=result.get("error", "Unknown error"),
+            )
 
         return result.get("success", False)
 
-    except (AgentError, ClaudeError, CodexError, GeminiError, JulesError, OpenCodeError, ValueError, RuntimeError, AttributeError, OSError) as e:
+    except (
+        AgentError,
+        ClaudeError,
+        CodexError,
+        GeminiError,
+        JulesError,
+        OpenCodeError,
+        ValueError,
+        RuntimeError,
+        AttributeError,
+        OSError,
+    ) as e:
         logger.exception("Error resuming Gemini chat")
         print_error("Error resuming Gemini chat", exception=e)
         return False
@@ -638,11 +853,25 @@ def handle_gemini_chat_list(args):
                 print_info("No chat sessions found")
             print_success("Chat sessions listed")
         else:
-            print_error("Failed to list chat sessions", context=result.get("error", "Unknown error"))
+            print_error(
+                "Failed to list chat sessions",
+                context=result.get("error", "Unknown error"),
+            )
 
         return result.get("success", False)
 
-    except (AgentError, ClaudeError, CodexError, GeminiError, JulesError, OpenCodeError, ValueError, RuntimeError, AttributeError, OSError) as e:
+    except (
+        AgentError,
+        ClaudeError,
+        CodexError,
+        GeminiError,
+        JulesError,
+        OpenCodeError,
+        ValueError,
+        RuntimeError,
+        AttributeError,
+        OSError,
+    ) as e:
         logger.exception("Error listing Gemini chats")
         print_error("Error listing Gemini chats", exception=e)
         return False
@@ -662,7 +891,18 @@ def _get_droid_controller() -> Any | None:
     if _droid_controller is None and create_default_controller is not None:
         try:
             _droid_controller = create_default_controller()
-        except (AgentError, ClaudeError, CodexError, GeminiError, JulesError, OpenCodeError, ValueError, RuntimeError, AttributeError, OSError) as e:
+        except (
+            AgentError,
+            ClaudeError,
+            CodexError,
+            GeminiError,
+            JulesError,
+            OpenCodeError,
+            ValueError,
+            RuntimeError,
+            AttributeError,
+            OSError,
+        ) as e:
             logger.error(f"Failed to create droid controller: {e}")
             return None
     return _droid_controller
@@ -685,7 +925,18 @@ def handle_droid_start(args):
         print_success("Droid controller started")
         return True
 
-    except (AgentError, ClaudeError, CodexError, GeminiError, JulesError, OpenCodeError, ValueError, RuntimeError, AttributeError, OSError) as e:
+    except (
+        AgentError,
+        ClaudeError,
+        CodexError,
+        GeminiError,
+        JulesError,
+        OpenCodeError,
+        ValueError,
+        RuntimeError,
+        AttributeError,
+        OSError,
+    ) as e:
         logger.exception("Error starting droid controller")
         print_error("Error starting droid controller", exception=e)
         return False
@@ -704,7 +955,18 @@ def handle_droid_stop(args):
         print_success("Droid controller stopped")
         return True
 
-    except (AgentError, ClaudeError, CodexError, GeminiError, JulesError, OpenCodeError, ValueError, RuntimeError, AttributeError, OSError) as e:
+    except (
+        AgentError,
+        ClaudeError,
+        CodexError,
+        GeminiError,
+        JulesError,
+        OpenCodeError,
+        ValueError,
+        RuntimeError,
+        AttributeError,
+        OSError,
+    ) as e:
         logger.exception("Error stopping droid controller")
         print_error("Error stopping droid controller", exception=e)
         return False
@@ -729,7 +991,18 @@ def handle_droid_status(args):
         print_success("Status retrieved")
         return True
 
-    except (AgentError, ClaudeError, CodexError, GeminiError, JulesError, OpenCodeError, ValueError, RuntimeError, AttributeError, OSError) as e:
+    except (
+        AgentError,
+        ClaudeError,
+        CodexError,
+        GeminiError,
+        JulesError,
+        OpenCodeError,
+        ValueError,
+        RuntimeError,
+        AttributeError,
+        OSError,
+    ) as e:
         logger.exception("Error getting droid status")
         print_error("Error getting droid status", exception=e)
         return False
@@ -750,7 +1023,18 @@ def handle_droid_config_show(args):
         print_success("Configuration retrieved")
         return True
 
-    except (AgentError, ClaudeError, CodexError, GeminiError, JulesError, OpenCodeError, ValueError, RuntimeError, AttributeError, OSError) as e:
+    except (
+        AgentError,
+        ClaudeError,
+        CodexError,
+        GeminiError,
+        JulesError,
+        OpenCodeError,
+        ValueError,
+        RuntimeError,
+        AttributeError,
+        OSError,
+    ) as e:
         logger.exception("Error showing droid config")
         print_error("Error showing droid config", exception=e)
         return False

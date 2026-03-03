@@ -16,6 +16,7 @@ from typing import Any, Optional
 
 class RolloutState(Enum):
     """Lifecycle states of a rollout."""
+
     PENDING = "pending"
     ACTIVE = "active"
     PAUSED = "paused"
@@ -31,6 +32,7 @@ class RolloutConfig:
         stages: List of rollout percentages (e.g. [5, 25, 50, 100]).
         stage_delay_seconds: Minimum seconds between automatic stage advances.
     """
+
     stages: list[float] = field(default_factory=lambda: [5.0, 25.0, 50.0, 100.0])
     stage_delay_seconds: float = 3600.0
 
@@ -55,6 +57,7 @@ class RolloutStatus:
         updated_at: When the rollout was last modified.
         metadata: Arbitrary extra data attached to the rollout.
     """
+
     flag_name: str
     state: RolloutState
     current_stage_index: int
@@ -216,6 +219,7 @@ class RolloutManager:
 @dataclass
 class _RolloutEntry:
     """Internal mutable storage for a rollout."""
+
     flag_name: str
     config: RolloutConfig
     state: RolloutState

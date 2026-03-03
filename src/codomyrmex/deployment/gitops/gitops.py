@@ -50,7 +50,9 @@ class GitOpsSynchronizer:
                 logger.info("Updating %s from %s", self.local_path, self.repo_url)
                 # Ensure we are in a Git repository
                 if not os.path.exists(os.path.join(self.local_path, ".git")):
-                    logger.warning("%s exists but is not a Git repo. Re-cloning.", self.local_path)
+                    logger.warning(
+                        "%s exists but is not a Git repo. Re-cloning.", self.local_path
+                    )
                     shutil.rmtree(self.local_path)
                     return self.sync(branch)
 
@@ -64,7 +66,14 @@ class GitOpsSynchronizer:
                     return False
 
                 res = subprocess.run(
-                    ["git", "-C", self.local_path, "reset", "--hard", f"origin/{branch}"],
+                    [
+                        "git",
+                        "-C",
+                        self.local_path,
+                        "reset",
+                        "--hard",
+                        f"origin/{branch}",
+                    ],
                     capture_output=True,
                     text=True,
                 )
@@ -84,7 +93,9 @@ class GitOpsSynchronizer:
             cannot be determined.
         """
         try:
-            if not os.path.exists(self.local_path) or not os.path.exists(os.path.join(self.local_path, ".git")):
+            if not os.path.exists(self.local_path) or not os.path.exists(
+                os.path.join(self.local_path, ".git")
+            ):
                 return None
 
             result = subprocess.run(
@@ -109,7 +120,9 @@ class GitOpsSynchronizer:
         """
         try:
             if not os.path.exists(self.local_path):
-                logger.error("Cannot checkout: local path %s does not exist", self.local_path)
+                logger.error(
+                    "Cannot checkout: local path %s does not exist", self.local_path
+                )
                 return False
 
             subprocess.run(

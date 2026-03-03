@@ -14,6 +14,7 @@ from typing import Any
 
 class TaskPriority(Enum):
     """Priority levels for tasks."""
+
     LOW = 1
     NORMAL = 5
     HIGH = 8
@@ -22,6 +23,7 @@ class TaskPriority(Enum):
 
 class TaskStatus(Enum):
     """Status of a task in the system."""
+
     PENDING = "pending"
     QUEUED = "queued"
     RUNNING = "running"
@@ -47,6 +49,7 @@ class Task:
         status: Current task status.
         assigned_agent_id: ID of the agent assigned to this task.
     """
+
     name: str
     description: str = ""
     id: str = field(default_factory=lambda: str(uuid.uuid4()))
@@ -84,7 +87,11 @@ class Task:
             priority=data.get("priority", 5),
             dependencies=data.get("dependencies", []),
             metadata=data.get("metadata", {}),
-            created_at=datetime.fromisoformat(data["created_at"]) if "created_at" in data else datetime.now(),
+            created_at=(
+                datetime.fromisoformat(data["created_at"])
+                if "created_at" in data
+                else datetime.now()
+            ),
             status=TaskStatus(data.get("status", "pending")),
             assigned_agent_id=data.get("assigned_agent_id"),
         )
@@ -108,6 +115,7 @@ class TaskResult:
         agent_id: ID of the agent that executed the task.
         completed_at: When the task completed.
     """
+
     task_id: str
     success: bool
     output: Any = None
@@ -138,7 +146,11 @@ class TaskResult:
             error=data.get("error"),
             duration=data.get("duration", 0.0),
             agent_id=data.get("agent_id", ""),
-            completed_at=datetime.fromisoformat(data["completed_at"]) if "completed_at" in data else datetime.now(),
+            completed_at=(
+                datetime.fromisoformat(data["completed_at"])
+                if "completed_at" in data
+                else datetime.now()
+            ),
         )
 
 
@@ -157,6 +169,7 @@ class SwarmStatus:
         failed_tasks: Number of failed tasks.
         uptime_seconds: How long the swarm has been running.
     """
+
     total_agents: int = 0
     active_agents: int = 0
     idle_agents: int = 0
@@ -195,6 +208,7 @@ class AgentStatus:
         tasks_failed: Number of tasks failed by this agent.
         last_heartbeat: Last time agent sent a heartbeat.
     """
+
     agent_id: str
     name: str = ""
     status: str = "idle"
@@ -228,7 +242,11 @@ class AgentStatus:
             capabilities=data.get("capabilities", []),
             tasks_completed=data.get("tasks_completed", 0),
             tasks_failed=data.get("tasks_failed", 0),
-            last_heartbeat=datetime.fromisoformat(data["last_heartbeat"]) if "last_heartbeat" in data else datetime.now(),
+            last_heartbeat=(
+                datetime.fromisoformat(data["last_heartbeat"])
+                if "last_heartbeat" in data
+                else datetime.now()
+            ),
         )
 
 

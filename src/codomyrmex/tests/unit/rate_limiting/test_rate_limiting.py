@@ -1,6 +1,5 @@
 """Tests for rate_limiting module."""
 
-
 import pytest
 
 try:
@@ -13,6 +12,7 @@ try:
         TokenBucketLimiter,
         create_limiter,
     )
+
     HAS_MODULE = True
 except ImportError:
     HAS_MODULE = False
@@ -24,6 +24,7 @@ if not HAS_MODULE:
 @pytest.mark.unit
 class TestRateLimitResult:
     """Test suite for RateLimitResult."""
+
     def test_create_result(self):
         """Test functionality: create result."""
         result = RateLimitResult(allowed=True, remaining=5, limit=10)
@@ -48,6 +49,7 @@ class TestRateLimitResult:
 @pytest.mark.unit
 class TestFixedWindowLimiter:
     """Test suite for FixedWindowLimiter."""
+
     def test_create_limiter(self):
         """Test functionality: create limiter."""
         limiter = FixedWindowLimiter(limit=10, window_seconds=60)
@@ -86,6 +88,7 @@ class TestFixedWindowLimiter:
 @pytest.mark.unit
 class TestSlidingWindowLimiter:
     """Test suite for SlidingWindowLimiter."""
+
     def test_create_limiter(self):
         """Test functionality: create limiter."""
         limiter = SlidingWindowLimiter(limit=10, window_seconds=60)
@@ -109,6 +112,7 @@ class TestSlidingWindowLimiter:
 @pytest.mark.unit
 class TestTokenBucketLimiter:
     """Test suite for TokenBucketLimiter."""
+
     def test_create_limiter(self):
         """Test functionality: create limiter."""
         limiter = TokenBucketLimiter(capacity=10, refill_rate=1.0)
@@ -132,6 +136,7 @@ class TestTokenBucketLimiter:
 @pytest.mark.unit
 class TestRateLimitExceeded:
     """Test suite for RateLimitExceeded."""
+
     def test_exception_is_raised(self):
         """Test functionality: exception is raised."""
         with pytest.raises(RateLimitExceeded):
@@ -146,6 +151,7 @@ class TestRateLimitExceeded:
 @pytest.mark.unit
 class TestQuotaManager:
     """Test suite for QuotaManager."""
+
     def test_create_manager(self):
         """Test functionality: create manager."""
         manager = QuotaManager()
@@ -155,6 +161,7 @@ class TestQuotaManager:
 @pytest.mark.unit
 class TestCreateLimiter:
     """Test suite for CreateLimiter."""
+
     def test_factory_creates_limiter(self):
         """Test functionality: factory creates limiter."""
         limiter = create_limiter(algorithm="fixed_window", limit=10, window_seconds=60)

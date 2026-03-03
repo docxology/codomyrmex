@@ -170,9 +170,7 @@ class WebhookDispatcher:
             last_result: DeliveryResult | None = None
 
             for attempt in range(1, retries + 2):  # attempts = retries + 1
-                result = self._deliver(
-                    webhook_id, event, config, attempt=attempt
-                )
+                result = self._deliver(webhook_id, event, config, attempt=attempt)
 
                 if result.status == WebhookStatus.DELIVERED:
                     last_result = result
@@ -189,5 +187,3 @@ class WebhookDispatcher:
                 results.append(last_result)
 
         return results
-
-

@@ -33,6 +33,7 @@ except ImportError:
 
     def monitor_performance(*args, **kwargs):
         """Decorator for performance monitoring (fallback)."""
+
         def decorator(func):
             return func
 
@@ -152,7 +153,9 @@ class OrchestrationSession:
             try:
                 sess.created_at = datetime.fromisoformat(data["created_at"])
             except Exception as e:
-                logger.warning("Failed to parse created_at '%s': %s", data["created_at"], e)
+                logger.warning(
+                    "Failed to parse created_at '%s': %s", data["created_at"], e
+                )
                 pass
         if data.get("status"):
             try:
@@ -160,8 +163,6 @@ class OrchestrationSession:
             except Exception:
                 sess.status = SessionStatus.PENDING
         return sess
-
-
 
 
 class OrchestrationEngine:
@@ -340,7 +341,9 @@ class OrchestrationEngine:
             }
 
             # Update context
-            context.status = SessionStatus.COMPLETED if result["success"] else SessionStatus.FAILED
+            context.status = (
+                SessionStatus.COMPLETED if result["success"] else SessionStatus.FAILED
+            )
             context.completed_at = datetime.now(UTC)
 
             # Emit events
@@ -658,7 +661,9 @@ class OrchestrationEngine:
             try:
                 self.close_session(session_id)
             except (ValueError, OSError) as e:
-                print(f"Warning: error closing session {session_id} during shutdown: {e}")
+                print(
+                    f"Warning: error closing session {session_id} during shutdown: {e}"
+                )
                 pass
 
         # Stop components

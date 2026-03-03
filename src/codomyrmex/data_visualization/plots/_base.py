@@ -4,6 +4,7 @@ Provides ``to_html()`` which renders the plot data as a matplotlib figure
 encoded as an inline base64 PNG ``<img>`` tag.  Subclasses should override
 ``_render_figure(fig, ax)`` to customise the matplotlib drawing.
 """
+
 from __future__ import annotations
 
 import base64
@@ -13,7 +14,7 @@ from typing import Any
 
 import matplotlib
 
-matplotlib.use("Agg")          # non-interactive backend
+matplotlib.use("Agg")  # non-interactive backend
 import matplotlib.pyplot as plt  # noqa: E402
 
 
@@ -28,6 +29,7 @@ class BasePlot:
         data: Generic data container used by subclasses.
         options: Additional rendering options.
     """
+
     title: str = ""
     width: int = 800
     height: int = 400
@@ -43,9 +45,7 @@ class BasePlot:
 
     def to_html(self) -> str:
         """Render the plot as an ``<img>`` tag containing a base64 PNG."""
-        fig, ax = plt.subplots(
-            figsize=(self.width / 100, self.height / 100), dpi=100
-        )
+        fig, ax = plt.subplots(figsize=(self.width / 100, self.height / 100), dpi=100)
         self._render_figure(fig, ax)
         ax.set_title(self.title)
         fig.tight_layout()
@@ -73,10 +73,9 @@ class BasePlot:
             The *output_path* for chaining convenience.
         """
         from pathlib import Path
+
         html = self.to_html()
-        Path(output_path).write_text(
-            f"<!DOCTYPE html><html><body>{html}</body></html>"
-        )
+        Path(output_path).write_text(f"<!DOCTYPE html><html><body>{html}</body></html>")
         return output_path
 
     def __str__(self) -> str:

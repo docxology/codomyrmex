@@ -341,11 +341,13 @@ class AuthenticationError(CodomyrmexError):
 # Circuit Breaker / Bulkhead (non-CodomyrmexError)
 class CircuitOpenError(Exception):
     """Raised when the circuit breaker is open."""
+
     pass
 
 
 class BulkheadFullError(Exception):
     """Raised when the bulkhead semaphore is exhausted."""
+
     pass
 
 

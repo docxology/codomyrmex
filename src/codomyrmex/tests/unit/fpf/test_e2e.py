@@ -101,6 +101,3 @@ def test_e2e_full_pipeline():
     # Build context
     context = client.build_context()
     assert isinstance(context, str)
-
-
-

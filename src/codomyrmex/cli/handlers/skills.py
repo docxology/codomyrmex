@@ -7,10 +7,12 @@ from codomyrmex.cli.utils import get_logger, print_error, print_success
 
 logger = get_logger(__name__)
 
+
 def handle_skills_sync(force: bool) -> bool:
     """Handle skills sync command."""
     try:
         from codomyrmex.skills import get_skills_manager
+
         manager = get_skills_manager()
 
         print("Syncing skills with upstream repository...")
@@ -31,13 +33,16 @@ def handle_skills_list(category: str | None) -> bool:
     """Handle skills list command."""
     try:
         from codomyrmex.skills import get_skills_manager
+
         manager = get_skills_manager()
         manager.initialize()
 
         skills = manager.list_skills(category=category)
 
         if not skills:
-            print("No skills found" + (f" in category '{category}'" if category else ""))
+            print(
+                "No skills found" + (f" in category '{category}'" if category else "")
+            )
             return True
 
         print(f"Found {len(skills)} skill(s):\n")
@@ -58,6 +63,7 @@ def handle_skills_get(category: str, name: str, output: str | None) -> bool:
     """Handle skills get command."""
     try:
         from codomyrmex.skills import get_skills_manager
+
         manager = get_skills_manager()
         manager.initialize()
 
@@ -90,6 +96,7 @@ def handle_skills_search(query: str) -> bool:
     """Handle skills search command."""
     try:
         from codomyrmex.skills import get_skills_manager
+
         manager = get_skills_manager()
         manager.initialize()
 

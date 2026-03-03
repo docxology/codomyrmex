@@ -8,6 +8,7 @@ from .branching import get_current_branch
 
 logger = get_logger(__name__)
 
+
 @mcp_tool(name="git_push")
 def push_changes(
     remote: str = "origin", branch: str = None, repository_path: str = None
@@ -45,6 +46,7 @@ def push_changes(
         logger.error(f"Unexpected error pushing changes: {e}")
         return False
 
+
 @mcp_tool(name="git_pull")
 def pull_changes(
     remote: str = "origin", branch: str = None, repository_path: str = None
@@ -81,6 +83,7 @@ def pull_changes(
     except Exception as e:
         logger.error(f"Unexpected error pulling changes: {e}")
         return False
+
 
 @mcp_tool(name="git_fetch_changes")
 def fetch_changes(
@@ -122,4 +125,3 @@ def fetch_changes(
     except Exception as e:
         logger.error(f"Unexpected error fetching changes: {e}")
         return False
-

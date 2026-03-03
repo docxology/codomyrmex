@@ -11,6 +11,7 @@ from _stubs import Stub
 
 # =========================================================================
 
+
 class TestInfomaniakNewsletterClient:
     """Tests for InfomaniakNewsletterClient.
 
@@ -53,7 +54,8 @@ class TestInfomaniakNewsletterClient:
         from codomyrmex.cloud.infomaniak.newsletter import InfomaniakNewsletterClient
 
         client = InfomaniakNewsletterClient.from_credentials(
-            token="tok-abc", newsletter_id="nl-456",
+            token="tok-abc",
+            newsletter_id="nl-456",
         )
         assert client._token == "tok-abc"
         assert client._newsletter_id == "nl-456"
@@ -86,7 +88,9 @@ class TestInfomaniakNewsletterClient:
             if key.startswith("INFOMANIAK_NEWSLETTER"):
                 removed[key] = os.environ.pop(key)
         try:
-            with pytest.raises(ValueError, match="Missing required environment variables"):
+            with pytest.raises(
+                ValueError, match="Missing required environment variables"
+            ):
                 InfomaniakNewsletterClient.from_env()
         finally:
             os.environ.update(removed)
@@ -96,7 +100,8 @@ class TestInfomaniakNewsletterClient:
         from codomyrmex.cloud.infomaniak.newsletter import InfomaniakNewsletterClient
 
         client = InfomaniakNewsletterClient(
-            token="my-secret-token", newsletter_id="nl-1",
+            token="my-secret-token",
+            newsletter_id="nl-1",
         )
         assert client._session.headers["Authorization"] == "Bearer my-secret-token"
         assert client._session.headers["Content-Type"] == "application/json"
@@ -111,6 +116,7 @@ class TestInfomaniakNewsletterClient:
     def test_inherits_rest_base(self):
         """Client inherits from InfomaniakRESTBase."""
         from codomyrmex.cloud.infomaniak.base import InfomaniakRESTBase
+
         client = self._make_client()
         assert isinstance(client, InfomaniakRESTBase)
 
@@ -518,6 +524,7 @@ class TestInfomaniakNewsletterClient:
     def test_base_url_trailing_slash_stripped(self):
         """Trailing slash in base_url is stripped."""
         from codomyrmex.cloud.infomaniak.newsletter import InfomaniakNewsletterClient
+
         client = InfomaniakNewsletterClient(
             token="t", newsletter_id="n", base_url="https://api.test.com/"
         )
@@ -551,14 +558,17 @@ class TestInfomaniakNewsletterClient:
 
 # =========================================================================
 
+
 class TestNewsletterValidationExpanded:
     """Tests for newsletter input validation and edge cases."""
 
     def _make_client(self):
         from codomyrmex.cloud.infomaniak.newsletter import InfomaniakNewsletterClient
+
         client = InfomaniakNewsletterClient(
-            token="test-token", newsletter_id="nl-1",
-            base_url="https://api.infomaniak.com"
+            token="test-token",
+            newsletter_id="nl-1",
+            base_url="https://api.infomaniak.com",
         )
         client._session = Stub()
         return client
@@ -606,5 +616,3 @@ class TestNewsletterValidationExpanded:
         client._session.get.return_value = resp
         result = client.list_mailing_lists()
         assert result == [{"id": "ml1"}]
-
-

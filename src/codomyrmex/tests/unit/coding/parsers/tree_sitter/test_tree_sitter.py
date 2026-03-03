@@ -9,12 +9,14 @@ import pytest
 
 try:
     import tree_sitter as _ts_lib
+
     _HAS_TREE_SITTER = True
 except ImportError:
     _HAS_TREE_SITTER = False
 
 try:
     import tree_sitter_python as tspython
+
     _HAS_TS_PYTHON = True
 except ImportError:
     _HAS_TS_PYTHON = False
@@ -23,6 +25,7 @@ except ImportError:
 # ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------
+
 
 def _get_python_lang():
     """Get a tree-sitter Python language object, or skip."""
@@ -36,6 +39,7 @@ def _get_parser(lang=None):
     if lang is None:
         lang = _get_python_lang()
     from codomyrmex.coding.parsers.tree_sitter import TreeSitterParser
+
     return TreeSitterParser(lang)
 
 
@@ -43,10 +47,12 @@ def _get_parser(lang=None):
 # Module imports
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 def test_module_importable():
     """Test that the tree_sitter package can be imported."""
     from codomyrmex.coding.parsers import tree_sitter as ts_mod
+
     assert ts_mod is not None
 
 
@@ -59,6 +65,7 @@ def test_submodules_importable():
         queries,
         transformers,
     )
+
     assert languages is not None
     assert parsers is not None
     assert queries is not None
@@ -69,10 +76,12 @@ def test_submodules_importable():
 # LanguageManager (no tree-sitter dependency for core logic)
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 def test_language_manager_get_unknown():
     """Test retrieving an unknown language returns None."""
     from codomyrmex.coding.parsers.tree_sitter import LanguageManager
+
     LanguageManager._languages = {}
     result = LanguageManager.get_language("nonexistent_xyz")
     assert result is None
@@ -82,6 +91,7 @@ def test_language_manager_get_unknown():
 def test_language_manager_registration_manual():
     """Test manually registering a language object."""
     from codomyrmex.coding.parsers.tree_sitter import LanguageManager
+
     LanguageManager._languages = {}
     sentinel = object()
     LanguageManager._languages["test_lang"] = sentinel
@@ -94,6 +104,7 @@ def test_language_manager_registration_manual():
 def test_language_manager_discover_nonexistent_path():
     """Test discover_languages with a path that does not exist."""
     from codomyrmex.coding.parsers.tree_sitter import LanguageManager
+
     LanguageManager._languages = {}
     LanguageManager.discover_languages("/nonexistent/path/abc123")
     assert len(LanguageManager._languages) == 0
@@ -103,6 +114,7 @@ def test_language_manager_discover_nonexistent_path():
 def test_language_manager_discover_empty_directory(tmp_path):
     """Test discover_languages with an empty directory."""
     from codomyrmex.coding.parsers.tree_sitter import LanguageManager
+
     LanguageManager._languages = {}
     LanguageManager.discover_languages(str(tmp_path))
     assert len(LanguageManager._languages) == 0
@@ -112,6 +124,7 @@ def test_language_manager_discover_empty_directory(tmp_path):
 def test_language_manager_multiple_registrations():
     """Test registering multiple languages."""
     from codomyrmex.coding.parsers.tree_sitter import LanguageManager
+
     LanguageManager._languages = {}
     LanguageManager._languages["lang_a"] = "a"
     LanguageManager._languages["lang_b"] = "b"
@@ -125,11 +138,13 @@ def test_language_manager_multiple_registrations():
 # LanguageManager with real tree-sitter-python
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 def test_language_manager_real_registration():
     """Test registering a real tree-sitter language."""
     lang = _get_python_lang()
     from codomyrmex.coding.parsers.tree_sitter import LanguageManager
+
     LanguageManager._languages = {}
     LanguageManager._languages["python"] = lang
     assert LanguageManager.get_language("python") is lang
@@ -139,6 +154,7 @@ def test_language_manager_real_registration():
 # ---------------------------------------------------------------------------
 # TreeSitterParser
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 def test_parser_initialization():

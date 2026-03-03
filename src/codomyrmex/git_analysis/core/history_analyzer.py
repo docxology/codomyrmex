@@ -49,16 +49,18 @@ class GitHistoryAnalyzer:
         commits = []
         for commit in self._repo.iter_commits(ref, max_count=max_count):
             stats = commit.stats.total
-            commits.append({
-                "sha": commit.hexsha[:12],
-                "author": commit.author.name,
-                "email": commit.author.email,
-                "date": commit.authored_datetime.isoformat(),
-                "message": commit.message.strip().split("\n")[0],
-                "insertions": stats["insertions"],
-                "deletions": stats["deletions"],
-                "files_changed": stats["files"],
-            })
+            commits.append(
+                {
+                    "sha": commit.hexsha[:12],
+                    "author": commit.author.name,
+                    "email": commit.author.email,
+                    "date": commit.authored_datetime.isoformat(),
+                    "message": commit.message.strip().split("\n")[0],
+                    "insertions": stats["insertions"],
+                    "deletions": stats["deletions"],
+                    "files_changed": stats["files"],
+                }
+            )
         return commits
 
     def get_contributor_stats(self) -> list[dict[str, Any]]:
@@ -67,13 +69,15 @@ class GitHistoryAnalyzer:
         Returns entries sorted by commit count descending. Each entry:
         author, commits, insertions, deletions, first_commit, last_commit.
         """
-        stats: dict[str, dict[str, Any]] = defaultdict(lambda: {
-            "commits": 0,
-            "insertions": 0,
-            "deletions": 0,
-            "first_commit": None,
-            "last_commit": None,
-        })
+        stats: dict[str, dict[str, Any]] = defaultdict(
+            lambda: {
+                "commits": 0,
+                "insertions": 0,
+                "deletions": 0,
+                "first_commit": None,
+                "last_commit": None,
+            }
+        )
         for commit in self._repo.iter_commits():
             name = commit.author.name
             s = stats[name]
@@ -106,9 +110,7 @@ class GitHistoryAnalyzer:
         for commit in self._repo.iter_commits():
             for path in commit.stats.files:
                 file_changes[path] += 1
-        sorted_files = sorted(
-            file_changes.items(), key=lambda x: x[1], reverse=True
-        )
+        sorted_files = sorted(file_changes.items(), key=lambda x: x[1], reverse=True)
         return [
             {"file": path, "change_count": count}
             for path, count in sorted_files[:top_n]
@@ -123,12 +125,14 @@ class GitHistoryAnalyzer:
         """
         branches = []
         for branch in self._repo.branches:
-            branches.append({
-                "name": branch.name,
-                "tip_sha": branch.commit.hexsha[:12],
-                "tip_message": branch.commit.message.strip().split("\n")[0],
-                "tip_date": branch.commit.authored_datetime.isoformat(),
-            })
+            branches.append(
+                {
+                    "name": branch.name,
+                    "tip_sha": branch.commit.hexsha[:12],
+                    "tip_message": branch.commit.message.strip().split("\n")[0],
+                    "tip_date": branch.commit.authored_datetime.isoformat(),
+                }
+            )
         return {
             "active_branch": self._repo.active_branch.name,
             "branches": branches,
@@ -188,16 +192,18 @@ class GitHistoryAnalyzer:
             if author_lower and author_lower not in commit.author.name.lower():
                 continue
             stats = commit.stats.total
-            commits.append({
-                "sha": commit.hexsha[:12],
-                "author": commit.author.name,
-                "email": commit.author.email,
-                "date": commit.authored_datetime.isoformat(),
-                "message": commit.message.strip().split("\n")[0],
-                "insertions": stats["insertions"],
-                "deletions": stats["deletions"],
-                "files_changed": stats["files"],
-            })
+            commits.append(
+                {
+                    "sha": commit.hexsha[:12],
+                    "author": commit.author.name,
+                    "email": commit.author.email,
+                    "date": commit.authored_datetime.isoformat(),
+                    "message": commit.message.strip().split("\n")[0],
+                    "insertions": stats["insertions"],
+                    "deletions": stats["deletions"],
+                    "files_changed": stats["files"],
+                }
+            )
         return commits
 
     def get_file_history(
@@ -215,16 +221,18 @@ class GitHistoryAnalyzer:
         commits = []
         for commit in self._repo.iter_commits(paths=file_path, max_count=max_count):
             stats = commit.stats.total
-            commits.append({
-                "sha": commit.hexsha[:12],
-                "author": commit.author.name,
-                "email": commit.author.email,
-                "date": commit.authored_datetime.isoformat(),
-                "message": commit.message.strip().split("\n")[0],
-                "insertions": stats["insertions"],
-                "deletions": stats["deletions"],
-                "files_changed": stats["files"],
-            })
+            commits.append(
+                {
+                    "sha": commit.hexsha[:12],
+                    "author": commit.author.name,
+                    "email": commit.author.email,
+                    "date": commit.authored_datetime.isoformat(),
+                    "message": commit.message.strip().split("\n")[0],
+                    "insertions": stats["insertions"],
+                    "deletions": stats["deletions"],
+                    "files_changed": stats["files"],
+                }
+            )
         return commits
 
     def get_churn_by_directory(self, top_n: int = 10) -> list[dict[str, Any]]:
@@ -280,11 +288,13 @@ class GitHistoryAnalyzer:
             last_dt = file_last.get(path, now)
             days_ago = max(0, (now - last_dt).days)
             score = count / (1.0 + days_ago / 30.0)
-            results.append({
-                "file": path,
-                "change_count": count,
-                "last_changed": last_dt.isoformat(),
-                "hotspot_score": round(score, 4),
-            })
+            results.append(
+                {
+                    "file": path,
+                    "change_count": count,
+                    "last_changed": last_dt.isoformat(),
+                    "hotspot_score": round(score, 4),
+                }
+            )
         results.sort(key=lambda x: x["hotspot_score"], reverse=True)
         return results[:top_n]

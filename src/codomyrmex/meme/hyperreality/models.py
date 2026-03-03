@@ -11,13 +11,14 @@ class SimulationLevel(int, Enum):
     """Baudrillard's succession of phases of the image."""
 
     REFLECTION = 1  # Reflection of a basic reality
-    MASK = 2        # Masks and perverts a basic reality
-    ABSENCE = 3     # Masks the absence of a basic reality
-    PURE = 4        # No relation to any reality: pure simulacrum
+    MASK = 2  # Masks and perverts a basic reality
+    ABSENCE = 3  # Masks the absence of a basic reality
+    PURE = 4  # No relation to any reality: pure simulacrum
 
 
 class OntologicalStatus(StrEnum):
     """The status of an object's existence."""
+
     REAL = "real"
     VIRTUAL = "virtual"
     HYPERREAL = "hyperreal"

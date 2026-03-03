@@ -19,10 +19,12 @@ from typing import Any
 try:
     from codomyrmex.model_context_protocol.decorators import mcp_tool
 except ImportError:
+
     def mcp_tool(**kwargs: Any):  # type: ignore[misc]
         def decorator(func: Any) -> Any:
             func._mcp_tool_meta = kwargs
             return func
+
         return decorator
 
 
@@ -36,12 +38,14 @@ def _validate_positive_int(name: str, value: int, default: int) -> int:
 def _bridge(repo_path: str):
     """Lazy import + instantiation of GitNexusBridge."""
     from .core.gitnexus_bridge import GitNexusBridge
+
     return GitNexusBridge(repo_path)
 
 
 def _analyzer(repo_path: str):
     """Lazy import + instantiation of GitHistoryAnalyzer."""
     from .core.history_analyzer import GitHistoryAnalyzer
+
     return GitHistoryAnalyzer(repo_path)
 
 
@@ -297,7 +301,10 @@ def git_analysis_commit_frequency(
 ) -> dict[str, Any]:
     """Get commit frequency bucketed by time period (day/week/month)."""
     if by not in {"day", "week", "month"}:
-        return {"status": "error", "error": f"by must be one of 'day', 'week', 'month', got {by!r}"}
+        return {
+            "status": "error",
+            "error": f"by must be one of 'day', 'week', 'month', got {by!r}",
+        }
     try:
         result = _analyzer(repo_path).get_commit_frequency(by=by)
         return {"status": "ok", "frequency": result, "bucket": by}
@@ -346,8 +353,15 @@ def git_analysis_file_history(
     """Get commit history for a specific file."""
     try:
         max_count = _validate_positive_int("max_count", max_count, 50)
-        result = _analyzer(repo_path).get_file_history(file_path=file_path, max_count=max_count)
-        return {"status": "ok", "file": file_path, "commits": result, "count": len(result)}
+        result = _analyzer(repo_path).get_file_history(
+            file_path=file_path, max_count=max_count
+        )
+        return {
+            "status": "ok",
+            "file": file_path,
+            "commits": result,
+            "count": len(result),
+        }
     except ValueError as exc:
         return {"status": "error", "error": str(exc)}
     except Exception as exc:
@@ -382,9 +396,7 @@ def git_analysis_directory_churn(
         "High-score files are both frequently changed and recently touched."
     ),
 )
-def git_analysis_hotspots(
-    repo_path: str = ".", top_n: int = 20
-) -> dict[str, Any]:
+def git_analysis_hotspots(repo_path: str = ".", top_n: int = 20) -> dict[str, Any]:
     """Identify high-risk hotspot files by churn and recency."""
     try:
         top_n = _validate_positive_int("top_n", top_n, 20)

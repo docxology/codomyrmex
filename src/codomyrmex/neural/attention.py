@@ -1,4 +1,5 @@
 """Multi-head attention mechanism from 'Attention Is All You Need' (Vaswani et al. 2017)."""
+
 from __future__ import annotations
 
 import numpy as np

@@ -114,8 +114,12 @@ class TestDistillationLoss:
         labels = np.argmax(teacher, axis=-1)
         alpha = 0.7
 
-        result = distillation_loss(student, teacher, labels, temperature=4.0, alpha=alpha)
-        expected_total = alpha * result["distillation_loss"] + (1 - alpha) * result["ce_loss"]
+        result = distillation_loss(
+            student, teacher, labels, temperature=4.0, alpha=alpha
+        )
+        expected_total = (
+            alpha * result["distillation_loss"] + (1 - alpha) * result["ce_loss"]
+        )
         np.testing.assert_allclose(result["total_loss"], expected_total, atol=1e-10)
 
     @pytest.mark.unit
@@ -139,9 +143,7 @@ class TestDistillationLoss:
         labels = np.argmax(teacher, axis=-1)
 
         result = distillation_loss(student, teacher, labels, temperature=4.0, alpha=0.0)
-        np.testing.assert_allclose(
-            result["total_loss"], result["ce_loss"], atol=1e-10
-        )
+        np.testing.assert_allclose(result["total_loss"], result["ce_loss"], atol=1e-10)
 
     @pytest.mark.unit
     def test_no_labels_ce_is_zero(self):

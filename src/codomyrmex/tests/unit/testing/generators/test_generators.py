@@ -191,7 +191,7 @@ class TestDatasetGenerator:
         dataset.add_column("name", NameGenerator())
 
         csv = dataset.generate_csv(rows=2)
-        lines = csv.split('\n')
+        lines = csv.split("\n")
 
         assert lines[0] == "name"
         assert len(lines) == 3

@@ -127,6 +127,7 @@ class TestRegisteredModel:
 
     def test_latest_version_multiple(self):
         import time
+
         rm = RegisteredModel(name="clf")
         v1 = ModelVersion(version="1.0.0", model_name="clf")
         time.sleep(0.001)

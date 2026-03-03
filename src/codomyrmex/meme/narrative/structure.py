@@ -6,6 +6,7 @@ from codomyrmex.meme.narrative.models import NarrativeArc
 
 # Standard tension curves (normalized 0-1 duration, 0-1 tension)
 
+
 def heros_journey_arc() -> NarrativeArc:
     """The Monomyth structure."""
     return NarrativeArc(
@@ -25,8 +26,19 @@ def heros_journey_arc() -> NarrativeArc:
             0.2,  # Return with Elixir
         ],
         emotional_valence=[
-            0.0, 0.2, -0.2, 0.5, 0.3, 0.1, -0.3, -0.8, 0.8, -0.4, 0.4, 0.9
-        ]
+            0.0,
+            0.2,
+            -0.2,
+            0.5,
+            0.3,
+            0.1,
+            -0.3,
+            -0.8,
+            0.8,
+            -0.4,
+            0.4,
+            0.9,
+        ],
     )
 
 
@@ -41,7 +53,7 @@ def freytag_pyramid_arc() -> NarrativeArc:
             0.6,  # Falling Action
             0.2,  # Denouement
         ],
-        emotional_valence=[0.0, 0.3, 0.8, -0.2, 0.1]
+        emotional_valence=[0.0, 0.3, 0.8, -0.2, 0.1],
     )
 
 
@@ -59,5 +71,5 @@ def fichtean_curve_arc() -> NarrativeArc:
             1.0,  # Climax
             0.1,  # Resolution
         ],
-        emotional_valence=[0.0, -0.3, 0.2, -0.5, 0.1, -0.7, 0.5, 0.8]
+        emotional_valence=[0.0, -0.3, 0.2, -0.5, 0.1, -0.7, 0.5, 0.8],
     )

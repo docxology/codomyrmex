@@ -12,7 +12,7 @@ from pathlib import Path
 import matplotlib
 import pytest
 
-matplotlib.use('Agg')  # Non-interactive backend for testing
+matplotlib.use("Agg")  # Non-interactive backend for testing
 
 
 @pytest.mark.unit
@@ -37,7 +37,7 @@ class TestDocumentationAccuracy:
         params = list(sig.parameters.keys())
 
         # Check actual parameters exist
-        expected_params = ['x_data', 'y_data', 'title', 'output_path']
+        expected_params = ["x_data", "y_data", "title", "output_path"]
         for param in expected_params:
             assert param in params, f"Parameter '{param}' missing from create_line_plot"
 
@@ -55,6 +55,7 @@ class TestDocumentationAccuracy:
         # Verify return structure
         assert result is not None, "Function should return a Figure"
         from matplotlib.figure import Figure
+
         assert isinstance(result, Figure)
 
     def test_static_analysis_api_exists(self):
@@ -67,7 +68,7 @@ class TestDocumentationAccuracy:
 
         # Verify function signatures
         run_sig = inspect.signature(run_pyrefly)
-        assert 'path' in run_sig.parameters
+        assert "path" in run_sig.parameters
 
         # Verify check function is callable
         assert callable(check_pyrefly_available)
@@ -94,14 +95,17 @@ class TestDocumentationAccuracy:
     def test_code_execution_api_exists(self):
         """Test that documented code execution functions exist."""
         from codomyrmex.coding.execution.executor import execute_code
+
         return
 
         # Verify function signatures match documentation
         exec_sig = inspect.signature(execute_code)
-        expected_params = ['code', 'language', 'timeout', 'session_id', 'stdin']
+        expected_params = ["code", "language", "timeout", "session_id", "stdin"]
 
         for param in expected_params:
-            assert param in exec_sig.parameters, f"Parameter '{param}' missing from execute_code"
+            assert param in exec_sig.parameters, (
+                f"Parameter '{param}' missing from execute_code"
+            )
 
     def test_code_execution_functionality(self):
         """Test that documented code execution actually works."""
@@ -115,19 +119,21 @@ class TestDocumentationAccuracy:
 
         # Test code execution as documented
         result = execute_code(
-            code="print('Hello from documentation test')",
-            language="python",
-            timeout=10
+            code="print('Hello from documentation test')", language="python", timeout=10
         )
 
         # Verify documented return structure
         assert isinstance(result, dict), "Should return dictionary"
-        assert 'status' in result, f"Expected 'status' in result, got keys: {result.keys()}"
-        if result.get('status') == 'setup_error':
+        assert "status" in result, (
+            f"Expected 'status' in result, got keys: {result.keys()}"
+        )
+        if result.get("status") == "setup_error":
             pytest.skip("Docker/sandbox not available for code execution test")
-        assert result.get('status') == 'success', f"Expected status='success', got {result.get('status')}"
-        assert 'stdout' in result or 'output' in result, "Should have stdout or output"
-        assert 'execution_time' in result
+        assert result.get("status") == "success", (
+            f"Expected status='success', got {result.get('status')}"
+        )
+        assert "stdout" in result or "output" in result, "Should have stdout or output"
+        assert "execution_time" in result
 
     def test_git_operations_api_exists(self):
         """Test that documented git operations functions exist."""
@@ -185,7 +191,7 @@ class TestDocumentationAccuracy:
         # Test environment check as documented
         env_result = check_build_environment()
         assert isinstance(env_result, dict)
-        assert 'python_available' in env_result
+        assert "python_available" in env_result
 
     def test_logging_api_exists(self):
         """Test that documented logging functions exist."""
@@ -197,9 +203,9 @@ class TestDocumentationAccuracy:
         # Test logger creation
         logger = get_logger("test_logger")
         assert logger is not None
-        assert hasattr(logger, 'info')
-        assert hasattr(logger, 'error')
-        assert hasattr(logger, 'debug')
+        assert hasattr(logger, "info")
+        assert hasattr(logger, "error")
+        assert hasattr(logger, "debug")
 
         # Test that setup_logging is callable
         assert callable(setup_logging)
@@ -224,20 +230,26 @@ class TestDocumentationAccuracy:
         """Test that all documented visualization modules exist."""
         # Modules in charts/ subdirectory
         chart_modules = {
-            'line_plot': 'create_line_plot',
-            'bar_chart': 'create_bar_chart',
-            'scatter_plot': 'create_scatter_plot',
-            'pie_chart': 'create_pie_chart',
-            'histogram': 'create_histogram',
+            "line_plot": "create_line_plot",
+            "bar_chart": "create_bar_chart",
+            "scatter_plot": "create_scatter_plot",
+            "pie_chart": "create_pie_chart",
+            "histogram": "create_histogram",
         }
 
         for module_name, create_fn in chart_modules.items():
             try:
-                module = importlib.import_module(f'codomyrmex.data_visualization.charts.{module_name}')
+                module = importlib.import_module(
+                    f"codomyrmex.data_visualization.charts.{module_name}"
+                )
                 assert module is not None
-                assert hasattr(module, create_fn), f"Missing {create_fn} in charts.{module_name}"
+                assert hasattr(module, create_fn), (
+                    f"Missing {create_fn} in charts.{module_name}"
+                )
             except ImportError as e:
-                pytest.fail(f"Documented module charts.{module_name} cannot be imported: {e}")
+                pytest.fail(
+                    f"Documented module charts.{module_name} cannot be imported: {e}"
+                )
 
     def test_mcp_schemas_exist(self):
         """Test that documented MCP schemas exist."""
@@ -269,16 +281,16 @@ class TestDocumentationAccuracy:
             name="test_repo",
             url="https://example.com/repo.git",
             description="Test repository",
-            local_path_suggestion="test_repo"
+            local_path_suggestion="test_repo",
         )
         assert repo.name == "test_repo"
         assert repo.url == "https://example.com/repo.git"
         assert repo.repo_type == RepositoryType.USE
 
         # Test RepositoryType enum exists with expected values
-        assert hasattr(RepositoryType, 'OWN')
-        assert hasattr(RepositoryType, 'USE')
-        assert hasattr(RepositoryType, 'FORK')
+        assert hasattr(RepositoryType, "OWN")
+        assert hasattr(RepositoryType, "USE")
+        assert hasattr(RepositoryType, "FORK")
 
     def test_comprehensive_workflow_functions_work_together(self):
         """Test that documented workflow actually works end-to-end."""
@@ -304,12 +316,14 @@ class TestDocumentationAccuracy:
                 execution_result = execute_code(
                     code="result = 2 + 2\nprint(f'Result: {result}')",
                     language="python",
-                    timeout=10
+                    timeout=10,
                 )
                 # Check if execution was successful or if Docker is not available
-                if execution_result.get('status') == 'success':
-                    assert 'Result: 4' in execution_result.get('stdout', '') or 'Result: 4' in execution_result.get('output', '')
-                elif execution_result.get('status') == 'setup_error':
+                if execution_result.get("status") == "success":
+                    assert "Result: 4" in execution_result.get(
+                        "stdout", ""
+                    ) or "Result: 4" in execution_result.get("output", "")
+                elif execution_result.get("status") == "setup_error":
                     pass  # Docker not available, continue with other tests
             except Exception:
                 pass  # Code execution not available, continue
@@ -319,7 +333,7 @@ class TestDocumentationAccuracy:
                 x_data=list(range(1, 5)),
                 y_data=[i**2 for i in range(1, 5)],
                 title="Workflow Test",
-                output_path=str(project_path / "workflow_test.png")
+                output_path=str(project_path / "workflow_test.png"),
             )
             assert viz_result is not None
 
@@ -329,13 +343,13 @@ class TestDocumentationAccuracy:
         # documented APIs when adding new functionality
 
         documented_modules = [
-            'codomyrmex.data_visualization.charts.line_plot',
-            'codomyrmex.coding.static_analysis.pyrefly_runner',
-            'codomyrmex.coding.execution.executor',
-            'codomyrmex.git_operations.core.git',
-            'codomyrmex.environment_setup.env_checker',
-            'codomyrmex.logging_monitoring.core.logger_config',
-            'codomyrmex.model_context_protocol.schemas.mcp_schemas',
+            "codomyrmex.data_visualization.charts.line_plot",
+            "codomyrmex.coding.static_analysis.pyrefly_runner",
+            "codomyrmex.coding.execution.executor",
+            "codomyrmex.git_operations.core.git",
+            "codomyrmex.environment_setup.env_checker",
+            "codomyrmex.logging_monitoring.core.logger_config",
+            "codomyrmex.model_context_protocol.schemas.mcp_schemas",
         ]
 
         for module_name in documented_modules:
@@ -343,11 +357,18 @@ class TestDocumentationAccuracy:
                 module = importlib.import_module(module_name)
                 assert module is not None
                 # Each module should have at least one public function/class
-                public_members = [name for name in dir(module)
-                                if not name.startswith('_') and
-                                (inspect.isfunction(getattr(module, name)) or
-                                 inspect.isclass(getattr(module, name)))]
-                assert len(public_members) > 0, f"Module {module_name} has no public members"
+                public_members = [
+                    name
+                    for name in dir(module)
+                    if not name.startswith("_")
+                    and (
+                        inspect.isfunction(getattr(module, name))
+                        or inspect.isclass(getattr(module, name))
+                    )
+                ]
+                assert len(public_members) > 0, (
+                    f"Module {module_name} has no public members"
+                )
 
             except ImportError as e:
                 pytest.fail(f"Documented module {module_name} cannot be imported: {e}")
@@ -375,12 +396,13 @@ class TestRealMethodsInDocumentation:
                 x_data=x_vals,
                 y_data=y_vals,
                 title="Benchmark Test",
-                output_path=f"{temp_dir}/benchmark.png"
+                output_path=f"{temp_dir}/benchmark.png",
             )
             duration = time.time() - start_time
 
         assert result is not None
         from matplotlib.figure import Figure
+
         assert isinstance(result, Figure)
         assert duration > 0
         assert duration < 10  # Should be reasonably fast for small dataset
@@ -406,9 +428,10 @@ class TestRealMethodsInDocumentation:
             # Verify result
             assert result is not None
             from matplotlib.figure import Figure
+
             assert isinstance(result, Figure)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # Allow running this test file directly
-    pytest.main([__file__, '-v'])
+    pytest.main([__file__, "-v"])

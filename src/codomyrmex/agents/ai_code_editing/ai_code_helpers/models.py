@@ -33,6 +33,7 @@ class CodeLanguage(Enum):
     JSON = "json"
     MARKDOWN = "markdown"
 
+
 class CodeComplexity(Enum):
     """Code complexity levels."""
 
@@ -40,6 +41,7 @@ class CodeComplexity(Enum):
     INTERMEDIATE = "intermediate"
     COMPLEX = "complex"
     EXPERT = "expert"
+
 
 class CodeStyle(Enum):
     """Code style preferences."""
@@ -50,6 +52,7 @@ class CodeStyle(Enum):
     FUNCTIONAL = "functional"
     OBJECT_ORIENTED = "object_oriented"
     PROCEDURAL = "procedural"
+
 
 @dataclass
 class CodeGenerationRequest:
@@ -65,6 +68,7 @@ class CodeGenerationRequest:
     max_length: int | None = None
     temperature: float = 0.7
 
+
 @dataclass
 class CodeRefactoringRequest:
     """Request structure for code refactoring."""
@@ -77,6 +81,7 @@ class CodeRefactoringRequest:
     add_tests: bool = False
     add_documentation: bool = False
 
+
 @dataclass
 class CodeAnalysisRequest:
     """Request structure for code analysis."""
@@ -86,6 +91,7 @@ class CodeAnalysisRequest:
     analysis_type: str  # e.g., "quality", "security", "performance", "maintainability"
     context: str | None = None
     include_suggestions: bool = True
+
 
 @dataclass
 class CodeGenerationResult:
@@ -97,4 +103,3 @@ class CodeGenerationResult:
     execution_time: float
     tokens_used: int | None = None
     confidence_score: float | None = None
-

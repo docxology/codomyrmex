@@ -15,6 +15,7 @@ by deferring module imports until they are actually needed.
 
 logger = get_logger(__name__)
 
+
 class LazyLoader:
     """
     A lazy loader that defers module imports until they are actually accessed.
@@ -126,7 +127,6 @@ def lazy_function(
 
     @wraps(lambda: None)  # Wraps sentinel — actual function resolved at call time
     def lazy_wrapper(*args, **kwargs):
-
 
         func = getattr(loader, function_name)
         return func(*args, **kwargs)

@@ -71,7 +71,7 @@ class JobScheduler:
         statuses = {}
         # Access backend's job storage
         backend = self.queue._queue
-        if hasattr(backend, '_jobs'):
+        if hasattr(backend, "_jobs"):
             for job_id, job in backend._jobs.items():
                 statuses[job_id] = job.status.value
         return statuses
@@ -105,7 +105,6 @@ class JobScheduler:
             Job instance or None if not found
         """
         backend = self.queue._queue
-        if hasattr(backend, '_jobs'):
+        if hasattr(backend, "_jobs"):
             return backend._jobs.get(job_id)
         return None
-

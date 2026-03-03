@@ -5,7 +5,9 @@ from __future__ import annotations
 from codomyrmex.meme.cultural_dynamics.models import PowerMap
 
 
-def map_power_dynamics(entities: list[str], flows: list[tuple[str, str, float]]) -> PowerMap:
+def map_power_dynamics(
+    entities: list[str], flows: list[tuple[str, str, float]]
+) -> PowerMap:
     """Map power based on capital flows.
 
     Args:
@@ -19,7 +21,7 @@ def map_power_dynamics(entities: list[str], flows: list[tuple[str, str, float]])
         if src in scores:
             scores[src] -= amount * 0.5  # Spending
         if dst in scores:
-            scores[dst] += amount      # Accumulating
+            scores[dst] += amount  # Accumulating
 
     # Normalize
     max_score = max(scores.values()) if scores else 1.0

@@ -14,6 +14,7 @@ from typing import Any
 
 class WASMRuntime(Enum):
     """Supported WASM runtimes."""
+
     WASMTIME = "wasmtime"
     WASMER = "wasmer"
     WAZERO = "wazero"
@@ -23,6 +24,7 @@ class WASMRuntime(Enum):
 @dataclass
 class WASMModule:
     """A WebAssembly module."""
+
     name: str
     path: str
     runtime: WASMRuntime = WASMRuntime.WASMTIME
@@ -36,6 +38,7 @@ class WASMModule:
 @dataclass
 class WASMInstance:
     """A running WASM instance."""
+
     id: str
     module: WASMModule
     created_at: datetime = field(default_factory=datetime.now)
@@ -47,6 +50,7 @@ class WASMInstance:
 @dataclass
 class WASMExecution:
     """Result of a WASM function execution."""
+
     success: bool
     result: Any = None
     error: str | None = None
@@ -189,7 +193,10 @@ class WASMOrchestrator:
         for client in self._runtimes.values():
             try:
                 result = client.execute(instance_id, function_name, args)
-                if result.success or result.error != f"Instance not found: {instance_id}":
+                if (
+                    result.success
+                    or result.error != f"Instance not found: {instance_id}"
+                ):
                     return result
             except Exception:
                 continue

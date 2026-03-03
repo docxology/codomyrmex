@@ -16,6 +16,7 @@ from typing import Any
 
 class SnapshotState(Enum):
     """Lifecycle states of a deployment snapshot."""
+
     ACTIVE = "active"
     ROLLED_BACK = "rolled_back"
     SUPERSEDED = "superseded"
@@ -32,6 +33,7 @@ class DeploymentSnapshot:
         metadata: Arbitrary metadata about the deployment at snapshot time
                   (e.g. target count, config hash, environment variables).
     """
+
     version: str
     state: SnapshotState = SnapshotState.ACTIVE
     created_at: datetime = field(default_factory=datetime.now)
@@ -58,6 +60,7 @@ class RollbackResult:
         performed_at: When the rollback was executed.
         message: A human-readable summary.
     """
+
     success: bool
     from_version: str
     to_version: str
@@ -134,7 +137,7 @@ class RollbackManager:
         from_version = self._current_version or "unknown"
 
         # Mark later snapshots as superseded
-        for snap in self._snapshots[target_index + 1:]:
+        for snap in self._snapshots[target_index + 1 :]:
             snap.state = SnapshotState.SUPERSEDED
 
         self._snapshots[target_index].state = SnapshotState.ROLLED_BACK
@@ -166,8 +169,7 @@ class RollbackManager:
             True if the rollback state is consistent.
         """
         rolled_back = [
-            s for s in self._snapshots
-            if s.state == SnapshotState.ROLLED_BACK
+            s for s in self._snapshots if s.state == SnapshotState.ROLLED_BACK
         ]
         if len(rolled_back) != 1:
             return False

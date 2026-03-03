@@ -14,6 +14,7 @@ except ImportError:
         def decorator(fn):
             fn._mcp_tool_meta = kwargs
             return fn
+
         return decorator
 
 

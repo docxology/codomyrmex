@@ -1,5 +1,6 @@
 """Generator content."""
 
+
 def generate_physical_simulation_content() -> str:
     """Generate the physical simulation engine."""
     return '''"""Physical simulation engine for object interactions."""
@@ -191,4 +192,3 @@ class PhysicsSimulator:
 
 __all__ = ["Vector3D", "ForceField", "Constraint", "PhysicsSimulator"]
 '''
-

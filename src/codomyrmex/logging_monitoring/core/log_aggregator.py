@@ -169,7 +169,9 @@ class LogAggregator:
         time_range = max(timestamps) - min(timestamps) if len(timestamps) > 1 else 0.0
         rps = total / time_range if time_range > 0 else 0.0
 
-        top_modules = sorted(module_counts.items(), key=lambda x: x[1], reverse=True)[:10]
+        top_modules = sorted(module_counts.items(), key=lambda x: x[1], reverse=True)[
+            :10
+        ]
 
         return LogStats(
             total_count=total,

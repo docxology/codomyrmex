@@ -4,6 +4,7 @@ from codomyrmex.cli.utils import get_logger, print_error, print_success
 
 logger = get_logger(__name__)
 
+
 def handle_ai_generate(prompt: str, language: str, provider: str) -> bool:
     """Handle AI code generation command."""
     try:

@@ -67,15 +67,20 @@ class TestAuthToken:
     def test_default_scopes_empty(self):
         """AuthToken scopes default to empty list."""
         token = AuthToken(
-            token="t", user_id="u", issued_at=0.0, expires_at=0.0,
+            token="t",
+            user_id="u",
+            issued_at=0.0,
+            expires_at=0.0,
         )
         assert token.scopes == []
 
     def test_custom_scopes(self):
         """AuthToken accepts custom scopes."""
         token = AuthToken(
-            token="t", user_id="u",
-            issued_at=0.0, expires_at=0.0,
+            token="t",
+            user_id="u",
+            issued_at=0.0,
+            expires_at=0.0,
             scopes=["read", "write"],
         )
         assert "read" in token.scopes
@@ -115,6 +120,7 @@ class TestAuthProviderABC:
     def test_is_abstract(self):
         """AuthProvider is abstract and cannot be instantiated."""
         import abc
+
         assert issubclass(AuthProvider, abc.ABC)
 
     def test_has_authenticate_method(self):
@@ -395,7 +401,9 @@ class TestIdentityMultipleProviders:
         api_key = tok_prov.create_token()
         ident.register_provider("token", tok_prov)
 
-        pw_token = ident.login("alice", {"user_id": "alice", "password": "pass"}, provider="password")
+        pw_token = ident.login(
+            "alice", {"user_id": "alice", "password": "pass"}, provider="password"
+        )
         api_token = ident.login("bot", {"token": api_key}, provider="token")
 
         assert pw_token is not None

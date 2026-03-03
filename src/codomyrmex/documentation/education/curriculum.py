@@ -17,6 +17,7 @@ logger = get_logger(__name__)
 
 class Difficulty(Enum):
     """Learning difficulty level."""
+
     BEGINNER = "beginner"
     INTERMEDIATE = "intermediate"
     ADVANCED = "advanced"
@@ -27,9 +28,13 @@ class Difficulty(Enum):
 DifficultyLevel = Difficulty
 
 
-
 # Ordered difficulty levels for comparison
-_DIFFICULTY_ORDER = [Difficulty.BEGINNER, Difficulty.INTERMEDIATE, Difficulty.ADVANCED, Difficulty.EXPERT]
+_DIFFICULTY_ORDER = [
+    Difficulty.BEGINNER,
+    Difficulty.INTERMEDIATE,
+    Difficulty.ADVANCED,
+    Difficulty.EXPERT,
+]
 
 
 @dataclass
@@ -45,6 +50,7 @@ class Lesson:
         prerequisites: List of prerequisite module names.
         exercises: List of exercise dicts (prompt/solution).
     """
+
     title: str
     objectives: list[str] = field(default_factory=list)
     content: str = ""
@@ -157,9 +163,7 @@ class Curriculum:
     # Learning path
     # ------------------------------------------------------------------
 
-    def generate_learning_path(
-        self, student_level: str | None = None
-    ) -> list[str]:
+    def generate_learning_path(self, student_level: str | None = None) -> list[str]:
         """Generate an ordered learning path (topological sort by prerequisites).
 
         Args:
@@ -201,12 +205,20 @@ class Curriculum:
                 filtered = []
                 for name in path:
                     mod = modules[name]
-                    mod_idx = _DIFFICULTY_ORDER.index(mod.difficulty) if mod.difficulty in _DIFFICULTY_ORDER else 0
+                    mod_idx = (
+                        _DIFFICULTY_ORDER.index(mod.difficulty)
+                        if mod.difficulty in _DIFFICULTY_ORDER
+                        else 0
+                    )
                     if mod_idx >= level_idx:
                         filtered.append(name)
                 path = filtered
             except (ValueError, IndexError) as e:
-                logger.warning("Failed to filter curriculum path by difficulty level '%s': %s", student_level, e)
+                logger.warning(
+                    "Failed to filter curriculum path by difficulty level '%s': %s",
+                    student_level,
+                    e,
+                )
                 pass
 
         return path
@@ -228,12 +240,15 @@ class Curriculum:
             ValueError: If format is unsupported.
         """
         if format == "json":
-            return json.dumps({
-                "name": self.name,
-                "level": self.level,
-                "total_duration_minutes": self.total_duration(),
-                "modules": self.get_modules(),
-            }, indent=2)
+            return json.dumps(
+                {
+                    "name": self.name,
+                    "level": self.level,
+                    "total_duration_minutes": self.total_duration(),
+                    "modules": self.get_modules(),
+                },
+                indent=2,
+            )
         elif format == "text":
             lines = [f"Curriculum: {self.name}"]
             lines.append(f"Level: {self.level}")

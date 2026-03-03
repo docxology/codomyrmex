@@ -23,13 +23,54 @@ class TermAnalyzer:
     """
 
     # Common English stop-words to exclude from analysis
-    _STOP_WORDS: frozenset[str] = frozenset({
-        "a", "an", "the", "and", "or", "but", "in", "on", "at", "to",
-        "for", "of", "with", "by", "from", "is", "are", "was", "were",
-        "be", "been", "being", "have", "has", "had", "do", "does", "did",
-        "will", "would", "could", "should", "may", "might", "shall",
-        "not", "no", "this", "that", "it", "its", "as", "if", "so",
-    })
+    _STOP_WORDS: frozenset[str] = frozenset(
+        {
+            "a",
+            "an",
+            "the",
+            "and",
+            "or",
+            "but",
+            "in",
+            "on",
+            "at",
+            "to",
+            "for",
+            "of",
+            "with",
+            "by",
+            "from",
+            "is",
+            "are",
+            "was",
+            "were",
+            "be",
+            "been",
+            "being",
+            "have",
+            "has",
+            "had",
+            "do",
+            "does",
+            "did",
+            "will",
+            "would",
+            "could",
+            "should",
+            "may",
+            "might",
+            "shall",
+            "not",
+            "no",
+            "this",
+            "that",
+            "it",
+            "its",
+            "as",
+            "if",
+            "so",
+        }
+    )
 
     # ------------------------------------------------------------------
     # Public API
@@ -57,7 +98,7 @@ class TermAnalyzer:
             for i, term_a in enumerate(unique_terms):
                 if term_a not in matrix:
                     matrix[term_a] = {}
-                for term_b in unique_terms[i + 1:]:
+                for term_b in unique_terms[i + 1 :]:
                     matrix[term_a][term_b] = matrix[term_a].get(term_b, 0) + 1
                     if term_b not in matrix:
                         matrix[term_b] = {}

@@ -22,6 +22,7 @@ try:
         timed_operation,
         with_retry,
     )
+
     HAS_MODULE = True
 except ImportError:
     HAS_MODULE = False
@@ -39,9 +40,11 @@ def _run(coro):
 # setup_module_logging
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestSetupModuleLogging:
     """Test suite for SetupModuleLogging."""
+
     def test_creates_logger(self):
         """Test functionality: creates logger."""
         log = setup_module_logging("test_module")
@@ -70,11 +73,14 @@ class TestSetupModuleLogging:
 # log_performance decorator
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestLogPerformance:
     """Test suite for LogPerformance."""
+
     def test_decorator_preserves_return_value(self):
         """Test functionality: decorator preserves return value."""
+
         @log_performance("test_op")
         def add(a, b):
             return a + b
@@ -83,6 +89,7 @@ class TestLogPerformance:
 
     def test_decorator_preserves_function_name(self):
         """Test functionality: decorator preserves function name."""
+
         @log_performance("test_op")
         def my_func():
             pass
@@ -91,6 +98,7 @@ class TestLogPerformance:
 
     def test_decorator_raises_on_error(self):
         """Test functionality: decorator raises on error."""
+
         @log_performance("test_op")
         def failing():
             raise ValueError("fail")
@@ -103,11 +111,14 @@ class TestLogPerformance:
 # run_async
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestRunAsync:
     """Test suite for RunAsync."""
+
     def test_runs_coroutine(self):
         """Test functionality: runs coroutine."""
+
         async def coro():
             return 42
 
@@ -116,6 +127,7 @@ class TestRunAsync:
 
     def test_returns_value(self):
         """Test functionality: returns value."""
+
         async def coro():
             return "hello"
 
@@ -126,11 +138,14 @@ class TestRunAsync:
 # make_async
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestMakeAsync:
     """Test suite for MakeAsync."""
+
     def test_converts_sync_to_async(self):
         """Test functionality: converts sync to async."""
+
         def sync_fn(x):
             return x * 2
 
@@ -143,6 +158,7 @@ class TestMakeAsync:
 
     def test_preserves_function_name(self):
         """Test functionality: preserves function name."""
+
         def my_function():
             pass
 
@@ -154,9 +170,11 @@ class TestMakeAsync:
 # RetryConfig
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestRetryConfig:
     """Test suite for RetryConfig."""
+
     def test_defaults(self):
         """Test functionality: defaults."""
         config = RetryConfig()
@@ -183,9 +201,11 @@ class TestRetryConfig:
 # with_retry decorator
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestWithRetry:
     """Test suite for WithRetry."""
+
     def test_succeeds_first_try(self):
         """Test functionality: succeeds first try."""
         call_count = 0
@@ -218,6 +238,7 @@ class TestWithRetry:
 
     def test_raises_after_max_attempts(self):
         """Test functionality: raises after max attempts."""
+
         @with_retry(RetryConfig(max_attempts=2, initial_delay=0.001, jitter=False))
         def always_fail():
             raise RuntimeError("always")
@@ -227,11 +248,14 @@ class TestWithRetry:
 
     def test_only_retries_specified_exceptions(self):
         """Test functionality: only retries specified exceptions."""
-        @with_retry(RetryConfig(
-            max_attempts=3,
-            initial_delay=0.001,
-            retryable_exceptions=(ValueError,),
-        ))
+
+        @with_retry(
+            RetryConfig(
+                max_attempts=3,
+                initial_delay=0.001,
+                retryable_exceptions=(ValueError,),
+            )
+        )
         def wrong_error():
             raise TypeError("wrong type")
 
@@ -243,9 +267,11 @@ class TestWithRetry:
 # timed_operation
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestTimedOperation:
     """Test suite for TimedOperation."""
+
     def test_context_manager(self):
         """Test functionality: context manager."""
         with timed_operation("test_op"):
@@ -264,11 +290,14 @@ class TestTimedOperation:
 # async_timed_operation
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestAsyncTimedOperation:
     """Test suite for AsyncTimedOperation."""
+
     def test_async_context_manager(self):
         """Test functionality: async context manager."""
+
         async def _test():
             async with async_timed_operation("test_op"):
                 await asyncio.sleep(0.01)
@@ -277,6 +306,7 @@ class TestAsyncTimedOperation:
 
     def test_yields_control(self):
         """Test functionality: yields control."""
+
         async def _test():
             result = None
             async with async_timed_operation("test_op"):
@@ -290,9 +320,11 @@ class TestAsyncTimedOperation:
 # ModuleRegistry
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestModuleRegistry:
     """Test suite for ModuleRegistry."""
+
     def test_singleton(self):
         """Test functionality: singleton."""
         r1 = ModuleRegistry()
@@ -344,9 +376,11 @@ class TestModuleRegistry:
 # HealthStatus
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestHealthStatus:
     """Test suite for HealthStatus."""
+
     def test_create_healthy(self):
         """Test functionality: create healthy."""
         status = HealthStatus(healthy=True, name="test_service")
@@ -375,9 +409,11 @@ class TestHealthStatus:
 # HealthChecker
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestHealthChecker:
     """Test suite for HealthChecker."""
+
     def test_create(self):
         """Test functionality: create."""
         checker = HealthChecker()
@@ -449,11 +485,14 @@ class TestHealthChecker:
 # gather_with_concurrency
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestGatherWithConcurrency:
     """Test suite for GatherWithConcurrency."""
+
     def test_runs_coroutines(self):
         """Test functionality: runs coroutines."""
+
         async def _test():
             async def double(x):
                 return x * 2
@@ -468,6 +507,7 @@ class TestGatherWithConcurrency:
 
     def test_respects_concurrency_limit(self):
         """Test functionality: respects concurrency limit."""
+
         async def _test():
             running = 0
             max_running = 0

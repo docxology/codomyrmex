@@ -17,6 +17,7 @@ from typing import Any
 
 class VulnerabilitySeverity(Enum):
     """Severity levels for vulnerabilities."""
+
     CRITICAL = "critical"
     HIGH = "high"
     MEDIUM = "medium"
@@ -27,6 +28,7 @@ class VulnerabilitySeverity(Enum):
 @dataclass
 class Vulnerability:
     """Represents a detected vulnerability."""
+
     id: str
     severity: VulnerabilitySeverity
     title: str
@@ -40,6 +42,7 @@ class Vulnerability:
 @dataclass
 class SecurityScanResult:
     """Result of a security scan."""
+
     image: str
     scan_time: datetime
     vulnerabilities: list[Vulnerability] = field(default_factory=list)
@@ -50,12 +53,24 @@ class SecurityScanResult:
     @property
     def critical_count(self) -> int:
         """Count critical vulnerabilities."""
-        return len([v for v in self.vulnerabilities if v.severity == VulnerabilitySeverity.CRITICAL])
+        return len(
+            [
+                v
+                for v in self.vulnerabilities
+                if v.severity == VulnerabilitySeverity.CRITICAL
+            ]
+        )
 
     @property
     def high_count(self) -> int:
         """Count high-severity vulnerabilities."""
-        return len([v for v in self.vulnerabilities if v.severity == VulnerabilitySeverity.HIGH])
+        return len(
+            [
+                v
+                for v in self.vulnerabilities
+                if v.severity == VulnerabilitySeverity.HIGH
+            ]
+        )
 
     def summary(self) -> dict[str, int]:
         """Get vulnerability count by severity."""
@@ -88,17 +103,25 @@ def _parse_trivy_results(data: dict) -> list[Vulnerability]:
     }
     for result in data.get("Results", []):
         for v in result.get("Vulnerabilities") or []:
-            sev = severity_map.get(v.get("Severity", "UNKNOWN"), VulnerabilitySeverity.INFO)
-            vulns.append(Vulnerability(
-                id=v.get("VulnerabilityID", "UNKNOWN"),
-                severity=sev,
-                title=v.get("Title", v.get("VulnerabilityID", "")),
-                description=v.get("Description", ""),
-                package=v.get("PkgName"),
-                version=v.get("InstalledVersion"),
-                fixed_version=v.get("FixedVersion"),
-                cve_ids=[v["VulnerabilityID"]] if v.get("VulnerabilityID", "").startswith("CVE-") else [],
-            ))
+            sev = severity_map.get(
+                v.get("Severity", "UNKNOWN"), VulnerabilitySeverity.INFO
+            )
+            vulns.append(
+                Vulnerability(
+                    id=v.get("VulnerabilityID", "UNKNOWN"),
+                    severity=sev,
+                    title=v.get("Title", v.get("VulnerabilityID", "")),
+                    description=v.get("Description", ""),
+                    package=v.get("PkgName"),
+                    version=v.get("InstalledVersion"),
+                    fixed_version=v.get("FixedVersion"),
+                    cve_ids=(
+                        [v["VulnerabilityID"]]
+                        if v.get("VulnerabilityID", "").startswith("CVE-")
+                        else []
+                    ),
+                )
+            )
     return vulns
 
 
@@ -119,7 +142,10 @@ class SecurityScanner:
         try:
             result = subprocess.run(
                 [cli, "image", "--format", "json", "--quiet", image],
-                check=True, capture_output=True, text=True, timeout=120,
+                check=True,
+                capture_output=True,
+                text=True,
+                timeout=120,
             )
             data = json.loads(result.stdout)
             vulns = _parse_trivy_results(data)
@@ -127,8 +153,13 @@ class SecurityScanner:
                 "image": image,
                 "status": "scanned",
                 "vulnerabilities": [
-                    {"id": v.id, "severity": v.severity.value, "title": v.title,
-                     "package": v.package, "version": v.version}
+                    {
+                        "id": v.id,
+                        "severity": v.severity.value,
+                        "title": v.title,
+                        "package": v.package,
+                        "version": v.version,
+                    }
                     for v in vulns
                 ],
             }
@@ -178,12 +209,17 @@ class ContainerSecurityScanner:
 
         try:
             proc = subprocess.run(
-                cmd, check=True, capture_output=True, text=True, timeout=120,
+                cmd,
+                check=True,
+                capture_output=True,
+                text=True,
+                timeout=120,
             )
             data = json.loads(proc.stdout)
             vulns = _parse_trivy_results(data)
             passed = not any(
-                v.severity in (VulnerabilitySeverity.CRITICAL, VulnerabilitySeverity.HIGH)
+                v.severity
+                in (VulnerabilitySeverity.CRITICAL, VulnerabilitySeverity.HIGH)
                 for v in vulns
             )
             result = SecurityScanResult(
@@ -222,12 +258,16 @@ class ContainerSecurityScanner:
         try:
             proc = subprocess.run(
                 [cli, "image", "--format", "json", "--quiet", container_id],
-                check=True, capture_output=True, text=True, timeout=120,
+                check=True,
+                capture_output=True,
+                text=True,
+                timeout=120,
             )
             data = json.loads(proc.stdout)
             vulns = _parse_trivy_results(data)
             passed = not any(
-                v.severity in (VulnerabilitySeverity.CRITICAL, VulnerabilitySeverity.HIGH)
+                v.severity
+                in (VulnerabilitySeverity.CRITICAL, VulnerabilitySeverity.HIGH)
                 for v in vulns
             )
             result = SecurityScanResult(
@@ -247,7 +287,9 @@ class ContainerSecurityScanner:
         self._scan_history.append(result)
         return result
 
-    def check_compliance(self, image: str, policy: str = "default") -> SecurityScanResult:
+    def check_compliance(
+        self, image: str, policy: str = "default"
+    ) -> SecurityScanResult:
         """
         Check container against compliance policy using Trivy misconfiguration scan.
 
@@ -264,14 +306,26 @@ class ContainerSecurityScanner:
         cli = _trivy_cli()
         try:
             proc = subprocess.run(
-                [cli, "image", "--format", "json", "--quiet",
-                 "--scanners", "vuln,misconfig", image],
-                check=True, capture_output=True, text=True, timeout=120,
+                [
+                    cli,
+                    "image",
+                    "--format",
+                    "json",
+                    "--quiet",
+                    "--scanners",
+                    "vuln,misconfig",
+                    image,
+                ],
+                check=True,
+                capture_output=True,
+                text=True,
+                timeout=120,
             )
             data = json.loads(proc.stdout)
             vulns = _parse_trivy_results(data)
             passed = not any(
-                v.severity in (VulnerabilitySeverity.CRITICAL, VulnerabilitySeverity.HIGH)
+                v.severity
+                in (VulnerabilitySeverity.CRITICAL, VulnerabilitySeverity.HIGH)
                 for v in vulns
             )
             result = SecurityScanResult(
@@ -303,9 +357,7 @@ class ContainerSecurityScanner:
 
 
 def scan_container_security(
-    image: str,
-    scanner: ContainerSecurityScanner | None = None,
-    **kwargs
+    image: str, scanner: ContainerSecurityScanner | None = None, **kwargs
 ) -> SecurityScanResult:
     """Scan a container image for security issues.
 

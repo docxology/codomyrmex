@@ -4,6 +4,7 @@ import pytest
 
 try:
     from codomyrmex.agents.core import AgentCapabilities, AgentRequest
+
     _HAS_AGENTS = True
 except ImportError:
     _HAS_AGENTS = False
@@ -19,8 +20,7 @@ class TestAgentIntegrations:
     def test_agent_request_creation(self):
         """Test creating an agent request."""
         request = AgentRequest(
-            prompt="Test prompt",
-            capabilities=[AgentCapabilities.CODE_GENERATION]
+            prompt="Test prompt", capabilities=[AgentCapabilities.CODE_GENERATION]
         )
         assert request.prompt == "Test prompt"
         assert AgentCapabilities.CODE_GENERATION in request.capabilities
@@ -29,11 +29,7 @@ class TestAgentIntegrations:
         """Test agent response structure."""
         from codomyrmex.agents.core import AgentResponse
 
-        response = AgentResponse(
-            content="Test content",
-            metadata={"test": "value"}
-        )
+        response = AgentResponse(content="Test content", metadata={"test": "value"})
         assert response.content == "Test content"
         assert response.is_success()
         assert response.metadata["test"] == "value"
-

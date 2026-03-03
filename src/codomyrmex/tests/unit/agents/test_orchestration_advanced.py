@@ -17,6 +17,7 @@ try:
     )
     from codomyrmex.agents.core.exceptions import AgentError
     from codomyrmex.agents.generic.agent_orchestrator import AgentOrchestrator
+
     _HAS_AGENTS = True
 except ImportError:
     _HAS_AGENTS = False
@@ -52,7 +53,9 @@ class StubAgent(BaseAgent):
             time.sleep(self.delay)
 
         if self.fail_after and self.execution_count > self.fail_after:
-            return AgentResponse(content="", error=f"Failed after {self.fail_after} attempts")
+            return AgentResponse(
+                content="", error=f"Failed after {self.fail_after} attempts"
+            )
 
         if self.should_succeed:
             return AgentResponse(
@@ -60,8 +63,8 @@ class StubAgent(BaseAgent):
                 metadata={
                     "agent": self.name,
                     "attempt": self.execution_count,
-                    "delay": self.delay
-                }
+                    "delay": self.delay,
+                },
             )
         else:
             return AgentResponse(content="", error=f"Error from {self.name}")
@@ -104,8 +107,12 @@ class TestSimpleOrchestration:
     def test_simple_fallback_chain(self):
         """Test simple fallback chain."""
         agents = [
-            StubAgent("agent1", [AgentCapabilities.CODE_GENERATION], should_succeed=False),
-            StubAgent("agent2", [AgentCapabilities.CODE_GENERATION], should_succeed=True),
+            StubAgent(
+                "agent1", [AgentCapabilities.CODE_GENERATION], should_succeed=False
+            ),
+            StubAgent(
+                "agent2", [AgentCapabilities.CODE_GENERATION], should_succeed=True
+            ),
         ]
         orchestrator = AgentOrchestrator(agents)
 
@@ -136,15 +143,25 @@ class TestComplexOrchestration:
         assert len(responses) == 3
         assert all(r.is_success() for r in responses)
         # Should be roughly parallel (less than sequential time)
-        assert execution_time < 0.4  # Sequential would be ~0.3s, parallel should be ~0.1s
+        assert (
+            execution_time < 0.4
+        )  # Sequential would be ~0.3s, parallel should be ~0.1s
 
     def test_complex_fallback_chain_partial_failures(self):
         """Test complex fallback chain with partial failures."""
         agents = [
-            StubAgent("agent1", [AgentCapabilities.CODE_GENERATION], should_succeed=False),
-            StubAgent("agent2", [AgentCapabilities.CODE_GENERATION], should_succeed=False),
-            StubAgent("agent3", [AgentCapabilities.CODE_GENERATION], should_succeed=True),
-            StubAgent("agent4", [AgentCapabilities.CODE_GENERATION], should_succeed=True),
+            StubAgent(
+                "agent1", [AgentCapabilities.CODE_GENERATION], should_succeed=False
+            ),
+            StubAgent(
+                "agent2", [AgentCapabilities.CODE_GENERATION], should_succeed=False
+            ),
+            StubAgent(
+                "agent3", [AgentCapabilities.CODE_GENERATION], should_succeed=True
+            ),
+            StubAgent(
+                "agent4", [AgentCapabilities.CODE_GENERATION], should_succeed=True
+            ),
         ]
         orchestrator = AgentOrchestrator(agents)
 
@@ -173,9 +190,15 @@ class TestComplexOrchestration:
     def test_sequential_execution_stop_on_success(self):
         """Test sequential execution stopping on first success."""
         agents = [
-            StubAgent("agent1", [AgentCapabilities.CODE_GENERATION], should_succeed=False),
-            StubAgent("agent2", [AgentCapabilities.CODE_GENERATION], should_succeed=True),
-            StubAgent("agent3", [AgentCapabilities.CODE_GENERATION], should_succeed=True),
+            StubAgent(
+                "agent1", [AgentCapabilities.CODE_GENERATION], should_succeed=False
+            ),
+            StubAgent(
+                "agent2", [AgentCapabilities.CODE_GENERATION], should_succeed=True
+            ),
+            StubAgent(
+                "agent3", [AgentCapabilities.CODE_GENERATION], should_succeed=True
+            ),
         ]
         orchestrator = AgentOrchestrator(agents)
 
@@ -193,17 +216,13 @@ class TestComplexOrchestration:
         code_gen_agent = StubAgent("code_gen", [AgentCapabilities.CODE_GENERATION])
         code_edit_agent = StubAgent("code_edit", [AgentCapabilities.CODE_EDITING])
         analysis_agent = StubAgent("analysis", [AgentCapabilities.CODE_ANALYSIS])
-        multi_cap_agent = StubAgent("multi", [
-            AgentCapabilities.CODE_GENERATION,
-            AgentCapabilities.CODE_EDITING
-        ])
+        multi_cap_agent = StubAgent(
+            "multi", [AgentCapabilities.CODE_GENERATION, AgentCapabilities.CODE_EDITING]
+        )
 
-        orchestrator = AgentOrchestrator([
-            code_gen_agent,
-            code_edit_agent,
-            analysis_agent,
-            multi_cap_agent
-        ])
+        orchestrator = AgentOrchestrator(
+            [code_gen_agent, code_edit_agent, analysis_agent, multi_cap_agent]
+        )
 
         # Select CODE_GENERATION agents
         selected = orchestrator.select_agent_by_capability(
@@ -242,12 +261,10 @@ class TestComplexOrchestration:
         slow_agent = StubAgent(
             "slow_agent",
             [AgentCapabilities.CODE_GENERATION],
-            delay=2.0  # Long delay
+            delay=2.0,  # Long delay
         )
         fast_agent = StubAgent(
-            "fast_agent",
-            [AgentCapabilities.CODE_GENERATION],
-            delay=0.01
+            "fast_agent", [AgentCapabilities.CODE_GENERATION], delay=0.01
         )
 
         orchestrator = AgentOrchestrator([slow_agent, fast_agent])
@@ -259,15 +276,23 @@ class TestComplexOrchestration:
 
         assert len(responses) == 2
         # Fast agent should succeed
-        fast_response = next(r for r in responses if "fast_agent" in r.metadata.get("agent", ""))
+        fast_response = next(
+            r for r in responses if "fast_agent" in r.metadata.get("agent", "")
+        )
         assert fast_response.is_success()
 
     def test_mixed_success_failure_in_parallel(self):
         """Test handling mixed success/failure in parallel execution."""
         agents = [
-            StubAgent("agent1", [AgentCapabilities.CODE_GENERATION], should_succeed=True),
-            StubAgent("agent2", [AgentCapabilities.CODE_GENERATION], should_succeed=False),
-            StubAgent("agent3", [AgentCapabilities.CODE_GENERATION], should_succeed=True),
+            StubAgent(
+                "agent1", [AgentCapabilities.CODE_GENERATION], should_succeed=True
+            ),
+            StubAgent(
+                "agent2", [AgentCapabilities.CODE_GENERATION], should_succeed=False
+            ),
+            StubAgent(
+                "agent3", [AgentCapabilities.CODE_GENERATION], should_succeed=True
+            ),
         ]
         orchestrator = AgentOrchestrator(agents)
 

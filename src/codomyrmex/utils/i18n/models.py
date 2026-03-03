@@ -6,6 +6,7 @@ from dataclasses import dataclass
 @dataclass
 class Locale:
     """A locale specification."""
+
     language: str  # ISO 639-1 (e.g., "en", "es")
     region: str = ""  # ISO 3166-1 (e.g., "US", "MX")
 

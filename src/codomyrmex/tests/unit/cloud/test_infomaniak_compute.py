@@ -23,6 +23,7 @@ from codomyrmex.cloud.infomaniak.compute import InfomaniakComputeClient
 
 try:
     import openstack  # noqa: F401
+
     HAS_OPENSTACK = True
 except ImportError:
     HAS_OPENSTACK = False
@@ -482,19 +483,20 @@ class TestComputeErrorPaths:
 
 # =========================================================================
 
+
 class TestInfomaniakComputeClientExpanded:
     """Tests for InfomaniakComputeClient untested methods."""
 
     def _make_client(self):
         from codomyrmex.cloud.infomaniak.compute import InfomaniakComputeClient
+
         mock_conn = Stub()
         return InfomaniakComputeClient(connection=mock_conn), mock_conn
 
     def test_get_image(self):
         """get_image returns dict with image details."""
         client, mc = self._make_client()
-        img = Stub(id="img-1", status="active",
-                        min_disk=10, min_ram=512, size=2048)
+        img = Stub(id="img-1", status="active", min_disk=10, min_ram=512, size=2048)
         img.name = "Ubuntu"
         mc.image.find_image.return_value = img
         result = client.get_image("img-1")
@@ -516,7 +518,9 @@ class TestInfomaniakComputeClientExpanded:
         kp.private_key = None
         mc.compute.create_keypair.return_value = kp
         result = client.create_keypair("mykey", "ssh-rsa AAA")
-        mc.compute.create_keypair.assert_called_once_with(name="mykey", public_key="ssh-rsa AAA")
+        mc.compute.create_keypair.assert_called_once_with(
+            name="mykey", public_key="ssh-rsa AAA"
+        )
         assert result["name"] == "mykey"
         assert result["fingerprint"] == "aa:bb"
 
@@ -546,9 +550,16 @@ class TestInfomaniakComputeClientExpanded:
     def test_server_to_dict_flavor_none(self):
         """_server_to_dict handles None flavor safely."""
         client, _ = self._make_client()
-        srv = Stub(id="s1", name="test", status="ACTIVE",
-                        addresses={}, key_name=None, created_at=None,
-                        updated_at=None, security_groups=[])
+        srv = Stub(
+            id="s1",
+            name="test",
+            status="ACTIVE",
+            addresses={},
+            key_name=None,
+            created_at=None,
+            updated_at=None,
+            security_groups=[],
+        )
         srv.flavor = None
         srv.image = None
         result = client._server_to_dict(srv)

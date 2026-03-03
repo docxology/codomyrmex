@@ -1,5 +1,6 @@
 """Generator content."""
 
+
 def generate_sensor_integration_content() -> str:
     """Generate sensor integration module."""
     return '''"""Sensor integration and device management."""
@@ -242,4 +243,3 @@ __all__ = [
     "SensorManager", "PhysicalConstants", "UnitConverter", "CoordinateSystem"
 ]
 '''
-

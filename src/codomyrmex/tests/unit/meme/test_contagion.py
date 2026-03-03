@@ -25,6 +25,7 @@ from codomyrmex.meme.contagion.simulation import run_simulation
 # CascadeType enum
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestCascadeType:
     """Tests for the CascadeType enum."""
@@ -43,6 +44,7 @@ class TestCascadeType:
 # ---------------------------------------------------------------------------
 # Cascade dataclass
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestCascade:
@@ -75,6 +77,7 @@ class TestCascade:
 # ---------------------------------------------------------------------------
 # PropagationTrace
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestPropagationTrace:
@@ -113,6 +116,7 @@ class TestPropagationTrace:
 # ResonanceMap
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestResonanceMap:
     """Tests for the ResonanceMap dataclass."""
@@ -140,6 +144,7 @@ class TestResonanceMap:
 # ContagionModel
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestContagionModel:
     """Tests for the ContagionModel config dataclass."""
@@ -162,11 +167,14 @@ class TestContagionModel:
 # CascadeDetector
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestCascadeDetector:
     """Tests for the CascadeDetector class."""
 
-    def _make_events(self, meme_id: str, count: int, time_gap: float = 1.0) -> list[dict]:
+    def _make_events(
+        self, meme_id: str, count: int, time_gap: float = 1.0
+    ) -> list[dict]:
         """Helper: create a list of propagation events for one meme."""
         return [
             {"meme_id": meme_id, "node_id": f"node_{i}", "timestamp": i * time_gap}
@@ -234,6 +242,7 @@ class TestCascadeDetector:
 # SIRModel
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestSIRModel:
     """Tests for the Susceptible-Infected-Recovered epidemic model."""
@@ -293,6 +302,7 @@ class TestSIRModel:
 # SISModel
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestSISModel:
     """Tests for the Susceptible-Infected-Susceptible model."""
@@ -328,6 +338,7 @@ class TestSISModel:
 # ---------------------------------------------------------------------------
 # SEIRModel
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestSEIRModel:
@@ -365,6 +376,7 @@ class TestSEIRModel:
 # ---------------------------------------------------------------------------
 # run_simulation convenience function
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestRunSimulation:

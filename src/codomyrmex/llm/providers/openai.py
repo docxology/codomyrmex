@@ -17,6 +17,7 @@ class OpenAIProvider(LLMProvider):
         """Initialize the OpenAI client."""
         try:
             from openai import OpenAI
+
             self._client = OpenAI(
                 api_key=self.config.api_key,
                 base_url=self.config.base_url,
@@ -33,7 +34,7 @@ class OpenAIProvider(LLMProvider):
         model: str | None = None,
         temperature: float = 0.7,
         max_tokens: int | None = None,
-        **kwargs
+        **kwargs,
     ) -> CompletionResponse:
         """Complete."""
         if not self._client:
@@ -44,7 +45,7 @@ class OpenAIProvider(LLMProvider):
             messages=[m.to_dict() for m in messages],
             temperature=temperature,
             max_tokens=max_tokens,
-            **kwargs
+            **kwargs,
         )
 
         choice = response.choices[0]
@@ -53,12 +54,20 @@ class OpenAIProvider(LLMProvider):
             model=response.model,
             provider=self.provider_type,
             finish_reason=choice.finish_reason,
-            usage={
-                "prompt_tokens": response.usage.prompt_tokens,
-                "completion_tokens": response.usage.completion_tokens,
-                "total_tokens": response.usage.total_tokens,
-            } if response.usage else None,
-            tool_calls=[tc.model_dump() for tc in choice.message.tool_calls] if choice.message.tool_calls else None,
+            usage=(
+                {
+                    "prompt_tokens": response.usage.prompt_tokens,
+                    "completion_tokens": response.usage.completion_tokens,
+                    "total_tokens": response.usage.total_tokens,
+                }
+                if response.usage
+                else None
+            ),
+            tool_calls=(
+                [tc.model_dump() for tc in choice.message.tool_calls]
+                if choice.message.tool_calls
+                else None
+            ),
             raw_response=response,
         )
 
@@ -68,7 +77,7 @@ class OpenAIProvider(LLMProvider):
         model: str | None = None,
         temperature: float = 0.7,
         max_tokens: int | None = None,
-        **kwargs
+        **kwargs,
     ) -> Iterator[str]:
         if not self._client:
             raise RuntimeError("OpenAI client not initialized.")
@@ -79,7 +88,7 @@ class OpenAIProvider(LLMProvider):
             temperature=temperature,
             max_tokens=max_tokens,
             stream=True,
-            **kwargs
+            **kwargs,
         )
 
         for chunk in stream:
@@ -92,10 +101,11 @@ class OpenAIProvider(LLMProvider):
         model: str | None = None,
         temperature: float = 0.7,
         max_tokens: int | None = None,
-        **kwargs
+        **kwargs,
     ) -> CompletionResponse:
         try:
             from openai import AsyncOpenAI
+
             async_client = AsyncOpenAI(
                 api_key=self.config.api_key,
                 base_url=self.config.base_url,
@@ -105,7 +115,7 @@ class OpenAIProvider(LLMProvider):
                 messages=[m.to_dict() for m in messages],
                 temperature=temperature,
                 max_tokens=max_tokens,
-                **kwargs
+                **kwargs,
             )
             choice = response.choices[0]
             return CompletionResponse(
@@ -113,12 +123,20 @@ class OpenAIProvider(LLMProvider):
                 model=response.model,
                 provider=self.provider_type,
                 finish_reason=choice.finish_reason,
-                usage={
-                    "prompt_tokens": response.usage.prompt_tokens,
-                    "completion_tokens": response.usage.completion_tokens,
-                    "total_tokens": response.usage.total_tokens,
-                } if response.usage else None,
-                tool_calls=[tc.model_dump() for tc in choice.message.tool_calls] if choice.message.tool_calls else None,
+                usage=(
+                    {
+                        "prompt_tokens": response.usage.prompt_tokens,
+                        "completion_tokens": response.usage.completion_tokens,
+                        "total_tokens": response.usage.total_tokens,
+                    }
+                    if response.usage
+                    else None
+                ),
+                tool_calls=(
+                    [tc.model_dump() for tc in choice.message.tool_calls]
+                    if choice.message.tool_calls
+                    else None
+                ),
                 raw_response=response,
             )
         except ImportError as e:
@@ -132,5 +150,3 @@ class OpenAIProvider(LLMProvider):
 
     def _default_model(self) -> str:
         return "gpt-4o"
-
-

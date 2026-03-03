@@ -12,6 +12,7 @@ from typing import Any
 
 class MetricType(Enum):
     """Types of metrics."""
+
     COUNTER = "counter"
     GAUGE = "gauge"
     HISTOGRAM = "histogram"
@@ -20,6 +21,7 @@ class MetricType(Enum):
 
 class AlertSeverity(Enum):
     """Alert severity levels."""
+
     INFO = "info"
     WARNING = "warning"
     ERROR = "error"
@@ -28,6 +30,7 @@ class AlertSeverity(Enum):
 
 class PanelType(Enum):
     """Dashboard panel types."""
+
     GRAPH = "graph"
     STAT = "stat"
     TABLE = "table"
@@ -39,6 +42,7 @@ class PanelType(Enum):
 @dataclass
 class MetricValue:
     """A single metric value."""
+
     name: str
     value: float
     timestamp: datetime = field(default_factory=datetime.now)
@@ -59,6 +63,7 @@ class MetricValue:
 @dataclass
 class Alert:
     """An alert notification."""
+
     id: str
     name: str
     message: str
@@ -98,13 +103,16 @@ class Alert:
 @dataclass
 class Panel:
     """A dashboard panel."""
+
     id: str
     title: str
     panel_type: PanelType
     metrics: list[str] = field(default_factory=list)
     query: str = ""
     options: dict[str, Any] = field(default_factory=dict)
-    position: dict[str, int] = field(default_factory=lambda: {"x": 0, "y": 0, "w": 6, "h": 4})
+    position: dict[str, int] = field(
+        default_factory=lambda: {"x": 0, "y": 0, "w": 6, "h": 4}
+    )
 
     def to_dict(self) -> dict[str, Any]:
         """Convert to dictionary."""
@@ -120,6 +128,7 @@ class Panel:
 @dataclass
 class Dashboard:
     """A complete dashboard."""
+
     id: str
     name: str
     panels: list[Panel] = field(default_factory=list)

@@ -77,9 +77,7 @@ class TestTranscriptionResultCreation:
         """Test TranscriptionResult stores source_path."""
         from codomyrmex.audio.speech_to_text.models import TranscriptionResult
 
-        result = TranscriptionResult(
-            text="test", source_path=Path("/audio/file.mp3")
-        )
+        result = TranscriptionResult(text="test", source_path=Path("/audio/file.mp3"))
         assert result.source_path == Path("/audio/file.mp3")
 
 
@@ -444,7 +442,15 @@ class TestWhisperModelSizeEnum:
         from codomyrmex.audio.speech_to_text.models import WhisperModelSize
 
         values = [s.value for s in WhisperModelSize]
-        assert values == ["tiny", "base", "small", "medium", "large", "large-v2", "large-v3"]
+        assert values == [
+            "tiny",
+            "base",
+            "small",
+            "medium",
+            "large",
+            "large-v2",
+            "large-v3",
+        ]
 
 
 @pytest.mark.unit

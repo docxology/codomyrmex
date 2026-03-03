@@ -39,22 +39,21 @@ class TestAPIEndpoint:
             summary="Get users",
             description="Retrieve a list of users",
             parameters=[
-                {
-                    "name": "limit",
-                    "in": "query",
-                    "schema": {"type": "integer"}
-                }
+                {"name": "limit", "in": "query", "schema": {"type": "integer"}}
             ],
             responses={
                 "200": {
                     "description": "Success",
                     "content": {
                         "application/json": {
-                            "schema": {"type": "array", "items": {"$ref": "#/components/schemas/User"}}
+                            "schema": {
+                                "type": "array",
+                                "items": {"$ref": "#/components/schemas/User"},
+                            }
                         }
-                    }
+                    },
                 }
-            }
+            },
         )
 
         assert endpoint.path == "/users"
@@ -78,10 +77,7 @@ class TestAPIEndpoint:
     def test_api_endpoint_to_dict(self):
         """Test APIEndpoint to_dict conversion."""
         endpoint = APIEndpoint(
-            path="/test",
-            method="GET",
-            summary="Test endpoint",
-            deprecated=True
+            path="/test", method="GET", summary="Test endpoint", deprecated=True
         )
 
         endpoint_dict = endpoint.to_dict()
@@ -104,7 +100,7 @@ class TestAPIDocumentation:
             version="1.0.0",
             description="Test API description",
             base_url="https://api.example.com",
-            endpoints=[endpoint]
+            endpoints=[endpoint],
         )
 
         assert documentation.title == "Test API"
@@ -119,7 +115,7 @@ class TestAPIDocumentation:
             version="1.0.0",
             description="Test",
             base_url="https://api.example.com",
-            endpoints=[]
+            endpoints=[],
         )
 
         assert documentation.generated_at is not None
@@ -133,7 +129,7 @@ class TestAPIDocumentation:
             description="Test description",
             base_url="https://api.example.com",
             endpoints=[],
-            generated_at=datetime.now(UTC)
+            generated_at=datetime.now(UTC),
         )
 
         doc_dict = documentation.to_dict()
@@ -150,7 +146,7 @@ class TestAPIDocumentation:
         endpoints = [
             APIEndpoint(path="/users", method="GET", summary="Get users"),
             APIEndpoint(path="/users", method="POST", summary="Create user"),
-            APIEndpoint(path="/users/{id}", method="GET", summary="Get user")
+            APIEndpoint(path="/users/{id}", method="GET", summary="Get user"),
         ]
 
         documentation = APIDocumentation(
@@ -158,7 +154,7 @@ class TestAPIDocumentation:
             version="1.0.0",
             description="Test",
             base_url="https://api.example.com",
-            endpoints=endpoints
+            endpoints=endpoints,
         )
 
         paths = documentation._build_paths()
@@ -195,9 +191,7 @@ class TestAPIDocumentationGenerator:
         generator = APIDocumentationGenerator()
 
         documentation = generator.generate_documentation(
-            title="Test API",
-            version="1.0.0",
-            base_url="https://api.example.com"
+            title="Test API", version="1.0.0", base_url="https://api.example.com"
         )
 
         assert isinstance(documentation, APIDocumentation)
@@ -220,6 +214,7 @@ class TestAPIDocumentationGenerator:
     def test_parse_decorator_info_route(self):
         """Test parsing route decorator with real AST node."""
         import ast
+
         generator = APIDocumentationGenerator()
 
         # Create a real AST node for a decorator
@@ -241,6 +236,7 @@ def get_users():
     def test_parse_decorator_info_with_method(self):
         """Test parsing decorator with method specification using real AST."""
         import ast
+
         generator = APIDocumentationGenerator()
 
         # Create a real AST node for a decorator with methods
@@ -261,6 +257,7 @@ def create_user():
     def test_extract_function_parameters(self):
         """Test function parameter extraction with real AST node."""
         import ast
+
         generator = APIDocumentationGenerator()
 
         # Create a real function with parameters
@@ -311,7 +308,7 @@ def get_user(user_id: int, name: str = "default"):
             version="1.0.0",
             description="Test",
             base_url="https://api.example.com",
-            endpoints=[]
+            endpoints=[],
         )
 
         # Set the documentation on the generator
@@ -335,7 +332,7 @@ def get_user(user_id: int, name: str = "default"):
             version="1.0.0",
             description="Test",
             base_url="https://api.example.com",
-            endpoints=[]
+            endpoints=[],
         )
 
         # Set the documentation on the generator
@@ -355,7 +352,7 @@ def get_user(user_id: int, name: str = "default"):
             version="1.0.0",
             description="Test",
             base_url="https://api.example.com",
-            endpoints=[]
+            endpoints=[],
         )
 
         generator = APIDocumentationGenerator()
@@ -367,18 +364,14 @@ def get_user(user_id: int, name: str = "default"):
 
     def test_validate_documentation_with_endpoints(self):
         """Test documentation validation with endpoints."""
-        endpoint = APIEndpoint(
-            path="/users",
-            method="GET",
-            summary="Get users"
-        )
+        endpoint = APIEndpoint(path="/users", method="GET", summary="Get users")
 
         documentation = APIDocumentation(
             title="Test",
             version="1.0.0",
             description="Test",
             base_url="https://api.example.com",
-            endpoints=[endpoint]
+            endpoints=[endpoint],
         )
 
         generator = APIDocumentationGenerator()
@@ -403,15 +396,13 @@ class TestOpenAPIGenerator:
 
     def test_generate_spec_basic(self):
         """Test basic OpenAPI spec generation."""
-        endpoints = [
-            APIEndpoint(path="/users", method="GET", summary="Get users")
-        ]
+        endpoints = [APIEndpoint(path="/users", method="GET", summary="Get users")]
 
         spec = self.generator.generate_spec(
             title="Test API",
             version="1.0.0",
             endpoints=endpoints,
-            base_url="https://api.example.com"
+            base_url="https://api.example.com",
         )
 
         assert spec["openapi"] == "3.0.3"
@@ -428,14 +419,12 @@ class TestOpenAPIGenerator:
             summary="Get users",
             responses={
                 "200": {"description": "Success"},
-                "404": {"description": "Not found"}
-            }
+                "404": {"description": "Not found"},
+            },
         )
 
         spec = self.generator.generate_spec(
-            title="Test",
-            version="1.0.0",
-            endpoints=[endpoint]
+            title="Test", version="1.0.0", endpoints=[endpoint]
         )
 
         assert "200" in spec["paths"]["/users"]["get"]["responses"]
@@ -445,11 +434,8 @@ class TestOpenAPIGenerator:
         """Test validation of valid OpenAPI spec."""
         spec = {
             "openapi": "3.0.3",
-            "info": {
-                "title": "Test API",
-                "version": "1.0.0"
-            },
-            "paths": {}
+            "info": {"title": "Test API", "version": "1.0.0"},
+            "paths": {},
         }
 
         errors = self.generator.validate_spec(spec)
@@ -469,15 +455,12 @@ class TestOpenAPIGenerator:
         """Test validation with invalid path."""
         spec = {
             "openapi": "3.0.3",
-            "info": {
-                "title": "Test",
-                "version": "1.0.0"
-            },
+            "info": {"title": "Test", "version": "1.0.0"},
             "paths": {
                 "invalid_path": {  # Should start with /
                     "get": {"responses": {"200": {"description": "OK"}}}
                 }
-            }
+            },
         }
 
         errors = self.generator.validate_spec(spec)
@@ -489,15 +472,12 @@ class TestOpenAPIGenerator:
         """Test validation with invalid HTTP method."""
         spec = {
             "openapi": "3.0.3",
-            "info": {
-                "title": "Test",
-                "version": "1.0.0"
-            },
+            "info": {"title": "Test", "version": "1.0.0"},
             "paths": {
                 "/test": {
                     "invalid_method": {"responses": {"200": {"description": "OK"}}}
                 }
-            }
+            },
         }
 
         errors = self.generator.validate_spec(spec)
@@ -510,7 +490,7 @@ class TestOpenAPIGenerator:
         spec = {
             "openapi": "3.0.3",
             "info": {"title": "Test", "version": "1.0.0"},
-            "paths": {}
+            "paths": {},
         }
 
         output_path = str(tmp_path / "test.json")
@@ -527,7 +507,7 @@ class TestOpenAPIGenerator:
         spec = {
             "openapi": "3.0.3",
             "info": {"title": "Test", "version": "1.0.0"},
-            "paths": {}
+            "paths": {},
         }
 
         output_path = str(tmp_path / "test.yaml")
@@ -546,10 +526,10 @@ class TestOpenAPIGenerator:
                 "/users": {
                     "get": {
                         "summary": "Get users",
-                        "responses": {"200": {"description": "Success"}}
+                        "responses": {"200": {"description": "Success"}},
                     }
                 }
-            }
+            },
         }
 
         output_path = str(tmp_path / "test.html")
@@ -618,7 +598,7 @@ class TestIntegration:
             path="/api/test",
             method="GET",
             summary="Test endpoint",
-            description="A test endpoint for integration testing"
+            description="A test endpoint for integration testing",
         )
 
         # Generate documentation
@@ -626,7 +606,7 @@ class TestIntegration:
         documentation = doc_generator.generate_documentation(
             title="Integration Test API",
             version="1.0.0",
-            base_url="https://api.test.com"
+            base_url="https://api.test.com",
         )
 
         # Add the endpoint manually for testing
@@ -646,20 +626,15 @@ class TestIntegration:
         # Create a valid spec
         spec = {
             "openapi": "3.0.3",
-            "info": {
-                "title": "Test API",
-                "version": "1.0.0"
-            },
+            "info": {"title": "Test API", "version": "1.0.0"},
             "paths": {
                 "/users": {
                     "get": {
                         "summary": "Get users",
-                        "responses": {
-                            "200": {"description": "Success"}
-                        }
+                        "responses": {"200": {"description": "Success"}},
                     }
                 }
-            }
+            },
         }
 
         # Validate the spec
@@ -677,7 +652,7 @@ class TestIntegration:
             version="1.0.0",
             description="Test export functionality",
             base_url="https://api.test.com",
-            endpoints=[]
+            endpoints=[],
         )
 
         # Export to JSON
@@ -713,7 +688,7 @@ class TestErrorHandling:
             version="1.0.0",
             description="Test",
             base_url="https://api.test.com",
-            endpoints=[]
+            endpoints=[],
         )
 
         generator = APIDocumentationGenerator()
@@ -756,7 +731,7 @@ class TestErrorHandling:
                 "title": "Test",
                 # Missing required "version" field
             },
-            "paths": {}
+            "paths": {},
         }
 
         generator = OpenAPIGenerator()

@@ -17,7 +17,9 @@ class NarrativeEngine:
         """
         import re
 
-        sentences = [s.strip() for s in re.split(r'(?<=[.!?])\s+', text.strip()) if s.strip()]
+        sentences = [
+            s.strip() for s in re.split(r"(?<=[.!?])\s+", text.strip()) if s.strip()
+        ]
         num_sentences = len(sentences) or 1
 
         # Build a simple tension curve based on exclamation / question density
@@ -37,6 +39,7 @@ class NarrativeEngine:
 
         # Detect characters via archetype keywords
         from codomyrmex.meme.narrative.models import Archetype
+
         archetype_keywords = {
             "hero": Archetype.HERO,
             "villain": Archetype.SHADOW,
@@ -53,10 +56,24 @@ class NarrativeEngine:
 
         # Detect theme from most common significant words
         words = re.findall(r"[a-z]{4,}", text_lower)
-        stopwords = {"that", "this", "with", "from", "have", "been", "were", "they", "their", "once", "upon", "time"}
+        stopwords = {
+            "that",
+            "this",
+            "with",
+            "from",
+            "have",
+            "been",
+            "were",
+            "they",
+            "their",
+            "once",
+            "upon",
+            "time",
+        }
         significant = [w for w in words if w not in stopwords]
         if significant:
             from collections import Counter
+
             theme = Counter(significant).most_common(1)[0][0]
         else:
             theme = "unidentified"
@@ -84,11 +101,12 @@ class NarrativeEngine:
     def insurgent_counter(self, narrative: Narrative) -> Narrative:
         """Generate a counter-narrative to disrupt an existing one."""
         import copy
+
         counter = copy.deepcopy(narrative)
         counter.title = f"Counter: {narrative.title}"
         counter.theme = f"Anti-{narrative.theme}"
         counter.content_segments = [
             f"Why {narrative.title} is a lie.",
-            f"The true story of {counter.theme}."
+            f"The true story of {counter.theme}.",
         ]
         return counter

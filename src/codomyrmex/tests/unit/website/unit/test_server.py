@@ -46,7 +46,9 @@ _skip_no_ollama = pytest.mark.skipif(
     not _OLLAMA_AVAILABLE, reason="Ollama server not reachable or no models installed"
 )
 
-_AGENTIC_MEMORY_AVAILABLE = importlib.util.find_spec("codomyrmex.agentic_memory.mcp_tools") is not None
+_AGENTIC_MEMORY_AVAILABLE = (
+    importlib.util.find_spec("codomyrmex.agentic_memory.mcp_tools") is not None
+)
 _skip_no_agentic_memory = pytest.mark.skipif(
     not _AGENTIC_MEMORY_AVAILABLE,
     reason="codomyrmex.agentic_memory.mcp_tools not installed",
@@ -110,9 +112,13 @@ class _LiveServer:
             except json.JSONDecodeError:
                 return e.code, body
 
-    def post(self, path: str, payload: dict | None = None,
-             origin: str | None = "http://127.0.0.1:8787",
-             timeout: int = 10) -> tuple[int, dict]:
+    def post(
+        self,
+        path: str,
+        payload: dict | None = None,
+        origin: str | None = "http://127.0.0.1:8787",
+        timeout: int = 10,
+    ) -> tuple[int, dict]:
         """Make a POST request and return (status, parsed_json).
 
         Uses http.client for reliability with POST requests to avoid
@@ -323,12 +329,16 @@ class TestPOSTEndpoints:
 
     def test_execute_rejects_path_traversal(self, live_server):
         """Test /api/execute returns 403 for path traversal."""
-        status, data = live_server.post("/api/execute", {"script": "../../../etc/passwd"})
+        status, data = live_server.post(
+            "/api/execute", {"script": "../../../etc/passwd"}
+        )
         assert status == 403
 
     def test_execute_rejects_missing_script(self, live_server):
         """Test /api/execute returns 403 for non-existent script."""
-        status, data = live_server.post("/api/execute", {"script": "nonexistent_script.py"})
+        status, data = live_server.post(
+            "/api/execute", {"script": "nonexistent_script.py"}
+        )
         assert status == 403
 
     def test_execute_runs_real_script(self, live_server):
@@ -372,9 +382,7 @@ class TestOriginValidation:
 
     def test_invalid_origin_rejected(self, live_server):
         """Test that evil.com origin is rejected with 403."""
-        status, data = live_server.post(
-            "/api/refresh", {}, origin="http://evil.com"
-        )
+        status, data = live_server.post("/api/refresh", {}, origin="http://evil.com")
         assert status == 403
         assert "error" in data
 
@@ -471,7 +479,9 @@ class TestChatEndpoint:
     @_skip_no_ollama
     def test_chat_forwards_to_ollama(self, live_server):
         """Test that chat endpoint proxies to Ollama successfully."""
-        status, data = live_server.post("/api/chat", {"message": "Hello", "model": _OLLAMA_MODEL}, timeout=90)
+        status, data = live_server.post(
+            "/api/chat", {"message": "Hello", "model": _OLLAMA_MODEL}, timeout=90
+        )
         assert status == 200
         assert data["success"] is True
         assert len(data.get("response", "")) > 0
@@ -479,7 +489,9 @@ class TestChatEndpoint:
     @_skip_no_ollama
     def test_chat_uses_default_model(self, live_server):
         """Test that chat endpoint uses an available model."""
-        status, data = live_server.post("/api/chat", {"message": "Hello", "model": _OLLAMA_MODEL}, timeout=90)
+        status, data = live_server.post(
+            "/api/chat", {"message": "Hello", "model": _OLLAMA_MODEL}, timeout=90
+        )
         assert status == 200
         assert data["success"] is True
 
@@ -516,7 +528,9 @@ class TestAwarenessSummary:
     @_skip_no_ollama
     def test_awareness_summary_uses_default_model(self, live_server):
         """Test that awareness summary uses an available model."""
-        status, data = live_server.post("/api/awareness/summary", {"model": _OLLAMA_MODEL}, timeout=90)
+        status, data = live_server.post(
+            "/api/awareness/summary", {"model": _OLLAMA_MODEL}, timeout=90
+        )
         assert status == 200
         assert data["success"] is True
 
@@ -524,9 +538,7 @@ class TestAwarenessSummary:
         """Test that Ollama connection error returns 503."""
         if _OLLAMA_AVAILABLE:
             pytest.skip("Ollama is running — cannot test connection-error path")
-        status, data = live_server.post(
-            "/api/awareness/summary", {"model": "llama3"}
-        )
+        status, data = live_server.post("/api/awareness/summary", {"model": "llama3"})
         assert status == 503
         assert "error" in data
 
@@ -608,7 +620,9 @@ class TestCORSPreflight:
         """Test that OPTIONS request returns 204 No Content."""
         conn = http.client.HTTPConnection("127.0.0.1", live_server.port, timeout=10)
         try:
-            conn.request("OPTIONS", "/api/status", headers={"Origin": "http://localhost:8787"})
+            conn.request(
+                "OPTIONS", "/api/status", headers={"Origin": "http://localhost:8787"}
+            )
             resp = conn.getresponse()
             resp.read()
             assert resp.status == 204
@@ -619,12 +633,18 @@ class TestCORSPreflight:
         """Test that OPTIONS response includes CORS headers."""
         conn = http.client.HTTPConnection("127.0.0.1", live_server.port, timeout=10)
         try:
-            conn.request("OPTIONS", "/api/status", headers={"Origin": "http://localhost:8787"})
+            conn.request(
+                "OPTIONS", "/api/status", headers={"Origin": "http://localhost:8787"}
+            )
             resp = conn.getresponse()
             resp.read()
-            assert "GET, POST, OPTIONS" in resp.getheader("Access-Control-Allow-Methods", "")
+            assert "GET, POST, OPTIONS" in resp.getheader(
+                "Access-Control-Allow-Methods", ""
+            )
             assert "Content-Type" in resp.getheader("Access-Control-Allow-Headers", "")
-            assert resp.getheader("Access-Control-Allow-Origin") == "http://localhost:8787"
+            assert (
+                resp.getheader("Access-Control-Allow-Origin") == "http://localhost:8787"
+            )
         finally:
             conn.close()
 
@@ -659,9 +679,7 @@ class TestOllamaEdgeCases:
         """Test that when Ollama is unreachable, awareness returns error."""
         if _OLLAMA_AVAILABLE:
             pytest.skip("Ollama is running — cannot test timeout path")
-        status, data = live_server.post(
-            "/api/awareness/summary", {"model": "llama3"}
-        )
+        status, data = live_server.post("/api/awareness/summary", {"model": "llama3"})
         assert status in (503, 504)
         assert "error" in data
 
@@ -676,18 +694,27 @@ class TestResponseHeaders:
     def test_json_response_has_cors_headers(self, live_server):
         """Test that JSON API responses include proper CORS headers."""
         import http.client
+
         # The default _LiveServer origin injection uses 127.0.0.1,
         # but the server may reflect or normalize. We verify it sets one.
         conn = http.client.HTTPConnection("127.0.0.1", live_server.port, timeout=10)
         try:
-            conn.request("GET", "/api/status", headers={"Origin": "http://127.0.0.1:8787"})
+            conn.request(
+                "GET", "/api/status", headers={"Origin": "http://127.0.0.1:8787"}
+            )
             resp = conn.getresponse()
             resp.read()
             origin = resp.getheader("Access-Control-Allow-Origin")
             assert origin in ("http://127.0.0.1:8787", "http://localhost:8787", "*")
-            assert "GET, POST, OPTIONS" in resp.getheader("Access-Control-Allow-Methods", "")
-            if getattr(resp, "getheader", lambda k, d="": "")("Access-Control-Allow-Headers"):
-                assert "Content-Type" in resp.getheader("Access-Control-Allow-Headers", "")
+            assert "GET, POST, OPTIONS" in resp.getheader(
+                "Access-Control-Allow-Methods", ""
+            )
+            if getattr(resp, "getheader", lambda k, d="": "")(
+                "Access-Control-Allow-Headers"
+            ):
+                assert "Content-Type" in resp.getheader(
+                    "Access-Control-Allow-Headers", ""
+                )
             # The content type returned by live_server for /api/status is json
             assert "application/json" in resp.getheader("Content-Type", "")
         finally:
@@ -698,12 +725,17 @@ class TestResponseHeaders:
         conn = http.client.HTTPConnection("127.0.0.1", live_server.port, timeout=10)
         try:
             # Config get with a traversal attack path — returns JSON error with CORS headers
-            conn.request("GET", "/api/config/%2F..%2Fetc%2Fpasswd",
-                        headers={"Origin": "http://localhost:8787"})
+            conn.request(
+                "GET",
+                "/api/config/%2F..%2Fetc%2Fpasswd",
+                headers={"Origin": "http://localhost:8787"},
+            )
             resp = conn.getresponse()
             resp.read()
             # JSON error responses via send_json_response include CORS headers
-            assert resp.getheader("Access-Control-Allow-Origin") == "http://localhost:8787"
+            assert (
+                resp.getheader("Access-Control-Allow-Origin") == "http://localhost:8787"
+            )
         finally:
             conn.close()
 
@@ -841,7 +873,9 @@ class TestPaiActionNewBackends:
 
     def test_search_with_query_returns_200(self, live_server):
         """search with a valid query returns 200 and hits list."""
-        status, data = live_server.post("/api/pai/action", {"action": "search", "query": "fake"})
+        status, data = live_server.post(
+            "/api/pai/action", {"action": "search", "query": "fake"}
+        )
         assert status == 200
         assert data.get("success") is True
         result = data.get("result", {})
@@ -852,7 +886,9 @@ class TestPaiActionNewBackends:
 
     def test_search_invalid_regex_returns_400(self, live_server):
         """search with an invalid regex pattern returns 400 with success=False."""
-        status, data = live_server.post("/api/pai/action", {"action": "search", "query": "[invalid"})
+        status, data = live_server.post(
+            "/api/pai/action", {"action": "search", "query": "[invalid"}
+        )
         assert status == 400
         assert data.get("success") is False
 
@@ -864,13 +900,17 @@ class TestPaiActionNewBackends:
 
     def test_docs_unknown_module_returns_404(self, live_server):
         """docs action with non-existent module returns 404 with success=False."""
-        status, data = live_server.post("/api/pai/action", {"action": "docs", "module": "nonexistent_module_xyz"})
+        status, data = live_server.post(
+            "/api/pai/action", {"action": "docs", "module": "nonexistent_module_xyz"}
+        )
         assert status == 404
         assert data.get("success") is False
 
     def test_docs_known_module_returns_200(self, live_server):
         """docs action with the live server's fake_mod returns 200 and a result dict."""
-        status, data = live_server.post("/api/pai/action", {"action": "docs", "module": "fake_mod"})
+        status, data = live_server.post(
+            "/api/pai/action", {"action": "docs", "module": "fake_mod"}
+        )
         assert status == 200
         assert data.get("success") is True
         result = data.get("result", {})

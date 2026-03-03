@@ -25,6 +25,7 @@ def retry_on_failure(max_retries: int = 3, backoff_factor: float = 1.0):
 
     def decorator(func):
         """Decorator."""
+
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
             """Wrapper."""
@@ -35,12 +36,13 @@ def retry_on_failure(max_retries: int = 3, backoff_factor: float = 1.0):
                 except (AgentError, AgentTimeoutError) as e:
                     last_exception = e
                     if attempt < max_retries:
-                        delay = backoff_factor * (2 ** attempt)
+                        delay = backoff_factor * (2**attempt)
                         time_module.sleep(delay)
             raise last_exception
-        return wrapper
-    return decorator
 
+        return wrapper
+
+    return decorator
 
 
 class CLIAgentBase(BaseAgent):
@@ -86,7 +88,9 @@ class CLIAgentBase(BaseAgent):
         if not self._check_command_available():
             print(f"Configuring {self.name}...")
             print(f"Command '{self.command}' not found in PATH.")
-            path = input(f"Enter absolute path to '{self.command}' executable (or leave empty to skip): ")
+            path = input(
+                f"Enter absolute path to '{self.command}' executable (or leave empty to skip): "
+            )
             if path:
                 self.config[f"{self.name}_command"] = path.strip()
                 self.command = path.strip()
@@ -100,9 +104,13 @@ class CLIAgentBase(BaseAgent):
         """
         available = self._check_command_available()
         if available:
-             self.logger.info(f"Connection test passed for {self.name} (Command available)")
+            self.logger.info(
+                f"Connection test passed for {self.name} (Command available)"
+            )
         else:
-             self.logger.warning(f"Connection test failed for {self.name}: Command not found")
+            self.logger.warning(
+                f"Connection test failed for {self.name}: Command not found"
+            )
         return available
 
     def health_check(self) -> dict[str, Any]:
@@ -140,7 +148,6 @@ class CLIAgentBase(BaseAgent):
             "response_time_ms": round(response_time * 1000, 2),
             "agent": self.name,
         }
-
 
     def _check_command_available(
         self, command: str | None = None, check_args: list[str] | None = None
@@ -323,7 +330,9 @@ class CLIAgentBase(BaseAgent):
                     "execution_time": execution_time,
                 },
             )
-            raise AgentError(f"Command execution failed: {str(e)}", command=" ".join(cmd)) from e
+            raise AgentError(
+                f"Command execution failed: {str(e)}", command=" ".join(cmd)
+            ) from e
 
     def _stream_command(
         self,
@@ -353,7 +362,11 @@ class CLIAgentBase(BaseAgent):
 
         self.logger.debug(
             f"Streaming command: {' '.join(cmd)}",
-            extra={"command": " ".join(cmd), "cwd": str(cwd), "has_input": input_text is not None},
+            extra={
+                "command": " ".join(cmd),
+                "cwd": str(cwd),
+                "has_input": input_text is not None,
+            },
         )
 
         try:
@@ -461,5 +474,3 @@ class CLIAgentBase(BaseAgent):
             metadata=metadata,
             execution_time=exec_time,
         )
-
-

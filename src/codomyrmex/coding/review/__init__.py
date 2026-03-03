@@ -95,4 +95,3 @@ __all__ = [
     "check_quality_gates",
     "generate_report",
 ]
-

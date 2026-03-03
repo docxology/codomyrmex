@@ -39,7 +39,9 @@ class TestChunk:
         assert chunk.metadata == {}
 
     def test_metadata_stored(self):
-        chunk = Chunk(text="x", index=0, start_char=0, end_char=1, metadata={"src": "doc"})
+        chunk = Chunk(
+            text="x", index=0, start_char=0, end_char=1, metadata={"src": "doc"}
+        )
         assert chunk.metadata["src"] == "doc"
 
 
@@ -65,7 +67,9 @@ class TestChunkConfig:
         assert "\n\n" in cfg.separators
 
     def test_custom_config(self):
-        cfg = ChunkConfig(strategy=ChunkStrategy.FIXED_SIZE, chunk_size=500, chunk_overlap=50)
+        cfg = ChunkConfig(
+            strategy=ChunkStrategy.FIXED_SIZE, chunk_size=500, chunk_overlap=50
+        )
         assert cfg.strategy == ChunkStrategy.FIXED_SIZE
         assert cfg.chunk_size == 500
 
@@ -305,7 +309,9 @@ class TestChunkerIntegration:
         text = "Hello world. " * 20
         for strategy in ChunkStrategy:
             chunker = DocumentChunker(
-                ChunkConfig(strategy=strategy, chunk_size=50, chunk_overlap=10, min_chunk_size=0)
+                ChunkConfig(
+                    strategy=strategy, chunk_size=50, chunk_overlap=10, min_chunk_size=0
+                )
             )
             chunks = chunker.chunk(text)
             assert isinstance(chunks, list)
@@ -313,10 +319,14 @@ class TestChunkerIntegration:
                 assert isinstance(c, Chunk)
 
     def test_no_metadata_defaults_to_empty_dict(self):
-        chunker = DocumentChunker(ChunkConfig(
-            strategy=ChunkStrategy.FIXED_SIZE,
-            chunk_size=50, chunk_overlap=10, min_chunk_size=0
-        ))
+        chunker = DocumentChunker(
+            ChunkConfig(
+                strategy=ChunkStrategy.FIXED_SIZE,
+                chunk_size=50,
+                chunk_overlap=10,
+                min_chunk_size=0,
+            )
+        )
         chunks = chunker.chunk("test " * 20)
         for c in chunks:
             assert c.metadata == {}

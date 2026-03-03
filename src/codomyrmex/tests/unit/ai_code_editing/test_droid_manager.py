@@ -5,6 +5,7 @@ convenience functions get_droid_manager / show_droid_status.
 Zero-mock policy: all objects are real instances; filesystem interaction
 uses tmp_path fixtures.
 """
+
 from __future__ import annotations
 
 import time
@@ -28,19 +29,24 @@ from codomyrmex.agents.droid.todo import TodoManager
 # Helpers
 # ---------------------------------------------------------------------------
 
-def _write_todo_file(path: Path, todos: list[str] | None = None, completed: list[str] | None = None) -> None:
+
+def _write_todo_file(
+    path: Path, todos: list[str] | None = None, completed: list[str] | None = None
+) -> None:
     """Write a well-formed todo_list.txt file."""
     lines = ["[TODO]"]
-    for t in (todos or []):
+    for t in todos or []:
         lines.append(t)
     lines.append("")
     lines.append("[COMPLETED]")
-    for c in (completed or []):
+    for c in completed or []:
         lines.append(c)
     path.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
-def _make_manager(tmp_path: Path, todos: list[str] | None = None, completed: list[str] | None = None) -> DroidSystemManager:
+def _make_manager(
+    tmp_path: Path, todos: list[str] | None = None, completed: list[str] | None = None
+) -> DroidSystemManager:
     """Create a DroidSystemManager pointing at a temp droid dir."""
     droid_dir = tmp_path / "droid"
     droid_dir.mkdir(parents=True, exist_ok=True)
@@ -156,7 +162,9 @@ class TestDroidSystemManagerStatus:
         assert "sessions_started" in metrics
         assert metrics["sessions_started"] == 1
 
-    def test_display_system_status_runs(self, tmp_path: Path, capsys: pytest.CaptureFixture[str]) -> None:
+    def test_display_system_status_runs(
+        self, tmp_path: Path, capsys: pytest.CaptureFixture[str]
+    ) -> None:
         """display_system_status should print without error."""
         mgr = _make_manager(tmp_path)
         mgr.display_system_status()
@@ -165,7 +173,9 @@ class TestDroidSystemManagerStatus:
         assert "TODO Statistics" in captured.out
         assert "Session Statistics" in captured.out
 
-    def test_display_status_with_active_controller(self, tmp_path: Path, capsys: pytest.CaptureFixture[str]) -> None:
+    def test_display_status_with_active_controller(
+        self, tmp_path: Path, capsys: pytest.CaptureFixture[str]
+    ) -> None:
         mgr = _make_manager(tmp_path)
         config = DroidConfig(mode=DroidMode.TEST)
         mgr.controller = DroidController(config)
@@ -217,7 +227,9 @@ class TestConvenienceFunctions:
         mgr = get_droid_manager()
         assert isinstance(mgr, DroidSystemManager)
 
-    def test_show_droid_status_prints(self, tmp_path: Path, capsys: pytest.CaptureFixture[str]) -> None:
+    def test_show_droid_status_prints(
+        self, tmp_path: Path, capsys: pytest.CaptureFixture[str]
+    ) -> None:
         droid_dir = tmp_path / "show"
         droid_dir.mkdir()
         (droid_dir / "todo_list.txt").write_text("[TODO]\n[COMPLETED]\n")

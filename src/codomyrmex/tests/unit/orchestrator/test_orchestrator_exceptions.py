@@ -128,8 +128,12 @@ class TestStateError:
         assert e.context.get("workflow_id") == "wf-123"
 
     def test_all_fields(self):
-        e = StateError("err", current_state="paused",
-                       expected_state="running", workflow_id="wf-abc")
+        e = StateError(
+            "err",
+            current_state="paused",
+            expected_state="running",
+            workflow_id="wf-abc",
+        )
         assert e.context["current_state"] == "paused"
         assert e.context["expected_state"] == "running"
         assert e.context["workflow_id"] == "wf-abc"
@@ -167,9 +171,7 @@ class TestDependencyResolutionError:
         assert "missing_dependencies" not in e.context
 
     def test_both_fields(self):
-        e = DependencyResolutionError(
-            "err", task_name="t", missing_dependencies=["x"]
-        )
+        e = DependencyResolutionError("err", task_name="t", missing_dependencies=["x"])
         assert e.context["task_name"] == "t"
         assert e.context["missing_dependencies"] == ["x"]
 

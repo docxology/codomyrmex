@@ -26,9 +26,11 @@ from codomyrmex.config_management.defaults import DEFAULT_API_BASE_URL
 
 try:
     from codomyrmex.logging_monitoring.core.logger_config import get_logger
+
     logger = get_logger(__name__)
 except ImportError:
     import logging
+
     logger = logging.getLogger(__name__)
 
 # Import from standardization submodule for type annotations in convenience functions
@@ -72,6 +74,7 @@ class APISchema:
 @dataclass
 class OpenAPISpecification:
     """OpenAPI specification container."""
+
     spec: dict[str, Any] = field(default_factory=dict)
     version: str = "3.0.3"
 
@@ -87,6 +90,7 @@ class OpenAPISpecification:
         """Get the specification as YAML."""
         try:
             import yaml
+
             return yaml.dump(self.spec, default_flow_style=False)
         except ImportError:
             raise ImportError("PyYAML is required for YAML output") from None
@@ -100,18 +104,22 @@ class OpenAPISpecification:
             format: File format ('json' or 'yaml')
         """
         if format.lower() == "json":
-            with open(filepath, 'w') as f:
+            with open(filepath, "w") as f:
                 f.write(self.to_json())
         elif format.lower() == "yaml":
-            with open(filepath, 'w') as f:
+            with open(filepath, "w") as f:
                 f.write(self.to_yaml())
         else:
             raise ValueError(f"Unsupported format: {format}")
 
 
 # Re-export generator classes from their dedicated modules
-from .openapi_documentation_generator import DocumentationOpenAPIGenerator  # noqa: E402, I001
-from .openapi_standardization_generator import StandardizationOpenAPIGenerator  # noqa: E402, I001
+from .openapi_documentation_generator import (
+    DocumentationOpenAPIGenerator,
+)  # noqa: E402, I001
+from .openapi_standardization_generator import (
+    StandardizationOpenAPIGenerator,
+)  # noqa: E402, I001
 
 
 # Convenience functions for documentation module
@@ -153,8 +161,11 @@ def validate_openapi_spec(spec: dict[str, Any]) -> list[str]:
 
 
 # Convenience functions for standardization module
-def create_openapi_generator(title: str = "Codomyrmex API", version: str = "1.0.0",
-                             description: str = "API for Codomyrmex") -> StandardizationOpenAPIGenerator:
+def create_openapi_generator(
+    title: str = "Codomyrmex API",
+    version: str = "1.0.0",
+    description: str = "API for Codomyrmex",
+) -> StandardizationOpenAPIGenerator:
     """
     Create a new OpenAPI generator for standardization.
 
@@ -166,7 +177,9 @@ def create_openapi_generator(title: str = "Codomyrmex API", version: str = "1.0.
     Returns:
         StandardizationOpenAPIGenerator instance
     """
-    return StandardizationOpenAPIGenerator(title=title, version=version, description=description)
+    return StandardizationOpenAPIGenerator(
+        title=title, version=version, description=description
+    )
 
 
 def create_openapi_from_rest_api(api: RESTAPI) -> OpenAPISpecification:
@@ -183,14 +196,15 @@ def create_openapi_from_rest_api(api: RESTAPI) -> OpenAPISpecification:
     if RESTAPI is None:
         try:
             from codomyrmex.api.standardization.rest_api import RESTAPI as _RESTAPI
+
             RESTAPI = _RESTAPI
         except ImportError:
-            raise ImportError("RESTAPI class not available. Ensure standardization module is properly imported.") from None
+            raise ImportError(
+                "RESTAPI class not available. Ensure standardization module is properly imported."
+            ) from None
 
     generator = StandardizationOpenAPIGenerator(
-        title=api.title,
-        version=api.version,
-        description=api.description
+        title=api.title, version=api.version, description=api.description
     )
     generator.add_rest_api(api)
     return generator.generate_spec()
@@ -207,12 +221,12 @@ def create_openapi_from_graphql_api(api: GraphQLAPI) -> OpenAPISpecification:
         OpenAPI specification
     """
     if GraphQLAPI is None:
-        raise ImportError("GraphQLAPI class not available. Ensure standardization module is properly imported.")
+        raise ImportError(
+            "GraphQLAPI class not available. Ensure standardization module is properly imported."
+        )
 
     generator = StandardizationOpenAPIGenerator(
-        title="GraphQL API",
-        version="1.0.0",
-        description="GraphQL API endpoint"
+        title="GraphQL API", version="1.0.0", description="GraphQL API endpoint"
     )
     generator.add_graphql_api(api)
     return generator.generate_spec()

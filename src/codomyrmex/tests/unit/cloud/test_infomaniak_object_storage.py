@@ -12,8 +12,6 @@ bucket policies, and error paths.
 Total: ~28 tests across 2 test classes.
 """
 
-
-
 from _stubs import Stub
 
 from codomyrmex.cloud.infomaniak.object_storage.client import (
@@ -24,6 +22,7 @@ from codomyrmex.cloud.infomaniak.object_storage.client import (
 # =========================================================================
 # Test InfomaniakObjectStorageClient (Swift)
 # =========================================================================
+
 
 class TestInfomaniakObjectStorageClient:
     """Tests for InfomaniakObjectStorageClient (Swift / OpenStack API)."""
@@ -45,7 +44,9 @@ class TestInfomaniakObjectStorageClient:
 
     def test_list_containers_error_returns_empty(self, mock_openstack_connection):
         """list_containers returns [] when the backend raises."""
-        mock_openstack_connection.object_store.containers.side_effect = Exception("timeout")
+        mock_openstack_connection.object_store.containers.side_effect = Exception(
+            "timeout"
+        )
 
         client = InfomaniakObjectStorageClient(mock_openstack_connection)
         assert client.list_containers() == []
@@ -79,7 +80,9 @@ class TestInfomaniakObjectStorageClient:
 
         assert result == {"X-Container-Read": ".r:*"}
 
-    def test_get_container_metadata_error_returns_empty(self, mock_openstack_connection):
+    def test_get_container_metadata_error_returns_empty(
+        self, mock_openstack_connection
+    ):
         """get_container_metadata returns {} on error."""
         mock_openstack_connection.object_store.get_container_metadata.side_effect = (
             Exception("not found")
@@ -150,7 +153,9 @@ class TestInfomaniakObjectStorageClient:
 
     def test_download_object(self, mock_openstack_connection):
         """download_object returns raw bytes from object_store."""
-        mock_openstack_connection.object_store.download_object.return_value = b"hello swift"
+        mock_openstack_connection.object_store.download_object.return_value = (
+            b"hello swift"
+        )
 
         client = InfomaniakObjectStorageClient(mock_openstack_connection)
         data = client.download_object("bucket", "key.txt")
@@ -159,7 +164,9 @@ class TestInfomaniakObjectStorageClient:
 
     def test_download_file(self, mock_openstack_connection, tmp_path):
         """download_file writes downloaded bytes to disk."""
-        mock_openstack_connection.object_store.download_object.return_value = b"bytes on disk"
+        mock_openstack_connection.object_store.download_object.return_value = (
+            b"bytes on disk"
+        )
 
         client = InfomaniakObjectStorageClient(mock_openstack_connection)
 
@@ -197,7 +204,9 @@ class TestInfomaniakObjectStorageClient:
         mock_obj.content_type = "text/plain"
         mock_obj.etag = "abc123"
         mock_obj.last_modified_at = "2026-01-15T10:00:00Z"
-        mock_openstack_connection.object_store.get_object_metadata.return_value = mock_obj
+        mock_openstack_connection.object_store.get_object_metadata.return_value = (
+            mock_obj
+        )
 
         client = InfomaniakObjectStorageClient(mock_openstack_connection)
         meta = client.get_object_metadata("bucket", "file.txt")
@@ -222,7 +231,9 @@ class TestInfomaniakObjectStorageClient:
     def test_set_container_write_acl(self, mock_openstack_connection):
         """set_container_write_acl sets write_acl via set_container_metadata."""
         client = InfomaniakObjectStorageClient(mock_openstack_connection)
-        assert client.set_container_write_acl("shared-bucket", "project:writers") is True
+        assert (
+            client.set_container_write_acl("shared-bucket", "project:writers") is True
+        )
 
         mock_openstack_connection.object_store.set_container_metadata.assert_called_once_with(
             "shared-bucket", write_acl="project:writers"
@@ -232,6 +243,7 @@ class TestInfomaniakObjectStorageClient:
 # =========================================================================
 # Test InfomaniakS3Client (S3-compatible)
 # =========================================================================
+
 
 class TestInfomaniakS3Client:
     """Tests for InfomaniakS3Client (S3-compatible / boto3)."""
@@ -302,11 +314,16 @@ class TestInfomaniakS3Client:
     def test_upload_data(self, mock_s3_client):
         """upload_data calls S3 put_object with Body and optional ContentType."""
         client = InfomaniakS3Client(mock_s3_client)
-        result = client.upload_data("bucket", "key.json", b'{"a":1}', content_type="application/json")
+        result = client.upload_data(
+            "bucket", "key.json", b'{"a":1}', content_type="application/json"
+        )
 
         assert result is True
         mock_s3_client.put_object.assert_called_once_with(
-            Bucket="bucket", Key="key.json", Body=b'{"a":1}', ContentType="application/json"
+            Bucket="bucket",
+            Key="key.json",
+            Body=b'{"a":1}',
+            ContentType="application/json",
         )
 
     def test_download_file(self, mock_s3_client):
@@ -334,13 +351,17 @@ class TestInfomaniakS3Client:
         """delete_object calls S3 delete_object."""
         client = InfomaniakS3Client(mock_s3_client)
         assert client.delete_object("bucket", "key.txt") is True
-        mock_s3_client.delete_object.assert_called_once_with(Bucket="bucket", Key="key.txt")
+        mock_s3_client.delete_object.assert_called_once_with(
+            Bucket="bucket", Key="key.txt"
+        )
 
     def test_delete_file_delegates_to_delete_object(self, mock_s3_client):
         """delete_file is an alias that delegates to delete_object."""
         client = InfomaniakS3Client(mock_s3_client)
         assert client.delete_file("bucket", "key.txt") is True
-        mock_s3_client.delete_object.assert_called_once_with(Bucket="bucket", Key="key.txt")
+        mock_s3_client.delete_object.assert_called_once_with(
+            Bucket="bucket", Key="key.txt"
+        )
 
     def test_get_metadata(self, mock_s3_client):
         """get_metadata returns structured metadata from head_object."""
@@ -362,10 +383,14 @@ class TestInfomaniakS3Client:
 
     def test_generate_presigned_url_get(self, mock_s3_client):
         """generate_presigned_url with GET uses get_object ClientMethod."""
-        mock_s3_client.generate_presigned_url.return_value = "https://s3.example.com/signed"
+        mock_s3_client.generate_presigned_url.return_value = (
+            "https://s3.example.com/signed"
+        )
 
         client = InfomaniakS3Client(mock_s3_client)
-        url = client.generate_presigned_url("bucket", "key.txt", expires_in=3600, http_method="GET")
+        url = client.generate_presigned_url(
+            "bucket", "key.txt", expires_in=3600, http_method="GET"
+        )
 
         assert url == "https://s3.example.com/signed"
         mock_s3_client.generate_presigned_url.assert_called_once_with(
@@ -376,7 +401,9 @@ class TestInfomaniakS3Client:
 
     def test_generate_presigned_url_put(self, mock_s3_client):
         """generate_presigned_url with PUT uses put_object ClientMethod."""
-        mock_s3_client.generate_presigned_url.return_value = "https://s3.example.com/upload"
+        mock_s3_client.generate_presigned_url.return_value = (
+            "https://s3.example.com/upload"
+        )
 
         client = InfomaniakS3Client(mock_s3_client)
         url = client.generate_presigned_url("bucket", "key.txt", http_method="PUT")
@@ -483,6 +510,7 @@ class TestInfomaniakS3Client:
 
 # =========================================================================
 
+
 class TestInfomaniakSwiftClientExpanded:
     """Tests for InfomaniakObjectStorageClient (Swift) untested methods."""
 
@@ -490,6 +518,7 @@ class TestInfomaniakSwiftClientExpanded:
         from codomyrmex.cloud.infomaniak.object_storage import (
             InfomaniakObjectStorageClient,
         )
+
         mock_conn = Stub()
         return InfomaniakObjectStorageClient(connection=mock_conn), mock_conn
 
@@ -527,9 +556,12 @@ class TestInfomaniakSwiftClientExpanded:
     def test_get_object_metadata(self):
         """Test functionality: get object metadata."""
         client, mc = self._make_client()
-        obj = Stub(content_length=1024,
-                        content_type="text/plain", etag="abc",
-                        last_modified_at=None)
+        obj = Stub(
+            content_length=1024,
+            content_type="text/plain",
+            etag="abc",
+            last_modified_at=None,
+        )
         obj.name = "file.txt"
         mc.object_store.get_object_metadata.return_value = obj
         result = client.get_object_metadata("mybucket", "file.txt")
@@ -561,11 +593,13 @@ class TestInfomaniakSwiftClientExpanded:
 
 # =========================================================================
 
+
 class TestInfomaniakS3ClientExpanded:
     """Tests for InfomaniakS3Client untested methods."""
 
     def _make_client(self):
         from codomyrmex.cloud.infomaniak.object_storage import InfomaniakS3Client
+
         mock_s3 = Stub()
         return InfomaniakS3Client(client=mock_s3), mock_s3
 
@@ -585,7 +619,9 @@ class TestInfomaniakS3ClientExpanded:
         """Test functionality: upload file."""
         client, s3 = self._make_client()
         assert client.upload_file("bkt", "key.txt", "/tmp/f.txt") is True
-        s3.upload_file.assert_called_once_with("/tmp/f.txt", "bkt", "key.txt", ExtraArgs=None)
+        s3.upload_file.assert_called_once_with(
+            "/tmp/f.txt", "bkt", "key.txt", ExtraArgs=None
+        )
 
     def test_download_file(self):
         """Test functionality: download file."""
@@ -603,9 +639,11 @@ class TestInfomaniakS3ClientExpanded:
         """Test functionality: get metadata."""
         client, s3 = self._make_client()
         s3.head_object.return_value = {
-            "ContentLength": 100, "ContentType": "text/plain",
-            "ETag": '"abc"', "LastModified": "2026-01-01",
-            "Metadata": {}
+            "ContentLength": 100,
+            "ContentType": "text/plain",
+            "ETag": '"abc"',
+            "LastModified": "2026-01-01",
+            "Metadata": {},
         }
         result = client.get_metadata("bkt", "key.txt")
         assert result["content_length"] == 100
@@ -616,8 +654,7 @@ class TestInfomaniakS3ClientExpanded:
         client, s3 = self._make_client()
         assert client.copy_object("src", "sk", "dst", "dk") is True
         s3.copy_object.assert_called_once_with(
-            Bucket="dst", Key="dk",
-            CopySource={"Bucket": "src", "Key": "sk"}
+            Bucket="dst", Key="dk", CopySource={"Bucket": "src", "Key": "sk"}
         )
 
     def test_list_objects_paginated(self):
@@ -636,7 +673,7 @@ class TestInfomaniakS3ClientExpanded:
         client, s3 = self._make_client()
         s3.delete_objects.return_value = {
             "Deleted": [{"Key": "a.txt"}, {"Key": "b.txt"}],
-            "Errors": []
+            "Errors": [],
         }
         result = client.delete_objects_batch("bkt", ["a.txt", "b.txt"])
         assert result["deleted"] == 2

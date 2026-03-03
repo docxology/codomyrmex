@@ -13,6 +13,7 @@ import pytest
 def reset_flags():
     """Clear the module-level flag registry before and after each test."""
     import codomyrmex.feature_flags.mcp_tools as _mod
+
     _mod._flags.clear()
     yield
     _mod._flags.clear()
@@ -25,6 +26,7 @@ def test_import_mcp_tools() -> None:
         flag_is_enabled,
         flag_list,
     )
+
     assert callable(flag_create)
     assert callable(flag_is_enabled)
     assert callable(flag_list)
@@ -107,5 +109,6 @@ def test_mcp_tool_meta_attached() -> None:
         flag_is_enabled,
         flag_list,
     )
+
     for fn in (flag_create, flag_is_enabled, flag_list):
         assert hasattr(fn, "_mcp_tool_meta"), f"{fn.__name__} missing _mcp_tool_meta"

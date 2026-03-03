@@ -13,6 +13,7 @@ from typing import Any
 
 class NodeType(Enum):
     """Types of lineage nodes."""
+
     DATASET = "dataset"
     TRANSFORMATION = "transformation"
     MODEL = "model"
@@ -24,6 +25,7 @@ class NodeType(Enum):
 
 class EdgeType(Enum):
     """Types of lineage edges."""
+
     DERIVED_FROM = "derived_from"
     PRODUCED_BY = "produced_by"
     USED_BY = "used_by"
@@ -34,6 +36,7 @@ class EdgeType(Enum):
 @dataclass
 class LineageNode:
     """A node in the lineage graph."""
+
     id: str
     name: str
     node_type: NodeType
@@ -61,6 +64,7 @@ class LineageNode:
 @dataclass
 class LineageEdge:
     """An edge connecting two nodes."""
+
     source_id: str
     target_id: str
     edge_type: EdgeType
@@ -86,6 +90,7 @@ class LineageEdge:
 @dataclass
 class DataAsset:
     """A data asset with lineage information."""
+
     id: str
     name: str
     location: str

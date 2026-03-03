@@ -51,13 +51,14 @@ This directory contains **{doc_type}** documentation. It serves to educate users
 - **Root**: [../../../README.md](../../../README.md)
 """
 
+
 def fix_placeholders(root_dir):
     root = Path(root_dir)
     count = 0
 
     for path in root.rglob("SPEC.md"):
         try:
-            content = path.read_text(encoding='utf-8')
+            content = path.read_text(encoding="utf-8")
         except Exception as e:
             print(f"Error reading {path}: {e}")
             continue
@@ -69,21 +70,36 @@ def fix_placeholders(root_dir):
             new_content = None
             if parent_name in ["tests", "unit", "integration", "fixtures"]:
                 print(f"Fixing Test SPEC: {path}")
-                test_type = "Unit Tests" if parent_name == "unit" else "Integration Tests" if parent_name == "integration" else "Tests"
-                new_content = TEST_SPEC_TEMPLATE.format(module_name=parent_name, test_type=test_type)
+                test_type = (
+                    "Unit Tests"
+                    if parent_name == "unit"
+                    else (
+                        "Integration Tests" if parent_name == "integration" else "Tests"
+                    )
+                )
+                new_content = TEST_SPEC_TEMPLATE.format(
+                    module_name=parent_name, test_type=test_type
+                )
 
             elif parent_name in ["docs", "tutorials", "examples"]:
                 print(f"Fixing Doc SPEC: {path}")
-                doc_type = "Tutorials" if parent_name == "tutorials" else "Documentation"
-                new_content = DOC_SPEC_TEMPLATE.format(module_name=parent_name, doc_type=doc_type)
+                doc_type = (
+                    "Tutorials" if parent_name == "tutorials" else "Documentation"
+                )
+                new_content = DOC_SPEC_TEMPLATE.format(
+                    module_name=parent_name, doc_type=doc_type
+                )
 
             if new_content:
-                path.write_text(new_content, encoding='utf-8')
+                path.write_text(new_content, encoding="utf-8")
                 count += 1
             else:
-                print(f"Skipping unknown placeholder type: {path} (internal manual fix needed)")
+                print(
+                    f"Skipping unknown placeholder type: {path} (internal manual fix needed)"
+                )
 
     print(f"Fixed {count} files.")
+
 
 if __name__ == "__main__":
     fix_placeholders(".")

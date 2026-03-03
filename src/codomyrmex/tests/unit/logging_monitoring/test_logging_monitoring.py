@@ -20,6 +20,7 @@ class TestLoggingMonitoring:
 
         try:
             from codomyrmex.logging_monitoring.core import logger_config
+
             assert logger_config is not None
         except ImportError as e:
             pytest.fail(f"Failed to import logger_config: {e}")
@@ -28,12 +29,12 @@ class TestLoggingMonitoring:
         """Test get_logger with real logging functionality."""
         from codomyrmex.logging_monitoring import get_logger
 
-        logger = get_logger('test_module')
+        logger = get_logger("test_module")
         assert logger is not None
-        assert hasattr(logger, 'info')
-        assert hasattr(logger, 'error')
-        assert hasattr(logger, 'debug')
-        assert hasattr(logger, 'warning')
+        assert hasattr(logger, "info")
+        assert hasattr(logger, "error")
+        assert hasattr(logger, "debug")
+        assert hasattr(logger, "warning")
 
         # Test actual logging
         logger.info("Test info message")
@@ -57,15 +58,15 @@ class TestLoggingMonitoring:
         tmp_path / "test_setup.log"
 
         # Note: Logging is already configured by conftest.py, so we test the existing logger
-        logger = get_logger('test_setup')
+        logger = get_logger("test_setup")
         logger.info("Setup test message")
         logger.warning("Setup warning message")
 
         # Since logging is already configured, we can't easily test file output
         # in this test environment. Instead, verify the logger works.
         assert logger is not None
-        assert hasattr(logger, 'info')
-        assert hasattr(logger, 'warning')
+        assert hasattr(logger, "info")
+        assert hasattr(logger, "warning")
 
     def test_json_logging_format(self):
         """Test JSON logging format capabilities."""
@@ -74,14 +75,20 @@ class TestLoggingMonitoring:
         # Test that JSONFormatter exists and can be instantiated
         formatter = JSONFormatter()
         assert formatter is not None
-        assert hasattr(formatter, 'format')
+        assert hasattr(formatter, "format")
 
         # Test basic formatting (without a real log record)
         # This tests that the formatter class works
         import logging
+
         record = logging.LogRecord(
-            name="test", level=logging.INFO, pathname="", lineno=0,
-            msg="Test message", args=(), exc_info=None
+            name="test",
+            level=logging.INFO,
+            pathname="",
+            lineno=0,
+            msg="Test message",
+            args=(),
+            exc_info=None,
         )
 
         formatted = formatter.format(record)
@@ -126,9 +133,9 @@ class TestLoggingMonitoring:
         from codomyrmex.logging_monitoring import get_logger
 
         # Get multiple loggers
-        logger1 = get_logger('module1')
-        logger2 = get_logger('module2.submodule')
-        logger3 = get_logger('module1.child')  # Should share hierarchy with logger1
+        logger1 = get_logger("module1")
+        logger2 = get_logger("module2.submodule")
+        logger3 = get_logger("module1.child")  # Should share hierarchy with logger1
 
         # Verify they are different logger instances but properly configured
         assert logger1 is not logger2
@@ -137,10 +144,10 @@ class TestLoggingMonitoring:
 
         # All should have the standard logging methods
         for logger in [logger1, logger2, logger3]:
-            assert hasattr(logger, 'info')
-            assert hasattr(logger, 'error')
-            assert hasattr(logger, 'debug')
-            assert hasattr(logger, 'warning')
+            assert hasattr(logger, "info")
+            assert hasattr(logger, "error")
+            assert hasattr(logger, "debug")
+            assert hasattr(logger, "warning")
 
         # Test that they can log without errors
         logger1.info("Message from module1")
@@ -148,9 +155,9 @@ class TestLoggingMonitoring:
         logger3.info("Message from module1.child")
 
         # Verify logger names are set correctly
-        assert logger1.name == 'module1'
-        assert logger2.name == 'module2.submodule'
-        assert logger3.name == 'module1.child'
+        assert logger1.name == "module1"
+        assert logger2.name == "module2.submodule"
+        assert logger3.name == "module1.child"
 
     def test_log_with_context(self, caplog):
         """Test logging with structured context."""
@@ -165,7 +172,7 @@ class TestLoggingMonitoring:
         record = caplog.records[0]
         assert record.message == "Test message with context"
         assert record.levelname == "INFO"
-        assert hasattr(record, 'context')
+        assert hasattr(record, "context")
         assert record.context == context
 
     def test_create_correlation_id(self):
@@ -184,6 +191,7 @@ class TestLoggingMonitoring:
 
         # Should be valid UUID format
         import uuid
+
         parsed = uuid.UUID(correlation_id)  # raises ValueError if invalid
         assert str(parsed) == correlation_id
 
@@ -197,13 +205,15 @@ class TestLoggingMonitoring:
         correlation_id = "test-correlation-123"
 
         with caplog.at_level(logging.INFO):
-            with LogContext(correlation_id=correlation_id, additional_context={"env": "test"}):
+            with LogContext(
+                correlation_id=correlation_id, additional_context={"env": "test"}
+            ):
                 log_with_context("INFO", "Message inside context", {"key": "value"})
 
         # Verify log contains correlation ID
         assert len(caplog.records) == 1
         record = caplog.records[0]
-        assert hasattr(record, 'correlation_id')
+        assert hasattr(record, "correlation_id")
         assert record.correlation_id == correlation_id
 
     def test_performance_logger_basic(self, caplog):
@@ -230,12 +240,19 @@ class TestLoggingMonitoring:
         perf_logger = PerformanceLogger("test.performance")
 
         with caplog.at_level(logging.INFO):
-            with perf_logger.time_operation("context_test", {"type": "context_manager"}):
+            with perf_logger.time_operation(
+                "context_test", {"type": "context_manager"}
+            ):
                 import time
+
                 time.sleep(0.01)  # Small delay to ensure measurable duration
 
         # Verify completion was logged
-        records = [r for r in caplog.records if "context_test" in r.message and "completed" in r.message]
+        records = [
+            r
+            for r in caplog.records
+            if "context_test" in r.message and "completed" in r.message
+        ]
         assert len(records) == 1
 
     def test_performance_logger_metrics(self, caplog):
@@ -250,7 +267,7 @@ class TestLoggingMonitoring:
 
         # Verify metrics were logged
         records = [r for r in caplog.records if r.name == "test.performance"]
-        metric_records = [r for r in records if hasattr(r, 'metric_name')]
+        metric_records = [r for r in records if hasattr(r, "metric_name")]
         assert len(metric_records) >= 2
 
 
@@ -297,8 +314,7 @@ class TestLogRotationManager:
         manager = LogRotationManager(log_dir=log_dir)
 
         handler = manager.attach_rotating_handler(
-            "test_rotation_params", "params.log",
-            max_bytes=2048, backup_count=3
+            "test_rotation_params", "params.log", max_bytes=2048, backup_count=3
         )
 
         try:
@@ -345,8 +361,13 @@ class TestStandaloneJSONFormatter:
         formatter = JSONFormatter()
 
         record = logging.LogRecord(
-            name="test.json", level=logging.WARNING, pathname="test_file.py",
-            lineno=42, msg="Standalone formatter test", args=(), exc_info=None
+            name="test.json",
+            level=logging.WARNING,
+            pathname="test_file.py",
+            lineno=42,
+            msg="Standalone formatter test",
+            args=(),
+            exc_info=None,
         )
 
         output = formatter.format(record)
@@ -371,11 +392,17 @@ class TestStandaloneJSONFormatter:
             raise ValueError("test exception for formatter")
         except ValueError:
             import sys
+
             exc_info = sys.exc_info()
 
         record = logging.LogRecord(
-            name="test.json.exc", level=logging.ERROR, pathname="test_file.py",
-            lineno=99, msg="Error occurred", args=(), exc_info=exc_info
+            name="test.json.exc",
+            level=logging.ERROR,
+            pathname="test_file.py",
+            lineno=99,
+            msg="Error occurred",
+            args=(),
+            exc_info=exc_info,
         )
 
         output = formatter.format(record)
@@ -420,7 +447,7 @@ class TestAuditLogger:
                     event_type="file_access",
                     user_id="user_42",
                     details={"file": "/etc/passwd", "action": "read"},
-                    status="denied"
+                    status="denied",
                 )
 
             assert len(caplog.records) >= 1
@@ -431,7 +458,6 @@ class TestAuditLogger:
             for h in audit.logger.handlers[:]:
                 audit.logger.removeHandler(h)
                 h.close()
-
 
 
 # From test_tier3_promotions.py
@@ -448,6 +474,7 @@ class TestStructuredFormatter:
             StructuredFormatter,
             StructuredLogEntry,
         )
+
         formatter = StructuredFormatter()
         entry = StructuredLogEntry(
             level=LogLevel.INFO,
@@ -470,6 +497,7 @@ class TestStructuredFormatter:
             StructuredFormatter,
             StructuredLogEntry,
         )
+
         config = FormatterConfig(static_fields={"service": "codomyrmex"})
         formatter = StructuredFormatter(config=config)
         entry = StructuredLogEntry(level=LogLevel.INFO, message="hi")
@@ -487,6 +515,7 @@ class TestStructuredFormatter:
             StructuredFormatter,
             StructuredLogEntry,
         )
+
         formatter = StructuredFormatter()
         entry = StructuredLogEntry(
             level=LogLevel.INFO,
@@ -508,6 +537,7 @@ class TestLogAggregator:
             LogAggregator,
             LogRecord,
         )
+
         agg = LogAggregator()
         agg.add(LogRecord(level="info", message="test"))
         assert agg.count == 1
@@ -519,6 +549,7 @@ class TestLogAggregator:
             LogQuery,
             LogRecord,
         )
+
         agg = LogAggregator()
         agg.add(LogRecord(level="info", message="ok"))
         agg.add(LogRecord(level="error", message="bad"))
@@ -532,6 +563,7 @@ class TestLogAggregator:
             LogAggregator,
             LogRecord,
         )
+
         agg = LogAggregator()
         agg.add(LogRecord(level="info", message="ok", module="main"))
         agg.add(LogRecord(level="error", message="fail", module="db"))
@@ -545,6 +577,7 @@ class TestLogAggregator:
             LogAggregator,
             LogRecord,
         )
+
         agg = LogAggregator(max_records=5)
         for i in range(10):
             agg.add(LogRecord(level="info", message=f"msg {i}"))

@@ -1,4 +1,3 @@
-
 import asyncio
 import time
 from collections.abc import Iterator
@@ -18,6 +17,7 @@ from codomyrmex.agents.core import (
 # =============================================================================
 # MOCK REPLACEMENTS (ZERO-MOCK COMPLIANCE)
 # =============================================================================
+
 
 class FakeLLMClient:
     """A concrete fake for LLM clients, replacing MagicMock."""
@@ -52,7 +52,10 @@ class ConcreteAgent(BaseAgent):
         capabilities: list[AgentCapabilities] = None,
         config: dict[str, Any] = None,
     ):
-        caps = capabilities or [AgentCapabilities.CODE_GENERATION, AgentCapabilities.TEXT_COMPLETION]
+        caps = capabilities or [
+            AgentCapabilities.CODE_GENERATION,
+            AgentCapabilities.TEXT_COMPLETION,
+        ]
         super().__init__(name, caps, config)
         self._execute_called = False
         self._stream_called = False
@@ -97,7 +100,10 @@ class AsyncAgent(BaseAgent):
     """Agent with async capabilities for testing."""
 
     def __init__(self, delay: float = 0.1):
-        super().__init__("async_agent", [AgentCapabilities.TEXT_COMPLETION, AgentCapabilities.STREAMING])
+        super().__init__(
+            "async_agent",
+            [AgentCapabilities.TEXT_COMPLETION, AgentCapabilities.STREAMING],
+        )
         self._delay = delay
 
     def _execute_impl(self, request: AgentRequest) -> AgentResponse:
@@ -124,6 +130,7 @@ class AsyncAgent(BaseAgent):
 # =============================================================================
 # FIXTURES
 # =============================================================================
+
 
 @pytest.fixture
 def fake_llm_client():

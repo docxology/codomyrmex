@@ -16,6 +16,7 @@ from codomyrmex.agents.agentic_seek.agentic_seek_client import AgenticSeekClient
 # Class structure
 # ===================================================================
 
+
 class TestAgenticSeekClientStructure:
     """Verify the client is importable and has expected methods."""
 
@@ -56,6 +57,7 @@ class TestAgenticSeekClientStructure:
 # get_available_agents
 # ===================================================================
 
+
 class TestGetAvailableAgents:
     def test_returns_all_five(self):
         client = AgenticSeekClient()
@@ -72,16 +74,19 @@ class TestGetAvailableAgents:
 # classify_query
 # ===================================================================
 
+
 class TestClassifyQuery:
     def test_coder(self):
         client = AgenticSeekClient()
         from codomyrmex.agents.agentic_seek.agent_types import AgenticSeekAgentType
+
         result = client.classify_query("Write a Python script")
         assert result is AgenticSeekAgentType.CODER
 
     def test_casual(self):
         client = AgenticSeekClient()
         from codomyrmex.agents.agentic_seek.agent_types import AgenticSeekAgentType
+
         result = client.classify_query("Hi there")
         assert result is AgenticSeekAgentType.CASUAL
 
@@ -89,6 +94,7 @@ class TestClassifyQuery:
 # ===================================================================
 # validate_environment
 # ===================================================================
+
 
 class TestValidateEnvironment:
     def test_returns_dict(self):
@@ -99,7 +105,14 @@ class TestValidateEnvironment:
     def test_has_required_keys(self):
         client = AgenticSeekClient()
         result = client.validate_environment()
-        expected_keys = {"docker", "docker_compose", "ollama", "python", "uv", "repo_exists"}
+        expected_keys = {
+            "docker",
+            "docker_compose",
+            "ollama",
+            "python",
+            "uv",
+            "repo_exists",
+        }
         assert expected_keys == set(result.keys())
 
     def test_values_are_booleans(self):
@@ -112,6 +125,7 @@ class TestValidateEnvironment:
 # ===================================================================
 # parse_config_ini
 # ===================================================================
+
 
 class TestParseConfigIni:
     """Test config.ini parsing with real temporary files."""
@@ -191,12 +205,7 @@ class TestParseConfigIni:
 
     def test_boolean_parsing_variants(self):
         path = self._write_config(
-            "[MAIN]\n"
-            "is_local = yes\n"
-            "speak = 1\n"
-            "listen = false\n"
-            "\n"
-            "[BROWSER]\n"
+            "[MAIN]\nis_local = yes\nspeak = 1\nlisten = false\n\n[BROWSER]\n"
         )
         try:
             cfg = AgenticSeekClient.parse_config_ini(path)
@@ -207,12 +216,7 @@ class TestParseConfigIni:
             os.unlink(path)
 
     def test_comma_separated_languages(self):
-        path = self._write_config(
-            "[MAIN]\n"
-            "languages = en, zh, fr\n"
-            "\n"
-            "[BROWSER]\n"
-        )
+        path = self._write_config("[MAIN]\nlanguages = en, zh, fr\n\n[BROWSER]\n")
         try:
             cfg = AgenticSeekClient.parse_config_ini(path)
             assert cfg.languages == ["en", "zh", "fr"]
@@ -224,21 +228,26 @@ class TestParseConfigIni:
 # Module-level import
 # ===================================================================
 
+
 class TestModuleImport:
     """Verify the module re-export from __init__.py."""
 
     def test_import_from_init(self):
         from codomyrmex.agents.agentic_seek import AgenticSeekClient as C
+
         assert C is AgenticSeekClient
 
     def test_import_router(self):
         from codomyrmex.agents.agentic_seek import AgenticSeekRouter
+
         assert AgenticSeekRouter is not None
 
     def test_import_executor(self):
         from codomyrmex.agents.agentic_seek import AgenticSeekCodeExecutor
+
         assert AgenticSeekCodeExecutor is not None
 
     def test_import_planner(self):
         from codomyrmex.agents.agentic_seek import AgenticSeekTaskPlanner
+
         assert AgenticSeekTaskPlanner is not None

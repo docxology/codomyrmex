@@ -15,24 +15,30 @@ and configuration synchronization across multiple environments.
 
 logger = get_logger(__name__)
 
+
 class DeploymentStatus(Enum):
     """Configuration deployment status."""
+
     PENDING = "pending"
     IN_PROGRESS = "in_progress"
     SUCCESS = "success"
     FAILED = "failed"
     ROLLED_BACK = "rolled_back"
 
+
 class EnvironmentType(Enum):
     """Types of deployment environments."""
+
     DEVELOPMENT = "development"
     STAGING = "staging"
     PRODUCTION = "production"
     TESTING = "testing"
 
+
 @dataclass
 class Environment:
     """Deployment environment configuration."""
+
     name: str
     type: EnvironmentType
     config_path: str
@@ -40,9 +46,11 @@ class Environment:
     secrets: dict[str, str] = field(default_factory=dict)
     created_at: datetime = field(default_factory=datetime.now)
 
+
 @dataclass
 class ConfigDeployment:
     """Configuration deployment record."""
+
     deployment_id: str
     environment: str
     config_version: str
@@ -52,6 +60,7 @@ class ConfigDeployment:
     config_files: list[str]
     changes: dict[str, Any]
     rollback_info: dict[str, Any] | None = None
+
 
 class ConfigurationDeployer:
     """Configuration deployment and environment management system."""
@@ -80,7 +89,7 @@ class ConfigurationDeployer:
         name: str,
         env_type: EnvironmentType,
         config_path: str,
-        variables: dict[str, str] | None = None
+        variables: dict[str, str] | None = None,
     ) -> Environment:
         """Create a deployment environment.
 
@@ -94,24 +103,25 @@ class ConfigurationDeployer:
             Created environment
         """
         environment = Environment(
-            name=name,
-            type=env_type,
-            config_path=config_path,
-            variables=variables or {}
+            name=name, type=env_type, config_path=config_path, variables=variables or {}
         )
 
         self._environments[name] = environment
 
         # Save environment configuration
         env_file = self.environments_dir / f"{name}.json"
-        with open(env_file, 'w') as f:
-            json.dump({
-                "name": environment.name,
-                "type": environment.type.value,
-                "config_path": environment.config_path,
-                "variables": environment.variables,
-                "created_at": environment.created_at.isoformat()
-            }, f, indent=2)
+        with open(env_file, "w") as f:
+            json.dump(
+                {
+                    "name": environment.name,
+                    "type": environment.type.value,
+                    "config_path": environment.config_path,
+                    "variables": environment.variables,
+                    "created_at": environment.created_at.isoformat(),
+                },
+                f,
+                indent=2,
+            )
 
         logger.info(f"Created environment: {name} ({env_type.value})")
         return environment
@@ -120,7 +130,7 @@ class ConfigurationDeployer:
         self,
         environment_name: str,
         config_files: list[str],
-        deployed_by: str = "system"
+        deployed_by: str = "system",
     ) -> ConfigDeployment:
         """Deploy configuration to an environment.
 
@@ -145,7 +155,7 @@ class ConfigurationDeployer:
             deployed_at=datetime.now(),
             deployed_by=deployed_by,
             config_files=config_files,
-            changes=self._analyze_config_changes(config_files)
+            changes=self._analyze_config_changes(config_files),
         )
 
         self._deployments[deployment_id] = deployment
@@ -165,18 +175,22 @@ class ConfigurationDeployer:
         finally:
             # Save deployment record
             deployment_file = self.deployments_dir / f"{deployment_id}.json"
-            with open(deployment_file, 'w') as f:
-                json.dump({
-                    "deployment_id": deployment.deployment_id,
-                    "environment": deployment.environment,
-                    "config_version": deployment.config_version,
-                    "status": deployment.status.value,
-                    "deployed_at": deployment.deployed_at.isoformat(),
-                    "deployed_by": deployment.deployed_by,
-                    "config_files": deployment.config_files,
-                    "changes": deployment.changes,
-                    "rollback_info": deployment.rollback_info
-                }, f, indent=2)
+            with open(deployment_file, "w") as f:
+                json.dump(
+                    {
+                        "deployment_id": deployment.deployment_id,
+                        "environment": deployment.environment,
+                        "config_version": deployment.config_version,
+                        "status": deployment.status.value,
+                        "deployed_at": deployment.deployed_at.isoformat(),
+                        "deployed_by": deployment.deployed_by,
+                        "config_files": deployment.config_files,
+                        "changes": deployment.changes,
+                        "rollback_info": deployment.rollback_info,
+                    },
+                    f,
+                    indent=2,
+                )
 
         return deployment
 
@@ -186,7 +200,7 @@ class ConfigurationDeployer:
             "files_modified": len(config_files),
             "files_added": [],
             "files_removed": [],
-            "settings_changed": {}
+            "settings_changed": {},
         }
 
         # This would typically compare with previous deployment
@@ -208,8 +222,7 @@ class ConfigurationDeployer:
             if source_path.exists():
                 # Apply environment variables
                 content = self._apply_environment_variables(
-                    source_path.read_text(),
-                    environment.variables
+                    source_path.read_text(), environment.variables
                 )
 
                 # Copy to environment location
@@ -219,7 +232,9 @@ class ConfigurationDeployer:
 
                 logger.debug(f"Deployed {config_file} to {target_path}")
 
-    def _apply_environment_variables(self, content: str, variables: dict[str, str]) -> str:
+    def _apply_environment_variables(
+        self, content: str, variables: dict[str, str]
+    ) -> str:
         """Apply environment variables to configuration content."""
         for key, value in variables.items():
             placeholder = f"${{{key}}}"
@@ -255,7 +270,7 @@ class ConfigurationDeployer:
             deployed_at=datetime.now(),
             deployed_by="system",
             config_files=original_deployment.config_files,
-            changes={"operation": "rollback", "original_deployment": deployment_id}
+            changes={"operation": "rollback", "original_deployment": deployment_id},
         )
 
         try:
@@ -292,7 +307,9 @@ class ConfigurationDeployer:
         """
         return self._deployments.get(deployment_id)
 
-    def list_deployments(self, environment: str | None = None) -> list[ConfigDeployment]:
+    def list_deployments(
+        self, environment: str | None = None
+    ) -> list[ConfigDeployment]:
         """List configuration deployments.
 
         Args:
@@ -330,10 +347,9 @@ class ConfigurationDeployer:
         """
         return list(self._environments.values())
 
+
 def deploy_configuration(
-    environment_name: str,
-    config_files: list[str],
-    deployed_by: str = "system"
+    environment_name: str, config_files: list[str], deployed_by: str = "system"
 ) -> ConfigDeployment:
     """Deploy configuration to an environment.
 

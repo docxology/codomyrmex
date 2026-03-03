@@ -36,13 +36,17 @@ class MultimodalMessageBuilder:
 
     def image(self, data: bytes, format: str = "png") -> "MultimodalMessageBuilder":
         """Add image from bytes."""
-        self._message.add_image(ImageContent(data=data, format=format, media_type=MediaType.IMAGE))
+        self._message.add_image(
+            ImageContent(data=data, format=format, media_type=MediaType.IMAGE)
+        )
         return self
 
     def image_base64(self, b64: str, format: str = "png") -> "MultimodalMessageBuilder":
         """Add image from base64."""
         data = base64.b64decode(b64)
-        self._message.add_image(ImageContent(data=data, format=format, media_type=MediaType.IMAGE))
+        self._message.add_image(
+            ImageContent(data=data, format=format, media_type=MediaType.IMAGE)
+        )
         return self
 
     def image_file(self, path: str) -> "MultimodalMessageBuilder":
@@ -53,7 +57,9 @@ class MultimodalMessageBuilder:
 
     def audio(self, data: bytes, format: str = "wav") -> "MultimodalMessageBuilder":
         """Add audio from bytes."""
-        self._message.add_audio(AudioContent(data=data, format=format, media_type=MediaType.AUDIO))
+        self._message.add_audio(
+            AudioContent(data=data, format=format, media_type=MediaType.AUDIO)
+        )
         return self
 
     def audio_file(self, path: str) -> "MultimodalMessageBuilder":

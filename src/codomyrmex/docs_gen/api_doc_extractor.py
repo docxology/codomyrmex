@@ -97,18 +97,23 @@ class APIDocExtractor:
         module_doc = ModuleDoc(name=module_name)
 
         # Module docstring
-        if (tree.body and isinstance(tree.body[0], ast.Expr)
-                and isinstance(tree.body[0].value, ast.Constant)
-                and isinstance(tree.body[0].value.value, str)):
+        if (
+            tree.body
+            and isinstance(tree.body[0], ast.Expr)
+            and isinstance(tree.body[0].value, ast.Constant)
+            and isinstance(tree.body[0].value.value, str)
+        ):
             module_doc.docstring = tree.body[0].value.value.strip()
 
         # Extract __all__
         for node in ast.walk(tree):
-            if (isinstance(node, ast.Assign)
-                    and any(isinstance(t, ast.Name) and t.id == "__all__" for t in node.targets)):
+            if isinstance(node, ast.Assign) and any(
+                isinstance(t, ast.Name) and t.id == "__all__" for t in node.targets
+            ):
                 if isinstance(node.value, ast.List):
                     module_doc.exports = [
-                        elt.value for elt in node.value.elts
+                        elt.value
+                        for elt in node.value.elts
                         if isinstance(elt, ast.Constant) and isinstance(elt.value, str)
                     ]
 
@@ -135,7 +140,9 @@ class APIDocExtractor:
 
         return doc
 
-    def _extract_function(self, node: ast.FunctionDef | ast.AsyncFunctionDef, module: str) -> FunctionDoc:
+    def _extract_function(
+        self, node: ast.FunctionDef | ast.AsyncFunctionDef, module: str
+    ) -> FunctionDoc:
         """Extract function documentation."""
         arg_strings = []
 
@@ -211,7 +218,9 @@ class APIDocExtractor:
             lines.extend([doc.docstring, ""])
 
         if doc.exports:
-            lines.extend(["## Exports", "", ", ".join(f"`{e}`" for e in doc.exports), ""])
+            lines.extend(
+                ["## Exports", "", ", ".join(f"`{e}`" for e in doc.exports), ""]
+            )
 
         for cls in doc.classes:
             bases_str = f"({', '.join(cls.bases)})" if cls.bases else ""
@@ -224,7 +233,9 @@ class APIDocExtractor:
                 for method in cls.methods:
                     async_prefix = "async " if method.is_async else ""
                     decorators = "".join(f"@{d}\n" for d in method.decorators)
-                    lines.append(f"#### `{async_prefix}{method.name}{method.signature}`")
+                    lines.append(
+                        f"#### `{async_prefix}{method.name}{method.signature}`"
+                    )
                     if decorators:
                         lines.extend(["```python", decorators.strip(), "```", ""])
                     if method.docstring:

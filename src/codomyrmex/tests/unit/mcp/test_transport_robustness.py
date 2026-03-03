@@ -7,7 +7,6 @@ MCPClientConfig new fields.
 Zero-mock: real objects, real state.
 """
 
-
 import pytest
 
 from codomyrmex.model_context_protocol.transport.client import (
@@ -29,6 +28,7 @@ from codomyrmex.model_context_protocol.transport.server import (
 
 class TestClientConfig:
     """Test suite for ClientConfig."""
+
     def test_default_retry_fields(self):
         """Test functionality: default retry fields."""
         cfg = MCPClientConfig()
@@ -132,8 +132,11 @@ async def test_no_retry_on_rpc_error():
 
     class _RPCErrorTransport(_Transport):
         async def send(self, message: dict, *, timeout: float = 30.0) -> dict:
-            return {"jsonrpc": "2.0", "id": message.get("id"),
-                    "error": {"code": -32600, "message": "Invalid request"}}
+            return {
+                "jsonrpc": "2.0",
+                "id": message.get("id"),
+                "error": {"code": -32600, "message": "Invalid request"},
+            }
 
         async def send_notification(self, message: dict) -> None:
             pass
@@ -240,6 +243,7 @@ def test_http_transport_default_pool_size():
 
 class TestServerConfig:
     """Test suite for ServerConfig."""
+
     def test_default_timeout_fields(self):
         """Test functionality: default timeout fields."""
         cfg = MCPServerConfig()
@@ -266,10 +270,12 @@ class TestServerConfig:
 @pytest.mark.asyncio
 async def test_server_rate_limit_rejects():
     """Server rejects when rate limit is exhausted."""
-    server = MCPServer(MCPServerConfig(
-        rate_limit_rate=1,
-        rate_limit_burst=1,
-    ))
+    server = MCPServer(
+        MCPServerConfig(
+            rate_limit_rate=1,
+            rate_limit_burst=1,
+        )
+    )
     # Register a dummy tool
     server.register_tool(
         name="dummy",
@@ -347,8 +353,11 @@ async def test_client_call_tool_success():
 
     class _OKTransport(_Transport):
         async def send(self, message: dict, *, timeout: float = 30.0) -> dict:
-            return {"jsonrpc": "2.0", "id": message.get("id"),
-                    "result": {"content": [{"type": "text", "text": "hello"}]}}
+            return {
+                "jsonrpc": "2.0",
+                "id": message.get("id"),
+                "result": {"content": [{"type": "text", "text": "hello"}]},
+            }
 
         async def send_notification(self, message: dict) -> None:
             pass

@@ -25,22 +25,34 @@ pytestmark = [
 # Helpers
 # ---------------------------------------------------------------------------
 
+
 def _make_git_repo(path):
     """Create a minimal git repo with one commit at *path*."""
-    subprocess.run(["git", "init", "-b", "main"], cwd=path, check=True, capture_output=True)
-    subprocess.run(["git", "config", "user.email", "t@t.com"], cwd=path, check=True, capture_output=True)
-    subprocess.run(["git", "config", "user.name", "T"], cwd=path, check=True, capture_output=True)
+    subprocess.run(
+        ["git", "init", "-b", "main"], cwd=path, check=True, capture_output=True
+    )
+    subprocess.run(
+        ["git", "config", "user.email", "t@t.com"],
+        cwd=path,
+        check=True,
+        capture_output=True,
+    )
+    subprocess.run(
+        ["git", "config", "user.name", "T"], cwd=path, check=True, capture_output=True
+    )
     (path / "README.md").write_text("hello\n")
     subprocess.run(["git", "add", "."], cwd=path, check=True, capture_output=True)
-    subprocess.run(["git", "commit", "-m", "init"], cwd=path, check=True, capture_output=True)
+    subprocess.run(
+        ["git", "commit", "-m", "init"], cwd=path, check=True, capture_output=True
+    )
 
 
 # ---------------------------------------------------------------------------
 # init_submodules
 # ---------------------------------------------------------------------------
 
-class TestInitSubmodules:
 
+class TestInitSubmodules:
     def test_init_submodules_on_repo_without_submodules(self, tmp_path):
         """Idempotent: no submodules means no-op, returns True."""
         _make_git_repo(tmp_path)
@@ -63,8 +75,8 @@ class TestInitSubmodules:
 # update_submodules
 # ---------------------------------------------------------------------------
 
-class TestUpdateSubmodules:
 
+class TestUpdateSubmodules:
     def test_update_submodules_on_repo_without_submodules(self, tmp_path):
         """Idempotent: no submodules means no-op, returns True."""
         _make_git_repo(tmp_path)

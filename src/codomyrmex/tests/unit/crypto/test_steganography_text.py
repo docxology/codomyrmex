@@ -79,8 +79,10 @@ class TestCoverTextPreservation:
         # Remove zero-width characters to get visible text
         visible_chars = []
         zero_width = {
-            ZERO_WIDTH_SPACE, ZERO_WIDTH_NON_JOINER,
-            "\u200d", "\u2060",
+            ZERO_WIDTH_SPACE,
+            ZERO_WIDTH_NON_JOINER,
+            "\u200d",
+            "\u2060",
         }
         for ch in stego:
             if ch not in zero_width:

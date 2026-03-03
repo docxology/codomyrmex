@@ -23,6 +23,7 @@ class TestMCPToolDecoratorMetadata:
 
     def test_decorator_attaches_mcp_tool_attribute(self):
         """Test functionality: decorated function gains _mcp_tool attribute."""
+
         @mcp_tool(category="testing", description="A unit test tool")
         def sample(x: int) -> int:
             """Sample doc."""
@@ -33,6 +34,7 @@ class TestMCPToolDecoratorMetadata:
 
     def test_decorator_attaches_mcp_tool_meta_alias(self):
         """Test functionality: decorated function also has _mcp_tool_meta alias."""
+
         @mcp_tool()
         def another():
             """Another."""
@@ -43,6 +45,7 @@ class TestMCPToolDecoratorMetadata:
 
     def test_category_stored_correctly(self):
         """Test functionality: category parameter persists in metadata."""
+
         @mcp_tool(category="math")
         def add(a: int, b: int) -> int:
             """Add numbers."""
@@ -52,6 +55,7 @@ class TestMCPToolDecoratorMetadata:
 
     def test_description_from_explicit_param(self):
         """Test functionality: explicit description overrides docstring."""
+
         @mcp_tool(description="Explicit description")
         def func():
             """Docstring description."""
@@ -61,6 +65,7 @@ class TestMCPToolDecoratorMetadata:
 
     def test_description_falls_back_to_docstring(self):
         """Test functionality: omitted description uses docstring."""
+
         @mcp_tool()
         def documented():
             """Docstring used as description."""
@@ -70,6 +75,7 @@ class TestMCPToolDecoratorMetadata:
 
     def test_description_empty_when_no_docstring(self):
         """Test functionality: no docstring and no explicit description yields empty string."""
+
         @mcp_tool()
         def undocumented():
             pass
@@ -78,6 +84,7 @@ class TestMCPToolDecoratorMetadata:
 
     def test_name_auto_prefixed_with_codomyrmex(self):
         """Test functionality: auto-generated name is prefixed with codomyrmex."""
+
         @mcp_tool()
         def my_tool():
             """Tool."""
@@ -88,6 +95,7 @@ class TestMCPToolDecoratorMetadata:
 
     def test_explicit_name_used_when_provided(self):
         """Test functionality: explicit name parameter is respected."""
+
         @mcp_tool(name="codomyrmex.custom_name")
         def irrelevant_name():
             """Tool."""
@@ -97,6 +105,7 @@ class TestMCPToolDecoratorMetadata:
 
     def test_name_without_prefix_gets_prefixed(self):
         """Test functionality: a bare name gets codomyrmex prefix."""
+
         @mcp_tool(name="bare_name")
         def tool():
             """Tool."""
@@ -106,6 +115,7 @@ class TestMCPToolDecoratorMetadata:
 
     def test_module_field_present_in_metadata(self):
         """Test functionality: module path is captured in metadata."""
+
         @mcp_tool()
         def tracked():
             """Tool."""
@@ -117,6 +127,7 @@ class TestMCPToolDecoratorMetadata:
 
     def test_version_defaults_to_one_point_zero(self):
         """Test functionality: version defaults to '1.0' when not specified."""
+
         @mcp_tool()
         def versioned():
             """Tool."""
@@ -126,6 +137,7 @@ class TestMCPToolDecoratorMetadata:
 
     def test_explicit_version_stored(self):
         """Test functionality: explicit version parameter is stored."""
+
         @mcp_tool(version="2.5")
         def v2():
             """Tool."""
@@ -135,6 +147,7 @@ class TestMCPToolDecoratorMetadata:
 
     def test_deprecated_in_stored(self):
         """Test functionality: deprecated_in metadata is stored."""
+
         @mcp_tool(deprecated_in="1.5")
         def old_tool():
             """Old tool."""
@@ -149,6 +162,7 @@ class TestMCPToolDecoratorBehavior:
 
     def test_decorated_function_returns_correct_result(self):
         """Test functionality: decorated function still computes correctly."""
+
         @mcp_tool()
         def multiply(a: int, b: int) -> int:
             """Multiply."""
@@ -158,6 +172,7 @@ class TestMCPToolDecoratorBehavior:
 
     def test_decorated_function_with_kwargs(self):
         """Test functionality: keyword arguments work after decoration."""
+
         @mcp_tool()
         def greet(name: str, greeting: str = "Hello") -> str:
             """Greet someone."""
@@ -168,6 +183,7 @@ class TestMCPToolDecoratorBehavior:
 
     def test_decorated_function_preserves_name(self):
         """Test functionality: functools.wraps preserves __name__."""
+
         @mcp_tool()
         def original_name():
             """Original."""
@@ -177,6 +193,7 @@ class TestMCPToolDecoratorBehavior:
 
     def test_decorated_function_preserves_docstring(self):
         """Test functionality: functools.wraps preserves __doc__."""
+
         @mcp_tool()
         def with_doc():
             """My docstring."""
@@ -186,6 +203,7 @@ class TestMCPToolDecoratorBehavior:
 
     def test_deprecation_warning_emitted_when_deprecated(self):
         """Test functionality: calling a deprecated tool emits DeprecationWarning."""
+
         @mcp_tool(deprecated_in="0.9")
         def legacy():
             """Legacy tool."""
@@ -202,6 +220,7 @@ class TestMCPToolDecoratorBehavior:
 
     def test_no_warning_when_not_deprecated(self):
         """Test functionality: non-deprecated tool does not emit warnings."""
+
         @mcp_tool()
         def current():
             """Current tool."""
@@ -211,7 +230,9 @@ class TestMCPToolDecoratorBehavior:
             warnings.simplefilter("always")
             result = current()
             assert result == "new"
-            deprecation_warnings = [x for x in w if issubclass(x.category, DeprecationWarning)]
+            deprecation_warnings = [
+                x for x in w if issubclass(x.category, DeprecationWarning)
+            ]
             assert len(deprecation_warnings) == 0
 
 
@@ -221,6 +242,7 @@ class TestSchemaGeneration:
 
     def test_schema_for_typed_parameters(self):
         """Test functionality: schema generated from type hints."""
+
         def func(name: str, count: int, ratio: float, flag: bool) -> str:
             pass
 
@@ -234,6 +256,7 @@ class TestSchemaGeneration:
 
     def test_schema_required_vs_optional(self):
         """Test functionality: params without defaults are required."""
+
         def func(required_param: str, optional_param: int = 42) -> None:
             pass
 
@@ -243,6 +266,7 @@ class TestSchemaGeneration:
 
     def test_schema_skips_self_and_cls(self):
         """Test functionality: self and cls are excluded from schema."""
+
         class MyClass:
             def method(self, x: int) -> int:
                 return x
@@ -253,6 +277,7 @@ class TestSchemaGeneration:
 
     def test_schema_skips_var_positional_and_var_keyword(self):
         """Test functionality: *args and **kwargs are excluded from schema."""
+
         def func(a: int, *args, **kwargs) -> None:
             pass
 
@@ -263,6 +288,7 @@ class TestSchemaGeneration:
 
     def test_schema_default_value_captured(self):
         """Test functionality: default values appear in schema."""
+
         def func(name: str = "world") -> str:
             return name
 
@@ -271,6 +297,7 @@ class TestSchemaGeneration:
 
     def test_schema_list_type_mapped_to_array(self):
         """Test functionality: list type maps to JSON array."""
+
         def func(items: list) -> None:
             pass
 
@@ -279,6 +306,7 @@ class TestSchemaGeneration:
 
     def test_schema_dict_type_mapped_to_object(self):
         """Test functionality: dict type maps to JSON object."""
+
         def func(data: dict) -> None:
             pass
 
@@ -287,6 +315,7 @@ class TestSchemaGeneration:
 
     def test_schema_auto_generated_by_decorator(self):
         """Test functionality: decorator auto-generates schema in metadata."""
+
         @mcp_tool()
         def auto_schema(name: str, count: int = 1) -> str:
             """Has schema."""
@@ -388,6 +417,7 @@ class TestSafeDefault:
 
     def test_arbitrary_object_stringified(self):
         """Test functionality: other objects are stringified as fallback."""
+
         class Custom:
             def __str__(self):
                 return "custom_str"

@@ -82,7 +82,9 @@ class TournamentSelection(SelectionOperator[T]):
             # Find winner — highest fitness
             winner = max(
                 contestants,
-                key=lambda ind: ind.fitness if ind.fitness is not None else -float("inf"),
+                key=lambda ind: (
+                    ind.fitness if ind.fitness is not None else -float("inf")
+                ),
             )
 
             # Copy to preserve original and preserve class
@@ -107,7 +109,9 @@ class RouletteWheelSelection(SelectionOperator[T]):
         if not population:
             return []
 
-        fitnesses = [ind.fitness if ind.fitness is not None else 0.0 for ind in population]
+        fitnesses = [
+            ind.fitness if ind.fitness is not None else 0.0 for ind in population
+        ]
         min_f = min(fitnesses)
         shift = abs(min_f) + 1.0 if min_f <= 0 else 0.0
         shifted = [f + shift for f in fitnesses]

@@ -131,7 +131,7 @@ def get_main_package_info() -> dict:
         "name": "codomyrmex",
         "version": codomyrmex.__version__,
         "modules": codomyrmex.list_modules(),
-        "description": "Core Codomyrmex functionality and modules"
+        "description": "Core Codomyrmex functionality and modules",
     }
 
 
@@ -151,7 +151,7 @@ def get_template_info() -> dict:
         "name": "module_template",
         "description": "Project templates and boilerplate code",
         "location": "codomyrmex/module_template/",
-        "components": ["AGENTS.md", "README.md", "SPEC.md", "docs/"]
+        "components": ["AGENTS.md", "README.md", "SPEC.md", "docs/"],
     }
 
 

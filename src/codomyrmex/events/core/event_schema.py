@@ -21,6 +21,7 @@ try:
 except ImportError:
     logger = logging.getLogger(__name__)
 
+
 class EventPriority(Enum):
     """Event priority levels for logging and processing."""
 
@@ -31,6 +32,7 @@ class EventPriority(Enum):
     ERROR = "error"
     CRITICAL = "critical"
     MONITORING = "monitoring"
+
 
 class EventType(Enum):
     """Standard event types in Codomyrmex."""
@@ -116,14 +118,15 @@ class EventType(Enum):
     # Custom events (for extensions)
     CUSTOM = "custom"
 
+
 @dataclass
 class Event:
     """Represents an event in the system."""
 
     event_type: EventType
     source: str
-    event_id: str = field(default_factory=lambda: str(__import__('uuid').uuid4()))
-    timestamp: float = field(default_factory=lambda: __import__('time').time())
+    event_id: str = field(default_factory=lambda: str(__import__("uuid").uuid4()))
+    timestamp: float = field(default_factory=lambda: __import__("time").time())
     correlation_id: str | None = None
     data: dict[str, Any] = field(default_factory=dict)
     metadata: dict[str, Any] = field(default_factory=dict)
@@ -138,7 +141,7 @@ class Event:
             "correlation_id": self.correlation_id,
             "data": self.data,
             "metadata": self.metadata,
-            "priority": self.priority
+            "priority": self.priority,
         }
 
     def to_json(self) -> str:
@@ -146,25 +149,26 @@ class Event:
         return json.dumps(self.to_dict(), default=str)
 
     @classmethod
-    def from_dict(cls, data: dict[str, Any]) -> 'Event':
+    def from_dict(cls, data: dict[str, Any]) -> "Event":
         """Create event from dictionary."""
         event_type = EventType(data["event_type"])
         return cls(
             event_type=event_type,
             source=data["source"],
-            event_id=data.get("event_id", str(__import__('uuid').uuid4())),
-            timestamp=data.get("timestamp", __import__('time').time()),
+            event_id=data.get("event_id", str(__import__("uuid").uuid4())),
+            timestamp=data.get("timestamp", __import__("time").time()),
             correlation_id=data.get("correlation_id"),
             data=data.get("data", {}),
             metadata=data.get("metadata", {}),
-            priority=data.get("priority", 0)
+            priority=data.get("priority", 0),
         )
 
     @classmethod
-    def from_json(cls, json_str: str) -> 'Event':
+    def from_json(cls, json_str: str) -> "Event":
         """Create event from JSON string."""
         data = json.loads(json_str)
         return cls.from_dict(data)
+
 
 class EventSchema:
     """
@@ -203,7 +207,9 @@ class EventSchema:
         except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
             return False, [f"Validation error: {str(e)}"]
 
-    def register_event_schema(self, event_type: EventType, schema: dict[str, Any]) -> None:
+    def register_event_schema(
+        self, event_type: EventType, schema: dict[str, Any]
+    ) -> None:
         """
         Register a schema for an event type.
 
@@ -244,12 +250,9 @@ class EventSchema:
             "properties": {
                 "version": {"type": "string"},
                 "startup_time": {"type": "number"},
-                "components_loaded": {
-                    "type": "array",
-                    "items": {"type": "string"}
-                }
+                "components_loaded": {"type": "array", "items": {"type": "string"}},
             },
-            "required": ["version"]
+            "required": ["version"],
         }
 
         # Module load event
@@ -259,12 +262,9 @@ class EventSchema:
                 "module_name": {"type": "string"},
                 "module_version": {"type": "string"},
                 "load_time": {"type": "number"},
-                "dependencies": {
-                    "type": "array",
-                    "items": {"type": "string"}
-                }
+                "dependencies": {"type": "array", "items": {"type": "string"}},
             },
-            "required": ["module_name"]
+            "required": ["module_name"],
         }
 
         # Analysis start event
@@ -274,9 +274,9 @@ class EventSchema:
                 "analysis_type": {"type": "string"},
                 "target": {"type": "string"},
                 "parameters": {"type": "object"},
-                "estimated_duration": {"type": "number"}
+                "estimated_duration": {"type": "number"},
             },
-            "required": ["analysis_type", "target"]
+            "required": ["analysis_type", "target"],
         }
 
         # Analysis complete event
@@ -287,9 +287,9 @@ class EventSchema:
                 "target": {"type": "string"},
                 "results": {"type": "object"},
                 "duration": {"type": "number"},
-                "success": {"type": "boolean"}
+                "success": {"type": "boolean"},
             },
-            "required": ["analysis_type", "target", "success"]
+            "required": ["analysis_type", "target", "success"],
         }
 
         # Build start event
@@ -299,9 +299,9 @@ class EventSchema:
                 "build_type": {"type": "string"},
                 "target": {"type": "string"},
                 "parameters": {"type": "object"},
-                "build_id": {"type": "string"}
+                "build_id": {"type": "string"},
             },
-            "required": ["build_type", "target"]
+            "required": ["build_type", "target"],
         }
 
         # Build complete event
@@ -312,13 +312,10 @@ class EventSchema:
                 "target": {"type": "string"},
                 "build_id": {"type": "string"},
                 "success": {"type": "boolean"},
-                "artifacts": {
-                    "type": "array",
-                    "items": {"type": "string"}
-                },
-                "duration": {"type": "number"}
+                "artifacts": {"type": "array", "items": {"type": "string"}},
+                "duration": {"type": "number"},
             },
-            "required": ["build_type", "target", "build_id", "success"]
+            "required": ["build_type", "target", "build_id", "success"],
         }
 
         # Error events
@@ -331,10 +328,10 @@ class EventSchema:
                 "context": {"type": "object"},
                 "severity": {
                     "type": "string",
-                    "enum": ["low", "medium", "high", "critical"]
-                }
+                    "enum": ["low", "medium", "high", "critical"],
+                },
             },
-            "required": ["error_message"]
+            "required": ["error_message"],
         }
 
         self.schemas[EventType.SYSTEM_ERROR.value] = error_schema
@@ -351,12 +348,12 @@ class EventSchema:
                 "metric_value": {"type": ["number", "string", "boolean"]},
                 "metric_type": {
                     "type": "string",
-                    "enum": ["counter", "gauge", "histogram", "summary"]
+                    "enum": ["counter", "gauge", "histogram", "summary"],
                 },
                 "labels": {"type": "object"},
-                "timestamp": {"type": "number"}
+                "timestamp": {"type": "number"},
             },
-            "required": ["metric_name", "metric_value"]
+            "required": ["metric_name", "metric_value"],
         }
 
         # Alert triggered event
@@ -366,19 +363,21 @@ class EventSchema:
                 "alert_name": {"type": "string"},
                 "alert_level": {
                     "type": "string",
-                    "enum": ["info", "warning", "error", "critical"]
+                    "enum": ["info", "warning", "error", "critical"],
                 },
                 "message": {"type": "string"},
                 "threshold": {"type": ["number", "string"]},
                 "current_value": {"type": ["number", "string"]},
-                "context": {"type": "object"}
+                "context": {"type": "object"},
             },
-            "required": ["alert_name", "alert_level", "message"]
+            "required": ["alert_name", "alert_level", "message"],
         }
 
         logger.info(f"Loaded {len(self.schemas)} standard event schemas")
 
+
 # Convenience functions for creating common events
+
 
 def create_system_startup_event(version: str, components: list[str]) -> Event:
     """Create a system startup event."""
@@ -388,9 +387,10 @@ def create_system_startup_event(version: str, components: list[str]) -> Event:
         data={
             "version": version,
             "components_loaded": components,
-            "startup_time": __import__('time').time()
-        }
+            "startup_time": __import__("time").time(),
+        },
     )
+
 
 def create_module_load_event(module_name: str, version: str, load_time: float) -> Event:
     """Create a module load event."""
@@ -400,11 +400,14 @@ def create_module_load_event(module_name: str, version: str, load_time: float) -
         data={
             "module_name": module_name,
             "module_version": version,
-            "load_time": load_time
-        }
+            "load_time": load_time,
+        },
     )
 
-def create_analysis_start_event(analysis_type: str, target: str, parameters: dict[str, Any] | None = None) -> Event:
+
+def create_analysis_start_event(
+    analysis_type: str, target: str, parameters: dict[str, Any] | None = None
+) -> Event:
     """Create an analysis start event."""
     return Event(
         event_type=EventType.ANALYSIS_START,
@@ -412,11 +415,18 @@ def create_analysis_start_event(analysis_type: str, target: str, parameters: dic
         data={
             "analysis_type": analysis_type,
             "target": target,
-            "parameters": parameters or {}
-        }
+            "parameters": parameters or {},
+        },
     )
 
-def create_analysis_complete_event(analysis_type: str, target: str, results: dict[str, Any], duration: float, success: bool) -> Event:
+
+def create_analysis_complete_event(
+    analysis_type: str,
+    target: str,
+    results: dict[str, Any],
+    duration: float,
+    success: bool,
+) -> Event:
     """Create an analysis complete event."""
     return Event(
         event_type=EventType.ANALYSIS_COMPLETE,
@@ -426,11 +436,18 @@ def create_analysis_complete_event(analysis_type: str, target: str, results: dic
             "target": target,
             "results": results,
             "duration": duration,
-            "success": success
-        }
+            "success": success,
+        },
     )
 
-def create_error_event(event_type: EventType, source: str, error_message: str, error_type: str = "unknown", context: dict[str, Any] | None = None) -> Event:
+
+def create_error_event(
+    event_type: EventType,
+    source: str,
+    error_message: str,
+    error_type: str = "unknown",
+    context: dict[str, Any] | None = None,
+) -> Event:
     """Create an error event."""
     return Event(
         event_type=event_type,
@@ -438,12 +455,18 @@ def create_error_event(event_type: EventType, source: str, error_message: str, e
         data={
             "error_type": error_type,
             "error_message": error_message,
-            "context": context or {}
+            "context": context or {},
         },
-        priority=2  # High priority for errors
+        priority=2,  # High priority for errors
     )
 
-def create_metric_event(metric_name: str, value: int | float | str | bool, metric_type: str = "gauge", labels: dict[str, str] | None = None) -> Event:
+
+def create_metric_event(
+    metric_name: str,
+    value: int | float | str | bool,
+    metric_type: str = "gauge",
+    labels: dict[str, str] | None = None,
+) -> Event:
     """Create a metric update event."""
     return Event(
         event_type=EventType.METRIC_UPDATE,
@@ -453,11 +476,18 @@ def create_metric_event(metric_name: str, value: int | float | str | bool, metri
             "metric_value": value,
             "metric_type": metric_type,
             "labels": labels or {},
-            "timestamp": __import__('time').time()
-        }
+            "timestamp": __import__("time").time(),
+        },
     )
 
-def create_alert_event(alert_name: str, level: str, message: str, threshold: Any = None, current_value: Any = None) -> Event:
+
+def create_alert_event(
+    alert_name: str,
+    level: str,
+    message: str,
+    threshold: Any = None,
+    current_value: Any = None,
+) -> Event:
     """Create an alert event."""
     priority_map = {"info": 0, "warning": 1, "error": 2, "critical": 2}
 
@@ -469,7 +499,7 @@ def create_alert_event(alert_name: str, level: str, message: str, threshold: Any
             "alert_level": level,
             "message": message,
             "threshold": threshold,
-            "current_value": current_value
+            "current_value": current_value,
         },
-        priority=priority_map.get(level, 0)
+        priority=priority_map.get(level, 0),
     )

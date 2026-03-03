@@ -7,9 +7,7 @@ from .openrouter import OpenRouterProvider
 
 
 def get_provider(
-    provider_type: ProviderType,
-    config: ProviderConfig | None = None,
-    **kwargs
+    provider_type: ProviderType, config: ProviderConfig | None = None, **kwargs
 ) -> LLMProvider:
     """Get an LLM provider instance."""
     if config is None:
@@ -27,5 +25,3 @@ def get_provider(
         raise ValueError(f"Unsupported provider: {provider_type}")
 
     return provider_class(config)
-
-

@@ -132,5 +132,6 @@ class TestCLIIntegrated:
         assert "Running tests for module: cli" in output
         assert isinstance(result, bool)
 
+
 if __name__ == "__main__":
     pytest.main([__file__])

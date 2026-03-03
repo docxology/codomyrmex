@@ -61,10 +61,12 @@ class WorkerAgent(CollaborativeAgent):
 
         # Add capability if not already present
         if not self.has_capability(capability_name):
-            self.add_capability(AgentCapability(
-                name=capability_name,
-                description=description,
-            ))
+            self.add_capability(
+                AgentCapability(
+                    name=capability_name,
+                    description=description,
+                )
+            )
 
         logger.info(f"Worker {self.name} registered handler for: {capability_name}")
 
@@ -94,8 +96,7 @@ class WorkerAgent(CollaborativeAgent):
 
         if handler is None:
             raise CapabilityMismatchError(
-                task.required_capabilities,
-                self.get_capabilities()
+                task.required_capabilities, self.get_capabilities()
             )
 
         # Execute the handler
@@ -126,20 +127,21 @@ class WorkerAgent(CollaborativeAgent):
                 return await self.process_task(task)
 
         results = await asyncio.gather(
-            *[execute_with_semaphore(task) for task in tasks],
-            return_exceptions=True
+            *[execute_with_semaphore(task) for task in tasks], return_exceptions=True
         )
 
         # Convert exceptions to TaskResults
         final_results = []
         for i, result in enumerate(results):
             if isinstance(result, Exception):
-                final_results.append(TaskResult(
-                    task_id=tasks[i].id,
-                    success=False,
-                    error=str(result),
-                    agent_id=self._agent_id,
-                ))
+                final_results.append(
+                    TaskResult(
+                        task_id=tasks[i].id,
+                        success=False,
+                        error=str(result),
+                        agent_id=self._agent_id,
+                    )
+                )
             else:
                 final_results.append(result)
 

@@ -87,10 +87,16 @@ class TestTaskUnavailable:
     def test_list_tasks_all_filters(self):
         with pytest.raises(ObsidianCLINotAvailable):
             list_tasks(
-                self._cli(), file="note",
-                status="x", format="json",
-                done=True, todo=True, daily=True,
-                active=True, verbose=True, total=True,
+                self._cli(),
+                file="note",
+                status="x",
+                format="json",
+                done=True,
+                todo=True,
+                daily=True,
+                active=True,
+                verbose=True,
+                total=True,
             )
 
     def test_get_task(self):

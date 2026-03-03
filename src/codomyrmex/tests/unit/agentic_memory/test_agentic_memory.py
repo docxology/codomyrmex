@@ -131,7 +131,9 @@ class TestAgentMemory:
         agent.remember("High priority", importance=MemoryImportance.HIGH)
 
         results = agent.recall("priority", min_importance=MemoryImportance.HIGH)
-        assert all(r.memory.importance.value >= MemoryImportance.HIGH.value for r in results)
+        assert all(
+            r.memory.importance.value >= MemoryImportance.HIGH.value for r in results
+        )
 
 
 class TestConversationMemory:

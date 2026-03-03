@@ -19,9 +19,9 @@ from typing import Any
 class ThinkingDepth(StrEnum):
     """Controls how many reasoning steps the CoT pipeline produces."""
 
-    SHALLOW = "shallow"     # 1 step — quick pattern match
-    NORMAL = "normal"       # 3 steps — standard analysis
-    DEEP = "deep"           # 5+ steps — exhaustive deliberation
+    SHALLOW = "shallow"  # 1 step — quick pattern match
+    NORMAL = "normal"  # 3 steps — standard analysis
+    DEEP = "deep"  # 5+ steps — exhaustive deliberation
     EXHAUSTIVE = "exhaustive"  # 8+ steps — maximum rigour
 
 
@@ -51,9 +51,7 @@ class ReasoningStep:
     confidence: float = 0.5
     evidence: list[str] = field(default_factory=list)
     step_type: str = "reasoning"
-    timestamp: str = field(
-        default_factory=lambda: datetime.now(UTC).isoformat()
-    )
+    timestamp: str = field(default_factory=lambda: datetime.now(UTC).isoformat())
     step_id: str = field(default_factory=lambda: uuid.uuid4().hex[:12])
 
     def __post_init__(self) -> None:
@@ -139,9 +137,7 @@ class ReasoningTrace:
     prompt: str = ""
     depth: ThinkingDepth = ThinkingDepth.NORMAL
     trace_id: str = field(default_factory=lambda: uuid.uuid4().hex)
-    created_at: str = field(
-        default_factory=lambda: datetime.now(UTC).isoformat()
-    )
+    created_at: str = field(default_factory=lambda: datetime.now(UTC).isoformat())
 
     # ── Computed properties ───────────────────────────────────────
 
@@ -172,9 +168,7 @@ class ReasoningTrace:
     def set_conclusion(self, conclusion: Conclusion) -> None:
         """Set the trace conclusion."""
         self.conclusion = conclusion
-        self.total_confidence = (
-            self.mean_confidence * 0.7 + conclusion.confidence * 0.3
-        )
+        self.total_confidence = self.mean_confidence * 0.7 + conclusion.confidence * 0.3
 
     # ── Serialization ─────────────────────────────────────────────
 

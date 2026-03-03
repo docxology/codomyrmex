@@ -27,6 +27,7 @@ from codomyrmex.physical_management.object_manager import (
 # Helpers
 # ---------------------------------------------------------------------------
 
+
 def _make_obj(
     obj_id: str = "obj-1",
     name: str = "TestSensor",
@@ -92,8 +93,11 @@ class TestMaterialProperties:
 
     def test_direct_construction(self):
         mp = MaterialProperties(
-            density=7850, elasticity=200e9, thermal_conductivity=45,
-            specific_heat=500, melting_point=1811,
+            density=7850,
+            elasticity=200e9,
+            thermal_conductivity=45,
+            specific_heat=500,
+            melting_point=1811,
         )
         assert mp.density == 7850
         assert mp.friction_coefficient == 0.5  # default
@@ -134,8 +138,10 @@ class TestObjectEvent:
 
     def test_construction_with_data(self):
         evt = ObjectEvent(
-            event_type=EventType.MOVED, object_id="y",
-            data={"dx": 1}, source="test",
+            event_type=EventType.MOVED,
+            object_id="y",
+            data={"dx": 1},
+            source="test",
         )
         assert evt.data == {"dx": 1}
         assert evt.source == "test"
@@ -579,8 +585,14 @@ class TestPhysicalObjectManager:
     def test_create_object(self):
         mgr = self._fresh_manager()
         obj = mgr.create_object(
-            "t1", "Thermometer", ObjectType.SENSOR, 1.0, 2.0, 3.0,
-            material=MaterialType.GLASS, mass=0.5,
+            "t1",
+            "Thermometer",
+            ObjectType.SENSOR,
+            1.0,
+            2.0,
+            3.0,
+            material=MaterialType.GLASS,
+            mass=0.5,
         )
         assert obj.id == "t1"
         assert obj.location == (1.0, 2.0, 3.0)

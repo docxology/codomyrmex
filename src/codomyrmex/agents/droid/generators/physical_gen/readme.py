@@ -1,8 +1,9 @@
 """Generator content."""
 
+
 def generate_physical_readme_content() -> str:
     """Generate README content for the physical management module."""
-    return '''# Physical Object Management Module
+    return """# Physical Object Management Module
 
 A comprehensive physical object management, simulation, and sensor integration module for the Codomyrmex platform.
 
@@ -143,5 +144,4 @@ See [requirements.txt](requirements.txt) for dependencies.
 2. Add comprehensive tests for new features
 3. Update documentation for API changes
 4. Ensure compatibility with existing modules
-'''
-
+"""

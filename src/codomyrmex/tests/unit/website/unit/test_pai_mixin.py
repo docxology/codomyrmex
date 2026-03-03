@@ -8,6 +8,7 @@ get_pai_memory_overview, _build_pai_mermaid_graph, and get_pai_awareness_data.
 Note: _PAI_ROOT is overridden as an instance attribute on each DataProvider
 so tests are fully isolated from the real ~/.claude directory.
 """
+
 from pathlib import Path
 
 import pytest
@@ -36,9 +37,7 @@ def _seed_pai_memory(tmp_path: Path) -> Path:
     (projects / "PROJECT.yaml").write_text(
         "title: Dashboard\nstatus: active\nparent_mission: codomyrmex\n"
     )
-    (projects / "TASKS.md").write_text(
-        "# Tasks\n- [x] Phase 1\n- [ ] Phase 3\n"
-    )
+    (projects / "TASKS.md").write_text("# Tasks\n- [x] Phase 1\n- [ ] Phase 3\n")
 
     # Work sessions
     work = mem / "WORK" / "session-abc"

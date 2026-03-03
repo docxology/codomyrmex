@@ -1,4 +1,3 @@
-
 from codomyrmex.market import DemandAggregator, ReverseAuction
 
 
@@ -11,8 +10,8 @@ def test_reverse_auction_lifecycle():
 
     # Bids
     assert auction.place_bid(aid, "p1", 90.0, "desc")
-    assert auction.place_bid(aid, "p2", 80.0, "desc") # Better
-    assert not auction.place_bid(aid, "p3", 110.0, "desc") # Too high
+    assert auction.place_bid(aid, "p2", 80.0, "desc")  # Better
+    assert not auction.place_bid(aid, "p3", 110.0, "desc")  # Too high
 
     # Best bid
     best = auction.get_best_bid(aid)
@@ -21,7 +20,8 @@ def test_reverse_auction_lifecycle():
 
     # Close
     assert auction.close_auction(aid, "requester_1")
-    assert not auction.close_auction(aid, "requester_2") # Wrong owner
+    assert not auction.close_auction(aid, "requester_2")  # Wrong owner
+
 
 def test_demand_aggregation():
     """Test functionality: demand aggregation."""

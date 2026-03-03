@@ -17,7 +17,9 @@ class TestOllamaClientSession:
     def test_create_session_raises_not_implemented(self):
         """create_session raises NotImplementedError — not yet implemented."""
         client = OllamaClient()
-        with pytest.raises(NotImplementedError, match="LLM session management not implemented"):
+        with pytest.raises(
+            NotImplementedError, match="LLM session management not implemented"
+        ):
             client.create_session("sess_1")
 
     def test_session_manager_is_none_by_default(self):

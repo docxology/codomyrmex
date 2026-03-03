@@ -31,6 +31,7 @@ from typing import Any
 
 try:
     from codomyrmex.logging_monitoring import get_logger
+
     logger = get_logger(__name__)
 except ImportError:
     logging.basicConfig(level=logging.INFO)
@@ -45,6 +46,7 @@ from codomyrmex.ide.antigravity.agent_relay import (
 # =====================================================================
 # Antigravity Side
 # =====================================================================
+
 
 class LiveAgentBridge:
     """Connects Antigravity to a remote agent via file-based relay.
@@ -111,7 +113,9 @@ class LiveAgentBridge:
             daemon=True,
         )
         self._thread.start()
-        logger.info(f"LiveAgentBridge started: {self.identity} on {self.relay.channel_id}")
+        logger.info(
+            f"LiveAgentBridge started: {self.identity} on {self.relay.channel_id}"
+        )
 
     def stop(self) -> None:
         """Stop background polling."""
@@ -160,7 +164,9 @@ class LiveAgentBridge:
         """
         cursor = self.relay.get_latest_cursor()
         req = self.relay.post_tool_request(
-            self.identity, tool_name, tool_args,
+            self.identity,
+            tool_name,
+            tool_args,
         )
         return self.relay.await_response(
             req.id,
@@ -264,13 +270,17 @@ class LiveAgentBridge:
                 return
 
             from codomyrmex.ide.antigravity import AntigravityClient
+
             client = AntigravityClient()
             result = client.invoke_tool(msg.tool_name, msg.tool_args or {})
             self.relay.post_tool_result(self.identity, msg.id, str(result))
 
         except Exception as e:
             self.relay.post_tool_result(
-                self.identity, msg.id, None, error=str(e),
+                self.identity,
+                msg.id,
+                None,
+                error=str(e),
             )
 
     # ── Accessors ─────────────────────────────────────────────────
@@ -312,6 +322,7 @@ class LiveAgentBridge:
 # =====================================================================
 # Claude Code Side
 # =====================================================================
+
 
 class ClaudeCodeEndpoint:
     """Connects a Claude Code instance to the relay channel.
@@ -383,6 +394,7 @@ class ClaudeCodeEndpoint:
         """
         if self._client is None:
             from codomyrmex.agents.claude.claude_client import ClaudeClient
+
             config = {}
             if self.model:
                 config["model"] = self.model
@@ -555,7 +567,10 @@ class ClaudeCodeEndpoint:
 
         except Exception as e:
             self.relay.post_tool_result(
-                self.identity, msg.id, None, error=str(e),
+                self.identity,
+                msg.id,
+                None,
+                error=str(e),
             )
 
 

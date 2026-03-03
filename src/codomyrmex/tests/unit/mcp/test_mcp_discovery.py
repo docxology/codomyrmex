@@ -85,7 +85,9 @@ class TestMCPToolDiscovery:
                 obj = getattr(mod, name)
                 if callable(obj) and hasattr(obj, "_mcp_tool_meta"):
                     meta = obj._mcp_tool_meta
-                    assert "description" in meta, f"{mod_name}.{name} missing description"
+                    assert "description" in meta, (
+                        f"{mod_name}.{name} missing description"
+                    )
                     assert len(meta["description"]) > 10, (
                         f"{mod_name}.{name} description too short"
                     )

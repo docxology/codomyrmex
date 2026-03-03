@@ -47,7 +47,9 @@ class Authenticator:
         self._initialized = True
         logger.debug("Authenticator initialized")
 
-    def register_user(self, username: str, password: str, roles: list[str] | None = None) -> bool:
+    def register_user(
+        self, username: str, password: str, roles: list[str] | None = None
+    ) -> bool:
         """Register a new user.
 
         Args:
@@ -59,13 +61,12 @@ class Authenticator:
             True if registration was successful, False if username exists
         """
         if username in self._users:
-            logger.warning("User registration failed: username '%s' already exists", username)
+            logger.warning(
+                "User registration failed: username '%s' already exists", username
+            )
             return False
 
-        self._users[username] = {
-            "password": password,
-            "roles": roles or ["default"]
-        }
+        self._users[username] = {"password": password, "roles": roles or ["default"]}
 
         # Register user in RBAC
         for role in roles or ["default"]:
@@ -92,10 +93,12 @@ class Authenticator:
                 api_key_str = credentials["api_key"]
                 api_key_info = self.api_key_manager.validate(api_key_str)
                 if api_key_info:
-                    logger.info("Authenticated via API key for user: %s", api_key_info.user_id)
+                    logger.info(
+                        "Authenticated via API key for user: %s", api_key_info.user_id
+                    )
                     return self.token_manager.create_token(
                         user_id=api_key_info.user_id,
-                        permissions=api_key_info.permissions
+                        permissions=api_key_info.permissions,
                     )
 
             # 2. Check for username/password authentication
@@ -104,11 +107,12 @@ class Authenticator:
                 password = credentials["password"]
                 if self._validate_password(username, password):
                     # Get user's effective permissions from RBAC
-                    user_permissions = list(self.permissions.get_user_permissions(username))
+                    user_permissions = list(
+                        self.permissions.get_user_permissions(username)
+                    )
                     logger.info("Authenticated via password for user: %s", username)
                     return self.token_manager.create_token(
-                        user_id=username,
-                        permissions=user_permissions
+                        user_id=username, permissions=user_permissions
                     )
 
             logger.warning("Authentication failed: invalid credentials")
@@ -161,8 +165,12 @@ class Authenticator:
         if self.permissions.check(user_id, permission, resource):
             return True
 
-        logger.warning("Authorization failed for user '%s' on resource '%s' with permission '%s'",
-                       user_id, resource, permission)
+        logger.warning(
+            "Authorization failed for user '%s' on resource '%s' with permission '%s'",
+            user_id,
+            resource,
+            permission,
+        )
         return False
 
     def refresh_token(self, token: Token) -> Token | None:

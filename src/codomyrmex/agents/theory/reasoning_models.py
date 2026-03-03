@@ -281,5 +281,3 @@ class HybridReasoningModel(ReasoningModel):
         neural_explanation = self.neural.explain(result.get("neural", {}))
 
         return f"Symbolic Reasoning:\n{symbolic_explanation}\n\nNeural Reasoning:\n{neural_explanation}"
-
-

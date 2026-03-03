@@ -15,6 +15,7 @@ logger = get_logger(__name__)
 
 class PluginType(Enum):
     """Types of plugins."""
+
     ANALYZER = "analyzer"
     FORMATTER = "formatter"
     EXPORTER = "exporter"
@@ -28,6 +29,7 @@ class PluginType(Enum):
 
 class PluginState(Enum):
     """Lifecycle state of a plugin."""
+
     UNKNOWN = "unknown"
     REGISTERED = "registered"
     LOADED = "loaded"
@@ -43,6 +45,7 @@ class PluginState(Enum):
 @dataclass
 class PluginInfo:
     """Plugin metadata."""
+
     name: str = ""
     version: str = "0.0.0"
     description: str = ""
@@ -63,19 +66,24 @@ class PluginInfo:
             "version": self.version,
             "description": self.description,
             "author": self.author,
-            "plugin_type": self.plugin_type.value if hasattr(self.plugin_type, 'value') else str(self.plugin_type),
+            "plugin_type": (
+                self.plugin_type.value
+                if hasattr(self.plugin_type, "value")
+                else str(self.plugin_type)
+            ),
             "entry_point": self.entry_point,
             "dependencies": self.dependencies,
             "enabled": self.enabled,
             "tags": self.tags,
             "config_schema": self.config_schema,
             "homepage": self.homepage,
-            "license": self.license
+            "license": self.license,
         }
 
 
 class Hook:
     """Represents a plugin hook."""
+
     def __init__(self, name: str, description: str = ""):
         self.name = name
         self.description = description
@@ -104,11 +112,13 @@ class Plugin:
         if isinstance(info, PluginInfo):
             self._info = info
         elif info is not None:
-             self._info = PluginInfo(name=getattr(info, 'name', 'unnamed'),
-                                     version=getattr(info, 'version', '0.0.0'),
-                                     description=getattr(info, 'description', ''))
+            self._info = PluginInfo(
+                name=getattr(info, "name", "unnamed"),
+                version=getattr(info, "version", "0.0.0"),
+                description=getattr(info, "description", ""),
+            )
         else:
-             self._info = PluginInfo()
+            self._info = PluginInfo()
 
         self.state = PluginState.UNLOADED
         self.config: dict[str, Any] = {}
@@ -167,8 +177,9 @@ class PluginRegistry:
         self.categories: dict[str, list[str]] = {}
         self.capabilities: dict[str, list[str]] = {}
 
-
-    def register_global_hook(self, name: str, signature: Callable | None = None, description: str = "") -> Hook:
+    def register_global_hook(
+        self, name: str, signature: Callable | None = None, description: str = ""
+    ) -> Hook:
         """Register a global entry point for hooks."""
         if name not in self._global_hooks:
             self._global_hooks[name] = Hook(name, description)
@@ -179,7 +190,6 @@ class PluginRegistry:
         if name in self._global_hooks:
             return self._global_hooks[name].emit(*args, **kwargs)
         return []
-
 
     def register(self, plugin: Plugin) -> bool:
         """Register a plugin."""
@@ -192,7 +202,11 @@ class PluginRegistry:
         self._plugin_info[info.name] = info
 
         # Update categories
-        cat_key = info.plugin_type.value if hasattr(info.plugin_type, 'value') else str(info.plugin_type)
+        cat_key = (
+            info.plugin_type.value
+            if hasattr(info.plugin_type, "value")
+            else str(info.plugin_type)
+        )
         if cat_key not in self.categories:
             self.categories[cat_key] = []
         if info.name not in self.categories[cat_key]:
@@ -210,7 +224,11 @@ class PluginRegistry:
         plugin.shutdown()
 
         info = self._plugin_info[name]
-        cat_key = info.plugin_type.value if hasattr(info.plugin_type, 'value') else str(info.plugin_type)
+        cat_key = (
+            info.plugin_type.value
+            if hasattr(info.plugin_type, "value")
+            else str(info.plugin_type)
+        )
         if cat_key in self.categories and name in self.categories[cat_key]:
             self.categories[cat_key].remove(name)
 
@@ -272,12 +290,14 @@ class PluginRegistry:
 # Global registry instance
 _registry: PluginRegistry | None = None
 
+
 def get_registry() -> PluginRegistry:
     """Get the global plugin registry."""
     global _registry
     if _registry is None:
         _registry = PluginRegistry()
     return _registry
+
 
 def create_plugin_info(**kwargs) -> PluginInfo:
     """Helper to create PluginInfo."""

@@ -19,11 +19,13 @@ class TestCacheModuleImport:
     def test_cache_module_import(self):
         """Test that cache module can be imported."""
         from codomyrmex import cache
+
         assert cache is not None
 
     def test_cache_module_exports(self):
         """Test cache module exports key components."""
         from codomyrmex import cache
+
         assert hasattr(cache, "Cache")
         assert hasattr(cache, "CacheManager")
         assert hasattr(cache, "CacheStats")
@@ -57,7 +59,9 @@ class TestCacheStats:
 
     def test_cache_stats_initialization(self):
         """Test CacheStats with initial values."""
-        stats = CacheStats(hits=10, misses=5, total_requests=15, size=100, max_size=1000)
+        stats = CacheStats(
+            hits=10, misses=5, total_requests=15, size=100, max_size=1000
+        )
 
         assert stats.hits == 10
         assert stats.misses == 5

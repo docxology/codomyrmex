@@ -32,6 +32,7 @@ from codomyrmex.orchestrator.resilience.self_healing import (
 
 class TestClassifyError:
     """Test suite for ClassifyError."""
+
     def test_config_error(self) -> None:
         """Test functionality: config error."""
         result = classify_error("Invalid config value for model")
@@ -86,6 +87,7 @@ class TestClassifyError:
 
 class TestDiagnoser:
     """Test suite for Diagnoser."""
+
     def test_diagnose_config_error(self) -> None:
         """Test functionality: diagnose config error."""
         diag = Diagnoser()
@@ -121,6 +123,7 @@ class TestDiagnoser:
 
 class TestRetryEngine:
     """Test suite for RetryEngine."""
+
     def test_immediate_success(self) -> None:
         """Test functionality: immediate success."""
         engine = RetryEngine(max_retries=3, base_delay=0.001)
@@ -132,6 +135,7 @@ class TestRetryEngine:
     def test_retry_then_success(self) -> None:
         """Test functionality: retry then success."""
         call_count = {"n": 0}
+
         def flaky():
             call_count["n"] += 1
             if call_count["n"] < 3:
@@ -163,6 +167,7 @@ class TestRetryEngine:
 
 class TestCircuitBreaker:
     """Test suite for CircuitBreaker."""
+
     def test_allow_when_closed(self) -> None:
         """Test functionality: allow when closed."""
         cb = CircuitBreaker(failure_threshold=3)
@@ -188,6 +193,7 @@ class TestCircuitBreaker:
         cb.record_failure("a1")
         assert cb.allow("a1") is False
         import time
+
         time.sleep(0.02)
         assert cb.allow("a1") is True
         health = cb.get_health("a1")
@@ -201,6 +207,7 @@ class TestCircuitBreaker:
         cb.record_failure("a1")
         cb.record_failure("a1")
         import time
+
         time.sleep(0.02)
         cb.allow("a1")  # Transitions to HALF_OPEN
         cb.record_success("a1")
@@ -233,6 +240,7 @@ class TestCircuitBreaker:
 
 class TestHealingEvent:
     """Test suite for HealingEvent."""
+
     def test_auto_id(self) -> None:
         """Test functionality: auto id."""
         e = HealingEvent(error_category="timeout")
@@ -248,6 +256,7 @@ class TestHealingEvent:
 
 class TestHealingLog:
     """Test suite for HealingLog."""
+
     def test_record_and_size(self) -> None:
         """Test functionality: record and size."""
         log = HealingLog()

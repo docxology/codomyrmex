@@ -26,6 +26,7 @@ from codomyrmex.physical_management.analytics import (
 # Helpers
 # ---------------------------------------------------------------------------
 
+
 def _make_points(
     values: list[float],
     source_id: str = "sensor-0",
@@ -126,9 +127,7 @@ class TestAnalyticsWindowMetrics:
         self, values: list[float], duration: float = 60.0
     ) -> AnalyticsWindow:
         now = time.time()
-        w = AnalyticsWindow(
-            start_time=now, end_time=now + duration, duration=duration
-        )
+        w = AnalyticsWindow(start_time=now, end_time=now + duration, duration=duration)
         for v in values:
             w.add_point(DataPoint(timestamp=now, value=v, source_id="s"))
         return w
@@ -164,7 +163,9 @@ class TestAnalyticsWindowMetrics:
         ],
         ids=["sequential", "all-same", "negative-to-positive", "small-floats"],
     )
-    def test_parametrized_aggregations(self, values, expected_mean, expected_min, expected_max):
+    def test_parametrized_aggregations(
+        self, values, expected_mean, expected_min, expected_max
+    ):
         w = self._make_window(values)
         m = w.calculate_metrics()
         assert abs(m[AnalyticsMetric.MEAN] - expected_mean) < 1e-9
@@ -201,9 +202,7 @@ class TestAnalyticsWindowMetrics:
 
     def test_add_point_outside_window_ignored(self):
         now = time.time()
-        w = AnalyticsWindow(
-            start_time=now, end_time=now + 60, duration=60
-        )
+        w = AnalyticsWindow(start_time=now, end_time=now + 60, duration=60)
         # Point before window start
         w.add_point(DataPoint(timestamp=now - 10, value=99.0, source_id="s"))
         # Point after window end
@@ -525,9 +524,7 @@ class TestPredictiveAnalyticsLinearTrend:
         too_few = _make_points([1.0] * (min_pts - 1), base_time=0.0)
         # Use distinct linearly-increasing values and small base_time to
         # avoid floating-point precision loss with large time.time() timestamps.
-        enough = _make_points(
-            [float(i) for i in range(min_pts)], base_time=0.0
-        )
+        enough = _make_points([float(i) for i in range(min_pts)], base_time=0.0)
         assert pa.predict_linear_trend(too_few, 1.0) is None
         result = pa.predict_linear_trend(enough, 1.0)
         assert result is not None

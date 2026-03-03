@@ -27,7 +27,9 @@ class TestServerManager:
         def health_check():
             return {"status": "ok"}
 
-    def add_route(self, path: str, endpoint: Callable, methods: list[str] | None = None):
+    def add_route(
+        self, path: str, endpoint: Callable, methods: list[str] | None = None
+    ):
         """Add a route to the FastAPI application."""
         if methods is None:
             methods = ["GET"]
@@ -65,7 +67,9 @@ class TestServerManager:
         # Wait for the server to actually start accepting requests
         started = self._startup_event.wait(timeout=5.0)
         if not started:
-            raise RuntimeError("Failed to start integration test server within timeout.")
+            raise RuntimeError(
+                "Failed to start integration test server within timeout."
+            )
 
     def stop(self):
         """Stop the background server."""

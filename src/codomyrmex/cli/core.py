@@ -65,6 +65,7 @@ class Cli:
             from codomyrmex.performance.monitoring.performance_monitor import (
                 PerformanceMonitor,
             )
+
             monitor = PerformanceMonitor()
             logger.info("Performance monitoring enabled")
             codomyrmex.performance._performance_monitor = monitor
@@ -90,7 +91,12 @@ class Cli:
         import subprocess
         from pathlib import Path
 
-        script = Path(__file__).resolve().parent.parent.parent.parent / "scripts" / "website" / "launch_dashboard.py"
+        script = (
+            Path(__file__).resolve().parent.parent.parent.parent
+            / "scripts"
+            / "website"
+            / "launch_dashboard.py"
+        )
         if not script.exists():
             print(f"❌ Dashboard script not found: {script}")
             return 1
@@ -109,9 +115,19 @@ class Cli:
         """Launch the interactive codomyrmex> REPL shell"""
         return run_interactive_shell()
 
-    def doctor(self, pai=False, mcp=False, rasp=False, workflows=False, imports=False, all_checks=False, output_json=False):
+    def doctor(
+        self,
+        pai=False,
+        mcp=False,
+        rasp=False,
+        workflows=False,
+        imports=False,
+        all_checks=False,
+        output_json=False,
+    ):
         """Run self-diagnostics on the Codomyrmex ecosystem"""
         from .doctor import run_doctor
+
         return run_doctor(
             pai=pai,
             mcp=mcp,
@@ -163,7 +179,13 @@ class Cli:
             """List all projects"""
             return handle_project_list()
 
-        def create(self, name: str, template: str = "ai_analysis", description: str = "", path: str = ""):
+        def create(
+            self,
+            name: str,
+            template: str = "ai_analysis",
+            description: str = "",
+            path: str = "",
+        ):
             """Create a new project"""
             kwargs = {}
             if description:
@@ -186,7 +208,9 @@ class Cli:
     class ai:
         """AI-powered operations"""
 
-        def generate(self, prompt: str, language: str = "python", provider: str = "openai"):
+        def generate(
+            self, prompt: str, language: str = "python", provider: str = "openai"
+        ):
             """Generate code from a prompt"""
             return handle_ai_generate(prompt, language, provider)
 
@@ -215,7 +239,9 @@ class Cli:
     class fpf:
         """First Principles Framework operations"""
 
-        def fetch(self, repo: str = "ailev/FPF", branch: str = "main", output: str = ""):
+        def fetch(
+            self, repo: str = "ailev/FPF", branch: str = "main", output: str = ""
+        ):
             """Fetch the FPF repository"""
             return handle_fpf_fetch(repo, branch, output or None)
 
@@ -236,17 +262,36 @@ class Cli:
                 filters["part"] = part
             return handle_fpf_search(query, file or None, filters)
 
-        def visualize(self, file: str, output: str, type: str = "hierarchy", format: str = "json", layout: str = "hierarchical", chart_type: str = "bar"):
+        def visualize(
+            self,
+            file: str,
+            output: str,
+            type: str = "hierarchy",
+            format: str = "json",
+            layout: str = "hierarchical",
+            chart_type: str = "bar",
+        ):
             """Visualize an FPF file"""
             return handle_fpf_visualize(file, type, output, format, layout, chart_type)
 
-        def context(self, file: str, output: str = "", pattern: str = "", depth: int = 1):
+        def context(
+            self, file: str, output: str = "", pattern: str = "", depth: int = 1
+        ):
             """Show context for an FPF file"""
             return handle_fpf_context(file, pattern or None, output or None, depth)
 
-        def export_section(self, file: str, output: str, part: str = "", pattern: str = "", include_dependencies: bool = False):
+        def export_section(
+            self,
+            file: str,
+            output: str,
+            part: str = "",
+            pattern: str = "",
+            include_dependencies: bool = False,
+        ):
             """Export a section of an FPF file"""
-            return handle_fpf_export_section(file, part or None, pattern or None, output, include_dependencies)
+            return handle_fpf_export_section(
+                file, part or None, pattern or None, output, include_dependencies
+            )
 
         def analyze(self, file: str, output: str = ""):
             """Analyze an FPF file"""
@@ -287,7 +332,9 @@ class Cli:
         """Quick run script, module, or directory"""
         if args is None:
             args = []
-        return handle_quick_run(target, args=args, timeout=timeout, parallel=parallel, verbose=verbose)
+        return handle_quick_run(
+            target, args=args, timeout=timeout, parallel=parallel, verbose=verbose
+        )
 
     def pipe(self, commands, continue_on_error=False):
         """Pipe commands together sequentially"""
@@ -295,11 +342,15 @@ class Cli:
 
     def batch(self, targets, workers=4, timeout=60, verbose=False):
         """Run multiple targets in parallel"""
-        return handle_quick_batch(targets, workers=workers, timeout=timeout, verbose=verbose)
+        return handle_quick_batch(
+            targets, workers=workers, timeout=timeout, verbose=verbose
+        )
 
     def chain(self, scripts, timeout=60, continue_on_error=False):
         """Chain scripts sequentially with result passing"""
-        return handle_quick_chain(scripts, timeout=timeout, continue_on_error=continue_on_error)
+        return handle_quick_chain(
+            scripts, timeout=timeout, continue_on_error=continue_on_error
+        )
 
     def exec(self, definition, params=None, verbose=False):
         """Execute workflow from definition file"""
@@ -317,9 +368,10 @@ def main():
         print(f"💥 An unexpected error occurred: {e}", file=sys.stderr)
         if "--verbose" in sys.argv:
             import traceback
+
             traceback.print_exc()
         sys.exit(1)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

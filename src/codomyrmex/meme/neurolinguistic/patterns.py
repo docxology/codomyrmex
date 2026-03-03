@@ -12,19 +12,19 @@ def milton_model_patterns() -> list[LinguisticPattern]:
             name="Mind Read",
             pattern_type=PatternType.HYPNOTIC,
             template="You may fit a pattern like...",
-            description="Claiming to know the internal state of another."
+            description="Claiming to know the internal state of another.",
         ),
         LinguisticPattern(
             name="Lost Performative",
             pattern_type=PatternType.HYPNOTIC,
             template="It is known that...",
-            description="Value judgment where the performer is omitted."
+            description="Value judgment where the performer is omitted.",
         ),
         LinguisticPattern(
             name="Cause-Effect",
             pattern_type=PatternType.HYPNOTIC,
             template="Reading this makes you relax...",
-            description="Implied causality between unrelated events."
+            description="Implied causality between unrelated events.",
         ),
     ]
 
@@ -36,13 +36,13 @@ def meta_model_patterns() -> list[LinguisticPattern]:
             name="Universal Quantifier Challenge",
             pattern_type=PatternType.CLARIFYING,
             template="Always? Never? Every time?",
-            description="Challenging absolutes like 'always' or 'never'."
+            description="Challenging absolutes like 'always' or 'never'.",
         ),
         LinguisticPattern(
             name="Specify Verb",
             pattern_type=PatternType.CLARIFYING,
             template="How specifically did X happen?",
-            description="Asking for specific details of an action."
+            description="Asking for specific details of an action.",
         ),
     ]
 
@@ -59,7 +59,7 @@ def detect_patterns(text: str) -> list[LinguisticPattern]:
             LinguisticPattern(
                 name="Universal Quantifier",
                 pattern_type=PatternType.DECEPTIVE,
-                description="Use of absolutes."
+                description="Use of absolutes.",
             )
         )
     return detected

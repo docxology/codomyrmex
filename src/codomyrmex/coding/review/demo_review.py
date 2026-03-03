@@ -28,7 +28,7 @@ def main():
     print("=" * 60)
 
     reviewer = CodeReviewer()
-    reviewer.config['pyscn']['enabled'] = True
+    reviewer.config["pyscn"]["enabled"] = True
 
     print("CodeReviewer initialized with pyscn integration")
 
@@ -46,10 +46,9 @@ def main():
     print("\nSTEP 2: Quality Gate Assessment")
     print("-" * 50)
 
-    quality_result = reviewer.check_quality_gates({
-        "max_complexity": 15,
-        "max_issues_per_file": 50
-    })
+    quality_result = reviewer.check_quality_gates(
+        {"max_complexity": 15, "max_issues_per_file": 50}
+    )
 
     print(f"Quality Gates: {'PASSED' if quality_result.passed else 'FAILED'}")
     print(f"   Total checks: {quality_result.total_checks}")
@@ -65,7 +64,9 @@ def main():
     print(f"Found {len(complexity_suggestions)} complexity issues requiring attention")
 
     for i, suggestion in enumerate(complexity_suggestions[:3], 1):  # Show top 3
-        print(f"\n   {i}. {suggestion.function_name} ({suggestion.current_complexity} complexity)")
+        print(
+            f"\n   {i}. {suggestion.function_name} ({suggestion.current_complexity} complexity)"
+        )
         print(f"      File: {os.path.basename(suggestion.file_path)}")
         print(f"      Refactoring: {suggestion.suggested_refactoring}")
         print(f"      Effort: {suggestion.estimated_effort}")
@@ -97,7 +98,9 @@ def main():
 
     print(f"Found {len(architecture_violations)} architecture violations")
 
-    high_severity_violations = [v for v in architecture_violations if v.severity == "high"]
+    high_severity_violations = [
+        v for v in architecture_violations if v.severity == "high"
+    ]
     print(f"High-severity violations: {len(high_severity_violations)}")
 
     for violation in architecture_violations[:3]:  # Show first 3
@@ -117,7 +120,7 @@ def main():
     print(f"Architecture Improvements: {len(plan['architecture_improvements'])}")
 
     print("\nExpected Benefits:")
-    for benefit in plan['expected_benefits']:
+    for benefit in plan["expected_benefits"]:
         print(f"   {benefit}")
 
     # 7. Performance optimization suggestions
@@ -132,7 +135,7 @@ def main():
     print(f"Caching opportunities: {len(optimizations['caching_opportunities'])}")
 
     print("\nSample Memory Optimizations:")
-    for opt in optimizations['memory_optimizations'][:2]:
+    for opt in optimizations["memory_optimizations"][:2]:
         print(f"   {opt}")
 
     # 8. Generate comprehensive report

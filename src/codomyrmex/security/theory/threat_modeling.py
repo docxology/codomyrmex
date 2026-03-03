@@ -13,6 +13,7 @@ logger = get_logger(__name__)
 
 class ThreatSeverity(Enum):
     """Threat severity levels."""
+
     LOW = "low"
     MEDIUM = "medium"
     HIGH = "high"
@@ -21,6 +22,7 @@ class ThreatSeverity(Enum):
 
 class ThreatCategory(Enum):
     """Categories of threats."""
+
     AUTHENTICATION = "authentication"
     AUTHORIZATION = "authorization"
     DATA_EXPOSURE = "data_exposure"
@@ -119,10 +121,14 @@ class ThreatModelBuilder:
             constraints=constraints,
         )
 
-        logger.info(f"Created threat model for {system_name} with {len(threats)} threats")
+        logger.info(
+            f"Created threat model for {system_name} with {len(threats)} threats"
+        )
         return model
 
-    def _identify_threats(self, assets: list[str], attack_surface: list[str]) -> list[Threat]:
+    def _identify_threats(
+        self, assets: list[str], attack_surface: list[str]
+    ) -> list[Threat]:
         """
         Identify threats based on assets and attack surface.
 
@@ -144,124 +150,201 @@ class ThreatModelBuilder:
 
         return threats
 
-    def _identify_stride_threats(self, assets: list[str], attack_surface: list[str]) -> list[Threat]:
+    def _identify_stride_threats(
+        self, assets: list[str], attack_surface: list[str]
+    ) -> list[Threat]:
         """Identify threats using STRIDE methodology."""
         threats = []
 
         # Spoofing threats
-        if any("authentication" in surface.lower() or "login" in surface.lower() for surface in attack_surface):
-            threats.append(Threat(
-                threat_id=f"threat_{uuid.uuid4().hex[:8]}",
-                threat_type="Spoofing",
-                description="Unauthorized user may spoof identity to gain access",
-                severity=ThreatSeverity.HIGH.value,
-                mitigation="Implement strong authentication mechanisms (MFA, certificates)",
-                category=ThreatCategory.AUTHENTICATION.value,
-                likelihood="medium",
-                impact="high",
-                affected_assets=[a for a in assets if "user" in a.lower() or "account" in a.lower()],
-                attack_vectors=["Credential theft", "Session hijacking", "Identity impersonation"],
-                detection_methods=["Authentication logs", "Failed login monitoring", "Anomaly detection"]
-            ))
+        if any(
+            "authentication" in surface.lower() or "login" in surface.lower()
+            for surface in attack_surface
+        ):
+            threats.append(
+                Threat(
+                    threat_id=f"threat_{uuid.uuid4().hex[:8]}",
+                    threat_type="Spoofing",
+                    description="Unauthorized user may spoof identity to gain access",
+                    severity=ThreatSeverity.HIGH.value,
+                    mitigation="Implement strong authentication mechanisms (MFA, certificates)",
+                    category=ThreatCategory.AUTHENTICATION.value,
+                    likelihood="medium",
+                    impact="high",
+                    affected_assets=[
+                        a
+                        for a in assets
+                        if "user" in a.lower() or "account" in a.lower()
+                    ],
+                    attack_vectors=[
+                        "Credential theft",
+                        "Session hijacking",
+                        "Identity impersonation",
+                    ],
+                    detection_methods=[
+                        "Authentication logs",
+                        "Failed login monitoring",
+                        "Anomaly detection",
+                    ],
+                )
+            )
 
         # Tampering threats
-        if any("data" in asset.lower() or "storage" in asset.lower() for asset in assets):
-            threats.append(Threat(
-                threat_id=f"threat_{uuid.uuid4().hex[:8]}",
-                threat_type="Tampering",
-                description="Data may be modified by unauthorized parties",
-                severity=ThreatSeverity.HIGH.value,
-                mitigation="Implement data integrity controls (checksums, digital signatures, access controls)",
-                category=ThreatCategory.DATA_EXPOSURE.value,
-                likelihood="medium",
-                impact="high",
-                affected_assets=[a for a in assets if "data" in a.lower()],
-                attack_vectors=["Unauthorized access", "Man-in-the-middle", "Malicious insiders"],
-                detection_methods=["Integrity checks", "Change monitoring", "Audit logs"]
-            ))
+        if any(
+            "data" in asset.lower() or "storage" in asset.lower() for asset in assets
+        ):
+            threats.append(
+                Threat(
+                    threat_id=f"threat_{uuid.uuid4().hex[:8]}",
+                    threat_type="Tampering",
+                    description="Data may be modified by unauthorized parties",
+                    severity=ThreatSeverity.HIGH.value,
+                    mitigation="Implement data integrity controls (checksums, digital signatures, access controls)",
+                    category=ThreatCategory.DATA_EXPOSURE.value,
+                    likelihood="medium",
+                    impact="high",
+                    affected_assets=[a for a in assets if "data" in a.lower()],
+                    attack_vectors=[
+                        "Unauthorized access",
+                        "Man-in-the-middle",
+                        "Malicious insiders",
+                    ],
+                    detection_methods=[
+                        "Integrity checks",
+                        "Change monitoring",
+                        "Audit logs",
+                    ],
+                )
+            )
 
         # Repudiation threats
-        threats.append(Threat(
-            threat_id=f"threat_{uuid.uuid4().hex[:8]}",
-            threat_type="Repudiation",
-            description="Users may deny performing actions",
-            severity=ThreatSeverity.MEDIUM.value,
-            mitigation="Implement comprehensive logging and audit trails",
-            category=ThreatCategory.LOGGING.value,
-            likelihood="low",
-            impact="medium",
-            affected_assets=assets,
-            attack_vectors=["Lack of logging", "Insufficient audit trails"],
-            detection_methods=["Audit log review", "Transaction monitoring"]
-        ))
+        threats.append(
+            Threat(
+                threat_id=f"threat_{uuid.uuid4().hex[:8]}",
+                threat_type="Repudiation",
+                description="Users may deny performing actions",
+                severity=ThreatSeverity.MEDIUM.value,
+                mitigation="Implement comprehensive logging and audit trails",
+                category=ThreatCategory.LOGGING.value,
+                likelihood="low",
+                impact="medium",
+                affected_assets=assets,
+                attack_vectors=["Lack of logging", "Insufficient audit trails"],
+                detection_methods=["Audit log review", "Transaction monitoring"],
+            )
+        )
 
         # Information Disclosure
-        if any("sensitive" in asset.lower() or "confidential" in asset.lower() for asset in assets):
-            threats.append(Threat(
-                threat_id=f"threat_{uuid.uuid4().hex[:8]}",
-                threat_type="Information Disclosure",
-                description="Sensitive information may be exposed",
-                severity=ThreatSeverity.CRITICAL.value,
-                mitigation="Encrypt sensitive data at rest and in transit, implement access controls",
-                category=ThreatCategory.DATA_EXPOSURE.value,
-                likelihood="medium",
-                impact="critical",
-                affected_assets=[a for a in assets if "sensitive" in a.lower() or "confidential" in a.lower()],
-                attack_vectors=["Unauthorized access", "Data breaches", "Insufficient encryption"],
-                detection_methods=["Access monitoring", "Data loss prevention", "Anomaly detection"]
-            ))
+        if any(
+            "sensitive" in asset.lower() or "confidential" in asset.lower()
+            for asset in assets
+        ):
+            threats.append(
+                Threat(
+                    threat_id=f"threat_{uuid.uuid4().hex[:8]}",
+                    threat_type="Information Disclosure",
+                    description="Sensitive information may be exposed",
+                    severity=ThreatSeverity.CRITICAL.value,
+                    mitigation="Encrypt sensitive data at rest and in transit, implement access controls",
+                    category=ThreatCategory.DATA_EXPOSURE.value,
+                    likelihood="medium",
+                    impact="critical",
+                    affected_assets=[
+                        a
+                        for a in assets
+                        if "sensitive" in a.lower() or "confidential" in a.lower()
+                    ],
+                    attack_vectors=[
+                        "Unauthorized access",
+                        "Data breaches",
+                        "Insufficient encryption",
+                    ],
+                    detection_methods=[
+                        "Access monitoring",
+                        "Data loss prevention",
+                        "Anomaly detection",
+                    ],
+                )
+            )
 
         # Denial of Service
-        if any("service" in surface.lower() or "api" in surface.lower() for surface in attack_surface):
-            threats.append(Threat(
-                threat_id=f"threat_{uuid.uuid4().hex[:8]}",
-                threat_type="Denial of Service",
-                description="Services may be unavailable due to attacks",
-                severity=ThreatSeverity.HIGH.value,
-                mitigation="Implement rate limiting, resource quotas, and DDoS protection",
-                category=ThreatCategory.NETWORK.value,
-                likelihood="medium",
-                impact="high",
-                affected_assets=[a for a in assets if "service" in a.lower()],
-                attack_vectors=["DDoS attacks", "Resource exhaustion", "Network flooding"],
-                detection_methods=["Traffic monitoring", "Resource usage alerts", "Availability monitoring"]
-            ))
+        if any(
+            "service" in surface.lower() or "api" in surface.lower()
+            for surface in attack_surface
+        ):
+            threats.append(
+                Threat(
+                    threat_id=f"threat_{uuid.uuid4().hex[:8]}",
+                    threat_type="Denial of Service",
+                    description="Services may be unavailable due to attacks",
+                    severity=ThreatSeverity.HIGH.value,
+                    mitigation="Implement rate limiting, resource quotas, and DDoS protection",
+                    category=ThreatCategory.NETWORK.value,
+                    likelihood="medium",
+                    impact="high",
+                    affected_assets=[a for a in assets if "service" in a.lower()],
+                    attack_vectors=[
+                        "DDoS attacks",
+                        "Resource exhaustion",
+                        "Network flooding",
+                    ],
+                    detection_methods=[
+                        "Traffic monitoring",
+                        "Resource usage alerts",
+                        "Availability monitoring",
+                    ],
+                )
+            )
 
         # Elevation of Privilege
-        threats.append(Threat(
-            threat_id=f"threat_{uuid.uuid4().hex[:8]}",
-            threat_type="Elevation of Privilege",
-            description="Unauthorized users may gain elevated privileges",
-            severity=ThreatSeverity.CRITICAL.value,
-            mitigation="Implement least privilege access controls and privilege separation",
-            category=ThreatCategory.AUTHORIZATION.value,
-            likelihood="low",
-            impact="critical",
-            affected_assets=assets,
-            attack_vectors=["Privilege escalation exploits", "Configuration errors", "Insufficient access controls"],
-            detection_methods=["Privilege change monitoring", "Access control audits", "Anomaly detection"]
-        ))
+        threats.append(
+            Threat(
+                threat_id=f"threat_{uuid.uuid4().hex[:8]}",
+                threat_type="Elevation of Privilege",
+                description="Unauthorized users may gain elevated privileges",
+                severity=ThreatSeverity.CRITICAL.value,
+                mitigation="Implement least privilege access controls and privilege separation",
+                category=ThreatCategory.AUTHORIZATION.value,
+                likelihood="low",
+                impact="critical",
+                affected_assets=assets,
+                attack_vectors=[
+                    "Privilege escalation exploits",
+                    "Configuration errors",
+                    "Insufficient access controls",
+                ],
+                detection_methods=[
+                    "Privilege change monitoring",
+                    "Access control audits",
+                    "Anomaly detection",
+                ],
+            )
+        )
 
         return threats
 
-    def _identify_generic_threats(self, assets: list[str], attack_surface: list[str]) -> list[Threat]:
+    def _identify_generic_threats(
+        self, assets: list[str], attack_surface: list[str]
+    ) -> list[Threat]:
         """Identify generic threats when methodology is not STRIDE."""
         threats = []
 
         # Generic threat: Unauthorized access
-        threats.append(Threat(
-            threat_id=f"threat_{uuid.uuid4().hex[:8]}",
-            threat_type="Unauthorized Access",
-            description="Unauthorized parties may gain access to system resources",
-            severity=ThreatSeverity.HIGH.value,
-            mitigation="Implement strong authentication and authorization controls",
-            category=ThreatCategory.AUTHORIZATION.value,
-            likelihood="medium",
-            impact="high",
-            affected_assets=assets,
-            attack_vectors=["Weak authentication", "Insufficient authorization"],
-            detection_methods=["Access logs", "Failed authentication monitoring"]
-        ))
+        threats.append(
+            Threat(
+                threat_id=f"threat_{uuid.uuid4().hex[:8]}",
+                threat_type="Unauthorized Access",
+                description="Unauthorized parties may gain access to system resources",
+                severity=ThreatSeverity.HIGH.value,
+                mitigation="Implement strong authentication and authorization controls",
+                category=ThreatCategory.AUTHORIZATION.value,
+                likelihood="medium",
+                impact="high",
+                affected_assets=assets,
+                attack_vectors=["Weak authentication", "Insufficient authorization"],
+                detection_methods=["Access logs", "Failed authentication monitoring"],
+            )
+        )
 
         return threats
 
@@ -302,10 +385,18 @@ def analyze_threats(threat_model: ThreatModel) -> dict[str, Any]:
         Analysis results with threat counts and details
     """
     total_threats = len(threat_model.threats)
-    critical_count = sum(1 for t in threat_model.threats if t.severity == ThreatSeverity.CRITICAL.value)
-    high_count = sum(1 for t in threat_model.threats if t.severity == ThreatSeverity.HIGH.value)
-    medium_count = sum(1 for t in threat_model.threats if t.severity == ThreatSeverity.MEDIUM.value)
-    low_count = sum(1 for t in threat_model.threats if t.severity == ThreatSeverity.LOW.value)
+    critical_count = sum(
+        1 for t in threat_model.threats if t.severity == ThreatSeverity.CRITICAL.value
+    )
+    high_count = sum(
+        1 for t in threat_model.threats if t.severity == ThreatSeverity.HIGH.value
+    )
+    medium_count = sum(
+        1 for t in threat_model.threats if t.severity == ThreatSeverity.MEDIUM.value
+    )
+    low_count = sum(
+        1 for t in threat_model.threats if t.severity == ThreatSeverity.LOW.value
+    )
 
     # Group by category
     threats_by_category = {}
@@ -313,25 +404,34 @@ def analyze_threats(threat_model: ThreatModel) -> dict[str, Any]:
         category = threat.category
         if category not in threats_by_category:
             threats_by_category[category] = []
-        threats_by_category[category].append({
-            "threat_id": threat.threat_id,
-            "threat_type": threat.threat_type,
-            "severity": threat.severity,
-            "description": threat.description
-        })
+        threats_by_category[category].append(
+            {
+                "threat_id": threat.threat_id,
+                "threat_type": threat.threat_type,
+                "severity": threat.severity,
+                "description": threat.description,
+            }
+        )
 
     # Calculate risk scores
     risk_scores = []
     for threat in threat_model.threats:
         from .risk_assessment import calculate_risk_score
-        risk_score = calculate_risk_score(threat.likelihood, threat.impact)
-        risk_scores.append({
-            "threat_id": threat.threat_id,
-            "risk_score": risk_score,
-            "severity": threat.severity
-        })
 
-    avg_risk_score = sum(r["risk_score"] for r in risk_scores) / len(risk_scores) if risk_scores else 0.0
+        risk_score = calculate_risk_score(threat.likelihood, threat.impact)
+        risk_scores.append(
+            {
+                "threat_id": threat.threat_id,
+                "risk_score": risk_score,
+                "severity": threat.severity,
+            }
+        )
+
+    avg_risk_score = (
+        sum(r["risk_score"] for r in risk_scores) / len(risk_scores)
+        if risk_scores
+        else 0.0
+    )
 
     return {
         "total_threats": total_threats,
@@ -352,10 +452,10 @@ def analyze_threats(threat_model: ThreatModel) -> dict[str, Any]:
                 "mitigation": t.mitigation,
                 "category": t.category,
                 "likelihood": t.likelihood,
-                "impact": t.impact
+                "impact": t.impact,
             }
             for t in threat_model.threats
-        ]
+        ],
     }
 
 
@@ -382,12 +482,11 @@ def prioritize_threats(threat_model: ThreatModel) -> list[Threat]:
         ThreatSeverity.CRITICAL.value: 4,
         ThreatSeverity.HIGH.value: 3,
         ThreatSeverity.MEDIUM.value: 2,
-        ThreatSeverity.LOW.value: 1
+        ThreatSeverity.LOW.value: 1,
     }
 
     threats_with_scores.sort(
-        key=lambda x: (x[1], severity_order.get(x[0].severity, 0)),
-        reverse=True
+        key=lambda x: (x[1], severity_order.get(x[0].severity, 0)), reverse=True
     )
 
     return [threat for threat, _ in threats_with_scores]

@@ -19,6 +19,7 @@ from codomyrmex.agents.agentic_seek.code_execution import (
 # extract_code_blocks
 # ===================================================================
 
+
 class TestExtractCodeBlocks:
     def test_single_python_block(self):
         text = "Here:\n```python\nprint('hi')\n```"
@@ -28,11 +29,7 @@ class TestExtractCodeBlocks:
         assert "print('hi')" in blocks[0].code
 
     def test_multiple_blocks(self):
-        text = (
-            "```python\nx = 1\n```\n"
-            "And then:\n"
-            "```bash\necho hi\n```"
-        )
+        text = "```python\nx = 1\n```\nAnd then:\n```bash\necho hi\n```"
         blocks = extract_code_blocks(text)
         assert len(blocks) == 2
         assert blocks[0].language == "python"
@@ -65,6 +62,7 @@ class TestExtractCodeBlocks:
 # classify_language
 # ===================================================================
 
+
 class TestClassifyLanguage:
     def test_known_language(self):
         block = CodeBlock(language="python", code="")
@@ -94,6 +92,7 @@ class TestClassifyLanguage:
 # ===================================================================
 # build_execution_command
 # ===================================================================
+
 
 class TestBuildExecutionCommand:
     def test_python_command(self):
@@ -145,6 +144,7 @@ class TestBuildExecutionCommand:
 # parse_execution_output
 # ===================================================================
 
+
 class TestParseExecutionOutput:
     def test_success_empty_stderr(self):
         result = parse_execution_output("hello", "", tool_type="python")
@@ -154,14 +154,17 @@ class TestParseExecutionOutput:
 
     def test_failure_with_error(self):
         result = parse_execution_output(
-            "", "Traceback (most recent call last):\nTypeError: ...",
+            "",
+            "Traceback (most recent call last):\nTypeError: ...",
             tool_type="python",
         )
         assert result.success is False
         assert "Traceback" in result.feedback
 
     def test_warning_not_treated_as_error(self):
-        result = parse_execution_output("ok", "DeprecationWarning: use X", tool_type="bash")
+        result = parse_execution_output(
+            "ok", "DeprecationWarning: use X", tool_type="bash"
+        )
         assert result.success is True
 
     def test_execution_time_preserved(self):
@@ -184,6 +187,7 @@ class TestParseExecutionOutput:
 # ===================================================================
 # AgenticSeekCodeExecutor facade
 # ===================================================================
+
 
 class TestAgenticSeekCodeExecutor:
     def test_extract(self):

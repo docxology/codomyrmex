@@ -77,12 +77,20 @@ def store_memory(
             cursor = conn.execute(
                 """INSERT INTO memories (key, content, tags, importance, type, metadata, created_at, updated_at)
                    VALUES (?, ?, ?, ?, ?, ?, ?, ?)""",
-                (key, content, tag_str, importance.value, memory_type.value, meta_str, now, now),
+                (
+                    key,
+                    content,
+                    tag_str,
+                    importance.value,
+                    memory_type.value,
+                    meta_str,
+                    now,
+                    now,
+                ),
             )
         except sqlite3.OperationalError:
             # Fallback: create a simple memories table if it doesn't exist
-            conn.execute(
-                """CREATE TABLE IF NOT EXISTS memories (
+            conn.execute("""CREATE TABLE IF NOT EXISTS memories (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     key TEXT UNIQUE,
                     content TEXT NOT NULL,
@@ -92,12 +100,20 @@ def store_memory(
                     metadata TEXT DEFAULT '{}',
                     created_at TEXT NOT NULL,
                     updated_at TEXT NOT NULL
-                )"""
-            )
+                )""")
             cursor = conn.execute(
                 """INSERT OR REPLACE INTO memories (key, content, tags, importance, type, metadata, created_at, updated_at)
                    VALUES (?, ?, ?, ?, ?, ?, ?, ?)""",
-                (key, content, tag_str, importance.value, memory_type.value, meta_str, now, now),
+                (
+                    key,
+                    content,
+                    tag_str,
+                    importance.value,
+                    memory_type.value,
+                    meta_str,
+                    now,
+                    now,
+                ),
             )
 
         conn.commit()
@@ -177,11 +193,9 @@ def consolidate_memories() -> dict[str, Any]:
         total_before = conn.execute("SELECT COUNT(*) FROM memories").fetchone()[0]
 
         # Remove exact duplicates (same key, keep latest)
-        conn.execute(
-            """DELETE FROM memories WHERE rowid NOT IN (
+        conn.execute("""DELETE FROM memories WHERE rowid NOT IN (
                 SELECT MAX(rowid) FROM memories GROUP BY key
-            ) AND key IS NOT NULL"""
-        )
+            ) AND key IS NOT NULL""")
         conn.commit()
 
         total_after = conn.execute("SELECT COUNT(*) FROM memories").fetchone()[0]

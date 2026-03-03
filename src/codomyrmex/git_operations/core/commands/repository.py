@@ -10,6 +10,7 @@ if PERFORMANCE_MONITOR_AVAILABLE:
 
 logger = get_logger(__name__)
 
+
 @mcp_tool(name="git_check_availability")
 def check_git_availability() -> bool:
     """Check if Git is available on the system."""
@@ -23,6 +24,7 @@ def check_git_availability() -> bool:
     except (subprocess.CalledProcessError, FileNotFoundError):
         logger.error("Git is not available on this system")
         return False
+
 
 @mcp_tool(name="git_is_repo")
 def is_git_repository(repository_path: str = None) -> bool:
@@ -43,11 +45,16 @@ def is_git_repository(repository_path: str = None) -> bool:
         )
         return result.returncode == 0
     except Exception as e:
-        logger.warning("Failed to check if %s is a git repository: %s", repository_path, e)
+        logger.warning(
+            "Failed to check if %s is a git repository: %s", repository_path, e
+        )
         return False
 
+
 @mcp_tool(name="git_init")
-def initialize_git_repository(repository_path: str, initial_commit: bool = True) -> bool:
+def initialize_git_repository(
+    repository_path: str, initial_commit: bool = True
+) -> bool:
     """Initialize a new Git repository at the specified path.
 
     Args:
@@ -61,7 +68,11 @@ def initialize_git_repository(repository_path: str, initial_commit: bool = True)
         os.makedirs(repository_path, exist_ok=True)
 
         subprocess.run(
-            ["git", "init"], cwd=repository_path, capture_output=True, text=True, check=True
+            ["git", "init"],
+            cwd=repository_path,
+            capture_output=True,
+            text=True,
+            check=True,
         )
 
         if initial_commit:
@@ -85,7 +96,9 @@ def initialize_git_repository(repository_path: str, initial_commit: bool = True)
                     with open(readme_path, "w") as f:
                         f.write("# Project\n\nInitial commit.\n")
 
-                subprocess.run(["git", "add", "README.md"], cwd=repository_path, check=True)
+                subprocess.run(
+                    ["git", "add", "README.md"], cwd=repository_path, check=True
+                )
                 subprocess.run(
                     [
                         "git",
@@ -112,6 +125,7 @@ def initialize_git_repository(repository_path: str, initial_commit: bool = True)
     except Exception as e:
         logger.error(f"Unexpected error initializing repository: {e}")
         return False
+
 
 @mcp_tool(name="git_clone")
 def clone_repository(url: str, destination: str, branch: str = None) -> bool:
@@ -141,5 +155,7 @@ def clone_repository(url: str, destination: str, branch: str = None) -> bool:
 
 # Apply performance monitoring wrappers explicitly when psutil is available.
 if PERFORMANCE_MONITOR_AVAILABLE:
-    initialize_git_repository = monitor_performance("git_initialize_repository")(initialize_git_repository)
+    initialize_git_repository = monitor_performance("git_initialize_repository")(
+        initialize_git_repository
+    )
     clone_repository = monitor_performance("git_clone_repository")(clone_repository)

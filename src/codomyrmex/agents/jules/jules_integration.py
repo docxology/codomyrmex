@@ -4,6 +4,7 @@ from codomyrmex.agents.core import AgentIntegrationAdapter, AgentRequest
 
 """Jules integration adapters for Codomyrmex modules."""
 
+
 class JulesIntegrationAdapter(AgentIntegrationAdapter):
     """Integration adapter for Jules with Codomyrmex modules."""
 
@@ -56,9 +57,7 @@ class JulesIntegrationAdapter(AgentIntegrationAdapter):
 
         return response.content
 
-    def adapt_for_llm(
-        self, messages: list[dict], model: str = None, **kwargs
-    ) -> dict:
+    def adapt_for_llm(self, messages: list[dict], model: str = None, **kwargs) -> dict:
         """
         Adapt Jules for LLM module.
 
@@ -73,8 +72,7 @@ class JulesIntegrationAdapter(AgentIntegrationAdapter):
 
         # Convert messages to prompt
         prompt = "\n".join(
-            f"{msg.get('role', 'user')}: {msg.get('content', '')}"
-            for msg in messages
+            f"{msg.get('role', 'user')}: {msg.get('content', '')}" for msg in messages
         )
 
         request = AgentRequest(prompt=prompt, context=kwargs)
@@ -122,4 +120,3 @@ class JulesIntegrationAdapter(AgentIntegrationAdapter):
             "error": response.error,
             "metadata": response.metadata,
         }
-

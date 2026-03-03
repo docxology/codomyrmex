@@ -37,6 +37,7 @@ class TestEdgeResourceManagement:
         node.resources.update_usage(cpu=95.0, mem=100.0)
         assert node.resources.is_overloaded
 
+
 @pytest.mark.unit
 class TestClusterRebalancing:
     def test_rebalance_cluster(self):
@@ -67,6 +68,7 @@ class TestClusterRebalancing:
         assert cluster.get_runtime("a").function_count == 0
         assert cluster.get_runtime("b").function_count == 1
 
+
 @pytest.mark.unit
 class TestDeltaSynchronization:
     def test_delta_update_local(self):
@@ -79,6 +81,7 @@ class TestDeltaSynchronization:
         state = sync.get_local_state()
         assert state.version == 2
         assert state.data == {"a": 1, "b": 3, "c": 4}
+
 
 @pytest.mark.unit
 class TestAdvancedHealthMonitoring:
@@ -93,7 +96,11 @@ class TestAdvancedHealthMonitoring:
         # Make stale
         node.last_heartbeat = datetime.now(UTC) - timedelta(seconds=10)
         monitor.check_node(node)
-        assert monitor.get_recovery_recommendation("n1") == "Investigate connectivity (stale heartbeat)"
+        assert (
+            monitor.get_recovery_recommendation("n1")
+            == "Investigate connectivity (stale heartbeat)"
+        )
+
 
 @pytest.mark.unit
 class TestEdgeSchedulerExecution:
@@ -110,7 +117,7 @@ class TestEdgeSchedulerExecution:
             job_id="j1",
             function_id="echo",
             schedule_type=ScheduleType.INTERVAL,
-            interval_seconds=0.1
+            interval_seconds=0.1,
         )
 
         # First tick should execute
@@ -124,13 +131,14 @@ class TestEdgeSchedulerExecution:
         count = scheduler.execute_tick(cluster)
         assert count == 0
 
+
 @pytest.mark.unit
 class TestEdgeCacheAdvanced:
     def test_lru_eviction_with_tie_break(self):
         # Small cache
         cache = EdgeCache(max_size=2)
         cache.put("k1", "v1")
-        time.sleep(0.01) # Ensure different created_at
+        time.sleep(0.01)  # Ensure different created_at
         cache.put("k2", "v2")
 
         # Access k2, so k1 is least accessed

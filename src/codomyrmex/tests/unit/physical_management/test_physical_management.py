@@ -17,6 +17,7 @@ class TestPhysicalManagement:
 
         try:
             from codomyrmex import physical_management
+
             assert physical_management is not None
         except ImportError as e:
             pytest.fail(f"Failed to import physical_management: {e}")
@@ -39,17 +40,23 @@ class TestPhysicalManagement:
 
     def test_simulation_engine_module_exists(self, code_dir):
         """Test that simulation_engine module exists."""
-        se_path = code_dir / "codomyrmex" / "physical_management" / "simulation_engine.py"
+        se_path = (
+            code_dir / "codomyrmex" / "physical_management" / "simulation_engine.py"
+        )
         assert se_path.exists()
 
     def test_sensor_integration_module_exists(self, code_dir):
         """Test that sensor_integration module exists."""
-        si_path = code_dir / "codomyrmex" / "physical_management" / "sensor_integration.py"
+        si_path = (
+            code_dir / "codomyrmex" / "physical_management" / "sensor_integration.py"
+        )
         assert si_path.exists()
 
     def test_analytics_module_exists(self, code_dir):
         """Test that analytics module exists."""
-        analytics_path = code_dir / "codomyrmex" / "physical_management" / "analytics.py"
+        analytics_path = (
+            code_dir / "codomyrmex" / "physical_management" / "analytics.py"
+        )
         assert analytics_path.exists()
 
     def test_physical_object_manager_import(self, code_dir):
@@ -62,6 +69,7 @@ class TestPhysicalManagement:
                 PhysicalObjectManager,
                 Vector3D,
             )
+
             assert PhysicalObjectManager is not None
         except ImportError as e:
             pytest.fail(f"Failed to import PhysicalObjectManager: {e}")
@@ -73,6 +81,7 @@ class TestPhysicalManagement:
 
         try:
             from codomyrmex.physical_management import PhysicalObject
+
             assert PhysicalObject is not None
         except ImportError as e:
             pytest.fail(f"Failed to import PhysicalObject: {e}")
@@ -84,6 +93,7 @@ class TestPhysicalManagement:
 
         try:
             from codomyrmex.physical_management import PhysicsSimulator
+
             assert PhysicsSimulator is not None
         except ImportError as e:
             pytest.fail(f"Failed to import PhysicsSimulator: {e}")
@@ -95,6 +105,7 @@ class TestPhysicalManagement:
 
         try:
             from codomyrmex.physical_management import SensorManager
+
             assert SensorManager is not None
         except ImportError as e:
             pytest.fail(f"Failed to import SensorManager: {e}")
@@ -106,6 +117,7 @@ class TestPhysicalManagement:
 
         try:
             from codomyrmex.physical_management import StreamingAnalytics
+
             assert StreamingAnalytics is not None
         except ImportError as e:
             pytest.fail(f"Failed to import StreamingAnalytics: {e}")
@@ -124,6 +136,7 @@ class TestPhysicalManagement:
                 ObjectType,
                 SensorType,
             )
+
             assert ObjectType is not None
             assert ObjectStatus is not None
             assert MaterialType is not None
@@ -140,6 +153,7 @@ class TestPhysicalManagement:
 
         try:
             from codomyrmex.physical_management import Vector3D
+
             assert Vector3D is not None
         except ImportError as e:
             pytest.fail(f"Failed to import Vector3D: {e}")
@@ -150,6 +164,7 @@ class TestPhysicalManagement:
             sys.path.insert(0, str(code_dir))
 
         from codomyrmex import physical_management
+
         assert hasattr(physical_management, "__version__")
         assert physical_management.__version__ == "0.2.0"
 
@@ -187,7 +202,9 @@ class TestPhysicalManagement:
         """Test that docs directory exists for physical_management module."""
         docs_path = code_dir / "codomyrmex" / "physical_management" / "docs"
         if not docs_path.exists():
-            pytest.skip("docs/ directory not yet created for physical_management module")
+            pytest.skip(
+                "docs/ directory not yet created for physical_management module"
+            )
 
     def test_examples_directory_exists(self, code_dir):
         """Test that examples directory exists for physical_management module."""
@@ -199,10 +216,9 @@ class TestPhysicalManagement:
         """Test that tests directory exists for physical_management module."""
         tests_path = code_dir / "codomyrmex" / "physical_management" / "tests"
         if not tests_path.exists():
-            pytest.skip("tests/ directory not yet created for physical_management module")
-
-
-
+            pytest.skip(
+                "tests/ directory not yet created for physical_management module"
+            )
 
 
 # From test_coverage_boost_r3.py
@@ -219,8 +235,12 @@ class TestDataPoint:
     def test_with_metadata(self):
         from codomyrmex.physical_management.analytics import DataPoint
 
-        dp = DataPoint(timestamp=time.time(), value=1.0, source_id="s",
-                       metadata={"unit": "celsius"})
+        dp = DataPoint(
+            timestamp=time.time(),
+            value=1.0,
+            source_id="s",
+            metadata={"unit": "celsius"},
+        )
         assert dp.metadata["unit"] == "celsius"
 
 
@@ -288,8 +308,10 @@ class TestDataStream:
         from codomyrmex.physical_management.analytics import DataStream
 
         received = []
+
         def cb(dp):
             return received.append(dp.value)
+
         stream = DataStream("unsub-test")
         stream.subscribe(cb)
         stream.add_data_point(1.0, source_id="s")
@@ -353,22 +375,27 @@ class TestStreamingAnalytics:
 class TestSensorIntegration:
     def test_device_status(self):
         from codomyrmex.physical_management.sensor_integration import DeviceStatus
+
         assert DeviceStatus is not None  # DeviceStatus exists
 
     def test_coordinate_system(self):
         from codomyrmex.physical_management.sensor_integration import CoordinateSystem
+
         assert CoordinateSystem is not None  # CoordinateSystem exists
 
     def test_physical_constants(self):
         from codomyrmex.physical_management.sensor_integration import PhysicalConstants
+
         assert hasattr(PhysicalConstants, "GRAVITY") or PhysicalConstants is not None
 
     def test_device_interface(self):
         from codomyrmex.physical_management.sensor_integration import DeviceInterface
+
         assert DeviceInterface is not None
 
     def test_sensor_manager(self):
         from codomyrmex.physical_management.sensor_integration import SensorManager
+
         mgr = SensorManager()
         assert mgr is not None
 
@@ -377,6 +404,7 @@ class TestSensorIntegration:
 class TestSimulationEngine:
     def test_vector3d(self):
         from codomyrmex.physical_management.simulation_engine import Vector3D
+
         v = Vector3D(x=1.0, y=2.0, z=3.0)
         assert v.x == 1.0
 
@@ -385,15 +413,18 @@ class TestSimulationEngine:
             ForceField,
             Vector3D,
         )
+
         ff = ForceField(position=Vector3D(0, -9.81, 0), strength=9.81)
         assert ff.strength == 9.81
 
     def test_constraint(self):
         from codomyrmex.physical_management.simulation_engine import Constraint
+
         c = Constraint(object1_id="obj1", object2_id="obj2", constraint_type="plane")
         assert c.constraint_type == "plane"
 
     def test_physics_simulator(self):
         from codomyrmex.physical_management.simulation_engine import PhysicsSimulator
+
         sim = PhysicsSimulator()
         assert sim is not None

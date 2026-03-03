@@ -18,6 +18,7 @@ from codomyrmex.model_context_protocol.errors import (
 
 # ── MCPToolError basics ──────────────────────────────────────────────
 
+
 class TestMCPToolError:
     """Core dataclass behaviour."""
 
@@ -30,7 +31,10 @@ class TestMCPToolError:
 
     def test_correlation_id_unique(self):
         """Test functionality: correlation id unique."""
-        ids = {MCPToolError(code=MCPErrorCode.INTERNAL, message="x").correlation_id for _ in range(20)}
+        ids = {
+            MCPToolError(code=MCPErrorCode.INTERNAL, message="x").correlation_id
+            for _ in range(20)
+        }
         assert len(ids) == 20, "correlation_ids should be unique"
 
     def test_all_error_codes(self):
@@ -42,12 +46,15 @@ class TestMCPToolError:
 
 # ── Serialisation round-trip ─────────────────────────────────────────
 
+
 class TestSerialisation:
     """JSON serialisation / deserialisation."""
 
     def test_to_dict_minimal(self):
         """Test functionality: to dict minimal."""
-        err = MCPToolError(code=MCPErrorCode.TIMEOUT, message="slow", correlation_id="abc123")
+        err = MCPToolError(
+            code=MCPErrorCode.TIMEOUT, message="slow", correlation_id="abc123"
+        )
         d = err.to_dict()
         assert d["code"] == "TIMEOUT"
         assert d["message"] == "slow"
@@ -104,6 +111,7 @@ class TestSerialisation:
 
 # ── MCP response format ─────────────────────────────────────────────
 
+
 class TestMCPResponse:
     """Compatibility with MCP ``isError: true`` protocol."""
 
@@ -128,7 +136,10 @@ class TestMCPResponse:
 
     def test_from_mcp_response_legacy_unstructured(self):
         """Old-style isError responses without JSON get wrapped as INTERNAL."""
-        legacy = {"content": [{"type": "text", "text": "plain error message"}], "isError": True}
+        legacy = {
+            "content": [{"type": "text", "text": "plain error message"}],
+            "isError": True,
+        }
         restored = MCPToolError.from_mcp_response(legacy)
         assert restored is not None
         assert restored.code == MCPErrorCode.INTERNAL
@@ -141,6 +152,7 @@ class TestMCPResponse:
 
 
 # ── Convenience constructors ─────────────────────────────────────────
+
 
 class TestConvenienceConstructors:
     """Test suite for ConvenienceConstructors."""

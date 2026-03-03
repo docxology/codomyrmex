@@ -81,21 +81,25 @@ class TestModuleExports:
     def test_claude_client_exported(self):
         """Test functionality: claude client exported."""
         from codomyrmex.agents.claude import ClaudeClient
+
         assert ClaudeClient is not None
 
     def test_integration_adapter_exported(self):
         """Test functionality: integration adapter exported."""
         from codomyrmex.agents.claude import ClaudeIntegrationAdapter
+
         assert ClaudeIntegrationAdapter is not None
 
     def test_pricing_exported(self):
         """Test functionality: pricing exported."""
         from codomyrmex.agents.claude import CLAUDE_PRICING
+
         assert CLAUDE_PRICING is not None
 
     def test_version_string(self):
         """Test functionality: version string."""
         import codomyrmex.agents.claude as m
+
         assert hasattr(m, "__version__")
         assert isinstance(m.__version__, str)
 
@@ -123,11 +127,13 @@ class TestClaudeClientInstantiation:
 
     def test_custom_model_config(self):
         """Test functionality: custom model config."""
-        client = ClaudeClient(config={
-            "claude_api_key": "sk-ant-test-key",
-            "claude_model": "claude-3-5-haiku-20241022",
-            "claude_temperature": 0.5,
-        })
+        client = ClaudeClient(
+            config={
+                "claude_api_key": "sk-ant-test-key",
+                "claude_model": "claude-3-5-haiku-20241022",
+                "claude_temperature": 0.5,
+            }
+        )
         assert client.model == "claude-3-5-haiku-20241022"
         assert client.temperature == 0.5
 
@@ -138,10 +144,12 @@ class TestClaudeClientInstantiation:
 
     def test_custom_retry_settings(self):
         """Test functionality: custom retry settings."""
-        client = ClaudeClient(config={
-            "claude_api_key": "sk-ant-test-key",
-            "initial_retry_delay": 2.0,
-        })
+        client = ClaudeClient(
+            config={
+                "claude_api_key": "sk-ant-test-key",
+                "initial_retry_delay": 2.0,
+            }
+        )
         assert client.initial_retry_delay == 2.0
 
 
@@ -169,6 +177,7 @@ class TestClaudeToolRegistration:
 
     def test_register_tool_with_handler(self, client):
         """Test functionality: register tool with handler."""
+
         def handler(x: int) -> int:
             return x * 2
 
@@ -196,6 +205,7 @@ class TestClaudeToolRegistration:
     def test_execute_unregistered_tool_raises(self, client):
         """Test functionality: execute unregistered tool raises."""
         from codomyrmex.agents.core.exceptions import AgentError
+
         with pytest.raises((AgentError, Exception)):
             client.execute_tool_call("nonexistent_tool", {})
 

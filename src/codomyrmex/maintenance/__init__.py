@@ -49,7 +49,6 @@ __all__ = [
     # Submodules
     "deps",
     "health",
-
     # Main analysis functions
     "analyze_project_structure",
     "analyze_project_dependencies",
@@ -57,10 +56,8 @@ __all__ = [
     "check_dependencies",
     "consolidate_dependencies",
     "add_deprecation_notice",
-
     # Main classes
     "DependencyAnalyzer",
-
     # CLI entry points
     "analyze_project_main",
     "dependency_analyzer_main",

@@ -19,6 +19,7 @@ from codomyrmex.plugin_system.validation.plugin_validator import (
 # Test Plugin Validator
 # ============================================================================
 
+
 @pytest.mark.unit
 class TestPluginValidator:
     """Test cases for PluginValidator functionality."""
@@ -40,7 +41,7 @@ class TestPluginValidator:
             "version": "1.0.0",
             "description": "Test plugin",
             "author": "Test Author",
-            "entry_point": "test_plugin.py"
+            "entry_point": "test_plugin.py",
         }
 
         result = validator.validate_plugin_metadata(valid_metadata)
@@ -50,7 +51,7 @@ class TestPluginValidator:
         invalid_metadata = {
             "name": "test_plugin",
             # Missing version
-            "description": "Test plugin"
+            "description": "Test plugin",
             # Missing other required fields
         }
 
@@ -62,10 +63,7 @@ class TestPluginValidator:
         """Test validation fails when name is missing."""
         validator = PluginValidator()
 
-        metadata = {
-            "version": "1.0.0",
-            "description": "Test"
-        }
+        metadata = {"version": "1.0.0", "description": "Test"}
 
         result = validator.validate_plugin_metadata(metadata)
         assert not result.valid
@@ -76,7 +74,7 @@ class TestPluginValidator:
         validator = PluginValidator()
 
         # Create test plugin file
-        with tempfile.NamedTemporaryFile(mode='w', suffix='.py', delete=False) as f:
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False) as f:
             f.write("""
 import os
 import subprocess
@@ -95,8 +93,13 @@ def dangerous_function():
             assert result.security_score < 100
 
             # Should detect multiple issues
-            issue_messages = [issue['message'] for issue in result.issues + result.warnings]
-            dangerous_found = any('dangerous' in msg.lower() or 'risky' in msg.lower() for msg in issue_messages)
+            issue_messages = [
+                issue["message"] for issue in result.issues + result.warnings
+            ]
+            dangerous_found = any(
+                "dangerous" in msg.lower() or "risky" in msg.lower()
+                for msg in issue_messages
+            )
             assert dangerous_found
 
         finally:
@@ -106,7 +109,7 @@ def dangerous_function():
         """Test security scanning on a safe plugin."""
         validator = PluginValidator()
 
-        with tempfile.NamedTemporaryFile(mode='w', suffix='.py', delete=False) as f:
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False) as f:
             f.write("""
 # Safe plugin with no dangerous patterns
 def safe_function(x, y):
@@ -133,7 +136,7 @@ class SafePlugin:
         """Test detection of eval and exec usage."""
         validator = PluginValidator()
 
-        with tempfile.NamedTemporaryFile(mode='w', suffix='.py', delete=False) as f:
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False) as f:
             f.write("""
 def run_code(code_string):
     eval(code_string)
@@ -144,8 +147,8 @@ def run_code(code_string):
         try:
             result = validator.validate_plugin(test_file)
             assert not result.valid
-            issue_messages = [issue['message'].lower() for issue in result.issues]
-            assert any('eval' in msg or 'exec' in msg for msg in issue_messages)
+            issue_messages = [issue["message"].lower() for issue in result.issues]
+            assert any("eval" in msg or "exec" in msg for msg in issue_messages)
         finally:
             os.unlink(test_file)
 
@@ -174,7 +177,7 @@ def run_code(code_string):
         result = validator.check_plugin_dependencies(required, available)
 
         assert not result.valid
-        assert any("plugin_c" in issue['message'] for issue in result.issues)
+        assert any("plugin_c" in issue["message"] for issue in result.issues)
 
     def test_dockerfile_validation(self):
         """Test Dockerfile validation."""
@@ -190,7 +193,9 @@ CMD ["python", "app.py"]
 """
 
         result = validator.validate_dockerfile(valid_dockerfile)
-        assert result.valid or len(result.issues) == 0  # May have warnings but no errors
+        assert (
+            result.valid or len(result.issues) == 0
+        )  # May have warnings but no errors
 
         # Invalid Dockerfile
         invalid_dockerfile = """FROM ubuntu:latest
@@ -212,13 +217,15 @@ RUN echo "no from instruction"
 
         result = validator.validate_dockerfile(invalid_dockerfile)
         assert not result.valid
-        assert any("FROM" in issue['message'] for issue in result.issues)
+        assert any("FROM" in issue["message"] for issue in result.issues)
 
     def test_validate_plugin_instance(self):
         """Test validating a plugin instance."""
         validator = PluginValidator()
 
-        plugin = Plugin(PluginInfo("test", "1.0.0", "", "", PluginType.UTILITY, "test.py"))
+        plugin = Plugin(
+            PluginInfo("test", "1.0.0", "", "", PluginType.UTILITY, "test.py")
+        )
 
         result = validator.validate(plugin)
         assert result.valid
@@ -238,31 +245,45 @@ RUN echo "no from instruction"
 # Test Interface Enforcer
 # ============================================================================
 
+
 @pytest.mark.unit
 class TestInterfaceEnforcer:
     """Test cases for the InterfaceEnforcer."""
 
     def test_enforcer_valid_interface(self):
         """Test enforcer with valid interface implementation."""
+
         class RequiredInterface:
-            def method_a(self): pass
-            def method_b(self): pass
+            def method_a(self):
+                pass
+
+            def method_b(self):
+                pass
 
         class ValidImplementation:
-            def method_a(self): return "a"
-            def method_b(self): return "b"
+            def method_a(self):
+                return "a"
+
+            def method_b(self):
+                return "b"
 
         result = InterfaceEnforcer.enforce(ValidImplementation(), RequiredInterface)
         assert result is True
 
     def test_enforcer_invalid_interface(self):
         """Test enforcer with invalid interface implementation."""
+
         class RequiredInterface:
-            def method_a(self): pass
-            def method_b(self): pass
+            def method_a(self):
+                pass
+
+            def method_b(self):
+                pass
 
         class InvalidImplementation:
-            def method_a(self): return "a"
+            def method_a(self):
+                return "a"
+
             # Missing method_b
 
         result = InterfaceEnforcer.enforce(InvalidImplementation(), RequiredInterface)
@@ -270,13 +291,21 @@ class TestInterfaceEnforcer:
 
     def test_enforcer_partial_implementation(self):
         """Test enforcer with partial interface implementation."""
+
         class RequiredInterface:
-            def method_a(self): pass
-            def method_b(self): pass
-            def method_c(self): pass
+            def method_a(self):
+                pass
+
+            def method_b(self):
+                pass
+
+            def method_c(self):
+                pass
 
         class PartialImplementation:
-            def method_a(self): return "a"
+            def method_a(self):
+                return "a"
+
             method_b = "not callable"  # Not a method
 
         result = InterfaceEnforcer.enforce(PartialImplementation(), RequiredInterface)

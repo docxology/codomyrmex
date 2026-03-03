@@ -52,7 +52,7 @@ def test_calendar_mcp_flow():
         end_time=(now + timedelta(hours=1)).isoformat(),
         description="Created via MCP tool",
         location="Virtual",
-        attendees=[_DEFAULT_ATTENDEE]
+        attendees=[_DEFAULT_ATTENDEE],
     )
     assert res_create["status"] == "ok"
     event_id = res_create["event_id"]
@@ -70,7 +70,7 @@ def test_calendar_mcp_flow():
         end_time=(now + timedelta(hours=2)).isoformat(),
         description="Updated via MCP tool",
         location="Virtual",
-        attendees=[_DEFAULT_ATTENDEE]
+        attendees=[_DEFAULT_ATTENDEE],
     )
     assert res_update["status"] == "ok"
 

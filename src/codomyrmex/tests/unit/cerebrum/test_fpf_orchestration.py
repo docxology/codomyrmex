@@ -310,7 +310,12 @@ class TestAnalyzeWithActiveInference:
         assert len(ai_result["exploration_path"]) <= 10
 
     def test_actions_are_valid(self, ai_result):
-        valid_actions = {"analyze_pattern", "explore_dependencies", "analyze_concepts", "skip"}
+        valid_actions = {
+            "analyze_pattern",
+            "explore_dependencies",
+            "analyze_concepts",
+            "skip",
+        }
         for step in ai_result["exploration_path"]:
             assert step["action"] in valid_actions
 
@@ -379,10 +384,19 @@ class TestExportResults:
     @pytest.fixture(scope="class")
     def exported(self, orchestrator):
         results = {
-            "fpf_statistics": {"total_patterns": 10, "total_concepts": 5, "total_relationships": 3},
+            "fpf_statistics": {
+                "total_patterns": 10,
+                "total_concepts": 5,
+                "total_relationships": 3,
+            },
             "case_based_reasoning": {
                 "similarity_analysis": {
-                    "P1": {"prediction": 0.7, "confidence": 0.8, "retrieved_count": 3, "similar_patterns": []},
+                    "P1": {
+                        "prediction": 0.7,
+                        "confidence": 0.8,
+                        "retrieved_count": 3,
+                        "similar_patterns": [],
+                    },
                 },
                 "total_cases": 10,
                 "case_base_size": 10,
@@ -390,7 +404,11 @@ class TestExportResults:
             "bayesian_inference": {
                 "inference_results": {
                     "P1": {
-                        "importance_distribution": {"high": 0.5, "medium": 0.3, "low": 0.2},
+                        "importance_distribution": {
+                            "high": 0.5,
+                            "medium": 0.3,
+                            "low": 0.2,
+                        },
                         "most_likely": "high",
                         "evidence": {},
                     },
@@ -400,7 +418,12 @@ class TestExportResults:
             },
             "active_inference": {
                 "exploration_path": [
-                    {"pattern_id": "P1", "action": "analyze_pattern", "free_energy": 0.5, "importance": 0.8},
+                    {
+                        "pattern_id": "P1",
+                        "action": "analyze_pattern",
+                        "free_energy": 0.5,
+                        "importance": 0.8,
+                    },
                 ],
                 "final_beliefs": {"states": {"s1": 0.5}},
             },
@@ -454,7 +477,11 @@ class TestGenerateMarkdownReport:
     def test_report_sections(self, orchestrator, tmp_path):
         output_path = tmp_path / "report.md"
         results = {
-            "fpf_statistics": {"total_patterns": 5, "total_concepts": 2, "total_relationships": 1},
+            "fpf_statistics": {
+                "total_patterns": 5,
+                "total_concepts": 2,
+                "total_relationships": 1,
+            },
             "case_based_reasoning": {
                 "similarity_analysis": {},
                 "total_cases": 5,
@@ -622,8 +649,7 @@ class TestPatternCaseKeywordFeatures:
         cases = orchestrator.create_pattern_cases()
         # Find a case that has keyword_* features in its features dict
         keyword_cases = [
-            c for c in cases
-            if any(k.startswith("keyword_") for k in c.features)
+            c for c in cases if any(k.startswith("keyword_") for k in c.features)
         ]
         # If the FPF spec has patterns with keywords, they should produce keyword features.
         # Some specs may have all-empty keyword lists -- in that case, skip gracefully.
@@ -645,7 +671,9 @@ class TestPatternCaseKeywordFeatures:
         """At most 5 keyword features per case."""
         cases = orchestrator.create_pattern_cases()
         for case in cases:
-            keyword_feature_keys = [k for k in case.features if k.startswith("keyword_")]
+            keyword_feature_keys = [
+                k for k in case.features if k.startswith("keyword_")
+            ]
             assert len(keyword_feature_keys) <= 5
 
 
@@ -661,7 +689,9 @@ class TestVisualizationsWithRealData:
     def real_results(self, orchestrator):
         return orchestrator.generate_comprehensive_analysis()
 
-    def test_generate_visualizations_with_real_results(self, orchestrator, real_results):
+    def test_generate_visualizations_with_real_results(
+        self, orchestrator, real_results
+    ):
         """Visualizations should complete without error when given real data."""
         orchestrator.generate_visualizations(real_results)
         viz_dir = orchestrator.output_dir / "visualizations"
@@ -713,11 +743,19 @@ class TestConcordanceVisualizationsWithData:
                 "inference_results": {
                     "P1": {
                         "most_likely": "high",
-                        "importance_distribution": {"high": 0.7, "medium": 0.2, "low": 0.1},
+                        "importance_distribution": {
+                            "high": 0.7,
+                            "medium": 0.2,
+                            "low": 0.1,
+                        },
                     },
                     "P2": {
                         "most_likely": "medium",
-                        "importance_distribution": {"high": 0.3, "medium": 0.5, "low": 0.2},
+                        "importance_distribution": {
+                            "high": 0.3,
+                            "medium": 0.5,
+                            "low": 0.2,
+                        },
                     },
                 },
             },
@@ -735,7 +773,11 @@ class TestConcordanceVisualizationsWithData:
                 "inference_results": {
                     "P1": {
                         "most_likely": "high",
-                        "importance_distribution": {"high": 0.7, "medium": 0.2, "low": 0.1},
+                        "importance_distribution": {
+                            "high": 0.7,
+                            "medium": 0.2,
+                            "low": 0.1,
+                        },
                     },
                 },
             },
@@ -782,11 +824,25 @@ class TestMarkdownReportPopulated:
     def test_report_includes_pattern_details(self, orchestrator, tmp_path):
         output_path = tmp_path / "populated_report.md"
         results = {
-            "fpf_statistics": {"total_patterns": 10, "total_concepts": 5, "total_relationships": 3},
+            "fpf_statistics": {
+                "total_patterns": 10,
+                "total_concepts": 5,
+                "total_relationships": 3,
+            },
             "case_based_reasoning": {
                 "similarity_analysis": {
-                    "P1": {"prediction": 0.75, "confidence": 0.9, "retrieved_count": 4, "similar_patterns": []},
-                    "P2": {"prediction": 0.55, "confidence": 0.7, "retrieved_count": 2, "similar_patterns": []},
+                    "P1": {
+                        "prediction": 0.75,
+                        "confidence": 0.9,
+                        "retrieved_count": 4,
+                        "similar_patterns": [],
+                    },
+                    "P2": {
+                        "prediction": 0.55,
+                        "confidence": 0.7,
+                        "retrieved_count": 2,
+                        "similar_patterns": [],
+                    },
                 },
                 "total_cases": 10,
                 "case_base_size": 10,
@@ -794,7 +850,11 @@ class TestMarkdownReportPopulated:
             "bayesian_inference": {
                 "inference_results": {
                     "P1": {
-                        "importance_distribution": {"high": 0.6, "medium": 0.3, "low": 0.1},
+                        "importance_distribution": {
+                            "high": 0.6,
+                            "medium": 0.3,
+                            "low": 0.1,
+                        },
                         "most_likely": "high",
                         "evidence": {"pattern_status": "Stable"},
                     },
@@ -804,8 +864,18 @@ class TestMarkdownReportPopulated:
             },
             "active_inference": {
                 "exploration_path": [
-                    {"pattern_id": "P1", "action": "analyze_pattern", "free_energy": 0.42, "importance": 0.8},
-                    {"pattern_id": "P2", "action": "explore_dependencies", "free_energy": 0.31, "importance": 0.6},
+                    {
+                        "pattern_id": "P1",
+                        "action": "analyze_pattern",
+                        "free_energy": 0.42,
+                        "importance": 0.8,
+                    },
+                    {
+                        "pattern_id": "P2",
+                        "action": "explore_dependencies",
+                        "free_energy": 0.31,
+                        "importance": 0.6,
+                    },
                 ],
                 "final_beliefs": {"states": {"s1": 0.5}},
             },
@@ -836,7 +906,11 @@ class TestMarkdownReportPopulated:
     def test_report_includes_active_inference_exploration(self, orchestrator, tmp_path):
         output_path = tmp_path / "ai_report.md"
         results = {
-            "fpf_statistics": {"total_patterns": 1, "total_concepts": 1, "total_relationships": 0},
+            "fpf_statistics": {
+                "total_patterns": 1,
+                "total_concepts": 1,
+                "total_relationships": 0,
+            },
             "case_based_reasoning": {
                 "similarity_analysis": {},
                 "total_cases": 1,
@@ -849,7 +923,12 @@ class TestMarkdownReportPopulated:
             },
             "active_inference": {
                 "exploration_path": [
-                    {"pattern_id": "X1", "action": "skip", "free_energy": 1.23, "importance": 0.1},
+                    {
+                        "pattern_id": "X1",
+                        "action": "skip",
+                        "free_energy": 1.23,
+                        "importance": 0.1,
+                    },
                 ],
                 "final_beliefs": {},
             },
@@ -890,8 +969,10 @@ class TestMainEntryPoint:
         try:
             sys.argv = [
                 "orchestration",
-                "--fpf-spec", str(spec_file),
-                "--output-dir", str(out_dir),
+                "--fpf-spec",
+                str(spec_file),
+                "--output-dir",
+                str(out_dir),
             ]
             main()
         finally:
@@ -916,7 +997,11 @@ class TestExportResultsJSONSerialization:
         out_dir.mkdir()
         o = FPFOrchestrator(output_dir=str(out_dir))
         results = {
-            "fpf_statistics": {"total_patterns": 1, "total_concepts": 0, "total_relationships": 0},
+            "fpf_statistics": {
+                "total_patterns": 1,
+                "total_concepts": 0,
+                "total_relationships": 0,
+            },
             "case_based_reasoning": {
                 "similarity_analysis": {},
                 "total_cases": 0,
@@ -941,7 +1026,9 @@ class TestExportResultsJSONSerialization:
                 "shared_terms": [],
                 "important_terms": [],
             },
-            "non_serializable": Path("/some/path"),  # Path is not JSON serializable by default
+            "non_serializable": Path(
+                "/some/path"
+            ),  # Path is not JSON serializable by default
         }
         o.export_results(results)
         json_path = out_dir / "comprehensive_analysis.json"

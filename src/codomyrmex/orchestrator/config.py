@@ -34,7 +34,13 @@ def load_config(scripts_dir: Path) -> dict[str, Any]:
                 try:
                     with open(config_path) as f:
                         return yaml.safe_load(f) or {}
-                except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
+                except (
+                    ValueError,
+                    RuntimeError,
+                    AttributeError,
+                    OSError,
+                    TypeError,
+                ) as e:
                     logger.warning(f"Failed to load YAML config {config_path}: {e}")
 
         # Also check for scripts_config.json
@@ -53,7 +59,10 @@ def load_config(scripts_dir: Path) -> dict[str, Any]:
 
     return {"skip": [], "timeout_override": {}, "scripts": {}}
 
-def get_script_config(script_path: Path, scripts_dir: Path, global_config: dict[str, Any]) -> dict[str, Any]:
+
+def get_script_config(
+    script_path: Path, scripts_dir: Path, global_config: dict[str, Any]
+) -> dict[str, Any]:
     """Get configuration for a specific script."""
     rel_path = str(script_path.relative_to(scripts_dir))
 

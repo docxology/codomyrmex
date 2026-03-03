@@ -95,7 +95,9 @@ class Tracer:
         parent: Span | None = None,
         attributes: dict[str, Any] | None = None,
     ) -> Span:
-        trace_id = parent.trace_id if parent else (self._active_trace or uuid.uuid4().hex[:16])
+        trace_id = (
+            parent.trace_id if parent else (self._active_trace or uuid.uuid4().hex[:16])
+        )
         span = Span(
             name=name,
             trace_id=trace_id,

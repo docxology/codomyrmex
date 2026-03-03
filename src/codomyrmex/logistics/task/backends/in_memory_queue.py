@@ -66,7 +66,9 @@ class InMemoryQueue:
             self._queue = [item for item in self._queue if item[2].job_id != job_id]
             heapq.heapify(self._queue)
             # Remove from scheduled
-            self._scheduled = [(dt, j) for dt, j in self._scheduled if j.job_id != job_id]
+            self._scheduled = [
+                (dt, j) for dt, j in self._scheduled if j.job_id != job_id
+            ]
             return True
         return False
 
@@ -77,4 +79,3 @@ class InMemoryQueue:
             "scheduled_count": len(self._scheduled),
             "total_jobs": len(self._jobs),
         }
-

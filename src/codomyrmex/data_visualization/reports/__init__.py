@@ -3,6 +3,7 @@
 Provides report types: GeneralSystemReport, FinanceReport,
 MarketingReport, LogisticsReport.
 """
+
 from ._base import BaseReport
 from .finance import FinanceReport
 from .general import GeneralSystemReport

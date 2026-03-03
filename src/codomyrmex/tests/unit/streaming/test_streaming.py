@@ -14,6 +14,7 @@ try:
         broadcast,
         create_event,
     )
+
     HAS_MODULE = True
 except ImportError:
     HAS_MODULE = False
@@ -25,6 +26,7 @@ if not HAS_MODULE:
 @pytest.mark.unit
 class TestEventType:
     """Test suite for EventType."""
+
     def test_message(self):
         """Test functionality: message."""
         assert EventType.MESSAGE is not None
@@ -49,6 +51,7 @@ class TestEventType:
 @pytest.mark.unit
 class TestEvent:
     """Test suite for Event."""
+
     def test_create_event(self):
         """Test functionality: create event."""
         event = Event()
@@ -66,6 +69,7 @@ class TestEvent:
 @pytest.mark.unit
 class TestSubscription:
     """Test suite for Subscription."""
+
     def test_create_subscription(self):
         """Test functionality: create subscription."""
         sub = Subscription()
@@ -82,6 +86,7 @@ class TestSubscription:
 @pytest.mark.unit
 class TestInMemoryStream:
     """Test suite for InMemoryStream."""
+
     def test_create_stream(self):
         """Test functionality: create stream."""
         stream = InMemoryStream()
@@ -91,6 +96,7 @@ class TestInMemoryStream:
 @pytest.mark.unit
 class TestSSEStream:
     """Test suite for SSEStream."""
+
     def test_create_stream(self):
         """Test functionality: create stream."""
         stream = SSEStream()
@@ -105,6 +111,7 @@ class TestSSEStream:
 @pytest.mark.unit
 class TestTopicStream:
     """Test suite for TopicStream."""
+
     def test_create_stream(self):
         """Test functionality: create stream."""
         stream = TopicStream()
@@ -114,6 +121,7 @@ class TestTopicStream:
 @pytest.mark.unit
 class TestStreamProcessor:
     """Test suite for StreamProcessor."""
+
     def test_create_processor(self):
         """Test functionality: create processor."""
         source = InMemoryStream()
@@ -124,6 +132,7 @@ class TestStreamProcessor:
 @pytest.mark.unit
 class TestCreateEvent:
     """Test suite for CreateEvent."""
+
     def test_creates_event(self):
         """Test functionality: creates event."""
         event = create_event(data="hello")
@@ -144,6 +153,7 @@ class TestCreateEvent:
 @pytest.mark.unit
 class TestBroadcast:
     """Test suite for Broadcast."""
+
     def test_broadcast_is_callable(self):
         """Test functionality: broadcast is callable."""
         assert callable(broadcast)

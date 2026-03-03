@@ -22,18 +22,22 @@ def detect_encoding(file_path: Path, sample_size: int = 8192) -> str | None:
     try:
         import chardet
 
-        with open(file_path, 'rb') as f:
+        with open(file_path, "rb") as f:
             sample = f.read(sample_size)
 
         result = chardet.detect(sample)
-        encoding = result.get('encoding')
-        confidence = result.get('confidence', 0)
+        encoding = result.get("encoding")
+        confidence = result.get("confidence", 0)
 
         if encoding and confidence > 0.7:
-            logger.debug(f"Detected encoding {encoding} with confidence {confidence:.2f}")
+            logger.debug(
+                f"Detected encoding {encoding} with confidence {confidence:.2f}"
+            )
             return encoding
         else:
-            logger.warning(f"Low confidence encoding detection: {encoding} ({confidence:.2f})")
+            logger.warning(
+                f"Low confidence encoding detection: {encoding} ({confidence:.2f})"
+            )
             return get_config().default_encoding
 
     except ImportError:
@@ -42,6 +46,3 @@ def detect_encoding(file_path: Path, sample_size: int = 8192) -> str | None:
     except Exception as e:
         logger.warning(f"Encoding detection failed: {e}, using default")
         return get_config().default_encoding
-
-
-

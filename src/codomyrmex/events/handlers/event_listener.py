@@ -12,9 +12,11 @@ from typing import Any
 # Import logging
 try:
     from codomyrmex.logging_monitoring.core.logger_config import get_logger
+
     logger = get_logger(__name__)
 except ImportError:
     import logging
+
     logger = logging.getLogger(__name__)
 
 from codomyrmex.events.core.event_bus import (
@@ -37,11 +39,14 @@ class EventListener:
         self.handlers: dict[str, Callable[[Event], Any]] = {}
         self.enabled = True
 
-
-    def on(self, event_types: EventType | list[EventType] | str | list[str],
-           handler: Callable[[Event], Any], handler_name: str | None = None,
-           filter_func: Callable[[Event], bool] | None = None,
-           priority: int = 0) -> str:
+    def on(
+        self,
+        event_types: EventType | list[EventType] | str | list[str],
+        handler: Callable[[Event], Any],
+        handler_name: str | None = None,
+        filter_func: Callable[[Event], bool] | None = None,
+        priority: int = 0,
+    ) -> str:
         """Register an event handler."""
         if not self.enabled:
             return ""
@@ -57,17 +62,21 @@ class EventListener:
             handler=handler,
             subscriber_id=f"{self.listener_id}_{handler_name}",
             filter_func=filter_func,
-            priority=priority
+            priority=priority,
         )
 
         self.subscriptions[handler_name] = subscriber_id
         self.handlers[handler_name] = handler
         return handler_name
 
-    def once(self, event_types: EventType | list[EventType] | str | list[str],
-             handler: Callable[[Event], Any], handler_name: str | None = None,
-             filter_func: Callable[[Event], bool] | None = None,
-             priority: int = 0) -> str:
+    def once(
+        self,
+        event_types: EventType | list[EventType] | str | list[str],
+        handler: Callable[[Event], Any],
+        handler_name: str | None = None,
+        filter_func: Callable[[Event], bool] | None = None,
+        priority: int = 0,
+    ) -> str:
         """Register a one-time event handler."""
         if handler_name is None:
             handler_name = f"{self.listener_id}_once_{len(self.handlers)}"
@@ -78,7 +87,9 @@ class EventListener:
             finally:
                 self.off(handler_name)
 
-        return self.on(event_types, one_time_wrapper, handler_name, filter_func, priority)
+        return self.on(
+            event_types, one_time_wrapper, handler_name, filter_func, priority
+        )
 
     def off(self, handler_name: str) -> bool:
         """Unsubscribe a handler."""
@@ -91,49 +102,72 @@ class EventListener:
         return False
 
     def listen_to_analysis_events(self, handler: Callable[[Event], Any]) -> list[str]:
-        event_types = [EventType.ANALYSIS_START, EventType.ANALYSIS_PROGRESS,
-                       EventType.ANALYSIS_COMPLETE, EventType.ANALYSIS_ERROR]
+        event_types = [
+            EventType.ANALYSIS_START,
+            EventType.ANALYSIS_PROGRESS,
+            EventType.ANALYSIS_COMPLETE,
+            EventType.ANALYSIS_ERROR,
+        ]
         return [self.on(et, handler) for et in event_types]
 
     def listen_to_build_events(self, handler: Callable[[Event], Any]) -> list[str]:
-        event_types = [EventType.BUILD_START, EventType.BUILD_PROGRESS,
-                       EventType.BUILD_COMPLETE, EventType.BUILD_ERROR]
+        event_types = [
+            EventType.BUILD_START,
+            EventType.BUILD_PROGRESS,
+            EventType.BUILD_COMPLETE,
+            EventType.BUILD_ERROR,
+        ]
         return [self.on(et, handler) for et in event_types]
 
 
-def event_handler(event_types: EventType | list[EventType] | str | list[str],
-                 filter_func: Callable[[Event], bool] | None = None,
-                 priority: int = 0):
+def event_handler(
+    event_types: EventType | list[EventType] | str | list[str],
+    filter_func: Callable[[Event], bool] | None = None,
+    priority: int = 0,
+):
     def decorator(func):
         """Decorator."""
-        func._event_types = event_types if isinstance(event_types, list) else [event_types]
+        func._event_types = (
+            event_types if isinstance(event_types, list) else [event_types]
+        )
         func._event_filter = filter_func
         func._event_priority = priority
         func._is_event_handler = True
         return func
+
     return decorator
 
 
 class AutoEventListener(EventListener):
     """EventListener that auto-discovers handler methods via the _is_event_handler attribute at runtime."""
+
     def register_handlers(self, obj: Any) -> None:
         for attr_name in dir(obj):
             attr = getattr(obj, attr_name)
-            if (callable(attr) and getattr(attr, '_is_event_handler', False)):
-                event_types = getattr(attr, '_event_types', [])
-                filter_func = getattr(attr, '_event_filter', None)
-                priority = getattr(attr, '_event_priority', 0)
+            if callable(attr) and getattr(attr, "_is_event_handler", False):
+                event_types = getattr(attr, "_event_types", [])
+                filter_func = getattr(attr, "_event_filter", None)
+                priority = getattr(attr, "_event_priority", 0)
 
                 # Check if it's already bound or needs binding
-                if hasattr(attr, '__get__') and not inspect.ismethod(attr):
+                if hasattr(attr, "__get__") and not inspect.ismethod(attr):
                     bound_handler = attr.__get__(obj, obj.__class__)
                 else:
                     bound_handler = attr
 
-                self.on(event_types, bound_handler, f"auto_{attr_name}", filter_func, priority)
+                self.on(
+                    event_types,
+                    bound_handler,
+                    f"auto_{attr_name}",
+                    filter_func,
+                    priority,
+                )
 
 
-def create_listener(listener_id: str) -> EventListener: return EventListener(listener_id)
+def create_listener(listener_id: str) -> EventListener:
+    return EventListener(listener_id)
+
+
 def create_auto_listener(listener_id: str, obj: Any) -> AutoEventListener:
     listener = AutoEventListener(listener_id)
     listener.register_handlers(obj)

@@ -1,4 +1,5 @@
 """Activation functions implemented from scratch with NumPy."""
+
 import numpy as np
 
 

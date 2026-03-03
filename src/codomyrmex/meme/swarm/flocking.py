@@ -51,9 +51,9 @@ def update_flock(agents: list[SwarmAgent], params: FlockingParams) -> None:
 
         # Apply weights (simplified physics)
         acceleration = (
-            sep * params.separation_weight +
-            ali * params.alignment_weight +
-            coh * params.cohesion_weight
+            sep * params.separation_weight
+            + ali * params.alignment_weight
+            + coh * params.cohesion_weight
         )
 
         # Limit force

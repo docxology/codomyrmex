@@ -96,5 +96,3 @@ class Cache(ABC):
         # Default implementation - override in subclasses for better performance
         # This is a basic implementation - subclasses should override
         return 0
-
-

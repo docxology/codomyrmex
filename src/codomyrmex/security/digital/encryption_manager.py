@@ -12,6 +12,7 @@ try:
     from cryptography.hazmat.primitives import hashes, serialization
     from cryptography.hazmat.primitives.asymmetric import rsa
     from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
+
     CRYPTOGRAPHY_AVAILABLE = True
 except ImportError:
     CRYPTOGRAPHY_AVAILABLE = False
@@ -24,6 +25,7 @@ logger = get_logger(__name__)
 
 class EncryptionError(CodomyrmexError):
     """Raised when encryption operations fail."""
+
     pass
 
 
@@ -37,7 +39,9 @@ class EncryptionManager:
             key: Symmetric key (Fernet). If None, a new key is generated.
         """
         if not CRYPTOGRAPHY_AVAILABLE:
-            raise ImportError("cryptography package not available. Install with: pip install cryptography")
+            raise ImportError(
+                "cryptography package not available. Install with: pip install cryptography"
+            )
 
         self.key = key or Fernet.generate_key()
         self.cipher = Fernet(self.key)
@@ -45,7 +49,7 @@ class EncryptionManager:
     def encrypt(self, data: str | bytes) -> bytes:
         """Encrypt data using symmetric key."""
         if isinstance(data, str):
-            data = data.encode('utf-8')
+            data = data.encode("utf-8")
         return self.cipher.encrypt(data)
 
     def decrypt(self, token: bytes) -> bytes:
@@ -57,7 +61,7 @@ class EncryptionManager:
 
     def decrypt_to_string(self, token: bytes) -> str:
         """Decrypt data and return as string."""
-        return self.decrypt(token).decode('utf-8')
+        return self.decrypt(token).decode("utf-8")
 
     @staticmethod
     def generate_key_pair(password: bytes | None = None) -> tuple[bytes, bytes]:
@@ -72,7 +76,7 @@ class EncryptionManager:
             Tuple of (private_key_pem, public_key_pem)
         """
         if not CRYPTOGRAPHY_AVAILABLE:
-             raise ImportError("cryptography package not available")
+            raise ImportError("cryptography package not available")
 
         private_key = rsa.generate_private_key(
             public_exponent=65537,
@@ -93,7 +97,7 @@ class EncryptionManager:
         public_key = private_key.public_key()
         public_pem = public_key.public_bytes(
             encoding=serialization.Encoding.PEM,
-            format=serialization.PublicFormat.SubjectPublicKeyInfo
+            format=serialization.PublicFormat.SubjectPublicKeyInfo,
         )
 
         return private_pem, public_pem
@@ -110,7 +114,7 @@ class EncryptionManager:
             Tuple of (key, salt)
         """
         if not CRYPTOGRAPHY_AVAILABLE:
-             raise ImportError("cryptography package not available")
+            raise ImportError("cryptography package not available")
 
         if salt is None:
             salt = os.urandom(16)

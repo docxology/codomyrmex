@@ -37,15 +37,22 @@ class TestSerializationResult:
 
     def test_error_field_default_empty(self):
         r = SerializationResult(
-            format="yaml", input_type="str", output_size=0,
-            duration_seconds=0.0, success=False
+            format="yaml",
+            input_type="str",
+            output_size=0,
+            duration_seconds=0.0,
+            success=False,
         )
         assert r.error == ""
 
     def test_error_field_set(self):
         r = SerializationResult(
-            format="json", input_type="set", output_size=0,
-            duration_seconds=0.0, success=False, error="not serializable"
+            format="json",
+            input_type="set",
+            output_size=0,
+            duration_seconds=0.0,
+            success=False,
+            error="not serializable",
         )
         assert r.error == "not serializable"
 

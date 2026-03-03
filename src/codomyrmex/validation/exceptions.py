@@ -30,7 +30,7 @@ class ValidationError(BaseValidationError):
         field: str | None = None,
         value: Any = None,
         rule: str | None = None,
-        **kwargs: Any
+        **kwargs: Any,
     ):
         super().__init__(message, **kwargs)
         if field:
@@ -61,7 +61,7 @@ class SchemaError(CodomyrmexError):
         schema_name: str | None = None,
         schema_path: str | None = None,
         schema_type: str | None = None,
-        **kwargs: Any
+        **kwargs: Any,
     ):
         super().__init__(message, **kwargs)
         if schema_name:
@@ -90,7 +90,7 @@ class ConstraintViolationError(ValidationError):
         constraint_type: str | None = None,
         expected: str | None = None,
         actual: str | None = None,
-        **kwargs: Any
+        **kwargs: Any,
     ):
         super().__init__(message, **kwargs)
         if constraint_name:
@@ -119,7 +119,7 @@ class TypeValidationError(ValidationError):
         expected_type: str | None = None,
         actual_type: str | None = None,
         field: str | None = None,
-        **kwargs: Any
+        **kwargs: Any,
     ):
         super().__init__(message, field=field, **kwargs)
         if expected_type:
@@ -142,7 +142,7 @@ class RequiredFieldError(ValidationError):
         message: str,
         field: str | None = None,
         parent: str | None = None,
-        **kwargs: Any
+        **kwargs: Any,
     ):
         super().__init__(message, field=field, **kwargs)
         if parent:
@@ -167,7 +167,7 @@ class RangeValidationError(ValidationError):
         value: Any = None,
         min_value: Any = None,
         max_value: Any = None,
-        **kwargs: Any
+        **kwargs: Any,
     ):
         super().__init__(message, field=field, value=value, **kwargs)
         if min_value is not None:
@@ -192,7 +192,7 @@ class FormatValidationError(ValidationError):
         field: str | None = None,
         expected_format: str | None = None,
         pattern: str | None = None,
-        **kwargs: Any
+        **kwargs: Any,
     ):
         super().__init__(message, field=field, **kwargs)
         if expected_format:
@@ -219,7 +219,7 @@ class LengthValidationError(ValidationError):
         actual_length: int | None = None,
         min_length: int | None = None,
         max_length: int | None = None,
-        **kwargs: Any
+        **kwargs: Any,
     ):
         super().__init__(message, field=field, **kwargs)
         if actual_length is not None:
@@ -246,7 +246,7 @@ class CustomValidationError(ValidationError):
         validator_name: str | None = None,
         field: str | None = None,
         details: dict[str, Any] | None = None,
-        **kwargs: Any
+        **kwargs: Any,
     ):
         super().__init__(message, field=field, **kwargs)
         if validator_name:

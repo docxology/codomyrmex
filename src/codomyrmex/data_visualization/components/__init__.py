@@ -4,6 +4,7 @@ Provides UI elements: TextBlock, CodeBlock, Image, Video, Badge,
 Alert, ProgressBar, Timeline, TimelineEvent, StatBox, ChatBubble,
 JsonView, HeatmapTable.
 """
+
 from ._base import BaseComponent
 from .alert import Alert
 from .badge import Badge

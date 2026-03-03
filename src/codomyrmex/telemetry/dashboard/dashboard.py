@@ -92,8 +92,6 @@ class DashboardManager:
 
         all_metrics = []
         for metric_name in panel.metrics:
-            all_metrics.extend(
-                self.collector.get_metrics(metric_name, start=start)
-            )
+            all_metrics.extend(self.collector.get_metrics(metric_name, start=start))
 
         return all_metrics

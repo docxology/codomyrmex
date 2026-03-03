@@ -36,19 +36,28 @@ except ImportError:
 
     def monitor_performance(*args, **kwargs):
         """No-op decorator if dependencies missing."""
+
         def decorator(func):
             """Decorator."""
             return func
+
         return decorator
 
     class performance_context:
         """No-op context manager if dependencies missing."""
-        def __init__(self, *args, **kwargs): return None  # No-op stub
-        def __enter__(self): return self
-        def __exit__(self, *args): return None  # No-op stub
+
+        def __init__(self, *args, **kwargs):
+            return None  # No-op stub
+
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *args):
+            return None  # No-op stub
 
     def get_system_metrics(*args, **kwargs):
         return {}
+
 
 __all__ = [
     "ResourceSnapshot",

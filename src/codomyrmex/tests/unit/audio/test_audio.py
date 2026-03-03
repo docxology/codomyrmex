@@ -17,6 +17,7 @@ import pytest
 def test_audio_module_imports() -> None:
     """Test that audio module can be imported."""
     from codomyrmex import audio
+
     assert hasattr(audio, "__version__")
 
 
@@ -421,6 +422,7 @@ class TestTranscriber:
     def test_transcriber_import(self) -> None:
         """Test Transcriber can be imported."""
         from codomyrmex.audio.speech_to_text.transcriber import Transcriber
+
         assert Transcriber is not None
 
     def test_get_supported_languages(self) -> None:
@@ -442,6 +444,7 @@ class TestSynthesizer:
     def test_synthesizer_import(self) -> None:
         """Test Synthesizer can be imported."""
         from codomyrmex.audio.text_to_speech.synthesizer import Synthesizer
+
         assert Synthesizer is not None
 
     def test_popular_voices_defined(self) -> None:

@@ -31,6 +31,7 @@ logger = get_logger(__name__)
 
 # ── Step generators ───────────────────────────────────────────────
 
+
 class StepGenerator(Protocol):
     """Protocol for pluggable step generation strategies."""
 
@@ -104,12 +105,11 @@ class StructuralStepGenerator:
 
 # ── Conclusion synthesizer ────────────────────────────────────────
 
+
 class ConclusionSynthesizer(Protocol):
     """Protocol for pluggable conclusion synthesis."""
 
-    def synthesize(
-        self, steps: list[ReasoningStep], prompt: str
-    ) -> Conclusion:
+    def synthesize(self, steps: list[ReasoningStep], prompt: str) -> Conclusion:
         """Synthesize a conclusion from reasoning steps."""
         ...
 
@@ -117,9 +117,7 @@ class ConclusionSynthesizer(Protocol):
 class StructuralConclusionSynthesizer:
     """Default synthesizer that aggregates step insights."""
 
-    def synthesize(
-        self, steps: list[ReasoningStep], prompt: str
-    ) -> Conclusion:
+    def synthesize(self, steps: list[ReasoningStep], prompt: str) -> Conclusion:
         """Synthesize conclusion by aggregating step confidence and evidence."""
         if not steps:
             return Conclusion(
@@ -138,8 +136,7 @@ class StructuralConclusionSynthesizer:
 
         # Build justification from step thoughts
         justification_parts = [
-            f"Step {i + 1} ({s.step_type}): {s.thought}"
-            for i, s in enumerate(steps)
+            f"Step {i + 1} ({s.step_type}): {s.thought}" for i, s in enumerate(steps)
         ]
         justification = " → ".join(justification_parts[:5])
 
@@ -153,6 +150,7 @@ class StructuralConclusionSynthesizer:
 
 
 # ── Main pipeline ─────────────────────────────────────────────────
+
 
 class ChainOfThought:
     """Composable Chain-of-Thought reasoning pipeline.
@@ -221,9 +219,7 @@ class ChainOfThought:
         )
 
         # Step 1: Generate reasoning steps
-        steps = self._generator.generate_steps(
-            prompt, effective_depth, context
-        )
+        steps = self._generator.generate_steps(prompt, effective_depth, context)
         for step in steps:
             trace.add_step(step)
 

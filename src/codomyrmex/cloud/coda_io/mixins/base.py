@@ -9,6 +9,7 @@ from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
 
+
 class BaseMixin:
     """BaseMixin class."""
 
@@ -66,23 +67,33 @@ class BaseMixin:
 
         return response_body
 
-    def _get(self, path: str, params: dict[str, Any] | None = None, **kwargs) -> dict[str, Any]:
+    def _get(
+        self, path: str, params: dict[str, Any] | None = None, **kwargs
+    ) -> dict[str, Any]:
         """Make a GET request."""
         return self._request("GET", path, params=params, **kwargs)
 
-    def _post(self, path: str, json_data: dict[str, Any] | None = None, **kwargs) -> dict[str, Any]:
+    def _post(
+        self, path: str, json_data: dict[str, Any] | None = None, **kwargs
+    ) -> dict[str, Any]:
         """Make a POST request."""
         return self._request("POST", path, json_data=json_data, **kwargs)
 
-    def _put(self, path: str, json_data: dict[str, Any] | None = None, **kwargs) -> dict[str, Any]:
+    def _put(
+        self, path: str, json_data: dict[str, Any] | None = None, **kwargs
+    ) -> dict[str, Any]:
         """Make a PUT request."""
         return self._request("PUT", path, json_data=json_data, **kwargs)
 
-    def _patch(self, path: str, json_data: dict[str, Any] | None = None, **kwargs) -> dict[str, Any]:
+    def _patch(
+        self, path: str, json_data: dict[str, Any] | None = None, **kwargs
+    ) -> dict[str, Any]:
         """Make a PATCH request."""
         return self._request("PATCH", path, json_data=json_data, **kwargs)
 
-    def _delete(self, path: str, json_data: dict[str, Any] | None = None, **kwargs) -> dict[str, Any]:
+    def _delete(
+        self, path: str, json_data: dict[str, Any] | None = None, **kwargs
+    ) -> dict[str, Any]:
         """Make a DELETE request."""
         return self._request("DELETE", path, json_data=json_data, **kwargs)
 
@@ -90,4 +101,3 @@ class BaseMixin:
     def _encode_id(id_or_name: str) -> str:
         """URL-encode an ID or name for use in paths."""
         return quote(id_or_name, safe="")
-

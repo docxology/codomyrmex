@@ -13,6 +13,7 @@ _HAS_GEMINI_KEY = bool(os.environ.get("GEMINI_API_KEY"))
 try:
     from codomyrmex.agents.core import AgentCapabilities, AgentRequest
     from codomyrmex.agents.gemini.gemini_client import GeminiClient
+
     _HAS_AGENTS = True
 except ImportError:
     _HAS_AGENTS = False
@@ -24,6 +25,7 @@ if not _HAS_AGENTS:
 # ---------------------------------------------------------------------------
 # Tests that require no API key (structural / init tests)
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestGeminiClientInit:
@@ -58,6 +60,7 @@ class TestGeminiClientInit:
 # ---------------------------------------------------------------------------
 # Tests that require a live Gemini API key
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.skipif(not _HAS_GEMINI_KEY, reason="GEMINI_API_KEY not set")
 @pytest.mark.unit

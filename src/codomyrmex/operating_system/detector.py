@@ -28,6 +28,7 @@ if TYPE_CHECKING:
 
 # ── Detection ───────────────────────────────────────────────────────
 
+
 def detect_platform() -> OSPlatform:
     """Detect the current operating system platform.
 
@@ -57,14 +58,17 @@ def get_provider() -> OSProviderBase:
 
     if current == OSPlatform.MACOS:
         from .mac.provider import MacOSProvider
+
         return MacOSProvider()
 
     if current == OSPlatform.LINUX:
         from .linux.provider import LinuxProvider
+
         return LinuxProvider()
 
     if current == OSPlatform.WINDOWS:
         from .windows.provider import WindowsProvider
+
         return WindowsProvider()
 
     raise RuntimeError(
@@ -74,6 +78,7 @@ def get_provider() -> OSProviderBase:
 
 
 # ── Generic Dispatch Functions ──────────────────────────────────────
+
 
 def get_system_info() -> SystemInfo:
     """Return system information for the current platform."""

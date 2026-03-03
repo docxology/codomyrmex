@@ -35,6 +35,7 @@ except ImportError:
 
 def cli_commands():
     """Return CLI commands for the plugin_system module."""
+
     def _list_plugins():
         registry = PluginRegistry()
         plugins = registry.list_plugins()
@@ -60,22 +61,22 @@ def cli_commands():
 
 
 __all__ = [
-    'PluginManager',
-    'PluginValidator',
-    'PluginLoader',
-    'PluginRegistry',
-    'PluginInfo',
-    'Plugin',
-    'PluginType',
-    'PluginState',
+    "PluginManager",
+    "PluginValidator",
+    "PluginLoader",
+    "PluginRegistry",
+    "PluginInfo",
+    "Plugin",
+    "PluginType",
+    "PluginState",
     # Exceptions
-    'PluginError',
-    'LoadError',
-    'DependencyError',
-    'HookError',
-    'PluginValidationError',
-    'PluginStateError',
-    'PluginConflictError',
+    "PluginError",
+    "LoadError",
+    "DependencyError",
+    "HookError",
+    "PluginValidationError",
+    "PluginStateError",
+    "PluginConflictError",
     # CLI
-    'cli_commands',
+    "cli_commands",
 ]

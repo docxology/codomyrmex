@@ -17,6 +17,7 @@ from typing import Any, Optional
 @dataclass
 class SpanContext:
     """Context for a span in a distributed trace."""
+
     trace_id: str
     span_id: str
     parent_span_id: str | None = None
@@ -32,14 +33,14 @@ class SpanContext:
         }
 
     @classmethod
-    def new_root(cls) -> 'SpanContext':
+    def new_root(cls) -> "SpanContext":
         """Create a new root span context."""
         return cls(
             trace_id=uuid.uuid4().hex,
             span_id=uuid.uuid4().hex[:16],
         )
 
-    def child(self) -> 'SpanContext':
+    def child(self) -> "SpanContext":
         """Create a child span context."""
         return SpanContext(
             trace_id=self.trace_id,
@@ -48,9 +49,11 @@ class SpanContext:
             sampled=self.sampled,
         )
 
+
 @dataclass
 class SpanEvent:
     """An event within a span."""
+
     name: str
     timestamp: datetime = field(default_factory=datetime.now)
     attributes: dict[str, Any] = field(default_factory=dict)
@@ -63,18 +66,23 @@ class SpanEvent:
             "attributes": self.attributes,
         }
 
+
 @dataclass
 class SpanLink:
     """A link to another span."""
+
     trace_id: str
     span_id: str
     attributes: dict[str, Any] = field(default_factory=dict)
 
+
 class SpanStatus:
     """Status of a span."""
+
     OK = "ok"
     ERROR = "error"
     UNSET = "unset"
+
 
 class Span:
     """A single span in a distributed trace."""
@@ -97,22 +105,22 @@ class Span:
         self.status: str = SpanStatus.UNSET
         self.status_message: str = ""
 
-    def start(self) -> 'Span':
+    def start(self) -> "Span":
         """Start the span."""
         self.start_time = datetime.now()
         return self
 
-    def end(self) -> 'Span':
+    def end(self) -> "Span":
         """End the span."""
         self.end_time = datetime.now()
         return self
 
-    def set_attribute(self, key: str, value: Any) -> 'Span':
+    def set_attribute(self, key: str, value: Any) -> "Span":
         """Set an attribute on the span."""
         self.attributes[key] = value
         return self
 
-    def set_attributes(self, attributes: dict[str, Any]) -> 'Span':
+    def set_attributes(self, attributes: dict[str, Any]) -> "Span":
         """Set multiple attributes."""
         self.attributes.update(attributes)
         return self
@@ -121,41 +129,45 @@ class Span:
         self,
         name: str,
         attributes: dict[str, Any] | None = None,
-    ) -> 'Span':
+    ) -> "Span":
         """Add an event to the span."""
-        self.events.append(SpanEvent(
-            name=name,
-            attributes=attributes or {},
-        ))
+        self.events.append(
+            SpanEvent(
+                name=name,
+                attributes=attributes or {},
+            )
+        )
         return self
 
     def add_link(
         self,
         context: SpanContext,
         attributes: dict[str, Any] | None = None,
-    ) -> 'Span':
+    ) -> "Span":
         """Add a link to another span."""
-        self.links.append(SpanLink(
-            trace_id=context.trace_id,
-            span_id=context.span_id,
-            attributes=attributes or {},
-        ))
+        self.links.append(
+            SpanLink(
+                trace_id=context.trace_id,
+                span_id=context.span_id,
+                attributes=attributes or {},
+            )
+        )
         return self
 
-    def set_status(self, status: str, message: str = "") -> 'Span':
+    def set_status(self, status: str, message: str = "") -> "Span":
         """Set the span status."""
         self.status = status
         self.status_message = message
         return self
 
-    def record_exception(self, exception: Exception) -> 'Span':
+    def record_exception(self, exception: Exception) -> "Span":
         """Record an exception on the span."""
         self.add_event(
             "exception",
             {
                 "exception.type": type(exception).__name__,
                 "exception.message": str(exception),
-            }
+            },
         )
         self.set_status(SpanStatus.ERROR, str(exception))
         return self
@@ -184,16 +196,20 @@ class Span:
             "status_message": self.status_message,
         }
 
+
 # Thread-local storage for current span
 _current_span = threading.local()
 
+
 def get_current_span() -> Span | None:
     """Get the current span from context."""
-    return getattr(_current_span, 'span', None)
+    return getattr(_current_span, "span", None)
+
 
 def set_current_span(span: Span | None) -> None:
     """Set the current span in context."""
     _current_span.span = span
+
 
 class Tracer:
     """Creates and manages spans."""
@@ -260,6 +276,7 @@ class Tracer:
         kind: str = "internal",
     ):
         """Decorator to wrap a function with span creation."""
+
         def decorator(func: Callable) -> Callable:
             """Decorator."""
             span_name = name or func.__name__
@@ -270,7 +287,9 @@ class Tracer:
                     return func(*args, **kwargs)
 
             return wrapper
+
         return decorator
+
 
 class SpanProcessor:
     """Processes completed spans."""
@@ -298,6 +317,7 @@ class SpanProcessor:
         """Get all spans for a trace."""
         with self._lock:
             return [s for s in self._spans if s.context.trace_id == trace_id]
+
 
 class BatchSpanProcessor(SpanProcessor):
     """Batch processes spans before export."""
@@ -338,6 +358,7 @@ class BatchSpanProcessor(SpanProcessor):
         with self._lock:
             self._flush()
 
+
 def create_tracer(
     name: str = "default",
     processor: SpanProcessor | None = None,
@@ -346,6 +367,7 @@ def create_tracer(
     if processor:
         return Tracer(name, on_span_end=processor.process)
     return Tracer(name)
+
 
 __all__ = [
     "SpanContext",

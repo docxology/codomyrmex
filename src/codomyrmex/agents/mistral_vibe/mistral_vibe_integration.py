@@ -4,6 +4,7 @@ from codomyrmex.agents.core import AgentIntegrationAdapter, AgentRequest
 
 """Mistral Vibe integration adapters for Codomyrmex modules."""
 
+
 class MistralVibeIntegrationAdapter(AgentIntegrationAdapter):
     """Integration adapter for Mistral Vibe with Codomyrmex modules."""
 
@@ -63,9 +64,7 @@ class MistralVibeIntegrationAdapter(AgentIntegrationAdapter):
 
         return response.content
 
-    def adapt_for_llm(
-        self, messages: list[dict], model: str = None, **kwargs
-    ) -> dict:
+    def adapt_for_llm(self, messages: list[dict], model: str = None, **kwargs) -> dict:
         """
         Adapt Mistral Vibe for LLM module.
 
@@ -147,4 +146,3 @@ class MistralVibeIntegrationAdapter(AgentIntegrationAdapter):
             "error": response.error,
             "metadata": response.metadata,
         }
-

@@ -25,6 +25,7 @@ if PROJECT_ROOT not in sys.path:
 
 logger = get_logger(__name__)
 
+
 @dataclass
 class APIEndpoint:
     """Represents a single API endpoint."""
@@ -54,6 +55,7 @@ class APIEndpoint:
             "deprecated": self.deprecated,
             "security": self.security,
         }
+
 
 @dataclass
 class APIDocumentation:
@@ -107,6 +109,7 @@ class APIDocumentation:
             paths[endpoint.path][endpoint.method.lower()] = endpoint.to_dict()
 
         return paths
+
 
 class APIDocumentationGenerator:
     """
@@ -275,10 +278,12 @@ class APIDocumentationGenerator:
         # Extract path (first argument)
         if decorator.args:
             # Check for modern ast.Constant first (Python 3.8+)
-            if hasattr(decorator.args[0], 'value') and isinstance(getattr(decorator.args[0], 'value', None), str):
+            if hasattr(decorator.args[0], "value") and isinstance(
+                getattr(decorator.args[0], "value", None), str
+            ):
                 info["path"] = decorator.args[0].value
             # Python 3.8 compatibility: ast.Str was removed in 3.12, use ast.Constant instead.
-            elif hasattr(decorator.args[0], 's'):
+            elif hasattr(decorator.args[0], "s"):
                 info["path"] = decorator.args[0].s
 
         # Extract method from decorator name or keyword arguments
@@ -299,13 +304,15 @@ class APIDocumentationGenerator:
 
         # Check keyword arguments
         for kwarg in decorator.keywords:
-            if kwarg.arg == "methods" and hasattr(kwarg.value, 'elts'):
+            if kwarg.arg == "methods" and hasattr(kwarg.value, "elts"):
                 if kwarg.value.elts:
                     # Check for modern ast.Constant first (Python 3.8+)
-                    if hasattr(kwarg.value.elts[0], 'value') and isinstance(getattr(kwarg.value.elts[0], 'value', None), str):
+                    if hasattr(kwarg.value.elts[0], "value") and isinstance(
+                        getattr(kwarg.value.elts[0], "value", None), str
+                    ):
                         info["method"] = kwarg.value.elts[0].value.upper()
                     # Python 3.8 compatibility: ast.Str was removed in 3.12, use ast.Constant instead.
-                    elif hasattr(kwarg.value.elts[0], 's'):
+                    elif hasattr(kwarg.value.elts[0], "s"):
                         info["method"] = kwarg.value.elts[0].s.upper()
 
         return info
@@ -415,7 +422,6 @@ class APIDocumentationGenerator:
                     json.dump(self.documentation.to_dict(), f, indent=2)
 
             elif format.lower() == "yaml":
-
                 with open(output_path, "w") as f:
                     yaml.dump(self.documentation.to_dict(), f, default_flow_style=False)
 
@@ -471,6 +477,7 @@ class APIDocumentationGenerator:
 
         return issues
 
+
 # Convenience functions
 def generate_api_docs(
     title: str,
@@ -492,6 +499,7 @@ def generate_api_docs(
     base_url = base_url or os.getenv("API_BASE_URL", DEFAULT_API_BASE_URL)
     generator = APIDocumentationGenerator(source_paths)
     return generator.generate_documentation(title, version, base_url)
+
 
 def extract_api_specs(source_path: str) -> list[APIEndpoint]:
     """

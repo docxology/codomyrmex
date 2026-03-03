@@ -1,4 +1,5 @@
 """Quality submodule — validation, testing, taxonomy."""
+
 from .taxonomy import (
     TaxonomyReport,
     ToolCategory,

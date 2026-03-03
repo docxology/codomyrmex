@@ -20,20 +20,24 @@ from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 logger = get_logger(__name__)
 
-T = TypeVar('T')
-K = TypeVar('K')
-V = TypeVar('V')
+T = TypeVar("T")
+K = TypeVar("K")
+V = TypeVar("V")
+
 
 class WarmingStrategy(Enum):
     """Cache warming strategies."""
-    EAGER = "eager"           # Warm all keys at startup
-    LAZY = "lazy"             # Warm on first access
-    SCHEDULED = "scheduled"   # Warm on schedule
-    ADAPTIVE = "adaptive"     # Warm based on access patterns
+
+    EAGER = "eager"  # Warm all keys at startup
+    LAZY = "lazy"  # Warm on first access
+    SCHEDULED = "scheduled"  # Warm on schedule
+    ADAPTIVE = "adaptive"  # Warm based on access patterns
+
 
 @dataclass
 class WarmingConfig:
     """Configuration for cache warming."""
+
     strategy: WarmingStrategy = WarmingStrategy.LAZY
     batch_size: int = 100
     max_workers: int = 4
@@ -42,9 +46,11 @@ class WarmingConfig:
     retry_on_failure: bool = True
     max_retries: int = 3
 
+
 @dataclass
 class WarmingStats:
     """Statistics for cache warming."""
+
     keys_warmed: int = 0
     keys_failed: int = 0
     total_time_ms: float = 0.0
@@ -59,6 +65,7 @@ class WarmingStats:
             return self.keys_warmed / total
         return 1.0
 
+
 class KeyProvider(ABC, Generic[K]):
     """Base class for providing keys to warm."""
 
@@ -66,6 +73,7 @@ class KeyProvider(ABC, Generic[K]):
     def get_keys(self) -> list[K]:
         """Get list of keys to warm."""
         pass
+
 
 class StaticKeyProvider(KeyProvider[K]):
     """Provide a static list of keys."""
@@ -76,6 +84,7 @@ class StaticKeyProvider(KeyProvider[K]):
     def get_keys(self) -> list[K]:
         return self._keys.copy()
 
+
 class CallableKeyProvider(KeyProvider[K]):
     """Provide keys from a callable."""
 
@@ -85,6 +94,7 @@ class CallableKeyProvider(KeyProvider[K]):
     def get_keys(self) -> list[K]:
         return self._func()
 
+
 class ValueLoader(ABC, Generic[K, V]):
     """Base class for loading values for cache warming."""
 
@@ -92,6 +102,7 @@ class ValueLoader(ABC, Generic[K, V]):
     def load(self, key: K) -> V:
         """Load a value for a given key."""
         pass
+
 
 class CallableValueLoader(ValueLoader[K, V]):
     """Load values using a callable."""
@@ -102,6 +113,7 @@ class CallableValueLoader(ValueLoader[K, V]):
     def load(self, key: K) -> V:
         """Load data from the specified source."""
         return self._func(key)
+
 
 class BatchValueLoader(ValueLoader[K, V]):
     """
@@ -127,6 +139,7 @@ class BatchValueLoader(ValueLoader[K, V]):
             return self._cache[key]
         result = self._batch_func([key])
         return result.get(key)  # type: ignore
+
 
 class CacheWarmer(Generic[K, V]):
     """
@@ -226,7 +239,7 @@ class CacheWarmer(Generic[K, V]):
 
         # Process in batches
         for i in range(0, len(keys), self.config.batch_size):
-            batch = keys[i:i + self.config.batch_size]
+            batch = keys[i : i + self.config.batch_size]
             try:
                 results = loader.load_batch(batch)
                 for key, value in results.items():
@@ -248,9 +261,12 @@ class CacheWarmer(Generic[K, V]):
                     value = self.value_loader.load(key)
                     return (key, value, None)
                 except Exception as e:
-                    if attempt == self.config.max_retries or not self.config.retry_on_failure:
+                    if (
+                        attempt == self.config.max_retries
+                        or not self.config.retry_on_failure
+                    ):
                         return (key, None, str(e))
-                    time.sleep(0.1 * (2 ** attempt))  # Exponential backoff
+                    time.sleep(0.1 * (2**attempt))  # Exponential backoff
             return (key, None, "Max retries exceeded")
 
         with concurrent.futures.ThreadPoolExecutor(
@@ -259,8 +275,7 @@ class CacheWarmer(Generic[K, V]):
             futures = {executor.submit(load_key, key): key for key in keys}
 
             for future in concurrent.futures.as_completed(
-                futures,
-                timeout=self.config.warmup_timeout_s
+                futures, timeout=self.config.warmup_timeout_s
             ):
                 key, value, error = future.result()
                 if error:
@@ -317,6 +332,7 @@ class CacheWarmer(Generic[K, V]):
         if self._scheduler_thread:
             self._scheduler_thread.join(timeout=5.0)
 
+
 class AccessTracker(Generic[K]):
     """
     Track cache access patterns for adaptive warming.
@@ -352,11 +368,8 @@ class AccessTracker(Generic[K]):
     def _trim(self) -> None:
         """Trim old or infrequent keys."""
         # Remove oldest half
-        sorted_by_time = sorted(
-            self._last_access.items(),
-            key=lambda x: x[1]
-        )
-        to_remove = [k for k, _ in sorted_by_time[:len(sorted_by_time) // 2]]
+        sorted_by_time = sorted(self._last_access.items(), key=lambda x: x[1])
+        to_remove = [k for k, _ in sorted_by_time[: len(sorted_by_time) // 2]]
 
         for key in to_remove:
             del self._access_counts[key]
@@ -374,7 +387,8 @@ class AccessTracker(Generic[K]):
         """Get frequently accessed keys."""
         with self._lock:
             hot = [
-                (k, count) for k, count in self._access_counts.items()
+                (k, count)
+                for k, count in self._access_counts.items()
                 if count >= threshold
             ]
             hot.sort(key=lambda x: x[1], reverse=True)
@@ -388,10 +402,7 @@ class AccessTracker(Generic[K]):
         """Get recently accessed keys."""
         cutoff = time.time() - seconds
         with self._lock:
-            recent = [
-                (k, t) for k, t in self._last_access.items()
-                if t >= cutoff
-            ]
+            recent = [(k, t) for k, t in self._last_access.items() if t >= cutoff]
             recent.sort(key=lambda x: x[1], reverse=True)
             return [k for k, _ in recent[:limit]]
 
@@ -400,6 +411,7 @@ class AccessTracker(Generic[K]):
         with self._lock:
             self._access_counts.clear()
             self._last_access.clear()
+
 
 class AdaptiveKeyProvider(KeyProvider[K]):
     """
@@ -423,6 +435,7 @@ class AdaptiveKeyProvider(KeyProvider[K]):
             threshold=self.threshold,
             limit=self.limit,
         )
+
 
 __all__ = [
     # Enums

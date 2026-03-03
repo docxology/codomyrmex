@@ -22,7 +22,11 @@ def file_system_read(path: str) -> dict:
             "status": "success",
             "path": str(path),
             "content": content,
-            "size_bytes": len(content.encode("utf-8")) if isinstance(content, str) else len(content),
+            "size_bytes": (
+                len(content.encode("utf-8"))
+                if isinstance(content, str)
+                else len(content)
+            ),
         }
     except FileNotFoundError:
         return {"status": "error", "message": f"File not found: {path}"}

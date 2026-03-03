@@ -86,8 +86,12 @@ class TestExecutionMonitor:
         self.monitor.end_execution("exec-A", "success")
         self.monitor.end_execution("exec-B", "error")
 
-        exec_a = next(e for e in self.monitor.executions if e["execution_id"] == "exec-A")
-        exec_b = next(e for e in self.monitor.executions if e["execution_id"] == "exec-B")
+        exec_a = next(
+            e for e in self.monitor.executions if e["execution_id"] == "exec-A"
+        )
+        exec_b = next(
+            e for e in self.monitor.executions if e["execution_id"] == "exec-B"
+        )
         assert exec_a["status"] == "success"
         assert exec_b["status"] == "error"
 
@@ -173,28 +177,34 @@ class TestCodingMetricsCollector:
 
     def test_record_execution_populates_metrics(self):
         """record_execution stores execution data for later summary."""
-        self.collector.record_execution({
-            "language": "python",
-            "status": "success",
-            "execution_time": 1.5,
-            "exit_code": 0,
-        })
+        self.collector.record_execution(
+            {
+                "language": "python",
+                "status": "success",
+                "execution_time": 1.5,
+                "exit_code": 0,
+            }
+        )
         summary = self.collector.get_summary()
         assert summary["total_executions"] == 1
         assert summary["success_count"] == 1
 
     def test_summary_aggregates_multiple_executions(self):
         """get_summary correctly computes rates across multiple executions."""
-        self.collector.record_execution({
-            "language": "python",
-            "status": "success",
-            "execution_time": 1.5,
-        })
-        self.collector.record_execution({
-            "language": "python",
-            "status": "error",
-            "execution_time": 0.2,
-        })
+        self.collector.record_execution(
+            {
+                "language": "python",
+                "status": "success",
+                "execution_time": 1.5,
+            }
+        )
+        self.collector.record_execution(
+            {
+                "language": "python",
+                "status": "error",
+                "execution_time": 0.2,
+            }
+        )
         summary = self.collector.get_summary()
         assert summary["total_executions"] == 2
         assert summary["success_count"] == 1
@@ -204,9 +214,15 @@ class TestCodingMetricsCollector:
 
     def test_get_language_stats_groups_by_language(self):
         """get_language_stats groups execution counts by programming language."""
-        self.collector.record_execution({"language": "python", "status": "success", "execution_time": 1.0})
-        self.collector.record_execution({"language": "python", "status": "error", "execution_time": 0.5})
-        self.collector.record_execution({"language": "javascript", "status": "success", "execution_time": 2.0})
+        self.collector.record_execution(
+            {"language": "python", "status": "success", "execution_time": 1.0}
+        )
+        self.collector.record_execution(
+            {"language": "python", "status": "error", "execution_time": 0.5}
+        )
+        self.collector.record_execution(
+            {"language": "javascript", "status": "success", "execution_time": 2.0}
+        )
 
         stats = self.collector.get_language_stats()
         assert "python" in stats
@@ -218,14 +234,20 @@ class TestCodingMetricsCollector:
 
     def test_clear_resets_all_metrics(self):
         """clear() removes all recorded metrics."""
-        self.collector.record_execution({"language": "python", "status": "success", "execution_time": 1.0})
+        self.collector.record_execution(
+            {"language": "python", "status": "success", "execution_time": 1.0}
+        )
         self.collector.clear()
         summary = self.collector.get_summary()
         assert summary["total_executions"] == 0
 
     def test_language_stats_computes_averages(self):
         """Language stats include average_execution_time per language."""
-        self.collector.record_execution({"language": "python", "status": "success", "execution_time": 2.0})
-        self.collector.record_execution({"language": "python", "status": "success", "execution_time": 4.0})
+        self.collector.record_execution(
+            {"language": "python", "status": "success", "execution_time": 2.0}
+        )
+        self.collector.record_execution(
+            {"language": "python", "status": "success", "execution_time": 4.0}
+        )
         stats = self.collector.get_language_stats()
         assert abs(stats["python"]["average_execution_time"] - 3.0) < 0.01

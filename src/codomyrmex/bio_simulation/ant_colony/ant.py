@@ -17,6 +17,7 @@ if TYPE_CHECKING:
 
 class AntState(Enum):
     """Possible behavioral states for an ant."""
+
     FORAGING = auto()
     RETURNING = auto()
     RESTING = auto()
@@ -71,7 +72,7 @@ class Ant:
         # Normalize and scale
         speed = self._speed
         if self.genome and "speed" in self.genome.traits:
-            speed *= (0.5 + self.genome.traits["speed"])
+            speed *= 0.5 + self.genome.traits["speed"]
 
         nx = (dx / magnitude) * speed
         ny = (dy / magnitude) * speed
@@ -85,7 +86,7 @@ class Ant:
         # Energy cost proportional to distance
         cost = speed * 0.005
         if self.genome and "endurance" in self.genome.traits:
-            cost *= (1.5 - self.genome.traits["endurance"])
+            cost *= 1.5 - self.genome.traits["endurance"]
 
         self.energy = max(0.0, self.energy - cost)
         self.age_ticks += 1
@@ -130,7 +131,7 @@ class Ant:
 
         max_carry = 10.0
         if self.genome and "strength" in self.genome.traits:
-            max_carry *= (0.5 + self.genome.traits["strength"])
+            max_carry *= 0.5 + self.genome.traits["strength"]
 
         picked = min(amount, max_carry)
         if picked > 0:

@@ -135,6 +135,7 @@ def timing_decorator(func: Callable[..., T]) -> Callable[..., T]:
     Adds execution_time_ms to function result if it's a dict,
     otherwise logs the time.
     """
+
     @functools.wraps(func)
     def wrapper(*args, **kwargs):
         """Wrapper."""
@@ -146,6 +147,7 @@ def timing_decorator(func: Callable[..., T]) -> Callable[..., T]:
             result["execution_time_ms"] = round(elapsed, 2)
 
         return result
+
     return wrapper
 
 
@@ -166,8 +168,10 @@ def retry(
     Returns:
         Decorator function
     """
+
     def decorator(func: Callable[..., T]) -> Callable[..., T]:
         """Decorator."""
+
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
             """Wrapper."""
@@ -184,7 +188,9 @@ def retry(
                         current_delay *= backoff
 
             raise last_exception
+
         return wrapper
+
     return decorator
 
 
@@ -213,7 +219,7 @@ def truncate_string(s: str, max_length: int = 100, suffix: str = "...") -> str:
     """
     if len(s) <= max_length:
         return s
-    return s[:max_length - len(suffix)] + suffix
+    return s[: max_length - len(suffix)] + suffix
 
 
 def get_env(key: str, default: str | None = None, required: bool = False) -> str | None:

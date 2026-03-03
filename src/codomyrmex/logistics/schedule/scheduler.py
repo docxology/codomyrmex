@@ -32,12 +32,7 @@ class ScheduleManager:
         self._thread: threading.Thread | None = None
 
     def schedule_cron(
-        self,
-        task_id: str,
-        cron_expression: str,
-        callback: Callable,
-        *args,
-        **kwargs
+        self, task_id: str, cron_expression: str, callback: Callable, *args, **kwargs
     ) -> str:
         """Schedule a task using cron expression.
 
@@ -68,7 +63,7 @@ class ScheduleManager:
         schedule: RecurringSchedule,
         callback: Callable,
         *args,
-        **kwargs
+        **kwargs,
     ) -> str:
         """Schedule a recurring task.
 
@@ -149,7 +144,9 @@ class ScheduleManager:
 
                     if should_run:
                         try:
-                            task_info["callback"](*task_info["args"], **task_info["kwargs"])
+                            task_info["callback"](
+                                *task_info["args"], **task_info["kwargs"]
+                            )
                             logger.info(f"Executed scheduled task {task_id}")
                         except Exception as e:
                             logger.error(f"Error executing task {task_id}: {e}")
@@ -166,5 +163,3 @@ class ScheduleManager:
             List of task IDs
         """
         return list(self._scheduled_tasks.keys())
-
-

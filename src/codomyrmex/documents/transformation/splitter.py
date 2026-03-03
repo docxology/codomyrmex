@@ -49,16 +49,16 @@ def _split_by_sections(document: Document, criteria: dict) -> list[Document]:
     sections = []
     current_section = []
 
-    for line in content.split('\n'):
-        if line.strip().startswith('#'):
+    for line in content.split("\n"):
+        if line.strip().startswith("#"):
             if current_section:
-                sections.append('\n'.join(current_section))
+                sections.append("\n".join(current_section))
             current_section = [line]
         else:
             current_section.append(line)
 
     if current_section:
-        sections.append('\n'.join(current_section))
+        sections.append("\n".join(current_section))
 
     split_docs = []
     for i, section_content in enumerate(sections):
@@ -82,7 +82,7 @@ def _split_by_size(document: Document, criteria: dict) -> list[Document]:
 
     split_docs = []
     for i in range(0, len(content), max_size):
-        chunk = content[i:i + max_size]
+        chunk = content[i : i + max_size]
         new_metadata = document.metadata.copy()
         new_metadata.custom_fields["chunk_index"] = i // max_size
 
@@ -101,6 +101,7 @@ def _split_by_pages(document: Document, criteria: dict) -> list[Document]:
     # Placeholder for actual PDF splitting logic
     return [document]
 
+
 def _split_by_rows(document: Document, criteria: dict) -> list[Document]:
     """Split CSV document (list of dicts) by rows."""
     rows_per_chunk = criteria.get("rows_per_chunk", 100)
@@ -109,7 +110,7 @@ def _split_by_rows(document: Document, criteria: dict) -> list[Document]:
 
     split_docs = []
     for i in range(0, len(document.content), rows_per_chunk):
-        chunk = document.content[i:i + rows_per_chunk]
+        chunk = document.content[i : i + rows_per_chunk]
         new_metadata = document.metadata.copy()
         new_metadata.custom_fields["chunk_index"] = i // rows_per_chunk
 
@@ -126,12 +127,12 @@ def _split_by_lines(document: Document, criteria: dict) -> list[Document]:
     """Split document by number of lines."""
     lines_per_chunk = criteria.get("lines_per_chunk", 100)
     content = document.get_content_as_string()
-    lines = content.split('\n')
+    lines = content.split("\n")
 
     split_docs = []
     for i in range(0, len(lines), lines_per_chunk):
-        chunk_lines = lines[i:i + lines_per_chunk]
-        chunk_content = '\n'.join(chunk_lines)
+        chunk_lines = lines[i : i + lines_per_chunk]
+        chunk_content = "\n".join(chunk_lines)
         new_metadata = document.metadata.copy()
         new_metadata.custom_fields["chunk_index"] = i // lines_per_chunk
 

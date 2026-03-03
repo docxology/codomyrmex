@@ -153,7 +153,13 @@ class DashboardBuilder:
             }
             if panel.thresholds:
                 panel_dict["thresholds"] = [
-                    {"value": t.value, "colorMode": "custom", "fill": True, "line": True, "op": "gt"}
+                    {
+                        "value": t.value,
+                        "colorMode": "custom",
+                        "fill": True,
+                        "line": True,
+                        "op": "gt",
+                    }
                     for t in panel.thresholds
                 ]
             if panel.unit:

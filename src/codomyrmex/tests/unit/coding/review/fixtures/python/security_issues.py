@@ -6,6 +6,7 @@ import pickle
 """Python file with security issues for testing security analysis.
 """
 
+
 def insecure_function(user_input):
     """Function with multiple security issues."""
     # SQL injection vulnerability
@@ -27,11 +28,13 @@ def insecure_function(user_input):
 
     return content
 
+
 def weak_crypto_example(password):
     """Example of weak cryptographic practices."""
     # Weak hashing (MD5)
     hash_obj = hashlib.md5(password.encode())
     return hash_obj.hexdigest()
+
 
 def hardcoded_credentials():
     """Example with hardcoded credentials."""
@@ -43,11 +46,11 @@ def hardcoded_credentials():
 
     return False
 
+
 class InsecureClass:
     """Class with insecure defaults."""
 
     def __init__(self):
-
 
         self.api_key = "sk-1234567890abcdef"  # Hardcoded API key
         self.debug_mode = True  # Debug mode enabled by default
@@ -60,4 +63,3 @@ class InsecureClass:
         print(f"Processing: {data}")
 
         return data
-

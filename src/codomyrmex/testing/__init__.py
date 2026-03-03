@@ -57,10 +57,10 @@ def cli_commands():
         },
         "run": {
             "help": "Run tests at a given path",
-            "args": {"--path": {"help": "Path to test file or directory", "required": True}},
-            "handler": lambda path=".", **kwargs: print(
-                f"Running tests at: {path}"
-            ),
+            "args": {
+                "--path": {"help": "Path to test file or directory", "required": True}
+            },
+            "handler": lambda path=".", **kwargs: print(f"Running tests at: {path}"),
         },
     }
 

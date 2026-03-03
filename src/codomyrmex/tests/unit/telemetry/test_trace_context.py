@@ -7,6 +7,7 @@ try:
     from opentelemetry.trace import StatusCode
 
     from codomyrmex.telemetry import TraceContext, start_span, traced
+
     _HAS_OTEL = True
 except ImportError:
     _HAS_OTEL = False
@@ -21,6 +22,7 @@ def test_telemetry_initialization():
     TraceContext.initialize(service_name="test-service")
     tracer = TraceContext.get_tracer("test-tracer")
     assert tracer is not None
+
 
 @pytest.mark.unit
 def test_span_lifecycle():
@@ -37,6 +39,7 @@ def test_span_lifecycle():
 
     assert not parent.is_recording()
 
+
 @pytest.mark.unit
 def test_span_attributes():
     """Test setting attributes on a span."""
@@ -47,6 +50,7 @@ def test_span_attributes():
         # In mock or real SDK, we can't easily check attributes without internal access
         # but we verify the call doesn't fail.
         assert span.is_recording()
+
 
 @pytest.mark.unit
 def test_error_recording():
@@ -62,6 +66,7 @@ def test_error_recording():
 
     # Status should be error
     assert span.status.status_code == StatusCode.ERROR
+
 
 @pytest.mark.unit
 def test_traced_decorator():

@@ -102,7 +102,10 @@ def test_verify_capabilities_structure():
     assert "destructive" in tools
     assert "total" in tools
     assert "by_category" in tools
-    assert tools["by_category"]["safe"] + tools["by_category"]["destructive"] == tools["total"]
+    assert (
+        tools["by_category"]["safe"] + tools["by_category"]["destructive"]
+        == tools["total"]
+    )
 
     # Check trust structure
     trust = report["trust"]
@@ -200,9 +203,7 @@ def test_tool_list_workflows_with_files(_cleanup_workflow_dir):
 
     # Create a valid workflow with frontmatter
     wf1 = workflows_dir / "_test_hardening_flow.md"
-    wf1.write_text(
-        "---\ndescription: Test workflow\n---\nSteps...", encoding="utf-8"
-    )
+    wf1.write_text("---\ndescription: Test workflow\n---\nSteps...", encoding="utf-8")
     created_files.append(wf1)
 
     # Create a workflow without frontmatter
@@ -216,15 +217,11 @@ def test_tool_list_workflows_with_files(_cleanup_workflow_dir):
     assert result["count"] >= 2
     workflows = result["workflows"]
 
-    item1 = next(
-        (w for w in workflows if w["name"] == "_test_hardening_flow"), None
-    )
+    item1 = next((w for w in workflows if w["name"] == "_test_hardening_flow"), None)
     assert item1 is not None, "Did not find _test_hardening_flow in results"
     assert item1["description"] == "Test workflow"
 
-    item2 = next(
-        (w for w in workflows if w["name"] == "_test_hardening_raw"), None
-    )
+    item2 = next((w for w in workflows if w["name"] == "_test_hardening_raw"), None)
     assert item2 is not None, "Did not find _test_hardening_raw in results"
     assert item2["description"] == "No description"
 

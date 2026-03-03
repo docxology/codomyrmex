@@ -19,6 +19,7 @@ logger = get_logger(__name__)
 
 class MCPCapability(Enum):
     """MCP server capabilities."""
+
     TOOLS = "tools"
     RESOURCES = "resources"
     PROMPTS = "prompts"
@@ -28,6 +29,7 @@ class MCPCapability(Enum):
 @dataclass
 class MCPClientInfo:
     """Client information for MCP handshake."""
+
     name: str
     version: str = "1.0.0"
 
@@ -35,6 +37,7 @@ class MCPClientInfo:
 @dataclass
 class MCPServerInfo:
     """Server information for MCP handshake."""
+
     name: str
     version: str = "1.0.0"
     capabilities: dict[str, Any] = field(default_factory=dict)
@@ -43,6 +46,7 @@ class MCPServerInfo:
 @dataclass
 class MCPResource:
     """An MCP resource (context data)."""
+
     uri: str
     name: str
     description: str | None = None
@@ -52,6 +56,7 @@ class MCPResource:
 @dataclass
 class MCPPrompt:
     """An MCP prompt template."""
+
     name: str
     description: str | None = None
     arguments: list[dict[str, Any]] = field(default_factory=list)
@@ -119,7 +124,7 @@ class MCPBridge:
 
         # Build input schema from function signature
         sig = inspect.signature(func)
-        type_hints = get_type_hints(func) if hasattr(func, '__annotations__') else {}
+        type_hints = get_type_hints(func) if hasattr(func, "__annotations__") else {}
 
         properties = {}
         required = []
@@ -134,7 +139,7 @@ class MCPBridge:
         }
 
         for param_name, param in sig.parameters.items():
-            if param_name in ('self', 'cls'):
+            if param_name in ("self", "cls"):
                 continue
 
             python_type = type_hints.get(param_name, str)
@@ -269,7 +274,7 @@ class MCPBridge:
                 error={
                     "code": -32603,
                     "message": str(e),
-                }
+                },
             )
 
     async def _handle_notification(self, method: str, params: dict[str, Any]) -> None:
@@ -327,10 +332,12 @@ class MCPBridge:
 
         if tool_name not in self._handlers:
             return {
-                "content": [{
-                    "type": "text",
-                    "text": f"Error: Tool '{tool_name}' not found",
-                }],
+                "content": [
+                    {
+                        "type": "text",
+                        "text": f"Error: Tool '{tool_name}' not found",
+                    }
+                ],
                 "isError": True,
             }
 
@@ -368,6 +375,7 @@ class MCPBridge:
         # File-based resources: read from filesystem
         if uri.startswith("file://"):
             import pathlib
+
             file_path = pathlib.Path(uri.removeprefix("file://"))
             if file_path.exists():
                 content = file_path.read_text(encoding="utf-8")
@@ -375,18 +383,23 @@ class MCPBridge:
                 raise FileNotFoundError(f"Resource file not found: {file_path}")
         else:
             # For non-file resources, return metadata as content
-            content = json.dumps({
-                "uri": resource.uri,
-                "name": resource.name,
-                "description": resource.description,
-            }, indent=2)
+            content = json.dumps(
+                {
+                    "uri": resource.uri,
+                    "name": resource.name,
+                    "description": resource.description,
+                },
+                indent=2,
+            )
 
         return {
-            "contents": [{
-                "uri": resource.uri,
-                "mimeType": resource.mime_type,
-                "text": content,
-            }],
+            "contents": [
+                {
+                    "uri": resource.uri,
+                    "mimeType": resource.mime_type,
+                    "text": content,
+                }
+            ],
         }
 
     async def _handle_prompt_get(self, params: dict[str, Any]) -> dict[str, Any]:
@@ -401,13 +414,15 @@ class MCPBridge:
 
         return {
             "description": prompt.description,
-            "messages": [{
-                "role": "user",
-                "content": {
-                    "type": "text",
-                    "text": f"Prompt: {prompt.name}",
+            "messages": [
+                {
+                    "role": "user",
+                    "content": {
+                        "type": "text",
+                        "text": f"Prompt: {prompt.name}",
+                    },
                 }
-            }]
+            ],
         }
 
     # =========================================================================
@@ -441,6 +456,7 @@ class MCPBridge:
 # Integration with LLM Tools
 # =========================================================================
 
+
 def convert_tool_to_mcp(tool) -> dict[str, Any]:
     """Convert a codomyrmex.llm.tools.Tool to MCP format."""
     properties = {}
@@ -458,7 +474,7 @@ def convert_tool_to_mcp(tool) -> dict[str, Any]:
             "type": "object",
             "properties": properties,
             "required": required,
-        }
+        },
     }
 
 

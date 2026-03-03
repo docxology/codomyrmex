@@ -50,15 +50,12 @@ class InfomaniakNetworkClient(InfomaniakOpenStackBase):
         name: str,
         description: str | None = None,
         is_shared: bool = False,
-        **kwargs
+        **kwargs,
     ) -> dict[str, Any] | None:
         """Create a new network."""
         try:
             network = self._conn.network.create_network(
-                name=name,
-                description=description,
-                is_shared=is_shared,
-                **kwargs
+                name=name, description=description, is_shared=is_shared, **kwargs
             )
             logger.info(f"Created network: {network.id}")
             return {"id": network.id, "name": network.name}
@@ -85,7 +82,7 @@ class InfomaniakNetworkClient(InfomaniakOpenStackBase):
         gateway_ip: str | None = None,
         enable_dhcp: bool = True,
         dns_nameservers: list[str] | None = None,
-        **kwargs
+        **kwargs,
     ) -> dict[str, Any] | None:
         """Create a subnet in a network."""
         try:
@@ -97,7 +94,7 @@ class InfomaniakNetworkClient(InfomaniakOpenStackBase):
                 gateway_ip=gateway_ip,
                 is_dhcp_enabled=enable_dhcp,
                 dns_nameservers=dns_nameservers or [],
-                **kwargs
+                **kwargs,
             )
             logger.info(f"Created subnet: {subnet.id}")
             return {"id": subnet.id, "name": subnet.name, "cidr": subnet.cidr}
@@ -127,10 +124,7 @@ class InfomaniakNetworkClient(InfomaniakOpenStackBase):
             return []
 
     def create_router(
-        self,
-        name: str,
-        external_network: str | None = None,
-        **kwargs
+        self, name: str, external_network: str | None = None, **kwargs
     ) -> dict[str, Any] | None:
         """Create a router with optional external gateway."""
         try:
@@ -148,11 +142,7 @@ class InfomaniakNetworkClient(InfomaniakOpenStackBase):
             logger.error(f"Failed to create router {name}: {e}")
             return None
 
-    def add_router_interface(
-        self,
-        router_id: str,
-        subnet_id: str
-    ) -> bool:
+    def add_router_interface(self, router_id: str, subnet_id: str) -> bool:
         """Add a subnet interface to a router."""
         try:
             self._conn.network.add_interface_to_router(router_id, subnet_id=subnet_id)
@@ -162,15 +152,15 @@ class InfomaniakNetworkClient(InfomaniakOpenStackBase):
             logger.error(f"Failed to add interface to router {router_id}: {e}")
             return False
 
-    def remove_router_interface(
-        self,
-        router_id: str,
-        subnet_id: str
-    ) -> bool:
+    def remove_router_interface(self, router_id: str, subnet_id: str) -> bool:
         """Remove a subnet interface from a router."""
         try:
-            self._conn.network.remove_interface_from_router(router_id, subnet_id=subnet_id)
-            logger.info(f"Removed interface for subnet {subnet_id} from router {router_id}")
+            self._conn.network.remove_interface_from_router(
+                router_id, subnet_id=subnet_id
+            )
+            logger.info(
+                f"Removed interface for subnet {subnet_id} from router {router_id}"
+            )
             return True
         except Exception as e:
             logger.error(f"Failed to remove interface from router {router_id}: {e}")
@@ -208,15 +198,12 @@ class InfomaniakNetworkClient(InfomaniakOpenStackBase):
             return []
 
     def create_security_group(
-        self,
-        name: str,
-        description: str | None = None
+        self, name: str, description: str | None = None
     ) -> dict[str, Any] | None:
         """Create a security group."""
         try:
             sg = self._conn.network.create_security_group(
-                name=name,
-                description=description or ""
+                name=name, description=description or ""
             )
             logger.info(f"Created security group: {sg.id}")
             return {"id": sg.id, "name": sg.name}
@@ -233,7 +220,7 @@ class InfomaniakNetworkClient(InfomaniakOpenStackBase):
         port_range_max: int | None = None,
         remote_ip_prefix: str | None = None,
         ethertype: str = "IPv4",
-        **kwargs
+        **kwargs,
     ) -> dict[str, Any] | None:
         """
         Add a rule to a security group.
@@ -256,7 +243,7 @@ class InfomaniakNetworkClient(InfomaniakOpenStackBase):
                 port_range_max=port_range_max,
                 remote_ip_prefix=remote_ip_prefix,
                 ether_type=ethertype,
-                **kwargs
+                **kwargs,
             )
             logger.info(f"Created security group rule: {rule.id}")
             return {"id": rule.id, "direction": direction, "protocol": protocol}
@@ -296,10 +283,7 @@ class InfomaniakNetworkClient(InfomaniakOpenStackBase):
             logger.error(f"Failed to list floating IPs: {e}")
             return []
 
-    def allocate_floating_ip(
-        self,
-        external_network: str
-    ) -> dict[str, Any] | None:
+    def allocate_floating_ip(self, external_network: str) -> dict[str, Any] | None:
         """Allocate a floating IP from an external network."""
         try:
             ext_net = self._conn.network.find_network(external_network)
@@ -314,11 +298,7 @@ class InfomaniakNetworkClient(InfomaniakOpenStackBase):
             logger.error(f"Failed to allocate floating IP: {e}")
             return None
 
-    def associate_floating_ip(
-        self,
-        floating_ip_id: str,
-        port_id: str
-    ) -> bool:
+    def associate_floating_ip(self, floating_ip_id: str, port_id: str) -> bool:
         """Associate a floating IP with a port."""
         try:
             self._conn.network.update_ip(floating_ip_id, port_id=port_id)
@@ -351,19 +331,12 @@ class InfomaniakNetworkClient(InfomaniakOpenStackBase):
             return []
 
     def create_loadbalancer(
-        self,
-        name: str,
-        subnet_id: str,
-        vip_address: str | None = None,
-        **kwargs
+        self, name: str, subnet_id: str, vip_address: str | None = None, **kwargs
     ) -> dict[str, Any] | None:
         """Create a load balancer."""
         try:
             lb = self._conn.load_balancer.create_load_balancer(
-                name=name,
-                vip_subnet_id=subnet_id,
-                vip_address=vip_address,
-                **kwargs
+                name=name, vip_subnet_id=subnet_id, vip_address=vip_address, **kwargs
             )
             logger.info(f"Created load balancer: {lb.id}")
             return {"id": lb.id, "name": lb.name, "vip_address": lb.vip_address}
@@ -375,8 +348,7 @@ class InfomaniakNetworkClient(InfomaniakOpenStackBase):
         """Delete a load balancer."""
         try:
             self._conn.load_balancer.delete_load_balancer(
-                loadbalancer_id,
-                cascade=cascade
+                loadbalancer_id, cascade=cascade
             )
             logger.info(f"Deleted load balancer: {loadbalancer_id}")
             return True
@@ -488,12 +460,7 @@ class InfomaniakNetworkClient(InfomaniakOpenStackBase):
             return []
 
     def create_listener(
-        self,
-        loadbalancer_id: str,
-        name: str,
-        protocol: str,
-        port: int,
-        **kwargs
+        self, loadbalancer_id: str, name: str, protocol: str, port: int, **kwargs
     ) -> dict[str, Any] | None:
         """Create a listener on a load balancer."""
         try:
@@ -502,7 +469,7 @@ class InfomaniakNetworkClient(InfomaniakOpenStackBase):
                 name=name,
                 protocol=protocol,
                 protocol_port=port,
-                **kwargs
+                **kwargs,
             )
             logger.info(f"Created listener: {listener.id}")
             return {"id": listener.id, "name": listener.name, "protocol": protocol}
@@ -524,9 +491,7 @@ class InfomaniakNetworkClient(InfomaniakOpenStackBase):
     # Octavia Pool Operations
     # =========================================================================
 
-    def list_pools(
-        self, loadbalancer_id: str | None = None
-    ) -> list[dict[str, Any]]:
+    def list_pools(self, loadbalancer_id: str | None = None) -> list[dict[str, Any]]:
         """List pools, optionally filtered by load balancer."""
         try:
             kwargs = {}
@@ -553,7 +518,7 @@ class InfomaniakNetworkClient(InfomaniakOpenStackBase):
         lb_algorithm: str,
         listener_id: str | None = None,
         loadbalancer_id: str | None = None,
-        **kwargs
+        **kwargs,
     ) -> dict[str, Any] | None:
         """Create a pool."""
         try:
@@ -563,7 +528,7 @@ class InfomaniakNetworkClient(InfomaniakOpenStackBase):
                 lb_algorithm=lb_algorithm,
                 listener_id=listener_id,
                 loadbalancer_id=loadbalancer_id,
-                **kwargs
+                **kwargs,
             )
             logger.info(f"Created pool: {pool.id}")
             return {"id": pool.id, "name": pool.name, "protocol": protocol}
@@ -612,7 +577,7 @@ class InfomaniakNetworkClient(InfomaniakOpenStackBase):
         weight: int = 1,
         name: str | None = None,
         subnet_id: str | None = None,
-        **kwargs
+        **kwargs,
     ) -> dict[str, Any] | None:
         """Add a member to a pool."""
         try:
@@ -623,7 +588,7 @@ class InfomaniakNetworkClient(InfomaniakOpenStackBase):
                 weight=weight,
                 name=name,
                 subnet_id=subnet_id,
-                **kwargs
+                **kwargs,
             )
             logger.info(f"Added pool member: {member.id}")
             return {"id": member.id, "address": address, "port": port}
@@ -638,16 +603,16 @@ class InfomaniakNetworkClient(InfomaniakOpenStackBase):
             logger.info(f"Removed pool member: {member_id}")
             return True
         except Exception as e:
-            logger.error(f"Failed to remove member {member_id} from pool {pool_id}: {e}")
+            logger.error(
+                f"Failed to remove member {member_id} from pool {pool_id}: {e}"
+            )
             return False
 
     # =========================================================================
     # Health Monitor Operations
     # =========================================================================
 
-    def list_health_monitors(
-        self, pool_id: str | None = None
-    ) -> list[dict[str, Any]]:
+    def list_health_monitors(self, pool_id: str | None = None) -> list[dict[str, Any]]:
         """List health monitors, optionally filtered by pool."""
         try:
             kwargs = {}
@@ -678,7 +643,7 @@ class InfomaniakNetworkClient(InfomaniakOpenStackBase):
         timeout: int,
         max_retries: int = 3,
         name: str | None = None,
-        **kwargs
+        **kwargs,
     ) -> dict[str, Any] | None:
         """Create a health monitor for a pool.
 
@@ -698,7 +663,7 @@ class InfomaniakNetworkClient(InfomaniakOpenStackBase):
                 timeout=timeout,
                 max_retries=max_retries,
                 name=name,
-                **kwargs
+                **kwargs,
             )
             logger.info(f"Created health monitor: {hm.id}")
             return {"id": hm.id, "type": monitor_type, "pool_id": pool_id}

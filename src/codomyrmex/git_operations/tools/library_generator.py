@@ -56,7 +56,7 @@ class GitHubLibraryGenerator:
                 repos.extend(page_repos)
                 page += 1
 
-                print(f"Fetched page {page-1}: {len(page_repos)} repositories")
+                print(f"Fetched page {page - 1}: {len(page_repos)} repositories")
 
             except requests.RequestException as e:
                 print(f"Error fetching repositories: {e}")
@@ -139,11 +139,11 @@ class GitHubLibraryGenerator:
         """
         content = f"""# {self.username.title()} Repository Library - REAL GITHUB REPOSITORIES
 # Generated from GitHub API: https://api.github.com/users/{self.username}/repos
-# Generated on: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
+# Generated on: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}
 # Format: TYPE|OWNER|REPO_NAME|URL|DESCRIPTION|LOCAL_PATH_SUGGESTION
 
 # =============================================================================
-# {self.username.upper()} ORIGINAL REPOSITORIES (Development/Contribution) - {len(categories['own'])} repositories
+# {self.username.upper()} ORIGINAL REPOSITORIES (Development/Contribution) - {len(categories["own"])} repositories
 # =============================================================================
 
 """
@@ -159,7 +159,7 @@ class GitHubLibraryGenerator:
 
         content += f"""
 # =============================================================================
-# INTERESTING FORKED REPOSITORIES (For Contribution/Study) - {len(categories['interesting_forks'])} repositories
+# INTERESTING FORKED REPOSITORIES (For Contribution/Study) - {len(categories["interesting_forks"])} repositories
 # =============================================================================
 
 """

@@ -11,6 +11,3 @@ __all__ = [
     "split_document",
     "format_document",
 ]
-
-
-

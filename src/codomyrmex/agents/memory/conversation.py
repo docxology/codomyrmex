@@ -51,12 +51,14 @@ class ConversationHistory:
         self._turns: list[Turn] = []
         self._max_turns = max_turns
 
-    def add(self, role: str, content: str, metadata: dict[str, Any] | None = None) -> Turn:
+    def add(
+        self, role: str, content: str, metadata: dict[str, Any] | None = None
+    ) -> Turn:
         """Return sum with other."""
         turn = Turn(role=role, content=content, metadata=metadata or {})
         self._turns.append(turn)
         if len(self._turns) > self._max_turns:
-            self._turns = self._turns[-self._max_turns:]
+            self._turns = self._turns[-self._max_turns :]
         return turn
 
     @property

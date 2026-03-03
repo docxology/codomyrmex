@@ -79,7 +79,11 @@ def monobit_test(data: bytes) -> NistTestResult:
     passed = p_value >= _SIGNIFICANCE_LEVEL
     logger.debug(
         "Monobit test: n=%d, S_n=%d, s_obs=%.4f, p_value=%.6f, passed=%s",
-        n, s_n, s_obs, p_value, passed,
+        n,
+        s_n,
+        s_obs,
+        p_value,
+        passed,
     )
 
     return NistTestResult(
@@ -119,7 +123,9 @@ def runs_test(data: bytes) -> NistTestResult:
 
     if abs(pi - 0.5) >= tau:
         logger.debug(
-            "Runs test: prerequisite failed, pi=%.4f, tau=%.4f", pi, tau,
+            "Runs test: prerequisite failed, pi=%.4f, tau=%.4f",
+            pi,
+            tau,
         )
         return NistTestResult(
             test_name="Runs Test",
@@ -143,7 +149,11 @@ def runs_test(data: bytes) -> NistTestResult:
     passed = p_value >= _SIGNIFICANCE_LEVEL
     logger.debug(
         "Runs test: n=%d, pi=%.4f, V_obs=%d, p_value=%.6f, passed=%s",
-        n, pi, v_obs, p_value, passed,
+        n,
+        pi,
+        v_obs,
+        p_value,
+        passed,
     )
 
     return NistTestResult(
@@ -206,7 +216,12 @@ def block_frequency_test(data: bytes, block_size: int = 128) -> NistTestResult:
     logger.debug(
         "Block frequency test: n=%d, blocks=%d, M=%d, chi2=%.4f, "
         "p_value=%.6f, passed=%s",
-        n, num_blocks, block_size, chi_squared, p_value, passed,
+        n,
+        num_blocks,
+        block_size,
+        chi_squared,
+        p_value,
+        passed,
     )
 
     return NistTestResult(
@@ -255,6 +270,7 @@ def run_nist_suite(data: bytes) -> list[NistTestResult]:
 # ---------------------------------------------------------------------------
 # Incomplete gamma function helpers (pure Python, no scipy dependency)
 # ---------------------------------------------------------------------------
+
 
 def _igamc(a: float, x: float) -> float:
     """Upper regularized incomplete gamma function Q(a, x) = 1 - P(a, x).

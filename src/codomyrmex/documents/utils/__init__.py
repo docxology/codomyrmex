@@ -11,6 +11,3 @@ __all__ = [
     "validate_file_path",
     "check_file_size",
 ]
-
-
-

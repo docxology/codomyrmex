@@ -19,6 +19,7 @@ from codomyrmex.documents.exceptions import DocumentReadError
 
 try:
     from codomyrmex.documents.transformation import convert_document, merge_documents
+
     TRANSFORMATION_AVAILABLE = True
 except ImportError:
     TRANSFORMATION_AVAILABLE = False
@@ -45,7 +46,9 @@ class TestDocumentWorkflows:
         assert output_file.exists()
         assert "# Source" in output_file.read_text()
 
-    @pytest.mark.skipif(not TRANSFORMATION_AVAILABLE, reason="Transformation not available")
+    @pytest.mark.skipif(
+        not TRANSFORMATION_AVAILABLE, reason="Transformation not available"
+    )
     def test_format_conversion_workflow(self, tmp_path):
         """Test format conversion workflow."""
         # Create markdown source
@@ -67,7 +70,9 @@ class TestDocumentWorkflows:
         content = text_file.read_text()
         assert "Title" in content or "Content" in content
 
-    @pytest.mark.skipif(not TRANSFORMATION_AVAILABLE, reason="Transformation not available")
+    @pytest.mark.skipif(
+        not TRANSFORMATION_AVAILABLE, reason="Transformation not available"
+    )
     def test_merge_workflow(self, tmp_path):
         """Test document merging workflow."""
         # Create multiple source documents
@@ -138,5 +143,3 @@ class TestErrorPropagation:
         # Try invalid operations should handle gracefully
         # (specific behavior depends on implementation)
         assert doc is not None
-
-

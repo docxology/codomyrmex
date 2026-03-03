@@ -408,7 +408,10 @@ class TestAntigravityAgentExecuteErrorHandling:
         assert isinstance(response, AgentResponse)
         # The execute catches the exception and returns an error response
         if response.metadata:
-            assert response.metadata.get("tool") == "grep_search" or response.error is not None
+            assert (
+                response.metadata.get("tool") == "grep_search"
+                or response.error is not None
+            )
 
     def test_execute_with_file_ops_defaults_to_view_file(self):
         """When no keyword matches and FILE_OPERATIONS is in capabilities, default to view_file."""
@@ -420,7 +423,10 @@ class TestAntigravityAgentExecuteErrorHandling:
         response = agent.execute(request)
         assert isinstance(response, AgentResponse)
         if response.metadata:
-            assert response.metadata.get("tool") == "view_file" or response.error is not None
+            assert (
+                response.metadata.get("tool") == "view_file"
+                or response.error is not None
+            )
 
 
 @pytest.mark.unit
@@ -528,7 +534,9 @@ class TestAntigravityAgentPlanActObserve:
 
 
 @pytest.mark.unit
-@pytest.mark.skipif(not ANTIGRAVITY_AVAILABLE, reason="Antigravity server not running on localhost:3000")
+@pytest.mark.skipif(
+    not ANTIGRAVITY_AVAILABLE, reason="Antigravity server not running on localhost:3000"
+)
 class TestAntigravityAgentLiveConnection:
     """Tests that require a live Antigravity server. Skipped in CI."""
 

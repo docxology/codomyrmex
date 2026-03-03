@@ -34,7 +34,7 @@ and reason about the First Principles Framework specification.
 """
 
 try:
-    matplotlib.use('Agg')  # Use non-interactive backend
+    matplotlib.use("Agg")  # Use non-interactive backend
     HAS_MATPLOTLIB = True
 except ImportError:
     HAS_MATPLOTLIB = False
@@ -46,7 +46,11 @@ logger = get_logger(__name__)
 class FPFOrchestrator:
     """Orchestrates CEREBRUM methods for comprehensive FPF analysis."""
 
-    def __init__(self, fpf_spec_path: str | None = None, output_dir: str = "output/cerebrum/orchestration"):
+    def __init__(
+        self,
+        fpf_spec_path: str | None = None,
+        output_dir: str = "output/cerebrum/orchestration",
+    ):
         """Initialize FPF orchestrator.
 
         Args:
@@ -77,7 +81,9 @@ class FPFOrchestrator:
         self.output_dir = Path(output_dir)
         self.output_dir.mkdir(parents=True, exist_ok=True)
 
-        self.logger.info(f"Initialized FPF Orchestrator with {len(self.spec.patterns)} patterns")
+        self.logger.info(
+            f"Initialized FPF Orchestrator with {len(self.spec.patterns)} patterns"
+        )
 
     def create_pattern_cases(self) -> list[Case]:
         """Create cases from FPF patterns for case-based reasoning.
@@ -92,9 +98,14 @@ class FPFOrchestrator:
                 "status": pattern.status,
                 "part": pattern.part or "Other",
                 "num_keywords": len(pattern.keywords),
-                "num_dependencies": sum(len(deps) for deps in pattern.dependencies.values()),
+                "num_dependencies": sum(
+                    len(deps) for deps in pattern.dependencies.values()
+                ),
                 "has_builds_on": len(pattern.dependencies.get("builds_on", [])) > 0,
-                "has_prerequisite": len(pattern.dependencies.get("prerequisite_for", [])) > 0,
+                "has_prerequisite": len(
+                    pattern.dependencies.get("prerequisite_for", [])
+                )
+                > 0,
             }
 
             # Add keyword features
@@ -142,7 +153,9 @@ class FPFOrchestrator:
         # Add nodes for key concepts
         important_concepts = self.term_analyzer.get_important_terms(self.spec, top_n=10)
         for concept, _, _ in important_concepts[:5]:  # Top 5 concepts
-            node_name = f"concept_{concept.lower().replace('.', '_').replace(' ', '_')[:20]}"
+            node_name = (
+                f"concept_{concept.lower().replace('.', '_').replace(' ', '_')[:20]}"
+            )
             network.add_node(node_name, values=["high", "medium", "low"])
 
         # Add relationship nodes
@@ -155,16 +168,19 @@ class FPFOrchestrator:
 
         # Set conditional probability tables
         # Pattern importance given status
-        network.set_cpt("pattern_importance", {
-            ("Stable", "yes"): {"high": 0.7, "medium": 0.2, "low": 0.1},
-            ("Stable", "no"): {"high": 0.3, "medium": 0.4, "low": 0.3},
-            ("Draft", "yes"): {"high": 0.4, "medium": 0.4, "low": 0.2},
-            ("Draft", "no"): {"high": 0.2, "medium": 0.3, "low": 0.5},
-            ("Stub", "yes"): {"high": 0.2, "medium": 0.3, "low": 0.5},
-            ("Stub", "no"): {"high": 0.1, "medium": 0.2, "low": 0.7},
-            ("New", "yes"): {"high": 0.3, "medium": 0.4, "low": 0.3},
-            ("New", "no"): {"high": 0.1, "medium": 0.3, "low": 0.6},
-        })
+        network.set_cpt(
+            "pattern_importance",
+            {
+                ("Stable", "yes"): {"high": 0.7, "medium": 0.2, "low": 0.1},
+                ("Stable", "no"): {"high": 0.3, "medium": 0.4, "low": 0.3},
+                ("Draft", "yes"): {"high": 0.4, "medium": 0.4, "low": 0.2},
+                ("Draft", "no"): {"high": 0.2, "medium": 0.3, "low": 0.5},
+                ("Stub", "yes"): {"high": 0.2, "medium": 0.3, "low": 0.5},
+                ("Stub", "no"): {"high": 0.1, "medium": 0.2, "low": 0.7},
+                ("New", "yes"): {"high": 0.3, "medium": 0.4, "low": 0.3},
+                ("New", "no"): {"high": 0.1, "medium": 0.3, "low": 0.6},
+            },
+        )
 
         self.logger.info(f"Built Bayesian network with {len(network.nodes)} nodes")
         return network
@@ -192,7 +208,9 @@ class FPFOrchestrator:
             case_id = f"pattern_{pattern.id}"
             importance = importance_scores.get(pattern.id, 0.5)
             # Normalize to [0, 1]
-            normalized_importance = min(1.0, importance * 2.0) if importance > 0 else 0.0
+            normalized_importance = (
+                min(1.0, importance * 2.0) if importance > 0 else 0.0
+            )
             self.cerebrum.learn_from_case(
                 Case(
                     case_id=case_id,
@@ -211,7 +229,9 @@ class FPFOrchestrator:
                     "status": pattern.status,
                     "part": pattern.part or "Other",
                     "num_keywords": len(pattern.keywords),
-                    "num_dependencies": sum(len(deps) for deps in pattern.dependencies.values()),
+                    "num_dependencies": sum(
+                        len(deps) for deps in pattern.dependencies.values()
+                    ),
                 },
             )
 
@@ -230,7 +250,9 @@ class FPFOrchestrator:
                 ],
             }
 
-        self.logger.info(f"Completed case-based reasoning for {len(similarity_analysis)} patterns")
+        self.logger.info(
+            f"Completed case-based reasoning for {len(similarity_analysis)} patterns"
+        )
         return {
             "similarity_analysis": similarity_analysis,
             "total_cases": len(cases),
@@ -255,7 +277,9 @@ class FPFOrchestrator:
             # Prepare evidence
             evidence = {
                 "pattern_status": pattern.status,
-                "has_dependencies": "yes" if any(pattern.dependencies.values()) else "no",
+                "has_dependencies": (
+                    "yes" if any(pattern.dependencies.values()) else "no"
+                ),
             }
 
             # Query pattern importance
@@ -264,9 +288,21 @@ class FPFOrchestrator:
                 result = inference.compute_marginal("pattern_importance", evidence)
                 inference_results[pattern.id] = {
                     "importance_distribution": {
-                        "high": result.probabilities[result.values.index("high")] if "high" in result.values else 0.0,
-                        "medium": result.probabilities[result.values.index("medium")] if "medium" in result.values else 0.0,
-                        "low": result.probabilities[result.values.index("low")] if "low" in result.values else 0.0,
+                        "high": (
+                            result.probabilities[result.values.index("high")]
+                            if "high" in result.values
+                            else 0.0
+                        ),
+                        "medium": (
+                            result.probabilities[result.values.index("medium")]
+                            if "medium" in result.values
+                            else 0.0
+                        ),
+                        "low": (
+                            result.probabilities[result.values.index("low")]
+                            if "low" in result.values
+                            else 0.0
+                        ),
                     },
                     "most_likely": result.mode(),
                     "evidence": evidence,
@@ -275,7 +311,9 @@ class FPFOrchestrator:
                 self.logger.warning(f"Inference failed for {pattern.id}: {e}")
                 inference_results[pattern.id] = {"error": str(e)}
 
-        self.logger.info(f"Completed Bayesian inference for {len(inference_results)} patterns")
+        self.logger.info(
+            f"Completed Bayesian inference for {len(inference_results)} patterns"
+        )
         return {
             "inference_results": inference_results,
             "network_nodes": len(network.nodes),
@@ -294,10 +332,20 @@ class FPFOrchestrator:
         states = ["unexplored", "exploring", "analyzed", "completed"]
 
         # Define observations (what we can observe about patterns)
-        observations = ["high_importance", "medium_importance", "low_importance", "unknown"]
+        observations = [
+            "high_importance",
+            "medium_importance",
+            "low_importance",
+            "unknown",
+        ]
 
         # Define actions (exploration actions)
-        actions = ["analyze_pattern", "explore_dependencies", "analyze_concepts", "skip"]
+        actions = [
+            "analyze_pattern",
+            "explore_dependencies",
+            "analyze_concepts",
+            "skip",
+        ]
 
         # Create active inference agent
         agent = ActiveInferenceAgent(
@@ -352,16 +400,20 @@ class FPFOrchestrator:
             action = agent.select_action()
             free_energy = agent.compute_free_energy()
 
-            exploration_path.append({
-                "pattern_id": pattern.id,
-                "action": action,
-                "free_energy": free_energy,
-                "importance": importance,
-            })
+            exploration_path.append(
+                {
+                    "pattern_id": pattern.id,
+                    "action": action,
+                    "free_energy": free_energy,
+                    "importance": importance,
+                }
+            )
 
         self.cerebrum.set_active_inference_agent(agent)
 
-        self.logger.info(f"Completed active inference exploration for {len(exploration_path)} patterns")
+        self.logger.info(
+            f"Completed active inference exploration for {len(exploration_path)} patterns"
+        )
         return {
             "exploration_path": exploration_path,
             "final_beliefs": agent.get_beliefs().to_dict(),
@@ -428,7 +480,7 @@ class FPFOrchestrator:
         # Visualize Bayesian network
         if self.cerebrum.bayesian_network:
             try:
-                matplotlib.use('Agg')  # Use non-interactive backend
+                matplotlib.use("Agg")  # Use non-interactive backend
                 visualizer = ModelVisualizer(figure_size=(14, 10), dpi=300)
                 fig = visualizer.visualize_network(
                     self.cerebrum.bayesian_network,
@@ -447,7 +499,7 @@ class FPFOrchestrator:
                         {"parent": parent, "child": child}
                         for parent, children in self.cerebrum.bayesian_network.edges.items()
                         for child in children
-                    ]
+                    ],
                 }
                 json_path = viz_dir / "bayesian_network.json"
                 with open(json_path, "w", encoding="utf-8") as f:
@@ -461,25 +513,32 @@ class FPFOrchestrator:
             # Get some example cases
             cases_with_similarity = []
             case_data_rows = []
-            for pattern_id, _cbr_data in list(analysis_results["case_based_reasoning"]["similarity_analysis"].items())[:10]:
+            for pattern_id, _cbr_data in list(
+                analysis_results["case_based_reasoning"]["similarity_analysis"].items()
+            )[:10]:
                 pattern = self.spec.get_pattern_by_id(pattern_id)
                 if pattern:
                     query_case = Case(
                         case_id="query",
-                        features={"status": pattern.status, "part": pattern.part or "Other"},
+                        features={
+                            "status": pattern.status,
+                            "part": pattern.part or "Other",
+                        },
                     )
                     similar = self.cerebrum.case_base.retrieve_similar(query_case, k=5)
                     cases_with_similarity.extend(similar)
 
                     # Collect data for export
                     for case, similarity in similar:
-                        case_data_rows.append({
-                            "case_id": case.case_id,
-                            "similarity_score": similarity,
-                            "pattern_id": pattern_id,
-                            "status": pattern.status or "",
-                            "part": pattern.part or "Other"
-                        })
+                        case_data_rows.append(
+                            {
+                                "case_id": case.case_id,
+                                "similarity_score": similarity,
+                                "pattern_id": pattern_id,
+                                "status": pattern.status or "",
+                                "part": pattern.part or "Other",
+                            }
+                        )
 
             if cases_with_similarity:
                 case_viz = CaseVisualizer(figure_size=(12, 10), dpi=300)
@@ -495,12 +554,25 @@ class FPFOrchestrator:
                 if case_data_rows:
                     csv_path = viz_dir / "case_similarity.csv"
                     with open(csv_path, "w", encoding="utf-8", newline="") as f:
-                        writer = csv.DictWriter(f, fieldnames=["case_id", "similarity_score", "pattern_id", "status", "part"])
+                        writer = csv.DictWriter(
+                            f,
+                            fieldnames=[
+                                "case_id",
+                                "similarity_score",
+                                "pattern_id",
+                                "status",
+                                "part",
+                            ],
+                        )
                         writer.writeheader()
-                        writer.writerows(case_data_rows[:20])  # Match visualization limit
+                        writer.writerows(
+                            case_data_rows[:20]
+                        )  # Match visualization limit
                     self.logger.info(f"Exported case similarity raw data to {csv_path}")
         except Exception as e:
-            self.logger.warning(f"Failed to visualize case similarity: {e}", exc_info=True)
+            self.logger.warning(
+                f"Failed to visualize case similarity: {e}", exc_info=True
+            )
 
         # Visualize inference results
         try:
@@ -509,7 +581,9 @@ class FPFOrchestrator:
                 # Convert to distribution format
                 inference_data = {}
                 inference_rows = []
-                for pattern_id, result in list(analysis_results["bayesian_inference"]["inference_results"].items())[:5]:
+                for pattern_id, result in list(
+                    analysis_results["bayesian_inference"]["inference_results"].items()
+                )[:5]:
                     if "importance_distribution" in result:
                         dist = Distribution(
                             values=["high", "medium", "low"],
@@ -522,30 +596,53 @@ class FPFOrchestrator:
                         inference_data[pattern_id] = dist
 
                         # Collect data for export
-                        inference_rows.append({
-                            "pattern_id": pattern_id,
-                            "high_probability": result["importance_distribution"]["high"],
-                            "medium_probability": result["importance_distribution"]["medium"],
-                            "low_probability": result["importance_distribution"]["low"],
-                            "most_likely": result.get("most_likely", "")
-                        })
+                        inference_rows.append(
+                            {
+                                "pattern_id": pattern_id,
+                                "high_probability": result["importance_distribution"][
+                                    "high"
+                                ],
+                                "medium_probability": result["importance_distribution"][
+                                    "medium"
+                                ],
+                                "low_probability": result["importance_distribution"][
+                                    "low"
+                                ],
+                                "most_likely": result.get("most_likely", ""),
+                            }
+                        )
 
                 if inference_data:
                     inference_viz = InferenceVisualizer(figure_size=(12, 8), dpi=300)
                     fig = inference_viz.plot_inference_results(inference_data)
-                    inference_viz.save_figure(fig, str(viz_dir / "inference_results.png"))
+                    inference_viz.save_figure(
+                        fig, str(viz_dir / "inference_results.png")
+                    )
                     self.logger.info("Saved inference results visualization")
 
                     # Export raw data
                     if inference_rows:
                         csv_path = viz_dir / "inference_results.csv"
                         with open(csv_path, "w", encoding="utf-8", newline="") as f:
-                            writer = csv.DictWriter(f, fieldnames=["pattern_id", "high_probability", "medium_probability", "low_probability", "most_likely"])
+                            writer = csv.DictWriter(
+                                f,
+                                fieldnames=[
+                                    "pattern_id",
+                                    "high_probability",
+                                    "medium_probability",
+                                    "low_probability",
+                                    "most_likely",
+                                ],
+                            )
                             writer.writeheader()
                             writer.writerows(inference_rows)
-                        self.logger.info(f"Exported inference results raw data to {csv_path}")
+                        self.logger.info(
+                            f"Exported inference results raw data to {csv_path}"
+                        )
         except Exception as e:
-            self.logger.warning(f"Failed to visualize inference results: {e}", exc_info=True)
+            self.logger.warning(
+                f"Failed to visualize inference results: {e}", exc_info=True
+            )
 
         # Generate concordance visualizations
         self._generate_concordance_visualizations(analysis_results, viz_dir)
@@ -563,7 +660,7 @@ class FPFOrchestrator:
             viz_dir: Visualization directory
         """
         try:
-            matplotlib.use('Agg')
+            matplotlib.use("Agg")
 
             concordance_viz = ConcordanceVisualizer(figure_size=(14, 10), dpi=300)
 
@@ -574,7 +671,9 @@ class FPFOrchestrator:
 
             # Get CBR results
             if "case_based_reasoning" in analysis_results:
-                cbr_data = analysis_results["case_based_reasoning"].get("similarity_analysis", {})
+                cbr_data = analysis_results["case_based_reasoning"].get(
+                    "similarity_analysis", {}
+                )
                 for pattern_id, data in cbr_data.items():
                     if isinstance(data, dict) and "average_similarity" in data:
                         cbr_results[pattern_id] = data["average_similarity"]
@@ -582,12 +681,17 @@ class FPFOrchestrator:
 
             # Get Bayesian results
             if "bayesian_inference" in analysis_results:
-                bayesian_data = analysis_results["bayesian_inference"].get("inference_results", {})
+                bayesian_data = analysis_results["bayesian_inference"].get(
+                    "inference_results", {}
+                )
                 for pattern_id, data in bayesian_data.items():
                     if isinstance(data, dict) and "most_likely" in data:
                         # Convert importance to score
                         importance_dist = data.get("importance_distribution", {})
-                        score = importance_dist.get("high", 0.0) * 1.0 + importance_dist.get("medium", 0.0) * 0.5
+                        score = (
+                            importance_dist.get("high", 0.0) * 1.0
+                            + importance_dist.get("medium", 0.0) * 0.5
+                        )
                         bayesian_results[pattern_id] = score
                         if pattern_id not in pattern_ids:
                             pattern_ids.append(pattern_id)
@@ -598,12 +702,18 @@ class FPFOrchestrator:
                     cbr_results, bayesian_results, pattern_ids=pattern_ids[:20]
                 )
                 concordance_viz.theme.apply_to_axes(fig.axes[0])
-                fig.savefig(viz_dir / "analysis_concordance_matrix.png", dpi=300, bbox_inches="tight")
+                fig.savefig(
+                    viz_dir / "analysis_concordance_matrix.png",
+                    dpi=300,
+                    bbox_inches="tight",
+                )
                 plt.close(fig)
                 self.logger.info("Saved analysis concordance matrix")
 
         except Exception as e:
-            self.logger.warning(f"Failed to generate concordance visualizations: {e}", exc_info=True)
+            self.logger.warning(
+                f"Failed to generate concordance visualizations: {e}", exc_info=True
+            )
 
     def _generate_composition_visualizations(
         self, analysis_results: dict[str, Any], viz_dir: Path
@@ -615,7 +725,7 @@ class FPFOrchestrator:
             viz_dir: Visualization directory
         """
         try:
-            matplotlib.use('Agg')
+            matplotlib.use("Agg")
 
             composition_viz = CompositionVisualizer(figure_size=(20, 14), dpi=300)
 
@@ -634,16 +744,23 @@ class FPFOrchestrator:
             # Extract summary data from results
             if "case_based_reasoning" in analysis_results:
                 cbr_data = analysis_results["case_based_reasoning"]
-                analysis_summary["method_summary"]["CBR"] = len(cbr_data.get("similarity_analysis", {}))
+                analysis_summary["method_summary"]["CBR"] = len(
+                    cbr_data.get("similarity_analysis", {})
+                )
 
             if "bayesian_inference" in analysis_results:
                 bayesian_data = analysis_results["bayesian_inference"]
-                analysis_summary["method_summary"]["Bayesian"] = len(bayesian_data.get("inference_results", {}))
+                analysis_summary["method_summary"]["Bayesian"] = len(
+                    bayesian_data.get("inference_results", {})
+                )
 
             if self.cerebrum.bayesian_network:
-                analysis_summary["network_summary"]["nodes"] = len(self.cerebrum.bayesian_network.nodes)
+                analysis_summary["network_summary"]["nodes"] = len(
+                    self.cerebrum.bayesian_network.nodes
+                )
                 analysis_summary["network_summary"]["edges"] = sum(
-                    len(children) for children in self.cerebrum.bayesian_network.edges.values()
+                    len(children)
+                    for children in self.cerebrum.bayesian_network.edges.values()
                 )
 
             # Create dashboard
@@ -653,7 +770,9 @@ class FPFOrchestrator:
             self.logger.info("Saved analysis overview dashboard")
 
         except Exception as e:
-            self.logger.warning(f"Failed to generate composition visualizations: {e}", exc_info=True)
+            self.logger.warning(
+                f"Failed to generate composition visualizations: {e}", exc_info=True
+            )
 
     def export_results(self, analysis_results: dict[str, Any]) -> None:
         """Export all results to JSON and markdown.
@@ -674,7 +793,9 @@ class FPFOrchestrator:
         self._generate_markdown_report(analysis_results, md_path)
         self.logger.info(f"Exported markdown report to {md_path}")
 
-    def _generate_markdown_report(self, results: dict[str, Any], output_path: Path) -> None:
+    def _generate_markdown_report(
+        self, results: dict[str, Any], output_path: Path
+    ) -> None:
         """Generate markdown report.
 
         Args:
@@ -700,25 +821,35 @@ class FPFOrchestrator:
         ]
 
         # Add similarity results
-        for pattern_id, data in list(results["case_based_reasoning"]["similarity_analysis"].items())[:10]:
+        for pattern_id, data in list(
+            results["case_based_reasoning"]["similarity_analysis"].items()
+        )[:10]:
             lines.append(f"### Pattern {pattern_id}")
-            lines.append(f"- **Predicted Importance**: {data.get('prediction', 'N/A'):.3f}")
+            lines.append(
+                f"- **Predicted Importance**: {data.get('prediction', 'N/A'):.3f}"
+            )
             lines.append(f"- **Confidence**: {data.get('confidence', 0):.3f}")
-            lines.append(f"- **Similar Patterns Found**: {data.get('retrieved_count', 0)}")
+            lines.append(
+                f"- **Similar Patterns Found**: {data.get('retrieved_count', 0)}"
+            )
             lines.append("")
 
-        lines.extend([
-            "## Bayesian Inference Analysis",
-            "",
-            f"- **Network Nodes**: {results['bayesian_inference']['network_nodes']}",
-            f"- **Network Edges**: {results['bayesian_inference']['network_edges']}",
-            "",
-            "### Inference Results",
-            "",
-        ])
+        lines.extend(
+            [
+                "## Bayesian Inference Analysis",
+                "",
+                f"- **Network Nodes**: {results['bayesian_inference']['network_nodes']}",
+                f"- **Network Edges**: {results['bayesian_inference']['network_edges']}",
+                "",
+                "### Inference Results",
+                "",
+            ]
+        )
 
         # Add inference results
-        for pattern_id, data in list(results["bayesian_inference"]["inference_results"].items())[:10]:
+        for pattern_id, data in list(
+            results["bayesian_inference"]["inference_results"].items()
+        )[:10]:
             if "importance_distribution" in data:
                 lines.append(f"### Pattern {pattern_id}")
                 dist = data["importance_distribution"]
@@ -728,50 +859,62 @@ class FPFOrchestrator:
                 lines.append(f"- **Most Likely**: {data.get('most_likely', 'N/A')}")
                 lines.append("")
 
-        lines.extend([
-            "## Active Inference Exploration",
-            "",
-            "### Exploration Path",
-            "",
-        ])
+        lines.extend(
+            [
+                "## Active Inference Exploration",
+                "",
+                "### Exploration Path",
+                "",
+            ]
+        )
 
         # Add exploration path
         for step in results["active_inference"]["exploration_path"][:10]:
-            lines.append(f"- **{step['pattern_id']}**: {step['action']} (Free Energy: {step['free_energy']:.3f})")
+            lines.append(
+                f"- **{step['pattern_id']}**: {step['action']} (Free Energy: {step['free_energy']:.3f})"
+            )
         lines.append("")
 
-        lines.extend([
-            "## FPF Analysis",
-            "",
-            "### Critical Patterns",
-            "",
-        ])
+        lines.extend(
+            [
+                "## FPF Analysis",
+                "",
+                "### Critical Patterns",
+                "",
+            ]
+        )
 
         # Add critical patterns
         for pattern_id, score in results["fpf_analysis"]["critical_patterns"][:10]:
             lines.append(f"- **{pattern_id}**: {score:.3f}")
         lines.append("")
 
-        lines.extend([
-            "### Part Cohesion",
-            "",
-        ])
+        lines.extend(
+            [
+                "### Part Cohesion",
+                "",
+            ]
+        )
 
         # Add part cohesion
         for part, cohesion in results["fpf_analysis"]["part_cohesion"].items():
             lines.append(f"- **Part {part}**: {cohesion:.3f}")
         lines.append("")
 
-        lines.extend([
-            "## Term Analysis",
-            "",
-            "### Shared Terms",
-            "",
-        ])
+        lines.extend(
+            [
+                "## Term Analysis",
+                "",
+                "### Shared Terms",
+                "",
+            ]
+        )
 
         # Add shared terms
         for term, count, pattern_ids in results["term_analysis"]["shared_terms"][:15]:
-            lines.append(f"- **{term}**: appears in {count} patterns ({', '.join(pattern_ids[:5])})")
+            lines.append(
+                f"- **{term}**: appears in {count} patterns ({', '.join(pattern_ids[:5])})"
+            )
         lines.append("")
 
         output_path.write_text("\n".join(lines), encoding="utf-8")
@@ -804,7 +947,9 @@ class FPFOrchestrator:
 def main():
     """Main entry point for FPF-CEREBRUM orchestration."""
 
-    parser = argparse.ArgumentParser(description="CEREBRUM orchestration for FPF analysis")
+    parser = argparse.ArgumentParser(
+        description="CEREBRUM orchestration for FPF analysis"
+    )
     parser.add_argument(
         "--fpf-spec",
         type=str,
@@ -833,9 +978,10 @@ def main():
     print(f"📊 Results saved to: {orchestrator.output_dir}")
     print(f"📈 Analyzed {results['fpf_statistics']['total_patterns']} patterns")
     print(f"🔍 Created {results['case_based_reasoning']['total_cases']} cases")
-    print(f"🌐 Built Bayesian network with {results['bayesian_inference']['network_nodes']} nodes")
+    print(
+        f"🌐 Built Bayesian network with {results['bayesian_inference']['network_nodes']} nodes"
+    )
 
 
 if __name__ == "__main__":
     main()
-

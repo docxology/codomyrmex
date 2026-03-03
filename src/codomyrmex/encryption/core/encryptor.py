@@ -104,14 +104,12 @@ class Encryptor:
             return os.urandom(32)  # 256-bit key
         elif self.algorithm == "RSA":
             private_key = rsa.generate_private_key(
-                public_exponent=65537,
-                key_size=2048,
-                backend=default_backend()
+                public_exponent=65537, key_size=2048, backend=default_backend()
             )
             return private_key.private_bytes(
                 encoding=serialization.Encoding.PEM,
                 format=serialization.PrivateFormat.PKCS8,
-                encryption_algorithm=serialization.NoEncryption()
+                encryption_algorithm=serialization.NoEncryption(),
             )
         else:
             raise ValueError(f"Unknown algorithm: {self.algorithm}")
@@ -132,7 +130,7 @@ class Encryptor:
             length=32,
             salt=salt,
             iterations=iterations,
-            backend=default_backend()
+            backend=default_backend(),
         )
         return kdf.derive(password.encode())
 
@@ -160,9 +158,9 @@ class Encryptor:
                 data,
                 asym_padding.PSS(
                     mgf=asym_padding.MGF1(hashes.SHA256()),
-                    salt_length=asym_padding.PSS.MAX_LENGTH
+                    salt_length=asym_padding.PSS.MAX_LENGTH,
                 ),
-                hashes.SHA256()
+                hashes.SHA256(),
             )
             return signature
         except Exception as e:
@@ -192,9 +190,9 @@ class Encryptor:
                 data,
                 asym_padding.PSS(
                     mgf=asym_padding.MGF1(hashes.SHA256()),
-                    salt_length=asym_padding.PSS.MAX_LENGTH
+                    salt_length=asym_padding.PSS.MAX_LENGTH,
                 ),
-                hashes.SHA256()
+                hashes.SHA256(),
             )
             return True
         except Exception as e:
@@ -257,8 +255,8 @@ class Encryptor:
             asym_padding.OAEP(
                 mgf=asym_padding.MGF1(algorithm=hashes.SHA256()),
                 algorithm=hashes.SHA256(),
-                label=None
-            )
+                label=None,
+            ),
         )
 
     def _decrypt_rsa_oaep(self, data: bytes, key: bytes) -> bytes:
@@ -274,13 +272,15 @@ class Encryptor:
             asym_padding.OAEP(
                 mgf=asym_padding.MGF1(algorithm=hashes.SHA256()),
                 algorithm=hashes.SHA256(),
-                label=None
-            )
+                label=None,
+            ),
         )
 
     # --- Utility Methods ---
 
-    def encrypt_string(self, plaintext: str, key: bytes, encoding: str = "utf-8") -> str:
+    def encrypt_string(
+        self, plaintext: str, key: bytes, encoding: str = "utf-8"
+    ) -> str:
         """Encrypt a string and return base64-encoded ciphertext.
 
         Args:
@@ -294,7 +294,9 @@ class Encryptor:
         encrypted = self.encrypt(plaintext.encode(encoding), key)
         return base64.b64encode(encrypted).decode("ascii")
 
-    def decrypt_string(self, ciphertext: str, key: bytes, encoding: str = "utf-8") -> str:
+    def decrypt_string(
+        self, ciphertext: str, key: bytes, encoding: str = "utf-8"
+    ) -> str:
         """Decrypt a base64-encoded ciphertext to string.
 
         Args:
@@ -308,7 +310,9 @@ class Encryptor:
         encrypted = base64.b64decode(ciphertext.encode("ascii"))
         return self.decrypt(encrypted, key).decode(encoding)
 
-    def encrypt_file(self, input_path: str | Path, output_path: str | Path, key: bytes) -> bool:
+    def encrypt_file(
+        self, input_path: str | Path, output_path: str | Path, key: bytes
+    ) -> bool:
         """Encrypt a file.
 
         Args:
@@ -337,7 +341,9 @@ class Encryptor:
             logger.error("File encryption error: %s", e)
             raise EncryptionError(f"Failed to encrypt file: {e}") from e
 
-    def decrypt_file(self, input_path: str | Path, output_path: str | Path, key: bytes) -> bool:
+    def decrypt_file(
+        self, input_path: str | Path, output_path: str | Path, key: bytes
+    ) -> bool:
         """Decrypt a file.
 
         Args:
@@ -411,26 +417,25 @@ class Encryptor:
             Tuple of (private_key_pem, public_key_pem).
         """
         private_key = rsa.generate_private_key(
-            public_exponent=65537,
-            key_size=key_size,
-            backend=default_backend()
+            public_exponent=65537, key_size=key_size, backend=default_backend()
         )
 
         private_pem = private_key.private_bytes(
             encoding=serialization.Encoding.PEM,
             format=serialization.PrivateFormat.PKCS8,
-            encryption_algorithm=serialization.NoEncryption()
+            encryption_algorithm=serialization.NoEncryption(),
         )
 
         public_pem = private_key.public_key().public_bytes(
             encoding=serialization.Encoding.PEM,
-            format=serialization.PublicFormat.SubjectPublicKeyInfo
+            format=serialization.PublicFormat.SubjectPublicKeyInfo,
         )
 
         return private_pem, public_pem
 
 
 # --- Convenience Functions ---
+
 
 def encrypt_data(data: bytes, key: bytes, algorithm: str = "AES") -> bytes:
     """Encrypt data using specified algorithm."""

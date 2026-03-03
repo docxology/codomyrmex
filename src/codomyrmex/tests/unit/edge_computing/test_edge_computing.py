@@ -36,6 +36,7 @@ if not HAS_MODULE:
 @pytest.mark.unit
 class TestEdgeNodeStatus:
     """Test suite for EdgeNodeStatus."""
+
     def test_online(self):
         """Test functionality: online."""
         assert EdgeNodeStatus.ONLINE is not None
@@ -56,6 +57,7 @@ class TestEdgeNodeStatus:
 @pytest.mark.unit
 class TestEdgeNode:
     """Test suite for EdgeNode."""
+
     def test_create_node(self):
         """Test functionality: create node."""
         node = EdgeNode(id="node-1", name="Edge US West")
@@ -74,6 +76,7 @@ class TestEdgeNode:
 @pytest.mark.unit
 class TestEdgeFunction:
     """Test suite for EdgeFunction."""
+
     def test_create_function(self):
         """Test functionality: create function."""
         func = EdgeFunction(id="fn-1", name="handler", handler=lambda: None)
@@ -95,6 +98,7 @@ class TestEdgeFunction:
 @pytest.mark.unit
 class TestSyncState:
     """Test suite for SyncState."""
+
     def test_create_sync_state(self):
         """Test functionality: create sync state."""
         state = SyncState(version=1, data={"key": "value"}, checksum="abc123")
@@ -111,6 +115,7 @@ class TestSyncState:
 @pytest.mark.unit
 class TestEdgeExecutionError:
     """Test suite for EdgeExecutionError."""
+
     def test_is_exception(self):
         """Test functionality: is exception."""
         with pytest.raises(EdgeExecutionError):
@@ -120,6 +125,7 @@ class TestEdgeExecutionError:
 @pytest.mark.unit
 class TestEdgeSynchronizer:
     """Test suite for EdgeSynchronizer."""
+
     def test_create_synchronizer(self):
         """Test functionality: create synchronizer."""
         sync = EdgeSynchronizer()
@@ -129,6 +135,7 @@ class TestEdgeSynchronizer:
 @pytest.mark.unit
 class TestEdgeRuntime:
     """Test suite for EdgeRuntime."""
+
     def test_create_runtime(self):
         """Test functionality: create runtime."""
         node = EdgeNode(id="n1", name="test")
@@ -139,6 +146,7 @@ class TestEdgeRuntime:
 @pytest.mark.unit
 class TestEdgeCluster:
     """Test suite for EdgeCluster."""
+
     def test_create_cluster(self):
         """Test functionality: create cluster."""
         cluster = EdgeCluster()
@@ -349,6 +357,7 @@ class TestEdgeRuntimeBehavior:
 
     def test_invoke_failure_wraps_in_edge_execution_error(self, runtime):
         """Test functionality: invoke failure wraps in edge execution error."""
+
         def broken():
             raise RuntimeError("boom")
 
@@ -359,6 +368,7 @@ class TestEdgeRuntimeBehavior:
 
     def test_invoke_failure_chains_original_exception(self, runtime):
         """Test functionality: invoke failure chains original exception."""
+
         def broken():
             raise RuntimeError("original")
 
@@ -374,6 +384,7 @@ class TestEdgeRuntimeBehavior:
 
     def test_invoke_with_kwargs(self, runtime):
         """Test functionality: invoke with kwargs."""
+
         def greeter(name="world"):
             return f"hello {name}"
 
@@ -474,9 +485,7 @@ class TestEdgeClusterBehavior:
         assert len(online) == 1
         assert online[0].id == "a"
 
-    def test_list_nodes_filter_returns_empty_when_none_match(
-        self, cluster, node_a
-    ):
+    def test_list_nodes_filter_returns_empty_when_none_match(self, cluster, node_a):
         """Test functionality: list nodes filter returns empty when none match."""
         node_a.status = EdgeNodeStatus.ONLINE
         cluster.register_node(node_a)

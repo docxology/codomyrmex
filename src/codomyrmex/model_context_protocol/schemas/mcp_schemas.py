@@ -7,6 +7,7 @@ from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
 
+
 class MCPErrorDetail(BaseModel):
     """Standard structure for detailed error information in MCP responses."""
 
@@ -32,7 +33,9 @@ class MCPToolCall(BaseModel):
         description="An object containing the arguments for the tool. The schema for this object is defined by the specific tool being called.",
     )
 
-    model_config = ConfigDict(extra="allow")  # Allow arbitrary arguments, tool-specific validation happens elsewhere
+    model_config = ConfigDict(
+        extra="allow"
+    )  # Allow arbitrary arguments, tool-specific validation happens elsewhere
 
 
 class MCPToolResult(BaseModel):
@@ -58,18 +61,18 @@ class MCPToolResult(BaseModel):
     def check_error_if_failed(cls, v, info):
         """Check Error If Failed.
 
-            Args:
-                v: The value of the error field
-                info: Validation info containing field context
+        Args:
+            v: The value of the error field
+            info: Validation info containing field context
 
-            Returns:
-                The validated value
-            """
-        if hasattr(info, 'data') and info.data.get("status"):
+        Returns:
+            The validated value
+        """
+        if hasattr(info, "data") and info.data.get("status"):
             status = info.data.get("status")
         else:
             # Fallback for older pydantic versions
-            status = getattr(info, 'values', {}).get("status")
+            status = getattr(info, "values", {}).get("status")
 
         if status and "fail" in status.lower() and v is None:
             raise ValueError(
@@ -86,18 +89,18 @@ class MCPToolResult(BaseModel):
     def check_data_if_success(cls, v, info):
         """Check Data If Success.
 
-            Args:
-                v: The value of the data field
-                info: Validation info containing field context
+        Args:
+            v: The value of the data field
+            info: Validation info containing field context
 
-            Returns:
-                The validated value
-            """
-        if hasattr(info, 'data') and info.data.get("status"):
+        Returns:
+            The validated value
+        """
+        if hasattr(info, "data") and info.data.get("status"):
             status = info.data.get("status")
         else:
             # Fallback for older pydantic versions
-            status = getattr(info, 'values', {}).get("status")
+            status = getattr(info, "values", {}).get("status")
 
         if status and "success" in status.lower() and v is None:
             # Data can be None even on success if the tool has no specific data output (e.g. a tool that only has side effects)
@@ -108,17 +111,28 @@ class MCPToolResult(BaseModel):
             )
         return v
 
-    model_config = ConfigDict(extra="allow")  # Allow additional fields in data, specific validation is per-tool
+    model_config = ConfigDict(
+        extra="allow"
+    )  # Allow additional fields in data, specific validation is per-tool
 
 
 class MCPMessage(BaseModel):
     """Represents a message in an MCP conversation."""
 
-    role: str = Field(..., description="Role of the message sender (e.g., 'user', 'assistant', 'system', 'tool').")
+    role: str = Field(
+        ...,
+        description="Role of the message sender (e.g., 'user', 'assistant', 'system', 'tool').",
+    )
     content: str | None = Field(None, description="Text content of the message.")
-    tool_calls: list[MCPToolCall] | None = Field(None, description="Tool calls made in this message.")
-    tool_results: list[MCPToolResult] | None = Field(None, description="Results from tool executions.")
-    metadata: dict[str, Any] | None = Field(None, description="Additional metadata for the message.")
+    tool_calls: list[MCPToolCall] | None = Field(
+        None, description="Tool calls made in this message."
+    )
+    tool_results: list[MCPToolResult] | None = Field(
+        None, description="Results from tool executions."
+    )
+    metadata: dict[str, Any] | None = Field(
+        None, description="Additional metadata for the message."
+    )
 
     model_config = ConfigDict(extra="allow")
 
@@ -131,7 +145,12 @@ class MCPToolRegistry:
         self._tools: dict[str, dict[str, Any]] = {}
         logger.info("MCPToolRegistry initialized")
 
-    def register(self, tool_name: str, schema: dict[str, Any], handler: Callable[..., Any] | None = None) -> None:
+    def register(
+        self,
+        tool_name: str,
+        schema: dict[str, Any],
+        handler: Callable[..., Any] | None = None,
+    ) -> None:
         """
         Register a tool with the registry.
 
@@ -221,8 +240,8 @@ class MCPToolRegistry:
                 status="failure",
                 error=MCPErrorDetail(
                     error_type="ToolNotFound",
-                    error_message=f"Tool '{tool_call.tool_name}' not registered"
-                )
+                    error_message=f"Tool '{tool_call.tool_name}' not registered",
+                ),
             )
 
         handler = tool.get("handler")
@@ -231,24 +250,18 @@ class MCPToolRegistry:
                 status="failure",
                 error=MCPErrorDetail(
                     error_type="NoHandler",
-                    error_message=f"No handler registered for tool '{tool_call.tool_name}'"
-                )
+                    error_message=f"No handler registered for tool '{tool_call.tool_name}'",
+                ),
             )
 
         try:
             result = handler(**tool_call.arguments)
-            return MCPToolResult(
-                status="success",
-                data={"result": result}
-            )
+            return MCPToolResult(status="success", data={"result": result})
         except Exception as e:
             logger.error(f"Tool execution failed: {e}")
             return MCPToolResult(
                 status="failure",
-                error=MCPErrorDetail(
-                    error_type=type(e).__name__,
-                    error_message=str(e)
-                )
+                error=MCPErrorDetail(error_type=type(e).__name__, error_message=str(e)),
             )
 
 

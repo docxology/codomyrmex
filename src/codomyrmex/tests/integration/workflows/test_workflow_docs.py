@@ -26,9 +26,13 @@ class TestWorkflowDocs:
 
         result = _tool_get_module_readme(module=module_name)
         assert isinstance(result, dict), f"Expected dict, got {type(result)}"
-        assert "error" not in result, f"Error fetching {module_name}: {result.get('error')}"
+        assert "error" not in result, (
+            f"Error fetching {module_name}: {result.get('error')}"
+        )
         content = result.get("content", "")
-        assert len(content) > 10, f"README for {module_name} too short: {len(content)} chars"
+        assert len(content) > 10, (
+            f"README for {module_name} too short: {len(content)} chars"
+        )
 
     @pytest.mark.parametrize("module_name", CORE_MODULES)
     def test_readme_has_heading(self, module_name):

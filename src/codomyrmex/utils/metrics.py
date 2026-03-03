@@ -16,6 +16,7 @@ from typing import Any
 
 class MetricType(Enum):
     """Types of metrics."""
+
     COUNTER = "counter"
     GAUGE = "gauge"
     HISTOGRAM = "histogram"
@@ -25,6 +26,7 @@ class MetricType(Enum):
 @dataclass
 class MetricValue:
     """A single metric value."""
+
     name: str
     value: float
     timestamp: datetime = field(default_factory=datetime.now)
@@ -136,6 +138,7 @@ def timed_metric(name: str, labels: dict[str, str] | None = None):
 
 def count_calls(name: str, labels: dict[str, str] | None = None):
     """Decorator to count function calls."""
+
     def decorator(func: Callable) -> Callable:
         """Decorator."""
         import functools
@@ -153,6 +156,7 @@ def count_calls(name: str, labels: dict[str, str] | None = None):
                 raise
 
         return wrapper
+
     return decorator
 
 
@@ -205,7 +209,7 @@ def export_prometheus() -> str:
         lines.append(f"{name} {value}")
 
     for name, hist in data["histograms"].items():
-        base = name.split('{')[0]
+        base = name.split("{")[0]
         lines.append(f"# TYPE {base} histogram")
         lines.append(f"{name}_sum {hist['sum']}")
         lines.append(f"{name}_count {hist['count']}")

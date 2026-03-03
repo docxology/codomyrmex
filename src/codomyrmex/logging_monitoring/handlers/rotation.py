@@ -58,11 +58,13 @@ class LogRotationManager:
         logger = logging.getLogger(logger_name)
         file_path = os.path.join(self.log_dir, filename)
 
-        handler = RotatingFileHandler(file_path, maxBytes=max_bytes, backupCount=backup_count)
+        handler = RotatingFileHandler(
+            file_path, maxBytes=max_bytes, backupCount=backup_count
+        )
         handler.setLevel(level)
-        handler.setFormatter(logging.Formatter(
-            '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-        ))
+        handler.setFormatter(
+            logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+        )
         logger.addHandler(handler)
         self._handlers[f"{logger_name}:{filename}"] = handler
         return handler
@@ -95,7 +97,9 @@ class LogRotationManager:
 
         files = list(log_path.glob("*"))
         total = sum(f.stat().st_size for f in files if f.is_file())
-        largest = max(files, key=lambda f: f.stat().st_size if f.is_file() else 0, default=None)
+        largest = max(
+            files, key=lambda f: f.stat().st_size if f.is_file() else 0, default=None
+        )
 
         return {
             "total_bytes": total,
@@ -113,11 +117,13 @@ class LogRotationManager:
         for f in sorted(log_path.iterdir()):
             if f.is_file():
                 stat = f.stat()
-                result.append({
-                    "name": f.name,
-                    "size_bytes": stat.st_size,
-                    "modified": stat.st_mtime,
-                })
+                result.append(
+                    {
+                        "name": f.name,
+                        "size_bytes": stat.st_size,
+                        "modified": stat.st_mtime,
+                    }
+                )
         return result
 
     def cleanup_old_logs(self, max_age_days: float = 30.0) -> int:

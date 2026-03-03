@@ -40,7 +40,9 @@ class TestMCPReadFile:
         f.write_bytes(b"x" * 2000)
         result = read_file(str(f), max_size=1000)
         assert result["success"] is False
-        assert "too large" in result["error"].lower() or "large" in result["error"].lower()
+        assert (
+            "too large" in result["error"].lower() or "large" in result["error"].lower()
+        )
 
     def test_read_multiline_file_counts_lines(self, tmp_path):
         """Test functionality: read multiline file counts lines."""
@@ -80,6 +82,7 @@ class TestMCPWriteFile:
         result = write_file(path, "written content")
         assert result["success"] is True
         from pathlib import Path
+
         assert Path(path).read_text() == "written content"
 
     def test_write_overwrites_existing_file(self, tmp_path):
@@ -175,6 +178,7 @@ class TestMCPToolDecorator:
 
     def test_decorator_attaches_mcp_metadata(self):
         """Test functionality: decorator attaches mcp metadata."""
+
         @mcp_tool(category="test_category", description="A test tool")
         def sample_tool(a: int, b: str) -> str:
             """Sample docstring."""
@@ -188,6 +192,7 @@ class TestMCPToolDecorator:
 
     def test_decorator_preserves_function_behavior(self):
         """Test functionality: decorator preserves function behavior."""
+
         @mcp_tool()
         def add(a: int, b: int) -> int:
             """Add two ints."""
@@ -197,6 +202,7 @@ class TestMCPToolDecorator:
 
     def test_decorator_auto_generates_schema(self):
         """Test functionality: decorator auto generates schema."""
+
         @mcp_tool()
         def greet(name: str, count: int = 1) -> str:
             """Say hello."""
@@ -209,6 +215,7 @@ class TestMCPToolDecorator:
 
     def test_decorator_uses_function_name_as_default(self):
         """Test functionality: decorator uses function name as default."""
+
         @mcp_tool()
         def my_tool_func():
             """Does something."""
@@ -218,6 +225,7 @@ class TestMCPToolDecorator:
 
     def test_decorator_uses_docstring_as_default_description(self):
         """Test functionality: decorator uses docstring as default description."""
+
         @mcp_tool()
         def documented():
             """This is the description."""
@@ -227,6 +235,7 @@ class TestMCPToolDecorator:
 
     def test_decorator_includes_module_info(self):
         """Test functionality: decorator includes module info."""
+
         @mcp_tool()
         def modular():
             """Test."""

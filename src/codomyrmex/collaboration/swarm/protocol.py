@@ -19,6 +19,7 @@ logger = get_logger(__name__)
 
 class AgentRole(Enum):
     """Roles an agent can assume in a swarm."""
+
     CODER = "coder"
     REVIEWER = "reviewer"
     ARCHITECT = "architect"
@@ -29,6 +30,7 @@ class AgentRole(Enum):
 
 class SwarmMessageType(Enum):
     """Types of swarm messages."""
+
     TASK_ASSIGNMENT = "task_assignment"
     REVIEW_REQUEST = "review_request"
     APPROVAL_VOTE = "approval_vote"
@@ -39,6 +41,7 @@ class SwarmMessageType(Enum):
 
 class TaskStatus(Enum):
     """Status of a swarm task."""
+
     PENDING = "pending"
     ASSIGNED = "assigned"
     IN_PROGRESS = "in_progress"
@@ -113,7 +116,9 @@ class SwarmAgent:
     @property
     def load(self) -> float:
         """Load of the agent (0.0 to 1.0)."""
-        return self.active_tasks / self.max_concurrent if self.max_concurrent > 0 else 1.0
+        return (
+            self.active_tasks / self.max_concurrent if self.max_concurrent > 0 else 1.0
+        )
 
     def to_dict(self) -> dict[str, Any]:
         """Return a dictionary representation of this object."""

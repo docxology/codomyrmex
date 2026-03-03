@@ -21,6 +21,7 @@ logger = get_logger(__name__)
 
 # ── Token estimation ──────────────────────────────────────────────
 
+
 def _estimate_tokens(text: str) -> int:
     """Estimate token count using word-level approximation (~1.3 tokens/word)."""
     return max(1, int(len(text.split()) * 1.3))
@@ -30,6 +31,7 @@ def _tiktoken_count(text: str, model: str = "gpt-4") -> int:
     """Count tokens using tiktoken (precise, requires tiktoken package)."""
     try:
         import tiktoken
+
         enc = tiktoken.encoding_for_model(model)
         return len(enc.encode(text))
     except (ImportError, KeyError):
@@ -38,13 +40,14 @@ def _tiktoken_count(text: str, model: str = "gpt-4") -> int:
 
 # ── Message importance ────────────────────────────────────────────
 
+
 class MessageImportance:
     """Importance levels for context window eviction priority."""
 
-    CRITICAL = 1.0     # System prompts — never evicted
-    HIGH = 0.8         # Tool results, function outputs
-    NORMAL = 0.5       # Regular conversation turns
-    LOW = 0.3          # Older context, greetings
+    CRITICAL = 1.0  # System prompts — never evicted
+    HIGH = 0.8  # Tool results, function outputs
+    NORMAL = 0.5  # Regular conversation turns
+    LOW = 0.3  # Older context, greetings
 
 
 _ROLE_IMPORTANCE: dict[str, float] = {
@@ -77,12 +80,11 @@ class ContextMessage:
         if self.token_count == 0:
             self.token_count = _estimate_tokens(self.content)
         if self.importance == MessageImportance.NORMAL:
-            self.importance = _ROLE_IMPORTANCE.get(
-                self.role, MessageImportance.NORMAL
-            )
+            self.importance = _ROLE_IMPORTANCE.get(self.role, MessageImportance.NORMAL)
 
 
 # ── Context Manager ───────────────────────────────────────────────
+
 
 class ContextManager:
     """Token-aware sliding window context manager.
@@ -172,7 +174,8 @@ class ContextManager:
         msg = ContextMessage(
             role=role,
             content=content,
-            importance=importance or _ROLE_IMPORTANCE.get(role, MessageImportance.NORMAL),
+            importance=importance
+            or _ROLE_IMPORTANCE.get(role, MessageImportance.NORMAL),
             token_count=token_count,
             metadata=metadata or {},
         )
@@ -201,7 +204,8 @@ class ContextManager:
         while self._total_tokens > budget and len(self._messages) > 1:
             # Find the lowest-importance, oldest message
             candidates = [
-                (i, m) for i, m in enumerate(self._messages)
+                (i, m)
+                for i, m in enumerate(self._messages)
                 if m.importance < MessageImportance.CRITICAL
             ]
             if not candidates:
@@ -231,10 +235,7 @@ class ContextManager:
         Returns:
             List of ``{"role": ..., "content": ...}`` dicts.
         """
-        return [
-            {"role": m.role, "content": m.content}
-            for m in self._messages
-        ]
+        return [{"role": m.role, "content": m.content} for m in self._messages]
 
     def get_messages(self) -> list[ContextMessage]:
         """Get the raw ContextMessage objects."""
@@ -252,9 +253,11 @@ class ContextManager:
             "total_tokens": self.current_tokens,
             "max_tokens": self.max_tokens,
             "available_tokens": self.available_tokens,
-            "utilization": round(
-                self.current_tokens / self.max_tokens, 3
-            ) if self.max_tokens > 0 else 0.0,
+            "utilization": (
+                round(self.current_tokens / self.max_tokens, 3)
+                if self.max_tokens > 0
+                else 0.0
+            ),
         }
 
 

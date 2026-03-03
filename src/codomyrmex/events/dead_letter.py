@@ -17,6 +17,7 @@ from typing import Any
 @dataclass
 class DeadLetter:
     """An event that failed processing."""
+
     event_type: str
     payload: dict[str, Any]
     error: str
@@ -55,8 +56,13 @@ class DeadLetterQueue:
         self._path = store_path
         self._path.parent.mkdir(parents=True, exist_ok=True)
 
-    def enqueue(self, event_type: str, payload: dict[str, Any],
-                error: Exception, metadata: dict[str, Any] | None = None) -> DeadLetter:
+    def enqueue(
+        self,
+        event_type: str,
+        payload: dict[str, Any],
+        error: Exception,
+        metadata: dict[str, Any] | None = None,
+    ) -> DeadLetter:
         """Add a failed event to the dead letter queue."""
         letter = DeadLetter(
             event_type=event_type,
@@ -80,7 +86,9 @@ class DeadLetterQueue:
                     letters.append(DeadLetter.from_dict(json.loads(line)))
         return letters
 
-    def retry_all(self, handler: Callable[[str, dict[str, Any]], None]) -> tuple[int, int]:
+    def retry_all(
+        self, handler: Callable[[str, dict[str, Any]], None]
+    ) -> tuple[int, int]:
         """Retry all dead letters. Returns (succeeded, failed)."""
         letters = self.list_all()
         succeeded, failed = 0, 0

@@ -143,10 +143,12 @@ class SBOMGenerator:
         for pkg_name, version_spec in deps.items():
             # Extract version number from spec
             clean_version = re.sub(r"[><=!~\s]", "", version_spec)
-            components.append(SBOMComponent(
-                name=pkg_name,
-                version=clean_version,
-            ))
+            components.append(
+                SBOMComponent(
+                    name=pkg_name,
+                    version=clean_version,
+                )
+            )
 
         sbom = SBOMDocument(
             project_name=name,
@@ -203,9 +205,7 @@ class SBOMGenerator:
     def _parse_dependencies(content: str) -> dict[str, str]:
         """Parse dependencies from pyproject.toml content."""
         deps: dict[str, str] = {}
-        dep_pattern = re.compile(
-            r'"([a-zA-Z0-9_-]+)\s*([><=!~]*\s*[\d.]*[^"]*)"'
-        )
+        dep_pattern = re.compile(r'"([a-zA-Z0-9_-]+)\s*([><=!~]*\s*[\d.]*[^"]*)"')
         for match in dep_pattern.finditer(content):
             deps[match.group(1)] = match.group(2).strip()
         return deps

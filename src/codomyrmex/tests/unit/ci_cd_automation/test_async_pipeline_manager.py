@@ -224,9 +224,7 @@ class TestAsyncPipelineManagerInit:
         """Workspace directory is created during init."""
         ws = str(tmp_path / "fresh_workspace")
         assert not os.path.exists(ws)
-        AsyncPipelineManager(
-            base_url="https://x", workspace_dir=ws
-        )
+        AsyncPipelineManager(base_url="https://x", workspace_dir=ws)
         assert os.path.isdir(ws)
 
     def test_pipelines_dict_starts_empty(self, tmp_path):
@@ -545,7 +543,9 @@ class TestAsyncWaitForCompletion:
             timeout=2,
         )
         assert result.status == PipelineStatus.FAILURE
-        assert "timeout" in (result.error or "").lower() or "Network error" in (result.message or "")
+        assert "timeout" in (result.error or "").lower() or "Network error" in (
+            result.message or ""
+        )
 
 
 # ---------------------------------------------------------------------------

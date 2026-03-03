@@ -122,9 +122,7 @@ def decode_base58(encoded: str) -> bytes:
         num = 0
         for ch in encoded:
             if ch not in _BASE58_MAP:
-                raise EncodingError(
-                    f"Invalid Base58 character: {ch!r}"
-                )
+                raise EncodingError(f"Invalid Base58 character: {ch!r}")
             num = num * 58 + _BASE58_MAP[ch]
 
         # Convert integer to bytes

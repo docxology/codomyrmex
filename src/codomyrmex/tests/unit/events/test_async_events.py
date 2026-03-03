@@ -22,6 +22,7 @@ from codomyrmex.events.emitters.event_emitter import EventEmitter
 
 # ==================== ASYNC EVENT PUBLISHING TESTS ====================
 
+
 @pytest.mark.asyncio
 class TestAsyncEventPublishing:
     """Tests for async event publishing functionality."""
@@ -39,7 +40,7 @@ class TestAsyncEventPublishing:
         event = Event(
             event_type=EventType.SYSTEM_STARTUP,
             source="test",
-            data={"message": "Starting up"}
+            data={"message": "Starting up"},
         )
         await bus.publish_async(event)
 
@@ -64,7 +65,7 @@ class TestAsyncEventPublishing:
             event = Event(
                 event_type=EventType.SYSTEM_STARTUP,
                 source=f"source_{i}",
-                data={"index": i}
+                data={"index": i},
             )
             await bus.publish_async(event)
 
@@ -84,7 +85,7 @@ class TestAsyncEventPublishing:
         event = Event(
             event_type=EventType.CUSTOM,
             source="test",
-            data={"key1": "value1", "key2": 42, "nested": {"a": 1}}
+            data={"key1": "value1", "key2": 42, "nested": {"a": 1}},
         )
         await bus.publish_async(event)
 
@@ -108,7 +109,7 @@ class TestAsyncEventPublishing:
             event = Event(
                 event_type=EventType.METRIC_UPDATE,
                 source="metrics",
-                data={"metric_name": f"metric_{i}", "metric_value": i}
+                data={"metric_name": f"metric_{i}", "metric_value": i},
             )
             tasks.append(bus.publish_async(event))
 
@@ -131,8 +132,12 @@ class TestAsyncEventPublishing:
         bus.subscribe([EventType.BUILD_START], handler, "build_handler")
 
         # Publish different types
-        await bus.publish_async(Event(event_type=EventType.SYSTEM_STARTUP, source="test"))
-        await bus.publish_async(Event(event_type=EventType.ANALYSIS_START, source="test"))
+        await bus.publish_async(
+            Event(event_type=EventType.SYSTEM_STARTUP, source="test")
+        )
+        await bus.publish_async(
+            Event(event_type=EventType.ANALYSIS_START, source="test")
+        )
         await bus.publish_async(Event(event_type=EventType.BUILD_START, source="test"))
 
         await asyncio.sleep(0.2)
@@ -243,7 +248,7 @@ class TestAsyncEventSubscription:
             [EventType.SYSTEM_STARTUP],
             handler,
             "filter_handler",
-            filter_func=filter_func
+            filter_func=filter_func,
         )
 
         # This should be received
@@ -276,9 +281,7 @@ class TestAsyncEventOrdering:
         # Publish events in order
         for i in range(10):
             event = Event(
-                event_type=EventType.CUSTOM,
-                source="test",
-                data={"sequence": i}
+                event_type=EventType.CUSTOM, source="test", data={"sequence": i}
             )
             bus.publish(event)
 
@@ -303,9 +306,15 @@ class TestAsyncEventOrdering:
         def medium_priority_handler(event):
             call_order.append("medium")
 
-        bus.subscribe([EventType.SYSTEM_STARTUP], low_priority_handler, "low", priority=1)
-        bus.subscribe([EventType.SYSTEM_STARTUP], high_priority_handler, "high", priority=10)
-        bus.subscribe([EventType.SYSTEM_STARTUP], medium_priority_handler, "medium", priority=5)
+        bus.subscribe(
+            [EventType.SYSTEM_STARTUP], low_priority_handler, "low", priority=1
+        )
+        bus.subscribe(
+            [EventType.SYSTEM_STARTUP], high_priority_handler, "high", priority=10
+        )
+        bus.subscribe(
+            [EventType.SYSTEM_STARTUP], medium_priority_handler, "medium", priority=5
+        )
 
         event = Event(event_type=EventType.SYSTEM_STARTUP, source="test")
         bus.publish(event)
@@ -347,16 +356,14 @@ class TestAsyncEventOrdering:
         """Test event timestamp ordering."""
         events = []
         for i in range(5):
-            events.append(Event(
-                event_type=EventType.CUSTOM,
-                source="test",
-                data={"index": i}
-            ))
+            events.append(
+                Event(event_type=EventType.CUSTOM, source="test", data={"index": i})
+            )
             await asyncio.sleep(0.01)  # Small delay to ensure different timestamps
 
         # Timestamps should be in increasing order
         for i in range(1, len(events)):
-            assert events[i].timestamp >= events[i-1].timestamp
+            assert events[i].timestamp >= events[i - 1].timestamp
 
 
 @pytest.mark.asyncio
@@ -371,21 +378,20 @@ class TestConcurrentSubscribers:
         def create_handler(sub_id: str):
             def handler(event):
                 subscriber_results[sub_id].append(event.data["value"])
+
             return handler
 
         # Create 5 subscribers
         for i in range(5):
             bus.subscribe(
-                [EventType.SYSTEM_STARTUP],
-                create_handler(f"sub_{i}"),
-                f"sub_{i}"
+                [EventType.SYSTEM_STARTUP], create_handler(f"sub_{i}"), f"sub_{i}"
             )
 
         # Publish event
         event = Event(
             event_type=EventType.SYSTEM_STARTUP,
             source="test",
-            data={"value": "test_value"}
+            data={"value": "test_value"},
         )
         bus.publish(event)
 
@@ -410,11 +416,7 @@ class TestConcurrentSubscribers:
 
         # Register multiple async subscribers
         for i in range(5):
-            bus.subscribe(
-                [EventType.CUSTOM],
-                async_subscriber,
-                f"async_sub_{i}"
-            )
+            bus.subscribe([EventType.CUSTOM], async_subscriber, f"async_sub_{i}")
 
         event = Event(event_type=EventType.CUSTOM, source="concurrent_test")
         bus.publish(event)
@@ -459,14 +461,13 @@ class TestConcurrentSubscribers:
         def create_handler(sub_id: str):
             def handler(event):
                 call_counts[sub_id] += 1
+
             return handler
 
         # Register 50 subscribers
         for i in range(50):
             bus.subscribe(
-                [EventType.SYSTEM_STARTUP],
-                create_handler(f"sub_{i}"),
-                f"sub_{i}"
+                [EventType.SYSTEM_STARTUP], create_handler(f"sub_{i}"), f"sub_{i}"
             )
 
         # Publish event
@@ -490,6 +491,7 @@ class TestConcurrentSubscribers:
             def late_handler(evt):
                 nonlocal late_subscriber_called
                 late_subscriber_called = True
+
             bus.subscribe([EventType.ANALYSIS_START], late_handler, "late_sub")
 
         bus.subscribe([EventType.SYSTEM_STARTUP], early_handler, "early_sub")
@@ -526,7 +528,9 @@ class TestAsyncErrorHandling:
             post_error_called = True
 
         bus.subscribe([EventType.SYSTEM_STARTUP], error_handler, "error", priority=10)
-        bus.subscribe([EventType.SYSTEM_STARTUP], post_error_handler, "post_error", priority=5)
+        bus.subscribe(
+            [EventType.SYSTEM_STARTUP], post_error_handler, "post_error", priority=5
+        )
 
         event = Event(event_type=EventType.SYSTEM_STARTUP, source="test")
         bus.publish(event)  # Should not raise
@@ -577,7 +581,7 @@ class TestAsyncErrorHandling:
         error_event = Event(
             event_type=EventType.SYSTEM_ERROR,
             source="error_source",
-            data={"error_message": "Test error"}
+            data={"error_message": "Test error"},
         )
         bus.publish(error_event)
 
@@ -622,10 +626,7 @@ class TestAsyncErrorHandling:
             raise ValueError("Filter error")
 
         bus.subscribe(
-            [EventType.SYSTEM_STARTUP],
-            handler,
-            "filtered",
-            filter_func=bad_filter
+            [EventType.SYSTEM_STARTUP], handler, "filtered", filter_func=bad_filter
         )
 
         event = Event(event_type=EventType.SYSTEM_STARTUP, source="test")
@@ -657,9 +658,7 @@ class TestAsyncEventEmitterClass:
         # Use EventBus directly since AsyncEventEmitter has a mismatch
         # with Event's constructor (payload vs data)
         event = Event(
-            event_type=EventType.CUSTOM,
-            source="async_emitter",
-            data={"key": "value"}
+            event_type=EventType.CUSTOM, source="async_emitter", data={"key": "value"}
         )
         await bus.publish_async(event)
 
@@ -680,9 +679,7 @@ class TestAsyncEventEmitterClass:
         # Demonstrate proper async event publishing
         async def emit_async_event(data: dict[str, Any]):
             event = Event(
-                event_type=EventType.CUSTOM,
-                source="async_pattern",
-                data=data
+                event_type=EventType.CUSTOM, source="async_pattern", data=data
             )
             await bus.publish_async(event)
 
@@ -709,9 +706,7 @@ class TestAsyncEventEmitterClass:
         async def emit_with_delay(data: dict[str, Any], delay: float):
             await asyncio.sleep(delay)
             event = Event(
-                event_type=EventType.CUSTOM,
-                source="delayed_emitter",
-                data=data
+                event_type=EventType.CUSTOM, source="delayed_emitter", data=data
             )
             await bus.publish_async(event)
 
@@ -738,10 +733,7 @@ class TestAsyncEventEmitterEmit:
         bus = EventBus(enable_async=True)
         emitter = EventEmitter("async_emitter", event_bus=bus)
 
-        await emitter.emit_async(
-            EventType.SYSTEM_STARTUP,
-            data={"message": "Starting"}
-        )
+        await emitter.emit_async(EventType.SYSTEM_STARTUP, data={"message": "Starting"})
 
         await asyncio.sleep(0.1)
         bus.shutdown()
@@ -759,8 +751,7 @@ class TestAsyncEventEmitterEmit:
         bus.subscribe([EventType.CUSTOM], handler, "batch_handler")
 
         events = [
-            {"event_type": EventType.CUSTOM, "data": {"index": i}}
-            for i in range(5)
+            {"event_type": EventType.CUSTOM, "data": {"index": i}} for i in range(5)
         ]
 
         await emitter.emit_batch_async(events)
@@ -782,9 +773,7 @@ class TestAsyncEventChaining:
             event_chain.append("first")
             # Trigger next event
             next_event = Event(
-                event_type=EventType.ANALYSIS_START,
-                source="chain",
-                data={"step": 2}
+                event_type=EventType.ANALYSIS_START, source="chain", data={"step": 2}
             )
             bus.publish(next_event)
 
@@ -870,7 +859,9 @@ class TestAsyncEventBusStats:
 
         # Publish events
         for _i in range(5):
-            await bus.publish_async(Event(event_type=EventType.SYSTEM_STARTUP, source="test"))
+            await bus.publish_async(
+                Event(event_type=EventType.SYSTEM_STARTUP, source="test")
+            )
 
         await asyncio.sleep(0.1)
 
@@ -891,7 +882,9 @@ class TestAsyncEventBusStats:
 
         # Publish some events
         for _i in range(3):
-            await bus.publish_async(Event(event_type=EventType.SYSTEM_STARTUP, source="test"))
+            await bus.publish_async(
+                Event(event_type=EventType.SYSTEM_STARTUP, source="test")
+            )
 
         await asyncio.sleep(0.1)
 
@@ -945,7 +938,7 @@ class TestAsyncEventCorrelation:
         event = Event(
             event_type=EventType.SYSTEM_STARTUP,
             source="test",
-            correlation_id="test-correlation-123"
+            correlation_id="test-correlation-123",
         )
         bus.publish(event)
 
@@ -1000,7 +993,7 @@ class TestAsyncEventValidation:
         event = Event(
             event_type=EventType.ANALYSIS_START,
             source="test",
-            data={"incomplete": True}  # Missing analysis_type and target
+            data={"incomplete": True},  # Missing analysis_type and target
         )
         bus.publish(event)
 
@@ -1018,7 +1011,7 @@ class TestAsyncEventValidation:
         valid_event = Event(
             event_type=EventType.ANALYSIS_START,
             source="test",
-            data={"analysis_type": "static", "target": "/path/to/code"}
+            data={"analysis_type": "static", "target": "/path/to/code"},
         )
         is_valid, errors = schema.validate_event(valid_event)
         assert is_valid
@@ -1027,7 +1020,7 @@ class TestAsyncEventValidation:
         invalid_event = Event(
             event_type=EventType.ANALYSIS_START,
             source="test",
-            data={"wrong_field": "value"}
+            data={"wrong_field": "value"},
         )
         is_valid, errors = schema.validate_event(invalid_event)
         assert not is_valid
@@ -1048,7 +1041,9 @@ class TestAsyncEventShutdown:
         bus.subscribe([EventType.SYSTEM_STARTUP], handler, "shutdown_handler")
 
         # Publish some events
-        await bus.publish_async(Event(event_type=EventType.SYSTEM_STARTUP, source="test"))
+        await bus.publish_async(
+            Event(event_type=EventType.SYSTEM_STARTUP, source="test")
+        )
 
         await asyncio.sleep(0.1)
 
@@ -1090,7 +1085,9 @@ class TestAsyncEventShutdown:
 
         # Queue up events
         for _i in range(5):
-            await bus.publish_async(Event(event_type=EventType.SYSTEM_STARTUP, source="test"))
+            await bus.publish_async(
+                Event(event_type=EventType.SYSTEM_STARTUP, source="test")
+            )
 
         # Immediate shutdown
         bus.shutdown()

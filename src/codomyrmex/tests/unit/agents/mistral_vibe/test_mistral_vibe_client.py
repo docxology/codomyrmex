@@ -12,6 +12,7 @@ try:
     from codomyrmex.agents.core import AgentCapabilities, AgentRequest
     from codomyrmex.agents.mistral_vibe import MistralVibeClient
     from codomyrmex.tests.unit.agents.helpers import VIBE_AVAILABLE
+
     _HAS_AGENTS = True
 except ImportError:
     _HAS_AGENTS = False
@@ -22,7 +23,7 @@ if not _HAS_AGENTS:
 # Skip entire module if vibe CLI is not properly configured
 pytestmark = pytest.mark.skipif(
     not os.getenv("MISTRAL_API_KEY"),
-    reason="MISTRAL_API_KEY not set - skipping mistral_vibe tests"
+    reason="MISTRAL_API_KEY not set - skipping mistral_vibe tests",
 )
 
 
@@ -53,7 +54,10 @@ class TestMistralVibeClient:
         assert AgentCapabilities.STREAMING in capabilities
         assert AgentCapabilities.MULTI_TURN in capabilities
 
-    @pytest.mark.skipif(not VIBE_AVAILABLE or not os.getenv("MISTRAL_API_KEY"), reason="vibe CLI not installed or not configured")
+    @pytest.mark.skipif(
+        not VIBE_AVAILABLE or not os.getenv("MISTRAL_API_KEY"),
+        reason="vibe CLI not installed or not configured",
+    )
     def test_mistral_vibe_client_execute_success(self):
         """Test successful execution of Mistral Vibe command with real CLI."""
         client = MistralVibeClient()
@@ -65,12 +69,17 @@ class TestMistralVibeClient:
         # Note: Actual success depends on authentication and CLI state
         # We test that the response structure is correct
 
-    @pytest.mark.skipif(not VIBE_AVAILABLE or not os.getenv("MISTRAL_API_KEY"), reason="vibe CLI not configured")
+    @pytest.mark.skipif(
+        not VIBE_AVAILABLE or not os.getenv("MISTRAL_API_KEY"),
+        reason="vibe CLI not configured",
+    )
     @pytest.mark.timeout(5)
     def test_mistral_vibe_client_execute_failure_invalid_command(self):
         """Test handling when command is not found."""
         # Use invalid command to trigger real FileNotFoundError
-        client = MistralVibeClient(config={"mistral_vibe_command": "nonexistent-vibe-command-xyz"})
+        client = MistralVibeClient(
+            config={"mistral_vibe_command": "nonexistent-vibe-command-xyz"}
+        )
         request = AgentRequest(prompt="test prompt")
         response = client.execute(request)
 
@@ -78,7 +87,10 @@ class TestMistralVibeClient:
         assert not response.is_success()
         assert response.error is not None
 
-    @pytest.mark.skipif(not VIBE_AVAILABLE or not os.getenv("MISTRAL_API_KEY"), reason="vibe CLI not installed or not configured")
+    @pytest.mark.skipif(
+        not VIBE_AVAILABLE or not os.getenv("MISTRAL_API_KEY"),
+        reason="vibe CLI not installed or not configured",
+    )
     @pytest.mark.timeout(5)
     def test_mistral_vibe_client_stream(self):
         """Test streaming output from Mistral Vibe with real CLI."""
@@ -92,7 +104,10 @@ class TestMistralVibeClient:
         # Verify we got some response (even if empty or error)
         assert isinstance(chunks, list)
 
-    @pytest.mark.skipif(not VIBE_AVAILABLE or not os.getenv("MISTRAL_API_KEY"), reason="vibe CLI not installed or not configured")
+    @pytest.mark.skipif(
+        not VIBE_AVAILABLE or not os.getenv("MISTRAL_API_KEY"),
+        reason="vibe CLI not installed or not configured",
+    )
     @pytest.mark.timeout(5)
     def test_mistral_vibe_client_execute_command(self):
         """Test executing a Mistral Vibe command with real CLI."""
@@ -103,7 +118,10 @@ class TestMistralVibeClient:
         assert isinstance(result, dict)
         assert "exit_code" in result or "output" in result
 
-    @pytest.mark.skipif(not VIBE_AVAILABLE or not os.getenv("MISTRAL_API_KEY"), reason="vibe CLI not installed or not configured")
+    @pytest.mark.skipif(
+        not VIBE_AVAILABLE or not os.getenv("MISTRAL_API_KEY"),
+        reason="vibe CLI not installed or not configured",
+    )
     @pytest.mark.timeout(5)
     def test_mistral_vibe_client_get_help(self):
         """Test getting Mistral Vibe help information with real CLI."""
@@ -115,7 +133,10 @@ class TestMistralVibeClient:
         assert "available" in help_info
         assert "help_text" in help_info
 
-    @pytest.mark.skipif(not VIBE_AVAILABLE or not os.getenv("MISTRAL_API_KEY"), reason="vibe CLI not configured")
+    @pytest.mark.skipif(
+        not VIBE_AVAILABLE or not os.getenv("MISTRAL_API_KEY"),
+        reason="vibe CLI not configured",
+    )
     @pytest.mark.timeout(5)
     def test_mistral_vibe_client_get_help_structure(self):
         """Test getting Mistral Vibe help information structure."""
@@ -139,8 +160,7 @@ class TestMistralVibeClient:
         """Test file operations structure (without executing)."""
         MistralVibeClient()
         request = AgentRequest(
-            prompt="Analyze this code",
-            context={"files": ["src/main.py"]}
+            prompt="Analyze this code", context={"files": ["src/main.py"]}
         )
 
         # Test that request structure is correct

@@ -64,6 +64,7 @@ __all__ = [
 @dataclass
 class StepResult:
     """Result from a workflow step."""
+
     success: bool
     value: Any = None
     error: str | None = None
@@ -75,7 +76,7 @@ def run(
     timeout: int = 60,
     args: list[str] = None,
     env: dict[str, str] = None,
-    cwd: Path = None
+    cwd: Path = None,
 ) -> dict[str, Any]:
     """Run a single script or command.
 
@@ -99,15 +100,12 @@ def run(
 
 
 async def run_async(
-    target: str | Path,
-    timeout: int = 60,
-    args: list[str] = None
+    target: str | Path, timeout: int = 60, args: list[str] = None
 ) -> dict[str, Any]:
     """Async version of run."""
     loop = asyncio.get_event_loop()
     return await loop.run_in_executor(
-        None,
-        lambda: run(target, timeout=timeout, args=args)
+        None, lambda: run(target, timeout=timeout, args=args)
     )
 
 
@@ -116,7 +114,7 @@ def shell(
     timeout: int = 60,
     env: dict[str, str] = None,
     cwd: Path = None,
-    check: bool = False
+    check: bool = False,
 ) -> dict[str, Any]:
     """Execute a shell command.
 
@@ -144,7 +142,7 @@ def shell(
             text=True,
             timeout=timeout,
             cwd=cwd,
-            env=run_env
+            env=run_env,
         )
 
         output = {
@@ -153,7 +151,7 @@ def shell(
             "returncode": result.returncode,
             "stdout": result.stdout,
             "stderr": result.stderr,
-            "execution_time": time.time() - start_time
+            "execution_time": time.time() - start_time,
         }
 
         if check and result.returncode != 0:
@@ -171,21 +169,19 @@ def shell(
             "error": f"Timeout after {timeout}s",
             "stdout": e.stdout or "",
             "stderr": e.stderr or "",
-            "execution_time": timeout
+            "execution_time": timeout,
         }
     except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
         return {
             "success": False,
             "command": command,
             "error": str(e),
-            "execution_time": time.time() - start_time
+            "execution_time": time.time() - start_time,
         }
 
 
 def pipe(
-    commands: list[str],
-    timeout_per_command: int = 30,
-    stop_on_error: bool = True
+    commands: list[str], timeout_per_command: int = 30, stop_on_error: bool = True
 ) -> dict[str, Any]:
     """Pipe commands together sequentially.
 
@@ -222,14 +218,12 @@ def pipe(
         "completed": len(results),
         "results": results,
         "final_output": prev_stdout,
-        "execution_time": time.time() - start_time
+        "execution_time": time.time() - start_time,
     }
 
 
 def batch(
-    targets: list[str | Path],
-    workers: int = None,
-    timeout: int = 60
+    targets: list[str | Path], workers: int = None, timeout: int = 60
 ) -> ExecutionResult:
     """Run multiple targets in parallel.
 
@@ -250,18 +244,14 @@ def batch(
     if not scripts:
         return ExecutionResult()
 
-    return run_parallel(
-        scripts=scripts,
-        max_workers=workers,
-        timeout=timeout
-    )
+    return run_parallel(scripts=scripts, max_workers=workers, timeout=timeout)
 
 
 def chain_scripts(
     scripts: list[str | Path],
     timeout_per_script: int = 60,
     pass_results: bool = True,
-    stop_on_error: bool = True
+    stop_on_error: bool = True,
 ) -> dict[str, Any]:
     """Chain scripts sequentially with result passing.
 
@@ -284,7 +274,9 @@ def chain_scripts(
     for script in scripts:
         script_path = Path(script)
         if not script_path.exists():
-            results.append({"script": str(script), "error": "Not found", "success": False})
+            results.append(
+                {"script": str(script), "error": "Not found", "success": False}
+            )
             overall_success = False
             if stop_on_error:
                 break
@@ -311,7 +303,7 @@ def chain_scripts(
         "completed": len(results),
         "passed": sum(1 for r in results if r.get("status") == "passed"),
         "results": results,
-        "execution_time": time.time() - start_time
+        "execution_time": time.time() - start_time,
     }
 
 
@@ -329,7 +321,7 @@ class Steps:
         action: Callable,
         depends_on: list[str] = None,
         timeout: float = None,
-        retry: int = 1
+        retry: int = 1,
     ) -> "Steps":
         """Add a step to the workflow.
 
@@ -353,16 +345,12 @@ class Steps:
             action=action,
             dependencies=depends_on,
             timeout=timeout,
-            retry_policy=retry_policy
+            retry_policy=retry_policy,
         )
         self._steps.append(name)
         return self
 
-    def add_parallel(
-        self,
-        steps: list[tuple],
-        depends_on: list[str] = None
-    ) -> "Steps":
+    def add_parallel(self, steps: list[tuple], depends_on: list[str] = None) -> "Steps":
         """Add parallel steps.
 
         Args:
@@ -376,11 +364,7 @@ class Steps:
             depends_on = [self._steps[-1]]
 
         for name, action in steps:
-            self._workflow.add_task(
-                name=name,
-                action=action,
-                dependencies=depends_on
-            )
+            self._workflow.add_task(name=name, action=action, dependencies=depends_on)
             self._steps.append(name)
 
         return self
@@ -407,12 +391,7 @@ class Steps:
         return self._workflow
 
 
-def step(
-    name: str,
-    action: Callable = None,
-    timeout: float = None,
-    retry: int = 1
-):
+def step(name: str, action: Callable = None, timeout: float = None, retry: int = 1):
     """Decorator to create a workflow step.
 
     Args:
@@ -424,12 +403,14 @@ def step(
     Returns:
         Decorator function
     """
+
     def decorator(func):
         """Decorator."""
         func._step_name = name
         func._step_timeout = timeout
         func._step_retry = retry
         return func
+
     return decorator
 
 
@@ -446,10 +427,7 @@ def workflow(name: str = "workflow") -> Steps:
 
 
 def python_func(
-    func: Callable,
-    args: tuple = (),
-    kwargs: dict = None,
-    timeout: int = 60
+    func: Callable, args: tuple = (), kwargs: dict = None, timeout: int = 60
 ) -> dict[str, Any]:
     """Run a Python function with monitoring.
 
@@ -466,10 +444,7 @@ def python_func(
 
 
 def retry(
-    action: Callable,
-    max_attempts: int = 3,
-    delay: float = 1.0,
-    backoff: float = 2.0
+    action: Callable, max_attempts: int = 3, delay: float = 1.0, backoff: float = 2.0
 ) -> Callable:
     """Wrap an action with retry logic.
 
@@ -482,6 +457,7 @@ def retry(
     Returns:
         Wrapped action
     """
+
     async def wrapper(*args, **kwargs):
         last_error = None
         current_delay = delay
@@ -495,7 +471,9 @@ def retry(
             except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
                 last_error = e
                 if attempt < max_attempts:
-                    logger.warning(f"Attempt {attempt} failed, retrying in {current_delay}s: {e}")
+                    logger.warning(
+                        f"Attempt {attempt} failed, retrying in {current_delay}s: {e}"
+                    )
                     await asyncio.sleep(current_delay)
                     current_delay *= backoff
 
@@ -513,21 +491,22 @@ def timeout(seconds: float) -> Callable:
     Returns:
         Decorator function
     """
+
     def decorator(action):
         """Decorator."""
+
         async def wrapper(*args, **kwargs):
             if asyncio.iscoroutinefunction(action):
-                return await asyncio.wait_for(
-                    action(*args, **kwargs),
-                    timeout=seconds
-                )
+                return await asyncio.wait_for(action(*args, **kwargs), timeout=seconds)
             else:
                 loop = asyncio.get_event_loop()
                 return await asyncio.wait_for(
                     loop.run_in_executor(None, lambda: action(*args, **kwargs)),
-                    timeout=seconds
+                    timeout=seconds,
                 )
+
         return wrapper
+
     return decorator
 
 

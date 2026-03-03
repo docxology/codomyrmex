@@ -24,6 +24,7 @@ _script_dir = os.path.dirname(__file__)
 @dataclass
 class ValidationReport:
     """Report on environment validation status."""
+
     valid: bool
     missing_items: list[str] = field(default_factory=list)
 
@@ -31,6 +32,7 @@ class ValidationReport:
 @dataclass
 class DependencyStatus:
     """Status of a specific dependency."""
+
     name: str
     installed: bool
 
@@ -38,6 +40,7 @@ class DependencyStatus:
 @dataclass
 class APIKeyReport:
     """Report on API key presence."""
+
     all_present: bool
     missing: list[str] = field(default_factory=list)
 
@@ -118,7 +121,9 @@ def ensure_dependencies_installed(dependencies: list[str] | None = None) -> bool
             all_installed = False
 
     if not all_installed:
-        logger.error("Missing dependencies. Please install them using 'uv pip install' or 'pip install'.")
+        logger.error(
+            "Missing dependencies. Please install them using 'uv pip install' or 'pip install'."
+        )
 
     return all_installed
 
@@ -126,7 +131,7 @@ def ensure_dependencies_installed(dependencies: list[str] | None = None) -> bool
 def check_and_setup_env_vars(
     repo_root: str | None = None,
     required: list[str] | None = None,
-    optional: list[str] | None = None
+    optional: list[str] | None = None,
 ) -> list[str]:
     """Load environment variables from a .env file and check for required keys.
 
@@ -200,11 +205,12 @@ def generate_environment_report() -> str:
         f"Python Executable: {sys.executable}",
         f"UV Available: {'Yes' if is_uv_available() else 'No'}",
         f"UV Path: {get_uv_path() or 'N/A'}",
-        f"UV Environment: {'Yes' if is_uv_environment() else 'No'}"
+        f"UV Environment: {'Yes' if is_uv_environment() else 'No'}",
     ]
 
     try:
         from codomyrmex.environment_setup.dependency_resolver import DependencyResolver
+
         resolver = DependencyResolver()
         venv = resolver.detect_virtualenv()
         report.append(f"Virtualenv: {venv['type']} ({venv['path'] or 'None'})")
@@ -218,7 +224,9 @@ def validate_environment_completeness(repo_root: str | None = None) -> bool:
     """Legacy wrapper for backward compatibility."""
     if repo_root is None:
         # Default to repo root (3 levels up from this file)
-        repo_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+        repo_root = os.path.dirname(
+            os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        )
 
     report = validate_environment()
     check_and_setup_env_vars(repo_root)

@@ -10,6 +10,7 @@ def test_scatterplot_render():
     assert "data:image/png;base64" in html
     assert 'alt="Test Plot"' in html
 
+
 def test_heatmap_render():
     """Test functionality: heatmap render."""
     data = [[1, 2], [3, 4]]
@@ -17,6 +18,7 @@ def test_heatmap_render():
     html = plot.to_html()
     assert "data:image/png;base64" in html
     assert 'alt="Heatmap Test"' in html
+
 
 def test_mermaid_render():
     """Test functionality: mermaid render."""

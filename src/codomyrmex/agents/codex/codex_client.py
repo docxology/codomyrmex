@@ -213,9 +213,7 @@ class CodexClient(APIAgentBase):
 
         # Add context if provided
         if request.context:
-            context_str = "\\n".join(
-                f"{k}: {v}" for k, v in request.context.items()
-            )
+            context_str = "\\n".join(f"{k}: {v}" for k, v in request.context.items())
             prompt = f"{context_str}\\n\\n{prompt}"
 
         return prompt

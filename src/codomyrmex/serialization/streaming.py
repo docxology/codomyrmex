@@ -13,8 +13,9 @@ from pathlib import Path
 from typing import Any
 
 
-def stream_jsonl_write(path: Path, items: Iterator[dict[str, Any]],
-                       flush_every: int = 100) -> int:
+def stream_jsonl_write(
+    path: Path, items: Iterator[dict[str, Any]], flush_every: int = 100
+) -> int:
     """Stream-write items as JSON Lines.
 
     Args:
@@ -44,8 +45,9 @@ def stream_jsonl_read(path: Path) -> Generator[dict[str, Any], None, None]:
                 yield json.loads(line)
 
 
-def stream_csv_write(path: Path, items: Iterator[dict[str, Any]],
-                     fieldnames: list[str] | None = None) -> int:
+def stream_csv_write(
+    path: Path, items: Iterator[dict[str, Any]], fieldnames: list[str] | None = None
+) -> int:
     """Stream-write dicts as CSV rows."""
     count = 0
 
@@ -69,8 +71,7 @@ def stream_csv_read(path: Path) -> Generator[dict[str, str], None, None]:
             yield dict(row)
 
 
-def chunked_json_write(path: Path, items: list[Any],
-                       chunk_size: int = 1000) -> int:
+def chunked_json_write(path: Path, items: list[Any], chunk_size: int = 1000) -> int:
     """Write a large list as JSON in chunks to manage memory."""
     with open(path, "w") as f:
         f.write("[\n")
@@ -85,8 +86,7 @@ def chunked_json_write(path: Path, items: list[Any],
 class StreamBuffer:
     """Buffer for accumulating items before batch serialization."""
 
-    def __init__(self, max_size: int = 1000,
-                 flush_callback: Any = None) -> None:
+    def __init__(self, max_size: int = 1000, flush_callback: Any = None) -> None:
         self._max_size = max_size
         self._buffer: list[Any] = []
         self._flush_callback = flush_callback

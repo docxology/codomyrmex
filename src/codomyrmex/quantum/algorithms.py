@@ -123,7 +123,7 @@ def grover_search(n: int, target: int, iterations: int | None = None) -> Quantum
         QuantumCircuit with oracle + diffusion applied.
     """
     if iterations is None:
-        iterations = max(1, int(math.pi / 4 * math.sqrt(2 ** n)))
+        iterations = max(1, int(math.pi / 4 * math.sqrt(2**n)))
 
     circuit = QuantumCircuit(n)
     # Initialize superposition
@@ -174,7 +174,9 @@ def _apply_oracle(circuit: QuantumCircuit, n: int, target: int) -> None:
 # ─── Variational / Ansatz ───────────────────────────────────────────────
 
 
-def vqe_ansatz(n: int, depth: int = 1, params: list[float] | None = None) -> QuantumCircuit:
+def vqe_ansatz(
+    n: int, depth: int = 1, params: list[float] | None = None
+) -> QuantumCircuit:
     """Hardware-efficient VQE ansatz.
 
     Alternating layers of Ry rotations and CNOT entanglement.

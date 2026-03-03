@@ -18,11 +18,15 @@ class CyberneticEngine:
         self._controllers: dict[str, PIDController] = {}
         self._last_tick = time.time()
 
-    def add_controller(self, var_name: str, kp: float = 1.0, ki: float = 0.1, kd: float = 0.0):
+    def add_controller(
+        self, var_name: str, kp: float = 1.0, ki: float = 0.1, kd: float = 0.0
+    ):
         """Register a PID controller for a specific variable."""
         self._controllers[var_name] = PIDController(kp, ki, kd)
 
-    def update(self, system: ControlSystem, current_state: SystemState) -> dict[str, float]:
+    def update(
+        self, system: ControlSystem, current_state: SystemState
+    ) -> dict[str, float]:
         """Update control outputs based on current state and setpoints.
 
         Returns:

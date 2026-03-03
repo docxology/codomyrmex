@@ -78,8 +78,8 @@ class TestHistogram:
         """Should track buckets."""
         hist = Histogram("latency", buckets=[0.1, 0.5, 1.0])
         hist.observe(0.05)  # <= 0.1
-        hist.observe(0.3)   # <= 0.5
-        hist.observe(0.8)   # <= 1.0
+        hist.observe(0.3)  # <= 0.5
+        hist.observe(0.8)  # <= 1.0
 
         stats = hist.get_value()
 

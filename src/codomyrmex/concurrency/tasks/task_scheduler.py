@@ -47,7 +47,9 @@ class TaskScheduler:
         worker_id = scheduler.assign(task)
     """
 
-    def __init__(self, strategy: SchedulingStrategy = SchedulingStrategy.ROUND_ROBIN) -> None:
+    def __init__(
+        self, strategy: SchedulingStrategy = SchedulingStrategy.ROUND_ROBIN
+    ) -> None:
         self._strategy = strategy
         self._workers: dict[str, WorkerInfo] = {}
         self._round_robin_index = 0
@@ -154,7 +156,11 @@ class TaskScheduler:
         for w in self._workers.values():
             if w.current_load >= w.max_concurrent:
                 continue
-            if w.capabilities and task.task_type and task.task_type not in w.capabilities:
+            if (
+                w.capabilities
+                and task.task_type
+                and task.task_type not in w.capabilities
+            ):
                 continue
             eligible.append(w)
         return eligible

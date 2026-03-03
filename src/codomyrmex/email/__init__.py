@@ -27,6 +27,7 @@ from .generics import EmailAddress, EmailDraft, EmailMessage, EmailProvider
 
 try:
     from .gmail import GMAIL_AVAILABLE, GmailProvider
+
     EMAIL_AVAILABLE = True
 except ImportError:
     GMAIL_AVAILABLE = False
@@ -38,6 +39,7 @@ try:
 except ImportError:
     AGENTMAIL_AVAILABLE = False
     AgentMailProvider = None  # type: ignore
+
 
 def cli_commands():
     """Return CLI commands for the email module."""
@@ -52,6 +54,7 @@ def cli_commands():
             ),
         }
     }
+
 
 __all__ = [
     # API endpoints

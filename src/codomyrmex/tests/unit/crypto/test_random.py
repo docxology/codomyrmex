@@ -29,6 +29,7 @@ from codomyrmex.crypto.random import (
 # Generator tests
 # -------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 @pytest.mark.crypto
 class TestSecureRandomBytes:
@@ -172,6 +173,7 @@ class TestGenerateNonce:
 # -------------------------------------------------------------------------
 # NIST statistical test suite
 # -------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 @pytest.mark.crypto

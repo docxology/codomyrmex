@@ -14,17 +14,21 @@ try:
         LeakyBucketLimiter,
         RedisRateLimiter,
     )
+
     HAS_MODULE = True
 except ImportError:
     HAS_MODULE = False
 
 if not HAS_MODULE:
-    pytest.skip("rate_limiting.distributed module not available", allow_module_level=True)
+    pytest.skip(
+        "rate_limiting.distributed module not available", allow_module_level=True
+    )
 
 
 # ---------------------------------------------------------------------------
 # RedisRateLimiter (local fallback mode, no Redis needed)
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestRedisRateLimiterLocalFallback:
@@ -110,9 +114,11 @@ class TestRedisRateLimiterLocalFallback:
 # LeakyBucketLimiter
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestLeakyBucketLimiter:
     """Test suite for LeakyBucketLimiter."""
+
     def test_create(self):
         """Test functionality: create."""
         limiter = LeakyBucketLimiter(capacity=10, leak_rate=1.0)
@@ -191,9 +197,11 @@ class TestLeakyBucketLimiter:
 # AdaptiveRateLimiter
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestAdaptiveRateLimiter:
     """Test suite for AdaptiveRateLimiter."""
+
     def test_create(self):
         """Test functionality: create."""
         limiter = AdaptiveRateLimiter(base_limit=100, window_seconds=60)

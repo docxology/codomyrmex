@@ -52,6 +52,7 @@ logger = get_logger(__name__)
 
 # ── Data Structures ──────────────────────────────────────────────────
 
+
 @dataclass
 class ConversationTurn:
     """A single turn in the conversation."""
@@ -170,6 +171,7 @@ class ConversationLog:
 
 # ── LLM Clients ─────────────────────────────────────────────────────
 
+
 def _create_llm_client(spec: AgentSpec) -> Any:
     """Create a real LLM client for the given agent spec.
 
@@ -191,6 +193,7 @@ def _create_llm_client(spec: AgentSpec) -> Any:
         if os.environ.get("ANTHROPIC_API_KEY"):
             try:
                 from codomyrmex.agents.llm_client import get_llm_client
+
                 client = get_llm_client(identity=spec.identity)
 
                 if spec.provider == "antigravity":
@@ -202,7 +205,13 @@ def _create_llm_client(spec: AgentSpec) -> Any:
                     ag_client = AntigravityClient()
                     try:
                         ag_client.connect()
-                    except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
+                    except (
+                        ValueError,
+                        RuntimeError,
+                        AttributeError,
+                        OSError,
+                        TypeError,
+                    ) as e:
                         logger.warning("Antigravity client connection failed: %s", e)
 
                     provider = AntigravityToolProvider(ag_client)
@@ -213,20 +222,29 @@ def _create_llm_client(spec: AgentSpec) -> Any:
                             name=tool.name,
                             description=tool.description,
                             input_schema=tool.args_schema,
-                            handler=tool.func
+                            handler=tool.func,
                         )
 
                     # Wrap the client so execute_with_session calls execute_with_tools
                     class AntigravityCodeImplementerWrapper:
                         """Adapts a base IDE client to the execute_with_session interface expected by the orchestrator."""
+
                         def __init__(self, base_client):
                             self.client = base_client
 
-                        def execute_with_session(self, request, session=None, session_id=None):
-                            if hasattr(self.client, 'execute_with_tools'):
-                                logger.info(f"[{spec.identity}] Executing with full Antigravity tool loop...")
-                                return self.client.execute_with_tools(request, auto_execute=True, max_tool_rounds=15)
-                            return self.client.execute_with_session(request, session, session_id)
+                        def execute_with_session(
+                            self, request, session=None, session_id=None
+                        ):
+                            if hasattr(self.client, "execute_with_tools"):
+                                logger.info(
+                                    f"[{spec.identity}] Executing with full Antigravity tool loop..."
+                                )
+                                return self.client.execute_with_tools(
+                                    request, auto_execute=True, max_tool_rounds=15
+                                )
+                            return self.client.execute_with_session(
+                                request, session, session_id
+                            )
 
                     return AntigravityCodeImplementerWrapper(client)
                 return client
@@ -249,6 +267,7 @@ def _create_llm_client(spec: AgentSpec) -> Any:
 
 
 # ── Orchestrator ─────────────────────────────────────────────────────
+
 
 class ConversationOrchestrator:
     """Orchestrate infinite conversations between LLM agents over a relay.
@@ -285,7 +304,7 @@ class ConversationOrchestrator:
 
         # Load context files.
         self.context_files: list[FileContext] = []
-        for fp in (context_files or []):
+        for fp in context_files or []:
             fc = FileContext(path=Path(fp))
             if fc.content:
                 self.context_files.append(fc)
@@ -310,8 +329,16 @@ class ConversationOrchestrator:
 
         # Parse agent specs.
         raw_agents = agents or [
-            {"identity": "ollama-agent", "persona": "helpful AI assistant", "provider": "ollama"},
-            {"identity": "antigravity-agent", "persona": "code reviewer", "provider": "ollama"},
+            {
+                "identity": "ollama-agent",
+                "persona": "helpful AI assistant",
+                "provider": "ollama",
+            },
+            {
+                "identity": "antigravity-agent",
+                "persona": "code reviewer",
+                "provider": "ollama",
+            },
         ]
         self.agents: list[AgentSpec] = []
         for a in raw_agents:
@@ -331,8 +358,7 @@ class ConversationOrchestrator:
         for spec in self.agents:
             self.clients[spec.identity] = _create_llm_client(spec)
             logger.info(
-                f"[Orchestrator] Agent '{spec.identity}' → "
-                f"{spec.provider}/{spec.model}"
+                f"[Orchestrator] Agent '{spec.identity}' → {spec.provider}/{spec.model}"
             )
 
         # Conversation state.
@@ -349,7 +375,7 @@ class ConversationOrchestrator:
         rounds: int = 3,
         *,
         max_tokens_per_turn: int = 256,
-        on_turn: Callable[[ConversationTurn], None] | None = None
+        on_turn: Callable[[ConversationTurn], None] | None = None,
     ) -> list[ConversationTurn]:
         """Run the conversation for N rounds (0 = infinite).
 
@@ -372,7 +398,7 @@ class ConversationOrchestrator:
         self,
         rounds: int,
         max_tokens_per_turn: int,
-        on_turn: Callable[[ConversationTurn], None] | None = None
+        on_turn: Callable[[ConversationTurn], None] | None = None,
     ) -> list[ConversationTurn]:
         """Internal loop — runs inside a correlation context."""
         self._running = True
@@ -399,9 +425,7 @@ class ConversationOrchestrator:
                 if not self._running:
                     break
 
-                turn = self._execute_turn(
-                    spec, context, round_num, max_tokens_per_turn
-                )
+                turn = self._execute_turn(spec, context, round_num, max_tokens_per_turn)
                 self.log.turns.append(turn)
                 context = turn.content  # next agent responds to this
 
@@ -435,6 +459,7 @@ class ConversationOrchestrator:
     def load_export(self, path: str | Path) -> None:
         """Load an exported conversation JSONL into the current state."""
         import json
+
         p = Path(path)
         if not p.exists():
             raise FileNotFoundError(f"Export not found: {p}")
@@ -541,9 +566,7 @@ class ConversationOrchestrator:
 
         # Build prompt with file context + TO-DO scaffolding.
         recent_turns = self.log.turns[-6:]  # last 6 for context
-        history = "\n".join(
-            f"[{t.speaker}]: {t.content}" for t in recent_turns
-        )
+        history = "\n".join(f"[{t.speaker}]: {t.content}" for t in recent_turns)
 
         # File context section.
         file_section = ""
@@ -552,9 +575,7 @@ class ConversationOrchestrator:
             for fc in self.context_files:
                 parts.append(f"=== {fc.name} ===\n{fc.content}")
             file_section = (
-                "\n\nProject Files (read-only reference):\n"
-                + "\n\n".join(parts)
-                + "\n"
+                "\n\nProject Files (read-only reference):\n" + "\n\n".join(parts) + "\n"
             )
 
         # Per-round TO-DO focus.
@@ -586,7 +607,9 @@ class ConversationOrchestrator:
         for attempt in range(1, self.max_retries + 2):  # +2 because range is [1, max+2)
             try:
                 resp = client.execute_with_session(req)
-                content = resp.content.strip() if hasattr(resp, "content") else str(resp)
+                content = (
+                    resp.content.strip() if hasattr(resp, "content") else str(resp)
+                )
                 last_error = None
                 break
             except Exception as exc:

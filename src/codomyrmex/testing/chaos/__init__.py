@@ -23,22 +23,27 @@ except ImportError:
     Result = None
     ResultStatus = None
 
+
 class FaultType(Enum):
     """Types of injectable faults."""
+
     LATENCY = "latency"
     ERROR = "error"
     TIMEOUT = "timeout"
     RESOURCE_EXHAUSTION = "resource_exhaustion"
     NETWORK_PARTITION = "network_partition"
 
+
 @dataclass
 class FaultConfig:
     """Configuration for a fault."""
+
     fault_type: FaultType
     probability: float = 0.1  # 0-1
     duration_seconds: float = 0.0
     error_message: str = "Injected fault"
     metadata: dict[str, Any] = field(default_factory=dict)
+
 
 class FaultInjector:
     """Inject faults into system components."""
@@ -88,20 +93,26 @@ class FaultInjector:
         if self.should_inject(name):
             self.inject(name)
 
+
 class InjectedFaultError(Exception):
     """Raised when a fault is injected."""
+
     pass
+
 
 @dataclass
 class SteadyStateHypothesis:
     """Define expected steady state."""
+
     name: str
     check_fn: Callable[[], bool]
     description: str = ""
 
+
 @dataclass
 class ExperimentResult:
     """Result of a chaos experiment."""
+
     experiment_name: str
     success: bool
     steady_state_before: bool
@@ -109,6 +120,7 @@ class ExperimentResult:
     duration_seconds: float
     error: str | None = None
     started_at: datetime = field(default_factory=datetime.now)
+
 
 class ChaosExperiment:
     """A chaos engineering experiment."""
@@ -182,6 +194,7 @@ class ChaosExperiment:
             error=error,
         )
 
+
 class ChaosMonkey:
     """Automated chaos testing."""
 
@@ -216,20 +229,26 @@ class ChaosMonkey:
         """Results."""
         return self._results
 
+
 # Decorators
 def with_chaos(
     injector: FaultInjector,
     fault_name: str,
 ) -> Callable:
     """Decorator to inject chaos into a function."""
+
     def decorator(func: Callable) -> Callable:
         """Decorator."""
+
         def wrapper(*args, **kwargs):
             """Wrapper."""
             injector.maybe_inject(fault_name)
             return func(*args, **kwargs)
+
         return wrapper
+
     return decorator
+
 
 def cli_commands():
     """Return CLI commands for the chaos_engineering module."""
@@ -255,6 +274,7 @@ def cli_commands():
         "experiments": _experiments,
         "run": _run,
     }
+
 
 __all__ = [
     "FaultInjector",

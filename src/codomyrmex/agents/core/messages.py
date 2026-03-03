@@ -103,11 +103,17 @@ class AgentMessage:
     def from_dict(cls, data: dict[str, Any]) -> AgentMessage:
         """Deserialize from a plain dictionary."""
         tool_calls = [
-            ToolCall(name=tc["name"], arguments=tc.get("arguments", {}), call_id=tc.get("call_id", ""))
+            ToolCall(
+                name=tc["name"],
+                arguments=tc.get("arguments", {}),
+                call_id=tc.get("call_id", ""),
+            )
             for tc in data.get("tool_calls", [])
         ]
         tool_results = [
-            ToolResult(call_id=tr["call_id"], output=tr.get("output"), error=tr.get("error"))
+            ToolResult(
+                call_id=tr["call_id"], output=tr.get("output"), error=tr.get("error")
+            )
             for tr in data.get("tool_results", [])
         ]
         return cls(
@@ -116,7 +122,11 @@ class AgentMessage:
             tool_calls=tool_calls,
             tool_results=tool_results,
             metadata=data.get("metadata", {}),
-            timestamp=datetime.fromisoformat(data["timestamp"]) if "timestamp" in data else datetime.now(UTC),
+            timestamp=(
+                datetime.fromisoformat(data["timestamp"])
+                if "timestamp" in data
+                else datetime.now(UTC)
+            ),
             message_id=data.get("message_id", uuid.uuid4().hex),
         )
 
@@ -141,6 +151,10 @@ class AgentMessage:
         return cls(role=MessageRole.ASSISTANT, content=content, **kwargs)
 
     @classmethod
-    def tool(cls, content: str, results: list[ToolResult] | None = None, **kwargs: Any) -> AgentMessage:
+    def tool(
+        cls, content: str, results: list[ToolResult] | None = None, **kwargs: Any
+    ) -> AgentMessage:
         """Create a tool result message."""
-        return cls(role=MessageRole.TOOL, content=content, tool_results=results or [], **kwargs)
+        return cls(
+            role=MessageRole.TOOL, content=content, tool_results=results or [], **kwargs
+        )

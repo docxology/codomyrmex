@@ -12,6 +12,7 @@ try:
         EdgeRegion,
         FastlyComputeClient,
     )
+
     HAS_MODULE = True
 except ImportError:
     HAS_MODULE = False
@@ -23,6 +24,7 @@ if not HAS_MODULE:
 @pytest.mark.unit
 class TestEdgeProvider:
     """Test suite for EdgeProvider."""
+
     def test_cloudflare(self):
         """Test functionality: cloudflare."""
         assert EdgeProvider.CLOUDFLARE_WORKERS is not None
@@ -47,6 +49,7 @@ class TestEdgeProvider:
 @pytest.mark.unit
 class TestEdgeRegion:
     """Test suite for EdgeRegion."""
+
     def test_global(self):
         """Test functionality: global."""
         assert EdgeRegion.GLOBAL is not None
@@ -63,6 +66,7 @@ class TestEdgeRegion:
 @pytest.mark.unit
 class TestEdgeFunctionConfig:
     """Test suite for EdgeFunctionConfig."""
+
     def test_create_config(self):
         """Test functionality: create config."""
         config = EdgeFunctionConfig(
@@ -88,6 +92,7 @@ class TestEdgeFunctionConfig:
 @pytest.mark.unit
 class TestEdgeDeployment:
     """Test suite for EdgeDeployment."""
+
     def test_create_deployment(self):
         """Test functionality: create deployment."""
         deployment = EdgeDeployment(
@@ -104,6 +109,7 @@ class TestEdgeDeployment:
 @pytest.mark.unit
 class TestCloudflareWorkersClient:
     """Test suite for CloudflareWorkersClient."""
+
     def test_create_client(self):
         """Test functionality: create client."""
         client = CloudflareWorkersClient(account_id="acc-123", api_token="token-123")
@@ -114,6 +120,7 @@ class TestCloudflareWorkersClient:
 @pytest.mark.unit
 class TestFastlyComputeClient:
     """Test suite for FastlyComputeClient."""
+
     def test_create_client(self):
         """Test functionality: create client."""
         client = FastlyComputeClient(api_key="key-123")
@@ -124,6 +131,7 @@ class TestFastlyComputeClient:
 @pytest.mark.unit
 class TestEdgeManager:
     """Test suite for EdgeManager."""
+
     def test_create_manager(self):
         """Test functionality: create manager."""
         manager = EdgeManager()

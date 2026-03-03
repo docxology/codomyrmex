@@ -22,6 +22,7 @@ logger = get_logger(__name__)
 
 try:
     import psutil
+
     HAS_PSUTIL = True
 except ImportError:
     HAS_PSUTIL = False
@@ -122,7 +123,9 @@ def run_benchmark(
             pass
         times.append(time.perf_counter() - start)
 
-    result = BenchmarkResult(name=name or "benchmark", iterations=len(times), times=times)
+    result = BenchmarkResult(
+        name=name or "benchmark", iterations=len(times), times=times
+    )
     return result.to_dict()
 
 
@@ -205,23 +208,29 @@ class BenchmarkSuite:
         """Return sum with other."""
         self._benchmarks[name] = func
 
-    def run_all(self, iterations: int = 5, warmup: int = 1) -> dict[str, dict[str, Any]]:
+    def run_all(
+        self, iterations: int = 5, warmup: int = 1
+    ) -> dict[str, dict[str, Any]]:
         """Run all registered benchmarks."""
         self._results = {}
         for name, func in self._benchmarks.items():
-            self._results[name] = run_benchmark(func, iterations=iterations, warmup=warmup, name=name)
+            self._results[name] = run_benchmark(
+                func, iterations=iterations, warmup=warmup, name=name
+            )
         return dict(self._results)
 
     def report(self) -> str:
         """Generate a tabular report of results."""
         if not self._results:
             return "No benchmark results. Call run_all() first."
-        lines = [f"{'Name':<20} {'Avg (ms)':>10} {'Min (ms)':>10} {'Max (ms)':>10} {'P95 (ms)':>10} {'StDev':>10}"]
+        lines = [
+            f"{'Name':<20} {'Avg (ms)':>10} {'Min (ms)':>10} {'Max (ms)':>10} {'P95 (ms)':>10} {'StDev':>10}"
+        ]
         lines.append("-" * 70)
         for name, r in sorted(self._results.items()):
             lines.append(
-                f"{name:<20} {r['average_time']*1000:>10.3f} {r['min_time']*1000:>10.3f} "
-                f"{r['max_time']*1000:>10.3f} {r['p95']*1000:>10.3f} {r['stdev']*1000:>10.3f}"
+                f"{name:<20} {r['average_time'] * 1000:>10.3f} {r['min_time'] * 1000:>10.3f} "
+                f"{r['max_time'] * 1000:>10.3f} {r['p95'] * 1000:>10.3f} {r['stdev'] * 1000:>10.3f}"
             )
         return "\n".join(lines)
 
@@ -233,7 +242,9 @@ class BenchmarkSuite:
 class PerformanceProfiler:
     """Class-based profiler for consistency with tests."""
 
-    def profile_function(self, func: Callable, *args: Any, **kwargs: Any) -> dict[str, Any]:
+    def profile_function(
+        self, func: Callable, *args: Any, **kwargs: Any
+    ) -> dict[str, Any]:
         """Profile a function."""
         return profile_function(func, *args, **kwargs)
 

@@ -14,11 +14,13 @@ logger = get_logger(__name__)
 @dataclass
 class LockStats:
     """Statistics for lock manager telemetry."""
+
     total_locks: int = 0
     total_acquisitions: int = 0
     total_releases: int = 0
     active_locks: int = 0
     lock_contention: dict[str, int] = field(default_factory=dict)
+
 
 class LockManager:
     """Orchestrates multiple locks and provides multi-resource acquisition."""
@@ -44,13 +46,15 @@ class LockManager:
     def stats(self) -> LockStats:
         """Get lock manager statistics for telemetry."""
         with self._manager_lock:
-            active = sum(1 for lock in self._locks.values() if getattr(lock, 'is_held', False))
+            active = sum(
+                1 for lock in self._locks.values() if getattr(lock, "is_held", False)
+            )
             return LockStats(
                 total_locks=len(self._locks),
                 total_acquisitions=self._total_acquisitions,
                 total_releases=self._total_releases,
                 active_locks=active,
-                lock_contention=self._contention.copy()
+                lock_contention=self._contention.copy(),
             )
 
     def list_locks(self) -> list[str]:
@@ -103,6 +107,7 @@ class LockManager:
                 lock.release()
                 with self._manager_lock:
                     self._total_releases += 1
+
 
 class ReadWriteLock:
     """In-process Read-Write lock (shared/exclusive).
@@ -172,6 +177,7 @@ class ReadWriteLock:
         """Return a context manager for the write lock."""
         return _WriteLockContext(self)
 
+
 class _ReadLockContext:
     def __init__(self, rw_lock: ReadWriteLock):
         self._rw_lock = rw_lock
@@ -183,6 +189,7 @@ class _ReadLockContext:
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         self._rw_lock.release_read()
+
 
 class _WriteLockContext:
     def __init__(self, rw_lock: ReadWriteLock):

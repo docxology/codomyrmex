@@ -51,7 +51,9 @@ class ThreatEvent:
     """A detected threat occurrence."""
 
     source: str
-    category: str  # "brute_force", "injection", "rate_limit", "anomaly", "cognitive_exploit"
+    category: (
+        str  # "brute_force", "injection", "rate_limit", "anomaly", "cognitive_exploit"
+    )
     severity: Severity
     description: str
     timestamp: float = field(default_factory=time.time)
@@ -150,7 +152,9 @@ class ThreatDetector:
         """Register a detection rule."""
         self._rules.append(rule)
 
-    def evaluate(self, request: dict[str, Any], source: str = "unknown") -> list[ThreatEvent]:
+    def evaluate(
+        self, request: dict[str, Any], source: str = "unknown"
+    ) -> list[ThreatEvent]:
         """Evaluate a request against all rules.
 
         Returns:
@@ -277,12 +281,17 @@ class Defense:
                 event = ThreatEvent(
                     source=source,
                     category="cognitive_exploit",
-                    severity=severity_map.get(exploit_result["threat_level"], Severity.MEDIUM),
+                    severity=severity_map.get(
+                        exploit_result["threat_level"], Severity.MEDIUM
+                    ),
                     description=f"Cognitive exploit detected: {exploit_result['patterns']}",
                     metadata=exploit_result,
-                    response=ResponseAction.RABBITHOLE
-                    if exploit_result["threat_level"].value >= ThreatLevel.HIGH.value
-                    else ResponseAction.POISON,
+                    response=(
+                        ResponseAction.RABBITHOLE
+                        if exploit_result["threat_level"].value
+                        >= ThreatLevel.HIGH.value
+                        else ResponseAction.POISON
+                    ),
                 )
                 threats.append(event)
 

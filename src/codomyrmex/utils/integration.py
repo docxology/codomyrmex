@@ -14,7 +14,7 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Any, TypeVar
 
-T = TypeVar('T')
+T = TypeVar("T")
 
 # Module-level logger
 logger = logging.getLogger("codomyrmex.integration")
@@ -23,6 +23,7 @@ logger = logging.getLogger("codomyrmex.integration")
 # ============================================================================
 # Logging Utilities
 # ============================================================================
+
 
 def setup_module_logging(
     module_name: str,
@@ -48,8 +49,10 @@ def log_performance(
     logger: logging.Logger | None = None,
 ):
     """Decorator to log function performance."""
+
     def decorator(func: Callable) -> Callable:
         """Decorator."""
+
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
             """Wrapper."""
@@ -64,13 +67,16 @@ def log_performance(
                 elapsed = (time.time() - start) * 1000
                 log.error(f"{operation} failed after {elapsed:.2f}ms: {e}")
                 raise
+
         return wrapper
+
     return decorator
 
 
 # ============================================================================
 # Async Helpers
 # ============================================================================
+
 
 def run_async(coro):
     """Run an async function from sync context."""
@@ -79,6 +85,7 @@ def run_async(coro):
         if loop.is_running():
             # Create new loop in thread for nested async
             import concurrent.futures
+
             with concurrent.futures.ThreadPoolExecutor() as pool:
                 future = pool.submit(asyncio.run, coro)
                 return future.result()
@@ -103,10 +110,12 @@ async def gather_with_concurrency(
 
 def make_async(func: Callable) -> Callable:
     """Convert sync function to async."""
+
     @functools.wraps(func)
     async def wrapper(*args, **kwargs):
         loop = asyncio.get_event_loop()
         return await loop.run_in_executor(None, lambda: func(*args, **kwargs))
+
     return wrapper
 
 
@@ -114,9 +123,11 @@ def make_async(func: Callable) -> Callable:
 # Retry Logic
 # ============================================================================
 
+
 @dataclass
 class RetryConfig:
     """Configuration for retry logic."""
+
     max_attempts: int = 3
     initial_delay: float = 0.1
     max_delay: float = 10.0
@@ -131,10 +142,12 @@ def with_retry(config: RetryConfig | None = None):
 
     def decorator(func: Callable) -> Callable:
         """Decorator."""
+
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
             """Wrapper."""
             import random
+
             last_exception = None
             delay = cfg.initial_delay
 
@@ -145,12 +158,14 @@ def with_retry(config: RetryConfig | None = None):
                     last_exception = e
                     if attempt < cfg.max_attempts - 1:
                         if cfg.jitter:
-                            delay *= (1 + random.random() * 0.1)
+                            delay *= 1 + random.random() * 0.1
                         time.sleep(min(delay, cfg.max_delay))
                         delay *= cfg.exponential_base
 
             raise last_exception
+
         return wrapper
+
     return decorator
 
 
@@ -162,6 +177,7 @@ async def async_retry(
 ):
     """Async retry with exponential backoff."""
     import random
+
     cfg = config or RetryConfig()
     last_exception = None
     delay = cfg.initial_delay
@@ -173,7 +189,7 @@ async def async_retry(
             last_exception = e
             if attempt < cfg.max_attempts - 1:
                 if cfg.jitter:
-                    delay *= (1 + random.random() * 0.1)
+                    delay *= 1 + random.random() * 0.1
                 await asyncio.sleep(min(delay, cfg.max_delay))
                 delay *= cfg.exponential_base
 
@@ -183,6 +199,7 @@ async def async_retry(
 # ============================================================================
 # Resource Management
 # ============================================================================
+
 
 @contextmanager
 def timed_operation(name: str, logger: logging.Logger | None = None):
@@ -211,6 +228,7 @@ async def async_timed_operation(name: str, logger: logging.Logger | None = None)
 # ============================================================================
 # Module Registry
 # ============================================================================
+
 
 class ModuleRegistry:
     """Registry for cross-module integration."""
@@ -258,9 +276,11 @@ registry = ModuleRegistry()
 # Health Checking
 # ============================================================================
 
+
 @dataclass
 class HealthStatus:
     """Health check result."""
+
     healthy: bool
     name: str
     message: str = ""

@@ -16,6 +16,7 @@ class TestCodeReview:
 
         try:
             from codomyrmex import coding
+
             assert coding is not None
         except ImportError as e:
             pytest.fail(f"Failed to import coding: {e}")
@@ -43,6 +44,7 @@ class TestCodeReview:
 
         try:
             from codomyrmex.coding.review import CodeReviewer
+
             assert CodeReviewer is not None
         except ImportError as e:
             pytest.fail(f"Failed to import CodeReviewer: {e}")
@@ -54,6 +56,7 @@ class TestCodeReview:
 
         try:
             from codomyrmex.coding.review import PyscnAnalyzer
+
             assert PyscnAnalyzer is not None
         except ImportError as e:
             pytest.fail(f"Failed to import PyscnAnalyzer: {e}")
@@ -65,6 +68,7 @@ class TestCodeReview:
 
         try:
             from codomyrmex.coding.review import AnalysisType, Language, SeverityLevel
+
             assert AnalysisType is not None
             assert SeverityLevel is not None
             assert Language is not None
@@ -83,6 +87,7 @@ class TestCodeReview:
                 CodeMetrics,
                 QualityGateResult,
             )
+
             assert AnalysisResult is not None
             assert AnalysisSummary is not None
             assert CodeMetrics is not None
@@ -102,6 +107,7 @@ class TestCodeReview:
                 PyscnError,
                 ToolNotFoundError,
             )
+
             assert CodeReviewError is not None
             assert PyscnError is not None
             assert ToolNotFoundError is not None
@@ -121,6 +127,7 @@ class TestCodeReview:
                 check_quality_gates,
                 generate_report,
             )
+
             assert callable(analyze_file)
             assert callable(analyze_project)
             assert callable(check_quality_gates)
@@ -134,13 +141,13 @@ class TestCodeReview:
             sys.path.insert(0, str(code_dir))
 
         from codomyrmex import coding
+
         assert hasattr(coding, "__version__")
 
     def test_code_review_all_exports(self, code_dir):
         """Test that code_review exports all expected symbols."""
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
-
 
         expected_exports = [
             "CodeReviewer",

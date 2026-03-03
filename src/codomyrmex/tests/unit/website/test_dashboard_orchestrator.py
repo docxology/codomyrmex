@@ -69,6 +69,7 @@ class TestPortIsLive:
     def test_timeout_works(self) -> None:
         """Short timeout doesn't hang."""
         import time
+
         start = time.monotonic()
         _port_is_live(59997, timeout=0.3)
         elapsed = time.monotonic() - start
@@ -120,4 +121,6 @@ class TestParseArgs:
             assert args.setup_only is True
         finally:
             sys.argv = saved
+
+
 """Zero-mock tests for PAI dashboard orchestrator helper functions."""

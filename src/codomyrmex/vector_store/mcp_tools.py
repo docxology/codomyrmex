@@ -11,10 +11,12 @@ from typing import Any
 try:
     from codomyrmex.model_context_protocol.decorators import mcp_tool
 except ImportError:
+
     def mcp_tool(**kwargs):  # type: ignore[misc]
         def decorator(fn):
             fn._mcp_tool_meta = kwargs
             return fn
+
         return decorator
 
 
@@ -27,6 +29,7 @@ def _get_store():  # type: ignore[return]
     global _store
     if _store is None:
         from codomyrmex.vector_store.store import InMemoryVectorStore
+
         _store = InMemoryVectorStore()
     return _store
 
@@ -79,10 +82,7 @@ def vector_search(
         sorted best-match first.
     """
     results = _get_store().search(query_embedding, k=k)
-    return [
-        {"id": r.id, "score": r.score, "metadata": r.metadata}
-        for r in results
-    ]
+    return [{"id": r.id, "score": r.score, "metadata": r.metadata} for r in results]
 
 
 @mcp_tool(

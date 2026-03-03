@@ -98,6 +98,7 @@ class TestSimpleSpecializedExceptions:
 
     def test_catch_as_base_exception(self):
         from codomyrmex.exceptions.base import CodomyrmexError
+
         for cls in self._SIMPLE_CLASSES:
             with pytest.raises(CodomyrmexError):
                 raise cls("err")
@@ -163,11 +164,13 @@ class TestCircuitAndBulkheadErrors:
 
     def test_circuit_not_codomyrmex_error(self):
         from codomyrmex.exceptions.base import CodomyrmexError
+
         e = CircuitOpenError("err")
         assert not isinstance(e, CodomyrmexError)
 
     def test_bulkhead_not_codomyrmex_error(self):
         from codomyrmex.exceptions.base import CodomyrmexError
+
         e = BulkheadFullError("err")
         assert not isinstance(e, CodomyrmexError)
 

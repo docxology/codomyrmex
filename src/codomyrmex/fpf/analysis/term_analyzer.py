@@ -1,4 +1,3 @@
-
 """Term analyzer for extracting shared terms and variables across FPF sections.
 
 
@@ -20,9 +19,15 @@ class TermAnalyzer:
         """Initialize the term analyzer."""
         # Patterns for extracting terms
         self.u_type_pattern = re.compile(r"`?U\.([A-Z][a-zA-Z0-9]*)`?")
-        self.variable_pattern = re.compile(r"`([A-Z][a-zA-Z0-9]*(?:\.[A-Z][a-zA-Z0-9]*)*)`")
-        self.term_pattern = re.compile(r"\b([A-Z][a-z]+(?:[A-Z][a-z]+)*)\b")  # CamelCase terms
-        self.keyword_pattern = re.compile(r"\*\*?([A-Z][a-zA-Z\s-]+?)\*\*?")  # Bold terms
+        self.variable_pattern = re.compile(
+            r"`([A-Z][a-zA-Z0-9]*(?:\.[A-Z][a-zA-Z0-9]*)*)`"
+        )
+        self.term_pattern = re.compile(
+            r"\b([A-Z][a-z]+(?:[A-Z][a-z]+)*)\b"
+        )  # CamelCase terms
+        self.keyword_pattern = re.compile(
+            r"\*\*?([A-Z][a-zA-Z\s-]+?)\*\*?"
+        )  # Bold terms
 
     def extract_terms_from_pattern(self, pattern: Pattern) -> set[str]:
         """Extract all terms from a pattern.
@@ -57,7 +62,9 @@ class TermAnalyzer:
 
         return terms
 
-    def build_term_cooccurrence_matrix(self, spec: FPFSpec) -> dict[str, dict[str, int]]:
+    def build_term_cooccurrence_matrix(
+        self, spec: FPFSpec
+    ) -> dict[str, dict[str, int]]:
         """Build a co-occurrence matrix of terms across patterns.
 
         Args:
@@ -79,7 +86,7 @@ class TermAnalyzer:
         terms_list = list(term_patterns.keys())
 
         for i, term1 in enumerate(terms_list):
-            for term2 in terms_list[i + 1:]:
+            for term2 in terms_list[i + 1 :]:
                 # Count patterns where both terms appear
                 patterns1 = term_patterns[term1]
                 patterns2 = term_patterns[term2]
@@ -91,7 +98,9 @@ class TermAnalyzer:
 
         return dict(cooccurrence)
 
-    def get_shared_terms(self, spec: FPFSpec, min_occurrences: int = 2) -> list[tuple[str, int, list[str]]]:
+    def get_shared_terms(
+        self, spec: FPFSpec, min_occurrences: int = 2
+    ) -> list[tuple[str, int, list[str]]]:
         """Get terms that appear in multiple patterns.
 
         Args:
@@ -171,7 +180,9 @@ class TermAnalyzer:
 
         return importance_scores[:top_n]
 
-    def analyze_section_terms(self, spec: FPFSpec, part: str = None) -> dict[str, list[str]]:
+    def analyze_section_terms(
+        self, spec: FPFSpec, part: str = None
+    ) -> dict[str, list[str]]:
         """Analyze terms by section/part.
 
         Args:
@@ -222,4 +233,3 @@ class TermAnalyzer:
         cross_section.sort(key=lambda x: x[1], reverse=True)
 
         return cross_section
-

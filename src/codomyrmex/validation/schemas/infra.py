@@ -11,6 +11,7 @@ from typing import Any
 
 class DeploymentStatus(Enum):
     """Status of a deployment."""
+
     PENDING = "pending"
     IN_PROGRESS = "in_progress"
     DEPLOYED = "deployed"
@@ -21,6 +22,7 @@ class DeploymentStatus(Enum):
 
 class PipelineStatus(Enum):
     """Status of a CI/CD pipeline."""
+
     QUEUED = "queued"
     RUNNING = "running"
     SUCCEEDED = "succeeded"
@@ -30,6 +32,7 @@ class PipelineStatus(Enum):
 
 class MetricType(Enum):
     """Type of metric."""
+
     COUNTER = "counter"
     GAUGE = "gauge"
     HISTOGRAM = "histogram"
@@ -43,6 +46,7 @@ class Deployment:
 
     Used by deployment, containerization, edge_computing modules.
     """
+
     id: str
     name: str
     status: DeploymentStatus = DeploymentStatus.PENDING
@@ -73,6 +77,7 @@ class Pipeline:
 
     Used by ci_cd_automation, build_synthesis modules.
     """
+
     id: str
     name: str
     status: PipelineStatus = PipelineStatus.QUEUED
@@ -99,6 +104,7 @@ class Resource:
 
     Used by cloud, containerization, service_mesh modules.
     """
+
     id: str
     name: str
     resource_type: str = ""
@@ -127,6 +133,7 @@ class BuildArtifact:
 
     Used by build_synthesis, ci_cd_automation modules.
     """
+
     name: str
     path: str
     artifact_type: str = ""  # binary, docker_image, package, etc.
@@ -153,6 +160,7 @@ class Metric:
 
     Used by metrics, telemetry, observability_dashboard modules.
     """
+
     name: str
     value: float
     metric_type: MetricType = MetricType.GAUGE
@@ -179,6 +187,7 @@ class Credential:
 
     Used by auth, encryption, security modules.
     """
+
     id: str
     name: str
     credential_type: str = ""  # api_key, token, certificate, etc.
@@ -194,6 +203,7 @@ class Permission:
 
     Used by auth, security modules.
     """
+
     subject: str
     action: str
     resource: str
@@ -208,6 +218,7 @@ class WorkflowStep:
 
     Used by orchestrator, logistics modules.
     """
+
     id: str
     name: str
     action: str

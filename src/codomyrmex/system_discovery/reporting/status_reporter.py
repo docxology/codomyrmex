@@ -19,11 +19,10 @@ including health checks, dependency analysis, and system diagnostics.
 """
 
 try:
-
     logger = get_logger(__name__)
 except ImportError:
-
     logger = logging.getLogger(__name__)
+
 
 class StatusReporter:
     """
@@ -46,7 +45,6 @@ class StatusReporter:
 
         # Import terminal formatter if available
         try:
-
             self.formatter = TerminalFormatter()
         except ImportError:
             self.formatter = None
@@ -540,9 +538,7 @@ class StatusReporter:
             recommendations.append("Create and activate a virtual environment")
 
         if report["dependencies"]["success_rate"] < 80:
-            recommendations.append(
-                "Install missing dependencies: uv sync"
-            )
+            recommendations.append("Install missing dependencies: uv sync")
 
         if not report["git_status"]["is_git_repo"]:
             recommendations.append("Initialize git repository: git init")
@@ -579,6 +575,7 @@ class StatusReporter:
         except Exception as e:
             print(self.format_message(f"Failed to export report: {e}", "error"))
             return ""
+
 
 if __name__ == "__main__":
     # Demo the status reporter

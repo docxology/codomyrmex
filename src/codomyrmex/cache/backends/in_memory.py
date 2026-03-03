@@ -98,9 +98,8 @@ class InMemoryCache(Cache):
     def delete_pattern(self, pattern: str) -> int:
         """Delete all keys matching a pattern."""
         import fnmatch
+
         keys_to_delete = [k for k in self._cache.keys() if fnmatch.fnmatch(k, pattern)]
         for key in keys_to_delete:
             self.delete(key)
         return len(keys_to_delete)
-
-

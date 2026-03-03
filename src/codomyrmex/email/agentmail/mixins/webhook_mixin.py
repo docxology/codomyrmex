@@ -22,6 +22,7 @@ except ImportError:
 def _raise_for_api_error(exc: Exception, context: str):
     """Import and delegate to the module-level error raiser."""
     from codomyrmex.email.agentmail.provider import _raise_for_api_error as _raise
+
     _raise(exc, context)
 
 
@@ -64,7 +65,9 @@ class WebhookMixin:
         except ApiError as exc:
             _raise_for_api_error(exc, f"get_webhook({webhook_id})")
         except Exception as exc:
-            raise EmailAPIError(f"Unexpected error fetching webhook {webhook_id}: {exc}") from exc
+            raise EmailAPIError(
+                f"Unexpected error fetching webhook {webhook_id}: {exc}"
+            ) from exc
 
     def create_webhook(
         self,
@@ -124,7 +127,9 @@ class WebhookMixin:
         except ApiError as exc:
             _raise_for_api_error(exc, f"update_webhook({webhook_id})")
         except Exception as exc:
-            raise EmailAPIError(f"Unexpected error updating webhook {webhook_id}: {exc}") from exc
+            raise EmailAPIError(
+                f"Unexpected error updating webhook {webhook_id}: {exc}"
+            ) from exc
 
     def delete_webhook(self, webhook_id: str) -> None:
         """Delete a webhook subscription.
@@ -140,4 +145,6 @@ class WebhookMixin:
         except ApiError as exc:
             _raise_for_api_error(exc, f"delete_webhook({webhook_id})")
         except Exception as exc:
-            raise EmailAPIError(f"Unexpected error deleting webhook {webhook_id}: {exc}") from exc
+            raise EmailAPIError(
+                f"Unexpected error deleting webhook {webhook_id}: {exc}"
+            ) from exc

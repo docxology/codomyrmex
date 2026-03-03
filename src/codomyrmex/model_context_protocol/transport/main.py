@@ -44,7 +44,11 @@ def _load_optional_mcp_tools():
         try:
             loaded.append(importlib.import_module(module_path))
         except ImportError as exc:
-            logger.warning("Optional MCP tool module %s could not be imported: %s", module_path, exc)
+            logger.warning(
+                "Optional MCP tool module %s could not be imported: %s",
+                module_path,
+                exc,
+            )
     return loaded
 
 
@@ -103,9 +107,11 @@ async def run_server() -> None:
 
     await server.run_stdio()
 
+
 def main() -> None:
     """Synchronous entry point."""
     asyncio.run(run_server())
+
 
 if __name__ == "__main__":
     main()

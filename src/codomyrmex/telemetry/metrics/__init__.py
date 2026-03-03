@@ -31,38 +31,47 @@ except ImportError:
 try:
     from codomyrmex.exceptions import CodomyrmexError
 except ImportError:
+
     class CodomyrmexError(Exception):
         pass
 
 
 class MetricType(Enum):
     """Types of metrics."""
+
     COUNTER = "counter"
     GAUGE = "gauge"
     HISTOGRAM = "histogram"
     SUMMARY = "summary"
     TIMER = "timer"
 
+
 @dataclass
 class MetricSample:
     """A single metric sample."""
+
     value: float
     timestamp: datetime = field(default_factory=datetime.now)
     labels: dict[str, str] = field(default_factory=dict)
 
+
 @dataclass
 class MetricDescriptor:
     """Describes a metric."""
+
     name: str
     metric_type: MetricType
     description: str = ""
     labels: list[str] = field(default_factory=list)
     unit: str = ""
 
+
 class Metric(ABC):
     """Base class for metrics."""
 
-    def __init__(self, name: str, description: str = "", labels: list[str] | None = None):
+    def __init__(
+        self, name: str, description: str = "", labels: list[str] | None = None
+    ):
         self.name = name
         self.description = description
         self.allowed_labels = labels or []
@@ -79,10 +88,17 @@ class Metric(ABC):
         """Get current value."""
         pass
 
+
 class Counter(Metric):
     """Counter metric (only increases)."""
 
-    def __init__(self, name: str, description: str = "", labels: dict[str, str] | list[str] | None = None, value: float = 0.0):
+    def __init__(
+        self,
+        name: str,
+        description: str = "",
+        labels: dict[str, str] | list[str] | None = None,
+        value: float = 0.0,
+    ):
         allowed = labels
         if isinstance(labels, dict):
             allowed = list(labels.keys())
@@ -124,10 +140,17 @@ class Counter(Metric):
         """Value."""
         return self.get_value()
 
+
 class Gauge(Metric):
     """Gauge metric (can go up and down)."""
 
-    def __init__(self, name: str, description: str = "", labels: dict[str, str] | list[str] | None = None, value: float = 0.0):
+    def __init__(
+        self,
+        name: str,
+        description: str = "",
+        labels: dict[str, str] | list[str] | None = None,
+        value: float = 0.0,
+    ):
         allowed = labels
         if isinstance(labels, dict):
             allowed = list(labels.keys())
@@ -179,6 +202,7 @@ class Gauge(Metric):
         """Value."""
         return self.get_value()
 
+
 class Histogram(Metric):
     """Histogram metric for distributions."""
 
@@ -220,7 +244,14 @@ class Histogram(Metric):
         """Get histogram stats."""
         with self._lock:
             if not self.values:
-                return {"count": 0, "sum": 0.0, "min": 0.0, "max": 0.0, "avg": 0.0, "buckets": self._bucket_counts}
+                return {
+                    "count": 0,
+                    "sum": 0.0,
+                    "min": 0.0,
+                    "max": 0.0,
+                    "avg": 0.0,
+                    "buckets": self._bucket_counts,
+                }
 
             return {
                 "count": len(self.values),
@@ -231,6 +262,7 @@ class Histogram(Metric):
                 "mean": sum(self.values) / len(self.values),
                 "buckets": dict(self._bucket_counts),
             }
+
 
 class Summary(Metric):
     """Summary metric with quantiles."""
@@ -290,6 +322,7 @@ class Summary(Metric):
                 "quantiles": quantile_values,
             }
 
+
 class Timer:
     """Context manager for timing operations."""
 
@@ -306,6 +339,7 @@ class Timer:
         """Exit the context manager and clean up."""
         duration = time.time() - self._start
         self.histogram.observe(duration)
+
 
 class MetricsRegistry:
     """
@@ -331,14 +365,18 @@ class MetricsRegistry:
         self._metrics: dict[str, Metric] = {}
         self._lock = threading.Lock()
 
-    def counter(self, name: str, description: str = "", labels: list[str] | None = None) -> Counter:
+    def counter(
+        self, name: str, description: str = "", labels: list[str] | None = None
+    ) -> Counter:
         """Create or get a counter."""
         with self._lock:
             if name not in self._metrics:
                 self._metrics[name] = Counter(name, description, labels)
             return self._metrics[name]
 
-    def gauge(self, name: str, description: str = "", labels: list[str] | None = None) -> Gauge:
+    def gauge(
+        self, name: str, description: str = "", labels: list[str] | None = None
+    ) -> Gauge:
         """Create or get a gauge."""
         with self._lock:
             if name not in self._metrics:
@@ -386,11 +424,14 @@ class MetricsRegistry:
 
 class MetricsError(CodomyrmexError):
     """Base class for metrics errors."""
+
     pass
+
 
 # Alias for compatibility with older tests/code
 class Metrics(MetricsRegistry):
     """Alias for MetricsRegistry for compatibility."""
+
     def __init__(self, backend="in_memory"):
         super().__init__()
         self.backend = backend
@@ -406,41 +447,67 @@ class Metrics(MetricsRegistry):
             return f"{name}{{{label_str}}}"
         return name
 
-    def counter(self, name: str, labels: dict | None = None, description: str = "") -> Counter:
+    def counter(
+        self, name: str, labels: dict | None = None, description: str = ""
+    ) -> Counter:
         """Counter."""
         key = self._make_key(name, labels)
         if key not in self._counters:
-            self._counters[key] = Counter(name=name, labels=labels, description=description)
+            self._counters[key] = Counter(
+                name=name, labels=labels, description=description
+            )
         return self._counters[key]
 
-    def gauge(self, name: str, labels: dict | None = None, description: str = "") -> Gauge:
+    def gauge(
+        self, name: str, labels: dict | None = None, description: str = ""
+    ) -> Gauge:
         """Gauge."""
         key = self._make_key(name, labels)
         if key not in self._gauges:
             self._gauges[key] = Gauge(name=name, labels=labels, description=description)
         return self._gauges[key]
 
-    def histogram(self, name: str, labels: dict | None = None, description: str = "") -> Histogram:
+    def histogram(
+        self, name: str, labels: dict | None = None, description: str = ""
+    ) -> Histogram:
         """Histogram."""
         key = self._make_key(name, labels)
         if key not in self._histograms:
-            self._histograms[key] = Histogram(name=name, labels=labels, description=description)
+            self._histograms[key] = Histogram(
+                name=name, labels=labels, description=description
+            )
         return self._histograms[key]
 
-    def summary(self, name: str, labels: dict | None = None, description: str = "") -> Summary:
+    def summary(
+        self, name: str, labels: dict | None = None, description: str = ""
+    ) -> Summary:
         """Summary."""
         key = self._make_key(name, labels)
         if key not in self._summaries:
-            self._summaries[key] = Summary(name=name, labels=labels, description=description)
+            self._summaries[key] = Summary(
+                name=name, labels=labels, description=description
+            )
         return self._summaries[key]
 
     def export(self) -> dict[str, Any]:
         """Export all metrics to a dictionary."""
         return {
-            "counters": {k: {"value": c.value, "labels": c.labels} for k, c in self._counters.items()},
-            "gauges": {k: {"value": g.value, "labels": g.labels} for k, g in self._gauges.items()},
-            "histograms": {k: {"stats": h.get(), "labels": h.labels} for k, h in self._histograms.items()},
-            "summaries": {k: {"stats": s.get(), "labels": s.labels} for k, s in self._summaries.items()},
+            "counters": {
+                k: {"value": c.value, "labels": c.labels}
+                for k, c in self._counters.items()
+            },
+            "gauges": {
+                k: {"value": g.value, "labels": g.labels}
+                for k, g in self._gauges.items()
+            },
+            "histograms": {
+                k: {"stats": h.get(), "labels": h.labels}
+                for k, h in self._histograms.items()
+            },
+            "summaries": {
+                k: {"stats": s.get(), "labels": s.labels}
+                for k, s in self._summaries.items()
+            },
         }
 
     def export_prometheus(self) -> str:
@@ -480,9 +547,11 @@ class Metrics(MetricsRegistry):
 
         return "\n".join(lines)
 
+
 def get_metrics(backend="in_memory") -> Metrics:
     """Helper to get a metrics instance."""
     return Metrics(backend=backend)
+
 
 __all__ = [
     # Enums

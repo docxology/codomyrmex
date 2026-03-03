@@ -1,4 +1,5 @@
 """Component module."""
+
 from dataclasses import dataclass
 
 from ._base import BaseComponent
@@ -7,6 +8,7 @@ from ._base import BaseComponent
 @dataclass
 class ChatBubble(BaseComponent):
     """Chat bubble component."""
+
     message: str = ""
     role: str = "user"
     timestamp: str = ""
@@ -18,9 +20,9 @@ class ChatBubble(BaseComponent):
         return (
             f'<div class="chat-bubble" style="float: {align}; '
             f'padding: 8px; margin: 4px; border-radius: 8px;">'
-            f'<strong>{label}</strong>: {self.message}'
+            f"<strong>{label}</strong>: {self.message}"
             f'<div class="timestamp">{self.timestamp}</div>'
-            f'</div>'
+            f"</div>"
         )
 
     def __str__(self) -> str:

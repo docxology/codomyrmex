@@ -1,4 +1,3 @@
-
 import threading
 
 import pytest
@@ -27,7 +26,8 @@ def test_slo_tracker_recoding_concurrency():
 
     status = tracker.get_status("concurrent_slo")
     assert status["total_events"] == 2000  # 10 threads * 100 iterations * 2 events
-    assert status["good_events"] == 1000   # 10 threads * 100 iterations * 1 good event
+    assert status["good_events"] == 1000  # 10 threads * 100 iterations * 1 good event
+
 
 def test_slo_creation_concurrency():
     """Verify thread safety of SLOTracker.create_slo."""

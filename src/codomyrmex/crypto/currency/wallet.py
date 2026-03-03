@@ -219,9 +219,7 @@ class HDWallet:
         child_int = (parent_int + child_key_add) % _SECP256K1_ORDER
 
         if child_key_add >= _SECP256K1_ORDER or child_int == 0:
-            raise WalletError(
-                f"Child derivation at index {index} produced invalid key"
-            )
+            raise WalletError(f"Child derivation at index {index} produced invalid key")
 
         child = object.__new__(HDWallet)
         child.private_key = child_int.to_bytes(32, "big")

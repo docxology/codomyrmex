@@ -110,9 +110,18 @@ class TestTask:
     def test_to_dict_has_required_keys(self):
         t = Task(name="build feature", description="build it")
         d = t.to_dict()
-        for key in ("id", "name", "description", "status", "priority",
-                    "dependencies", "required_capabilities", "metadata",
-                    "created_at", "assigned_agent_id"):
+        for key in (
+            "id",
+            "name",
+            "description",
+            "status",
+            "priority",
+            "dependencies",
+            "required_capabilities",
+            "metadata",
+            "created_at",
+            "assigned_agent_id",
+        ):
             assert key in d
 
     def test_to_dict_name_stored(self):
@@ -200,8 +209,15 @@ class TestTaskResult:
     def test_to_dict_has_keys(self):
         r = TaskResult(task_id="t1", success=False, error="timeout")
         d = r.to_dict()
-        for key in ("task_id", "success", "output", "error", "duration",
-                    "agent_id", "completed_at"):
+        for key in (
+            "task_id",
+            "success",
+            "output",
+            "error",
+            "duration",
+            "agent_id",
+            "completed_at",
+        ):
             assert key in d
 
     def test_to_dict_success_false(self):
@@ -234,11 +250,13 @@ class TestTaskResult:
         assert r.error is None
 
     def test_from_dict_failure(self):
-        r = TaskResult.from_dict({
-            "task_id": "t1",
-            "success": False,
-            "error": "timed out",
-        })
+        r = TaskResult.from_dict(
+            {
+                "task_id": "t1",
+                "success": False,
+                "error": "timed out",
+            }
+        )
         assert r.success is False
         assert r.error == "timed out"
 
@@ -268,9 +286,16 @@ class TestSwarmStatus:
     def test_to_dict_has_all_keys(self):
         s = SwarmStatus()
         d = s.to_dict()
-        for key in ("total_agents", "active_agents", "idle_agents",
-                    "pending_tasks", "running_tasks", "completed_tasks",
-                    "failed_tasks", "uptime_seconds"):
+        for key in (
+            "total_agents",
+            "active_agents",
+            "idle_agents",
+            "pending_tasks",
+            "running_tasks",
+            "completed_tasks",
+            "failed_tasks",
+            "uptime_seconds",
+        ):
             assert key in d
 
     def test_to_dict_values_match(self):
@@ -316,9 +341,16 @@ class TestAgentStatus:
     def test_to_dict_has_keys(self):
         a = AgentStatus(agent_id="agent-1")
         d = a.to_dict()
-        for key in ("agent_id", "name", "status", "current_task_id",
-                    "capabilities", "tasks_completed", "tasks_failed",
-                    "last_heartbeat"):
+        for key in (
+            "agent_id",
+            "name",
+            "status",
+            "current_task_id",
+            "capabilities",
+            "tasks_completed",
+            "tasks_failed",
+            "last_heartbeat",
+        ):
             assert key in d
 
     def test_to_dict_last_heartbeat_isoformat(self):

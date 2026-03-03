@@ -158,25 +158,28 @@ class TestCodexError:
 class TestCliAgentErrors:
     """Test the pattern of command/exit_code errors shared by multiple classes."""
 
-    @pytest.mark.parametrize("ErrorClass", [
-        OpenCodeError, GeminiError, MistralVibeError, EveryCodeError, OpenClawError
-    ])
+    @pytest.mark.parametrize(
+        "ErrorClass",
+        [OpenCodeError, GeminiError, MistralVibeError, EveryCodeError, OpenClawError],
+    )
     def test_with_command_and_exit_code(self, ErrorClass):
         err = ErrorClass("failed", command="cmd run", exit_code=2)
         assert err.context["command"] == "cmd run"
         assert err.context["exit_code"] == 2
 
-    @pytest.mark.parametrize("ErrorClass", [
-        OpenCodeError, GeminiError, MistralVibeError, EveryCodeError, OpenClawError
-    ])
+    @pytest.mark.parametrize(
+        "ErrorClass",
+        [OpenCodeError, GeminiError, MistralVibeError, EveryCodeError, OpenClawError],
+    )
     def test_without_optional_fields(self, ErrorClass):
         err = ErrorClass("failed")
         assert "command" not in err.context
         assert "exit_code" not in err.context
 
-    @pytest.mark.parametrize("ErrorClass", [
-        OpenCodeError, GeminiError, MistralVibeError, EveryCodeError, OpenClawError
-    ])
+    @pytest.mark.parametrize(
+        "ErrorClass",
+        [OpenCodeError, GeminiError, MistralVibeError, EveryCodeError, OpenClawError],
+    )
     def test_is_agent_error(self, ErrorClass):
         assert isinstance(ErrorClass("msg"), AgentError)
 
@@ -201,7 +204,9 @@ class TestSessionError:
 @pytest.mark.unit
 class TestExecutionError:
     def test_all_fields(self):
-        err = ExecutionError("exec failed", task_id="t1", action="run_code", exit_code=1)
+        err = ExecutionError(
+            "exec failed", task_id="t1", action="run_code", exit_code=1
+        )
         assert err.context["task_id"] == "t1"
         assert err.context["action"] == "run_code"
         assert err.context["exit_code"] == 1

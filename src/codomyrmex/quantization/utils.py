@@ -41,9 +41,9 @@ def compute_scale_zero_point(
         return scale, 0
 
     # asymmetric
-    qmin = -(1 << (n_bits - 1))       # -128 for 8-bit
-    qmax = (1 << (n_bits - 1)) - 1    # 127 for 8-bit
-    n_levels = qmax - qmin             # 255 for 8-bit
+    qmin = -(1 << (n_bits - 1))  # -128 for 8-bit
+    qmax = (1 << (n_bits - 1)) - 1  # 127 for 8-bit
+    n_levels = qmax - qmin  # 255 for 8-bit
 
     if (x_max - x_min) < 1e-10:
         return 1.0, 0

@@ -23,18 +23,21 @@ import pytest
 # Check optional dependencies
 try:
     import yaml  # noqa: F401
+
     YAML_AVAILABLE = True
 except ImportError:
     YAML_AVAILABLE = False
 
 try:
     import msgpack  # noqa: F401
+
     MSGPACK_AVAILABLE = True
 except ImportError:
     MSGPACK_AVAILABLE = False
 
 try:
     import fastavro  # noqa: F401
+
     AVRO_AVAILABLE = True
 except ImportError:
     AVRO_AVAILABLE = False
@@ -42,6 +45,7 @@ except ImportError:
 try:
     import pandas as _pd
     import pyarrow  # noqa: F401
+
     # Verify pandas can actually use pyarrow for parquet (version compat check)
     _pd.DataFrame({"_test": [1]}).to_parquet("/dev/null")
     PARQUET_AVAILABLE = True
@@ -65,6 +69,7 @@ try:
     # Import SerializationError from the serializer module directly since
     # the Serializer uses its local definition
     from codomyrmex.serialization.serializer import SerializationError
+
     SERIALIZATION_MODULE_AVAILABLE = True
 except ImportError:
     SERIALIZATION_MODULE_AVAILABLE = False
@@ -78,6 +83,7 @@ pytestmark = pytest.mark.skipif(
 # ==============================================================================
 # Module Import Tests
 # ==============================================================================
+
 
 class TestSerializationModuleImport:
     """Test serialization module import and structure."""
@@ -116,9 +122,11 @@ class TestSerializationModuleImport:
 # Test Data Classes
 # ==============================================================================
 
+
 @dataclass
 class Person:
     """Test dataclass for serialization tests."""
+
     name: str
     age: int
     email: str | None = None
@@ -127,6 +135,7 @@ class Person:
 @dataclass
 class Address:
     """Nested dataclass for complex serialization tests."""
+
     street: str
     city: str
     zip_code: str
@@ -135,6 +144,7 @@ class Address:
 @dataclass
 class Company:
     """Complex dataclass with nested structure."""
+
     name: str
     employees: list[str]
     headquarters: Address | None = None
@@ -142,6 +152,7 @@ class Company:
 
 class Status(Enum):
     """Test enum for serialization tests."""
+
     ACTIVE = "active"
     INACTIVE = "inactive"
     PENDING = "pending"
@@ -150,6 +161,7 @@ class Status(Enum):
 # ==============================================================================
 # JSON Serialization Tests
 # ==============================================================================
+
 
 class TestJSONSerialization:
     """Tests for JSON serialization/deserialization."""
@@ -164,7 +176,7 @@ class TestJSONSerialization:
         data = {"name": "test", "value": 123, "active": True}
         result = serializer.serialize(data)
         assert isinstance(result, bytes)
-        parsed = json.loads(result.decode('utf-8'))
+        parsed = json.loads(result.decode("utf-8"))
         assert parsed == data
 
     def test_json_deserialize_dict(self, serializer):
@@ -184,17 +196,14 @@ class TestJSONSerialization:
         """Test JSON serialization of list."""
         data = [1, 2, 3, "a", "b", "c"]
         result = serializer.serialize(data)
-        parsed = json.loads(result.decode('utf-8'))
+        parsed = json.loads(result.decode("utf-8"))
         assert parsed == data
 
     def test_json_serialize_nested_structure(self, serializer):
         """Test JSON serialization of nested structures."""
         data = {
-            "users": [
-                {"name": "Alice", "age": 30},
-                {"name": "Bob", "age": 25}
-            ],
-            "config": {"enabled": True, "limit": 100}
+            "users": [{"name": "Alice", "age": 30}, {"name": "Bob", "age": 25}],
+            "config": {"enabled": True, "limit": 100},
         }
         serialized = serializer.serialize(data)
         deserialized = serializer.deserialize(serialized)
@@ -265,6 +274,7 @@ class TestJSONSerialization:
 # YAML Serialization Tests
 # ==============================================================================
 
+
 class TestYAMLSerialization:
     """Tests for YAML parsing/dumping."""
 
@@ -299,10 +309,7 @@ class TestYAMLSerialization:
             "database": {
                 "host": "localhost",
                 "port": 5432,
-                "credentials": {
-                    "username": "admin",
-                    "password": "secret"
-                }
+                "credentials": {"username": "admin", "password": "secret"},
             }
         }
         serialized = serializer.serialize(data)
@@ -342,6 +349,7 @@ class TestYAMLSerialization:
 # Pickle Serialization Tests
 # ==============================================================================
 
+
 class TestPickleSerialization:
     """Tests for pickle binary serialization."""
 
@@ -378,7 +386,7 @@ class TestPickleSerialization:
             "datetime": datetime.now(),
             "path": Path("/test/path"),
             "set": {1, 2, 3},
-            "tuple": (1, 2, 3)
+            "tuple": (1, 2, 3),
         }
         serialized = serializer.serialize(data)
         deserialized = serializer.deserialize(serialized)
@@ -395,6 +403,7 @@ class TestPickleSerialization:
 # ==============================================================================
 # Msgpack Serialization Tests
 # ==============================================================================
+
 
 class TestMsgpackSerialization:
     """Tests for MessagePack binary serialization."""
@@ -414,13 +423,7 @@ class TestMsgpackSerialization:
 
     def test_msgpack_serialize_nested(self):
         """Test msgpack serialization of nested structures."""
-        data = {
-            "level1": {
-                "level2": {
-                    "level3": {"value": "deep"}
-                }
-            }
-        }
+        data = {"level1": {"level2": {"level3": {"value": "deep"}}}}
         serialized = MsgpackSerializer.serialize(data)
         deserialized = MsgpackSerializer.deserialize(serialized)
         assert deserialized == data
@@ -451,6 +454,7 @@ class TestMsgpackSerialization:
 # Avro Serialization Tests
 # ==============================================================================
 
+
 class TestAvroSerialization:
     """Tests for Apache Avro serialization."""
 
@@ -458,13 +462,13 @@ class TestAvroSerialization:
     def simple_schema(self):
         """Simple Avro schema for testing."""
         return {
-            'doc': 'Test schema',
-            'name': 'TestRecord',
-            'namespace': 'test',
-            'type': 'record',
-            'fields': [
-                {'name': 'name', 'type': 'string'},
-                {'name': 'age', 'type': 'int'},
+            "doc": "Test schema",
+            "name": "TestRecord",
+            "namespace": "test",
+            "type": "record",
+            "fields": [
+                {"name": "name", "type": "string"},
+                {"name": "age", "type": "int"},
             ],
         }
 
@@ -472,35 +476,32 @@ class TestAvroSerialization:
     def nullable_schema(self):
         """Schema with nullable fields."""
         return {
-            'doc': 'Nullable schema',
-            'name': 'NullableRecord',
-            'namespace': 'test',
-            'type': 'record',
-            'fields': [
-                {'name': 'id', 'type': 'int'},
-                {'name': 'description', 'type': ['null', 'string']},
+            "doc": "Nullable schema",
+            "name": "NullableRecord",
+            "namespace": "test",
+            "type": "record",
+            "fields": [
+                {"name": "id", "type": "int"},
+                {"name": "description", "type": ["null", "string"]},
             ],
         }
 
     def test_avro_serialize_basic(self, simple_schema):
         """Test basic Avro serialization."""
-        data = [{'name': 'Alice', 'age': 30}]
+        data = [{"name": "Alice", "age": 30}]
         result = AvroSerializer.serialize(data, simple_schema)
         assert isinstance(result, bytes)
 
     def test_avro_roundtrip(self, simple_schema):
         """Test Avro serialize/deserialize roundtrip."""
-        data = [
-            {'name': 'Alice', 'age': 30},
-            {'name': 'Bob', 'age': 25}
-        ]
+        data = [{"name": "Alice", "age": 30}, {"name": "Bob", "age": 25}]
         serialized = AvroSerializer.serialize(data, simple_schema)
         deserialized = AvroSerializer.deserialize(serialized)
         assert deserialized == data
 
     def test_avro_multiple_records(self, simple_schema):
         """Test Avro with multiple records."""
-        data = [{'name': f'User{i}', 'age': 20 + i} for i in range(100)]
+        data = [{"name": f"User{i}", "age": 20 + i} for i in range(100)]
         serialized = AvroSerializer.serialize(data, simple_schema)
         deserialized = AvroSerializer.deserialize(serialized)
         assert len(deserialized) == 100
@@ -508,43 +509,46 @@ class TestAvroSerialization:
     def test_avro_nullable_field(self, nullable_schema):
         """Test Avro with nullable fields."""
         data = [
-            {'id': 1, 'description': 'Has description'},
-            {'id': 2, 'description': None}
+            {"id": 1, "description": "Has description"},
+            {"id": 2, "description": None},
         ]
         serialized = AvroSerializer.serialize(data, nullable_schema)
         deserialized = AvroSerializer.deserialize(serialized)
-        assert deserialized[0]['description'] == 'Has description'
-        assert deserialized[1]['description'] is None
+        assert deserialized[0]["description"] == "Has description"
+        assert deserialized[1]["description"] is None
 
 
 # ==============================================================================
 # Parquet Serialization Tests
 # ==============================================================================
 
-@pytest.mark.skipif(not PARQUET_AVAILABLE, reason="pyarrow/pandas parquet support not available")
+
+@pytest.mark.skipif(
+    not PARQUET_AVAILABLE, reason="pyarrow/pandas parquet support not available"
+)
 class TestParquetSerialization:
     """Tests for Apache Parquet serialization."""
 
     def test_parquet_serialize_basic(self):
         """Test basic Parquet serialization."""
-        data = [{'col1': 1, 'col2': 'A'}, {'col1': 2, 'col2': 'B'}]
+        data = [{"col1": 1, "col2": "A"}, {"col1": 2, "col2": "B"}]
         result = ParquetSerializer.serialize(data)
         assert isinstance(result, bytes)
 
     def test_parquet_roundtrip(self):
         """Test Parquet serialize/deserialize roundtrip."""
         data = [
-            {'id': 1, 'name': 'Alice', 'score': 95.5},
-            {'id': 2, 'name': 'Bob', 'score': 87.3}
+            {"id": 1, "name": "Alice", "score": 95.5},
+            {"id": 2, "name": "Bob", "score": 87.3},
         ]
         serialized = ParquetSerializer.serialize(data)
         deserialized = ParquetSerializer.deserialize(serialized)
         assert len(deserialized) == 2
-        assert deserialized[0]['name'] == 'Alice'
+        assert deserialized[0]["name"] == "Alice"
 
     def test_parquet_large_dataset(self):
         """Test Parquet with larger dataset."""
-        data = [{'id': i, 'value': f'item_{i}'} for i in range(1000)]
+        data = [{"id": i, "value": f"item_{i}"} for i in range(1000)]
         serialized = ParquetSerializer.serialize(data)
         deserialized = ParquetSerializer.deserialize(serialized)
         assert len(deserialized) == 1000
@@ -552,8 +556,8 @@ class TestParquetSerialization:
     def test_parquet_mixed_types(self):
         """Test Parquet with mixed column types."""
         data = [
-            {'int_col': 1, 'float_col': 1.5, 'str_col': 'a', 'bool_col': True},
-            {'int_col': 2, 'float_col': 2.5, 'str_col': 'b', 'bool_col': False}
+            {"int_col": 1, "float_col": 1.5, "str_col": "a", "bool_col": True},
+            {"int_col": 2, "float_col": 2.5, "str_col": "b", "bool_col": False},
         ]
         serialized = ParquetSerializer.serialize(data)
         deserialized = ParquetSerializer.deserialize(serialized)
@@ -563,6 +567,7 @@ class TestParquetSerialization:
 # ==============================================================================
 # File Serialization Tests
 # ==============================================================================
+
 
 class TestFileSerialization:
     """Tests for file-based serialization."""
@@ -629,6 +634,7 @@ class TestFileSerialization:
 # Serialization Manager Tests
 # ==============================================================================
 
+
 class TestSerializationManager:
     """Tests for SerializationManager."""
 
@@ -658,6 +664,7 @@ class TestSerializationManager:
 # ==============================================================================
 # Convenience Function Tests
 # ==============================================================================
+
 
 class TestConvenienceFunctions:
     """Tests for module-level convenience functions."""
@@ -699,6 +706,7 @@ class TestConvenienceFunctions:
 # Error Handling Tests
 # ==============================================================================
 
+
 class TestErrorHandling:
     """Tests for error handling in serialization."""
 
@@ -716,12 +724,12 @@ class TestErrorHandling:
 
     def test_deserialize_empty_json(self, serializer):
         """Test deserialization of empty JSON."""
-        result = serializer.deserialize(b'{}', SerializationFormat.JSON)
+        result = serializer.deserialize(b"{}", SerializationFormat.JSON)
         assert result == {}
 
     def test_deserialize_empty_list(self, serializer):
         """Test deserialization of empty JSON list."""
-        result = serializer.deserialize(b'[]', SerializationFormat.JSON)
+        result = serializer.deserialize(b"[]", SerializationFormat.JSON)
         assert result == []
 
     def test_unsupported_format_raises_error(self, serializer):
@@ -734,6 +742,7 @@ class TestErrorHandling:
 # ==============================================================================
 # Edge Cases and Special Data Tests
 # ==============================================================================
+
 
 class TestEdgeCases:
     """Tests for edge cases and special data handling."""
@@ -775,7 +784,7 @@ class TestEdgeCases:
         data = {
             "integer": 9007199254740992,  # Large integer
             "float": 3.141592653589793,
-            "scientific": 1.23e-10
+            "scientific": 1.23e-10,
         }
         serialized = serializer.serialize(data)
         deserialized = serializer.deserialize(serialized)
@@ -794,11 +803,11 @@ class TestEdgeCases:
         """Test handling of special float values."""
         # Note: JSON doesn't support inf/nan, pickle does
         pickle_serializer = Serializer(default_format=SerializationFormat.PICKLE)
-        data = {"inf": float('inf'), "neg_inf": float('-inf')}
+        data = {"inf": float("inf"), "neg_inf": float("-inf")}
         serialized = pickle_serializer.serialize(data)
         deserialized = pickle_serializer.deserialize(serialized)
-        assert deserialized["inf"] == float('inf')
-        assert deserialized["neg_inf"] == float('-inf')
+        assert deserialized["inf"] == float("inf")
+        assert deserialized["neg_inf"] == float("-inf")
 
     def test_mixed_list_types(self, serializer):
         """Test serialization of lists with mixed types."""
@@ -892,7 +901,9 @@ class TestStreamBuffer:
         from codomyrmex.serialization.streaming import StreamBuffer
 
         flushed_items = []
-        buf = StreamBuffer(max_size=3, flush_callback=lambda items: flushed_items.extend(items))
+        buf = StreamBuffer(
+            max_size=3, flush_callback=lambda items: flushed_items.extend(items)
+        )
         buf.add(1)
         buf.add(2)
         buf.add(3)  # Should trigger auto-flush
@@ -952,6 +963,7 @@ class TestStreamBufferExtended:
     def test_flush_empty_buffer(self):
         """Flushing empty buffer returns empty list."""
         from codomyrmex.serialization.streaming import StreamBuffer
+
         buf = StreamBuffer(max_size=10)
         result = buf.flush()
         assert result == []
@@ -960,6 +972,7 @@ class TestStreamBufferExtended:
     def test_pending_count_accurate(self):
         """pending count matches number of items added."""
         from codomyrmex.serialization.streaming import StreamBuffer
+
         buf = StreamBuffer(max_size=100)
         for i in range(7):
             buf.add(i)
@@ -968,6 +981,7 @@ class TestStreamBufferExtended:
     def test_multiple_flushes(self):
         """Multiple manual flushes work correctly."""
         from codomyrmex.serialization.streaming import StreamBuffer
+
         buf = StreamBuffer(max_size=100)
         buf.add("a")
         buf.add("b")

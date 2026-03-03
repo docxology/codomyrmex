@@ -1,4 +1,5 @@
 """Violin plot visualization."""
+
 from ._base import BasePlot
 
 

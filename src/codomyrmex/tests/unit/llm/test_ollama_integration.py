@@ -9,6 +9,7 @@ Tests all aspects of the Ollama integration including:
 - Integration with Codomyrmex modules
 - Real execution tests (no mocks)
 """
+
 import json
 import time
 from pathlib import Path
@@ -26,6 +27,7 @@ try:
         OutputManager,
     )
     from codomyrmex.llm.ollama.model_runner import ExecutionOptions
+
     OLLAMA_AVAILABLE = True
 except ImportError as e:
     print(f"Ollama integration not available: {e}")
@@ -34,6 +36,7 @@ except ImportError as e:
 # Import Codomyrmex modules for integration testing
 try:
     from codomyrmex.logging_monitoring import get_logger
+
     LOGGING_AVAILABLE = True
 except ImportError:
     LOGGING_AVAILABLE = False
@@ -65,7 +68,7 @@ class TestOllamaIntegration:
         self.test_prompts = [
             "What is artificial intelligence?",
             "Explain machine learning in simple terms.",
-            "What are the benefits of using local LLMs?"
+            "What are the benefits of using local LLMs?",
         ]
 
         # Check if Ollama server is actually reachable at runtime
@@ -99,10 +102,10 @@ class TestOllamaIntegration:
         # If models exist, validate structure
         if models:
             model = models[0]
-            assert hasattr(model, 'name')
-            assert hasattr(model, 'size')
-            assert hasattr(model, 'modified')
-            assert hasattr(model, 'status')
+            assert hasattr(model, "name")
+            assert hasattr(model, "size")
+            assert hasattr(model, "modified")
+            assert hasattr(model, "status")
 
     def test_model_availability_checking(self):
         """Test model availability checking."""
@@ -115,7 +118,9 @@ class TestOllamaIntegration:
             assert isinstance(available, bool)
 
         # Test with non-existent model
-        not_available = self.ollama_manager.is_model_available("nonexistent_model_xyz123")
+        not_available = self.ollama_manager.is_model_available(
+            "nonexistent_model_xyz123"
+        )
         assert not not_available
 
     def test_model_statistics(self):
@@ -123,33 +128,35 @@ class TestOllamaIntegration:
         stats = self.ollama_manager.get_model_stats()
 
         assert isinstance(stats, dict)
-        assert 'total_models' in stats
-        assert 'total_size_mb' in stats
-        assert 'models_by_family' in stats
+        assert "total_models" in stats
+        assert "total_size_mb" in stats
+        assert "models_by_family" in stats
 
         # Validate data types
-        assert isinstance(stats['total_models'], int)
-        assert isinstance(stats['total_size_mb'], float)
-        assert isinstance(stats['models_by_family'], dict)
+        assert isinstance(stats["total_models"], int)
+        assert isinstance(stats["total_size_mb"], float)
+        assert isinstance(stats["models_by_family"], dict)
 
     def test_model_execution_basic(self):
         """Test basic model execution."""
-        if not self.ollama_available or not self.ollama_manager.is_model_available(self.test_model):
+        if not self.ollama_available or not self.ollama_manager.is_model_available(
+            self.test_model
+        ):
             pytest.skip("Ollama server or test model not available")
 
         result = self.ollama_manager.run_model(
             self.test_model,
             "Hello, how are you?",
-            save_output=False  # Don't save for basic test
+            save_output=False,  # Don't save for basic test
         )
 
         # Validate result structure
         assert result is not None
-        assert hasattr(result, 'model_name')
-        assert hasattr(result, 'prompt')
-        assert hasattr(result, 'response')
-        assert hasattr(result, 'execution_time')
-        assert hasattr(result, 'success')
+        assert hasattr(result, "model_name")
+        assert hasattr(result, "prompt")
+        assert hasattr(result, "response")
+        assert hasattr(result, "execution_time")
+        assert hasattr(result, "success")
 
         # Validate data
         assert result.model_name == self.test_model
@@ -164,20 +171,18 @@ class TestOllamaIntegration:
 
     def test_model_execution_with_options(self):
         """Test model execution with execution options."""
-        if not self.ollama_available or not self.ollama_manager.is_model_available(self.test_model):
+        if not self.ollama_available or not self.ollama_manager.is_model_available(
+            self.test_model
+        ):
             pytest.skip("Ollama server or test model not available")
 
-        options = ExecutionOptions(
-            temperature=0.7,
-            max_tokens=100,
-            timeout=60
-        )
+        options = ExecutionOptions(temperature=0.7, max_tokens=100, timeout=60)
 
         result = self.model_runner.run_with_options(
             self.test_model,
             "Explain quantum computing briefly.",
             options,
-            save_output=False
+            save_output=False,
         )
 
         assert result is not None
@@ -186,14 +191,16 @@ class TestOllamaIntegration:
 
     def test_batch_execution(self):
         """Test batch execution of multiple prompts."""
-        if not self.ollama_available or not self.ollama_manager.is_model_available(self.test_model):
+        if not self.ollama_available or not self.ollama_manager.is_model_available(
+            self.test_model
+        ):
             pytest.skip("Ollama server or test model not available")
 
         results = self.model_runner.run_batch(
             self.test_model,
             self.test_prompts[:2],  # Test with first 2 prompts
             ExecutionOptions(max_tokens=50, temperature=0.7),
-            max_concurrent=2
+            max_concurrent=2,
         )
 
         # Validate results
@@ -218,28 +225,26 @@ class TestOllamaIntegration:
         test_prompt = "What is the capital of France?"
 
         comparison = self.model_runner.create_model_comparison(
-            model_names,
-            test_prompt,
-            ExecutionOptions(max_tokens=50, temperature=0.1)
+            model_names, test_prompt, ExecutionOptions(max_tokens=50, temperature=0.1)
         )
 
         # Validate comparison structure
         assert isinstance(comparison, dict)
-        assert 'test_prompt' in comparison
-        assert 'models_compared' in comparison
-        assert 'results' in comparison
-        assert 'summary' in comparison
+        assert "test_prompt" in comparison
+        assert "models_compared" in comparison
+        assert "results" in comparison
+        assert "summary" in comparison
 
-        assert comparison['test_prompt'] == test_prompt
-        assert comparison['models_compared'] == len(comparison['results'])
+        assert comparison["test_prompt"] == test_prompt
+        assert comparison["models_compared"] == len(comparison["results"])
 
         # Validate results for each model
         for model_name in model_names:
-            assert model_name in comparison['results']
-            model_result = comparison['results'][model_name]
-            assert 'success' in model_result
-            assert 'execution_time' in model_result
-            assert 'response_length' in model_result
+            assert model_name in comparison["results"]
+            model_result = comparison["results"][model_name]
+            assert "success" in model_result
+            assert "execution_time" in model_result
+            assert "response_length" in model_result
 
     def test_output_saving(self):
         """Test output saving functionality."""
@@ -252,7 +257,7 @@ class TestOllamaIntegration:
             test_prompt,
             test_response,
             1.5,
-            metadata={'test': True, 'category': 'unit_test'}
+            metadata={"test": True, "category": "unit_test"},
         )
 
         # Validate file was created
@@ -262,7 +267,7 @@ class TestOllamaIntegration:
         assert output_file.is_file()
 
         # Validate file contents
-        with open(output_file, encoding='utf-8') as f:
+        with open(output_file, encoding="utf-8") as f:
             content = f.read()
 
         assert self.test_model in content
@@ -278,52 +283,54 @@ class TestOllamaIntegration:
 
         # Test configuration update
         test_config = {
-            'default_model': 'test_model',
-            'auto_start_server': False,
-            'base_output_dir': str(self.test_output_dir / 'custom')
+            "default_model": "test_model",
+            "auto_start_server": False,
+            "base_output_dir": str(self.test_output_dir / "custom"),
         }
 
         success = self.config_manager.update_config(**test_config)
         assert success is True
 
         # Verify changes
-        assert self.config_manager.config.default_model == 'test_model'
+        assert self.config_manager.config.default_model == "test_model"
         assert self.config_manager.config.auto_start_server is False
 
         # Test configuration validation
         validation = self.config_manager.validate_config()
         assert isinstance(validation, dict)
-        assert 'valid' in validation
+        assert "valid" in validation
 
     def test_model_configuration_save_load(self):
         """Test saving and loading model-specific configurations."""
         test_model = "test_model_123"
         test_config = {
-            'temperature': 0.8,
-            'max_tokens': 512,
-            'timeout': 120,
-            'description': 'Test model configuration'
+            "temperature": 0.8,
+            "max_tokens": 512,
+            "timeout": 120,
+            "description": "Test model configuration",
         }
 
         # Save configuration
-        config_path = self.output_manager.save_model_config(test_model, test_config, "test_config")
+        config_path = self.output_manager.save_model_config(
+            test_model, test_config, "test_config"
+        )
         assert isinstance(config_path, str)
         assert Path(config_path).exists()
 
         # Load configuration
         loaded_config = self.output_manager.load_model_config(test_model, "test_config")
         assert loaded_config is not None
-        assert loaded_config['temperature'] == 0.8
-        assert loaded_config['max_tokens'] == 512
+        assert loaded_config["temperature"] == 0.8
+        assert loaded_config["max_tokens"] == 512
 
     def test_execution_presets(self):
         """Test execution option presets."""
         presets = self.config_manager.get_execution_presets()
 
         assert isinstance(presets, dict)
-        assert 'fast' in presets
-        assert 'creative' in presets
-        assert 'balanced' in presets
+        assert "fast" in presets
+        assert "creative" in presets
+        assert "balanced" in presets
 
         # Validate preset structure
         for _preset_name, preset_options in presets.items():
@@ -341,23 +348,25 @@ class TestOllamaIntegration:
                 f"test_prompt_{i}",
                 f"test_response_{i}",
                 1.0,
-                metadata={'test_run': i}
+                metadata={"test_run": i},
             )
 
         stats = self.output_manager.get_output_stats()
 
         assert isinstance(stats, dict)
-        assert 'total_outputs' in stats
-        assert 'total_size' in stats
-        assert 'by_type' in stats
-        assert 'by_model' in stats
+        assert "total_outputs" in stats
+        assert "total_size" in stats
+        assert "by_type" in stats
+        assert "by_model" in stats
 
         # Should have at least some outputs (may be more due to other tests)
-        assert stats['total_outputs'] >= 0
+        assert stats["total_outputs"] >= 0
 
     def test_conversation_execution(self):
         """Test conversational model execution."""
-        if not self.ollama_available or not self.ollama_manager.is_model_available(self.test_model):
+        if not self.ollama_available or not self.ollama_manager.is_model_available(
+            self.test_model
+        ):
             pytest.skip("Ollama server or test model not available")
 
         # Test conversation format
@@ -365,13 +374,11 @@ class TestOllamaIntegration:
             {"role": "system", "content": "You are a helpful assistant."},
             {"role": "user", "content": "Hello, how are you?"},
             {"role": "assistant", "content": "I'm doing well, thank you for asking!"},
-            {"role": "user", "content": "What's the weather like?"}
+            {"role": "user", "content": "What's the weather like?"},
         ]
 
         result = self.model_runner.run_conversation(
-            self.test_model,
-            messages,
-            ExecutionOptions(max_tokens=100, temperature=0.7)
+            self.test_model, messages, ExecutionOptions(max_tokens=100, temperature=0.7)
         )
 
         assert result is not None
@@ -380,19 +387,21 @@ class TestOllamaIntegration:
 
     def test_context_execution(self):
         """Test execution with additional context."""
-        if not self.ollama_available or not self.ollama_manager.is_model_available(self.test_model):
+        if not self.ollama_available or not self.ollama_manager.is_model_available(
+            self.test_model
+        ):
             pytest.skip("Ollama server or test model not available")
 
         context_docs = [
             "Context 1: Machine learning is a subset of AI.",
-            "Context 2: Neural networks are inspired by biological brains."
+            "Context 2: Neural networks are inspired by biological brains.",
         ]
 
         result = self.model_runner.run_with_context(
             self.test_model,
             "Explain how neural networks work.",
             context_docs,
-            ExecutionOptions(max_tokens=100, temperature=0.7)
+            ExecutionOptions(max_tokens=100, temperature=0.7),
         )
 
         assert result is not None
@@ -401,32 +410,30 @@ class TestOllamaIntegration:
 
     def test_benchmarking(self):
         """Test model benchmarking functionality."""
-        if not self.ollama_available or not self.ollama_manager.is_model_available(self.test_model):
+        if not self.ollama_available or not self.ollama_manager.is_model_available(
+            self.test_model
+        ):
             pytest.skip("Ollama server or test model not available")
 
         # Test with small prompts for quick benchmarking
-        test_prompts = [
-            "What is 2+2?",
-            "Explain gravity.",
-            "What is recursion?"
-        ]
+        test_prompts = ["What is 2+2?", "Explain gravity.", "What is recursion?"]
 
         benchmark_results = self.model_runner.benchmark_model(
             self.test_model,
             test_prompts,
-            ExecutionOptions(max_tokens=50, temperature=0.7)
+            ExecutionOptions(max_tokens=50, temperature=0.7),
         )
 
         # Validate benchmark structure
         assert isinstance(benchmark_results, dict)
-        assert 'model_name' in benchmark_results
-        assert 'total_prompts' in benchmark_results
-        assert 'successful_runs' in benchmark_results
-        assert 'detailed_results' in benchmark_results
+        assert "model_name" in benchmark_results
+        assert "total_prompts" in benchmark_results
+        assert "successful_runs" in benchmark_results
+        assert "detailed_results" in benchmark_results
 
-        assert benchmark_results['model_name'] == self.test_model
-        assert benchmark_results['total_prompts'] == len(test_prompts)
-        assert isinstance(benchmark_results['detailed_results'], list)
+        assert benchmark_results["model_name"] == self.test_model
+        assert benchmark_results["total_prompts"] == len(test_prompts)
+        assert isinstance(benchmark_results["detailed_results"], list)
 
     def test_config_export_import(self):
         """Test configuration export and import."""
@@ -438,12 +445,12 @@ class TestOllamaIntegration:
         assert Path(export_path).exists()
 
         # Verify export file structure
-        with open(export_path, encoding='utf-8') as f:
+        with open(export_path, encoding="utf-8") as f:
             export_data = json.load(f)
 
-        assert 'export_timestamp' in export_data
-        assert 'main_config' in export_data
-        assert 'execution_presets' in export_data
+        assert "export_timestamp" in export_data
+        assert "main_config" in export_data
+        assert "execution_presets" in export_data
 
         # Test import (create new config manager for clean import)
         import_config_manager = ConfigManager()
@@ -455,20 +462,14 @@ class TestOllamaIntegration:
         """Test error handling in various scenarios."""
         # Test with non-existent model
         result = self.ollama_manager.run_model(
-            "nonexistent_model_xyz123",
-            "test prompt",
-            save_output=False
+            "nonexistent_model_xyz123", "test prompt", save_output=False
         )
 
         assert result.success is False
         assert "not available" in result.error_message.lower()
 
         # Test with empty prompt
-        result = self.ollama_manager.run_model(
-            self.test_model,
-            "",
-            save_output=False
-        )
+        result = self.ollama_manager.run_model(self.test_model, "", save_output=False)
 
         # Should handle empty prompt gracefully
         assert result is not None
@@ -523,7 +524,7 @@ class TestOllamaIntegrationRealExecution:
             self.test_model,
             "What is the meaning of life?",
             save_output=True,
-            output_dir=str(self.output_manager.outputs_dir)
+            output_dir=str(self.output_manager.outputs_dir),
         )
 
         # Validate real execution
@@ -531,7 +532,9 @@ class TestOllamaIntegrationRealExecution:
         assert len(result.response) > 10  # Should have substantial response
         assert result.execution_time > 0
 
-        print(f"Real execution successful: {len(result.response)} characters in {result.execution_time:.2f}s")
+        print(
+            f"Real execution successful: {len(result.response)} characters in {result.execution_time:.2f}s"
+        )
 
     def test_real_batch_execution(self):
         """Test real batch execution."""
@@ -540,17 +543,13 @@ class TestOllamaIntegrationRealExecution:
 
         print(f"Testing real batch execution with model: {self.test_model}")
 
-        prompts = [
-            "Count to 5.",
-            "What is 10 + 15?",
-            "Explain photosynthesis briefly."
-        ]
+        prompts = ["Count to 5.", "What is 10 + 15?", "Explain photosynthesis briefly."]
 
         results = self.model_runner.run_batch(
             self.test_model,
             prompts,
             ExecutionOptions(max_tokens=50, temperature=0.7),
-            max_concurrent=2
+            max_concurrent=2,
         )
 
         # Validate all executions succeeded
@@ -575,15 +574,15 @@ class TestOllamaIntegrationRealExecution:
         prompt = "What is artificial intelligence?"
 
         comparison = self.model_runner.create_model_comparison(
-            model_names,
-            prompt,
-            ExecutionOptions(max_tokens=75, temperature=0.7)
+            model_names, prompt, ExecutionOptions(max_tokens=75, temperature=0.7)
         )
 
         # Should have results for both models
-        assert comparison['models_compared'] == 2
+        assert comparison["models_compared"] == 2
 
-        successful_comparisons = sum(1 for r in comparison['results'].values() if r['success'])
+        successful_comparisons = sum(
+            1 for r in comparison["results"].values() if r["success"]
+        )
         assert successful_comparisons > 0, "No successful model comparisons"
 
         print(f"Real model comparison: {successful_comparisons}/2 successful")
@@ -601,7 +600,7 @@ class TestOllamaIntegrationRealExecution:
             self.test_model,
             test_prompt,
             save_output=True,
-            output_dir=str(self.output_manager.outputs_dir)
+            output_dir=str(self.output_manager.outputs_dir),
         )
 
         assert result.success is True
@@ -614,7 +613,7 @@ class TestOllamaIntegrationRealExecution:
         output_file = max(output_files, key=lambda f: f.stat().st_mtime)
 
         # Verify file contents
-        with open(output_file, encoding='utf-8') as f:
+        with open(output_file, encoding="utf-8") as f:
             content = f.read()
 
         assert self.test_model in content
@@ -624,7 +623,9 @@ class TestOllamaIntegrationRealExecution:
 
         # The response might be different from what we expect due to model behavior,
         # but we should verify that some response was saved
-        response_section = content.split("RESPONSE:")[1] if "RESPONSE:" in content else ""
+        response_section = (
+            content.split("RESPONSE:")[1] if "RESPONSE:" in content else ""
+        )
         assert len(response_section.strip()) > 0, "No response content found"
 
         # Check that execution time is recorded
@@ -640,10 +641,11 @@ def run_ollama_integration_tests():
     print("=" * 60)
 
     # Use pytest programmatic runner
-    return pytest.main([__file__, '-v']) == 0
+    return pytest.main([__file__, "-v"]) == 0
 
 
 if __name__ == "__main__":
     import sys
+
     success = run_ollama_integration_tests()
     sys.exit(0 if success else 1)

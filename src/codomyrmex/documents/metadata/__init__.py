@@ -11,6 +11,3 @@ __all__ = [
     "get_document_version",
     "set_document_version",
 ]
-
-
-

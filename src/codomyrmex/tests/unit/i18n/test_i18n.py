@@ -15,6 +15,7 @@ try:
         init,
         t,
     )
+
     HAS_MODULE = True
 except ImportError:
     HAS_MODULE = False
@@ -27,9 +28,11 @@ if not HAS_MODULE:
 # Locale
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestLocale:
     """Test suite for Locale."""
+
     # --- original 4 tests ---
     def test_create_locale(self):
         """Test functionality: create locale."""
@@ -98,9 +101,11 @@ class TestLocale:
 # MessageBundle
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestMessageBundle:
     """Test suite for MessageBundle."""
+
     # --- original 1 test ---
     def test_create_bundle(self):
         """Test functionality: create bundle."""
@@ -168,9 +173,11 @@ class TestMessageBundle:
 # Translator
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestTranslator:
     """Test suite for Translator."""
+
     # --- original 2 tests ---
     def test_create_translator(self):
         """Test functionality: create translator."""
@@ -269,9 +276,11 @@ class TestTranslator:
 # PluralRules
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestPluralRules:
     """Test suite for PluralRules."""
+
     # --- original 1 test ---
     def test_class_exists(self):
         """Test functionality: class exists."""
@@ -334,9 +343,11 @@ class TestPluralRules:
 # NumberFormatter
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestNumberFormatter:
     """Test suite for NumberFormatter."""
+
     # --- original 1 test ---
     def test_class_exists(self):
         """Test functionality: class exists."""
@@ -383,9 +394,11 @@ class TestNumberFormatter:
 # DateFormatter
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestDateFormatter:
     """Test suite for DateFormatter."""
+
     def test_format_date_english(self):
         """English date: MM/DD/YYYY."""
         d = date(2025, 3, 15)
@@ -486,9 +499,11 @@ class TestDateFormatter:
 # Convenience functions: init() and t()
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestInit:
     """Test suite for Init."""
+
     # --- original 2 tests ---
     def test_init_returns_translator(self):
         """Test functionality: init returns translator."""
@@ -510,6 +525,7 @@ class TestInit:
 @pytest.mark.unit
 class TestTranslateFunction:
     """Test suite for TranslateFunction."""
+
     # --- original 1 test ---
     def test_t_returns_string(self):
         """Test functionality: t returns string."""
@@ -526,6 +542,7 @@ class TestTranslateFunction:
     def test_global_translator_works_end_to_end(self):
         """init() + add bundle + t() works as a full workflow."""
         import codomyrmex.utils.i18n as i18n_mod
+
         tr = i18n_mod.init("en")
         bundle = MessageBundle.from_dict(Locale("en"), {"welcome": "Welcome!"})
         tr.add_bundle(bundle)
@@ -538,6 +555,7 @@ class TestTranslateFunction:
 # MessageBundle.from_json_file() tests
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestMessageBundleFromJsonFile:
     """Tests for MessageBundle.from_json_file()."""
@@ -545,6 +563,7 @@ class TestMessageBundleFromJsonFile:
     def test_loads_valid_json_file(self, tmp_path):
         """Loads messages from a valid JSON file."""
         import json
+
         f = tmp_path / "en.json"
         f.write_text(json.dumps({"hello": "Hello", "bye": "Goodbye"}))
         bundle = MessageBundle.from_json_file(Locale("en"), str(f))
@@ -555,6 +574,7 @@ class TestMessageBundleFromJsonFile:
     def test_preserves_all_keys(self, tmp_path):
         """All keys from the JSON file are available."""
         import json
+
         data = {"k1": "v1", "k2": "v2", "k3": "v3"}
         f = tmp_path / "fr.json"
         f.write_text(json.dumps(data))
@@ -569,6 +589,7 @@ class TestMessageBundleFromJsonFile:
     def test_raises_on_invalid_json(self, tmp_path):
         """Raises JSONDecodeError for malformed JSON."""
         import json
+
         f = tmp_path / "bad.json"
         f.write_text("not valid json{{{")
         with pytest.raises(json.JSONDecodeError):
@@ -579,6 +600,7 @@ class TestMessageBundleFromJsonFile:
 # Translator.load_directory() tests
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestTranslatorLoadDirectory:
     """Tests for Translator.load_directory()."""
@@ -586,6 +608,7 @@ class TestTranslatorLoadDirectory:
     def test_loads_all_json_files(self, tmp_path):
         """Loads all .json files from directory."""
         import json
+
         (tmp_path / "en.json").write_text(json.dumps({"hi": "Hello"}))
         (tmp_path / "es.json").write_text(json.dumps({"hi": "Hola"}))
         tr = Translator(Locale("en"))
@@ -598,6 +621,7 @@ class TestTranslatorLoadDirectory:
     def test_returns_count_of_loaded_bundles(self, tmp_path):
         """Returns the number of bundles loaded."""
         import json
+
         (tmp_path / "en.json").write_text(json.dumps({"a": "b"}))
         (tmp_path / "fr.json").write_text(json.dumps({"a": "c"}))
         (tmp_path / "de.json").write_text(json.dumps({"a": "d"}))
@@ -607,6 +631,7 @@ class TestTranslatorLoadDirectory:
     def test_ignores_non_json_files(self, tmp_path):
         """Ignores .txt and other non-.json files."""
         import json
+
         (tmp_path / "en.json").write_text(json.dumps({"a": "b"}))
         (tmp_path / "readme.txt").write_text("not a bundle")
         (tmp_path / "data.csv").write_text("a,b,c")
@@ -621,6 +646,7 @@ class TestTranslatorLoadDirectory:
     def test_file_stems_become_locale_codes(self, tmp_path):
         """File name (stem) is parsed as locale code."""
         import json
+
         (tmp_path / "en_US.json").write_text(json.dumps({"msg": "US English"}))
         tr = Translator(Locale("en"))
         tr.load_directory(str(tmp_path))

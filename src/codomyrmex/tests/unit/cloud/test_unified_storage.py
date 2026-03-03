@@ -69,9 +69,17 @@ class TestUnifiedStorageClients:
         test_file = tmp_path / "test.txt"
         test_file.write_text("hello")
 
-        assert client.upload_file("my-bucket", "my-key", str(test_file), content_type="text/plain") is True
+        assert (
+            client.upload_file(
+                "my-bucket", "my-key", str(test_file), content_type="text/plain"
+            )
+            is True
+        )
         s3_mock.upload_file.assert_called_once_with(
-            str(test_file), "my-bucket", "my-key", ExtraArgs={"ContentType": "text/plain"}
+            str(test_file),
+            "my-bucket",
+            "my-key",
+            ExtraArgs={"ContentType": "text/plain"},
         )
 
     # -----------------------------------------------------------------
@@ -81,7 +89,8 @@ class TestUnifiedStorageClients:
     def test_gcs_list_buckets(self, mock_gcs_client):
         """Test GCSClient list_buckets."""
         mock_gcs_client.list_buckets.return_value = [
-            Stub(name="bucket1"), Stub(name="bucket2")
+            Stub(name="bucket1"),
+            Stub(name="bucket2"),
         ]
 
         client = GCSClient(client=mock_gcs_client)
@@ -104,7 +113,9 @@ class TestUnifiedStorageClients:
         assert client.upload_file("my-bucket", "my-key", str(test_file)) is True
         mock_gcs_client.bucket.assert_called_once_with("my-bucket")
         bucket_mock.blob.assert_called_once_with("my-key")
-        blob_mock.upload_from_filename.assert_called_once_with(str(test_file), content_type=None)
+        blob_mock.upload_from_filename.assert_called_once_with(
+            str(test_file), content_type=None
+        )
 
     # -----------------------------------------------------------------
     # Azure AzureBlobClient Tests
@@ -113,7 +124,8 @@ class TestUnifiedStorageClients:
     def test_azure_list_buckets(self, mock_azure_client):
         """Test AzureBlobClient list_buckets (containers)."""
         mock_azure_client.list_containers.return_value = [
-            Stub(name="container1"), Stub(name="container2")
+            Stub(name="container1"),
+            Stub(name="container2"),
         ]
 
         client = AzureBlobClient(client=mock_azure_client)
@@ -132,5 +144,7 @@ class TestUnifiedStorageClients:
         test_file.write_text("hello")
 
         assert client.upload_file("my-container", "my-blob", str(test_file)) is True
-        mock_azure_client.get_blob_client.assert_called_once_with(container="my-container", blob="my-blob")
+        mock_azure_client.get_blob_client.assert_called_once_with(
+            container="my-container", blob="my-blob"
+        )
         blob_client_mock.upload_blob.assert_called_once()

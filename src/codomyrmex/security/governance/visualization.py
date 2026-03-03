@@ -11,9 +11,5 @@ def plot_policy_compliance(engine: PolicyEngine) -> str:
     # Mock data for demonstration as we don't have historical logs in the basic engine yet
     data = [85, 15]
 
-    chart = PieChart(
-        title="Policy Compliance Rate",
-        labels=labels,
-        sizes=data
-    )
+    chart = PieChart(title="Policy Compliance Rate", labels=labels, sizes=data)
     return chart.render()

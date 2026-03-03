@@ -14,6 +14,7 @@ try:
         CachedVectorStore,
         PersistentVectorStore,
     )
+
     HAS_MODULE = True
 except ImportError:
     HAS_MODULE = False
@@ -26,9 +27,11 @@ if not HAS_MODULE:
 # PersistentVectorStore
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestPersistentVectorStore:
     """Test suite for PersistentVectorStore."""
+
     def test_create(self, tmp_path):
         """Test functionality: create."""
         path = str(tmp_path / "vectors.json")
@@ -187,9 +190,11 @@ class TestPersistentVectorStore:
 # CachedVectorStore
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestCachedVectorStore:
     """Test suite for CachedVectorStore."""
+
     def _make_backend(self):
         return InMemoryVectorStore()
 

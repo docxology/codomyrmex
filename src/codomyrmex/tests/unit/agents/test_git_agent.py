@@ -4,7 +4,6 @@ Zero-Mock compliant — uses a StubRepositoryManager and real function
 calls where possible, with skip markers for external dependencies.
 """
 
-
 import pytest
 
 try:
@@ -13,6 +12,7 @@ try:
     from codomyrmex.git_operations.core.repository import (
         RepositoryManager,  # noqa: F401
     )
+
     _HAS_AGENTS = True
 except ImportError:
     _HAS_AGENTS = False
@@ -24,6 +24,7 @@ if not _HAS_AGENTS:
 # ---------------------------------------------------------------------------
 # Stub RepositoryManager (replaces MagicMock(spec=RepositoryManager))
 # ---------------------------------------------------------------------------
+
 
 class StubRepositoryManager:
     """Lightweight stub for RepositoryManager.
@@ -65,6 +66,7 @@ class StubRepositoryManager:
 # ---------------------------------------------------------------------------
 # Tests
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestGitAgentInit:

@@ -70,7 +70,7 @@ def create_box_plot(
         data_list = [data]
 
     if not labels:
-        labels = [f"Group {i+1}" for i in range(len(data_list))]
+        labels = [f"Group {i + 1}" for i in range(len(data_list))]
 
     fig, ax = plt.subplots(figsize=figure_size)
 

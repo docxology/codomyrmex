@@ -54,6 +54,7 @@ from codomyrmex.agents.cli.handlers import (
 # Helpers
 # ---------------------------------------------------------------------------
 
+
 def _make_args(**kwargs):
     """Build a SimpleNamespace args object with sensible defaults."""
     defaults = {
@@ -71,6 +72,7 @@ def _make_args(**kwargs):
 # ---------------------------------------------------------------------------
 # _parse_context
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestParseContext:
@@ -92,7 +94,7 @@ class TestParseContext:
 
     def test_json_array_parsed(self):
         # json.loads allows arrays -- handler should pass through
-        result = _parse_context('[1, 2, 3]')
+        result = _parse_context("[1, 2, 3]")
         assert result == [1, 2, 3]
 
     def test_nested_json(self):
@@ -104,6 +106,7 @@ class TestParseContext:
 # ---------------------------------------------------------------------------
 # _create_agent_request
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestCreateAgentRequest:
@@ -141,6 +144,7 @@ class TestCreateAgentRequest:
 # handle_info
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestHandleInfo:
     """Tests for handle_info."""
@@ -172,6 +176,7 @@ class TestHandleInfo:
 # ---------------------------------------------------------------------------
 # handle_agent_setup / handle_agent_test with None client
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestHandleAgentSetupNoneClient:
@@ -205,6 +210,7 @@ class TestHandleAgentTestNoneClient:
 # via the public wrappers, by testing the None-guard directly.
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestAgentExecuteNoneGuard:
     """All execute handlers should gracefully handle unavailable clients."""
@@ -212,6 +218,7 @@ class TestAgentExecuteNoneGuard:
     def test_handle_agent_execute_none_client(self, capsys):
         """Directly test _handle_agent_execute with None."""
         from codomyrmex.agents.cli.handlers import _handle_agent_execute
+
         args = _make_args()
         result = _handle_agent_execute(None, "TestAgent", args)
         assert result is False
@@ -219,6 +226,7 @@ class TestAgentExecuteNoneGuard:
     def test_handle_agent_stream_none_client(self, capsys):
         """Directly test _handle_agent_stream with None."""
         from codomyrmex.agents.cli.handlers import _handle_agent_stream
+
         args = _make_args()
         result = _handle_agent_stream(None, "TestAgent", args)
         assert result is False
@@ -227,6 +235,7 @@ class TestAgentExecuteNoneGuard:
 # ---------------------------------------------------------------------------
 # Jules handlers
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestJulesHandlers:
@@ -269,6 +278,7 @@ class TestJulesHandlers:
 # Claude handlers
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestClaudeHandlers:
     """Tests for Claude-specific handlers.
@@ -304,6 +314,7 @@ class TestClaudeHandlers:
 # Codex handlers
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestCodexHandlers:
     """Tests for Codex-specific handlers."""
@@ -327,6 +338,7 @@ class TestCodexHandlers:
 # ---------------------------------------------------------------------------
 # OpenCode handlers
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestOpenCodeHandlers:
@@ -362,6 +374,7 @@ class TestOpenCodeHandlers:
 # ---------------------------------------------------------------------------
 # Gemini handlers
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestGeminiHandlers:
@@ -407,6 +420,7 @@ class TestGeminiHandlers:
 # Droid handlers
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestDroidHandlers:
     """Tests for Droid-specific handlers.
@@ -440,6 +454,7 @@ class TestDroidHandlers:
 # _get_droid_controller
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestGetDroidController:
     """Tests for the _get_droid_controller singleton helper."""
@@ -447,6 +462,7 @@ class TestGetDroidController:
     def test_returns_none_when_create_fn_missing(self):
         """When create_default_controller is None, should return None."""
         import codomyrmex.agents.cli.handlers as h
+
         # Reset singleton
         original = h._droid_controller
         h._droid_controller = None
@@ -464,6 +480,7 @@ class TestGetDroidController:
 # Edge cases: _handle_agent_execute and _handle_agent_stream with
 # a class that raises on instantiation (simulates missing config)
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestHandlerErrorPaths:
@@ -521,6 +538,7 @@ class TestHandlerErrorPaths:
 # We cannot easily trigger a real successful response without API keys,
 # but we CAN test the _create_agent_request + output path indirectly.
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestOutputFilePath:

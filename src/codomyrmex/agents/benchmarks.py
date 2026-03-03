@@ -17,6 +17,7 @@ from typing import Any
 @dataclass
 class BenchmarkResult:
     """Result from a single benchmark run."""
+
     task_name: str
     agent_name: str
     duration_seconds: float
@@ -42,18 +43,22 @@ class BenchmarkResult:
 @dataclass
 class BenchmarkSuite:
     """A collection of benchmark tasks."""
+
     name: str
     tasks: list[BenchmarkTask] = field(default_factory=list)
 
-    def add_task(self, name: str, func: Callable, expected: Any = None,
-                 timeout: float = 60.0) -> None:
-        self.tasks.append(BenchmarkTask(name=name, func=func,
-                                         expected=expected, timeout=timeout))
+    def add_task(
+        self, name: str, func: Callable, expected: Any = None, timeout: float = 60.0
+    ) -> None:
+        self.tasks.append(
+            BenchmarkTask(name=name, func=func, expected=expected, timeout=timeout)
+        )
 
 
 @dataclass
 class BenchmarkTask:
     """A single benchmark task definition."""
+
     name: str
     func: Callable
     expected: Any = None
@@ -71,8 +76,9 @@ class AgentBenchmarker:
         self._output_dir = output_dir
         self._results: list[BenchmarkResult] = []
 
-    def run_task(self, task: BenchmarkTask, agent_name: str,
-                 agent_func: Callable) -> BenchmarkResult:
+    def run_task(
+        self, task: BenchmarkTask, agent_name: str, agent_func: Callable
+    ) -> BenchmarkResult:
         """Run a single benchmark task against an agent."""
         start = time.monotonic()
         try:
@@ -102,12 +108,15 @@ class AgentBenchmarker:
         self._results.append(result)
         return result
 
-    def run_suite(self, suite: BenchmarkSuite, agent_name: str,
-                  agent_func: Callable) -> list[BenchmarkResult]:
+    def run_suite(
+        self, suite: BenchmarkSuite, agent_name: str, agent_func: Callable
+    ) -> list[BenchmarkResult]:
         """Run all tasks in a suite against an agent."""
         return [self.run_task(task, agent_name, agent_func) for task in suite.tasks]
 
-    def compare_agents(self, agent_results: dict[str, list[BenchmarkResult]]) -> dict[str, Any]:
+    def compare_agents(
+        self, agent_results: dict[str, list[BenchmarkResult]]
+    ) -> dict[str, Any]:
         """Compare benchmark results across agents."""
         comparison: dict[str, Any] = {}
         for agent_name, results in agent_results.items():

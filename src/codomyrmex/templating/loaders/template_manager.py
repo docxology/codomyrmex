@@ -37,7 +37,9 @@ class TemplateManager:
 
     # ── Registration ────────────────────────────────────────────────
 
-    def register(self, name: str, template_source: str, parent: str | None = None) -> None:
+    def register(
+        self, name: str, template_source: str, parent: str | None = None
+    ) -> None:
         """Register a template by name.
 
         Args:
@@ -53,7 +55,9 @@ class TemplateManager:
     def add_template(self, name: str, template: str | Template) -> None:
         """Add a template."""
         if isinstance(template, Template):
-            self._templates[name] = template.source if hasattr(template, "source") else str(template)
+            self._templates[name] = (
+                template.source if hasattr(template, "source") else str(template)
+            )
         else:
             self._templates[name] = template
         logger.info("Added template: %s", name)
@@ -118,7 +122,9 @@ class TemplateManager:
 
         return rendered
 
-    def render_string(self, template_source: str, context: dict[str, Any] | None = None) -> str:
+    def render_string(
+        self, template_source: str, context: dict[str, Any] | None = None
+    ) -> str:
         """Render an ad-hoc template string without registration.
 
         Args:

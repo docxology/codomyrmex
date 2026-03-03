@@ -161,26 +161,30 @@ class ImprovementReport:
         lines.extend(["", f"## Proposed Changes ({self.change_count})", ""])
 
         for i, change in enumerate(self.changes, 1):
-            lines.extend([
-                f"### Change {i}: {change.anti_pattern}",
-                f"**File**: `{change.file_path}` L{change.line_start}-{change.line_end}",
-                f"**Rationale**: {change.rationale}",
-                f"**Confidence**: {change.confidence:.0%} | **Risk**: {change.risk.value}",
-                "",
-                "```diff",
-                *[f"- {line}" for line in change.old_code.splitlines()],
-                *[f"+ {line}" for line in change.new_code.splitlines()],
-                "```",
-                "",
-            ])
+            lines.extend(
+                [
+                    f"### Change {i}: {change.anti_pattern}",
+                    f"**File**: `{change.file_path}` L{change.line_start}-{change.line_end}",
+                    f"**Rationale**: {change.rationale}",
+                    f"**Confidence**: {change.confidence:.0%} | **Risk**: {change.risk.value}",
+                    "",
+                    "```diff",
+                    *[f"- {line}" for line in change.old_code.splitlines()],
+                    *[f"+ {line}" for line in change.new_code.splitlines()],
+                    "```",
+                    "",
+                ]
+            )
 
         if self.test_results.total > 0:
             tr = self.test_results
-            lines.extend([
-                "## Test Results",
-                f"- **{tr.passed}/{tr.total} passed** ({tr.success_rate:.0%})",
-                "",
-            ])
+            lines.extend(
+                [
+                    "## Test Results",
+                    f"- **{tr.passed}/{tr.total} passed** ({tr.success_rate:.0%})",
+                    "",
+                ]
+            )
 
         return "\n".join(lines)
 

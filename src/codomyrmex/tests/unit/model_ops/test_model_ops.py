@@ -38,6 +38,7 @@ from codomyrmex.model_ops import (
 # Dataset
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 def test_dataset_creation_empty():
     """Test empty dataset creation."""
@@ -71,10 +72,12 @@ def test_dataset_validation_messages_format():
 @pytest.mark.unit
 def test_dataset_validation_mixed_formats():
     """Test validation accepts mixed format datasets."""
-    ds = Dataset([
-        {"prompt": "a", "completion": "b"},
-        {"messages": [{"role": "user", "content": "hi"}]},
-    ])
+    ds = Dataset(
+        [
+            {"prompt": "a", "completion": "b"},
+            {"messages": [{"role": "user", "content": "hi"}]},
+        ]
+    )
     assert ds.validate() is True
 
 
@@ -96,10 +99,12 @@ def test_dataset_validation_empty_is_valid():
 def test_dataset_to_jsonl(tmp_path):
     """Test exporting dataset to JSONL file."""
     path = str(tmp_path / "data.jsonl")
-    ds = Dataset([
-        {"prompt": "a", "completion": "b"},
-        {"prompt": "c", "completion": "d"},
-    ])
+    ds = Dataset(
+        [
+            {"prompt": "a", "completion": "b"},
+            {"prompt": "c", "completion": "d"},
+        ]
+    )
     ds.to_jsonl(path)
 
     with open(path) as f:
@@ -138,13 +143,16 @@ def test_dataset_from_file_skips_blank_lines(tmp_path):
 # DatasetSanitizer
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 def test_sanitizer_strip_keys():
     """Test stripping specified keys from dataset examples."""
-    ds = Dataset([
-        {"prompt": "hi", "pii": "secret", "extra": "data"},
-        {"prompt": "hello"},
-    ])
+    ds = Dataset(
+        [
+            {"prompt": "hi", "pii": "secret", "extra": "data"},
+            {"prompt": "hello"},
+        ]
+    )
     sanitized = DatasetSanitizer.strip_keys(ds, ["pii", "extra"])
     assert "pii" not in sanitized.data[0]
     assert "extra" not in sanitized.data[0]
@@ -155,10 +163,12 @@ def test_sanitizer_strip_keys():
 @pytest.mark.unit
 def test_sanitizer_filter_by_length():
     """Test filtering examples by content length."""
-    ds = Dataset([
-        {"prompt": "a", "completion": "b"},        # length = 2
-        {"prompt": "hello world", "completion": "foo bar baz"},  # length = 22
-    ])
+    ds = Dataset(
+        [
+            {"prompt": "a", "completion": "b"},  # length = 2
+            {"prompt": "hello world", "completion": "foo bar baz"},  # length = 22
+        ]
+    )
     filtered = DatasetSanitizer.filter_by_length(ds, min_length=5, max_length=100)
     assert len(filtered.data) == 1
     assert filtered.data[0]["prompt"] == "hello world"
@@ -167,10 +177,12 @@ def test_sanitizer_filter_by_length():
 @pytest.mark.unit
 def test_sanitizer_filter_by_length_keeps_all():
     """Test filter keeps all when bounds are wide."""
-    ds = Dataset([
-        {"prompt": "a", "completion": "b"},
-        {"prompt": "hello", "completion": "world"},
-    ])
+    ds = Dataset(
+        [
+            {"prompt": "a", "completion": "b"},
+            {"prompt": "hello", "completion": "world"},
+        ]
+    )
     filtered = DatasetSanitizer.filter_by_length(ds, min_length=0, max_length=10000)
     assert len(filtered.data) == 2
 
@@ -178,6 +190,7 @@ def test_sanitizer_filter_by_length_keeps_all():
 # ---------------------------------------------------------------------------
 # FineTuningJob
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 def test_fine_tuning_job_initial_state():
@@ -221,6 +234,7 @@ def test_fine_tuning_job_refresh_pending_stays_pending():
 # Evaluator (simple metric-function based)
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 def test_evaluator_exact_match():
     """Test Evaluator with exact_match_metric."""
@@ -248,6 +262,7 @@ def test_evaluator_length_ratio():
 @pytest.mark.unit
 def test_evaluator_handles_metric_errors():
     """Test Evaluator handles metric functions that raise."""
+
     def bad_metric(preds, refs):
         raise RuntimeError("boom")
 
@@ -259,6 +274,7 @@ def test_evaluator_handles_metric_errors():
 # ---------------------------------------------------------------------------
 # Metric classes (evaluation submodule)
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 def test_accuracy_metric():
@@ -387,6 +403,7 @@ def test_auc_roc_metric_mixed():
 # ConfusionMatrix
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 def test_confusion_matrix_binary():
     """Test ConfusionMatrix for binary classification."""
@@ -419,6 +436,7 @@ def test_confusion_matrix_str():
 # ---------------------------------------------------------------------------
 # ModelEvaluator
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 def test_model_evaluator_classification():
@@ -466,6 +484,7 @@ def test_evaluation_result_to_dict():
 # create_evaluator factory
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 def test_create_evaluator_binary():
     """Test create_evaluator for binary classification."""
@@ -492,6 +511,7 @@ def test_create_evaluator_unknown_raises():
 # Metric functions
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 def test_exact_match_metric_empty():
     """Test exact_match_metric with empty lists."""
@@ -517,6 +537,7 @@ def test_length_ratio_metric_empty_reference():
 class TestQualityEvaluation:
     def test_quality_dimension(self):
         from codomyrmex.model_ops.evaluation.quality import QualityDimension
+
         assert len(list(QualityDimension)) > 0
 
     def test_dimension_score(self):
@@ -524,16 +545,19 @@ class TestQualityEvaluation:
             DimensionScore,
             QualityDimension,
         )
+
         dim = list(QualityDimension)[0]
         s = DimensionScore(dimension=dim, score=0.95)
         assert s.score == 0.95
 
     def test_quality_analyzer(self):
         from codomyrmex.model_ops.evaluation.quality import QualityAnalyzer
+
         qa = QualityAnalyzer()
         assert qa is not None
 
     def test_quality_report(self):
         from codomyrmex.model_ops.evaluation.quality import QualityReport
+
         r = QualityReport(overall_score=0.9)
         assert r.overall_score == 0.9

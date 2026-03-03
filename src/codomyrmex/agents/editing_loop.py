@@ -28,6 +28,7 @@ from typing import Any
 
 try:
     from codomyrmex.logging_monitoring import get_logger
+
     logger = get_logger(__name__)
 except ImportError:
     logging.basicConfig(level=logging.INFO)
@@ -43,6 +44,7 @@ from codomyrmex.ide.antigravity.message_scheduler import (
 # =====================================================================
 # Data Structures
 # =====================================================================
+
 
 @dataclass
 class EditTask:
@@ -97,17 +99,17 @@ class EditingConfig:
 
     def __post_init__(self) -> None:
         import os
+
         if not self.ollama_model:
             self.ollama_model = os.environ.get("OLLAMA_MODEL", "codellama:latest")
         if not self.review_model:
-            self.review_model = os.environ.get(
-                "OLLAMA_REVIEW_MODEL", self.ollama_model
-            )
+            self.review_model = os.environ.get("OLLAMA_REVIEW_MODEL", self.ollama_model)
 
 
 # =====================================================================
 # Editing Orchestrator
 # =====================================================================
+
 
 class EditingOrchestrator:
     """Autonomous plan→edit→review loop across Ollama, Antigravity, and Claude.
@@ -128,9 +130,11 @@ class EditingOrchestrator:
 
         # Planner: always Ollama (fast, local).
         import os
+
         base_url = os.environ.get("OLLAMA_BASE_URL", "http://localhost:11434")
         self._planner = OllamaClient(
-            model=self.config.ollama_model, base_url=base_url,
+            model=self.config.ollama_model,
+            base_url=base_url,
         )
 
         # Reviewer: Claude if available, else Ollama.
@@ -138,15 +142,15 @@ class EditingOrchestrator:
             try:
                 self._reviewer = get_llm_client(identity="reviewer")
             except RuntimeError:
-                logger.warning(
-                    "Claude unavailable for review — falling back to Ollama"
-                )
+                logger.warning("Claude unavailable for review — falling back to Ollama")
                 self._reviewer = OllamaClient(
-                    model=self.config.review_model, base_url=base_url,
+                    model=self.config.review_model,
+                    base_url=base_url,
                 )
         else:
             self._reviewer = OllamaClient(
-                model=self.config.review_model, base_url=base_url,
+                model=self.config.review_model,
+                base_url=base_url,
             )
 
         # Antigravity client (lazy — only needed during _edit).
@@ -158,7 +162,9 @@ class EditingOrchestrator:
         self._scheduler: MessageScheduler | None = None
         if self.config.scheduler_config:
             self._scheduler = MessageScheduler(
-                self._relay, self.config.scheduler_config, identity="editor",
+                self._relay,
+                self.config.scheduler_config,
+                identity="editor",
             )
 
         logger.info(
@@ -200,22 +206,18 @@ class EditingOrchestrator:
 
             # 3. Review
             approved, notes, score = self._review(task, plan, edit_summary)
-            task.review_notes.append(
-                f"[iter {iteration}] score={score:.1f} — {notes}"
-            )
+            task.review_notes.append(f"[iter {iteration}] score={score:.1f} — {notes}")
 
             if approved:
                 task.approved = True
                 task.result = edit_summary
                 logger.info(
-                    f"[EditLoop] APPROVED at iteration {iteration} "
-                    f"(score={score:.1f})"
+                    f"[EditLoop] APPROVED at iteration {iteration} (score={score:.1f})"
                 )
             else:
                 feedback = notes
                 logger.info(
-                    f"[EditLoop] Revision requested (score={score:.1f}): "
-                    f"{notes[:80]}"
+                    f"[EditLoop] Revision requested (score={score:.1f}): {notes[:80]}"
                 )
 
         if not task.approved:
@@ -264,15 +266,10 @@ class EditingOrchestrator:
         text = path.read_text(errors="replace")
         items = extract_todo_items(text)
 
-        tasks = [
-            EditTask(description=item, edit_type="todo")
-            for item in items
-        ]
+        tasks = [EditTask(description=item, edit_type="todo") for item in items]
 
         orch = cls(config=config)
-        logger.info(
-            f"[EditLoop] from_todo: {len(tasks)} tasks from {path.name}"
-        )
+        logger.info(f"[EditLoop] from_todo: {len(tasks)} tasks from {path.name}")
         return orch, tasks
 
     # ── Private: Plan ────────────────────────────────────────────────
@@ -311,15 +308,14 @@ class EditingOrchestrator:
 
         context_section = ""
         if context_parts:
-            context_section = (
-                "\n\nAdditional context files:\n" + "\n\n".join(context_parts)
+            context_section = "\n\nAdditional context files:\n" + "\n\n".join(
+                context_parts
             )
 
         feedback_section = ""
         if feedback:
             feedback_section = (
-                f"\n\nPrevious reviewer feedback (address these issues):\n"
-                f"{feedback}"
+                f"\n\nPrevious reviewer feedback (address these issues):\n{feedback}"
             )
 
         prompt = (
@@ -371,13 +367,16 @@ class EditingOrchestrator:
 
         for i, (find_text, replace_text) in enumerate(edits, 1):
             try:
-                result = client.invoke_tool("replace_file_content", {
-                    "TargetFile": str(Path(task.file_path).resolve()),
-                    "TargetContent": find_text,
-                    "ReplacementContent": replace_text,
-                    "StartLine": 0,
-                    "EndLine": 0,
-                })
+                result = client.invoke_tool(
+                    "replace_file_content",
+                    {
+                        "TargetFile": str(Path(task.file_path).resolve()),
+                        "TargetContent": find_text,
+                        "ReplacementContent": replace_text,
+                        "StartLine": 0,
+                        "EndLine": 0,
+                    },
+                )
                 if hasattr(result, "success") and result.success:
                     applied += 1
                 else:
@@ -422,6 +421,7 @@ class EditingOrchestrator:
         if self._ag_client is None:
             try:
                 from codomyrmex.ide.antigravity import AntigravityClient
+
                 client = AntigravityClient()
                 if client.connect():
                     self._ag_client = client
@@ -455,13 +455,9 @@ class EditingOrchestrator:
         post_edit_content = ""
         if task.file_path:
             try:
-                post_edit_content = Path(task.file_path).read_text(
-                    errors="replace"
-                )
+                post_edit_content = Path(task.file_path).read_text(errors="replace")
                 if len(post_edit_content) > 8000:
-                    post_edit_content = (
-                        post_edit_content[:8000] + "\n... (truncated)"
-                    )
+                    post_edit_content = post_edit_content[:8000] + "\n... (truncated)"
             except (FileNotFoundError, OSError):
                 post_edit_content = "(file not found after edit)"
 
@@ -497,6 +493,7 @@ class EditingOrchestrator:
     def _parse_score(review_text: str) -> float:
         """Extract a numeric score from review text."""
         import re
+
         match = re.search(r"SCORE:\s*([\d.]+)", review_text, re.IGNORECASE)
         if match:
             try:
@@ -509,6 +506,7 @@ class EditingOrchestrator:
     def _parse_notes(review_text: str) -> str:
         """Extract notes from review text."""
         import re
+
         match = re.search(r"NOTES:\s*(.+)", review_text, re.IGNORECASE | re.DOTALL)
         if match:
             return match.group(1).strip()

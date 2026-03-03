@@ -34,7 +34,9 @@ from codomyrmex.logging_monitoring.formatters.json_formatter import (
 # ── Helpers ─────────────────────────────────────────────────────────────────
 
 
-def _make_record(msg: str = "test message", level: int = logging.INFO) -> logging.LogRecord:
+def _make_record(
+    msg: str = "test message", level: int = logging.INFO
+) -> logging.LogRecord:
     """Create a minimal LogRecord for formatter tests."""
     record = logging.LogRecord(
         name="test.logger",
@@ -297,10 +299,16 @@ class TestJSONFormatter:
             raise ValueError("boom")
         except ValueError:
             import sys
+
             exc_info = sys.exc_info()
         record = logging.LogRecord(
-            name="test", level=logging.ERROR, pathname="f.py",
-            lineno=1, msg="error", args=(), exc_info=exc_info,
+            name="test",
+            level=logging.ERROR,
+            pathname="f.py",
+            lineno=1,
+            msg="error",
+            args=(),
+            exc_info=exc_info,
         )
         parsed = json.loads(fmt.format(record))
         assert "exception" in parsed

@@ -21,6 +21,7 @@ logger = get_logger(__name__)
 
 class VoteType(Enum):
     """Types of votes."""
+
     YES = "yes"
     NO = "no"
     ABSTAIN = "abstain"
@@ -29,6 +30,7 @@ class VoteType(Enum):
 @dataclass
 class Vote:
     """A vote cast by an agent."""
+
     voter_id: str
     vote: VoteType
     timestamp: datetime = field(default_factory=datetime.now)
@@ -47,6 +49,7 @@ class Vote:
 @dataclass
 class Proposal:
     """A proposal to be voted on."""
+
     proposal_id: str
     title: str
     description: str
@@ -71,6 +74,7 @@ class Proposal:
 @dataclass
 class VotingResult:
     """Result of a voting round."""
+
     proposal_id: str
     passed: bool
     votes_for: int
@@ -85,7 +89,9 @@ class VotingResult:
         """Calculate voter participation rate."""
         if self.total_voters == 0:
             return 0.0
-        return (self.votes_for + self.votes_against + self.abstentions) / self.total_voters
+        return (
+            self.votes_for + self.votes_against + self.abstentions
+        ) / self.total_voters
 
     def to_dict(self) -> dict[str, Any]:
         """Return a dictionary representation of this object."""
@@ -237,7 +243,9 @@ class VotingMechanism:
         del self._active_proposals[proposal_id]
         del self._votes[proposal_id]
 
-        logger.info(f"Voting complete: {proposal_id} - {'PASSED' if passed else 'REJECTED'}")
+        logger.info(
+            f"Voting complete: {proposal_id} - {'PASSED' if passed else 'REJECTED'}"
+        )
         return result
 
     def get_result(self, proposal_id: str) -> VotingResult | None:
@@ -303,7 +311,9 @@ class ConsensusBuilder:
         if agreement_rate >= self._convergence_threshold:
             # Find the actual value (not the string key)
             for value in proposals.values():
-                if str(value) == max(value_counts.keys(), key=lambda k: value_counts[k]):
+                if str(value) == max(
+                    value_counts.keys(), key=lambda k: value_counts[k]
+                ):
                     self._consensus_values[key] = value
                     return value
 

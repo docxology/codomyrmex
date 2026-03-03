@@ -15,6 +15,7 @@ from _stubs import Stub
 # Test Operation Risk Classification
 # =========================================================================
 
+
 class TestOperationRiskClassification:
     """Tests for classify_operation_risk() mapping."""
 
@@ -24,6 +25,7 @@ class TestOperationRiskClassification:
             OperationRisk,
             classify_operation_risk,
         )
+
         assert classify_operation_risk("list_instances") == OperationRisk.READ
 
     def test_get_is_read(self):
@@ -32,6 +34,7 @@ class TestOperationRiskClassification:
             OperationRisk,
             classify_operation_risk,
         )
+
         assert classify_operation_risk("get_volume") == OperationRisk.READ
 
     def test_create_is_write(self):
@@ -40,6 +43,7 @@ class TestOperationRiskClassification:
             OperationRisk,
             classify_operation_risk,
         )
+
         assert classify_operation_risk("create_network") == OperationRisk.WRITE
 
     def test_delete_is_delete(self):
@@ -48,6 +52,7 @@ class TestOperationRiskClassification:
             OperationRisk,
             classify_operation_risk,
         )
+
         assert classify_operation_risk("delete_bucket") == OperationRisk.DELETE
 
     def test_terminate_is_admin(self):
@@ -56,6 +61,7 @@ class TestOperationRiskClassification:
             OperationRisk,
             classify_operation_risk,
         )
+
         assert classify_operation_risk("terminate_instance") == OperationRisk.ADMIN
 
     def test_unknown_defaults_to_read(self):
@@ -64,6 +70,7 @@ class TestOperationRiskClassification:
             OperationRisk,
             classify_operation_risk,
         )
+
         assert classify_operation_risk("some_unknown_operation") == OperationRisk.READ
 
     def test_upload_is_write(self):
@@ -72,6 +79,7 @@ class TestOperationRiskClassification:
             OperationRisk,
             classify_operation_risk,
         )
+
         assert classify_operation_risk("upload_file") == OperationRisk.WRITE
 
     def test_remove_is_delete(self):
@@ -80,12 +88,14 @@ class TestOperationRiskClassification:
             OperationRisk,
             classify_operation_risk,
         )
+
         assert classify_operation_risk("remove_pool_member") == OperationRisk.DELETE
 
 
 # =========================================================================
 # Test SecurityCheckResult
 # =========================================================================
+
 
 class TestSecurityCheckResult:
     """Tests for SecurityCheckResult dataclass."""
@@ -96,6 +106,7 @@ class TestSecurityCheckResult:
             OperationRisk,
             SecurityCheckResult,
         )
+
         r = SecurityCheckResult()
         assert r.allowed is True
         assert r.reason == ""
@@ -109,6 +120,7 @@ class TestSecurityCheckResult:
             OperationRisk,
             SecurityCheckResult,
         )
+
         r = SecurityCheckResult(
             allowed=False,
             reason="blocked",
@@ -125,6 +137,7 @@ class TestSecurityCheckResult:
     def test_mutable_lists_are_independent(self):
         """Test functionality: mutable lists are independent."""
         from codomyrmex.cloud.infomaniak.security import SecurityCheckResult
+
         r1 = SecurityCheckResult()
         r2 = SecurityCheckResult()
         r1.checks_passed.append("x")
@@ -135,12 +148,14 @@ class TestSecurityCheckResult:
 # Test CloudSecurityPipeline
 # =========================================================================
 
+
 class TestCloudSecurityPipeline:
     """Tests for CloudSecurityPipeline pre_check and post_process."""
 
     def test_clean_params_pass(self):
         """Clean parameters should pass all checks."""
         from codomyrmex.cloud.infomaniak.security import CloudSecurityPipeline
+
         pipeline = CloudSecurityPipeline()
         result = pipeline.pre_check("list_instances", {"region": "dc3-a"})
         assert result.allowed is True
@@ -148,6 +163,7 @@ class TestCloudSecurityPipeline:
     def test_exploit_blocks_operation(self):
         """Exploit pattern in params should block the operation."""
         from codomyrmex.cloud.infomaniak.security import CloudSecurityPipeline
+
         pipeline = CloudSecurityPipeline()
         result = pipeline.pre_check(
             "create_instance",
@@ -160,6 +176,7 @@ class TestCloudSecurityPipeline:
     def test_read_operations_skip_identity_check(self):
         """Read operations don't require identity verification."""
         from codomyrmex.cloud.infomaniak.security import CloudSecurityPipeline
+
         pipeline = CloudSecurityPipeline()
         result = pipeline.pre_check("list_networks", {})
         assert result.allowed is True
@@ -167,6 +184,7 @@ class TestCloudSecurityPipeline:
     def test_post_process_scrubs_metadata(self):
         """post_process removes tracking metadata from results."""
         from codomyrmex.cloud.infomaniak.security import CloudSecurityPipeline
+
         pipeline = CloudSecurityPipeline()
         data = {
             "id": "inst-1",
@@ -185,18 +203,21 @@ class TestCloudSecurityPipeline:
     def test_post_process_handles_none(self):
         """post_process passes through None results unchanged."""
         from codomyrmex.cloud.infomaniak.security import CloudSecurityPipeline
+
         pipeline = CloudSecurityPipeline()
         assert pipeline.post_process("delete_instance", None) is None
 
     def test_post_process_handles_bool(self):
         """post_process passes through bool results unchanged."""
         from codomyrmex.cloud.infomaniak.security import CloudSecurityPipeline
+
         pipeline = CloudSecurityPipeline()
         assert pipeline.post_process("delete_instance", True) is True
 
     def test_post_process_handles_list(self):
         """post_process scrubs list of dicts."""
         from codomyrmex.cloud.infomaniak.security import CloudSecurityPipeline
+
         pipeline = CloudSecurityPipeline()
         data = [{"id": "1", "session_id": "s1"}, {"id": "2"}]
         result = pipeline.post_process("list_instances", data)
@@ -208,6 +229,7 @@ class TestCloudSecurityPipeline:
     def test_pipeline_with_no_modules_still_works(self):
         """Pipeline with all modules set to None still allows operations."""
         from codomyrmex.cloud.infomaniak.security import CloudSecurityPipeline
+
         pipeline = CloudSecurityPipeline(
             active_defense=None,
             identity_manager=None,
@@ -223,6 +245,7 @@ class TestCloudSecurityPipeline:
     def test_exploit_detection_with_mock(self):
         """Exploit detection using mock ActiveDefense."""
         from codomyrmex.cloud.infomaniak.security import CloudSecurityPipeline
+
         mock_defense = Stub()
         mock_defense.detect_exploit.return_value = True
         pipeline = CloudSecurityPipeline(active_defense=mock_defense)
@@ -234,6 +257,7 @@ class TestCloudSecurityPipeline:
     def test_no_exploit_passes_with_mock(self):
         """Clean input passes mock exploit detection."""
         from codomyrmex.cloud.infomaniak.security import CloudSecurityPipeline
+
         mock_defense = Stub()
         mock_defense.detect_exploit.return_value = False
         pipeline = CloudSecurityPipeline(active_defense=mock_defense)
@@ -245,6 +269,7 @@ class TestCloudSecurityPipeline:
     def test_identity_blocks_write_without_persona(self):
         """Write operations blocked when no active persona."""
         from codomyrmex.cloud.infomaniak.security import CloudSecurityPipeline
+
         mock_identity = Stub()
         mock_identity.active_persona = None
         pipeline = CloudSecurityPipeline(identity_manager=mock_identity)
@@ -299,6 +324,7 @@ class TestCloudSecurityPipeline:
             CloudSecurityPipeline,
             OperationRisk,
         )
+
         pipeline = CloudSecurityPipeline()
         pipeline._defense = None
         pipeline._identity = None
@@ -309,6 +335,7 @@ class TestCloudSecurityPipeline:
     def test_post_process_with_mock_cleaner(self):
         """post_process delegates to CrumbCleaner.scrub()."""
         from codomyrmex.cloud.infomaniak.security import CloudSecurityPipeline
+
         mock_cleaner = Stub()
         mock_cleaner.scrub.return_value = {"id": "cleaned"}
         pipeline = CloudSecurityPipeline(crumb_cleaner=mock_cleaner)
@@ -319,6 +346,7 @@ class TestCloudSecurityPipeline:
     def test_empty_params_pass(self):
         """Empty parameters dict should pass all checks."""
         from codomyrmex.cloud.infomaniak.security import CloudSecurityPipeline
+
         pipeline = CloudSecurityPipeline()
         pipeline._identity = None
         result = pipeline.pre_check("list_all", {})

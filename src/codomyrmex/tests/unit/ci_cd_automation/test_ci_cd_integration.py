@@ -9,12 +9,14 @@ import yaml
 
 try:
     import docker
+
     DOCKER_AVAILABLE = True
 except ImportError:
     DOCKER_AVAILABLE = False
 
 try:
     import aiohttp  # noqa: F401
+
     AIOHTTP_AVAILABLE = True
 except ImportError:
     AIOHTTP_AVAILABLE = False
@@ -137,6 +139,7 @@ stages:
 
     def test_run_command_success(self):
         """Test successful command execution with real subprocess."""
+
         async def test():
             result = await self.manager._run_command_async("echo test", 30, {})
             assert result["returncode"] == 0
@@ -146,11 +149,15 @@ stages:
 
     def test_run_command_timeout(self):
         """Test command execution timeout with real subprocess."""
+
         async def test():
             # Use a command that will timeout quickly
             result = await self.manager._run_command_async("sleep 60", 1, {})
             assert result["returncode"] == -1
-            assert "timed out" in result.get("stderr", "").lower() or result["returncode"] == -1
+            assert (
+                "timed out" in result.get("stderr", "").lower()
+                or result["returncode"] == -1
+            )
 
         asyncio.run(test())
 
@@ -170,8 +177,7 @@ stages:
     def test_save_pipeline_config(self, tmp_path):
         """Test pipeline config saving with real YAML operations."""
         pipeline = Pipeline(
-            name="test_pipeline",
-            stages=[PipelineStage(name="stage1", jobs=[])]
+            name="test_pipeline", stages=[PipelineStage(name="stage1", jobs=[])]
         )
 
         output_path = str(tmp_path / "pipeline.yaml")
@@ -205,7 +211,7 @@ class TestDeploymentOrchestrator:
             name="test-env",
             type=EnvironmentType.DEVELOPMENT,
             host="localhost",
-            user="deploy"
+            user="deploy",
         )
         self.orchestrator.environments["test-env"] = environment
 
@@ -213,7 +219,7 @@ class TestDeploymentOrchestrator:
             name="test-deployment",
             version="1.0.0",
             environment_name="test-env",
-            artifacts=["app.tar.gz"]
+            artifacts=["app.tar.gz"],
         )
 
         assert deployment.name == "test-deployment"
@@ -229,7 +235,7 @@ class TestDeploymentOrchestrator:
                 name="test",
                 version="1.0.0",
                 environment_name="nonexistent",
-                artifacts=[]
+                artifacts=[],
             )
 
     def test_get_deployment_status(self):
@@ -241,8 +247,10 @@ class TestDeploymentOrchestrator:
         deployment = Deployment(
             name="test",
             version="1.0.0",
-            environment=Environment(name="test", type=EnvironmentType.DEVELOPMENT, host="localhost"),
-            artifacts=[]
+            environment=Environment(
+                name="test", type=EnvironmentType.DEVELOPMENT, host="localhost"
+            ),
+            artifacts=[],
         )
         self.orchestrator.deployments["test"] = deployment
 
@@ -256,8 +264,10 @@ class TestDeploymentOrchestrator:
         deployment = Deployment(
             name="test",
             version="1.0.0",
-            environment=Environment(name="test", type=EnvironmentType.DEVELOPMENT, host="localhost"),
-            artifacts=[]
+            environment=Environment(
+                name="test", type=EnvironmentType.DEVELOPMENT, host="localhost"
+            ),
+            artifacts=[],
         )
         self.orchestrator.deployments["test"] = deployment
 
@@ -275,9 +285,11 @@ class TestDeploymentOrchestrator:
         deployment = Deployment(
             name="test",
             version="1.0.0",
-            environment=Environment(name="test", type=EnvironmentType.DEVELOPMENT, host="localhost"),
+            environment=Environment(
+                name="test", type=EnvironmentType.DEVELOPMENT, host="localhost"
+            ),
             artifacts=[],
-            status=DeploymentStatus.RUNNING
+            status=DeploymentStatus.RUNNING,
         )
         self.orchestrator.deployments["test"] = deployment
 
@@ -290,9 +302,11 @@ class TestDeploymentOrchestrator:
         deployment = Deployment(
             name="test",
             version="1.0.0",
-            environment=Environment(name="test", type=EnvironmentType.DEVELOPMENT, host="localhost"),
+            environment=Environment(
+                name="test", type=EnvironmentType.DEVELOPMENT, host="localhost"
+            ),
             artifacts=[],
-            status=DeploymentStatus.SUCCESS
+            status=DeploymentStatus.SUCCESS,
         )
         self.orchestrator.deployments["test"] = deployment
 
@@ -312,16 +326,14 @@ class TestDeploymentOrchestrator:
             pytest.skip("Docker not available")
 
         environment = Environment(
-            name="dev",
-            type=EnvironmentType.DEVELOPMENT,
-            host="localhost"
+            name="dev", type=EnvironmentType.DEVELOPMENT, host="localhost"
         )
 
         deployment = Deployment(
             name="test",
             version="1.0.0",
             environment=environment,
-            artifacts=["app.tar.gz"]
+            artifacts=["app.tar.gz"],
         )
 
         # Verify structure
@@ -331,6 +343,7 @@ class TestDeploymentOrchestrator:
         """Test deployment to production with Kubernetes."""
         try:
             import kubernetes  # noqa: F401
+
             KUBERNETES_AVAILABLE = True
         except ImportError:
             KUBERNETES_AVAILABLE = False
@@ -342,14 +355,14 @@ class TestDeploymentOrchestrator:
             name="prod",
             type=EnvironmentType.PRODUCTION,
             host="prod.example.com",
-            kubernetes_context="prod-cluster"
+            kubernetes_context="prod-cluster",
         )
 
         deployment = Deployment(
             name="test",
             version="1.0.0",
             environment=environment,
-            artifacts=["deployment.yaml"]
+            artifacts=["deployment.yaml"],
         )
 
         assert deployment.environment.type == EnvironmentType.PRODUCTION
@@ -361,14 +374,11 @@ class TestDeploymentOrchestrator:
             type=EnvironmentType.DEVELOPMENT,
             host="localhost",
             pre_deploy_hooks=["echo 'pre-deploy'"],
-            post_deploy_hooks=["echo 'post-deploy'"]
+            post_deploy_hooks=["echo 'post-deploy'"],
         )
 
         deployment = Deployment(
-            name="test",
-            version="1.0.0",
-            environment=environment,
-            artifacts=[]
+            name="test", version="1.0.0", environment=environment, artifacts=[]
         )
 
         # Execute hooks with real subprocess
@@ -390,18 +400,17 @@ class TestDeploymentOrchestrator:
             name="test",
             type=EnvironmentType.DEVELOPMENT,
             host="localhost",
-            health_checks=[{
-                "type": "http",
-                "endpoint": "http://localhost:8000/health",
-                "timeout": 30
-            }]
+            health_checks=[
+                {
+                    "type": "http",
+                    "endpoint": "http://localhost:8000/health",
+                    "timeout": 30,
+                }
+            ],
         )
 
         deployment = Deployment(
-            name="test",
-            version="1.0.0",
-            environment=environment,
-            artifacts=[]
+            name="test", version="1.0.0", environment=environment, artifacts=[]
         )
 
         # Try real HTTP check (may fail if endpoint not available)
@@ -423,18 +432,17 @@ class TestDeploymentOrchestrator:
             name="test",
             type=EnvironmentType.DEVELOPMENT,
             host="localhost",
-            health_checks=[{
-                "type": "http",
-                "endpoint": "http://localhost:99999/health",  # Invalid port
-                "timeout": 1
-            }]
+            health_checks=[
+                {
+                    "type": "http",
+                    "endpoint": "http://localhost:99999/health",  # Invalid port
+                    "timeout": 1,
+                }
+            ],
         )
 
         deployment = Deployment(
-            name="test",
-            version="1.0.0",
-            environment=environment,
-            artifacts=[]
+            name="test", version="1.0.0", environment=environment, artifacts=[]
         )
 
         # Should fail gracefully
@@ -447,18 +455,17 @@ class TestDeploymentOrchestrator:
             name="test",
             type=EnvironmentType.DEVELOPMENT,
             host="localhost",
-            health_checks=[{
-                "type": "tcp",
-                "endpoint": "localhost:99999",  # Invalid port for testing
-                "timeout": 1
-            }]
+            health_checks=[
+                {
+                    "type": "tcp",
+                    "endpoint": "localhost:99999",  # Invalid port for testing
+                    "timeout": 1,
+                }
+            ],
         )
 
         deployment = Deployment(
-            name="test",
-            version="1.0.0",
-            environment=environment,
-            artifacts=[]
+            name="test", version="1.0.0", environment=environment, artifacts=[]
         )
 
         # Should fail gracefully with invalid endpoint
@@ -519,9 +526,7 @@ class TestIntegration:
     def test_deployment_creation_flow(self):
         """Test deployment creation and management flow."""
         environment = Environment(
-            name="integration_test",
-            type=EnvironmentType.DEVELOPMENT,
-            host="localhost"
+            name="integration_test", type=EnvironmentType.DEVELOPMENT, host="localhost"
         )
 
         orchestrator = DeploymentOrchestrator()
@@ -531,7 +536,7 @@ class TestIntegration:
             name="integration_deployment",
             version="1.0.0",
             environment_name="integration_test",
-            artifacts=["test-app.tar.gz"]
+            artifacts=["test-app.tar.gz"],
         )
 
         assert deployment.name == "integration_deployment"
@@ -546,7 +551,7 @@ class TestIntegration:
             description="Test description",
             stages=[],
             status=PipelineStatus.RUNNING,
-            started_at=datetime.now(UTC)
+            started_at=datetime.now(UTC),
         )
 
         pipeline_dict = pipeline.to_dict()
@@ -560,9 +565,7 @@ class TestIntegration:
     def test_deployment_to_dict_conversion(self):
         """Test Deployment to_dict conversion for serialization."""
         environment = Environment(
-            name="test",
-            type=EnvironmentType.DEVELOPMENT,
-            host="localhost"
+            name="test", type=EnvironmentType.DEVELOPMENT, host="localhost"
         )
 
         deployment = Deployment(
@@ -572,7 +575,7 @@ class TestIntegration:
             artifacts=[],
             status=DeploymentStatus.SUCCESS,
             started_at=datetime.now(UTC),
-            finished_at=datetime.now(UTC)
+            finished_at=datetime.now(UTC),
         )
 
         deployment_dict = deployment.to_dict()
@@ -591,7 +594,7 @@ class TestPipelineTriggeringGitHubActions:
         """Setup for each test method."""
         self.manager = AsyncPipelineManager(
             base_url="https://api.github.com",
-            api_token=os.environ.get("GITHUB_TOKEN", "")
+            api_token=os.environ.get("GITHUB_TOKEN", ""),
         )
 
     @requires_github_api
@@ -604,7 +607,7 @@ class TestPipelineTriggeringGitHubActions:
             repo_name=_GITHUB_REPO,
             workflow_id="ci.yml",
             ref="main",
-            inputs={"environment": "staging"}
+            inputs={"environment": "staging"},
         )
         # Result depends on whether the workflow actually exists
         assert result.status in (PipelineStatus.PENDING, PipelineStatus.FAILURE)
@@ -615,15 +618,14 @@ class TestPipelineTriggeringGitHubActions:
         if not AIOHTTP_AVAILABLE:
             pytest.skip("aiohttp not installed")
         manager = AsyncPipelineManager(
-            base_url="https://api.github.com",
-            api_token="invalid_token_12345"
+            base_url="https://api.github.com", api_token="invalid_token_12345"
         )
         result = await manager.async_trigger_pipeline(
             pipeline_name="test-workflow",
             repo_owner="nonexistent-owner-xyz",
             repo_name="nonexistent-repo-xyz",
             workflow_id="ci.yml",
-            ref="main"
+            ref="main",
         )
         assert result.status == PipelineStatus.FAILURE
 
@@ -633,8 +635,7 @@ class TestPipelineTriggeringGitHubActions:
         if not AIOHTTP_AVAILABLE:
             pytest.skip("aiohttp not installed")
         manager = AsyncPipelineManager(
-            base_url="https://api.github.com",
-            api_token="test_token"
+            base_url="https://api.github.com", api_token="test_token"
         )
         result = await manager.async_trigger_pipeline(
             pipeline_name="test-workflow",
@@ -642,7 +643,7 @@ class TestPipelineTriggeringGitHubActions:
             repo_name="nonexistent-repo-xyz",
             workflow_id="ci.yml",
             ref="main",
-            timeout=0.001  # Very short timeout
+            timeout=0.001,  # Very short timeout
         )
         assert result.status == PipelineStatus.FAILURE
 
@@ -665,13 +666,13 @@ class TestPipelineStatusMonitoring:
         if not run_id:
             pytest.skip("GITHUB_RUN_ID not set")
         result = await self.manager.async_get_pipeline_status(
-            repo_owner=_GITHUB_OWNER,
-            repo_name=_GITHUB_REPO,
-            run_id=run_id
+            repo_owner=_GITHUB_OWNER, repo_name=_GITHUB_REPO, run_id=run_id
         )
         assert result.status in (
-            PipelineStatus.SUCCESS, PipelineStatus.RUNNING,
-            PipelineStatus.FAILURE, PipelineStatus.PENDING
+            PipelineStatus.SUCCESS,
+            PipelineStatus.RUNNING,
+            PipelineStatus.FAILURE,
+            PipelineStatus.PENDING,
         )
 
     @requires_github_api
@@ -679,9 +680,7 @@ class TestPipelineStatusMonitoring:
     async def test_get_workflow_runs_list(self):
         """Test listing real workflow runs from GitHub API."""
         result = await self.manager.async_get_workflow_runs(
-            repo_owner=_GITHUB_OWNER,
-            repo_name=_GITHUB_REPO,
-            per_page=5
+            repo_owner=_GITHUB_OWNER, repo_name=_GITHUB_REPO, per_page=5
         )
         assert result.status in (PipelineStatus.SUCCESS, PipelineStatus.FAILURE)
 
@@ -708,8 +707,8 @@ class TestWorkflowDispatching:
             inputs={
                 "environment": "production",
                 "version": "1.2.3",
-                "dry_run": "false"
-            }
+                "dry_run": "false",
+            },
         )
         # May succeed or fail depending on repo config
         assert result.status in (PipelineStatus.PENDING, PipelineStatus.FAILURE)
@@ -723,7 +722,7 @@ class TestWorkflowDispatching:
             repo_owner=_GITHUB_OWNER,
             repo_name=_GITHUB_REPO,
             workflow_id="test.yml",
-            ref="feature/new-feature"
+            ref="feature/new-feature",
         )
         assert result.status in (PipelineStatus.PENDING, PipelineStatus.FAILURE)
 
@@ -738,7 +737,7 @@ class TestWorkflowDispatching:
             repo_owner="nonexistent-owner-xyz",
             repo_name="nonexistent-repo-xyz",
             workflow_id="nonexistent.yml",
-            ref="main"
+            ref="main",
         )
         assert result.status == PipelineStatus.FAILURE
 

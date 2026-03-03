@@ -10,10 +10,12 @@ from typing import Any
 try:
     from codomyrmex.model_context_protocol.decorators import mcp_tool
 except ImportError:
+
     def mcp_tool(**kwargs: Any):  # type: ignore[misc]
         def decorator(func: Any) -> Any:
             func._mcp_tool_meta = kwargs
             return func
+
         return decorator
 
 
@@ -31,6 +33,7 @@ def plugin_scan_entry_points(
     """
     try:
         from codomyrmex.plugin_system.discovery import PluginDiscovery
+
         discovery = PluginDiscovery(entry_point_group=entry_point_group)
         result = discovery.scan_entry_points()
         return {
@@ -63,12 +66,15 @@ def plugin_resolve_dependencies(
             DependencyNode,
             DependencyResolver,
         )
+
         resolver = DependencyResolver()
         for p in plugins:
-            resolver.add(DependencyNode(
-                name=p["name"],
-                dependencies=p.get("dependencies", []),
-            ))
+            resolver.add(
+                DependencyNode(
+                    name=p["name"],
+                    dependencies=p.get("dependencies", []),
+                )
+            )
         result = resolver.resolve()
         return {
             "status": "ok",

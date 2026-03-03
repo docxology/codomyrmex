@@ -16,8 +16,9 @@ from codomyrmex.calendar_integration.exceptions import CalendarAuthError
 # Require calendar module dependencies
 pytestmark = pytest.mark.skipif(
     not CALENDAR_AVAILABLE,
-    reason="Calendar module dependencies not installed. Run `uv sync --extra calendar`"
+    reason="Calendar module dependencies not installed. Run `uv sync --extra calendar`",
 )
+
 
 def test_calendar_event_model():
     """Test that the generic CalendarEvent model instantiates correctly."""
@@ -28,7 +29,7 @@ def test_calendar_event_model():
         start_time=now,
         end_time=now + timedelta(hours=1),
         location="Virtual",
-        attendees=["test@example.com"]
+        attendees=["test@example.com"],
     )
 
     assert event.summary == "Test Meeting"
@@ -40,13 +41,13 @@ def test_calendar_event_model():
 
 
 @pytest.mark.skipif(
-    not GCAL_AVAILABLE,
-    reason="Google Calendar dependencies not installed."
+    not GCAL_AVAILABLE, reason="Google Calendar dependencies not installed."
 )
 def test_google_calendar_auth_error():
     """Test that GoogleCalendar raises CalendarAuthError without credentials."""
     with pytest.raises(CalendarAuthError):
         GoogleCalendar()
+
 
 # To fully test the Google Calendar integration in a Zero-Mock environment,
 # we would need actual valid credentials. The following test is skipped by
@@ -54,7 +55,7 @@ def test_google_calendar_auth_error():
 # it's safe to run the integration tests against a real account.
 @pytest.mark.skipif(
     os.environ.get("CODOMYRMEX_RUN_LIVE_CALENDAR_TESTS") != "1",
-    reason="Live calendar tests require CODOMYRMEX_RUN_LIVE_CALENDAR_TESTS=1 and credentials."
+    reason="Live calendar tests require CODOMYRMEX_RUN_LIVE_CALENDAR_TESTS=1 and credentials.",
 )
 def test_google_calendar_live_integration():
     """
@@ -64,6 +65,7 @@ def test_google_calendar_live_integration():
     """
     try:
         from google.auth import default
+
         creds, _ = default()
     except Exception as e:
         pytest.skip(f"Could not load default Google credentials: {e}")

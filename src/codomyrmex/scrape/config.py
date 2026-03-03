@@ -63,7 +63,9 @@ class ScrapeConfig:
         retry_delay = float(os.getenv("SCRAPE_RETRY_DELAY", "1.0"))
         rate_limit = os.getenv("SCRAPE_RATE_LIMIT")
         user_agent = os.getenv("SCRAPE_USER_AGENT", "Codomyrmex-Scraper/0.1.0")
-        respect_robots = os.getenv("SCRAPE_RESPECT_ROBOTS_TXT", "true").lower() == "true"
+        respect_robots = (
+            os.getenv("SCRAPE_RESPECT_ROBOTS_TXT", "true").lower() == "true"
+        )
 
         return cls(
             api_key=api_key,
@@ -155,4 +157,3 @@ def reset_config() -> None:
     global _config
     _config = None
     logger.info("Scrape configuration reset")
-

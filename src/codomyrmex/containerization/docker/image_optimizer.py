@@ -22,9 +22,11 @@ except ImportError:
     docker = None
     HAS_DOCKER = False
 
+
 @dataclass
 class ImageAnalysis:
     """Analysis results for a Docker image."""
+
     image_name: str
     size_bytes: int
     layers: list[dict[str, Any]]
@@ -48,12 +50,14 @@ class ImageAnalysis:
             "environment_vars": self.environment_vars,
             "commands": self.commands,
             "potential_optimizations": self.potential_optimizations,
-            "optimization_score": self.optimization_score
+            "optimization_score": self.optimization_score,
         }
+
 
 @dataclass
 class OptimizationSuggestion:
     """A specific optimization suggestion."""
+
     category: str
     description: str
     impact: str  # "high", "medium", "low"
@@ -69,8 +73,9 @@ class OptimizationSuggestion:
             "impact": self.impact,
             "effort": self.effort,
             "dockerfile_changes": self.dockerfile_changes,
-            "size_reduction_mb": self.size_reduction_mb
+            "size_reduction_mb": self.size_reduction_mb,
         }
+
 
 class ImageOptimizer:
     """
@@ -84,7 +89,9 @@ class ImageOptimizer:
         """Initialize the image optimizer."""
         self.client = docker.from_env() if HAS_DOCKER else None
         if not HAS_DOCKER:
-            logger.warning("Docker library not available, image optimization features will be limited")
+            logger.warning(
+                "Docker library not available, image optimization features will be limited"
+            )
 
     def analyze_image(self, image_name: str) -> ImageAnalysis:
         """
@@ -111,7 +118,9 @@ class ImageOptimizer:
 
             # Extract configuration details
             exposed_ports = list(config.get("ExposedPorts", {}).keys())
-            volumes = list(config.get("Volumes", {}).keys()) if config.get("Volumes") else []
+            volumes = (
+                list(config.get("Volumes", {}).keys()) if config.get("Volumes") else []
+            )
             environment_vars = config.get("Env", [])
             commands = config.get("Cmd", [])
 
@@ -121,12 +130,14 @@ class ImageOptimizer:
             analysis = ImageAnalysis(
                 image_name=image_name,
                 size_bytes=size_bytes,
-                layers=[{"digest": layer, "size": 0} for layer in layers],  # Size info limited
+                layers=[
+                    {"digest": layer, "size": 0} for layer in layers
+                ],  # Size info limited
                 base_image=base_image,
                 exposed_ports=exposed_ports,
                 volumes=volumes,
                 environment_vars=environment_vars,
-                commands=commands
+                commands=commands,
             )
 
             # Generate optimization suggestions
@@ -197,12 +208,16 @@ class ImageOptimizer:
             comparison = {
                 "image1": analysis1.to_dict(),
                 "image2": analysis2.to_dict(),
-                "size_difference_mb": (analysis2.size_bytes - analysis1.size_bytes) / (1024 * 1024),
+                "size_difference_mb": (analysis2.size_bytes - analysis1.size_bytes)
+                / (1024 * 1024),
                 "size_reduction_percentage": (
-                    (analysis1.size_bytes - analysis2.size_bytes) / analysis1.size_bytes * 100
-                    if analysis1.size_bytes > 0 else 0
+                    (analysis1.size_bytes - analysis2.size_bytes)
+                    / analysis1.size_bytes
+                    * 100
+                    if analysis1.size_bytes > 0
+                    else 0
                 ),
-                "recommendations": []
+                "recommendations": [],
             }
 
             # Generate comparison-based recommendations
@@ -241,11 +256,17 @@ class ImageOptimizer:
                 "optimization_suggestions": [s.to_dict() for s in suggestions],
                 "summary": {
                     "total_suggestions": len(suggestions),
-                    "high_impact_suggestions": len([s for s in suggestions if s.impact == "high"]),
-                    "easy_improvements": len([s for s in suggestions if s.effort == "easy"]),
-                    "estimated_savings_mb": sum(s.size_reduction_mb or 0 for s in suggestions)
+                    "high_impact_suggestions": len(
+                        [s for s in suggestions if s.impact == "high"]
+                    ),
+                    "easy_improvements": len(
+                        [s for s in suggestions if s.effort == "easy"]
+                    ),
+                    "estimated_savings_mb": sum(
+                        s.size_reduction_mb or 0 for s in suggestions
+                    ),
                 },
-                "implementation_plan": self._create_implementation_plan(suggestions)
+                "implementation_plan": self._create_implementation_plan(suggestions),
             }
 
             return report
@@ -263,7 +284,7 @@ class ImageOptimizer:
                 created_by = entry.get("CreatedBy", "")
                 if created_by and "FROM" in created_by.upper():
                     # Extract FROM instruction
-                    match = re.search(r'FROM\s+([^\s\n]+)', created_by, re.IGNORECASE)
+                    match = re.search(r"FROM\s+([^\s\n]+)", created_by, re.IGNORECASE)
                     if match:
                         return match.group(1).strip()
         except Exception as e:
@@ -309,7 +330,9 @@ class ImageOptimizer:
 
         if has_pip:
             optimizations.append("Use --no-cache-dir with pip install")
-            optimizations.append("Use requirements.txt instead of individual pip installs")
+            optimizations.append(
+                "Use requirements.txt instead of individual pip installs"
+            )
 
         if has_npm:
             optimizations.append("Use npm ci instead of npm install for production")
@@ -339,90 +362,101 @@ class ImageOptimizer:
 
         # Package management bonus
         has_good_practices = (
-            any("rm -rf /var/lib/apt/lists/*" in cmd for cmd in analysis.commands) or
-            any("--no-cache-dir" in cmd for cmd in analysis.commands) or
-            any("npm ci" in cmd for cmd in analysis.commands)
+            any("rm -rf /var/lib/apt/lists/*" in cmd for cmd in analysis.commands)
+            or any("--no-cache-dir" in cmd for cmd in analysis.commands)
+            or any("npm ci" in cmd for cmd in analysis.commands)
         )
         if has_good_practices:
             score += 15
 
         return max(0.0, min(100.0, score))
 
-    def _generate_suggestions(self, analysis: ImageAnalysis) -> list[OptimizationSuggestion]:
+    def _generate_suggestions(
+        self, analysis: ImageAnalysis
+    ) -> list[OptimizationSuggestion]:
         """Generate detailed optimization suggestions."""
         suggestions = []
 
         # Size-based suggestions
         if analysis.size_bytes > 500 * 1024 * 1024:
-            suggestions.append(OptimizationSuggestion(
-                category="size",
-                description="Use multi-stage build to reduce final image size",
-                impact="high",
-                effort="medium",
-                dockerfile_changes=[
-                    "# Multi-stage build example",
-                    "FROM builder AS build-stage",
-                    "# Build commands here",
-                    "FROM runtime-image AS production",
-                    "COPY --from=build-stage /app/build /app"
-                ],
-                size_reduction_mb=analysis.size_bytes * 0.3 / (1024 * 1024)  # Estimate 30% reduction
-            ))
+            suggestions.append(
+                OptimizationSuggestion(
+                    category="size",
+                    description="Use multi-stage build to reduce final image size",
+                    impact="high",
+                    effort="medium",
+                    dockerfile_changes=[
+                        "# Multi-stage build example",
+                        "FROM builder AS build-stage",
+                        "# Build commands here",
+                        "FROM runtime-image AS production",
+                        "COPY --from=build-stage /app/build /app",
+                    ],
+                    size_reduction_mb=analysis.size_bytes
+                    * 0.3
+                    / (1024 * 1024),  # Estimate 30% reduction
+                )
+            )
 
         # Layer optimization
         if len(analysis.layers) > 15:
-            suggestions.append(OptimizationSuggestion(
-                category="layers",
-                description="Combine RUN commands to reduce layer count",
-                impact="medium",
-                effort="easy",
-                dockerfile_changes=[
-                    "# Instead of multiple RUN commands:",
-                    "# RUN apt-get update",
-                    "# RUN apt-get install -y package1",
-                    "# RUN apt-get install -y package2",
-                    "# Use:",
-                    "# RUN apt-get update && apt-get install -y package1 package2"
-                ]
-            ))
+            suggestions.append(
+                OptimizationSuggestion(
+                    category="layers",
+                    description="Combine RUN commands to reduce layer count",
+                    impact="medium",
+                    effort="easy",
+                    dockerfile_changes=[
+                        "# Instead of multiple RUN commands:",
+                        "# RUN apt-get update",
+                        "# RUN apt-get install -y package1",
+                        "# RUN apt-get install -y package2",
+                        "# Use:",
+                        "# RUN apt-get update && apt-get install -y package1 package2",
+                    ],
+                )
+            )
 
         # Package manager optimizations
         if any("apt" in str(analysis.commands).lower()):
-            suggestions.append(OptimizationSuggestion(
-                category="packages",
-                description="Clean apt cache to reduce image size",
-                impact="medium",
-                effort="easy",
-                dockerfile_changes=[
-                    "RUN apt-get update && apt-get install -y packages && rm -rf /var/lib/apt/lists/*"
-                ],
-                size_reduction_mb=50.0  # Estimate 50MB reduction
-            ))
+            suggestions.append(
+                OptimizationSuggestion(
+                    category="packages",
+                    description="Clean apt cache to reduce image size",
+                    impact="medium",
+                    effort="easy",
+                    dockerfile_changes=[
+                        "RUN apt-get update && apt-get install -y packages && rm -rf /var/lib/apt/lists/*"
+                    ],
+                    size_reduction_mb=50.0,  # Estimate 50MB reduction
+                )
+            )
 
         if any("pip" in str(analysis.commands).lower()):
-            suggestions.append(OptimizationSuggestion(
-                category="packages",
-                description="Use pip --no-cache-dir to avoid cache in image",
-                impact="low",
-                effort="easy",
-                dockerfile_changes=[
-                    "RUN pip install --no-cache-dir -r requirements.txt"
-                ],
-                size_reduction_mb=20.0  # Estimate 20MB reduction
-            ))
+            suggestions.append(
+                OptimizationSuggestion(
+                    category="packages",
+                    description="Use pip --no-cache-dir to avoid cache in image",
+                    impact="low",
+                    effort="easy",
+                    dockerfile_changes=[
+                        "RUN pip install --no-cache-dir -r requirements.txt"
+                    ],
+                    size_reduction_mb=20.0,  # Estimate 20MB reduction
+                )
+            )
 
         # Security suggestions
         if not any("USER" in str(analysis.environment_vars).upper()):
-            suggestions.append(OptimizationSuggestion(
-                category="security",
-                description="Create non-root user for better security",
-                impact="high",
-                effort="easy",
-                dockerfile_changes=[
-                    "RUN useradd -m appuser",
-                    "USER appuser"
-                ]
-            ))
+            suggestions.append(
+                OptimizationSuggestion(
+                    category="security",
+                    description="Create non-root user for better security",
+                    impact="high",
+                    effort="easy",
+                    dockerfile_changes=["RUN useradd -m appuser", "USER appuser"],
+                )
+            )
 
         return suggestions
 
@@ -432,9 +466,13 @@ class ImageOptimizer:
         base_image = config.get("base_image", "").lower()
 
         if "python:3" in base_image and "slim" not in base_image:
-            config["suggested_base_image"] = base_image.replace("python:3", "python:3-slim")
+            config["suggested_base_image"] = base_image.replace(
+                "python:3", "python:3-slim"
+            )
             config["optimization_notes"] = config.get("optimization_notes", [])
-            config["optimization_notes"].append("Consider using python:3-slim for smaller size")
+            config["optimization_notes"].append(
+                "Consider using python:3-slim for smaller size"
+            )
 
         return config
 
@@ -443,7 +481,9 @@ class ImageOptimizer:
         # Add cache cleaning for apt
         if "apt-get" in str(config.get("commands", [])):
             config["optimization_notes"] = config.get("optimization_notes", [])
-            config["optimization_notes"].append("Add 'rm -rf /var/lib/apt/lists/*' after apt commands")
+            config["optimization_notes"].append(
+                "Add 'rm -rf /var/lib/apt/lists/*' after apt commands"
+            )
 
         return config
 
@@ -451,7 +491,9 @@ class ImageOptimizer:
         """Optimize Docker layer caching."""
         # Suggest ordering commands for better caching
         config["optimization_notes"] = config.get("optimization_notes", [])
-        config["optimization_notes"].append("Order commands to maximize layer caching (frequent changes last)")
+        config["optimization_notes"].append(
+            "Order commands to maximize layer caching (frequent changes last)"
+        )
 
         return config
 
@@ -466,11 +508,15 @@ class ImageOptimizer:
     def _optimize_size(self, config: dict[str, Any]) -> dict[str, Any]:
         """Optimize for size reduction."""
         config["optimization_notes"] = config.get("optimization_notes", [])
-        config["optimization_notes"].append("Use .dockerignore to exclude unnecessary files")
+        config["optimization_notes"].append(
+            "Use .dockerignore to exclude unnecessary files"
+        )
 
         return config
 
-    def _create_implementation_plan(self, suggestions: list[OptimizationSuggestion]) -> list[dict[str, Any]]:
+    def _create_implementation_plan(
+        self, suggestions: list[OptimizationSuggestion]
+    ) -> list[dict[str, Any]]:
         """Create an implementation plan from suggestions."""
         # Sort by impact and effort
         priority_order = {"high": 3, "medium": 2, "low": 1}
@@ -478,16 +524,23 @@ class ImageOptimizer:
 
         sorted_suggestions = sorted(
             suggestions,
-            key=lambda s: (priority_order.get(s.impact, 0), effort_order.get(s.effort, 0)),
-            reverse=True
+            key=lambda s: (
+                priority_order.get(s.impact, 0),
+                effort_order.get(s.effort, 0),
+            ),
+            reverse=True,
         )
 
         plan = []
         for i, suggestion in enumerate(sorted_suggestions, 1):
-            plan.append({
-                "priority": i,
-                "suggestion": suggestion.to_dict(),
-                "implementation_order": "immediate" if suggestion.effort == "easy" else "planned"
-            })
+            plan.append(
+                {
+                    "priority": i,
+                    "suggestion": suggestion.to_dict(),
+                    "implementation_order": (
+                        "immediate" if suggestion.effort == "easy" else "planned"
+                    ),
+                }
+            )
 
         return plan

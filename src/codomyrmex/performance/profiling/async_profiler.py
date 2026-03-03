@@ -81,6 +81,7 @@ class AsyncProfiler:
 
     def profile(self, func: Callable) -> Callable:
         """Decorator to profile an async function."""
+
         @functools.wraps(func)
         async def wrapper(*args: Any, **kwargs: Any) -> Any:
             start = time.perf_counter()
@@ -102,14 +103,20 @@ class AsyncProfiler:
                     self._slow_calls.append(entry)
                     logger.warning(
                         "SLOW async call: %s took %.4fs (threshold: %.4fs)",
-                        func.__name__, duration, self.slow_threshold,
+                        func.__name__,
+                        duration,
+                        self.slow_threshold,
                     )
                 else:
-                    logger.debug("Async Profile: %s took %.4fs", func.__name__, duration)
+                    logger.debug(
+                        "Async Profile: %s took %.4fs", func.__name__, duration
+                    )
+
         return wrapper
 
     def profile_sync(self, func: Callable) -> Callable:
         """Decorator to profile a synchronous function."""
+
         @functools.wraps(func)
         def wrapper(*args: Any, **kwargs: Any) -> Any:
             """Wrapper."""
@@ -130,11 +137,14 @@ class AsyncProfiler:
                 self._entries[func.__name__].append(entry)
                 if duration > self.slow_threshold:
                     self._slow_calls.append(entry)
+
         return wrapper
 
     def record(self, function_name: str, duration: float, error: str = "") -> None:
         """Manually record a profiling entry."""
-        entry = ProfileEntry(function_name=function_name, duration_seconds=duration, error=error)
+        entry = ProfileEntry(
+            function_name=function_name, duration_seconds=duration, error=error
+        )
         self._entries[function_name].append(entry)
         if duration > self.slow_threshold:
             self._slow_calls.append(entry)
@@ -188,9 +198,13 @@ class AsyncProfiler:
             "total_calls": self.total_calls,
             "slow_calls": len(self._slow_calls),
             "functions": [
-                {"name": s.function_name, "calls": s.call_count,
-                 "avg_ms": round(s.avg_ms, 2), "max_ms": round(s.max_ms, 2),
-                 "errors": s.error_count}
+                {
+                    "name": s.function_name,
+                    "calls": s.call_count,
+                    "avg_ms": round(s.avg_ms, 2),
+                    "max_ms": round(s.max_ms, 2),
+                    "errors": s.error_count,
+                }
                 for s in stats
             ],
         }

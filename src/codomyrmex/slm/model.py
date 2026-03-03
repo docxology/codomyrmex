@@ -6,6 +6,7 @@ Architecture:
 - Language model head (d_model -> vocab_size)
 - Greedy autoregressive generation
 """
+
 from dataclasses import dataclass
 
 import numpy as np
@@ -193,9 +194,21 @@ class _InlineMultiHeadAttention:
     def __call__(self, query, key, value, mask=None):
         batch, seq_q, _ = query.shape
         _, seq_k, _ = key.shape
-        Q = (query @ self.W_Q).reshape(batch, seq_q, self.n_heads, self.d_k).transpose(0, 2, 1, 3)
-        K = (key @ self.W_K).reshape(batch, seq_k, self.n_heads, self.d_k).transpose(0, 2, 1, 3)
-        V = (value @ self.W_V).reshape(batch, seq_k, self.n_heads, self.d_k).transpose(0, 2, 1, 3)
+        Q = (
+            (query @ self.W_Q)
+            .reshape(batch, seq_q, self.n_heads, self.d_k)
+            .transpose(0, 2, 1, 3)
+        )
+        K = (
+            (key @ self.W_K)
+            .reshape(batch, seq_k, self.n_heads, self.d_k)
+            .transpose(0, 2, 1, 3)
+        )
+        V = (
+            (value @ self.W_V)
+            .reshape(batch, seq_k, self.n_heads, self.d_k)
+            .transpose(0, 2, 1, 3)
+        )
         scores = Q @ K.swapaxes(-2, -1) / np.sqrt(self.d_k)
         if mask is not None:
             scores = np.where(mask, scores, -1e9)

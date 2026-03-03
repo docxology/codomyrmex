@@ -11,6 +11,7 @@ logger = get_logger(__name__)
 
 class EventType(Enum):
     """Types of physical security events."""
+
     ACCESS = "access"
     MOVEMENT = "movement"
     ALARM = "alarm"
@@ -117,4 +118,3 @@ def log_physical_event(
     if monitor is None:
         monitor = SurveillanceMonitor()
     return monitor.log_event(event_type, location, description, severity)
-

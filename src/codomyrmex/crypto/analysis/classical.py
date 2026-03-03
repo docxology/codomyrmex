@@ -128,7 +128,8 @@ def break_caesar(ciphertext: str) -> list[CaesarResult]:
 
     logger.debug(
         "Caesar break: best shift=%d, score=%.2f",
-        results[0].shift, results[0].score,
+        results[0].shift,
+        results[0].score,
     )
     return results
 
@@ -236,7 +237,8 @@ def _estimate_key_length(ciphertext: str, max_key_length: int) -> int:
 
 
 def break_vigenere(
-    ciphertext: str, max_key_length: int = 20,
+    ciphertext: str,
+    max_key_length: int = 20,
 ) -> VigenereResult:
     """Break a Vigenere cipher by finding the key.
 

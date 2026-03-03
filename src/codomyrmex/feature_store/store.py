@@ -79,7 +79,9 @@ class InMemoryFeatureStore(FeatureStore):
 
     def __init__(self):
         self._definitions: dict[str, FeatureDefinition] = {}
-        self._values: dict[str, dict[str, FeatureValue]] = {}  # feature_name -> entity_id -> value
+        self._values: dict[
+            str, dict[str, FeatureValue]
+        ] = {}  # feature_name -> entity_id -> value
         self._lock = threading.Lock()
 
     def register_feature(self, definition: FeatureDefinition) -> None:
@@ -93,7 +95,9 @@ class InMemoryFeatureStore(FeatureStore):
             FeatureRegistrationError: If definition is invalid.
         """
         if not definition or not definition.name:
-            raise FeatureRegistrationError("Invalid feature definition: name is required")
+            raise FeatureRegistrationError(
+                "Invalid feature definition: name is required"
+            )
 
         with self._lock:
             self._definitions[definition.name] = definition

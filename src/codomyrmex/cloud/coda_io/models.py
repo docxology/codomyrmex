@@ -17,14 +17,17 @@ providing type-safe access to API data with automatic deserialization.
 # Enums
 # ============================================================================
 
+
 class TableType(Enum):
     """Type of table in Coda."""
+
     TABLE = "table"
     VIEW = "view"
 
 
 class PageType(Enum):
     """Type of page content."""
+
     CANVAS = "canvas"
     EMBED = "embed"
     SYNC_PAGE = "syncPage"
@@ -32,6 +35,7 @@ class PageType(Enum):
 
 class ControlType(Enum):
     """Type of control widget."""
+
     AI_BLOCK = "aiBlock"
     BUTTON = "button"
     CHECKBOX = "checkbox"
@@ -50,6 +54,7 @@ class ControlType(Enum):
 
 class AccessType(Enum):
     """Permission access level."""
+
     NONE = "none"
     READONLY = "readonly"
     WRITE = "write"
@@ -58,6 +63,7 @@ class AccessType(Enum):
 
 class DocPublishMode(Enum):
     """Publishing mode for docs."""
+
     VIEW = "view"
     PLAY = "play"
     EDIT = "edit"
@@ -65,6 +71,7 @@ class DocPublishMode(Enum):
 
 class ValueFormat(Enum):
     """Format for cell values."""
+
     SIMPLE = "simple"
     SIMPLE_WITH_ARRAYS = "simpleWithArrays"
     RICH = "rich"
@@ -74,9 +81,11 @@ class ValueFormat(Enum):
 # Reference Types
 # ============================================================================
 
+
 @dataclass
 class Icon:
     """Icon information."""
+
     name: str | None = None
     type: str | None = None
     browser_link: str | None = None
@@ -96,6 +105,7 @@ class Icon:
 @dataclass
 class Image:
     """Image information."""
+
     browser_link: str | None = None
     type: str | None = None
     width: int | None = None
@@ -117,6 +127,7 @@ class Image:
 @dataclass
 class WorkspaceReference:
     """Reference to a Coda workspace."""
+
     id: str
     type: str = "workspace"
     name: str | None = None
@@ -140,6 +151,7 @@ class WorkspaceReference:
 @dataclass
 class FolderReference:
     """Reference to a Coda folder."""
+
     id: str
     type: str = "folder"
     name: str | None = None
@@ -161,6 +173,7 @@ class FolderReference:
 @dataclass
 class DocSize:
     """Size information for a doc."""
+
     total_row_count: int = 0
     table_and_view_count: int = 0
     page_count: int = 0
@@ -182,6 +195,7 @@ class DocSize:
 @dataclass
 class PageReference:
     """Reference to a page."""
+
     id: str
     type: str = "page"
     href: str | None = None
@@ -205,6 +219,7 @@ class PageReference:
 @dataclass
 class TableReference:
     """Reference to a table."""
+
     id: str
     type: str = "table"
     table_type: str | None = None
@@ -230,6 +245,7 @@ class TableReference:
 @dataclass
 class ColumnReference:
     """Reference to a column."""
+
     id: str
     type: str = "column"
     href: str | None = None
@@ -250,9 +266,11 @@ class ColumnReference:
 # Core Resources
 # ============================================================================
 
+
 @dataclass
 class Doc:
     """A Coda document."""
+
     id: str
     type: str
     href: str
@@ -298,6 +316,7 @@ class Doc:
 @dataclass
 class DocList:
     """List of docs with pagination."""
+
     items: list[Doc]
     href: str | None = None
     next_page_token: str | None = None
@@ -317,6 +336,7 @@ class DocList:
 @dataclass
 class PersonValue:
     """A person reference."""
+
     name: str | None = None
     email: str | None = None
 
@@ -334,6 +354,7 @@ class PersonValue:
 @dataclass
 class Page:
     """A page in a Coda doc."""
+
     id: str
     type: str
     href: str
@@ -360,7 +381,11 @@ class Page:
         children = [PageReference.from_dict(c) for c in children_data if c]
 
         authors_data = data.get("authors", [])
-        authors = [PersonValue.from_dict(a) for a in authors_data if a] if authors_data else None
+        authors = (
+            [PersonValue.from_dict(a) for a in authors_data if a]
+            if authors_data
+            else None
+        )
 
         return cls(
             id=data.get("id", ""),
@@ -387,6 +412,7 @@ class Page:
 @dataclass
 class PageList:
     """List of pages with pagination."""
+
     items: list[Page]
     href: str | None = None
     next_page_token: str | None = None
@@ -406,6 +432,7 @@ class PageList:
 @dataclass
 class PageContentItem:
     """A content item within a page."""
+
     id: str
     type: str
     text: str | None = None
@@ -423,6 +450,7 @@ class PageContentItem:
 @dataclass
 class Sort:
     """Sort configuration for a table."""
+
     column: ColumnReference
     direction: str  # "ascending" or "descending"
 
@@ -430,7 +458,8 @@ class Sort:
     def from_dict(cls, data: dict[str, Any]) -> "Sort":
 
         return cls(
-            column=ColumnReference.from_dict(data.get("column")) or ColumnReference(id=""),
+            column=ColumnReference.from_dict(data.get("column"))
+            or ColumnReference(id=""),
             direction=data.get("direction", "ascending"),
         )
 
@@ -438,6 +467,7 @@ class Sort:
 @dataclass
 class Table:
     """A table in a Coda doc."""
+
     id: str
     type: str
     table_type: str
@@ -482,6 +512,7 @@ class Table:
 @dataclass
 class TableList:
     """List of tables with pagination."""
+
     items: list[Table]
     href: str | None = None
     next_page_token: str | None = None
@@ -501,6 +532,7 @@ class TableList:
 @dataclass
 class Column:
     """A column in a Coda table."""
+
     id: str
     type: str
     href: str
@@ -532,6 +564,7 @@ class Column:
 @dataclass
 class ColumnList:
     """List of columns with pagination."""
+
     items: list[Column]
     href: str | None = None
     next_page_token: str | None = None
@@ -551,6 +584,7 @@ class ColumnList:
 @dataclass
 class Row:
     """A row in a Coda table."""
+
     id: str
     type: str
     href: str
@@ -582,6 +616,7 @@ class Row:
 @dataclass
 class RowList:
     """List of rows with pagination."""
+
     items: list[Row]
     href: str | None = None
     next_page_token: str | None = None
@@ -603,6 +638,7 @@ class RowList:
 @dataclass
 class CellEdit:
     """A cell value edit."""
+
     column: str  # Column ID or name
     value: Any
 
@@ -617,6 +653,7 @@ class CellEdit:
 @dataclass
 class RowEdit:
     """A row edit with cell values."""
+
     cells: list[CellEdit]
 
     def to_dict(self) -> dict[str, Any]:
@@ -627,6 +664,7 @@ class RowEdit:
 @dataclass
 class Formula:
     """A named formula in a Coda doc."""
+
     id: str
     type: str
     href: str
@@ -649,6 +687,7 @@ class Formula:
 @dataclass
 class FormulaList:
     """List of formulas with pagination."""
+
     items: list[Formula]
     href: str | None = None
     next_page_token: str | None = None
@@ -668,6 +707,7 @@ class FormulaList:
 @dataclass
 class Control:
     """A control in a Coda doc."""
+
     id: str
     type: str
     href: str
@@ -693,6 +733,7 @@ class Control:
 @dataclass
 class ControlList:
     """List of controls with pagination."""
+
     items: list[Control]
     href: str | None = None
     next_page_token: str | None = None
@@ -713,9 +754,11 @@ class ControlList:
 # Permissions
 # ============================================================================
 
+
 @dataclass
 class Principal:
     """A principal (user or group) for permissions."""
+
     type: str  # "email", "domain", "anyone"
     email: str | None = None
 
@@ -739,6 +782,7 @@ class Principal:
 @dataclass
 class Permission:
     """A permission on a doc."""
+
     id: str
     principal: Principal
     access: str
@@ -756,6 +800,7 @@ class Permission:
 @dataclass
 class PermissionList:
     """List of permissions with pagination."""
+
     items: list[Permission]
     href: str
     next_page_token: str | None = None
@@ -775,6 +820,7 @@ class PermissionList:
 @dataclass
 class SharingMetadata:
     """Sharing metadata for a doc."""
+
     can_share: bool
     can_share_with_workspace: bool
     can_share_with_org: bool
@@ -794,6 +840,7 @@ class SharingMetadata:
 @dataclass
 class ACLSettings:
     """ACL settings for a doc."""
+
     allow_editors_to_change_permissions: bool
     allow_copying: bool
     allow_viewers_to_request_editing: bool
@@ -802,9 +849,13 @@ class ACLSettings:
     def from_dict(cls, data: dict[str, Any]) -> "ACLSettings":
 
         return cls(
-            allow_editors_to_change_permissions=data.get("allowEditorsToChangePermissions", False),
+            allow_editors_to_change_permissions=data.get(
+                "allowEditorsToChangePermissions", False
+            ),
             allow_copying=data.get("allowCopying", False),
-            allow_viewers_to_request_editing=data.get("allowViewersToRequestEditing", False),
+            allow_viewers_to_request_editing=data.get(
+                "allowViewersToRequestEditing", False
+            ),
         )
 
 
@@ -812,9 +863,11 @@ class ACLSettings:
 # User / Account
 # ============================================================================
 
+
 @dataclass
 class User:
     """Current user information from whoami endpoint."""
+
     name: str
     login_id: str
     type: str
@@ -843,9 +896,11 @@ class User:
 # Mutation Results
 # ============================================================================
 
+
 @dataclass
 class MutationStatus:
     """Status of an asynchronous mutation."""
+
     completed: bool
     warning: str | None = None
 
@@ -861,6 +916,7 @@ class MutationStatus:
 @dataclass
 class InsertRowsResult:
     """Result of inserting rows."""
+
     request_id: str
     added_row_ids: list[str] | None = None
 
@@ -875,6 +931,7 @@ class InsertRowsResult:
 # ============================================================================
 # Helpers
 # ============================================================================
+
 
 def _parse_datetime(value: str | None) -> datetime | None:
     """Parse ISO 8601 datetime string."""

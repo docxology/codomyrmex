@@ -33,7 +33,9 @@ def cli_commands():
     return {
         "pending": lambda: print(
             "Pending Migrations\n"
-            "  Migration statuses: " + ", ".join(ms.value for ms in MigrationStatus) + "\n"
+            "  Migration statuses: "
+            + ", ".join(ms.value for ms in MigrationStatus)
+            + "\n"
             "  Directions: " + ", ".join(md.value for md in MigrationDirection) + "\n"
             "  Use MigrationRunner to check for and list pending migrations."
         ),

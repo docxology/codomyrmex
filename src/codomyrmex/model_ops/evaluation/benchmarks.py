@@ -33,6 +33,7 @@ class BenchmarkCase:
         metadata: Arbitrary metadata for categorization and filtering.
         tags: Tags for grouping and filtering benchmark cases.
     """
+
     input_text: str
     expected_output: str
     id: str = ""
@@ -56,6 +57,7 @@ class BenchmarkResult:
         actual_output: The actual output produced by the model.
         metadata: Additional metadata about the run.
     """
+
     case_id: str
     score: float
     duration_ms: float
@@ -91,6 +93,7 @@ class SuiteResult:
         total_duration_ms: Total time for all cases in milliseconds.
         metadata: Additional metadata about the suite run.
     """
+
     suite_name: str
     results: list[BenchmarkResult] = field(default_factory=list)
     total_duration_ms: float = 0.0
@@ -116,9 +119,7 @@ class SuiteResult:
         """Average score across all cases."""
         if not self.results:
             return 0.0
-        return round(
-            sum(r.score for r in self.results) / len(self.results), 6
-        )
+        return round(sum(r.score for r in self.results) / len(self.results), 6)
 
     @property
     def pass_rate(self) -> float:
@@ -153,16 +154,12 @@ class SuiteResult:
         if Result is None or ResultStatus is None:
             return None
 
-        status = (
-            ResultStatus.SUCCESS
-            if self.pass_rate >= 0.5
-            else ResultStatus.FAILURE
-        )
+        status = ResultStatus.SUCCESS if self.pass_rate >= 0.5 else ResultStatus.FAILURE
         return Result(
             status=status,
             data=self.to_dict(),
             message=f"Suite '{self.suite_name}': {self.passed_cases}/{self.total_cases} passed "
-                    f"(avg score: {self.average_score})",
+            f"(avg score: {self.average_score})",
             duration_ms=self.total_duration_ms,
             metadata={"suite_name": self.suite_name},
         )
@@ -298,14 +295,16 @@ class BenchmarkSuite:
 
             score_value = active_scorer.score(actual_output, case.expected_output)
 
-            results.append(BenchmarkResult(
-                case_id=case.id,
-                score=score_value,
-                duration_ms=duration_ms,
-                scorer_name=active_scorer.name,
-                actual_output=actual_output,
-                metadata=case.metadata,
-            ))
+            results.append(
+                BenchmarkResult(
+                    case_id=case.id,
+                    score=score_value,
+                    duration_ms=duration_ms,
+                    scorer_name=active_scorer.name,
+                    actual_output=actual_output,
+                    metadata=case.metadata,
+                )
+            )
 
         suite_end = time.perf_counter()
         total_duration_ms = round((suite_end - suite_start) * 1000, 3)

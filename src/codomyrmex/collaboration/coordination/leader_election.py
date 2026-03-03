@@ -22,6 +22,7 @@ logger = get_logger(__name__)
 
 class ElectionState(Enum):
     """State of an election process."""
+
     IDLE = "idle"
     IN_PROGRESS = "in_progress"
     COMPLETED = "completed"
@@ -31,6 +32,7 @@ class ElectionState(Enum):
 @dataclass
 class ElectionResult:
     """Result of a leader election."""
+
     leader_id: str | None
     success: bool
     round_count: int
@@ -83,14 +85,18 @@ class LeaderElection(ABC):
 
         This is the base implementation - subclasses should override.
         """
-        raise NotImplementedError("Subclasses must implement elect()")  # ABC: intentional
+        raise NotImplementedError(
+            "Subclasses must implement elect()"
+        )  # ABC: intentional
 
     def _record_result(self, result: ElectionResult) -> None:
         """Record an election result."""
         self._election_history.append(result)
         if result.success:
             self._current_leader = result.leader_id
-        self._state = ElectionState.COMPLETED if result.success else ElectionState.FAILED
+        self._state = (
+            ElectionState.COMPLETED if result.success else ElectionState.FAILED
+        )
 
 
 class BullyElection(LeaderElection):
@@ -176,7 +182,9 @@ class BullyElection(LeaderElection):
         )
 
         self._record_result(result)
-        logger.info(f"Bully election complete: Leader is {leader.name} ({leader.agent_id})")
+        logger.info(
+            f"Bully election complete: Leader is {leader.name} ({leader.agent_id})"
+        )
         return result
 
 
@@ -253,7 +261,9 @@ class RingElection(LeaderElection):
         )
 
         self._record_result(result)
-        logger.info(f"Ring election complete: Leader is {leader.name} ({leader.agent_id})")
+        logger.info(
+            f"Ring election complete: Leader is {leader.name} ({leader.agent_id})"
+        )
         return result
 
 
@@ -306,7 +316,9 @@ class RandomElection(LeaderElection):
         )
 
         self._record_result(result)
-        logger.info(f"Random election complete: Leader is {leader.name} ({leader.agent_id})")
+        logger.info(
+            f"Random election complete: Leader is {leader.name} ({leader.agent_id})"
+        )
         return result
 
 

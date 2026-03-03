@@ -247,9 +247,7 @@ class VaultConfig:
         """Return a dictionary representation of this object."""
         return {
             "vault_path": str(self.vault_path),
-            "kernel": {
-                "primitives": [p.to_dict() for p in self.kernel.primitives]
-            },
+            "kernel": {"primitives": [p.to_dict() for p in self.kernel.primitives]},
             "active_spaces": [s.value for s in self.active_spaces],
             "derivation_signals": [s.to_dict() for s in self.derivation_signals],
             "prerequisites": self.prerequisites,

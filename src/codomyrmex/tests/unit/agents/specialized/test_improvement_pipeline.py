@@ -22,6 +22,7 @@ from codomyrmex.agents.specialized.improvement_report import (
 
 # ─── Anti-Pattern Detector ────────────────────────────────────────────
 
+
 class TestAntiPatternDetector:
     """Test suite for AntiPatternDetector."""
 
@@ -65,6 +66,7 @@ class TestAntiPatternDetector:
 
 
 # ─── ImprovementPipeline ──────────────────────────────────────────────
+
 
 class TestImprovementPipeline:
     """Test suite for ImprovementPipeline."""
@@ -116,6 +118,7 @@ class TestImprovementPipeline:
 
 # ─── ImprovementReport ───────────────────────────────────────────────
 
+
 class TestImprovementReport:
     """Test suite for ImprovementReport."""
 
@@ -123,15 +126,26 @@ class TestImprovementReport:
         """Test functionality: report to markdown."""
         report = ImprovementReport(
             source_file="app.py",
-            anti_patterns=[AntiPattern(
-                name="bare_except", description="Catches all",
-                file_path="app.py", line_start=5, severity=0.7,
-            )],
-            changes=[ProposedChange(
-                file_path="app.py", line_start=5, line_end=5,
-                old_code="except:", new_code="except Exception:",
-                rationale="Fix bare except", anti_pattern="bare_except",
-            )],
+            anti_patterns=[
+                AntiPattern(
+                    name="bare_except",
+                    description="Catches all",
+                    file_path="app.py",
+                    line_start=5,
+                    severity=0.7,
+                )
+            ],
+            changes=[
+                ProposedChange(
+                    file_path="app.py",
+                    line_start=5,
+                    line_end=5,
+                    old_code="except:",
+                    new_code="except Exception:",
+                    rationale="Fix bare except",
+                    anti_pattern="bare_except",
+                )
+            ],
             test_results=TestSuiteResult(total=1, passed=1),
             review_verdict=ReviewVerdict.APPROVE,
             overall_confidence=0.85,

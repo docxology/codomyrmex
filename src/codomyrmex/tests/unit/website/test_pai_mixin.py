@@ -50,9 +50,17 @@ class TestGetPaiMissions:
         if not missions:
             pytest.skip("No missions found in ~/.claude/MEMORY/STATE/missions/")
         mission = missions[0]
-        for key in ("id", "title", "status", "priority", "description",
-                     "success_criteria", "linked_projects",
-                     "completion_percentage", "recent_activity"):
+        for key in (
+            "id",
+            "title",
+            "status",
+            "priority",
+            "description",
+            "success_criteria",
+            "linked_projects",
+            "completion_percentage",
+            "recent_activity",
+        ):
             assert key in mission, f"Missing key: {key}"
 
     def test_sorted_by_priority(self, provider: DataProvider) -> None:
@@ -82,9 +90,18 @@ class TestGetPaiProjects:
         if not projects:
             pytest.skip("No projects found in ~/.claude/MEMORY/STATE/projects/")
         project = projects[0]
-        for key in ("id", "title", "status", "goal", "priority",
-                     "parent_mission", "tags", "completion_percentage",
-                     "task_counts", "recent_activity"):
+        for key in (
+            "id",
+            "title",
+            "status",
+            "goal",
+            "priority",
+            "parent_mission",
+            "tags",
+            "completion_percentage",
+            "task_counts",
+            "recent_activity",
+        ):
             assert key in project, f"Missing key: {key}"
 
     def test_graceful_on_empty(self, tmp_provider: DataProvider) -> None:
@@ -203,10 +220,22 @@ class TestBuildPaiMermaidGraph:
         assert result.startswith("graph TD")
 
     def test_mission_nodes_appear(self, provider: DataProvider) -> None:
-        missions = [{"id": "m1", "title": "Mission One", "status": "active",
-                      "linked_projects": ["p1"]}]
-        projects = [{"id": "p1", "title": "Project One", "status": "active",
-                      "parent_mission": "m1"}]
+        missions = [
+            {
+                "id": "m1",
+                "title": "Mission One",
+                "status": "active",
+                "linked_projects": ["p1"],
+            }
+        ]
+        projects = [
+            {
+                "id": "p1",
+                "title": "Project One",
+                "status": "active",
+                "parent_mission": "m1",
+            }
+        ]
         result = provider._build_pai_mermaid_graph(missions, projects)
         assert "M_m1" in result
         assert "P_p1" in result
@@ -214,8 +243,14 @@ class TestBuildPaiMermaidGraph:
         assert "-->" in result
 
     def test_sanitizes_special_chars(self, provider: DataProvider) -> None:
-        missions = [{"id": "m-1/test", "title": 'Has "quotes" <tags>',
-                      "status": "active", "linked_projects": []}]
+        missions = [
+            {
+                "id": "m-1/test",
+                "title": 'Has "quotes" <tags>',
+                "status": "active",
+                "linked_projects": [],
+            }
+        ]
         result = provider._build_pai_mermaid_graph(missions, [])
         assert '"' not in result.split('"')[1] if result.count('"') >= 2 else True
         assert "<" not in result.replace("<", "")  # Tags stripped
@@ -242,16 +277,31 @@ class TestGetPaiAwarenessData:
 
     def test_top_level_keys(self, provider: DataProvider) -> None:
         result = provider.get_pai_awareness_data()
-        expected_keys = {"missions", "projects", "telos", "memory",
-                         "skills", "hooks", "metrics", "mermaid_graph"}
+        expected_keys = {
+            "missions",
+            "projects",
+            "telos",
+            "memory",
+            "skills",
+            "hooks",
+            "metrics",
+            "mermaid_graph",
+        }
         assert expected_keys.issubset(result.keys())
 
     def test_metrics_structure(self, provider: DataProvider) -> None:
         result = provider.get_pai_awareness_data()
         metrics = result["metrics"]
-        for key in ("mission_count", "project_count", "total_tasks",
-                     "completed_tasks", "telos_files", "overall_completion",
-                     "skill_count", "hook_count"):
+        for key in (
+            "mission_count",
+            "project_count",
+            "total_tasks",
+            "completed_tasks",
+            "telos_files",
+            "overall_completion",
+            "skill_count",
+            "hook_count",
+        ):
             assert key in metrics
 
     def test_overall_completion_range(self, provider: DataProvider) -> None:
@@ -269,4 +319,6 @@ class TestGetPaiAwarenessData:
         assert result["missions"] == []
         assert result["projects"] == []
         assert result["metrics"]["mission_count"] == 0
+
+
 """Zero-mock tests for PAIProviderMixin — tests real production code paths."""

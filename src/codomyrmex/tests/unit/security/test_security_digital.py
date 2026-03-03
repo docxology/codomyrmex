@@ -5,12 +5,12 @@ This module tests all digital security functionality including
 vulnerability scanning, security monitoring, encryption, and certificate validation.
 """
 
-
 import pytest
 
 # Import cryptography conditionally
 try:
     from cryptography.fernet import Fernet
+
     CRYPTOGRAPHY_AVAILABLE = True
 except ImportError:
     Fernet = None
@@ -19,7 +19,7 @@ except ImportError:
 # Skip all tests if cryptography is not available
 pytestmark = pytest.mark.skipif(
     not CRYPTOGRAPHY_AVAILABLE,
-    reason="cryptography package not available (install with: uv sync --extra security)"
+    reason="cryptography package not available (install with: uv sync --extra security)",
 )
 
 try:
@@ -29,6 +29,7 @@ try:
         audit_code_security,
         scan_vulnerabilities,
     )
+
     VULNERABILITY_AVAILABLE = True
 except ImportError:
     VULNERABILITY_AVAILABLE = False
@@ -38,6 +39,7 @@ try:
         SecurityMonitor,
         monitor_security_events,
     )
+
     MONITORING_AVAILABLE = True
 except ImportError:
     MONITORING_AVAILABLE = False
@@ -48,6 +50,7 @@ try:
         decrypt_sensitive_data,
         encrypt_sensitive_data,
     )
+
     ENCRYPTION_AVAILABLE = True
 except ImportError:
     ENCRYPTION_AVAILABLE = False
@@ -57,6 +60,7 @@ try:
         CertificateValidator,
         validate_ssl_certificates,
     )
+
     CERTIFICATE_AVAILABLE = True
 except ImportError:
     CERTIFICATE_AVAILABLE = False
@@ -65,13 +69,17 @@ except ImportError:
 class TestVulnerabilityScanner:
     """Test vulnerability scanning functionality."""
 
-    @pytest.mark.skipif(not VULNERABILITY_AVAILABLE, reason="Vulnerability scanner not available")
+    @pytest.mark.skipif(
+        not VULNERABILITY_AVAILABLE, reason="Vulnerability scanner not available"
+    )
     def test_vulnerability_scanner_initialization(self):
         """Test VulnerabilityScanner can be initialized."""
         scanner = VulnerabilityScanner()
         assert scanner is not None
 
-    @pytest.mark.skipif(not VULNERABILITY_AVAILABLE, reason="Vulnerability scanner not available")
+    @pytest.mark.skipif(
+        not VULNERABILITY_AVAILABLE, reason="Vulnerability scanner not available"
+    )
     def test_scan_vulnerabilities_basic(self, tmp_path):
         """Test basic vulnerability scanning."""
         # Create a test file
@@ -87,7 +95,9 @@ class TestVulnerabilityScanner:
             # May fail if dependencies not available, that's okay
             pytest.skip(f"Vulnerability scanning failed: {e}")
 
-    @pytest.mark.skipif(not VULNERABILITY_AVAILABLE, reason="Vulnerability scanner not available")
+    @pytest.mark.skipif(
+        not VULNERABILITY_AVAILABLE, reason="Vulnerability scanner not available"
+    )
     def test_audit_code_security(self, tmp_path):
         """Test code security auditing."""
         test_file = tmp_path / "test.py"
@@ -104,13 +114,17 @@ class TestVulnerabilityScanner:
 class TestSecurityMonitor:
     """Test security monitoring functionality."""
 
-    @pytest.mark.skipif(not MONITORING_AVAILABLE, reason="Security monitor not available")
+    @pytest.mark.skipif(
+        not MONITORING_AVAILABLE, reason="Security monitor not available"
+    )
     def test_security_monitor_initialization(self):
         """Test SecurityMonitor can be initialized."""
         monitor = SecurityMonitor()
         assert monitor is not None
 
-    @pytest.mark.skipif(not MONITORING_AVAILABLE, reason="Security monitor not available")
+    @pytest.mark.skipif(
+        not MONITORING_AVAILABLE, reason="Security monitor not available"
+    )
     def test_monitor_security_events(self):
         """Test monitoring security events."""
         try:
@@ -123,13 +137,17 @@ class TestSecurityMonitor:
 class TestEncryptionManager:
     """Test encryption functionality."""
 
-    @pytest.mark.skipif(not ENCRYPTION_AVAILABLE, reason="Encryption manager not available")
+    @pytest.mark.skipif(
+        not ENCRYPTION_AVAILABLE, reason="Encryption manager not available"
+    )
     def test_encryption_manager_initialization(self):
         """Test EncryptionManager can be initialized."""
         manager = EncryptionManager()
         assert manager is not None
 
-    @pytest.mark.skipif(not ENCRYPTION_AVAILABLE, reason="Encryption manager not available")
+    @pytest.mark.skipif(
+        not ENCRYPTION_AVAILABLE, reason="Encryption manager not available"
+    )
     def test_encrypt_decrypt_data(self):
         """Test encrypting and decrypting data."""
         test_data = "sensitive information"
@@ -143,8 +161,9 @@ class TestEncryptionManager:
             # Decrypt if key available
             if "key" in encrypted_result:
                 decrypted = decrypt_sensitive_data(
-                    encrypted_result.get("encrypted_data") or encrypted_result.get("data"),
-                    encrypted_result["key"]
+                    encrypted_result.get("encrypted_data")
+                    or encrypted_result.get("data"),
+                    encrypted_result["key"],
                 )
                 assert decrypted == test_data
         except Exception as e:
@@ -154,13 +173,17 @@ class TestEncryptionManager:
 class TestCertificateValidator:
     """Test certificate validation functionality."""
 
-    @pytest.mark.skipif(not CERTIFICATE_AVAILABLE, reason="Certificate validator not available")
+    @pytest.mark.skipif(
+        not CERTIFICATE_AVAILABLE, reason="Certificate validator not available"
+    )
     def test_certificate_validator_initialization(self):
         """Test CertificateValidator can be initialized."""
         validator = CertificateValidator()
         assert validator is not None
 
-    @pytest.mark.skipif(not CERTIFICATE_AVAILABLE, reason="Certificate validator not available")
+    @pytest.mark.skipif(
+        not CERTIFICATE_AVAILABLE, reason="Certificate validator not available"
+    )
     @pytest.mark.network
     def test_validate_ssl_certificate(self):
         """Test SSL certificate validation."""
@@ -170,5 +193,3 @@ class TestCertificateValidator:
             assert isinstance(result, dict)
         except Exception as e:
             pytest.skip(f"Certificate validation failed: {e}")
-
-

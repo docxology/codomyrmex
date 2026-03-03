@@ -175,6 +175,7 @@ class TestRegexScorer:
 
     def test_case_insensitive_flag(self):
         import re
+
         s = RegexScorer(flags=re.IGNORECASE)
         assert s.score("Hello World", r"hello") == 1.0
 
@@ -242,19 +243,23 @@ class TestCompositeScorer:
         # ExactMatch (weight=2): score=1.0 → contributes 2.0
         # Contains (weight=1): score=0.0 (no "world" in "hi") → contributes 0.0
         # Total weight=3, weighted_sum=2.0 → avg = 2/3
-        s = CompositeScorer([
-            WeightedScorer(ExactMatchScorer(), weight=2.0),
-            WeightedScorer(ContainsScorer(), weight=1.0),
-        ])
+        s = CompositeScorer(
+            [
+                WeightedScorer(ExactMatchScorer(), weight=2.0),
+                WeightedScorer(ContainsScorer(), weight=1.0),
+            ]
+        )
         score = s.score("hi", "hi")
         # exact=1.0 (weight=2), contains=1.0 (weight=1) → 3/3 = 1.0
         assert score == 1.0
 
     def test_weighted_average_partial(self):
-        s = CompositeScorer([
-            WeightedScorer(ExactMatchScorer(), weight=1.0),
-            WeightedScorer(ContainsScorer(), weight=1.0),
-        ])
+        s = CompositeScorer(
+            [
+                WeightedScorer(ExactMatchScorer(), weight=1.0),
+                WeightedScorer(ContainsScorer(), weight=1.0),
+            ]
+        )
         # "hello world" vs "world": exact=0, contains=1
         score = s.score("hello world", "world")
         assert score == 0.5

@@ -182,8 +182,16 @@ class TestFirecrawlConversion:
         # Real map result structure
         firecrawl_data = {
             "links": [
-                {"url": "https://example.com/page1", "title": "Page 1", "description": "Description 1"},
-                {"url": "https://example.com/page2", "title": "Page 2", "description": "Description 2"},
+                {
+                    "url": "https://example.com/page1",
+                    "title": "Page 1",
+                    "description": "Description 1",
+                },
+                {
+                    "url": "https://example.com/page2",
+                    "title": "Page 2",
+                    "description": "Description 2",
+                },
             ]
         }
 

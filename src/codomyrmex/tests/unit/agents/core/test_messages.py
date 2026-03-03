@@ -142,7 +142,9 @@ class TestAgentMessageSerialization:
         d = {
             "role": "user",
             "content": "run search",
-            "tool_calls": [{"name": "search", "arguments": {"q": "test"}, "call_id": "abc123"}],
+            "tool_calls": [
+                {"name": "search", "arguments": {"q": "test"}, "call_id": "abc123"}
+            ],
             "timestamp": "2025-01-01T00:00:00+00:00",
         }
         msg = AgentMessage.from_dict(d)

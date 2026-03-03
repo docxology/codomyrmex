@@ -20,16 +20,19 @@ from codomyrmex.relations.crm.crm import Contact, ContactManager, Interaction
 # Module import
 # ======================================================================
 
+
 @pytest.mark.unit
 def test_module_import():
     """relations module is importable."""
     from codomyrmex import relations
+
     assert relations is not None
 
 
 # ======================================================================
 # Interaction tests
 # ======================================================================
+
 
 @pytest.mark.unit
 def test_interaction_creation_defaults():
@@ -69,6 +72,7 @@ def test_interaction_timestamp_is_string():
 # ======================================================================
 # Contact tests
 # ======================================================================
+
 
 @pytest.mark.unit
 def test_contact_creation_defaults():
@@ -132,6 +136,7 @@ def test_contact_to_dict_with_interactions():
 # ======================================================================
 # ContactManager: add and get
 # ======================================================================
+
 
 @pytest.mark.unit
 def test_contact_manager_add_contact():
@@ -199,6 +204,7 @@ def test_contact_manager_len():
 # ContactManager: remove
 # ======================================================================
 
+
 @pytest.mark.unit
 def test_contact_manager_remove_contact():
     """remove_contact removes existing contact and returns True."""
@@ -220,6 +226,7 @@ def test_contact_manager_remove_nonexistent():
 # ======================================================================
 # ContactManager: search
 # ======================================================================
+
 
 @pytest.mark.unit
 def test_contact_manager_search_by_name():
@@ -295,6 +302,7 @@ def test_contact_manager_search_multiple_results():
 # ContactManager: tagging
 # ======================================================================
 
+
 @pytest.mark.unit
 def test_contact_manager_tag_contact():
     """tag_contact adds tags to an existing contact."""
@@ -349,6 +357,7 @@ def test_contact_manager_get_contacts_by_tag_empty():
 # ======================================================================
 # ContactManager: interactions
 # ======================================================================
+
 
 @pytest.mark.unit
 def test_contact_manager_add_interaction():

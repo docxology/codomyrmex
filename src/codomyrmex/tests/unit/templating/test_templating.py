@@ -30,6 +30,7 @@ except ImportError:
 # TemplateEngine Jinja2 Tests
 # ==============================================================================
 
+
 @pytest.mark.unit
 class TestTemplateEngineJinja2:
     """Tests for TemplateEngine with Jinja2."""
@@ -48,11 +49,9 @@ class TestTemplateEngineJinja2:
     def test_render_multiple_variables(self, engine):
         """Test rendering with multiple variables."""
         template = "{{ greeting }}, {{ name }}! You have {{ count }} messages."
-        result = engine.render(template, {
-            "greeting": "Hello",
-            "name": "Alice",
-            "count": 5
-        })
+        result = engine.render(
+            template, {"greeting": "Hello", "name": "Alice", "count": 5}
+        )
         assert result == "Hello, Alice! You have 5 messages."
 
     def test_render_with_conditionals(self, engine):
@@ -117,6 +116,7 @@ Line 3: {{ var3 }}"""
 # TemplateEngine Mako Tests
 # ==============================================================================
 
+
 @pytest.mark.unit
 class TestTemplateEngineMako:
     """Tests for TemplateEngine with Mako."""
@@ -156,6 +156,7 @@ class TestTemplateEngineMako:
 # ==============================================================================
 # Template Loading Tests
 # ==============================================================================
+
 
 @pytest.mark.unit
 class TestTemplateLoading:
@@ -209,6 +210,7 @@ class TestTemplateLoading:
 # Custom Filter Tests
 # ==============================================================================
 
+
 @pytest.mark.unit
 class TestCustomFilters:
     """Tests for custom template filters."""
@@ -220,6 +222,7 @@ class TestCustomFilters:
 
     def test_register_custom_filter(self, engine):
         """Test registering a custom filter."""
+
         def reverse_filter(value):
             return value[::-1]
 
@@ -228,6 +231,7 @@ class TestCustomFilters:
 
     def test_use_custom_filter(self, engine):
         """Test using a registered custom filter."""
+
         def double_filter(value):
             return value * 2
 
@@ -238,6 +242,7 @@ class TestCustomFilters:
 
     def test_use_custom_string_filter(self, engine):
         """Test using custom string filter."""
+
         def shout_filter(value):
             return value.upper() + "!"
 
@@ -264,6 +269,7 @@ class TestCustomFilters:
 # Template Class Tests
 # ==============================================================================
 
+
 @pytest.mark.unit
 class TestTemplateClass:
     """Tests for Template class."""
@@ -271,6 +277,7 @@ class TestTemplateClass:
     def test_template_render_jinja2(self):
         """Test Template render with Jinja2."""
         from jinja2 import Template as Jinja2Template
+
         jinja_template = Jinja2Template("Hello, {{ name }}!")
         template = Template(jinja_template, "jinja2")
         result = template.render({"name": "Test"})
@@ -286,6 +293,7 @@ class TestTemplateClass:
 # ==============================================================================
 # TemplateManager Tests
 # ==============================================================================
+
 
 @pytest.mark.unit
 class TestTemplateManager:
@@ -305,6 +313,7 @@ class TestTemplateManager:
     def test_add_template_object(self, manager):
         """Test adding a Template object."""
         from jinja2 import Template as Jinja2Template
+
         jinja_template = Jinja2Template("{{ value }}")
         template = Template(jinja_template, "jinja2")
         manager.add_template("value_template", template)
@@ -343,6 +352,7 @@ class TestTemplateManager:
 # Error Handling Tests
 # ==============================================================================
 
+
 @pytest.mark.unit
 class TestErrorHandling:
     """Tests for error handling."""
@@ -369,12 +379,14 @@ class TestErrorHandling:
     def test_templating_error_inherits_from_codomyrmex_error(self):
         """Test that TemplatingError inherits from CodomyrmexError."""
         from codomyrmex.exceptions import CodomyrmexError
+
         assert issubclass(TemplatingError, CodomyrmexError)
 
 
 # ==============================================================================
 # Integration Tests
 # ==============================================================================
+
 
 @pytest.mark.unit
 class TestIntegration:
@@ -402,7 +414,7 @@ class TestIntegration:
             "user": {
                 "name": "Alice",
                 "role": "Admin",
-                "permissions": ["read", "write", "delete"]
+                "permissions": ["read", "write", "delete"],
             }
         }
 
@@ -421,7 +433,7 @@ class TestIntegration:
         templates = {
             "header": "<h1>{{ title }}</h1>",
             "footer": "<footer>{{ copyright }}</footer>",
-            "list": "{% for item in items %}<li>{{ item }}</li>{% endfor %}"
+            "list": "{% for item in items %}<li>{{ item }}</li>{% endfor %}",
         }
 
         for name, content in templates.items():
@@ -451,15 +463,13 @@ class TestIntegration:
                         "name": "Engineering",
                         "employees": [
                             {"name": "Alice", "title": "Senior Dev"},
-                            {"name": "Bob", "title": "Junior Dev"}
-                        ]
+                            {"name": "Bob", "title": "Junior Dev"},
+                        ],
                     },
                     {
                         "name": "Marketing",
-                        "employees": [
-                            {"name": "Carol", "title": "Manager"}
-                        ]
-                    }
+                        "employees": [{"name": "Carol", "title": "Manager"}],
+                    },
                 ]
             }
         }

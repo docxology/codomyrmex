@@ -46,6 +46,7 @@ __version__ = "0.1.0"
 
 def cli_commands():
     """Return CLI commands for the logistics module."""
+
     def _list_routes():
         """List logistics routes."""
         print("Logistics Module - Routing:")

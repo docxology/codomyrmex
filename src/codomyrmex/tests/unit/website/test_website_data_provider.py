@@ -1,4 +1,3 @@
-
 import pytest
 
 from codomyrmex.website.data_provider import DataProvider
@@ -18,6 +17,7 @@ def mock_root(tmp_path):
 
     return tmp_path
 
+
 @pytest.mark.unit
 def test_get_system_summary(mock_root):
     """Test functionality: get system summary."""
@@ -25,6 +25,7 @@ def test_get_system_summary(mock_root):
     summary = provider.get_system_summary()
     assert summary["status"] == "Operational"
     assert "agent_count" in summary
+
 
 @pytest.mark.unit
 def test_get_modules(mock_root):
@@ -36,6 +37,7 @@ def test_get_modules(mock_root):
     assert modules[0]["name"] == "fake_agent"
     assert modules[0]["description"] == "Test Description"
     assert modules[0]["status"] == "Active"
+
 
 @pytest.mark.unit
 def test_get_description_fallback(mock_root):
@@ -59,11 +61,13 @@ class TestDataProviderDeep:
 
     def test_init(self, tmp_path):
         from codomyrmex.website.data_provider import DataProvider
+
         dp = DataProvider(root_dir=tmp_path)
         assert dp is not None
 
     def test_get_doc_tree(self, tmp_path):
         from codomyrmex.website.data_provider import DataProvider
+
         # Create minimal doc structure
         (tmp_path / "README.md").write_text("# Project")
         (tmp_path / "docs").mkdir(exist_ok=True)
@@ -74,7 +78,8 @@ class TestDataProviderDeep:
 
     def test_get_config_files(self, tmp_path):
         from codomyrmex.website.data_provider import DataProvider
-        (tmp_path / "pyproject.toml").write_text("[project]\nname=\"test\"")
+
+        (tmp_path / "pyproject.toml").write_text('[project]\nname="test"')
         dp = DataProvider(root_dir=tmp_path)
         configs = dp.get_config_files()
         assert isinstance(configs, (list, dict))

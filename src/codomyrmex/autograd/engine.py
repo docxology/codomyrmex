@@ -16,6 +16,7 @@ import numpy as np
 # Scalar Autograd: Value
 # ---------------------------------------------------------------------------
 
+
 class Value:
     """A scalar value that tracks its computation graph for reverse-mode autodiff.
 
@@ -66,8 +67,10 @@ class Value:
 
     def __pow__(self, other: float | int) -> Value:
         if isinstance(other, Value):
-            raise NotImplementedError("Value**Value is not supported; use float exponent")
-        out = Value(self.data ** other, (self,), f"**{other}")
+            raise NotImplementedError(
+                "Value**Value is not supported; use float exponent"
+            )
+        out = Value(self.data**other, (self,), f"**{other}")
 
         def _backward() -> None:
             self.grad += (other * self.data ** (other - 1)) * out.grad
@@ -82,7 +85,7 @@ class Value:
         return self + (-other if isinstance(other, Value) else Value(-other))
 
     def __truediv__(self, other: Value | float | int) -> Value:
-        return self * (other ** -1 if isinstance(other, Value) else Value(other) ** -1)
+        return self * (other**-1 if isinstance(other, Value) else Value(other) ** -1)
 
     def __radd__(self, other: float | int) -> Value:
         return self + other
@@ -94,7 +97,7 @@ class Value:
         return Value(other) + (-self)
 
     def __rtruediv__(self, other: float | int) -> Value:
-        return Value(other) * (self ** -1)
+        return Value(other) * (self**-1)
 
     # -- special math -------------------------------------------------------
 
@@ -115,7 +118,7 @@ class Value:
         out = Value(t, (self,), "tanh")
 
         def _backward() -> None:
-            self.grad += (1 - t ** 2) * out.grad
+            self.grad += (1 - t**2) * out.grad
 
         out._backward = _backward
         return out
@@ -176,6 +179,7 @@ class Value:
 # ---------------------------------------------------------------------------
 # Tensor Autograd
 # ---------------------------------------------------------------------------
+
 
 class Tensor:
     """A thin numpy-backed tensor with reverse-mode autodiff support.
@@ -363,6 +367,7 @@ class Tensor:
 # ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------
+
 
 def _unbroadcast(grad: np.ndarray, target_shape: tuple[int, ...]) -> np.ndarray:
     """Sum out dimensions that were broadcast to match *target_shape*."""

@@ -28,7 +28,6 @@ class TestCheckGitAvailability:
         # Should be True if Git is installed (which it should be in test environment)
 
 
-
 @pytest.mark.unit
 class TestIsGitRepository:
     """Tests for is_git_repository function."""
@@ -118,6 +117,7 @@ class TestCreateBranch:
 
         # Switch back to main
         from codomyrmex.git_operations import switch_branch
+
         switch_branch("main", temp_git_repo)
 
         # Try to create again (should fail)
@@ -189,4 +189,3 @@ class TestCommitChanges:
         """Test committing in non-Git directory."""
         result = commit_changes("Test commit", temp_dir)
         assert result is None
-

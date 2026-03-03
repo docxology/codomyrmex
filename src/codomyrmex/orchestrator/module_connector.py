@@ -55,7 +55,10 @@ class ModuleConnector:
     ) -> None:
         """Register the item in the registry."""
         self._bindings[name] = ServiceBinding(
-            name=name, factory=factory, singleton=singleton, tags=tags or [],
+            name=name,
+            factory=factory,
+            singleton=singleton,
+            tags=tags or [],
         )
 
     def resolve(self, name: str) -> Any:

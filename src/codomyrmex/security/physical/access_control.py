@@ -22,6 +22,7 @@ def get_access_control_system() -> "AccessControlSystem":
 
 class AccessLevel(Enum):
     """Security clearance levels for access control."""
+
     PUBLIC = "public"
     RESTRICTED = "restricted"
     CONFIDENTIAL = "confidential"
@@ -69,13 +70,15 @@ class AccessControlSystem:
             self.permissions[user_id] = []
 
         self.permissions[user_id].append(permission)
-        self.audit_trail.append({
-            "action": "grant",
-            "user_id": user_id,
-            "resource": resource,
-            "permission_type": permission_type,
-            "timestamp": datetime.now().isoformat(),
-        })
+        self.audit_trail.append(
+            {
+                "action": "grant",
+                "user_id": user_id,
+                "resource": resource,
+                "permission_type": permission_type,
+                "timestamp": datetime.now().isoformat(),
+            }
+        )
         logger.info(f"Granted {permission_type} access to {user_id} for {resource}")
         return permission
 
@@ -83,15 +86,16 @@ class AccessControlSystem:
         """Revoke access permission for a user."""
         if user_id in self.permissions:
             self.permissions[user_id] = [
-                p for p in self.permissions[user_id]
-                if p.resource != resource
+                p for p in self.permissions[user_id] if p.resource != resource
             ]
-            self.audit_trail.append({
-                "action": "revoke",
-                "user_id": user_id,
-                "resource": resource,
-                "timestamp": datetime.now().isoformat(),
-            })
+            self.audit_trail.append(
+                {
+                    "action": "revoke",
+                    "user_id": user_id,
+                    "resource": resource,
+                    "timestamp": datetime.now().isoformat(),
+                }
+            )
             logger.info(f"Revoked access for {user_id} to {resource}")
             return True
         return False
@@ -108,7 +112,10 @@ class AccessControlSystem:
         now = datetime.now()
         for permission in self.permissions[user_id]:
             if permission.resource == resource:
-                if permission.permission_type == permission_type or permission.permission_type == "admin":
+                if (
+                    permission.permission_type == permission_type
+                    or permission.permission_type == "admin"
+                ):
                     if permission.expires_at is None or permission.expires_at > now:
                         return True
         return False
@@ -148,4 +155,3 @@ def revoke_access(
     if access_control is None:
         access_control = get_access_control_system()
     return access_control.revoke_access(user_id, resource)
-

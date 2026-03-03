@@ -25,6 +25,7 @@ except ImportError:
 def _raise_for_api_error(exc: Exception, context: str):
     """Import and delegate to the module-level error raiser."""
     from codomyrmex.email.agentmail.provider import _raise_for_api_error as _raise
+
     _raise(exc, context)
 
 
@@ -62,8 +63,8 @@ class DraftMixin:
                 kwargs["html"] = draft.body_html
 
             response = self._client.inboxes.drafts.create(resolved_inbox, **kwargs)
-            draft_id = (
-                getattr(response, "draft_id", None) or getattr(response, "id", None)
+            draft_id = getattr(response, "draft_id", None) or getattr(
+                response, "id", None
             )
             if not draft_id:
                 raise EmailAPIError("AgentMail returned no draft ID from create_draft.")
@@ -121,7 +122,9 @@ class DraftMixin:
         except ApiError as exc:
             _raise_for_api_error(exc, f"get_draft({draft_id})")
         except Exception as exc:
-            raise EmailAPIError(f"Unexpected error fetching draft {draft_id}: {exc}") from exc
+            raise EmailAPIError(
+                f"Unexpected error fetching draft {draft_id}: {exc}"
+            ) from exc
 
     def update_draft(
         self,
@@ -164,12 +167,16 @@ class DraftMixin:
                 kwargs["text"] = text
             if html is not None:
                 kwargs["html"] = html
-            draft = self._client.inboxes.drafts.update(resolved_inbox, draft_id, **kwargs)
+            draft = self._client.inboxes.drafts.update(
+                resolved_inbox, draft_id, **kwargs
+            )
             return _sdk_draft_to_model(draft, resolved_inbox)
         except ApiError as exc:
             _raise_for_api_error(exc, f"update_draft({draft_id})")
         except Exception as exc:
-            raise EmailAPIError(f"Unexpected error updating draft {draft_id}: {exc}") from exc
+            raise EmailAPIError(
+                f"Unexpected error updating draft {draft_id}: {exc}"
+            ) from exc
 
     def send_draft(
         self,
@@ -191,14 +198,18 @@ class DraftMixin:
         resolved_inbox = self._resolve_inbox_id(inbox_id)
         try:
             response = self._client.inboxes.drafts.send(resolved_inbox, draft_id)
-            sent_id = getattr(response, "message_id", None) or getattr(response, "id", None)
+            sent_id = getattr(response, "message_id", None) or getattr(
+                response, "id", None
+            )
             if sent_id:
                 return self.get_message(sent_id, resolved_inbox)
             return _sdk_message_to_email_message(response, resolved_inbox)
         except ApiError as exc:
             _raise_for_api_error(exc, f"send_draft({draft_id})")
         except Exception as exc:
-            raise EmailAPIError(f"Unexpected error sending draft {draft_id}: {exc}") from exc
+            raise EmailAPIError(
+                f"Unexpected error sending draft {draft_id}: {exc}"
+            ) from exc
 
     def delete_draft(
         self,
@@ -220,4 +231,6 @@ class DraftMixin:
         except ApiError as exc:
             _raise_for_api_error(exc, f"delete_draft({draft_id})")
         except Exception as exc:
-            raise EmailAPIError(f"Unexpected error deleting draft {draft_id}: {exc}") from exc
+            raise EmailAPIError(
+                f"Unexpected error deleting draft {draft_id}: {exc}"
+            ) from exc

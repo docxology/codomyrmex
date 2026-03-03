@@ -65,6 +65,7 @@ except ImportError:
 
 class PromptEngineeringError(CodomyrmexError):
     """Raised when prompt engineering operations fail."""
+
     pass
 
 
@@ -115,7 +116,9 @@ def cli_commands() -> dict:
         "templates": {
             "help": "List prompt templates in the default registry",
             "handler": lambda args: print(
-                "\n".join(list_templates()) if list_templates() else "(no templates registered)"
+                "\n".join(list_templates())
+                if list_templates()
+                else "(no templates registered)"
             ),
             "arguments": [],
         },

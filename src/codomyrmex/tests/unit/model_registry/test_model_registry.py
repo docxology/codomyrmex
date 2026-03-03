@@ -1,4 +1,5 @@
 """Unit tests for model_registry module."""
+
 import pytest
 
 
@@ -9,11 +10,13 @@ class TestModelRegistryImports:
     def test_module_imports(self):
         """Verify module can be imported without errors."""
         from codomyrmex.model_ops import registry as model_registry
+
         assert model_registry is not None
 
     def test_public_api_exists(self):
         """Verify expected public API is available."""
         from codomyrmex.model_ops.registry import __all__
+
         expected_exports = [
             "ModelStage",
             "ModelFramework",

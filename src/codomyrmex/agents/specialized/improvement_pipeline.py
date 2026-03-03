@@ -95,15 +95,17 @@ class AntiPatternDetector:
             pattern = re.compile(ap_def["pattern"])
             for i, line in enumerate(lines, 1):
                 if pattern.search(line):
-                    results.append(AntiPattern(
-                        name=ap_def["name"],
-                        description=ap_def["description"],
-                        file_path=file_path,
-                        line_start=i,
-                        line_end=i,
-                        severity=ap_def["severity"],
-                        snippet=line.strip(),
-                    ))
+                    results.append(
+                        AntiPattern(
+                            name=ap_def["name"],
+                            description=ap_def["description"],
+                            file_path=file_path,
+                            line_start=i,
+                            line_end=i,
+                            severity=ap_def["severity"],
+                            snippet=line.strip(),
+                        )
+                    )
 
         return results
 
@@ -131,7 +133,9 @@ class ImprovementPipeline:
         self,
         config: ImprovementConfig | None = None,
         detector: AntiPatternDetector | None = None,
-        fix_generator: Callable[[AntiPattern, str], ProposedChange | None] | None = None,
+        fix_generator: (
+            Callable[[AntiPattern, str], ProposedChange | None] | None
+        ) = None,
         test_generator: Callable[[ProposedChange], str] | None = None,
     ) -> None:
         self._config = config or ImprovementConfig()
@@ -210,7 +214,9 @@ class ImprovementPipeline:
             avg_confidence = sum(c.confidence for c in changes) / len(changes)
             report.overall_confidence = avg_confidence
 
-            max_risk = max((c.risk for c in changes), key=lambda r: list(RiskLevel).index(r))
+            max_risk = max(
+                (c.risk for c in changes), key=lambda r: list(RiskLevel).index(r)
+            )
             report.risk_assessment = max_risk
 
             if avg_confidence >= cfg.min_confidence:
@@ -224,7 +230,9 @@ class ImprovementPipeline:
         return report
 
     def _default_fix_generator(
-        self, ap: AntiPattern, source: str,
+        self,
+        ap: AntiPattern,
+        source: str,
     ) -> ProposedChange | None:
         """Built-in fix generator using pattern templates."""
         # Find the matching anti-pattern definition

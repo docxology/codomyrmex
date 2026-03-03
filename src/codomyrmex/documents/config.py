@@ -25,7 +25,7 @@ class DocumentsConfig:
 
         # Use environment variable for cache directory if set (for testing)
         if cache_directory is None:
-            env_cache = os.environ.get('CODOMYRMEX_CACHE_DIR')
+            env_cache = os.environ.get("CODOMYRMEX_CACHE_DIR")
             if env_cache:
                 cache_directory = Path(env_cache) / "documents_cache"
             else:

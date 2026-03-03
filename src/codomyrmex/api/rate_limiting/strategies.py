@@ -26,8 +26,7 @@ class QuotaManager:
     def check_all(self, key: str, cost: int = 1) -> dict[str, RateLimitResult]:
         """Check all limiters."""
         return {
-            name: limiter.check(key, cost)
-            for name, limiter in self._limiters.items()
+            name: limiter.check(key, cost) for name, limiter in self._limiters.items()
         }
 
     def acquire_all(self, key: str, cost: int = 1) -> dict[str, RateLimitResult]:
@@ -43,8 +42,7 @@ class QuotaManager:
 
         # Then acquire from all
         return {
-            name: limiter.acquire(key, cost)
-            for name, limiter in self._limiters.items()
+            name: limiter.acquire(key, cost) for name, limiter in self._limiters.items()
         }
 
 

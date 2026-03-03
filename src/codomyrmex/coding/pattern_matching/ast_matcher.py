@@ -176,7 +176,9 @@ class ASTMatcher:
             code_tree = ast.parse(code)
             tmpl_tree = ast.parse(template)
         except SyntaxError as e:
-            logger.warning("Failed to parse code or template for structure matching: %s", e)
+            logger.warning(
+                "Failed to parse code or template for structure matching: %s", e
+            )
             return False
 
         code_nodes = list(ast.iter_child_nodes(code_tree))
@@ -216,14 +218,20 @@ class ASTMatcher:
                     for n in node.body
                 )
                 if has_new or has_instance_attr:
-                    results.append(ASTMatchResult(
-                        pattern_name="singleton",
-                        node_type="ClassDef",
-                        line=node.lineno,
-                        col=node.col_offset,
-                        name=node.name,
-                        details="Overrides __new__" if has_new else "Has _instance attribute",
-                    ))
+                    results.append(
+                        ASTMatchResult(
+                            pattern_name="singleton",
+                            node_type="ClassDef",
+                            line=node.lineno,
+                            col=node.col_offset,
+                            name=node.name,
+                            details=(
+                                "Overrides __new__"
+                                if has_new
+                                else "Has _instance attribute"
+                            ),
+                        )
+                    )
         return results
 
     @staticmethod
@@ -233,15 +241,19 @@ class ASTMatcher:
             if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
                 # Heuristic: function name contains "create" or "make" or "build"
                 name_lower = node.name.lower()
-                if any(kw in name_lower for kw in ("create", "make", "build", "factory")):
-                    results.append(ASTMatchResult(
-                        pattern_name="factory",
-                        node_type=type(node).__name__,
-                        line=node.lineno,
-                        col=node.col_offset,
-                        name=node.name,
-                        details="Function name suggests factory pattern",
-                    ))
+                if any(
+                    kw in name_lower for kw in ("create", "make", "build", "factory")
+                ):
+                    results.append(
+                        ASTMatchResult(
+                            pattern_name="factory",
+                            node_type=type(node).__name__,
+                            line=node.lineno,
+                            col=node.col_offset,
+                            name=node.name,
+                            details="Function name suggests factory pattern",
+                        )
+                    )
         return results
 
     @staticmethod
@@ -259,14 +271,16 @@ class ASTMatcher:
                         elif isinstance(dec, ast.Call):
                             if isinstance(dec.func, ast.Name):
                                 dec_names.append(dec.func.id)
-                    results.append(ASTMatchResult(
-                        pattern_name="decorator",
-                        node_type=type(node).__name__,
-                        line=node.lineno,
-                        col=node.col_offset,
-                        name=getattr(node, "name", ""),
-                        details=f"Decorators: {', '.join(dec_names)}",
-                    ))
+                    results.append(
+                        ASTMatchResult(
+                            pattern_name="decorator",
+                            node_type=type(node).__name__,
+                            line=node.lineno,
+                            col=node.col_offset,
+                            name=getattr(node, "name", ""),
+                            details=f"Decorators: {', '.join(dec_names)}",
+                        )
+                    )
         return results
 
     @staticmethod
@@ -280,14 +294,16 @@ class ASTMatcher:
                     if isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef))
                 }
                 if "__enter__" in method_names and "__exit__" in method_names:
-                    results.append(ASTMatchResult(
-                        pattern_name="context_manager",
-                        node_type="ClassDef",
-                        line=node.lineno,
-                        col=node.col_offset,
-                        name=node.name,
-                        details="Implements __enter__ and __exit__",
-                    ))
+                    results.append(
+                        ASTMatchResult(
+                            pattern_name="context_manager",
+                            node_type="ClassDef",
+                            line=node.lineno,
+                            col=node.col_offset,
+                            name=node.name,
+                            details="Implements __enter__ and __exit__",
+                        )
+                    )
         return results
 
     # ------------------------------------------------------------------
@@ -299,13 +315,15 @@ class ASTMatcher:
         results = []
         for node in ast.walk(tree):
             if isinstance(node, ast.ExceptHandler) and node.type is None:
-                results.append(ASTMatchResult(
-                    pattern_name="bare_except",
-                    node_type="ExceptHandler",
-                    line=node.lineno,
-                    col=node.col_offset,
-                    details="Bare 'except:' catches all exceptions including KeyboardInterrupt",
-                ))
+                results.append(
+                    ASTMatchResult(
+                        pattern_name="bare_except",
+                        node_type="ExceptHandler",
+                        line=node.lineno,
+                        col=node.col_offset,
+                        details="Bare 'except:' catches all exceptions including KeyboardInterrupt",
+                    )
+                )
         return results
 
     @staticmethod
@@ -316,14 +334,16 @@ class ASTMatcher:
             if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
                 for default in node.args.defaults + node.args.kw_defaults:
                     if isinstance(default, mutable_types):
-                        results.append(ASTMatchResult(
-                            pattern_name="mutable_default_arg",
-                            node_type=type(node).__name__,
-                            line=node.lineno,
-                            col=node.col_offset,
-                            name=node.name,
-                            details="Mutable default argument (list/dict/set literal)",
-                        ))
+                        results.append(
+                            ASTMatchResult(
+                                pattern_name="mutable_default_arg",
+                                node_type=type(node).__name__,
+                                line=node.lineno,
+                                col=node.col_offset,
+                                name=node.name,
+                                details="Mutable default argument (list/dict/set literal)",
+                            )
+                        )
                         break  # one per function is enough
         return results
 
@@ -335,13 +355,15 @@ class ASTMatcher:
                 for alias in node.names:
                     if alias.name == "*":
                         module_name = node.module or "<unknown>"
-                        results.append(ASTMatchResult(
-                            pattern_name="star_import",
-                            node_type="ImportFrom",
-                            line=node.lineno,
-                            col=node.col_offset,
-                            details=f"from {module_name} import *",
-                        ))
+                        results.append(
+                            ASTMatchResult(
+                                pattern_name="star_import",
+                                node_type="ImportFrom",
+                                line=node.lineno,
+                                col=node.col_offset,
+                                details=f"from {module_name} import *",
+                            )
+                        )
         return results
 
     @staticmethod
@@ -355,14 +377,16 @@ class ASTMatcher:
             """Walk."""
             if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
                 if depth > max_depth:
-                    results.append(ASTMatchResult(
-                        pattern_name="deep_nesting",
-                        node_type=type(node).__name__,
-                        line=node.lineno,
-                        col=node.col_offset,
-                        name=node.name,
-                        details=f"Function nested {depth} levels deep (max {max_depth})",
-                    ))
+                    results.append(
+                        ASTMatchResult(
+                            pattern_name="deep_nesting",
+                            node_type=type(node).__name__,
+                            line=node.lineno,
+                            col=node.col_offset,
+                            name=node.name,
+                            details=f"Function nested {depth} levels deep (max {max_depth})",
+                        )
+                    )
                 for child in ast.iter_child_nodes(node):
                     _walk(child, depth + 1)
             else:

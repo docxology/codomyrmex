@@ -4,7 +4,6 @@ Validates the full honeytoken lifecycle: create → embed → detect → report.
 """
 
 
-
 class TestHoneytokenActivation:
     """Tests for the honeytoken subsystem."""
 

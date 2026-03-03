@@ -55,17 +55,23 @@ def _init_repo_with_commit(path: Path) -> str:
     subprocess.run(["git", "init"], cwd=str(path), capture_output=True, check=True)
     subprocess.run(
         ["git", "config", "user.email", "test@test.com"],
-        cwd=str(path), capture_output=True, check=True,
+        cwd=str(path),
+        capture_output=True,
+        check=True,
     )
     subprocess.run(
         ["git", "config", "user.name", "Test"],
-        cwd=str(path), capture_output=True, check=True,
+        cwd=str(path),
+        capture_output=True,
+        check=True,
     )
     (path / "README.md").write_text("# test\n")
     subprocess.run(["git", "add", "."], cwd=str(path), capture_output=True, check=True)
     subprocess.run(
         ["git", "commit", "-m", "init"],
-        cwd=str(path), capture_output=True, check=True,
+        cwd=str(path),
+        capture_output=True,
+        check=True,
     )
     return _default_branch(path)
 
@@ -155,4 +161,3 @@ def test_get_upstream_version(temp_dir):
     version = sync.get_upstream_version()
     assert isinstance(version, str)
     assert len(version) >= 7  # short SHA or full
-

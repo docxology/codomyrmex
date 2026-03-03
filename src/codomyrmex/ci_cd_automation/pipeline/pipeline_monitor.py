@@ -20,6 +20,7 @@ logger = get_logger(__name__)
 
 class ReportType(Enum):
     """Types of pipeline reports."""
+
     EXECUTION = "execution"
     PERFORMANCE = "performance"
     QUALITY = "quality"
@@ -30,6 +31,7 @@ class ReportType(Enum):
 @dataclass
 class PipelineMetrics:
     """Pipeline performance metrics."""
+
     pipeline_name: str
     total_duration: float
     stage_count: int
@@ -44,6 +46,7 @@ class PipelineMetrics:
 @dataclass
 class PipelineReport:
     """Comprehensive pipeline execution report."""
+
     pipeline_name: str
     execution_id: str
     status: str
@@ -101,15 +104,19 @@ class PipelineMonitor:
             stage_count=0,
             job_count=0,
             success_rate=0.0,
-            start_time=datetime.now()
+            start_time=datetime.now(),
         )
 
         self._active_metrics[execution_id] = metrics
-        logger.info(f"Started monitoring pipeline {pipeline_name} with execution ID {execution_id}")
+        logger.info(
+            f"Started monitoring pipeline {pipeline_name} with execution ID {execution_id}"
+        )
 
         return execution_id
 
-    def record_stage_completion(self, execution_id: str, stage_name: str, success: bool):
+    def record_stage_completion(
+        self, execution_id: str, stage_name: str, success: bool
+    ):
         """Record completion of a pipeline stage.
 
         Args:
@@ -149,7 +156,9 @@ class PipelineMonitor:
 
         logger.debug(f"Recorded job completion: {job_name} (success: {success})")
 
-    def finish_monitoring(self, execution_id: str, status: str = "completed") -> PipelineMetrics:
+    def finish_monitoring(
+        self, execution_id: str, status: str = "completed"
+    ) -> PipelineMetrics:
         """Finish monitoring a pipeline execution.
 
         Args:
@@ -160,27 +169,37 @@ class PipelineMonitor:
             Final pipeline metrics
         """
         if execution_id not in self._active_metrics:
-            raise CodomyrmexError(f"No active metrics found for execution ID {execution_id}")
+            raise CodomyrmexError(
+                f"No active metrics found for execution ID {execution_id}"
+            )
 
         metrics = self._active_metrics[execution_id]
         metrics.end_time = datetime.now()
 
         # Calculate final metrics
         if metrics.end_time and metrics.start_time:
-            metrics.total_duration = (metrics.end_time - metrics.start_time).total_seconds()
+            metrics.total_duration = (
+                metrics.end_time - metrics.start_time
+            ).total_seconds()
 
         total_jobs = metrics.job_count
         if total_jobs > 0:
-            metrics.success_rate = ((total_jobs - metrics.error_count) / total_jobs) * 100
+            metrics.success_rate = (
+                (total_jobs - metrics.error_count) / total_jobs
+            ) * 100
 
-        logger.info(f"Finished monitoring pipeline {metrics.pipeline_name} - Status: {status}")
+        logger.info(
+            f"Finished monitoring pipeline {metrics.pipeline_name} - Status: {status}"
+        )
 
         # Clean up active metrics
         del self._active_metrics[execution_id]
 
         return metrics
 
-    def generate_report(self, execution_id: str, report_type: ReportType = ReportType.EXECUTION) -> PipelineReport:
+    def generate_report(
+        self, execution_id: str, report_type: ReportType = ReportType.EXECUTION
+    ) -> PipelineReport:
         """Generate a comprehensive pipeline report.
 
         Args:
@@ -208,30 +227,38 @@ class PipelineMonitor:
             artifacts_created=["build.zip", "test-results.xml"],
             metrics={"coverage": 85.5, "performance_score": 92.3},
             errors=["Job 'test' failed due to timeout"],
-            warnings=["Long execution time for build stage"]
+            warnings=["Long execution time for build stage"],
         )
 
         # Save report to file
         report_file = self.reports_dir / f"report_{execution_id}.json"
-        with open(report_file, 'w') as f:
-            json.dump({
-                "pipeline_name": report.pipeline_name,
-                "execution_id": report.execution_id,
-                "status": report.status,
-                "start_time": report.start_time.isoformat(),
-                "end_time": report.end_time.isoformat() if report.end_time else None,
-                "duration": report.duration,
-                "stages_executed": report.stages_executed,
-                "jobs_executed": report.jobs_executed,
-                "jobs_passed": report.jobs_passed,
-                "jobs_failed": report.jobs_failed,
-                "artifacts_created": report.artifacts_created,
-                "metrics": report.metrics,
-                "errors": report.errors,
-                "warnings": report.warnings
-            }, f, indent=2)
+        with open(report_file, "w") as f:
+            json.dump(
+                {
+                    "pipeline_name": report.pipeline_name,
+                    "execution_id": report.execution_id,
+                    "status": report.status,
+                    "start_time": report.start_time.isoformat(),
+                    "end_time": (
+                        report.end_time.isoformat() if report.end_time else None
+                    ),
+                    "duration": report.duration,
+                    "stages_executed": report.stages_executed,
+                    "jobs_executed": report.jobs_executed,
+                    "jobs_passed": report.jobs_passed,
+                    "jobs_failed": report.jobs_failed,
+                    "artifacts_created": report.artifacts_created,
+                    "metrics": report.metrics,
+                    "errors": report.errors,
+                    "warnings": report.warnings,
+                },
+                f,
+                indent=2,
+            )
 
-        logger.info(f"Generated {report_type.value} report for execution {execution_id}")
+        logger.info(
+            f"Generated {report_type.value} report for execution {execution_id}"
+        )
         return report
 
     def get_pipeline_health(self, pipeline_name: str) -> dict[str, Any]:
@@ -253,7 +280,7 @@ class PipelineMonitor:
             "success_rate": 95.5,
             "average_duration": 180.5,
             "active_executions": 0,
-            "recent_failures": []
+            "recent_failures": [],
         }
 
     def get_metrics_summary(self, days: int = 7) -> dict[str, Any]:
@@ -279,12 +306,14 @@ class PipelineMonitor:
             "trending_metrics": {
                 "performance": "improving",
                 "reliability": "stable",
-                "coverage": "increasing"
-            }
+                "coverage": "increasing",
+            },
         }
 
 
-def monitor_pipeline_health(pipeline_name: str, workspace_dir: str | None = None) -> dict[str, Any]:
+def monitor_pipeline_health(
+    pipeline_name: str, workspace_dir: str | None = None
+) -> dict[str, Any]:
     """Monitor pipeline health and return status.
 
     Args:
@@ -299,9 +328,7 @@ def monitor_pipeline_health(pipeline_name: str, workspace_dir: str | None = None
 
 
 def generate_pipeline_reports(
-    execution_id: str,
-    report_types: list[ReportType],
-    workspace_dir: str | None = None
+    execution_id: str, report_types: list[ReportType], workspace_dir: str | None = None
 ) -> dict[str, PipelineReport]:
     """Generate multiple types of pipeline reports.
 

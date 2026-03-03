@@ -112,7 +112,9 @@ class TestAPIDocExtractorComprehensive:
         fn = next(f for f in doc.functions if f.name == "complex_fn")
         assert "a: int" in fn.signature
         # ast.unparse might use single quotes for strings
-        assert "b: str = 'default'" in fn.signature or 'b: str = "default"' in fn.signature
+        assert (
+            "b: str = 'default'" in fn.signature or 'b: str = "default"' in fn.signature
+        )
         assert "*args: list[int]" in fn.signature
         assert "kw1: bool" in fn.signature
         assert "kw2: float = 1.0" in fn.signature
@@ -208,7 +210,9 @@ class TestSiteGeneratorComprehensive:
         gen.add_module_source("def a(): pass", "z_mod")
         gen.add_module_source("def b(): pass", "a_mod")
         config = gen.generate_config()
-        api_nav = next(item["API Reference"] for item in config.nav if "API Reference" in item)
+        api_nav = next(
+            item["API Reference"] for item in config.nav if "API Reference" in item
+        )
         names = [list(d.keys())[0] for d in api_nav]
         assert names == ["a_mod", "z_mod"]
 

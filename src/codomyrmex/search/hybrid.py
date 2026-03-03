@@ -16,6 +16,7 @@ from typing import Any
 @dataclass
 class SearchResult:
     """A hybrid search result."""
+
     doc_id: str
     score: float
     keyword_score: float = 0.0
@@ -56,8 +57,9 @@ class BM25Index:
         sorted_results = sorted(scores.items(), key=lambda x: x[1], reverse=True)
         return sorted_results[:top_k]
 
-    def _bm25_score(self, query_tokens: list[str], doc_tokens: list[str],
-                    doc_id: str) -> float:
+    def _bm25_score(
+        self, query_tokens: list[str], doc_tokens: list[str], doc_id: str
+    ) -> float:
         """bm25 Score ."""
         tf_map = Counter(doc_tokens)
         dl = self._doc_lengths[doc_id]
@@ -69,34 +71,42 @@ class BM25Index:
             df = self._df.get(term, 0)
             idf = math.log((self._n - df + 0.5) / (df + 0.5) + 1)
             numerator = tf * (self._k1 + 1)
-            denominator = tf + self._k1 * (1 - self._b + self._b * dl / max(self._avg_dl, 1))
+            denominator = tf + self._k1 * (
+                1 - self._b + self._b * dl / max(self._avg_dl, 1)
+            )
             score += idf * numerator / denominator
         return score
 
     @staticmethod
     def _tokenize(text: str) -> list[str]:
         """Tokenize."""
-        return re.findall(r'\w+', text.lower())
+        return re.findall(r"\w+", text.lower())
 
 
 class HybridSearchEngine:
     """Combine keyword (BM25) and semantic search results."""
 
-    def __init__(self, keyword_weight: float = 0.4,
-                 semantic_weight: float = 0.6) -> None:
+    def __init__(
+        self, keyword_weight: float = 0.4, semantic_weight: float = 0.6
+    ) -> None:
         self._kw_weight = keyword_weight
         self._sem_weight = semantic_weight
         self._bm25 = BM25Index()
         self._documents: dict[str, str] = {}
 
-    def add_document(self, doc_id: str, content: str,
-                     metadata: dict[str, Any] | None = None) -> None:
+    def add_document(
+        self, doc_id: str, content: str, metadata: dict[str, Any] | None = None
+    ) -> None:
         """Add a document for both keyword and semantic indexing."""
         self._bm25.add_document(doc_id, content)
         self._documents[doc_id] = content
 
-    def search(self, query: str, top_k: int = 10,
-               semantic_scores: dict[str, float] | None = None) -> list[SearchResult]:
+    def search(
+        self,
+        query: str,
+        top_k: int = 10,
+        semantic_scores: dict[str, float] | None = None,
+    ) -> list[SearchResult]:
         """Hybrid search combining BM25 and (optionally) semantic scores.
 
         Args:
@@ -117,13 +127,15 @@ class HybridSearchEngine:
             kw_s = kw_results.get(doc_id, 0.0) / max(max_kw, 1e-9)
             sem_s = sem_scores.get(doc_id, 0.0) / max(max_sem, 1e-9)
             combined = self._kw_weight * kw_s + self._sem_weight * sem_s
-            results.append(SearchResult(
-                doc_id=doc_id,
-                score=combined,
-                keyword_score=kw_s,
-                semantic_score=sem_s,
-                content=self._documents.get(doc_id, ""),
-            ))
+            results.append(
+                SearchResult(
+                    doc_id=doc_id,
+                    score=combined,
+                    keyword_score=kw_s,
+                    semantic_score=sem_s,
+                    content=self._documents.get(doc_id, ""),
+                )
+            )
 
         results.sort(key=lambda r: r.score, reverse=True)
         return results[:top_k]

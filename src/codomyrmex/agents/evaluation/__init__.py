@@ -16,10 +16,12 @@ from datetime import datetime
 from enum import Enum
 from typing import Any, Generic, Optional, TypeVar
 
-T = TypeVar('T')
+T = TypeVar("T")
+
 
 class MetricType(Enum):
     """Types of evaluation metrics."""
+
     LATENCY = "latency"
     ACCURACY = "accuracy"
     COMPLETENESS = "completeness"
@@ -29,9 +31,11 @@ class MetricType(Enum):
     TOKEN_EFFICIENCY = "token_efficiency"
     CUSTOM = "custom"
 
+
 @dataclass
 class EvalResult:
     """Result of a single evaluation."""
+
     agent_id: str
     test_case_id: str
     passed: bool = True
@@ -46,9 +50,11 @@ class EvalResult:
     errors: list[str] = field(default_factory=list)
     timestamp: datetime = field(default_factory=datetime.now)
 
+
 @dataclass
 class TestCase:
     """A test case for evaluation."""
+
     id: str
     prompt: str
     expected_output: str | None = None
@@ -79,9 +85,11 @@ class TestCase:
 
         return len(failures) == 0, failures
 
+
 @dataclass
 class BenchmarkResult:
     """Aggregated benchmark results for an agent."""
+
     agent_id: str
     total_tests: int = 0
     passed_tests: int = 0
@@ -114,6 +122,7 @@ class BenchmarkResult:
             return total_tokens / total_time_s
         return 0.0
 
+
 class Scorer(ABC):
     """Base class for scoring outputs."""
 
@@ -131,6 +140,7 @@ class Scorer(ABC):
         """
         pass
 
+
 class ExactMatchScorer(Scorer):
     """Score based on exact match."""
 
@@ -145,6 +155,7 @@ class ExactMatchScorer(Scorer):
         if self.case_sensitive:
             return 1.0 if output.strip() == expected.strip() else 0.0
         return 1.0 if output.strip().lower() == expected.strip().lower() else 0.0
+
 
 class ContainsScorer(Scorer):
     """Score based on whether output contains expected text."""
@@ -161,6 +172,7 @@ class ContainsScorer(Scorer):
             return 1.0 if expected in output else 0.0
         return 1.0 if expected.lower() in output.lower() else 0.0
 
+
 class LengthScorer(Scorer):
     """Score based on output length relative to target."""
 
@@ -176,6 +188,7 @@ class LengthScorer(Scorer):
         if diff <= self.tolerance:
             return 1.0 - (diff / self.tolerance) * 0.5
         return max(0.0, 0.5 - (diff - self.tolerance))
+
 
 class CompositeScorer(Scorer):
     """Combine multiple scorers with weights."""
@@ -195,6 +208,7 @@ class CompositeScorer(Scorer):
         for scorer, weight in self.normalized_scorers:
             total += scorer.score(output, expected) * weight
         return total
+
 
 class AgentBenchmark(Generic[T]):
     """
@@ -319,7 +333,10 @@ class AgentBenchmark(Generic[T]):
             result.errors = failures
 
             # Check latency constraint
-            if test_case.max_latency_ms and result.latency_ms > test_case.max_latency_ms:
+            if (
+                test_case.max_latency_ms
+                and result.latency_ms > test_case.max_latency_ms
+            ):
                 result.passed = False
                 result.errors.append(
                     f"Latency {result.latency_ms:.0f}ms exceeds max {test_case.max_latency_ms}ms"
@@ -344,9 +361,7 @@ class AgentBenchmark(Generic[T]):
         return result
 
     def _aggregate_results(
-        self,
-        agent_id: str,
-        results: list[EvalResult]
+        self, agent_id: str, results: list[EvalResult]
     ) -> BenchmarkResult:
         """Aggregate individual results into benchmark result."""
         if not results:
@@ -366,8 +381,7 @@ class AgentBenchmark(Generic[T]):
         by_tag: dict[str, dict[str, Any]] = {}
         for result in results:
             test_case = next(
-                (tc for tc in self.test_cases if tc.id == result.test_case_id),
-                None
+                (tc for tc in self.test_cases if tc.id == result.test_case_id), None
             )
             if test_case:
                 for tag in test_case.tags:
@@ -377,7 +391,8 @@ class AgentBenchmark(Generic[T]):
                     if result.passed:
                         by_tag[tag]["passed"] += 1
                     by_tag[tag]["avg_score"] = (
-                        by_tag[tag]["avg_score"] * (by_tag[tag]["total"] - 1) + result.score
+                        by_tag[tag]["avg_score"] * (by_tag[tag]["total"] - 1)
+                        + result.score
                     ) / by_tag[tag]["total"]
 
         return BenchmarkResult(
@@ -398,10 +413,7 @@ class AgentBenchmark(Generic[T]):
             results=results,
         )
 
-    def compare(
-        self,
-        results: dict[str, BenchmarkResult]
-    ) -> str:
+    def compare(self, results: dict[str, BenchmarkResult]) -> str:
         """
         Generate a comparison report.
 
@@ -420,14 +432,14 @@ class AgentBenchmark(Generic[T]):
         lines.append("")
 
         # Header
-        lines.append(f"{'Agent':<20} {'Pass Rate':<12} {'Avg Score':<12} {'Latency (p50)':<15} {'Cost':<10}")
+        lines.append(
+            f"{'Agent':<20} {'Pass Rate':<12} {'Avg Score':<12} {'Latency (p50)':<15} {'Cost':<10}"
+        )
         lines.append("-" * 69)
 
         # Sort by score
         sorted_results = sorted(
-            results.items(),
-            key=lambda x: x[1].avg_score,
-            reverse=True
+            results.items(), key=lambda x: x[1].avg_score, reverse=True
         )
 
         for agent_id, result in sorted_results:
@@ -465,6 +477,7 @@ class AgentBenchmark(Generic[T]):
             }
         return json.dumps(export, indent=2)
 
+
 # Pre-built test suites
 def create_basic_test_suite() -> list[TestCase]:
     """Create a basic test suite for LLM agents."""
@@ -501,6 +514,7 @@ def create_basic_test_suite() -> list[TestCase]:
             tags=["coding", "python"],
         ),
     ]
+
 
 __all__ = [
     # Enums

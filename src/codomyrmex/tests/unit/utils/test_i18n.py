@@ -140,11 +140,14 @@ class TestMessageBundle:
 class TestTranslator:
     def _make_translator_with_en(self):
         t = Translator(Locale("en"))
-        bundle = MessageBundle.from_dict(Locale("en"), {
-            "greeting": "Hello",
-            "farewell": "Goodbye",
-            "item_count": "You have {count} items",
-        })
+        bundle = MessageBundle.from_dict(
+            Locale("en"),
+            {
+                "greeting": "Hello",
+                "farewell": "Goodbye",
+                "item_count": "You have {count} items",
+            },
+        )
         t.add_bundle(bundle)
         return t
 

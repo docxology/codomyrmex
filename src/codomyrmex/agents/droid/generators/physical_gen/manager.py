@@ -1,5 +1,6 @@
 """Generator content."""
 
+
 def generate_physical_manager_content() -> str:
     """Generate the core physical object manager implementation."""
     return '''"""Core physical object management system."""
@@ -244,4 +245,3 @@ __all__ = [
     "ObjectType", "ObjectStatus", "PhysicalObject", "ObjectRegistry", "PhysicalObjectManager"
 ]
 '''
-

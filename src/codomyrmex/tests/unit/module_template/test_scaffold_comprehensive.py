@@ -22,10 +22,10 @@ from codomyrmex.module_template.scaffold import (
     scaffold_new_module,
 )
 
-
 # ===========================================================================
 # TEMPLATE_FILES constant
 # ===========================================================================
+
 
 @pytest.mark.unit
 class TestTemplateFiles:
@@ -49,6 +49,7 @@ class TestTemplateFiles:
 # ===========================================================================
 # scaffold_new_module - name validation
 # ===========================================================================
+
 
 @pytest.mark.unit
 class TestScaffoldNameValidation:
@@ -101,6 +102,7 @@ class TestScaffoldNameValidation:
 # scaffold_new_module - directory creation
 # ===========================================================================
 
+
 @pytest.mark.unit
 class TestScaffoldDirectoryCreation:
     """Tests for directory creation in scaffold_new_module."""
@@ -127,6 +129,7 @@ class TestScaffoldDirectoryCreation:
 # ===========================================================================
 # scaffold_new_module - file creation
 # ===========================================================================
+
 
 @pytest.mark.unit
 class TestScaffoldFileCreation:
@@ -191,6 +194,7 @@ class TestScaffoldFileCreation:
 # _create_core_module
 # ===========================================================================
 
+
 @pytest.mark.unit
 class TestCreateCoreModule:
     """Tests for _create_core_module function."""
@@ -234,6 +238,7 @@ class TestCreateCoreModule:
 # ===========================================================================
 # list_template_files
 # ===========================================================================
+
 
 @pytest.mark.unit
 class TestListTemplateFiles:

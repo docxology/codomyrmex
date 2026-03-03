@@ -177,7 +177,9 @@ class ContactManager:
             for i in interactions
         ]
 
-    def add_interaction(self, contact_id: str, type: str, notes: str) -> Interaction | None:
+    def add_interaction(
+        self, contact_id: str, type: str, notes: str
+    ) -> Interaction | None:
         """Log a new interaction with a contact.
 
         Args:

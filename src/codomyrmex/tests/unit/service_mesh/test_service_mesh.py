@@ -17,6 +17,7 @@ try:
         with_circuit_breaker,
         with_retry,
     )
+
     HAS_MODULE = True
 except ImportError:
     HAS_MODULE = False
@@ -28,6 +29,7 @@ if not HAS_MODULE:
 @pytest.mark.unit
 class TestCircuitState:
     """Test suite for CircuitState."""
+
     def test_closed(self):
         """Test functionality: closed."""
         assert CircuitState.CLOSED is not None
@@ -44,6 +46,7 @@ class TestCircuitState:
 @pytest.mark.unit
 class TestLoadBalancerStrategy:
     """Test suite for LoadBalancerStrategy."""
+
     def test_round_robin(self):
         """Test functionality: round robin."""
         assert LoadBalancerStrategy.ROUND_ROBIN is not None
@@ -64,6 +67,7 @@ class TestLoadBalancerStrategy:
 @pytest.mark.unit
 class TestCircuitBreakerConfig:
     """Test suite for CircuitBreakerConfig."""
+
     def test_create_config(self):
         """Test functionality: create config."""
         config = CircuitBreakerConfig()
@@ -81,6 +85,7 @@ class TestCircuitBreakerConfig:
 @pytest.mark.unit
 class TestServiceInstance:
     """Test suite for ServiceInstance."""
+
     def test_create_instance(self):
         """Test functionality: create instance."""
         instance = ServiceInstance(id="svc-1", host="localhost", port=8080)
@@ -93,6 +98,7 @@ class TestServiceInstance:
 @pytest.mark.unit
 class TestCircuitBreaker:
     """Test suite for CircuitBreaker."""
+
     def test_create_breaker(self):
         """Test functionality: create breaker."""
         breaker = CircuitBreaker(name="test-service")
@@ -108,6 +114,7 @@ class TestCircuitBreaker:
 @pytest.mark.unit
 class TestCircuitOpenError:
     """Test suite for CircuitOpenError."""
+
     def test_is_exception(self):
         """Test functionality: is exception."""
         with pytest.raises(CircuitOpenError):
@@ -117,6 +124,7 @@ class TestCircuitOpenError:
 @pytest.mark.unit
 class TestNoHealthyInstanceError:
     """Test suite for NoHealthyInstanceError."""
+
     def test_is_exception(self):
         """Test functionality: is exception."""
         with pytest.raises(NoHealthyInstanceError):
@@ -126,6 +134,7 @@ class TestNoHealthyInstanceError:
 @pytest.mark.unit
 class TestLoadBalancer:
     """Test suite for LoadBalancer."""
+
     def test_create_balancer(self):
         """Test functionality: create balancer."""
         lb = LoadBalancer()
@@ -140,6 +149,7 @@ class TestLoadBalancer:
 @pytest.mark.unit
 class TestRetryPolicy:
     """Test suite for RetryPolicy."""
+
     def test_create_policy(self):
         """Test functionality: create policy."""
         policy = RetryPolicy()
@@ -158,6 +168,7 @@ class TestRetryPolicy:
 @pytest.mark.unit
 class TestServiceProxy:
     """Test suite for ServiceProxy."""
+
     def test_create_proxy(self):
         """Test functionality: create proxy."""
         proxy = ServiceProxy(service_name="my-service")
@@ -180,6 +191,7 @@ class TestServiceProxy:
 @pytest.mark.unit
 class TestDecorators:
     """Test suite for Decorators."""
+
     def test_with_circuit_breaker_callable(self):
         """Test functionality: with circuit breaker callable."""
         assert callable(with_circuit_breaker)

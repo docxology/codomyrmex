@@ -7,5 +7,3 @@ __all__ = [
     "MistralVibeClient",
     "MistralVibeIntegrationAdapter",
 ]
-
-

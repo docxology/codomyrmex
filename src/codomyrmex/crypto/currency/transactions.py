@@ -145,7 +145,13 @@ def create_transaction(sender: str, recipient: str, amount: float) -> Transactio
         timestamp=time.time(),
     )
     tx.tx_id = hashlib.sha256(serialize_transaction(tx)).hexdigest()
-    logger.debug("Created transaction %s: %s -> %s (%.8f)", tx.tx_id[:16], sender, recipient, amount)
+    logger.debug(
+        "Created transaction %s: %s -> %s (%.8f)",
+        tx.tx_id[:16],
+        sender,
+        recipient,
+        amount,
+    )
     return tx
 
 
@@ -223,10 +229,14 @@ def verify_transaction(
             tx_hash,
             ec.ECDSA(utils.Prehashed(hashes.SHA256())),
         )
-        logger.debug("Transaction %s signature verified", signed_tx.transaction.tx_id[:16])
+        logger.debug(
+            "Transaction %s signature verified", signed_tx.transaction.tx_id[:16]
+        )
         return True
     except InvalidSignature:
-        logger.debug("Transaction %s signature INVALID", signed_tx.transaction.tx_id[:16])
+        logger.debug(
+            "Transaction %s signature INVALID", signed_tx.transaction.tx_id[:16]
+        )
         return False
     except Exception as exc:
         logger.warning("Transaction verification error: %s", exc)

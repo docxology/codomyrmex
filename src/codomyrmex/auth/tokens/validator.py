@@ -12,6 +12,7 @@ from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 logger = get_logger(__name__)
 
+
 class TokenValidator:
     """Validates tokens and their signatures.
 
@@ -48,10 +49,7 @@ class TokenValidator:
             Base64 encoded string containing data and signature.
         """
         signature = self._generate_signature(token_data)
-        full_token = {
-            "data": token_data,
-            "signature": signature
-        }
+        full_token = {"data": token_data, "signature": signature}
         token_bytes = json.dumps(full_token).encode()
         return base64.b64encode(token_bytes).decode()
 

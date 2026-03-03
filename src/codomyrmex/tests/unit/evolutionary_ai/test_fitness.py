@@ -72,9 +72,7 @@ class TestScalarFitness:
 @pytest.mark.unit
 class TestMultiObjectiveFitness:
     def test_evaluate_two_objectives(self):
-        ff = MultiObjectiveFitness(
-            objectives=[lambda g: g[0], lambda g: g[1]]
-        )
+        ff = MultiObjectiveFitness(objectives=[lambda g: g[0], lambda g: g[1]])
         ind = Individual(genes=[3.0, 5.0])
         result = ff.evaluate(ind)
         assert result.value == [3.0, 5.0]
@@ -95,6 +93,7 @@ class TestMultiObjectiveFitness:
                 objectives=[lambda g: 1.0],
                 maximize=[True, False],
             )
+
 
 @pytest.mark.unit
 class TestMultiObjectiveDominates:

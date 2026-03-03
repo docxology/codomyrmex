@@ -20,6 +20,7 @@ from codomyrmex.edge_computing.core.models import SyncState
 
 class ConflictStrategy(Enum):
     """How to resolve version conflicts."""
+
     REMOTE_WINS = "remote_wins"
     LOCAL_WINS = "local_wins"
     LATEST_WINS = "latest_wins"
@@ -28,6 +29,7 @@ class ConflictStrategy(Enum):
 @dataclass
 class SyncEvent:
     """Record of a sync operation."""
+
     direction: str  # "push" or "pull"
     version: int
     success: bool
@@ -93,16 +95,18 @@ class EdgeSynchronizer:
                 data = new_data
 
             self._local_state = SyncState.from_data(data, version)
-            self._pending_changes.append({
-                "type": "update",
-                "version": version,
-                "data": data,
-                "timestamp": time.time(),
-                "is_delta": is_delta,
-            })
+            self._pending_changes.append(
+                {
+                    "type": "update",
+                    "version": version,
+                    "data": data,
+                    "timestamp": time.time(),
+                    "is_delta": is_delta,
+                }
+            )
             # Trim oldest if over max
             if len(self._pending_changes) > self._max_pending:
-                self._pending_changes = self._pending_changes[-self._max_pending:]
+                self._pending_changes = self._pending_changes[-self._max_pending :]
         return self._local_state
 
     def apply_remote(self, state: SyncState) -> bool:
@@ -121,15 +125,23 @@ class EdgeSynchronizer:
             if should_apply:
                 self._local_state = state
                 self._remote_version = state.version
-                self._history.append(SyncEvent(
-                    direction="pull", version=state.version, success=True,
-                ))
+                self._history.append(
+                    SyncEvent(
+                        direction="pull",
+                        version=state.version,
+                        success=True,
+                    )
+                )
                 return True
 
-            self._history.append(SyncEvent(
-                direction="pull", version=state.version, success=False,
-                error="Conflict: local state preferred",
-            ))
+            self._history.append(
+                SyncEvent(
+                    direction="pull",
+                    version=state.version,
+                    success=False,
+                    error="Conflict: local state preferred",
+                )
+            )
             return False
 
     def get_pending_changes(self) -> list[dict[str, Any]]:
@@ -145,9 +157,13 @@ class EdgeSynchronizer:
             ]
             removed = before - len(self._pending_changes)
             self._remote_version = max(self._remote_version, up_to_version)
-            self._history.append(SyncEvent(
-                direction="push", version=up_to_version, success=True,
-            ))
+            self._history.append(
+                SyncEvent(
+                    direction="push",
+                    version=up_to_version,
+                    success=True,
+                )
+            )
             return removed
 
     def sync_history(self, limit: int = 20) -> list[SyncEvent]:

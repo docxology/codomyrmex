@@ -91,10 +91,14 @@ class APIKeyManager:
             label=label,
         )
         self._keys[key_str] = api_key
-        logger.info("Generated API key for %s (label=%s, ttl=%s)", user_id, label, ttl_seconds)
+        logger.info(
+            "Generated API key for %s (label=%s, ttl=%s)", user_id, label, ttl_seconds
+        )
         return key_str
 
-    def generate_api_key(self, user_id: str, permissions: list[str] | None = None) -> str:
+    def generate_api_key(
+        self, user_id: str, permissions: list[str] | None = None
+    ) -> str:
         """Legacy alias for generate()."""
         return self.generate(user_id, permissions=permissions)
 
@@ -150,7 +154,9 @@ class APIKeyManager:
             label=f"{old.label} (rotated)",
         )
 
-    def list_keys(self, user_id: str | None = None, include_revoked: bool = False) -> list[APIKey]:
+    def list_keys(
+        self, user_id: str | None = None, include_revoked: bool = False
+    ) -> list[APIKey]:
         """List API keys, optionally filtered by user and status.
 
         Args:

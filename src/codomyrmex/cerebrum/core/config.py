@@ -6,6 +6,8 @@ from codomyrmex.logging_monitoring import get_logger
 """Configuration management for CEREBRUM module."""
 
 logger = get_logger(__name__)
+
+
 @dataclass
 class CerebrumConfig:
     """Configuration for CEREBRUM engine."""
@@ -16,7 +18,9 @@ class CerebrumConfig:
     case_weighting_strategy: str = "distance"  # "distance", "frequency", "hybrid"
 
     # Bayesian inference settings
-    inference_method: str = "variable_elimination"  # "variable_elimination", "mcmc", "belief_propagation"
+    inference_method: str = (
+        "variable_elimination"  # "variable_elimination", "mcmc", "belief_propagation"
+    )
     mcmc_samples: int = 10000
     mcmc_burn_in: int = 1000
     convergence_threshold: float = 1e-6
@@ -75,4 +79,3 @@ class CerebrumConfig:
     def from_dict(cls, config_dict: dict[str, Any]) -> "CerebrumConfig":
         """Create config from dictionary."""
         return cls(**config_dict)
-

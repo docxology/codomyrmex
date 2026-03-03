@@ -10,6 +10,7 @@ from typing import Any
 
 try:
     import resource
+
     RESOURCE_LIMIT_AVAILABLE = True
 except ImportError:
     RESOURCE_LIMIT_AVAILABLE = False
@@ -41,6 +42,7 @@ def _set_memory_limit(memory_limit_mb: int):
         resource.setrlimit(resource.RLIMIT_AS, (limit_bytes, limit_bytes))
     except (ValueError, OSError) as e:
         logger.warning(f"Failed to set memory limit: {e}")
+
 
 def run_script(
     script_path: Path,
@@ -83,11 +85,14 @@ def run_script(
     }
 
     # Log SCRIPT_START event
-    logger.info(f"Script execution started: {script_path.name}", extra={
-        "event": "SCRIPT_START",
-        "script": str(script_path),
-        "subdirectory": script_path.parent.name,
-    })
+    logger.info(
+        f"Script execution started: {script_path.name}",
+        extra={
+            "event": "SCRIPT_START",
+            "script": str(script_path),
+            "subdirectory": script_path.parent.name,
+        },
+    )
 
     start_time = time.time()
 
@@ -113,7 +118,7 @@ def run_script(
         if (current_dir / "src").exists():
             project_root = current_dir
             break
-        if current_dir.parent == current_dir: # Root reached
+        if current_dir.parent == current_dir:  # Root reached
             break
         current_dir = current_dir.parent
 
@@ -131,9 +136,9 @@ def run_script(
         # Fallback for when src is not found relative to script
         # This logs a warning but continues
         if env and env.get("PYTHONPATH"):
-             pass # External env configured
+            pass  # External env configured
         else:
-             pass # Removed DEBUG print statement
+            pass  # Removed DEBUG print statement
 
     # get args from config
     script_args = script_config.get("args", [])
@@ -144,6 +149,7 @@ def run_script(
         # Prepare preexec_fn for memory limit
         preexec = None
         if memory_limit_mb and RESOURCE_LIMIT_AVAILABLE:
+
             def preexec():
                 return _set_memory_limit(memory_limit_mb)
 
@@ -161,11 +167,15 @@ def run_script(
         result["exit_code"] = process.returncode
         result["stdout"] = process.stdout
         result["stderr"] = process.stderr
-        result["status"] = "passed" if process.returncode in allowed_exit_codes else "failed"
+        result["status"] = (
+            "passed" if process.returncode in allowed_exit_codes else "failed"
+        )
 
         if result["status"] == "passed" and process.returncode != 0:
-             # Annotate passed (non-zero)
-             result["stdout"] += f"\n[INFO] Script exited with code {process.returncode} (ALLOWED)"
+            # Annotate passed (non-zero)
+            result["stdout"] += (
+                f"\n[INFO] Script exited with code {process.returncode} (ALLOWED)"
+            )
 
     except subprocess.TimeoutExpired as e:
         result["status"] = "timeout"
@@ -181,16 +191,20 @@ def run_script(
     result["end_time"] = datetime.now().isoformat()
 
     # Log SCRIPT_END event
-    logger.info(f"Script execution completed: {script_path.name}", extra={
-        "event": "SCRIPT_END",
-        "script": str(script_path),
-        "subdirectory": script_path.parent.name,
-        "status": result["status"],
-        "exit_code": result["exit_code"],
-        "execution_time": result["execution_time"],
-    })
+    logger.info(
+        f"Script execution completed: {script_path.name}",
+        extra={
+            "event": "SCRIPT_END",
+            "script": str(script_path),
+            "subdirectory": script_path.parent.name,
+            "status": result["status"],
+            "exit_code": result["exit_code"],
+            "execution_time": result["execution_time"],
+        },
+    )
 
     return result
+
 
 def _target_wrapper(q, f, a, k, memory_limit_mb):
     """Wrapper to run function in separate process."""
@@ -201,6 +215,7 @@ def _target_wrapper(q, f, a, k, memory_limit_mb):
         q.put(("success", val))
     except (ValueError, RuntimeError, AttributeError, OSError, TypeError):
         q.put(("error", traceback.format_exc()))
+
 
 def run_function(
     func: callable,
@@ -233,15 +248,14 @@ def run_function(
         "execution_time": 0.0,
         "result": None,
         "error": None,
-        "stdout": "", # Capturing stdout from functon complicates things with multiprocessing
+        "stdout": "",  # Capturing stdout from functon complicates things with multiprocessing
     }
 
     queue = multiprocessing.Queue()
     start_time = time.time()
 
     p = multiprocessing.Process(
-        target=_target_wrapper,
-        args=(queue, func, args, kwargs, memory_limit_mb)
+        target=_target_wrapper, args=(queue, func, args, kwargs, memory_limit_mb)
     )
     p.start()
     p.join(timeout)

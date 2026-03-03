@@ -157,6 +157,7 @@ class TestRetryDecorator:
 class TestResolvePath:
     def test_absolute_path_unchanged(self):
         from pathlib import Path
+
         result = RefinedUtilities.resolve_path("/absolute/path/to/file.txt")
         assert result == Path("/absolute/path/to/file.txt")
 
@@ -172,11 +173,13 @@ class TestResolvePath:
 
     def test_returns_path_object(self):
         from pathlib import Path
+
         result = RefinedUtilities.resolve_path("/tmp/test")
         assert isinstance(result, Path)
 
     def test_absolute_path_with_base_ignores_base(self):
         from pathlib import Path
+
         result = RefinedUtilities.resolve_path("/absolute/path", base_dir="/tmp")
         # Absolute path ignores base_dir
         assert result == Path("/absolute/path")

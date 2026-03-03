@@ -1,6 +1,5 @@
 """MCP tools for the model_context_protocol module itself — MCP introspection."""
 
-
 from codomyrmex.model_context_protocol.decorators import mcp_tool
 
 
@@ -40,20 +39,27 @@ def list_registered_tools() -> dict:
     try:
         tools: list[dict[str, str]] = []
         import codomyrmex
+
         pkg_path = codomyrmex.__path__
 
-        for _importer, modname, _ispkg in pkgutil.walk_packages(pkg_path, prefix="codomyrmex."):
+        for _importer, modname, _ispkg in pkgutil.walk_packages(
+            pkg_path, prefix="codomyrmex."
+        ):
             if modname.endswith(".mcp_tools"):
                 try:
                     mod = importlib.import_module(modname)
                     for name in dir(mod):
                         obj = getattr(mod, name)
                         if callable(obj) and hasattr(obj, "_mcp_tool_meta"):
-                            tools.append({
-                                "name": name,
-                                "module": modname,
-                                "category": getattr(obj, "_mcp_tool_meta", {}).get("category", "unknown"),
-                            })
+                            tools.append(
+                                {
+                                    "name": name,
+                                    "module": modname,
+                                    "category": getattr(obj, "_mcp_tool_meta", {}).get(
+                                        "category", "unknown"
+                                    ),
+                                }
+                            )
                 except ImportError:
                     continue
 
@@ -86,6 +92,7 @@ def get_tool_schema(tool_name: str) -> dict:
         from codomyrmex.model_context_protocol.decorators import (
             _generate_schema_from_signature,
         )
+
         for _importer, modname, _ispkg in pkgutil.walk_packages(
             codomyrmex.__path__, prefix="codomyrmex."
         ):

@@ -36,7 +36,9 @@ class TestWorkflowMemory:
         add_memory = self._import_add_memory()
 
         try:
-            result = add_memory(content="Critical finding: module X has O(n²) loop", importance=9)
+            result = add_memory(
+                content="Critical finding: module X has O(n²) loop", importance=9
+            )
             assert result is not None
         except Exception as exc:
             pytest.skip(f"Memory store not configured: {exc}")

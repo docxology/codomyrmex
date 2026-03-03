@@ -17,6 +17,7 @@ from codomyrmex.security.secrets.secret_scanner import SecretScanner
 
 # ─── PermissionModel ──────────────────────────────────────────────────
 
+
 class TestPermissionModel:
     """Test suite for PermissionModel."""
 
@@ -61,6 +62,7 @@ class TestPermissionModel:
 
 # ─── ComplianceGenerator ─────────────────────────────────────────────
 
+
 class TestComplianceGenerator:
     """Test suite for ComplianceGenerator."""
 
@@ -75,10 +77,14 @@ class TestComplianceGenerator:
     def test_failed_checks(self):
         """Test functionality: failed checks."""
         gen = ComplianceGenerator()
-        gen.add_check(ComplianceCheck(
-            check_id="C1", category="custom",
-            description="test", status=ComplianceStatus.FAIL,
-        ))
+        gen.add_check(
+            ComplianceCheck(
+                check_id="C1",
+                category="custom",
+                description="test",
+                status=ComplianceStatus.FAIL,
+            )
+        )
         report = gen.generate()
         assert len(report.failed_checks()) == 1
 
@@ -92,6 +98,7 @@ class TestComplianceGenerator:
 
 
 # ─── SecretScanner ───────────────────────────────────────────────────
+
 
 class TestSecretScanner:
     """Test suite for SecretScanner."""
@@ -120,6 +127,7 @@ class TestSecretScanner:
 
 # ─── SecurityDashboard ──────────────────────────────────────────────
 
+
 class TestSecurityDashboard:
     """Test suite for SecurityDashboard."""
 
@@ -132,6 +140,7 @@ class TestSecurityDashboard:
     def test_posture_with_secrets(self):
         """Test functionality: posture with secrets."""
         from codomyrmex.security.secrets.secret_scanner import SecretFinding
+
         findings = [SecretFinding(file_path="a", line_number=1, secret_type="api_key")]
         dashboard = SecurityDashboard(secrets=findings)
         posture = dashboard.posture()

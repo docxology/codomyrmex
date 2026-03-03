@@ -69,7 +69,13 @@ class TestModuleExports:
 
     def test_dataclasses_importable(self) -> None:
         """Test functionality: dataclasses importable."""
-        for cls in (PAISkillInfo, PAIToolInfo, PAIHookInfo, PAIAgentInfo, PAIMemoryStore):
+        for cls in (
+            PAISkillInfo,
+            PAIToolInfo,
+            PAIHookInfo,
+            PAIAgentInfo,
+            PAIMemoryStore,
+        ):
             assert cls is not None
 
     def test_constants_importable(self) -> None:
@@ -105,7 +111,16 @@ class TestDiscovery:
     def test_get_components(self, bridge: PAIBridge) -> None:
         """Test functionality: get components."""
         components = bridge.get_components()
-        expected_keys = {"algorithm", "skills", "tools", "agents", "memory", "hooks", "security", "components"}
+        expected_keys = {
+            "algorithm",
+            "skills",
+            "tools",
+            "agents",
+            "memory",
+            "hooks",
+            "security",
+            "components",
+        }
         assert expected_keys.issubset(set(components.keys()))
 
         # Each component has exists/count/path
@@ -139,7 +154,15 @@ class TestAlgorithm:
     def test_phase_names(self) -> None:
         """Test functionality: phase names."""
         names = [p["name"] for p in PAIBridge.get_algorithm_phases()]
-        assert names == ["OBSERVE", "THINK", "PLAN", "BUILD", "EXECUTE", "VERIFY", "LEARN"]
+        assert names == [
+            "OBSERVE",
+            "THINK",
+            "PLAN",
+            "BUILD",
+            "EXECUTE",
+            "VERIFY",
+            "LEARN",
+        ]
 
     def test_response_depth_levels(self) -> None:
         """Test functionality: response depth levels."""

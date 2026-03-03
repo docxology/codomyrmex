@@ -36,7 +36,10 @@ class ActiveDefense:
             "you are now",
             "mode: unlocked",
         ]
-        self._metrics: dict[str, int] = {"exploits_detected": 0, "honeytokens_triggered": 0}
+        self._metrics: dict[str, int] = {
+            "exploits_detected": 0,
+            "honeytokens_triggered": 0,
+        }
         self._honeytokens: dict[str, dict[str, Any]] = {}
         self._honeytoken_lock = threading.Lock()
 
@@ -106,7 +109,9 @@ class ActiveDefense:
             "honeytokens_triggered": self._metrics.get("honeytokens_triggered", 0),
         }
 
-    def poison_context(self, attacker_id: str, intensity: float = 0.5) -> dict[str, Any]:
+    def poison_context(
+        self, attacker_id: str, intensity: float = 0.5
+    ) -> dict[str, Any]:
         """Generate adversarial context to poison the attacker's model.
 
         Args:
@@ -116,7 +121,9 @@ class ActiveDefense:
         Returns:
             Dict containing poisoned context and metadata.
         """
-        logger.info("Generating poison context for %s (intensity=%f)", attacker_id, intensity)
+        logger.info(
+            "Generating poison context for %s (intensity=%f)", attacker_id, intensity
+        )
 
         # Simulated counter-embeddings/noise
         noise_phrases = [

@@ -56,7 +56,9 @@ class TestBasicScheduling:
     @pytest.mark.asyncio
     async def test_schedule_multiple_jobs(self) -> None:
         scheduler = AsyncScheduler()
-        ids = [scheduler.schedule(_double, args=(i,), name=f"job_{i}") for i in range(5)]
+        ids = [
+            scheduler.schedule(_double, args=(i,), name=f"job_{i}") for i in range(5)
+        ]
         results = await scheduler.run_all()
         assert len(results) == 5
         for i, jid in enumerate(ids):
@@ -261,7 +263,14 @@ class TestEventBusIntegration:
 
         class FakeEventBus:
             def publish(self, event):
-                events.append({"type": getattr(event.event_type, "value", str(event.event_type)), "data": event.data})
+                events.append(
+                    {
+                        "type": getattr(
+                            event.event_type, "value", str(event.event_type)
+                        ),
+                        "data": event.data,
+                    }
+                )
 
         scheduler = AsyncScheduler(event_bus=FakeEventBus())
         scheduler.schedule(_double, args=(1,), name="test_job")
@@ -278,7 +287,14 @@ class TestEventBusIntegration:
 
         class FakeEventBus:
             def publish(self, event):
-                events.append({"type": getattr(event.event_type, "value", str(event.event_type)), "data": event.data})
+                events.append(
+                    {
+                        "type": getattr(
+                            event.event_type, "value", str(event.event_type)
+                        ),
+                        "data": event.data,
+                    }
+                )
 
         scheduler = AsyncScheduler(event_bus=FakeEventBus())
         scheduler.schedule(_fail_job, name="bad_job")
@@ -312,6 +328,7 @@ class TestExports:
         from codomyrmex.orchestrator import (
             SchedulerMetrics as _SM,
         )
+
         assert _AS is not None
         assert _AJ is not None
         assert _AJS is not None

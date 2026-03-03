@@ -60,14 +60,18 @@ class Z3Backend(SolverBackend):
         if not self._items:
             raise ModelBuildError(f"Cannot delete index {index}: model is empty")
         if not 0 <= index < len(self._items):
-            raise ModelBuildError(f"Index {index} out of range (0-{len(self._items) - 1})")
+            raise ModelBuildError(
+                f"Index {index} out of range (0-{len(self._items) - 1})"
+            )
         return self._items.pop(index)
 
     def replace_item(self, index: int, new_item: str) -> str:
         if not self._items:
             raise ModelBuildError(f"Cannot replace index {index}: model is empty")
         if not 0 <= index < len(self._items):
-            raise ModelBuildError(f"Index {index} out of range (0-{len(self._items) - 1})")
+            raise ModelBuildError(
+                f"Index {index} out of range (0-{len(self._items) - 1})"
+            )
         old = self._items[index]
         self._items[index] = new_item
         return old
@@ -82,11 +86,31 @@ class Z3Backend(SolverBackend):
         namespace: dict[str, Any] = {"z3": z3}
         # Pre-populate common z3 types for convenience
         for name in [
-            "Int", "Real", "Bool", "BitVec", "Array", "IntSort", "RealSort",
-            "BoolSort", "BitVecSort", "ArraySort", "Solver", "Optimize",
-            "And", "Or", "Not", "Implies", "If", "Xor",
-            "ForAll", "Exists", "Sum", "Product",
-            "sat", "unsat", "unknown",
+            "Int",
+            "Real",
+            "Bool",
+            "BitVec",
+            "Array",
+            "IntSort",
+            "RealSort",
+            "BoolSort",
+            "BitVecSort",
+            "ArraySort",
+            "Solver",
+            "Optimize",
+            "And",
+            "Or",
+            "Not",
+            "Implies",
+            "If",
+            "Xor",
+            "ForAll",
+            "Exists",
+            "Sum",
+            "Product",
+            "sat",
+            "unsat",
+            "unknown",
         ]:
             if hasattr(z3, name):
                 namespace[name] = getattr(z3, name)

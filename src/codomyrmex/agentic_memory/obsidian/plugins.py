@@ -53,17 +53,19 @@ def _parse_plugins(lines: list[str], *, enabled: bool = False) -> list[PluginInf
             continue
         parts = stripped.split("\t")
         if len(parts) >= 2:
-            plugins.append(PluginInfo(
-                id=parts[0].strip(),
-                name=parts[1].strip() if len(parts) > 1 else parts[0].strip(),
-                version=parts[2].strip() if len(parts) > 2 else "",
-                enabled=enabled,
-                raw=line,
-            ))
+            plugins.append(
+                PluginInfo(
+                    id=parts[0].strip(),
+                    name=parts[1].strip() if len(parts) > 1 else parts[0].strip(),
+                    version=parts[2].strip() if len(parts) > 2 else "",
+                    enabled=enabled,
+                    raw=line,
+                )
+            )
         else:
-            plugins.append(PluginInfo(
-                id=stripped, name=stripped, enabled=enabled, raw=line
-            ))
+            plugins.append(
+                PluginInfo(id=stripped, name=stripped, enabled=enabled, raw=line)
+            )
     return plugins
 
 
@@ -170,9 +172,7 @@ def install_plugin(
     Maps to ``obsidian plugin:install id=<id> [enable]``.
     """
     flags = ["enable"] if enable else []
-    return cli.run(
-        "plugin:install", vault=vault, params={"id": plugin_id}, flags=flags
-    )
+    return cli.run("plugin:install", vault=vault, params={"id": plugin_id}, flags=flags)
 
 
 def uninstall_plugin(
@@ -260,9 +260,7 @@ def install_theme(
     Maps to ``obsidian theme:install name=<name> [enable]``.
     """
     flags = ["enable"] if enable else []
-    return cli.run(
-        "theme:install", vault=vault, params={"name": name}, flags=flags
-    )
+    return cli.run("theme:install", vault=vault, params={"name": name}, flags=flags)
 
 
 def uninstall_theme(

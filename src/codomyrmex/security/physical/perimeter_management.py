@@ -21,6 +21,7 @@ def get_perimeter_manager() -> "PerimeterManager":
 
 class AccessPointType(Enum):
     """Types of physical access points."""
+
     DOOR = "door"
     GATE = "gate"
     WINDOW = "window"
@@ -33,6 +34,7 @@ class AccessPointType(Enum):
 
 class SecurityLevel(Enum):
     """Security levels for access points and perimeter zones."""
+
     MINIMAL = "minimal"
     LOW = "low"
     MEDIUM = "medium"
@@ -81,16 +83,22 @@ class PerimeterManager:
     def check_perimeter_security(self) -> dict:
         """Check overall perimeter security status."""
         total_points = len(self.access_points)
-        active_points = sum(1 for p in self.access_points.values() if p.status == "active")
+        active_points = sum(
+            1 for p in self.access_points.values() if p.status == "active"
+        )
 
         status = {
             "total_access_points": total_points,
             "active_points": active_points,
             "inactive_points": total_points - active_points,
-            "security_coverage": active_points / total_points if total_points > 0 else 0,
+            "security_coverage": (
+                active_points / total_points if total_points > 0 else 0
+            ),
         }
 
-        logger.info(f"Checked perimeter security: {active_points}/{total_points} active")
+        logger.info(
+            f"Checked perimeter security: {active_points}/{total_points} active"
+        )
         return status
 
     def manage_access_points(self) -> list[AccessPoint]:
@@ -100,7 +108,8 @@ class PerimeterManager:
     def get_vulnerable_points(self) -> list[AccessPoint]:
         """Return access points with low security level or non-active status."""
         return [
-            point for point in self.access_points.values()
+            point
+            for point in self.access_points.values()
             if point.security_level == "low" or point.status != "active"
         ]
 
@@ -121,5 +130,3 @@ def manage_access_points(
     if manager is None:
         manager = get_perimeter_manager()
     return manager.manage_access_points()
-
-

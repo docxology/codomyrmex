@@ -15,20 +15,18 @@ def generate_module_docs(module_name: str) -> dict:
     """
     from pathlib import Path
 
-
     module_path = Path(f"src/codomyrmex/{module_name}")
     if not module_path.exists():
         return {"status": "error", "message": f"Module {module_name} not found."}
 
     try:
         from codomyrmex.documentation import write_pai_md
+
         write_pai_md(module_name, module_path)
         return {
             "status": "success",
             "message": f"Documentation generated for {module_name}",
-            "paths": [
-                f"{module_path}/PAI.md"
-            ]
+            "paths": [f"{module_path}/PAI.md"],
         }
     except Exception as e:
         return {"status": "error", "message": str(e)}
@@ -59,7 +57,7 @@ def audit_rasp_compliance(module_name: str | None = None) -> dict:
         return {
             "status": "success",
             "compliant": success,
-            "missing_count": missing_count
+            "missing_count": missing_count,
         }
     except Exception as e:
         return {"status": "error", "message": str(e)}

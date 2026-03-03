@@ -11,7 +11,6 @@ Job data structures for queue module.
 """
 
 
-
 class JobStatus(Enum):
     """Job status enumeration."""
 
@@ -43,4 +42,3 @@ class Job:
             self.job_id = str(uuid.uuid4())
         if self.created_at is None:
             self.created_at = datetime.now()
-

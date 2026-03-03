@@ -296,7 +296,8 @@ class EdgeTTSProvider(TTSProvider):
 
         if language:
             return [
-                v for v in self._voices
+                v
+                for v in self._voices
                 if v.language.lower().startswith(language.lower())
             ]
         return self._voices.copy()
@@ -317,7 +318,8 @@ class EdgeTTSProvider(TTSProvider):
 
         if language:
             return [
-                v for v in self._voices
+                v
+                for v in self._voices
                 if v.language.lower().startswith(language.lower())
             ]
         return self._voices.copy()

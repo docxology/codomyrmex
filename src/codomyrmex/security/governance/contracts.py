@@ -13,6 +13,7 @@ from uuid import uuid4
 
 class ContractStatus(Enum):
     """Status of a governance contract."""
+
     DRAFT = "draft"
     ACTIVE = "active"
     EXPIRED = "expired"
@@ -22,6 +23,7 @@ class ContractStatus(Enum):
 
 class ContractError(Exception):
     """Base exception for contract errors."""
+
     pass
 
 
@@ -39,6 +41,7 @@ class ContractTerm:
         deadline: Optional deadline for the term.
         fulfilled: Whether the term has been fulfilled.
     """
+
     description: str
     type: str
     party: str
@@ -214,11 +217,13 @@ class Contract:
         issues = []
         for t in self.terms:
             if t.is_overdue():
-                issues.append({
-                    "description": t.description,
-                    "party": t.party,
-                    "severity": "overdue",
-                })
+                issues.append(
+                    {
+                        "description": t.description,
+                        "party": t.party,
+                        "severity": "overdue",
+                    }
+                )
 
         compliance_rate = fulfilled / total if total > 0 else 1.0
 

@@ -12,9 +12,31 @@ from dataclasses import dataclass, field
 
 # Basic English stopwords
 STOPWORDS = {
-    "a", "an", "and", "are", "as", "at", "be", "by", "for", "from", "has", "he",
-    "in", "is", "it", "its", "of", "on", "that", "the", "to", "was", "were",
-    "will", "with",
+    "a",
+    "an",
+    "and",
+    "are",
+    "as",
+    "at",
+    "be",
+    "by",
+    "for",
+    "from",
+    "has",
+    "he",
+    "in",
+    "is",
+    "it",
+    "its",
+    "of",
+    "on",
+    "that",
+    "the",
+    "to",
+    "was",
+    "were",
+    "will",
+    "with",
 }
 
 
@@ -84,8 +106,11 @@ class SearchIndex:
             tags: Optional tags.
         """
         entry = IndexEntry(
-            doc_id=doc_id, title=title, content=content,
-            path=path, tags=tags or [],
+            doc_id=doc_id,
+            title=title,
+            content=content,
+            path=path,
+            tags=tags or [],
         )
         self._docs[doc_id] = entry
 
@@ -95,7 +120,7 @@ class SearchIndex:
             self._inverted[token].add(doc_id)
 
         # Index tags
-        for tag in (tags or []):
+        for tag in tags or []:
             for t in self._tokenize(tag):
                 self._inverted[t].add(doc_id)
 
@@ -146,13 +171,15 @@ class SearchIndex:
         for doc_id, score in ranked:
             entry = self._docs[doc_id]
             snippet = self._extract_snippet(entry.content, query_tokens)
-            results.append(SearchResult(
-                doc_id=doc_id,
-                title=entry.title,
-                snippet=snippet,
-                score=score,
-                path=entry.path,
-            ))
+            results.append(
+                SearchResult(
+                    doc_id=doc_id,
+                    title=entry.title,
+                    snippet=snippet,
+                    score=score,
+                    path=entry.path,
+                )
+            )
 
         return results
 
@@ -165,7 +192,9 @@ class SearchIndex:
         # Filter stopwords
         return [t for t in tokens if t not in STOPWORDS]
 
-    def _extract_snippet(self, content: str, query_tokens: list[str], max_len: int = 200) -> str:
+    def _extract_snippet(
+        self, content: str, query_tokens: list[str], max_len: int = 200
+    ) -> str:
         """Extract a relevant snippet from content."""
         lower = content.lower()
         best_pos = -1

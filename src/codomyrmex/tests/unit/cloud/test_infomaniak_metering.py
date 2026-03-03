@@ -133,7 +133,9 @@ class TestInfomaniakMetering:
         assert usage["instance_count"] == 0
         assert usage["total_vcpus"] == 0
 
-    def test_get_compute_usage_error_returns_empty_dict(self, mock_openstack_connection):
+    def test_get_compute_usage_error_returns_empty_dict(
+        self, mock_openstack_connection
+    ):
         """Connection error during get_compute_usage returns {} instead of raising."""
         mock_openstack_connection.compute.servers.side_effect = Exception(
             "Service unavailable"
@@ -183,7 +185,9 @@ class TestInfomaniakMetering:
         assert usage["attached_count"] == 0
         assert usage["unattached_count"] == 0
 
-    def test_get_storage_usage_error_returns_empty_dict(self, mock_openstack_connection):
+    def test_get_storage_usage_error_returns_empty_dict(
+        self, mock_openstack_connection
+    ):
         """Connection error during get_storage_usage returns {} instead of raising."""
         mock_openstack_connection.block_storage.volumes.side_effect = Exception(
             "API timeout"
@@ -245,7 +249,9 @@ class TestInfomaniakMetering:
         assert usage["floating_ip_count"] == 2
         assert usage["floating_ips_in_use"] == 0
 
-    def test_get_network_usage_error_returns_empty_dict(self, mock_openstack_connection):
+    def test_get_network_usage_error_returns_empty_dict(
+        self, mock_openstack_connection
+    ):
         """Connection error during get_network_usage returns {} instead of raising."""
         mock_openstack_connection.network.networks.side_effect = Exception(
             "Connection refused"
@@ -327,9 +333,7 @@ class TestInfomaniakMetering:
     # Resource Listing
     # =====================================================================
 
-    def test_list_resources_with_usage_partial_failure(
-        self, mock_openstack_connection
-    ):
+    def test_list_resources_with_usage_partial_failure(self, mock_openstack_connection):
         """When compute fails, volumes and FIPs still appear in the result."""
         # Compute raises
         mock_openstack_connection.compute.servers.side_effect = Exception(
@@ -461,11 +465,13 @@ class TestInfomaniakMetering:
 
 # =========================================================================
 
+
 class TestInfomaniakMeteringClientExpanded:
     """Tests for InfomaniakMeteringClient untested methods."""
 
     def _make_client(self):
         from codomyrmex.cloud.infomaniak.metering import InfomaniakMeteringClient
+
         mock_conn = Stub()
         mock_conn.current_project_id = "proj-1"
         return InfomaniakMeteringClient(connection=mock_conn), mock_conn
@@ -485,7 +491,9 @@ class TestInfomaniakMeteringClientExpanded:
         client, mc = self._make_client()
         srv = Stub(id="s1", name="web", status="ACTIVE", created_at=None)
         vol = Stub(id="v1", name="data", status="in-use", size=50)
-        fip = Stub(id="f1", floating_ip_address="1.2.3.4", status="ACTIVE", port_id="p1")
+        fip = Stub(
+            id="f1", floating_ip_address="1.2.3.4", status="ACTIVE", port_id="p1"
+        )
         mc.compute.servers.return_value = [srv]
         mc.block_storage.volumes.return_value = [vol]
         mc.network.ips.return_value = [fip]
@@ -499,8 +507,14 @@ class TestInfomaniakMeteringClientExpanded:
     def test_get_network_quotas(self):
         """Test functionality: get network quotas."""
         client, mc = self._make_client()
-        q = Stub(networks=10, subnets=20, routers=5,
-                      floatingips=3, security_groups=10, security_group_rules=50)
+        q = Stub(
+            networks=10,
+            subnets=20,
+            routers=5,
+            floatingips=3,
+            security_groups=10,
+            security_group_rules=50,
+        )
         mc.network.get_quota.return_value = q
         result = client.get_network_quotas()
         assert result["networks"] == 10

@@ -8,14 +8,15 @@ from enum import Enum
 
 
 class CircuitState(Enum):
-    CLOSED = "closed"       # Normal operation
-    OPEN = "open"           # Failing, reject requests
-    HALF_OPEN = "half_open" # Testing recovery
+    CLOSED = "closed"  # Normal operation
+    OPEN = "open"  # Failing, reject requests
+    HALF_OPEN = "half_open"  # Testing recovery
 
 
 @dataclass
 class Provider:
     """An LLM provider endpoint."""
+
     name: str
     endpoint: str
     model_fn: Callable[[str], str] | None = None
@@ -28,6 +29,7 @@ class Provider:
 @dataclass
 class GatewayConfig:
     """Configuration for the AI Gateway."""
+
     strategy: str = "round_robin"  # "round_robin", "weighted", "least_loaded"
     circuit_failure_threshold: int = 5
     circuit_recovery_timeout_s: float = 60.0
@@ -98,14 +100,14 @@ class AIGateway:
         }
         self._round_robin_idx = 0
         self.metrics = {
-            p.name: {"requests": 0, "failures": 0, "total_ms": 0.0}
-            for p in providers
+            p.name: {"requests": 0, "failures": 0, "total_ms": 0.0} for p in providers
         }
 
     def _select_provider(self) -> Provider:
         """Select next provider based on strategy."""
         available = [
-            p for p in self.providers
+            p
+            for p in self.providers
             if p.is_healthy and self.circuit_breakers[p.name].is_available
         ]
 
@@ -169,7 +171,12 @@ class AIGateway:
                 if not self.config.retry_on_failure:
                     break
 
-        return {"provider": None, "response": None, "success": False, "error": last_error}
+        return {
+            "provider": None,
+            "response": None,
+            "success": False,
+            "error": last_error,
+        }
 
     def health_check(self) -> dict:
         """Check health of all providers."""

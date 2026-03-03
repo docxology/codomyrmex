@@ -97,7 +97,9 @@ def cmd_history(args: argparse.Namespace) -> None:
             print(f"{prefix}: 🔧 {msg.tool_name}({json.dumps(msg.tool_args)})")
         elif msg.msg_type == "tool_result":
             status = "❌" if msg.metadata.get("error") else "✅"
-            print(f"{prefix}: {status} result for {msg.request_id[:8]}: {msg.content[:100]}")
+            print(
+                f"{prefix}: {status} result for {msg.request_id[:8]}: {msg.content[:100]}"
+            )
         elif msg.msg_type == "system":
             print(f"  ⚙️  {msg.content}")
 
@@ -153,7 +155,9 @@ def build_parser() -> argparse.ArgumentParser:
     # start
     p_start = sub.add_parser("start", help="Start Claude Code endpoint")
     p_start.add_argument("--channel", "-c", required=True, help="Channel ID")
-    p_start.add_argument("--poll", type=float, default=2.0, help="Poll interval (seconds)")
+    p_start.add_argument(
+        "--poll", type=float, default=2.0, help="Poll interval (seconds)"
+    )
     p_start.add_argument("--model", "-m", default=None, help="Claude model")
     p_start.add_argument("--no-auto", action="store_true", help="Disable auto-respond")
     p_start.set_defaults(func=cmd_start)

@@ -11,6 +11,7 @@ from typing import Any
 
 try:
     from codomyrmex.logging_monitoring.core.logger_config import get_logger
+
     logger = get_logger(__name__)
 except ImportError:
     logging.basicConfig(level=logging.INFO)
@@ -45,7 +46,7 @@ class ComposedSkill:
             with ThreadPoolExecutor() as executor:
                 futures = {
                     executor.submit(s.execute, **kwargs): getattr(
-                        getattr(s, 'metadata', None), 'name', str(i)
+                        getattr(s, "metadata", None), "name", str(i)
                     )
                     for i, s in enumerate(self.skills)
                 }
@@ -98,7 +99,7 @@ class SkillComposer:
             A ComposedSkill that executes skills sequentially
         """
         names = [
-            getattr(getattr(s, 'metadata', None), 'name', f'skill_{i}')
+            getattr(getattr(s, "metadata", None), "name", f"skill_{i}")
             for i, s in enumerate(skills)
         ]
         return ComposedSkill(
@@ -120,7 +121,7 @@ class SkillComposer:
             A ComposedSkill that executes skills concurrently
         """
         names = [
-            getattr(getattr(s, 'metadata', None), 'name', f'skill_{i}')
+            getattr(getattr(s, "metadata", None), "name", f"skill_{i}")
             for i, s in enumerate(skills)
         ]
         return ComposedSkill(
@@ -129,7 +130,9 @@ class SkillComposer:
             mode="parallel",
         )
 
-    def conditional(self, condition: Callable[..., bool], if_skill, else_skill=None) -> ConditionalSkill:
+    def conditional(
+        self, condition: Callable[..., bool], if_skill, else_skill=None
+    ) -> ConditionalSkill:
         """
         Create a conditional skill that branches based on a condition.
 

@@ -1,4 +1,5 @@
 """Unit tests for inference_optimization module."""
+
 import time
 
 import pytest
@@ -11,11 +12,13 @@ class TestInferenceOptimizationImports:
     def test_module_imports(self):
         """Verify module can be imported without errors."""
         from codomyrmex.model_ops import optimization as inference_optimization
-        assert hasattr(inference_optimization, '__name__')
+
+        assert hasattr(inference_optimization, "__name__")
 
     def test_public_api_exists(self):
         """Verify expected public API is available."""
         from codomyrmex.model_ops.optimization import __all__
+
         expected_exports = [
             "QuantizationType",
             "BatchingStrategy",

@@ -143,7 +143,9 @@ class WorkflowJournal:
         """Return the most recent n entries."""
         return list(self._entries[-n:])
 
-    def record_full_workflow(self, runner: WorkflowRunner, result: WorkflowResult) -> None:
+    def record_full_workflow(
+        self, runner: WorkflowRunner, result: WorkflowResult
+    ) -> None:
         """Convenience: record all events for a completed workflow.
 
         Args:

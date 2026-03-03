@@ -14,6 +14,7 @@ try:
         SupplyChainVerifier,
         VulnerabilityScanner,
     )
+
     HAS_MODULE = True
 except ImportError:
     HAS_MODULE = False
@@ -25,6 +26,7 @@ if not HAS_MODULE:
 @pytest.mark.unit
 class TestSBOMFormat:
     """Test suite for SBOMFormat."""
+
     def test_spdx(self):
         """Test functionality: spdx."""
         assert SBOMFormat.SPDX is not None
@@ -41,6 +43,7 @@ class TestSBOMFormat:
 @pytest.mark.unit
 class TestLicenseType:
     """Test suite for LicenseType."""
+
     def test_mit(self):
         """Test functionality: mit."""
         assert LicenseType.MIT is not None
@@ -61,6 +64,7 @@ class TestLicenseType:
 @pytest.mark.unit
 class TestComponent:
     """Test suite for Component."""
+
     def test_create_component(self):
         """Test functionality: create component."""
         comp = Component(name="requests", version="2.31.0")
@@ -88,6 +92,7 @@ class TestComponent:
 @pytest.mark.unit
 class TestSBOM:
     """Test suite for SBOM."""
+
     def test_create_sbom(self):
         """Test functionality: create sbom."""
         sbom = SBOM(name="my-project", version="1.0.0")
@@ -121,6 +126,7 @@ class TestSBOM:
 @pytest.mark.unit
 class TestSBOMGenerator:
     """Test suite for SBOMGenerator."""
+
     def test_create_generator(self):
         """Test functionality: create generator."""
         gen = SBOMGenerator()
@@ -130,6 +136,7 @@ class TestSBOMGenerator:
 @pytest.mark.unit
 class TestVulnerabilityScanner:
     """Test suite for VulnerabilityScanner."""
+
     def test_create_scanner(self):
         """Test functionality: create scanner."""
         scanner = VulnerabilityScanner()
@@ -146,6 +153,7 @@ class TestVulnerabilityScanner:
 @pytest.mark.unit
 class TestSupplyChainVerifier:
     """Test suite for SupplyChainVerifier."""
+
     def test_create_verifier(self):
         """Test functionality: create verifier."""
         verifier = SupplyChainVerifier()

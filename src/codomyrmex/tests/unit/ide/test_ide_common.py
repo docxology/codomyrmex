@@ -37,11 +37,18 @@ class TestIDEClientAbstractContract:
     def test_abstract_methods_exist(self):
         """IDEClient should declare the required abstract methods."""
         abstract_names = {
-            "connect", "disconnect", "is_connected", "get_capabilities",
-            "execute_command", "get_active_file", "open_file", "get_open_files",
+            "connect",
+            "disconnect",
+            "is_connected",
+            "get_capabilities",
+            "execute_command",
+            "get_active_file",
+            "open_file",
+            "get_open_files",
         }
         client_abstract = {
-            name for name, method in vars(IDEClient).items()
+            name
+            for name, method in vars(IDEClient).items()
             if getattr(method, "__isabstractmethod__", False)
         }
         assert abstract_names.issubset(client_abstract)
@@ -49,9 +56,14 @@ class TestIDEClientAbstractContract:
     def test_concrete_helper_methods_exist(self):
         """IDEClient should provide concrete helper methods."""
         helpers = [
-            "execute_command_safe", "execute_batch", "get_file_info",
-            "register_event_handler", "emit_event", "clear_command_history",
-            "get_last_command", "get_success_rate",
+            "execute_command_safe",
+            "execute_batch",
+            "get_file_info",
+            "register_event_handler",
+            "emit_event",
+            "clear_command_history",
+            "get_last_command",
+            "get_success_rate",
         ]
         for name in helpers:
             assert hasattr(IDEClient, name), f"Missing helper: {name}"
@@ -101,7 +113,13 @@ class TestIDEErrorHierarchy:
 
     def test_error_classes_are_raisable(self):
         """All IDE error classes should be raisable with a message."""
-        for cls in (IDEError, ConnectionError, CommandExecutionError, SessionError, ArtifactError):
+        for cls in (
+            IDEError,
+            ConnectionError,
+            CommandExecutionError,
+            SessionError,
+            ArtifactError,
+        ):
             with pytest.raises(cls):
                 raise cls("test error message")
 
@@ -192,7 +210,9 @@ class TestIDECommandResultDataClass:
 
     def test_to_dict_structure(self):
         """to_dict should include all expected keys."""
-        result = IDECommandResult(success=True, command="test", output={"data": 1}, execution_time=0.5)
+        result = IDECommandResult(
+            success=True, command="test", output={"data": 1}, execution_time=0.5
+        )
         d = result.to_dict()
         assert d["success"] is True
         assert d["command"] == "test"

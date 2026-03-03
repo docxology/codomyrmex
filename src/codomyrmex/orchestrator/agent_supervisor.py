@@ -172,7 +172,7 @@ class AgentSupervisor:
                     CrashRecord(
                         agent_id=p_id,
                         error=f"Cascaded restart due to {crashed_id}",
-                        action_taken=SupervisorAction.RESTART
+                        action_taken=SupervisorAction.RESTART,
                     )
                 )
 

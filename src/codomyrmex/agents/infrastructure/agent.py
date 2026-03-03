@@ -42,9 +42,7 @@ class InfrastructureAgent(BaseAgent):
         config: dict[str, Any] | None = None,
     ):
         capabilities = [AgentCapabilities.CLOUD_INFRASTRUCTURE]
-        if clients and any(
-            name in clients for name in ("s3", "object_storage")
-        ):
+        if clients and any(name in clients for name in ("s3", "object_storage")):
             capabilities.append(AgentCapabilities.CLOUD_STORAGE)
 
         super().__init__(
@@ -74,6 +72,7 @@ class InfrastructureAgent(BaseAgent):
         # Compute
         try:
             from codomyrmex.cloud.infomaniak import InfomaniakComputeClient
+
             clients["compute"] = InfomaniakComputeClient.from_env()
         except (ImportError, OSError, ValueError, AttributeError):
             logger.debug("Compute client unavailable")
@@ -81,6 +80,7 @@ class InfrastructureAgent(BaseAgent):
         # Volume
         try:
             from codomyrmex.cloud.infomaniak import InfomaniakVolumeClient
+
             clients["volume"] = InfomaniakVolumeClient.from_env()
         except (ImportError, OSError, ValueError, AttributeError):
             logger.debug("Volume client unavailable")
@@ -88,6 +88,7 @@ class InfrastructureAgent(BaseAgent):
         # Network
         try:
             from codomyrmex.cloud.infomaniak import InfomaniakNetworkClient
+
             clients["network"] = InfomaniakNetworkClient.from_env()
         except (ImportError, OSError, ValueError, AttributeError):
             logger.debug("Network client unavailable")
@@ -95,6 +96,7 @@ class InfrastructureAgent(BaseAgent):
         # S3
         try:
             from codomyrmex.cloud.infomaniak import InfomaniakS3Client
+
             clients["s3"] = InfomaniakS3Client.from_env()
         except (ImportError, OSError, ValueError, AttributeError):
             logger.debug("S3 client unavailable")
@@ -102,6 +104,7 @@ class InfrastructureAgent(BaseAgent):
         # DNS
         try:
             from codomyrmex.cloud.infomaniak import InfomaniakDNSClient
+
             clients["dns"] = InfomaniakDNSClient.from_env()
         except (ImportError, OSError, ValueError, AttributeError):
             logger.debug("DNS client unavailable")
@@ -109,6 +112,7 @@ class InfrastructureAgent(BaseAgent):
         # Heat
         try:
             from codomyrmex.cloud.infomaniak import InfomaniakHeatClient
+
             clients["orchestration"] = InfomaniakHeatClient.from_env()
         except (ImportError, OSError, ValueError, AttributeError):
             logger.debug("Heat client unavailable")
@@ -158,9 +162,7 @@ class InfrastructureAgent(BaseAgent):
                 )
 
             # Extract params (everything except service/action)
-            params = {
-                k: v for k, v in data.items() if k not in ("service", "action")
-            }
+            params = {k: v for k, v in data.items() if k not in ("service", "action")}
 
             # Security pre-check
             if self._pipeline is not None:
@@ -211,9 +213,7 @@ class InfrastructureAgent(BaseAgent):
             The populated registry.
         """
         target = registry if registry is not None else self._tool_registry
-        CloudToolFactory.register_all_clients(
-            target, self._clients, self._pipeline
-        )
+        CloudToolFactory.register_all_clients(target, self._clients, self._pipeline)
         return target
 
     # ------------------------------------------------------------------

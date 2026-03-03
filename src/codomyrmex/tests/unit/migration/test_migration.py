@@ -1,4 +1,5 @@
 """Unit tests for migration module."""
+
 import pytest
 
 
@@ -9,11 +10,13 @@ class TestMigrationImports:
     def test_module_imports(self):
         """Verify module can be imported without errors."""
         from codomyrmex.database_management import migration
+
         assert migration is not None
 
     def test_public_api_exists(self):
         """Verify expected public API is available."""
         from codomyrmex.database_management.migration import __all__
+
         expected_exports = [
             "MigrationStatus",
             "MigrationDirection",
@@ -242,10 +245,12 @@ class TestFieldRenameTransformer:
         """Verify field renaming."""
         from codomyrmex.database_management.migration import FieldRenameTransformer
 
-        transformer = FieldRenameTransformer({
-            "old_name": "new_name",
-            "email": "email_address",
-        })
+        transformer = FieldRenameTransformer(
+            {
+                "old_name": "new_name",
+                "email": "email_address",
+            }
+        )
 
         data = {"old_name": "value1", "email": "test@example.com", "other": "unchanged"}
         result = transformer.transform(data)
@@ -264,10 +269,12 @@ class TestFieldTypeTransformer:
         """Verify field type conversion."""
         from codomyrmex.database_management.migration import FieldTypeTransformer
 
-        transformer = FieldTypeTransformer({
-            "age": int,
-            "score": float,
-        })
+        transformer = FieldTypeTransformer(
+            {
+                "age": int,
+                "score": float,
+            }
+        )
 
         data = {"age": "25", "score": "0.95", "name": "Alice"}
         result = transformer.transform(data)
@@ -303,10 +310,12 @@ class TestCompositeTransformer:
             FieldTypeTransformer,
         )
 
-        transformer = CompositeTransformer([
-            FieldRenameTransformer({"old_age": "age"}),
-            FieldTypeTransformer({"age": int}),
-        ])
+        transformer = CompositeTransformer(
+            [
+                FieldRenameTransformer({"old_age": "age"}),
+                FieldTypeTransformer({"age": int}),
+            ]
+        )
 
         data = {"old_age": "30"}
         result = transformer.transform(data)

@@ -61,11 +61,13 @@ def _extract_pdf_metadata(file_path: Path) -> dict[str, Any]:
     try:
         try:
             from pypdf import PdfReader
+
             reader = PdfReader(str(file_path))
             pdf_metadata = reader.metadata or {}
         except ImportError:
             import PyPDF2
-            with open(file_path, 'rb') as f:
+
+            with open(file_path, "rb") as f:
                 reader = PyPDF2.PdfReader(f)
                 pdf_metadata = reader.metadata or {}
 
@@ -84,13 +86,14 @@ def _extract_pdf_metadata(file_path: Path) -> dict[str, Any]:
 def _extract_markdown_metadata(file_path: Path) -> dict[str, Any]:
     """Extract markdown frontmatter metadata."""
     try:
-        with open(file_path, encoding='utf-8') as f:
+        with open(file_path, encoding="utf-8") as f:
             content = f.read()
 
         # Check for YAML frontmatter
-        if content.startswith('---'):
+        if content.startswith("---"):
             import yaml
-            parts = content.split('---', 2)
+
+            parts = content.split("---", 2)
             if len(parts) >= 3:
                 frontmatter = yaml.safe_load(parts[1])
                 if frontmatter:
@@ -106,13 +109,24 @@ def _extract_json_metadata(file_path: Path) -> dict[str, Any]:
     """Extract metadata from JSON files."""
     try:
         import json
-        with open(file_path, encoding='utf-8') as f:
+
+        with open(file_path, encoding="utf-8") as f:
             data = json.load(f)
             if isinstance(data, dict):
                 # Return standard metadata fields if present at top level
                 return {
-                    k: v for k, v in data.items()
-                    if k in ["title", "author", "description", "version", "metadata", "created_at", "updated_at"]
+                    k: v
+                    for k, v in data.items()
+                    if k
+                    in [
+                        "title",
+                        "author",
+                        "description",
+                        "version",
+                        "metadata",
+                        "created_at",
+                        "updated_at",
+                    ]
                 }
         return {}
     except Exception as e:
@@ -124,18 +138,26 @@ def _extract_yaml_metadata(file_path: Path) -> dict[str, Any]:
     """Extract metadata from YAML files."""
     try:
         import yaml
-        with open(file_path, encoding='utf-8') as f:
+
+        with open(file_path, encoding="utf-8") as f:
             data = yaml.safe_load(f)
             if isinstance(data, dict):
                 # Return standard metadata fields
                 return {
-                    k: v for k, v in data.items()
-                    if k in ["title", "author", "description", "version", "metadata", "created_at", "updated_at"]
+                    k: v
+                    for k, v in data.items()
+                    if k
+                    in [
+                        "title",
+                        "author",
+                        "description",
+                        "version",
+                        "metadata",
+                        "created_at",
+                        "updated_at",
+                    ]
                 }
         return {}
     except Exception as e:
         logger.warning("Failed to extract YAML metadata from %s: %s", file_path, e)
         return {}
-
-
-

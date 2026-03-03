@@ -17,6 +17,7 @@ from typing import Any, Optional
 
 class ModelProvider(Enum):
     """Supported LLM providers."""
+
     OPENAI = "openai"
     ANTHROPIC = "anthropic"
     GOOGLE = "google"
@@ -25,9 +26,11 @@ class ModelProvider(Enum):
     LOCAL = "local"
     CUSTOM = "custom"
 
+
 @dataclass
 class ModelPricing:
     """Pricing information for a model."""
+
     model_id: str
     provider: ModelProvider
     input_cost_per_1k: float  # Cost per 1000 input tokens
@@ -41,36 +44,60 @@ class ModelPricing:
         output_cost = (output_tokens / 1000) * self.output_cost_per_1k
         return input_cost + output_cost
 
+
 # Pricing data (as of late 2025 / early 2026 - prices change!)
 MODEL_PRICING: dict[str, ModelPricing] = {
     # OpenAI
     "gpt-4o": ModelPricing("gpt-4o", ModelProvider.OPENAI, 0.0025, 0.01, 128000),
-    "gpt-4o-mini": ModelPricing("gpt-4o-mini", ModelProvider.OPENAI, 0.00015, 0.0006, 128000),
-    "gpt-4-turbo": ModelPricing("gpt-4-turbo", ModelProvider.OPENAI, 0.01, 0.03, 128000),
+    "gpt-4o-mini": ModelPricing(
+        "gpt-4o-mini", ModelProvider.OPENAI, 0.00015, 0.0006, 128000
+    ),
+    "gpt-4-turbo": ModelPricing(
+        "gpt-4-turbo", ModelProvider.OPENAI, 0.01, 0.03, 128000
+    ),
     "gpt-4": ModelPricing("gpt-4", ModelProvider.OPENAI, 0.03, 0.06, 8192),
-    "gpt-3.5-turbo": ModelPricing("gpt-3.5-turbo", ModelProvider.OPENAI, 0.0005, 0.0015, 16385),
+    "gpt-3.5-turbo": ModelPricing(
+        "gpt-3.5-turbo", ModelProvider.OPENAI, 0.0005, 0.0015, 16385
+    ),
     "o1": ModelPricing("o1", ModelProvider.OPENAI, 0.015, 0.06, 200000),
     "o1-mini": ModelPricing("o1-mini", ModelProvider.OPENAI, 0.003, 0.012, 128000),
-
     # Anthropic
-    "claude-3-5-sonnet": ModelPricing("claude-3-5-sonnet", ModelProvider.ANTHROPIC, 0.003, 0.015, 200000),
-    "claude-3-opus": ModelPricing("claude-3-opus", ModelProvider.ANTHROPIC, 0.015, 0.075, 200000),
-    "claude-3-haiku": ModelPricing("claude-3-haiku", ModelProvider.ANTHROPIC, 0.00025, 0.00125, 200000),
-
+    "claude-3-5-sonnet": ModelPricing(
+        "claude-3-5-sonnet", ModelProvider.ANTHROPIC, 0.003, 0.015, 200000
+    ),
+    "claude-3-opus": ModelPricing(
+        "claude-3-opus", ModelProvider.ANTHROPIC, 0.015, 0.075, 200000
+    ),
+    "claude-3-haiku": ModelPricing(
+        "claude-3-haiku", ModelProvider.ANTHROPIC, 0.00025, 0.00125, 200000
+    ),
     # Google
-    "gemini-1.5-pro": ModelPricing("gemini-1.5-pro", ModelProvider.GOOGLE, 0.00125, 0.005, 2000000),
-    "gemini-1.5-flash": ModelPricing("gemini-1.5-flash", ModelProvider.GOOGLE, 0.000075, 0.0003, 1000000),
-    "gemini-2.0-flash": ModelPricing("gemini-2.0-flash", ModelProvider.GOOGLE, 0.0001, 0.0004, 1000000),
-
+    "gemini-1.5-pro": ModelPricing(
+        "gemini-1.5-pro", ModelProvider.GOOGLE, 0.00125, 0.005, 2000000
+    ),
+    "gemini-1.5-flash": ModelPricing(
+        "gemini-1.5-flash", ModelProvider.GOOGLE, 0.000075, 0.0003, 1000000
+    ),
+    "gemini-2.0-flash": ModelPricing(
+        "gemini-2.0-flash", ModelProvider.GOOGLE, 0.0001, 0.0004, 1000000
+    ),
     # Mistral
-    "mistral-large": ModelPricing("mistral-large", ModelProvider.MISTRAL, 0.002, 0.006, 128000),
-    "mistral-small": ModelPricing("mistral-small", ModelProvider.MISTRAL, 0.0002, 0.0006, 32000),
-    "codestral": ModelPricing("codestral", ModelProvider.MISTRAL, 0.0002, 0.0006, 32000),
+    "mistral-large": ModelPricing(
+        "mistral-large", ModelProvider.MISTRAL, 0.002, 0.006, 128000
+    ),
+    "mistral-small": ModelPricing(
+        "mistral-small", ModelProvider.MISTRAL, 0.0002, 0.0006, 32000
+    ),
+    "codestral": ModelPricing(
+        "codestral", ModelProvider.MISTRAL, 0.0002, 0.0006, 32000
+    ),
 }
+
 
 @dataclass
 class UsageRecord:
     """Record of a single LLM usage event."""
+
     model_id: str
     input_tokens: int
     output_tokens: int
@@ -84,9 +111,11 @@ class UsageRecord:
         """Total tokens used."""
         return self.input_tokens + self.output_tokens
 
+
 @dataclass
 class UsageSummary:
     """Aggregated usage summary."""
+
     period_start: datetime
     period_end: datetime
     total_requests: int = 0
@@ -99,6 +128,7 @@ class UsageSummary:
     @property
     def total_tokens(self) -> int:
         return self.total_input_tokens + self.total_output_tokens
+
 
 class TokenCounter:
     """
@@ -120,9 +150,7 @@ class TokenCounter:
 
     @classmethod
     def estimate_tokens(
-        cls,
-        text: str,
-        provider: ModelProvider = ModelProvider.OPENAI
+        cls, text: str, provider: ModelProvider = ModelProvider.OPENAI
     ) -> int:
         """
         Estimate token count for text.
@@ -155,7 +183,7 @@ class TokenCounter:
     def estimate_messages_tokens(
         cls,
         messages: list[dict[str, str]],
-        provider: ModelProvider = ModelProvider.OPENAI
+        provider: ModelProvider = ModelProvider.OPENAI,
     ) -> int:
         """
         Estimate tokens for a list of messages.
@@ -184,6 +212,7 @@ class TokenCounter:
         total += 2  # End of messages token
 
         return total
+
 
 class CostTracker:
     """
@@ -316,21 +345,20 @@ class CostTracker:
                 start_date = datetime.min
 
         # Filter records
-        filtered = [
-            r for r in self._records
-            if start_date <= r.timestamp <= end_date
-        ]
+        filtered = [r for r in self._records if start_date <= r.timestamp <= end_date]
 
         if not filtered:
             return UsageSummary(period_start=start_date, period_end=end_date)
 
         # Aggregate
-        by_model: dict[str, dict[str, Any]] = defaultdict(lambda: {
-            "requests": 0,
-            "input_tokens": 0,
-            "output_tokens": 0,
-            "cost": 0.0,
-        })
+        by_model: dict[str, dict[str, Any]] = defaultdict(
+            lambda: {
+                "requests": 0,
+                "input_tokens": 0,
+                "output_tokens": 0,
+                "cost": 0.0,
+            }
+        )
 
         total_latency = 0.0
 
@@ -375,22 +403,26 @@ class CostTracker:
 
     def export_to_json(self) -> str:
         """Export all records to JSON."""
-        return json.dumps([
-            {
-                "model_id": r.model_id,
-                "input_tokens": r.input_tokens,
-                "output_tokens": r.output_tokens,
-                "cost": r.cost,
-                "latency_ms": r.latency_ms,
-                "timestamp": r.timestamp.isoformat(),
-                "metadata": r.metadata,
-            }
-            for r in self._records
-        ], indent=2)
+        return json.dumps(
+            [
+                {
+                    "model_id": r.model_id,
+                    "input_tokens": r.input_tokens,
+                    "output_tokens": r.output_tokens,
+                    "cost": r.cost,
+                    "latency_ms": r.latency_ms,
+                    "timestamp": r.timestamp.isoformat(),
+                    "metadata": r.metadata,
+                }
+                for r in self._records
+            ],
+            indent=2,
+        )
 
     def clear(self) -> None:
         """Clear all records."""
         self._records = []
+
 
 class BudgetGuard:
     """
@@ -438,7 +470,10 @@ class BudgetGuard:
                 return False
 
         if self.monthly_limit is not None:
-            if self._monthly_spend[self._month_key()] + estimated_cost > self.monthly_limit:
+            if (
+                self._monthly_spend[self._month_key()] + estimated_cost
+                > self.monthly_limit
+            ):
                 return False
 
         if self.total_limit is not None:
@@ -452,24 +487,22 @@ class BudgetGuard:
         return {
             "daily": (
                 self.daily_limit - self._daily_spend[self._today_key()]
-                if self.daily_limit else None
+                if self.daily_limit
+                else None
             ),
             "monthly": (
                 self.monthly_limit - self._monthly_spend[self._month_key()]
-                if self.monthly_limit else None
+                if self.monthly_limit
+                else None
             ),
             "total": (
-                self.total_limit - self._total_spend
-                if self.total_limit else None
+                self.total_limit - self._total_spend if self.total_limit else None
             ),
         }
 
+
 # Convenience functions
-def estimate_cost(
-    model_id: str,
-    input_text: str,
-    output_tokens: int = 500
-) -> float:
+def estimate_cost(model_id: str, input_text: str, output_tokens: int = 500) -> float:
     """Quick cost estimation."""
     if model_id not in MODEL_PRICING:
         return 0.0
@@ -478,14 +511,17 @@ def estimate_cost(
     input_tokens = TokenCounter.estimate_tokens(input_text, provider)
     return MODEL_PRICING[model_id].calculate_cost(input_tokens, output_tokens)
 
+
 def count_tokens(text: str, provider: str = "openai") -> int:
     """Quick token count."""
     provider_enum = ModelProvider[provider.upper()]
     return TokenCounter.estimate_tokens(text, provider_enum)
 
+
 def get_model_pricing(model_id: str) -> ModelPricing | None:
     """Get pricing for a model."""
     return MODEL_PRICING.get(model_id)
+
 
 __all__ = [
     # Enums

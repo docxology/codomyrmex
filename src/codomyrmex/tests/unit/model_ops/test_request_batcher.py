@@ -41,7 +41,9 @@ class TestRequestBatcherConstruction:
         assert b.processor is None
 
     def test_custom_params(self):
-        b = RequestBatcher(max_batch_size=8, timeout_ms=50.0, processor=_identity_processor)
+        b = RequestBatcher(
+            max_batch_size=8, timeout_ms=50.0, processor=_identity_processor
+        )
         assert b.max_batch_size == 8
         assert b.timeout_ms == 50.0
         assert b.processor is _identity_processor
@@ -209,6 +211,7 @@ class TestProcessBatchNoProcessor:
     def test_no_processor_does_not_set_future(self):
         b = RequestBatcher(processor=None)
         from concurrent.futures import Future
+
         future = Future()
         b._process_batch([(b._get_request_id(), "data", future)])
         # Future should not be resolved

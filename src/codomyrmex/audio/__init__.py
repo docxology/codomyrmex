@@ -70,6 +70,7 @@ try:
         WhisperModelSize,
         Word,
     )
+
     STT_AVAILABLE = True
 except ImportError:
     Transcriber = None  # type: ignore
@@ -95,6 +96,7 @@ try:
         VoiceGender,
         VoiceInfo,
     )
+
     TTS_AVAILABLE = True
 except ImportError:
     Synthesizer = None  # type: ignore
@@ -117,9 +119,15 @@ def cli_commands():
             "handler": lambda **kwargs: print(
                 f"Audio Module v{__version__}\n"
                 f"  STT available: {STT_AVAILABLE}"
-                + (f" (Whisper: {WHISPER_AVAILABLE})" if STT_AVAILABLE else "") + "\n"
+                + (f" (Whisper: {WHISPER_AVAILABLE})" if STT_AVAILABLE else "")
+                + "\n"
                 f"  TTS available: {TTS_AVAILABLE}"
-                + (f" (pyttsx3: {PYTTSX3_AVAILABLE}, Edge TTS: {EDGE_TTS_AVAILABLE})" if TTS_AVAILABLE else "") + "\n"
+                + (
+                    f" (pyttsx3: {PYTTSX3_AVAILABLE}, Edge TTS: {EDGE_TTS_AVAILABLE})"
+                    if TTS_AVAILABLE
+                    else ""
+                )
+                + "\n"
                 "  Supported operations: transcribe, synthesize"
             ),
         },
@@ -158,23 +166,27 @@ __all__ = [
 ]
 
 if STT_AVAILABLE:
-    __all__.extend([
-        "Transcriber",
-        "TranscriptionResult",
-        "TranscriptionConfig",
-        "Segment",
-        "Word",
-        "WhisperModelSize",
-        "STTProvider",
-    ])
+    __all__.extend(
+        [
+            "Transcriber",
+            "TranscriptionResult",
+            "TranscriptionConfig",
+            "Segment",
+            "Word",
+            "WhisperModelSize",
+            "STTProvider",
+        ]
+    )
 
 if TTS_AVAILABLE:
-    __all__.extend([
-        "Synthesizer",
-        "SynthesisResult",
-        "TTSConfig",
-        "AudioFormat",
-        "VoiceInfo",
-        "VoiceGender",
-        "TTSProvider",
-    ])
+    __all__.extend(
+        [
+            "Synthesizer",
+            "SynthesisResult",
+            "TTSConfig",
+            "AudioFormat",
+            "VoiceInfo",
+            "VoiceGender",
+            "TTSProvider",
+        ]
+    )

@@ -111,19 +111,23 @@ class TestGenerator:
         tests = []
         class_name = node.name
 
-        tests.append(GeneratedTest(
-            name=f"test_{class_name.lower()}_instantiation",
-            body=f"# TODO: test {class_name} instantiation\n    assert True",
-            target=class_name,
-        ))
+        tests.append(
+            GeneratedTest(
+                name=f"test_{class_name.lower()}_instantiation",
+                body=f"# TODO: test {class_name} instantiation\n    assert True",
+                target=class_name,
+            )
+        )
 
         for item in node.body:
             if isinstance(item, ast.FunctionDef) and not item.name.startswith("_"):
-                tests.append(GeneratedTest(
-                    name=f"test_{class_name.lower()}_{item.name}",
-                    body=f"# TODO: test {class_name}.{item.name}\n    assert True",
-                    target=f"{class_name}.{item.name}",
-                ))
+                tests.append(
+                    GeneratedTest(
+                        name=f"test_{class_name.lower()}_{item.name}",
+                        body=f"# TODO: test {class_name}.{item.name}\n    assert True",
+                        target=f"{class_name}.{item.name}",
+                    )
+                )
 
         return tests
 

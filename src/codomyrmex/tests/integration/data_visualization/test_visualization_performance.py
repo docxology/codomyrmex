@@ -20,6 +20,7 @@ try:
         create_bar_chart,  # noqa: F401
         create_line_plot,  # noqa: F401
     )
+
     DATA_VISUALIZATION_AVAILABLE = True
 except ImportError:
     DATA_VISUALIZATION_AVAILABLE = False
@@ -30,12 +31,14 @@ try:
         profile_function,  # noqa: F401
         run_benchmark,  # noqa: F401
     )
+
     PERFORMANCE_AVAILABLE = True
 except ImportError:
     PERFORMANCE_AVAILABLE = False
 
 try:
     from codomyrmex.logging_monitoring.core.logger_config import PerformanceLogger
+
     PERFORMANCE_LOGGING_AVAILABLE = True
 except ImportError:
     PERFORMANCE_LOGGING_AVAILABLE = False
@@ -45,6 +48,7 @@ try:
         get_logger,
         setup_logging,
     )
+
     LOGGING_AVAILABLE = True
 except ImportError:
     LOGGING_AVAILABLE = False
@@ -70,6 +74,7 @@ class TestVisualizationPerformanceWorkflow:
     def teardown_method(self):
         """Clean up test environment."""
         import shutil
+
         shutil.rmtree(self.output_dir, ignore_errors=True)
 
     def _generate_test_data(self) -> dict[str, Any]:
@@ -79,17 +84,19 @@ class TestVisualizationPerformanceWorkflow:
             "performance_data": {
                 "function_times": [0.1, 0.15, 0.12, 0.18, 0.09, 0.14, 0.11, 0.16],
                 "memory_usage": [45.2, 46.1, 44.8, 47.3, 45.9, 46.7, 45.5, 46.8],
-                "cpu_usage": [12.3, 15.6, 13.8, 18.2, 11.9, 14.7, 13.2, 16.4]
+                "cpu_usage": [12.3, 15.6, 13.8, 18.2, 11.9, 14.7, 13.2, 16.4],
             },
             "comparison_data": {
                 "algorithms": ["Bubble Sort", "Quick Sort", "Merge Sort", "Heap Sort"],
                 "times": [120.5, 15.2, 25.8, 18.9],
-                "memory": [50.2, 45.8, 52.1, 48.3]
-            }
+                "memory": [50.2, 45.8, 52.1, 48.3],
+            },
         }
 
-    @pytest.mark.skipif(not DATA_VISUALIZATION_AVAILABLE,
-                       reason="Data visualization module not available")
+    @pytest.mark.skipif(
+        not DATA_VISUALIZATION_AVAILABLE,
+        reason="Data visualization module not available",
+    )
     def test_basic_visualization_creation(self):
         """Test that basic visualizations can be created."""
         import matplotlib
@@ -109,8 +116,9 @@ class TestVisualizationPerformanceWorkflow:
         assert line_result is not None
         assert isinstance(line_result, matplotlib.figure.Figure)
 
-    @pytest.mark.skipif(not PERFORMANCE_AVAILABLE,
-                       reason="Performance module not available")
+    @pytest.mark.skipif(
+        not PERFORMANCE_AVAILABLE, reason="Performance module not available"
+    )
     def test_performance_function_profiling(self):
         """Test that functions can be profiled for performance."""
         from codomyrmex.performance import profile_function
@@ -130,8 +138,9 @@ class TestVisualizationPerformanceWorkflow:
         assert "memory_usage" in profile_result
         assert profile_result["execution_time"] > 0
 
-    @pytest.mark.skipif(not PERFORMANCE_AVAILABLE,
-                       reason="Performance module not available")
+    @pytest.mark.skipif(
+        not PERFORMANCE_AVAILABLE, reason="Performance module not available"
+    )
     def test_benchmark_execution(self):
         """Test running benchmarks on functions."""
         from codomyrmex.performance import run_benchmark
@@ -148,8 +157,9 @@ class TestVisualizationPerformanceWorkflow:
         assert "max_time" in benchmark_result
         assert "iterations" in benchmark_result
 
-    @pytest.mark.skipif(not PERFORMANCE_LOGGING_AVAILABLE,
-                       reason="Performance logging not available")
+    @pytest.mark.skipif(
+        not PERFORMANCE_LOGGING_AVAILABLE, reason="Performance logging not available"
+    )
     def test_performance_logger_integration(self):
         """Test performance logger with visualization data."""
         perf_logger = PerformanceLogger("visualization_performance")
@@ -168,8 +178,10 @@ class TestVisualizationPerformanceWorkflow:
         # The logger should have recorded these operations
         # (We can't easily test the internal state, but no exceptions should occur)
 
-    @pytest.mark.skipif(not all([DATA_VISUALIZATION_AVAILABLE, PERFORMANCE_AVAILABLE]),
-                       reason="Required modules not available")
+    @pytest.mark.skipif(
+        not all([DATA_VISUALIZATION_AVAILABLE, PERFORMANCE_AVAILABLE]),
+        reason="Required modules not available",
+    )
     def test_visualization_performance_integration(self):
         """Test the integrated workflow of visualization with performance monitoring."""
         from codomyrmex.data_visualization import create_bar_chart
@@ -179,7 +191,7 @@ class TestVisualizationPerformanceWorkflow:
             """Function to create a test chart."""
             data = {
                 "categories": ["Jan", "Feb", "Mar", "Apr", "May"],
-                "values": [100, 120, 140, 110, 160]
+                "values": [100, 120, 140, 110, 160],
             }
             return create_bar_chart(data, "Monthly Sales")
 
@@ -190,8 +202,10 @@ class TestVisualizationPerformanceWorkflow:
         # Chart creation should be reasonably fast
         assert profile_result["execution_time"] < 1.0  # Less than 1 second
 
-    @pytest.mark.skipif(not all([DATA_VISUALIZATION_AVAILABLE, PERFORMANCE_AVAILABLE]),
-                       reason="Required modules not available")
+    @pytest.mark.skipif(
+        not all([DATA_VISUALIZATION_AVAILABLE, PERFORMANCE_AVAILABLE]),
+        reason="Required modules not available",
+    )
     def test_performance_data_visualization(self):
         """Test visualizing performance data."""
         from codomyrmex.data_visualization import create_line_plot
@@ -208,7 +222,10 @@ class TestVisualizationPerformanceWorkflow:
         # Create visualization of the performance data
         perf_data = {
             "iterations": list(range(1, benchmark_result["iterations"] + 1)),
-            "times": benchmark_result.get("all_times", [benchmark_result["average_time"]] * benchmark_result["iterations"])
+            "times": benchmark_result.get(
+                "all_times",
+                [benchmark_result["average_time"]] * benchmark_result["iterations"],
+            ),
         }
 
         import matplotlib.figure
@@ -221,8 +238,10 @@ class TestVisualizationPerformanceWorkflow:
 
         assert isinstance(plot_result, matplotlib.figure.Figure)
 
-    @pytest.mark.skipif(not DATA_VISUALIZATION_AVAILABLE,
-                       reason="Data visualization module not available")
+    @pytest.mark.skipif(
+        not DATA_VISUALIZATION_AVAILABLE,
+        reason="Data visualization module not available",
+    )
     def test_visualization_error_handling(self):
         """Test error handling in visualization components."""
         from codomyrmex.data_visualization import create_bar_chart
@@ -240,8 +259,9 @@ class TestVisualizationPerformanceWorkflow:
 
         assert result is None
 
-    @pytest.mark.skipif(not PERFORMANCE_AVAILABLE,
-                       reason="Performance module not available")
+    @pytest.mark.skipif(
+        not PERFORMANCE_AVAILABLE, reason="Performance module not available"
+    )
     def test_performance_error_handling(self):
         """Test error handling in performance monitoring."""
         from codomyrmex.performance import profile_function
@@ -257,8 +277,9 @@ class TestVisualizationPerformanceWorkflow:
         # Should still have basic profiling info even if function failed
         assert "execution_time" in profile_result
 
-    @pytest.mark.skipif(not PERFORMANCE_AVAILABLE,
-                       reason="Performance module not available")
+    @pytest.mark.skipif(
+        not PERFORMANCE_AVAILABLE, reason="Performance module not available"
+    )
     def test_performance_profiler_class(self):
         """Test the PerformanceProfiler class."""
         from codomyrmex.performance import PerformanceProfiler
@@ -282,7 +303,7 @@ class TestVisualizationPerformanceWorkflow:
         # Create some test data
         test_data = {
             "performance_metrics": [0.1, 0.2, 0.15, 0.18, 0.12],
-            "chart_labels": ["Test1", "Test2", "Test3", "Test4", "Test5"]
+            "chart_labels": ["Test1", "Test2", "Test3", "Test4", "Test5"],
         }
 
         # Test that both modules can work with the same data structure
@@ -291,9 +312,10 @@ class TestVisualizationPerformanceWorkflow:
 
             viz_data = {
                 "categories": test_data["chart_labels"],
-                "values": test_data["performance_metrics"]
+                "values": test_data["performance_metrics"],
             }
             import matplotlib.figure
+
             chart = create_bar_chart(viz_data, "Performance Chart")
             assert isinstance(chart, matplotlib.figure.Figure)
 
@@ -333,7 +355,7 @@ class TestVisualizationPerformanceWorkflow:
                 """Function that uses CPU."""
                 result = 0
                 for i in range(100000):
-                    result += i ** 2
+                    result += i**2
                 return result
 
             profile_result = profile_function(cpu_intensive_function)
@@ -351,6 +373,7 @@ class TestVisualizationPerformanceWorkflow:
             data = {"categories": ["A", "B", "C"], "values": [1, 2, 3]}
 
             import matplotlib.figure
+
             # Test basic creation
             result = create_bar_chart(data, "Format Test")
             assert isinstance(result, matplotlib.figure.Figure)
@@ -366,6 +389,7 @@ class TestVisualizationPerformanceWorkflow:
             def variable_time_function():
                 """Function with variable execution time."""
                 import random
+
                 time.sleep(random.uniform(0.001, 0.01))
                 return 42
 
@@ -375,7 +399,11 @@ class TestVisualizationPerformanceWorkflow:
             assert "average_time" in benchmark
             assert "min_time" in benchmark
             assert "max_time" in benchmark
-            assert benchmark["min_time"] <= benchmark["average_time"] <= benchmark["max_time"]
+            assert (
+                benchmark["min_time"]
+                <= benchmark["average_time"]
+                <= benchmark["max_time"]
+            )
             assert benchmark["average_time"] > 0
 
     def test_integration_workflow_performance(self):
@@ -388,6 +416,7 @@ class TestVisualizationPerformanceWorkflow:
         # Step 1: Create visualization data
         if DATA_VISUALIZATION_AVAILABLE:
             from codomyrmex.data_visualization import create_bar_chart
+
             data = {"categories": ["X", "Y", "Z"], "values": [10, 20, 30]}
             create_bar_chart(data, "Integration Test")
             workflow_steps += 1
@@ -395,6 +424,7 @@ class TestVisualizationPerformanceWorkflow:
         # Step 2: Profile a function
         if PERFORMANCE_AVAILABLE:
             from codomyrmex.performance import profile_function
+
             profile_function(lambda: sum(range(100)))
             workflow_steps += 1
 

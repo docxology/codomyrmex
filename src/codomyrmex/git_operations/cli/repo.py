@@ -108,7 +108,9 @@ def cmd_clone(manager: RepositoryManager, args) -> None:
             try:
                 repo_type = RepositoryType(args.type.upper())
             except ValueError as e:
-                logger.warning("Invalid repository type for clone '%s': %s", args.type, e)
+                logger.warning(
+                    "Invalid repository type for clone '%s': %s", args.type, e
+                )
                 print(f"Invalid repository type: {args.type}")
                 return
 
@@ -147,7 +149,9 @@ def cmd_update(manager: RepositoryManager, args) -> None:
             try:
                 repo_type = RepositoryType(args.type.upper())
             except ValueError as e:
-                logger.warning("Invalid repository type for update '%s': %s", args.type, e)
+                logger.warning(
+                    "Invalid repository type for update '%s': %s", args.type, e
+                )
                 print(f"Invalid repository type: {args.type}")
                 return
 
@@ -410,7 +414,9 @@ Examples:
     clean_parser = subparsers.add_parser("clean", help="Clean repository")
     clean_parser.add_argument("repository", help="Repository name")
     clean_parser.add_argument("--path", help="Custom local path")
-    clean_parser.add_argument("--force", action="store_true", help="Force clean (ignored files)")
+    clean_parser.add_argument(
+        "--force", action="store_true", help="Force clean (ignored files)"
+    )
     clean_parser.set_defaults(func=cmd_clean)
 
     args = parser.parse_args()
@@ -432,7 +438,6 @@ Examples:
     except Exception as e:
         print(f"Error executing command: {e}")
         if args.verbose:
-
             traceback.print_exc()
 
 

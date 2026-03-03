@@ -263,6 +263,7 @@ class TestMain:
         """Nonexistent metadata file → returns gracefully (no crash)."""
         # Pointing to a nonexistent file — manager will start fresh
         import tempfile as tf
+
         with tf.TemporaryDirectory() as d:
             meta = str(Path(d) / "missing_subdir" / "meta.json")
             # This will fail to initialize (dir doesn't exist)
