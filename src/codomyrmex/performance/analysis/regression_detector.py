@@ -29,6 +29,7 @@ class BenchmarkResult:
         unit: Unit of measurement (e.g. "ms", "MB", "ops/s").
         higher_is_better: If True, value increase = improvement.
         metadata: Extra context (commit hash, env info, etc.).
+
     """
 
     name: str
@@ -49,6 +50,7 @@ class Baseline:
         sample_count: Number of runs in baseline.
         warning_threshold: Relative deviation to trigger WARNING.
         critical_threshold: Relative deviation to trigger CRITICAL.
+
     """
 
     name: str
@@ -71,6 +73,7 @@ class RegressionReport:
         severity: Assessed severity level.
         is_regression: Whether this constitutes a regression.
         message: Human-readable summary.
+
     """
 
     benchmark_name: str
@@ -96,6 +99,7 @@ class RegressionDetector:
     """
 
     def __init__(self) -> None:
+        """Initialize the regression detector."""
         self._baselines: dict[str, Baseline] = {}
 
     def set_baseline(self, baseline: Baseline) -> None:
@@ -127,6 +131,7 @@ class RegressionDetector:
 
         Raises:
             KeyError: If no baseline exists for the benchmark.
+
         """
         baseline = self._baselines.get(result.name)
         if baseline is None:
@@ -181,6 +186,7 @@ class RegressionDetector:
 
         Returns:
             List of RegressionReport objects.
+
         """
         reports = []
         for r in results:
@@ -200,6 +206,7 @@ class RegressionDetector:
 
         Returns:
             Multi-line summary string.
+
         """
         regressions = self.regressions_only(reports)
         lines = [f"Performance Report: {len(reports)} benchmarks, {len(regressions)} regressions"]

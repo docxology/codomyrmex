@@ -33,6 +33,7 @@ def performance_check_regression(
         warning_threshold: Relative deviation for WARNING.
         critical_threshold: Relative deviation for CRITICAL.
         higher_is_better: If True, decrease = regression.
+
     """
     try:
         from codomyrmex.performance.analysis.regression_detector import (
@@ -76,6 +77,7 @@ def performance_compare_benchmarks(
         before: Previous value.
         after: New value.
         higher_is_better: If True, increase = improvement.
+
     """
     try:
         from codomyrmex.performance.benchmarking.benchmark_comparison import (

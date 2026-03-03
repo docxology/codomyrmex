@@ -19,6 +19,7 @@ class MemorySnapshot:
         timestamp: When taken.
         object_count: Total tracked objects.
         tracked_types: Object count per type.
+
     """
 
     label: str
@@ -37,6 +38,7 @@ class MemoryDelta:
         object_delta: Change in total object count.
         type_deltas: Per-type changes.
         leak_suspected: Whether growth suggests a leak.
+
     """
 
     from_label: str
@@ -60,11 +62,13 @@ class MemoryProfiler:
     """
 
     def __init__(self, leak_threshold: int = 1000) -> None:
+        """Initialize the memory profiler."""
         self._snapshots: dict[str, MemorySnapshot] = {}
         self._leak_threshold = leak_threshold
 
     @property
     def snapshot_count(self) -> int:
+        """Get the number of stored memory snapshots."""
         return len(self._snapshots)
 
     def snapshot(self, label: str) -> MemorySnapshot:
@@ -75,6 +79,7 @@ class MemoryProfiler:
 
         Returns:
             The captured snapshot.
+
         """
         # Use sys.getrefcount and gc-style counting
         import gc
@@ -104,6 +109,7 @@ class MemoryProfiler:
 
         Returns:
             The snapshot.
+
         """
         snap = MemorySnapshot(
             label=label,
@@ -121,6 +127,7 @@ class MemoryProfiler:
 
         Returns:
             MemoryDelta with changes.
+
         """
         a = self._snapshots.get(label_a)
         b = self._snapshots.get(label_b)
@@ -145,6 +152,7 @@ class MemoryProfiler:
         )
 
     def get_snapshot(self, label: str) -> MemorySnapshot | None:
+        """Retrieve a memory snapshot by its label."""
         return self._snapshots.get(label)
 
 
