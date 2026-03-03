@@ -5,6 +5,7 @@ Theory Module Example - Agent Architectures and Reasoning
 Demonstrates usage of theoretical agent components: ReactiveArchitecture,
 DeliberativeArchitecture with KnowledgeBase, and SymbolicReasoningModel.
 """
+
 import sys
 from pathlib import Path
 
@@ -14,21 +15,33 @@ except ImportError:
     project_root = Path(__file__).resolve().parent.parent.parent
     sys.path.insert(0, str(project_root / "src"))
 
-from codomyrmex.agents import ReactiveArchitecture, DeliberativeArchitecture
+from codomyrmex.agents import DeliberativeArchitecture, ReactiveArchitecture
 from codomyrmex.agents.theory.reasoning_models import SymbolicReasoningModel
-from codomyrmex.utils.cli_helpers import setup_logging, print_success, print_info, print_section
+from codomyrmex.utils.cli_helpers import (
+    print_info,
+    print_section,
+    print_success,
+    setup_logging,
+)
 
 
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
-    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "agents" / "config.yaml"
+
+    import yaml
+
+    config_path = (
+        Path(__file__).resolve().parent.parent.parent
+        / "config"
+        / "agents"
+        / "config.yaml"
+    )
     config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
+        with open(config_path) as f:
             config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/agents/config.yaml")
+            print("Loaded config from config/agents/config.yaml")
 
     setup_logging()
     print_section("Agent Theory Examples")
@@ -40,11 +53,11 @@ def main():
     # Add rules
     reactive.add_rule(
         condition=lambda env: env.get("temperature", 0) > 30,
-        action=lambda env: {"action": "cool_down", "temp": env["temperature"]}
+        action=lambda env: {"action": "cool_down", "temp": env["temperature"]},
     )
     reactive.add_rule(
         condition=lambda env: env.get("temperature", 0) < 10,
-        action=lambda env: {"action": "heat_up", "temp": env["temperature"]}
+        action=lambda env: {"action": "heat_up", "temp": env["temperature"]},
     )
 
     # Simulate perception -> decision -> action
@@ -57,10 +70,10 @@ def main():
     # --- Deliberative Architecture with KnowledgeBase ---
     print_info("\n2. Deliberative Architecture Demo")
     deliberative = DeliberativeArchitecture()
-    
+
     # Set goals
     deliberative.set_goal({"type": "simple", "target": "optimize_code"})
-    
+
     # Simulate environment with facts
     environment = {"code_quality": 0.7, "test_coverage": 0.5}
     perception = deliberative.perceive(environment)
@@ -76,13 +89,15 @@ def main():
     # Add facts and rules
     reasoner.add_fact("is_python", True)
     reasoner.add_fact("has_tests", True)
-    reasoner.add_rule({
-        "conditions": [
-            {"fact": "is_python", "operator": "==", "value": True},
-            {"fact": "has_tests", "operator": "==", "value": True},
-        ],
-        "conclusion": {"quality": "high"}
-    })
+    reasoner.add_rule(
+        {
+            "conditions": [
+                {"fact": "is_python", "operator": "==", "value": True},
+                {"fact": "has_tests", "operator": "==", "value": True},
+            ],
+            "conclusion": {"quality": "high"},
+        }
+    )
 
     # Reason
     result = reasoner.reason(premises={"lines_of_code": 500})

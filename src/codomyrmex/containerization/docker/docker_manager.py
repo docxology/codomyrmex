@@ -1,10 +1,14 @@
+"""Module docstring."""
 import os
 import sys
 from dataclasses import dataclass, field
 from datetime import UTC, datetime
 from typing import Any
 
-import docker
+try:
+    import docker
+except ImportError:
+    docker = None
 
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
@@ -45,8 +49,7 @@ class ContainerConfig:
 
 
 class DockerManager:
-    """
-    Comprehensive Docker container manager.
+    """Comprehensive Docker container manager.
 
     Features:
     - Container building and management
@@ -57,11 +60,11 @@ class DockerManager:
     """
 
     def __init__(self, docker_host: str | None = None):
-        """
-        Initialize the Docker manager.
+        """Initialize the Docker manager.
 
         Args:
             docker_host: Docker daemon host (optional)
+
         """
         self.docker_host = docker_host
         self.client = None
@@ -89,8 +92,7 @@ class DockerManager:
         push: bool = False,
         registry_auth: dict[str, str] | None = None,
     ) -> dict[str, Any]:
-        """
-        Build a Docker image from configuration.
+        """Build a Docker image from configuration.
 
         Args:
             config: Container configuration
@@ -99,6 +101,7 @@ class DockerManager:
 
         Returns:
             Dict containing build results
+
         """
         if not self.client:
             return {"success": False, "error": "Docker client not available"}
@@ -156,8 +159,7 @@ class DockerManager:
     def push_image(
         self, image_name: str, auth_config: dict[str, str]
     ) -> dict[str, Any]:
-        """
-        Push a Docker image to registry.
+        """Push a Docker image to registry.
 
         Args:
             image_name: Full image name with tag
@@ -165,6 +167,7 @@ class DockerManager:
 
         Returns:
             Dict containing push results
+
         """
         if not self.client:
             return {"success": False, "error": "Docker client not available"}
@@ -196,8 +199,7 @@ class DockerManager:
     def run_container(
         self, config: ContainerConfig, detach: bool = True
     ) -> dict[str, Any]:
-        """
-        Run a Docker container.
+        """Run a Docker container.
 
         Args:
             config: Container configuration
@@ -205,6 +207,7 @@ class DockerManager:
 
         Returns:
             Dict containing container run results
+
         """
         if not self.client:
             return {"success": False, "error": "Docker client not available"}
@@ -259,14 +262,14 @@ class DockerManager:
             return {"success": False, "error": str(e)}
 
     def list_containers(self, show_all: bool = False) -> list[dict[str, Any]]:
-        """
-        List Docker containers.
+        """List Docker containers.
 
         Args:
             show_all: Whether to show all containers (including stopped)
 
         Returns:
             List of container information
+
         """
         if not self.client:
             return []
@@ -296,14 +299,14 @@ class DockerManager:
             return []
 
     def stop_container(self, container_id: str) -> dict[str, Any]:
-        """
-        Stop a Docker container.
+        """Stop a Docker container.
 
         Args:
             container_id: Container ID or name
 
         Returns:
             Dict containing stop results
+
         """
         if not self.client:
             return {"success": False, "error": "Docker client not available"}
@@ -325,8 +328,7 @@ class DockerManager:
     def remove_container(
         self, container_id: str, force: bool = False
     ) -> dict[str, Any]:
-        """
-        Remove a Docker container.
+        """Remove a Docker container.
 
         Args:
             container_id: Container ID or name
@@ -334,6 +336,7 @@ class DockerManager:
 
         Returns:
             Dict containing removal results
+
         """
         if not self.client:
             return {"success": False, "error": "Docker client not available"}
@@ -353,8 +356,7 @@ class DockerManager:
             return {"success": False, "error": str(e)}
 
     def get_container_logs(self, container_id: str, tail: int = 100) -> dict[str, Any]:
-        """
-        Get logs from a Docker container.
+        """Get logs from a Docker container.
 
         Args:
             container_id: Container ID or name
@@ -362,6 +364,7 @@ class DockerManager:
 
         Returns:
             Dict containing container logs
+
         """
         if not self.client:
             return {"success": False, "error": "Docker client not available"}
@@ -382,14 +385,14 @@ class DockerManager:
             return {"success": False, "error": str(e)}
 
     def get_container_stats(self, container_id: str) -> dict[str, Any]:
-        """
-        Get statistics for a Docker container.
+        """Get statistics for a Docker container.
 
         Args:
             container_id: Container ID or name
 
         Returns:
             Dict containing container statistics
+
         """
         if not self.client:
             return {"success": False, "error": "Docker client not available"}
@@ -412,8 +415,7 @@ class DockerManager:
             return {"success": False, "error": str(e)}
 
     def create_network(self, name: str, driver: str = "bridge") -> dict[str, Any]:
-        """
-        Create a Docker network.
+        """Create a Docker network.
 
         Args:
             name: Network name
@@ -421,6 +423,7 @@ class DockerManager:
 
         Returns:
             Dict containing network creation results
+
         """
         if not self.client:
             return {"success": False, "error": "Docker client not available"}
@@ -441,11 +444,11 @@ class DockerManager:
             return {"success": False, "error": str(e)}
 
     def list_images(self) -> list[dict[str, Any]]:
-        """
-        List Docker images.
+        """List Docker images.
 
         Returns:
             List of image information
+
         """
         if not self.client:
             return []
@@ -467,8 +470,7 @@ class DockerManager:
             return []
 
     def remove_image(self, image_name: str, force: bool = False) -> dict[str, Any]:
-        """
-        Remove a Docker image.
+        """Remove a Docker image.
 
         Args:
             image_name: Image name or ID
@@ -476,6 +478,7 @@ class DockerManager:
 
         Returns:
             Dict containing image removal results
+
         """
         if not self.client:
             return {"success": False, "error": "Docker client not available"}
@@ -494,11 +497,11 @@ class DockerManager:
             return {"success": False, "error": str(e)}
 
     def get_docker_info(self) -> dict[str, Any]:
-        """
-        Get Docker system information.
+        """Get Docker system information.
 
         Returns:
             Dict containing Docker system information
+
         """
         if not self.client:
             return {"available": False, "error": "Docker client not available"}
@@ -525,8 +528,7 @@ class DockerManager:
             return {"available": False, "error": str(e)}
 
     def optimize_container_image(self, base_image: str, requirements: list[str]) -> str:
-        """
-        Optimize container image selection based on requirements.
+        """Optimize container image selection based on requirements.
 
         Args:
             base_image: Current base image
@@ -534,6 +536,7 @@ class DockerManager:
 
         Returns:
             Optimized base image recommendation
+
         """
         # Simple optimization logic - can be enhanced with ML models
         optimizations = {
@@ -568,14 +571,14 @@ class DockerManager:
         return base_image  # Return original if no optimization found
 
     def analyze_image_size(self, image_name: str) -> dict[str, Any]:
-        """
-        Analyze Docker image size and layer information.
+        """Analyze Docker image size and layer information.
 
         Args:
             image_name: Name of the image to analyze
 
         Returns:
             Dict containing size analysis
+
         """
         if not self.client:
             return {"error": "Docker client not available"}
@@ -631,14 +634,14 @@ class DockerManager:
             return {"error": str(e)}
 
     def get_image_layers(self, image_name: str) -> list[dict[str, Any]]:
-        """
-        Get detailed information about image layers.
+        """Get detailed information about image layers.
 
         Args:
             image_name: Name of the image to analyze
 
         Returns:
             List of layer information dictionaries
+
         """
         if not self.client:
             return []
@@ -674,8 +677,7 @@ def build_containers(
     push: bool = False,
     registry_auth: dict[str, str] | None = None,
 ) -> dict[str, Any]:
-    """
-    Convenience function to build containers.
+    """Build containers.
 
     Args:
         config: Container configuration
@@ -684,16 +686,17 @@ def build_containers(
 
     Returns:
         Dict containing build results
+
     """
     manager = DockerManager()
     return manager.build_image(config, push, registry_auth)
 
 
 def manage_containers() -> DockerManager:
-    """
-    Convenience function to create Docker manager.
+    """Create Docker manager.
 
     Returns:
         DockerManager: Configured Docker manager
+
     """
     return DockerManager()

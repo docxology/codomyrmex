@@ -1,5 +1,4 @@
-"""
-Containerization Module for Codomyrmex.
+"""Containerization Module for Codomyrmex.
 
 The Containerization module provides container management,
 orchestration, and deployment capabilities for the Codomyrmex ecosystem.

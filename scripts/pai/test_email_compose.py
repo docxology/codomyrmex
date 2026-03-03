@@ -34,10 +34,10 @@ import urllib.error
 import urllib.request
 from pathlib import Path
 
-
 BASE_URL = "http://localhost:8888"
 
 # ── Helpers ──────────────────────────────────────────────────────────────────
+
 
 def _get(path: str) -> dict | list | None:
     """Send GET request, return parsed JSON or None on error."""
@@ -81,6 +81,7 @@ def _fail(label: str) -> None:
 
 # ── Test Functions ───────────────────────────────────────────────────────────
 
+
 def test_server_health() -> bool:
     """Verify PMServer is running and responsive."""
     print("\n── Server Health ──")
@@ -106,7 +107,9 @@ def test_calendar_api() -> bool:
         return True  # Not a hard failure
     _ok(f"Calendar API: {len(events)} events")
     for ev in events[:5]:
-        start = ev.get("start", {}).get("dateTime", ev.get("start", {}).get("date", "?"))
+        start = ev.get("start", {}).get(
+            "dateTime", ev.get("start", {}).get("date", "?")
+        )
         summary = ev.get("summary", "untitled")
         print(f"    📅 {start}: {summary}")
     return True
@@ -240,6 +243,7 @@ def test_compose_all_templates(backend: str) -> dict:
 
 # ── Dry-Run Mode ─────────────────────────────────────────────────────────────
 
+
 def test_dry_run() -> dict:
     """Test API connectivity without invoking LLM backends."""
     print("\n══════════════════════════════════════════")
@@ -255,6 +259,7 @@ def test_dry_run() -> dict:
 
 
 # ── CLI ──────────────────────────────────────────────────────────────────────
+
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
@@ -335,17 +340,20 @@ def main() -> int:
         print(f"\n⚠ {total - passed} template(s) failed.")
         return 1
 
-
-
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
-    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "pai" / "config.yaml"
+
+    import yaml
+
+    config_path = (
+        Path(__file__).resolve().parent.parent.parent / "config" / "pai" / "config.yaml"
+    )
     config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
+        with open(config_path) as f:
             config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/pai/config.yaml")
+            print("Loaded config from config/pai/config.yaml")
+
 
 if __name__ == "__main__":
     sys.exit(main())

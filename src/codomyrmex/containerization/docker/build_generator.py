@@ -1,3 +1,4 @@
+"""Module docstring."""
 import logging
 from dataclasses import dataclass, field
 from typing import Any
@@ -15,6 +16,7 @@ except ImportError:
 @dataclass
 class BuildStage:
     """Represents a single build stage in a multi-stage build."""
+
     name: str
     base_image: str
     commands: list[str] = field(default_factory=list)
@@ -51,6 +53,7 @@ class BuildStage:
 @dataclass
 class MultiStageBuild:
     """Represents a complete multi-stage Docker build."""
+
     stages: list[BuildStage] = field(default_factory=list)
     final_stage: str | None = None
     metadata: dict[str, Any] = field(default_factory=dict)
@@ -79,6 +82,7 @@ class MultiStageBuild:
 @dataclass
 class BuildScript:
     """Represents a build script for containerization."""
+
     name: str
     dockerfile_path: str
     context_path: str
@@ -109,8 +113,7 @@ class BuildScript:
         return "\n".join(lines)
 
 class BuildGenerator:
-    """
-    Advanced Dockerfile and build script generator.
+    """Advanced Dockerfile and build script generator.
 
     Provides intelligent generation of Dockerfiles with multi-stage builds,
     security hardening, performance optimization, and build script generation.
@@ -121,14 +124,14 @@ class BuildGenerator:
         self.templates = self._load_templates()
 
     def create_multi_stage_build(self, config: dict[str, Any]) -> MultiStageBuild:
-        """
-        Create a multi-stage build configuration.
+        """Create a multi-stage build configuration.
 
         Args:
             config: Build configuration dictionary
 
         Returns:
             MultiStageBuild configuration
+
         """
         build = MultiStageBuild()
         build.metadata = config.get("metadata", {})
@@ -150,14 +153,14 @@ class BuildGenerator:
         return build
 
     def optimize_dockerfile(self, dockerfile_path: str) -> str:
-        """
-        Optimize an existing Dockerfile.
+        """Optimize an existing Dockerfile.
 
         Args:
             dockerfile_path: Path to existing Dockerfile
 
         Returns:
             Optimized Dockerfile content
+
         """
         try:
             with open(dockerfile_path) as f:
@@ -206,14 +209,14 @@ class BuildGenerator:
             raise
 
     def generate_build_script(self, config: dict[str, Any]) -> BuildScript:
-        """
-        Generate a build script from configuration.
+        """Generate a build script from configuration.
 
         Args:
             config: Build script configuration
 
         Returns:
             BuildScript instance
+
         """
         script = BuildScript(
             name=config.get("name", "build"),
@@ -228,14 +231,14 @@ class BuildGenerator:
         return script
 
     def validate_dockerfile(self, dockerfile_content: str) -> tuple[bool, list[str]]:
-        """
-        Validate Dockerfile content for common issues.
+        """Validate Dockerfile content for common issues.
 
         Args:
             dockerfile_content: Dockerfile content to validate
 
         Returns:
             Tuple of (is_valid, list_of_issues)
+
         """
         issues = []
         lines = dockerfile_content.split('\n')

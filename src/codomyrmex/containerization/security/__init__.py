@@ -1,5 +1,4 @@
-"""
-Security submodule for containerization.
+"""Security submodule for containerization.
 
 Provides container security scanning and optimization.
 """

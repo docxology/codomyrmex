@@ -17,6 +17,7 @@ from typing import Any
 
 class VulnerabilitySeverity(Enum):
     """Severity levels for vulnerabilities."""
+
     CRITICAL = "critical"
     HIGH = "high"
     MEDIUM = "medium"
@@ -27,6 +28,7 @@ class VulnerabilitySeverity(Enum):
 @dataclass
 class Vulnerability:
     """Represents a detected vulnerability."""
+
     id: str
     severity: VulnerabilitySeverity
     title: str
@@ -40,6 +42,7 @@ class Vulnerability:
 @dataclass
 class SecurityScanResult:
     """Result of a security scan."""
+
     image: str
     scan_time: datetime
     vulnerabilities: list[Vulnerability] = field(default_factory=list)
@@ -114,6 +117,7 @@ class SecurityScanner:
 
         Raises:
             NotImplementedError: If Trivy CLI is not installed.
+
         """
         cli = _trivy_cli()
         try:
@@ -139,25 +143,23 @@ class SecurityScanner:
 
 
 class ContainerSecurityScanner:
-    """
-    Container security scanner for vulnerability detection via Trivy.
+    """Container security scanner for vulnerability detection via Trivy.
 
     Requires Trivy CLI: https://trivy.dev/latest/getting-started/installation/
     """
 
     def __init__(self, config: dict[str, Any] | None = None):
-        """
-        Initialize the security scanner.
+        """Initialize the security scanner.
 
         Args:
             config: Optional configuration dictionary
+
         """
         self.config = config or {}
         self._scan_history: list[SecurityScanResult] = []
 
     def scan_image(self, image: str, **kwargs) -> SecurityScanResult:
-        """
-        Scan a container image for vulnerabilities using Trivy.
+        """Scan a container image for vulnerabilities using Trivy.
 
         Args:
             image: Image name/tag to scan
@@ -168,6 +170,7 @@ class ContainerSecurityScanner:
 
         Raises:
             NotImplementedError: If Trivy CLI is not installed
+
         """
         cli = _trivy_cli()
         severity_filter = kwargs.get("severity_filter", [])
@@ -205,8 +208,7 @@ class ContainerSecurityScanner:
         return result
 
     def scan_container(self, container_id: str, **kwargs) -> SecurityScanResult:
-        """
-        Scan a running container for vulnerabilities using Trivy.
+        """Scan a running container for vulnerabilities using Trivy.
 
         Args:
             container_id: Container ID or name
@@ -217,6 +219,7 @@ class ContainerSecurityScanner:
 
         Raises:
             NotImplementedError: If Trivy CLI is not installed
+
         """
         cli = _trivy_cli()
         try:
@@ -248,8 +251,7 @@ class ContainerSecurityScanner:
         return result
 
     def check_compliance(self, image: str, policy: str = "default") -> SecurityScanResult:
-        """
-        Check container against compliance policy using Trivy misconfiguration scan.
+        """Check container against compliance policy using Trivy misconfiguration scan.
 
         Args:
             image: Image to check
@@ -260,6 +262,7 @@ class ContainerSecurityScanner:
 
         Raises:
             NotImplementedError: If Trivy CLI is not installed
+
         """
         cli = _trivy_cli()
         try:
@@ -319,6 +322,7 @@ def scan_container_security(
 
     Raises:
         NotImplementedError: If Trivy CLI is not installed
+
     """
     if scanner is None:
         scanner = ContainerSecurityScanner()

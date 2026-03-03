@@ -1,9 +1,13 @@
+"""Module docstring."""
 import logging
 import re
 from dataclasses import dataclass, field
 from typing import Any
 
-import docker
+try:
+    import docker
+except ImportError:
+    docker = None
 
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
@@ -25,6 +29,7 @@ except ImportError:
 @dataclass
 class ImageAnalysis:
     """Analysis results for a Docker image."""
+
     image_name: str
     size_bytes: int
     layers: list[dict[str, Any]]
@@ -54,6 +59,7 @@ class ImageAnalysis:
 @dataclass
 class OptimizationSuggestion:
     """A specific optimization suggestion."""
+
     category: str
     description: str
     impact: str  # "high", "medium", "low"
@@ -73,8 +79,7 @@ class OptimizationSuggestion:
         }
 
 class ImageOptimizer:
-    """
-    Docker image optimizer with comprehensive analysis and optimization capabilities.
+    """Docker image optimizer with comprehensive analysis and optimization capabilities.
 
     Provides intelligent image analysis, optimization suggestions, and automated
     Dockerfile improvements for better image efficiency and security.
@@ -87,14 +92,14 @@ class ImageOptimizer:
             logger.warning("Docker library not available, image optimization features will be limited")
 
     def analyze_image(self, image_name: str) -> ImageAnalysis:
-        """
-        Analyze a Docker image for optimization opportunities.
+        """Analyze a Docker image for optimization opportunities.
 
         Args:
             image_name: Name of the Docker image to analyze
 
         Returns:
             ImageAnalysis with detailed image information and optimization suggestions
+
         """
         if not self.client:
             raise RuntimeError("Docker client not available")
@@ -142,14 +147,14 @@ class ImageOptimizer:
             raise
 
     def optimize_image(self, config: dict[str, Any]) -> dict[str, Any]:
-        """
-        Optimize an image configuration.
+        """Optimize an image configuration.
 
         Args:
             config: Image configuration dictionary
 
         Returns:
             Optimized configuration with improvements
+
         """
         optimized = config.copy()
 
@@ -163,14 +168,14 @@ class ImageOptimizer:
         return optimized
 
     def suggest_optimizations(self, image_name: str) -> list[OptimizationSuggestion]:
-        """
-        Generate specific optimization suggestions for an image.
+        """Generate specific optimization suggestions for an image.
 
         Args:
             image_name: Name of the image to analyze
 
         Returns:
             List of optimization suggestions
+
         """
         try:
             analysis = self.analyze_image(image_name)
@@ -180,8 +185,7 @@ class ImageOptimizer:
             return []
 
     def compare_images(self, image1: str, image2: str) -> dict[str, Any]:
-        """
-        Compare two images and provide detailed comparison.
+        """Compare two images and provide detailed comparison.
 
         Args:
             image1: First image name
@@ -189,6 +193,7 @@ class ImageOptimizer:
 
         Returns:
             Comparison results
+
         """
         try:
             analysis1 = self.analyze_image(image1)
@@ -223,14 +228,14 @@ class ImageOptimizer:
             return {"error": str(e)}
 
     def get_optimization_report(self, image_name: str) -> dict[str, Any]:
-        """
-        Generate a comprehensive optimization report for an image.
+        """Generate a comprehensive optimization report for an image.
 
         Args:
             image_name: Image to analyze
 
         Returns:
             Detailed optimization report
+
         """
         try:
             analysis = self.analyze_image(image_name)

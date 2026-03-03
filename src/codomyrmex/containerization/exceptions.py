@@ -31,6 +31,7 @@ class ContainerError(BaseContainerError):
             container_id: ID of the container
             container_name: Name of the container
             **kwargs: Additional context passed to parent
+
         """
         super().__init__(message, **kwargs)
         if container_id:
@@ -64,6 +65,7 @@ class ImageBuildError(BaseContainerError):
             dockerfile_path: Path to the Dockerfile
             build_step: Step number where build failed
             **kwargs: Additional context passed to parent
+
         """
         super().__init__(message, **kwargs)
         if image_name:
@@ -99,6 +101,7 @@ class NetworkError(BaseContainerError):
             network_id: ID of the network
             driver: Network driver type
             **kwargs: Additional context passed to parent
+
         """
         super().__init__(message, **kwargs)
         if network_name:
@@ -132,6 +135,7 @@ class VolumeError(BaseContainerError):
             mount_point: Mount point path in container
             driver: Volume driver type
             **kwargs: Additional context passed to parent
+
         """
         super().__init__(message, **kwargs)
         if volume_name:
@@ -163,6 +167,7 @@ class RegistryError(BaseContainerError):
             registry_url: URL of the registry
             image_reference: Full image reference (registry/image:tag)
             **kwargs: Additional context passed to parent
+
         """
         super().__init__(message, **kwargs)
         if registry_url:
@@ -194,6 +199,7 @@ class KubernetesError(BaseContainerError):
             resource_name: Name of the resource
             namespace: Kubernetes namespace
             **kwargs: Additional context passed to parent
+
         """
         super().__init__(message, **kwargs)
         if resource_type:

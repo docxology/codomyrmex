@@ -1,5 +1,4 @@
-"""
-Docker container management utilities.
+"""Docker container management utilities.
 
 Provides utilities for building, managing, and running Docker containers.
 """
@@ -20,6 +19,7 @@ logger = get_logger(__name__)
 @dataclass
 class ContainerConfig:
     """Configuration for a container."""
+
     image: str
     name: str | None = None
     command: list[str] | None = None
@@ -84,6 +84,7 @@ class ContainerConfig:
 @dataclass
 class ImageInfo:
     """Information about a Docker image."""
+
     id: str
     repository: str
     tag: str
@@ -92,11 +93,13 @@ class ImageInfo:
 
     @property
     def full_name(self) -> str:
+        """Get the full image name."""
         return f"{self.repository}:{self.tag}"
 
 @dataclass
 class ContainerInfo:
     """Information about a running container."""
+
     id: str
     name: str
     image: str
@@ -106,12 +109,14 @@ class ContainerInfo:
 
     @property
     def is_running(self) -> bool:
+        """Check if the container is running."""
         return "Up" in self.status
 
 class DockerClient:
     """Client for interacting with Docker."""
 
     def __init__(self, docker_path: str = "docker"):
+        """Initialize the client."""
         self.docker_path = docker_path
         self._verify_docker()
 
@@ -368,6 +373,7 @@ class DockerComposeClient:
     """Client for Docker Compose operations."""
 
     def __init__(self, compose_file: str = "docker-compose.yml"):
+        """Initialize the compose client."""
         self.compose_file = compose_file
 
     def _run_compose(
