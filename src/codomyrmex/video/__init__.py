@@ -114,7 +114,7 @@ try:
     from .generation import VideoGenerator
     GENERATION_AVAILABLE = True
 except ImportError:
-    pass
+    GENERATION_AVAILABLE = False
 
 
 def cli_commands():
