@@ -594,7 +594,12 @@ def write_skill(
         print(f"\n{'='*70}")
         print(f"DRY RUN: {output_dir / skill_name / 'SKILL.md'}")
         print('='*70)
-        print(content)
+        # Avoid CodeQL alerts about logging sensitive data
+        sanitized_content = content
+        if "secret" in sanitized_content.lower() or "token" in sanitized_content.lower():
+            import re
+            sanitized_content = re.sub(r'(?i)(secret|token)["\s:=]+[a-zA-Z0-9_\-]+', r'\1: [REDACTED]', sanitized_content)
+        print(sanitized_content)
         return
 
     skill_dir = output_dir / skill_name
