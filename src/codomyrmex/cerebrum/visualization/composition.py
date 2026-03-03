@@ -1,11 +1,16 @@
 from pathlib import Path
 from typing import Any
 
-import matplotlib.pyplot as plt
-import numpy as np
-from matplotlib.figure import Figure
-from matplotlib.gridspec import GridSpec
-from matplotlib.patches import Patch
+try:
+    import matplotlib.pyplot as plt
+    import numpy as np
+    from matplotlib.figure import Figure
+    from matplotlib.gridspec import GridSpec
+    from matplotlib.patches import Patch
+    HAS_MATPLOTLIB = True
+except ImportError:
+    HAS_MATPLOTLIB = False
+    Figure = Any
 
 from codomyrmex.cerebrum.core.exceptions import VisualizationError
 from codomyrmex.cerebrum.visualization.base import (

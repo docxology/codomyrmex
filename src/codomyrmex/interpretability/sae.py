@@ -41,8 +41,12 @@ class SparseAutoencoder:
 
         self._normalize_decoder()
 
-    def _normalize_decoder(self):
-        """Normalize decoder columns to unit norm (standard SAE practice)."""
+    def _normalize_decoder(self) -> None:
+        """Normalize decoder columns to unit norm (standard SAE practice).
+
+        This prevents the decoder weights from growing arbitrarily large while the
+        features shrink, which would artificially lower the L1 penalty.
+        """
         norms = np.linalg.norm(self.W_dec, axis=0, keepdims=True)
         self.W_dec = self.W_dec / (norms + 1e-8)
 
@@ -59,24 +63,49 @@ class SparseAutoencoder:
         return np.maximum(0, pre_relu)  # ReLU sparsity
 
     def decode(self, features: np.ndarray) -> np.ndarray:
-        """Decode sparse features back to activation space."""
+        """Decode sparse features back to activation space.
+
+        Args:
+            features: (batch, d_features) sparse activations.
+
+        Returns:
+            reconstruction: (batch, d_input) reconstructed activations.
+        """
         return features @ self.W_dec.T + self.b_dec
 
     def forward(self, x: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
-        """Encode then decode."""
+        """Encode inputs into sparse features and then decode back to reconstructions.
+
+        Args:
+            x: (batch, d_input) original activations.
+
+        Returns:
+            Tuple containing:
+                - reconstruction: (batch, d_input) reconstructed activations.
+                - features: (batch, d_features) sparse activations.
+        """
         features = self.encode(x)
         reconstruction = self.decode(features)
         return reconstruction, features
 
     def loss(self, x: np.ndarray) -> dict:
-        """Compute SAE loss components."""
+        """Compute SAE loss components including reconstruction and sparsity loss.
+
+        Args:
+            x: (batch, d_input) original activations.
+
+        Returns:
+            Dictionary containing computed loss metrics.
+        """
         reconstruction, features = self.forward(x)
 
         # Reconstruction loss: MSE
         recon_loss = float(np.mean((x - reconstruction) ** 2))
 
         # Sparsity loss: L1 norm of features
-        sparsity_loss = float(self.lambda_l1 * np.mean(np.sum(np.abs(features), axis=-1)))
+        sparsity_loss = float(
+            self.lambda_l1 * np.mean(np.sum(np.abs(features), axis=-1))
+        )
 
         # Metrics
         n_active = float(np.mean(np.sum(features > 0, axis=-1)))
@@ -90,7 +119,15 @@ class SparseAutoencoder:
         }
 
     def train_step(self, x: np.ndarray, lr: float = 1e-3) -> dict:
-        """One gradient descent step using closed-form gradients."""
+        """One gradient descent step using closed-form gradients.
+
+        Args:
+            x: (batch, d_input) activations to train on.
+            lr: Learning rate for the update step.
+
+        Returns:
+            Dictionary of loss components computed after the update.
+        """
         reconstruction, features = self.forward(x)
 
         # Gradient of MSE wrt decoder
@@ -119,7 +156,19 @@ def train_sae(
     lambda_l1: float = 1e-3,
     seed: int = None,
 ) -> SparseAutoencoder:
-    """Train a sparse autoencoder on neural network activations."""
+    """Train a sparse autoencoder on neural network activations.
+
+    Args:
+        activations: Array of shape (n_samples, d_input) representing activations.
+        d_features: Target number of sparse features to learn. Defaults to 4 * d_input.
+        n_steps: Number of training steps to perform.
+        lr: Learning rate for training.
+        lambda_l1: Coefficient for the L1 sparsity penalty.
+        seed: Random seed for initialization and sampling.
+
+    Returns:
+        The trained SparseAutoencoder instance.
+    """
     if seed is not None:
         np.random.seed(seed)
 
@@ -138,7 +187,15 @@ def train_sae(
 
 
 def analyze_features(sae: SparseAutoencoder, activations: np.ndarray) -> dict:
-    """Analyze learned features: find most active, compute correlations."""
+    """Analyze learned features: find most active, compute correlations.
+
+    Args:
+        sae: A trained SparseAutoencoder instance.
+        activations: Array of shape (n_samples, d_input) to analyze.
+
+    Returns:
+        Dictionary containing analysis statistics (sparsity ratio, top features, etc.).
+    """
     features = sae.encode(activations)
 
     # Feature activation statistics

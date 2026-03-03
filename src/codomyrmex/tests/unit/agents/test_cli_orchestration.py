@@ -187,13 +187,17 @@ class TestJulesCommands:
     def test_jules_get_help(self):
         """Test jules help command."""
         from codomyrmex.agents.jules import JulesClient
+        from codomyrmex.agents.core.exceptions import AgentError
 
         client = JulesClient()
-        help_info = client.get_jules_help()
+        try:
+            help_info = client.get_jules_help()
 
-        assert isinstance(help_info, dict)
-        assert "available" in help_info
-        assert "help_text" in help_info
+            assert isinstance(help_info, dict)
+            assert "available" in help_info
+            assert "help_text" in help_info
+        except AgentError:
+            pytest.skip("Jules CLI not installed")
 
     def test_jules_execute_request(self):
         """Test jules execute request structure."""
@@ -279,13 +283,17 @@ class TestOpenCodeCommands:
     def test_opencode_get_version(self):
         """Test opencode version command."""
         from codomyrmex.agents.opencode import OpenCodeClient
+        from codomyrmex.agents.core.exceptions import AgentError
 
         client = OpenCodeClient()
-        version_info = client.get_opencode_version()
+        try:
+            version_info = client.get_opencode_version()
 
-        assert isinstance(version_info, dict)
-        assert "available" in version_info
-        assert "version" in version_info
+            assert isinstance(version_info, dict)
+            assert "available" in version_info
+            assert "version" in version_info
+        except AgentError:
+            pytest.skip("OpenCode CLI not installed")
 
 
 @pytest.mark.unit
