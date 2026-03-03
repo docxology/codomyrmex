@@ -1,3 +1,5 @@
+"""Advanced analytics and data streaming for physical management."""
+
 import json
 import statistics
 import threading
@@ -9,8 +11,6 @@ from enum import Enum
 from typing import Any
 
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
-
-"""Advanced analytics and data streaming for physical management."""
 
 logger = get_logger(__name__)
 
@@ -250,8 +250,7 @@ class StreamingAnalytics:
     """Central streaming analytics manager."""
 
     def __init__(self):
-        """  Init  .
-            """
+        """Init  ."""
         self.streams: dict[str, DataStream] = {}
         self.processors: list[Callable[[str, DataPoint], None]] = []
         self.alerts: list[dict[str, Any]] = []
@@ -401,8 +400,7 @@ class StreamingAnalytics:
                         "end_time": w.end_time,
                         "duration": w.duration,
                         "metrics": {
-                            k.value: v
-                            for k, v in w.calculate_metrics().items()
+                            k.value: v for k, v in w.calculate_metrics().items()
                         },
                     }
                     for w in stream.completed_windows
@@ -529,7 +527,8 @@ class PredictiveAnalytics:
             mean2 = statistics.mean(values2)
 
             numerator = sum(
-                (v1 - mean1) * (v2 - mean2) for v1, v2 in zip(values1, values2, strict=False)
+                (v1 - mean1) * (v2 - mean2)
+                for v1, v2 in zip(values1, values2, strict=False)
             )
             sum_sq1 = sum((v1 - mean1) ** 2 for v1 in values1)
             sum_sq2 = sum((v2 - mean2) ** 2 for v2 in values2)
