@@ -1,24 +1,22 @@
 import http.server
 import socketserver
 import threading
-import urllib.request
-import urllib.error
 import time
 
 import pytest
 
 from codomyrmex.web_scraping.mcp_tools import (
-    scraping_fetch_page,
     scraping_extract_links,
+    scraping_fetch_page,
     scraping_get_text,
 )
 
 
 class MockServerRequestHandler(http.server.SimpleHTTPRequestHandler):
     def do_GET(self):
-        if self.path == '/test.html':
+        if self.path == "/test.html":
             self.send_response(200)
-            self.send_header('Content-type', 'text/html')
+            self.send_header("Content-type", "text/html")
             self.end_headers()
             html_content = """
             <!DOCTYPE html>
@@ -36,8 +34,8 @@ class MockServerRequestHandler(http.server.SimpleHTTPRequestHandler):
             </body>
             </html>
             """
-            self.wfile.write(html_content.encode('utf-8'))
-        elif self.path == '/error':
+            self.wfile.write(html_content.encode("utf-8"))
+        elif self.path == "/error":
             self.send_response(500)
             self.end_headers()
         else:
@@ -47,6 +45,7 @@ class MockServerRequestHandler(http.server.SimpleHTTPRequestHandler):
     def log_message(self, format, *args):
         # Suppress logging
         pass
+
 
 @pytest.fixture(scope="module")
 def local_server():
@@ -68,6 +67,7 @@ def local_server():
     httpd.server_close()
     server_thread.join()
 
+
 def test_scraping_fetch_page_success(local_server):
     url = f"{local_server}/test.html"
     result = scraping_fetch_page(url)
@@ -78,6 +78,7 @@ def test_scraping_fetch_page_success(local_server):
     assert "<html>" in result["html"]
     assert "Test Page" in result["html"]
 
+
 def test_scraping_fetch_page_error(local_server):
     url = f"{local_server}/error"
     result = scraping_fetch_page(url)
@@ -86,9 +87,11 @@ def test_scraping_fetch_page_error(local_server):
     assert "message" in result
     assert "HTTP Error 500" in result["message"]
 
+
 def test_scraping_fetch_page_invalid_url():
     result = scraping_fetch_page("http://invalid.domain.that.does.not.exist.codomyrmex")
     assert result["status"] == "error"
+
 
 def test_scraping_extract_links(local_server):
     url = f"{local_server}/test.html"
@@ -102,12 +105,14 @@ def test_scraping_extract_links(local_server):
     assert f"{local_server}/link1" in links
     assert "http://external.com" in links
 
+
 def test_scraping_extract_links_error(local_server):
     url = f"{local_server}/error"
     result = scraping_extract_links(url)
 
     assert result["status"] == "error"
     assert "message" in result
+
 
 def test_scraping_get_text(local_server):
     url = f"{local_server}/test.html"
@@ -126,6 +131,7 @@ def test_scraping_get_text(local_server):
     assert "var x = 1" not in text
     assert "color: black" not in text
     assert "Test Page" not in text
+
 
 def test_scraping_get_text_error(local_server):
     url = f"{local_server}/error"

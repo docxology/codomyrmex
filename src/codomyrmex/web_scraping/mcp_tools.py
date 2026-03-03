@@ -25,22 +25,14 @@ def scraping_fetch_page(url: str) -> dict:
         Dictionary containing status, HTML content, and message if failed.
     """
     req = urllib.request.Request(
-        url,
-        headers={"User-Agent": "Codomyrmex/1.0 (Web Scraper)"}
+        url, headers={"User-Agent": "Codomyrmex/1.0 (Web Scraper)"}
     )
     try:
         with urllib.request.urlopen(req, timeout=10) as response:
-            content = response.read().decode('utf-8', errors='replace')
-            return {
-                "status": "success",
-                "html": content,
-                "url": response.geturl()
-            }
+            content = response.read().decode("utf-8", errors="replace")
+            return {"status": "success", "html": content, "url": response.geturl()}
     except Exception as e:
-        return {
-            "status": "error",
-            "message": str(e)
-        }
+        return {"status": "error", "message": str(e)}
 
 
 class _LinkExtractor(HTMLParser):
@@ -79,15 +71,9 @@ def scraping_extract_links(url: str, base_url: str = "") -> dict:
     parser = _LinkExtractor(effective_base)
     try:
         parser.feed(html_content)
-        return {
-            "status": "success",
-            "links": parser.links
-        }
+        return {"status": "success", "links": parser.links}
     except Exception as e:
-        return {
-            "status": "error",
-            "message": str(e)
-        }
+        return {"status": "error", "message": str(e)}
 
 
 class _TextExtractor(HTMLParser):
@@ -137,16 +123,10 @@ def scraping_get_text(url: str) -> dict:
         parser.feed(html_content)
         raw_text = "".join(parser.text_chunks)
         # Clean up multiple newlines and spaces
-        clean_text = re.sub(r'\n+', '\n', raw_text)
-        clean_text = re.sub(r'[ \t]+', ' ', clean_text)
+        clean_text = re.sub(r"\n+", "\n", raw_text)
+        clean_text = re.sub(r"[ \t]+", " ", clean_text)
         clean_text = html.unescape(clean_text).strip()
 
-        return {
-            "status": "success",
-            "text": clean_text
-        }
+        return {"status": "success", "text": clean_text}
     except Exception as e:
-        return {
-            "status": "error",
-            "message": str(e)
-        }
+        return {"status": "error", "message": str(e)}
