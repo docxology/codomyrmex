@@ -243,7 +243,7 @@ jobs:
           if [ ${#affected_modules[@]} -eq 0 ]; then
             echo 'modules=[]' >> "$GITHUB_OUTPUT"
           else
-            JSON_ARRAY=$(printf '%s\n' "${affected_modules[@]}" | jq -R . | jq -s -c .) || JSON_ARRAY="[]"
+            JSON_ARRAY=$(printf '%s\n' "${affected_modules[@]}" | jq -R . | jq -s -c . || echo "[]")
             echo "modules=${JSON_ARRAY}" >> "$GITHUB_OUTPUT"
           fi
           
