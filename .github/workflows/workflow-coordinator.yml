@@ -241,13 +241,10 @@ jobs:
           echo "strategy=$strategy" >> $GITHUB_OUTPUT
 
           if [ ${#affected_modules[@]} -eq 0 ]; then
-            { echo 'modules<<EOF'; echo '[]'; echo 'EOF'; } >> "$GITHUB_OUTPUT"
+            echo 'modules=[]' >> "$GITHUB_OUTPUT"
           else
-            {
-              echo "modules<<EOF"
-              printf '%s\n' "${affected_modules[@]}" | jq -R . | jq -s -c . || echo "[]"
-              echo "EOF"
-            } >> "$GITHUB_OUTPUT"
+            JSON_ARRAY=$(printf '%s\n' "${affected_modules[@]}" | jq -R . | jq -s -c .) || JSON_ARRAY="[]"
+            echo "modules=${JSON_ARRAY}" >> "$GITHUB_OUTPUT"
           fi
           
           echo "Test strategy: $strategy"
