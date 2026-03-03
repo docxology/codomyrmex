@@ -11,6 +11,12 @@ from .config_monitor import (
     ConfigurationMonitor,
     monitor_config_changes,
 )
+from .mcp_tools import (
+    config_monitoring_audit_configuration,
+    config_monitoring_create_snapshot,
+    config_monitoring_detect_changes,
+    config_monitoring_detect_drift,
+)
 from .watcher import ConfigWatcher
 
 __all__ = [
@@ -19,5 +25,9 @@ __all__ = [
     "ConfigSnapshot",
     "ConfigurationMonitor",
     "ConfigWatcher",
+    "config_monitoring_audit_configuration",
+    "config_monitoring_create_snapshot",
+    "config_monitoring_detect_changes",
+    "config_monitoring_detect_drift",
     "monitor_config_changes",
 ]

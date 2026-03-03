@@ -28,6 +28,14 @@ Thread-safe filesystem poller for hot-reloading.
 - `start()` / `stop()`: Lifecycle management.
 - `is_alive`: Status check.
 
+
+### `mcp_tools.py`
+Exposes the core monitoring functionalities to the Model Context Protocol (MCP) using decorators:
+- `config_monitoring_detect_changes`
+- `config_monitoring_create_snapshot`
+- `config_monitoring_detect_drift`
+- `config_monitoring_audit_configuration`
+
 ## Directory Layout
 - `{workspace}/config_monitoring/config_hashes.json`: Current known hashes.
 - `{workspace}/config_monitoring/snapshots/`: JSON snapshot files.

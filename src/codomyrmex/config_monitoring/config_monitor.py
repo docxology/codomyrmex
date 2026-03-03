@@ -1,3 +1,5 @@
+"""Configuration Monitoring Module for Codomyrmex."""
+
 import hashlib
 import json
 import re
@@ -9,8 +11,6 @@ from typing import Any
 
 from codomyrmex.exceptions import CodomyrmexError
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
-
-"""Configuration Monitoring Module for Codomyrmex."""
 
 logger = get_logger(__name__)
 
@@ -78,7 +78,7 @@ class ConfigurationMonitor:
         if self.snapshots_dir.exists():
             for snap_file in self.snapshots_dir.glob("*.json"):
                 try:
-                    with open(snap_file) as f:
+                    with open(snap_file, encoding="utf-8") as f:
                         data = json.load(f)
                         snapshot = ConfigSnapshot(
                             snapshot_id=data["snapshot_id"],
@@ -96,7 +96,7 @@ class ConfigurationMonitor:
         if self.audits_dir.exists():
             for audit_file in self.audits_dir.glob("*.json"):
                 try:
-                    with open(audit_file) as f:
+                    with open(audit_file, encoding="utf-8") as f:
                         data = json.load(f)
                         audit = ConfigAudit(
                             audit_id=data["audit_id"],
@@ -217,7 +217,7 @@ class ConfigurationMonitor:
         if not hash_store_path.exists():
             return None
         try:
-            with open(hash_store_path) as f:
+            with open(hash_store_path, encoding="utf-8") as f:
                 stored_hashes = json.load(f)
             return stored_hashes.get(file_path)
         except (json.JSONDecodeError, OSError):
@@ -229,12 +229,12 @@ class ConfigurationMonitor:
         existing: dict[str, str] = {}
         if hash_store_path.exists():
             try:
-                with open(hash_store_path) as f:
+                with open(hash_store_path, encoding="utf-8") as f:
                     existing = json.load(f)
             except (json.JSONDecodeError, OSError):
                 pass
         existing.update(file_hashes)
-        with open(hash_store_path, "w") as f:
+        with open(hash_store_path, "w", encoding="utf-8") as f:
             json.dump(existing, f, indent=2)
 
     def _remove_hash(self, file_path: str) -> None:
@@ -243,11 +243,11 @@ class ConfigurationMonitor:
         if not hash_store_path.exists():
             return
         try:
-            with open(hash_store_path) as f:
+            with open(hash_store_path, encoding="utf-8") as f:
                 existing = json.load(f)
             if file_path in existing:
                 del existing[file_path]
-                with open(hash_store_path, "w") as f:
+                with open(hash_store_path, "w", encoding="utf-8") as f:
                     json.dump(existing, f, indent=2)
         except (json.JSONDecodeError, OSError):
             pass
@@ -284,7 +284,7 @@ class ConfigurationMonitor:
 
         # Persist to disk
         snap_file = self.snapshots_dir / f"{snapshot_id}.json"
-        with open(snap_file, 'w') as f:
+        with open(snap_file, 'w', encoding="utf-8") as f:
             json.dump({
                 "snapshot_id": snapshot.snapshot_id,
                 "timestamp": snapshot.timestamp.isoformat(),
@@ -424,7 +424,7 @@ class ConfigurationMonitor:
 
         # Persist audit
         audit_file = self.audits_dir / f"{audit_id}.json"
-        with open(audit_file, 'w') as f:
+        with open(audit_file, 'w', encoding="utf-8") as f:
             json.dump({
                 "audit_id": audit.audit_id,
                 "timestamp": audit.timestamp.isoformat(),

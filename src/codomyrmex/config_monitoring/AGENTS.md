@@ -13,6 +13,7 @@ Configuration change detection, drift analysis, compliance auditing, and file-sy
 | `ConfigSnapshot` | `config_monitor.py` | Snapshot for drift detection: per-file SHA-256 hashes, file count |
 | `ConfigurationMonitor` | `config_monitor.py` | Change tracking, snapshot creation, drift analysis, compliance auditing |
 | `ConfigWatcher` | `watcher.py` | Filesystem mtime-polling hot-reload with thread-safe daemon thread |
+| `mcp_tools` | `mcp_tools.py` | Exposes configuration monitoring capabilities via MCP |
 
 ## Operating Contracts
 
