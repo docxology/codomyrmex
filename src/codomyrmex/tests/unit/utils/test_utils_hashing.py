@@ -185,6 +185,43 @@ class TestDictHash:
 
         assert dict_hash({"a": 1}) != dict_hash({"a": 2})
 
+    def test_empty_dict(self):
+        from codomyrmex.utils.hashing import dict_hash
+
+        result = dict_hash({})
+        assert len(result) == 64
+
+    def test_md5_algorithm(self):
+        from codomyrmex.utils.hashing import dict_hash
+
+        result = dict_hash({"a": 1}, algorithm="md5")
+        assert len(result) == 32
+
+    def test_nested_dicts(self):
+        from codomyrmex.utils.hashing import dict_hash
+
+        d1 = {"a": {"x": 1, "y": 2}, "b": 3}
+        d2 = {"b": 3, "a": {"y": 2, "x": 1}}
+        assert dict_hash(d1) == dict_hash(d2)
+
+    def test_list_values(self):
+        from codomyrmex.utils.hashing import dict_hash
+
+        d1 = {"a": [1, 2, 3]}
+        d2 = {"a": [1, 2, 3]}
+        assert dict_hash(d1) == dict_hash(d2)
+
+    def test_non_serializable_values(self):
+        from codomyrmex.utils.hashing import dict_hash
+
+        class CustomObj:
+            def __str__(self):
+                return "custom"
+
+        d1 = {"a": CustomObj()}
+        result = dict_hash(d1)
+        assert len(result) == 64
+
 
 # From test_coverage_boost.py
 class TestConsistentHash:
