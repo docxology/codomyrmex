@@ -10,9 +10,10 @@ Secure Cognitive Agent module handling all identity-related operations. Ensures 
 
 | File | Purpose |
 |------|---------|
-| `__init__.py` | Exports `Persona`, `VerificationLevel`, `IdentityManager`, `BioCognitiveVerifier`, `cli_commands` |
+| `__init__.py` | Exports `Persona`, `VerificationLevel`, `IdentityManager`, `BioCognitiveVerifier`, `cli_commands`, and MCP tools |
 | `identity.py` | `Identity` orchestrator with session management, pluggable `AuthProvider` backends (`PasswordProvider`, `TokenProvider`), `AuthToken`, `AuthEvent` audit log |
 | `manager.py` | `IdentityManager` -- persona registry, active persona switching, create/register/revoke/promote/export operations |
+| `mcp_tools.py`| Exposes MCP tools (`identity_create_persona`, `identity_set_active_persona`, `identity_verify_metric`, etc.) to agents for direct interaction |
 | `persona.py` | `Persona` dataclass (id, name, level, attributes, crumbs, capabilities) and `VerificationLevel` enum |
 | `biocognitive.py` | `BioCognitiveVerifier` -- Z-score behavioral verification, metric recording, enrollment, confidence scoring |
 

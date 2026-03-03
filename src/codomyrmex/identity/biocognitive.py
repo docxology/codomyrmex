@@ -24,6 +24,7 @@ class BioCognitiveVerifier:
     """
 
     def __init__(self) -> None:
+        """Initialize BioCognitiveVerifier."""
         # keyed by user_id -> metric_name -> list of values
         self._baselines: dict[str, dict[str, list[float]]] = {}
         self._thresholds: dict[str, float] = {
@@ -70,7 +71,9 @@ class BioCognitiveVerifier:
 
         samples = self._baselines[user_id][metric]
         if len(samples) < 10:
-            logger.info("Insufficient samples for verification, assuming true for training")
+            logger.info(
+                "Insufficient samples for verification, assuming true for training"
+            )
             return True
 
         mean = float(np.mean(samples))
