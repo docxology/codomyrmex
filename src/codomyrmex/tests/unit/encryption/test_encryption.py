@@ -14,19 +14,13 @@ import os
 import tempfile
 import warnings
 from pathlib import Path
-from typing import Any
 
 import pytest
 
-# ---------------------------------------------------------------------------
-# Skip guard: the entire module depends on ``cryptography``
-# ---------------------------------------------------------------------------
-cryptography = pytest.importorskip("cryptography", reason="cryptography library required")
-
 from codomyrmex.encryption import (
     AESGCMEncryptor,
-    Encryptor,
     EncryptionError,
+    Encryptor,
     KeyManager,
     SecureDataContainer,
     Signer,
@@ -49,6 +43,13 @@ from codomyrmex.encryption.signing import (
     SignatureResult,
     sign_file,
     verify_file,
+)
+
+# ---------------------------------------------------------------------------
+# Skip guard: the entire module depends on ``cryptography``
+# ---------------------------------------------------------------------------
+cryptography = pytest.importorskip(
+    "cryptography", reason="cryptography library required"
 )
 
 # ==============================================================================
@@ -546,10 +547,14 @@ class TestHashing:
         assert len(h) == 32
 
     def test_deterministic(self):
-        assert Encryptor.hash_data(b"abc", "sha256") == Encryptor.hash_data(b"abc", "sha256")
+        assert Encryptor.hash_data(b"abc", "sha256") == Encryptor.hash_data(
+            b"abc", "sha256"
+        )
 
     def test_different_data_different_hash(self):
-        assert Encryptor.hash_data(b"a", "sha256") != Encryptor.hash_data(b"b", "sha256")
+        assert Encryptor.hash_data(b"a", "sha256") != Encryptor.hash_data(
+            b"b", "sha256"
+        )
 
     def test_empty_data(self):
         h = Encryptor.hash_data(b"", "sha256")
@@ -560,7 +565,9 @@ class TestHashing:
             Encryptor.hash_data(b"data", "invalid_algo")
 
     def test_case_insensitive(self):
-        assert Encryptor.hash_data(b"x", "SHA256") == Encryptor.hash_data(b"x", "sha256")
+        assert Encryptor.hash_data(b"x", "SHA256") == Encryptor.hash_data(
+            b"x", "sha256"
+        )
 
 
 # ==============================================================================
@@ -1248,7 +1255,7 @@ class TestIntegrationWorkflows:
         pt = enc.decrypt(ct)
 
         recovered_msg = pt[: len(msg)]
-        recovered_mac = pt[len(msg):]
+        recovered_mac = pt[len(msg) :]
         assert recovered_msg == msg
         assert verify_hmac(recovered_msg, hmac_key, recovered_mac) is True
 

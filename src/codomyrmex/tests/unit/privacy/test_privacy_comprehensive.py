@@ -8,8 +8,6 @@ Zero-mock policy: no unittest.mock, no MagicMock, no monkeypatch.
 """
 
 import hashlib
-import math
-import time
 
 import pytest
 
@@ -29,7 +27,6 @@ from codomyrmex.privacy.privacy import (
     mask_redact,
 )
 
-
 # ==============================================================================
 # PIIMatch Dataclass
 # ==============================================================================
@@ -41,7 +38,9 @@ class TestPIIMatch:
 
     def test_piimatch_creation(self):
         """PIIMatch stores all fields correctly."""
-        m = PIIMatch(field="email_field", pii_type="email", value="a@b.com", start=5, end=12)
+        m = PIIMatch(
+            field="email_field", pii_type="email", value="a@b.com", start=5, end=12
+        )
         assert m.field == "email_field"
         assert m.pii_type == "email"
         assert m.value == "a@b.com"
@@ -159,7 +158,7 @@ class TestDetectPII:
         text = "Email: alice@example.com done"
         matches = detect_pii(text)
         email_match = next(m for m in matches if m.pii_type == "email")
-        assert text[email_match.start:email_match.end] == "alice@example.com"
+        assert text[email_match.start : email_match.end] == "alice@example.com"
 
     def test_detect_pii_multiple_same_type(self):
         """Detects multiple occurrences of the same PII type."""
@@ -224,7 +223,7 @@ class TestMaskHash:
     def test_unicode_input(self):
         """Unicode characters are hashed correctly."""
         result = mask_hash("cafe\u0301")
-        expected = hashlib.sha256("cafe\u0301".encode("utf-8")).hexdigest()
+        expected = hashlib.sha256("cafe\u0301".encode()).hexdigest()
         assert result == expected
 
     def test_invalid_algorithm_raises(self):
@@ -260,7 +259,9 @@ class TestMaskRedact:
 
     def test_ignores_original_value(self):
         """Output is always the replacement, regardless of input."""
-        assert mask_redact("short") == mask_redact("a very long string with lots of data")
+        assert mask_redact("short") == mask_redact(
+            "a very long string with lots of data"
+        )
 
 
 # ==============================================================================
@@ -472,14 +473,18 @@ class TestDPMean:
 
     def test_single_value(self):
         """Single value list returns approximately that value (high epsilon)."""
-        results = [dp_mean([50.0], epsilon=100.0, lower=0.0, upper=100.0) for _ in range(20)]
+        results = [
+            dp_mean([50.0], epsilon=100.0, lower=0.0, upper=100.0) for _ in range(20)
+        ]
         mean_result = sum(results) / len(results)
         assert 40.0 < mean_result < 60.0
 
     def test_known_mean_high_epsilon(self):
         """With high epsilon, result is close to true mean."""
         values = [10.0, 20.0, 30.0, 40.0, 50.0]
-        results = [dp_mean(values, epsilon=100.0, lower=0.0, upper=100.0) for _ in range(20)]
+        results = [
+            dp_mean(values, epsilon=100.0, lower=0.0, upper=100.0) for _ in range(20)
+        ]
         mean_result = sum(results) / len(results)
         # True mean is 30.0
         assert 25.0 < mean_result < 35.0
@@ -492,7 +497,9 @@ class TestDPMean:
     def test_large_list_stability(self):
         """Larger list has less noise (sensitivity decreases with n)."""
         values = [50.0] * 100
-        results = [dp_mean(values, epsilon=1.0, lower=0.0, upper=100.0) for _ in range(20)]
+        results = [
+            dp_mean(values, epsilon=1.0, lower=0.0, upper=100.0) for _ in range(20)
+        ]
         mean_result = sum(results) / len(results)
         # With 100 values, sensitivity = (100-0)/100 = 1.0, so noise is moderate
         assert 40.0 < mean_result < 60.0
@@ -748,10 +755,12 @@ class TestPrivacyClass:
     def test_scan_pii_multiple_fields(self):
         """scan_pii scans all string fields."""
         p = Privacy()
-        matches = p.scan_pii({
-            "email_field": "alice@example.com",
-            "phone_field": "555-123-4567",
-        })
+        matches = p.scan_pii(
+            {
+                "email_field": "alice@example.com",
+                "phone_field": "555-123-4567",
+            }
+        )
         types = {m.pii_type for m in matches}
         assert "email" in types
         assert "phone" in types
