@@ -40,15 +40,15 @@ def load_workflow(path: Path) -> dict:
 def execute_step(step: dict, dry_run: bool = False) -> dict:
     """Execute a workflow step."""
     result = {"name": step.get("name", "unnamed"), "status": "pending"}
-    
+
     if "command" in step:
         cmd = step["command"]
         result["command"] = cmd
-        
+
         if dry_run:
             result["status"] = "dry_run"
             return result
-        
+
         try:
             start = time.time()
             proc = subprocess.run(cmd, shell=True, capture_output=True, text=True, timeout=step.get("timeout", 60))
@@ -61,29 +61,29 @@ def execute_step(step: dict, dry_run: bool = False) -> dict:
         except Exception as e:
             result["status"] = "error"
             result["error"] = str(e)
-    
+
     elif "script" in step:
         result["status"] = "script_not_implemented"
-    
+
     return result
 
 
 def run_workflow(workflow: dict, dry_run: bool = False) -> list:
     """Execute a workflow."""
     results = []
-    
+
     steps = workflow.get("steps", [])
     if not steps:
         return [{"error": "No steps defined"}]
-    
+
     for step in steps:
         result = execute_step(step, dry_run)
         results.append(result)
-        
+
         # Stop on failure unless continue_on_error
         if result["status"] == "failed" and not step.get("continue_on_error"):
             break
-    
+
     return results
 
 
@@ -93,7 +93,7 @@ def main():
     parser.add_argument("--dry-run", "-n", action="store_true", help="Show what would run")
     parser.add_argument("--demo", action="store_true", help="Run demo workflow")
     args = parser.parse_args()
-    
+
     if args.demo:
         workflow = {
             "name": "Demo Workflow",
@@ -121,18 +121,18 @@ def main():
         print("\nWorkflow format:")
         print('  {"name": "My Workflow", "steps": [{"name": "Step 1", "command": "echo hello"}]}')
         return 0
-    
+
     name = workflow.get("name", "Unnamed Workflow")
     steps = workflow.get("steps", [])
-    
+
     print(f"🔄 Running: {name}")
     print(f"   Steps: {len(steps)}")
     if args.dry_run:
         print("   Mode: DRY RUN")
     print()
-    
+
     results = run_workflow(workflow, args.dry_run)
-    
+
     for r in results:
         icon = {"success": "✅", "failed": "❌", "dry_run": "🔍", "timeout": "⏰"}.get(r["status"], "⚪")
         print(f"   {icon} {r['name']}: {r['status']}")
@@ -140,10 +140,10 @@ def main():
             print(f"      Duration: {r['duration']}s")
         if r.get("output"):
             print(f"      Output: {r['output'][:80]}...")
-    
+
     successful = sum(1 for r in results if r["status"] in ["success", "dry_run"])
     print(f"\n📊 Results: {successful}/{len(results)} steps completed")
-    
+
     return 0 if successful == len(results) else 1
 
 

@@ -240,13 +240,15 @@ jobs:
     permissions:
       security-events: write
       contents: read
+    env:
+      SEMGREP_APP_TOKEN: ${{ secrets.SEMGREP_APP_TOKEN }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Check Semgrep token
         run: |
-          if [ -z "${{ secrets.SEMGREP_APP_TOKEN }}" ]; then
+          if [ -z "$SEMGREP_APP_TOKEN" ]; then
             echo "⚠️  SEMGREP_APP_TOKEN not configured — Semgrep scan skipped."
             echo "   To enable: add SEMGREP_APP_TOKEN to repository secrets."
             exit 0
@@ -254,7 +256,7 @@ jobs:
           echo "✅ SEMGREP_APP_TOKEN found, proceeding with scan"
 
       - name: Run Semgrep
-        if: ${{ secrets.SEMGREP_APP_TOKEN != '' }}
+        if: env.SEMGREP_APP_TOKEN != ''
         uses: semgrep/semgrep-action@v1
         with:
           config: >-
