@@ -14,11 +14,12 @@ except ImportError:
     sys.path.insert(0, str(project_root / "src"))
 
 import logging
+
 from codomyrmex.exceptions import (
-    CodomyrmexError,
     AIProviderError,
-    FileOperationError,
+    CodomyrmexError,
     ConfigurationError,
+    FileOperationError,
     InferenceError,
     format_exception_chain,
 )
@@ -47,8 +48,8 @@ def demonstrate_exceptions():
     try:
         logger.info("Raising AIProviderError with specific parameters...")
         raise AIProviderError(
-            "API Limit exceeded", 
-            provider_name="OpenAI", 
+            "API Limit exceeded",
+            provider_name="OpenAI",
             model_name="gpt-4o"
         )
     except AIProviderError as e:
@@ -67,7 +68,7 @@ def demonstrate_exceptions():
             raise FileOperationError("File not found", file_path="/tmp/missing.txt")
         except FileOperationError as cause:
             raise ConfigurationError(
-                "Failed to load configuration", 
+                "Failed to load configuration",
                 config_file="/tmp/missing.txt"
             ) from cause
     except CodomyrmexError as e:
@@ -80,7 +81,7 @@ def demonstrate_exceptions():
     try:
         logger.info("Raising Cerebrum InferenceError...")
         raise InferenceError(
-            "Inference engine failure", 
+            "Inference engine failure",
             inference_engine="BayesianNet",
             system_component="cerebrum_v1"
         )
@@ -93,14 +94,14 @@ def demonstrate_exceptions():
 
 
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
+
+    import yaml
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "exceptions" / "config.yaml"
-    config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
-            config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/exceptions/config.yaml")
+        with open(config_path) as f:
+            yaml.safe_load(f) or {}
+            print("Loaded config from config/exceptions/config.yaml")
 
 if __name__ == "__main__":
     try:

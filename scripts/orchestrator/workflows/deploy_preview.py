@@ -18,16 +18,16 @@ import subprocess
 import sys
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any
 
 project_root = Path(__file__).parent.parent.parent.parent
 sys.path.insert(0, str(project_root / "src"))
 
-from codomyrmex.orchestrator import Workflow, RetryPolicy
-from codomyrmex.utils.cli_helpers import setup_logging, print_info, print_error
+from codomyrmex.orchestrator import RetryPolicy, Workflow
+from codomyrmex.utils.cli_helpers import print_error, print_info, setup_logging
 
 
-async def build_application(_task_results: dict = None) -> Dict[str, Any]:
+async def build_application(_task_results: dict = None) -> dict[str, Any]:
     """Build the application for deployment."""
     result = subprocess.run(
         ["uv", "build"],
@@ -48,7 +48,7 @@ async def build_application(_task_results: dict = None) -> Dict[str, Any]:
     }
 
 
-async def run_pre_deployment_checks(_task_results: dict = None) -> Dict[str, Any]:
+async def run_pre_deployment_checks(_task_results: dict = None) -> dict[str, Any]:
     """Run pre-deployment validation checks."""
     checks = {
         "lint": False,
@@ -92,11 +92,11 @@ async def run_pre_deployment_checks(_task_results: dict = None) -> Dict[str, Any
     }
 
 
-async def deploy_to_preview(task_results: dict = None, _task_results: dict = None, env: str = "preview", dry_run: bool = False) -> Dict[str, Any]:
+async def deploy_to_preview(task_results: dict = None, _task_results: dict = None, env: str = "preview", dry_run: bool = False) -> dict[str, Any]:
     """Deploy to preview environment."""
     # Handle both naming conventions and TaskResult objects
     results = task_results or _task_results or {}
-    
+
     # Get build artifacts - handle TaskResult objects
     build_result_obj = results.get("build")
     if build_result_obj is not None:
@@ -104,7 +104,7 @@ async def deploy_to_preview(task_results: dict = None, _task_results: dict = Non
         build_result = getattr(build_result_obj, "value", build_result_obj) or {}
     else:
         build_result = {}
-    
+
     artifacts = build_result.get("artifacts", []) if isinstance(build_result, dict) else []
 
     if not artifacts:
@@ -127,7 +127,7 @@ async def deploy_to_preview(task_results: dict = None, _task_results: dict = Non
     # Example: deploy using pip install to a virtual environment
     deploy_cmd = ["echo", f"Deploying {artifacts[0]} to {env}"]
 
-    result = subprocess.run(
+    subprocess.run(
         deploy_cmd,
         capture_output=True,
         text=True,
@@ -144,7 +144,7 @@ async def deploy_to_preview(task_results: dict = None, _task_results: dict = Non
     }
 
 
-async def run_smoke_tests(task_results: dict = None, _task_results: dict = None, skip: bool = False) -> Dict[str, Any]:
+async def run_smoke_tests(task_results: dict = None, _task_results: dict = None, skip: bool = False) -> dict[str, Any]:
     """Run smoke tests against deployed preview."""
     if skip:
         return {
@@ -158,7 +158,7 @@ async def run_smoke_tests(task_results: dict = None, _task_results: dict = None,
     deploy_obj = results.get("deploy")
     deployment = getattr(deploy_obj, "value", deploy_obj) if deploy_obj else {}
     deployment = deployment or {}
-    
+
     if deployment.get("dry_run"):
         return {
             "success": True,
@@ -195,11 +195,11 @@ def _extract_result(obj) -> dict:
     return value if isinstance(value, dict) else {}
 
 
-async def generate_deployment_report(task_results: dict = None, _task_results: dict = None) -> Dict[str, Any]:
+async def generate_deployment_report(task_results: dict = None, _task_results: dict = None) -> dict[str, Any]:
     """Generate deployment report."""
     # Handle both naming conventions
     results = task_results or _task_results or {}
-    
+
     report = {
         "timestamp": datetime.now().isoformat(),
         "status": "success",
@@ -238,7 +238,7 @@ async def generate_deployment_report(task_results: dict = None, _task_results: d
     }
 
 
-def _summarize_result(result: Dict[str, Any]) -> str:
+def _summarize_result(result: dict[str, Any]) -> str:
     """Create summary string from result."""
     if result.get("dry_run"):
         return "Dry run completed"
@@ -289,7 +289,7 @@ async def main() -> int:
     )
 
     # Deploy
-    async def deploy_action(_task_results: dict = None) -> Dict[str, Any]:
+    async def deploy_action(_task_results: dict = None) -> dict[str, Any]:
         return await deploy_to_preview(_task_results, env=args.env, dry_run=args.dry_run)
 
     workflow.add_task(
@@ -300,7 +300,7 @@ async def main() -> int:
     )
 
     # Smoke tests
-    async def smoke_test_action(_task_results: dict = None) -> Dict[str, Any]:
+    async def smoke_test_action(_task_results: dict = None) -> dict[str, Any]:
         return await run_smoke_tests(_task_results, skip=args.skip_tests)
 
     workflow.add_task(
@@ -372,14 +372,14 @@ async def main() -> int:
 
 
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
+
+    import yaml
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "orchestrator" / "config.yaml"
-    config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
-            config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/orchestrator/config.yaml")
+        with open(config_path) as f:
+            yaml.safe_load(f) or {}
+            print("Loaded config from config/orchestrator/config.yaml")
 
 if __name__ == "__main__":
     sys.exit(asyncio.run(main()))

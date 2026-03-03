@@ -16,14 +16,15 @@ Example:
     >>> print(f"Status: {pipeline_result.status.value}")
 """
 
-from pathlib import Path
-from typing import Optional, Dict, Any
-import sys
 import logging
+import sys
+from pathlib import Path
+from typing import Any
+
+from codomyrmex.events import Event, EventType, get_event_bus
 
 # Real codomyrmex imports - no fallback for mega-seed project
-from codomyrmex.logging_monitoring import setup_logging, get_logger
-from codomyrmex.events import get_event_bus, Event, EventType
+from codomyrmex.logging_monitoring import get_logger, setup_logging
 
 HAS_CODOMYRMEX_LOGGING = True  # Exported for integration tests
 
@@ -33,8 +34,8 @@ event_bus = get_event_bus()
 
 def run_analysis(
     target_path: Path,
-    config_path: Optional[Path] = None
-) -> Dict[str, Any]:
+    config_path: Path | None = None
+) -> dict[str, Any]:
     """Run project analysis using codomyrmex static_analysis.
     
     Demonstrates integration with:
@@ -58,28 +59,28 @@ def run_analysis(
     """
     setup_logging()
     logger.info(f"Starting analysis of {target_path}")
-    
+
     # Publish analysis start event
     event_bus.publish(Event(
         event_type=EventType.CUSTOM,
         source="test_project.main",
         data={"action": "analysis_start", "target": str(target_path)}
     ))
-    
+
     # Import here to avoid circular imports
     from .analyzer import ProjectAnalyzer
-    
+
     # Resolve config path
     if config_path is None:
         default_config = Path(__file__).parent.parent / "config" / "settings.yaml"
         if default_config.exists():
             config_path = default_config
             logger.debug(f"Using default config: {config_path}")
-    
+
     # Create analyzer and run analysis
     analyzer = ProjectAnalyzer(config_path)
     results = analyzer.analyze(target_path)
-    
+
     # Log summary
     summary = results.get("summary", {})
     logger.info(
@@ -87,13 +88,13 @@ def run_analysis(
         f"{summary.get('total_lines', 0)} lines, "
         f"{summary.get('total_functions', 0)} functions"
     )
-    
+
     return results
 
 
 def run_pipeline(
-    target_path: Optional[Path] = None,
-    config_path: Optional[Path] = None
+    target_path: Path | None = None,
+    config_path: Path | None = None
 ) -> "PipelineResult":
     """Run the full analysis pipeline.
     
@@ -120,31 +121,31 @@ def run_pipeline(
     """
     setup_logging()
     logger.info("Starting full analysis pipeline")
-    
+
     # Import here to avoid circular imports
     from .pipeline import AnalysisPipeline
-    
+
     # Resolve target path
     if target_path is None:
         target_path = Path(__file__).parent
         logger.debug(f"Using default target: {target_path}")
-    
+
     # Resolve config path
     if config_path is None:
         default_config = Path(__file__).parent.parent / "config" / "workflows.yaml"
         if default_config.exists():
             config_path = default_config
-    
+
     # Create and execute pipeline
     pipeline = AnalysisPipeline(config_path)
     result = pipeline.execute(target_path)
-    
+
     # Log completion
     logger.info(
         f"Pipeline {result.status.value} in {result.duration_seconds:.2f}s "
         f"({result.steps_completed}/{result.total_steps} steps)"
     )
-    
+
     return result
 
 
@@ -161,7 +162,7 @@ def main() -> int:
         Exit code (0 for success, 1 for error)
     """
     import argparse
-    
+
     parser = argparse.ArgumentParser(
         description="Test Project - Codomyrmex Reference Implementation",
         formatter_class=argparse.RawDescriptionHelpFormatter,
@@ -193,16 +194,16 @@ Examples:
         action="store_true",
         help="Enable verbose logging"
     )
-    
+
     args = parser.parse_args()
-    
+
     # Set log level
     if args.verbose:
         logging.getLogger().setLevel(logging.DEBUG)
-    
+
     try:
         target = Path(args.target)
-        
+
         if args.pipeline:
             result = run_pipeline(target, args.config)
             print(f"\n{'='*60}")
@@ -225,7 +226,7 @@ Examples:
             print(f"Total Classes:    {summary.get('total_classes', 0)}")
             print(f"{'='*60}")
             return 0
-            
+
     except Exception as e:
         logger.error(f"Error: {e}")
         print(f"Error: {e}", file=sys.stderr)
