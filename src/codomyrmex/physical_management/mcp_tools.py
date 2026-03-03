@@ -16,3 +16,4 @@ logger = get_logger(__name__)
 def physical_management_status() -> dict:
     """Return physical management module status."""
     return {"status": "active", "module": "physical_management"}
+# Trigger new commit for PR title update
