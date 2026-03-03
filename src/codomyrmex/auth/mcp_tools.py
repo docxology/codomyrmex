@@ -73,7 +73,11 @@ def auth_validate_token(token_value: str) -> dict:
     ),
 )
 def auth_list_providers() -> list[str]:
-    """Return the names of available auth provider classes."""
+    """Return the names of available auth provider classes.
+
+    Returns:
+        List of available auth provider class names as strings.
+    """
     return [
         "Authenticator",
         "APIKeyManager",
