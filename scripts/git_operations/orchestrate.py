@@ -18,8 +18,8 @@ Workflow:
 
 import os
 import shutil
-import tempfile
 import sys
+import tempfile
 from pathlib import Path
 
 # Ensure codomyrmex is in path
@@ -29,20 +29,26 @@ except ImportError:
     project_root = Path(__file__).resolve().parent.parent.parent
     sys.path.insert(0, str(project_root / "src"))
 
-from codomyrmex.utils.cli_helpers import setup_logging, print_success, print_info, print_error, print_section
 from codomyrmex.git_operations import (
-    initialize_git_repository,
     add_files,
     commit_changes,
     create_branch,
-    switch_branch,
-    merge_branch,
-    get_status,
+    delete_branch,
     get_commit_history,
     get_current_branch,
-    get_diff,
-    delete_branch
+    get_status,
+    initialize_git_repository,
+    merge_branch,
+    switch_branch,
 )
+from codomyrmex.utils.cli_helpers import (
+    print_error,
+    print_info,
+    print_section,
+    print_success,
+    setup_logging,
+)
+
 
 def run_workflow():
     setup_logging()
@@ -51,7 +57,7 @@ def run_workflow():
     # Create a temporary directory for the demo repository
     temp_dir = tempfile.mkdtemp(prefix="git_demo_")
     repo_path = os.path.join(temp_dir, "demo_repo")
-    
+
     try:
         # 1. Initialize repository
         print_info(f"Initializing repository at: {repo_path}")
@@ -65,7 +71,7 @@ def run_workflow():
         file1 = os.path.join(repo_path, "feature.txt")
         with open(file1, "w") as f:
             f.write("New feature content\n")
-        
+
         if not add_files(["feature.txt"], repository_path=repo_path):
             print_error("Failed to add files")
             return 1
@@ -85,7 +91,7 @@ def run_workflow():
         if not create_branch(branch_name, repository_path=repo_path):
             print_error(f"Failed to create branch {branch_name}")
             return 1
-        
+
         current = get_current_branch(repository_path=repo_path)
         print_success(f"Now on branch: {current}")
 
@@ -93,7 +99,7 @@ def run_workflow():
         print_info("Modifying file on feature branch...")
         with open(file1, "a") as f:
             f.write("Experimental changes\n")
-        
+
         sha2 = commit_changes("feat: experimental updates", repository_path=repo_path)
         print_success(f"Committed on branch. SHA: {sha2[:8]}")
 
@@ -101,14 +107,14 @@ def run_workflow():
         main_branch = "main"
         # Check if it's main or master
         status = get_status(repo_path)
-        
+
         print_info("Switching back to main and merging...")
         if not switch_branch("main", repository_path=repo_path):
             if not switch_branch("master", repository_path=repo_path):
                 print_error("Failed to switch back to main branch")
                 return 1
             main_branch = "master"
-        
+
         if not merge_branch(branch_name, repository_path=repo_path):
             print_error(f"Failed to merge {branch_name}")
             return 1
@@ -116,12 +122,12 @@ def run_workflow():
 
         # 7. Final inspection
         print_section("Final Repository State")
-        
+
         history = get_commit_history(limit=5, repository_path=repo_path)
         print_info("Recent History:")
         for commit in history:
             print(f"  {commit['hash'][:7]} - {commit['message']} ({commit['author_name']})")
-            
+
         status = get_status(repo_path)
         if status.get("clean"):
             print_success("Working directory is clean.")
@@ -142,14 +148,15 @@ def run_workflow():
 
 
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
+
+    import yaml
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "git_operations" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
+        with open(config_path) as f:
             config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/git_operations/config.yaml")
+            print("Loaded config from config/git_operations/config.yaml")
 
 if __name__ == "__main__":
     # If run as orchestrator (with --scripts-dir), it will find this file.

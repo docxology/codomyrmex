@@ -17,13 +17,12 @@ import pytest
 
 from codomyrmex.telemetry.dashboard.slo import (
     SLI,
-    SLIType,
     SLO,
+    ErrorBudgetPolicy,
+    SLIType,
     SLOTracker,
     SLOViolation,
-    ErrorBudgetPolicy,
 )
-
 
 # ===========================================================================
 # SLIType enum

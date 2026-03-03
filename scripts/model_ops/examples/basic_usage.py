@@ -12,13 +12,14 @@ Usage:
 
 import sys
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any
 
 project_root = Path(__file__).parent.parent.parent.parent
 sys.path.insert(0, str(project_root / "src"))
 
 # Direct import to avoid triggering full codomyrmex package init
 import importlib.util
+
 script_base_path = project_root / "src" / "codomyrmex" / "utils" / "script_base.py"
 spec = importlib.util.spec_from_file_location("script_base", script_base_path)
 script_base = importlib.util.module_from_spec(spec)
@@ -61,7 +62,7 @@ class ModelOpsScript(ScriptBase):
             help="Export synthetic dataset to JSONL file"
         )
 
-    def run(self, args, config: ScriptConfig) -> Dict[str, Any]:
+    def run(self, args, config: ScriptConfig) -> dict[str, Any]:
         """Execute model operations demonstrations."""
         results = {
             "tests_run": 0,
@@ -72,13 +73,22 @@ class ModelOpsScript(ScriptBase):
 
         if config.dry_run:
             self.log_info(f"Would create dataset with {args.dataset_size} examples")
-            self.log_info(f"Would test: Dataset, DatasetSanitizer, FineTuningJob, Evaluator")
+            self.log_info("Would test: Dataset, DatasetSanitizer, FineTuningJob, Evaluator")
             results["dry_run"] = True
             return results
 
         # Import model_ops module (after dry_run check)
-        from codomyrmex.model_ops import Dataset, DatasetSanitizer, FineTuningJob, Evaluator
-        from codomyrmex.model_ops.evaluators import exact_match_metric, length_ratio_metric
+        from codomyrmex.model_ops.evaluators import (
+            exact_match_metric,
+            length_ratio_metric,
+        )
+
+        from codomyrmex.model_ops import (
+            Dataset,
+            DatasetSanitizer,
+            Evaluator,
+            FineTuningJob,
+        )
 
         # Test 1: Create and validate dataset
         self.log_info(f"\n1. Creating synthetic dataset ({args.dataset_size} examples)")
@@ -210,14 +220,15 @@ class ModelOpsScript(ScriptBase):
 
 
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
+
+    import yaml
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "model_ops" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
+        with open(config_path) as f:
             config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/model_ops/config.yaml")
+            print("Loaded config from config/model_ops/config.yaml")
 
 if __name__ == "__main__":
     script = ModelOpsScript()

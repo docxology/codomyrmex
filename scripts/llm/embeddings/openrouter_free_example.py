@@ -16,15 +16,15 @@ Usage:
     python openrouter_free_example.py
 """
 
-import sys
 import os
+import sys
 from pathlib import Path
 
 # Ensure codomyrmex is in path
 PROJECT_ROOT = Path(__file__).parent.parent.parent.parent
 sys.path.insert(0, str(PROJECT_ROOT / "src"))
 
-from codomyrmex.llm.providers import get_provider, ProviderType, ProviderConfig, Message
+from codomyrmex.llm.providers import Message, ProviderConfig, ProviderType, get_provider
 
 # Config file locations
 CONFIG_PATHS = [
@@ -61,34 +61,35 @@ Text 2: "{text2}"
 
 Similarity score (0-100):"""),
     ]
-    
+
     response = provider.complete(
         messages=messages,
         model="openrouter/free",
         temperature=0.1,
         max_tokens=10,
     )
-    
+
     return response.content.strip()
 
 
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
+
+    import yaml
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "llm" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
+        with open(config_path) as f:
             config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/llm/config.yaml")
+            print("Loaded config from config/llm/config.yaml")
 
     """Demonstrate semantic similarity with OpenRouter free models."""
     print("=" * 60)
     print("  OpenRouter Free Example - Semantic Similarity")
     print("=" * 60)
     print()
-    
+
     # Check for API key
     api_key = get_api_key()
     if not api_key:
@@ -96,34 +97,34 @@ def main():
         print("   Get your free API key at: https://openrouter.ai/keys")
         print("\n   Setup: export OPENROUTER_API_KEY='key' or ~/.config/openrouter/api_key")
         return 1
-    
+
     # Test pairs
     test_pairs = [
         ("The cat sat on the mat", "A feline rested on the rug"),
         ("Python is a programming language", "JavaScript is used for web development"),
         ("The weather is sunny today", "I love eating pizza"),
     ]
-    
+
     config = ProviderConfig(api_key=api_key, timeout=60.0)
-    
+
     print("📡 Connecting to OpenRouter with free model...")
     print()
-    
+
     with get_provider(ProviderType.OPENROUTER, config=config) as provider:
         print("🔍 Comparing semantic similarity:\n")
-        
+
         for i, (text1, text2) in enumerate(test_pairs, 1):
             print(f"  Pair {i}:")
             print(f"    Text 1: \"{text1}\"")
             print(f"    Text 2: \"{text2}\"")
-            
+
             score = get_similarity_score(provider, text1, text2)
             print(f"    Similarity: {score}")
             print()
-    
+
     print("✅ Example completed successfully!")
     print("   💡 Use free models for semantic analysis during development!")
-    
+
     return 0
 
 

@@ -53,11 +53,11 @@ def swift_list_containers(client):
     """List Swift containers."""
     print("\n📦 Swift Containers\n" + "=" * 50)
     containers = client.list_containers()
-    
+
     if not containers:
         print("   No containers found.")
         return
-    
+
     for name in containers:
         print(f"   📁 {name}")
 
@@ -66,11 +66,11 @@ def swift_list_objects(client, container: str, prefix: str = None):
     """List objects in a Swift container."""
     print(f"\n📄 Objects in '{container}'\n" + "=" * 50)
     objects = client.list_objects(container, prefix=prefix)
-    
+
     if not objects:
         print("   No objects found.")
         return
-    
+
     for name in objects:
         print(f"   📄 {name}")
 
@@ -78,7 +78,7 @@ def swift_list_objects(client, container: str, prefix: str = None):
 def swift_upload(client, container: str, name: str, file_path: str):
     """Upload a file to Swift."""
     print(f"\n⬆️  Uploading to {container}/{name}")
-    
+
     if client.upload_file(container, name, file_path):
         print("   ✅ Upload successful")
     else:
@@ -88,7 +88,7 @@ def swift_upload(client, container: str, name: str, file_path: str):
 def swift_download(client, container: str, name: str, output_path: str):
     """Download an object from Swift."""
     print(f"\n⬇️  Downloading {container}/{name}")
-    
+
     if client.download_file(container, name, output_path):
         print(f"   ✅ Downloaded to {output_path}")
     else:
@@ -98,7 +98,7 @@ def swift_download(client, container: str, name: str, output_path: str):
 def swift_create_container(client, name: str):
     """Create a Swift container."""
     print(f"\n📦 Creating container: {name}")
-    
+
     if client.create_container(name):
         print("   ✅ Container created")
     else:
@@ -113,11 +113,11 @@ def s3_list_buckets(client):
     """List S3 buckets."""
     print("\n🪣 S3 Buckets\n" + "=" * 50)
     buckets = client.list_buckets()
-    
+
     if not buckets:
         print("   No buckets found.")
         return
-    
+
     for name in buckets:
         print(f"   🪣 {name}")
 
@@ -126,11 +126,11 @@ def s3_list_objects(client, bucket: str, prefix: str = None):
     """List objects in an S3 bucket."""
     print(f"\n📄 Objects in '{bucket}'\n" + "=" * 50)
     objects = client.list_objects(bucket, prefix=prefix)
-    
+
     if not objects:
         print("   No objects found.")
         return
-    
+
     for key in objects:
         print(f"   📄 {key}")
 
@@ -138,7 +138,7 @@ def s3_list_objects(client, bucket: str, prefix: str = None):
 def s3_upload(client, bucket: str, key: str, file_path: str):
     """Upload a file to S3."""
     print(f"\n⬆️  Uploading to s3://{bucket}/{key}")
-    
+
     if client.upload_file(bucket, key, file_path):
         print("   ✅ Upload successful")
     else:
@@ -148,7 +148,7 @@ def s3_upload(client, bucket: str, key: str, file_path: str):
 def s3_upload_data(client, bucket: str, key: str, data: str, content_type: str = None):
     """Upload data directly to S3."""
     print(f"\n⬆️  Uploading data to s3://{bucket}/{key}")
-    
+
     if client.upload_data(bucket, key, data.encode(), content_type):
         print("   ✅ Upload successful")
     else:
@@ -158,7 +158,7 @@ def s3_upload_data(client, bucket: str, key: str, data: str, content_type: str =
 def s3_download(client, bucket: str, key: str, output_path: str):
     """Download an object from S3."""
     print(f"\n⬇️  Downloading s3://{bucket}/{key}")
-    
+
     if client.download_file(bucket, key, output_path):
         print(f"   ✅ Downloaded to {output_path}")
     else:
@@ -168,7 +168,7 @@ def s3_download(client, bucket: str, key: str, output_path: str):
 def s3_create_bucket(client, name: str):
     """Create an S3 bucket."""
     print(f"\n🪣 Creating bucket: {name}")
-    
+
     if client.create_bucket(name):
         print("   ✅ Bucket created")
     else:
@@ -179,7 +179,7 @@ def s3_get_metadata(client, bucket: str, key: str):
     """Get object metadata."""
     print(f"\n📋 Metadata for s3://{bucket}/{key}\n" + "=" * 50)
     meta = client.get_metadata(bucket, key)
-    
+
     if meta:
         for k, v in meta.items():
             print(f"   {k}: {v}")
@@ -190,7 +190,7 @@ def s3_get_metadata(client, bucket: str, key: str):
 def s3_presigned_url(client, bucket: str, key: str, expires: int):
     """Generate a presigned URL."""
     print(f"\n🔗 Generating presigned URL for s3://{bucket}/{key}")
-    
+
     url = client.generate_presigned_url(bucket, key, expires_in=expires)
     if url:
         print(f"   ✅ URL (expires in {expires}s):")
@@ -202,7 +202,7 @@ def s3_presigned_url(client, bucket: str, key: str, expires: int):
 def s3_delete(client, bucket: str, key: str):
     """Delete an S3 object."""
     print(f"\n🗑️  Deleting s3://{bucket}/{key}")
-    
+
     if client.delete_object(bucket, key):
         print("   ✅ Object deleted")
     else:
@@ -211,26 +211,27 @@ def s3_delete(client, bucket: str, key: str):
 
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
+
+    import yaml
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "cloud" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
+        with open(config_path) as f:
             config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/cloud/config.yaml")
+            print("Loaded config from config/cloud/config.yaml")
 
     parser = argparse.ArgumentParser(description="Infomaniak Object Storage Examples")
-    
+
     # Client selection
     parser.add_argument("--swift", action="store_true", help="Use Swift client")
     parser.add_argument("--s3", action="store_true", help="Use S3 client")
-    
+
     # List operations
     parser.add_argument("--list-containers", action="store_true", help="List Swift containers")
     parser.add_argument("--list-buckets", action="store_true", help="List S3 buckets")
     parser.add_argument("--list-objects", type=str, metavar="CONTAINER/BUCKET", help="List objects")
-    
+
     # CRUD operations
     parser.add_argument("--upload", action="store_true", help="Upload file")
     parser.add_argument("--upload-data", type=str, metavar="DATA", help="Upload raw data")
@@ -238,11 +239,11 @@ def main():
     parser.add_argument("--delete", action="store_true", help="Delete object")
     parser.add_argument("--create-container", type=str, metavar="NAME", help="Create container")
     parser.add_argument("--create-bucket", type=str, metavar="NAME", help="Create bucket")
-    
+
     # Other operations
     parser.add_argument("--metadata", action="store_true", help="Get object metadata")
     parser.add_argument("--presigned-url", action="store_true", help="Generate presigned URL")
-    
+
     # Options
     parser.add_argument("--bucket", type=str, help="Bucket name")
     parser.add_argument("--container", type=str, help="Container name")
@@ -252,9 +253,9 @@ def main():
     parser.add_argument("--prefix", type=str, help="Object prefix filter")
     parser.add_argument("--content-type", type=str, help="Content type")
     parser.add_argument("--expires", type=int, default=3600, help="URL expiration seconds")
-    
+
     args = parser.parse_args()
-    
+
     # Determine client type
     if args.swift:
         try:
@@ -274,7 +275,7 @@ def main():
         print("❌ Specify --swift or --s3")
         parser.print_help()
         return 1
-    
+
     # Execute operations
     if args.list_containers and client_type == "swift":
         swift_list_containers(client)
@@ -339,7 +340,7 @@ def main():
         s3_presigned_url(client, args.bucket, args.key, args.expires)
     else:
         parser.print_help()
-    
+
     return 0
 
 

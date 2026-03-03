@@ -25,14 +25,15 @@ except ImportError as e:
 
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
+
+    import yaml
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "audits" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
+        with open(config_path) as f:
             config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/audits/config.yaml")
+            print("Loaded config from config/audits/config.yaml")
 
     parser = argparse.ArgumentParser(description="Audit module __all__ exports")
     parser.add_argument("--json", action="store_true", help="Output as JSON")
@@ -40,7 +41,7 @@ def main():
     args = parser.parse_args()
 
     src_dir = args.root / "src" / "codomyrmex"
-    
+
     findings = audit_exports(src_dir)
 
     if args.json:

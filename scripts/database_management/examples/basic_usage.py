@@ -8,8 +8,8 @@ Demonstrates actual database capabilities:
 - Backup/Migration stubs
 """
 
-import sys
 import os
+import sys
 from pathlib import Path
 
 # Ensure codomyrmex is in path
@@ -19,23 +19,30 @@ except ImportError:
     project_root = Path(__file__).resolve().parent.parent.parent.parent
     sys.path.insert(0, str(project_root / "src"))
 
-from codomyrmex.utils.cli_helpers import setup_logging, print_success, print_info, print_error
 from codomyrmex.database_management import (
-    DatabaseManager,
     DatabaseConnection,
-    generate_schema
+    DatabaseManager,
+    generate_schema,
 )
+from codomyrmex.utils.cli_helpers import (
+    print_error,
+    print_info,
+    print_success,
+    setup_logging,
+)
+
 
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
+
+    import yaml
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "database_management" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
+        with open(config_path) as f:
             config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/database_management/config.yaml")
+            print("Loaded config from config/database_management/config.yaml")
 
     setup_logging()
     print_info("Running Database Management Examples...")
@@ -45,7 +52,7 @@ def main():
     try:
         from codomyrmex.database_management.db_manager import DatabaseType
         mgr = DatabaseManager()
-        
+
         # Define a real SQLite connection for testing
         db_path = "output/test_app.db"
         conn = DatabaseConnection(
@@ -55,10 +62,10 @@ def main():
         )
         mgr.add_connection(conn)
         print_success(f"  DatabaseConnection registered: '{conn.name}' -> {db_path}")
-        
+
         # Test connection string generation
         print_info(f"  Connection string: {conn.get_connection_string()}")
-        
+
     except Exception as e:
         print_error(f"  DatabaseManager flow failed: {e}")
 

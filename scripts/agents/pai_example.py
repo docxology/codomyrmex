@@ -26,11 +26,11 @@ except ImportError:
     sys.path.insert(0, str(project_root / "src"))
 
 from codomyrmex.agents.pai import (
-    PAIBridge,
     ALGORITHM_PHASES,
     PAI_PRINCIPLES,
-    RESPONSE_DEPTH_LEVELS,
     PAI_UPSTREAM_URL,
+    RESPONSE_DEPTH_LEVELS,
+    PAIBridge,
 )
 
 SUBSYSTEMS = [
@@ -245,14 +245,15 @@ def main() -> int:
 
 
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
+
+    import yaml
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "agents" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
+        with open(config_path) as f:
             config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/agents/config.yaml")
+            print("Loaded config from config/agents/config.yaml")
 
 if __name__ == "__main__":
     sys.exit(main())

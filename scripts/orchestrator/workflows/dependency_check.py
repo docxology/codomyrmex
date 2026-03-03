@@ -17,16 +17,16 @@ import json
 import subprocess
 import sys
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any
 
 project_root = Path(__file__).parent.parent.parent.parent
 sys.path.insert(0, str(project_root / "src"))
 
 from codomyrmex.orchestrator import Workflow
-from codomyrmex.utils.cli_helpers import setup_logging, print_info, print_error
+from codomyrmex.utils.cli_helpers import print_error, print_info, setup_logging
 
 
-async def list_outdated_packages(_task_results: dict = None) -> Dict[str, Any]:
+async def list_outdated_packages(_task_results: dict = None) -> dict[str, Any]:
     """List outdated packages using pip."""
     result = subprocess.run(
         ["uv", "pip", "list", "--outdated", "--format=json"],
@@ -50,7 +50,7 @@ async def list_outdated_packages(_task_results: dict = None) -> Dict[str, Any]:
     }
 
 
-async def check_security_vulnerabilities(_task_results: dict = None) -> Dict[str, Any]:
+async def check_security_vulnerabilities(_task_results: dict = None) -> dict[str, Any]:
     """Check for known security vulnerabilities."""
     # Try pip-audit or safety
     result = subprocess.run(
@@ -80,7 +80,7 @@ async def check_security_vulnerabilities(_task_results: dict = None) -> Dict[str
     }
 
 
-async def check_dependency_tree(_task_results: dict = None) -> Dict[str, Any]:
+async def check_dependency_tree(_task_results: dict = None) -> dict[str, Any]:
     """Analyze dependency tree for issues."""
     result = subprocess.run(
         ["uv", "pip", "check"],
@@ -102,7 +102,7 @@ async def check_dependency_tree(_task_results: dict = None) -> Dict[str, Any]:
     }
 
 
-async def verify_requirements_files(_task_results: dict = None) -> Dict[str, Any]:
+async def verify_requirements_files(_task_results: dict = None) -> dict[str, Any]:
     """Verify requirements files exist and are valid."""
     req_files = list(project_root.glob("requirements*.txt"))
     pyproject = project_root / "pyproject.toml"
@@ -147,11 +147,11 @@ def _extract_result(obj) -> dict:
     return value if isinstance(value, dict) else {}
 
 
-async def generate_dependency_report(task_results: dict = None, _task_results: dict = None) -> Dict[str, Any]:
+async def generate_dependency_report(task_results: dict = None, _task_results: dict = None) -> dict[str, Any]:
     """Generate comprehensive dependency report."""
     # Handle both parameter naming conventions
     raw_results = task_results or _task_results or {}
-    
+
     report = {
         "timestamp": __import__("datetime").datetime.now().isoformat(),
         "summary": {},
@@ -287,14 +287,15 @@ async def main() -> int:
 
 
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
+
+    import yaml
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "orchestrator" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
+        with open(config_path) as f:
             config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/orchestrator/config.yaml")
+            print("Loaded config from config/orchestrator/config.yaml")
 
 if __name__ == "__main__":
     sys.exit(asyncio.run(main()))

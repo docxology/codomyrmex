@@ -19,7 +19,6 @@ from codomyrmex.auth.rbac.permissions import PermissionCheck, PermissionRegistry
 from codomyrmex.auth.tokens.token import Token, TokenManager
 from codomyrmex.auth.tokens.validator import TokenValidator
 
-
 # ==============================================================================
 # Token Dataclass
 # ==============================================================================
