@@ -10,7 +10,7 @@ Verifies Defense and Market module functionality:
 """
 
 from codomyrmex.defense import ActiveDefense, RabbitHole
-from codomyrmex.market import ReverseAuction, DemandAggregator
+from codomyrmex.market import DemandAggregator, ReverseAuction
 
 
 def verify_defense():
@@ -79,8 +79,9 @@ def verify_market():
 
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
+
+    import yaml
 
     config_path = (
         Path(__file__).resolve().parent.parent.parent
@@ -90,9 +91,9 @@ def main():
     )
     config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
+        with open(config_path) as f:
             config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/verification/config.yaml")
+            print("Loaded config from config/verification/config.yaml")
 
     verify_defense()
     verify_market()

@@ -5,11 +5,10 @@ Verifies that the `scripts/` directory structure mirrors `src/codomyrmex/`
 and that every module has a corresponding orchestrator.
 """
 
-import sys
 import argparse
 import logging
+import sys
 from pathlib import Path
-from typing import Set, Tuple
 
 # Add src to path to import AntigravityClient (scripts/utils/file.py -> parents[2] is repo root)
 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "src"))
@@ -21,7 +20,7 @@ logging.basicConfig(level=logging.INFO, format="%(name)s - %(levelname)s - %(mes
 logger = logging.getLogger("verify_parity")
 
 
-def get_subdirectories(path: Path) -> Set[str]:
+def get_subdirectories(path: Path) -> set[str]:
     """Get all immediate subdirectories excluding hidden/special ones."""
     if not path.exists():
         return set()
@@ -32,7 +31,7 @@ def get_subdirectories(path: Path) -> Set[str]:
     }
 
 
-def verify_structure(src_root: Path, scripts_root: Path) -> Tuple[bool, str]:
+def verify_structure(src_root: Path, scripts_root: Path) -> tuple[bool, str]:
     """
     Verifies that scripts/ mirrors src/codomyrmex structure.
     Returns (success, report_message).
@@ -63,7 +62,7 @@ def verify_structure(src_root: Path, scripts_root: Path) -> Tuple[bool, str]:
         report.append(
             f"- All {len(src_modules)} source modules have matching script directories."
         )
-        report.append(f"- All script directories contain `orchestrate.py`.")
+        report.append("- All script directories contain `orchestrate.py`.")
     else:
         report.append("\n❌ **FAILURE:** Structure mismatch detected.")
 
@@ -88,8 +87,9 @@ def verify_structure(src_root: Path, scripts_root: Path) -> Tuple[bool, str]:
 
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
+
+    import yaml
 
     config_path = (
         Path(__file__).resolve().parent.parent.parent
@@ -99,9 +99,9 @@ def main():
     )
     config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
+        with open(config_path) as f:
             config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/utils/config.yaml")
+            print("Loaded config from config/utils/config.yaml")
 
     parser = argparse.ArgumentParser(
         description="Verify scripts/ vs src/codomyrmex/ parity."

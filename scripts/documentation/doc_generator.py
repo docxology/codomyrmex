@@ -23,18 +23,18 @@ def extract_module_info(file_path: Path) -> dict:
     """Extract info from a Python module."""
     with open(file_path) as f:
         source = f.read()
-    
+
     info = {
         "name": file_path.stem,
         "docstring": None,
         "functions": [],
         "classes": [],
     }
-    
+
     try:
         tree = ast.parse(source)
         info["docstring"] = ast.get_docstring(tree)
-        
+
         for node in ast.iter_child_nodes(tree):
             if isinstance(node, ast.FunctionDef):
                 info["functions"].append({
@@ -54,17 +54,17 @@ def extract_module_info(file_path: Path) -> dict:
                 })
     except:
         pass
-    
+
     return info
 
 
 def generate_markdown(info: dict) -> str:
     """Generate markdown documentation."""
     lines = [f"# {info['name']}\n"]
-    
+
     if info["docstring"]:
         lines.append(f"{info['docstring']}\n")
-    
+
     if info["classes"]:
         lines.append("## Classes\n")
         for cls in info["classes"]:
@@ -76,7 +76,7 @@ def generate_markdown(info: dict) -> str:
                 for m in cls["methods"]:
                     lines.append(f"- `{m}()`\n")
             lines.append("")
-    
+
     if info["functions"]:
         lines.append("## Functions\n")
         for func in info["functions"]:
@@ -85,20 +85,21 @@ def generate_markdown(info: dict) -> str:
             if func["docstring"]:
                 lines.append(f"{func['docstring']}\n")
             lines.append("")
-    
+
     return "\n".join(lines)
 
 
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
+
+    import yaml
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "documentation" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
+        with open(config_path) as f:
             config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/documentation/config.yaml")
+            print("Loaded config from config/documentation/config.yaml")
 
     parser = argparse.ArgumentParser(description="Generate documentation")
     parser.add_argument("path", nargs="?", help="Python file or directory")
@@ -106,7 +107,7 @@ def main():
     parser.add_argument("--format", "-f", choices=["markdown", "json"], default="markdown")
     parser.add_argument("--list", "-l", action="store_true", help="List undocumented items")
     args = parser.parse_args()
-    
+
     if not args.path:
         print("📚 Documentation Generator\n")
         print("Usage:")
@@ -114,22 +115,22 @@ def main():
         print("  python doc_generator.py src/ --output docs/")
         print("  python doc_generator.py module.py --list")
         return 0
-    
+
     target = Path(args.path)
     if not target.exists():
         print(f"❌ Path not found: {args.path}")
         return 1
-    
+
     files = [target] if target.is_file() else list(target.rglob("*.py"))
     files = [f for f in files if "__pycache__" not in str(f) and not f.name.startswith("_")]
-    
+
     print(f"📚 Generating docs for {len(files)} file(s)\n")
-    
+
     undocumented = []
-    
+
     for f in files[:20]:
         info = extract_module_info(f)
-        
+
         if args.list:
             if not info["docstring"]:
                 undocumented.append(f"Module: {f.name}")
@@ -140,9 +141,9 @@ def main():
                 if not cls["docstring"]:
                     undocumented.append(f"  Class: {f.name}:{cls['name']}")
             continue
-        
+
         doc = generate_markdown(info)
-        
+
         if args.output:
             out_dir = Path(args.output)
             out_dir.mkdir(parents=True, exist_ok=True)
@@ -153,7 +154,7 @@ def main():
             print(f"📄 {f.name}:")
             print(f"   Functions: {len(info['functions'])}")
             print(f"   Classes: {len(info['classes'])}")
-    
+
     if args.list:
         if undocumented:
             print(f"⚠️  Undocumented items ({len(undocumented)}):\n")
@@ -161,7 +162,7 @@ def main():
                 print(f"   {item}")
         else:
             print("✅ All items documented")
-    
+
     return 0
 
 

@@ -122,8 +122,9 @@ def update_init_file(module_name: str, info: dict) -> bool:
 
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
+
+    import yaml
 
     config_path = (
         Path(__file__).resolve().parent.parent.parent
@@ -133,9 +134,9 @@ def main():
     )
     config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
+        with open(config_path) as f:
             config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/utils/config.yaml")
+            print("Loaded config from config/utils/config.yaml")
 
     """Main execution."""
     print("=" * 60)
@@ -146,10 +147,10 @@ def main():
     for module_name, info in UPDATES.items():
         print(f"\n  {module_name}/")
         if update_init_file(module_name, info):
-            print(f"    ✓ Updated __init__.py")
+            print("    ✓ Updated __init__.py")
             updated += 1
         else:
-            print(f"    ○ No changes needed")
+            print("    ○ No changes needed")
 
     print(f"\n✅ Updated {updated} modules")
     return 0

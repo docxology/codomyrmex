@@ -10,8 +10,9 @@ Verifies Identity and Wallet module functionality:
 """
 
 import hashlib
-from codomyrmex.identity import IdentityManager, VerificationLevel, BioCognitiveVerifier
-from codomyrmex.wallet import WalletManager, NaturalRitualRecovery, RitualStep
+
+from codomyrmex.identity import BioCognitiveVerifier, IdentityManager, VerificationLevel
+from codomyrmex.wallet import NaturalRitualRecovery, RitualStep, WalletManager
 
 
 def verify_identity():
@@ -85,8 +86,9 @@ def verify_wallet():
 
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
+
+    import yaml
 
     config_path = (
         Path(__file__).resolve().parent.parent.parent
@@ -96,9 +98,9 @@ def main():
     )
     config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
+        with open(config_path) as f:
             config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/verification/config.yaml")
+            print("Loaded config from config/verification/config.yaml")
 
     verify_identity()
     verify_wallet()

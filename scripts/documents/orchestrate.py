@@ -3,8 +3,8 @@
 Orchestrator for documents - A thin wrapper around documents capabilities.
 """
 
-import sys
 import argparse
+import sys
 from pathlib import Path
 
 # Ensure codomyrmex is in path
@@ -15,21 +15,28 @@ if str(project_root) not in sys.path:
     sys.path.insert(0, str(project_root))
 
 from codomyrmex.documents import (
+    DocumentFormat,
+    convert_document,
     read_document,
     write_document,
-    convert_document,
-    DocumentFormat
 )
-from codomyrmex.utils.cli_helpers import setup_logging, print_success, print_info, print_error
+from codomyrmex.utils.cli_helpers import (
+    print_error,
+    print_info,
+    print_success,
+    setup_logging,
+)
+
 
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
+
+    import yaml
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "documents" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
+        with open(config_path) as f:
             config_data = yaml.safe_load(f) or {}
             print(f"Loaded config from {config_path.name}")
 
@@ -38,7 +45,7 @@ def main():
     parser.add_argument("--input", "-i", help="Input file path")
     parser.add_argument("--output", "-o", help="Output file path")
     parser.add_argument("--format", "-f", help="Target format for conversion")
-    
+
     args = parser.parse_args()
     setup_logging()
 
@@ -58,19 +65,19 @@ def main():
 
     try:
         doc = read_document(input_path)
-        
+
         if args.action == "info":
-            print_info(f"Document Info:")
+            print_info("Document Info:")
             print_info(f"  Format: {doc.format.value}")
             print_info(f"  Type: {doc.type.value}")
             print_info(f"  Metadata: {doc.metadata.to_dict()}")
             return 0
-            
+
         if args.action == "convert":
             if not args.output or not args.format:
                 print_error("Output path and target format required for conversion")
                 return 1
-            
+
             target_format = DocumentFormat(args.format.lower())
             converted = convert_document(doc, target_format)
             write_document(converted, args.output)

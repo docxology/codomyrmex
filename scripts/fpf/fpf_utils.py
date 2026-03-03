@@ -21,18 +21,18 @@ import argparse
 def analyze_principles(path: str = ".") -> dict:
     """Analyze first principles in codebase."""
     p = Path(path)
-    
+
     analysis = {
         "modules": 0,
         "interfaces": 0,
         "abstractions": 0,
         "patterns": []
     }
-    
+
     # Count Python modules
     py_files = list(p.rglob("*.py"))
     analysis["modules"] = len([f for f in py_files if "__pycache__" not in str(f)])
-    
+
     # Look for interface patterns
     for f in py_files[:50]:
         try:
@@ -49,14 +49,14 @@ def analyze_principles(path: str = ".") -> dict:
                     analysis["patterns"].append("Singleton")
         except:
             pass
-    
+
     return analysis
 
 
 def check_modularity(path: str = ".") -> dict:
     """Check module structure and dependencies."""
     p = Path(path)
-    
+
     modules = {}
     for init in p.rglob("__init__.py"):
         if "__pycache__" not in str(init):
@@ -66,34 +66,35 @@ def check_modularity(path: str = ".") -> dict:
                 "files": len(files),
                 "has_tests": (module_dir / "tests").exists() or (module_dir / "test").exists(),
             }
-    
+
     return modules
 
 
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
+
+    import yaml
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "fpf" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
+        with open(config_path) as f:
             config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/fpf/config.yaml")
+            print("Loaded config from config/fpf/config.yaml")
 
     parser = argparse.ArgumentParser(description="FPF utilities")
     subparsers = parser.add_subparsers(dest="command")
-    
+
     # Analyze command
     analyze = subparsers.add_parser("analyze", help="Analyze principles")
     analyze.add_argument("path", nargs="?", default=".")
-    
+
     # Check command
     check = subparsers.add_parser("check", help="Check modularity")
     check.add_argument("path", nargs="?", default=".")
-    
+
     args = parser.parse_args()
-    
+
     if not args.command:
         print("🧠 FPF Utilities\n")
         print("First Principles Framework analysis tools.\n")
@@ -101,7 +102,7 @@ def main():
         print("  analyze - Analyze codebase principles")
         print("  check   - Check module structure")
         return 0
-    
+
     if args.command == "analyze":
         analysis = analyze_principles(args.path)
         print(f"🧠 FPF Analysis: {args.path}\n")
@@ -110,14 +111,14 @@ def main():
         print(f"   Abstractions: {analysis['abstractions']}")
         if analysis["patterns"]:
             print(f"   Patterns found: {', '.join(analysis['patterns'])}")
-    
+
     elif args.command == "check":
         modules = check_modularity(args.path)
         print(f"📦 Module Structure ({len(modules)} modules):\n")
         for name, info in list(modules.items())[:15]:
             tests = "✓ tests" if info["has_tests"] else ""
             print(f"   {name}: {info['files']} files {tests}")
-    
+
     return 0
 
 

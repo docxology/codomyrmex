@@ -124,7 +124,7 @@ def enrich_spec(mod_name, info):
 
     # Add API code block if no code blocks exist
     if "```" not in content:
-        code = f"\n## API Usage\n\n```python\n"
+        code = "\n## API Usage\n\n```python\n"
         if info["classes"]:
             imports = ", ".join(c[0] for c in info["classes"][:3])
             code += f"from codomyrmex.{mod_name} import {imports}\n"
@@ -165,7 +165,7 @@ def create_submodule_readme(parent, sub, info):
 
     content = f"# {display}\n\n"
     content += f"**Module**: `codomyrmex.{parent}.{sub}` | **Status**: Active\n\n"
-    content += f"## Overview\n\n"
+    content += "## Overview\n\n"
     content += f"{info['desc'] or f'{display} submodule of {parent_display}.'}\n\n"
 
     if info["classes"] or info["functions"]:
@@ -192,7 +192,7 @@ def create_submodule_readme(parent, sub, info):
     content += "```\n\n"
     content += "## Navigation\n\n"
     content += f"- **📁 Parent**: [{parent_display}](../README.md)\n"
-    content += f"- **🏠 Root**: [codomyrmex](../../../../README.md)\n"
+    content += "- **🏠 Root**: [codomyrmex](../../../../README.md)\n"
 
     with open(sub_path, "w") as f:
         f.write(content)
@@ -205,7 +205,7 @@ def create_submodule_agents(parent, sub, info):
     parent_display = get_display_name(parent)
 
     content = f"# Agent Guidelines — {display}\n\n"
-    content += f"## Overview\n\n"
+    content += "## Overview\n\n"
     content += f"{info['desc'] or f'{display} submodule for agent operations.'}\n\n"
 
     content += "## Operating Contracts\n\n"
@@ -227,7 +227,7 @@ def create_submodule_agents(parent, sub, info):
 
     content += "## Navigation\n\n"
     content += f"- **📁 Parent**: [{parent_display}](../AGENTS.md)\n"
-    content += f"- **🏠 Root**: [codomyrmex](../../../../AGENTS.md)\n"
+    content += "- **🏠 Root**: [codomyrmex](../../../../AGENTS.md)\n"
 
     with open(sub_path, "w") as f:
         f.write(content)
@@ -235,14 +235,15 @@ def create_submodule_agents(parent, sub, info):
 
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
+
+    import yaml
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "documentation" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
+        with open(config_path) as f:
             config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/documentation/config.yaml")
+            print("Loaded config from config/documentation/config.yaml")
 
     modules = sorted(
         d for d in os.listdir(SRC)

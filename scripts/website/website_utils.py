@@ -16,10 +16,10 @@ except ImportError:
     sys.path.insert(0, str(project_root / "src"))
 
 import argparse
-import re
 import http.server
-import socketserver
 import os
+import re
+import socketserver
 
 
 def find_html_files(path: str = ".") -> list:
@@ -85,8 +85,9 @@ def check_broken_links(path: Path) -> list:
 
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
+
+    import yaml
 
     config_path = (
         Path(__file__).resolve().parent.parent.parent
@@ -96,9 +97,9 @@ def main():
     )
     config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
+        with open(config_path) as f:
             config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/website/config.yaml")
+            print("Loaded config from config/website/config.yaml")
 
     parser = argparse.ArgumentParser(description="Website utilities")
     subparsers = parser.add_subparsers(dest="command")

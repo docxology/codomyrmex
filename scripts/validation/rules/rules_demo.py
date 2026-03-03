@@ -13,10 +13,10 @@ PROJECT_ROOT = Path(__file__).parent.parent.parent.parent  # 4 levels up
 sys.path.insert(0, str(PROJECT_ROOT / "src"))
 
 from codomyrmex.utils.cli_helpers import (
-    setup_logging,
+    print_error,
     print_info,
     print_success,
-    print_error,
+    setup_logging,
 )
 
 
@@ -37,8 +37,9 @@ def main() -> int:
     return 0
 
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
+
+    import yaml
 
     config_path = (
         Path(__file__).resolve().parent.parent.parent
@@ -48,9 +49,9 @@ def main() -> int:
     )
     config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
+        with open(config_path) as f:
             config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/validation/config.yaml")
+            print("Loaded config from config/validation/config.yaml")
 
 
 if __name__ == "__main__":

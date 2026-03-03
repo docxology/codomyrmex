@@ -16,8 +16,8 @@ except ImportError:
     sys.path.insert(0, str(project_root / "src"))
 
 import argparse
-import subprocess
 import shutil
+import subprocess
 
 
 def check_tool(name: str) -> dict:
@@ -25,9 +25,9 @@ def check_tool(name: str) -> dict:
     path = shutil.which(name)
     if not path:
         return {"installed": False}
-    
+
     info = {"installed": True, "path": path}
-    
+
     # Try to get version
     version_flags = ["--version", "-V", "version"]
     for flag in version_flags:
@@ -38,7 +38,7 @@ def check_tool(name: str) -> dict:
                 break
         except:
             continue
-    
+
     return info
 
 
@@ -63,21 +63,22 @@ DEV_TOOLS = {
 
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
+
+    import yaml
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "tools" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
+        with open(config_path) as f:
             config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/tools/config.yaml")
+            print("Loaded config from config/tools/config.yaml")
 
     parser = argparse.ArgumentParser(description="Development tools utilities")
     parser.add_argument("--check", "-c", action="store_true", help="Check all tools")
     parser.add_argument("--tool", "-t", help="Check specific tool")
     parser.add_argument("--json", "-j", action="store_true", help="Output as JSON")
     args = parser.parse_args()
-    
+
     if not args.check and not args.tool:
         print("🛠️  Development Tools\n")
         print("Usage:")
@@ -87,28 +88,28 @@ def main():
         for name, desc in DEV_TOOLS.items():
             print(f"   {name:<10} - {desc}")
         return 0
-    
+
     tools_to_check = {args.tool: ""} if args.tool else DEV_TOOLS
     results = {}
-    
+
     print("🛠️  Tool Check\n")
-    
+
     for name, desc in tools_to_check.items():
         info = check_tool(name)
         results[name] = info
-        
+
         if not args.json:
             icon = "✅" if info["installed"] else "❌"
             version = info.get("version", "")
             print(f"   {icon} {name:<10} {version}")
-    
+
     if args.json:
         import json
         print(json.dumps(results, indent=2))
     else:
         installed = sum(1 for r in results.values() if r["installed"])
         print(f"\n   {installed}/{len(results)} tools installed")
-    
+
     return 0
 
 
