@@ -20,7 +20,9 @@ import yaml
 
 from codomyrmex.orchestrator.core import main
 
-config_path = Path(__file__).resolve().parent.parent.parent / "config" / "website" / "config.yaml"
+config_path = (
+    Path(__file__).resolve().parent.parent.parent / "config" / "website" / "config.yaml"
+)
 config_data = {}
 if config_path.exists():
     with open(config_path) as f:
