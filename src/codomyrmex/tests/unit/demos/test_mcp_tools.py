@@ -1,10 +1,9 @@
 """Zero-mock unit tests for demos module MCP tools."""
 
+import pytest
+
 from codomyrmex.demos.mcp_tools import demos_list_demos, demos_run_demo
 from codomyrmex.demos.registry import get_registry
-
-
-import pytest
 
 
 @pytest.fixture
@@ -23,7 +22,13 @@ def test_demos_list_demos(clean_registry):
     def dummy_demo():
         return True
 
-    clean_registry.register("dummy_test_demo", "Dummy description", dummy_demo, module="dummy_module", category="dummy_category")
+    clean_registry.register(
+        "dummy_test_demo",
+        "Dummy description",
+        dummy_demo,
+        module="dummy_module",
+        category="dummy_category",
+    )
 
     results = demos_list_demos()
     assert isinstance(results, list)
