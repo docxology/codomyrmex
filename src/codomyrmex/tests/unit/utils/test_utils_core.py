@@ -376,6 +376,62 @@ class TestDeepMerge:
 
         assert result == {"a": "simple"}
 
+    def test_empty_override(self):
+        """Test merge with empty override dictionary."""
+        from codomyrmex.utils import deep_merge
+
+        base = {"a": 1, "b": {"c": 2}}
+        override = {}
+
+        result = deep_merge(base, override)
+
+        assert result == {"a": 1, "b": {"c": 2}}
+
+    def test_empty_base(self):
+        """Test merge with empty base dictionary."""
+        from codomyrmex.utils import deep_merge
+
+        base = {}
+        override = {"a": 1, "b": {"c": 2}}
+
+        result = deep_merge(base, override)
+
+        assert result == {"a": 1, "b": {"c": 2}}
+
+    def test_both_empty(self):
+        """Test merge with both empty dictionaries."""
+        from codomyrmex.utils import deep_merge
+
+        base = {}
+        override = {}
+
+        result = deep_merge(base, override)
+
+        assert result == {}
+
+    def test_non_dict_with_dict_override(self):
+        """Test merge when base has a non-dict value replaced by dict."""
+        from codomyrmex.utils import deep_merge
+
+        base = {"a": "simple"}
+        override = {"a": {"nested": "value"}}
+
+        result = deep_merge(base, override)
+
+        assert result == {"a": {"nested": "value"}}
+
+    def test_merge_with_lists(self):
+        """Test merge with dictionaries containing lists."""
+        from codomyrmex.utils import deep_merge
+
+        base = {"a": [1, 2], "b": {"c": [3]}}
+        override = {"a": [4, 5], "b": {"c": [6], "d": [7]}}
+
+        result = deep_merge(base, override)
+
+        # Lists are replaced, not extended
+        assert result == {"a": [4, 5], "b": {"c": [6], "d": [7]}}
+
 
 @pytest.mark.unit
 class TestCliHelpers:
