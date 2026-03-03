@@ -4,7 +4,11 @@ from typing import Any
 
 from google import genai
 from google.genai import types
-from PIL import Image
+
+try:
+    from PIL import Image
+except ImportError:
+    Image = None
 
 from codomyrmex.agents.core import (
     AgentCapabilities,
@@ -164,12 +168,15 @@ class GeminiClient(BaseAgent):
 
         parts = [prompt]
         if "images" in context:
-            for img_path in context["images"]:
-                try:
-                    img = Image.open(img_path)
-                    parts.append(img)
-                except (OSError, AttributeError) as e:
-                    logger.warning(f"Failed to load image: {e}")
+            if Image is None:
+                logger.warning("PIL is not installed. Images cannot be loaded.")
+            else:
+                for img_path in context["images"]:
+                    try:
+                        img = Image.open(img_path)
+                        parts.append(img)
+                    except (OSError, AttributeError) as e:
+                        logger.warning(f"Failed to load image: {e}")
         return [parts]
 
     def _build_response_from_api_result(

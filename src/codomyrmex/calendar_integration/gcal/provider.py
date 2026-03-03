@@ -3,6 +3,7 @@
 import logging
 import os
 from datetime import datetime
+from typing import Optional
 
 try:
     from codomyrmex.logging_monitoring.core.logger_config import get_logger
@@ -36,7 +37,7 @@ _GCAL_SCOPES = ["https://www.googleapis.com/auth/calendar"]
 class GoogleCalendar(CalendarProvider):
     """Google Calendar provider implementation."""
 
-    def __init__(self, credentials: Credentials | None = None, service: Resource | None = None):
+    def __init__(self, credentials: Optional[Credentials] = None, service: Optional[Resource] = None):
         """
         Initialize the Google Calendar provider.
 
