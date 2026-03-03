@@ -10,5 +10,6 @@
 - Always provide a `description` and `module` for each registered demo.
 - Demos should return a boolean success status and optional metadata.
 
-## CLI Integration
+## CLI and AI Integration
 - Demos should be runnable via `scripts/demos/` and the main `codomyrmex` CLI.
+- The `mcp_tools.py` exposes `demos_list_demos` and `demos_run_demo` via `@mcp_tool` for agents.

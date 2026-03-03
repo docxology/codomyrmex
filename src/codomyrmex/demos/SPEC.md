@@ -21,6 +21,9 @@ Provide a unified way to register, discover, and execute demonstrations of Codom
 - Leverages `codomyrmex.orchestrator.thin` for running demos.
 - Handles timeouts and logging.
 
+### 5. MCP Tools Integration
+- Exposes `demos_list_demos` and `demos_run_demo` via `@mcp_tool` for system-wide execution and testing.
+
 ## Data Structures
 
 ```python
