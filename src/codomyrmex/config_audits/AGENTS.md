@@ -12,6 +12,10 @@ Security and compliance auditing for system configurations.
 - **VERIFY**: Used during the VERIFY phase to ensure configurations are safe and compliant before or after deployment.
 - **OBSERVE**: Used during OBSERVE to detect drift or unauthorized changes in configuration security posture.
 
+## MCP Tools
+- `config_audit_file`: Audit a single configuration file for security and compliance issues.
+- `config_audit_directory`: Audit an entire directory of configuration files.
+
 ## Navigation
 - **📁 Parent Directory**: [codomyrmex](../README.md)
 - **🏠 Project Root**: ../../../README.md
