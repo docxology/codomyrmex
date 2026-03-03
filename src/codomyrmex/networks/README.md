@@ -115,7 +115,7 @@ print(g.edge_count)                 # 3
 | Centrality | Degree centrality, density | Not provided |
 | Components | `connected_components`, `is_connected` | Not provided |
 | Serialization | `to_dict` / `from_dict` JSON round-trip | Not provided |
-| MCP tool | None | `shortest_path` decorated with `@mcp_tool` |
+| MCP tool | Uses `mcp_tools.py` for LLM integrations | `shortest_path` decorated with `@mcp_tool` |
 
 ## Relationship to the `relations` Module
 
@@ -136,6 +136,7 @@ networks/
   __init__.py        # Re-exports: Network, Node, Edge (from core.py)
   core.py            # Network class -- undirected graph with traversal and metrics
   graph.py           # NetworkGraph class -- directed graph with Dijkstra shortest path
+  mcp_tools.py       # MCP Tools for graph operations
   PAI.md             # PAI Algorithm integration guide
   AGENTS.md          # AI agent operational guide
   SPEC.md            # Technical specification

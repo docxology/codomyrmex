@@ -15,7 +15,6 @@ Tests cover:
 - NetworkGraph: node_count, edge_count
 """
 
-
 import pytest
 
 from codomyrmex.networks.core import Edge as CoreEdge
@@ -28,6 +27,7 @@ from codomyrmex.networks.graph import Node as GraphNode
 # ---------------------------------------------------------------------------
 # core.py -- Node and Edge dataclasses
 # ---------------------------------------------------------------------------
+
 
 class TestCoreNodeEdge:
     """Node and Edge dataclasses from core.py."""
@@ -52,7 +52,9 @@ class TestCoreNodeEdge:
 
     @pytest.mark.unit
     def test_edge_custom_weight(self) -> None:
-        edge = CoreEdge(source="x", target="y", weight=0.5, attributes={"label": "friend"})
+        edge = CoreEdge(
+            source="x", target="y", weight=0.5, attributes={"label": "friend"}
+        )
         assert edge.weight == 0.5
         assert edge.attributes["label"] == "friend"
 
@@ -60,6 +62,7 @@ class TestCoreNodeEdge:
 # ---------------------------------------------------------------------------
 # core.py -- Network class: node operations
 # ---------------------------------------------------------------------------
+
 
 class TestNetworkNodeOps:
     """Network.add_node, remove_node, has_node."""
@@ -106,6 +109,7 @@ class TestNetworkNodeOps:
 # ---------------------------------------------------------------------------
 # core.py -- Network class: edge operations
 # ---------------------------------------------------------------------------
+
 
 class TestNetworkEdgeOps:
     """Network.add_edge, has_edge."""
@@ -156,6 +160,7 @@ class TestNetworkEdgeOps:
 # core.py -- Network class: neighborhood
 # ---------------------------------------------------------------------------
 
+
 class TestNetworkNeighborhood:
     """get_neighbors, degree."""
 
@@ -197,6 +202,7 @@ class TestNetworkNeighborhood:
 # ---------------------------------------------------------------------------
 # core.py -- Network class: traversal
 # ---------------------------------------------------------------------------
+
 
 class TestNetworkTraversal:
     """BFS, DFS, has_path."""
@@ -267,6 +273,7 @@ class TestNetworkTraversal:
 # core.py -- Network class: components and connectivity
 # ---------------------------------------------------------------------------
 
+
 class TestNetworkComponents:
     """connected_components, is_connected."""
 
@@ -316,6 +323,7 @@ class TestNetworkComponents:
 # core.py -- Network class: centrality
 # ---------------------------------------------------------------------------
 
+
 class TestNetworkCentrality:
     """Degree centrality."""
 
@@ -344,6 +352,7 @@ class TestNetworkCentrality:
 # ---------------------------------------------------------------------------
 # core.py -- Network class: properties
 # ---------------------------------------------------------------------------
+
 
 class TestNetworkProperties:
     """node_count, edge_count, density."""
@@ -390,6 +399,7 @@ class TestNetworkProperties:
 # ---------------------------------------------------------------------------
 # core.py -- Network class: serialization
 # ---------------------------------------------------------------------------
+
 
 class TestNetworkSerialization:
     """to_dict / from_dict round-trip."""
@@ -443,31 +453,32 @@ class TestNetworkSerialization:
 # graph.py -- GraphNode and GraphEdge dataclasses
 # ---------------------------------------------------------------------------
 
+
 class TestGraphNodeEdge:
     """Frozen Node and Edge from graph.py."""
 
     @pytest.mark.unit
     def test_graph_node_hash_by_id(self) -> None:
-        n1 = GraphNode(id="a", data="one")
-        n2 = GraphNode(id="a", data="two")
+        n1 = GraphNode[str](id="a", data="one")
+        n2 = GraphNode[str](id="a", data="two")
         assert hash(n1) == hash(n2)
         assert n1 == n2
 
     @pytest.mark.unit
     def test_graph_node_not_equal_different_id(self) -> None:
-        n1 = GraphNode(id="a")
-        n2 = GraphNode(id="b")
+        n1 = GraphNode[str](id="a")
+        n2 = GraphNode[str](id="b")
         assert n1 != n2
 
     @pytest.mark.unit
     def test_graph_node_not_equal_non_node(self) -> None:
-        n = GraphNode(id="a")
+        n = GraphNode[str](id="a")
         assert n != "a"
 
     @pytest.mark.unit
     def test_graph_edge_defaults(self) -> None:
-        src = GraphNode(id="a")
-        tgt = GraphNode(id="b")
+        src = GraphNode[str](id="a")
+        tgt = GraphNode[str](id="b")
         edge = GraphEdge(source=src, target=tgt)
         assert edge.weight == 1.0
         assert edge.data == {}
@@ -477,12 +488,13 @@ class TestGraphNodeEdge:
 # graph.py -- NetworkGraph class
 # ---------------------------------------------------------------------------
 
+
 class TestNetworkGraph:
     """NetworkGraph: add_node, add_edge, get_neighbors, shortest_path, counts."""
 
     @pytest.mark.unit
     def test_add_node(self) -> None:
-        g = NetworkGraph()
+        g = NetworkGraph[str]()
         node = g.add_node("a", data="val")
         assert node.id == "a"
         assert node.data == "val"
@@ -490,7 +502,7 @@ class TestNetworkGraph:
 
     @pytest.mark.unit
     def test_add_node_idempotent(self) -> None:
-        g = NetworkGraph()
+        g = NetworkGraph[str]()
         n1 = g.add_node("a", data="first")
         n2 = g.add_node("a", data="second")
         assert n1 is n2
@@ -498,14 +510,14 @@ class TestNetworkGraph:
 
     @pytest.mark.unit
     def test_add_edge_auto_creates_nodes(self) -> None:
-        g = NetworkGraph()
+        g = NetworkGraph[str]()
         edge = g.add_edge("a", "b", weight=2.0)
         assert g.node_count == 2
         assert edge.weight == 2.0
 
     @pytest.mark.unit
     def test_get_neighbors(self) -> None:
-        g = NetworkGraph()
+        g = NetworkGraph[str]()
         g.add_edge("a", "b")
         g.add_edge("a", "c")
         neighbors = g.get_neighbors("a")
@@ -515,12 +527,12 @@ class TestNetworkGraph:
 
     @pytest.mark.unit
     def test_get_neighbors_missing_node(self) -> None:
-        g = NetworkGraph()
+        g = NetworkGraph[str]()
         assert g.get_neighbors("ghost") == []
 
     @pytest.mark.unit
     def test_shortest_path_direct(self) -> None:
-        g = NetworkGraph()
+        g = NetworkGraph[str]()
         g.add_edge("a", "b", weight=1.0)
         path = g.shortest_path("a", "b")
         assert path is not None
@@ -529,7 +541,7 @@ class TestNetworkGraph:
     @pytest.mark.unit
     def test_shortest_path_chooses_lighter(self) -> None:
         """Shortest path prefers lower total weight."""
-        g = NetworkGraph()
+        g = NetworkGraph[str]()
         g.add_edge("a", "b", weight=1.0)
         g.add_edge("b", "c", weight=1.0)
         g.add_edge("a", "c", weight=10.0)
@@ -539,7 +551,7 @@ class TestNetworkGraph:
 
     @pytest.mark.unit
     def test_shortest_path_no_path(self) -> None:
-        g = NetworkGraph()
+        g = NetworkGraph[str]()
         g.add_node("a")
         g.add_node("b")
         path = g.shortest_path("a", "b")
@@ -547,19 +559,19 @@ class TestNetworkGraph:
 
     @pytest.mark.unit
     def test_shortest_path_nonexistent_nodes(self) -> None:
-        g = NetworkGraph()
+        g = NetworkGraph[str]()
         assert g.shortest_path("x", "y") is None
 
     @pytest.mark.unit
     def test_edge_count(self) -> None:
-        g = NetworkGraph()
+        g = NetworkGraph[str]()
         g.add_edge("a", "b")
         g.add_edge("b", "c")
         assert g.edge_count == 2
 
     @pytest.mark.unit
     def test_edge_with_extra_data(self) -> None:
-        g = NetworkGraph()
+        g = NetworkGraph[str]()
         edge = g.add_edge("a", "b", weight=1.5, label="friend", since=2020)
         assert edge.data["label"] == "friend"
         assert edge.data["since"] == 2020
@@ -568,6 +580,7 @@ class TestNetworkGraph:
 # ---------------------------------------------------------------------------
 # Integration: Network + package __init__
 # ---------------------------------------------------------------------------
+
 
 class TestPackageInit:
     """The networks package __init__ re-exports core classes."""
