@@ -30,19 +30,23 @@ import argparse
 import json
 import logging
 
-logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
+logging.basicConfig(
+    level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s"
+)
 logger = logging.getLogger(__name__)
 
 
 def get_client():
     """Get newsletter client from environment."""
     from codomyrmex.cloud.infomaniak.newsletter import InfomaniakNewsletterClient
+
     return InfomaniakNewsletterClient.from_env()
 
 
 # ------------------------------------------------------------------
 # Campaign operations
 # ------------------------------------------------------------------
+
 
 def list_campaigns(client):
     """List all campaigns."""
@@ -72,8 +76,14 @@ def get_campaign(client, campaign_id: str):
         print("   Campaign not found")
 
 
-def create_campaign(client, subject: str, sender_email: str, sender_name: str,
-                    content_html: str, mailing_list_id: str):
+def create_campaign(
+    client,
+    subject: str,
+    sender_email: str,
+    sender_name: str,
+    content_html: str,
+    mailing_list_id: str,
+):
     """Create a new campaign."""
     print(f"\n📧 Creating campaign: {subject}")
 
@@ -168,6 +178,7 @@ def get_statistics(client, campaign_id: str):
 # Mailing list operations
 # ------------------------------------------------------------------
 
+
 def list_mailing_lists(client):
     """List all mailing lists."""
     print("\n📋 Mailing Lists\n" + "=" * 50)
@@ -247,7 +258,7 @@ def import_contacts(client, list_id: str, contacts_file: str):
     print(f"\n📥 Importing contacts into list {list_id} from {contacts_file}")
 
     try:
-        with open(contacts_file, "r") as f:
+        with open(contacts_file) as f:
             contacts = json.load(f)
     except (FileNotFoundError, json.JSONDecodeError) as e:
         print(f"   ❌ Failed to read contacts file: {e}")
@@ -273,6 +284,7 @@ def manage_contact(client, list_id: str, contact_id: str, action: str):
 # ------------------------------------------------------------------
 # Contact operations
 # ------------------------------------------------------------------
+
 
 def get_contact(client, contact_id: str):
     """Get contact details."""
@@ -311,6 +323,7 @@ def delete_contact(client, contact_id: str):
 # Utility operations
 # ------------------------------------------------------------------
 
+
 def get_credits(client):
     """Get newsletter credits."""
     print("\n💳 Newsletter Credits\n" + "=" * 50)
@@ -337,64 +350,132 @@ def get_task_status(client, task_id: str):
 
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
-    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "cloud" / "config.yaml"
+
+    import yaml
+
+    config_path = (
+        Path(__file__).resolve().parent.parent.parent
+        / "config"
+        / "cloud"
+        / "config.yaml"
+    )
     config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
+        with open(config_path) as f:
             config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/cloud/config.yaml")
+            print("Loaded config from config/cloud/config.yaml")
 
     parser = argparse.ArgumentParser(description="Infomaniak Newsletter Examples")
 
     # Campaign operations
     parser.add_argument("--list-campaigns", action="store_true", help="List campaigns")
-    parser.add_argument("--get-campaign", type=str, metavar="ID", help="Get campaign details")
-    parser.add_argument("--create-campaign", action="store_true", help="Create a campaign")
-    parser.add_argument("--update-campaign", type=str, metavar="ID", help="Update a campaign")
-    parser.add_argument("--delete-campaign", type=str, metavar="ID", help="Delete a campaign")
+    parser.add_argument(
+        "--get-campaign", type=str, metavar="ID", help="Get campaign details"
+    )
+    parser.add_argument(
+        "--create-campaign", action="store_true", help="Create a campaign"
+    )
+    parser.add_argument(
+        "--update-campaign", type=str, metavar="ID", help="Update a campaign"
+    )
+    parser.add_argument(
+        "--delete-campaign", type=str, metavar="ID", help="Delete a campaign"
+    )
     parser.add_argument("--send-test", action="store_true", help="Send a test email")
-    parser.add_argument("--schedule", type=str, metavar="ID", help="Schedule a campaign")
-    parser.add_argument("--unschedule", type=str, metavar="ID", help="Unschedule a campaign")
+    parser.add_argument(
+        "--schedule", type=str, metavar="ID", help="Schedule a campaign"
+    )
+    parser.add_argument(
+        "--unschedule", type=str, metavar="ID", help="Unschedule a campaign"
+    )
     parser.add_argument("--send-campaign", type=str, metavar="ID", help="Send campaign")
-    parser.add_argument("--statistics", type=str, metavar="ID", help="Get campaign statistics")
+    parser.add_argument(
+        "--statistics", type=str, metavar="ID", help="Get campaign statistics"
+    )
 
     # Mailing list operations
-    parser.add_argument("--list-mailing-lists", action="store_true", help="List mailing lists")
-    parser.add_argument("--get-mailing-list", type=str, metavar="ID", help="Get mailing list details")
-    parser.add_argument("--create-mailing-list", type=str, metavar="NAME", help="Create mailing list")
-    parser.add_argument("--update-mailing-list", type=str, metavar="ID", help="Update mailing list")
-    parser.add_argument("--delete-mailing-list", type=str, metavar="ID", help="Delete mailing list")
-    parser.add_argument("--list-contacts", type=str, metavar="LIST_ID", help="List contacts in list")
-    parser.add_argument("--import-contacts", type=str, metavar="LIST_ID", help="Import contacts into list")
-    parser.add_argument("--manage-contact", action="store_true", help="Manage contact subscription")
+    parser.add_argument(
+        "--list-mailing-lists", action="store_true", help="List mailing lists"
+    )
+    parser.add_argument(
+        "--get-mailing-list", type=str, metavar="ID", help="Get mailing list details"
+    )
+    parser.add_argument(
+        "--create-mailing-list", type=str, metavar="NAME", help="Create mailing list"
+    )
+    parser.add_argument(
+        "--update-mailing-list", type=str, metavar="ID", help="Update mailing list"
+    )
+    parser.add_argument(
+        "--delete-mailing-list", type=str, metavar="ID", help="Delete mailing list"
+    )
+    parser.add_argument(
+        "--list-contacts", type=str, metavar="LIST_ID", help="List contacts in list"
+    )
+    parser.add_argument(
+        "--import-contacts",
+        type=str,
+        metavar="LIST_ID",
+        help="Import contacts into list",
+    )
+    parser.add_argument(
+        "--manage-contact", action="store_true", help="Manage contact subscription"
+    )
 
     # Contact operations
-    parser.add_argument("--get-contact", type=str, metavar="ID", help="Get contact details")
-    parser.add_argument("--update-contact", type=str, metavar="ID", help="Update a contact")
-    parser.add_argument("--delete-contact", type=str, metavar="ID", help="Delete a contact")
+    parser.add_argument(
+        "--get-contact", type=str, metavar="ID", help="Get contact details"
+    )
+    parser.add_argument(
+        "--update-contact", type=str, metavar="ID", help="Update a contact"
+    )
+    parser.add_argument(
+        "--delete-contact", type=str, metavar="ID", help="Delete a contact"
+    )
 
     # Utility
-    parser.add_argument("--get-credits", action="store_true", help="Get newsletter credits")
-    parser.add_argument("--get-task-status", type=str, metavar="ID", help="Get task status")
+    parser.add_argument(
+        "--get-credits", action="store_true", help="Get newsletter credits"
+    )
+    parser.add_argument(
+        "--get-task-status", type=str, metavar="ID", help="Get task status"
+    )
 
     # Supporting arguments
     parser.add_argument("--subject", type=str, help="Campaign subject")
-    parser.add_argument("--sender", type=str, help="Sender email (e.g., news@activeinference.tech)")
-    parser.add_argument("--sender-name", type=str, default="Active Inference Institute", help="Sender name")
+    parser.add_argument(
+        "--sender", type=str, help="Sender email (e.g., news@activeinference.tech)"
+    )
+    parser.add_argument(
+        "--sender-name",
+        type=str,
+        default="Active Inference Institute",
+        help="Sender name",
+    )
     parser.add_argument("--content", type=str, default=None, help="HTML content")
     parser.add_argument("--list-id", type=str, help="Mailing list ID")
     parser.add_argument("--campaign", type=str, help="Campaign ID (for --send-test)")
     parser.add_argument("--email", type=str, help="Recipient email (for --send-test)")
-    parser.add_argument("--schedule-at", type=str, help="ISO 8601 datetime for scheduling")
+    parser.add_argument(
+        "--schedule-at", type=str, help="ISO 8601 datetime for scheduling"
+    )
     parser.add_argument("--contact-id", type=str, help="Contact ID")
-    parser.add_argument("--action", type=str, choices=["subscribe", "unsubscribe"], help="Contact action")
-    parser.add_argument("--contacts-file", type=str, help="JSON file with contacts for import")
+    parser.add_argument(
+        "--action",
+        type=str,
+        choices=["subscribe", "unsubscribe"],
+        help="Contact action",
+    )
+    parser.add_argument(
+        "--contacts-file", type=str, help="JSON file with contacts for import"
+    )
     parser.add_argument("--name", type=str, help="Name for update operations")
 
     # Validation
-    parser.add_argument("--validate", action="store_true", help="Validate connection to API")
+    parser.add_argument(
+        "--validate", action="store_true", help="Validate connection to API"
+    )
 
     # All operations
     parser.add_argument("--all", action="store_true", help="Show all information")
@@ -427,8 +508,9 @@ def main():
             print("❌ --create-campaign requires --subject, --sender, --list-id")
             return 1
         content = args.content or "<h1>Newsletter</h1><p>Content here.</p>"
-        create_campaign(client, args.subject, args.sender, args.sender_name,
-                        content, args.list_id)
+        create_campaign(
+            client, args.subject, args.sender, args.sender_name, content, args.list_id
+        )
     elif args.update_campaign:
         kwargs = {}
         if args.subject:

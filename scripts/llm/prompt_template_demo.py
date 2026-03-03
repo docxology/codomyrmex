@@ -19,7 +19,6 @@ except ImportError:
 import argparse
 import re
 
-
 # Built-in demo templates
 DEMO_TEMPLATES = {
     "code_review": """You are a code reviewer. Review the following code:
@@ -34,19 +33,16 @@ Focus on:
 - Suggestions for improvement
 
 Provide your review:""",
-
     "summarize": """Summarize the following text in {style} style:
 
 {text}
 
 Summary:""",
-
     "explain": """Explain the concept of {topic} to someone who is {audience}.
 
 Use simple language and provide examples where helpful.
 
 Explanation:""",
-
     "translate": """Translate the following {source_lang} text to {target_lang}:
 
 {text}
@@ -59,17 +55,17 @@ def load_template(template_path: str) -> str:
     """Load template from file or use built-in."""
     if template_path in DEMO_TEMPLATES:
         return DEMO_TEMPLATES[template_path]
-    
+
     path = Path(template_path)
     if path.exists():
         return path.read_text()
-    
+
     raise ValueError(f"Template not found: {template_path}")
 
 
 def extract_variables(template: str) -> list:
     """Extract variable names from template."""
-    return list(set(re.findall(r'\{(\w+)\}', template)))
+    return list(set(re.findall(r"\{(\w+)\}", template)))
 
 
 def render_template(template: str, variables: dict) -> str:
@@ -90,26 +86,41 @@ def parse_var_arg(var_str: str) -> tuple:
 
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
-    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "llm" / "config.yaml"
+
+    import yaml
+
+    config_path = (
+        Path(__file__).resolve().parent.parent.parent / "config" / "llm" / "config.yaml"
+    )
     config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
+        with open(config_path) as f:
             config_data = yaml.safe_load(f) or {}
             print(f"Loaded config from {config_path.name}")
 
     parser = argparse.ArgumentParser(description="Demonstrate prompt template usage")
-    parser.add_argument("--template", "-t", default="explain",
-                        help="Template name or file path (built-in: code_review, summarize, explain, translate)")
-    parser.add_argument("--vars", "-v", nargs="*", default=[],
-                        help="Template variables as KEY=VALUE pairs")
-    parser.add_argument("--list", "-l", action="store_true",
-                        help="List available built-in templates")
-    parser.add_argument("--show", "-s", action="store_true",
-                        help="Show template without rendering")
+    parser.add_argument(
+        "--template",
+        "-t",
+        default="explain",
+        help="Template name or file path (built-in: code_review, summarize, explain, translate)",
+    )
+    parser.add_argument(
+        "--vars",
+        "-v",
+        nargs="*",
+        default=[],
+        help="Template variables as KEY=VALUE pairs",
+    )
+    parser.add_argument(
+        "--list", "-l", action="store_true", help="List available built-in templates"
+    )
+    parser.add_argument(
+        "--show", "-s", action="store_true", help="Show template without rendering"
+    )
     args = parser.parse_args()
-    
+
     if args.list:
         print("📋 Available built-in templates:\n")
         for name, template in DEMO_TEMPLATES.items():
@@ -118,22 +129,22 @@ def main():
             print(f"    Variables: {', '.join(variables)}")
             print()
         return 0
-    
+
     try:
         template = load_template(args.template)
     except ValueError as e:
         print(f"❌ Error: {e}")
         return 1
-    
+
     variables = extract_variables(template)
-    
+
     if args.show:
         print(f"📄 Template: {args.template}\n")
         print("Variables:", ", ".join(variables))
         print("\n--- Template Content ---\n")
         print(template)
         return 0
-    
+
     # Parse provided variables
     var_dict = {}
     for var_str in args.vars:
@@ -143,7 +154,7 @@ def main():
         except ValueError as e:
             print(f"❌ Error: {e}")
             return 1
-    
+
     # Check for missing variables
     missing = [v for v in variables if v not in var_dict]
     if missing:
@@ -154,15 +165,15 @@ def main():
         example_vars = " ".join(f'-v {v}="<value>"' for v in missing)
         print(f"   python prompt_template_demo.py -t {args.template} {example_vars}")
         return 1
-    
+
     # Render template
     rendered = render_template(template, var_dict)
-    
+
     print(f"📄 Template: {args.template}")
     print(f"   Variables: {var_dict}")
     print("\n--- Rendered Prompt ---\n")
     print(rendered)
-    
+
     return 0
 
 

@@ -31,13 +31,14 @@ import asyncio
 import json
 from typing import Any, Dict
 
+from codomyrmex.logging_monitoring.logger_config import get_logger
+
 from codomyrmex.model_context_protocol import MCPServer, MCPServerConfig
+from codomyrmex.model_context_protocol import tools as mcp_tools
 from codomyrmex.model_context_protocol.discovery import (
     DiscoveredTool,
     discover_tools,
 )
-from codomyrmex.model_context_protocol import tools as mcp_tools
-from codomyrmex.logging_monitoring.logger_config import get_logger
 
 logger = get_logger(__name__)
 
@@ -46,7 +47,7 @@ logger = get_logger(__name__)
 # Known tool-name -> tools.py function mapping for spec-discovered tools
 # ============================================================================
 
-_SPEC_TOOL_IMPLEMENTATIONS: Dict[str, Any] = {
+_SPEC_TOOL_IMPLEMENTATIONS: dict[str, Any] = {
     "git_status": mcp_tools.git_status,
     "git_diff": mcp_tools.git_diff,
     "read_file": mcp_tools.read_file,
@@ -65,6 +66,7 @@ _SPEC_TOOL_IMPLEMENTATIONS: Dict[str, Any] = {
 # ============================================================================
 # MCP Tool Discovery Bridge
 # ============================================================================
+
 
 def discover_and_register_tools(server: MCPServer) -> int:
     """
@@ -118,7 +120,9 @@ def discover_and_register_tools(server: MCPServer) -> int:
             "name": prefixed_name,
             "title": tool.name,  # MCP 2025-06-18: human-friendly display name
             "description": tool.description or f"Discovered tool: {tool.name}",
-            "inputSchema": tool.input_schema if tool.input_schema else {
+            "inputSchema": tool.input_schema
+            if tool.input_schema
+            else {
                 "type": "object",
                 "properties": {},
                 "required": [],
@@ -146,12 +150,15 @@ def discover_and_register_tools(server: MCPServer) -> int:
                         "module": _extract_module_name(t.source_path, str(modules_dir)),
                         "provided_arguments": kwargs,
                     }
+
                 return handler
 
             server.register_tool(prefixed_name, schema, make_handler(tool))
 
         registered_count += 1
-        logger.debug(f"Registered discovered tool: {prefixed_name} ({'implemented' if has_impl else 'spec_only'})")
+        logger.debug(
+            f"Registered discovered tool: {prefixed_name} ({'implemented' if has_impl else 'spec_only'})"
+        )
 
     logger.info(f"Registered {registered_count} discovered tools from specifications")
     return registered_count
@@ -173,6 +180,7 @@ def _extract_module_name(source_path: str, base_dir: str) -> str:
 # ============================================================================
 # Built-in Codomyrmex Tools (delegating to tools.py)
 # ============================================================================
+
 
 def create_file_tools(server: MCPServer) -> None:
     """Register file operation tools (delegating to tools.py)."""
@@ -200,8 +208,12 @@ def create_file_tools(server: MCPServer) -> None:
         title="List Directory",
         description="List directory contents with filtering, pagination, and file metadata",
     )
-    def list_directory(path: str = ".", pattern: str = "*", recursive: bool = False) -> str:
-        result = mcp_tools.list_directory(path=path, pattern=pattern, recursive=recursive)
+    def list_directory(
+        path: str = ".", pattern: str = "*", recursive: bool = False
+    ) -> str:
+        result = mcp_tools.list_directory(
+            path=path, pattern=pattern, recursive=recursive
+        )
         return json.dumps(result)
 
 
@@ -298,20 +310,32 @@ def create_data_tools(server: MCPServer) -> None:
 def create_memory_tools(server: MCPServer) -> None:
     """Register memory/context tools."""
 
-    _memory_store: Dict[str, str] = {}
+    _memory_store: dict[str, str] = {}
 
-    @server.tool(name="store_memory", title="Store Memory", description="Store a key-value pair in temporary memory")
+    @server.tool(
+        name="store_memory",
+        title="Store Memory",
+        description="Store a key-value pair in temporary memory",
+    )
     def store_memory(key: str, value: str) -> str:
         _memory_store[key] = value
         return f"Stored '{key}' in memory"
 
-    @server.tool(name="recall_memory", title="Recall Memory", description="Retrieve a value from temporary memory")
+    @server.tool(
+        name="recall_memory",
+        title="Recall Memory",
+        description="Retrieve a value from temporary memory",
+    )
     def recall_memory(key: str) -> str:
         if key in _memory_store:
             return _memory_store[key]
         return f"Key '{key}' not found in memory"
 
-    @server.tool(name="list_memories", title="List Memories", description="List all keys stored in temporary memory")
+    @server.tool(
+        name="list_memories",
+        title="List Memories",
+        description="List all keys stored in temporary memory",
+    )
     def list_memories() -> str:
         if _memory_store:
             return "\n".join(f"- {k}" for k in _memory_store.keys())
@@ -321,19 +345,30 @@ def create_memory_tools(server: MCPServer) -> None:
 def create_codomyrmex_tools(server: MCPServer) -> None:
     """Register Codomyrmex-specific tools."""
 
-    @server.tool(name="list_modules", title="List Modules", description="List all available Codomyrmex modules")
+    @server.tool(
+        name="list_modules",
+        title="List Modules",
+        description="List all available Codomyrmex modules",
+    )
     def list_modules() -> str:
         try:
             from codomyrmex import list_modules as lm
+
             modules = lm()
             return "\n".join(f"- {m}" for m in sorted(modules))
         except Exception as e:
             return f"Error: {e}"
 
-    @server.tool(name="get_module_info", title="Module Info", description="Get information about a Codomyrmex module")
+    @server.tool(
+        name="get_module_info",
+        title="Module Info",
+        description="Get information about a Codomyrmex module",
+    )
     def get_module_info(module_name: str) -> str:
         try:
-            module_path = Path(__file__).parent.parent.parent / "src" / "codomyrmex" / module_name
+            module_path = (
+                Path(__file__).parent.parent.parent / "src" / "codomyrmex" / module_name
+            )
 
             info = [f"Module: {module_name}"]
 
@@ -356,6 +391,7 @@ def create_codomyrmex_tools(server: MCPServer) -> None:
 # ============================================================================
 # Server Management
 # ============================================================================
+
 
 def create_server(name: str = "codomyrmex-mcp") -> MCPServer:
     """Create and configure an MCP server with all tools."""
@@ -393,9 +429,12 @@ def create_server(name: str = "codomyrmex-mcp") -> MCPServer:
         description="Prompt for reviewing code changes",
         template="Please review the following code for: {focus}\n\nCode:\n{code}",
         arguments=[
-            {"name": "focus", "description": "What to focus on (security, performance, style)"},
+            {
+                "name": "focus",
+                "description": "What to focus on (security, performance, style)",
+            },
             {"name": "code", "description": "The code to review"},
-        ]
+        ],
     )
 
     server.register_prompt(
@@ -403,9 +442,12 @@ def create_server(name: str = "codomyrmex-mcp") -> MCPServer:
         description="Prompt for explaining code",
         template="Explain this code in {detail_level} detail:\n\n{code}",
         arguments=[
-            {"name": "detail_level", "description": "Level of detail (brief, detailed, expert)"},
+            {
+                "name": "detail_level",
+                "description": "Level of detail (brief, detailed, expert)",
+            },
             {"name": "code", "description": "The code to explain"},
-        ]
+        ],
     )
 
     return server
@@ -438,14 +480,21 @@ def list_available_tools(server: MCPServer) -> None:
 
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
-    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "model_context_protocol" / "config.yaml"
+
+    import yaml
+
+    config_path = (
+        Path(__file__).resolve().parent.parent.parent
+        / "config"
+        / "model_context_protocol"
+        / "config.yaml"
+    )
     config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
+        with open(config_path) as f:
             config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/model_context_protocol/config.yaml")
+            print("Loaded config from config/model_context_protocol/config.yaml")
 
     parser = argparse.ArgumentParser(
         description="Run Codomyrmex MCP Server",
@@ -455,35 +504,26 @@ Examples:
   python run_mcp_server.py                    # Run stdio server
   python run_mcp_server.py --list-tools       # List available tools
   python run_mcp_server.py --transport http   # Run HTTP server (browser access)
-        """
+        """,
     )
 
     parser.add_argument(
         "--transport",
         choices=["stdio", "http"],
         default="stdio",
-        help="Transport protocol (default: stdio)"
+        help="Transport protocol (default: stdio)",
     )
     parser.add_argument(
-        "--port",
-        type=int,
-        default=8080,
-        help="Port for HTTP transport (default: 8080)"
+        "--port", type=int, default=8080, help="Port for HTTP transport (default: 8080)"
     )
     parser.add_argument(
-        "--host",
-        default="0.0.0.0",
-        help="Host for HTTP transport (default: 0.0.0.0)"
+        "--host", default="0.0.0.0", help="Host for HTTP transport (default: 0.0.0.0)"
     )
     parser.add_argument(
-        "--list-tools",
-        action="store_true",
-        help="List available tools and exit"
+        "--list-tools", action="store_true", help="List available tools and exit"
     )
     parser.add_argument(
-        "--name",
-        default="codomyrmex-mcp",
-        help="Server name (default: codomyrmex-mcp)"
+        "--name", default="codomyrmex-mcp", help="Server name (default: codomyrmex-mcp)"
     )
 
     args = parser.parse_args()
@@ -503,7 +543,7 @@ Examples:
         server.run()
     else:
         tool_count = len(server._tool_registry.list_tools())
-        print(f"Starting Codomyrmex MCP Server (HTTP)", file=sys.stderr)
+        print("Starting Codomyrmex MCP Server (HTTP)", file=sys.stderr)
         print(f"   URL: http://{args.host}:{args.port}", file=sys.stderr)
         print(f"   Tools: {tool_count}", file=sys.stderr)
         print(f"   Web UI: http://localhost:{args.port}/", file=sys.stderr)

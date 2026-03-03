@@ -6,8 +6,8 @@ Thin wrapper around codomyrmex.documentation.audit.audit_documentation.
 """
 
 import argparse
-from pathlib import Path
 import sys
+from pathlib import Path
 
 # Ensure src is in path
 PROJ_ROOT = Path(__file__).resolve().parent.parent
@@ -25,25 +25,36 @@ except ImportError as e:
 
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
-    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "audits" / "config.yaml"
+
+    import yaml
+
+    config_path = (
+        Path(__file__).resolve().parent.parent.parent
+        / "config"
+        / "audits"
+        / "config.yaml"
+    )
     config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
+        with open(config_path) as f:
             config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/audits/config.yaml")
+            print("Loaded config from config/audits/config.yaml")
 
     parser = argparse.ArgumentParser(description="Audit documentation completeness.")
-    parser.add_argument("--root", type=Path, default=PROJ_ROOT, help="Project root directory")
-    parser.add_argument("--report", type=Path, default=None, help="Output path for the report file")
-    
+    parser.add_argument(
+        "--root", type=Path, default=PROJ_ROOT, help="Project root directory"
+    )
+    parser.add_argument(
+        "--report", type=Path, default=None, help="Output path for the report file"
+    )
+
     args = parser.parse_args()
-    
+
     root_dir = args.root
     src_dir = root_dir / "src" / "codomyrmex"
     report_file = args.report or (root_dir / "docs_audit_report.md")
-    
+
     audit_documentation(src_dir, report_file)
 
 
