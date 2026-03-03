@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 
 from codomyrmex.logging_monitoring import get_logger
 
-from codomyrmex.data_visualization.utils import apply_theme_to_axes, save_plot
+from codomyrmex.data_visualization.utils import DEFAULT_FIGURE_SIZE, apply_theme_to_axes, save_plot
 
 logger = get_logger(__name__)
 
@@ -27,6 +27,7 @@ def create_histogram(
     hist_color: str = "cornflowerblue",
     edge_color: str = "black",
     theme=None,
+    figure_size: tuple = DEFAULT_FIGURE_SIZE,
 ):
     """
     Generates a histogram.
@@ -37,7 +38,7 @@ def create_histogram(
         logger.warning("Empty data provided for histogram. No plot generated.")
         return None
 
-    fig, ax = plt.subplots()
+    fig, ax = plt.subplots(figsize=figure_size)
     if theme is not None:
         apply_theme_to_axes(ax, theme)
     ax.hist(data, bins=bins, color=hist_color, edgecolor=edge_color)

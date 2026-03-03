@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 
 from codomyrmex.logging_monitoring import get_logger
 
-from codomyrmex.data_visualization.utils import apply_theme_to_axes, save_plot
+from codomyrmex.data_visualization.utils import DEFAULT_FIGURE_SIZE, apply_theme_to_axes, save_plot
 
 logger = get_logger(__name__)
 
@@ -27,6 +27,7 @@ def create_bar_chart(
     horizontal: bool = False,
     bar_color: str = "skyblue",
     theme=None,
+    figure_size: tuple = DEFAULT_FIGURE_SIZE,
 ):
     """
     Generates a bar chart (vertical or horizontal).
@@ -44,7 +45,7 @@ def create_bar_chart(
         )
         return None
 
-    fig, ax = plt.subplots()
+    fig, ax = plt.subplots(figsize=figure_size)
     if theme is not None:
         apply_theme_to_axes(ax, theme)
     if horizontal:

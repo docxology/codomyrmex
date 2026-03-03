@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 
 from codomyrmex.logging_monitoring import get_logger
 
-from codomyrmex.data_visualization.utils import apply_theme_to_axes, save_plot
+from codomyrmex.data_visualization.utils import DEFAULT_FIGURE_SIZE, apply_theme_to_axes, save_plot
 
 logger = get_logger(__name__)
 
@@ -26,6 +26,7 @@ def create_pie_chart(
     startangle: int = 90,
     explode: list = None,  # e.g., [0, 0.1, 0, 0] to explode the 2nd slice
     theme=None,
+    figure_size: tuple = DEFAULT_FIGURE_SIZE,
 ):
     """
     Generates a pie chart.
@@ -48,7 +49,7 @@ def create_pie_chart(
         )
         explode = None
 
-    fig, ax = plt.subplots()
+    fig, ax = plt.subplots(figsize=figure_size)
     if theme is not None:
         apply_theme_to_axes(ax, theme)
     # Add a check for sum of sizes to avoid division by zero in autopct if all sizes are 0
