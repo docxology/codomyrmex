@@ -1,0 +1,40 @@
+#!/usr/bin/env python3
+"""
+scripts/validate_pai_integration.py
+
+Thin wrapper around codomyrmex.validation.pai.validate_pai_integration.
+"""
+
+import sys
+from pathlib import Path
+
+# Ensure src is in path
+PROJ_ROOT = Path(__file__).resolve().parent.parent
+SRC_DIR = PROJ_ROOT / "src"
+if str(SRC_DIR) not in sys.path:
+    sys.path.insert(0, str(SRC_DIR))
+
+try:
+    from codomyrmex.validation.pai import validate_pai_integration
+except ImportError as e:
+    print(f"Error importing codomyrmex module: {e}")
+    sys.exit(1)
+
+
+def main():
+    # Auto-injected: Load configuration
+    import yaml
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "pai" / "config.yaml"
+    config_data = {}
+    if config_path.exists():
+        with open(config_path, "r") as f:
+            config_data = yaml.safe_load(f) or {}
+            print(f"Loaded config from config/pai/config.yaml")
+
+    src_dir = PROJ_ROOT / "src" / "codomyrmex"
+    sys.exit(validate_pai_integration(src_dir))
+
+
+if __name__ == "__main__":
+    main()

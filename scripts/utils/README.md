@@ -1,0 +1,21 @@
+# utils
+
+**Version**: v0.1.7 | **Status**: Active | **Last Updated**: February 2026
+
+## Overview
+
+Automation and utility scripts.
+
+## Directory Contents
+- `PAI.md` – File
+- `README.md` – File
+- `SPEC.md` – File
+- `check_module_health.py` – File
+- `examples/` – Subdirectory
+- `integration_example.py` – File
+- `orchestrate.py` – File
+- `verify_structure_parity.py` – File
+
+## Navigation
+- **Parent Directory**: [scripts](../README.md)
+- **Project Root**: ../../README.md

@@ -1,0 +1,19 @@
+# Default configuration for all scripts
+default:
+  env:
+    CODOMYRMEX_TEST_MODE: "1"
+    CODOMYRMEX_LOG_QUIET_RECONFIG: "1"
+
+# Scripts to skip during orchestrator runs
+skip: []
+
+# Timeout overrides (in seconds)
+timeout_override:
+  agents/examples/opencode_example.py: 180
+  agents/orchestrate.py: 300
+  ide/orchestrate.py: 180
+
+# Script-specific configurations
+scripts:
+  ide/antigravity/periodic_chat.py:
+    args: ["--test-mode"]
