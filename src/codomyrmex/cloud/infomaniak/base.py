@@ -212,10 +212,12 @@ class InfomaniakRESTBase:
         self._token = token
         self._base_url = base_url.rstrip("/")
         self._session = requests.Session()
-        self._session.headers.update({
-            "Authorization": f"Bearer {token}",
-            "Content-Type": "application/json",
-        })
+        self._session.headers.update(
+            {
+                "Authorization": f"Bearer {token}",
+                "Content-Type": "application/json",
+            }
+        )
 
     @classmethod
     def from_env(cls, **kwargs) -> "InfomaniakRESTBase":

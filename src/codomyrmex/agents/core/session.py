@@ -72,7 +72,9 @@ class AgentSession:
         self._trim_history()
         return msg
 
-    def add_assistant_message(self, content: str, metadata: dict | None = None) -> Message:
+    def add_assistant_message(
+        self, content: str, metadata: dict | None = None
+    ) -> Message:
         """Add an assistant message to the session."""
         msg = Message(role="assistant", content=content, metadata=metadata or {})
         self.messages.append(msg)
@@ -122,7 +124,7 @@ class AgentSession:
         if keep_count > 0:
             self.messages = system_msgs + other_msgs[-keep_count:]
         else:
-            self.messages = system_msgs[-self.max_history:]
+            self.messages = system_msgs[-self.max_history :]
 
     def save(self, path: Path) -> None:
         """
@@ -178,7 +180,9 @@ class AgentSession:
 
     def __repr__(self) -> str:
         """Return string representation."""
-        return f"AgentSession(id={self.session_id[:8]}..., messages={len(self.messages)})"
+        return (
+            f"AgentSession(id={self.session_id[:8]}..., messages={len(self.messages)})"
+        )
 
 
 class SessionManager:
@@ -197,7 +201,9 @@ class SessionManager:
         if storage_dir:
             storage_dir.mkdir(parents=True, exist_ok=True)
 
-    def create_session(self, agent_name: str, session_id: str | None = None) -> AgentSession:
+    def create_session(
+        self, agent_name: str, session_id: str | None = None
+    ) -> AgentSession:
         """Create a new session."""
         session = AgentSession(
             session_id=session_id or str(uuid.uuid4()),
@@ -211,7 +217,9 @@ class SessionManager:
         """Get session by ID."""
         return self.sessions.get(session_id)
 
-    def get_or_create(self, agent_name: str, session_id: str | None = None) -> AgentSession:
+    def get_or_create(
+        self, agent_name: str, session_id: str | None = None
+    ) -> AgentSession:
         """Get existing session or create new one."""
         if session_id and session_id in self.sessions:
             return self.sessions[session_id]

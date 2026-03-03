@@ -24,13 +24,17 @@ from codomyrmex.events.core.event_schema import Event, EventType
 # Helpers
 # ---------------------------------------------------------------------------
 
-def _make_event(event_type: EventType = EventType.SYSTEM_STARTUP, data: dict | None = None) -> Event:
+
+def _make_event(
+    event_type: EventType = EventType.SYSTEM_STARTUP, data: dict | None = None
+) -> Event:
     return Event(event_type=event_type, source="test", data=data or {})
 
 
 # ---------------------------------------------------------------------------
 # Subscription.matches_event
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestSubscriptionMatchesEvent:
@@ -103,6 +107,7 @@ class TestSubscriptionMatchesEvent:
 # EventBus lifecycle
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestEventBusSubscribePublish:
     """Tests for EventBus subscribe, publish, and unsubscribe."""
@@ -163,8 +168,14 @@ class TestEventBusSubscribePublish:
         """Multiple subscribers to the same event type all receive the event."""
         bus = EventBus()
         counts = [0, 0]
-        bus.subscribe([EventType.MODULE_LOAD], handler=lambda e: counts.__setitem__(0, counts[0] + 1))
-        bus.subscribe([EventType.MODULE_LOAD], handler=lambda e: counts.__setitem__(1, counts[1] + 1))
+        bus.subscribe(
+            [EventType.MODULE_LOAD],
+            handler=lambda e: counts.__setitem__(0, counts[0] + 1),
+        )
+        bus.subscribe(
+            [EventType.MODULE_LOAD],
+            handler=lambda e: counts.__setitem__(1, counts[1] + 1),
+        )
 
         bus.publish(_make_event(EventType.MODULE_LOAD))
 
@@ -175,6 +186,7 @@ class TestEventBusSubscribePublish:
 # ---------------------------------------------------------------------------
 # get_stats / reset_stats
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestEventBusStats:
@@ -215,6 +227,7 @@ class TestEventBusStats:
 # ---------------------------------------------------------------------------
 # Module-level helpers
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestModuleLevelHelpers:

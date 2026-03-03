@@ -1,5 +1,6 @@
 """Generator content."""
 
+
 def generate_physical_init_content() -> str:
     """Generate the main __init__.py content for the physical management module."""
     return '''"""Physical Object Management Module for Codomyrmex.
@@ -28,4 +29,3 @@ __all__ = [
     "PhysicalConstants", "UnitConverter", "CoordinateSystem"
 ]
 '''
-

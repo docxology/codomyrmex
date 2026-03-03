@@ -20,6 +20,7 @@ from typing import Any
 @dataclass
 class ToolMetrics:
     """Per-tool metric counters."""
+
     calls: int = 0
     errors: int = 0
     total_duration: float = 0.0
@@ -100,7 +101,9 @@ class MCPObservabilityHooks:
                         "calls": m.calls,
                         "errors": m.errors,
                         "total_duration": round(m.total_duration, 6),
-                        "avg_duration": round(m.total_duration / m.calls, 6) if m.calls > 0 else 0,
+                        "avg_duration": round(m.total_duration / m.calls, 6)
+                        if m.calls > 0
+                        else 0,
                     }
                     for name, m in self._tool_metrics.items()
                 },

@@ -4,6 +4,7 @@ from codomyrmex.agents.core import AgentIntegrationAdapter, AgentRequest
 
 """OpenClaw integration adapters for Codomyrmex modules."""
 
+
 class OpenClawIntegrationAdapter(AgentIntegrationAdapter):
     """Integration adapter for OpenClaw with Codomyrmex modules."""
 
@@ -56,9 +57,7 @@ class OpenClawIntegrationAdapter(AgentIntegrationAdapter):
 
         return response.content
 
-    def adapt_for_llm(
-        self, messages: list[dict], model: str = None, **kwargs
-    ) -> dict:
+    def adapt_for_llm(self, messages: list[dict], model: str = None, **kwargs) -> dict:
         """
         Adapt OpenClaw for LLM module.
 
@@ -73,8 +72,7 @@ class OpenClawIntegrationAdapter(AgentIntegrationAdapter):
 
         # Convert messages to prompt
         prompt = "\n".join(
-            f"{msg.get('role', 'user')}: {msg.get('content', '')}"
-            for msg in messages
+            f"{msg.get('role', 'user')}: {msg.get('content', '')}" for msg in messages
         )
 
         request = AgentRequest(prompt=prompt, context=kwargs)

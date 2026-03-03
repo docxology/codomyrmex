@@ -232,7 +232,9 @@ class TestGetScriptMetadata:
         root = _make_project(tmp_path)
         dp = DataProvider(root)
         script = root / "scripts" / "example.py"
-        script.write_text('"""Example script for testing.\n\nMore details."""\nprint("hi")\n')
+        script.write_text(
+            '"""Example script for testing.\n\nMore details."""\nprint("hi")\n'
+        )
         meta = dp._get_script_metadata(script)
         assert isinstance(meta, tuple)
         assert len(meta) == 2

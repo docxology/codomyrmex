@@ -18,8 +18,9 @@ class TestModuleTemplate:
 
         try:
             from codomyrmex import module_template
+
             assert module_template is not None
-            assert hasattr(module_template, '__file__')
+            assert hasattr(module_template, "__file__")
         except ImportError as e:
             pytest.fail(f"Failed to import module_template: {e}")
 
@@ -30,9 +31,9 @@ class TestModuleTemplate:
 
         from codomyrmex import module_template
 
-        assert hasattr(module_template, '__file__')
-        assert hasattr(module_template, '__name__')
-        assert module_template.__name__ == 'codomyrmex.module_template'
+        assert hasattr(module_template, "__file__")
+        assert hasattr(module_template, "__name__")
+        assert module_template.__name__ == "codomyrmex.module_template"
         # This module provides scaffolding for creating new modules
         # It contains __init__.py and scaffold.py
 
@@ -46,7 +47,7 @@ class TestModuleTemplate:
 
         # The module exists and provides scaffolding for new modules
         assert module_template is not None
-        assert hasattr(module_template, '__file__')
+        assert hasattr(module_template, "__file__")
 
     def test_module_template_import_error_handling(self, code_dir):
         """Test error handling when module_template cannot be imported."""
@@ -57,8 +58,8 @@ class TestModuleTemplate:
         # import errors are handled gracefully
         from codomyrmex import module_template
 
-        assert hasattr(module_template, '__file__')
-        assert hasattr(module_template, '__name__')
+        assert hasattr(module_template, "__file__")
+        assert hasattr(module_template, "__name__")
 
         # Test that the module can be imported with real sys.path manipulation
         # Verify import still works after path manipulation
@@ -66,12 +67,15 @@ class TestModuleTemplate:
         try:
             # Temporarily modify path to test import resilience
             # Keep code_dir in path to ensure module can still be found
-            sys.path = [str(code_dir)] + [p for p in original_path if p != str(code_dir)]
+            sys.path = [str(code_dir)] + [
+                p for p in original_path if p != str(code_dir)
+            ]
             # Re-import to test path resilience
             import importlib
+
             # Get fresh reference to module
-            fresh_module = importlib.import_module('codomyrmex.module_template')
-            assert hasattr(fresh_module, '__file__')
+            fresh_module = importlib.import_module("codomyrmex.module_template")
+            assert hasattr(fresh_module, "__file__")
         finally:
             sys.path = original_path
 
@@ -83,10 +87,10 @@ class TestModuleTemplate:
         # Test that the module is importable and has basic Python module attributes
         from codomyrmex import module_template
 
-        assert hasattr(module_template, '__name__')
-        assert module_template.__name__ == 'codomyrmex.module_template'
-        assert hasattr(module_template, '__file__')
-        assert hasattr(module_template, '__path__')
+        assert hasattr(module_template, "__name__")
+        assert module_template.__name__ == "codomyrmex.module_template"
+        assert hasattr(module_template, "__file__")
+        assert hasattr(module_template, "__path__")
 
     def test_module_template_init_module(self, code_dir):
         """Test the __init__.py file of module_template module."""
@@ -96,8 +100,8 @@ class TestModuleTemplate:
         from codomyrmex import module_template as module_template_init
 
         # Verify it's a proper Python module
-        assert hasattr(module_template_init, '__file__')
-        assert hasattr(module_template_init, '__name__')
+        assert hasattr(module_template_init, "__file__")
+        assert hasattr(module_template_init, "__name__")
 
         # The __init__.py file provides module initialization
         # This test ensures it doesn't have syntax errors
@@ -112,8 +116,9 @@ class TestModuleTemplate:
         # for new modules by ensuring basic importability
         try:
             from codomyrmex import module_template
+
             # Verify the template module was loaded and has expected attributes
-            assert hasattr(module_template, '__name__')
+            assert hasattr(module_template, "__name__")
         except ImportError:
             # Template should be importable
             pytest.fail("Template module should be importable")

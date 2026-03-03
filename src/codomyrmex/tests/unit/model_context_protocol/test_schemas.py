@@ -129,8 +129,18 @@ class TestTool:
             name="calculate",
             description="Calculate expression",
             parameters=[
-                ToolParameter(name="expression", param_type="string", description="Math expr", required=True),
-                ToolParameter(name="precision", param_type="integer", description="Decimal places", required=False),
+                ToolParameter(
+                    name="expression",
+                    param_type="string",
+                    description="Math expr",
+                    required=True,
+                ),
+                ToolParameter(
+                    name="precision",
+                    param_type="integer",
+                    description="Decimal places",
+                    required=False,
+                ),
             ],
         )
         oai = tool.to_openai_format()
@@ -159,8 +169,17 @@ class TestCreateToolFactory:
             name="search",
             description="Search documents",
             parameters={
-                "query": {"type": "string", "description": "Search query", "required": True},
-                "limit": {"type": "integer", "description": "Max results", "required": False, "default": 10},
+                "query": {
+                    "type": "string",
+                    "description": "Search query",
+                    "required": True,
+                },
+                "limit": {
+                    "type": "integer",
+                    "description": "Max results",
+                    "required": False,
+                    "default": 10,
+                },
             },
         )
         assert tool.name == "search"
@@ -299,7 +318,9 @@ class TestRequestResponse:
         conv = Conversation(id="r_1")
         conv.add_user_message("Ask something")
         tool = Tool(name="search", description="Search")
-        req = Request(conversation=conv, tools=[tool], model="test-model", temperature=0.5)
+        req = Request(
+            conversation=conv, tools=[tool], model="test-model", temperature=0.5
+        )
         d = req.to_dict()
         assert d["model"] == "test-model"
         assert d["temperature"] == 0.5
@@ -445,7 +466,9 @@ class TestMCPMessageModel:
 
     def test_message_serialization_roundtrip(self):
         """Test functionality: MCPMessage serializes to JSON and back."""
-        msg = MCPMessage(role="system", content="You are helpful", metadata={"key": "value"})
+        msg = MCPMessage(
+            role="system", content="You are helpful", metadata={"key": "value"}
+        )
         json_str = msg.model_dump_json()
         restored = MCPMessage.model_validate_json(json_str)
         assert restored.role == "system"

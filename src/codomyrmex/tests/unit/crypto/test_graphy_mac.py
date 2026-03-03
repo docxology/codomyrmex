@@ -36,6 +36,7 @@ def aes_key() -> bytes:
 @pytest.mark.unit
 class TestHMACSHA256:
     """Test suite for HMACSHA256."""
+
     def test_compute(self, hmac_key: bytes) -> None:
         """Test functionality: compute."""
         mac = compute_hmac_sha256(DATA, hmac_key)
@@ -95,6 +96,7 @@ class TestHMACSHA256:
 @pytest.mark.unit
 class TestPoly1305:
     """Test suite for Poly1305."""
+
     def test_compute(self, poly1305_key: bytes) -> None:
         """Test functionality: compute."""
         tag = compute_poly1305(DATA, poly1305_key)
@@ -117,6 +119,7 @@ class TestPoly1305:
 @pytest.mark.unit
 class TestCMAC:
     """Test suite for CMAC."""
+
     def test_compute_aes128(self, aes_key: bytes) -> None:
         """Test functionality: compute aes128."""
         tag = compute_cmac(DATA, aes_key)

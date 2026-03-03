@@ -21,6 +21,7 @@ from codomyrmex.config_management.defaults import DEFAULT_OLLAMA_URL
 # Agent type taxonomy
 # ---------------------------------------------------------------------------
 
+
 @unique
 class AgenticSeekAgentType(Enum):
     """Enumeration of agent specialisations exposed by agenticSeek.
@@ -58,14 +59,13 @@ class AgenticSeekAgentType(Enum):
             if member.value == normalised:
                 return member
         valid = ", ".join(m.value for m in cls)
-        raise ValueError(
-            f"Unknown agent type {value!r}. Valid types: {valid}"
-        )
+        raise ValueError(f"Unknown agent type {value!r}. Valid types: {valid}")
 
 
 # ---------------------------------------------------------------------------
 # Provider configuration
 # ---------------------------------------------------------------------------
+
 
 @unique
 class AgenticSeekProvider(Enum):
@@ -95,7 +95,9 @@ class AgenticSeekConfig:
     provider_name: str = "ollama"
     provider_model: str = "deepseek-r1:14b"
     provider_server_address: str = field(
-        default_factory=lambda: os.getenv("AGENTIC_SEEK_PROVIDER_URL", DEFAULT_OLLAMA_URL)
+        default_factory=lambda: os.getenv(
+            "AGENTIC_SEEK_PROVIDER_URL", DEFAULT_OLLAMA_URL
+        )
     )
     agent_name: str = "Friday"
     recover_last_session: bool = False
@@ -142,6 +144,7 @@ class AgenticSeekConfig:
 # Memory
 # ---------------------------------------------------------------------------
 
+
 @dataclass
 class AgenticSeekMemoryEntry:
     """Single turn in the agenticSeek conversation memory.
@@ -162,6 +165,7 @@ class AgenticSeekMemoryEntry:
 # ---------------------------------------------------------------------------
 # Task planning
 # ---------------------------------------------------------------------------
+
 
 @unique
 class AgenticSeekTaskStatus(Enum):
@@ -197,6 +201,7 @@ class AgenticSeekTaskStep:
 # ---------------------------------------------------------------------------
 # Execution results
 # ---------------------------------------------------------------------------
+
 
 @dataclass
 class AgenticSeekExecutionResult:

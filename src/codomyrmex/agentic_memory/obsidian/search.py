@@ -84,12 +84,14 @@ def search_vault(
                 break
 
         if score > 0:
-            results.append(SearchResult(
-                note=note,
-                score=score,
-                match_type=match_type,
-                context=context,
-            ))
+            results.append(
+                SearchResult(
+                    note=note,
+                    score=score,
+                    match_type=match_type,
+                    context=context,
+                )
+            )
 
     results.sort(key=lambda r: r.score, reverse=True)
     return results[:limit]
@@ -125,12 +127,14 @@ def search_regex(
             idx = match.start()
             start = max(0, idx - 40)
             end = min(len(note.content), match.end() + 40)
-            results.append(SearchResult(
-                note=note,
-                score=1.0,
-                match_type="content",
-                context=note.content[start:end].strip(),
-            ))
+            results.append(
+                SearchResult(
+                    note=note,
+                    score=1.0,
+                    match_type="content",
+                    context=note.content[start:end].strip(),
+                )
+            )
     return results[:limit]
 
 

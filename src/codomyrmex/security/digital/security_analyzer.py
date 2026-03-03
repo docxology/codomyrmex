@@ -22,6 +22,7 @@ logger = get_logger(__name__)
 
 class SecurityIssue(Enum):
     """Types of security issues that can be detected."""
+
     SQL_INJECTION = "sql_injection"
     XSS_VULNERABILITY = "xss_vulnerability"
     COMMAND_INJECTION = "command_injection"
@@ -37,6 +38,7 @@ class SecurityIssue(Enum):
 @dataclass
 class SecurityFinding:
     """Represents a security finding."""
+
     issue_type: SecurityIssue
     severity: str
     confidence: float
@@ -60,34 +62,44 @@ class SecurityAnalyzer:
     def _load_vulnerable_patterns(self) -> dict[str, re.Pattern]:
         """Load regex patterns for vulnerable code detection."""
         return {
-            "sql_string_concat": re.compile(r'(?:execute|query|cursor\.execute).*[\+\%]', re.IGNORECASE),
-            "unsafe_innerHTML": re.compile(r'\.innerHTML\s*='),
-            "shell_true": re.compile(r'subprocess\.(?:call|Popen|run|check_output)\([^,]+,\s*shell\s*=\s*True'),
-            "eval_usage": re.compile(r'\beval\s*\('),
-            "exec_usage": re.compile(r'\bexec\s*\('),
-            "path_join_user_input": re.compile(r'os\.path\.join.*input|request\.|argv'),
-            "hardcoded_password": re.compile(r'password\s*[=:]\s*["\'][^"\']{8,}["\']', re.IGNORECASE),
-            "md5_usage": re.compile(r'hashlib\.md5\s*\('),
-            "random_random": re.compile(r'\brandom\.(?:random|randint|choice|sample)\b'),
+            "sql_string_concat": re.compile(
+                r"(?:execute|query|cursor\.execute).*[\+\%]", re.IGNORECASE
+            ),
+            "unsafe_innerHTML": re.compile(r"\.innerHTML\s*="),
+            "shell_true": re.compile(
+                r"subprocess\.(?:call|Popen|run|check_output)\([^,]+,\s*shell\s*=\s*True"
+            ),
+            "eval_usage": re.compile(r"\beval\s*\("),
+            "exec_usage": re.compile(r"\bexec\s*\("),
+            "path_join_user_input": re.compile(r"os\.path\.join.*input|request\.|argv"),
+            "hardcoded_password": re.compile(
+                r'password\s*[=:]\s*["\'][^"\']{8,}["\']', re.IGNORECASE
+            ),
+            "md5_usage": re.compile(r"hashlib\.md5\s*\("),
+            "random_random": re.compile(
+                r"\brandom\.(?:random|randint|choice|sample)\b"
+            ),
         }
 
     def _load_safe_functions(self) -> set[str]:
         """Load set of known safe functions."""
         return {
-            "hashlib.sha256", "secrets.token_bytes", "os.urandom",
-            "cryptography.hazmat.primitives.ciphers.algorithms.AES"
+            "hashlib.sha256",
+            "secrets.token_bytes",
+            "os.urandom",
+            "cryptography.hazmat.primitives.ciphers.algorithms.AES",
         }
 
     def analyze_file(self, filepath: str) -> list[SecurityFinding]:
         """Analyze a file for security vulnerabilities."""
         try:
-            with open(filepath, encoding='utf-8', errors='ignore') as f:
+            with open(filepath, encoding="utf-8", errors="ignore") as f:
                 content = f.read()
 
             findings = []
             findings.extend(self._analyze_patterns(content, filepath))
 
-            if filepath.endswith('.py'):
+            if filepath.endswith(".py"):
                 findings.extend(self._analyze_ast(content, filepath))
 
             return findings
@@ -98,22 +110,26 @@ class SecurityAnalyzer:
     def _analyze_patterns(self, content: str, filepath: str) -> list[SecurityFinding]:
         """Analyze content using pattern matching."""
         findings = []
-        lines = content.split('\n')
+        lines = content.split("\n")
 
         for line_num, line in enumerate(lines, 1):
             for pattern_name, pattern in self.vulnerable_patterns.items():
                 if pattern.search(line):
-                     # Simplified finding creation
-                     findings.append(SecurityFinding(
-                         issue_type=SecurityIssue.COMMAND_INJECTION if "shell" in pattern_name else SecurityIssue.HARD_CODED_SECRET,
-                         severity="HIGH",
-                         confidence=0.8,
-                         file_path=filepath,
-                         line_number=line_num,
-                         code_snippet=line.strip()[:100],
-                         description=f"Potential issue detected: {pattern_name}",
-                         recommendation="Review code for security vulnerability"
-                     ))
+                    # Simplified finding creation
+                    findings.append(
+                        SecurityFinding(
+                            issue_type=SecurityIssue.COMMAND_INJECTION
+                            if "shell" in pattern_name
+                            else SecurityIssue.HARD_CODED_SECRET,
+                            severity="HIGH",
+                            confidence=0.8,
+                            file_path=filepath,
+                            line_number=line_num,
+                            code_snippet=line.strip()[:100],
+                            description=f"Potential issue detected: {pattern_name}",
+                            recommendation="Review code for security vulnerability",
+                        )
+                    )
         return findings
 
     def _analyze_ast(self, content: str, filepath: str) -> list[SecurityFinding]:
@@ -128,12 +144,14 @@ class SecurityAnalyzer:
             logger.warning(f"AST analysis failed for {filepath}: {e}")
         return findings
 
-    def analyze_directory(self, directory: str, recursive: bool = True) -> list[SecurityFinding]:
+    def analyze_directory(
+        self, directory: str, recursive: bool = True
+    ) -> list[SecurityFinding]:
         """Analyze all files in a directory."""
         all_findings = []
         path = Path(directory)
         pattern = "**/*" if recursive else "*"
-        supported = {'.py', '.js', '.ts', '.java', '.cpp', '.rb'}
+        supported = {".py", ".js", ".ts", ".java", ".cpp", ".rb"}
 
         for file_path in path.glob(pattern):
             if file_path.is_file() and file_path.suffix.lower() in supported:
@@ -152,17 +170,19 @@ class ASTSecurityAnalyzer(ast.NodeVisitor):
     def visit_Call(self, node: ast.Call) -> None:
         """Check for dangerous calls."""
         if isinstance(node.func, ast.Name):
-            if node.func.id in ('eval', 'exec'):
-                self.findings.append(SecurityFinding(
-                    issue_type=SecurityIssue.COMMAND_INJECTION,
-                    severity="CRITICAL",
-                    confidence=0.9,
-                    file_path=self.filepath,
-                    line_number=node.lineno,
-                    code_snippet=f"Use of {node.func.id}()",
-                    description=f"Dangerous use of {node.func.id}",
-                    recommendation="Avoid eval/exec"
-                ))
+            if node.func.id in ("eval", "exec"):
+                self.findings.append(
+                    SecurityFinding(
+                        issue_type=SecurityIssue.COMMAND_INJECTION,
+                        severity="CRITICAL",
+                        confidence=0.9,
+                        file_path=self.filepath,
+                        line_number=node.lineno,
+                        code_snippet=f"Use of {node.func.id}()",
+                        description=f"Dangerous use of {node.func.id}",
+                        recommendation="Avoid eval/exec",
+                    )
+                )
         self.generic_visit(node)
 
 
@@ -172,7 +192,10 @@ def analyze_file_security(filepath: str) -> list[SecurityFinding]:
     analyzer = SecurityAnalyzer()
     return analyzer.analyze_file(filepath)
 
-def analyze_directory_security(directory: str, recursive: bool = True) -> list[SecurityFinding]:
+
+def analyze_directory_security(
+    directory: str, recursive: bool = True
+) -> list[SecurityFinding]:
     """Convenience function to analyze a directory."""
     analyzer = SecurityAnalyzer()
     return analyzer.analyze_directory(directory, recursive)

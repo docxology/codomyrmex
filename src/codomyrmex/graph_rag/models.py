@@ -11,6 +11,7 @@ from typing import Any
 
 class EntityType(Enum):
     """Types of entities in the knowledge graph."""
+
     PERSON = "person"
     ORGANIZATION = "organization"
     LOCATION = "location"
@@ -22,6 +23,7 @@ class EntityType(Enum):
 
 class RelationType(Enum):
     """Types of relationships in the knowledge graph."""
+
     IS_A = "is_a"
     PART_OF = "part_of"
     RELATED_TO = "related_to"
@@ -35,6 +37,7 @@ class RelationType(Enum):
 @dataclass
 class Entity:
     """An entity in the knowledge graph."""
+
     id: str
     name: str
     entity_type: EntityType = EntityType.CONCEPT
@@ -59,6 +62,7 @@ class Entity:
 @dataclass
 class Relationship:
     """A relationship between entities."""
+
     source_id: str
     target_id: str
     relation_type: RelationType
@@ -84,6 +88,7 @@ class Relationship:
 @dataclass
 class GraphContext:
     """Context retrieved from the knowledge graph."""
+
     query: str
     entities: list[Entity]
     relationships: list[Relationship]
@@ -103,11 +108,15 @@ class GraphContext:
             lines.append("\nEntities:")
             for e in self.entities:
                 props = ", ".join(f"{k}={v}" for k, v in e.properties.items())
-                lines.append(f"  - {e.name} ({e.entity_type.value}){': ' + props if props else ''}")
+                lines.append(
+                    f"  - {e.name} ({e.entity_type.value}){': ' + props if props else ''}"
+                )
 
         if self.relationships:
             lines.append("\nRelationships:")
             for r in self.relationships:
-                lines.append(f"  - {r.source_id} --[{r.relation_type.value}]--> {r.target_id}")
+                lines.append(
+                    f"  - {r.source_id} --[{r.relation_type.value}]--> {r.target_id}"
+                )
 
         return "\n".join(lines)

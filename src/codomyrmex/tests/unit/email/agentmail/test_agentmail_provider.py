@@ -38,7 +38,6 @@ def test_provider_init_from_env() -> None:
     assert provider._default_inbox_id == DEFAULT_INBOX
 
 
-
 @SKIP
 @pytest.mark.unit
 def test_list_inboxes() -> None:
@@ -307,6 +306,7 @@ def test_mcp_tools_load() -> None:
 def test_agentmail_available_flag_without_key() -> None:
     """AGENTMAIL_AVAILABLE flag reflects SDK installation state."""
     from codomyrmex.email.agentmail import AGENTMAIL_AVAILABLE
+
     # Should be a boolean — either True (SDK installed) or False (not installed)
     assert isinstance(AGENTMAIL_AVAILABLE, bool)
 

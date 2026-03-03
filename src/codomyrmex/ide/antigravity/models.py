@@ -10,6 +10,7 @@ Example:
     >>> client.connect()
     >>> capabilities = client.get_capabilities()
 """
+
 from dataclasses import dataclass, field
 from typing import Any
 
@@ -40,10 +41,10 @@ except ImportError:
     ArtifactError = Exception
 
 
-
 @dataclass
 class Artifact:
     """Represents an Antigravity conversation artifact."""
+
     name: str
     path: str
     artifact_type: str
@@ -61,9 +62,11 @@ class Artifact:
             "modified": self.modified,
         }
 
+
 @dataclass
 class ConversationContext:
     """Represents the current Antigravity conversation context."""
+
     conversation_id: str
     task_name: str | None = None
     task_status: str | None = None
@@ -79,4 +82,3 @@ class ConversationContext:
             "mode": self.mode,
             "artifacts": [a.to_dict() for a in self.artifacts],
         }
-

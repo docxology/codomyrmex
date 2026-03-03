@@ -66,6 +66,7 @@ def _trust_safe_tools():
 # Test 1: Direct call_tool propagates correlation context
 # ------------------------------------------------------------------
 
+
 @pytest.mark.integration
 def test_call_tool_correlation(clean_event_bus, _trust_safe_tools):
     """call_tool wraps execution in with_correlation(); verify the ID propagates.
@@ -102,6 +103,7 @@ def test_call_tool_correlation(clean_event_bus, _trust_safe_tools):
 # Test 2: MCPServer HTTP transport -- real FastAPI TestClient
 # ------------------------------------------------------------------
 
+
 @pytest.fixture
 def mcp_test_app():
     """Build a real FastAPI app backed by an MCPServer with a registered tool.
@@ -130,9 +132,8 @@ def mcp_test_app():
     @app.post("/mcp")
     async def mcp_endpoint(request: Request) -> JSONResponse:
         body = await request.json()
-        cid = (
-            request.headers.get("x-correlation-id")
-            or request.headers.get("X-Correlation-ID")
+        cid = request.headers.get("x-correlation-id") or request.headers.get(
+            "X-Correlation-ID"
         )
         response = await server.handle_request(body, correlation_id=cid)
 
@@ -217,6 +218,7 @@ def test_mcp_server_http_no_correlation(mcp_test_app):
 # Test 3: MCPServer with injected call_tool_fn
 # ------------------------------------------------------------------
 
+
 @pytest.mark.integration
 def test_mcp_server_injected_call_tool_fn(clean_event_bus):
     """MCPServer(call_tool_fn=...) uses the injected handler instead of default.
@@ -246,9 +248,8 @@ def test_mcp_server_injected_call_tool_fn(clean_event_bus):
     @app.post("/mcp")
     async def mcp_endpoint(request: Request) -> JSONResponse:
         body = await request.json()
-        cid = (
-            request.headers.get("x-correlation-id")
-            or request.headers.get("X-Correlation-ID")
+        cid = request.headers.get("x-correlation-id") or request.headers.get(
+            "X-Correlation-ID"
         )
         response = await server.handle_request(body, correlation_id=cid)
         headers = {}

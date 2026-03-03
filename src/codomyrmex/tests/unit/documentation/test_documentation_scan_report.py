@@ -841,9 +841,7 @@ class TestFullScanIntegration:
         assert len(long_lines) >= 1
         # docs/README.md has TODO
         todos = [
-            i
-            for i in p4["actionability_issues"]
-            if i["type"] == "incomplete_content"
+            i for i in p4["actionability_issues"] if i["type"] == "incomplete_content"
         ]
         assert len(todos) >= 1
 

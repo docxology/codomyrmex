@@ -39,7 +39,7 @@ class RollingDeployment(DeploymentStrategy):
         errors = []
 
         batches = [
-            targets[i:i + self.batch_size]
+            targets[i : i + self.batch_size]
             for i in range(0, len(targets), self.batch_size)
         ]
 
@@ -146,7 +146,7 @@ class BlueGreenDeployment(DeploymentStrategy):
             duration_ms=(time.time() - start_time) * 1000,
             state=DeploymentState.COMPLETED if failed == 0 else DeploymentState.FAILED,
             errors=errors,
-            metadata={"active_slot": "green" if failed == 0 else "blue"}
+            metadata={"active_slot": "green" if failed == 0 else "blue"},
         )
 
     def rollback(
@@ -164,7 +164,7 @@ class BlueGreenDeployment(DeploymentStrategy):
             targets_failed=0,
             duration_ms=0,
             state=DeploymentState.ROLLED_BACK,
-            metadata={"active_slot": "blue"}
+            metadata={"active_slot": "blue"},
         )
 
 
@@ -198,10 +198,9 @@ class CanaryDeployment(DeploymentStrategy):
 
         for stage_pct in self.stages:
             target_count = int(total * stage_pct / 100)
-            targets_to_update = [
-                t for t in targets
-                if t.version != version
-            ][:target_count - updated]
+            targets_to_update = [t for t in targets if t.version != version][
+                : target_count - updated
+            ]
 
             stage_updated = 0
             stage_failed = 0
@@ -227,7 +226,9 @@ class CanaryDeployment(DeploymentStrategy):
             if (stage_updated + stage_failed) > 0:
                 success_rate = stage_updated / (stage_updated + stage_failed)
                 if success_rate < self.success_threshold:
-                    errors.append(f"Canary failed at {stage_pct}%: success rate {success_rate:.1%}")
+                    errors.append(
+                        f"Canary failed at {stage_pct}%: success rate {success_rate:.1%}"
+                    )
                     return DeploymentResult(
                         success=False,
                         targets_updated=updated,

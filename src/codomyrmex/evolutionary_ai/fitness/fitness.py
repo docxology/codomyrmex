@@ -25,6 +25,7 @@ class FitnessResult:
         feasible: Whether the genome satisfies all constraints.
         metadata: Arbitrary extra information from the evaluation.
     """
+
     value: float | list[float]
     feasible: bool = True
     metadata: dict[str, Any] = field(default_factory=dict)

@@ -121,8 +121,7 @@ class PatternDetector:
         """
         raw = patterns if patterns is not None else PATTERNS
         self._definitions: dict[str, PatternDefinition] = {
-            name: _to_definition(name, info)
-            for name, info in raw.items()
+            name: _to_definition(name, info) for name, info in raw.items()
         }
 
     def register_pattern(self, name: str, definition: dict) -> None:
@@ -186,20 +185,21 @@ class PatternDetector:
                         for target in item.targets:
                             if isinstance(target, ast.Name):
                                 attrs.append(target.id)
-                classes.append({
-                    "name": node.name,
-                    "line": node.lineno,
-                    "methods": methods,
-                    "attrs": attrs,
-                    "bases": [
-                        getattr(b, "id", getattr(b, "attr", ""))
-                        for b in node.bases
-                    ],
-                    "decorator_list": [
-                        getattr(d, "id", getattr(d, "attr", ""))
-                        for d in node.decorator_list
-                    ],
-                })
+                classes.append(
+                    {
+                        "name": node.name,
+                        "line": node.lineno,
+                        "methods": methods,
+                        "attrs": attrs,
+                        "bases": [
+                            getattr(b, "id", getattr(b, "attr", "")) for b in node.bases
+                        ],
+                        "decorator_list": [
+                            getattr(d, "id", getattr(d, "attr", ""))
+                            for d in node.decorator_list
+                        ],
+                    }
+                )
         return classes
 
     @staticmethod
@@ -207,11 +207,13 @@ class PatternDetector:
         funcs = []
         for node in ast.walk(tree):
             if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
-                funcs.append({
-                    "name": node.name,
-                    "line": node.lineno,
-                    "is_async": isinstance(node, ast.AsyncFunctionDef),
-                })
+                funcs.append(
+                    {
+                        "name": node.name,
+                        "line": node.lineno,
+                        "is_async": isinstance(node, ast.AsyncFunctionDef),
+                    }
+                )
         return funcs
 
     # ------------------------------------------------------------------
@@ -224,12 +226,14 @@ class PatternDetector:
         results = []
         for cls in classes:
             if "__new__" in cls["methods"] or "_instance" in cls["attrs"]:
-                results.append({
-                    "pattern": "singleton",
-                    "category": "creational",
-                    "location": {"line": cls["line"], "name": cls["name"]},
-                    "confidence": 0.85,
-                })
+                results.append(
+                    {
+                        "pattern": "singleton",
+                        "category": "creational",
+                        "location": {"line": cls["line"], "name": cls["name"]},
+                        "confidence": 0.85,
+                    }
+                )
         return results
 
     def _detect_factory(self, funcs: list[dict]) -> list[dict]:
@@ -240,12 +244,14 @@ class PatternDetector:
         for fn in funcs:
             name_lower = fn["name"].lower()
             if any(kw in name_lower for kw in keywords):
-                results.append({
-                    "pattern": "factory",
-                    "category": "creational",
-                    "location": {"line": fn["line"], "name": fn["name"]},
-                    "confidence": 0.70,
-                })
+                results.append(
+                    {
+                        "pattern": "factory",
+                        "category": "creational",
+                        "location": {"line": fn["line"], "name": fn["name"]},
+                        "confidence": 0.70,
+                    }
+                )
         return results
 
     def _detect_observer(self, classes: list[dict]) -> list[dict]:
@@ -263,12 +269,14 @@ class PatternDetector:
             has_listener_list = bool(set(cls["attrs"]) & listener_attrs)
 
             if (has_subscribe and has_notify) or (has_listener_list and has_notify):
-                results.append({
-                    "pattern": "observer",
-                    "category": "behavioral",
-                    "location": {"line": cls["line"], "name": cls["name"]},
-                    "confidence": 0.80,
-                })
+                results.append(
+                    {
+                        "pattern": "observer",
+                        "category": "behavioral",
+                        "location": {"line": cls["line"], "name": cls["name"]},
+                        "confidence": 0.80,
+                    }
+                )
         return results
 
     def _detect_strategy(self, classes: list[dict]) -> list[dict]:
@@ -281,12 +289,14 @@ class PatternDetector:
             if method_set & strategy_method_names:
                 # Heuristic: has an abstract-looking base or ABC in bases
                 if "ABC" in cls["bases"] or "abstractmethod" in cls["decorator_list"]:
-                    results.append({
-                        "pattern": "strategy",
-                        "category": "behavioral",
-                        "location": {"line": cls["line"], "name": cls["name"]},
-                        "confidence": 0.75,
-                    })
+                    results.append(
+                        {
+                            "pattern": "strategy",
+                            "category": "behavioral",
+                            "location": {"line": cls["line"], "name": cls["name"]},
+                            "confidence": 0.75,
+                        }
+                    )
         return results
 
     def _detect_template_method(self, classes: list[dict]) -> list[dict]:
@@ -298,14 +308,17 @@ class PatternDetector:
         for cls in classes:
             public_methods = [m for m in cls["methods"] if not m.startswith("_")]
             hook_methods = [
-                m for m in cls["methods"]
+                m
+                for m in cls["methods"]
                 if m.startswith("_") and not m.startswith("__")
             ]
             if public_methods and len(hook_methods) >= 2:
-                results.append({
-                    "pattern": "template_method",
-                    "category": "behavioral",
-                    "location": {"line": cls["line"], "name": cls["name"]},
-                    "confidence": 0.55,
-                })
+                results.append(
+                    {
+                        "pattern": "template_method",
+                        "category": "behavioral",
+                        "location": {"line": cls["line"], "name": cls["name"]},
+                        "confidence": 0.55,
+                    }
+                )
         return results

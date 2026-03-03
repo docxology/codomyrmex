@@ -31,6 +31,7 @@ from _stubs import (  # noqa: F401, E402  – re-exported for fixture use
 # Connection Fixtures
 # =========================================================================
 
+
 @pytest.fixture
 def mock_openstack_connection():
     """Create a fully-stubbed OpenStack connection with all service subsystems."""
@@ -49,6 +50,7 @@ def mock_s3_client():
 # =========================================================================
 # Environment Variable Fixtures
 # =========================================================================
+
 
 @pytest.fixture
 def infomaniak_openstack_env():

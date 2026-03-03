@@ -46,7 +46,9 @@ class TestSequentialEngine:
         engine = SequentialEngine()
         wf = WorkflowDefinition(name="chain")
         t1 = wf.add_task("step1", action=lambda ctx: 10)
-        wf.add_task("step2", action=lambda ctx: ctx.get("step1", 0) + 5, dependencies=[t1])
+        wf.add_task(
+            "step2", action=lambda ctx: ctx.get("step1", 0) + 5, dependencies=[t1]
+        )
         result = engine.execute(wf)
         assert result.success is True
         task_results = list(result.task_results.values())
@@ -57,7 +59,7 @@ class TestSequentialEngine:
         """Engine reports failure when a task raises."""
         engine = SequentialEngine()
         wf = WorkflowDefinition(name="fail")
-        wf.add_task("boom", action=lambda ctx: 1/0)
+        wf.add_task("boom", action=lambda ctx: 1 / 0)
         result = engine.execute(wf)
         assert result.success is False
         assert "boom" in (result.error or "")
@@ -122,7 +124,9 @@ class TestParallelEngine:
         engine = ParallelEngine(max_workers=2)
         wf = WorkflowDefinition(name="dep")
         t1 = wf.add_task("first", action=lambda ctx: 42)
-        wf.add_task("second", action=lambda ctx: ctx.get("first", 0) * 2, dependencies=[t1])
+        wf.add_task(
+            "second", action=lambda ctx: ctx.get("first", 0) * 2, dependencies=[t1]
+        )
         result = engine.execute(wf)
         assert result.success is True
 
@@ -131,7 +135,7 @@ class TestParallelEngine:
         engine = ParallelEngine(max_workers=2)
         wf = WorkflowDefinition(name="fail")
         wf.add_task("ok", action=lambda ctx: "fine")
-        wf.add_task("err", action=lambda ctx: 1/0)
+        wf.add_task("err", action=lambda ctx: 1 / 0)
         result = engine.execute(wf)
         assert result.success is False
 

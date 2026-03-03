@@ -33,6 +33,7 @@ __version__ = "0.1.0"
 # PDF submodule uses optional dependencies
 try:
     from . import pdf
+
     PDF_AVAILABLE = True
 except ImportError:
     pdf = None  # type: ignore

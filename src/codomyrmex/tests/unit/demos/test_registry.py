@@ -12,7 +12,9 @@ def test_registry_register_and_list():
     def my_demo():
         return True
 
-    registry.register("test_demo", "A test demo", my_demo, module="test", category="unit")
+    registry.register(
+        "test_demo", "A test demo", my_demo, module="test", category="unit"
+    )
 
     demos = registry.list_demos()
     assert len(demos) == 1

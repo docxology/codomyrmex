@@ -62,6 +62,7 @@ def read_template(
     Maps to ``obsidian template:read [file=|path=] [resolve]``.
     """
     from codomyrmex.agentic_memory.obsidian.cli import _file_or_path
+
     params = _file_or_path(file, path)
     flags = ["resolve"] if resolve else []
     return cli.run(
@@ -82,6 +83,7 @@ def insert_template(
     Maps to ``obsidian template:insert [template=<name>] [file=|path=]``.
     """
     from codomyrmex.agentic_memory.obsidian.cli import _file_or_path
+
     params = _file_or_path(file, path)
     params["template"] = template
     return cli.run("template:insert", vault=vault, params=params)

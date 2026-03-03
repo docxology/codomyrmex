@@ -24,6 +24,7 @@ from codomyrmex.telemetry.otel import MetricCounter, Span, Tracer
 
 class TestTracer:
     """Test suite for Tracer."""
+
     def test_start_span(self) -> None:
         """Test functionality: start span."""
         t = Tracer()
@@ -56,6 +57,7 @@ class TestTracer:
 
 class TestMetricCounter:
     """Test suite for MetricCounter."""
+
     def test_increment(self) -> None:
         """Test functionality: increment."""
         m = MetricCounter()
@@ -75,6 +77,7 @@ class TestMetricCounter:
 
 class TestAlertEngine:
     """Test suite for AlertEngine."""
+
     def test_fire_alert(self) -> None:
         """Test functionality: fire alert."""
         eng = AlertEngine()
@@ -112,6 +115,7 @@ class TestAlertEngine:
 
 class TestAuditTrail:
     """Test suite for AuditTrail."""
+
     def test_record(self) -> None:
         """Test functionality: record."""
         trail = AuditTrail()
@@ -147,6 +151,7 @@ class TestAuditTrail:
 
 class TestDashboardExporter:
     """Test suite for DashboardExporter."""
+
     def test_add_panel(self) -> None:
         """Test functionality: add panel."""
         exp = DashboardExporter()
@@ -172,6 +177,7 @@ class TestDashboardExporter:
 
 class TestCodeGenerator:
     """Test suite for CodeGenerator."""
+
     def test_generate_functions(self) -> None:
         """Test functionality: generate functions."""
         gen = CodeGenerator()
@@ -203,6 +209,7 @@ class TestCodeGenerator:
 
 class TestTestGenerator:
     """Test suite for Generator."""
+
     def test_from_source(self) -> None:
         """Test functionality: from source."""
         gen = TestGenerator()
@@ -229,6 +236,7 @@ class TestTestGenerator:
 
 class TestPRBuilder:
     """Test suite for PRBuilder."""
+
     def test_create(self) -> None:
         """Test functionality: create."""
         builder = PRBuilder()
@@ -248,6 +256,7 @@ class TestPRBuilder:
 
 class TestReviewLoop:
     """Test suite for ReviewLoop."""
+
     def test_converges(self) -> None:
         """Test functionality: converges."""
         loop = ReviewLoop(max_iterations=5, approval_threshold=0.7)

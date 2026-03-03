@@ -1,10 +1,8 @@
-
 """Section manager for extracting and managing FPF sections.
 
 This module provides functionality to extract individual parts, pattern groups,
 and concept clusters from FPF specifications.
 """
-
 
 from codomyrmex.fpf.core.models import FPFSpec
 
@@ -36,9 +34,7 @@ class SectionManager:
         pattern_ids = {p.id for p in part_patterns}
 
         # Filter concepts by pattern IDs
-        part_concepts = [
-            c for c in self.spec.concepts if c.pattern_id in pattern_ids
-        ]
+        part_concepts = [c for c in self.spec.concepts if c.pattern_id in pattern_ids]
 
         # Filter relationships where both source and target are in this part
         part_relationships = [
@@ -123,9 +119,7 @@ class SectionManager:
         concept_name_set = set(concept_names)
 
         # Filter concepts
-        cluster_concepts = [
-            c for c in self.spec.concepts if c.name in concept_name_set
-        ]
+        cluster_concepts = [c for c in self.spec.concepts if c.name in concept_name_set]
 
         # Get related pattern IDs
         pattern_ids = {c.pattern_id for c in cluster_concepts}
@@ -250,4 +244,3 @@ class SectionManager:
             "total_relationships": len(self.spec.relationships),
             "part_statistics": part_stats,
         }
-

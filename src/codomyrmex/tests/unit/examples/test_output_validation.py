@@ -28,7 +28,7 @@ class TestOutputValidation:
     def load_output_file(self, file_path: Path) -> dict[str, Any] | None:
         """Load and parse output JSON file."""
         try:
-            with open(file_path, encoding='utf-8') as f:
+            with open(file_path, encoding="utf-8") as f:
                 return json.load(f)
         except json.JSONDecodeError:
             return None
@@ -48,13 +48,15 @@ class TestOutputValidation:
         expected_patterns = [
             "workflow_phases_completed",
             "modules_integrated",
-            "final_results"
+            "final_results",
         ]
 
         found_expected = any(key in output for key in expected_patterns)
 
         if not found_expected and len(output) > 0:
-            validation["warnings"].append("Output may be missing expected result fields")
+            validation["warnings"].append(
+                "Output may be missing expected result fields"
+            )
 
         # Check for reasonable content
         if len(output) == 0:
@@ -72,25 +74,32 @@ class TestOutputValidation:
             "modules_integrated": (int, list),
             "final_results": dict,
             "execution_time": (int, float),
-            "success": bool
+            "success": bool,
         }
 
         for field, expected_type in expected_types.items():
             if field in output:
                 actual_value = output[field]
                 if not isinstance(actual_value, expected_type):
-                    type_errors.append(f"Field '{field}' should be {expected_type.__name__}, got {type(actual_value).__name__}")
+                    type_errors.append(
+                        f"Field '{field}' should be {expected_type.__name__}, got {type(actual_value).__name__}"
+                    )
 
         return type_errors
 
-    def validate_output_completeness(self, output: dict[str, Any], module_name: str) -> dict[str, Any]:
+    def validate_output_completeness(
+        self, output: dict[str, Any], module_name: str
+    ) -> dict[str, Any]:
         """Validate that output contains expected information for the module."""
         validation = {"complete": True, "missing": []}
 
         # Define module-specific expectations
         module_expectations = {
             "api": ["api_endpoints_documented", "openapi_spec_generated"],
-            "database_management": ["database_connections_created", "schema_tables_created"],
+            "database_management": [
+                "database_connections_created",
+                "schema_tables_created",
+            ],
             "security_audit": ["vulnerabilities_found", "secrets_detected"],
             "config_management": ["configurations_loaded", "validations_performed"],
             "build_synthesis": ["build_configs_created", "build_targets_created"],
@@ -110,12 +119,17 @@ class TestOutputValidation:
             "environment_setup": ["dependencies_checked", "environment_validated"],
             "model_context_protocol": ["tools_registered", "protocols_established"],
             "terminal_interface": ["ui_components_created", "interactions_handled"],
-            "llm": ["models_loaded", "inference_completed", "providers_configured", "completions_generated"],
+            "llm": [
+                "models_loaded",
+                "inference_completed",
+                "providers_configured",
+                "completions_generated",
+            ],
             "spatial.three_d": ["scenes_created", "rendering_completed"],
             "physical_management": ["systems_monitored", "resources_managed"],
             "system_discovery": ["modules_discovered", "health_assessed"],
             "documentation": ["docs_generated", "formats_supported"],
-            "project_orchestration": ["workflows_created", "tasks_orchestrated"]
+            "project_orchestration": ["workflows_created", "tasks_orchestrated"],
         }
 
         if module_name in module_expectations:
@@ -154,7 +168,9 @@ class TestOutputValidation:
                     if structure_validation["valid"]:
                         print("✓ Output structure is valid")
                     else:
-                        print(f"⚠ Output structure issues: {structure_validation['errors']}")
+                        print(
+                            f"⚠ Output structure issues: {structure_validation['errors']}"
+                        )
 
                     # Validate types
                     type_errors = self.validate_output_types(output_data)
@@ -164,7 +180,9 @@ class TestOutputValidation:
                         print(f"⚠ Output type issues: {type_errors}")
 
                     # Validate completeness
-                    completeness = self.validate_output_completeness(output_data, module_name)
+                    completeness = self.validate_output_completeness(
+                        output_data, module_name
+                    )
                     if completeness["complete"]:
                         print("✓ Output completeness check passed")
                     else:
@@ -180,7 +198,9 @@ class TestOutputValidation:
         print(f"  Valid JSON: {valid_files}/{len(output_files)}")
 
         # Allow some flexibility - not all examples may have run yet
-        assert generated_files >= len(output_files) * 0.5, f"Only {generated_files}/{len(output_files)} output files generated"
+        assert generated_files >= len(output_files) * 0.5, (
+            f"Only {generated_files}/{len(output_files)} output files generated"
+        )
 
     def test_output_file_naming(self, examples_dir: Path):
         """Test that output files follow naming conventions."""
@@ -193,15 +213,23 @@ class TestOutputValidation:
             actual_name = output_file.name
 
             if actual_name != expected_name:
-                naming_errors.append(f"{output_file}: expected '{expected_name}', got '{actual_name}'")
+                naming_errors.append(
+                    f"{output_file}: expected '{expected_name}', got '{actual_name}'"
+                )
 
         if naming_errors:
-            pytest.fail(f"Found {len(naming_errors)} output files with incorrect naming: {naming_errors}")
+            pytest.fail(
+                f"Found {len(naming_errors)} output files with incorrect naming: {naming_errors}"
+            )
 
     def test_output_directory_structure(self, examples_dir: Path):
         """Test that output directories are structured correctly."""
         # Check that output directories exist where expected
-        example_dirs = [d for d in examples_dir.iterdir() if d.is_dir() and not d.name.startswith('_')]
+        example_dirs = [
+            d
+            for d in examples_dir.iterdir()
+            if d.is_dir() and not d.name.startswith("_")
+        ]
 
         structure_issues = []
 
@@ -242,20 +270,38 @@ class TestOutputValidation:
             for key, value in output_data.items():
                 if isinstance(value, (int, float)):
                     if value < 0:
-                        reasonableness_issues.append(f"{output_file}: negative value for {key}: {value}")
-                    elif isinstance(value, float) and (value == float('inf') or value == float('-inf')):
-                        reasonableness_issues.append(f"{output_file}: infinite value for {key}: {value}")
+                        reasonableness_issues.append(
+                            f"{output_file}: negative value for {key}: {value}"
+                        )
+                    elif isinstance(value, float) and (
+                        value == float("inf") or value == float("-inf")
+                    ):
+                        reasonableness_issues.append(
+                            f"{output_file}: infinite value for {key}: {value}"
+                        )
                 elif isinstance(value, str) and len(value) > 10000:
-                    reasonableness_issues.append(f"{output_file}: unusually long string for {key}: {len(value)} chars")
+                    reasonableness_issues.append(
+                        f"{output_file}: unusually long string for {key}: {len(value)} chars"
+                    )
 
         if reasonableness_issues:
-            pytest.fail(f"Found {len(reasonableness_issues)} output data reasonableness issues: {reasonableness_issues}")
+            pytest.fail(
+                f"Found {len(reasonableness_issues)} output data reasonableness issues: {reasonableness_issues}"
+            )
 
     def test_log_file_generation(self, examples_dir: Path):
         """Test that log files are generated when expected."""
-        example_dirs = [d for d in examples_dir.iterdir() if d.is_dir() and not d.name.startswith('_')]
+        example_dirs = [
+            d
+            for d in examples_dir.iterdir()
+            if d.is_dir() and not d.name.startswith("_")
+        ]
 
-        log_stats = {"total_examples": len(example_dirs), "with_logs": 0, "log_files": 0}
+        log_stats = {
+            "total_examples": len(example_dirs),
+            "with_logs": 0,
+            "log_files": 0,
+        }
 
         for example_dir in example_dirs:
             logs_dir = example_dir / "logs"
@@ -265,7 +311,9 @@ class TestOutputValidation:
                 log_stats["log_files"] += len(log_files)
 
         print("\nLog file statistics:")
-        print(f"  Examples with logs: {log_stats['with_logs']}/{log_stats['total_examples']}")
+        print(
+            f"  Examples with logs: {log_stats['with_logs']}/{log_stats['total_examples']}"
+        )
         print(f"  Total log files: {log_stats['log_files']}")
 
         # Verify the stats collection completed successfully

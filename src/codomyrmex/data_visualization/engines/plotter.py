@@ -24,6 +24,7 @@ from codomyrmex.data_visualization.charts.scatter_plot import create_scatter_plo
 # Attempt to import Codomyrmex logging utilities
 try:
     from codomyrmex.logging_monitoring.core.logger_config import get_logger
+
     logger = get_logger(__name__)
 except ImportError:
     logger = logging.getLogger(__name__)
@@ -36,6 +37,7 @@ except ImportError:
 # Import performance monitoring
 try:
     from codomyrmex.performance import monitor_performance, performance_context
+
     PERFORMANCE_MONITORING_AVAILABLE = True
 except ImportError:
     logger.debug("Performance monitoring not available - decorators will be no-op")
@@ -43,18 +45,23 @@ except ImportError:
 
     def monitor_performance(*args, **kwargs):
         """Decorator for performance monitoring (fallback)."""
+
         def decorator(func):
             """Decorator."""
             return func
+
         return decorator
 
     class performance_context:
         """Performance Context (fallback)."""
+
         def __init__(self, *args, **kwargs):
             return None  # Intentional no-op
+
         def __enter__(self):
             """Enter the context manager."""
             return self
+
         def __exit__(self, *args):
             """Exit the context manager and clean up."""
             return None  # Intentional no-op
@@ -147,9 +154,11 @@ def create_heatmap(
             for j in range(np_data.shape[1]):
                 text_color = "black" if im.norm(np_data[i, j]) > 0.5 else "white"
                 ax.text(
-                    j, i,
+                    j,
+                    i,
                     format(np_data[i, j], fmt),
-                    ha="center", va="center",
+                    ha="center",
+                    va="center",
                     color=text_color,
                 )
 

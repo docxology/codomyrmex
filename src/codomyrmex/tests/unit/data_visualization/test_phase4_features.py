@@ -12,6 +12,7 @@ def test_word_cloud_render():
     assert "data:image/png;base64" in html
     assert 'alt="Test Cloud"' in html
 
+
 def test_confusion_matrix_render():
     """Test functionality: confusion matrix render."""
     matrix = [[10, 2], [3, 8]]
@@ -20,6 +21,7 @@ def test_confusion_matrix_render():
     html = plot.to_html()
     assert "data:image/png;base64" in html
     assert 'alt="Test CM"' in html
+
 
 def test_chat_bubble_component():
     """Test functionality: chat bubble component."""
@@ -34,6 +36,7 @@ def test_chat_bubble_component():
     assert "Hi there" in html2
     assert "Agent" in html2
     assert "float: left" in html2  # Agent aligned left
+
 
 def test_json_view_component():
     """Test functionality: json view component."""

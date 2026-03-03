@@ -51,13 +51,14 @@ _DATAVIEW_FIELD_RE = re.compile(r"^([A-Za-z][\w\-]*)\s*::\s*(.+)$", re.MULTILINE
 
 # ── frontmatter ──────────────────────────────────────────────────────
 
+
 def parse_frontmatter(raw: str) -> tuple[dict[str, Any], str]:
     """Split raw markdown into ``(frontmatter_dict, body)``."""
     match = _FM_RE.match(raw)
     if not match:
         return {}, raw
     fm_text = match.group(1).strip()
-    body = raw[match.end():]
+    body = raw[match.end() :]
     if not fm_text:
         return {}, body
     if yaml is not None:
@@ -68,6 +69,7 @@ def parse_frontmatter(raw: str) -> tuple[dict[str, Any], str]:
 
 
 # ── wikilinks ────────────────────────────────────────────────────────
+
 
 def extract_wikilinks(content: str) -> list[Wikilink]:
     """Extract ``[[target]]``, ``[[target|alias]]``, ``[[target#heading]]``,
@@ -93,13 +95,14 @@ def extract_wikilinks(content: str) -> list[Wikilink]:
         else:
             target = target_part
 
-        results.append(Wikilink(
-            target=target, alias=alias, heading=heading, block=block
-        ))
+        results.append(
+            Wikilink(target=target, alias=alias, heading=heading, block=block)
+        )
     return results
 
 
 # ── embeds ───────────────────────────────────────────────────────────
+
 
 def extract_embeds(content: str) -> list[Embed]:
     """Extract ``![[file]]`` and ``![[file|WxH]]`` embeds."""
@@ -134,6 +137,7 @@ def extract_embeds(content: str) -> list[Embed]:
 
 # ── tags ─────────────────────────────────────────────────────────────
 
+
 def extract_tags(
     content: str,
     frontmatter: dict[str, Any] | None = None,
@@ -156,12 +160,16 @@ def extract_tags(
 
 # ── headings ─────────────────────────────────────────────────────────
 
+
 def extract_headings(content: str) -> list[tuple[int, str]]:
     """Return ``(level, text)`` tuples for every heading."""
-    return [(len(m.group(1)), m.group(2).strip()) for m in _HEADING_RE.finditer(content)]
+    return [
+        (len(m.group(1)), m.group(2).strip()) for m in _HEADING_RE.finditer(content)
+    ]
 
 
 # ── callouts ─────────────────────────────────────────────────────────
+
 
 def extract_callouts(content: str) -> list[Callout]:
     """Extract Obsidian-style callout blocks."""
@@ -173,34 +181,44 @@ def extract_callouts(content: str) -> list[Callout]:
         body_raw = m.group(4)
         body = "\n".join(
             line.lstrip("> ").rstrip()
-            for line in body_raw.strip().split("\n") if line.strip()
+            for line in body_raw.strip().split("\n")
+            if line.strip()
         )
 
         foldable = fold_char in ("-", "+")
         default_open = fold_char == "+"
-        results.append(Callout(
-            type=ctype, title=title, content=body,
-            foldable=foldable, default_open=default_open,
-        ))
+        results.append(
+            Callout(
+                type=ctype,
+                title=title,
+                content=body,
+                foldable=foldable,
+                default_open=default_open,
+            )
+        )
     return results
 
 
 # ── code blocks ──────────────────────────────────────────────────────
 
+
 def extract_code_blocks(content: str) -> list[CodeBlock]:
     """Extract fenced code blocks (```language ... ```)."""
     blocks: list[CodeBlock] = []
     for m in _CODE_BLOCK_RE.finditer(content):
-        line_start = content[:m.start()].count("\n") + 1
-        blocks.append(CodeBlock(
-            language=m.group(1).strip(),
-            content=m.group(2).strip(),
-            line_start=line_start,
-        ))
+        line_start = content[: m.start()].count("\n") + 1
+        blocks.append(
+            CodeBlock(
+                language=m.group(1).strip(),
+                content=m.group(2).strip(),
+                line_start=line_start,
+            )
+        )
     return blocks
 
 
 # ── math blocks ──────────────────────────────────────────────────────
+
 
 def extract_math(content: str) -> list[MathBlock]:
     """Extract display math (``$$...$$``) and inline math (``$...$``)."""
@@ -214,21 +232,25 @@ def extract_math(content: str) -> list[MathBlock]:
 
 # ── Dataview inline fields ───────────────────────────────────────────
 
+
 def extract_dataview_fields(content: str) -> list[DataviewField]:
     """Extract Dataview inline fields (``key:: value``)."""
     fields: list[DataviewField] = []
     for i, line in enumerate(content.split("\n"), 1):
         m = _DATAVIEW_FIELD_RE.match(line)
         if m:
-            fields.append(DataviewField(
-                key=m.group(1).strip(),
-                value=m.group(2).strip(),
-                line=i,
-            ))
+            fields.append(
+                DataviewField(
+                    key=m.group(1).strip(),
+                    value=m.group(2).strip(),
+                    line=i,
+                )
+            )
     return fields
 
 
 # ── full note parser ─────────────────────────────────────────────────
+
 
 def parse_note(path: Path, *, raw: str | None = None) -> Note:
     """Parse a markdown file (or raw string) into a ``Note``."""
@@ -255,6 +277,7 @@ def parse_note(path: Path, *, raw: str | None = None) -> Note:
 
 
 # ── serialize ────────────────────────────────────────────────────────
+
 
 def serialize_note(note: Note) -> str:
     """Reconstruct markdown text from a ``Note``."""

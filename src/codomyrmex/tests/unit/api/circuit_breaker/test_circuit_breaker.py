@@ -2,7 +2,6 @@
 Tests for API Circuit Breaker Module
 """
 
-
 import pytest
 
 from codomyrmex.api.circuit_breaker import (
@@ -121,7 +120,9 @@ class TestRetryPolicy:
 
     def test_delay_max(self):
         """Delay should be capped at max."""
-        policy = RetryPolicy(backoff_base=1.0, backoff_multiplier=10.0, backoff_max=5.0, jitter=False)
+        policy = RetryPolicy(
+            backoff_base=1.0, backoff_multiplier=10.0, backoff_max=5.0, jitter=False
+        )
 
         assert policy.get_delay(3) == 5.0
 

@@ -36,6 +36,7 @@ from codomyrmex.meme.memetics.mutation import (
 # MemeType enum
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestMemeType:
     """Tests for the MemeType enum."""
@@ -43,8 +44,14 @@ class TestMemeType:
     def test_all_values_present(self) -> None:
         """All eight MemeType values are accessible."""
         expected = {
-            "belief", "norm", "strategy", "aesthetic",
-            "narrative", "symbol", "ritual", "slogan",
+            "belief",
+            "norm",
+            "strategy",
+            "aesthetic",
+            "narrative",
+            "symbol",
+            "ritual",
+            "slogan",
         }
         actual = {m.value for m in MemeType}
         assert actual == expected
@@ -58,6 +65,7 @@ class TestMemeType:
 # ---------------------------------------------------------------------------
 # Meme dataclass
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestMeme:
@@ -140,6 +148,7 @@ class TestMeme:
 # MemeticCode
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestMemeticCode:
     """Tests for the MemeticCode sequence container."""
@@ -189,6 +198,7 @@ class TestMemeticCode:
 # ---------------------------------------------------------------------------
 # Memeplex
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestMemeplex:
@@ -256,6 +266,7 @@ class TestMemeplex:
 # FitnessMap
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestFitnessMap:
     """Tests for the FitnessMap snapshot."""
@@ -290,6 +301,7 @@ class TestFitnessMap:
 # MemeticEngine
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestMemeticEngine:
     """Tests for the high-level memetic engine."""
@@ -304,7 +316,9 @@ class TestMemeticEngine:
     def test_dissect_multiple_sentences(self) -> None:
         """Multiple sentences produce multiple memes."""
         engine = MemeticEngine()
-        text = "I believe freedom is key. You should vote. This is a beautiful art piece."
+        text = (
+            "I believe freedom is key. You should vote. This is a beautiful art piece."
+        )
         memes = engine.dissect(text)
         assert len(memes) >= 3
 
@@ -329,8 +343,14 @@ class TestMemeticEngine:
     def test_fitness_landscape_values(self) -> None:
         """Fitness landscape entries match memeplex fitness values."""
         engine = MemeticEngine()
-        m1 = Memeplex(name="a", memes=[Meme(content="x", fidelity=1.0, fecundity=1.0, longevity=1.0)])
-        m2 = Memeplex(name="b", memes=[Meme(content="y", fidelity=0.5, fecundity=0.5, longevity=0.5)])
+        m1 = Memeplex(
+            name="a",
+            memes=[Meme(content="x", fidelity=1.0, fecundity=1.0, longevity=1.0)],
+        )
+        m2 = Memeplex(
+            name="b",
+            memes=[Meme(content="y", fidelity=0.5, fecundity=0.5, longevity=0.5)],
+        )
         fmap = engine.fitness_landscape([m1, m2])
         assert fmap.entries[m1.id] == pytest.approx(m1.fitness, abs=1e-9)
         assert fmap.entries[m2.id] == pytest.approx(m2.fitness, abs=1e-9)
@@ -352,10 +372,7 @@ class TestMemeticEngine:
         """Evolve maintains population size across generations."""
         random.seed(42)
         engine = MemeticEngine()
-        pop = [
-            Memeplex(name=f"m{i}", memes=[Meme(content=f"c{i}")])
-            for i in range(6)
-        ]
+        pop = [Memeplex(name=f"m{i}", memes=[Meme(content=f"c{i}")]) for i in range(6)]
         evolved = engine.evolve(pop, generations=3, mutation_rate=0.1)
         assert len(evolved) >= 1  # At minimum parents survive
 
@@ -363,6 +380,7 @@ class TestMemeticEngine:
 # ---------------------------------------------------------------------------
 # Fitness functions
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestFitnessFunctions:
@@ -423,6 +441,7 @@ class TestFitnessFunctions:
 # ---------------------------------------------------------------------------
 # Mutation operators
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestMutationOperators:

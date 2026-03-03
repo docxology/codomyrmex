@@ -27,6 +27,7 @@ from typing import Any
 
 try:
     import yaml
+
     YAML_AVAILABLE = True
 except ImportError:
     YAML_AVAILABLE = False
@@ -38,6 +39,7 @@ sys.path.insert(0, str(project_root / "src"))
 
 try:
     from codomyrmex.logging_monitoring import get_logger
+
     logger = get_logger(__name__)
 except ImportError:
     logging.basicConfig(level=logging.INFO)
@@ -58,10 +60,12 @@ class ConfigValidator:
             "invalid_files": 0,
             "errors": [],
             "warnings": [],
-            "file_results": {}
+            "file_results": {},
         }
 
-    def validate_all_configs(self, fix: bool = False, verbose: bool = False) -> dict[str, Any]:
+    def validate_all_configs(
+        self, fix: bool = False, verbose: bool = False
+    ) -> dict[str, Any]:
         """Validate all configuration files."""
         logger.info("Starting configuration validation...")
 
@@ -86,11 +90,16 @@ class ConfigValidator:
 
         # Calculate summary
         self.validation_results["success_rate"] = (
-            self.validation_results["valid_files"] / self.validation_results["total_files"] * 100
-            if self.validation_results["total_files"] > 0 else 0
+            self.validation_results["valid_files"]
+            / self.validation_results["total_files"]
+            * 100
+            if self.validation_results["total_files"] > 0
+            else 0
         )
 
-        logger.info(f"Validation complete. {self.validation_results['valid_files']}/{self.validation_results['total_files']} files valid.")
+        logger.info(
+            f"Validation complete. {self.validation_results['valid_files']}/{self.validation_results['total_files']} files valid."
+        )
         return self.validation_results
 
     def _find_config_files(self) -> list[tuple[Path, str]]:
@@ -114,7 +123,9 @@ class ConfigValidator:
         logger.info(f"Found {len(config_files)} configuration files")
         return config_files
 
-    def _validate_config_file(self, file_path: Path, file_type: str, fix: bool, verbose: bool) -> dict[str, Any]:
+    def _validate_config_file(
+        self, file_path: Path, file_type: str, fix: bool, verbose: bool
+    ) -> dict[str, Any]:
         """Validate a single configuration file."""
         result = {
             "file": str(file_path),
@@ -122,7 +133,7 @@ class ConfigValidator:
             "valid": True,
             "errors": [],
             "warnings": [],
-            "fixed": False
+            "fixed": False,
         }
 
         if verbose:
@@ -152,14 +163,18 @@ class ConfigValidator:
 
         return result
 
-    def _load_config_file(self, file_path: Path, file_type: str, result: dict[str, Any]) -> dict[str, Any] | None:
+    def _load_config_file(
+        self, file_path: Path, file_type: str, result: dict[str, Any]
+    ) -> dict[str, Any] | None:
         """Load configuration from file."""
         try:
-            with open(file_path, encoding='utf-8') as f:
+            with open(file_path, encoding="utf-8") as f:
                 if file_type == "yaml":
                     if not YAML_AVAILABLE:
                         result["valid"] = False
-                        result["errors"].append("PyYAML not available for YAML validation")
+                        result["errors"].append(
+                            "PyYAML not available for YAML validation"
+                        )
                         return None
                     config = yaml.safe_load(f)
                 elif file_type == "json":
@@ -200,7 +215,9 @@ class ConfigValidator:
 
         if missing_required:
             result["valid"] = False
-            result["errors"].append(f"Missing required sections: {', '.join(missing_required)}")
+            result["errors"].append(
+                f"Missing required sections: {', '.join(missing_required)}"
+            )
 
         # Validate output section
         if "output" in config:
@@ -225,7 +242,9 @@ class ConfigValidator:
             valid_levels = ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
             log_level = config["logging"]["level"]
             if log_level not in valid_levels:
-                result["warnings"].append(f"logging.level '{log_level}' not in valid levels: {valid_levels}")
+                result["warnings"].append(
+                    f"logging.level '{log_level}' not in valid levels: {valid_levels}"
+                )
 
     def _attempt_fixes(self, file_path: Path, file_type: str, result: dict[str, Any]):
         """Attempt to automatically fix common issues."""
@@ -233,7 +252,7 @@ class ConfigValidator:
             return  # Auto-fix only implemented for JSON currently
 
         try:
-            with open(file_path, encoding='utf-8') as f:
+            with open(file_path, encoding="utf-8") as f:
                 data = json.load(f)
 
             fixed = False
@@ -247,7 +266,7 @@ class ConfigValidator:
                         fixed = True
 
             if fixed:
-                with open(file_path, 'w', encoding='utf-8') as f:
+                with open(file_path, "w", encoding="utf-8") as f:
                     json.dump(data, f, indent=2)
                 result["fixed"] = True
                 result["valid"] = True
@@ -258,24 +277,30 @@ class ConfigValidator:
 
     def print_report(self, results: dict[str, Any], verbose: bool = False):
         """Print validation results."""
-        print("\n" + "="*80)
+        print("\n" + "=" * 80)
         print("🔧 CONFIGURATION VALIDATION REPORT")
-        print("="*80)
+        print("=" * 80)
         print("\n📊 SUMMARY:")
         print(f"   Total Files: {results['total_files']}")
         print(f"   Valid Files: {results['valid_files']}")
         print(f"   Invalid Files: {results['invalid_files']}")
         print(f"   Success Rate: {results['success_rate']:.1f}%")
-        print("\n" + "="*80)
+        print("\n" + "=" * 80)
 
     def save_report(self, results: dict[str, Any], output_file: str = None):
         """Save validation results to file."""
         if output_file is None:
-            output_file = self.project_root / "src" / "codomyrmex" / "examples" / "config_validation_report.json"
+            output_file = (
+                self.project_root
+                / "src"
+                / "codomyrmex"
+                / "examples"
+                / "config_validation_report.json"
+            )
 
         output_file.parent.mkdir(parents=True, exist_ok=True)
 
-        with open(output_file, 'w', encoding='utf-8') as f:
+        with open(output_file, "w", encoding="utf-8") as f:
             json.dump(results, f, indent=2, ensure_ascii=False)
 
         logger.info(f"Report saved to: {output_file}")
@@ -283,9 +308,15 @@ class ConfigValidator:
 
 def main():
     """Main function to run config validation."""
-    parser = argparse.ArgumentParser(description="Validate Codomyrmex example configurations")
-    parser.add_argument("--fix", action="store_true", help="Attempt to fix common issues automatically")
-    parser.add_argument("--verbose", "-v", action="store_true", help="Show detailed validation results")
+    parser = argparse.ArgumentParser(
+        description="Validate Codomyrmex example configurations"
+    )
+    parser.add_argument(
+        "--fix", action="store_true", help="Attempt to fix common issues automatically"
+    )
+    parser.add_argument(
+        "--verbose", "-v", action="store_true", help="Show detailed validation results"
+    )
     parser.add_argument("--output", "-o", help="Output file for validation report")
 
     args = parser.parse_args()

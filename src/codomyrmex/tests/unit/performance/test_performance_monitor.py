@@ -30,6 +30,7 @@ from codomyrmex.performance.monitoring.performance_monitor import (
 # Dataclass tests
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestPerformanceMetrics:
     """Tests for the PerformanceMetrics dataclass."""
@@ -105,6 +106,7 @@ class TestSystemMetrics:
 # SystemMonitor tests
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestSystemMonitor:
     """Tests for the SystemMonitor class."""
@@ -166,6 +168,7 @@ class TestSystemMonitor:
 # ---------------------------------------------------------------------------
 # PerformanceMonitor tests
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestPerformanceMonitor:
@@ -324,6 +327,7 @@ class TestPerformanceMonitor:
 # Decorator tests
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestMonitorPerformanceDecorator:
     """Tests for the monitor_performance decorator."""
@@ -406,6 +410,7 @@ class TestProfileMemoryUsage:
 # Context manager tests
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestPerformanceContext:
     """Tests for the performance_context context manager."""
@@ -451,6 +456,7 @@ class TestTrackResourceUsage:
 # ---------------------------------------------------------------------------
 # Module-level helper tests
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestModuleLevelHelpers:

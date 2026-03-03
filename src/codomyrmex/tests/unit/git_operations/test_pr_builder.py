@@ -14,8 +14,8 @@ pytestmark = pytest.mark.unit
 # FileChange dataclass
 # ---------------------------------------------------------------------------
 
-class TestFileChange:
 
+class TestFileChange:
     def test_default_action_is_add(self):
         fc = FileChange("path.py")
         assert fc.action == "add"
@@ -33,8 +33,8 @@ class TestFileChange:
 # PRSpec dataclass
 # ---------------------------------------------------------------------------
 
-class TestPRSpec:
 
+class TestPRSpec:
     def test_file_count_empty(self):
         spec = PRSpec()
         assert spec.file_count == 0
@@ -46,7 +46,14 @@ class TestPRSpec:
     def test_to_dict_contains_required_keys(self):
         spec = PRSpec(title="Test PR", branch="auto/test", base="main")
         d = spec.to_dict()
-        required = {"title", "branch", "base", "files_changed", "labels", "test_results"}
+        required = {
+            "title",
+            "branch",
+            "base",
+            "files_changed",
+            "labels",
+            "test_results",
+        }
         assert required.issubset(d.keys())
 
     def test_to_dict_files_changed_matches_file_count(self):
@@ -63,8 +70,8 @@ class TestPRSpec:
 # PRBuilder.create
 # ---------------------------------------------------------------------------
 
-class TestPRBuilderCreate:
 
+class TestPRBuilderCreate:
     def setup_method(self):
         self.builder = PRBuilder()
 
@@ -124,8 +131,8 @@ class TestPRBuilderCreate:
 # PRBuilder branch name generation
 # ---------------------------------------------------------------------------
 
-class TestPRBuilderBranchName:
 
+class TestPRBuilderBranchName:
     def setup_method(self):
         self.builder = PRBuilder()
 

@@ -69,7 +69,7 @@ class PrismEngine:
         self.quantum = quantum
         self.width = quantum + 1
         self.bits = self.BYTE_BITS * self.width
-        self.cycle = self.BYTE_CYCLE ** self.width
+        self.cycle = self.BYTE_CYCLE**self.width
         self._mask = self.cycle - 1
         self._coherent = False
 
@@ -119,19 +119,25 @@ class PrismEngine:
         b = self._normalize(n)
         return tuple(byte ^ 0xFF for byte in b)
 
-    def xor(self, a: int | tuple[int, ...], b: int | tuple[int, ...]) -> tuple[int, ...]:
+    def xor(
+        self, a: int | tuple[int, ...], b: int | tuple[int, ...]
+    ) -> tuple[int, ...]:
         """Bitwise XOR (per byte). Commutative, associative."""
         ba = self._normalize(a)
         bb = self._normalize(b)
         return tuple(x ^ y for x, y in zip(ba, bb, strict=False))
 
-    def band(self, a: int | tuple[int, ...], b: int | tuple[int, ...]) -> tuple[int, ...]:
+    def band(
+        self, a: int | tuple[int, ...], b: int | tuple[int, ...]
+    ) -> tuple[int, ...]:
         """Bitwise AND (per byte). Commutative, associative."""
         ba = self._normalize(a)
         bb = self._normalize(b)
         return tuple(x & y for x, y in zip(ba, bb, strict=False))
 
-    def bor(self, a: int | tuple[int, ...], b: int | tuple[int, ...]) -> tuple[int, ...]:
+    def bor(
+        self, a: int | tuple[int, ...], b: int | tuple[int, ...]
+    ) -> tuple[int, ...]:
         """Bitwise OR (per byte). Commutative, associative."""
         ba = self._normalize(a)
         bb = self._normalize(b)

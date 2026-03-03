@@ -21,6 +21,7 @@ from codomyrmex.model_context_protocol.discovery import (
 
 class TestDiscoveryMetricsDataclass:
     """Test suite for DiscoveryMetricsDataclass."""
+
     def test_default_values(self) -> None:
         """Test functionality: default values."""
         m = DiscoveryMetrics()
@@ -57,6 +58,7 @@ class TestDiscoveryMetricsDataclass:
 
 class TestMetricsViaEngine:
     """Test suite for MetricsViaEngine."""
+
     def test_fresh_engine_metrics(self) -> None:
         """Test functionality: fresh engine metrics."""
         engine = MCPDiscovery()
@@ -93,6 +95,7 @@ class TestMetricsViaEngine:
 
 class TestMetricsSerialisation:
     """Test suite for MetricsSerialisation."""
+
     def test_metrics_are_json_serialisable(self) -> None:
         """Test functionality: metrics are json serialisable."""
         from datetime import datetime
@@ -111,7 +114,9 @@ class TestMetricsSerialisation:
             "failed_modules": m.failed_modules,
             "modules_scanned": m.modules_scanned,
             "cache_hits": m.cache_hits,
-            "last_scan_time": m.last_scan_time.isoformat() if m.last_scan_time else None,
+            "last_scan_time": m.last_scan_time.isoformat()
+            if m.last_scan_time
+            else None,
         }
         result = json.dumps(payload)
         parsed = json.loads(result)
@@ -134,6 +139,7 @@ class TestStreamThreeExports:
             FailedModule,
             MCPDiscovery,
         )
+
         assert DiscoveryMetrics is not None
         assert DiscoveryReport is not None
         assert FailedModule is not None

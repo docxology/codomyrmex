@@ -149,9 +149,7 @@ class TestCopyAndCustomize:
         src = tmp_path / "README.md"
         dst = tmp_path / "out_README.md"
         src.write_text("# Title\nSome content", encoding="utf-8")
-        _copy_and_customize(
-            src, dst, {}, description="My great description", author=""
-        )
+        _copy_and_customize(src, dst, {}, description="My great description", author="")
         # Rename dst so its .name is README.md (the function checks dst.name)
         # Actually the function checks dst.name — let's use a proper name
         dst2 = tmp_path / "sub"

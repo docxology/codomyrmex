@@ -88,10 +88,12 @@ class TestDataFixture:
 
     def test_filter(self):
         """Should filter records."""
-        data = DataFixture([
-            {"name": "Alice", "active": True},
-            {"name": "Bob", "active": False},
-        ])
+        data = DataFixture(
+            [
+                {"name": "Alice", "active": True},
+                {"name": "Bob", "active": False},
+            ]
+        )
 
         active = data.filter(active=True)
 
@@ -100,10 +102,12 @@ class TestDataFixture:
 
     def test_find(self):
         """Should find first match."""
-        data = DataFixture([
-            {"id": 1, "name": "Alice"},
-            {"id": 2, "name": "Bob"},
-        ])
+        data = DataFixture(
+            [
+                {"id": 1, "name": "Alice"},
+                {"id": 2, "name": "Bob"},
+            ]
+        )
 
         result = data.find(id=2)
 
@@ -151,27 +155,25 @@ class TestFixtureBuilder:
 
     def test_build(self):
         """Should build fixture."""
-        fixture = (FixtureBuilder("user")
+        fixture = (
+            FixtureBuilder("user")
             .with_field("id", 1)
             .with_field("name", "Test")
-            .build())
+            .build()
+        )
 
         assert fixture["id"] == 1
         assert fixture["name"] == "Test"
 
     def test_with_fields(self):
         """Should add multiple fields."""
-        fixture = (FixtureBuilder("item")
-            .with_fields(a=1, b=2, c=3)
-            .build())
+        fixture = FixtureBuilder("item").with_fields(a=1, b=2, c=3).build()
 
         assert fixture == {"a": 1, "b": 2, "c": 3}
 
     def test_build_many(self):
         """Should build many with IDs."""
-        fixtures = (FixtureBuilder("user")
-            .with_field("name", "Test")
-            .build_many(3))
+        fixtures = FixtureBuilder("user").with_field("name", "Test").build_many(3)
 
         assert len(fixtures) == 3
         assert fixtures[0]["id"] == 1

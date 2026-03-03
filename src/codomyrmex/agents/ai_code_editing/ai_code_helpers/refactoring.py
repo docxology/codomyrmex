@@ -3,9 +3,11 @@
 try:
     from codomyrmex.performance import monitor_performance
 except ImportError:
+
     def monitor_performance(name):
         def decorator(func):
             return func
+
         return decorator
 
 
@@ -17,6 +19,7 @@ from codomyrmex.logging_monitoring.core.logger_config import get_logger
 from .config import DEFAULT_LLM_PROVIDER, get_llm_client
 
 logger = get_logger(__name__)
+
 
 @monitor_performance("ai_code_refactoring")
 def refactor_code_snippet(
@@ -98,19 +101,18 @@ def refactor_code_snippet(
             )
 
         elif provider == "google":
-            response = client.models.generate_content(
-                model=model,
-                contents=prompt
-            )
+            response = client.models.generate_content(model=model, contents=prompt)
             refactored_code = response.text
-            tokens_used = response.usage_metadata.total_token_count if hasattr(response, "usage_metadata") else None
+            tokens_used = (
+                response.usage_metadata.total_token_count
+                if hasattr(response, "usage_metadata")
+                else None
+            )
 
         elif provider == "ollama":
             # Use Ollama integration
             result = client.run_model(
-                model_name=model,
-                prompt=prompt,
-                save_output=False
+                model_name=model, prompt=prompt, save_output=False
             )
             refactored_code = result.response
             tokens_used = result.tokens_used
@@ -148,4 +150,3 @@ def refactor_code_snippet(
         # Final fallback for unexpected API errors or network issues
         logger.error(f"Unexpected error refactoring code: {e}", exc_info=True)
         raise RuntimeError(f"Code refactoring failed: {e}") from None
-

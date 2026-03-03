@@ -44,7 +44,9 @@ class MistralVibeClient(CLIAgentBase):
 
         vibe_command = self.get_config_value("mistral_vibe_command", config=config)
         timeout = self.get_config_value("mistral_vibe_timeout", config=config)
-        working_dir_str = self.get_config_value("mistral_vibe_working_dir", config=config)
+        working_dir_str = self.get_config_value(
+            "mistral_vibe_working_dir", config=config
+        )
         working_dir = Path(working_dir_str) if working_dir_str else None
 
         api_key = self.get_config_value("mistral_vibe_api_key", config=config)
@@ -76,16 +78,24 @@ class MistralVibeClient(CLIAgentBase):
                 request,
                 additional_metadata={
                     "vibe_success": result.get("success", False),
-                    "input_preview": vibe_input[:200] if len(vibe_input) > 200 else vibe_input,
+                    "input_preview": vibe_input[:200]
+                    if len(vibe_input) > 200
+                    else vibe_input,
                 },
             )
         except AgentTimeoutError as e:
-            raise MistralVibeError(f"Mistral Vibe command timed out: {str(e)}", command=self.command) from e
+            raise MistralVibeError(
+                f"Mistral Vibe command timed out: {str(e)}", command=self.command
+            ) from e
         except AgentError as e:
-            raise MistralVibeError(f"Mistral Vibe command failed: {str(e)}", command=self.command) from e
+            raise MistralVibeError(
+                f"Mistral Vibe command failed: {str(e)}", command=self.command
+            ) from e
         except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
             self.logger.error(f"Mistral Vibe execution failed: {e}", exc_info=True)
-            raise MistralVibeError(f"Mistral Vibe command failed: {str(e)}", command=self.command) from e
+            raise MistralVibeError(
+                f"Mistral Vibe command failed: {str(e)}", command=self.command
+            ) from e
 
     def _stream_impl(self, request: AgentRequest) -> Iterator[str]:
         """Stream Mistral Vibe command output."""
@@ -132,4 +142,9 @@ class MistralVibeClient(CLIAgentBase):
             }
         except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
             self.logger.warning(f"Failed to get Mistral Vibe help: {e}")
-            return {"help_text": "", "exit_code": -1, "available": False, "error": str(e)}
+            return {
+                "help_text": "",
+                "exit_code": -1,
+                "available": False,
+                "error": str(e),
+            }

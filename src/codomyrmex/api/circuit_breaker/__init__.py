@@ -19,17 +19,21 @@ from typing import Any, Optional, TypeVar
 
 from codomyrmex.exceptions import BulkheadFullError, CircuitOpenError
 
-T = TypeVar('T')
+T = TypeVar("T")
+
 
 class CircuitState(Enum):
     """States of a circuit breaker."""
-    CLOSED = "closed"      # Normal operation
-    OPEN = "open"          # Failing fast
+
+    CLOSED = "closed"  # Normal operation
+    OPEN = "open"  # Failing fast
     HALF_OPEN = "half_open"  # Testing recovery
+
 
 @dataclass
 class CircuitStats:
     """Statistics for a circuit breaker."""
+
     success_count: int = 0
     failure_count: int = 0
     consecutive_failures: int = 0
@@ -76,9 +80,11 @@ class CircuitStats:
         self.last_success_time = None
         self.total_latency_ms = 0.0
 
+
 @dataclass
 class CircuitBreakerConfig:
     """Configuration for circuit breaker."""
+
     failure_threshold: int = 5
     success_threshold: int = 3  # Successes needed in half-open to close
     reset_timeout_s: float = 30.0
@@ -87,6 +93,7 @@ class CircuitBreakerConfig:
     # Optional error rate threshold (0.0 to 1.0)
     error_rate_threshold: float | None = None
     error_rate_window: int = 100  # Calls to consider for error rate
+
 
 class CircuitBreaker:
     """
@@ -284,11 +291,11 @@ class RetryPolicy:
 
     def get_delay(self, attempt: int) -> float:
         """Calculate delay for an attempt."""
-        delay = self.backoff_base * (self.backoff_multiplier ** attempt)
+        delay = self.backoff_base * (self.backoff_multiplier**attempt)
         delay = min(delay, self.backoff_max)
 
         if self.jitter:
-            delay *= (0.5 + random.random())
+            delay *= 0.5 + random.random()
 
         return delay
 
@@ -303,6 +310,7 @@ class RetryPolicy:
                 delay = self.get_delay(attempt - 1)
                 time.sleep(delay)
             yield attempt
+
 
 class Bulkhead:
     """
@@ -380,6 +388,7 @@ class Bulkhead:
         """Context manager exit."""
         self.release()
 
+
 def circuit_breaker(
     name: str = "default",
     failure_threshold: int = 5,
@@ -401,6 +410,7 @@ def circuit_breaker(
 
     def decorator(func: Callable[..., T]) -> Callable[..., T]:
         """Decorator."""
+
         @functools.wraps(func)
         def wrapper(*args, **kwargs) -> T:
             """Wrapper."""
@@ -411,6 +421,7 @@ def circuit_breaker(
         return wrapper
 
     return decorator
+
 
 def retry(
     max_retries: int = 3,
@@ -426,8 +437,10 @@ def retry(
         def make_api_call():
             ...
     """
+
     def decorator(func: Callable[..., T]) -> Callable[..., T]:
         """Decorator."""
+
         @functools.wraps(func)
         def wrapper(*args, **kwargs) -> T:
             """Wrapper."""
@@ -452,6 +465,7 @@ def retry(
         return wrapper
 
     return decorator
+
 
 __all__ = [
     # Enums

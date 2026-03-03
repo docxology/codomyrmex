@@ -91,7 +91,9 @@ def parse_json_response(text: str, strict: bool = False) -> ParseResult:
         return ParseResult(success=False, error="No valid JSON found", raw_text=text)
 
     # Return raw text as fallback
-    return ParseResult(success=False, error="No JSON found", data=text.strip(), raw_text=text)
+    return ParseResult(
+        success=False, error="No JSON found", data=text.strip(), raw_text=text
+    )
 
 
 def parse_code_blocks(text: str, language: str | None = None) -> list[CodeBlock]:
@@ -124,12 +126,14 @@ def parse_code_blocks(text: str, language: str | None = None) -> list[CodeBlock]
         start_line = text[:start_pos].count("\n") + 1
         end_line = start_line + code.count("\n")
 
-        blocks.append(CodeBlock(
-            language=lang,
-            code=code,
-            start_line=start_line,
-            end_line=end_line,
-        ))
+        blocks.append(
+            CodeBlock(
+                language=lang,
+                code=code,
+                start_line=start_line,
+                end_line=end_line,
+            )
+        )
 
     logger.debug(f"Extracted {len(blocks)} code blocks")
     return blocks

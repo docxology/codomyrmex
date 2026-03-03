@@ -203,6 +203,7 @@ from .webhooks import (
 
 def cli_commands():
     """Return CLI commands for the API module."""
+
     def _list_routes():
         """List API routes."""
         print("API Module - Route Types:")

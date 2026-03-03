@@ -38,7 +38,9 @@ class TestValidationIssue:
         assert issue.code == "E001"
 
     def test_str_format(self):
-        issue = ValidationIssue(field="email", message="invalid format", severity="error")
+        issue = ValidationIssue(
+            field="email", message="invalid format", severity="error"
+        )
         s = str(issue)
         assert "ERROR" in s
         assert "email" in s
@@ -92,7 +94,9 @@ class TestContextualValidator:
 
     def test_is_valid_no_errors(self):
         v = ContextualValidator()
-        v.add_rule(lambda d: ValidationIssue(field="f", message="m", severity="warning"))
+        v.add_rule(
+            lambda d: ValidationIssue(field="f", message="m", severity="warning")
+        )
         assert v.is_valid({}) is True
 
     def test_is_valid_with_error(self):
@@ -105,7 +109,7 @@ class TestContextualValidator:
         v.add_rule(ContextualValidator.required_fields("name"))
         result = v.validate_many([{"name": "Alice"}, {}, {"name": "Bob"}])
         assert 0 not in result  # Alice is valid
-        assert 1 in result      # empty dict fails
+        assert 1 in result  # empty dict fails
         assert 2 not in result  # Bob is valid
 
     def test_required_fields_missing(self):
@@ -214,7 +218,9 @@ class TestValidationSummary:
     """Tests for ValidationSummary."""
 
     def _issue(self, field="f", message="m", severity="error", code=""):
-        return ValidationIssue(field=field, message=message, severity=severity, code=code)
+        return ValidationIssue(
+            field=field, message=message, severity=severity, code=code
+        )
 
     def test_empty_summary_is_valid(self):
         s = ValidationSummary()
@@ -240,77 +246,93 @@ class TestValidationSummary:
         assert s.is_valid is True
 
     def test_error_count(self):
-        s = ValidationSummary([
-            self._issue(severity="error"),
-            self._issue(severity="warning"),
-            self._issue(severity="info"),
-        ])
+        s = ValidationSummary(
+            [
+                self._issue(severity="error"),
+                self._issue(severity="warning"),
+                self._issue(severity="info"),
+            ]
+        )
         assert s.error_count == 1
         assert s.warning_count == 1
         assert s.info_count == 1
 
     def test_by_severity_groups_correctly(self):
-        s = ValidationSummary([
-            self._issue(severity="error"),
-            self._issue(severity="error"),
-            self._issue(severity="warning"),
-        ])
+        s = ValidationSummary(
+            [
+                self._issue(severity="error"),
+                self._issue(severity="error"),
+                self._issue(severity="warning"),
+            ]
+        )
         grouped = s.by_severity()
         assert len(grouped["error"]) == 2
         assert len(grouped["warning"]) == 1
 
     def test_by_field_groups_correctly(self):
-        s = ValidationSummary([
-            self._issue(field="name"),
-            self._issue(field="name"),
-            self._issue(field="age"),
-        ])
+        s = ValidationSummary(
+            [
+                self._issue(field="name"),
+                self._issue(field="name"),
+                self._issue(field="age"),
+            ]
+        )
         grouped = s.by_field()
         assert len(grouped["name"]) == 2
         assert len(grouped["age"]) == 1
 
     def test_worst_fields_returns_top_n(self):
-        s = ValidationSummary([
-            self._issue(field="name", severity="error"),
-            self._issue(field="name", severity="error"),
-            self._issue(field="age", severity="error"),
-        ])
+        s = ValidationSummary(
+            [
+                self._issue(field="name", severity="error"),
+                self._issue(field="name", severity="error"),
+                self._issue(field="age", severity="error"),
+            ]
+        )
         worst = s.worst_fields(n=1)
         assert len(worst) == 1
         assert worst[0][0] == "name"
         assert worst[0][1] == 2
 
     def test_worst_fields_only_errors(self):
-        s = ValidationSummary([
-            self._issue(field="x", severity="warning"),
-        ])
+        s = ValidationSummary(
+            [
+                self._issue(field="x", severity="warning"),
+            ]
+        )
         # warnings don't count
         assert s.worst_fields() == []
 
     def test_filter_by_severity(self):
-        s = ValidationSummary([
-            self._issue(severity="error"),
-            self._issue(severity="warning"),
-        ])
+        s = ValidationSummary(
+            [
+                self._issue(severity="error"),
+                self._issue(severity="warning"),
+            ]
+        )
         errors = s.filter(severity="error")
         assert len(errors) == 1
         assert errors[0].severity == "error"
 
     def test_filter_by_field(self):
-        s = ValidationSummary([
-            self._issue(field="email"),
-            self._issue(field="name"),
-        ])
+        s = ValidationSummary(
+            [
+                self._issue(field="email"),
+                self._issue(field="name"),
+            ]
+        )
         result = s.filter(field="email")
         assert len(result) == 1
         assert result[0].field == "email"
 
     def test_filter_by_both(self):
-        s = ValidationSummary([
-            self._issue(field="email", severity="error"),
-            self._issue(field="email", severity="warning"),
-            self._issue(field="name", severity="error"),
-        ])
+        s = ValidationSummary(
+            [
+                self._issue(field="email", severity="error"),
+                self._issue(field="email", severity="warning"),
+                self._issue(field="name", severity="error"),
+            ]
+        )
         result = s.filter(severity="error", field="email")
         assert len(result) == 1
 
@@ -324,7 +346,9 @@ class TestValidationSummary:
         assert isinstance(d["issues"], list)
 
     def test_to_dict_issue_has_fields(self):
-        s = ValidationSummary([self._issue(field="name", message="required", severity="error", code="E1")])
+        s = ValidationSummary(
+            [self._issue(field="name", message="required", severity="error", code="E1")]
+        )
         d = s.to_dict()
         issue_d = d["issues"][0]
         assert issue_d["field"] == "name"
@@ -500,7 +524,9 @@ class TestValidationManagerContextual:
 
     def test_add_contextual_rule_and_validate(self):
         mgr = ValidationManager()
-        mgr.add_contextual_rule(ContextualValidator.required_fields("name"), name="name_required")
+        mgr.add_contextual_rule(
+            ContextualValidator.required_fields("name"), name="name_required"
+        )
         summary = mgr.validate_contextual({})
         assert summary.total > 0
         assert summary.is_valid is False
@@ -526,7 +552,9 @@ class TestValidationManagerProfiles:
 
         def check_name(data):
             if not data.get("name"):
-                return ValidationIssue(field="name", message="required", severity="error")
+                return ValidationIssue(
+                    field="name", message="required", severity="error"
+                )
             return None
 
         mgr.create_profile("strict", [("name_check", check_name)])

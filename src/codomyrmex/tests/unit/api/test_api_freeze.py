@@ -17,6 +17,7 @@ from codomyrmex.api.migration_engine import MigrationEngine
 
 # ─── APIContract ──────────────────────────────────────────────────────
 
+
 class TestAPIContract:
     """Test suite for APIContract."""
 
@@ -53,6 +54,7 @@ class TestAPIContract:
 
 
 # ─── ContractValidator ───────────────────────────────────────────────
+
 
 class TestContractValidator:
     """Test suite for ContractValidator."""
@@ -98,6 +100,7 @@ class TestContractValidator:
 
 # ─── MigrationEngine ────────────────────────────────────────────────
 
+
 class TestMigrationEngine:
     """Test suite for MigrationEngine."""
 
@@ -135,6 +138,7 @@ class TestMigrationEngine:
 
 
 # ─── APISurface ──────────────────────────────────────────────────────
+
 
 class TestAPISurface:
     """Test suite for APISurface."""

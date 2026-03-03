@@ -45,7 +45,9 @@ class DocumentReader:
         file_path = Path(file_path)
 
         if not file_path.exists():
-            raise DocumentReadError(f"File not found: {file_path}", file_path=str(file_path))
+            raise DocumentReadError(
+                f"File not found: {file_path}", file_path=str(file_path)
+            )
 
         # Detect format if not provided
         if format is None:
@@ -59,34 +61,41 @@ class DocumentReader:
         try:
             if format == DocumentFormat.MARKDOWN:
                 from codomyrmex.documents.formats.markdown_handler import read_markdown
+
                 content = read_markdown(str(file_path), encoding=encoding)
             elif format == DocumentFormat.JSON:
                 from codomyrmex.documents.formats.json_handler import read_json
+
                 content = read_json(str(file_path), encoding=encoding)
             elif format == DocumentFormat.YAML:
                 from codomyrmex.documents.formats.yaml_handler import read_yaml
+
                 content = read_yaml(str(file_path), encoding=encoding)
             elif format == DocumentFormat.PDF:
                 from codomyrmex.documents.formats.pdf_handler import read_pdf
+
                 pdf_doc = read_pdf(str(file_path))
                 # For PDF, we keep the PDFDocument object as content
                 content = pdf_doc
             elif format == DocumentFormat.TEXT:
                 from codomyrmex.documents.formats.text_handler import read_text
+
                 content = read_text(str(file_path), encoding=encoding)
             elif format == DocumentFormat.HTML:
                 from codomyrmex.documents.formats.html_handler import read_html
+
                 content = read_html(str(file_path), encoding=encoding)
             elif format == DocumentFormat.XML:
                 from codomyrmex.documents.formats.xml_handler import read_xml
+
                 content = read_xml(str(file_path), encoding=encoding)
             elif format == DocumentFormat.CSV:
                 from codomyrmex.documents.formats.csv_handler import read_csv
+
                 content = read_csv(str(file_path), encoding=encoding)
             else:
                 raise UnsupportedFormatError(
-                    f"Format {format.value} not yet implemented",
-                    format=format.value
+                    f"Format {format.value} not yet implemented", format=format.value
                 )
 
             # Create document object
@@ -99,6 +108,7 @@ class DocumentReader:
 
             # Extract metadata and update document.metadata
             from codomyrmex.documents.metadata.extractor import extract_metadata
+
             raw_metadata = extract_metadata(str(file_path))
             document.metadata.update(raw_metadata)
 
@@ -109,8 +119,7 @@ class DocumentReader:
             if isinstance(e, (DocumentReadError, UnsupportedFormatError)):
                 raise
             raise DocumentReadError(
-                f"Failed to read document: {str(e)}",
-                file_path=str(file_path)
+                f"Failed to read document: {str(e)}", file_path=str(file_path)
             ) from e
 
     def _detect_format(self, file_path: Path) -> DocumentFormat:

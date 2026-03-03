@@ -20,6 +20,7 @@ PASSWORD = b"correct horse battery staple"
 @pytest.mark.unit
 class TestPBKDF2:
     """Test suite for PBKDF2."""
+
     def test_basic_derivation(self) -> None:
         """Test functionality: basic derivation."""
         result = derive_pbkdf2(PASSWORD, salt=FIXED_SALT, iterations=1000)
@@ -63,7 +64,9 @@ class TestPBKDF2:
 
     def test_custom_key_length(self) -> None:
         """Test functionality: custom key length."""
-        result = derive_pbkdf2(PASSWORD, salt=FIXED_SALT, iterations=1000, key_length=64)
+        result = derive_pbkdf2(
+            PASSWORD, salt=FIXED_SALT, iterations=1000, key_length=64
+        )
         assert len(result.key) == 64
         assert result.parameters["key_length"] == 64
 
@@ -72,6 +75,7 @@ class TestPBKDF2:
 @pytest.mark.unit
 class TestScrypt:
     """Test suite for Scrypt."""
+
     def test_basic_derivation(self) -> None:
         """Test functionality: basic derivation."""
         result = derive_scrypt(PASSWORD, salt=FIXED_SALT, n=2**14, r=8, p=1)
@@ -107,6 +111,7 @@ class TestScrypt:
 @pytest.mark.unit
 class TestArgon2id:
     """Test suite for Argon2id."""
+
     def test_basic_derivation(self) -> None:
         """Test functionality: basic derivation."""
         result = derive_argon2id(PASSWORD, salt=FIXED_SALT)
@@ -137,6 +142,7 @@ class TestArgon2id:
 @pytest.mark.unit
 class TestHKDF:
     """Test suite for HKDF."""
+
     def test_basic_derivation(self) -> None:
         """Test functionality: basic derivation."""
         ikm = b"\x0b" * 32

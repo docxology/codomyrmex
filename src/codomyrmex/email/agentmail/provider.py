@@ -21,6 +21,7 @@ from typing import Any, NoReturn
 
 try:
     from codomyrmex.logging_monitoring.core.logger_config import get_logger
+
     logger = get_logger(__name__)
 except Exception:
     logger = logging.getLogger(__name__)
@@ -64,9 +65,13 @@ def _raise_for_api_error(exc: Exception, context: str) -> NoReturn:
     """Convert AgentMail SDK errors to codomyrmex email exceptions."""
     status_code = getattr(exc, "status_code", None)
     if status_code == 401 or status_code == 403:
-        raise EmailAuthError(f"AgentMail authentication failed during {context}: {exc}") from exc
+        raise EmailAuthError(
+            f"AgentMail authentication failed during {context}: {exc}"
+        ) from exc
     if status_code == 404:
-        raise MessageNotFoundError(f"Resource not found during {context}: {exc}") from exc
+        raise MessageNotFoundError(
+            f"Resource not found during {context}: {exc}"
+        ) from exc
     logger.error(f"AgentMail API error during {context}: {exc}")
     raise EmailAPIError(f"AgentMail API error during {context}: {exc}") from exc
 
@@ -121,8 +126,8 @@ class AgentMailProvider(
             logger.error(f"Failed to initialize AgentMail client: {e}")
             raise EmailAuthError(f"Failed to initialize AgentMail client: {e}") from e
 
-        self._default_inbox_id: str | None = (
-            default_inbox_id or os.environ.get("AGENTMAIL_DEFAULT_INBOX")
+        self._default_inbox_id: str | None = default_inbox_id or os.environ.get(
+            "AGENTMAIL_DEFAULT_INBOX"
         )
 
     def _resolve_inbox_id(self, inbox_id: str | None) -> str:
@@ -175,7 +180,9 @@ class AgentMailProvider(
                 kwargs["after"] = after
 
             response = self._client.inboxes.messages.list(resolved_inbox, **kwargs)
-            items = getattr(response, "messages", None) or (list(response) if response else [])
+            items = getattr(response, "messages", None) or (
+                list(response) if response else []
+            )
             return [_sdk_message_to_email_message(m, resolved_inbox) for m in items]
         except ApiError as exc:
             _raise_for_api_error(exc, "list_messages")
@@ -207,8 +214,12 @@ class AgentMailProvider(
         except ApiError as exc:
             _raise_for_api_error(exc, f"get_message({message_id})")
         except Exception as exc:
-            logger.error(f"Unexpected error fetching AgentMail message {message_id}: {exc}")
-            raise EmailAPIError(f"Unexpected error fetching message {message_id}: {exc}") from exc
+            logger.error(
+                f"Unexpected error fetching AgentMail message {message_id}: {exc}"
+            )
+            raise EmailAPIError(
+                f"Unexpected error fetching message {message_id}: {exc}"
+            ) from exc
 
     def send_message(
         self,
@@ -242,7 +253,9 @@ class AgentMailProvider(
 
             response = self._client.inboxes.messages.send(resolved_inbox, **kwargs)
             # The response contains the sent message ID; fetch full message
-            sent_id = getattr(response, "message_id", None) or getattr(response, "id", None)
+            sent_id = getattr(response, "message_id", None) or getattr(
+                response, "id", None
+            )
             if sent_id:
                 return self.get_message(sent_id, resolved_inbox)
             # If no ID returned, construct a minimal EmailMessage from draft
@@ -296,8 +309,12 @@ class AgentMailProvider(
         except (EmailAPIError, MessageNotFoundError):
             raise
         except Exception as exc:
-            logger.error(f"Unexpected error deleting AgentMail message {message_id}: {exc}")
-            raise EmailAPIError(f"Unexpected error deleting message {message_id}: {exc}") from exc
+            logger.error(
+                f"Unexpected error deleting AgentMail message {message_id}: {exc}"
+            )
+            raise EmailAPIError(
+                f"Unexpected error deleting message {message_id}: {exc}"
+            ) from exc
 
     def modify_labels(
         self,
@@ -328,7 +345,9 @@ class AgentMailProvider(
         except ApiError as exc:
             _raise_for_api_error(exc, f"modify_labels({message_id})")
         except Exception as exc:
-            logger.error(f"Unexpected error modifying AgentMail labels on {message_id}: {exc}")
+            logger.error(
+                f"Unexpected error modifying AgentMail labels on {message_id}: {exc}"
+            )
             raise EmailAPIError(
                 f"Unexpected error modifying labels on {message_id}: {exc}"
             ) from exc
@@ -370,15 +389,21 @@ class AgentMailProvider(
             response = self._client.inboxes.messages.reply(
                 resolved_inbox, message_id, **kwargs
             )
-            sent_id = getattr(response, "message_id", None) or getattr(response, "id", None)
+            sent_id = getattr(response, "message_id", None) or getattr(
+                response, "id", None
+            )
             if sent_id:
                 return self.get_message(sent_id, resolved_inbox)
             return _sdk_message_to_email_message(response, resolved_inbox)
         except ApiError as exc:
             _raise_for_api_error(exc, f"reply_to_message({message_id})")
         except Exception as exc:
-            logger.error(f"Unexpected error replying to AgentMail message {message_id}: {exc}")
-            raise EmailAPIError(f"Unexpected error replying to {message_id}: {exc}") from exc
+            logger.error(
+                f"Unexpected error replying to AgentMail message {message_id}: {exc}"
+            )
+            raise EmailAPIError(
+                f"Unexpected error replying to {message_id}: {exc}"
+            ) from exc
 
     def forward_message(
         self,
@@ -411,15 +436,21 @@ class AgentMailProvider(
             response = self._client.inboxes.messages.forward(
                 resolved_inbox, message_id, **kwargs
             )
-            sent_id = getattr(response, "message_id", None) or getattr(response, "id", None)
+            sent_id = getattr(response, "message_id", None) or getattr(
+                response, "id", None
+            )
             if sent_id:
                 return self.get_message(sent_id, resolved_inbox)
             return _sdk_message_to_email_message(response, resolved_inbox)
         except ApiError as exc:
             _raise_for_api_error(exc, f"forward_message({message_id})")
         except Exception as exc:
-            logger.error(f"Unexpected error forwarding AgentMail message {message_id}: {exc}")
-            raise EmailAPIError(f"Unexpected error forwarding {message_id}: {exc}") from exc
+            logger.error(
+                f"Unexpected error forwarding AgentMail message {message_id}: {exc}"
+            )
+            raise EmailAPIError(
+                f"Unexpected error forwarding {message_id}: {exc}"
+            ) from exc
 
     def get_message_attachment(
         self,
@@ -455,9 +486,13 @@ class AgentMailProvider(
                 data=data,
             )
         except ApiError as exc:
-            _raise_for_api_error(exc, f"get_message_attachment({message_id}, {attachment_id})")
+            _raise_for_api_error(
+                exc, f"get_message_attachment({message_id}, {attachment_id})"
+            )
         except Exception as exc:
-            logger.error(f"Unexpected error downloading AgentMail attachment {attachment_id}: {exc}")
+            logger.error(
+                f"Unexpected error downloading AgentMail attachment {attachment_id}: {exc}"
+            )
             raise EmailAPIError(
                 f"Unexpected error downloading attachment {attachment_id}: {exc}"
             ) from exc
@@ -490,8 +525,12 @@ class AgentMailProvider(
         except (EmailAPIError, MessageNotFoundError):
             raise
         except Exception as exc:
-            logger.error(f"Unexpected error fetching raw AgentMail message {message_id}: {exc}")
-            raise EmailAPIError(f"Unexpected error fetching raw message {message_id}: {exc}") from exc
+            logger.error(
+                f"Unexpected error fetching raw AgentMail message {message_id}: {exc}"
+            )
+            raise EmailAPIError(
+                f"Unexpected error fetching raw message {message_id}: {exc}"
+            ) from exc
 
     # -------------------------------------------------------------------------
     # Pod management
@@ -535,7 +574,9 @@ class AgentMailProvider(
             _raise_for_api_error(exc, f"get_pod({pod_id})")
         except Exception as exc:
             logger.error(f"Unexpected error fetching AgentMail pod {pod_id}: {exc}")
-            raise EmailAPIError(f"Unexpected error fetching pod {pod_id}: {exc}") from exc
+            raise EmailAPIError(
+                f"Unexpected error fetching pod {pod_id}: {exc}"
+            ) from exc
 
     def create_pod(self, name: str | None = None) -> AgentMailPod:
         """Create a new pod for grouping inboxes.
@@ -573,7 +614,9 @@ class AgentMailProvider(
             _raise_for_api_error(exc, f"delete_pod({pod_id})")
         except Exception as exc:
             logger.error(f"Unexpected error deleting AgentMail pod {pod_id}: {exc}")
-            raise EmailAPIError(f"Unexpected error deleting pod {pod_id}: {exc}") from exc
+            raise EmailAPIError(
+                f"Unexpected error deleting pod {pod_id}: {exc}"
+            ) from exc
 
     # -------------------------------------------------------------------------
     # Domain management
@@ -616,8 +659,12 @@ class AgentMailProvider(
         except ApiError as exc:
             _raise_for_api_error(exc, f"get_domain({domain_id})")
         except Exception as exc:
-            logger.error(f"Unexpected error fetching AgentMail domain {domain_id}: {exc}")
-            raise EmailAPIError(f"Unexpected error fetching domain {domain_id}: {exc}") from exc
+            logger.error(
+                f"Unexpected error fetching AgentMail domain {domain_id}: {exc}"
+            )
+            raise EmailAPIError(
+                f"Unexpected error fetching domain {domain_id}: {exc}"
+            ) from exc
 
     # -------------------------------------------------------------------------
     # Metrics
@@ -653,7 +700,9 @@ class AgentMailProvider(
                 return response
             result: dict[str, Any] = {}
             for item in response:
-                key = str(getattr(item, "name", None) or getattr(item, "metric", str(item)))
+                key = str(
+                    getattr(item, "name", None) or getattr(item, "metric", str(item))
+                )
                 value = getattr(item, "value", None)
                 result[key] = value
             return result

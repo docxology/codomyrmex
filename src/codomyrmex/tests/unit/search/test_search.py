@@ -15,6 +15,7 @@ try:
         create_index,
         quick_search,
     )
+
     HAS_MODULE = True
 except ImportError:
     HAS_MODULE = False
@@ -26,6 +27,7 @@ if not HAS_MODULE:
 @pytest.mark.unit
 class TestDocument:
     """Test suite for Document."""
+
     def test_create_document(self):
         """Test functionality: create document."""
         doc = Document(id="doc-1", content="Hello world")
@@ -47,6 +49,7 @@ class TestDocument:
 @pytest.mark.unit
 class TestSearchResult:
     """Test suite for SearchResult."""
+
     def test_create_result(self):
         """Test functionality: create result."""
         doc = Document(id="doc-1", content="test")
@@ -58,6 +61,7 @@ class TestSearchResult:
 @pytest.mark.unit
 class TestSimpleTokenizer:
     """Test suite for SimpleTokenizer."""
+
     def test_create_tokenizer(self):
         """Test functionality: create tokenizer."""
         tokenizer = SimpleTokenizer()
@@ -77,6 +81,7 @@ class TestSimpleTokenizer:
 @pytest.mark.unit
 class TestInMemoryIndex:
     """Test suite for InMemoryIndex."""
+
     def test_create_index(self):
         """Test functionality: create index."""
         index = InMemoryIndex()
@@ -92,6 +97,7 @@ class TestInMemoryIndex:
 @pytest.mark.unit
 class TestFuzzyMatcher:
     """Test suite for FuzzyMatcher."""
+
     def test_class_exists(self):
         """Test functionality: class exists."""
         assert FuzzyMatcher is not None
@@ -100,6 +106,7 @@ class TestFuzzyMatcher:
 @pytest.mark.unit
 class TestQueryParser:
     """Test suite for QueryParser."""
+
     def test_create_parser(self):
         """Test functionality: create parser."""
         parser = QueryParser()
@@ -109,6 +116,7 @@ class TestQueryParser:
 @pytest.mark.unit
 class TestCreateIndex:
     """Test suite for CreateIndex."""
+
     def test_default_creates_memory_index(self):
         """Test functionality: default creates memory index."""
         index = create_index()
@@ -123,6 +131,7 @@ class TestCreateIndex:
 @pytest.mark.unit
 class TestQuickSearch:
     """Test suite for QuickSearch."""
+
     def test_returns_results(self):
         """Test functionality: returns results."""
         docs = ["Hello world", "Python programming", "Search engine"]

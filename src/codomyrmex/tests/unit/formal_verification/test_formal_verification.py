@@ -25,6 +25,7 @@ class TestConstraintSolver:
     def test_solver_creation(self):
         """Create solver with z3 backend."""
         from codomyrmex.formal_verification import ConstraintSolver
+
         solver = ConstraintSolver(backend="z3")
         assert solver.backend_name == "Z3 SMT Solver"
 
@@ -32,6 +33,7 @@ class TestConstraintSolver:
     def test_add_item_returns_index(self):
         """Add items and verify sequential indices."""
         from codomyrmex.formal_verification import ConstraintSolver
+
         solver = ConstraintSolver()
         idx = solver.add_item("x = Int('x')")
         assert idx == 0
@@ -42,6 +44,7 @@ class TestConstraintSolver:
     def test_add_item_at_index(self):
         """Insert item at specific index."""
         from codomyrmex.formal_verification import ConstraintSolver
+
         solver = ConstraintSolver()
         solver.add_item("a = 1")
         solver.add_item("c = 3")
@@ -53,6 +56,7 @@ class TestConstraintSolver:
     def test_delete_item(self):
         """Delete item and verify removal."""
         from codomyrmex.formal_verification import ConstraintSolver
+
         solver = ConstraintSolver()
         solver.add_item("x = Int('x')")
         solver.add_item("y = Int('y')")
@@ -64,6 +68,7 @@ class TestConstraintSolver:
     def test_replace_item(self):
         """Replace item and verify old value returned."""
         from codomyrmex.formal_verification import ConstraintSolver
+
         solver = ConstraintSolver()
         solver.add_item("old = 1")
         old = solver.replace_item(0, "new = 2")
@@ -74,6 +79,7 @@ class TestConstraintSolver:
     def test_clear_model(self):
         """Clear model and verify empty."""
         from codomyrmex.formal_verification import ConstraintSolver
+
         solver = ConstraintSolver()
         solver.add_item("x = 1")
         solver.add_item("y = 2")
@@ -84,6 +90,7 @@ class TestConstraintSolver:
     def test_get_model(self):
         """Get model returns indexed tuples."""
         from codomyrmex.formal_verification import ConstraintSolver
+
         solver = ConstraintSolver()
         solver.add_item("x = Int('x')")
         solver.add_item("solver.add(x > 0)")
@@ -96,6 +103,7 @@ class TestConstraintSolver:
     def test_solve_sat(self):
         """Solve satisfiable model."""
         from codomyrmex.formal_verification import ConstraintSolver, SolverStatus
+
         solver = ConstraintSolver()
         solver.add_item("x = Int('x')")
         solver.add_item("solver.add(x > 0)")
@@ -109,6 +117,7 @@ class TestConstraintSolver:
     def test_solve_unsat(self):
         """Solve unsatisfiable model."""
         from codomyrmex.formal_verification import ConstraintSolver, SolverStatus
+
         solver = ConstraintSolver()
         solver.add_item("x = Int('x')")
         solver.add_item("solver.add(x > 10)")
@@ -122,6 +131,7 @@ class TestConstraintSolver:
     def test_is_satisfiable(self):
         """Quick satisfiability check returns True."""
         from codomyrmex.formal_verification import ConstraintSolver
+
         solver = ConstraintSolver()
         solver.add_item("x = Int('x')")
         solver.add_item("solver.add(x == 42)")
@@ -131,6 +141,7 @@ class TestConstraintSolver:
     def test_is_unsatisfiable(self):
         """Quick satisfiability check returns False."""
         from codomyrmex.formal_verification import ConstraintSolver
+
         solver = ConstraintSolver()
         solver.add_item("x = Bool('x')")
         solver.add_item("solver.add(x == True)")
@@ -143,6 +154,7 @@ class TestConstraintSolver:
             BackendNotAvailableError,
             ConstraintSolver,
         )
+
         with pytest.raises(BackendNotAvailableError):
             ConstraintSolver(backend="nonexistent")
 
@@ -151,6 +163,7 @@ class TestConstraintSolver:
         """Invalid Python in constraint raises ModelBuildError."""
         from codomyrmex.formal_verification import ConstraintSolver
         from codomyrmex.formal_verification.exceptions import ModelBuildError
+
         solver = ConstraintSolver()
         solver.add_item("this is not valid python!!!")
         with pytest.raises(ModelBuildError):
@@ -161,6 +174,7 @@ class TestConstraintSolver:
         """Delete from empty model raises ModelBuildError."""
         from codomyrmex.formal_verification import ConstraintSolver
         from codomyrmex.formal_verification.exceptions import ModelBuildError
+
         solver = ConstraintSolver()
         with pytest.raises(ModelBuildError):
             solver.delete_item(0)
@@ -169,6 +183,7 @@ class TestConstraintSolver:
     def test_add_constraints_batch(self):
         """Batch add returns correct indices."""
         from codomyrmex.formal_verification import ConstraintSolver
+
         solver = ConstraintSolver()
         indices = solver.add_constraints("a = 1", "b = 2", "c = 3")
         assert indices == [0, 1, 2]
@@ -178,6 +193,7 @@ class TestConstraintSolver:
     def test_push_pop(self):
         """Push and pop affect solver scopes."""
         from codomyrmex.formal_verification import ConstraintSolver
+
         solver = ConstraintSolver()
         solver.add_item("x = Int('x')")
         solver.add_item("solver.add(x > 0)")
@@ -194,6 +210,7 @@ class TestConstraintSolver:
     def test_optimizer_support(self):
         """Optimize engine is used when optimizer constraints are added."""
         from codomyrmex.formal_verification import ConstraintSolver
+
         solver = ConstraintSolver()
         solver.add_item("x = Int('x')")
         solver.add_item("optimizer.add(x == 10)")
@@ -211,10 +228,13 @@ class TestISCVerification:
     def test_consistent_criteria(self):
         """Consistent criteria return consistent=True."""
         from codomyrmex.formal_verification import verify_criteria_consistency
-        result = verify_criteria_consistency([
-            {"id": "ISC-C1", "description": "Response time under 200"},
-            {"id": "ISC-C2", "description": "At least 10 concurrent users"},
-        ])
+
+        result = verify_criteria_consistency(
+            [
+                {"id": "ISC-C1", "description": "Response time under 200"},
+                {"id": "ISC-C2", "description": "At least 10 concurrent users"},
+            ]
+        )
         assert result.consistent is True
         assert result.criteria_analyzed == 2
 
@@ -222,23 +242,32 @@ class TestISCVerification:
     def test_conflict_detection_unsat_core(self):
         """Conflicting criteria are detected and reported via conflicts list."""
         from codomyrmex.formal_verification import verify_criteria_consistency
-        result = verify_criteria_consistency([
-            {"id": "ISC-C1", "description": "Response time under 100ms"},
-            {"id": "ISC-C2", "description": "Response time at least 500ms"},
-        ])
+
+        result = verify_criteria_consistency(
+            [
+                {"id": "ISC-C1", "description": "Response time under 100ms"},
+                {"id": "ISC-C2", "description": "Response time at least 500ms"},
+            ]
+        )
         assert result.consistent is False
         # Conflicting pair should be (ISC_C1, ISC_C2) or similar
         assert len(result.conflicts) > 0
-        assert ("ISC_C1", "ISC_C2") in result.conflicts or ("ISC_C2", "ISC_C1") in result.conflicts
+        assert ("ISC_C1", "ISC_C2") in result.conflicts or (
+            "ISC_C2",
+            "ISC_C1",
+        ) in result.conflicts
 
     @skip_no_z3
     def test_inconsistent_criteria(self):
         """Same variable conflicting criteria are UNSAT."""
         from codomyrmex.formal_verification import verify_criteria_consistency
-        result = verify_criteria_consistency([
-            {"id": "ISC-C1", "description": "Value under 5"},
-            {"id": "ISC-C2", "description": "Value at least 10"},
-        ])
+
+        result = verify_criteria_consistency(
+            [
+                {"id": "ISC-C1", "description": "Value under 5"},
+                {"id": "ISC-C2", "description": "Value at least 10"},
+            ]
+        )
         # Same variable "value" is extracted for both because both descriptions start with "Value"
         assert result.consistent is False
 
@@ -246,22 +275,34 @@ class TestISCVerification:
     def test_direct_constraint_override(self):
         """Direct Z3 constraints override description extraction."""
         from codomyrmex.formal_verification import verify_criteria_consistency
-        result = verify_criteria_consistency([
-            {"id": "ISC-C1", "description": "X constraint",
-             "constraint": "x = Int('x')\nsolver.add(x > 10)"},
-            {"id": "ISC-C2", "description": "X constraint",
-             "constraint": "solver.add(x < 5)"},
-        ])
+
+        result = verify_criteria_consistency(
+            [
+                {
+                    "id": "ISC-C1",
+                    "description": "X constraint",
+                    "constraint": "x = Int('x')\nsolver.add(x > 10)",
+                },
+                {
+                    "id": "ISC-C2",
+                    "description": "X constraint",
+                    "constraint": "solver.add(x < 5)",
+                },
+            ]
+        )
         assert result.consistent is False
 
     @skip_no_z3
     def test_no_translatable_criteria(self):
         """Non-numeric criteria are skipped."""
         from codomyrmex.formal_verification import verify_criteria_consistency
-        result = verify_criteria_consistency([
-            {"id": "ISC-C1", "description": "Code is well-structured"},
-            {"id": "ISC-C2", "description": "Tests pass reliably"},
-        ])
+
+        result = verify_criteria_consistency(
+            [
+                {"id": "ISC-C1", "description": "Code is well-structured"},
+                {"id": "ISC-C2", "description": "Tests pass reliably"},
+            ]
+        )
         assert result.consistent is None
         assert result.criteria_skipped == 2
 
@@ -269,16 +310,23 @@ class TestISCVerification:
     def test_returns_result_never_raises(self):
         """Advisory behavior — never raises on UNSAT."""
         from codomyrmex.formal_verification import verify_criteria_consistency
-        result = verify_criteria_consistency([
-            {"id": "ISC-C1", "description": "impossible",
-             "constraint": "x = Bool('x')\nsolver.add(x == True)\nsolver.add(x == False)"},
-        ])
+
+        result = verify_criteria_consistency(
+            [
+                {
+                    "id": "ISC-C1",
+                    "description": "impossible",
+                    "constraint": "x = Bool('x')\nsolver.add(x == True)\nsolver.add(x == False)",
+                },
+            ]
+        )
         assert result.consistent is False
         assert result.solver_status == "unsat"
 
     def test_graceful_without_z3(self):
         """ISCVerificationResult is always importable."""
         from codomyrmex.formal_verification.verify_isc import ISCVerificationResult
+
         assert ISCVerificationResult is not None
 
 
@@ -289,6 +337,7 @@ class TestSolverBackendBase:
     def test_solver_status_enum(self):
         """SolverStatus enum has correct values."""
         from codomyrmex.formal_verification import SolverStatus
+
         assert SolverStatus.SAT.value == "sat"
         assert SolverStatus.UNSAT.value == "unsat"
         assert SolverStatus.UNKNOWN.value == "unknown"
@@ -296,6 +345,7 @@ class TestSolverBackendBase:
     def test_solver_result_properties(self):
         """SolverResult convenience properties work correctly."""
         from codomyrmex.formal_verification import SolverResult, SolverStatus
+
         sat_result = SolverResult(status=SolverStatus.SAT, model={"x": "5"})
         assert sat_result.is_sat
         assert not sat_result.is_unsat
@@ -313,6 +363,7 @@ class TestSolverBackendBase:
             SolverError,
             SolverTimeoutError,
         )
+
         assert issubclass(SolverTimeoutError, SolverError)
         assert issubclass(ModelBuildError, SolverError)
         assert issubclass(BackendNotAvailableError, SolverError)
@@ -322,6 +373,7 @@ class TestSolverBackendBase:
     def test_z3_backend_name(self):
         """Z3 backend reports correct name."""
         from codomyrmex.formal_verification.backends.z3_backend import Z3Backend
+
         backend = Z3Backend()
         assert backend.backend_name() == "Z3 SMT Solver"
 
@@ -333,12 +385,14 @@ class TestMCPTools:
     def setup_method(self):
         """Reset module-level solver before each test."""
         from codomyrmex.formal_verification import mcp_tools
+
         mcp_tools._solver = None
 
     @skip_no_z3
     def test_mcp_clear_model(self):
         """MCP clear_model returns ok status."""
         from codomyrmex.formal_verification import mcp_tools
+
         result = mcp_tools.clear_model()
         assert result["status"] == "ok"
 
@@ -346,6 +400,7 @@ class TestMCPTools:
     def test_mcp_add_and_get(self):
         """MCP add_item and get_model work together."""
         from codomyrmex.formal_verification import mcp_tools
+
         mcp_tools.clear_model()
         mcp_tools.add_item("x = Int('x')")
         result = mcp_tools.get_model()
@@ -355,6 +410,7 @@ class TestMCPTools:
     def test_mcp_solve(self):
         """MCP solve_model returns sat result."""
         from codomyrmex.formal_verification import mcp_tools
+
         mcp_tools.clear_model()
         mcp_tools.add_item("x = Int('x')")
         mcp_tools.add_item("solver.add(x == 42)")
@@ -370,6 +426,7 @@ class TestCLICommands:
     def test_cli_status(self):
         """Status command returns z3 availability."""
         from codomyrmex.formal_verification import _cmd_status
+
         result = _cmd_status()
         assert "z3_available" in result
         assert "version" in result
@@ -377,6 +434,7 @@ class TestCLICommands:
     def test_cli_backends(self):
         """Backends command lists at least one backend."""
         from codomyrmex.formal_verification import _cmd_backends
+
         result = _cmd_backends()
         assert "backends" in result
         assert len(result["backends"]) >= 1
@@ -394,12 +452,14 @@ class TestModulePublicAPI:
     def test_all_exports_valid(self):
         """Every name in __all__ is importable."""
         import codomyrmex.formal_verification as fv
+
         for name in fv.__all__:
             assert hasattr(fv, name), f"{name} in __all__ but not importable"
 
     def test_version_string(self):
         """Module version is a non-empty string."""
         from codomyrmex.formal_verification import __version__
+
         assert isinstance(__version__, str)
         assert len(__version__) > 0
 
@@ -412,6 +472,7 @@ class TestRegexPatterns:
         from codomyrmex.formal_verification.verify_isc import (
             _extract_numeric_constraint,
         )
+
         return _extract_numeric_constraint(cid, desc)
 
     def test_under_pattern(self):
@@ -487,6 +548,7 @@ class TestISCEdgeCases:
     def test_empty_criteria_list(self):
         """Empty criteria list returns no_constraints status."""
         from codomyrmex.formal_verification import verify_criteria_consistency
+
         result = verify_criteria_consistency([])
         assert result.consistent is None
         assert result.criteria_analyzed == 0
@@ -495,19 +557,25 @@ class TestISCEdgeCases:
     def test_skipped_reasons_populated(self):
         """Skipped criteria have reasons in skipped_reasons dict."""
         from codomyrmex.formal_verification import verify_criteria_consistency
-        result = verify_criteria_consistency([
-            {"id": "ISC-C1", "description": "Quality is good"},
-        ])
+
+        result = verify_criteria_consistency(
+            [
+                {"id": "ISC-C1", "description": "Quality is good"},
+            ]
+        )
         assert "ISC-C1" in result.skipped_reasons
 
     @skip_no_z3
     def test_mixed_analyzable_and_skipped(self):
         """Mix of numeric and non-numeric criteria counts correctly."""
         from codomyrmex.formal_verification import verify_criteria_consistency
-        result = verify_criteria_consistency([
-            {"id": "ISC-C1", "description": "Response under 200ms"},
-            {"id": "ISC-C2", "description": "Code is clean"},
-        ])
+
+        result = verify_criteria_consistency(
+            [
+                {"id": "ISC-C1", "description": "Response under 200ms"},
+                {"id": "ISC-C2", "description": "Code is clean"},
+            ]
+        )
         assert result.criteria_analyzed == 1
         assert result.criteria_skipped == 1
 
@@ -515,10 +583,13 @@ class TestISCEdgeCases:
     def test_idless_criteria_no_collision(self):
         """Criteria without IDs get unique keys in skipped_reasons."""
         from codomyrmex.formal_verification import verify_criteria_consistency
-        result = verify_criteria_consistency([
-            {"description": "Quality is good"},
-            {"description": "Tests are stable"},
-        ])
+
+        result = verify_criteria_consistency(
+            [
+                {"description": "Quality is good"},
+                {"description": "Tests are stable"},
+            ]
+        )
         assert result.criteria_skipped == 2
         # Must have 2 distinct keys, not collision at "unknown"
         assert len(result.skipped_reasons) == 2
@@ -527,10 +598,16 @@ class TestISCEdgeCases:
     def test_multiline_constraint(self):
         """Direct constraint with newlines works correctly."""
         from codomyrmex.formal_verification import verify_criteria_consistency
-        result = verify_criteria_consistency([
-            {"id": "ISC-C1", "description": "multi",
-             "constraint": "x = Int('x')\ny = Int('y')\nsolver.add(x + y == 10)\nsolver.add(x > 0)\nsolver.add(y > 0)"},
-        ])
+
+        result = verify_criteria_consistency(
+            [
+                {
+                    "id": "ISC-C1",
+                    "description": "multi",
+                    "constraint": "x = Int('x')\ny = Int('y')\nsolver.add(x + y == 10)\nsolver.add(x > 0)\nsolver.add(y > 0)",
+                },
+            ]
+        )
         assert result.consistent is True
         assert result.satisfying_assignment is not None
 
@@ -542,12 +619,14 @@ class TestMCPToolsExtended:
     def setup_method(self):
         """Reset module-level solver before each test."""
         from codomyrmex.formal_verification import mcp_tools
+
         mcp_tools._solver = None
 
     @skip_no_z3
     def test_mcp_delete_item(self):
         """MCP delete_item removes and returns the item."""
         from codomyrmex.formal_verification import mcp_tools
+
         mcp_tools.clear_model()
         mcp_tools.add_item("x = Int('x')")
         result = mcp_tools.delete_item(0)
@@ -558,6 +637,7 @@ class TestMCPToolsExtended:
     def test_mcp_replace_item(self):
         """MCP replace_item swaps and returns old item."""
         from codomyrmex.formal_verification import mcp_tools
+
         mcp_tools.clear_model()
         mcp_tools.add_item("old = 1")
         result = mcp_tools.replace_item(0, "new = 2")
@@ -568,6 +648,7 @@ class TestMCPToolsExtended:
     def test_mcp_delete_out_of_range_error(self):
         """MCP delete_item on empty model returns error dict."""
         from codomyrmex.formal_verification import mcp_tools
+
         mcp_tools.clear_model()
         result = mcp_tools.delete_item(5)
         assert result["status"] == "error"
@@ -577,6 +658,7 @@ class TestMCPToolsExtended:
     def test_mcp_replace_out_of_range_error(self):
         """MCP replace_item on empty model returns error dict."""
         from codomyrmex.formal_verification import mcp_tools
+
         mcp_tools.clear_model()
         result = mcp_tools.replace_item(5, "new = 1")
         assert result["status"] == "error"
@@ -586,6 +668,7 @@ class TestMCPToolsExtended:
     def test_mcp_solve_unsat(self):
         """MCP solve_model returns unsat status."""
         from codomyrmex.formal_verification import mcp_tools
+
         mcp_tools.clear_model()
         mcp_tools.add_item("x = Int('x')")
         mcp_tools.add_item("solver.add(x > 10)")
@@ -598,6 +681,7 @@ class TestMCPToolsExtended:
     def test_mcp_solve_empty_model(self):
         """MCP solve_model on empty model returns sat (vacuously true)."""
         from codomyrmex.formal_verification import mcp_tools
+
         mcp_tools.clear_model()
         result = mcp_tools.solve_model()
         assert result["status"] == "sat"
@@ -606,6 +690,7 @@ class TestMCPToolsExtended:
     def test_mcp_add_with_explicit_index(self):
         """MCP add_item with explicit index inserts correctly."""
         from codomyrmex.formal_verification import mcp_tools
+
         mcp_tools.clear_model()
         mcp_tools.add_item("a = 1")
         mcp_tools.add_item("c = 3")
@@ -623,6 +708,7 @@ class TestCLICommandsExtended:
     def test_cmd_check_empty_expression(self):
         """Check with empty expression returns error."""
         from codomyrmex.formal_verification import _cmd_check
+
         result = _cmd_check(expression="")
         assert "error" in result
 
@@ -630,6 +716,7 @@ class TestCLICommandsExtended:
     def test_cmd_check_valid_expression(self):
         """Check with valid expression returns status."""
         from codomyrmex.formal_verification import _cmd_check
+
         result = _cmd_check(expression="x = Int('x')\nsolver.add(x == 42)")
         assert "status" in result
 
@@ -637,6 +724,7 @@ class TestCLICommandsExtended:
     def test_cmd_check_invalid_expression(self):
         """Check with invalid expression returns error."""
         from codomyrmex.formal_verification import _cmd_check
+
         result = _cmd_check(expression="this is not valid!!!")
         assert "error" in result
 
@@ -650,6 +738,7 @@ class TestZ3BackendEmptyModel:
         """Delete on empty model says 'model is empty', not '0--1'."""
         from codomyrmex.formal_verification.backends.z3_backend import Z3Backend
         from codomyrmex.formal_verification.exceptions import ModelBuildError
+
         backend = Z3Backend()
         with pytest.raises(ModelBuildError, match="model is empty"):
             backend.delete_item(0)
@@ -659,6 +748,7 @@ class TestZ3BackendEmptyModel:
         """Replace on empty model says 'model is empty', not '0--1'."""
         from codomyrmex.formal_verification.backends.z3_backend import Z3Backend
         from codomyrmex.formal_verification.exceptions import ModelBuildError
+
         backend = Z3Backend()
         with pytest.raises(ModelBuildError, match="model is empty"):
             backend.replace_item(0, "new = 1")
@@ -676,6 +766,7 @@ class TestSolverStatusProperties:
     def test_unknown_status_properties(self):
         """SolverResult with UNKNOWN status: neither sat nor unsat."""
         from codomyrmex.formal_verification import SolverResult, SolverStatus
+
         result = SolverResult(status=SolverStatus.UNKNOWN)
         assert not result.is_sat
         assert not result.is_unsat
@@ -684,6 +775,7 @@ class TestSolverStatusProperties:
     def test_sat_result_model_not_none(self):
         """SAT result can carry a non-None model."""
         from codomyrmex.formal_verification import SolverResult, SolverStatus
+
         result = SolverResult(status=SolverStatus.SAT, model={"x": "42"})
         assert result.model is not None
         assert result.model["x"] == "42"
@@ -691,35 +783,41 @@ class TestSolverStatusProperties:
     def test_unsat_result_model_is_none(self):
         """UNSAT result has None model."""
         from codomyrmex.formal_verification import SolverResult, SolverStatus
+
         result = SolverResult(status=SolverStatus.UNSAT)
         assert result.model is None
 
     def test_solver_error_is_base_exception(self):
         """SolverError inherits from Exception."""
         from codomyrmex.formal_verification import SolverError
+
         error = SolverError("test")
         assert isinstance(error, Exception)
 
     def test_solver_timeout_error_message(self):
         """SolverTimeoutError preserves message."""
         from codomyrmex.formal_verification import SolverTimeoutError
+
         error = SolverTimeoutError("timed out after 30s")
         assert "timed out" in str(error)
 
     def test_invalid_constraint_error_inherits(self):
         """InvalidConstraintError inherits SolverError."""
         from codomyrmex.formal_verification import InvalidConstraintError, SolverError
+
         error = InvalidConstraintError("bad constraint")
         assert isinstance(error, SolverError)
 
     def test_model_build_error_inherits(self):
         """ModelBuildError inherits SolverError."""
         from codomyrmex.formal_verification import ModelBuildError, SolverError
+
         error = ModelBuildError("build failed")
         assert isinstance(error, SolverError)
 
     def test_backend_not_available_inherits(self):
         """BackendNotAvailableError inherits SolverError."""
         from codomyrmex.formal_verification import BackendNotAvailableError, SolverError
+
         error = BackendNotAvailableError("no backend")
         assert isinstance(error, SolverError)

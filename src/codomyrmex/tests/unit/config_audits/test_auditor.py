@@ -92,7 +92,7 @@ def test_audit_prod_debug(temp_config_dir):
 
 def test_audit_directory(temp_config_dir):
     (temp_config_dir / "one.json").write_text('{"a": 1}')
-    (temp_config_dir / "two.yaml").write_text('b: 2')
+    (temp_config_dir / "two.yaml").write_text("b: 2")
 
     for f in temp_config_dir.glob("*"):
         os.chmod(f, 0o600)

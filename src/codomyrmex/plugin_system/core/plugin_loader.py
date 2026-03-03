@@ -15,9 +15,11 @@ from typing import Any
 # Import logging
 try:
     from codomyrmex.logging_monitoring.core.logger_config import get_logger
+
     logger = get_logger(__name__)
 except ImportError:
     import logging
+
     logger = logging.getLogger(__name__)
 
 # Import plugin system components
@@ -27,6 +29,7 @@ from .plugin_registry import Plugin, PluginInfo, PluginState
 @dataclass
 class LoadResult:
     """Result of plugin loading operation."""
+
     plugin_name: str
     success: bool
     plugin_instance: Plugin | None = None
@@ -56,7 +59,7 @@ class PluginLoader:
         """
         self.plugin_directories = plugin_directories or [
             Path.cwd() / "plugins",
-            Path.home() / ".codomyrmex" / "plugins"
+            Path.home() / ".codomyrmex" / "plugins",
         ]
 
         # Ensure directories exist
@@ -87,7 +90,7 @@ class PluginLoader:
                     plugin_info = self._load_plugin_metadata(item)
                     if plugin_info:
                         discovered_plugins.append(plugin_info)
-                elif item.suffix == '.py' and item.name != '__init__.py':
+                elif item.suffix == ".py" and item.name != "__init__.py":
                     # Check if it's a plugin file
                     plugin_info = self._load_plugin_metadata_from_file(item)
                     if plugin_info:
@@ -96,7 +99,9 @@ class PluginLoader:
         logger.info(f"Discovered {len(discovered_plugins)} plugins")
         return discovered_plugins
 
-    def load_plugin(self, plugin_info: PluginInfo, config: dict[str, Any] | None = None) -> LoadResult:
+    def load_plugin(
+        self, plugin_info: PluginInfo, config: dict[str, Any] | None = None
+    ) -> LoadResult:
         """
         Load and initialize a plugin.
 
@@ -188,7 +193,9 @@ class PluginLoader:
             plugin.state = PluginState.ERROR
             return False
 
-    def reload_plugin(self, plugin_name: str, config: dict[str, Any] | None = None) -> LoadResult:
+    def reload_plugin(
+        self, plugin_name: str, config: dict[str, Any] | None = None
+    ) -> LoadResult:
         """
         Reload a plugin.
 
@@ -211,7 +218,7 @@ class PluginLoader:
             return LoadResult(
                 plugin_name=plugin_name,
                 success=False,
-                error_message="Plugin not found during rediscovery"
+                error_message="Plugin not found during rediscovery",
             )
 
         # Load again
@@ -272,7 +279,7 @@ class PluginLoader:
         entry_point = plugin_info.entry_point
 
         # Handle different entry point formats
-        if entry_point.endswith('.py'):
+        if entry_point.endswith(".py"):
             # Direct file path
             plugin_path = None
 
@@ -311,7 +318,9 @@ class PluginLoader:
                 logger.error(f"Could not import plugin module {entry_point}: {e}")
                 return None
 
-    def _find_plugin_class(self, module: Any, plugin_info: PluginInfo) -> type[Plugin] | None:
+    def _find_plugin_class(
+        self, module: Any, plugin_info: PluginInfo
+    ) -> type[Plugin] | None:
         """
         Find the plugin class in a loaded module.
 
@@ -327,13 +336,17 @@ class PluginLoader:
 
         for attr_name in dir(module):
             attr = getattr(module, attr_name)
-            if (isinstance(attr, type) and
-                issubclass(attr, BasePlugin) and
-                attr != BasePlugin):
+            if (
+                isinstance(attr, type)
+                and issubclass(attr, BasePlugin)
+                and attr != BasePlugin
+            ):
                 return attr
 
         # Fallback: look for a class with the plugin name
-        plugin_class_name = plugin_info.name.replace('_', '').replace('-', '').title() + 'Plugin'
+        plugin_class_name = (
+            plugin_info.name.replace("_", "").replace("-", "").title() + "Plugin"
+        )
         if hasattr(module, plugin_class_name):
             plugin_class = getattr(module, plugin_class_name)
             if isinstance(plugin_class, type) and issubclass(plugin_class, BasePlugin):
@@ -356,46 +369,53 @@ class PluginLoader:
             plugin_dir / "plugin.json",
             plugin_dir / "plugin.yaml",
             plugin_dir / "plugin.yml",
-            plugin_dir / "pyproject.toml"
+            plugin_dir / "pyproject.toml",
         ]
 
         for metadata_file in metadata_files:
             if metadata_file.exists():
                 try:
-                    if metadata_file.suffix == '.json':
+                    if metadata_file.suffix == ".json":
                         import json
+
                         with open(metadata_file) as f:
                             data = json.load(f)
-                    elif metadata_file.suffix in ['.yaml', '.yml']:
+                    elif metadata_file.suffix in [".yaml", ".yml"]:
                         import yaml
+
                         with open(metadata_file) as f:
                             data = yaml.safe_load(f)
-                    elif metadata_file.name == 'pyproject.toml':
+                    elif metadata_file.name == "pyproject.toml":
                         import tomllib
-                        with open(metadata_file, 'rb') as f:
+
+                        with open(metadata_file, "rb") as f:
                             toml_data = tomllib.load(f)
-                        data = toml_data.get('tool', {}).get('codomyrmex', {}).get('plugin', {})
+                        data = (
+                            toml_data.get("tool", {})
+                            .get("codomyrmex", {})
+                            .get("plugin", {})
+                        )
 
                     # Extract plugin info
-                    if all(key in data for key in ['name', 'version', 'entry_point']):
+                    if all(key in data for key in ["name", "version", "entry_point"]):
                         from .plugin_registry import PluginType
 
-                        plugin_type = PluginType(data.get('plugin_type', 'utility'))
+                        plugin_type = PluginType(data.get("plugin_type", "utility"))
                         if isinstance(plugin_type, str):
                             plugin_type = PluginType(plugin_type)
 
                         return PluginInfo(
-                            name=data['name'],
-                            version=data['version'],
-                            description=data.get('description', ''),
-                            author=data.get('author', 'Unknown'),
+                            name=data["name"],
+                            version=data["version"],
+                            description=data.get("description", ""),
+                            author=data.get("author", "Unknown"),
                             plugin_type=plugin_type,
-                            entry_point=data['entry_point'],
-                            dependencies=data.get('dependencies', []),
-                            config_schema=data.get('config_schema'),
-                            homepage=data.get('homepage'),
-                            license=data.get('license'),
-                            tags=data.get('tags', [])
+                            entry_point=data["entry_point"],
+                            dependencies=data.get("dependencies", []),
+                            config_schema=data.get("config_schema"),
+                            homepage=data.get("homepage"),
+                            license=data.get("license"),
+                            tags=data.get("tags", []),
                         )
 
                 except Exception as e:
@@ -415,30 +435,31 @@ class PluginLoader:
         """
         # For single-file plugins, extract metadata from docstring or comments
         try:
-            with open(plugin_file, encoding='utf-8') as f:
+            with open(plugin_file, encoding="utf-8") as f:
                 content = f.read()
 
             # Look for plugin metadata in comments or docstring
-            metadata_match = re.search(r'#\s*plugin:\s*(\{.*\})', content, re.DOTALL)
+            metadata_match = re.search(r"#\s*plugin:\s*(\{.*\})", content, re.DOTALL)
             if metadata_match:
                 import json
+
                 metadata = json.loads(metadata_match.group(1))
 
                 from .plugin_registry import PluginType
 
-                plugin_type = PluginType(metadata.get('type', 'utility'))
+                plugin_type = PluginType(metadata.get("type", "utility"))
                 if isinstance(plugin_type, str):
                     plugin_type = PluginType(plugin_type)
 
                 return PluginInfo(
-                    name=metadata.get('name', plugin_file.stem),
-                    version=metadata.get('version', '1.0.0'),
-                    description=metadata.get('description', ''),
-                    author=metadata.get('author', 'Unknown'),
+                    name=metadata.get("name", plugin_file.stem),
+                    version=metadata.get("version", "1.0.0"),
+                    description=metadata.get("description", ""),
+                    author=metadata.get("author", "Unknown"),
                     plugin_type=plugin_type,
                     entry_point=str(plugin_file),
-                    dependencies=metadata.get('dependencies', []),
-                    tags=metadata.get('tags', [])
+                    dependencies=metadata.get("dependencies", []),
+                    tags=metadata.get("tags", []),
                 )
 
         except Exception as e:
@@ -448,6 +469,7 @@ class PluginLoader:
 
 
 # Convenience functions
+
 
 def discover_plugins() -> list[PluginInfo]:
     """
@@ -460,7 +482,9 @@ def discover_plugins() -> list[PluginInfo]:
     return loader.discover_plugins()
 
 
-def load_plugin(plugin_info: PluginInfo, config: dict[str, Any] | None = None) -> LoadResult:
+def load_plugin(
+    plugin_info: PluginInfo, config: dict[str, Any] | None = None
+) -> LoadResult:
     """
     Convenience function to load a plugin.
 

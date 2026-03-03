@@ -1,11 +1,11 @@
 """Enhanced tests for containerization improvements."""
 
-
 import pytest
 
 # Check Docker availability
 try:
     import docker
+
     DOCKER_AVAILABLE = True
 except ImportError:
     DOCKER_AVAILABLE = False
@@ -73,7 +73,7 @@ class TestImageOptimizer:
         analysis = MockAnalysis()
 
         # Test suggestion generation if method exists
-        if hasattr(optimizer, '_generate_suggestions'):
+        if hasattr(optimizer, "_generate_suggestions"):
             suggestions = optimizer._generate_suggestions(analysis)
 
             assert isinstance(suggestions, list)
@@ -95,11 +95,11 @@ class TestImageOptimizer:
 
         config = {
             "base_image": "python:3.9",
-            "commands": ["RUN apt-get update", "RUN pip install flask"]
+            "commands": ["RUN apt-get update", "RUN pip install flask"],
         }
 
         # Test optimization if method exists
-        if hasattr(optimizer, 'optimize_image'):
+        if hasattr(optimizer, "optimize_image"):
             optimized = optimizer.optimize_image(config)
 
             assert isinstance(optimized, dict)
@@ -123,7 +123,7 @@ class TestBuildGenerator:
 
         generator = BuildGenerator()
         assert generator is not None
-        assert hasattr(generator, 'templates')
+        assert hasattr(generator, "templates")
 
     def test_create_multi_stage_build_python(self):
         """Test creating multi-stage build for Python."""
@@ -140,14 +140,14 @@ class TestBuildGenerator:
         config = {
             "build_type": "python",
             "base_image": "python:3.9-slim",
-            "metadata": {"project_name": "test_app"}
+            "metadata": {"project_name": "test_app"},
         }
 
         build = generator.create_multi_stage_build(config)
 
         assert isinstance(build, MultiStageBuild)
         assert len(build.stages) >= 1
-        assert hasattr(build, 'final_stage')
+        assert hasattr(build, "final_stage")
 
     def test_create_multi_stage_build_node(self):
         """Test creating multi-stage build for Node.js."""
@@ -160,15 +160,12 @@ class TestBuildGenerator:
 
         generator = BuildGenerator()
 
-        config = {
-            "build_type": "node",
-            "base_image": "node:18-alpine"
-        }
+        config = {"build_type": "node", "base_image": "node:18-alpine"}
 
         build = generator.create_multi_stage_build(config)
 
         assert len(build.stages) >= 1
-        assert hasattr(build, 'final_stage')
+        assert hasattr(build, "final_stage")
 
     def test_optimize_dockerfile(self, tmp_path):
         """Test Dockerfile optimization with real file operations."""
@@ -250,7 +247,7 @@ ENV PASSWORD=secret123
             "context": ".",
             "build_args": {"VERSION": "1.0"},
             "tags": ["myapp:1.0", "myapp:latest"],
-            "push_targets": ["registry.example.com/myapp:1.0"]
+            "push_targets": ["registry.example.com/myapp:1.0"],
         }
 
         script = generator.generate_build_script(config)
@@ -281,8 +278,10 @@ class TestDockerManagerEnhanced:
         manager = DockerManager()
 
         # Test Python optimization if method exists
-        if hasattr(manager, 'optimize_container_image'):
-            optimized = manager.optimize_container_image("python:3.9", ["flask", "django"])
+        if hasattr(manager, "optimize_container_image"):
+            optimized = manager.optimize_container_image(
+                "python:3.9", ["flask", "django"]
+            )
 
             assert isinstance(optimized, str)
             assert len(optimized) > 0
@@ -306,7 +305,7 @@ class TestBuildStagesAndScripts:
             copy_commands=["COPY . /app"],
             environment={"PATH": "/usr/local/bin"},
             working_directory="/app",
-            user="appuser"
+            user="appuser",
         )
 
         dockerfile = stage.to_dockerfile()
@@ -331,14 +330,14 @@ class TestBuildStagesAndScripts:
         build_stage = BuildStage(
             name="builder",
             base_image="golang:1.19",
-            commands=["WORKDIR /app", "COPY . .", "RUN go build"]
+            commands=["WORKDIR /app", "COPY . .", "RUN go build"],
         )
 
         runtime_stage = BuildStage(
             name="runtime",
             base_image="alpine:latest",
             copy_commands=["COPY --from=builder /app/main /app/main"],
-            user="appuser"
+            user="appuser",
         )
 
         build.stages = [build_stage, runtime_stage]
@@ -363,7 +362,7 @@ class TestBuildStagesAndScripts:
             build_args={"VERSION": "2.1.0"},
             tags=["myapp:2.1.0", "myapp:latest"],
             push_targets=["registry.example.com/myapp:2.1.0"],
-            dependencies=["base-image:latest"]
+            dependencies=["base-image:latest"],
         )
 
         shell_script = script.to_shell_script()
@@ -382,20 +381,32 @@ class TestImageOptimizerCoverage:
 
     def test_image_analysis_dataclass(self):
         from codomyrmex.containerization.docker.image_optimizer import ImageAnalysis
+
         a = ImageAnalysis(
-            image_name="myapp:latest", size_bytes=100_000_000, layers=[],
-            base_image="python:3.12", exposed_ports=["8080"],
-            volumes=[], environment_vars=[], commands=[],
+            image_name="myapp:latest",
+            size_bytes=100_000_000,
+            layers=[],
+            base_image="python:3.12",
+            exposed_ports=["8080"],
+            volumes=[],
+            environment_vars=[],
+            commands=[],
         )
         assert a.image_name == "myapp:latest"
         assert a.optimization_score == 0.0
 
     def test_optimization_suggestions(self):
         from codomyrmex.containerization.docker.image_optimizer import ImageAnalysis
+
         a = ImageAnalysis(
-            image_name="test", size_bytes=500_000_000, layers=[],
-            base_image="ubuntu:22.04", exposed_ports=[], volumes=[],
-            environment_vars=[], commands=["RUN apt-get install -y curl"],
+            image_name="test",
+            size_bytes=500_000_000,
+            layers=[],
+            base_image="ubuntu:22.04",
+            exposed_ports=[],
+            volumes=[],
+            environment_vars=[],
+            commands=["RUN apt-get install -y curl"],
             potential_optimizations=["Use multi-stage build", "Minimize layers"],
         )
         assert len(a.potential_optimizations) == 2
@@ -406,9 +417,12 @@ class TestBuildGeneratorCoverage:
 
     def test_build_script_dataclass(self):
         from codomyrmex.containerization.docker.build_generator import BuildScript
+
         bs = BuildScript(
-            name="app", dockerfile_path="./Dockerfile",
-            context_path=".", tags=["v1.0"],
+            name="app",
+            dockerfile_path="./Dockerfile",
+            context_path=".",
+            tags=["v1.0"],
         )
         assert bs.name == "app"
         assert bs.tags == ["v1.0"]

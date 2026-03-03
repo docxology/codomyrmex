@@ -135,8 +135,7 @@ def autograd_gradient_check(func_name: str, inputs: list) -> dict:
 
     if func_name not in func_map:
         raise ValueError(
-            f"Unknown function: {func_name!r}. "
-            f"Supported: {sorted(func_map.keys())}"
+            f"Unknown function: {func_name!r}. Supported: {sorted(func_map.keys())}"
         )
 
     fn = func_map[func_name]

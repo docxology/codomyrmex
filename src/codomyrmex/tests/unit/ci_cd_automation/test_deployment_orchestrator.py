@@ -29,6 +29,7 @@ from codomyrmex.ci_cd_automation.deployment_orchestrator import (
 # Helpers
 # ---------------------------------------------------------------------------
 
+
 def _make_env(
     name: str = "dev",
     env_type: EnvironmentType = EnvironmentType.DEVELOPMENT,
@@ -79,12 +80,20 @@ def _orchestrator_with_env(
 # Enum tests
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestDeploymentStatusEnum:
     """Verify DeploymentStatus enum members and values."""
 
     def test_all_members_present(self):
-        expected = {"PENDING", "RUNNING", "SUCCESS", "FAILURE", "ROLLED_BACK", "CANCELLED"}
+        expected = {
+            "PENDING",
+            "RUNNING",
+            "SUCCESS",
+            "FAILURE",
+            "ROLLED_BACK",
+            "CANCELLED",
+        }
         assert set(DeploymentStatus.__members__.keys()) == expected
 
     def test_values_are_lowercase_strings(self):
@@ -108,6 +117,7 @@ class TestEnvironmentTypeEnum:
 # ---------------------------------------------------------------------------
 # Environment dataclass tests
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestEnvironmentDataclass:
@@ -160,9 +170,18 @@ class TestEnvironmentDataclass:
         env = _make_env()
         d = env.to_dict()
         expected_keys = {
-            "name", "type", "host", "port", "user", "key_path",
-            "docker_registry", "kubernetes_context", "variables",
-            "pre_deploy_hooks", "post_deploy_hooks", "health_checks",
+            "name",
+            "type",
+            "host",
+            "port",
+            "user",
+            "key_path",
+            "docker_registry",
+            "kubernetes_context",
+            "variables",
+            "pre_deploy_hooks",
+            "post_deploy_hooks",
+            "health_checks",
         }
         assert set(d.keys()) == expected_keys
 
@@ -171,13 +190,16 @@ class TestEnvironmentDataclass:
 # Deployment dataclass tests
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestDeploymentDataclass:
     """Tests for the Deployment dataclass."""
 
     def test_minimal_construction(self):
         env = _make_env()
-        dep = Deployment(name="app", version="1.0.0", environment=env, artifacts=["app.tar.gz"])
+        dep = Deployment(
+            name="app", version="1.0.0", environment=env, artifacts=["app.tar.gz"]
+        )
         assert dep.name == "app"
         assert dep.version == "1.0.0"
         assert dep.strategy == "rolling"
@@ -201,7 +223,9 @@ class TestDeploymentDataclass:
     def test_explicit_created_at_preserved(self):
         env = _make_env()
         ts = datetime(2025, 1, 1, tzinfo=UTC)
-        dep = Deployment(name="a", version="1", environment=env, artifacts=[], created_at=ts)
+        dep = Deployment(
+            name="a", version="1", environment=env, artifacts=[], created_at=ts
+        )
         assert dep.created_at == ts
 
     def test_to_dict_contains_all_fields(self):
@@ -209,9 +233,20 @@ class TestDeploymentDataclass:
         dep = Deployment(name="app", version="2.0", environment=env, artifacts=["x"])
         d = dep.to_dict()
         expected_keys = {
-            "name", "version", "environment", "artifacts", "strategy",
-            "timeout", "rollback_on_failure", "status", "created_at",
-            "started_at", "finished_at", "duration", "logs", "metrics",
+            "name",
+            "version",
+            "environment",
+            "artifacts",
+            "strategy",
+            "timeout",
+            "rollback_on_failure",
+            "status",
+            "created_at",
+            "started_at",
+            "finished_at",
+            "duration",
+            "logs",
+            "metrics",
             "previous_version",
         }
         assert set(d.keys()) == expected_keys
@@ -233,8 +268,12 @@ class TestDeploymentDataclass:
         env = _make_env()
         ts = datetime(2025, 6, 15, 12, 0, 0, tzinfo=UTC)
         dep = Deployment(
-            name="a", version="1", environment=env, artifacts=[],
-            created_at=ts, started_at=ts,
+            name="a",
+            version="1",
+            environment=env,
+            artifacts=[],
+            created_at=ts,
+            started_at=ts,
         )
         d = dep.to_dict()
         assert "2025-06-15" in d["created_at"]
@@ -245,6 +284,7 @@ class TestDeploymentDataclass:
 # ---------------------------------------------------------------------------
 # DeploymentOrchestrator constructor / config loading tests
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestOrchestratorInit:
@@ -286,7 +326,9 @@ class TestOrchestratorInit:
         config_path = str(tmp_path / "full.json")
         envs = [
             _env_dict(
-                "prod", "production", "prod.example.com",
+                "prod",
+                "production",
+                "prod.example.com",
                 port=2222,
                 user="admin",
                 key_path="/keys/id_rsa",
@@ -341,6 +383,7 @@ class TestOrchestratorInit:
 # create_deployment tests
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestCreateDeployment:
     """Test DeploymentOrchestrator.create_deployment."""
@@ -371,7 +414,9 @@ class TestCreateDeployment:
 
     def test_create_deployment_rollback_flag(self, tmp_path):
         orch = _orchestrator_with_env(tmp_path)
-        dep = orch.create_deployment("app", "1.0", "staging", [], rollback_on_failure=False)
+        dep = orch.create_deployment(
+            "app", "1.0", "staging", [], rollback_on_failure=False
+        )
         assert dep.rollback_on_failure is False
 
     def test_create_deployment_unknown_env_raises(self, tmp_path):
@@ -397,6 +442,7 @@ class TestCreateDeployment:
 # ---------------------------------------------------------------------------
 # get_deployment_status / list / cancel
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestDeploymentQueries:
@@ -453,6 +499,7 @@ class TestDeploymentQueries:
 # deploy lifecycle tests
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestDeployLifecycle:
     """Test the deploy() method and its lifecycle transitions."""
@@ -502,6 +549,7 @@ class TestDeployLifecycle:
 # Health check tests (unit-level, no real network)
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestHealthChecks:
     """Test _perform_health_checks and underlying check methods."""
@@ -514,10 +562,20 @@ class TestHealthChecks:
     def test_http_health_check_unreachable(self, tmp_path):
         """HTTP check against a guaranteed-bad endpoint returns False."""
         config_path = str(tmp_path / "deploy.json")
-        envs = [_env_dict(
-            "staging", "staging", "stage.local",
-            health_checks=[{"type": "http", "endpoint": "http://127.0.0.1:1/nope", "timeout": 1}],
-        )]
+        envs = [
+            _env_dict(
+                "staging",
+                "staging",
+                "stage.local",
+                health_checks=[
+                    {
+                        "type": "http",
+                        "endpoint": "http://127.0.0.1:1/nope",
+                        "timeout": 1,
+                    }
+                ],
+            )
+        ]
         _write_json_config(config_path, envs)
         orch = DeploymentOrchestrator(config_path=config_path)
         dep = orch.create_deployment("app", "1.0", "staging", [])
@@ -528,10 +586,16 @@ class TestHealthChecks:
     def test_tcp_health_check_unreachable(self, tmp_path):
         """TCP check against a guaranteed-bad endpoint returns False."""
         config_path = str(tmp_path / "deploy.json")
-        envs = [_env_dict(
-            "staging", "staging", "stage.local",
-            health_checks=[{"type": "tcp", "endpoint": "127.0.0.1:1", "timeout": 1}],
-        )]
+        envs = [
+            _env_dict(
+                "staging",
+                "staging",
+                "stage.local",
+                health_checks=[
+                    {"type": "tcp", "endpoint": "127.0.0.1:1", "timeout": 1}
+                ],
+            )
+        ]
         _write_json_config(config_path, envs)
         orch = DeploymentOrchestrator(config_path=config_path)
         dep = orch.create_deployment("app", "1.0", "staging", [])
@@ -540,10 +604,14 @@ class TestHealthChecks:
 
     def test_unknown_health_check_type(self, tmp_path):
         config_path = str(tmp_path / "deploy.json")
-        envs = [_env_dict(
-            "staging", "staging", "stage.local",
-            health_checks=[{"type": "grpc", "endpoint": "localhost:50051"}],
-        )]
+        envs = [
+            _env_dict(
+                "staging",
+                "staging",
+                "stage.local",
+                health_checks=[{"type": "grpc", "endpoint": "localhost:50051"}],
+            )
+        ]
         _write_json_config(config_path, envs)
         orch = DeploymentOrchestrator(config_path=config_path)
         dep = orch.create_deployment("app", "1.0", "staging", [])
@@ -571,6 +639,7 @@ class TestHealthChecks:
 # Rollback logic tests
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestRollback:
     """Test rollback paths in deploy()."""
@@ -578,10 +647,20 @@ class TestRollback:
     def test_deploy_with_failed_health_check_rollback(self, tmp_path):
         """When health checks fail and rollback_on_failure=True, status is ROLLED_BACK."""
         config_path = str(tmp_path / "deploy.json")
-        envs = [_env_dict(
-            "staging", "staging", "stage.local",
-            health_checks=[{"type": "http", "endpoint": "http://127.0.0.1:1/down", "timeout": 1}],
-        )]
+        envs = [
+            _env_dict(
+                "staging",
+                "staging",
+                "stage.local",
+                health_checks=[
+                    {
+                        "type": "http",
+                        "endpoint": "http://127.0.0.1:1/down",
+                        "timeout": 1,
+                    }
+                ],
+            )
+        ]
         _write_json_config(config_path, envs)
         orch = DeploymentOrchestrator(config_path=config_path)
         orch.create_deployment("app", "1.0", "staging", [], rollback_on_failure=True)
@@ -591,10 +670,20 @@ class TestRollback:
     def test_deploy_with_failed_health_check_no_rollback(self, tmp_path):
         """When health checks fail and rollback_on_failure=False, status is FAILURE."""
         config_path = str(tmp_path / "deploy.json")
-        envs = [_env_dict(
-            "staging", "staging", "stage.local",
-            health_checks=[{"type": "http", "endpoint": "http://127.0.0.1:1/down", "timeout": 1}],
-        )]
+        envs = [
+            _env_dict(
+                "staging",
+                "staging",
+                "stage.local",
+                health_checks=[
+                    {
+                        "type": "http",
+                        "endpoint": "http://127.0.0.1:1/down",
+                        "timeout": 1,
+                    }
+                ],
+            )
+        ]
         _write_json_config(config_path, envs)
         orch = DeploymentOrchestrator(config_path=config_path)
         orch.create_deployment("app", "1.0", "staging", [], rollback_on_failure=False)
@@ -628,6 +717,7 @@ class TestRollback:
 # Hooks execution tests
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestHooksExecution:
     """Test _execute_hooks."""
@@ -635,10 +725,14 @@ class TestHooksExecution:
     def test_pre_deploy_hook_executed(self, tmp_path):
         marker = str(tmp_path / "pre_marker.txt")
         config_path = str(tmp_path / "deploy.json")
-        envs = [_env_dict(
-            "staging", "staging", "stage.local",
-            pre_deploy_hooks=[f"touch {marker}"],
-        )]
+        envs = [
+            _env_dict(
+                "staging",
+                "staging",
+                "stage.local",
+                pre_deploy_hooks=[f"touch {marker}"],
+            )
+        ]
         _write_json_config(config_path, envs)
         orch = DeploymentOrchestrator(config_path=config_path)
         dep = orch.create_deployment("app", "1.0", "staging", [])
@@ -648,10 +742,14 @@ class TestHooksExecution:
     def test_post_deploy_hook_executed(self, tmp_path):
         marker = str(tmp_path / "post_marker.txt")
         config_path = str(tmp_path / "deploy.json")
-        envs = [_env_dict(
-            "staging", "staging", "stage.local",
-            post_deploy_hooks=[f"touch {marker}"],
-        )]
+        envs = [
+            _env_dict(
+                "staging",
+                "staging",
+                "stage.local",
+                post_deploy_hooks=[f"touch {marker}"],
+            )
+        ]
         _write_json_config(config_path, envs)
         orch = DeploymentOrchestrator(config_path=config_path)
         dep = orch.create_deployment("app", "1.0", "staging", [])
@@ -660,10 +758,14 @@ class TestHooksExecution:
 
     def test_hook_failure_does_not_crash(self, tmp_path):
         config_path = str(tmp_path / "deploy.json")
-        envs = [_env_dict(
-            "staging", "staging", "stage.local",
-            pre_deploy_hooks=["false"],  # 'false' command exits 1
-        )]
+        envs = [
+            _env_dict(
+                "staging",
+                "staging",
+                "stage.local",
+                pre_deploy_hooks=["false"],  # 'false' command exits 1
+            )
+        ]
         _write_json_config(config_path, envs)
         orch = DeploymentOrchestrator(config_path=config_path)
         dep = orch.create_deployment("app", "1.0", "staging", [])
@@ -680,6 +782,7 @@ class TestHooksExecution:
 # ---------------------------------------------------------------------------
 # manage_deployments convenience function
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestManageDeployments:

@@ -5,7 +5,6 @@ Covers: ReActAgent plan/act/observe/_execute_impl, direct tool calls,
 LLM-less fallback path, _parse_action_args, stream().
 """
 
-
 import pytest
 
 from codomyrmex.agents.core.base import AgentCapabilities, AgentRequest, AgentResponse
@@ -189,7 +188,7 @@ class TestReActExecuteImpl:
         # When plan returns a call_tool action that fails, execution stops
         reg = _make_registry(_fail)
         agent = ReActAgent("a", reg)
-        req = AgentRequest(prompt='call: _fail {}')
+        req = AgentRequest(prompt="call: _fail {}")
         resp = agent.execute(req)
         # Should get back an error result
         assert not resp.is_success()

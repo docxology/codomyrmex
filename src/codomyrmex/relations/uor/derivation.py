@@ -37,17 +37,17 @@ class DerivationRecord:
     operation: str
     inputs: dict[str, Any] = field(default_factory=dict)
     result_hash: str = ""
-    timestamp: str = field(
-        default_factory=lambda: datetime.now(UTC).isoformat()
-    )
+    timestamp: str = field(default_factory=lambda: datetime.now(UTC).isoformat())
     id: str = field(default="")
 
     def __post_init__(self) -> None:
         if not self.id:
             object.__setattr__(
-                self, "id", self._compute_derivation_id(
+                self,
+                "id",
+                self._compute_derivation_id(
                     self.entity_id, self.operation, self.inputs, self.result_hash
-                )
+                ),
             )
 
     @staticmethod
@@ -137,8 +137,10 @@ class DerivationTracker:
         history = self.get_history(entity_id)
         for record in history:
             expected_id = DerivationRecord._compute_derivation_id(
-                record.entity_id, record.operation,
-                record.inputs, record.result_hash,
+                record.entity_id,
+                record.operation,
+                record.inputs,
+                record.result_hash,
             )
             if record.id != expected_id:
                 raise RuntimeError(
@@ -196,4 +198,3 @@ class DerivationTracker:
     def __len__(self) -> int:
         """Return the number of items."""
         return len(self._records)
-

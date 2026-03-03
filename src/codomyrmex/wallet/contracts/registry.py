@@ -19,6 +19,7 @@ from .contract import Contract
 
 class ContractStatus(Enum):
     """Deployment lifecycle stages of a smart contract (draft → deployed → active → deprecated → archived)."""
+
     DRAFT = auto()
     DEPLOYED = auto()
     ACTIVE = auto()
@@ -53,7 +54,13 @@ class ContractRegistry:
         self._contracts: dict[str, ContractVersion] = {}
         self._history: dict[str, list[ContractVersion]] = {}
 
-    def register(self, name: str, contract: Contract, tags: set[str] | None = None, notes: str = "") -> None:
+    def register(
+        self,
+        name: str,
+        contract: Contract,
+        tags: set[str] | None = None,
+        notes: str = "",
+    ) -> None:
         """Register a contract with optional tags."""
         version_num = len(self._history.get(name, [])) + 1
         entry = ContractVersion(
@@ -124,7 +131,9 @@ class ContractRegistry:
 
     def filter_by_status(self, status: ContractStatus) -> list[str]:
         """Return contract names with a specific status."""
-        return [name for name, entry in self._contracts.items() if entry.status == status]
+        return [
+            name for name, entry in self._contracts.items() if entry.status == status
+        ]
 
     def filter_by_tag(self, tag: str) -> list[str]:
         """Return contract names that have a specific tag."""

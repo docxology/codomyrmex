@@ -16,6 +16,7 @@ from .strategies import GeneratorStrategy
 @dataclass
 class PropertyTestResult:
     """Result of a property-based test."""
+
     passed: bool
     iterations: int
     failures: list[dict[str, Any]] = field(default_factory=list)
@@ -28,8 +29,10 @@ def property_test(
     **generators: GeneratorStrategy,
 ):
     """Decorator for property-based tests."""
+
     def decorator(func: Callable) -> Callable:
         """Decorator."""
+
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
             """Wrapper."""
@@ -37,10 +40,7 @@ def property_test(
             start = datetime.now()
 
             for _i in range(iterations):
-                test_kwargs = {
-                    name: gen.generate()
-                    for name, gen in generators.items()
-                }
+                test_kwargs = {name: gen.generate() for name, gen in generators.items()}
                 test_kwargs.update(kwargs)
 
                 try:
@@ -48,10 +48,12 @@ def property_test(
                     if result is False:
                         failures.append(test_kwargs.copy())
                 except Exception as e:
-                    failures.append({
-                        **test_kwargs,
-                        "__error__": str(e),
-                    })
+                    failures.append(
+                        {
+                            **test_kwargs,
+                            "__error__": str(e),
+                        }
+                    )
 
             duration = (datetime.now() - start).total_seconds()
 
@@ -63,4 +65,5 @@ def property_test(
             )
 
         return wrapper
+
     return decorator

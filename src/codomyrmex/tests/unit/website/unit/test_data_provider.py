@@ -372,7 +372,9 @@ class TestGetPipelineStatus:
         wf_dir = tmp_path / ".github" / "workflows"
         wf_dir.mkdir(parents=True)
         (wf_dir / "bad.yml").write_text(":::: not yaml {{{{")
-        (wf_dir / "good.yml").write_text("name: Good\non: push\njobs:\n  build:\n    runs-on: ubuntu-latest\n")
+        (wf_dir / "good.yml").write_text(
+            "name: Good\non: push\njobs:\n  build:\n    runs-on: ubuntu-latest\n"
+        )
 
         provider = DataProvider(tmp_path)
         result = provider.get_pipeline_status()
@@ -584,7 +586,7 @@ class TestComputeModuleStatus:
         """Test that a syntax-error __init__.py yields SyntaxError status."""
         mod_path = tmp_path / "badmod"
         mod_path.mkdir()
-        (mod_path / "__init__.py").write_text('def broken(\n')
+        (mod_path / "__init__.py").write_text("def broken(\n")
 
         provider = DataProvider(tmp_path)
         assert provider._compute_module_status(mod_path) == "SyntaxError"
@@ -608,7 +610,7 @@ class TestComputeModuleStatus:
 
         bad = src_path / "badmod"
         bad.mkdir()
-        (bad / "__init__.py").write_text('def broken(\n')
+        (bad / "__init__.py").write_text("def broken(\n")
 
         provider = DataProvider(tmp_path)
         modules = provider.get_modules()
@@ -799,6 +801,7 @@ class TestSaveConfigContentHardened:
     def test_rejects_symlink_escape(self, tmp_path):
         """Test that symlinks escaping root_dir are rejected."""
         import os
+
         outside = tmp_path.parent / "outside.txt"
         outside.write_text("outside data")
         link = tmp_path / "evil_link.txt"
@@ -854,7 +857,9 @@ class TestGetDescription:
         """Test that _get_description extracts module docstring from __init__.py."""
         mod_dir = tmp_path / "mymod"
         mod_dir.mkdir()
-        (mod_dir / "__init__.py").write_text('"""This is the module docstring."""\nx = 1')
+        (mod_dir / "__init__.py").write_text(
+            '"""This is the module docstring."""\nx = 1'
+        )
 
         provider = DataProvider(tmp_path)
         result = provider._get_description(mod_dir)
@@ -887,7 +892,9 @@ class TestGetScriptMetadata:
     def test_extracts_title_and_description(self, tmp_path):
         """Test that title and description are extracted from script docstring."""
         script = tmp_path / "myscript.py"
-        script.write_text('"""Title: Deploy Script\nDeploys the application to production."""\npass')
+        script.write_text(
+            '"""Title: Deploy Script\nDeploys the application to production."""\npass'
+        )
 
         provider = DataProvider(tmp_path)
         title, description = provider._get_script_metadata(script)

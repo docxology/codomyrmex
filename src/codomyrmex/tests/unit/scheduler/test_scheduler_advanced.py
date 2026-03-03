@@ -20,6 +20,7 @@ try:
         describe_cron,
         parse_cron,
     )
+
     HAS_MODULE = True
 except ImportError:
     HAS_MODULE = False
@@ -42,9 +43,11 @@ def failing_job():
 # DependencyScheduler
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestDependencyScheduler:
     """Test suite for DependencyScheduler."""
+
     def test_create(self):
         """Test functionality: create."""
         scheduler = DependencyScheduler(max_workers=2)
@@ -126,9 +129,11 @@ class TestDependencyScheduler:
 # PersistentScheduler
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestPersistentScheduler:
     """Test suite for PersistentScheduler."""
+
     def test_create_without_path(self):
         """Test functionality: create without path."""
         scheduler = PersistentScheduler()
@@ -198,9 +203,11 @@ class TestPersistentScheduler:
 # JobPipeline
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestJobPipeline:
     """Test suite for JobPipeline."""
+
     def test_create(self):
         """Test functionality: create."""
         scheduler = Scheduler()
@@ -230,9 +237,11 @@ class TestJobPipeline:
 # ScheduledRecurrence
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestScheduledRecurrence:
     """Test suite for ScheduledRecurrence."""
+
     def test_create_defaults(self):
         """Test functionality: create defaults."""
         recurrence = ScheduledRecurrence()
@@ -263,9 +272,11 @@ class TestScheduledRecurrence:
 # parse_cron / describe_cron
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestCronHelpers:
     """Test suite for CronHelpers."""
+
     def test_parse_cron_valid(self):
         """Test functionality: parse cron valid."""
         result = parse_cron("0 * * * *")

@@ -31,14 +31,17 @@ logger = get_logger(__name__)
 
 # ── State ────────────────────────────────────────────────────────────
 
+
 class CircuitState(enum.Enum):
     """Circuit breaker states."""
+
     CLOSED = "CLOSED"
     OPEN = "OPEN"
     HALF_OPEN = "HALF_OPEN"
 
 
 # ── Configuration ────────────────────────────────────────────────────
+
 
 @dataclass
 class CircuitBreakerConfig:
@@ -50,6 +53,7 @@ class CircuitBreakerConfig:
         half_open_max_calls: Allowed probe calls in half-open state.
         success_threshold: Successes in half-open needed to close again.
     """
+
     failure_threshold: int = 5
     reset_timeout: float = 30.0
     half_open_max_calls: int = 1
@@ -58,18 +62,18 @@ class CircuitBreakerConfig:
 
 # ── Exceptions ───────────────────────────────────────────────────────
 
+
 class CircuitOpenError(Exception):
     """Raised when the circuit is open and calls are being rejected."""
 
     def __init__(self, name: str, remaining: float) -> None:
         self.name = name
         self.remaining = remaining
-        super().__init__(
-            f"Circuit '{name}' is OPEN — retry in {remaining:.1f}s"
-        )
+        super().__init__(f"Circuit '{name}' is OPEN — retry in {remaining:.1f}s")
 
 
 # ── Circuit breaker ─────────────────────────────────────────────────
+
 
 class CircuitBreaker:
     """Async-safe circuit breaker.
@@ -130,16 +134,14 @@ class CircuitBreaker:
         """Raise if circuit is open and reset timeout hasn't elapsed."""
         state = self.state  # triggers auto-transition
         if state == CircuitState.OPEN:
-            remaining = (
-                self.config.reset_timeout
-                - (time.monotonic() - self._last_failure_time)
+            remaining = self.config.reset_timeout - (
+                time.monotonic() - self._last_failure_time
             )
             raise CircuitOpenError(self.name, max(0, remaining))
         if state == CircuitState.HALF_OPEN:
             if self._half_open_calls >= self.config.half_open_max_calls:
-                remaining = (
-                    self.config.reset_timeout
-                    - (time.monotonic() - self._last_failure_time)
+                remaining = self.config.reset_timeout - (
+                    time.monotonic() - self._last_failure_time
                 )
                 raise CircuitOpenError(self.name, max(0, remaining))
             self._half_open_calls += 1
@@ -186,7 +188,9 @@ class CircuitBreaker:
             self._check_state()
         return self
 
-    async def __aexit__(self, exc_type: type | None, exc_val: Exception | None, tb: Any) -> bool:
+    async def __aexit__(
+        self, exc_type: type | None, exc_val: Exception | None, tb: Any
+    ) -> bool:
         async with self._lock:
             if exc_type is None:
                 self.record_success()

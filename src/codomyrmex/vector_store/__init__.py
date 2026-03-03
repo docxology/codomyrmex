@@ -41,7 +41,7 @@ def cli_commands():
         print("Vector Store Statistics")
         print(f"  Backend: {store.__class__.__name__}")
         print(f"  Distance Metrics: {[dm.value for dm in DistanceMetric]}")
-        count = len(store) if hasattr(store, '__len__') else 'N/A'
+        count = len(store) if hasattr(store, "__len__") else "N/A"
         print(f"  Stored Vectors: {count}")
 
     return {

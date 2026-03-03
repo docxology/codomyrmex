@@ -40,31 +40,57 @@ class ToolCategory(enum.Enum):
 # Order matters — first match wins.
 _CATEGORY_RULES: list[tuple[re.Pattern[str], ToolCategory]] = [
     # Mutations (state-changing operations).
-    (re.compile(r"git_(commit|push|pull|init|create_branch|switch_branch|clone)$"), ToolCategory.MUTATION),
+    (
+        re.compile(r"git_(commit|push|pull|init|create_branch|switch_branch|clone)$"),
+        ToolCategory.MUTATION,
+    ),
     (re.compile(r"write_file$"), ToolCategory.MUTATION),
     (re.compile(r"obsidian_(create|update|delete)_note$"), ToolCategory.MUTATION),
     (re.compile(r"invalidate_cache$"), ToolCategory.MUTATION),
-
     # Execution (runs code/commands with side-effects).
-    (re.compile(r"(execute_code|code_execute|run_command|run_tests|call_module_function)$"), ToolCategory.EXECUTION),
+    (
+        re.compile(
+            r"(execute_code|code_execute|run_command|run_tests|call_module_function)$"
+        ),
+        ToolCategory.EXECUTION,
+    ),
     (re.compile(r"code_debug$"), ToolCategory.EXECUTION),
-
     # Generation (creates new artifacts/content).
-    (re.compile(r"create_(bar_chart|line_plot|pie_chart|ascii_art)$"), ToolCategory.GENERATION),
-    (re.compile(r"create_(commit_timeline|git_branch|git_workflow|repository_structure)_diagram$"), ToolCategory.GENERATION),
+    (
+        re.compile(r"create_(bar_chart|line_plot|pie_chart|ascii_art)$"),
+        ToolCategory.GENERATION,
+    ),
+    (
+        re.compile(
+            r"create_(commit_timeline|git_branch|git_workflow|repository_structure)_diagram$"
+        ),
+        ToolCategory.GENERATION,
+    ),
     (re.compile(r"generate_documentation$"), ToolCategory.GENERATION),
-
     # Analysis (read-only inspection).
-    (re.compile(r"(analyze_file|analyze_project|analyze_python)$"), ToolCategory.ANALYSIS),
+    (
+        re.compile(r"(analyze_file|analyze_project|analyze_python)$"),
+        ToolCategory.ANALYSIS,
+    ),
     (re.compile(r"code_review_(file|project)$"), ToolCategory.ANALYSIS),
     (re.compile(r"checksum_file$"), ToolCategory.ANALYSIS),
     (re.compile(r"obsidian_find_broken_links$"), ToolCategory.ANALYSIS),
     (re.compile(r"obsidian_vault_stats$"), ToolCategory.ANALYSIS),
-
     # Query (data retrieval, no side-effects).
-    (re.compile(r"(list_|get_|search_|read_|module_info|pai_|json_query|code_list)"), ToolCategory.QUERY),
-    (re.compile(r"obsidian_(load_vault|read_|search|list_tags|get_backlinks)"), ToolCategory.QUERY),
-    (re.compile(r"git_(diff|log|status|repo_status|is_repo|check_availability|current_branch)$"), ToolCategory.QUERY),
+    (
+        re.compile(r"(list_|get_|search_|read_|module_info|pai_|json_query|code_list)"),
+        ToolCategory.QUERY,
+    ),
+    (
+        re.compile(r"obsidian_(load_vault|read_|search|list_tags|get_backlinks)"),
+        ToolCategory.QUERY,
+    ),
+    (
+        re.compile(
+            r"git_(diff|log|status|repo_status|is_repo|check_availability|current_branch)$"
+        ),
+        ToolCategory.QUERY,
+    ),
 ]
 
 

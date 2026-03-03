@@ -10,10 +10,12 @@ from typing import Any
 try:
     from codomyrmex.model_context_protocol.decorators import mcp_tool
 except ImportError:
+
     def mcp_tool(**kwargs: Any):  # type: ignore[misc]
         def decorator(func: Any) -> Any:
             func._mcp_tool_meta = kwargs
             return func
+
         return decorator
 
 
@@ -37,12 +39,15 @@ def maintenance_health_check(
             HealthChecker,
             HealthStatus,
         )
+
         checker = HealthChecker()
-        checker.register(HealthCheck(
-            name=name,
-            description="Agent-triggered health check",
-            check_fn=lambda: (HealthStatus.HEALTHY, "System operational", {}),
-        ))
+        checker.register(
+            HealthCheck(
+                name=name,
+                description="Agent-triggered health check",
+                check_fn=lambda: (HealthStatus.HEALTHY, "System operational", {}),
+            )
+        )
         result = checker.run(name)
         return {
             "status": "ok",
@@ -63,6 +68,7 @@ def maintenance_list_tasks() -> dict[str, Any]:
     """List maintenance tasks with their current status."""
     try:
         from codomyrmex.maintenance.health.scheduler import MaintenanceScheduler
+
         scheduler = MaintenanceScheduler()
         return {
             "status": "ok",

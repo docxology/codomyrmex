@@ -13,13 +13,14 @@ Usage:
 import sys
 import time
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any
 
 project_root = Path(__file__).parent.parent.parent.parent
 sys.path.insert(0, str(project_root / "src"))
 
 # Direct import to avoid triggering full codomyrmex package init
 import importlib.util
+
 script_base_path = project_root / "src" / "codomyrmex" / "utils" / "script_base.py"
 spec = importlib.util.spec_from_file_location("script_base", script_base_path)
 script_base = importlib.util.module_from_spec(spec)
@@ -42,23 +43,29 @@ class TelemetryScript(ScriptBase):
         """Add telemetry-specific arguments."""
         group = parser.add_argument_group("Telemetry Options")
         group.add_argument(
-            "--service-name", default="codomyrmex-demo",
-            help="Service name for tracing (default: codomyrmex-demo)"
+            "--service-name",
+            default="codomyrmex-demo",
+            help="Service name for tracing (default: codomyrmex-demo)",
         )
         group.add_argument(
-            "--num-spans", type=int, default=10,
-            help="Number of test spans to create (default: 10)"
+            "--num-spans",
+            type=int,
+            default=10,
+            help="Number of test spans to create (default: 10)",
         )
         group.add_argument(
-            "--nested-depth", type=int, default=3,
-            help="Depth of nested spans (default: 3)"
+            "--nested-depth",
+            type=int,
+            default=3,
+            help="Depth of nested spans (default: 3)",
         )
         group.add_argument(
-            "--simulate-errors", action="store_true",
-            help="Simulate errors in some spans"
+            "--simulate-errors",
+            action="store_true",
+            help="Simulate errors in some spans",
         )
 
-    def run(self, args, config: ScriptConfig) -> Dict[str, Any]:
+    def run(self, args, config: ScriptConfig) -> dict[str, Any]:
         """Execute telemetry demonstrations."""
         results = {
             "tests_run": 0,
@@ -76,13 +83,20 @@ class TelemetryScript(ScriptBase):
         # Import telemetry module (requires opentelemetry)
         try:
             from codomyrmex.telemetry import (
-                TraceContext, start_span, get_current_span, traced,
-                SimpleSpanProcessor, BatchSpanProcessor, OTLPExporter
+                BatchSpanProcessor,
+                OTLPExporter,
+                SimpleSpanProcessor,
+                TraceContext,
+                get_current_span,
+                start_span,
+                traced,
             )
         except ImportError as e:
             self.log_info(f"Telemetry dependencies not available: {e}")
             self.log_info("OpenTelemetry package required for full telemetry support.")
-            self.log_info("Install with: pip install opentelemetry-api opentelemetry-sdk")
+            self.log_info(
+                "Install with: pip install opentelemetry-api opentelemetry-sdk"
+            )
             results["skipped"] = True
             results["reason"] = str(e)
             return results
@@ -92,7 +106,7 @@ class TelemetryScript(ScriptBase):
         try:
             TraceContext.initialize(
                 service_name=args.service_name,
-                attributes={"environment": "demo", "version": "1.0.0"}
+                attributes={"environment": "demo", "version": "1.0.0"},
             )
             tracer = TraceContext.get_tracer(args.service_name)
 
@@ -113,8 +127,7 @@ class TelemetryScript(ScriptBase):
             for i in range(args.num_spans):
                 start_time = time.perf_counter()
                 span = start_span(
-                    f"test_span_{i}",
-                    attributes={"span_index": i, "test_type": "basic"}
+                    f"test_span_{i}", attributes={"span_index": i, "test_type": "basic"}
                 )
                 time.sleep(0.001)  # Simulate work
                 span.end()
@@ -127,7 +140,9 @@ class TelemetryScript(ScriptBase):
                 "total_time_ms": sum(span_times),
             }
             results["tests_passed"] += 1
-            self.log_success(f"Created {args.num_spans} spans, avg {results['basic_spans']['avg_time_ms']:.2f}ms")
+            self.log_success(
+                f"Created {args.num_spans} spans, avg {results['basic_spans']['avg_time_ms']:.2f}ms"
+            )
         except Exception as e:
             self.log_error(f"Basic span creation failed: {e}")
         results["tests_run"] += 1
@@ -135,13 +150,14 @@ class TelemetryScript(ScriptBase):
         # Test 3: Nested spans
         self.log_info(f"\n3. Testing nested spans (depth={args.nested_depth})")
         try:
+
             def create_nested_spans(depth: int, parent_span=None):
                 if depth <= 0:
                     return
                 span = start_span(
                     f"nested_span_depth_{depth}",
                     attributes={"depth": depth},
-                    parent=parent_span
+                    parent=parent_span,
                 )
                 results["spans_created"] += 1
                 time.sleep(0.001)
@@ -163,6 +179,7 @@ class TelemetryScript(ScriptBase):
         # Test 4: @traced decorator
         self.log_info("\n4. Testing @traced decorator")
         try:
+
             @traced(name="decorated_function", attributes={"test": True})
             def sample_traced_function(x: int) -> int:
                 time.sleep(0.002)
@@ -222,17 +239,23 @@ class TelemetryScript(ScriptBase):
 
         return results
 
-
-
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
-    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "telemetry" / "config.yaml"
+
+    import yaml
+
+    config_path = (
+        Path(__file__).resolve().parent.parent.parent
+        / "config"
+        / "telemetry"
+        / "config.yaml"
+    )
     config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
+        with open(config_path) as f:
             config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/telemetry/config.yaml")
+            print("Loaded config from config/telemetry/config.yaml")
+
 
 if __name__ == "__main__":
     script = TelemetryScript()

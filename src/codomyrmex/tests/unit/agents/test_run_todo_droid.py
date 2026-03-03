@@ -12,6 +12,7 @@ Covers:
 - CODOMYRMEX_ENHANCED_PROMPT constant validation
 - argparse construction inside main()
 """
+
 from __future__ import annotations
 
 import json
@@ -46,6 +47,7 @@ from codomyrmex.agents.droid.todo import TodoItem, TodoManager
 # Helpers (real objects, no mocks)
 # ---------------------------------------------------------------------------
 
+
 def _make_todo_file(tmp_path: Path, content: str) -> Path:
     """Write a todo_list.txt with the given content and return its path."""
     p = tmp_path / "todo_list.txt"
@@ -59,11 +61,11 @@ def _sample_todo_content(
 ) -> str:
     """Build a well-formed todo file string."""
     parts = ["[TODO]"]
-    for line in (todo_lines or []):
+    for line in todo_lines or []:
         parts.append(line)
     parts.append("")
     parts.append("[COMPLETED]")
-    for line in (completed_lines or []):
+    for line in completed_lines or []:
         parts.append(line)
     return "\n".join(parts) + "\n"
 
@@ -82,6 +84,7 @@ def _make_args(**kwargs) -> SimpleNamespace:
 # ===========================================================================
 # 1. Import and constant smoke tests
 # ===========================================================================
+
 
 class TestModuleImports:
     """Verify all public symbols are importable."""
@@ -112,12 +115,16 @@ class TestModuleImports:
         assert "Codomyrmex" in CODOMYRMEX_ENHANCED_PROMPT
 
     def test_prompt_mentions_modularity(self):
-        assert "Modularity" in CODOMYRMEX_ENHANCED_PROMPT or "modular" in CODOMYRMEX_ENHANCED_PROMPT.lower()
+        assert (
+            "Modularity" in CODOMYRMEX_ENHANCED_PROMPT
+            or "modular" in CODOMYRMEX_ENHANCED_PROMPT.lower()
+        )
 
 
 # ===========================================================================
 # 2. resolve_handler() tests
 # ===========================================================================
+
 
 class TestResolveHandler:
     """Test handler resolution with real importlib."""
@@ -171,6 +178,7 @@ class TestResolveHandler:
 # 3. _determine_count() tests
 # ===========================================================================
 
+
 class TestDetermineCount:
     """Test count determination logic with fake args objects."""
 
@@ -211,6 +219,7 @@ class TestDetermineCount:
 # ===========================================================================
 # 4. _list_todos() tests
 # ===========================================================================
+
 
 class TestListTodos:
     """Test the _list_todos display helper (printing to stdout)."""
@@ -259,6 +268,7 @@ class TestListTodos:
 # 5. _show_dry_run() tests
 # ===========================================================================
 
+
 class TestShowDryRun:
     """Test the dry-run display helper."""
 
@@ -295,6 +305,7 @@ class TestShowDryRun:
 # 6. build_controller() tests
 # ===========================================================================
 
+
 class TestBuildController:
     """Test DroidController construction helper."""
 
@@ -322,6 +333,7 @@ class TestBuildController:
 # ===========================================================================
 # 7. run_todos() integration tests
 # ===========================================================================
+
 
 class TestRunTodos:
     """Test run_todos with real DroidController and TodoManager."""
@@ -380,9 +392,7 @@ class TestRunTodos:
 
     def test_run_todos_invalid_handler_raises_import_error(self, tmp_path):
         """An invalid handler with a nonexistent module raises ImportError (not caught by run_todos)."""
-        todo_lines = [
-            "bad_task | nonexistent.module:no_func | Will fail"
-        ]
+        todo_lines = ["bad_task | nonexistent.module:no_func | Will fail"]
         controller, manager = self._setup(tmp_path, todo_lines=todo_lines)
         # ImportError is NOT in run_todos' except clause, so it propagates
         with pytest.raises(ImportError):
@@ -390,9 +400,7 @@ class TestRunTodos:
 
     def test_run_todos_invalid_function_caught(self, tmp_path, capsys):
         """A valid module but nonexistent function raises AttributeError, which IS caught."""
-        todo_lines = [
-            "bad_task | droid:nonexistent_handler_xyz | Will fail gracefully"
-        ]
+        todo_lines = ["bad_task | droid:nonexistent_handler_xyz | Will fail gracefully"]
         controller, manager = self._setup(tmp_path, todo_lines=todo_lines)
         result = list(run_todos(controller, manager, 1))
         assert len(result) == 0
@@ -408,9 +416,7 @@ class TestRunTodos:
           which only catches ValueError, RuntimeError, AttributeError, OSError, TypeError)
         So this actually raises ModuleNotFoundError for 'tasks' module.
         """
-        todo_lines = [
-            "unknown_task_xyz | Do something unknown | Expected outcomes"
-        ]
+        todo_lines = ["unknown_task_xyz | Do something unknown | Expected outcomes"]
         controller, manager = self._setup(tmp_path, todo_lines=todo_lines)
         # The inference loop's inner try/except doesn't catch ImportError,
         # so this propagates out of run_todos
@@ -419,9 +425,7 @@ class TestRunTodos:
 
     def test_run_todos_rotates_completed(self, tmp_path):
         """After successful processing, completed items are rotated via manager."""
-        todo_lines = [
-            "verify_methods | droid:verify_real_methods | Check methods"
-        ]
+        todo_lines = ["verify_methods | droid:verify_real_methods | Check methods"]
         content = _sample_todo_content(todo_lines)
         todo_file = _make_todo_file(tmp_path, content)
         controller = create_default_controller()
@@ -452,18 +456,14 @@ class TestRunTodos:
 
     def test_run_todos_zero_count(self, tmp_path):
         """run_todos with count=0 should process nothing."""
-        todo_lines = [
-            "task_a | droid:verify_real_methods | Something"
-        ]
+        todo_lines = ["task_a | droid:verify_real_methods | Something"]
         controller, manager = self._setup(tmp_path, todo_lines=todo_lines)
         result = list(run_todos(controller, manager, 0))
         assert result == []
 
     def test_run_todos_with_verify_readiness_handler(self, tmp_path):
         """The verify_readiness handler checks for project directories."""
-        todo_lines = [
-            "readiness | droid:verify_readiness | Check readiness"
-        ]
+        todo_lines = ["readiness | droid:verify_readiness | Check readiness"]
         controller, manager = self._setup(tmp_path, todo_lines=todo_lines)
         result = list(run_todos(controller, manager, 1))
         assert len(result) == 1
@@ -472,6 +472,7 @@ class TestRunTodos:
 # ===========================================================================
 # 8. TodoItem + TodoManager integration (exercised through run_todo_droid paths)
 # ===========================================================================
+
 
 class TestTodoIntegration:
     """Verify TodoItem and TodoManager work correctly in run_todo_droid scenarios."""
@@ -544,6 +545,7 @@ class TestTodoIntegration:
 # 9. get_todo_count_interactive() -- skip if no TTY
 # ===========================================================================
 
+
 @pytest.mark.skipif(
     not sys.stdin.isatty(),
     reason="get_todo_count_interactive requires an interactive TTY",
@@ -562,6 +564,7 @@ class TestGetTodoCountInteractive:
 # 10. main() argparse construction -- no subprocess needed
 # ===========================================================================
 
+
 class TestMainArgparse:
     """Verify main() builds a valid argparse parser."""
 
@@ -579,6 +582,7 @@ class TestMainArgparse:
 # ===========================================================================
 # 11. _process_todos() helper
 # ===========================================================================
+
 
 class TestProcessTodos:
     """Test _process_todos wrapper for error handling."""
@@ -620,6 +624,7 @@ class TestProcessTodos:
 # 12. Edge cases and error paths
 # ===========================================================================
 
+
 class TestEdgeCases:
     """Edge cases and boundary conditions."""
 
@@ -659,10 +664,16 @@ class TestEdgeCases:
         assert metrics["tasks_executed"] >= 1
 
     def test_enhanced_prompt_contains_security(self):
-        assert "Security" in CODOMYRMEX_ENHANCED_PROMPT or "security" in CODOMYRMEX_ENHANCED_PROMPT.lower()
+        assert (
+            "Security" in CODOMYRMEX_ENHANCED_PROMPT
+            or "security" in CODOMYRMEX_ENHANCED_PROMPT.lower()
+        )
 
     def test_enhanced_prompt_contains_testing(self):
-        assert "Test" in CODOMYRMEX_ENHANCED_PROMPT or "test" in CODOMYRMEX_ENHANCED_PROMPT.lower()
+        assert (
+            "Test" in CODOMYRMEX_ENHANCED_PROMPT
+            or "test" in CODOMYRMEX_ENHANCED_PROMPT.lower()
+        )
 
     def test_todo_file_with_comments_and_blank_lines(self, tmp_path):
         """Todo files with comments and blank lines should load correctly."""
@@ -696,6 +707,7 @@ class TestEdgeCases:
 # ===========================================================================
 # 13. Controller integration via build_controller
 # ===========================================================================
+
 
 class TestBuildControllerIntegration:
     """Deeper tests for build_controller behavior."""

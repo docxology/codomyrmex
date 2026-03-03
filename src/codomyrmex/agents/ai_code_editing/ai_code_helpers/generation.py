@@ -9,9 +9,11 @@ except ImportError:
 try:
     from codomyrmex.performance import monitor_performance
 except ImportError:
+
     def monitor_performance(name):
         def decorator(func):
             return func
+
         return decorator
 
 
@@ -24,6 +26,7 @@ from .config import DEFAULT_LLM_PROVIDER, get_llm_client
 from .models import CodeGenerationRequest, CodeGenerationResult
 
 logger = get_logger(__name__)
+
 
 @monitor_performance("ai_code_generation")
 def generate_code_snippet(
@@ -120,10 +123,16 @@ def generate_code_snippet(
                 config=types.GenerateContentConfig(
                     max_output_tokens=max_length or 2000,
                     temperature=temperature,
-                ) if types else None
+                )
+                if types
+                else None,
             )
             generated_code = response.text
-            tokens_used = response.usage_metadata.total_token_count if hasattr(response, "usage_metadata") else None
+            tokens_used = (
+                response.usage_metadata.total_token_count
+                if hasattr(response, "usage_metadata")
+                else None
+            )
 
         elif provider == "ollama":
             # Use Ollama integration
@@ -134,10 +143,7 @@ def generate_code_snippet(
                 options["max_tokens"] = max_length
 
             result = client.run_model(
-                model_name=model,
-                prompt=full_prompt,
-                options=options,
-                save_output=False
+                model_name=model, prompt=full_prompt, options=options, save_output=False
             )
             generated_code = result.response
             tokens_used = result.tokens_used
@@ -175,6 +181,7 @@ def generate_code_snippet(
         # Final fallback for unexpected API errors or network issues
         logger.error(f"Unexpected error generating code snippet: {e}", exc_info=True)
         raise RuntimeError(f"Code generation failed: {e}") from None
+
 
 @monitor_performance("ai_code_generation_batch")
 def generate_code_batch(
@@ -246,8 +253,9 @@ def generate_code_batch(
             )
 
     if parallel and len(requests) > 1:
-
-        logger.info(f"Processing {len(requests)} requests in parallel with {max_workers} workers")
+        logger.info(
+            f"Processing {len(requests)} requests in parallel with {max_workers} workers"
+        )
         results_dict: dict[int, CodeGenerationResult] = {}
 
         with ThreadPoolExecutor(max_workers=max_workers) as executor:
@@ -276,6 +284,7 @@ def generate_code_batch(
     else:
         # Sequential processing
         return [process_request(request) for request in requests]
+
 
 @monitor_performance("ai_code_documentation")
 def generate_code_documentation(
@@ -358,9 +367,7 @@ def generate_code_documentation(
         elif provider == "ollama":
             # Use Ollama integration
             result = client.run_model(
-                model_name=model,
-                prompt=prompt,
-                save_output=False
+                model_name=model, prompt=prompt, save_output=False
             )
             documentation = result.response
             tokens_used = result.tokens_used
@@ -397,4 +404,3 @@ def generate_code_documentation(
         # Final fallback for unexpected API errors or network issues
         logger.error(f"Unexpected error generating documentation: {e}", exc_info=True)
         raise RuntimeError(f"Documentation generation failed: {e}") from None
-

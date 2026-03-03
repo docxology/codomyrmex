@@ -18,6 +18,7 @@ logger = get_logger(__name__)
 
 class TriageDecision(Enum):
     """Triage disposition for a module."""
+
     PROMOTE = "promote"
     ARCHIVE = "archive"
     MERGE = "merge"
@@ -125,14 +126,26 @@ MERGE_MAP: dict[str, str] = {
 }
 
 # Archive list: modules too small or speculative
-ARCHIVE_SET: frozenset[str] = frozenset({
-    "embodiment", "evolutionary_ai", "module_template", "dark", "quantum",
-})
+ARCHIVE_SET: frozenset[str] = frozenset(
+    {
+        "embodiment",
+        "evolutionary_ai",
+        "module_template",
+        "dark",
+        "quantum",
+    }
+)
 
 # Promote list: modules worth investing in
-PROMOTE_SET: frozenset[str] = frozenset({
-    "wallet", "networking", "telemetry", "skills", "auth",
-})
+PROMOTE_SET: frozenset[str] = frozenset(
+    {
+        "wallet",
+        "networking",
+        "telemetry",
+        "skills",
+        "auth",
+    }
+)
 
 
 class TriageEngine:
@@ -170,7 +183,9 @@ class TriageEngine:
         for py_file in py_files:
             try:
                 lines = py_file.read_text().splitlines()
-                total_loc += sum(1 for ln in lines if ln.strip() and not ln.strip().startswith("#"))
+                total_loc += sum(
+                    1 for ln in lines if ln.strip() and not ln.strip().startswith("#")
+                )
             except (OSError, UnicodeDecodeError) as e:
                 logger.debug("Could not read file %s for LOC count: %s", py_file, e)
                 pass

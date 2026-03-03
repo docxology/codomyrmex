@@ -111,10 +111,13 @@ try:
 except ImportError:
     VISUALIZATION_INTEGRATION_AVAILABLE = False
 
+
 def cli_commands():
     """Return CLI commands for the git_operations module."""
+
     def _show_status():
         import os
+
         try:
             status = get_status(os.getcwd())
             print("Git status:")
@@ -128,6 +131,7 @@ def cli_commands():
 
     def _show_info():
         import os
+
         cwd = os.getcwd()
         try:
             is_repo = is_git_repository(cwd)

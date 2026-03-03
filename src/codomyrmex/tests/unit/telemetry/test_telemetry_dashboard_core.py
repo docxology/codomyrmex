@@ -347,6 +347,7 @@ class TestMetricCollectorCore:
         old_ts = datetime(2020, 1, 1)
         new_ts = datetime(2026, 1, 1)
         from codomyrmex.telemetry.dashboard.models import MetricValue as MV
+
         c._metrics["z"] = [
             MV(name="z", value=1.0, timestamp=old_ts),
             MV(name="z", value=2.0, timestamp=new_ts),
@@ -358,6 +359,7 @@ class TestMetricCollectorCore:
     def test_cleanup_removes_old(self):
         c = MetricCollector(retention_minutes=1)
         from codomyrmex.telemetry.dashboard.models import MetricValue as MV
+
         old_ts = datetime.now() - timedelta(minutes=10)
         c._metrics["stale"] = [MV(name="stale", value=1.0, timestamp=old_ts)]
         c.record("fresh", 5.0)
@@ -545,7 +547,12 @@ class TestDashboardManagerCore:
         c.record("cpu_usage", 0.9)
         dm = DashboardManager(collector=c)
         dash = dm.create("PanelTest")
-        panel = Panel(id="cpu_panel", title="CPU", panel_type=PanelType.GRAPH, metrics=["cpu_usage"])
+        panel = Panel(
+            id="cpu_panel",
+            title="CPU",
+            panel_type=PanelType.GRAPH,
+            metrics=["cpu_usage"],
+        )
         dash.add_panel(panel)
         data = dm.get_panel_data("paneltest", "cpu_panel")
         assert len(data) == 2
@@ -564,7 +571,9 @@ class TestDashboardManagerCore:
         c.record("mem", 512.0)
         dm = DashboardManager(collector=c)
         dash = dm.create("DurTest")
-        panel = Panel(id="mem_panel", title="Mem", panel_type=PanelType.STAT, metrics=["mem"])
+        panel = Panel(
+            id="mem_panel", title="Mem", panel_type=PanelType.STAT, metrics=["mem"]
+        )
         dash.add_panel(panel)
         data = dm.get_panel_data("durtest", "mem_panel", duration_minutes=30)
         assert len(data) == 1

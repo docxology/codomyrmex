@@ -4,8 +4,6 @@ This module tests the integration bridges between thin orchestration
 and other Codomyrmex modules.
 """
 
-
-
 import pytest
 
 pytestmark = [pytest.mark.orchestrator]
@@ -62,10 +60,7 @@ class TestStageConfig:
         """Test StageConfig default values."""
         from codomyrmex.orchestrator.integration import StageConfig
 
-        config = StageConfig(
-            name="test_stage",
-            commands=["echo hello"]
-        )
+        config = StageConfig(name="test_stage", commands=["echo hello"])
 
         assert config.name == "test_stage"
         assert config.commands == ["echo hello"]
@@ -87,7 +82,7 @@ class TestStageConfig:
             allow_failure=True,
             timeout=600,
             retry=3,
-            environment={"KEY": "value"}
+            environment={"KEY": "value"},
         )
 
         assert config.parallel is False
@@ -105,10 +100,7 @@ class TestPipelineConfig:
         from codomyrmex.orchestrator.integration import PipelineConfig, StageConfig
 
         stage = StageConfig(name="stage1", commands=["echo test"])
-        config = PipelineConfig(
-            name="test_pipeline",
-            stages=[stage]
-        )
+        config = PipelineConfig(name="test_pipeline", stages=[stage])
 
         assert config.name == "test_pipeline"
         assert len(config.stages) == 1
@@ -122,7 +114,7 @@ class TestPipelineConfig:
 
         stages = [
             StageConfig(name="build", commands=["make build"]),
-            StageConfig(name="test", commands=["make test"])
+            StageConfig(name="test", commands=["make test"]),
         ]
 
         config = PipelineConfig(
@@ -130,7 +122,7 @@ class TestPipelineConfig:
             stages=stages,
             variables={"VERSION": "1.0.0"},
             timeout=7200,
-            fail_fast=False
+            fail_fast=False,
         )
 
         assert len(config.stages) == 2
@@ -170,7 +162,7 @@ class TestCICDBridge:
 
         stages = [
             StageConfig(name="build", commands=["echo build"]),
-            StageConfig(name="test", commands=["echo test"])
+            StageConfig(name="test", commands=["echo test"]),
         ]
         config = PipelineConfig(name="test_pipeline", stages=stages)
 
@@ -192,9 +184,9 @@ class TestCICDBridge:
             "name": "dict_pipeline",
             "stages": [
                 {"name": "stage1", "commands": ["echo 1"]},
-                {"name": "stage2", "commands": ["echo 2"]}
+                {"name": "stage2", "commands": ["echo 2"]},
             ],
-            "fail_fast": True
+            "fail_fast": True,
         }
 
         workflow = bridge.create_workflow_from_pipeline(config)
@@ -208,10 +200,7 @@ class TestCICDBridge:
         from codomyrmex.orchestrator.integration import CICDBridge, StageConfig
 
         bridge = CICDBridge()
-        stage = StageConfig(
-            name="test_stage",
-            commands=["echo hello"]
-        )
+        stage = StageConfig(name="test_stage", commands=["echo hello"])
 
         result = await bridge.run_stage(stage)
 
@@ -228,7 +217,7 @@ class TestCICDBridge:
         stage = StageConfig(
             name="env_stage",
             commands=["echo $TEST_VAR"],
-            environment={"TEST_VAR": "from_stage"}
+            environment={"TEST_VAR": "from_stage"},
         )
 
         result = await bridge.run_stage(stage, env={"EXTRA": "value"})
@@ -242,9 +231,7 @@ class TestCICDBridge:
 
         bridge = CICDBridge()
         stage = StageConfig(
-            name="failing_stage",
-            commands=["exit 1"],
-            allow_failure=True
+            name="failing_stage", commands=["exit 1"], allow_failure=True
         )
 
         result = await bridge.run_stage(stage)
@@ -372,7 +359,12 @@ class TestAgentOrchestrator:
 
         tasks = [
             {"name": "task1", "agent": "agent1", "task": "do task 1"},
-            {"name": "task2", "agent": "agent2", "task": "do task 2", "depends_on": ["task1"]}
+            {
+                "name": "task2",
+                "agent": "agent2",
+                "task": "do task 2",
+                "depends_on": ["task1"],
+            },
         ]
 
         workflow = orchestrator.create_agent_workflow(tasks, "agent_workflow")
@@ -393,7 +385,7 @@ class TestConvenienceFunctions:
 
         stages = [
             {"name": "build", "commands": ["echo build"]},
-            {"name": "test", "commands": ["echo test"]}
+            {"name": "test", "commands": ["echo test"]},
         ]
 
         workflow = create_pipeline_workflow(stages, "my_pipeline")
@@ -407,9 +399,7 @@ class TestConvenienceFunctions:
         from codomyrmex.orchestrator.integration import run_ci_stage
 
         result = await run_ci_stage(
-            name="test_stage",
-            commands=["echo hello", "echo world"],
-            timeout=60
+            name="test_stage", commands=["echo hello", "echo world"], timeout=60
         )
 
         assert result["stage"] == "test_stage"
@@ -442,7 +432,7 @@ class TestWorkflowExecution:
 
         stages = [
             StageConfig(name="step1", commands=["echo step1"]),
-            StageConfig(name="step2", commands=["echo step2"])
+            StageConfig(name="step2", commands=["echo step2"]),
         ]
         config = PipelineConfig(name="test", stages=stages)
 
@@ -468,7 +458,7 @@ class TestWorkflowExecution:
 
         stages = [
             StageConfig(name="pass", commands=["echo pass"]),
-            StageConfig(name="fail", commands=["exit 1"])
+            StageConfig(name="fail", commands=["exit 1"]),
         ]
         config = PipelineConfig(name="failing", stages=stages, fail_fast=True)
 

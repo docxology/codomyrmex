@@ -37,7 +37,10 @@ def stego_image(clean_image, tmp_path):
     """Create an image with embedded steganographic data."""
     output_path = str(tmp_path / "stego.png")
     # Embed a substantial message to make detection more likely
-    message = "This is a secret message that should be detectable by statistical analysis." * 5
+    message = (
+        "This is a secret message that should be detectable by statistical analysis."
+        * 5
+    )
     embed_in_image(clean_image, message, output_path)
     return output_path
 
@@ -79,7 +82,12 @@ class TestDetectLsbSteganography:
         stego_result = detect_lsb_steganography(stego_image)
         # Stego image should generally have higher confidence than clean
         # The stego image has embedded data which creates a length header
-        assert stego_result.confidence >= clean_result.confidence or stego_result.has_length_header if hasattr(stego_result, 'has_length_header') else True
+        assert (
+            stego_result.confidence >= clean_result.confidence
+            or stego_result.has_length_header
+            if hasattr(stego_result, "has_length_header")
+            else True
+        )
 
     def test_details_contains_expected_keys(self, clean_image):
         """Test functionality: details contains expected keys."""
@@ -128,7 +136,7 @@ class TestAnalyzeStatisticalAnomalies:
     def test_low_entropy_data(self):
         """Test functionality: low entropy data."""
         # Repeated pattern -- low entropy, probably not stego
-        data = b"\xAB" * 1000
+        data = b"\xab" * 1000
         result = analyze_statistical_anomalies(data)
         assert result.confidence < 0.8
 

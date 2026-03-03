@@ -346,8 +346,11 @@ class TestQLearningAgent:
     def test_epsilon_does_not_decay_below_min(self):
         """epsilon never goes below epsilon_min."""
         agent = QLearningAgent(
-            "ql1", action_types=["a"],
-            epsilon=0.02, epsilon_decay=0.5, epsilon_min=0.01,
+            "ql1",
+            action_types=["a"],
+            epsilon=0.02,
+            epsilon_decay=0.5,
+            epsilon_min=0.01,
         )
         agent.act({"x": 1})
         agent.learn(1.0)
@@ -364,7 +367,10 @@ class TestQLearningAgent:
     def test_greedy_exploitation(self):
         """With epsilon=0, agent always picks the best Q-value action."""
         agent = QLearningAgent(
-            "ql1", action_types=["a", "b"], epsilon=0.0, alpha=1.0,
+            "ql1",
+            action_types=["a", "b"],
+            epsilon=0.0,
+            alpha=1.0,
         )
         obs = {"s": 1}
         # Force Q("a") = 10 by acting and learning
@@ -428,8 +434,10 @@ class TestSimulationResult:
     def test_result_creation(self):
         """SimulationResult stores all provided fields."""
         result = SimulationResult(
-            steps_completed=10, config_name="test",
-            status="completed", agent_count=3,
+            steps_completed=10,
+            config_name="test",
+            status="completed",
+            agent_count=3,
         )
         assert result.steps_completed == 10
         assert result.config_name == "test"
@@ -440,8 +448,10 @@ class TestSimulationResult:
     def test_result_with_history(self):
         """SimulationResult stores history entries."""
         result = SimulationResult(
-            steps_completed=1, config_name="t",
-            status="completed", agent_count=1,
+            steps_completed=1,
+            config_name="t",
+            status="completed",
+            agent_count=1,
             history=[{"step": 0, "data": "test"}],
         )
         assert len(result.history) == 1

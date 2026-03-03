@@ -42,6 +42,7 @@ MESSAGE = b"The quick brown fox jumps over the lazy dog"
 @pytest.mark.unit
 class TestECDSA:
     """Test suite for ECDSA."""
+
     def test_sign_and_verify(self, ec_keypair: KeyPair) -> None:
         """Test functionality: sign and verify."""
         sig = sign_ecdsa(MESSAGE, ec_keypair.private_key)
@@ -77,6 +78,7 @@ class TestECDSA:
 @pytest.mark.unit
 class TestEd25519:
     """Test suite for Ed25519."""
+
     def test_sign_and_verify(self, ed25519_keypair: KeyPair) -> None:
         """Test functionality: sign and verify."""
         sig = sign_ed25519(MESSAGE, ed25519_keypair.private_key)
@@ -94,7 +96,10 @@ class TestEd25519:
         sig = sign_ed25519(MESSAGE, ed25519_keypair.private_key)
         tampered = bytearray(sig)
         tampered[0] ^= 0xFF
-        assert verify_ed25519(MESSAGE, bytes(tampered), ed25519_keypair.public_key) is False
+        assert (
+            verify_ed25519(MESSAGE, bytes(tampered), ed25519_keypair.public_key)
+            is False
+        )
 
     def test_wrong_key_fails(self, ed25519_keypair: KeyPair) -> None:
         """Test functionality: wrong key fails."""
@@ -107,6 +112,7 @@ class TestEd25519:
 @pytest.mark.unit
 class TestRSAPSS:
     """Test suite for RSAPSS."""
+
     def test_sign_and_verify(self, rsa_keypair: KeyPair) -> None:
         """Test functionality: sign and verify."""
         sig = sign_rsa_pss(MESSAGE, rsa_keypair.private_key)

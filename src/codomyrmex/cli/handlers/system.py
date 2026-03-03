@@ -11,6 +11,7 @@ from codomyrmex.cli.utils import (
 
 logger = get_logger(__name__)
 
+
 def check_environment() -> bool:
     """Check if the environment is properly set up."""
     formatter = TerminalFormatter() if TERMINAL_INTERFACE_AVAILABLE else None
@@ -39,7 +40,7 @@ def check_environment() -> bool:
         hasattr(sys, "base_prefix") and sys.base_prefix != sys.prefix
     )
     if is_venv:
-        venv_path = os.environ.get('VIRTUAL_ENV', 'unknown')
+        venv_path = os.environ.get("VIRTUAL_ENV", "unknown")
         msg = f"Running in virtual environment: {venv_path}"
         print(formatter.success(msg) if formatter else f"✅ {msg}")
     else:
@@ -239,6 +240,7 @@ def show_system_status():
     # System discovery
     try:
         from codomyrmex.system_discovery import StatusReporter
+
         reporter = StatusReporter()
 
         print("\n🔍 System Discovery:")
@@ -257,6 +259,7 @@ def show_system_status():
             from codomyrmex.performance.monitoring.performance_monitor import (
                 PerformanceMonitor,
             )
+
             monitor = PerformanceMonitor()
             stats = monitor.get_stats()
             print("\n⚡ Performance Stats:")
@@ -274,6 +277,7 @@ def run_interactive_shell() -> bool:
 
     try:
         from codomyrmex.terminal_interface.interactive_shell import InteractiveShell
+
         shell = InteractiveShell()
         shell.run()
         return True

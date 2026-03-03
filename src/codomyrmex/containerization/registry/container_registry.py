@@ -33,9 +33,11 @@ except ImportError:
     requests = None
     REQUESTS_AVAILABLE = False
 
+
 @dataclass
 class ContainerImage:
     """Container image information."""
+
     name: str
     tag: str
     registry_url: str
@@ -46,9 +48,11 @@ class ContainerImage:
     labels: dict[str, str] = field(default_factory=dict)
     vulnerabilities: list[dict[str, Any]] = field(default_factory=list)
 
+
 @dataclass
 class RegistryCredentials:
     """Container registry credentials."""
+
     username: str
     password: str
     registry_url: str
@@ -62,6 +66,7 @@ class RegistryCredentials:
         encoded = base64.b64encode(auth_string.encode()).decode()
         return f"Basic {encoded}"
 
+
 class ContainerRegistry:
     """Container registry management system.
 
@@ -69,9 +74,7 @@ class ContainerRegistry:
     """
 
     def __init__(
-        self,
-        registry_url: str,
-        credentials: RegistryCredentials | None = None
+        self, registry_url: str, credentials: RegistryCredentials | None = None
     ):
         """Initialize container registry manager.
 
@@ -79,7 +82,7 @@ class ContainerRegistry:
             registry_url: URL of the container registry (e.g., docker.io, gcr.io)
             credentials: Registry authentication credentials
         """
-        self.registry_url = registry_url.rstrip('/')
+        self.registry_url = registry_url.rstrip("/")
         self.credentials = credentials
         self._docker_client = None
         self._session = None
@@ -101,7 +104,9 @@ class ContainerRegistry:
         if REQUESTS_AVAILABLE:
             self._session = requests.Session()
             if self.credentials:
-                self._session.headers["Authorization"] = self.credentials.get_auth_header()
+                self._session.headers["Authorization"] = (
+                    self.credentials.get_auth_header()
+                )
 
     def is_available(self) -> bool:
         """Check if Docker is available."""
@@ -114,10 +119,7 @@ class ContainerRegistry:
         return f"{self.registry_url}/{image_name}:{image_tag}"
 
     def push_image(
-        self,
-        image_name: str,
-        image_tag: str,
-        local_image: str | None = None
+        self, image_name: str, image_tag: str, local_image: str | None = None
     ) -> dict[str, Any]:
         """Push container image to registry.
 
@@ -140,7 +142,7 @@ class ContainerRegistry:
             return {
                 "status": "simulated",
                 "image": full_name,
-                "message": "Docker not available - operation simulated"
+                "message": "Docker not available - operation simulated",
             }
 
         start_time = datetime.now()
@@ -153,22 +155,29 @@ class ContainerRegistry:
                 raise CodomyrmexError(f"Local image not found: {local_name}") from None
 
             # Tag image for the registry
-            image.tag(self.registry_url + "/" + image_name if self.registry_url else image_name, image_tag)
+            image.tag(
+                self.registry_url + "/" + image_name
+                if self.registry_url
+                else image_name,
+                image_tag,
+            )
 
             # Login to registry if credentials provided
             if self.credentials:
                 self._docker_client.login(
                     username=self.credentials.username,
                     password=self.credentials.password,
-                    registry=self.registry_url or "https://index.docker.io/v1/"
+                    registry=self.registry_url or "https://index.docker.io/v1/",
                 )
 
             # Push image
             push_result = self._docker_client.images.push(
-                repository=self.registry_url + "/" + image_name if self.registry_url else image_name,
+                repository=self.registry_url + "/" + image_name
+                if self.registry_url
+                else image_name,
                 tag=image_tag,
                 stream=True,
-                decode=True
+                decode=True,
             )
 
             # Parse push output
@@ -191,17 +200,13 @@ class ContainerRegistry:
                 "image": full_name,
                 "digest": digest,
                 "size_bytes": size,
-                "duration_seconds": duration
+                "duration_seconds": duration,
             }
 
         except DockerException as e:
             raise CodomyrmexError(f"Failed to push image: {e}") from e
 
-    def pull_image(
-        self,
-        image_name: str,
-        image_tag: str = "latest"
-    ) -> dict[str, Any]:
+    def pull_image(self, image_name: str, image_tag: str = "latest") -> dict[str, Any]:
         """Pull container image from registry.
 
         Args:
@@ -221,7 +226,7 @@ class ContainerRegistry:
             return {
                 "status": "simulated",
                 "image": full_name,
-                "message": "Docker not available - operation simulated"
+                "message": "Docker not available - operation simulated",
             }
 
         start_time = datetime.now()
@@ -232,19 +237,23 @@ class ContainerRegistry:
                 self._docker_client.login(
                     username=self.credentials.username,
                     password=self.credentials.password,
-                    registry=self.registry_url or "https://index.docker.io/v1/"
+                    registry=self.registry_url or "https://index.docker.io/v1/",
                 )
 
             # Pull image
             image = self._docker_client.images.pull(
-                repository=self.registry_url + "/" + image_name if self.registry_url not in ["docker.io", ""] else image_name,
-                tag=image_tag
+                repository=self.registry_url + "/" + image_name
+                if self.registry_url not in ["docker.io", ""]
+                else image_name,
+                tag=image_tag,
             )
 
             duration = (datetime.now() - start_time).total_seconds()
 
             # Get image info
-            size_mb = sum(layer.get("Size", 0) for layer in image.history()) / (1024 * 1024)
+            size_mb = sum(layer.get("Size", 0) for layer in image.history()) / (
+                1024 * 1024
+            )
 
             logger.info(f"Pulled image {full_name} in {duration:.2f}s")
 
@@ -254,7 +263,7 @@ class ContainerRegistry:
                 "image_id": image.id,
                 "size_mb": round(size_mb, 2),
                 "duration_seconds": duration,
-                "tags": image.tags
+                "tags": image.tags,
             }
 
         except ImageNotFound:
@@ -268,7 +277,7 @@ class ContainerRegistry:
         image_name: str,
         image_tag: str,
         build_args: dict[str, str] | None = None,
-        no_cache: bool = False
+        no_cache: bool = False,
     ) -> dict[str, Any]:
         """Build and push an image to the registry.
 
@@ -289,7 +298,7 @@ class ContainerRegistry:
             return {
                 "status": "simulated",
                 "image": full_name,
-                "message": "Docker not available - operation simulated"
+                "message": "Docker not available - operation simulated",
             }
 
         path = Path(dockerfile_path)
@@ -310,7 +319,7 @@ class ContainerRegistry:
                 tag=full_name,
                 buildargs=build_args,
                 nocache=no_cache,
-                rm=True
+                rm=True,
             )
 
             build_duration = (datetime.now() - start_time).total_seconds()
@@ -327,16 +336,13 @@ class ContainerRegistry:
                 "image_id": image.id,
                 "build_duration_seconds": build_duration,
                 "total_duration_seconds": total_duration,
-                "push_result": push_result
+                "push_result": push_result,
             }
 
         except DockerException as e:
             raise CodomyrmexError(f"Failed to build and push image: {e}") from e
 
-    def list_images(
-        self,
-        repository: str | None = None
-    ) -> list[dict[str, Any]]:
+    def list_images(self, repository: str | None = None) -> list[dict[str, Any]]:
         """List images in the local Docker cache or registry.
 
         Args:
@@ -363,14 +369,18 @@ class ContainerRegistry:
                     else:
                         name, img_tag = tag, "latest"
 
-                    result.append({
-                        "name": name,
-                        "tag": img_tag,
-                        "image_id": image.short_id,
-                        "size_mb": round(image.attrs.get("Size", 0) / (1024 * 1024), 2),
-                        "created": image.attrs.get("Created"),
-                        "labels": image.labels
-                    })
+                    result.append(
+                        {
+                            "name": name,
+                            "tag": img_tag,
+                            "image_id": image.short_id,
+                            "size_mb": round(
+                                image.attrs.get("Size", 0) / (1024 * 1024), 2
+                            ),
+                            "created": image.attrs.get("Created"),
+                            "labels": image.labels,
+                        }
+                    )
 
             return result
 
@@ -379,9 +389,7 @@ class ContainerRegistry:
             return []
 
     def list_registry_images(
-        self,
-        repository: str | None = None,
-        limit: int = 100
+        self, repository: str | None = None, limit: int = 100
     ) -> list[dict[str, Any]]:
         """List images directly from the registry API.
 
@@ -417,11 +425,13 @@ class ContainerRegistry:
                     if tags_response.status_code == 200:
                         tags_data = tags_response.json()
                         for tag in tags_data.get("tags", []):
-                            result.append({
-                                "name": repo,
-                                "tag": tag,
-                                "registry_url": self.registry_url
-                            })
+                            result.append(
+                                {
+                                    "name": repo,
+                                    "tag": tag,
+                                    "registry_url": self.registry_url,
+                                }
+                            )
 
                 return result
 
@@ -433,10 +443,7 @@ class ContainerRegistry:
             return []
 
     def delete_image(
-        self,
-        image_name: str,
-        image_tag: str,
-        local_only: bool = False
+        self, image_name: str, image_tag: str, local_only: bool = False
     ) -> bool:
         """Delete image from local cache or registry.
 
@@ -466,15 +473,19 @@ class ContainerRegistry:
                     manifest_url = f"https://{self.registry_url}/v2/{image_name}/manifests/{image_tag}"
                     response = self._session.head(
                         manifest_url,
-                        headers={"Accept": "application/vnd.docker.distribution.manifest.v2+json"},
-                        timeout=30
+                        headers={
+                            "Accept": "application/vnd.docker.distribution.manifest.v2+json"
+                        },
+                        timeout=30,
                     )
 
                     if response.status_code == 200:
                         digest = response.headers.get("Docker-Content-Digest")
                         if digest:
                             delete_url = f"https://{self.registry_url}/v2/{image_name}/manifests/{digest}"
-                            delete_response = self._session.delete(delete_url, timeout=30)
+                            delete_response = self._session.delete(
+                                delete_url, timeout=30
+                            )
                             if delete_response.status_code in [200, 202]:
                                 logger.info(f"Deleted image from registry: {full_name}")
                 except Exception as e:
@@ -489,11 +500,7 @@ class ContainerRegistry:
             logger.error(f"Failed to delete image: {e}")
             return False
 
-    def get_image_info(
-        self,
-        image_name: str,
-        image_tag: str
-    ) -> dict[str, Any] | None:
+    def get_image_info(self, image_name: str, image_tag: str) -> dict[str, Any] | None:
         """Get detailed information about an image.
 
         Args:
@@ -528,8 +535,10 @@ class ContainerRegistry:
                     "env": image.attrs.get("Config", {}).get("Env", []),
                     "cmd": image.attrs.get("Config", {}).get("Cmd"),
                     "entrypoint": image.attrs.get("Config", {}).get("Entrypoint"),
-                    "exposed_ports": list(image.attrs.get("Config", {}).get("ExposedPorts", {}).keys())
-                }
+                    "exposed_ports": list(
+                        image.attrs.get("Config", {}).get("ExposedPorts", {}).keys()
+                    ),
+                },
             }
 
         except ImageNotFound as e:
@@ -539,12 +548,7 @@ class ContainerRegistry:
             logger.error(f"Failed to get image info: {e}")
             return None
 
-    def tag_image(
-        self,
-        source_image: str,
-        target_name: str,
-        target_tag: str
-    ) -> bool:
+    def tag_image(self, source_image: str, target_name: str, target_tag: str) -> bool:
         """Tag an image for the registry.
 
         Args:
@@ -556,7 +560,9 @@ class ContainerRegistry:
             True if tagged successfully
         """
         if not self.is_available():
-            logger.info(f"[SIMULATED] Tag image: {source_image} -> {target_name}:{target_tag}")
+            logger.info(
+                f"[SIMULATED] Tag image: {source_image} -> {target_name}:{target_tag}"
+            )
             return True
 
         try:
@@ -574,9 +580,7 @@ class ContainerRegistry:
             return False
 
     def inspect_manifest(
-        self,
-        image_name: str,
-        image_tag: str
+        self, image_name: str, image_tag: str
     ) -> dict[str, Any] | None:
         """Inspect image manifest from registry.
 
@@ -591,11 +595,15 @@ class ContainerRegistry:
             return None
 
         try:
-            manifest_url = f"https://{self.registry_url}/v2/{image_name}/manifests/{image_tag}"
+            manifest_url = (
+                f"https://{self.registry_url}/v2/{image_name}/manifests/{image_tag}"
+            )
             response = self._session.get(
                 manifest_url,
-                headers={"Accept": "application/vnd.docker.distribution.manifest.v2+json"},
-                timeout=30
+                headers={
+                    "Accept": "application/vnd.docker.distribution.manifest.v2+json"
+                },
+                timeout=30,
             )
 
             if response.status_code == 200:
@@ -607,11 +615,12 @@ class ContainerRegistry:
             logger.error(f"Failed to inspect manifest: {e}")
             return None
 
+
 def manage_container_registry(
     operation: str,
     registry_url: str,
     credentials: dict[str, str] | None = None,
-    **kwargs: Any
+    **kwargs: Any,
 ) -> Any:
     """Manage container registry operations.
 
@@ -630,21 +639,18 @@ def manage_container_registry(
             username=credentials.get("username", ""),
             password=credentials.get("password", ""),
             registry_url=registry_url,
-            token=credentials.get("token")
+            token=credentials.get("token"),
         )
 
     registry = ContainerRegistry(registry_url, credentials=creds)
 
     if operation == "push":
         return registry.push_image(
-            kwargs.get("image_name"),
-            kwargs.get("image_tag"),
-            kwargs.get("local_image")
+            kwargs.get("image_name"), kwargs.get("image_tag"), kwargs.get("local_image")
         )
     elif operation == "pull":
         return registry.pull_image(
-            kwargs.get("image_name"),
-            kwargs.get("image_tag", "latest")
+            kwargs.get("image_name"), kwargs.get("image_tag", "latest")
         )
     elif operation == "build_and_push":
         return registry.build_and_push(
@@ -652,36 +658,33 @@ def manage_container_registry(
             kwargs.get("image_name"),
             kwargs.get("image_tag"),
             kwargs.get("build_args"),
-            kwargs.get("no_cache", False)
+            kwargs.get("no_cache", False),
         )
     elif operation == "list":
         return registry.list_images(kwargs.get("repository"))
     elif operation == "list_registry":
         return registry.list_registry_images(
-            kwargs.get("repository"),
-            kwargs.get("limit", 100)
+            kwargs.get("repository"), kwargs.get("limit", 100)
         )
     elif operation == "delete":
         return registry.delete_image(
             kwargs.get("image_name"),
             kwargs.get("image_tag"),
-            kwargs.get("local_only", False)
+            kwargs.get("local_only", False),
         )
     elif operation == "info":
         return registry.get_image_info(
-            kwargs.get("image_name"),
-            kwargs.get("image_tag")
+            kwargs.get("image_name"), kwargs.get("image_tag")
         )
     elif operation == "tag":
         return registry.tag_image(
             kwargs.get("source_image"),
             kwargs.get("target_name"),
-            kwargs.get("target_tag")
+            kwargs.get("target_tag"),
         )
     elif operation == "manifest":
         return registry.inspect_manifest(
-            kwargs.get("image_name"),
-            kwargs.get("image_tag")
+            kwargs.get("image_name"), kwargs.get("image_tag")
         )
     else:
         raise CodomyrmexError(f"Unknown registry operation: {operation}")

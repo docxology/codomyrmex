@@ -30,9 +30,7 @@ class FabricOrchestrator:
         self.logger = get_logger(__name__)
 
     def analyze_code(
-        self,
-        code_content: str,
-        analysis_type: str = "comprehensive"
+        self, code_content: str, analysis_type: str = "comprehensive"
     ) -> dict[str, Any]:
         """
         Analyze code using appropriate Fabric patterns.
@@ -49,7 +47,7 @@ class FabricOrchestrator:
             "security": ["security_review", "find_vulnerabilities"],
             "quality": ["analyze_code", "find_code_smells"],
             "documentation": ["write_docstring", "explain_code"],
-            "optimization": ["optimize_code", "improve_performance"]
+            "optimization": ["optimize_code", "improve_performance"],
         }
 
         patterns = analysis_patterns.get(analysis_type, ["analyze_code"])
@@ -63,13 +61,15 @@ class FabricOrchestrator:
             if result["success"]:
                 self.logger.info(f"Pattern '{pattern}' completed successfully")
             else:
-                self.logger.error(f"Pattern '{pattern}' failed: {result.get('error', 'Unknown error')}")
+                self.logger.error(
+                    f"Pattern '{pattern}' failed: {result.get('error', 'Unknown error')}"
+                )
 
         return {
             "analysis_type": analysis_type,
             "patterns_used": patterns,
             "results": results,
-            "summary": self._create_analysis_summary(results)
+            "summary": self._create_analysis_summary(results),
         }
 
     def _create_analysis_summary(self, results: dict[str, dict]) -> dict[str, Any]:
@@ -80,17 +80,21 @@ class FabricOrchestrator:
         return {
             "successful_patterns": successful_patterns,
             "total_patterns": total_patterns,
-            "success_rate": (successful_patterns / total_patterns) * 100 if total_patterns > 0 else 0,
-            "total_output_length": sum(len(r.get("output", "")) for r in results.values()),
+            "success_rate": (successful_patterns / total_patterns) * 100
+            if total_patterns > 0
+            else 0,
+            "total_output_length": sum(
+                len(r.get("output", "")) for r in results.values()
+            ),
             "average_duration": (
                 sum(r.get("duration", 0) for r in results.values()) / len(results)
-                if results else 0
-            )
+                if results
+                else 0
+            ),
         }
 
     def create_workflow_visualization(
-        self,
-        output_path: str = "workflow_metrics.png"
+        self, output_path: str = "workflow_metrics.png"
     ) -> bool:
         """
         Create visualization of workflow results using Codomyrmex.
@@ -117,7 +121,11 @@ class FabricOrchestrator:
             for result in results_history:
                 pattern = result["pattern"]
                 if pattern not in pattern_stats:
-                    pattern_stats[pattern] = {"successes": 0, "total": 0, "durations": []}
+                    pattern_stats[pattern] = {
+                        "successes": 0,
+                        "total": 0,
+                        "durations": [],
+                    }
 
                 pattern_stats[pattern]["total"] += 1
                 if result["success"]:
@@ -141,7 +149,7 @@ class FabricOrchestrator:
                     y_label="Success Rate (%)",
                     output_path=output_path,
                     show_plot=False,
-                    bar_color="lightgreen"
+                    bar_color="lightgreen",
                 )
 
                 self.logger.info(f"Created workflow visualization: {output_path}")
@@ -160,5 +168,3 @@ class FabricOrchestrator:
     def list_patterns(self) -> list[str]:
         """Get list of available Fabric patterns."""
         return self.fabric_manager.list_patterns()
-
-

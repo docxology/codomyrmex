@@ -25,6 +25,7 @@ class TestHtmlHandler:
         html = "<p>Hello <b>World</b></p>"
         assert strip_html_tags(html) == "Hello World"
 
+
 @pytest.mark.unit
 class TestXmlHandler:
     def test_xml_roundtrip(self, tmp_path):
@@ -39,6 +40,7 @@ class TestXmlHandler:
         f.write_text("<unclosed>", encoding="utf-8")
         with pytest.raises(DocumentReadError):
             read_xml(f)
+
 
 @pytest.mark.unit
 class TestCsvHandler:

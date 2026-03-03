@@ -93,7 +93,9 @@ class EdgeRuntime:
 
         # Check resource constraints
         if self.node.resources.is_overloaded:
-            logger.warning("Node %s is overloaded, invocation may be delayed", self.node.id)
+            logger.warning(
+                "Node %s is overloaded, invocation may be delayed", self.node.id
+            )
 
         try:
             result = func.handler(*args, **kwargs)
@@ -106,23 +108,27 @@ class EdgeRuntime:
 
             self._warm_functions.add(function_id)
             self._call_counts[function_id] = self._call_counts.get(function_id, 0) + 1
-            self._metrics.append(InvocationMetrics(
-                function_id=function_id,
-                duration_seconds=elapsed,
-                success=True,
-                cold_start=cold_start,
-            ))
+            self._metrics.append(
+                InvocationMetrics(
+                    function_id=function_id,
+                    duration_seconds=elapsed,
+                    success=True,
+                    cold_start=cold_start,
+                )
+            )
             return result
 
         except Exception as e:
             elapsed = time.time() - start
-            self._metrics.append(InvocationMetrics(
-                function_id=function_id,
-                duration_seconds=elapsed,
-                success=False,
-                cold_start=cold_start,
-                error=str(e),
-            ))
+            self._metrics.append(
+                InvocationMetrics(
+                    function_id=function_id,
+                    duration_seconds=elapsed,
+                    success=False,
+                    cold_start=cold_start,
+                    error=str(e),
+                )
+            )
             raise EdgeExecutionError(f"Edge function failed: {e}") from e
 
     def warm_up(self, function_id: str) -> bool:
@@ -169,7 +175,10 @@ class EdgeRuntime:
             "calls": len(fn_metrics),
             "successes": len(successes),
             "errors": len(fn_metrics) - len(successes),
-            "avg_latency_ms": (sum(m.duration_seconds for m in successes) / max(len(successes), 1)) * 1000,
+            "avg_latency_ms": (
+                sum(m.duration_seconds for m in successes) / max(len(successes), 1)
+            )
+            * 1000,
             "cold_starts": sum(1 for m in fn_metrics if m.cold_start),
         }
 

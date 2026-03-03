@@ -1,4 +1,3 @@
-
 """Parser for FPF specification markdown.
 
 
@@ -24,7 +23,9 @@ class FPFParser:
         self.subsection_regex = re.compile(r"^####\s+(.+)$")
         self.subsubsection_regex = re.compile(r"^#####\s+(.+)$")
 
-    def parse_spec(self, markdown_content: str, source_path: str | None = None) -> FPFSpec:
+    def parse_spec(
+        self, markdown_content: str, source_path: str | None = None
+    ) -> FPFSpec:
         """Parse the complete FPF specification.
 
         Args:
@@ -277,16 +278,12 @@ class FPFParser:
             keywords_str = keyword_matches[0]
             # Split by comma and clean
             keywords = [
-                k.strip().strip("*")
-                for k in keywords_str.split(",")
-                if k.strip()
+                k.strip().strip("*") for k in keywords_str.split(",") if k.strip()
             ]
             pattern.keywords = keywords
 
         # Extract search queries
-        query_matches = re.findall(
-            r'\*Queries:\*\s*"(.+?)"', content, re.MULTILINE
-        )
+        query_matches = re.findall(r'\*Queries:\*\s*"(.+?)"', content, re.MULTILINE)
         if query_matches:
             pattern.search_queries = query_matches
 
@@ -367,4 +364,3 @@ class FPFParser:
             sections[current_section] = "\n".join(current_lines).strip()
 
         return sections
-

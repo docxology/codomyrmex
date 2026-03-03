@@ -98,8 +98,7 @@ class WorkflowAnalytics:
             Success rate in [0, 1]. Returns 0.0 if no data.
         """
         step_entries = [
-            e for e in self._journal.by_event_type("step")
-            if e.step_name == step_name
+            e for e in self._journal.by_event_type("step") if e.step_name == step_name
         ]
 
         if not step_entries:

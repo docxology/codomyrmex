@@ -231,10 +231,7 @@ class TemplateRegistry:
             if query_lower in template.name.lower():
                 results.append(template)
                 continue
-            if any(
-                query_lower in str(v).lower()
-                for v in template.metadata.values()
-            ):
+            if any(query_lower in str(v).lower() for v in template.metadata.values()):
                 results.append(template)
         return sorted(results, key=lambda t: t.name)
 

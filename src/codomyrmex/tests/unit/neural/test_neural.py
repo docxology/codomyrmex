@@ -1,4 +1,5 @@
 """Unit tests for codomyrmex.neural -- Transformer, attention, layers, activations."""
+
 import numpy as np
 import pytest
 
@@ -321,9 +322,7 @@ class TestActivations:
 
     @pytest.mark.unit
     def test_relu_positive(self):
-        np.testing.assert_allclose(
-            relu(np.array([1.0, 2.0, -1.0])), [1.0, 2.0, 0.0]
-        )
+        np.testing.assert_allclose(relu(np.array([1.0, 2.0, -1.0])), [1.0, 2.0, 0.0])
 
     @pytest.mark.unit
     def test_relu_zero_for_negative(self):

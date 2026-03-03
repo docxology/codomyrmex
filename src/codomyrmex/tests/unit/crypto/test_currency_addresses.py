@@ -46,13 +46,17 @@ class TestBitcoinAddress:
         """Test functionality: mainnet address starts with 1."""
         compressed, _ = secp256k1_keys
         addr = generate_bitcoin_address(compressed, network="mainnet")
-        assert addr.startswith("1"), f"Mainnet address should start with '1', got {addr}"
+        assert addr.startswith("1"), (
+            f"Mainnet address should start with '1', got {addr}"
+        )
 
     def test_testnet_address_starts_with_m_or_n(self, secp256k1_keys):
         """Test functionality: testnet address starts with m or n."""
         compressed, _ = secp256k1_keys
         addr = generate_bitcoin_address(compressed, network="testnet")
-        assert addr[0] in ("m", "n"), f"Testnet address should start with 'm' or 'n', got {addr}"
+        assert addr[0] in ("m", "n"), (
+            f"Testnet address should start with 'm' or 'n', got {addr}"
+        )
 
     def test_address_length_reasonable(self, secp256k1_keys):
         """Test functionality: address length reasonable."""

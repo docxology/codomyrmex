@@ -5,7 +5,6 @@ tests are skipped rather than using mocks. All data processing and
 conversion logic is tested with real data structures.
 """
 
-
 import pytest
 
 try:
@@ -13,6 +12,7 @@ try:
     from codomyrmex.agents.gemini import GeminiClient, GeminiIntegrationAdapter
     from codomyrmex.agents.generic import AgentOrchestrator
     from codomyrmex.tests.unit.agents.helpers import GEMINI_AVAILABLE
+
     _HAS_AGENTS = True
 except ImportError:
     _HAS_AGENTS = False
@@ -39,8 +39,7 @@ class TestGeminiIntegrationAdapter:
 
         try:
             code = adapter.adapt_for_ai_code_editing(
-                prompt="Create a fibonacci function",
-                language="python"
+                prompt="Create a fibonacci function", language="python"
             )
             # Test real result structure
             assert isinstance(code, str)
@@ -56,9 +55,7 @@ class TestGeminiIntegrationAdapter:
 
         try:
             code = adapter.adapt_for_ai_code_editing(
-                prompt="Create a function",
-                language="python",
-                files=["src/models.py"]
+                prompt="Create a function", language="python", files=["src/models.py"]
             )
             # Test real result structure
             assert isinstance(code, str)
@@ -74,7 +71,7 @@ class TestGeminiIntegrationAdapter:
 
         messages = [
             {"role": "user", "content": "Hello"},
-            {"role": "assistant", "content": "Hi there"}
+            {"role": "assistant", "content": "Hi there"},
         ]
 
         try:
@@ -115,8 +112,7 @@ class TestGeminiIntegrationAdapter:
 
         try:
             result = adapter.adapt_for_code_execution(
-                code="def test(): pass",
-                language="python"
+                code="def test(): pass", language="python"
             )
 
             # Test real result structure
@@ -163,7 +159,9 @@ class TestGeminiOrchestration:
 
             # Test real response structure
             assert len(responses) == 1
-            assert isinstance(responses[0], type(gemini.execute(AgentRequest(prompt=""))))
+            assert isinstance(
+                responses[0], type(gemini.execute(AgentRequest(prompt="")))
+            )
         except Exception:
             # Expected if authentication fails or CLI error
             pytest.skip("Gemini CLI authentication or execution failed")

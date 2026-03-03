@@ -51,10 +51,12 @@ from codomyrmex.meme.narrative.structure import (
 # Module imports
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 def test_meme_module_importable():
     """Verify that the meme module can be explicitly imported."""
     from codomyrmex import meme
+
     assert meme is not None
 
 
@@ -83,6 +85,7 @@ def test_meme_submodules_exist():
 # ---------------------------------------------------------------------------
 # Meme
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 def test_meme_creation():
@@ -134,6 +137,7 @@ def test_meme_unique_ids():
 # MemeticCode
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 def test_memetic_code_append():
     """Test MemeticCode append and length."""
@@ -179,13 +183,17 @@ def test_memetic_code_aggregate_fitness():
 # Memeplex
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 def test_memeplex_creation():
     """Test Memeplex creation."""
-    m = Memeplex(name="democracy", memes=[
-        Meme(content="freedom of speech"),
-        Meme(content="voting rights"),
-    ])
+    m = Memeplex(
+        name="democracy",
+        memes=[
+            Meme(content="freedom of speech"),
+            Meme(content="voting rights"),
+        ],
+    )
     assert m.name == "democracy"
     assert len(m.memes) == 2
     assert m.id  # auto-generated
@@ -251,6 +259,7 @@ def test_memeplex_recombine():
 # FitnessMap
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 def test_fitness_map_operations():
     """Test FitnessMap add, mean, max, min, top_n."""
@@ -276,6 +285,7 @@ def test_fitness_map_empty():
 # ---------------------------------------------------------------------------
 # MemeticEngine
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 def test_memetic_engine_dissect():
@@ -314,7 +324,17 @@ def test_memetic_engine_select_truncation():
     """Test MemeticEngine truncation selection."""
     engine = MemeticEngine()
     pop = [
-        Memeplex(name=f"m{i}", memes=[Meme(content=f"c{i}", fidelity=0.1 * i, fecundity=0.1 * i, longevity=0.1 * i)])
+        Memeplex(
+            name=f"m{i}",
+            memes=[
+                Meme(
+                    content=f"c{i}",
+                    fidelity=0.1 * i,
+                    fecundity=0.1 * i,
+                    longevity=0.1 * i,
+                )
+            ],
+        )
         for i in range(1, 6)
     ]
     selected = engine.select(pop, n=2, method="truncation")
@@ -326,6 +346,7 @@ def test_memetic_engine_select_truncation():
 # ---------------------------------------------------------------------------
 # Mutation functions
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 def test_semantic_drift():
@@ -360,6 +381,7 @@ def test_splice_memes():
 # Fitness functions
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 def test_virality_score():
     """Test virality_score is in [0, 1]."""
@@ -373,7 +395,10 @@ def test_robustness_score_func():
     """Test robustness_score function for memeplex."""
     mp = Memeplex(
         name="robust",
-        memes=[Meme(content=f"m{i}", fidelity=0.5, fecundity=0.5, longevity=0.5) for i in range(5)],
+        memes=[
+            Meme(content=f"m{i}", fidelity=0.5, fecundity=0.5, longevity=0.5)
+            for i in range(5)
+        ],
         synergy=0.8,
     )
     score = robustness_score(mp)
@@ -395,7 +420,10 @@ def test_decay_rate_func():
 @pytest.mark.unit
 def test_population_fitness_stats_func():
     """Test population_fitness_stats returns correct keys."""
-    pop = [Meme(content=f"m{i}", fidelity=0.5, fecundity=0.5, longevity=0.5) for i in range(10)]
+    pop = [
+        Meme(content=f"m{i}", fidelity=0.5, fecundity=0.5, longevity=0.5)
+        for i in range(10)
+    ]
     stats = population_fitness_stats(pop)
     assert "mean" in stats
     assert "std" in stats
@@ -415,6 +443,7 @@ def test_population_fitness_stats_empty():
 # ---------------------------------------------------------------------------
 # Semiotic
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 def test_sign_creation():
@@ -459,7 +488,10 @@ def test_drift_report_stability_ratio():
     """Test DriftReport stability_ratio property."""
     report = DriftReport(
         shifted_signs=[Sign(signifier="a", signified="b")],
-        stable_signs=[Sign(signifier="c", signified="d"), Sign(signifier="e", signified="f")],
+        stable_signs=[
+            Sign(signifier="c", signified="d"),
+            Sign(signifier="e", signified="f"),
+        ],
     )
     assert report.stability_ratio == pytest.approx(2 / 3, abs=1e-6)
 
@@ -467,6 +499,7 @@ def test_drift_report_stability_ratio():
 # ---------------------------------------------------------------------------
 # Narrative
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 def test_narrative_arc_creation():
@@ -545,6 +578,7 @@ def test_narrative_engine_insurgent_counter():
 # Contagion models
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 def test_contagion_model_creation():
     """Test ContagionModel dataclass creation."""
@@ -592,6 +626,7 @@ def test_resonance_map():
 # ---------------------------------------------------------------------------
 # Cultural dynamics
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 def test_cultural_dynamics_imports():

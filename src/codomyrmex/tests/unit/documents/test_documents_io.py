@@ -86,6 +86,7 @@ from codomyrmex.documents.utils.mime_type_detector import (
 
 # --- Document Reader --------------------------------------------------------
 
+
 class TestDocumentReader:
     """Test DocumentReader class."""
 
@@ -162,14 +163,14 @@ class TestDocumentReader:
 
 # --- Document Writer --------------------------------------------------------
 
+
 class TestDocumentWriter:
     """Test DocumentWriter class."""
 
     def test_write_markdown(self, tmp_path):
         """Test writing a markdown document."""
         doc = Document(
-            content="# Test Document\n\nContent here",
-            format=DocumentFormat.MARKDOWN
+            content="# Test Document\n\nContent here", format=DocumentFormat.MARKDOWN
         )
 
         output_file = tmp_path / "output.md"
@@ -182,8 +183,7 @@ class TestDocumentWriter:
     def test_write_json(self, tmp_path):
         """Test writing a JSON document."""
         doc = Document(
-            content={"key": "value", "number": 42},
-            format=DocumentFormat.JSON
+            content={"key": "value", "number": 42}, format=DocumentFormat.JSON
         )
 
         output_file = tmp_path / "output.json"
@@ -219,10 +219,14 @@ class TestDocumentWriter:
 
 # --- Format Handlers --------------------------------------------------------
 
+
 class TestFormatHandlers:
     """Test format-specific handlers."""
 
-    @pytest.mark.skipif(read_markdown is None or write_markdown is None, reason="Markdown handlers not available")
+    @pytest.mark.skipif(
+        read_markdown is None or write_markdown is None,
+        reason="Markdown handlers not available",
+    )
     def test_markdown_read_write(self, tmp_path):
         """Test markdown read and write."""
         test_file = tmp_path / "test.md"
@@ -232,7 +236,9 @@ class TestFormatHandlers:
         read_content = read_markdown(test_file)
         assert read_content == content
 
-    @pytest.mark.skipif(read_json is None or write_json is None, reason="JSON handlers not available")
+    @pytest.mark.skipif(
+        read_json is None or write_json is None, reason="JSON handlers not available"
+    )
     def test_json_read_write(self, tmp_path):
         """Test JSON read and write."""
         test_file = tmp_path / "test.json"
@@ -242,7 +248,9 @@ class TestFormatHandlers:
         read_data = read_json(test_file)
         assert read_data == data
 
-    @pytest.mark.skipif(read_yaml is None or write_yaml is None, reason="YAML handlers not available")
+    @pytest.mark.skipif(
+        read_yaml is None or write_yaml is None, reason="YAML handlers not available"
+    )
     def test_yaml_read_write(self, tmp_path):
         """Test YAML read and write."""
         test_file = tmp_path / "test.yaml"
@@ -252,7 +260,9 @@ class TestFormatHandlers:
         read_data = read_yaml(test_file)
         assert read_data == data
 
-    @pytest.mark.skipif(read_text is None or write_text is None, reason="Text handlers not available")
+    @pytest.mark.skipif(
+        read_text is None or write_text is None, reason="Text handlers not available"
+    )
     def test_text_read_write(self, tmp_path):
         """Test text read and write."""
         test_file = tmp_path / "test.txt"
@@ -262,7 +272,9 @@ class TestFormatHandlers:
         read_content = read_text(test_file)
         assert read_content == content
 
-    @pytest.mark.skipif(read_json is None or write_json is None, reason="JSON handlers not available")
+    @pytest.mark.skipif(
+        read_json is None or write_json is None, reason="JSON handlers not available"
+    )
     def test_json_schema_validation(self, tmp_path):
         """Test JSON read with schema validation."""
         test_file = tmp_path / "test.json"
@@ -271,10 +283,7 @@ class TestFormatHandlers:
 
         schema = {
             "type": "object",
-            "properties": {
-                "name": {"type": "string"},
-                "age": {"type": "number"}
-            }
+            "properties": {"name": {"type": "string"}, "age": {"type": "number"}},
         }
 
         try:
@@ -286,10 +295,13 @@ class TestFormatHandlers:
 
 # --- HTML Handler -----------------------------------------------------------
 
+
 class TestHtmlHandler:
     """Test HTML handler."""
 
-    @pytest.mark.skipif(read_html is None or write_html is None, reason="HTML handler not available")
+    @pytest.mark.skipif(
+        read_html is None or write_html is None, reason="HTML handler not available"
+    )
     def test_html_read_write(self, tmp_path):
         """Test HTML read and write."""
         test_file = tmp_path / "test.html"
@@ -313,7 +325,9 @@ class TestHtmlHandler:
         assert "Hello" in text
         assert "world" in text
 
-    @pytest.mark.skipif(read_html is None or write_html is None, reason="HTML handler not available")
+    @pytest.mark.skipif(
+        read_html is None or write_html is None, reason="HTML handler not available"
+    )
     def test_html_unicode(self, tmp_path):
         """Test HTML with unicode content."""
         test_file = tmp_path / "unicode.html"
@@ -324,10 +338,13 @@ class TestHtmlHandler:
 
 # --- XML Handler ------------------------------------------------------------
 
+
 class TestXmlHandler:
     """Test XML handler."""
 
-    @pytest.mark.skipif(read_xml is None or write_xml is None, reason="XML handler not available")
+    @pytest.mark.skipif(
+        read_xml is None or write_xml is None, reason="XML handler not available"
+    )
     def test_xml_read_write(self, tmp_path):
         """Test XML read and write."""
         test_file = tmp_path / "test.xml"
@@ -355,10 +372,13 @@ class TestXmlHandler:
 
 # --- CSV Handler ------------------------------------------------------------
 
+
 class TestCsvHandler:
     """Test CSV handler."""
 
-    @pytest.mark.skipif(read_csv is None or write_csv is None, reason="CSV handler not available")
+    @pytest.mark.skipif(
+        read_csv is None or write_csv is None, reason="CSV handler not available"
+    )
     def test_csv_read_write(self, tmp_path):
         """Test CSV read and write."""
         test_file = tmp_path / "test.csv"
@@ -389,6 +409,7 @@ class TestCsvHandler:
 
 # --- Convenience Functions --------------------------------------------------
 
+
 class TestConvenienceFunctions:
     """Test convenience functions."""
 
@@ -412,6 +433,7 @@ class TestConvenienceFunctions:
 
 
 # --- Error Handling ---------------------------------------------------------
+
 
 class TestErrorHandling:
     """Test error handling."""
@@ -437,6 +459,7 @@ class TestErrorHandling:
 
 
 # --- Round-Trip Tests -------------------------------------------------------
+
 
 class TestRoundTrip:
     """Test read/write round-trips."""
@@ -483,6 +506,7 @@ class TestRoundTrip:
 
 # --- Edge Cases -------------------------------------------------------------
 
+
 class TestEdgeCases:
     """Test edge cases."""
 
@@ -521,6 +545,7 @@ class TestEdgeCases:
 
 # --- Utils: Encoding Detector -----------------------------------------------
 
+
 class TestUtilsEncodingDetector:
     """Test encoding detection utilities."""
 
@@ -543,6 +568,7 @@ class TestUtilsEncodingDetector:
 
 
 # --- Utils: Format Detector --------------------------------------------------
+
 
 class TestUtilsFormatDetector:
     """Test format detection utilities."""
@@ -592,6 +618,7 @@ class TestUtilsFormatDetector:
 
 
 # --- Utils: File Validator ---------------------------------------------------
+
 
 class TestUtilsFileValidator:
     """Test file validation utilities."""

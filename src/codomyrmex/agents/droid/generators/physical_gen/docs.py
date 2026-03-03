@@ -1,8 +1,9 @@
 """Generator content."""
 
+
 def generate_physical_docs_content() -> str:
     """Generate architecture documentation."""
-    return '''# Physical Management Module Architecture
+    return """# Physical Management Module Architecture
 
 ## Overview
 
@@ -170,5 +171,4 @@ External Devices → Sensor Manager → Data Processing → Object Manager → P
 - **Distributed Simulation**: Multi-node physics processing
 - **Real-time Optimization**: Adaptive algorithms for performance
 - **Memory Pooling**: Efficient memory management for large object counts
-'''
-
+"""

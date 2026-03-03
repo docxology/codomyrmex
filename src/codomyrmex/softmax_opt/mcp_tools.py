@@ -6,7 +6,9 @@ from .kernel import log_softmax, online_softmax, softmax
 
 
 @mcp_tool(category="softmax_opt")
-def compute_softmax(logits: list[float], temperature: float = 1.0, variant: str = "standard") -> dict:
+def compute_softmax(
+    logits: list[float], temperature: float = 1.0, variant: str = "standard"
+) -> dict:
     """Compute softmax probabilities from logits.
 
     Args:

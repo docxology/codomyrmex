@@ -21,11 +21,13 @@ logger = get_logger(__name__)
 @dataclass
 class DistributedRateLimiterConfig:
     """Configuration for distributed rate limiting."""
+
     redis_url: str = ""
 
     def __post_init__(self):
         if not self.redis_url:
             self.redis_url = os.getenv("REDIS_URL", DEFAULT_REDIS_URL)
+
     key_prefix: str = "ratelimit:"
     sync_interval: float = 0.1  # Seconds between syncs
 
@@ -67,7 +69,9 @@ class RedisRateLimiter(RateLimiter):
                     limit=self.limit,
                 )
             except Exception as e:
-                logger.warning("Redis check failed, falling back to local limiter: %s", e)
+                logger.warning(
+                    "Redis check failed, falling back to local limiter: %s", e
+                )
 
         # Fallback to local
         with self._lock:
@@ -106,7 +110,9 @@ class RedisRateLimiter(RateLimiter):
             except RateLimitExceeded:
                 raise
             except Exception as e:
-                logger.warning("Redis acquire failed, falling back to local limiter: %s", e)
+                logger.warning(
+                    "Redis acquire failed, falling back to local limiter: %s", e
+                )
 
         # Fallback to local
         with self._lock:
@@ -237,7 +243,9 @@ class AdaptiveRateLimiter(RateLimiter):
             return self.base_limit
 
         # Reduce limit linearly as load increases
-        load_factor = 1 - ((self._current_load - self.load_threshold) / (1 - self.load_threshold))
+        load_factor = 1 - (
+            (self._current_load - self.load_threshold) / (1 - self.load_threshold)
+        )
         load_factor = max(self.min_limit_ratio, load_factor)
 
         return int(self.base_limit * load_factor)

@@ -243,12 +243,8 @@ class UORGraph:
         return {
             "entity_count": self.entity_count,
             "relationship_count": self.relationship_count,
-            "entities": [
-                e.to_dict() for e in self._manager.all_entities
-            ],
-            "relationships": [
-                r.to_dict() for r in self._relationships.values()
-            ],
+            "entities": [e.to_dict() for e in self._manager.all_entities],
+            "relationships": [r.to_dict() for r in self._relationships.values()],
         }
 
     def __repr__(self) -> str:

@@ -68,7 +68,9 @@ class TestGetPaiMissions:
         """Test that progress.json is merged into mission data."""
         m_dir = tmp_path / "MEMORY" / "STATE" / "missions" / "m1"
         m_dir.mkdir(parents=True)
-        (m_dir / "MISSION.yaml").write_text("title: M1\nstatus: active\npriority: MEDIUM\n")
+        (m_dir / "MISSION.yaml").write_text(
+            "title: M1\nstatus: active\npriority: MEDIUM\n"
+        )
         (m_dir / "progress.json").write_text(json.dumps({"completion_percentage": 75}))
 
         provider = _make_provider(tmp_path)
@@ -85,7 +87,9 @@ class TestGetPaiMissions:
 
         good = missions_dir / "good"
         good.mkdir(parents=True)
-        (good / "MISSION.yaml").write_text("title: Good\nstatus: active\npriority: LOW\n")
+        (good / "MISSION.yaml").write_text(
+            "title: Good\nstatus: active\npriority: LOW\n"
+        )
 
         provider = _make_provider(tmp_path)
         result = provider.get_pai_missions()
@@ -98,7 +102,9 @@ class TestGetPaiMissions:
         for name, prio in [("low", "LOW"), ("high", "HIGH"), ("med", "MEDIUM")]:
             d = missions_dir / name
             d.mkdir(parents=True)
-            (d / "MISSION.yaml").write_text(f"title: {name}\nstatus: active\npriority: {prio}\n")
+            (d / "MISSION.yaml").write_text(
+                f"title: {name}\nstatus: active\npriority: {prio}\n"
+            )
 
         provider = _make_provider(tmp_path)
         result = provider.get_pai_missions()
@@ -140,10 +146,14 @@ class TestGetPaiProjects:
         p_dir = tmp_path / "MEMORY" / "STATE" / "projects" / "p1"
         p_dir.mkdir(parents=True)
         (p_dir / "PROJECT.yaml").write_text("title: P1\nstatus: active\n")
-        (p_dir / "progress.json").write_text(json.dumps({
-            "completion_percentage": 50,
-            "task_counts": {"completed": 5, "total": 10}
-        }))
+        (p_dir / "progress.json").write_text(
+            json.dumps(
+                {
+                    "completion_percentage": 50,
+                    "task_counts": {"completed": 5, "total": 10},
+                }
+            )
+        )
 
         provider = _make_provider(tmp_path)
         result = provider.get_pai_projects()
@@ -328,8 +338,22 @@ class TestBuildPaiMermaidGraph:
 
     def test_valid_syntax_with_data(self, tmp_path):
         """Test that graph with missions and projects has valid structure."""
-        missions = [{"id": "m1", "title": "Mission 1", "status": "active", "linked_projects": ["p1"]}]
-        projects = [{"id": "p1", "title": "Project 1", "status": "in_progress", "parent_mission": "m1"}]
+        missions = [
+            {
+                "id": "m1",
+                "title": "Mission 1",
+                "status": "active",
+                "linked_projects": ["p1"],
+            }
+        ]
+        projects = [
+            {
+                "id": "p1",
+                "title": "Project 1",
+                "status": "in_progress",
+                "parent_mission": "m1",
+            }
+        ]
 
         provider = _make_provider(tmp_path)
         result = provider._build_pai_mermaid_graph(missions, projects)
@@ -339,7 +363,14 @@ class TestBuildPaiMermaidGraph:
 
     def test_orphan_projects_handled(self, tmp_path):
         """Test that projects without mission links still appear."""
-        projects = [{"id": "orphan", "title": "Orphan", "status": "active", "parent_mission": ""}]
+        projects = [
+            {
+                "id": "orphan",
+                "title": "Orphan",
+                "status": "active",
+                "parent_mission": "",
+            }
+        ]
 
         provider = _make_provider(tmp_path)
         result = provider._build_pai_mermaid_graph([], projects)

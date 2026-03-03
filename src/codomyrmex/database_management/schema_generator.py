@@ -55,12 +55,14 @@ TYPE_MAPPINGS = {
         "binary": "BLOB",
         "json": "JSON",
         "uuid": "CHAR(36)",
-    }
+    },
 }
+
 
 @dataclass
 class Column:
     """Database column definition."""
+
     name: str
     data_type: str
     length: int | None = None
@@ -110,9 +112,11 @@ class Column:
 
         return " ".join(parts)
 
+
 @dataclass
 class Index:
     """Database index definition."""
+
     name: str
     columns: list[str]
     unique: bool = False
@@ -130,9 +134,11 @@ class Index:
 
         return sql
 
+
 @dataclass
 class SchemaTable:
     """Database table schema definition."""
+
     name: str
     columns: list[Column] = field(default_factory=list)
     indexes: list[Index] = field(default_factory=list)
@@ -151,7 +157,9 @@ class SchemaTable:
             if col.foreign_key:
                 fk_table = col.foreign_key["table"]
                 fk_column = col.foreign_key.get("column", "id")
-                constraint = f"    FOREIGN KEY ({col.name}) REFERENCES {fk_table}({fk_column})"
+                constraint = (
+                    f"    FOREIGN KEY ({col.name}) REFERENCES {fk_table}({fk_column})"
+                )
                 column_defs.append(constraint)
 
         for constraint in self.constraints:
@@ -174,18 +182,23 @@ class SchemaTable:
                     "primary_key": c.primary_key,
                     "unique": c.unique,
                     "default": c.default,
-                    "foreign_key": c.foreign_key
+                    "foreign_key": c.foreign_key,
                 }
                 for c in self.columns
             ],
-            "indexes": [{"name": i.name, "columns": i.columns, "unique": i.unique} for i in self.indexes],
+            "indexes": [
+                {"name": i.name, "columns": i.columns, "unique": i.unique}
+                for i in self.indexes
+            ],
             "constraints": self.constraints,
-            "description": self.description
+            "description": self.description,
         }
+
 
 @dataclass
 class SchemaMigration:
     """Database schema migration."""
+
     migration_id: str
     name: str
     description: str
@@ -200,9 +213,11 @@ class SchemaMigration:
         if not self.checksum:
             self.checksum = hashlib.sha256(self.up_sql.encode()).hexdigest()[:16]
 
+
 @dataclass
 class SchemaDefinition:
     """Complete database schema definition."""
+
     name: str
     version: str
     tables: list[SchemaTable] = field(default_factory=list)
@@ -227,8 +242,9 @@ class SchemaDefinition:
             "name": self.name,
             "version": self.version,
             "tables": [t.to_dict() for t in self.tables],
-            "created_at": self.created_at.isoformat()
+            "created_at": self.created_at.isoformat(),
         }
+
 
 class SchemaGenerator:
     """Database schema generation and management system."""
@@ -268,7 +284,7 @@ class SchemaGenerator:
 
         # Save table schema
         schema_file = self.schemas_dir / f"{table_id}.json"
-        with open(schema_file, 'w') as f:
+        with open(schema_file, "w") as f:
             json.dump(table.to_dict(), f, indent=2)
 
         logger.info(f"Created table schema: {table.name}")
@@ -285,41 +301,42 @@ class SchemaGenerator:
         """
         columns = []
         for col_def in table_def.get("columns", []):
-            columns.append(Column(
-                name=col_def["name"],
-                data_type=col_def.get("type", "string"),
-                length=col_def.get("length"),
-                nullable=col_def.get("nullable", True),
-                primary_key=col_def.get("primary_key", False),
-                auto_increment=col_def.get("auto_increment", False),
-                unique=col_def.get("unique", False),
-                default=col_def.get("default"),
-                foreign_key=col_def.get("foreign_key")
-            ))
+            columns.append(
+                Column(
+                    name=col_def["name"],
+                    data_type=col_def.get("type", "string"),
+                    length=col_def.get("length"),
+                    nullable=col_def.get("nullable", True),
+                    primary_key=col_def.get("primary_key", False),
+                    auto_increment=col_def.get("auto_increment", False),
+                    unique=col_def.get("unique", False),
+                    default=col_def.get("default"),
+                    foreign_key=col_def.get("foreign_key"),
+                )
+            )
 
         indexes = []
         for idx_def in table_def.get("indexes", []):
-            indexes.append(Index(
-                name=idx_def["name"],
-                columns=idx_def["columns"],
-                unique=idx_def.get("unique", False)
-            ))
+            indexes.append(
+                Index(
+                    name=idx_def["name"],
+                    columns=idx_def["columns"],
+                    unique=idx_def.get("unique", False),
+                )
+            )
 
         table = SchemaTable(
             name=table_def["name"],
             columns=columns,
             indexes=indexes,
             constraints=table_def.get("constraints", []),
-            description=table_def.get("description", "")
+            description=table_def.get("description", ""),
         )
 
         return self.create_table(table)
 
     def generate_migration(
-        self,
-        name: str,
-        description: str,
-        changes: dict[str, Any]
+        self, name: str, description: str, changes: dict[str, Any]
     ) -> SchemaMigration:
         """Generate a schema migration from changes.
 
@@ -341,24 +358,28 @@ class SchemaGenerator:
             name=name,
             description=description,
             up_sql=up_sql,
-            down_sql=down_sql
+            down_sql=down_sql,
         )
 
         self._migrations[migration_id] = migration
 
         # Save migration
         migration_file = self.migrations_dir / f"{migration_id}.json"
-        with open(migration_file, 'w') as f:
-            json.dump({
-                "id": migration.migration_id,
-                "name": migration.name,
-                "description": migration.description,
-                "up_sql": migration.up_sql,
-                "down_sql": migration.down_sql,
-                "dependencies": migration.dependencies,
-                "created_at": migration.created_at.isoformat(),
-                "checksum": migration.checksum
-            }, f, indent=2)
+        with open(migration_file, "w") as f:
+            json.dump(
+                {
+                    "id": migration.migration_id,
+                    "name": migration.name,
+                    "description": migration.description,
+                    "up_sql": migration.up_sql,
+                    "down_sql": migration.down_sql,
+                    "dependencies": migration.dependencies,
+                    "created_at": migration.created_at.isoformat(),
+                    "checksum": migration.checksum,
+                },
+                f,
+                indent=2,
+            )
 
         # Also save as SQL files
         up_file = self.migrations_dir / f"{migration_id}_up.sql"
@@ -384,7 +405,9 @@ class SchemaGenerator:
             table_name = col_change["table"]
             for col_def in col_change.get("columns", []):
                 col = Column(**col_def) if isinstance(col_def, dict) else col_def
-                statements.append(f"ALTER TABLE {table_name} ADD COLUMN {col.to_sql(self.dialect)};")
+                statements.append(
+                    f"ALTER TABLE {table_name} ADD COLUMN {col.to_sql(self.dialect)};"
+                )
 
         # Drop columns
         for col_change in changes.get("drop_columns", []):
@@ -432,14 +455,18 @@ class SchemaGenerator:
 
         # Rollback table creations by dropping them
         for table_def in changes.get("create_tables", []):
-            table_name = table_def["name"] if isinstance(table_def, dict) else table_def.name
+            table_name = (
+                table_def["name"] if isinstance(table_def, dict) else table_def.name
+            )
             statements.append(f"DROP TABLE IF EXISTS {table_name};")
 
         # Rollback column additions by dropping them
         for col_change in changes.get("add_columns", []):
             table_name = col_change["table"]
             for col_def in col_change.get("columns", []):
-                col_name = col_def["name"] if isinstance(col_def, dict) else col_def.name
+                col_name = (
+                    col_def["name"] if isinstance(col_def, dict) else col_def.name
+                )
                 statements.append(f"ALTER TABLE {table_name} DROP COLUMN {col_name};")
 
         # Rollback index creations by dropping them
@@ -456,38 +483,40 @@ class SchemaGenerator:
         """Convert dictionary to SchemaTable."""
         columns = []
         for col_def in table_def.get("columns", []):
-            columns.append(Column(
-                name=col_def["name"],
-                data_type=col_def.get("type", "string"),
-                length=col_def.get("length"),
-                nullable=col_def.get("nullable", True),
-                primary_key=col_def.get("primary_key", False),
-                auto_increment=col_def.get("auto_increment", False),
-                unique=col_def.get("unique", False),
-                default=col_def.get("default"),
-                foreign_key=col_def.get("foreign_key")
-            ))
+            columns.append(
+                Column(
+                    name=col_def["name"],
+                    data_type=col_def.get("type", "string"),
+                    length=col_def.get("length"),
+                    nullable=col_def.get("nullable", True),
+                    primary_key=col_def.get("primary_key", False),
+                    auto_increment=col_def.get("auto_increment", False),
+                    unique=col_def.get("unique", False),
+                    default=col_def.get("default"),
+                    foreign_key=col_def.get("foreign_key"),
+                )
+            )
 
         indexes = []
         for idx_def in table_def.get("indexes", []):
-            indexes.append(Index(
-                name=idx_def["name"],
-                columns=idx_def["columns"],
-                unique=idx_def.get("unique", False)
-            ))
+            indexes.append(
+                Index(
+                    name=idx_def["name"],
+                    columns=idx_def["columns"],
+                    unique=idx_def.get("unique", False),
+                )
+            )
 
         return SchemaTable(
             name=table_def["name"],
             columns=columns,
             indexes=indexes,
             constraints=table_def.get("constraints", []),
-            description=table_def.get("description", "")
+            description=table_def.get("description", ""),
         )
 
     def compare_schemas(
-        self,
-        current_schema: dict[str, Any],
-        target_schema: dict[str, Any]
+        self, current_schema: dict[str, Any], target_schema: dict[str, Any]
     ) -> dict[str, Any]:
         """Compare two schemas and generate differences.
 
@@ -505,7 +534,7 @@ class SchemaGenerator:
             "columns_to_remove": [],
             "columns_to_modify": [],
             "indexes_to_add": [],
-            "indexes_to_remove": []
+            "indexes_to_remove": [],
         }
 
         current_tables = {t["name"]: t for t in current_schema.get("tables", [])}
@@ -524,41 +553,43 @@ class SchemaGenerator:
         # Compare columns in matching tables
         for table_name in current_tables:
             if table_name in target_tables:
-                current_cols = {c["name"]: c for c in current_tables[table_name].get("columns", [])}
-                target_cols = {c["name"]: c for c in target_tables[table_name].get("columns", [])}
+                current_cols = {
+                    c["name"]: c for c in current_tables[table_name].get("columns", [])
+                }
+                target_cols = {
+                    c["name"]: c for c in target_tables[table_name].get("columns", [])
+                }
 
                 # New columns
                 for col_name in target_cols:
                     if col_name not in current_cols:
-                        differences["columns_to_add"].append({
-                            "table": table_name,
-                            "column": target_cols[col_name]
-                        })
+                        differences["columns_to_add"].append(
+                            {"table": table_name, "column": target_cols[col_name]}
+                        )
 
                 # Removed columns
                 for col_name in current_cols:
                     if col_name not in target_cols:
-                        differences["columns_to_remove"].append({
-                            "table": table_name,
-                            "column": col_name
-                        })
+                        differences["columns_to_remove"].append(
+                            {"table": table_name, "column": col_name}
+                        )
 
                 # Modified columns
                 for col_name in current_cols:
                     if col_name in target_cols:
                         if current_cols[col_name] != target_cols[col_name]:
-                            differences["columns_to_modify"].append({
-                                "table": table_name,
-                                "from": current_cols[col_name],
-                                "to": target_cols[col_name]
-                            })
+                            differences["columns_to_modify"].append(
+                                {
+                                    "table": table_name,
+                                    "from": current_cols[col_name],
+                                    "to": target_cols[col_name],
+                                }
+                            )
 
         return differences
 
     def get_schema_drift_report(
-        self,
-        current_schema: dict[str, Any],
-        target_schema: dict[str, Any]
+        self, current_schema: dict[str, Any], target_schema: dict[str, Any]
     ) -> dict[str, Any]:
         """Generate schema drift report.
 
@@ -571,22 +602,29 @@ class SchemaGenerator:
         """
         differences = self.compare_schemas(current_schema, target_schema)
 
-        has_drift = any(
-            len(differences[key]) > 0
-            for key in differences
-        )
+        has_drift = any(len(differences[key]) > 0 for key in differences)
 
         recommendations = []
         if differences["tables_to_add"]:
-            recommendations.append(f"Create {len(differences['tables_to_add'])} new table(s)")
+            recommendations.append(
+                f"Create {len(differences['tables_to_add'])} new table(s)"
+            )
         if differences["tables_to_remove"]:
-            recommendations.append(f"Review {len(differences['tables_to_remove'])} table(s) for removal")
+            recommendations.append(
+                f"Review {len(differences['tables_to_remove'])} table(s) for removal"
+            )
         if differences["columns_to_add"]:
-            recommendations.append(f"Add {len(differences['columns_to_add'])} new column(s)")
+            recommendations.append(
+                f"Add {len(differences['columns_to_add'])} new column(s)"
+            )
         if differences["columns_to_remove"]:
-            recommendations.append(f"Review {len(differences['columns_to_remove'])} column(s) for removal")
+            recommendations.append(
+                f"Review {len(differences['columns_to_remove'])} column(s) for removal"
+            )
         if differences["columns_to_modify"]:
-            recommendations.append(f"Modify {len(differences['columns_to_modify'])} column(s)")
+            recommendations.append(
+                f"Modify {len(differences['columns_to_modify'])} column(s)"
+            )
 
         if not recommendations:
             recommendations.append("Schema is up to date - no changes needed")
@@ -599,7 +637,7 @@ class SchemaGenerator:
             "columns_removed": differences["columns_to_remove"],
             "columns_modified": differences["columns_to_modify"],
             "recommendations": recommendations,
-            "migration_needed": has_drift
+            "migration_needed": has_drift,
         }
 
     def generate_schema_sql(self, schema_name: str, version: str = "1.0.0") -> str:
@@ -613,9 +651,7 @@ class SchemaGenerator:
             Complete SQL schema
         """
         schema = SchemaDefinition(
-            name=schema_name,
-            version=version,
-            tables=list(self._tables.values())
+            name=schema_name, version=version, tables=list(self._tables.values())
         )
 
         return schema.to_sql(self.dialect)
@@ -638,9 +674,9 @@ class SchemaGenerator:
         elif format == "json":
             schema_data = {
                 "tables": [t.to_dict() for t in self._tables.values()],
-                "exported_at": datetime.now().isoformat()
+                "exported_at": datetime.now().isoformat(),
             }
-            with open(output, 'w') as f:
+            with open(output, "w") as f:
                 json.dump(schema_data, f, indent=2)
         else:
             raise CodomyrmexError(f"Unsupported format: {format}")
@@ -657,10 +693,11 @@ class SchemaGenerator:
                 "description": m.description,
                 "dependencies": m.dependencies,
                 "created_at": m.created_at.isoformat(),
-                "checksum": m.checksum
+                "checksum": m.checksum,
             }
             for m in self._migrations.values()
         ]
+
 
 def generate_schema(models: list[Any], output_dir: str) -> dict[str, Any]:
     """Generate database schema from models.
@@ -673,6 +710,7 @@ def generate_schema(models: list[Any], output_dir: str) -> dict[str, Any]:
         Generated schema information
     """
     return generate_schema_from_models(models, output_dir)
+
 
 def generate_schema_from_models(models: list[Any], output_dir: str) -> dict[str, Any]:
     """Generate database schema from model definitions.
@@ -696,7 +734,7 @@ def generate_schema_from_models(models: list[Any], output_dir: str) -> dict[str,
             table_def = {
                 "name": model.__tablename__,
                 "columns": [],
-                "description": model.__doc__ or ""
+                "description": model.__doc__ or "",
             }
 
             for column in model.__table__.columns:
@@ -704,7 +742,7 @@ def generate_schema_from_models(models: list[Any], output_dir: str) -> dict[str,
                     "name": column.name,
                     "type": str(column.type).lower(),
                     "nullable": column.nullable,
-                    "primary_key": column.primary_key
+                    "primary_key": column.primary_key,
                 }
                 table_def["columns"].append(col_def)
 
@@ -718,5 +756,5 @@ def generate_schema_from_models(models: list[Any], output_dir: str) -> dict[str,
     return {
         "tables_generated": tables_generated,
         "schema_file": str(schema_file),
-        "message": f"Generated schema with {tables_generated} tables"
+        "message": f"Generated schema with {tables_generated} tables",
     }

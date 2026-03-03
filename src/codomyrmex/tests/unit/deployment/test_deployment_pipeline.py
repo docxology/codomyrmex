@@ -31,6 +31,7 @@ from codomyrmex.deployment.canary import (
 
 class TestDockerStage:
     """Test suite for DockerStage."""
+
     def test_render(self) -> None:
         """Test functionality: render."""
         stage = DockerStage("builder", "python:3.12", ["WORKDIR /build"])
@@ -41,12 +42,15 @@ class TestDockerStage:
 
 class TestDockerfileSpec:
     """Test suite for DockerfileSpec."""
+
     def test_render_multi_stage(self) -> None:
         """Test functionality: render multi stage."""
-        spec = DockerfileSpec(stages=[
-            DockerStage("builder", "python:3.12", ["WORKDIR /build"]),
-            DockerStage("runtime", "python:3.12-slim", ["WORKDIR /app"]),
-        ])
+        spec = DockerfileSpec(
+            stages=[
+                DockerStage("builder", "python:3.12", ["WORKDIR /build"]),
+                DockerStage("runtime", "python:3.12-slim", ["WORKDIR /app"]),
+            ]
+        )
         rendered = spec.render()
         assert "AS builder" in rendered
         assert "AS runtime" in rendered
@@ -64,14 +68,15 @@ class TestDockerfileSpec:
 
 class TestAutoBuilder:
     """Test suite for AutoBuilder."""
+
     def test_from_pyproject(self) -> None:
         """Test functionality: from pyproject."""
-        content = '''
+        content = """
 [project]
 name = "my-app"
 version = "1.2.3"
 requires-python = ">=3.11"
-'''
+"""
         with tempfile.NamedTemporaryFile(mode="w", suffix=".toml", delete=False) as f:
             f.write(content)
             f.flush()
@@ -109,6 +114,7 @@ requires-python = ">=3.11"
 
 class TestComponentHealth:
     """Test suite for ComponentHealth."""
+
     def test_to_dict(self) -> None:
         """Test functionality: to dict."""
         h = ComponentHealth("db", HealthStatus.HEALTHY, 5.2)
@@ -118,6 +124,7 @@ class TestComponentHealth:
 
 class TestHealthReport:
     """Test suite for HealthReport."""
+
     def test_is_healthy(self) -> None:
         """Test functionality: is healthy."""
         r = HealthReport(status=HealthStatus.HEALTHY)
@@ -128,6 +135,7 @@ class TestHealthReport:
 
 class TestHealthChecker:
     """Test suite for HealthChecker."""
+
     def test_all_healthy(self) -> None:
         """Test functionality: all healthy."""
         checker = HealthChecker()
@@ -177,6 +185,7 @@ class TestHealthChecker:
 
 class TestMetricComparison:
     """Test suite for MetricComparison."""
+
     def test_within_threshold(self) -> None:
         """Test functionality: within threshold."""
         mc = MetricComparison("err_rate", 0.01, 0.011, threshold=0.15)
@@ -195,6 +204,7 @@ class TestMetricComparison:
 
 class TestCanaryAnalyzer:
     """Test suite for CanaryAnalyzer."""
+
     def test_promote(self) -> None:
         """Test functionality: promote."""
         analyzer = CanaryAnalyzer(promote_threshold=0.9)

@@ -26,7 +26,9 @@ class TestInfomaniakDNS:
         """list_zones returns formatted dicts for each zone."""
         from codomyrmex.cloud.infomaniak.dns.client import InfomaniakDNSClient
 
-        zone = make_stub_zone(zone_id="z-1", name="example.com.", email="admin@example.com")
+        zone = make_stub_zone(
+            zone_id="z-1", name="example.com.", email="admin@example.com"
+        )
         mock_openstack_connection.dns.zones.return_value = [zone]
 
         client = InfomaniakDNSClient(mock_openstack_connection)
@@ -149,7 +151,9 @@ class TestInfomaniakDNS:
 
         assert result is True
         mock_openstack_connection.dns.update_zone.assert_called_once_with(
-            "z-upd", email="new@example.com", ttl=7200,
+            "z-upd",
+            email="new@example.com",
+            ttl=7200,
         )
 
     # =====================================================================
@@ -197,7 +201,9 @@ class TestInfomaniakDNS:
         assert result is not None
         assert result["id"] == "rec-abc"
         assert result["type"] == "CNAME"
-        mock_openstack_connection.dns.get_recordset.assert_called_once_with("rec-abc", "z-1")
+        mock_openstack_connection.dns.get_recordset.assert_called_once_with(
+            "rec-abc", "z-1"
+        )
 
     def test_create_record_appends_dot(self, mock_openstack_connection):
         """create_record appends trailing dot to name without one."""
@@ -253,7 +259,9 @@ class TestInfomaniakDNS:
         """create_record returns None when the SDK raises an exception."""
         from codomyrmex.cloud.infomaniak.dns.client import InfomaniakDNSClient
 
-        mock_openstack_connection.dns.create_recordset.side_effect = Exception("Conflict")
+        mock_openstack_connection.dns.create_recordset.side_effect = Exception(
+            "Conflict"
+        )
 
         client = InfomaniakDNSClient(mock_openstack_connection)
         result = client.create_record("z-1", "dup.example.com", "A", ["1.2.3.4"])
@@ -266,12 +274,18 @@ class TestInfomaniakDNS:
 
         client = InfomaniakDNSClient(mock_openstack_connection)
         result = client.update_record(
-            "z-1", "rec-1", records=["10.0.0.2"], ttl=600,
+            "z-1",
+            "rec-1",
+            records=["10.0.0.2"],
+            ttl=600,
         )
 
         assert result is True
         mock_openstack_connection.dns.update_recordset.assert_called_once_with(
-            "rec-1", "z-1", records=["10.0.0.2"], ttl=600,
+            "rec-1",
+            "z-1",
+            records=["10.0.0.2"],
+            ttl=600,
         )
 
     def test_delete_record_success(self, mock_openstack_connection):
@@ -282,13 +296,17 @@ class TestInfomaniakDNS:
         result = client.delete_record("z-1", "rec-del")
 
         assert result is True
-        mock_openstack_connection.dns.delete_recordset.assert_called_once_with("rec-del", "z-1")
+        mock_openstack_connection.dns.delete_recordset.assert_called_once_with(
+            "rec-del", "z-1"
+        )
 
     def test_delete_record_error_returns_false(self, mock_openstack_connection):
         """delete_record returns False when the SDK raises an exception."""
         from codomyrmex.cloud.infomaniak.dns.client import InfomaniakDNSClient
 
-        mock_openstack_connection.dns.delete_recordset.side_effect = Exception("Not found")
+        mock_openstack_connection.dns.delete_recordset.side_effect = Exception(
+            "Not found"
+        )
 
         client = InfomaniakDNSClient(mock_openstack_connection)
         result = client.delete_record("z-1", "rec-missing")
@@ -338,7 +356,9 @@ class TestInfomaniakDNS:
         assert result["id"] == "ptr-new"
         assert result["address"] == "195.15.220.10"
         assert result["ptrdname"] == "mail.example.com."
-        mock_openstack_connection.network.find_ip.assert_called_once_with("195.15.220.10")
+        mock_openstack_connection.network.find_ip.assert_called_once_with(
+            "195.15.220.10"
+        )
         mock_openstack_connection.dns.create_ptr_record.assert_called_once_with(
             floating_ip_id="fip-1",
             ptrdname="mail.example.com.",
@@ -426,7 +446,9 @@ class TestInfomaniakDNS:
         result = client.delete_reverse_dns("195.15.220.30")
 
         assert result is True
-        mock_openstack_connection.dns.delete_ptr_record.assert_called_once_with("fip-del")
+        mock_openstack_connection.dns.delete_ptr_record.assert_called_once_with(
+            "fip-del"
+        )
 
     def test_delete_reverse_dns_fip_not_found(self, mock_openstack_connection):
         """delete_reverse_dns returns False when the floating IP is not found."""
@@ -443,19 +465,20 @@ class TestInfomaniakDNS:
 
 # =========================================================================
 
+
 class TestInfomaniakDNSClientExpanded:
     """Tests for InfomaniakDNSClient untested methods."""
 
     def _make_client(self):
         from codomyrmex.cloud.infomaniak.dns import InfomaniakDNSClient
+
         mock_conn = Stub()
         return InfomaniakDNSClient(connection=mock_conn), mock_conn
 
     def test_get_zone(self):
         """Test functionality: get zone."""
         client, mc = self._make_client()
-        z = Stub(id="z1", email="a@b.com",
-                      status="ACTIVE", ttl=3600)
+        z = Stub(id="z1", email="a@b.com", status="ACTIVE", ttl=3600)
         z.name = "example.com."
         mc.dns.find_zone.return_value = z
         result = client.get_zone("z1")
@@ -471,8 +494,9 @@ class TestInfomaniakDNSClientExpanded:
     def test_get_record(self):
         """Test functionality: get record."""
         client, mc = self._make_client()
-        r = Stub(id="r1", name="www.example.com.", type="A",
-                      records=["1.2.3.4"], ttl=300)
+        r = Stub(
+            id="r1", name="www.example.com.", type="A", records=["1.2.3.4"], ttl=300
+        )
         mc.dns.get_recordset.return_value = r
         result = client.get_record("z1", "r1")
         assert result["id"] == "r1"
@@ -486,8 +510,9 @@ class TestInfomaniakDNSClientExpanded:
     def test_list_ptr_records(self):
         """Test functionality: list ptr records."""
         client, mc = self._make_client()
-        ptr = Stub(id="ptr1", ptrdname="host.example.com.",
-                        address="1.2.3.4", status="ACTIVE")
+        ptr = Stub(
+            id="ptr1", ptrdname="host.example.com.", address="1.2.3.4", status="ACTIVE"
+        )
         mc.dns.ptr_records.return_value = [ptr]
         result = client.list_ptr_records()
         assert len(result) == 1

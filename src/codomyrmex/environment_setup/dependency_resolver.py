@@ -22,6 +22,7 @@ logger = get_logger(__name__)
 @dataclass
 class DependencyInfo:
     """Information about an installed dependency."""
+
     name: str
     version: str
     required_by: list[str] = field(default_factory=list)
@@ -31,6 +32,7 @@ class DependencyInfo:
 @dataclass
 class Conflict:
     """A detected dependency conflict."""
+
     package: str
     installed_version: str
     required_version: str
@@ -53,7 +55,9 @@ class DependencyResolver:
         try:
             result = subprocess.run(
                 [self._python, "-m", "pip", "check"],
-                capture_output=True, text=True, timeout=30,
+                capture_output=True,
+                text=True,
+                timeout=30,
             )
             if result.returncode == 0:
                 return []
@@ -76,12 +80,14 @@ class DependencyResolver:
                     installed_info = req_parts[1].strip()
                     # Extract package name and version
                     pkg = required_version.split()[0] if required_version else "unknown"
-                    conflicts.append(Conflict(
-                        package=pkg,
-                        installed_version=installed_info,
-                        required_version=required_version,
-                        required_by=required_by,
-                    ))
+                    conflicts.append(
+                        Conflict(
+                            package=pkg,
+                            installed_version=installed_info,
+                            required_version=required_version,
+                            required_by=required_by,
+                        )
+                    )
         return conflicts
 
     def list_installed(self) -> list[DependencyInfo]:
@@ -89,14 +95,19 @@ class DependencyResolver:
         try:
             result = subprocess.run(
                 [self._python, "-m", "pip", "list", "--format=json"],
-                capture_output=True, text=True, timeout=30,
+                capture_output=True,
+                text=True,
+                timeout=30,
             )
             packages = json.loads(result.stdout)
             return [
-                DependencyInfo(name=p["name"], version=p["version"])
-                for p in packages
+                DependencyInfo(name=p["name"], version=p["version"]) for p in packages
             ]
-        except (subprocess.TimeoutExpired, json.JSONDecodeError, FileNotFoundError) as e:
+        except (
+            subprocess.TimeoutExpired,
+            json.JSONDecodeError,
+            FileNotFoundError,
+        ) as e:
             logger.warning("Failed to list installed packages: %s", e)
             return []
 
@@ -164,9 +175,17 @@ class DependencyResolver:
                 # uv can install directly from pyproject.toml if in the same dir,
                 # but let's be explicit and use -r if it was requirements,
                 # for pyproject we might need a different approach or just use pip/uv on current dir
-                cmd = [uv_path, "pip", "install", "-e", "."] if source == "pyproject.toml" else [uv_path, "pip", "install", "-r", source]
+                cmd = (
+                    [uv_path, "pip", "install", "-e", "."]
+                    if source == "pyproject.toml"
+                    else [uv_path, "pip", "install", "-r", source]
+                )
             else:
-                cmd = [self._python, "-m", "pip", "install", "."] if source == "pyproject.toml" else [self._python, "-m", "pip", "install", "-r", source]
+                cmd = (
+                    [self._python, "-m", "pip", "install", "."]
+                    if source == "pyproject.toml"
+                    else [self._python, "-m", "pip", "install", "-r", source]
+                )
         else:
             cmd.extend(["-r", source])
 
@@ -197,11 +216,19 @@ class DependencyResolver:
 
         if venv_path:
             # Detect if uv-managed
-            venv_type = "uv" if ".venv" in venv_path or "uv" in venv_path.lower() or os.environ.get("UV_ACTIVE") == "1" else "venv"
+            venv_type = (
+                "uv"
+                if ".venv" in venv_path
+                or "uv" in venv_path.lower()
+                or os.environ.get("UV_ACTIVE") == "1"
+                else "venv"
+            )
             return {"active": True, "path": venv_path, "type": venv_type}
         elif conda_env:
             return {"active": True, "path": conda_env, "type": "conda"}
-        elif hasattr(sys, "real_prefix") or (hasattr(sys, "base_prefix") and sys.base_prefix != sys.prefix):
+        elif hasattr(sys, "real_prefix") or (
+            hasattr(sys, "base_prefix") and sys.base_prefix != sys.prefix
+        ):
             return {"active": True, "path": sys.prefix, "type": "virtualenv"}
         return {"active": False, "path": "", "type": "none"}
 
@@ -238,7 +265,9 @@ class DependencyResolver:
         env = self.get_environment_info()
         lines.append(f"**Python**: {env['python_version'].split()[0]}")
         lines.append(f"**Platform**: {env['platform']}")
-        lines.append(f"**Virtualenv**: {env['virtualenv']['type']} ({env['virtualenv']['path'] or 'n/a'})")
+        lines.append(
+            f"**Virtualenv**: {env['virtualenv']['type']} ({env['virtualenv']['path'] or 'n/a'})"
+        )
         lines.append(f"**Installed packages**: {env['installed_packages']}")
         lines.append("")
 
@@ -247,8 +276,10 @@ class DependencyResolver:
         if conflicts:
             lines.append(f"## Conflicts ({len(conflicts)})")
             for c in conflicts:
-                lines.append(f"- **{c.package}**: installed={c.installed_version}, "
-                             f"required={c.required_version} (by {c.required_by})")
+                lines.append(
+                    f"- **{c.package}**: installed={c.installed_version}, "
+                    f"required={c.required_version} (by {c.required_by})"
+                )
             lines.append("")
             lines.append("## Suggested fixes")
             for s in self.suggest_resolution(conflicts):
@@ -278,7 +309,9 @@ class DependencyResolver:
         try:
             result = subprocess.run(
                 [self._python, "-m", "pip", "list", "--outdated", "--format=json"],
-                capture_output=True, text=True, timeout=60,
+                capture_output=True,
+                text=True,
+                timeout=60,
             )
             packages = json.loads(result.stdout)
             return [
@@ -289,7 +322,11 @@ class DependencyResolver:
                 }
                 for p in packages
             ]
-        except (subprocess.TimeoutExpired, json.JSONDecodeError, FileNotFoundError) as e:
+        except (
+            subprocess.TimeoutExpired,
+            json.JSONDecodeError,
+            FileNotFoundError,
+        ) as e:
             logger.warning("Failed to find outdated packages: %s", e)
             return []
 
@@ -300,12 +337,18 @@ class DependencyResolver:
             Dict with environment, conflicts, pyproject_issues, outdated, and report.
         """
         conflicts = self.check_conflicts()
-        pyproject_issues = self.validate_pyproject(pyproject_path) if pyproject_path else []
+        pyproject_issues = (
+            self.validate_pyproject(pyproject_path) if pyproject_path else []
+        )
         return {
             "environment": self.get_environment_info(),
             "conflicts": [
-                {"package": c.package, "installed": c.installed_version,
-                 "required": c.required_version, "by": c.required_by}
+                {
+                    "package": c.package,
+                    "installed": c.installed_version,
+                    "required": c.required_version,
+                    "by": c.required_by,
+                }
                 for c in conflicts
             ],
             "pyproject_issues": pyproject_issues,

@@ -1,4 +1,3 @@
-
 """Exporter for FPF specification to JSON and other formats.
 
 
@@ -32,13 +31,17 @@ class FPFExporter:
 
         export_data = {
             "version": spec.version,
-            "last_updated": spec.last_updated.isoformat() if spec.last_updated else None,
+            "last_updated": spec.last_updated.isoformat()
+            if spec.last_updated
+            else None,
             "source_url": spec.source_url,
             "source_hash": spec.source_hash,
             "metadata": spec.metadata,
             "patterns": [self._pattern_to_dict(p) for p in spec.patterns],
             "concepts": [self._concept_to_dict(c) for c in spec.concepts],
-            "relationships": [self._relationship_to_dict(r) for r in spec.relationships],
+            "relationships": [
+                self._relationship_to_dict(r) for r in spec.relationships
+            ],
             "table_of_contents": spec.table_of_contents,
         }
 
@@ -79,7 +82,9 @@ class FPFExporter:
         with open(output_path, "w", encoding="utf-8") as f:
             json.dump(export_data, f, indent=2, ensure_ascii=False)
 
-    def export_for_context(self, spec: FPFSpec, filters: dict[str, Any] | None = None) -> dict[str, Any]:
+    def export_for_context(
+        self, spec: FPFSpec, filters: dict[str, Any] | None = None
+    ) -> dict[str, Any]:
         """Export specification data optimized for context engineering.
 
         Args:
@@ -173,7 +178,9 @@ class FPFExporter:
             "cluster": pattern.cluster,
         }
 
-    def _concept_to_dict(self, concept: Any) -> dict[str, Any]:  # Using Any to avoid circular import
+    def _concept_to_dict(
+        self, concept: Any
+    ) -> dict[str, Any]:  # Using Any to avoid circular import
         """Convert a Concept to a dictionary.
 
         Args:
@@ -192,7 +199,9 @@ class FPFExporter:
             "metadata": concept.metadata,
         }
 
-    def _relationship_to_dict(self, relationship: Any) -> dict[str, Any]:  # Using Any to avoid circular import
+    def _relationship_to_dict(
+        self, relationship: Any
+    ) -> dict[str, Any]:  # Using Any to avoid circular import
         """Convert a Relationship to a dictionary.
 
         Args:
@@ -209,4 +218,3 @@ class FPFExporter:
             "description": relationship.description,
             "metadata": relationship.metadata,
         }
-

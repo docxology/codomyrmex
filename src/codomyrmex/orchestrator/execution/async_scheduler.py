@@ -27,6 +27,7 @@ logger = get_logger(__name__)
 
 class AsyncJobStatus(Enum):
     """Status of an async scheduled job."""
+
     PENDING = "pending"
     RUNNING = "running"
     COMPLETED = "completed"
@@ -97,6 +98,7 @@ def _emit_scheduler_event(
         return
     try:
         from codomyrmex.events.core.event_schema import Event, EventType
+
         et = getattr(EventType, event_type_name, EventType.CUSTOM)
         event = Event(
             event_type=et,
@@ -256,7 +258,9 @@ class AsyncScheduler:
                 self._metrics.total_execution_time += execution_time
 
                 _emit_scheduler_event(
-                    self._event_bus, "JOB_COMPLETED", job,
+                    self._event_bus,
+                    "JOB_COMPLETED",
+                    job,
                     execution_time=execution_time,
                 )
                 logger.debug("Job %s completed in %.2fs", job.name, execution_time)
@@ -270,7 +274,9 @@ class AsyncScheduler:
                 self._metrics.total_execution_time += execution_time
 
                 _emit_scheduler_event(
-                    self._event_bus, "JOB_FAILED", job,
+                    self._event_bus,
+                    "JOB_FAILED",
+                    job,
                     error=str(exc),
                     execution_time=execution_time,
                 )

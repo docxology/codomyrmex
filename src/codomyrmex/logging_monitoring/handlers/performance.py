@@ -45,7 +45,9 @@ class PerformanceLogger:
         self.logger = logging.getLogger(logger_name)
         self._timers: dict[str, float] = {}
 
-    def start_timer(self, operation: str, context: dict[str, Any] | None = None) -> None:
+    def start_timer(
+        self, operation: str, context: dict[str, Any] | None = None
+    ) -> None:
         """Start timing an operation.
 
         Records the start time for the named operation. Use end_timer() to
@@ -64,7 +66,10 @@ class PerformanceLogger:
             >>> duration = perf_logger.end_timer("api_call")
         """
         self._timers[operation] = time.time()
-        self.logger.debug(f"Started timing: {operation}", extra={"operation": operation, "context": context or {}})
+        self.logger.debug(
+            f"Started timing: {operation}",
+            extra={"operation": operation, "context": context or {}},
+        )
 
     def end_timer(self, operation: str, context: dict[str, Any] | None = None) -> float:
         """End timing an operation and log the duration.
@@ -89,11 +94,20 @@ class PerformanceLogger:
             return 0.0
         start_time = self._timers.pop(operation)
         duration = time.time() - start_time
-        self.logger.info(f"Operation completed: {operation}", extra={"operation": operation, "duration_seconds": duration, "context": context or {}})
+        self.logger.info(
+            f"Operation completed: {operation}",
+            extra={
+                "operation": operation,
+                "duration_seconds": duration,
+                "context": context or {},
+            },
+        )
         return duration
 
     @contextmanager
-    def time_operation(self, operation: str, context: dict[str, Any] | None = None) -> Iterator[None]:
+    def time_operation(
+        self, operation: str, context: dict[str, Any] | None = None
+    ) -> Iterator[None]:
         """Context manager for timing a code block.
 
         Automatically starts and ends timing around the enclosed code block.
@@ -117,7 +131,13 @@ class PerformanceLogger:
         finally:
             self.end_timer(operation, context)
 
-    def log_metric(self, name: str, value: Any, unit: str | None = None, context: dict[str, Any] | None = None) -> None:
+    def log_metric(
+        self,
+        name: str,
+        value: Any,
+        unit: str | None = None,
+        context: dict[str, Any] | None = None,
+    ) -> None:
         """Log a performance metric.
 
         Records a named metric value with optional unit and context. Useful

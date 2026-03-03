@@ -6,8 +6,11 @@ from codomyrmex.model_context_protocol.decorators import mcp_tool
 
 logger = get_logger(__name__)
 
+
 @mcp_tool()
-def get_config(key: str, repository_path: str = None, global_config: bool = False) -> str | None:
+def get_config(
+    key: str, repository_path: str = None, global_config: bool = False
+) -> str | None:
     """Get a Git configuration value."""
     if repository_path is None:
         repository_path = os.getcwd()
@@ -38,6 +41,7 @@ def get_config(key: str, repository_path: str = None, global_config: bool = Fals
     except Exception as e:
         logger.error(f"Unexpected error getting config: {e}")
         return None
+
 
 @mcp_tool()
 def set_config(

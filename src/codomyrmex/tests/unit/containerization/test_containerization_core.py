@@ -79,6 +79,7 @@ from codomyrmex.containerization.kubernetes.kubernetes_orchestrator import (
 # Docker CLI ContainerConfig (docker/__init__.py)
 # ===========================================================================
 
+
 @pytest.mark.unit
 class TestDockerCliContainerConfig:
     """Tests for the CLI-based ContainerConfig dataclass and to_run_args."""
@@ -182,9 +183,7 @@ class TestDockerCliContainerConfig:
         assert args[idx + 1] == "always"
 
     def test_entrypoint(self):
-        cfg = DockerCliContainerConfig(
-            image="myapp:v1", entrypoint=["/bin/sh", "-c"]
-        )
+        cfg = DockerCliContainerConfig(image="myapp:v1", entrypoint=["/bin/sh", "-c"])
         args = cfg.to_run_args()
         assert "--entrypoint" in args
         idx = args.index("--entrypoint")
@@ -197,16 +196,14 @@ class TestDockerCliContainerConfig:
         args = cfg.to_run_args()
         img_idx = args.index("python:3.12")
         # Command args come after the image
-        assert args[img_idx + 1:] == ["python", "-m", "http.server"]
+        assert args[img_idx + 1 :] == ["python", "-m", "http.server"]
 
     @pytest.mark.parametrize(
         "restart_policy",
         ["no", "always", "unless-stopped", "on-failure"],
     )
     def test_restart_policy_variants(self, restart_policy):
-        cfg = DockerCliContainerConfig(
-            image="myapp:v1", restart_policy=restart_policy
-        )
+        cfg = DockerCliContainerConfig(image="myapp:v1", restart_policy=restart_policy)
         args = cfg.to_run_args()
         idx = args.index("--restart")
         assert args[idx + 1] == restart_policy
@@ -233,14 +230,27 @@ class TestDockerCliContainerConfig:
         # Verify image is present
         assert "myapp:v2" in args
         # Verify all flags present
-        for flag in ["--name", "-e", "-v", "-p", "--label", "--network",
-                      "-w", "-u", "--memory", "--cpus", "--restart", "--entrypoint"]:
+        for flag in [
+            "--name",
+            "-e",
+            "-v",
+            "-p",
+            "--label",
+            "--network",
+            "-w",
+            "-u",
+            "--memory",
+            "--cpus",
+            "--restart",
+            "--entrypoint",
+        ]:
             assert flag in args
 
 
 # ===========================================================================
 # Docker ImageInfo and ContainerInfo (docker/__init__.py)
 # ===========================================================================
+
 
 @pytest.mark.unit
 class TestImageInfo:
@@ -309,6 +319,7 @@ class TestContainerInfo:
 # Docker SDK ContainerConfig (docker_manager.py)
 # ===========================================================================
 
+
 @pytest.mark.unit
 class TestDockerSdkContainerConfig:
     """Tests for the SDK-based ContainerConfig from docker_manager.py."""
@@ -369,6 +380,7 @@ class TestDockerSdkContainerConfig:
 # DockerManager.optimize_container_image (pure logic, no daemon needed)
 # ===========================================================================
 
+
 @pytest.mark.unit
 class TestDockerManagerOptimizeImage:
     """Tests for optimize_container_image -- pure logic, no Docker daemon."""
@@ -381,6 +393,7 @@ class TestDockerManagerOptimizeImage:
         optimize_container_image method works regardless.
         """
         from codomyrmex.containerization.docker.docker_manager import DockerManager
+
         manager = DockerManager()
         return manager.optimize_container_image
 
@@ -425,6 +438,7 @@ class TestDockerManagerOptimizeImage:
 # ===========================================================================
 # Kubernetes Dataclasses
 # ===========================================================================
+
 
 @pytest.mark.unit
 class TestKubernetesDeployment:
@@ -496,9 +510,7 @@ class TestKubernetesService:
         assert svc.selector == {}
         assert svc.labels == {}
 
-    @pytest.mark.parametrize(
-        "svc_type", ["ClusterIP", "NodePort", "LoadBalancer"]
-    )
+    @pytest.mark.parametrize("svc_type", ["ClusterIP", "NodePort", "LoadBalancer"])
     def test_service_types(self, svc_type):
         svc = KubernetesService(name="svc", type=svc_type)
         assert svc.type == svc_type
@@ -527,6 +539,7 @@ class TestKubernetesService:
 # ===========================================================================
 # Containerization Exceptions
 # ===========================================================================
+
 
 @pytest.mark.unit
 class TestContainerizationExceptions:
@@ -602,14 +615,22 @@ class TestContainerizationExceptions:
 
     def test_all_exceptions_are_base_container_error_subclass(self):
         from codomyrmex.exceptions import ContainerError as BaseContainerError
-        for exc_cls in [ContainerError, ImageBuildError, NetworkError,
-                        VolumeError, RegistryError, KubernetesError]:
+
+        for exc_cls in [
+            ContainerError,
+            ImageBuildError,
+            NetworkError,
+            VolumeError,
+            RegistryError,
+            KubernetesError,
+        ]:
             assert issubclass(exc_cls, BaseContainerError)
 
 
 # ===========================================================================
 # Module __init__.py Flags and CLI Commands
 # ===========================================================================
+
 
 @pytest.mark.unit
 class TestContainerizationModuleInit:
@@ -643,6 +664,7 @@ class TestContainerizationModuleInit:
 # ===========================================================================
 # BuildGenerator Dockerfile Validation Edge Cases
 # ===========================================================================
+
 
 @pytest.mark.unit
 class TestBuildGeneratorDockerfileValidation:
@@ -697,11 +719,7 @@ class TestBuildGeneratorDockerfileValidation:
 
     def test_comments_and_blank_lines_ignored(self):
         content = (
-            "# This is a comment\n"
-            "\n"
-            "FROM python:3.12\n"
-            "# Another comment\n"
-            "USER appuser\n"
+            "# This is a comment\n\nFROM python:3.12\n# Another comment\nUSER appuser\n"
         )
         is_valid, issues = self.generator.validate_dockerfile(content)
         assert is_valid is True
@@ -721,6 +739,7 @@ class TestBuildGeneratorDockerfileValidation:
 # ===========================================================================
 # BuildStage Dockerfile Serialization
 # ===========================================================================
+
 
 @pytest.mark.unit
 class TestBuildStageSerialization:
@@ -767,6 +786,7 @@ class TestBuildStageSerialization:
 # MultiStageBuild Dockerfile Serialization
 # ===========================================================================
 
+
 @pytest.mark.unit
 class TestMultiStageBuildSerialization:
     """Tests for MultiStageBuild to_dockerfile."""
@@ -797,6 +817,7 @@ class TestMultiStageBuildSerialization:
 # ===========================================================================
 # BuildScript Shell Script Generation
 # ===========================================================================
+
 
 @pytest.mark.unit
 class TestBuildScriptGeneration:
@@ -855,6 +876,7 @@ class TestBuildScriptGeneration:
 # BuildGenerator Multi-Stage Build Templates
 # ===========================================================================
 
+
 @pytest.mark.unit
 class TestBuildGeneratorTemplates:
     """Tests for BuildGenerator multi-stage build template creation."""
@@ -878,9 +900,7 @@ class TestBuildGeneratorTemplates:
         ],
     )
     def test_multi_stage_build_types(self, build_type, expected_base_substring):
-        build = self.generator.create_multi_stage_build(
-            {"build_type": build_type}
-        )
+        build = self.generator.create_multi_stage_build({"build_type": build_type})
         assert isinstance(build, MultiStageBuild)
         assert len(build.stages) >= 2
         assert build.final_stage == "runtime"
@@ -889,9 +909,7 @@ class TestBuildGeneratorTemplates:
         assert expected_base_substring in builder_dockerfile.lower()
 
     def test_generic_build_type(self):
-        build = self.generator.create_multi_stage_build(
-            {"build_type": "unknown-type"}
-        )
+        build = self.generator.create_multi_stage_build({"build_type": "unknown-type"})
         assert isinstance(build, MultiStageBuild)
         assert len(build.stages) >= 1
 
@@ -899,6 +917,7 @@ class TestBuildGeneratorTemplates:
 # ===========================================================================
 # Dockerfile Optimization (file-based)
 # ===========================================================================
+
 
 @pytest.mark.unit
 class TestDockerfileOptimization:

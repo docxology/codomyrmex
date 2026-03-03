@@ -11,6 +11,7 @@ from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 logger = get_logger(__name__)
 
+
 class MsgpackSerializer:
     """Msgpack serialization."""
 
@@ -23,6 +24,7 @@ class MsgpackSerializer:
     def deserialize(data: bytes) -> Any:
         """Deserialize from a portable format and return an instance."""
         return msgpack.unpackb(data, raw=False)
+
 
 class AvroSerializer:
     """Avro serialization using fastavro."""
@@ -41,6 +43,7 @@ class AvroSerializer:
         reader = fastavro.reader(inp)
         return list(reader)
 
+
 class ParquetSerializer:
     """Parquet serialization using pandas and pyarrow."""
 
@@ -49,12 +52,12 @@ class ParquetSerializer:
         """Serialize this object to a portable format."""
         df = pd.DataFrame(data)
         out = io.BytesIO()
-        df.to_parquet(out, engine='pyarrow')
+        df.to_parquet(out, engine="pyarrow")
         return out.getvalue()
 
     @staticmethod
     def deserialize(data: bytes) -> list[dict[str, Any]]:
         """Deserialize from a portable format and return an instance."""
         inp = io.BytesIO(data)
-        df = pd.read_parquet(inp, engine='pyarrow')
-        return df.to_dict('records')
+        df = pd.read_parquet(inp, engine="pyarrow")
+        return df.to_dict("records")

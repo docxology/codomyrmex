@@ -1,4 +1,3 @@
-
 """Graph generator for FPF visualizations using NetworkX and Matplotlib.
 
 
@@ -6,7 +5,6 @@ logger = get_logger(__name__)
 This module provides graph generation utilities for creating various
 types of network visualizations from FPF specifications.
 """
-
 
 import matplotlib.pyplot as plt
 import networkx as nx
@@ -116,7 +114,7 @@ class GraphGenerator:
         # Connect concepts that share patterns
         concepts_list = list(spec.concepts)
         for i, concept1 in enumerate(concepts_list):
-            for concept2 in concepts_list[i + 1:]:
+            for concept2 in concepts_list[i + 1 :]:
                 patterns1 = concept_patterns.get(concept1.name, set())
                 patterns2 = concept_patterns.get(concept2.name, set())
                 if patterns1 & patterns2:
@@ -124,7 +122,9 @@ class GraphGenerator:
 
         return G
 
-    def apply_hierarchical_layout(self, G: nx.DiGraph) -> dict[str, tuple[float, float]]:
+    def apply_hierarchical_layout(
+        self, G: nx.DiGraph
+    ) -> dict[str, tuple[float, float]]:
         """Apply hierarchical layout to a directed graph.
 
         Args:
@@ -171,7 +171,9 @@ class GraphGenerator:
         """
         return nx.circular_layout(G)
 
-    def apply_tree_layout(self, G: nx.Graph, root: str | None = None) -> dict[str, tuple[float, float]]:
+    def apply_tree_layout(
+        self, G: nx.Graph, root: str | None = None
+    ) -> dict[str, tuple[float, float]]:
         """Apply tree layout to a graph.
 
         Args:
@@ -222,9 +224,13 @@ class GraphGenerator:
                 color_map = {part: colors_list[i] for i, part in enumerate(part_list)}
             else:
                 # Default: use attribute hash
-                unique_vals = {G.nodes[node].get(attribute, "default") for node in G.nodes()}
+                unique_vals = {
+                    G.nodes[node].get(attribute, "default") for node in G.nodes()
+                }
                 colors_list = plt.cm.tab10(np.linspace(0, 1, len(unique_vals)))
-                color_map = {val: colors_list[i] for i, val in enumerate(sorted(unique_vals))}
+                color_map = {
+                    val: colors_list[i] for i, val in enumerate(sorted(unique_vals))
+                }
 
         colors = []
         for node in G.nodes():
@@ -265,9 +271,11 @@ class GraphGenerator:
 
         # Scale to 100-2000 range
         sizes = [
-            100 + (importances.get(node, 0) - min_importance) / (max_importance - min_importance) * 1900
+            100
+            + (importances.get(node, 0) - min_importance)
+            / (max_importance - min_importance)
+            * 1900
             for node in G.nodes()
         ]
 
         return sizes
-

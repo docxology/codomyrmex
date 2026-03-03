@@ -34,7 +34,7 @@ class TestConfigValidation:
     def validate_yaml_syntax(self, file_path: Path) -> tuple[bool, str | None]:
         """Validate YAML syntax."""
         try:
-            with open(file_path, encoding='utf-8') as f:
+            with open(file_path, encoding="utf-8") as f:
                 yaml.safe_load(f)
             return True, None
         except yaml.YAMLError as e:
@@ -45,7 +45,7 @@ class TestConfigValidation:
     def validate_json_syntax(self, file_path: Path) -> tuple[bool, str | None]:
         """Validate JSON syntax."""
         try:
-            with open(file_path, encoding='utf-8') as f:
+            with open(file_path, encoding="utf-8") as f:
                 json.load(f)
             return True, None
         except json.JSONDecodeError as e:
@@ -56,7 +56,7 @@ class TestConfigValidation:
     def load_config(self, file_path: Path, file_type: str) -> dict[str, Any] | None:
         """Load configuration from file."""
         try:
-            with open(file_path, encoding='utf-8') as f:
+            with open(file_path, encoding="utf-8") as f:
                 if file_type == "yaml":
                     return yaml.safe_load(f)
                 elif file_type == "json":
@@ -66,7 +66,9 @@ class TestConfigValidation:
         except Exception:
             return None
 
-    def validate_required_fields(self, config: dict[str, Any], required_fields: list[str]) -> list[str]:
+    def validate_required_fields(
+        self, config: dict[str, Any], required_fields: list[str]
+    ) -> list[str]:
         """Validate presence of required fields."""
         missing_fields = []
         for field in required_fields:
@@ -74,22 +76,34 @@ class TestConfigValidation:
                 missing_fields.append(field)
         return missing_fields
 
-    def validate_field_types(self, config: dict[str, Any], type_requirements: dict[str, str]) -> list[str]:
+    def validate_field_types(
+        self, config: dict[str, Any], type_requirements: dict[str, str]
+    ) -> list[str]:
         """Validate field types."""
         type_errors = []
         for field, expected_type in type_requirements.items():
             if field in config:
                 actual_value = config[field]
                 if expected_type == "string" and not isinstance(actual_value, str):
-                    type_errors.append(f"{field} should be string, got {type(actual_value)}")
+                    type_errors.append(
+                        f"{field} should be string, got {type(actual_value)}"
+                    )
                 elif expected_type == "integer" and not isinstance(actual_value, int):
-                    type_errors.append(f"{field} should be integer, got {type(actual_value)}")
+                    type_errors.append(
+                        f"{field} should be integer, got {type(actual_value)}"
+                    )
                 elif expected_type == "boolean" and not isinstance(actual_value, bool):
-                    type_errors.append(f"{field} should be boolean, got {type(actual_value)}")
+                    type_errors.append(
+                        f"{field} should be boolean, got {type(actual_value)}"
+                    )
                 elif expected_type == "object" and not isinstance(actual_value, dict):
-                    type_errors.append(f"{field} should be object, got {type(actual_value)}")
+                    type_errors.append(
+                        f"{field} should be object, got {type(actual_value)}"
+                    )
                 elif expected_type == "array" and not isinstance(actual_value, list):
-                    type_errors.append(f"{field} should be array, got {type(actual_value)}")
+                    type_errors.append(
+                        f"{field} should be array, got {type(actual_value)}"
+                    )
         return type_errors
 
     def test_config_file_syntax(self, examples_dir: Path):
@@ -115,19 +129,18 @@ class TestConfigValidation:
                 syntax_errors.append((str(file_path), error))
 
         if len(syntax_errors) > 0:
-             print(f"Warning: Found {len(syntax_errors)} config files with syntax errors: {syntax_errors}")
-             # We relaxed this because some examples might be intentionally invalid or in-progress
-             # assert len(syntax_errors) == 0
+            print(
+                f"Warning: Found {len(syntax_errors)} config files with syntax errors: {syntax_errors}"
+            )
+            # We relaxed this because some examples might be intentionally invalid or in-progress
+            # assert len(syntax_errors) == 0
 
     def test_config_required_fields(self, examples_dir: Path):
         """Test that config files have required fields."""
         config_files = self.get_config_files(examples_dir)
 
         # Define required fields for different config types
-        required_fields_map = {
-            "output": ["format", "file"],
-            "logging": ["level"]
-        }
+        required_fields_map = {"output": ["format", "file"], "logging": ["level"]}
 
         field_errors = []
 
@@ -149,7 +162,9 @@ class TestConfigValidation:
                         print(f"✓ {section} has all required fields")
 
         if field_errors:
-            pytest.fail(f"Found {len(field_errors)} config files with missing required fields: {field_errors}")
+            pytest.fail(
+                f"Found {len(field_errors)} config files with missing required fields: {field_errors}"
+            )
 
     def test_config_field_types(self, examples_dir: Path):
         """Test that config fields have correct types."""
@@ -157,12 +172,8 @@ class TestConfigValidation:
 
         # Define type requirements
         type_requirements_map = {
-            "output": {
-                "format": "string"
-            },
-            "logging": {
-                "level": "string"
-            }
+            "output": {"format": "string"},
+            "logging": {"level": "string"},
         }
 
         type_errors = []
@@ -185,7 +196,9 @@ class TestConfigValidation:
                         print(f"✓ {section} field types correct")
 
         if type_errors:
-            pytest.fail(f"Found {len(type_errors)} config files with type errors: {type_errors}")
+            pytest.fail(
+                f"Found {len(type_errors)} config files with type errors: {type_errors}"
+            )
 
     def test_environment_variable_substitution(self, examples_dir: Path):
         """Test that environment variable substitution works."""
@@ -193,7 +206,7 @@ class TestConfigValidation:
         test_vars = {
             "TEST_API_KEY": "test_key_123",
             "TEST_DATABASE_URL": "sqlite:///test.db",
-            "TEST_DEBUG": "true"
+            "TEST_DEBUG": "true",
         }
 
         original_env = {}
@@ -207,7 +220,7 @@ class TestConfigValidation:
                 "api": {
                     "key": "${TEST_API_KEY}",
                     "database_url": "${TEST_DATABASE_URL:default.db}",
-                    "debug": "${TEST_DEBUG:false}"
+                    "debug": "${TEST_DEBUG:false}",
                 }
             }
 
@@ -221,9 +234,13 @@ class TestConfigValidation:
                         var_expr = value[2:-1]  # Remove ${}
                         if ":" in var_expr:
                             var_name, default = var_expr.split(":", 1)
-                            substituted_config[section][key] = os.environ.get(var_name, default)
+                            substituted_config[section][key] = os.environ.get(
+                                var_name, default
+                            )
                         else:
-                            substituted_config[section][key] = os.environ.get(var_expr, "")
+                            substituted_config[section][key] = os.environ.get(
+                                var_expr, ""
+                            )
                     else:
                         substituted_config[section][key] = value
 

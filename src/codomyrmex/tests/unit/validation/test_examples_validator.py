@@ -4,7 +4,6 @@ No mocks. Tests real dataclass behavior, enum values,
 and ExamplesValidator initialization.
 """
 
-
 import pytest
 
 from codomyrmex.validation.examples_validator import (

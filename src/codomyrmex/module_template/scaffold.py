@@ -50,7 +50,7 @@ def scaffold_new_module(
         ValueError: If module_name is invalid
     """
     # Validate module name
-    if not re.match(r'^[a-z][a-z0-9_]*$', module_name):
+    if not re.match(r"^[a-z][a-z0-9_]*$", module_name):
         raise ValueError(
             f"Invalid module name '{module_name}'. "
             "Use lowercase letters, numbers, and underscores. Must start with a letter."
@@ -97,15 +97,11 @@ def scaffold_new_module(
 
 
 def _copy_and_customize(
-    src: Path,
-    dst: Path,
-    replacements: dict,
-    description: str,
-    author: str
+    src: Path, dst: Path, replacements: dict, description: str, author: str
 ) -> None:
     """Copy a file and perform text replacements."""
     try:
-        content = src.read_text(encoding='utf-8')
+        content = src.read_text(encoding="utf-8")
 
         # Perform replacements
         for old, new in replacements.items():
@@ -115,14 +111,14 @@ def _copy_and_customize(
         if description and "# Description" not in content:
             # For README.md, add description after first heading
             if dst.name == "README.md":
-                lines = content.split('\n')
+                lines = content.split("\n")
                 for i, line in enumerate(lines):
-                    if line.startswith('# '):
+                    if line.startswith("# "):
                         lines.insert(i + 1, f"\n{description}\n")
                         break
-                content = '\n'.join(lines)
+                content = "\n".join(lines)
 
-        dst.write_text(content, encoding='utf-8')
+        dst.write_text(content, encoding="utf-8")
     except Exception as e:
         logger.error(f"Error customizing {src}: {e}")
         # Fall back to simple copy
@@ -131,7 +127,7 @@ def _copy_and_customize(
 
 def _create_core_module(path: Path, module_name: str, description: str) -> None:
     """Create the main Python file for the new module."""
-    class_name = ''.join(word.title() for word in module_name.split('_'))
+    class_name = "".join(word.title() for word in module_name.split("_"))
 
     content = f'''"""
 {module_name.replace("_", " ").title()} Module
@@ -186,7 +182,7 @@ def create_{module_name}(config: Optional[Dict[str, Any]] = None) -> {class_name
     """
     return {class_name}(config)
 '''
-    path.write_text(content, encoding='utf-8')
+    path.write_text(content, encoding="utf-8")
     logger.debug(f"Created core module: {path}")
 
 
@@ -198,4 +194,8 @@ def list_template_files() -> list[str]:
         List of template file names
     """
     template_dir = Path(__file__).parent
-    return [f.name for f in template_dir.iterdir() if f.is_file() and not f.name.startswith('.')]
+    return [
+        f.name
+        for f in template_dir.iterdir()
+        if f.is_file() and not f.name.startswith(".")
+    ]

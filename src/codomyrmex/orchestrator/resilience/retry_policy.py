@@ -22,6 +22,7 @@ T = TypeVar("T")
 
 class RetryOutcome(Enum):
     """Outcome of a retry attempt."""
+
     SUCCESS = "success"
     RETRY = "retry"
     ABORT = "abort"
@@ -31,6 +32,7 @@ class RetryOutcome(Enum):
 @dataclass
 class RetryPolicy:
     """Policy for retrying failed pipeline steps."""
+
     max_attempts: int = 3
     base_delay: float = 1.0
     max_delay: float = 300.0
@@ -43,7 +45,7 @@ class RetryPolicy:
 
     def compute_delay(self, attempt: int) -> float:
         """Compute delay for a given attempt number."""
-        delay = self.base_delay * (self.exponential_base ** attempt)
+        delay = self.base_delay * (self.exponential_base**attempt)
         delay = min(delay, self.max_delay)
         if self.jitter:
             delay *= random.uniform(0.5, 1.5)
@@ -63,6 +65,7 @@ class RetryPolicy:
 @dataclass
 class RetryResult:
     """Result of executing with retry policy."""
+
     outcome: RetryOutcome
     result: Any = None
     error: Exception | None = None
@@ -85,8 +88,9 @@ class PipelineRetryExecutor:
         """Get the retry policy for a step (custom or default)."""
         return self._step_policies.get(step_name, self._default_policy)
 
-    def execute(self, step_name: str, func: Callable[..., T],
-                *args: Any, **kwargs: Any) -> RetryResult:
+    def execute(
+        self, step_name: str, func: Callable[..., T], *args: Any, **kwargs: Any
+    ) -> RetryResult:
         """Execute a function with retry policy."""
         policy = self.get_policy(step_name)
         total_delay = 0.0
@@ -107,7 +111,10 @@ class PipelineRetryExecutor:
                     total_delay += delay
                     logger.warning(
                         "Step '%s' attempt %d failed, retrying in %.1fs: %s",
-                        step_name, attempt + 1, delay, e,
+                        step_name,
+                        attempt + 1,
+                        delay,
+                        e,
                     )
                     if policy.on_retry:
                         policy.on_retry(attempt + 1, e)
@@ -116,8 +123,10 @@ class PipelineRetryExecutor:
                     if policy.on_exhausted:
                         policy.on_exhausted(e)
                     return RetryResult(
-                        outcome=outcome, error=e,
-                        attempts=attempt + 1, total_delay=total_delay,
+                        outcome=outcome,
+                        error=e,
+                        attempts=attempt + 1,
+                        total_delay=total_delay,
                     )
 
         return RetryResult(
@@ -126,8 +135,9 @@ class PipelineRetryExecutor:
             total_delay=total_delay,
         )
 
-    async def execute_async(self, step_name: str, func: Callable[..., Any],
-                            *args: Any, **kwargs: Any) -> RetryResult:
+    async def execute_async(
+        self, step_name: str, func: Callable[..., Any], *args: Any, **kwargs: Any
+    ) -> RetryResult:
         """Execute an async function with retry policy."""
         policy = self.get_policy(step_name)
         total_delay = 0.0
@@ -153,8 +163,10 @@ class PipelineRetryExecutor:
                     if policy.on_exhausted:
                         policy.on_exhausted(e)
                     return RetryResult(
-                        outcome=outcome, error=e,
-                        attempts=attempt + 1, total_delay=total_delay,
+                        outcome=outcome,
+                        error=e,
+                        attempts=attempt + 1,
+                        total_delay=total_delay,
                     )
 
         return RetryResult(
@@ -230,14 +242,19 @@ def with_retry(
                             delay = policy.compute_delay(attempt - 1)
                             logger.warning(
                                 "%s attempt %d/%d failed (%s), retrying in %.2fs",
-                                func.__name__, attempt, policy.max_attempts,
-                                exc, delay,
+                                func.__name__,
+                                attempt,
+                                policy.max_attempts,
+                                exc,
+                                delay,
                             )
                             await asyncio.sleep(delay)
                         else:
                             logger.error(
                                 "%s failed after %d attempts: %s",
-                                func.__name__, policy.max_attempts, exc,
+                                func.__name__,
+                                policy.max_attempts,
+                                exc,
                             )
                 raise last_exc  # type: ignore[misc]
 
@@ -257,14 +274,19 @@ def with_retry(
                             delay = policy.compute_delay(attempt - 1)
                             logger.warning(
                                 "%s attempt %d/%d failed (%s), retrying in %.2fs",
-                                func.__name__, attempt, policy.max_attempts,
-                                exc, delay,
+                                func.__name__,
+                                attempt,
+                                policy.max_attempts,
+                                exc,
+                                delay,
                             )
                             time.sleep(delay)
                         else:
                             logger.error(
                                 "%s failed after %d attempts: %s",
-                                func.__name__, policy.max_attempts, exc,
+                                func.__name__,
+                                policy.max_attempts,
+                                exc,
                             )
                 raise last_exc  # type: ignore[misc]
 

@@ -90,8 +90,7 @@ class PlanEvaluator:
         # Success rate: fraction of steps that completed
         if total_steps > 0:
             completed = sum(
-                1 for s in workflow_result.steps
-                if s.status == StepStatus.COMPLETED
+                1 for s in workflow_result.steps if s.status == StepStatus.COMPLETED
             )
             success_rate = completed / total_steps
         else:

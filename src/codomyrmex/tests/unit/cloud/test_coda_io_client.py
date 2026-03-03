@@ -85,6 +85,7 @@ class TestCodaClientMethods:
     def client(self):
         """Create a test client."""
         from codomyrmex.cloud.coda_io import CodaClient
+
         return CodaClient(api_token="test-token")
 
     # Docs API
@@ -401,6 +402,7 @@ class TestCodaClientHelperMethods:
     def client(self):
         """Create a test client."""
         from codomyrmex.cloud.coda_io import CodaClient
+
         return CodaClient(api_token="test-token")
 
     def test_get_method_exists(self, client):

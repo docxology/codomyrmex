@@ -188,6 +188,7 @@ class TestCountCalls:
 
     def test_increments_call_counter(self):
         """Test functionality: increments call counter."""
+
         @count_calls("my_func")
         def my_func():
             return 42
@@ -199,6 +200,7 @@ class TestCountCalls:
 
     def test_increments_success_counter(self):
         """Test functionality: increments success counter."""
+
         @count_calls("ok_func")
         def ok_func():
             return "ok"
@@ -209,6 +211,7 @@ class TestCountCalls:
 
     def test_increments_error_counter_on_exception(self):
         """Test functionality: increments error counter on exception."""
+
         @count_calls("failing_func")
         def failing_func():
             raise RuntimeError("boom")
@@ -221,6 +224,7 @@ class TestCountCalls:
 
     def test_preserves_return_value(self):
         """Test functionality: preserves return value."""
+
         @count_calls("ret_func")
         def ret_func():
             return 99
@@ -229,6 +233,7 @@ class TestCountCalls:
 
     def test_preserves_exception(self):
         """Test functionality: preserves exception."""
+
         @count_calls("exc_func")
         def exc_func():
             raise ValueError("test")
@@ -274,6 +279,7 @@ class TestModuleHealth:
 
     def test_check_handles_exception_as_unhealthy(self):
         """Test functionality: check handles exception as unhealthy."""
+
         def bad_check():
             raise RuntimeError("broken")
 

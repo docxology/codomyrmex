@@ -6,9 +6,11 @@ from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
 
+
 def find_markdown_files(root_dir):
     """Recursively find all markdown files in a directory."""
     return list(Path(root_dir).rglob("*.md"))
+
 
 def check_links(root_dir):
     """
@@ -20,7 +22,7 @@ def check_links(root_dir):
         List of dictionaries containing broken link details
     """
     root_path = Path(root_dir).absolute()
-    link_pattern = re.compile(r'\[([^\]]+)\]\(([^)]+)\)')
+    link_pattern = re.compile(r"\[([^\]]+)\]\(([^)]+)\)")
     broken_links = []
 
     for md_file in find_markdown_files(root_path):
@@ -47,14 +49,17 @@ def check_links(root_dir):
             target = (md_file.parent / clean_link).resolve()
 
             if not target.exists():
-                broken_links.append({
-                    "file": str(md_file.relative_to(root_path)),
-                    "link": link,
-                    "text": text,
-                    "target": str(target)
-                })
+                broken_links.append(
+                    {
+                        "file": str(md_file.relative_to(root_path)),
+                        "link": link,
+                        "text": text,
+                        "target": str(target),
+                    }
+                )
 
     return broken_links
+
 
 if __name__ == "__main__":
     root = os.getcwd()

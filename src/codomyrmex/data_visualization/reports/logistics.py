@@ -1,4 +1,5 @@
 """Logistics report."""
+
 from pathlib import Path
 
 from codomyrmex.data_visualization.core.ui import Card, Dashboard

@@ -12,6 +12,7 @@ try:
         WASMRuntime,
         WasmtimeClient,
     )
+
     HAS_MODULE = True
 except ImportError:
     HAS_MODULE = False
@@ -23,6 +24,7 @@ if not HAS_MODULE:
 @pytest.mark.unit
 class TestWASMRuntime:
     """Test suite for WASMRuntime."""
+
     def test_wasmtime(self):
         """Test functionality: wasmtime."""
         assert WASMRuntime.WASMTIME is not None
@@ -43,6 +45,7 @@ class TestWASMRuntime:
 @pytest.mark.unit
 class TestWASMModule:
     """Test suite for WASMModule."""
+
     def test_create_module(self):
         """Test functionality: create module."""
         module = WASMModule(name="test-mod", path="/tmp/test.wasm")
@@ -61,6 +64,7 @@ class TestWASMModule:
 @pytest.mark.unit
 class TestWASMInstance:
     """Test suite for WASMInstance."""
+
     def test_create_instance(self):
         """Test functionality: create instance."""
         module = WASMModule(name="m", path="/m.wasm")
@@ -74,6 +78,7 @@ class TestWASMInstance:
 @pytest.mark.unit
 class TestWASMExecution:
     """Test suite for WASMExecution."""
+
     def test_successful_execution(self):
         """Test functionality: successful execution."""
         execution = WASMExecution(success=True, result=42)
@@ -91,6 +96,7 @@ class TestWASMExecution:
 @pytest.mark.unit
 class TestWasmtimeClient:
     """Test suite for WasmtimeClient."""
+
     def test_create_client(self):
         """Test functionality: create client."""
         client = WasmtimeClient()
@@ -101,6 +107,7 @@ class TestWasmtimeClient:
 @pytest.mark.unit
 class TestWASMOrchestrator:
     """Test suite for WASMOrchestrator."""
+
     def test_create_orchestrator(self):
         """Test functionality: create orchestrator."""
         orch = WASMOrchestrator()
@@ -110,6 +117,7 @@ class TestWASMOrchestrator:
 @pytest.mark.unit
 class TestWASMComponentModel:
     """Test suite for WASMComponentModel."""
+
     def test_create_model(self):
         """Test functionality: create model."""
         model = WASMComponentModel()
@@ -118,6 +126,8 @@ class TestWASMComponentModel:
     def test_define_interface(self):
         """Test functionality: define interface."""
         model = WASMComponentModel()
-        model.define_interface("math", {"add": {"params": ["i32", "i32"], "result": "i32"}})
+        model.define_interface(
+            "math", {"add": {"params": ["i32", "i32"], "result": "i32"}}
+        )
         iface = model.get_interface("math")
         assert iface is not None

@@ -40,7 +40,9 @@ class CacheStats:
     writes: int = 0
     deletes: int = 0
     _timestamps: list[tuple[float, bool]] = field(default_factory=list, repr=False)
-    _key_hits: dict[str, int] = field(default_factory=lambda: defaultdict(int), repr=False)
+    _key_hits: dict[str, int] = field(
+        default_factory=lambda: defaultdict(int), repr=False
+    )
 
     @property
     def hit_rate(self) -> float:
@@ -122,9 +124,14 @@ class CacheStats:
     def snapshot(self) -> CacheStats:
         """Create a frozen copy of current stats."""
         return CacheStats(
-            hits=self.hits, misses=self.misses, total_requests=self.total_requests,
-            size=self.size, max_size=self.max_size, evictions=self.evictions,
-            writes=self.writes, deletes=self.deletes,
+            hits=self.hits,
+            misses=self.misses,
+            total_requests=self.total_requests,
+            size=self.size,
+            max_size=self.max_size,
+            evictions=self.evictions,
+            writes=self.writes,
+            deletes=self.deletes,
         )
 
     def to_dict(self) -> dict[str, Any]:

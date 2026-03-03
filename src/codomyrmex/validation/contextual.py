@@ -76,7 +76,9 @@ class ContextualValidator:
                 issues.append(result)
         return issues
 
-    def validate_many(self, records: list[dict[str, Any]]) -> dict[int, list[ValidationIssue]]:
+    def validate_many(
+        self, records: list[dict[str, Any]]
+    ) -> dict[int, list[ValidationIssue]]:
         """Validate multiple records. Returns {index: issues} for records with issues."""
         results: dict[int, list[ValidationIssue]] = {}
         for i, record in enumerate(records):
@@ -87,9 +89,7 @@ class ContextualValidator:
 
     def is_valid(self, data: dict[str, Any]) -> bool:
         """Quick check: returns True if no error-severity issues."""
-        return not any(
-            issue.severity == "error" for issue in self.validate(data)
-        )
+        return not any(issue.severity == "error" for issue in self.validate(data))
 
     @property
     def rule_count(self) -> int:
@@ -100,21 +100,25 @@ class ContextualValidator:
     @staticmethod
     def required_fields(*fields: str) -> ValidationRule:
         """Rule: all listed fields must be present and non-empty."""
+
         def _check(data: dict[str, Any]) -> ValidationIssue | None:
             """Check the condition and return the result."""
             for f in fields:
                 val = data.get(f)
                 if val is None or (isinstance(val, str) and not val.strip()):
                     return ValidationIssue(
-                        field=f, message=f"Required field '{f}' is missing or empty",
+                        field=f,
+                        message=f"Required field '{f}' is missing or empty",
                         code="REQUIRED",
                     )
             return None
+
         return _check
 
     @staticmethod
     def mutual_exclusion(field_a: str, field_b: str) -> ValidationRule:
         """Rule: at most one of two fields may be set."""
+
         def _check(data: dict[str, Any]) -> ValidationIssue | None:
             """Check the condition and return the result."""
             if data.get(field_a) and data.get(field_b):
@@ -124,25 +128,35 @@ class ContextualValidator:
                     code="MUTUAL_EXCLUSION",
                 )
             return None
+
         return _check
 
     @staticmethod
-    def conditional_requirement(trigger_field: str, trigger_value: Any, required_field: str) -> ValidationRule:
+    def conditional_requirement(
+        trigger_field: str, trigger_value: Any, required_field: str
+    ) -> ValidationRule:
         """Rule: if trigger_field == trigger_value then required_field must be set."""
+
         def _check(data: dict[str, Any]) -> ValidationIssue | None:
             """Check the condition and return the result."""
-            if data.get(trigger_field) == trigger_value and not data.get(required_field):
+            if data.get(trigger_field) == trigger_value and not data.get(
+                required_field
+            ):
                 return ValidationIssue(
                     field=required_field,
                     message=f"'{required_field}' is required when '{trigger_field}' is '{trigger_value}'",
                     code="CONDITIONAL_REQUIRED",
                 )
             return None
+
         return _check
 
     @staticmethod
-    def range_check(field_name: str, min_val: float | None = None, max_val: float | None = None) -> ValidationRule:
+    def range_check(
+        field_name: str, min_val: float | None = None, max_val: float | None = None
+    ) -> ValidationRule:
         """Rule: numeric field must be within [min_val, max_val]."""
+
         def _check(data: dict[str, Any]) -> ValidationIssue | None:
             """Check the condition and return the result."""
             val = data.get(field_name)
@@ -152,26 +166,33 @@ class ContextualValidator:
                 num = float(val)
             except (ValueError, TypeError):
                 return ValidationIssue(
-                    field=field_name, message=f"'{field_name}' must be numeric",
+                    field=field_name,
+                    message=f"'{field_name}' must be numeric",
                     code="TYPE_ERROR",
                 )
             if min_val is not None and num < min_val:
                 return ValidationIssue(
-                    field=field_name, message=f"'{field_name}' must be >= {min_val}, got {num}",
+                    field=field_name,
+                    message=f"'{field_name}' must be >= {min_val}, got {num}",
                     code="RANGE_MIN",
                 )
             if max_val is not None and num > max_val:
                 return ValidationIssue(
-                    field=field_name, message=f"'{field_name}' must be <= {max_val}, got {num}",
+                    field=field_name,
+                    message=f"'{field_name}' must be <= {max_val}, got {num}",
                     code="RANGE_MAX",
                 )
             return None
+
         return _check
 
     @staticmethod
-    def pattern_match(field_name: str, pattern: str, description: str = "") -> ValidationRule:
+    def pattern_match(
+        field_name: str, pattern: str, description: str = ""
+    ) -> ValidationRule:
         """Rule: string field must match a regex pattern."""
         compiled = re.compile(pattern)
+
         def _check(data: dict[str, Any]) -> ValidationIssue | None:
             """Check the condition and return the result."""
             val = data.get(field_name)
@@ -180,15 +201,18 @@ class ContextualValidator:
             if not compiled.match(str(val)):
                 desc = description or f"must match pattern '{pattern}'"
                 return ValidationIssue(
-                    field=field_name, message=f"'{field_name}' {desc}",
+                    field=field_name,
+                    message=f"'{field_name}' {desc}",
                     code="PATTERN_MISMATCH",
                 )
             return None
+
         return _check
 
     @staticmethod
     def type_check(field_name: str, expected_type: type) -> ValidationRule:
         """Rule: field value must be of the expected type."""
+
         def _check(data: dict[str, Any]) -> ValidationIssue | None:
             """Check the condition and return the result."""
             val = data.get(field_name)
@@ -199,4 +223,5 @@ class ContextualValidator:
                     code="TYPE_CHECK",
                 )
             return None
+
         return _check

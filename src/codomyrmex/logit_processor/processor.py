@@ -128,9 +128,7 @@ class RepetitionPenaltyProcessor(LogitProcessor):
 
     def __init__(self, penalty: float = 1.3) -> None:
         if penalty < 1.0:
-            raise ValueError(
-                f"Repetition penalty must be >= 1.0, got {penalty}"
-            )
+            raise ValueError(f"Repetition penalty must be >= 1.0, got {penalty}")
         self.penalty = penalty
 
     def __call__(
@@ -209,9 +207,7 @@ def sample_token(
         processors.append(TopPProcessor(top_p))
 
     processed = (
-        LogitProcessorList(processors)(logits, input_ids)
-        if processors
-        else logits
+        LogitProcessorList(processors)(logits, input_ids) if processors else logits
     )
 
     # Convert to probabilities

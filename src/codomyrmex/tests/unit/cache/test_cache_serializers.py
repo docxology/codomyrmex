@@ -69,6 +69,7 @@ class TestPickleSerializer:
 
     def test_default_protocol(self):
         import pickle
+
         s = PickleSerializer()
         assert s.protocol == pickle.HIGHEST_PROTOCOL
 
@@ -125,6 +126,7 @@ class TestBase64Serializer:
 
     def test_output_is_valid_base64(self):
         import base64
+
         s = Base64Serializer(base_serializer=JSONSerializer())
         data = s.serialize({"k": "v"})
         # Should not raise

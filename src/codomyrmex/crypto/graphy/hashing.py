@@ -176,8 +176,7 @@ def hash_data(data: bytes, algorithm: str = "sha256") -> str:
     func = _DISPATCH.get(algorithm)
     if func is None:
         raise HashError(
-            f"Unknown hash algorithm: {algorithm}. "
-            f"Supported: {', '.join(_DISPATCH)}"
+            f"Unknown hash algorithm: {algorithm}. Supported: {', '.join(_DISPATCH)}"
         )
     return func(data)  # type: ignore[operator]
 
@@ -199,5 +198,9 @@ def verify_hash(data: bytes, expected_hash: str, algorithm: str = "sha256") -> b
 
     computed = hash_data(data, algorithm)
     result = _hmac.compare_digest(computed, expected_hash)
-    logger.debug("Hash verification %s for algorithm %s", "passed" if result else "failed", algorithm)
+    logger.debug(
+        "Hash verification %s for algorithm %s",
+        "passed" if result else "failed",
+        algorithm,
+    )
     return result

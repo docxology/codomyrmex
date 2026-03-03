@@ -188,7 +188,9 @@ class AsyncParallelRunner:
         result: AsyncExecutionResult,
     ) -> None:
         """Run all tasks, collecting results even if some fail."""
-        coros = [self._guarded_run(name, coro, args, result) for name, coro, args in tasks]
+        coros = [
+            self._guarded_run(name, coro, args, result) for name, coro, args in tasks
+        ]
         await asyncio.gather(*coros)
 
     async def _run_fail_fast(

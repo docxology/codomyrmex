@@ -30,6 +30,7 @@ from codomyrmex.orchestrator.execution.parallel_runner import ExecutionResult
 # Helpers
 # ---------------------------------------------------------------------------
 
+
 def _write_script(path, code):
     """Write a Python script to *path* with dedented *code*."""
     path.write_text(textwrap.dedent(code))
@@ -52,6 +53,7 @@ def _capture_stdout(func, *args, **kwargs):
 # TestHandleQuickRun
 # ===================================================================
 
+
 @pytest.mark.unit
 class TestHandleQuickRun:
     """Tests for handle_quick_run with real scripts.
@@ -62,9 +64,12 @@ class TestHandleQuickRun:
 
     def test_run_simple_python_script(self, tmp_path):
         """Run a script that prints 'hello', assert success."""
-        script = _write_script(tmp_path / "hello.py", """\
+        script = _write_script(
+            tmp_path / "hello.py",
+            """\
             print("hello")
-        """)
+        """,
+        )
         result, output = _capture_stdout(handle_quick_run, str(script))
         assert result is True
 
@@ -76,10 +81,13 @@ class TestHandleQuickRun:
 
     def test_run_with_args(self, tmp_path):
         """Script uses sys.argv; verify extra args are accessible."""
-        script = _write_script(tmp_path / "args_check.py", """\
+        script = _write_script(
+            tmp_path / "args_check.py",
+            """\
             import sys
             print(",".join(sys.argv[1:]))
-        """)
+        """,
+        )
         result, _ = _capture_stdout(handle_quick_run, str(script), args=["--extra"])
         assert result is True
 
@@ -102,19 +110,25 @@ class TestHandleQuickRun:
 
     def test_run_script_with_exit_code_1(self, tmp_path):
         """Script that exits with code 1 should return False."""
-        script = _write_script(tmp_path / "fail.py", """\
+        script = _write_script(
+            tmp_path / "fail.py",
+            """\
             import sys
             sys.exit(1)
-        """)
+        """,
+        )
         result, output = _capture_stdout(handle_quick_run, str(script))
         assert result is False
 
     def test_run_timeout_exceeded(self, tmp_path):
         """Script that sleeps longer than timeout should fail gracefully."""
-        script = _write_script(tmp_path / "slow.py", """\
+        script = _write_script(
+            tmp_path / "slow.py",
+            """\
             import time
             time.sleep(30)
-        """)
+        """,
+        )
         result, output = _capture_stdout(handle_quick_run, str(script), timeout=1)
         assert result is False
 
@@ -139,6 +153,7 @@ class TestHandleQuickRun:
 # ===================================================================
 # TestHandleQuickPipe
 # ===================================================================
+
 
 @pytest.mark.unit
 class TestHandleQuickPipe:
@@ -202,6 +217,7 @@ class TestHandleQuickPipe:
 # TestHandleQuickBatch
 # ===================================================================
 
+
 @pytest.mark.unit
 class TestHandleQuickBatch:
     """Tests for handle_quick_batch with real scripts.
@@ -228,7 +244,9 @@ class TestHandleQuickBatch:
         """verbose=True should produce per-target output lines."""
         s = _write_script(tmp_path / "verb.py", 'print("v")\n')
         result, output = _capture_stdout(
-            handle_quick_batch, [str(s)], verbose=True,
+            handle_quick_batch,
+            [str(s)],
+            verbose=True,
         )
         assert isinstance(result, bool)
 
@@ -240,12 +258,17 @@ class TestHandleQuickBatch:
 
     def test_batch_timeout(self, tmp_path):
         """Script exceeding timeout should be marked failed."""
-        s = _write_script(tmp_path / "hang.py", """\
+        s = _write_script(
+            tmp_path / "hang.py",
+            """\
             import time
             time.sleep(30)
-        """)
+        """,
+        )
         result, output = _capture_stdout(
-            handle_quick_batch, [str(s)], timeout=1,
+            handle_quick_batch,
+            [str(s)],
+            timeout=1,
         )
         assert result is False
 
@@ -262,7 +285,8 @@ class TestHandleQuickBatch:
     def test_batch_nonexistent_target(self, tmp_path):
         """Batch ignores targets that are not files or directories."""
         result, output = _capture_stdout(
-            handle_quick_batch, [str(tmp_path / "ghost.py")],
+            handle_quick_batch,
+            [str(tmp_path / "ghost.py")],
         )
         assert result is False
 
@@ -270,6 +294,7 @@ class TestHandleQuickBatch:
 # ===================================================================
 # TestHandleQuickChain
 # ===================================================================
+
 
 @pytest.mark.unit
 class TestHandleQuickChain:
@@ -291,25 +316,35 @@ class TestHandleQuickChain:
 
     def test_chain_continue_on_error_false(self, tmp_path):
         """First script fails, continue_on_error=False stops the chain."""
-        fail = _write_script(tmp_path / "fail.py", """\
+        fail = _write_script(
+            tmp_path / "fail.py",
+            """\
             import sys
             sys.exit(1)
-        """)
+        """,
+        )
         ok = _write_script(tmp_path / "ok.py", 'print("ok")\n')
         result, output = _capture_stdout(
-            handle_quick_chain, [str(fail), str(ok)], continue_on_error=False,
+            handle_quick_chain,
+            [str(fail), str(ok)],
+            continue_on_error=False,
         )
         assert result is False
 
     def test_chain_continue_on_error_true(self, tmp_path):
         """First script fails, continue_on_error=True continues to second."""
-        fail = _write_script(tmp_path / "fail.py", """\
+        fail = _write_script(
+            tmp_path / "fail.py",
+            """\
             import sys
             sys.exit(1)
-        """)
+        """,
+        )
         ok = _write_script(tmp_path / "ok.py", 'print("ok")\n')
         result, output = _capture_stdout(
-            handle_quick_chain, [str(fail), str(ok)], continue_on_error=True,
+            handle_quick_chain,
+            [str(fail), str(ok)],
+            continue_on_error=True,
         )
         # Overall still fails because first script failed
         assert result is False
@@ -343,16 +378,20 @@ class TestHandleQuickChain:
     def test_chain_passes_result_via_env(self, tmp_path):
         """Second script can read PREV_RESULT env var set by the chain."""
         first = _write_script(tmp_path / "first.py", 'print("first output")\n')
-        second = _write_script(tmp_path / "second.py", """\
+        second = _write_script(
+            tmp_path / "second.py",
+            """\
             import os, json
             prev = os.environ.get("PREV_RESULT", "")
             if prev:
                 data = json.loads(prev)
                 assert data.get("status") == "passed"
             print("second ok")
-        """)
+        """,
+        )
         result, output = _capture_stdout(
-            handle_quick_chain, [str(first), str(second)],
+            handle_quick_chain,
+            [str(first), str(second)],
         )
         assert result is True
 
@@ -362,7 +401,8 @@ class TestHandleQuickChain:
         b = _write_script(tmp_path / "b.py", 'print("b")\n')
         c = _write_script(tmp_path / "c.py", 'print("c")\n')
         result, output = _capture_stdout(
-            handle_quick_chain, [str(a), str(b), str(c)],
+            handle_quick_chain,
+            [str(a), str(b), str(c)],
         )
         assert result is True
         assert "3/3" in output
@@ -372,6 +412,7 @@ class TestHandleQuickChain:
 # TestHandleQuickWorkflow
 # ===================================================================
 
+
 @pytest.mark.unit
 class TestHandleQuickWorkflow:
     """Tests for handle_quick_workflow."""
@@ -379,7 +420,8 @@ class TestHandleQuickWorkflow:
     def test_workflow_invalid_path(self, tmp_path):
         """Non-existent definition file returns False."""
         result, output = _capture_stdout(
-            handle_quick_workflow, str(tmp_path / "missing.yaml"),
+            handle_quick_workflow,
+            str(tmp_path / "missing.yaml"),
         )
         assert result is False
         assert "not found" in output
@@ -389,7 +431,9 @@ class TestHandleQuickWorkflow:
         defn = tmp_path / "w.json"
         defn.write_text(json.dumps({"name": "test", "steps": []}))
         result, output = _capture_stdout(
-            handle_quick_workflow, str(defn), params="not-json!!",
+            handle_quick_workflow,
+            str(defn),
+            params="not-json!!",
         )
         assert result is False
         assert "Invalid JSON" in output
@@ -405,16 +449,22 @@ class TestHandleQuickWorkflow:
     def test_workflow_valid_json_loads_but_engine_fails(self, tmp_path):
         """Valid JSON that loads but orchestration engine unavailable."""
         defn = tmp_path / "wf.json"
-        defn.write_text(json.dumps({
-            "name": "test-workflow",
-            "steps": [{"name": "s1", "command": "echo hi"}],
-        }))
+        defn.write_text(
+            json.dumps(
+                {
+                    "name": "test-workflow",
+                    "steps": [{"name": "s1", "command": "echo hi"}],
+                }
+            )
+        )
         # The orchestration engine import will likely fail or the engine
         # will reject the definition.  Either way, we get False.
         result, output = _capture_stdout(handle_quick_workflow, str(defn))
         assert result is False
 
-    @pytest.mark.skipif(True, reason="requires pyyaml and workflow orchestration infrastructure")
+    @pytest.mark.skipif(
+        True, reason="requires pyyaml and workflow orchestration infrastructure"
+    )
     def test_workflow_malformed_yaml(self, tmp_path):
         """Malformed YAML file should return False."""
         bad = tmp_path / "bad.yaml"
@@ -426,10 +476,14 @@ class TestHandleQuickWorkflow:
     def test_workflow_valid_json_definition(self, tmp_path):
         """Valid JSON workflow definition attempts execution."""
         defn = tmp_path / "workflow.json"
-        defn.write_text(json.dumps({
-            "name": "test-workflow",
-            "steps": [{"name": "step1", "command": "echo hi"}],
-        }))
+        defn.write_text(
+            json.dumps(
+                {
+                    "name": "test-workflow",
+                    "steps": [{"name": "step1", "command": "echo hi"}],
+                }
+            )
+        )
         result, output = _capture_stdout(handle_quick_workflow, str(defn))
         assert isinstance(result, bool)
 
@@ -439,7 +493,9 @@ class TestHandleQuickWorkflow:
         defn = tmp_path / "paramwf.json"
         defn.write_text(json.dumps({"name": "paramwf", "steps": []}))
         result, output = _capture_stdout(
-            handle_quick_workflow, str(defn), params='{"key":"val"}',
+            handle_quick_workflow,
+            str(defn),
+            params='{"key":"val"}',
         )
         assert isinstance(result, bool)
 
@@ -447,6 +503,7 @@ class TestHandleQuickWorkflow:
 # ===================================================================
 # TestPrintHelpers
 # ===================================================================
+
 
 @pytest.mark.unit
 class TestPrintHelpers:
@@ -557,8 +614,12 @@ class TestPrintHelpers:
     def test_print_batch_result_all_passed(self):
         """_print_batch_result with all passing shows 0 failed."""
         batch = ExecutionResult(
-            total=3, passed=3, failed=0, timeout=0,
-            execution_time=2.5, results=[],
+            total=3,
+            passed=3,
+            failed=0,
+            timeout=0,
+            execution_time=2.5,
+            results=[],
         )
         buf = io.StringIO()
         old = sys.stdout
@@ -575,7 +636,10 @@ class TestPrintHelpers:
     def test_print_batch_result_with_failures(self):
         """_print_batch_result with failures lists the failed scripts."""
         batch = ExecutionResult(
-            total=2, passed=1, failed=1, timeout=0,
+            total=2,
+            passed=1,
+            failed=1,
+            timeout=0,
             execution_time=1.0,
             results=[
                 {"status": "passed", "name": "ok.py"},
@@ -596,7 +660,10 @@ class TestPrintHelpers:
     def test_print_batch_result_with_timeouts(self):
         """_print_batch_result reports timeouts."""
         batch = ExecutionResult(
-            total=1, passed=0, failed=0, timeout=1,
+            total=1,
+            passed=0,
+            failed=0,
+            timeout=1,
             execution_time=60.0,
             results=[{"status": "timeout", "name": "slow.py", "error": "timeout"}],
         )
@@ -644,7 +711,10 @@ class TestPrintHelpers:
     def test_print_batch_result_mixed_status(self):
         """_print_batch_result handles mixed passed/failed/timeout."""
         batch = ExecutionResult(
-            total=4, passed=2, failed=1, timeout=1,
+            total=4,
+            passed=2,
+            failed=1,
+            timeout=1,
             execution_time=10.0,
             results=[
                 {"status": "passed", "name": "a.py"},
@@ -672,17 +742,21 @@ class TestPrintHelpers:
 # TestEdgeCases (additional coverage)
 # ===================================================================
 
+
 @pytest.mark.unit
 class TestEdgeCases:
     """Additional edge-case tests for broader coverage."""
 
     def test_run_script_with_stderr_output(self, tmp_path):
         """Script that writes to stderr should still succeed (exit 0)."""
-        script = _write_script(tmp_path / "warns.py", """\
+        script = _write_script(
+            tmp_path / "warns.py",
+            """\
             import sys
             print("ok to stdout")
             print("warning info", file=sys.stderr)
-        """)
+        """,
+        )
         result, _ = _capture_stdout(handle_quick_run, str(script))
         assert result is True
 
@@ -695,18 +769,25 @@ class TestEdgeCases:
         _write_script(inner / "x.py", 'print("x")\n')
         _write_script(inner / "y.py", 'print("y")\n')
         result, output = _capture_stdout(
-            handle_quick_run, str(subdir), parallel=True,
+            handle_quick_run,
+            str(subdir),
+            parallel=True,
         )
         assert isinstance(result, bool)
 
     def test_chain_timeout_per_script(self, tmp_path):
         """Chain with a tight timeout should fail the slow script."""
-        slow = _write_script(tmp_path / "slow.py", """\
+        slow = _write_script(
+            tmp_path / "slow.py",
+            """\
             import time
             time.sleep(30)
-        """)
+        """,
+        )
         result, output = _capture_stdout(
-            handle_quick_chain, [str(slow)], timeout=1,
+            handle_quick_chain,
+            [str(slow)],
+            timeout=1,
         )
         assert result is False
 

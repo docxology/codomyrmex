@@ -19,6 +19,7 @@ from typing import Any, Optional
 
 class InvalidationStrategy(Enum):
     """Cache invalidation strategies."""
+
     TTL = "ttl"
     LRU = "lru"
     LFU = "lfu"
@@ -26,9 +27,11 @@ class InvalidationStrategy(Enum):
     TAG_BASED = "tag_based"
     VERSION_BASED = "version_based"
 
+
 @dataclass
 class CacheEntry:
     """A cache entry with metadata."""
+
     key: str
     value: Any
     created_at: datetime = field(default_factory=datetime.now)
@@ -51,6 +54,7 @@ class CacheEntry:
         self.last_accessed = datetime.now()
         self.access_count += 1
 
+
 class InvalidationPolicy(ABC):
     """Base class for invalidation policies."""
 
@@ -63,6 +67,7 @@ class InvalidationPolicy(ABC):
     def select_for_eviction(self, entries: dict[str, CacheEntry]) -> str | None:
         """Select an entry for eviction."""
         pass
+
 
 class TTLPolicy(InvalidationPolicy):
     """Time-to-live based invalidation."""
@@ -82,6 +87,7 @@ class TTLPolicy(InvalidationPolicy):
                 return key
         return None
 
+
 class LRUPolicy(InvalidationPolicy):
     """Least recently used invalidation."""
 
@@ -95,6 +101,7 @@ class LRUPolicy(InvalidationPolicy):
             return None
         oldest = min(entries.items(), key=lambda x: x[1].last_accessed)
         return oldest[0]
+
 
 class LFUPolicy(InvalidationPolicy):
     """Least frequently used invalidation."""
@@ -110,6 +117,7 @@ class LFUPolicy(InvalidationPolicy):
         least_used = min(entries.items(), key=lambda x: x[1].access_count)
         return least_used[0]
 
+
 class FIFOPolicy(InvalidationPolicy):
     """First in, first out invalidation."""
 
@@ -123,6 +131,7 @@ class FIFOPolicy(InvalidationPolicy):
             return None
         oldest = min(entries.items(), key=lambda x: x[1].created_at)
         return oldest[0]
+
 
 class InvalidationManager:
     """
@@ -260,6 +269,7 @@ class InvalidationManager:
             "tags": len(self._tags),
             "namespaces": len(self._versions),
         }
+
 
 __all__ = [
     # Enums

@@ -47,6 +47,7 @@ logger = get_logger(__name__)
 # Trust Model
 # =====================================================================
 
+
 class TrustLevel(enum.Enum):
     """Trust tier for an MCP tool."""
 
@@ -57,6 +58,7 @@ class TrustLevel(enum.Enum):
 
 class SecurityError(Exception):
     """Raised when a security policy is violated."""
+
     pass
 
 
@@ -65,12 +67,14 @@ _trust_level: TrustLevel = TrustLevel.UNTRUSTED
 
 
 # Tools that can mutate state — require explicit TRUSTED promotion.
-DESTRUCTIVE_TOOLS: frozenset[str] = frozenset({
-    "codomyrmex.write_file",
-    "codomyrmex.run_command",
-    "codomyrmex.run_tests",
-    "codomyrmex.call_module_function",
-})
+DESTRUCTIVE_TOOLS: frozenset[str] = frozenset(
+    {
+        "codomyrmex.write_file",
+        "codomyrmex.run_command",
+        "codomyrmex.run_tests",
+        "codomyrmex.call_module_function",
+    }
+)
 
 # Audit Log
 _AUDIT_LOG_MAX_SIZE = 10000
@@ -85,6 +89,7 @@ _CONFIRMATION_TTL = 60.0  # seconds
 
 class AuditEntry(TypedDict):
     """Immutable record of a single tool call stored in the trust gateway audit log."""
+
     timestamp: str
     tool_name: str
     args_hash: str
@@ -100,7 +105,7 @@ def _log_audit_entry(
     status: str,
     trust_level: str,
     duration_ms: float,
-    error: Exception | None = None
+    error: Exception | None = None,
 ) -> None:
     """Record an entry in the audit log."""
     # Canonicalize args for consistent hashing
@@ -134,7 +139,8 @@ def _cleanup_expired_confirmations() -> None:
     """Remove expired confirmation tokens."""
     now = time.monotonic()
     expired = [
-        token for token, data in _pending_confirmations.items()
+        token
+        for token, data in _pending_confirmations.items()
         if now - data["timestamp"] > _CONFIRMATION_TTL
     ]
     for token in expired:
@@ -144,7 +150,7 @@ def _cleanup_expired_confirmations() -> None:
 def get_audit_log(
     since: datetime | None = None,
     tool_name: str | None = None,
-    status: str | None = None
+    status: str | None = None,
 ) -> list[AuditEntry]:
     """Retrieve filtered audit log entries."""
     with _audit_lock:
@@ -204,18 +210,36 @@ def clear_audit_log(before: datetime | None = None) -> int:
 
 
 # Patterns that indicate a tool may have side effects (for auto-discovered tools).
-_DESTRUCTIVE_PATTERNS: frozenset[str] = frozenset({
-    "write", "delete", "remove", "execute", "run", "drop",
-    "create", "update", "modify", "change", "set", "grant",
-    "revoke", "reset", "clear", "kill", "terminate",
-})
+_DESTRUCTIVE_PATTERNS: frozenset[str] = frozenset(
+    {
+        "write",
+        "delete",
+        "remove",
+        "execute",
+        "run",
+        "drop",
+        "create",
+        "update",
+        "modify",
+        "change",
+        "set",
+        "grant",
+        "revoke",
+        "reset",
+        "clear",
+        "kill",
+        "terminate",
+    }
+)
 
 
 # Trust Escalation Hooks
 _on_trust_change: Callable[[TrustLevel, TrustLevel], None] | None = None
 
 
-def set_trust_change_callback(callback: Callable[[TrustLevel, TrustLevel], None] | None) -> None:
+def set_trust_change_callback(
+    callback: Callable[[TrustLevel, TrustLevel], None] | None,
+) -> None:
     """Set a callback to be invoked when global trust level changes."""
     global _on_trust_change
     _on_trust_change = callback
@@ -236,6 +260,7 @@ def _trigger_trust_change(old_level: TrustLevel, new_level: TrustLevel) -> None:
     try:
         from codomyrmex.events import publish_event
         from codomyrmex.events.core.event_schema import Event, EventType
+
         event = Event(
             event_type=EventType.TRUST_LEVEL_CHANGED,
             source="trust_gateway",
@@ -246,12 +271,13 @@ def _trigger_trust_change(old_level: TrustLevel, new_level: TrustLevel) -> None:
             },
         )
         publish_event(event)
-        logger.debug("Trust level change emitted: %s -> %s", old_level.name, new_level.name)
+        logger.debug(
+            "Trust level change emitted: %s -> %s", old_level.name, new_level.name
+        )
     except ImportError:
         logger.warning("EventBus not available; trust level change event not emitted")
     except (RuntimeError, AttributeError) as e:
         logger.warning("Failed to emit trust level change event: %s", e)
-
 
 
 def _is_destructive(tool_name: str) -> bool:
@@ -280,7 +306,6 @@ def _get_safe_tools() -> frozenset[str]:
     return all_names - _get_destructive_tools()
 
 
-
 class _LazyToolSets:
     """Non-caching lazy evaluator for tool sets.
 
@@ -304,7 +329,6 @@ class _LazyToolSets:
 SAFE_TOOLS: frozenset[str] = _get_safe_tools()
 SAFE_TOOL_COUNT: int = len(SAFE_TOOLS)
 DESTRUCTIVE_TOOL_COUNT: int = len(_get_destructive_tools())
-
 
 
 class TrustRegistry:
@@ -339,7 +363,12 @@ class TrustRegistry:
                     try:
                         self._levels[name] = TrustLevel(level_val)
                     except ValueError as e:
-                        logger.warning("Invalid trust level %r for %r in ledger, skipping: %s", level_val, name, e)
+                        logger.warning(
+                            "Invalid trust level %r for %r in ledger, skipping: %s",
+                            level_val,
+                            name,
+                            e,
+                        )
                         pass
         except (json.JSONDecodeError, OSError, KeyError) as e:
             logger.warning(f"Failed to load trust ledger: {e}")
@@ -365,7 +394,7 @@ class TrustRegistry:
 
     def verify_all_safe(self) -> list[str]:
         """Promote all safe (read-only) tools to VERIFIED. Return promoted names."""
-        self._load() # Refresh first
+        self._load()  # Refresh first
         promoted = []
         for name in SAFE_TOOLS:
             if name in self._levels and self._levels[name] == TrustLevel.UNTRUSTED:
@@ -379,11 +408,10 @@ class TrustRegistry:
 
     def trust_tool(self, tool_name: str) -> TrustLevel:
         """Promote *tool_name* to TRUSTED."""
-        self._load() # Refresh first
+        self._load()  # Refresh first
         if tool_name not in self._levels:
             raise KeyError(
-                f"Unknown tool: {tool_name!r}. "
-                f"Available: {sorted(self._levels.keys())}"
+                f"Unknown tool: {tool_name!r}. Available: {sorted(self._levels.keys())}"
             )
         old_level = self._levels[tool_name]
         self._levels[tool_name] = TrustLevel.TRUSTED
@@ -394,7 +422,7 @@ class TrustRegistry:
 
     def trust_all(self) -> list[str]:
         """Promote **all** tools to TRUSTED. Return promoted names."""
-        self._load() # Refresh first
+        self._load()  # Refresh first
         promoted = []
         for name in self._levels:
             if self._levels[name] != TrustLevel.TRUSTED:
@@ -487,6 +515,7 @@ _registry = TrustRegistry()
 # Public API
 # =====================================================================
 
+
 def verify_capabilities() -> dict[str, Any]:
     """Run a full read-only audit of all Codomyrmex capabilities.
 
@@ -498,6 +527,7 @@ def verify_capabilities() -> dict[str, Any]:
     """
     # ── Module inventory ──────────────────────────────────────────
     import codomyrmex
+
     modules = codomyrmex.list_modules()
 
     # ── Promote safe tools to VERIFIED (before snapshot) ──────────
@@ -527,6 +557,7 @@ def verify_capabilities() -> dict[str, Any]:
     discovery_last_duration = 0.0
     try:
         from codomyrmex.agents.pai.mcp_bridge import get_discovery_metrics
+
         discovery_metrics = get_discovery_metrics()
         if discovery_metrics is not None:
             failed_modules = [
@@ -535,8 +566,7 @@ def verify_capabilities() -> dict[str, Any]:
             ]
             last_scan = discovery_metrics["last_scan_time"]
             discovery_cache_age = (
-                (datetime.now(UTC) - last_scan).total_seconds()
-                if last_scan else -1.0
+                (datetime.now(UTC) - last_scan).total_seconds() if last_scan else -1.0
             )
             discovery_last_duration = discovery_metrics["scan_duration_ms"]
     except ImportError as e:
@@ -547,11 +577,13 @@ def verify_capabilities() -> dict[str, Any]:
         # We don't want to create a full server every time if we can avoid it,
         # but it's the robust check.
         server = create_codomyrmex_mcp_server()
-        mcp_transport = "stdio/http" # Configurable, but default
+        mcp_transport = "stdio/http"  # Configurable, but default
         mcp_resources = len(getattr(server, "_resources", {}))
         mcp_prompts = len(getattr(server, "_prompts", {}))
         server_config = getattr(server, "config", None)
-        mcp_server_name = getattr(server_config, "name", "unknown") if server_config else "unknown"
+        mcp_server_name = (
+            getattr(server_config, "name", "unknown") if server_config else "unknown"
+        )
     except (ImportError, TypeError):
         mcp_server_name = "unknown"
         mcp_transport = "unknown"
@@ -589,7 +621,7 @@ def verify_capabilities() -> dict[str, Any]:
         "discovery": {
             "cache_age_seconds": discovery_cache_age,
             "last_scan_duration_ms": discovery_last_duration,
-        }
+        },
     }
 
     logger.info(
@@ -683,20 +715,13 @@ def trusted_call_tool(name: str, **kwargs: Any) -> dict[str, Any]:
     registry = get_tool_registry()
     known_tools = set(registry.list_tools())
     if name not in known_tools:
-        raise KeyError(
-            f"Unknown tool: {name!r}. "
-            f"Available: {sorted(known_tools)}"
-        )
+        raise KeyError(f"Unknown tool: {name!r}. Available: {sorted(known_tools)}")
 
     # Validation Step (Secure by default)
     # We must validate before we even check trust, to catch malformed attacks early.
     tool_entry = registry.get(name)
     if tool_entry and "schema" in tool_entry:
-        val_result = validate_tool_arguments(
-            name,
-            kwargs,
-            tool_entry["schema"]
-        )
+        val_result = validate_tool_arguments(name, kwargs, tool_entry["schema"])
         if not val_result.valid:
             raise ValueError(f"Tool argument validation failed: {val_result.errors}")
 
@@ -727,15 +752,27 @@ def trusted_call_tool(name: str, **kwargs: Any) -> dict[str, Any]:
         if token:
             # Validate token
             if token not in _pending_confirmations:
-                _log_audit_entry(name, kwargs, "blocked", _registry.level(name).name, 0.0,
-                               error=SecurityError("Invalid or expired confirmation token"))
+                _log_audit_entry(
+                    name,
+                    kwargs,
+                    "blocked",
+                    _registry.level(name).name,
+                    0.0,
+                    error=SecurityError("Invalid or expired confirmation token"),
+                )
                 raise SecurityError("Invalid or expired confirmation token")
 
             saved = _pending_confirmations[token]
             if saved["tool_name"] != name:
-                 _log_audit_entry(name, kwargs, "blocked", _registry.level(name).name, 0.0,
-                               error=SecurityError("Token mismatch"))
-                 raise SecurityError("Confirmation token does not match tool")
+                _log_audit_entry(
+                    name,
+                    kwargs,
+                    "blocked",
+                    _registry.level(name).name,
+                    0.0,
+                    error=SecurityError("Token mismatch"),
+                )
+                raise SecurityError("Confirmation token does not match tool")
 
             # Token valid, proceed. Remove used token.
             del _pending_confirmations[token]
@@ -743,21 +780,24 @@ def trusted_call_tool(name: str, **kwargs: Any) -> dict[str, Any]:
         else:
             # Require confirmation
             import uuid
+
             new_token = str(uuid.uuid4())
             _pending_confirmations[new_token] = {
                 "timestamp": time.monotonic(),
                 "tool_name": name,
-                "args": kwargs
+                "args": kwargs,
             }
 
-            _log_audit_entry(name, kwargs, "pending_confirmation", _registry.level(name).name, 0.0)
+            _log_audit_entry(
+                name, kwargs, "pending_confirmation", _registry.level(name).name, 0.0
+            )
 
             return {
                 "confirmation_required": True,
                 "tool_name": name,
                 "args_preview": kwargs,
                 "confirm_token": new_token,
-                "message": f"Destructive tool '{name}' requires confirmation. Call again with 'confirmation_token': '{new_token}'."
+                "message": f"Destructive tool '{name}' requires confirmation. Call again with 'confirmation_token': '{new_token}'.",
             }
 
     t0 = time.monotonic()
@@ -775,12 +815,7 @@ def trusted_call_tool(name: str, **kwargs: Any) -> dict[str, Any]:
     finally:
         duration = (time.monotonic() - t0) * 1000
         _log_audit_entry(
-            name,
-            kwargs,
-            status,
-            _registry.level(name).name,
-            duration,
-            error_obj
+            name, kwargs, status, _registry.level(name).name, duration, error_obj
         )
 
 
@@ -801,7 +836,6 @@ def reset_trust() -> None:
     _trust_level = TrustLevel.UNTRUSTED
     _registry.reset()
     _trigger_trust_change(old_level, TrustLevel.UNTRUSTED)
-
 
 
 # =====================================================================
@@ -828,4 +862,3 @@ __all__ = [
     "SecurityError",
     "get_current_trust_level",
 ]
-

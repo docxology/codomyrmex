@@ -39,7 +39,7 @@ class TestConsoleLogParsing:
             bracket_end = stripped.find("]")
             if bracket_end > 0:
                 level = stripped[1:bracket_end].lower()
-                message = stripped[bracket_end + 1:].strip()
+                message = stripped[bracket_end + 1 :].strip()
         assert level == "warn"
         assert message == "Something went wrong"
 
@@ -98,8 +98,13 @@ class TestDeveloperUnavailable:
     def test_get_dom_full_params(self):
         with pytest.raises(ObsidianCLINotAvailable):
             get_dom(
-                self._cli(), ".workspace",
-                attr="class", total=True, text=True, inner=True, all=True,
+                self._cli(),
+                ".workspace",
+                attr="class",
+                total=True,
+                text=True,
+                inner=True,
+                all=True,
             )
 
     def test_get_css(self):
@@ -121,7 +126,8 @@ class TestDeveloperUnavailable:
     def test_cdp_command_with_params(self):
         with pytest.raises(ObsidianCLINotAvailable):
             cdp_command(
-                self._cli(), "Runtime.evaluate",
+                self._cli(),
+                "Runtime.evaluate",
                 params='{"expression":"1+1"}',
             )
 

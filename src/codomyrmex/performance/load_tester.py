@@ -85,7 +85,9 @@ class LoadTester:
 
         n = len(latencies)
         mean = sum(latencies) / n if n > 0 else 0
-        p95 = latencies[int(n * 0.95)] if n >= 20 else (latencies[-1] if latencies else 0)
+        p95 = (
+            latencies[int(n * 0.95)] if n >= 20 else (latencies[-1] if latencies else 0)
+        )
         throughput = (total_requests / total_ms * 1000) if total_ms > 0 else 0
         error_rate = failures / total_requests if total_requests > 0 else 0
 

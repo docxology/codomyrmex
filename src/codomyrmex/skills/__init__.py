@@ -35,6 +35,7 @@ from .skills_manager import SkillsManager
 
 def cli_commands():
     """Return CLI commands for the skills module."""
+
     def _list_skills():
         """List available skills."""
         try:
@@ -53,7 +54,9 @@ def cli_commands():
             print(f"Upstream: {DEFAULT_UPSTREAM_REPO}")
             print(f"Branch: {DEFAULT_UPSTREAM_BRANCH}")
         except Exception:
-            print(f"Skills upstream: {DEFAULT_UPSTREAM_REPO} ({DEFAULT_UPSTREAM_BRANCH})")
+            print(
+                f"Skills upstream: {DEFAULT_UPSTREAM_REPO} ({DEFAULT_UPSTREAM_BRANCH})"
+            )
 
     return {
         "list": _list_skills,
@@ -62,9 +65,9 @@ def cli_commands():
 
 
 __all__ = [
-    'permissions',
-    'versioning',
-    'marketplace',
+    "permissions",
+    "versioning",
+    "marketplace",
     "SkillsManager",
     "SkillLoader",
     "SkillSync",

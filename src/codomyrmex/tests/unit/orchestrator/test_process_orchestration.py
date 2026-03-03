@@ -17,6 +17,7 @@ from codomyrmex.orchestrator.process_orchestrator import ProcessOrchestrator
 
 # ─── HeartbeatMonitor ────────────────────────────────────────────────
 
+
 class TestHeartbeatMonitor:
     """Test suite for HeartbeatMonitor."""
 
@@ -50,6 +51,7 @@ class TestHeartbeatMonitor:
 
 
 # ─── AgentSupervisor ─────────────────────────────────────────────────
+
 
 class TestAgentSupervisor:
     """Test suite for AgentSupervisor."""
@@ -97,6 +99,7 @@ class TestAgentSupervisor:
 
 
 # ─── ProcessOrchestrator ─────────────────────────────────────────────
+
 
 class TestProcessOrchestrator:
     """Test suite for ProcessOrchestrator."""
@@ -319,7 +322,9 @@ class TestWorkflow:
         events = []
         wf = Workflow(
             "progress",
-            progress_callback=lambda name, status, details: events.append((name, status)),
+            progress_callback=lambda name, status, details: events.append(
+                (name, status)
+            ),
         )
         wf.add_task("a", action=lambda: 1)
         asyncio.new_event_loop().run_until_complete(wf.run())

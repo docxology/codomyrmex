@@ -117,12 +117,24 @@ class TestGetDeadCodeSuggestion:
 
     def test_known_reasons(self, tmp_path):
         r = _make_reviewer(tmp_path)
-        assert "return statement" in r._get_dead_code_suggestion("unreachable_after_return", "critical")
-        assert "exception" in r._get_dead_code_suggestion("unreachable_after_raise", "warning")
-        assert "break" in r._get_dead_code_suggestion("unreachable_after_break", "warning")
-        assert "continue" in r._get_dead_code_suggestion("unreachable_after_continue", "warning")
-        assert "unused" in r._get_dead_code_suggestion("unused_variable", "info").lower()
-        assert "unused" in r._get_dead_code_suggestion("unused_function", "info").lower()
+        assert "return statement" in r._get_dead_code_suggestion(
+            "unreachable_after_return", "critical"
+        )
+        assert "exception" in r._get_dead_code_suggestion(
+            "unreachable_after_raise", "warning"
+        )
+        assert "break" in r._get_dead_code_suggestion(
+            "unreachable_after_break", "warning"
+        )
+        assert "continue" in r._get_dead_code_suggestion(
+            "unreachable_after_continue", "warning"
+        )
+        assert (
+            "unused" in r._get_dead_code_suggestion("unused_variable", "info").lower()
+        )
+        assert (
+            "unused" in r._get_dead_code_suggestion("unused_function", "info").lower()
+        )
         assert "unused" in r._get_dead_code_suggestion("unused_import", "info").lower()
         assert "unused" in r._get_dead_code_suggestion("unused_class", "info").lower()
 
@@ -176,11 +188,13 @@ class TestGenerateComplexitySuggestion:
 
     def test_very_high_complexity_extract_method(self, tmp_path):
         r = _make_reviewer(tmp_path)
-        suggestion = r._generate_complexity_suggestion({
-            "name": "big_func",
-            "complexity": 30,
-            "file_path": "module.py",
-        })
+        suggestion = r._generate_complexity_suggestion(
+            {
+                "name": "big_func",
+                "complexity": 30,
+                "file_path": "module.py",
+            }
+        )
         assert suggestion is not None
         assert suggestion.function_name == "big_func"
         assert suggestion.current_complexity == 30
@@ -191,43 +205,51 @@ class TestGenerateComplexitySuggestion:
 
     def test_high_complexity_guard_clause(self, tmp_path):
         r = _make_reviewer(tmp_path)
-        suggestion = r._generate_complexity_suggestion({
-            "name": "medium_func",
-            "complexity": 18,
-            "file_path": "mod.py",
-        })
+        suggestion = r._generate_complexity_suggestion(
+            {
+                "name": "medium_func",
+                "complexity": 18,
+                "file_path": "mod.py",
+            }
+        )
         assert suggestion is not None
         assert "guard" in suggestion.suggested_refactoring.lower()
         assert suggestion.estimated_effort == "low"
 
     def test_moderate_complexity_returns_none(self, tmp_path):
         r = _make_reviewer(tmp_path)
-        suggestion = r._generate_complexity_suggestion({
-            "name": "ok_func",
-            "complexity": 10,
-            "file_path": "mod.py",
-        })
+        suggestion = r._generate_complexity_suggestion(
+            {
+                "name": "ok_func",
+                "complexity": 10,
+                "file_path": "mod.py",
+            }
+        )
         assert suggestion is None
 
     def test_boundary_complexity_15(self, tmp_path):
         r = _make_reviewer(tmp_path)
         # Exactly 15 should return guard clause suggestion
-        suggestion = r._generate_complexity_suggestion({
-            "name": "boundary_func",
-            "complexity": 15,
-            "file_path": "mod.py",
-        })
+        suggestion = r._generate_complexity_suggestion(
+            {
+                "name": "boundary_func",
+                "complexity": 15,
+                "file_path": "mod.py",
+            }
+        )
         assert suggestion is not None
         assert "guard" in suggestion.suggested_refactoring.lower()
 
     def test_boundary_complexity_25(self, tmp_path):
         r = _make_reviewer(tmp_path)
         # Exactly 25 should return extract method suggestion
-        suggestion = r._generate_complexity_suggestion({
-            "name": "boundary_func",
-            "complexity": 25,
-            "file_path": "mod.py",
-        })
+        suggestion = r._generate_complexity_suggestion(
+            {
+                "name": "boundary_func",
+                "complexity": 25,
+                "file_path": "mod.py",
+            }
+        )
         assert suggestion is not None
         assert "extract" in suggestion.suggested_refactoring.lower()
 
@@ -238,13 +260,15 @@ class TestEnhanceDeadCodeFinding:
 
     def test_basic_finding(self, tmp_path):
         r = _make_reviewer(tmp_path)
-        finding = r._enhance_dead_code_finding({
-            "location": {"file_path": "a.py", "start_line": 10, "start_column": 0},
-            "reason": "unused_variable",
-            "severity": "warning",
-            "code": "x = 1",
-            "description": "unused",
-        })
+        finding = r._enhance_dead_code_finding(
+            {
+                "location": {"file_path": "a.py", "start_line": 10, "start_column": 0},
+                "reason": "unused_variable",
+                "severity": "warning",
+                "code": "x = 1",
+                "description": "unused",
+            }
+        )
         assert finding is not None
         assert isinstance(finding, DeadCodeFinding)
         assert finding.file_path == "a.py"
@@ -257,20 +281,24 @@ class TestEnhanceDeadCodeFinding:
 
     def test_unreachable_finding_is_fixable(self, tmp_path):
         r = _make_reviewer(tmp_path)
-        finding = r._enhance_dead_code_finding({
-            "location": {"file_path": "b.py", "start_line": 5},
-            "reason": "unreachable_after_return",
-            "severity": "critical",
-            "code": "print('never')",
-        })
+        finding = r._enhance_dead_code_finding(
+            {
+                "location": {"file_path": "b.py", "start_line": 5},
+                "reason": "unreachable_after_return",
+                "severity": "critical",
+                "code": "print('never')",
+            }
+        )
         assert finding.fix_available is True
 
     def test_empty_location_defaults(self, tmp_path):
         r = _make_reviewer(tmp_path)
-        finding = r._enhance_dead_code_finding({
-            "reason": "unknown",
-            "severity": "info",
-        })
+        finding = r._enhance_dead_code_finding(
+            {
+                "reason": "unknown",
+                "severity": "info",
+            }
+        )
         assert finding.file_path == ""
         assert finding.line_number == 0
         # finding.get("code", "") returns "" when key is absent
@@ -342,10 +370,12 @@ class TestCheckQualityGates:
             )
         ]
         # With strict threshold
-        gate = r.check_quality_gates(thresholds={
-            "max_complexity": 5,
-            "max_issues_per_file": 100,
-        })
+        gate = r.check_quality_gates(
+            thresholds={
+                "max_complexity": 5,
+                "max_issues_per_file": 100,
+            }
+        )
         assert gate.passed is False
 
 
@@ -365,9 +395,13 @@ class TestGenerateSummary:
     def test_populated_results(self, tmp_path):
         r = _make_reviewer(tmp_path)
         r.results = [
-            AnalysisResult("a.py", 1, 0, SeverityLevel.WARNING, "warn", "W01", "quality"),
+            AnalysisResult(
+                "a.py", 1, 0, SeverityLevel.WARNING, "warn", "W01", "quality"
+            ),
             AnalysisResult("a.py", 2, 0, SeverityLevel.ERROR, "err", "E01", "security"),
-            AnalysisResult("b.py", 1, 0, SeverityLevel.WARNING, "warn2", "W01", "quality"),
+            AnalysisResult(
+                "b.py", 1, 0, SeverityLevel.WARNING, "warn2", "W01", "quality"
+            ),
         ]
         summary = r._generate_summary(files_analyzed=2, analysis_time=0.5)
         assert summary.total_issues == 3
@@ -402,7 +436,9 @@ class TestReportGeneration:
     def test_json_report(self, tmp_path):
         r = _make_reviewer(tmp_path)
         r.results = [
-            AnalysisResult("a.py", 10, 5, SeverityLevel.WARNING, "warn", "W01", "quality"),
+            AnalysisResult(
+                "a.py", 10, 5, SeverityLevel.WARNING, "warn", "W01", "quality"
+            ),
         ]
         output = str(tmp_path / "report.json")
         result = r.generate_report(output, format="json")
@@ -417,7 +453,16 @@ class TestReportGeneration:
     def test_markdown_report(self, tmp_path):
         r = _make_reviewer(tmp_path)
         r.results = [
-            AnalysisResult("b.py", 5, 0, SeverityLevel.ERROR, "error msg", "E01", "security", suggestion="fix it"),
+            AnalysisResult(
+                "b.py",
+                5,
+                0,
+                SeverityLevel.ERROR,
+                "error msg",
+                "E01",
+                "security",
+                suggestion="fix it",
+            ),
         ]
         output = str(tmp_path / "report.md")
         result = r.generate_report(output, format="markdown")
@@ -433,7 +478,9 @@ class TestReportGeneration:
         """HTML report falls back to basic HTML when pyscn report isn't available."""
         r = _make_reviewer(tmp_path)
         r.results = [
-            AnalysisResult("c.py", 1, 0, SeverityLevel.INFO, "info msg", "I01", "style"),
+            AnalysisResult(
+                "c.py", 1, 0, SeverityLevel.INFO, "info msg", "I01", "style"
+            ),
         ]
         output = str(tmp_path / "report.html")
         result = r.generate_report(output, format="html")
@@ -487,7 +534,12 @@ class TestOptimizePerformance:
     def test_suggestions_are_non_empty_lists(self, tmp_path):
         r = _make_reviewer(tmp_path)
         result = r.optimize_performance()
-        for key in ["memory_optimizations", "cpu_optimizations", "io_optimizations", "caching_opportunities"]:
+        for key in [
+            "memory_optimizations",
+            "cpu_optimizations",
+            "io_optimizations",
+            "caching_opportunities",
+        ]:
             assert isinstance(result[key], list)
             assert len(result[key]) > 0
 
@@ -509,7 +561,9 @@ class TestArchitectureCompliance:
         bad_file = tmp_path / "mytest.py"
         bad_file.write_text("# test file")
         violations = r._check_naming_conventions()
-        naming_violations = [v for v in violations if v.violation_type == "naming_convention"]
+        naming_violations = [
+            v for v in violations if v.violation_type == "naming_convention"
+        ]
         assert len(naming_violations) >= 1
         assert any("mytest.py" in v.file_path for v in naming_violations)
 
@@ -518,7 +572,9 @@ class TestArchitectureCompliance:
         good_file = tmp_path / "test_module.py"
         good_file.write_text("# correct test file")
         violations = r._check_naming_conventions()
-        naming_violations = [v for v in violations if v.violation_type == "naming_convention"]
+        naming_violations = [
+            v for v in violations if v.violation_type == "naming_convention"
+        ]
         assert not any("test_module.py" in v.file_path for v in naming_violations)
 
     def test_naming_convention_ignores_suffix_test(self, tmp_path):
@@ -526,7 +582,9 @@ class TestArchitectureCompliance:
         good_file = tmp_path / "module_test.py"
         good_file.write_text("# correct suffix test file")
         violations = r._check_naming_conventions()
-        naming_violations = [v for v in violations if v.violation_type == "naming_convention"]
+        naming_violations = [
+            v for v in violations if v.violation_type == "naming_convention"
+        ]
         assert not any("module_test.py" in v.file_path for v in naming_violations)
 
     def test_check_circular_dependencies_empty(self, tmp_path):
@@ -768,8 +826,18 @@ class TestDashboardHelpers:
     def test_quick_wins_from_critical_dead_code(self, tmp_path):
         r = _make_reviewer(tmp_path)
         issues = [
-            {"file_path": "/a.py", "line_number": 5, "severity": "critical", "reason": "unused"},
-            {"file_path": "/b.py", "line_number": 10, "severity": "warning", "reason": "unused"},
+            {
+                "file_path": "/a.py",
+                "line_number": 5,
+                "severity": "critical",
+                "reason": "unused",
+            },
+            {
+                "file_path": "/b.py",
+                "line_number": 10,
+                "severity": "warning",
+                "reason": "unused",
+            },
         ]
         wins = r._identify_quick_wins(issues)
         assert len(wins) == 1  # only critical
@@ -855,7 +923,9 @@ class TestTraditionalAnalysis:
     def test_no_tools_returns_empty(self, tmp_path):
         r = _make_reviewer(tmp_path)
         # All tools marked as unavailable
-        results = r._run_traditional_analysis("test.py", ["quality", "security", "style"])
+        results = r._run_traditional_analysis(
+            "test.py", ["quality", "security", "style"]
+        )
         assert results == []
 
     def test_non_python_returns_empty(self, tmp_path):
@@ -930,24 +1000,43 @@ class TestDeterminePriorityActionsFromDashboard:
     def test_high_complexity_action(self, tmp_path):
         r = _make_reviewer(tmp_path)
         complexity_issues = [
-            {"function_name": "fn", "file_path": "a.py", "complexity": 25, "line_number": 1},
+            {
+                "function_name": "fn",
+                "file_path": "a.py",
+                "complexity": 25,
+                "line_number": 1,
+            },
         ]
-        actions = r._determine_priority_actions_from_dashboard(complexity_issues, [], [])
+        actions = r._determine_priority_actions_from_dashboard(
+            complexity_issues, [], []
+        )
         assert len(actions) == 1
         assert actions[0]["priority"] == "high"
 
     def test_low_complexity_no_action(self, tmp_path):
         r = _make_reviewer(tmp_path)
         complexity_issues = [
-            {"function_name": "fn", "file_path": "a.py", "complexity": 15, "line_number": 1},
+            {
+                "function_name": "fn",
+                "file_path": "a.py",
+                "complexity": 15,
+                "line_number": 1,
+            },
         ]
-        actions = r._determine_priority_actions_from_dashboard(complexity_issues, [], [])
+        actions = r._determine_priority_actions_from_dashboard(
+            complexity_issues, [], []
+        )
         assert len(actions) == 0
 
     def test_critical_dead_code_action(self, tmp_path):
         r = _make_reviewer(tmp_path)
         dead_code_issues = [
-            {"file_path": "a.py", "line_number": 1, "severity": "critical", "reason": "unused"},
+            {
+                "file_path": "a.py",
+                "line_number": 1,
+                "severity": "critical",
+                "reason": "unused",
+            },
         ]
         actions = r._determine_priority_actions_from_dashboard([], dead_code_issues, [])
         assert len(actions) == 1

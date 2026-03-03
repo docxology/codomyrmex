@@ -19,6 +19,7 @@ logger = get_logger(__name__)
 # Check for OpenCV availability
 try:
     import cv2
+
     OPENCV_AVAILABLE = True
 except ImportError:
     OPENCV_AVAILABLE = False
@@ -27,6 +28,7 @@ except ImportError:
 # Check for moviepy availability
 try:
     from moviepy.editor import VideoFileClip
+
     MOVIEPY_AVAILABLE = True
 except ImportError:
     MOVIEPY_AVAILABLE = False
@@ -120,7 +122,9 @@ class VideoAnalyzer:
         cap = cv2.VideoCapture(str(video_path))
 
         if not cap.isOpened():
-            raise VideoReadError(f"Cannot open video: {video_path}", video_path=video_path)
+            raise VideoReadError(
+                f"Cannot open video: {video_path}", video_path=video_path
+            )
 
         try:
             width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
@@ -313,7 +317,9 @@ class VideoAnalyzer:
         return VideoComparison(
             video1_path=path1,
             video2_path=path2,
-            same_resolution=(info1.width == info2.width and info1.height == info2.height),
+            same_resolution=(
+                info1.width == info2.width and info1.height == info2.height
+            ),
             same_duration=(duration_diff <= duration_tolerance),
             same_fps=(abs(info1.fps - info2.fps) < 0.1),
             same_codec=(info1.video_codec == info2.video_codec),

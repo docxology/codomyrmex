@@ -35,6 +35,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[5]
 # TrustLevel Enum
 # =====================================================================
 
+
 class TestTrustLevel:
     """Test trust level enum values."""
 
@@ -58,6 +59,7 @@ class TestTrustLevel:
 # =====================================================================
 # Tool Classification
 # =====================================================================
+
 
 class TestToolClassification:
     """Test safe vs destructive tool sets."""
@@ -118,6 +120,7 @@ class TestToolClassification:
 # =====================================================================
 # TrustRegistry
 # =====================================================================
+
 
 class TestTrustRegistry:
     """Test in-memory trust registry."""
@@ -210,6 +213,7 @@ class TestTrustRegistry:
 # verify_capabilities()
 # =====================================================================
 
+
 class TestVerifyCapabilities:
     """Test full capability audit."""
 
@@ -281,6 +285,7 @@ class TestVerifyCapabilities:
 # trusted_call_tool() enforcement
 # =====================================================================
 
+
 class TestTrustedCallTool:
     """Test trust-gated tool execution."""
 
@@ -333,6 +338,7 @@ class TestTrustedCallTool:
 # Module-level functions
 # =====================================================================
 
+
 class TestModuleLevelFunctions:
     """Test public API convenience functions."""
 
@@ -380,6 +386,7 @@ class TestModuleLevelFunctions:
 # =====================================================================
 # Full Workflow Integration
 # =====================================================================
+
 
 class TestFullWorkflow:
     """Test the complete verify → trust → call flow."""

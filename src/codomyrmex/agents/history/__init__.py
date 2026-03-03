@@ -21,15 +21,18 @@ from typing import Any, Optional
 
 class MessageRole(Enum):
     """Standard conversation roles."""
+
     SYSTEM = "system"
     USER = "user"
     ASSISTANT = "assistant"
     TOOL = "tool"
     FUNCTION = "function"
 
+
 @dataclass
 class HistoryMessage:
     """A message in conversation history."""
+
     role: MessageRole
     content: str
     timestamp: datetime = field(default_factory=datetime.now)
@@ -69,9 +72,11 @@ class HistoryMessage:
             tokens=data.get("tokens", 0),
         )
 
+
 @dataclass
 class Conversation:
     """A conversation with metadata."""
+
     conversation_id: str
     title: str = ""
     messages: list[HistoryMessage] = field(default_factory=list)
@@ -79,12 +84,7 @@ class Conversation:
     updated_at: datetime = field(default_factory=datetime.now)
     metadata: dict[str, Any] = field(default_factory=dict)
 
-    def add_message(
-        self,
-        role: MessageRole,
-        content: str,
-        **kwargs
-    ) -> HistoryMessage:
+    def add_message(self, role: MessageRole, content: str, **kwargs) -> HistoryMessage:
         """Add a message to the conversation."""
         msg = HistoryMessage(role=role, content=content, **kwargs)
         self.messages.append(msg)
@@ -105,10 +105,12 @@ class Conversation:
         for msg in self.messages:
             if not include_system and msg.role == MessageRole.SYSTEM:
                 continue
-            result.append({
-                "role": msg.role.value,
-                "content": msg.content,
-            })
+            result.append(
+                {
+                    "role": msg.role.value,
+                    "content": msg.content,
+                }
+            )
         return result
 
     @property
@@ -132,7 +134,7 @@ class Conversation:
         if len(other_msgs) <= max_messages:
             return []
 
-        to_remove = other_msgs[:len(other_msgs) - max_messages]
+        to_remove = other_msgs[: len(other_msgs) - max_messages]
         self.messages = system_msgs + other_msgs[-max_messages:]
         self.updated_at = datetime.now()
         return to_remove
@@ -159,6 +161,7 @@ class Conversation:
             updated_at=datetime.fromisoformat(data["updated_at"]),
             metadata=data.get("metadata", {}),
         )
+
 
 class InMemoryHistoryStore:
     """In-memory conversation storage."""
@@ -188,11 +191,9 @@ class InMemoryHistoryStore:
     ) -> list[Conversation]:
         """List conversations, most recent first."""
         sorted_convs = sorted(
-            self._conversations.values(),
-            key=lambda c: c.updated_at,
-            reverse=True
+            self._conversations.values(), key=lambda c: c.updated_at, reverse=True
         )
-        return sorted_convs[offset:offset + limit]
+        return sorted_convs[offset : offset + limit]
 
     def search(self, query: str) -> list[Conversation]:
         """Search conversations by content."""
@@ -212,6 +213,7 @@ class InMemoryHistoryStore:
         """Clear all conversations."""
         self._conversations.clear()
 
+
 class FileHistoryStore:
     """File-based conversation storage (JSON)."""
 
@@ -226,7 +228,7 @@ class FileHistoryStore:
     def save(self, conversation: Conversation) -> None:
         """Save a conversation."""
         path = self._get_path(conversation.conversation_id)
-        with open(path, 'w') as f:
+        with open(path, "w") as f:
             json.dump(conversation.to_dict(), f, indent=2)
 
     def load(self, conversation_id: str) -> Conversation | None:
@@ -259,7 +261,7 @@ class FileHistoryStore:
 
         # Sort by updated_at
         conversations.sort(key=lambda c: c.updated_at, reverse=True)
-        return conversations[offset:offset + limit]
+        return conversations[offset : offset + limit]
 
     def search(self, query: str) -> list[Conversation]:
         """Search conversations."""
@@ -274,6 +276,7 @@ class FileHistoryStore:
                     results.append(conv)
                     break
         return results
+
 
 class SQLiteHistoryStore:
     """SQLite-based conversation storage."""
@@ -325,39 +328,45 @@ class SQLiteHistoryStore:
         """Save a conversation."""
         with self._get_connection() as conn:
             # Upsert conversation
-            conn.execute("""
+            conn.execute(
+                """
                 INSERT OR REPLACE INTO conversations
                 (conversation_id, title, created_at, updated_at, metadata)
                 VALUES (?, ?, ?, ?, ?)
-            """, (
-                conversation.conversation_id,
-                conversation.title,
-                conversation.created_at.isoformat(),
-                conversation.updated_at.isoformat(),
-                json.dumps(conversation.metadata),
-            ))
+            """,
+                (
+                    conversation.conversation_id,
+                    conversation.title,
+                    conversation.created_at.isoformat(),
+                    conversation.updated_at.isoformat(),
+                    json.dumps(conversation.metadata),
+                ),
+            )
 
             # Delete existing messages
             conn.execute(
                 "DELETE FROM messages WHERE conversation_id = ?",
-                (conversation.conversation_id,)
+                (conversation.conversation_id,),
             )
 
             # Insert messages
             for msg in conversation.messages:
-                conn.execute("""
+                conn.execute(
+                    """
                     INSERT INTO messages
                     (message_id, conversation_id, role, content, timestamp, tokens, metadata)
                     VALUES (?, ?, ?, ?, ?, ?, ?)
-                """, (
-                    msg.message_id,
-                    conversation.conversation_id,
-                    msg.role.value,
-                    msg.content,
-                    msg.timestamp.isoformat(),
-                    msg.tokens,
-                    json.dumps(msg.metadata),
-                ))
+                """,
+                    (
+                        msg.message_id,
+                        conversation.conversation_id,
+                        msg.role.value,
+                        msg.content,
+                        msg.timestamp.isoformat(),
+                        msg.tokens,
+                        json.dumps(msg.metadata),
+                    ),
+                )
 
             conn.commit()
 
@@ -366,7 +375,7 @@ class SQLiteHistoryStore:
         with self._get_connection() as conn:
             row = conn.execute(
                 "SELECT * FROM conversations WHERE conversation_id = ?",
-                (conversation_id,)
+                (conversation_id,),
             ).fetchone()
 
             if not row:
@@ -375,7 +384,7 @@ class SQLiteHistoryStore:
             # Load messages
             msg_rows = conn.execute(
                 "SELECT * FROM messages WHERE conversation_id = ? ORDER BY timestamp",
-                (conversation_id,)
+                (conversation_id,),
             ).fetchall()
 
             messages = [
@@ -403,12 +412,11 @@ class SQLiteHistoryStore:
         """Delete a conversation."""
         with self._get_connection() as conn:
             conn.execute(
-                "DELETE FROM messages WHERE conversation_id = ?",
-                (conversation_id,)
+                "DELETE FROM messages WHERE conversation_id = ?", (conversation_id,)
             )
             result = conn.execute(
                 "DELETE FROM conversations WHERE conversation_id = ?",
-                (conversation_id,)
+                (conversation_id,),
             )
             conn.commit()
             return result.rowcount > 0
@@ -422,7 +430,7 @@ class SQLiteHistoryStore:
         with self._get_connection() as conn:
             rows = conn.execute(
                 "SELECT conversation_id FROM conversations ORDER BY updated_at DESC LIMIT ? OFFSET ?",
-                (limit, offset)
+                (limit, offset),
             ).fetchall()
 
             return [self.load(row[0]) for row in rows if row]
@@ -434,18 +442,19 @@ class SQLiteHistoryStore:
             conv_ids = set()
             rows = conn.execute(
                 "SELECT conversation_id FROM conversations WHERE title LIKE ?",
-                (f"%{query}%",)
+                (f"%{query}%",),
             ).fetchall()
             conv_ids.update(r[0] for r in rows)
 
             # Search in messages
             rows = conn.execute(
                 "SELECT DISTINCT conversation_id FROM messages WHERE content LIKE ?",
-                (f"%{query}%",)
+                (f"%{query}%",),
             ).fetchall()
             conv_ids.update(r[0] for r in rows)
 
             return [self.load(cid) for cid in conv_ids if cid]
+
 
 class ConversationManager:
     """
@@ -478,10 +487,7 @@ class ConversationManager:
         self._active_conversation: Conversation | None = None
 
     def create_conversation(
-        self,
-        title: str = "",
-        system_prompt: str | None = None,
-        **metadata
+        self, title: str = "", system_prompt: str | None = None, **metadata
     ) -> Conversation:
         """Create a new conversation."""
         conv_id = hashlib.sha256(
@@ -536,6 +542,7 @@ class ConversationManager:
         if conv:
             self._active_conversation = conv
         return conv
+
 
 __all__ = [
     # Enums

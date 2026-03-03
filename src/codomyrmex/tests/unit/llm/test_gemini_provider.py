@@ -47,7 +47,9 @@ class TestGeminiProviderInit:
         config = ProviderConfig()
         provider = GeminiProvider(config)
 
-        expected_key = os.environ.get("GEMINI_API_KEY") or os.environ.get("GOOGLE_API_KEY")
+        expected_key = os.environ.get("GEMINI_API_KEY") or os.environ.get(
+            "GOOGLE_API_KEY"
+        )
         assert provider.config.api_key == expected_key
 
 
@@ -175,7 +177,9 @@ class TestGeminiProviderComplete:
         config = ProviderConfig(api_key=_GEMINI_KEY)
         with GeminiProvider(config) as provider:
             messages = [
-                Message(role="system", content="You are a pirate. Reply in pirate speak."),
+                Message(
+                    role="system", content="You are a pirate. Reply in pirate speak."
+                ),
                 Message(role="user", content="Hello"),
             ]
             response = provider.complete(messages, model="gemini-2.0-flash")

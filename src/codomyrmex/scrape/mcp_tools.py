@@ -10,10 +10,12 @@ from typing import Any
 try:
     from codomyrmex.model_context_protocol.decorators import mcp_tool
 except ImportError:
+
     def mcp_tool(**kwargs: Any):  # type: ignore[misc]
         def decorator(func: Any) -> Any:
             func._mcp_tool_meta = kwargs
             return func
+
         return decorator
 
 
@@ -33,6 +35,7 @@ def scrape_extract_content(
     """
     try:
         from codomyrmex.scrape.extractors.content_extractor import ContentExtractor
+
         extractor = ContentExtractor(base_url=base_url)
         result = extractor.extract(html)
         return {
@@ -66,6 +69,7 @@ def scrape_text_similarity(
     """
     try:
         from codomyrmex.scrape.extractors.content_extractor import text_similarity
+
         score = text_similarity(text_a, text_b)
         return {"status": "ok", "similarity": score}
     except Exception as exc:

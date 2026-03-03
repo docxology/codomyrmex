@@ -266,9 +266,7 @@ class InfomaniakNewsletterClient(InfomaniakRESTBase):
 
     _VALID_ACTIONS = frozenset({"subscribe", "unsubscribe"})
 
-    def manage_contact(
-        self, list_id: str, contact_id: str, action: str
-    ) -> bool:
+    def manage_contact(self, list_id: str, contact_id: str, action: str) -> bool:
         """Manage a contact's subscription status in a mailing list.
 
         Args:

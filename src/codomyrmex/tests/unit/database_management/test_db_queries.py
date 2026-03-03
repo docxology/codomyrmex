@@ -24,6 +24,7 @@ from codomyrmex.exceptions import CodomyrmexError
 # Query Execution Tests
 # ==============================================================================
 
+
 @pytest.mark.database
 class TestQueryExecution:
     """Tests for query execution."""
@@ -33,16 +34,16 @@ class TestQueryExecution:
         """Create a SQLite database connection for testing."""
         db_path = str(tmp_path / "test.db")
         conn = sqlite3.connect(db_path)
-        conn.execute("CREATE TABLE users (id INTEGER PRIMARY KEY, name TEXT, email TEXT)")
+        conn.execute(
+            "CREATE TABLE users (id INTEGER PRIMARY KEY, name TEXT, email TEXT)"
+        )
         conn.execute("INSERT INTO users VALUES (1, 'Alice', 'alice@example.com')")
         conn.execute("INSERT INTO users VALUES (2, 'Bob', 'bob@example.com')")
         conn.commit()
         conn.close()
 
         connection = DatabaseConnection(
-            name="test",
-            db_type=DatabaseType.SQLITE,
-            database=db_path
+            name="test", db_type=DatabaseType.SQLITE, database=db_path
         )
         connection.connect()
         yield connection
@@ -94,6 +95,7 @@ class TestQueryExecution:
 # Parameterized Query Tests
 # ==============================================================================
 
+
 @pytest.mark.database
 class TestParameterizedQueries:
     """Tests for parameterized query execution."""
@@ -111,9 +113,7 @@ class TestParameterizedQueries:
         conn.close()
 
         connection = DatabaseConnection(
-            name="test",
-            db_type=DatabaseType.SQLITE,
-            database=db_path
+            name="test", db_type=DatabaseType.SQLITE, database=db_path
         )
         connection.connect()
         yield connection
@@ -122,8 +122,7 @@ class TestParameterizedQueries:
     def test_parameterized_select(self, db_connection):
         """Test parameterized SELECT query."""
         result = db_connection.execute_query(
-            "SELECT * FROM products WHERE id = ?",
-            (1,)
+            "SELECT * FROM products WHERE id = ?", (1,)
         )
 
         assert len(result) == 1
@@ -132,8 +131,7 @@ class TestParameterizedQueries:
     def test_parameterized_select_multiple_params(self, db_connection):
         """Test parameterized SELECT with multiple parameters."""
         result = db_connection.execute_query(
-            "SELECT * FROM products WHERE price > ? AND price < ?",
-            (20.0, 40.0)
+            "SELECT * FROM products WHERE price > ? AND price < ?", (20.0, 40.0)
         )
 
         assert len(result) == 2
@@ -141,8 +139,7 @@ class TestParameterizedQueries:
     def test_parameterized_insert(self, db_connection):
         """Test parameterized INSERT query."""
         db_connection.execute_query(
-            "INSERT INTO products VALUES (?, ?, ?)",
-            (4, "Thingamajig", 49.99)
+            "INSERT INTO products VALUES (?, ?, ?)", (4, "Thingamajig", 49.99)
         )
 
         result = db_connection.execute_query("SELECT * FROM products WHERE id = 4")
@@ -152,8 +149,7 @@ class TestParameterizedQueries:
     def test_parameterized_update(self, db_connection):
         """Test parameterized UPDATE query."""
         db_connection.execute_query(
-            "UPDATE products SET price = ? WHERE id = ?",
-            (24.99, 1)
+            "UPDATE products SET price = ? WHERE id = ?", (24.99, 1)
         )
 
         result = db_connection.execute_query("SELECT price FROM products WHERE id = 1")
@@ -163,6 +159,7 @@ class TestParameterizedQueries:
 # ==============================================================================
 # Transaction Handling Tests
 # ==============================================================================
+
 
 @pytest.mark.database
 class TestTransactionHandling:
@@ -183,12 +180,8 @@ class TestTransactionHandling:
 
     def test_transaction_commit(self, db_connector):
         """Test that transaction commits correctly."""
-        db_connector.execute(
-            "UPDATE accounts SET balance = balance - 100 WHERE id = 1"
-        )
-        db_connector.execute(
-            "UPDATE accounts SET balance = balance + 100 WHERE id = 2"
-        )
+        db_connector.execute("UPDATE accounts SET balance = balance - 100 WHERE id = 1")
+        db_connector.execute("UPDATE accounts SET balance = balance + 100 WHERE id = 2")
         db_connector.commit()
 
         # Verify changes persisted
@@ -218,9 +211,7 @@ class TestTransactionHandling:
 
     def test_nested_transaction_behavior(self, db_connector):
         """Test transaction commit after multiple operations."""
-        db_connector.execute(
-            "UPDATE accounts SET balance = balance - 50 WHERE id = 1"
-        )
+        db_connector.execute("UPDATE accounts SET balance = balance - 50 WHERE id = 1")
         db_connector.commit()
 
         _, cursor = db_connector.execute("SELECT balance FROM accounts WHERE id = 1")
@@ -230,6 +221,7 @@ class TestTransactionHandling:
 # ==============================================================================
 # Error Handling Tests
 # ==============================================================================
+
 
 @pytest.mark.database
 class TestErrorHandling:
@@ -271,7 +263,9 @@ class TestErrorHandling:
         db_path = str(tmp_path / "test.db")
         connector = DatabaseConnector(f"sqlite:///{db_path}")
         connector.connect()
-        connector.execute("CREATE TABLE unique_test (id INTEGER PRIMARY KEY, value TEXT UNIQUE)")
+        connector.execute(
+            "CREATE TABLE unique_test (id INTEGER PRIMARY KEY, value TEXT UNIQUE)"
+        )
         connector.execute("INSERT INTO unique_test VALUES (1, 'unique_value')")
         connector.commit()
 
@@ -292,14 +286,13 @@ class TestErrorHandling:
         """Test error when rolling back migration without rollback SQL."""
         db_path = str(tmp_path / "test.db")
         manager = MigrationManager(
-            workspace_dir=str(tmp_path),
-            database_url=f"sqlite:///{db_path}"
+            workspace_dir=str(tmp_path), database_url=f"sqlite:///{db_path}"
         )
 
         migration = manager.create_migration(
             name="no_rollback",
             description="Migration without rollback",
-            sql="CREATE TABLE test (id INTEGER);"
+            sql="CREATE TABLE test (id INTEGER);",
             # No rollback_sql provided
         )
 
@@ -314,6 +307,7 @@ class TestErrorHandling:
 # ==============================================================================
 # Convenience Function Tests
 # ==============================================================================
+
 
 @pytest.mark.database
 class TestConvenienceFunctions:

@@ -40,5 +40,3 @@ def create_webhook_dispatcher(
             handler=lambda url, payload, headers, timeout: (200, "OK")
         )
     return WebhookDispatcher(registry=registry, transport=transport)
-
-

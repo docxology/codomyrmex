@@ -12,6 +12,7 @@ from typing import Any
 
 class ModelStage(Enum):
     """Lifecycle stages for models."""
+
     DEVELOPMENT = "development"
     STAGING = "staging"
     PRODUCTION = "production"
@@ -20,6 +21,7 @@ class ModelStage(Enum):
 
 class ModelFramework(Enum):
     """Supported ML frameworks."""
+
     SKLEARN = "sklearn"
     PYTORCH = "pytorch"
     TENSORFLOW = "tensorflow"
@@ -30,6 +32,7 @@ class ModelFramework(Enum):
 @dataclass
 class ModelMetrics:
     """Performance metrics for a model."""
+
     accuracy: float | None = None
     precision: float | None = None
     recall: float | None = None
@@ -41,7 +44,9 @@ class ModelMetrics:
 
     def to_dict(self) -> dict[str, Any]:
         """Convert to dictionary."""
-        result = {k: v for k, v in self.__dict__.items() if v is not None and k != 'custom'}
+        result = {
+            k: v for k, v in self.__dict__.items() if v is not None and k != "custom"
+        }
         result.update(self.custom)
         return result
 
@@ -49,6 +54,7 @@ class ModelMetrics:
 @dataclass
 class ModelVersion:
     """A specific version of a model."""
+
     version: str
     model_name: str
     stage: ModelStage = ModelStage.DEVELOPMENT
@@ -86,6 +92,7 @@ class ModelVersion:
 @dataclass
 class RegisteredModel:
     """A registered model with multiple versions."""
+
     name: str
     description: str = ""
     tags: dict[str, str] = field(default_factory=dict)

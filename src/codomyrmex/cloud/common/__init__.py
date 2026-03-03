@@ -13,6 +13,7 @@ from typing import Any, Optional
 
 class CloudProvider(Enum):
     """Supported cloud providers."""
+
     AWS = "aws"
     GCP = "gcp"
     AZURE = "azure"
@@ -20,8 +21,10 @@ class CloudProvider(Enum):
     CODA = "coda"
     LOCAL = "local"
 
+
 class ResourceType(Enum):
     """Types of cloud resources."""
+
     COMPUTE = "compute"
     STORAGE = "storage"
     DATABASE = "database"
@@ -31,16 +34,20 @@ class ResourceType(Enum):
     QUEUE = "queue"
     DOCUMENT = "document"
 
+
 class CloudError(Exception):
     """Base class for cloud-related errors."""
+
     def __init__(self, message: str, provider: CloudProvider | None = None, **kwargs):
         super().__init__(message)
         self.provider = provider
         self.metadata = kwargs
 
+
 @dataclass
 class CloudCredentials:
     """Credentials for cloud access."""
+
     provider: CloudProvider
     access_key: str | None = None
     secret_key: str | None = None
@@ -49,9 +56,11 @@ class CloudCredentials:
     profile: str | None = None
     metadata: dict[str, str] = field(default_factory=dict)
 
+
 @dataclass
 class CloudResource:
     """A cloud resource."""
+
     id: str
     name: str
     resource_type: ResourceType
@@ -75,6 +84,7 @@ class CloudResource:
             "tags": self.tags,
             "metadata": self.metadata,
         }
+
 
 class CloudClient(ABC):
     """Abstract base class for cloud clients."""
@@ -112,6 +122,7 @@ class CloudClient(ABC):
     def delete_resource(self, resource_id: str) -> bool:
         """Delete a resource."""
         pass
+
 
 class StorageClient(ABC):
     """Abstract storage client."""
@@ -178,6 +189,7 @@ class StorageClient(ABC):
         """Generate a presigned URL."""
         pass
 
+
 class ComputeClient(ABC):
     """Abstract compute client."""
 
@@ -203,14 +215,11 @@ class ComputeClient(ABC):
 
     @abstractmethod
     def create_instance(
-        self,
-        name: str,
-        instance_type: str,
-        image_id: str,
-        **kwargs
+        self, name: str, instance_type: str, image_id: str, **kwargs
     ) -> dict[str, Any]:
         """Create a new instance."""
         pass
+
 
 class ServerlessClient(ABC):
     """Abstract serverless client."""
@@ -231,12 +240,7 @@ class ServerlessClient(ABC):
 
     @abstractmethod
     def create_function(
-        self,
-        name: str,
-        runtime: str,
-        handler: str,
-        code_path: str,
-        **kwargs
+        self, name: str, runtime: str, handler: str, code_path: str, **kwargs
     ) -> dict[str, Any]:
         """Create a new function."""
         pass
@@ -245,6 +249,7 @@ class ServerlessClient(ABC):
     def delete_function(self, function_name: str) -> bool:
         """Delete a function."""
         pass
+
 
 class CloudConfig:
     """Configuration for cloud operations."""
@@ -265,47 +270,58 @@ class CloudConfig:
         return provider in self._providers
 
     @classmethod
-    def from_env(cls) -> 'CloudConfig':
+    def from_env(cls) -> "CloudConfig":
         """Create config from environment variables."""
         import os
 
         config = cls()
 
         # AWS
-        if os.environ.get('AWS_ACCESS_KEY_ID'):
-            config.add_provider(CloudCredentials(
-                provider=CloudProvider.AWS,
-                access_key=os.environ.get('AWS_ACCESS_KEY_ID'),
-                secret_key=os.environ.get('AWS_SECRET_ACCESS_KEY'),
-                region=os.environ.get('AWS_DEFAULT_REGION', 'us-east-1'),
-            ))
+        if os.environ.get("AWS_ACCESS_KEY_ID"):
+            config.add_provider(
+                CloudCredentials(
+                    provider=CloudProvider.AWS,
+                    access_key=os.environ.get("AWS_ACCESS_KEY_ID"),
+                    secret_key=os.environ.get("AWS_SECRET_ACCESS_KEY"),
+                    region=os.environ.get("AWS_DEFAULT_REGION", "us-east-1"),
+                )
+            )
 
         # GCP
-        if os.environ.get('GOOGLE_APPLICATION_CREDENTIALS') or os.environ.get('GCP_PROJECT_ID'):
-            config.add_provider(CloudCredentials(
-                provider=CloudProvider.GCP,
-                project_id=os.environ.get('GCP_PROJECT_ID'),
-                region=os.environ.get('GCP_REGION', 'us-central1'),
-            ))
+        if os.environ.get("GOOGLE_APPLICATION_CREDENTIALS") or os.environ.get(
+            "GCP_PROJECT_ID"
+        ):
+            config.add_provider(
+                CloudCredentials(
+                    provider=CloudProvider.GCP,
+                    project_id=os.environ.get("GCP_PROJECT_ID"),
+                    region=os.environ.get("GCP_REGION", "us-central1"),
+                )
+            )
 
         # Infomaniak
-        if os.environ.get('INFOMANIAK_APP_CREDENTIAL_ID'):
-            config.add_provider(CloudCredentials(
-                provider=CloudProvider.INFOMANIAK,
-                access_key=os.environ.get('INFOMANIAK_APP_CREDENTIAL_ID'),
-                secret_key=os.environ.get('INFOMANIAK_APP_CREDENTIAL_SECRET'),
-                region=os.environ.get('INFOMANIAK_REGION', 'dc3-a'),
-                project_id=os.environ.get('INFOMANIAK_PROJECT_ID'),
-            ))
+        if os.environ.get("INFOMANIAK_APP_CREDENTIAL_ID"):
+            config.add_provider(
+                CloudCredentials(
+                    provider=CloudProvider.INFOMANIAK,
+                    access_key=os.environ.get("INFOMANIAK_APP_CREDENTIAL_ID"),
+                    secret_key=os.environ.get("INFOMANIAK_APP_CREDENTIAL_SECRET"),
+                    region=os.environ.get("INFOMANIAK_REGION", "dc3-a"),
+                    project_id=os.environ.get("INFOMANIAK_PROJECT_ID"),
+                )
+            )
 
         # Coda
-        if os.environ.get('CODA_API_TOKEN'):
-            config.add_provider(CloudCredentials(
-                provider=CloudProvider.CODA,
-                access_key=os.environ.get('CODA_API_TOKEN'),
-            ))
+        if os.environ.get("CODA_API_TOKEN"):
+            config.add_provider(
+                CloudCredentials(
+                    provider=CloudProvider.CODA,
+                    access_key=os.environ.get("CODA_API_TOKEN"),
+                )
+            )
 
         return config
+
 
 __all__ = [
     "CloudProvider",

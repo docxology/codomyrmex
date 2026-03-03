@@ -1,4 +1,5 @@
 """Unit tests for the improved data_lineage module."""
+
 import pytest
 
 from codomyrmex.data_lineage import (
@@ -79,7 +80,7 @@ class TestLineageGraph:
 
         graph.add_edge(LineageEdge("A", "B", EdgeType.INPUT_TO))
         graph.add_edge(LineageEdge("B", "C", EdgeType.INPUT_TO))
-        graph.add_edge(LineageEdge("C", "A", EdgeType.INPUT_TO)) # Cycle A->B->C->A
+        graph.add_edge(LineageEdge("C", "A", EdgeType.INPUT_TO))  # Cycle A->B->C->A
 
         cycles = graph.validate_graph()
         assert len(cycles) > 0
@@ -123,10 +124,7 @@ class TestLineageTracker:
 
         # output_1 is not registered yet
         tracker.register_transformation(
-            id="job_1",
-            name="Job 1",
-            inputs=["input_1"],
-            outputs=["output_1"]
+            id="job_1", name="Job 1", inputs=["input_1"], outputs=["output_1"]
         )
 
         assert tracker.graph.get_node("output_1") is not None
@@ -136,8 +134,12 @@ class TestLineageTracker:
         tracker = LineageTracker()
         tracker.register_dataset(id="root1", name="Root 1")
         tracker.register_dataset(id="root2", name="Root 2")
-        tracker.register_transformation(id="T1", name="T1", inputs=["root1", "root2"], outputs=["mid"])
-        tracker.register_transformation(id="T2", name="T2", inputs=["mid"], outputs=["leaf"])
+        tracker.register_transformation(
+            id="T1", name="T1", inputs=["root1", "root2"], outputs=["mid"]
+        )
+        tracker.register_transformation(
+            id="T2", name="T2", inputs=["mid"], outputs=["leaf"]
+        )
 
         origins = tracker.get_origin("leaf")
         origin_ids = {n.id for n in origins}
@@ -151,7 +153,9 @@ class TestImpactAnalyzer:
     def test_analyze_change_comprehensive(self):
         graph = LineageGraph()
         graph.add_node(LineageNode(id="S1", name="S1", node_type=NodeType.DATASET))
-        graph.add_node(LineageNode(id="T1", name="T1", node_type=NodeType.TRANSFORMATION))
+        graph.add_node(
+            LineageNode(id="T1", name="T1", node_type=NodeType.TRANSFORMATION)
+        )
         graph.add_node(LineageNode(id="D1", name="D1", node_type=NodeType.DATASET))
         graph.add_node(LineageNode(id="M1", name="M1", node_type=NodeType.MODEL))
         graph.add_node(LineageNode(id="DB1", name="DB1", node_type=NodeType.DASHBOARD))
@@ -178,7 +182,13 @@ class TestDataLineageOrchestrator:
     def test_data_lineage_flow(self):
         dl = DataLineage()
         dl.track("dataset", id="raw", name="Raw Data")
-        dl.track("transformation", id="clean_job", name="Clean Job", inputs=["raw"], outputs=["clean"])
+        dl.track(
+            "transformation",
+            id="clean_job",
+            name="Clean Job",
+            inputs=["raw"],
+            outputs=["clean"],
+        )
 
         impact = dl.analyze("raw")
         assert "clean" in impact["affected_datasets"]

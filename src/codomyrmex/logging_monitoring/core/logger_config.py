@@ -71,7 +71,7 @@ class JSONFormatter(logging.Formatter):
         log_data = {
             "timestamp": datetime.fromtimestamp(record.created).isoformat(),
             "level": record.levelname,
-            "name": record.name, # Use "name" instead of "logger" for test compliance
+            "name": record.name,  # Use "name" instead of "logger" for test compliance
             "message": record.getMessage(),
             "module": record.module,
             "function": record.funcName,
@@ -88,15 +88,34 @@ class JSONFormatter(logging.Formatter):
 
         for key, value in record.__dict__.items():
             if key not in [
-                "name", "msg", "args", "created", "filename", "funcName",
-                "levelname", "levelno", "lineno", "module", "msecs",
-                "pathname", "process", "processName", "relativeCreated",
-                "stack_info", "exc_info", "exc_text", "thread", "threadName",
-                "message", "context", "correlation_id"
+                "name",
+                "msg",
+                "args",
+                "created",
+                "filename",
+                "funcName",
+                "levelname",
+                "levelno",
+                "lineno",
+                "module",
+                "msecs",
+                "pathname",
+                "process",
+                "processName",
+                "relativeCreated",
+                "stack_info",
+                "exc_info",
+                "exc_text",
+                "thread",
+                "threadName",
+                "message",
+                "context",
+                "correlation_id",
             ]:
                 log_data[key] = value
 
         return json.dumps(log_data)
+
 
 def setup_logging(force: bool = True) -> None:
     """Configure the logging system for the application.
@@ -283,7 +302,11 @@ class LogContext:
         ...     logger.info("Back to outer context")  # Original correlation_id
     """
 
-    def __init__(self, correlation_id: str | None = None, additional_context: dict[str, Any] | None = None):
+    def __init__(
+        self,
+        correlation_id: str | None = None,
+        additional_context: dict[str, Any] | None = None,
+    ):
         """Initialize a new LogContext.
 
         Args:
@@ -292,7 +315,7 @@ class LogContext:
         """
         self.correlation_id = correlation_id or create_correlation_id()
         self.additional_context = additional_context or {}
-        self.previous_context = getattr(_correlation_context, 'correlation_id', None)
+        self.previous_context = getattr(_correlation_context, "correlation_id", None)
 
     def __enter__(self) -> "LogContext":
         """Enter the context, setting the correlation ID for subsequent logs.
@@ -304,7 +327,12 @@ class LogContext:
         _correlation_context.additional_context = self.additional_context
         return self
 
-    def __exit__(self, exc_type: type[BaseException] | None, exc_val: BaseException | None, exc_tb: Any) -> None:
+    def __exit__(
+        self,
+        exc_type: type[BaseException] | None,
+        exc_val: BaseException | None,
+        exc_tb: Any,
+    ) -> None:
         """Exit the context, restoring the previous correlation ID if any.
 
         Args:
@@ -314,8 +342,8 @@ class LogContext:
         """
         if self.previous_context is not None:
             _correlation_context.correlation_id = self.previous_context
-        elif hasattr(_correlation_context, 'correlation_id'):
-            delattr(_correlation_context, 'correlation_id')
+        elif hasattr(_correlation_context, "correlation_id"):
+            delattr(_correlation_context, "correlation_id")
 
 
 # Re-exports for convenience.
@@ -350,11 +378,18 @@ class AuditLogger:
         self.logger.setLevel(logging.INFO)
         formatter = JSONFormatter()
         if log_file:
-            handler = logging.FileHandler(log_file, mode='a')
+            handler = logging.FileHandler(log_file, mode="a")
             handler.setFormatter(formatter)
             self.logger.addHandler(handler)
 
-    def log(self, actor: str, action: str, resource: str, outcome: str = "success", details: dict[str, Any] | None = None) -> None:
+    def log(
+        self,
+        actor: str,
+        action: str,
+        resource: str,
+        outcome: str = "success",
+        details: dict[str, Any] | None = None,
+    ) -> None:
         """Record an audit event.
 
         Creates an immutable audit record with a unique ID, timestamp, and
@@ -382,11 +417,16 @@ class AuditLogger:
             "action": action,
             "resource": resource,
             "outcome": outcome,
-            "details": details or {}
+            "details": details or {},
         }
-        self.logger.info(f"AUDIT: {actor} {action} {resource} -> {outcome}", extra={"audit": audit_record})
+        self.logger.info(
+            f"AUDIT: {actor} {action} {resource} -> {outcome}",
+            extra={"audit": audit_record},
+        )
 
-    def log_access(self, actor: str, resource: str, access_type: str = "read", granted: bool = True) -> None:
+    def log_access(
+        self, actor: str, resource: str, access_type: str = "read", granted: bool = True
+    ) -> None:
         """Record an access control event.
 
         Convenience method for logging resource access attempts with
@@ -406,4 +446,9 @@ class AuditLogger:
             >>> audit.log_access("user:guest", "admin_panel", "read", granted=False)
             >>> audit.log_access("user:admin", "config_file", "write", granted=True)
         """
-        self.log(actor=actor, action=f"access:{access_type}", resource=resource, outcome="granted" if granted else "denied")
+        self.log(
+            actor=actor,
+            action=f"access:{access_type}",
+            resource=resource,
+            outcome="granted" if granted else "denied",
+        )

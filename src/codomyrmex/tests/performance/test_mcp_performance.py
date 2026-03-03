@@ -35,6 +35,7 @@ class TestMCPServerCreation:
 
     def test_server_creation_speed(self, benchmark) -> None:
         """MCPServerConfig + MCPServer.__init__ should be fast."""
+
         def create_server():
             config = MCPServerConfig(name="bench", warm_up=False)
             return MCPServer(config)
@@ -49,7 +50,11 @@ class TestMCPServerCreation:
         def register_tool():
             server.register_tool(
                 name="bench_tool",
-                schema={"name": "bench_tool", "description": "test", "inputSchema": {"type": "object"}},
+                schema={
+                    "name": "bench_tool",
+                    "description": "test",
+                    "inputSchema": {"type": "object"},
+                },
                 handler=lambda tc: {"status": "ok"},
             )
 
@@ -151,7 +156,6 @@ class TestRetryDecoratorOverhead:
 
 class TestAsyncRunnerOverhead:
     """Benchmark AsyncParallelRunner."""
-
 
     def test_runner_10_noop_tasks(self, benchmark) -> None:
         """10 no-op tasks should complete quickly."""

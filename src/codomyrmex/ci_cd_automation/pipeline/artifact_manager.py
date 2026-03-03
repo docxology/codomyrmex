@@ -19,6 +19,7 @@ class ArtifactManager:
         Actually just copies them to the storage directory in this implementation.
         """
         import glob
+
         files = glob.glob(pattern)
         version_dir = self.storage_dir / version
         version_dir.mkdir(parents=True, exist_ok=True)

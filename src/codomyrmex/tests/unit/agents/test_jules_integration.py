@@ -5,7 +5,6 @@ tests are skipped rather than using mocks. All data processing and
 conversion logic is tested with real data structures.
 """
 
-
 import pytest
 
 try:
@@ -18,6 +17,7 @@ try:
     from codomyrmex.agents.generic.agent_orchestrator import AgentOrchestrator
     from codomyrmex.agents.jules import JulesClient, JulesIntegrationAdapter
     from codomyrmex.tests.unit.agents.helpers import JULES_AVAILABLE
+
     _HAS_AGENTS = True
 except ImportError:
     _HAS_AGENTS = False
@@ -72,8 +72,7 @@ class TestJulesClient:
         """Test execution with context parameters using real CLI."""
         client = JulesClient()
         request = AgentRequest(
-            prompt="write unit tests",
-            context={"repo": "test/repo", "parallel": 2}
+            prompt="write unit tests", context={"repo": "test/repo", "parallel": 2}
         )
 
         try:
@@ -162,8 +161,7 @@ class TestJulesIntegrationAdapter:
 
         try:
             code = adapter.adapt_for_ai_code_editing(
-                prompt="create a test function",
-                language="python"
+                prompt="create a test function", language="python"
             )
 
             # Test real result structure
@@ -181,8 +179,7 @@ class TestJulesIntegrationAdapter:
         # Use invalid prompt that might fail
         try:
             code = adapter.adapt_for_ai_code_editing(
-                prompt="invalid prompt that should fail",
-                language="python"
+                prompt="invalid prompt that should fail", language="python"
             )
             # If it doesn't fail, that's also valid
             assert isinstance(code, str)
@@ -198,7 +195,7 @@ class TestJulesIntegrationAdapter:
 
         messages = [
             {"role": "user", "content": "Hello"},
-            {"role": "assistant", "content": "Hi there"}
+            {"role": "assistant", "content": "Hi there"},
         ]
 
         try:
@@ -222,8 +219,7 @@ class TestJulesIntegrationAdapter:
 
         try:
             result = adapter.adapt_for_code_execution(
-                code="print('hello')",
-                language="python"
+                code="print('hello')", language="python"
             )
 
             # Test real result structure
@@ -308,14 +304,15 @@ class TestJulesOrchestration:
         # Create a test agent that implements BaseAgent (not a mock)
         class TestAgent(BaseAgent):
             """Test suite for Agent."""
+
             def _execute_impl(self, request):
                 return AgentResponse(content="Test response")
+
             def _stream_impl(self, request):
                 yield "Test"
 
         test_agent = TestAgent(
-            name="test",
-            capabilities=[AgentCapabilities.TEXT_COMPLETION]
+            name="test", capabilities=[AgentCapabilities.TEXT_COMPLETION]
         )
 
         orchestrator = AgentOrchestrator([jules_client, test_agent])

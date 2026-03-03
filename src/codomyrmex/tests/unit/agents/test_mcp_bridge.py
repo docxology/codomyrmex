@@ -35,6 +35,7 @@ PYPROJECT = PROJECT_ROOT / "pyproject.toml"
 # Server & Registry
 # =====================================================================
 
+
 class TestCreateServer:
     """Test MCP server creation."""
 
@@ -47,6 +48,7 @@ class TestCreateServer:
         """Test functionality: all tools registered."""
         server = create_codomyrmex_mcp_server()
         from codomyrmex.agents.pai.mcp_bridge import get_total_tool_count
+
         assert len(server._tool_registry.list_tools()) == get_total_tool_count()
 
     def test_resources_registered(self):
@@ -79,12 +81,14 @@ class TestToolRegistry:
         """Test functionality: returns registry."""
         reg = get_tool_registry()
         from codomyrmex.agents.pai.mcp.server import _ToolRegistry
+
         assert isinstance(reg, _ToolRegistry)
 
     def test_registry_has_all_tools(self):
         """Test functionality: registry has all tools."""
         reg = get_tool_registry()
         from codomyrmex.agents.pai.mcp_bridge import get_total_tool_count
+
         assert len(reg.list_tools()) == get_total_tool_count()
 
     def test_registry_tools_have_handlers(self):
@@ -99,6 +103,7 @@ class TestToolRegistry:
 # =====================================================================
 # Direct call_tool API
 # =====================================================================
+
 
 class TestCallToolDiscovery:
     """Test discovery tools via call_tool."""
@@ -129,7 +134,9 @@ class TestCallToolDiscovery:
 
     def test_module_info_invalid(self):
         """Test functionality: module info invalid."""
-        result = call_tool("codomyrmex.module_info", module_name="nonexistent_module_xyz")
+        result = call_tool(
+            "codomyrmex.module_info", module_name="nonexistent_module_xyz"
+        )
         assert "error" in result
 
     def test_unknown_tool_raises(self):
@@ -155,7 +162,9 @@ class TestCallToolFileOps:
 
     def test_read_file_missing(self):
         """Test functionality: read file missing."""
-        result = call_tool("codomyrmex.read_file", path="/tmp/nonexistent_file_xyz_12345.txt")
+        result = call_tool(
+            "codomyrmex.read_file", path="/tmp/nonexistent_file_xyz_12345.txt"
+        )
         assert "error" in result
 
     def test_list_directory(self):
@@ -179,7 +188,9 @@ class TestCallToolCodeAnalysis:
             PROJECT_ROOT / "src" / "codomyrmex" / "agents" / "pai" / "mcp_bridge.py"
         )
         result = call_tool("codomyrmex.analyze_python", path=bridge_path)
-        assert isinstance(result, dict) and ("functions" in result or "classes" in result or "error" in result)
+        assert isinstance(result, dict) and (
+            "functions" in result or "classes" in result or "error" in result
+        )
 
     def test_search_codebase(self):
         """Test functionality: search codebase."""
@@ -228,7 +239,11 @@ class TestCallToolPAI:
         result = call_tool("codomyrmex.pai_status")
         assert isinstance(result, dict)
         # Should always have these keys even if PAI not installed
-        assert "pai_installed" in result or "installed" in result or isinstance(result, dict)
+        assert (
+            "pai_installed" in result
+            or "installed" in result
+            or isinstance(result, dict)
+        )
 
     def test_pai_awareness(self):
         """Test functionality: pai awareness."""
@@ -263,6 +278,7 @@ class TestCallToolData:
 # Skill Manifest
 # =====================================================================
 
+
 class TestSkillManifest:
     """Test PAI skill manifest structure."""
 
@@ -278,6 +294,7 @@ class TestSkillManifest:
         """Test functionality: manifest has all tools."""
         manifest = get_skill_manifest()
         from codomyrmex.agents.pai.mcp_bridge import get_total_tool_count
+
         assert len(manifest["tools"]) >= get_total_tool_count()
 
     def test_manifest_has_resources(self):
@@ -333,6 +350,7 @@ class TestSkillManifest:
 # Constants
 # =====================================================================
 
+
 class TestConstants:
     """Test module-level constants."""
 
@@ -354,6 +372,7 @@ class TestConstants:
         reg = get_tool_registry()
         reg_names = set(reg.list_tools())
         from codomyrmex.agents.pai.mcp_bridge import get_total_tool_count
+
         assert len(reg_names) == get_total_tool_count()
         # Every tool should be callable via call_tool
         for name in reg_names:
@@ -366,6 +385,7 @@ class TestDynamicDiscovery:
     def test_dynamic_discovery_returns_tools(self):
         """Dynamic discovery finds at least some tools from modules."""
         from codomyrmex.agents.pai.mcp.discovery import _discover_dynamic_tools
+
         tools = _discover_dynamic_tools()
         assert isinstance(tools, list)
         assert len(tools) > 0, "Dynamic discovery should find at least 1 tool"
@@ -373,6 +393,7 @@ class TestDynamicDiscovery:
     def test_dynamic_tool_structure(self):
         """Each discovered tool has correct tuple structure."""
         from codomyrmex.agents.pai.mcp.discovery import _discover_dynamic_tools
+
         tools = _discover_dynamic_tools()
         for name, desc, handler, schema in tools:
             assert isinstance(name, str), f"Tool name should be str, got {type(name)}"
@@ -383,6 +404,7 @@ class TestDynamicDiscovery:
     def test_dynamic_tools_included_in_registry(self):
         """Dynamic tools should be in the full tool registry."""
         from codomyrmex.agents.pai.mcp.discovery import _discover_dynamic_tools
+
         reg = get_tool_registry()
         reg_names = set(reg.list_tools())
         dynamic = _discover_dynamic_tools()

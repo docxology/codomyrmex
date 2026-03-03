@@ -84,7 +84,11 @@ class TestMCPLoadConcurrent:
         for i in range(50):
             registry.register(
                 tool_name=f"tool_{i}",
-                schema={"name": f"tool_{i}", "description": f"Tool {i}", "inputSchema": {"type": "object"}},
+                schema={
+                    "name": f"tool_{i}",
+                    "description": f"Tool {i}",
+                    "inputSchema": {"type": "object"},
+                },
                 handler=lambda: None,
             )
 
@@ -198,6 +202,7 @@ class TestMCPMemoryProfile:
         rss_after = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
         # RSS is in KB on Linux, bytes on macOS — normalize
         import sys
+
         if sys.platform == "darwin":
             delta_mb = (rss_after - rss_before) / (1024 * 1024)
         else:
@@ -219,7 +224,11 @@ class TestMCPThroughput:
         for i in range(count):
             registry.register(
                 tool_name=f"throughput_tool_{i}",
-                schema={"name": f"throughput_tool_{i}", "description": "test", "inputSchema": {"type": "object"}},
+                schema={
+                    "name": f"throughput_tool_{i}",
+                    "description": "test",
+                    "inputSchema": {"type": "object"},
+                },
                 handler=lambda: None,
             )
         elapsed = time.perf_counter() - start

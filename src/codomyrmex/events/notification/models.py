@@ -12,6 +12,7 @@ from typing import Any
 
 class NotificationChannel(Enum):
     """Available notification channels."""
+
     EMAIL = "email"
     SLACK = "slack"
     WEBHOOK = "webhook"
@@ -22,6 +23,7 @@ class NotificationChannel(Enum):
 
 class NotificationPriority(Enum):
     """Priority levels for notifications."""
+
     LOW = "low"
     MEDIUM = "medium"
     HIGH = "high"
@@ -30,6 +32,7 @@ class NotificationPriority(Enum):
 
 class NotificationStatus(Enum):
     """Status of a notification."""
+
     PENDING = "pending"
     SENT = "sent"
     FAILED = "failed"
@@ -39,6 +42,7 @@ class NotificationStatus(Enum):
 @dataclass
 class Notification:
     """A notification to be sent."""
+
     id: str
     subject: str
     body: str
@@ -65,6 +69,7 @@ class Notification:
 @dataclass
 class NotificationResult:
     """Result of sending a notification."""
+
     notification_id: str
     status: NotificationStatus
     channel: NotificationChannel

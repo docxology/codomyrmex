@@ -18,6 +18,7 @@ from codomyrmex.orchestrator.module_connector import ModuleConnector
 
 class TestIntegrationBus:
     """Test suite for IntegrationBus."""
+
     def test_emit_and_subscribe(self) -> None:
         """Test functionality: emit and subscribe."""
         bus = IntegrationBus()
@@ -63,6 +64,7 @@ class TestIntegrationBus:
 
 class TestModuleConnector:
     """Test suite for ModuleConnector."""
+
     def test_register_and_resolve(self) -> None:
         """Test functionality: register and resolve."""
         mc = ModuleConnector()
@@ -111,6 +113,7 @@ class TestModuleConnector:
 
 class TestPlanEngine:
     """Test suite for PlanEngine."""
+
     def test_decompose_build(self) -> None:
         """Test functionality: decompose build."""
         engine = PlanEngine()
@@ -152,6 +155,7 @@ class TestPlanEngine:
 
 class TestPlanExecutor:
     """Test suite for PlanExecutor."""
+
     def test_execute_all_succeed(self) -> None:
         """Test functionality: execute all succeed."""
         engine = PlanEngine()
@@ -166,9 +170,12 @@ class TestPlanExecutor:
         plan = Plan(goal="test", tasks=[PlanTask("step1"), PlanTask("step2")])
         results: list[str] = []
         executor = PlanExecutor()
-        result = executor.execute(plan, actions={
-            "step1": lambda t: results.append(t.name),
-        })
+        result = executor.execute(
+            plan,
+            actions={
+                "step1": lambda t: results.append(t.name),
+            },
+        )
         assert result.success
         assert "step1" in results
 
@@ -176,9 +183,12 @@ class TestPlanExecutor:
         """Test functionality: execute with failure."""
         plan = Plan(goal="test", tasks=[PlanTask("fail_step")])
         executor = PlanExecutor()
-        result = executor.execute(plan, actions={
-            "fail_step": lambda t: (_ for _ in ()).throw(RuntimeError("boom")),
-        })
+        result = executor.execute(
+            plan,
+            actions={
+                "fail_step": lambda t: (_ for _ in ()).throw(RuntimeError("boom")),
+            },
+        )
         assert not result.success
         assert result.failed_tasks == 1
 

@@ -39,7 +39,7 @@ class LLMProvider(ABC):
         model: str | None = None,
         temperature: float = 0.7,
         max_tokens: int | None = None,
-        **kwargs
+        **kwargs,
     ) -> CompletionResponse:
         """Generate a completion from messages."""
         pass
@@ -51,7 +51,7 @@ class LLMProvider(ABC):
         model: str | None = None,
         temperature: float = 0.7,
         max_tokens: int | None = None,
-        **kwargs
+        **kwargs,
     ) -> Iterator[str]:
         """Generate a streaming completion."""
         pass
@@ -63,7 +63,7 @@ class LLMProvider(ABC):
         model: str | None = None,
         temperature: float = 0.7,
         max_tokens: int | None = None,
-        **kwargs
+        **kwargs,
     ) -> CompletionResponse:
         """Generate a completion asynchronously."""
         pass
@@ -81,5 +81,3 @@ class LLMProvider(ABC):
     def _default_model(self) -> str:
         """Get the default model for this provider."""
         pass
-
-

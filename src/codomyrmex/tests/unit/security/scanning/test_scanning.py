@@ -118,10 +118,10 @@ class TestSecurityScanner:
     def test_scan_content(self):
         """Should scan content."""
         scanner = SecurityScanner()
-        code = '''
+        code = """
 password = "hardcoded123"
 cursor.execute("SELECT * FROM users WHERE id = %s" % id)
-'''
+"""
 
         findings = scanner.scan_content(code)
 
@@ -131,7 +131,7 @@ cursor.execute("SELECT * FROM users WHERE id = %s" % id)
         """Should scan file."""
         scanner = SecurityScanner()
 
-        with tempfile.NamedTemporaryFile(mode='w', suffix='.py', delete=False) as f:
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False) as f:
             f.write('api_key = "secret12345678"\n')
             f.flush()
 

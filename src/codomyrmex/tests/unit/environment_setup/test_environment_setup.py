@@ -20,6 +20,7 @@ class TestEnvironmentSetupComprehensive:
 
         try:
             from codomyrmex.environment_setup import env_checker
+
             assert env_checker is not None
         except ImportError as e:
             pytest.fail(f"Failed to import env_checker: {e}")
@@ -133,16 +134,14 @@ class TestEnvironmentSetupComprehensive:
 
         # Test with required var that is present in .env
         missing = check_and_setup_env_vars(
-            repo_root=str(tmp_path),
-            required=["TEST_REQUIRED_VAR"]
+            repo_root=str(tmp_path), required=["TEST_REQUIRED_VAR"]
         )
         assert "TEST_REQUIRED_VAR" not in missing
         assert os.environ.get("TEST_REQUIRED_VAR") == "present"
 
         # Test with required var that is missing
         missing = check_and_setup_env_vars(
-            repo_root=str(tmp_path),
-            required=["MISSING_VAR_XYZ"]
+            repo_root=str(tmp_path), required=["MISSING_VAR_XYZ"]
         )
         assert "MISSING_VAR_XYZ" in missing
 

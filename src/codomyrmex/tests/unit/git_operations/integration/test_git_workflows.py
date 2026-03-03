@@ -126,7 +126,9 @@ class TestCompleteWorkflow:
 
         # Status should show staged file
         status = get_status(temp_git_repo)
-        assert "added" in status or "staged" in status or len(status.get("added", [])) > 0
+        assert (
+            "added" in status or "staged" in status or len(status.get("added", [])) > 0
+        )
 
         # Commit
         commit_changes("Add untracked file", temp_git_repo)
@@ -145,6 +147,7 @@ class TestCompleteWorkflow:
 
         # Verify it's a Git repository
         from codomyrmex.git_operations import is_git_repository
+
         assert is_git_repository(repo_path) is True
 
         # Verify README exists (from initial commit)
@@ -166,6 +169,7 @@ class TestCompleteWorkflow:
 
         # Verify it's a Git repository
         from codomyrmex.git_operations import is_git_repository
+
         assert is_git_repository(repo_path) is True
 
         # Create first file and commit
@@ -176,4 +180,3 @@ class TestCompleteWorkflow:
         assert add_files(["first.txt"], repo_path) is True
         commit_sha = commit_changes("Initial commit", repo_path)
         assert commit_sha is not None
-

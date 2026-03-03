@@ -1,6 +1,5 @@
 """Tests for orchestrator.core module."""
 
-
 import pytest
 
 from codomyrmex.orchestrator.core import main
@@ -57,10 +56,9 @@ def test_main_generate_docs(test_env, tmp_path):
     """Test --generate-docs argument."""
     scripts_dir, _ = test_env
     docs_out = tmp_path / "docs.md"
-    exit_code = main([
-        "--generate-docs", str(docs_out),
-        "--scripts-dir", str(scripts_dir)
-    ])
+    exit_code = main(
+        ["--generate-docs", str(docs_out), "--scripts-dir", str(scripts_dir)]
+    )
     assert exit_code == 0
     assert docs_out.exists()
 
@@ -68,11 +66,9 @@ def test_main_generate_docs(test_env, tmp_path):
 def test_main_success_run(test_env, capsys):
     """Test a successful full run (fail.py is skipped via config)."""
     scripts_dir, logs_dir = test_env
-    exit_code = main([
-        "--scripts-dir", str(scripts_dir),
-        "--output-dir", str(logs_dir),
-        "--verbose"
-    ])
+    exit_code = main(
+        ["--scripts-dir", str(scripts_dir), "--output-dir", str(logs_dir), "--verbose"]
+    )
     assert exit_code == 0
 
     captured = capsys.readouterr()
@@ -99,13 +95,9 @@ def test_main_failure_run(test_env, capsys):
     # Remove config so fail.py is not skipped and runs, causing a failure
     (scripts_dir / "config.yaml").unlink()
 
-    exit_code = main([
-        "--scripts-dir", str(scripts_dir),
-        "--output-dir", str(logs_dir)
-    ])
+    exit_code = main(["--scripts-dir", str(scripts_dir), "--output-dir", str(logs_dir)])
     assert exit_code == 1
 
     captured = capsys.readouterr()
     assert "Passed:  1" in captured.out
     assert "Failed:  1" in captured.out
-

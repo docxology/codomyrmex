@@ -32,9 +32,7 @@ class MessageBus:
         self.message_history: list[Message] = []
         self.logger = get_logger(__name__)
 
-    def subscribe(
-        self, message_type: str, handler: Callable[[Message], None]
-    ) -> None:
+    def subscribe(self, message_type: str, handler: Callable[[Message], None]) -> None:
         """
         Subscribe to messages of a specific type.
 
@@ -46,9 +44,7 @@ class MessageBus:
             self.subscribers[message_type] = []
 
         self.subscribers[message_type].append(handler)
-        self.logger.debug(
-            f"Subscribed handler to message type: {message_type}"
-        )
+        self.logger.debug(f"Subscribed handler to message type: {message_type}")
 
     def unsubscribe(
         self, message_type: str, handler: Callable[[Message], None]
@@ -81,17 +77,27 @@ class MessageBus:
             for handler in self.subscribers[message.message_type]:
                 try:
                     handler(message)
-                except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
-                    self.logger.error(
-                        f"Error in message handler: {e}", exc_info=True
-                    )
+                except (
+                    ValueError,
+                    RuntimeError,
+                    AttributeError,
+                    OSError,
+                    TypeError,
+                ) as e:
+                    self.logger.error(f"Error in message handler: {e}", exc_info=True)
 
         # Publish to wildcard subscribers
         if "*" in self.subscribers:
             for handler in self.subscribers["*"]:
                 try:
                     handler(message)
-                except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
+                except (
+                    ValueError,
+                    RuntimeError,
+                    AttributeError,
+                    OSError,
+                    TypeError,
+                ) as e:
                     self.logger.error(
                         f"Error in wildcard message handler: {e}", exc_info=True
                     )
@@ -184,5 +190,3 @@ class MessageBus:
             messages = messages[-limit:]
 
         return messages
-
-

@@ -131,7 +131,7 @@ class Colony:
                 # Rest and regain energy
                 recovery = 0.01
                 if ant.genome and "endurance" in ant.genome.traits:
-                    recovery *= (0.5 + ant.genome.traits["endurance"])
+                    recovery *= 0.5 + ant.genome.traits["endurance"]
                 ant.energy = min(ant.energy + recovery, 1.0)
                 if ant.energy >= 0.9:
                     ant.state = AntState.FORAGING
@@ -158,7 +158,7 @@ class Colony:
         # Check for nearby food
         perception_radius = 1.5
         if ant.genome and "perception" in ant.genome.traits:
-            perception_radius *= (0.5 + ant.genome.traits["perception"])
+            perception_radius *= 0.5 + ant.genome.traits["perception"]
 
         food = self.environment.food_at(pos, radius=perception_radius)
         if food is not None:

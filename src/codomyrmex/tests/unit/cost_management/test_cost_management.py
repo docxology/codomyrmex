@@ -177,7 +177,9 @@ class TestBudget:
 
     def test_budget_get_period_start_yearly(self):
         """Verify yearly period start calculation."""
-        budget = Budget(id="test", name="Test", amount=5000.0, period=BudgetPeriod.YEARLY)
+        budget = Budget(
+            id="test", name="Test", amount=5000.0, period=BudgetPeriod.YEARLY
+        )
         reference = datetime(2024, 6, 15, 14, 30, 45)
 
         period_start = budget.get_period_start(reference)
@@ -300,7 +302,9 @@ class TestInMemoryCostStore:
 
         # Date range + category
         entries = store.get_entries(
-            now - timedelta(hours=1), now + timedelta(hours=1), category=CostCategory.COMPUTE
+            now - timedelta(hours=1),
+            now + timedelta(hours=1),
+            category=CostCategory.COMPUTE,
         )
         assert len(entries) == 1
         assert entries[0].id == "e1"

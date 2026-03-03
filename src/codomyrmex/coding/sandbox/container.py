@@ -64,9 +64,7 @@ def run_code_in_docker(
     real_temp = os.path.realpath(temp_dir)
     _tmp_base = os.path.realpath(tempfile.gettempdir())
     if not (real_temp == _tmp_base or real_temp.startswith(_tmp_base + os.sep)):
-        raise ValueError(
-            f"temp_dir must be within system temp directory: {temp_dir!r}"
-        )
+        raise ValueError(f"temp_dir must be within system temp directory: {temp_dir!r}")
 
     # Add volume mapping for code and working directory
     docker_args.append(f"-v={real_temp}:/sandbox")
@@ -81,9 +79,7 @@ def run_code_in_docker(
     if stdin_file:
         real_stdin = os.path.realpath(stdin_file)
         if not real_stdin.startswith(real_temp + os.sep):
-            raise ValueError(
-                f"stdin_file must be inside temp_dir: {stdin_file!r}"
-            )
+            raise ValueError(f"stdin_file must be inside temp_dir: {stdin_file!r}")
 
     # Calculate the docker command timeout (slightly longer than the code timeout)
     docker_timeout = timeout * language_config.get("timeout_factor", 1.2)
@@ -150,7 +146,9 @@ def run_code_in_docker(
                             capture_output=True,
                         )
             except subprocess.SubprocessError as e:
-                logger.warning("Container cleanup error — orphaned container may remain: %s", e)
+                logger.warning(
+                    "Container cleanup error — orphaned container may remain: %s", e
+                )
 
     except subprocess.SubprocessError as e:
         stdout = ""
@@ -181,4 +179,3 @@ def run_code_in_docker(
         "status": status,
         "error_message": error_message,
     }
-

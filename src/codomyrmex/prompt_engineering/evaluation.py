@@ -62,8 +62,12 @@ class EvaluationResult:
     def to_dict(self) -> dict[str, Any]:
         """Convert evaluation result to dictionary."""
         return {
-            "prompt": self.prompt[:200] + "..." if len(self.prompt) > 200 else self.prompt,
-            "response": self.response[:200] + "..." if len(self.response) > 200 else self.response,
+            "prompt": self.prompt[:200] + "..."
+            if len(self.prompt) > 200
+            else self.prompt,
+            "response": self.response[:200] + "..."
+            if len(self.response) > 200
+            else self.response,
             "scores": self.scores,
             "weighted_score": self.weighted_score,
             "details": self.details,
@@ -71,6 +75,7 @@ class EvaluationResult:
 
 
 # -- Built-in scorer functions --
+
 
 def score_response_length(prompt: str, response: str) -> float:
     """
@@ -98,9 +103,7 @@ def score_relevance(prompt: str, response: str) -> float:
     Extracts significant words (4+ chars) from the prompt and checks
     how many appear in the response.
     """
-    prompt_words = {
-        w.lower() for w in re.findall(r"\b\w{4,}\b", prompt)
-    }
+    prompt_words = {w.lower() for w in re.findall(r"\b\w{4,}\b", prompt)}
     if not prompt_words:
         return 1.0
 
@@ -168,7 +171,7 @@ def score_completeness(prompt: str, response: str) -> float:
     # Response should not appear truncated
     checks += 1
     stripped = response.rstrip()
-    if stripped and stripped[-1] in ".!?)\":;>]":
+    if stripped and stripped[-1] in '.!?)":;>]':
         score += 1.0
     elif stripped:
         score += 0.5
@@ -184,6 +187,7 @@ def score_completeness(prompt: str, response: str) -> float:
 
 
 # -- Default criteria presets --
+
 
 def get_default_criteria() -> list[EvaluationCriteria]:
     """
@@ -361,7 +365,9 @@ class PromptEvaluator:
             "best_index": ranked[0][0] if ranked else None,
             "statistics": {
                 "mean": round(statistics.mean(all_scores), 4) if all_scores else 0.0,
-                "stdev": round(statistics.stdev(all_scores), 4) if len(all_scores) > 1 else 0.0,
+                "stdev": round(statistics.stdev(all_scores), 4)
+                if len(all_scores) > 1
+                else 0.0,
                 "min": round(min(all_scores), 4) if all_scores else 0.0,
                 "max": round(max(all_scores), 4) if all_scores else 0.0,
             },

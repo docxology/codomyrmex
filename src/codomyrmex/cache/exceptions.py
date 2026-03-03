@@ -24,7 +24,7 @@ class CacheError(CodomyrmexError):
         message: str,
         cache_name: str | None = None,
         backend: str | None = None,
-        **kwargs: Any
+        **kwargs: Any,
     ):
         super().__init__(message, **kwargs)
         if cache_name:
@@ -49,7 +49,7 @@ class CacheExpiredError(CacheError):
         key: str | None = None,
         expired_at: float | None = None,
         ttl: float | None = None,
-        **kwargs: Any
+        **kwargs: Any,
     ):
         super().__init__(message, **kwargs)
         if key:
@@ -76,7 +76,7 @@ class CacheFullError(CacheError):
         max_size: int | None = None,
         current_size: int | None = None,
         required_space: int | None = None,
-        **kwargs: Any
+        **kwargs: Any,
     ):
         super().__init__(message, **kwargs)
         if max_size is not None:
@@ -103,7 +103,7 @@ class CacheConnectionError(CacheError):
         host: str | None = None,
         port: int | None = None,
         connection_timeout: float | None = None,
-        **kwargs: Any
+        **kwargs: Any,
     ):
         super().__init__(message, **kwargs)
         if host:
@@ -128,7 +128,7 @@ class CacheKeyError(CacheError):
         message: str,
         key: str | None = None,
         reason: str | None = None,
-        **kwargs: Any
+        **kwargs: Any,
     ):
         super().__init__(message, **kwargs)
         if key:
@@ -151,7 +151,7 @@ class CacheSerializationError(CacheError):
         message: str,
         key: str | None = None,
         value_type: str | None = None,
-        **kwargs: Any
+        **kwargs: Any,
     ):
         super().__init__(message, **kwargs)
         if key:
@@ -174,7 +174,7 @@ class CacheInvalidationError(CacheError):
         message: str,
         pattern: str | None = None,
         keys_affected: int | None = None,
-        **kwargs: Any
+        **kwargs: Any,
     ):
         super().__init__(message, **kwargs)
         if pattern:

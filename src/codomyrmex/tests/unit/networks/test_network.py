@@ -43,7 +43,9 @@ def test_shortest_path():
     graph.add_edge("B", "C", weight=1.0)
     graph.add_edge("A", "D", weight=1.0)
     graph.add_edge("D", "E", weight=1.0)
-    graph.add_edge("E", "C", weight=1.0) # Path A->D->E->C is length 3.0, A->B->C is 2.0
+    graph.add_edge(
+        "E", "C", weight=1.0
+    )  # Path A->D->E->C is length 3.0, A->B->C is 2.0
 
     path = graph.shortest_path("A", "C")
     assert path is not None

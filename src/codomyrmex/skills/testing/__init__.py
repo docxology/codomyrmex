@@ -10,6 +10,7 @@ from typing import Any
 
 try:
     from codomyrmex.logging_monitoring.core.logger_config import get_logger
+
     logger = get_logger(__name__)
 except ImportError:
     logging.basicConfig(level=logging.INFO)
@@ -19,7 +20,14 @@ except ImportError:
 class SkillTestResult:
     """Result of a single skill test case."""
 
-    def __init__(self, name: str, passed: bool, expected: Any = None, actual: Any = None, error: str | None = None):
+    def __init__(
+        self,
+        name: str,
+        passed: bool,
+        expected: Any = None,
+        actual: Any = None,
+        error: str | None = None,
+    ):
         self.name = name
         self.passed = passed
         self.expected = expected
@@ -44,7 +52,9 @@ class SkillTestResult:
 class SkillTestRunner:
     """Runs test cases against skills and produces reports."""
 
-    def test_skill(self, skill, test_cases: list[dict[str, Any]]) -> list[SkillTestResult]:
+    def test_skill(
+        self, skill, test_cases: list[dict[str, Any]]
+    ) -> list[SkillTestResult]:
         """
         Run test cases against a skill.
 
@@ -61,7 +71,7 @@ class SkillTestRunner:
             List of SkillTestResult objects
         """
         results = []
-        skill_name = getattr(getattr(skill, 'metadata', None), 'name', str(skill))
+        skill_name = getattr(getattr(skill, "metadata", None), "name", str(skill))
         logger.info(f"Running {len(test_cases)} test cases for skill: {skill_name}")
 
         for case in test_cases:
@@ -74,24 +84,32 @@ class SkillTestRunner:
                 if expected is not None:
                     passed = actual == expected
                 else:
-                    passed = True  # No expected value means we just check it doesn't raise
+                    passed = (
+                        True  # No expected value means we just check it doesn't raise
+                    )
 
-                results.append(SkillTestResult(
-                    name=name,
-                    passed=passed,
-                    expected=expected,
-                    actual=actual,
-                ))
+                results.append(
+                    SkillTestResult(
+                        name=name,
+                        passed=passed,
+                        expected=expected,
+                        actual=actual,
+                    )
+                )
             except Exception as e:
-                results.append(SkillTestResult(
-                    name=name,
-                    passed=False,
-                    expected=expected,
-                    error=str(e),
-                ))
+                results.append(
+                    SkillTestResult(
+                        name=name,
+                        passed=False,
+                        expected=expected,
+                        error=str(e),
+                    )
+                )
 
         passed_count = sum(1 for r in results if r.passed)
-        logger.info(f"Test results for {skill_name}: {passed_count}/{len(results)} passed")
+        logger.info(
+            f"Test results for {skill_name}: {passed_count}/{len(results)} passed"
+        )
         return results
 
     def validate_skill(self, skill) -> dict[str, Any]:
@@ -106,28 +124,28 @@ class SkillTestRunner:
         """
         issues = []
 
-        if not hasattr(skill, 'metadata'):
+        if not hasattr(skill, "metadata"):
             issues.append("Missing 'metadata' attribute")
             return {"valid": False, "issues": issues}
 
         metadata = skill.metadata
 
-        if not getattr(metadata, 'name', None):
+        if not getattr(metadata, "name", None):
             issues.append("Metadata missing 'name'")
-        if not getattr(metadata, 'description', None):
+        if not getattr(metadata, "description", None):
             issues.append("Metadata missing 'description'")
-        if not getattr(metadata, 'id', None):
+        if not getattr(metadata, "id", None):
             issues.append("Metadata missing 'id'")
 
-        if not hasattr(skill, 'execute'):
+        if not hasattr(skill, "execute"):
             issues.append("Missing 'execute' method")
-        if not hasattr(skill, 'validate_params'):
+        if not hasattr(skill, "validate_params"):
             issues.append("Missing 'validate_params' method")
 
         return {
             "valid": len(issues) == 0,
             "issues": issues,
-            "skill_name": getattr(metadata, 'name', 'unknown'),
+            "skill_name": getattr(metadata, "name", "unknown"),
         }
 
     def benchmark_skill(self, skill, iterations: int = 100, **kwargs) -> dict[str, Any]:
@@ -142,7 +160,7 @@ class SkillTestRunner:
         Returns:
             Dictionary with benchmark results (min, max, avg, total times)
         """
-        skill_name = getattr(getattr(skill, 'metadata', None), 'name', str(skill))
+        skill_name = getattr(getattr(skill, "metadata", None), "name", str(skill))
         logger.info(f"Benchmarking skill {skill_name} with {iterations} iterations")
 
         times = []

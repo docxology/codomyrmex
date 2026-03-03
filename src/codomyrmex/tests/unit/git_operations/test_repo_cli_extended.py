@@ -43,10 +43,18 @@ pytestmark = [
 # Lightweight test doubles
 # ---------------------------------------------------------------------------
 
+
 class StubRepo:
     """Minimal Repository-like object."""
-    def __init__(self, full_name="owner/test_repo", owner="owner",
-                 repo_type=None, description="A test repo", url="https://example.com/r"):
+
+    def __init__(
+        self,
+        full_name="owner/test_repo",
+        owner="owner",
+        repo_type=None,
+        description="A test repo",
+        url="https://example.com/r",
+    ):
         self.full_name = full_name
         self.owner = owner
         self.repo_type = repo_type or _FakeType("github")
@@ -61,6 +69,7 @@ class _FakeType:
 
 class StubArgs:
     """Stub for argparse.Namespace."""
+
     def __init__(self, **kwargs):
         self.repository = kwargs.get("repository", None)
         self.path = kwargs.get("path", None)
@@ -153,6 +162,7 @@ class StubRepositoryManager:
 # TestCmdList
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestCmdList:
     """Tests for cmd_list."""
@@ -198,6 +208,7 @@ class TestCmdList:
 # TestCmdSearch
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestCmdSearch:
     """Tests for cmd_search."""
@@ -229,6 +240,7 @@ class TestCmdSearch:
 # ---------------------------------------------------------------------------
 # TestCmdClone
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestCmdClone:
@@ -293,6 +305,7 @@ class TestCmdClone:
 # TestCmdUpdate
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestCmdUpdate:
     """Tests for cmd_update."""
@@ -341,6 +354,7 @@ class TestCmdUpdate:
 # TestCmdStatus
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestCmdStatus:
     """Tests for cmd_status."""
@@ -362,14 +376,16 @@ class TestCmdStatus:
 
     def test_status_clean_repo(self, capsys):
         """cmd_status prints 'Clean' for clean repository."""
-        manager = StubRepositoryManager(status={
-            "repository": "owner/repo",
-            "path": "/tmp/repo",
-            "branch": "main",
-            "type": "github",
-            "is_development": False,
-            "status": {"clean": True},
-        })
+        manager = StubRepositoryManager(
+            status={
+                "repository": "owner/repo",
+                "path": "/tmp/repo",
+                "branch": "main",
+                "type": "github",
+                "is_development": False,
+                "status": {"clean": True},
+            }
+        )
         args = StubArgs(repository="owner/repo")
         cmd_status(manager, args)
         captured = capsys.readouterr()
@@ -386,10 +402,12 @@ class TestCmdStatus:
 
     def test_status_with_error_in_result(self, capsys):
         """cmd_status prints error when status dict contains 'error' key."""
-        manager = StubRepositoryManager(status={
-            "error": "Not cloned",
-            "path": "/tmp/missing",
-        })
+        manager = StubRepositoryManager(
+            status={
+                "error": "Not cloned",
+                "path": "/tmp/missing",
+            }
+        )
         args = StubArgs(repository="owner/repo")
         cmd_status(manager, args)
         captured = capsys.readouterr()
@@ -397,14 +415,21 @@ class TestCmdStatus:
 
     def test_status_dirty_repo_shows_modified(self, capsys):
         """cmd_status shows modified files for dirty repo."""
-        manager = StubRepositoryManager(status={
-            "repository": "owner/repo",
-            "path": "/tmp/repo",
-            "branch": "feature",
-            "type": "github",
-            "is_development": True,
-            "status": {"clean": False, "modified": ["src/a.py"], "added": [], "untracked": []},
-        })
+        manager = StubRepositoryManager(
+            status={
+                "repository": "owner/repo",
+                "path": "/tmp/repo",
+                "branch": "feature",
+                "type": "github",
+                "is_development": True,
+                "status": {
+                    "clean": False,
+                    "modified": ["src/a.py"],
+                    "added": [],
+                    "untracked": [],
+                },
+            }
+        )
         args = StubArgs(repository="owner/repo")
         cmd_status(manager, args)
         captured = capsys.readouterr()
@@ -414,6 +439,7 @@ class TestCmdStatus:
 # ---------------------------------------------------------------------------
 # TestCmdSummary
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestCmdSummary:
@@ -430,6 +456,7 @@ class TestCmdSummary:
 # ---------------------------------------------------------------------------
 # TestPrintHelpers
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestRepoPrintHelpers:
@@ -476,6 +503,7 @@ class TestRepoPrintHelpers:
 # TestCmdSync (extended)
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestCmdSyncExtended:
     """Extended tests for cmd_sync."""
@@ -509,6 +537,7 @@ class TestCmdSyncExtended:
 # ---------------------------------------------------------------------------
 # TestCmdPruneExtended
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestCmdPruneExtended:

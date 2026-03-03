@@ -123,11 +123,17 @@ class RetryEngine:
                 if cat_key in adjusters and current_config:
                     try:
                         current_config = adjusters[cat_key](current_config)
-                        result.adjustments.append(
-                            f"Adjusted config for {cat_key}"
+                        result.adjustments.append(f"Adjusted config for {cat_key}")
+                    except (
+                        ValueError,
+                        RuntimeError,
+                        AttributeError,
+                        OSError,
+                        TypeError,
+                    ) as e:
+                        logger.warning(
+                            "Config adjustment for %s failed: %s", cat_key, e
                         )
-                    except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
-                        logger.warning("Config adjustment for %s failed: %s", cat_key, e)
                         pass
 
                 if attempt < self._max_retries:

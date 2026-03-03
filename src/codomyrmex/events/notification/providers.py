@@ -50,7 +50,9 @@ class ConsoleProvider(NotificationProvider):
         }
 
         prefix = priority_prefix.get(notification.priority, "")
-        print(f"\n{prefix} [{notification.priority.value.upper()}] {notification.subject}")
+        print(
+            f"\n{prefix} [{notification.priority.value.upper()}] {notification.subject}"
+        )
         print(f"   {notification.body}")
 
         return NotificationResult(

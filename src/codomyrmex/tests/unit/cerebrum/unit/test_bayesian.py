@@ -78,10 +78,13 @@ class TestBayesianNetwork:
         network.add_node("B", values=[0, 1])
         network.add_edge("A", "B")
 
-        network.set_cpt("B", {
-            (0,): {0: 0.8, 1: 0.2},
-            (1,): {0: 0.3, 1: 0.7},
-        })
+        network.set_cpt(
+            "B",
+            {
+                (0,): {0: 0.8, 1: 0.2},
+                (1,): {0: 0.3, 1: 0.7},
+            },
+        )
 
         assert () in network.cpt["A"]  # Root node has empty parent config
         assert (0,) in network.cpt["B"]
@@ -97,10 +100,13 @@ class TestInferenceEngine:
         network.add_node("A", values=[0, 1], prior=[0.5, 0.5])
         network.add_node("B", values=[0, 1])
         network.add_edge("A", "B")
-        network.set_cpt("B", {
-            (0,): {0: 0.8, 1: 0.2},
-            (1,): {0: 0.3, 1: 0.7},
-        })
+        network.set_cpt(
+            "B",
+            {
+                (0,): {0: 0.8, 1: 0.2},
+                (1,): {0: 0.3, 1: 0.7},
+            },
+        )
 
         inference = InferenceEngine(network)
         result = inference.compute_marginal("A")
@@ -115,10 +121,13 @@ class TestInferenceEngine:
         network.add_node("A", values=[0, 1], prior=[0.5, 0.5])
         network.add_node("B", values=[0, 1])
         network.add_edge("A", "B")
-        network.set_cpt("B", {
-            (0,): {0: 0.8, 1: 0.2},
-            (1,): {0: 0.3, 1: 0.7},
-        })
+        network.set_cpt(
+            "B",
+            {
+                (0,): {0: 0.8, 1: 0.2},
+                (1,): {0: 0.3, 1: 0.7},
+            },
+        )
 
         inference = InferenceEngine(network)
         evidence = {"B": 1}
@@ -136,5 +145,3 @@ class TestInferenceEngine:
         inference = InferenceEngine(network)
         with pytest.raises(InferenceError):
             inference.compute_marginal("B")  # B doesn't exist
-
-

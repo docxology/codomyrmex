@@ -145,7 +145,8 @@ class AlertEvaluator:
                     current_value=value,
                     threshold=rule.threshold,
                     severity=rule.severity,
-                    message=rule.message or f"{rule.name}: {value} {rule.operator} {rule.threshold}",
+                    message=rule.message
+                    or f"{rule.name}: {value} {rule.operator} {rule.threshold}",
                 )
                 new_alerts.append(alert)
                 self._active[rule.name] = alert

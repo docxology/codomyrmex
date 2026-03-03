@@ -68,18 +68,37 @@ class TaskDecomposer:
 
     # Keyword → (role, description_template, priority)
     _PHASE_MAP: list[tuple[set[str], AgentRole, str, int]] = [
-        ({"design", "architect", "plan", "structure"},
-         AgentRole.ARCHITECT, "Design architecture for: {task}", 1),
-        ({"implement", "code", "build", "add", "create", "fix", "write"},
-         AgentRole.CODER, "Implement: {task}", 3),
-        ({"test", "verify", "validate", "check"},
-         AgentRole.TESTER, "Write tests for: {task}", 4),
-        ({"review", "inspect", "audit"},
-         AgentRole.REVIEWER, "Review: {task}", 5),
-        ({"document", "docs", "readme", "docstring"},
-         AgentRole.DOCUMENTER, "Document: {task}", 6),
-        ({"deploy", "ci", "cd", "pipeline", "release"},
-         AgentRole.DEVOPS, "Deploy: {task}", 7),
+        (
+            {"design", "architect", "plan", "structure"},
+            AgentRole.ARCHITECT,
+            "Design architecture for: {task}",
+            1,
+        ),
+        (
+            {"implement", "code", "build", "add", "create", "fix", "write"},
+            AgentRole.CODER,
+            "Implement: {task}",
+            3,
+        ),
+        (
+            {"test", "verify", "validate", "check"},
+            AgentRole.TESTER,
+            "Write tests for: {task}",
+            4,
+        ),
+        ({"review", "inspect", "audit"}, AgentRole.REVIEWER, "Review: {task}", 5),
+        (
+            {"document", "docs", "readme", "docstring"},
+            AgentRole.DOCUMENTER,
+            "Document: {task}",
+            6,
+        ),
+        (
+            {"deploy", "ci", "cd", "pipeline", "release"},
+            AgentRole.DEVOPS,
+            "Deploy: {task}",
+            7,
+        ),
     ]
 
     def decompose(self, task: str) -> list[SubTask]:
@@ -153,9 +172,7 @@ class TaskDecomposer:
                     in_degree[st.task_id] += 1
 
         # Kahn's algorithm
-        queue: deque[str] = deque(
-            tid for tid, deg in in_degree.items() if deg == 0
-        )
+        queue: deque[str] = deque(tid for tid, deg in in_degree.items() if deg == 0)
         result: list[SubTask] = []
 
         while queue:

@@ -15,6 +15,7 @@ from typing import Any
 
 class ChunkStrategy(Enum):
     """Supported chunking strategies."""
+
     FIXED_SIZE = "fixed_size"
     SENTENCE = "sentence"
     PARAGRAPH = "paragraph"
@@ -25,6 +26,7 @@ class ChunkStrategy(Enum):
 @dataclass
 class Chunk:
     """A document chunk with metadata."""
+
     text: str
     index: int
     start_char: int
@@ -43,6 +45,7 @@ class Chunk:
 @dataclass
 class ChunkConfig:
     """Configuration for chunking."""
+
     strategy: ChunkStrategy = ChunkStrategy.RECURSIVE
     chunk_size: int = 1000
     chunk_overlap: int = 200
@@ -85,18 +88,24 @@ class DocumentChunker:
             end = min(start + size, len(text))
             chunk_text = text[start:end]
             if len(chunk_text.strip()) >= self._config.min_chunk_size or start == 0:
-                chunks.append(Chunk(
-                    text=chunk_text, index=idx,
-                    start_char=start, end_char=end,
-                    metadata=metadata or {},
-                ))
+                chunks.append(
+                    Chunk(
+                        text=chunk_text,
+                        index=idx,
+                        start_char=start,
+                        end_char=end,
+                        metadata=metadata or {},
+                    )
+                )
                 idx += 1
             start = end - overlap if end < len(text) else end
         return chunks
 
-    def _chunk_sentences(self, text: str, metadata: dict[str, Any] | None) -> list[Chunk]:
+    def _chunk_sentences(
+        self, text: str, metadata: dict[str, Any] | None
+    ) -> list[Chunk]:
         """Split text by sentences, grouping up to chunk_size."""
-        sentences = re.split(r'(?<=[.!?])\s+', text)
+        sentences = re.split(r"(?<=[.!?])\s+", text)
         chunks: list[Chunk] = []
         current: list[str] = []
         current_len = 0
@@ -105,12 +114,15 @@ class DocumentChunker:
         for sentence in sentences:
             if current_len + len(sentence) > self._config.chunk_size and current:
                 chunk_text = " ".join(current)
-                chunks.append(Chunk(
-                    text=chunk_text, index=idx,
-                    start_char=char_pos - len(chunk_text),
-                    end_char=char_pos,
-                    metadata=metadata or {},
-                ))
+                chunks.append(
+                    Chunk(
+                        text=chunk_text,
+                        index=idx,
+                        start_char=char_pos - len(chunk_text),
+                        end_char=char_pos,
+                        metadata=metadata or {},
+                    )
+                )
                 idx += 1
                 # Keep overlap
                 overlap_count = max(1, len(current) // 4)
@@ -121,36 +133,53 @@ class DocumentChunker:
             char_pos += len(sentence) + 1
         if current:
             chunk_text = " ".join(current)
-            chunks.append(Chunk(
-                text=chunk_text, index=idx,
-                start_char=max(0, char_pos - len(chunk_text)),
-                end_char=char_pos,
-                metadata=metadata or {},
-            ))
+            chunks.append(
+                Chunk(
+                    text=chunk_text,
+                    index=idx,
+                    start_char=max(0, char_pos - len(chunk_text)),
+                    end_char=char_pos,
+                    metadata=metadata or {},
+                )
+            )
         return chunks
 
-    def _chunk_paragraphs(self, text: str, metadata: dict[str, Any] | None) -> list[Chunk]:
+    def _chunk_paragraphs(
+        self, text: str, metadata: dict[str, Any] | None
+    ) -> list[Chunk]:
         """Split text by paragraphs."""
-        paragraphs = re.split(r'\n\s*\n', text)
+        paragraphs = re.split(r"\n\s*\n", text)
         chunks: list[Chunk] = []
         char_pos = 0
         for idx, para in enumerate(paragraphs):
             para = para.strip()
             if len(para) >= self._config.min_chunk_size:
-                chunks.append(Chunk(
-                    text=para, index=idx,
-                    start_char=char_pos, end_char=char_pos + len(para),
-                    metadata=metadata or {},
-                ))
+                chunks.append(
+                    Chunk(
+                        text=para,
+                        index=idx,
+                        start_char=char_pos,
+                        end_char=char_pos + len(para),
+                        metadata=metadata or {},
+                    )
+                )
             char_pos += len(para) + 2
         return chunks
 
-    def _chunk_recursive(self, text: str, separators: list[str],
-                         metadata: dict[str, Any] | None) -> list[Chunk]:
+    def _chunk_recursive(
+        self, text: str, separators: list[str], metadata: dict[str, Any] | None
+    ) -> list[Chunk]:
         """Recursively split text using separator hierarchy."""
         if len(text) <= self._config.chunk_size:
-            return [Chunk(text=text, index=0, start_char=0,
-                         end_char=len(text), metadata=metadata or {})]
+            return [
+                Chunk(
+                    text=text,
+                    index=0,
+                    start_char=0,
+                    end_char=len(text),
+                    metadata=metadata or {},
+                )
+            ]
 
         sep = separators[0] if separators else " "
         parts = text.split(sep)
@@ -165,7 +194,10 @@ class DocumentChunker:
             if current_len + len(part) > self._config.chunk_size and current_parts:
                 chunk_text = sep.join(current_parts)
                 if len(chunk_text.strip()) >= self._config.min_chunk_size:
-                    if len(chunk_text) > self._config.chunk_size and len(separators) > 1:
+                    if (
+                        len(chunk_text) > self._config.chunk_size
+                        and len(separators) > 1
+                    ):
                         sub_chunks = self._chunk_recursive(
                             chunk_text, separators[1:], metadata
                         )
@@ -174,12 +206,15 @@ class DocumentChunker:
                             idx += 1
                         chunks.extend(sub_chunks)
                     else:
-                        chunks.append(Chunk(
-                            text=chunk_text, index=idx,
-                            start_char=char_pos - len(chunk_text),
-                            end_char=char_pos,
-                            metadata=metadata or {},
-                        ))
+                        chunks.append(
+                            Chunk(
+                                text=chunk_text,
+                                index=idx,
+                                start_char=char_pos - len(chunk_text),
+                                end_char=char_pos,
+                                metadata=metadata or {},
+                            )
+                        )
                         idx += 1
                 current_parts = []
                 current_len = 0
@@ -190,10 +225,13 @@ class DocumentChunker:
         if current_parts:
             chunk_text = sep.join(current_parts)
             if len(chunk_text.strip()) >= self._config.min_chunk_size:
-                chunks.append(Chunk(
-                    text=chunk_text, index=idx,
-                    start_char=max(0, char_pos - len(chunk_text)),
-                    end_char=char_pos,
-                    metadata=metadata or {},
-                ))
+                chunks.append(
+                    Chunk(
+                        text=chunk_text,
+                        index=idx,
+                        start_char=max(0, char_pos - len(chunk_text)),
+                        end_char=char_pos,
+                        metadata=metadata or {},
+                    )
+                )
         return chunks

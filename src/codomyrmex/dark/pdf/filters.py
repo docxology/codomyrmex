@@ -190,9 +190,7 @@ class DarkPDFFilter:
 
                 # Create new page with same dimensions as original
                 rect = page.rect
-                new_page = out_doc.new_page(
-                    width=rect.width, height=rect.height
-                )
+                new_page = out_doc.new_page(width=rect.width, height=rect.height)
                 new_page.insert_image(rect, pixmap=filtered_pix)
 
             out_doc.save(str(output_path))

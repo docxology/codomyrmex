@@ -1,4 +1,5 @@
 """Transformer encoder and decoder blocks from 'Attention Is All You Need'."""
+
 from __future__ import annotations
 
 import numpy as np

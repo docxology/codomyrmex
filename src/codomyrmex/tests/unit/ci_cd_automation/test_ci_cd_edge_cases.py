@@ -9,12 +9,14 @@ import yaml
 
 try:
     import docker  # noqa: F401
+
     DOCKER_AVAILABLE = True
 except ImportError:
     DOCKER_AVAILABLE = False
 
 try:
     import aiohttp  # noqa: F401
+
     AIOHTTP_AVAILABLE = True
 except ImportError:
     AIOHTTP_AVAILABLE = False
@@ -83,7 +85,7 @@ class TestErrorHandling:
                 name="test",
                 version="1.0.0",
                 environment_name="nonexistent_env",
-                artifacts=[]
+                artifacts=[],
             )
 
 
@@ -100,9 +102,7 @@ class TestPipelineCancellation:
     def test_cancel_local_pipeline(self):
         """Test canceling a local pipeline."""
         pipeline = Pipeline(
-            name="running_pipeline",
-            status=PipelineStatus.RUNNING,
-            stages=[]
+            name="running_pipeline", status=PipelineStatus.RUNNING, stages=[]
         )
         self.sync_manager.pipelines["running_pipeline"] = pipeline
 
@@ -110,6 +110,7 @@ class TestPipelineCancellation:
         class _CancellableTask:
             def __init__(self):
                 self.cancelled_called = False
+
             def cancel(self):
                 self.cancelled_called = True
 
@@ -135,13 +136,9 @@ class TestPipelineCancellation:
         if not run_id:
             pytest.skip("GITHUB_RUN_ID not set")
         result = await self.async_manager.async_cancel_pipeline(
-            repo_owner=_GITHUB_OWNER,
-            repo_name=_GITHUB_REPO,
-            run_id=run_id
+            repo_owner=_GITHUB_OWNER, repo_name=_GITHUB_REPO, run_id=run_id
         )
-        assert result.status in (
-            PipelineStatus.CANCELLED, PipelineStatus.FAILURE
-        )
+        assert result.status in (PipelineStatus.CANCELLED, PipelineStatus.FAILURE)
 
 
 class TestErrorHandlingAndRetries:
@@ -153,11 +150,7 @@ class TestErrorHandlingAndRetries:
 
     def test_job_retry_on_failure(self):
         """Test job retry count decrements on failure."""
-        job = PipelineJob(
-            name="flaky_job",
-            commands=["flaky_command"],
-            retry_count=3
-        )
+        job = PipelineJob(name="flaky_job", commands=["flaky_command"], retry_count=3)
 
         initial_retries = job.retry_count
 
@@ -174,9 +167,7 @@ class TestErrorHandlingAndRetries:
     def test_job_allow_failure_flag(self):
         """Test job with allow_failure flag."""
         job = PipelineJob(
-            name="optional_job",
-            commands=["optional_command"],
-            allow_failure=True
+            name="optional_job", commands=["optional_command"], allow_failure=True
         )
 
         assert job.allow_failure is True
@@ -189,11 +180,7 @@ class TestErrorHandlingAndRetries:
 
     def test_stage_allow_failure_flag(self):
         """Test stage with allow_failure flag."""
-        stage = PipelineStage(
-            name="optional_stage",
-            allow_failure=True,
-            jobs=[]
-        )
+        stage = PipelineStage(name="optional_stage", allow_failure=True, jobs=[])
 
         assert stage.allow_failure is True
 
@@ -202,7 +189,7 @@ class TestErrorHandlingAndRetries:
         job = PipelineJob(
             name="long_job",
             commands=["long_running_command"],
-            timeout=60  # 1 minute timeout
+            timeout=60,  # 1 minute timeout
         )
 
         assert job.timeout == 60
@@ -220,7 +207,7 @@ class TestErrorHandlingAndRetries:
             repo_owner="owner",
             repo_name="repo",
             workflow_id="test.yml",
-            ref="main"
+            ref="main",
         )
         assert result.status == PipelineStatus.FAILURE
 
@@ -237,7 +224,7 @@ class TestRollbackManager:
         plan = self.rollback_manager.create_rollback_plan(
             deployment_id="deploy_123",
             strategy=RollbackStrategy.IMMEDIATE,
-            reason="Deployment failed health checks"
+            reason="Deployment failed health checks",
         )
 
         assert plan.deployment_id == "deploy_123"
@@ -252,14 +239,14 @@ class TestRollbackManager:
             RollbackStrategy.ROLLING,
             RollbackStrategy.BLUE_GREEN,
             RollbackStrategy.CANARY,
-            RollbackStrategy.MANUAL
+            RollbackStrategy.MANUAL,
         ]
 
         for strategy in strategies:
             plan = self.rollback_manager.create_rollback_plan(
                 deployment_id=f"deploy_{strategy.value}",
                 strategy=strategy,
-                reason="Test rollback"
+                reason="Test rollback",
             )
             assert plan.strategy == strategy
 
@@ -271,7 +258,7 @@ class TestRollbackManager:
             deployment_id="deploy_456",
             strategy=RollbackStrategy.IMMEDIATE,
             status="running",
-            start_time=datetime.now()
+            start_time=datetime.now(),
         )
         self.rollback_manager._active_rollbacks["rollback_123"] = execution
 
@@ -285,12 +272,10 @@ class TestRollbackManager:
         self.rollback_manager.create_rollback_plan(
             deployment_id="deploy_1",
             strategy=RollbackStrategy.IMMEDIATE,
-            reason="Test 1"
+            reason="Test 1",
         )
         self.rollback_manager.create_rollback_plan(
-            deployment_id="deploy_2",
-            strategy=RollbackStrategy.ROLLING,
-            reason="Test 2"
+            deployment_id="deploy_2", strategy=RollbackStrategy.ROLLING, reason="Test 2"
         )
 
         plans = self.rollback_manager.list_rollback_plans()
@@ -311,7 +296,7 @@ class TestPipelineOptimizer:
             name="duration",
             value=120.5,
             unit="seconds",
-            tags={"pipeline": "test_pipeline", "stage": "build"}
+            tags={"pipeline": "test_pipeline", "stage": "build"},
         )
 
         assert len(self.optimizer._metrics_history) == 1
@@ -328,7 +313,7 @@ class TestPipelineOptimizer:
                 name="duration",
                 value=100 + i * 10,
                 unit="seconds",
-                tags={"pipeline": "test_pipeline"}
+                tags={"pipeline": "test_pipeline"},
             )
 
         analysis = self.optimizer.analyze_performance("test_pipeline")
@@ -346,12 +331,11 @@ class TestPipelineOptimizer:
                 name="duration",
                 value=400 + i * 20,  # Values that would trigger suggestions
                 unit="seconds",
-                tags={"pipeline": "slow_pipeline"}
+                tags={"pipeline": "slow_pipeline"},
             )
 
         result = optimizer.optimize_pipeline_performance(
-            pipeline_name="slow_pipeline",
-            target_improvement=0.2
+            pipeline_name="slow_pipeline", target_improvement=0.2
         )
 
         assert "pipeline_name" in result

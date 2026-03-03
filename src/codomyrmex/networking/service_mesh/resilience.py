@@ -94,7 +94,9 @@ class CircuitBreaker:
 class LoadBalancer:
     """Load balancer for service instances."""
 
-    def __init__(self, strategy: LoadBalancerStrategy = LoadBalancerStrategy.ROUND_ROBIN):
+    def __init__(
+        self, strategy: LoadBalancerStrategy = LoadBalancerStrategy.ROUND_ROBIN
+    ):
         self.strategy = strategy
         self._instances: dict[str, ServiceInstance] = {}
         self._round_robin_index = 0
@@ -161,7 +163,7 @@ class RetryPolicy:
 
     def get_delay(self, attempt: int) -> float:
         """Get delay for retry attempt."""
-        delay = self.initial_delay * (self.exponential_base ** attempt)
+        delay = self.initial_delay * (self.exponential_base**attempt)
         delay = min(delay, self.max_delay)
         if self.jitter:
             delay *= random.uniform(0.5, 1.5)
@@ -199,7 +201,9 @@ class ServiceProxy:
         """Make a service call with full resilience stack."""
         instance = self.load_balancer.get_instance()
         if not instance:
-            raise NoHealthyInstanceError(f"No healthy instances for {self.service_name}")
+            raise NoHealthyInstanceError(
+                f"No healthy instances for {self.service_name}"
+            )
 
         def wrapped():
             """Wrapped."""
@@ -208,15 +212,19 @@ class ServiceProxy:
         return self.retry_policy.execute(wrapped)
 
 
-def with_circuit_breaker(name: str, config: CircuitBreakerConfig | None = None) -> Callable:
+def with_circuit_breaker(
+    name: str, config: CircuitBreakerConfig | None = None
+) -> Callable:
     """Decorator for circuit breaker protection."""
     cb = CircuitBreaker(name, config)
 
     def decorator(func: Callable) -> Callable:
         """Decorator."""
+
         def wrapper(*args, **kwargs):
             """Wrapper."""
             return cb.execute(func, *args, **kwargs)
+
         return wrapper
 
     return decorator
@@ -228,9 +236,11 @@ def with_retry(max_retries: int = 3, **kwargs) -> Callable:
 
     def decorator(func: Callable) -> Callable:
         """Decorator."""
+
         def wrapper(*args, **kwargs):
             """Wrapper."""
             return policy.execute(func, *args, **kwargs)
+
         return wrapper
 
     return decorator

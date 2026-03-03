@@ -11,7 +11,7 @@ from collections.abc import Callable
 from concurrent.futures import Future
 from typing import Any, Generic, TypeVar
 
-T = TypeVar('T')
+T = TypeVar("T")
 
 
 class RequestBatcher(Generic[T]):
@@ -147,8 +147,7 @@ class RequestBatcher(Generic[T]):
     def stats(self) -> dict[str, Any]:
         """Get batching statistics."""
         avg_batch = (
-            sum(self._batch_sizes) / len(self._batch_sizes)
-            if self._batch_sizes else 0
+            sum(self._batch_sizes) / len(self._batch_sizes) if self._batch_sizes else 0
         )
         return {
             "total_requests": self._total_requests,

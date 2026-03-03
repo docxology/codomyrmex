@@ -109,7 +109,9 @@ def embed_in_text(cover_text: str, secret_message: str) -> str:
 
     logger.info(
         "Embedded %d bytes (%d zero-width chars) in text at position %d",
-        len(message_bytes), len(zw_payload), insert_pos,
+        len(message_bytes),
+        len(zw_payload),
+        insert_pos,
     )
     return stego_text
 

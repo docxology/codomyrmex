@@ -287,9 +287,9 @@ class TestHistogram:
 
     def test_bucket_counting(self):
         h = Histogram("latency", buckets=[0.1, 0.5, 1.0])
-        h.observe(0.05)   # ≤ 0.1, ≤ 0.5, ≤ 1.0 → all 3
-        h.observe(0.3)    # ≤ 0.5, ≤ 1.0 → 2
-        h.observe(0.8)    # ≤ 1.0 → 1
+        h.observe(0.05)  # ≤ 0.1, ≤ 0.5, ≤ 1.0 → all 3
+        h.observe(0.3)  # ≤ 0.5, ≤ 1.0 → 2
+        h.observe(0.8)  # ≤ 1.0 → 1
         v = h.get_value()
         buckets = v["buckets"]
         assert buckets[0.1] == 1
@@ -410,6 +410,7 @@ class TestTimer:
     def test_timer_records_duration_positive(self):
         h = Histogram("t", buckets=[0.0, 0.001, 0.01, 0.1, 1.0, 10.0])
         import time as _time
+
         with Timer(h):
             _time.sleep(0.001)
         v = h.get_value()

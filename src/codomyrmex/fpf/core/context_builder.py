@@ -1,11 +1,9 @@
-
 """Context builder for prompt engineering.
 
 logger = get_logger(__name__)
 This module provides functionality to build context strings
 from FPF specifications for use in prompt engineering.
 """
-
 
 from .models import FPFSpec, Pattern
 
@@ -72,7 +70,9 @@ class ContextBuilder:
             if related:
                 context_lines.append("## Related Patterns")
                 for related_pattern in related[:5]:  # Limit to 5
-                    context_lines.append(f"- {related_pattern.id}: {related_pattern.title}")
+                    context_lines.append(
+                        f"- {related_pattern.id}: {related_pattern.title}"
+                    )
                 context_lines.append("")
 
         return "\n".join(context_lines)
@@ -87,7 +87,9 @@ class ContextBuilder:
             Context string for prompt engineering
         """
         # Find concept
-        matching_concepts = [c for c in self.spec.concepts if concept.lower() in c.name.lower()]
+        matching_concepts = [
+            c for c in self.spec.concepts if concept.lower() in c.name.lower()
+        ]
 
         if not matching_concepts:
             return f"Concept '{concept}' not found."
@@ -180,7 +182,9 @@ class ContextBuilder:
         context_lines.append("## Concepts")
         context_lines.append("")
         for concept in self.spec.concepts[:50]:  # Limit to 50 concepts
-            context_lines.append(f"- **{concept.name}** ({concept.type}): {concept.definition[:100]}...")
+            context_lines.append(
+                f"- **{concept.name}** ({concept.type}): {concept.definition[:100]}..."
+            )
             context_lines.append("")
 
         return "\n".join(context_lines)
@@ -213,4 +217,3 @@ class ContextBuilder:
                 related_patterns.append(related_pattern)
 
         return related_patterns[:10]  # Limit to 10
-

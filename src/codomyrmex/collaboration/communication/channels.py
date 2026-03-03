@@ -22,6 +22,7 @@ logger = get_logger(__name__)
 
 class ChannelState(Enum):
     """State of a communication channel."""
+
     OPEN = "open"
     CLOSED = "closed"
     PAUSED = "paused"
@@ -31,6 +32,7 @@ class ChannelState(Enum):
 @dataclass
 class ChannelInfo:
     """Information about a channel."""
+
     channel_id: str
     name: str
     state: ChannelState
@@ -122,7 +124,9 @@ class MessageQueue:
     """
 
     def __init__(self, max_size: int = 0, message_ttl: float = 0):
-        self._queue: asyncio.Queue = asyncio.Queue(maxsize=max_size) if max_size > 0 else asyncio.Queue()
+        self._queue: asyncio.Queue = (
+            asyncio.Queue(maxsize=max_size) if max_size > 0 else asyncio.Queue()
+        )
         self._max_size = max_size
         self._message_ttl = message_ttl
         self._message_count = 0
@@ -161,8 +165,7 @@ class MessageQueue:
             self._message_count += 1
         except TimeoutError:
             raise ChannelError(
-                "message_queue",
-                f"Queue is full, timeout after {timeout}s"
+                "message_queue", f"Queue is full, timeout after {timeout}s"
             ) from None
 
     def put_nowait(self, message: AgentMessage) -> None:
@@ -202,8 +205,7 @@ class MessageQueue:
             return message
         except TimeoutError:
             raise ChannelError(
-                "message_queue",
-                f"No message available, timeout after {timeout}s"
+                "message_queue", f"No message available, timeout after {timeout}s"
             ) from None
 
     def get_nowait(self) -> AgentMessage | None:
@@ -282,10 +284,7 @@ class ChannelManager:
         self._channels: dict[str, Channel] = {}
 
     def create_channel(
-        self,
-        name: str,
-        channel_type: str = "queue",
-        **kwargs
+        self, name: str, channel_type: str = "queue", **kwargs
     ) -> Channel:
         """
         Create a new channel.

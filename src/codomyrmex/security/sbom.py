@@ -18,6 +18,7 @@ logger = get_logger(__name__)
 
 class SBOMFormat(Enum):
     """SBOM output formats."""
+
     SPDX = "spdx"
     CYCLONEDX = "cyclonedx"
     SWID = "swid"
@@ -25,6 +26,7 @@ class SBOMFormat(Enum):
 
 class LicenseType(Enum):
     """Common license types."""
+
     MIT = "MIT"
     APACHE_2 = "Apache-2.0"
     GPL_3 = "GPL-3.0"
@@ -36,6 +38,7 @@ class LicenseType(Enum):
 @dataclass
 class Component:
     """A software component/dependency."""
+
     name: str
     version: str
     purl: str = ""  # Package URL
@@ -63,6 +66,7 @@ class Component:
 @dataclass
 class SBOM:
     """Software Bill of Materials."""
+
     name: str
     version: str
     components: list[Component] = field(default_factory=list)
@@ -86,7 +90,7 @@ class SBOM:
 
     def save(self, path: str) -> None:
         """Save data to the specified destination."""
-        with open(path, 'w') as f:
+        with open(path, "w") as f:
             f.write(self.to_json())
 
 
@@ -104,25 +108,27 @@ class SBOMGenerator:
             with open(requirements_path) as f:
                 for line in f:
                     line = line.strip()
-                    if not line or line.startswith('#'):
+                    if not line or line.startswith("#"):
                         continue
 
                     # Parse package==version
-                    if '==' in line:
-                        name, version = line.split('==', 1)
-                    elif '>=' in line:
-                        name, version = line.split('>=', 1)
+                    if "==" in line:
+                        name, version = line.split("==", 1)
+                    elif ">=" in line:
+                        name, version = line.split(">=", 1)
                     else:
                         name, version = line, "unknown"
 
                     name = name.strip()
-                    version = version.split('[')[0].strip()  # Remove extras
+                    version = version.split("[")[0].strip()  # Remove extras
 
-                    components.append(Component(
-                        name=name,
-                        version=version,
-                        purl=f"pkg:pypi/{name}@{version}",
-                    ))
+                    components.append(
+                        Component(
+                            name=name,
+                            version=version,
+                            purl=f"pkg:pypi/{name}@{version}",
+                        )
+                    )
         except FileNotFoundError as e:
             logger.warning("SBOM: requirements file not found: %s", e)
             pass
@@ -143,17 +149,21 @@ class SBOMGenerator:
 
             for name, version in deps.items():
                 # Clean version string
-                version = version.lstrip('^~>=<')
-                components.append(Component(
-                    name=name,
-                    version=version,
-                    purl=f"pkg:npm/{name}@{version}",
-                ))
+                version = version.lstrip("^~>=<")
+                components.append(
+                    Component(
+                        name=name,
+                        version=version,
+                        purl=f"pkg:npm/{name}@{version}",
+                    )
+                )
         except FileNotFoundError as e:
             logger.warning("SBOM: package.json not found, skipping npm deps: %s", e)
             pass
         except json.JSONDecodeError as e:
-            logger.warning("SBOM: malformed package.json, skipping npm deps: %s", str(e))
+            logger.warning(
+                "SBOM: malformed package.json, skipping npm deps: %s", str(e)
+            )
 
         self._components.extend(components)
         return components
@@ -164,24 +174,27 @@ class SBOMGenerator:
 
         try:
             import tomllib
-            with open(pyproject_path, 'rb') as f:
+
+            with open(pyproject_path, "rb") as f:
                 data = tomllib.load(f)
 
             deps = data.get("project", {}).get("dependencies", [])
             for dep in deps:
                 # Simple parsing
-                if '>=' in dep:
-                    name, version = dep.split('>=', 1)
-                elif '==' in dep:
-                    name, version = dep.split('==', 1)
+                if ">=" in dep:
+                    name, version = dep.split(">=", 1)
+                elif "==" in dep:
+                    name, version = dep.split("==", 1)
                 else:
                     name, version = dep, "latest"
 
-                components.append(Component(
-                    name=name.strip(),
-                    version=version.strip(),
-                    purl=f"pkg:pypi/{name.strip()}@{version.strip()}",
-                ))
+                components.append(
+                    Component(
+                        name=name.strip(),
+                        version=version.strip(),
+                        purl=f"pkg:pypi/{name.strip()}@{version.strip()}",
+                    )
+                )
         except (FileNotFoundError, ImportError) as e:
             logger.warning("SBOM: failed to parse pyproject.toml: %s", e)
             pass
@@ -244,6 +257,7 @@ class SupplyChainVerifier:
             # A true signature verification would use public keys, but as a Zero-Mock implementation
             # we do a secure hash comparison fallback.
             import hmac
+
             return hmac.compare_digest(actual, expected)
         except Exception as e:
             logger.warning("Signature verification failed: %s", e)
@@ -252,8 +266,8 @@ class SupplyChainVerifier:
     def compute_file_hash(self, path: str, algorithm: str = "sha256") -> str:
         """Compute file hash."""
         h = hashlib.new(algorithm)
-        with open(path, 'rb') as f:
-            for chunk in iter(lambda: f.read(8192), b''):
+        with open(path, "rb") as f:
+            for chunk in iter(lambda: f.read(8192), b""):
                 h.update(chunk)
         return h.hexdigest()
 

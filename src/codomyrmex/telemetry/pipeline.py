@@ -77,47 +77,69 @@ class ObservabilityPipeline:
         return f"cor-{uuid.uuid4().hex[:12]}"
 
     def record_span(
-        self, name: str, correlation_id: str = "",
-        duration_ms: float = 0.0, source: str = "",
+        self,
+        name: str,
+        correlation_id: str = "",
+        duration_ms: float = 0.0,
+        source: str = "",
         data: dict[str, Any] | None = None,
     ) -> ObservabilityEvent:
         """Record a span event."""
         return self._record(
-            EventKind.SPAN, name, correlation_id,
-            duration_ms=duration_ms, source=source, data=data,
+            EventKind.SPAN,
+            name,
+            correlation_id,
+            duration_ms=duration_ms,
+            source=source,
+            data=data,
         )
 
     def record_metric(
-        self, name: str, correlation_id: str = "",
-        value: float = 0.0, source: str = "",
+        self,
+        name: str,
+        correlation_id: str = "",
+        value: float = 0.0,
+        source: str = "",
         data: dict[str, Any] | None = None,
     ) -> ObservabilityEvent:
         """Record a metric event."""
         d = data or {}
         d["value"] = value
-        return self._record(EventKind.METRIC, name, correlation_id, source=source, data=d)
+        return self._record(
+            EventKind.METRIC, name, correlation_id, source=source, data=d
+        )
 
     def record_log(
-        self, level: str, correlation_id: str = "",
-        message: str = "", source: str = "",
+        self,
+        level: str,
+        correlation_id: str = "",
+        message: str = "",
+        source: str = "",
         data: dict[str, Any] | None = None,
     ) -> ObservabilityEvent:
         """Record a log event."""
         d = data or {}
         d["level"] = level
         d["message"] = message
-        return self._record(EventKind.LOG, f"log.{level}", correlation_id, source=source, data=d)
+        return self._record(
+            EventKind.LOG, f"log.{level}", correlation_id, source=source, data=d
+        )
 
     def record_audit(
-        self, action: str, correlation_id: str = "",
-        actor: str = "", source: str = "",
+        self,
+        action: str,
+        correlation_id: str = "",
+        actor: str = "",
+        source: str = "",
         data: dict[str, Any] | None = None,
     ) -> ObservabilityEvent:
         """Record an audit event."""
         d = data or {}
         d["action"] = action
         d["actor"] = actor
-        return self._record(EventKind.AUDIT, f"audit.{action}", correlation_id, source=source, data=d)
+        return self._record(
+            EventKind.AUDIT, f"audit.{action}", correlation_id, source=source, data=d
+        )
 
     def get_correlated(self, correlation_id: str) -> list[ObservabilityEvent]:
         """Get all events for a correlation ID."""
@@ -128,14 +150,22 @@ class ObservabilityPipeline:
         return [e for e in self._events if e.kind == kind]
 
     def _record(
-        self, kind: EventKind, name: str, correlation_id: str,
-        duration_ms: float = 0.0, source: str = "",
+        self,
+        kind: EventKind,
+        name: str,
+        correlation_id: str,
+        duration_ms: float = 0.0,
+        source: str = "",
         data: dict[str, Any] | None = None,
     ) -> ObservabilityEvent:
         """Record."""
         event = ObservabilityEvent(
-            kind=kind, name=name, correlation_id=correlation_id,
-            duration_ms=duration_ms, source=source, data=data or {},
+            kind=kind,
+            name=name,
+            correlation_id=correlation_id,
+            duration_ms=duration_ms,
+            source=source,
+            data=data or {},
         )
         self._events.append(event)
         if correlation_id:

@@ -18,23 +18,19 @@ import subprocess
 import sys
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any
 
 project_root = Path(__file__).parent.parent.parent.parent
 sys.path.insert(0, str(project_root / "src"))
 
-from codomyrmex.orchestrator import Workflow, RetryPolicy
-from codomyrmex.utils.cli_helpers import setup_logging, print_info, print_error
+from codomyrmex.orchestrator import RetryPolicy, Workflow
+from codomyrmex.utils.cli_helpers import print_error, print_info, setup_logging
 
 
-async def build_application(_task_results: dict = None) -> Dict[str, Any]:
+async def build_application(_task_results: dict = None) -> dict[str, Any]:
     """Build the application for deployment."""
     result = subprocess.run(
-        ["uv", "build"],
-        capture_output=True,
-        text=True,
-        cwd=project_root,
-        timeout=300
+        ["uv", "build"], capture_output=True, text=True, cwd=project_root, timeout=300
     )
 
     # Check for built artifacts
@@ -44,33 +40,36 @@ async def build_application(_task_results: dict = None) -> Dict[str, Any]:
     return {
         "success": result.returncode == 0,
         "artifacts": [f.name for f in artifacts],
-        "build_output": result.stdout[:500] if result.stdout else ""
+        "build_output": result.stdout[:500] if result.stdout else "",
     }
 
 
-async def run_pre_deployment_checks(_task_results: dict = None) -> Dict[str, Any]:
+async def run_pre_deployment_checks(_task_results: dict = None) -> dict[str, Any]:
     """Run pre-deployment validation checks."""
-    checks = {
-        "lint": False,
-        "types": False,
-        "security": False
-    }
+    checks = {"lint": False, "types": False, "security": False}
 
     # Quick lint check
     lint_result = subprocess.run(
         ["uv", "run", "ruff", "check", "src/", "--select=E,F", "--quiet"],
         capture_output=True,
         cwd=project_root,
-        timeout=60
+        timeout=60,
     )
     checks["lint"] = lint_result.returncode == 0
 
     # Quick type check on critical modules
     type_result = subprocess.run(
-        ["uv", "run", "mypy", "src/codomyrmex/orchestrator", "--ignore-missing-imports", "--no-error-summary"],
+        [
+            "uv",
+            "run",
+            "mypy",
+            "src/codomyrmex/orchestrator",
+            "--ignore-missing-imports",
+            "--no-error-summary",
+        ],
         capture_output=True,
         cwd=project_root,
-        timeout=120
+        timeout=120,
     )
     checks["types"] = type_result.returncode == 0
 
@@ -79,7 +78,7 @@ async def run_pre_deployment_checks(_task_results: dict = None) -> Dict[str, Any
         ["uv", "run", "bandit", "-r", "src/codomyrmex", "-ll", "-q"],
         capture_output=True,
         cwd=project_root,
-        timeout=120
+        timeout=120,
     )
     checks["security"] = security_result.returncode == 0
 
@@ -88,15 +87,22 @@ async def run_pre_deployment_checks(_task_results: dict = None) -> Dict[str, Any
     return {
         "success": all_passed,
         "checks": checks,
-        "message": "All pre-deployment checks passed" if all_passed else "Some checks failed"
+        "message": "All pre-deployment checks passed"
+        if all_passed
+        else "Some checks failed",
     }
 
 
-async def deploy_to_preview(task_results: dict = None, _task_results: dict = None, env: str = "preview", dry_run: bool = False) -> Dict[str, Any]:
+async def deploy_to_preview(
+    task_results: dict = None,
+    _task_results: dict = None,
+    env: str = "preview",
+    dry_run: bool = False,
+) -> dict[str, Any]:
     """Deploy to preview environment."""
     # Handle both naming conventions and TaskResult objects
     results = task_results or _task_results or {}
-    
+
     # Get build artifacts - handle TaskResult objects
     build_result_obj = results.get("build")
     if build_result_obj is not None:
@@ -104,21 +110,20 @@ async def deploy_to_preview(task_results: dict = None, _task_results: dict = Non
         build_result = getattr(build_result_obj, "value", build_result_obj) or {}
     else:
         build_result = {}
-    
-    artifacts = build_result.get("artifacts", []) if isinstance(build_result, dict) else []
+
+    artifacts = (
+        build_result.get("artifacts", []) if isinstance(build_result, dict) else []
+    )
 
     if not artifacts:
-        return {
-            "success": False,
-            "error": "No build artifacts found"
-        }
+        return {"success": False, "error": "No build artifacts found"}
 
     if dry_run:
         return {
             "success": True,
             "dry_run": True,
             "message": f"Would deploy {artifacts} to {env}",
-            "environment": env
+            "environment": env,
         }
 
     # Simulate deployment (in real scenario, this would deploy to actual infrastructure)
@@ -128,11 +133,7 @@ async def deploy_to_preview(task_results: dict = None, _task_results: dict = Non
     deploy_cmd = ["echo", f"Deploying {artifacts[0]} to {env}"]
 
     result = subprocess.run(
-        deploy_cmd,
-        capture_output=True,
-        text=True,
-        cwd=project_root,
-        timeout=300
+        deploy_cmd, capture_output=True, text=True, cwd=project_root, timeout=300
     )
 
     return {
@@ -140,39 +141,47 @@ async def deploy_to_preview(task_results: dict = None, _task_results: dict = Non
         "deployment_id": deployment_id,
         "environment": env,
         "artifacts_deployed": artifacts,
-        "timestamp": datetime.now().isoformat()
+        "timestamp": datetime.now().isoformat(),
     }
 
 
-async def run_smoke_tests(task_results: dict = None, _task_results: dict = None, skip: bool = False) -> Dict[str, Any]:
+async def run_smoke_tests(
+    task_results: dict = None, _task_results: dict = None, skip: bool = False
+) -> dict[str, Any]:
     """Run smoke tests against deployed preview."""
     if skip:
-        return {
-            "success": True,
-            "skipped": True,
-            "message": "Smoke tests skipped"
-        }
+        return {"success": True, "skipped": True, "message": "Smoke tests skipped"}
 
     # Handle both naming conventions and TaskResult objects
     results = task_results or _task_results or {}
     deploy_obj = results.get("deploy")
     deployment = getattr(deploy_obj, "value", deploy_obj) if deploy_obj else {}
     deployment = deployment or {}
-    
+
     if deployment.get("dry_run"):
         return {
             "success": True,
             "skipped": True,
-            "message": "Smoke tests skipped for dry run"
+            "message": "Smoke tests skipped for dry run",
         }
 
     # Run a quick subset of tests
     result = subprocess.run(
-        ["uv", "run", "pytest", "src/codomyrmex/tests/unit", "-q", "--tb=no", "-x", "-k", "test_basic or test_init"],
+        [
+            "uv",
+            "run",
+            "pytest",
+            "src/codomyrmex/tests/unit",
+            "-q",
+            "--tb=no",
+            "-x",
+            "-k",
+            "test_basic or test_init",
+        ],
         capture_output=True,
         text=True,
         cwd=project_root,
-        timeout=120
+        timeout=120,
     )
 
     # Parse test results
@@ -183,7 +192,7 @@ async def run_smoke_tests(task_results: dict = None, _task_results: dict = None,
         "success": result.returncode == 0,
         "tests_passed": passed,
         "tests_failed": failed,
-        "output": result.stdout[-300:] if result.stdout else ""
+        "output": result.stdout[-300:] if result.stdout else "",
     }
 
 
@@ -195,15 +204,17 @@ def _extract_result(obj) -> dict:
     return value if isinstance(value, dict) else {}
 
 
-async def generate_deployment_report(task_results: dict = None, _task_results: dict = None) -> Dict[str, Any]:
+async def generate_deployment_report(
+    task_results: dict = None, _task_results: dict = None
+) -> dict[str, Any]:
     """Generate deployment report."""
     # Handle both naming conventions
     results = task_results or _task_results or {}
-    
+
     report = {
         "timestamp": datetime.now().isoformat(),
         "status": "success",
-        "stages": {}
+        "stages": {},
     }
 
     # Aggregate all stage results
@@ -212,15 +223,14 @@ async def generate_deployment_report(task_results: dict = None, _task_results: d
         if isinstance(result, dict):
             report["stages"][stage_name] = {
                 "success": result.get("success", False),
-                "summary": _summarize_result(result)
+                "summary": _summarize_result(result),
             }
             if not result.get("success", True):
                 report["status"] = "partial_failure"
 
     # Check for overall success
     all_success = all(
-        _extract_result(r).get("success", False)
-        for r in results.values()
+        _extract_result(r).get("success", False) for r in results.values()
     )
     report["status"] = "success" if all_success else "failure"
 
@@ -229,16 +239,13 @@ async def generate_deployment_report(task_results: dict = None, _task_results: d
     report["deployment"] = {
         "id": deploy_result.get("deployment_id", "N/A"),
         "environment": deploy_result.get("environment", "unknown"),
-        "dry_run": deploy_result.get("dry_run", False)
+        "dry_run": deploy_result.get("dry_run", False),
     }
 
-    return {
-        "success": True,
-        "report": report
-    }
+    return {"success": True, "report": report}
 
 
-def _summarize_result(result: Dict[str, Any]) -> str:
+def _summarize_result(result: dict[str, Any]) -> str:
     """Create summary string from result."""
     if result.get("dry_run"):
         return "Dry run completed"
@@ -257,7 +264,9 @@ async def main() -> int:
     parser = argparse.ArgumentParser(description="Deploy to preview environment")
     parser.add_argument("--env", default="preview", help="Target environment")
     parser.add_argument("--skip-tests", action="store_true", help="Skip smoke tests")
-    parser.add_argument("--dry-run", action="store_true", help="Dry run without actual deployment")
+    parser.add_argument(
+        "--dry-run", action="store_true", help="Dry run without actual deployment"
+    )
     parser.add_argument("--verbose", "-v", action="store_true", help="Verbose output")
     args = parser.parse_args()
 
@@ -266,18 +275,14 @@ async def main() -> int:
         print_info("(DRY RUN - no actual deployment)")
     print()
 
-    workflow = Workflow(
-        name="deploy_preview",
-        timeout=1800,
-        fail_fast=True
-    )
+    workflow = Workflow(name="deploy_preview", timeout=1800, fail_fast=True)
 
     # Build
     workflow.add_task(
         name="build",
         action=build_application,
         timeout=300,
-        retry_policy=RetryPolicy(max_attempts=2)
+        retry_policy=RetryPolicy(max_attempts=2),
     )
 
     # Pre-deployment checks
@@ -285,29 +290,28 @@ async def main() -> int:
         name="pre_checks",
         action=run_pre_deployment_checks,
         dependencies=["build"],
-        timeout=300
+        timeout=300,
     )
 
     # Deploy
-    async def deploy_action(_task_results: dict = None) -> Dict[str, Any]:
-        return await deploy_to_preview(_task_results, env=args.env, dry_run=args.dry_run)
+    async def deploy_action(_task_results: dict = None) -> dict[str, Any]:
+        return await deploy_to_preview(
+            _task_results, env=args.env, dry_run=args.dry_run
+        )
 
     workflow.add_task(
-        name="deploy",
-        action=deploy_action,
-        dependencies=["pre_checks"],
-        timeout=300
+        name="deploy", action=deploy_action, dependencies=["pre_checks"], timeout=300
     )
 
     # Smoke tests
-    async def smoke_test_action(_task_results: dict = None) -> Dict[str, Any]:
+    async def smoke_test_action(_task_results: dict = None) -> dict[str, Any]:
         return await run_smoke_tests(_task_results, skip=args.skip_tests)
 
     workflow.add_task(
         name="smoke_tests",
         action=smoke_test_action,
         dependencies=["deploy"],
-        timeout=180
+        timeout=180,
     )
 
     # Report
@@ -315,7 +319,7 @@ async def main() -> int:
         name="report",
         action=generate_deployment_report,
         dependencies=["build", "pre_checks", "deploy", "smoke_tests"],
-        timeout=30
+        timeout=30,
     )
 
     try:
@@ -369,17 +373,23 @@ async def main() -> int:
         print_error(f"Deployment failed: {e}")
         return 1
 
-
-
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
-    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "orchestrator" / "config.yaml"
+
+    import yaml
+
+    config_path = (
+        Path(__file__).resolve().parent.parent.parent
+        / "config"
+        / "orchestrator"
+        / "config.yaml"
+    )
     config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
+        with open(config_path) as f:
             config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/orchestrator/config.yaml")
+            print("Loaded config from config/orchestrator/config.yaml")
+
 
 if __name__ == "__main__":
     sys.exit(asyncio.run(main()))

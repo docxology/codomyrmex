@@ -1,4 +1,5 @@
 """Confusion matrix visualization."""
+
 import numpy as np
 
 from ._base import BasePlot

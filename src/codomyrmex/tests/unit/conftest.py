@@ -31,9 +31,11 @@ def container_registry_url() -> str:
     """Local container registry URL, configurable via CONTAINER_REGISTRY_URL env var."""
     return CONTAINER_REGISTRY_URL
 
+
 # ═══════════════════════════════════════════════════════════════
 # Project paths
 # ═══════════════════════════════════════════════════════════════
+
 
 @pytest.fixture
 def src_root() -> Path:
@@ -50,6 +52,7 @@ def project_root() -> Path:
 # ═══════════════════════════════════════════════════════════════
 # Reusable temp-project scaffolds
 # ═══════════════════════════════════════════════════════════════
+
 
 @pytest.fixture
 def minimal_project(tmp_path) -> Path:
@@ -82,18 +85,23 @@ def minimal_git_repo(tmp_path) -> Path:
     subprocess.run(["git", "init", str(tmp_path)], capture_output=True, check=True)
     subprocess.run(
         ["git", "-C", str(tmp_path), "config", "user.email", "test@test.com"],
-        capture_output=True, check=True,
+        capture_output=True,
+        check=True,
     )
     subprocess.run(
         ["git", "-C", str(tmp_path), "config", "user.name", "Test"],
-        capture_output=True, check=True,
+        capture_output=True,
+        check=True,
     )
     readme = tmp_path / "README.md"
     readme.write_text("# Test\n")
-    subprocess.run(["git", "-C", str(tmp_path), "add", "."], capture_output=True, check=True)
+    subprocess.run(
+        ["git", "-C", str(tmp_path), "add", "."], capture_output=True, check=True
+    )
     subprocess.run(
         ["git", "-C", str(tmp_path), "commit", "-m", "init"],
-        capture_output=True, check=True,
+        capture_output=True,
+        check=True,
     )
     return tmp_path
 
@@ -101,6 +109,7 @@ def minimal_git_repo(tmp_path) -> Path:
 # ═══════════════════════════════════════════════════════════════
 # Import-availability guards
 # ═══════════════════════════════════════════════════════════════
+
 
 @pytest.fixture
 def requires_ollama():
@@ -112,7 +121,10 @@ def requires_ollama():
 def requires_docker():
     """Skip if docker CLI is not available."""
     import subprocess
+
     try:
-        subprocess.run(["docker", "--version"], capture_output=True, timeout=5, check=True)
+        subprocess.run(
+            ["docker", "--version"], capture_output=True, timeout=5, check=True
+        )
     except Exception:
         pytest.skip("Docker not available")

@@ -74,12 +74,16 @@ We welcome contributions! Please ensure you:
 See the root `CONTRIBUTING.md` for more details.
 """
 
+
 def enhance_stubs(root_dir):
     root = Path(root_dir)
     count = 0
 
     for path in root.rglob("README.md"):
-        if any(x in str(path) for x in ["node_modules", ".git", ".venv", "output", ".pytest_cache"]):
+        if any(
+            x in str(path)
+            for x in ["node_modules", ".git", ".venv", "output", ".pytest_cache"]
+        ):
             continue
 
         try:
@@ -87,7 +91,6 @@ def enhance_stubs(root_dir):
 
             # Simple heuristic for "stub": short content
             if len(content.split()) < 50 or "Getting Started" not in content:
-
                 # Determine module path for the code example
                 try:
                     rel_path = path.relative_to(root / "src")
@@ -106,6 +109,7 @@ def enhance_stubs(root_dir):
             print(f"Error processing {path}: {e}")
 
     print(f"Enhanced {count} stub READMEs.")
+
 
 if __name__ == "__main__":
     enhance_stubs(".")

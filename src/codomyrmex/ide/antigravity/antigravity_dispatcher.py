@@ -28,6 +28,7 @@ from typing import Any
 
 try:
     from codomyrmex.logging_monitoring import get_logger
+
     logger = get_logger(__name__)
 except ImportError:
     logging.basicConfig(level=logging.INFO)
@@ -41,6 +42,7 @@ from codomyrmex.ide.antigravity.agent_relay import (
 # =====================================================================
 # Configuration
 # =====================================================================
+
 
 @dataclass
 class DispatcherConfig:
@@ -71,6 +73,7 @@ class DispatcherConfig:
 # =====================================================================
 # Dispatcher
 # =====================================================================
+
 
 class AntigravityDispatcher:
     """Forward relay messages into Antigravity's real chat UI.
@@ -243,6 +246,7 @@ class AntigravityDispatcher:
         if self._client is None:
             try:
                 from codomyrmex.ide.antigravity import AntigravityClient
+
                 self._client = AntigravityClient()
             except Exception:
                 logger.exception("Failed to create AntigravityClient")
@@ -295,7 +299,8 @@ class AntigravityDispatcher:
 
         except Exception:
             logger.exception(
-                "Exception dispatching message %s to Antigravity", msg.id,
+                "Exception dispatching message %s to Antigravity",
+                msg.id,
             )
             with self._lock:
                 self._failed_count += 1

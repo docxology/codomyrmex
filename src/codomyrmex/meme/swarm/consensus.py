@@ -5,7 +5,9 @@ from __future__ import annotations
 from codomyrmex.meme.swarm.models import SwarmAgent
 
 
-def reach_consensus(agents: list[SwarmAgent], proposal: str, threshold: float = 0.6) -> bool:
+def reach_consensus(
+    agents: list[SwarmAgent], proposal: str, threshold: float = 0.6
+) -> bool:
     """Simple majority/threshold consensus check.
 
     Agents vote based on internal state — 'positive' state counts as yes.
@@ -28,7 +30,7 @@ def quorum_sensing(agents: list[SwarmAgent], radius: float) -> float:
 
     for i in range(len(agents)):
         dists = np.linalg.norm(positions - positions[i], axis=1)
-        count = np.sum(dists < radius) - 1 # Exclude self
+        count = np.sum(dists < radius) - 1  # Exclude self
         total_neighbors += count
 
     return total_neighbors / len(agents) if agents else 0.0

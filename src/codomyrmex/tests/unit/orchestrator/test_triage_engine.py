@@ -18,6 +18,7 @@ from codomyrmex.orchestrator.triage_engine import (
 
 class TestModuleProfile:
     """Test suite for ModuleProfile."""
+
     def test_to_dict(self) -> None:
         """Test functionality: to dict."""
         p = ModuleProfile("foo", loc=100, file_count=3, decision=TriageDecision.STUB)
@@ -28,13 +29,16 @@ class TestModuleProfile:
 
 class TestTriageReport:
     """Test suite for TriageReport."""
+
     def test_summary(self) -> None:
         """Test functionality: summary."""
-        r = TriageReport(modules=[
-            ModuleProfile("a", decision=TriageDecision.PROMOTE),
-            ModuleProfile("b", decision=TriageDecision.ARCHIVE),
-            ModuleProfile("c", decision=TriageDecision.STUB),
-        ])
+        r = TriageReport(
+            modules=[
+                ModuleProfile("a", decision=TriageDecision.PROMOTE),
+                ModuleProfile("b", decision=TriageDecision.ARCHIVE),
+                ModuleProfile("c", decision=TriageDecision.STUB),
+            ]
+        )
         s = r.summary()
         assert s["total"] == 3
         assert s["promote"] == 1
@@ -43,16 +47,19 @@ class TestTriageReport:
 
     def test_filters(self) -> None:
         """Test functionality: filters."""
-        r = TriageReport(modules=[
-            ModuleProfile("x", decision=TriageDecision.MERGE),
-            ModuleProfile("y", decision=TriageDecision.ACTIVE),
-        ])
+        r = TriageReport(
+            modules=[
+                ModuleProfile("x", decision=TriageDecision.MERGE),
+                ModuleProfile("y", decision=TriageDecision.ACTIVE),
+            ]
+        )
         assert len(r.merge) == 1
         assert len(r.active) == 1
 
 
 class TestTriageEngine:
     """Test suite for TriageEngine."""
+
     def _make_module(self, root: Path, name: str, files: dict[str, str]) -> Path:
         mod = root / name
         mod.mkdir(parents=True, exist_ok=True)
@@ -64,10 +71,14 @@ class TestTriageEngine:
         """Test functionality: profile module."""
         with tempfile.TemporaryDirectory() as td:
             root = Path(td)
-            self._make_module(root, "mymod", {
-                "__init__.py": "",
-                "core.py": "def foo():\n    return 1\n\ndef bar():\n    return 2\n",
-            })
+            self._make_module(
+                root,
+                "mymod",
+                {
+                    "__init__.py": "",
+                    "core.py": "def foo():\n    return 1\n\ndef bar():\n    return 2\n",
+                },
+            )
             engine = TriageEngine()
             profile = engine.profile_module("mymod", root / "mymod")
             assert profile.file_count == 2

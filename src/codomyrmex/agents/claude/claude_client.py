@@ -138,4 +138,3 @@ class ClaudeClient(
 
         # Registered tools for function calling
         self._tools: list[dict[str, Any]] = []
-

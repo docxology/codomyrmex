@@ -36,10 +36,7 @@ class ConversationManager:
         self._active_conversation: Conversation | None = None
 
     def create_conversation(
-        self,
-        title: str = "",
-        system_prompt: str | None = None,
-        **metadata
+        self, title: str = "", system_prompt: str | None = None, **metadata
     ) -> Conversation:
         """Create a new conversation."""
         conv_id = hashlib.sha256(
@@ -94,5 +91,3 @@ class ConversationManager:
         if conv:
             self._active_conversation = conv
         return conv
-
-

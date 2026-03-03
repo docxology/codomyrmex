@@ -29,8 +29,7 @@ def cli_commands():
         "agents": {
             "help": "List registered agents in the marketplace",
             "handler": lambda: print(
-                "Registered marketplace agents:\n"
-                "  (none currently registered)"
+                "Registered marketplace agents:\n  (none currently registered)"
             ),
         },
     }

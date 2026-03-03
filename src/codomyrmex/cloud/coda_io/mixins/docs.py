@@ -10,6 +10,7 @@ from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
 
+
 class DocsMixin:
     """DocsMixin class."""
 
@@ -150,4 +151,3 @@ class DocsMixin:
             body["iconName"] = icon_name
 
         return self._patch(f"/docs/{self._encode_id(doc_id)}", json_data=body)
-

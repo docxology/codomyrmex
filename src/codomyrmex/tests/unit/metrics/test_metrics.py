@@ -603,6 +603,7 @@ class TestMetricsError:
     def test_metrics_error_is_codomyrmex_error(self):
         """Test MetricsError inherits from CodomyrmexError."""
         from codomyrmex.exceptions import CodomyrmexError
+
         assert issubclass(MetricsError, CodomyrmexError)
 
     def test_metrics_error_can_be_raised(self):
@@ -623,15 +624,16 @@ class TestPrometheusExporter:
     def test_prometheus_exporter_import(self):
         """Test PrometheusExporter can be imported."""
         from codomyrmex.telemetry.metrics import PrometheusExporter
+
         assert PrometheusExporter is None or callable(PrometheusExporter)
 
     @pytest.mark.skipif(
-        metrics.PrometheusExporter is None,
-        reason="prometheus_client not installed"
+        metrics.PrometheusExporter is None, reason="prometheus_client not installed"
     )
     def test_prometheus_exporter_creation(self):
         """Test PrometheusExporter creation without starting server."""
         from codomyrmex.telemetry.metrics import PrometheusExporter
+
         exporter = PrometheusExporter(port=9090, addr="127.0.0.1")
         assert exporter.port == 9090
         assert exporter.addr == "127.0.0.1"
@@ -666,48 +668,41 @@ class TestStatsDClient:
     def test_statsd_client_import(self):
         """Test StatsDClient can be imported."""
         from codomyrmex.telemetry.metrics import StatsDClient
+
         assert StatsDClient is None or callable(StatsDClient)
 
-    @pytest.mark.skipif(
-        metrics.StatsDClient is None,
-        reason="statsd not installed"
-    )
+    @pytest.mark.skipif(metrics.StatsDClient is None, reason="statsd not installed")
     def test_statsd_client_creation(self):
         """Test StatsDClient creation with real client."""
         from codomyrmex.telemetry.metrics import StatsDClient
+
         client = StatsDClient(host="localhost", port=8125, prefix="test")
         assert isinstance(client, StatsDClient)
 
-    @pytest.mark.skipif(
-        metrics.StatsDClient is None,
-        reason="statsd not installed"
-    )
+    @pytest.mark.skipif(metrics.StatsDClient is None, reason="statsd not installed")
     @requires_statsd
     def test_statsd_client_incr(self):
         """Test StatsDClient incr — sends real UDP packet."""
         from codomyrmex.telemetry.metrics import StatsDClient
+
         client = StatsDClient()
         client.incr("requests", count=5, rate=0.5)
 
-    @pytest.mark.skipif(
-        metrics.StatsDClient is None,
-        reason="statsd not installed"
-    )
+    @pytest.mark.skipif(metrics.StatsDClient is None, reason="statsd not installed")
     @requires_statsd
     def test_statsd_client_gauge(self):
         """Test StatsDClient gauge — sends real UDP packet."""
         from codomyrmex.telemetry.metrics import StatsDClient
+
         client = StatsDClient()
         client.gauge("memory", 1024.0, rate=1.0)
 
-    @pytest.mark.skipif(
-        metrics.StatsDClient is None,
-        reason="statsd not installed"
-    )
+    @pytest.mark.skipif(metrics.StatsDClient is None, reason="statsd not installed")
     @requires_statsd
     def test_statsd_client_timing(self):
         """Test StatsDClient timing — sends real UDP packet."""
         from codomyrmex.telemetry.metrics import StatsDClient
+
         client = StatsDClient()
         client.timing("request_time", 150.0)
 
@@ -743,7 +738,9 @@ class TestMetricsIntegration:
         export = m.export()
         assert export["counters"]["http_requests_total{method=GET}"]["value"] == 100
         assert export["gauges"]["http_active_connections"]["value"] == 50
-        assert export["histograms"]["http_response_time_seconds"]["stats"]["count"] == 100
+        assert (
+            export["histograms"]["http_response_time_seconds"]["stats"]["count"] == 100
+        )
 
         # Prometheus export
         prom_output = m.export_prometheus()
@@ -765,10 +762,10 @@ class TestMetricsIntegration:
         counters = export["counters"]
 
         assert len(counters) == 4
-        assert counters['requests{method=GET,status=200}']["value"] == 100
-        assert counters['requests{method=GET,status=404}']["value"] == 10
-        assert counters['requests{method=POST,status=200}']["value"] == 50
-        assert counters['requests{method=POST,status=500}']["value"] == 5
+        assert counters["requests{method=GET,status=200}"]["value"] == 100
+        assert counters["requests{method=GET,status=404}"]["value"] == 10
+        assert counters["requests{method=POST,status=200}"]["value"] == 50
+        assert counters["requests{method=POST,status=500}"]["value"] == 5
 
     def test_concurrent_metric_updates(self):
         """Test thread safety of metric updates."""

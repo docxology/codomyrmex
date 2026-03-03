@@ -10,6 +10,7 @@ def test_image_component():
     assert 'alt="Test Image"' in html
     assert "<figcaption>A caption</figcaption>" in html
 
+
 def test_video_component():
     """Test functionality: video component."""
     vid = Video(src="test.mp4", controls=True)
@@ -17,12 +18,14 @@ def test_video_component():
     assert 'src="test.mp4"' in html
     assert "controls" in html
 
+
 def test_text_block():
     """Test functionality: text block."""
     txt = TextBlock(content="Hello\nWorld", is_markdown=True)
     html = str(txt)
     assert "Hello<br>World" in html
     assert "markdown" in html
+
 
 def test_code_block():
     """Test functionality: code block."""

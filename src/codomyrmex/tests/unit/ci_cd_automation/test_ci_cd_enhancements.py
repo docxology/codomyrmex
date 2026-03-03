@@ -26,24 +26,14 @@ class TestPipelineEnhancements:
             "stages": [
                 {
                     "name": "build",
-                    "jobs": [
-                        {
-                            "name": "compile",
-                            "commands": ["make build"]
-                        }
-                    ]
+                    "jobs": [{"name": "compile", "commands": ["make build"]}],
                 },
                 {
                     "name": "test",
                     "dependencies": ["build"],
-                    "jobs": [
-                        {
-                            "name": "unit_tests",
-                            "commands": ["pytest tests/"]
-                        }
-                    ]
-                }
-            ]
+                    "jobs": [{"name": "unit_tests", "commands": ["pytest tests/"]}],
+                },
+            ],
         }
 
         is_valid, errors = manager.validate_pipeline_config(valid_config)
@@ -55,9 +45,7 @@ class TestPipelineEnhancements:
         manager = PipelineManager()
 
         # Missing required fields
-        invalid_config = {
-            "stages": []
-        }
+        invalid_config = {"stages": []}
 
         is_valid, errors = manager.validate_pipeline_config(invalid_config)
         assert not is_valid
@@ -74,18 +62,14 @@ class TestPipelineEnhancements:
             stages=[
                 PipelineStage(
                     name="build",
-                    jobs=[
-                        PipelineJob(name="compile", commands=["make build"])
-                    ]
+                    jobs=[PipelineJob(name="compile", commands=["make build"])],
                 ),
                 PipelineStage(
                     name="test",
                     dependencies=["build"],
-                    jobs=[
-                        PipelineJob(name="unit_tests", commands=["pytest"])
-                    ]
-                )
-            ]
+                    jobs=[PipelineJob(name="unit_tests", commands=["pytest"])],
+                ),
+            ],
         )
 
         mermaid_diagram = manager.generate_pipeline_visualization(pipeline)
@@ -102,12 +86,7 @@ class TestPipelineEnhancements:
         manager = PipelineManager()
 
         # Test stage with branch condition
-        stage = {
-            "name": "deploy_prod",
-            "conditions": {
-                "branch": "main"
-            }
-        }
+        stage = {"name": "deploy_prod", "conditions": {"branch": "main"}}
 
         # Should execute on main branch
         conditions = {"branch": "main"}
@@ -127,12 +106,31 @@ class TestPipelineEnhancements:
         pipeline = Pipeline(
             name="optimized_pipeline",
             stages=[
-                PipelineStage(name="setup", jobs=[PipelineJob(name="init", commands=["echo init"])]),
-                PipelineStage(name="build", jobs=[PipelineJob(name="compile", commands=["make"])]),
-                PipelineStage(name="test_unit", dependencies=["build"], jobs=[PipelineJob(name="unit", commands=["pytest"])]),
-                PipelineStage(name="test_integration", dependencies=["build"], jobs=[PipelineJob(name="integration", commands=["pytest integration"])]),
-                PipelineStage(name="deploy", dependencies=["test_unit", "test_integration"], jobs=[PipelineJob(name="deploy", commands=["deploy"])]),
-            ]
+                PipelineStage(
+                    name="setup",
+                    jobs=[PipelineJob(name="init", commands=["echo init"])],
+                ),
+                PipelineStage(
+                    name="build", jobs=[PipelineJob(name="compile", commands=["make"])]
+                ),
+                PipelineStage(
+                    name="test_unit",
+                    dependencies=["build"],
+                    jobs=[PipelineJob(name="unit", commands=["pytest"])],
+                ),
+                PipelineStage(
+                    name="test_integration",
+                    dependencies=["build"],
+                    jobs=[
+                        PipelineJob(name="integration", commands=["pytest integration"])
+                    ],
+                ),
+                PipelineStage(
+                    name="deploy",
+                    dependencies=["test_unit", "test_integration"],
+                    jobs=[PipelineJob(name="deploy", commands=["deploy"])],
+                ),
+            ],
         )
 
         optimization = manager.optimize_pipeline_schedule(pipeline)
@@ -186,13 +184,13 @@ stages:
                     "name": "test",
                     "jobs": [
                         {"name": "lint", "commands": ["eslint ."]},
-                        {"name": "test", "commands": ["jest"]}
-                    ]
+                        {"name": "test", "commands": ["jest"]},
+                    ],
                 }
-            ]
+            ],
         }
         config_path = tmp_path / "pipeline.json"
-        with open(config_path, 'w') as f:
+        with open(config_path, "w") as f:
             json.dump(config, f)
 
         pipeline = self.manager.create_pipeline(str(config_path))
@@ -228,12 +226,7 @@ stages:
 
     def test_validate_config_missing_jobs(self):
         """Test validation fails when stage has no jobs."""
-        config = {
-            "name": "invalid_pipeline",
-            "stages": [
-                {"name": "empty_stage"}
-            ]
-        }
+        config = {"name": "invalid_pipeline", "stages": [{"name": "empty_stage"}]}
 
         is_valid, errors = self.manager.validate_pipeline_config(config)
         assert not is_valid
@@ -244,13 +237,8 @@ stages:
         config = {
             "name": "invalid_pipeline",
             "stages": [
-                {
-                    "name": "stage1",
-                    "jobs": [
-                        {"name": "empty_job", "commands": []}
-                    ]
-                }
-            ]
+                {"name": "stage1", "jobs": [{"name": "empty_job", "commands": []}]}
+            ],
         }
 
         is_valid, errors = self.manager.validate_pipeline_config(config)
@@ -267,10 +255,7 @@ class TestJobStepExecutionTracking:
 
     def test_job_status_transitions(self):
         """Test job status transitions during execution."""
-        job = PipelineJob(
-            name="test_job",
-            commands=["echo test"]
-        )
+        job = PipelineJob(name="test_job", commands=["echo test"])
 
         assert job.status == JobStatus.PENDING
 
@@ -297,11 +282,7 @@ class TestJobStepExecutionTracking:
 
     def test_job_with_retry_tracking(self):
         """Test job with retry count tracking."""
-        job = PipelineJob(
-            name="flaky_job",
-            commands=["exit 1"],
-            retry_count=3
-        )
+        job = PipelineJob(name="flaky_job", commands=["exit 1"], retry_count=3)
 
         assert job.retry_count == 3
 
@@ -342,7 +323,7 @@ class TestArtifactHandling:
         job = PipelineJob(
             name="build_job",
             commands=["make build"],
-            artifacts=["build/output.tar.gz", "build/reports/*.xml", "coverage.json"]
+            artifacts=["build/output.tar.gz", "build/reports/*.xml", "coverage.json"],
         )
 
         assert len(job.artifacts) == 3
@@ -354,11 +335,7 @@ class TestArtifactHandling:
         job = PipelineJob(
             name="test_job",
             commands=["pytest"],
-            artifacts=[
-                "test-results/**/*.xml",
-                "coverage/*.html",
-                "screenshots/*.png"
-            ]
+            artifacts=["test-results/**/*.xml", "coverage/*.html", "screenshots/*.png"],
         )
 
         assert any("**" in a for a in job.artifacts)
@@ -408,8 +385,8 @@ class TestEnvironmentVariableInjection:
             environment={
                 "MY_VAR": "my_value",
                 "NODE_ENV": "production",
-                "DEBUG": "false"
-            }
+                "DEBUG": "false",
+            },
         )
 
         assert job.environment["MY_VAR"] == "my_value"
@@ -422,8 +399,8 @@ class TestEnvironmentVariableInjection:
             name="test_stage",
             environment={
                 "STAGE_VAR": "stage_value",
-                "API_URL": "https://api.example.com"
-            }
+                "API_URL": "https://api.example.com",
+            },
         )
 
         assert stage.environment["STAGE_VAR"] == "stage_value"
@@ -433,11 +410,8 @@ class TestEnvironmentVariableInjection:
         """Test pipeline-level global variables."""
         pipeline = Pipeline(
             name="test_pipeline",
-            variables={
-                "GLOBAL_VAR": "global_value",
-                "VERSION": "1.0.0"
-            },
-            stages=[]
+            variables={"GLOBAL_VAR": "global_value", "VERSION": "1.0.0"},
+            stages=[],
         )
 
         assert pipeline.variables["GLOBAL_VAR"] == "global_value"
@@ -460,19 +434,17 @@ class TestEnvironmentVariableInjection:
 
     def test_variable_substitution_in_commands(self):
         """Test variable substitution in command strings."""
-        variables = {
-            "VERSION": "2.0.0",
-            "ENV": "staging",
-            "DOCKER_TAG": "myapp:latest"
-        }
+        variables = {"VERSION": "2.0.0", "ENV": "staging", "DOCKER_TAG": "myapp:latest"}
 
         commands = [
             "echo Building version ${VERSION}",
             "docker build -t $DOCKER_TAG .",
-            "deploy to $ENV"
+            "deploy to $ENV",
         ]
 
-        substituted = [self.manager._substitute_variables(cmd, variables) for cmd in commands]
+        substituted = [
+            self.manager._substitute_variables(cmd, variables) for cmd in commands
+        ]
 
         assert "2.0.0" in substituted[0]
         assert "myapp:latest" in substituted[1]
@@ -511,7 +483,7 @@ stages:
         job = PipelineJob(
             name="deploy_job",
             commands=["deploy --password=secret123"],
-            environment={"SECRET_TOKEN": "abc123secret"}
+            environment={"SECRET_TOKEN": "abc123secret"},
         )
 
         # Simulate output that might contain secrets
@@ -533,10 +505,7 @@ stages:
             type=EnvironmentType.PRODUCTION,
             host="prod.example.com",
             key_path="/path/to/key",
-            variables={
-                "NORMAL_VAR": "value",
-                "API_KEY": "should_be_secret"
-            }
+            variables={"NORMAL_VAR": "value", "API_KEY": "should_be_secret"},
         )
 
         env_dict = environment.to_dict()
@@ -558,7 +527,7 @@ class TestStageDependencyValidation:
         stages = [
             {"name": "build", "dependencies": []},
             {"name": "test", "dependencies": ["build"]},
-            {"name": "deploy", "dependencies": ["test"]}
+            {"name": "deploy", "dependencies": ["test"]},
         ]
 
         is_valid, errors = self.manager.validate_stage_dependencies(stages)
@@ -570,7 +539,7 @@ class TestStageDependencyValidation:
         """Test missing stage dependency."""
         stages = [
             {"name": "build", "dependencies": []},
-            {"name": "deploy", "dependencies": ["test"]}  # test doesn't exist
+            {"name": "deploy", "dependencies": ["test"]},  # test doesn't exist
         ]
 
         is_valid, errors = self.manager.validate_stage_dependencies(stages)
@@ -594,7 +563,7 @@ class TestStageDependencyValidation:
         stages = [
             {"name": "build", "dependencies": []},
             {"name": "test", "dependencies": ["build"]},
-            {"name": "deploy", "dependencies": ["test", "build"]}
+            {"name": "deploy", "dependencies": ["test", "build"]},
         ]
 
         deps = self.manager.get_stage_dependencies(stages)
@@ -616,9 +585,21 @@ class TestParallelPipelineExecution:
         # Test the method exists and can handle basic input without crashing
         # The actual parallel execution depends on concurrent.futures internal implementation
         stages = [
-            {"name": "build", "dependencies": [], "jobs": [{"name": "compile", "commands": ["echo build"]}]},
-            {"name": "lint", "dependencies": [], "jobs": [{"name": "eslint", "commands": ["echo lint"]}]},
-            {"name": "test", "dependencies": ["build", "lint"], "jobs": [{"name": "pytest", "commands": ["echo test"]}]}
+            {
+                "name": "build",
+                "dependencies": [],
+                "jobs": [{"name": "compile", "commands": ["echo build"]}],
+            },
+            {
+                "name": "lint",
+                "dependencies": [],
+                "jobs": [{"name": "eslint", "commands": ["echo lint"]}],
+            },
+            {
+                "name": "test",
+                "dependencies": ["build", "lint"],
+                "jobs": [{"name": "pytest", "commands": ["echo test"]}],
+            },
         ]
 
         # Test that method can be called and returns proper structure
@@ -631,7 +612,9 @@ class TestParallelPipelineExecution:
         except AttributeError:
             # The implementation has a known bug with futures dictionary handling
             # This test verifies the expected interface
-            pytest.skip("parallel_pipeline_execution has known implementation issue with futures.wait")
+            pytest.skip(
+                "parallel_pipeline_execution has known implementation issue with futures.wait"
+            )
 
     def test_execution_levels_calculation(self):
         """Test calculation of execution levels for parallelism."""
@@ -642,8 +625,8 @@ class TestParallelPipelineExecution:
                 PipelineStage(name="b", dependencies=[], jobs=[]),
                 PipelineStage(name="c", dependencies=["a"], jobs=[]),
                 PipelineStage(name="d", dependencies=["b"], jobs=[]),
-                PipelineStage(name="e", dependencies=["c", "d"], jobs=[])
-            ]
+                PipelineStage(name="e", dependencies=["c", "d"], jobs=[]),
+            ],
         )
 
         stage_deps = {stage.name: stage.dependencies for stage in pipeline.stages}

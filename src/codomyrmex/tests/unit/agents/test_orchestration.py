@@ -10,6 +10,7 @@ try:
         BaseAgent,
     )
     from codomyrmex.agents.generic.agent_orchestrator import AgentOrchestrator
+
     _HAS_AGENTS = True
 except ImportError:
     _HAS_AGENTS = False
@@ -23,9 +24,7 @@ class MockAgent(BaseAgent):
 
     def __init__(self, name: str, should_succeed: bool = True):
         super().__init__(
-            name=name,
-            capabilities=[AgentCapabilities.CODE_GENERATION],
-            config={}
+            name=name, capabilities=[AgentCapabilities.CODE_GENERATION], config={}
         )
         self.should_succeed = should_succeed
 
@@ -42,11 +41,7 @@ class TestAgentOrchestration:
 
     def test_parallel_execution(self):
         """Test parallel agent execution."""
-        agents = [
-            MockAgent("agent1"),
-            MockAgent("agent2"),
-            MockAgent("agent3")
-        ]
+        agents = [MockAgent("agent1"), MockAgent("agent2"), MockAgent("agent3")]
         orchestrator = AgentOrchestrator(agents)
 
         request = AgentRequest(prompt="Test")
@@ -57,10 +52,7 @@ class TestAgentOrchestration:
 
     def test_sequential_execution(self):
         """Test sequential agent execution."""
-        agents = [
-            MockAgent("agent1"),
-            MockAgent("agent2")
-        ]
+        agents = [MockAgent("agent1"), MockAgent("agent2")]
         orchestrator = AgentOrchestrator(agents)
 
         request = AgentRequest(prompt="Test")
@@ -72,7 +64,7 @@ class TestAgentOrchestration:
         """Test fallback execution."""
         agents = [
             MockAgent("agent1", should_succeed=False),
-            MockAgent("agent2", should_succeed=True)
+            MockAgent("agent2", should_succeed=True),
         ]
         orchestrator = AgentOrchestrator(agents)
 
@@ -81,4 +73,3 @@ class TestAgentOrchestration:
 
         assert response.is_success()
         assert "agent2" in response.content
-

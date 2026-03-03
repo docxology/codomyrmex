@@ -29,6 +29,7 @@ __all__ = [
 @dataclass
 class StageConfig:
     """Configuration for a CI/CD stage."""
+
     name: str
     commands: list[str]
     parallel: bool = True
@@ -42,6 +43,7 @@ class StageConfig:
 @dataclass
 class PipelineConfig:
     """Configuration for a CI/CD pipeline."""
+
     name: str
     stages: list[StageConfig]
     variables: dict[str, str] = field(default_factory=dict)
@@ -67,6 +69,7 @@ class OrchestratorBridge:
         if self._engine is None:
             try:
                 from codomyrmex.logistics.orchestration import get_orchestration_engine
+
                 self._engine = get_orchestration_engine()
             except ImportError:
                 logger.warning("Logistics orchestration not available")
@@ -94,11 +97,7 @@ class OrchestratorBridge:
             return result
         return False
 
-    async def execute_workflow(
-        self,
-        workflow_name: str,
-        **params
-    ) -> dict[str, Any]:
+    async def execute_workflow(self, workflow_name: str, **params) -> dict[str, Any]:
         """Execute a logistics workflow via thin orchestration.
 
         Args:
@@ -110,17 +109,12 @@ class OrchestratorBridge:
         """
         if self.engine:
             return self.engine.execute_workflow(
-                workflow_name,
-                session_id=self._session_id,
-                **params
+                workflow_name, session_id=self._session_id, **params
             )
         return {"success": False, "error": "Engine not available"}
 
     def run_quick(
-        self,
-        target: str | Path,
-        timeout: int = 60,
-        **kwargs
+        self, target: str | Path, timeout: int = 60, **kwargs
     ) -> dict[str, Any]:
         """Quick run using thin orchestration.
 
@@ -164,14 +158,14 @@ class CICDBridge:
         if self._manager is None:
             try:
                 from codomyrmex.ci_cd_automation.pipeline import PipelineManager
+
                 self._manager = PipelineManager(workspace_dir=self._workspace_dir)
             except ImportError:
                 logger.warning("CI/CD automation not available")
         return self._manager
 
     def create_workflow_from_pipeline(
-        self,
-        pipeline_config: PipelineConfig | dict[str, Any]
+        self, pipeline_config: PipelineConfig | dict[str, Any]
     ) -> Workflow:
         """Create a thin workflow from pipeline config.
 
@@ -189,13 +183,13 @@ class CICDBridge:
                 ],
                 variables=pipeline_config.get("variables", {}),
                 timeout=pipeline_config.get("timeout", 3600),
-                fail_fast=pipeline_config.get("fail_fast", True)
+                fail_fast=pipeline_config.get("fail_fast", True),
             )
 
         wf = Workflow(
             name=pipeline_config.name,
             timeout=pipeline_config.timeout,
-            fail_fast=pipeline_config.fail_fast
+            fail_fast=pipeline_config.fail_fast,
         )
 
         prev_stages = []
@@ -213,7 +207,7 @@ class CICDBridge:
                 dependencies=prev_stages.copy() if not stage_config.parallel else [],
                 timeout=stage_config.timeout,
                 retry_policy=retry_policy,
-                condition=stage_config.condition
+                condition=stage_config.condition,
             )
 
             if not stage_config.parallel:
@@ -232,6 +226,7 @@ class CICDBridge:
         Returns:
             Async action function
         """
+
         async def stage_action(_task_results: dict = None) -> dict[str, Any]:
             results = []
             overall_success = True
@@ -240,7 +235,7 @@ class CICDBridge:
                 result = shell(
                     cmd,
                     timeout=stage_config.timeout // max(len(stage_config.commands), 1),
-                    env=stage_config.environment
+                    env=stage_config.environment,
                 )
                 results.append(result)
 
@@ -252,15 +247,13 @@ class CICDBridge:
                 "success": overall_success,
                 "stage": stage_config.name,
                 "commands_executed": len(results),
-                "results": results
+                "results": results,
             }
 
         return stage_action
 
     async def run_stage(
-        self,
-        stage_config: StageConfig,
-        env: dict[str, str] | None = None
+        self, stage_config: StageConfig, env: dict[str, str] | None = None
     ) -> dict[str, Any]:
         """Run a single CI/CD stage.
 
@@ -306,10 +299,7 @@ class AgentOrchestrator:
         return self._agents.get(name)
 
     async def run_agent_task(
-        self,
-        agent_name: str,
-        task: str,
-        **kwargs
+        self, agent_name: str, task: str, **kwargs
     ) -> dict[str, Any]:
         """Run a task using an agent.
 
@@ -323,10 +313,7 @@ class AgentOrchestrator:
         """
         agent = self.get_agent(agent_name)
         if not agent:
-            return {
-                "success": False,
-                "error": f"Agent '{agent_name}' not found"
-            }
+            return {"success": False, "error": f"Agent '{agent_name}' not found"}
 
         try:
             # Try different agent interfaces
@@ -339,26 +326,16 @@ class AgentOrchestrator:
             else:
                 return {
                     "success": False,
-                    "error": f"Agent '{agent_name}' has no execute method"
+                    "error": f"Agent '{agent_name}' has no execute method",
                 }
 
-            return {
-                "success": True,
-                "agent": agent_name,
-                "result": result
-            }
+            return {"success": True, "agent": agent_name, "result": result}
 
         except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
-            return {
-                "success": False,
-                "agent": agent_name,
-                "error": str(e)
-            }
+            return {"success": False, "agent": agent_name, "error": str(e)}
 
     def create_agent_workflow(
-        self,
-        tasks: list[dict[str, Any]],
-        name: str = "agent_workflow"
+        self, tasks: list[dict[str, Any]], name: str = "agent_workflow"
     ) -> Workflow:
         """Create a workflow from agent tasks.
 
@@ -382,7 +359,7 @@ class AgentOrchestrator:
                 _task_results: dict = None,
                 _agent=agent_name,
                 _task=task_content,
-                _kwargs=task_def.get("kwargs", {})
+                _kwargs=task_def.get("kwargs", {}),
             ) -> dict[str, Any]:
                 return await self.run_agent_task(_agent, _task, **_kwargs)
 
@@ -390,16 +367,14 @@ class AgentOrchestrator:
                 name=task_name,
                 action=agent_action,
                 dependencies=dependencies,
-                timeout=timeout
+                timeout=timeout,
             )
 
         return wf
 
 
 def create_pipeline_workflow(
-    stages: list[dict[str, Any]],
-    name: str = "pipeline",
-    fail_fast: bool = True
+    stages: list[dict[str, Any]], name: str = "pipeline", fail_fast: bool = True
 ) -> Workflow:
     """Create a workflow from pipeline stages.
 
@@ -413,9 +388,7 @@ def create_pipeline_workflow(
     """
     bridge = CICDBridge()
     config = PipelineConfig(
-        name=name,
-        stages=[StageConfig(**s) for s in stages],
-        fail_fast=fail_fast
+        name=name, stages=[StageConfig(**s) for s in stages], fail_fast=fail_fast
     )
     return bridge.create_workflow_from_pipeline(config)
 
@@ -425,7 +398,7 @@ async def run_ci_stage(
     commands: list[str],
     timeout: int = 300,
     env: dict[str, str] | None = None,
-    allow_failure: bool = False
+    allow_failure: bool = False,
 ) -> dict[str, Any]:
     """Run a CI/CD stage.
 
@@ -445,16 +418,13 @@ async def run_ci_stage(
         commands=commands,
         timeout=timeout,
         environment=env or {},
-        allow_failure=allow_failure
+        allow_failure=allow_failure,
     )
     return await bridge.run_stage(stage)
 
 
 async def run_agent_task(
-    agent_name: str,
-    task: str,
-    orchestrator: AgentOrchestrator | None = None,
-    **kwargs
+    agent_name: str, task: str, orchestrator: AgentOrchestrator | None = None, **kwargs
 ) -> dict[str, Any]:
     """Run a task using an agent.
 

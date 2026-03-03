@@ -20,6 +20,7 @@ from codomyrmex.coding.review.models import (
 # Real helper: a minimal pyscn analyzer that returns configurable data
 # ---------------------------------------------------------------------------
 
+
 class SimplePyscnAnalyzer:
     """A real (non-mock) pyscn-like analyzer that returns configurable data.
 
@@ -40,7 +41,9 @@ class SimplePyscnAnalyzer:
     def detect_dead_code(self, project_root: str) -> list[dict[str, Any]]:
         return self.dead_code_results
 
-    def find_clones(self, python_files: list[str], threshold: float = 0.8) -> list[dict[str, Any]]:
+    def find_clones(
+        self, python_files: list[str], threshold: float = 0.8
+    ) -> list[dict[str, Any]]:
         return self.clone_groups
 
     def analyze_coupling(self, project_root: str) -> list[dict[str, Any]]:
@@ -50,6 +53,7 @@ class SimplePyscnAnalyzer:
 # ---------------------------------------------------------------------------
 # Concrete class that composes MetricsMixin with its sibling-method stubs
 # ---------------------------------------------------------------------------
+
 
 class TestableMetrics(MetricsMixin):
     """Concrete class that satisfies all MetricsMixin protocol requirements.
@@ -94,15 +98,21 @@ class TestableMetrics(MetricsMixin):
     ) -> list[dict[str, Any]]:
         actions = []
         if complexity_issues:
-            actions.append({"action": "reduce_complexity", "count": len(complexity_issues)})
+            actions.append(
+                {"action": "reduce_complexity", "count": len(complexity_issues)}
+            )
         if dead_code_issues:
-            actions.append({"action": "remove_dead_code", "count": len(dead_code_issues)})
+            actions.append(
+                {"action": "remove_dead_code", "count": len(dead_code_issues)}
+            )
         if duplication_issues:
             actions.append({"action": "deduplicate", "count": len(duplication_issues)})
         return actions
 
     def _identify_quick_wins(self, dead_code_issues) -> list[dict[str, Any]]:
-        return [{"win": f"remove dead code item {i}"} for i in range(len(dead_code_issues))]
+        return [
+            {"win": f"remove dead code item {i}"} for i in range(len(dead_code_issues))
+        ]
 
     def _identify_long_term_improvements(self, complexity_data) -> list[dict[str, Any]]:
         improvements = []
@@ -114,6 +124,7 @@ class TestableMetrics(MetricsMixin):
 # ---------------------------------------------------------------------------
 # Fixtures
 # ---------------------------------------------------------------------------
+
 
 @pytest.fixture
 def analyzer():
@@ -129,6 +140,7 @@ def subject(tmp_path, analyzer):
 # ---------------------------------------------------------------------------
 # Tests
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestCalculateGrade:
@@ -179,12 +191,18 @@ class TestCalculateOverallScore:
 
     def test_mixed_scores_weighted(self, subject):
         complexity = {"score": 100.0}  # weight 0.25
-        dead_code = {"score": 80.0}    # weight 0.20
+        dead_code = {"score": 80.0}  # weight 0.20
         duplication = {"score": 60.0}  # weight 0.15
-        coupling = {"score": 40.0}     # weight 0.20
-        architecture = {"score": 20.0} # weight 0.20
+        coupling = {"score": 40.0}  # weight 0.20
+        architecture = {"score": 20.0}  # weight 0.20
 
-        expected = (100.0 * 0.25) + (80.0 * 0.20) + (60.0 * 0.15) + (40.0 * 0.20) + (20.0 * 0.20)
+        expected = (
+            (100.0 * 0.25)
+            + (80.0 * 0.20)
+            + (60.0 * 0.15)
+            + (40.0 * 0.20)
+            + (20.0 * 0.20)
+        )
         result = subject._calculate_overall_score(
             complexity, dead_code, duplication, coupling, architecture
         )
@@ -234,7 +252,9 @@ class TestGetComplexityMetrics:
         result = subject._get_complexity_metrics()
         assert result["total_functions"] == 3
         assert result["high_risk_count"] == 3
-        assert result["score"] == 55.0  # 100 - min(25*2,30) - min(3*5,40) = 100 - 30 - 15
+        assert (
+            result["score"] == 55.0
+        )  # 100 - min(25*2,30) - min(3*5,40) = 100 - 30 - 15
 
     def test_mixed_complexity(self, subject, analyzer):
         analyzer.complexity_results = [
@@ -250,9 +270,11 @@ class TestGetComplexityMetrics:
 
     def test_exception_returns_zero_score(self, subject):
         """When pyscn_analyzer raises, score is 0.0."""
+
         class FailingAnalyzer:
             def analyze_complexity(self, root):
                 raise RuntimeError("pyscn crash")
+
         subject.pyscn_analyzer = FailingAnalyzer()
         result = subject._get_complexity_metrics()
         assert result["score"] == 0.0
@@ -305,6 +327,7 @@ class TestGetDeadCodeMetrics:
         class FailingAnalyzer:
             def detect_dead_code(self, root):
                 raise RuntimeError("pyscn crash")
+
         subject.pyscn_analyzer = FailingAnalyzer()
         result = subject._get_dead_code_metrics()
         assert result["score"] == 0.0
@@ -349,6 +372,7 @@ class TestGetCouplingMetrics:
         class FailingAnalyzer:
             def analyze_coupling(self, root):
                 raise RuntimeError("crash")
+
         subject.pyscn_analyzer = FailingAnalyzer()
         result = subject._get_coupling_metrics()
         assert result["score"] == 0.0
@@ -367,9 +391,11 @@ class TestGetArchitectureMetrics:
     def test_high_severity_violations(self, subject):
         subject._architecture_violations = [
             ArchitectureViolation(
-                file_path="a.py", violation_type="circular_dep",
-                description="Circular import", severity="high",
-                suggestion="Refactor"
+                file_path="a.py",
+                violation_type="circular_dep",
+                description="Circular import",
+                severity="high",
+                suggestion="Refactor",
             ),
         ]
         result = subject._get_architecture_metrics()
@@ -379,16 +405,25 @@ class TestGetArchitectureMetrics:
     def test_mixed_severity_violations(self, subject):
         subject._architecture_violations = [
             ArchitectureViolation(
-                file_path="a.py", violation_type="t", description="d",
-                severity="high", suggestion="s"
+                file_path="a.py",
+                violation_type="t",
+                description="d",
+                severity="high",
+                suggestion="s",
             ),
             ArchitectureViolation(
-                file_path="b.py", violation_type="t", description="d",
-                severity="medium", suggestion="s"
+                file_path="b.py",
+                violation_type="t",
+                description="d",
+                severity="medium",
+                suggestion="s",
             ),
             ArchitectureViolation(
-                file_path="c.py", violation_type="t", description="d",
-                severity="low", suggestion="s"
+                file_path="c.py",
+                violation_type="t",
+                description="d",
+                severity="low",
+                suggestion="s",
             ),
         ]
         result = subject._get_architecture_metrics()
@@ -400,8 +435,11 @@ class TestGetArchitectureMetrics:
         """Many violations hit the penalty caps."""
         subject._architecture_violations = [
             ArchitectureViolation(
-                file_path=f"{i}.py", violation_type="t", description="d",
-                severity="high", suggestion="s"
+                file_path=f"{i}.py",
+                violation_type="t",
+                description="d",
+                severity="high",
+                suggestion="s",
             )
             for i in range(10)
         ]
@@ -491,9 +529,11 @@ class TestGetDuplicationMetrics:
 
     def test_exception_returns_perfect_score(self, subject, tmp_path):
         """On error, duplication metrics return score 100.0."""
+
         class FailingAnalyzer:
             def find_clones(self, files, threshold=0.8):
                 raise RuntimeError("crash")
+
         py_file = tmp_path / "module.py"
         py_file.write_text("x = 1\n")
         subject.project_root = str(tmp_path)
@@ -528,13 +568,19 @@ class TestGetTopDuplicationIssues:
         groups = []
         for i in range(6):
             size = (i + 1) * 5
-            groups.append({
-                "instances": [
-                    {"file_path": str(py_file), "start_line": 1, "end_line": size},
-                    {"file_path": str(py_file), "start_line": size + 1, "end_line": size * 2},
-                ],
-                "similarity": 0.9,
-            })
+            groups.append(
+                {
+                    "instances": [
+                        {"file_path": str(py_file), "start_line": 1, "end_line": size},
+                        {
+                            "file_path": str(py_file),
+                            "start_line": size + 1,
+                            "end_line": size * 2,
+                        },
+                    ],
+                    "similarity": 0.9,
+                }
+            )
         analyzer.clone_groups = groups
         result = subject._get_top_duplication_issues()
         assert len(result) <= 5
@@ -566,6 +612,7 @@ class TestCalculateMaintainabilityScore:
         class FailingAnalyzer:
             def analyze_complexity(self, root):
                 raise RuntimeError("fail")
+
         subject.pyscn_analyzer = FailingAnalyzer()
         result = subject._calculate_maintainability_score()
         assert result == 50.0
@@ -600,6 +647,7 @@ class TestCalculateTestabilityScore:
         class FailingAnalyzer:
             def analyze_complexity(self, root):
                 raise RuntimeError("fail")
+
         subject.pyscn_analyzer = FailingAnalyzer()
         result = subject._calculate_testability_score()
         assert result == 50.0
@@ -619,7 +667,10 @@ class TestCalculateReliabilityScore:
         py_file = tmp_path / "mod.py"
         py_file.write_text("try:\n    pass\nexcept:\n    pass\n")
         subject.project_root = str(tmp_path)
-        analyzer.dead_code_results = [{"severity": "critical"}, {"severity": "critical"}]
+        analyzer.dead_code_results = [
+            {"severity": "critical"},
+            {"severity": "critical"},
+        ]
         result = subject._calculate_reliability_score()
         # base=100, penalty=min(2*5+0,30)=10, bonus from try/except
         assert result <= 100.0
@@ -629,6 +680,7 @@ class TestCalculateReliabilityScore:
         class FailingAnalyzer:
             def detect_dead_code(self, root):
                 raise RuntimeError("fail")
+
         subject.pyscn_analyzer = FailingAnalyzer()
         result = subject._calculate_reliability_score()
         assert result == 50.0
@@ -669,6 +721,7 @@ class TestCalculateSecurityScore:
 
         class BrokenSelf:
             """Trigger outer exception via property."""
+
             @property
             def project_root(self):
                 raise RuntimeError("broken")
@@ -733,9 +786,11 @@ class TestGenerateQualityDashboard:
         subject._top_dead_code_issues = [{"code": "unused_var"}]
         subject._architecture_violations = [
             ArchitectureViolation(
-                file_path="a.py", violation_type="circular",
-                description="Circular import", severity="medium",
-                suggestion="Refactor"
+                file_path="a.py",
+                violation_type="circular",
+                description="Circular import",
+                severity="medium",
+                suggestion="Refactor",
             ),
         ]
 

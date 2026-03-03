@@ -19,9 +19,11 @@ from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 logger = get_logger(__name__)
 
+
 @dataclass
 class SpanData:
     """Data for a single trace span."""
+
     trace_id: str
     span_id: str
     parent_span_id: str | None = None
@@ -56,6 +58,7 @@ class SpanData:
             "events": self.events,
         }
 
+
 class SpanExporter(ABC):
     """Abstract base class for span exporters."""
 
@@ -68,6 +71,7 @@ class SpanExporter(ABC):
     def shutdown(self) -> None:
         """Shutdown the exporter."""
         pass
+
 
 class ConsoleExporter(SpanExporter):
     """Exports spans to the console for debugging."""
@@ -89,6 +93,7 @@ class ConsoleExporter(SpanExporter):
         """Shutdown."""
         pass
 
+
 class FileExporter(SpanExporter):
     """Exports spans to a JSON file."""
 
@@ -100,17 +105,20 @@ class FileExporter(SpanExporter):
         """Export."""
         try:
             with self._lock:
-                with open(self.filepath, 'a') as f:
+                with open(self.filepath, "a") as f:
                     for span in spans:
-                        f.write(json.dumps(span.to_dict()) + '\n')
+                        f.write(json.dumps(span.to_dict()) + "\n")
             return True
         except Exception as e:
-            logger.warning("FileExporter failed to write spans to %s: %s", self.filepath, e)
+            logger.warning(
+                "FileExporter failed to write spans to %s: %s", self.filepath, e
+            )
             return False
 
     def shutdown(self) -> None:
         """Shutdown."""
         pass
+
 
 class OTLPExporter(SpanExporter):
     """Exports spans using the OTLP protocol."""
@@ -122,7 +130,7 @@ class OTLPExporter(SpanExporter):
         timeout: float = 10.0,
         compression: str = "none",  # none, gzip
     ):
-        self.endpoint = endpoint.rstrip('/')
+        self.endpoint = endpoint.rstrip("/")
         self.headers = headers or {}
         self.timeout = timeout
         self.compression = compression
@@ -142,34 +150,47 @@ class OTLPExporter(SpanExporter):
         for _trace_id, trace_span_list in trace_spans.items():
             scope_spans = []
             for span in trace_span_list:
-                scope_spans.append({
-                    "traceId": span.trace_id,
-                    "spanId": span.span_id,
-                    "parentSpanId": span.parent_span_id,
-                    "name": span.name,
-                    "kind": self._map_span_kind(span.kind),
-                    "startTimeUnixNano": int(span.start_time.timestamp() * 1e9),
-                    "endTimeUnixNano": int(span.end_time.timestamp() * 1e9) if span.end_time else None,
-                    "status": {"code": 1 if span.status == "ok" else 2},
-                    "attributes": self._convert_attributes(span.attributes),
-                    "events": [
-                        {
-                            "name": e.get("name", ""),
-                            "timeUnixNano": int(e.get("timestamp", datetime.now()).timestamp() * 1e9),
-                            "attributes": self._convert_attributes(e.get("attributes", {})),
-                        }
-                        for e in span.events
-                    ],
-                })
+                scope_spans.append(
+                    {
+                        "traceId": span.trace_id,
+                        "spanId": span.span_id,
+                        "parentSpanId": span.parent_span_id,
+                        "name": span.name,
+                        "kind": self._map_span_kind(span.kind),
+                        "startTimeUnixNano": int(span.start_time.timestamp() * 1e9),
+                        "endTimeUnixNano": int(span.end_time.timestamp() * 1e9)
+                        if span.end_time
+                        else None,
+                        "status": {"code": 1 if span.status == "ok" else 2},
+                        "attributes": self._convert_attributes(span.attributes),
+                        "events": [
+                            {
+                                "name": e.get("name", ""),
+                                "timeUnixNano": int(
+                                    e.get("timestamp", datetime.now()).timestamp() * 1e9
+                                ),
+                                "attributes": self._convert_attributes(
+                                    e.get("attributes", {})
+                                ),
+                            }
+                            for e in span.events
+                        ],
+                    }
+                )
 
-            resource_spans.append({
-                "resource": {
-                    "attributes": [
-                        {"key": "service.name", "value": {"stringValue": "codomyrmex"}},
-                    ]
-                },
-                "scopeSpans": [{"spans": scope_spans}],
-            })
+            resource_spans.append(
+                {
+                    "resource": {
+                        "attributes": [
+                            {
+                                "key": "service.name",
+                                "value": {"stringValue": "codomyrmex"},
+                            },
+                        ]
+                    },
+                    "scopeSpans": [{"spans": scope_spans}],
+                }
+            )
 
         return {"resourceSpans": resource_spans}
 
@@ -208,7 +229,7 @@ class OTLPExporter(SpanExporter):
             import urllib.request
 
             payload = self._convert_to_otlp_format(spans)
-            data = json.dumps(payload).encode('utf-8')
+            data = json.dumps(payload).encode("utf-8")
 
             headers = {
                 "Content-Type": "application/json",
@@ -217,26 +238,27 @@ class OTLPExporter(SpanExporter):
 
             if self.compression == "gzip":
                 import gzip
+
                 data = gzip.compress(data)
                 headers["Content-Encoding"] = "gzip"
 
             req = urllib.request.Request(
-                f"{self.endpoint}/v1/traces",
-                data=data,
-                headers=headers,
-                method='POST'
+                f"{self.endpoint}/v1/traces", data=data, headers=headers, method="POST"
             )
 
             with urllib.request.urlopen(req, timeout=self.timeout) as response:
                 return response.status == 200
 
         except Exception as e:
-            logger.warning("OTLPExporter failed to export spans to %s: %s", self.endpoint, e)
+            logger.warning(
+                "OTLPExporter failed to export spans to %s: %s", self.endpoint, e
+            )
             return False
 
     def shutdown(self) -> None:
         """Shutdown."""
         pass
+
 
 class BatchExporter(SpanExporter):
     """Batches spans before exporting to reduce network calls."""
@@ -273,7 +295,9 @@ class BatchExporter(SpanExporter):
                     span = self._queue.get(timeout=remaining)
                     batch.append(span)
                 except Exception as e:
-                    logger.debug("BatchExporter queue get timed out or interrupted: %s", e)
+                    logger.debug(
+                        "BatchExporter queue get timed out or interrupted: %s", e
+                    )
                     break
 
             if batch:
@@ -308,6 +332,7 @@ class BatchExporter(SpanExporter):
 
         self.exporter.shutdown()
 
+
 class MultiExporter(SpanExporter):
     """Exports to multiple backends simultaneously."""
 
@@ -334,10 +359,8 @@ class MultiExporter(SpanExporter):
                 logger.debug("Exporter shutdown error: %s", e)
                 pass
 
-def create_exporter(
-    exporter_type: str,
-    **kwargs
-) -> SpanExporter:
+
+def create_exporter(exporter_type: str, **kwargs) -> SpanExporter:
     """Factory function to create exporters."""
     exporters = {
         "console": ConsoleExporter,
@@ -350,6 +373,7 @@ def create_exporter(
         raise ValueError(f"Unknown exporter type: {exporter_type}")
 
     return exporter_class(**kwargs)
+
 
 __all__ = [
     "SpanData",

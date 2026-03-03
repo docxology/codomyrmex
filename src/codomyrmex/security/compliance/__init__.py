@@ -17,6 +17,7 @@ from typing import Any, Optional
 
 class ComplianceFramework(Enum):
     """Compliance frameworks."""
+
     SOC2 = "soc2"
     HIPAA = "hipaa"
     GDPR = "gdpr"
@@ -24,17 +25,21 @@ class ComplianceFramework(Enum):
     ISO27001 = "iso27001"
     CUSTOM = "custom"
 
+
 class ControlStatus(Enum):
     """Status of a control check."""
+
     PASSED = "passed"
     FAILED = "failed"
     PARTIAL = "partial"
     NOT_APPLICABLE = "not_applicable"
     UNKNOWN = "unknown"
 
+
 @dataclass
 class Control:
     """A compliance control."""
+
     id: str
     title: str
     description: str
@@ -52,9 +57,11 @@ class Control:
             "category": self.category,
         }
 
+
 @dataclass
 class ControlResult:
     """Result of a control check."""
+
     control_id: str
     status: ControlStatus
     message: str = ""
@@ -75,9 +82,11 @@ class ControlResult:
             "message": self.message,
         }
 
+
 @dataclass
 class ComplianceReport:
     """A compliance assessment report."""
+
     report_id: str
     framework: ComplianceFramework
     results: list[ControlResult] = field(default_factory=list)
@@ -117,6 +126,7 @@ class ComplianceReport:
             "score": self.compliance_score,
         }
 
+
 class ControlChecker(ABC):
     """Base class for control checkers."""
 
@@ -130,6 +140,7 @@ class ControlChecker(ABC):
     def check(self, context: dict[str, Any]) -> ControlResult:
         """Check the control."""
         pass
+
 
 class PolicyChecker(ControlChecker):
     """Checker based on policy rules."""
@@ -168,6 +179,7 @@ class PolicyChecker(ControlChecker):
                 status=ControlStatus.UNKNOWN,
                 message=f"Check error: {e}",
             )
+
 
 class ComplianceChecker:
     """
@@ -246,12 +258,15 @@ class ComplianceChecker:
 
         return report
 
-    def check_control(self, control_id: str, context: dict[str, Any]) -> ControlResult | None:
+    def check_control(
+        self, control_id: str, context: dict[str, Any]
+    ) -> ControlResult | None:
         """Check a single control."""
         checker = self._checkers.get(control_id)
         if not checker:
             return None
         return checker.check(context)
+
 
 # Pre-built SOC2 controls
 SOC2_CONTROLS = [

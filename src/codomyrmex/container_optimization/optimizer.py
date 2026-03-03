@@ -9,6 +9,7 @@ from loguru import logger
 @dataclass
 class OptimizationSuggestion:
     """A specific optimization suggestion."""
+
     category: str
     description: str
     impact: str  # "high", "medium", "low"
@@ -24,12 +25,14 @@ class OptimizationSuggestion:
             "impact": self.impact,
             "effort": self.effort,
             "dockerfile_changes": self.dockerfile_changes,
-            "size_reduction_mb": self.size_reduction_mb
+            "size_reduction_mb": self.size_reduction_mb,
         }
+
 
 @dataclass
 class ImageAnalysis:
     """Analysis results for a Docker image."""
+
     image_name: str
     size_bytes: int
     layers_count: int
@@ -55,8 +58,9 @@ class ImageAnalysis:
             "commands": self.commands,
             "user": self.user,
             "potential_optimizations": self.potential_optimizations,
-            "optimization_score": self.optimization_score
+            "optimization_score": self.optimization_score,
         }
+
 
 class ContainerOptimizer:
     """
@@ -86,8 +90,14 @@ class ContainerOptimizer:
             layers = attrs.get("RootFS", {}).get("Layers", [])
             config = attrs.get("Config", {})
 
-            exposed_ports = list(config.get("ExposedPorts", {}).keys()) if config.get("ExposedPorts") else []
-            volumes = list(config.get("Volumes", {}).keys()) if config.get("Volumes") else []
+            exposed_ports = (
+                list(config.get("ExposedPorts", {}).keys())
+                if config.get("ExposedPorts")
+                else []
+            )
+            volumes = (
+                list(config.get("Volumes", {}).keys()) if config.get("Volumes") else []
+            )
             env_vars = config.get("Env", [])
             commands = config.get("Cmd", []) or []
             user = config.get("User", "")
@@ -103,7 +113,7 @@ class ContainerOptimizer:
                 volumes=volumes,
                 environment_vars=env_vars,
                 commands=commands,
-                user=user
+                user=user,
             )
 
             analysis.potential_optimizations = self._analyze_optimizations(analysis)
@@ -122,32 +132,43 @@ class ContainerOptimizer:
         suggestions = []
 
         if analysis.size_bytes > 500 * 1024 * 1024:
-            suggestions.append(OptimizationSuggestion(
-                category="size",
-                description="Large image size detected. Consider multi-stage builds.",
-                impact="high",
-                effort="medium",
-                dockerfile_changes=["FROM builder AS build", "COPY --from=build /src /app"],
-                size_reduction_mb=analysis.size_bytes * 0.4 / (1024 * 1024)
-            ))
+            suggestions.append(
+                OptimizationSuggestion(
+                    category="size",
+                    description="Large image size detected. Consider multi-stage builds.",
+                    impact="high",
+                    effort="medium",
+                    dockerfile_changes=[
+                        "FROM builder AS build",
+                        "COPY --from=build /src /app",
+                    ],
+                    size_reduction_mb=analysis.size_bytes * 0.4 / (1024 * 1024),
+                )
+            )
 
         if analysis.layers_count > 20:
-            suggestions.append(OptimizationSuggestion(
-                category="layers",
-                description="High number of layers. Combine RUN commands.",
-                impact="medium",
-                effort="easy",
-                dockerfile_changes=["RUN apt-get update && apt-get install -y pkg1 pkg2 && rm -rf /var/lib/apt/lists/*"]
-            ))
+            suggestions.append(
+                OptimizationSuggestion(
+                    category="layers",
+                    description="High number of layers. Combine RUN commands.",
+                    impact="medium",
+                    effort="easy",
+                    dockerfile_changes=[
+                        "RUN apt-get update && apt-get install -y pkg1 pkg2 && rm -rf /var/lib/apt/lists/*"
+                    ],
+                )
+            )
 
         if not analysis.user or analysis.user == "root":
-             suggestions.append(OptimizationSuggestion(
-                category="security",
-                description="Image likely runs as root. Use a non-root user.",
-                impact="high",
-                effort="easy",
-                dockerfile_changes=["RUN useradd -m appuser", "USER appuser"]
-            ))
+            suggestions.append(
+                OptimizationSuggestion(
+                    category="security",
+                    description="Image likely runs as root. Use a non-root user.",
+                    impact="high",
+                    effort="easy",
+                    dockerfile_changes=["RUN useradd -m appuser", "USER appuser"],
+                )
+            )
 
         return suggestions
 
@@ -160,7 +181,9 @@ class ContainerOptimizer:
             "analysis": analysis.to_dict(),
             "suggestions": [s.to_dict() for s in suggestions],
             "score": analysis.optimization_score,
-            "status": "needs_improvement" if analysis.optimization_score < 80 else "optimized"
+            "status": "needs_improvement"
+            if analysis.optimization_score < 80
+            else "optimized",
         }
 
     def _extract_base_image(self, image: docker.models.images.Image) -> str:
@@ -170,7 +193,7 @@ class ContainerOptimizer:
             for entry in history:
                 cmd = entry.get("CreatedBy", "")
                 if "FROM" in cmd.upper():
-                    match = re.search(r'FROM\s+([^\s\n]+)', cmd, re.IGNORECASE)
+                    match = re.search(r"FROM\s+([^\s\n]+)", cmd, re.IGNORECASE)
                     if match:
                         return match.group(1).strip()
         except Exception as e:

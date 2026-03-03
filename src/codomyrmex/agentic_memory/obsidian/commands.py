@@ -134,6 +134,7 @@ def get_diff(
     [filter=local|sync]``.
     """
     from codomyrmex.agentic_memory.obsidian.cli import _file_or_path
+
     params = _file_or_path(file, path)
     if from_version is not None:
         params["from"] = str(from_version)
@@ -163,6 +164,7 @@ def get_history(
     Maps to ``obsidian history [file=|path=]``.
     """
     from codomyrmex.agentic_memory.obsidian.cli import _file_or_path
+
     params = _file_or_path(file, path)
     return cli.run("history", vault=vault, params=params or None)
 
@@ -179,17 +181,20 @@ def list_history(
     Maps to ``obsidian history:list [file=|path=]``.
     """
     from codomyrmex.agentic_memory.obsidian.cli import _file_or_path
+
     params = _file_or_path(file, path)
     result = cli.run("history:list", vault=vault, params=params or None)
     entries: list[HistoryEntry] = []
     for line in result.lines:
         parts = line.split("\t")
-        entries.append(HistoryEntry(
-            version=parts[0].strip() if len(parts) > 0 else "",
-            timestamp=parts[1].strip() if len(parts) > 1 else "",
-            size=parts[2].strip() if len(parts) > 2 else "",
-            raw=line,
-        ))
+        entries.append(
+            HistoryEntry(
+                version=parts[0].strip() if len(parts) > 0 else "",
+                timestamp=parts[1].strip() if len(parts) > 1 else "",
+                size=parts[2].strip() if len(parts) > 2 else "",
+                raw=line,
+            )
+        )
     return entries
 
 
@@ -206,6 +211,7 @@ def read_history(
     Maps to ``obsidian history:read [file=|path=] [version=<n>]``.
     """
     from codomyrmex.agentic_memory.obsidian.cli import _file_or_path
+
     params = _file_or_path(file, path)
     if version:
         params["version"] = version
@@ -225,6 +231,7 @@ def restore_history(
     Maps to ``obsidian history:restore [file=|path=] [version=<n>]``.
     """
     from codomyrmex.agentic_memory.obsidian.cli import _file_or_path
+
     params = _file_or_path(file, path)
     if version:
         params["version"] = version
@@ -243,6 +250,7 @@ def open_history(
     Maps to ``obsidian history:open [file=|path=]``.
     """
     from codomyrmex.agentic_memory.obsidian.cli import _file_or_path
+
     params = _file_or_path(file, path)
     return cli.run("history:open", vault=vault, params=params or None)
 
@@ -262,6 +270,7 @@ def get_backlinks_cli(
     Maps to ``obsidian backlinks [file=|path=]``.
     """
     from codomyrmex.agentic_memory.obsidian.cli import _file_or_path
+
     params = _file_or_path(file, path)
     return cli.run("backlinks", vault=vault, params=params or None).lines
 
@@ -278,6 +287,7 @@ def get_links(
     Maps to ``obsidian links [file=|path=]``.
     """
     from codomyrmex.agentic_memory.obsidian.cli import _file_or_path
+
     params = _file_or_path(file, path)
     return cli.run("links", vault=vault, params=params or None).lines
 
@@ -333,6 +343,7 @@ def get_outline(
     Maps to ``obsidian outline [file=|path=]``.
     """
     from codomyrmex.agentic_memory.obsidian.cli import _file_or_path
+
     params = _file_or_path(file, path)
     result = cli.run("outline", vault=vault, params=params or None)
     items: list[OutlineItem] = []
@@ -363,6 +374,7 @@ def get_wordcount(
     Maps to ``obsidian wordcount [file=|path=]``.
     """
     from codomyrmex.agentic_memory.obsidian.cli import _file_or_path
+
     params = _file_or_path(file, path)
     result = cli.run("wordcount", vault=vault, params=params or None)
     wc = WordCount(raw=result.stdout)

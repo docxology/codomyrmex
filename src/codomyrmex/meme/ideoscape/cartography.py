@@ -10,7 +10,7 @@ from codomyrmex.meme.ideoscape.models import MapFeature, TerrainMap
 def generate_terrain(
     features: list[MapFeature],
     resolution: int = 100,
-    bounds: tuple[float, float, float, float] = (-100.0, 100.0, -100.0, 100.0)
+    bounds: tuple[float, float, float, float] = (-100.0, 100.0, -100.0, 100.0),
 ) -> TerrainMap:
     """Generate a height map from feature points using Gaussian kernels.
 
@@ -35,15 +35,11 @@ def generate_terrain(
         sigma = 10.0  # Default spread
 
         # Apply Gaussian
-        dist_sq = (X - x0)**2 + (Y - y0)**2
+        dist_sq = (X - x0) ** 2 + (Y - y0) ** 2
         gauss = f.magnitude * np.exp(-dist_sq / (2 * sigma**2))
         Z += gauss
 
-    return TerrainMap(
-        height_map=Z,
-        resolution=resolution,
-        features=features
-    )
+    return TerrainMap(height_map=Z, resolution=resolution, features=features)
 
 
 def locate_features(terrain: TerrainMap, threshold: float) -> list[tuple[int, int]]:

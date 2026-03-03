@@ -22,6 +22,7 @@ from codomyrmex.agents.agentic_seek.agent_types import (
 # Code-block extraction
 # ---------------------------------------------------------------------------
 
+
 @dataclass(frozen=True)
 class CodeBlock:
     """A fenced code block extracted from an LLM response.
@@ -76,6 +77,7 @@ def extract_code_blocks(text: str) -> list[CodeBlock]:
 # Language classification
 # ---------------------------------------------------------------------------
 
+
 def classify_language(block: CodeBlock) -> str:
     """Resolve a ``CodeBlock``'s language tag to a canonical key.
 
@@ -95,6 +97,7 @@ def classify_language(block: CodeBlock) -> str:
 # ---------------------------------------------------------------------------
 # Execution command building
 # ---------------------------------------------------------------------------
+
 
 def build_execution_command(
     block: CodeBlock,
@@ -135,6 +138,7 @@ def build_execution_command(
 # ---------------------------------------------------------------------------
 # Output parsing
 # ---------------------------------------------------------------------------
+
 
 def parse_execution_output(
     stdout: str,
@@ -180,6 +184,7 @@ def _stderr_has_error(stderr: str) -> bool:
 # ---------------------------------------------------------------------------
 # Convenience: AgenticSeekCodeExecutor facade
 # ---------------------------------------------------------------------------
+
 
 class AgenticSeekCodeExecutor:
     """Facade that combines extraction, classification and command building.

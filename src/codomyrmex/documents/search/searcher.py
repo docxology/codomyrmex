@@ -15,7 +15,7 @@ def _tokenize(text: str) -> list[str]:
     """Tokenize text into lowercase words."""
     if not isinstance(text, str):
         text = str(text)
-    return re.findall(r'\w+', text.lower())
+    return re.findall(r"\w+", text.lower())
 
 
 def search_documents(query: str, index: InMemoryIndex) -> list[Document]:
@@ -71,11 +71,13 @@ def search_index(query: str, index: InMemoryIndex) -> list[dict]:
         token_counts = Counter(content_tokens)
         score = sum(token_counts.get(t, 0) for t in terms)
 
-        results.append({
-            "document_id": doc_id,
-            "score": score,
-            "document": doc,
-        })
+        results.append(
+            {
+                "document_id": doc_id,
+                "score": score,
+                "document": doc,
+            }
+        )
 
     # Sort by score descending
     results.sort(key=lambda r: r["score"], reverse=True)

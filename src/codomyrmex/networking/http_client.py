@@ -26,6 +26,7 @@ logger = get_logger(__name__)
 
 class NetworkingError(CodomyrmexError):
     """Raised when networking operations fail."""
+
     pass
 
 
@@ -138,7 +139,7 @@ class HTTPClient:
                 url=url,
                 headers=request_headers,
                 timeout=timeout,
-                **kwargs
+                **kwargs,
             )
 
             # Parse JSON if possible

@@ -23,6 +23,7 @@ from codomyrmex.crypto.graphy.hashing import (
 @pytest.mark.unit
 class TestSHA256:
     """Test suite for SHA256."""
+
     def test_known_vector_empty(self) -> None:
         """Test functionality: known vector empty."""
         # SHA-256 of empty string
@@ -44,6 +45,7 @@ class TestSHA256:
 @pytest.mark.unit
 class TestSHA3_256:
     """Test suite for SHA3_256."""
+
     def test_known_vector_empty(self) -> None:
         """Test functionality: known vector empty."""
         # SHA-3-256 of empty string
@@ -60,6 +62,7 @@ class TestSHA3_256:
 @pytest.mark.unit
 class TestSHA512:
     """Test suite for SHA512."""
+
     def test_known_vector_empty(self) -> None:
         """Test functionality: known vector empty."""
         # SHA-512 of empty string
@@ -79,6 +82,7 @@ class TestSHA512:
 @pytest.mark.unit
 class TestBLAKE2b:
     """Test suite for BLAKE2b."""
+
     def test_default_digest_size(self) -> None:
         """Test functionality: default digest size."""
         result = hash_blake2b(b"test")
@@ -103,6 +107,7 @@ class TestBLAKE2b:
 @pytest.mark.unit
 class TestMD5:
     """Test suite for MD5."""
+
     def test_known_vector_empty(self) -> None:
         """Test functionality: known vector empty."""
         expected = "d41d8cd98f00b204e9800998ecf8427e"
@@ -131,6 +136,7 @@ class TestMD5:
 @pytest.mark.unit
 class TestHashData:
     """Test suite for HashData."""
+
     def test_dispatch_sha256(self) -> None:
         """Test functionality: dispatch sha256."""
         assert hash_data(b"abc", "sha256") == hash_sha256(b"abc")
@@ -167,6 +173,7 @@ class TestHashData:
 @pytest.mark.unit
 class TestVerifyHash:
     """Test suite for VerifyHash."""
+
     def test_correct_hash_passes(self) -> None:
         """Test functionality: correct hash passes."""
         data = b"verify me"
@@ -195,6 +202,7 @@ class TestVerifyHash:
 @pytest.mark.unit
 class TestHashAlgorithmEnum:
     """Test suite for HashAlgorithmEnum."""
+
     def test_values(self) -> None:
         """Test functionality: values."""
         assert HashAlgorithm.SHA256.value == "sha256"

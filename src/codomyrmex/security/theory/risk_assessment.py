@@ -13,6 +13,7 @@ logger = get_logger(__name__)
 
 class RiskLevel(Enum):
     """Risk levels."""
+
     LOW = "low"
     MEDIUM = "medium"
     HIGH = "high"
@@ -21,6 +22,7 @@ class RiskLevel(Enum):
 
 class LikelihoodLevel(Enum):
     """Likelihood levels."""
+
     LOW = "low"
     MEDIUM = "medium"
     HIGH = "high"
@@ -28,6 +30,7 @@ class LikelihoodLevel(Enum):
 
 class ImpactLevel(Enum):
     """Impact levels."""
+
     LOW = "low"
     MEDIUM = "medium"
     HIGH = "high"
@@ -114,10 +117,12 @@ class RiskAssessor:
             recommendations=recommendations,
             assessment_methodology=self.methodology,
             risk_matrix=risk_matrix,
-            summary=self._generate_summary(risks, overall_risk)
+            summary=self._generate_summary(risks, overall_risk),
         )
 
-        logger.info(f"Completed risk assessment with {len(risks)} risks, overall level: {overall_risk}")
+        logger.info(
+            f"Completed risk assessment with {len(risks)} risks, overall level: {overall_risk}"
+        )
         return assessment
 
     def _identify_risks(self, context: dict[str, Any]) -> list[Risk]:
@@ -140,81 +145,106 @@ class RiskAssessor:
 
         # Identify risks based on common threat patterns
         if "data_breach" in str(threats).lower() or "data" in str(assets).lower():
-            risks.append(Risk(
-                risk_id=f"risk_{uuid.uuid4().hex[:8]}",
-                description="Risk of unauthorized data access or disclosure",
-                likelihood=LikelihoodLevel.MEDIUM.value,
-                impact=ImpactLevel.CRITICAL.value,
-                risk_score=calculate_risk_score(LikelihoodLevel.MEDIUM.value, ImpactLevel.CRITICAL.value),
-                category="data_protection",
-                affected_assets=[a for a in assets if "data" in str(a).lower()],
-                threat_source="External attackers, malicious insiders",
-                vulnerability="Insufficient access controls, weak encryption",
-                existing_controls=context.get("existing_controls", []),
-                recommended_controls=[
-                    "Implement encryption at rest and in transit",
-                    "Enforce strong access controls",
-                    "Regular security audits"
-                ],
-                mitigation_priority="critical"
-            ))
+            risks.append(
+                Risk(
+                    risk_id=f"risk_{uuid.uuid4().hex[:8]}",
+                    description="Risk of unauthorized data access or disclosure",
+                    likelihood=LikelihoodLevel.MEDIUM.value,
+                    impact=ImpactLevel.CRITICAL.value,
+                    risk_score=calculate_risk_score(
+                        LikelihoodLevel.MEDIUM.value, ImpactLevel.CRITICAL.value
+                    ),
+                    category="data_protection",
+                    affected_assets=[a for a in assets if "data" in str(a).lower()],
+                    threat_source="External attackers, malicious insiders",
+                    vulnerability="Insufficient access controls, weak encryption",
+                    existing_controls=context.get("existing_controls", []),
+                    recommended_controls=[
+                        "Implement encryption at rest and in transit",
+                        "Enforce strong access controls",
+                        "Regular security audits",
+                    ],
+                    mitigation_priority="critical",
+                )
+            )
 
-        if "unauthorized_access" in str(threats).lower() or "authentication" in str(context).lower():
-            risks.append(Risk(
-                risk_id=f"risk_{uuid.uuid4().hex[:8]}",
-                description="Risk of unauthorized system access",
-                likelihood=LikelihoodLevel.MEDIUM.value,
-                impact=ImpactLevel.HIGH.value,
-                risk_score=calculate_risk_score(LikelihoodLevel.MEDIUM.value, ImpactLevel.HIGH.value),
-                category="access_control",
-                affected_assets=assets,
-                threat_source="External attackers, credential theft",
-                vulnerability="Weak authentication, insufficient authorization",
-                existing_controls=context.get("existing_controls", []),
-                recommended_controls=[
-                    "Implement multi-factor authentication",
-                    "Enforce strong password policies",
-                    "Regular access reviews"
-                ],
-                mitigation_priority="high"
-            ))
+        if (
+            "unauthorized_access" in str(threats).lower()
+            or "authentication" in str(context).lower()
+        ):
+            risks.append(
+                Risk(
+                    risk_id=f"risk_{uuid.uuid4().hex[:8]}",
+                    description="Risk of unauthorized system access",
+                    likelihood=LikelihoodLevel.MEDIUM.value,
+                    impact=ImpactLevel.HIGH.value,
+                    risk_score=calculate_risk_score(
+                        LikelihoodLevel.MEDIUM.value, ImpactLevel.HIGH.value
+                    ),
+                    category="access_control",
+                    affected_assets=assets,
+                    threat_source="External attackers, credential theft",
+                    vulnerability="Weak authentication, insufficient authorization",
+                    existing_controls=context.get("existing_controls", []),
+                    recommended_controls=[
+                        "Implement multi-factor authentication",
+                        "Enforce strong password policies",
+                        "Regular access reviews",
+                    ],
+                    mitigation_priority="high",
+                )
+            )
 
-        if "denial_of_service" in str(threats).lower() or "service" in str(assets).lower():
-            risks.append(Risk(
-                risk_id=f"risk_{uuid.uuid4().hex[:8]}",
-                description="Risk of service unavailability due to attacks",
-                likelihood=LikelihoodLevel.MEDIUM.value,
-                impact=ImpactLevel.HIGH.value,
-                risk_score=calculate_risk_score(LikelihoodLevel.MEDIUM.value, ImpactLevel.HIGH.value),
-                category="availability",
-                affected_assets=[a for a in assets if "service" in str(a).lower()],
-                threat_source="DDoS attacks, resource exhaustion",
-                vulnerability="Insufficient rate limiting, no DDoS protection",
-                existing_controls=context.get("existing_controls", []),
-                recommended_controls=[
-                    "Implement rate limiting",
-                    "DDoS protection services",
-                    "Resource quotas and monitoring"
-                ],
-                mitigation_priority="high"
-            ))
+        if (
+            "denial_of_service" in str(threats).lower()
+            or "service" in str(assets).lower()
+        ):
+            risks.append(
+                Risk(
+                    risk_id=f"risk_{uuid.uuid4().hex[:8]}",
+                    description="Risk of service unavailability due to attacks",
+                    likelihood=LikelihoodLevel.MEDIUM.value,
+                    impact=ImpactLevel.HIGH.value,
+                    risk_score=calculate_risk_score(
+                        LikelihoodLevel.MEDIUM.value, ImpactLevel.HIGH.value
+                    ),
+                    category="availability",
+                    affected_assets=[a for a in assets if "service" in str(a).lower()],
+                    threat_source="DDoS attacks, resource exhaustion",
+                    vulnerability="Insufficient rate limiting, no DDoS protection",
+                    existing_controls=context.get("existing_controls", []),
+                    recommended_controls=[
+                        "Implement rate limiting",
+                        "DDoS protection services",
+                        "Resource quotas and monitoring",
+                    ],
+                    mitigation_priority="high",
+                )
+            )
 
         # Generic risk if no specific risks identified
         if not risks:
-            risks.append(Risk(
-                risk_id=f"risk_{uuid.uuid4().hex[:8]}",
-                description="General security risk in system",
-                likelihood=LikelihoodLevel.LOW.value,
-                impact=ImpactLevel.MEDIUM.value,
-                risk_score=calculate_risk_score(LikelihoodLevel.LOW.value, ImpactLevel.MEDIUM.value),
-                category="general",
-                affected_assets=assets,
-                threat_source="Various",
-                vulnerability="Unknown vulnerabilities",
-                existing_controls=context.get("existing_controls", []),
-                recommended_controls=["Conduct security assessment", "Implement security controls"],
-                mitigation_priority="medium"
-            ))
+            risks.append(
+                Risk(
+                    risk_id=f"risk_{uuid.uuid4().hex[:8]}",
+                    description="General security risk in system",
+                    likelihood=LikelihoodLevel.LOW.value,
+                    impact=ImpactLevel.MEDIUM.value,
+                    risk_score=calculate_risk_score(
+                        LikelihoodLevel.LOW.value, ImpactLevel.MEDIUM.value
+                    ),
+                    category="general",
+                    affected_assets=assets,
+                    threat_source="Various",
+                    vulnerability="Unknown vulnerabilities",
+                    existing_controls=context.get("existing_controls", []),
+                    recommended_controls=[
+                        "Conduct security assessment",
+                        "Implement security controls",
+                    ],
+                    mitigation_priority="medium",
+                )
+            )
 
         return risks
 
@@ -299,24 +329,21 @@ class RiskAssessor:
         Returns:
             Risk matrix data structure
         """
-        matrix = {
-            "critical": [],
-            "high": [],
-            "medium": [],
-            "low": []
-        }
+        matrix = {"critical": [], "high": [], "medium": [], "low": []}
 
         for risk in risks:
             level = risk.impact
             if level not in matrix:
                 level = "medium"
-            matrix[level].append({
-                "risk_id": risk.risk_id,
-                "description": risk.description,
-                "likelihood": risk.likelihood,
-                "impact": risk.impact,
-                "risk_score": risk.risk_score
-            })
+            matrix[level].append(
+                {
+                    "risk_id": risk.risk_id,
+                    "description": risk.description,
+                    "likelihood": risk.likelihood,
+                    "impact": risk.impact,
+                    "risk_score": risk.risk_score,
+                }
+            )
 
         return matrix
 
@@ -377,14 +404,14 @@ def calculate_risk_score(likelihood: str, impact: str) -> float:
     likelihood_scores = {
         LikelihoodLevel.LOW.value: 0.25,
         LikelihoodLevel.MEDIUM.value: 0.5,
-        LikelihoodLevel.HIGH.value: 0.75
+        LikelihoodLevel.HIGH.value: 0.75,
     }
 
     impact_scores = {
         ImpactLevel.LOW.value: 0.25,
         ImpactLevel.MEDIUM.value: 0.5,
         ImpactLevel.HIGH.value: 0.75,
-        ImpactLevel.CRITICAL.value: 1.0
+        ImpactLevel.CRITICAL.value: 1.0,
     }
 
     likelihood_score = likelihood_scores.get(likelihood.lower(), 0.5)
@@ -406,17 +433,12 @@ def prioritize_risks(risks: list[Risk]) -> list[Risk]:
     Returns:
         Sorted list of risks (highest priority first)
     """
-    priority_order = {
-        "critical": 4,
-        "high": 3,
-        "medium": 2,
-        "low": 1
-    }
+    priority_order = {"critical": 4, "high": 3, "medium": 2, "low": 1}
 
     return sorted(
         risks,
         key=lambda r: (r.risk_score, priority_order.get(r.mitigation_priority, 0)),
-        reverse=True
+        reverse=True,
     )
 
 
@@ -435,7 +457,7 @@ def calculate_aggregate_risk(risks: list[Risk]) -> dict[str, Any]:
             "total_risks": 0,
             "average_risk_score": 0.0,
             "max_risk_score": 0.0,
-            "risk_distribution": {}
+            "risk_distribution": {},
         }
 
     risk_scores = [r.risk_score for r in risks]
@@ -447,12 +469,12 @@ def calculate_aggregate_risk(risks: list[Risk]) -> dict[str, Any]:
         "critical": sum(1 for r in risks if r.impact == ImpactLevel.CRITICAL.value),
         "high": sum(1 for r in risks if r.impact == ImpactLevel.HIGH.value),
         "medium": sum(1 for r in risks if r.impact == ImpactLevel.MEDIUM.value),
-        "low": sum(1 for r in risks if r.impact == ImpactLevel.LOW.value)
+        "low": sum(1 for r in risks if r.impact == ImpactLevel.LOW.value),
     }
 
     return {
         "total_risks": len(risks),
         "average_risk_score": round(avg_score, 3),
         "max_risk_score": round(max_score, 3),
-        "risk_distribution": distribution
+        "risk_distribution": distribution,
     }

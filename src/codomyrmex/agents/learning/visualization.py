@@ -20,6 +20,6 @@ def plot_skill_distribution(library: SkillLibrary) -> str:
         x_label="Tag",
         y_label="Count",
         categories=list(counts.keys()),
-        values=list(counts.values())
+        values=list(counts.values()),
     )
     return chart.render()

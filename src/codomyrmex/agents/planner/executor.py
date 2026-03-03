@@ -88,7 +88,9 @@ class PlanExecutor:
             except Exception as exc:
                 task.state = TaskState.FAILED
                 result.failed_tasks += 1
-                logger.warning("Task failed", extra={"task": task.name, "error": str(exc)[:80]})
+                logger.warning(
+                    "Task failed", extra={"task": task.name, "error": str(exc)[:80]}
+                )
 
         result.duration_ms = (time.time() - start) * 1000
         result.success = result.failed_tasks == 0

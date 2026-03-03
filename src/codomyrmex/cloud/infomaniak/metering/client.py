@@ -27,9 +27,7 @@ class InfomaniakMeteringClient(InfomaniakOpenStackBase):
     # =========================================================================
 
     def get_compute_usage(
-        self,
-        start: datetime | None = None,
-        end: datetime | None = None
+        self, start: datetime | None = None, end: datetime | None = None
     ) -> dict[str, Any]:
         """
         Get compute resource usage summary.
@@ -148,39 +146,47 @@ class InfomaniakMeteringClient(InfomaniakOpenStackBase):
         # Compute instances
         try:
             for server in self._conn.compute.servers():
-                resources.append({
-                    "type": "compute.instance",
-                    "id": server.id,
-                    "name": server.name,
-                    "status": server.status,
-                    "created": str(server.created_at) if server.created_at else None,
-                })
+                resources.append(
+                    {
+                        "type": "compute.instance",
+                        "id": server.id,
+                        "name": server.name,
+                        "status": server.status,
+                        "created": str(server.created_at)
+                        if server.created_at
+                        else None,
+                    }
+                )
         except Exception as e:
             logger.warning(f"Failed to list compute instances: {e}")
 
         # Volumes
         try:
             for volume in self._conn.block_storage.volumes():
-                resources.append({
-                    "type": "storage.volume",
-                    "id": volume.id,
-                    "name": volume.name,
-                    "status": volume.status,
-                    "size_gb": volume.size,
-                })
+                resources.append(
+                    {
+                        "type": "storage.volume",
+                        "id": volume.id,
+                        "name": volume.name,
+                        "status": volume.status,
+                        "size_gb": volume.size,
+                    }
+                )
         except Exception as e:
             logger.warning(f"Failed to list volumes: {e}")
 
         # Floating IPs
         try:
             for fip in self._conn.network.ips():
-                resources.append({
-                    "type": "network.floating_ip",
-                    "id": fip.id,
-                    "address": fip.floating_ip_address,
-                    "status": fip.status,
-                    "in_use": bool(fip.port_id),
-                })
+                resources.append(
+                    {
+                        "type": "network.floating_ip",
+                        "id": fip.id,
+                        "address": fip.floating_ip_address,
+                        "status": fip.status,
+                        "in_use": bool(fip.port_id),
+                    }
+                )
         except Exception as e:
             logger.warning(f"Failed to list floating IPs: {e}")
 

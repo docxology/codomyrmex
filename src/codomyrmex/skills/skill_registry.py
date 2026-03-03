@@ -14,6 +14,7 @@ if TYPE_CHECKING:
 
 try:
     from codomyrmex.logging_monitoring.core.logger_config import get_logger
+
     logger = get_logger(__name__)
 except ImportError:
     logging.basicConfig(level=logging.INFO)
@@ -50,9 +51,13 @@ class SkillRegistry:
         for category, skills in self._index.items():
             self._metadata[category] = {}
             for name, skill_data in skills.items():
-                self._metadata[category][name] = self._extract_metadata(category, name, skill_data)
+                self._metadata[category][name] = self._extract_metadata(
+                    category, name, skill_data
+                )
 
-        logger.info(f"Index built: {len(self._index)} categories, {sum(len(s) for s in self._index.values())} skills")
+        logger.info(
+            f"Index built: {len(self._index)} categories, {sum(len(s) for s in self._index.values())} skills"
+        )
         return self._index
 
     def _extract_metadata(
@@ -124,7 +129,9 @@ class SkillRegistry:
 
         return self._metadata.get(category, {}).get(name)
 
-    def search_by_pattern(self, pattern: str, case_sensitive: bool = False) -> list[dict[str, Any]]:
+    def search_by_pattern(
+        self, pattern: str, case_sensitive: bool = False
+    ) -> list[dict[str, Any]]:
         """
         Search skills by pattern (regex or text).
 

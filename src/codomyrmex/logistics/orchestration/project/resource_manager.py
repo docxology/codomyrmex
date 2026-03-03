@@ -20,16 +20,20 @@ except ImportError:
     # Fallback if performance module is not available or has circular imports
     def monitor_performance(*args, **kwargs):
         """Decorator for performance monitoring (fallback)."""
+
         def decorator(func):
             """Decorator."""
             return func
+
         return decorator
+
 
 logger = get_logger(__name__)
 
 
 class ResourceType(Enum):
     """Types of resources."""
+
     COMPUTE = "compute"
     MEMORY = "memory"
     STORAGE = "storage"
@@ -45,6 +49,7 @@ class ResourceType(Enum):
 
 class ResourceStatus(Enum):
     """Status of resources."""
+
     AVAILABLE = "available"
     ALLOCATED = "allocated"
     BUSY = "busy"
@@ -57,6 +62,7 @@ class ResourceStatus(Enum):
 @dataclass
 class ResourceLimits:
     """Resource limits definition."""
+
     min_value: float = 0
     max_value: float = float("inf")
     default_allocation: float = 1.0
@@ -67,6 +73,7 @@ class ResourceLimits:
 @dataclass
 class ResourceAllocation:
     """Record of a resource allocation."""
+
     allocation_id: str
     resource_id: str
     requester_id: str
@@ -79,6 +86,7 @@ class ResourceAllocation:
 @dataclass
 class ResourceUsage:
     """Current usage statistics for a resource."""
+
     resource_id: str
     total_capacity: float
     allocated_amount: float
@@ -91,6 +99,7 @@ class ResourceUsage:
 @dataclass
 class Resource:
     """Resource definition."""
+
     id: str
     name: str
     type: ResourceType
@@ -120,11 +129,11 @@ class Resource:
             "status": self.status.value,
             "limits": asdict(self.limits),
             "metadata": self.metadata,
-            "allocations": {k: asdict(v) for k, v in self.allocations.items()}
+            "allocations": {k: asdict(v) for k, v in self.allocations.items()},
         }
 
     @classmethod
-    def from_dict(cls, data: dict[str, Any]) -> 'Resource':
+    def from_dict(cls, data: dict[str, Any]) -> "Resource":
         """Create resource from dictionary."""
         limits_data = data.get("limits", {})
         limits = ResourceLimits(**limits_data)
@@ -137,7 +146,7 @@ class Resource:
             description=data.get("description", ""),
             limits=limits,
             status=ResourceStatus(data.get("status", "available")),
-            metadata=data.get("metadata", {})
+            metadata=data.get("metadata", {}),
         )
 
         # Restore allocations if present (carefully)
@@ -164,34 +173,40 @@ class ResourceManager:
     def _init_default_resources(self):
         """Initialize standard system resources."""
         # Generic Compute Resource
-        self.add_resource(Resource(
-            id="sys-compute",
-            name="System Compute",
-            type=ResourceType.COMPUTE,
-            capacity=100.0,
-            description="Virtual CPU units",
-            limits=ResourceLimits(unit="vCPU")
-        ))
+        self.add_resource(
+            Resource(
+                id="sys-compute",
+                name="System Compute",
+                type=ResourceType.COMPUTE,
+                capacity=100.0,
+                description="Virtual CPU units",
+                limits=ResourceLimits(unit="vCPU"),
+            )
+        )
 
         # Generic Memory Resource
-        self.add_resource(Resource(
-            id="sys-memory",
-            name="System Memory",
-            type=ResourceType.MEMORY,
-            capacity=1024.0,
-            description="System RAM in MB/GB units",
-            limits=ResourceLimits(unit="MB")
-        ))
+        self.add_resource(
+            Resource(
+                id="sys-memory",
+                name="System Memory",
+                type=ResourceType.MEMORY,
+                capacity=1024.0,
+                description="System RAM in MB/GB units",
+                limits=ResourceLimits(unit="MB"),
+            )
+        )
 
         # API Quota
-        self.add_resource(Resource(
-            id="api-global",
-            name="Global API Quota",
-            type=ResourceType.API_QUOTA,
-            capacity=1000.0,
-            description="Global API calls per minute",
-            limits=ResourceLimits(unit="RPM")
-        ))
+        self.add_resource(
+            Resource(
+                id="api-global",
+                name="Global API Quota",
+                type=ResourceType.API_QUOTA,
+                capacity=1000.0,
+                description="Global API calls per minute",
+                limits=ResourceLimits(unit="RPM"),
+            )
+        )
 
     @monitor_performance("add_resource")
     def add_resource(self, resource: Resource) -> bool:
@@ -222,7 +237,7 @@ class ResourceManager:
         resource_id: str,
         requester_id: str,
         amount: float = 1.0,
-        timeout: float | None = None
+        timeout: float | None = None,
     ) -> ResourceAllocation | None:
         """Allocate a resource."""
         with self._lock:
@@ -231,15 +246,22 @@ class ResourceManager:
                 logger.error(f"Cannot allocate: Resource {resource_id} not found")
                 return None
 
-            if resource.status != ResourceStatus.AVAILABLE and resource.status != ResourceStatus.ALLOCATED:
+            if (
+                resource.status != ResourceStatus.AVAILABLE
+                and resource.status != ResourceStatus.ALLOCATED
+            ):
                 logger.warning(f"Resource {resource.name} is {resource.status.value}")
                 return None
 
             # Check capacity
             available = resource.capacity - resource.allocated
             if available < amount:
-                logger.warning(f"Insufficient capacity for {resource.name}: requested {amount}, available {available}")
-                resource.status = ResourceStatus.BUSY if available <= 0 else ResourceStatus.ALLOCATED
+                logger.warning(
+                    f"Insufficient capacity for {resource.name}: requested {amount}, available {available}"
+                )
+                resource.status = (
+                    ResourceStatus.BUSY if available <= 0 else ResourceStatus.ALLOCATED
+                )
                 return None
 
             # Create allocation
@@ -248,7 +270,7 @@ class ResourceManager:
                 allocation_id=allocation_id,
                 resource_id=resource_id,
                 requester_id=requester_id,
-                amount=amount
+                amount=amount,
             )
 
             resource.allocations[allocation_id] = allocation
@@ -256,9 +278,15 @@ class ResourceManager:
             self.total_allocations += 1
 
             # Update status
-            resource.status = ResourceStatus.ALLOCATED if resource.allocated < resource.capacity else ResourceStatus.BUSY
+            resource.status = (
+                ResourceStatus.ALLOCATED
+                if resource.allocated < resource.capacity
+                else ResourceStatus.BUSY
+            )
 
-            logger.info(f"Allocated {amount} {resource.limits.unit} of {resource.name} to {requester_id}")
+            logger.info(
+                f"Allocated {amount} {resource.limits.unit} of {resource.name} to {requester_id}"
+            )
             return allocation
 
     @monitor_performance("release_resource")
@@ -286,9 +314,15 @@ class ResourceManager:
 
             # Update status
             if target_resource.allocated < target_resource.capacity:
-                target_resource.status = ResourceStatus.AVAILABLE if target_resource.allocated == 0 else ResourceStatus.ALLOCATED
+                target_resource.status = (
+                    ResourceStatus.AVAILABLE
+                    if target_resource.allocated == 0
+                    else ResourceStatus.ALLOCATED
+                )
 
-            logger.info(f"Released {amount} {target_resource.limits.unit} of {target_resource.name}")
+            logger.info(
+                f"Released {amount} {target_resource.limits.unit} of {target_resource.name}"
+            )
             return True
 
     @monitor_performance("get_usage")
@@ -304,7 +338,9 @@ class ResourceManager:
             allocated_amount=resource.allocated,
             available_amount=resource.capacity - resource.allocated,
             allocation_count=len(resource.allocations),
-            utilization_percentage=(resource.allocated / resource.capacity * 100) if resource.capacity > 0 else 0
+            utilization_percentage=(resource.allocated / resource.capacity * 100)
+            if resource.capacity > 0
+            else 0,
         )
 
     def list_resources(self, type_filter: ResourceType | None = None) -> list[Resource]:
@@ -345,5 +381,3 @@ def get_resource_manager() -> ResourceManager:
     if _resource_manager is None:
         _resource_manager = ResourceManager()
     return _resource_manager
-
-

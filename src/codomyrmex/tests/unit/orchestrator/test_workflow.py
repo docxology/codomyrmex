@@ -1,4 +1,3 @@
-
 import asyncio
 
 import pytest
@@ -37,6 +36,7 @@ async def test_workflow_linear_execution():
 
     assert execution_order == ["A", "B", "C"]
     assert results == {"A": "result_a", "B": "result_b", "C": "result_c"}
+
 
 @pytest.mark.asyncio
 async def test_workflow_parallel_execution():
@@ -83,6 +83,7 @@ async def test_workflow_parallel_execution():
     assert len(results_list) == 4
     assert set(results_list) == {"A", "B", "C", "D"}
 
+
 @pytest.mark.asyncio
 async def test_cycle_detection():
     """Test detection of circular dependencies."""
@@ -93,6 +94,7 @@ async def test_cycle_detection():
     with pytest.raises(CycleError):
         await wf.run()
 
+
 @pytest.mark.asyncio
 async def test_missing_dependency():
     """Test missing dependency validation."""
@@ -102,6 +104,7 @@ async def test_missing_dependency():
     with pytest.raises(WorkflowError):
         await wf.run()
 
+
 @pytest.mark.asyncio
 async def test_task_failure_handling():
     """Test that downstream tasks are skipped/marked failed if dependency fails."""
@@ -110,11 +113,14 @@ async def test_task_failure_handling():
         raise ValueError("Boom")
 
     success_run = False
+
     async def downstream_task(_task_results=None):
         nonlocal success_run
         success_run = True
 
-    wf = Workflow("test_failure", fail_fast=False)  # Disable fail-fast to see proper skip behavior
+    wf = Workflow(
+        "test_failure", fail_fast=False
+    )  # Disable fail-fast to see proper skip behavior
     wf.add_task("Fail", failing_task)
     wf.add_task("Downstream", downstream_task, dependencies=["Fail"])
 
@@ -136,6 +142,7 @@ async def test_task_failure_handling():
 
 # Additional tests for new workflow features
 
+
 class TestRetryPolicy:
     """Tests for RetryPolicy dataclass."""
 
@@ -155,10 +162,7 @@ class TestRetryPolicy:
         from codomyrmex.orchestrator.workflows.workflow import RetryPolicy
 
         policy = RetryPolicy(
-            max_attempts=5,
-            initial_delay=0.5,
-            max_delay=30.0,
-            exponential_base=3.0
+            max_attempts=5, initial_delay=0.5, max_delay=30.0, exponential_base=3.0
         )
 
         assert policy.max_attempts == 5
@@ -208,7 +212,7 @@ class TestTaskResult:
             value={"data": "test"},
             error=None,
             execution_time=2.5,
-            attempts=3
+            attempts=3,
         )
 
         assert result.success is True
@@ -223,8 +227,11 @@ class TestWorkflowHelpers:
         """Test chain helper function."""
         from codomyrmex.orchestrator.workflows.workflow import chain
 
-        def action1(): return "1"
-        def action2(): return "2"
+        def action1():
+            return "1"
+
+        def action2():
+            return "2"
 
         workflow = chain(action1, action2, names=["step1", "step2"])
 
@@ -236,8 +243,11 @@ class TestWorkflowHelpers:
         """Test parallel helper function."""
         from codomyrmex.orchestrator.workflows.workflow import parallel
 
-        def action1(): return "1"
-        def action2(): return "2"
+        def action1():
+            return "1"
+
+        def action2():
+            return "2"
 
         workflow = parallel(action1, action2, names=["p1", "p2"])
 
@@ -251,15 +261,20 @@ class TestWorkflowHelpers:
         """Test fan_out_fan_in helper function."""
         from codomyrmex.orchestrator.workflows.workflow import fan_out_fan_in
 
-        def initial(): return "start"
-        def parallel1(): return "p1"
-        def parallel2(): return "p2"
-        def final(): return "end"
+        def initial():
+            return "start"
+
+        def parallel1():
+            return "p1"
+
+        def parallel2():
+            return "p2"
+
+        def final():
+            return "end"
 
         workflow = fan_out_fan_in(
-            initial=initial,
-            parallel_tasks=[parallel1, parallel2],
-            final=final
+            initial=initial, parallel_tasks=[parallel1, parallel2], final=final
         )
 
         assert "initial" in workflow.tasks
@@ -287,6 +302,7 @@ async def test_workflow_with_timeout():
 @pytest.mark.asyncio
 async def test_workflow_get_summary():
     """Test getting workflow summary."""
+
     async def success_task(_task_results=None):
         return "done"
 

@@ -23,35 +23,38 @@ Usage:
 logger = get_logger(__name__)
 logger = get_logger(__name__)
 
+
 def analyze_project_structure() -> dict[str, Any]:
     """Analyze the overall project structure."""
     project_root = Path(__file__).parent.parent.parent.parent
 
-    structure = {
-        "directories": {},
-        "files": {},
-        "total_size": 0,
-        "file_types": {}
-    }
+    structure = {"directories": {}, "files": {}, "total_size": 0, "file_types": {}}
 
     for root, dirs, files in os.walk(project_root):
         # Skip common directories
-        skip_dirs = {'.git', '__pycache__', '.pytest_cache', '.mypy_cache', '.venv', 'node_modules'}
+        skip_dirs = {
+            ".git",
+            "__pycache__",
+            ".pytest_cache",
+            ".mypy_cache",
+            ".venv",
+            "node_modules",
+        }
         dirs[:] = [d for d in dirs if d not in skip_dirs]
 
         rel_root = os.path.relpath(root, project_root)
 
-        if rel_root == '.':
-            rel_root = 'root'
+        if rel_root == ".":
+            rel_root = "root"
 
         structure["directories"][rel_root] = {
             "subdirs": len(dirs),
             "files": len(files),
-            "files_list": [f for f in files if not f.startswith('.')]
+            "files_list": [f for f in files if not f.startswith(".")],
         }
 
         for file in files:
-            if file.startswith('.'):
+            if file.startswith("."):
                 continue
 
             file_path = os.path.join(root, file)
@@ -73,7 +76,7 @@ def analyze_dependencies() -> dict[str, Any]:
         "python_requires": ">=3.10",
         "main_dependencies": [],
         "dev_dependencies": [],
-        "total_count": 0
+        "total_count": 0,
     }
 
     # Read pyproject.toml if available
@@ -86,7 +89,11 @@ def analyze_dependencies() -> dict[str, Any]:
             if "project" in data and "dependencies" in data["project"]:
                 deps["main_dependencies"] = data["project"]["dependencies"]
 
-            if "tool" in data and "uv" in data["tool"] and "dev-dependencies" in data["tool"]["uv"]:
+            if (
+                "tool" in data
+                and "uv" in data["tool"]
+                and "dev-dependencies" in data["tool"]["uv"]
+            ):
                 deps["dev_dependencies"] = data["tool"]["uv"]["dev-dependencies"]
 
         except ImportError:
@@ -107,7 +114,7 @@ def analyze_code_quality() -> dict[str, Any]:
         "has_tests": False,
         "has_docs": False,
         "has_ci": False,
-        "has_linting": False
+        "has_linting": False,
     }
 
     project_root = Path(__file__).parent.parent.parent.parent
@@ -123,16 +130,18 @@ def analyze_code_quality() -> dict[str, Any]:
         quality["documentation_files"] += 1
 
     # Check for testing setup
-    quality["has_tests"] = (project_root / "testing").exists() or (project_root / "tests").exists()
+    quality["has_tests"] = (project_root / "testing").exists() or (
+        project_root / "tests"
+    ).exists()
 
     # Check for CI configuration
     quality["has_ci"] = (project_root / ".github" / "workflows").exists()
 
     # Check for linting configuration
     quality["has_linting"] = (
-        (project_root / "pyproject.toml").exists() or
-        (project_root / ".flake8").exists() or
-        (project_root / "setup.cfg").exists()
+        (project_root / "pyproject.toml").exists()
+        or (project_root / ".flake8").exists()
+        or (project_root / "setup.cfg").exists()
     )
 
     return quality
@@ -147,7 +156,7 @@ def generate_report(structure: dict, deps: dict, quality: dict) -> str:
 
     # Project Structure
     report.append("## Project Structure")
-    total_size = structure.get('total_size', 0)
+    total_size = structure.get("total_size", 0)
     report.append(f"- **Total Size**: {total_size / 1024 / 1024:.2f} MB")
     report.append(f"- **Directories**: {len(structure.get('directories', {}))}")
     report.append(f"- **Python Files**: {quality.get('total_python_files', 0)}")
@@ -156,7 +165,7 @@ def generate_report(structure: dict, deps: dict, quality: dict) -> str:
 
     # File Types
     report.append("## File Types")
-    for ext, files in sorted(structure.get('file_types', {}).items()):
+    for ext, files in sorted(structure.get("file_types", {}).items()):
         report.append(f"- **{ext}**: {len(files)} files")
     report.append("")
 
@@ -172,18 +181,18 @@ def generate_report(structure: dict, deps: dict, quality: dict) -> str:
     report.append(f"- **Has Tests**: {'✅' if quality.get('has_tests') else '❌'}")
     report.append(f"- **Has CI**: {'✅' if quality.get('has_ci') else '❌'}")
     report.append(f"- **Has Linting**: {'✅' if quality.get('has_linting') else '❌'}")
-    total_py = quality.get('total_python_files', 0)
-    test_files = quality.get('test_files', 0)
+    total_py = quality.get("total_python_files", 0)
+    test_files = quality.get("test_files", 0)
     report.append(f"- **Test Coverage**: {test_files}/{total_py} files")
     report.append("")
 
     # Recommendations
     report.append("## Recommendations")
-    if not quality.get('has_tests'):
+    if not quality.get("has_tests"):
         report.append("- ⚠️  Consider adding tests for better code reliability")
-    if not quality.get('has_ci'):
+    if not quality.get("has_ci"):
         report.append("- ⚠️  Consider adding GitHub Actions for continuous integration")
-    if not quality.get('has_linting'):
+    if not quality.get("has_linting"):
         report.append("- ⚠️  Consider adding code linting configuration")
     if total_py > 100 and test_files < total_py * 0.5:
         report.append("- ⚠️  Consider increasing test coverage")
@@ -209,14 +218,10 @@ def main():
 
     if args.json:
         # Output JSON
-        result = {
-            "structure": structure,
-            "dependencies": deps,
-            "quality": quality
-        }
+        result = {"structure": structure, "dependencies": deps, "quality": quality}
 
         if args.output:
-            with open(args.output, 'w') as f:
+            with open(args.output, "w") as f:
                 json.dump(result, f, indent=2)
         else:
             print(json.dumps(result, indent=2))
@@ -225,7 +230,7 @@ def main():
         report = generate_report(structure, deps, quality)
 
         if args.output:
-            with open(args.output, 'w') as f:
+            with open(args.output, "w") as f:
                 f.write(report)
         else:
             print(report)

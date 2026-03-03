@@ -1,5 +1,6 @@
 """Generator content."""
 
+
 def generate_physical_requirements() -> str:
     """Generate requirements.txt for the physical management module."""
     return """# Physical Management Module Requirements
@@ -42,4 +43,3 @@ flake8>=3.9.0
 mkdocs>=1.2.0
 mkdocs-material>=7.3.0
 """
-

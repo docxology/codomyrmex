@@ -31,10 +31,12 @@ from codomyrmex.security.governance.policy import PolicyEngine, PolicyError, Pol
 # Module & Enum tests
 # ======================================================================
 
+
 @pytest.mark.unit
 def test_module_import():
     """governance module is importable."""
     from codomyrmex.security import governance
+
     assert governance is not None
 
 
@@ -65,6 +67,7 @@ def test_contract_status_distinct_values():
 # ======================================================================
 # ContractTerm tests
 # ======================================================================
+
 
 @pytest.mark.unit
 def test_contract_term_creation():
@@ -153,6 +156,7 @@ def test_contract_term_is_overdue_fulfilled():
 # Contract construction tests
 # ======================================================================
 
+
 @pytest.mark.unit
 def test_contract_construction():
     """Contract is created in DRAFT status with UUID id."""
@@ -189,6 +193,7 @@ def test_contract_created_at_is_datetime():
 # ======================================================================
 # Contract add_term tests
 # ======================================================================
+
 
 @pytest.mark.unit
 def test_contract_add_term():
@@ -228,6 +233,7 @@ def test_contract_add_term_non_draft_raises():
 # ======================================================================
 # Contract signing tests
 # ======================================================================
+
 
 @pytest.mark.unit
 def test_contract_sign_valid_party():
@@ -319,6 +325,7 @@ def test_contract_signature_has_timestamp():
 # Contract status and lifecycle tests
 # ======================================================================
 
+
 @pytest.mark.unit
 def test_contract_is_active():
     """is_active returns True only when contract is ACTIVE."""
@@ -380,6 +387,7 @@ def test_contract_repr_after_activation():
 # ======================================================================
 # Contract compliance tests
 # ======================================================================
+
 
 @pytest.mark.unit
 def test_contract_check_compliance_no_terms():
@@ -447,7 +455,9 @@ def test_contract_check_compliance_mixed():
     t1.fulfill()
     # Overdue term
     t2 = ContractTerm(
-        description="b", type="obligation", party="Bob",
+        description="b",
+        type="obligation",
+        party="Bob",
         deadline=datetime.now() - timedelta(days=1),
     )
     # Pending term (no deadline)
@@ -465,6 +475,7 @@ def test_contract_check_compliance_mixed():
 # ======================================================================
 # PolicyRule tests
 # ======================================================================
+
 
 @pytest.mark.unit
 def test_policy_rule_creation():
@@ -512,6 +523,7 @@ def test_policy_rule_evaluate_fails():
 @pytest.mark.unit
 def test_policy_rule_evaluate_exception_returns_false():
     """PolicyRule.evaluate returns False when condition raises."""
+
     def bad_condition(ctx):
         raise RuntimeError("broken")
 
@@ -522,7 +534,9 @@ def test_policy_rule_evaluate_exception_returns_false():
 @pytest.mark.unit
 def test_policy_rule_repr():
     """PolicyRule repr includes name and priority."""
-    rule = PolicyRule(name="test_rule", condition=lambda c: True, action="a", priority=5)
+    rule = PolicyRule(
+        name="test_rule", condition=lambda c: True, action="a", priority=5
+    )
     r = repr(rule)
     assert "test_rule" in r
     assert "5" in r
@@ -531,6 +545,7 @@ def test_policy_rule_repr():
 # ======================================================================
 # PolicyEngine tests
 # ======================================================================
+
 
 @pytest.mark.unit
 def test_policy_engine_create_policy():
@@ -580,16 +595,22 @@ def test_policy_engine_evaluate_all_pass():
     """Evaluate returns passed=True when all rules pass."""
     engine = PolicyEngine()
     engine.create_policy("checks")
-    engine.add_rule("checks", PolicyRule(
-        name="positive",
-        condition=lambda ctx: ctx.get("value", 0) > 0,
-        action="Must be positive",
-    ))
-    engine.add_rule("checks", PolicyRule(
-        name="small",
-        condition=lambda ctx: ctx.get("value", 0) < 100,
-        action="Must be under 100",
-    ))
+    engine.add_rule(
+        "checks",
+        PolicyRule(
+            name="positive",
+            condition=lambda ctx: ctx.get("value", 0) > 0,
+            action="Must be positive",
+        ),
+    )
+    engine.add_rule(
+        "checks",
+        PolicyRule(
+            name="small",
+            condition=lambda ctx: ctx.get("value", 0) < 100,
+            action="Must be under 100",
+        ),
+    )
     result = engine.evaluate("checks", {"value": 50})
     assert result["passed"] is True
     assert result["violations"] == 0
@@ -601,11 +622,14 @@ def test_policy_engine_evaluate_single_violation():
     """Evaluate detects a single violation."""
     engine = PolicyEngine()
     engine.create_policy("budget")
-    engine.add_rule("budget", PolicyRule(
-        name="max",
-        condition=lambda ctx: ctx.get("amount", 0) <= 1000,
-        action="Reject over 1000",
-    ))
+    engine.add_rule(
+        "budget",
+        PolicyRule(
+            name="max",
+            condition=lambda ctx: ctx.get("amount", 0) <= 1000,
+            action="Reject over 1000",
+        ),
+    )
     result = engine.evaluate("budget", {"amount": 5000})
     assert result["passed"] is False
     assert result["violations"] == 1
@@ -616,16 +640,22 @@ def test_policy_engine_evaluate_multiple_violations():
     """Evaluate detects multiple violations."""
     engine = PolicyEngine()
     engine.create_policy("checks")
-    engine.add_rule("checks", PolicyRule(
-        name="check_a",
-        condition=lambda ctx: ctx.get("a", False),
-        action="A must be true",
-    ))
-    engine.add_rule("checks", PolicyRule(
-        name="check_b",
-        condition=lambda ctx: ctx.get("b", False),
-        action="B must be true",
-    ))
+    engine.add_rule(
+        "checks",
+        PolicyRule(
+            name="check_a",
+            condition=lambda ctx: ctx.get("a", False),
+            action="A must be true",
+        ),
+    )
+    engine.add_rule(
+        "checks",
+        PolicyRule(
+            name="check_b",
+            condition=lambda ctx: ctx.get("b", False),
+            action="B must be true",
+        ),
+    )
     result = engine.evaluate("checks", {"a": False, "b": False})
     assert result["violations"] == 2
 
@@ -635,16 +665,22 @@ def test_policy_engine_get_violations():
     """get_violations returns only failed rules."""
     engine = PolicyEngine()
     engine.create_policy("mixed")
-    engine.add_rule("mixed", PolicyRule(
-        name="passes",
-        condition=lambda ctx: True,
-        action="Should pass",
-    ))
-    engine.add_rule("mixed", PolicyRule(
-        name="fails",
-        condition=lambda ctx: False,
-        action="Should fail",
-    ))
+    engine.add_rule(
+        "mixed",
+        PolicyRule(
+            name="passes",
+            condition=lambda ctx: True,
+            action="Should pass",
+        ),
+    )
+    engine.add_rule(
+        "mixed",
+        PolicyRule(
+            name="fails",
+            condition=lambda ctx: False,
+            action="Should fail",
+        ),
+    )
     violations = engine.get_violations("mixed", {})
     assert len(violations) == 1
     assert violations[0]["rule"] == "fails"
@@ -656,12 +692,15 @@ def test_policy_engine_enforce():
     """enforce returns result with actions and enforced flag."""
     engine = PolicyEngine()
     engine.create_policy("budget")
-    engine.add_rule("budget", PolicyRule(
-        name="max",
-        condition=lambda ctx: ctx.get("amount", 0) <= 1000,
-        action="Reject transaction",
-        priority=10,
-    ))
+    engine.add_rule(
+        "budget",
+        PolicyRule(
+            name="max",
+            condition=lambda ctx: ctx.get("amount", 0) <= 1000,
+            action="Reject transaction",
+            priority=10,
+        ),
+    )
     result = engine.enforce("budget", {"amount": 5000})
     assert result["enforced"] is True
     assert "Reject transaction" in result["actions"]
@@ -672,11 +711,14 @@ def test_policy_engine_enforce_no_violations():
     """enforce with no violations has enforced=False."""
     engine = PolicyEngine()
     engine.create_policy("budget")
-    engine.add_rule("budget", PolicyRule(
-        name="max",
-        condition=lambda ctx: ctx.get("amount", 0) <= 1000,
-        action="Reject",
-    ))
+    engine.add_rule(
+        "budget",
+        PolicyRule(
+            name="max",
+            condition=lambda ctx: ctx.get("amount", 0) <= 1000,
+            action="Reject",
+        ),
+    )
     result = engine.enforce("budget", {"amount": 500})
     assert result["enforced"] is False
     assert result["actions"] == []
@@ -712,18 +754,24 @@ def test_policy_engine_rules_sorted_by_priority():
     """Rules are evaluated in descending priority order."""
     engine = PolicyEngine()
     engine.create_policy("ordered")
-    engine.add_rule("ordered", PolicyRule(
-        name="low",
-        condition=lambda ctx: True,
-        action="low priority",
-        priority=1,
-    ))
-    engine.add_rule("ordered", PolicyRule(
-        name="high",
-        condition=lambda ctx: True,
-        action="high priority",
-        priority=10,
-    ))
+    engine.add_rule(
+        "ordered",
+        PolicyRule(
+            name="low",
+            condition=lambda ctx: True,
+            action="low priority",
+            priority=1,
+        ),
+    )
+    engine.add_rule(
+        "ordered",
+        PolicyRule(
+            name="high",
+            condition=lambda ctx: True,
+            action="high priority",
+            priority=10,
+        ),
+    )
     result = engine.evaluate("ordered", {})
     # High priority should be first in details
     assert result["details"][0]["rule"] == "high"

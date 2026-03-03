@@ -2,6 +2,7 @@
 Complex Python function for testing high complexity analysis.
 """
 
+
 def highly_complex_function(data, config, options):
     """
     A highly complex function that should trigger complexity warnings.
@@ -14,14 +15,14 @@ def highly_complex_function(data, config, options):
     if not data:
         return result
 
-    if config.get('enabled', False):
+    if config.get("enabled", False):
         for item in data:
             if isinstance(item, dict):
-                if 'type' in item:
-                    if item['type'] == 'special':
-                        if options.get('process_special', False):
-                            if len(item.get('values', [])) > 0:
-                                for value in item['values']:
+                if "type" in item:
+                    if item["type"] == "special":
+                        if options.get("process_special", False):
+                            if len(item.get("values", [])) > 0:
+                                for value in item["values"]:
                                     if value is not None:
                                         if isinstance(value, str):
                                             if len(value) > 10:
@@ -43,9 +44,9 @@ def highly_complex_function(data, config, options):
                                 result.append("EMPTY_SPECIAL")
                         else:
                             result.append("SKIPPED_SPECIAL")
-                    elif item['type'] == 'normal':
-                        if options.get('process_normal', True):
-                            result.append(item.get('data', 'default'))
+                    elif item["type"] == "normal":
+                        if options.get("process_normal", True):
+                            result.append(item.get("data", "default"))
                         else:
                             result.append("SKIPPED_NORMAL")
                     else:

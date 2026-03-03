@@ -1,6 +1,5 @@
 """Comprehensive unit tests for DeploymentOrchestrator."""
 
-
 import pytest
 import yaml
 
@@ -23,9 +22,7 @@ class TestDeploymentOrchestrator:
                     "host": "localhost",
                     "port": 8022,
                     "variables": {"deploy_path": "/tmp/staging"},
-                    "health_checks": [
-                        {"type": "tcp", "endpoint": "localhost:8000"}
-                    ]
+                    "health_checks": [{"type": "tcp", "endpoint": "localhost:8000"}],
                 }
             ]
         }
@@ -47,7 +44,7 @@ class TestDeploymentOrchestrator:
             name="test-deploy",
             version="1.1.0",
             environment_name="staging",
-            artifacts=["app.zip"]
+            artifacts=["app.zip"],
         )
         assert deployment.name == "test-deploy"
         assert deployment.version == "1.1.0"
@@ -64,9 +61,7 @@ class TestDeploymentOrchestrator:
         env = orchestrator.environments["staging"]
         env.pre_deploy_hooks = ["exit 1"]
 
-        deployment = orchestrator.create_deployment(
-            "fail-hook", "1.0", "staging", []
-        )
+        deployment = orchestrator.create_deployment("fail-hook", "1.0", "staging", [])
         # We don't rollback if it's not a real failure during deployment itself
         # But wait, in our implementation if hooks fail, we log warning and continue.
         # Let's see how it behaves.
@@ -86,7 +81,10 @@ class TestDeploymentOrchestrator:
 
         # If health check fails, it should be ROLLED_BACK (since rollback_on_failure=True)
         # Or FAILURE if rollback fails.
-        assert deployment.status in (DeploymentStatus.ROLLED_BACK, DeploymentStatus.FAILURE)
+        assert deployment.status in (
+            DeploymentStatus.ROLLED_BACK,
+            DeploymentStatus.FAILURE,
+        )
 
     def test_cancel_deployment(self, config_file):
         orchestrator = DeploymentOrchestrator(config_file)

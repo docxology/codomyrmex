@@ -14,6 +14,7 @@ from typing import Any
 @dataclass
 class Document:
     """A searchable document."""
+
     id: str
     content: str
     metadata: dict[str, Any] = field(default_factory=dict)
@@ -23,6 +24,7 @@ class Document:
 @dataclass
 class SearchResult:
     """A search result."""
+
     document: Document
     score: float
     highlights: list[str] = field(default_factory=list)
@@ -52,7 +54,7 @@ class SimpleTokenizer(Tokenizer):
         """Tokenize."""
         if self.lowercase:
             text = text.lower()
-        tokens = re.findall(r'\b\w+\b', text)
+        tokens = re.findall(r"\b\w+\b", text)
         return [t for t in tokens if len(t) >= self.min_length]
 
 
@@ -88,7 +90,9 @@ class FuzzyMatcher:
         return 1.0 - (distance / max_len)
 
     @staticmethod
-    def find_best_match(query: str, candidates: list[str], threshold: float = 0.6) -> str | None:
+    def find_best_match(
+        query: str, candidates: list[str], threshold: float = 0.6
+    ) -> str | None:
         """Find best matching string."""
         best_match = None
         best_score = threshold
@@ -105,33 +109,33 @@ class QueryParser:
 
     def __init__(self):
         self._operators = {
-            '+': 'must',
-            '-': 'must_not',
-            '"': 'phrase',
+            "+": "must",
+            "-": "must_not",
+            '"': "phrase",
         }
 
     def parse(self, query: str) -> dict[str, Any]:
         """Parse query into structured format."""
         result = {
-            'terms': [],
-            'must': [],
-            'must_not': [],
-            'phrases': [],
+            "terms": [],
+            "must": [],
+            "must_not": [],
+            "phrases": [],
         }
 
         # Extract phrases
         phrases = re.findall(r'"([^"]+)"', query)
-        result['phrases'] = phrases
-        query = re.sub(r'"[^"]+"', '', query)
+        result["phrases"] = phrases
+        query = re.sub(r'"[^"]+"', "", query)
 
         # Parse remaining tokens
         tokens = query.split()
         for token in tokens:
-            if token.startswith('+'):
-                result['must'].append(token[1:])
-            elif token.startswith('-'):
-                result['must_not'].append(token[1:])
+            if token.startswith("+"):
+                result["must"].append(token[1:])
+            elif token.startswith("-"):
+                result["must_not"].append(token[1:])
             elif token:
-                result['terms'].append(token)
+                result["terms"].append(token)
 
         return result

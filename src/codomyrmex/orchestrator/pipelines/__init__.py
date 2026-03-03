@@ -17,10 +17,12 @@ from datetime import datetime, timedelta
 from enum import Enum
 from typing import Any, Generic, Optional, TypeVar, Union
 
-T = TypeVar('T')
+T = TypeVar("T")
+
 
 class StageStatus(Enum):
     """Status of a pipeline stage."""
+
     PENDING = "pending"
     RUNNING = "running"
     SUCCESS = "success"
@@ -28,17 +30,21 @@ class StageStatus(Enum):
     SKIPPED = "skipped"
     CANCELLED = "cancelled"
 
+
 class PipelineStatus(Enum):
     """Status of a pipeline."""
+
     CREATED = "created"
     RUNNING = "running"
     SUCCESS = "success"
     FAILED = "failed"
     CANCELLED = "cancelled"
 
+
 @dataclass
 class StageResult:
     """Result of a stage execution."""
+
     stage_id: str
     status: StageStatus
     output: Any = None
@@ -57,9 +63,11 @@ class StageResult:
     def is_success(self) -> bool:
         return self.status == StageStatus.SUCCESS
 
+
 @dataclass
 class PipelineResult:
     """Result of a pipeline execution."""
+
     pipeline_id: str
     status: PipelineStatus
     stages: list[StageResult] = field(default_factory=list)
@@ -80,6 +88,7 @@ class PipelineResult:
     @property
     def failed_stages(self) -> int:
         return sum(1 for s in self.stages if s.status == StageStatus.FAILED)
+
 
 class Stage(ABC):
     """Base class for pipeline stages."""
@@ -111,6 +120,7 @@ class Stage(ABC):
         """Called on failed execution."""
         return None  # Optional hook — subclass may override
 
+
 class FunctionStage(Stage):
     """Stage that executes a function."""
 
@@ -126,6 +136,7 @@ class FunctionStage(Stage):
     def execute(self, context: dict[str, Any]) -> Any:
         """Execute the operation."""
         return self._func(context)
+
 
 class ConditionalStage(Stage):
     """Stage that executes conditionally."""
@@ -147,6 +158,7 @@ class ConditionalStage(Stage):
             return self.stage.execute(context)
         return None
 
+
 class ParallelStage(Stage):
     """Stage that executes multiple stages in parallel."""
 
@@ -165,7 +177,9 @@ class ParallelStage(Stage):
         """Execute the operation."""
         results = {}
 
-        with concurrent.futures.ThreadPoolExecutor(max_workers=self.max_workers) as executor:
+        with concurrent.futures.ThreadPoolExecutor(
+            max_workers=self.max_workers
+        ) as executor:
             futures = {
                 executor.submit(stage.execute, context): stage.stage_id
                 for stage in self.stages
@@ -179,6 +193,7 @@ class ParallelStage(Stage):
                     results[stage_id] = {"error": str(e)}
 
         return results
+
 
 class Pipeline:
     """
@@ -267,7 +282,7 @@ class Pipeline:
                 result.end_time = datetime.now()
 
                 if attempt < stage.retry_count:
-                    time.sleep(0.1 * (2 ** attempt))  # Exponential backoff
+                    time.sleep(0.1 * (2**attempt))  # Exponential backoff
                 else:
                     stage.on_failure(result, context)
 
@@ -339,6 +354,7 @@ class Pipeline:
         result.end_time = datetime.now()
         return result
 
+
 class PipelineBuilder:
     """
     Fluent builder for pipelines.
@@ -362,12 +378,14 @@ class PipelineBuilder:
         retry_count: int = 0,
     ) -> "PipelineBuilder":
         """Add a function stage."""
-        self._pipeline.add_stage(FunctionStage(
-            stage_id=stage_id,
-            func=func,
-            depends_on=depends_on,
-            retry_count=retry_count,
-        ))
+        self._pipeline.add_stage(
+            FunctionStage(
+                stage_id=stage_id,
+                func=func,
+                depends_on=depends_on,
+                retry_count=retry_count,
+            )
+        )
         return self
 
     def parallel(
@@ -377,11 +395,13 @@ class PipelineBuilder:
         depends_on: list[str] | None = None,
     ) -> "PipelineBuilder":
         """Add a parallel stage."""
-        self._pipeline.add_stage(ParallelStage(
-            stage_id=stage_id,
-            stages=stages,
-            depends_on=depends_on,
-        ))
+        self._pipeline.add_stage(
+            ParallelStage(
+                stage_id=stage_id,
+                stages=stages,
+                depends_on=depends_on,
+            )
+        )
         return self
 
     def context(self, key: str, value: Any) -> "PipelineBuilder":
@@ -392,6 +412,7 @@ class PipelineBuilder:
     def build(self) -> Pipeline:
         """Build the pipeline."""
         return self._pipeline
+
 
 __all__ = [
     # Enums

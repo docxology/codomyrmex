@@ -59,6 +59,7 @@ class EventLoggingBridge:
             from codomyrmex.events.core.event_schema import (
                 EventType,  # lazy import at use-site
             )
+
             event_types = list(EventType)
         self._event_types = event_types
         self._logger = logging.getLogger(logger_name)
@@ -127,9 +128,13 @@ class EventLoggingBridge:
     def _event_to_dict(event: Event) -> dict[str, Any]:
         """Convert an Event to a structured dict."""
         d: dict[str, Any] = {
-            "event_type": event.event_type.value if hasattr(event.event_type, "value") else str(event.event_type),
+            "event_type": event.event_type.value
+            if hasattr(event.event_type, "value")
+            else str(event.event_type),
             "source": event.source,
-            "timestamp": event.timestamp.isoformat() if hasattr(event.timestamp, "isoformat") else str(event.timestamp),
+            "timestamp": event.timestamp.isoformat()
+            if hasattr(event.timestamp, "isoformat")
+            else str(event.timestamp),
             "data": event.data or {},
         }
 

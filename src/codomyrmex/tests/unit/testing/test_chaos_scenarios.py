@@ -246,16 +246,20 @@ class TestGameDay:
     def test_run_all_sequential(self):
         """Run all scenarios sequentially."""
         gd = GameDay()
-        gd.add_scenario(ScenarioConfig(
-            type=ScenarioType.HIGH_LATENCY,
-            duration_seconds=0.1,
-            parameters={"latency_ms": 30},
-        ))
-        gd.add_scenario(ScenarioConfig(
-            type=ScenarioType.SERVICE_OUTAGE,
-            duration_seconds=0.1,
-            targets=["svc-a"],
-        ))
+        gd.add_scenario(
+            ScenarioConfig(
+                type=ScenarioType.HIGH_LATENCY,
+                duration_seconds=0.1,
+                parameters={"latency_ms": 30},
+            )
+        )
+        gd.add_scenario(
+            ScenarioConfig(
+                type=ScenarioType.SERVICE_OUTAGE,
+                duration_seconds=0.1,
+                targets=["svc-a"],
+            )
+        )
         results = asyncio.run(gd.run_all(parallel=False))
         assert len(results) == 2
         assert all(r.success for r in results)
@@ -263,16 +267,20 @@ class TestGameDay:
     def test_run_all_parallel(self):
         """Run all scenarios in parallel."""
         gd = GameDay()
-        gd.add_scenario(ScenarioConfig(
-            type=ScenarioType.HIGH_LATENCY,
-            duration_seconds=0.1,
-            parameters={"latency_ms": 30},
-        ))
-        gd.add_scenario(ScenarioConfig(
-            type=ScenarioType.SERVICE_OUTAGE,
-            duration_seconds=0.1,
-            targets=["svc-x"],
-        ))
+        gd.add_scenario(
+            ScenarioConfig(
+                type=ScenarioType.HIGH_LATENCY,
+                duration_seconds=0.1,
+                parameters={"latency_ms": 30},
+            )
+        )
+        gd.add_scenario(
+            ScenarioConfig(
+                type=ScenarioType.SERVICE_OUTAGE,
+                duration_seconds=0.1,
+                targets=["svc-x"],
+            )
+        )
         results = asyncio.run(gd.run_all(parallel=True))
         assert len(results) == 2
         assert all(r.success for r in results)
@@ -289,11 +297,13 @@ class TestGameDay:
     def test_report_after_run(self):
         """Report after running scenarios includes scenario details."""
         gd = GameDay()
-        gd.add_scenario(ScenarioConfig(
-            type=ScenarioType.SERVICE_OUTAGE,
-            duration_seconds=0.1,
-            targets=["svc-a"],
-        ))
+        gd.add_scenario(
+            ScenarioConfig(
+                type=ScenarioType.SERVICE_OUTAGE,
+                duration_seconds=0.1,
+                targets=["svc-a"],
+            )
+        )
         asyncio.run(gd.run_all())
         report = gd.report()
         assert "Scenarios Run:** 1" in report

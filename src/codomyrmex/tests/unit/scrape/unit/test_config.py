@@ -156,4 +156,3 @@ class TestConfigFunctions:
         new_config = get_config()
         # They should be different instances
         assert new_config is not config
-

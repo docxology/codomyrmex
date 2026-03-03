@@ -5,6 +5,7 @@ Implements the PPO-Clip algorithm (Schulman et al. 2017) with:
 - Generalized Advantage Estimation (Schulman et al. 2015)
 - Bradley-Terry reward model for preference learning
 """
+
 from dataclasses import dataclass
 
 import numpy as np
@@ -38,8 +39,10 @@ class Actor:
         logits = h @ self.W2 + self.b2
         # Log-softmax
         logits_max = np.max(logits, axis=-1, keepdims=True)
-        log_probs = logits - logits_max - np.log(
-            np.sum(np.exp(logits - logits_max), axis=-1, keepdims=True) + 1e-9
+        log_probs = (
+            logits
+            - logits_max
+            - np.log(np.sum(np.exp(logits - logits_max), axis=-1, keepdims=True) + 1e-9)
         )
         return log_probs
 
@@ -192,7 +195,9 @@ def ppo_step(
     entropy = float(-np.mean(np.sum(probs * new_log_probs_all, axis=-1)))
 
     total_loss = (
-        policy_loss + config.value_loss_coef * value_loss - config.entropy_coef * entropy
+        policy_loss
+        + config.value_loss_coef * value_loss
+        - config.entropy_coef * entropy
     )
 
     return {
@@ -217,9 +222,7 @@ class PPOTrainer:
         self.config = config or PPOConfig()
         self.losses: list[float] = []
 
-    def compute_loss(
-        self, states, actions, old_log_probs, advantages, returns
-    ) -> dict:
+    def compute_loss(self, states, actions, old_log_probs, advantages, returns) -> dict:
         """Compute PPO loss for one batch and record history."""
         result = ppo_step(
             states,

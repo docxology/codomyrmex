@@ -29,9 +29,7 @@ HAS_REQUESTS = _requests_spec is not None
 
 # Check for a running Docker daemon (needed for live-Docker tests only)
 try:
-    _docker_info = subprocess.run(
-        ["docker", "info"], capture_output=True, timeout=10
-    )
+    _docker_info = subprocess.run(["docker", "info"], capture_output=True, timeout=10)
     HAS_DOCKER_DAEMON = _docker_info.returncode == 0
 except Exception:
     HAS_DOCKER_DAEMON = False
@@ -49,6 +47,7 @@ from codomyrmex.exceptions import CodomyrmexError  # noqa: E402
 # ---------------------------------------------------------------------------
 # ContainerImage dataclass
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestContainerImage:
@@ -111,6 +110,7 @@ class TestContainerImage:
 # RegistryCredentials dataclass
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestRegistryCredentials:
     """Tests for RegistryCredentials and its auth header logic."""
@@ -169,6 +169,7 @@ class TestRegistryCredentials:
 # ContainerRegistry -- initialisation and pure-logic helpers
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestContainerRegistryInit:
     """Tests for ContainerRegistry construction and URL normalisation."""
@@ -183,9 +184,7 @@ class TestContainerRegistryInit:
         assert not reg.registry_url.endswith("/")
 
     def test_credentials_stored(self):
-        creds = RegistryCredentials(
-            username="u", password="p", registry_url="r"
-        )
+        creds = RegistryCredentials(username="u", password="p", registry_url="r")
         reg = ContainerRegistry(registry_url="r", credentials=creds)
         assert reg.credentials is creds
 
@@ -224,6 +223,7 @@ class TestGetFullImageName:
 # ---------------------------------------------------------------------------
 # ContainerRegistry -- simulated paths (no Docker daemon required)
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestContainerRegistrySimulated:
@@ -303,6 +303,7 @@ class TestContainerRegistrySimulated:
 # (HTTP-based, no Docker daemon needed, but needs requests)
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestContainerRegistryHttpMethods:
     """Tests for HTTP-based registry methods when session is not available."""
@@ -323,6 +324,7 @@ class TestContainerRegistryHttpMethods:
 # ---------------------------------------------------------------------------
 # manage_container_registry dispatcher
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestManageContainerRegistry:
@@ -452,6 +454,7 @@ class TestManageContainerRegistry:
 # Live Docker daemon tests (only run when Docker is available)
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 @pytest.mark.skipif(not HAS_DOCKER_DAEMON, reason="Requires running Docker daemon")
 class TestContainerRegistryLiveDocker:
@@ -484,7 +487,5 @@ class TestContainerRegistryLiveDocker:
 
     def test_tag_image_nonexistent_source(self):
         reg = ContainerRegistry(registry_url="docker.io")
-        result = reg.tag_image(
-            "nonexistent-image-xyzzy-12345:v999", "target", "v1"
-        )
+        result = reg.tag_image("nonexistent-image-xyzzy-12345:v999", "target", "v1")
         assert result is False

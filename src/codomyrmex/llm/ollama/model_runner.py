@@ -66,6 +66,7 @@ class ExecutionOptions:
             Maps to Ollama's `num_ctx` parameter.
             Default: None
     """
+
     temperature: float = 0.7
     top_p: float = 0.9
     top_k: int = 40
@@ -81,6 +82,7 @@ class ExecutionOptions:
 @dataclass
 class StreamingChunk:
     """A chunk of streaming response."""
+
     content: str
     done: bool = False
     token_count: int | None = None
@@ -110,7 +112,7 @@ class ModelRunner:
         prompt: str,
         options: ExecutionOptions | None = None,
         save_output: bool = True,
-        output_dir: str | None = None
+        output_dir: str | None = None,
     ) -> ModelExecutionResult:
         """
         Run a model with custom execution options.
@@ -130,25 +132,25 @@ class ModelRunner:
 
         # Convert options to Ollama format
         ollama_options = {
-            'temperature': options.temperature,
-            'top_p': options.top_p,
-            'top_k': options.top_k,
-            'repeat_penalty': options.repeat_penalty,
+            "temperature": options.temperature,
+            "top_p": options.top_p,
+            "top_k": options.top_k,
+            "repeat_penalty": options.repeat_penalty,
         }
 
         if options.max_tokens:
-            ollama_options['num_predict'] = options.max_tokens
+            ollama_options["num_predict"] = options.max_tokens
 
         if options.format:
-            ollama_options['format'] = options.format
+            ollama_options["format"] = options.format
 
         # Handle context window - use 'num_ctx' for Ollama API
         if options.context_window:
-            ollama_options['num_ctx'] = options.context_window
+            ollama_options["num_ctx"] = options.context_window
 
         # Handle system prompt - use 'system' key for HTTP API
         if options.system_prompt:
-            ollama_options['system'] = options.system_prompt
+            ollama_options["system"] = options.system_prompt
             full_prompt = prompt  # Keep prompt separate when using system prompt
         else:
             full_prompt = prompt
@@ -158,7 +160,7 @@ class ModelRunner:
             full_prompt,
             options=ollama_options,
             save_output=save_output,
-            output_dir=output_dir
+            output_dir=output_dir,
         )
 
     def run_streaming(
@@ -166,7 +168,7 @@ class ModelRunner:
         model_name: str,
         prompt: str,
         options: ExecutionOptions | None = None,
-        chunk_callback: Callable[[StreamingChunk], None] | None = None
+        chunk_callback: Callable[[StreamingChunk], None] | None = None,
     ) -> ModelExecutionResult:
         """
         Run a model with streaming output.
@@ -193,10 +195,7 @@ class ModelRunner:
 
         if result.success and chunk_callback:
             # Simulate streaming by calling callback with response
-            chunk = StreamingChunk(
-                content=result.response,
-                done=True
-            )
+            chunk = StreamingChunk(content=result.response, done=True)
             chunk_callback(chunk)
 
         return result
@@ -206,7 +205,7 @@ class ModelRunner:
         model_name: str,
         prompts: list[str],
         options: ExecutionOptions | None = None,
-        max_concurrent: int = 3
+        max_concurrent: int = 3,
     ) -> list[ModelExecutionResult]:
         """
         Run multiple prompts in batch with concurrency control.
@@ -240,14 +239,16 @@ class ModelRunner:
             final_results = []
             for i, result in enumerate(results):
                 if isinstance(result, Exception):
-                    final_results.append(ModelExecutionResult(
-                        model_name=model_name,
-                        prompt=prompts[i],
-                        response="",
-                        execution_time=0,
-                        success=False,
-                        error_message=str(result)
-                    ))
+                    final_results.append(
+                        ModelExecutionResult(
+                            model_name=model_name,
+                            prompt=prompts[i],
+                            response="",
+                            execution_time=0,
+                            success=False,
+                            error_message=str(result),
+                        )
+                    )
                 else:
                     final_results.append(result)
 
@@ -265,7 +266,7 @@ class ModelRunner:
         self,
         model_name: str,
         messages: list[dict[str, str]],
-        options: ExecutionOptions | None = None
+        options: ExecutionOptions | None = None,
     ) -> ModelExecutionResult:
         """
         Run a conversational model execution.
@@ -287,24 +288,24 @@ class ModelRunner:
         """Format conversation messages into a single prompt."""
         formatted = []
         for msg in messages:
-            role = msg.get('role', 'user')
-            content = msg.get('content', '')
+            role = msg.get("role", "user")
+            content = msg.get("content", "")
 
-            if role == 'system':
+            if role == "system":
                 formatted.append(f"System: {content}")
-            elif role == 'assistant':
+            elif role == "assistant":
                 formatted.append(f"Assistant: {content}")
             else:  # user or default
                 formatted.append(f"User: {content}")
 
-        return '\n\n'.join(formatted)
+        return "\n\n".join(formatted)
 
     def run_with_context(
         self,
         model_name: str,
         prompt: str,
         context_docs: list[str],
-        options: ExecutionOptions | None = None
+        options: ExecutionOptions | None = None,
     ) -> ModelExecutionResult:
         """
         Run a model with additional context documents.
@@ -323,12 +324,16 @@ class ModelRunner:
             options = ExecutionOptions()
 
         # Add context to system prompt
-        context_text = '\n\n'.join([f"Context {i+1}:\n{doc}" for i, doc in enumerate(context_docs)])
+        context_text = "\n\n".join(
+            [f"Context {i + 1}:\n{doc}" for i, doc in enumerate(context_docs)]
+        )
 
         if options.system_prompt:
             options.system_prompt += f"\n\nAdditional Context:\n{context_text}"
         else:
-            options.system_prompt = f"Use the following context to inform your response:\n{context_text}"
+            options.system_prompt = (
+                f"Use the following context to inform your response:\n{context_text}"
+            )
 
         return self.run_with_options(model_name, prompt, options)
 
@@ -336,7 +341,7 @@ class ModelRunner:
         self,
         model_name: str,
         test_prompts: list[str],
-        options: ExecutionOptions | None = None
+        options: ExecutionOptions | None = None,
     ) -> dict[str, Any]:
         """
         Benchmark a model with multiple test prompts.
@@ -349,23 +354,27 @@ class ModelRunner:
         Returns:
             Benchmark results dictionary
         """
-        self.logger.info(f"Benchmarking model {model_name} with {len(test_prompts)} prompts")
+        self.logger.info(
+            f"Benchmarking model {model_name} with {len(test_prompts)} prompts"
+        )
 
         results = []
         total_start_time = time.time()
 
         for i, prompt in enumerate(test_prompts):
-            self.logger.info(f"Running benchmark prompt {i+1}/{len(test_prompts)}")
+            self.logger.info(f"Running benchmark prompt {i + 1}/{len(test_prompts)}")
 
             result = self.run_with_options(model_name, prompt, options)
 
             benchmark_data = {
-                'prompt_index': i,
-                'prompt_length': len(prompt),
-                'execution_time': result.execution_time,
-                'success': result.success,
-                'response_length': len(result.response) if result.success else 0,
-                'tokens_per_second': len(result.response) / result.execution_time if result.success and result.execution_time > 0 else 0
+                "prompt_index": i,
+                "prompt_length": len(prompt),
+                "execution_time": result.execution_time,
+                "success": result.success,
+                "response_length": len(result.response) if result.success else 0,
+                "tokens_per_second": len(result.response) / result.execution_time
+                if result.success and result.execution_time > 0
+                else 0,
             }
 
             results.append(benchmark_data)
@@ -373,28 +382,38 @@ class ModelRunner:
         total_time = time.time() - total_start_time
 
         # Calculate statistics
-        successful_runs = [r for r in results if r['success']]
-        failed_runs = [r for r in results if not r['success']]
+        successful_runs = [r for r in results if r["success"]]
+        failed_runs = [r for r in results if not r["success"]]
 
         benchmark_summary = {
-            'model_name': model_name,
-            'total_prompts': len(test_prompts),
-            'successful_runs': len(successful_runs),
-            'failed_runs': len(failed_runs),
-            'total_time': total_time,
-            'avg_execution_time': sum(r['execution_time'] for r in successful_runs) / len(successful_runs) if successful_runs else 0,
-            'avg_tokens_per_second': sum(r['tokens_per_second'] for r in successful_runs) / len(successful_runs) if successful_runs else 0,
-            'detailed_results': results
+            "model_name": model_name,
+            "total_prompts": len(test_prompts),
+            "successful_runs": len(successful_runs),
+            "failed_runs": len(failed_runs),
+            "total_time": total_time,
+            "avg_execution_time": sum(r["execution_time"] for r in successful_runs)
+            / len(successful_runs)
+            if successful_runs
+            else 0,
+            "avg_tokens_per_second": sum(
+                r["tokens_per_second"] for r in successful_runs
+            )
+            / len(successful_runs)
+            if successful_runs
+            else 0,
+            "detailed_results": results,
         }
 
-        self.logger.info(f"Benchmark completed: {len(successful_runs)}/{len(test_prompts)} successful")
+        self.logger.info(
+            f"Benchmark completed: {len(successful_runs)}/{len(test_prompts)} successful"
+        )
         return benchmark_summary
 
     def create_model_comparison(
         self,
         model_names: list[str],
         test_prompt: str,
-        options: ExecutionOptions | None = None
+        options: ExecutionOptions | None = None,
     ) -> dict[str, Any]:
         """
         Compare multiple models on the same prompt.
@@ -419,38 +438,54 @@ class ModelRunner:
             result = self.run_with_options(model_name, test_prompt, options)
 
             comparison_results[model_name] = {
-                'success': result.success,
-                'execution_time': result.execution_time,
-                'response_length': len(result.response) if result.success else 0,
-                'tokens_per_second': len(result.response) / result.execution_time if result.success and result.execution_time > 0 else 0,
-                'response_preview': result.response[:200] + "..." if result.success and len(result.response) > 200 else result.response,
-                'error': result.error_message if not result.success else None
+                "success": result.success,
+                "execution_time": result.execution_time,
+                "response_length": len(result.response) if result.success else 0,
+                "tokens_per_second": len(result.response) / result.execution_time
+                if result.success and result.execution_time > 0
+                else 0,
+                "response_preview": result.response[:200] + "..."
+                if result.success and len(result.response) > 200
+                else result.response,
+                "error": result.error_message if not result.success else None,
             }
 
         return {
-            'test_prompt': test_prompt,
-            'models_compared': len(comparison_results),
-            'results': comparison_results,
-            'summary': self._create_comparison_summary(comparison_results)
+            "test_prompt": test_prompt,
+            "models_compared": len(comparison_results),
+            "results": comparison_results,
+            "summary": self._create_comparison_summary(comparison_results),
         }
 
     def _create_comparison_summary(self, results: dict[str, dict]) -> dict[str, Any]:
         """Create summary statistics for model comparison."""
-        successful_results = {name: data for name, data in results.items() if data['success']}
+        successful_results = {
+            name: data for name, data in results.items() if data["success"]
+        }
 
         if not successful_results:
-            return {'error': 'No successful model executions'}
+            return {"error": "No successful model executions"}
 
-        execution_times = [data['execution_time'] for data in successful_results.values()]
-        tokens_per_sec = [data['tokens_per_second'] for data in successful_results.values()]
+        execution_times = [
+            data["execution_time"] for data in successful_results.values()
+        ]
+        tokens_per_sec = [
+            data["tokens_per_second"] for data in successful_results.values()
+        ]
 
         return {
-            'fastest_model': min(successful_results.items(), key=lambda x: x[1]['execution_time'])[0],
-            'slowest_model': max(successful_results.items(), key=lambda x: x[1]['execution_time'])[0],
-            'most_efficient': max(successful_results.items(), key=lambda x: x[1]['tokens_per_second'])[0],
-            'avg_execution_time': sum(execution_times) / len(execution_times),
-            'avg_tokens_per_second': sum(tokens_per_sec) / len(tokens_per_sec),
-            'success_rate': len(successful_results) / len(results)
+            "fastest_model": min(
+                successful_results.items(), key=lambda x: x[1]["execution_time"]
+            )[0],
+            "slowest_model": max(
+                successful_results.items(), key=lambda x: x[1]["execution_time"]
+            )[0],
+            "most_efficient": max(
+                successful_results.items(), key=lambda x: x[1]["tokens_per_second"]
+            )[0],
+            "avg_execution_time": sum(execution_times) / len(execution_times),
+            "avg_tokens_per_second": sum(tokens_per_sec) / len(tokens_per_sec),
+            "success_rate": len(successful_results) / len(results),
         }
 
     # =========================================================================
@@ -462,7 +497,7 @@ class ModelRunner:
         model_name: str,
         prompt: str,
         options: ExecutionOptions | None = None,
-        timeout: int = 300
+        timeout: int = 300,
     ) -> ModelExecutionResult:
         """
         Run a model asynchronously with custom execution options.
@@ -481,7 +516,9 @@ class ModelRunner:
         if options is None:
             options = ExecutionOptions()
 
-        self.logger.info(f"[ASYNC] Running model {model_name} with prompt length: {len(prompt)}")
+        self.logger.info(
+            f"[ASYNC] Running model {model_name} with prompt length: {len(prompt)}"
+        )
 
         start_time = time.time()
 
@@ -495,7 +532,7 @@ class ModelRunner:
                 "top_p": options.top_p,
                 "top_k": options.top_k,
                 "repeat_penalty": options.repeat_penalty,
-            }
+            },
         }
 
         if options.max_tokens:
@@ -514,8 +551,7 @@ class ModelRunner:
             timeout_config = aiohttp.ClientTimeout(total=timeout)
             async with aiohttp.ClientSession(timeout=timeout_config) as session:
                 async with session.post(
-                    f"{self.ollama_manager.base_url}/api/generate",
-                    json=payload
+                    f"{self.ollama_manager.base_url}/api/generate", json=payload
                 ) as response:
                     execution_time = time.time() - start_time
 
@@ -536,12 +572,14 @@ class ModelRunner:
                             tokens_used=tokens_used,
                             success=True,
                             error_message=None,
-                            metadata={"api_method": "async_http"}
+                            metadata={"api_method": "async_http"},
                         )
                     else:
                         error_text = await response.text()
                         error_msg = f"HTTP {response.status}: {error_text}"
-                        self.logger.error(f"[ASYNC] Model {model_name} failed: {error_msg}")
+                        self.logger.error(
+                            f"[ASYNC] Model {model_name} failed: {error_msg}"
+                        )
 
                         return ModelExecutionResult(
                             model_name=model_name,
@@ -549,7 +587,7 @@ class ModelRunner:
                             response="",
                             execution_time=execution_time,
                             success=False,
-                            error_message=error_msg
+                            error_message=error_msg,
                         )
 
         except TimeoutError:
@@ -560,7 +598,7 @@ class ModelRunner:
                 response="",
                 execution_time=execution_time,
                 success=False,
-                error_message="Model execution timed out"
+                error_message="Model execution timed out",
             )
         except aiohttp.ClientError as e:
             execution_time = time.time() - start_time
@@ -570,7 +608,7 @@ class ModelRunner:
                 response="",
                 execution_time=execution_time,
                 success=False,
-                error_message=f"Network error: {str(e)}"
+                error_message=f"Network error: {str(e)}",
             )
         except Exception as e:
             execution_time = time.time() - start_time
@@ -580,7 +618,7 @@ class ModelRunner:
                 response="",
                 execution_time=execution_time,
                 success=False,
-                error_message=f"Execution error: {str(e)}"
+                error_message=f"Execution error: {str(e)}",
             )
 
     async def async_generate(
@@ -588,7 +626,7 @@ class ModelRunner:
         model_name: str,
         prompt: str,
         options: ExecutionOptions | None = None,
-        timeout: int = 300
+        timeout: int = 300,
     ) -> ModelExecutionResult:
         """
         Generate text asynchronously using the specified model.
@@ -612,7 +650,7 @@ class ModelRunner:
         model_name: str,
         messages: list[dict[str, str]],
         options: ExecutionOptions | None = None,
-        timeout: int = 300
+        timeout: int = 300,
     ) -> ModelExecutionResult:
         """
         Run a chat conversation asynchronously.
@@ -648,7 +686,7 @@ class ModelRunner:
                 "top_p": options.top_p,
                 "top_k": options.top_k,
                 "repeat_penalty": options.repeat_penalty,
-            }
+            },
         }
 
         if options.max_tokens:
@@ -664,8 +702,7 @@ class ModelRunner:
             timeout_config = aiohttp.ClientTimeout(total=timeout)
             async with aiohttp.ClientSession(timeout=timeout_config) as session:
                 async with session.post(
-                    f"{self.ollama_manager.base_url}/api/chat",
-                    json=payload
+                    f"{self.ollama_manager.base_url}/api/chat", json=payload
                 ) as response:
                     execution_time = time.time() - start_time
 
@@ -693,13 +730,15 @@ class ModelRunner:
                             metadata={
                                 "api_method": "async_chat",
                                 "message_count": len(messages),
-                                "role": message.get("role", "assistant")
-                            }
+                                "role": message.get("role", "assistant"),
+                            },
                         )
                     else:
                         error_text = await response.text()
                         error_msg = f"HTTP {response.status}: {error_text}"
-                        self.logger.error(f"[ASYNC] Chat with {model_name} failed: {error_msg}")
+                        self.logger.error(
+                            f"[ASYNC] Chat with {model_name} failed: {error_msg}"
+                        )
 
                         return ModelExecutionResult(
                             model_name=model_name,
@@ -707,7 +746,7 @@ class ModelRunner:
                             response="",
                             execution_time=execution_time,
                             success=False,
-                            error_message=error_msg
+                            error_message=error_msg,
                         )
 
         except TimeoutError:
@@ -718,7 +757,7 @@ class ModelRunner:
                 response="",
                 execution_time=execution_time,
                 success=False,
-                error_message="Chat execution timed out"
+                error_message="Chat execution timed out",
             )
         except aiohttp.ClientError as e:
             execution_time = time.time() - start_time
@@ -728,7 +767,7 @@ class ModelRunner:
                 response="",
                 execution_time=execution_time,
                 success=False,
-                error_message=f"Network error: {str(e)}"
+                error_message=f"Network error: {str(e)}",
             )
         except Exception as e:
             execution_time = time.time() - start_time
@@ -738,7 +777,7 @@ class ModelRunner:
                 response="",
                 execution_time=execution_time,
                 success=False,
-                error_message=f"Execution error: {str(e)}"
+                error_message=f"Execution error: {str(e)}",
             )
 
     async def async_generate_stream(
@@ -746,7 +785,7 @@ class ModelRunner:
         model_name: str,
         prompt: str,
         options: ExecutionOptions | None = None,
-        timeout: int = 300
+        timeout: int = 300,
     ) -> AsyncIterator[StreamingChunk]:
         """
         Generate text asynchronously with streaming output.
@@ -777,7 +816,7 @@ class ModelRunner:
                 "top_p": options.top_p,
                 "top_k": options.top_k,
                 "repeat_penalty": options.repeat_penalty,
-            }
+            },
         }
 
         if options.max_tokens:
@@ -796,17 +835,14 @@ class ModelRunner:
             timeout_config = aiohttp.ClientTimeout(total=timeout)
             async with aiohttp.ClientSession(timeout=timeout_config) as session:
                 async with session.post(
-                    f"{self.ollama_manager.base_url}/api/generate",
-                    json=payload
+                    f"{self.ollama_manager.base_url}/api/generate", json=payload
                 ) as response:
                     if response.status != 200:
                         await response.text()
-                        yield StreamingChunk(
-                            content="",
-                            done=True,
-                            token_count=0
+                        yield StreamingChunk(content="", done=True, token_count=0)
+                        self.logger.error(
+                            f"[ASYNC] Stream failed: HTTP {response.status}"
                         )
-                        self.logger.error(f"[ASYNC] Stream failed: HTTP {response.status}")
                         return
 
                     async for line in response.content:
@@ -820,7 +856,7 @@ class ModelRunner:
                                 yield StreamingChunk(
                                     content=chunk_content,
                                     done=is_done,
-                                    token_count=eval_count
+                                    token_count=eval_count,
                                 )
 
                                 if is_done:
@@ -847,7 +883,7 @@ class ModelRunner:
         model_name: str,
         prompts: list[str],
         options: ExecutionOptions | None = None,
-        max_concurrent: int = 3
+        max_concurrent: int = 3,
     ) -> list[ModelExecutionResult]:
         """
         Run multiple prompts in batch asynchronously with concurrency control.
@@ -878,14 +914,16 @@ class ModelRunner:
         final_results = []
         for i, result in enumerate(results):
             if isinstance(result, Exception):
-                final_results.append(ModelExecutionResult(
-                    model_name=model_name,
-                    prompt=prompts[i],
-                    response="",
-                    execution_time=0,
-                    success=False,
-                    error_message=str(result)
-                ))
+                final_results.append(
+                    ModelExecutionResult(
+                        model_name=model_name,
+                        prompt=prompts[i],
+                        response="",
+                        execution_time=0,
+                        success=False,
+                        error_message=str(result),
+                    )
+                )
             else:
                 final_results.append(result)
 

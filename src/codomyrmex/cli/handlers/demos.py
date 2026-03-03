@@ -1,17 +1,19 @@
-
 from codomyrmex.cli.utils import get_logger
 
 # Lazy imports for demos to avoid hard dependencies
 logger = get_logger(__name__)
 
+
 def demo_data_visualization() -> bool:
     """Demo data visualization capabilities."""
     try:
         import matplotlib
-        matplotlib.use('Agg')
+
+        matplotlib.use("Agg")
         import os
 
         from codomyrmex.data_visualization import create_bar_chart, create_line_plot
+
         # Generate sample data
         output_dir = "output"
         os.makedirs(output_dir, exist_ok=True)
@@ -23,9 +25,7 @@ def demo_data_visualization() -> bool:
         create_line_plot(
             x, y, title="Demo: Quadratic Function", save_path="output/demo_line.png"
         )
-        create_bar_chart(
-            x, y, title="Demo: Bar Chart", save_path="output/demo_bar.png"
-        )
+        create_bar_chart(x, y, title="Demo: Bar Chart", save_path="output/demo_bar.png")
 
         print("✅ Data visualization demo complete. Check output/ directory.")
         return True
@@ -95,7 +95,9 @@ for i in range(8):
             print("-" * 40)
             return True
         else:
-            print(f"❌ Demo failed: {result.get('error_message', result.get('stderr', 'Unknown error'))}")
+            print(
+                f"❌ Demo failed: {result.get('error_message', result.get('stderr', 'Unknown error'))}"
+            )
             return False
 
     except ImportError:

@@ -18,6 +18,7 @@ from codomyrmex.documents.models.metadata import DocumentMetadata
 
 class DocumentType(Enum):
     """Types of documents."""
+
     TEXT = "text"
     MARKUP = "markup"
     STRUCTURED = "structured"
@@ -27,6 +28,7 @@ class DocumentType(Enum):
 
 class DocumentFormat(Enum):
     """Document file formats."""
+
     MARKDOWN = "markdown"
     TEXT = "text"
     HTML = "html"
@@ -63,6 +65,7 @@ _FORMAT_TYPE_MAP = {
 @dataclass
 class Document:
     """Represents a document."""
+
     content: Any
     format: DocumentFormat
     file_path: Path | str | None = None

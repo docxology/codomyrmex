@@ -407,7 +407,9 @@ class TestFormatValidationError:
     """Tests for FormatValidationError."""
 
     def test_basic(self):
-        err = FormatValidationError("Invalid format", field="email", expected_format="email")
+        err = FormatValidationError(
+            "Invalid format", field="email", expected_format="email"
+        )
         assert err.context["expected_format"] == "email"
 
     def test_with_pattern(self):

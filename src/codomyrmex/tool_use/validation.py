@@ -72,9 +72,7 @@ def _validate_value(value: Any, schema: dict[str, Any], path: str) -> list[str]:
 
         if allowed_python_types and not isinstance(value, tuple(allowed_python_types)):
             actual = type(value).__name__
-            errors.append(
-                f"{path}: expected type {expected_type}, got {actual}"
-            )
+            errors.append(f"{path}: expected type {expected_type}, got {actual}")
             # If the type is wrong, skip deeper checks that depend on it
             return errors
 
@@ -129,7 +127,9 @@ def _validate_value(value: Any, schema: dict[str, Any], path: str) -> list[str]:
         for prop_name, prop_schema in properties.items():
             if prop_name in value:
                 errors.extend(
-                    _validate_value(value[prop_name], prop_schema, f"{path}.{prop_name}")
+                    _validate_value(
+                        value[prop_name], prop_schema, f"{path}.{prop_name}"
+                    )
                 )
 
         # Check additionalProperties constraint

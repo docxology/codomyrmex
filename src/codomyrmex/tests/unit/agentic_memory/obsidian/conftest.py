@@ -258,6 +258,7 @@ def sample_simple_note():
 def unavailable_cli():
     """Return an ObsidianCLI pointing to a nonexistent binary."""
     from codomyrmex.agentic_memory.obsidian.cli import ObsidianCLI
+
     return ObsidianCLI(binary="__nonexistent_cli_binary__")
 
 

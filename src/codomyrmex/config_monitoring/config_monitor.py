@@ -14,9 +14,11 @@ from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 logger = get_logger(__name__)
 
+
 @dataclass
 class ConfigChange:
     """Configuration change record."""
+
     change_id: str
     config_path: str
     change_type: str  # "created", "modified", "deleted"
@@ -26,9 +28,11 @@ class ConfigChange:
     changes: dict[str, Any] = field(default_factory=dict)
     source: str = "unknown"
 
+
 @dataclass
 class ConfigAudit:
     """Configuration audit record."""
+
     audit_id: str
     timestamp: datetime
     environment: str
@@ -37,14 +41,17 @@ class ConfigAudit:
     recommendations: list[str]
     audit_scope: dict[str, Any]
 
+
 @dataclass
 class ConfigSnapshot:
     """Configuration snapshot for drift detection."""
+
     snapshot_id: str
     timestamp: datetime
     environment: str
     config_hashes: dict[str, str]
     total_files: int
+
 
 class ConfigurationMonitor:
     """Configuration monitoring and auditing system."""
@@ -85,7 +92,7 @@ class ConfigurationMonitor:
                             timestamp=datetime.fromisoformat(data["timestamp"]),
                             environment=data["environment"],
                             config_hashes=data["config_hashes"],
-                            total_files=data["total_files"]
+                            total_files=data["total_files"],
                         )
                         self._snapshots[snapshot.snapshot_id] = snapshot
                 except (json.JSONDecodeError, KeyError, ValueError, OSError) as e:
@@ -105,7 +112,7 @@ class ConfigurationMonitor:
                             compliance_status=data["compliance_status"],
                             issues_found=data["issues_found"],
                             recommendations=data["recommendations"],
-                            audit_scope=data["audit_scope"]
+                            audit_scope=data["audit_scope"],
                         )
                         self._audits.append(audit)
                 except (json.JSONDecodeError, KeyError, ValueError, OSError) as e:
@@ -125,7 +132,7 @@ class ConfigurationMonitor:
             return ""
 
         sha256 = hashlib.sha256()
-        with open(path, 'rb') as f:
+        with open(path, "rb") as f:
             while chunk := f.read(8192):
                 sha256.update(chunk)
         return sha256.hexdigest()
@@ -136,7 +143,7 @@ class ConfigurationMonitor:
         change_type: str,
         previous_hash: str | None = None,
         current_hash: str | None = None,
-        source: str = "unknown"
+        source: str = "unknown",
     ) -> ConfigChange:
         """Create and store a ConfigChange record.
 
@@ -158,14 +165,16 @@ class ConfigurationMonitor:
             timestamp=datetime.now(),
             previous_hash=previous_hash,
             current_hash=current_hash,
-            source=source
+            source=source,
         )
         self._changes.append(change)
         if len(self._changes) > 1000:
             self._changes = self._changes[-1000:]
         return change
 
-    def detect_config_changes(self, config_paths: list[str | Path]) -> list[ConfigChange]:
+    def detect_config_changes(
+        self, config_paths: list[str | Path]
+    ) -> list[ConfigChange]:
         """Detect changes in configuration files and persist hashes.
 
         Args:
@@ -198,7 +207,9 @@ class ConfigurationMonitor:
                 logger.info(f"Detected new file: {str_path}")
                 new_hashes[str_path] = current_hash
             elif current_hash != previous_hash:
-                change = self.record_change(str_path, "modified", previous_hash, current_hash)
+                change = self.record_change(
+                    str_path, "modified", previous_hash, current_hash
+                )
                 changes.append(change)
                 logger.info(f"Detected modification: {str_path}")
                 new_hashes[str_path] = current_hash
@@ -252,7 +263,9 @@ class ConfigurationMonitor:
         except (json.JSONDecodeError, OSError):
             pass
 
-    def create_snapshot(self, environment: str, config_dir: str | Path) -> ConfigSnapshot:
+    def create_snapshot(
+        self, environment: str, config_dir: str | Path
+    ) -> ConfigSnapshot:
         """Hash all files in directory and store as ConfigSnapshot.
 
         Args:
@@ -264,7 +277,9 @@ class ConfigurationMonitor:
         """
         path = Path(config_dir)
         if not path.is_dir():
-            raise CodomyrmexError(f"Configuration directory does not exist: {config_dir}")
+            raise CodomyrmexError(
+                f"Configuration directory does not exist: {config_dir}"
+            )
 
         config_hashes = {}
         files = [f for f in path.rglob("*") if f.is_file()]
@@ -277,21 +292,25 @@ class ConfigurationMonitor:
             timestamp=datetime.now(),
             environment=environment,
             config_hashes=config_hashes,
-            total_files=len(config_hashes)
+            total_files=len(config_hashes),
         )
 
         self._snapshots[snapshot_id] = snapshot
 
         # Persist to disk
         snap_file = self.snapshots_dir / f"{snapshot_id}.json"
-        with open(snap_file, 'w') as f:
-            json.dump({
-                "snapshot_id": snapshot.snapshot_id,
-                "timestamp": snapshot.timestamp.isoformat(),
-                "environment": snapshot.environment,
-                "config_hashes": snapshot.config_hashes,
-                "total_files": snapshot.total_files
-            }, f, indent=2)
+        with open(snap_file, "w") as f:
+            json.dump(
+                {
+                    "snapshot_id": snapshot.snapshot_id,
+                    "timestamp": snapshot.timestamp.isoformat(),
+                    "environment": snapshot.environment,
+                    "config_hashes": snapshot.config_hashes,
+                    "total_files": snapshot.total_files,
+                },
+                f,
+                indent=2,
+            )
 
         return snapshot
 
@@ -314,51 +333,60 @@ class ConfigurationMonitor:
         snapshot = self._snapshots[snapshot_id]
         current_dir = Path(config_dir).absolute()
 
-        current_files = {str(f.absolute()): self.calculate_file_hash(f)
-                         for f in current_dir.rglob("*") if f.is_file()}
+        current_files = {
+            str(f.absolute()): self.calculate_file_hash(f)
+            for f in current_dir.rglob("*")
+            if f.is_file()
+        }
 
         drift_details = []
 
         # Check snapshot files against current
         for path, expected_hash in snapshot.config_hashes.items():
             if path not in current_files:
-                drift_details.append({
-                    "path": path,
-                    "issue": "deleted",
-                    "expected": expected_hash,
-                    "actual": None
-                })
+                drift_details.append(
+                    {
+                        "path": path,
+                        "issue": "deleted",
+                        "expected": expected_hash,
+                        "actual": None,
+                    }
+                )
             elif current_files[path] != expected_hash:
-                drift_details.append({
-                    "path": path,
-                    "issue": "modified",
-                    "expected": expected_hash,
-                    "actual": current_files[path]
-                })
+                drift_details.append(
+                    {
+                        "path": path,
+                        "issue": "modified",
+                        "expected": expected_hash,
+                        "actual": current_files[path],
+                    }
+                )
 
         # Check current files not in snapshot
         for path, actual_hash in current_files.items():
             if path not in snapshot.config_hashes:
-                drift_details.append({
-                    "path": path,
-                    "issue": "added",
-                    "expected": None,
-                    "actual": actual_hash
-                })
+                drift_details.append(
+                    {
+                        "path": path,
+                        "issue": "added",
+                        "expected": None,
+                        "actual": actual_hash,
+                    }
+                )
 
         return {
             "snapshot_id": snapshot_id,
             "drift_detected": len(drift_details) > 0,
             "drift_count": len(drift_details),
             "details": drift_details,
-            "timestamp": datetime.now().isoformat()
+            "timestamp": datetime.now().isoformat(),
         }
 
     def audit_configuration(
         self,
         environment: str,
         config_dir: str | Path,
-        compliance_rules: dict[str, Any] | None = None
+        compliance_rules: dict[str, Any] | None = None,
     ) -> ConfigAudit:
         """Perform compliance audit on configuration files.
 
@@ -379,11 +407,26 @@ class ConfigurationMonitor:
         files_audited = 0
 
         sensitive_patterns = [
-            (re.compile(r'password\s*[:=]\s*["\'][^"\']+["\']', re.I), "Plaintext password pattern found"),
-            (re.compile(r'api_key\s*[:=]\s*["\'][^"\']+["\']', re.I), "Plaintext API key pattern found"),
-            (re.compile(r'secret\s*[:=]\s*["\'][^"\']+["\']', re.I), "Plaintext secret pattern found"),
-            (re.compile(r'token\s*[:=]\s*["\'][^"\']+["\']', re.I), "Plaintext token pattern found"),
-            (re.compile(r'-----BEGIN (?:RSA |EC )?PRIVATE KEY-----'), "Unencrypted private key found")
+            (
+                re.compile(r'password\s*[:=]\s*["\'][^"\']+["\']', re.I),
+                "Plaintext password pattern found",
+            ),
+            (
+                re.compile(r'api_key\s*[:=]\s*["\'][^"\']+["\']', re.I),
+                "Plaintext API key pattern found",
+            ),
+            (
+                re.compile(r'secret\s*[:=]\s*["\'][^"\']+["\']', re.I),
+                "Plaintext secret pattern found",
+            ),
+            (
+                re.compile(r'token\s*[:=]\s*["\'][^"\']+["\']', re.I),
+                "Plaintext token pattern found",
+            ),
+            (
+                re.compile(r"-----BEGIN (?:RSA |EC )?PRIVATE KEY-----"),
+                "Unencrypted private key found",
+            ),
         ]
 
         for f in path.rglob("*"):
@@ -394,18 +437,24 @@ class ConfigurationMonitor:
             # Check permissions (on Unix-like)
             try:
                 if f.stat().st_mode & 0o077:
-                    issues.append(f"Overly permissive permissions on {f.name}: {oct(f.stat().st_mode)}")
-                    recommendations.append(f"Restrict {f.name} permissions to owner-only (e.g., 600)")
+                    issues.append(
+                        f"Overly permissive permissions on {f.name}: {oct(f.stat().st_mode)}"
+                    )
+                    recommendations.append(
+                        f"Restrict {f.name} permissions to owner-only (e.g., 600)"
+                    )
             except (OSError, AttributeError):
                 pass
 
             # Check content
             try:
-                content = f.read_text(errors='ignore')
+                content = f.read_text(errors="ignore")
                 for pattern, msg in sensitive_patterns:
                     if pattern.search(content):
                         issues.append(f"{msg} in {f.name}")
-                        recommendations.append(f"Move sensitive data in {f.name} to a secure secret manager")
+                        recommendations.append(
+                            f"Move sensitive data in {f.name} to a secure secret manager"
+                        )
             except Exception as e:
                 logger.debug(f"Could not read {f} for audit: {e}")
 
@@ -417,23 +466,30 @@ class ConfigurationMonitor:
             compliance_status="non_compliant" if issues else "compliant",
             issues_found=issues,
             recommendations=list(set(recommendations)),
-            audit_scope={"files_audited": files_audited, "config_dir": str(path.absolute())}
+            audit_scope={
+                "files_audited": files_audited,
+                "config_dir": str(path.absolute()),
+            },
         )
 
         self._audits.append(audit)
 
         # Persist audit
         audit_file = self.audits_dir / f"{audit_id}.json"
-        with open(audit_file, 'w') as f:
-            json.dump({
-                "audit_id": audit.audit_id,
-                "timestamp": audit.timestamp.isoformat(),
-                "environment": audit.environment,
-                "compliance_status": audit.compliance_status,
-                "issues_found": audit.issues_found,
-                "recommendations": audit.recommendations,
-                "audit_scope": audit.audit_scope
-            }, f, indent=2)
+        with open(audit_file, "w") as f:
+            json.dump(
+                {
+                    "audit_id": audit.audit_id,
+                    "timestamp": audit.timestamp.isoformat(),
+                    "environment": audit.environment,
+                    "compliance_status": audit.compliance_status,
+                    "issues_found": audit.issues_found,
+                    "recommendations": audit.recommendations,
+                    "audit_scope": audit.audit_scope,
+                },
+                f,
+                indent=2,
+            )
 
         return audit
 
@@ -470,13 +526,15 @@ class ConfigurationMonitor:
             "total_changes": len(self._changes),
             "recent_changes": len(self.get_recent_changes(24)),
             "total_audits": len(self._audits),
-            "last_audit_at": self._audits[-1].timestamp.isoformat() if self._audits else None,
-            "status": "active"
+            "last_audit_at": self._audits[-1].timestamp.isoformat()
+            if self._audits
+            else None,
+            "status": "active",
         }
 
+
 def monitor_config_changes(
-    config_paths: list[str | Path],
-    workspace_dir: str | Path | None = None
+    config_paths: list[str | Path], workspace_dir: str | Path | None = None
 ) -> dict[str, Any]:
     """Monitor configuration changes once and return summary."""
     monitor = ConfigurationMonitor(workspace_dir)
@@ -484,5 +542,5 @@ def monitor_config_changes(
     return {
         "paths_monitored": len(config_paths),
         "changes_detected": len(changes),
-        "summary": monitor.get_monitoring_summary()
+        "summary": monitor.get_monitoring_summary(),
     }

@@ -24,7 +24,7 @@ import pytest
 # Removed mock imports to follow TDD principle: no mock methods, always do real data analysis
 
 # Add src to path for imports
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', 'src'))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "..", "src"))
 
 from codomyrmex.git_operations.core.git import (
     # File operations
@@ -52,7 +52,9 @@ from codomyrmex.git_operations.core.git import (
 _GIT_AVAILABLE = check_git_availability()
 pytestmark = [
     pytest.mark.unit,
-    pytest.mark.skipif(not _GIT_AVAILABLE, reason="Git is not available on this system"),
+    pytest.mark.skipif(
+        not _GIT_AVAILABLE, reason="Git is not available on this system"
+    ),
 ]
 
 
@@ -85,7 +87,7 @@ class TestAdvancedGitOperations:
             ["git", "branch", "-m", "main"],
             cwd=self.repo_dir,
             capture_output=True,
-            check=False
+            check=False,
         )
 
         yield
@@ -102,7 +104,7 @@ class TestAdvancedGitOperations:
 
         # Add content to feature branch
         feature_file = os.path.join(self.repo_dir, "feature.txt")
-        with open(feature_file, 'w') as f:
+        with open(feature_file, "w") as f:
             f.write("Feature content")
 
         assert add_files(["feature.txt"], self.repo_dir)
@@ -111,7 +113,7 @@ class TestAdvancedGitOperations:
         # Switch back to main and create different content
         assert switch_branch("main", self.repo_dir)
         main_file = os.path.join(self.repo_dir, "main.txt")
-        with open(main_file, 'w') as f:
+        with open(main_file, "w") as f:
             f.write("Main content")
 
         assert add_files(["main.txt"], self.repo_dir)
@@ -128,7 +130,7 @@ class TestAdvancedGitOperations:
         # Test merge with explicit target branch
         assert create_branch("feature/test2", self.repo_dir)
         feature2_file = os.path.join(self.repo_dir, "feature2.txt")
-        with open(feature2_file, 'w') as f:
+        with open(feature2_file, "w") as f:
             f.write("Feature 2 content")
 
         assert add_files(["feature2.txt"], self.repo_dir)
@@ -153,7 +155,7 @@ class TestAdvancedGitOperations:
         """Test comprehensive rebase operations."""
         # Setup: Create commits on main
         main_file1 = os.path.join(self.repo_dir, "main1.txt")
-        with open(main_file1, 'w') as f:
+        with open(main_file1, "w") as f:
             f.write("Main content 1")
 
         assert add_files(["main1.txt"], self.repo_dir)
@@ -164,7 +166,7 @@ class TestAdvancedGitOperations:
 
         # Add commits to feature branch
         feature_file = os.path.join(self.repo_dir, "feature.txt")
-        with open(feature_file, 'w') as f:
+        with open(feature_file, "w") as f:
             f.write("Feature content")
 
         assert add_files(["feature.txt"], self.repo_dir)
@@ -173,7 +175,7 @@ class TestAdvancedGitOperations:
         # Go back to main and add more commits
         assert switch_branch("main", self.repo_dir)
         main_file2 = os.path.join(self.repo_dir, "main2.txt")
-        with open(main_file2, 'w') as f:
+        with open(main_file2, "w") as f:
             f.write("Main content 2")
 
         assert add_files(["main2.txt"], self.repo_dir)
@@ -239,14 +241,14 @@ class TestAdvancedGitOperations:
         """Test comprehensive stash operations."""
         # Create some changes to stash
         test_file = os.path.join(self.repo_dir, "stash_test.txt")
-        with open(test_file, 'w') as f:
+        with open(test_file, "w") as f:
             f.write("Content to stash")
 
         assert add_files(["stash_test.txt"], self.repo_dir)
         assert commit_changes("Initial commit for stash test", self.repo_dir)
 
         # Modify the file
-        with open(test_file, 'w') as f:
+        with open(test_file, "w") as f:
             f.write("Modified content")
 
         # Test stashing changes
@@ -296,14 +298,14 @@ class TestAdvancedGitOperations:
         """Test comprehensive diff operations."""
         # Create initial file
         test_file = os.path.join(self.repo_dir, "diff_test.txt")
-        with open(test_file, 'w') as f:
+        with open(test_file, "w") as f:
             f.write("Original content\n")
 
         assert add_files(["diff_test.txt"], self.repo_dir)
         assert commit_changes("Initial commit for diff test", self.repo_dir)
 
         # Modify the file
-        with open(test_file, 'w') as f:
+        with open(test_file, "w") as f:
             f.write("Modified content\n")
 
         # Test getting diff of working tree
@@ -337,7 +339,7 @@ class TestAdvancedGitOperations:
         # Create multiple commits
         for i in range(3):
             test_file = os.path.join(self.repo_dir, f"reset_test_{i}.txt")
-            with open(test_file, 'w') as f:
+            with open(test_file, "w") as f:
                 f.write(f"Content {i}")
 
             assert add_files([f"reset_test_{i}.txt"], self.repo_dir)
@@ -382,7 +384,7 @@ class TestAdvancedGitOperations:
         # Step 2: Add multiple commits
         for i in range(2):
             feature_file = os.path.join(self.repo_dir, f"advanced_feature_{i}.txt")
-            with open(feature_file, 'w') as f:
+            with open(feature_file, "w") as f:
                 f.write(f"Advanced feature content {i}")
 
             assert add_files([f"advanced_feature_{i}.txt"], self.repo_dir)
@@ -394,7 +396,7 @@ class TestAdvancedGitOperations:
 
         # Step 4: Make some changes and stash them
         temp_file = os.path.join(self.repo_dir, "temp_work.txt")
-        with open(temp_file, 'w') as f:
+        with open(temp_file, "w") as f:
             f.write("Temporary work")
 
         assert add_files(["temp_work.txt"], self.repo_dir)
@@ -403,7 +405,9 @@ class TestAdvancedGitOperations:
 
         # Step 5: Switch to main and merge feature
         assert switch_branch("main", self.repo_dir)
-        result = merge_branch("feature/advanced-workflow", repository_path=self.repo_dir)
+        result = merge_branch(
+            "feature/advanced-workflow", repository_path=self.repo_dir
+        )
         assert result
 
         # Step 6: Verify all operations completed successfully
@@ -432,7 +436,7 @@ class TestAdvancedGitOperations:
 
             # Add content to each branch
             branch_file = os.path.join(self.repo_dir, f"branch_{i}.txt")
-            with open(branch_file, 'w') as f:
+            with open(branch_file, "w") as f:
                 f.write(f"Branch {i} content")
 
             assert add_files([f"branch_{i}.txt"], self.repo_dir)
@@ -451,8 +455,8 @@ class TestAdvancedGitOperations:
         # We need to ensure tags list is not empty before checking specific tags
         assert isinstance(tags, list)
         if not tags:
-             # If tags are empty, print for debugging (though capture_output usually hides this)
-             print(f"DEBUG: No tags found in {self.repo_dir}")
+            # If tags are empty, print for debugging (though capture_output usually hides this)
+            print(f"DEBUG: No tags found in {self.repo_dir}")
 
         for i in range(branch_count):
             tag_name = f"branch-{i}-v1.0"

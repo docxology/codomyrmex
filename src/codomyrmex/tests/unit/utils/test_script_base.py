@@ -234,7 +234,9 @@ class TestScriptBaseInit:
 
     def test_custom_version_and_output_dir(self, tmp_path):
         s = SuccessScript(
-            name="s", description="d", version="2.3.4",
+            name="s",
+            description="d",
+            version="2.3.4",
             default_output_dir=tmp_path,
         )
         assert s.version == "2.3.4"
@@ -353,7 +355,9 @@ class TestScriptBaseLoadConfig:
     def test_load_config_cli_overrides(self):
         s = SuccessScript(name="t", description="d")
         parser = s.create_parser()
-        args = parser.parse_args(["--dry-run", "--timeout", "10", "--output-format", "yaml"])
+        args = parser.parse_args(
+            ["--dry-run", "--timeout", "10", "--output-format", "yaml"]
+        )
         config = s.load_config(args)
         assert config.dry_run is True
         assert config.timeout == 10
@@ -507,7 +511,9 @@ class TestScriptBaseOutputDirectory:
         s.config = ScriptConfig(output_dir=tmp_path / "custom_out")
         out = s.setup_output_directory()
         assert out.exists()
-        assert tmp_path / "custom_out" in out.parents or str(tmp_path / "custom_out") in str(out)
+        assert tmp_path / "custom_out" in out.parents or str(
+            tmp_path / "custom_out"
+        ) in str(out)
         assert s.run_id is not None
 
     def test_uses_default_output_dir(self, tmp_path):
@@ -636,10 +642,16 @@ class TestScriptBaseExecute:
 
     def test_execute_with_custom_args(self, tmp_path):
         s = CustomArgsScript(name="custom", description="d")
-        exit_code = s.execute([
-            "--custom-flag", "--custom-value", "77",
-            "--output-dir", str(tmp_path), "--quiet",
-        ])
+        exit_code = s.execute(
+            [
+                "--custom-flag",
+                "--custom-value",
+                "77",
+                "--output-dir",
+                str(tmp_path),
+                "--quiet",
+            ]
+        )
         assert exit_code == 0
 
     def test_metrics_script_collects_data(self, tmp_path):
@@ -694,9 +706,12 @@ class TestScriptBaseSaveResult:
         s.config = ScriptConfig(save_output=False)
         s.output_path = None
         result = ScriptResult(
-            script_name="t", status="success",
-            start_time="x", end_time="y",
-            duration_seconds=1.0, exit_code=0,
+            script_name="t",
+            status="success",
+            start_time="x",
+            end_time="y",
+            duration_seconds=1.0,
+            exit_code=0,
         )
         assert s.save_result(result) is None
 
@@ -708,9 +723,12 @@ class TestFormatTextResult:
     def test_basic_format(self):
         s = SuccessScript(name="t", description="d")
         r = ScriptResult(
-            script_name="test_script", status="success",
-            start_time="t0", end_time="t1",
-            duration_seconds=2.5, exit_code=0,
+            script_name="test_script",
+            status="success",
+            start_time="t0",
+            end_time="t1",
+            duration_seconds=2.5,
+            exit_code=0,
             data={"key": "val"},
         )
         text = s._format_text_result(r)
@@ -723,9 +741,12 @@ class TestFormatTextResult:
     def test_format_with_errors(self):
         s = SuccessScript(name="t", description="d")
         r = ScriptResult(
-            script_name="t", status="error",
-            start_time="t0", end_time="t1",
-            duration_seconds=1.0, exit_code=1,
+            script_name="t",
+            status="error",
+            start_time="t0",
+            end_time="t1",
+            duration_seconds=1.0,
+            exit_code=1,
             errors=["err1", "err2"],
         )
         text = s._format_text_result(r)
@@ -736,9 +757,12 @@ class TestFormatTextResult:
     def test_format_with_warnings(self):
         s = SuccessScript(name="t", description="d")
         r = ScriptResult(
-            script_name="t", status="success",
-            start_time="t0", end_time="t1",
-            duration_seconds=1.0, exit_code=0,
+            script_name="t",
+            status="success",
+            start_time="t0",
+            end_time="t1",
+            duration_seconds=1.0,
+            exit_code=0,
             warnings=["warn1"],
         )
         text = s._format_text_result(r)
@@ -748,9 +772,12 @@ class TestFormatTextResult:
     def test_format_with_metrics(self):
         s = SuccessScript(name="t", description="d")
         r = ScriptResult(
-            script_name="t", status="success",
-            start_time="t0", end_time="t1",
-            duration_seconds=1.0, exit_code=0,
+            script_name="t",
+            status="success",
+            start_time="t0",
+            end_time="t1",
+            duration_seconds=1.0,
+            exit_code=0,
             metrics={"count": 10},
         )
         text = s._format_text_result(r)
@@ -861,7 +888,9 @@ class TestRunScript:
                 return run_func(args, config)
 
         script = SimpleScript(name=name, description=description, version=version)
-        return script.execute(argv=argv if argv is not None else ["--no-save", "--quiet"])
+        return script.execute(
+            argv=argv if argv is not None else ["--no-save", "--quiet"]
+        )
 
     def test_basic_run_script(self):
         def my_run(args, config):
@@ -910,6 +939,7 @@ class TestRunScript:
     def test_run_script_function_exists(self):
         """Verify run_script is callable and has expected signature."""
         import inspect
+
         sig = inspect.signature(run_script)
         params = list(sig.parameters.keys())
         assert "name" in params

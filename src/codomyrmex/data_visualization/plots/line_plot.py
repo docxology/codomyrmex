@@ -1,4 +1,5 @@
 """Line plot visualization module."""
+
 from ._base import BasePlot
 
 

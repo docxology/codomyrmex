@@ -9,6 +9,7 @@ from pathlib import Path
 
 try:
     import yaml
+
     YAML_AVAILABLE = True
 except ImportError:
     YAML_AVAILABLE = False
@@ -21,11 +22,12 @@ from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 logger = get_logger(__name__)
 
-T = TypeVar('T')
+T = TypeVar("T")
 
 
 class SerializationFormat(Enum):
     """Supported serialization formats."""
+
     JSON = "json"
     PICKLE = "pickle"
     YAML = "yaml"
@@ -33,6 +35,7 @@ class SerializationFormat(Enum):
 
 class SerializationError(Exception):
     """Raised when serialization fails."""
+
     pass
 
 
@@ -59,8 +62,12 @@ class Serializer:
         except Exception as e:
             raise SerializationError(f"Serialization failed: {e}") from e
 
-    def deserialize(self, data: bytes, format: SerializationFormat | None = None,
-                    target_type: type[T] | None = None) -> Any:
+    def deserialize(
+        self,
+        data: bytes,
+        format: SerializationFormat | None = None,
+        target_type: type[T] | None = None,
+    ) -> Any:
         """Deserialize bytes to an object."""
         fmt = format or self.default_format
 
@@ -86,11 +93,11 @@ class Serializer:
 
     def _serialize_json(self, obj: Any) -> bytes:
         """Serialize to JSON bytes."""
-        return json.dumps(self._to_jsonable(obj), indent=2).encode('utf-8')
+        return json.dumps(self._to_jsonable(obj), indent=2).encode("utf-8")
 
     def _deserialize_json(self, data: bytes, target_type: type[T] | None) -> Any:
         """Deserialize from JSON bytes."""
-        parsed = json.loads(data.decode('utf-8'))
+        parsed = json.loads(data.decode("utf-8"))
         if target_type and is_dataclass(target_type):
             return target_type(**parsed)
         return parsed
@@ -99,13 +106,15 @@ class Serializer:
         """Serialize to YAML bytes."""
         if not YAML_AVAILABLE:
             raise SerializationError("PyYAML not installed")
-        return yaml.dump(self._to_jsonable(obj), default_flow_style=False).encode('utf-8')
+        return yaml.dump(self._to_jsonable(obj), default_flow_style=False).encode(
+            "utf-8"
+        )
 
     def _deserialize_yaml(self, data: bytes, target_type: type[T] | None) -> Any:
         """Deserialize from YAML bytes."""
         if not YAML_AVAILABLE:
             raise SerializationError("PyYAML not installed")
-        parsed = yaml.safe_load(data.decode('utf-8'))
+        parsed = yaml.safe_load(data.decode("utf-8"))
         if target_type and is_dataclass(target_type):
             return target_type(**parsed)
         return parsed
@@ -129,27 +138,38 @@ class Serializer:
         else:
             return str(obj)
 
-    def to_file(self, obj: Any, file_path: str, format: SerializationFormat | None = None):
+    def to_file(
+        self, obj: Any, file_path: str, format: SerializationFormat | None = None
+    ):
         """Serialize object to file."""
         data = self.serialize(obj, format)
-        with open(file_path, 'wb') as f:
+        with open(file_path, "wb") as f:
             f.write(data)
 
-    def from_file(self, file_path: str, format: SerializationFormat | None = None,
-                  target_type: type[T] | None = None) -> Any:
+    def from_file(
+        self,
+        file_path: str,
+        format: SerializationFormat | None = None,
+        target_type: type[T] | None = None,
+    ) -> Any:
         """Deserialize object from file."""
-        with open(file_path, 'rb') as f:
+        with open(file_path, "rb") as f:
             data = f.read()
         return self.deserialize(data, format, target_type)
 
 
 # Convenience functions
-def serialize(obj: Any, format: SerializationFormat = SerializationFormat.JSON) -> bytes:
+def serialize(
+    obj: Any, format: SerializationFormat = SerializationFormat.JSON
+) -> bytes:
     """Serialize an object."""
     serializer = Serializer(format)
     return serializer.serialize(obj)
 
-def deserialize(data: bytes, format: SerializationFormat = SerializationFormat.JSON) -> Any:
+
+def deserialize(
+    data: bytes, format: SerializationFormat = SerializationFormat.JSON
+) -> Any:
     """Deserialize bytes to object."""
     serializer = Serializer(format)
     return serializer.deserialize(data)

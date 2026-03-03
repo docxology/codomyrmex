@@ -152,4 +152,3 @@ def test_clear_cache(temp_dirs, sample_skill):
     # Clear cache
     loader.clear_cache()
     assert len(loader._cache) == 0
-

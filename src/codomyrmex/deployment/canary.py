@@ -17,6 +17,7 @@ logger = get_logger(__name__)
 
 class CanaryDecision(Enum):
     """Canary analysis outcome."""
+
     PROMOTE = "promote"
     ROLLBACK = "rollback"
     CONTINUE = "continue"
@@ -142,12 +143,14 @@ class CanaryAnalyzer:
             base_val = baseline.get(name, 0.0)
             canary_val = canary.get(name, 0.0)
             tol = tols.get(name, self._metric_tolerance)
-            comparisons.append(MetricComparison(
-                metric_name=name,
-                baseline_value=base_val,
-                canary_value=canary_val,
-                threshold=tol,
-            ))
+            comparisons.append(
+                MetricComparison(
+                    metric_name=name,
+                    baseline_value=base_val,
+                    canary_value=canary_val,
+                    threshold=tol,
+                )
+            )
 
         passed_count = sum(1 for c in comparisons if c.passed)
         total_count = len(comparisons)
@@ -168,7 +171,8 @@ class CanaryAnalyzer:
 
         logger.info(
             "Canary analysis completed: %s (Pass rate: %.1f%%)",
-            decision.value, pass_rate * 100
+            decision.value,
+            pass_rate * 100,
         )
 
         return report

@@ -20,6 +20,7 @@ logger = get_logger(__name__)
 
 class StepStatus(Enum):
     """Status of a workflow step."""
+
     PENDING = "pending"
     RUNNING = "running"
     COMPLETED = "completed"
@@ -161,10 +162,13 @@ class WorkflowRunner:
             step.duration_ms = (time.time() - step_start) * 1000
 
         result.total_duration_ms = (time.time() - start) * 1000
-        result.success = all(
-            s.status in (StepStatus.COMPLETED, StepStatus.SKIPPED)
-            for s in self._steps.values()
-        ) and result.failed_count == 0
+        result.success = (
+            all(
+                s.status in (StepStatus.COMPLETED, StepStatus.SKIPPED)
+                for s in self._steps.values()
+            )
+            and result.failed_count == 0
+        )
 
         logger.info("Workflow complete", extra=result.to_dict())
         return result

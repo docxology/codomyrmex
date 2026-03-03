@@ -13,6 +13,7 @@ try:
         WHISPER_LANGUAGES,
         WhisperProvider,
     )
+
     WHISPER_AVAILABLE = True
 except ImportError:
     WhisperProvider = None  # type: ignore

@@ -18,15 +18,18 @@ from typing import Any, Optional, Union
 
 class PromptRole(Enum):
     """Standard message roles."""
+
     SYSTEM = "system"
     USER = "user"
     ASSISTANT = "assistant"
     FUNCTION = "function"
     TOOL = "tool"
 
+
 @dataclass
 class Message:
     """A message in a prompt."""
+
     role: PromptRole
     content: str
     name: str | None = None
@@ -39,9 +42,11 @@ class Message:
             result["name"] = self.name
         return result
 
+
 @dataclass
 class PromptVersion:
     """A version of a prompt template."""
+
     version: str
     template: str
     created_at: datetime = field(default_factory=datetime.now)
@@ -53,6 +58,7 @@ class PromptVersion:
     def content_hash(self) -> str:
         """Get hash of template content."""
         return hashlib.sha256(self.template.encode()).hexdigest()[:12]
+
 
 class PromptTemplate:
     """
@@ -85,7 +91,7 @@ class PromptTemplate:
     def _extract_variables(self) -> list[str]:
         """Extract variable names from template."""
         # Match {variable} and {variable:default}
-        pattern = r'\{([a-zA-Z_][a-zA-Z0-9_]*)(?::[^}]*)?\}'
+        pattern = r"\{([a-zA-Z_][a-zA-Z0-9_]*)(?::[^}]*)?\}"
         matches = re.findall(pattern, self.template)
         return list(set(matches))
 
@@ -108,14 +114,14 @@ class PromptTemplate:
 
         # Handle conditionals: {?var}content{/var}
         for var in self._variables:
-            pattern = r'\{\?' + var + r'\}(.*?)\{/' + var + r'\}'
+            pattern = r"\{\?" + var + r"\}(.*?)\{/" + var + r"\}"
             if var in kwargs and kwargs[var]:
-                result = re.sub(pattern, r'\1', result, flags=re.DOTALL)
+                result = re.sub(pattern, r"\1", result, flags=re.DOTALL)
             else:
-                result = re.sub(pattern, '', result, flags=re.DOTALL)
+                result = re.sub(pattern, "", result, flags=re.DOTALL)
 
         # Handle simple variables with defaults: {var:default}
-        for match in re.finditer(r'\{([a-zA-Z_][a-zA-Z0-9_]*):([^}]*)\}', result):
+        for match in re.finditer(r"\{([a-zA-Z_][a-zA-Z0-9_]*):([^}]*)\}", result):
             var_name = match.group(1)
             default = match.group(2)
             value = kwargs.get(var_name, default)
@@ -124,7 +130,7 @@ class PromptTemplate:
         # Handle simple variables: {var}
         for var in self._variables:
             if var in kwargs:
-                result = result.replace(f'{{{var}}}', str(kwargs[var]))
+                result = result.replace(f"{{{var}}}", str(kwargs[var]))
 
         return result
 
@@ -138,11 +144,12 @@ class PromptTemplate:
         # Variables with defaults are optional
         required = set()
         for var in self._variables:
-            pattern = r'\{' + var + r':[^}]*\}'
+            pattern = r"\{" + var + r":[^}]*\}"
             if not re.search(pattern, self.template):
                 required.add(var)
 
         return [v for v in required if v not in kwargs]
+
 
 class PromptBuilder:
     """
@@ -163,30 +170,38 @@ class PromptBuilder:
 
     def system(self, content: str, **metadata) -> "PromptBuilder":
         """Add a system message."""
-        self._messages.append(Message(
-            role=PromptRole.SYSTEM,
-            content=content,
-            metadata=metadata,
-        ))
+        self._messages.append(
+            Message(
+                role=PromptRole.SYSTEM,
+                content=content,
+                metadata=metadata,
+            )
+        )
         return self
 
-    def user(self, content: str, name: str | None = None, **metadata) -> "PromptBuilder":
+    def user(
+        self, content: str, name: str | None = None, **metadata
+    ) -> "PromptBuilder":
         """Add a user message."""
-        self._messages.append(Message(
-            role=PromptRole.USER,
-            content=content,
-            name=name,
-            metadata=metadata,
-        ))
+        self._messages.append(
+            Message(
+                role=PromptRole.USER,
+                content=content,
+                name=name,
+                metadata=metadata,
+            )
+        )
         return self
 
     def assistant(self, content: str, **metadata) -> "PromptBuilder":
         """Add an assistant message."""
-        self._messages.append(Message(
-            role=PromptRole.ASSISTANT,
-            content=content,
-            metadata=metadata,
-        ))
+        self._messages.append(
+            Message(
+                role=PromptRole.ASSISTANT,
+                content=content,
+                metadata=metadata,
+            )
+        )
         return self
 
     def message(self, role: PromptRole, content: str, **kwargs) -> "PromptBuilder":
@@ -194,7 +209,9 @@ class PromptBuilder:
         self._messages.append(Message(role=role, content=content, **kwargs))
         return self
 
-    def template(self, tmpl: PromptTemplate, role: PromptRole = PromptRole.USER, **kwargs) -> "PromptBuilder":
+    def template(
+        self, tmpl: PromptTemplate, role: PromptRole = PromptRole.USER, **kwargs
+    ) -> "PromptBuilder":
         """Add a message from a template."""
         content = tmpl.render(**kwargs)
         return self.message(role, content)
@@ -215,6 +232,7 @@ class PromptBuilder:
     def messages(self) -> list[Message]:
         """Get raw message objects."""
         return self._messages.copy()
+
 
 class PromptRegistry:
     """
@@ -264,7 +282,7 @@ class PromptRegistry:
             self._templates[name] = {}
 
         # Extract variables
-        pattern = r'\{([a-zA-Z_][a-zA-Z0-9_]*)(?::[^}]*)?\}'
+        pattern = r"\{([a-zA-Z_][a-zA-Z0-9_]*)(?::[^}]*)?\}"
         variables = list(set(re.findall(pattern, template)))
 
         version_obj = PromptVersion(
@@ -281,11 +299,7 @@ class PromptRegistry:
 
         return version_obj
 
-    def get(
-        self,
-        name: str,
-        version: str | None = None
-    ) -> PromptTemplate | None:
+    def get(self, name: str, version: str | None = None) -> PromptTemplate | None:
         """
         Get a prompt template.
 
@@ -347,7 +361,7 @@ class PromptRegistry:
                         "created_at": pv.created_at.isoformat(),
                     }
                     for v, pv in versions.items()
-                }
+                },
             }
         return json.dumps(export, indent=2)
 
@@ -368,6 +382,7 @@ class PromptRegistry:
                 count += 1
 
         return count
+
 
 # Common prompt templates
 COMMON_TEMPLATES = {
@@ -393,9 +408,11 @@ COMMON_TEMPLATES = {
     ),
 }
 
+
 def get_common_template(name: str) -> PromptTemplate | None:
     """Get a common built-in template."""
     return COMMON_TEMPLATES.get(name)
+
 
 __all__ = [
     # Enums

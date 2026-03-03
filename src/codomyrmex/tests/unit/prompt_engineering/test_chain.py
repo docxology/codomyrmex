@@ -20,7 +20,9 @@ except ImportError:
     HAS_MODULE = False
 
 if not HAS_MODULE:
-    pytest.skip("prompt_engineering.optimization not available", allow_module_level=True)
+    pytest.skip(
+        "prompt_engineering.optimization not available", allow_module_level=True
+    )
 
 
 @pytest.mark.unit
@@ -40,7 +42,10 @@ class TestOptimizationStrategies:
         assert len(result.changes) > 0
         # "please" or "I would like you to" should be removed
         optimized_lower = result.optimized.template_str.lower()
-        assert "please" not in optimized_lower or "i would like you to" not in optimized_lower
+        assert (
+            "please" not in optimized_lower
+            or "i would like you to" not in optimized_lower
+        )
 
     def test_concise_collapses_blank_lines(self):
         """Concise strategy should collapse multiple blank lines."""
@@ -70,7 +75,9 @@ class TestOptimizationStrategies:
     def test_detailed_skips_role_if_present(self):
         """Detailed strategy should not add Role if already in prompt."""
         optimizer = PromptOptimizer()
-        t = PromptTemplate(name="t", template_str="You are a coding assistant. Explain {topic}")
+        t = PromptTemplate(
+            name="t", template_str="You are a coding assistant. Explain {topic}"
+        )
         result = optimizer.optimize(t, OptimizationStrategy.DETAILED)
         # Should NOT have a separate "## Role" section since "You are" is already present
         assert result.optimized.template_str.count("## Role") == 0
@@ -94,10 +101,12 @@ class TestOptimizationStrategies:
     def test_few_shot_with_examples(self):
         """Few-shot should inject examples into the prompt."""
         optimizer = PromptOptimizer()
-        optimizer.set_few_shot_examples([
-            {"input": "2+2", "output": "4"},
-            {"input": "3*3", "output": "9"},
-        ])
+        optimizer.set_few_shot_examples(
+            [
+                {"input": "2+2", "output": "4"},
+                {"input": "3*3", "output": "9"},
+            ]
+        )
         t = PromptTemplate(name="math", template_str="Calculate {expression}")
         result = optimizer.optimize(t, OptimizationStrategy.FEW_SHOT)
         assert "Example 1" in result.optimized.template_str
@@ -147,7 +156,13 @@ class TestOptimizationResult:
         """to_dict should include all expected keys."""
         result = self._make_result()
         d = result.to_dict()
-        for key in ("original", "optimized", "strategy", "changes", "token_reduction_estimate"):
+        for key in (
+            "original",
+            "optimized",
+            "strategy",
+            "changes",
+            "token_reduction_estimate",
+        ):
             assert key in d
 
     def test_strategy_value_in_dict(self):
@@ -203,7 +218,9 @@ class TestBulkOptimization:
             PromptTemplate(name="a", template_str="Do {x}"),
             PromptTemplate(name="b", template_str="Make {y}"),
         ]
-        results = optimizer.bulk_optimize(templates, OptimizationStrategy.CHAIN_OF_THOUGHT)
+        results = optimizer.bulk_optimize(
+            templates, OptimizationStrategy.CHAIN_OF_THOUGHT
+        )
         for r in results:
             assert r.strategy == OptimizationStrategy.CHAIN_OF_THOUGHT
 

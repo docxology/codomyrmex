@@ -55,7 +55,7 @@ class ConsistentHash:
         self._replicas = replicas
         self._ring: list[int] = []
         self._node_map: dict[int, str] = {}
-        for node in (nodes or []):
+        for node in nodes or []:
             self.add_node(node)
 
     def _hash(self, key: str) -> int:

@@ -24,14 +24,20 @@ class TestTemplate:
         items = list(template_dir.iterdir())
 
         # Template directory should contain template files
-        non_hidden_items = [item for item in items if not item.name.startswith('.') and not item.name.endswith('.pyc')]
+        non_hidden_items = [
+            item
+            for item in items
+            if not item.name.startswith(".") and not item.name.endswith(".pyc")
+        ]
 
         # The template directory should contain essential template files
-        expected_files = ['README.md', 'AGENTS.md', '__init__.py', 'scaffold.py']
+        expected_files = ["README.md", "AGENTS.md", "__init__.py", "scaffold.py"]
         actual_files = [item.name for item in non_hidden_items]
 
         for expected_file in expected_files:
-            assert expected_file in actual_files, f"Expected template file {expected_file} not found"
+            assert expected_file in actual_files, (
+                f"Expected template file {expected_file} not found"
+            )
 
     def test_template_module_discovery(self, code_dir):
         """Test that the template module can be discovered."""
@@ -55,7 +61,11 @@ class TestTemplate:
 
         # Should contain template files for module creation
         items = list(template_dir.iterdir())
-        non_hidden_items = [item for item in items if not item.name.startswith('.') and not item.name.endswith('.pyc')]
+        non_hidden_items = [
+            item
+            for item in items
+            if not item.name.startswith(".") and not item.name.endswith(".pyc")
+        ]
 
         # Should have scaffolding files (Python and documentation)
         assert len(non_hidden_items) > 0
@@ -103,14 +113,20 @@ class TestTemplate:
         assert target_dir.is_dir()
 
         copied_items = list(target_dir.iterdir())
-        non_hidden_items = [item for item in copied_items if not item.name.startswith('.') and not item.name.endswith('.pyc')]
+        non_hidden_items = [
+            item
+            for item in copied_items
+            if not item.name.startswith(".") and not item.name.endswith(".pyc")
+        ]
 
         # Should contain the essential template files
-        expected_files = ['README.md', 'AGENTS.md', '__init__.py', 'scaffold.py']
+        expected_files = ["README.md", "AGENTS.md", "__init__.py", "scaffold.py"]
         copied_files = [item.name for item in non_hidden_items]
 
         for expected_file in expected_files:
-            assert expected_file in copied_files, f"Expected template file {expected_file} not found in copy"
+            assert expected_file in copied_files, (
+                f"Expected template file {expected_file} not found in copy"
+            )
 
     def test_template_module_path_resolution(self, code_dir):
         """Test template module path resolution."""
@@ -133,7 +149,11 @@ class TestTemplate:
 
         # Should contain scaffolding files for module creation
         contents = list(template_dir.iterdir())
-        non_hidden_items = [item for item in contents if not item.name.startswith('.') and not item.name.endswith('.pyc')]
+        non_hidden_items = [
+            item
+            for item in contents
+            if not item.name.startswith(".") and not item.name.endswith(".pyc")
+        ]
 
         # Should have scaffolding files (Python and documentation)
         assert len(non_hidden_items) > 0

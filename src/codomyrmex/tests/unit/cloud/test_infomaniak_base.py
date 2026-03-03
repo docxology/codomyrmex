@@ -4,11 +4,11 @@ Unit tests for Infomaniak base.
 Zero ``unittest.mock`` — uses ``Stub`` from ``conftest.py``.
 """
 
-
 import pytest
 from _stubs import Stub
 
 # =========================================================================
+
 
 class TestInfomaniakOpenStackBaseClass:
     """Tests for InfomaniakOpenStackBase protocol methods."""
@@ -75,6 +75,7 @@ class TestInfomaniakOpenStackBaseClass:
     def test_service_name_default(self):
         """Default _service_name is 'openstack'."""
         from codomyrmex.cloud.infomaniak.base import InfomaniakOpenStackBase
+
         assert InfomaniakOpenStackBase._service_name == "openstack"
 
 
@@ -187,6 +188,7 @@ class TestInfomaniakRESTBaseClass:
     def test_service_name_default(self):
         """Default _service_name is 'rest'."""
         from codomyrmex.cloud.infomaniak.base import InfomaniakRESTBase
+
         assert InfomaniakRESTBase._service_name == "rest"
 
     def test_exit_does_not_suppress_exception(self):
@@ -201,4 +203,3 @@ class TestInfomaniakRESTBaseClass:
 # =========================================================================
 # Test Auth Module
 # =========================================================================
-

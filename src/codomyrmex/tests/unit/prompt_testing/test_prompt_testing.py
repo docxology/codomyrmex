@@ -1,4 +1,5 @@
 """Unit tests for prompt_testing module."""
+
 import pytest
 
 
@@ -9,11 +10,13 @@ class TestPromptTestingImports:
     def test_module_imports(self):
         """Verify module can be imported without errors."""
         from codomyrmex.prompt_engineering import testing as prompt_testing
+
         assert prompt_testing is not None
 
     def test_public_api_exists(self):
         """Verify expected public API is available."""
         from codomyrmex.prompt_engineering.testing import __all__
+
         expected_exports = [
             "EvaluationType",
             "TestStatus",
@@ -171,15 +174,21 @@ class TestTestSuiteResult:
 
         result = TestSuiteResult(suite_id="test", prompt_version="v1")
         result.results = [
-            TestResult(test_case_id="1", status=TestStatus.PASSED, score=1.0, latency_ms=100),
-            TestResult(test_case_id="2", status=TestStatus.PASSED, score=0.8, latency_ms=200),
-            TestResult(test_case_id="3", status=TestStatus.FAILED, score=0.3, latency_ms=150),
+            TestResult(
+                test_case_id="1", status=TestStatus.PASSED, score=1.0, latency_ms=100
+            ),
+            TestResult(
+                test_case_id="2", status=TestStatus.PASSED, score=0.8, latency_ms=200
+            ),
+            TestResult(
+                test_case_id="3", status=TestStatus.FAILED, score=0.3, latency_ms=150
+            ),
         ]
 
         assert result.total_tests == 3
         assert result.passed_tests == 2
         assert result.failed_tests == 1
-        assert result.pass_rate == 2/3
+        assert result.pass_rate == 2 / 3
         assert result.average_latency_ms == 150.0
         assert abs(result.average_score - 0.7) < 0.01
 
@@ -286,7 +295,7 @@ class TestContainsEvaluator:
         )
 
         score = evaluator.evaluate(test_case, "hello world")
-        assert score == 2/3
+        assert score == 2 / 3
 
     def test_not_contains(self):
         """Verify not_contains evaluation."""
@@ -383,11 +392,13 @@ class TestPromptTestSuite:
         )
 
         suite = PromptTestSuite(suite_id="test")
-        suite.add_tests([
-            PromptTestCase(id="t1", prompt="Test 1"),
-            PromptTestCase(id="t2", prompt="Test 2"),
-            PromptTestCase(id="t3", prompt="Test 3"),
-        ])
+        suite.add_tests(
+            [
+                PromptTestCase(id="t1", prompt="Test 1"),
+                PromptTestCase(id="t2", prompt="Test 2"),
+                PromptTestCase(id="t3", prompt="Test 3"),
+            ]
+        )
 
         assert len(suite) == 3
 
@@ -447,11 +458,13 @@ class TestPromptTester:
             return f"Response to: {prompt}"
 
         suite = PromptTestSuite(suite_id="test")
-        suite.add_test(PromptTestCase(
-            id="t1",
-            prompt="Say hello",
-            expected_contains=["Response"],
-        ))
+        suite.add_test(
+            PromptTestCase(
+                id="t1",
+                prompt="Say hello",
+                expected_contains=["Response"],
+            )
+        )
 
         tester = PromptTester()
         results = tester.run(suite, mock_executor, prompt_version="v1")
@@ -492,11 +505,13 @@ class TestPromptTester:
         custom_eval = CustomEvaluator(lambda tc, out: 1.0 if "magic" in out else 0.0)
 
         suite = PromptTestSuite(suite_id="test")
-        suite.add_test(PromptTestCase(
-            id="t1",
-            prompt="Test",
-            evaluation_type=EvaluationType.CUSTOM,
-        ))
+        suite.add_test(
+            PromptTestCase(
+                id="t1",
+                prompt="Test",
+                evaluation_type=EvaluationType.CUSTOM,
+            )
+        )
 
         tester = PromptTester()
         tester.register_evaluator(EvaluationType.CUSTOM, custom_eval)
@@ -548,11 +563,13 @@ class TestABTest:
         )
 
         suite = PromptTestSuite(suite_id="test")
-        suite.add_test(PromptTestCase(
-            id="t1",
-            prompt="Hello",
-            expected_contains=["response"],
-        ))
+        suite.add_test(
+            PromptTestCase(
+                id="t1",
+                prompt="Hello",
+                expected_contains=["response"],
+            )
+        )
 
         ab_test = ABTest(test_id="experiment")
         ab_test.add_variant("control", "Control prompt")
@@ -580,12 +597,16 @@ class TestABTest:
         # Manually set results
         control_result = TestSuiteResult(suite_id="test", prompt_version="control")
         control_result.results = [
-            TestResult(test_case_id="1", status=TestStatus.PASSED, score=0.8, latency_ms=100),
+            TestResult(
+                test_case_id="1", status=TestStatus.PASSED, score=0.8, latency_ms=100
+            ),
         ]
 
         treatment_result = TestSuiteResult(suite_id="test", prompt_version="treatment")
         treatment_result.results = [
-            TestResult(test_case_id="1", status=TestStatus.PASSED, score=0.9, latency_ms=100),
+            TestResult(
+                test_case_id="1", status=TestStatus.PASSED, score=0.9, latency_ms=100
+            ),
         ]
 
         ab_test.results = {
@@ -609,12 +630,16 @@ class TestABTest:
 
         result_a = TestSuiteResult(suite_id="test", prompt_version="a")
         result_a.results = [
-            TestResult(test_case_id="1", status=TestStatus.PASSED, score=0.9, latency_ms=100),
+            TestResult(
+                test_case_id="1", status=TestStatus.PASSED, score=0.9, latency_ms=100
+            ),
         ]
 
         result_b = TestSuiteResult(suite_id="test", prompt_version="b")
         result_b.results = [
-            TestResult(test_case_id="1", status=TestStatus.FAILED, score=0.4, latency_ms=200),
+            TestResult(
+                test_case_id="1", status=TestStatus.FAILED, score=0.4, latency_ms=200
+            ),
         ]
 
         ab_test.results = {"a": result_a, "b": result_b}

@@ -20,6 +20,7 @@ from codomyrmex.exceptions import CodomyrmexError
 # DatabaseConnector Tests
 # =============================================================================
 
+
 class TestDatabaseConnector:
     """Test DatabaseConnector URL parsing and SQLite operations."""
 
@@ -90,6 +91,7 @@ class TestDatabaseConnector:
 # MigrationManager with In-Memory SQLite Tests
 # =============================================================================
 
+
 class TestMigrationManagerSQLite:
     """Test MigrationManager end-to-end with in-memory SQLite."""
 
@@ -148,7 +150,9 @@ class TestMigrationManagerSQLite:
 
         # Table should NOT exist
         conn = sqlite3.connect(db_path)
-        cursor = conn.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='users'")
+        cursor = conn.execute(
+            "SELECT name FROM sqlite_master WHERE type='table' AND name='users'"
+        )
         assert cursor.fetchone() is None
         conn.close()
         mm.close()
@@ -192,7 +196,9 @@ class TestMigrationManagerSQLite:
 
         # users table should be gone
         conn = sqlite3.connect(db_path)
-        cursor = conn.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='users'")
+        cursor = conn.execute(
+            "SELECT name FROM sqlite_master WHERE type='table' AND name='users'"
+        )
         assert cursor.fetchone() is None
         conn.close()
         mm.close()

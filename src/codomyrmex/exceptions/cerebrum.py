@@ -99,6 +99,7 @@ class TransformationError(CerebrumError):
 
 class CaseNotFoundError(CaseError):
     """Exception raised when a case is not found."""
+
     pass
 
 

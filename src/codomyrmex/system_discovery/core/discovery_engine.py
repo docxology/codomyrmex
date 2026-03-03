@@ -124,15 +124,13 @@ class SystemDiscovery:
                 "src_exists": self.src_path.exists(),
                 "tests_exist": self.testing_path.exists(),
             },
-            "modules": {
-                name: asdict(info) for name, info in self.modules.items()
-            },
+            "modules": {name: asdict(info) for name, info in self.modules.items()},
             "stats": {
                 "total_modules": len(self.modules),
                 "importable": sum(1 for m in self.modules.values() if m.is_importable),
                 "documented": sum(1 for m in self.modules.values() if m.has_docs),
                 "tested": sum(1 for m in self.modules.values() if m.has_tests),
-            }
+            },
         }
         return system_inventory
 
@@ -153,7 +151,7 @@ class SystemDiscovery:
                     return str(list(obj) if isinstance(obj, set) else obj)
                 return str(obj)
 
-            with open(output_path, 'w', encoding='utf-8') as f:
+            with open(output_path, "w", encoding="utf-8") as f:
                 json.dump(inventory, f, indent=2, default=default_serializer)
 
             logger.info(f"System inventory exported to {output_path}")
@@ -198,9 +196,7 @@ class SystemDiscovery:
                     if module_info:
                         self.modules[module_name] = module_info
 
-    def _analyze_module(
-        self, module_name: str, module_path: Path
-    ) -> ModuleInfo | None:
+    def _analyze_module(self, module_name: str, module_path: Path) -> ModuleInfo | None:
         """Analyze a single module directory, extracting metadata, dependencies, and capabilities."""
         try:
             module_import_path = f"codomyrmex.{module_name}"
@@ -342,7 +338,9 @@ class SystemDiscovery:
         """Delegate to DependencyAnalyzer."""
         return self._analyzer.get_last_modified(module_path)
 
-    def _static_analysis_capabilities(self, module_path: Path) -> list[ModuleCapability]:
+    def _static_analysis_capabilities(
+        self, module_path: Path
+    ) -> list[ModuleCapability]:
         """Delegate to DependencyAnalyzer."""
         return self._analyzer.static_analysis_capabilities(module_path)
 
@@ -350,7 +348,9 @@ class SystemDiscovery:
         """Delegate to DependencyAnalyzer."""
         return self._analyzer.get_function_signature_from_ast(node)
 
-    def _analyze_object(self, name: str, obj: Any, module_path: Path) -> ModuleCapability | None:
+    def _analyze_object(
+        self, name: str, obj: Any, module_path: Path
+    ) -> ModuleCapability | None:
         """Delegate to DependencyAnalyzer."""
         return self._analyzer.analyze_object(name, obj, module_path)
 

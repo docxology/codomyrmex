@@ -9,6 +9,7 @@ from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 logger = get_logger(__name__)
 
+
 class BaseSemaphore(ABC):
     """Abstract base class for all semaphore implementations."""
 
@@ -37,6 +38,7 @@ class BaseSemaphore(ABC):
         """Exit the context manager and clean up."""
         self.release()
 
+
 class LocalSemaphore(BaseSemaphore):
     """Local thread-safe semaphore wrapper."""
 
@@ -51,6 +53,7 @@ class LocalSemaphore(BaseSemaphore):
     def release(self) -> None:
         """Release a semaphore unit."""
         self._semaphore.release()
+
 
 class AsyncLocalSemaphore(BaseSemaphore):
     """Asyncio-compatible local semaphore."""

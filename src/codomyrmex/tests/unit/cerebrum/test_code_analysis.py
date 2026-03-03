@@ -30,6 +30,7 @@ from codomyrmex.cerebrum.drift_tracker import (
 
 class TestAntiPattern:
     """Test suite for AntiPattern."""
+
     def test_to_dict(self) -> None:
         """Test functionality: to dict."""
         ap = AntiPattern(name="test", message="msg", severity=Severity.WARNING)
@@ -40,6 +41,7 @@ class TestAntiPattern:
 
 class TestAntiPatternDetector:
     """Test suite for AntiPatternDetector."""
+
     def test_clean_code(self) -> None:
         """Test functionality: clean code."""
         detector = AntiPatternDetector()
@@ -111,11 +113,13 @@ class TestAntiPatternDetector:
 
     def test_report_count_by_severity(self) -> None:
         """Test functionality: report count by severity."""
-        report = AnalysisReport(patterns=[
-            AntiPattern(name="a", message="", severity=Severity.WARNING),
-            AntiPattern(name="b", message="", severity=Severity.ERROR),
-            AntiPattern(name="c", message="", severity=Severity.WARNING),
-        ])
+        report = AnalysisReport(
+            patterns=[
+                AntiPattern(name="a", message="", severity=Severity.WARNING),
+                AntiPattern(name="b", message="", severity=Severity.ERROR),
+                AntiPattern(name="c", message="", severity=Severity.WARNING),
+            ]
+        )
         assert report.count_by_severity == {"warning": 2, "error": 1}
 
 
@@ -124,6 +128,7 @@ class TestAntiPatternDetector:
 
 class TestDriftEvent:
     """Test suite for DriftEvent."""
+
     def test_to_dict(self) -> None:
         """Test functionality: to dict."""
         e = DriftEvent(term="foo", category="new")
@@ -134,6 +139,7 @@ class TestDriftEvent:
 
 class TestConceptDriftTracker:
     """Test suite for ConceptDriftTracker."""
+
     def test_no_drift_identical(self) -> None:
         """Test functionality: no drift identical."""
         tracker = ConceptDriftTracker()
@@ -182,6 +188,7 @@ class TestConceptDriftTracker:
 
 class TestAgentPromptSelector:
     """Test suite for AgentPromptSelector."""
+
     def test_list_builtins(self) -> None:
         """Test functionality: list builtins."""
         selector = AgentPromptSelector()
@@ -213,7 +220,9 @@ class TestAgentPromptSelector:
             variables={"language": "python", "code": "pass"},
         )
         assert selection.template.name in (
-            "anti_pattern_analysis", "code_review", "reasoning_chain"
+            "anti_pattern_analysis",
+            "code_review",
+            "reasoning_chain",
         )
 
     def test_fallback_to_reasoning(self) -> None:
@@ -243,6 +252,7 @@ class TestAgentPromptSelector:
 
 class TestReviewFinding:
     """Test suite for ReviewFinding."""
+
     def test_to_dict(self) -> None:
         """Test functionality: to dict."""
         f = ReviewFinding(category="test", message="msg")
@@ -252,6 +262,7 @@ class TestReviewFinding:
 
 class TestCodeReviewer:
     """Test suite for CodeReviewer."""
+
     def test_review_clean(self) -> None:
         """Test functionality: review clean."""
         reviewer = CodeReviewer()

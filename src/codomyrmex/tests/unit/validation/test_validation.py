@@ -4,7 +4,6 @@ This module tests the Validator, ValidationResult, ValidationError, and related 
 Comprehensive tests for validators, schema validation, input sanitization, and edge cases.
 """
 
-
 import pytest
 
 
@@ -15,17 +14,20 @@ class TestValidationModuleImport:
     def test_validation_module_import(self):
         """Verify that the validation module can be imported successfully."""
         from codomyrmex import validation
+
         assert validation is not None
         assert hasattr(validation, "__path__")
 
     def test_validation_module_structure(self):
         """Verify basic structure of validation module."""
         from codomyrmex import validation
+
         assert hasattr(validation, "__file__")
 
     def test_validation_module_exports(self):
         """Verify module exports key components."""
         from codomyrmex import validation
+
         assert hasattr(validation, "validate_pai_integration")
 
 
@@ -76,7 +78,7 @@ class TestValidationError:
             "Complex error",
             field="email",
             code="invalid_format",
-            path=["user", "contact", "email"]
+            path=["user", "contact", "email"],
         )
 
         assert "Complex error" in str(error)
@@ -105,7 +107,7 @@ class TestValidationWarning:
         warning = ValidationWarning(
             field="email",
             message="Email format is deprecated",
-            code="deprecated_format"
+            code="deprecated_format",
         )
 
         assert warning.code == "deprecated_format"
@@ -125,7 +127,7 @@ class TestValidationWarning:
         warning = ValidationWarning(
             field="config",
             message="Config may be outdated",
-            path=["settings", "config"]
+            path=["settings", "config"],
         )
 
         assert warning.path == ["settings", "config"]
@@ -232,11 +234,8 @@ class TestValidator:
         validator = Validator(validator_type="json_schema")
         schema = {
             "type": "object",
-            "properties": {
-                "name": {"type": "string"},
-                "age": {"type": "integer"}
-            },
-            "required": ["name"]
+            "properties": {"name": {"type": "string"}, "age": {"type": "integer"}},
+            "required": ["name"],
         }
         data = {"name": "John", "age": 30}
 
@@ -251,10 +250,8 @@ class TestValidator:
         validator = Validator(validator_type="json_schema")
         schema = {
             "type": "object",
-            "properties": {
-                "name": {"type": "string"}
-            },
-            "required": ["name"]
+            "properties": {"name": {"type": "string"}},
+            "required": ["name"],
         }
         data = {}
 
@@ -308,12 +305,12 @@ class TestValidator:
                     "type": "object",
                     "properties": {
                         "name": {"type": "string"},
-                        "email": {"type": "string"}
+                        "email": {"type": "string"},
                     },
-                    "required": ["name"]
+                    "required": ["name"],
                 }
             },
-            "required": ["user"]
+            "required": ["user"],
         }
         data = {"user": {"name": "John", "email": "john@example.com"}}
 
@@ -326,10 +323,7 @@ class TestValidator:
         from codomyrmex.validation.validator import Validator
 
         validator = Validator(validator_type="json_schema")
-        schema = {
-            "type": "array",
-            "items": {"type": "integer"}
-        }
+        schema = {"type": "array", "items": {"type": "integer"}}
         data = [1, 2, 3, 4, 5]
 
         result = validator.validate(data, schema)
@@ -341,10 +335,7 @@ class TestValidator:
         from codomyrmex.validation.validator import Validator
 
         validator = Validator(validator_type="json_schema")
-        schema = {
-            "type": "array",
-            "items": {"type": "integer"}
-        }
+        schema = {"type": "array", "items": {"type": "integer"}}
         data = [1, "two", 3]
 
         result = validator.validate(data, schema)
@@ -462,10 +453,7 @@ class TestBasicValidation:
         from codomyrmex.validation.validator import Validator
 
         validator = Validator()
-        schema = {
-            "type": "object",
-            "required": ["name", "email"]
-        }
+        schema = {"type": "object", "required": ["name", "email"]}
         data = {"name": "John"}
 
         result = validator._basic_validation(data, schema)
@@ -478,10 +466,7 @@ class TestBasicValidation:
         from codomyrmex.validation.validator import Validator
 
         validator = Validator()
-        schema = {
-            "type": "object",
-            "required": ["name", "email"]
-        }
+        schema = {"type": "object", "required": ["name", "email"]}
         data = {"name": "John", "email": "john@example.com"}
 
         result = validator._basic_validation(data, schema)

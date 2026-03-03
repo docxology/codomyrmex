@@ -1,4 +1,5 @@
 """Unit tests for observability_dashboard module."""
+
 from datetime import datetime, timedelta
 
 import pytest
@@ -11,11 +12,13 @@ class TestObservabilityDashboardImports:
     def test_module_imports(self):
         """Verify module can be imported without errors."""
         from codomyrmex.telemetry import dashboard as observability_dashboard
+
         assert observability_dashboard is not None
 
     def test_public_api_exists(self):
         """Verify expected public API is available."""
         from codomyrmex.telemetry.dashboard import __all__
+
         expected_exports = [
             "MetricType",
             "AlertSeverity",
@@ -535,12 +538,14 @@ class TestDashboardManager:
 
         manager = DashboardManager(collector=collector)
         dashboard = manager.create(name="Test")
-        dashboard.add_panel(Panel(
-            id="cpu_panel",
-            title="CPU",
-            panel_type=PanelType.GRAPH,
-            metrics=["cpu_usage"],
-        ))
+        dashboard.add_panel(
+            Panel(
+                id="cpu_panel",
+                title="CPU",
+                panel_type=PanelType.GRAPH,
+                metrics=["cpu_usage"],
+            )
+        )
 
         data = manager.get_panel_data("test", "cpu_panel")
         assert len(data) == 2

@@ -26,6 +26,7 @@ def create_branch(branch_name: str, repository_path: str = None) -> bool:
     logger.info(f"Branch '{branch_name}' created and checked out successfully")
     return True
 
+
 def switch_branch(branch_name: str, repository_path: str = None) -> bool:
     """Switch to an existing Git branch.
 
@@ -46,7 +47,10 @@ def switch_branch(branch_name: str, repository_path: str = None) -> bool:
     logger.info(f"Switched to branch '{branch_name}' successfully")
     return True
 
-def delete_branch(branch_name: str, repository_path: str = None, force: bool = False) -> bool:
+
+def delete_branch(
+    branch_name: str, repository_path: str = None, force: bool = False
+) -> bool:
     """Delete a local git branch.
 
     Args:
@@ -70,6 +74,7 @@ def delete_branch(branch_name: str, repository_path: str = None, force: bool = F
     )
     logger.info(f"Deleted branch {branch_name} (force={force})")
     return True
+
 
 def get_current_branch(repository_path: str = None) -> str | None:
     """Get the name of the current Git branch."""

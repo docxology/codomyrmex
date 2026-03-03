@@ -24,6 +24,7 @@ except ImportError:
 
 class QualityDimension(Enum):
     """Dimensions along which LLM output quality is measured."""
+
     COHERENCE = "coherence"
     RELEVANCE = "relevance"
     COMPLETENESS = "completeness"
@@ -41,6 +42,7 @@ class DimensionScore:
         explanation: Human-readable explanation of the score.
         raw_metrics: Raw metrics that contributed to this score.
     """
+
     dimension: QualityDimension
     score: float
     explanation: str = ""
@@ -58,6 +60,7 @@ class QualityReport:
         context_text: The context provided for analysis.
         metadata: Additional metadata about the analysis.
     """
+
     scores: dict[QualityDimension, DimensionScore] = field(default_factory=dict)
     overall_score: float = 0.0
     output_text: str = ""
@@ -115,7 +118,9 @@ class QualityReport:
                 for dim, ds in self.scores.items()
             },
             "weakest": self.weakest_dimension.value if self.weakest_dimension else None,
-            "strongest": self.strongest_dimension.value if self.strongest_dimension else None,
+            "strongest": self.strongest_dimension.value
+            if self.strongest_dimension
+            else None,
             "metadata": self.metadata,
         }
 
@@ -163,8 +168,10 @@ class QualityAnalyzer:
 
     # Completion markers that indicate the text reached a natural end
     _COMPLETION_MARKERS = [
-        ".", "!", "?",           # Sentence-ending punctuation
-        "```",                   # Closed code block
+        ".",
+        "!",
+        "?",  # Sentence-ending punctuation
+        "```",  # Closed code block
         "in conclusion",
         "in summary",
         "to summarize",
@@ -217,14 +224,14 @@ class QualityAnalyzer:
         scores[QualityDimension.ACCURACY] = self._score_accuracy(output, context)
 
         # Weighted average
-        total_weight = sum(
-            self._weights.get(dim, 1.0) for dim in scores
-        )
+        total_weight = sum(self._weights.get(dim, 1.0) for dim in scores)
         if total_weight > 0:
-            overall = sum(
-                ds.score * self._weights.get(dim, 1.0)
-                for dim, ds in scores.items()
-            ) / total_weight
+            overall = (
+                sum(
+                    ds.score * self._weights.get(dim, 1.0) for dim, ds in scores.items()
+                )
+                / total_weight
+            )
         else:
             overall = 0.0
 
@@ -327,19 +334,108 @@ class QualityAnalyzer:
 
         # Stopwords to exclude from overlap calculation
         stopwords = {
-            "the", "a", "an", "is", "are", "was", "were", "be", "been",
-            "being", "have", "has", "had", "do", "does", "did", "will",
-            "would", "shall", "should", "may", "might", "must", "can",
-            "could", "of", "in", "to", "for", "with", "on", "at", "from",
-            "by", "about", "as", "into", "through", "during", "before",
-            "after", "above", "below", "between", "and", "but", "or",
-            "nor", "not", "so", "yet", "both", "either", "neither", "each",
-            "every", "all", "any", "few", "more", "most", "other", "some",
-            "such", "no", "only", "own", "same", "than", "too", "very",
-            "just", "because", "if", "when", "while", "that", "this",
-            "these", "those", "it", "its", "i", "me", "my", "we", "us",
-            "our", "you", "your", "he", "him", "his", "she", "her", "they",
-            "them", "their", "what", "which", "who", "whom",
+            "the",
+            "a",
+            "an",
+            "is",
+            "are",
+            "was",
+            "were",
+            "be",
+            "been",
+            "being",
+            "have",
+            "has",
+            "had",
+            "do",
+            "does",
+            "did",
+            "will",
+            "would",
+            "shall",
+            "should",
+            "may",
+            "might",
+            "must",
+            "can",
+            "could",
+            "of",
+            "in",
+            "to",
+            "for",
+            "with",
+            "on",
+            "at",
+            "from",
+            "by",
+            "about",
+            "as",
+            "into",
+            "through",
+            "during",
+            "before",
+            "after",
+            "above",
+            "below",
+            "between",
+            "and",
+            "but",
+            "or",
+            "nor",
+            "not",
+            "so",
+            "yet",
+            "both",
+            "either",
+            "neither",
+            "each",
+            "every",
+            "all",
+            "any",
+            "few",
+            "more",
+            "most",
+            "other",
+            "some",
+            "such",
+            "no",
+            "only",
+            "own",
+            "same",
+            "than",
+            "too",
+            "very",
+            "just",
+            "because",
+            "if",
+            "when",
+            "while",
+            "that",
+            "this",
+            "these",
+            "those",
+            "it",
+            "its",
+            "i",
+            "me",
+            "my",
+            "we",
+            "us",
+            "our",
+            "you",
+            "your",
+            "he",
+            "him",
+            "his",
+            "she",
+            "her",
+            "they",
+            "them",
+            "their",
+            "what",
+            "which",
+            "who",
+            "whom",
         }
 
         context_words = set(_tokenize(context)) - stopwords
@@ -413,17 +509,24 @@ class QualityAnalyzer:
         incompletion_penalty = min(0.5, incompletion_signals * 0.15)
         punct_bonus = 0.3 if ends_with_punct else 0.0
 
-        score = max(0.0, min(1.0,
-            completion_score + punct_bonus + length_factor * 0.3 - incompletion_penalty
-        ))
+        score = max(
+            0.0,
+            min(
+                1.0,
+                completion_score
+                + punct_bonus
+                + length_factor * 0.3
+                - incompletion_penalty,
+            ),
+        )
         score = round(score, 6)
 
         return DimensionScore(
             dimension=QualityDimension.COMPLETENESS,
             score=score,
             explanation=f"Found {completion_signals} completion markers, "
-                        f"{incompletion_signals} incompletion markers. "
-                        f"Ends with punctuation: {ends_with_punct}.",
+            f"{incompletion_signals} incompletion markers. "
+            f"Ends with punctuation: {ends_with_punct}.",
             raw_metrics={
                 "completion_signals": completion_signals,
                 "incompletion_signals": incompletion_signals,
@@ -483,7 +586,7 @@ class QualityAnalyzer:
             dimension=QualityDimension.CONCISENESS,
             score=score,
             explanation=f"Unique word ratio: {unique}/{total} ({unique_ratio:.2f}). "
-                        f"Most frequent word appears {max_freq} times.",
+            f"Most frequent word appears {max_freq} times.",
             raw_metrics={
                 "total_words": total,
                 "unique_words": unique,
@@ -523,19 +626,28 @@ class QualityAnalyzer:
         factual_density = min(1.0, factual_signals / max(1, total_words) * 5)
 
         # Hedging penalty
-        hedging_words = {"maybe", "possibly", "perhaps", "might", "could", "seems", "apparently"}
+        hedging_words = {
+            "maybe",
+            "possibly",
+            "perhaps",
+            "might",
+            "could",
+            "seems",
+            "apparently",
+        }
         hedge_count = sum(1 for w in words if w in hedging_words)
         hedge_ratio = hedge_count / total_words
         hedge_penalty = min(0.4, hedge_ratio * 4)
 
         # Contradiction penalty (simple pattern)
         contradiction_patterns = [
-            r"\bbut\s+not\b", r"\bhowever\s+.*\bnot\b",
-            r"\balthough\s+.*\bnot\b", r"\bdespite\s+.*\bnot\b",
+            r"\bbut\s+not\b",
+            r"\bhowever\s+.*\bnot\b",
+            r"\balthough\s+.*\bnot\b",
+            r"\bdespite\s+.*\bnot\b",
         ]
         contradiction_count = sum(
-            len(re.findall(p, output, re.IGNORECASE))
-            for p in contradiction_patterns
+            len(re.findall(p, output, re.IGNORECASE)) for p in contradiction_patterns
         )
         contradiction_penalty = min(0.3, contradiction_count * 0.1)
 
@@ -548,16 +660,24 @@ class QualityAnalyzer:
             if context_words:
                 context_bonus = min(0.2, (overlap / len(context_words)) * 0.3)
 
-        score = max(0.0, min(1.0,
-            0.5 + factual_density * 0.3 + context_bonus - hedge_penalty - contradiction_penalty
-        ))
+        score = max(
+            0.0,
+            min(
+                1.0,
+                0.5
+                + factual_density * 0.3
+                + context_bonus
+                - hedge_penalty
+                - contradiction_penalty,
+            ),
+        )
         score = round(score, 6)
 
         return DimensionScore(
             dimension=QualityDimension.ACCURACY,
             score=score,
             explanation=f"Factual density: {factual_signals} signals in {total_words} words. "
-                        f"Hedge ratio: {hedge_ratio:.3f}. Contradictions: {contradiction_count}.",
+            f"Hedge ratio: {hedge_ratio:.3f}. Contradictions: {contradiction_count}.",
             raw_metrics={
                 "factual_signals": factual_signals,
                 "number_count": number_count,

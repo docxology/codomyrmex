@@ -44,7 +44,9 @@ class TestOptimizationStrategy:
 
 @pytest.mark.unit
 class TestOptimizationResult:
-    def _make_result(self, original_text: str, optimized_text: str) -> OptimizationResult:
+    def _make_result(
+        self, original_text: str, optimized_text: str
+    ) -> OptimizationResult:
         return OptimizationResult(
             original=_tmpl(original_text, "orig"),
             optimized=_tmpl(optimized_text, "opt"),

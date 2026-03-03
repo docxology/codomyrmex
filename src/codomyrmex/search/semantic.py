@@ -15,6 +15,7 @@ from . import Document, InMemoryIndex, SearchResult
 @dataclass
 class SemanticSearchResult:
     """Result from semantic search."""
+
     document: Document
     semantic_score: float
     keyword_score: float
@@ -60,7 +61,9 @@ class HybridSearchIndex:
         semantic_weight: float | None = None,
     ) -> list[SemanticSearchResult]:
         """Hybrid search combining keyword and semantic."""
-        weight = semantic_weight if semantic_weight is not None else self._semantic_weight
+        weight = (
+            semantic_weight if semantic_weight is not None else self._semantic_weight
+        )
 
         # Keyword search
         keyword_results = self._keyword_index.search(query, k=k * 2)
@@ -90,12 +93,14 @@ class HybridSearchIndex:
             sem_score = semantic_scores.get(doc_id, 0)
             combined = (1 - weight) * kw_score + weight * sem_score
 
-            results.append(SemanticSearchResult(
-                document=document,
-                semantic_score=sem_score,
-                keyword_score=kw_score,
-                combined_score=combined,
-            ))
+            results.append(
+                SemanticSearchResult(
+                    document=document,
+                    semantic_score=sem_score,
+                    keyword_score=kw_score,
+                    combined_score=combined,
+                )
+            )
 
         results.sort(key=lambda r: r.combined_score, reverse=True)
         return results[:k]
@@ -131,7 +136,8 @@ class BM25Index:
     def _tokenize(self, text: str) -> list[str]:
         """Simple tokenization."""
         import re
-        return re.findall(r'\b\w+\b', text.lower())
+
+        return re.findall(r"\b\w+\b", text.lower())
 
     def index(self, document: Document) -> None:
         """Index a document."""
@@ -165,9 +171,7 @@ class BM25Index:
 
             # IDF component
             doc_freq = len(self._inverted_index[token])
-            idf = math.log(
-                (self._doc_count - doc_freq + 0.5) / (doc_freq + 0.5) + 1
-            )
+            idf = math.log((self._doc_count - doc_freq + 0.5) / (doc_freq + 0.5) + 1)
 
             for doc_id, term_freq in self._inverted_index[token].items():
                 doc_len = self._doc_lengths[doc_id]

@@ -75,7 +75,7 @@ class InfomaniakComputeClient(InfomaniakOpenStackBase, ComputeClient):
         security_groups: list[str] | None = None,
         user_data: str | None = None,
         availability_zone: str | None = None,
-        **kwargs
+        **kwargs,
     ) -> dict[str, Any] | None:
         """
         Create a new compute instance.
@@ -122,7 +122,7 @@ class InfomaniakComputeClient(InfomaniakOpenStackBase, ComputeClient):
                 security_groups=security_groups or [],
                 user_data=user_data,
                 availability_zone=availability_zone,
-                **kwargs
+                **kwargs,
             )
 
             # Wait for server to be active
@@ -321,9 +321,7 @@ class InfomaniakComputeClient(InfomaniakOpenStackBase, ComputeClient):
             return []
 
     def create_keypair(
-        self,
-        name: str,
-        public_key: str | None = None
+        self, name: str, public_key: str | None = None
     ) -> dict[str, Any] | None:
         """
         Create or import an SSH key pair.
@@ -337,8 +335,7 @@ class InfomaniakComputeClient(InfomaniakOpenStackBase, ComputeClient):
         """
         try:
             keypair = self._conn.compute.create_keypair(
-                name=name,
-                public_key=public_key
+                name=name, public_key=public_key
             )
             result = {
                 "name": keypair.name,

@@ -12,6 +12,7 @@ from codomyrmex.cli.utils import (
 
 logger = get_logger(__name__)
 
+
 def handle_project_build(config_file: str | None) -> bool:
     """Handle project build command."""
     try:
@@ -49,6 +50,7 @@ def handle_workflow_create(name: str, template: str | None = None) -> bool:
             WorkflowStep,
             get_workflow_manager,
         )
+
         manager = get_workflow_manager()
 
         # Create a simple workflow based on template
@@ -128,6 +130,7 @@ def handle_project_create(name: str, template: str = "ai_analysis", **kwargs) ->
     """Handle project creation command."""
     try:
         from codomyrmex.logistics.orchestration.project import get_project_manager
+
         manager = get_project_manager()
 
         project = manager.create_project(name=name, template_name=template, **kwargs)
@@ -153,6 +156,7 @@ def handle_project_list() -> bool:
     """Handle project listing command."""
     try:
         from codomyrmex.logistics.orchestration.project import get_project_manager
+
         manager = get_project_manager()
         projects = manager.list_projects()
 
@@ -200,6 +204,7 @@ def handle_orchestration_status() -> bool:
     """Handle orchestration status command."""
     try:
         from codomyrmex.logistics.orchestration.project import get_orchestration_engine
+
         engine = get_orchestration_engine()
         status = engine.get_system_status()
 
@@ -245,6 +250,7 @@ def handle_orchestration_health() -> bool:
     """Handle orchestration health check command."""
     try:
         from codomyrmex.logistics.orchestration.project import get_orchestration_engine
+
         engine = get_orchestration_engine()
         health = engine.health_check()
 
@@ -254,7 +260,9 @@ def handle_orchestration_health() -> bool:
         status_color = (
             "BRIGHT_GREEN"
             if overall_status == "healthy"
-            else "YELLOW" if overall_status == "degraded" else "RED"
+            else "YELLOW"
+            if overall_status == "degraded"
+            else "RED"
         )
 
         print_header("🏥 Orchestration Health Check")
@@ -272,7 +280,9 @@ def handle_orchestration_health() -> bool:
             comp_color = (
                 "BRIGHT_GREEN"
                 if comp_status == "healthy"
-                else "YELLOW" if comp_status == "degraded" else "RED"
+                else "YELLOW"
+                if comp_status == "degraded"
+                else "RED"
             )
 
             if formatter:
@@ -286,6 +296,7 @@ def handle_orchestration_health() -> bool:
             print(f"\nIssues Found ({len(issues)}):")
             for issue in issues:
                 from codomyrmex.cli.utils import print_warning
+
                 print_warning(issue)
 
         return overall_status in ["healthy", "degraded"]
@@ -304,6 +315,7 @@ def list_workflows() -> bool:
     """List available workflows and orchestration templates."""
     try:
         from codomyrmex.logistics.orchestration.project import get_workflow_manager
+
         manager = get_workflow_manager()
         workflows = manager.list_workflows()
 
@@ -346,6 +358,7 @@ def run_workflow(workflow_name: str, **kwargs) -> bool:
     """Run a specific workflow."""
     try:
         from codomyrmex.logistics.orchestration.project import get_orchestration_engine
+
         engine = get_orchestration_engine()
 
         print(f"🏃 Executing workflow: {workflow_name}...")
@@ -354,7 +367,9 @@ def run_workflow(workflow_name: str, **kwargs) -> bool:
         if result["success"]:
             print_success(f"Workflow '{workflow_name}' completed successfully")
         else:
-            print_error(f"Workflow '{workflow_name}' failed: {result.get('error', 'Unknown error')}")
+            print_error(
+                f"Workflow '{workflow_name}' failed: {result.get('error', 'Unknown error')}"
+            )
 
         return result["success"]
 

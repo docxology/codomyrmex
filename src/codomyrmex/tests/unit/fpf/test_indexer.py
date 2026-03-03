@@ -146,4 +146,3 @@ def test_search_patterns_empty_query():
     indexer.build_index(spec)
     results = indexer.search_patterns("")
     assert isinstance(results, list)
-

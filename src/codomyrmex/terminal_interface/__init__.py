@@ -6,7 +6,6 @@ exploring and interacting with the Codomyrmex ecosystem in engaging,
 accessible ways.
 """
 
-
 # Submodule exports - import first
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
@@ -85,4 +84,3 @@ if CommandRunner:
     __all__.extend(["CommandRunner", "TerminalFormatter"])
 
 __version__ = "0.1.0"
-

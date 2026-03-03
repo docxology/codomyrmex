@@ -42,9 +42,9 @@ class TestPropertyParsing:
         for line in lines:
             if ":" in line:
                 key, _, value = line.partition(":")
-                props.append(PropertyValue(
-                    key=key.strip(), value=value.strip(), raw=line
-                ))
+                props.append(
+                    PropertyValue(key=key.strip(), value=value.strip(), raw=line)
+                )
         assert len(props) == 3
         assert props[0].key == "title"
         assert props[2].key == "created"
@@ -73,9 +73,14 @@ class TestPropertyUnavailable:
     def test_get_properties_all_params(self):
         with pytest.raises(ObsidianCLINotAvailable):
             get_properties(
-                self._cli(), file="note",
-                name="title", sort="count", format="json",
-                total=True, counts=True, active=True,
+                self._cli(),
+                file="note",
+                name="title",
+                sort="count",
+                format="json",
+                total=True,
+                counts=True,
+                active=True,
             )
 
     def test_read_property(self):
@@ -89,8 +94,11 @@ class TestPropertyUnavailable:
     def test_set_property_with_type(self):
         with pytest.raises(ObsidianCLINotAvailable):
             set_property(
-                self._cli(), "tags", "a,b",
-                type="list", file="note",
+                self._cli(),
+                "tags",
+                "a,b",
+                type="list",
+                file="note",
             )
 
     def test_remove_property(self):

@@ -15,6 +15,7 @@ from .triggers import OnceTrigger, Trigger
 
 class JobStatus(Enum):
     """Status of a scheduled job."""
+
     PENDING = "pending"
     RUNNING = "running"
     COMPLETED = "completed"
@@ -25,6 +26,7 @@ class JobStatus(Enum):
 @dataclass
 class Job:
     """A scheduled job."""
+
     id: str
     name: str
     func: Callable[..., Any]

@@ -19,6 +19,7 @@ def _get_agent() -> Any:
     global _agent_instance
     if _agent_instance is None:
         from codomyrmex.agents.core.thinking_agent import ThinkingAgent
+
         _agent_instance = ThinkingAgent()
     return _agent_instance
 
@@ -51,6 +52,7 @@ def think(prompt: str, depth: str = "normal") -> dict:
     agent.thinking_depth = td
 
     from codomyrmex.agents.core.base import AgentRequest
+
     response = agent.execute(AgentRequest(prompt=prompt))
 
     trace = agent.last_trace
@@ -130,7 +132,9 @@ def get_last_trace() -> dict:
         "is_complete": trace.is_complete,
         "conclusion": {
             "action": trace.conclusion.action if trace.conclusion else None,
-            "justification": trace.conclusion.justification if trace.conclusion else None,
+            "justification": trace.conclusion.justification
+            if trace.conclusion
+            else None,
             "confidence": trace.conclusion.confidence if trace.conclusion else None,
         },
     }
@@ -189,7 +193,9 @@ def react_step(
             "action": tools[0] if tools else "think",
             "action_input": observation,
             "is_final": response.is_success(),
-            "step_number": response.metadata.get("steps_taken", 1) if response.metadata else 1,
+            "step_number": response.metadata.get("steps_taken", 1)
+            if response.metadata
+            else 1,
             "content": response.content,
         }
     except Exception as e:

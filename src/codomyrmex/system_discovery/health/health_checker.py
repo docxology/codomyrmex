@@ -10,6 +10,7 @@ from typing import Any
 
 try:
     import docker
+
     HAS_DOCKER = True
 except ImportError:
     HAS_DOCKER = False
@@ -45,6 +46,7 @@ except ImportError:
 
 class HealthStatus(Enum):
     """Health status enumeration."""
+
     HEALTHY = "healthy"
     DEGRADED = "degraded"
     UNHEALTHY = "unhealthy"
@@ -74,7 +76,7 @@ class HealthCheckResult:
             "issues": self.issues,
             "recommendations": self.recommendations,
             "metrics": self.metrics,
-            "dependencies": {k: v.value for k, v in self.dependencies.items()}
+            "dependencies": {k: v.value for k, v in self.dependencies.items()},
         }
 
     def add_issue(self, issue: str, recommendation: str | None = None) -> None:
@@ -137,7 +139,9 @@ class HealthChecker:
             result.checks_performed.append("module_availability")
             if not self._check_module_availability(module_name):
                 result.status = HealthStatus.UNHEALTHY
-                result.add_issue("Module not available", "Check module installation and imports")
+                result.add_issue(
+                    "Module not available", "Check module installation and imports"
+                )
                 return result
 
             # Perform module-specific checks
@@ -150,7 +154,10 @@ class HealthChecker:
         except Exception as e:
             logger.error(f"Error during health check for {module_name}: {e}")
             result.status = HealthStatus.UNKNOWN
-            result.add_issue(f"Health check failed: {str(e)}", "Review error logs and module configuration")
+            result.add_issue(
+                f"Health check failed: {str(e)}",
+                "Review error logs and module configuration",
+            )
 
         return result
 
@@ -164,7 +171,9 @@ class HealthChecker:
             logger.warning("Module %s not importable: %s", module_name, e)
             return False
         except Exception as e:
-            logger.warning("Unexpected error checking module %s availability: %s", module_name, e)
+            logger.warning(
+                "Unexpected error checking module %s availability: %s", module_name, e
+            )
             return False
 
     def _determine_overall_status(self, result: HealthCheckResult) -> HealthStatus:
@@ -173,9 +182,14 @@ class HealthChecker:
             return HealthStatus.HEALTHY
 
         # Count critical vs non-critical issues
-        critical_issues = [issue for issue in result.issues
-                          if any(keyword in issue.lower()
-                                for keyword in ["import", "dependency", "critical", "unavailable"])]
+        critical_issues = [
+            issue
+            for issue in result.issues
+            if any(
+                keyword in issue.lower()
+                for keyword in ["import", "dependency", "critical", "unavailable"]
+            )
+        ]
 
         if critical_issues:
             return HealthStatus.UNHEALTHY
@@ -193,7 +207,7 @@ class HealthChecker:
             module = importlib.import_module(f"codomyrmex.{module_name}")
 
             # Check for __init__.py indicators
-            if hasattr(module, '__version__'):
+            if hasattr(module, "__version__"):
                 result.add_metric("version", module.__version__)
 
             # Check for main functions/classes
@@ -215,7 +229,6 @@ class HealthChecker:
         result.checks_performed.extend(["logger_creation", "structured_logging"])
 
         try:
-
             # Test logger creation
             test_logger = get_logger("health_check_test")
             test_logger.info("Health check test message")
@@ -226,76 +239,92 @@ class HealthChecker:
             result.add_metric("logger_available", True)
 
         except Exception as e:
-            result.add_issue(f"Logging system error: {str(e)}", "Check logging configuration")
+            result.add_issue(
+                f"Logging system error: {str(e)}", "Check logging configuration"
+            )
 
     def _check_environment_setup(self, result: HealthCheckResult) -> None:
         """Check environment setup module health."""
         result.checks_performed.extend(["dependency_check", "python_version"])
 
         try:
-
             # Get the project root (assuming we're in the project)
-            project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+            project_root = os.path.abspath(
+                os.path.join(os.path.dirname(__file__), "..", "..")
+            )
 
             is_complete, report = validate_environment_completeness(project_root)
 
             result.add_metric("environment_complete", is_complete)
-            result.add_metric("python_version_check", report.get("python_version_check", {}))
+            result.add_metric(
+                "python_version_check", report.get("python_version_check", {})
+            )
 
             if not is_complete:
-                result.add_issue("Environment setup incomplete", "Run environment validation")
+                result.add_issue(
+                    "Environment setup incomplete", "Run environment validation"
+                )
 
         except Exception as e:
             result.add_issue(f"Environment check error: {str(e)}")
 
     def _check_code(self, result: HealthCheckResult) -> None:
         """Check code module health (execution, sandbox, review, monitoring)."""
-        result.checks_performed.extend(["docker_availability", "sandbox_execution", "code_review"])
+        result.checks_performed.extend(
+            ["docker_availability", "sandbox_execution", "code_review"]
+        )
 
         try:
-
             # Test basic execution (this might require Docker)
             test_result = execute_code("python", "print('test')", timeout=5)
 
             if test_result.get("status") == "success":
                 result.add_metric("sandbox_working", True)
             else:
-                result.add_issue("Sandbox execution failed", "Check Docker installation and configuration")
+                result.add_issue(
+                    "Sandbox execution failed",
+                    "Check Docker installation and configuration",
+                )
 
         except Exception as e:
-            result.add_issue(f"Sandbox check error: {str(e)}", "Verify Docker and sandbox setup")
+            result.add_issue(
+                f"Sandbox check error: {str(e)}", "Verify Docker and sandbox setup"
+            )
 
     def _check_static_analysis(self, result: HealthCheckResult) -> None:
         """Check static analysis module health."""
         result.checks_performed.extend(["tool_availability", "analysis_execution"])
 
         try:
-
             # Create a simple test file
 
-            with tempfile.NamedTemporaryFile(mode='w', suffix='.py', delete=False) as f:
+            with tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False) as f:
                 f.write("def test(): pass\n")
                 test_file = f.name
 
             try:
                 analysis_result = analyze_file(test_file)
                 result.add_metric("analysis_working", True)
-                result.add_metric("issues_found", len(analysis_result) if isinstance(analysis_result, list) else 0)
+                result.add_metric(
+                    "issues_found",
+                    len(analysis_result) if isinstance(analysis_result, list) else 0,
+                )
             finally:
                 os.unlink(test_file)
 
         except Exception as e:
-            result.add_issue(f"Static analysis error: {str(e)}", "Check analysis tools installation")
+            result.add_issue(
+                f"Static analysis error: {str(e)}", "Check analysis tools installation"
+            )
 
     def _check_security_digital(self, result: HealthCheckResult) -> None:
         """Check digital security submodule health."""
         result.checks_performed.extend(["vulnerability_scanning", "secrets_detection"])
 
         try:
-
             # Create a test file with potential security issues
 
-            with tempfile.NamedTemporaryFile(mode='w', suffix='.py', delete=False) as f:
+            with tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False) as f:
                 f.write("import os\nos.system('ls')  # Potential security issue\n")
                 test_file = f.name
 
@@ -307,14 +336,15 @@ class HealthChecker:
                 os.unlink(test_file)
 
         except Exception as e:
-            result.add_issue(f"Security audit error: {str(e)}", "Check security scanning tools")
+            result.add_issue(
+                f"Security audit error: {str(e)}", "Check security scanning tools"
+            )
 
     def _check_performance(self, result: HealthCheckResult) -> None:
         """Check performance monitoring module health."""
         result.checks_performed.extend(["performance_monitoring", "resource_tracking"])
 
         try:
-
             # Test performance profiling
             @profile_function
             def test_func():
@@ -335,11 +365,20 @@ class HealthChecker:
         result.checks_performed.extend(["workflow_creation", "dag_validation"])
 
         try:
-
             # Test DAG creation
             tasks = [
-                {"name": "task1", "module": "test", "action": "run", "dependencies": []},
-                {"name": "task2", "module": "test", "action": "run", "dependencies": ["task1"]},
+                {
+                    "name": "task1",
+                    "module": "test",
+                    "action": "run",
+                    "dependencies": [],
+                },
+                {
+                    "name": "task2",
+                    "module": "test",
+                    "action": "run",
+                    "dependencies": ["task1"],
+                },
             ]
 
             dag = WorkflowDAG(tasks)
@@ -359,7 +398,6 @@ class HealthChecker:
         result.checks_performed.extend(["docker_client", "image_management"])
 
         try:
-
             # Test Docker client
             client = docker.from_env()
             client.ping()  # Test connection
@@ -372,9 +410,13 @@ class HealthChecker:
             result.add_metric("docker_images", info.get("Images", 0))
 
         except ImportError:
-            result.add_issue("Docker library not available", "Install docker Python package")
+            result.add_issue(
+                "Docker library not available", "Install docker Python package"
+            )
         except Exception as e:
-            result.add_issue(f"Docker connection error: {str(e)}", "Check Docker daemon status")
+            result.add_issue(
+                f"Docker connection error: {str(e)}", "Check Docker daemon status"
+            )
 
     # Add more module-specific checks as needed
     def _check_model_context_protocol(self, result: HealthCheckResult) -> None:
@@ -399,7 +441,9 @@ class HealthChecker:
         try:
             result.add_metric("matplotlib_available", True)
         except ImportError:
-            result.add_issue("Matplotlib not available", "Install matplotlib for plotting")
+            result.add_issue(
+                "Matplotlib not available", "Install matplotlib for plotting"
+            )
 
     def _check_pattern_matching(self, result: HealthCheckResult) -> None:
         """Check pattern matching module health."""

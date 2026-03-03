@@ -9,6 +9,7 @@ from codomyrmex.documents.models.metadata import DocumentMetadata
 @pytest.mark.unit
 class TestDocument:
     """Test suite for Document."""
+
     def test_document_initialization(self):
         """Test basic document initialization."""
         content = "Test content"
@@ -64,5 +65,7 @@ class TestDocument:
         doc = Document("content", DocumentFormat.TEXT)
         assert isinstance(doc.metadata, DocumentMetadata)
 
-        doc_with_meta = Document("content", DocumentFormat.TEXT, metadata={"author": "me"})
+        doc_with_meta = Document(
+            "content", DocumentFormat.TEXT, metadata={"author": "me"}
+        )
         assert doc_with_meta.metadata.author == "me"

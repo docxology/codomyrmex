@@ -107,6 +107,7 @@ class ThinkingAgent(AgentInterface):
             AgentResponse with the reasoning-informed output.
         """
         import time
+
         t0 = time.monotonic()
 
         # 1. Observe — add request to context
@@ -123,17 +124,31 @@ class ThinkingAgent(AgentInterface):
             try:
                 graph_ctx = self._knowledge_retriever.retrieve(request.prompt)
                 context_data["knowledge_entities"] = [
-                    {"name": e.name, "type": e.entity_type.value if hasattr(e.entity_type, "value") else str(e.entity_type)}
+                    {
+                        "name": e.name,
+                        "type": e.entity_type.value
+                        if hasattr(e.entity_type, "value")
+                        else str(e.entity_type),
+                    }
                     for e in graph_ctx.entities[:10]
                 ]
                 context_data["knowledge_relationships"] = [
-                    {"source": r.source_id, "target": r.target_id, "type": r.relation_type.value if hasattr(r.relation_type, "value") else str(r.relation_type)}
+                    {
+                        "source": r.source_id,
+                        "target": r.target_id,
+                        "type": r.relation_type.value
+                        if hasattr(r.relation_type, "value")
+                        else str(r.relation_type),
+                    }
                     for r in graph_ctx.relationships[:10]
                 ]
                 context_data["knowledge_confidence"] = graph_ctx.confidence
                 logger.info(
                     "ThinkingAgent: knowledge retrieved",
-                    extra={"entities": len(graph_ctx.entities), "confidence": round(graph_ctx.confidence, 3)},
+                    extra={
+                        "entities": len(graph_ctx.entities),
+                        "confidence": round(graph_ctx.confidence, 3),
+                    },
                 )
             except Exception as exc:
                 logger.warning(

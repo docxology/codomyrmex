@@ -14,8 +14,6 @@ with the Codomyrmex ecosystem.
 """
 
 
-
-
 class FabricManager:
     """
     Main Fabric integration manager for Codomyrmex.
@@ -43,7 +41,7 @@ class FabricManager:
                 [self.fabric_binary, "--version"],
                 capture_output=True,
                 text=True,
-                timeout=10
+                timeout=10,
             )
             return result.returncode == 0
         except (subprocess.TimeoutExpired, FileNotFoundError) as e:
@@ -65,13 +63,13 @@ class FabricManager:
                 [self.fabric_binary, "--listpatterns"],
                 capture_output=True,
                 text=True,
-                timeout=30
+                timeout=30,
             )
             if result.returncode == 0:
                 patterns = [
                     line.strip()
-                    for line in result.stdout.split('\n')
-                    if line.strip() and not line.startswith('Available patterns:')
+                    for line in result.stdout.split("\n")
+                    if line.strip() and not line.startswith("Available patterns:")
                 ]
                 return patterns
         except subprocess.TimeoutExpired as e:
@@ -79,10 +77,7 @@ class FabricManager:
             raise
 
     def run_pattern(
-        self,
-        pattern: str,
-        input_text: str,
-        additional_args: list[str] | None = None
+        self, pattern: str, input_text: str, additional_args: list[str] | None = None
     ) -> dict[str, Any]:
         """
         Run a Fabric pattern with given input.
@@ -100,7 +95,7 @@ class FabricManager:
                 "success": False,
                 "error": "Fabric not available",
                 "output": "",
-                "pattern": pattern
+                "pattern": pattern,
             }
 
         cmd = [self.fabric_binary, "--pattern", pattern]
@@ -108,7 +103,9 @@ class FabricManager:
             cmd.extend(additional_args)
 
         try:
-            with tempfile.NamedTemporaryFile(mode='w', suffix='.txt', delete=False) as tmp:
+            with tempfile.NamedTemporaryFile(
+                mode="w", suffix=".txt", delete=False
+            ) as tmp:
                 tmp.write(input_text)
                 tmp.flush()
 
@@ -119,7 +116,7 @@ class FabricManager:
                         stdin=input_file,
                         capture_output=True,
                         text=True,
-                        timeout=120
+                        timeout=120,
                     )
                     end_time = datetime.now()
 
@@ -131,7 +128,7 @@ class FabricManager:
                     "error": result.stderr if result.returncode != 0 else "",
                     "pattern": pattern,
                     "duration": (end_time - start_time).total_seconds(),
-                    "timestamp": start_time.isoformat()
+                    "timestamp": start_time.isoformat(),
                 }
 
                 self.results_history.append(result_data)
@@ -141,7 +138,9 @@ class FabricManager:
                         f"Fabric pattern '{pattern}' executed successfully in {result_data['duration']:.2f}s"
                     )
                 else:
-                    self.logger.error(f"Fabric pattern '{pattern}' failed: {result_data['error']}")
+                    self.logger.error(
+                        f"Fabric pattern '{pattern}' failed: {result_data['error']}"
+                    )
 
                 return result_data
 
@@ -151,7 +150,7 @@ class FabricManager:
                 "error": "Pattern execution timeout",
                 "output": "",
                 "pattern": pattern,
-                "timestamp": datetime.now().isoformat()
+                "timestamp": datetime.now().isoformat(),
             }
             self.results_history.append(error_result)
             return error_result
@@ -161,7 +160,7 @@ class FabricManager:
                 "error": f"Execution error: {str(e)}",
                 "output": "",
                 "pattern": pattern,
-                "timestamp": datetime.now().isoformat()
+                "timestamp": datetime.now().isoformat(),
             }
             self.results_history.append(error_result)
             return error_result
@@ -173,5 +172,3 @@ class FabricManager:
     def get_results_history(self) -> list[dict[str, Any]]:
         """Get history of pattern execution results."""
         return self.results_history.copy()
-
-

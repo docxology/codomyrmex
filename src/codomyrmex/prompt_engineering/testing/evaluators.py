@@ -52,7 +52,9 @@ class ContainsEvaluator(Evaluator):
     def evaluate(self, test_case: PromptTestCase, actual_output: str) -> float:
         """Evaluate."""
         actual = actual_output if self.case_sensitive else actual_output.lower()
-        total_checks = len(test_case.expected_contains) + len(test_case.expected_not_contains)
+        total_checks = len(test_case.expected_contains) + len(
+            test_case.expected_not_contains
+        )
         if total_checks == 0:
             return 1.0
         passed = 0
@@ -112,7 +114,9 @@ class LengthEvaluator(Evaluator):
 class RegexEvaluator(Evaluator):
     """Evaluate output against one or more regex patterns."""
 
-    def __init__(self, patterns: list[str] | None = None, all_must_match: bool = True) -> None:
+    def __init__(
+        self, patterns: list[str] | None = None, all_must_match: bool = True
+    ) -> None:
         self._patterns = [re.compile(p) for p in (patterns or [])]
         self.all_must_match = all_must_match
 
@@ -125,7 +129,9 @@ class RegexEvaluator(Evaluator):
             return 1.0
         matches = sum(1 for p in self._patterns if p.search(actual_output))
         if self.all_must_match:
-            return 1.0 if matches == len(self._patterns) else matches / len(self._patterns)
+            return (
+                1.0 if matches == len(self._patterns) else matches / len(self._patterns)
+            )
         return 1.0 if matches > 0 else 0.0
 
 

@@ -27,7 +27,6 @@ Usage:
 """
 
 
-
 # Import logging setup
 
 logger = get_logger(__name__)
@@ -58,7 +57,9 @@ OUTPUT_WIDTH = 80
 class ProgressReporter:
     """Progress reporting utility for long-running operations."""
 
-    def __init__(self, total: int = 100, prefix: str = "Progress", suffix: str = "Complete"):
+    def __init__(
+        self, total: int = 100, prefix: str = "Progress", suffix: str = "Complete"
+    ):
         """
         Initialize progress reporter.
 
@@ -199,7 +200,7 @@ def validate_dry_run(args: argparse.Namespace) -> bool:
     Returns:
         True if dry-run should proceed
     """
-    if not getattr(args, 'dry_run', False):
+    if not getattr(args, "dry_run", False):
         return True
 
     print_section("DRY RUN MODE", separator="=")
@@ -224,7 +225,7 @@ def enhanced_error_context(operation: str, context: dict[str, Any] | None = None
     error_context = {
         "operation": operation,
         "correlation_id": correlation_id,
-        "timestamp": time.time()
+        "timestamp": time.time(),
     }
 
     if context:
@@ -245,7 +246,9 @@ def enhanced_error_context(operation: str, context: dict[str, Any] | None = None
         raise enhanced_error from e
 
 
-def create_dry_run_plan(args: argparse.Namespace, operations: list[dict[str, Any]]) -> str:
+def create_dry_run_plan(
+    args: argparse.Namespace, operations: list[dict[str, Any]]
+) -> str:
     """
     Create a dry-run execution plan.
 
@@ -260,9 +263,9 @@ def create_dry_run_plan(args: argparse.Namespace, operations: list[dict[str, Any
 
     for i, op in enumerate(operations, 1):
         lines.append(f"{i}. {op.get('description', 'Unknown operation')}")
-        if 'details' in op:
+        if "details" in op:
             lines.append(f"   Details: {op['details']}")
-        if 'target' in op:
+        if "target" in op:
             lines.append(f"   Target: {op['target']}")
         lines.append("")
 
@@ -278,28 +281,24 @@ def add_common_arguments(parser: argparse.ArgumentParser) -> None:
         parser: Argument parser to extend
     """
     parser.add_argument(
-        '--dry-run',
-        action='store_true',
-        help='Show what would be executed without actually running commands'
+        "--dry-run",
+        action="store_true",
+        help="Show what would be executed without actually running commands",
     )
 
     parser.add_argument(
-        '--format',
-        choices=['json', 'text'],
-        default='text',
-        help='Output format (default: text)'
+        "--format",
+        choices=["json", "text"],
+        default="text",
+        help="Output format (default: text)",
     )
 
     parser.add_argument(
-        '--verbose', '-v',
-        action='store_true',
-        help='Enable verbose output'
+        "--verbose", "-v", action="store_true", help="Enable verbose output"
     )
 
     parser.add_argument(
-        '--quiet', '-q',
-        action='store_true',
-        help='Suppress non-error output'
+        "--quiet", "-q", action="store_true", help="Suppress non-error output"
     )
 
 
@@ -317,11 +316,11 @@ def print_with_color(message: str, color: str = "default", **kwargs) -> None:
         "green": "\033[92m",
         "yellow": "\033[93m",
         "blue": "\033[94m",
-        "default": "\033[0m"
+        "default": "\033[0m",
     }
 
     # Check if we're in a TTY and colors are supported
-    if hasattr(sys.stdout, 'isatty') and sys.stdout.isatty():
+    if hasattr(sys.stdout, "isatty") and sys.stdout.isatty():
         color_code = color_codes.get(color, color_codes["default"])
         reset_code = color_codes["default"]
         print(f"{color_code}{message}{reset_code}", **kwargs)
@@ -539,6 +538,7 @@ def handle_common_exceptions(
     Returns:
         Decorator function
     """
+
     def decorator(func):
         """Decorator."""
 
@@ -571,7 +571,9 @@ def handle_common_exceptions(
                 if verbose:
                     logger.exception("Detailed error information:")
                 return False
+
         return wrapper
+
     return decorator
 
 

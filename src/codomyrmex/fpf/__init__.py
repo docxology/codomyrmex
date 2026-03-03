@@ -172,7 +172,9 @@ class FPFClient:
             List of matching Pattern objects
         """
         if not self.spec:
-            raise ValueError("No specification loaded. Call load_from_file() or fetch_and_load() first.")
+            raise ValueError(
+                "No specification loaded. Call load_from_file() or fetch_and_load() first."
+            )
 
         return self.indexer.search_patterns(query, filters)
 
@@ -186,7 +188,9 @@ class FPFClient:
             Pattern object
         """
         if not self.spec:
-            raise ValueError("No specification loaded. Call load_from_file() or fetch_and_load() first.")
+            raise ValueError(
+                "No specification loaded. Call load_from_file() or fetch_and_load() first."
+            )
 
         pattern = self.indexer.get_pattern_by_id(pattern_id)
         if not pattern:
@@ -201,7 +205,9 @@ class FPFClient:
             output_path: Path to output JSON file
         """
         if not self.spec:
-            raise ValueError("No specification loaded. Call load_from_file() or fetch_and_load() first.")
+            raise ValueError(
+                "No specification loaded. Call load_from_file() or fetch_and_load() first."
+            )
 
         self.exporter.export_json(self.spec, Path(output_path))
 
@@ -216,7 +222,9 @@ class FPFClient:
             Context string
         """
         if not self.spec:
-            raise ValueError("No specification loaded. Call load_from_file() or fetch_and_load() first.")
+            raise ValueError(
+                "No specification loaded. Call load_from_file() or fetch_and_load() first."
+            )
 
         builder = ContextBuilder(self.spec)
         if pattern_id:

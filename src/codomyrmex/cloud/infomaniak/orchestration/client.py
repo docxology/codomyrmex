@@ -56,7 +56,9 @@ class InfomaniakHeatClient(InfomaniakOpenStackBase):
                     "description": stack.description,
                     "parameters": dict(stack.parameters) if stack.parameters else {},
                     "outputs": stack.outputs or [],
-                    "creation_time": str(stack.created_at) if stack.created_at else None,
+                    "creation_time": str(stack.created_at)
+                    if stack.created_at
+                    else None,
                     "updated_time": str(stack.updated_at) if stack.updated_at else None,
                 }
             return None
@@ -72,7 +74,7 @@ class InfomaniakHeatClient(InfomaniakOpenStackBase):
         environment: dict[str, Any] | None = None,
         timeout_mins: int = 60,
         disable_rollback: bool = False,
-        **kwargs
+        **kwargs,
     ) -> dict[str, Any] | None:
         """
         Create a new Heat stack.
@@ -93,7 +95,7 @@ class InfomaniakHeatClient(InfomaniakOpenStackBase):
                 environment=environment,
                 timeout_mins=timeout_mins,
                 disable_rollback=disable_rollback,
-                **kwargs
+                **kwargs,
             )
             logger.info(f"Created stack: {stack.id}")
             return {"id": stack.id, "name": name}
@@ -106,7 +108,7 @@ class InfomaniakHeatClient(InfomaniakOpenStackBase):
         name: str,
         template_path: str,
         parameters: dict[str, Any] | None = None,
-        **kwargs
+        **kwargs,
     ) -> dict[str, Any] | None:
         """Create a stack from a template file."""
         try:
@@ -123,7 +125,7 @@ class InfomaniakHeatClient(InfomaniakOpenStackBase):
         template: str | None = None,
         parameters: dict[str, Any] | None = None,
         environment: dict[str, Any] | None = None,
-        **kwargs
+        **kwargs,
     ) -> bool:
         """Update an existing stack."""
         try:
@@ -196,9 +198,7 @@ class InfomaniakHeatClient(InfomaniakOpenStackBase):
             return []
 
     def get_stack_resource(
-        self,
-        stack_id: str,
-        resource_name: str
+        self, stack_id: str, resource_name: str
     ) -> dict[str, Any] | None:
         """Get a specific resource in a stack."""
         try:
@@ -221,9 +221,7 @@ class InfomaniakHeatClient(InfomaniakOpenStackBase):
     # =========================================================================
 
     def list_stack_events(
-        self,
-        stack_id: str,
-        resource_name: str | None = None
+        self, stack_id: str, resource_name: str | None = None
     ) -> list[dict[str, Any]]:
         """List events for a stack or specific resource."""
         try:
@@ -247,9 +245,7 @@ class InfomaniakHeatClient(InfomaniakOpenStackBase):
     # =========================================================================
 
     def validate_template(
-        self,
-        template: str,
-        environment: dict[str, Any] | None = None
+        self, template: str, environment: dict[str, Any] | None = None
     ) -> dict[str, Any]:
         """
         Validate a Heat template.
@@ -263,8 +259,7 @@ class InfomaniakHeatClient(InfomaniakOpenStackBase):
         """
         try:
             result = self._conn.orchestration.validate_template(
-                template=template,
-                environment=environment
+                template=template, environment=environment
             )
             return {
                 "valid": True,

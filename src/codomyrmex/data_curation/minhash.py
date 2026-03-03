@@ -58,8 +58,7 @@ class MinHash:
 
         # Compute all hash values: (n_hashes, n_shingles)
         hash_values = (
-            self._a[:, np.newaxis] * shingle_arr[np.newaxis, :]
-            + self._b[:, np.newaxis]
+            self._a[:, np.newaxis] * shingle_arr[np.newaxis, :] + self._b[:, np.newaxis]
         ) % self._p
 
         # MinHash: minimum over shingles for each hash function

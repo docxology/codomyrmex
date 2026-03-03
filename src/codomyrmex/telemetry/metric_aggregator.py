@@ -93,10 +93,7 @@ class MetricAggregator:
 
     def snapshot(self) -> MetricSnapshot:
         """Capture a point-in-time snapshot."""
-        histograms = {
-            name: self.histogram_stats(name)
-            for name in self._histograms
-        }
+        histograms = {name: self.histogram_stats(name) for name in self._histograms}
         return MetricSnapshot(
             counters=dict(self._counters),
             gauges=dict(self._gauges),

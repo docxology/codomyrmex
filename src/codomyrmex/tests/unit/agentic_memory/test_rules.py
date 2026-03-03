@@ -16,7 +16,6 @@ No mocks, stubs, or monkeypatching.
 
 from __future__ import annotations
 
-import tempfile
 from pathlib import Path
 
 import pytest
@@ -277,6 +276,7 @@ class TestRuleSet:
 
     def _make_rules(self):
         """Create a list of rules at different priorities."""
+
         def _rule(name, priority):
             return Rule(
                 name=name,
@@ -930,7 +930,12 @@ class TestMCPTools:
         result = rules_list_all()
         if len(result) < 2:
             pytest.skip("Not enough rules to test sorting")
-        priority_order = {"FILE_SPECIFIC": 1, "MODULE": 2, "CROSS_MODULE": 3, "GENERAL": 4}
+        priority_order = {
+            "FILE_SPECIFIC": 1,
+            "MODULE": 2,
+            "CROSS_MODULE": 3,
+            "GENERAL": 4,
+        }
         values = [priority_order.get(d["priority"], 99) for d in result]
         assert values == sorted(values)
 
@@ -955,8 +960,7 @@ class TestEdgeCases:
     def test_rule_with_many_sections(self, tmp_path):
         """A rule file with 8 sections should all be parsed."""
         content = "\n\n".join(
-            f"## {i}. Section {i}\nContent for section {i}."
-            for i in range(8)
+            f"## {i}. Section {i}\nContent for section {i}." for i in range(8)
         )
         p = tmp_path / "many.cursorrules"
         p.write_text(content)
@@ -980,8 +984,20 @@ class TestEdgeCases:
     def test_ruleset_duplicate_priorities(self):
         """RuleSet with multiple rules at same priority should resolve stably."""
         rules = [
-            Rule(name="a", priority=RulePriority.MODULE, file_path=Path("/a"), sections=[], raw_content=""),
-            Rule(name="b", priority=RulePriority.MODULE, file_path=Path("/b"), sections=[], raw_content=""),
+            Rule(
+                name="a",
+                priority=RulePriority.MODULE,
+                file_path=Path("/a"),
+                sections=[],
+                raw_content="",
+            ),
+            Rule(
+                name="b",
+                priority=RulePriority.MODULE,
+                file_path=Path("/b"),
+                sections=[],
+                raw_content="",
+            ),
         ]
         rs = RuleSet(rules=rules)
         resolved = rs.resolved()

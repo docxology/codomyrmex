@@ -104,9 +104,13 @@ class InMemoryIndex(SearchIndex):
                     highlight = "..." + doc.content[start:end] + "..."
                     highlights.append(highlight)
 
-            results.append(SearchResult(
-                document=doc, score=score, highlights=highlights[:3],
-            ))
+            results.append(
+                SearchResult(
+                    document=doc,
+                    score=score,
+                    highlights=highlights[:3],
+                )
+            )
 
         results.sort(reverse=True)
         return results[:k]

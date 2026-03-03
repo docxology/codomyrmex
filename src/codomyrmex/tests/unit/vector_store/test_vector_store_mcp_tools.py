@@ -14,6 +14,7 @@ import pytest
 def reset_vector_store():
     """Reset the module-level store before each test for isolation."""
     import codomyrmex.vector_store.mcp_tools as _mod
+
     _mod._store = None
     yield
     _mod._store = None
@@ -27,6 +28,7 @@ def test_import_mcp_tools() -> None:
         vector_delete,
         vector_search,
     )
+
     assert callable(vector_add)
     assert callable(vector_search)
     assert callable(vector_delete)
@@ -130,5 +132,6 @@ def test_mcp_tool_meta_attached() -> None:
         vector_delete,
         vector_search,
     )
+
     for fn in (vector_add, vector_search, vector_delete, vector_count):
         assert hasattr(fn, "_mcp_tool_meta"), f"{fn.__name__} missing _mcp_tool_meta"

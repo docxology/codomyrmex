@@ -24,7 +24,7 @@ class SerializationError(CodomyrmexError):
         message: str,
         format: str | None = None,
         data_type: str | None = None,
-        **kwargs: Any
+        **kwargs: Any,
     ):
         super().__init__(message, **kwargs)
         if format:
@@ -49,13 +49,15 @@ class DeserializationError(SerializationError):
         format: str | None = None,
         raw_data_preview: str | None = None,
         expected_type: str | None = None,
-        **kwargs: Any
+        **kwargs: Any,
     ):
         super().__init__(message, format=format, **kwargs)
         # Truncate raw data preview to avoid huge context
         if raw_data_preview:
             self.context["raw_data_preview"] = (
-                raw_data_preview[:200] + "..." if len(raw_data_preview) > 200 else raw_data_preview
+                raw_data_preview[:200] + "..."
+                if len(raw_data_preview) > 200
+                else raw_data_preview
             )
         if expected_type:
             self.context["expected_type"] = expected_type
@@ -77,7 +79,7 @@ class SchemaValidationError(SerializationError):
         schema_name: str | None = None,
         validation_errors: list[str] | None = None,
         path: str | None = None,
-        **kwargs: Any
+        **kwargs: Any,
     ):
         super().__init__(message, **kwargs)
         if schema_name:
@@ -102,7 +104,7 @@ class EncodingError(SerializationError):
         message: str,
         encoding: str | None = None,
         position: int | None = None,
-        **kwargs: Any
+        **kwargs: Any,
     ):
         super().__init__(message, **kwargs)
         if encoding:
@@ -125,7 +127,7 @@ class FormatNotSupportedError(SerializationError):
         message: str,
         requested_format: str | None = None,
         supported_formats: list[str] | None = None,
-        **kwargs: Any
+        **kwargs: Any,
     ):
         super().__init__(message, **kwargs)
         if requested_format:
@@ -148,7 +150,7 @@ class CircularReferenceError(SerializationError):
         message: str,
         object_type: str | None = None,
         reference_path: str | None = None,
-        **kwargs: Any
+        **kwargs: Any,
     ):
         super().__init__(message, **kwargs)
         if object_type:
@@ -173,7 +175,7 @@ class TypeConversionError(SerializationError):
         source_type: str | None = None,
         target_type: str | None = None,
         value_preview: str | None = None,
-        **kwargs: Any
+        **kwargs: Any,
     ):
         super().__init__(message, **kwargs)
         if source_type:
@@ -182,7 +184,9 @@ class TypeConversionError(SerializationError):
             self.context["target_type"] = target_type
         if value_preview:
             self.context["value_preview"] = (
-                value_preview[:100] + "..." if len(value_preview) > 100 else value_preview
+                value_preview[:100] + "..."
+                if len(value_preview) > 100
+                else value_preview
             )
 
 
@@ -200,7 +204,7 @@ class BinaryFormatError(SerializationError):
         message: str,
         format: str | None = None,
         operation: str | None = None,
-        **kwargs: Any
+        **kwargs: Any,
     ):
         super().__init__(message, format=format, **kwargs)
         if operation:

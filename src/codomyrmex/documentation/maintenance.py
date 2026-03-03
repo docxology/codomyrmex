@@ -88,7 +88,11 @@ def get_submodules(src_dir: Path) -> list[str]:
     """Get list of valid submodule names."""
     modules = []
     for item in src_dir.iterdir():
-        if item.is_dir() and item.name not in IGNORE_DIRS and not item.name.startswith("."):
+        if (
+            item.is_dir()
+            and item.name not in IGNORE_DIRS
+            and not item.name.startswith(".")
+        ):
             if (item / "__init__.py").exists():
                 modules.append(item.name)
     return sorted(modules)
@@ -104,8 +108,8 @@ def update_init_py(modules: list[str], src_dir: Path):
     content = init_path.read_text(encoding="utf-8")
 
     # Generate new lists
-    submodules_list = "    " + ',\n    '.join([f'"{m}"' for m in modules]) + ",\n"
-    all_list = "    " + ',\n    '.join([f'"{m}"' for m in modules]) + ",\n"
+    submodules_list = "    " + ",\n    ".join([f'"{m}"' for m in modules]) + ",\n"
+    all_list = "    " + ",\n    ".join([f'"{m}"' for m in modules]) + ",\n"
 
     start_marker = "_submodules = ["
     end_marker = "]"
@@ -126,18 +130,23 @@ def update_init_py(modules: list[str], src_dir: Path):
         end_idx_all = new_content.find(end_marker, start_idx_all)
 
         if start_idx_all == -1 or end_idx_all == -1:
-             print("Could not find __all__ list in __init__.py")
-             return
+            print("Could not find __all__ list in __init__.py")
+            return
 
         # Preserve static exports (heuristic)
         static_exports = [
             '    "get_version",',
             '    "get_module_path",',
-            '    "list_modules",'
+            '    "list_modules",',
         ]
 
-        final_all_content = all_list + '\n'.join(static_exports) + "\n"
-        final_content = new_content[:start_idx_all] + "\n" + final_all_content + new_content[end_idx_all:]
+        final_all_content = all_list + "\n".join(static_exports) + "\n"
+        final_content = (
+            new_content[:start_idx_all]
+            + "\n"
+            + final_all_content
+            + new_content[end_idx_all:]
+        )
 
         init_path.write_text(final_content, encoding="utf-8")
         print("Updated __init__.py")
@@ -184,8 +193,8 @@ def update_agents_md_list(modules: list[str], src_dir: Path):
     """Update AGENTS.md component list."""
     agents_path = src_dir / "AGENTS.md"
     if not agents_path.exists():
-         print(f"Skipping AGENTS.md update: {agents_path} not found")
-         return
+        print(f"Skipping AGENTS.md update: {agents_path} not found")
+        return
 
     content = agents_path.read_text(encoding="utf-8")
 

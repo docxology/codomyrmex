@@ -13,11 +13,14 @@ from typing import Any
 try:
     from codomyrmex.model_context_protocol.decorators import mcp_tool
 except ImportError:
+
     def mcp_tool(**kwargs: Any):  # type: ignore
         def decorator(func: Any) -> Any:
             func._mcp_tool_meta = kwargs
             return func
+
         return decorator
+
 
 from codomyrmex.calendar_integration.generics import CalendarEvent
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
@@ -55,11 +58,15 @@ def _get_provider() -> Any:
 
         from codomyrmex.calendar_integration.gcal.provider import GoogleCalendar
     except ImportError:
-        raise RuntimeError("Google Calendar dependencies not installed. Run `uv sync --extra calendar`") from None
+        raise RuntimeError(
+            "Google Calendar dependencies not installed. Run `uv sync --extra calendar`"
+        ) from None
 
     token_path = Path.home() / ".codomyrmex" / "gcal_token.json"
     if not token_path.exists():
-        raise RuntimeError("Google Calendar not authenticated. Please connect via PAI dashboard.")
+        raise RuntimeError(
+            "Google Calendar not authenticated. Please connect via PAI dashboard."
+        )
 
     try:
         with open(token_path) as f:
@@ -69,6 +76,7 @@ def _get_provider() -> Any:
 
     try:
         from dotenv import load_dotenv
+
         load_dotenv()
     except ImportError as e:
         logger.debug("python-dotenv not installed, skipping .env loading: %s", e)
@@ -77,7 +85,9 @@ def _get_provider() -> Any:
     client_secret = os.environ.get("GOOGLE_CLIENT_SECRET")
 
     if not client_id or not client_secret:
-        raise RuntimeError("GOOGLE_CLIENT_ID or GOOGLE_CLIENT_SECRET environment variables are missing.")
+        raise RuntimeError(
+            "GOOGLE_CLIENT_ID or GOOGLE_CLIENT_SECRET environment variables are missing."
+        )
 
     creds = Credentials(
         token=token_data.get("access_token"),
@@ -85,7 +95,7 @@ def _get_provider() -> Any:
         token_uri="https://oauth2.googleapis.com/token",
         client_id=client_id,
         client_secret=client_secret,
-        scopes=["https://www.googleapis.com/auth/calendar"]
+        scopes=["https://www.googleapis.com/auth/calendar"],
     )
 
     return GoogleCalendar(credentials=creds)
@@ -125,9 +135,10 @@ def calendar_list_events(days_ahead: int = 7) -> dict[str, Any]:
                     "description": e.description,
                     "location": e.location,
                     "attendees": e.attendees,
-                    "html_link": e.html_link
-                } for e in events
-            ]
+                    "html_link": e.html_link,
+                }
+                for e in events
+            ],
         }
     except Exception as exc:
         return {"status": "error", "error": str(exc)}
@@ -147,7 +158,7 @@ def calendar_create_event(
     end_time: str,
     description: str = "",
     location: str = "",
-    attendees: list[str] | None = None
+    attendees: list[str] | None = None,
 ) -> dict[str, Any]:
     """Create a new event in the Google Calendar.
 
@@ -180,17 +191,13 @@ def calendar_create_event(
         evt = CalendarEvent(
             summary=summary,
             description=description,
-            start_time=datetime.fromisoformat(start_time.replace('Z', '+00:00')),
-            end_time=datetime.fromisoformat(end_time.replace('Z', '+00:00')),
+            start_time=datetime.fromisoformat(start_time.replace("Z", "+00:00")),
+            end_time=datetime.fromisoformat(end_time.replace("Z", "+00:00")),
             location=location,
-            attendees=attendees
+            attendees=attendees,
         )
         created = provider.create_event(evt)
-        return {
-            "status": "ok",
-            "event_id": created.id,
-            "link": created.html_link
-        }
+        return {"status": "ok", "event_id": created.id, "link": created.html_link}
     except Exception as exc:
         return {"status": "error", "error": str(exc)}
 
@@ -226,8 +233,8 @@ def calendar_get_event(event_id: str) -> dict[str, Any]:
                 "description": e.description,
                 "location": e.location,
                 "attendees": e.attendees,
-                "html_link": e.html_link
-            }
+                "html_link": e.html_link,
+            },
         }
     except Exception as exc:
         return {"status": "error", "error": str(exc)}
@@ -271,7 +278,7 @@ def calendar_update_event(
     end_time: str,
     description: str = "",
     location: str = "",
-    attendees: list[str] | None = None
+    attendees: list[str] | None = None,
 ) -> dict[str, Any]:
     """Replace all fields of an existing calendar event (PUT semantics).
 
@@ -306,17 +313,16 @@ def calendar_update_event(
         evt = CalendarEvent(
             summary=summary,
             description=description,
-            start_time=datetime.fromisoformat(start_time.replace('Z', '+00:00')),
-            end_time=datetime.fromisoformat(end_time.replace('Z', '+00:00')),
+            start_time=datetime.fromisoformat(start_time.replace("Z", "+00:00")),
+            end_time=datetime.fromisoformat(end_time.replace("Z", "+00:00")),
             location=location,
-            attendees=attendees
+            attendees=attendees,
         )
         updated_event = provider.update_event(event_id, evt)
         return {
             "status": "ok",
             "event_id": updated_event.id,
-            "link": updated_event.html_link
+            "link": updated_event.html_link,
         }
     except Exception as exc:
         return {"status": "error", "error": str(exc)}
-

@@ -122,12 +122,16 @@ def get_encryptor(algorithm: str = "AES") -> Encryptor:
     return Encryptor(algorithm=algorithm)
 
 
-def encrypt_file(input_path: str | Path, output_path: str | Path, key: bytes, algorithm: str = "AES") -> bool:
+def encrypt_file(
+    input_path: str | Path, output_path: str | Path, key: bytes, algorithm: str = "AES"
+) -> bool:
     """Encrypt a file from input to output."""
     return Encryptor(algorithm=algorithm).encrypt_file(input_path, output_path, key)
 
 
-def decrypt_file(input_path: str | Path, output_path: str | Path, key: bytes, algorithm: str = "AES") -> bool:
+def decrypt_file(
+    input_path: str | Path, output_path: str | Path, key: bytes, algorithm: str = "AES"
+) -> bool:
     """Decrypt a file from input to output."""
     return Encryptor(algorithm=algorithm).decrypt_file(input_path, output_path, key)
 

@@ -61,7 +61,9 @@ class AuditLogger:
         recent = audit.query(user_id="user_123")
     """
 
-    def __init__(self, name: str = "codomyrmex.audit", max_records: int = 10000) -> None:
+    def __init__(
+        self, name: str = "codomyrmex.audit", max_records: int = 10000
+    ) -> None:
         self.logger = logging.getLogger(name)
         self.logger.setLevel(logging.INFO)
         self._records: list[AuditRecord] = []
@@ -106,7 +108,7 @@ class AuditLogger:
 
         # Trim if over max
         if len(self._records) > self._max_records:
-            self._records = self._records[-self._max_records:]
+            self._records = self._records[-self._max_records :]
 
         extra = record.to_dict()
         self.logger.info("Audit event: %s", event_type, extra={"extra": extra})

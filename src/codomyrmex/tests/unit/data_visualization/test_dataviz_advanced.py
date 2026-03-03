@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 import pytest
 
 # Use non-interactive backend for testing
-matplotlib.use('Agg')
+matplotlib.use("Agg")
 
 
 # ============================================================================
@@ -20,32 +20,36 @@ class TestThemes:
     def test_get_all_themes(self):
         """Test functionality: get all themes."""
         from codomyrmex.data_visualization.themes import ThemeName, get_theme
+
         for name in ThemeName:
             theme = get_theme(name)
-            assert hasattr(theme, 'colors')
+            assert hasattr(theme, "colors")
             assert theme.name == name
 
     def test_default_theme(self):
         """Test functionality: default theme."""
         from codomyrmex.data_visualization.themes import ThemeName, get_theme
+
         theme = get_theme(ThemeName.DEFAULT)
         assert theme.colors.primary == "#1f77b4"
 
     def test_dark_theme(self):
         """Test functionality: dark theme."""
         from codomyrmex.data_visualization.themes import ThemeName, get_theme
+
         theme = get_theme(ThemeName.DARK)
         assert theme.figure_facecolor == "#1a1a2e"
 
     def test_theme_to_rcparams(self):
         """Test functionality: theme to rcparams."""
         from codomyrmex.data_visualization.themes import ThemeName, get_theme
+
         theme = get_theme(ThemeName.DEFAULT)
         params = theme.to_matplotlib_rcparams()
         assert isinstance(params, dict)
-        assert 'figure.facecolor' in params
-        assert 'axes.facecolor' in params
-        assert 'font.family' in params
+        assert "figure.facecolor" in params
+        assert "axes.facecolor" in params
+        assert "font.family" in params
 
     def test_apply_theme(self):
         """Test functionality: apply theme."""
@@ -54,13 +58,15 @@ class TestThemes:
             apply_theme,
             get_theme,
         )
+
         theme = get_theme(ThemeName.LIGHT)
         apply_theme(theme)
-        assert plt.rcParams['figure.facecolor'] == theme.figure_facecolor
+        assert plt.rcParams["figure.facecolor"] == theme.figure_facecolor
 
     def test_list_themes(self):
         """Test functionality: list themes."""
         from codomyrmex.data_visualization.themes import list_themes
+
         themes = list_themes()
         assert isinstance(themes, list)
         assert len(themes) == 6
@@ -70,6 +76,7 @@ class TestThemes:
     def test_color_palette_cycling(self):
         """Test functionality: color palette cycling."""
         from codomyrmex.data_visualization.themes import ThemeName, get_theme
+
         theme = get_theme(ThemeName.DEFAULT)
         palette = theme.colors
         # Should cycle
@@ -80,12 +87,14 @@ class TestThemes:
     def test_minimal_theme_no_grid(self):
         """Test functionality: minimal theme no grid."""
         from codomyrmex.data_visualization.themes import ThemeName, get_theme
+
         theme = get_theme(ThemeName.MINIMAL)
         assert theme.grid.show is False
 
     def test_scientific_theme_serif(self):
         """Test functionality: scientific theme serif."""
         from codomyrmex.data_visualization.themes import ThemeName, get_theme
+
         theme = get_theme(ThemeName.SCIENTIFIC)
         assert theme.fonts.family == "serif"
 
@@ -102,6 +111,7 @@ class TestAdvancedPlotter:
         from codomyrmex.data_visualization.engines.advanced_plotter import (
             AdvancedPlotter,
         )
+
         plotter = AdvancedPlotter()
         fig, ax = plotter.create_figure()
         assert isinstance(fig, plt.Figure)
@@ -113,10 +123,11 @@ class TestAdvancedPlotter:
         from codomyrmex.data_visualization.engines.advanced_plotter import (
             AdvancedPlotter,
         )
+
         plotter = AdvancedPlotter()
         plotter.create_figure()
         line = plotter.plot_line([1, 2, 3], [4, 5, 6], label="test")
-        assert hasattr(line, 'get_xdata')
+        assert hasattr(line, "get_xdata")
         plotter.clear_figures()
 
     def test_plot_scatter(self):
@@ -124,10 +135,11 @@ class TestAdvancedPlotter:
         from codomyrmex.data_visualization.engines.advanced_plotter import (
             AdvancedPlotter,
         )
+
         plotter = AdvancedPlotter()
         plotter.create_figure()
         scatter = plotter.plot_scatter([1, 2, 3], [4, 5, 6])
-        assert hasattr(scatter, 'get_offsets')
+        assert hasattr(scatter, "get_offsets")
         plotter.clear_figures()
 
     def test_plot_bar(self):
@@ -135,9 +147,10 @@ class TestAdvancedPlotter:
         from codomyrmex.data_visualization.engines.advanced_plotter import (
             AdvancedPlotter,
         )
+
         plotter = AdvancedPlotter()
         plotter.create_figure()
-        bars = plotter.plot_bar(['A', 'B'], [10, 20])
+        bars = plotter.plot_bar(["A", "B"], [10, 20])
         assert isinstance(bars, matplotlib.container.BarContainer)
         plotter.clear_figures()
 
@@ -146,6 +159,7 @@ class TestAdvancedPlotter:
         from codomyrmex.data_visualization.engines.advanced_plotter import (
             AdvancedPlotter,
         )
+
         plotter = AdvancedPlotter()
         plotter.create_figure()
         result = plotter.plot_histogram([1, 2, 2, 3, 3, 3])
@@ -157,6 +171,7 @@ class TestAdvancedPlotter:
         from codomyrmex.data_visualization.engines.advanced_plotter import (
             AdvancedPlotter,
         )
+
         plotter = AdvancedPlotter()
         plotter.create_figure()
         try:
@@ -173,6 +188,7 @@ class TestAdvancedPlotter:
         from codomyrmex.data_visualization.engines.advanced_plotter import (
             AdvancedPlotter,
         )
+
         plotter = AdvancedPlotter()
         plotter.create_figure()
         bp = plotter.plot_box({"A": [1, 2, 3], "B": [4, 5, 6]})
@@ -184,6 +200,7 @@ class TestAdvancedPlotter:
         from codomyrmex.data_visualization.engines.advanced_plotter import (
             AdvancedPlotter,
         )
+
         plotter = AdvancedPlotter()
         plotter.create_figure()
         plotter.plot_line([1, 2, 3], [1, 4, 9])
@@ -198,6 +215,7 @@ class TestAdvancedPlotter:
         from codomyrmex.data_visualization.engines.advanced_plotter import (
             AdvancedPlotter,
         )
+
         plotter = AdvancedPlotter()
         plotter.create_figure()
         plotter.create_figure()
@@ -216,6 +234,7 @@ class TestAdvancedPlotter:
             get_available_plot_types,
             get_available_styles,
         )
+
         assert callable(create_advanced_line_plot)
         assert callable(create_advanced_scatter_plot)
         assert callable(create_advanced_bar_chart)
@@ -226,6 +245,7 @@ class TestAdvancedPlotter:
     def test_plot_config_dataclass(self):
         """Test functionality: plot config dataclass."""
         from codomyrmex.data_visualization.engines.advanced_plotter import PlotConfig
+
         config = PlotConfig(title="Test", figsize=(8, 5), dpi=150)
         assert config.title == "Test"
         assert config.figsize == (8, 5)
@@ -238,6 +258,7 @@ class TestAdvancedPlotter:
             ColorPalette,
             PlotType,
         )
+
         assert PlotType.LINE.value == "line"
         assert ChartStyle.DARK.value == "dark"
         assert ColorPalette.VIRIDIS.value == "viridis"
@@ -257,6 +278,7 @@ class TestMermaidBuilders:
             FlowDirection,
             NodeShape,
         )
+
         fc = Flowchart(direction=FlowDirection.TOP_DOWN)
         fc.add_node("A", "Start", NodeShape.ROUND)
         fc.add_node("B", "End", NodeShape.ROUND)
@@ -269,6 +291,7 @@ class TestMermaidBuilders:
     def test_sequence_diagram(self):
         """Test functionality: sequence diagram."""
         from codomyrmex.data_visualization.mermaid import SequenceDiagram
+
         sd = SequenceDiagram()
         sd.add_participant("Alice")
         sd.add_participant("Bob")
@@ -281,6 +304,7 @@ class TestMermaidBuilders:
     def test_class_diagram(self):
         """Test functionality: class diagram."""
         from codomyrmex.data_visualization.mermaid import ClassDiagram
+
         cd = ClassDiagram()
         cd.add_class("Animal", attributes=["name: str"], methods=["speak()"])
         content = cd.render()
@@ -294,6 +318,7 @@ class TestMermaidBuilders:
             FlowDirection,
             NodeShape,
         )
+
         fc = Flowchart(direction=FlowDirection.LEFT_RIGHT)
         fc.add_node("A", "Node A", NodeShape.RECTANGLE)
         fc.add_node("B", "Node B", NodeShape.RECTANGLE)
@@ -304,6 +329,7 @@ class TestMermaidBuilders:
     def test_to_markdown(self):
         """Test functionality: to markdown."""
         from codomyrmex.data_visualization.mermaid import Flowchart, FlowDirection
+
         fc = Flowchart(direction=FlowDirection.TOP_DOWN)
         md = fc.to_markdown()
         assert "```mermaid" in md
@@ -322,10 +348,16 @@ class TestMermaidGenerator:
         from codomyrmex.data_visualization.mermaid.mermaid_generator import (
             MermaidDiagramGenerator,
         )
+
         gen = MermaidDiagramGenerator()
         branches = [{"name": "main", "created_at": "2024-01-01"}]
         commits = [
-            {"hash": "abc123", "message": "Init", "branch": "main", "date": "2024-01-01"},
+            {
+                "hash": "abc123",
+                "message": "Init",
+                "branch": "main",
+                "date": "2024-01-01",
+            },
         ]
         content = gen.create_git_branch_diagram(branches=branches, commits=commits)
         assert content  # non-empty
@@ -335,12 +367,15 @@ class TestMermaidGenerator:
         from codomyrmex.data_visualization.mermaid.mermaid_generator import (
             MermaidDiagramGenerator,
         )
+
         gen = MermaidDiagramGenerator()
         workflow_steps = [
             {"name": "checkout", "description": "Checkout code"},
             {"name": "build", "description": "Build project"},
         ]
-        content = gen.create_git_workflow_diagram(workflow_steps=workflow_steps, title="Test Workflow")
+        content = gen.create_git_workflow_diagram(
+            workflow_steps=workflow_steps, title="Test Workflow"
+        )
         assert content
         assert len(content) > 0
 
@@ -349,6 +384,7 @@ class TestMermaidGenerator:
         from codomyrmex.data_visualization.mermaid.mermaid_generator import (
             create_commit_timeline_diagram,
         )
+
         commits = [
             {"hash": "abc", "message": "First", "date": "2024-01-01"},
             {"hash": "def", "message": "Second", "date": "2024-01-02"},
@@ -361,6 +397,7 @@ class TestMermaidGenerator:
         from codomyrmex.data_visualization.mermaid.mermaid_generator import (
             MermaidDiagramGenerator,
         )
+
         gen = MermaidDiagramGenerator()
         structure = {"src": {"main.py": "file"}, "README.md": "file"}
         content = gen.create_repository_structure_diagram(repo_structure=structure)
@@ -371,6 +408,7 @@ class TestMermaidGenerator:
         from codomyrmex.data_visualization.mermaid.mermaid_generator import (
             MermaidDiagramGenerator,
         )
+
         gen = MermaidDiagramGenerator()
         output = str(tmp_path / "test.mmd")
         workflow_steps = [
@@ -393,14 +431,16 @@ class TestGitVisualizer:
     def test_instantiation(self):
         """Test functionality: instantiation."""
         from codomyrmex.data_visualization.git.git_visualizer import GitVisualizer
+
         viz = GitVisualizer()
         assert isinstance(viz, GitVisualizer)
-        assert hasattr(viz.mermaid_generator, 'create_git_branch_diagram')
+        assert hasattr(viz.mermaid_generator, "create_git_branch_diagram")
         assert "main" in viz.colors
 
     def test_git_tree_png_with_sample_data(self, tmp_path):
         """Test functionality: git tree png with sample data."""
         from codomyrmex.data_visualization.git.git_visualizer import GitVisualizer
+
         viz = GitVisualizer()
         output = str(tmp_path / "git_tree.png")
         result = viz.visualize_git_tree_png(title="Test Tree", output_path=output)
@@ -410,14 +450,18 @@ class TestGitVisualizer:
     def test_git_tree_mermaid_with_sample_data(self, tmp_path):
         """Test functionality: git tree mermaid with sample data."""
         from codomyrmex.data_visualization.git.git_visualizer import GitVisualizer
+
         viz = GitVisualizer()
         output = str(tmp_path / "git_tree.mmd")
-        content = viz.visualize_git_tree_mermaid(title="Test Mermaid", output_path=output)
+        content = viz.visualize_git_tree_mermaid(
+            title="Test Mermaid", output_path=output
+        )
         assert content  # non-empty string
 
     def test_commit_activity_png(self, tmp_path):
         """Test functionality: commit activity png."""
         from codomyrmex.data_visualization.git.git_visualizer import GitVisualizer
+
         viz = GitVisualizer()
         output = str(tmp_path / "activity.png")
         result = viz.visualize_commit_activity_png(title="Activity", output_path=output)
@@ -427,6 +471,7 @@ class TestGitVisualizer:
     def test_repository_summary_png(self, tmp_path):
         """Test functionality: repository summary png."""
         from codomyrmex.data_visualization.git.git_visualizer import GitVisualizer
+
         viz = GitVisualizer()
         output = str(tmp_path / "summary.png")
         result = viz.visualize_repository_summary_png(
@@ -438,6 +483,7 @@ class TestGitVisualizer:
     def test_branch_color_mapping(self):
         """Test functionality: branch color mapping."""
         from codomyrmex.data_visualization.git.git_visualizer import GitVisualizer
+
         viz = GitVisualizer()
         assert viz._get_branch_color("main") == viz.colors["main"]
         assert viz._get_branch_color("develop") == viz.colors["develop"]
@@ -449,6 +495,7 @@ class TestGitVisualizer:
     def test_sample_commits_generation(self):
         """Test functionality: sample commits generation."""
         from codomyrmex.data_visualization.git.git_visualizer import GitVisualizer
+
         viz = GitVisualizer()
         commits = viz._generate_sample_commits(10)
         assert len(commits) == 10
@@ -460,6 +507,7 @@ class TestGitVisualizer:
             create_git_tree_mermaid,
             create_git_tree_png,
         )
+
         png_output = str(tmp_path / "conv_tree.png")
         result = create_git_tree_png(output_path=png_output, title="Conv PNG")
         assert result is True
@@ -522,6 +570,7 @@ class TestExceptions:
     def test_exception_message(self):
         """Test functionality: exception message."""
         from codomyrmex.data_visualization.exceptions import DataVisualizationError
+
         err = DataVisualizationError("something went wrong")
         assert "something went wrong" in str(err)
 
@@ -536,20 +585,25 @@ class TestPlotter:
     def test_plotter_bar_chart(self, tmp_path):
         """Test functionality: plotter bar chart."""
         from codomyrmex.data_visualization.engines.plotter import Plotter
+
         p = Plotter()
-        fig = p.bar_chart(['A', 'B'], [1, 2], output_path=str(tmp_path / "p_bar.png"))
+        fig = p.bar_chart(["A", "B"], [1, 2], output_path=str(tmp_path / "p_bar.png"))
         assert isinstance(fig, plt.Figure)
 
     def test_plotter_line_plot(self, tmp_path):
         """Test functionality: plotter line plot."""
         from codomyrmex.data_visualization.engines.plotter import Plotter
+
         p = Plotter()
-        fig = p.line_plot([1, 2, 3], [4, 5, 6], output_path=str(tmp_path / "p_line.png"))
+        fig = p.line_plot(
+            [1, 2, 3], [4, 5, 6], output_path=str(tmp_path / "p_line.png")
+        )
         assert isinstance(fig, plt.Figure)
 
     def test_plotter_heatmap(self, tmp_path):
         """Test functionality: plotter heatmap."""
         from codomyrmex.data_visualization.engines.plotter import Plotter
+
         p = Plotter()
         fig = p.heatmap([[1, 2], [3, 4]], output_path=str(tmp_path / "p_hm.png"))
         assert isinstance(fig, plt.Figure)
@@ -560,6 +614,7 @@ class TestPlotter:
             DEFAULT_FIGURE_SIZE,
             Plotter,
         )
+
         p = Plotter()
         assert p.figure_size == DEFAULT_FIGURE_SIZE
 
@@ -570,10 +625,12 @@ class TestAdvancedPlotterCoverage:
 
     def test_chart_style_enum(self):
         from codomyrmex.data_visualization.engines.advanced_plotter import ChartStyle
+
         assert len(list(ChartStyle)) > 0
 
     def test_plot_config(self):
         from codomyrmex.data_visualization.engines.advanced_plotter import PlotConfig
+
         cfg = PlotConfig()
         assert isinstance(cfg, PlotConfig)
 
@@ -583,6 +640,7 @@ class TestAdvancedPlotterCoverage:
         from codomyrmex.data_visualization.engines.advanced_plotter import (
             create_advanced_bar_chart,
         )
+
         matplotlib.use("Agg")
         fig = create_advanced_bar_chart(["A", "B", "C"], [10, 20, 30], title="Test")
         assert isinstance(fig, plt.Figure)
@@ -593,9 +651,12 @@ class TestAdvancedPlotterCoverage:
             Dataset,
             PlotType,
         )
+
         dp1 = DataPoint(x=1.0, y=2.0)
         dp2 = DataPoint(x=2.0, y=3.0)
-        ds = Dataset(name="test", data=[dp1, dp2], plot_type=list(PlotType)[0], label="test")
+        ds = Dataset(
+            name="test", data=[dp1, dp2], plot_type=list(PlotType)[0], label="test"
+        )
         assert ds.label == "test"
 
 
@@ -606,6 +667,7 @@ class TestMermaidGeneratorExtended:
         from codomyrmex.data_visualization.mermaid.mermaid_generator import (
             create_git_branch_diagram,
         )
+
         result = create_git_branch_diagram()
         assert isinstance(result, str)
 
@@ -613,6 +675,7 @@ class TestMermaidGeneratorExtended:
         from codomyrmex.data_visualization.mermaid.mermaid_generator import (
             create_commit_timeline_diagram,
         )
+
         result = create_commit_timeline_diagram()
         assert isinstance(result, str)
 
@@ -624,6 +687,7 @@ class TestMermaidDeep:
         from codomyrmex.data_visualization.mermaid.mermaid_generator import (
             create_git_workflow_diagram,
         )
+
         result = create_git_workflow_diagram()
         assert isinstance(result, str)
 
@@ -631,6 +695,7 @@ class TestMermaidDeep:
         from codomyrmex.data_visualization.mermaid.mermaid_generator import (
             create_repository_structure_diagram,
         )
+
         result = create_repository_structure_diagram()
         assert isinstance(result, str)
 
@@ -638,8 +703,12 @@ class TestMermaidDeep:
         from codomyrmex.data_visualization.mermaid.mermaid_generator import (
             MermaidDiagramGenerator,
         )
+
         gen = MermaidDiagramGenerator()
         branches = [{"name": "main", "commits": ["abc", "def"]}]
-        commits = [{"hash": "abc", "message": "init"}, {"hash": "def", "message": "feat"}]
+        commits = [
+            {"hash": "abc", "message": "init"},
+            {"hash": "def", "message": "feat"},
+        ]
         diagram = gen.create_git_branch_diagram(branches=branches, commits=commits)
         assert isinstance(diagram, str)

@@ -1,4 +1,3 @@
-
 try:
     from codomyrmex.spatial.three_d import (
         ARSession,
@@ -61,7 +60,6 @@ def basic_scene_example():
 def ar_example():
     """Demonstrate AR capabilities."""
 
-
     ar_session = ARSession()
 
     if ar_session.start_session():
@@ -74,7 +72,6 @@ def ar_example():
 
 def vr_example():
     """Demonstrate VR rendering."""
-
 
     scene = Scene3D()
     vr_renderer = VRRenderer()

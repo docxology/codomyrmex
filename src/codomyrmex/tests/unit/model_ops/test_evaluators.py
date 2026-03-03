@@ -77,10 +77,12 @@ class TestEvaluator:
         assert results["exact"] == 0.0
 
     def test_evaluate_multiple_metrics(self):
-        ev = Evaluator({
-            "exact": exact_match_metric,
-            "ratio": length_ratio_metric,
-        })
+        ev = Evaluator(
+            {
+                "exact": exact_match_metric,
+                "ratio": length_ratio_metric,
+            }
+        )
         results = ev.evaluate(["hello"], ["hello"])
         assert "exact" in results
         assert "ratio" in results

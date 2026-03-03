@@ -14,6 +14,7 @@ try:
         LoadBalanceStrategy,
         PoolConfig,
     )
+
     _HAS_AGENTS = True
 except ImportError:
     _HAS_AGENTS = False

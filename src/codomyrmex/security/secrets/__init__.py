@@ -21,6 +21,7 @@ from typing import Any, Optional
 
 class SecretType(Enum):
     """Types of secrets that can be detected."""
+
     API_KEY = "api_key"
     AWS_KEY = "aws_key"
     GITHUB_TOKEN = "github_token"
@@ -30,16 +31,20 @@ class SecretType(Enum):
     DATABASE_URL = "database_url"
     GENERIC = "generic"
 
+
 class SecretSeverity(Enum):
     """Severity levels for detected secrets."""
+
     LOW = "low"
     MEDIUM = "medium"
     HIGH = "high"
     CRITICAL = "critical"
 
+
 @dataclass
 class DetectedSecret:
     """A detected secret in content."""
+
     secret_type: SecretType
     severity: SecretSeverity
     location: tuple[int, int]  # (start, end) positions
@@ -53,9 +58,11 @@ class DetectedSecret:
     def is_high_severity(self) -> bool:
         return self.severity in [SecretSeverity.HIGH, SecretSeverity.CRITICAL]
 
+
 @dataclass
 class ScanResult:
     """Result of a secret scan."""
+
     secrets_found: list[DetectedSecret] = field(default_factory=list)
     files_scanned: int = 0
     scan_time_ms: float = 0.0
@@ -68,50 +75,93 @@ class ScanResult:
     def high_severity_count(self) -> int:
         return sum(1 for s in self.secrets_found if s.is_high_severity)
 
+
 class SecretPatterns:
     """Collection of patterns for detecting secrets."""
 
     # Pattern definitions: (regex, secret_type, severity, confidence)
     PATTERNS = [
         # AWS
-        (r'AKIA[0-9A-Z]{16}', SecretType.AWS_KEY, SecretSeverity.CRITICAL, 0.95),
-        (r'aws[_-]?secret[_-]?access[_-]?key["\']?\s*[:=]\s*["\']?([A-Za-z0-9/+=]{40})',
-         SecretType.AWS_KEY, SecretSeverity.CRITICAL, 0.9),
-
+        (r"AKIA[0-9A-Z]{16}", SecretType.AWS_KEY, SecretSeverity.CRITICAL, 0.95),
+        (
+            r'aws[_-]?secret[_-]?access[_-]?key["\']?\s*[:=]\s*["\']?([A-Za-z0-9/+=]{40})',
+            SecretType.AWS_KEY,
+            SecretSeverity.CRITICAL,
+            0.9,
+        ),
         # GitHub
-        (r'ghp_[A-Za-z0-9]{36}', SecretType.GITHUB_TOKEN, SecretSeverity.CRITICAL, 0.99),
-        (r'github[_-]?token["\']?\s*[:=]\s*["\']?([A-Za-z0-9_-]{40})',
-         SecretType.GITHUB_TOKEN, SecretSeverity.HIGH, 0.8),
-
+        (
+            r"ghp_[A-Za-z0-9]{36}",
+            SecretType.GITHUB_TOKEN,
+            SecretSeverity.CRITICAL,
+            0.99,
+        ),
+        (
+            r'github[_-]?token["\']?\s*[:=]\s*["\']?([A-Za-z0-9_-]{40})',
+            SecretType.GITHUB_TOKEN,
+            SecretSeverity.HIGH,
+            0.8,
+        ),
         # Generic API keys
-        (r'api[_-]?key["\']?\s*[:=]\s*["\']?([A-Za-z0-9_-]{20,})',
-         SecretType.API_KEY, SecretSeverity.HIGH, 0.7),
-        (r'api[_-]?secret["\']?\s*[:=]\s*["\']?([A-Za-z0-9_-]{20,})',
-         SecretType.API_KEY, SecretSeverity.HIGH, 0.7),
-
+        (
+            r'api[_-]?key["\']?\s*[:=]\s*["\']?([A-Za-z0-9_-]{20,})',
+            SecretType.API_KEY,
+            SecretSeverity.HIGH,
+            0.7,
+        ),
+        (
+            r'api[_-]?secret["\']?\s*[:=]\s*["\']?([A-Za-z0-9_-]{20,})',
+            SecretType.API_KEY,
+            SecretSeverity.HIGH,
+            0.7,
+        ),
         # Private keys
-        (r'-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----',
-         SecretType.PRIVATE_KEY, SecretSeverity.CRITICAL, 0.99),
-        (r'-----BEGIN PGP PRIVATE KEY BLOCK-----',
-         SecretType.PRIVATE_KEY, SecretSeverity.CRITICAL, 0.99),
-
+        (
+            r"-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----",
+            SecretType.PRIVATE_KEY,
+            SecretSeverity.CRITICAL,
+            0.99,
+        ),
+        (
+            r"-----BEGIN PGP PRIVATE KEY BLOCK-----",
+            SecretType.PRIVATE_KEY,
+            SecretSeverity.CRITICAL,
+            0.99,
+        ),
         # JWT
-        (r'eyJ[A-Za-z0-9_-]*\.eyJ[A-Za-z0-9_-]*\.[A-Za-z0-9_-]*',
-         SecretType.JWT, SecretSeverity.MEDIUM, 0.9),
-
+        (
+            r"eyJ[A-Za-z0-9_-]*\.eyJ[A-Za-z0-9_-]*\.[A-Za-z0-9_-]*",
+            SecretType.JWT,
+            SecretSeverity.MEDIUM,
+            0.9,
+        ),
         # Database URLs
-        (r'(?:postgres|mysql|mongodb)://[^:]+:([^@]+)@',
-         SecretType.DATABASE_URL, SecretSeverity.HIGH, 0.85),
-
+        (
+            r"(?:postgres|mysql|mongodb)://[^:]+:([^@]+)@",
+            SecretType.DATABASE_URL,
+            SecretSeverity.HIGH,
+            0.85,
+        ),
         # Password patterns
-        (r'password["\']?\s*[:=]\s*["\']?([^\s"\']{8,})',
-         SecretType.PASSWORD, SecretSeverity.MEDIUM, 0.6),
-        (r'passwd["\']?\s*[:=]\s*["\']?([^\s"\']{8,})',
-         SecretType.PASSWORD, SecretSeverity.MEDIUM, 0.6),
-
+        (
+            r'password["\']?\s*[:=]\s*["\']?([^\s"\']{8,})',
+            SecretType.PASSWORD,
+            SecretSeverity.MEDIUM,
+            0.6,
+        ),
+        (
+            r'passwd["\']?\s*[:=]\s*["\']?([^\s"\']{8,})',
+            SecretType.PASSWORD,
+            SecretSeverity.MEDIUM,
+            0.6,
+        ),
         # Generic high-entropy strings (potential secrets)
-        (r'["\']([A-Za-z0-9+/]{40,}={0,2})["\']',
-         SecretType.GENERIC, SecretSeverity.LOW, 0.4),
+        (
+            r'["\']([A-Za-z0-9+/]{40,}={0,2})["\']',
+            SecretType.GENERIC,
+            SecretSeverity.LOW,
+            0.4,
+        ),
     ]
 
     def __init__(self, custom_patterns: list[tuple] | None = None):
@@ -119,9 +169,9 @@ class SecretPatterns:
         if custom_patterns:
             self.patterns.extend(custom_patterns)
         self._compiled = [
-            (re.compile(p[0], re.IGNORECASE), p[1], p[2], p[3])
-            for p in self.patterns
+            (re.compile(p[0], re.IGNORECASE), p[1], p[2], p[3]) for p in self.patterns
         ]
+
 
 class SecretScanner:
     """
@@ -144,13 +194,13 @@ class SecretScanner:
 
     # Files to ignore during directory scan
     IGNORE_PATTERNS = [
-        r'\.git',
-        r'node_modules',
-        r'__pycache__',
-        r'\.pyc$',
-        r'\.min\.js$',
-        r'\.lock$',
-        r'package-lock\.json$',
+        r"\.git",
+        r"node_modules",
+        r"__pycache__",
+        r"\.pyc$",
+        r"\.min\.js$",
+        r"\.lock$",
+        r"package-lock\.json$",
     ]
 
     def __init__(
@@ -170,13 +220,15 @@ class SecretScanner:
 
     def _get_line_number(self, text: str, position: int) -> int:
         """Get line number for a position in text."""
-        return text[:position].count('\n') + 1
+        return text[:position].count("\n") + 1
 
-    def _get_context(self, text: str, start: int, end: int, context_chars: int = 50) -> str:
+    def _get_context(
+        self, text: str, start: int, end: int, context_chars: int = 50
+    ) -> str:
         """Get context around a match."""
         ctx_start = max(0, start - context_chars)
         ctx_end = min(len(text), end + context_chars)
-        context = text[ctx_start:ctx_end].replace('\n', ' ')
+        context = text[ctx_start:ctx_end].replace("\n", " ")
         return f"...{context}..." if ctx_start > 0 or ctx_end < len(text) else context
 
     def _should_ignore(self, path: str) -> bool:
@@ -202,6 +254,7 @@ class SecretScanner:
             ScanResult with detected secrets
         """
         import time
+
         start_time = time.time()
 
         secrets_found = []
@@ -219,16 +272,18 @@ class SecretScanner:
                     secret_value = match.group(0)
                     location = (match.start(), match.end())
 
-                secrets_found.append(DetectedSecret(
-                    secret_type=secret_type,
-                    severity=severity,
-                    location=location,
-                    redacted_value=self._redact(secret_value),
-                    line_number=self._get_line_number(text, location[0]),
-                    file_path=file_path,
-                    context=self._get_context(text, location[0], location[1]),
-                    confidence=confidence,
-                ))
+                secrets_found.append(
+                    DetectedSecret(
+                        secret_type=secret_type,
+                        severity=severity,
+                        location=location,
+                        redacted_value=self._redact(secret_value),
+                        line_number=self._get_line_number(text, location[0]),
+                        file_path=file_path,
+                        context=self._get_context(text, location[0], location[1]),
+                        confidence=confidence,
+                    )
+                )
 
         return ScanResult(
             secrets_found=secrets_found,
@@ -247,7 +302,7 @@ class SecretScanner:
             return ScanResult()
 
         try:
-            text = path.read_text(errors='ignore')
+            text = path.read_text(errors="ignore")
             return self.scan_text(text, str(path))
         except Exception:
             return ScanResult()
@@ -268,6 +323,7 @@ class SecretScanner:
             Aggregated ScanResult
         """
         import time
+
         start_time = time.time()
 
         all_secrets = []
@@ -295,6 +351,7 @@ class SecretScanner:
             files_scanned=files_scanned,
             scan_time_ms=(time.time() - start_time) * 1000,
         )
+
 
 class SecretVault:
     """
@@ -337,10 +394,7 @@ class SecretVault:
             return base64.b64encode(value.encode()).decode()
 
         key = self._key
-        encrypted = bytes(
-            c ^ key[i % len(key)]
-            for i, c in enumerate(value.encode())
-        )
+        encrypted = bytes(c ^ key[i % len(key)] for i, c in enumerate(value.encode()))
         return base64.b64encode(encrypted).decode()
 
     def _decrypt(self, encrypted: str) -> str:
@@ -351,10 +405,7 @@ class SecretVault:
             return data.decode()
 
         key = self._key
-        decrypted = bytes(
-            c ^ key[i % len(key)]
-            for i, c in enumerate(data)
-        )
+        decrypted = bytes(c ^ key[i % len(key)] for i, c in enumerate(data))
         return decrypted.decode()
 
     def set(self, name: str, value: str) -> None:
@@ -381,7 +432,7 @@ class SecretVault:
     def save(self) -> None:
         """Save vault to disk."""
         if self.path:
-            with open(self.path, 'w') as f:
+            with open(self.path, "w") as f:
                 json.dump(self._secrets, f)
 
     def _load(self) -> None:
@@ -390,15 +441,20 @@ class SecretVault:
             with open(self.path) as f:
                 self._secrets = json.load(f)
 
+
 def get_secret_from_env(name: str, default: str | None = None) -> str | None:
     """Get a secret from environment variables."""
     return os.environ.get(name, default)
+
 
 def mask_secret(value: str, show_chars: int = 4) -> str:
     """Mask a secret for display."""
     if len(value) <= show_chars * 2:
         return "*" * len(value)
-    return value[:show_chars] + "*" * (len(value) - show_chars * 2) + value[-show_chars:]
+    return (
+        value[:show_chars] + "*" * (len(value) - show_chars * 2) + value[-show_chars:]
+    )
+
 
 def generate_secret(length: int = 32, include_special: bool = True) -> str:
     """Generate a random secret."""
@@ -420,7 +476,8 @@ def generate_secret(length: int = 32, include_special: bool = True) -> str:
     if include_special:
         chars += "!@#$%^&*"
 
-    return ''.join(_stdlib_secrets.choice(chars) for _ in range(length))
+    return "".join(_stdlib_secrets.choice(chars) for _ in range(length))
+
 
 __all__ = [
     # Enums

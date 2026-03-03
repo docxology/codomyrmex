@@ -9,13 +9,16 @@ from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
 
+
 @dataclass
 class ReasoningStep:
     """A single step in a reasoning chain."""
+
     description: str
     action: Callable[[WorkingMemory], Any] | None = None
     result: Any = None
     status: str = "pending"  # pending, completed, failed
+
 
 class ReasoningChain:
     """Orchestrates a sequence of reasoning steps."""
@@ -25,7 +28,9 @@ class ReasoningChain:
         self.steps: list[ReasoningStep] = []
         self.logger = get_logger(__name__)
 
-    def add_step(self, description: str, action: Callable[[WorkingMemory], Any] | None = None) -> None:
+    def add_step(
+        self, description: str, action: Callable[[WorkingMemory], Any] | None = None
+    ) -> None:
         """Add a step to the reasoning chain.
 
         Args:
@@ -62,12 +67,14 @@ class ReasoningChain:
         return ChainExecutionResult(
             steps_completed=completed_steps,
             total_steps=len(self.steps),
-            steps=self.steps
+            steps=self.steps,
         )
+
 
 @dataclass
 class ChainExecutionResult:
     """Result of executing a reasoning chain."""
+
     steps_completed: int
     total_steps: int
     steps: list[ReasoningStep]

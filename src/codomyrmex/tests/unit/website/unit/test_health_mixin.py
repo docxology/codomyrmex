@@ -5,11 +5,13 @@ Tests get_llm_config(), _compute_overall_status(), and get_health_status()
 which have zero direct coverage. Pipeline, git_info, and architecture_layers
 are already tested in test_data_provider.py.
 """
+
 import pytest
 
 from codomyrmex.website.data_provider import DataProvider
 
 # ── get_llm_config ────────────────────────────────────────────────────
+
 
 @pytest.mark.unit
 class TestGetLlmConfig:
@@ -25,7 +27,12 @@ class TestGetLlmConfig:
         """Result has default_model, preferred_models, available_models, ollama_host."""
         provider = DataProvider(tmp_path)
         result = provider.get_llm_config()
-        for key in ("default_model", "preferred_models", "available_models", "ollama_host"):
+        for key in (
+            "default_model",
+            "preferred_models",
+            "available_models",
+            "ollama_host",
+        ):
             assert key in result, f"Missing key: {key}"
 
     def test_default_model_is_non_empty_string(self, tmp_path):
@@ -43,6 +50,7 @@ class TestGetLlmConfig:
 
 
 # ── _compute_overall_status ───────────────────────────────────────────
+
 
 @pytest.mark.unit
 class TestComputeOverallStatus:
@@ -68,7 +76,9 @@ class TestComputeOverallStatus:
         """Minority of error modules → ('Degraded', 'warn')."""
         provider = DataProvider(tmp_path)
         modules = [
-            {"status": "Active"}, {"status": "Active"}, {"status": "Active"},
+            {"status": "Active"},
+            {"status": "Active"},
+            {"status": "Active"},
             {"status": "SyntaxError"},  # 1/4 = 25%, < 50%
         ]
         git_info = {"branch": "main"}
@@ -80,7 +90,8 @@ class TestComputeOverallStatus:
         """More than 50% error modules → ('Error', 'err')."""
         provider = DataProvider(tmp_path)
         modules = [
-            {"status": "SyntaxError"}, {"status": "ImportError"},
+            {"status": "SyntaxError"},
+            {"status": "ImportError"},
             {"status": "Active"},  # 2/3 = 67% errors
         ]
         git_info = {"branch": "main"}
@@ -100,6 +111,7 @@ class TestComputeOverallStatus:
 
 # ── get_health_status ─────────────────────────────────────────────────
 
+
 @pytest.mark.unit
 class TestGetHealthStatus:
     """Tests for get_health_status() — comprehensive system health aggregation."""
@@ -115,8 +127,15 @@ class TestGetHealthStatus:
         provider = DataProvider(tmp_path)
         result = provider.get_health_status()
         required = {
-            "uptime", "uptime_seconds", "status_text", "status_class",
-            "python", "git", "modules", "architecture_layers", "llm_config",
+            "uptime",
+            "uptime_seconds",
+            "status_text",
+            "status_class",
+            "python",
+            "git",
+            "modules",
+            "architecture_layers",
+            "llm_config",
         }
         for key in required:
             assert key in result, f"Missing key: {key}"

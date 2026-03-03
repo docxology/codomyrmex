@@ -1,6 +1,5 @@
 """Unit tests for document processing -- parsing, validation, transformation, search, and chunking."""
 
-
 import pytest
 
 from codomyrmex.documents import (
@@ -85,6 +84,7 @@ from codomyrmex.documents.exceptions import (
 
 # --- Document Parser --------------------------------------------------------
 
+
 class TestDocumentParser:
     """Test DocumentParser class."""
 
@@ -118,15 +118,13 @@ class TestDocumentParser:
 
 # --- Document Validator -----------------------------------------------------
 
+
 class TestDocumentValidator:
     """Test DocumentValidator class."""
 
     def test_validate_valid_json(self):
         """Test validating valid JSON document."""
-        doc = Document(
-            content={"key": "value"},
-            format=DocumentFormat.JSON
-        )
+        doc = Document(content={"key": "value"}, format=DocumentFormat.JSON)
 
         validator = DocumentValidator()
         result = validator.validate(doc)
@@ -136,10 +134,7 @@ class TestDocumentValidator:
 
     def test_validate_invalid_json_string(self):
         """Test validating invalid JSON string."""
-        doc = Document(
-            content='{"key": invalid}',
-            format=DocumentFormat.JSON
-        )
+        doc = Document(content='{"key": invalid}', format=DocumentFormat.JSON)
 
         validator = DocumentValidator()
         result = validator.validate(doc)
@@ -158,23 +153,18 @@ class TestDocumentValidator:
         """Test validating document with JSON schema."""
         schema = {
             "type": "object",
-            "properties": {
-                "name": {"type": "string"},
-                "age": {"type": "number"}
-            },
-            "required": ["name"]
+            "properties": {"name": {"type": "string"}, "age": {"type": "number"}},
+            "required": ["name"],
         }
 
-        doc = Document(
-            content={"name": "John", "age": 30},
-            format=DocumentFormat.JSON
-        )
+        doc = Document(content={"name": "John", "age": 30}, format=DocumentFormat.JSON)
         validator = DocumentValidator()
         result = validator.validate(doc, schema=schema)
         assert result is not None
 
 
 # --- Convenience Functions (parse/validate) ---------------------------------
+
 
 class TestProcessingConvenienceFunctions:
     """Test parse and validate convenience functions."""
@@ -195,7 +185,9 @@ class TestProcessingConvenienceFunctions:
         assert result is not None
         assert hasattr(result, "is_valid")
 
-    @pytest.mark.skipif(convert_document is None, reason="Document converter not available")
+    @pytest.mark.skipif(
+        convert_document is None, reason="Document converter not available"
+    )
     def test_unsupported_format_error(self):
         """Test error handling for unsupported formats."""
         doc = Document(content="Test", format=DocumentFormat.TEXT)
@@ -206,29 +198,33 @@ class TestProcessingConvenienceFunctions:
 
 # --- Document Transformation -----------------------------------------------
 
+
 class TestDocumentTransformation:
     """Test document transformation operations."""
 
-    @pytest.mark.skipif(convert_document is None, reason="Document converter not available")
+    @pytest.mark.skipif(
+        convert_document is None, reason="Document converter not available"
+    )
     def test_convert_markdown_to_text(self):
         """Test converting markdown to text."""
-        doc = Document(
-            content="# Heading\n\nContent",
-            format=DocumentFormat.MARKDOWN
-        )
+        doc = Document(content="# Heading\n\nContent", format=DocumentFormat.MARKDOWN)
 
         converted = convert_document(doc, DocumentFormat.TEXT)
         assert converted.format == DocumentFormat.TEXT
         assert "# Heading" in converted.get_content_as_string()
 
-    @pytest.mark.skipif(convert_document is None, reason="Document converter not available")
+    @pytest.mark.skipif(
+        convert_document is None, reason="Document converter not available"
+    )
     def test_convert_same_format(self):
         """Test converting to same format returns same document."""
         doc = Document(content="Test", format=DocumentFormat.TEXT)
         result = convert_document(doc, DocumentFormat.TEXT)
         assert result is doc
 
-    @pytest.mark.skipif(convert_document is None, reason="Document converter not available")
+    @pytest.mark.skipif(
+        convert_document is None, reason="Document converter not available"
+    )
     def test_convert_yaml_to_json(self):
         """Test converting YAML to JSON."""
         doc = Document(content="key: value", format=DocumentFormat.YAML)
@@ -264,18 +260,22 @@ class TestDocumentTransformation:
         with pytest.raises(ValueError):
             merge_documents([])
 
-    @pytest.mark.skipif(split_document is None, reason="Document splitter not available")
+    @pytest.mark.skipif(
+        split_document is None, reason="Document splitter not available"
+    )
     def test_split_document_by_sections(self):
         """Test splitting document by sections."""
         doc = Document(
             content="# Section 1\n\nContent 1\n\n# Section 2\n\nContent 2",
-            format=DocumentFormat.MARKDOWN
+            format=DocumentFormat.MARKDOWN,
         )
 
         split_docs = split_document(doc, {"method": "by_sections"})
         assert len(split_docs) >= 2
 
-    @pytest.mark.skipif(split_document is None, reason="Document splitter not available")
+    @pytest.mark.skipif(
+        split_document is None, reason="Document splitter not available"
+    )
     def test_split_document_by_size(self):
         """Test splitting document by size."""
         large_content = "A" * 10000
@@ -284,7 +284,9 @@ class TestDocumentTransformation:
         split_docs = split_document(doc, {"method": "by_size", "max_size": 1000})
         assert len(split_docs) == 10
 
-    @pytest.mark.skipif(split_document is None, reason="Document splitter not available")
+    @pytest.mark.skipif(
+        split_document is None, reason="Document splitter not available"
+    )
     def test_split_document_by_lines(self):
         """Test splitting document by lines."""
         content = "\n".join(f"Line {i}" for i in range(100))
@@ -295,6 +297,7 @@ class TestDocumentTransformation:
 
 
 # --- Formatter --------------------------------------------------------------
+
 
 class TestFormatter:
     """Test document formatter."""
@@ -325,10 +328,13 @@ class TestFormatter:
 
 # --- Metadata Operations ---------------------------------------------------
 
+
 class TestMetadataOperations:
     """Test metadata operations."""
 
-    @pytest.mark.skipif(extract_metadata is None, reason="Metadata extractor not available")
+    @pytest.mark.skipif(
+        extract_metadata is None, reason="Metadata extractor not available"
+    )
     def test_extract_metadata(self, tmp_path):
         """Test extracting metadata from file."""
         test_file = tmp_path / "test.txt"
@@ -338,11 +344,15 @@ class TestMetadataOperations:
         assert "file_size" in metadata
         assert "modified_at" in metadata
 
-    @pytest.mark.skipif(extract_metadata is None, reason="Metadata extractor not available")
+    @pytest.mark.skipif(
+        extract_metadata is None, reason="Metadata extractor not available"
+    )
     def test_extract_markdown_frontmatter(self, tmp_path):
         """Test extracting markdown frontmatter."""
         test_file = tmp_path / "test.md"
-        test_file.write_text("---\ntitle: My Doc\nauthor: Author\n---\n\n# Content", encoding="utf-8")
+        test_file.write_text(
+            "---\ntitle: My Doc\nauthor: Author\n---\n\n# Content", encoding="utf-8"
+        )
 
         metadata = extract_metadata(test_file)
         assert metadata.get("title") == "My Doc"
@@ -356,7 +366,9 @@ class TestMetadataOperations:
         version = get_document_version(test_file)
         assert version is None or isinstance(version, str)
 
-    @pytest.mark.skipif(update_metadata is None, reason="Metadata manager not available")
+    @pytest.mark.skipif(
+        update_metadata is None, reason="Metadata manager not available"
+    )
     def test_update_markdown_metadata(self, tmp_path):
         """Test updating markdown frontmatter."""
         test_file = tmp_path / "test.md"
@@ -369,6 +381,7 @@ class TestMetadataOperations:
 
 
 # --- Search Module ----------------------------------------------------------
+
 
 class TestSearchIndexer:
     """Test search indexer."""
@@ -401,8 +414,12 @@ class TestSearchIndexer:
     def test_index_search(self):
         """Test searching the index."""
         idx = InMemoryIndex()
-        doc1 = Document(content="python programming language", format=DocumentFormat.TEXT)
-        doc2 = Document(content="javascript web development", format=DocumentFormat.TEXT)
+        doc1 = Document(
+            content="python programming language", format=DocumentFormat.TEXT
+        )
+        doc2 = Document(
+            content="javascript web development", format=DocumentFormat.TEXT
+        )
         doc3 = Document(content="python web framework", format=DocumentFormat.TEXT)
         idx.add(doc1)
         idx.add(doc2)
@@ -459,7 +476,9 @@ class TestSearchIndexer:
 class TestSearchSearcher:
     """Test search searcher."""
 
-    @pytest.mark.skipif(search_documents is None or InMemoryIndex is None, reason="Search not available")
+    @pytest.mark.skipif(
+        search_documents is None or InMemoryIndex is None, reason="Search not available"
+    )
     def test_search_documents(self):
         """Test searching documents."""
         idx = InMemoryIndex()
@@ -472,7 +491,9 @@ class TestSearchSearcher:
         assert len(results) == 1
         assert results[0].id == doc1.id
 
-    @pytest.mark.skipif(search_index is None or InMemoryIndex is None, reason="Search not available")
+    @pytest.mark.skipif(
+        search_index is None or InMemoryIndex is None, reason="Search not available"
+    )
     def test_search_index_with_scores(self):
         """Test search_index returns results with scores."""
         idx = InMemoryIndex()
@@ -487,7 +508,9 @@ class TestSearchSearcher:
         assert results[0]["score"] >= results[1]["score"]
         assert results[0]["document_id"] == doc1.id
 
-    @pytest.mark.skipif(search_documents is None or InMemoryIndex is None, reason="Search not available")
+    @pytest.mark.skipif(
+        search_documents is None or InMemoryIndex is None, reason="Search not available"
+    )
     def test_search_empty_query(self):
         """Test searching with empty query."""
         idx = InMemoryIndex()
@@ -505,7 +528,12 @@ class TestSearchQueryBuilder:
     def test_query_builder_fluent(self):
         """Test fluent API of QueryBuilder."""
         qb = QueryBuilder()
-        result = qb.add_term("hello").add_term("world").add_filter("type", "text").set_sort("date")
+        result = (
+            qb.add_term("hello")
+            .add_term("world")
+            .add_filter("type", "text")
+            .set_sort("date")
+        )
         assert result is qb
         assert qb.build() == "hello world"
 
@@ -528,6 +556,7 @@ class TestSearchQueryBuilder:
 
 # --- Chunking ---------------------------------------------------------------
 
+
 class TestChunk:
     """Tests for Chunk dataclass."""
 
@@ -549,9 +578,13 @@ class TestDocumentChunkerFixed:
             DocumentChunker,
         )
 
-        chunker = DocumentChunker(ChunkConfig(
-            strategy=ChunkStrategy.FIXED_SIZE, chunk_size=1000, min_chunk_size=1,
-        ))
+        chunker = DocumentChunker(
+            ChunkConfig(
+                strategy=ChunkStrategy.FIXED_SIZE,
+                chunk_size=1000,
+                min_chunk_size=1,
+            )
+        )
         chunks = chunker.chunk("short text")
         assert len(chunks) == 1
         assert chunks[0].text == "short text"
@@ -564,10 +597,14 @@ class TestDocumentChunkerFixed:
         )
 
         text = "a" * 500
-        chunker = DocumentChunker(ChunkConfig(
-            strategy=ChunkStrategy.FIXED_SIZE,
-            chunk_size=200, chunk_overlap=50 , min_chunk_size=1,
-        ))
+        chunker = DocumentChunker(
+            ChunkConfig(
+                strategy=ChunkStrategy.FIXED_SIZE,
+                chunk_size=200,
+                chunk_overlap=50,
+                min_chunk_size=1,
+            )
+        )
         chunks = chunker.chunk(text)
         assert len(chunks) > 1
         # Verify no text is lost
@@ -585,9 +622,13 @@ class TestDocumentChunkerSentence:
         )
 
         text = "First sentence. Second sentence. Third sentence. Fourth sentence."
-        chunker = DocumentChunker(ChunkConfig(
-            strategy=ChunkStrategy.SENTENCE, chunk_size=40, min_chunk_size=1,
-        ))
+        chunker = DocumentChunker(
+            ChunkConfig(
+                strategy=ChunkStrategy.SENTENCE,
+                chunk_size=40,
+                min_chunk_size=1,
+            )
+        )
         chunks = chunker.chunk(text)
         assert len(chunks) >= 1
         # All text should be represented
@@ -606,9 +647,12 @@ class TestDocumentChunkerParagraph:
         )
 
         text = "Paragraph one content here.\n\nParagraph two content here.\n\nParagraph three content."
-        chunker = DocumentChunker(ChunkConfig(
-            strategy=ChunkStrategy.PARAGRAPH, min_chunk_size=10,
-        ))
+        chunker = DocumentChunker(
+            ChunkConfig(
+                strategy=ChunkStrategy.PARAGRAPH,
+                min_chunk_size=10,
+            )
+        )
         chunks = chunker.chunk(text)
         assert len(chunks) >= 2
 
@@ -623,11 +667,14 @@ class TestDocumentChunkerRecursive:
             DocumentChunker,
         )
 
-        text = ("Paragraph one.\n\nParagraph two.\n\n" +
-                "A longer section. " * 100)
-        chunker = DocumentChunker(ChunkConfig(
-            strategy=ChunkStrategy.RECURSIVE, chunk_size=200, min_chunk_size=10,
-        ))
+        text = "Paragraph one.\n\nParagraph two.\n\n" + "A longer section. " * 100
+        chunker = DocumentChunker(
+            ChunkConfig(
+                strategy=ChunkStrategy.RECURSIVE,
+                chunk_size=200,
+                min_chunk_size=10,
+            )
+        )
         chunks = chunker.chunk(text)
         assert len(chunks) >= 2
 
@@ -642,9 +689,13 @@ class TestDocumentChunkerSemantic:
             DocumentChunker,
         )
 
-        chunker = DocumentChunker(ChunkConfig(
-            strategy=ChunkStrategy.SEMANTIC, chunk_size=100, min_chunk_size=1,
-        ))
+        chunker = DocumentChunker(
+            ChunkConfig(
+                strategy=ChunkStrategy.SEMANTIC,
+                chunk_size=100,
+                min_chunk_size=1,
+            )
+        )
         chunks = chunker.chunk("Just some text content here.")
         assert len(chunks) >= 1
 
@@ -659,8 +710,12 @@ class TestDocumentChunkerMetadata:
             DocumentChunker,
         )
 
-        chunker = DocumentChunker(ChunkConfig(
-            strategy=ChunkStrategy.FIXED_SIZE, chunk_size=1000, min_chunk_size=1,
-        ))
+        chunker = DocumentChunker(
+            ChunkConfig(
+                strategy=ChunkStrategy.FIXED_SIZE,
+                chunk_size=1000,
+                min_chunk_size=1,
+            )
+        )
         chunks = chunker.chunk("content", metadata={"source": "test"})
         assert chunks[0].metadata == {"source": "test"}

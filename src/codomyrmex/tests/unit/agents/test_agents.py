@@ -27,6 +27,7 @@ from codomyrmex.agents.orchestrator import (
 
 # ── Helpers ──────────────────────────────────────────────────────────
 
+
 def _ollama_reachable() -> bool:
     """Check whether a local Ollama instance is responding."""
     base = os.environ.get("OLLAMA_BASE_URL", "http://localhost:11434")
@@ -45,6 +46,7 @@ SKIP_NO_OLLAMA = pytest.mark.skipif(
 
 
 # ── ConversationTurn tests ───────────────────────────────────────────
+
 
 class TestConversationTurn:
     """Tests for the ConversationTurn dataclass."""
@@ -101,6 +103,7 @@ class TestConversationTurn:
 
 # ── AgentSpec tests ──────────────────────────────────────────────────
 
+
 class TestAgentSpec:
     """Tests for the AgentSpec dataclass and its __post_init__ defaults."""
 
@@ -140,12 +143,15 @@ class TestAgentSpec:
             ("antigravity", "claude-3-haiku-20240307"),
         ],
     )
-    def test_non_ollama_providers_default_to_claude_model(self, provider, expected_model):
+    def test_non_ollama_providers_default_to_claude_model(
+        self, provider, expected_model
+    ):
         spec = AgentSpec(identity="a", persona="p", provider=provider)
         assert spec.model == expected_model
 
 
 # ── FileContext tests ────────────────────────────────────────────────
+
 
 class TestFileContext:
     """Tests for FileContext — reads real files, clips to max_lines."""
@@ -204,6 +210,7 @@ class TestFileContext:
 
 # ── extract_todo_items tests ─────────────────────────────────────────
 
+
 class TestExtractTodoItems:
     """Tests for the extract_todo_items helper function."""
 
@@ -248,6 +255,7 @@ class TestExtractTodoItems:
 
 
 # ── ConversationLog tests ────────────────────────────────────────────
+
 
 class TestConversationLog:
     """Tests for ConversationLog — summary, export, serialization."""
@@ -330,6 +338,7 @@ class TestConversationLog:
 
 # ── ConversationOrchestrator tests (require Ollama) ──────────────────
 
+
 class TestConversationOrchestratorConstruction:
     """Tests for ConversationOrchestrator constructor and configuration."""
 
@@ -359,8 +368,16 @@ class TestConversationOrchestratorConstruction:
     def test_constructor_with_explicit_agents(self):
         with tempfile.TemporaryDirectory() as tmpdir:
             agents = [
-                {"identity": "analyst", "persona": "data analyst", "provider": "ollama"},
-                {"identity": "reviewer", "persona": "code reviewer", "provider": "ollama"},
+                {
+                    "identity": "analyst",
+                    "persona": "data analyst",
+                    "provider": "ollama",
+                },
+                {
+                    "identity": "reviewer",
+                    "persona": "code reviewer",
+                    "provider": "ollama",
+                },
                 {"identity": "writer", "persona": "tech writer", "provider": "ollama"},
             ]
             orch = ConversationOrchestrator(
@@ -378,7 +395,9 @@ class TestConversationOrchestratorConstruction:
     def test_constructor_accepts_agentspec_instances(self):
         with tempfile.TemporaryDirectory() as tmpdir:
             specs = [
-                AgentSpec(identity="spec-agent", persona="test persona", provider="ollama"),
+                AgentSpec(
+                    identity="spec-agent", persona="test persona", provider="ollama"
+                ),
             ]
             orch = ConversationOrchestrator(
                 agents=specs,
@@ -404,7 +423,11 @@ class TestConversationOrchestratorConstruction:
     def test_constructor_unknown_provider_raises_runtime_error(self):
         with tempfile.TemporaryDirectory() as tmpdir:
             agents = [
-                {"identity": "bad-agent", "persona": "test", "provider": "nonexistent_provider_xyz"},
+                {
+                    "identity": "bad-agent",
+                    "persona": "test",
+                    "provider": "nonexistent_provider_xyz",
+                },
             ]
             with pytest.raises(RuntimeError, match="Unknown provider"):
                 ConversationOrchestrator(agents=agents, relay_dir=tmpdir)

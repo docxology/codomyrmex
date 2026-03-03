@@ -28,10 +28,12 @@ from codomyrmex.documentation.education.curriculum import Curriculum, Difficulty
 # Module & Difficulty tests
 # ======================================================================
 
+
 @pytest.mark.unit
 def test_module_import():
     """education module is importable."""
     from codomyrmex.agents import education
+
     assert education is not None
 
 
@@ -61,6 +63,7 @@ def test_difficulty_level_distinct_values():
 # ======================================================================
 # Lesson tests
 # ======================================================================
+
 
 @pytest.mark.unit
 def test_lesson_creation():
@@ -172,6 +175,7 @@ def test_lesson_multiple_objectives():
 # Curriculum construction tests
 # ======================================================================
 
+
 @pytest.mark.unit
 def test_curriculum_construction():
     """Curriculum is created with name and default level."""
@@ -191,6 +195,7 @@ def test_curriculum_custom_level():
 # ======================================================================
 # Curriculum add_module tests
 # ======================================================================
+
 
 @pytest.mark.unit
 def test_curriculum_add_module():
@@ -242,6 +247,7 @@ def test_curriculum_add_duplicate_module_raises():
 # Curriculum get_module tests
 # ======================================================================
 
+
 @pytest.mark.unit
 def test_curriculum_get_module_found():
     """get_module retrieves a lesson by name."""
@@ -274,6 +280,7 @@ def test_curriculum_get_module_among_many():
 # Curriculum total_duration tests
 # ======================================================================
 
+
 @pytest.mark.unit
 def test_curriculum_total_duration_empty():
     """Total duration of empty curriculum is 0."""
@@ -303,6 +310,7 @@ def test_curriculum_total_duration_multiple():
 # Curriculum get_modules tests
 # ======================================================================
 
+
 @pytest.mark.unit
 def test_curriculum_get_modules_returns_list_of_dicts():
     """get_modules returns a list of serialized lesson dicts."""
@@ -326,6 +334,7 @@ def test_curriculum_get_modules_empty():
 # ======================================================================
 # Curriculum generate_learning_path tests
 # ======================================================================
+
 
 @pytest.mark.unit
 def test_curriculum_learning_path_no_prerequisites():
@@ -374,6 +383,7 @@ def test_curriculum_learning_path_skips_for_advanced_student():
 # Curriculum export tests
 # ======================================================================
 
+
 @pytest.mark.unit
 def test_curriculum_export_json():
     """Export as JSON produces valid JSON with expected fields."""
@@ -409,6 +419,7 @@ def test_curriculum_export_unsupported_format_raises():
 # ======================================================================
 # Curriculum repr and len tests
 # ======================================================================
+
 
 @pytest.mark.unit
 def test_curriculum_repr():

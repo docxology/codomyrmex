@@ -7,6 +7,7 @@ from typing import Any
 
 class Severity(Enum):
     """Audit issue severity levels."""
+
     LOW = "low"
     MEDIUM = "medium"
     HIGH = "high"
@@ -16,6 +17,7 @@ class Severity(Enum):
 @dataclass
 class AuditIssue:
     """A single issue found during an audit."""
+
     rule_id: str
     message: str
     severity: Severity
@@ -27,6 +29,7 @@ class AuditIssue:
 @dataclass
 class AuditResult:
     """The result of a configuration audit."""
+
     audit_id: str
     timestamp: datetime = field(default_factory=datetime.now)
     issues: list[AuditIssue] = field(default_factory=list)
@@ -45,6 +48,7 @@ class AuditResult:
 @dataclass
 class AuditRule:
     """A rule to be applied during an audit."""
+
     rule_id: str
     description: str
     severity: Severity

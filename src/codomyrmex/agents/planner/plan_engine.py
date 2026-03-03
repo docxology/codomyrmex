@@ -14,6 +14,7 @@ logger = get_logger(__name__)
 
 class TaskPriority(Enum):
     """Scheduling urgency levels for agent planner tasks."""
+
     LOW = "low"
     MEDIUM = "medium"
     HIGH = "high"
@@ -22,6 +23,7 @@ class TaskPriority(Enum):
 
 class TaskState(Enum):
     """Execution lifecycle state of a planner task."""
+
     PENDING = "pending"
     IN_PROGRESS = "in_progress"
     COMPLETED = "completed"
@@ -127,7 +129,9 @@ class PlanEngine:
         tasks = self._analyze_goal(goal, depth=0, max_depth=max_depth)
         plan = Plan(goal=goal, tasks=tasks)
 
-        logger.info("Plan created", extra={"goal": goal[:40], "tasks": plan.total_tasks})
+        logger.info(
+            "Plan created", extra={"goal": goal[:40], "tasks": plan.total_tasks}
+        )
         return plan
 
     def _analyze_goal(self, goal: str, depth: int, max_depth: int) -> list[PlanTask]:
@@ -157,8 +161,8 @@ class PlanEngine:
             if depth < max_depth:
                 task.subtasks = [
                     PlanTask(
-                        name=f"{phase}_step_{j+1}",
-                        description=f"Step {j+1} of {phase}",
+                        name=f"{phase}_step_{j + 1}",
+                        description=f"Step {j + 1} of {phase}",
                     )
                     for j in range(2)
                 ]

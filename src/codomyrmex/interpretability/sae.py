@@ -76,7 +76,9 @@ class SparseAutoencoder:
         recon_loss = float(np.mean((x - reconstruction) ** 2))
 
         # Sparsity loss: L1 norm of features
-        sparsity_loss = float(self.lambda_l1 * np.mean(np.sum(np.abs(features), axis=-1)))
+        sparsity_loss = float(
+            self.lambda_l1 * np.mean(np.sum(np.abs(features), axis=-1))
+        )
 
         # Metrics
         n_active = float(np.mean(np.sum(features > 0, axis=-1)))

@@ -13,8 +13,8 @@ This script identifies and removes items that are not actual files/directories
 # Script removes conceptual items from Active Components sections, while preserving the actual file listings.
 
 
-
 logger = get_logger(__name__)
+
 
 class AgentsCleaner:
     """Clean AGENTS.md files by removing conceptual items."""
@@ -31,9 +31,9 @@ class AgentsCleaner:
         items = set()
         try:
             for item in directory.iterdir():
-                if item.name.startswith('.'):
+                if item.name.startswith("."):
                     continue  # Skip hidden files
-                if item.name == 'AGENTS.md':
+                if item.name == "AGENTS.md":
                     continue  # Don't include AGENTS.md itself
                 if item.is_file() or item.is_dir():
                     items.add(item.name)
@@ -48,13 +48,13 @@ class AgentsCleaner:
         directory = agents_file.parent
         self.get_actual_files(directory)
 
-        content = agents_file.read_text(encoding='utf-8')
-        lines = content.split('\n')
+        content = agents_file.read_text(encoding="utf-8")
+        lines = content.split("\n")
 
         # Find Active Components section
         active_start = -1
         for i, line in enumerate(lines):
-            if line.strip() == '## Active Components':
+            if line.strip() == "## Active Components":
                 active_start = i
                 break
 
@@ -64,7 +64,7 @@ class AgentsCleaner:
         # Find the end of Active Components section (next ## section)
         active_end = len(lines)
         for i in range(active_start + 1, len(lines)):
-            if lines[i].startswith('## '):
+            if lines[i].startswith("## "):
                 active_end = i
                 break
 
@@ -75,33 +75,50 @@ class AgentsCleaner:
         conceptual_items = []
         for line in active_section:
             line = line.strip()
-            if line.startswith('- ') or line.startswith('* '):
+            if line.startswith("- ") or line.startswith("* "):
                 # Extract item name
                 item_text = line[2:].strip()
-                if '**' in item_text:
+                if "**" in item_text:
                     # Bold items are likely conceptual
                     conceptual_items.append(line)
-                elif ':' in item_text and not item_text.startswith('`'):
+                elif ":" in item_text and not item_text.startswith("`"):
                     # Items with descriptions but no backticks are likely conceptual
                     conceptual_items.append(line)
-                elif item_text.startswith('**') and item_text.endswith('**'):
+                elif item_text.startswith("**") and item_text.endswith("**"):
                     # Double-starred items are conceptual
                     conceptual_items.append(line)
-                elif any(phrase in item_text.lower() for phrase in [
-                    'basic workflows', 'custom templates', 'dependency workflows',
-                    'migration status', 'output directory', 'data schemas',
-                    'input datasets', 'intermediate results', 'reference data',
-                    'development', 'production', 'workflow configurations',
-                    'docker configuration', 'validation reports', 'quality analysis',
-                    'dashboards', 'test validation results', 'baseline audit'
-                ]):
+                elif any(
+                    phrase in item_text.lower()
+                    for phrase in [
+                        "basic workflows",
+                        "custom templates",
+                        "dependency workflows",
+                        "migration status",
+                        "output directory",
+                        "data schemas",
+                        "input datasets",
+                        "intermediate results",
+                        "reference data",
+                        "development",
+                        "production",
+                        "workflow configurations",
+                        "docker configuration",
+                        "validation reports",
+                        "quality analysis",
+                        "dashboards",
+                        "test validation results",
+                        "baseline audit",
+                    ]
+                ):
                     conceptual_items.append(line)
 
         if not conceptual_items:
             return True  # No conceptual items to remove
 
         if dry_run:
-            print(f"🔧 Would clean {agents_file.relative_to(self.repo_root)}: Remove {len(conceptual_items)} conceptual items")
+            print(
+                f"🔧 Would clean {agents_file.relative_to(self.repo_root)}: Remove {len(conceptual_items)} conceptual items"
+            )
             return False
 
         # Remove conceptual items
@@ -114,9 +131,11 @@ class AgentsCleaner:
         lines[active_start:active_end] = cleaned_section
 
         # Write back
-        agents_file.write_text('\n'.join(lines), encoding='utf-8')
+        agents_file.write_text("\n".join(lines), encoding="utf-8")
 
-        print(f"✅ Cleaned {agents_file.relative_to(self.repo_root)}: Removed {len(conceptual_items)} conceptual items")
+        print(
+            f"✅ Cleaned {agents_file.relative_to(self.repo_root)}: Removed {len(conceptual_items)} conceptual items"
+        )
         self.fixed_count += 1
         return True
 
@@ -124,19 +143,15 @@ class AgentsCleaner:
         """Clean all AGENTS.md files in the repository."""
         agents_files = list(self.repo_root.rglob("AGENTS.md"))
 
-        results = {
-            'total': len(agents_files),
-            'cleaned': 0,
-            'already_clean': 0
-        }
+        results = {"total": len(agents_files), "cleaned": 0, "already_clean": 0}
 
         for agents_file in agents_files:
             try:
                 cleaned = self.clean_agents_file(agents_file, dry_run=dry_run)
                 if cleaned:
-                    results['already_clean'] += 1
+                    results["already_clean"] += 1
                 elif not dry_run:
-                    results['cleaned'] += 1
+                    results["cleaned"] += 1
             except Exception as e:
                 print(f"❌ Error cleaning {agents_file}: {e}")
 
@@ -146,13 +161,19 @@ class AgentsCleaner:
 def main():
     """Main entry point."""
 
-    parser = argparse.ArgumentParser(description='Clean AGENTS.md files by removing conceptual items')
-    parser.add_argument('--repo-root', type=Path, default=Path.cwd(),
-                       help='Repository root directory')
-    parser.add_argument('--dry-run', action='store_true', default=True,
-                       help='Show what would be cleaned without making changes')
-    parser.add_argument('--clean', action='store_true',
-                       help='Actually clean the files')
+    parser = argparse.ArgumentParser(
+        description="Clean AGENTS.md files by removing conceptual items"
+    )
+    parser.add_argument(
+        "--repo-root", type=Path, default=Path.cwd(), help="Repository root directory"
+    )
+    parser.add_argument(
+        "--dry-run",
+        action="store_true",
+        default=True,
+        help="Show what would be cleaned without making changes",
+    )
+    parser.add_argument("--clean", action="store_true", help="Actually clean the files")
 
     args = parser.parse_args()
 
@@ -181,12 +202,12 @@ def main():
     if not args.dry_run:
         print(f"Cleaned: {results['cleaned']}")
 
-    if args.dry_run and results['total'] > results['already_clean']:
+    if args.dry_run and results["total"] > results["already_clean"]:
         print()
         print("Files needing cleaning:")
         # Re-run to show which files need cleaning
         cleaner.clean_all_agents_files(dry_run=True)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

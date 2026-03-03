@@ -24,7 +24,9 @@ class AnalysisPatternsMixin:
 
         try:
             # Get complexity data from pyscn
-            complexity_results = self.pyscn_analyzer.analyze_complexity(self.project_root)
+            complexity_results = self.pyscn_analyzer.analyze_complexity(
+                self.project_root
+            )
 
             for func in complexity_results:
                 complexity = func.get("complexity", 0)
@@ -38,7 +40,9 @@ class AnalysisPatternsMixin:
 
         return suggestions
 
-    def _generate_complexity_suggestion(self, func_data: dict[str, Any]) -> ComplexityReductionSuggestion | None:
+    def _generate_complexity_suggestion(
+        self, func_data: dict[str, Any]
+    ) -> ComplexityReductionSuggestion | None:
         """Generate a specific suggestion for reducing complexity."""
         function_name = func_data.get("name", "unknown")
         complexity = func_data.get("complexity", 0)
@@ -52,7 +56,7 @@ class AnalysisPatternsMixin:
                 "Improved readability",
                 "Easier testing",
                 "Better maintainability",
-                "Reduced cognitive load"
+                "Reduced cognitive load",
             ]
             code_example = f"""
 def {function_name}(...):
@@ -66,7 +70,7 @@ def {function_name}(...):
             benefits = [
                 "Early returns reduce nesting",
                 "Improved readability",
-                "Reduced complexity"
+                "Reduced complexity",
             ]
             code_example = """
 def complex_function(data):
@@ -88,7 +92,7 @@ def complex_function(data):
             suggested_refactoring=refactoring,
             estimated_effort=effort,
             benefits=benefits,
-            code_example=code_example
+            code_example=code_example,
         )
 
     def analyze_dead_code_patterns(self) -> list[DeadCodeFinding]:
@@ -109,7 +113,9 @@ def complex_function(data):
 
         return findings
 
-    def _enhance_dead_code_finding(self, finding: dict[str, Any]) -> DeadCodeFinding | None:
+    def _enhance_dead_code_finding(
+        self, finding: dict[str, Any]
+    ) -> DeadCodeFinding | None:
         """Enhance a dead code finding with better suggestions."""
         location = finding.get("location", {})
         file_path = location.get("file_path", "")
@@ -128,7 +134,7 @@ def complex_function(data):
             severity=severity,
             suggestion=suggestion,
             fix_available=self._can_auto_fix_dead_code(reason),
-            estimated_savings=self._estimate_dead_code_savings(reason)
+            estimated_savings=self._estimate_dead_code_savings(reason),
         )
 
     def _get_dead_code_suggestion(self, reason: str, severity: str) -> str:
@@ -141,7 +147,7 @@ def complex_function(data):
             "unused_variable": "Remove unused variable or add underscore prefix if intentionally unused",
             "unused_function": "Remove unused function or add proper usage",
             "unused_import": "Remove unused import to reduce namespace pollution",
-            "unused_class": "Remove unused class or add proper usage"
+            "unused_class": "Remove unused class or add proper usage",
         }
 
         return suggestions.get(reason, f"Remove unreachable code (reason: {reason})")
@@ -152,7 +158,7 @@ def complex_function(data):
             "unreachable_after_return",
             "unreachable_after_raise",
             "unreachable_after_break",
-            "unreachable_after_continue"
+            "unreachable_after_continue",
         }
         return reason in auto_fixable
 
@@ -192,14 +198,16 @@ def complex_function(data):
         for data_file in data_files:
             # This is a simplified check - in reality would need AST analysis
             if self._file_imports_presentation_layer(data_file, presentation_files):
-                violations.append(ArchitectureViolation(
-                    file_path=data_file,
-                    violation_type="layering_violation",
-                    description="Data layer should not depend on presentation layer",
-                    severity="high",
-                    suggestion="Move shared code to a common layer or use dependency injection",
-                    affected_modules=["data_access", "presentation"]
-                ))
+                violations.append(
+                    ArchitectureViolation(
+                        file_path=data_file,
+                        violation_type="layering_violation",
+                        description="Data layer should not depend on presentation layer",
+                        severity="high",
+                        suggestion="Move shared code to a common layer or use dependency injection",
+                        affected_modules=["data_access", "presentation"],
+                    )
+                )
 
         return violations
 
@@ -218,18 +226,24 @@ def complex_function(data):
         # Check for files that don't follow naming conventions
         for root, _dirs, files in os.walk(self.project_root):
             for file in files:
-                if file.endswith('.py'):
+                if file.endswith(".py"):
                     file_path = os.path.join(root, file)
 
                     # Check if test files follow naming convention
-                    if 'test' in file.lower() and not file.startswith('test_') and not file.endswith('_test.py'):
-                        violations.append(ArchitectureViolation(
-                            file_path=file_path,
-                            violation_type="naming_convention",
-                            description=f"Test file '{file}' should follow naming convention (test_*.py or *_test.py)",
-                            severity="low",
-                            suggestion="Rename file to follow test naming conventions"
-                        ))
+                    if (
+                        "test" in file.lower()
+                        and not file.startswith("test_")
+                        and not file.endswith("_test.py")
+                    ):
+                        violations.append(
+                            ArchitectureViolation(
+                                file_path=file_path,
+                                violation_type="naming_convention",
+                                description=f"Test file '{file}' should follow naming convention (test_*.py or *_test.py)",
+                                severity="low",
+                                suggestion="Rename file to follow test naming conventions",
+                            )
+                        )
 
         return violations
 
@@ -238,7 +252,7 @@ def complex_function(data):
         layer_patterns = {
             "presentation": ["ui", "interface", "view", "controller", "handler"],
             "business": ["service", "manager", "orchestrator", "engine"],
-            "data": ["repository", "dao", "model", "entity"]
+            "data": ["repository", "dao", "model", "entity"],
         }
 
         matching_files = []
@@ -246,27 +260,35 @@ def complex_function(data):
 
         for root, _dirs, files in os.walk(self.project_root):
             for file in files:
-                if file.endswith('.py'):
+                if file.endswith(".py"):
                     file_path = os.path.join(root, file)
 
                     # Simple pattern matching
                     for pattern in patterns:
-                        if pattern.lower() in file.lower() or pattern.lower() in root.lower():
+                        if (
+                            pattern.lower() in file.lower()
+                            or pattern.lower() in root.lower()
+                        ):
                             matching_files.append(file_path)
                             break
 
         return matching_files
 
-    def _file_imports_presentation_layer(self, file_path: str, presentation_files: list[str]) -> bool:
+    def _file_imports_presentation_layer(
+        self, file_path: str, presentation_files: list[str]
+    ) -> bool:
         """Check if a file imports from presentation layer (simplified check)."""
         try:
-            with open(file_path, encoding='utf-8') as f:
+            with open(file_path, encoding="utf-8") as f:
                 content = f.read()
 
             # Look for import statements that might reference presentation layer
             for pres_file in presentation_files:
                 pres_module = os.path.splitext(os.path.basename(pres_file))[0]
-                if f"from {pres_module} import" in content or f"import {pres_module}" in content:
+                if (
+                    f"from {pres_module} import" in content
+                    or f"import {pres_module}" in content
+                ):
                     return True
 
         except Exception as e:
@@ -287,8 +309,8 @@ def complex_function(data):
                 "Improved maintainability",
                 "Reduced technical debt",
                 "Better testability",
-                "Enhanced readability"
-            ]
+                "Enhanced readability",
+            ],
         }
 
         try:
@@ -300,7 +322,7 @@ def complex_function(data):
                     "file": s.file_path,
                     "refactoring": s.suggested_refactoring,
                     "effort": s.estimated_effort,
-                    "benefits": s.benefits
+                    "benefits": s.benefits,
                 }
                 for s in complexity_suggestions
             ]
@@ -313,7 +335,7 @@ def complex_function(data):
                     "line": f.line_number,
                     "reason": f.reason,
                     "suggestion": f.suggestion,
-                    "fix_available": f.fix_available
+                    "fix_available": f.fix_available,
                 }
                 for f in dead_code_findings
             ]
@@ -326,7 +348,7 @@ def complex_function(data):
                     "violation": v.violation_type,
                     "description": v.description,
                     "suggestion": v.suggestion,
-                    "severity": v.severity
+                    "severity": v.severity,
                 }
                 for v in architecture_violations
             ]
@@ -341,41 +363,48 @@ def complex_function(data):
 
         return plan
 
-    def _determine_priority_actions(self, complexity_suggestions, dead_code_findings, architecture_violations) -> list[dict[str, Any]]:
+    def _determine_priority_actions(
+        self, complexity_suggestions, dead_code_findings, architecture_violations
+    ) -> list[dict[str, Any]]:
         """Determine the highest priority refactoring actions."""
         actions = []
 
         # High complexity functions are high priority
         for suggestion in complexity_suggestions:
             if suggestion.current_complexity >= 20:
-                actions.append({
-                    "type": "complexity_reduction",
-                    "priority": "high",
-                    "function": suggestion.function_name,
-                    "file": suggestion.file_path,
-                    "description": f"Reduce complexity of {suggestion.function_name} from {suggestion.current_complexity} to under 15"
-                })
+                actions.append(
+                    {
+                        "type": "complexity_reduction",
+                        "priority": "high",
+                        "function": suggestion.function_name,
+                        "file": suggestion.file_path,
+                        "description": f"Reduce complexity of {suggestion.function_name} from {suggestion.current_complexity} to under 15",
+                    }
+                )
 
         # Critical dead code is high priority
         for finding in dead_code_findings:
             if finding.severity == "critical":
-                actions.append({
-                    "type": "dead_code_removal",
-                    "priority": "high",
-                    "file": finding.file_path,
-                    "line": finding.line_number,
-                    "description": f"Remove critical dead code: {finding.reason}"
-                })
+                actions.append(
+                    {
+                        "type": "dead_code_removal",
+                        "priority": "high",
+                        "file": finding.file_path,
+                        "line": finding.line_number,
+                        "description": f"Remove critical dead code: {finding.reason}",
+                    }
+                )
 
         # Architecture violations are medium priority
         for violation in architecture_violations:
             if violation.severity == "high":
-                actions.append({
-                    "type": "architecture_fix",
-                    "priority": "medium",
-                    "file": violation.file_path,
-                    "description": violation.description
-                })
+                actions.append(
+                    {
+                        "type": "architecture_fix",
+                        "priority": "medium",
+                        "file": violation.file_path,
+                        "description": violation.description,
+                    }
+                )
 
         return actions
-

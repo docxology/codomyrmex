@@ -1,10 +1,10 @@
-
 import pytest
 
 try:
     from codomyrmex.agents.core.base import AgentRequest
     from codomyrmex.agents.core.react import ReActAgent
     from codomyrmex.agents.core.registry import ToolRegistry
+
     _HAS_AGENTS = True
 except ImportError:
     _HAS_AGENTS = False
@@ -17,6 +17,7 @@ def dummy_tool(x: int) -> int:
     """Multiplies by 2."""
     return x * 2
 
+
 @pytest.mark.unit
 def test_react_agent_initialization():
     """Test functionality: react agent initialization."""
@@ -26,6 +27,7 @@ def test_react_agent_initialization():
     agent = ReActAgent("TestAgent", registry)
     assert agent.name == "TestAgent"
     assert agent.tool_registry == registry
+
 
 @pytest.mark.unit
 def test_react_system_prompt():
@@ -39,6 +41,7 @@ def test_react_system_prompt():
     assert "You are an intelligent agent." in prompt
     assert "dummy_tool" in prompt
     assert "Multiplies by 2" in prompt
+
 
 @pytest.mark.unit
 def test_react_execution_mock():
@@ -55,18 +58,22 @@ def test_react_execution_mock():
     assert response.error is None
     assert "Tool dummy_tool returned: 10" in response.content
 
+
 @pytest.mark.unit
 def test_react_execution_invalid_format():
     """Test functionality: react execution invalid format."""
     registry = ToolRegistry()
     agent = ReActAgent("TestAgent", registry)
 
-    response = agent.execute(AgentRequest(prompt='call: unknown', id="1"))
+    response = agent.execute(AgentRequest(prompt="call: unknown", id="1"))
 
     # ToolRegistry raises ValueError, which is caught by ReActAgent
     # and returned as AgentResponse(error=...)
     assert response.error is not None
-    assert "Tool 'unknown' not found" in response.error or "tool not found" in str(response.error).lower()
+    assert (
+        "Tool 'unknown' not found" in response.error
+        or "tool not found" in str(response.error).lower()
+    )
     # Depending on how the error propagates.
     # Current impl: execute -> _execute_impl -> try/except -> returns AgentResponse(error=...)
     # But if tool not found, registry.execute raises ValueError.

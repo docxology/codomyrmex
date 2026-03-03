@@ -82,9 +82,7 @@ class AgenticSeekClient(CLIAgentBase):
         )
         self._config = _cfg
         self._repo_path: str = repo_path
-        self._use_docker: bool = self._config.get(
-            "agentic_seek_docker", True
-        )
+        self._use_docker: bool = self._config.get("agentic_seek_docker", True)
         self._router = AgenticSeekRouter()
         self._seek_config: AgenticSeekConfig | None = None
 
@@ -124,9 +122,7 @@ class AgenticSeekClient(CLIAgentBase):
                 content=content,
                 metadata={
                     "returncode": result.returncode,
-                    "agent_type": self._router.classify_query(
-                        request.prompt
-                    ).value,
+                    "agent_type": self._router.classify_query(request.prompt).value,
                 },
                 execution_time=execution_time,
             )
@@ -137,9 +133,7 @@ class AgenticSeekClient(CLIAgentBase):
             ) from None
         except FileNotFoundError as exc:
             execution_time = time.time() - start_time
-            raise AgentError(
-                f"agenticSeek CLI not found: {exc}"
-            ) from exc
+            raise AgentError(f"agenticSeek CLI not found: {exc}") from exc
 
     def _stream_impl(self, request: AgentRequest) -> Iterator[str]:
         """Stream agenticSeek output line by line.
@@ -217,9 +211,7 @@ class AgenticSeekClient(CLIAgentBase):
             "ollama": shutil.which("ollama") is not None,
             "python": shutil.which("python3") is not None,
             "uv": shutil.which("uv") is not None,
-            "repo_exists": bool(
-                self._repo_path and Path(self._repo_path).is_dir()
-            ),
+            "repo_exists": bool(self._repo_path and Path(self._repo_path).is_dir()),
         }
 
     @staticmethod
@@ -267,20 +259,14 @@ class AgenticSeekClient(CLIAgentBase):
                 os.getenv("AGENTIC_SEEK_PROVIDER_URL", DEFAULT_OLLAMA_URL),
             ),
             agent_name=main.get("agent_name", "Friday"),
-            recover_last_session=_bool(
-                main.get("recover_last_session", "False")
-            ),
+            recover_last_session=_bool(main.get("recover_last_session", "False")),
             save_session=_bool(main.get("save_session", "False")),
             speak=_bool(main.get("speak", "False")),
             listen=_bool(main.get("listen", "False")),
             work_dir=main.get("work_dir", ""),
-            jarvis_personality=_bool(
-                main.get("jarvis_personality", "False")
-            ),
+            jarvis_personality=_bool(main.get("jarvis_personality", "False")),
             languages=languages,
-            headless_browser=_bool(
-                browser.get("headless_browser", "True")
-            ),
+            headless_browser=_bool(browser.get("headless_browser", "True")),
             stealth_mode=_bool(browser.get("stealth_mode", "True")),
         )
 
@@ -292,9 +278,13 @@ class AgenticSeekClient(CLIAgentBase):
         """Build the subprocess command for executing a prompt."""
         if self._use_docker:
             return [
-                "docker", "compose", "exec", "backend",
-                "python", "-c",
-                f'from sources.interaction import Interaction; '
+                "docker",
+                "compose",
+                "exec",
+                "backend",
+                "python",
+                "-c",
+                f"from sources.interaction import Interaction; "
                 f'print(Interaction.quick_query("{_escape(prompt)}"))',
             ]
         return ["uv", "run", "cli.py"]
@@ -303,8 +293,15 @@ class AgenticSeekClient(CLIAgentBase):
         """Ping the backend health endpoint."""
         try:
             result = subprocess.run(
-                ["curl", "-s", "-o", "/dev/null", "-w", "%{http_code}",
-                 f"{os.getenv('AGENTIC_SEEK_BACKEND_URL', DEFAULT_API_BASE_URL)}/health"],
+                [
+                    "curl",
+                    "-s",
+                    "-o",
+                    "/dev/null",
+                    "-w",
+                    "%{http_code}",
+                    f"{os.getenv('AGENTIC_SEEK_BACKEND_URL', DEFAULT_API_BASE_URL)}/health",
+                ],
                 capture_output=True,
                 text=True,
                 timeout=5,
@@ -318,6 +315,7 @@ class AgenticSeekClient(CLIAgentBase):
 # ---------------------------------------------------------------------------
 # Module-private helpers
 # ---------------------------------------------------------------------------
+
 
 def _escape(text: str) -> str:
     """Escape a string for embedding in a Python f-string command."""

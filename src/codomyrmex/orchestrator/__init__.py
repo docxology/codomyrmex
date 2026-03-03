@@ -114,7 +114,9 @@ def cli_commands():
             "help": "List available workflows",
             "handler": lambda **kwargs: print(
                 "Available workflows:\n"
-                + "\n".join(f"  - {name}" for name in ["default", "ci", "deploy", "test"])
+                + "\n".join(
+                    f"  - {name}" for name in ["default", "ci", "deploy", "test"]
+                )
             ),
         },
         "run": {
@@ -131,10 +133,10 @@ __all__ = [
     "scheduler",
     # CLI integration
     "cli_commands",
-    'templates',
-    'state',
-    'triggers',
-    'pipelines',
+    "templates",
+    "state",
+    "triggers",
+    "pipelines",
     # Core orchestration
     "run_orchestrator",
     "load_config",
@@ -210,4 +212,3 @@ __all__ = [
     "resilience",
     "workflows",
 ]
-

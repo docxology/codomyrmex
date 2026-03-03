@@ -52,9 +52,7 @@ class WebhookRegistry:
         """
         return dict(self._webhooks)
 
-    def list_for_event(
-        self, event_type: WebhookEventType
-    ) -> dict[str, WebhookConfig]:
+    def list_for_event(self, event_type: WebhookEventType) -> dict[str, WebhookConfig]:
         """Return all active webhooks subscribed to a given event type.
 
         A webhook matches if it is active **and** either has the event type
@@ -73,5 +71,3 @@ class WebhookRegistry:
             if config.active
             and (event_type in config.events or len(config.events) == 0)
         }
-
-

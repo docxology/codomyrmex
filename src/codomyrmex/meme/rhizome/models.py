@@ -9,6 +9,7 @@ from enum import StrEnum
 
 class NetworkTopology(StrEnum):
     """Network structure types."""
+
     RANDOM = "random"
     SCALE_FREE = "scale_free"
     SMALL_WORLD = "small_world"
@@ -26,6 +27,7 @@ class Node:
         node_type: Classification.
         connections: Set of connected node IDs.
     """
+
     id: str = field(default_factory=lambda: str(uuid.uuid4())[:8])
     content: str = ""
     node_type: str = "generic"
@@ -44,6 +46,7 @@ class Edge:
         weight: Connection strength (0-1).
         edge_type: Relationship type.
     """
+
     source: str
     target: str
     weight: float = 1.0
@@ -65,6 +68,7 @@ class Graph:
         nodes: Map of ID to Node.
         edges: List of Edges.
     """
+
     nodes: dict[str, Node] = field(default_factory=dict)
     edges: list[Edge] = field(default_factory=list)
     topology: NetworkTopology = NetworkTopology.RANDOM

@@ -27,6 +27,7 @@ from codomyrmex.agents.ai_code_editing.claude_task_master import (
 # Fixtures
 # ---------------------------------------------------------------------------
 
+
 @pytest.fixture
 def master_no_key():
     """ClaudeTaskMaster initialized explicitly with no API key."""
@@ -48,6 +49,7 @@ def master_fake_key():
 # ---------------------------------------------------------------------------
 # Module-level constants
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestModuleConstants:
@@ -77,6 +79,7 @@ class TestModuleConstants:
 # ---------------------------------------------------------------------------
 # Enums
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestTaskPriorityEnum:
@@ -126,6 +129,7 @@ class TestTaskStatusEnum:
 # Task dataclass
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestTaskDataclass:
     """Task dataclass creation and field defaults."""
@@ -165,7 +169,12 @@ class TestTaskDataclass:
 
     @pytest.mark.parametrize(
         "priority",
-        [TaskPriority.LOW, TaskPriority.MEDIUM, TaskPriority.HIGH, TaskPriority.CRITICAL],
+        [
+            TaskPriority.LOW,
+            TaskPriority.MEDIUM,
+            TaskPriority.HIGH,
+            TaskPriority.CRITICAL,
+        ],
     )
     def test_all_priorities_accepted(self, priority):
         t = Task(description="test", priority=priority)
@@ -175,6 +184,7 @@ class TestTaskDataclass:
 # ---------------------------------------------------------------------------
 # TaskResult dataclass
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestTaskResultDataclass:
@@ -215,7 +225,11 @@ class TestTaskResultDataclass:
     @pytest.mark.parametrize("status", list(TaskStatus))
     def test_all_statuses_accepted(self, status):
         r = TaskResult(
-            task_id="t", status=status, result=None, execution_time=0, tokens_used=0,
+            task_id="t",
+            status=status,
+            result=None,
+            execution_time=0,
+            tokens_used=0,
         )
         assert r.status is status
 
@@ -223,6 +237,7 @@ class TestTaskResultDataclass:
 # ---------------------------------------------------------------------------
 # ClaudeTaskMaster.__init__
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestClaudeTaskMasterInit:
@@ -239,7 +254,9 @@ class TestClaudeTaskMasterInit:
 
     def test_custom_model_and_retries(self):
         m = ClaudeTaskMaster(
-            api_key="sk-test", model="claude-3-opus-20240229", max_retries=5,
+            api_key="sk-test",
+            model="claude-3-opus-20240229",
+            max_retries=5,
         )
         assert m.model == "claude-3-opus-20240229"
         assert m.max_retries == 5
@@ -256,6 +273,7 @@ class TestClaudeTaskMasterInit:
 # ---------------------------------------------------------------------------
 # _calculate_cost
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestCalculateCost:
@@ -291,7 +309,9 @@ class TestCalculateCost:
             ("claude-opus-4-5-20251101", 15.00, 75.00),
         ],
     )
-    def test_model_specific_rates(self, model, expected_input_rate, expected_output_rate):
+    def test_model_specific_rates(
+        self, model, expected_input_rate, expected_output_rate
+    ):
         m = ClaudeTaskMaster(api_key="sk-test", model=model)
         cost = m._calculate_cost(1_000_000, 1_000_000)
         expected = expected_input_rate + expected_output_rate
@@ -308,6 +328,7 @@ class TestCalculateCost:
 # ---------------------------------------------------------------------------
 # _build_task_system_prompt / _build_task_message
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestMessageBuilding:
@@ -333,6 +354,7 @@ class TestMessageBuilding:
 # ---------------------------------------------------------------------------
 # _parse_subtasks
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestParseSubtasks:
@@ -413,6 +435,7 @@ class TestParseSubtasks:
 # _parse_analysis
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestParseAnalysis:
     """Analysis text parsing for complexity extraction."""
@@ -454,12 +477,15 @@ class TestParseAnalysis:
 # _extract_code
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestExtractCode:
     """Code extraction from markdown-formatted responses."""
 
     def test_language_specific_block(self, master_fake_key):
-        response = "Here is the code:\n```python\ndef hello():\n    return 'hi'\n```\nDone."
+        response = (
+            "Here is the code:\n```python\ndef hello():\n    return 'hi'\n```\nDone."
+        )
         code = master_fake_key._extract_code(response, "python")
         assert "def hello():" in code
         assert "return 'hi'" in code
@@ -476,10 +502,7 @@ class TestExtractCode:
         assert code == "Just plain text without code blocks"
 
     def test_multiple_blocks_extracts_first_matching(self, master_fake_key):
-        response = (
-            "```python\nfirst_block()\n```\n\n"
-            "```python\nsecond_block()\n```"
-        )
+        response = "```python\nfirst_block()\n```\n\n```python\nsecond_block()\n```"
         code = master_fake_key._extract_code(response, "python")
         assert "first_block()" in code
 
@@ -489,7 +512,8 @@ class TestExtractCode:
         assert "code_here()" in code
 
     @pytest.mark.parametrize(
-        "lang", ["python", "javascript", "rust", "go", "typescript"],
+        "lang",
+        ["python", "javascript", "rust", "go", "typescript"],
     )
     def test_various_languages(self, master_fake_key, lang):
         response = f"```{lang}\n// code for {lang}\n```"
@@ -500,6 +524,7 @@ class TestExtractCode:
 # ---------------------------------------------------------------------------
 # Usage stats
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestUsageStats:
@@ -545,6 +570,7 @@ class TestUsageStats:
 # is_available
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestIsAvailable:
     """Availability checks without hitting the network."""
@@ -561,6 +587,7 @@ class TestIsAvailable:
 # ---------------------------------------------------------------------------
 # Retry configuration constants
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestRetryConstants:

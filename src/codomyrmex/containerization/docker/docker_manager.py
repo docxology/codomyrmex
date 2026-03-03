@@ -11,7 +11,6 @@ from codomyrmex.logging_monitoring.core.logger_config import get_logger
 """Docker Manager for Codomyrmex Containerization Module."""
 
 
-
 # Add project root to Python path
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 PROJECT_ROOT = os.path.abspath(os.path.join(SCRIPT_DIR, "..", ".."))
@@ -540,23 +539,21 @@ class DockerManager:
             "python": {
                 "base": "python:3.9-slim",
                 "alpine": "python:3.9-alpine",
-                "conda": "continuumio/miniconda3"
+                "conda": "continuumio/miniconda3",
             },
-            "node": {
-                "base": "node:18-slim",
-                "alpine": "node:18-alpine"
-            },
-            "ubuntu": {
-                "minimal": "ubuntu:20.04",
-                "alpine": "alpine:latest"
-            }
+            "node": {"base": "node:18-slim", "alpine": "node:18-alpine"},
+            "ubuntu": {"minimal": "ubuntu:20.04", "alpine": "alpine:latest"},
         }
 
         # Analyze requirements for optimization hints
         has_python = any("python" in req.lower() for req in requirements)
-        has_node = any("node" in req.lower() or "npm" in req.lower() for req in requirements)
-        needs_compilation = any(keyword in " ".join(requirements).lower()
-                               for keyword in ["gcc", "build-essential", "make"])
+        has_node = any(
+            "node" in req.lower() or "npm" in req.lower() for req in requirements
+        )
+        needs_compilation = any(
+            keyword in " ".join(requirements).lower()
+            for keyword in ["gcc", "build-essential", "make"]
+        )
 
         if has_python and not needs_compilation:
             return optimizations["python"]["base"]
@@ -610,19 +607,33 @@ class DockerManager:
                 "virtual_size_mb": virtual_size / (1024 * 1024),
                 "layer_count": len(layers),
                 "layer_sizes": layer_sizes,
-                "average_layer_size_mb": sum(layer_sizes) / len(layer_sizes) / (1024 * 1024) if layer_sizes else 0,
-                "largest_layer_mb": max(layer_sizes) / (1024 * 1024) if layer_sizes else 0,
-                "size_efficiency": "good" if size_bytes < 500 * 1024 * 1024 else "large"
+                "average_layer_size_mb": sum(layer_sizes)
+                / len(layer_sizes)
+                / (1024 * 1024)
+                if layer_sizes
+                else 0,
+                "largest_layer_mb": max(layer_sizes) / (1024 * 1024)
+                if layer_sizes
+                else 0,
+                "size_efficiency": "good"
+                if size_bytes < 500 * 1024 * 1024
+                else "large",
             }
 
             # Add optimization suggestions
             analysis["optimization_suggestions"] = []
             if analysis["layer_count"] > 20:
-                analysis["optimization_suggestions"].append("Consider reducing layer count with multi-stage builds")
+                analysis["optimization_suggestions"].append(
+                    "Consider reducing layer count with multi-stage builds"
+                )
             if analysis["largest_layer_mb"] > 100:
-                analysis["optimization_suggestions"].append("Large layer detected - consider separating build dependencies")
+                analysis["optimization_suggestions"].append(
+                    "Large layer detected - consider separating build dependencies"
+                )
             if analysis["total_size_mb"] > 1000:
-                analysis["optimization_suggestions"].append("Image is very large - consider using smaller base image or multi-stage build")
+                analysis["optimization_suggestions"].append(
+                    "Image is very large - consider using smaller base image or multi-stage build"
+                )
 
             return analysis
 
@@ -657,7 +668,7 @@ class DockerManager:
                     "created_by": entry.get("CreatedBy", ""),
                     "size_bytes": entry.get("Size", 0),
                     "size_mb": entry.get("Size", 0) / (1024 * 1024),
-                    "empty": entry.get("Size", 0) == 0
+                    "empty": entry.get("Size", 0) == 0,
                 }
                 layers.append(layer_info)
 

@@ -10,6 +10,7 @@ from codomyrmex.exceptions import AIProviderError
 
 class LLMError(AIProviderError):
     """Base exception for LLM-related errors."""
+
     pass
 
 
@@ -21,7 +22,7 @@ class LLMConnectionError(LLMError):
         message: str,
         provider: str | None = None,
         endpoint: str | None = None,
-        **kwargs
+        **kwargs,
     ):
         super().__init__(message, **kwargs)
         if provider:
@@ -33,12 +34,7 @@ class LLMConnectionError(LLMError):
 class LLMAuthenticationError(LLMError):
     """Raised when LLM authentication fails."""
 
-    def __init__(
-        self,
-        message: str,
-        provider: str | None = None,
-        **kwargs
-    ):
+    def __init__(self, message: str, provider: str | None = None, **kwargs):
         super().__init__(message, **kwargs)
         if provider:
             self.context["provider"] = provider
@@ -53,7 +49,7 @@ class LLMRateLimitError(LLMError):
         provider: str | None = None,
         retry_after: float | None = None,
         limit_type: str | None = None,
-        **kwargs
+        **kwargs,
     ):
         super().__init__(message, **kwargs)
         if provider:
@@ -72,7 +68,7 @@ class LLMTimeoutError(LLMError):
         message: str,
         timeout_seconds: float | None = None,
         provider: str | None = None,
-        **kwargs
+        **kwargs,
     ):
         super().__init__(message, **kwargs)
         if timeout_seconds is not None:
@@ -83,6 +79,7 @@ class LLMTimeoutError(LLMError):
 
 class PromptError(LLMError):
     """Raised when prompt processing fails."""
+
     pass
 
 
@@ -95,7 +92,7 @@ class PromptTooLongError(PromptError):
         token_count: int | None = None,
         max_tokens: int | None = None,
         model: str | None = None,
-        **kwargs
+        **kwargs,
     ):
         super().__init__(message, **kwargs)
         if token_count is not None:
@@ -110,10 +107,7 @@ class PromptValidationError(PromptError):
     """Raised when prompt validation fails."""
 
     def __init__(
-        self,
-        message: str,
-        validation_errors: list[str] | None = None,
-        **kwargs
+        self, message: str, validation_errors: list[str] | None = None, **kwargs
     ):
         super().__init__(message, **kwargs)
         if validation_errors:
@@ -122,6 +116,7 @@ class PromptValidationError(PromptError):
 
 class ResponseError(LLMError):
     """Raised when LLM response processing fails."""
+
     pass
 
 
@@ -133,18 +128,21 @@ class ResponseParsingError(ResponseError):
         message: str,
         expected_format: str | None = None,
         raw_response: str | None = None,
-        **kwargs
+        **kwargs,
     ):
         super().__init__(message, **kwargs)
         if expected_format:
             self.context["expected_format"] = expected_format
         # Truncate raw response to avoid huge context
         if raw_response:
-            self.context["raw_response"] = raw_response[:500] + "..." if len(raw_response) > 500 else raw_response
+            self.context["raw_response"] = (
+                raw_response[:500] + "..." if len(raw_response) > 500 else raw_response
+            )
 
 
 class ResponseValidationError(ResponseError):
     """Raised when LLM response validation fails."""
+
     pass
 
 
@@ -156,7 +154,7 @@ class ContentFilterError(LLMError):
         message: str,
         filter_type: str | None = None,
         category: str | None = None,
-        **kwargs
+        **kwargs,
     ):
         super().__init__(message, **kwargs)
         if filter_type:
@@ -174,7 +172,7 @@ class ModelNotFoundError(LLMError):
         model: str | None = None,
         provider: str | None = None,
         available_models: list[str] | None = None,
-        **kwargs
+        **kwargs,
     ):
         super().__init__(message, **kwargs)
         if model:
@@ -193,7 +191,7 @@ class TokenLimitError(LLMError):
         message: str,
         requested_tokens: int | None = None,
         available_tokens: int | None = None,
-        **kwargs
+        **kwargs,
     ):
         super().__init__(message, **kwargs)
         if requested_tokens is not None:
@@ -205,12 +203,7 @@ class TokenLimitError(LLMError):
 class StreamingError(LLMError):
     """Raised when streaming response fails."""
 
-    def __init__(
-        self,
-        message: str,
-        chunks_received: int | None = None,
-        **kwargs
-    ):
+    def __init__(self, message: str, chunks_received: int | None = None, **kwargs):
         super().__init__(message, **kwargs)
         if chunks_received is not None:
             self.context["chunks_received"] = chunks_received
@@ -225,7 +218,7 @@ class ContextWindowError(LLMError):
         context_length: int | None = None,
         max_context: int | None = None,
         model: str | None = None,
-        **kwargs
+        **kwargs,
     ):
         super().__init__(message, **kwargs)
         if context_length is not None:

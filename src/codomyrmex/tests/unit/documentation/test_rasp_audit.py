@@ -20,7 +20,7 @@ class TestModuleAuditRaspFiles:
         mod = tmp_path / "src" / "codomyrmex" / "test_module"
         mod.mkdir(parents=True)
         (mod / "__init__.py").write_text('"""Test module."""\n')
-        for fname in (files or []):
+        for fname in files or []:
             (mod / fname).write_text(
                 f"# {fname.replace('.md', '')}\n\nThis file has real content "
                 f"that is well above the fifty character minimum threshold.\n"
@@ -31,7 +31,9 @@ class TestModuleAuditRaspFiles:
         from codomyrmex.documentation.quality.audit import ModuleAudit
 
         src_root = tmp_path / "src" / "codomyrmex"
-        mod = self._make_module(tmp_path, ["README.md", "AGENTS.md", "SPEC.md", "PAI.md"])
+        mod = self._make_module(
+            tmp_path, ["README.md", "AGENTS.md", "SPEC.md", "PAI.md"]
+        )
         audit = ModuleAudit(mod, src_root)
         audit.audit()
         assert audit.missing_docs == []
@@ -52,7 +54,12 @@ class TestModuleAuditRaspFiles:
         mod = self._make_module(tmp_path, [])
         audit = ModuleAudit(mod, src_root)
         audit.audit()
-        assert set(audit.missing_docs) == {"README.md", "AGENTS.md", "SPEC.md", "PAI.md"}
+        assert set(audit.missing_docs) == {
+            "README.md",
+            "AGENTS.md",
+            "SPEC.md",
+            "PAI.md",
+        }
 
     def test_placeholder_content_detected(self, tmp_path: Path):
         from codomyrmex.documentation.quality.audit import ModuleAudit

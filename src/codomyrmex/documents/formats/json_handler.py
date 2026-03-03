@@ -48,11 +48,12 @@ def read_json(
         if schema:
             try:
                 import jsonschema
+
                 jsonschema.validate(instance=data, schema=schema)
             except jsonschema.ValidationError as e:
                 raise DocumentValidationError(
                     f"JSON schema validation failed: {str(e)}",
-                    validation_errors=[str(e)]
+                    validation_errors=[str(e)],
                 ) from e
             except ImportError:
                 logger.warning("jsonschema not available, skipping validation")
@@ -62,14 +63,12 @@ def read_json(
     except json.JSONDecodeError as e:
         logger.error(f"Invalid JSON in file {file_path}: {e}")
         raise DocumentReadError(
-            f"Invalid JSON: {str(e)}",
-            file_path=str(file_path)
+            f"Invalid JSON: {str(e)}", file_path=str(file_path)
         ) from e
     except Exception as e:
         logger.error(f"Error reading JSON file {file_path}: {e}")
         raise DocumentReadError(
-            f"Failed to read JSON file: {str(e)}",
-            file_path=str(file_path)
+            f"Failed to read JSON file: {str(e)}", file_path=str(file_path)
         ) from e
 
 
@@ -98,15 +97,11 @@ def write_json(
 
     try:
         file_path.parent.mkdir(parents=True, exist_ok=True)
-        with open(file_path, 'w', encoding=encoding) as f:
+        with open(file_path, "w", encoding=encoding) as f:
             json.dump(data, f, indent=indent, ensure_ascii=ensure_ascii)
         logger.debug(f"Wrote JSON to {file_path}")
     except Exception as e:
         logger.error(f"Error writing JSON file {file_path}: {e}")
         raise DocumentWriteError(
-            f"Failed to write JSON file: {str(e)}",
-            file_path=str(file_path)
+            f"Failed to write JSON file: {str(e)}", file_path=str(file_path)
         ) from e
-
-
-

@@ -66,8 +66,12 @@ class TestDHKeyExchange:
 
         kp1 = dh_generate_keypair(dh_params)
         kp2 = dh_generate_keypair(dh_params)
-        pub1 = kp1.public_key.public_bytes(Encoding.DER, PublicFormat.SubjectPublicKeyInfo)
-        pub2 = kp2.public_key.public_bytes(Encoding.DER, PublicFormat.SubjectPublicKeyInfo)
+        pub1 = kp1.public_key.public_bytes(
+            Encoding.DER, PublicFormat.SubjectPublicKeyInfo
+        )
+        pub2 = kp2.public_key.public_bytes(
+            Encoding.DER, PublicFormat.SubjectPublicKeyInfo
+        )
         assert pub1 != pub2
 
     def test_invalid_key_size_raises(self) -> None:

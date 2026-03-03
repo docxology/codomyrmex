@@ -18,6 +18,7 @@ by storing expensive computation results and avoiding redundant work.
 
 logger = get_logger(__name__)
 
+
 class CacheManager:
     """
     A cache manager that provides persistent caching for expensive operations.
@@ -204,16 +205,17 @@ def cached_function(
     def decorator(func: Callable) -> Callable:
         """Decorator.
 
-            Args:        func: Parameter for the operation.
+        Args:        func: Parameter for the operation.
 
-            Returns:        The result of the operation.
-            """
+        Returns:        The result of the operation.
+        """
+
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
             """Wrapper.
 
-                Returns:        The result of the operation.
-                """
+            Returns:        The result of the operation.
+            """
             # Generate cache key
             prefix = cache_key_prefix or func.__name__
             key = _cache_manager._generate_key(prefix, args, kwargs)

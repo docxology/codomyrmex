@@ -69,20 +69,23 @@ class HealthProviderMixin:
                         trigger_list = []
 
                     jobs = data.get("jobs", {})
-                    stages = [
-                        {"name": job_name, "status": "defined"}
-                        for job_name in jobs
-                    ] if isinstance(jobs, dict) else []
+                    stages = (
+                        [{"name": job_name, "status": "defined"} for job_name in jobs]
+                        if isinstance(jobs, dict)
+                        else []
+                    )
 
                 counter += 1
-                pipelines.append({
-                    "id": f"wf-{counter:04d}",
-                    "name": name,
-                    "status": "defined",
-                    "file": str(wf_file.relative_to(self.root_dir)),
-                    "triggers": trigger_list,
-                    "stages": stages,
-                })
+                pipelines.append(
+                    {
+                        "id": f"wf-{counter:04d}",
+                        "name": name,
+                        "status": "defined",
+                        "file": str(wf_file.relative_to(self.root_dir)),
+                        "triggers": trigger_list,
+                        "stages": stages,
+                    }
+                )
             except Exception:
                 continue
 
@@ -91,22 +94,22 @@ class HealthProviderMixin:
     def _parse_workflow_fallback(self, content: str, filename: str) -> dict | None:
         """Fallback parser for workflows with embedded heredocs that break yaml.safe_load()."""
 
-        name_match = re.search(r'^name:\s*(.+)$', content, re.MULTILINE)
+        name_match = re.search(r"^name:\s*(.+)$", content, re.MULTILINE)
         name = name_match.group(1).strip().strip("'\"") if name_match else filename
 
         # Extract top-level trigger keys from 'on:' section (2-space indent only)
         triggers = []
         in_on = False
         for line in content.splitlines():
-            if re.match(r'^on:\s*$', line):
+            if re.match(r"^on:\s*$", line):
                 in_on = True
                 continue
             if in_on:
                 # A new top-level key exits the on: section
-                if re.match(r'^[a-zA-Z_][\w-]*:', line):
+                if re.match(r"^[a-zA-Z_][\w-]*:", line):
                     break
                 # Only capture trigger names at exactly 2-space indent
-                m = re.match(r'^  ([a-zA-Z_][\w-]*):', line)
+                m = re.match(r"^  ([a-zA-Z_][\w-]*):", line)
                 if m:
                     triggers.append(m.group(1))
 
@@ -129,19 +132,21 @@ class HealthProviderMixin:
                 heredoc_terminator = heredoc_match.group(1)
                 continue
 
-            if re.match(r'^jobs:\s*$', line):
+            if re.match(r"^jobs:\s*$", line):
                 in_jobs = True
                 continue
             if in_jobs:
                 # Job definitions are at exactly 2-space indent under jobs:
-                if re.match(r'^  [a-zA-Z_][\w-]*:', line):
-                    job_name = line.strip().split(':')[0].strip()
-                    if job_name and not job_name.startswith('#'):
+                if re.match(r"^  [a-zA-Z_][\w-]*:", line):
+                    job_name = line.strip().split(":")[0].strip()
+                    if job_name and not job_name.startswith("#"):
                         stages.append({"name": job_name, "status": "defined"})
 
         return {"name": name, "triggers": triggers, "stages": stages}
 
-    def _compute_overall_status(self, modules: list[dict[str, Any]], git_info: dict[str, str]) -> tuple[str, str]:
+    def _compute_overall_status(
+        self, modules: list[dict[str, Any]], git_info: dict[str, str]
+    ) -> tuple[str, str]:
         """Compute overall system status from module health and git availability.
 
         Returns (status_text, status_class) where status_class is 'ok', 'warn', or 'err'.
@@ -208,10 +213,18 @@ class HealthProviderMixin:
                 "with_api_spec": modules_with_api_spec,
                 "with_mcp_spec": modules_with_mcp_spec,
                 "needing_api_spec": modules_needing_api_spec,
-                "test_coverage_pct": round(modules_with_tests / max(len(modules), 1) * 100, 1),
-                "api_spec_pct": round(modules_with_api_spec / max(len(modules), 1) * 100, 1),
-                "api_spec_contextual_pct": round(modules_with_api_spec / max(modules_needing_api_spec, 1) * 100, 1),
-                "mcp_spec_pct": round(modules_with_mcp_spec / max(len(modules), 1) * 100, 1),
+                "test_coverage_pct": round(
+                    modules_with_tests / max(len(modules), 1) * 100, 1
+                ),
+                "api_spec_pct": round(
+                    modules_with_api_spec / max(len(modules), 1) * 100, 1
+                ),
+                "api_spec_contextual_pct": round(
+                    modules_with_api_spec / max(modules_needing_api_spec, 1) * 100, 1
+                ),
+                "mcp_spec_pct": round(
+                    modules_with_mcp_spec / max(len(modules), 1) * 100, 1
+                ),
             },
             "architecture_layers": self._get_architecture_layers(),
             "llm_config": self.get_llm_config(),
@@ -228,7 +241,7 @@ class HealthProviderMixin:
                     "default_model": config_manager.config.default_model,
                     "preferred_models": config_manager.config.preferred_models,
                     "available_models": config_manager.get_available_models(),
-                    "ollama_host": f"{config_manager.config.server_host}:{config_manager.config.server_port}"
+                    "ollama_host": f"{config_manager.config.server_host}:{config_manager.config.server_port}",
                 }
         except Exception as e:
             logger.warning(f"Failed to load LLM config: {e}")
@@ -238,7 +251,9 @@ class HealthProviderMixin:
             "default_model": "llama3.1:latest",
             "preferred_models": ["llama3.1:latest", "codellama:latest"],
             "available_models": ["llama3.1:latest"],
-            "ollama_host": os.getenv("OLLAMA_BASE_URL", DEFAULT_OLLAMA_URL).replace("http://", "")
+            "ollama_host": os.getenv("OLLAMA_BASE_URL", DEFAULT_OLLAMA_URL).replace(
+                "http://", ""
+            ),
         }
 
     def _get_git_info(self) -> dict[str, str]:
@@ -246,24 +261,42 @@ class HealthProviderMixin:
         try:
             branch = subprocess.run(
                 ["git", "rev-parse", "--abbrev-ref", "HEAD"],
-                capture_output=True, text=True, cwd=self.root_dir, timeout=5
+                capture_output=True,
+                text=True,
+                cwd=self.root_dir,
+                timeout=5,
             ).stdout.strip()
 
             last_commit = subprocess.run(
                 ["git", "log", "-1", "--format=%h %s (%ar)"],
-                capture_output=True, text=True, cwd=self.root_dir, timeout=5
+                capture_output=True,
+                text=True,
+                cwd=self.root_dir,
+                timeout=5,
             ).stdout.strip()
 
             commit_count = subprocess.run(
                 ["git", "rev-list", "--count", "HEAD"],
-                capture_output=True, text=True, cwd=self.root_dir, timeout=5
+                capture_output=True,
+                text=True,
+                cwd=self.root_dir,
+                timeout=5,
             ).stdout.strip()
 
             status_result = subprocess.run(
                 ["git", "status", "--porcelain"],
-                capture_output=True, text=True, cwd=self.root_dir, timeout=5
+                capture_output=True,
+                text=True,
+                cwd=self.root_dir,
+                timeout=5,
             )
-            dirty_count = len([line for line in status_result.stdout.strip().split("\n") if line.strip()])
+            dirty_count = len(
+                [
+                    line
+                    for line in status_result.stdout.strip().split("\n")
+                    if line.strip()
+                ]
+            )
 
             return {
                 "branch": branch,
@@ -287,14 +320,44 @@ class HealthProviderMixin:
             layer_defs = data.get("layers", [])
         except Exception:
             layer_defs = [
-                {"name": "Foundation", "color": "#10b981",
-                 "modules": ["logging_monitoring", "environment_setup", "model_context_protocol", "terminal_interface"]},
-                {"name": "Core", "color": "#3b82f6",
-                 "modules": ["agents", "static_analysis", "coding", "llm", "pattern_matching", "git_operations"]},
-                {"name": "Service", "color": "#8b5cf6",
-                 "modules": ["build_synthesis", "documentation", "ci_cd_automation", "containerization", "orchestrator"]},
-                {"name": "Application", "color": "#f59e0b",
-                 "modules": ["cli", "system_discovery", "website"]},
+                {
+                    "name": "Foundation",
+                    "color": "#10b981",
+                    "modules": [
+                        "logging_monitoring",
+                        "environment_setup",
+                        "model_context_protocol",
+                        "terminal_interface",
+                    ],
+                },
+                {
+                    "name": "Core",
+                    "color": "#3b82f6",
+                    "modules": [
+                        "agents",
+                        "static_analysis",
+                        "coding",
+                        "llm",
+                        "pattern_matching",
+                        "git_operations",
+                    ],
+                },
+                {
+                    "name": "Service",
+                    "color": "#8b5cf6",
+                    "modules": [
+                        "build_synthesis",
+                        "documentation",
+                        "ci_cd_automation",
+                        "containerization",
+                        "orchestrator",
+                    ],
+                },
+                {
+                    "name": "Application",
+                    "color": "#f59e0b",
+                    "modules": ["cli", "system_discovery", "website"],
+                },
             ]
 
         existing_modules = {m["name"] for m in self.get_modules()}
@@ -304,11 +367,13 @@ class HealthProviderMixin:
         for layer in layer_defs:
             present = [m for m in layer.get("modules", []) if m in existing_modules]
             classified.update(layer.get("modules", []))
-            result.append({
-                "name": layer["name"],
-                "modules": present,
-                "color": layer.get("color", "#94a3b8"),
-            })
+            result.append(
+                {
+                    "name": layer["name"],
+                    "modules": present,
+                    "color": layer.get("color", "#94a3b8"),
+                }
+            )
 
         other = sorted(existing_modules - classified)
         if other:
@@ -326,10 +391,19 @@ class HealthProviderMixin:
             xml_path = tf.name
 
         try:
-            cmd = [sys.executable, "-m", "pytest", f"--junitxml={xml_path}", "-q", "--no-header"]
+            cmd = [
+                sys.executable,
+                "-m",
+                "pytest",
+                f"--junitxml={xml_path}",
+                "-q",
+                "--no-header",
+            ]
 
             if module and module != "all":
-                test_path = self.root_dir / "src" / "codomyrmex" / "tests" / "unit" / module
+                test_path = (
+                    self.root_dir / "src" / "codomyrmex" / "tests" / "unit" / module
+                )
                 if test_path.exists():
                     cmd.append(str(test_path))
                 else:
@@ -342,8 +416,12 @@ class HealthProviderMixin:
             env["PYTHONPATH"] = str(src_path) + os.pathsep + env.get("PYTHONPATH", "")
 
             result = subprocess.run(
-                cmd, capture_output=True, text=True,
-                cwd=self.root_dir, env=env, timeout=600
+                cmd,
+                capture_output=True,
+                text=True,
+                cwd=self.root_dir,
+                env=env,
+                timeout=600,
             )
 
             # Parse XML
@@ -382,11 +460,11 @@ class HealthProviderMixin:
                 "failed": failed,
                 "skipped": skipped,
                 "errors": errors,
-                "warnings": 0, # XML doesn't strictly track warnings easily without plugins
+                "warnings": 0,  # XML doesn't strictly track warnings easily without plugins
                 "total": passed + failed + skipped + errors,
                 "success": failed == 0 and errors == 0 and result.returncode == 0,
                 "returncode": result.returncode,
-                "output": (result.stdout + result.stderr)[-5000:], # Cap output
+                "output": (result.stdout + result.stderr)[-5000:],  # Cap output
                 "module": module or "all",
             }
 

@@ -52,7 +52,9 @@ def _ollama_has_model() -> bool:
                 return False
             data = json.loads(resp.read().decode("utf-8"))
             available = [m.get("name", "") for m in data.get("models", [])]
-            return model in available or any(model.split(":")[0] in a for a in available)
+            return model in available or any(
+                model.split(":")[0] in a for a in available
+            )
     except (urllib.error.URLError, OSError, TimeoutError, json.JSONDecodeError):
         return False
 
@@ -473,13 +475,15 @@ class TestFromTodo:
     def test_from_todo_creates_tasks(self, tmp_path):
         """from_todo parses unchecked items into EditTask list."""
         todo_file = tmp_path / "TODO.md"
-        todo_file.write_text(textwrap.dedent("""\
+        todo_file.write_text(
+            textwrap.dedent("""\
             # Tasks
             - [ ] Add docstrings to helpers.py
             - [x] Already done
             - [ ] Fix the import order
             - [/] Partially done task
-        """))
+        """)
+        )
 
         orch, tasks = EditingOrchestrator.from_todo(str(todo_file))
         assert isinstance(orch, EditingOrchestrator)
@@ -508,10 +512,12 @@ class TestFromTodo:
     def test_from_todo_no_unchecked_items(self, tmp_path):
         """from_todo with all-checked file yields zero tasks."""
         todo_file = tmp_path / "TODO.md"
-        todo_file.write_text(textwrap.dedent("""\
+        todo_file.write_text(
+            textwrap.dedent("""\
             - [x] Already done
             - [x] Also done
-        """))
+        """)
+        )
 
         orch, tasks = EditingOrchestrator.from_todo(str(todo_file))
         assert tasks == []
@@ -532,7 +538,9 @@ class TestFromTodo:
 
 
 @pytest.mark.unit
-@pytest.mark.skipif(not _OLLAMA_HAS_MODEL, reason="Requires Ollama with configured model")
+@pytest.mark.skipif(
+    not _OLLAMA_HAS_MODEL, reason="Requires Ollama with configured model"
+)
 class TestPlanMethod:
     """Tests for the _plan private method (requires live Ollama)."""
 
@@ -574,7 +582,9 @@ class TestPlanMethod:
 
         orch = EditingOrchestrator()
         task = EditTask(description="Improve variable naming", file_path=str(target))
-        plan = orch._plan(task, feedback="Use descriptive names like 'count' instead of 'x'")
+        plan = orch._plan(
+            task, feedback="Use descriptive names like 'count' instead of 'x'"
+        )
         assert isinstance(plan, str)
 
     def test_plan_with_context_files(self, tmp_path):
@@ -654,7 +664,9 @@ class TestEditMethod:
 
 
 @pytest.mark.unit
-@pytest.mark.skipif(not _OLLAMA_HAS_MODEL, reason="Requires Ollama with configured model")
+@pytest.mark.skipif(
+    not _OLLAMA_HAS_MODEL, reason="Requires Ollama with configured model"
+)
 class TestReviewMethod:
     """Tests for _review with a live Ollama reviewer."""
 
@@ -711,7 +723,9 @@ class TestReviewMethod:
 
 
 @pytest.mark.unit
-@pytest.mark.skipif(not _OLLAMA_HAS_MODEL, reason="Requires Ollama with configured model")
+@pytest.mark.skipif(
+    not _OLLAMA_HAS_MODEL, reason="Requires Ollama with configured model"
+)
 class TestRunTask:
     """Integration tests for run_task (requires live LLM)."""
 

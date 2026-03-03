@@ -17,6 +17,7 @@ logger = get_logger(__name__)
 @dataclass
 class TestResult:
     """Result of a single test."""
+
     name: str
     passed: bool
     duration_ms: float
@@ -36,6 +37,7 @@ class TestResult:
 @dataclass
 class TestSuite:
     """Collection of test results."""
+
     name: str
     results: list[TestResult] = field(default_factory=list)
 
@@ -60,7 +62,9 @@ class TestSuite:
 
     def summary(self) -> str:
         """Summary."""
-        return f"{self.name}: {self.passed}/{self.total} passed ({self.success_rate:.1%})"
+        return (
+            f"{self.name}: {self.passed}/{self.total} passed ({self.success_rate:.1%})"
+        )
 
 
 class ToolTester:
@@ -103,12 +107,14 @@ class ToolTester:
                 # Get tool and execute
                 tool = self.registry.get(tool_name)
                 if not tool:
-                    suite.results.append(TestResult(
-                        name=case_name,
-                        passed=False,
-                        duration_ms=0,
-                        error=f"Tool not found: {tool_name}",
-                    ))
+                    suite.results.append(
+                        TestResult(
+                            name=case_name,
+                            passed=False,
+                            duration_ms=0,
+                            error=f"Tool not found: {tool_name}",
+                        )
+                    )
                     continue
 
                 handler = tool.get("handler")
@@ -122,37 +128,45 @@ class ToolTester:
                 # Check expected if provided
                 if expected is not None:
                     if result == expected:
-                        suite.results.append(TestResult(
+                        suite.results.append(
+                            TestResult(
+                                name=case_name,
+                                passed=True,
+                                duration_ms=duration,
+                                output=result,
+                            )
+                        )
+                    else:
+                        suite.results.append(
+                            TestResult(
+                                name=case_name,
+                                passed=False,
+                                duration_ms=duration,
+                                error=f"Expected {expected}, got {result}",
+                                output=result,
+                            )
+                        )
+                else:
+                    # Just check it runs without error
+                    suite.results.append(
+                        TestResult(
                             name=case_name,
                             passed=True,
                             duration_ms=duration,
                             output=result,
-                        ))
-                    else:
-                        suite.results.append(TestResult(
-                            name=case_name,
-                            passed=False,
-                            duration_ms=duration,
-                            error=f"Expected {expected}, got {result}",
-                            output=result,
-                        ))
-                else:
-                    # Just check it runs without error
-                    suite.results.append(TestResult(
-                        name=case_name,
-                        passed=True,
-                        duration_ms=duration,
-                        output=result,
-                    ))
+                        )
+                    )
 
             except Exception as e:
                 duration = (time.perf_counter() - start) * 1000
-                suite.results.append(TestResult(
-                    name=case_name,
-                    passed=False,
-                    duration_ms=duration,
-                    error=str(e),
-                ))
+                suite.results.append(
+                    TestResult(
+                        name=case_name,
+                        passed=False,
+                        duration_ms=duration,
+                        error=str(e),
+                    )
+                )
 
         return suite
 
@@ -180,7 +194,7 @@ class ServerTester:
                 "params": {
                     "protocolVersion": "2024-11-05",
                     "clientInfo": {"name": "test-client", "version": "1.0.0"},
-                }
+                },
             }
 
             response = await self.server.handle_request(request)
@@ -215,12 +229,7 @@ class ServerTester:
         """Test tools/list endpoint."""
         start = time.perf_counter()
         try:
-            request = {
-                "jsonrpc": "2.0",
-                "id": 2,
-                "method": "tools/list",
-                "params": {}
-            }
+            request = {"jsonrpc": "2.0", "id": 2, "method": "tools/list", "params": {}}
 
             response = await self.server.handle_request(request)
             duration = (time.perf_counter() - start) * 1000
@@ -263,7 +272,7 @@ class ServerTester:
                 "params": {
                     "name": tool_name,
                     "arguments": arguments,
-                }
+                },
             }
 
             response = await self.server.handle_request(request)
@@ -320,11 +329,13 @@ class IntegrationTester:
         description: str = "",
     ) -> None:
         """Add a test scenario."""
-        self.scenarios.append({
-            "name": name,
-            "description": description,
-            "steps": steps,
-        })
+        self.scenarios.append(
+            {
+                "name": name,
+                "description": description,
+                "steps": steps,
+            }
+        )
 
     async def run_scenario(
         self,
@@ -371,27 +382,33 @@ class IntegrationTester:
                         pass
 
                 if "error" in response:
-                    suite.results.append(TestResult(
-                        name=step_name,
-                        passed=False,
-                        duration_ms=duration,
-                        error=response["error"].get("message"),
-                    ))
+                    suite.results.append(
+                        TestResult(
+                            name=step_name,
+                            passed=False,
+                            duration_ms=duration,
+                            error=response["error"].get("message"),
+                        )
+                    )
                 else:
-                    suite.results.append(TestResult(
-                        name=step_name,
-                        passed=True,
-                        duration_ms=duration,
-                        output=response.get("result"),
-                    ))
+                    suite.results.append(
+                        TestResult(
+                            name=step_name,
+                            passed=True,
+                            duration_ms=duration,
+                            output=response.get("result"),
+                        )
+                    )
 
             except Exception as e:
-                suite.results.append(TestResult(
-                    name=step_name,
-                    passed=False,
-                    duration_ms=(time.perf_counter() - start) * 1000,
-                    error=str(e),
-                ))
+                suite.results.append(
+                    TestResult(
+                        name=step_name,
+                        passed=False,
+                        duration_ms=(time.perf_counter() - start) * 1000,
+                        error=str(e),
+                    )
+                )
 
         return suite
 
@@ -419,24 +436,28 @@ class TestMCPClient:
 
     async def initialize(self) -> dict[str, Any]:
         """Send initialize request."""
-        return await self.server.handle_request({
-            "jsonrpc": "2.0",
-            "id": self._next_id(),
-            "method": "initialize",
-            "params": {
-                "protocolVersion": "2024-11-05",
-                "clientInfo": {"name": "mock-client", "version": "1.0.0"},
+        return await self.server.handle_request(
+            {
+                "jsonrpc": "2.0",
+                "id": self._next_id(),
+                "method": "initialize",
+                "params": {
+                    "protocolVersion": "2024-11-05",
+                    "clientInfo": {"name": "mock-client", "version": "1.0.0"},
+                },
             }
-        })
+        )
 
     async def list_tools(self) -> dict[str, Any]:
         """List available tools."""
-        return await self.server.handle_request({
-            "jsonrpc": "2.0",
-            "id": self._next_id(),
-            "method": "tools/list",
-            "params": {}
-        })
+        return await self.server.handle_request(
+            {
+                "jsonrpc": "2.0",
+                "id": self._next_id(),
+                "method": "tools/list",
+                "params": {},
+            }
+        )
 
     async def call_tool(
         self,
@@ -444,21 +465,25 @@ class TestMCPClient:
         arguments: dict[str, Any],
     ) -> dict[str, Any]:
         """Call a tool."""
-        return await self.server.handle_request({
-            "jsonrpc": "2.0",
-            "id": self._next_id(),
-            "method": "tools/call",
-            "params": {"name": name, "arguments": arguments}
-        })
+        return await self.server.handle_request(
+            {
+                "jsonrpc": "2.0",
+                "id": self._next_id(),
+                "method": "tools/call",
+                "params": {"name": name, "arguments": arguments},
+            }
+        )
 
     async def list_resources(self) -> dict[str, Any]:
         """List available resources."""
-        return await self.server.handle_request({
-            "jsonrpc": "2.0",
-            "id": self._next_id(),
-            "method": "resources/list",
-            "params": {}
-        })
+        return await self.server.handle_request(
+            {
+                "jsonrpc": "2.0",
+                "id": self._next_id(),
+                "method": "resources/list",
+                "params": {},
+            }
+        )
 
 
 def run_quick_test(server: Any) -> TestSuite:

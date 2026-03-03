@@ -97,7 +97,10 @@ class TestMCPHTTPTransport:
             base_url = f"http://localhost:{server.port}"
             async with MCPClient.connect_http(base_url) as client:
                 assert client._initialized is True
-                assert client.server_info.get("serverInfo", {}).get("name") == "test-server"
+                assert (
+                    client.server_info.get("serverInfo", {}).get("name")
+                    == "test-server"
+                )
         finally:
             await server.close()
 
@@ -235,7 +238,9 @@ class TestMCPClientErrorHandling:
     def test_rpc_error_raises_mcp_client_error(self):
         """Client should raise MCPClientError on JSON-RPC error response."""
         client = MCPClient(MCPClientConfig(name="err-client"))
-        client._transport = _ErrorTransport(error_code=-32601, error_message="Method not found")
+        client._transport = _ErrorTransport(
+            error_code=-32601, error_message="Method not found"
+        )
 
         with pytest.raises(MCPClientError, match="Method not found"):
             asyncio.run(client.initialize())
@@ -251,6 +256,7 @@ class TestMCPClientErrorHandling:
 
     def test_call_tool_error(self):
         """Calling a nonexistent tool should propagate the server error."""
+
         async def _test():
             client = MCPClient(MCPClientConfig(name="err-client"))
             client._transport = _ErrorTransport(error_message="Tool not found")
@@ -262,9 +268,13 @@ class TestMCPClientErrorHandling:
 
     def test_transport_error_retried_and_wrapped(self):
         """Raw transport errors (ConnectionError, OSError) are retried then wrapped."""
-        client = MCPClient(MCPClientConfig(
-            name="err-client", max_retries=1, retry_delay=0.01,
-        ))
+        client = MCPClient(
+            MCPClientConfig(
+                name="err-client",
+                max_retries=1,
+                retry_delay=0.01,
+            )
+        )
         client._transport = _ServerExplodingTransport(ConnectionError("refused"))
 
         with pytest.raises(MCPClientError, match="failed after 1 retries"):
@@ -278,6 +288,7 @@ class TestMCPClientErrorHandling:
 
     def test_close_resets_state(self):
         """Closing should reset initialized state and transport."""
+
         async def _test():
             client = MCPClient()
             client._transport = _ErrorTransport()  # Will fail, but let's pretend
@@ -296,8 +307,10 @@ class TestMCPClientTimeout:
     def test_timeout_on_initialize(self):
         """Client should timeout and wrap in MCPClientError after retry."""
         config = MCPClientConfig(
-            name="timeout-client", timeout_seconds=0.1,
-            max_retries=1, retry_delay=0.01,
+            name="timeout-client",
+            timeout_seconds=0.1,
+            max_retries=1,
+            retry_delay=0.01,
         )
         client = MCPClient(config)
         client._transport = _TimeoutTransport()
@@ -307,10 +320,13 @@ class TestMCPClientTimeout:
 
     def test_timeout_on_call_tool(self):
         """Tool call timeout is retried then wrapped in MCPClientError."""
+
         async def _test():
             config = MCPClientConfig(
-                name="timeout-client", timeout_seconds=0.1,
-                max_retries=1, retry_delay=0.01,
+                name="timeout-client",
+                timeout_seconds=0.1,
+                max_retries=1,
+                retry_delay=0.01,
             )
             client = MCPClient(config)
             client._transport = _TimeoutTransport()
@@ -322,10 +338,13 @@ class TestMCPClientTimeout:
 
     def test_timeout_on_list_tools(self):
         """List tools timeout is retried then wrapped in MCPClientError."""
+
         async def _test():
             config = MCPClientConfig(
-                name="timeout-client", timeout_seconds=0.1,
-                max_retries=1, retry_delay=0.01,
+                name="timeout-client",
+                timeout_seconds=0.1,
+                max_retries=1,
+                retry_delay=0.01,
             )
             client = MCPClient(config)
             client._transport = _TimeoutTransport()
@@ -337,10 +356,13 @@ class TestMCPClientTimeout:
 
     def test_timeout_recorded_by_transport(self):
         """Verify timeout parameter is forwarded to transport."""
+
         async def _test():
             config = MCPClientConfig(
-                name="timeout-client", timeout_seconds=0.1,
-                max_retries=1, retry_delay=0.01,
+                name="timeout-client",
+                timeout_seconds=0.1,
+                max_retries=1,
+                retry_delay=0.01,
             )
             client = MCPClient(config)
             transport = _TimeoutTransport()
@@ -366,6 +388,7 @@ class _CountingTransport:
         self._max_active = 0
         self._total = 0
         import threading
+
         self._lock = threading.Lock()
 
     async def send(self, message, *, timeout=30.0):
@@ -389,7 +412,12 @@ class _CountingTransport:
                 "jsonrpc": "2.0",
                 "id": message.get("id"),
                 "result": {
-                    "content": [{"type": "text", "text": json.dumps({"echo": tool_args.get("text", "")})}]
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": json.dumps({"echo": tool_args.get("text", "")}),
+                        }
+                    ]
                 },
             }
 
@@ -412,16 +440,14 @@ class TestMCPClientConcurrency:
 
     def test_concurrent_call_tool(self):
         """Run 10 concurrent call_tool invocations and verify no corruption."""
+
         async def _test():
             transport = _CountingTransport()
             client = MCPClient(MCPClientConfig(name="concurrency-client"))
             client._transport = transport
             client._initialized = True
 
-            tasks = [
-                client.call_tool("echo", {"text": f"msg-{i}"})
-                for i in range(10)
-            ]
+            tasks = [client.call_tool("echo", {"text": f"msg-{i}"}) for i in range(10)]
             results = await asyncio.gather(*tasks)
 
             # All 10 should return successfully

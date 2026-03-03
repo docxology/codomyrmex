@@ -34,6 +34,7 @@ def chacha_key() -> bytes:
 @pytest.mark.unit
 class TestGenerateSymmetricKey:
     """Test suite for GenerateSymmetricKey."""
+
     def test_key_128(self) -> None:
         """Test functionality: key 128."""
         key = generate_symmetric_key(128)
@@ -65,6 +66,7 @@ class TestGenerateSymmetricKey:
 @pytest.mark.unit
 class TestAESGCM:
     """Test suite for AESGCM."""
+
     def test_encrypt_decrypt_roundtrip(self, aes_key_256: bytes) -> None:
         """Test functionality: encrypt decrypt roundtrip."""
         plaintext = b"Hello, AES-GCM world!"
@@ -96,7 +98,11 @@ class TestAESGCM:
         result = encrypt_aes_gcm(plaintext, aes_key_256, aad=aad)
         with pytest.raises(SymmetricCipherError):
             decrypt_aes_gcm(
-                result.ciphertext, aes_key_256, result.nonce, result.tag, aad=b"wrong aad"
+                result.ciphertext,
+                aes_key_256,
+                result.nonce,
+                result.tag,
+                aad=b"wrong aad",
             )
 
     def test_wrong_key_fails(self, aes_key_256: bytes) -> None:
@@ -149,6 +155,7 @@ class TestAESGCM:
 @pytest.mark.unit
 class TestChaCha20:
     """Test suite for ChaCha20."""
+
     def test_encrypt_decrypt_roundtrip(self, chacha_key: bytes) -> None:
         """Test functionality: encrypt decrypt roundtrip."""
         plaintext = b"Hello, ChaCha20-Poly1305!"

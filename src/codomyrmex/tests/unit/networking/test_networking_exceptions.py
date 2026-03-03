@@ -100,7 +100,9 @@ class TestNetworkTimeoutError:
         assert "url" not in e.context
 
     def test_all_fields(self):
-        e = NetworkTimeoutError("t", timeout_seconds=5.0, operation="read", url="http://x")
+        e = NetworkTimeoutError(
+            "t", timeout_seconds=5.0, operation="read", url="http://x"
+        )
         assert e.context["timeout_seconds"] == pytest.approx(5.0)
         assert e.context["operation"] == "read"
         assert e.context["url"] == "http://x"
@@ -134,7 +136,9 @@ class TestSSLError:
         assert "ssl_version" not in e.context
 
     def test_all_fields(self):
-        e = SSLError("fail", host="h", certificate_error="expired", ssl_version="TLS1.2")
+        e = SSLError(
+            "fail", host="h", certificate_error="expired", ssl_version="TLS1.2"
+        )
         assert e.context["host"] == "h"
         assert e.context["certificate_error"] == "expired"
         assert e.context["ssl_version"] == "TLS1.2"
@@ -256,7 +260,9 @@ class TestWebSocketError:
         assert "close_reason" not in e.context
 
     def test_all_fields(self):
-        e = WebSocketError("fail", url="wss://x", close_code=1000, close_reason="normal")
+        e = WebSocketError(
+            "fail", url="wss://x", close_code=1000, close_reason="normal"
+        )
         assert e.context["url"] == "wss://x"
         assert e.context["close_code"] == 1000
         assert e.context["close_reason"] == "normal"

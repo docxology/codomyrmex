@@ -38,6 +38,7 @@ class TestAccessibilityReportModel:
     def test_report_has_expected_attributes(self):
         """Test that the class has expected field structure."""
         import inspect
+
         sig = inspect.signature(models.AccessibilityReport)
         param_names = set(sig.parameters.keys())
         # Should have at least some of these common a11y fields
@@ -90,12 +91,18 @@ class TestAccessibilityCheckerImport:
     def test_checker_importable(self):
         """Test that checker module can be imported."""
         from codomyrmex.website.accessibility import checker
+
         assert hasattr(checker, "__name__")
 
     def test_checker_has_callable(self):
         """Test that checker module has at least one callable."""
         from codomyrmex.website.accessibility import checker
-        callables = [name for name in dir(checker) if callable(getattr(checker, name)) and not name.startswith("_")]
+
+        callables = [
+            name
+            for name in dir(checker)
+            if callable(getattr(checker, name)) and not name.startswith("_")
+        ]
         assert len(callables) > 0
 
 
@@ -109,10 +116,16 @@ class TestAccessibilityReporterImport:
     def test_reporter_importable(self):
         """Test that reporters module can be imported."""
         from codomyrmex.website.accessibility import reporters
+
         assert hasattr(reporters, "__name__")
 
     def test_reporter_has_callable(self):
         """Test that reporters module has at least one callable."""
         from codomyrmex.website.accessibility import reporters
-        callables = [name for name in dir(reporters) if callable(getattr(reporters, name)) and not name.startswith("_")]
+
+        callables = [
+            name
+            for name in dir(reporters)
+            if callable(getattr(reporters, name)) and not name.startswith("_")
+        ]
         assert len(callables) > 0

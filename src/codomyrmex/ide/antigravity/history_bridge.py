@@ -22,6 +22,7 @@ from typing import Any
 
 try:
     from codomyrmex.logging_monitoring import get_logger
+
     logger = get_logger(__name__)
 except ImportError:
     logging.basicConfig(level=logging.INFO)
@@ -29,11 +30,13 @@ except ImportError:
 
 
 # Standard Antigravity artifact names
-ARTIFACT_NAMES: frozenset[str] = frozenset({
-    "task.md",
-    "implementation_plan.md",
-    "walkthrough.md",
-})
+ARTIFACT_NAMES: frozenset[str] = frozenset(
+    {
+        "task.md",
+        "implementation_plan.md",
+        "walkthrough.md",
+    }
+)
 
 
 class ArtifactHistoryBridge:
@@ -65,7 +68,8 @@ class ArtifactHistoryBridge:
         if not self.brain_dir.exists():
             return []
         return [
-            f.name for f in self.brain_dir.iterdir()
+            f.name
+            for f in self.brain_dir.iterdir()
             if f.is_file() and f.suffix == ".md"
         ]
 
@@ -156,7 +160,8 @@ class ArtifactHistoryBridge:
         if not self._memory_dir.exists():
             return []
         return [
-            f.stem for f in self._memory_dir.iterdir()
+            f.stem
+            for f in self._memory_dir.iterdir()
             if f.is_file() and f.suffix == ".json"
         ]
 

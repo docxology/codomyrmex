@@ -20,13 +20,10 @@ Usage:
 """
 
 
-
 try:
-
     setup_logging()
     logger = get_logger(__name__)
 except ImportError:
-
     logging.basicConfig(level=logging.INFO)
     logger = logging.getLogger(__name__)
 
@@ -56,7 +53,11 @@ class DependencyAnalyzer:
             "logging_monitoring": set(),
             "model_context_protocol": set(),
             # AI & Intelligence layer
-            "ai_code_editing": {"logging_monitoring", "environment_setup", "model_context_protocol"},
+            "ai_code_editing": {
+                "logging_monitoring",
+                "environment_setup",
+                "model_context_protocol",
+            },
             "pattern_matching": {"logging_monitoring", "environment_setup"},
             # Analysis & Quality layer
             "static_analysis": {"logging_monitoring"},
@@ -68,9 +69,15 @@ class DependencyAnalyzer:
             "build_synthesis": {"logging_monitoring", "static_analysis"},
             "git_operations": {"logging_monitoring"},
             "containerization": {"logging_monitoring"},
-            "ci_cd_automation": {"logging_monitoring", "build_synthesis", "containerization"},
+            "ci_cd_automation": {
+                "logging_monitoring",
+                "build_synthesis",
+                "containerization",
+            },
             # Application layer
-            "project_orchestration": {"logging_monitoring"},  # Can import from all, but validate
+            "project_orchestration": {
+                "logging_monitoring"
+            },  # Can import from all, but validate
             "terminal_interface": set(),
             "system_discovery": {"logging_monitoring"},
             # Other modules
@@ -138,7 +145,11 @@ class DependencyAnalyzer:
             return
 
         for item in self.src_path.iterdir():
-            if item.is_dir() and not item.name.startswith("_") and item.name != "output":
+            if (
+                item.is_dir()
+                and not item.name.startswith("_")
+                and item.name != "output"
+            ):
                 self.scan_module(item.name)
 
     def detect_circular_dependencies(self) -> list[tuple[str, str]]:
@@ -146,9 +157,13 @@ class DependencyAnalyzer:
         circular = []
 
         # Build dependency graph
-        graph: dict[str, set[str]] = {module: set(self.imports[module]) for module in self.modules}
+        graph: dict[str, set[str]] = {
+            module: set(self.imports[module]) for module in self.modules
+        }
 
-        def has_cycle(start: str, current: str, visited: set[str], path: list[str]) -> bool:
+        def has_cycle(
+            start: str, current: str, visited: set[str], path: list[str]
+        ) -> bool:
             """Check if there's a cycle from start to current."""
             if current in visited:
                 if current == start:
@@ -203,7 +218,9 @@ class DependencyAnalyzer:
                         {
                             "module": module,
                             "imported": imported_module,
-                            "allowed": ", ".join(sorted(allowed)) if allowed else "none",
+                            "allowed": ", ".join(sorted(allowed))
+                            if allowed
+                            else "none",
                             "severity": "error",
                         }
                     )
@@ -242,7 +259,9 @@ class DependencyAnalyzer:
         if self.violations:
             lines.append("❌ **Dependency hierarchy violations:**")
             lines.append("")
-            lines.append("| Module | Imported Module | Allowed Dependencies | Severity |")
+            lines.append(
+                "| Module | Imported Module | Allowed Dependencies | Severity |"
+            )
             lines.append("|--------|----------------|---------------------|----------|")
 
             for violation in self.violations:
@@ -317,7 +336,9 @@ class DependencyAnalyzer:
             "violations": violations,
             "summary": {
                 "total_modules": len(self.modules),
-                "modules_with_imports": len([m for m in self.modules if self.imports.get(m)]),
+                "modules_with_imports": len(
+                    [m for m in self.modules if self.imports.get(m)]
+                ),
                 "circular_count": len(circular),
                 "violation_count": len(violations),
             },
@@ -375,4 +396,3 @@ def main() -> int:
 
 if __name__ == "__main__":
     sys.exit(main())
-

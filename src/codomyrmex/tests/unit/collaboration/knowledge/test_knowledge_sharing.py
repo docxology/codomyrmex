@@ -5,7 +5,6 @@ global search, conflict resolution), and KnowledgeRouter (routing,
 expertise matching).
 """
 
-
 from codomyrmex.collaboration.knowledge.knowledge_router import KnowledgeRouter
 from codomyrmex.collaboration.knowledge.models import (
     AccessLevel,
@@ -18,6 +17,7 @@ from codomyrmex.collaboration.knowledge.models import (
 from codomyrmex.collaboration.knowledge.shared_pool import SharedMemoryPool
 
 # ─── Models ───────────────────────────────────────────────────────────
+
 
 class TestModels:
     """Test suite for Models."""
@@ -44,6 +44,7 @@ class TestModels:
 
 # ─── SharedMemoryPool ────────────────────────────────────────────────
 
+
 class TestSharedMemoryPool:
     """Test suite for SharedMemoryPool."""
 
@@ -64,7 +65,7 @@ class TestSharedMemoryPool:
         pool.create_namespace("agent-a")
         pool.put("agent-a", "key", "value")
         entry = pool.get("agent-a", "key")
-        assert hasattr(entry, 'value')
+        assert hasattr(entry, "value")
         assert entry.value == "value"
 
     def test_global_search_cross_namespace(self):
@@ -72,8 +73,12 @@ class TestSharedMemoryPool:
         pool = SharedMemoryPool()
         pool.create_namespace("agent-a")
         pool.create_namespace("agent-b")
-        pool.put("agent-a", "pytest-tip", "use fixtures", domain="testing", tags=["pytest"])
-        pool.put("agent-b", "deploy-tip", "use containers", domain="ops", tags=["deploy"])
+        pool.put(
+            "agent-a", "pytest-tip", "use fixtures", domain="testing", tags=["pytest"]
+        )
+        pool.put(
+            "agent-b", "deploy-tip", "use containers", domain="ops", tags=["deploy"]
+        )
 
         results = pool.search_global(["pytest"])
         assert len(results) == 1
@@ -116,6 +121,7 @@ class TestSharedMemoryPool:
 
 # ─── KnowledgeRouter ─────────────────────────────────────────────────
 
+
 class TestKnowledgeRouter:
     """Test suite for KnowledgeRouter."""
 
@@ -123,16 +129,20 @@ class TestKnowledgeRouter:
         """Test functionality: route to correct expert."""
         pool = SharedMemoryPool()
         router = KnowledgeRouter(pool=pool)
-        router.register_expert(ExpertiseProfile(
-            agent_id="tester",
-            domains={"testing": 0.9},
-            tags=["pytest", "coverage", "fixtures"],
-        ))
-        router.register_expert(ExpertiseProfile(
-            agent_id="deployer",
-            domains={"deployment": 0.8},
-            tags=["docker", "k8s"],
-        ))
+        router.register_expert(
+            ExpertiseProfile(
+                agent_id="tester",
+                domains={"testing": 0.9},
+                tags=["pytest", "coverage", "fixtures"],
+            )
+        )
+        router.register_expert(
+            ExpertiseProfile(
+                agent_id="deployer",
+                domains={"deployment": 0.8},
+                tags=["docker", "k8s"],
+            )
+        )
 
         agent_id, confidence = router.route("pytest fixtures for testing")
         assert agent_id == "tester"
@@ -149,14 +159,18 @@ class TestKnowledgeRouter:
         """Test functionality: query returns results."""
         pool = SharedMemoryPool()
         pool.create_namespace("tester")
-        pool.put("tester", "tip-1", "Use parametrize", domain="testing", tags=["pytest"])
+        pool.put(
+            "tester", "tip-1", "Use parametrize", domain="testing", tags=["pytest"]
+        )
 
         router = KnowledgeRouter(pool=pool)
-        router.register_expert(ExpertiseProfile(
-            agent_id="tester",
-            domains={"testing": 0.9},
-            tags=["pytest"],
-        ))
+        router.register_expert(
+            ExpertiseProfile(
+                agent_id="tester",
+                domains={"testing": 0.9},
+                tags=["pytest"],
+            )
+        )
 
         result = router.query("pytest")
         assert isinstance(result, QueryResult)
@@ -165,12 +179,20 @@ class TestKnowledgeRouter:
     def test_suggest_experts(self):
         """Test functionality: suggest experts."""
         router = KnowledgeRouter()
-        router.register_expert(ExpertiseProfile(
-            agent_id="a", domains={"testing": 0.9}, tags=["pytest"],
-        ))
-        router.register_expert(ExpertiseProfile(
-            agent_id="b", domains={"ops": 0.7}, tags=["docker"],
-        ))
+        router.register_expert(
+            ExpertiseProfile(
+                agent_id="a",
+                domains={"testing": 0.9},
+                tags=["pytest"],
+            )
+        )
+        router.register_expert(
+            ExpertiseProfile(
+                agent_id="b",
+                domains={"ops": 0.7},
+                tags=["docker"],
+            )
+        )
         suggestions = router.suggest_experts("pytest testing", n=2)
         assert len(suggestions) >= 1
         assert suggestions[0][0] == "a"

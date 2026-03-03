@@ -125,7 +125,9 @@ def quantize_int8(
         raise ValueError(f"scheme must be 'symmetric' or 'asymmetric', got '{scheme}'")
 
     channel_axis = axis if per_channel else None
-    scale, zero_point = compute_scale_zero_point_int8(x, scheme=scheme, axis=channel_axis)
+    scale, zero_point = compute_scale_zero_point_int8(
+        x, scheme=scheme, axis=channel_axis
+    )
 
     if per_channel and isinstance(scale, np.ndarray):
         # Reshape scale/zero_point for broadcasting

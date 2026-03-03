@@ -22,6 +22,7 @@ class SystemState:
         variables: Map of variable names to values.
         timestamp: Time of measurement.
     """
+
     variables: dict[str, float] = field(default_factory=dict)
     timestamp: float = field(default_factory=time.time)
 
@@ -37,6 +38,7 @@ class FeedbackLoop:
         feedback_type: Positive or Negative.
         delay: Time delay in loop response.
     """
+
     source_var: str
     target_var: str
     gain: float = 1.0
@@ -53,6 +55,7 @@ class Homeostat:
         bounds: Map of var -> (min, max).
         adaptation_rate: How fast it reconfigures when out of bounds.
     """
+
     essential_vars: list[str]
     bounds: dict[str, tuple] = field(default_factory=dict)
     adaptation_rate: float = 0.1
@@ -68,6 +71,7 @@ class ControlSystem:
         setpoints: Target values for variables.
         controllers: Active controllers (e.g. PIDs).
     """
+
     name: str
     setpoints: dict[str, float] = field(default_factory=dict)
     active: bool = True

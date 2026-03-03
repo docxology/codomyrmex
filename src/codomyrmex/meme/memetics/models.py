@@ -157,9 +157,7 @@ class Memeplex:
         fitnesses = sorted(m.fitness for m in self.memes)
         n = len(fitnesses)
         numerator = sum(
-            abs(fitnesses[i] - fitnesses[j])
-            for i in range(n)
-            for j in range(n)
+            abs(fitnesses[i] - fitnesses[j]) for i in range(n) for j in range(n)
         )
         denominator = 2 * n * sum(fitnesses)
         if denominator == 0:

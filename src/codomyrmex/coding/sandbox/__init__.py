@@ -26,4 +26,3 @@ __all__ = [
     "prepare_stdin_file",
     "cleanup_temp_files",
 ]
-

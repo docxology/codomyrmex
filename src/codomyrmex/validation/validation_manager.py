@@ -69,7 +69,9 @@ class ValidationManager:
 
     # ── Core Validation ─────────────────────────────────────────────
 
-    def validate(self, data: Any, schema: Any, validator_type: str = "json_schema") -> ValidationResult:
+    def validate(
+        self, data: Any, schema: Any, validator_type: str = "json_schema"
+    ) -> ValidationResult:
         """Validate data against a schema.
 
         Args:
@@ -84,18 +86,26 @@ class ValidationManager:
         if validator_type in self._validators:
             validator_func = self._validators[validator_type]
             validator = Validator(validator_type="custom")
-            result = validator._validate_custom(data, lambda d: validator_func(d, schema))
+            result = validator._validate_custom(
+                data, lambda d: validator_func(d, schema)
+            )
         else:
             validator = Validator(validator_type=validator_type)
             result = validator.validate(data, schema)
 
-        self._history.append(ValidationRun(
-            schema_name=str(schema.get("title", "unknown") if isinstance(schema, dict) else "unknown"),
-            validator_type=validator_type,
-            success=result.is_valid,
-            duration_ms=(time.time() - start) * 1000,
-            issue_count=len(result.errors),
-        ))
+        self._history.append(
+            ValidationRun(
+                schema_name=str(
+                    schema.get("title", "unknown")
+                    if isinstance(schema, dict)
+                    else "unknown"
+                ),
+                validator_type=validator_type,
+                success=result.is_valid,
+                duration_ms=(time.time() - start) * 1000,
+                issue_count=len(result.errors),
+            )
+        )
         return result
 
     def validate_batch(
@@ -109,7 +119,10 @@ class ValidationManager:
         Returns:
             List of ValidationResult for each record.
         """
-        return [self.validate(record, schema, validator_type=validator_type) for record in records]
+        return [
+            self.validate(record, schema, validator_type=validator_type)
+            for record in records
+        ]
 
     # ── Contextual Rules ────────────────────────────────────────────
 
@@ -124,7 +137,9 @@ class ValidationManager:
 
     # ── Profiles ────────────────────────────────────────────────────
 
-    def create_profile(self, name: str, rules: list[tuple[str, Callable]] | None = None) -> None:
+    def create_profile(
+        self, name: str, rules: list[tuple[str, Callable]] | None = None
+    ) -> None:
         """Create a named validation profile with a set of rules.
 
         Args:
@@ -133,7 +148,9 @@ class ValidationManager:
         """
         self._profiles[name] = rules or []
 
-    def validate_with_profile(self, data: dict[str, Any], profile_name: str) -> ValidationSummary:
+    def validate_with_profile(
+        self, data: dict[str, Any], profile_name: str
+    ) -> ValidationSummary:
         """Run all rules in a named profile."""
         rules = self._profiles.get(profile_name, [])
         issues: list[ValidationIssue] = []
@@ -141,10 +158,15 @@ class ValidationManager:
             try:
                 result = rule_fn(data)
                 if result is not None:
-                    issues.append(result if isinstance(result, ValidationIssue) else
-                                  ValidationIssue(field="unknown", message=str(result)))
+                    issues.append(
+                        result
+                        if isinstance(result, ValidationIssue)
+                        else ValidationIssue(field="unknown", message=str(result))
+                    )
             except Exception as e:
-                issues.append(ValidationIssue(field=rule_name, message=str(e), severity="error"))
+                issues.append(
+                    ValidationIssue(field=rule_name, message=str(e), severity="error")
+                )
         return ValidationSummary(issues)
 
     # ── Statistics ──────────────────────────────────────────────────
@@ -170,6 +192,7 @@ class ValidationManager:
             "successes": successes,
             "failures": len(self._history) - successes,
             "pass_rate": successes / len(self._history),
-            "avg_duration_ms": sum(r.duration_ms for r in self._history) / len(self._history),
+            "avg_duration_ms": sum(r.duration_ms for r in self._history)
+            / len(self._history),
             "validators_used": list({r.validator_type for r in self._history}),
         }

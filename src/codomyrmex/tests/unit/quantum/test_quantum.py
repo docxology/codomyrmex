@@ -17,6 +17,7 @@ try:
         ghz_state,
         qft,
     )
+
     HAS_MODULE = True
 except ImportError:
     HAS_MODULE = False
@@ -33,6 +34,7 @@ if not HAS_MODULE:
 @pytest.mark.unit
 class TestGateType:
     """Test suite for GateType."""
+
     def test_hadamard(self):
         """Test functionality: hadamard."""
         assert GateType.H is not None
@@ -59,6 +61,7 @@ class TestGateType:
 @pytest.mark.unit
 class TestGate:
     """Test suite for Gate."""
+
     def test_create_gate(self):
         """Test functionality: create gate."""
         gate = Gate(gate_type=GateType.H, target=0)
@@ -81,6 +84,7 @@ class TestGate:
 @pytest.mark.unit
 class TestQubit:
     """Test suite for Qubit."""
+
     def test_create_qubit(self):
         """Test functionality: create qubit."""
         qubit = Qubit()
@@ -111,6 +115,7 @@ class TestQubit:
 @pytest.mark.unit
 class TestQuantumCircuit:
     """Test suite for QuantumCircuit."""
+
     def test_create_circuit(self):
         """Test functionality: create circuit."""
         circuit = QuantumCircuit(num_qubits=2)
@@ -125,6 +130,7 @@ class TestQuantumCircuit:
 @pytest.mark.unit
 class TestQuantumSimulator:
     """Test suite for QuantumSimulator."""
+
     def test_create_simulator(self):
         """Test functionality: create simulator."""
         sim = QuantumSimulator()
@@ -134,6 +140,7 @@ class TestQuantumSimulator:
 @pytest.mark.unit
 class TestBellState:
     """Test suite for BellState."""
+
     def test_creates_circuit(self):
         """Test functionality: creates circuit."""
         circuit = bell_state()
@@ -143,6 +150,7 @@ class TestBellState:
 @pytest.mark.unit
 class TestGHZState:
     """Test suite for GHZState."""
+
     def test_creates_circuit(self):
         """Test functionality: creates circuit."""
         circuit = ghz_state(3)
@@ -152,6 +160,7 @@ class TestGHZState:
 @pytest.mark.unit
 class TestQFT:
     """Test suite for QFT."""
+
     def test_creates_circuit(self):
         """Test functionality: creates circuit."""
         circuit = qft(3)
@@ -579,7 +588,9 @@ class TestQFTGateCounts:
         for n in range(2, 6):
             c = qft(n)
             expected = n * (n + 1) // 2
-            assert len(c.gates) == expected, f"QFT({n}) expected {expected} gates, got {len(c.gates)}"
+            assert len(c.gates) == expected, (
+                f"QFT({n}) expected {expected} gates, got {len(c.gates)}"
+            )
 
 
 # ---------------------------------------------------------------------------
@@ -712,7 +723,13 @@ class TestCircuitStats:
     def test_stats_returns_all_keys(self):
         """Test functionality: stats returns all keys."""
         stats = circuit_stats(QuantumCircuit(1))
-        expected_keys = {"num_qubits", "num_gates", "gate_counts", "depth", "has_measurements"}
+        expected_keys = {
+            "num_qubits",
+            "num_gates",
+            "gate_counts",
+            "depth",
+            "has_measurements",
+        }
         assert set(stats.keys()) == expected_keys
 
 

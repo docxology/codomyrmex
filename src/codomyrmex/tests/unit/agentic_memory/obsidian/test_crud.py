@@ -16,6 +16,7 @@ from codomyrmex.agentic_memory.obsidian.vault import ObsidianVault
 
 class TestCreateNote:
     """Test suite for CreateNote."""
+
     def test_create_basic(self, tmp_vault):
         """Test functionality: create basic."""
         vault = ObsidianVault(tmp_vault)
@@ -58,6 +59,7 @@ class TestCreateNote:
 
 class TestReadNote:
     """Test suite for ReadNote."""
+
     def test_read_existing(self, tmp_vault):
         """Test functionality: read existing."""
         vault = ObsidianVault(tmp_vault)
@@ -80,6 +82,7 @@ class TestReadNote:
 
 class TestUpdateNote:
     """Test suite for UpdateNote."""
+
     def test_update_content(self, tmp_vault):
         """Test functionality: update content."""
         vault = ObsidianVault(tmp_vault)
@@ -91,9 +94,7 @@ class TestUpdateNote:
     def test_update_frontmatter(self, tmp_vault):
         """Test functionality: update frontmatter."""
         vault = ObsidianVault(tmp_vault)
-        update_note(
-            vault, "My Test Note.md", frontmatter={"new_key": "new_value"}
-        )
+        update_note(vault, "My Test Note.md", frontmatter={"new_key": "new_value"})
         note2 = read_note(vault, "My Test Note.md")
         assert note2.frontmatter["new_key"] == "new_value"
         # Original keys preserved
@@ -108,6 +109,7 @@ class TestUpdateNote:
 
 class TestDeleteNote:
     """Test suite for DeleteNote."""
+
     def test_delete_existing(self, tmp_vault):
         """Test functionality: delete existing."""
         vault = ObsidianVault(tmp_vault)
@@ -128,6 +130,7 @@ class TestDeleteNote:
 
 class TestFrontmatter:
     """Test suite for Frontmatter."""
+
     def test_get_frontmatter(self, tmp_vault):
         """Test functionality: get frontmatter."""
         vault = ObsidianVault(tmp_vault)
@@ -146,6 +149,7 @@ class TestFrontmatter:
 
 class TestRenameNote:
     """Test suite for RenameNote."""
+
     def test_rename_basic(self, tmp_vault):
         """Test functionality: rename basic."""
         vault = ObsidianVault(tmp_vault)

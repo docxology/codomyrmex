@@ -11,16 +11,19 @@ from typing import Any
 try:
     from codomyrmex.model_context_protocol.decorators import mcp_tool
 except ImportError:
+
     def mcp_tool(**kwargs: Any):  # type: ignore[misc]
         def decorator(func: Any) -> Any:
             func._mcp_tool_meta = kwargs
             return func
+
         return decorator
 
 
 def _git():
     """Lazy import to avoid circular import with git_operations.__init__."""
     from .core import git
+
     return git
 
 
@@ -107,7 +110,12 @@ def git_init(path: str) -> dict[str, Any]:
     """Initialize a git repository."""
     try:
         result = _git().initialize_git_repository(path)
-        return {"status": "success", "initialized": True, "path": path, "result": result}
+        return {
+            "status": "success",
+            "initialized": True,
+            "path": path,
+            "result": result,
+        }
     except Exception as exc:
         return {"status": "error", "message": str(exc)}
 
@@ -223,7 +231,9 @@ def git_push(path: str = ".", remote: str = "origin") -> dict[str, Any]:
     category="git_operations",
     description="Delete a local branch. Use force=True to delete unmerged branches.",
 )
-def git_delete_branch(path: str, branch_name: str, force: bool = False) -> dict[str, Any]:
+def git_delete_branch(
+    path: str, branch_name: str, force: bool = False
+) -> dict[str, Any]:
     """Delete a local git branch."""
     try:
         result = _git().delete_branch(branch_name, repository_path=path, force=force)
@@ -236,11 +246,20 @@ def git_delete_branch(path: str, branch_name: str, force: bool = False) -> dict[
     category="git_operations",
     description="Merge a source branch into a target branch.",
 )
-def git_merge(path: str, source_branch: str, target_branch: str = None) -> dict[str, Any]:
+def git_merge(
+    path: str, source_branch: str, target_branch: str = None
+) -> dict[str, Any]:
     """Merge source_branch into target_branch (or current branch)."""
     try:
-        result = _git().merge_branch(source_branch, target_branch=target_branch, repository_path=path)
-        return {"status": "success", "merged": result, "source": source_branch, "target": target_branch}
+        result = _git().merge_branch(
+            source_branch, target_branch=target_branch, repository_path=path
+        )
+        return {
+            "status": "success",
+            "merged": result,
+            "source": source_branch,
+            "target": target_branch,
+        }
     except Exception as exc:
         return {"status": "error", "message": str(exc)}
 
@@ -460,7 +479,9 @@ def git_commit_details(path: str, commit_sha: str) -> dict[str, Any]:
 def git_get_config(path: str, key: str, global_config: bool = False) -> dict[str, Any]:
     """Get a git config value."""
     try:
-        result = _git().get_config(key, repository_path=path, global_config=global_config)
+        result = _git().get_config(
+            key, repository_path=path, global_config=global_config
+        )
         return {"status": "success", "key": key, "value": result}
     except Exception as exc:
         return {"status": "error", "message": str(exc)}
@@ -470,10 +491,14 @@ def git_get_config(path: str, key: str, global_config: bool = False) -> dict[str
     category="git_operations",
     description="Set a git configuration value (local or global scope).",
 )
-def git_set_config(path: str, key: str, value: str, global_config: bool = False) -> dict[str, Any]:
+def git_set_config(
+    path: str, key: str, value: str, global_config: bool = False
+) -> dict[str, Any]:
     """Set a git config value."""
     try:
-        result = _git().set_config(key, value, repository_path=path, global_config=global_config)
+        result = _git().set_config(
+            key, value, repository_path=path, global_config=global_config
+        )
         return {"status": "success", "key": key, "value": value, "set": result}
     except Exception as exc:
         return {"status": "error", "message": str(exc)}
@@ -483,10 +508,14 @@ def git_set_config(path: str, key: str, value: str, global_config: bool = False)
     category="git_operations",
     description="WARNING: Irreversible. Deletes untracked files from the working tree.",
 )
-def git_clean(path: str, force: bool = False, directories: bool = False) -> dict[str, Any]:
+def git_clean(
+    path: str, force: bool = False, directories: bool = False
+) -> dict[str, Any]:
     """Clean untracked files from the repository."""
     try:
-        result = _git().clean_repository(force=force, directories=directories, repository_path=path)
+        result = _git().clean_repository(
+            force=force, directories=directories, repository_path=path
+        )
         return {"status": "success", "cleaned": result}
     except Exception as exc:
         return {"status": "error", "message": str(exc)}

@@ -493,6 +493,9 @@ jobs:
     runs-on: ubuntu-latest
     needs: [dependency-scan, bandit-scan, license-scan]
     if: always()
+    permissions:
+      issues: write
+      pull-requests: write
     steps:
       - name: Download all security artifacts
         uses: actions/download-artifact@v4
@@ -561,12 +564,21 @@ jobs:
                 ? report.substring(0, maxLength) + '\n\n... (truncated, see artifacts for full report)'
                 : report;
               
-              github.rest.issues.createComment({
-                issue_number: context.issue.number,
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                body: `## 🔒 Security Scan Results\n\n${summary}`
-              });
+              if (context.issue && context.issue.number) {
+                try {
+                  await github.rest.issues.createComment({
+                    issue_number: context.issue.number,
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    body: `## 🔒 Security Scan Results\n\n${summary}`
+                  });
+                } catch (e) {
+                  console.error("Failed to create comment", e);
+                }
+              } else {
+                 console.log("No issue context to comment on");
+                 console.log(summary);
+              }
             }
 
   security-status:

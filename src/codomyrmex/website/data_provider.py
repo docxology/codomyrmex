@@ -26,10 +26,17 @@ class DataProvider(HealthProviderMixin, PAIProviderMixin):
     """
 
     # Utility modules that don't need API specs
-    _UTILITY_MODULES = frozenset({
-        "__pycache__", "tests", "utils", "exceptions", "skills",
-        "module_template", "examples",
-    })
+    _UTILITY_MODULES = frozenset(
+        {
+            "__pycache__",
+            "tests",
+            "utils",
+            "exceptions",
+            "skills",
+            "module_template",
+            "examples",
+        }
+    )
 
     _PAI_ROOT: Path = Path.home() / ".claude"
 
@@ -45,7 +52,7 @@ class DataProvider(HealthProviderMixin, PAIProviderMixin):
             "environment": os.getenv("CODOMYRMEX_ENV", "Development"),
             "module_count": len(self.get_modules()),
             "agent_count": len(self.get_actual_agents()),
-            "last_build": self._get_last_build_time()
+            "last_build": self._get_last_build_time(),
         }
 
     def _compute_module_status(self, module_path: Path) -> str:
@@ -86,13 +93,15 @@ class DataProvider(HealthProviderMixin, PAIProviderMixin):
                 if description == "No description available":
                     description = self._get_description_from_markdown(item)
 
-                modules.append({
-                    "name": item.name,
-                    "status": self._compute_module_status(item),
-                    "path": str(item.relative_to(self.root_dir)),
-                    "description": description,
-                    "submodules": self._get_submodules(item)
-                })
+                modules.append(
+                    {
+                        "name": item.name,
+                        "status": self._compute_module_status(item),
+                        "path": str(item.relative_to(self.root_dir)),
+                        "description": description,
+                        "submodules": self._get_submodules(item),
+                    }
+                )
 
         return sorted(modules, key=lambda x: x["name"])
 
@@ -101,11 +110,13 @@ class DataProvider(HealthProviderMixin, PAIProviderMixin):
         submodules = []
         for item in module_path.iterdir():
             if item.is_dir() and (item / "__init__.py").exists():
-                submodules.append({
-                    "name": item.name,
-                    "path": str(item.relative_to(self.root_dir)),
-                    "description": self._get_description(item)
-                })
+                submodules.append(
+                    {
+                        "name": item.name,
+                        "path": str(item.relative_to(self.root_dir)),
+                        "description": self._get_description(item),
+                    }
+                )
         return sorted(submodules, key=lambda x: x["name"])
 
     def get_actual_agents(self) -> list[dict[str, Any]]:
@@ -129,13 +140,15 @@ class DataProvider(HealthProviderMixin, PAIProviderMixin):
                 if description == "No description available":
                     description = self._get_description_from_markdown(item)
 
-                agents.append({
-                    "name": item.name,
-                    "status": self._compute_module_status(item),
-                    "path": str(item.relative_to(self.root_dir)),
-                    "description": description,
-                    "type": self._get_agent_type(item.name)
-                })
+                agents.append(
+                    {
+                        "name": item.name,
+                        "status": self._compute_module_status(item),
+                        "path": str(item.relative_to(self.root_dir)),
+                        "description": description,
+                        "type": self._get_agent_type(item.name),
+                    }
+                )
 
         return sorted(agents, key=lambda x: x["name"])
 
@@ -153,19 +166,36 @@ class DataProvider(HealthProviderMixin, PAIProviderMixin):
             return "Framework"
         return "Agent"
 
-
     def get_mcp_tools(self) -> dict[str, Any]:
         """Return MCP tools, resources, and prompts from the PAI bridge."""
         try:
             from codomyrmex.agents.pai.mcp_bridge import get_skill_manifest
+
             manifest = get_skill_manifest()
 
             # Classify tools as safe vs destructive using trust gateway patterns
             destructive_patterns = {
-                "write", "delete", "remove", "execute", "run", "drop",
-                "create", "update", "modify", "set", "reset", "clear",
-                "purge", "destroy", "kill", "terminate", "send", "push",
-                "mutate", "shutdown", "stop",
+                "write",
+                "delete",
+                "remove",
+                "execute",
+                "run",
+                "drop",
+                "create",
+                "update",
+                "modify",
+                "set",
+                "reset",
+                "clear",
+                "purge",
+                "destroy",
+                "kill",
+                "terminate",
+                "send",
+                "push",
+                "mutate",
+                "shutdown",
+                "stop",
             }
 
             tools = []
@@ -173,13 +203,17 @@ class DataProvider(HealthProviderMixin, PAIProviderMixin):
                 name = tool.get("name", "")
                 parts = name.lower().split(".")
                 last_part = parts[-1] if parts else ""
-                is_destructive = any(last_part.startswith(p) for p in destructive_patterns)
-                tools.append({
-                    "name": name,
-                    "description": tool.get("description", ""),
-                    "category": tool.get("category", "general"),
-                    "is_destructive": is_destructive,
-                })
+                is_destructive = any(
+                    last_part.startswith(p) for p in destructive_patterns
+                )
+                tools.append(
+                    {
+                        "name": name,
+                        "description": tool.get("description", ""),
+                        "category": tool.get("category", "general"),
+                        "is_destructive": is_destructive,
+                    }
+                )
 
             return {
                 "tools": tools,
@@ -209,13 +243,15 @@ class DataProvider(HealthProviderMixin, PAIProviderMixin):
             rel_path = path.relative_to(scripts_dir)
             title, description = self._get_script_metadata(path)
 
-            scripts.append({
-                "name": str(rel_path),
-                "title": title,
-                "path": str(rel_path),
-                "full_path": str(path),
-                "description": description
-            })
+            scripts.append(
+                {
+                    "name": str(rel_path),
+                    "title": title,
+                    "path": str(rel_path),
+                    "full_path": str(path),
+                    "description": description,
+                }
+            )
 
         return sorted(scripts, key=lambda x: x["name"])
 
@@ -258,7 +294,7 @@ class DataProvider(HealthProviderMixin, PAIProviderMixin):
                     docstring = content[start:end].strip()
 
             if docstring:
-                lines = docstring.split('\n')
+                lines = docstring.split("\n")
                 # Try to find a title
                 # 1. explicit "Title: ..."
                 for line in lines:
@@ -275,7 +311,9 @@ class DataProvider(HealthProviderMixin, PAIProviderMixin):
                 description = docstring
 
         except Exception as e:
-            logger.debug("Failed to extract script metadata from %s: %s", script_path, e)
+            logger.debug(
+                "Failed to extract script metadata from %s: %s", script_path, e
+            )
             pass
 
         return title, description
@@ -298,7 +336,6 @@ class DataProvider(HealthProviderMixin, PAIProviderMixin):
                     continue
         return "No description available"
 
-
     def get_config_files(self) -> list[dict[str, str]]:
         """Scans for configuration files."""
         configs = []
@@ -308,11 +345,13 @@ class DataProvider(HealthProviderMixin, PAIProviderMixin):
         for pattern in patterns:
             for path in self.root_dir.glob(pattern):
                 if path.is_file():
-                    configs.append({
-                        "name": path.name,
-                        "path": path.name, # Relative to root
-                        "type": path.suffix.lstrip(".")
-                    })
+                    configs.append(
+                        {
+                            "name": path.name,
+                            "path": path.name,  # Relative to root
+                            "type": path.suffix.lstrip("."),
+                        }
+                    )
 
         # Also look in config/ dir if it exists
         config_dir = self.root_dir / "config"
@@ -320,17 +359,28 @@ class DataProvider(HealthProviderMixin, PAIProviderMixin):
             for pattern in patterns:
                 for path in config_dir.glob(pattern):
                     if path.is_file():
-                        configs.append({
-                            "name": f"config/{path.name}",
-                            "path": str(path.relative_to(self.root_dir)),
-                            "type": path.suffix.lstrip(".")
-                        })
+                        configs.append(
+                            {
+                                "name": f"config/{path.name}",
+                                "path": str(path.relative_to(self.root_dir)),
+                                "type": path.suffix.lstrip("."),
+                            }
+                        )
 
         return sorted(configs, key=lambda x: x["name"])
 
-    _SAFE_CONFIG_EXTENSIONS = frozenset({
-        ".toml", ".yaml", ".yml", ".json", ".txt", ".cfg", ".ini", ".conf",
-    })
+    _SAFE_CONFIG_EXTENSIONS = frozenset(
+        {
+            ".toml",
+            ".yaml",
+            ".yml",
+            ".json",
+            ".txt",
+            ".cfg",
+            ".ini",
+            ".conf",
+        }
+    )
 
     def get_config_content(self, filename: str) -> str:
         """Reads content of a config file.
@@ -350,7 +400,9 @@ class DataProvider(HealthProviderMixin, PAIProviderMixin):
         # Restrict to safe extensions
         suffix = file_path.suffix.lower()
         if suffix not in self._SAFE_CONFIG_EXTENSIONS:
-            raise ValueError(f"File type '{suffix}' is not allowed - only config files permitted")
+            raise ValueError(
+                f"File type '{suffix}' is not allowed - only config files permitted"
+            )
 
         if not file_path.exists():
             raise FileNotFoundError(f"File {filename} not found")
@@ -372,7 +424,9 @@ class DataProvider(HealthProviderMixin, PAIProviderMixin):
 
         # Only allow updating existing files - refuse to create new ones
         if not file_path.exists():
-            raise FileNotFoundError(f"File {filename} does not exist - refusing to create new files")
+            raise FileNotFoundError(
+                f"File {filename} does not exist - refusing to create new files"
+            )
 
         logger.info("Saving config file: %s", filename)
         file_path.write_text(content, encoding="utf-8")
@@ -391,12 +445,14 @@ class DataProvider(HealthProviderMixin, PAIProviderMixin):
         # Add src/ READMEs
         src_docs = {"name": "Modules", "children": []}
         if src_root.exists():
-             for path in src_root.rglob("README.md"):
-                  src_docs["children"].append({
-                      "name": str(path.relative_to(src_root).parent),
-                      "path": str(path.relative_to(self.root_dir)),
-                      "type": "file"
-                  })
+            for path in src_root.rglob("README.md"):
+                src_docs["children"].append(
+                    {
+                        "name": str(path.relative_to(src_root).parent),
+                        "path": str(path.relative_to(self.root_dir)),
+                        "type": "file",
+                    }
+                )
         if src_docs["children"]:
             tree["children"].append(src_docs)
 
@@ -417,11 +473,13 @@ class DataProvider(HealthProviderMixin, PAIProviderMixin):
                 continue
 
             if item.is_file() and item.suffix == ".md":
-                node["children"].append({
-                     "name": item.name,
-                     "path": str(item.relative_to(self.root_dir)),
-                     "type": "file"
-                })
+                node["children"].append(
+                    {
+                        "name": item.name,
+                        "path": str(item.relative_to(self.root_dir)),
+                        "type": "file",
+                    }
+                )
             elif item.is_dir():
                 child_node = self._scan_directory_for_docs(item)
                 # Only add if it has content
@@ -487,11 +545,12 @@ class DataProvider(HealthProviderMixin, PAIProviderMixin):
         try:
             result = subprocess.run(
                 ["git", "log", "-1", "--format=%ci"],
-                capture_output=True, text=True,
-                cwd=self.root_dir, timeout=5
+                capture_output=True,
+                text=True,
+                cwd=self.root_dir,
+                timeout=5,
             )
             timestamp = result.stdout.strip()
             return timestamp if timestamp else "N/A"
         except Exception:
             return "N/A"
-

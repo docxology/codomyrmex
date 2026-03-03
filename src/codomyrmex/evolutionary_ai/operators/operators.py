@@ -17,6 +17,7 @@ T = TypeVar("T")
 
 # ─── Mutation Operators ─────────────────────────────────────────────────
 
+
 class MutationOperator(ABC, Generic[T]):
     """Abstract base class for mutation operators."""
 
@@ -130,6 +131,7 @@ class ScrambleMutation(MutationOperator[list[Any]]):
 
 # ─── Crossover Operators ────────────────────────────────────────────────
 
+
 class CrossoverOperator(ABC, Generic[T]):
     """Abstract base class for crossover operators."""
 
@@ -162,7 +164,9 @@ class CrossoverOperator(ABC, Generic[T]):
     def _copy_parent(self, parent: Individual[T]) -> Individual[T]:
         """Create a copy of a parent, preserving its class."""
         return parent.__class__(
-            genes=list(parent.genes) if isinstance(parent.genes, list) else parent.genes,
+            genes=list(parent.genes)
+            if isinstance(parent.genes, list)
+            else parent.genes,
             fitness=parent.fitness,
             metadata=dict(parent.metadata),
         )
@@ -221,14 +225,14 @@ class TwoPointCrossover(CrossoverOperator[list[Any]]):
         point1, point2 = sorted(random.sample(range(1, length), 2))
 
         child1_genes = (
-            list(parent1.genes[:point1]) +
-            list(parent2.genes[point1:point2]) +
-            list(parent1.genes[point2:])
+            list(parent1.genes[:point1])
+            + list(parent2.genes[point1:point2])
+            + list(parent1.genes[point2:])
         )
         child2_genes = (
-            list(parent2.genes[:point1]) +
-            list(parent1.genes[point1:point2]) +
-            list(parent2.genes[point2:])
+            list(parent2.genes[:point1])
+            + list(parent1.genes[point1:point2])
+            + list(parent2.genes[point2:])
         )
 
         return (

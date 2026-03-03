@@ -18,6 +18,7 @@ logger = get_logger(__name__)
 
 class ExportFormat(Enum):
     """Supported export formats."""
+
     PNG = "png"
     SVG = "svg"
     PDF = "pdf"
@@ -28,6 +29,7 @@ class ExportFormat(Enum):
 @dataclass
 class ExportConfig:
     """Configuration for chart export."""
+
     format: ExportFormat = ExportFormat.PNG
     dpi: int = 150
     width: int | None = None
@@ -43,8 +45,9 @@ class ChartExporter:
     def __init__(self, output_dir: Path | None = None) -> None:
         self._output_dir = output_dir or Path(".")
 
-    def export(self, fig: Any, filename: str,
-               config: ExportConfig | None = None) -> Path:
+    def export(
+        self, fig: Any, filename: str, config: ExportConfig | None = None
+    ) -> Path:
         """Export a matplotlib figure to file.
 
         Args:
@@ -71,13 +74,18 @@ class ChartExporter:
             save_kwargs["quality"] = cfg.quality
 
         fig.savefig(str(output_path), **save_kwargs)
-        logger.info("Exported chart to %s (%d bytes)", output_path,
-                     output_path.stat().st_size)
+        logger.info(
+            "Exported chart to %s (%d bytes)", output_path, output_path.stat().st_size
+        )
         return output_path
 
-    def export_multi(self, fig: Any, filename: str,
-                     formats: list[ExportFormat] | None = None,
-                     dpi: int = 150) -> list[Path]:
+    def export_multi(
+        self,
+        fig: Any,
+        filename: str,
+        formats: list[ExportFormat] | None = None,
+        dpi: int = 150,
+    ) -> list[Path]:
         """Export a figure to multiple formats at once."""
         fmts = formats or [ExportFormat.PNG, ExportFormat.SVG]
         paths = []
@@ -90,9 +98,9 @@ class ChartExporter:
         """Export an interactive figure to HTML (if Plotly-compatible)."""
         output_path = self._output_dir / f"{filename}.html"
         output_path.parent.mkdir(parents=True, exist_ok=True)
-        if hasattr(fig, 'write_html'):
+        if hasattr(fig, "write_html"):
             fig.write_html(str(output_path))
-        elif hasattr(fig, 'savefig'):
+        elif hasattr(fig, "savefig"):
             # Fallback: save as SVG embedded in HTML
             svg_path = self.export(fig, filename, ExportConfig(format=ExportFormat.SVG))
             svg_content = svg_path.read_text()

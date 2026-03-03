@@ -47,8 +47,10 @@ PROJECT_ROOT = os.path.abspath(os.path.join(SCRIPT_DIR, "..", ".."))
 
 logger = get_logger(__name__)
 
+
 class DeploymentStatus(Enum):
     """Deployment execution status."""
+
     PENDING = "pending"
     RUNNING = "running"
     SUCCESS = "success"
@@ -56,16 +58,20 @@ class DeploymentStatus(Enum):
     ROLLED_BACK = "rolled_back"
     CANCELLED = "cancelled"
 
+
 class EnvironmentType(Enum):
     """Types of deployment environments."""
+
     DEVELOPMENT = "development"
     STAGING = "staging"
     PRODUCTION = "production"
     TESTING = "testing"
 
+
 @dataclass
 class Environment:
     """Deployment environment configuration."""
+
     name: str
     type: EnvironmentType
     host: str
@@ -96,9 +102,11 @@ class Environment:
             "health_checks": self.health_checks,
         }
 
+
 @dataclass
 class Deployment:
     """Deployment configuration and status."""
+
     name: str
     version: str
     environment: Environment
@@ -139,6 +147,7 @@ class Deployment:
             "previous_version": self.previous_version,
         }
 
+
 class DeploymentOrchestrator:
     """
     Comprehensive deployment orchestrator for multiple platforms.
@@ -177,7 +186,10 @@ class DeploymentOrchestrator:
         if os.path.exists(self.config_path):
             try:
                 with open(self.config_path) as f:
-                    if yaml and (self.config_path.endswith(".yaml") or self.config_path.endswith(".yml")):
+                    if yaml and (
+                        self.config_path.endswith(".yaml")
+                        or self.config_path.endswith(".yml")
+                    ):
                         config = yaml.safe_load(f)
                     else:
                         config = json.load(f)
@@ -254,7 +266,7 @@ class DeploymentOrchestrator:
             strategy=kwargs.get("strategy", "rolling"),
             timeout=kwargs.get("timeout", 1800),
             rollback_on_failure=kwargs.get("rollback_on_failure", True),
-            previous_version=kwargs.get("previous_version")
+            previous_version=kwargs.get("previous_version"),
         )
 
         self.deployments[name] = deployment
@@ -398,9 +410,7 @@ class DeploymentOrchestrator:
         try:
             # Extract artifact if it's an archive
             if artifact_path.endswith(".tar.gz") or artifact_path.endswith(".zip"):
-                extract_dir = (
-                    f"/tmp/{os.path.basename(artifact_path).replace('.tar.gz', '').replace('.zip', '')}"
-                )
+                extract_dir = f"/tmp/{os.path.basename(artifact_path).replace('.tar.gz', '').replace('.zip', '')}"
                 if os.path.exists(extract_dir):
                     shutil.rmtree(extract_dir)
                 os.makedirs(extract_dir)
@@ -505,7 +515,7 @@ class DeploymentOrchestrator:
         """Deploy via SSH/rsync."""
         try:
             # Use rsync to deploy artifacts
-            deploy_path = environment.variables.get('deploy_path', '/opt/app')
+            deploy_path = environment.variables.get("deploy_path", "/opt/app")
             remote_path = f"{environment.user}@{environment.host}:{deploy_path}"
 
             rsync_cmd = [
@@ -513,7 +523,9 @@ class DeploymentOrchestrator:
                 "-avz",
                 "--delete",
                 "-e",
-                f"ssh -p {environment.port} -i {environment.key_path}" if environment.key_path else f"ssh -p {environment.port}",
+                f"ssh -p {environment.port} -i {environment.key_path}"
+                if environment.key_path
+                else f"ssh -p {environment.port}",
                 artifact_path,
                 remote_path,
             ]
@@ -550,12 +562,19 @@ class DeploymentOrchestrator:
                 env["DEPLOYMENT_VERSION"] = deployment.version
 
                 result = subprocess.run(
-                    hook, shell=True, capture_output=True, text=True, cwd=os.getcwd(), env=env
+                    hook,
+                    shell=True,
+                    capture_output=True,
+                    text=True,
+                    cwd=os.getcwd(),
+                    env=env,
                 )
 
                 if result.returncode != 0:
                     logger.warning(f"Hook failed: {hook} - {result.stderr}")
-                    deployment.logs.append(f"Hook failed: {hook} (exit code {result.returncode})")
+                    deployment.logs.append(
+                        f"Hook failed: {hook} (exit code {result.returncode})"
+                    )
                 else:
                     deployment.logs.append(f"Hook executed: {hook}")
                     logger.info(f"Hook successful: {hook}")
@@ -626,11 +645,15 @@ class DeploymentOrchestrator:
 
     def _rollback_deployment(self, deployment: Deployment):
         """Rollback a failed deployment."""
-        logger.info(f"Rolling back deployment: {deployment.name} (strategy: {deployment.strategy})")
+        logger.info(
+            f"Rolling back deployment: {deployment.name} (strategy: {deployment.strategy})"
+        )
 
         try:
             if not deployment.previous_version:
-                logger.warning(f"No previous version found for rollback of {deployment.name}")
+                logger.warning(
+                    f"No previous version found for rollback of {deployment.name}"
+                )
                 return
 
             # Implementation depends on deployment strategy
@@ -640,7 +663,9 @@ class DeploymentOrchestrator:
                 self._rollback_blue_green(deployment)
             else:
                 # Default to re-deploying previous version
-                logger.info(f"Executing default rollback by re-deploying version {deployment.previous_version}")
+                logger.info(
+                    f"Executing default rollback by re-deploying version {deployment.previous_version}"
+                )
                 # We would normally trigger a new deployment with previous version
                 pass
 
@@ -650,7 +675,9 @@ class DeploymentOrchestrator:
 
     def _rollback_rolling(self, deployment: Deployment):
         """Rollback rolling deployment."""
-        logger.info(f"Rolling back rolling deployment to version {deployment.previous_version}")
+        logger.info(
+            f"Rolling back rolling deployment to version {deployment.previous_version}"
+        )
         if self.k8s_client:
             # In K8s, we can use kubectl rollout undo
             try:
@@ -670,7 +697,9 @@ class DeploymentOrchestrator:
 
     def _rollback_blue_green(self, deployment: Deployment):
         """Rollback blue-green deployment."""
-        logger.info(f"Rolling back blue-green deployment to version {deployment.previous_version}")
+        logger.info(
+            f"Rolling back blue-green deployment to version {deployment.previous_version}"
+        )
         # Typically involves switching a load balancer or service selector back
         if self.k8s_client:
             # Switch service back to 'green' (previous)
@@ -704,6 +733,7 @@ class DeploymentOrchestrator:
             return True
 
         return False
+
 
 # Convenience functions
 def manage_deployments(config_path: str | None = None) -> DeploymentOrchestrator:

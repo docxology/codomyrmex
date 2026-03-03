@@ -17,6 +17,7 @@ from .strategies import FloatGenerator, IntGenerator, StringGenerator
 @dataclass
 class Fixture:
     """A test fixture."""
+
     name: str
     setup_fn: Callable[[], Any]
     teardown_fn: Callable[[Any], None] | None = None
@@ -66,11 +67,13 @@ class FixtureManager:
 
 def fixture(name: str, scope: str = "function"):
     """Decorator to create fixtures."""
+
     def decorator(func: Callable) -> Callable:
         """Decorator."""
         func._fixture_name = name
         func._fixture_scope = scope
         return func
+
     return decorator
 
 
@@ -80,19 +83,20 @@ class TestDataFactory:
     @staticmethod
     def email(domain: str = "test.com") -> str:
         """Email."""
-        username = ''.join(random.choices(string.ascii_lowercase, k=8))
+        username = "".join(random.choices(string.ascii_lowercase, k=8))
         return f"{username}@{domain}"
 
     @staticmethod
     def phone(country_code: str = "+1") -> str:
         """Phone."""
-        number = ''.join(random.choices(string.digits, k=10))
+        number = "".join(random.choices(string.digits, k=10))
         return f"{country_code}{number}"
 
     @staticmethod
     def uuid() -> str:
         """Uuid."""
         import uuid
+
         return str(uuid.uuid4())
 
     @staticmethod
@@ -111,12 +115,16 @@ class TestDataFactory:
     def json_object(depth: int = 2, breadth: int = 3) -> dict[str, Any]:
         """Generate random JSON-like object."""
         if depth == 0:
-            return random.choice([
-                StringGenerator().generate(),
-                IntGenerator().generate(),
-                FloatGenerator().generate(),
-                True, False, None,
-            ])
+            return random.choice(
+                [
+                    StringGenerator().generate(),
+                    IntGenerator().generate(),
+                    FloatGenerator().generate(),
+                    True,
+                    False,
+                    None,
+                ]
+            )
 
         result = {}
         for _ in range(breadth):
@@ -124,9 +132,11 @@ class TestDataFactory:
             if random.random() < 0.3:
                 result[key] = TestDataFactory.json_object(depth - 1, breadth)
             else:
-                result[key] = random.choice([
-                    StringGenerator().generate(),
-                    IntGenerator().generate(),
-                    random.random(),
-                ])
+                result[key] = random.choice(
+                    [
+                        StringGenerator().generate(),
+                        IntGenerator().generate(),
+                        random.random(),
+                    ]
+                )
         return result

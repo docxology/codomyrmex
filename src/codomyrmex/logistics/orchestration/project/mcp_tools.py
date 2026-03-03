@@ -24,10 +24,14 @@ try:
     MCP_AVAILABLE = True
 except ImportError:
     MCP_AVAILABLE = False
-    logger.error("CRITICAL: MCP core modules are not installed. Cannot instantiate MCP tools. Zero mock policy enforces crashing instead of mocking.")
+    logger.error(
+        "CRITICAL: MCP core modules are not installed. Cannot instantiate MCP tools. Zero mock policy enforces crashing instead of mocking."
+    )
 
     def __raise_mcp_error(*args, **kwargs):
-        raise RuntimeError("MCP tools cannot be utilized without the codomyrmex.model_context_protocol package installed.")
+        raise RuntimeError(
+            "MCP tools cannot be utilized without the codomyrmex.model_context_protocol package installed."
+        )
 
     MCPToolResult = __raise_mcp_error
     MCPErrorDetail = __raise_mcp_error
@@ -56,7 +60,9 @@ class OrchestrationMCPTools:
         self.resource_manager = get_resource_manager()
 
         if not MCP_AVAILABLE:
-            raise RuntimeError("Cannot initialize OrchestrationMCPTools: MCP not available (Zero-Mock strict mode)")
+            raise RuntimeError(
+                "Cannot initialize OrchestrationMCPTools: MCP not available (Zero-Mock strict mode)"
+            )
 
     def get_tool_definitions(self) -> dict[str, dict[str, Any]]:
         """Get MCP tool definitions."""

@@ -227,8 +227,7 @@ class Ledger:
         total = sum(e.amount for e in tx_entries)
         if total != Decimal("0.00"):
             raise LedgerError(
-                f"Transaction does not balance: net amount is {total} "
-                "(must be 0)."
+                f"Transaction does not balance: net amount is {total} (must be 0)."
             )
 
         txn = Transaction(
@@ -334,9 +333,9 @@ class Ledger:
                         entry.amount
                     )
                 elif acct.account_type == AccountType.EXPENSE:
-                    expenses[acct.name] = expenses.get(acct.name, Decimal("0.00")) + abs(
-                        entry.amount
-                    )
+                    expenses[acct.name] = expenses.get(
+                        acct.name, Decimal("0.00")
+                    ) + abs(entry.amount)
 
         total_rev = sum(revenue.values(), Decimal("0.00"))
         total_exp = sum(expenses.values(), Decimal("0.00"))

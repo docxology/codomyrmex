@@ -10,6 +10,7 @@ defense module.
 
 try:
     from codomyrmex.defense.active import ActiveDefense
+
     ACTIVE_DEFENSE_AVAILABLE = True
 except ImportError:
     ActiveDefense = None
@@ -17,6 +18,7 @@ except ImportError:
 
 try:
     from codomyrmex.defense.rabbithole import RabbitHole
+
     RABBITHOLE_AVAILABLE = True
 except ImportError:
     RabbitHole = None

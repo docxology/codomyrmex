@@ -128,7 +128,11 @@ class Scheduler:
 
             with self._lock:
                 # Find all jobs due to run
-                while self._job_queue and self._job_queue[0].next_run and self._job_queue[0].next_run <= now:
+                while (
+                    self._job_queue
+                    and self._job_queue[0].next_run
+                    and self._job_queue[0].next_run <= now
+                ):
                     job = heapq.heappop(self._job_queue)
                     if job.status != JobStatus.CANCELLED:
                         jobs_to_run.append(job)
@@ -144,7 +148,11 @@ class Scheduler:
         try:
             job.execute()
         except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
-            logger.warning("Job '%s' execution failed: %s", job.name if hasattr(job, 'name') else job, e)
+            logger.warning(
+                "Job '%s' execution failed: %s",
+                job.name if hasattr(job, "name") else job,
+                e,
+            )
             pass  # Error already recorded in job
 
         # Reschedule if has next run

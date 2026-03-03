@@ -80,9 +80,7 @@ class ReactiveArchitecture(AgentArchitecture):
         super().__init__(name, ArchitectureType.REACTIVE)
         self.rules: list[tuple[callable, callable]] = []
 
-    def add_rule(
-        self, condition: callable, action: callable
-    ) -> None:
+    def add_rule(self, condition: callable, action: callable) -> None:
         """
         Add a condition-action rule.
 
@@ -193,7 +191,9 @@ class DeliberativeArchitecture(AgentArchitecture):
         self.goals.append(goal)
         self.logger.debug(f"Set goal: {goal}")
 
-    def plan(self, goal: dict[str, Any], current_state: dict[str, Any]) -> list[dict[str, Any]]:
+    def plan(
+        self, goal: dict[str, Any], current_state: dict[str, Any]
+    ) -> list[dict[str, Any]]:
         """
         Create a plan to achieve a goal using knowledge base.
 
@@ -212,10 +212,12 @@ class DeliberativeArchitecture(AgentArchitecture):
         # If goal is "reach_location", and we are at "A", plan is "move_to_B", "move_to_Goal"
         plan = []
         if goal.get("type") == "complex":
-             plan.append({"action": "decompose_goal", "goal": goal})
-             plan.append({"action": "execute_subgoals"})
+            plan.append({"action": "decompose_goal", "goal": goal})
+            plan.append({"action": "execute_subgoals"})
         else:
-             plan.append({"action": "achieve_goal", "goal": goal, "context": self.kb.facts})
+            plan.append(
+                {"action": "achieve_goal", "goal": goal, "context": self.kb.facts}
+            )
 
         self.plans.append(plan)
         self.logger.debug(f"Created plan for goal: {goal}")
@@ -339,5 +341,3 @@ class HybridArchitecture(AgentArchitecture):
             return self.reactive.act(decision)
         else:
             return self.deliberative.act(decision)
-
-

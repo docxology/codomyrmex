@@ -34,6 +34,7 @@ class Queue:
         elif backend == "redis":
             try:
                 from .backends.redis_queue import RedisQueue
+
                 self._queue = RedisQueue()
             except ImportError:
                 logger.warning("Redis not available, falling back to in-memory queue")
@@ -106,4 +107,3 @@ class Queue:
             Statistics dictionary
         """
         return self._queue.get_stats()
-

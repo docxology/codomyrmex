@@ -91,7 +91,7 @@ class PersistentVectorStore(VectorStore):
             ],
         }
 
-        with open(self._path, 'w') as f:
+        with open(self._path, "w") as f:
             json.dump(data, f)
 
     def _maybe_save(self) -> None:
@@ -144,12 +144,14 @@ class PersistentVectorStore(VectorStore):
                 continue
 
             score = self._distance_fn(query, entry.embedding)
-            results.append(SearchResult(
-                id=entry.id,
-                score=score,
-                embedding=entry.embedding,
-                metadata=entry.metadata,
-            ))
+            results.append(
+                SearchResult(
+                    id=entry.id,
+                    score=score,
+                    embedding=entry.embedding,
+                    metadata=entry.metadata,
+                )
+            )
 
         results.sort(key=lambda x: x.score, reverse=self._higher_is_better)
         return results[:k]

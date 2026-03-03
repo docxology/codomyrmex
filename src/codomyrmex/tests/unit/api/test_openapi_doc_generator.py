@@ -14,6 +14,7 @@ from codomyrmex.api.openapi_generator import (
 # DocumentationOpenAPIGenerator
 # ---------------------------------------------------------------------------
 
+
 class TestDocGenMultipleEndpoints:
     """Tests for multiple-endpoint and complex endpoint scenarios."""
 
@@ -33,7 +34,10 @@ class TestDocGenMultipleEndpoints:
     def test_endpoint_with_request_body(self):
         """Endpoint containing requestBody should propagate."""
         gen = DocumentationOpenAPIGenerator()
-        body = {"required": True, "content": {"application/json": {"schema": {"type": "object"}}}}
+        body = {
+            "required": True,
+            "content": {"application/json": {"schema": {"type": "object"}}},
+        }
         endpoints = [
             {
                 "path": "/users",
@@ -83,7 +87,9 @@ class TestDocGenMultipleEndpoints:
         gen = DocumentationOpenAPIGenerator()
         endpoints = [{"path": "/def", "method": "GET"}]
         spec = gen.generate_spec("API", "1.0.0", endpoints)
-        assert spec["paths"]["/def"]["get"]["responses"] == {"200": {"description": "Success"}}
+        assert spec["paths"]["/def"]["get"]["responses"] == {
+            "200": {"description": "Success"}
+        }
 
     @pytest.mark.unit
     def test_endpoint_custom_responses(self):
@@ -98,7 +104,14 @@ class TestDocGenMultipleEndpoints:
     def test_endpoint_with_parameters(self):
         """Parameters list should pass through."""
         gen = DocumentationOpenAPIGenerator()
-        params = [{"name": "id", "in": "path", "required": True, "schema": {"type": "integer"}}]
+        params = [
+            {
+                "name": "id",
+                "in": "path",
+                "required": True,
+                "schema": {"type": "integer"},
+            }
+        ]
         endpoints = [{"path": "/users/{id}", "method": "GET", "parameters": params}]
         spec = gen.generate_spec("API", "1.0.0", endpoints)
         assert spec["paths"]["/users/{id}"]["get"]["parameters"] == params
@@ -183,6 +196,7 @@ class TestDocGenMultipleEndpoints:
 # DocumentationOpenAPIGenerator -- validate_spec
 # ---------------------------------------------------------------------------
 
+
 class TestDocGenValidateSpec:
     """Thorough validation tests for DocumentationOpenAPIGenerator.validate_spec."""
 
@@ -193,9 +207,7 @@ class TestDocGenValidateSpec:
         spec = {
             "openapi": "3.0.3",
             "info": {"title": "T", "version": "1.0.0"},
-            "paths": {
-                "/a": {"get": {"responses": {"200": {"description": "OK"}}}}
-            },
+            "paths": {"/a": {"get": {"responses": {"200": {"description": "OK"}}}}},
         }
         assert gen.validate_spec(spec) == []
 
@@ -254,9 +266,7 @@ class TestDocGenValidateSpec:
         spec = {
             "openapi": "3.0.3",
             "info": {"title": "T", "version": "1"},
-            "paths": {
-                "/x": {"CONNECT": {"responses": {"200": {"description": "OK"}}}}
-            },
+            "paths": {"/x": {"CONNECT": {"responses": {"200": {"description": "OK"}}}}},
         }
         errors = gen.validate_spec(spec)
         assert any("Invalid HTTP method" in e for e in errors)
@@ -312,7 +322,9 @@ class TestDocGenValidateSpec:
         assert any("responses" in e.lower() for e in errors)
 
     @pytest.mark.unit
-    @pytest.mark.parametrize("method", ["get", "post", "put", "delete", "patch", "options", "head"])
+    @pytest.mark.parametrize(
+        "method", ["get", "post", "put", "delete", "patch", "options", "head"]
+    )
     def test_all_valid_methods_accepted(self, method):
         """Each valid HTTP method should not produce a method error."""
         gen = DocumentationOpenAPIGenerator()
@@ -335,6 +347,7 @@ class TestDocGenValidateSpec:
 # ---------------------------------------------------------------------------
 # DocumentationOpenAPIGenerator -- export_spec
 # ---------------------------------------------------------------------------
+
 
 class TestDocGenExport:
     """Tests for export_spec and HTML doc generation edge cases."""
@@ -394,8 +407,12 @@ class TestDocGenExport:
             "info": {"title": "Multi", "version": "1.0.0", "description": "desc"},
             "paths": {
                 "/a": {"get": {"summary": "Get A", "parameters": [], "responses": {}}},
-                "/b": {"post": {"summary": "Post B", "parameters": [], "responses": {}}},
-                "/c": {"delete": {"summary": "Del C", "parameters": [], "responses": {}}},
+                "/b": {
+                    "post": {"summary": "Post B", "parameters": [], "responses": {}}
+                },
+                "/c": {
+                    "delete": {"summary": "Del C", "parameters": [], "responses": {}}
+                },
             },
         }
         with tempfile.NamedTemporaryFile(suffix=".html", delete=False) as f:

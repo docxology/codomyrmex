@@ -47,7 +47,11 @@ class SupervisorAgent(CollaborativeAgent):
         super().__init__(
             agent_id,
             name,
-            [AgentCapability(name="supervision", description="Supervise and delegate tasks")]
+            [
+                AgentCapability(
+                    name="supervision", description="Supervise and delegate tasks"
+                )
+            ],
         )
         self._workers: dict[str, WorkerAgent] = {}
         self._delegation_strategy = delegation_strategy
@@ -92,7 +96,7 @@ class SupervisorAgent(CollaborativeAgent):
         if not capable_workers:
             raise CapabilityMismatchError(
                 task.required_capabilities,
-                [cap for w in self._workers.values() for cap in w.get_capabilities()]
+                [cap for w in self._workers.values() for cap in w.get_capabilities()],
             )
 
         if self._delegation_strategy == "round_robin":
@@ -111,7 +115,9 @@ class SupervisorAgent(CollaborativeAgent):
             # Select worker with most matching capabilities
             best_worker = max(
                 capable_workers,
-                key=lambda w: len(set(w.get_capabilities()) & set(task.required_capabilities))
+                key=lambda w: len(
+                    set(w.get_capabilities()) & set(task.required_capabilities)
+                ),
             )
             return best_worker
 
@@ -167,19 +173,20 @@ class SupervisorAgent(CollaborativeAgent):
         """
         if parallel:
             results = await asyncio.gather(
-                *[self.delegate(task) for task in tasks],
-                return_exceptions=True
+                *[self.delegate(task) for task in tasks], return_exceptions=True
             )
             # Convert exceptions to TaskResults
             final_results = []
             for i, result in enumerate(results):
                 if isinstance(result, Exception):
-                    final_results.append(TaskResult(
-                        task_id=tasks[i].id,
-                        success=False,
-                        error=str(result),
-                        agent_id=self._agent_id,
-                    ))
+                    final_results.append(
+                        TaskResult(
+                            task_id=tasks[i].id,
+                            success=False,
+                            error=str(result),
+                            agent_id=self._agent_id,
+                        )
+                    )
                 else:
                     final_results.append(result)
             return final_results
@@ -216,7 +223,7 @@ class SupervisorAgent(CollaborativeAgent):
                 # Check for circular dependencies
                 raise TaskDependencyError(
                     pending[0].id,
-                    [d for d in pending[0].dependencies if d not in completed_ids]
+                    [d for d in pending[0].dependencies if d not in completed_ids],
                 )
 
             # Execute ready tasks in parallel

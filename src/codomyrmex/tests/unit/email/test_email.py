@@ -113,6 +113,7 @@ class TestEmailMessage:
     def test_subject_is_required(self):
         """Test functionality: subject is required."""
         from pydantic import ValidationError
+
         with pytest.raises(ValidationError):
             EmailMessage(
                 sender=EmailAddress(email="a@b.com"),
@@ -122,6 +123,7 @@ class TestEmailMessage:
     def test_sender_is_required(self):
         """Test functionality: sender is required."""
         from pydantic import ValidationError
+
         with pytest.raises(ValidationError):
             EmailMessage(
                 subject="Test",
@@ -131,6 +133,7 @@ class TestEmailMessage:
     def test_date_is_required(self):
         """Test functionality: date is required."""
         from pydantic import ValidationError
+
         with pytest.raises(ValidationError):
             EmailMessage(
                 subject="Test",
@@ -178,12 +181,14 @@ class TestEmailDraft:
     def test_subject_is_required(self):
         """Test functionality: draft subject is required."""
         from pydantic import ValidationError
+
         with pytest.raises(ValidationError):
             EmailDraft(body_text="no subject")
 
     def test_body_text_is_required(self):
         """Test functionality: draft body_text is required."""
         from pydantic import ValidationError
+
         with pytest.raises(ValidationError):
             EmailDraft(subject="no body")
 
@@ -205,6 +210,7 @@ class TestEmailProviderAbstractInterface:
         class IncompleteProvider(EmailProvider):
             def list_messages(self, query="", max_results=100):
                 return []
+
             # Missing: get_message, send_message, create_draft, delete_message, modify_labels
 
         with pytest.raises(TypeError):
@@ -245,16 +251,23 @@ class TestEmailProviderAbstractInterface:
         class MinimalProvider(EmailProvider):
             def list_messages(self, query="", max_results=100):
                 return []
+
             def get_message(self, message_id):
                 raise MessageNotFoundError(message_id)
+
             def send_message(self, draft):
                 return EmailMessage(
-                    subject="x", sender=EmailAddress(email="a@b.com"),
-                    date=datetime.now(UTC))
+                    subject="x",
+                    sender=EmailAddress(email="a@b.com"),
+                    date=datetime.now(UTC),
+                )
+
             def create_draft(self, draft):
                 return "id"
+
             def delete_message(self, message_id):
                 return None
+
             def modify_labels(self, message_id, add_labels, remove_labels):
                 return None
 
@@ -268,19 +281,24 @@ class TestEmailProviderAbstractInterface:
         class MinimalProvider(EmailProvider):
             def list_messages(self, query="", max_results=100):
                 return []
+
             def get_message(self, message_id):
                 return EmailMessage(
                     id=message_id,
                     subject="Test",
                     sender=EmailAddress(email="a@b.com"),
-                    date=datetime.now(UTC)
+                    date=datetime.now(UTC),
                 )
+
             def send_message(self, draft):
                 raise NotImplementedError()
+
             def create_draft(self, draft):
                 return "id"
+
             def delete_message(self, message_id):
                 return None
+
             def modify_labels(self, message_id, add_labels, remove_labels):
                 return None
 
@@ -354,7 +372,12 @@ class TestEmailExceptions:
 
     def test_all_exceptions_caught_by_base(self):
         """Test functionality: all exceptions caught by base EmailError."""
-        for exc_class in [EmailAuthError, EmailAPIError, MessageNotFoundError, InvalidMessageError]:
+        for exc_class in [
+            EmailAuthError,
+            EmailAPIError,
+            MessageNotFoundError,
+            InvalidMessageError,
+        ]:
             with pytest.raises(EmailError):
                 raise exc_class("test")
 
@@ -383,8 +406,13 @@ class TestEmailModuleExports:
 
     def test_exceptions_exported(self):
         """Test functionality: all exception types exported."""
-        for name in ["EmailError", "EmailAuthError", "EmailAPIError",
-                     "MessageNotFoundError", "InvalidMessageError"]:
+        for name in [
+            "EmailError",
+            "EmailAuthError",
+            "EmailAPIError",
+            "MessageNotFoundError",
+            "InvalidMessageError",
+        ]:
             assert hasattr(email_module, name), f"Missing export: {name}"
 
     def test_cli_commands_exported(self):
@@ -404,6 +432,7 @@ class TestAgentMailModels:
     def test_agentmail_inbox_model(self):
         """Test functionality: AgentMailInbox instantiation."""
         from codomyrmex.email.agentmail.models import AgentMailInbox
+
         inbox = AgentMailInbox(inbox_id="test@agentmail.to")
         assert inbox.inbox_id == "test@agentmail.to"
         assert inbox.pod_id is None
@@ -412,6 +441,7 @@ class TestAgentMailModels:
     def test_agentmail_thread_model(self):
         """Test functionality: AgentMailThread instantiation."""
         from codomyrmex.email.agentmail.models import AgentMailThread
+
         thread = AgentMailThread(thread_id="th_123", inbox_id="inbox_456")
         assert thread.thread_id == "th_123"
         assert thread.inbox_id == "inbox_456"
@@ -420,6 +450,7 @@ class TestAgentMailModels:
     def test_agentmail_draft_model(self):
         """Test functionality: AgentMailDraft instantiation."""
         from codomyrmex.email.agentmail.models import AgentMailDraft
+
         draft = AgentMailDraft(
             draft_id="dr_123",
             inbox_id="inbox_456",
@@ -434,6 +465,7 @@ class TestAgentMailModels:
     def test_agentmail_webhook_model(self):
         """Test functionality: AgentMailWebhook instantiation."""
         from codomyrmex.email.agentmail.models import AgentMailWebhook
+
         webhook = AgentMailWebhook(
             webhook_id="wh_123",
             url="https://example.com/hook",
@@ -446,6 +478,7 @@ class TestAgentMailModels:
     def test_agentmail_pod_model(self):
         """Test functionality: AgentMailPod instantiation."""
         from codomyrmex.email.agentmail.models import AgentMailPod
+
         pod = AgentMailPod(pod_id="pod_123", name="Test Pod")
         assert pod.pod_id == "pod_123"
         assert pod.name == "Test Pod"
@@ -453,7 +486,10 @@ class TestAgentMailModels:
     def test_agentmail_domain_model(self):
         """Test functionality: AgentMailDomain instantiation."""
         from codomyrmex.email.agentmail.models import AgentMailDomain
-        domain = AgentMailDomain(domain_id="dom_123", domain="example.com", verified=True)
+
+        domain = AgentMailDomain(
+            domain_id="dom_123", domain="example.com", verified=True
+        )
         assert domain.domain_id == "dom_123"
         assert domain.domain == "example.com"
         assert domain.verified is True
@@ -461,6 +497,7 @@ class TestAgentMailModels:
     def test_agentmail_attachment_model(self):
         """Test functionality: AgentMailAttachment instantiation."""
         from codomyrmex.email.agentmail.models import AgentMailAttachment
+
         att = AgentMailAttachment(
             attachment_id="att_123",
             filename="doc.pdf",
@@ -482,6 +519,7 @@ class TestAgentMailProvider:
     def test_import(self):
         """Test functionality: AgentMailProvider is importable."""
         from codomyrmex.email.agentmail.provider import AgentMailProvider
+
         assert AgentMailProvider is not None
 
 
@@ -494,7 +532,8 @@ class TestGmailProviderFromEnv:
     def test_from_env_exists(self):
         """GmailProvider.from_env() classmethod exists and is callable."""
         from codomyrmex.email.gmail.provider import GmailProvider
-        assert hasattr(GmailProvider, 'from_env')
+
+        assert hasattr(GmailProvider, "from_env")
         assert callable(GmailProvider.from_env)
 
     def test_from_env_raises_without_credentials(self):
@@ -507,10 +546,15 @@ class TestGmailProviderFromEnv:
             pytest.skip("Gmail SDK not installed")
 
         # Temporarily clear all Google env vars to force the no-credentials path
-        saved = {k: os.environ.pop(k, None) for k in (
-            "GOOGLE_REFRESH_TOKEN", "GOOGLE_CLIENT_ID", "GOOGLE_CLIENT_SECRET",
-            "GOOGLE_APPLICATION_CREDENTIALS",
-        )}
+        saved = {
+            k: os.environ.pop(k, None)
+            for k in (
+                "GOOGLE_REFRESH_TOKEN",
+                "GOOGLE_CLIENT_ID",
+                "GOOGLE_CLIENT_SECRET",
+                "GOOGLE_APPLICATION_CREDENTIALS",
+            )
+        }
         try:
             with pytest.raises((EmailAuthError, ImportError)):
                 GmailProvider.from_env()
@@ -527,6 +571,7 @@ class TestGmailProviderFromEnv:
         clause in from_env() raises ImportError.
         """
         import codomyrmex.email.gmail.provider as gmail_mod
+
         original = gmail_mod.GMAIL_AVAILABLE
         try:
             gmail_mod.GMAIL_AVAILABLE = False
@@ -541,6 +586,7 @@ class TestGmailProviderFromEnv:
         Tests the constructor guard clause in addition to from_env().
         """
         import codomyrmex.email.gmail.provider as gmail_mod
+
         original = gmail_mod.GMAIL_AVAILABLE
         try:
             gmail_mod.GMAIL_AVAILABLE = False
@@ -556,6 +602,7 @@ class TestAgentMailProviderGuards:
     def test_init_raises_import_error_when_sdk_missing(self):
         """AgentMailProvider.__init__() raises ImportError when AGENTMAIL_AVAILABLE is False."""
         import codomyrmex.email.agentmail.provider as am_mod
+
         original = am_mod.AGENTMAIL_AVAILABLE
         try:
             am_mod.AGENTMAIL_AVAILABLE = False
@@ -569,13 +616,16 @@ class TestAgentMailProviderGuards:
         import os
 
         from codomyrmex.email.agentmail.provider import AGENTMAIL_AVAILABLE
+
         if not AGENTMAIL_AVAILABLE:
             pytest.skip("AgentMail SDK not installed")
         saved = os.environ.pop("AGENTMAIL_API_KEY", None)
         try:
             from codomyrmex.email.exceptions import EmailAuthError
+
             with pytest.raises(EmailAuthError, match="No AgentMail API key"):
                 from codomyrmex.email.agentmail.provider import AgentMailProvider
+
                 AgentMailProvider(api_key=None)
         finally:
             if saved is not None:
@@ -604,15 +654,26 @@ class TestGmailMcpToolsMeta:
             gmail_list_messages,
             gmail_send_message,
         )
+
         tools = [
-            agentmail_send_message, agentmail_list_messages, agentmail_get_message,
-            agentmail_reply_to_message, agentmail_list_inboxes, agentmail_create_inbox,
-            agentmail_list_threads, agentmail_create_webhook,
-            gmail_send_message, gmail_list_messages, gmail_get_message, gmail_create_draft,
+            agentmail_send_message,
+            agentmail_list_messages,
+            agentmail_get_message,
+            agentmail_reply_to_message,
+            agentmail_list_inboxes,
+            agentmail_create_inbox,
+            agentmail_list_threads,
+            agentmail_create_webhook,
+            gmail_send_message,
+            gmail_list_messages,
+            gmail_get_message,
+            gmail_create_draft,
         ]
         assert len(tools) == 12
         for tool in tools:
             assert callable(tool)
             meta = getattr(tool, "_mcp_tool_meta", None)
             assert meta is not None, f"{tool.__name__} missing _mcp_tool_meta"
-            assert meta.get("category") == "email", f"{tool.__name__} wrong category: {meta.get('category')}"
+            assert meta.get("category") == "email", (
+                f"{tool.__name__} wrong category: {meta.get('category')}"
+            )

@@ -18,6 +18,7 @@ from codomyrmex.finance import (
 
 # --- Ledger Tests ---
 
+
 @pytest.mark.unit
 class TestLedger:
     def test_ledger_initialization(self):
@@ -49,10 +50,13 @@ class TestLedger:
         cash = ledger.create_account("Assets:Cash", AccountType.ASSET)
         revenue = ledger.create_account("Revenue:Sales", AccountType.REVENUE)
 
-        ledger.post_transaction([
-            {"account_id": cash.id, "amount": Decimal("100.00")},
-            {"account_id": revenue.id, "amount": Decimal("-100.00")}
-        ], description="Sale")
+        ledger.post_transaction(
+            [
+                {"account_id": cash.id, "amount": Decimal("100.00")},
+                {"account_id": revenue.id, "amount": Decimal("-100.00")},
+            ],
+            description="Sale",
+        )
 
         assert ledger.get_balance(cash.id) == Decimal("100.00")
         assert ledger.get_balance(revenue.id) == Decimal("100.00")
@@ -62,9 +66,10 @@ class TestLedger:
         ledger = Ledger()
         cash = ledger.create_account("Assets:Cash", AccountType.ASSET)
         with pytest.raises(LedgerError, match="does not balance"):
-            ledger.post_transaction([
-                {"account_id": cash.id, "amount": Decimal("100.00")}
-            ], description="Unbalanced")
+            ledger.post_transaction(
+                [{"account_id": cash.id, "amount": Decimal("100.00")}],
+                description="Unbalanced",
+            )
 
     def test_account_frozen(self):
         ledger = Ledger()
@@ -73,27 +78,35 @@ class TestLedger:
         cash.frozen = True
 
         with pytest.raises(LedgerError, match="is frozen"):
-            ledger.post_transaction([
-                {"account_id": cash.id, "amount": Decimal("100.00")},
-                {"account_id": revenue.id, "amount": Decimal("-100.00")}
-            ], description="Sale")
+            ledger.post_transaction(
+                [
+                    {"account_id": cash.id, "amount": Decimal("100.00")},
+                    {"account_id": revenue.id, "amount": Decimal("-100.00")},
+                ],
+                description="Sale",
+            )
 
     def test_trial_balance(self):
         ledger = Ledger()
         bank = ledger.create_account("Assets:Bank", AccountType.ASSET)
         equity = ledger.create_account("Equity:Capital", AccountType.EQUITY)
 
-        ledger.post_transaction([
-            {"account_id": bank.id, "amount": Decimal("1000.00")},
-            {"account_id": equity.id, "amount": Decimal("-1000.00")}
-        ], description="Investment")
+        ledger.post_transaction(
+            [
+                {"account_id": bank.id, "amount": Decimal("1000.00")},
+                {"account_id": equity.id, "amount": Decimal("-1000.00")},
+            ],
+            description="Investment",
+        )
 
         tb = ledger.trial_balance()
         assert tb["balanced"] is True
         assert tb["total_debits"] == Decimal("1000.00")
         assert tb["total_credits"] == Decimal("1000.00")
 
+
 # --- Tax Tests ---
+
 
 @pytest.mark.unit
 class TestTaxes:
@@ -120,7 +133,9 @@ class TestTaxes:
         with pytest.raises(TaxError, match="Unsupported jurisdiction"):
             TaxCalculator(jurisdiction="FR")
 
+
 # --- Payroll Tests ---
+
 
 @pytest.mark.unit
 class TestPayroll:
@@ -129,8 +144,8 @@ class TestPayroll:
         # Gross 5000 monthly
         pay = processor.calculate_pay(5000, pay_period="monthly")
         assert pay["gross"] == Decimal("5000.00")
-        assert pay["social_security"] == Decimal("310.00") # 5000 * 0.062
-        assert pay["medicare"] == Decimal("72.50") # 5000 * 0.0145
+        assert pay["social_security"] == Decimal("310.00")  # 5000 * 0.062
+        assert pay["medicare"] == Decimal("72.50")  # 5000 * 0.0145
         assert pay["net_pay"] < Decimal("5000.00")
 
     def test_generate_pay_stub(self):
@@ -144,7 +159,9 @@ class TestPayroll:
         pay = processor.calculate_pay(5000)
         assert stub.net_pay == pay["net_pay"] - Decimal("100.00")
 
+
 # --- Forecasting Tests ---
+
 
 @pytest.mark.unit
 class TestForecasting:

@@ -21,6 +21,7 @@ logger = get_logger(__name__)
 @dataclass
 class Subscription:
     """A subscription to a topic."""
+
     subscription_id: str
     topic: str
     subscriber_id: str
@@ -32,6 +33,7 @@ class Subscription:
 @dataclass
 class TopicInfo:
     """Information about a topic."""
+
     topic: str
     subscriber_count: int
     message_count: int
@@ -60,7 +62,9 @@ class Broadcaster:
 
     def __init__(self, retention_count: int = 100):
         self._topics: dict[str, set[str]] = {}  # topic -> subscription_ids
-        self._subscriptions: dict[str, Subscription] = {}  # subscription_id -> Subscription
+        self._subscriptions: dict[
+            str, Subscription
+        ] = {}  # subscription_id -> Subscription
         self._topic_created_at: dict[str, datetime] = {}
         self._message_counts: dict[str, int] = {}
         self._retention_count = retention_count
@@ -158,7 +162,9 @@ class Broadcaster:
             self._topics[subscription.topic].discard(subscription_id)
 
         del self._subscriptions[subscription_id]
-        logger.info(f"Agent {subscription.subscriber_id} unsubscribed from {subscription.topic}")
+        logger.info(
+            f"Agent {subscription.subscriber_id} unsubscribed from {subscription.topic}"
+        )
         return True
 
     def unsubscribe_all(self, subscriber_id: str) -> int:
@@ -207,7 +213,9 @@ class Broadcaster:
                         subscription.handler(message)
                     delivered += 1
                 except Exception as e:
-                    logger.error(f"Error delivering to {subscription.subscriber_id}: {e}")
+                    logger.error(
+                        f"Error delivering to {subscription.subscriber_id}: {e}"
+                    )
 
         logger.debug(f"Published to {topic}: {delivered} subscribers received")
         return delivered
@@ -239,7 +247,9 @@ class Broadcaster:
                         subscription.handler(message)
                     delivered += 1
                 except Exception as e:
-                    logger.error(f"Error delivering to {subscription.subscriber_id}: {e}")
+                    logger.error(
+                        f"Error delivering to {subscription.subscriber_id}: {e}"
+                    )
 
         return delivered
 
@@ -257,7 +267,11 @@ class Broadcaster:
 
     def list_topics(self) -> list[TopicInfo]:
         """List all topics."""
-        return [self.get_topic_info(t) for t in self._topics.keys() if self.get_topic_info(t)]
+        return [
+            self.get_topic_info(t)
+            for t in self._topics.keys()
+            if self.get_topic_info(t)
+        ]
 
     def get_subscriber_topics(self, subscriber_id: str) -> list[str]:
         """Get all topics a subscriber is subscribed to."""

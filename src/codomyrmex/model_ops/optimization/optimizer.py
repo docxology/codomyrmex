@@ -130,12 +130,14 @@ class InferenceOptimizer:
         per_item_latency = total_latency / len(inputs)
 
         for i, output in enumerate(outputs):
-            results.append(InferenceResult(
-                request_id=f"batch_{i}",
-                output=output,
-                latency_ms=per_item_latency,
-                batch_size=len(inputs),
-            ))
+            results.append(
+                InferenceResult(
+                    request_id=f"batch_{i}",
+                    output=output,
+                    latency_ms=per_item_latency,
+                    batch_size=len(inputs),
+                )
+            )
 
         with self._lock:
             self._stats.total_requests += len(inputs)

@@ -1,6 +1,5 @@
 """Model merging utilities: SLERP, linear interpolation, and model soups."""
 
-
 import numpy as np
 
 

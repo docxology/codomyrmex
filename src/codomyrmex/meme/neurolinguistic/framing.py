@@ -5,7 +5,9 @@ from __future__ import annotations
 from codomyrmex.meme.neurolinguistic.models import CognitiveFrame
 
 
-def analyze_frames(text: str, known_frames: list[CognitiveFrame]) -> list[CognitiveFrame]:
+def analyze_frames(
+    text: str, known_frames: list[CognitiveFrame]
+) -> list[CognitiveFrame]:
     """Identify which frames are active in a text.
 
     Args:
@@ -27,7 +29,9 @@ def analyze_frames(text: str, known_frames: list[CognitiveFrame]) -> list[Cognit
     return active
 
 
-def reframe(content: str, source_frame: CognitiveFrame, target_frame: CognitiveFrame) -> str:
+def reframe(
+    content: str, source_frame: CognitiveFrame, target_frame: CognitiveFrame
+) -> str:
     """Translate content from one frame to another.
 
     Uses keyword mapping to shift the perspective.

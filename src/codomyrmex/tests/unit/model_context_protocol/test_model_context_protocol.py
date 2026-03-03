@@ -20,6 +20,7 @@ class TestModelContextProtocol:
 
         try:
             from codomyrmex.model_context_protocol.schemas import mcp_schemas
+
             assert mcp_schemas is not None
         except ImportError as e:
             pytest.fail(f"Failed to import mcp_schemas: {e}")
@@ -31,10 +32,10 @@ class TestModelContextProtocol:
 
         from codomyrmex.model_context_protocol.schemas import mcp_schemas
 
-        assert hasattr(mcp_schemas, '__file__')
-        assert hasattr(mcp_schemas, 'MCPErrorDetail')
-        assert hasattr(mcp_schemas, 'MCPToolCall')
-        assert hasattr(mcp_schemas, 'MCPToolResult')
+        assert hasattr(mcp_schemas, "__file__")
+        assert hasattr(mcp_schemas, "MCPErrorDetail")
+        assert hasattr(mcp_schemas, "MCPToolCall")
+        assert hasattr(mcp_schemas, "MCPToolResult")
 
     def test_mcp_error_detail_model(self, code_dir):
         """Test MCPErrorDetail model."""
@@ -47,7 +48,7 @@ class TestModelContextProtocol:
         error_data = {
             "error_type": "ValidationError",
             "error_message": "Invalid input provided",
-            "error_details": {"field": "name", "value": None}
+            "error_details": {"field": "name", "value": None},
         }
         error_detail = MCPErrorDetail(**error_data)
         assert error_detail.error_type == "ValidationError"
@@ -58,7 +59,7 @@ class TestModelContextProtocol:
         error_data_str = {
             "error_type": "FileNotFoundError",
             "error_message": "File not found",
-            "error_details": "The specified file does not exist"
+            "error_details": "The specified file does not exist",
         }
         error_detail_str = MCPErrorDetail(**error_data_str)
         assert error_detail_str.error_details == "The specified file does not exist"
@@ -66,7 +67,7 @@ class TestModelContextProtocol:
         # Test with None error details
         error_data_none = {
             "error_type": "NetworkError",
-            "error_message": "Connection failed"
+            "error_message": "Connection failed",
         }
         error_detail_none = MCPErrorDetail(**error_data_none)
         assert error_detail_none.error_details is None
@@ -84,8 +85,8 @@ class TestModelContextProtocol:
             "arguments": {
                 "param1": "value1",
                 "param2": 123,
-                "param3": {"nested": "object"}
-            }
+                "param3": {"nested": "object"},
+            },
         }
         tool_call = MCPToolCall(**tool_call_data)
         assert tool_call.tool_name == "example.do_something"
@@ -94,11 +95,9 @@ class TestModelContextProtocol:
 
         # Test with extra arguments (should be allowed due to Config.extra = 'allow')
         tool_call_extra = MCPToolCall(
-            tool_name="test.tool",
-            arguments={"arg1": "val1"},
-            extra_field="extra_value"
+            tool_name="test.tool", arguments={"arg1": "val1"}, extra_field="extra_value"
         )
-        assert hasattr(tool_call_extra, 'extra_field')
+        assert hasattr(tool_call_extra, "extra_field")
         assert tool_call_extra.extra_field == "extra_value"
 
     def test_mcp_tool_result_model_success(self, code_dir):
@@ -113,9 +112,9 @@ class TestModelContextProtocol:
             "status": "success",
             "data": {
                 "output_value": "Task completed successfully",
-                "items_processed": 10
+                "items_processed": 10,
             },
-            "explanation": "The tool processed 10 items successfully"
+            "explanation": "The tool processed 10 items successfully",
         }
         success_result = MCPToolResult(**success_data)
         assert success_result.status == "success"
@@ -126,7 +125,7 @@ class TestModelContextProtocol:
         # Test successful result with None data (allowed for side-effect only tools)
         success_no_data = {
             "status": "success",
-            "explanation": "Operation completed with no data output"
+            "explanation": "Operation completed with no data output",
         }
         success_result_no_data = MCPToolResult(**success_no_data)
         assert success_result_no_data.data is None
@@ -148,9 +147,9 @@ class TestModelContextProtocol:
                 "error_message": "The required resource could not be accessed",
                 "error_details": {
                     "resource_id": "res_abc123",
-                    "reason": "permission_denied"
-                }
-            }
+                    "reason": "permission_denied",
+                },
+            },
         }
         failure_result = MCPToolResult(**failure_data)
         assert failure_result.status == "failure"
@@ -168,17 +167,23 @@ class TestModelContextProtocol:
         # Test failure without error (should raise ValueError)
         invalid_failure_data = {
             "status": "failure",
-            "data": {"some": "data"}  # Data should be null on failure
+            "data": {"some": "data"},  # Data should be null on failure
         }
-        with pytest.raises(ValueError, match="'data' field should be null or omitted if status indicates failure"):
+        with pytest.raises(
+            ValueError,
+            match="'data' field should be null or omitted if status indicates failure",
+        ):
             MCPToolResult(**invalid_failure_data)
 
         # Test failure without error details (should raise ValueError)
         invalid_failure_no_error = {
             "status": "failure",
-            "error": None  # Error must be populated on failure
+            "error": None,  # Error must be populated on failure
         }
-        with pytest.raises(ValueError, match="'error' field must be populated if status indicates failure"):
+        with pytest.raises(
+            ValueError,
+            match="'error' field must be populated if status indicates failure",
+        ):
             MCPToolResult(**invalid_failure_no_error)
 
     def test_model_serialization(self, code_dir):
@@ -193,10 +198,7 @@ class TestModelContextProtocol:
         )
 
         # Test MCPToolCall serialization
-        tool_call = MCPToolCall(
-            tool_name="test.tool",
-            arguments={"param": "value"}
-        )
+        tool_call = MCPToolCall(tool_name="test.tool", arguments={"param": "value"})
         json_str = tool_call.model_dump_json(indent=2)
         assert '"tool_name": "test.tool"' in json_str
         assert '"param": "value"' in json_str
@@ -205,7 +207,7 @@ class TestModelContextProtocol:
         error_detail = MCPErrorDetail(
             error_type="TestError",
             error_message="Test message",
-            error_details={"key": "value"}
+            error_details={"key": "value"},
         )
         json_str = error_detail.model_dump_json(indent=2)
         assert '"error_type": "TestError"' in json_str
@@ -213,9 +215,7 @@ class TestModelContextProtocol:
 
         # Test MCPToolResult serialization
         result = MCPToolResult(
-            status="success",
-            data={"result": "ok"},
-            explanation="Success"
+            status="success", data={"result": "ok"}, explanation="Success"
         )
         json_str = result.model_dump_json(indent=2)
         assert '"status": "success"' in json_str
@@ -232,10 +232,7 @@ class TestModelContextProtocol:
         # Replicate the main block logic with real execution
         tool_call_data = {
             "tool_name": "example.do_something",
-            "arguments": {
-                "param1": "value1",
-                "param2": 123
-            }
+            "arguments": {"param1": "value1", "param2": 123},
         }
         mcp_call = mcp_schemas.MCPToolCall(**tool_call_data)
         call_json = mcp_call.model_dump_json(indent=2)
@@ -246,9 +243,9 @@ class TestModelContextProtocol:
             "status": "success",
             "data": {
                 "output_value": "Task completed successfully.",
-                "items_processed": 10
+                "items_processed": 10,
             },
-            "explanation": "The example tool processed 10 items and finished."
+            "explanation": "The example tool processed 10 items and finished.",
         }
         mcp_success_result = mcp_schemas.MCPToolResult(**success_result_data)
         success_json = mcp_success_result.model_dump_json(indent=2)
@@ -260,10 +257,8 @@ class TestModelContextProtocol:
             "error": {
                 "error_type": "ResourceUnavailable",
                 "error_message": "The required resource could not be accessed.",
-                "error_details": {
-                    "resource_id": "res_abc123"
-                }
-            }
+                "error_details": {"resource_id": "res_abc123"},
+            },
         }
         mcp_failure_result = mcp_schemas.MCPToolResult(**failure_result_data)
         failure_json = mcp_failure_result.model_dump_json(indent=2)
@@ -280,20 +275,26 @@ class TestModelContextProtocol:
         # Test invalid failure data (data present when status is failure)
         invalid_failure_data = {
             "status": "failure",
-            "data": {"some": "data"}  # Data should be null on failure
+            "data": {"some": "data"},  # Data should be null on failure
         }
         with pytest.raises(ValueError) as exc_info:
             mcp_schemas.MCPToolResult(**invalid_failure_data)
-        assert "data" in str(exc_info.value).lower() or "failure" in str(exc_info.value).lower()
+        assert (
+            "data" in str(exc_info.value).lower()
+            or "failure" in str(exc_info.value).lower()
+        )
 
         # Test invalid failure data (error missing when status is failure)
         invalid_failure_no_error = {
             "status": "failure",
-            "error": None  # Error must be populated
+            "error": None,  # Error must be populated
         }
         with pytest.raises(ValueError) as exc_info:
             mcp_schemas.MCPToolResult(**invalid_failure_no_error)
-        assert "error" in str(exc_info.value).lower() or "failure" in str(exc_info.value).lower()
+        assert (
+            "error" in str(exc_info.value).lower()
+            or "failure" in str(exc_info.value).lower()
+        )
 
     def test_pydantic_config_extra_allow(self, code_dir):
         """Test that Pydantic models allow extra fields."""
@@ -310,14 +311,11 @@ class TestModelContextProtocol:
             tool_name="test.tool",
             arguments={"arg1": "val1"},
             extra_field="extra",
-            another_extra=123
+            another_extra=123,
         )
-        assert hasattr(tool_call, 'extra_field')
-        assert hasattr(tool_call, 'another_extra')
+        assert hasattr(tool_call, "extra_field")
+        assert hasattr(tool_call, "another_extra")
 
         # Test MCPToolResult allows extra fields
-        result = MCPToolResult(
-            status="success",
-            custom_field="custom_value"
-        )
-        assert hasattr(result, 'custom_field')
+        result = MCPToolResult(status="success", custom_field="custom_value")
+        assert hasattr(result, "custom_field")

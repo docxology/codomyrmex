@@ -1,4 +1,5 @@
 """Heatmap visualization."""
+
 from ._base import BasePlot
 
 

@@ -1,4 +1,5 @@
 """Unit tests for feature_store module."""
+
 import pytest
 
 from codomyrmex.feature_store import (
@@ -24,11 +25,13 @@ class TestFeatureStoreImports:
     def test_module_imports(self):
         """Verify module can be imported without errors."""
         import codomyrmex.feature_store as feature_store
+
         assert feature_store is not None
 
     def test_public_api_exists(self):
         """Verify expected public API is available."""
         from codomyrmex.feature_store import __all__
+
         expected_exports = [
             "FeatureType",
             "ValueType",
@@ -255,12 +258,18 @@ class TestInMemoryFeatureStore:
         """Verify invalid registration raises error."""
         store = InMemoryFeatureStore()
         with pytest.raises(FeatureRegistrationError):
-            store.register_feature(FeatureDefinition(name="", feature_type=FeatureType.TEXT, value_type=ValueType.STRING))
+            store.register_feature(
+                FeatureDefinition(
+                    name="", feature_type=FeatureType.TEXT, value_type=ValueType.STRING
+                )
+            )
 
     def test_store_set_and_get_value(self):
         """Verify value storage and retrieval."""
         store = InMemoryFeatureStore()
-        store.register_feature(FeatureDefinition("score", FeatureType.NUMERIC, ValueType.FLOAT))
+        store.register_feature(
+            FeatureDefinition("score", FeatureType.NUMERIC, ValueType.FLOAT)
+        )
 
         store.set_value("score", "entity_1", 0.95)
         value = store.get_value("score", "entity_1")
@@ -278,14 +287,18 @@ class TestInMemoryFeatureStore:
     def test_store_set_invalid_type(self):
         """Verify setting invalid type raises error."""
         store = InMemoryFeatureStore()
-        store.register_feature(FeatureDefinition("age", FeatureType.NUMERIC, ValueType.INT))
+        store.register_feature(
+            FeatureDefinition("age", FeatureType.NUMERIC, ValueType.INT)
+        )
         with pytest.raises(FeatureValidationError):
             store.set_value("age", "entity_1", "twenty-five")
 
     def test_store_value_versioning(self):
         """Verify value versioning on updates."""
         store = InMemoryFeatureStore()
-        store.register_feature(FeatureDefinition("score", FeatureType.NUMERIC, ValueType.FLOAT))
+        store.register_feature(
+            FeatureDefinition("score", FeatureType.NUMERIC, ValueType.FLOAT)
+        )
 
         store.set_value("score", "entity_1", 0.8)
         store.set_value("score", "entity_1", 0.9)
@@ -297,8 +310,14 @@ class TestInMemoryFeatureStore:
     def test_store_get_vector(self):
         """Verify vector retrieval."""
         store = InMemoryFeatureStore()
-        store.register_feature(FeatureDefinition("age", FeatureType.NUMERIC, ValueType.INT, default_value=0))
-        store.register_feature(FeatureDefinition("score", FeatureType.NUMERIC, ValueType.FLOAT))
+        store.register_feature(
+            FeatureDefinition(
+                "age", FeatureType.NUMERIC, ValueType.INT, default_value=0
+            )
+        )
+        store.register_feature(
+            FeatureDefinition("score", FeatureType.NUMERIC, ValueType.FLOAT)
+        )
 
         store.set_value("age", "user_1", 25)
         store.set_value("score", "user_1", 0.95)
@@ -313,7 +332,9 @@ class TestInMemoryFeatureStore:
     def test_store_delete_value(self):
         """Verify value deletion."""
         store = InMemoryFeatureStore()
-        store.register_feature(FeatureDefinition("test", FeatureType.NUMERIC, ValueType.INT))
+        store.register_feature(
+            FeatureDefinition("test", FeatureType.NUMERIC, ValueType.INT)
+        )
 
         store.set_value("test", "entity_1", 100)
         deleted = store.delete_value("test", "entity_1")
@@ -346,6 +367,7 @@ class TestFeatureTransform:
     def test_transform_error_handling(self):
         """Verify transform errors are handled gracefully."""
         transform = FeatureTransform()
+
         def failing_transform(v):
             raise ValueError("Failed")
 
@@ -364,11 +386,13 @@ class TestFeatureService:
         """Verify feature registration and ingestion."""
         service = FeatureService()
 
-        service.register_feature(FeatureDefinition(
-            name="rating",
-            feature_type=FeatureType.NUMERIC,
-            value_type=ValueType.FLOAT,
-        ))
+        service.register_feature(
+            FeatureDefinition(
+                name="rating",
+                feature_type=FeatureType.NUMERIC,
+                value_type=ValueType.FLOAT,
+            )
+        )
 
         service.ingest({"rating": 4.5}, entity_id="item_123")
 
@@ -394,14 +418,16 @@ class TestFeatureService:
     def test_service_ingest_batch(self):
         """Verify batch ingestion."""
         service = FeatureService()
-        service.register_feature(FeatureDefinition("score", FeatureType.NUMERIC, ValueType.FLOAT))
+        service.register_feature(
+            FeatureDefinition("score", FeatureType.NUMERIC, ValueType.FLOAT)
+        )
 
         batch = [
             {"entity_id": "user_1", "score": 0.8},
             {"entity_id": "user_2", "score": 0.9},
             {"entity_id": "user_3", "score": 0.7},
             {"score": 0.5},  # Missing entity_id
-            {"entity_id": "user_4", "score": "invalid"}, # Invalid type
+            {"entity_id": "user_4", "score": "invalid"},  # Invalid type
         ]
 
         count = service.ingest_batch(batch)
@@ -415,7 +441,7 @@ class TestFeatureService:
         service = FeatureService()
         group = FeatureGroup(
             name="g1",
-            features=[FeatureDefinition("f1", FeatureType.NUMERIC, ValueType.INT)]
+            features=[FeatureDefinition("f1", FeatureType.NUMERIC, ValueType.INT)],
         )
         service.register_group(group)
         service.ingest({"f1": 10}, "e1")

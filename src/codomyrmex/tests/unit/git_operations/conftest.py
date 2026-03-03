@@ -10,6 +10,7 @@ from codomyrmex.git_operations import initialize_git_repository
 """Pytest configuration and shared fixtures for git_operations tests.
 """
 
+
 @pytest.fixture
 def temp_dir() -> Generator[str, None, None]:
     """Create a temporary directory for tests."""
@@ -18,6 +19,7 @@ def temp_dir() -> Generator[str, None, None]:
         yield temp_path
     finally:
         shutil.rmtree(temp_path, ignore_errors=True)
+
 
 @pytest.fixture
 def temp_git_repo(temp_dir: str) -> Generator[str, None, None]:
@@ -30,11 +32,15 @@ def temp_git_repo(temp_dir: str) -> Generator[str, None, None]:
 
     # Ensure we are on 'main' regardless of system default
     import subprocess
-    subprocess.run(["git", "branch", "-m", "main"], cwd=repo_path, capture_output=True, check=False)
+
+    subprocess.run(
+        ["git", "branch", "-m", "main"], cwd=repo_path, capture_output=True, check=False
+    )
 
     yield repo_path
 
     # Cleanup is handled by temp_dir fixture
+
 
 @pytest.fixture
 def temp_git_repo_no_commit(temp_dir: str) -> Generator[str, None, None]:
@@ -49,6 +55,7 @@ def temp_git_repo_no_commit(temp_dir: str) -> Generator[str, None, None]:
 
     # Cleanup is handled by temp_dir fixture
 
+
 @pytest.fixture
 def sample_file(temp_git_repo: str) -> Generator[str, None, None]:
     """Create a sample file in the test repository."""
@@ -57,4 +64,3 @@ def sample_file(temp_git_repo: str) -> Generator[str, None, None]:
         f.write("Test content\n")
 
     yield file_path
-

@@ -228,6 +228,7 @@ class TestWithRetryDecorator:
 
     def test_sync_retry_exhausts_and_raises(self) -> None:
         """Test functionality: sync retry exhausts and raises."""
+
         @with_retry(max_attempts=2, base_delay=0.01)
         def always_fails_sync() -> None:
             raise RuntimeError("always")
@@ -237,6 +238,7 @@ class TestWithRetryDecorator:
 
     def test_retry_only_on_specified_exceptions(self) -> None:
         """Test functionality: retry only on specified exceptions."""
+
         @with_retry(max_attempts=5, base_delay=0.01, retry_on=(ValueError,))
         def raises_type_error() -> None:
             raise TypeError("wrong type")
@@ -270,6 +272,7 @@ class TestExports:
         from codomyrmex.orchestrator import (
             AsyncTaskResult as _ATR,
         )
+
         assert _APR is not None
         assert _ATR is not None
         assert _AER is not None
@@ -277,4 +280,5 @@ class TestExports:
     def test_with_retry_export(self) -> None:
         """Test functionality: with retry export."""
         from codomyrmex.orchestrator import with_retry as _wr
+
         assert _wr is not None

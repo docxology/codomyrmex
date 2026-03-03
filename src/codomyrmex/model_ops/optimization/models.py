@@ -9,11 +9,12 @@ from datetime import datetime
 from enum import Enum
 from typing import Generic, TypeVar
 
-T = TypeVar('T')
+T = TypeVar("T")
 
 
 class QuantizationType(Enum):
     """Types of quantization."""
+
     FP32 = "fp32"
     FP16 = "fp16"
     INT8 = "int8"
@@ -22,6 +23,7 @@ class QuantizationType(Enum):
 
 class BatchingStrategy(Enum):
     """Strategies for batching requests."""
+
     FIXED = "fixed"
     DYNAMIC = "dynamic"
     ADAPTIVE = "adaptive"
@@ -30,6 +32,7 @@ class BatchingStrategy(Enum):
 @dataclass
 class OptimizationConfig:
     """Configuration for inference optimization."""
+
     quantization: QuantizationType = QuantizationType.FP32
     max_batch_size: int = 32
     batch_timeout_ms: float = 100.0
@@ -41,6 +44,7 @@ class OptimizationConfig:
 @dataclass
 class InferenceStats:
     """Statistics for inference performance."""
+
     total_requests: int = 0
     total_batches: int = 0
     avg_batch_size: float = 0.0
@@ -58,6 +62,7 @@ class InferenceStats:
 @dataclass
 class InferenceRequest(Generic[T]):
     """A single inference request."""
+
     id: str
     input_data: T
     priority: int = 0
@@ -72,6 +77,7 @@ class InferenceRequest(Generic[T]):
 @dataclass
 class InferenceResult(Generic[T]):
     """Result of an inference request."""
+
     request_id: str
     output: T
     latency_ms: float

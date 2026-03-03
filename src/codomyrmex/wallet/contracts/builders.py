@@ -105,7 +105,9 @@ class TransactionBuilder:
 
     def auto_gas(self) -> TransactionBuilder:
         """Auto-estimate gas from calldata."""
-        self._gas_limit = estimate_gas(self._data, is_contract_creation=(self._to is None))
+        self._gas_limit = estimate_gas(
+            self._data, is_contract_creation=(self._to is None)
+        )
         return self
 
     def validate(self) -> list[str]:
@@ -145,6 +147,7 @@ class TransactionBuilder:
 
 
 # ── Batch builder ───────────────────────────────────────────────────
+
 
 def build_batch(
     from_address: Address,

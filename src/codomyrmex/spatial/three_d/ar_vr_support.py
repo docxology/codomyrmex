@@ -74,9 +74,13 @@ class ARSession:
 
     # ── Spatial Anchors ─────────────────────────────────────────────
 
-    def create_anchor(self, anchor_id: str, position: Vector3D, rotation: Quaternion | None = None) -> SpatialAnchor:
+    def create_anchor(
+        self, anchor_id: str, position: Vector3D, rotation: Quaternion | None = None
+    ) -> SpatialAnchor:
         """Create a world-locked spatial anchor."""
-        anchor = SpatialAnchor(id=anchor_id, position=position, rotation=rotation or Quaternion())
+        anchor = SpatialAnchor(
+            id=anchor_id, position=position, rotation=rotation or Quaternion()
+        )
         self._anchors[anchor_id] = anchor
         logger.info("Created spatial anchor: %s", anchor_id)
         return anchor
@@ -137,7 +141,9 @@ class VRRenderer:
         self._frame_count += 1
         self.left_eye_texture = f"frame_{self._frame_count}_left"
         self.right_eye_texture = f"frame_{self._frame_count}_right"
-        logger.debug("VR stereo render #%d at %s", self._frame_count, self._render_resolution)
+        logger.debug(
+            "VR stereo render #%d at %s", self._frame_count, self._render_resolution
+        )
         return {
             "frame": self._frame_count,
             "resolution": self._render_resolution,
@@ -176,7 +182,9 @@ class XRInterface:
 
     # ── Hand Tracking ───────────────────────────────────────────────
 
-    def update_hand_pose(self, hand: str, wrist: Vector3D, confidence: float = 1.0, pinch: float = 0.0) -> HandPose:
+    def update_hand_pose(
+        self, hand: str, wrist: Vector3D, confidence: float = 1.0, pinch: float = 0.0
+    ) -> HandPose:
         """Update tracked hand pose.
 
         Args:
@@ -185,7 +193,9 @@ class XRInterface:
             confidence: Tracking confidence (0-1).
             pinch: Pinch gesture strength (0-1).
         """
-        pose = HandPose(hand=hand, wrist=wrist, confidence=confidence, pinch_strength=pinch)
+        pose = HandPose(
+            hand=hand, wrist=wrist, confidence=confidence, pinch_strength=pinch
+        )
         self._hand_poses[hand] = pose
         return pose
 
@@ -199,7 +209,10 @@ class XRInterface:
         pos, rot = self.ar_session.get_camera_pose()
         return {
             "camera_pose": {"position": pos, "rotation": rot},
-            "anchors": [{"id": a.id, "position": a.position} for a in self.ar_session.list_anchors()],
+            "anchors": [
+                {"id": a.id, "position": a.position}
+                for a in self.ar_session.list_anchors()
+            ],
             "hand_tracking": {
                 hand: {"wrist": p.wrist, "pinching": p.is_pinching}
                 for hand, p in self._hand_poses.items()

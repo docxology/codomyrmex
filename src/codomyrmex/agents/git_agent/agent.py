@@ -1,4 +1,3 @@
-
 import json
 from collections.abc import Iterator
 from typing import Any
@@ -23,6 +22,7 @@ from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
 
+
 class GitAgent(BaseAgent):
     """
     Agent specialized for Git and GitHub operations.
@@ -40,7 +40,9 @@ class GitAgent(BaseAgent):
     ):
         super().__init__(
             name="GitAgent",
-            capabilities=[AgentCapabilities.CODE_EXECUTION], # Technically executing git commands
+            capabilities=[
+                AgentCapabilities.CODE_EXECUTION
+            ],  # Technically executing git commands
             config=config,
         )
         self.repo_manager = repository_manager or RepositoryManager()
@@ -65,7 +67,10 @@ class GitAgent(BaseAgent):
             else:
                 # Basic string parsing "action: key=value"
                 if ":" not in request.prompt:
-                    return AgentResponse(content="Invalid format. Use 'action: key=value' or JSON.", error="InvalidFormat")
+                    return AgentResponse(
+                        content="Invalid format. Use 'action: key=value' or JSON.",
+                        error="InvalidFormat",
+                    )
 
                 action, param_str = request.prompt.split(":", 1)
                 action = action.strip()
@@ -93,18 +98,22 @@ class GitAgent(BaseAgent):
             return self.repo_manager.sync_repository(repo_name)
 
         elif action == "prune":
-             if not repo_name:
+            if not repo_name:
                 raise ValueError("Repository name required for prune")
-             return self.repo_manager.prune_repository(repo_name)
+            return self.repo_manager.prune_repository(repo_name)
 
         elif action == "clean":
             if not repo_name:
                 raise ValueError("Repository name required for clean")
             repo = self.repo_manager.get_repository(repo_name)
             if not repo:
-                 raise ValueError(f"Repository {repo_name} not found")
+                raise ValueError(f"Repository {repo_name} not found")
             local_path = str(self.repo_manager.get_local_path(repo))
-            return clean_repository(force=params.get("force") == "true", directories=True, repository_path=local_path)
+            return clean_repository(
+                force=params.get("force") == "true",
+                directories=True,
+                repository_path=local_path,
+            )
 
         elif action == "status":
             if not repo_name:
@@ -116,7 +125,7 @@ class GitAgent(BaseAgent):
                 raise ValueError("Repository name required for list_remotes")
             repo = self.repo_manager.get_repository(repo_name)
             if not repo:
-                 raise ValueError(f"Repository {repo_name} not found")
+                raise ValueError(f"Repository {repo_name} not found")
             local_path = str(self.repo_manager.get_local_path(repo))
             return list_remotes(local_path)
 
@@ -130,7 +139,7 @@ class GitAgent(BaseAgent):
 
             repo = self.repo_manager.get_repository(repo_name)
             if not repo:
-                 raise ValueError(f"Repository {repo_name} not found")
+                raise ValueError(f"Repository {repo_name} not found")
             local_path = str(self.repo_manager.get_local_path(repo))
             return add_remote(name, url, local_path)
 
@@ -138,17 +147,19 @@ class GitAgent(BaseAgent):
         elif action == "create_issue":
             return create_issue(
                 owner=params.get("owner"),
-                repo_name=params.get("repo_name"), # Using repo_name to match API arg
+                repo_name=params.get("repo_name"),  # Using repo_name to match API arg
                 title=params.get("title"),
                 body=params.get("body", ""),
-                labels=params.get("labels", "").split(",") if params.get("labels") else None
+                labels=params.get("labels", "").split(",")
+                if params.get("labels")
+                else None,
             )
 
         elif action == "list_issues":
-             return list_issues(
+            return list_issues(
                 owner=params.get("owner"),
                 repo_name=params.get("repo_name"),
-                state=params.get("state", "open")
+                state=params.get("state", "open"),
             )
 
         else:

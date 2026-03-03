@@ -49,7 +49,9 @@ class TestASTMatcher:
         """parse_code reports ClassDef with correct name."""
         matcher = ASTMatcher()
         result = matcher.parse_code("class Foo:\n    x = 1\n")
-        assert any(n["type"] == "ClassDef" and n["name"] == "Foo" for n in result["top_level"])
+        assert any(
+            n["type"] == "ClassDef" and n["name"] == "Foo" for n in result["top_level"]
+        )
 
     def test_parse_code_empty_string(self):
         """parse_code on empty string returns zero top-level nodes."""
@@ -344,7 +346,11 @@ class TestASTMatcher:
             ("factory", "def create_x(): pass\ndef make_y(): pass\n", 2),
             ("factory", "def helper(): pass\n", 0),
             ("decorator", "@property\ndef x(self): pass\n", 1),
-            ("context_manager", "class C:\n    def __enter__(self): pass\n    def __exit__(self,*a): pass\n", 1),
+            (
+                "context_manager",
+                "class C:\n    def __enter__(self): pass\n    def __exit__(self,*a): pass\n",
+                1,
+            ),
             ("context_manager", "class C:\n    def __enter__(self): pass\n", 0),
         ],
         ids=[
@@ -423,21 +429,14 @@ class TestPatternDetector:
 
     def test_detect_observer_with_listener_attr_and_emit(self):
         """detect_patterns finds observer with _listeners attr and emit method."""
-        code = (
-            "class Notifier:\n"
-            "    _listeners = []\n"
-            "    def emit(self, event): pass\n"
-        )
+        code = "class Notifier:\n    _listeners = []\n    def emit(self, event): pass\n"
         detector = PatternDetector()
         results = detector.detect_patterns(code)
         assert any(r["pattern"] == "observer" for r in results)
 
     def test_detect_strategy(self):
         """detect_patterns finds strategy with ABC base and execute method."""
-        code = (
-            "class Strategy(ABC):\n"
-            "    def execute(self): pass\n"
-        )
+        code = "class Strategy(ABC):\n    def execute(self): pass\n"
         detector = PatternDetector()
         results = detector.detect_patterns(code)
         strategies = [r for r in results if r["pattern"] == "strategy"]
@@ -480,11 +479,14 @@ class TestPatternDetector:
     def test_register_pattern(self):
         """register_pattern adds a new pattern definition."""
         detector = PatternDetector()
-        detector.register_pattern("custom", {
-            "description": "My custom pattern",
-            "indicators": ["custom indicator"],
-            "category": "experimental",
-        })
+        detector.register_pattern(
+            "custom",
+            {
+                "description": "My custom pattern",
+                "indicators": ["custom indicator"],
+                "category": "experimental",
+            },
+        )
         assert "custom" in detector._definitions
         assert detector._definitions["custom"].category == "experimental"
 
@@ -557,7 +559,14 @@ class TestPatternDefinitionAndCatalogue:
 
     def test_patterns_catalogue_has_expected_keys(self):
         """Built-in PATTERNS catalogue has singleton, factory, observer, strategy, etc."""
-        expected = {"singleton", "factory", "observer", "strategy", "decorator_pattern", "template_method"}
+        expected = {
+            "singleton",
+            "factory",
+            "observer",
+            "strategy",
+            "decorator_pattern",
+            "template_method",
+        }
         assert expected.issubset(set(PATTERNS.keys()))
 
     def test_patterns_catalogue_all_have_description(self):
@@ -607,7 +616,9 @@ class TestCodeSimilarity:
     def test_completely_different_code_low_similarity(self):
         """compute_similarity returns low score for unrelated code."""
         code_a = "import os\nprint(os.getcwd())\n"
-        code_b = "class MyWidget:\n    def render(self):\n        return '<div></div>'\n"
+        code_b = (
+            "class MyWidget:\n    def render(self):\n        return '<div></div>'\n"
+        )
         sim = CodeSimilarity()
         score = sim.compute_similarity(code_a, code_b)
         assert score < 0.5

@@ -6,6 +6,7 @@ from uuid import UUID, uuid4
 @dataclass
 class Skill:
     """A learnable capability."""
+
     name: str
     description: str
     code_snippet: str
@@ -13,6 +14,7 @@ class Skill:
     usage_count: int = 0
     created_at: datetime = field(default_factory=datetime.now)
     id: UUID = field(default_factory=uuid4)
+
 
 class SkillLibrary:
     """Repository of agent skills."""

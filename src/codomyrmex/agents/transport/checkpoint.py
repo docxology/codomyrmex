@@ -61,9 +61,7 @@ class Checkpoint:
 
     def __post_init__(self) -> None:
         if not self.checkpoint_id:
-            self.checkpoint_id = (
-                f"ckpt-{self.snapshot.agent_id}-{int(self.created_at)}"
-            )
+            self.checkpoint_id = f"ckpt-{self.snapshot.agent_id}-{int(self.created_at)}"
 
     def save(self, path: str | Path) -> None:
         """Save checkpoint to a JSON file.
@@ -129,7 +127,8 @@ class Checkpoint:
 
         # Traces diff
         delta.traces_added = max(
-            0, len(other.snapshot.traces) - len(self.snapshot.traces),
+            0,
+            len(other.snapshot.traces) - len(self.snapshot.traces),
         )
 
         # Memory diff
@@ -138,7 +137,8 @@ class Checkpoint:
         delta.memory_keys_added = sorted(other_keys - self_keys)
         delta.memory_keys_removed = sorted(self_keys - other_keys)
         delta.memory_keys_modified = sorted(
-            k for k in self_keys & other_keys
+            k
+            for k in self_keys & other_keys
             if self.snapshot.memory[k] != other.snapshot.memory[k]
         )
 

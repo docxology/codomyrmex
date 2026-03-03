@@ -15,6 +15,7 @@ from typing import Any
 
 class EventType(Enum):
     """Standard event types."""
+
     MESSAGE = "message"
     ERROR = "error"
     CONNECT = "connect"
@@ -25,6 +26,7 @@ class EventType(Enum):
 @dataclass
 class Event:
     """A stream event."""
+
     id: str = field(default_factory=lambda: str(uuid.uuid4()))
     type: EventType = EventType.MESSAGE
     data: Any = None
@@ -59,13 +61,16 @@ class Event:
             type=EventType(data.get("type", "message")),
             data=data.get("data"),
             metadata=data.get("metadata", {}),
-            timestamp=datetime.fromisoformat(data["timestamp"]) if "timestamp" in data else datetime.now(),
+            timestamp=datetime.fromisoformat(data["timestamp"])
+            if "timestamp" in data
+            else datetime.now(),
         )
 
 
 @dataclass
 class Subscription:
     """A subscription to a stream."""
+
     id: str = field(default_factory=lambda: str(uuid.uuid4()))
     topic: str = "*"
     handler: Callable[[Event], None] | None = None

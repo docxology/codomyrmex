@@ -48,7 +48,9 @@ class HeartbeatMonitor:
         status = monitor.check("agent-1")
     """
 
-    def __init__(self, timeout_seconds: float = 10.0, suspect_threshold: int = 2) -> None:
+    def __init__(
+        self, timeout_seconds: float = 10.0, suspect_threshold: int = 2
+    ) -> None:
         self._timeout = timeout_seconds
         self._suspect_threshold = suspect_threshold
         self._agents: dict[str, list[HeartbeatRecord]] = {}
@@ -120,10 +122,7 @@ class HeartbeatMonitor:
 
     def dead_agents(self) -> list[str]:
         """Return IDs of agents considered dead."""
-        return [
-            aid for aid in self._agents
-            if self.check(aid) == AgentStatus.DEAD
-        ]
+        return [aid for aid in self._agents if self.check(aid) == AgentStatus.DEAD]
 
     def history(self, agent_id: str, n: int = 10) -> list[HeartbeatRecord]:
         """Get recent heartbeat history."""

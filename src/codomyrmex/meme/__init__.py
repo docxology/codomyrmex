@@ -110,28 +110,67 @@ from codomyrmex.meme.swarm import (
 
 __all__ = [
     # memetics
-    "Meme", "Memeplex", "MemeticCode", "FitnessMap", "MemeticEngine",
+    "Meme",
+    "Memeplex",
+    "MemeticCode",
+    "FitnessMap",
+    "MemeticEngine",
     # semiotic
-    "Sign", "SignType", "DriftReport", "SemioticAnalyzer",
+    "Sign",
+    "SignType",
+    "DriftReport",
+    "SemioticAnalyzer",
     # contagion
-    "ContagionModel", "CascadeDetector", "PropagationTrace",
-    "Cascade", "CascadeType", "ResonanceMap",
+    "ContagionModel",
+    "CascadeDetector",
+    "PropagationTrace",
+    "Cascade",
+    "CascadeType",
+    "ResonanceMap",
     # narrative
-    "Narrative", "NarrativeArc", "Archetype", "NarrativeEngine",
+    "Narrative",
+    "NarrativeArc",
+    "Archetype",
+    "NarrativeEngine",
     # cultural_dynamics
-    "CulturalState", "CulturalDynamicsEngine", "PowerMap",
+    "CulturalState",
+    "CulturalDynamicsEngine",
+    "PowerMap",
     # swarm
-    "SwarmAgent", "SwarmEngine", "EmergentPattern", "ConsensusState", "SwarmState",
+    "SwarmAgent",
+    "SwarmEngine",
+    "EmergentPattern",
+    "ConsensusState",
+    "SwarmState",
     # neurolinguistic
-    "CognitiveFrame", "BiasInstance", "NeurolinguisticEngine",
+    "CognitiveFrame",
+    "BiasInstance",
+    "NeurolinguisticEngine",
     # hyperreality
-    "Simulacrum", "HyperrealityEngine", "SimulationLevel", "RealityTunnel",
+    "Simulacrum",
+    "HyperrealityEngine",
+    "SimulationLevel",
+    "RealityTunnel",
     # ideoscape
-    "IdeoscapeLayer", "IdeoscapeEngine", "MapFeature", "TerrainMap",
+    "IdeoscapeLayer",
+    "IdeoscapeEngine",
+    "MapFeature",
+    "TerrainMap",
     # rhizome
-    "RhizomeEngine", "Graph", "Node", "Edge", "NetworkTopology",
+    "RhizomeEngine",
+    "Graph",
+    "Node",
+    "Edge",
+    "NetworkTopology",
     # epistemic
-    "EpistemicEngine", "EpistemicState", "Fact", "Belief", "Evidence",
+    "EpistemicEngine",
+    "EpistemicState",
+    "Fact",
+    "Belief",
+    "Evidence",
     # cybernetic
-    "CyberneticEngine", "ControlSystem", "FeedbackLoop", "SystemState",
+    "CyberneticEngine",
+    "ControlSystem",
+    "FeedbackLoop",
+    "SystemState",
 ]

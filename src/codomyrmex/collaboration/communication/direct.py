@@ -21,6 +21,7 @@ logger = get_logger(__name__)
 @dataclass
 class PendingRequest:
     """A pending request awaiting a response."""
+
     request_id: str
     sender_id: str
     receiver_id: str
@@ -100,7 +101,7 @@ class DirectMessenger:
                 str(uuid.uuid4()),
                 sender_id,
                 receiver_id,
-                "No handler registered for receiver"
+                "No handler registered for receiver",
             )
 
         message = AgentMessage(
@@ -122,10 +123,7 @@ class DirectMessenger:
             logger.debug(f"Message delivered: {sender_id} -> {receiver_id}")
         except Exception as e:
             raise MessageDeliveryError(
-                message.id,
-                sender_id,
-                receiver_id,
-                str(e)
+                message.id, sender_id, receiver_id, str(e)
             ) from e
 
     async def request(
@@ -158,7 +156,7 @@ class DirectMessenger:
                 str(uuid.uuid4()),
                 sender_id,
                 receiver_id,
-                "No handler registered for receiver"
+                "No handler registered for receiver",
             )
 
         timeout = timeout or self._default_timeout
@@ -204,10 +202,7 @@ class DirectMessenger:
             raise
         except Exception as e:
             raise MessageDeliveryError(
-                message.id,
-                sender_id,
-                receiver_id,
-                str(e)
+                message.id, sender_id, receiver_id, str(e)
             ) from e
         finally:
             # Cleanup pending request
@@ -261,7 +256,8 @@ class DirectMessenger:
 
         if agent_id:
             messages = [
-                m for m in messages
+                m
+                for m in messages
                 if m.sender_id == agent_id or m.receiver_id == agent_id
             ]
 
@@ -269,10 +265,7 @@ class DirectMessenger:
 
     def clear_expired_requests(self) -> int:
         """Clear expired pending requests. Returns count of cleared requests."""
-        expired = [
-            rid for rid, req in self._pending_requests.items()
-            if req.is_expired
-        ]
+        expired = [rid for rid, req in self._pending_requests.items() if req.is_expired]
 
         for rid in expired:
             req = self._pending_requests.pop(rid)

@@ -22,6 +22,7 @@ from codomyrmex.logging_monitoring import get_logger
 @dataclass
 class OllamaModel:
     """Represents an Ollama model with metadata."""
+
     name: str
     id: str
     size: int  # Size in bytes
@@ -35,6 +36,7 @@ class OllamaModel:
 @dataclass
 class ModelExecutionResult:
     """Result of a model execution."""
+
     model_name: str
     prompt: str
     response: str
@@ -58,7 +60,7 @@ class OllamaManager:
         ollama_binary: str = "ollama",
         auto_start_server: bool = True,
         base_url: str = os.getenv("OLLAMA_BASE_URL", DEFAULT_OLLAMA_URL),
-        use_http_api: bool = True
+        use_http_api: bool = True,
     ):
         """
         Initialize the Ollama manager.
@@ -71,7 +73,7 @@ class OllamaManager:
         """
         self.ollama_binary = ollama_binary
         self.auto_start_server = auto_start_server
-        self.base_url = base_url.rstrip('/')
+        self.base_url = base_url.rstrip("/")
         self.use_http_api = use_http_api
         self.logger = get_logger(__name__)
         self.server_process = None
@@ -98,15 +100,14 @@ class OllamaManager:
                     self.logger.info("Ollama server is already running (HTTP API)")
                     return True
             except requests.exceptions.RequestException as e:
-                self.logger.debug("Ollama HTTP API not responding, trying CLI check: %s", str(e))
+                self.logger.debug(
+                    "Ollama HTTP API not responding, trying CLI check: %s", str(e)
+                )
 
         # Fallback to subprocess check
         try:
             result = subprocess.run(
-                [self.ollama_binary, "list"],
-                capture_output=True,
-                text=True,
-                timeout=5
+                [self.ollama_binary, "list"], capture_output=True, text=True, timeout=5
             )
 
             if result.returncode == 0:
@@ -114,7 +115,9 @@ class OllamaManager:
                 return True
 
         except (subprocess.TimeoutExpired, FileNotFoundError) as e:
-            self.logger.debug("Ollama CLI check failed, will attempt to start server: %s", str(e))
+            self.logger.debug(
+                "Ollama CLI check failed, will attempt to start server: %s", str(e)
+            )
 
         if not self.auto_start_server:
             self.logger.error("Ollama server not running and auto_start disabled")
@@ -126,7 +129,7 @@ class OllamaManager:
             self.server_process = subprocess.Popen(
                 [self.ollama_binary, "serve"],
                 stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE
+                stderr=subprocess.PIPE,
             )
 
             # Wait for server to start
@@ -137,17 +140,18 @@ class OllamaManager:
                 try:
                     response = requests.get(f"{self.base_url}/api/tags", timeout=5)
                     if response.status_code == 200:
-                        self.logger.info("Ollama server started successfully (HTTP API)")
+                        self.logger.info(
+                            "Ollama server started successfully (HTTP API)"
+                        )
                         return True
                 except requests.exceptions.RequestException as e:
-                    self.logger.debug("Ollama HTTP API still not responding after start: %s", str(e))
+                    self.logger.debug(
+                        "Ollama HTTP API still not responding after start: %s", str(e)
+                    )
 
             # Fallback to subprocess test
             result = subprocess.run(
-                [self.ollama_binary, "list"],
-                capture_output=True,
-                text=True,
-                timeout=5
+                [self.ollama_binary, "list"], capture_output=True, text=True, timeout=5
             )
 
             if result.returncode == 0:
@@ -188,8 +192,12 @@ class OllamaManager:
         """
         # Check cache first
         current_time = time.time()
-        if (not force_refresh and self._models_cache and self._cache_timestamp and
-            current_time - self._cache_timestamp < self._cache_ttl):
+        if (
+            not force_refresh
+            and self._models_cache
+            and self._cache_timestamp
+            and current_time - self._cache_timestamp < self._cache_ttl
+        ):
             return self._models_cache
 
         models = []
@@ -200,16 +208,16 @@ class OllamaManager:
                 response = requests.get(f"{self.base_url}/api/tags", timeout=10)
                 if response.status_code == 200:
                     data = response.json()
-                    for model_data in data.get('models', []):
+                    for model_data in data.get("models", []):
                         # Parse size - ensure it's an integer
-                        size = model_data.get('size', 0)
+                        size = model_data.get("size", 0)
                         if isinstance(size, str):
                             size = self._parse_size(size)
                         elif not isinstance(size, int):
                             size = int(size) if size else 0
 
                         # Parse modified_at - ensure it's a valid timestamp
-                        modified_at = model_data.get('modified_at', time.time())
+                        modified_at = model_data.get("modified_at", time.time())
                         if isinstance(modified_at, str):
                             try:
                                 modified_at = float(modified_at)
@@ -217,18 +225,22 @@ class OllamaManager:
                                 modified_at = time.time()
 
                         model = OllamaModel(
-                            name=model_data.get('name', ''),
-                            id=model_data.get('digest', '')[:12] if model_data.get('digest') else '',
+                            name=model_data.get("name", ""),
+                            id=model_data.get("digest", "")[:12]
+                            if model_data.get("digest")
+                            else "",
                             size=size,
-                            modified=time.strftime('%Y-%m-%d', time.localtime(modified_at)),
-                            status="available"
+                            modified=time.strftime(
+                                "%Y-%m-%d", time.localtime(modified_at)
+                            ),
+                            status="available",
                         )
                         # Get additional info
                         model_info = self._get_model_info(model.name)
                         if model_info:
-                            model.parameters = model_info.get('parameter_size')
-                            model.family = model_info.get('family')
-                            model.format = model_info.get('file_type')
+                            model.parameters = model_info.get("parameter_size")
+                            model.family = model_info.get("family")
+                            model.format = model_info.get("file_type")
                         models.append(model)
 
                     # Update cache
@@ -244,17 +256,14 @@ class OllamaManager:
         # Fallback to subprocess
         try:
             result = subprocess.run(
-                [self.ollama_binary, "list"],
-                capture_output=True,
-                text=True,
-                timeout=10
+                [self.ollama_binary, "list"], capture_output=True, text=True, timeout=10
             )
 
             if result.returncode != 0:
                 self.logger.error(f"Ollama list failed: {result.stderr}")
                 return []
 
-            lines = result.stdout.strip().split('\n')[1:]  # Skip header
+            lines = result.stdout.strip().split("\n")[1:]  # Skip header
 
             for line in lines:
                 if not line.strip():
@@ -277,15 +286,15 @@ class OllamaManager:
                         id=model_id,
                         size=size,
                         modified=modified,
-                        status="available"
+                        status="available",
                     )
 
                     # Try to get more details
                     model_info = self._get_model_info(name)
                     if model_info:
-                        model.parameters = model_info.get('parameter_size')
-                        model.family = model_info.get('family')
-                        model.format = model_info.get('file_type')
+                        model.parameters = model_info.get("parameter_size")
+                        model.family = model_info.get("family")
+                        model.format = model_info.get("file_type")
 
                     models.append(model)
 
@@ -303,11 +312,11 @@ class OllamaManager:
     def _parse_size(self, size_str: str) -> int:
         """Parse size string to bytes."""
         try:
-            if size_str.endswith('GB'):
+            if size_str.endswith("GB"):
                 return int(float(size_str[:-2]) * 1024 * 1024 * 1024)
-            elif size_str.endswith('MB'):
+            elif size_str.endswith("MB"):
                 return int(float(size_str[:-2]) * 1024 * 1024)
-            elif size_str.endswith('KB'):
+            elif size_str.endswith("KB"):
                 return int(float(size_str[:-2]) * 1024)
             else:
                 return int(size_str)
@@ -322,7 +331,7 @@ class OllamaManager:
                 [self.ollama_binary, "show", model_name],
                 capture_output=True,
                 text=True,
-                timeout=10
+                timeout=10,
             )
 
             if result.returncode != 0:
@@ -330,11 +339,11 @@ class OllamaManager:
 
             # Parse the output (this is a simplified parser)
             info = {}
-            lines = result.stdout.strip().split('\n')
+            lines = result.stdout.strip().split("\n")
 
             for line in lines:
-                if ':' in line:
-                    key, value = line.split(':', 1)
+                if ":" in line:
+                    key, value = line.split(":", 1)
                     info[key.strip()] = value.strip()
 
             return info
@@ -362,7 +371,7 @@ class OllamaManager:
                     f"{self.base_url}/api/pull",
                     json={"name": model_name},
                     timeout=3600,  # 1 hour timeout for large models
-                    stream=True
+                    stream=True,
                 )
 
                 if response.status_code == 200:
@@ -373,22 +382,38 @@ class OllamaManager:
                         if line:
                             try:
                                 data = json.loads(line)
-                                status = data.get('status', '')
+                                status = data.get("status", "")
                                 if status and status != last_status:
                                     # Log significant status changes
-                                    if any(keyword in status.lower() for keyword in ['pulling', 'downloading', 'verifying', 'writing']):
-                                        if 'manifest' in status.lower() or 'digest' in status.lower() or 'layer' in status.lower():
+                                    if any(
+                                        keyword in status.lower()
+                                        for keyword in [
+                                            "pulling",
+                                            "downloading",
+                                            "verifying",
+                                            "writing",
+                                        ]
+                                    ):
+                                        if (
+                                            "manifest" in status.lower()
+                                            or "digest" in status.lower()
+                                            or "layer" in status.lower()
+                                        ):
                                             self.logger.info(f"Pull status: {status}")
                                     last_status = status
 
                                 # Check for completion
-                                if data.get('completed', False):
+                                if data.get("completed", False):
                                     completed = True
-                                    self.logger.info(f"Model {model_name} pull completed via HTTP API")
+                                    self.logger.info(
+                                        f"Model {model_name} pull completed via HTTP API"
+                                    )
                                     break
-                                elif data.get('status') == 'success':
+                                elif data.get("status") == "success":
                                     completed = True
-                                    self.logger.info(f"Model {model_name} pull successful via HTTP API")
+                                    self.logger.info(
+                                        f"Model {model_name} pull successful via HTTP API"
+                                    )
                                     break
                             except json.JSONDecodeError:
                                 # Skip non-JSON lines (like ANSI escape codes)
@@ -402,18 +427,24 @@ class OllamaManager:
                     self._models_cache = None  # Clear cache
                     for _attempt in range(5):  # More retries
                         if self.is_model_available(model_name):
-                            self.logger.info(f"Model {model_name} verified as available via HTTP API")
+                            self.logger.info(
+                                f"Model {model_name} verified as available via HTTP API"
+                            )
                             return True
                         time.sleep(2)  # Longer wait between retries
                         self._models_cache = None  # Clear cache again
 
                     # Final check - maybe model name has a tag or different format
                     models = self.list_models(force_refresh=True)
-                    base_name = model_name.split(':')[0]
+                    base_name = model_name.split(":")[0]
                     model_found = any(base_name in m.name for m in models)
                     if model_found:
-                        matching_models = [m.name for m in models if base_name in m.name]
-                        self.logger.info(f"Model {base_name} appears to be available: {matching_models}")
+                        matching_models = [
+                            m.name for m in models if base_name in m.name
+                        ]
+                        self.logger.info(
+                            f"Model {base_name} appears to be available: {matching_models}"
+                        )
                         # Update model name to match what's actually available
                         if matching_models:
                             self.logger.info(f"Using model: {matching_models[0]}")
@@ -421,14 +452,20 @@ class OllamaManager:
 
                     # If pull completed, assume success even if not in list yet
                     if completed:
-                        self.logger.info(f"Pull completed for {model_name}, model should be available")
+                        self.logger.info(
+                            f"Pull completed for {model_name}, model should be available"
+                        )
                         return True
 
                     self.logger.warning(f"Pull may not have completed for {model_name}")
                     return False
                 else:
-                    error_text = response.text[:200] if response.text else "Unknown error"
-                    self.logger.error(f"Pull failed: HTTP {response.status_code}: {error_text}")
+                    error_text = (
+                        response.text[:200] if response.text else "Unknown error"
+                    )
+                    self.logger.error(
+                        f"Pull failed: HTTP {response.status_code}: {error_text}"
+                    )
                     return False
             except requests.exceptions.RequestException as e:
                 self.logger.warning(f"HTTP API pull failed, falling back to CLI: {e}")
@@ -440,7 +477,7 @@ class OllamaManager:
                 [self.ollama_binary, "pull", model_name],
                 capture_output=True,
                 text=True,
-                timeout=3600  # 1 hour timeout for large models
+                timeout=3600,  # 1 hour timeout for large models
             )
 
             success = result.returncode == 0
@@ -480,7 +517,7 @@ class OllamaManager:
         prompt: str,
         options: dict[str, Any] | None = None,
         save_output: bool = True,
-        output_dir: str | None = None
+        output_dir: str | None = None,
     ) -> ModelExecutionResult:
         """
         Run a model with the given prompt.
@@ -502,10 +539,12 @@ class OllamaManager:
                 response="",
                 execution_time=0,
                 success=False,
-                error_message=f"Model {model_name} not available"
+                error_message=f"Model {model_name} not available",
             )
 
-        self.logger.info(f"Running model {model_name} with prompt length: {len(prompt)}")
+        self.logger.info(
+            f"Running model {model_name} with prompt length: {len(prompt)}"
+        )
 
         start_time = time.time()
 
@@ -513,57 +552,63 @@ class OllamaManager:
         if self.use_http_api:
             try:
                 # Prepare request payload
-                payload = {
-                    "model": model_name,
-                    "prompt": prompt,
-                    "stream": False
-                }
+                payload = {"model": model_name, "prompt": prompt, "stream": False}
 
                 # Add options if provided
                 if options:
                     # Map ExecutionOptions to Ollama API format
-                    payload['options'] = payload.get('options', {})
+                    payload["options"] = payload.get("options", {})
 
-                    if 'temperature' in options:
-                        payload['options']['temperature'] = options['temperature']
-                    if 'top_p' in options:
-                        payload['options']['top_p'] = options['top_p']
-                    if 'top_k' in options:
-                        payload['options'] = payload.get('options', {})
-                        payload['options']['top_k'] = options['top_k']
-                    if 'repeat_penalty' in options:
-                        payload['options'] = payload.get('options', {})
-                        payload['options']['repeat_penalty'] = options['repeat_penalty']
-                    if 'max_tokens' in options or 'num_predict' in options:
-                        payload['options']['num_predict'] = options.get('num_predict', options.get('max_tokens', 2048))
-                    if 'num_ctx' in options:
-                        payload['options']['num_ctx'] = options['num_ctx']
-                    if 'format' in options:
-                        payload['format'] = options['format']
-                    if 'system' in options or 'system_prompt' in options:
-                        payload['system'] = options.get('system') or options.get('system_prompt')
+                    if "temperature" in options:
+                        payload["options"]["temperature"] = options["temperature"]
+                    if "top_p" in options:
+                        payload["options"]["top_p"] = options["top_p"]
+                    if "top_k" in options:
+                        payload["options"] = payload.get("options", {})
+                        payload["options"]["top_k"] = options["top_k"]
+                    if "repeat_penalty" in options:
+                        payload["options"] = payload.get("options", {})
+                        payload["options"]["repeat_penalty"] = options["repeat_penalty"]
+                    if "max_tokens" in options or "num_predict" in options:
+                        payload["options"]["num_predict"] = options.get(
+                            "num_predict", options.get("max_tokens", 2048)
+                        )
+                    if "num_ctx" in options:
+                        payload["options"]["num_ctx"] = options["num_ctx"]
+                    if "format" in options:
+                        payload["format"] = options["format"]
+                    if "system" in options or "system_prompt" in options:
+                        payload["system"] = options.get("system") or options.get(
+                            "system_prompt"
+                        )
 
                 response = requests.post(
                     f"{self.base_url}/api/generate",
                     json=payload,
-                    timeout=300  # 5 minute timeout
+                    timeout=300,  # 5 minute timeout
                 )
 
                 execution_time = time.time() - start_time
 
                 if response.status_code == 200:
                     data = response.json()
-                    response_text = data.get('response', '').strip()
+                    response_text = data.get("response", "").strip()
                     success = True
                     error_msg = None
-                    tokens_used = data.get('eval_count')  # Approximate token count
+                    tokens_used = data.get("eval_count")  # Approximate token count
 
-                    self.logger.info(f"Model {model_name} completed successfully in {execution_time:.2f}s")
+                    self.logger.info(
+                        f"Model {model_name} completed successfully in {execution_time:.2f}s"
+                    )
 
                     # Save output if requested
                     if save_output and self.output_manager and output_dir:
                         self.output_manager.save_model_output(
-                            model_name, prompt, response_text, execution_time, output_dir
+                            model_name,
+                            prompt,
+                            response_text,
+                            execution_time,
+                            output_dir,
                         )
 
                     return ModelExecutionResult(
@@ -574,7 +619,7 @@ class OllamaManager:
                         tokens_used=tokens_used,
                         success=success,
                         error_message=error_msg,
-                        metadata={'api_method': 'http'}
+                        metadata={"api_method": "http"},
                     )
                 else:
                     error_msg = f"HTTP {response.status_code}: {response.text}"
@@ -585,7 +630,7 @@ class OllamaManager:
                         response="",
                         execution_time=execution_time,
                         success=False,
-                        error_message=error_msg
+                        error_message=error_msg,
                     )
 
             except requests.exceptions.Timeout:
@@ -596,7 +641,7 @@ class OllamaManager:
                     response="",
                     execution_time=execution_time,
                     success=False,
-                    error_message="Model execution timed out"
+                    error_message="Model execution timed out",
                 )
             except requests.exceptions.RequestException as e:
                 self.logger.warning(f"HTTP API failed, falling back to CLI: {e}")
@@ -615,7 +660,7 @@ class OllamaManager:
                 input=prompt,
                 capture_output=True,
                 text=True,
-                timeout=300  # 5 minute timeout
+                timeout=300,  # 5 minute timeout
             )
 
             execution_time = time.time() - start_time
@@ -625,7 +670,9 @@ class OllamaManager:
                 success = True
                 error_msg = None
 
-                self.logger.info(f"Model {model_name} completed successfully in {execution_time:.2f}s")
+                self.logger.info(
+                    f"Model {model_name} completed successfully in {execution_time:.2f}s"
+                )
 
                 # Save output if requested
                 if save_output and self.output_manager and output_dir:
@@ -647,7 +694,7 @@ class OllamaManager:
                 execution_time=execution_time,
                 success=success,
                 error_message=error_msg,
-                metadata={'api_method': 'cli'}
+                metadata={"api_method": "cli"},
             )
 
         except subprocess.TimeoutExpired:
@@ -658,7 +705,7 @@ class OllamaManager:
                 response="",
                 execution_time=execution_time,
                 success=False,
-                error_message="Model execution timed out"
+                error_message="Model execution timed out",
             )
 
         except Exception as e:
@@ -669,14 +716,11 @@ class OllamaManager:
                 response="",
                 execution_time=execution_time,
                 success=False,
-                error_message=f"Execution error: {str(e)}"
+                error_message=f"Execution error: {str(e)}",
             )
 
     def run_model_async(
-        self,
-        model_name: str,
-        prompt: str,
-        options: dict[str, Any] | None = None
+        self, model_name: str, prompt: str, options: dict[str, Any] | None = None
     ) -> asyncio.Future[ModelExecutionResult]:
         """
         Run a model asynchronously.
@@ -690,38 +734,32 @@ class OllamaManager:
             Future that resolves to ModelExecutionResult
         """
         loop = asyncio.get_event_loop()
-        return loop.run_in_executor(
-            None,
-            self.run_model,
-            model_name,
-            prompt,
-            options
-        )
+        return loop.run_in_executor(None, self.run_model, model_name, prompt, options)
 
     def get_model_stats(self) -> dict[str, Any]:
         """Get statistics about available models."""
         models = self.list_models()
 
         stats = {
-            'total_models': len(models),
-            'total_size_bytes': sum(model.size for model in models),
-            'total_size_mb': sum(model.size for model in models) / (1024 * 1024),
-            'models_by_family': {},
-            'largest_model': None,
-            'smallest_model': None
+            "total_models": len(models),
+            "total_size_bytes": sum(model.size for model in models),
+            "total_size_mb": sum(model.size for model in models) / (1024 * 1024),
+            "models_by_family": {},
+            "largest_model": None,
+            "smallest_model": None,
         }
 
         # Group by family
         for model in models:
-            family = model.family or 'unknown'
-            if family not in stats['models_by_family']:
-                stats['models_by_family'][family] = []
-            stats['models_by_family'][family].append(model.name)
+            family = model.family or "unknown"
+            if family not in stats["models_by_family"]:
+                stats["models_by_family"][family] = []
+            stats["models_by_family"][family].append(model.name)
 
         # Find largest and smallest
         if models:
-            stats['largest_model'] = max(models, key=lambda m: m.size).name
-            stats['smallest_model'] = min(models, key=lambda m: m.size).name
+            stats["largest_model"] = max(models, key=lambda m: m.size).name
+            stats["smallest_model"] = min(models, key=lambda m: m.size).name
 
         return stats
 

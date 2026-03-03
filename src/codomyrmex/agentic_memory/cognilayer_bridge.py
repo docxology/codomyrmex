@@ -77,7 +77,16 @@ def store_memory(
             cursor = conn.execute(
                 """INSERT INTO memories (key, content, tags, importance, type, metadata, created_at, updated_at)
                    VALUES (?, ?, ?, ?, ?, ?, ?, ?)""",
-                (key, content, tag_str, importance.value, memory_type.value, meta_str, now, now),
+                (
+                    key,
+                    content,
+                    tag_str,
+                    importance.value,
+                    memory_type.value,
+                    meta_str,
+                    now,
+                    now,
+                ),
             )
         except sqlite3.OperationalError:
             # Fallback: create a simple memories table if it doesn't exist
@@ -97,7 +106,16 @@ def store_memory(
             cursor = conn.execute(
                 """INSERT OR REPLACE INTO memories (key, content, tags, importance, type, metadata, created_at, updated_at)
                    VALUES (?, ?, ?, ?, ?, ?, ?, ?)""",
-                (key, content, tag_str, importance.value, memory_type.value, meta_str, now, now),
+                (
+                    key,
+                    content,
+                    tag_str,
+                    importance.value,
+                    memory_type.value,
+                    meta_str,
+                    now,
+                    now,
+                ),
             )
 
         conn.commit()

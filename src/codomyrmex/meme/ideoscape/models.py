@@ -21,6 +21,7 @@ class ProjectionType(StrEnum):
 @dataclass
 class CoordinateSystem:
     """Definition of the mapping space."""
+
     dimensions: int = 2
     bounds: list[float] = field(default_factory=lambda: [-100.0, 100.0, -100.0, 100.0])
     projection: ProjectionType = ProjectionType.MERCATOR
@@ -36,6 +37,7 @@ class MapFeature:
         feature_type: Classification (e.g. 'peak', 'valley', 'cluster').
         magnitude: Size/Importance.
     """
+
     name: str
     position: np.ndarray = field(default_factory=lambda: np.zeros(2))
     feature_type: str = "point"
@@ -56,6 +58,7 @@ class IdeoscapeLayer:
         data_points: Raw data points.
         opacity: Visual weight.
     """
+
     name: str
     data_points: list[MapFeature] = field(default_factory=list)
     opacity: float = 1.0
@@ -70,6 +73,7 @@ class TerrainMap:
         resolution: Grid resolution.
         features: Identified features.
     """
+
     height_map: np.ndarray = field(default_factory=lambda: np.zeros((100, 100)))
     resolution: int = 100
     features: list[MapFeature] = field(default_factory=list)

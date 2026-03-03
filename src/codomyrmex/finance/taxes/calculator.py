@@ -112,7 +112,9 @@ class TaxCalculator:
         Raises:
             TaxError: If income is negative.
         """
-        income = Decimal(str(income)).quantize(Decimal("0.01"), rounding=ROUND_HALF_EVEN)
+        income = Decimal(str(income)).quantize(
+            Decimal("0.01"), rounding=ROUND_HALF_EVEN
+        )
         if income < Decimal("0"):
             raise TaxError("Income must be non-negative.")
 
@@ -139,13 +141,15 @@ class TaxCalculator:
             marginal_rate = rate
             remaining -= taxable_in_bracket
 
-            breakdown.append({
-                "bracket_min": bracket_min,
-                "bracket_max": bracket_max,
-                "rate": rate,
-                "taxable_amount": taxable_in_bracket,
-                "tax": tax_for_bracket,
-            })
+            breakdown.append(
+                {
+                    "bracket_min": bracket_min,
+                    "bracket_max": bracket_max,
+                    "rate": rate,
+                    "taxable_amount": taxable_in_bracket,
+                    "tax": tax_for_bracket,
+                }
+            )
 
         effective_rate = (
             (total_tax / income).quantize(Decimal("0.000001"), rounding=ROUND_HALF_EVEN)
@@ -184,7 +188,9 @@ class TaxCalculator:
         Returns:
             Adjusted taxable income.
         """
-        income = Decimal(str(income)).quantize(Decimal("0.01"), rounding=ROUND_HALF_EVEN)
+        income = Decimal(str(income)).quantize(
+            Decimal("0.01"), rounding=ROUND_HALF_EVEN
+        )
         if income < Decimal("0"):
             raise TaxError("Income must be non-negative.")
 
