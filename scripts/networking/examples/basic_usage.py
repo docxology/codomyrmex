@@ -15,29 +15,38 @@ except ImportError:
     project_root = Path(__file__).resolve().parent.parent.parent.parent
     sys.path.insert(0, str(project_root / "src"))
 
-from codomyrmex.utils.cli_helpers import setup_logging, print_success, print_info
+from codomyrmex.utils.cli_helpers import print_info, print_success, setup_logging
+
 
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
-    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "networking" / "config.yaml"
+
+    import yaml
+
+    config_path = (
+        Path(__file__).resolve().parent.parent.parent
+        / "config"
+        / "networking"
+        / "config.yaml"
+    )
     config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
+        with open(config_path) as f:
             config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/networking/config.yaml")
+            print("Loaded config from config/networking/config.yaml")
 
     setup_logging()
-    print_info(f"Running Basic networking Usage...")
+    print_info("Running Basic networking Usage...")
 
     # 1. HTTP Client
     print_info("Testing HTTPClient initialization and simulated request...")
     try:
         from codomyrmex.networking import HTTPClient
+
         client = HTTPClient(timeout=5)
         print_success("  HTTPClient initialized successfully.")
-        
+
         # Test a local or well-known URL check (simulated)
         # We catch exceptions so the script passes even if offline
         print_info("  Attempting simulated request to localhost...")
@@ -45,8 +54,10 @@ def main():
             # This will likely fail if no local server, but tests the error handling
             client.get("http://localhost:8080/health", timeout=1)
         except Exception:
-            print_success("  HTTPClient error handling functional (Request failed as expected).")
-            
+            print_success(
+                "  HTTPClient error handling functional (Request failed as expected)."
+            )
+
     except Exception as e:
         print_error(f"  HTTPClient flow failed: {e}")
 
@@ -54,13 +65,15 @@ def main():
     print_info("Testing WebSocketClient interface...")
     try:
         from codomyrmex.networking import WebSocketClient
+
         ws = WebSocketClient(url="ws://localhost:8080")
         print_success("  WebSocketClient initialized (interface check).")
     except Exception as e:
         print_info(f"  WebSocketClient demo: {e}")
 
-    print_success(f"Networking Usage completed successfully")
+    print_success("Networking Usage completed successfully")
     return 0
+
 
 if __name__ == "__main__":
     sys.exit(main())

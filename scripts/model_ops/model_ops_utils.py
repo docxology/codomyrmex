@@ -21,12 +21,21 @@ import argparse
 def find_models(path: str = ".") -> list:
     """Find model files."""
     p = Path(path)
-    extensions = [".pt", ".pth", ".h5", ".keras", ".onnx", ".pkl", ".joblib", ".safetensors"]
-    
+    extensions = [
+        ".pt",
+        ".pth",
+        ".h5",
+        ".keras",
+        ".onnx",
+        ".pkl",
+        ".joblib",
+        ".safetensors",
+    ]
+
     found = []
     for ext in extensions:
         found.extend(p.rglob(f"*{ext}"))
-    
+
     return found
 
 
@@ -48,48 +57,55 @@ def list_model_registries() -> dict:
         "ollama": {"installed": False, "models": []},
         "mlflow": {"installed": False},
     }
-    
+
     # Check HuggingFace
     hf_cache = Path.home() / ".cache" / "huggingface"
     if hf_cache.exists():
         registries["huggingface"]["installed"] = True
         registries["huggingface"]["cache"] = str(hf_cache)
-    
+
     # Check Ollama
     ollama_dir = Path.home() / ".ollama"
     if ollama_dir.exists():
         registries["ollama"]["installed"] = True
-    
+
     return registries
 
 
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
-    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "model_ops" / "config.yaml"
+
+    import yaml
+
+    config_path = (
+        Path(__file__).resolve().parent.parent.parent
+        / "config"
+        / "model_ops"
+        / "config.yaml"
+    )
     config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
+        with open(config_path) as f:
             config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/model_ops/config.yaml")
+            print("Loaded config from config/model_ops/config.yaml")
 
     parser = argparse.ArgumentParser(description="Model operations utilities")
     subparsers = parser.add_subparsers(dest="command")
-    
+
     # Find command
     find = subparsers.add_parser("find", help="Find model files")
     find.add_argument("path", nargs="?", default=".")
-    
+
     # Registries command
     subparsers.add_parser("registries", help="List model registries")
-    
+
     # Info command
     info = subparsers.add_parser("info", help="Get model info")
     info.add_argument("path", help="Model file path")
-    
+
     args = parser.parse_args()
-    
+
     if not args.command:
         print("🤖 Model Ops Utilities\n")
         print("Commands:")
@@ -97,40 +113,40 @@ def main():
         print("  registries - List model registries")
         print("  info       - Get model info")
         return 0
-    
+
     if args.command == "find":
         models = find_models(args.path)
         print(f"🔍 Found {len(models)} model files:\n")
-        
+
         for m in models[:20]:
             info = get_model_info(m)
             print(f"   📦 {info['name']} ({info['size_mb']} MB)")
-        
+
         if len(models) > 20:
             print(f"\n   ... and {len(models) - 20} more")
-    
+
     elif args.command == "registries":
         registries = list_model_registries()
         print("📚 Model Registries:\n")
-        
+
         for name, info in registries.items():
             status = "✅" if info["installed"] else "⚪"
             print(f"   {status} {name.title()}")
             if info.get("cache"):
                 print(f"      Cache: {info['cache']}")
-    
+
     elif args.command == "info":
         path = Path(args.path)
         if not path.exists():
             print(f"❌ File not found: {args.path}")
             return 1
-        
+
         info = get_model_info(path)
         print(f"📦 Model: {info['name']}\n")
         print(f"   Size: {info['size_mb']} MB")
         print(f"   Format: {info['format']}")
         print(f"   Path: {info['path']}")
-    
+
     return 0
 
 
