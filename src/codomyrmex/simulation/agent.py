@@ -30,6 +30,12 @@ class Agent(abc.ABC):
     """Abstract base class for all simulation agents."""
 
     def __init__(self, agent_id: str, name: str = "") -> None:
+        """Initialize a new agent.
+
+        Args:
+            agent_id: Unique identifier for the agent.
+            name: Optional descriptive name. Defaults to agent_id if not provided.
+        """
         self.id = agent_id
         self.name = name or agent_id
         self.step_count: int = 0
@@ -88,6 +94,13 @@ class RandomAgent(Agent):
         action_types: list[str] | None = None,
         name: str = "",
     ) -> None:
+        """Initialize a new random agent.
+
+        Args:
+            agent_id: Unique identifier.
+            action_types: List of available action types.
+            name: Optional descriptive name.
+        """
         super().__init__(agent_id, name)
         self.action_types = action_types or ["move", "wait", "observe"]
 
@@ -110,6 +123,12 @@ class RuleBasedAgent(Agent):
     """
 
     def __init__(self, agent_id: str, name: str = "") -> None:
+        """Initialize a new rule-based agent.
+
+        Args:
+            agent_id: Unique identifier.
+            name: Optional descriptive name.
+        """
         super().__init__(agent_id, name)
         self._rules: list[tuple[Any, str]] = []
 
@@ -122,6 +141,7 @@ class RuleBasedAgent(Agent):
             condition: Callable[[dict], bool] — returns True when the rule fires.
             action_type: Action type string to emit.
             params: Optional parameters to include in the Action.
+
         """
         self._rules.append((condition, action_type, params or {}))  # type: ignore[arg-type]
 
@@ -150,6 +170,7 @@ class QLearningAgent(Agent):
         epsilon: Exploration rate (0–1). Decays multiplicatively each step.
         epsilon_decay: Per-step decay multiplier for epsilon.
         epsilon_min: Lower bound for epsilon.
+
     """
 
     def __init__(
@@ -163,6 +184,18 @@ class QLearningAgent(Agent):
         epsilon_min: float = 0.01,
         name: str = "",
     ) -> None:
+        """Initialize a new Q-learning agent.
+
+        Args:
+            agent_id: Unique identifier.
+            action_types: List of available action types.
+            alpha: Learning rate.
+            gamma: Discount factor.
+            epsilon: Exploration rate.
+            epsilon_decay: Epsilon decay factor.
+            epsilon_min: Minimum epsilon.
+            name: Optional descriptive name.
+        """
         super().__init__(agent_id, name)
         self.action_types = action_types
         self.alpha = alpha
