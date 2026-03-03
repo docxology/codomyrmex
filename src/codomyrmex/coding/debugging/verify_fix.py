@@ -19,9 +19,6 @@ from dataclasses import dataclass
 from codomyrmex.coding.debugging.patch_generator import Patch
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
-# In a real scenario, this would import the Execution module
-# from codomyrmex.coding.execution import execute_code
-
 logger = get_logger(__name__)
 
 
