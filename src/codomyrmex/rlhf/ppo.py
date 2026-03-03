@@ -5,7 +5,9 @@ Implements the PPO-Clip algorithm (Schulman et al. 2017) with:
 - Generalized Advantage Estimation (Schulman et al. 2015)
 - Bradley-Terry reward model for preference learning
 """
+
 from dataclasses import dataclass
+from typing import Any
 
 import numpy as np
 
@@ -26,6 +28,13 @@ class Actor:
     """Policy network (outputs action log-probabilities)."""
 
     def __init__(self, d_state: int, d_action: int):
+        """Initialize the Actor network.
+
+        Args:
+            d_state: State dimension
+            d_action: Action dimension
+
+        """
         scale = np.sqrt(2.0 / d_state)
         self.W1 = np.random.randn(d_state, 64) * scale
         self.b1 = np.zeros(64)
@@ -33,17 +42,19 @@ class Actor:
         self.b2 = np.zeros(d_action)
 
     def forward(self, state: np.ndarray) -> np.ndarray:
-        """Returns log-probabilities over actions."""
+        """Return log-probabilities over actions."""
         h = np.maximum(0, state @ self.W1 + self.b1)
         logits = h @ self.W2 + self.b2
         # Log-softmax
         logits_max = np.max(logits, axis=-1, keepdims=True)
-        log_probs = logits - logits_max - np.log(
-            np.sum(np.exp(logits - logits_max), axis=-1, keepdims=True) + 1e-9
+        log_probs: np.ndarray = (
+            logits
+            - logits_max
+            - np.log(np.sum(np.exp(logits - logits_max), axis=-1, keepdims=True) + 1e-9)
         )
         return log_probs
 
-    def __call__(self, x):
+    def __call__(self, x: np.ndarray) -> np.ndarray:
         """Make Actor callable."""
         return self.forward(x)
 
@@ -52,6 +63,12 @@ class Critic:
     """Value function network (estimates expected return)."""
 
     def __init__(self, d_state: int):
+        """Initialize the Critic network.
+
+        Args:
+            d_state: State dimension
+
+        """
         scale = np.sqrt(2.0 / d_state)
         self.W1 = np.random.randn(d_state, 64) * scale
         self.b1 = np.zeros(64)
@@ -59,11 +76,12 @@ class Critic:
         self.b2 = np.zeros(1)
 
     def forward(self, state: np.ndarray) -> np.ndarray:
-        """Returns value estimate."""
+        """Return value estimate."""
         h = np.maximum(0, state @ self.W1 + self.b1)
-        return (h @ self.W2 + self.b2).squeeze(-1)
+        res: np.ndarray = (h @ self.W2 + self.b2).squeeze(-1)
+        return res
 
-    def __call__(self, x):
+    def __call__(self, x: np.ndarray) -> np.ndarray:
         """Make Critic callable."""
         return self.forward(x)
 
@@ -75,6 +93,12 @@ class RewardModel:
     """
 
     def __init__(self, d_state: int):
+        """Initialize the RewardModel network.
+
+        Args:
+            d_state: State dimension
+
+        """
         scale = np.sqrt(2.0 / d_state)
         self.W1 = np.random.randn(d_state, 32) * scale
         self.b1 = np.zeros(32)
@@ -84,7 +108,8 @@ class RewardModel:
     def score(self, state: np.ndarray) -> np.ndarray:
         """Return reward score for a state/response."""
         h = np.maximum(0, state @ self.W1 + self.b1)
-        return (h @ self.W2 + self.b2).squeeze(-1)
+        res: np.ndarray = (h @ self.W2 + self.b2).squeeze(-1)
+        return res
 
     def preference_loss(self, w_states: np.ndarray, l_states: np.ndarray) -> float:
         """Bradley-Terry preference loss: -log sigmoid(r_w - r_l)."""
@@ -115,6 +140,7 @@ def compute_gae(
     Returns:
         advantages: GAE estimates, shape (T,)
         returns: Value function targets, shape (T,)
+
     """
     T = len(rewards)
     advantages = np.zeros(T)
@@ -138,8 +164,8 @@ def ppo_step(
     returns: np.ndarray,
     actor: Actor,
     critic: Critic,
-    config: PPOConfig = None,
-) -> dict:
+    config: PPOConfig | None = None,
+) -> dict[str, Any]:
     """Compute PPO loss components (no gradient update in NumPy version).
 
     PPO Clip Loss:
@@ -159,6 +185,7 @@ def ppo_step(
     Returns:
         dict with: policy_loss, value_loss, entropy, total_loss,
                    mean_ratio, clip_fraction
+
     """
     if config is None:
         config = PPOConfig()
@@ -192,7 +219,9 @@ def ppo_step(
     entropy = float(-np.mean(np.sum(probs * new_log_probs_all, axis=-1)))
 
     total_loss = (
-        policy_loss + config.value_loss_coef * value_loss - config.entropy_coef * entropy
+        policy_loss
+        + config.value_loss_coef * value_loss
+        - config.entropy_coef * entropy
     )
 
     return {
@@ -211,15 +240,21 @@ def ppo_step(
 class PPOTrainer:
     """Orchestrates PPO training loop."""
 
-    def __init__(self, d_state: int, d_action: int, config: PPOConfig = None):
+    def __init__(self, d_state: int, d_action: int, config: PPOConfig | None = None):
+        """Initialize the PPOTrainer with dimensions and optional config."""
         self.actor = Actor(d_state, d_action)
         self.critic = Critic(d_state)
         self.config = config or PPOConfig()
         self.losses: list[float] = []
 
     def compute_loss(
-        self, states, actions, old_log_probs, advantages, returns
-    ) -> dict:
+        self,
+        states: np.ndarray,
+        actions: np.ndarray,
+        old_log_probs: np.ndarray,
+        advantages: np.ndarray,
+        returns: np.ndarray,
+    ) -> dict[str, Any]:
         """Compute PPO loss for one batch and record history."""
         result = ppo_step(
             states,

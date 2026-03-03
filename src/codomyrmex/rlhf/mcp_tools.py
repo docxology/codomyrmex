@@ -1,5 +1,7 @@
 """MCP tools for the RLHF module."""
 
+from typing import Any
+
 import numpy as np
 
 from codomyrmex.model_context_protocol.decorators import mcp_tool
@@ -11,7 +13,7 @@ def rlhf_ppo_step(
     d_action: int = 4,
     batch_size: int = 16,
     seed: int = 42,
-) -> dict:
+) -> dict[str, Any]:
     """Run a single PPO step on synthetic data and return loss metrics.
 
     Args:
@@ -22,6 +24,7 @@ def rlhf_ppo_step(
 
     Returns:
         dict with: policy_loss, value_loss, entropy, total_loss, mean_ratio, clip_fraction
+
     """
     from .ppo import PPOTrainer, compute_gae
 
@@ -54,7 +57,7 @@ def rlhf_reward_score(
     d_state: int = 8,
     batch_size: int = 4,
     seed: int = 42,
-) -> dict:
+) -> dict[str, Any]:
     """Score synthetic states using the RLHF reward model.
 
     Args:
@@ -64,6 +67,7 @@ def rlhf_reward_score(
 
     Returns:
         dict with: scores (list), preference_loss, mean_score
+
     """
     from .ppo import RewardModel
 
