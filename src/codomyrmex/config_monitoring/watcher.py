@@ -18,6 +18,7 @@ class ConfigWatcher:
             file_path: Path to the file to watch
             callback: Function to call when change is detected
             interval: Polling interval in seconds
+
         """
         self.file_path = Path(file_path).absolute()
         self.callback = callback
@@ -61,7 +62,7 @@ class ConfigWatcher:
                 logger.info(f"Stopped watching {self.file_path}")
 
     def _run(self) -> None:
-        """Polling loop."""
+        """Run the polling loop to check for file changes."""
         while not self._stop_event.is_set():
             try:
                 current_mtime = self._get_mtime()
