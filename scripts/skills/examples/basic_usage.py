@@ -47,14 +47,14 @@ def main():
         if temp_skills_dir.exists():
             shutil.rmtree(temp_skills_dir)
         temp_skills_dir.mkdir(parents=True, exist_ok=True)
-        
+
         mgr = get_skills_manager(
             skills_dir=temp_skills_dir,
             auto_sync=False
         )
         if isinstance(mgr, SkillsManager):
             print_success(f"  SkillsManager initialized at: {mgr.skills_dir}")
-            
+
         # Initialize directories
         mgr.initialize()
         print_success("  SkillsManager directories initialized.")
@@ -74,17 +74,17 @@ def main():
         }
         if mgr.add_custom_skill(category="general", name="greeter", skill_data=skill_data):
             print_success("  Custom skill 'general/greeter' added successfully.")
-            
+
         # Verify it's in the registry
         skills = mgr.list_skills(category="general")
         if any(s["name"] == "greeter" for s in skills):
             print_success("  Skill found in registry listing.")
-            
+
         # Search
         search_results = mgr.search_skills("greet")
         if search_results:
             print_success(f"  Search for 'greet' found {len(search_results)} result(s).")
-            
+
     except Exception as e:
         print_error(f"  Custom skill operations failed: {e}")
 

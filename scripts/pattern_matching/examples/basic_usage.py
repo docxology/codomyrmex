@@ -35,7 +35,7 @@ def main():
     print_info("Testing Pattern Matching initialization...")
     try:
         from codomyrmex.pattern_matching import get_embedding_function
-        
+
         # Test embedding function if available
         try:
             embedder = get_embedding_function()
@@ -43,7 +43,7 @@ def main():
                 print_success("  Embedding function initialized successfully.")
         except Exception as e:
             print_info(f"  Embedder initialization note: {e}")
-            
+
         print_success("  Pattern matching module ready for analysis.")
     except Exception as e:
         print_error(f"  Pattern matching flow failed: {e}")

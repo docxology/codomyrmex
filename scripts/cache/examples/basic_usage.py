@@ -45,7 +45,7 @@ def main():
         val = cache.get("foo")
         if val == "bar":
             print_success("  Cache Set/Get functional.")
-        
+
         stats = cache.get_stats()
         if stats:
             print_success("  Cache statistics retrieved.")

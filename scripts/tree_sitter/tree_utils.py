@@ -24,19 +24,19 @@ def parse_python_ast(path: Path) -> dict:
     """Parse Python file and extract structure."""
     with open(path) as f:
         source = f.read()
-    
+
     try:
         tree = ast.parse(source)
     except SyntaxError as e:
         return {"error": f"Syntax error: {e}"}
-    
+
     structure = {
         "imports": [],
         "functions": [],
         "classes": [],
         "variables": [],
     }
-    
+
     for node in ast.walk(tree):
         if isinstance(node, ast.Import):
             for alias in node.names:
@@ -60,7 +60,7 @@ def parse_python_ast(path: Path) -> dict:
             })
         elif isinstance(node, ast.Assign) and isinstance(node.targets[0], ast.Name):
             structure["variables"].append(node.targets[0].id)
-    
+
     return structure
 
 
@@ -68,12 +68,12 @@ def search_pattern(path: Path, pattern: str) -> list:
     """Search for pattern in code."""
     with open(path) as f:
         lines = f.readlines()
-    
+
     matches = []
     for i, line in enumerate(lines, 1):
         if re.search(pattern, line):
             matches.append({"line": i, "content": line.strip()})
-    
+
     return matches
 
 
@@ -94,7 +94,7 @@ def main():
     parser.add_argument("--structure", "-s", action="store_true", help="Show structure")
     parser.add_argument("--json", "-j", action="store_true", help="Output as JSON")
     args = parser.parse_args()
-    
+
     if not args.file:
         print("🌳 Tree Utilities\n")
         print("Usage:")
@@ -102,12 +102,12 @@ def main():
         print("  python tree_utils.py module.py --query 'def.*async'")
         print("\nNote: Uses Python AST (tree-sitter available via codomyrmex)")
         return 0
-    
+
     path = Path(args.file)
     if not path.exists():
         print(f"❌ File not found: {args.file}")
         return 1
-    
+
     if args.query:
         matches = search_pattern(path, args.query)
         print(f"🔍 Pattern: {args.query}\n")
@@ -115,33 +115,33 @@ def main():
         for m in matches[:20]:
             print(f"   L{m['line']:4d}: {m['content'][:60]}")
         return 0
-    
+
     if path.suffix == ".py":
         structure = parse_python_ast(path)
-        
+
         if args.json:
             import json
             print(json.dumps(structure, indent=2))
             return 0
-        
+
         print(f"🌳 Structure: {path.name}\n")
-        
+
         if "error" in structure:
             print(f"   ❌ {structure['error']}")
             return 1
-        
+
         if structure["imports"]:
             print(f"   📦 Imports ({len(structure['imports'])}):")
             for imp in structure["imports"][:10]:
                 print(f"      - {imp}")
-        
+
         if structure["classes"]:
             print(f"\n   🏛️  Classes ({len(structure['classes'])}):")
             for cls in structure["classes"]:
                 print(f"      {cls['name']} (line {cls['line']})")
                 for m in cls["methods"][:5]:
                     print(f"         - {m}()")
-        
+
         if structure["functions"]:
             print(f"\n   🔧 Functions ({len(structure['functions'])}):")
             for func in structure["functions"][:10]:
@@ -151,7 +151,7 @@ def main():
         print(f"📄 File: {path.name}")
         print(f"   Size: {path.stat().st_size} bytes")
         print(f"   Note: Only Python parsing supported in this utility")
-    
+
     return 0
 
 

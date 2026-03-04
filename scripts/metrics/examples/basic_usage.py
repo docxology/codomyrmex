@@ -38,7 +38,7 @@ def main():
     # 1. Get Metrics Instance
     print_info("Initializing metrics (in_memory)...")
     m = get_metrics(backend="in_memory")
-    
+
     # 2. Counter
     print_info("Testing Counter...")
     c = m.counter("requests_total")
@@ -46,7 +46,7 @@ def main():
     c.inc(5)
     if c.get() == 6:
         print_success("  Counter functional.")
-    
+
     # 3. Gauge
     print_info("Testing Gauge...")
     g = m.gauge("memory_usage")

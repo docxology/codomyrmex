@@ -75,14 +75,14 @@ def run_orchestrator():
     print("[1] Scanning for @injectable services...")
     import __main__
     container.scan(__main__)
-    
+
     # Also register some named repositories to demonstrate collection resolution
     container.register(IDataRepository, MockRepository, scope="transient", name="repo1")
     container.register(IDataRepository, MockRepository, scope="transient", name="repo2")
-    
+
     # Register the interface for the service
     container.register(IProcessingService, ProcessingService, scope="scoped")
-    
+
     print(f"Container state: {container}\n")
 
     # 3. Resolve Singleton
@@ -97,19 +97,19 @@ def run_orchestrator():
     with ScopeContext(container) as scope:
         service1 = scope.resolve(IProcessingService)
         service2 = scope.resolve(IProcessingService)
-        
+
         print(f"Service 1 output: {service1.process()}")
         print(f"Scoped check (service): {service1 is service2}")
-        
+
         # Demonstrating transient behavior: resolve twice from container
         repo_a = container.resolve(IDataRepository, name="repo1")
         repo_b = container.resolve(IDataRepository, name="repo1")
         print(f"Transient check (repo): {repo_a is not repo_b} (IDs: {id(repo_a)}, {id(repo_b)})")
-    
+
     print("\n[4] Collection Resolution...")
     all_repos = container.resolve_all(IDataRepository)
     print(f"Resolved all {len(all_repos)} repositories.")
-    
+
     print("\nOrchestration complete.")
 
 

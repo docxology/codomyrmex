@@ -1,5 +1,4 @@
-"""
-Plugin Validator for Codomyrmex Plugin System
+"""Plugin Validator for Codomyrmex Plugin System.
 
 This module provides validation logic for plugins, including metadata
 checks, dependency verification, and security scanning.
@@ -16,6 +15,7 @@ from codomyrmex.plugin_system.core.plugin_registry import Plugin, PluginInfo
 @dataclass
 class ValidationResult:
     """Represents the results of a plugin validation."""
+
     valid: bool = True
     issues: list[dict[str, Any]] = field(default_factory=list)
     warnings: list[dict[str, Any]] = field(default_factory=list)
@@ -24,9 +24,7 @@ class ValidationResult:
 
 
 class PluginValidator:
-    """
-    Validator for Codomyrmex plugins.
-    """
+    """Validator for Codomyrmex plugins."""
 
     def __init__(self):
         """Initialize the validator."""
@@ -112,9 +110,7 @@ class PluginValidator:
         return result
 
     def validate_plugin(self, target: Any) -> ValidationResult:
-        """
-        Validate a plugin (can be a file path or a plugin object).
-        """
+        """Validate a plugin (can be a file path or a plugin object)."""
         if isinstance(target, str) and os.path.exists(target):
             return self._scan_file_security(target)
         elif hasattr(target, 'info'):
@@ -147,6 +143,6 @@ class PluginValidator:
 
 
 def validate_plugin(plugin: Any) -> ValidationResult:
-    """Helper function for plugin validation."""
+    """Validate a plugin with a new PluginValidator."""
     validator = PluginValidator()
     return validator.validate_plugin(plugin)

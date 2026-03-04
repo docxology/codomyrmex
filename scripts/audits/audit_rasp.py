@@ -37,13 +37,13 @@ def main():
     parser = argparse.ArgumentParser(description="Audit RASP documentation breadth.")
     parser.add_argument("--root", type=Path, default=PROJ_ROOT, help="Project root directory")
     args = parser.parse_args()
-    
+
     src_dir = args.root / "src" / "codomyrmex"
-    
+
     if not src_dir.exists():
         print(f"Critical Error: Could not find src/codomyrmex at {src_dir}")
         sys.exit(1)
-        
+
     sys.exit(audit_rasp(src_dir))
 
 

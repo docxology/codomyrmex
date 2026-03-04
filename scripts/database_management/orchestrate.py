@@ -31,20 +31,20 @@ def main():
             print(f"Loaded config from {config_path.name}")
 
     print("--- Codomyrmex Database Management Orchestrator ---")
-    
+
     # 1. Setup workspace and database
     with tempfile.TemporaryDirectory() as tmpdir:
         workspace = Path(tmpdir)
         db_file = workspace / "orchestrator_demo.db"
         db_url = f"sqlite:///{db_file}"
-        
+
         print(f"[*] Initializing database: {db_url}")
         manager = manage_databases(db_url)
-        
+
         # 2. Run Migrations
         print("[*] Setting up migrations...")
         mig_manager = MigrationManager(workspace_dir=str(workspace), database_url=db_url)
-        
+
         create_table_sql = """
         CREATE TABLE sensors (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -60,25 +60,25 @@ def main():
             sql=create_table_sql,
             rollback_sql="DROP TABLE sensors;"
         )
-        
+
         print("[*] Applying migrations...")
         results = mig_manager.apply_pending_migrations()
         for res in results:
             if res.success:
                 print(f"  [+] Migration {res.migration_id} applied successfully.")
-        
+
         # 3. Execute Queries
         print("[*] Seeding data...")
         with manager.transaction() as tx:
             tx.execute("INSERT INTO sensors (name, type, last_value) VALUES (?, ?, ?)", ("Temp01", "temperature", 22.5), commit=False)
             tx.execute("INSERT INTO sensors (name, type, last_value) VALUES (?, ?, ?)", ("Hum01", "humidity", 45.0), commit=False)
-        
+
         print("[*] Querying data...")
         result = manager.execute("SELECT * FROM sensors")
         if result.success:
             for row in result.to_dict_list():
                 print(f"  - Sensor: {row['name']} ({row['type']}) = {row['last_value']}")
-        
+
         # 4. Performance Monitoring
         print("[*] Recording performance metrics...")
         monitor = DatabasePerformanceMonitor(workspace_dir=str(workspace))
@@ -87,17 +87,17 @@ def main():
             "queries_per_second": 10.5,
             "average_query_time_ms": result.execution_time * 1000
         })
-        
+
         report = monitor.analyze_database_performance("demo_db")
         print(f"  [+] Health status: {report.get('performance_issues', 'Healthy')}")
-        
+
         # 5. Backup
         print("[*] Creating database backup...")
         backup_manager = BackupManager(workspace_dir=str(workspace), database_url=db_url)
         backup_res = backup_manager.create_backup("orchestrator_demo")
         if backup_res.success:
             print(f"  [+] Backup created: {backup_res.backup_id} ({backup_res.file_size_mb:.2f} MB)")
-            
+
     print("\n--- Orchestration Complete ---")
 
 if __name__ == "__main__":

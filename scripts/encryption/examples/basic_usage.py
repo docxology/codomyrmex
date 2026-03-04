@@ -51,10 +51,10 @@ def main():
         data = b"Highly sensitive secret data"
         key = generate_key(algorithm="AES")
         print_success(f"  AES Key generated (length: {len(key)})")
-        
+
         encrypted = encrypt(data, key, algorithm="AES")
         print_success(f"  Data encrypted via AES.")
-        
+
         decrypted = decrypt(encrypted, key, algorithm="AES")
         if decrypted == data:
             print_success("  AES Decryption successful (Data matches).")
@@ -81,14 +81,14 @@ def main():
     try:
         test_dir = Path("output/encryption_test")
         test_dir.mkdir(parents=True, exist_ok=True)
-        
+
         input_file = test_dir / "secret.txt"
         input_file.write_text("This is a secret file.")
-        
+
         enc_file = test_dir / "secret.enc"
         if encrypt_file(str(input_file), str(enc_file), key):
             print_success(f"  File encrypted: {enc_file}")
-            
+
         dec_file = test_dir / "secret.dec.txt"
         if decrypt_file(str(enc_file), str(dec_file), key):
             print_success(f"  File decrypted: {dec_file}")

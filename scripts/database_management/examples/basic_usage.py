@@ -45,7 +45,7 @@ def main():
     try:
         from codomyrmex.database_management.db_manager import DatabaseType
         mgr = DatabaseManager()
-        
+
         # Define a real SQLite connection for testing
         db_path = "output/test_app.db"
         conn = DatabaseConnection(
@@ -55,10 +55,10 @@ def main():
         )
         mgr.add_connection(conn)
         print_success(f"  DatabaseConnection registered: '{conn.name}' -> {db_path}")
-        
+
         # Test connection string generation
         print_info(f"  Connection string: {conn.get_connection_string()}")
-        
+
     except Exception as e:
         print_error(f"  DatabaseManager flow failed: {e}")
 

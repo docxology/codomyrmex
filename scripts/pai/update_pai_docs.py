@@ -41,7 +41,7 @@ def main():
     args = parser.parse_args()
 
     src_dir = args.root / "src" / "codomyrmex"
-    
+
     update_pai_docs(src_dir, apply=args.apply, max_lines=args.max_lines)
 
 

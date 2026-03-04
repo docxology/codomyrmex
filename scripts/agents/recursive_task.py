@@ -27,7 +27,7 @@ class TaskAgent:
         self.identity = identity
         self.system_prompt = system_prompt
         self.client = get_llm_client(identity=identity)
-        
+
         self.endpoint = ClaudeCodeEndpoint(
             CHANNEL,
             identity=identity,
@@ -49,23 +49,23 @@ class TaskAgent:
 
     def _handle_message(self, msg):
         print(f"\n[{self.identity.title()}] Received from {msg.sender}: {msg.content}")
-        
+
         # Construct prompt with system instruction
         # We wrap the user message with the system context
         full_prompt = f"System: {self.system_prompt}\n\nUser: {msg.content}"
-        
+
         request = AgentRequest(prompt=full_prompt, context=msg.metadata)
-        
+
         try:
             # We explicitly invoke the client with our constructed request
             response = self.client.execute_with_session(request, session=None)
-            
+
             if hasattr(response, 'is_success') and response.is_success():
                 return response.content
             elif hasattr(response, 'error'):
                 return f"Error: {response.error}"
             return str(response.content)
-            
+
         except Exception as e:
             return f"Error executing agent: {e}"
 
@@ -79,12 +79,12 @@ def run_manager():
     )
     agent = TaskAgent("manager", system_prompt)
     agent.start()
-    
+
     # Manager initiates
     time.sleep(2)
     print("\n[Manager] Delegating task...")
     agent.send("Generate a report for project X.")
-    
+
     time.sleep(15)
     agent.stop()
 
@@ -98,7 +98,7 @@ def run_worker():
     )
     agent = TaskAgent("worker", system_prompt)
     agent.start()
-    
+
     # Worker runs longer to listen
     time.sleep(16)
     agent.stop()
@@ -115,13 +115,13 @@ def main():
             print(f"Loaded config from config/agents/config.yaml")
 
     AgentRelay(CHANNEL).clear()
-    
+
     t1 = threading.Thread(target=run_manager)
     t2 = threading.Thread(target=run_worker)
-    
+
     t1.start()
     t2.start()
-    
+
     t1.join()
     t2.join()
     print("\nRecursive task demo complete.")

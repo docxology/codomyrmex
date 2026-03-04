@@ -54,12 +54,12 @@ def main():
         # Manually register pipeline in the manager's state
         mgr.pipelines[pipeline.name] = pipeline
         print_success(f"  Pipeline '{pipeline.name}' registered manually.")
-        
+
         # Verify it's listed
         pipelines = mgr.list_pipelines()
         if any(p.name == "demo_pipeline" for p in pipelines):
             print_success("  Pipeline successfully retrieved from PipelineManager.")
-            
+
         print_success("  PipelineManager state management verified.")
     except Exception as e:
         print_error(f"  PipelineManager flow failed: {e}")

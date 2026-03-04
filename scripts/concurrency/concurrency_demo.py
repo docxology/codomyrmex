@@ -19,10 +19,10 @@ except ImportError:
     sys.path.insert(0, str(project_root / "src"))
 
 from codomyrmex.concurrency import (
-    LocalLock, 
-    LockManager, 
-    ReadWriteLock, 
-    LocalSemaphore, 
+    LocalLock,
+    LockManager,
+    ReadWriteLock,
+    LocalSemaphore,
     AsyncWorkerPool,
     RedisLock
 )
@@ -39,7 +39,7 @@ def section(name: str):
 def demo_local_lock():
     section("LocalLock (Process & Thread Safe)")
     lock = LocalLock("demo_resource")
-    
+
     # Re-entry demonstration
     print("Attempting re-entry...")
     with lock:
@@ -52,7 +52,7 @@ def demo_read_write_lock():
     section("ReadWriteLock (Multiple Readers, Exclusive Writer)")
     rw_lock = ReadWriteLock()
     results = []
-    
+
     def reader(id: int):
         with rw_lock.read_lock():
             print(f"  Reader {id} entered")
@@ -73,7 +73,7 @@ def demo_read_write_lock():
         threading.Thread(target=writer, args=(1,)),
         threading.Thread(target=reader, args=(3,)),
     ]
-    
+
     for t in threads: t.start()
     for t in threads: t.join()
     print(f"Sequence: {results}")
@@ -83,7 +83,7 @@ def demo_lock_manager():
     manager = LockManager()
     manager.register_lock("resource_A", LocalLock("A"))
     manager.register_lock("resource_B", LocalLock("B"))
-    
+
     print("Acquiring multiple resources safely...")
     if manager.acquire_all(["resource_A", "resource_B"], timeout=5.0):
         try:
@@ -91,7 +91,7 @@ def demo_lock_manager():
         finally:
             manager.release_all(["resource_A", "resource_B"])
             print("  Released all resources")
-    
+
     stats = manager.stats
     print(f"Manager Stats: Total acquisitions={stats.total_acquisitions}")
 
@@ -100,10 +100,10 @@ def demo_redis_lock():
     if not fakeredis:
         print("  Skipping: fakeredis not installed")
         return
-        
+
     client = fakeredis.FakeRedis()
     lock = RedisLock("global_task", client, ttl=10)
-    
+
     print("Acquiring distributed lock...")
     with lock:
         print("  Acquired distributed lock")
@@ -116,7 +116,7 @@ def demo_redis_lock():
 def demo_semaphore():
     section("LocalSemaphore (Resource Throttling)")
     sem = LocalSemaphore(value=2)
-    
+
     def throttled_worker(id: int):
         with sem:
             print(f"  Worker {id} processing...")
@@ -129,7 +129,7 @@ def demo_semaphore():
 
 async def demo_async_worker_pool():
     section("AsyncWorkerPool (Bounded Async Execution)")
-    
+
     async def task(item: str, delay: float):
         await asyncio.sleep(delay)
         return f"Processed {item}"
@@ -139,10 +139,10 @@ async def demo_async_worker_pool():
         items = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"]
         # Mix of delays
         results = await pool.map(lambda x: task(x, random.uniform(0.1, 0.3)), items)
-        
+
         success_count = sum(1 for r in results if r.success)
         print(f"  Completed {success_count}/{len(items)} tasks")
-        
+
         stats = pool.stats
         print(f"  Pool Stats: Completed={stats.completed}, Failed={stats.failed}")
 
@@ -158,15 +158,15 @@ def main():
             print(f"Loaded config from {config_path.name}")
 
     print("🚀 Codomyrmex Concurrency Module Demo")
-    
+
     demo_local_lock()
     demo_read_write_lock()
     demo_lock_manager()
     demo_redis_lock()
     demo_semaphore()
-    
+
     asyncio.run(demo_async_worker_pool())
-    
+
     print("\n✅ Concurrency Demo Completed")
     return 0
 

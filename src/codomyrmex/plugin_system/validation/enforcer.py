@@ -59,6 +59,7 @@ class InterfaceEnforcer:
 
         Returns:
             True if all required methods are present.
+
         """
         required_methods = [
             m for m in dir(interface_class)

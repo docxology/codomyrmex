@@ -34,7 +34,7 @@ def main():
     print_info("Initializing OpenCode Agent...")
 
     client = OpenCodeClient()
-    
+
     if not client.test_connection():
         print_warning("OpenCode CLI not available. Skipping execution.")
         print_info("To use: ensure OpenCode CLI is installed and in PATH")

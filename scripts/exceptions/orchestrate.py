@@ -47,8 +47,8 @@ def demonstrate_exceptions():
     try:
         logger.info("Raising AIProviderError with specific parameters...")
         raise AIProviderError(
-            "API Limit exceeded", 
-            provider_name="OpenAI", 
+            "API Limit exceeded",
+            provider_name="OpenAI",
             model_name="gpt-4o"
         )
     except AIProviderError as e:
@@ -67,7 +67,7 @@ def demonstrate_exceptions():
             raise FileOperationError("File not found", file_path="/tmp/missing.txt")
         except FileOperationError as cause:
             raise ConfigurationError(
-                "Failed to load configuration", 
+                "Failed to load configuration",
                 config_file="/tmp/missing.txt"
             ) from cause
     except CodomyrmexError as e:
@@ -80,7 +80,7 @@ def demonstrate_exceptions():
     try:
         logger.info("Raising Cerebrum InferenceError...")
         raise InferenceError(
-            "Inference engine failure", 
+            "Inference engine failure",
             inference_engine="BayesianNet",
             system_component="cerebrum_v1"
         )

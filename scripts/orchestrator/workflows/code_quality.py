@@ -208,7 +208,7 @@ def run_docstring_coverage(_task_results: dict = None) -> Dict[str, Any]:
 def generate_quality_report(_task_results: dict = None) -> Dict[str, Any]:
     """Generate comprehensive quality report."""
     import datetime
-    
+
     _task_results = _task_results or {}
 
     report = {

@@ -30,6 +30,7 @@ class DependencyNode:
         dependencies: List of required plugin names.
         optional_dependencies: Dependencies that are nice-to-have.
         conflicts: Plugins that conflict with this one.
+
     """
 
     name: str
@@ -49,6 +50,7 @@ class ResolutionResult:
         missing: Plugin names that are required but not registered.
         circular: List of cycles found (each a list of plugin names).
         conflicts: List of (plugin_a, plugin_b) conflicts.
+
     """
 
     status: ResolutionStatus
@@ -74,6 +76,7 @@ class DependencyResolver:
     """
 
     def __init__(self) -> None:
+        """Initialize a dependency resolver."""
         self._nodes: dict[str, DependencyNode] = {}
 
     def add(self, node: DependencyNode) -> None:
@@ -102,6 +105,7 @@ class DependencyResolver:
 
         Returns:
             ResolutionResult with load order or error info.
+
         """
         # Check for missing dependencies
         all_names = set(self._nodes.keys())

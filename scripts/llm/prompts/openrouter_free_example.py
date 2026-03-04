@@ -90,7 +90,7 @@ def main():
     print("  OpenRouter Free Example - Prompt Templates")
     print("=" * 60)
     print()
-    
+
     # Check for API key
     api_key = get_api_key()
     if not api_key:
@@ -98,12 +98,12 @@ def main():
         print("   Get your free API key at: https://openrouter.ai/keys")
         print("\n   Setup: export OPENROUTER_API_KEY='key' or ~/.config/openrouter/api_key")
         return 1
-    
+
     config = ProviderConfig(api_key=api_key, timeout=60.0)
-    
+
     print("📡 Connecting to OpenRouter with free model...")
     print()
-    
+
     # Example: Explain template
     print("📝 Template: 'explain'")
     prompt = render_template(
@@ -113,10 +113,10 @@ def main():
     )
     print(f"   Rendered prompt: \"{prompt[:60]}...\"")
     print()
-    
+
     with get_provider(ProviderType.OPENROUTER, config=config) as provider:
         messages = [Message(role="user", content=prompt)]
-        
+
         print("🤖 Calling OpenRouter free model...")
         response = provider.complete(
             messages=messages,
@@ -124,18 +124,18 @@ def main():
             temperature=0.7,
             max_tokens=150,
         )
-        
+
         print(f"\n📤 Response:\n")
         print(f"   {response.content}")
         print()
-        
+
         if response.usage:
             print(f"📊 Tokens used: {response.usage.get('total_tokens', 'N/A')}")
-    
+
     print()
     print("✅ Example completed successfully!")
     print("   💡 Templates help create consistent, reusable prompts!")
-    
+
     return 0
 
 

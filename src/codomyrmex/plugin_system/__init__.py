@@ -1,5 +1,4 @@
-"""
-Plugin System for Codomyrmex
+"""Plugin System for Codomyrmex.
 
 This module provides a plugin architecture that allows
 extending Codomyrmex functionality through third-party plugins.

@@ -40,7 +40,7 @@ def main():
         print_warning(f"Claude not configured: {e}")
         print_info("To configure: set ANTHROPIC_API_KEY environment variable")
         return 0  # Exit gracefully - this is expected for demo scripts
-    
+
     # Test connection
     if not client.test_connection():
         print_warning("Claude connection test failed. Check API key.")

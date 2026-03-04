@@ -38,7 +38,7 @@ def main():
     parser.add_argument("--input", "-i", help="Input file path")
     parser.add_argument("--output", "-o", help="Output file path")
     parser.add_argument("--format", "-f", help="Target format for conversion")
-    
+
     args = parser.parse_args()
     setup_logging()
 
@@ -58,19 +58,19 @@ def main():
 
     try:
         doc = read_document(input_path)
-        
+
         if args.action == "info":
             print_info(f"Document Info:")
             print_info(f"  Format: {doc.format.value}")
             print_info(f"  Type: {doc.type.value}")
             print_info(f"  Metadata: {doc.metadata.to_dict()}")
             return 0
-            
+
         if args.action == "convert":
             if not args.output or not args.format:
                 print_error("Output path and target format required for conversion")
                 return 1
-            
+
             target_format = DocumentFormat(args.format.lower())
             converted = convert_document(doc, target_format)
             write_document(converted, args.output)

@@ -55,12 +55,12 @@ def main() -> int:
     print("Registering downstream consumers...")
     # Manual node creation for specific types
     from codomyrmex.data_lineage import LineageNode, LineageEdge
-    
+
     # Model
     model_node = LineageNode(id="revenue_forecast", name="Revenue Forecast Model", node_type=NodeType.MODEL)
     tracker.graph.add_node(model_node)
     tracker.graph.add_edge(LineageEdge("daily_sales_summary", "revenue_forecast", EdgeType.INPUT_TO))
-    
+
     # Dashboard
     dashboard_node = LineageNode(id="exec_dashboard", name="Executive KPI Dashboard", node_type=NodeType.DASHBOARD)
     tracker.graph.add_node(dashboard_node)
@@ -90,7 +90,7 @@ def main() -> int:
     print("\n--- DOT Export (Sample) ---")
     dot_content = tracker.graph.export_to_dot()
     print(f"Graph DOT length: {len(dot_content)} characters")
-    
+
     # 8. Cycle Validation
     print("\n--- Graph Validation ---")
     cycles = tracker.graph.validate_graph()

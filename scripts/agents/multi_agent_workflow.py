@@ -41,13 +41,13 @@ def get_claude_review(code: str) -> dict:
     client = ClaudeClient()
     if not client.test_connection():
         return {"status": "skipped", "reason": "Claude not configured"}
-    
+
     request = AgentRequest(
         prompt=f"Review this Python code for bugs and improvements:\n{code}",
         context={"task": "code_review"}
     )
     response = client.execute(request)
-    
+
     if response.is_success():
         return {"status": "success", "review": response.content}
     return {"status": "error", "error": response.error}

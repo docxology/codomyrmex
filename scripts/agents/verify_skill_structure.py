@@ -5,14 +5,14 @@ import sys
 
 def verify_skill_md():
     skill_path = Path("~/.claude/skills/Codomyrmex/SKILL.md").expanduser().resolve()
-    
+
     if not skill_path.exists():
         print(f"❌ SKILL.md not found at {skill_path}")
         sys.exit(1)
-        
+
     content = skill_path.read_text()
     print(f"📄 Analyzing {skill_path} ({len(content)} bytes)...")
-    
+
     # Check Frontmatter
     frontmatter_match = re.match(r"^---\n(.*?)\n---", content, re.DOTALL)
     if not frontmatter_match:
@@ -34,13 +34,13 @@ def verify_skill_md():
             print("✅ Routing table header found")
         else:
             print("❌ Routing table header MISSING or malformed")
-            
+
         # Check specific entries
         if "/codomyrmexVerify" in section:
              print("  - /codomyrmexVerify (Found)")
         else:
              print("  - /codomyrmexVerify (MISSING)")
-             
+
         if "/codomyrmexTrust" in section:
              print("  - /codomyrmexTrust (Found)")
         else:
@@ -63,7 +63,7 @@ def verify_skill_md():
             print("  - codomyrmexVerify (Found)")
         else:
             print("  - codomyrmexVerify (MISSING)")
-            
+
         if "codomyrmexTrust" in section:
             print("  - codomyrmexTrust (Found)")
         else:
@@ -80,7 +80,7 @@ def verify_skill_md():
             # Basic check: starts and ends with pipe (ignoring whitespace)
             if not line.strip().endswith('|'):
                 malformed_lines.append((i+1, line))
-    
+
     if malformed_lines:
         print("\n⚠️ Potential Malformed Table Lines (missing end pipe?):")
         for ln, text in malformed_lines:

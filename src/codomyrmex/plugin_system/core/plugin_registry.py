@@ -15,6 +15,7 @@ logger = get_logger(__name__)
 
 class PluginType(Enum):
     """Types of plugins."""
+
     ANALYZER = "analyzer"
     FORMATTER = "formatter"
     EXPORTER = "exporter"
@@ -28,6 +29,7 @@ class PluginType(Enum):
 
 class PluginState(Enum):
     """Lifecycle state of a plugin."""
+
     UNKNOWN = "unknown"
     REGISTERED = "registered"
     LOADED = "loaded"
@@ -43,6 +45,7 @@ class PluginState(Enum):
 @dataclass
 class PluginInfo:
     """Plugin metadata."""
+
     name: str = ""
     version: str = "0.0.0"
     description: str = ""
@@ -76,7 +79,9 @@ class PluginInfo:
 
 class Hook:
     """Represents a plugin hook."""
+
     def __init__(self, name: str, description: str = ""):
+        """Initialize a plugin hook."""
         self.name = name
         self.description = description
         self.handlers: list[Callable] = []
@@ -280,5 +285,5 @@ def get_registry() -> PluginRegistry:
     return _registry
 
 def create_plugin_info(**kwargs) -> PluginInfo:
-    """Helper to create PluginInfo."""
+    """Create a PluginInfo instance with the given arguments."""
     return PluginInfo(**kwargs)

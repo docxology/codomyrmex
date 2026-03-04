@@ -134,7 +134,7 @@ class EmbodimentScript(ScriptBase):
             sensor.connect()
             reading = sensor.read()
             self.log_info(f"Sensor '{reading.sensor_id}' read: {reading.data}")
-            
+
             # Actuator
             actuator = MockActuator("gripper_1")
             actuator.connect()

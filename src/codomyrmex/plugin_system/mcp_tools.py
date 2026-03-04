@@ -21,6 +21,7 @@ def plugin_scan_entry_points(
 
     Args:
         entry_point_group: Entry point group name to scan.
+
     """
     try:
         from codomyrmex.plugin_system.discovery import PluginDiscovery
@@ -50,6 +51,7 @@ def plugin_resolve_dependencies(
 
     Args:
         plugins: List of dicts with 'name' and optional 'dependencies' list.
+
     """
     try:
         from codomyrmex.plugin_system.dependency_resolver import (

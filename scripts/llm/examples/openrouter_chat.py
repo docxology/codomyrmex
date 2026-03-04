@@ -61,11 +61,11 @@ def get_api_key(cli_key: str | None = None) -> str | None:
     """Get API key from multiple sources."""
     if cli_key:
         return cli_key
-    
+
     env_key = os.environ.get("OPENROUTER_API_KEY")
     if env_key:
         return env_key
-    
+
     for path in CONFIG_PATHS:
         try:
             if path.exists():
@@ -80,7 +80,7 @@ def get_api_key(cli_key: str | None = None) -> str | None:
 
 class ChatSession:
     """Multi-turn chat session manager."""
-    
+
     def __init__(
         self,
         provider,
@@ -95,7 +95,7 @@ class ChatSession:
         self.temperature = temperature
         self.messages: list[Message] = []
         self.conversation_log: list[dict] = []
-        
+
         if system_prompt:
             self.messages.append(Message(role="system", content=system_prompt))
             self.conversation_log.append({
@@ -103,7 +103,7 @@ class ChatSession:
                 "content": system_prompt,
                 "timestamp": datetime.now().isoformat(),
             })
-    
+
     def send(self, user_message: str, stream: bool = False) -> str:
         """Send a message and get a response."""
         # Add user message to history
@@ -113,7 +113,7 @@ class ChatSession:
             "content": user_message,
             "timestamp": datetime.now().isoformat(),
         })
-        
+
         if stream:
             # Streaming response
             full_response = ""
@@ -136,7 +136,7 @@ class ChatSession:
                 max_tokens=self.max_tokens,
             )
             response_content = response.content
-        
+
         # Add assistant response to history
         self.messages.append(Message(role="assistant", content=response_content))
         self.conversation_log.append({
@@ -145,25 +145,25 @@ class ChatSession:
             "timestamp": datetime.now().isoformat(),
             "model": self.model,
         })
-        
+
         return response_content
-    
+
     def save(self, filepath: str | Path) -> None:
         """Save conversation to JSON file."""
         filepath = Path(filepath)
         filepath.parent.mkdir(parents=True, exist_ok=True)
-        
+
         data = {
             "model": self.model,
             "started_at": self.conversation_log[0]["timestamp"] if self.conversation_log else None,
             "messages": self.conversation_log,
         }
-        
+
         with open(filepath, "w", encoding="utf-8") as f:
             json.dump(data, f, indent=2, ensure_ascii=False)
-        
+
         print(f"\n💾 Conversation saved to: {filepath}")
-    
+
     def display_history(self) -> None:
         """Display conversation history."""
         print("\n📜 Conversation History:")
@@ -194,9 +194,9 @@ def run_interactive_chat(
     print(f"🌡️  Temperature: {temperature} | Max Tokens: {max_tokens}")
     print("\nCommands: /quit, /save <file>, /history, /clear, /model <name>")
     print("-" * 60 + "\n")
-    
+
     config = ProviderConfig(api_key=api_key, timeout=120.0)
-    
+
     with get_provider(ProviderType.OPENROUTER, config=config) as provider:
         session = ChatSession(
             provider=provider,
@@ -205,23 +205,23 @@ def run_interactive_chat(
             max_tokens=max_tokens,
             temperature=temperature,
         )
-        
+
         while True:
             try:
                 user_input = input("\n👤 You: ").strip()
             except (KeyboardInterrupt, EOFError):
                 print("\n\n👋 Goodbye!")
                 break
-            
+
             if not user_input:
                 continue
-            
+
             # Handle commands
             if user_input.startswith("/"):
                 cmd_parts = user_input.split(maxsplit=1)
                 cmd = cmd_parts[0].lower()
                 arg = cmd_parts[1] if len(cmd_parts) > 1 else None
-                
+
                 if cmd == "/quit":
                     print("\n👋 Goodbye!")
                     break
@@ -248,7 +248,7 @@ def run_interactive_chat(
                 else:
                     print(f"❓ Unknown command: {cmd}")
                 continue
-            
+
             # Send message and get response
             print("\n🤖 Assistant: ", end="" if stream else "\n")
             try:
@@ -257,11 +257,11 @@ def run_interactive_chat(
                     print(response)
             except Exception as e:
                 print(f"\n❌ Error: {e}")
-        
+
         # Auto-save on exit if save_to specified
         if save_to and session.conversation_log:
             session.save(save_to)
-    
+
     return 0
 
 
@@ -281,9 +281,9 @@ def run_batch_chat(
     print(f"\n🤖 Model: {model}")
     print(f"📝 Messages to process: {len(messages)}")
     print("-" * 60 + "\n")
-    
+
     config = ProviderConfig(api_key=api_key, timeout=120.0)
-    
+
     with get_provider(ProviderType.OPENROUTER, config=config) as provider:
         session = ChatSession(
             provider=provider,
@@ -292,7 +292,7 @@ def run_batch_chat(
             max_tokens=max_tokens,
             temperature=temperature,
         )
-        
+
         for i, msg in enumerate(messages, 1):
             print(f"\n[{i}/{len(messages)}] 👤 User: {msg}")
             print("\n🤖 Assistant:")
@@ -301,10 +301,10 @@ def run_batch_chat(
             except Exception as e:
                 print(f"❌ Error: {e}")
             print()
-        
+
         if save_to:
             session.save(save_to)
-    
+
     print("\n✅ Batch chat completed!")
     return 0
 
@@ -332,7 +332,7 @@ Examples:
   python openrouter_chat.py --save-to conversation.json
         """
     )
-    
+
     # Model and behavior
     parser.add_argument("--model", "-m", type=str, default="openrouter/free",
                         help="Model to use (default: openrouter/free)")
@@ -344,32 +344,32 @@ Examples:
                         help="Response temperature 0.0-2.0 (default: 0.7)")
     parser.add_argument("--no-stream", action="store_true",
                         help="Disable streaming responses")
-    
+
     # Batch mode
     parser.add_argument("--batch", nargs="+", type=str,
                         help="Run in batch mode with preset messages")
-    
+
     # Save/load
     parser.add_argument("--save-to", type=str, default=None,
                         help="Save conversation to JSON file")
-    
+
     # API key
     parser.add_argument("--api-key", "-k", type=str, default=None,
                         help="OpenRouter API key")
-    
+
     # List models
     parser.add_argument("--list-models", "-l", action="store_true",
                         help="List available free models")
-    
+
     args = parser.parse_args()
-    
+
     if args.list_models:
         print("\n📋 Available Free Models:\n")
         for m in OpenRouterProvider.FREE_MODELS:
             marker = "✨" if m == "openrouter/free" else "•"
             print(f"  {marker} {m}")
         return 0
-    
+
     # Get API key
     api_key = get_api_key(args.api_key)
     if not api_key:
@@ -380,7 +380,7 @@ Examples:
         print("     2. echo 'your-key' > ~/.config/openrouter/api_key")
         print("     3. python openrouter_chat.py --api-key 'your-key'")
         return 1
-    
+
     if args.batch:
         return run_batch_chat(
             api_key=api_key,

@@ -57,10 +57,10 @@ def main():
     # --- Deliberative Architecture with KnowledgeBase ---
     print_info("\n2. Deliberative Architecture Demo")
     deliberative = DeliberativeArchitecture()
-    
+
     # Set goals
     deliberative.set_goal({"type": "simple", "target": "optimize_code"})
-    
+
     # Simulate environment with facts
     environment = {"code_quality": 0.7, "test_coverage": 0.5}
     perception = deliberative.perceive(environment)

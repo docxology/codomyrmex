@@ -29,15 +29,15 @@ class PluginHook(Protocol):
     """Protocol for plugin lifecycle callbacks."""
 
     def on_load(self) -> None:
-        """Called when the plugin module is loaded."""
+        """Execute when the plugin module is loaded."""
         ...
 
     def on_init(self, config: dict[str, Any]) -> None:
-        """Called when the plugin is initialized with config."""
+        """Execute when the plugin is initialized with config."""
         ...
 
     def on_teardown(self) -> None:
-        """Called when the plugin is being deactivated."""
+        """Execute when the plugin is being deactivated."""
         ...
 
 
@@ -56,6 +56,7 @@ class PluginInfo:
         dependencies: List of required plugin names.
         error: Error message if state is ERROR.
         metadata: Additional plugin metadata.
+
     """
 
     name: str
@@ -78,6 +79,7 @@ class DiscoveryResult:
         plugins: List of discovered plugins.
         errors: List of (source, error_message) tuples.
         scan_sources: Sources that were scanned.
+
     """
 
     plugins: list[PluginInfo] = field(default_factory=list)
@@ -107,6 +109,7 @@ class PluginDiscovery:
         entry_point_group: str = "codomyrmex.plugins",
         plugin_dirs: list[str] | None = None,
     ) -> None:
+        """Initialize the plugin discovery."""
         self._entry_point_group = entry_point_group
         self._plugin_dirs = plugin_dirs or []
 
@@ -115,6 +118,7 @@ class PluginDiscovery:
 
         Returns:
             DiscoveryResult with plugins found via entry points.
+
         """
         result = DiscoveryResult(scan_sources=[f"entry_point:{self._entry_point_group}"])
 
@@ -158,6 +162,7 @@ class PluginDiscovery:
 
         Returns:
             DiscoveryResult with plugins found in the directory.
+
         """
         result = DiscoveryResult(scan_sources=[f"directory:{directory}"])
 
@@ -217,6 +222,7 @@ class PluginDiscovery:
 
         Returns:
             Combined DiscoveryResult from all sources.
+
         """
         combined = DiscoveryResult()
 

@@ -49,17 +49,17 @@ def main():
         md_content = "# Hello Codomyrmex\n\nThis is a sample document."
         doc = Document(content=md_content, format=DocumentFormat.MARKDOWN)
         doc.metadata.title = "Sample Doc"
-        
+
         md_path = output_dir / "sample.md"
         write_document(doc, md_path)
         print_success(f"  Markdown written to {md_path}")
-        
+
         csv_data = [{"id": 1, "name": "Item 1"}, {"id": 2, "name": "Item 2"}]
         csv_doc = Document(content=csv_data, format=DocumentFormat.CSV)
         csv_path = output_dir / "data.csv"
         write_document(csv_doc, csv_path)
         print_success(f"  CSV written to {csv_path}")
-        
+
     except Exception as e:
         print_error(f"  Writing failed: {e}")
         return 1
@@ -80,11 +80,11 @@ def main():
         # Convert MD to HTML (basic)
         html_doc = convert_document(read_doc, DocumentFormat.HTML)
         print_success(f"  Converted to HTML. Content starts with: {html_doc.get_content_as_string()[:20]}...")
-        
+
         # Merge
         merged = merge_documents([read_doc, Document("## Footer", DocumentFormat.MARKDOWN)])
         print_success(f"  Merged documents. Total length: {len(merged.get_content_as_string())}")
-        
+
         # Split
         chunks = split_document(merged, {"method": "by_sections"})
         print_success(f"  Split merged doc into {len(chunks)} sections.")
@@ -97,7 +97,7 @@ def main():
     try:
         index = create_index()
         index_document(read_doc, index)
-        
+
         results = search_documents("Codomyrmex", index)
         print_success(f"  Found {len(results)} matches for 'Codomyrmex'")
     except Exception as e:

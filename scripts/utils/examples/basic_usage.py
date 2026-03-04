@@ -78,7 +78,7 @@ def main():
         @timing_decorator
         def task():
             return {"status": "ok"}
-        
+
         result = task()
         if "execution_time_ms" in result:
             print_success(f"  Timing decorator verified: {result['execution_time_ms']}ms")

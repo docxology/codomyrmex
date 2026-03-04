@@ -57,12 +57,12 @@ def main():
     @cached_function(ttl=60)
     def heavy_comp(n):
         return n * n
-    
+
     res1 = heavy_comp(10)
     res2 = heavy_comp(10)
     if res1 == 100 and res2 == 100:
         print_success("  @cached_function functional.")
-    
+
     # 3. Performance Monitor
     print_info("Testing system metrics...")
     metrics = get_system_metrics()
@@ -79,7 +79,7 @@ def main():
     @monitor_performance("test_decorated")
     def sample_func():
         time.sleep(0.05)
-    
+
     sample_func()
     print_success("  @monitor_performance functional.")
 

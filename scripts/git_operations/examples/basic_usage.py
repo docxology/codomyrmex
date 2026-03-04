@@ -47,16 +47,16 @@ def main():
     current_dir = Path.cwd()
     if check_git_availability():
         print_success("  Git is available.")
-    
+
     if is_git_repository(current_dir):
         print_success(f"  Current directory is a Git repository.")
         try:
             branch = get_current_branch(current_dir)
             print_success(f"  Branch: {branch}")
-            
+
             history = get_commit_history(current_dir, max_count=5)
             print_success(f"  Retrieved {len(history)} recent commit(s).")
-            
+
             config = get_config(current_dir)
             if config:
                 print_success("  Git configuration retrieved.")

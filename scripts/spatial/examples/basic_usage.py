@@ -54,15 +54,15 @@ def main():
         obj = Object3D(name="TestObject", position=pos)
         scene = Scene3D(objects=[obj])
         print_success(f"  Scene3D created with object '{obj.name}' at {pos}")
-        
+
         # Physics
         physics = PhysicsEngine()
         # Initialize gravity to a known value for testing
         physics.gravity = Vector3D(0.0, -9.81, 0.0)
-        
+
         initial_y = obj.position.y
         physics.update_physics(scene.objects, delta_time=0.1)
-        
+
         if obj.position.y != initial_y:
             print_success(f"  Physics updated. New y-position: {obj.position.y:.4f}")
     except Exception as e:

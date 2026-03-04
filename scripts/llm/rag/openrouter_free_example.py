@@ -54,7 +54,7 @@ KNOWLEDGE_BASE = [
         "content": "Python is a high-level programming language created by Guido van Rossum in 1991. It emphasizes code readability with significant whitespace."
     },
     {
-        "source": "openrouter_docs.txt", 
+        "source": "openrouter_docs.txt",
         "content": "OpenRouter is an API gateway providing unified access to 100+ LLM models through a single API. It includes free models for development."
     },
     {
@@ -88,7 +88,7 @@ Context:
 Question: {question}
 
 Answer:"""
-    
+
     messages = [Message(role="user", content=prompt)]
     response = provider.complete(messages=messages, model="openrouter/free", temperature=0.3, max_tokens=150)
     return response.content, docs
@@ -110,7 +110,7 @@ def main():
     print("  OpenRouter Free Example - RAG Pipeline")
     print("=" * 60)
     print()
-    
+
     # Check for API key
     api_key = get_api_key()
     if not api_key:
@@ -118,31 +118,31 @@ def main():
         print("   Get your free API key at: https://openrouter.ai/keys")
         print("\n   Setup: export OPENROUTER_API_KEY='key' or ~/.config/openrouter/api_key")
         return 1
-    
+
     config = ProviderConfig(api_key=api_key, timeout=60.0)
     question = "What is Python and who created it?"
-    
+
     print(f"❓ Question: \"{question}\"")
     print()
-    
+
     with get_provider(ProviderType.OPENROUTER, config=config) as provider:
         print("🔍 Step 1: Retrieving relevant context...")
         docs = simple_retrieve(question, top_k=2)
         for doc in docs:
             print(f"   📄 {doc['source']}")
         print()
-        
+
         print("🤖 Step 2: Generating augmented response...")
         answer, _ = rag_completion(provider, question)
         print()
-        
+
         print("📤 Answer:")
         print(f"   {answer}")
-    
+
     print()
     print("✅ Example completed successfully!")
     print("   💡 RAG combines retrieval with generation for grounded responses!")
-    
+
     return 0
 
 

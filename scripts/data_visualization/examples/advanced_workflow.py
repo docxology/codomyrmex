@@ -71,7 +71,7 @@ def main():
     print("  Chart Styles:")
     for style in list(ChartStyle)[:4]:
         print(f"    - {style.name}: {style.value}")
-    
+
     print("  Color Palettes:")
     for palette in list(ColorPalette)[:4]:
         print(f"    - {palette.name}: {palette.value}")

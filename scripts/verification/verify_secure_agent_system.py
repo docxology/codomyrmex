@@ -50,12 +50,12 @@ def main():
             print(f"Loaded config from config/verification/config.yaml")
 
     print("=== Secure Cognitive Agent - Full System Verification ===")
-    
+
     success_count = 0
     for script in VERIFICATION_SCRIPTS:
         if run_script(script):
             success_count += 1
-            
+
     if success_count == len(VERIFICATION_SCRIPTS):
         print(f"\n[ALL PASSED] System verified ({success_count}/{len(VERIFICATION_SCRIPTS)})")
         sys.exit(0)

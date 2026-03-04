@@ -45,15 +45,15 @@ def main():
         formatter = TerminalFormatter(use_colors=True)
         print(formatter.header("STYLED HEADER"))
         print(formatter.success("This is a success message in green."))
-        
+
         # Test progress bar
         print("\n" + formatter.progress_bar(75, 100, prefix="Processing", suffix="Complete"))
-        
+
         # Test table
         headers = ["Module", "Status"]
         rows = [["Core", "Active"], ["Agents", "Idle"]]
         print("\n" + formatter.table(headers, rows))
-        
+
         print_success("  TerminalFormatter verified.")
     except Exception as e:
         print_error(f"  TerminalFormatter failed: {e}")

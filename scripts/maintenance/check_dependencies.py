@@ -33,16 +33,16 @@ def run_command(cmd: list[str], cwd: Path = None) -> tuple[int, str, str]:
 def check_dependencies(repo_root: Path) -> int:
     """Run dependency health checks."""
     print("🔧 Running dependency health checks...\n")
-    
+
     issues = []
-    
+
     # Check if uv is available
     code, stdout, stderr = run_command(["uv", "--version"])
     if code == 0:
         print(f"✅ UV version: {stdout.strip()}")
     else:
         print("⚠️  UV not found, skipping some checks")
-    
+
     # Check for lock file
     lock_file = repo_root / "uv.lock"
     if lock_file.exists():
@@ -50,7 +50,7 @@ def check_dependencies(repo_root: Path) -> int:
     else:
         issues.append("No lock file found")
         print("❌ Lock file not found")
-    
+
     # Try to validate sync
     print("\n📦 Checking dependency sync...")
     code, stdout, stderr = run_command(["uv", "sync", "--dry-run"], cwd=repo_root)
@@ -58,18 +58,18 @@ def check_dependencies(repo_root: Path) -> int:
         print("✅ Dependencies are in sync")
     else:
         print("⚠️  Dependencies may need syncing")
-    
+
     # Check for pyproject.toml
     pyproject = repo_root / "pyproject.toml"
     if pyproject.exists():
         print(f"\n✅ pyproject.toml exists")
-        
+
         # Count dependencies (basic check)
         with open(pyproject) as f:
             content = f.read()
             dep_count = content.count(">=") + content.count("==")
             print(f"   Approximate dependencies: {dep_count}")
-    
+
     # Summary
     print("\n" + "=" * 50)
     if issues:
@@ -90,9 +90,9 @@ def main() -> int:
         default=Path.cwd(),
         help="Repository root directory"
     )
-    
+
     args = parser.parse_args()
-    
+
     return check_dependencies(args.repo_root)
 
 

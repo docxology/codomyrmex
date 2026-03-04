@@ -60,14 +60,14 @@ def main():
 if __name__ == "__main__":
     main()
 ''')
-    
+
     # Create utils.py
     (tmp_path / "utils.py").write_text('''"""Utility functions."""
 
 def helper(x):
     return x * 2
 ''')
-    
+
     # Create subdir
     subdir = tmp_path / "subdir"
     subdir.mkdir()
@@ -76,7 +76,7 @@ def helper(x):
 class SubClass:
     pass
 ''')
-    
+
     return tmp_path
 
 
