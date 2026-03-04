@@ -53,3 +53,7 @@ When working within this module, pay close attention to:
 -   Confirm that any changes to `docusaurus.config.js` or `sidebars.js` are correct and reflect the intended structure.
 -   Update this module's `CHANGELOG.md` for any significant changes to the documentation infrastructure or overall structure.
 
+
+
+# AGENTS.md cross-reference
+# See corresponding AGENTS.md: src/codomyrmex/documentation/AGENTS.md

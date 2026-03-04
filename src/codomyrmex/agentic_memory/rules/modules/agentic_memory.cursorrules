@@ -53,3 +53,7 @@ When working within this module, pay close attention to:
 -   Test integration with related modules like `agents`, `llm`, and `graph_rag`.
 </Parameter>
 <parameter name="Complexity">3
+
+
+# AGENTS.md cross-reference
+# See corresponding AGENTS.md: src/codomyrmex/agentic_memory/AGENTS.md

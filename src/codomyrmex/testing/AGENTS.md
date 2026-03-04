@@ -106,3 +106,10 @@ def test_parametrized(input, expected):
 ## Navigation
 
 - [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)
+
+
+## Rule Reference
+
+This module is governed by the following rule file:
+
+- [`src/codomyrmex/agentic_memory/rules/modules/testing.cursorrules`](src/codomyrmex/agentic_memory/rules/modules/testing.cursorrules)

@@ -120,3 +120,10 @@ def sync_config(storage: StorageClient, bucket: str, local_path: str):
 - **🏠 Project Root**: [../../../README.md](../../../README.md)
 - **📖 Specification**: [SPEC.md](SPEC.md)
 - **🔌 API Reference**: [API_SPECIFICATION.md](API_SPECIFICATION.md)
+
+
+## Rule Reference
+
+This module is governed by the following rule file:
+
+- [`src/codomyrmex/agentic_memory/rules/modules/cloud.cursorrules`](src/codomyrmex/agentic_memory/rules/modules/cloud.cursorrules)

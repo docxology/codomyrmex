@@ -50,3 +50,7 @@ When working within this module, pay close attention to:
 -   Verify that all tests for this module pass.
 -   Confirm that retrieval produces relevant, high-quality context.
 -   Test integration with related modules like `llm`, `agents`, and `agentic_memory`.
+
+
+# AGENTS.md cross-reference
+# See corresponding AGENTS.md: src/codomyrmex/graph_rag/AGENTS.md

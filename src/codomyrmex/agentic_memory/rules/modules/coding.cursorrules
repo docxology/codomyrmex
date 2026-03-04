@@ -50,3 +50,7 @@ When working within this module, pay close attention to:
 -   Verify that all tests for this module pass.
 -   Confirm that code transformations produce valid, formatted output.
 -   Test integration with related modules like `static_analysis`, `ai_code_editing`, and `tree_sitter`.
+
+
+# AGENTS.md cross-reference
+# See corresponding AGENTS.md: src/codomyrmex/coding/AGENTS.md

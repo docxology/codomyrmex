@@ -53,3 +53,7 @@ When working within this module, pay close attention to:
 -   Verify that all tests for this module pass, especially security-focused tests.
 -   Confirm that security operations are robust and produce accurate results.
 -   Test integration with related modules like `encryption`, `defense`, and `static_analysis`.
+
+
+# AGENTS.md cross-reference
+# See corresponding AGENTS.md: src/codomyrmex/security/AGENTS.md

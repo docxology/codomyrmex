@@ -120,3 +120,10 @@ assert result["has_agents_md"] is True
 
 - [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)
 - **Parent**: [codomyrmex](../README.md)
+
+
+## Rule Reference
+
+This module is governed by the following rule file:
+
+- [`src/codomyrmex/agentic_memory/rules/modules/documentation.cursorrules`](src/codomyrmex/agentic_memory/rules/modules/documentation.cursorrules)

@@ -53,3 +53,7 @@ When working within this module, pay close attention to:
 -   Verify that all tests for this module pass.
 -   Confirm that system discovery works correctly and provides accurate results.
 -   Test integration with related modules like `environment_setup` and `project_orchestration`.
+
+
+# AGENTS.md cross-reference
+# See corresponding AGENTS.md: src/codomyrmex/system_discovery/AGENTS.md

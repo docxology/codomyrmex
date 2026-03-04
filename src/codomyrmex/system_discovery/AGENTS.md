@@ -119,3 +119,10 @@ assert 0 <= report.health_score <= 100
 ## Navigation
 
 - [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)
+
+
+## Rule Reference
+
+This module is governed by the following rule file:
+
+- [`src/codomyrmex/agentic_memory/rules/modules/system_discovery.cursorrules`](src/codomyrmex/agentic_memory/rules/modules/system_discovery.cursorrules)

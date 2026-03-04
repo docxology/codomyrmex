@@ -141,3 +141,10 @@ assert received[0].data["task"] == "test"
 ## Navigation
 
 - [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)
+
+
+## Rule Reference
+
+This module is governed by the following rule file:
+
+- [`src/codomyrmex/agentic_memory/rules/modules/events.cursorrules`](src/codomyrmex/agentic_memory/rules/modules/events.cursorrules)

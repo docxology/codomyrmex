@@ -53,3 +53,7 @@ When working within this module, pay close attention to:
 -   Verify that all tests for this module pass.
 -   Confirm that pipelines execute correctly and deployments handle failures gracefully.
 -   Test integration with related modules like `build_synthesis` and `containerization`.
+
+
+# AGENTS.md cross-reference
+# See corresponding AGENTS.md: src/codomyrmex/ci_cd_automation/AGENTS.md

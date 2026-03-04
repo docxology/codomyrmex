@@ -80,3 +80,10 @@ assert value is not None
 ## Navigation
 
 - [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)
+
+
+## Rule Reference
+
+This module is governed by the following rule file:
+
+- [`src/codomyrmex/agentic_memory/rules/modules/physical_management.cursorrules`](src/codomyrmex/agentic_memory/rules/modules/physical_management.cursorrules)

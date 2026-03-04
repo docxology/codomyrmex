@@ -52,3 +52,7 @@ When working within this module, pay close attention to:
 -   Verify that all tests for this module pass.
 -   Confirm that static analysis tools produce accurate results and integrate properly.
 -   Test integration with related modules like `code_review` and `build_synthesis`.
+
+
+# AGENTS.md cross-reference
+# See corresponding AGENTS.md: src/codomyrmex/static_analysis/AGENTS.md

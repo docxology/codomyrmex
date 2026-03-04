@@ -73,3 +73,7 @@ When working within this module, pay close attention to:
 -   Confirm that error handling is robust and user-friendly.
 -   Update this module's `CHANGELOG.md` for any changes to the API or significant functionality.
 -   Ensure subprocess calls use list arguments and never shell=True.
+
+
+# AGENTS.md cross-reference
+# See corresponding AGENTS.md: src/codomyrmex/git_operations/AGENTS.md

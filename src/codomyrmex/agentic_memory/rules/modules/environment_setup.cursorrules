@@ -55,3 +55,7 @@ When working within this module, pay close attention to:
 -   Read through all documentation in this module to ensure it is consistent and accurate.
 -   Update this module's `CHANGELOG.md` if significant changes were made to scripts or core documentation.
 
+
+
+# AGENTS.md cross-reference
+# See corresponding AGENTS.md: src/codomyrmex/environment_setup/AGENTS.md

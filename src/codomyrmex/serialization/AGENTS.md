@@ -111,3 +111,10 @@ assert decoded == data
 ## Navigation
 
 - [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)
+
+
+## Rule Reference
+
+This module is governed by the following rule file:
+
+- [`src/codomyrmex/agentic_memory/rules/modules/serialization.cursorrules`](src/codomyrmex/agentic_memory/rules/modules/serialization.cursorrules)

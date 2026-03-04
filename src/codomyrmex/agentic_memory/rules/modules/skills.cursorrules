@@ -50,3 +50,7 @@ When working within this module, pay close attention to:
 -   Verify that all tests for this module pass.
 -   Confirm that skills execute reliably and produce expected outputs.
 -   Test integration with related modules like `agents`, `orchestrator`, and `model_context_protocol`.
+
+
+# AGENTS.md cross-reference
+# See corresponding AGENTS.md: src/codomyrmex/skills/AGENTS.md

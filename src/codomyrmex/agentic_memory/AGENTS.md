@@ -74,3 +74,10 @@ All tools are auto-discovered via `@mcp_tool` decorators and exposed through the
 ## Navigation
 
 - [README.md](README.md) | [SPEC.md](SPEC.md) | [PAI.md](PAI.md) | [Parent](../AGENTS.md)
+
+
+## Rule Reference
+
+This module is governed by the following rule file:
+
+- [`src/codomyrmex/agentic_memory/rules/modules/agentic_memory.cursorrules`](src/codomyrmex/agentic_memory/rules/modules/agentic_memory.cursorrules)

@@ -92,3 +92,10 @@ Modules are classified into architectural layers for violation detection:
 
 - [README.md](README.md) — Module overview
 - [SPEC.md](SPEC.md) — Technical specification
+
+
+## Rule Reference
+
+This module is governed by the following rule file:
+
+- [`src/codomyrmex/agentic_memory/rules/modules/static_analysis.cursorrules`](src/codomyrmex/agentic_memory/rules/modules/static_analysis.cursorrules)

@@ -91,3 +91,10 @@ assert hasattr(new_module, "__all__")
 ## Navigation
 
 - [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)
+
+
+## Rule Reference
+
+This module is governed by the following rule file:
+
+- [`src/codomyrmex/agentic_memory/rules/modules/module_template.cursorrules`](src/codomyrmex/agentic_memory/rules/modules/module_template.cursorrules)

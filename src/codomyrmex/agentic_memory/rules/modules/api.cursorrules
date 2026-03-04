@@ -50,3 +50,7 @@ When working within this module, pay close attention to:
 -   Verify that all tests for this module pass.
 -   Confirm that API endpoints are secure and performant.
 -   Test integration with related modules like `auth`, `validation`, and `serialization`.
+
+
+# AGENTS.md cross-reference
+# See corresponding AGENTS.md: src/codomyrmex/api/AGENTS.md

@@ -50,3 +50,7 @@ When working within this module, pay close attention to:
 -   Verify that all tests for this module pass.
 -   Confirm that privacy operations provide strong protection without data leakage.
 -   Test integration with related modules like `identity`, `logging_monitoring`, and `defense`.
+
+
+# AGENTS.md cross-reference
+# See corresponding AGENTS.md: src/codomyrmex/privacy/AGENTS.md

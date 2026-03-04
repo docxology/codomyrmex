@@ -53,3 +53,7 @@ When working within this module, pay close attention to:
 -   Verify that all tests for this module pass.
 -   Confirm that containers build correctly and orchestration works as expected.
 -   Test integration with related modules like `ci_cd_automation` and `build_synthesis`.
+
+
+# AGENTS.md cross-reference
+# See corresponding AGENTS.md: src/codomyrmex/containerization/AGENTS.md

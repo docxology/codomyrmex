@@ -129,3 +129,10 @@ assert "jobs" in workflow.to_dict()
 ## Navigation
 
 - [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)
+
+
+## Rule Reference
+
+This module is governed by the following rule file:
+
+- [`src/codomyrmex/agentic_memory/rules/modules/ci_cd_automation.cursorrules`](src/codomyrmex/agentic_memory/rules/modules/ci_cd_automation.cursorrules)

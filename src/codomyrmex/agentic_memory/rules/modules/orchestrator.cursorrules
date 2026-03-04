@@ -50,3 +50,7 @@ When working within this module, pay close attention to:
 -   Verify that all tests for this module pass.
 -   Confirm that workflows execute reliably and handle failures gracefully.
 -   Test integration with related modules like `project_orchestration`, `events`, and `logging_monitoring`.
+
+
+# AGENTS.md cross-reference
+# See corresponding AGENTS.md: src/codomyrmex/orchestrator/AGENTS.md

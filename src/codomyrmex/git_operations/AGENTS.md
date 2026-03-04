@@ -228,3 +228,10 @@ assert len(commits) <= 5
 ## Navigation
 
 - [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)
+
+
+## Rule Reference
+
+This module is governed by the following rule file:
+
+- [`src/codomyrmex/agentic_memory/rules/modules/git_operations.cursorrules`](src/codomyrmex/agentic_memory/rules/modules/git_operations.cursorrules)

@@ -59,3 +59,7 @@ When working within this module, pay close attention to:
 -   Verify that all unit tests for this module pass.
 -   Manually test the logging output with a simple script if significant changes are made to formatters or handlers.
 
+
+
+# AGENTS.md cross-reference
+# See corresponding AGENTS.md: src/codomyrmex/logging_monitoring/AGENTS.md

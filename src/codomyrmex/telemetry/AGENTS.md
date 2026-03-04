@@ -101,3 +101,10 @@ assert test_func() == 42
 ## Navigation
 
 - [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)
+
+
+## Rule Reference
+
+This module is governed by the following rule file:
+
+- [`src/codomyrmex/agentic_memory/rules/modules/telemetry.cursorrules`](src/codomyrmex/agentic_memory/rules/modules/telemetry.cursorrules)

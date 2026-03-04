@@ -111,3 +111,10 @@ is_valid = backup_mgr.verify_backup("agent_001", record["backup_id"])
 - **Source**: [src/codomyrmex/wallet/](.)
 - **Documentation**: [docs/modules/wallet/](../../../docs/modules/wallet/)
 - **Related**: [encryption/](../encryption/) | [identity/](../identity/) | [defense/](../defense/) | [privacy/](../privacy/)
+
+
+## Rule Reference
+
+This module is governed by the following rule file:
+
+- [`src/codomyrmex/agentic_memory/rules/modules/wallet.cursorrules`](src/codomyrmex/agentic_memory/rules/modules/wallet.cursorrules)

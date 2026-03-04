@@ -77,3 +77,10 @@ aggregator.join_demand(item="storage_1TB", persona_id="anon_1")
 - **📁 Parent**: [codomyrmex/](../README.md)
 - **🏠 Root**: [../../../README.md](../../../README.md)
 - **🔗 Related**: [identity/](../identity/) | [wallet/](../wallet/) | [privacy/](../privacy/)
+
+
+## Rule Reference
+
+This module is governed by the following rule file:
+
+- [`src/codomyrmex/agentic_memory/rules/modules/market.cursorrules`](src/codomyrmex/agentic_memory/rules/modules/market.cursorrules)

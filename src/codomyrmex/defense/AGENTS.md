@@ -79,3 +79,10 @@ if result["detected"]:
 - **📁 Parent**: [codomyrmex/](../README.md)
 - **🏠 Root**: [../../../README.md](../../../README.md)
 - **🔗 Related**: [logging_monitoring/](../logging_monitoring/) | [identity/](../identity/)
+
+
+## Rule Reference
+
+This module is governed by the following rule file:
+
+- [`src/codomyrmex/agentic_memory/rules/modules/defense.cursorrules`](src/codomyrmex/agentic_memory/rules/modules/defense.cursorrules)

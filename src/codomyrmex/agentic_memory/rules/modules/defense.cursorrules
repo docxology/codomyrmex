@@ -50,3 +50,7 @@ When working within this module, pay close attention to:
 -   Verify that all tests for this module pass.
 -   Confirm that defense mechanisms operate reliably and proportionately.
 -   Test integration with related modules like `security`, `identity`, and `logging_monitoring`.
+
+
+# AGENTS.md cross-reference
+# See corresponding AGENTS.md: src/codomyrmex/defense/AGENTS.md

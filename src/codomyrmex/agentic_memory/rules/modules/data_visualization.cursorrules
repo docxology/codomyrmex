@@ -53,3 +53,7 @@ When working within this module, pay close attention to:
 -   Verify that all tests for this module pass.
 -   Confirm that visualizations render correctly and accurately represent data.
 -   Test integration with related modules like `git_operations` and `static_analysis`.
+
+
+# AGENTS.md cross-reference
+# See corresponding AGENTS.md: src/codomyrmex/data_visualization/AGENTS.md

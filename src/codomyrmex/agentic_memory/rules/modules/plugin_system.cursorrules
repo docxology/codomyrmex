@@ -50,3 +50,7 @@ When working within this module, pay close attention to:
 -   Verify that all tests for this module pass.
 -   Confirm that plugins load and execute correctly.
 -   Test integration with related modules like `skills`, `orchestrator`, and `config_management`.
+
+
+# AGENTS.md cross-reference
+# See corresponding AGENTS.md: src/codomyrmex/plugin_system/AGENTS.md

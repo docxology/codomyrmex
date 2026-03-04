@@ -51,3 +51,7 @@ When working within this module, pay close attention to:
 -   Verify that all tests for this module pass using official test vectors.
 -   Confirm that cryptographic operations use approved algorithms correctly.
 -   Test integration with related modules like `wallet`, `identity`, and `security`.
+
+
+# AGENTS.md cross-reference
+# See corresponding AGENTS.md: src/codomyrmex/encryption/AGENTS.md

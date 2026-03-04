@@ -104,3 +104,10 @@ def test_my_command_integrated():
 ## Navigation
 
 - [README](README.md) | [SPEC](SPEC.md)
+
+
+## Rule Reference
+
+This module is governed by the following rule file:
+
+- [`src/codomyrmex/agentic_memory/rules/modules/cli.cursorrules`](src/codomyrmex/agentic_memory/rules/modules/cli.cursorrules)

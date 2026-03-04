@@ -113,3 +113,10 @@ All tools are auto-discovered via `@mcp_tool` decorators and exposed through the
 ## Navigation
 
 - [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)
+
+
+## Rule Reference
+
+This module is governed by the following rule file:
+
+- [`src/codomyrmex/agentic_memory/rules/modules/model_context_protocol.cursorrules`](src/codomyrmex/agentic_memory/rules/modules/model_context_protocol.cursorrules)

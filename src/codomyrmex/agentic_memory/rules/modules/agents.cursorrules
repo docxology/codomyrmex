@@ -52,3 +52,7 @@ When working within this module, pay close attention to:
 -   Verify that all tests for this module pass.
 -   Confirm that agents interact correctly with their configured LLM providers.
 -   Test integration with related modules like `agentic_memory`, `llm`, and `model_context_protocol`.
+
+
+# AGENTS.md cross-reference
+# See corresponding AGENTS.md: src/codomyrmex/agents/AGENTS.md

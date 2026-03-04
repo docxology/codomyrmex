@@ -50,3 +50,7 @@ When working within this module, pay close attention to:
 -   Verify that all tests for this module pass.
 -   Confirm that serialization is reliable and handles edge cases.
 -   Test integration with related modules like `api`, `cache`, and `events`.
+
+
+# AGENTS.md cross-reference
+# See corresponding AGENTS.md: src/codomyrmex/serialization/AGENTS.md

@@ -82,3 +82,10 @@ blacklist.add_pattern("ip_address")
 - **📁 Parent**: [codomyrmex/](../README.md)
 - **🏠 Root**: [../../../README.md](../../../README.md)
 - **🔗 Related**: [identity/](../identity/) | [wallet/](../wallet/) | [defense/](../defense/)
+
+
+## Rule Reference
+
+This module is governed by the following rule file:
+
+- [`src/codomyrmex/agentic_memory/rules/modules/privacy.cursorrules`](src/codomyrmex/agentic_memory/rules/modules/privacy.cursorrules)

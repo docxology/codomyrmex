@@ -50,3 +50,7 @@ When working within this module, pay close attention to:
 -   Verify that all tests for this module pass.
 -   Confirm that identity operations are secure and privacy-preserving.
 -   Test integration with related modules like `wallet`, `privacy`, and `defense`.
+
+
+# AGENTS.md cross-reference
+# See corresponding AGENTS.md: src/codomyrmex/identity/AGENTS.md

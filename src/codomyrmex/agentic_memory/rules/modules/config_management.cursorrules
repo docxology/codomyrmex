@@ -53,3 +53,7 @@ When working within this module, pay close attention to:
 -   Verify that all tests for this module pass.
 -   Confirm that configurations load correctly and validation works as expected.
 -   Test integration with related modules like `environment_setup` and `security_audit`.
+
+
+# AGENTS.md cross-reference
+# See corresponding AGENTS.md: src/codomyrmex/config_management/AGENTS.md

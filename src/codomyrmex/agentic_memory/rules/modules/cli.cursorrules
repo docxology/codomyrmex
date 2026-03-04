@@ -50,3 +50,7 @@ When working within this module, pay close attention to:
 -   Verify that all tests for this module pass.
 -   Confirm that CLI commands work correctly in terminal environments.
 -   Test integration with related modules like `terminal_interface` and `config_management`.
+
+
+# AGENTS.md cross-reference
+# See corresponding AGENTS.md: src/codomyrmex/cli/AGENTS.md

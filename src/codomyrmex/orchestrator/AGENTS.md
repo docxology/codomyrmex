@@ -96,3 +96,10 @@ All tools are auto-discovered via `@mcp_tool` decorators and exposed through the
 
 - [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)
 - **Parent**: [codomyrmex](../README.md)
+
+
+## Rule Reference
+
+This module is governed by the following rule file:
+
+- [`src/codomyrmex/agentic_memory/rules/modules/orchestrator.cursorrules`](src/codomyrmex/agentic_memory/rules/modules/orchestrator.cursorrules)

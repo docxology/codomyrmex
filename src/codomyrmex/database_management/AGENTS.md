@@ -65,3 +65,10 @@ assert result.row_count == 1
 | **Engineer** | Full | Database operations, schema management, query execution, connection pooling | TRUSTED |
 | **Architect** | Read + Design | Schema design review, query optimization analysis, database architecture | OBSERVED |
 | **QATester** | Validation | Query correctness, schema validation, data integrity verification | OBSERVED |
+
+
+## Rule Reference
+
+This module is governed by the following rule file:
+
+- [`src/codomyrmex/agentic_memory/rules/modules/database_management.cursorrules`](src/codomyrmex/agentic_memory/rules/modules/database_management.cursorrules)

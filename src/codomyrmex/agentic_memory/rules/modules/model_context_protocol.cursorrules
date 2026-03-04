@@ -55,3 +55,7 @@ When working within this module, pay close attention to:
 -   Verify that the `CHANGELOG.md` is updated with all significant changes.
 -   If code/utilities are present, verify that all tests pass and documentation (docstrings, `README.md`) is updated.
 
+
+
+# AGENTS.md cross-reference
+# See corresponding AGENTS.md: src/codomyrmex/model_context_protocol/AGENTS.md

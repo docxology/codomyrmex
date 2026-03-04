@@ -74,3 +74,10 @@ assert len(results) == 1
 ## Navigation
 
 - [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)
+
+
+## Rule Reference
+
+This module is governed by the following rule file:
+
+- [`src/codomyrmex/agentic_memory/rules/modules/tree_sitter.cursorrules`](src/codomyrmex/agentic_memory/rules/modules/tree_sitter.cursorrules)

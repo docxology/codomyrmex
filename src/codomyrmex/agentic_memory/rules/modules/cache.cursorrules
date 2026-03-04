@@ -50,3 +50,7 @@ When working within this module, pay close attention to:
 -   Verify that all tests for this module pass.
 -   Confirm that caching operations are performant and reliable.
 -   Test integration with related modules like `performance`, `database_management`, and `llm`.
+
+
+# AGENTS.md cross-reference
+# See corresponding AGENTS.md: src/codomyrmex/cache/AGENTS.md

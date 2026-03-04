@@ -114,3 +114,10 @@ This section defines which PAI v4.0.1 agent types can access which agents submod
 
 - **📁 Parent Directory**: [codomyrmex](../README.md)
 - **🏠 Project Root**: [README.md](../../../README.md)
+
+
+## Rule Reference
+
+This module is governed by the following rule file:
+
+- [`src/codomyrmex/agentic_memory/rules/modules/agents.cursorrules`](src/codomyrmex/agentic_memory/rules/modules/agents.cursorrules)

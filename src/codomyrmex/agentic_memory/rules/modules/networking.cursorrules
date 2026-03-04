@@ -50,3 +50,7 @@ When working within this module, pay close attention to:
 -   Verify that all tests for this module pass.
 -   Confirm that network operations are reliable and properly handle errors.
 -   Test integration with related modules like `api`, `cloud`, and `security`.
+
+
+# AGENTS.md cross-reference
+# See corresponding AGENTS.md: src/codomyrmex/networking/AGENTS.md

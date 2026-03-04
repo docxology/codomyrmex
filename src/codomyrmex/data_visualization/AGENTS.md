@@ -117,3 +117,10 @@ assert Path("/tmp/test.png").exists()
 ## Navigation
 
 - [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)
+
+
+## Rule Reference
+
+This module is governed by the following rule file:
+
+- [`src/codomyrmex/agentic_memory/rules/modules/data_visualization.cursorrules`](src/codomyrmex/agentic_memory/rules/modules/data_visualization.cursorrules)

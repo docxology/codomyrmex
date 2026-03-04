@@ -50,3 +50,7 @@ When working within this module, pay close attention to:
 -   Verify that all tests for this module pass.
 -   Confirm that deployment operations are reliable and have proper rollback.
 -   Test integration with related modules like `cloud`, `containerization`, and `ci_cd_automation`.
+
+
+# AGENTS.md cross-reference
+# See corresponding AGENTS.md: src/codomyrmex/deployment/AGENTS.md

@@ -50,3 +50,7 @@ When working within this module, pay close attention to:
 -   Verify that all tests for this module pass.
 -   Confirm that reasoning operations produce correct results.
 -   Test integration with related modules like `agents`, `llm`, and `agentic_memory`.
+
+
+# AGENTS.md cross-reference
+# See corresponding AGENTS.md: src/codomyrmex/cerebrum/AGENTS.md

@@ -46,3 +46,7 @@ When working within this module, pay close attention to:
 ## 7. Final Check for `tree_sitter`
 -   Verify tests pass for all supported languages.
 -   Test integration with `coding`, `static_analysis`, and `pattern_matching`.
+
+
+# AGENTS.md cross-reference
+# See corresponding AGENTS.md: src/codomyrmex/tree_sitter/AGENTS.md

@@ -50,3 +50,7 @@ When working within this module, pay close attention to:
 -   Verify that all tests for this module pass.
 -   Confirm that utilities are well-documented and have examples.
 -   Ensure no breaking changes to existing utility interfaces.
+
+
+# AGENTS.md cross-reference
+# See corresponding AGENTS.md: src/codomyrmex/utils/AGENTS.md
