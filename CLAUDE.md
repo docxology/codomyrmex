@@ -312,12 +312,12 @@ Last: [first session]
 
 ## Last Session Bridge
 [Emergency bridge — running bridge was not updated]
-Files: src/codomyrmex/cli/handlers/analysis.py (edit), src/codomyrmex/deployment/gitops/gitops.py (edit), src/codomyrmex/tests/unit/data_visualization/test_base_classes.py (create), src/codomyrmex/ci_cd_automation/deployment_orchestrator.py (edit), src/codomyrmex/tests/unit/data_visualization/test_base_classes.py (edit)
+Files: .desloppify/external_review_sessions/ext_20260304_020207_d630a6ce/review_result.json (create), src/codomyrmex/utils/process/subprocess.py (edit), src/codomyrmex/utils/process/__init__.py (edit), src/codomyrmex/utils/__init__.py (edit), src/codomyrmex/tests/unit/utils/test_subprocess.py (edit)
 
 ## Crash Recovery
-Last session (2026-03-03T17:01:58.218600) was not properly closed (crash/kill).
-Recorded 13 file changes before crash.
-Last changed files: src/codomyrmex/ci_cd_automation/deployment_orchestrator.py, src/codomyrmex/tests/unit/data_visualization/test_base_classes.py, src/codomyrmex/deployment/gitops/gitops.py, src/codomyrmex/cli/handlers/analysis.py
+Last session (2026-03-03T17:59:01.058726) was not properly closed (crash/kill).
+Recorded 8 file changes before crash.
+Last changed files: src/codomyrmex/tests/unit/utils/test_subprocess.py, src/codomyrmex/utils/__init__.py, src/codomyrmex/utils/process/__init__.py, src/codomyrmex/utils/process/subprocess.py, .desloppify/external_review_sessions/ext_20260304_020207_d630a6ce/review_result.json
 Bridge from previous session is valid (above).
 For details use: memory_search("changes last session")
 

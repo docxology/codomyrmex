@@ -72,16 +72,13 @@ def create_git_analysis_report(
         logger.error(f"Path {repository_path} is not a Git repository")
         return {"error": "Not a Git repository"}
 
-    # Set default report name
     if not report_name:
         report_name = os.path.basename(os.path.abspath(repository_path))
 
-    # Create output directory
     os.makedirs(output_dir, exist_ok=True)
 
     visualizer = GitVisualizer()
 
-    # Create comprehensive report
     try:
         results = visualizer.create_comprehensive_git_report(
             repository_path=repository_path,
@@ -89,7 +86,6 @@ def create_git_analysis_report(
             report_name=report_name,
         )
 
-        # Filter results based on user preferences
         if not include_png:
             results = {k: v for k, v in results.items() if "png" not in k}
         if not include_mermaid:
@@ -137,7 +133,6 @@ def visualize_git_branches(
     if not is_git_repository(repository_path):
         return {"error": "Not a Git repository"}
 
-    # Set defaults
     if not title:
         title = f"Git Branches - {os.path.basename(repository_path)}"
 
@@ -210,7 +205,6 @@ def visualize_commit_activity(
     if not is_git_repository(repository_path):
         return {"error": "Not a Git repository"}
 
-    # Set defaults
     if not title:
         title = f"Commit Activity - {os.path.basename(repository_path)}"
 
@@ -370,7 +364,6 @@ def analyze_repository_structure(
     if not is_git_repository(repository_path):
         return {"error": "Not a Git repository"}
 
-    # Set defaults
     if not title:
         title = f"Repository Structure - {os.path.basename(repository_path)}"
 
@@ -379,10 +372,8 @@ def analyze_repository_structure(
         output_path = f"./repo_structure_{base_name}.mmd"
 
     try:
-        # Analyze repository structure
         structure = _analyze_directory_structure(repository_path, max_depth)
 
-        # Create visualization
         from codomyrmex.data_visualization import create_repository_structure_diagram
 
         content = create_repository_structure_diagram(
@@ -430,11 +421,9 @@ def get_repository_metadata(repository_path: str) -> dict[str, Any]:
             "structure_stats": {},
         }
 
-        # Add structure analysis
         structure = _analyze_directory_structure(repository_path, 2)
         metadata["structure_stats"] = _get_structure_stats(structure)
 
-        # Add commit statistics
         commits = get_commit_history(100, repository_path)
         if commits:
             authors = {}

@@ -243,7 +243,6 @@ class ExtractFunctionRefactoring(Refactoring):
         # Find assignments (defined)
         defined = set(re.findall(r'^\s*(\w+)\s*=', code, re.MULTILINE))
 
-        # Find all identifiers (used)
         used = set(re.findall(r'\b([a-zA-Z_]\w*)\b', code))
 
         # Filter out Python keywords and builtins
@@ -379,7 +378,6 @@ class InlineRefactoring(Refactoring):
             with open(self.file_path) as f:
                 content = f.read()
 
-            # Find the definition (simple variable assignment)
             definition_pattern = re.compile(
                 rf'^(\s*){re.escape(self.symbol_name)}\s*=\s*(.+)$',
                 re.MULTILINE
@@ -396,7 +394,6 @@ class InlineRefactoring(Refactoring):
 
             value = match.group(2).strip()
 
-            # Find all usages (excluding the definition)
             usage_pattern = re.compile(r'\b' + re.escape(self.symbol_name) + r'\b')
 
             changes = []

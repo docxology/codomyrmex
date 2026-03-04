@@ -240,12 +240,10 @@ class RepositoryManager:
         else:
             local_path = self.get_local_path(repo)
 
-        # Create parent directories
         local_path.parent.mkdir(parents=True, exist_ok=True)
 
         logger.info(f"Cloning {repo.full_name} to {local_path}")
 
-        # Update metadata before cloning
         metadata = self.metadata_manager.create_or_update_metadata(
             full_name=repo.full_name,
             owner=repo.owner,
@@ -261,12 +259,10 @@ class RepositoryManager:
         if success:
             logger.info(f"Successfully cloned {repo.full_name}")
 
-            # Update metadata after successful clone
             metadata.clone_date = datetime.now().isoformat()
             metadata.clone_status = CloneStatus.CLONED
             metadata.last_sync_date = datetime.now().isoformat()
 
-            # Update local repository information
             self.metadata_manager.update_local_repository_info(metadata)
             self.metadata_manager.update_repository_metadata(metadata)
             self.metadata_manager.save_metadata()
@@ -276,7 +272,6 @@ class RepositoryManager:
                 self._setup_development_repo(str(local_path), repo)
         else:
             logger.error(f"Failed to clone {repo.full_name}")
-            # Update metadata to reflect failed clone
             metadata.clone_status = CloneStatus.ERROR
             self.metadata_manager.update_repository_metadata(metadata)
             self.metadata_manager.save_metadata()
@@ -336,13 +331,11 @@ class RepositoryManager:
 
         logger.info(f"Updating {repo.full_name} at {local_path}")
 
-        # Get current branch
         current_branch = get_current_branch(str(local_path))
         if not current_branch:
             logger.error(f"Could not determine current branch for {repo.full_name}")
             return False
 
-        # Pull changes
         success = pull_changes("origin", current_branch, str(local_path))
 
         if success:

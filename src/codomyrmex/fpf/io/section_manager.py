@@ -29,13 +29,8 @@ class SectionManager:
         Returns:
             Dictionary containing patterns, concepts, and relationships for the part
         """
-        # Filter patterns by part
         part_patterns = [p for p in self.spec.patterns if p.part == part_id]
-
-        # Get pattern IDs
         pattern_ids = {p.id for p in part_patterns}
-
-        # Filter concepts by pattern IDs
         part_concepts = [
             c for c in self.spec.concepts if c.pattern_id in pattern_ids
         ]
@@ -73,7 +68,6 @@ class SectionManager:
         """
         pattern_id_set = set(pattern_ids)
 
-        # Add dependencies if requested
         if include_dependencies:
             for relationship in self.spec.relationships:
                 if relationship.source in pattern_id_set:
@@ -81,15 +75,10 @@ class SectionManager:
                 if relationship.target in pattern_id_set:
                     pattern_id_set.add(relationship.source)
 
-        # Filter patterns
         group_patterns = [p for p in self.spec.patterns if p.id in pattern_id_set]
-
-        # Filter concepts
         group_concepts = [
             c for c in self.spec.concepts if c.pattern_id in pattern_id_set
         ]
-
-        # Filter relationships
         group_relationships = [
             r
             for r in self.spec.relationships
@@ -122,22 +111,17 @@ class SectionManager:
         """
         concept_name_set = set(concept_names)
 
-        # Filter concepts
         cluster_concepts = [
             c for c in self.spec.concepts if c.name in concept_name_set
         ]
 
-        # Get related pattern IDs
         pattern_ids = {c.pattern_id for c in cluster_concepts}
         if include_related_patterns:
             # Add patterns that reference these concepts
             for concept in cluster_concepts:
                 pattern_ids.update(concept.references)
 
-        # Filter patterns
         cluster_patterns = [p for p in self.spec.patterns if p.id in pattern_ids]
-
-        # Filter relationships
         cluster_relationships = [
             r
             for r in self.spec.relationships
@@ -181,13 +165,11 @@ class SectionManager:
         }
 
         if include_patterns:
-            # Get pattern IDs from relationships
             pattern_ids = set()
             for rel in subset_relationships:
                 pattern_ids.add(rel.source)
                 pattern_ids.add(rel.target)
 
-            # Filter patterns
             subset_patterns = [p for p in self.spec.patterns if p.id in pattern_ids]
             result["patterns"] = subset_patterns
             result["metadata"] = {

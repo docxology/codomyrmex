@@ -130,7 +130,6 @@ class GitVisualizer:
                 ]
                 commits = self._generate_sample_commits()
 
-            # Create the visualization
             fig, ax = plt.subplots(figsize=figure_size)
 
             # Plot branches as horizontal lanes
@@ -144,7 +143,6 @@ class GitVisualizer:
                 color = self._get_branch_color(branch_name)
                 ax.axhline(y=y_pos, color=color, linewidth=2, alpha=0.3)
 
-                # Add branch label
                 ax.text(
                     -0.5,
                     y_pos,
@@ -155,17 +153,14 @@ class GitVisualizer:
                     ha="right",
                 )
 
-            # Plot commits
             for i, commit in enumerate(commits[:max_commits]):
                 branch = commit.get("branch", "main")
                 y_pos = branch_y_positions.get(branch, 0)
                 x_pos = i
 
-                # Plot commit point
                 color = self._get_branch_color(branch)
                 ax.scatter(x_pos, y_pos, color=color, s=100, zorder=3)
 
-                # Add commit hash below point
                 ax.text(
                     x_pos,
                     y_pos - 0.15,
@@ -187,7 +182,6 @@ class GitVisualizer:
                     rotation=45,
                 )
 
-            # Connect commits with lines
             for i in range(1, min(len(commits), max_commits)):
                 prev_commit = commits[i - 1]
                 curr_commit = commits[i]
@@ -200,7 +194,6 @@ class GitVisualizer:
                 # Draw connection line
                 ax.plot([i - 1, i], [prev_y, curr_y], "k-", alpha=0.5, zorder=1)
 
-            # Customize the plot
             apply_common_aesthetics(ax, title, "Commits (timeline →)", "Branches")
             ax.set_xlim(-1, max(max_commits - 1, 5))
             ax.set_ylim(-0.5, len(branches) - 0.5)
@@ -282,7 +275,6 @@ class GitVisualizer:
                     for commit in commits_data
                 ]
 
-            # Create Mermaid diagram
             mermaid_content = self.mermaid_generator.create_git_branch_diagram(
                 branches=branches, commits=commits, title=title, output_path=output_path
             )
@@ -350,12 +342,10 @@ class GitVisualizer:
                 logger.warning("No valid commit dates found")
                 return False
 
-            # Create daily commit counts
             from collections import Counter
 
             commit_counts = Counter(commit_dates)
 
-            # Create date range
             end_date = max(commit_dates)
             start_date = end_date - timedelta(days=days_back)
             date_range = [start_date + timedelta(days=i) for i in range(days_back + 1)]
@@ -363,7 +353,6 @@ class GitVisualizer:
             # Get counts for each date
             daily_counts = [commit_counts.get(date, 0) for date in date_range]
 
-            # Create the plot
             fig, ax = plt.subplots(figsize=figure_size)
 
             ax.bar(date_range, daily_counts, color=self.colors["commit"], alpha=0.7)
@@ -562,7 +551,6 @@ class GitVisualizer:
             ax.set_xticklabels(["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"])
             ax.set_yticks(range(len(weeks)))
             ax.set_yticklabels(weeks, fontsize=8)
-            # Add colorbar
             plt.colorbar(im, ax=ax, label="Commits")
 
     def visualize_repository_summary_png(
@@ -591,10 +579,8 @@ class GitVisualizer:
         logger.debug(f"Creating repository summary PNG dashboard: {title}")
 
         try:
-            # Get repository data
             repo_data = self._get_repo_data(repository_path, repo_data)
 
-            # Create subplot dashboard
             fig = plt.figure(figsize=figure_size)
             gs = fig.add_gridspec(3, 3, hspace=0.3, wspace=0.3)
 
@@ -660,7 +646,6 @@ class GitVisualizer:
             logger.error(f"Path {repository_path} is not a Git repository")
             return {}
 
-        # Create output directory
         os.makedirs(output_dir, exist_ok=True)
 
         results = {}
@@ -721,7 +706,6 @@ class GitVisualizer:
             logger.error(f"Error creating structure diagram: {e}")
             results["structure_mermaid"] = False
 
-        # Create summary report
         self._create_report_summary(output_dir, report_name, results, repository_path)
 
         success_count = sum(results.values())
