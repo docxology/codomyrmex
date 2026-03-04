@@ -455,7 +455,6 @@ class DashboardMixin:
                         break
             except Exception as e:
                 logger.warning("Security analysis walk failed: %s", e)
-                pass
 
             # Normalize penalty based on codebase size
             if files_analyzed > 0:
@@ -511,7 +510,6 @@ class DashboardMixin:
                         break
             except Exception as e:
                 logger.warning("Performance analysis walk failed: %s", e)
-                pass
 
             # Performance score calculation
             base_score = 100.0
@@ -718,7 +716,6 @@ class DashboardMixin:
                             total_lines += len(f.readlines())
                     except Exception as e:
                         logger.debug("Failed to count lines in file: %s", e)
-                        pass
         return total_lines
 
     def detect_code_smells(self) -> list[dict[str, Any]]:

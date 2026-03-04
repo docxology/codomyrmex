@@ -29,10 +29,10 @@ def fetch_remote(remote: str = "origin", repository_path: str = None) -> bool:
         logger.error(f"Failed to fetch remote '{remote}': {e}")
         if e.stderr:
             logger.error(f"Git error: {e.stderr}")
-        return False
+        raise
     except Exception as e:
         logger.error(f"Unexpected error fetching remote: {e}")
-        return False
+        raise
 
 @mcp_tool(name="git_prune_remote")
 def prune_remote(remote: str = "origin", repository_path: str = None) -> bool:
@@ -55,10 +55,10 @@ def prune_remote(remote: str = "origin", repository_path: str = None) -> bool:
         logger.error(f"Failed to prune remote '{remote}': {e}")
         if e.stderr:
             logger.error(f"Git error: {e.stderr}")
-        return False
+        raise
     except Exception as e:
         logger.error(f"Unexpected error pruning remote: {e}")
-        return False
+        raise
 
 @mcp_tool(name="git_add_remote")
 def add_remote(
@@ -87,10 +87,10 @@ def add_remote(
         logger.error(f"Failed to add remote '{remote_name}': {e}")
         if e.stderr:
             logger.error(f"Git error: {e.stderr}")
-        return False
+        raise
     except Exception as e:
         logger.error(f"Unexpected error adding remote: {e}")
-        return False
+        raise
 
 @mcp_tool(name="git_remove_remote")
 def remove_remote(remote_name: str, repository_path: str = None) -> bool:
@@ -117,10 +117,10 @@ def remove_remote(remote_name: str, repository_path: str = None) -> bool:
         logger.error(f"Failed to remove remote '{remote_name}': {e}")
         if e.stderr:
             logger.error(f"Git error: {e.stderr}")
-        return False
+        raise
     except Exception as e:
         logger.error(f"Unexpected error removing remote: {e}")
-        return False
+        raise
 
 @mcp_tool(name="git_list_remotes")
 def list_remotes(repository_path: str = None) -> list[dict[str, str]]:
@@ -169,7 +169,7 @@ def list_remotes(repository_path: str = None) -> list[dict[str, str]]:
 
     except subprocess.CalledProcessError as e:
         logger.error(f"Failed to list remotes: {e}")
-        return []
+        raise
     except Exception as e:
         logger.error(f"Unexpected error listing remotes: {e}")
-        return []
+        raise

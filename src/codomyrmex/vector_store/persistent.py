@@ -73,7 +73,6 @@ class PersistentVectorStore(VectorStore):
                     self._vectors[entry.id] = entry
             except (json.JSONDecodeError, KeyError) as e:
                 logger.warning("Failed to load vector store from %s: %s", self._path, e)
-                pass
 
     def _save(self) -> None:
         """Save vectors to file."""

@@ -56,7 +56,6 @@ class PAIProviderMixin:
                     progress = _json.loads(progress_file.read_text(encoding="utf-8"))
                 except Exception as e:
                     logger.debug("Failed to parse progress.json for mission %s: %s", mission_dir.name, e)
-                    pass
 
             missions.append({
                 "id": mission_dir.name,
@@ -103,7 +102,6 @@ class PAIProviderMixin:
                     progress = _json.loads(progress_file.read_text(encoding="utf-8"))
                 except Exception as e:
                     logger.debug("Failed to parse progress.json for project %s: %s", project_dir.name, e)
-                    pass
 
             projects.append({
                 "id": project_dir.name,
@@ -222,7 +220,6 @@ class PAIProviderMixin:
                 work_sessions_count = sum(1 for d in work_dir.iterdir() if d.is_dir())
             except OSError as e:
                 logger.debug("Failed to count work sessions in %s: %s", work_dir, e)
-                pass
 
         return {
             "directories": directories,
@@ -330,7 +327,6 @@ class PAIProviderMixin:
                 )
         except Exception as e:
             logger.debug("Failed to discover PAI skills: %s", e)
-            pass
         try:
             hooks_dir = self._PAI_ROOT / "hooks"
             if hooks_dir.exists():
@@ -340,7 +336,6 @@ class PAIProviderMixin:
                 )
         except Exception as e:
             logger.debug("Failed to discover PAI hooks: %s", e)
-            pass
 
         return {
             "missions": missions,

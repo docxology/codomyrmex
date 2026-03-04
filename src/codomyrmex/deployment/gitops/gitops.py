@@ -42,6 +42,7 @@ class GitOpsSynchronizer:
                     ["git", "clone", "-b", branch, self.repo_url, self.local_path],
                     capture_output=True,
                     text=True,
+                    timeout=60,
                 )
                 if res.returncode != 0:
                     logger.error("Git clone failed: %s", res.stderr)
@@ -58,6 +59,7 @@ class GitOpsSynchronizer:
                     ["git", "-C", self.local_path, "fetch", "origin"],
                     capture_output=True,
                     text=True,
+                    timeout=60,
                 )
                 if res.returncode != 0:
                     logger.error("Git fetch failed: %s", res.stderr)
@@ -67,6 +69,7 @@ class GitOpsSynchronizer:
                     ["git", "-C", self.local_path, "reset", "--hard", f"origin/{branch}"],
                     capture_output=True,
                     text=True,
+                    timeout=60,
                 )
                 if res.returncode != 0:
                     logger.error("Git reset failed: %s", res.stderr)
@@ -92,6 +95,7 @@ class GitOpsSynchronizer:
                 capture_output=True,
                 text=True,
                 check=True,
+                timeout=10,
             )
             return result.stdout.strip()
         except (subprocess.CalledProcessError, OSError) as e:
@@ -117,12 +121,14 @@ class GitOpsSynchronizer:
                 check=True,
                 capture_output=True,
                 text=True,
+                timeout=60,
             )
             subprocess.run(
                 ["git", "-C", self.local_path, "checkout", revision],
                 check=True,
                 capture_output=True,
                 text=True,
+                timeout=60,
             )
             return True
         except (subprocess.CalledProcessError, OSError) as e:
@@ -144,6 +150,7 @@ class GitOpsSynchronizer:
                 capture_output=True,
                 text=True,
                 check=True,
+                timeout=10,
             )
             return bool(result.stdout.strip())
         except (subprocess.CalledProcessError, OSError):

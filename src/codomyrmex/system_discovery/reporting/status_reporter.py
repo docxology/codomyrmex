@@ -244,7 +244,6 @@ class StatusReporter:
 
         except subprocess.TimeoutExpired as e:
             logger.warning("Git status check timed out: %s", e)
-            pass
 
         if not status["is_git_repo"]:
             return status
@@ -262,7 +261,6 @@ class StatusReporter:
                 status["current_branch"] = result.stdout.strip()
         except subprocess.TimeoutExpired as e:
             logger.warning("Git branch check timed out: %s", e)
-            pass
 
         # Get remotes
         try:
@@ -279,7 +277,6 @@ class StatusReporter:
                 ]
         except subprocess.TimeoutExpired as e:
             logger.warning("Git remote check timed out: %s", e)
-            pass
 
         # Get recent commits
         try:
@@ -296,7 +293,6 @@ class StatusReporter:
                 ]
         except subprocess.TimeoutExpired as e:
             logger.warning("Git log check timed out: %s", e)
-            pass
 
         return status
 

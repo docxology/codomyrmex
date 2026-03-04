@@ -207,7 +207,6 @@ class Curriculum:
                 path = filtered
             except (ValueError, IndexError) as e:
                 logger.warning("Failed to filter curriculum path by difficulty level '%s': %s", student_level, e)
-                pass
 
         return path
 

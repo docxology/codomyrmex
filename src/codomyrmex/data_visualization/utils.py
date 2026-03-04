@@ -96,11 +96,6 @@ def save_plot(
         raise
 
 
-def apply_codomyrmex_style(ax, title: str = None):
-    """Apply Codomyrmex default styling to a matplotlib axes."""
-    return apply_common_aesthetics(ax, title=title)
-
-
 def get_color_palette(n_colors: int = 10) -> list:
     """
     Get a list of colors for visualizations.
@@ -184,7 +179,6 @@ def apply_style(ax, style_name: str = None):
 __all__ = [
     "save_plot",
     "apply_common_aesthetics",
-    "apply_codomyrmex_style",
     "get_color_palette",
     "apply_theme_to_axes",
     "apply_style",

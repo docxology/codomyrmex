@@ -36,6 +36,7 @@ except ImportError:
     pymysql = None
     MYSQL_AVAILABLE = False
 
+__all__ = ["Migration", "MigrationResult", "DatabaseConnector", "MigrationManager", "run_migrations"]
 
 
 @dataclass

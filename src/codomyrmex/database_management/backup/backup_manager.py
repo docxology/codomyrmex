@@ -22,6 +22,8 @@ from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
 
+__all__ = ["Backup", "BackupResult", "BackupManager", "backup_database"]
+
 
 @dataclass
 class Backup:

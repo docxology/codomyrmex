@@ -162,7 +162,7 @@ class AgenticSeekClient(CLIAgentBase):
             if proc.stdout is not None:
                 for line in proc.stdout:
                     yield line.rstrip("\n")
-            proc.wait()
+            proc.wait(timeout=self.timeout)
         except FileNotFoundError as exc:
             yield f"Error: agenticSeek CLI not found: {exc}"
 

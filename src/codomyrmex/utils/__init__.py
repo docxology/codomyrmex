@@ -293,7 +293,6 @@ try:
     )
 except ImportError as e:
     logger.debug("Optional utils imports not available: %s", e)
-    pass
 
 # Script base utilities
 from . import (  # noqa: E402

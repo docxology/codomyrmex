@@ -81,7 +81,6 @@ class OllamaClient:
                          logger.debug("Available models for debugging: %s", models)
             except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as debug_err:
                 logger.debug("Failed to list available Ollama models for debug: %s", debug_err)
-                pass
             raise RuntimeError(f"Real Ollama Connection Failed: {e}") from e
 
         elapsed = time.monotonic() - start_time
@@ -114,7 +113,6 @@ def get_llm_client(identity: str = "agent") -> Any:
             return ClaudeClient()
     except ImportError as e:
         logger.warning("[%s] ClaudeClient import failed: %s", identity, e)
-        pass
 
     # 2. Check Ollama
     try:
@@ -128,7 +126,6 @@ def get_llm_client(identity: str = "agent") -> Any:
                 return OllamaClient(model=model)
     except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
         logger.warning("[%s] Ollama connection check failed: %s", identity, e)
-        pass
 
     raise RuntimeError(
         f"[{identity}] CRITICAL: No Real LLM Available.\n"

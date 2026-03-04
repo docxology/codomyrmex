@@ -19,6 +19,8 @@ from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
 
+__all__ = ["BackupFormat", "BackupMetadata", "DatabaseBackup"]
+
 
 class BackupFormat(Enum):
     """Supported backup formats."""

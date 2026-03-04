@@ -71,7 +71,7 @@ class GeminiCLIWrapper(BaseAgent):
 
         try:
             logger.debug(f"Executing gemini CLI command: {' '.join(cmd)}")
-            result = subprocess.run(cmd, capture_output=True, text=True)
+            result = subprocess.run(cmd, capture_output=True, text=True, timeout=300)
 
             if result.returncode != 0:
                 # Sometimes the CLI writes error to stdout instead of stderr depending on how it's handled

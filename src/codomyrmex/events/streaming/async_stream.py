@@ -42,7 +42,6 @@ class AsyncStream:
                 await self._dispatcher_task
             except asyncio.CancelledError as e:
                 logger.debug("Dispatcher task cancelled cleanly: %s", e)
-                pass
 
     async def _dispatch_loop(self) -> None:
         """Dispatch events to subscribers."""
@@ -63,7 +62,6 @@ class AsyncStream:
             except asyncio.QueueFull as e:
                 # Drop event if subscriber can't keep up
                 logger.debug("Subscriber queue full, dropping event: %s", e)
-                pass
 
     async def publish(self, event: Event) -> bool:
         """Publish an event."""
@@ -192,7 +190,6 @@ class BatchingStream:
                 handler(batch)
             except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
                 logger.debug("Batch handler error during flush: %s", e)
-                pass
 
     async def add(self, event: Event) -> None:
         """Add event to batch."""
@@ -209,7 +206,6 @@ class BatchingStream:
                         handler(batch)
                     except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
                         logger.debug("Batch handler error during add: %s", e)
-                        pass
 
     def on_batch(self, handler: Callable[[list[Event]], None]) -> None:
         """Register batch handler."""

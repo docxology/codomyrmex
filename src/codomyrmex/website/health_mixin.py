@@ -400,4 +400,3 @@ class HealthProviderMixin:
                     os.unlink(xml_path)
                 except OSError as e:
                     logger.debug("Failed to remove temp xml_path %s: %s", xml_path, e)
-                    pass

@@ -30,6 +30,8 @@ except ImportError:
     logging.basicConfig(level=logging.INFO)
     logger = logging.getLogger(__name__)
 
+__all__ = ["DependencyAnalyzer"]
+
 
 class DependencyAnalyzer:
     """Analyzes module dependencies for circular imports and hierarchy violations."""

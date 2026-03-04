@@ -75,7 +75,6 @@ class AlertManager:
                         self._alerts[rule_name].resolve()
             except Exception as e:
                 logger.warning("Alert rule evaluation failed for %s: %s", rule_name, e)
-                pass
 
         return new_alerts
 

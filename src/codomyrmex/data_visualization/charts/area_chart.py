@@ -7,8 +7,6 @@ including stacked area charts.
 
 import matplotlib.pyplot as plt
 
-from codomyrmex.logging_monitoring import get_logger
-
 from codomyrmex.data_visualization.utils import (
     DEFAULT_FIGURE_SIZE,
     apply_common_aesthetics,
@@ -16,6 +14,7 @@ from codomyrmex.data_visualization.utils import (
     get_color_palette,
     save_plot,
 )
+from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
 

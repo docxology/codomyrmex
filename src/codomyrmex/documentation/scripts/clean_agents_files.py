@@ -39,7 +39,6 @@ class AgentsCleaner:
                     items.add(item.name)
         except PermissionError as e:
             logger.warning("Permission denied reading directory %s: %s", directory, e)
-            pass
 
         return items
 

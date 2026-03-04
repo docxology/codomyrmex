@@ -16,6 +16,8 @@ Usage:
 """
 logger = get_logger(__name__)
 
+__all__ = ["parse_requirements_file", "find_all_requirements_files", "analyze_dependencies", "generate_pyproject_additions", "generate_deprecation_notice", "main"]
+
 
 def parse_requirements_file(file_path: Path) -> list[tuple[str, str, str]]:
     """

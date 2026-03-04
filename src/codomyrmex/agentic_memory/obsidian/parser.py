@@ -118,13 +118,11 @@ def extract_embeds(content: str) -> list[Embed]:
                     height = int(parts[1])
                 except ValueError as e:
                     logger.debug("Non-integer embed dimensions %r: %s", dims, e)
-                    pass
             else:
                 try:
                     width = int(dims)
                 except ValueError as e:
                     logger.debug("Non-integer embed width %r: %s", dims, e)
-                    pass
         else:
             target = raw
 

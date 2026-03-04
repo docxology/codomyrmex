@@ -224,7 +224,6 @@ def run_todos(
                             break
                         except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
                             logger.debug("Handler resolution failed for %s via %s: %s", candidate, try_path, e)
-                            pass
             handler_path = item.handler_path or inferred_handler
             if not handler_path:
                 raise ValueError(f"No handler specified or inferable for task '{item.task_name}'")
@@ -404,7 +403,6 @@ def _process_todos(controller: DroidController, manager: TodoManager, count: int
                 print(f"\n📊 Final Controller Metrics: {controller.metrics}")
         except (AttributeError, KeyError, TypeError) as e:
             logger.debug("Could not retrieve final controller metrics: %s", e)
-            pass
         print("👋 Droid session completed.")
 
 

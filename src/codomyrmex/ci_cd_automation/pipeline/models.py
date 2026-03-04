@@ -6,8 +6,8 @@ from enum import Enum
 from typing import Any
 
 
-class PipelineStatus(Enum):
-    """Pipeline execution status."""
+class ExecutionStatus(Enum):
+    """Shared execution status for pipelines, stages, and jobs."""
 
     PENDING = "pending"
     RUNNING = "running"
@@ -17,26 +17,10 @@ class PipelineStatus(Enum):
     SKIPPED = "skipped"
 
 
-class StageStatus(Enum):
-    """Pipeline stage status."""
-
-    PENDING = "pending"
-    RUNNING = "running"
-    SUCCESS = "success"
-    FAILURE = "failure"
-    CANCELLED = "cancelled"
-    SKIPPED = "skipped"
-
-
-class JobStatus(Enum):
-    """Job execution status."""
-
-    PENDING = "pending"
-    RUNNING = "running"
-    SUCCESS = "success"
-    FAILURE = "failure"
-    CANCELLED = "cancelled"
-    SKIPPED = "skipped"
+# Aliases for backward compatibility — all three share the same values.
+PipelineStatus = ExecutionStatus
+StageStatus = ExecutionStatus
+JobStatus = ExecutionStatus
 
 
 @dataclass

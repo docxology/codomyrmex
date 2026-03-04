@@ -153,7 +153,6 @@ class OrchestrationSession:
                 sess.created_at = datetime.fromisoformat(data["created_at"])
             except Exception as e:
                 logger.warning("Failed to parse created_at '%s': %s", data["created_at"], e)
-                pass
         if data.get("status"):
             try:
                 sess.status = SessionStatus(data["status"])

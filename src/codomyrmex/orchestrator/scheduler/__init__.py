@@ -32,7 +32,6 @@ try:
     )
 except ImportError as e:
     logger.debug("Advanced scheduler extensions not available: %s", e)
-    pass
 
 def cli_commands():
     """Return CLI commands for the scheduler module."""

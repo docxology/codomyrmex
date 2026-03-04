@@ -139,7 +139,7 @@ def run_code_in_docker(
                     f"ancestor={language_config['image']}",
                 ]
                 container_ids = (
-                    subprocess.check_output(container_id_cmd, universal_newlines=True)
+                    subprocess.check_output(container_id_cmd, universal_newlines=True, timeout=10)
                     .strip()
                     .split("\n")
                 )
@@ -148,6 +148,7 @@ def run_code_in_docker(
                         subprocess.run(
                             ["docker", "kill", container_id],
                             capture_output=True,
+                            timeout=10,
                         )
             except subprocess.SubprocessError as e:
                 logger.warning("Container cleanup error — orphaned container may remain: %s", e)

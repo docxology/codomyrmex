@@ -50,10 +50,10 @@ def merge_branch(
         logger.error(f"Failed to merge branch '{source_branch}': {e}")
         if e.stderr:
             logger.error(f"Git error: {e.stderr}")
-        return False
+        raise
     except Exception as e:
         logger.error(f"Unexpected error merging branch: {e}")
-        return False
+        raise
 
 @mcp_tool(name="git_rebase")
 def rebase_branch(
@@ -85,8 +85,8 @@ def rebase_branch(
         logger.error(f"Failed to rebase onto '{target_branch}': {e}")
         if e.stderr:
             logger.error(f"Git error: {e.stderr}")
-        return False
+        raise
     except Exception as e:
         logger.error(f"Unexpected error rebasing branch: {e}")
-        return False
+        raise
 

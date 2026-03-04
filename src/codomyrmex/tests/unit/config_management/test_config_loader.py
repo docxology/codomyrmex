@@ -356,7 +356,7 @@ class TestGetValidationReportExceptionPath:
         # Inject a config with 'level' AND 'format' keys to trigger logging schema detection
         # but with a data type that will cause JSON serialization errors in the validator
         config = Configuration(
-            data={"level": "INFO", "format": set(["a", "b"])},  # set is not JSON-serialisable
+            data={"level": "INFO", "format": {"a", "b"}},  # set is not JSON-serialisable
             source="test_err",
         )
         manager.configurations["err_report_cfg"] = config

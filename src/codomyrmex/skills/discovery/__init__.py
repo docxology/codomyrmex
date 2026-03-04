@@ -163,7 +163,6 @@ class FunctionSkill(Skill):
             type_hints = func.__annotations__
         except AttributeError as e:
             logger.debug("Could not read annotations from %s: %s", func, e)
-            pass
 
         for name, param in sig.parameters.items():
             if name in ('self', 'cls'):
@@ -363,7 +362,6 @@ class SkillDiscoverer:
                     discovered.append(instance)
                 except TypeError as e:
                     logger.debug("Could not instantiate skill class %s: %s", name, e)
-                    pass
 
         return discovered
 

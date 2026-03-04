@@ -271,7 +271,6 @@ def complex_function(data):
 
         except Exception as e:
             logger.debug("Failed to check imports in %s: %s", file_path, e)
-            pass
 
         return False
 

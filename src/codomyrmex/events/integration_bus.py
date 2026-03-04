@@ -76,7 +76,6 @@ class IntegrationBus:
                 handler(event)
             except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
                 logger.warning("Wildcard handler error for topic '%s': %s", topic, e)
-                pass
 
         return event
 

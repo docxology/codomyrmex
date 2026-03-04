@@ -100,7 +100,7 @@ class Cli:
             cmd.append("--open")
         try:
             print(f"🚀 Launching dashboard on http://{host}:{port}...")
-            subprocess.run(cmd, check=False)
+            subprocess.run(cmd, check=False, timeout=300)
         except KeyboardInterrupt:
             print("\nDashboard stopped.")
         return 0

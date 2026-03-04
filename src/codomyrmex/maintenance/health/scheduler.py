@@ -12,6 +12,8 @@ from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any
 
+__all__ = ["TaskPriority", "TaskStatus", "ScheduleConfig", "TaskResult", "MaintenanceTask", "MaintenanceScheduler"]
+
 
 class TaskPriority(Enum):
     """Priority levels for maintenance tasks."""

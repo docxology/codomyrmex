@@ -197,7 +197,7 @@ class DockerClient:
 
         args.extend(config.to_run_args())
 
-        result = self._run_command(args)
+        result = self._run_command(args, timeout=300)
         if result.returncode != 0:
             raise RuntimeError(f"Run failed: {result.stderr}")
 

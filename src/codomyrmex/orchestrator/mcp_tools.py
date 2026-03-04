@@ -65,7 +65,6 @@ def analyze_workflow_dependencies(tasks: list[dict]) -> dict:
                     workflow.add_dependency(task_id, dep)
                 except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
                     logger.warning("Failed to add dependency %s -> %s: %s", task_id, dep, e)
-                    pass
 
         # Verification happens implicitly or through a topological sort check
         # This will raise CycleError if a cycle exists

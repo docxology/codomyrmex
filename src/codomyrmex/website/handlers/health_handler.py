@@ -120,7 +120,6 @@ class HealthHandler:
                                     metric_type=MetricType.GAUGE)
                 except Exception as e:
                     logger.debug("Failed to record tool_count metric: %s", e)
-                    pass
 
             # Build latest_values dict for the frontend
             latest_values = {}
@@ -171,7 +170,6 @@ class HealthHandler:
                     seeded.append("tool_count")
                 except Exception as e:
                     logger.debug("Failed to seed tool_count metric: %s", e)
-                    pass
 
                 # Additional useful metrics
                 collector.record("python_version_minor",

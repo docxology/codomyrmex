@@ -179,7 +179,6 @@ class ConfigurationMonitor:
                     existing = json.load(f)
             except (json.JSONDecodeError, OSError) as e:
                 logger.debug("Hash store unreadable, starting fresh: %s", e)
-                pass
         existing.update(file_hashes)
         with open(hash_store_path, "w") as f:
             json.dump(existing, f, indent=2)

@@ -20,6 +20,8 @@ Usage:
 """
 logger = get_logger(__name__)
 
+__all__ = ["run_command", "check_python_version", "check_dependencies", "check_security", "check_environment", "generate_report", "fix_dependencies", "main"]
+
 
 def run_command(cmd: list[str]) -> tuple[bool, str, str]:
     """Run a shell command and return success status, stdout, and stderr."""

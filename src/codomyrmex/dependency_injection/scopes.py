@@ -172,7 +172,6 @@ class ScopeContext:
                             method()
                         except Exception as e:
                             logger.debug("Error disposing scoped instance via %s: %s", method_name, e)
-                            pass
                         break
             self._instances.clear()
 

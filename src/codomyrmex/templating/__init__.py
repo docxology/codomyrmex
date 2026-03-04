@@ -25,7 +25,6 @@ try:
     from . import loaders
 except ImportError as e:
     logger.debug("Optional templating submodule 'loaders' not available: %s", e)
-    pass
 
 # Try to import from existing modules, but don't fail if they don't exist
 try:

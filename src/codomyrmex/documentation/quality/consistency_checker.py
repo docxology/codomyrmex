@@ -14,6 +14,8 @@ from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
 
+__all__ = ["ConsistencyIssue", "ConsistencyReport", "DocumentationConsistencyChecker", "check_documentation_consistency"]
+
 
 @dataclass
 class ConsistencyIssue:

@@ -99,7 +99,6 @@ class EveryCodeClient(CLIAgentBase):
                 return code_command
         except (subprocess.TimeoutExpired, FileNotFoundError) as e:
             logger.debug("Primary command %r not available: %s", code_command, e)
-            pass
 
         # Fall back to alternative command
         try:
@@ -113,7 +112,6 @@ class EveryCodeClient(CLIAgentBase):
                 return alt_command
         except (subprocess.TimeoutExpired, FileNotFoundError) as e:
             logger.debug("Alternative command %r not available: %s", alt_command, e)
-            pass
 
         # Return primary as default (will fail later if not available)
         return code_command

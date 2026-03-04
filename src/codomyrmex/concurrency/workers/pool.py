@@ -21,6 +21,8 @@ from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
 
+__all__ = ["TaskResult", "PoolStats", "AsyncWorkerPool"]
+
 T = TypeVar("T")
 R = TypeVar("R")
 

@@ -19,4 +19,3 @@ try:
     __all__.append("Z3Backend")
 except ImportError as e:
     logger.debug("Z3 backend not available (z3-solver not installed): %s", e)
-    pass

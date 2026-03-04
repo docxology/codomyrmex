@@ -9,6 +9,8 @@ from __future__ import annotations
 import math
 from dataclasses import dataclass
 
+__all__ = ["BenchmarkDelta", "compute_delta", "mean", "stddev", "coefficient_of_variation"]
+
 
 @dataclass
 class BenchmarkDelta:

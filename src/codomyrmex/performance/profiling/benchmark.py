@@ -110,7 +110,6 @@ def run_benchmark(
             func()
         except Exception as e:
             logger.debug("Benchmark warmup iteration raised: %s", e)
-            pass
 
     times: list[float] = []
     for _ in range(iterations):
@@ -119,7 +118,6 @@ def run_benchmark(
             func()
         except Exception as e:
             logger.debug("Benchmark iteration raised: %s", e)
-            pass
         times.append(time.perf_counter() - start)
 
     result = BenchmarkResult(name=name or "benchmark", iterations=len(times), times=times)
@@ -147,7 +145,6 @@ def profile_function(func: Callable, *args: Any, **kwargs: Any) -> dict[str, Any
         func(*args, **kwargs)
     except Exception as e:
         logger.debug("Profiled function raised: %s", e)
-        pass
     execution_time = time.perf_counter() - start
 
     memory_after = 0.0

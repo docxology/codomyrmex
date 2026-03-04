@@ -36,6 +36,8 @@ except ImportError:
 
 logger = get_logger(__name__)
 
+__all__ = ["CompositionVisualizer"]
+
 
 class CompositionVisualizer:
     """Creates composite visualizations combining multiple analyses."""

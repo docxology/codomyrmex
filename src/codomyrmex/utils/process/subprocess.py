@@ -688,7 +688,6 @@ def get_command_version(
             return result.stdout.strip().split("\n")[0]
     except Exception as e:
         logger.debug("Failed to get version for command %s: %s", command, e)
-        pass
     return None
 
 

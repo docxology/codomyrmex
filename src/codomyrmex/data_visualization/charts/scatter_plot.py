@@ -141,7 +141,6 @@ class ScatterPlot:
 
 
 if __name__ == "__main__":
-    import logging
     # Example Usage
     from pathlib import Path
 

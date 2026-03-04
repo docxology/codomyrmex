@@ -312,12 +312,12 @@ Last: [first session]
 
 ## Last Session Bridge
 [Emergency bridge — running bridge was not updated]
-Files: src/codomyrmex/tests/unit/model_context_protocol/test_discovery.py (edit), .desloppify/external_review_sessions/ext_20260304_003440_d2ca13a0/review_result.json (create)
+Files: src/codomyrmex/cli/handlers/analysis.py (edit), src/codomyrmex/deployment/gitops/gitops.py (edit), src/codomyrmex/tests/unit/data_visualization/test_base_classes.py (create), src/codomyrmex/ci_cd_automation/deployment_orchestrator.py (edit), src/codomyrmex/tests/unit/data_visualization/test_base_classes.py (edit)
 
 ## Crash Recovery
-Last session (2026-03-03T16:39:06.616351) was not properly closed (crash/kill).
-Recorded 2 file changes before crash.
-Last changed files: .desloppify/external_review_sessions/ext_20260304_003440_d2ca13a0/review_result.json, src/codomyrmex/tests/unit/model_context_protocol/test_discovery.py
+Last session (2026-03-03T17:01:58.218600) was not properly closed (crash/kill).
+Recorded 13 file changes before crash.
+Last changed files: src/codomyrmex/ci_cd_automation/deployment_orchestrator.py, src/codomyrmex/tests/unit/data_visualization/test_base_classes.py, src/codomyrmex/deployment/gitops/gitops.py, src/codomyrmex/cli/handlers/analysis.py
 Bridge from previous session is valid (above).
 For details use: memory_search("changes last session")
 

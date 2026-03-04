@@ -96,6 +96,7 @@ def handle_module_test(module_name: str) -> bool:
             ],
             capture_output=True,
             text=True,
+            timeout=300,
         )
 
         print(result.stdout)

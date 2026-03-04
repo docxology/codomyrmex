@@ -231,7 +231,6 @@ class ExamplesValidator:
                         ))
             except Exception as e:
                 logger.warning("Failed to parse orchestrate.py in module %s: %s", module, e)
-                pass
 
         return issues
 

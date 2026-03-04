@@ -332,7 +332,6 @@ class MultiExporter(SpanExporter):
                 exporter.shutdown()
             except Exception as e:
                 logger.debug("Exporter shutdown error: %s", e)
-                pass
 
 def create_exporter(
     exporter_type: str,

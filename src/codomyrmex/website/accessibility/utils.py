@@ -1,6 +1,6 @@
-from codomyrmex.logging_monitoring import get_logger
-
 """Accessibility utility functions."""
+
+from codomyrmex.logging_monitoring import get_logger
 
 _logger = get_logger(__name__)
 

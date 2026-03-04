@@ -125,7 +125,6 @@ class SBOMGenerator:
                     ))
         except FileNotFoundError as e:
             logger.warning("SBOM: requirements file not found: %s", e)
-            pass
 
         self._components.extend(components)
         return components
@@ -151,7 +150,6 @@ class SBOMGenerator:
                 ))
         except FileNotFoundError as e:
             logger.warning("SBOM: package.json not found, skipping npm deps: %s", e)
-            pass
         except json.JSONDecodeError as e:
             logger.warning("SBOM: malformed package.json, skipping npm deps: %s", str(e))
 
@@ -184,7 +182,6 @@ class SBOMGenerator:
                 ))
         except (FileNotFoundError, ImportError) as e:
             logger.warning("SBOM: failed to parse pyproject.toml: %s", e)
-            pass
 
         self._components.extend(components)
         return components

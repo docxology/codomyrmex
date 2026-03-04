@@ -182,7 +182,6 @@ class PerformanceMonitor:
         except (OSError, ValueError) as e:
             # If we can't write to the log file, that's okay
             logger.debug("Failed to write performance log: %s", e)
-            pass
 
     def get_stats(self, function_name: str | None = None) -> dict[str, Any]:
         """

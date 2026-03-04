@@ -25,7 +25,6 @@ try:
 except ImportError as e:
     import logging as _logging
     _logging.getLogger(__name__).debug("Optional telemetry.context not available: %s", e)
-    pass
 
 # Try to import from existing modules, but don't fail if they don't exist
 try:

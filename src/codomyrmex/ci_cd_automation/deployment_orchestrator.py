@@ -450,6 +450,7 @@ class DeploymentOrchestrator:
                 capture_output=True,
                 text=True,
                 env=env,
+                timeout=300,
             )
 
             if result.returncode != 0:
@@ -486,6 +487,7 @@ class DeploymentOrchestrator:
                     ["kubectl", "apply", "-f", temp_manifest],
                     capture_output=True,
                     text=True,
+                    timeout=300,
                 )
 
                 if result.returncode != 0:
@@ -522,6 +524,7 @@ class DeploymentOrchestrator:
                 rsync_cmd,
                 capture_output=True,
                 text=True,
+                timeout=300,
             )
 
             if result.returncode != 0:
@@ -550,7 +553,7 @@ class DeploymentOrchestrator:
                 env["DEPLOYMENT_VERSION"] = deployment.version
 
                 result = subprocess.run(
-                    hook, shell=True, capture_output=True, text=True, cwd=os.getcwd(), env=env
+                    hook, shell=True, capture_output=True, text=True, cwd=os.getcwd(), env=env, timeout=300
                 )
 
                 if result.returncode != 0:
@@ -659,6 +662,7 @@ class DeploymentOrchestrator:
                     ["kubectl", "rollout", "undo", "deployment", deployment.name],
                     check=True,
                     capture_output=True,
+                    timeout=300,
                 )
             except Exception as e:
                 logger.error(f"K8s rolling rollback failed: {e}")

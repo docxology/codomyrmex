@@ -126,7 +126,6 @@ class CLIAgentBase(BaseAgent):
                 version = result.stdout.strip() or result.stderr.strip()
             except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
                 logger.debug("Version check for %r failed: %s", self.command, e)
-                pass
 
         status = "healthy" if available else "unavailable"
 
@@ -384,7 +383,7 @@ class CLIAgentBase(BaseAgent):
                 else:
                     break
 
-            process.wait()
+            process.wait(timeout=self.timeout)
 
             if process.returncode != 0:
                 stderr = process.stderr.read()

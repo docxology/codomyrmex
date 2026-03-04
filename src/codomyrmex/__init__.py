@@ -141,7 +141,6 @@ try:
     from . import exceptions, utils
 except ImportError as e:
     logger.debug("Optional eager imports unavailable: %s", e)
-    pass
 
 __all__ = [
     "agentic_memory",

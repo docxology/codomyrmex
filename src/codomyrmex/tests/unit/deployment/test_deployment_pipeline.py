@@ -25,19 +25,19 @@ try:
         HealthReport,
         HealthStatus,
     )
+    from codomyrmex.containerization.auto_build import (
+        AutoBuilder,
+        DockerfileSpec,
+        DockerStage,
+    )
+    from codomyrmex.deployment.canary import (
+        CanaryAnalyzer,
+        CanaryDecision,
+        CanaryReport,
+        MetricComparison,
+    )
 except ImportError:
     pytest.skip("api extra not installed; run: uv sync --extra api", allow_module_level=True)
-from codomyrmex.containerization.auto_build import (
-    AutoBuilder,
-    DockerfileSpec,
-    DockerStage,
-)
-from codomyrmex.deployment.canary import (
-    CanaryAnalyzer,
-    CanaryDecision,
-    CanaryReport,
-    MetricComparison,
-)
 
 # ── AutoBuilder ──────────────────────────────────────────────────
 

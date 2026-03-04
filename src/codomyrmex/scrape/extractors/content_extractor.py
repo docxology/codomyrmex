@@ -11,6 +11,8 @@ import re
 from dataclasses import dataclass, field
 from urllib.parse import urljoin
 
+__all__ = ["ExtractedContent", "ContentExtractor", "text_similarity"]
+
 
 @dataclass
 class ExtractedContent:

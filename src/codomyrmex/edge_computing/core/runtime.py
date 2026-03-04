@@ -137,7 +137,6 @@ class EdgeRuntime:
             func.handler()
         except Exception as e:
             logger.warning("Pre-warm failed for function '%s': %s", function_id, e)
-            pass
         self._warm_functions.add(function_id)
         return True
 

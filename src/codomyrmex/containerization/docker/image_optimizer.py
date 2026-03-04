@@ -268,7 +268,6 @@ class ImageOptimizer:
                         return match.group(1).strip()
         except Exception as e:
             logger.debug("Failed to detect base image: %s", e)
-            pass
 
         return "unknown"
 

@@ -123,7 +123,6 @@ class Pyttsx3Provider(TTSProvider):
         except Exception as e:
             # If we can't load voices, use a placeholder
             logger.warning("Failed to load pyttsx3 voices: %s", e)
-            pass
 
     def synthesize(
         self,

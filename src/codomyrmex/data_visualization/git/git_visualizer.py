@@ -22,12 +22,12 @@ from typing import Any
 import matplotlib.patches as mpatches
 import matplotlib.pyplot as plt
 
+from codomyrmex.data_visualization.mermaid.mermaid_generator import (
+    MermaidDiagramGenerator,
+)
 from codomyrmex.data_visualization.utils import (
     apply_common_aesthetics,
     save_plot,
-)
-from codomyrmex.data_visualization.mermaid.mermaid_generator import (
-    MermaidDiagramGenerator,
 )
 from codomyrmex.logging_monitoring import get_logger
 
@@ -796,7 +796,6 @@ class GitVisualizer:
                                 substructure[subitem.name] = "file"
                     except PermissionError as e:
                         logger.debug("Permission denied reading subdirectory: %s", e)
-                        pass
                     structure[item.name] = substructure
                 else:
                     structure[item.name] = "file"

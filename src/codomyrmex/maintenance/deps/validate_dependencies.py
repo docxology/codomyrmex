@@ -17,6 +17,9 @@ Usage:
 """
 logger = get_logger(__name__)
 
+__all__ = ["parse_pyproject_dependencies", "check_version_constraints", "check_duplicates", "check_requirements_txt_deprecated", "main"]
+
+
 def parse_pyproject_dependencies(content: str) -> dict[str, list[tuple[str, str]]]:
     """
     Parse dependencies from pyproject.toml content.

@@ -283,7 +283,6 @@ class CapabilityScanner:
                         imports.add(node.module)
                 except Exception as e:
                     logger.debug("Failed to extract import info from AST node: %s", e)
-                    pass
 
         return functions, classes, constants, imports
 

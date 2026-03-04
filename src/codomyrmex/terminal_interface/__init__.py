@@ -19,7 +19,6 @@ try:
     from . import utils
 except ImportError as e:
     logger.debug("Optional terminal_interface submodule 'utils' not available: %s", e)
-    pass
 
 # Try to import from existing modules, but don't fail if they don't exist
 try:

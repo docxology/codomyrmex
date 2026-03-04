@@ -138,7 +138,6 @@ class PersistentScheduler(Scheduler):
                     self._job_functions[job_id] = func_name
         except (json.JSONDecodeError, KeyError) as e:
             logger.warning("Failed to load scheduler state from %s: %s", self._state_path, e)
-            pass
 
     def _save_state(self) -> None:
         """Save scheduler state to disk."""

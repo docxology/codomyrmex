@@ -298,7 +298,6 @@ class Population:
                     distances.append(ind1.distance(ind2))
             except (ValueError, AttributeError) as e:
                 logger.debug("Distance calculation failed: %s", e)
-                pass
             attempts += 1
 
         return sum(distances) / len(distances) if distances else 0.0

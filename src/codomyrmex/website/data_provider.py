@@ -233,7 +233,6 @@ class DataProvider(HealthProviderMixin, PAIProviderMixin):
                         return content[start:end].strip()
             except Exception as e:
                 logger.debug("Failed to parse __init__.py docstring in %s: %s", path, e)
-                pass
         return "No description available"
 
     def _get_script_metadata(self, script_path: Path) -> tuple[str, str]:
@@ -276,7 +275,6 @@ class DataProvider(HealthProviderMixin, PAIProviderMixin):
 
         except Exception as e:
             logger.debug("Failed to extract script metadata from %s: %s", script_path, e)
-            pass
 
         return title, description
 

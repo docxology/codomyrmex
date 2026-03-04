@@ -115,7 +115,6 @@ class WebSocketClient:
                 data = json.loads(message)
             except json.JSONDecodeError as e:
                 logger.debug("WebSocket message is not JSON, using raw: %s", e)
-                pass
 
         for handler in self._handlers:
             try:

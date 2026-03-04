@@ -129,7 +129,6 @@ class InterfaceEnforcer:
                         result.notes.append(f"Signature mismatch on {name}")
                 except (ValueError, TypeError) as e:
                     logger.debug("Could not compare signatures for %s: %s", name, e)
-                    pass
 
         return result
 

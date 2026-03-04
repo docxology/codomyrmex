@@ -73,7 +73,6 @@ class GoogleAuthenticator:
             except Exception as e:
                 # If the cache file is malformed, simply ignore it and re-auth
                 logger.warning("Malformed token cache file %s, will re-auth: %s", self.token_file, e)
-                pass
 
         # If there are no (valid) credentials available, let the user log in.
         if not creds or not creds.valid:

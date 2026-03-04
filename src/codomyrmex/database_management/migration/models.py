@@ -156,7 +156,6 @@ class FieldTypeTransformer(DataTransformer):
                     result[field_name] = target_type(result[field_name])
                 except (ValueError, TypeError) as e:
                     logger.warning("Failed to convert field %r to %s: %s", field_name, target_type, e)
-                    pass
         return result
 
 

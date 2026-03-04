@@ -80,7 +80,6 @@ def _extract_json_from_text(text: str) -> list[dict[str, Any]]:
                 results.append(parsed)
         except json.JSONDecodeError as e:
             logger.debug("Skipping non-JSON chunk in task plan response: %s", e)
-            pass
 
     return results
 

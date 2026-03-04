@@ -37,8 +37,9 @@ def demo_active_defense():
         print_error(">> EXPLOIT DETECTED! Deploying Countermeasures...")
 
         # 3. Poisoning
-        poison = defense.poison_context("attacker_1", intensity=0.8)
-        print_info(f"Generated Poison Context: {poison[:60]}... (len={len(poison)})")
+        poison_payload = defense.poison_context("attacker_1", intensity=0.8)
+        poison_str = poison_payload["poisoned_content"]
+        print_info(f"Generated Poison Context: {poison_str[:60]}... (len={len(poison_str)})")
         print_info(">> Attacker context corrupted.")
     else:
         print_success(">> Input Safe.")

@@ -309,7 +309,6 @@ class ConnectionPool(Generic[T]):
             conn.close()
         except Exception as e:
             logger.debug("Error closing connection during removal: %s", e)
-            pass
 
         with self._lock:
             if conn in self._all_connections:
@@ -351,7 +350,6 @@ class ConnectionPool(Generic[T]):
                     conn.close()
                 except Exception as e:
                     logger.debug("Error closing connection during pool shutdown: %s", e)
-                    pass
             self._all_connections.clear()
 
         # Drain the queue
@@ -360,7 +358,6 @@ class ConnectionPool(Generic[T]):
                 self._pool.get_nowait()
         except queue.Empty as e:
             logger.debug("Connection pool queue drained: %s", e)
-            pass
 
 class HealthChecker:
     """

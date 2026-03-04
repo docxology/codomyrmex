@@ -11,6 +11,8 @@ from typing import Any, Generic, TypeVar
 
 T = TypeVar("T")
 
+__all__ = ["ChannelClosed", "Channel"]
+
 
 @dataclass
 class ChannelClosed(Exception):

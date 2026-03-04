@@ -128,7 +128,6 @@ class RetryEngine:
                         )
                     except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
                         logger.warning("Config adjustment for %s failed: %s", cat_key, e)
-                        pass
 
                 if attempt < self._max_retries:
                     # attempt+1 gives correct 2x, 4x, 8x... progression (first retry = 2x base)

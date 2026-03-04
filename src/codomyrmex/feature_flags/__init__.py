@@ -13,7 +13,6 @@ try:
     from . import core
 except ImportError as e:
     logger.debug("Optional feature_flags.core submodule not available: %s", e)
-    pass
 
 # Try to import from existing modules, but don't fail if they don't exist
 try:

@@ -345,7 +345,6 @@ class TrustRegistry:
                         self._levels[name] = TrustLevel(level_val)
                     except ValueError as e:
                         logger.warning("Invalid trust level %r for %r in ledger, skipping: %s", level_val, name, e)
-                        pass
         except (json.JSONDecodeError, OSError, KeyError) as e:
             logger.warning(f"Failed to load trust ledger: {e}")
 

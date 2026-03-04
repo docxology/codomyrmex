@@ -61,7 +61,6 @@ class InMemoryStream(Stream):
                         sub.handler(event)
                     except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
                         logger.warning("Stream handler error for subscription '%s': %s", sub.topic, e)
-                        pass
 
     async def subscribe(
         self,

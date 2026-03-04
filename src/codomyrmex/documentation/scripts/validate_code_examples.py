@@ -103,7 +103,6 @@ def check_imports(code: str) -> list[str]:
     except SyntaxError as e:
         # Already handled by syntax validation
         logger.debug("Syntax error in code example (handled upstream): %s", e)
-        pass
 
     return errors
 

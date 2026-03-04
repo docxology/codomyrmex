@@ -33,6 +33,8 @@ except ImportError:
 
 logger = get_logger(__name__)
 
+__all__ = ["ConcordanceVisualizer"]
+
 
 class ConcordanceVisualizer:
     """Visualizes concordance between different analysis methods."""
