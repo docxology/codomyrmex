@@ -297,6 +297,26 @@ class TestDetermineLanguageFromFile:
         result = determine_language_from_file("/a/b/c/d/test.ts")
         assert result == "typescript"
 
+    def test_uppercase_extension(self):
+        # The current implementation is case-sensitive and does not use .lower()
+        assert determine_language_from_file("app.JS") == "python"
+
+    def test_hidden_file_no_extension(self):
+        assert determine_language_from_file(".gitignore") == "python"
+
+    def test_hidden_file_with_extension(self):
+        assert determine_language_from_file(".hidden.py") == "python"
+
+    def test_multiple_extensions(self):
+        # Path("app.test.js").suffix is ".js"
+        assert determine_language_from_file("app.test.js") == "javascript"
+        # Path("archive.tar.gz").suffix is ".gz"
+        assert determine_language_from_file("archive.tar.gz") == "python"
+
+    def test_empty_string(self):
+        assert determine_language_from_file("") == "python"
+        assert determine_language_from_file("   ") == "python"
+
 
 # ---------------------------------------------------------------------------
 # ensure_output_directory
