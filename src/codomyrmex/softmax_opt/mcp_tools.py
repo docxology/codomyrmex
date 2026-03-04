@@ -1,3 +1,7 @@
+"""MCP tools for the softmax_opt module."""
+
+from typing import Any
+
 import numpy as np
 
 from codomyrmex.model_context_protocol.decorators import mcp_tool
@@ -6,7 +10,9 @@ from .kernel import log_softmax, online_softmax, softmax
 
 
 @mcp_tool(category="softmax_opt")
-def compute_softmax(logits: list[float], temperature: float = 1.0, variant: str = "standard") -> dict:
+def compute_softmax(
+    logits: list[float], temperature: float = 1.0, variant: str = "standard"
+) -> dict[str, Any]:
     """Compute softmax probabilities from logits.
 
     Args:

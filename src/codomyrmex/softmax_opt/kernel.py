@@ -1,7 +1,11 @@
+"""Kernel implementations for softmax variations."""
+
+from typing import Any
+
 import numpy as np
 
 
-def softmax(x: np.ndarray, axis: int = -1, temperature: float = 1.0) -> np.ndarray:
+def softmax(x: np.ndarray, axis: int = -1, temperature: float = 1.0) -> np.ndarray[Any, Any]:
     """
     Numerically stable softmax using max subtraction.
 
@@ -23,10 +27,10 @@ def softmax(x: np.ndarray, axis: int = -1, temperature: float = 1.0) -> np.ndarr
     x_scaled = x / temperature
     x_max = np.max(x_scaled, axis=axis, keepdims=True)
     exp_x = np.exp(x_scaled - x_max)
-    return exp_x / np.sum(exp_x, axis=axis, keepdims=True)
+    return np.array(exp_x / np.sum(exp_x, axis=axis, keepdims=True))
 
 
-def log_softmax(x: np.ndarray, axis: int = -1) -> np.ndarray:
+def log_softmax(x: np.ndarray, axis: int = -1) -> np.ndarray[Any, Any]:
     """
     Numerically stable log-softmax using the log-sum-exp trick.
 
@@ -39,10 +43,10 @@ def log_softmax(x: np.ndarray, axis: int = -1) -> np.ndarray:
     x_max = np.max(x, axis=axis, keepdims=True)
     shifted = x - x_max
     log_sum_exp = np.log(np.sum(np.exp(shifted), axis=axis, keepdims=True))
-    return shifted - log_sum_exp
+    return np.array(shifted - log_sum_exp)
 
 
-def online_softmax(x: np.ndarray, axis: int = -1) -> np.ndarray:
+def online_softmax(x: np.ndarray, axis: int = -1) -> np.ndarray[Any, Any]:
     """
     Online softmax using single-pass algorithm (Flash Attention style).
 
@@ -67,7 +71,7 @@ def online_softmax(x: np.ndarray, axis: int = -1) -> np.ndarray:
     result = np.zeros_like(x_flat)
     for row_idx in range(x_flat.shape[0]):
         row = x_flat[row_idx]
-        m = float('-inf')
+        m = float("-inf")
         d = 0.0
 
         # Single pass to compute max and normalizer
@@ -84,11 +88,11 @@ def online_softmax(x: np.ndarray, axis: int = -1) -> np.ndarray:
     return np.moveaxis(result, -1, axis)
 
 
-def safe_softmax(x: np.ndarray, axis: int = -1, eps: float = 1e-8) -> np.ndarray:
+def safe_softmax(x: np.ndarray, axis: int = -1, eps: float = 1e-8) -> np.ndarray[Any, Any]:
     """
     Softmax with epsilon for numerical safety in attention masks.
     Adds epsilon to denominator to prevent division by zero.
     """
     x_max = np.max(x, axis=axis, keepdims=True)
     exp_x = np.exp(x - x_max)
-    return exp_x / (np.sum(exp_x, axis=axis, keepdims=True) + eps)
+    return np.array(exp_x / (np.sum(exp_x, axis=axis, keepdims=True) + eps))
