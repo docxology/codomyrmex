@@ -100,7 +100,7 @@ def run_audio_synthesis(
         "default_text",
         "Hello! This is a test of the Codomyrmex audio synthesis system.",
     )
-    batch_texts = tts_cfg.get("batch_texts", [])
+    prompts = tts_cfg.get("prompts", [])
 
     print_info(f"  Provider:         {default_provider} (fallback: {fallback_provider})")
     print_info(f"  Voice:            {voice}")
@@ -137,13 +137,13 @@ def run_audio_synthesis(
         print_error(f"  Synthesis failed: {e}")
         return False
 
-    # Batch synthesis
-    if batch_texts:
-        print_info(f"  Synthesizing batch ({len(batch_texts)} texts)...")
-        for i, batch_text in enumerate(batch_texts):
+    # Multi-prompt batch synthesis
+    if prompts:
+        print_info(f"  Synthesizing from custom prompts ({len(prompts)} texts)...")
+        for i, act_prompt in enumerate(prompts):
             try:
-                out_path = output_dir / f"orchestrate_batch_{i + 1}.mp3"
-                synth.synthesize_to_file(batch_text, out_path, voice=voice_arg, rate=rate)
+                out_path = output_dir / f"audio_{i + 1}.mp3"
+                synth.synthesize_to_file(act_prompt, out_path, voice=voice_arg, rate=rate)
                 print_success(f"  [{i + 1}] Saved: {out_path.name}")
             except SynthesisError as e:
                 print_warning(f"  [{i + 1}] Failed: {e}")

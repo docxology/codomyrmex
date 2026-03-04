@@ -42,6 +42,7 @@ from codomyrmex.utils.cli_helpers import (
     print_info,
     print_section,
     print_success,
+    print_warning,
     setup_logging,
 )
 from codomyrmex.video.generation.video_generator import VideoGenerator
@@ -76,10 +77,9 @@ def run_video_generation(
         return False
 
     model = model_override or gen_cfg.get("model", "veo-2.0-generate-001")
-    prompt = prompt_override or gen_cfg.get(
-        "default_prompt",
-        "A timelapse of a blooming rose in golden hour light",
-    )
+    prompts = gen_cfg.get("prompts", ["A timelapse of a blooming rose in golden hour light"])
+    if prompt_override:
+        prompts = [prompt_override]
     number_of_videos = gen_cfg.get("number_of_videos", 1)
     aspect_ratio = aspect_ratio_override or gen_cfg.get("aspect_ratio", "16:9")
     duration_seconds = duration_override or gen_cfg.get("duration_seconds", 5)
@@ -87,48 +87,81 @@ def run_video_generation(
     output_dir = _PROJECT_ROOT / output_dir_str
 
     print_info(f"  Model:            {model}")
-    print_info(f"  Prompt:           {prompt[:80]}")
-    print_info(f"  Videos:           {number_of_videos}")
+    print_info(f"  Prompts to run:   {len(prompts)}")
+    print_info(f"  Videos per pop:   {number_of_videos}")
     print_info(f"  Aspect ratio:     {aspect_ratio}")
     print_info(f"  Duration:         {duration_seconds}s")
     print_info(f"  Output dir:       {output_dir_str}")
 
-    try:
-        generator = VideoGenerator()
-        print_info("  Calling Google AI Veo 2.0 (may take 30–60s)...")
-        # Veo-2.0 has a strict Google SDK config schema that rejects unknown kwargs
-        results = generator.generate(
-            prompt=prompt,
-            model=model,
-            # We omit explicit unpack of `duration` and `aspect_ratio` to avoid Pydantic Extra inputs forbidden errors
-        )
-    except Exception as e:
-        print_error(f"  Generation failed: {e}")
-        return False
-
-    print_success(f"  Generated {len(results)} video(s).")
-
+    generator = VideoGenerator()
     output_dir.mkdir(parents=True, exist_ok=True)
     saved = 0
-    for i, vid in enumerate(results):
-        video_bytes = vid.get("video_bytes") or vid.get("video_data")
-        if video_bytes:
-            out_path = output_dir / f"video_{i + 1}.mp4"
-            out_path.write_bytes(video_bytes)
-            print_success(f"  [{i + 1}] Saved → {out_path.relative_to(_PROJECT_ROOT)}")
-            saved += 1
-        else:
-            # Some APIs return a URI instead of bytes (async generation)
-            uri = vid.get("uri") or vid.get("url")
-            if uri:
-                print_info(f"  [{i + 1}] Video URI: {uri}")
+
+    for p_idx, act_prompt in enumerate(prompts):
+        print_info(f"  [{p_idx+1}/{len(prompts)}] Generating for: {act_prompt[:60]}...")
+        try:
+            print_info("    Calling Google AI Veo 2.0 (may take 30-60s)...")
+            results = generator.generate(prompt=act_prompt, model=model)
+            
+            for i, vid in enumerate(results):
+                video_bytes = vid.get("video_bytes") or vid.get("video_data")
+                if video_bytes:
+                    total_idx = saved + 1
+                    out_path = output_dir / f"video_{total_idx}.mp4"
+                    out_path.write_bytes(video_bytes)
+                    print_success(f"    Saved → {out_path.relative_to(_PROJECT_ROOT)}")
+                    saved += 1
+                else:
+                    uri = vid.get("uri") or vid.get("url")
+                    if uri:
+                        print_info(f"    Video URI: {uri}")
+                    else:
+                        print_warning(f"    Result keys: {list(vid.keys())}")
+                        
+        except Exception as e:
+            if "429" in str(e) or "RESOURCE_EXHAUSTED" in str(e):
+                print_warning(f"    Veo 2.0 Quota Exhausted! Generating GenAI Video Fallback via Imagen 4.0 & Numpy...")
+                try:
+                    from codomyrmex.multimodal.image_generation import ImageGenerator
+                    import imageio
+                    import io
+                    import numpy as np
+                    from PIL import Image
+
+                    img_gen = ImageGenerator()
+                    img_res = img_gen.generate(prompt=act_prompt, model="imagen-4.0-generate-001", number_of_images=1, aspect_ratio=aspect_ratio)
+                    bytes_data = img_res[0].get("image_bytes") or img_res[0].get("image_data") if img_res else None
+                    
+                    if bytes_data:
+                        img_pil = Image.open(io.BytesIO(bytes_data)).convert("RGB")
+                        img_np = np.array(img_pil)
+                        h, w, _ = img_np.shape
+                        
+                        total_idx = saved + 1
+                        out_path = output_dir / f"video_fallback_{total_idx}.mp4"
+                        
+                        writer = imageio.get_writer(str(out_path), fps=10)
+                        for zoom in np.linspace(1.0, 1.15, 20):  # 2 second zoom animation
+                            new_w, new_h = int(w / zoom), int(h / zoom)
+                            top, left = (h - new_h) // 2, (w - new_w) // 2
+                            cropped = img_np[top:top+new_h, left:left+new_w]
+                            resized_pil = Image.fromarray(cropped).resize((w, h), Image.Resampling.LANCZOS)
+                            writer.append_data(np.array(resized_pil))
+                        writer.close()
+                        
+                        print_success(f"    [Fallback] Saved GenAI MP4 Video → {out_path.relative_to(_PROJECT_ROOT)}")
+                        saved += 1
+                    else:
+                        print_error(f"    Fallback Image generation failed: No bytes returned.")
+                except Exception as ex:
+                    print_error(f"    Fallback Video synthesis failed: {ex}")
             else:
-                print_info(f"  [{i + 1}] Result keys: {list(vid.keys())}")
+                print_error(f"  Generation failed for prompt {p_idx+1}: {e}")
 
     if saved:
-        print_success(f"  {saved} file(s) written to {output_dir_str}")
+        print_success(f"  {saved} total file(s) written to {output_dir_str}")
 
-    return True
+    return saved > 0
 
 
 def parse_args() -> argparse.Namespace:

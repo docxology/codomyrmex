@@ -5,26 +5,13 @@ This module consolidates and exports plotting functions from the charts package.
 It acts as the primary entry point for accessing visualization capabilities.
 """
 
-try:
-    import matplotlib.pyplot as plt
-    import numpy as np
-except ImportError as _e:
-    raise ImportError(
-        "matplotlib and numpy are required for data_visualization.engines.plotter. "
-        "Install with: uv sync --extra visualization"
-    ) from _e
-
-from codomyrmex.data_visualization._compat import monitor_performance
 from codomyrmex.data_visualization.charts.bar_chart import create_bar_chart
+from codomyrmex.data_visualization.charts.heatmap import create_heatmap
 from codomyrmex.data_visualization.charts.histogram import create_histogram
 from codomyrmex.data_visualization.charts.line_plot import create_line_plot
 from codomyrmex.data_visualization.charts.pie_chart import create_pie_chart
-from codomyrmex.data_visualization.utils import (
-    DEFAULT_FIGURE_SIZE,
-    apply_common_aesthetics,
-    save_plot,
-)
 from codomyrmex.data_visualization.charts.scatter_plot import create_scatter_plot
+from codomyrmex.data_visualization.utils import DEFAULT_FIGURE_SIZE, save_plot
 from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
@@ -66,80 +53,6 @@ class Plotter:
         kwargs.setdefault("figure_size", self.figure_size)
         return create_heatmap(data, **kwargs)
 
-
-@monitor_performance("data_viz_create_heatmap")
-def create_heatmap(
-    data: list,
-    x_labels: list = None,
-    y_labels: list = None,
-    title: str = "Heatmap",
-    x_label: str = None,
-    y_label: str = None,
-    cmap: str = "viridis",
-    colorbar_label: str = None,
-    output_path: str = None,
-    show_plot: bool = False,
-    annot: bool = False,
-    fmt: str = ".2f",
-    figure_size: tuple = DEFAULT_FIGURE_SIZE,
-):
-    """
-    Generates a heatmap from a 2D data array.
-    Uses Matplotlib for plotting and plot_utils for saving and aesthetics.
-    """
-    logger.debug(f"Generating heatmap titled '{title}'")
-    if not data or not isinstance(data, list) or not isinstance(data[0], list):
-        logger.warning(
-            "Invalid or empty 2D data provided for heatmap. No plot generated."
-        )
-        return None
-
-    fig, ax = plt.subplots(figsize=figure_size)
-    im = ax.imshow(data, cmap=cmap)
-
-    # Apply common aesthetics (title, labels)
-    apply_common_aesthetics(ax, title, x_label, y_label)
-
-    # Set ticks and labels for x and y axes
-    if x_labels:
-        ax.set_xticks(np.arange(len(x_labels)))
-        ax.set_xticklabels(x_labels)
-        plt.setp(ax.get_xticklabels(), rotation=45, ha="right", rotation_mode="anchor")
-    if y_labels:
-        ax.set_yticks(np.arange(len(y_labels)))
-        ax.set_yticklabels(y_labels)
-
-    # Add colorbar
-    cbar = fig.colorbar(im)
-    if colorbar_label:
-        cbar.set_label(colorbar_label)
-
-    # Add annotations
-    if annot:
-        np_data = np.array(data)
-        for i in range(np_data.shape[0]):
-            for j in range(np_data.shape[1]):
-                text_color = "black" if im.norm(np_data[i, j]) > 0.5 else "white"
-                ax.text(
-                    j, i,
-                    format(np_data[i, j], fmt),
-                    ha="center", va="center",
-                    color=text_color,
-                )
-
-    plt.tight_layout()
-
-    if output_path:
-        save_plot(fig, output_path)
-
-    if show_plot:
-        logger.debug(f"Displaying heatmap: {title}")
-        plt.show()
-    else:
-        plt.close(fig)
-
-    logger.info(f"Heatmap '{title}' generated successfully.")
-    return fig
 
 
 __all__ = [

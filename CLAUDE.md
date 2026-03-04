@@ -312,13 +312,12 @@ Last: [first session]
 
 ## Last Session Bridge
 [Emergency bridge — running bridge was not updated]
-Files: src/codomyrmex/events/handlers/event_logger.py (edit), src/codomyrmex/calendar_integration/mcp_tools.py (edit), src/codomyrmex/agents/cli/handlers.py (edit), src/codomyrmex/logging_monitoring/__init__.py (edit), src/codomyrmex/tests/unit/api_documentation/test_api_documentation.py (edit), src/codomyrmex/tests/unit/deployment/test_deployment_pipeline.py (edit), src/codomyrmex/tests/unit/api_standardization/test_api_standardization.py (edit), src/codomyrmex/data_visualization/engines/plotter.py (edit), src/codomyrmex/data_visualization/charts/bar_chart.py (edit), src/codomyrmex/data_visualization/charts/scatter_plot.py (edit)
-  ... and 3 more
+Files: src/codomyrmex/tests/unit/api/test_api_http_primitives.py (edit), src/codomyrmex/tests/unit/api/test_api_request_response.py (edit)
 
 ## Crash Recovery
-Last session (2026-03-03T15:13:02.765035) was not properly closed (crash/kill).
-Recorded 26 file changes before crash.
-Last changed files: src/codomyrmex/tests/unit/autograd/test_autograd.py, src/codomyrmex/data_visualization/charts/pie_chart.py, src/codomyrmex/data_visualization/charts/histogram.py, src/codomyrmex/data_visualization/charts/scatter_plot.py, src/codomyrmex/data_visualization/charts/bar_chart.py
+Last session (2026-03-03T16:05:36.926478) was not properly closed (crash/kill).
+Recorded 2 file changes before crash.
+Last changed files: src/codomyrmex/tests/unit/api/test_api_request_response.py, src/codomyrmex/tests/unit/api/test_api_http_primitives.py
 Bridge from previous session is valid (above).
 For details use: memory_search("changes last session")
 

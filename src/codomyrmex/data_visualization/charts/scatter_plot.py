@@ -5,13 +5,14 @@ Generates scatter plots.
 - Recommend calling environment_setup.env_checker.ensure_dependencies_installed() at app startup.
 """
 
-import logging
-
 import matplotlib.pyplot as plt
 
+from codomyrmex.data_visualization.utils import (
+    DEFAULT_FIGURE_SIZE,
+    apply_theme_to_axes,
+    save_plot,
+)
 from codomyrmex.logging_monitoring import get_logger
-
-from codomyrmex.data_visualization.utils import DEFAULT_FIGURE_SIZE, apply_theme_to_axes, save_plot
 
 logger = get_logger(__name__)
 
@@ -117,7 +118,7 @@ class ScatterPlot:
             output_path: Optional path to save the chart
             show_plot: Whether to display the plot interactively
         """
-        create_scatter_plot(
+        return create_scatter_plot(
             x_data=self.x_data,
             y_data=self.y_data,
             title=self.title,
@@ -182,13 +183,3 @@ if __name__ == "__main__":
         f"Scatter plot example saved to {output_dir / 'quadratic_scatter_plot.png'}"
     )
 
-    # Setup a root logger for the example script if this is run directly
-    # (assuming logging_monitoring.setup_logging would handle this in a full app context)
-    if not logging.getLogger("").hasHandlers():  # Check if root logger is already configured
-        logging.basicConfig(
-            level=logging.DEBUG,
-            format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-        )
-        logger.info(
-            "Basic logging configured for direct script execution of scatter_plot.py."
-        )

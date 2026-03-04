@@ -17,8 +17,13 @@ generation:
   video:
     # Google AI model — "veo-2.0-generate-001" is Veo 2.0 (recommended)
     model: "veo-2.0-generate-001"
-    # Default prompt used by orchestrate.py when no --prompt is given
-    default_prompt: "A timelapse of a blooming rose in golden hour light, cinematic, 4K quality"
+    # List of prompts to generate multiple videos for
+    prompts:
+      - "A timelapse of a blooming rose in golden hour light, cinematic, 4K quality"
+      - "A slow-motion capture of a water droplet splashing into a calm pond"
+      - "A macroscopic view of frost crystals forming quickly on a window pane"
+      - "A drone shot flying over a dense, misty pine forest at sunrise"
+      - "A hyper-lapse of stars moving across the night sky above a glowing tent"
     # Number of videos to generate per request (1–4)
     number_of_videos: 1
     # Aspect ratio: "16:9" (landscape) | "9:16" (portrait/vertical)

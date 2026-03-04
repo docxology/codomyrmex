@@ -139,17 +139,6 @@ def run_workflow():
     print_success("\nGit Operations workflow completed successfully!")
     return 0
 
-
-    # Auto-injected: Load configuration
-    import yaml
-    from pathlib import Path
-    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "git_operations" / "config.yaml"
-    config_data = {}
-    if config_path.exists():
-        with open(config_path, "r") as f:
-            config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/git_operations/config.yaml")
-
 if __name__ == "__main__":
     # If run as orchestrator (with --scripts-dir), it will find this file.
     # If run directly, execute the workflow.

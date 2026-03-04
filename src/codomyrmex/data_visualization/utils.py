@@ -93,7 +93,7 @@ def save_plot(
 
     except Exception as e:
         logger.error(f"Failed to save plot to {output_path}: {e}")
-        return False
+        raise
 
 
 def apply_codomyrmex_style(ax, title: str = None):

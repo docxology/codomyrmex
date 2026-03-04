@@ -207,18 +207,6 @@ class ModelOpsScript(ScriptBase):
 
         return Dataset(data=data)
 
-
-
-    # Auto-injected: Load configuration
-    import yaml
-    from pathlib import Path
-    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "model_ops" / "config.yaml"
-    config_data = {}
-    if config_path.exists():
-        with open(config_path, "r") as f:
-            config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/model_ops/config.yaml")
-
 if __name__ == "__main__":
     script = ModelOpsScript()
     sys.exit(script.execute())

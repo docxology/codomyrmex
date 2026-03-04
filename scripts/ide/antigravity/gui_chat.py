@@ -57,17 +57,6 @@ def is_app_running(app_name: str) -> bool:
     except Exception:
         return False
 
-
-    # Auto-injected: Load configuration
-    import yaml
-    from pathlib import Path
-    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "ide" / "config.yaml"
-    config_data = {}
-    if config_path.exists():
-        with open(config_path, "r") as f:
-            config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/ide/config.yaml")
-
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Send GUI chat message to Antigravity.")
     parser.add_argument("--message", "-m", default="Hello from orchestrator test",

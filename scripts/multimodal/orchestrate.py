@@ -76,10 +76,9 @@ def run_image_generation(
         return False
 
     model = model_override or gen_cfg.get("model", "imagen-4.0-generate-001")
-    prompt = prompt_override or gen_cfg.get(
-        "default_prompt",
-        "A photorealistic landscape at golden hour",
-    )
+    prompts = gen_cfg.get("prompts", ["A photorealistic landscape at golden hour"])
+    if prompt_override:
+        prompts = [prompt_override]
     number_of_images = images_override or gen_cfg.get("number_of_images", 1)
     aspect_ratio = aspect_ratio_override or gen_cfg.get("aspect_ratio", "1:1")
     output_dir_str = config.get("output_dir_override") or gen_cfg.get("output_dir", "output")
@@ -87,42 +86,41 @@ def run_image_generation(
     save_format = gen_cfg.get("save_format", "png")
 
     print_info(f"  Model:            {model}")
-    print_info(f"  Prompt:           {prompt[:80]}")
-    print_info(f"  Images:           {number_of_images}")
+    print_info(f"  Prompts to run:   {len(prompts)}")
+    print_info(f"  Images per pop:   {number_of_images}")
     print_info(f"  Aspect ratio:     {aspect_ratio}")
     print_info(f"  Output dir:       {output_dir_str}")
 
-    try:
-        generator = ImageGenerator()
-        print_info("  Calling Google AI Imagen 3...")
-        results = generator.generate(
-            prompt=prompt,
-            model=model,
-            number_of_images=number_of_images,
-            aspect_ratio=aspect_ratio,
-        )
-    except Exception as e:
-        print_error(f"  Generation failed: {e}")
-        return False
-
-    print_success(f"  Generated {len(results)} image(s).")
-
+    generator = ImageGenerator()
     output_dir.mkdir(parents=True, exist_ok=True)
     saved = 0
-    for i, img in enumerate(results):
-        image_bytes = img.get("image_bytes") or img.get("image_data")
-        if image_bytes:
-            out_path = output_dir / f"image_{i + 1}.{save_format}"
-            out_path.write_bytes(image_bytes)
-            print_success(f"  [{i + 1}] Saved → {out_path.relative_to(_PROJECT_ROOT)}")
-            saved += 1
-        else:
-            print_info(f"  [{i + 1}] Result keys: {list(img.keys())}")
+
+    for p_idx, act_prompt in enumerate(prompts):
+        print_info(f"  [{p_idx+1}/{len(prompts)}] Generating for: {act_prompt[:60]}...")
+        try:
+            results = generator.generate(
+                prompt=act_prompt,
+                model=model,
+                number_of_images=number_of_images,
+                aspect_ratio=aspect_ratio,
+            )
+            for i, img in enumerate(results):
+                image_bytes = img.get("image_bytes") or img.get("image_data")
+                if image_bytes:
+                    total_idx = saved + 1
+                    out_path = output_dir / f"image_{total_idx}.{save_format}"
+                    out_path.write_bytes(image_bytes)
+                    print_success(f"    Saved → {out_path.relative_to(_PROJECT_ROOT)}")
+                    saved += 1
+                else:
+                    print_info(f"    Result keys: {list(img.keys())}")
+        except Exception as e:
+            print_error(f"  Generation failed for prompt {p_idx+1}: {e}")
 
     if saved:
-        print_success(f"  {saved} file(s) written to {output_dir_str}")
+        print_success(f"  {saved} total file(s) written to {output_dir_str}")
 
-    return True
+    return saved > 0
 
 
 def parse_args() -> argparse.Namespace:

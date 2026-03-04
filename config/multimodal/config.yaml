@@ -17,8 +17,13 @@ generation:
   image:
     # Google AI model
     model: "imagen-4.0-generate-001"
-    # Default prompt used by orchestrate.py when no --prompt is given
-    default_prompt: "A photorealistic blue butterfly resting on a sunlit dandelion, macro photography, golden hour"
+    # List of prompts to generate multiple images for
+    prompts:
+      - "A photorealistic blue butterfly resting on a sunlit dandelion, macro photography, golden hour"
+      - "A cyberpunk city at night with neon signs reflecting in rain puddles"
+      - "A peaceful zen garden with a small pond and cherry blossoms"
+      - "A dramatic volcanic eruption with lightning in the ash cloud"
+      - "A futuristic spacecraft in orbit around a ringed exoplanet"
     # Number of images to generate per request (1–4)
     number_of_images: 1
     # Aspect ratio: "1:1" | "16:9" | "9:16" | "4:3" | "3:4"

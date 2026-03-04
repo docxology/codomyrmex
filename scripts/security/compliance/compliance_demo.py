@@ -31,17 +31,5 @@ def main() -> int:
     print_success("Security Compliance demo complete")
     return 0
 
-
-
-    # Auto-injected: Load configuration
-    import yaml
-    from pathlib import Path
-    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "security" / "config.yaml"
-    config_data = {}
-    if config_path.exists():
-        with open(config_path, "r") as f:
-            config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/security/config.yaml")
-
 if __name__ == "__main__":
     sys.exit(main())
